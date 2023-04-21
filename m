@@ -2,141 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236756EA28B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 06:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B686EA446
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 09:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbjDUEC7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Apr 2023 00:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
+        id S229635AbjDUHHO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Apr 2023 03:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233817AbjDUECk (ORCPT
+        with ESMTP id S229572AbjDUHHN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 00:02:40 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB58B5251
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 21:02:38 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b92309d84c1so3685875276.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 21:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682049758; x=1684641758;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EHcf3TtAxqYUDjiNAmiyf7rcYOiQRzr3HgI4M/rAcaU=;
-        b=vhOy+/6XGUNImozjW6uXE3awKrpBeiSgUUKudpv9mylXFGdVs6orwkvboBIKJ+gUSI
-         fYZxsGRNlFm42JgTEFcUFLD1/1BFY8psdjXBoP38wBHcHbK+wyMHxCGzN+w61d7gytkU
-         vu9cmM7aNMUhG0WLCVGBj+xxPFj9ebAu54bdHCIxwewn0vAO1Cqhp29CDwt7vEBNgg9Q
-         jrC7EJhVkPl+hArDZNM17DQB7/02YtPjoh48F2mhv8wHzWaUCan39/Vnac6KexCLRV0V
-         hXowYu8GYiC8PFpOmN/hmhw7rl1DR50qb8sDWApZ6QcE+iUGe+OnLapi388bUTfWh++g
-         r0YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682049758; x=1684641758;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EHcf3TtAxqYUDjiNAmiyf7rcYOiQRzr3HgI4M/rAcaU=;
-        b=Ibi3Y3tfS4EGBWQlcwqcHBoO91yuj1WMs4fXU2ms93WDULBF0Tbmj2vLf0jSO8AO7g
-         1pWrN6J1zOIkVnbXkDt1cXAkaWYqEVYFiaUIcDoZ62Pz/aAEoxG/2eSEo8Plqm3hKb8u
-         vjLA4ZnyxOj8vz3vF5SyZG04TlOekJ8wWm0yw7mvjUb2ub7VUBE7i1pddakvjuuQ089i
-         oQA96LCboKl4CQp6QjNG2WOD6esv+iO1bV5pFX0wx0FX1Mqtt28FCattI5ZrYecwoTz/
-         LNJYHbT1O4Yc8S6CUBt53dQwdDgSant0TrylcTG7dZxsu2BTviAXOj0Yel3qHiATM0JG
-         Kk7Q==
-X-Gm-Message-State: AAQBX9f6Kf976AI8r8+pV0bN4aBnGzmrvPalmlqAMfy45QmdtNO1k9ZG
-        ZDUKSPZTjc5lJhLa8TLLTaj8XrAgSKy4iA==
-X-Google-Smtp-Source: AKy350Y54kiwT82AuAuLomhBMXGh6hDiOxSmVnuqZHCRGMCYguaPXyqmvOXzegJ/z1hHhEwjXIqd/8eSj0tc5g==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:690c:2b88:b0:54c:15ad:11e4 with SMTP
- id en8-20020a05690c2b8800b0054c15ad11e4mr897255ywb.0.1682049758080; Thu, 20
- Apr 2023 21:02:38 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 12:02:18 +0800
-In-Reply-To: <20230421040218.2156548-1-davidgow@google.com>
-Mime-Version: 1.0
-References: <20230421040218.2156548-1-davidgow@google.com>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421040218.2156548-4-davidgow@google.com>
-Subject: [PATCH v3 4/4] kunit: example: Provide example exit functions
-From:   David Gow <davidgow@google.com>
-To:     Benjamin Berg <benjamin@sipsolutions.net>,
+        Fri, 21 Apr 2023 03:07:13 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430C911A;
+        Fri, 21 Apr 2023 00:07:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682060831; x=1713596831;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OZUQs/csUJg3zppeTrY4QrFxyRUcxl5Pm/V/42YW00U=;
+  b=CPyYDO9ok3VLVPXzRPMIVIuUvmtW/62f2T61czH5qFDFkvEQhPOE2oai
+   bVhNScY/4sGNtqv4TzJ947Q5LthhrULAkn1ahPEEvOGojCM/RJR7viSjn
+   pdSVfAivURJokVh+S2GOjYLe6r+MdhdtCEuENeVb/umwSN0MQgfHy2DDq
+   5UgpkgxP+Z6UsWpdXjkyqyijNmXa+c7efpiPhv9Pw4K4JYwC9YY9Er+WV
+   ctZhLoidV1J7igdkWx2Vo4q80mTZ1C1MKum8QAtnBP0U0ND3SwVIUewRD
+   sYr8EbxLV+TmzEzE6O4KDQZAYsCpLCU+oZx4kls2ZhRGR48HplXiuNxeO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="373855789"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="373855789"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 00:07:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="1021828552"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="1021828552"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Apr 2023 00:07:06 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppkrK-000gPQ-01;
+        Fri, 21 Apr 2023 07:07:06 +0000
+Date:   Fri, 21 Apr 2023 15:06:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Gow <davidgow@google.com>,
+        Benjamin Berg <benjamin@sipsolutions.net>,
         Brendan Higgins <brendan.higgins@linux.dev>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Rae Moar <rmoar@google.com>,
         Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>, maxime@cerno.tech,
-        Stephen Boyd <sboyd@kernel.org>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sadiya Kazi <sadiyakazi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Cc:     oe-kbuild-all@lists.linux.dev, David Gow <davidgow@google.com>,
+        maxime@cerno.tech, Stephen Boyd <sboyd@kernel.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sadiya Kazi <sadiyakazi@google.com>
+Subject: Re: [PATCH v3 1/4] kunit: Always run cleanup from a test kthread
+Message-ID: <202304211445.r8UQGW3F-lkp@intel.com>
+References: <20230421040218.2156548-1-davidgow@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421040218.2156548-1-davidgow@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add an example .exit and .suite_exit function to the KUnit example
-suite. Given exit functions are a bit more subtle than init functions
-(due to running in a different kthread, and running even after tests or
-test init functions fail), providing an easy place to experiment with
-them is useful.
+Hi David,
 
-Signed-off-by: David Gow <davidgow@google.com>
----
+kernel test robot noticed the following build warnings:
 
-This patch was introduced in v3.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.3-rc7 next-20230420]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
----
- lib/kunit/kunit-example-test.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/Documentation-kunit-Note-that-assertions-should-not-be-used-in-cleanup/20230421-120437
+patch link:    https://lore.kernel.org/r/20230421040218.2156548-1-davidgow%40google.com
+patch subject: [PATCH v3 1/4] kunit: Always run cleanup from a test kthread
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230421/202304211445.r8UQGW3F-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/e6f2b343739c4656e2090449ad7eac10db57dde9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Gow/Documentation-kunit-Note-that-assertions-should-not-be-used-in-cleanup/20230421-120437
+        git checkout e6f2b343739c4656e2090449ad7eac10db57dde9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash lib/kunit/
 
-diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-index cd8b7e51d02b..24315c882b31 100644
---- a/lib/kunit/kunit-example-test.c
-+++ b/lib/kunit/kunit-example-test.c
-@@ -41,6 +41,16 @@ static int example_test_init(struct kunit *test)
- 	return 0;
- }
- 
-+/*
-+ * This is run once after each test case, see the comment on
-+ * example_test_suite for more information.
-+ */
-+static void example_test_exit(struct kunit *test)
-+{
-+	kunit_info(test, "cleaning up\n");
-+}
-+
-+
- /*
-  * This is run once before all test cases in the suite.
-  * See the comment on example_test_suite for more information.
-@@ -52,6 +62,16 @@ static int example_test_init_suite(struct kunit_suite *suite)
- 	return 0;
- }
- 
-+/*
-+ * This is run once after all test cases in the suite.
-+ * See the comment on example_test_suite for more information.
-+ */
-+static void example_test_exit_suite(struct kunit_suite *suite)
-+{
-+	kunit_info(suite, "exiting suite\n");
-+}
-+
-+
- /*
-  * This test should always be skipped.
-  */
-@@ -211,7 +231,9 @@ static struct kunit_case example_test_cases[] = {
- static struct kunit_suite example_test_suite = {
- 	.name = "example",
- 	.init = example_test_init,
-+	.exit = example_test_exit,
- 	.suite_init = example_test_init_suite,
-+	.suite_exit = example_test_exit_suite,
- 	.test_cases = example_test_cases,
- };
- 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304211445.r8UQGW3F-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   lib/kunit/test.c: In function 'kunit_catch_run_case':
+>> lib/kunit/test.c:440:29: warning: unused variable 'suite' [-Wunused-variable]
+     440 |         struct kunit_suite *suite = ctx->suite;
+         |                             ^~~~~
+
+
+vim +/suite +440 lib/kunit/test.c
+
+e6f2b343739c46 David Gow       2023-04-21  434  
+e6f2b343739c46 David Gow       2023-04-21  435  
+5f3e06208920ee Brendan Higgins 2019-09-23  436  static void kunit_catch_run_case(void *data)
+5f3e06208920ee Brendan Higgins 2019-09-23  437  {
+5f3e06208920ee Brendan Higgins 2019-09-23  438  	struct kunit_try_catch_context *ctx = data;
+5f3e06208920ee Brendan Higgins 2019-09-23  439  	struct kunit *test = ctx->test;
+5f3e06208920ee Brendan Higgins 2019-09-23 @440  	struct kunit_suite *suite = ctx->suite;
+5f3e06208920ee Brendan Higgins 2019-09-23  441  	int try_exit_code = kunit_try_catch_get_result(&test->try_catch);
+5f3e06208920ee Brendan Higgins 2019-09-23  442  
+5f3e06208920ee Brendan Higgins 2019-09-23  443  	if (try_exit_code) {
+5f3e06208920ee Brendan Higgins 2019-09-23  444  		kunit_set_failure(test);
+5f3e06208920ee Brendan Higgins 2019-09-23  445  		/*
+5f3e06208920ee Brendan Higgins 2019-09-23  446  		 * Test case could not finish, we have no idea what state it is
+5f3e06208920ee Brendan Higgins 2019-09-23  447  		 * in, so don't do clean up.
+5f3e06208920ee Brendan Higgins 2019-09-23  448  		 */
+5f3e06208920ee Brendan Higgins 2019-09-23  449  		if (try_exit_code == -ETIMEDOUT) {
+5f3e06208920ee Brendan Higgins 2019-09-23  450  			kunit_err(test, "test case timed out\n");
+5f3e06208920ee Brendan Higgins 2019-09-23  451  		/*
+5f3e06208920ee Brendan Higgins 2019-09-23  452  		 * Unknown internal error occurred preventing test case from
+5f3e06208920ee Brendan Higgins 2019-09-23  453  		 * running, so there is nothing to clean up.
+5f3e06208920ee Brendan Higgins 2019-09-23  454  		 */
+5f3e06208920ee Brendan Higgins 2019-09-23  455  		} else {
+5f3e06208920ee Brendan Higgins 2019-09-23  456  			kunit_err(test, "internal error occurred preventing test case from running: %d\n",
+5f3e06208920ee Brendan Higgins 2019-09-23  457  				  try_exit_code);
+5f3e06208920ee Brendan Higgins 2019-09-23  458  		}
+5f3e06208920ee Brendan Higgins 2019-09-23  459  		return;
+5f3e06208920ee Brendan Higgins 2019-09-23  460  	}
+5f3e06208920ee Brendan Higgins 2019-09-23  461  }
+5f3e06208920ee Brendan Higgins 2019-09-23  462  
+
 -- 
-2.40.0.634.g4ca3ef3211-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
