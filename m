@@ -2,67 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553A46EB731
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Apr 2023 05:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC076EBB5B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Apr 2023 22:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjDVDrl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Apr 2023 23:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S229693AbjDVUzW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 22 Apr 2023 16:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDVDrk (ORCPT
+        with ESMTP id S229531AbjDVUzU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 23:47:40 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402A51FF1;
-        Fri, 21 Apr 2023 20:47:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682135259; x=1713671259;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uSLCXbVVatEMzVoM1qtANKX2CM4Zh2BjCrV2sdtYG+A=;
-  b=iD5+UXhKmDeKAg+w1kvAo+ygMMs6+bqp2gXf4Fc/mS3Ne+07VQCqt+SM
-   8+C4fqEpiTMV7KNv7bwaoYXvFYikA08A7Q9DFa1KMKAtXDvDbMd0ovvMw
-   bOq8B0zUbRVQ345T+uROD5yCRFQvzNlAb8yZ9yZkFnG7MvPhFvu2tQ7Cu
-   ueSJ0fb7kwzT8JGRxzssGgAe7dwZtGRO5W06XLapi93OcrRRZ85mIXRmY
-   1tGscbZeAadSbz/1+b2AHwygAj0vR2dBwnb3sO3K84yQ3A4+DXAeYIuLH
-   bttyddSKwizWP2pevWZLaVoxKZoFGWlMWo/TASgSen+CyTDfpKG7rju5j
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="343610975"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="343610975"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 20:47:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="816640029"
-X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="816640029"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Apr 2023 20:47:34 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pq4Dl-000h2s-1a;
-        Sat, 22 Apr 2023 03:47:33 +0000
-Date:   Sat, 22 Apr 2023 11:47:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rae Moar <rmoar@google.com>, frowand.list@gmail.com,
-        davidgow@google.com, skhan@linuxfoundation.org,
-        keescook@chromium.org, Tim.Bird@sony.com, brendanhiggins@google.com
-Cc:     oe-kbuild-all@lists.linux.dev, corbet@lwn.net,
-        guillaume.tucker@collabora.com, dlatypov@google.com,
-        kernelci@lists.linux.dev, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>
-Subject: Re: [KTAP V2 PATCH] ktap_v2: add test metadata
-Message-ID: <202304221132.H0D5OLHS-lkp@intel.com>
-References: <20230420205734.1288498-1-rmoar@google.com>
+        Sat, 22 Apr 2023 16:55:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBA6132
+        for <linux-kselftest@vger.kernel.org>; Sat, 22 Apr 2023 13:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682196879;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MmovEZDh3RRZ4TGij6AOUtYqNZkl+ysd7uj3ZrA1KLk=;
+        b=bHwpml5+n/vwwqHROKthWCuS0ywhYIXouRq/cU09Xcgu1RNn2tr2F9xylbo/1BmiPm8tRh
+        S+NgZRjdxeFkE1iNQH2xdAN6ppm2tC2bTRx+mqrU/IjeEC3rXS6aGChuouXv3TCyeAZAby
+        qY8MEv7dCvUazsDovOJMJ206sk9KJFw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-573-6F8RbvXvPe2iBIeR5XH5sQ-1; Sat, 22 Apr 2023 16:54:35 -0400
+X-MC-Unique: 6F8RbvXvPe2iBIeR5XH5sQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B6D4D101A531;
+        Sat, 22 Apr 2023 20:54:34 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.192.6])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7F7F6492B03;
+        Sat, 22 Apr 2023 20:54:21 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stefan Roesch <shr@devkernel.io>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH mm-stable v2 0/3] mm/ksm: improve PR_SET_MEMORY_MERGE=0 handling and cleanup disabling KSM
+Date:   Sat, 22 Apr 2023 22:54:17 +0200
+Message-Id: <20230422205420.30372-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420205734.1288498-1-rmoar@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,45 +70,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Rae,
+This is a follow-up to [1]:
+	[PATCH v9 0/3] mm: process/cgroup ksm support
 
-kernel test robot noticed the following build warnings:
+which is now in mm-stable. Ideally we'd get at least patch #1 into the
+same kernel release as [1], so the semantics of setting
+PR_SET_MEMORY_MERGE=0 are unchanged between kernel versions.
 
-[auto build test WARNING on 906f02e42adfbd5ae70d328ee71656ecb602aaf5]
+(1) Make PR_SET_MEMORY_MERGE=0 unmerge pages like setting MADV_UNMERGEABLE
+does, (2) add a selftest for it and (3) factor out disabling of KSM from
+s390/gmap code.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rae-Moar/ktap_v2-add-test-metadata/20230421-045838
-base:   906f02e42adfbd5ae70d328ee71656ecb602aaf5
-patch link:    https://lore.kernel.org/r/20230420205734.1288498-1-rmoar%40google.com
-patch subject: [KTAP V2 PATCH] ktap_v2: add test metadata
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/9a01de0a8d8f9f09023184d9df00aa98a559c871
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rae-Moar/ktap_v2-add-test-metadata/20230421-045838
-        git checkout 9a01de0a8d8f9f09023184d9df00aa98a559c871
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+v1 -> v2:
+- "mm/ksm: unmerge and clear VM_MERGEABLE when setting
+   PR_SET_MEMORY_MERGE=0"
+ -> Cleanup one if/else
+ -> Add doc for ksm_disable_merge_any()
+- Added ACKs
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304221132.H0D5OLHS-lkp@intel.com/
+[1] https://lkml.kernel.org/r/20230418051342.1919757-1-shr@devkernel.io
 
-All warnings (new ones prefixed by >>):
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Stefan Roesch <shr@devkernel.io>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Janosch Frank <frankja@linux.ibm.com>
+Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: Shuah Khan <shuah@kernel.org>
 
->> Documentation/dev-tools/ktap.rst:184: WARNING: Unexpected indentation.
->> Documentation/dev-tools/ktap.rst:185: WARNING: Block quote ends without a blank line; unexpected unindent.
+David Hildenbrand (3):
+  mm/ksm: unmerge and clear VM_MERGEABLE when setting
+    PR_SET_MEMORY_MERGE=0
+  selftests/ksm: ksm_functional_tests: add prctl unmerge test
+  mm/ksm: move disabling KSM from s390/gmap code to KSM code
 
-vim +184 Documentation/dev-tools/ktap.rst
-
-   181	
-   182	There are a few currently recognized metadata types:
-   183	- "# Subtest: <test_name>" to indicate test name (name must match
- > 184	  corresponding result line)
- > 185	- "# Attributes: <attributes list>" to indicate test attributes (list
-   186	  separated by commas)
-   187	- "# File: <file_path>" to indicate file used in testing
-   188	
+ arch/s390/mm/gmap.c                           | 20 +-----
+ include/linux/ksm.h                           |  7 ++
+ kernel/sys.c                                  | 12 +---
+ mm/ksm.c                                      | 70 +++++++++++++++++++
+ .../selftests/mm/ksm_functional_tests.c       | 46 ++++++++++--
+ 5 files changed, 121 insertions(+), 34 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.0
+
