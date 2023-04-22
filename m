@@ -2,162 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6B26EB638
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Apr 2023 02:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379EC6EB640
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Apr 2023 02:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbjDVAJR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Apr 2023 20:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
+        id S232865AbjDVALh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Apr 2023 20:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjDVAJP (ORCPT
+        with ESMTP id S233879AbjDVALg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 20:09:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68F22135;
-        Fri, 21 Apr 2023 17:09:14 -0700 (PDT)
+        Fri, 21 Apr 2023 20:11:36 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69133212D;
+        Fri, 21 Apr 2023 17:11:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682122154; x=1713658154;
+  t=1682122295; x=1713658295;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=GGPwTdDYMCT4zFv31Iszy3AQNI0iGsPu2NiMGbqI6Ms=;
-  b=AA7lLkc5GKxGfvJS3Q8QSG/ga/IINg1OUprPZDIKZWtfzBYPWJamncC8
-   m6P+E8oyJKBVbEMQdjASLHONi8Ono6hTotFSpMbTKd8IYhbnk3P7k5t/I
-   cRJRuRUFbM0n+fZnoAODCeyNP2Yo87fO96w1LWulKj5ZPrVv9kr4jwIJu
-   ajm8nwFYeUqhZlI9ulzX7yJMTI341g+kqGNy4qNBypQuAnirF4fvy/gji
-   WVact9fFa5vh/ELSQCXu3azewZJQGuyOTS8d0pk0jqpXp0JnqcNUXgQP6
-   kJVWRY6DrXoRdFEPK2Ju7Jqg3don4gVZ0vgGAHoG75VbilrcvyRC/duWR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="411380551"
+  bh=I1XCOJtKetpHT+g71okvHinqPZ2oOrbFEAwqXu8fIkY=;
+  b=g2ZzcOw76y9x+qGNGq2RBXNCBtYeTEH8RmcdC8NY06F3xI8CH7/XWwEK
+   jZ5R54g87fAwlumN61YvOMASC0zDl6e9+6XKOvfXKmOEKjmRndYi8qGQ0
+   KPV9gfmMUqlngNcgz6wKFkyYB2swopS+tohWUoWm/er/pjRuNZoboINwb
+   9CYjxfwAm6GYZ0lVZKhwMu5veCetBYHcZXKPj1gWgdr2a4vqcgeptLvi+
+   ypzen7VYSxuyVJm/jEr4hCwUfqo70tNHl9c7TtagFG0oYj/TJ4bu889Ku
+   urQOwgggKvJXVQtNH74YnYyzAieszufm38RYq7hpHTKVmxkYe4sCMTXq7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="348905436"
 X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="411380551"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 17:09:14 -0700
+   d="scan'208";a="348905436"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 17:11:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="866852616"
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="781775964"
 X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="866852616"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga005.jf.intel.com with ESMTP; 21 Apr 2023 17:09:14 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+   d="scan'208";a="781775964"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Apr 2023 17:11:34 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 17:09:14 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ 15.1.2507.23; Fri, 21 Apr 2023 17:11:34 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 21 Apr 2023 17:09:14 -0700
+ 15.1.2507.23 via Frontend Transport; Fri, 21 Apr 2023 17:11:34 -0700
 Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 21 Apr 2023 17:09:13 -0700
+ 15.1.2507.23; Fri, 21 Apr 2023 17:11:34 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G8Ywmhd46SHEDxHl9zkAidiUu/eBXoO3IF2TqQ/B0xNBeHTeWAVvfoDmeJyau8KnK7Clu+7iX8oGJuPmYFZL3d5pphrEOHPPcKtaQAdBsrCIEf/4+EV0smONsJcxQdRRWtrB/DUZyf02Lab5wyANc0xBx2BNLrzpaGapi5OgJ53oinDin1ilnp+rOPu2WwtqgzRS7nttgUDS315Vo5tQA09EJIQmt9R0+V0zJLhJfWdKG7NAPx6gS0oCK0glozsUu1I4sSpAHdKL9ePbrdK44IADCWtwBuOpPk+ps16ozkMefcDQRzPbUU7v97DlGgn4ooMS+m8s7hsw2koRUtgCFA==
+ b=drBYtoXegvk06NHruVs8JJ3HG9pIiAspkdmzTXEItjVE6x++jOLPWENDjgShhH18T+YnA6YyPAKYZFmdgq1/IeTmrgAfnVLVtjryetApqAVCBNxvKnJ0eqQtDR+KL171LDY6wGz+8JTu52d/XitM0VRD2arAc26RrC+Iar9QMvDdL8IZtTS/EId0im11S8ilU8i+4lPBgFkMOAlRZb/8Vn/1wXbta48MyDnGgpp2OR+G7L+8zAxj89LrwPjJ90kVUN1oyiwtlPza+FdbdCxmuuJtlWQTCThax56XACCV8OfsJfaUeXYhULkiMzlWH00TwYSKGklk5WkbOhMd97Sr/Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t5384pmH6ftZAusATf/TdFd7tOl2BSkorPfmXmiE66A=;
- b=jHDPAgxfW94olNuSOsJbHkgFjD1fTYbO2sY3NWiIaNLanj31oAqKBSM0y85Xa2jZOrA5+2skMkXgK2o4Bzy3H5hyunm3pb7jLQYsttHZwty8EzvbstVqiWzPoz2tZg/9AHQ/xu9yyTxX/GJZEoKF0T79/UmBJlLIvOj1ANsIRoCq7Dj27ISrY+thmkT0eqkVso2ytMz2gq8sNbS3q8HYRbtU8BjRPdHzTvemHHA1hSlsySQe9GvaDpNIMAelRMLXdSsdU9+XDKH9DqLZS6ujJu3beIj0NAI3jlL3Oac0Cloqqszqt46uLCXvNCAsZ1tIXDNmIEvFapvwf/OcuVy0Yg==
+ bh=NhuhTCKuLp2N1txLows8rofDOTH+04ja98hTN3r/Oes=;
+ b=BDItJ6u5l2N2LL8BNj/FcpVpTf+wleLtOkc2s7xLPYirEzCkgPxUPzEosysC/6BEKnZTeyKSMk74vYTVr3FLwmAlvQ8/GUUwo+7+s7AKw6xVovC+hj4oOtjhoOJSEbMY9C8oqaY4DSljfdlFm+kY6YK7kjHz5wlYq58aGW6fsT8H/YvVGp5/hC1CBeERLBJ/4ehKV4INbequsdR42j5FV6qJ046sk2uwNmwRp9Rb97RVVtp3T2ebHf820kloMTSoB+iSeqMRoNxFPujXotUIzgHGc5SdhRURUsWZ/+vmWseGKkMhLuJOvfbLjGhhom/aMbJjG4w7cRNxLzjubKckpw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by SJ0PR11MB5937.namprd11.prod.outlook.com (2603:10b6:a03:42c::15) with
+ by BN9PR11MB5227.namprd11.prod.outlook.com (2603:10b6:408:134::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Sat, 22 Apr
- 2023 00:09:12 +0000
+ 2023 00:11:32 +0000
 Received: from CY4PR11MB1862.namprd11.prod.outlook.com
  ([fe80::2854:770d:2a43:dbc6]) by CY4PR11MB1862.namprd11.prod.outlook.com
  ([fe80::2854:770d:2a43:dbc6%4]) with mapi id 15.20.6319.022; Sat, 22 Apr 2023
- 00:09:12 +0000
-Message-ID: <74cab34d-767c-aa10-807d-3cbab7907ca9@intel.com>
-Date:   Fri, 21 Apr 2023 17:09:10 -0700
+ 00:11:31 +0000
+Message-ID: <3df815f8-345e-7089-1c05-f46592ffa393@intel.com>
+Date:   Fri, 21 Apr 2023 17:11:28 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v2 03/24] selftests/resctrl: Move resctrl FS mount/umount
- to higher level
+Subject: Re: [PATCH v2 04/24] selftests/resctrl: Remove mum_resctrlfs
 Content-Language: en-US
 To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         <linux-kselftest@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>,
-        "Shuah Khan" <shuah@kernel.org>,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-        Babu Moger <babu.moger@amd.com>, <linux-kernel@vger.kernel.org>
+        "Shuah Khan" <shuah@kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
- <20230418114506.46788-4-ilpo.jarvinen@linux.intel.com>
+ <20230418114506.46788-5-ilpo.jarvinen@linux.intel.com>
 From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230418114506.46788-4-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20230418114506.46788-5-ilpo.jarvinen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR13CA0091.namprd13.prod.outlook.com
- (2603:10b6:a03:2c5::6) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+X-ClientProxiedBy: BYAPR01CA0032.prod.exchangelabs.com (2603:10b6:a02:80::45)
+ To CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|SJ0PR11MB5937:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd2b219c-a6c1-49b0-ac53-08db42c5cd3e
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|BN9PR11MB5227:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1ba7943-b69d-485d-5f63-08db42c6203a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cTPvDU0HfCx7kc31lKnQ1eBh1uod7FfLMiPGQdYrGdjssI6a1LEfzeEiuTWlf/FA3tCo6GNs9ETESd/8RYyGOPVJDyrEpxWrhyh7LR03Cxlsw9yFe+zF4p4Dz2OC05WIe4HKF7j2M4Enbnmue4t3C+gYOe4pnHOtJ6kcxe195glrC0L70Tj7C/1MbWCKGFkRhcfkf3/Fi+sIuhTDy/7qu1MW3T69Wq7q++nyBPVJOfKixoYllND/gDGXejrmn4WQPrgGq7+klUM2hNYhLv86mrxwzXivQ0fOEg35XvS7+3cQDIqEaonhmbjwb9tKIBtvgTPk3l+0OQ0P4TwK16FO9kxY7b4DCDNpISCtcn3LSMe2zwtW5paeRA8XGprEOqnCIQE0MwiWGi4fwJKTZ69x+XDAaQVxXuVSGPRy0L6pEFGf7A0pEoaVcAFtOwLNZZ66YAcjBE1ghVMNTyh1oYhE2ICQvPClIAb9y+qhDnjy1agxTRJ5PmJUqP+/SMmlwpYXOT58ieTYI/GyjdsLo7AE5rLxsGxUHfx22i3t5Lz++lsfquIS1a+mBTcBZwm5uKcoyiiaaHnkyzOq51DN+3EvxrAaTrM7j4Os+snLJnqckxuUdV5H+SEWfpn16VAWufoRtuddAIwBSTGbB4qeVqeTKg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(376002)(366004)(39860400002)(396003)(451199021)(66476007)(478600001)(5660300002)(66556008)(66946007)(82960400001)(8676002)(8936002)(38100700002)(316002)(110136005)(41300700001)(4326008)(186003)(53546011)(66574015)(83380400001)(2616005)(6486002)(44832011)(6506007)(6512007)(26005)(31696002)(86362001)(36756003)(2906002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: IkyzzHMUWrcBVUIvZgOCmLhsSjQ/6abKNgu7EyCE/azrPF7WksXla2WTxK0Wx0YXkBbYoyaxqJtJINCrGPVECe0iExu6yS2stU2rba113DijBKXoL4guByFGDv7FNX4qwqSuwkat08mNzvTWTJifXPaKhajeZdTit1B8K9cTn7cpiO3+QhuiMGc38pIzl2Em6ye914Y18gBjPmcWMZE+WpBziz0GYqA0GCuD1Q90EK42q5HlHBgtZq0ugEpwfgDTsSqttFmbu9rFbpvadHbMYLZ2ofXFQnBbvsPsOzDmPdSui8WMG/ThZSZPiJylyfVKnFF4HvVJ91RyOD9XNhr0i4yxT7P49LnTMMky7g0A6es3MAxyx4KZkBpitH3ej1q4AJbJMsmv2mp5wIsYQOsuj+881UsN0i3CCG1BDR/UqVydvY9HEGpystzHWx8VkWiobabBjVil37VNABEbMjfUz1KI3GXs7J+q6dPiLBcJVwLcr4HWzc0+7dnOrva4MM8um89Ow8yDrB2ulbPxjA6ut5GoHyUYg/GHE/QDefXe243fvGlV+RgXmu3QCw70rlXpGP6rjhzDm55mWMVOWx1MLQI/bJPjIifnNhbFlQ+pHWGV5orpolEZS4fvjVYVXW9rZKXU1NttZFkMObaSelS1+A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(136003)(39860400002)(396003)(451199021)(2906002)(8936002)(8676002)(38100700002)(44832011)(5660300002)(36756003)(86362001)(66574015)(31696002)(6506007)(6486002)(6666004)(6512007)(26005)(110136005)(2616005)(31686004)(83380400001)(478600001)(4326008)(186003)(316002)(53546011)(82960400001)(66556008)(66476007)(66946007)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dVdBSzdBQ1JVbE9PQkY1Y0hTbGRxZGVGVXdaby80OGlMTEdUY1pwWXRhbUtk?=
- =?utf-8?B?aEl4V2NkTmtOR3ZqNEJzL1hxbXZZTWRwYUF1NGNMNXFQYkEyMTZCd2hhbUps?=
- =?utf-8?B?Z2dha0RROTM4WDB2Wm9WeDhQU1JpODF2ZFlJWkpHbW1TeU1jczhaYzZMQ2FP?=
- =?utf-8?B?ZVhjZDFPekpFcGIrSWxOc3BnWDhxMHpESFJMYnc2UXNtSlBNNTgyZGxpdHVq?=
- =?utf-8?B?Z2M2S0ZCUmlPaDEwNm4vYjBLWEFMc1p1TW52MENWWXRXRTMxM0taam1YaWxE?=
- =?utf-8?B?Vk5JYTNaOG5ITXVzeVRjdEVoblR6RkVnUXdHeFJkeGFXTFIvelVRNnlwKzBG?=
- =?utf-8?B?QTJ5MUpqR2ttYzk0RVVVRTJDTkJzd1FkcHlSWDhUU2JHK0IzZmQ3UEljQnRo?=
- =?utf-8?B?VGpLQmFSeCt4TitkdURkWHUydWplUWhTajhCbDh4THdFZk1XWHFIQzR4M0hC?=
- =?utf-8?B?THJibS9TVXZGUE82TVdtRlN2ajJPdkRsb1drYTZRVFJCRlRwSlhlMUczcWlm?=
- =?utf-8?B?a3hBRytTQ09oZmJaSUg3dmViUzVjbHEyQjQxYUpsQ1J6K3d6N0o5NHNCVEV2?=
- =?utf-8?B?ckRVaU9HcUE4dG0zUmxiSWlwU1VqUXdLakgrSnRGY2IxZzZHTTJoeEFmelJX?=
- =?utf-8?B?ck9PcE5BMmZjRzRqQmpHZmo0cDlseDFPQWNQKzI3RlJCQXNyaTlnRTBNT2Rn?=
- =?utf-8?B?aC9tWTZFSE1yMUdsM0s4azVkcTh6dE4zbU1QdkR0L256Uy8xU2h3c0wxNnlr?=
- =?utf-8?B?Q0FZQTRQc2d0eWlVdmZkMGZaVzV5TWtYMllkbVArVGhxQVBjZTBsWis0NUFM?=
- =?utf-8?B?SFZsMlFxNmNXM3d3NGpLWDVxblJ0cEdjWEdRaHdubzRtRlgybTRTRXUzYUhG?=
- =?utf-8?B?eW5TRzZpM21zZ3VWbFVSS2h6dUd0VDBOZmhHR1dLQzkvNFBGdW5RVkdOZU1u?=
- =?utf-8?B?RGx1VDZkeFhRT2MxenVTbVpjRGpuNXY1b1hjT3lwNnhkMlJyL3pNeHcvd3J4?=
- =?utf-8?B?eXpQdzhURVgzTDl5RzBLL1lBMHBHNDlMR0daOHVRQW1WbXhtcEQvQTVIYi8v?=
- =?utf-8?B?VmNnZHN0SDBwdm44cU41ZHVNbC95T2FFZG9MT0ZLcC9QM0VkZEw1QWZBeCtp?=
- =?utf-8?B?M2FtaU92eksvSDkzckErZ2NaMzVFcmFsR013NXRTTXkwb2RIa0VVUHFjUmRS?=
- =?utf-8?B?Yk1KdzgyVmdUQ0V1RmxhMDJPYjlZSFVteENOdlQ2aDlXN2REYS9zaEl3TWgx?=
- =?utf-8?B?MjNrMVJoSVVSbm5yOXd6U3BpWjlySmRoYk9mVm5KMWZKTEY0QjNYU2VraXhy?=
- =?utf-8?B?YkVnaWpzYlQrcW0yK2lDY0k3cmhNcjN3ODBmUEVOM0J3UHhHclVPSUlRRisx?=
- =?utf-8?B?bVB1UlZISFQyVFBRMVA3ZUVvdFo4Q2J1YWpEVEJqdCtVT0FuRVZGTFlZVnZw?=
- =?utf-8?B?OUpoMytPcjVTdEk5bnBPOG9HUm1LRmxIOHZtNkVFRUQvR3Y4dTJUb21Xc1Fx?=
- =?utf-8?B?M0ZSSm1RRWswcURkcSs0cDEzNVNNMWY2Zi9aWHgrNytiS1dMMFF1TWRLZHFi?=
- =?utf-8?B?WVU3RkorUTB0UTNiUXdmRmdLRVV3T253RlNNOFIyVW1rSFBXdWQrTTk2T2JZ?=
- =?utf-8?B?bnZBQVZUK3JyN2l1cGYvK3RVVVlYSWNFOUQ0bWVUREN5TzBWZlIyaUh0YW1K?=
- =?utf-8?B?M1ZqVjdOdGNKUFhKM1l2NU11WXRrL3hQaEk2N2RWdFBEdThKbzV6a21VTGFJ?=
- =?utf-8?B?aFdHK21YaHVtV3hNYzNZSWUvUktvVzVFeU1vellpcURSSHIxZkVHRzdUVm9v?=
- =?utf-8?B?L2M5cG5DNC9pQ1FuSS9TdUtsOFBZNnVSREdObWdhcnh5UURzeFBDRzcyYy9i?=
- =?utf-8?B?WDFNVkh4cm9XZDlncGNOdHpVZW5BSzJLaU10U0xtVUpWMHdKa25LWlZUR2gz?=
- =?utf-8?B?cGVUUWZ4c1RHNHNsbXlTY3VzTW0yWkdoVlZ6T0lVVEhaUWJNVk9ZMGo3T2V3?=
- =?utf-8?B?R1NDNGx3TmJuUjhsK2t5V2dNN2dXM3h6bXZBRFpjMjVyRUx3bmJEU1NLUVFj?=
- =?utf-8?B?b2gvdnJaYWJrakptWjFaQmxXckVXZU9jM0xDZ25SbTEwVGtVMmRzVG1iRk1W?=
- =?utf-8?B?MzJoZExRWENyOHJUSDhmSDZWdjIvbzNxT3BhQ05QemI0RmppanR3ME9mdXJR?=
- =?utf-8?B?aUE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd2b219c-a6c1-49b0-ac53-08db42c5cd3e
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QUhDYTlZMUNSOUJFelUxd0d5SjB4Nkl4QUkvcFl6MG5FL25oMWpSZXZ3N3pz?=
+ =?utf-8?B?VWhqa0cwQWljeDNPaWM5OVBNOXZLVkJFZTRFMHV6eXQ3Q2NuY1pvYm1CVFhq?=
+ =?utf-8?B?NmVZWUhpOTFoZDFoalR6aGRFNGRlZFl2SnNEeTNmUE5MWlhEczBIczJxejV4?=
+ =?utf-8?B?YjBrQlBaV0hFV3ZxbjIxQ1JjVUw3Wmc0Qm41b3hWQ3VZNHZMdlp6WlhlSW5E?=
+ =?utf-8?B?azRjeGhtZitCamM2TDcvNnc2bklIQmxQZ1RJWk5ncEt4OFo3eVNxYmp4OEE5?=
+ =?utf-8?B?MkxWVjdQUFovYm1senhwZ3FsUkRWSHNCanY1ekk0OWhCejdLZk1YMS9KZ0Ru?=
+ =?utf-8?B?UTgyWk1KSkpBNEJSdnJYQitJWlYxYng1OStiUW1iYjFlRWVSZnA5OVBkV0g4?=
+ =?utf-8?B?UTM2ZG1HQWRSalFXRnVkUWJRSHlzamJaQjRiNlJOWWhwNUFxdE5pQzg2ZC9E?=
+ =?utf-8?B?WElwRGsvcUtpQ2FyRjdIWk1ZWFhuY1JOZWFTaVhBZS9uU2dLTlZ4MzVEMElq?=
+ =?utf-8?B?Mm8rYndTaWlibkV1bHQ1MDBqNFJiY2ZJb0c3dW9OQVZNQ1MyWGQya1JZdmk1?=
+ =?utf-8?B?Vk1lWEtFZDI5Y1R3VWd0d3dBdDFwWUtRZURuSWNPWEtlSkppRVJldFBKaEdN?=
+ =?utf-8?B?U2lzUmdhQmtCS2hudjdGYlFYNTExQXpYd3p4cCtJbXh2cm9oTFptWks2cDNX?=
+ =?utf-8?B?ME9zYUd4VW5xV09CZ2VVeUFhQWdDUStPY055YW82QkVvb2VvbFZQbnFOR2NQ?=
+ =?utf-8?B?ak1UOGpydnMwSjNvbXByM3o3d3QvWDRIV09raVZHSVFKSWgwUEJwbVpvTVVy?=
+ =?utf-8?B?cVQrTHVaN2cxeEVmM05aeEQ2Y1BSOTc3a0JXb1AzaXNzS1dmTmp4cW5wQVp5?=
+ =?utf-8?B?Z1FZckRoelJwVUl5aDVYL3JpWk9heXl5ZjBIRmJBd0p2WHJ4RnRseGo1VEo1?=
+ =?utf-8?B?dEdsNGt6R1JmZGxhb29mS2J5Y1dONkpVdVVpTXRjSXhVbCtZVk9XZzVLaDY4?=
+ =?utf-8?B?dzZvK2V0L3lIQTZyV0t6RVcrYWNiMy9SaThpY2U1eW4rbTBueC9uTnZteW0z?=
+ =?utf-8?B?OFJwalo2bXc4cGhqS1djQjlkNUFOeUVsV1BTd3pvWGppczFKVDNDODBtanp6?=
+ =?utf-8?B?a25KOE41eXUySmgwMkZ6R0hXeGxxZFA1MXNMbVZUK1ZUR0lRV0p6cm1HVVJG?=
+ =?utf-8?B?cTBkcTBOaURIYnZLR1doZlcwVyttdjMwZGdmeVk3MEUwdHdzNlFkUHh5bmhu?=
+ =?utf-8?B?c3lQSGx0SHVpZWMvNWpSZHVCM1c4NG5jck5GZktlZ1ZrQ2xYa0pIQ1l0clJu?=
+ =?utf-8?B?M2FxMnE2MVJpN0dzUWNZVjNhNmwwNm45YXNkR2NZTmx2a3l3aEdDUTNJTHRW?=
+ =?utf-8?B?YUQxVFVic1M5cDM1MUFwM0pISS9qUDUwdFlyelhUSFdOTHBIUWdJMmpiUFBq?=
+ =?utf-8?B?RzkxSjFYOGY5OFBJUk5nS3d6c01ISldYNjJrbWkxWGhHTldIMFIyM0QrWnhM?=
+ =?utf-8?B?WUFHdUxhWDFwT1lFUmZKUys3d3RoaGtkelo4Ylk3SHZjNmxwMWR3TGRzMk1C?=
+ =?utf-8?B?czh1MXFSNlIrVk5ickFFY2U4bWsyNU1CRXIrZ055a1Y0SW4raEl5SzZxalVy?=
+ =?utf-8?B?NUxub2tLaHErQW5aOEJ0Y1U3YmhtbTdxSjZSNFRxL2JzU2tkYmQ4dzRMN0dG?=
+ =?utf-8?B?NC9lS0p4YkRoNm1XcmtnR3lML3pjVm1icS80MDkyc3d0aDlDcEZmY1Fvamwz?=
+ =?utf-8?B?UWdUK3loNzA4aW04WWNOek9NajBmRXlONTRUZW5RY25ENkRVY1c3WXZDNHgz?=
+ =?utf-8?B?eEFYay80d3U0dUtQTXBTcDU1OWs5YXRadis3ZHFOMEFqM3ltWXRpT3dVK2E1?=
+ =?utf-8?B?VDhmY1NpaGZqVzliR1JkNWM4dmVuQUtvTnc0Y1haZ0NEb1d4d0RacjZhMVJT?=
+ =?utf-8?B?cXlKUDI0U2IweldDNjhpSGw5ZEx0cjhOZHlROUlSQmVzblh0ZGh4SVlsRzNn?=
+ =?utf-8?B?V1BTb3JQQ1IyMGY3K2lpbk9sRnNDV3Y3Mi9zZFZYbEljbmNBTld0d1U1dGNj?=
+ =?utf-8?B?L05RNm5aQ1VRakY1RzhHZTRPbTN1eWFNSzB0SmZVczlPTlJxVkR3OVk5Mll3?=
+ =?utf-8?B?aW5ZcUg5RlU1bjdCSkZHNEdMT1JxT2w1YnhPSXlyVExFRTRIMUhENUxKdzlN?=
+ =?utf-8?B?T0E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1ba7943-b69d-485d-5f63-08db42c6203a
 X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2023 00:09:12.4340
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2023 00:11:31.7310
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9pZ6R/ntvwzme9TduB/bU2qFxmUJC9di/XVgprGZlh3mrif0anLAueusNQa3ace4VoJUyPV3c9Toah7X1wvvLWlgzKm4zRPJW2CCz3GiBWY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5937
+X-MS-Exchange-CrossTenant-UserPrincipalName: gFnl24zu365se5VJyXUT5BFSqxlXZ70zFgGUGb+mwl+phNhULTvgTFa/z7jcKyJZ6Sb7xyWxJRbQu9cD3SmYeg8JJj1HO/6towX9CRimopY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5227
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -167,63 +162,104 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 Hi Ilpo,
 
 On 4/18/2023 4:44 AM, Ilpo Järvinen wrote:
-> A few places currently lack umounting resctrl FS on error paths.
-
-You mention "A few places" (plural). In the patch I do see that
-cmt_resctrl_val() is missing an unmount. Where are the other places?
-
-> Each and every test does require resctrl FS to be present already for
-> feature check. Thus, it makes sense to just mount it on higher level in
-> resctrl_tests.c.
+> Resctrl FS mount/umount are now cleanly paired.
 > 
-> Move resctrl FS mount/unmount into each test function in
-> resctrl_tests.c. Make feature validation to simply check that resctrl
-> FS is mounted.
-> 
+> Removed mum_resctrlfs that is what is left of the earlier remount
+Removed -> Remove?
+I am not sure what is meant with "that is what is left" ... 
+
+
+> trickery to make the code cleaner. Rename remount_resctrlfs() to
+> mount_resctrlfs() to match the reduced functionality.
+
+These two logical changes would be easier to review if done
+in two patches.
 
 ...
 
-> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-> index af71b2141271..426d11189a99 100644
-> --- a/tools/testing/selftests/resctrl/cmt_test.c
-> +++ b/tools/testing/selftests/resctrl/cmt_test.c
-> @@ -86,10 +86,6 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
->  
->  	cache_size = 0;
->  
-> -	ret = remount_resctrlfs(true);
-> -	if (ret)
-> -		return ret;
-> -
->  	if (!validate_resctrl_feature_request(CMT_STR))
->  		return -1;
->  
+
 > diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-> index 9b9751206e1c..5c9ed52b69f2 100644
+> index 5c9ed52b69f2..f3303459136d 100644
 > --- a/tools/testing/selftests/resctrl/resctrl_tests.c
 > +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-> @@ -77,9 +77,15 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
+> @@ -77,7 +77,7 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
 >  
 >  	ksft_print_msg("Starting MBM BW change ...\n");
 >  
-> +	res = remount_resctrlfs(false);
+> -	res = remount_resctrlfs(false);
+> +	res = mount_resctrlfs();
 
-I think that should be remount_resctrlfs(true). Please note that any of the tests could be
-run separately from the command line and thus each test need to ensure a clean
-environment, it cannot assume that (a) user space provided it with a clean and/or
-unmounted resctrl or (b) that any test was run before it.
+As mentioned in previous patch the way I see it remount is still needed.
 
-> +	if (res) {
-> +		ksft_exit_fail_msg("Failed to mount resctrl FS\n");
-> +		return;
-> +	}
-> +
->  	if (!validate_resctrl_feature_request(MBM_STR) || (get_vendor() != ARCH_INTEL)) {
->  		ksft_test_result_skip("Hardware does not support MBM or MBM is disabled\n");
-> -		return;
-> +		goto umount;
->  	}
+>  	if (res) {
+>  		ksft_exit_fail_msg("Failed to mount resctrl FS\n");
+>  		return;
+> @@ -106,7 +106,7 @@ static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
 >  
+>  	ksft_print_msg("Starting MBA Schemata change ...\n");
+>  
+> -	res = remount_resctrlfs(false);
+> +	res = mount_resctrlfs();
+>  	if (res) {
+>  		ksft_exit_fail_msg("Failed to mount resctrl FS\n");
+>  		return;
+> @@ -132,7 +132,7 @@ static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
+>  
+>  	ksft_print_msg("Starting CMT test ...\n");
+>  
+> -	res = remount_resctrlfs(false);
+> +	res = mount_resctrlfs();
+>  	if (res) {
+>  		ksft_exit_fail_msg("Failed to mount resctrl FS\n");
+>  		return;
+> @@ -160,7 +160,7 @@ static void run_cat_test(int cpu_no, int no_of_bits)
+>  
+>  	ksft_print_msg("Starting CAT test ...\n");
+>  
+> -	res = remount_resctrlfs(false);
+> +	res = mount_resctrlfs();
+>  	if (res) {
+>  		ksft_exit_fail_msg("Failed to mount resctrl FS\n");
+>  		return;
+> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+> index 42f547a81e25..45f785213143 100644
+> --- a/tools/testing/selftests/resctrl/resctrlfs.c
+> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
+> @@ -48,29 +48,19 @@ static int find_resctrl_mount(char *buffer)
+>  }
+>  
+>  /*
+> - * remount_resctrlfs - Remount resctrl FS at /sys/fs/resctrl
+> - * @mum_resctrlfs:	Should the resctrl FS be remounted?
+> + * mount_resctrlfs - Mount resctrl FS at /sys/fs/resctrl
+>   *
+>   * If not mounted, mount it.
+> - * If mounted and mum_resctrlfs then remount resctrl FS.
+> - * If mounted and !mum_resctrlfs then noop
+>   *
+>   * Return: 0 on success, non-zero on failure
+>   */
+> -int remount_resctrlfs(bool mum_resctrlfs)
+> +int mount_resctrlfs(void)
+>  {
+> -	char mountpoint[256];
+>  	int ret;
+>  
+> -	ret = find_resctrl_mount(mountpoint);
+> -	if (ret)
+> -		strcpy(mountpoint, RESCTRL_PATH);
+> -
+> -	if (!ret && mum_resctrlfs && umount(mountpoint))
+> -		ksft_print_msg("Fail: unmounting \"%s\"\n", mountpoint);
+> -
+> -	if (!ret && !mum_resctrlfs)
+> -		return 0;
+> +	ret = find_resctrl_mount(NULL);
+> +	if (!ret)
+> +		return -1;
+
+This seems to assume that resctrl is always unmounted. Should the main program
+thus start by unmounting resctrl before it runs any test in case it is mounted
+when user space starts the tests?
 
 Reinette
-
