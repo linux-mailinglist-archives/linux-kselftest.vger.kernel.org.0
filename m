@@ -2,85 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABAF6EB658
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Apr 2023 02:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365736EB663
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Apr 2023 02:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbjDVART (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Apr 2023 20:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        id S233771AbjDVATo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Apr 2023 20:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233922AbjDVARS (ORCPT
+        with ESMTP id S233685AbjDVATm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 20:17:18 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A834630E5;
-        Fri, 21 Apr 2023 17:17:07 -0700 (PDT)
+        Fri, 21 Apr 2023 20:19:42 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA302716;
+        Fri, 21 Apr 2023 17:19:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682122627; x=1713658627;
+  t=1682122774; x=1713658774;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=QFEpkpTvzGW8gVGXv+0HLYdznJKVQ7e+N5ylV/YoTcc=;
-  b=aWuAFPDwkMHKsbdlnieNT1mGc9xzpmrIDzxeIp2ImaPX/X56GZoe1e2A
-   lJHzYD+/CSdKLQwQJXUfwfV0PauX8AxEPw3lxQ1YprqAmtqEpZTEl3Rl7
-   LmbnCj0r1LrDLWRunzq/DClDxkpnXkFY9/egb25nMiLne98GARos4gNEm
-   ANYgmyshox5iWNWT5TKZzqJmDc9wAM+bbBV7nCcOntucgo9clwVXEU02w
-   5w+0ITj1yvGQJh9rXnj/4sPzxRF7590uZR7zG/XjEnYknEXxzmTHPAdkL
-   Y0drb0r5yXXUCcpoM4oR6Ezs9dCDurgKXTZluDD09n8Bhal6UxEXLhQNZ
+  bh=ouNDz773DeCxFA7PN9OmfbLGfIRFHNlFIbj+MFXzuV0=;
+  b=RLJ8HoqgP/8CF7KVEBp5T/2CKJ/fYcbXkoa3iHuwmzlfjw9Eobv1BPz7
+   sQc3OUyvZc2N3fjd9clr8nbqm4hUlvkpxO3pRMIbLIdsIzBuSm00myop8
+   ASjqQNLJej17GyT7WpHwnH+o4DO2JtC8T3Lfpb3xAvFv5cd3ExJUlooa7
+   XiqtiUYXn1H7U2+17vNKoGUQZqaTjClFn0u6267Ou4XtVEmztq+Y4oZg8
+   BK+4VjRo/p93SSBE1mdKHT8n0JCPNxdwroV6vHqwyW7vvdiv1HdhM1iWR
+   c3KC8GUdB8ZfBRQDyAdbluaN5fTVC2BVLxaKTGuo6x6wwzDe7V/OtgxkV
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="432383954"
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="346129005"
 X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="432383954"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 17:17:07 -0700
+   d="scan'208";a="346129005"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 17:19:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="866854949"
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="722937684"
 X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
-   d="scan'208";a="866854949"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga005.jf.intel.com with ESMTP; 21 Apr 2023 17:17:06 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+   d="scan'208";a="722937684"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga008.jf.intel.com with ESMTP; 21 Apr 2023 17:19:33 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 17:17:06 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ 15.1.2507.23; Fri, 21 Apr 2023 17:19:33 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 17:17:06 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ 15.1.2507.23; Fri, 21 Apr 2023 17:19:33 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 21 Apr 2023 17:17:06 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.173)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ 15.1.2507.23 via Frontend Transport; Fri, 21 Apr 2023 17:19:33 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.168)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 21 Apr 2023 17:17:05 -0700
+ 15.1.2507.23; Fri, 21 Apr 2023 17:19:32 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TswY/nmPP5v2rwX0WEm8QDUQW8IE/DyRnVFokGSXN/ZA/e+acoZH9fZ4dNun4Ou5hQexEr0eXJfRyFG/V0YC4B54+Fgsoi6uSxSag/tyi2Yt5nUWzKGOMGOVeWZ+Ism4lVgdeLxuigpSWPs6rc3lS7iQCGSpTK3DTNi50T7tnZ9evcbNr9sp5qJ51Tbv2CP35FEzrnlueoK3f4Zw7+E0Hu/xXOo3DRTCDSMDdvFPqrDx+7AB11ab0/Kzkyp9Ymc5wDvZYhWtrHYeVKGUP34ldvCLgFqSb3rwjKPdziI/2eYUMwJixwKGej+7nzFxJIHVKhYcCp4wJ43OAab9aJiOlw==
+ b=Jkz6FeGcd7SgEFrzCJGEB1btr4LoFMwCdd2A5RdtiCmNmL4vmEL4G/8uamTMDxhBQ2I1JCPxvO/VCjTMlwDn8LwqXncKMg/89sXR/G8j0t65x0X10ZO/MV+1SoBH2rKnscd9lyRBPKm252aZ3OzpfV3LKtXGgbWG11BGUu5ymcrirogY2kJGJwmffvVxPpENG+InDWGCEdagTiap77V4fJecRKii1nKAuhsnxcJ+r7CV577Dl8VxBNOO+cmzLm7KjxGEF0tJqAlGQmlfh5QIsQHdLs/NqLRqWTvsiTlWgUQNLoFM6cj0J3ZjHnqud3JDO5wBTl4wKfZqnjAgsu/Yxg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uGPa9hCv3/TpSRJDpIZW1K6k0nEkBz1D6Gc4aZyIhYE=;
- b=Wh5d+L4rtdzsuURbrfOoOemgwtVD3HjG7MKs219Hd86iHfv3wBFtD4UHOhpE+ZiDsheQHSH/eoc858SmpDzWjKu48kcEJbJEi9LL0/0B1mb/+83v8mXVeR8o6rvTgnhmIasucR5wdbjIXLa4OZJGjUQkHjER6kcGlTiXf5fzPZu0aAw4Vu/kGcO/xnoNfb53yTT+vc3sN82GlFcmGqcBmOfP0ZmpcOMWiknSIBRYG2JQVCDYBk/2Zk+d6SGsa2wmxY3/MTwYQx8udgDlr4EGLsUOzrwM8vE6oRoS30R5cDSEzsWQfwi/Nfi2viCm2DidYRnAPVZkS5XiclEJ9+zHEw==
+ bh=pCNka+nSJVt5GnWRcHSpbT4tc6PxI9Lqo33NyDu8QYI=;
+ b=NhNXQfct36Bq4RPo3IhAI0jVw7Legn7yKvfD4x+aBuSBiUdaRG8nUVcBeqpESyuOFtpaOBDRBd+ZSlL0e/TjDpOTLLBGv6yZ+qMGCCNnbikZRBIqrv7HsEfGfs0lj1kOcaybgziOLiC+8hONzEHmFW66nQrE+7RruR73PLIyWmYGGhUIm6Z7t9Wan7N5QDXATM7In6ZRzoGP9+cq59heoKVdxOY0Yu+ADf8MVZH+zSI4bTEsVMoX0o3+zkuzRMknFN2uamFrtdfHCsD8zAsKqXf7f9VWXHRN1FZAKG/goUWw27Z1LyxA0uu4sg0IQ1ojaLSMFMuXAF4geZANTGuhAg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by BN9PR11MB5227.namprd11.prod.outlook.com (2603:10b6:408:134::9) with
+ by SJ2PR11MB7715.namprd11.prod.outlook.com (2603:10b6:a03:4f4::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Sat, 22 Apr
- 2023 00:17:04 +0000
+ 2023 00:19:31 +0000
 Received: from CY4PR11MB1862.namprd11.prod.outlook.com
  ([fe80::2854:770d:2a43:dbc6]) by CY4PR11MB1862.namprd11.prod.outlook.com
  ([fe80::2854:770d:2a43:dbc6%4]) with mapi id 15.20.6319.022; Sat, 22 Apr 2023
- 00:17:04 +0000
-Message-ID: <c54c301e-ff18-90a6-3e68-d77d0df23b77@intel.com>
-Date:   Fri, 21 Apr 2023 17:17:01 -0700
+ 00:19:30 +0000
+Message-ID: <287e5f1f-87d5-473a-2bff-271adca8d458@intel.com>
+Date:   Fri, 21 Apr 2023 17:19:27 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v2 15/24] selftests/resctrl: Refactor get_cbm_mask()
+Subject: Re: [PATCH v2 16/24] selftests/resctrl: Create cache_alloc_size()
+ helper
 Content-Language: en-US
 To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         <linux-kselftest@vger.kernel.org>,
@@ -88,71 +89,71 @@ To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         "Shuah Khan" <shuah@kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
- <20230418114506.46788-16-ilpo.jarvinen@linux.intel.com>
+ <20230418114506.46788-17-ilpo.jarvinen@linux.intel.com>
 From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230418114506.46788-16-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20230418114506.46788-17-ilpo.jarvinen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BY3PR10CA0021.namprd10.prod.outlook.com
- (2603:10b6:a03:255::26) To CY4PR11MB1862.namprd11.prod.outlook.com
+X-ClientProxiedBy: BY5PR13CA0015.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::28) To CY4PR11MB1862.namprd11.prod.outlook.com
  (2603:10b6:903:124::18)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|BN9PR11MB5227:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c7e7db1-dd08-4da9-6d8e-08db42c6e64b
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|SJ2PR11MB7715:EE_
+X-MS-Office365-Filtering-Correlation-Id: 97cc1868-6611-4dec-7dec-08db42c73d75
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kuLiHlgPe0rpFN38xDVjiUxew2Vez/YRqvpoPMK7z2+LwmWuJl4JIHMqyYhKPGpuEpukzjM5lZLdhGaug1PpqnvrL19UWcCvRT3qjFt5Zc2a6+PT1uGWDaXruqcW2d7/4rjwnUth8UBVTxoXkTDeCbVjf4qy1LBPsIx8x29rgHNJHor8WA+4oS96nBQwKzUoBvfNjxBQe2LwmfEF97jXr4RB0r3GbCyZ4rZROk6WdzuafRC5ibGrjFEeUWW0UU+hiuU/yT/qXs1iEgEbw8mi0ONXcZ1gZGwMXDu1NuGzapXIWJ8ZwZrIfCEo1/8tIN7RFzJYnRGRzhopYfbYIVNARb+2rT49EBMTKZM68AXMwnc8Y1PdyoEM46SpT2933cb0l0v0xp8n1axImkRhscNK9I2j75rgQmFvHDlSo5sUD1/DieUddeQrXb8o+JKr3kwFBtFp0b4o+FJtEIAmg2+s1XpxhpngzewEm9OY7f5RlSzLsybKMWzIs+IjeyoE4PQZ7cVyfhEQLZeZQMoMpcwQgrBjNDglLatWEk96It4Be2T0U7Rd5eMWXfbkfK+/RdgTY/jDd8xqNcD4M2pZwf/zvgoko8wusX7r3lUMqGSJLEMrRJ2AKTosGBPITJ4meG/Vp0KHnloQSXAY1He1pWbQOw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(136003)(39860400002)(396003)(451199021)(2906002)(8936002)(8676002)(38100700002)(44832011)(5660300002)(36756003)(86362001)(66574015)(31696002)(6506007)(6486002)(6666004)(6512007)(26005)(110136005)(2616005)(31686004)(83380400001)(478600001)(4326008)(186003)(316002)(53546011)(82960400001)(66556008)(66476007)(66946007)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: +dBRv0kJdBVSwVpToYhGNQNPW9Lfc7LVrGVyA/TcMbG3yXyXC8kbg52OtFW3nJuKXt4Sqo0JZCI5/1i1vUdODo2w5377JrA76fxxG11W9MU/CwLzyQ10Qr74UZMhxsN6THQPq1m37kxRpQwxOMRqZtrAC9VRGjZrtvTT5gx9C6P/s1s3SB4ODhY+P0qn+s9fZLkKw0BA8CHqAKnVnlWs0oAIlLJKzM4QxyzbA7rIL8XMdJQG1Ma5ljFNvmf1IOKATYJ9AFxvIO1IQeuhWGsS/twWiB5Ov1d9EGjZNRUqzSK+BFOPhIaXBlKgTksp0/YuQcHtpvxwwJUHzXIdQcxPkDa5DtnttFjlrqjdDs2OTzH/dsLIv3HHcUgu2zp4MXzGomD1XgjYpLeOyxead07Qdl84JdX0bhzLwjBDxJE2OXn0noCap7CHsNj2LCJ6ejrBdpdDguQZqzmf10HdVk+6ZLT3CpALyrv6DpUKkXK1avKgS19BmVYh1/FVlSBIVW6apmSNt4ySvb4reEnN2IbTd2UY0dAUmuNBx6Fp1egFUafi3fk4MLsXL1LaqrlaV3fIpPn5nSfyXHhvmD7ZcEdWm0Nw38fOZ4u+jNxBHYqsLCsKC1yiZH0Pxw8/Ap/Lqb5rOnltXQPBqCJchUf47wok+A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(346002)(376002)(39860400002)(136003)(366004)(451199021)(53546011)(6512007)(6506007)(26005)(186003)(2616005)(8936002)(8676002)(44832011)(5660300002)(36756003)(41300700001)(31696002)(110136005)(86362001)(316002)(82960400001)(38100700002)(66476007)(66946007)(66556008)(4326008)(6666004)(6486002)(31686004)(83380400001)(478600001)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZlpGY1lXTExzaGNmK0JkU2hPaWZEd1FqRHVJQWo0RE5IUzN2cVZNenFYSk0r?=
- =?utf-8?B?aHl3ZTdkK2tlalB2djI0RGJjcGdNVzByTWp4VC9CTjVzTm1kUzlzeGxRRnZK?=
- =?utf-8?B?U0pXcXRMVXZNSkRic1FIZDB2d3RnSHUzZEJZNHFlM1pjaU1CN2NuM0ZtbnIx?=
- =?utf-8?B?MmlPVVJvVzNIaFViWUx2QWtzaytJZGN3UTJUY3FsQSs2WmJRU1NqbFJuOVZB?=
- =?utf-8?B?RkJkS2N4eUp4VmgrTkhaNmt2UXB5YTNMdE5HdC9mZXhLRm1weCtKWjZ3VTEv?=
- =?utf-8?B?SU5ranR3R09odW95OGZtTDVRQmZxUEJwelhSci9HMGVDcVlBUC82eGZRZlBK?=
- =?utf-8?B?WGs3Nm9WTXI2Z0tDckZMVzhtT2VvTm43TXBxZTBobzF4YmhETkFxWDhySXRk?=
- =?utf-8?B?b2N3V0lITW50U005QzZESTIyanF0MEZlZDUzdG5lVTl5bDBVc0xHUCt0NVp4?=
- =?utf-8?B?OGw2NzFncVduQ20zVFNMTjRsUk1qSXpSU3dqYmlxV250NUw1NE84SVJEYTNN?=
- =?utf-8?B?ZzFiZ2tmcTAzSk1YSk1oWDRyU0NEL2sxY2NCbkZ0U1JpVEUwSXJGRXJWblB4?=
- =?utf-8?B?NUV0RnBvdHQ1WXQyTFR6OXVxUjNuY1ZXbjZTaW4zSS8zUEc3aHZ6cFdNK1V6?=
- =?utf-8?B?TmdNbTZaR00wTHFqUENldVZIc2NHZFJuN3ZYc29JSFdEV1N6V3JWc3IzaGdL?=
- =?utf-8?B?R2VWSHI2YXlrMWh4RSsvM0dteVF6UnFMbm9ScDNoNktBTDBXczIxTFFKekZT?=
- =?utf-8?B?MnlzMGI2cGFjaFlYdDlFa2phanlyV1pHRVlESjd0OGZwcHZZbVNOdEhFR3h0?=
- =?utf-8?B?bXBlUjFPdUU0d0lLMXFsR3BSMGNtSWVIT3lNeEFFZlZvM1lRMzdKbzc3RlEw?=
- =?utf-8?B?dXZJQVA0cUJSWWRXZ0hidGtqVG9GcmF2OEpYNlBGUDlQTFVCSUFkV3JaZ0dv?=
- =?utf-8?B?SXVTR20zWXY0VXRLVU9KOG5VRVFFeVFsd1JGNUdFRUJFNVQ5TFd0c0VLSysw?=
- =?utf-8?B?djJsU3o5RVh2ZnlTdlgzYktLRVhpemV2RnRDajgxcHM2U0JneXN1cU0rajdm?=
- =?utf-8?B?K2FMNFlMQmZBNDB4cmxsNTNzSEw2SFlBSFVnQm1YZGk0cDhxclNSaXhtRThE?=
- =?utf-8?B?N1NWelU3VGpLYlpPeVc5UnVyQnRJSWFuVlNiZHJpdWhYNFhLU3VJbC9VT0Vz?=
- =?utf-8?B?WDEvRWRXRlZqNk5rcG45WFhNbGNtdmxXUjhma0kwcWVJdU1QSHFYRFhLZnds?=
- =?utf-8?B?VEZkenN2dlhDQTJBVkkyOG1OQ1Q2QVdKaUFXYkNrekFDK3BIMXk4QWU4NWow?=
- =?utf-8?B?OWNNKzAzbUJNOTFzTEpPbjN2RHJHSktSQ0U5M0FPSm9UUWxPR1dwYkpTVU5t?=
- =?utf-8?B?Y0p0UElmQXRrQnFGT25Cc1BIa2FlaVpYTEVWbHBUQkJqMzVPbHJoWHc2dlB3?=
- =?utf-8?B?ZEVHcU93TVJURVhpcUNhYm54N1RPUU51d2x3VDVlL3FNd05tRE8rVHhweGtm?=
- =?utf-8?B?WEpobFdkck5jUm9yL0R3VVB0d1NWKzFYSjhvcEV0TExRMitpeFZUYjc2alpM?=
- =?utf-8?B?T2NzcGlyVTNWd1dNdWkzblJjSHphT2FUTjcvcFlWd1ltRisrVVUrZDRiWDZS?=
- =?utf-8?B?cExNTy82YzdXck9JRUhyZDFQVCtWSm96LzdhTkYycVN1QnhIWHBWT3dXU0xu?=
- =?utf-8?B?MThnWkQrVExRVTRmTUJKalFYOUVjMktVOVc1MThuRnk4QXVCZXY2MDNRbVhO?=
- =?utf-8?B?MFNWM3o1Tks1NXlrazFHcENmc2ZHaml0SEo2UzBlQ3lKWityUk9IMVFhcHRw?=
- =?utf-8?B?S1c3MWJvRHk1eDkweGl2dis0aVhTVllxRmdybVBGQTdhekNkbXErYVFDM3ht?=
- =?utf-8?B?bjliSXo5ZG44OXcvazE0akEyL0lSTmxvSkFRd1gxSkFGcVozRU93RklBbktO?=
- =?utf-8?B?M3RnQ1Y5R0dCV1BwR0drQW5qYWRpbUN0dks0WXlsZlcwd2psdEtpRFNaQk1S?=
- =?utf-8?B?WC9abTdscXJYemJyZzVta0RTYW5wN09JYU9PZmdMdmpFdmFTcTNhc2Z2QWdT?=
- =?utf-8?B?dUxiUDMxbFI5TzFLYkxJdTcyaWhxMnh5QlVkWGIyRlpUZWt3bUpORndyRVUz?=
- =?utf-8?B?K0dydm85WnpCNDVFQTNtdmdXWXFyanV5TlJtMVdjZUlUZ2Q4aFF5dVNmN0th?=
- =?utf-8?B?M0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c7e7db1-dd08-4da9-6d8e-08db42c6e64b
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RVd3bzZXNHN6ams3YXpGamV3Z2M5QnI0NGdZWE5ROER3bnpUQjVrT1lqbG5a?=
+ =?utf-8?B?aWJJMmRTaUh5UkJmdUlCcnFYTnY5enYyNnJKZExHYmhCOHRsOUNnaFhETzR3?=
+ =?utf-8?B?ZkJaYXczWUhxMmZQZ3pGUXpaZjZ6RFlMOVMwWU9TZStpZG11amdwbGU2cXFJ?=
+ =?utf-8?B?blljVFZIWEZDRkZtT254cXdXVUlIYUdSUjhKMkE5MllPbnpOS2ZZanpCcVRw?=
+ =?utf-8?B?bENsMWxPSm16eWxkYnNKaTNydnZOWEFVRGhvSzNGUTdrRnUvcng1QXM0MW9F?=
+ =?utf-8?B?Zmk2NFQrK3NWK285TFF0VFlGU2ZTWlNXTWc1YzFOMHFHb2hWMURLaG43NDE3?=
+ =?utf-8?B?Q2FHbkJXUkM0bFgxK1FiRm0zbGlVWGg5K0FjWHdqMWcxZmFadm1iK0V3MUZN?=
+ =?utf-8?B?Ti92bkM4ZkxSNWZyUysrczEwaXNIcisvbzJXOU9WS3VmMDAxbDEyZDVkU0Q3?=
+ =?utf-8?B?bzFleUJjYmZLRTVUOVJURFJvZUE0T1A3QzNGUzc5M3FxS2lTUk0xd0hLSmxL?=
+ =?utf-8?B?WldpTExiWFhiSEhpQVM1NWJsZnN1Z2h4MlowcUZJSVBUY1ZhQWdVcGhXSzRR?=
+ =?utf-8?B?MG1TSmVaRnREbE9HRmQ5NFR0dVFMbTFleXdaNGxlcjNBZUxvUHFZQ1JiQUpx?=
+ =?utf-8?B?ZWZ0U2FDWmE0RkVHaVN1akFUODhlTVVDb1ZGWStZdGRPam5scHBpeTI1SXVw?=
+ =?utf-8?B?YmpxOXQ5azFWWmJDWXFGTlBhVzNHek5UK3BCdHpFNnlIVll5ekNYcmI0NWlL?=
+ =?utf-8?B?SVl3YjIrZXJnVFFyaUF5ZnpZNU14Yk15eDlHaERxZWZqYVJUVnlqaS9NZ1dk?=
+ =?utf-8?B?Y1NsR3E0ZkFPd0FaUjE2clhMY1ZlZnp2djErck9UeHppQW1oeGZtbksvYUtG?=
+ =?utf-8?B?d2ZVTUJQcTA5STI0V3RIa0hDd0xyaUlibStMSGd1R1I0S1AzZzhUbS9ra3hJ?=
+ =?utf-8?B?U0V6Smc3ZkFmeUNvTlJOM1NISVc1ZjZrQjNhMzJoL2RIS3M3YUFSR25kZGVu?=
+ =?utf-8?B?QlFMYm5TNmZudFkyVDRXT0xiTHl6aHpxbUV1N1ZzL0Q3TVhROG53MlZ2SG1X?=
+ =?utf-8?B?RXBrYzRhS25OTXFVdEo5RW45SExvcjNUN1YxbXhYcTdLZ1Z4UWtXMGUxZTJT?=
+ =?utf-8?B?elpxempIN3lWV3pDRVlQMGRlcGRWZDVLcytvQ1RDQlJBME00TFNWYmV0bm9H?=
+ =?utf-8?B?T2NUb3RTZ0xOSzNEVWVQS3U0Y2srb3NKMUZSVzJwQ2hmaVRVVGF5cWFaQytN?=
+ =?utf-8?B?ell5NVFxWENmZGJuOTRxOFFTY1JENGZUZ1BLNER1NFYzdFF2aVJkK1lXTnVk?=
+ =?utf-8?B?NFN0d2hMRTlvdU5raDdsaU9LMDVXNFVZRzE3cThEalRuZzIzN2VSWGh1MHla?=
+ =?utf-8?B?ZVJ1RFN2YlBScTJWYkF4MWkrWVM5WllYY1ZIRXlqVXBtSHlhTVdaNE9UWm9W?=
+ =?utf-8?B?M0IyVjBhZ0RpMmVud3B4WUxOZVMyTEFGR2pLQ0J4Mmx1MjIyK0ZYQVlhTmNQ?=
+ =?utf-8?B?ZVFaQStBK2RRUXV3UXpLbG5hejNnaXFVdmdmbTJuN0x3blh3c1ZQK0xMcExm?=
+ =?utf-8?B?a2tVWHlSVFh3TmpKVU5YT1FpeWdpcmpuRVBFbWJ0OEQ2NnRCeSt0TjBtZFRH?=
+ =?utf-8?B?NmhtSmI5Q0d2ZWlndno1UXUyTXF2Z0lQVHBqd3BKdWtZMnVXcnB2TEh4eWxB?=
+ =?utf-8?B?U3JEa2Q3aUIvVEx2NGIxYVhjOXpCVTg3ZWJzcE1wQ2V4dDFKKzRGRHYxaUlD?=
+ =?utf-8?B?Rm84WGhHNFdGekZSc0lVZ3E1UFM1WnY4cVJVLzA1NmdNcUY1cndCeWc4dnp2?=
+ =?utf-8?B?bUhxT0tGNTZXZ3R2ZTFrK1ZYcEVOdWpsOFZhK3Q5RExDYjlYL2NKZkkvdU1P?=
+ =?utf-8?B?RWMyZEIzNDZQNkMydDJRUXRDMFkreGhZeWdaa1psZnZhZFFQa0o0WkJBQzFy?=
+ =?utf-8?B?Rjc3VDlDQXVVanRpendVV0hLeTU0TEZLVkkvS3U3Rmp1QnRINUVXRVd3R3ha?=
+ =?utf-8?B?bjE0R2FnSE1MQ3JxazZMRlNOZWpJaHM3SWh3emo2eXhZVGExaFpmS2dmR0Nn?=
+ =?utf-8?B?eTJha0Z3and1U2FPV3lwd2tNa2VjMXorbGtwMU9ITzJIU3M2UjlsNGJFMDJ6?=
+ =?utf-8?B?ZjV3aVE4NVd3akpGZFJiTlpZcnRGY2g0VFczdXFESktrQ2RveW9SbDZLdmx4?=
+ =?utf-8?B?bFE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97cc1868-6611-4dec-7dec-08db42c73d75
 X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2023 00:17:03.9552
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2023 00:19:30.2693
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: e9z5I+3ysstZxLwDOzF2kXwnRNPJ012ou7JSt3lPbDBuT9ipMoXDzVUU15PE57wofGxUlH56rOCwqx6RhVjzJg+mgLA+vfh97ZdncCSIDqI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5227
+X-MS-Exchange-CrossTenant-UserPrincipalName: xgOoSyuZ6WDQsOvTAvw1ekRn47Veuycq+TaB9H3B9AftV7VqS8NXge6mZ9lrz3wCS9gfpuic7HTIKUUpFwOTyCBwB8ZO8Vm4oljxBADlCYU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7715
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
@@ -167,80 +168,152 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 Hi Ilpo,
 
 On 4/18/2023 4:44 AM, Ilpo Järvinen wrote:
-> Callers of get_cbm_mask() are required to pass a string into which
-> the CBM bit mask is read into. Neither CAT nor CMT tests need the
+> CAT and CMT tests calculate the span size from the n-bits cache
+> allocation on their own.
+> 
+> Add cache_alloc_size() helper which calculates size of the cache
+> allocation for the given number of bits to avoid duplicating code.
 
-There is a double "into" above. Perhaps the second can be dropped?
+This patch is very heavy on the usage of allocation when I think it
+only refers to the cache size ... how that size is used by the caller
+is independent from this. 
 
-> mask as string but just convert it into an unsigned long value.
+Compare to how it sounds with some small changes to changelog:
+
+	CAT and CMT tests calculate the span size from the capacity
+	bitmask independently.
+	
+	Add cache_size() helper which calculates the size of the
+	cache for the given number of bits to avoid duplicating code.
+
+I think removing "alloc" helps to convey what this code actually does.
+
 > 
-> The bit mask reader can only read .../cbm_mask files.
-> 
-> Generalize the bit mask reading function into get_bit_mask() such that
-> it can be used to handle other files besides the .../cbm_mask and
-> handle the unsigned long conversion within within get_bit_mask() using
-> fscanf(). Alter get_cbm_mask() to construct the filename for
-> get_bit_mask().
-> 
-> Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
->  tools/testing/selftests/resctrl/cat_test.c  |  5 +--
->  tools/testing/selftests/resctrl/cmt_test.c  |  5 +--
->  tools/testing/selftests/resctrl/resctrl.h   |  2 +-
->  tools/testing/selftests/resctrl/resctrlfs.c | 50 +++++++++++++++------
->  4 files changed, 40 insertions(+), 22 deletions(-)
+>  tools/testing/selftests/resctrl/cache.c    | 27 ++++++++++++++++++++++
+>  tools/testing/selftests/resctrl/cat_test.c |  8 +++++--
+>  tools/testing/selftests/resctrl/cmt_test.c |  4 +++-
+>  tools/testing/selftests/resctrl/resctrl.h  |  2 ++
+>  4 files changed, 38 insertions(+), 3 deletions(-)
 > 
+> diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+> index 6bc912de38be..b983af394e33 100644
+> --- a/tools/testing/selftests/resctrl/cache.c
+> +++ b/tools/testing/selftests/resctrl/cache.c
+> @@ -15,6 +15,33 @@ static struct read_format rf_cqm;
+>  static int fd_lm;
+>  char llc_occup_path[1024];
+>  
+> +/*
+> + * cache_alloc_size - Calculate alloc size for given cache alloc mask
+
+"cache_size - Calculate number of bytes represented by bitmask" ?
+Please feel free to improve.
+
+
+> + * @cpu_no:		CPU number
+> + * @cache_type:		Cache level L2/L3
+> + * @alloc_mask:		Cache alloc mask
+
+The description is mostly a rewrite of the variable name. Can it be
+more descriptive?
+
+> + * @alloc_size:		Alloc size returned on success
+
+I do not think the utility should assume anything about how
+the value it provides should be used. Instead it should just reflect
+what the value is.
+
+> + *
+> + * Returns: 0 on success with @alloc_size filled, non-zero on error.
+> + */
+> +int cache_alloc_size(int cpu_no, char *cache_type, unsigned long alloc_mask,
+> +		     unsigned long *alloc_size)
+> +{
+> +	unsigned long cache_size, full_mask;
+> +	int ret;
+> +
+> +	ret = get_cbm_mask(cache_type, &full_mask);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = get_cache_size(cpu_no, cache_type, &cache_size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*alloc_size = cache_size * count_bits(alloc_mask) / count_bits(full_mask);
+> +	return 0;
+> +}
+> +
+>  static void initialize_perf_event_attr(void)
+>  {
+>  	pea_llc_miss.type = PERF_TYPE_HARDWARE;
 > diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index a998e6397518..9bf5d05d9e74 100644
+> index 9bf5d05d9e74..d3fbd4de9f8a 100644
 > --- a/tools/testing/selftests/resctrl/cat_test.c
 > +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -18,7 +18,6 @@
->  #define MAX_DIFF		1000000
->  
->  static int count_of_bits;
-> -static char cbm_mask[256];
->  static unsigned long long_mask;
->  static unsigned long cache_size;
->  
-> @@ -101,12 +100,10 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
->  	cache_size = 0;
->  
->  	/* Get default cbm mask for L3/L2 cache */
-> -	ret = get_cbm_mask(cache_type, cbm_mask);
-> +	ret = get_cbm_mask(cache_type, &long_mask);
->  	if (ret)
->  		return ret;
->  
-> -	long_mask = strtoul(cbm_mask, NULL, 16);
-> -
->  	/* Get L3/L2 cache size */
->  	ret = get_cache_size(cpu_no, cache_type, &cache_size);
->  	if (ret)
+> @@ -140,7 +140,9 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>  	/* Set param values for parent thread which will be allocated bitmask
+>  	 * with (max_bits - n) bits
+>  	 */
+> -	param.span = cache_size * (count_of_bits - n) / count_of_bits;
+> +	ret = cache_alloc_size(cpu_no, cache_type, l_mask, &param.span);
+> +	if (ret)
+> +		return ret;
+>  	strcpy(param.ctrlgrp, "c2");
+>  	strcpy(param.mongrp, "m2");
+>  	strcpy(param.filename, RESULT_FILE_NAME2);
+> @@ -162,7 +164,9 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>  		param.mask = l_mask_1;
+>  		strcpy(param.ctrlgrp, "c1");
+>  		strcpy(param.mongrp, "m1");
+> -		param.span = cache_size * n / count_of_bits;
+> +		ret = cache_alloc_size(cpu_no, cache_type, l_mask_1, &param.span);
+> +		if (ret)
+> +			exit(-1);
+>  		strcpy(param.filename, RESULT_FILE_NAME1);
+>  		param.num_of_runs = 0;
+>  		param.cpu_no = sibling_cpu_no;
+
+Did this change intend to remove the duplicate code mentioned
+in the changelog? I was expecting the calls to get_cbm_mask() and
+get_cache_size() within cat_perf_miss_val() to be removed.
+
 > diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-> index 2d434c03cbba..ae54bbabbd91 100644
+> index ae54bbabbd91..efe77e0f1d4c 100644
 > --- a/tools/testing/selftests/resctrl/cmt_test.c
 > +++ b/tools/testing/selftests/resctrl/cmt_test.c
-> @@ -17,7 +17,6 @@
->  #define MAX_DIFF_PERCENT	15
+> @@ -105,10 +105,12 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
+>  		.cpu_no		= cpu_no,
+>  		.filename	= RESULT_FILE_NAME,
+>  		.mask		= ~(long_mask << n) & long_mask,
+> -		.span		= cache_size * n / count_of_bits,
+>  		.num_of_runs	= 0,
+>  		.setup		= cmt_setup,
+>  	};
+> +	ret = cache_alloc_size(cpu_no, "L3", param.mask, &param.span);
+> +	if (ret)
+> +		return ret;
 >  
->  static int count_of_bits;
-> -static char cbm_mask[256];
->  static unsigned long long_mask;
->  static unsigned long cache_size;
->  
-> @@ -82,12 +81,10 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
->  	if (!validate_resctrl_feature_request(CMT_STR))
->  		return -1;
->  
-> -	ret = get_cbm_mask("L3", cbm_mask);
-> +	ret = get_cbm_mask("L3", &long_mask);
->  	if (ret)
->  		return ret;
+>  	if (strcmp(benchmark_cmd[0], "fill_buf") == 0)
+>  		sprintf(benchmark_cmd[1], "%lu", param.span);
 
-I think this is a good change. It does raise the question why long_mask
-is a global variable so I think it may make things go smoother if
-the patch making long_mask local is moved to be before this patch.
+Same here regarding removal of code.
+
+> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> index bcc95faa5b4e..65425d92684e 100644
+> --- a/tools/testing/selftests/resctrl/resctrl.h
+> +++ b/tools/testing/selftests/resctrl/resctrl.h
+> @@ -108,6 +108,8 @@ int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd);
+>  void mba_test_cleanup(void);
+>  int get_cbm_mask(char *cache_type, unsigned long *mask);
+>  int get_cache_size(int cpu_no, char *cache_type, unsigned long *cache_size);
+> +int cache_alloc_size(int cpu_no, char *cache_type, unsigned long alloc_mask,
+> +		     unsigned long *alloc_size);
+>  void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
+>  int signal_handler_register(void);
+>  void signal_handler_unregister(void);
+
 
 Reinette
