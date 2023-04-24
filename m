@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6939E6ED582
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Apr 2023 21:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A43036ED805
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 00:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbjDXTtu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Apr 2023 15:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
+        id S232851AbjDXWgS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Apr 2023 18:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbjDXTtj (ORCPT
+        with ESMTP id S233074AbjDXWgD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Apr 2023 15:49:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448AD6198;
-        Mon, 24 Apr 2023 12:49:35 -0700 (PDT)
+        Mon, 24 Apr 2023 18:36:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6224658A;
+        Mon, 24 Apr 2023 15:36:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C57B2628C7;
-        Mon, 24 Apr 2023 19:49:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2DFE6C433D2;
-        Mon, 24 Apr 2023 19:49:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682365742;
-        bh=Yqq9MgdKtSPO1lrsEqOXiYWx3QEIAGZBp+WSsJMD1a8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=J5NvV8ewZ6t6PFc2ztQfEfOzgvw0pOK/NVrQi4oD1Imm8ACSdpKYEG1MDaV85DVuk
-         YQhItWkEjzQNoTnmbs+oDc6SPMzl8Aeir1OjkMkO6EvMGeGdxwTKhRkLEdhIHrvsx8
-         wx6Fw6mFczRpIc+Mwhr98FkoCP09HEAwpyZinW/I9XR6+IEi+G4GpfvRVjQQhqTKOY
-         vZCShQI/C3740zogqBVe+SBUy7sIBG/OTKzi2CMbx28NU8UnaFb8Z+bxnCIvlQ13uI
-         tVqiac1soFuJHdmvkEK2kLPfJP2mL95dJMZ8Yzu/8tyBPiSnDORIopmCO6H3g4Up1d
-         5f/oC2xOLF6+A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 194F5E21ED9;
-        Mon, 24 Apr 2023 19:49:02 +0000 (UTC)
-Subject: Re: [GIT PULL] KUnit next update for Linux 6.4-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <c0903897-d542-eaaa-11ba-d7e19d282fce@linuxfoundation.org>
-References: <c0903897-d542-eaaa-11ba-d7e19d282fce@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
-X-PR-Tracked-Message-Id: <c0903897-d542-eaaa-11ba-d7e19d282fce@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-6.4-rc1
-X-PR-Tracked-Commit-Id: a42077b787680cbc365a96446b30f32399fa3f6f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1be89faab3cf1f3dd6eb4924b60d2b9094e7206b
-Message-Id: <168236574209.6990.14006822455715573431.pr-tracker-bot@kernel.org>
-Date:   Mon, 24 Apr 2023 19:49:02 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        skhan@linuxfoundation.org, shuah@kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FF29629D9;
+        Mon, 24 Apr 2023 22:36:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164E0C433D2;
+        Mon, 24 Apr 2023 22:36:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1682375761;
+        bh=JUKZ2Hs9/htC0zzfnmoGs26A5T6CXo9vY2LrTZkkL8s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Fuuz51ZP8E4g8Tp5ErfnuI8Fcgtbfv8oC4n34/gtTaI+UgORIlT9iPF4rEgWswDXG
+         xci+uBoMUzVFpciGUwJN6Elx4qtDHSSRGkpy0ANUZ+WBvlHJyUgryGL6hFUsUJYAId
+         KdRVhAxdP6ZeAwEVgsU7fuNNBQc6puvIGJsNdMgo=
+Date:   Mon, 24 Apr 2023 15:36:00 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Stefan Roesch <shr@devkernel.io>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH mm-stable v2 0/3] mm/ksm: improve PR_SET_MEMORY_MERGE=0
+ handling and cleanup disabling KSM
+Message-Id: <20230424153600.a0a6150ac5673d84dbd9f4f0@linux-foundation.org>
+In-Reply-To: <20230422205420.30372-1-david@redhat.com>
+References: <20230422205420.30372-1-david@redhat.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,15 +64,15 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Sun, 23 Apr 2023 10:56:38 -0600:
+On Sat, 22 Apr 2023 22:54:17 +0200 David Hildenbrand <david@redhat.com> wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-6.4-rc1
+> This is a follow-up to [1]:
+> 	[PATCH v9 0/3] mm: process/cgroup ksm support
+> 
+> which is now in mm-stable. Ideally we'd get at least patch #1 into the
+> same kernel release as [1], so the semantics of setting
+> PR_SET_MEMORY_MERGE=0 are unchanged between kernel versions.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1be89faab3cf1f3dd6eb4924b60d2b9094e7206b
+Ack.  I'll prepare a second followon MM batch for Linus latish in the
+merge window for material such as this.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
