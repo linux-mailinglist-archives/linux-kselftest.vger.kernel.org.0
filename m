@@ -2,62 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1CF6ED0D5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Apr 2023 16:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D84046ED0EC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Apr 2023 17:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbjDXO6l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Apr 2023 10:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S231663AbjDXPGZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Apr 2023 11:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbjDXO6l (ORCPT
+        with ESMTP id S230434AbjDXPGY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:58:41 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F89D7680;
-        Mon, 24 Apr 2023 07:58:40 -0700 (PDT)
+        Mon, 24 Apr 2023 11:06:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F2D35AC;
+        Mon, 24 Apr 2023 08:06:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682348320; x=1713884320;
+  t=1682348783; x=1713884783;
   h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=yDWaktabYWFGQaXIwUoOQB61kNKDGmTqY21HhUuRI5Q=;
-  b=iqKeGJxYGnqDUNU8LEj9nAcZKniSTPlhkWLDJqf5e7voTaHYoxETLk9P
-   oxh8VXcD/hPN6p2bfXIa/igtyB6MVJOxT2kOQZuXpWf0L4czO0rvVhc2t
-   Nowo5ztdtOxRCiKg4BdyDll7T2H1Or1wA6nhSa/PfXu/l+eJabNiTSbh4
-   Ycqkj7TeWtU7kThAnM7SSbcsE94GhhnlO6i07S+40i9N/YTNK2qIZ/Wpl
-   RtLg/IYtJ3PRCox7hT55reJF/Kvi4RMz8hCIOJvcgZDRq8IssfjF3WVSu
-   M6E4trJ7yBfXJjrym30mIc8UW/DSogzeO3q60vgvE0FdFdoVXmGUdm00k
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="326082453"
+   references:mime-version;
+  bh=P2/o+HQtOGekrFjXgRaUqQiENOerFGVjTh6Xgf7VXmE=;
+  b=fImFD0R+EpT7+Xqh9PkGGcapXxWBuUR9/iO5Ltw+h+xqAteL2vTJkUtA
+   xVuJTjpADMwOki8xGIifzU09ddGiGiPDdyoYFtB2Kgqq10UEhtEUf1TG9
+   T7OR7y6PqenzIFJSWJGrsaFA0a8XWoDrZ9hjzOFIluvlYp/OHaQIHRvbi
+   KDem6mBFVymSrRTXwYr8DQFo8s422MGePNaJRLcVu1Pudew3c99ixNbVa
+   N149NBRDdJU5ASJ51TmA3cyey0WaDrEiTRDZ1nR9IMRro97Ax9OKtIbpY
+   GnyhtAtaNB9U5doW1CVvGR5GD1j4zLIEaW72g/R4oZ/1EFEBFlUpm/tCn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="346500432"
 X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="326082453"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 07:58:39 -0700
+   d="scan'208";a="346500432"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:05:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="693106347"
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="670529165"
 X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="693106347"
+   d="scan'208";a="670529165"
 Received: from wlwpo-8.amr.corp.intel.com ([10.251.215.143])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 07:58:36 -0700
-Date:   Mon, 24 Apr 2023 17:58:34 +0300 (EEST)
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:05:53 -0700
+Date:   Mon, 24 Apr 2023 18:05:50 +0300 (EEST)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Reinette Chatre <reinette.chatre@intel.com>
 cc:     linux-kselftest@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
         Shuah Khan <shuah@kernel.org>,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-        Babu Moger <babu.moger@amd.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Subject: Re: [PATCH v2 03/24] selftests/resctrl: Move resctrl FS mount/umount
- to higher level
-In-Reply-To: <74cab34d-767c-aa10-807d-3cbab7907ca9@intel.com>
-Message-ID: <85166db-cf39-5ddd-ba9c-add78e6144e9@linux.intel.com>
-References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-4-ilpo.jarvinen@linux.intel.com> <74cab34d-767c-aa10-807d-3cbab7907ca9@intel.com>
+Subject: Re: [PATCH v2 05/24] selftests/resctrl: Make span unsigned long
+ everywhere
+In-Reply-To: <83a61c92-01bf-0ac3-709d-7ba2ed0259b2@intel.com>
+Message-ID: <6585df2-6b55-b1da-483-7c2e3356e6bf@linux.intel.com>
+References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-6-ilpo.jarvinen@linux.intel.com> <83a61c92-01bf-0ac3-709d-7ba2ed0259b2@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1579805254-1682334295=:2038"
-Content-ID: <f4b5cc3-ee69-a0a8-54e-7f93afc47d4b@linux.intel.com>
+Content-Type: multipart/mixed; boundary="8323329-702082943-1682348754=:2038"
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,89 +66,32 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1579805254-1682334295=:2038
-Content-Type: text/plain; CHARSET=ISO-8859-15
+--8323329-702082943-1682348754=:2038
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
-Content-ID: <a1e1e5cb-27cc-a359-716-75b3f424e5e8@linux.intel.com>
 
 On Fri, 21 Apr 2023, Reinette Chatre wrote:
-> On 4/18/2023 4:44 AM, Ilpo Järvinen wrote:
-> > A few places currently lack umounting resctrl FS on error paths.
+> On 4/18/2023 4:44 AM, Ilpo JÃ¤rvinen wrote:
+> > fill_buf(), show_bw_info(), and resctrl_val_param.span define span as
+> > unsigned long.
 > 
-> You mention "A few places" (plural). In the patch I do see that
-> cmt_resctrl_val() is missing an unmount. Where are the other places?
+> There is no fill_buf() in the code and show_bw_info() does
+> not define span as unsigned long (it is even the first function
+> changed in this patch).
 
-- cmt_resctrl_val() has multiple error paths with direct return.
-- cat_perf_miss_val() has multiple error paths with direct return.
+Shuffling a large number of patches around seems detrimental for the 
+quality of the commit messages no matter how hard I try to maintain them 
+up to date. Thanks for noticing this.
 
-In addition, validate_resctrl_feature_request() is called by 
-run_mbm_test() and run_mba_test(). Neither MBA nor MBM test tries to 
-umount resctrl FS.
-
-I improved the changelog accordingly.
-
-While doing this, I took a more careful look into how it can result in 
-problems and I think the only way is through PARENT_EXIT() because main 
-has the umount in the end (and the remounting trickery kinda seems to 
-work even if it was hard to track).
-
-Fixing the PARENT_EXIT() problem required yet another change which I add
-in v3.
-
-As the only failure I could think of is because of PARENT_EXIT(), I 
-removed Fixes tags from this change and put one into the PARENT_EXIT() 
-umount fix. So this change will just be part of the move towards more 
-tractable resctrl FS handling, not a fix anymore.
-
-In the end, after some reshuffling, I ended up having 5 changes related to
-this:
-
-selftests/resctrl: Remove mum_resctrlfs from struct resctrl_val_param
-selftests/resctrl: Refactor remount_resctrl(bool mum_resctrlfs) to mount_resctrl()
-selftests/resctrl: Move resctrl FS mount/umount to higher level
-selftests/resctrl: Unmount resctrl FS before starting the first test
-selftests/resctrl: Unmount resctrl FS if child fails to run benchmark
-
-> > diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-> > index af71b2141271..426d11189a99 100644
-> > --- a/tools/testing/selftests/resctrl/cmt_test.c
-> > +++ b/tools/testing/selftests/resctrl/cmt_test.c
-> > @@ -86,10 +86,6 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
-> >  
-> >  	cache_size = 0;
-> >  
-> > -	ret = remount_resctrlfs(true);
-> > -	if (ret)
-> > -		return ret;
-> > -
-> >  	if (!validate_resctrl_feature_request(CMT_STR))
-> >  		return -1;
-> >  
-> > diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-> > index 9b9751206e1c..5c9ed52b69f2 100644
-> > --- a/tools/testing/selftests/resctrl/resctrl_tests.c
-> > +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-> > @@ -77,9 +77,15 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
-> >  
-> >  	ksft_print_msg("Starting MBM BW change ...\n");
-> >  
-> > +	res = remount_resctrlfs(false);
+> > Consistently use unsigned long elsewhere too for span parameters.
 > 
-> I think that should be remount_resctrlfs(true).
+> Is unsigned long the right type to use? Tracing through all the
+> indirections I do not see how making all usages unsigned long
+> achieves consistency ... have you considered size_t?
 
-> Please note that any of  the tests could be 
-> run separately from the command line and thus each test need to ensure a clean
-> environment, it cannot assume that (a) user space provided it with a 
-> clean and/or  unmounted resctrl or (b) that any test was run before it.
-
-I think I got tripped by the level of complexity here and trying to split 
-patch to minimal parts. I was somehow thinking that 
-remount_resctrlfs(false) would return error if resctrl fs is already 
-mounted.
-
-I've now changed this to pass true instead even if the argument is removed 
-by the other change.
+I'll change to size_t as it refers to the size of the memory block.
 
 -- 
  i.
---8323329-1579805254-1682334295=:2038--
+
+--8323329-702082943-1682348754=:2038--
