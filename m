@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D096EE6F7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 19:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9596EE6FB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 19:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234781AbjDYRis (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Apr 2023 13:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
+        id S234803AbjDYRjJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Apr 2023 13:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234621AbjDYRir (ORCPT
+        with ESMTP id S234762AbjDYRjH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Apr 2023 13:38:47 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5A2CC2E;
-        Tue, 25 Apr 2023 10:38:28 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Q5TW52wVDz9xFHM;
-        Wed, 26 Apr 2023 01:28:49 +0800 (CST)
+        Tue, 25 Apr 2023 13:39:07 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9B114F5F;
+        Tue, 25 Apr 2023 10:38:41 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q5TWG6w3Cz9xFQD;
+        Wed, 26 Apr 2023 01:28:58 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwD3dADLD0hkGxlWAg--.5466S5;
-        Tue, 25 Apr 2023 18:38:04 +0100 (CET)
+        by APP1 (Coremail) with SMTP id LxC2BwD3dADLD0hkGxlWAg--.5466S6;
+        Tue, 25 Apr 2023 18:38:16 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     dhowells@redhat.com, dwmw2@infradead.org,
         herbert@gondor.apana.org.au, davem@davemloft.net,
@@ -35,33 +35,33 @@ Cc:     linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
         linux-trace-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 3/6] verification: Introduce verify_umd_signature() and verify_umd_message_sig()
-Date:   Tue, 25 Apr 2023 19:35:54 +0200
-Message-Id: <20230425173557.724688-4-roberto.sassu@huaweicloud.com>
+Subject: [RFC][PATCH 4/6] bpf: Introduce bpf_verify_umd_signature() kfunc
+Date:   Tue, 25 Apr 2023 19:35:55 +0200
+Message-Id: <20230425173557.724688-5-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230425173557.724688-1-roberto.sassu@huaweicloud.com>
 References: <20230425173557.724688-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwD3dADLD0hkGxlWAg--.5466S5
-X-Coremail-Antispam: 1UD129KBjvJXoW3Gr4fKr18ZF18XFW3ZryDAwb_yoWxtrWfpF
-        nY9r1FvFy3Jwn7AasxKa17Zw4fWrn5J347G3sFy3WxXFn7J3ZrKrs0gF4Y9rW5C34UJryY
-        9rZFqFy3Wwn8Aw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
-        AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wr
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-        0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
-        07j4T5LUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgASBF1jj4iAGAAAs1
+X-CM-TRANSID: LxC2BwD3dADLD0hkGxlWAg--.5466S6
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr4UJFWkuFW5uryUWryfZwb_yoWrWr1rpF
+        W8Krsavry8Jrs7Ja4rJa1fZF4FkF4vqw17G3sFk3s7uFn5Xr13Z348KF4UG3s0k348trWD
+        ZrWIqw45u3W7GaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
+        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
+        kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
+        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
+        v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvE
+        c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
+        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
+        pf9x07jxwIDUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBF1jj4x8NAAAsi
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -74,226 +74,123 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Introduce verify_umd_signature() and verify_umd_message_sig(), to verify
-UMD-parsed signatures from detached data. It aims to be used by kernel
-subsystems wishing to verify the authenticity of system data, with
-system-defined keyrings as trust anchor.
+Introduce the bpf_verify_umd_signature() kfunc, to verify UMD-parsed
+signatures. The parameters and usage are the same as for
+bpf_verify_pkcs7_signature().
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- certs/system_keyring.c       | 125 +++++++++++++++++++++++++++++++++++
- include/linux/verification.h |  48 ++++++++++++++
- 2 files changed, 173 insertions(+)
+ kernel/trace/bpf_trace.c | 69 ++++++++++++++++++++++++++++++++--------
+ 1 file changed, 55 insertions(+), 14 deletions(-)
 
-diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-index a7a49b17ceb..d4c0de4dceb 100644
---- a/certs/system_keyring.c
-+++ b/certs/system_keyring.c
-@@ -16,6 +16,7 @@
- #include <keys/asymmetric-type.h>
- #include <keys/system_keyring.h>
- #include <crypto/pkcs7.h>
-+#include <crypto/umd_sig.h>
- 
- static struct key *builtin_trusted_keys;
- #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
-@@ -339,6 +340,130 @@ int verify_pkcs7_signature(const void *data, size_t len,
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index e8da032bb6f..c9cae337596 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1271,7 +1271,7 @@ __bpf_kfunc struct bpf_key *bpf_lookup_user_key(u32 serial, u64 flags)
+  * The key pointer is marked as invalid, to prevent bpf_key_put() from
+  * attempting to decrement the key reference count on that pointer. The key
+  * pointer set in such way is currently understood only by
+- * verify_pkcs7_signature().
++ * verify_pkcs7_signature() and verify_umd_signature().
+  *
+  * Set *id* to one of the values defined in include/linux/verification.h:
+  * 0 for the primary keyring (immutable keyring of system keys);
+@@ -1317,6 +1317,27 @@ __bpf_kfunc void bpf_key_put(struct bpf_key *bkey)
  }
- EXPORT_SYMBOL_GPL(verify_pkcs7_signature);
  
-+#ifdef CONFIG_UMD_SIG_PARSER
-+/**
-+ * verify_umd_message_sig - Verify a UMD-parsed signature on system data.
-+ * @data: The data to be verified (must be provided)
-+ * @len: Size of @data
-+ * @umd_sig: The UMD-parsed signature
-+ * @trusted_keys: Trusted keys to use (NULL for builtin trusted keys only,
-+ *					(void *)1UL for all trusted keys)
-+ *					(void *)2UL for platform keys)
-+ * @usage: The use to which the key is being put
-+ * @view_content: Callback to gain access to content
-+ * @ctx: Context for callback
-+ *
-+ * Verify the UMD-parsed signature of the supplied system data, against a
-+ * key (if found) in the supplied trusted keyring.
-+ *
-+ * Return: Zero on successful verification, a negative value otherwise.
-+ */
-+int verify_umd_message_sig(const void *data, size_t len,
-+			   struct umd_sig_message *umd_sig,
-+			   struct key *trusted_keys,
-+			   enum key_being_used_for usage,
-+			   int (*view_content)(void *ctx,
-+					       const void *data, size_t len,
-+					       size_t asn1hdrlen),
-+			   void *ctx)
+ #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
++static int validate_key(struct bpf_key *trusted_keyring)
 +{
-+	int ret;
++	int ret = 0;
 +
-+	/* The data should be detached - so we need to supply it. */
-+	if (data && umd_sig_supply_detached_data(umd_sig, data, len)) {
-+		pr_err("Failed to supply data for UMD-parsed signature\n");
-+		ret = -EBADMSG;
-+		goto error;
++	if (trusted_keyring->has_ref) {
++		/*
++		 * Do the permission check deferred in bpf_lookup_user_key().
++		 * See bpf_lookup_user_key() for more details.
++		 *
++		 * A call to key_task_permission() here would be redundant, as
++		 * it is already done by keyring_search() called by
++		 * find_asymmetric_key().
++		 */
++		ret = key_validate(trusted_keyring->key);
++		if (ret < 0)
++			return ret;
 +	}
 +
-+	if (!trusted_keys) {
-+		trusted_keys = builtin_trusted_keys;
-+	} else if (trusted_keys == VERIFY_USE_SECONDARY_KEYRING) {
-+#ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
-+		trusted_keys = secondary_trusted_keys;
-+#else
-+		trusted_keys = builtin_trusted_keys;
-+#endif
-+	} else if (trusted_keys == VERIFY_USE_PLATFORM_KEYRING) {
-+#ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
-+		trusted_keys = platform_trusted_keys;
-+#else
-+		trusted_keys = NULL;
-+#endif
-+		if (!trusted_keys) {
-+			ret = -ENOKEY;
-+			pr_devel("Platform keyring is not available\n");
-+			goto error;
-+		}
-+	}
++	return ret;
++}
 +
-+	ret = umd_sig_verify_message(umd_sig, trusted_keys);
+ /**
+  * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
+  * @data_ptr: data to verify
+@@ -1334,19 +1355,9 @@ __bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
+ {
+ 	int ret;
+ 
+-	if (trusted_keyring->has_ref) {
+-		/*
+-		 * Do the permission check deferred in bpf_lookup_user_key().
+-		 * See bpf_lookup_user_key() for more details.
+-		 *
+-		 * A call to key_task_permission() here would be redundant, as
+-		 * it is already done by keyring_search() called by
+-		 * find_asymmetric_key().
+-		 */
+-		ret = key_validate(trusted_keyring->key);
+-		if (ret < 0)
+-			return ret;
+-	}
++	ret = validate_key(trusted_keyring);
 +	if (ret < 0)
-+		goto error;
-+
-+	if (view_content) {
-+		size_t sig_data_len;
-+
-+		ret = umd_sig_get_content_data(umd_sig, &data, &len,
-+					       &sig_data_len);
-+		if (ret < 0) {
-+			if (ret == -ENODATA)
-+				pr_devel("UMD-parsed signature does not contain data\n");
-+			goto error;
-+		}
-+
-+		ret = view_content(ctx, data, len, sig_data_len);
-+		kfree(data);
-+	}
-+error:
-+	pr_devel("<==%s() = %d\n", __func__, ret);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(verify_umd_message_sig);
++		return ret;
+ 
+ 	return verify_pkcs7_signature(data_ptr->data,
+ 				      bpf_dynptr_get_size(data_ptr),
+@@ -1356,6 +1367,35 @@ __bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
+ 				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
+ 				      NULL);
+ }
 +
 +/**
-+ * verify_umd_signature - Verify a UMD-parsed signature on system data.
-+ * @data: The data to be verified (must be provided)
-+ * @len: Size of @data
-+ * @raw_umd_sig: The raw signature to be parsed with UMD
-+ * @raw_umd_sig_len: The size of @raw_umd_sig
-+ * @trusted_keys: Trusted keys to use (NULL for builtin trusted keys only,
-+ *					(void *)1UL for all trusted keys)
-+ *					(void *)2UL for platform keys)
-+ * @usage: The use to which the key is being put
-+ * @view_content: Callback to gain access to content
-+ * @ctx: Context for callback
++ * bpf_verify_umd_signature - Verify a UMD-parsed signature
++ * @data_ptr: Data to verify
++ * @sig_ptr: Signature of the data
++ * @trusted_keyring: Keyring with keys trusted for signature verification
 + *
-+ * Verify the UMD-parsed signature of the supplied system data, against a
-+ * key (if found) in the supplied trusted keyring.
++ * Verify the UMD-parsed signature *sig_ptr* against the supplied *data_ptr*
++ * with keys in a keyring referenced by *trusted_keyring*.
 + *
-+ * Return: Zero on successful verification, a negative value otherwise.
++ * Return: 0 on success, a negative value on error.
 + */
-+int verify_umd_signature(const void *data, size_t len,
-+			 const void *raw_umd_sig, size_t raw_umd_sig_len,
-+			 struct key *trusted_keys,
-+			 enum key_being_used_for usage,
-+			 int (*view_content)(void *ctx,
-+					     const void *data, size_t len,
-+					     size_t asn1hdrlen),
-+			 void *ctx)
++__bpf_kfunc int bpf_verify_umd_signature(struct bpf_dynptr_kern *data_ptr,
++					 struct bpf_dynptr_kern *sig_ptr,
++					 struct bpf_key *trusted_keyring)
 +{
-+	struct umd_sig_message *umd_sig;
 +	int ret;
 +
-+	umd_sig = umd_sig_parse_message(raw_umd_sig, raw_umd_sig_len);
-+	if (IS_ERR(umd_sig))
-+		return PTR_ERR(umd_sig);
++	ret = validate_key(trusted_keyring);
++	if (ret < 0)
++		return ret;
 +
-+	ret = verify_umd_message_sig(data, len, umd_sig, trusted_keys, usage,
-+				     view_content, ctx);
-+
-+	umd_sig_free_message(umd_sig);
-+	pr_devel("<==%s() = %d\n", __func__, ret);
-+	return ret;
++	return verify_umd_signature(data_ptr->data,
++				    bpf_dynptr_get_size(data_ptr),
++				    sig_ptr->data, bpf_dynptr_get_size(sig_ptr),
++				    trusted_keyring->key,
++				    VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
++				    NULL);
 +}
-+EXPORT_SYMBOL_GPL(verify_umd_signature);
-+#endif /* CONFIG_UMD_SIG_PARSER */
  #endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
  
- #ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
-diff --git a/include/linux/verification.h b/include/linux/verification.h
-index f34e50ebcf6..2e44ea17f23 100644
---- a/include/linux/verification.h
-+++ b/include/linux/verification.h
-@@ -43,6 +43,7 @@ extern const char *const key_being_used_for[NR__KEY_BEING_USED_FOR];
+ __diag_pop();
+@@ -1366,6 +1406,7 @@ BTF_ID_FLAGS(func, bpf_lookup_system_key, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_key_put, KF_RELEASE)
+ #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+ BTF_ID_FLAGS(func, bpf_verify_pkcs7_signature, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_verify_umd_signature, KF_SLEEPABLE)
+ #endif
+ BTF_SET8_END(key_sig_kfunc_set)
  
- struct key;
- struct pkcs7_message;
-+struct umd_sig_message;
- 
- extern int verify_pkcs7_signature(const void *data, size_t len,
- 				  const void *raw_pkcs7, size_t pkcs7_len,
-@@ -62,6 +63,53 @@ extern int verify_pkcs7_message_sig(const void *data, size_t len,
- 							size_t asn1hdrlen),
- 				    void *ctx);
- 
-+#ifdef CONFIG_UMD_SIG_PARSER
-+extern int verify_umd_message_sig(const void *data, size_t len,
-+				  struct umd_sig_message *umd_sig,
-+				  struct key *trusted_keys,
-+				  enum key_being_used_for usage,
-+				  int (*view_content)(void *ctx,
-+						      const void *data,
-+						      size_t len,
-+						      size_t asn1hdrlen),
-+				  void *ctx);
-+extern int verify_umd_signature(const void *data, size_t len,
-+				const void *raw_pgp, size_t pgp_len,
-+				struct key *trusted_keys,
-+				enum key_being_used_for usage,
-+				int (*view_content)(void *ctx,
-+						const void *data, size_t len,
-+						size_t asn1hdrlen),
-+				void *ctx);
-+#else
-+static inline int verify_umd_message_sig(const void *data, size_t len,
-+					 struct umd_sig_message *umd_sig,
-+					 struct key *trusted_keys,
-+					 enum key_being_used_for usage,
-+					 int (*view_content)(void *ctx,
-+							     const void *data,
-+							     size_t len,
-+							     size_t asn1hdrlen),
-+					 void *ctx)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static inline int verify_umd_signature(const void *data, size_t len,
-+				       const void *raw_umd_sig,
-+				       size_t raw_umd_sig_len,
-+				       struct key *trusted_keys,
-+				       enum key_being_used_for usage,
-+				       int (*view_content)(void *ctx,
-+							   const void *data,
-+							   size_t len,
-+							   size_t asn1hdrlen),
-+				       void *ctx)
-+{
-+	return -EOPNOTSUPP;
-+}
-+#endif /* CONFIG_UMD_SIG_PARSER */
-+
- #ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
- extern int verify_pefile_signature(const void *pebuf, unsigned pelen,
- 				   struct key *trusted_keys,
 -- 
 2.25.1
 
