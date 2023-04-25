@@ -2,132 +2,324 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0796EE990
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 23:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1FD6EE945
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 22:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236377AbjDYVZf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Apr 2023 17:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
+        id S234826AbjDYUza (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Apr 2023 16:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236369AbjDYVZd (ORCPT
+        with ESMTP id S232164AbjDYUzF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Apr 2023 17:25:33 -0400
-Received: from kadath.azazel.net (unknown [IPv6:2001:8b0:135f:bcd1:e0cb:4eff:fedf:e608])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D38816F37
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Apr 2023 14:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=azazel.net;
-        s=20220717; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=3mFOt001pph4ZFjh5op6TvkmvLo9FO+BniOXvTOhuBg=; b=JpjDZJn9y+kLTdtECeKpuznBh1
-        78AovN9RPfqnbKTG+sZ2u8uNQWVI1ACtgsGp8IggU8+unWa4njnQEAwb2fxdFNkLIoJz7JlkISvRK
-        p3YYRpHKt+zpmhQxAMEA3TYr7aWBJMsa62M26VGTNePQdn7CkZmg1MykJPJi7dR0oBPvhgBG+nmeh
-        aNda1ILf5alu40LE625gQWuJ96Aw1pSMKHN3m/T6Z88z/kyaUGUjX4DFQs+VjFyzKmW12So734VGa
-        oByyL+quXJeE3qyV54vgjQOT2xR1imopmlVn8mIjnCMfYGs1A+nQZIqqvxJ/4nNOy72AstlwBe+eB
-        y/XKWuUQ==;
-Received: from celephais.dreamlands.azazel.net ([2001:8b0:fb7d:d6d7:3c21:9cff:fe2f:35f] helo=celephais.dreamlands)
-        by kadath.azazel.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <jeremy@azazel.net>)
-        id 1prPab-009aLz-I4; Tue, 25 Apr 2023 21:48:41 +0100
-Date:   Tue, 25 Apr 2023 21:48:40 +0100
-From:   Jeremy Sowden <jeremy@azazel.net>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>
-Cc:     Jan Engelhardt <jengelh@inai.de>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Kai Liu <kai.liu@suse.com>, netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: netfilter: fix a build error on openSUSE
-Message-ID: <20230425204840.GE5944@celephais.dreamlands>
-References: <5ee95e93a11a239df8e09d059da25a4eaa5725ba.1646198836.git.geliang.tang@suse.com>
- <8cbf1231-0da5-c8a0-d66b-1488633d9895@linuxfoundation.org>
- <Yh+wulh/nIkFeFmz@salvia>
- <sr67066-o9or-1s32-pp7-s764r386n55q@vanv.qr>
- <ZEgArba2jGAGy0/Z@calendula>
+        Tue, 25 Apr 2023 16:55:05 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E60D146D3;
+        Tue, 25 Apr 2023 13:55:03 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-b953887e70eso8897660276.1;
+        Tue, 25 Apr 2023 13:55:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682456103; x=1685048103;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OU/Nt9B7XN1sCdbr/6eEb0oLClGSXdVDLD5Mdz4L6mI=;
+        b=DxsvyX9FhAGMU+w31NsiCPMJpBjiSmiusOxrrqMuWc7O2JrI3lOOhib9NUZ8evbkVb
+         hnpe+Dv76iu91frLgDA9nGUkKbjFzq0OvBXo0Xoy5xb+tpmzXuaDlwJQYj5J/J53DSjE
+         3v3ta/aG3bSsUUMmV78xGQmvmXq8YucDwfmouyPZOA9/J4waeSO8XWxhagfzpRzcXzAI
+         svko/KEuM58pa4AkiN3pHR7OQ1eIAZ26Cqn/5dxBes0BDJmsgrCcnAOUZ7nOQJVkEKW/
+         7k7i8gws9nQro3wQwqHnMi1d292dOmYhyF5+UUwSdrLE7o2eARF2luNFPTWuEy0N0H2v
+         xkhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682456103; x=1685048103;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OU/Nt9B7XN1sCdbr/6eEb0oLClGSXdVDLD5Mdz4L6mI=;
+        b=M4XEUwR49qLlR/xGAC5lHZyV5JzRld8G6WbTimFJSGbGSsNHDiPVza9yWVZeBjBgHG
+         IwgoIU5CT9N10MYMOrNQ0C2UTefrCx6pqJVQYXNNVoRZoxPypfqClkGWoFklGLjsxwq3
+         vhWtjadVsRw5TQpndxAnidpk7is3ApMxWLmLFDKO5kmuGItulo+iHNSQOvyjn5KuRWBb
+         iMZ4GZDK5lUrdfx/MLOiMPqx1TuddOBEYjZProxf4Z+6v7/VdBqdII4bjs2gtEcLTxAF
+         S3OZmd1BFOM8McB1CUYa/nBIu4DyHTjcCyWX+lYs77rKzct6uruF1MQ6uC80IRk3OTZS
+         lJCw==
+X-Gm-Message-State: AAQBX9dD3spzdEJE7bTzrlPosc5R/TIGv/9FcQ7b4vXILcmb1WQdM3jo
+        SfTqkw6ekNjbqEWgtIv2rIA=
+X-Google-Smtp-Source: AKy350ZBOeq+FuyZ+QGosrfgyVeMEZ16y1tOuiCk4iWVjMIHrX23nwDvyYSFgFY7ng6MxhuoZh/xcw==
+X-Received: by 2002:a25:4105:0:b0:b99:75f:8f24 with SMTP id o5-20020a254105000000b00b99075f8f24mr12009761yba.30.1682456102630;
+        Tue, 25 Apr 2023 13:55:02 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:7dac:d9da:d59f:fcdb? ([2600:1700:2442:6db0:7dac:d9da:d59f:fcdb])
+        by smtp.gmail.com with ESMTPSA id o68-20020a254147000000b00b8f5b078eacsm3687976yba.39.2023.04.25.13.55.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 13:55:02 -0700 (PDT)
+Message-ID: <ce5b723d-2395-8974-ba62-1ee519732218@gmail.com>
+Date:   Tue, 25 Apr 2023 15:55:01 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qLqTDRbgXsuHCJND"
-Content-Disposition: inline
-In-Reply-To: <ZEgArba2jGAGy0/Z@calendula>
-X-SA-Exim-Connect-IP: 2001:8b0:fb7d:d6d7:3c21:9cff:fe2f:35f
-X-SA-Exim-Mail-From: jeremy@azazel.net
-X-SA-Exim-Scanned: No (on kadath.azazel.net); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [KTAP V2 PATCH] ktap_v2: add test metadata
+Content-Language: en-US
+To:     Rae Moar <rmoar@google.com>, davidgow@google.com,
+        skhan@linuxfoundation.org, keescook@chromium.org,
+        Tim.Bird@sony.com, brendanhiggins@google.com
+Cc:     corbet@lwn.net, guillaume.tucker@collabora.com,
+        dlatypov@google.com, kernelci@lists.linux.dev,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230420205734.1288498-1-rmoar@google.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20230420205734.1288498-1-rmoar@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TRACKER_ID,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 4/20/23 15:57, Rae Moar wrote:
+> Add specification for declaring test metadata to the KTAP v2 spec.
+> 
+> The purpose of test metadata is to allow for the declaration of essential
+> testing information in KTAP output. This information includes test
+> names, test configuration info, test attributes, and test files.
+> 
+> There have been similar ideas around the idea of test metadata such as test
+> prefixes and test name lines. However, I propose this specification as an
+> overall fix for these issues.
 
---qLqTDRbgXsuHCJND
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This seems like a cleaner approach.
 
-On 2023-04-25, at 18:32:45 +0200, Pablo Neira Ayuso wrote:
-> On Tue, Apr 25, 2023 at 11:14:55AM +0200, Jan Engelhardt wrote:
-> > On Wednesday ** 2022-03-02 19:00 **, Pablo Neira Ayuso wrote:
-> > >On Wed, Mar 02, 2022 at 10:11:11AM -0700, Shuah Khan wrote:
-> > >> On 3/1/22 10:29 PM, Geliang Tang wrote:
-> > >> > This patch fixed the following build error on openSUSE Leap 15.3:
-> > >> >   nf-queue.c:13:10: fatal error: libmnl/libmnl.h: No such file or directory
-> > >> >    #include <libmnl/libmnl.h>
-> > >> > diff --git a/tools/testing/selftests/netfilter/Makefile b/tools/testing/selftests/netfilter/Makefile
-> > >> > index e4f845dd942b..8136c1fab7ab 100644
-> > >> > --- a/tools/testing/selftests/netfilter/Makefile
-> > >> > +++ b/tools/testing/selftests/netfilter/Makefile
-> > >> > @@ -8,6 +8,7 @@ TEST_PROGS := nft_trans_stress.sh nft_fib.sh nft_nat.sh bridge_brouter.sh \
-> > >> >   	ipip-conntrack-mtu.sh conntrack_tcp_unreplied.sh \
-> > >> >   	conntrack_vrf.sh nft_synproxy.sh
-> > >> > +CFLAGS += $(shell pkg-config --cflags libmnl 2>/dev/null || echo "-I/usr/include/libmnl")
-> > >> >   LDLIBS = -lmnl
-> > >> >   TEST_GEN_FILES =  nf-queue
-> > >>
-> > >> Adding Pablo to the thread.
-> > >> This looks good to me. I can take this through linux-kselftest tree.
-> > >> Or if it is going through netfilter tree:
-> > >> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> > >
-> > >If this does not cause any issue when running tests in any other
-> > >distros, then it is fine with me.
-> >
-> > Since a pkgconfig file exists, it ought to be used. That also means
-> > you need the same/similar incantation in LDLIBS, with `pkg-config
-> > --libs libmnl`.
+> 
+> These test metadata lines are a form of diagnostic lines with the
+> format: "# <metadata_type>: <data>". As a type of diagnostic line, test
+> metadata lines are compliant with KTAP v1, which will help to not
+> interfere too much with current parsers.
+> 
+> Specifically the "# Subtest:" line is derived from the TAP 14 spec:
+> https://testanything.org/tap-version-14-specification.html.
+> 
+> The proposed location for test metadata is in the test header, between the
+> version line and the test plan line. Note including diagnostic lines in
+> the test header is a depature from KTAP v1.
+> 
+> This location provides two main benefits:
+> 
+> First, metadata will be printed prior to when subtests are run. Then if a
+> test fails, test metadata can help discern which test is causing the issue
+> and potentially why.
+> 
+> Second, this location ensures that the lines will not be accidentally
+> parsed as a subtest's diagnostic lines because the lines are bordered by
+> the version line and plan line.
 
-I would also avoid hard-coding pkg-config and remove the unnecessary
-SUSE-specific default for CFLAGS.
+I like that.
 
-> Patch?
+> 
+> Here is an example of test metadata:
+> 
+>  KTAP version 2
+>  # Config: CONFIG_TEST=y
+>  1..1
+>      KTAP version 2
+>      # Subtest: test_suite
+>      # File: /sys/kernel/...
+>      # Attributes: slow
+>      # Other: example_test
+>      1..2
+>      ok 1 test_1
+>      ok 2 test_2
+>  ok 1 test_suite
+> 
+> Here is a link to a version of the KUnit parser that is able to parse test
+> metadata lines for KTAP version 2. Note this includes test metadata
+> lines for the main level of KTAP.
+> 
+> Link: https://kunit-review.googlesource.com/c/linux/+/5809
+> 
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> ---
+> 
+> Hi everyone,
+> 
+> I would like to use this proposal similar to an RFC to gather ideas on the
+> topic of test metadata. Let me know what you think.
+> 
+> I am also interested in brainstorming a list of recognized metadata types.
+> Providing recognized metadata types would be helpful in parsing and
+> displaying test metadata in a useful way.
+> 
+> Current ideas:
+> - "# Subtest: <test_name>" to indicate test name (name must match
+>   corresponding result line)
 
-Following shortly.
+I would prefer "Test" to "Subtest" because the type should be allowed for the
+top level test, as well as for subtest levels.
 
-J.
+> - "# Attributes: <attributes list>" to indicate test attributes (list
+>   separated by commas)
+> - "# File: <file_path>" to indicate file used in testing
+> 
+> Any other ideas?
 
---qLqTDRbgXsuHCJND
-Content-Type: application/pgp-signature; name="signature.asc"
+(Already used in an example above...)
 
------BEGIN PGP SIGNATURE-----
+- "# Config: <config_option list> to indicate kernel configuration options
+  (list separated by commas)
 
-iQIzBAABCgAdFiEEbB20U2PvQDe9VtUXKYasCr3xBA0FAmRIPKgACgkQKYasCr3x
-BA26gRAAlr17yFl82bk3zD6LVCFcVdp5Zm1jQD6JwO03yTL1J6LR135pOqpqBNNp
-KzOCa8yd0Ziecq74F6i8G+A9Vl+JnO67KqzSxzy2FN8AUC7TncqjCh4TjinBQ1cB
-9XiKnlnqAs2a57/E2WEIAmhH/o10mm43LU6CAUi+o1/4+DyltMyJFRrH9lJvvaS9
-oMTE4C1CvTRhZTuhJID/baDPTx9fCdY7xMolVPhNGK+ZVCTwJbtEEcruPHap1knU
-nLgKYBBYQw6hzXR+MA935WtPZoqkXTCr/gjlllbAo/w9nZclp8GUL4LYn+wQKGKp
-A8Cg+c6Yr6shys+nUTCW74vS5++c4Z5mwrNqSmCNKFZA7oUfgqteIi938aKOG4TV
-h2CPs6oNZ5idyjfwu8dUBipO0b9kTaGv556YMiJYYYxbINz1mFia4iT7BL2IHtf7
-UVF/n+sp7Ro6Dp2B0x28ysmD0g0+kpwVRS+rMYSAPS0bN+Peit0Me4bgDHy065st
-Ah81/qBb5dhsTdKACZQx1eKHImtCztJmhd/pZq5ewUAfqHn7jM8j7A4Z+dyUhmK2
-9NK0eow30Rl+W3j57ODoThQpoKJn/kds6wTUGUp5lU75ASv5/STMtVXHB5mdt/pR
-X7bAfpD07LGCeUb2YY3xkFjUWMmK44JrAl7oKnJ3uEiPMkh9Awk=
-=hQnQ
------END PGP SIGNATURE-----
+    config_option format:
+      Option XXX is enabled: CONFIG_XXX=y
+      Option XXX is not enabled: CONFIG_XXX=n
+      Option XXX is text: CONFIG_XXX="a text string"
 
---qLqTDRbgXsuHCJND--
+Linux .config format is "#CONFIG_XXX is not set",
+but this would be harder to parse in a list.
+
+A text config option also complicates parsing of a list.  Maybe there
+should not be a list, instead have a separate "# Config:" line for
+each config option.
+
+I would like to bifurcate the name space of metadata types, to names
+specified in the standard vs names not in the standard that can be
+used on an experimental or for future use in existing tests.
+
+I can think of at least two ways to implement this:
+
+(1) types that are in the specification all begin with a specific prefix,
+such as "ktap_" (bike shedding on naming welcomed), so the examples woudld be
+
+  # ktap_test:
+  # ktap_attributes:
+  # ktap_file:
+  # ktap_config:
+
+(2) types that are _not_ in the specification all begin with a specific prefix,
+such as "custom_" (bike shedding on naming welcomed).
+
+> 
+> Note this proposal replaces two of my previous proposals: "ktap_v2: add
+> recognized test name line" and "ktap_v2: allow prefix to KTAP lines."
+> 
+> Thanks!
+> -Rae
+> 
+> Note: this patch is based on Frank's ktap_spec_version_2 branch.
+> 
+>  Documentation/dev-tools/ktap.rst | 51 ++++++++++++++++++++++++++++++--
+>  1 file changed, 48 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+> index ff77f4aaa6ef..a2d0a196c115 100644
+> --- a/Documentation/dev-tools/ktap.rst
+> +++ b/Documentation/dev-tools/ktap.rst
+> @@ -17,7 +17,9 @@ KTAP test results describe a series of tests (which may be nested: i.e., test
+>  can have subtests), each of which can contain both diagnostic data -- e.g., log
+>  lines -- and a final result. The test structure and results are
+>  machine-readable, whereas the diagnostic data is unstructured and is there to
+> -aid human debugging.
+> +aid human debugging. One exception to this is test metadata lines - a type
+> +of diagnostic lines. Test metadata is located between the version line and
+> +plan line of a test and can be machine-readable.
+>  
+>  KTAP output is built from four different types of lines:
+>  - Version lines
+> @@ -28,8 +30,7 @@ KTAP output is built from four different types of lines:
+>  In general, valid KTAP output should also form valid TAP output, but some
+>  information, in particular nested test results, may be lost. Also note that
+>  there is a stagnant draft specification for TAP14, KTAP diverges from this in
+> -a couple of places (notably the "Subtest" header), which are described where
+> -relevant later in this document.
+> +a couple of places, which are described where relevant later in this document.
+>  
+>  Version lines
+>  -------------
+> @@ -166,6 +167,45 @@ even if they do not start with a "#": this is to capture any other useful
+>  kernel output which may help debug the test. It is nevertheless recommended
+>  that tests always prefix any diagnostic output they have with a "#" character.
+>  
+> +Test metadata lines
+> +-------------------
+> +
+> +Test metadata lines are a type of diagnostic lines used to the declare the
+> +name of a test and other helpful testing information in the test header.
+> +These lines are often helpful for parsing and for providing context during
+> +crashes.
+> +
+> +Test metadata lines must follow the format: "# <metadata_type>: <data>".
+> +These lines must be located between the version line and the plan line
+> +within a test header.
+> +
+> +There are a few currently recognized metadata types:
+> +- "# Subtest: <test_name>" to indicate test name (name must match
+> +  corresponding result line)
+> +- "# Attributes: <attributes list>" to indicate test attributes (list
+> +  separated by commas)
+> +- "# File: <file_path>" to indicate file used in testing
+> +
+> +As a rule, the "# Subtest:" line is generally first to declare the test
+> +name. Note that metadata lines do not necessarily need to use a
+> +recognized metadata type.
+> +
+> +An example of using metadata lines:
+> +
+> +::
+> +
+> +        KTAP version 2
+> +        1..1
+> +        # File: /sys/kernel/...
+> +          KTAP version 2
+> +          # Subtest: example
+> +          # Attributes: slow, example_test
+> +          1..1
+> +          ok 1 test_1
+> +        # example passed
+> +        ok 1 example
+> +
+> +
+>  Unknown lines
+>  -------------
+>  
+> @@ -206,6 +246,7 @@ An example of a test with two nested subtests:
+>  	KTAP version 2
+>  	1..1
+>  	  KTAP version 2
+> +	  # Subtest: example
+>  	  1..2
+>  	  ok 1 test_1
+>  	  not ok 2 test_2
+> @@ -219,6 +260,7 @@ An example format with multiple levels of nested testing:
+>  	KTAP version 2
+>  	1..2
+>  	  KTAP version 2
+> +	  # Subtest: example_test_1
+>  	  1..2
+>  	    KTAP version 2
+>  	    1..2
+> @@ -254,6 +296,7 @@ Example KTAP output
+>  	KTAP version 2
+>  	1..1
+>  	  KTAP version 2
+> +	  # Subtest: main_test
+>  	  1..3
+>  	    KTAP version 2
+>  	    1..1
+> @@ -261,11 +304,13 @@ Example KTAP output
+>  	    ok 1 test_1
+>  	  ok 1 example_test_1
+>  	    KTAP version 2
+> +            # Attributes: slow
+>  	    1..2
+>  	    ok 1 test_1 # SKIP test_1 skipped
+>  	    ok 2 test_2
+>  	  ok 2 example_test_2
+>  	    KTAP version 2
+> +	    # Subtest: example_test_3
+>  	    1..3
+>  	    ok 1 test_1
+>  	    # test_2: FAIL
+> 
+> base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
+
