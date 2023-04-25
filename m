@@ -2,105 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 855CD6ED9EE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 03:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEAB86ED9F7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 03:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232693AbjDYBjG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Apr 2023 21:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S232839AbjDYBnB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Apr 2023 21:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjDYBjF (ORCPT
+        with ESMTP id S233255AbjDYBmx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Apr 2023 21:39:05 -0400
+        Mon, 24 Apr 2023 21:42:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC35AF04;
-        Mon, 24 Apr 2023 18:39:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F0CAF21;
+        Mon, 24 Apr 2023 18:42:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EB1C62A0D;
-        Tue, 25 Apr 2023 01:39:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 634E0C433EF;
-        Tue, 25 Apr 2023 01:39:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682386743;
-        bh=7Cc7EPJ+q4FtKp9evs/nNwHrEkNOVZMFrQmiSexhBYE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZCMILtBlPEqMDJwMW9NM2lomD0O/11qW8UXAgXXF3cQzWvex2moR4JKn05Ve+h0fT
-         OMoaZq+TUbiVBIWMm14PvgqhtwuYpVVVWQJwCD/53p7fhV1CXJGNpaIjRffLxoN0E3
-         AHjPfsOjafjOymJMexHr9xaqoPAD/5qPOCeXYnsYXGVI6zy1w94VoiBeApiiP92tJw
-         jWR2L2TR0dcKjvyfqVgjb2vdnKsfjqFLYlOpIl8lFIcCEFyWHcrh+RPbpcMi8gz5NY
-         WoS4ungU+vX3ZuBAzd0oT1gfKqV/ZBtESF8NGZBImxDfHTJQeGfG3u8tg4DM9E5ncL
-         AmseJAA5fu9Iw==
-Message-ID: <09814247-07ca-5945-8b6e-9dc1632c1e45@kernel.org>
-Date:   Mon, 24 Apr 2023 19:39:01 -0600
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D54262AD5;
+        Tue, 25 Apr 2023 01:42:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52618C433D2;
+        Tue, 25 Apr 2023 01:42:48 +0000 (UTC)
+Date:   Mon, 24 Apr 2023 21:42:46 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RESEND] selftests/ftrace: Improve integration with
+ kselftest runner
+Message-ID: <20230424214246.3e158fb6@rorschach.local.home>
+In-Reply-To: <20230302-ftrace-kselftest-ktap-v1-1-1270085b4cd5@kernel.org>
+References: <20230302-ftrace-kselftest-ktap-v1-1-1270085b4cd5@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH bpf,v2 0/4] Socket lookup BPF API from tc/xdp ingress does
- not respect VRF bindings.
-To:     Stanislav Fomichev <sdf@google.com>,
-        Gilad Sever <gilad9366@gmail.com>
-Cc:     martin.lau@linux.dev, daniel@iogearbox.net,
-        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
-        shuah@kernel.org, hawk@kernel.org, joe@wand.net.nz,
-        eyal.birger@gmail.com, shmulik.ladkani@gmail.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20230420145041.508434-1-gilad9366@gmail.com>
- <ZEFrcoG+QS/PRbew@google.com>
- <2ebf97ba-1bd2-3286-7feb-d2e7f4c95383@gmail.com>
- <CAKH8qBuntApFvGYEs_fU_OAsQeP_Uf2sdrEMAtB4rS6c6fhF9A@mail.gmail.com>
-Content-Language: en-US
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <CAKH8qBuntApFvGYEs_fU_OAsQeP_Uf2sdrEMAtB4rS6c6fhF9A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/24/23 11:06 AM, Stanislav Fomichev wrote:
->> - xdp callers would check the device's l3 enslaved state using the new
->> `dev_sdif()`
->> - sock_addr callers would use inet{,6}_sdif() as they did before
->> - cg/tc share the same code path, so when netif_is_l3_master() is true
->>    use inet{,6}_sdif() and when it is false use dev_sdif(). this relies
->> on the following
->>    assumptions:
->>    - tc programs don't run on l3 master devices
+On Tue, 11 Apr 2023 12:19:30 +0100
+Mark Brown <broonie@kernel.org> wrote:
 
-this can happen, but I am not sure how prevalent a use case.
-
->>    - cgroup callers never see l3 enslaved devices
-
-egress definitely, not sure on ingress. The code resets the skb->dev
-back to the original device in a lot of places in the ip/ipv6 code now.
-And ipv6 brings up LLAs and those did not get the device switch so it
-could be fairly common.
-
->>    - inet{,6}_sdif() isn't relevant for non l3 master devices
-
-sdif should be 0 and not matched if a netdev is not a l3mdev port.
-
-BTW, in skimming the patches, I noticed patch 3 has bpf_l2_sdif which
-seems an odd name to me. It returns a layer 3 device index, not a layer
-2 which would be a bridge port. I would stick to the l3 naming for
-consistency.
-
+> The ftrace selftests do not currently produce KTAP output, they produce a
+> custom format much nicer for human consumption. This means that when run in
+> automated test systems we just get a single result for the suite as a whole
+> rather than recording results for individual test cases, making it harder
+> to look at the test data and masking things like inappropriate skips.
 > 
-> Yeah, that's what I was assuming we should be able to do..
-> But we probably need somebody who understands this part better than me
-> to say whether the above are safe..
+> Address this by adding support for KTAP output to the ftracetest script and
+> providing a trivial wrapper which will be invoked by the kselftest runner
+> to generate output in this format by default, users using ftracetest
+> directly will continue to get the existing output.
 > 
-> If nobody comments, ignore me and do a v2 with your original approach.
+> This is not the most elegant solution but it is simple and effective. I
+> did consider implementing this by post processing the existing output
+> format but that felt more complex and likely to result in all output being
+> lost if something goes seriously wrong during the run which would not be
+> helpful. I did also consider just writing a separate runner script but
+> there's enough going on with things like the signal handling for that to
+> seem like it would be duplicating too much.
 
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+Shuah, care to take this?
+
+-- Steve
