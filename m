@@ -2,91 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6806ED962
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 02:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 855CD6ED9EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 03:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjDYAqm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Apr 2023 20:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S232693AbjDYBjG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Apr 2023 21:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjDYAql (ORCPT
+        with ESMTP id S231137AbjDYBjF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Apr 2023 20:46:41 -0400
+        Mon, 24 Apr 2023 21:39:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EDB59CA;
-        Mon, 24 Apr 2023 17:46:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC35AF04;
+        Mon, 24 Apr 2023 18:39:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A20F620AA;
-        Tue, 25 Apr 2023 00:46:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D839BC433D2;
-        Tue, 25 Apr 2023 00:46:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EB1C62A0D;
+        Tue, 25 Apr 2023 01:39:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 634E0C433EF;
+        Tue, 25 Apr 2023 01:39:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682383599;
-        bh=+qr4ONusJbqoWW6hCqya8fbiWqMGkDydQpxJxUyRNfo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YrwM9F5yndFDH3wOW39f2+1chzS7om4r893EUqTAj43JUaqLxqKuZyFXqV3/+xsqr
-         Argg42Enc6mKX8gKaGb5o//tCQFmmxWEbgiwxBGIvSR6afSwtsyvgSY/VkRkiOpHfp
-         7AGyM4DOQDxkFfjBhgokAx7HfsXo6PbLwCjFPyJkn1nHNrSahV1CY7xBEL7ChUExYq
-         UH7m0agyvD8Ead3C+6e9XFbMbpDcr5+o+uhXadWgKTALYFT/Spx9+pHJEbYQh0oMpD
-         yvDOTl3q8cyxEK96GH/odwp6hNg9Y0DS5ahRdlnOGOosKlt//x5RL3rPdNrhKpaxcV
-         PAdAcInrdzEjw==
-From:   SeongJae Park <sj@kernel.org>
-To:     gregkh@linuxfoundation.org, sashal@kernel.org
-Cc:     stable@vger.kernel.org, sj@kernel.org, shuah@kernel.org,
-        sj38.park@gmail.com, akpm@linux-foundation.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sjpark@amazon.de>
-Subject: Re: [PATCH v2] selftests/kselftest/runner/run_one(): Allow running non-executable files
-Date:   Tue, 25 Apr 2023 00:46:37 +0000
-Message-Id: <20230425004637.156064-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210810164534.25902-1-sj38.park@gmail.com>
-References: 
+        s=k20201202; t=1682386743;
+        bh=7Cc7EPJ+q4FtKp9evs/nNwHrEkNOVZMFrQmiSexhBYE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZCMILtBlPEqMDJwMW9NM2lomD0O/11qW8UXAgXXF3cQzWvex2moR4JKn05Ve+h0fT
+         OMoaZq+TUbiVBIWMm14PvgqhtwuYpVVVWQJwCD/53p7fhV1CXJGNpaIjRffLxoN0E3
+         AHjPfsOjafjOymJMexHr9xaqoPAD/5qPOCeXYnsYXGVI6zy1w94VoiBeApiiP92tJw
+         jWR2L2TR0dcKjvyfqVgjb2vdnKsfjqFLYlOpIl8lFIcCEFyWHcrh+RPbpcMi8gz5NY
+         WoS4ungU+vX3ZuBAzd0oT1gfKqV/ZBtESF8NGZBImxDfHTJQeGfG3u8tg4DM9E5ncL
+         AmseJAA5fu9Iw==
+Message-ID: <09814247-07ca-5945-8b6e-9dc1632c1e45@kernel.org>
+Date:   Mon, 24 Apr 2023 19:39:01 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH bpf,v2 0/4] Socket lookup BPF API from tc/xdp ingress does
+ not respect VRF bindings.
+To:     Stanislav Fomichev <sdf@google.com>,
+        Gilad Sever <gilad9366@gmail.com>
+Cc:     martin.lau@linux.dev, daniel@iogearbox.net,
+        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
+        shuah@kernel.org, hawk@kernel.org, joe@wand.net.nz,
+        eyal.birger@gmail.com, shmulik.ladkani@gmail.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20230420145041.508434-1-gilad9366@gmail.com>
+ <ZEFrcoG+QS/PRbew@google.com>
+ <2ebf97ba-1bd2-3286-7feb-d2e7f4c95383@gmail.com>
+ <CAKH8qBuntApFvGYEs_fU_OAsQeP_Uf2sdrEMAtB4rS6c6fhF9A@mail.gmail.com>
+Content-Language: en-US
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <CAKH8qBuntApFvGYEs_fU_OAsQeP_Uf2sdrEMAtB4rS6c6fhF9A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Greg and Sasha,
+On 4/24/23 11:06 AM, Stanislav Fomichev wrote:
+>> - xdp callers would check the device's l3 enslaved state using the new
+>> `dev_sdif()`
+>> - sock_addr callers would use inet{,6}_sdif() as they did before
+>> - cg/tc share the same code path, so when netif_is_l3_master() is true
+>>    use inet{,6}_sdif() and when it is false use dev_sdif(). this relies
+>> on the following
+>>    assumptions:
+>>    - tc programs don't run on l3 master devices
 
-On Tue, 10 Aug 2021 16:45:34 +0000 SeongJae Park <sj38.park@gmail.com> wrote:
+this can happen, but I am not sure how prevalent a use case.
 
-> From: SeongJae Park <sjpark@amazon.de>
+>>    - cgroup callers never see l3 enslaved devices
+
+egress definitely, not sure on ingress. The code resets the skb->dev
+back to the original device in a lot of places in the ip/ipv6 code now.
+And ipv6 brings up LLAs and those did not get the device switch so it
+could be fairly common.
+
+>>    - inet{,6}_sdif() isn't relevant for non l3 master devices
+
+sdif should be 0 and not matched if a netdev is not a l3mdev port.
+
+BTW, in skimming the patches, I noticed patch 3 has bpf_l2_sdif which
+seems an odd name to me. It returns a layer 3 device index, not a layer
+2 which would be a bridge port. I would stick to the l3 naming for
+consistency.
+
 > 
-> When running a test program, 'run_one()' checks if the program has the
-> execution permission and fails if it doesn't.  However, it's easy to
-> mistakenly missing the permission, as some common tools like 'diff'
-> don't support the permission change well[1].  Compared to that, making
-> mistakes in the test program's path would only rare, as those are
-> explicitly listed in 'TEST_PROGS'.  Therefore, it might make more sense
-> to resolve the situation on our own and run the program.
+> Yeah, that's what I was assuming we should be able to do..
+> But we probably need somebody who understands this part better than me
+> to say whether the above are safe..
 > 
-> For the reason, this commit makes the test program runner function to
-> still print the warning message but try parsing the interpreter of the
-> program and explicitly run it with the interpreter, in the case.
-> 
-> [1] https://lore.kernel.org/mm-commits/YRJisBs9AunccCD4@kroah.com/
-> 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: SeongJae Park <sjpark@amazon.de>
+> If nobody comments, ignore me and do a v2 with your original approach.
 
-This patch has merged into the mainline by the commit 303f8e2d0200
-("selftests/kselftest/runner/run_one(): allow running non-executable files").
-However, this patch has not added to v5.15.y, while there are some selftests
-having no execution permission, including that for DAMON.  As a result, the
-selftests always fail unless this patch is manually applied.  Could you please
-add this patch to v5.15.y?  I confirmed this patch can cleanly cherry-picked on
-the latest v5.15.y.
-
-
-Thanks,
-SJ
