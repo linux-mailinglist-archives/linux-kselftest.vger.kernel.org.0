@@ -2,160 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884E86EE80B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 21:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0796EE990
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 23:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234571AbjDYTLU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Apr 2023 15:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
+        id S236377AbjDYVZf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Apr 2023 17:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbjDYTLU (ORCPT
+        with ESMTP id S236369AbjDYVZd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Apr 2023 15:11:20 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D759F72A9
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Apr 2023 12:11:17 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3ef31924c64so195311cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Apr 2023 12:11:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682449877; x=1685041877;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+el9HnAEkjAwcIZXHJipWv7CnhoGdX3eWtO34Q1+csc=;
-        b=wl+vbZqUf4Yzyu94qIYHS4scGC2UaPSsAE+Cqii5fIizO2OMMc1SWJ43+ZAxE2swGJ
-         EZ1gZf6yYAvLPReAH8Pb5Y3ySeOatOMV5reJCTVgW5KnV/5SbZObLyc0DqR0MHiFg5+W
-         5jr9+hcp7BzWyw/wQOOhfKI6k8ni81GLy7HYKR8XOI49+39Ss0WhyFdXGVVAVCIP46/l
-         QC5kXL46bjn2Ngu8ulJ7t5D7G5L0Kh2ThOx7N2z0pEP1++SLjPiycvmjSOofZZ9dSx05
-         /Qp6bK4njzmgztK9/o1nJrLlroHVAspinRKFceiinQJSpWOdWJhMYYpcK4rgZjsTqSe1
-         /1ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682449877; x=1685041877;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+el9HnAEkjAwcIZXHJipWv7CnhoGdX3eWtO34Q1+csc=;
-        b=S0R4Ld0IrXfP3DMQmnJdXh/LdRZq60hbTp6MdKnd++3nvV7KIM7Fha0HHyxzT70kJY
-         //rV8WAqIIIMpR+c/t3lDHFJbLRbsw2qOTMY6xRZQykvXRS2DDsNqv3OwBYShbNa+Q5o
-         4chHzB2JKtX/lbiVne9u9qMB3ZFMQDgEAn9VMBwDjFLsqiyAm2wrIjjEI6WzmktvKpqx
-         WcsfZ4vF+4B8Pu4QTsILMAbuoBrWBuZnwoGHPDHkiDeIF5vbajZG8fssN3mns81sAQSM
-         Rn3UZkh18kvcPCsPT2gVO6B3vC1Ds8anEaPn1x5Cq0acU6J5R6Yi80jgD2vty1y5Yc3X
-         J6BA==
-X-Gm-Message-State: AC+VfDwEUtdwROrrq5ASZ6Ocueuu3Et4Ajs1L36MVLjnc2ZEAJqSH35i
-        9eIcRIQMziz71wre4KGTbu8/e6hCYgAfi5bkg/ThFA==
-X-Google-Smtp-Source: ACHHUZ5gyvxZ6/VVecCj50kIZMLvP7Q2BZmfrPDjXDGiWXdqIWJieT6NtYd2TO+kGzqAXo/D43kOvGkphSCa9OAEXJ8=
-X-Received: by 2002:ac8:4e89:0:b0:3de:b0b0:557c with SMTP id
- 9-20020ac84e89000000b003deb0b0557cmr44534qtp.18.1682449876862; Tue, 25 Apr
- 2023 12:11:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230421040218.2156548-1-davidgow@google.com> <20230421040218.2156548-4-davidgow@google.com>
-In-Reply-To: <20230421040218.2156548-4-davidgow@google.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 25 Apr 2023 15:11:04 -0400
-Message-ID: <CA+GJov4+-u3fnqDWCgsp8EjGkm2efbqtaqMFq+_0pWpTnfkurw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] kunit: example: Provide example exit functions
-To:     David Gow <davidgow@google.com>
-Cc:     Benjamin Berg <benjamin@sipsolutions.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
+        Tue, 25 Apr 2023 17:25:33 -0400
+Received: from kadath.azazel.net (unknown [IPv6:2001:8b0:135f:bcd1:e0cb:4eff:fedf:e608])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D38816F37
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Apr 2023 14:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=azazel.net;
+        s=20220717; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=3mFOt001pph4ZFjh5op6TvkmvLo9FO+BniOXvTOhuBg=; b=JpjDZJn9y+kLTdtECeKpuznBh1
+        78AovN9RPfqnbKTG+sZ2u8uNQWVI1ACtgsGp8IggU8+unWa4njnQEAwb2fxdFNkLIoJz7JlkISvRK
+        p3YYRpHKt+zpmhQxAMEA3TYr7aWBJMsa62M26VGTNePQdn7CkZmg1MykJPJi7dR0oBPvhgBG+nmeh
+        aNda1ILf5alu40LE625gQWuJ96Aw1pSMKHN3m/T6Z88z/kyaUGUjX4DFQs+VjFyzKmW12So734VGa
+        oByyL+quXJeE3qyV54vgjQOT2xR1imopmlVn8mIjnCMfYGs1A+nQZIqqvxJ/4nNOy72AstlwBe+eB
+        y/XKWuUQ==;
+Received: from celephais.dreamlands.azazel.net ([2001:8b0:fb7d:d6d7:3c21:9cff:fe2f:35f] helo=celephais.dreamlands)
+        by kadath.azazel.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <jeremy@azazel.net>)
+        id 1prPab-009aLz-I4; Tue, 25 Apr 2023 21:48:41 +0100
+Date:   Tue, 25 Apr 2023 21:48:40 +0100
+From:   Jeremy Sowden <jeremy@azazel.net>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     Jan Engelhardt <jengelh@inai.de>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>, maxime@cerno.tech,
-        Stephen Boyd <sboyd@kernel.org>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sadiya Kazi <sadiyakazi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Geliang Tang <geliang.tang@suse.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Kai Liu <kai.liu@suse.com>, netfilter-devel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: netfilter: fix a build error on openSUSE
+Message-ID: <20230425204840.GE5944@celephais.dreamlands>
+References: <5ee95e93a11a239df8e09d059da25a4eaa5725ba.1646198836.git.geliang.tang@suse.com>
+ <8cbf1231-0da5-c8a0-d66b-1488633d9895@linuxfoundation.org>
+ <Yh+wulh/nIkFeFmz@salvia>
+ <sr67066-o9or-1s32-pp7-s764r386n55q@vanv.qr>
+ <ZEgArba2jGAGy0/Z@calendula>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qLqTDRbgXsuHCJND"
+Content-Disposition: inline
+In-Reply-To: <ZEgArba2jGAGy0/Z@calendula>
+X-SA-Exim-Connect-IP: 2001:8b0:fb7d:d6d7:3c21:9cff:fe2f:35f
+X-SA-Exim-Mail-From: jeremy@azazel.net
+X-SA-Exim-Scanned: No (on kadath.azazel.net); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 12:02=E2=80=AFAM David Gow <davidgow@google.com> wr=
-ote:
->
-> Add an example .exit and .suite_exit function to the KUnit example
-> suite. Given exit functions are a bit more subtle than init functions
-> (due to running in a different kthread, and running even after tests or
-> test init functions fail), providing an easy place to experiment with
-> them is useful.
->
-> Signed-off-by: David Gow <davidgow@google.com>
 
-Hi David!
+--qLqTDRbgXsuHCJND
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I have reviewed this patch and the overall changes to the cleanup
-structure. It looks good to me (other than that kernel test robot
-error). Nice to see an example of how to use exit functions in our
-example test.
+On 2023-04-25, at 18:32:45 +0200, Pablo Neira Ayuso wrote:
+> On Tue, Apr 25, 2023 at 11:14:55AM +0200, Jan Engelhardt wrote:
+> > On Wednesday ** 2022-03-02 19:00 **, Pablo Neira Ayuso wrote:
+> > >On Wed, Mar 02, 2022 at 10:11:11AM -0700, Shuah Khan wrote:
+> > >> On 3/1/22 10:29 PM, Geliang Tang wrote:
+> > >> > This patch fixed the following build error on openSUSE Leap 15.3:
+> > >> >   nf-queue.c:13:10: fatal error: libmnl/libmnl.h: No such file or directory
+> > >> >    #include <libmnl/libmnl.h>
+> > >> > diff --git a/tools/testing/selftests/netfilter/Makefile b/tools/testing/selftests/netfilter/Makefile
+> > >> > index e4f845dd942b..8136c1fab7ab 100644
+> > >> > --- a/tools/testing/selftests/netfilter/Makefile
+> > >> > +++ b/tools/testing/selftests/netfilter/Makefile
+> > >> > @@ -8,6 +8,7 @@ TEST_PROGS := nft_trans_stress.sh nft_fib.sh nft_nat.sh bridge_brouter.sh \
+> > >> >   	ipip-conntrack-mtu.sh conntrack_tcp_unreplied.sh \
+> > >> >   	conntrack_vrf.sh nft_synproxy.sh
+> > >> > +CFLAGS += $(shell pkg-config --cflags libmnl 2>/dev/null || echo "-I/usr/include/libmnl")
+> > >> >   LDLIBS = -lmnl
+> > >> >   TEST_GEN_FILES =  nf-queue
+> > >>
+> > >> Adding Pablo to the thread.
+> > >> This looks good to me. I can take this through linux-kselftest tree.
+> > >> Or if it is going through netfilter tree:
+> > >> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> > >
+> > >If this does not cause any issue when running tests in any other
+> > >distros, then it is fine with me.
+> >
+> > Since a pkgconfig file exists, it ought to be used. That also means
+> > you need the same/similar incantation in LDLIBS, with `pkg-config
+> > --libs libmnl`.
 
-Thanks!
--Rae
+I would also avoid hard-coding pkg-config and remove the unnecessary
+SUSE-specific default for CFLAGS.
 
-Reviewed-by: Rae Moar <rmoar@google.com>
+> Patch?
 
-> ---
->
-> This patch was introduced in v3.
->
-> ---
->  lib/kunit/kunit-example-test.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->
-> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-tes=
-t.c
-> index cd8b7e51d02b..24315c882b31 100644
-> --- a/lib/kunit/kunit-example-test.c
-> +++ b/lib/kunit/kunit-example-test.c
-> @@ -41,6 +41,16 @@ static int example_test_init(struct kunit *test)
->         return 0;
->  }
->
-> +/*
-> + * This is run once after each test case, see the comment on
-> + * example_test_suite for more information.
-> + */
-> +static void example_test_exit(struct kunit *test)
-> +{
-> +       kunit_info(test, "cleaning up\n");
-> +}
-> +
-> +
->  /*
->   * This is run once before all test cases in the suite.
->   * See the comment on example_test_suite for more information.
-> @@ -52,6 +62,16 @@ static int example_test_init_suite(struct kunit_suite =
-*suite)
->         return 0;
->  }
->
-> +/*
-> + * This is run once after all test cases in the suite.
-> + * See the comment on example_test_suite for more information.
-> + */
-> +static void example_test_exit_suite(struct kunit_suite *suite)
-> +{
-> +       kunit_info(suite, "exiting suite\n");
-> +}
-> +
-> +
->  /*
->   * This test should always be skipped.
->   */
-> @@ -211,7 +231,9 @@ static struct kunit_case example_test_cases[] =3D {
->  static struct kunit_suite example_test_suite =3D {
->         .name =3D "example",
->         .init =3D example_test_init,
-> +       .exit =3D example_test_exit,
->         .suite_init =3D example_test_init_suite,
-> +       .suite_exit =3D example_test_exit_suite,
->         .test_cases =3D example_test_cases,
->  };
->
-> --
-> 2.40.0.634.g4ca3ef3211-goog
->
+Following shortly.
+
+J.
+
+--qLqTDRbgXsuHCJND
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEbB20U2PvQDe9VtUXKYasCr3xBA0FAmRIPKgACgkQKYasCr3x
+BA26gRAAlr17yFl82bk3zD6LVCFcVdp5Zm1jQD6JwO03yTL1J6LR135pOqpqBNNp
+KzOCa8yd0Ziecq74F6i8G+A9Vl+JnO67KqzSxzy2FN8AUC7TncqjCh4TjinBQ1cB
+9XiKnlnqAs2a57/E2WEIAmhH/o10mm43LU6CAUi+o1/4+DyltMyJFRrH9lJvvaS9
+oMTE4C1CvTRhZTuhJID/baDPTx9fCdY7xMolVPhNGK+ZVCTwJbtEEcruPHap1knU
+nLgKYBBYQw6hzXR+MA935WtPZoqkXTCr/gjlllbAo/w9nZclp8GUL4LYn+wQKGKp
+A8Cg+c6Yr6shys+nUTCW74vS5++c4Z5mwrNqSmCNKFZA7oUfgqteIi938aKOG4TV
+h2CPs6oNZ5idyjfwu8dUBipO0b9kTaGv556YMiJYYYxbINz1mFia4iT7BL2IHtf7
+UVF/n+sp7Ro6Dp2B0x28ysmD0g0+kpwVRS+rMYSAPS0bN+Peit0Me4bgDHy065st
+Ah81/qBb5dhsTdKACZQx1eKHImtCztJmhd/pZq5ewUAfqHn7jM8j7A4Z+dyUhmK2
+9NK0eow30Rl+W3j57ODoThQpoKJn/kds6wTUGUp5lU75ASv5/STMtVXHB5mdt/pR
+X7bAfpD07LGCeUb2YY3xkFjUWMmK44JrAl7oKnJ3uEiPMkh9Awk=
+=hQnQ
+-----END PGP SIGNATURE-----
+
+--qLqTDRbgXsuHCJND--
