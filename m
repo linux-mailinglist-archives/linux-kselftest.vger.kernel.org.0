@@ -2,174 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 874DE6EE419
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 16:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CE56EE4A8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 17:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234061AbjDYOlh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Apr 2023 10:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
+        id S234339AbjDYPYB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Apr 2023 11:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234220AbjDYOlb (ORCPT
+        with ESMTP id S234186AbjDYPYA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:41:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632B419A2;
-        Tue, 25 Apr 2023 07:41:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDAF262B0F;
-        Tue, 25 Apr 2023 14:41:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC08C433EF;
-        Tue, 25 Apr 2023 14:41:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682433689;
-        bh=lZk+EFWneQATzI/nj3p2fQd2Dgt+Z7L2bXldLPZN7ao=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tyDqjLiA/h2M63/HcxIIofyoWsVIe8PRXh1frH+MBnH3pL3LxhcVM6gHkcc86vQ+e
-         v2amCqwpWA2iZ9LaZnjatfu96VVon0bjkRDLJ0kibijE+7v+OXAixeaBEy6Qx0T78b
-         5IP6BaKn5VpMdYfxAPdSM6dUr44Djy3Ttjp/j7CopJ1heRXEpNcKM54gQxbkGfWFlo
-         mG7mGZ6NsEW7t6T/X6HysIHrMgy7So2igThhJIVVzvHuTUtBN0LAk0a+KFsnPCH9eT
-         LLTOycxhkMum1rTb9T+Z5HfSes8OqH2d6n3Bm1NnaE9wcSGXs4VRGUNn5Rjb2Zmh2f
-         PG4HtbKRzqPAA==
-Date:   Tue, 25 Apr 2023 23:41:25 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-Cc:     Akanksha J N <akanksha@linux.ibm.com>,
+        Tue, 25 Apr 2023 11:24:00 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8483CA5F5;
+        Tue, 25 Apr 2023 08:23:59 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id CF8232B061E1;
+        Tue, 25 Apr 2023 11:23:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 25 Apr 2023 11:23:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1682436234; x=1682443434; bh=ie
+        +kwy29np8Lu3Cx0FWF+CbrsbBORKaPAuFe21CfxZE=; b=EXp/Q8bHo7P+3qC8bM
+        5VDVYZBe4ELBbbCfMb5+4wNueWe1iYMU6aaW3CIxrwpcXqUUhd7hghKxZ09CuhK/
+        QMnIkfEtrwqN1586XPmr0SvjG7Rc2/DjKSXd8I8AHdLsJyjc/3mwLt4itQD8dpK8
+        FH+iz9zymDZhVC+Fl6/0p4Y/31F5cV9czUxZdOtwLq7UOxC3ahhFtzOmY2uocxXO
+        QiS6rGUHxlqcKUptdmmBfhPv+P5n4LF6SgiCQXKGq671tcTf7DEm+SyUMsiHBT2q
+        fUJGosGOFwEGKavCaNG1s9NsS4/uyrcEJbo0k0gMr+6Xl7PcHD7aq4D/HZSB8c4P
+        K6mA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682436234; x=1682443434; bh=ie+kwy29np8Lu
+        3Cx0FWF+CbrsbBORKaPAuFe21CfxZE=; b=CrSQOm6Jg028X3LsVqROL4eT6pydQ
+        WT375bIrqh4Lng37wujwE0K6P9iL2P+OA5UDOFJnk0qfxJ6vHHkCTHUqK6vKwdGT
+        HHaNR5mlsFC2qphfD5pMFWs7ChQaa0zARDN71PbKnkMjnz3hyrGqhFJBiq6SYFq7
+        dQpiehkZl7CqfIZ+5Xp44BpEPYkFRXI+iqFebGM/TXBpvsX0mCvoYGLmRTMcONbQ
+        9CILIrb56MwAZzf1zpJD5oYG33QsqNKF0+HDPQXQrQwY+9Cugzjgs11P2MBiAGGO
+        G+YkIebivQBBd1iwBzbHznh+70D+0yAVVmmv9qGWZ1RwyUm4Kfs+9WOfA==
+X-ME-Sender: <xms:ifBHZN4KyomX3KdRe7frJ1pmbUu88PShVhYkQbNVC5IdxeLs8IODmQ>
+    <xme:ifBHZK4waAE5xl2kxfD0n39PnpavMjTtfniLrrJfIdT4gfBiHLCTO8xj-gZ6PveYh
+    79IOWjrcEolkCAh-Io>
+X-ME-Received: <xmr:ifBHZEdm4fDu1epxvsQarXIUiaDBgxQOeDAcZXlEfb-dN2f3bIpgLnn3EbtoP3ctxlzUvE7rlUI4eJrdyJJYeBwNQiAoMD0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduvddgkeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
+    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:ifBHZGLCMzJFOYk1g3C8R4P23FvOSfJ3T1t89z9g4zoLRuo5RNnM3Q>
+    <xmx:ifBHZBKUSUsjd8xU16wbp2oK9d7KxwkWg0sW2iaqakAi0rONbHUqCg>
+    <xmx:ifBHZPzT2sZbes9g5asxK_d89mjAjEJrPnwH1Xhzcy401dB6zDaVkA>
+    <xmx:ivBHZP31z8LqNWugs2llvkHGH1D7Z1u6sEh0WmmsGx5B6-1JE1OvTLt1w0o>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 25 Apr 2023 11:23:52 -0400 (EDT)
+Date:   Tue, 25 Apr 2023 17:23:50 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     David Gow <davidgow@google.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>,
+        Benjamin Berg <benjamin@sipsolutions.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
-        shuah@kernel.org
-Subject: Re: [PATCH v2 2/2] selftests/ftrace: Add new test case which checks
- for optimized probes
-Message-Id: <20230425234125.51455711c4388481c13be5ad@kernel.org>
-In-Reply-To: <1682400251.pez54ergiy.naveen@linux.ibm.com>
-References: <20230418095557.19061-1-akanksha@linux.ibm.com>
-        <20230418095557.19061-3-akanksha@linux.ibm.com>
-        <20230425091039.9fd523dfdf7be5e800bac4fe@kernel.org>
-        <1682400251.pez54ergiy.naveen@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        kunit-dev@googlegroups.com
+Subject: Re: [PATCH v1 0/3] kunit: Deferred action helpers
+Message-ID: <knlcj7ub477vbdhi4jkhxg6eltrluffli2gett4t4w4ed4cztr@qlxpd4rmgx3g>
+References: <20230421084226.2278282-1-davidgow@google.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rb5lfax26rs5huyx"
+Content-Disposition: inline
+In-Reply-To: <20230421084226.2278282-1-davidgow@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 25 Apr 2023 10:58:30 +0530
-"Naveen N. Rao" <naveen.n.rao@linux.ibm.com> wrote:
 
-> Masami Hiramatsu wrote:
-> > On Tue, 18 Apr 2023 15:25:57 +0530
-> > Akanksha J N <akanksha@linux.ibm.com> wrote:
-> > 
-> >> Add new test case kprobe_opt_types.tc which enables and checks
-> >> if each probe has been optimized in order to test potential issues with
-> >> optimized probes.
-> >> The '|| continue' is added with the echo statement to ignore errors that
-> >> are caused by trying to add kprobes to non probeable lines and continue
-> >> with the test.
-> >> Signed-off-by: Akanksha J N <akanksha@linux.ibm.com>
-> >> ---
-> >>  .../ftrace/test.d/kprobe/kprobe_opt_types.tc  | 34 +++++++++++++++++++
-> >>  1 file changed, 34 insertions(+)
-> >>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
-> >> 
-> >> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
-> >> new file mode 100644
-> >> index 000000000000..54e4800b8a13
-> >> --- /dev/null
-> >> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
-> >> @@ -0,0 +1,34 @@
-> >> +#!/bin/sh
-> >> +# SPDX-License-Identifier: GPL-2.0-or-later
-> >> +# Copyright (C) 2023 Akanksha J N, IBM corporation
-> >> +# description: Register/unregister optimized probe
-> >> +# requires: kprobe_events
-> >> +
-> >> +case `uname -m` in
-> >> +x86_64)
-> >> +;;
-> >> +arm*)
-> >> +;;
-> >> +ppc*)
-> >> +;;
-> >> +*)
-> >> +  echo "Please implement other architecture here"
-> >> +  exit_unsupported
-> >> +esac
-> >> +
-> >> +DEFAULT=$(cat /proc/sys/debug/kprobes-optimization)
-> >> +echo 1 > /proc/sys/debug/kprobes-optimization
-> >> +for i in `seq 0 255`; do
-> >> +        echo  "p:testprobe $FUNCTION_FORK+${i}" > kprobe_events || continue
-> >> +        echo 1 > events/kprobes/enable || continue
-> >> +        (echo "forked")
-> >> +        PROBE_TYPE=$(cat /sys/kernel/debug/kprobes/list | grep $FUNCTION_FORK | awk '{print $4}' | awk '{print substr($0,2,length($0)-2)}')
-> > 
-> > I think we can make it simply;
-> > 
-> > PROBE=$(grep $FUNCTION_FORK /sys/kernel/debug/kprobes/list)
-> > 
-> >> +        echo 0 > events/kprobes/enable
-> >> +        echo > kprobe_events
-> >> +        if [ $PROBE_TYPE = "OPTIMIZED" ]; then
-> > 
-> > and
-> > 
-> > if echo $PROBE | grep -q OPTIMIZED; then
-> > 
-> >> +                echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
-> >> +                exit_pass
-> >> +        fi
-> >> +done
-> >> +echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
-> >> +echo "Done"
-> > 
-> > Hmm, this test does NOT return any error. It always returns success.
-> 
-> Good catch!
-> 
-> > I understand that optimization may not be possible within 256 bytes
-> > from the beginning of the function.
-> 
-> Is that true in practice? Looking at x86 and ppc64le, it looks like we 
-> will almost always be able to optimize at least one of the instructions 
-> within the first 256 bytes of kernel_clone(). That's one of the primary 
-> purposes of this test.
+--rb5lfax26rs5huyx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, usually it should not happen. But since we don't disassemble it,
-we can not ensure that. So this depends on the compiler at last.
+Hi,
 
-> 
-> Are there valid reasons why we may not be able to optimize instructions?
+On Fri, Apr 21, 2023 at 04:42:23PM +0800, David Gow wrote:
+> This is v1 of the KUnit deferred actions API, which implements an
+> equivalent of devm_add_action[1] on top of KUnit managed resources. This
+> provides a simple way of scheduling a function to run when the test
+> terminates (whether successfully, or with an error). It's therefore very
+> useful for freeing resources, or otherwise cleaning up.
+>=20
+> The notable changes since RFCv2[2] are:
+> - Got rid of the 'cancellation token' concept. It was overcomplicated,
+>   and we can add it back if we need to.
+> - kunit_add_action() therefore now returns 0 on success, and an error
+>   otherwise (like devm_add_action()). Though you may wish to use:
+> - Added kunit_add_action_or_reset(), which will call the deferred
+>   function if an error occurs. (See devm_add_action_or_reset()). This
+>   also returns an error on failure, which can be asserted safely.
+> - Got rid of the function pointer typedef. Personally, I liked it, but
+>   it's more typedef-y than most kernel code.
+> - Got rid of the 'internal_gfp' argument: all internal state is now
+>   allocated with GFP_KERNEL. The main KUnit resource API can be used
+>   instead if this doesn't work for your use-case.
+>=20
+> I'd love to hear any further thoughts!
 
-For example, if the compiler starts inserting some checker instruction
-on each instruction boundary for security, it may prevent optimizing
-kprobes. Usually it should not happen (because it bloat up the kernel size)
-but we cannot deny the possibility of such new feature as an option
-in the future.
+I've converted the KMS kunit tests to use that API when relevant, and
+it works like a charm and is super usable, thanks so much.
 
-> 
-> > In that case, you can return
-> > "unresolved", and not echoing "Done" but the reason why it is
-> > unresolved.
+One improvement we could do as a second step is to provide a
+kunit_action_t type or something to make casting kfree-like functions
+easier, but it's already great overall.
 
-Even in that case, it can notify such case as "unresolved", then we
-can notice it. (something like WARN_ON)
+Reviewed-by: Maxime Ripard <maxime@cerno.tech>
+Tested-by: Maxime Ripard <maxime@cerno.tech>
 
-Thank you,
+Thanks again,
+Maxime
 
-> 
-> 
-> - Naveen
-> 
+--rb5lfax26rs5huyx
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZEfwhgAKCRDj7w1vZxhR
+xcAtAP4prqqqC77VuBSmZ2OPTWVaV2lVYsHKC9qTunwwWG+JxgEA8xbRD6OKfxOH
+ctUpY5UfYbzXWLDYjOBC+h0ylhFx1Ac=
+=uD/b
+-----END PGP SIGNATURE-----
+
+--rb5lfax26rs5huyx--
