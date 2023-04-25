@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBE46EE6F0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 19:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC126EE6F4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 19:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234617AbjDYRiL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Apr 2023 13:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
+        id S230429AbjDYRi0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Apr 2023 13:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbjDYRiG (ORCPT
+        with ESMTP id S234621AbjDYRiY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Apr 2023 13:38:06 -0400
+        Tue, 25 Apr 2023 13:38:24 -0400
 Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF008682;
-        Tue, 25 Apr 2023 10:38:03 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Q5TVd3SvKz9ttD6;
-        Wed, 26 Apr 2023 01:28:25 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A06A13F83;
+        Tue, 25 Apr 2023 10:38:16 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Q5TVs3K0Qz9xFg5;
+        Wed, 26 Apr 2023 01:28:37 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwD3dADLD0hkGxlWAg--.5466S3;
-        Tue, 25 Apr 2023 18:37:40 +0100 (CET)
+        by APP1 (Coremail) with SMTP id LxC2BwD3dADLD0hkGxlWAg--.5466S4;
+        Tue, 25 Apr 2023 18:37:52 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     dhowells@redhat.com, dwmw2@infradead.org,
         herbert@gondor.apana.org.au, davem@davemloft.net,
@@ -35,33 +35,33 @@ Cc:     linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
         linux-trace-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 1/6] KEYS: asymmetric: Introduce UMD-based asymmetric key parser
-Date:   Tue, 25 Apr 2023 19:35:52 +0200
-Message-Id: <20230425173557.724688-2-roberto.sassu@huaweicloud.com>
+Subject: [RFC][PATCH 2/6] KEYS: asymmetric: Introduce UMD-based asymmetric key signature parser
+Date:   Tue, 25 Apr 2023 19:35:53 +0200
+Message-Id: <20230425173557.724688-3-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230425173557.724688-1-roberto.sassu@huaweicloud.com>
 References: <20230425173557.724688-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwD3dADLD0hkGxlWAg--.5466S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Zw1UKF1DKw15WrWxJrWfAFb_yoWkKF48pF
-        WrWr18tFW8Kw1xK34rAr42gw1rtw1vyFWagw4Sqw13uasxXr4kG3yIyF45WFy7Jr1kJ34f
-        trs8Xa4Utr1DtFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
-        AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wr
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-        0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
-        07j4hFxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBF1jj4x8MwAAsl
+X-CM-TRANSID: LxC2BwD3dADLD0hkGxlWAg--.5466S4
+X-Coremail-Antispam: 1UD129KBjvAXoWfJr18trW5Jr4kXw1rKF4xXrb_yoW8CF4DKo
+        WfWr45G3W5tr1UCF4agw1kArs5ZFWDGa1UJw4rWF9IvFWqvw1kCrs5Ca47GrWSqwn8Krnx
+        ZryrtryxJFW0g3Z3n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUO57kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr
+        yl82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+        AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+        x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+        W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
+        7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
+        v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+        vjxUxiihUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBF1jj4x8MwABsk
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -74,250 +74,282 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Introduce a new parser for the asymmetric key type. The parser forwards the
-key payload to a User Mode Driver (UMD) handler, which replies with the
-data necessary to populate a public_key structure (blob, IDs and algorithm)
-and, possibly, with a key description.
+Like for keys, add a parser of asymmetric key signatures which forwards the
+request to a UMD handler (the same used for keys) and obtains from it the
+parsed fields (blob, public key algo, hash algo, signature encoding, and
+additional data required for the verification).
 
-The parser then validates the response, fills the key payload fields from
-it, and sets the key description if provided.
+Introduce an API for each phase of the signature verification: signature
+parsing, supplying/getting the data for the verification, calculating the
+digest, doing the actual signature verification and, finally, freeing the
+allocated memory.
 
-The main advantage of this approach is that potential risks of parsing data
-from the kernel are avoided, as the UMD handler does not have access to the
-kernel memory.
-
-If the UMD handler is corrupted, the damage is likely limited to user
-space. The parser sanitizes malicious data sent by the UMD. In addition,
-seccomp can further limit which system calls the UMD is authorized to
-invoke.
-
-The communication protocol between the parser and the UMD handler consists
-of two main structures: msg_in for the parser request, and msg_out for the
-UMD handler response.
-
-msg_in contains a buffer for a generic request, not only for parsing keys,
-and the type of command (CMD_KEY for key parsing).
-
-msg_out contains the result of the operation to communicate to the parser,
-and the specific structure umd_key_msg_out for storing the key payload
-fields and the key description.
+Extend the communication protocol with the UMD handler, by introducing the
+new specific structure umd_sig_msg_out, to be included in msg_out, and by
+introducing the new command CMD_SIG.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- crypto/asymmetric_keys/Kconfig           |  11 ++
+ MAINTAINERS                              |   1 +
+ crypto/asymmetric_keys/Kconfig           |  11 +
  crypto/asymmetric_keys/Makefile          |   5 +
- crypto/asymmetric_keys/asymmetric_type.c |   3 +-
- crypto/asymmetric_keys/umd_key.h         |  20 +++
- crypto/asymmetric_keys/umd_key_parser.c  | 203 +++++++++++++++++++++++
- crypto/asymmetric_keys/umd_key_sig_umh.h |  52 ++++++
- include/keys/asymmetric-type.h           |   1 +
- 7 files changed, 294 insertions(+), 1 deletion(-)
- create mode 100644 crypto/asymmetric_keys/umd_key.h
- create mode 100644 crypto/asymmetric_keys/umd_key_parser.c
- create mode 100644 crypto/asymmetric_keys/umd_key_sig_umh.h
+ crypto/asymmetric_keys/umd_key.h         |   8 +
+ crypto/asymmetric_keys/umd_key_sig_umh.h |  21 +-
+ crypto/asymmetric_keys/umd_sig_parser.c  | 416 +++++++++++++++++++++++
+ include/crypto/umd_sig.h                 |  71 ++++
+ 7 files changed, 532 insertions(+), 1 deletion(-)
+ create mode 100644 crypto/asymmetric_keys/umd_sig_parser.c
+ create mode 100644 include/crypto/umd_sig.h
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 782242fef7f..dd210bbcc2b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3205,6 +3205,7 @@ F:	Documentation/crypto/asymmetric-keys.rst
+ F:	crypto/asymmetric_keys/
+ F:	include/crypto/pkcs7.h
+ F:	include/crypto/public_key.h
++F:	include/crypto/umd_sig.h
+ F:	include/linux/verification.h
+ 
+ ASYNCHRONOUS TRANSFERS/TRANSFORMS (IOAT) API
 diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
-index 1ef3b46d6f6..5f627026476 100644
+index 5f627026476..d312feae88e 100644
 --- a/crypto/asymmetric_keys/Kconfig
 +++ b/crypto/asymmetric_keys/Kconfig
-@@ -85,4 +85,15 @@ config FIPS_SIGNATURE_SELFTEST
- 	depends on ASYMMETRIC_KEY_TYPE
- 	depends on PKCS7_MESSAGE_PARSER=X509_CERTIFICATE_PARSER
+@@ -96,4 +96,15 @@ config UMD_KEY_PARSER
  
-+config UMD_KEY_PARSER
-+	bool "UMD-based parser for the asymmetric key type"
-+	depends on ASYMMETRIC_PUBLIC_KEY_SUBTYPE
-+	select USERMODE_DRIVER
+ 	  On success, the parser fills the key from the UMD handler response.
+ 
++config UMD_SIG_PARSER
++	bool "UMD-based parser for asymmetric key signatures"
++	depends on UMD_KEY_PARSER
 +	help
-+	  This option introduces a new parser for the asymmetric key type.
-+	  The parser forwards the request to a User Mode Driver (UMD) handler,
-+	  which replies with the result.
++	  This option introduces a new parser for asymmetric key signatures.
++	  The parser forwards the request to a User Mode Driver (UMD) handler
++	  (the same used for keys), which replies with the result.
 +
-+	  On success, the parser fills the key from the UMD handler response.
++	  On success, the parser fills the signature from the UMD handler
++	  response.
 +
  endif # ASYMMETRIC_KEY_TYPE
 diff --git a/crypto/asymmetric_keys/Makefile b/crypto/asymmetric_keys/Makefile
-index 0d1fa1b692c..d8f266cdeeb 100644
+index d8f266cdeeb..060c699fbb2 100644
 --- a/crypto/asymmetric_keys/Makefile
 +++ b/crypto/asymmetric_keys/Makefile
-@@ -76,3 +76,8 @@ verify_signed_pefile-y := \
- 
- $(obj)/mscode_parser.o: $(obj)/mscode.asn1.h $(obj)/mscode.asn1.h
- $(obj)/mscode.asn1.o: $(obj)/mscode.asn1.c $(obj)/mscode.asn1.h
+@@ -81,3 +81,8 @@ $(obj)/mscode.asn1.o: $(obj)/mscode.asn1.c $(obj)/mscode.asn1.h
+ # UMD asymmetric key parser
+ #
+ obj-$(CONFIG_UMD_KEY_PARSER) += umd_key_parser.o
 +
 +#
-+# UMD asymmetric key parser
++# UMD signature parser
 +#
-+obj-$(CONFIG_UMD_KEY_PARSER) += umd_key_parser.o
-diff --git a/crypto/asymmetric_keys/asymmetric_type.c b/crypto/asymmetric_keys/asymmetric_type.c
-index 41a2f0eb4ce..f1752eb8ff8 100644
---- a/crypto/asymmetric_keys/asymmetric_type.c
-+++ b/crypto/asymmetric_keys/asymmetric_type.c
-@@ -431,7 +431,7 @@ static int asymmetric_key_preparse(struct key_preparsed_payload *prep)
- /*
-  * Clean up the key ID list
-  */
--static void asymmetric_key_free_kids(struct asymmetric_key_ids *kids)
-+void asymmetric_key_free_kids(struct asymmetric_key_ids *kids)
- {
- 	int i;
- 
-@@ -441,6 +441,7 @@ static void asymmetric_key_free_kids(struct asymmetric_key_ids *kids)
- 		kfree(kids);
- 	}
- }
-+EXPORT_SYMBOL_GPL(asymmetric_key_free_kids);
- 
- /*
-  * Clean up the preparse data
++obj-$(CONFIG_UMD_SIG_PARSER) += umd_sig_parser.o
 diff --git a/crypto/asymmetric_keys/umd_key.h b/crypto/asymmetric_keys/umd_key.h
-new file mode 100644
-index 00000000000..7e641bbf884
---- /dev/null
+index 7e641bbf884..91da42c5aa8 100644
+--- a/crypto/asymmetric_keys/umd_key.h
 +++ b/crypto/asymmetric_keys/umd_key.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Header file of the UMD asymmetric key parser.
-+ */
+@@ -18,3 +18,11 @@ extern const char *pub_key_algos[PUBKEY_ALGO__LAST];
+ 
+ int umd_get_kids(struct umd_asymmetric_key_ids *umd_kids,
+ 		 struct asymmetric_key_id *id[3]);
 +
-+#include <linux/usermode_driver_mgmt.h>
-+#include <keys/asymmetric-subtype.h>
-+#include <keys/asymmetric-parser.h>
++struct umd_sig_message {
++	struct public_key_signature *sig;
++	size_t data_len;
++	const void *data;
++	size_t sig_data_len;
++	const void *sig_data;
++};
+diff --git a/crypto/asymmetric_keys/umd_key_sig_umh.h b/crypto/asymmetric_keys/umd_key_sig_umh.h
+index e01c9e341c6..5f5ae81a9de 100644
+--- a/crypto/asymmetric_keys/umd_key_sig_umh.h
++++ b/crypto/asymmetric_keys/umd_key_sig_umh.h
+@@ -7,22 +7,29 @@
+  * Header file for communication between the kernel and the UMD handler.
+  */
+ 
++#include <linux/hash_info.h>
 +
-+#include "umd_key_sig_umh.h"
+ #define MAX_KEY_SIZE 1024
+ #define MAX_KEY_DESC_SIZE 256
+ #define MAX_PAYLOAD_SIZE 8192
+ #define MAX_KID_SIZE 256
++#define MAX_SIG_SIZE MAX_KEY_SIZE
++#define MAX_SIG_DATA_SIZE 1024
+ 
+ #ifndef __packed
+ #define __packed __attribute__((packed))
+ #endif
+ 
+-enum cmds { CMD_KEY, CMD__LAST };
++enum cmds { CMD_KEY, CMD_SIG, CMD__LAST };
+ 
+ /* Public key algorithms that the kernel supports. */
+ enum pub_key_algos { PUBKEY_ALGO_RSA, PUBKEY_ALGO_ECDSA,
+ 		     PUBKEY_ALGO_ECDSA_NIST_P192, PUBKEY_ALGO_ECDSA_NIST_P256,
+ 		     PUBKEY_ALGO_ECDSA_NIST_P384, PUBKEY_ALGO__LAST };
+ 
++/* Signature encodings that the kernel supports. */
++enum sig_encodings { SIG_ENC_PKCS1, SIG_ENC_X962, SIG_ENC_RAW, SIG_ENC__LAST };
 +
-+extern struct umd_mgmt key_ops;
-+extern const char *pub_key_algos[PUBKEY_ALGO__LAST];
+ struct msg_in {
+ 	enum cmds cmd;
+ 	size_t data_len;
+@@ -44,9 +51,21 @@ struct umd_key_msg_out {
+ 	char key_desc[MAX_KEY_DESC_SIZE];
+ } __packed;
+ 
++struct umd_sig_msg_out {
++	size_t sig_len;
++	unsigned char sig[MAX_SIG_SIZE];
++	enum pub_key_algos pkey_algo;
++	enum hash_algo hash_algo;
++	enum sig_encodings enc;
++	struct umd_asymmetric_key_ids auth_ids;
++	size_t sig_data_len;
++	unsigned char sig_data[MAX_SIG_DATA_SIZE];
++} __packed;
 +
-+int umd_get_kids(struct umd_asymmetric_key_ids *umd_kids,
-+		 struct asymmetric_key_id *id[3]);
-diff --git a/crypto/asymmetric_keys/umd_key_parser.c b/crypto/asymmetric_keys/umd_key_parser.c
+ struct msg_out {
+ 	int ret;
+ 	union {
+ 		struct umd_key_msg_out key;
++		struct umd_sig_msg_out sig;
+ 	};
+ } __packed;
+diff --git a/crypto/asymmetric_keys/umd_sig_parser.c b/crypto/asymmetric_keys/umd_sig_parser.c
 new file mode 100644
-index 00000000000..bd7d09d89f3
+index 00000000000..03bc2310f89
 --- /dev/null
-+++ b/crypto/asymmetric_keys/umd_key_parser.c
-@@ -0,0 +1,203 @@
++++ b/crypto/asymmetric_keys/umd_sig_parser.c
+@@ -0,0 +1,416 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Implement the UMD asymmetric key parser.
++ * Implement the UMD asymmetric key signature parser.
 + */
 +
 +#include <linux/module.h>
++#include <keys/asymmetric-subtype.h>
++#include <keys/asymmetric-parser.h>
 +#include <crypto/public_key.h>
++#include <crypto/umd_sig.h>
++#include <crypto/hash_info.h>
++#include <crypto/hash.h>
 +
 +#include "umd_key.h"
 +
-+const char *pub_key_algos[PUBKEY_ALGO__LAST] = {
-+	[PUBKEY_ALGO_RSA] = "rsa",
-+	[PUBKEY_ALGO_ECDSA] = "ecdsa",
-+	[PUBKEY_ALGO_ECDSA_NIST_P192] = "ecdsa-nist-p192",
-+	[PUBKEY_ALGO_ECDSA_NIST_P256] = "ecdsa-nist-p256",
-+	[PUBKEY_ALGO_ECDSA_NIST_P384] = "ecdsa-nist-p384",
++const char *sig_encodings[SIG_ENC__LAST] = {
++	[SIG_ENC_PKCS1] = "pkcs1",
++	[SIG_ENC_X962] = "x962",
++	[SIG_ENC_RAW] = "raw",
 +};
 +
-+struct umd_mgmt key_ops = {
-+	.info.driver_name = "umd_key_sig_umh",
-+	.kmod = "umd_key_sig_user",
-+	.lock = __MUTEX_INITIALIZER(key_ops.lock),
-+};
-+EXPORT_SYMBOL_GPL(key_ops);
-+
-+static struct public_key *get_public_key(struct msg_out *out)
++static struct public_key_signature *get_sig(struct msg_out *out)
 +{
-+	struct public_key *pub;
++	struct public_key_signature *sig = NULL;
++	int ret;
 +
-+	if (out->key.pkey_algo >= PUBKEY_ALGO__LAST) {
-+		pr_err("Unexpected key algo %d\n", out->key.pkey_algo);
++	if (!out->sig.sig_len) {
++		pr_err("Unexpected zero-length for signature\n");
 +		return ERR_PTR(-EBADMSG);
 +	}
 +
-+	if (!out->key.pub_key_len) {
-+		pr_err("Unexpected zero-length for public key\n");
++	if (out->sig.sig_len > sizeof(out->sig.sig)) {
++		pr_err("Signature length %ld greater than expected %ld\n",
++		       out->sig.sig_len, sizeof(out->sig.sig));
 +		return ERR_PTR(-EBADMSG);
 +	}
 +
-+	if (out->key.pub_key_len > sizeof(out->key.pub_key)) {
-+		pr_err("Public key length %ld greater than expected %ld\n",
-+		       out->key.pub_key_len, sizeof(out->key.pub_key));
++	if (out->sig.pkey_algo >= PUBKEY_ALGO__LAST) {
++		pr_err("Unexpected key algo %d\n", out->sig.pkey_algo);
 +		return ERR_PTR(-EBADMSG);
 +	}
 +
-+	pub = kzalloc(sizeof(*pub), GFP_KERNEL);
-+	if (!pub)
++	if (out->sig.hash_algo >= HASH_ALGO__LAST) {
++		pr_err("Unexpected hash algo %d\n", out->sig.hash_algo);
++		return ERR_PTR(-EBADMSG);
++	}
++
++	if (out->sig.enc >= SIG_ENC__LAST) {
++		pr_err("Unexpected signature encoding %d\n", out->sig.enc);
++		return ERR_PTR(-EBADMSG);
++	}
++
++	sig = kzalloc(sizeof(*sig), GFP_KERNEL);
++	if (!sig)
 +		return ERR_PTR(-ENOMEM);
 +
-+	pub->id_type = "UMD";
-+	pub->pkey_algo = pub_key_algos[out->key.pkey_algo];
-+
-+	pub->key = kmemdup(out->key.pub_key, out->key.pub_key_len, GFP_KERNEL);
-+	if (!pub->key) {
-+		kfree(pub);
-+		return ERR_PTR(-ENOMEM);
++	sig->s = kmemdup(out->sig.sig, out->sig.sig_len, GFP_KERNEL);
++	if (!sig->s) {
++		ret = -ENOMEM;
++		goto out;
 +	}
 +
-+	pub->keylen = out->key.pub_key_len;
-+	return pub;
-+}
++	sig->s_size = out->sig.sig_len;
 +
-+int umd_get_kids(struct umd_asymmetric_key_ids *umd_kids,
-+		 struct asymmetric_key_id **id)
-+{
-+	int ret = 0, i, j;
++	ret = umd_get_kids(&out->sig.auth_ids, sig->auth_ids);
++	if (ret)
++		goto out;
 +
-+	for (i = 0; i < ARRAY_SIZE(umd_kids->kid1_len); i++) {
-+		if (!umd_kids->kid1_len[i] && !umd_kids->kid2_len[i])
-+			continue;
-+
-+		if (umd_kids->kid1_len[i] > sizeof(umd_kids->kid1[0])) {
-+			pr_err("Key ID 1 length %ld greater than expected %ld\n",
-+			       umd_kids->kid1_len[i],
-+			       sizeof(umd_kids->kid1[0]));
-+			ret = -EBADMSG;
-+			break;
-+		}
-+
-+		if (umd_kids->kid2_len[i] > sizeof(umd_kids->kid2[0])) {
-+			pr_err("Key ID 2 length %ld greater than expected %ld\n",
-+			       umd_kids->kid2_len[i],
-+			       sizeof(umd_kids->kid2[0]));
-+			ret = -EBADMSG;
-+			break;
-+		}
-+
-+		id[i] = asymmetric_key_generate_id(umd_kids->kid1[i],
-+						   umd_kids->kid1_len[i],
-+						   umd_kids->kid2[i],
-+						   umd_kids->kid2_len[i]);
-+		if (!id[i]) {
-+			ret = -ENOMEM;
-+			break;
-+		}
-+	}
-+
++	sig->pkey_algo = pub_key_algos[out->sig.pkey_algo];
++	sig->hash_algo = hash_algo_name[out->sig.hash_algo];
++	sig->digest_size = hash_digest_size[out->sig.hash_algo];
++	sig->encoding = sig_encodings[out->sig.enc];
++out:
 +	if (ret) {
-+		for (j = 0; j < i; j++)
-+			kfree(id[j]);
++		public_key_signature_free(sig);
++		sig = ERR_PTR(ret);
 +	}
 +
-+	return ret;
++	return sig;
 +}
 +
-+static int umd_key_parse(struct key_preparsed_payload *prep)
++static int get_sig_data(struct msg_out *out, struct umd_sig_message *umd_sig)
++{
++	if (!out->sig.sig_data_len)
++		return 0;
++
++	if (out->sig.sig_data_len > sizeof(out->sig.sig_data)) {
++		pr_err("Additional data length %ld greater than expected %ld\n",
++		       out->sig.sig_data_len, sizeof(out->sig.sig_data));
++		return -EBADMSG;
++	}
++
++	umd_sig->sig_data = kmemdup(out->sig.sig_data, out->sig.sig_data_len,
++				    GFP_KERNEL);
++	if (!umd_sig->sig_data)
++		return -ENOMEM;
++
++	umd_sig->sig_data_len = out->sig.sig_data_len;
++	return 0;
++}
++
++/**
++ * umd_sig_parse_message - Parse a signature with a UMD handler
++ * @sig_data: Signature blob
++ * @sig_len: Length of signature blob
++ *
++ * Pass the signature blob to a UMD handler and fill a public_key_signature
++ * structure from the UMD handler response.
++ *
++ * Return: A umd_sig_message structure on success, an error pointer on error.
++ */
++struct umd_sig_message *umd_sig_parse_message(const u8 *sig_data,
++					      size_t sig_len)
 +{
 +	struct msg_in *in = NULL;
 +	struct msg_out *out = NULL;
-+	struct asymmetric_key_ids *kids = NULL;
-+	struct public_key *pub = NULL;
++	struct umd_sig_message *umd_sig = NULL;
 +	int ret = -ENOMEM;
++
++	if (sig_len > sizeof(in->data))
++		return ERR_PTR(-EINVAL);
 +
 +	in = kzalloc(sizeof(*in), GFP_KERNEL);
 +	if (!in)
@@ -327,10 +359,9 @@ index 00000000000..bd7d09d89f3
 +	if (!out)
 +		goto out;
 +
-+	in->cmd = CMD_KEY;
-+	in->data_len = prep->datalen;
-+	/* Truncate the input, there might be multiple keys in the same blob. */
-+	memcpy(in->data, prep->data, min(prep->datalen, sizeof(in->data)));
++	in->cmd = CMD_SIG;
++	in->data_len = sig_len;
++	memcpy(in->data, sig_data, sig_len);
 +
 +	out->ret = -EINVAL;
 +
@@ -343,138 +374,350 @@ index 00000000000..bd7d09d89f3
 +		goto out;
 +	}
 +
-+	pub = get_public_key(out);
-+	if (IS_ERR(pub)) {
-+		ret = PTR_ERR(pub);
-+		pub = NULL;
-+		goto out;
-+	}
-+
-+	kids = kzalloc(sizeof(*kids), GFP_KERNEL);
-+	if (!kids) {
++	umd_sig = kzalloc(sizeof(*umd_sig), GFP_KERNEL);
++	if (!umd_sig) {
 +		ret = -ENOMEM;
 +		goto out;
 +	}
 +
-+	ret = umd_get_kids(&out->key.kids,
-+			   (struct asymmetric_key_id **)kids->id);
-+	if (ret)
++	umd_sig->sig = get_sig(out);
++	if (IS_ERR(umd_sig->sig)) {
++		ret = PTR_ERR(umd_sig->sig);
++		umd_sig->sig = NULL;
 +		goto out;
-+
-+	if (strlen(out->key.key_desc)) {
-+		prep->description = kstrdup(out->key.key_desc, GFP_KERNEL);
-+		if (!prep->description)
-+			ret = -ENOMEM;
 +	}
 +
++	ret = get_sig_data(out, umd_sig);
 +out:
++	if (ret) {
++		if (umd_sig) {
++			public_key_signature_free(umd_sig->sig);
++			kfree(umd_sig);
++		}
++
++		umd_sig = ERR_PTR(ret);
++	}
++
 +	kfree(in);
 +	kfree(out);
++	return umd_sig;
++}
++EXPORT_SYMBOL_GPL(umd_sig_parse_message);
 +
-+	if (ret) {
-+		public_key_free(pub);
-+		asymmetric_key_free_kids(kids);
-+		return ret;
++/**
++ * umd_sig_supply_detached_data - Supply the data to verify a UMD-parsed sig
++ * @umd_sig: The UMD-parsed signature
++ * @data: The data to be verified
++ * @data_len: The amount of data
++ *
++ * Supply the detached data needed to verify a UMD-parsed signature. Note that
++ * no attempt to retain/pin the data is made. That is left to the caller. The
++ * data will not be modified by umd_sig_verify_message() and will not be freed
++ * when the UMD-parsed signature is freed.
++ *
++ * Return: Zero on success, -EINVAL if data are already supplied.
++ */
++int umd_sig_supply_detached_data(struct umd_sig_message *umd_sig,
++				 const void *data, size_t data_len)
++{
++	if (umd_sig->data) {
++		pr_debug("Data already supplied\n");
++		return -EINVAL;
 +	}
-+
-+	/* We're pinning the module by being linked against it */
-+	__module_get(public_key_subtype.owner);
-+	prep->payload.data[asym_subtype] = &public_key_subtype;
-+	prep->payload.data[asym_key_ids] = kids;
-+	prep->payload.data[asym_crypto] = pub;
-+	prep->quotalen = 100;
++	umd_sig->data = data;
++	umd_sig->data_len = data_len;
 +	return 0;
 +}
++EXPORT_SYMBOL_GPL(umd_sig_supply_detached_data);
 +
-+static struct asymmetric_key_parser umd_key_parser = {
-+	.owner = THIS_MODULE,
-+	.name = "umd_key",
-+	.parse = umd_key_parse
-+};
-+
-+static int __init umd_key_init(void)
++/**
++ * umd_sig_get_content_data - Get access to content data and additional data
++ * @umd_sig: The UMD-parsed signature
++ * @_data: Place to return a pointer to the data
++ * @_data_len: Place to return the data length
++ * @_headerlen: Size of the additional data
++ *
++ * Get access to the data associated to the UMD-parsed signature. This includes
++ * the content data eventually supplied by the caller of the UMD signatures API,
++ * and the additional data resulting from the signature parsing, appended at the
++ * end (the ordering can be configurable in the future).
++ *
++ * Data is allocated, to concatenate together the two data sources, and must be
++ * freed by the caller. It is presented in a way that is suitable for
++ * calculating the digest for verifying the signature.
++ *
++ * Return: Zero if the data and additional data can be provided,
++ *         a negative value on error.
++ */
++int umd_sig_get_content_data(struct umd_sig_message *umd_sig,
++			     const void **_data, size_t *_data_len,
++			     size_t *_headerlen)
 +{
-+	return register_asymmetric_key_parser(&umd_key_parser);
++	void *data;
++
++	if (!umd_sig->data)
++		return -ENODATA;
++
++	if (!_data)
++		goto skip_data;
++
++	data = kmalloc(umd_sig->data_len + umd_sig->sig->data_size, GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	memcpy(data, umd_sig->data, umd_sig->data_len);
++	memcpy(data + umd_sig->data_len, umd_sig->sig->data,
++	       umd_sig->sig->data_size);
++	*_data = data;
++skip_data:
++	if (_data_len)
++		*_data_len = umd_sig->data_len + umd_sig->sig->data_size;
++	if (_headerlen)
++		*_headerlen = umd_sig->sig->data_size;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(umd_sig_get_content_data);
++
++static int umd_sig_digest(struct umd_sig_message *umd_sig)
++{
++	struct public_key_signature *sig = umd_sig->sig;
++	struct crypto_shash *tfm;
++	struct shash_desc *desc;
++	size_t desc_size;
++	int ret;
++
++	/* The digest was calculated already. */
++	if (sig->digest)
++		return 0;
++
++	tfm = crypto_alloc_shash(sig->hash_algo, 0, 0);
++	if (IS_ERR(tfm))
++		return (PTR_ERR(tfm) == -ENOENT) ? -ENOPKG : PTR_ERR(tfm);
++
++	desc_size = crypto_shash_descsize(tfm) + sizeof(*desc);
++
++	ret = -ENOMEM;
++	sig->digest = kmalloc(sig->digest_size, GFP_KERNEL);
++	if (!sig->digest)
++		goto error_no_desc;
++
++	desc = kzalloc(desc_size, GFP_KERNEL);
++	if (!desc)
++		goto error_no_desc;
++
++	desc->tfm = tfm;
++
++	ret = crypto_shash_init(desc);
++	if (ret < 0)
++		goto error;
++
++	ret = crypto_shash_update(desc, umd_sig->data, umd_sig->data_len);
++	if (ret < 0)
++		goto error;
++
++	ret = crypto_shash_finup(desc, umd_sig->sig_data, umd_sig->sig_data_len,
++				 sig->digest);
++error:
++	kfree(desc);
++error_no_desc:
++	crypto_free_shash(tfm);
++	return ret;
 +}
 +
-+static void __exit umd_key_exit(void)
++/**
++ * umd_sig_get_digest - Obtain the digest and algorithm of the data to verify
++ * @umd_sig: The UMD-parsed signature
++ * @digest: The buffer the digest is written to
++ * @digest_len: The length of @digest
++ * @hash_algo: The algorithm the digest is calculated with
++ *
++ * Calculate the digest of data to verify with the UMD-parsed signature, if
++ * not calculated already. Pass the pointer of the digest from the
++ * public_key_signature structure, the length and the algorithm to the caller.
++ *
++ * Return: Zero on success, a negative value otherwise.
++ */
++int umd_sig_get_digest(struct umd_sig_message *umd_sig, const u8 **digest,
++		       u32 *digest_len, enum hash_algo *hash_algo)
 +{
-+	unregister_asymmetric_key_parser(&umd_key_parser);
++	struct public_key_signature *sig = umd_sig->sig;
++	int i, ret;
++
++	ret = umd_sig_digest(umd_sig);
++	if (ret)
++		return ret;
++
++	*digest = sig->digest;
++	*digest_len = sig->digest_size;
++
++	i = match_string(hash_algo_name, HASH_ALGO__LAST, sig->hash_algo);
++	if (i >= 0)
++		*hash_algo = i;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(umd_sig_get_digest);
++
++static struct key *get_key(struct umd_sig_message *umd_sig, struct key *keyring)
++{
++	struct public_key_signature *sig = umd_sig->sig;
++	struct key *key;
++
++	key = find_asymmetric_key(keyring, sig->auth_ids[0], sig->auth_ids[1],
++				  sig->auth_ids[2], true);
++	if (IS_ERR(key)) {
++		pr_debug("Public key not found (#%*phN, #%*phN, #%*phN)\n",
++			 sig->auth_ids[0]->len, sig->auth_ids[0]->data,
++			 sig->auth_ids[1]->len, sig->auth_ids[1]->data,
++			 sig->auth_ids[2]->len, sig->auth_ids[2]->data);
++
++		switch (PTR_ERR(key)) {
++			/* Hide some search errors */
++		case -EACCES:
++		case -ENOTDIR:
++		case -EAGAIN:
++			return ERR_PTR(-ENOKEY);
++		default:
++			return ERR_CAST(key);
++		}
++	}
++
++	return key;
 +}
 +
-+module_init(umd_key_init);
-+module_exit(umd_key_exit);
-+MODULE_LICENSE("GPL");
-diff --git a/crypto/asymmetric_keys/umd_key_sig_umh.h b/crypto/asymmetric_keys/umd_key_sig_umh.h
++/**
++ * umd_sig_verify_message - Verify the UMD-parsed signature
++ * @umd_sig: The UMD-parsed signature
++ * @keyring: Keyring containing the key for signature verification
++ *
++ * Calculate the digest, search the key for signature verification, and verify
++ * the signature.
++ *
++ * Return: Zero if the signature is valid, a negative value otherwise.
++ */
++int umd_sig_verify_message(struct umd_sig_message *umd_sig, struct key *keyring)
++{
++	const struct public_key *pub;
++	struct key *key;
++	int ret;
++
++	ret = umd_sig_digest(umd_sig);
++	if (ret < 0)
++		return ret;
++
++	key = get_key(umd_sig, keyring);
++	if (IS_ERR(key))
++		return PTR_ERR(key);
++
++	pub = key->payload.data[asym_crypto];
++
++	if (strcmp(pub->pkey_algo, umd_sig->sig->pkey_algo) != 0 &&
++	    (strncmp(pub->pkey_algo, "ecdsa-", 6) != 0 ||
++	     strcmp(umd_sig->sig->pkey_algo, "ecdsa") != 0)) {
++		ret = -EKEYREJECTED;
++		goto out;
++	}
++
++	ret = verify_signature(key, umd_sig->sig);
++out:
++	key_put(key);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(umd_sig_verify_message);
++
++/**
++ * umd_sig_free_message - Free the memory allocated
++ * @umd_sig: The UMD-parsed signature
++ *
++ * Free the memory allocated for the verification of the UMD-parsed signature.
++ */
++void umd_sig_free_message(struct umd_sig_message *umd_sig)
++{
++	if (!umd_sig)
++		return;
++
++	kfree(umd_sig->sig_data);
++	public_key_signature_free(umd_sig->sig);
++	kfree(umd_sig);
++}
++EXPORT_SYMBOL_GPL(umd_sig_free_message);
+diff --git a/include/crypto/umd_sig.h b/include/crypto/umd_sig.h
 new file mode 100644
-index 00000000000..e01c9e341c6
+index 00000000000..89b6646a4aa
 --- /dev/null
-+++ b/crypto/asymmetric_keys/umd_key_sig_umh.h
-@@ -0,0 +1,52 @@
++++ b/include/crypto/umd_sig.h
+@@ -0,0 +1,71 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Header file for communication between the kernel and the UMD handler.
++ * Header of the UMD asymmetric key signature parser.
 + */
 +
-+#define MAX_KEY_SIZE 1024
-+#define MAX_KEY_DESC_SIZE 256
-+#define MAX_PAYLOAD_SIZE 8192
-+#define MAX_KID_SIZE 256
++#ifndef _CRYPTO_UMD_SIG_H
++#define _CRYPTO_UMD_SIG_H
 +
-+#ifndef __packed
-+#define __packed __attribute__((packed))
-+#endif
++#include <linux/verification.h>
++#include <linux/hash_info.h>
++#include <crypto/public_key.h>
 +
-+enum cmds { CMD_KEY, CMD__LAST };
++struct key;
++struct umd_sig_message;
 +
-+/* Public key algorithms that the kernel supports. */
-+enum pub_key_algos { PUBKEY_ALGO_RSA, PUBKEY_ALGO_ECDSA,
-+		     PUBKEY_ALGO_ECDSA_NIST_P192, PUBKEY_ALGO_ECDSA_NIST_P256,
-+		     PUBKEY_ALGO_ECDSA_NIST_P384, PUBKEY_ALGO__LAST };
++#ifdef CONFIG_UMD_SIG_PARSER
++extern struct umd_sig_message *umd_sig_parse_message(const u8 *sig_data,
++						     size_t sig_len);
++extern int umd_sig_supply_detached_data(struct umd_sig_message *umd_sig,
++					const void *data, size_t data_len);
++extern int umd_sig_get_content_data(struct umd_sig_message *umd_sig,
++				    const void **_data, size_t *_data_len,
++				    size_t *_headerlen);
++extern int umd_sig_get_digest(struct umd_sig_message *umd_sig, const u8 **buf,
++			      u32 *len, enum hash_algo *hash_algo);
++extern int umd_sig_verify_message(struct umd_sig_message *umd_sig,
++				  struct key *keyring);
++extern void umd_sig_free_message(struct umd_sig_message *umd_sig);
++#else
++static inline struct umd_sig_message *umd_sig_parse_message(const u8 *sig_data,
++							    size_t sig_len)
++{
++	return ERR_PTR(-EOPNOTSUPP);
++}
 +
-+struct msg_in {
-+	enum cmds cmd;
-+	size_t data_len;
-+	unsigned char data[MAX_PAYLOAD_SIZE];
-+} __packed;
++static inline int umd_sig_supply_detached_data(struct umd_sig_message *umd_sig,
++					       const void *data, size_t data_len)
++{
++	return -EOPNOTSUPP;
++}
 +
-+struct umd_asymmetric_key_ids {
-+	size_t kid1_len[3];
-+	unsigned char kid1[3][MAX_KID_SIZE];
-+	size_t kid2_len[3];
-+	unsigned char kid2[3][MAX_KID_SIZE];
-+} __packed;
++static inline int umd_sig_get_content_data(struct umd_sig_message *umd_sig,
++					   const void **_data,
++					   size_t *_data_len,
++					   size_t *_headerlen)
++{
++	return -EOPNOTSUPP;
++}
 +
-+struct umd_key_msg_out {
-+	size_t pub_key_len;
-+	unsigned char pub_key[MAX_KEY_SIZE];
-+	enum pub_key_algos pkey_algo;
-+	struct umd_asymmetric_key_ids kids;
-+	char key_desc[MAX_KEY_DESC_SIZE];
-+} __packed;
++static inline int umd_sig_get_digest(struct umd_sig_message *umd_sig, const u8 **buf,
++				     u32 *len, enum hash_algo *hash_algo)
++{
++	return -EOPNOTSUPP;
++}
 +
-+struct msg_out {
-+	int ret;
-+	union {
-+		struct umd_key_msg_out key;
-+	};
-+} __packed;
-diff --git a/include/keys/asymmetric-type.h b/include/keys/asymmetric-type.h
-index 69a13e1e5b2..acbb8c805f6 100644
---- a/include/keys/asymmetric-type.h
-+++ b/include/keys/asymmetric-type.h
-@@ -66,6 +66,7 @@ extern struct asymmetric_key_id *asymmetric_key_generate_id(const void *val_1,
- 							    size_t len_1,
- 							    const void *val_2,
- 							    size_t len_2);
-+void asymmetric_key_free_kids(struct asymmetric_key_ids *kids);
- static inline
- const struct asymmetric_key_ids *asymmetric_key_ids(const struct key *key)
- {
++static inline int umd_sig_verify_message(struct umd_sig_message *umd_sig,
++					 struct key *keyring)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline void umd_sig_free_message(struct umd_sig_message *umd_sig)
++{
++}
++
++#endif /* CONFIG_UMD_SIG_PARSER */
++#endif /* _CRYPTO_UMD_SIG_H */
 -- 
 2.25.1
 
