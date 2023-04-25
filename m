@@ -2,305 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA8C6EE52C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 18:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D24B6EE5CE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 18:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbjDYQBT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Apr 2023 12:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
+        id S234489AbjDYQcv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Apr 2023 12:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233966AbjDYQBP (ORCPT
+        with ESMTP id S234377AbjDYQcu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Apr 2023 12:01:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D32013C19;
-        Tue, 25 Apr 2023 09:01:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE4EA62F7E;
-        Tue, 25 Apr 2023 16:01:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2BE3C433EF;
-        Tue, 25 Apr 2023 16:01:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682438472;
-        bh=6Yrx9edyKSHeZsGFemGRrrlnf8qH6XswXiSIsdYmwXQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ush8rZM3eb00Hb51tg+A8ZXm+shFZhNHKvT5BIaiTGIc6+U/u6xcXnuvf4RxgN2br
-         +1vbJ9ssyO7AmzqOv2z29KgUyJSmptxH63jNTKLj/tpyP1b0KPBi6H0Zrpa6SNKqps
-         UGrzkHvbcLzCno1M5PktVHdbdurffu9oZ/vuWHysfnzODopEBsyrzwlY4MYI/LMdTH
-         D9Xla0z0n8WYStFbY7nAqqjbwC8E0bjdYB+txBTDoWpvKS4NpRQAhkkkMcsn/1/0ey
-         1ZtsnTF5kFS0j34Vt3mTimh5TYV4FX3ixWLHTWW06AQr5xzBIFOZvPgwDI1S3bMCzR
-         P8/aJshUQSOCw==
-Date:   Wed, 26 Apr 2023 01:01:07 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RESEND] selftests/ftrace: Improve integration with
- kselftest runner
-Message-Id: <20230426010107.0858c3c8f435734624221a21@kernel.org>
-In-Reply-To: <20230302-ftrace-kselftest-ktap-v1-1-1270085b4cd5@kernel.org>
-References: <20230302-ftrace-kselftest-ktap-v1-1-1270085b4cd5@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 25 Apr 2023 12:32:50 -0400
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C69CDC17A;
+        Tue, 25 Apr 2023 09:32:49 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 18:32:45 +0200
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Jan Engelhardt <jengelh@inai.de>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Kai Liu <kai.liu@suse.com>, netfilter-devel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: netfilter: fix a build error on openSUSE
+Message-ID: <ZEgArba2jGAGy0/Z@calendula>
+References: <5ee95e93a11a239df8e09d059da25a4eaa5725ba.1646198836.git.geliang.tang@suse.com>
+ <8cbf1231-0da5-c8a0-d66b-1488633d9895@linuxfoundation.org>
+ <Yh+wulh/nIkFeFmz@salvia>
+ <sr67066-o9or-1s32-pp7-s764r386n55q@vanv.qr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <sr67066-o9or-1s32-pp7-s764r386n55q@vanv.qr>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 11 Apr 2023 12:19:30 +0100
-Mark Brown <broonie@kernel.org> wrote:
-
-> The ftrace selftests do not currently produce KTAP output, they produce a
-> custom format much nicer for human consumption. This means that when run in
-> automated test systems we just get a single result for the suite as a whole
-> rather than recording results for individual test cases, making it harder
-> to look at the test data and masking things like inappropriate skips.
+On Tue, Apr 25, 2023 at 11:14:55AM +0200, Jan Engelhardt wrote:
 > 
-> Address this by adding support for KTAP output to the ftracetest script and
-> providing a trivial wrapper which will be invoked by the kselftest runner
-> to generate output in this format by default, users using ftracetest
-> directly will continue to get the existing output.
+> On Wednesday ** 2022-03-02 19:00 **, Pablo Neira Ayuso wrote:
 > 
-> This is not the most elegant solution but it is simple and effective. I
-> did consider implementing this by post processing the existing output
-> format but that felt more complex and likely to result in all output being
-> lost if something goes seriously wrong during the run which would not be
-> helpful. I did also consider just writing a separate runner script but
-> there's enough going on with things like the signal handling for that to
-> seem like it would be duplicating too much.
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  tools/testing/selftests/ftrace/Makefile        |  3 +-
->  tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
->  tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
->  3 files changed, 70 insertions(+), 4 deletions(-)
+> >On Wed, Mar 02, 2022 at 10:11:11AM -0700, Shuah Khan wrote:
+> >> On 3/1/22 10:29 PM, Geliang Tang wrote:
+> >> > This patch fixed the following build error on openSUSE Leap 15.3:
+> >> >   nf-queue.c:13:10: fatal error: libmnl/libmnl.h: No such file or directory
+> >> >    #include <libmnl/libmnl.h>
+> >> > diff --git a/tools/testing/selftests/netfilter/Makefile b/tools/testing/selftests/netfilter/Makefile
+> >> > index e4f845dd942b..8136c1fab7ab 100644
+> >> > --- a/tools/testing/selftests/netfilter/Makefile
+> >> > +++ b/tools/testing/selftests/netfilter/Makefile
+> >> > @@ -8,6 +8,7 @@ TEST_PROGS := nft_trans_stress.sh nft_fib.sh nft_nat.sh bridge_brouter.sh \
+> >> >   	ipip-conntrack-mtu.sh conntrack_tcp_unreplied.sh \
+> >> >   	conntrack_vrf.sh nft_synproxy.sh
+> >> > +CFLAGS += $(shell pkg-config --cflags libmnl 2>/dev/null || echo "-I/usr/include/libmnl")
+> >> >   LDLIBS = -lmnl
+> >> >   TEST_GEN_FILES =  nf-queue
+> >> 
+> >> Adding Pablo to the thread.
+> >> This looks good to me. I can take this through linux-kselftest tree.
+> >> Or if it is going through netfilter tree:
+> >> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> >
+> >If this does not cause any issue when running tests in any other
+> >distros, then it is fine with me.
 > 
-> diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
-> index d6e106fbce11..a1e955d2de4c 100644
-> --- a/tools/testing/selftests/ftrace/Makefile
-> +++ b/tools/testing/selftests/ftrace/Makefile
-> @@ -1,7 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
->  all:
->  
-> -TEST_PROGS := ftracetest
-> +TEST_PROGS_EXTENDED := ftracetest
-> +TEST_PROGS := ftracetest-ktap
->  TEST_FILES := test.d settings
->  EXTRA_CLEAN := $(OUTPUT)/logs/*
->  
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> index c3311c8c4089..539c8d6d5d71 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
->  echo " Options:"
->  echo "		-h|--help  Show help message"
->  echo "		-k|--keep  Keep passed test logs"
-> +echo "		-K|--KTAP  Output in KTAP format"
+> Since a pkgconfig file exists, it ought to be used. That also means
+> you need the same/similar incantation in LDLIBS, with
+> `pkg-config --libs libmnl`.
 
-This should be "-K|--ktap".
-
-Others looks good to me. Can you update it with my Ack?
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org> # with above fix.
-
-Thank you,
-
-
->  echo "		-v|--verbose Increase verbosity of test messages"
->  echo "		-vv        Alias of -v -v (Show all results in stdout)"
->  echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
-> @@ -85,6 +86,10 @@ parse_opts() { # opts
->        KEEP_LOG=1
->        shift 1
->      ;;
-> +    --ktap|-K)
-> +      KTAP=1
-> +      shift 1
-> +    ;;
->      --verbose|-v|-vv|-vvv)
->        if [ $VERBOSE -eq -1 ]; then
->  	usage "--console can not use with --verbose"
-> @@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
->  TEST_CASES=`find_testcases $TEST_DIR`
->  LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
->  KEEP_LOG=0
-> +KTAP=0
->  DEBUG=0
->  VERBOSE=0
->  UNSUPPORTED_RESULT=0
-> @@ -229,7 +235,7 @@ prlog() { # messages
->      newline=
->      shift
->    fi
-> -  printf "$*$newline"
-> +  [ "$KTAP" != "1" ] && printf "$*$newline"
->    [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
->  }
->  catlog() { #file
-> @@ -260,11 +266,11 @@ TOTAL_RESULT=0
->  
->  INSTANCE=
->  CASENO=0
-> +CASENAME=
->  
->  testcase() { # testfile
->    CASENO=$((CASENO+1))
-> -  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
-> -  prlog -n "[$CASENO]$INSTANCE$desc"
-> +  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
->  }
->  
->  checkreq() { # testfile
-> @@ -277,40 +283,68 @@ test_on_instance() { # testfile
->    grep -q "^#[ \t]*flags:.*instance" $1
->  }
->  
-> +ktaptest() { # result comment
-> +  if [ "$KTAP" != "1" ]; then
-> +    return
-> +  fi
-> +
-> +  local result=
-> +  if [ "$1" = "1" ]; then
-> +    result="ok"
-> +  else
-> +    result="not ok"
-> +  fi
-> +  shift
-> +
-> +  local comment=$*
-> +  if [ "$comment" != "" ]; then
-> +    comment="# $comment"
-> +  fi
-> +
-> +  echo $CASENO $result $INSTANCE$CASENAME $comment
-> +}
-> +
->  eval_result() { # sigval
->    case $1 in
->      $PASS)
->        prlog "	[${color_green}PASS${color_reset}]"
-> +      ktaptest 1
->        PASSED_CASES="$PASSED_CASES $CASENO"
->        return 0
->      ;;
->      $FAIL)
->        prlog "	[${color_red}FAIL${color_reset}]"
-> +      ktaptest 0
->        FAILED_CASES="$FAILED_CASES $CASENO"
->        return 1 # this is a bug.
->      ;;
->      $UNRESOLVED)
->        prlog "	[${color_blue}UNRESOLVED${color_reset}]"
-> +      ktaptest 0 UNRESOLVED
->        UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
->        return $UNRESOLVED_RESULT # depends on use case
->      ;;
->      $UNTESTED)
->        prlog "	[${color_blue}UNTESTED${color_reset}]"
-> +      ktaptest 1 SKIP
->        UNTESTED_CASES="$UNTESTED_CASES $CASENO"
->        return 0
->      ;;
->      $UNSUPPORTED)
->        prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
-> +      ktaptest 1 SKIP
->        UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
->        return $UNSUPPORTED_RESULT # depends on use case
->      ;;
->      $XFAIL)
->        prlog "	[${color_green}XFAIL${color_reset}]"
-> +      ktaptest 1 XFAIL
->        XFAILED_CASES="$XFAILED_CASES $CASENO"
->        return 0
->      ;;
->      *)
->        prlog "	[${color_blue}UNDEFINED${color_reset}]"
-> +      ktaptest 0 error
->        UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
->        return 1 # this must be a test bug
->      ;;
-> @@ -371,6 +405,7 @@ __run_test() { # testfile
->  run_test() { # testfile
->    local testname=`basename $1`
->    testcase $1
-> +  prlog -n "[$CASENO]$INSTANCE$CASENAME"
->    if [ ! -z "$LOG_FILE" ] ; then
->      local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
->    else
-> @@ -405,6 +440,17 @@ run_test() { # testfile
->  # load in the helper functions
->  . $TEST_DIR/functions
->  
-> +if [ "$KTAP" = "1" ]; then
-> +  echo "TAP version 13"
-> +
-> +  casecount=`echo $TEST_CASES | wc -w`
-> +  for t in $TEST_CASES; do
-> +    test_on_instance $t || continue
-> +    casecount=$((casecount+1))
-> +  done
-> +  echo "1..${casecount}"
-> +fi
-> +
->  # Main loop
->  for t in $TEST_CASES; do
->    run_test $t
-> @@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
->  prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
->  prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
->  
-> +if [ "$KTAP" = "1" ]; then
-> +  echo -n "# Totals:"
-> +  echo -n " pass:"`echo $PASSED_CASES | wc -w`
-> +  echo -n " faii:"`echo $FAILED_CASES | wc -w`
-> +  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
-> +  echo -n " xpass:0"
-> +  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
-> +  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
-> +  echo
-> +fi
-> +
->  cleanup
->  
->  # if no error, return 0
-> diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
-> new file mode 100755
-> index 000000000000..b3284679ef3a
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/ftracetest-ktap
-> @@ -0,0 +1,8 @@
-> +#!/bin/sh -e
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +#
-> +# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
-> +#
-> +# Copyright (C) Arm Ltd., 2023
-> +
-> +./ftracetest -K
-> 
-> ---
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-> change-id: 20230302-ftrace-kselftest-ktap-9d7878691557
-> 
-> Best regards,
-> -- 
-> Mark Brown <broonie@kernel.org>
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Patch?
