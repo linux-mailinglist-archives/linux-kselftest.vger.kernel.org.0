@@ -2,288 +2,309 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C497D6EE706
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 19:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8E66EE7DD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Apr 2023 20:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234829AbjDYRje (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Apr 2023 13:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
+        id S235080AbjDYSzj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Apr 2023 14:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234882AbjDYRjc (ORCPT
+        with ESMTP id S235050AbjDYSzX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Apr 2023 13:39:32 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A40A13FBE;
-        Tue, 25 Apr 2023 10:39:04 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Q5TWn0Hpdz9xFg7;
-        Wed, 26 Apr 2023 01:29:25 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwD3dADLD0hkGxlWAg--.5466S8;
-        Tue, 25 Apr 2023 18:38:40 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        jarkko@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        rostedt@goodmis.org, mhiramat@kernel.org, mykolal@fb.com,
-        shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 6/6] KEYS: asymmetric: Add UMD handler
-Date:   Tue, 25 Apr 2023 19:35:57 +0200
-Message-Id: <20230425173557.724688-7-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230425173557.724688-1-roberto.sassu@huaweicloud.com>
-References: <20230425173557.724688-1-roberto.sassu@huaweicloud.com>
+        Tue, 25 Apr 2023 14:55:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5670F17DD1;
+        Tue, 25 Apr 2023 11:55:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0442630FA;
+        Tue, 25 Apr 2023 18:53:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2F9BC433EF;
+        Tue, 25 Apr 2023 18:53:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682448796;
+        bh=QzL4eLmoqmYi59jjtuPso8/mePb5tQoGq17DOI9Er2I=;
+        h=From:Date:Subject:To:Cc:From;
+        b=AUPNN2hkEz6pjnB9XN0Ob2ytqek7TMszaV/pr4fPKXjBiCD6PaVNxvz/5OMiA6SqH
+         SlJp4sEfSZCwpeur3mEyBrXTBj5gbkM/d+m2a6bpXaKrkFNJstLYGK1L2Vd2ReTKDm
+         HpFreFBD2clS+YyuP5DuQhPCmD2GADLbV2NXIq10JErZh/uAoIc/dcTslNihF+oSrp
+         w2TrJndFHleUZ6MGmRdUirxpj+FcUlCgYqiEiiPkSv14AUYeq9zEYUxqSgOvV5hif5
+         rSYw3UIp3jVZcKLhcotRfTKoI10IliqlLWXQnmw1/nkl22MH1ECRD2Exz8lqjNfk6U
+         MpTn0kzJultlg==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Tue, 25 Apr 2023 19:52:25 +0100
+Subject: [PATCH v2] selftests/ftrace: Improve integration with kselftest
+ runner
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwD3dADLD0hkGxlWAg--.5466S8
-X-Coremail-Antispam: 1UD129KBjvJXoW3XF17Zr1UWFy8Cr1UuFW8tFb_yoW7Zw4fpa
-        yF9rWrtFWrtw1Ska4rJr12gw4rAw48Ar4Sgw1Sq3W5uasrXw4kCrWIyF43WFy8JryxJFyr
-        tFWkZFyUJrs5JaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
-        kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
-        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
-        v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvE
-        c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
-        pf9x07jxwIDUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBF1jj4x8NAACsg
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230302-ftrace-kselftest-ktap-v2-1-337ab8219014@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAGghSGQC/4WNQQqDMBAAvyI5d0sSq1FP/UfxsOqqQRtlE6RF/
+ HujH+hxBobZhSe25EWV7IJps94uLoK+JaId0Q0EtosstNSpTKWGPjC2BJOnuQ/kA0wBVyg7U5g
+ iL1WWGRHbBj1Bw+ja8azDez3tytTbz3V71ZFH68PC32u+qdP++2wKFGDxQGnyrDHYPSdiR/N94
+ UHUx3H8AMmk61HRAAAA
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-00e42
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7654; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=QzL4eLmoqmYi59jjtuPso8/mePb5tQoGq17DOI9Er2I=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkSCGZevTH5VcnmeRPG4tflGsqGShsIY5Ys32/8VDL
+ zKjd2V6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZEghmQAKCRAk1otyXVSH0EXYCA
+ CGr8ak2PZn/pdfuQj2ia64jDuqFMWWBoG1Xii/TdqeAOtiM9aqov93+vvtSa4gVh36r6CwX2qxBmor
+ jYSXBD5+nwK8AyXHljdyAYuloUrH/5pgWgrDMs1WMcOIBjyf2Qk4lY6PhwPXMRfQQy/imbZiBCyrGV
+ 1c/JKo/KzcylLfZAUc6NQQXcW8NH/4JVnIsd1xn94R+2440oHVaQbQBOg9IsbQ3NUCqFUgcuuwVVkG
+ AxTBajeM/I1AFppqOZWqJDB375ByjSa9o+Rna8tgRrpU+nySXGJ7qcVgaW7NRbH1O4k04sg/bxIXs3
+ u8562aXUUIZDVu1dTje06maqjFw0BK
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+The ftrace selftests do not currently produce KTAP output, they produce a
+custom format much nicer for human consumption. This means that when run in
+automated test systems we just get a single result for the suite as a whole
+rather than recording results for individual test cases, making it harder
+to look at the test data and masking things like inappropriate skips.
 
-Introduce the skeleton of the UMD handler, complete enough to talk with
-the new key and signature parsers in the kernel.
+Address this by adding support for KTAP output to the ftracetest script and
+providing a trivial wrapper which will be invoked by the kselftest runner
+to generate output in this format by default, users using ftracetest
+directly will continue to get the existing output.
 
-Commands to parse keys and signatures are not implemented.
+This is not the most elegant solution but it is simple and effective. I
+did consider implementing this by post processing the existing output
+format but that felt more complex and likely to result in all output being
+lost if something goes seriously wrong during the run which would not be
+helpful. I did also consider just writing a separate runner script but
+there's enough going on with things like the signal handling for that to
+seem like it would be duplicating too much.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .gitignore                                    |  3 +
- crypto/asymmetric_keys/Kconfig                | 10 +++
- crypto/asymmetric_keys/Makefile               | 13 +++
- crypto/asymmetric_keys/umd_key_sig_loader.c   | 32 +++++++
- crypto/asymmetric_keys/umd_key_sig_umh_blob.S |  7 ++
- crypto/asymmetric_keys/umd_key_sig_umh_user.c | 84 +++++++++++++++++++
- 6 files changed, 149 insertions(+)
- create mode 100644 crypto/asymmetric_keys/umd_key_sig_loader.c
- create mode 100644 crypto/asymmetric_keys/umd_key_sig_umh_blob.S
- create mode 100644 crypto/asymmetric_keys/umd_key_sig_umh_user.c
+Changes in v2:
+- Update help text.
+- Link to v1: https://lore.kernel.org/r/20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org
+---
+ tools/testing/selftests/ftrace/Makefile        |  3 +-
+ tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
+ tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
+ 3 files changed, 70 insertions(+), 4 deletions(-)
 
-diff --git a/.gitignore b/.gitignore
-index 7f86e083790..f14e42b7273 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -174,3 +174,6 @@ sphinx_*/
+diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
+index d6e106fbce11..a1e955d2de4c 100644
+--- a/tools/testing/selftests/ftrace/Makefile
++++ b/tools/testing/selftests/ftrace/Makefile
+@@ -1,7 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ all:
  
- # Rust analyzer configuration
- /rust-project.json
-+
-+# User mode driver for asymmetric keys and signatures
-+/crypto/asymmetric_keys/umd_key_sig_umh
-diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
-index d312feae88e..4b53667d209 100644
---- a/crypto/asymmetric_keys/Kconfig
-+++ b/crypto/asymmetric_keys/Kconfig
-@@ -107,4 +107,14 @@ config UMD_SIG_PARSER
- 	  On success, the parser fills the signature from the UMD handler
- 	  response.
+-TEST_PROGS := ftracetest
++TEST_PROGS_EXTENDED := ftracetest
++TEST_PROGS := ftracetest-ktap
+ TEST_FILES := test.d settings
+ EXTRA_CLEAN := $(OUTPUT)/logs/*
  
-+config UMD_KEY_SIG_HANDLER
-+	tristate "UMD handler for asymmetric keys and signatures"
-+	depends on UMD_KEY_PARSER
-+	help
-+	  This option introduces a UMD handler to parse data received from
-+	  the key and signature kernel parsers.
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index c3311c8c4089..2506621e75df 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
+ echo " Options:"
+ echo "		-h|--help  Show help message"
+ echo "		-k|--keep  Keep passed test logs"
++echo "		-K|--ktap  Output in KTAP format"
+ echo "		-v|--verbose Increase verbosity of test messages"
+ echo "		-vv        Alias of -v -v (Show all results in stdout)"
+ echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
+@@ -85,6 +86,10 @@ parse_opts() { # opts
+       KEEP_LOG=1
+       shift 1
+     ;;
++    --ktap|-K)
++      KTAP=1
++      shift 1
++    ;;
+     --verbose|-v|-vv|-vvv)
+       if [ $VERBOSE -eq -1 ]; then
+ 	usage "--console can not use with --verbose"
+@@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
+ TEST_CASES=`find_testcases $TEST_DIR`
+ LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
+ KEEP_LOG=0
++KTAP=0
+ DEBUG=0
+ VERBOSE=0
+ UNSUPPORTED_RESULT=0
+@@ -229,7 +235,7 @@ prlog() { # messages
+     newline=
+     shift
+   fi
+-  printf "$*$newline"
++  [ "$KTAP" != "1" ] && printf "$*$newline"
+   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
+ }
+ catlog() { #file
+@@ -260,11 +266,11 @@ TOTAL_RESULT=0
+ 
+ INSTANCE=
+ CASENO=0
++CASENAME=
+ 
+ testcase() { # testfile
+   CASENO=$((CASENO+1))
+-  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+-  prlog -n "[$CASENO]$INSTANCE$desc"
++  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+ }
+ 
+ checkreq() { # testfile
+@@ -277,40 +283,68 @@ test_on_instance() { # testfile
+   grep -q "^#[ \t]*flags:.*instance" $1
+ }
+ 
++ktaptest() { # result comment
++  if [ "$KTAP" != "1" ]; then
++    return
++  fi
 +
-+	  It includes just the basic program structure, to be enhanced with
-+	  actual parsers.
++  local result=
++  if [ "$1" = "1" ]; then
++    result="ok"
++  else
++    result="not ok"
++  fi
++  shift
 +
- endif # ASYMMETRIC_KEY_TYPE
-diff --git a/crypto/asymmetric_keys/Makefile b/crypto/asymmetric_keys/Makefile
-index 060c699fbb2..d870cc04fcf 100644
---- a/crypto/asymmetric_keys/Makefile
-+++ b/crypto/asymmetric_keys/Makefile
-@@ -86,3 +86,16 @@ obj-$(CONFIG_UMD_KEY_PARSER) += umd_key_parser.o
- # UMD signature parser
- #
- obj-$(CONFIG_UMD_SIG_PARSER) += umd_sig_parser.o
++  local comment=$*
++  if [ "$comment" != "" ]; then
++    comment="# $comment"
++  fi
 +
++  echo $CASENO $result $INSTANCE$CASENAME $comment
++}
++
+ eval_result() { # sigval
+   case $1 in
+     $PASS)
+       prlog "	[${color_green}PASS${color_reset}]"
++      ktaptest 1
+       PASSED_CASES="$PASSED_CASES $CASENO"
+       return 0
+     ;;
+     $FAIL)
+       prlog "	[${color_red}FAIL${color_reset}]"
++      ktaptest 0
+       FAILED_CASES="$FAILED_CASES $CASENO"
+       return 1 # this is a bug.
+     ;;
+     $UNRESOLVED)
+       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
++      ktaptest 0 UNRESOLVED
+       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
+       return $UNRESOLVED_RESULT # depends on use case
+     ;;
+     $UNTESTED)
+       prlog "	[${color_blue}UNTESTED${color_reset}]"
++      ktaptest 1 SKIP
+       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
+       return 0
+     ;;
+     $UNSUPPORTED)
+       prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
++      ktaptest 1 SKIP
+       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
+       return $UNSUPPORTED_RESULT # depends on use case
+     ;;
+     $XFAIL)
+       prlog "	[${color_green}XFAIL${color_reset}]"
++      ktaptest 1 XFAIL
+       XFAILED_CASES="$XFAILED_CASES $CASENO"
+       return 0
+     ;;
+     *)
+       prlog "	[${color_blue}UNDEFINED${color_reset}]"
++      ktaptest 0 error
+       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
+       return 1 # this must be a test bug
+     ;;
+@@ -371,6 +405,7 @@ __run_test() { # testfile
+ run_test() { # testfile
+   local testname=`basename $1`
+   testcase $1
++  prlog -n "[$CASENO]$INSTANCE$CASENAME"
+   if [ ! -z "$LOG_FILE" ] ; then
+     local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
+   else
+@@ -405,6 +440,17 @@ run_test() { # testfile
+ # load in the helper functions
+ . $TEST_DIR/functions
+ 
++if [ "$KTAP" = "1" ]; then
++  echo "TAP version 13"
++
++  casecount=`echo $TEST_CASES | wc -w`
++  for t in $TEST_CASES; do
++    test_on_instance $t || continue
++    casecount=$((casecount+1))
++  done
++  echo "1..${casecount}"
++fi
++
+ # Main loop
+ for t in $TEST_CASES; do
+   run_test $t
+@@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
+ prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
+ prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
+ 
++if [ "$KTAP" = "1" ]; then
++  echo -n "# Totals:"
++  echo -n " pass:"`echo $PASSED_CASES | wc -w`
++  echo -n " faii:"`echo $FAILED_CASES | wc -w`
++  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
++  echo -n " xpass:0"
++  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
++  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
++  echo
++fi
++
+ cleanup
+ 
+ # if no error, return 0
+diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
+new file mode 100755
+index 000000000000..b3284679ef3a
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/ftracetest-ktap
+@@ -0,0 +1,8 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0-only
 +#
-+# UMD handler for asymmetric keys and signatures
++# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
 +#
-+CC=klcc
-+userprogs := umd_key_sig_umh
-+umd_key_sig_umh-objs := umd_key_sig_umh_user.o
-+userldflags += -static
++# Copyright (C) Arm Ltd., 2023
 +
-+$(obj)/umd_key_sig_umh_blob.o: $(obj)/umd_key_sig_umh
-+
-+obj-$(CONFIG_UMD_KEY_SIG_HANDLER) += umd_key_sig_user.o
-+umd_key_sig_user-objs += umd_key_sig_loader.o umd_key_sig_umh_blob.o
-diff --git a/crypto/asymmetric_keys/umd_key_sig_loader.c b/crypto/asymmetric_keys/umd_key_sig_loader.c
-new file mode 100644
-index 00000000000..b959a42b9fd
---- /dev/null
-+++ b/crypto/asymmetric_keys/umd_key_sig_loader.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement the loader of the UMD handler.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/slab.h>
-+
-+#include "umd_key.h"
-+
-+extern char umd_key_umh_start;
-+extern char umd_key_umh_end;
-+
-+MODULE_LICENSE("GPL");
-+
-+static int __init umd_key_umh_init(void)
-+{
-+	return umd_mgmt_load(&key_ops, &umd_key_umh_start, &umd_key_umh_end);
-+}
-+
-+static void __exit umd_key_umh_exit(void)
-+{
-+	umd_mgmt_unload(&key_ops);
-+}
-+
-+module_init(umd_key_umh_init);
-+module_exit(umd_key_umh_exit);
-diff --git a/crypto/asymmetric_keys/umd_key_sig_umh_blob.S b/crypto/asymmetric_keys/umd_key_sig_umh_blob.S
-new file mode 100644
-index 00000000000..954cbe891bd
---- /dev/null
-+++ b/crypto/asymmetric_keys/umd_key_sig_umh_blob.S
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+	.section .init.rodata, "a"
-+	.global umd_key_umh_start
-+umd_key_umh_start:
-+	.incbin "crypto/asymmetric_keys/umd_key_sig_umh"
-+	.global umd_key_umh_end
-+umd_key_umh_end:
-diff --git a/crypto/asymmetric_keys/umd_key_sig_umh_user.c b/crypto/asymmetric_keys/umd_key_sig_umh_user.c
-new file mode 100644
-index 00000000000..21f53008762
---- /dev/null
-+++ b/crypto/asymmetric_keys/umd_key_sig_umh_user.c
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement the UMD handler.
-+ */
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <stdlib.h>
-+#include <errno.h>
-+
-+#include "umd_key_sig_umh.h"
-+
-+FILE *debug_f;
-+
-+int main(int argc, char *argv[])
-+{
-+	struct msg_in *in = NULL;
-+	struct msg_out *out = NULL;
-+	size_t in_len, out_len;
-+	loff_t pos;
-+	int ret = 0;
-+
-+#ifdef debug
-+	debug_f = fopen("/dev/kmsg", "a");
-+	fprintf(debug_f, "<5>Started %s\n", argv[0]);
-+	fflush(debug_f);
-+#endif
-+	in = malloc(sizeof(*in));
-+	if (!in)
-+		goto out;
-+
-+	out = malloc(sizeof(*out));
-+	if (!out)
-+		goto out;
-+
-+	while (1) {
-+		int n;
-+
-+		in_len = sizeof(*in);
-+		out_len = sizeof(*out);
-+
-+		memset(in, 0, in_len);
-+		memset(out, 0, out_len);
-+
-+		pos = 0;
-+		while (in_len) {
-+			n = read(0, (void *)in + pos, in_len);
-+			if (n <= 0) {
-+				ret = -EIO;
-+				goto out;
-+			}
-+			in_len -= n;
-+			pos += n;
-+		}
-+
-+		switch (in->cmd) {
-+		default:
-+			out->ret = -EOPNOTSUPP;
-+			break;
-+		}
-+
-+		pos = 0;
-+		while (out_len) {
-+			n = write(1, (void *)out + pos, out_len);
-+			if (n <= 0) {
-+				ret = -EIO;
-+				goto out;
-+			}
-+			out_len -= n;
-+			pos += n;
-+		}
-+	}
-+out:
-+	free(in);
-+	free(out);
-+#ifdef debug
-+	fclose(debug_f);
-+#endif
-+	return ret;
-+}
++./ftracetest -K
+
+---
+base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
+change-id: 20230302-ftrace-kselftest-ktap-9d7878691557
+
+Best regards,
 -- 
-2.25.1
+Mark Brown <broonie@kernel.org>
 
