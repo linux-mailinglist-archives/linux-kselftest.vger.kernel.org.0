@@ -2,203 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3BE6EF5FA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 16:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DAD6EF601
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 16:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbjDZOEg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Apr 2023 10:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S241085AbjDZOIr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Apr 2023 10:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241058AbjDZOEf (ORCPT
+        with ESMTP id S229889AbjDZOIp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:04:35 -0400
-X-Greylist: delayed 352 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 26 Apr 2023 07:04:33 PDT
-Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [IPv6:2001:1600:3:17::190b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DFD6598
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Apr 2023 07:04:33 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Q60p31RkfzMqKm8;
-        Wed, 26 Apr 2023 15:58:35 +0200 (CEST)
-Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Q60p10S6VzMpnPs;
-        Wed, 26 Apr 2023 15:58:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1682517515;
-        bh=q7YipNjqfn/z8kn3IJil8RM+axjuqfK/m4XxAXBUf+Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=W3ugWyQJtbD1oliKhX2Yzdcz480Vu9ygX9tFHZIoWk3rLpcrlhe0J0wGmRPKueSKw
-         3RvQkqQa2k9xP8f2ipclUpzNvmCuv6awzTMTl9zgXLWrce99hInBlJuFELbhM9S+66
-         ZTIfZHvu2s/84MMyRA7LTcejVHUjMyRZebV9J06g=
-Message-ID: <99c0648d-deec-c7e2-a54f-94a7f6a3a50f@digikod.net>
-Date:   Wed, 26 Apr 2023 15:58:31 +0200
+        Wed, 26 Apr 2023 10:08:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BD9659E;
+        Wed, 26 Apr 2023 07:08:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43FF663539;
+        Wed, 26 Apr 2023 14:08:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5484C433EF;
+        Wed, 26 Apr 2023 14:08:42 +0000 (UTC)
+Date:   Wed, 26 Apr 2023 10:08:40 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, corbet@lwn.net,
+        shuah@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH tracing 0/3] tracing: support > 8 byte filter predicates
+Message-ID: <20230426100840.69d29b68@gandalf.local.home>
+In-Reply-To: <57d8f27c-7737-8af9-490b-a33b2783fc9f@oracle.com>
+References: <1682414197-13173-1-git-send-email-alan.maguire@oracle.com>
+        <20230425233233.2ad5168c630b4c1349ab3398@kernel.org>
+        <9c4cebb7-514c-f7fd-1f95-50837460eb66@oracle.com>
+        <20230425132028.7d16e04c@gandalf.local.home>
+        <57d8f27c-7737-8af9-490b-a33b2783fc9f@oracle.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH -next v2 0/6] landlock: add chmod and chown support
-Content-Language: en-US
-To:     xiujianfeng <xiujianfeng@huawei.com>, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
-        corbet@lwn.net
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, roberto.sassu@huawei.com,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christian Brauner <brauner@kernel.org>
-References: <20220827111215.131442-1-xiujianfeng@huawei.com>
- <d55baf4d-01d3-e4d7-e07f-9658d1606a8c@huawei.com>
- <a4dc7c12-b485-2eb2-add5-4f7a387a50fa@digikod.net>
- <5fc97b5b-e76f-99c7-7314-6bb16851f66e@huawei.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <5fc97b5b-e76f-99c7-7314-6bb16851f66e@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Wed, 26 Apr 2023 09:51:00 +0100
+Alan Maguire <alan.maguire@oracle.com> wrote:
 
+> - 16 byte field with ':'; convert from IPv6 address before memcmp()ing
+> - 6 byte field with ':'; convert from MAC address before memcmp()ing
+> - 4 byte field with '.'; convert from IPv4 address before memcmp()ing
+> - 0x prefix, any other size; basic memcmp
 
-On 24/04/2023 10:52, xiujianfeng wrote:
-> 
-> 
-> On 2023/4/21 1:40, Mickaël Salaün wrote:
->>
->> On 18/04/2023 12:53, xiujianfeng wrote:
->>> Hi Mickael,
->>>
->>> Sorry about the long silence on this work, As we known this work depends
->>> on another work about changing argument from struct dentry to struct
->>> path for some attr/xattr related lsm hooks, I'm stuck with this thing,
->>> because IMA/EVM is a special security module which is not LSM-based
->>> currently, and severely coupled with the file system. so I am waiting
->>> for Roberto Sassu' work (Move IMA and EVM to the LSM infrastructure) to
->>> be ready, I think it can make my work more easy. you can find
->>> Roberto'work here,
->>> https://lwn.net/ml/linux-kernel/20230303181842.1087717-1-roberto.sassu@huaweicloud.com/
->>>
->>> Any good idea are welcome, thanks.
->>
->> Thanks for the update Xiu.
->>
->> Which part would be needed from Roberto's patch series?
->>
-> As we discussed before, the two access rights that need to be added and
-> their usage is as below:
-> LANDLOCK_ACCESS_FS_WRITE_METADATA controls
-> 1.inode_setattr
-> 2.inode_setxattr
-> 3.inode_removexattr
-> 4.inode_set_acl
-> 5.inode_remove_acl
-> LANDLOCK_ACCESS_FS_READ_METADATA controls
-> 1.inode_getattr
-> 2.inode_get_acl
-> 3.inode_getxattr
-> 4.inode_listxattr
-> 
-> all these APIs should be changed to use struct path instead of dentry,
-> and then several vfs APIs as follows are invovled:
-> notify_change,
-> __vfs_setxattr_locked,
-> __vfs_removexattr_locked,
-> __vfs_setxattr_noperm
-> vfs_set_acl
-> vfs_remove_acl
-> vfs_getxattr
-> vfs_listxattr
-> vfs_get_acl
-> and also include some LSM hooks such as inode_post_setxattr and
-> inode_setsecctx.
-> 
-> Since the original places where pass dentry to security_inode_xxx may
-> not have any struct path, we have to pass it from the top caller, so
-> this also touches lots of filesystems(e.g. cachefiles, ecryptfs, ksmbd,
-> nfsd, overlayfs...).
-> 
-> Other LSMs such as selinux, smack can be easy to refator because they
-> are LSM-based, and if VFS passes path to security_inode_xxx and they can
-> just use path->dentry instead inside they own modules.
-> 
-> AS for IMA/EVM, unfortunately they are not LSM-based and coupled with
-> the file system. To make things worse, there is a recursive dependency
-> situation during the update of extended attribute which happen as follows:
-> 
-> __vfs_setxattr_noperm
->    => security_inode_post_setxattr
->      => evm_inode_post_setxattr
->        => evm_update_evmxattr
-> => __vfs_setxattr_noperm
-> 
-> To change the argument of __vfs_setxattr_noperm from a dentry to the
-> path structure, the two EVM functions would have to be altered as well.
-> However, evm_update_evmxattr is called by 3 other EVM functions who
-> lives in the very heart of the complicated EVM framework. Any change to
-> them would cause a nasty chain reaction in EVM and, as IMA would trigger
-> EVM directly, in IMA as well.
-> 
-> There is another callchain as follow:
-> ima_appraise_measurement
->    =>evm_verifyxattr
->      =>evm_verifyxattr
->        =>evm_verify_hmac
-> 	=>evm_calc_hash
-> 	   =>evm_calc_hmac_or_hash
-> 	     =>vfs_getxattr
-> Passing struct path into vfs_getxattr() would also affect this
-> callchain. Currently ima_appraise_measurment accepts a struct file, and
-> dentry is generated from file_dentry(file) in order to mitigate a
-> deadlock issue involving overlayfs(commit e71b9dff0634ed). Once
-> &file->f_path is passed through this callchain, and someone wants the
-> dentry, it will be using file->f_path.dentry, which is different from
-> file_dentry(file). In the overlayfs scenario, may this cause an issue?
+Sure.
 
-I might be OK, but this need to be tested.
-
-> 
-> The patchset of moving IMA and EVM into the LSM infrastructe would be
-> helpfull but still can not completely resolve this situation. more
-> refactor would be needed in EVM. That's all that's happening right now.
-
-OK, thanks for the detailed explanation!
-
-I guess you could start with easier hooks (e.g. inode_getattr and 
-inode_setattr) to see if there is potentially other implications, and 
-incrementally build on that.
-
-
-> 
->>
->>>
->>>
->>> On 2022/8/27 19:12, Xiu Jianfeng wrote:
->>>> v2:
->>>>    * abstract walk_to_visible_parent() helper
->>>>    * chmod and chown rights only take affect on directory's context
->>>>    * add testcase for fchmodat/lchown/fchownat
->>>>    * fix other review issues
->>>>
->>>> Xiu Jianfeng (6):
->>>>     landlock: expand access_mask_t to u32 type
->>>>     landlock: abstract walk_to_visible_parent() helper
->>>>     landlock: add chmod and chown support
->>>>     landlock/selftests: add selftests for chmod and chown
->>>>     landlock/samples: add chmod and chown support
->>>>     landlock: update chmod and chown support in document
->>>>
->>>>    Documentation/userspace-api/landlock.rst     |   9 +-
->>>>    include/uapi/linux/landlock.h                |  10 +-
->>>>    samples/landlock/sandboxer.c                 |  13 +-
->>>>    security/landlock/fs.c                       | 110 ++++++--
->>>>    security/landlock/limits.h                   |   2 +-
->>>>    security/landlock/ruleset.h                  |   2 +-
->>>>    security/landlock/syscalls.c                 |   2 +-
->>>>    tools/testing/selftests/landlock/base_test.c |   2 +-
->>>>    tools/testing/selftests/landlock/fs_test.c   | 267 ++++++++++++++++++-
->>>>    9 files changed, 386 insertions(+), 31 deletions(-)
->>>>
+-- Steve
