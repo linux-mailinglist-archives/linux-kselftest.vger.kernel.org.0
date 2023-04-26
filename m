@@ -2,187 +2,243 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260A66EEC41
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 04:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B98476EEE0A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 08:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239221AbjDZCMo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Apr 2023 22:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S239372AbjDZGID (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Apr 2023 02:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239175AbjDZCMn (ORCPT
+        with ESMTP id S239315AbjDZGIC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Apr 2023 22:12:43 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580FA14479
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Apr 2023 19:12:41 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1a6e5be6224so152745ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Apr 2023 19:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682475161; x=1685067161;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UQAl7WIDX3nG1b8WyYVDaxQxUXgVIGV2IaFgXNIX3BQ=;
-        b=cDF46ZOLvvKRFEBOEk2p8ZsjyWIwx+A+Khp62kbiCO79drnTEk7FaJM5QzGHnPUCHY
-         pQaGO4GB1RZ0UlzkDQNFA0pJFN7blaF+DPYsxecCFMRVWbZzmrX/mDxVRwtF8c2Z90gP
-         ZTGqSixXO1xYspZpStywkwE568OAH9aLNDjCgqHka8N2j8KWbri3vnYo+6xIYyPPT310
-         8Og80162GDA9fzT44SLcXIR7K5re5fHv83lVoguZSiKdirr2lMHowrUxsY1ji0/HNbtS
-         Rg/Lj7amlTC1wa+Bit14r7RJcEsD78t7RENWC1vDVAfPvsq7TSA+BGZsAkRU0dDbzvEw
-         RDig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682475161; x=1685067161;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UQAl7WIDX3nG1b8WyYVDaxQxUXgVIGV2IaFgXNIX3BQ=;
-        b=dNAFvPVZWS8O6OKUbNi7pNHkwurzQFRLm1IVADH9jGAYpzLwbKntxASJZE1WsGayaz
-         uEMmaWFs5JFZA8o6FW+TN+WZ+rwD0fgUDTOTTz3rYkEmbTaaBDrecYB9SrBiSXr1CAhz
-         bo5UYrdo8eWkNXnZOyqdUB/V0Bck3IoavB3d9wEedpQ+5L0Yof6TXLwhzvB1oGCnww9y
-         VJ6xp6ZylstOEQVI228loJkkYNdEHg6+TFm/hA6tCzOEqbthdnCc8YS9Rgxif14PucZr
-         zTBm1hpYIfaQMjamDjpFqOU7nhvb+I1VmsKafFQBTOP8Ovr/atvk05oZvYrNsHmrx7lo
-         qRMQ==
-X-Gm-Message-State: AC+VfDz+K+YKqkWCFz5c7hVctlekyPqP48hdrwgrVUwec3sOSESfte1p
-        nrRHSgiajqubZW7twYiuxaker1k3kjym5HLcF4rJeA==
-X-Google-Smtp-Source: ACHHUZ5TrEeOXF1Ku1oe7rI+MSUtgXxc1PFXG1WC0SxAVGSGPuAvwT5hk5Eks697mlBICtmiJyGox6uCSwhojLPo9G4=
-X-Received: by 2002:a17:902:f1d3:b0:1a8:df:f3c6 with SMTP id
- e19-20020a170902f1d300b001a800dff3c6mr148837plc.2.1682475160683; Tue, 25 Apr
- 2023 19:12:40 -0700 (PDT)
+        Wed, 26 Apr 2023 02:08:02 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D13F2D50;
+        Tue, 25 Apr 2023 23:07:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682489247; x=1714025247;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KFNleya7xt94i466EISgoBljuoJrw5ZOHnzA6qkSr10=;
+  b=DrpJqvGRL80jT52KUS+8PR9sJ5knlUNda9lj/6QfcZcCcWPM8wCJ5r+j
+   jCGg+hVG5tZVn8h0JPyyiOQ9xouDqaGnQKEnPXF2CM0mnsYWs/EHEad1b
+   EqDefloCUyxM6oNNj4FbpQW8gyQGflHzRIb3VG8LP/DNWOUlgbXPfDAOb
+   stSs2txt7BE/+VcrAvfzDAUTFjxxeW/Fuc3vk3RFXB23qqDaOOLAV++aV
+   0rTm70L8wuy9JBeelzZqBaOjAZAfYZqRHwPJimhpPBEQrMFIX/9Ei02AU
+   NWZowwY4yOh4b9teXx7K0XXCGgCwaZAHYS9IY2DhFfcLEHr84TmjNjlcE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="326618284"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="326618284"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 23:07:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="817987264"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="817987264"
+Received: from mmhacket-mobl.amr.corp.intel.com (HELO [10.209.15.30]) ([10.209.15.30])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 23:07:18 -0700
+Message-ID: <80718d6c-9e53-d549-bfe2-6c10d618acb1@linux.intel.com>
+Date:   Tue, 25 Apr 2023 23:07:17 -0700
 MIME-Version: 1.0
-References: <20230421084226.2278282-1-davidgow@google.com> <20230421084226.2278282-2-davidgow@google.com>
-In-Reply-To: <20230421084226.2278282-2-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 25 Apr 2023 19:12:29 -0700
-Message-ID: <CAGS_qxp72dSbE9ZD7EyQ-JvXWucMs=LcX7uM1MAYL5oF_mtzgA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] kunit: Add kunit_add_action() to defer a call
- until test exit
-To:     David Gow <davidgow@google.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Rae Moar <rmoar@google.com>,
-        Benjamin Berg <benjamin@sipsolutions.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/3] x86/tdx: Add TDX Guest event notify interrupt
+ support
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>, "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>
+Cc:     "Yu, Guorui" <guorui.yu@linux.alibaba.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "wander@redhat.com" <wander@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "chongc@google.com" <chongc@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "qinkun@apache.org" <qinkun@apache.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "dionnaglaze@google.com" <dionnaglaze@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Du, Fan" <fan.du@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <20230413034108.1902712-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20230413034108.1902712-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <632a9a27abb5da053caedbbc6bcb7d5e15b2322c.camel@intel.com>
+ <0da37de8-6036-f475-d80d-92c77fb7cbaa@linux.intel.com>
+ <40b6ca5df5988305fea734e559fe5c8b3a22df78.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <40b6ca5df5988305fea734e559fe5c8b3a22df78.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 1:42=E2=80=AFAM David Gow <davidgow@google.com> wro=
-te:
->
-> Many uses of the KUnit resource system are intended to simply defer
-> calling a function until the test exits (be it due to success or
-> failure). The existing kunit_alloc_resource() function is often used for
-> this, but was awkward to use (requiring passing NULL init functions, etc)=
-,
-> and returned a resource without incrementing its reference count, which
-> -- while okay for this use-case -- could cause problems in others.
->
-> Instead, introduce a simple kunit_add_action() API: a simple function
-> (returning nothing, accepting a single void* argument) can be scheduled
-> to be called when the test exits. Deferred actions are called in the
-> opposite order to that which they were registered.
->
-> This mimics the devres API, devm_add_action(), and also provides
-> kunit_remove_action(), to cancel a deferred action, and
-> kunit_release_action() to trigger one early.
 
-Apologies for the delayed bikeshedding.
 
-I think mimicking the devres API is a better idea than kunit_defer()
-and friends.
-But I can't help but think this still isn't the best name.
-I personally would have no idea what `kunit_release_action()` does
-without looking it up.
+On 4/25/23 6:59 PM, Huang, Kai wrote:
+> On Tue, 2023-04-25 at 16:47 -0700, Sathyanarayanan Kuppuswamy wrote:
+>> Hi Kai,
+>>
+>> On 4/14/23 6:34 AM, Huang, Kai wrote:
+>>> On Wed, 2023-04-12 at 20:41 -0700, Kuppuswamy Sathyanarayanan wrote:
+>>>> Host-guest event notification via configured interrupt vector is useful
+>>>> in cases where a guest makes an asynchronous request and needs a
+>>>> callback from the host to indicate the completion or to let the host
+>>>> notify the guest about events like device removal. One usage example is,
+>>>> callback requirement of GetQuote asynchronous hypercall.
+>>>>
+>>>> In TDX guest, SetupEventNotifyInterrupt hypercall can be used by the
+>>>> guest to specify which interrupt vector to use as an event-notify
+>>>> vector from the VMM. Details about the SetupEventNotifyInterrupt
+>>>> hypercall can be found in TDX Guest-Host Communication Interface
+>>>> (GHCI) Specification, section "VP.VMCALL<SetupEventNotifyInterrupt>".
+>>>>
+>>>> As per design, VMM will post the event completion IRQ using the same
+>>>> CPU on which SetupEventNotifyInterrupt hypercall request is received.
+>>>> So allocate an IRQ vector from "x86_vector_domain", and set the CPU
+>>>> affinity of the IRQ vector to the CPU on which
+>>>> SetupEventNotifyInterrupt hypercall is made.
+>>>>
+>>>> Add tdx_register_event_irq_cb()/tdx_unregister_event_irq_cb()
+>>>> interfaces to allow drivers register/unregister event noficiation
+>>> 			      ^
+>>> 			      to register/unregister
+>>>> handlers.
+>>>>
+>>>>
+>>>
+>>> [...]
+>>>
+>>
+>> With suggested changes, the final version looks like below.
+>>
+>> +/**
+>> + * tdx_event_irq_init() - Register IRQ for event notification from the VMM to
+>> + *                       the TDX Guest.
+>> + *
+>> + * Use SetupEventNotifyInterrupt TDVMCALL to register the event notification
+>> + * IRQ with the VMM, which is used by the VMM to notify the TDX guest when
+>> + * needed, for instance, when VMM finishes the GetQuote request from the TDX
+>> + * guest. The VMM always notifies the TDX guest via the same CPU on which the
+>> + * SetupEventNotifyInterrupt TDVMCALL is called. For simplicity, just allocate
+>> + * an IRQ (and a vector) directly from x86_vector_domain for such notification
+>> + * and pin the IRQ to the same CPU on which TDVMCALL is called.
+> 
+> I think "for simplicity" applies to allocate IRQ/vector "from BSP using
+> early_initcall()" (so TDVMCALL is easily guaranteed to be called on the same cpu
+> where vector is allocated), but doesn't apply to allocate IRQ/vector from
+> x86_vector_domain and "pin the IRQ to the same CPU on which TDVMCALAL is
+> called".  The latter is something you must do (otherwise you need to allocate
+> the same vector on all cpus), but not something that you do "for simplicity".
+> 
+>> + *
+>> + * Since tdx_event_irq_init() is triggered via early_initcall(), it will be
+>> + * called before secondary CPUs bring up, so no special logic is required to
+>> + * ensure that the same CPU is used for SetupEventNotifyInterrupt TDVMCALL and
+>> + * IRQ allocation.
+> 
+> IMHO the second paragraph is obvious and no need to mention.
+> 
+> As explained above, I guess you just need to at somewhere simply mention
+> something like: "for simplicity use early_initcall() to allocate and pin the
+> IRQ/vector on BSP and also call the TDVMCALL on BSP".  Or probably "also call
+> the TDVMCALL on BSP" can also be omitted as it's kinda already explained in the
+> nature of the TDVMCALL.
 
-I feel like `kunit_add_cleanup()` probably works better for a unit
-test framework.
-I think `kunit_remove_cleanup()` is fine and `kunit_release_cleanup()`
-is questionably ok.
-Instead of `release`, maybe it should be `kunit_trigger_cleanup()` or
-more verbosely, something like `kunit_early_trigger_cleanup()`.
+How about the following?
 
-I tried to look for equivalents in other languages/frameworks:
-* Rust and C++ rely on RAII, don't think they have equivalents in testing l=
-ibs
-* Python has `self.addCleanup()`,
-https://docs.python.org/3/library/unittest.html#unittest.TestCase.addCleanu=
-p
-* Go has `t.Cleanup()`, https://pkg.go.dev/testing#T.Cleanup
-* Looking at Zig since it also has a `defer`, I guess they just use
-that, I don't see anything in
-https://ziglang.org/documentation/master/std/#A;std:testing
-* I know nothing about JUnit, but a quick search seems like they rely
-on @After and @AfterClass annotations,
-https://junit.org/junit4/javadoc/4.12/org/junit/After.html
-* I know even less about HUnit, but it looks like it relies on
-wrapping things via the IO monad,
-https://hackage.haskell.org/package/HUnit-1.6.2.0/docs/Test-HUnit-Base.html=
-#t:AssertionPredicate
-* Since we were inspired by TAP, I tried to look at Perl, but didn't
-immediately see anything that looked equivalent,
-https://metacpan.org/pod/Test::Most
+Use SetupEventNotifyInterrupt TDVMCALL to register the event notification
+IRQ with the VMM, which is used by the VMM to notify the TDX guest when
+needed, for instance, when VMM finishes the GetQuote request from the TDX
+guest. The VMM always notifies the TDX guest via the same CPU that calls the
+SetupEventNotifyInterrupt TDVMCALL. Allocate an IRQ/vector from the
+x86_vector_domain and pin it on the same CPU on which TDVMCALL is called.
+For simplicity, use early_initcall() to allow both IRQ allocation and
+TDVMCALL to use BSP.
 
->
-> This is implemented as a resource under the hood, so the ordering
-> between resource cleanup and deferred functions is maintained.
->
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
+> 
+>> + */
+>> +static int __init tdx_event_irq_init(void)
+>> +{
+>> +       struct irq_affinity_desc desc;
+>> +       struct irq_alloc_info info;
+>> +       struct irq_cfg *cfg;
+>> +       int irq;
+>> +
+>> +       if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+>> +               return 0;
+>> +
+>> +       init_irq_alloc_info(&info, NULL);
+>> +
+>> +       cpumask_set_cpu(smp_processor_id(), &desc.mask);
+>> +
+>> +       irq = __irq_domain_alloc_irqs(x86_vector_domain, -1, 1, cpu_to_node(0),
+> 
+> cpu_to_node(smp_processor_id())?
+> 
+>> +                                     &info, false, &desc);
+>> +       if (irq <= 0) {
+>> +               pr_err("Event notification IRQ allocation failed %d\n", irq);
+>> +               return -EIO;
+>> +       }
+>> +
+>> +       irq_set_handler(irq, handle_edge_irq);
+>> +
+>> +       /*
+>> +        * The IRQ cannot be migrated because VMM always notifies the TDX
+>> +        * guest on the same CPU on which the SetupEventNotifyInterrupt
+>> +        * TDVMCALL is called. Set the IRQ with IRQF_NOBALANCING to prevent
+>> +        * its affinity from being changed.
+>> +        */
+>> +       if (request_irq(irq, tdx_event_irq_handler, IRQF_NOBALANCING,
+>> +                       "tdx_event_irq", NULL)) {
+>> +               pr_err("Event notification IRQ request failed\n");
+>> +               goto err_free_domain_irqs;
+>> +       }
+>> +
+>> +       cfg = irq_cfg(irq);
+>> +
+>> +       if (_tdx_hypercall(TDVMCALL_SETUP_NOTIFY_INTR, cfg->vector, 0, 0, 0)) {
+>> +               pr_err("Event notification hypercall failed\n");
+>> +               goto err_free_irqs;
+>> +       }
+>> +
+>> +       tdx_event_irq = irq;
+>> +
+>> +       return 0;
+>> +
+>> +err_free_irqs:
+>> +       free_irq(irq, NULL);
+>> +err_free_domain_irqs:
+>> +       irq_domain_free_irqs(irq, 1);
+>> +
+>> +       return -EIO;
+>> +}
+>> +early_initcall(tdx_event_irq_init)
+>>
+>>
+>>
+>>
+>> -- 
+>> Sathyanarayanan Kuppuswamy
+>> Linux Kernel Developer
+> 
+> 
 
-<snip>
-
-> diff --git a/include/kunit/resource.h b/include/kunit/resource.h
-> index c0d88b318e90..6db28cd43e9b 100644
-> --- a/include/kunit/resource.h
-> +++ b/include/kunit/resource.h
-> @@ -387,4 +387,80 @@ static inline int kunit_destroy_named_resource(struc=
-t kunit *test,
->   */
->  void kunit_remove_resource(struct kunit *test, struct kunit_resource *re=
-s);
->
-> +
-> +/**
-> + * kunit_add_action() - Defer an 'action' (function call) until the test=
- ends.
-> + * @test: Test case to associate the action with.
-> + * @func: The function to run on test exit
-> + * @ctx: Data passed into @func
-> + *
-> + * Defer the execution of a function until the test exits, either normal=
-ly or
-> + * due to a failure.  @ctx is passed as additional context. All function=
-s
-> + * registered with kunit_add_action() will execute in the opposite order=
- to that
-> + * they were registered in.
-> + *
-> + * This is useful for cleaning up allocated memory and resources.
-
-Re renaming to kunit_add_cleanup(), I think this makes writing the
-comment easier.
-
-E.g.
-- kunit_add_action() - Defer an 'action' (function call) until the test end=
-s.
-+ kunit_add_cleanup() - Call a function when the test ends.
-+ ...
-+ This is useful for cleaning up allocated memory and resources.
-
-Daniel
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
