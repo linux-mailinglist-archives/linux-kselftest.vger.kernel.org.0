@@ -2,250 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06686EF54C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 15:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000586EF58D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 15:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241078AbjDZNQY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Apr 2023 09:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S241028AbjDZNew convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Apr 2023 09:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241123AbjDZNQR (ORCPT
+        with ESMTP id S239947AbjDZNeo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:16:17 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F904659F;
-        Wed, 26 Apr 2023 06:16:16 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 35C846017C;
-        Wed, 26 Apr 2023 15:16:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682514974; bh=DplkcwFmSKllgiewQPCLoUNazOClR1ZbTBiZSdEqy0U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jLF34zZySbrMIOar5hbB9l+LuyXzqgbjgZcvmCeF6wi62cxiSBVLdnN33YdtamlH7
-         cxz82IsYoaZRnYV0sAcYqYPs1h2BS4xFbwHv/lb2vTonHxSu9DqH25Xgz8rtlCKLTI
-         tEEmgSqjGTS/zSGn8o2mMkarG1eHI3oxjCTTSntsDb7cib6Yp0EEQsreaud/UKc+Su
-         6yRps4q37snvK5dKB0mjdVu0eP4lDtE9J8Z6zbw1uj7LyHB66qCgBh6XYkk4OqaaOK
-         J2qpvxyNE/CDHmFDdWbokqReuiI/Xvi0AR0M2bA/lPRVT45bJ44IDzw8aGrGdM7CRp
-         oMTYHbrvrkGpA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1v-Us3qcu3JB; Wed, 26 Apr 2023 15:16:11 +0200 (CEST)
-Received: by domac.alu.hr (Postfix, from userid 1014)
-        id BF8626017E; Wed, 26 Apr 2023 15:16:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682514971; bh=DplkcwFmSKllgiewQPCLoUNazOClR1ZbTBiZSdEqy0U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jeJ0Ih/8vIHpF7+4lPcHrAOhBKIylrZon4YZvFtptil7dkKd30YiZ7juYT+ui9lC1
-         VVvemuF2C0PxVzqLOwBP38jRFtCOLUAsENzDleEvBBMlIesu8UEjswrCK7Wiwptuh4
-         S2afR3HJ7AYsPq32LgNYJ1U3xFYEkjtUzIv7BDlHJ0j15j4W2jLqzdHalf2tW28X8s
-         olPSgMrSSoG7F20x9Up56Syg3p+JkSxoA1xNLbHSywcZLImZBrJ6vQoQnA+Tp5hIvh
-         T1C4zHtx+IpbcC1qZaO851r7C4rnNjvqnGiBN9rSjCnOQKulBznA+hMCBLwN9OPQU8
-         uObYf4PwasanQ==
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <error27@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v5 3/3] test_firmware: fix the memory leak of the allocated firmware buffer
-Date:   Wed, 26 Apr 2023 15:14:43 +0200
-Message-Id: <20230426131438.16936-3-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230426131438.16936-1-mirsad.todorovac@alu.unizg.hr>
-References: <20230426131438.16936-1-mirsad.todorovac@alu.unizg.hr>
+        Wed, 26 Apr 2023 09:34:44 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88E52701;
+        Wed, 26 Apr 2023 06:34:42 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-b95fb433f59so12658151276.0;
+        Wed, 26 Apr 2023 06:34:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682516081; x=1685108081;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SeHKt905fqWZBLe33jnW16aE0fwe02cFw8ng1B7DTOU=;
+        b=LDDOmRxNyxlYGsb3WSOKVdJr9oWmkJGsFQC10dsyJ1hCN+Fz8YW9P2mkArYfhGT7tl
+         RSsCIP1p3amNW+4VoyZ2KYPXzWaLntxWx2oTCH2FJeQDxTKlA7KSiB7I20U4YER7rz8t
+         nlyVCfLwQnkcsCv8KGmpeDx6WcVuV54a+NUsbq/Xq2tVxxcoJqOm2xlMZTv7iWJgHARZ
+         357lknIYbTWzKHJd3HtkeDB/Kzl1y7e+uxKnGCts4SrzD1QZSKGFo+xzDe3MwlOCfpy8
+         yNotXE7Wog6OJJPAPT/2+OzJq8OVohT8mQ6YIej51Aosmu+Np+ppz23S9WbUG28UsjZO
+         7NoA==
+X-Gm-Message-State: AAQBX9eQr7C8d7IC4jgMS2PSy36zJpBRWcWugJaXEfFt6ipY75bF3Nia
+        MQT2tQEjoHMD3YW+8gj9Euz+RScQ4kkyag==
+X-Google-Smtp-Source: AKy350YUpjzij4nVpR/rMt6Q4NNGL/nRtveFNBSP3prbrsbiht7eXjAy+rWr7EU8ItHaLhBtYU+Faw==
+X-Received: by 2002:a25:6dd4:0:b0:b8f:3b82:bf9c with SMTP id i203-20020a256dd4000000b00b8f3b82bf9cmr12997920ybc.41.1682516081643;
+        Wed, 26 Apr 2023 06:34:41 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id z188-20020a8165c5000000b00545a08184d0sm4186796ywb.96.2023.04.26.06.34.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 06:34:40 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-54f8e81c3f3so102521817b3.1;
+        Wed, 26 Apr 2023 06:34:40 -0700 (PDT)
+X-Received: by 2002:a81:ab46:0:b0:552:ea90:3930 with SMTP id
+ d6-20020a81ab46000000b00552ea903930mr13313007ywk.10.1682516080348; Wed, 26
+ Apr 2023 06:34:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <a89cb0eae953f534011d3a655fa70feb01fb2b73.1682510075.git.geert@linux-m68k.org>
+ <36a8dc3b-50bb-4db8-a7eb-bb69517187da@sirena.org.uk>
+In-Reply-To: <36a8dc3b-50bb-4db8-a7eb-bb69517187da@sirena.org.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 26 Apr 2023 15:34:27 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWN1nbHCgRabsiJJ9cYfs2LWQkMJ-mQs6WAMb-TY59a=g@mail.gmail.com>
+Message-ID: <CAMuHMdWN1nbHCgRabsiJJ9cYfs2LWQkMJ-mQs6WAMb-TY59a=g@mail.gmail.com>
+Subject: Re: [PATCH] regmap: REGMAP_KUNIT must not select REGMAP
+To:     Mark Brown <broonie@kernel.org>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The following kernel memory leak was noticed after running
-tools/testing/selftests/firmware/fw_run_tests.sh:
+Hi Mark,
 
-[root@pc-mtodorov firmware]# cat /sys/kernel/debug/kmemleak
-.
-.
-.
-unreferenced object 0xffff955389bc3400 (size 1024):
-  comm "test_firmware-0", pid 5451, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c334b400 (size 1024):
-  comm "test_firmware-1", pid 5452, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c334f000 (size 1024):
-  comm "test_firmware-2", pid 5453, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c3348400 (size 1024):
-  comm "test_firmware-3", pid 5454, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-[root@pc-mtodorov firmware]#
+On Wed, Apr 26, 2023 at 2:42 PM Mark Brown <broonie@kernel.org> wrote:
+> On Wed, Apr 26, 2023 at 01:56:44PM +0200, Geert Uytterhoeven wrote:
+> > Enabling a (modular) test must not silently enable additional kernel
+> > functionality, as that may increase the attack vector of a product.
+> >
+> > Fix this by making REGMAP_KUNIT depend on REGMAP instead.
+>
+> This doesn't work since regmap is a selected library so there's no way
+> to directly enable regmap other than by enabling something that uses it
+> and it is very likely that the virtual configurations people often use
+> with KUnit will not have any physical hardware and therefore will not
+> need regmap.  It seems a lot more likely that someone would want to run
+> the tests on a platform that doesn't otherwise use regmap than that
+> someone would end up building in regmap on a production kernel that
+> wouldn't otherwise have enabled it.
 
-Note that the size 1024 corresponds to the size of the test firmware
-buffer. The actual number of the buffers leaked is around 70-110,
-depending on the test run.
+Thanks, I had missed that.  Will send a v2...
 
-The cause of the leak is the following:
+Gr{oetje,eeting}s,
 
-request_partial_firmware_into_buf() and request_firmware_into_buf()
-provided firmware buffer isn't released on release_firmware(), we
-have allocated it and we are responsible for deallocating it manually.
-This is introduced in a number of context where previously only
-release_firmware() was called, which was insufficient.
+                        Geert
 
-Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf")
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Dan Carpenter <error27@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.de>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Tianfei zhang <tianfei.zhang@intel.com>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Zhengchao Shao <shaozhengchao@huawei.com>
-Cc: Colin Ian King <colin.i.king@gmail.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Scott Branden <sbranden@broadcom.com>
-Cc: Luis R. Rodriguez <mcgrof@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.4
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
----
- lib/test_firmware.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
-
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 91b232ed3161..1d7d480b8eeb 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -45,6 +45,7 @@ struct test_batched_req {
- 	bool sent;
- 	const struct firmware *fw;
- 	const char *name;
-+	const char *fw_buf;
- 	struct completion completion;
- 	struct task_struct *task;
- 	struct device *dev;
-@@ -175,8 +176,14 @@ static void __test_release_all_firmware(void)
- 
- 	for (i = 0; i < test_fw_config->num_requests; i++) {
- 		req = &test_fw_config->reqs[i];
--		if (req->fw)
-+		if (req->fw) {
-+			if (req->fw_buf) {
-+				kfree_const(req->fw_buf);
-+				req->fw_buf = NULL;
-+			}
- 			release_firmware(req->fw);
-+			req->fw = NULL;
-+		}
- 	}
- 
- 	vfree(test_fw_config->reqs);
-@@ -670,6 +677,8 @@ static ssize_t trigger_request_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	test_firmware = NULL;
- 	rc = request_firmware(&test_firmware, name, dev);
- 	if (rc) {
-@@ -770,6 +779,8 @@ static ssize_t trigger_async_request_store(struct device *dev,
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
- 	test_firmware = NULL;
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	rc = request_firmware_nowait(THIS_MODULE, 1, name, dev, GFP_KERNEL,
- 				     NULL, trigger_async_request_cb);
- 	if (rc) {
-@@ -812,6 +823,8 @@ static ssize_t trigger_custom_fallback_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	test_firmware = NULL;
- 	rc = request_firmware_nowait(THIS_MODULE, FW_ACTION_NOUEVENT, name,
- 				     dev, GFP_KERNEL, NULL,
-@@ -874,6 +887,8 @@ static int test_fw_run_batch_request(void *data)
- 						 test_fw_config->buf_size);
- 		if (!req->fw)
- 			kfree(test_buf);
-+		else
-+			req->fw_buf = test_buf;
- 	} else {
- 		req->rc = test_fw_config->req_firmware(&req->fw,
- 						       req->name,
-@@ -934,6 +949,7 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
- 		req->fw = NULL;
- 		req->idx = i;
- 		req->name = test_fw_config->name;
-+		req->fw_buf = NULL;
- 		req->dev = dev;
- 		init_completion(&req->completion);
- 		req->task = kthread_run(test_fw_run_batch_request, req,
-@@ -1038,6 +1054,7 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
- 	for (i = 0; i < test_fw_config->num_requests; i++) {
- 		req = &test_fw_config->reqs[i];
- 		req->name = test_fw_config->name;
-+		req->fw_buf = NULL;
- 		req->fw = NULL;
- 		req->idx = i;
- 		init_completion(&req->completion);
 -- 
-2.30.2
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
