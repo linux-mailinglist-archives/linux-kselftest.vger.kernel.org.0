@@ -2,57 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55436EF490
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 14:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34236EF541
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 15:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240968AbjDZMoI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Apr 2023 08:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S240599AbjDZNPS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Apr 2023 09:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240507AbjDZMoE (ORCPT
+        with ESMTP id S240724AbjDZNPS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Apr 2023 08:44:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6346583;
-        Wed, 26 Apr 2023 05:43:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2E216364E;
-        Wed, 26 Apr 2023 12:42:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DAC4C4339B;
-        Wed, 26 Apr 2023 12:42:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682512971;
-        bh=uieBeTHPw0OyQKwNBxDYcvIw16jfHMMim73G+Vggw2Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oUaMoeG0VORpZbZ86IjeoKr31XXs/aNKwiacEuMo6eINeHP+VyDLqUQn59LmBn8Pj
-         hIi8/k2Bbyz8z9v3MFYqYjcyXmmZVcDaCbqbFoHhqud0xZEDrjS1y3clUNgi1CKidd
-         x/pNLmoA2/8M6vLJ2/WBkuMMFWsyrcTnUDAW1AMFiWQ1nkKtT0ayZhOQ3IsEgCykX6
-         93n7r1uoiGJHFx/LOCJCLJaec+0tksdche/pvqJHdyFJoVTXyQFMMIrJ/34ihBgTfH
-         YVpoL6flPh9beTeLRYSsaCPvo26iNwObtXCzCbjEPtkaWgcIZpagge3460EDjBH7Zh
-         /HyoBaOX8VwyQ==
-Date:   Wed, 26 Apr 2023 13:42:45 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Wed, 26 Apr 2023 09:15:18 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B090E4C20;
+        Wed, 26 Apr 2023 06:15:14 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id C5D526017C;
+        Wed, 26 Apr 2023 15:15:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1682514912; bh=KPZQypbGgzI0Uu0XwSNF25wVht5AlW8b9I12H+fXD3k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=haM6Jal+LvAX2qletPJuXWPCFKV1m0fxKwf6GFlaAj3K7BLvuVQ+oNhdZpbRKHTgj
+         e+c1w4aI6nA1ufo6fAx5CE5HSsjvsly/1LDs6HWYBUO55q9uO5ynfzBgvP891ZUBfV
+         uiQa4F23u0kEQTTrlYiAVhLoayMnG6cvaScbQejxXz4sSJ2N6OAbMGki0vyV9FYOY+
+         CnoduxQFiTbiNMMXhMhU8V+f+7aKU4jwMHcJFlAlNyyw2C2ou4R9Qcyuv/syhaR7C4
+         Tg+VDMHCpI6MFKoEWtmubZ7TiSb7Wnj5uj4ZE/fJxU9Zfk/zh4L0IgHsvGt9ohfuve
+         gglubFsIIR89A==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id MUxykxBY5qAx; Wed, 26 Apr 2023 15:15:09 +0200 (CEST)
+Received: by domac.alu.hr (Postfix, from userid 1014)
+        id 186216017E; Wed, 26 Apr 2023 15:15:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1682514909; bh=KPZQypbGgzI0Uu0XwSNF25wVht5AlW8b9I12H+fXD3k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Z+CG57hMuumbMi0/YDANdX8MtnK+tEt6GGXOzm0zVcrHbsD3jVi1HXm44I+e9N2nI
+         dBRVnP1gWGT1yMU4igD5ptdAsI3XlhTi/S5VQjq1xeoK1ew0mSqldUESYs9jZIvk8o
+         Nq4kZ7+LxJqz1jTZoERpQQxqOsyGBMpvONlvJRvOa0fTWkrIu3DaPezXIr40DJ7DgZ
+         x3wBJPp/YK3qh7Di4sVp/a2Ypjj23Pf3YDPyYkOSheyDKFtyFBfC0Kb67ib9gNJkUU
+         pjr94KSwAz6RG2n1WXO23WdX4by8txuJRponnTxwt6CDBtITXzlTgxnc7xHRl7H/oW
+         Dxwaof12Z3c/w==
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] regmap: REGMAP_KUNIT must not select REGMAP
-Message-ID: <36a8dc3b-50bb-4db8-a7eb-bb69517187da@sirena.org.uk>
-References: <a89cb0eae953f534011d3a655fa70feb01fb2b73.1682510075.git.geert@linux-m68k.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Tianfei Zhang <tianfei.zhang@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH v5 1/3] test_firmware: prevent race conditions by a correct implementation of locking
+Date:   Wed, 26 Apr 2023 15:14:37 +0200
+Message-Id: <20230426131438.16936-1-mirsad.todorovac@alu.unizg.hr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wI5iOEwEcWninvPe"
-Content-Disposition: inline
-In-Reply-To: <a89cb0eae953f534011d3a655fa70feb01fb2b73.1682510075.git.geert@linux-m68k.org>
-X-Cookie: Drilling for oil is boring.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,40 +71,249 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Dan Carpenter spotted a race condition in a couple of situations like
+these in the test_firmware driver:
 
---wI5iOEwEcWninvPe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+{
+        u8 val;
+        int ret;
 
-On Wed, Apr 26, 2023 at 01:56:44PM +0200, Geert Uytterhoeven wrote:
-> Enabling a (modular) test must not silently enable additional kernel
-> functionality, as that may increase the attack vector of a product.
->=20
-> Fix this by making REGMAP_KUNIT depend on REGMAP instead.
+        ret = kstrtou8(buf, 10, &val);
+        if (ret)
+                return ret;
 
-This doesn't work since regmap is a selected library so there's no way
-to directly enable regmap other than by enabling something that uses it
-and it is very likely that the virtual configurations people often use
-with KUnit will not have any physical hardware and therefore will not
-need regmap.  It seems a lot more likely that someone would want to run
-the tests on a platform that doesn't otherwise use regmap than that
-someone would end up building in regmap on a production kernel that
-wouldn't otherwise have enabled it.
+        mutex_lock(&test_fw_mutex);
+        *(u8 *)cfg = val;
+        mutex_unlock(&test_fw_mutex);
 
---wI5iOEwEcWninvPe
-Content-Type: application/pgp-signature; name="signature.asc"
+        /* Always return full write size even if we didn't consume all */
+        return size;
+}
 
------BEGIN PGP SIGNATURE-----
+static ssize_t config_num_requests_store(struct device *dev,
+                                         struct device_attribute *attr,
+                                         const char *buf, size_t count)
+{
+        int rc;
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRJHEUACgkQJNaLcl1U
-h9DkMgf+M3R7UaVQ67Gg1Ebklb9FqUD7UYByywsPobp19ufSlH69H3Tn/IJMh1SX
-YW/EurCEO7+1RkB0dbbNX38pOwjyCd2XQNLPp7p5moFmDoM9t322JdwLplHkCLe6
-t8hQxF068Ax+crAuMBt/UzTpPVADZpqh3EAeeVI0xpa/Yy2ysFPJy/HIaV5G8idy
-dcVvkaalbraCgPRnw9mb1WsmRE4st85zVIMia37oRnC+243Rh7l2zsgvb02OsQox
-NbFGewieYzlbNtrVjM5Lvl4c4upbeHw5laWgMosf8egATFgUA5tWuPaxaUfK3oie
-3G5vqZuHcJe93snOVj4rSHR51puKVg==
-=1cSX
------END PGP SIGNATURE-----
+        mutex_lock(&test_fw_mutex);
+        if (test_fw_config->reqs) {
+                pr_err("Must call release_all_firmware prior to changing config\n");
+                rc = -EINVAL;
+                mutex_unlock(&test_fw_mutex);
+                goto out;
+        }
+        mutex_unlock(&test_fw_mutex);
 
---wI5iOEwEcWninvPe--
+        rc = test_dev_config_update_u8(buf, count,
+                                       &test_fw_config->num_requests);
+
+out:
+        return rc;
+}
+
+static ssize_t config_read_fw_idx_store(struct device *dev,
+                                        struct device_attribute *attr,
+                                        const char *buf, size_t count)
+{
+        return test_dev_config_update_u8(buf, count,
+                                         &test_fw_config->read_fw_idx);
+}
+
+The function test_dev_config_update_u8() is called from both the locked
+and the unlocked context, function config_num_requests_store() and
+config_read_fw_idx_store() which can both be called asynchronously as
+they are driver's methods, while test_dev_config_update_u8() and siblings
+change their argument pointed to by u8 *cfg or similar pointer.
+
+To avoid deadlock on test_fw_mutex, the lock is dropped before calling
+test_dev_config_update_u8() and re-acquired within test_dev_config_update_u8()
+itself, but alas this creates a race condition.
+
+Having two locks wouldn't assure a race-proof mutual exclusion.
+
+This situation is best avoided by the introduction of a new, unlocked
+function __test_dev_config_update_u8() which can be called from the locked
+context and reducing test_dev_config_update_u8() to:
+
+static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+{
+        int ret;
+
+        mutex_lock(&test_fw_mutex);
+        ret = __test_dev_config_update_u8(buf, size, cfg);
+        mutex_unlock(&test_fw_mutex);
+
+        return ret;
+}
+
+doing the locking and calling the unlocked primitive, which enables both
+locked and unlocked versions without duplication of code.
+
+The similar approach was applied to all functions called from the locked
+and the unlocked context, which safely mitigates both deadlocks and race
+conditions in the driver.
+
+__test_dev_config_update_bool(), __test_dev_config_update_u8() and
+__test_dev_config_update_size_t() unlocked versions of the functions
+were introduced to be called from the locked contexts as a workaround
+without releasing the main driver's lock and thereof causing a race
+condition.
+
+The test_dev_config_update_bool(), test_dev_config_update_u8() and
+test_dev_config_update_size_t() locked versions of the functions
+are being called from driver methods without the unnecessary multiplying
+of the locking and unlocking code for each method, and complicating
+the code with saving of the return value across lock.
+
+Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf")
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Russ Weight <russell.h.weight@intel.com>
+Cc: Takashi Iwai <tiwai@suse.de>
+Cc: Tianfei Zhang <tianfei.zhang@intel.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Colin Ian King <colin.i.king@gmail.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: stable@vger.kernel.org # v5.4
+Suggested-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+---
+ lib/test_firmware.c | 52 ++++++++++++++++++++++++++++++---------------
+ 1 file changed, 35 insertions(+), 17 deletions(-)
+
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 05ed84c2fc4c..35417e0af3f4 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -353,16 +353,26 @@ static ssize_t config_test_show_str(char *dst,
+ 	return len;
+ }
+ 
+-static int test_dev_config_update_bool(const char *buf, size_t size,
++static inline int __test_dev_config_update_bool(const char *buf, size_t size,
+ 				       bool *cfg)
+ {
+ 	int ret;
+ 
+-	mutex_lock(&test_fw_mutex);
+ 	if (kstrtobool(buf, cfg) < 0)
+ 		ret = -EINVAL;
+ 	else
+ 		ret = size;
++
++	return ret;
++}
++
++static int test_dev_config_update_bool(const char *buf, size_t size,
++				       bool *cfg)
++{
++	int ret;
++
++	mutex_lock(&test_fw_mutex);
++	ret = __test_dev_config_update_bool(buf, size, cfg);
+ 	mutex_unlock(&test_fw_mutex);
+ 
+ 	return ret;
+@@ -373,7 +383,8 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+ }
+ 
+-static int test_dev_config_update_size_t(const char *buf,
++static int __test_dev_config_update_size_t(
++					 const char *buf,
+ 					 size_t size,
+ 					 size_t *cfg)
+ {
+@@ -384,9 +395,7 @@ static int test_dev_config_update_size_t(const char *buf,
+ 	if (ret)
+ 		return ret;
+ 
+-	mutex_lock(&test_fw_mutex);
+ 	*(size_t *)cfg = new;
+-	mutex_unlock(&test_fw_mutex);
+ 
+ 	/* Always return full write size even if we didn't consume all */
+ 	return size;
+@@ -402,7 +411,7 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+ }
+ 
+-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
++static int __test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+ {
+ 	u8 val;
+ 	int ret;
+@@ -411,14 +420,23 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+ 	if (ret)
+ 		return ret;
+ 
+-	mutex_lock(&test_fw_mutex);
+ 	*(u8 *)cfg = val;
+-	mutex_unlock(&test_fw_mutex);
+ 
+ 	/* Always return full write size even if we didn't consume all */
+ 	return size;
+ }
+ 
++static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
++{
++	int ret;
++
++	mutex_lock(&test_fw_mutex);
++	ret = __test_dev_config_update_u8(buf, size, cfg);
++	mutex_unlock(&test_fw_mutex);
++
++	return ret;
++}
++
+ static ssize_t test_dev_config_show_u8(char *buf, u8 val)
+ {
+ 	return snprintf(buf, PAGE_SIZE, "%u\n", val);
+@@ -471,10 +489,10 @@ static ssize_t config_num_requests_store(struct device *dev,
+ 		mutex_unlock(&test_fw_mutex);
+ 		goto out;
+ 	}
+-	mutex_unlock(&test_fw_mutex);
+ 
+-	rc = test_dev_config_update_u8(buf, count,
+-				       &test_fw_config->num_requests);
++	rc = __test_dev_config_update_u8(buf, count,
++					 &test_fw_config->num_requests);
++	mutex_unlock(&test_fw_mutex);
+ 
+ out:
+ 	return rc;
+@@ -518,10 +536,10 @@ static ssize_t config_buf_size_store(struct device *dev,
+ 		mutex_unlock(&test_fw_mutex);
+ 		goto out;
+ 	}
+-	mutex_unlock(&test_fw_mutex);
+ 
+-	rc = test_dev_config_update_size_t(buf, count,
+-					   &test_fw_config->buf_size);
++	rc = __test_dev_config_update_size_t(buf, count,
++					     &test_fw_config->buf_size);
++	mutex_unlock(&test_fw_mutex);
+ 
+ out:
+ 	return rc;
+@@ -548,10 +566,10 @@ static ssize_t config_file_offset_store(struct device *dev,
+ 		mutex_unlock(&test_fw_mutex);
+ 		goto out;
+ 	}
+-	mutex_unlock(&test_fw_mutex);
+ 
+-	rc = test_dev_config_update_size_t(buf, count,
+-					   &test_fw_config->file_offset);
++	rc = __test_dev_config_update_size_t(buf, count,
++					     &test_fw_config->file_offset);
++	mutex_unlock(&test_fw_mutex);
+ 
+ out:
+ 	return rc;
+-- 
+2.30.2
+
