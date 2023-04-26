@@ -2,106 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E0F6EF608
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 16:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 336EE6EF615
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 16:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240793AbjDZOMW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Apr 2023 10:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        id S241226AbjDZOOh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Apr 2023 10:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjDZOMV (ORCPT
+        with ESMTP id S241262AbjDZOOf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:12:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940E46A52;
-        Wed, 26 Apr 2023 07:12:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33F2063672;
-        Wed, 26 Apr 2023 14:12:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 980A7C433D2;
-        Wed, 26 Apr 2023 14:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682518339;
-        bh=akfknqOJ7XH7SYpGWnDMom1hlgSbj88cifnxq0fhJDQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=U4cWFC/bf1VepzDUnpGDkW7avfmVShX30/zd3LOKgXfOBXumOZtcHl8HFKff8X0TU
-         Amh64TRRXRhOJWfq79pKvjePzFKnRTysRSg+o//4xuJ1gmYs3ITNdOejxiUzabmodn
-         2aUqfTtmxUOjAXCUt0lwDrJnFrE4PuJm14Pg4nnrah85TcEYeZXNrir2e2JDW+C8qW
-         fKxOUMLx8UTCaqfoGIijbg5l6ykdEUxsTO8++zjyh33ypea2U3KpyhsSsDJDZFv7zU
-         JIreusfMEbHLZda6rBhs6NztY6K1SmtZ8XJB6WA6ZoaU00yJDq3aKz0RxygEI3FvoP
-         o230hz2dF3vyw==
-Date:   Wed, 26 Apr 2023 23:12:15 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, corbet@lwn.net,
-        shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH tracing 0/3] tracing: support > 8 byte filter predicates
-Message-Id: <20230426231215.9f3c43a345fc0b7f047988a9@kernel.org>
-In-Reply-To: <57d8f27c-7737-8af9-490b-a33b2783fc9f@oracle.com>
-References: <1682414197-13173-1-git-send-email-alan.maguire@oracle.com>
-        <20230425233233.2ad5168c630b4c1349ab3398@kernel.org>
-        <9c4cebb7-514c-f7fd-1f95-50837460eb66@oracle.com>
-        <20230425132028.7d16e04c@gandalf.local.home>
-        <57d8f27c-7737-8af9-490b-a33b2783fc9f@oracle.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 26 Apr 2023 10:14:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A27A6A57
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Apr 2023 07:13:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682518428;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZY/DGd7KWtJA1mhxoodB4vkh85XMWSpyoDAgN9JXUHw=;
+        b=Pz8CDg9zc4ci96yNBKX0Jui++dGYTNOvNuDxW1vVVFPzfn+SVvaPsV+MJgFLfOORnja/Ar
+        kAHJkTIjuCui7TKADw8yhTUnVdhZhuwcHTX70CIfmZeLwO/raO70haBL9JQ+e4ETdR8H3L
+        ecVQLrIRG9xxROptUK6MGgh+AntFuwE=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-292-ZPpkSyiKNp6TMtOLUJl8dQ-1; Wed, 26 Apr 2023 10:13:35 -0400
+X-MC-Unique: ZPpkSyiKNp6TMtOLUJl8dQ-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-74e0a11dce7so37807485a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Apr 2023 07:13:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682518410; x=1685110410;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZY/DGd7KWtJA1mhxoodB4vkh85XMWSpyoDAgN9JXUHw=;
+        b=Tf8KSEevj7WGM9L6eQkzsNxA+R124vmLFiHALcdUJz0DohKE7djCwlJ1rY0TpNqeSX
+         wFkPLtViCirTuEH9MaZXLXi6oHnGtc7JgTODJxZcLjGpe6r0x+L6nTMIDMU9O5ZL3GWW
+         i56u4RNHt8dGZjqHZAwyeRlrRSbK53ZW4W1jjJ8zWJttCFnUsKzB1EL9yhpkL3/3/mNV
+         mRoy+gfMKgJnFEpdFvFTScZ5KG/r/iZHYexBjqj9K1boqG8eGM+tJ0ppwGvhudWaY71E
+         fJCri0iT0l+SOhU8BU+SvMnEvfDQwnZLbYdzvd4xgdK1kmz89Jmw6G28uVICoSMb1lbA
+         Z8Hg==
+X-Gm-Message-State: AAQBX9dfSuZ9MkVHYPumlkGYVlaSb8tUSWX259P50yENKX0F+TB3wsep
+        /F4YbGbHwmlhA/UIIbenuxYLCmZZUFrjIVeEva1+jCco3kjYba+IBRtKNvsqxS5jYSVuQmbibJZ
+        9/uTt2goAEAjAQUwxMKgq1UDSzaPr
+X-Received: by 2002:a05:622a:1818:b0:3ef:59e8:511f with SMTP id t24-20020a05622a181800b003ef59e8511fmr35114557qtc.0.1682518410346;
+        Wed, 26 Apr 2023 07:13:30 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Ypb1WVI8Au+jeNnS1kOxOesFDM/LXy8R7e8LtLca5Jtza4C18yaEzzsP5hULc8x6Vg88C0Xg==
+X-Received: by 2002:a05:622a:1818:b0:3ef:59e8:511f with SMTP id t24-20020a05622a181800b003ef59e8511fmr35114509qtc.0.1682518410050;
+        Wed, 26 Apr 2023 07:13:30 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id y19-20020a05622a121300b003e390b48958sm2613867qtx.55.2023.04.26.07.13.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 07:13:29 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 10:13:27 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Paul Gofman <pgofman@codeweavers.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Nadav Amit <namit@vmware.com>
+Subject: Re: [PATCH RESEND v15 2/5] fs/proc/task_mmu: Implement IOCTL to get
+ and optionally clear info about PTEs
+Message-ID: <ZEkxh6dbnAOuYuJj@x1n>
+References: <20230420060156.895881-1-usama.anjum@collabora.com>
+ <20230420060156.895881-3-usama.anjum@collabora.com>
+ <fd9ddd43-6737-88bd-4054-3d5b94534271@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fd9ddd43-6737-88bd-4054-3d5b94534271@collabora.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 26 Apr 2023 09:51:00 +0100
-Alan Maguire <alan.maguire@oracle.com> wrote:
+Hi, Muhammad,
 
-> On 25/04/2023 18:20, Steven Rostedt wrote:
-> > On Tue, 25 Apr 2023 18:15:03 +0100
-> > Alan Maguire <alan.maguire@oracle.com> wrote:
-> > 
-> >> that's a great idea; what would be the most consistent ftrace syntax
-> >> for this do you think? I noticed that hist triggers append a modifier
-> >> to the field name so would something like
-> >>
-> >> "dst.ipv6 == ::1"
-> > 
-> > Yeah, I think just having ":" in the name without quotes can help the filter
-> > know that it's a ipv6 id.
-> > 
-> > Hmm, although we may want to do the same for mac addresses. But we can
-> > determine the difference by the field size. If it's 6 bytes, it's a mac, if
-> > it's 128 bits, then ipv6.
-> >
+On Wed, Apr 26, 2023 at 12:06:23PM +0500, Muhammad Usama Anjum wrote:
+> On 4/20/23 11:01 AM, Muhammad Usama Anjum wrote:
+> > +/* Supported flags */
+> > +#define PM_SCAN_OP_GET	(1 << 0)
+> > +#define PM_SCAN_OP_WP	(1 << 1)
+> We have only these flag options available in PAGEMAP_SCAN IOCTL.
+> PM_SCAN_OP_GET must always be specified for this IOCTL. PM_SCAN_OP_WP can
+> be specified as need. But PM_SCAN_OP_WP cannot be specified without
+> PM_SCAN_OP_GET. (This was removed after you had asked me to not duplicate
+> functionality which can be achieved by UFFDIO_WRITEPROTECT.)
 > 
-> good idea! so what about the following
+> 1) PM_SCAN_OP_GET | PM_SCAN_OP_WP
+> vs
+> 2) UFFDIO_WRITEPROTECT
 > 
-> - 16 byte field with ':'; convert from IPv6 address before memcmp()ing
-> - 6 byte field with ':'; convert from MAC address before memcmp()ing
-> - 4 byte field with '.'; convert from IPv4 address before memcmp()ing
-> - 0x prefix, any other size; basic memcmp
-
-This looks good to me :)
-
-Thanks!
-
+> After removing the usage of uffd_wp_range() from PAGEMAP_SCAN IOCTL, we are
+> getting really good performance which is comparable just like we are
+> depending on SOFT_DIRTY flags in the PTE. But when we want to perform wp,
+> PM_SCAN_OP_GET | PM_SCAN_OP_WP is more desirable than UFFDIO_WRITEPROTECT
+> performance and behavior wise.
 > 
-> ? Thanks!
+> I've got the results from someone else that UFFDIO_WRITEPROTECT block
+> pagefaults somehow which PAGEMAP_IOCTL doesn't. I still need to verify this
+> as I don't have tests comparing them one-to-one.
 > 
-> Alan
->  
-> > -- Steve
-> > 
+> What are your thoughts about it? Have you thought about making
+> UFFDIO_WRITEPROTECT perform better?
+> 
+> I'm sorry to mention the word "performance" here. Actually we want better
+> performance to emulate Windows syscall. That is why we are adding this
+> functionality. So either we need to see what can be improved in
+> UFFDIO_WRITEPROTECT or can I please add only PM_SCAN_OP_WP back in
+> pagemap_ioctl?
 
+I'm fine if you want to add it back if it works for you.  Though before
+that, could you remind me why there can be a difference on performance?
+
+Thanks,
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Peter Xu
+
