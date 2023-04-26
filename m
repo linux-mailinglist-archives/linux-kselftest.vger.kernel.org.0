@@ -2,60 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FC46EF5E7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 15:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3BE6EF5FA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Apr 2023 16:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjDZN7A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Apr 2023 09:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S232584AbjDZOEg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Apr 2023 10:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240570AbjDZN67 (ORCPT
+        with ESMTP id S241058AbjDZOEf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:58:59 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4D06A52;
-        Wed, 26 Apr 2023 06:58:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682517537; x=1714053537;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=9SgBTnJblGwgDkEyMnQDPGqR7X3brA77OnxVHEByyUU=;
-  b=iPko3ZLpPgl9bsAX2itFXhtp/fIrsspk/f9WmqGfxvp5YVop1cCdy7Yg
-   a80tnePixVfY+/rwLz5+t5FWeqpwsLHnyUE5VhgpBHRMslAkKuThVfR7c
-   Ks2MiqPny6iNNLZLnKQWRyHQnS+4WC5rE0afT0ksTuEMj3ClAKhpp6cLf
-   alNVTv5zpGF6loZxN5C1sXsIWgYsooHLdWPWwhnMd2h/ZcmPHMkwUfjCM
-   KelKpi1Zhb37xlQlaftM7Vyzr16BG9LlYALtMvufrCXhKWCFBisegTUS7
-   vQB+0EayZFzA42chqp81HF9H7nLwpn80UE5TTbHLNdUDjYOxuLHLjwUIs
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="410107019"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="410107019"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 06:58:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="940222385"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="940222385"
-Received: from dancaspi-mobl1.ger.corp.intel.com ([10.252.60.3])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 06:58:49 -0700
-Date:   Wed, 26 Apr 2023 16:58:42 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-cc:     linux-kselftest@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Subject: Re: [PATCH v2 24/24] selftests/resctrl: Rewrite Cache Allocation
- Technology (CAT) test
-In-Reply-To: <eac72c7b-bd01-084e-cf23-ec5e8e0e3cf3@intel.com>
-Message-ID: <b2f72637-5c16-d25b-8a0-3fee4ca9ec7e@linux.intel.com>
-References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-25-ilpo.jarvinen@linux.intel.com> <eac72c7b-bd01-084e-cf23-ec5e8e0e3cf3@intel.com>
+        Wed, 26 Apr 2023 10:04:35 -0400
+X-Greylist: delayed 352 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 26 Apr 2023 07:04:33 PDT
+Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [IPv6:2001:1600:3:17::190b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DFD6598
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Apr 2023 07:04:33 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Q60p31RkfzMqKm8;
+        Wed, 26 Apr 2023 15:58:35 +0200 (CEST)
+Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Q60p10S6VzMpnPs;
+        Wed, 26 Apr 2023 15:58:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1682517515;
+        bh=q7YipNjqfn/z8kn3IJil8RM+axjuqfK/m4XxAXBUf+Y=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=W3ugWyQJtbD1oliKhX2Yzdcz480Vu9ygX9tFHZIoWk3rLpcrlhe0J0wGmRPKueSKw
+         3RvQkqQa2k9xP8f2ipclUpzNvmCuv6awzTMTl9zgXLWrce99hInBlJuFELbhM9S+66
+         ZTIfZHvu2s/84MMyRA7LTcejVHUjMyRZebV9J06g=
+Message-ID: <99c0648d-deec-c7e2-a54f-94a7f6a3a50f@digikod.net>
+Date:   Wed, 26 Apr 2023 15:58:31 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-289570517-1682517530=:2068"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: 
+Subject: Re: [PATCH -next v2 0/6] landlock: add chmod and chown support
+Content-Language: en-US
+To:     xiujianfeng <xiujianfeng@huawei.com>, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+        corbet@lwn.net
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, roberto.sassu@huawei.com,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+References: <20220827111215.131442-1-xiujianfeng@huawei.com>
+ <d55baf4d-01d3-e4d7-e07f-9658d1606a8c@huawei.com>
+ <a4dc7c12-b485-2eb2-add5-4f7a387a50fa@digikod.net>
+ <5fc97b5b-e76f-99c7-7314-6bb16851f66e@huawei.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <5fc97b5b-e76f-99c7-7314-6bb16851f66e@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,228 +62,143 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-289570517-1682517530=:2068
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
 
-On Fri, 21 Apr 2023, Reinette Chatre wrote:
-
-> Hi Ilpo,
+On 24/04/2023 10:52, xiujianfeng wrote:
 > 
-> On 4/18/2023 4:45 AM, Ilpo Järvinen wrote:
-> > CAT test spawns two processes into two different control groups with
-> > exclusive schemata. Both the processes alloc a buffer from memory
-> > matching their allocated LLC block size and flush the entire buffer out
-> > of caches. Since the processes are reading through the buffer only once
-> > during the measurement and initially all the buffer was flushed, the
-> > test isn't testing CAT.
-> > 
-> > Rewrite the CAT test to allocated a buffer sized to half of LLC. Then
 > 
-> "allocated a buffer" -> "allocate a buffer" ?
+> On 2023/4/21 1:40, Mickaël Salaün wrote:
+>>
+>> On 18/04/2023 12:53, xiujianfeng wrote:
+>>> Hi Mickael,
+>>>
+>>> Sorry about the long silence on this work, As we known this work depends
+>>> on another work about changing argument from struct dentry to struct
+>>> path for some attr/xattr related lsm hooks, I'm stuck with this thing,
+>>> because IMA/EVM is a special security module which is not LSM-based
+>>> currently, and severely coupled with the file system. so I am waiting
+>>> for Roberto Sassu' work (Move IMA and EVM to the LSM infrastructure) to
+>>> be ready, I think it can make my work more easy. you can find
+>>> Roberto'work here,
+>>> https://lwn.net/ml/linux-kernel/20230303181842.1087717-1-roberto.sassu@huaweicloud.com/
+>>>
+>>> Any good idea are welcome, thanks.
+>>
+>> Thanks for the update Xiu.
+>>
+>> Which part would be needed from Roberto's patch series?
+>>
+> As we discussed before, the two access rights that need to be added and
+> their usage is as below:
+> LANDLOCK_ACCESS_FS_WRITE_METADATA controls
+> 1.inode_setattr
+> 2.inode_setxattr
+> 3.inode_removexattr
+> 4.inode_set_acl
+> 5.inode_remove_acl
+> LANDLOCK_ACCESS_FS_READ_METADATA controls
+> 1.inode_getattr
+> 2.inode_get_acl
+> 3.inode_getxattr
+> 4.inode_listxattr
 > 
-> > perform a sequence of tests with different LLC alloc sizes starting
-> > from half of the CBM bits down to 1-bit CBM. Flush the buffer before
-> > each test and read the buffer twice. Observe the LLC misses on the
-> > second read through the buffer. As the allocated LLC block gets smaller
-> > and smaller, the LLC misses will become larger and larger giving a
-> > strong signal on CAT working properly.
+> all these APIs should be changed to use struct path instead of dentry,
+> and then several vfs APIs as follows are invovled:
+> notify_change,
+> __vfs_setxattr_locked,
+> __vfs_removexattr_locked,
+> __vfs_setxattr_noperm
+> vfs_set_acl
+> vfs_remove_acl
+> vfs_getxattr
+> vfs_listxattr
+> vfs_get_acl
+> and also include some LSM hooks such as inode_post_setxattr and
+> inode_setsecctx.
 > 
-> Since the changelog starts by describing the CAT test needing two
-> processes I think it would help to highlight that this test uses a
-> single process. I think it would also help to describing how the cache
-> is used by the rest while this test is running.
-
-Sure, good points, I'll add the info.
-
-> > Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  tools/testing/selftests/resctrl/cache.c    |  20 +-
-> >  tools/testing/selftests/resctrl/cat_test.c | 204 +++++++++------------
-> >  2 files changed, 97 insertions(+), 127 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-> > index 7970239413da..64f08ba5edc2 100644
-> > --- a/tools/testing/selftests/resctrl/cache.c
-> > +++ b/tools/testing/selftests/resctrl/cache.c
-> > @@ -224,10 +224,10 @@ int measure_llc_resctrl(struct resctrl_val_param *param, int bm_pid)
-> >   */
-> >  int cat_val(struct resctrl_val_param *param)
-> >  {
-> > -	int memflush = 1, operation = 0, ret = 0;
-> >  	char *resctrl_val = param->resctrl_val;
-> >  	unsigned long llc_perf_miss = 0;
-> >  	pid_t bm_pid;
-> > +	int ret;
-> >  
-> >  	if (strcmp(param->filename, "") == 0)
-> >  		sprintf(param->filename, "stdio");
-> > @@ -245,6 +245,10 @@ int cat_val(struct resctrl_val_param *param)
-> >  	if (ret)
-> >  		return ret;
-> >  
-> > +	ret = alloc_buffer(param->span, 1);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> >  	initialize_llc_perf();
-> >  
-> >  	/* Test runs until the callback setup() tells the test to stop. */
-> > @@ -256,17 +260,15 @@ int cat_val(struct resctrl_val_param *param)
-> >  		}
-> >  		if (ret < 0)
-> >  			break;
-> > +
-> > +		flush_buffer(param->span);
-> > +		use_buffer(param->span, 0, true);
-> > +
-> >  		ret = reset_enable_llc_perf(bm_pid, param->cpu_no);
-> >  		if (ret)
-> >  			break;
-> >  
-> > -		if (run_fill_buf(param->span, memflush, operation, true)) {
-> > -			fprintf(stderr, "Error-running fill buffer\n");
-> > -			ret = -1;
-> > -			break;
-> > -		}
-> > -
-> > -		sleep(1);
-> > +		use_buffer(param->span, 0, true);
-> >  
-> >  		/* Measure cache miss from perf */
-> >  		ret = get_llc_perf(&llc_perf_miss);
-> > @@ -279,6 +281,8 @@ int cat_val(struct resctrl_val_param *param)
-> >  			break;
-> >  	}
-> >  
-> > +	free_buffer();
-> > +
-> >  	return ret;
-> >  }
-> >  
-> > diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> > index 4b505fdb35d7..85053829b9c5 100644
-> > --- a/tools/testing/selftests/resctrl/cat_test.c
-> > +++ b/tools/testing/selftests/resctrl/cat_test.c
-> > @@ -11,11 +11,12 @@
-> >  #include "resctrl.h"
-> >  #include <unistd.h>
-> >  
-> > -#define RESULT_FILE_NAME1	"result_cat1"
-> > -#define RESULT_FILE_NAME2	"result_cat2"
-> > -#define NUM_OF_RUNS		5
-> > -#define MAX_DIFF_PERCENT	4
-> > -#define MAX_DIFF		1000000
-> > +#define RESULT_FILE_NAME		"result_cat"
-> > +#define NUM_OF_RUNS			5
-> > +#define MIN_DIFF_PERCENT_PER_BIT	2
+> Since the original places where pass dentry to security_inode_xxx may
+> not have any struct path, we have to pass it from the top caller, so
+> this also touches lots of filesystems(e.g. cachefiles, ecryptfs, ksmbd,
+> nfsd, overlayfs...).
 > 
-> Could you please start a new trend that adds documentation
-> that explains what this constant means and how it was chosen?
-
-I can try although that particular 2 was a bit handwavy that just seems to 
-work with the tests I performed.
-
-> > +static unsigned long current_mask;
-> > +static long prev_avg_llc_val;
-> >  
-> >  /*
-> >   * Change schemata. Write schemata to specified
-> > @@ -28,13 +29,24 @@ static int cat_setup(struct resctrl_val_param *p)
-> >  	int ret = 0;
-> >  
-> >  	/* Run NUM_OF_RUNS times */
-> > -	if (p->num_of_runs >= NUM_OF_RUNS)
-> > -		return END_OF_TESTS;
-> > +	if (p->num_of_runs >= NUM_OF_RUNS) {
-> > +		/* Remove one bit from the consecutive block */
-> > +		current_mask &= current_mask >> 1;
-> > +		if (!current_mask)
-> > +			return END_OF_TESTS;
-> > +
-> > +		p->num_of_runs = 0;
+> Other LSMs such as selinux, smack can be easy to refator because they
+> are LSM-based, and if VFS passes path to security_inode_xxx and they can
+> just use path->dentry instead inside they own modules.
 > 
-> This seems like a workaround to get the schemata to be written. It is
-> problematic since now p->num_of_runs no longer accurately reflects the
-> number of test runs.
-
-This is already the case. MBA test works around this very same problem by 
-using a custom static variable (runs_per_allocation) which is reset to 0 
-every NUM_OF_RUNS tests and not keeping ->num_of_runs at all. If MBA test 
-would replace runs_per_allocation with use of ->num_of_runs, it would 
-match what the new CAT test does.
-
-Nothing currently relies on ->num_of_runs counting across the different 
-"tests" that are run inside CAT and MBA tests. And I don't have anything 
-immediately around the corner that would require ->num_of_runs to count 
-total number of repetitions that were ran.
-
-I guess it would be possible to attempt to consolidate that second layer
-MBA and the rewritten CAT tests need somehow into resctrl_val_param. But 
-IMHO that too is low-prio refactor as nothing is broken as is.
-
-> I was expecting this mask manipulation to be
-> in cat_val() so that it is clear how test works instead of part
-> of the logic handled here.
-
-That seems to be moving into opposite direction from how things are 
-currently handled. Doing it in cat_val() would be relying less on 
-->setup(). If that's the preferred direction, then the question becomes, 
-should CAT test do anything in ->setup() because also the schemata 
-writing could be done in directly cat_val().
-
-What I would prefer not to do is to have a rule which says: if there's a 
-test-specific function, don't use ->setup() but do any setup directly 
-in the test-specific function but, otherwise use ->setup(). Such an
-inconsistency would make things hard to track.
-
-> > +	}
-> >  
-> >  	if (p->num_of_runs == 0) {
-> > -		sprintf(schemata, "%lx", p->mask);
-> > -		ret = write_schemata(p->ctrlgrp, schemata, p->cpu_no,
-> > -				     p->resctrl_val);
-> > +		snprintf(schemata, sizeof(schemata), "%lx", p->mask & ~current_mask);
-> > +		ret = write_schemata("", schemata, p->cpu_no, p->resctrl_val);
-> > +		if (ret)
-> > +			return ret;
-> > +		snprintf(schemata, sizeof(schemata), "%lx", current_mask);
-> > +		ret = write_schemata(p->ctrlgrp, schemata, p->cpu_no, p->resctrl_val);
-> > +		if (ret)
-> > +			return ret;
-> >  	}
-> >  	p->num_of_runs++;
-> >  
+> AS for IMA/EVM, unfortunately they are not LSM-based and coupled with
+> the file system. To make things worse, there is a recursive dependency
+> situation during the update of extended attribute which happen as follows:
 > 
-> ...
+> __vfs_setxattr_noperm
+>    => security_inode_post_setxattr
+>      => evm_inode_post_setxattr
+>        => evm_update_evmxattr
+> => __vfs_setxattr_noperm
 > 
-> > @@ -126,7 +162,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
-> >  	ret = get_mask_no_shareable(cache_type, &long_mask);
-> >  	if (ret)
-> >  		return ret;
-> > -	count_of_bits = count_consecutive_bits(long_mask, NULL);
-> > +	count_of_bits = count_consecutive_bits(long_mask, &start);
-> >  
-> >  	/* Get L3/L2 cache size */
-> >  	ret = get_cache_size(cpu_no, cache_type, &cache_size);
-> > @@ -143,99 +179,29 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
-> >  			       count_of_bits - 1);
-> >  		return -1;
-> >  	}
-> > -
-> > -	/* Get core id from same socket for running another thread */
-> > -	sibling_cpu_no = get_core_sibling(cpu_no);
+> To change the argument of __vfs_setxattr_noperm from a dentry to the
+> path structure, the two EVM functions would have to be altered as well.
+> However, evm_update_evmxattr is called by 3 other EVM functions who
+> lives in the very heart of the complicated EVM framework. Any change to
+> them would cause a nasty chain reaction in EVM and, as IMA would trigger
+> EVM directly, in IMA as well.
 > 
-> Do any users of get_core_sibling() remain after this?
+> There is another callchain as follow:
+> ima_appraise_measurement
+>    =>evm_verifyxattr
+>      =>evm_verifyxattr
+>        =>evm_verify_hmac
+> 	=>evm_calc_hash
+> 	   =>evm_calc_hmac_or_hash
+> 	     =>vfs_getxattr
+> Passing struct path into vfs_getxattr() would also affect this
+> callchain. Currently ima_appraise_measurment accepts a struct file, and
+> dentry is generated from file_dentry(file) in order to mitigate a
+> deadlock issue involving overlayfs(commit e71b9dff0634ed). Once
+> &file->f_path is passed through this callchain, and someone wants the
+> dentry, it will be using file->f_path.dentry, which is different from
+> file_dentry(file). In the overlayfs scenario, may this cause an issue?
 
-Correct observation, there seems to be no other users after this is 
-removed.
+I might be OK, but this need to be tested.
 
--- 
- i.
+> 
+> The patchset of moving IMA and EVM into the LSM infrastructe would be
+> helpfull but still can not completely resolve this situation. more
+> refactor would be needed in EVM. That's all that's happening right now.
 
---8323329-289570517-1682517530=:2068--
+OK, thanks for the detailed explanation!
+
+I guess you could start with easier hooks (e.g. inode_getattr and 
+inode_setattr) to see if there is potentially other implications, and 
+incrementally build on that.
+
+
+> 
+>>
+>>>
+>>>
+>>> On 2022/8/27 19:12, Xiu Jianfeng wrote:
+>>>> v2:
+>>>>    * abstract walk_to_visible_parent() helper
+>>>>    * chmod and chown rights only take affect on directory's context
+>>>>    * add testcase for fchmodat/lchown/fchownat
+>>>>    * fix other review issues
+>>>>
+>>>> Xiu Jianfeng (6):
+>>>>     landlock: expand access_mask_t to u32 type
+>>>>     landlock: abstract walk_to_visible_parent() helper
+>>>>     landlock: add chmod and chown support
+>>>>     landlock/selftests: add selftests for chmod and chown
+>>>>     landlock/samples: add chmod and chown support
+>>>>     landlock: update chmod and chown support in document
+>>>>
+>>>>    Documentation/userspace-api/landlock.rst     |   9 +-
+>>>>    include/uapi/linux/landlock.h                |  10 +-
+>>>>    samples/landlock/sandboxer.c                 |  13 +-
+>>>>    security/landlock/fs.c                       | 110 ++++++--
+>>>>    security/landlock/limits.h                   |   2 +-
+>>>>    security/landlock/ruleset.h                  |   2 +-
+>>>>    security/landlock/syscalls.c                 |   2 +-
+>>>>    tools/testing/selftests/landlock/base_test.c |   2 +-
+>>>>    tools/testing/selftests/landlock/fs_test.c   | 267 ++++++++++++++++++-
+>>>>    9 files changed, 386 insertions(+), 31 deletions(-)
+>>>>
