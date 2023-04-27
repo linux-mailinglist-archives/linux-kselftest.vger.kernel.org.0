@@ -2,89 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411756F0DD6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Apr 2023 23:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996DE6F0F1C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Apr 2023 01:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344097AbjD0Vye (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Apr 2023 17:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
+        id S1344227AbjD0Xgt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Apr 2023 19:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344148AbjD0Vy0 (ORCPT
+        with ESMTP id S1344066AbjD0Xgs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Apr 2023 17:54:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529882D69;
-        Thu, 27 Apr 2023 14:54:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4FEA63FA2;
-        Thu, 27 Apr 2023 21:54:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E5C9C433D2;
-        Thu, 27 Apr 2023 21:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682632461;
-        bh=5jyq9pCiWcfs3d6AHx9K4T1jjd8/Liwe3W5FVncTTcY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WD563Sc/B5aCQDh6w4nraFRJhPwMDKHFvw05UZKotrhnaa1Gv+vRQCzI57YMon1lN
-         nGHlqCd2L20afda2t6w2aMD63Ua/pXHdnRN6qj3++OK81r7ogAbxHn0uaYg95sgucf
-         dYiiG6GQ+dcjZhCA1h3nKmaImDg1ofFulA/8D8wO+0CZV1FWmtuBIOuswsoI8ILYR2
-         wVyiJzzDO5EqXaUHNKWCFJ2lRgIfciZz5qpSzGMYY+eQDJ9VqONHtkmJA2Vd2lqAql
-         z0UDUaGoa0J+f5fmxr6hLUVz5gRHEPWpilyQUPqkbaqARIuap9BCZQQ1VhpdAL9Lsl
-         q0oIZFzOrja/A==
-Message-ID: <46a3adcb-856c-9f62-b31e-053ff92f9673@kernel.org>
-Date:   Thu, 27 Apr 2023 15:54:19 -0600
+        Thu, 27 Apr 2023 19:36:48 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E11559E
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Apr 2023 16:36:30 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64115e652eeso8668421b3a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Apr 2023 16:36:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682638589; x=1685230589;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZR28aZTtyd2FOq2+x/D3Azav1fghqMGnnJ3OBjU1db8=;
+        b=QcNL4WTD7BAZ45uZ2rUZBbHaGb5NGq88OMFb/hk+6h14hkmiOAuxcM6o8gxy7BWb6s
+         7ZPujWviSqnQUcUVMS9L5QsXEECDvEvaPYxqivp87T18IDo0ebxAKMiYrIpH+sT5cpdy
+         Sv1lHGvKFRi2CHt3R0PhNVr4VK3oxlWYxQTcLN0AWiaCV4Kv0ug4brrnI0+MMSLdO6fS
+         JL8OPt4Tjqe8nb59x+qSmZBO1nOowz0M0vYoCIZXJcPjoTSbUjTe/+WlgVE8ZCTRZF//
+         /soGydjss1oGYhoub1jY9+MrWs1N93zW9UX52KYodnuYbsHbJ1/Mgu1IC6Z4ZXHa4Acl
+         rDmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682638589; x=1685230589;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZR28aZTtyd2FOq2+x/D3Azav1fghqMGnnJ3OBjU1db8=;
+        b=QwFZZqfw7DCEo8IM7dbMn02t0syZ7PeGf2Q7SJGuwqzKKPOZitpt0qSuo2E4Wt7Kje
+         v1AyI6eMTmhS7GiNrzkWsF5uwYBe6NTFLcLGKBbVpWG1XmLDp33+2URhtec4As8ME+H5
+         Mr8oxuEQYgOSffSiITNNp9HJ2w+x6128H+Si2gd93fk0V2set4U1MmymJbR0gAvtBuRr
+         rxunEmo14caPJDrOAxGfi9bIqrIJ0L/5uPpWeJ5FHLU+6eZHkJJih7wOi0G5VxkoNZzQ
+         eiwe0diV2rre95e9WicpuogOeOqsjVUuPu6Ox170492AzCtyxs6PBEipLyvggK9crLGx
+         7gkQ==
+X-Gm-Message-State: AC+VfDzWb1BnvO4rndFtPCyPEKDN2XdEj+otHdtIIL9lZskoAIR/t+jd
+        jHs/VIfuYDMR5eP9AeGe2d9IBF178qnikr1D4a4Ecw==
+X-Google-Smtp-Source: ACHHUZ6yJzEMVVoXMIG1hh3C2IuooL/DG3uom1bZlv2jJpIj4Ggw5K4nRIaVYciqBWns5Bc7nqnAnXUjK1Eo57YDGRs=
+X-Received: by 2002:a17:90a:dd83:b0:244:d441:8f68 with SMTP id
+ l3-20020a17090add8300b00244d4418f68mr9245486pjv.16.1682638589170; Thu, 27 Apr
+ 2023 16:36:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [net] selftests: srv6: make srv6_end_dt46_l3vpn_test more robust
-Content-Language: en-US
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>
-References: <20230427094923.20432-1-andrea.mayer@uniroma2.it>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20230427094923.20432-1-andrea.mayer@uniroma2.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230406004018.1439952-1-drosen@google.com> <CAEf4BzZ2zjJKhyUtZKUxbNXJMggcot4MyNEeg6n4Lho-EVbBbg@mail.gmail.com>
+ <CA+PiJmTHO3SPM_LvwFYWP+uf_KU4QytBshGzk78CZi8oGJ+rnw@mail.gmail.com> <CAEf4BzZ_4kcM5=Jo3JoWQWugS3wkrtoteyM8YqkykFvYywG+kg@mail.gmail.com>
+In-Reply-To: <CAEf4BzZ_4kcM5=Jo3JoWQWugS3wkrtoteyM8YqkykFvYywG+kg@mail.gmail.com>
+From:   Daniel Rosenberg <drosen@google.com>
+Date:   Thu, 27 Apr 2023 16:36:18 -0700
+Message-ID: <CA+PiJmTsEsUi3c5soodZHxS_PvMPnJG-4bFvdfpLq-kPZ0j4UQ@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Dynptr Verifier Adjustments
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/27/23 3:49 AM, Andrea Mayer wrote:
-> On some distributions, the rp_filter is automatically set (=1) by
-> default on a netdev basis (also on VRFs).
-> In an SRv6 End.DT46 behavior, decapsulated IPv4 packets are routed using
-> the table associated with the VRF bound to that tunnel. During lookup
-> operations, the rp_filter can lead to packet loss when activated on the
-> VRF.
-> Therefore, we chose to make this selftest more robust by explicitly
-> disabling the rp_filter during tests (as it is automatically set by some
-> Linux distributions).
-> 
-> Fixes: 03a0b567a03d ("selftests: seg6: add selftest for SRv6 End.DT46 Behavior")
-> Reported-by: Hangbin Liu <liuhangbin@gmail.com>
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> Tested-by: Hangbin Liu <liuhangbin@gmail.com>
-> ---
->  .../testing/selftests/net/srv6_end_dt46_l3vpn_test.sh  | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
+On Wed, Apr 26, 2023 at 4:39=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> Don't know, show the sequence of commands you are running?
+>
+> I have linux source in ~/linux, and KBUILD_OUTPUT set to
+> ~/linux-build/default. And it only takes this:
+>
+> $ cd ~/linux
+> $ make -j90 # build kernel
+> $ cd tools/testing/selftests/bpf
+> $ make -j90 # build selftests
+>
+> And that's it.
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+I've tried the same, modulo some paths. I'm pretty sure it's version
+related at this point.
+The current issue I'm seeing is "error: indirect call in function,
+which are not supported by eBPF" when using GCC-BPF for
+progs/bind4_prog.c
 
-
+Currently using clang 16.0.0 and gcc 12.2.0-14.
+I did manage to get it to build by just commenting out TEST_GEN_PROGS
++=3D test_progs-bpf_gcc
