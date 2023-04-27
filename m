@@ -2,105 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288186F0CC1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Apr 2023 21:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E436F0CF3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Apr 2023 22:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245540AbjD0T5B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Apr 2023 15:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
+        id S1344171AbjD0USL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Apr 2023 16:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjD0T5A (ORCPT
+        with ESMTP id S1344045AbjD0USK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Apr 2023 15:57:00 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391DF1FD0;
-        Thu, 27 Apr 2023 12:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682625420; x=1714161420;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=haUZlRZVpKJjs4ThNpRF4P6XcJnbRFVkaRfj4rKvGQM=;
-  b=Tt8qcUcYkXFpLJ4j3rDUq1mJ++3CQ4IHBrXyhcIqKzLLFcmYePmf4fOu
-   FXKqk5dDER9tk4WZjRi2x6ffIY7m/K2APq60GhSC/DFAOX6Wy7YNjW7Dl
-   YaqF2fcP4YJJWE7PX3pUqfkxEv1sR3KvIj02g1ssg9svgekTbIGPAbuOV
-   6Q0PbiwJLSZ4B9YHs0WRmNCI4HyAGB3NB3QKrgeCOR7QLJU4fb6+mdwPS
-   8x5Xp/+Q/dtSPdK3SHUlaZ5364TqFfLQOWbcNGoYlyazEOiWe31woRvZh
-   owrS23sNdh2qe949qrjLuwS42QNbJ+yKjdX5AJmq4DQj5MJsOI6txZVj4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="336556487"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="336556487"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:56:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="868857114"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="868857114"
-Received: from jonnaman-mobl2.amr.corp.intel.com (HELO [10.212.24.30]) ([10.212.24.30])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:56:58 -0700
-Message-ID: <7d3f1877-8762-34f4-f1bb-c5c2924c2b77@intel.com>
-Date:   Thu, 27 Apr 2023 12:56:52 -0700
+        Thu, 27 Apr 2023 16:18:10 -0400
+X-Greylist: delayed 1121 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 13:18:09 PDT
+Received: from ulthar.dreamlands.azazel.net (wan.azazel.net [81.187.77.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E13B3ABC;
+        Thu, 27 Apr 2023 13:18:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=azazel.net;
+        s=20220717; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=vVMK0DmoTVin8v+RKwMB1x+zt92VjiVf5R1eGxA+9Ks=; b=nH4/jvP+w5LbS4HpcOH1UgI3is
+        /iytLTAfnnvZ/T5RRDqRq4usCneIywBasHitLIVdl6kRp4o3KEhIWUUX2rGkPrBkFLNhYpKvKuTlr
+        56d7zW7RRQl4CKxLOY9fptKbCbgZuFr9hKJbNChLIzhummoEBhFS0b/4yO+ZCE9aBggtzghKEUFpt
+        cESJEjjsUroeFS1XjPgydfgFoOuHF7Td485RW2bt6P1Hsa6+GGlQNht1bB0GAaLEEgRzKU1jLI5JM
+        PE605vx6Z7S8aB6koS6eDY2OcahwIPdkW4gMmb+6+yX9A0emWv264cVcv0OSQ30lmADM0Af9jfKKk
+        ObL+NzsA==;
+Received: from azazel by ulthar.dreamlands.azazel.net with local (Exim 4.96)
+        (envelope-from <azazel@azazel.net>)
+        id 1ps7ks-0021kV-29;
+        Thu, 27 Apr 2023 20:58:14 +0100
+Date:   Thu, 27 Apr 2023 20:58:14 +0100
+From:   Jeremy Sowden <jeremy@azazel.net>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf] selftests/bpf: fix pkg-config call building sign-file
+Message-ID: <20230427195814.GE415348@azazel.net>
+References: <20230426215032.415792-1-jeremy@azazel.net>
+ <e1bd99a4ea209277d657f7fb7ccdc26451113fc9.camel@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 3/3] selftests/tdx: Test GetQuote TDX attestation
- feature
-Content-Language: en-US
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20230413034108.1902712-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20230413034108.1902712-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <CAAH4kHb_PAhR5jLFi2KsGku9ALNtjtxb-JO-k1ULK-Mj5mi=pw@mail.gmail.com>
- <a418c2d3-e333-fe3d-63a5-c6e555f81fc7@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <a418c2d3-e333-fe3d-63a5-c6e555f81fc7@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mRi/Sh4c9dkl2g8K"
+Content-Disposition: inline
+In-Reply-To: <e1bd99a4ea209277d657f7fb7ccdc26451113fc9.camel@huaweicloud.com>
+X-SA-Exim-Connect-IP: <locally generated>
+X-SA-Exim-Mail-From: azazel@azazel.net
+X-SA-Exim-Scanned: No (on ulthar.dreamlands.azazel.net); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/27/23 12:10, Sathyanarayanan Kuppuswamy wrote:
->> Shouldn't req be zeroed before populating reportdata? We wouldn't want
->> uninitialized memory to leave the guest. I know this is just a test,
-> There are only two members in struct tdx_report_req (reportdata and tdreport).
-> The reportdata has already been updated here, and the tdreport will be updated
-> by the kernel on output. Since TDX_CMD_GET_REPORT0 IOCTL handler uses an
-> intermediate kernel buffer to the TDREPORT and copies the generated report back
-> to this user buffer, this uninitialized tdreport data never leaves the guest.
 
-Is that really even relevant?
+--mRi/Sh4c9dkl2g8K
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I mean, we could implement the whole thing with get_user_pages() and
-then just pass the physical address of the reportdata and tdreport down
-to the TDX module.
+On 2023-04-27, at 08:52:27 +0200, Roberto Sassu wrote:
+> On Wed, 2023-04-26 at 22:50 +0100, Jeremy Sowden wrote:
+> > When building sign-file, the call to get the CFLAGS for libcrypto is
+> > missing white-space between `pkg-config` and `--cflags`:
+> >=20
+> >   $(shell $(HOSTPKG_CONFIG)--cflags libcrypto 2> /dev/null)
+> >=20
+> > Removing the redirection of stderr, we see:
+> >=20
+> >   $ make -C tools/testing/selftests/bpf sign-file
+> >   make: Entering directory '[...]/tools/testing/selftests/bpf'
+> >   make: pkg-config--cflags: No such file or directory
+> >     SIGN-FILE sign-file
+> >   make: Leaving directory '[...]/tools/testing/selftests/bpf'
+> >=20
+> > Add the missing space.
+> >=20
+> > Fixes: fc97590668ae ("selftests/bpf: Add test for bpf_verify_pkcs7_sign=
+ature() kfunc")
+> > Signed-off-by: Jeremy Sowden <jeremy@azazel.net>
+>=20
+> Thanks.
+>=20
+> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Roberto
 
-It doesn't matter either way.  The data is going from guest userspace to
-the guest kernel to the TDX module, all of which are trusted.
+Thanks.  I was having e-mail problems yesterday when I sent the original
+message with the patch in it, and it didn't reach some of the
+recipients.  I'll send it again with your `Reviewed-by:` attached.
 
-It's a selftest.  I'd just leave it alone.
+J.
 
+> > ---
+> >  tools/testing/selftests/bpf/Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
+ests/bpf/Makefile
+> > index b677dcd0b77a..ad01c9e1ff12 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -197,7 +197,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read=
+_aux.c $(OUTPUT)/liburandom_r
+> > =20
+> >  $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
+> >  	$(call msg,SIGN-FILE,,$@)
+> > -	$(Q)$(CC) $(shell $(HOSTPKG_CONFIG)--cflags libcrypto 2> /dev/null) \
+> > +	$(Q)$(CC) $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null) \
+> >  		  $< -o $@ \
+> >  		  $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -l=
+crypto)
+> > =20
 
+--mRi/Sh4c9dkl2g8K
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEbB20U2PvQDe9VtUXKYasCr3xBA0FAmRK084ACgkQKYasCr3x
+BA3WMw//dtfaKXgeSzYYSiB5uUJ91AnWV5EhEUZhFmgrxl9zATqbS+UimZ2X3JiV
+uuHbQQixkxwB8FNUYmEVGQpIjuJonWnTFhorfWvVTzr4hDNTsycE/FyB9ROYUWBJ
+0+T3aMcm8tBS8hqasPncs33TgEolPlO902kyUaB5NCfZOKNWW88wUOA6EiAILN5L
+nEmOK8BwIt68gO55fAWm/zOObyG17YdYdmI6EBCdxW8UaVUCbO9K4DJDoPsy2e8u
+QauB6vpiGLJAFQEnGaKeecEnBRYJFEGMop/bLEnuThRR9Cc6W8cW2iTo2ltF4ljy
+CwwF6yO11Ua6cGF+0s/gvFnTfHwtOfuIRmQcSQEoaZyTWrE8M1bmK55WCxiaQb4B
+Cpeylu3XnCCRZzHUoxQutc9+4lt87EdgQLRHVv1SbGVMYgJiDdhNMu/ZxXZp4eDN
+VRFklTPVumtH1IUYGwjIfpIl8JCZAE+yOeLmMjE7PgrD3Ay+UB3FYE6irW8+Q/rp
+GG1AdIMlqkq9Tuj6hv+9ymtfBgZBaaS6aCoFqJaEHKVmJwHBRxOA7DpeVh+zkLBd
+Oh+fxnmvxm54Np/EjvyY/D2BvuIu2ZkhHACwozvIwydc51+9f86ksR3zKUWyHSlZ
+UKoV4IlblMs98QvNiw3I91fBPwLCUsMzjI7UyDUMgsVpzCrQTZE=
+=sPuM
+-----END PGP SIGNATURE-----
+
+--mRi/Sh4c9dkl2g8K--
