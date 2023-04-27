@@ -2,108 +2,249 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45DC6F0BDE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Apr 2023 20:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6266F0C61
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Apr 2023 21:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244353AbjD0S2P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Apr 2023 14:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
+        id S244405AbjD0TKk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Apr 2023 15:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244265AbjD0S2O (ORCPT
+        with ESMTP id S244317AbjD0TKj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Apr 2023 14:28:14 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B6F40F2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Apr 2023 11:28:13 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-24b6a888085so6923972a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Apr 2023 11:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682620093; x=1685212093;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=d4aLQGpFNX5qly7iV9G5CqlTNQWcBkLYmo+FRHaOx6I=;
-        b=NJoFhRto2PQlOOjbzPh9oXFg+y0CSQjCKSlgskjud8bzXf5fB0gjG/g6rrcha5ydRJ
-         MIe954s2abHb0UqqKI+4rcQY0IbPgvVKEF6AAA4lqtGYEbLILWHLBfdbIYgU+telaUf9
-         dm1fgFK1tc6p2yEq2NWQLjVNjOiBk3h7w4F4OjgO54xCc9K0bopRwB35McFiyZrKkznJ
-         6X3TdWJk3vw51Ja1MpHnDSjEY+dDE+gm47O2Ly4xVM8B4zgs6vYQX9bufUoOWWU+vTrU
-         8tzfms2tiV6IFB0F0VFvoS7xj2rZhd8hYo8Vzno34/8D3hy4Ovgi7QOmqwtBmR41AEGO
-         jIYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682620093; x=1685212093;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d4aLQGpFNX5qly7iV9G5CqlTNQWcBkLYmo+FRHaOx6I=;
-        b=PkjV+Dxvl11wrpikWbLbo1aJWC5xuQGQPDbRY21Bcd0Bgv2cKUA5m7SLvET5ZP757p
-         uWltDY96OinL7z11OdBvsTgObvHHaQ2D7zyEgrl97XW+RBOtcb4YXyiLqXevPlic+z1H
-         wXGPgSmsNeJBNpB/SLm5uIlSXKbkQu7hAWGYgqtkCycyWGLPZASlwPvpZ1Msar7HeGGR
-         1fxT62M0eRRfDdlYzRL02iktEU6aON1rsACDtzDGB8o/AHS3/nkfubj0x8NffdAPC8RI
-         Ji/bpOakEFuRrEC2tXpNGNsQdn0u0yxXCdr2jAGd3aHQDhD8UhzvP2UE4YD94ybx2Sd6
-         7Z8Q==
-X-Gm-Message-State: AC+VfDyqvfWAjoH12EKLcND3L451catWHRLjUqlHQYfEv9v1i3miMUy/
-        kfz+inkWwwIwcHSdds6skGOPSNQ=
-X-Google-Smtp-Source: ACHHUZ7+0lDE62NqgN7SOmFhEMUOybYiJhSDJKluYTuON5gTSMdUBLUULYmHIFAtGf2ugW7CW6uK/Ls=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:90a:3881:b0:247:9111:9d0d with SMTP id
- x1-20020a17090a388100b0024791119d0dmr728351pjb.4.1682620092950; Thu, 27 Apr
- 2023 11:28:12 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 11:28:11 -0700
-In-Reply-To: <88e3ab23029d726a2703adcf6af8356f7a2d3483.1682607419.git.legion@kernel.org>
-Mime-Version: 1.0
-References: <88e3ab23029d726a2703adcf6af8356f7a2d3483.1682607419.git.legion@kernel.org>
-Message-ID: <ZEq+u0CWs8eO2ED/@google.com>
-Subject: Re: [PATCH v1] selftests/bpf: Do not use sign-file as testcase
-From:   Stanislav Fomichev <sdf@google.com>
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 27 Apr 2023 15:10:39 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99C383;
+        Thu, 27 Apr 2023 12:10:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682622637; x=1714158637;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=U11SN9mWGEQdDYTAKbNstXN/CypdmKjslQJG22dkEC0=;
+  b=jDeMgHZ8jQTocEZuxrK2oWcHtwv5JVF2dSYEXmx6oztDNvcJF6ygwtdz
+   8aBkmN670dBI0EnhyXCJ9/iRc0PoKL1rqz0Zw9fEbsTMmqzrGafRVMFuk
+   FG55uTCor49QX9e6nipQqvgFbPO4fRLD36M2GsACLMKs58XuGdaGWatz7
+   VTImOJe95DKQ4OAx4iGgU08h45YFVecF3H3jgcB9+MPMEZdxgebfHD8pj
+   c1og/NDktQCR9lzIEBBB/kE3Zx97U+Pw4Y7GEToM54mCRqR4ji2wxVwii
+   3iyBHzh26sy55jlH3XZQDRJMygXsrdjzMOr8NIX6CzcsjZWtL9qp2l77q
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="331831569"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="331831569"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:10:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="727242040"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="727242040"
+Received: from mhammon-mobl.amr.corp.intel.com (HELO [10.212.181.179]) ([10.212.181.179])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:10:36 -0700
+Message-ID: <a418c2d3-e333-fe3d-63a5-c6e555f81fc7@linux.intel.com>
+Date:   Thu, 27 Apr 2023 12:10:36 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v2 3/3] selftests/tdx: Test GetQuote TDX attestation
+ feature
+Content-Language: en-US
+To:     Dionna Amalie Glaze <dionnaglaze@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20230413034108.1902712-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20230413034108.1902712-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <CAAH4kHb_PAhR5jLFi2KsGku9ALNtjtxb-JO-k1ULK-Mj5mi=pw@mail.gmail.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <CAAH4kHb_PAhR5jLFi2KsGku9ALNtjtxb-JO-k1ULK-Mj5mi=pw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 04/27, Alexey Gladkov wrote:
-> The sign-file utility (from scripts/) is used in prog_tests/verify_pkcs7_sig.c,
-> but the utility should not be called as a test. Executing this utility
-> produces the following error:
-> 
-> selftests: /linux/tools/testing/selftests/bpf: urandom_read
-> ok 16 selftests: /linux/tools/testing/selftests/bpf: urandom_read
-> 
-> selftests: /linux/tools/testing/selftests/bpf: sign-file
-> not ok 17 selftests: /linux/tools/testing/selftests/bpf: sign-file # exit=2
-> 
-> Fixes: fc97590668ae ("selftests/bpf: Add test for bpf_verify_pkcs7_signature() kfunc")
-> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+Hi,
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
+On 4/26/23 8:47 AM, Dionna Amalie Glaze wrote:
+> On Wed, Apr 12, 2023 at 8:42 PM Kuppuswamy Sathyanarayanan
+> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+>>
+>> In TDX guest, the second stage of the attestation process is Quote
+>> generation. This process is required to convert the locally generated
+>> TDREPORT into a remotely verifiable Quote. It involves sending the
+>> TDREPORT data to a Quoting Enclave (QE) which will verify the
+>> integerity of the TDREPORT and sign it with an attestation key.
+> 
+> nit: integrity
+> 
+>>
+>> Intel's TDX attestation driver exposes TDX_CMD_GET_QUOTE IOCTL to
+>> allow user agent get the TD Quote.
+> 
+> nit: to get
+>>
+>> Add a kernel selftest module to verify the Quote generation feature.
+>>
+>> TD Quote generation involves following steps:
+>>
+>> * Get the TDREPORT data using TDX_CMD_GET_REPORT IOCTL.
+>> * Embed the TDREPORT data in quote buffer and request for quote
+>>   generation via TDX_CMD_GET_QUOTE IOCTL request.
+>> * Upon completion of the GetQuote request, check for non zero value
+>>   in the status field of Quote header to make sure the generated
+>>   quote is valid.
+>>
+>> Reviewed-by: Tony Luck <tony.luck@intel.com>
+>> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+>> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+>> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+>> ---
+>>  tools/testing/selftests/tdx/tdx_guest_test.c | 68 ++++++++++++++++++--
+>>  1 file changed, 62 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/tdx/tdx_guest_test.c b/tools/testing/selftests/tdx/tdx_guest_test.c
+>> index 81d8cb88ea1a..2eccde54185b 100644
+>> --- a/tools/testing/selftests/tdx/tdx_guest_test.c
+>> +++ b/tools/testing/selftests/tdx/tdx_guest_test.c
+>> @@ -18,6 +18,7 @@
+>>  #define TDX_GUEST_DEVNAME "/dev/tdx_guest"
+>>  #define HEX_DUMP_SIZE 8
+>>  #define DEBUG 0
+>> +#define QUOTE_SIZE 8192
+>>
+>>  /**
+>>   * struct tdreport_type - Type header of TDREPORT_STRUCT.
+>> @@ -128,21 +129,29 @@ static void print_array_hex(const char *title, const char *prefix_str,
+>>         printf("\n");
+>>  }
+>>
+>> +/* Helper function to get TDREPORT */
+>> +long get_tdreport0(int devfd, struct tdx_report_req *req)
+>> +{
+>> +       int i;
+>> +
+>> +       /* Generate sample report data */
+>> +       for (i = 0; i < TDX_REPORTDATA_LEN; i++)
+>> +               req->reportdata[i] = i;
+>> +
+> 
+> Shouldn't req be zeroed before populating reportdata? We wouldn't want
+> uninitialized memory to leave the guest. I know this is just a test,
 
-> ---
->  tools/testing/selftests/bpf/Makefile | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+There are only two members in struct tdx_report_req (reportdata and tdreport).
+The reportdata has already been updated here, and the tdreport will be updated
+by the kernel on output. Since TDX_CMD_GET_REPORT0 IOCTL handler uses an
+intermediate kernel buffer to the TDREPORT and copies the generated report back
+to this user buffer, this uninitialized tdreport data never leaves the guest.
+
+IMO, we don't need to zero it. However, because it is harmless, I am fine with
+including it.
+
+> but it's best to model good practices for anyone that might
+> copy/paste.
+
+
 > 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index b677dcd0b77a..fd214d1526d4 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -88,8 +88,7 @@ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
->  	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
->  	xdp_features
->  
-> -TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read $(OUTPUT)/sign-file
-> -TEST_GEN_FILES += liburandom_read.so
-> +TEST_GEN_FILES += liburandom_read.so urandom_read sign-file
->  
->  # Emit succinct information message describing current building step
->  # $1 - generic step name (e.g., CC, LINK, etc);
-> -- 
-> 2.33.7
+>> +       return ioctl(devfd, TDX_CMD_GET_REPORT0, req);
+>> +}
+>> +
+>>  TEST(verify_report)
+>>  {
+>>         struct tdx_report_req req;
+>>         struct tdreport *tdreport;
+>> -       int devfd, i;
+>> +       int devfd;
+>>
+>>         devfd = open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
+>>         ASSERT_LT(0, devfd);
+>>
+>> -       /* Generate sample report data */
+>> -       for (i = 0; i < TDX_REPORTDATA_LEN; i++)
+>> -               req.reportdata[i] = i;
+>> -
+>>         /* Get TDREPORT */
+>> -       ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT0, &req));
+>> +       ASSERT_EQ(0, get_tdreport0(devfd, &req));
+>>
+>>         if (DEBUG) {
+>>                 print_array_hex("\n\t\tTDX report data\n", "",
+>> @@ -160,4 +169,51 @@ TEST(verify_report)
+>>         ASSERT_EQ(0, close(devfd));
+>>  }
+>>
+>> +TEST(verify_quote)
+>> +{
+>> +       struct tdx_quote_hdr *quote_hdr;
+>> +       struct tdx_report_req rep_req;
+>> +       struct tdx_quote_req req;
+>> +       __u64 quote_buf_size;
+>> +       __u8 *quote_buf;
+>> +       int devfd;
+>> +
+>> +       /* Open attestation device */
+>> +       devfd = open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
+>> +
+>> +       ASSERT_LT(0, devfd);
+>> +
+>> +       /* Add size for quote header */
+>> +       quote_buf_size = sizeof(*quote_hdr) + QUOTE_SIZE;
+>> +
+>> +       /* Allocate quote buffer */
+>> +       quote_buf = malloc(quote_buf_size);
+>> +       ASSERT_NE(NULL, quote_buf);
+>> +
+>> +       quote_hdr = (struct tdx_quote_hdr *)quote_buf;
+>> +
+>> +       /* Initialize GetQuote header */
+>> +       quote_hdr->version = 1;
+>> +       quote_hdr->status  = GET_QUOTE_SUCCESS;
+>> +       quote_hdr->in_len  = TDX_REPORT_LEN;
+>> +       quote_hdr->out_len = 0;
+>> +
+>> +       /* Get TDREPORT data */
+>> +       ASSERT_EQ(0, get_tdreport0(devfd, &rep_req));
+>> +
+>> +       /* Fill GetQuote request */
+>> +       memcpy(quote_hdr->data, rep_req.tdreport, TDX_REPORT_LEN);
+>> +       req.buf   = (__u64)quote_buf;
+>> +       req.len   = quote_buf_size;
+>> +
+>> +       ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_QUOTE, &req));
+>> +
+>> +       /* Check whether GetQuote request is successful */
+>> +       EXPECT_EQ(0, quote_hdr->status);
+>> +
+>> +       free(quote_buf);
+>> +
+>> +       ASSERT_EQ(0, close(devfd));
+>> +}
+>> +
+>>  TEST_HARNESS_MAIN
+>> --
+>> 2.34.1
+>>
 > 
+> 
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
