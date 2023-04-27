@@ -2,91 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236596F0295
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Apr 2023 10:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339C96F041E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Apr 2023 12:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243096AbjD0I35 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Apr 2023 04:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43902 "EHLO
+        id S243317AbjD0KWW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Apr 2023 06:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjD0I3x (ORCPT
+        with ESMTP id S243577AbjD0KWA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Apr 2023 04:29:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B6819B9;
-        Thu, 27 Apr 2023 01:29:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A2A663B98;
-        Thu, 27 Apr 2023 08:29:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 187B8C4339B;
-        Thu, 27 Apr 2023 08:29:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682584191;
-        bh=sY0kxvVgQRX9F8cq5ylxtU1vKe3/bQabvwR1G3kDi3s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KLO9xmpLdw3bo6+Sz8+9XIpE5j2Yt2O6CLyKgntS56Pnsszu9BE7vB6woq39vTYdj
-         BUnJjMxPQjRIypwJgCLpasEptkOFpnJdPgBJOq64QQVxb9EdaGQ8gctjczrUpCzavl
-         uoPIgHurxZTwheHSop+r6YZ0YEoO7yc+qSrmBBG4=
-Date:   Thu, 27 Apr 2023 10:29:48 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     sashal@kernel.org, stable@vger.kernel.org, shuah@kernel.org,
-        sj38.park@gmail.com, akpm@linux-foundation.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sjpark@amazon.de>
-Subject: Re: [PATCH v2] selftests/kselftest/runner/run_one(): Allow running
- non-executable files
-Message-ID: <2023042743-cheesy-parasitic-206d@gregkh>
-References: <20210810164534.25902-1-sj38.park@gmail.com>
- <20230425004637.156064-1-sj@kernel.org>
+        Thu, 27 Apr 2023 06:22:00 -0400
+X-Greylist: delayed 569 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 03:21:43 PDT
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE2259F8;
+        Thu, 27 Apr 2023 03:21:43 -0700 (PDT)
+Received: from localhost.localdomain ([160.80.103.126])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 33R9naub002272
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 27 Apr 2023 11:49:36 +0200
+From:   Andrea Mayer <andrea.mayer@uniroma2.it>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@GMAIL.COM>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>,
+        Hangbin Liu <liuhangbin@GMAIL.COM>
+Subject: [net] selftests: srv6: make srv6_end_dt46_l3vpn_test more robust
+Date:   Thu, 27 Apr 2023 11:49:23 +0200
+Message-Id: <20230427094923.20432-1-andrea.mayer@uniroma2.it>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425004637.156064-1-sj@kernel.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 12:46:37AM +0000, SeongJae Park wrote:
-> Hi Greg and Sasha,
-> 
-> On Tue, 10 Aug 2021 16:45:34 +0000 SeongJae Park <sj38.park@gmail.com> wrote:
-> 
-> > From: SeongJae Park <sjpark@amazon.de>
-> > 
-> > When running a test program, 'run_one()' checks if the program has the
-> > execution permission and fails if it doesn't.  However, it's easy to
-> > mistakenly missing the permission, as some common tools like 'diff'
-> > don't support the permission change well[1].  Compared to that, making
-> > mistakes in the test program's path would only rare, as those are
-> > explicitly listed in 'TEST_PROGS'.  Therefore, it might make more sense
-> > to resolve the situation on our own and run the program.
-> > 
-> > For the reason, this commit makes the test program runner function to
-> > still print the warning message but try parsing the interpreter of the
-> > program and explicitly run it with the interpreter, in the case.
-> > 
-> > [1] https://lore.kernel.org/mm-commits/YRJisBs9AunccCD4@kroah.com/
-> > 
-> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Signed-off-by: SeongJae Park <sjpark@amazon.de>
-> 
-> This patch has merged into the mainline by the commit 303f8e2d0200
-> ("selftests/kselftest/runner/run_one(): allow running non-executable files").
-> However, this patch has not added to v5.15.y, while there are some selftests
-> having no execution permission, including that for DAMON.  As a result, the
-> selftests always fail unless this patch is manually applied.  Could you please
-> add this patch to v5.15.y?  I confirmed this patch can cleanly cherry-picked on
-> the latest v5.15.y.
+On some distributions, the rp_filter is automatically set (=1) by
+default on a netdev basis (also on VRFs).
+In an SRv6 End.DT46 behavior, decapsulated IPv4 packets are routed using
+the table associated with the VRF bound to that tunnel. During lookup
+operations, the rp_filter can lead to packet loss when activated on the
+VRF.
+Therefore, we chose to make this selftest more robust by explicitly
+disabling the rp_filter during tests (as it is automatically set by some
+Linux distributions).
 
-Now queued up, thanks.
+Fixes: 03a0b567a03d ("selftests: seg6: add selftest for SRv6 End.DT46 Behavior")
+Reported-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+Tested-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ .../testing/selftests/net/srv6_end_dt46_l3vpn_test.sh  | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-greg k-h
+diff --git a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
+index aebaab8ce44c..441eededa031 100755
+--- a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
++++ b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
+@@ -292,6 +292,11 @@ setup_hs()
+ 	ip netns exec ${hsname} sysctl -wq net.ipv6.conf.all.accept_dad=0
+ 	ip netns exec ${hsname} sysctl -wq net.ipv6.conf.default.accept_dad=0
+ 
++	# disable the rp_filter otherwise the kernel gets confused about how
++	# to route decap ipv4 packets.
++	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.all.rp_filter=0
++	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.default.rp_filter=0
++
+ 	ip -netns ${hsname} link add veth0 type veth peer name ${rtveth}
+ 	ip -netns ${hsname} link set ${rtveth} netns ${rtname}
+ 	ip -netns ${hsname} addr add ${IPv6_HS_NETWORK}::${hs}/64 dev veth0 nodad
+@@ -316,11 +321,6 @@ setup_hs()
+ 	ip netns exec ${rtname} sysctl -wq net.ipv6.conf.${rtveth}.proxy_ndp=1
+ 	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.${rtveth}.proxy_arp=1
+ 
+-	# disable the rp_filter otherwise the kernel gets confused about how
+-	# to route decap ipv4 packets.
+-	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.all.rp_filter=0
+-	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.${rtveth}.rp_filter=0
+-
+ 	ip netns exec ${rtname} sh -c "echo 1 > /proc/sys/net/vrf/strict_mode"
+ }
+ 
+-- 
+2.20.1
+
