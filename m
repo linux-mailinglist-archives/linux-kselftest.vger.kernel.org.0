@@ -2,116 +2,195 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406EB6F010D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Apr 2023 08:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0F46F024A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Apr 2023 10:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243064AbjD0GxF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Apr 2023 02:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
+        id S243215AbjD0IE4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Apr 2023 04:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242825AbjD0GxF (ORCPT
+        with ESMTP id S243274AbjD0IEp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Apr 2023 02:53:05 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD921BD6;
-        Wed, 26 Apr 2023 23:53:03 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Q6R5P4Tgzz9yHBc;
-        Thu, 27 Apr 2023 14:43:21 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAn61GxG0pkqy9aAg--.8914S2;
-        Thu, 27 Apr 2023 07:52:43 +0100 (CET)
-Message-ID: <e1bd99a4ea209277d657f7fb7ccdc26451113fc9.camel@huaweicloud.com>
-Subject: Re: [PATCH bpf] selftests/bpf: fix pkg-config call building
- sign-file
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Jeremy Sowden <jeremy@azazel.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date:   Thu, 27 Apr 2023 08:52:27 +0200
-In-Reply-To: <20230426215032.415792-1-jeremy@azazel.net>
-References: <20230426215032.415792-1-jeremy@azazel.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 27 Apr 2023 04:04:45 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C46540E7;
+        Thu, 27 Apr 2023 01:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682582666; x=1714118666;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=YAwLYDdMqQcMoIUVD/XrkZQr1t1fwC+m98oRe+LHHI0=;
+  b=Lfn6JMdzIyBDeDbdLPj2ra8viyfF1aoad4p0j1nQZp+kyoVb/Yozq3VT
+   Z5MI6z5Ir3IVeliFVctSq0M935Zct7ZNNka/KqHSxzaQQMx9+cD+U0tj9
+   K/aRoYa+pS9JCCCLM+Uz05FfABJ0KLswx+qNbHH1Cwbfs5CfQYysrQ9WS
+   jtvIYfeMSAysuqXCxcNYSnAziTSy78WybPMXypsv3HJA/itVnt5hpaRHQ
+   ss0Sf8cCNEh3C3ohBK4cKGTVqzOxNlXK3ozE+sO55EzLmT+5XHGP2lcI/
+   4yRwQciDJPVNr/PRpVZsOcL2KtvCogOmgmDIIRBlgzxHcuMJJhDauCqMf
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="336304909"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="336304909"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 01:04:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="758993834"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="758993834"
+Received: from mmaiores-mobl.ger.corp.intel.com ([10.251.215.69])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 01:04:22 -0700
+Date:   Thu, 27 Apr 2023 11:04:17 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     linux-kselftest@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Subject: Re: [PATCH v2 24/24] selftests/resctrl: Rewrite Cache Allocation
+ Technology (CAT) test
+In-Reply-To: <ff2b3b61-57d2-04da-a719-c72d8bfd49eb@intel.com>
+Message-ID: <dfe24719-cd5e-9ff-9278-a92356dc1490@linux.intel.com>
+References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-25-ilpo.jarvinen@linux.intel.com> <eac72c7b-bd01-084e-cf23-ec5e8e0e3cf3@intel.com> <b2f72637-5c16-d25b-8a0-3fee4ca9ec7e@linux.intel.com>
+ <ff2b3b61-57d2-04da-a719-c72d8bfd49eb@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAn61GxG0pkqy9aAg--.8914S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJryrJrykurWrtr1kZw45GFg_yoW8WF4kpa
-        yFy3WYyFySgw17JFWrCFW3uFWrKr1UXFyYvFnFgryUZrn3Jr97Jr4IkFW5WF9xW3yrtr13
-        Za4IgFy3Zw48J37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj4yJpAABsU
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-2136314721-1682582664=:1971"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2023-04-26 at 22:50 +0100, Jeremy Sowden wrote:
-> When building sign-file, the call to get the CFLAGS for libcrypto is
-> missing white-space between `pkg-config` and `--cflags`:
-> 
->   $(shell $(HOSTPKG_CONFIG)--cflags libcrypto 2> /dev/null)
-> 
-> Removing the redirection of stderr, we see:
-> 
->   $ make -C tools/testing/selftests/bpf sign-file
->   make: Entering directory '[...]/tools/testing/selftests/bpf'
->   make: pkg-config--cflags: No such file or directory
->     SIGN-FILE sign-file
->   make: Leaving directory '[...]/tools/testing/selftests/bpf'
-> 
-> Add the missing space.
-> 
-> Fixes: fc97590668ae ("selftests/bpf: Add test for bpf_verify_pkcs7_signature() kfunc")
-> Signed-off-by: Jeremy Sowden <jeremy@azazel.net>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Thanks.
+--8323329-2136314721-1682582664=:1971
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
-
-Roberto
-
-> ---
->  tools/testing/selftests/bpf/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 26 Apr 2023, Reinette Chatre wrote:
+> On 4/26/2023 6:58 AM, Ilpo Järvinen wrote:
+> > On Fri, 21 Apr 2023, Reinette Chatre wrote:
+> >> On 4/18/2023 4:45 AM, Ilpo Järvinen wrote:
 > 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index b677dcd0b77a..ad01c9e1ff12 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -197,7 +197,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
->  
->  $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
->  	$(call msg,SIGN-FILE,,$@)
-> -	$(Q)$(CC) $(shell $(HOSTPKG_CONFIG)--cflags libcrypto 2> /dev/null) \
-> +	$(Q)$(CC) $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null) \
->  		  $< -o $@ \
->  		  $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
->  
+> ...
+> 
+> >>> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+> >>> index 4b505fdb35d7..85053829b9c5 100644
+> >>> --- a/tools/testing/selftests/resctrl/cat_test.c
+> >>> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> >>> @@ -11,11 +11,12 @@
+> >>>  #include "resctrl.h"
+> >>>  #include <unistd.h>
+> >>>  
+> >>> -#define RESULT_FILE_NAME1	"result_cat1"
+> >>> -#define RESULT_FILE_NAME2	"result_cat2"
+> >>> -#define NUM_OF_RUNS		5
+> >>> -#define MAX_DIFF_PERCENT	4
+> >>> -#define MAX_DIFF		1000000
+> >>> +#define RESULT_FILE_NAME		"result_cat"
+> >>> +#define NUM_OF_RUNS			5
+> >>> +#define MIN_DIFF_PERCENT_PER_BIT	2
+> >>
+> >> Could you please start a new trend that adds documentation
+> >> that explains what this constant means and how it was chosen?
+> > 
+> > I can try although that particular 2 was a bit handwavy that just seems to 
+> > work with the tests I performed.
+> 
+> The changelog claims that the existing CAT test does not work with
+> this new test offered as replacement. Considering that I do think it
+> is important to have confidence that this test is able to test CAT.
+> The words "handwave" and "seems to work" are red flags to me.
+> When merged, these tests will be run on a variety of platforms with
+> various configurations. Using test criteria based on measurements
+> from one particular system may work but there needs to be confidence
+> that the criteria maps to all systems these tests will be run on.
 
+My "tests" (in plural) were not limited to one particular system but 
+included systems from different generations.
+
+> >>> +static unsigned long current_mask;
+> >>> +static long prev_avg_llc_val;
+> >>>  
+> >>>  /*
+> >>>   * Change schemata. Write schemata to specified
+> >>> @@ -28,13 +29,24 @@ static int cat_setup(struct resctrl_val_param *p)
+> >>>  	int ret = 0;
+> >>>  
+> >>>  	/* Run NUM_OF_RUNS times */
+> >>> -	if (p->num_of_runs >= NUM_OF_RUNS)
+> >>> -		return END_OF_TESTS;
+> >>> +	if (p->num_of_runs >= NUM_OF_RUNS) {
+> >>> +		/* Remove one bit from the consecutive block */
+> >>> +		current_mask &= current_mask >> 1;
+> >>> +		if (!current_mask)
+> >>> +			return END_OF_TESTS;
+> >>> +
+> >>> +		p->num_of_runs = 0;
+> >>
+> >> This seems like a workaround to get the schemata to be written. It is
+> >> problematic since now p->num_of_runs no longer accurately reflects the
+> >> number of test runs.
+> > 
+> > This is already the case. MBA test works around this very same problem by 
+> > using a custom static variable (runs_per_allocation) which is reset to 0 
+> > every NUM_OF_RUNS tests and not keeping ->num_of_runs at all. If MBA test 
+> > would replace runs_per_allocation with use of ->num_of_runs, it would 
+> > match what the new CAT test does.
+> > 
+> > Nothing currently relies on ->num_of_runs counting across the different 
+> > "tests" that are run inside CAT and MBA tests. And I don't have anything 
+> > immediately around the corner that would require ->num_of_runs to count 
+> > total number of repetitions that were ran.
+> > 
+> > I guess it would be possible to attempt to consolidate that second layer
+> > MBA and the rewritten CAT tests need somehow into resctrl_val_param. But 
+> > IMHO that too is low-prio refactor as nothing is broken as is.
+> 
+> I do not think that I would use any of the other tests as reference
+> since all the other tests rely on the same wrapper (resctrl_val())
+> by providing it their own customization (via aptly named ... struct
+> resctrl_val_param). 
+
+Oh, I see. I never made the connection to the function name before this.
+(To be honest, it's pretty stupid name for that particular function,
+given what the function does, but that's an entirely separate issue.)
+
+-- 
+ i.
+
+> The CAT test is already unique by _not_ using resctrl_val() but its
+> own test. I do not see why those resctrl_val() customization need to
+> propagate to the CAT test if it is not using the wrapper to begin with.
+> 
+> > 
+> >> I was expecting this mask manipulation to be
+> >> in cat_val() so that it is clear how test works instead of part
+> >> of the logic handled here.
+> > 
+> > That seems to be moving into opposite direction from how things are 
+> > currently handled. Doing it in cat_val() would be relying less on 
+> > ->setup(). If that's the preferred direction, then the question becomes, 
+> > should CAT test do anything in ->setup() because also the schemata 
+> > writing could be done in directly cat_val().
+> > 
+> > What I would prefer not to do is to have a rule which says: if there's a 
+> > test-specific function, don't use ->setup() but do any setup directly 
+> > in the test-specific function but, otherwise use ->setup(). Such an
+> > inconsistency would make things hard to track.
+> 
+> The test specific function can still call a setup function but it
+> can be done directly instead of via "struct resctrl_val_param". The
+> test specific function already transitioned away from using resctrl_val(),
+> it is not clear to me why there should be rules about how
+> function pointers within "struct resctrl_val_param" should be used or
+> indeed why "struct resctrl_val_param" should be used at all.
+> 
+> Reinette
+> 
+
+--8323329-2136314721-1682582664=:1971--
