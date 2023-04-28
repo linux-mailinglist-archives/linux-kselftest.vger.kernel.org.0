@@ -2,232 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B426F123F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Apr 2023 09:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB526F1301
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Apr 2023 10:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345488AbjD1HSo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Apr 2023 03:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
+        id S1345789AbjD1IJW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Apr 2023 04:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345489AbjD1HSe (ORCPT
+        with ESMTP id S1345483AbjD1IJL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:18:34 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A35144A2
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Apr 2023 00:18:06 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64115e652eeso10497010b3a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Apr 2023 00:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682666286; x=1685258286;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0BVJHOpXJP2O2nDTKA8p24jt3D3+BhxA0VLRakwV7yc=;
-        b=TK4l8iwoo83rRIEhzs+Tk9Ibi88EuLo/u5UJ75l3+iPRCigxhrfpstyqVgZDBekxpR
-         8kfPMPMikgTGQqxu5wyv+Gv7tqy93I4MPfUtveCZU1vtfXaK+WCRXYJV8UG0xbvtGJDP
-         6qGV3xFWMPCM1B5WFB325Dw2SXNaeLSKVVAg32S7ep+fq2taYlU4PlmtwR4IrgBwNgr2
-         m6hlyP9PlWz60HX5nNh6tNKHx0dp3v22K+XB8xd5AwFCpXMKj3yB7WWRylRzkYk+rOs1
-         qhMTw/YHzlzLmo/t67R10fbsDK2pWdSVq4uGKbELdaBQQBW+kq8AvScGTgnEeiCZpuiY
-         nxfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682666286; x=1685258286;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0BVJHOpXJP2O2nDTKA8p24jt3D3+BhxA0VLRakwV7yc=;
-        b=bnPYMjpIn9UUytsFSSCAEMOZGKh5gu0RMEUVf5HazT/pmiVDSdzuYE++IfhmWbMhSu
-         UIgPZJwD8LotdjM/6dOcvPwCg+O2jDGvsNPuYxyraAWTnBU12bA0t+2zDS9ib4pwHcQB
-         yu1E0XSZuyYEjTDCvdnrLAXI344bqw01l+R+FwAHH6wtrw370raCPCX96AaMtozwFsGg
-         Oeh1WWNW5BZAUCC59UAp+AtQzjUHg59y0uNoYBkX5ywuMnfRhA6DcCjEa8QXBVTWR3Uc
-         omEDk06up58GJcEx/d+t41OAOrrEK+l4dQRAzI0T3le012EHGR+f2BdGRpXrP4jG5s/s
-         SUig==
-X-Gm-Message-State: AC+VfDwwtY/jEAMdQUlPo2XL4g9eMotYefOtBk3rGSqmPC2anMzxRxSW
-        0OTJD4qoFB6urNVTODwHIVtIvw==
-X-Google-Smtp-Source: ACHHUZ4vXSOjLR384i5gDZpzJ1l8RzqQ9wDu5WvlV4VtpjxyTz7BCc0yRhGjzwLjMf1cG42ZCm45Sg==
-X-Received: by 2002:a17:90a:cb81:b0:249:7ad3:e843 with SMTP id a1-20020a17090acb8100b002497ad3e843mr5541110pju.16.1682666285777;
-        Fri, 28 Apr 2023 00:18:05 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id j2-20020a17090a318200b0024739d29252sm14159939pjb.15.2023.04.28.00.17.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 00:18:05 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
-        zhoufeng.zf@bytedance.com
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Add testcase for bpf_task_under_cgroup
-Date:   Fri, 28 Apr 2023 15:17:37 +0800
-Message-Id: <20230428071737.43849-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230428071737.43849-1-zhoufeng.zf@bytedance.com>
-References: <20230428071737.43849-1-zhoufeng.zf@bytedance.com>
+        Fri, 28 Apr 2023 04:09:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF2430F4;
+        Fri, 28 Apr 2023 01:09:09 -0700 (PDT)
+Received: from [192.168.10.39] (unknown [39.37.187.173])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2791266032C3;
+        Fri, 28 Apr 2023 09:09:04 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682669347;
+        bh=j90SNX8gDxgMch3e8i0rNxBg5i2HnX4rEsOIw0VxQug=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=nI15zjo251FRTC5y40Ph5kANUL6OpwjTQHhBiCc1uYNex6zMsiHvISoE8uCrrfUDO
+         CZnVGzeLa5xN2QyYXcoIMztjkby06Zm8lyrvdYl03Wv78nYdfG7+cLw3Bc7PEbKdyJ
+         Wwekx7SqPnqQXON2mPROfZV+pjJvaPBOrV7zrvrWwJMuBoHDg9gVNYDqMMX8n7UAK+
+         UEpK8FZlXwJOytRYk80h1vkjDKl6Odzin94OAbo8/pkXzvQaAFQSqVmO9XfPBiNy+Y
+         hTUKl2JvxqKfdSiijdFoFtMUHNftbg8e0JO6bMfryIgGK9/jvAslyRWk/1XTeQsfbA
+         5zW4Nyd2rTyQw==
+Message-ID: <b0af0f17-907c-3905-faf8-1c1e43acbca2@collabora.com>
+Date:   Fri, 28 Apr 2023 13:09:00 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/powerpc: Replace obsolete memalign() with
+ posix_memalign()
+Content-Language: en-US
+To:     Deming Wang <wangdeming@inspur.com>, mpe@ellerman.id.au,
+        shuah@kernel.org
+References: <20230413010250.4254-1-wangdeming@inspur.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230413010250.4254-1-wangdeming@inspur.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On 4/13/23 6:02 AM, Deming Wang wrote:
+> memalign() is obsolete according to its manpage.
+> 
+> Replace memalign() with posix_memalign() and remove malloc.h include
+> that was there for memalign().
+Thanks for the patch.
 
-test_progs:
-Tests new kfunc bpf_task_under_cgroup().
+> 
+> As a pointer is passed into posix_memalign(), initialize *s to NULL
+I'm unable to find this initialization below. Did you really mean to add
+the initialization?
 
-The bpf program saves the new task's pid within a given cgroup to
-the remote_pid, which is convenient for the user-mode program to
-verify the test correctness.
+> to silence a warning about the function's return value being used as
+> uninitialized (which is not valid anyway because the error is properly
+> checked before s is returned).
+> 
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+> ---
+>  tools/testing/selftests/powerpc/stringloops/strlen.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/powerpc/stringloops/strlen.c b/tools/testing/selftests/powerpc/stringloops/strlen.c
+> index 9055ebc484d0..f9c1f9cc2d32 100644
+> --- a/tools/testing/selftests/powerpc/stringloops/strlen.c
+> +++ b/tools/testing/selftests/powerpc/stringloops/strlen.c
+> @@ -1,5 +1,4 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -#include <malloc.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+>  #include <time.h>
+> @@ -51,10 +50,11 @@ static void bench_test(char *s)
+>  static int testcase(void)
+>  {
+>  	char *s;
+> +	int ret;
+>  	unsigned long i;
+>  
+> -	s = memalign(128, SIZE);
+> -	if (!s) {
+> +	ret = posix_memalign((void **)&s, 128, SIZE);
+> +	if (ret < 0) {
+Can we do if (!ret) instead? The page says:
+posix_memalign()  returns zero on success.
+>  		perror("memalign");
+>  		exit(1);
+>  	}
 
-The user-mode program creates its own mount namespace, and mounts the
-cgroupsv2 hierarchy in there, call the fork syscall, then check if
-remote_pid and local_pid are unequal.
-
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
- .../bpf/prog_tests/task_under_cgroup.c        | 55 +++++++++++++++++++
- .../bpf/progs/test_task_under_cgroup.c        | 51 +++++++++++++++++
- 3 files changed, 107 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-
-diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-index c7463f3ec3c0..5061d9e24c16 100644
---- a/tools/testing/selftests/bpf/DENYLIST.s390x
-+++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-@@ -26,3 +26,4 @@ user_ringbuf                             # failed to find kernel BTF type ID of
- verif_stats                              # trace_vprintk__open_and_load unexpected error: -9                           (?)
- xdp_bonding                              # failed to auto-attach program 'trace_on_entry': -524                        (trampoline)
- xdp_metadata                             # JIT does not support calling kernel function                                (kfunc)
-+test_task_under_cgroup                   # JIT does not support calling kernel function                                (kfunc)
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-new file mode 100644
-index 000000000000..5e79dff86dec
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+#include <cgroup_helpers.h>
-+#include "test_task_under_cgroup.skel.h"
-+
-+#define FOO	"/foo"
-+
-+void test_task_under_cgroup(void)
-+{
-+	struct test_task_under_cgroup *skel;
-+	int ret, foo = -1;
-+	pid_t pid;
-+
-+	foo = test__join_cgroup(FOO);
-+	if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
-+		return;
-+
-+	skel = test_task_under_cgroup__open();
-+	if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
-+		goto cleanup;
-+
-+	skel->rodata->local_pid = getpid();
-+	skel->bss->remote_pid = getpid();
-+	skel->rodata->cgid = get_cgroup_id(FOO);
-+
-+	ret = test_task_under_cgroup__load(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
-+		goto cleanup;
-+
-+	ret = test_task_under_cgroup__attach(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
-+		goto cleanup;
-+
-+	pid = fork();
-+	if (pid == 0)
-+		exit(0);
-+	else if (pid == -1)
-+		printf("Couldn't fork process!\n");
-+
-+	wait(NULL);
-+
-+	test_task_under_cgroup__detach(skel);
-+
-+	ASSERT_NEQ(skel->bss->remote_pid, skel->rodata->local_pid,
-+		   "test task_under_cgroup");
-+
-+cleanup:
-+	if (foo >= 0)
-+		close(foo);
-+
-+	test_task_under_cgroup__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-new file mode 100644
-index 000000000000..5bcb726d6d0a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "bpf_misc.h"
-+
-+struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
-+long bpf_task_under_cgroup(struct task_struct *task, struct cgroup *ancestor) __ksym;
-+void bpf_cgroup_release(struct cgroup *p) __ksym;
-+struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-+void bpf_task_release(struct task_struct *p) __ksym;
-+
-+const volatile int local_pid;
-+const volatile long cgid;
-+int remote_pid;
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(handle__task_newtask, struct task_struct *task, u64 clone_flags)
-+{
-+	struct cgroup *cgrp = NULL;
-+	struct task_struct *acquired = NULL;
-+
-+	if (local_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	acquired = bpf_task_acquire(task);
-+	if (!acquired)
-+		return 0;
-+
-+	if (local_pid == acquired->tgid)
-+		goto out;
-+
-+	cgrp = bpf_cgroup_from_id(cgid);
-+	if (!cgrp)
-+		goto out;
-+
-+	if (bpf_task_under_cgroup(acquired, cgrp))
-+		remote_pid = acquired->tgid;
-+
-+out:
-+	if (acquired)
-+		bpf_task_release(acquired);
-+	if (cgrp)
-+		bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
 -- 
-2.20.1
-
+BR,
+Muhammad Usama Anjum
