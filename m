@@ -2,118 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5516F220E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Apr 2023 03:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8186F2236
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Apr 2023 03:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjD2B0Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Apr 2023 21:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        id S230181AbjD2B6H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Apr 2023 21:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347249AbjD2B0O (ORCPT
+        with ESMTP id S1347136AbjD2B6C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Apr 2023 21:26:14 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AA5468F;
-        Fri, 28 Apr 2023 18:26:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682731570; x=1714267570;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3MViQk5cJbqCpKwe3c9u4njFfHK4UXRbtmvJlbjadrE=;
-  b=PPq4pgEHC9pRsk4MevBxrVwl4sEd1cX4EE1h4fHYD3Uc4/KTWLy/ZVCd
-   nY40zmGyIPuEFGrNrddGsDAYsEWJ44BD9pgLgunItSxvcqZ9A1nGo/y6o
-   Cim/l1sr7itpbISlw/6rZR4nFL38r1+uRFeyYuVU7lj2RV0vajC5vggtI
-   28y9ZPd0D56WkRdTbNptaqiHDVvZz5UIuK7Km04adUuWFmEgRRy2rMdU5
-   pXTH2Yq0myj+ElziZdmJYnfc6t/gDh0xMG6MsyO9VWi5/sI6Xgy/iF29l
-   q/JgbdMBZcM10PAjHhGvW9KIbuCWVPQRj33MKU1TiCfgDMWWtjFhL+hCj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="332218206"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="332218206"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 18:26:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="941311401"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="941311401"
-Received: from jli61-mobl.ccr.corp.intel.com (HELO [10.254.211.72]) ([10.254.211.72])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 18:26:06 -0700
-Message-ID: <62b0e0ab-02b6-0789-3289-fb0d54bc93c5@linux.intel.com>
-Date:   Sat, 29 Apr 2023 09:25:56 +0800
+        Fri, 28 Apr 2023 21:58:02 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAE83C1B
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Apr 2023 18:57:59 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1aad5245632so510095ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Apr 2023 18:57:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682733479; x=1685325479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JwYEXU7Lp9XroufPN43xvmiTz9v2gxPHNeujBe94GAs=;
+        b=RXfyW4VFENC5ciM0BkQroL4aTdKXdDxKRQP+lXVasRmQpe5AI9ZHyvuHYeeGYk3Qb3
+         5eGB9m1chP/gFDsK+Kq3oCrQGusaWdv4ohH1vJ1AauBiusk9QlXKDJxIcIXL/ysUJiuo
+         TJ8ryIERQ67DdKzkaBWura/eB3J3OP4gWII1O8nQCqHtILnjZkE20TC7iYsmfyoi2YcD
+         NVYLjMQk/hAcc+H6PB0dtfjya3cxCRCqtERmwcSfhVVfyFnWklGRnJI6OQH/9Y6bZpbv
+         0B8iJM+g4s5BoqriWl9kxk+QO331R/fFPpG6dylVLVil6y68Q6dXek410s1b5hZSql8w
+         pDgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682733479; x=1685325479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JwYEXU7Lp9XroufPN43xvmiTz9v2gxPHNeujBe94GAs=;
+        b=HYq/tqzmsxItlXGi9N0cBX+dBNl1acAYeSH7xRNNP/p1LVbntxYdIMiLnCvBZBB4d8
+         ibJrMMS+FveEKo99MbKU/GN01kJWOm4kBA9A0cWiTKt6IiKWd0ZPEbdcGGs1iTt+6JV6
+         1wY1wBGKTQkky/R6ndxV31fqZqcUck7H1XQYafZbLCLL8nCe9uni4p30MC0I8bnNxPrf
+         5rvOEky+1zNji2iZJciDG9/NPmBljcw4ScUu5pi2mNz5lR1UehR81MK7HnC8SJDhKAN8
+         dkPvNOSA12XJvMYqRyfj4+LusQy5+iqgzjuRuBLsk4UyEPSMIn24YmoLyN6E2l8ehx3n
+         5d+A==
+X-Gm-Message-State: AC+VfDx7nsmV7ynhWH2xeKD9qARlYo3H4Wr7ddFDTrulPv1W6/KLwBLi
+        rSk3SU/B3UEihQw6nN6Flt2ix8WD4l61Nl6nqb0v7Q==
+X-Google-Smtp-Source: ACHHUZ6hnf26OkmiqUDWsr7DSiuPNV/BdRgyZpdsz5lR+uhorY4Vu4itliEAmdMKDWjt/ddvAknB/Tx9C46kEc/0Fy8=
+X-Received: by 2002:a17:902:f78a:b0:1a9:b62f:9338 with SMTP id
+ q10-20020a170902f78a00b001a9b62f9338mr6290325pln.45.1682733479236; Fri, 28
+ Apr 2023 18:57:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RESEND PATCH] selftests/sgx: Add "test_encl.elf" to TEST_FILES
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Yi Lai <yi1.lai@intel.com>, jarkko@kernel.org,
-        dave.hansen@linux.intel.com, shuah@kernel.org, jethro@fortanix.com,
-        bp@suse.de
-Cc:     linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        heng.su@intel.com, pengfei.xu@intel.com
-References: <20230421033123.445883-1-yi1.lai@intel.com>
- <9005b73c-85c5-8296-e329-5bb87bc8c3ec@collabora.com>
-Content-Language: en-US
-From:   "Lai, Yi1" <yi1.lai@linux.intel.com>
-In-Reply-To: <9005b73c-85c5-8296-e329-5bb87bc8c3ec@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-3-drosen@google.com>
+ <CAEf4BzakRfffU9+wLBNfhBi1dKxs03ibopJsMyEF6JAM-QJWjw@mail.gmail.com>
+In-Reply-To: <CAEf4BzakRfffU9+wLBNfhBi1dKxs03ibopJsMyEF6JAM-QJWjw@mail.gmail.com>
+From:   Daniel Rosenberg <drosen@google.com>
+Date:   Fri, 28 Apr 2023 18:57:48 -0700
+Message-ID: <CA+PiJmQJ8m_W_SF3GPe9pqnwJX0gbkWuuOz-WXHWcA7JExgMyg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/28/2023 8:31 PM, Muhammad Usama Anjum wrote:
-> On 4/21/23 8:31 AM, Yi Lai wrote:
->> The "test_encl.elf" file used by test_sgx is not installed in
->> INSTALL_PATH. Attempting to execute test_sgx causes false negative:
-> I've ran the following on next-20230427:
-> make -C tools/testing/selftests O=build2 -j `nproc`
-> 
-> find | grep test_encl.elf
-> ./build2/kselftest/sgx/test_encl.elf
-> 
-> test_encl.elf is being copied already. Am i missing something?
->>
->> "
->> enclave executable open(): No such file or directory
->> main.c:188:unclobbered_vdso:Failed to load the test enclave.
->> "
->>
->> Add "test_encl.elf" to TEST_FILES so that it will be installed.
->>
->> Fixes: 2adcba79e69d ("selftests/x86: Add a selftest for SGX")
->> Signed-off-by: Yi Lai <yi1.lai@intel.com>
->> ---
->>  tools/testing/selftests/sgx/Makefile | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/tools/testing/selftests/sgx/Makefile b/tools/testing/selftests/sgx/Makefile
->> index 75af864e07b6..50aab6b57da3 100644
->> --- a/tools/testing/selftests/sgx/Makefile
->> +++ b/tools/testing/selftests/sgx/Makefile
->> @@ -17,6 +17,7 @@ ENCL_CFLAGS := -Wall -Werror -static -nostdlib -nostartfiles -fPIC \
->>  	       -fno-stack-protector -mrdrnd $(INCLUDES)
->>  
->>  TEST_CUSTOM_PROGS := $(OUTPUT)/test_sgx
->> +TEST_FILES := $(OUTPUT)/test_encl.elf
-> I think this isn't needed just like sign_key.o is being copied already.
-> test_encl.elf is being copied.
->> 
-Hi,
-
-When using tools/testing/selftests/kselftest_install.sh
-
-test_encl.elf can be built but not copied to tools/testing/selftests/kselftest_install/sgx/
-
->>  ifeq ($(CAN_BUILD_X86_64), 1)
->>  all: $(TEST_CUSTOM_PROGS) $(OUTPUT)/test_encl.elf
-> 
-
-Regards,
-Yi Lai
+On Thu, Apr 6, 2023 at 2:09=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> would this work correctly if someone passes a non-null buffer with too
+> small size? Can you please add a test for this use case.
+>
+Working on a test case for this, but the test case I wrote fails
+without my patches.
+I'm just declaring a buffer of size 9 on the stack, and then passing
+in bpf_dynptr_slice that buffer, and size 10. That's passing the
+verifier just fine. In fact, it loads successfully up to size 16. I'm
+guessing that's adjusting for alignment? Still feels very strange. Is
+that expected behavior?
