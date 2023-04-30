@@ -2,128 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED446F274F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Apr 2023 03:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB3E6F2A31
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Apr 2023 20:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjD3Bwh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 29 Apr 2023 21:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S229521AbjD3SPF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 30 Apr 2023 14:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjD3Bwg (ORCPT
+        with ESMTP id S229513AbjD3SPF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Apr 2023 21:52:36 -0400
+        Sun, 30 Apr 2023 14:15:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1661995;
-        Sat, 29 Apr 2023 18:52:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A4210EF;
+        Sun, 30 Apr 2023 11:15:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2349460A4E;
-        Sun, 30 Apr 2023 01:52:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AFAAC433EF;
-        Sun, 30 Apr 2023 01:52:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 692DE60DBE;
+        Sun, 30 Apr 2023 18:15:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFEE4C433EF;
+        Sun, 30 Apr 2023 18:15:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682819554;
-        bh=ZhxqaDEN86XmxUi8KbuYL4Tf06ROel7RYWuePCb+syI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=npqsfDHWJpY6BH2oOxznuazADeDTN0eAV0JGypgI7Ab66IfNeEMEteraDFRx2Pczi
-         AAuwWb8OQNiWzPUaoiwuHiVoxX67Dg5BGZH+/obIWf+nEjf9Eo6wgGtp8TirTe4Bfk
-         pgNNqp11go9cgszpyvlK2k9GzdjuHFCwvTe6EQPPiNAZadVqZp0a8ByoiSeGtxpsZO
-         CYrN3roOJpHfDm+GIB8TRa50wbAxp8xAO0RJYoK9zp0D9jgdnJxAu79vvNbTTJvzFL
-         GSCpZAiBYK/LSJGZbpNLH+yC/JN8L8VN2yfkOxiqcbSbLCT+YC2WkvscFN3Ah40kbv
-         oRfv7PjcphBQw==
-Date:   Sun, 30 Apr 2023 10:52:31 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Akanksha J N <akanksha@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rostedt@goodmis.org, mhiramat@kernel.org, shuah@kernel.org,
-        naveen.n.rao@linux.ibm.com
-Subject: Re: [PATCH v3 2/2] selftests/ftrace: Add new test case which checks
- for optimized probes
-Message-Id: <20230430105231.2e7f5bd8a3f879d2330485d2@kernel.org>
-In-Reply-To: <20230428163842.95118-3-akanksha@linux.ibm.com>
-References: <20230428163842.95118-1-akanksha@linux.ibm.com>
-        <20230428163842.95118-3-akanksha@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        s=k20201202; t=1682878502;
+        bh=O4JBBRUic0uivPVdWP2D/uJkT2Quy0op12TFRtFXla4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Fvrpiz/HH/oL2MWvJoSpWw9QIW9Y8BQBNqPqAtAVPmBkJOw6t1ORio+Bq8srlODJ8
+         c2EGSeevVh1+/YmVIy714jlRnvPTVPJ8Y/1kJ5QJGKl572Yf77jjOOKMqtC/A+xHbu
+         FKnKYmoIaHDPHEF665qs56Zm9K1YgWmH7ti/ZUTMSfyPo812sY+XcmhTkdno7sY23j
+         KwpNP4gg2wcIs1FxG/J7jJprM0cZRqIg8UU+MxiCowV93iSoLN037lX7wO20Y/H40K
+         /NTR6X9y6lU6K4ls/wIHgab3oPV0QbQyz2g3QY5TKQ8uNofGAb2uILko9qsVYpmBPk
+         m7d/wroH8F4tg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        johannes@sipsolutions.net, Johannes Berg <johannes.berg@intel.com>,
+        regressions@lists.linux.dev
+Subject: Re: [PATCH v2 1/3] kunit: tool: add subscripts for type annotations where appropriate
+Date:   Sun, 30 Apr 2023 18:15:00 +0000
+Message-Id: <20230430181500.122664-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230316220638.983743-1-dlatypov@google.com>
+References: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 28 Apr 2023 22:08:42 +0530
-Akanksha J N <akanksha@linux.ibm.com> wrote:
+Hi Daniel,
 
-> Add new test case kprobe_opt_types.tc which enables and checks
-> if each probe has been optimized in order to test potential issues with
-> optimized probes.
-> The '|| continue' is added with the echo statement to ignore errors that
-> are caused by trying to add kprobes to non probeable lines and continue
-> with the test.
+On Thu, 16 Mar 2023 15:06:36 -0700 Daniel Latypov <dlatypov@google.com> wrote:
+
+> E.g. for subprocess.Popen, it can be opened in `text=True` mode where it
+> returns strings, or `text=False` where it returns bytes.
+> To differentiate, you can annotate types as `Popen[str]` or
+> `Popen[bytes]`.
 > 
-> Signed-off-by: Akanksha J N <akanksha@linux.ibm.com>
+> This patch should add subscripts in all the places we were missing them.
 
-Thanks! This looks good to me.
+I just found this patch is in the latest mainline tree, and it causes kunit
+failure on my test machine like below.
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+    $ python3 --version
+    Python 3.8.10
+    $
+    $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
+    Traceback (most recent call last):
+      File "./tools/testing/kunit/kunit.py", line 24, in <module>
+        import kunit_kernel
+      File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line 42, in <module>
+        class LinuxSourceTreeOperations:
+      File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line 95, in LinuxSourceTreeOperations
+        def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+    TypeError: 'type' object is not subscriptable
+    $
 
+I further confirmed reverting this patch makes it run again.  Do you have any
+idea?
+
+
+Thanks,
+SJ
+
+> 
+> Reported-by: Johannes Berg <johannes.berg@intel.com>
+> Link: https://lore.kernel.org/linux-kselftest/20230315105055.9b2be0153625.I7a2cb99b95dff216c0feed4604255275e0b156a7@changeid/
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
->  .../ftrace/test.d/kprobe/kprobe_opt_types.tc  | 34 +++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
+> Note: this is unchanged, just added a 3rd patch to this series.
+> ---
+>  tools/testing/kunit/kunit_kernel.py  | 6 +++---
+>  tools/testing/kunit/kunit_printer.py | 2 +-
+>  tools/testing/kunit/run_checks.py    | 2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
-> new file mode 100644
-> index 000000000000..9f5d99328086
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
-> @@ -0,0 +1,34 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0-or-later
-> +# Copyright (C) 2023 Akanksha J N, IBM corporation
-> +# description: Register/unregister optimized probe
-> +# requires: kprobe_events
-> +
-> +case `uname -m` in
-> +x86_64)
-> +;;
-> +arm*)
-> +;;
-> +ppc*)
-> +;;
-> +*)
-> +  echo "Please implement other architecture here"
-> +  exit_unsupported
-> +esac
-> +
-> +DEFAULT=$(cat /proc/sys/debug/kprobes-optimization)
-> +echo 1 > /proc/sys/debug/kprobes-optimization
-> +for i in `seq 0 255`; do
-> +        echo  "p:testprobe $FUNCTION_FORK+${i}" > kprobe_events || continue
-> +        echo 1 > events/kprobes/enable || continue
-> +        (echo "forked")
-> +	PROBE=$(grep $FUNCTION_FORK /sys/kernel/debug/kprobes/list)
-> +        echo 0 > events/kprobes/enable
-> +        echo > kprobe_events
-> +	if echo $PROBE | grep -q OPTIMIZED; then
-> +                echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
-> +                exit_pass
-> +        fi
-> +done
-> +echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
-> +exit_unresolved
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 53e90c335834..e6fc8fcb071a 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -92,7 +92,7 @@ class LinuxSourceTreeOperations:
+>  		if stderr:  # likely only due to build warnings
+>  			print(stderr.decode())
+>  
+> -	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+> +	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+>  		raise RuntimeError('not implemented!')
+>  
+>  
+> @@ -112,7 +112,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+>  		kconfig.merge_in_entries(base_kunitconfig)
+>  		return kconfig
+>  
+> -	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+> +	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+>  		kernel_path = os.path.join(build_dir, self._kernel_path)
+>  		qemu_command = ['qemu-system-' + self._qemu_arch,
+>  				'-nodefaults',
+> @@ -141,7 +141,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+>  		kconfig.merge_in_entries(base_kunitconfig)
+>  		return kconfig
+>  
+> -	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+> +	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+>  		"""Runs the Linux UML binary. Must be named 'linux'."""
+>  		linux_bin = os.path.join(build_dir, 'linux')
+>  		params.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
+> diff --git a/tools/testing/kunit/kunit_printer.py b/tools/testing/kunit/kunit_printer.py
+> index 5f1cc55ecdf5..015adf87dc2c 100644
+> --- a/tools/testing/kunit/kunit_printer.py
+> +++ b/tools/testing/kunit/kunit_printer.py
+> @@ -15,7 +15,7 @@ _RESET = '\033[0;0m'
+>  class Printer:
+>  	"""Wraps a file object, providing utilities for coloring output, etc."""
+>  
+> -	def __init__(self, output: typing.IO):
+> +	def __init__(self, output: typing.IO[str]):
+>  		self._output = output
+>  		self._use_color = output.isatty()
+>  
+> diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
+> index 066e6f938f6d..61cece1684df 100755
+> --- a/tools/testing/kunit/run_checks.py
+> +++ b/tools/testing/kunit/run_checks.py
+> @@ -37,7 +37,7 @@ def main(argv: Sequence[str]) -> None:
+>  	if argv:
+>  		raise RuntimeError('This script takes no arguments')
+>  
+> -	future_to_name: Dict[futures.Future, str] = {}
+> +	future_to_name: Dict[futures.Future[None], str] = {}
+>  	executor = futures.ThreadPoolExecutor(max_workers=len(commands))
+>  	for name, argv in commands.items():
+>  		if name in necessary_deps and shutil.which(necessary_deps[name]) is None:
+> 
+> base-commit: 2c6a96dad5797e57b4cf04101d6c8d5c7a571603
 > -- 
-> 2.31.1
+> 2.40.0.rc1.284.g88254d51c5-goog
 > 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
