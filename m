@@ -2,360 +2,274 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C926F3385
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 May 2023 18:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8516F338C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 May 2023 18:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbjEAQZ7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 May 2023 12:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S232434AbjEAQab (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 May 2023 12:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjEAQZ4 (ORCPT
+        with ESMTP id S229679AbjEAQaa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 May 2023 12:25:56 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2C610C8;
-        Mon,  1 May 2023 09:25:55 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 87E505C00F3;
-        Mon,  1 May 2023 12:25:54 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 01 May 2023 12:25:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nikishkin.pw; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1682958354; x=
-        1683044754; bh=cvplEnShbwb1Rkb4fLE1QUu5yhWBseBlVRLabGxQK3c=; b=D
-        +5BgZSOfs6kUa42LTz4z2KJP5t10/yEP6/v+tEOGrCqhIz59nrrSDiJ9GMLXZo/R
-        DyEutnf4tOfw9FFXIL/yu2SDmBZqPQ7nfp1bp+TBLm21UrP4pFirYiAJoZrNRfwz
-        a+D9jqoowjM31pTEEM9ez950niXQvtGkLSrKSZ/bKvsDI+zni2k1PCYeL+Oz/62C
-        Z7u6YeOjmDwhJVQCFBRXob3TJBvORb662riZrMmHmBA9N0wHKWYHIJTI8lfCLqIu
-        Gony7g9f8CGiwjLmHyJhv8E4Q7L1jJm9yof5YQyV2tlMIEsKjcvfgy7mfKHZfb0Y
-        mbQ5GK5GS7hIXnEr0T75g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1682958354; x=
-        1683044754; bh=cvplEnShbwb1Rkb4fLE1QUu5yhWBseBlVRLabGxQK3c=; b=R
-        H66ECGpHnr7D5I2VCfgksrqvuNoI2kEcYQ/xPNlsTR9qMCuyYg6LMTOqZQVMAZ9a
-        9wKPgAIJc4YPnThZePaS5GIa5y1V6nCC4WS6UIWxGIZFEOozrI3S6dwvV2RXV5YB
-        T/NeQ/t/zULBo8OsT1KU/AlJSWouwYaojc3+FU/yhKczYXK3y2qnQ7mYhwulIOmu
-        4gnbQJIB9J9F5Gek5OoKAlW5JdNHvkkA15hvdmPEP+kTjR7rb6dv4aDiFkRM+LUC
-        21v+TDVueVHpcvDW6PXmn03Ucgn5Wrr3a+rG41WgjllF4TKQh6Mu7KfzVTY5LQET
-        IG3Kr9GsVBF9w2pN24V5A==
-X-ME-Sender: <xms:EuhPZHby45pehPdYpn2hA_muUbnXZTYAvROFG4rau6yNHQvV7FmnhQ>
-    <xme:EuhPZGZcot_6uPiergaJHAL9Z_VBKLsmX6ia2ShxhQgvfWw_1andishJhDCVElxFB
-    dro2xg_l5r_zyfClj0>
-X-ME-Received: <xmr:EuhPZJ9TjbAB9TFiW3hNZwitHmsXt30ZaYfZ7E6sTpLGPHVD2kA4WhAlGejGBE60L_bBY5wy>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvgedguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdeftddmnecujfgurhephf
-    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepgghlrgguihhmihhrucfp
-    ihhkihhshhhkihhnuceovhhlrgguihhmihhrsehnihhkihhshhhkihhnrdhpfieqnecugg
-    ftrfgrthhtvghrnhepfeefgeefkedugfehkeevffdvleeiudelfedugeevtddvgfehveel
-    ffeffeeiveffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepvhhlrgguihhmihhrsehnihhkihhshhhkihhnrdhpfi
-X-ME-Proxy: <xmx:EuhPZNrgxGLp5IhLoF_FNuD0AhLCZ6h_d5yz0icXx5wIIv5AHeGFjg>
-    <xmx:EuhPZCpdE4HDRRpKc_AnmWwyo90_xhOoDcNE9_jt2fwE1s0D2n0uKA>
-    <xmx:EuhPZDQDkSpO4jH7sMzKUmvPwm810Y4Ok1LA5FvRPvY-WGf0dSn7ug>
-    <xmx:EuhPZH4mywImD_pdqctMl2MGBr-RDkp8HCTFpUjDBhzqxfqeOAziKA>
-Feedback-ID: id3b446c5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 1 May 2023 12:25:50 -0400 (EDT)
-From:   Vladimir Nikishkin <vladimir@nikishkin.pw>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, eng.alaamohamedsoliman.am@gmail.com,
-        gnault@redhat.com, razor@blackwall.org, idosch@nvidia.com,
-        liuhangbin@gmail.com, eyal.birger@gmail.com, jtoppins@redhat.com,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        Vladimir Nikishkin <vladimir@nikishkin.pw>
-Subject: [PATCH net-next v7 2/2] Add tests for vxlan nolocalbypass option.
-Date:   Tue,  2 May 2023 00:25:30 +0800
-Message-Id: <20230501162530.26414-2-vladimir@nikishkin.pw>
-X-Mailer: git-send-email 2.35.7
-In-Reply-To: <20230501162530.26414-1-vladimir@nikishkin.pw>
-References: <20230501162530.26414-1-vladimir@nikishkin.pw>
+        Mon, 1 May 2023 12:30:30 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC69118;
+        Mon,  1 May 2023 09:30:28 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4edb26f762dso3322868e87.3;
+        Mon, 01 May 2023 09:30:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682958626; x=1685550626;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dhyY7qHBH6sqFDpLFZPOfJAsbZ/jh+LoAySlLW5v564=;
+        b=Me/CK+eKkmHcSCfwKpOjXd4tUjZF5/VDgkPHJuAsRU9uwx2iltUZW9V/6Aawql5tij
+         LZkSM4/o1kwDNzBu42ImCSbv1mHZ3yRkQcx1Otv//k1xPBluguCEHQBDqZADbSBlbE1N
+         fTemcboLPfOvYqcPELmHxh6ykoU56XyJW3tCERgrvU/68XxI9NwlJamarm7h2864lSoN
+         rYsR/BzZxO1Po1Vvyp6wGlq4pGrPBB7AOCZgqw2gwo86beakGmupQYM073muOfbooOcu
+         SJGqQKmlXAq9mae/V2FQyOEBxfVyXpm3pCdoBwLOEHwam9zLaf29mo6UgmLOKRHfs5wZ
+         jAlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682958626; x=1685550626;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dhyY7qHBH6sqFDpLFZPOfJAsbZ/jh+LoAySlLW5v564=;
+        b=hyhDUhYgoR+DeGsL/a2H3U4RtCVc91/cf5hZNmbzsrm+bUtw3EMOupkWPWL9WaEK9O
+         9tp3pR/gDcY1sw9FtGkqvkMzHWbAKbJpnmetLkwa1/o/o0b/pRP0bmxNwjJN8hKCFSxy
+         Fr345iONUWJsu3v50JQZ1v4fD4xtOi9ynArIgANRXVGLs8nYZIpCjRX7SkegnJJknDfc
+         a4qRydJOlX4GfmXrCa5Lt8SeCRcf0LWa/TRBm8URoTKhXnm1I+PXHlZ8hgM5Axw9lMlW
+         /ViJGjWvpsg3TpW6LnhT95uIA7Dmx7hV8AhPh9j4GWAnguaBrNRhgPF/5a3urMlPpfUj
+         oL3w==
+X-Gm-Message-State: AC+VfDz5ohYptDSJC/m2oOBsOX/LXiZVbznVy9U2ydLstB3K2+gq4PRj
+        mlxRql3VwlLZeQHXZf1YNSs=
+X-Google-Smtp-Source: ACHHUZ4/2ceDc4pC1aiCJnTvLMRBf39++inShkCIxU+nSVgxHEh5RUZLR3y7ywLuIZVVxCn7yCoR5w==
+X-Received: by 2002:a05:6512:24a:b0:4db:3e56:55c8 with SMTP id b10-20020a056512024a00b004db3e5655c8mr4000247lfo.59.1682958626370;
+        Mon, 01 May 2023 09:30:26 -0700 (PDT)
+Received: from eg ([2a01:799:1727:1d00:bf75:af6:260e:41be])
+        by smtp.gmail.com with ESMTPSA id m19-20020ac24293000000b004edc585d6besm4799556lfh.285.2023.05.01.09.30.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 09:30:25 -0700 (PDT)
+Date:   Mon, 1 May 2023 18:30:24 +0200
+From:   Espen Grindhaug <espen.grindhaug@gmail.com>
+To:     Yonghong Song <yhs@meta.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] libbpf: Improve version handling when attaching uprobe
+Message-ID: <ZE/pIM/z7x+35KQo@eg>
+References: <ZEV/EzOM+TJomP66@eg>
+ <07e05c57-feb7-5482-9c07-eb41f976f9fd@meta.com>
+ <ZErK0M/qAi/VS8U8@eg>
+ <0e7b884a-05c3-83c7-0de1-9bfe14ff77b3@meta.com>
+ <ZE+4Ct7ZMecFy7YV@eg>
+ <533437a4-a76d-96e0-b04a-ab8eb7b5fb7f@meta.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <533437a4-a76d-96e0-b04a-ab8eb7b5fb7f@meta.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add test to make sure that the localbypass option is on by default.
+On Mon, May 01, 2023 at 08:23:35AM -0700, Yonghong Song wrote:
+>
+>
+> On 5/1/23 6:00 AM, Espen Grindhaug wrote:
+> > On Thu, Apr 27, 2023 at 06:19:29PM -0700, Yonghong Song wrote:
+> > >
+> > >
+> > > On 4/27/23 12:19 PM, Espen Grindhaug wrote:
+> > > > On Wed, Apr 26, 2023 at 02:47:27PM -0700, Yonghong Song wrote:
+> > > > >
+> > > > >
+> > > > > On 4/23/23 11:55 AM, Espen Grindhaug wrote:
+> > > > > > This change fixes the handling of versions in elf_find_func_offset.
+> > > > > > In the previous implementation, we incorrectly assumed that the
+> > > > >
+> > > > > Could you give more explanation/example in the commit message
+> > > > > what does 'incorrectly' mean here? In which situations the
+> > > > > current libbpf implementation will not be correct?
+> > > > >
+> > > >
+> > > > How about something like this?
+> > > >
+> > > >
+> > > > libbpf: Improve version handling when attaching uprobe
+> > > >
+> > > > This change fixes the handling of versions in elf_find_func_offset.
+> > > >
+> > > > For example, let's assume we are trying to attach an uprobe to pthread_create in
+> > > > glibc. Prior to this commit, it would fail with an error message saying 'elf:
+> > > > ambiguous match [...]', this is because there are two entries in the symbol
+> > > > table with that name.
+> > > >
+> > > > $ nm -D /lib/x86_64-linux-gnu/libc.so.6 | grep pthread_create
+> > > > 0000000000094cc0 T pthread_create@GLIBC_2.2.5
+> > > > 0000000000094cc0 T pthread_create@@GLIBC_2.34
+> > > >
+> > > > So we go ahead and modify our code to attach to 'pthread_create@@GLIBC_2.34',
+> > > > and this also fails, but this time with the error 'elf: failed to find symbol
+> > > > [...]'. This fails because we incorrectly assumed that the version information
+> > > > would be present in the string found in the string table, but there is only the
+> > > > string 'pthread_create'.
+> > >
+> > > I tried one example with my centos8 libpthread library.
+> > >
+> > > $ llvm-readelf -s /lib64/libc-2.28.so | grep pthread_cond_signal
+> > >      39: 0000000000095f70    43 FUNC    GLOBAL DEFAULT    14
+> > > pthread_cond_signal@@GLIBC_2.3.2
+> > >      40: 0000000000096250    43 FUNC    GLOBAL DEFAULT    14
+> > > pthread_cond_signal@GLIBC_2.2.5
+> > >    3160: 0000000000096250    43 FUNC    LOCAL  DEFAULT    14
+> > > __pthread_cond_signal_2_0
+> > >    3589: 0000000000095f70    43 FUNC    LOCAL  DEFAULT    14
+> > > __pthread_cond_signal
+> > >    5522: 0000000000095f70    43 FUNC    GLOBAL DEFAULT    14
+> > > pthread_cond_signal@@GLIBC_2.3.2
+> > >    5545: 0000000000096250    43 FUNC    GLOBAL DEFAULT    14
+> > > pthread_cond_signal@GLIBC_2.2.5
+> > > $ nm -D /lib64/libc-2.28.so | grep pthread_cond_signal
+> > > 0000000000095f70 T pthread_cond_signal@@GLIBC_2.3.2
+> > > 0000000000096250 T pthread_cond_signal@GLIBC_2.2.5
+> > > $
+> > >
+> > > Note that two pthread_cond_signal functions have different addresses,
+> > > which is expected as they implemented for different versions.
+> > >
+> > > But in your case,
+> > > > $ nm -D /lib/x86_64-linux-gnu/libc.so.6 | grep pthread_create
+> > > > 0000000000094cc0 T pthread_create@GLIBC_2.2.5
+> > > > 0000000000094cc0 T pthread_create@@GLIBC_2.34
+> > >
+> > > Two functions have the same address which is very weird and I suspect
+> > > some issues here at least needs some investigation.
+> > >
+> >
+> > I am no expert on this, but as far as I can tell, this is normal,
+> > although much more common on my Ubuntu machine than my Fedora machine.
+> >
+> > Script to find duplicates:
+> >
+> > nm -D /usr/lib64/libc-2.33.so | awk '
+> > {
+> >      addr = $1;
+> >      symbol = $3;
+> >      sub(/[@].*$/, "", symbol);
+> >
+> >      if (addr == prev_addr && symbol == prev_symbol) {
+> >          if (prev_symbol_printed == 0) {
+> >              print prev_line;
+> >              prev_symbol_printed = 1;
+> >          }
+> >          print;
+> >      } else {
+> >          prev_symbol_printed = 0;
+> >      }
+> >      prev_addr = addr;
+> >      prev_symbol = symbol;
+> >      prev_line = $0;
+> > }'
+> >
+> >
+> > > Second, for the symbol table, the following is ELF encoding,
+> > >
+> > > typedef struct {
+> > >          Elf64_Word      st_name;
+> > >          unsigned char   st_info;
+> > >          unsigned char   st_other;
+> > >          Elf64_Half      st_shndx;
+> > >          Elf64_Addr      st_value;
+> > >          Elf64_Xword     st_size;
+> > > } Elf64_Sym;
+> > >
+> > > where
+> > > st_name
+> > >
+> > >      An index into the object file's symbol string table, which holds the
+> > > character representations of the symbol names. If the value is nonzero, the
+> > > value represents a string table index that gives the symbol name. Otherwise,
+> > > the symbol table entry has no name.
+> > >
+> > > So, the function name (including @..., @@...) should be in string table
+> > > which is the same for the above two pthread_cond_signal symbols.
+> > >
+> > > I think it is worthwhile to debug why in your situation
+> > > pthread_create@GLIBC_2.2.5 and pthread_create@@GLIBC_2.34 do not
+> > > have them in the string table.
+> > >
+> >
+> > I think you are mistaken here; the strings in the strings table don't contain
+> > the version. Take a look at this partial dump of the strings table.
+> >
+> > 	$ readelf -W -p .dynstr /usr/lib64/libc-2.33.so
+> >
+> > 	String dump of section '.dynstr':
+> > 		[     1]  xdrmem_create
+> > 		[     f]  __wctomb_chk
+> > 		[    1c]  getmntent
+> > 		[    26]  __freelocale
+> > 		[    33]  __rawmemchr
+> > 		[    3f]  _IO_vsprintf
+> > 		[    4c]  getutent
+> > 		[    55]  __file_change_detection_for_path
+> > 	(...)
+> > 		[  350e]  memrchr
+> > 		[  3516]  pthread_cond_signal
+> > 		[  352a]  __close
+> > 	(...)
+> > 		[  61b6]  GLIBC_2.2.5
+> > 		[  61c2]  GLIBC_2.2.6
+> > 		[  61ce]  GLIBC_2.3
+> > 		[  61d8]  GLIBC_2.3.2
+> > 		[  61e4]  GLIBC_2.3.3
+> >
+> > As you can see, the strings have no versions, and the version strings
+> > themselves are also in this table as entries at the end of the table.
+>
+> I see you search .dynstr section. Do you think whether we should
+> search .strtab instead since it contains versioned symbols?
+>
 
-Add test to change vxlan localbypass to nolocalbypass and check
-that packets are delivered to userspace.
+I searched .dynstr since my libc files only have that section, but I do see
+your point. If const char *binary_path points to an executable and not an
+.so file, then we would find some versioned symbols in the .strtab section.
+However, since libbpf supports using the .so as binary_path, would we not
+need the functionality to build the complete name regardless?
 
-Signed-off-by: Vladimir Nikishkin <vladimir@nikishkin.pw>
----
- tools/testing/selftests/net/Makefile          |   1 +
- .../selftests/net/test_vxlan_nolocalbypass.sh | 234 ++++++++++++++++++
- 2 files changed, 235 insertions(+)
- create mode 100755 tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
+Adding a check to not build the full name if it already contains an '@' is
+probably a good idea, though.
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index c12df57d5539..7f3ab2a93ed6 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -84,6 +84,7 @@ TEST_GEN_FILES += ip_local_port_range
- TEST_GEN_FILES += bind_wildcard
- TEST_PROGS += test_vxlan_mdb.sh
- TEST_PROGS += test_bridge_neigh_suppress.sh
-+TEST_PROGS += test_vxlan_nolocalbypass.sh
- 
- TEST_FILES := settings
- 
-diff --git a/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh b/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
-new file mode 100755
-index 000000000000..d8e48ab1e7e0
---- /dev/null
-+++ b/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
-@@ -0,0 +1,234 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# This file is testing that the [no]localbypass option for a vxlan device is
-+# working. With the nolocalbypass option, packets to a local destination, which
-+# have no corresponding vxlan in the kernel, will be delivered to userspace, for
-+# any userspace process to process. In this test tcpdump plays the role of such a
-+# process. This is what the test 1 is checking.
-+# The test 2 checks that without the nolocalbypass (which is equivalent to the
-+# localbypass option), the packets do not reach userspace.
-+
-+EXIT_SUCCESS=0
-+EXIT_FAIL=1
-+ksft_skip=4
-+nsuccess=0
-+nfail=0
-+
-+ret=0
-+
-+TESTS="
-+changelink_nolocalbypass_simple
-+"
-+VERBOSE=0
-+PAUSE_ON_FAIL=no
-+PAUSE=no
-+
-+
-+NETNS_NAME=vxlan_nolocalbypass_test
-+
-+################################################################################
-+# Utilities
-+
-+log_test()
-+{
-+	local rc=$1
-+	local expected=$2
-+	local msg="$3"
-+
-+	if [ ${rc} -eq ${expected} ]; then
-+		printf "TEST: %-60s  [ OK ]\n" "${msg}"
-+		nsuccess=$((nsuccess+1))
-+	else
-+		ret=1
-+		nfail=$((nfail+1))
-+		printf "TEST: %-60s  [FAIL]\n" "${msg}"
-+		if [ "$VERBOSE" = "1" ]; then
-+			echo "    rc=$rc, expected $expected"
-+		fi
-+
-+		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-+		echo
-+			echo "hit enter to continue, 'q' to quit"
-+			read a
-+			[ "$a" = "q" ] && exit 1
-+		fi
-+	fi
-+
-+	if [ "${PAUSE}" = "yes" ]; then
-+		echo
-+		echo "hit enter to continue, 'q' to quit"
-+		read a
-+		[ "$a" = "q" ] && exit 1
-+	fi
-+
-+	[ "$VERBOSE" = "1" ] && echo
-+}
-+
-+run_cmd()
-+{
-+	local cmd="$1"
-+	local out
-+	local stderr="2>/dev/null"
-+
-+	if [ "$VERBOSE" = "1" ]; then
-+		printf "COMMAND: $cmd\n"
-+		stderr=
-+	fi
-+
-+	out=$(eval $cmd $stderr)
-+	rc=$?
-+	if [ "$VERBOSE" = "1" -a -n "$out" ]; then
-+		echo "    $out"
-+	fi
-+
-+	return $rc
-+}
-+
-+socat_check_packets()
-+{
-+  echo TODO
-+  exit 1
-+}
-+
-+################################################################################
-+# Setup
-+
-+setup()
-+{
-+  ip netns add "$NETNS_NAME"
-+  ip -n "$NETNS_NAME" link set up lo
-+  ip -n "$NETNS_NAME" addr add 127.0.0.1 dev lo
-+}
-+
-+cleanup()
-+{
-+  ip netns del "$NETNS_NAME"
-+}
-+
-+
-+################################################################################
-+# Tests
-+
-+changelink_nolocalbypass_simple()
-+{
-+  # test 1: by default, packets are dropped
-+
-+  run_cmd "ip -n $NETNS_NAME link add testvxlan0 type vxlan  \
-+     id 100 \
-+     dstport 4789 \
-+     srcport 4789 4790 \
-+     nolearning noproxy"
-+  log_test $? 0 "Create vxlan with localbypass by default"
-+  run_cmd "ip -n $NETNS_NAME link set up dev testvxlan0"
-+  log_test $? 0 "Bring up vxlan device"
-+  run_cmd "bridge -n $NETNS_NAME fdb add 00:00:00:00:00:00 dev testvxlan0 dst 127.0.0.1 port 4792"
-+  log_test $? 0 "Add the most general fdb entry"
-+  run_cmd "ip -n $NETNS_NAME address add 172.16.100.1/24 dev testvxlan0"
-+
-+  local tmp_file="$(mktemp)"
-+  ip netns exec $NETNS_NAME socat UDP4-LISTEN:4792,fork "$tmp_file" &
-+
-+  run_cmd "ip netns exec $NETNS_NAME timeout 3 ping  172.16.100.2"
-+
-+  l_size=$(stat -c '%s' "$tmp_file" | tr -d '\n')
-+  log_test $l_size 0 "    Packets dropped by default."
-+
-+  { kill %% && wait %%; } 2>/dev/null
-+  rm -rf "$tmp_file"
-+  touch "$tmp_file"
-+  # test 2: nolocalbypass works
-+
-+  run_cmd "ip -n $NETNS_NAME link set testvxlan0 type vxlan nolocalbypass"
-+
-+  ip netns exec $NETNS_NAME socat UDP4-LISTEN:4792,fork "$tmp_file" &
-+  sleep 1
-+  run_cmd "ip netns exec $NETNS_NAME timeout 3 ping 172.16.100.2"
-+
-+  l_size=$(stat -c '%s' "$tmp_file" | tr -d '\n')
-+  if [[ "$l_size" != 0 ]] ; then
-+    log_test 1 1 "    Packets dropped by default."
-+  else
-+    log_test 0 1 "    Packets dropped by default."
-+  fi
-+
-+  run_cmd "ip -n $NETNS_NAME link del dev testvxlan0 1>/dev/null 2>&1"
-+
-+  { kill %% && wait %%; } 2>/dev/null
-+  rm -rf "$tmp_file"
-+
-+}
-+
-+################################################################################
-+# Usage
-+
-+usage()
-+{
-+	cat <<EOF
-+usage: ${0##*/} OPTS
-+
-+        -t <test>   Test(s) to run (default: all)
-+                    (options: $TESTS)
-+        -p          Pause on fail
-+        -P          Pause after each test before cleanup
-+        -v          Verbose mode (show commands and output)
-+EOF
-+}
-+
-+################################################################################
-+# Main
-+
-+trap cleanup EXIT
-+
-+while getopts ":t:pPvh" opt; do
-+	case $opt in
-+		t) TESTS=$OPTARG ;;
-+		p) PAUSE_ON_FAIL=yes;;
-+		P) PAUSE=yes;;
-+		v) VERBOSE=$(($VERBOSE + 1));;
-+		h) usage; exit 0;;
-+		*) usage; exit 1;;
-+	esac
-+done
-+
-+# Make sure we don't pause twice.
-+[ "${PAUSE}" = "yes" ] && PAUSE_ON_FAIL=no
-+
-+if [ "$(id -u)" -ne 0 ];then
-+  echo "SKIP: Need root privileges"
-+  exit $ksft_skip;
-+fi
-+
-+if [ ! -x "$(command -v ip)" ]; then
-+  echo "SKIP: Could not run test without ip tool"
-+  exit $ksft_skip
-+fi
-+
-+if [ ! -x "$(command -v bridge)" ]; then
-+  echo "SKIP: Could not run test without bridge tool"
-+  exit $ksft_skip
-+fi
-+if [ ! -x "$(command -v socat)" ]; then
-+  echo "socat command not found. Skipping test"
-+  return 1
-+fi
-+
-+ip link help vxlan 2>&1 | grep -q "localbypass"
-+if [ $? -ne 0 ]; then
-+   echo "SKIP: iproute2 ip too old, missing VXLAN nolocalbypass support"
-+   exit $ksft_skip
-+fi
-+
-+cleanup
-+
-+for t in $TESTS
-+do
-+	setup; $t; cleanup;
-+done
-+
-+if [ "$TESTS" != "none" ]; then
-+	printf "\nTests passed: %3d\n" ${nsuccess}
-+	printf "Tests failed: %3d\n"   ${nfail}
-+fi
-+
-+exit $ret
--- 
-2.35.7
-
---
-Fastmail.
-
+> >
+> > > >
+> > > > This patch reworks how we compare the symbol name provided by the user if it is
+> > > > qualified with a version (using @ or @@). We now look up the correct version
+> > > > string in the version symbol table before constructing the full name, as also
+> > > > done above by nm, before comparing.
+> > > >
+> > > > > > version information would be present in the string found in the
+> > > > > > string table.
+> > > > > >
+> > > > > > We now look up the correct version string in the version symbol
+> > > > > > table before constructing the full name and then comparing.
+> > > > > >
+> > > > > > This patch adds support for both name@version and name@@version to
+> > > > > > match output of the various elf parsers.
+> > > > > >
+> > > > > > Signed-off-by: Espen Grindhaug <espen.grindhaug@gmail.com>
+> > > > >
+> > > > > [...]
