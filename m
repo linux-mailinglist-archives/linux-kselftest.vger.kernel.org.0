@@ -2,81 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698556F2EA7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 May 2023 08:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113FD6F312A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 May 2023 14:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjEAGDm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 May 2023 02:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S232444AbjEAMsr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 May 2023 08:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjEAGDl (ORCPT
+        with ESMTP id S232411AbjEAMsq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 May 2023 02:03:41 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FEE1BE;
-        Sun, 30 Apr 2023 23:03:36 -0700 (PDT)
+        Mon, 1 May 2023 08:48:46 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A779410D1;
+        Mon,  1 May 2023 05:48:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682921016; x=1714457016;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=S3W5/sdp67bPQlCdGUoLMDUvowa9uSAR1wFsESTqj34=;
-  b=IHpoB/ST+ic7R+nH4Kunf1NSOSrEZ7H6CtPRqIEB16pEPlcwH5on2nO2
-   5AJDEcii6z7w6mur/dNws132NbWf2bn+SeuOPTyLJq5ifV4JDTwg0sHsO
-   YYacyLDFPovgjOy3VHEjTFZAJ2hFkuQ+H+7fsW/+n+SSVf5bgcJoVCoku
-   MNw5Nay4pXfHRknRYg+N183wAcSUczwyf2l+ssw8dvmqJsqMH/23uf+sF
-   nrEEN9GMx/lxXX3mH7AK6R06OqTWoA7GBAt6X1xSK0+bMJYrnaKZWNFDN
-   Y1DgFaRIRBMUiFwy7FLGECno6tbW7g2g4MNbsm3wreTsyxo8RaqmWL9cL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="346899546"
-X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
-   d="scan'208";a="346899546"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2023 23:03:35 -0700
+  t=1682945322; x=1714481322;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=B20Ks+9UpHxg++e31H8Mdv64CesHXwHWUYpSQN84wn8=;
+  b=eTfqHr+u8iQQ6nP8jq9Xk2Fg1N0XIBQJwBvjZLPPPFP+Li24t9aBha9w
+   HNl7BZj/CMmPR9M6KExWTzgqJ+FSu+5fBM+uAqyRXEvzsufQVAth+BY9S
+   pLEMJA0CDGrEXElgTZ3TW/kdPVhEMz589/aaQdTK6YrlYqXpEloNYuS/g
+   0O8A0H7CbUDkHGOByy9l+oe9IwNRRhadBf5pM38w4tlQ9Bt6XKI+hj41v
+   omMuym2VXTYqp5BBoYKH71vpcnWHTCva41Ob+BBXWfwYUEweoniatIUkS
+   7VfdXR6HzyKfu407mKjTN182Toxqwu1MbiDcHGwkhqRcgJj3huhjjO+SM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="351094299"
+X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
+   d="scan'208";a="351094299"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 05:48:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="785160284"
-X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
-   d="scan'208";a="785160284"
-Received: from asutfin-mobl.amr.corp.intel.com (HELO [10.212.180.49]) ([10.212.180.49])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2023 23:03:34 -0700
-Message-ID: <dc7228c1-d37b-205a-ba81-3fc709fc51a8@linux.intel.com>
-Date:   Sun, 30 Apr 2023 23:03:33 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/3] virt: tdx-guest: Add Quote generation support
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="760664382"
+X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
+   d="scan'208";a="760664382"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga008.fm.intel.com with ESMTP; 01 May 2023 05:48:41 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 1 May 2023 05:48:40 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 1 May 2023 05:48:40 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 1 May 2023 05:48:40 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.108)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 1 May 2023 05:48:40 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fuUw7mA9xmI7S3Ns3mCZVqRa3+SoV8rYBZjMn0UhhUYv91GVwRgRsSgeWsrGS7NrVbSIBhYHudVxLCgpZn8bCwIdg2sdeoziFAyOE0cTXRedKFJAxLi/IPTFfxzjxTzyAkPJclhYusNxtAOGwImYI3qf0SO+LOUxMAeprwxMeOG11SbJoKg63uARLa9xorR3uM0v9QiR0Uo0o2IpgxGMvlCtOKjbHdQvrZ6fEq3bCnFGCBMUGzqB7bssAV0DlhO1ZXIf+kxP8GC6bsjHRw+nz4bK78USJCs77tXM4541X5TAfVKKUV+OUF1a9W+Rvhc24M9QQLygz6mPyWa6VysB3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B20Ks+9UpHxg++e31H8Mdv64CesHXwHWUYpSQN84wn8=;
+ b=E+0uDf3L2r+VLKajQHyUaDRzMx9BsEjQuxuzDVtTo+mhwKG2mie5/nhk/hw437xY3RXQkslyItketcQ5AOjAYerqVUuelbnxnW0ngyG8oJd142Qy6mVS7tJ/26FtEZn7jUIzePRX6jVGK1RlqCKGpGTWsdAAJmwgzsnnQB2V6XVZs1ufxGFn9nPI4pBD7byJCf6VMwuLF8quVAQcRzENk/8lAP8wRnBlNWxqqSMfZjxe9Nut8PK9YpHVOxr9xZoNqsCaFCYXWe1490sd5nNqOwk/q4jUDEGK0qOl7XJHeoyBcSpjQVI864fHRG1eWH6kjhOIjXMfIAejZNEjJ+ENqw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by PH0PR11MB4789.namprd11.prod.outlook.com (2603:10b6:510:38::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.24; Mon, 1 May
+ 2023 12:48:37 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::3a8a:7ef7:fbaa:19e2]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::3a8a:7ef7:fbaa:19e2%5]) with mapi id 15.20.6340.030; Mon, 1 May 2023
+ 12:48:36 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "corbet@lwn.net" <corbet@lwn.net>, "bp@alien8.de" <bp@alien8.de>,
         "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
         "shuah@kernel.org" <shuah@kernel.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
         "x86@kernel.org" <x86@kernel.org>,
         "mingo@redhat.com" <mingo@redhat.com>
-Cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Yu, Guorui" <guorui.yu@linux.alibaba.com>,
-        "qinkun@apache.org" <qinkun@apache.org>,
+CC:     "Yu, Guorui" <guorui.yu@linux.alibaba.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         "wander@redhat.com" <wander@redhat.com>,
         "hpa@zytor.com" <hpa@zytor.com>,
         "chongc@google.com" <chongc@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
         "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "qinkun@apache.org" <qinkun@apache.org>,
         "Luck, Tony" <tony.luck@intel.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
         "dionnaglaze@google.com" <dionnaglaze@google.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Du, Fan" <fan.du@intel.com>
+        "Du, Fan" <fan.du@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2 2/3] virt: tdx-guest: Add Quote generation support
+Thread-Topic: [PATCH v2 2/3] virt: tdx-guest: Add Quote generation support
+Thread-Index: AQHZbbn4ML2XQOJ7RU6SRFNWYMPkZa9A1PQAgAQ06YCAAHEogA==
+Date:   Mon, 1 May 2023 12:48:36 +0000
+Message-ID: <81c54b8e844d20fe080ddd65458a6036ee22ed33.camel@intel.com>
 References: <20230413034108.1902712-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20230413034108.1902712-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <f33fe0bfb5b6e603bd259942d017076aa5e0015f.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <f33fe0bfb5b6e603bd259942d017076aa5e0015f.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+         <20230413034108.1902712-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <f33fe0bfb5b6e603bd259942d017076aa5e0015f.camel@intel.com>
+         <dc7228c1-d37b-205a-ba81-3fc709fc51a8@linux.intel.com>
+In-Reply-To: <dc7228c1-d37b-205a-ba81-3fc709fc51a8@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|PH0PR11MB4789:EE_
+x-ms-office365-filtering-correlation-id: 722e407d-e0f8-4100-07d8-08db4a426163
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ILtGZaKVx8xrfxyPKUm/arJFB69HOUgKerAbxO9gUJ73bz1XlpSLIKOf5/B66Lwjf5NkbIoJGThrWwgEhp6OEkCRn2mC7PRtlNBC++etn9xJhih1ztIhqVWeAhIiE5Rfm4XoYv6XBCG0UXfbfyPOYLFxc/b69mM0Gnly5F1Ck6kcDDzQ/KMFNnGeOF2zIbur2wVxyM0NSejOrc9MZ7Azhao1MCRxC4EdE9cVly+TPkCO/RLr0Zz3hms54GhLKTjoyBT3U26HOVb76Xnu2ICOEYiEuv69BfR5y6ouuptylNdSOMvFz6S890hhh/lVP+ihhwBTZGOSxc2pbkI79LyaO0HkBN+FZZQi0crX0qtV4K9Ou0p5dfw9kUxu4LNJ+xgj7zifqD4fAaV+JiOopx/TJsZ1KhKk5NoF5bCoQUYuFV40tYLNWcVAXe5yh02sqAzZzyt8iPlbDtB4MyAQN/5n1yyrEj/jYxsJqUKavVoYiz1zuqpAAdIBuaxpU3y/pmyluJEddkADUNdAT/vl9oC2SGd2wudzELZWrg5/dFGVgnMBsj4q7NNmTFhNe40AVzyqmXqHremNkno8I8OMrG/JBd+IuEKPG/yuSuJ7ihNGrAUcLXexdir1nuQ8Lm9gS6bE
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(136003)(376002)(39860400002)(346002)(451199021)(71200400001)(4326008)(91956017)(66446008)(64756008)(66946007)(110136005)(76116006)(478600001)(66476007)(54906003)(8936002)(7416002)(8676002)(82960400001)(316002)(5660300002)(41300700001)(122000001)(38100700002)(66556008)(186003)(2616005)(53546011)(83380400001)(6486002)(26005)(6506007)(6512007)(86362001)(36756003)(2906002)(30864003)(38070700005)(579004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aGphbjBza0VRS1JzSjI2N0QrdEM4U0U2ZmErTE9yNnErSEM3VEZncFhEYzN6?=
+ =?utf-8?B?VmplVHI1WGVncWJFVmRRSVdGeFdnSjhMNjVocnBVZnhJd3FtaUpONnRHeHp6?=
+ =?utf-8?B?SjhOR1lDUHFpaVBHb3A1eC9Qb3lXdmNwcDExMGJSK1lzSTRMR2lhUVhMQkVm?=
+ =?utf-8?B?RTZaTzlkbkxITUE2djYyT1BDUWNudlV6YTZwdU1TT0ZyUWJLVFRJeDhvU1dD?=
+ =?utf-8?B?YUR0QkFESGR2QStzNUxYcW12NzlrdXZuaHlDY2VaVkNQSGpjY0dmZTh2UTQr?=
+ =?utf-8?B?UGpnOFRlWkszUjYzOTAwaHRtcFExSzVnd2hDc042ei95c2Jtd0Fpd0ppNmVR?=
+ =?utf-8?B?dDF6cTE4K3YzSzRFYzdoUmpKWE1HNTVIUkJZY0FvK2NqKzBlZVp6cW14VWhR?=
+ =?utf-8?B?aC9uMjBPTENUc0tGL3g3RFNnSDhkTS9PNlB2MlNqWFhaUTIxRDFWZVYrMVRs?=
+ =?utf-8?B?QkNXZEtwWEk4QTB0b0hYMVFXRkQ2Qit1dVluaEtiZ2k2NVdFT2dSYUc1d3Ja?=
+ =?utf-8?B?aTgzc3pldDVEK2FCRVBkb0pYRlB4c0R0Skd3bzlpZElkNnA1azRueng4K2U1?=
+ =?utf-8?B?WUx6R3J0V0JKNGZzUnpFSkUxdmVxTHFKc0xOcmdqU0M2RFNsWGJRcXpQRWZW?=
+ =?utf-8?B?a2l0aXdnWmpwalFpT0dYb0xHL1FDNXM1UUU2RzB2SUxBZmFoRW1Eek1UNmtw?=
+ =?utf-8?B?cXppUWxwM0ltNkl4RWpuL3BKMGtYSzNlcEdETzdGMWZYV0ZIQkRydEhwdzJX?=
+ =?utf-8?B?d0dlTWI4dXBpWDhHV254YTd6NFF3UVpYVFIwSkxKQVVmT25pREE2b1hndzlV?=
+ =?utf-8?B?V1lGUVR6dGlMdzM0ZHZHZHo1RUpBd1YzaThvMmpOM0MwTXlwdlJyaXNIT3B0?=
+ =?utf-8?B?UklMMS9PWEtHM3dIVUFvYU13VmVzSkpLTG5xN1RPUXdqR3BVclVlT25FdUxV?=
+ =?utf-8?B?eThKNmtYZEE5VkNtVFROM2U3emExamdtQUdYMFBEdC9mRGNZaWhEeDMxNjVz?=
+ =?utf-8?B?RFJ1UDhCR0Vab1BUMnhRWFRrVkFCUUZndmE3ZkkxTUNkWGNkOUhEWVJiTmYr?=
+ =?utf-8?B?WlhSTXhCMEFPdE52WFVYMTc4ekdiSzVSTHJmVzkvN0kzQUhKcnlScHcyUFlD?=
+ =?utf-8?B?UEliUDFVSnAwZmZFbXJyYUNZWS9WOVZCZ0kvL0ZOaTAzV1VZOS9EQjViOVFX?=
+ =?utf-8?B?bDVYekVBY0thbWEzTzcxZHpSeDIxc2QrRTFrVGlvTGo4Y2FRTVMwZno2TnNM?=
+ =?utf-8?B?M0dabm80eGZIZ2ZZOThxZjBpbEI4dUtkNnhORTVZYVhlaDE1RE1rK3RxdGRa?=
+ =?utf-8?B?L3JNeTlBcHQ5OGp3NGlxZUpVYk82S04xcTFHYUxoMnRyUy9NbXB2VWxtdVph?=
+ =?utf-8?B?RlNBRWRhQXk3S2tnOWRWTXQ4VmZoWDNuei9iS01ya3hDNndYL2twVzU2bit4?=
+ =?utf-8?B?U2ZveXc2YmgwMTg2VzhKRFZuT0hXMEQvZktEMDJKUlpqc0xicENrVDIvK2Fz?=
+ =?utf-8?B?T3lGTndHcDlxSEovbUw2amIwdWF3STU1ZUdHaU51K3Fvd3R0THJiT29tL2xx?=
+ =?utf-8?B?YzNuZklRVENJekNNUzFobU9FTk1mYjUvellZZ2ZOY2NWaUNHa1laUnlyeGNR?=
+ =?utf-8?B?Qm5xRU50U0JhY2dsS2tMaFFueWJTZitUaEk4R1ZxRWxDdlkrVEs0OWFBN3d6?=
+ =?utf-8?B?N3N2aGJhL1R6NTJFVFlHTDNpQzFiaVMwZ0MvNzdyT3poUml1RlNpdmErWndo?=
+ =?utf-8?B?dFZITTBlSkZ3a0N5Y3ZrT05aZXFSdHBzR0dhdmJ0VXd2RTFmUndkNWNXc2lv?=
+ =?utf-8?B?SUxXUGQ5MjNabHQyZ3hqa3FrcTg2ZjdqK20rOEpjYjV4N09qYjFKbGcrU3BG?=
+ =?utf-8?B?Z1JaRHE4TUZxSW5UdFFyYjhKNW5jb2cxRXBmVk41VFlBKytmWThIYlFFY1cz?=
+ =?utf-8?B?RlRKV1VUY2xRMm1mcXJOM2ZjZmZEdVM4WjZBWXc1S1pTTFFXYzRISDV6QXFo?=
+ =?utf-8?B?UzU3UERuMGF2UUtaWStGb1ArdExlQWRjZjdRSHNURHU5b0dQcUV2Qm9ocEUy?=
+ =?utf-8?B?cld6TGtQWVAwM25lZmx1Ulp0YTBhUlJrZ1dLcW55RzJjWm5JK1ZGbWlmVkMw?=
+ =?utf-8?Q?x888HW8gRIGp8D9yoDPM/ks9x?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <10542925F79D5949AE24DC8C884F02BD@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 722e407d-e0f8-4100-07d8-08db4a426163
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 May 2023 12:48:36.4714
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1psPSqVvwNu0NFuae0JGb54Se2+KoYcgfwn9rnDf2ZijBZrOF4Bgfrzgf+bKWFFm7wZDdhti5sC5vkb/tbSkWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4789
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,668 +185,402 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Kai,
-
-On 4/28/23 6:49 AM, Huang, Kai wrote:
-> On Wed, 2023-04-12 at 20:41 -0700, Kuppuswamy Sathyanarayanan wrote:
->> In TDX guest, the second stage in attestation process is to send the
->> TDREPORT to QE/QGS to generate the TD Quote. For platforms that does
->> not support communication channels like vsock or TCP/IP, implement
->> support to get TD Quote using hypercall. GetQuote hypercall can be used
->> by the TD guest to request VMM facilitate the Quote generation via
->> QE/QGS. More details about GetQuote hypercall can be found in TDX
->> Guest-Host Communication Interface (GHCI) for Intel TDX 1.0, section
->> titled "TDG.VP.VMCALL<GetQuote>".
-> 
-> When this patch gets merged, the patch to get the TDREPORT would be long before
-> this patch.  To help the git blamers to understand more easily, I think it's
-> better to provide some background here.
-> 
-> FYI below:
-> 
-> "
-> In TDX attestation, the TDREPORT of a TDX guest contains information to uniquely
-> identify the TDX guest along with the TEE environment of the local machine. 
-> TDREPORT is integrity-protected and can only be verified on the local machine.  
-> 
-> To support TDX remote attestation, in SGX-based attestation, after the TDX guest
-> gets the TDREPORT from the TDX module, the TDREPORT needs to be sent to the SGX
-> Quoting Enclave (QE) to convert it to a remote verifiable Quote.
-> 
-> SGX QE can only run outside of the TDX guest (i.e. in a host process or in a
-> normal VM).  For security concern the TDX guest may not support normal
-> communication channels like vsock or TCP/IP.  To support remote attestation for
-> such case, TDX uses GetQuote TDVMCALL to ask the host VMM to communicate with
-> the SGX QE.  More details about GetQuote TDVMCALL can be found in ...
-> "
-> 
-
-Ok. I will add some introduction to the commit log.
-
->>
->> Add support for TDX_CMD_GET_QUOTE IOCTL to allow attestation agent
->> submit GetQuote requests from the user space using GetQuote hypercall.
->>
->> Since GetQuote is an asynchronous request hypercall, VMM will use
->> callback interrupt vector configured by SetupEventNotifyInterrupt
->> hypercall to notify the guest about Quote generation completion or
->> failure. So register an IRQ handler for it.
->>
->> GetQuote TDVMCALL requires TD guest pass a 4K aligned shared buffer
->> with TDREPORT data as input, which is further used by the VMM to copy
->> the TD Quote result after successful Quote generation. To create the
->> shared buffer, allocate the required memory using alloc_pages() and
->> mark it shared using set_memory_decrypted() in tdx_guest_init(). 
->>
-> 
-> Personally I think you don't need to mention "using alloc_pages() ... 
-> set_memory_decrypted()" staff.  They belong to details and the code can tell.
-> 
->> This
->> buffer will be re-used for GetQuote requests in TDX_CMD_GET_QUOTE
->> IOCTL handler.
-> 
-> Besides the "re-used" part, I think it's better to explain the rational of
-> choosing a fixed 16K (4 pages) shared buffer.  For instance, in practice in
-> Intel's SGX QE implementation a Quote is less than 8K, and 16K should be big
-> enough in the foreseeable future even considering 3rd party's own
-> implementation.
-
-I will add it part of the comment in the code.
-
-> 
-> Also, I guess it's better to call out somewhere currently we don't support
-> multiple GetQuote in parallel because of <xxx>, so allocating a single shared
-> buffer at early time is OK.
-
-
-> 
->>
->> Although this method will reserve a fixed chunk of memory for
->> GetQuote requests during the init time, it is preferable to the
->> alternative choice of allocating/freeing the shared buffer in the
->> TDX_CMD_GET_QUOTE IOCTL handler, which will damage the direct map.
->>
-
-Updated commit log looks like below:
-
-    In TDX guest, the attestation process is used to verify the TDX guest
-    trustworthiness to other entities before provisioning secrets to the
-    guest. The First step in the attestation process is TDREPORT
-    generation, which involves getting the guest measurement data in the
-    format of TDREPORT, which is further used to validate the authenticity
-    of the TDX guest. TDREPORT by design is integrity-protected and can
-    only be verified on the local machine.
-    
-    To support remote verification of the TDREPORT (in a SGX-based
-    attestation), the TDREPORT needs to be sent to the SGX Quoting Enclave
-    (QE) to convert it to a remote verifiable Quote. SGX QE by design can
-    only run outside of the TDX guest (i.e. in a host process or in a
-    normal VM) and the guest can use communication channels like vsock or
-    TCP/IP to send the TDREPORT to the QE. But for security concerns, some
-    platforms may not support these communication channels. To handle such
-    cases, TDX defines a GetQuote hypercall which can be used by the guest
-    to request the host VMM to communicate with the SGX QE. More details
-    about GetQuote hypercall can be found in TDX Guest-Host Communication
-    Interface (GHCI) for Intel TDX 1.0, section titled
-    "TDG.VP.VMCALL<GetQuote>".
-    
-    Add support for TDX_CMD_GET_QUOTE IOCTL to allow an attestation agent
-    to submit GetQuote requests from the user space using GetQuote
-    hypercall.
-    
-    Since GetQuote is an asynchronous request hypercall, VMM will use the
-    callback interrupt vector configured by the SetupEventNotifyInterrupt
-    hypercall to notify the guest about Quote generation completion or
-    failure. So register an IRQ handler for it.
-    
-    GetQuote TDVMCALL requires TD guest pass a 4K aligned shared buffer
-    with TDREPORT data as input, which is further used by the VMM to copy
-    the TD Quote result after successful Quote generation. Allocate the
-    required shared memory once in tdx_guest_init() and reuse it in the
-    TDX_CMD_GET_QUOTE IOCTL handler for GetQuote requests.
-    
-    Although this method reserves a fixed chunk of memory for GetQuote
-    requests, such one-time allocation is preferable to the alternative
-    choice of repeatedly allocating/freeing the shared buffer in the
-    TDX_CMD_GET_QUOTE IOCTL handler, which will damage the direct map
-    (because the sharing/unsharing process modifies the direct map). This
-    allocation model is similar to that used by the AMD SEV guest driver.
-    
-    Since the Quote generation process is not time-critical or frequently
-    used, the current version do not support parallel GetQuote requests.
-
-
-
->> Reviewed-by: Tony Luck <tony.luck@intel.com>
->> Reviewed-by: Andi Kleen <ak@linux.intel.com>
->> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
->> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
->> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
->> ---
->>
->> Changes since v1:
->>  * Removed platform bus device support.
->>  * Instead of allocating the shared buffers using DMA APIs in IOCTL
->>    handler, allocated it once in tdx_guest_init() and re-used it in
->>    GetQuote IOCTL handler.
->>  * To simplify the design, removed the support for parallel GetQuote
->>    requests. It can be added when there is a real requirement for it.
->>  * Fixed commit log and comments to reflect the latest changes.
->>
->>  Documentation/virt/coco/tdx-guest.rst   |  11 ++
->>  arch/x86/coco/tdx/tdx.c                 |  40 ++++++
->>  arch/x86/include/asm/tdx.h              |   2 +
->>  drivers/virt/coco/tdx-guest/tdx-guest.c | 168 +++++++++++++++++++++++-
->>  include/uapi/linux/tdx-guest.h          |  43 ++++++
->>  5 files changed, 263 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/virt/coco/tdx-guest.rst b/Documentation/virt/coco/tdx-guest.rst
->> index 46e316db6bb4..54601dcd5864 100644
->> --- a/Documentation/virt/coco/tdx-guest.rst
->> +++ b/Documentation/virt/coco/tdx-guest.rst
->> @@ -42,6 +42,17 @@ ABI. However, in the future, if the TDX Module supports more than one subtype,
->>  a new IOCTL CMD will be created to handle it. To keep the IOCTL naming
->>  consistent, a subtype index is added as part of the IOCTL CMD.
->>  
->> +2.2 TDX_CMD_GET_QUOTE
->> +----------------------
->> +
->> +:Input parameters: struct tdx_quote_req
->> +:Output: Return 0 on success, -EIO on TDCALL failure or standard error number
->> +         on common failures. Upon successful execution, QUOTE data is copied
->> +         to tdx_quote_req.buf.
->> +
->> +The TDX_CMD_GET_QUOTE IOCTL can be used by attestation software to generate
->> +QUOTE for the given TDREPORT using TDG.VP.VMCALL<GetQuote> hypercall.
-> 
-> Here QUOTE is used, but I see 'Quote' is used in changelog and the code as well,
-> perhaps we need to make sure the consistency.
-
-I will use "Quote" uniformly.
-
-> 
->> +
->>  Reference
->>  ---------
->>  
->> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
->> index 26f6e2eaf5c8..09b5925eec67 100644
->> --- a/arch/x86/coco/tdx/tdx.c
->> +++ b/arch/x86/coco/tdx/tdx.c
->> @@ -33,6 +33,7 @@
->>  #define TDVMCALL_MAP_GPA		0x10001
->>  #define TDVMCALL_REPORT_FATAL_ERROR	0x10003
->>  #define TDVMCALL_SETUP_NOTIFY_INTR	0x10004
->> +#define TDVMCALL_GET_QUOTE		0x10002
->>  
->>  /* MMIO direction */
->>  #define EPT_READ	0
->> @@ -198,6 +199,45 @@ static void __noreturn tdx_panic(const char *msg)
->>  		__tdx_hypercall(&args, 0);
->>  }
->>  
->> +/**
->> + * tdx_hcall_get_quote() - Wrapper to request TD Quote using GetQuote
->> + *                         hypercall.
->> + * @tdquote: Address of the direct mapped shared kernel buffer which
->> + * 	     contains TDREPORT data. The same buffer will be used by
->> + * 	     VMM to store the generated TD Quote output.
->> + * @size: size of the tdquote buffer.
->> + *
->> + * Refer to section titled "TDG.VP.VMCALL<GetQuote>" in the TDX GHCI
->> + * v1.0 specification for more information on GetQuote hypercall.
->> + * It is used in the TDX guest driver module to get the TD Quote.
->> + *
->> + * Return 0 on success or error code on failure.
->> + */
->> +int tdx_hcall_get_quote(u8 *tdquote, size_t size)
->> +{
->> +	struct tdx_hypercall_args args = {0};
->> +
->> +	/*
->> +	 * TDX guest driver is the only user of this function and it uses
->> +	 * the kernel mapped memory. So use virt_to_phys() to get the
->> +	 * physical address of the TDQuote buffer without any additional
->> +	 * checks for memory type.
->> +	 */
-> 
-> How about just call out this function requires the buffer must be shared in kdoc
-> style comment above this function?  We should just focus on what this function
-> is doing.
-
-It was suggested in the previous review to add it. A comment about why using
-virt_to_phys() is fine here. 
-
-> 
->> +	args.r10 = TDX_HYPERCALL_STANDARD;
->> +	args.r11 = TDVMCALL_GET_QUOTE;
->> +	args.r12 = cc_mkdec(virt_to_phys(tdquote));
->> +	args.r13 = size;
->> +
->> +	/*
->> +	 * Pass the physical address of TDREPORT to the VMM and
->> +	 * trigger the Quote generation. It is not a blocking
->> +	 * call, hence completion of this request will be notified to
->> +	 * the TD guest via a callback interrupt.
->> +	 */
->> +	return __tdx_hypercall(&args, 0);
->> +}
->> +EXPORT_SYMBOL_GPL(tdx_hcall_get_quote);
->> +
->>  static void tdx_parse_tdinfo(u64 *cc_mask)
->>  {
->>  	struct tdx_module_output out;
->> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
->> index 8807fe1b1f3f..a72bd7b96564 100644
->> --- a/arch/x86/include/asm/tdx.h
->> +++ b/arch/x86/include/asm/tdx.h
->> @@ -75,6 +75,8 @@ int tdx_register_event_irq_cb(tdx_event_irq_cb_t handler, void *data);
->>  
->>  int tdx_unregister_event_irq_cb(tdx_event_irq_cb_t handler, void *data);
->>  
->> +int tdx_hcall_get_quote(u8 *tdquote, size_t size);
->> +
->>  #else
->>  
->>  static inline void tdx_early_init(void) { };
->> diff --git a/drivers/virt/coco/tdx-guest/tdx-guest.c b/drivers/virt/coco/tdx-guest/tdx-guest.c
->> index 5e44a0fa69bd..a275d6b55f33 100644
->> --- a/drivers/virt/coco/tdx-guest/tdx-guest.c
->> +++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
->> @@ -12,12 +12,105 @@
->>  #include <linux/mod_devicetable.h>
->>  #include <linux/string.h>
->>  #include <linux/uaccess.h>
->> +#include <linux/set_memory.h>
->>  
->>  #include <uapi/linux/tdx-guest.h>
->>  
->>  #include <asm/cpu_device_id.h>
->>  #include <asm/tdx.h>
->>  
->> +#define GET_QUOTE_MAX_SIZE		(4 * PAGE_SIZE)
-> 
-> A comment to explain why this particular size is chosen would be helpful.
-
-/*
- * Intel's SGX QE implementation generally uses Quote size less than 8K; Use
- * 16K as MAX size to handle future updates and other 3rd party implementations.
- */
-
-> 
->> +
->> +/**
->> + * struct quote_entry - Quote request struct
->> + * @valid: Flag to check validity of the GetQuote request.
->> + * @buf: Kernel buffer to share data with VMM (size is page aligned).
->> + * @buf_len: Size of the buf in bytes.
->> + * @compl: Completion object to track completion of GetQuote request.
->> + */
->> +struct quote_entry {
->> +	bool valid;
->> +	void *buf;
->> +	size_t buf_len;
->> +	struct completion compl;
->> +};
-> 
-> We have a static global @qentry below.
-> 
-> The buffer size is a fixed size (16K), why do we need @buf_len here?
-
-I have added it to support buf length changes in future (like adding a
-command line option to allow user change the GET_QUOTE_MAX_SIZE).  Also,
-IMO, using buf_len is more readable than just using GET_QUOTE_MAX_SIZE
-macro in all places.
-
-> 
-> And why do we need @valid?  It seems ...
-
-As a precaution against spurious event notification. I also believe that in
-the future, event notification IRQs may be used for other purposes such as
-vTPM or other TDVMCALL services, and that this handler may be triggered
-without a valid GetQuote request. So, before we process the IRQ, I want to
-make sure we have a valid buffer.
-
-> 
->> +
->> +/* Quote data entry */
->> +static struct quote_entry *qentry;
->> +
->> +/* Lock to streamline quote requests */
->> +static DEFINE_MUTEX(quote_lock);
->> +
->> +static int quote_cb_handler(void *dev_id)
->> +{
->> +	struct quote_entry *entry = dev_id;
->> +	struct tdx_quote_hdr *quote_hdr = entry->buf;
->> +
->> +	if (entry->valid && quote_hdr->status != GET_QUOTE_IN_FLIGHT)
->> +		complete(&entry->compl);
-> 
-> ... this handler is only called when we have received the notification from the
-> VMM, so the VMM must have already put something into the buffer, meaning the
-> buffer is already valid.
-> 
-> Could you explain why do we need @valid?
-> 
-> That being said, to me I found the 'struct quote_entry' itself is quite
-> unnecessary.  It looks like a leftover that you didn't remove when changing from
-> supporting multiple GetQuote requests in parallel to only supporting one request
-> at one time.
-
-I don't want to use multiple global values. So I have bundled all Quote related
-book keeping (completion object or buffer pointer) in the same struct.
-
-> 
->> +
->> +	return 0;
->> +}
->> +
->> +static void free_shared_pages(void *buf, size_t len)
->> +{
->> +	unsigned int count = PAGE_ALIGN(len) >> PAGE_SHIFT;
->> +
->> +	if (!buf)
->> +		return;
-> 
-> Looks like a NULL @buf cannot happen.  Use WARN_ON_ONCE()?
-
-Since the buf cannot be NULL as per current implementation,
-I can remove it.
-
-> 
->> +
->> +	set_memory_encrypted((unsigned long)buf, count);
->> +
->> +	__free_pages(virt_to_page(buf), get_order(len));
->> +}
->> +
->> +static void *alloc_shared_pages(size_t len)
->> +{
->> +	unsigned int count = PAGE_ALIGN(len) >> PAGE_SHIFT;
->> +	struct page *page;
->> +	int ret;
->> +
->> +	page = alloc_pages(GFP_KERNEL, get_order(len));
->> +	if (!page)
->> +		return NULL;
->> +
->> +	ret = set_memory_decrypted((unsigned long)page_address(page), count);
->> +	if (ret) {
->> +		__free_pages(page, get_order(len));
->> +		return NULL;
->> +	}
->> +
->> +	return page_address(page);
->> +}
-> 
-> I think you can use alloc_pages_exact():
-> 
-> 1) For 4 pages it doesn't matter, but in case in the future we want a non-power-
-> of-2 size alloc_pages_exact() can save some memory.
-> 
-> 2) It gives you a kernel virtual address directly, so you can save the
-> page_address() call above.
-
-Ok makes sense. I will use alloc_pages_exact()/free_pages_exact().
-
-> 
->> +
->> +static struct quote_entry *alloc_quote_entry(size_t len)
->> +{
->> +	struct quote_entry *entry = NULL;
->> +	size_t new_len = PAGE_ALIGN(len);
-> 
-> I don't think you need @new_len, because anyway alloc_shared_pages() will
-> allocate enough space if you just pass @len?
-> 
->> +
->> +	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
->> +	if (!entry)
->> +		return NULL;
->> +
->> +	entry->buf = alloc_shared_pages(new_len);
->> +	if (!entry->buf) {
->> +		kfree(entry);
->> +		return NULL;
->> +	}
->> +
->> +	entry->buf_len = new_len;
->> +	init_completion(&entry->compl);
->> +	entry->valid = false;
->> +
->> +	return entry;
->> +}
->> +
->> +static void free_quote_entry(struct quote_entry *entry)
->> +{
->> +	free_shared_pages(entry->buf, entry->buf_len);
->> +	kfree(entry);
->> +}
->> +
->>  static long tdx_get_report0(struct tdx_report_req __user *req)
->>  {
->>  	u8 *reportdata, *tdreport;
->> @@ -53,12 +146,59 @@ static long tdx_get_report0(struct tdx_report_req __user *req)
->>  	return ret;
->>  }
->>  
->> +static long tdx_get_quote(struct tdx_quote_req __user *ureq)
->> +{
->> +	struct tdx_quote_req req;
->> +	long ret;
->> +
->> +	if (copy_from_user(&req, ureq, sizeof(req)))
->> +		return -EFAULT;
->> +
->> +	mutex_lock(&quote_lock);
->> +
->> +	if (!req.len || req.len > qentry->buf_len) {
->> +		ret = -EINVAL;
->> +		goto quote_failed;
->> +	}
->> +
->> +	if (copy_from_user(qentry->buf, (void __user *)req.buf, req.len)) {
->> +		ret = -EFAULT;
->> +		goto quote_failed;
->> +	}
->> +
->> +	qentry->valid = true;
->> +
->> +	reinit_completion(&qentry->compl);
->> +
->> +	/* Submit GetQuote Request using GetQuote hypercall */
->> +	ret = tdx_hcall_get_quote(qentry->buf, qentry->buf_len);
->> +	if (ret) {
->> +		pr_err("GetQuote hypercall failed, status:%lx\n", ret);
->> +		ret = -EIO;
->> +		goto quote_failed;
->> +	}
->> +
->> +	/* Wait till GetQuote completion */
->> +	wait_for_completion(&qentry->compl);
-> 
-> Non-killable wait w/o timeout worries me a little bit, because it can wait
-> forever if VMM also couldn't get the Quote for whatever reason  and doesn't have
-> it's own timeout.  Unfortunately the GHCI doesn't put any requirement to the VMM
-> on this, so we kinda depend on the VMM.
-> 
-> Perhaps for now it's OK to have this simple implementation, but looks we should
-> at least call out the risk in the comment.
-
-How about the following comment?
-
-/*
- * Since TDX GHCI specification does not define a valid timeout for GetQuote
- * requests, wait until VMM sends the completion notification. Note that there
- * is a risk that this wait can be infinite.
- */
-
-> 
->> +
->> +	if (copy_to_user((void __user *)req.buf, qentry->buf, req.len))
->> +		ret = -EFAULT;
->> +
->> +quote_failed:
->> +	qentry->valid = false;
->> +	mutex_unlock(&quote_lock);
->> +
->> +	return ret;
->> +}
->> +
->>  static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
->>  			    unsigned long arg)
->>  {
->>  	switch (cmd) {
->>  	case TDX_CMD_GET_REPORT0:
->>  		return tdx_get_report0((struct tdx_report_req __user *)arg);
->> +	case TDX_CMD_GET_QUOTE:
->> +		return tdx_get_quote((struct tdx_quote_req *)arg);
->>  	default:
->>  		return -ENOTTY;
->>  	}
->> @@ -84,15 +224,41 @@ MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
->>  
->>  static int __init tdx_guest_init(void)
->>  {
->> +	int ret;
->> +
->>  	if (!x86_match_cpu(tdx_guest_ids))
->>  		return -ENODEV;
->>  
->> -	return misc_register(&tdx_misc_dev);
->> +	ret = misc_register(&tdx_misc_dev);
->> +	if (ret)
->> +		return ret;
->> +
->> +	qentry = alloc_quote_entry(GET_QUOTE_MAX_SIZE);
->> +	if (!qentry) {
->> +		pr_err("Quote entry allocation failed\n");
-> 
-> This is a rather confusing message from user's perspective.  The result of this
-> error isn't clear from  this message.  I think we should have clear message ...
-
-I will remove it.
-
-> 
->> +		ret = -ENOMEM;
->> +		goto free_misc;
->> +	}
->> +
->> +	ret = tdx_register_event_irq_cb(quote_cb_handler, qentry);
->> +	if (ret)
->> +		goto free_quote;
->> +
->> +	return 0;
->> +
->> +free_quote:
->> +	free_quote_entry(qentry);
->> +free_misc:
->> +	misc_deregister(&tdx_misc_dev);
-> 
-> ... here saying something like "Attestation is not available" so user can be
-> clear about this.
-> 
->> +
->> +	return ret;
->>  }
->>  module_init(tdx_guest_init);
->>  
->>  static void __exit tdx_guest_exit(void)
->>  {
->> +	tdx_unregister_event_irq_cb(quote_cb_handler, qentry);
->> +	free_quote_entry(qentry);
->>  	misc_deregister(&tdx_misc_dev);
->>  }
->>  module_exit(tdx_guest_exit);
->> diff --git a/include/uapi/linux/tdx-guest.h b/include/uapi/linux/tdx-guest.h
->> index a6a2098c08ff..500cdfa025ad 100644
->> --- a/include/uapi/linux/tdx-guest.h
->> +++ b/include/uapi/linux/tdx-guest.h
->> @@ -17,6 +17,12 @@
->>  /* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
->>  #define TDX_REPORT_LEN                  1024
->>  
->> +/* TD Quote status codes */
->> +#define GET_QUOTE_SUCCESS               0
->> +#define GET_QUOTE_IN_FLIGHT             0xffffffffffffffff
->> +#define GET_QUOTE_ERROR                 0x8000000000000000
->> +#define GET_QUOTE_SERVICE_UNAVAILABLE   0x8000000000000001
->> +
->>  /**
->>   * struct tdx_report_req - Request struct for TDX_CMD_GET_REPORT0 IOCTL.
->>   *
->> @@ -30,6 +36,35 @@ struct tdx_report_req {
->>  	__u8 tdreport[TDX_REPORT_LEN];
->>  };
->>  
->> +/* struct tdx_quote_hdr: Format of Quote request buffer header.
->> + * @version: Quote format version, filled by TD.
->> + * @status: Status code of Quote request, filled by VMM.
->> + * @in_len: Length of TDREPORT, filled by TD.
->> + * @out_len: Length of Quote data, filled by VMM.
->> + * @data: Quote data on output or TDREPORT on input.
->> + *
->> + * More details of Quote data header can be found in TDX
->> + * Guest-Host Communication Interface (GHCI) for Intel TDX 1.0,
->> + * section titled "TDG.VP.VMCALL<GetQuote>"
->> + */
->> +struct tdx_quote_hdr {
->> +	__u64 version;
->> +	__u64 status;
->> +	__u32 in_len;
->> +	__u32 out_len;
->> +	__u64 data[];
->> +};
-> 
-> This structure is weird.  It's a header, but it contains the dynamic-size
-> buffer.  If you have __data[] in this structure, then it is already a buffer for
-> the entire Quote, no?  Then should we just call it 'struct tdx_quote'?
-> 
-> Or do you want to remove __data[]?
-
-I can name it as struct tdx_quote_data
-
-> 
->> +
->> +/* struct tdx_quote_req: Request struct for TDX_CMD_GET_QUOTE IOCTL.
->> + * @buf: Address of user buffer that includes TDREPORT. Upon successful
->> + *	 completion of IOCTL, output is copied back to the same buffer.
-> 
-> This description isn't precise.  "user buffer that includes TDREPORT" doesn't
-> tell application writer where to put the TDREPORT at all.  We need to explicitly
-> call out the buffer starts with 'tdx_quote_hdr' followed by TDREPORT
-> immediately.
-
-I have specified it in struct tdx_quote_hdr.data help content.
-
->  
->> + * @len: Length of the Quote buffer.
->> + */
->> +struct tdx_quote_req {
->> +	__u64 buf;
->> +	__u64 len;
->> +};
->> +
->>  /*
->>   * TDX_CMD_GET_REPORT0 - Get TDREPORT0 (a.k.a. TDREPORT subtype 0) using
->>   *                       TDCALL[TDG.MR.REPORT]
->> @@ -39,4 +74,12 @@ struct tdx_report_req {
->>   */
->>  #define TDX_CMD_GET_REPORT0              _IOWR('T', 1, struct tdx_report_req)
->>  
->> +/*
->> + * TDX_CMD_GET_QUOTE - Get TD Guest Quote from QE/QGS using GetQuote
->> + *		       TDVMCALL.
->> + *
->> + * Returns 0 on success or standard errno on other failures.
->> + */
->> +#define TDX_CMD_GET_QUOTE		_IOR('T', 2, struct tdx_quote_req)
->> +
->>  #endif /* _UAPI_LINUX_TDX_GUEST_H_ */
-> 
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+T24gU3VuLCAyMDIzLTA0LTMwIGF0IDIzOjAzIC0wNzAwLCBTYXRoeWFuYXJheWFuYW4gS3VwcHVz
+d2FteSB3cm90ZToNCj4gSGkgS2FpLA0KPiANCj4gT24gNC8yOC8yMyA2OjQ5IEFNLCBIdWFuZywg
+S2FpIHdyb3RlOg0KPiA+IE9uIFdlZCwgMjAyMy0wNC0xMiBhdCAyMDo0MSAtMDcwMCwgS3VwcHVz
+d2FteSBTYXRoeWFuYXJheWFuYW4gd3JvdGU6DQo+ID4gPiBJbiBURFggZ3Vlc3QsIHRoZSBzZWNv
+bmQgc3RhZ2UgaW4gYXR0ZXN0YXRpb24gcHJvY2VzcyBpcyB0byBzZW5kIHRoZQ0KPiA+ID4gVERS
+RVBPUlQgdG8gUUUvUUdTIHRvIGdlbmVyYXRlIHRoZSBURCBRdW90ZS4gRm9yIHBsYXRmb3JtcyB0
+aGF0IGRvZXMNCj4gPiA+IG5vdCBzdXBwb3J0IGNvbW11bmljYXRpb24gY2hhbm5lbHMgbGlrZSB2
+c29jayBvciBUQ1AvSVAsIGltcGxlbWVudA0KPiA+ID4gc3VwcG9ydCB0byBnZXQgVEQgUXVvdGUg
+dXNpbmcgaHlwZXJjYWxsLiBHZXRRdW90ZSBoeXBlcmNhbGwgY2FuIGJlIHVzZWQNCj4gPiA+IGJ5
+IHRoZSBURCBndWVzdCB0byByZXF1ZXN0IFZNTSBmYWNpbGl0YXRlIHRoZSBRdW90ZSBnZW5lcmF0
+aW9uIHZpYQ0KPiA+ID4gUUUvUUdTLiBNb3JlIGRldGFpbHMgYWJvdXQgR2V0UXVvdGUgaHlwZXJj
+YWxsIGNhbiBiZSBmb3VuZCBpbiBURFgNCj4gPiA+IEd1ZXN0LUhvc3QgQ29tbXVuaWNhdGlvbiBJ
+bnRlcmZhY2UgKEdIQ0kpIGZvciBJbnRlbCBURFggMS4wLCBzZWN0aW9uDQo+ID4gPiB0aXRsZWQg
+IlRERy5WUC5WTUNBTEw8R2V0UXVvdGU+Ii4NCj4gPiANCj4gPiBXaGVuIHRoaXMgcGF0Y2ggZ2V0
+cyBtZXJnZWQsIHRoZSBwYXRjaCB0byBnZXQgdGhlIFREUkVQT1JUIHdvdWxkIGJlIGxvbmcgYmVm
+b3JlDQo+ID4gdGhpcyBwYXRjaC4gIFRvIGhlbHAgdGhlIGdpdCBibGFtZXJzIHRvIHVuZGVyc3Rh
+bmQgbW9yZSBlYXNpbHksIEkgdGhpbmsgaXQncw0KPiA+IGJldHRlciB0byBwcm92aWRlIHNvbWUg
+YmFja2dyb3VuZCBoZXJlLg0KPiA+IA0KPiA+IEZZSSBiZWxvdzoNCj4gPiANCj4gPiAiDQo+ID4g
+SW4gVERYIGF0dGVzdGF0aW9uLCB0aGUgVERSRVBPUlQgb2YgYSBURFggZ3Vlc3QgY29udGFpbnMg
+aW5mb3JtYXRpb24gdG8gdW5pcXVlbHkNCj4gPiBpZGVudGlmeSB0aGUgVERYIGd1ZXN0IGFsb25n
+IHdpdGggdGhlIFRFRSBlbnZpcm9ubWVudCBvZiB0aGUgbG9jYWwgbWFjaGluZS4gDQo+ID4gVERS
+RVBPUlQgaXMgaW50ZWdyaXR5LXByb3RlY3RlZCBhbmQgY2FuIG9ubHkgYmUgdmVyaWZpZWQgb24g
+dGhlIGxvY2FsIG1hY2hpbmUuICANCj4gPiANCj4gPiBUbyBzdXBwb3J0IFREWCByZW1vdGUgYXR0
+ZXN0YXRpb24sIGluIFNHWC1iYXNlZCBhdHRlc3RhdGlvbiwgYWZ0ZXIgdGhlIFREWCBndWVzdA0K
+PiA+IGdldHMgdGhlIFREUkVQT1JUIGZyb20gdGhlIFREWCBtb2R1bGUsIHRoZSBURFJFUE9SVCBu
+ZWVkcyB0byBiZSBzZW50IHRvIHRoZSBTR1gNCj4gPiBRdW90aW5nIEVuY2xhdmUgKFFFKSB0byBj
+b252ZXJ0IGl0IHRvIGEgcmVtb3RlIHZlcmlmaWFibGUgUXVvdGUuDQo+ID4gDQo+ID4gU0dYIFFF
+IGNhbiBvbmx5IHJ1biBvdXRzaWRlIG9mIHRoZSBURFggZ3Vlc3QgKGkuZS4gaW4gYSBob3N0IHBy
+b2Nlc3Mgb3IgaW4gYQ0KPiA+IG5vcm1hbCBWTSkuICBGb3Igc2VjdXJpdHkgY29uY2VybiB0aGUg
+VERYIGd1ZXN0IG1heSBub3Qgc3VwcG9ydCBub3JtYWwNCj4gPiBjb21tdW5pY2F0aW9uIGNoYW5u
+ZWxzIGxpa2UgdnNvY2sgb3IgVENQL0lQLiAgVG8gc3VwcG9ydCByZW1vdGUgYXR0ZXN0YXRpb24g
+Zm9yDQo+ID4gc3VjaCBjYXNlLCBURFggdXNlcyBHZXRRdW90ZSBURFZNQ0FMTCB0byBhc2sgdGhl
+IGhvc3QgVk1NIHRvIGNvbW11bmljYXRlIHdpdGgNCj4gPiB0aGUgU0dYIFFFLiAgTW9yZSBkZXRh
+aWxzIGFib3V0IEdldFF1b3RlIFREVk1DQUxMIGNhbiBiZSBmb3VuZCBpbiAuLi4NCj4gPiAiDQo+
+ID4gDQo+IA0KPiBPay4gSSB3aWxsIGFkZCBzb21lIGludHJvZHVjdGlvbiB0byB0aGUgY29tbWl0
+IGxvZy4NCj4gDQo+ID4gPiANCj4gPiA+IEFkZCBzdXBwb3J0IGZvciBURFhfQ01EX0dFVF9RVU9U
+RSBJT0NUTCB0byBhbGxvdyBhdHRlc3RhdGlvbiBhZ2VudA0KPiA+ID4gc3VibWl0IEdldFF1b3Rl
+IHJlcXVlc3RzIGZyb20gdGhlIHVzZXIgc3BhY2UgdXNpbmcgR2V0UXVvdGUgaHlwZXJjYWxsLg0K
+PiA+ID4gDQo+ID4gPiBTaW5jZSBHZXRRdW90ZSBpcyBhbiBhc3luY2hyb25vdXMgcmVxdWVzdCBo
+eXBlcmNhbGwsIFZNTSB3aWxsIHVzZQ0KPiA+ID4gY2FsbGJhY2sgaW50ZXJydXB0IHZlY3RvciBj
+b25maWd1cmVkIGJ5IFNldHVwRXZlbnROb3RpZnlJbnRlcnJ1cHQNCj4gPiA+IGh5cGVyY2FsbCB0
+byBub3RpZnkgdGhlIGd1ZXN0IGFib3V0IFF1b3RlIGdlbmVyYXRpb24gY29tcGxldGlvbiBvcg0K
+PiA+ID4gZmFpbHVyZS4gU28gcmVnaXN0ZXIgYW4gSVJRIGhhbmRsZXIgZm9yIGl0Lg0KPiA+ID4g
+DQo+ID4gPiBHZXRRdW90ZSBURFZNQ0FMTCByZXF1aXJlcyBURCBndWVzdCBwYXNzIGEgNEsgYWxp
+Z25lZCBzaGFyZWQgYnVmZmVyDQo+ID4gPiB3aXRoIFREUkVQT1JUIGRhdGEgYXMgaW5wdXQsIHdo
+aWNoIGlzIGZ1cnRoZXIgdXNlZCBieSB0aGUgVk1NIHRvIGNvcHkNCj4gPiA+IHRoZSBURCBRdW90
+ZSByZXN1bHQgYWZ0ZXIgc3VjY2Vzc2Z1bCBRdW90ZSBnZW5lcmF0aW9uLiBUbyBjcmVhdGUgdGhl
+DQo+ID4gPiBzaGFyZWQgYnVmZmVyLCBhbGxvY2F0ZSB0aGUgcmVxdWlyZWQgbWVtb3J5IHVzaW5n
+IGFsbG9jX3BhZ2VzKCkgYW5kDQo+ID4gPiBtYXJrIGl0IHNoYXJlZCB1c2luZyBzZXRfbWVtb3J5
+X2RlY3J5cHRlZCgpIGluIHRkeF9ndWVzdF9pbml0KCkuwqANCj4gPiA+IA0KPiA+IA0KPiA+IFBl
+cnNvbmFsbHkgSSB0aGluayB5b3UgZG9uJ3QgbmVlZCB0byBtZW50aW9uICJ1c2luZyBhbGxvY19w
+YWdlcygpIC4uLiANCj4gPiBzZXRfbWVtb3J5X2RlY3J5cHRlZCgpIiBzdGFmZi4gIFRoZXkgYmVs
+b25nIHRvIGRldGFpbHMgYW5kIHRoZSBjb2RlIGNhbiB0ZWxsLg0KPiA+IA0KPiA+ID4gVGhpcw0K
+PiA+ID4gYnVmZmVyIHdpbGwgYmUgcmUtdXNlZCBmb3IgR2V0UXVvdGUgcmVxdWVzdHMgaW4gVERY
+X0NNRF9HRVRfUVVPVEUNCj4gPiA+IElPQ1RMIGhhbmRsZXIuDQo+ID4gDQo+ID4gQmVzaWRlcyB0
+aGUgInJlLXVzZWQiIHBhcnQsIEkgdGhpbmsgaXQncyBiZXR0ZXIgdG8gZXhwbGFpbiB0aGUgcmF0
+aW9uYWwgb2YNCj4gPiBjaG9vc2luZyBhIGZpeGVkIDE2SyAoNCBwYWdlcykgc2hhcmVkIGJ1ZmZl
+ci4gIEZvciBpbnN0YW5jZSwgaW4gcHJhY3RpY2UgaW4NCj4gPiBJbnRlbCdzIFNHWCBRRSBpbXBs
+ZW1lbnRhdGlvbiBhIFF1b3RlIGlzIGxlc3MgdGhhbiA4SywgYW5kIDE2SyBzaG91bGQgYmUgYmln
+DQo+ID4gZW5vdWdoIGluIHRoZSBmb3Jlc2VlYWJsZSBmdXR1cmUgZXZlbiBjb25zaWRlcmluZyAz
+cmQgcGFydHkncyBvd24NCj4gPiBpbXBsZW1lbnRhdGlvbi4NCj4gDQo+IEkgd2lsbCBhZGQgaXQg
+cGFydCBvZiB0aGUgY29tbWVudCBpbiB0aGUgY29kZS4NCj4gDQo+ID4gDQo+ID4gQWxzbywgSSBn
+dWVzcyBpdCdzIGJldHRlciB0byBjYWxsIG91dCBzb21ld2hlcmUgY3VycmVudGx5IHdlIGRvbid0
+IHN1cHBvcnQNCj4gPiBtdWx0aXBsZSBHZXRRdW90ZSBpbiBwYXJhbGxlbCBiZWNhdXNlIG9mIDx4
+eHg+LCBzbyBhbGxvY2F0aW5nIGEgc2luZ2xlIHNoYXJlZA0KPiA+IGJ1ZmZlciBhdCBlYXJseSB0
+aW1lIGlzIE9LLg0KPiANCj4gDQo+ID4gDQo+ID4gPiANCj4gPiA+IEFsdGhvdWdoIHRoaXMgbWV0
+aG9kIHdpbGwgcmVzZXJ2ZSBhIGZpeGVkIGNodW5rIG9mIG1lbW9yeSBmb3INCj4gPiA+IEdldFF1
+b3RlIHJlcXVlc3RzIGR1cmluZyB0aGUgaW5pdCB0aW1lLCBpdCBpcyBwcmVmZXJhYmxlIHRvIHRo
+ZQ0KPiA+ID4gYWx0ZXJuYXRpdmUgY2hvaWNlIG9mIGFsbG9jYXRpbmcvZnJlZWluZyB0aGUgc2hh
+cmVkIGJ1ZmZlciBpbiB0aGUNCj4gPiA+IFREWF9DTURfR0VUX1FVT1RFIElPQ1RMIGhhbmRsZXIs
+IHdoaWNoIHdpbGwgZGFtYWdlIHRoZSBkaXJlY3QgbWFwLg0KPiA+ID4gDQo+IA0KPiBVcGRhdGVk
+IGNvbW1pdCBsb2cgbG9va3MgbGlrZSBiZWxvdzoNCj4gDQo+ICAgICBJbiBURFggZ3Vlc3QsIHRo
+ZSBhdHRlc3RhdGlvbiBwcm9jZXNzIGlzIHVzZWQgdG8gdmVyaWZ5IHRoZSBURFggZ3Vlc3QNCj4g
+ICAgIHRydXN0d29ydGhpbmVzcyB0byBvdGhlciBlbnRpdGllcyBiZWZvcmUgcHJvdmlzaW9uaW5n
+IHNlY3JldHMgdG8gdGhlDQo+ICAgICBndWVzdC4gVGhlIEZpcnN0IHN0ZXAgaW4gdGhlIGF0dGVz
+dGF0aW9uIHByb2Nlc3MgaXMgVERSRVBPUlQNCj4gICAgIGdlbmVyYXRpb24sIHdoaWNoIGludm9s
+dmVzIGdldHRpbmcgdGhlIGd1ZXN0IG1lYXN1cmVtZW50IGRhdGEgaW4gdGhlDQo+ICAgICBmb3Jt
+YXQgb2YgVERSRVBPUlQsIHdoaWNoIGlzIGZ1cnRoZXIgdXNlZCB0byB2YWxpZGF0ZSB0aGUgYXV0
+aGVudGljaXR5DQo+ICAgICBvZiB0aGUgVERYIGd1ZXN0LiBURFJFUE9SVCBieSBkZXNpZ24gaXMg
+aW50ZWdyaXR5LXByb3RlY3RlZCBhbmQgY2FuDQo+ICAgICBvbmx5IGJlIHZlcmlmaWVkIG9uIHRo
+ZSBsb2NhbCBtYWNoaW5lLg0KPiAgICAgDQo+ICAgICBUbyBzdXBwb3J0IHJlbW90ZSB2ZXJpZmlj
+YXRpb24gb2YgdGhlIFREUkVQT1JUIChpbiBhIFNHWC1iYXNlZA0KPiAgICAgYXR0ZXN0YXRpb24p
+LCB0aGUgVERSRVBPUlQgbmVlZHMgdG8gYmUgc2VudCB0byB0aGUgU0dYIFF1b3RpbmcgRW5jbGF2
+ZQ0KPiAgICAgKFFFKSB0byBjb252ZXJ0IGl0IHRvIGEgcmVtb3RlIHZlcmlmaWFibGUgUXVvdGUu
+IFNHWCBRRSBieSBkZXNpZ24gY2FuDQo+ICAgICBvbmx5IHJ1biBvdXRzaWRlIG9mIHRoZSBURFgg
+Z3Vlc3QgKGkuZS4gaW4gYSBob3N0IHByb2Nlc3Mgb3IgaW4gYQ0KPiAgICAgbm9ybWFsIFZNKSBh
+bmQgdGhlIGd1ZXN0IGNhbiB1c2UgY29tbXVuaWNhdGlvbiBjaGFubmVscyBsaWtlIHZzb2NrIG9y
+DQo+ICAgICBUQ1AvSVAgdG8gc2VuZCB0aGUgVERSRVBPUlQgdG8gdGhlIFFFLiBCdXQgZm9yIHNl
+Y3VyaXR5IGNvbmNlcm5zLCBzb21lDQo+ICAgICBwbGF0Zm9ybXMgbWF5IG5vdCBzdXBwb3J0IHRo
+ZXNlIGNvbW11bmljYXRpb24gY2hhbm5lbHMuIFRvIGhhbmRsZSBzdWNoDQoNCiJwbGF0Zm9ybXMg
+bWF5IG5vdCBzdXBwb3J0IHZzb2NrL3RjcC9pcCBldGMiIGlzbid0IGNvcnJlY3QuICBJdCBzaG91
+bGQgYmUgdGhlDQoiVERYIGd1ZXN0IiBtYXkgbm90IHN1cHBvcnQgdGhvc2UuDQoNClRoZSBzZWN1
+cml0eSBjb25jZXJuIG1haW5seSBpcyBhYm91dCB0aGUgQ1NQIGRvZXNuJ3Qgd2FudCB0byBleHBv
+c2UgdnNvY2svdGNwL2lwDQp0byBURFggZ3Vlc3QgdG8gYWxsb3cgaXQgdG8gYmUgYWJsZSB0byBj
+b21tdW5pY2F0ZSB0byBob3N0IHNlcnZpY2UgKFF1b3RpbmcNCnNlcnZpY2UgaW4gb3VyIGV4YW1w
+bGUpIGRpcmVjdGx5LiAgSG93ZXZlciB0aGUgaG9zdCB3aWxsIGFsbW9zdCBjZXJ0YWlubHkNCnN1
+cHBvcnQgYXQgbGVhc3QgdGNwL2lwIG90aGVyd2lzZSB0aGUgbWFjaGluZSBpcyB0b3RhbGx5IGlz
+b2xhdGVkLg0KDQo+ICAgICBjYXNlcywgVERYIGRlZmluZXMgYSBHZXRRdW90ZSBoeXBlcmNhbGwg
+d2hpY2ggY2FuIGJlIHVzZWQgYnkgdGhlIGd1ZXN0DQo+ICAgICB0byByZXF1ZXN0IHRoZSBob3N0
+IFZNTSB0byBjb21tdW5pY2F0ZSB3aXRoIHRoZSBTR1ggUUUuIE1vcmUgZGV0YWlscw0KPiAgICAg
+YWJvdXQgR2V0UXVvdGUgaHlwZXJjYWxsIGNhbiBiZSBmb3VuZCBpbiBURFggR3Vlc3QtSG9zdCBD
+b21tdW5pY2F0aW9uDQo+ICAgICBJbnRlcmZhY2UgKEdIQ0kpIGZvciBJbnRlbCBURFggMS4wLCBz
+ZWN0aW9uIHRpdGxlZA0KPiAgICAgIlRERy5WUC5WTUNBTEw8R2V0UXVvdGU+Ii4NCj4gICAgIA0K
+PiAgICAgQWRkIHN1cHBvcnQgZm9yIFREWF9DTURfR0VUX1FVT1RFIElPQ1RMIHRvIGFsbG93IGFu
+IGF0dGVzdGF0aW9uIGFnZW50DQo+ICAgICB0byBzdWJtaXQgR2V0UXVvdGUgcmVxdWVzdHMgZnJv
+bSB0aGUgdXNlciBzcGFjZSB1c2luZyBHZXRRdW90ZQ0KPiAgICAgaHlwZXJjYWxsLg0KPiAgICAg
+DQo+ICAgICBTaW5jZSBHZXRRdW90ZSBpcyBhbiBhc3luY2hyb25vdXMgcmVxdWVzdCBoeXBlcmNh
+bGwsIFZNTSB3aWxsIHVzZSB0aGUNCj4gICAgIGNhbGxiYWNrIGludGVycnVwdCB2ZWN0b3IgY29u
+ZmlndXJlZCBieSB0aGUgU2V0dXBFdmVudE5vdGlmeUludGVycnVwdA0KPiAgICAgaHlwZXJjYWxs
+IHRvIG5vdGlmeSB0aGUgZ3Vlc3QgYWJvdXQgUXVvdGUgZ2VuZXJhdGlvbiBjb21wbGV0aW9uIG9y
+DQo+ICAgICBmYWlsdXJlLiBTbyByZWdpc3RlciBhbiBJUlEgaGFuZGxlciBmb3IgaXQuDQo+ICAg
+ICANCj4gICAgIEdldFF1b3RlIFREVk1DQUxMIHJlcXVpcmVzIFREIGd1ZXN0IHBhc3MgYSA0SyBh
+bGlnbmVkIHNoYXJlZCBidWZmZXINCj4gICAgIHdpdGggVERSRVBPUlQgZGF0YSBhcyBpbnB1dCwg
+d2hpY2ggaXMgZnVydGhlciB1c2VkIGJ5IHRoZSBWTU0gdG8gY29weQ0KPiAgICAgdGhlIFREIFF1
+b3RlIHJlc3VsdCBhZnRlciBzdWNjZXNzZnVsIFF1b3RlIGdlbmVyYXRpb24uIEFsbG9jYXRlIHRo
+ZQ0KPiAgICAgcmVxdWlyZWQgc2hhcmVkIG1lbW9yeSBvbmNlIGluIHRkeF9ndWVzdF9pbml0KCkg
+YW5kIHJldXNlIGl0IGluIHRoZQ0KDQoicmVxdWlyZWQiIGlzbid0IHZlcnkgY2xlYXIgSU1ITywg
+YmVjYXVzZSB0aGVyZSdzIG5vIG1lbnRpb24gb2YgYW55IHJlcXVpcmVtZW50DQphdCBhbGwgcmVn
+YXJkaW5nIHRvIHRoZSBidWZmZXIgc2l6ZS4gIElmIHlvdSBkb24ndCB3YW50IHRvIGV4cGxhaW4g
+aW4gY2hhbmdlbG9nLA0KcGVyaGFwcyB5b3UgbmVlZCB0byBhdCBsZWFzdCBtZW50aW9uIHNvbWV0
+aGluZyBsaWtlICJhbGxvY2F0ZSBhIGxhcmdlIGVub3VnaA0Kc2hhcmVkIG1lbW9yeSIgZXRjLg0K
+DQo+ICAgICBURFhfQ01EX0dFVF9RVU9URSBJT0NUTCBoYW5kbGVyIGZvciBHZXRRdW90ZSByZXF1
+ZXN0cy4NCj4gICAgIA0KPiAgICAgQWx0aG91Z2ggdGhpcyBtZXRob2QgcmVzZXJ2ZXMgYSBmaXhl
+ZCBjaHVuayBvZiBtZW1vcnkgZm9yIEdldFF1b3RlDQo+ICAgICByZXF1ZXN0cywgc3VjaCBvbmUt
+dGltZSBhbGxvY2F0aW9uIGlzIHByZWZlcmFibGUgdG8gdGhlIGFsdGVybmF0aXZlDQo+ICAgICBj
+aG9pY2Ugb2YgcmVwZWF0ZWRseSBhbGxvY2F0aW5nL2ZyZWVpbmcgdGhlIHNoYXJlZCBidWZmZXIg
+aW4gdGhlDQo+ICAgICBURFhfQ01EX0dFVF9RVU9URSBJT0NUTCBoYW5kbGVyLCB3aGljaCB3aWxs
+IGRhbWFnZSB0aGUgZGlyZWN0IG1hcA0KPiAgICAgKGJlY2F1c2UgdGhlIHNoYXJpbmcvdW5zaGFy
+aW5nIHByb2Nlc3MgbW9kaWZpZXMgdGhlIGRpcmVjdCBtYXApLiBUaGlzDQo+ICAgICBhbGxvY2F0
+aW9uIG1vZGVsIGlzIHNpbWlsYXIgdG8gdGhhdCB1c2VkIGJ5IHRoZSBBTUQgU0VWIGd1ZXN0IGRy
+aXZlci4NCj4gICAgIA0KPiAgICAgU2luY2UgdGhlIFF1b3RlIGdlbmVyYXRpb24gcHJvY2VzcyBp
+cyBub3QgdGltZS1jcml0aWNhbCBvciBmcmVxdWVudGx5DQo+ICAgICB1c2VkLCB0aGUgY3VycmVu
+dCB2ZXJzaW9uIGRvIG5vdCBzdXBwb3J0IHBhcmFsbGVsIEdldFF1b3RlIHJlcXVlc3RzLg0KCQkJ
+CV4NCgkJCQlkb2VzIG5vdA0KDQpbLi4uXQ0KDQoNCj4gPiA+ICANCj4gPiA+IGRpZmYgLS1naXQg
+YS9hcmNoL3g4Ni9jb2NvL3RkeC90ZHguYyBiL2FyY2gveDg2L2NvY28vdGR4L3RkeC5jDQo+ID4g
+PiBpbmRleCAyNmY2ZTJlYWY1YzguLjA5YjU5MjVlZWM2NyAxMDA2NDQNCj4gPiA+IC0tLSBhL2Fy
+Y2gveDg2L2NvY28vdGR4L3RkeC5jDQo+ID4gPiArKysgYi9hcmNoL3g4Ni9jb2NvL3RkeC90ZHgu
+Yw0KPiA+ID4gQEAgLTMzLDYgKzMzLDcgQEANCj4gPiA+ICAjZGVmaW5lIFREVk1DQUxMX01BUF9H
+UEEJCTB4MTAwMDENCj4gPiA+ICAjZGVmaW5lIFREVk1DQUxMX1JFUE9SVF9GQVRBTF9FUlJPUgkw
+eDEwMDAzDQo+ID4gPiAgI2RlZmluZSBURFZNQ0FMTF9TRVRVUF9OT1RJRllfSU5UUgkweDEwMDA0
+DQo+ID4gPiArI2RlZmluZSBURFZNQ0FMTF9HRVRfUVVPVEUJCTB4MTAwMDINCj4gPiA+ICANCj4g
+PiA+ICAvKiBNTUlPIGRpcmVjdGlvbiAqLw0KPiA+ID4gICNkZWZpbmUgRVBUX1JFQUQJMA0KPiA+
+ID4gQEAgLTE5OCw2ICsxOTksNDUgQEAgc3RhdGljIHZvaWQgX19ub3JldHVybiB0ZHhfcGFuaWMo
+Y29uc3QgY2hhciAqbXNnKQ0KPiA+ID4gIAkJX190ZHhfaHlwZXJjYWxsKCZhcmdzLCAwKTsNCj4g
+PiA+ICB9DQo+ID4gPiAgDQo+ID4gPiArLyoqDQo+ID4gPiArICogdGR4X2hjYWxsX2dldF9xdW90
+ZSgpIC0gV3JhcHBlciB0byByZXF1ZXN0IFREIFF1b3RlIHVzaW5nIEdldFF1b3RlDQo+ID4gPiAr
+ICogICAgICAgICAgICAgICAgICAgICAgICAgaHlwZXJjYWxsLg0KPiA+ID4gKyAqIEB0ZHF1b3Rl
+OiBBZGRyZXNzIG9mIHRoZSBkaXJlY3QgbWFwcGVkIHNoYXJlZCBrZXJuZWwgYnVmZmVyIHdoaWNo
+DQo+ID4gPiArICogCSAgICAgY29udGFpbnMgVERSRVBPUlQgZGF0YS4gVGhlIHNhbWUgYnVmZmVy
+IHdpbGwgYmUgdXNlZCBieQ0KPiA+ID4gKyAqIAkgICAgIFZNTSB0byBzdG9yZSB0aGUgZ2VuZXJh
+dGVkIFREIFF1b3RlIG91dHB1dC4NCj4gPiA+ICsgKiBAc2l6ZTogc2l6ZSBvZiB0aGUgdGRxdW90
+ZSBidWZmZXIuDQoNCkJldHRlciB0byBjYWxsIG91dCBAc2l6ZSBtdXN0IGJlIGluIGdyYW51bGFy
+aXR5IG9mIDRLLg0KDQo+ID4gPiArICoNCj4gPiA+ICsgKiBSZWZlciB0byBzZWN0aW9uIHRpdGxl
+ZCAiVERHLlZQLlZNQ0FMTDxHZXRRdW90ZT4iIGluIHRoZSBURFggR0hDSQ0KPiA+ID4gKyAqIHYx
+LjAgc3BlY2lmaWNhdGlvbiBmb3IgbW9yZSBpbmZvcm1hdGlvbiBvbiBHZXRRdW90ZSBoeXBlcmNh
+bGwuDQo+ID4gPiArICogSXQgaXMgdXNlZCBpbiB0aGUgVERYIGd1ZXN0IGRyaXZlciBtb2R1bGUg
+dG8gZ2V0IHRoZSBURCBRdW90ZS4NCj4gPiA+ICsgKg0KPiA+ID4gKyAqIFJldHVybiAwIG9uIHN1
+Y2Nlc3Mgb3IgZXJyb3IgY29kZSBvbiBmYWlsdXJlLg0KPiA+ID4gKyAqLw0KPiA+ID4gK2ludCB0
+ZHhfaGNhbGxfZ2V0X3F1b3RlKHU4ICp0ZHF1b3RlLCBzaXplX3Qgc2l6ZSkNCj4gPiA+ICt7DQo+
+ID4gPiArCXN0cnVjdCB0ZHhfaHlwZXJjYWxsX2FyZ3MgYXJncyA9IHswfTsNCj4gPiA+ICsNCj4g
+PiA+ICsJLyoNCj4gPiA+ICsJICogVERYIGd1ZXN0IGRyaXZlciBpcyB0aGUgb25seSB1c2VyIG9m
+IHRoaXMgZnVuY3Rpb24gYW5kIGl0IHVzZXMNCj4gPiA+ICsJICogdGhlIGtlcm5lbCBtYXBwZWQg
+bWVtb3J5LiBTbyB1c2UgdmlydF90b19waHlzKCkgdG8gZ2V0IHRoZQ0KPiA+ID4gKwkgKiBwaHlz
+aWNhbCBhZGRyZXNzIG9mIHRoZSBURFF1b3RlIGJ1ZmZlciB3aXRob3V0IGFueSBhZGRpdGlvbmFs
+DQo+ID4gPiArCSAqIGNoZWNrcyBmb3IgbWVtb3J5IHR5cGUuDQo+ID4gPiArCSAqLw0KPiA+IA0K
+PiA+IEhvdyBhYm91dCBqdXN0IGNhbGwgb3V0IHRoaXMgZnVuY3Rpb24gcmVxdWlyZXMgdGhlIGJ1
+ZmZlciBtdXN0IGJlIHNoYXJlZCBpbiBrZG9jDQo+ID4gc3R5bGUgY29tbWVudCBhYm92ZSB0aGlz
+IGZ1bmN0aW9uPyAgV2Ugc2hvdWxkIGp1c3QgZm9jdXMgb24gd2hhdCB0aGlzIGZ1bmN0aW9uDQo+
+ID4gaXMgZG9pbmcuDQo+IA0KPiBJdCB3YXMgc3VnZ2VzdGVkIGluIHRoZSBwcmV2aW91cyByZXZp
+ZXcgdG8gYWRkIGl0LiBBIGNvbW1lbnQgYWJvdXQgd2h5IHVzaW5nDQo+IHZpcnRfdG9fcGh5cygp
+IGlzIGZpbmUgaGVyZS4gDQoNClNvcnJ5IHRyaWVkIHRvIGRpZyBidXQgSSBjb3VsZG4ndCBmaW5k
+IHRoZSBjb21tZW50IHlvdSBtZW50aW9uZWQuIMKgDQoNCkFueXdheSwgSU1ITyB5b3UgY2FuIGp1
+c3QgcmVtb3ZlIHRoaXMgY29tbWVudCwgYmVjYXVzZSBhZnRlciByZWFkaW5nIGFnYWluLCBpbg0K
+ZmFjdCBJTUhPIGl0IG9ubHkgY29uZnVzZXMgcGVvcGxlOsKgDQoNCjEpICJtZW1vcnkgdHlwZSIg
+aXMgY29uZnVzaW5nLiAgSSB0aGluayBJIChhcyBzb21lb25lIHdobyBpcyB3b3JraW5nIG9uIFRE
+WCB0b28pDQp1bmRlcnN0YW5kIGJ5ICJtZW1vcnkgdHlwZSIgeW91IGFjdHVhbGx5IG1lYW4gdGhl
+IHZpcnR1YWwgYWRkcmVzcyBpcyBmcm9tIGtlcm5lbA0KZGlyZWN0IG1hcHBpbmcsIG9yIGl0IGNv
+dWxkIGJlIGZyb20gdm1hbGxvYygpL3ZtYXAoKSAoZG8geW91PyksIGJ1dCBmb3Igb3RoZXJzDQpp
+dCBjb3VsZCBiZSBjYWNoZSByZWxhdGVkIG1lbW9yeSB0eXBlIChVQywgV0IsIGV0YykuDQoNCjIp
+IFlvdSBhbHJlYWR5IHNhaWQgdGhlIGJ1ZmZlciBpcyAiZGlyZWN0IG1hcHBlZCBzaGFyZWQga2Vy
+bmVsIGJ1ZmZlciIgKGJ0dywNCnNob3VsZCBiZSAiZGlyZWN0bHkgbWFwcGVkIiByZWFsbHkpIGlu
+IHRoZSBjb21tZW50IHdoaWNoIGV4cGxhaW5zIEB0ZHF1b3RlLCB0aHVzDQppdCdzIGNsZWFyIGhv
+dyB0byBnZXQgdGhlIHBoeXNpY2FsIGFkZHJlc3MuICAiVERYIGd1ZXN0IGRyaXZlciBpcyB0aGUg
+b25seSB1c2VyDQpvZiB0aGlzIGZ1bmN0aW9uIiBkb2Vzbid0IG1hdHRlciAtLSB3aGVuIHRoZXJl
+J3MgYW5vdGhlciB1c2VyIGluIHRoZSBmdXR1cmUgYW5kDQppZiBpdCBjaGFuZ2VzIHdoZXJlIHRo
+ZSBAdGRxdW90ZSBjb21lcyBmcm9tLCB0aGVuIHRoZSBjb21tZW50IG9mIEB0ZHF1b3RlIGFuZA0K
+dGhlIGNvZGUgbmVlZHMgdG8gYmUgdXBkYXRlZCBhbnl3YXkuDQoNClNvIEkgZG9uJ3Qgc2VlIGFu
+eSBnb29kIG9mIHRoaXMgY29tbWVudC4NCg0KQnR3LCB0byBtZSBAdGRxdW90ZSBpc24ndCBhIGdv
+b2QgbmFtZSBiZWNhdXNlIGl0IGdpdmVzIG1lIHRoZSBpbXByZXNzaW9uIHRoYXQNCnRoZSBRdW90
+ZSBpcyB1c2VkIGFzIGlucHV0LiAgSG93IGFib3V0IGp1c3QgJ2J1ZicgKHdoaWNoIHlvdSBhbHNv
+IHVzZWQgaW4NCid0ZHhfcXVvdGVfcmVxJyBzdHJ1Y3R1cmUpPw0KDQo+IA0KPiA+IA0KPiA+ID4g
+KwlhcmdzLnIxMCA9IFREWF9IWVBFUkNBTExfU1RBTkRBUkQ7DQo+ID4gPiArCWFyZ3MucjExID0g
+VERWTUNBTExfR0VUX1FVT1RFOw0KPiA+ID4gKwlhcmdzLnIxMiA9IGNjX21rZGVjKHZpcnRfdG9f
+cGh5cyh0ZHF1b3RlKSk7DQoNCkJ0dyBjYW4gd2UganVzdCB1c2UgX19wYSgpPyAgVG8gYmUgaG9u
+ZXN0IEkgYW0gaWdub3JhbnQgb24gdGhlIGRpZmZlcmVuY2UNCmJldHdlZW4gdmlydF90b19waHlz
+KCkgYW5kIF9fcGEoKSwgaS5lLiB3aGVuIHNob3VsZCB3ZSB1c2Ugd2hpY2guDQoNCkFsc28sIHlv
+dSBfbWF5XyB3YW50IHRvIGFkZCBhIGNvbW1lbnQgd2h5ICJjY19ta2RlYygpIiBpcyB1c2VkLiAg
+QnkgdGhlIG5hdHVyZQ0Kb2YgdGhpcyBURFZNQ0FMTCwgaXQncyBvYnZpb3VzIHRoZSBidWZmZXIg
+bmVlZHMgdG8gYmUgc2hhcmVkLCBhbmQgdGhlIFZNTSBtdXN0DQpjaGVjayB3aGV0aGVyIHRoZSBi
+dWZmZXIgaXMgYWN0dWFsbHkgc2hhcmVkLCBubyBtYXR0ZXIgd2hldGhlciB0aGUgInNoYXJlZC1i
+aXQiDQppcyBzZXQgaGVyZSBvciBub3QuDQoNClNvIHRvIG1lIGl0J3MganVzdCByZXF1ZXN0ZWQg
+YnkgdGhlIEdIQ0kgc3BlYyB0aGF0IHdlIG5lZWQgdG8gaW5jbHVkZSB0aGUNCiJzaGFyZWQtYml0
+IiwgYnV0IGl0IF9zZWVtc18gdGhlIEdIQ0kgc3BlYyBkb2Vzbid0IGV4cGxpY2l0bHkgc2F5IHdl
+IG5lZWQgdG8gZG8NCnRoYXQgYmVjYXVzZSBpdCBvbmx5IHNheXMgIlNoYXJlZCBidWZmZXIgYXMg
+aW5wdXQiLiAgU28gbG9va3MgYSBjb21tZW50IGNhbiBoZWxwDQp0byBjbGFyaWZ5IGEgbGl0dGxl
+IGJpdC4NCg0KPiA+ID4gKwlhcmdzLnIxMyA9IHNpemU7DQoNClRoZSBAc2l6ZSBtdXN0IGJlIDRL
+LWFsaWduZWQgcGVyIEdIQ0kuICBJIGd1ZXNzIHdlIHNob3VsZCBhZGQgYSBjaGVjayBhbmQgcmV0
+dXJuDQplYXJseSByYXRoZXIgdGhhbiBkZXBlbmRpbmcgb24gdGhlIFREVk1DQUxMIHRvIGZhaWw/
+DQoNCj4gPiA+ICsNCj4gPiA+ICsJLyoNCj4gPiA+ICsJICogUGFzcyB0aGUgcGh5c2ljYWwgYWRk
+cmVzcyBvZiBURFJFUE9SVCB0byB0aGUgVk1NIGFuZA0KPiA+ID4gKwkgKiB0cmlnZ2VyIHRoZSBR
+dW90ZSBnZW5lcmF0aW9uLiBJdCBpcyBub3QgYSBibG9ja2luZw0KPiA+ID4gKwkgKiBjYWxsLCBo
+ZW5jZSBjb21wbGV0aW9uIG9mIHRoaXMgcmVxdWVzdCB3aWxsIGJlIG5vdGlmaWVkIHRvDQo+ID4g
+PiArCSAqIHRoZSBURCBndWVzdCB2aWEgYSBjYWxsYmFjayBpbnRlcnJ1cHQuDQo+ID4gPiArCSAq
+Lw0KPiA+ID4gKwlyZXR1cm4gX190ZHhfaHlwZXJjYWxsKCZhcmdzLCAwKTsNCj4gPiA+ICt9DQo+
+ID4gPiArRVhQT1JUX1NZTUJPTF9HUEwodGR4X2hjYWxsX2dldF9xdW90ZSk7DQo+ID4gPiArDQo+
+ID4gPiANCj4gDQoNClsuLi5dDQoNCj4gPiANCj4gPiA+ICsNCj4gPiA+ICsvKioNCj4gPiA+ICsg
+KiBzdHJ1Y3QgcXVvdGVfZW50cnkgLSBRdW90ZSByZXF1ZXN0IHN0cnVjdA0KPiA+ID4gKyAqIEB2
+YWxpZDogRmxhZyB0byBjaGVjayB2YWxpZGl0eSBvZiB0aGUgR2V0UXVvdGUgcmVxdWVzdC4NCj4g
+PiA+ICsgKiBAYnVmOiBLZXJuZWwgYnVmZmVyIHRvIHNoYXJlIGRhdGEgd2l0aCBWTU0gKHNpemUg
+aXMgcGFnZSBhbGlnbmVkKS4NCj4gPiA+ICsgKiBAYnVmX2xlbjogU2l6ZSBvZiB0aGUgYnVmIGlu
+IGJ5dGVzLg0KPiA+ID4gKyAqIEBjb21wbDogQ29tcGxldGlvbiBvYmplY3QgdG8gdHJhY2sgY29t
+cGxldGlvbiBvZiBHZXRRdW90ZSByZXF1ZXN0Lg0KPiA+ID4gKyAqLw0KPiA+ID4gK3N0cnVjdCBx
+dW90ZV9lbnRyeSB7DQo+ID4gPiArCWJvb2wgdmFsaWQ7DQo+ID4gPiArCXZvaWQgKmJ1ZjsNCj4g
+PiA+ICsJc2l6ZV90IGJ1Zl9sZW47DQo+ID4gPiArCXN0cnVjdCBjb21wbGV0aW9uIGNvbXBsOw0K
+PiA+ID4gK307DQo+ID4gDQo+ID4gV2UgaGF2ZSBhIHN0YXRpYyBnbG9iYWwgQHFlbnRyeSBiZWxv
+dy4NCj4gPiANCj4gPiBUaGUgYnVmZmVyIHNpemUgaXMgYSBmaXhlZCBzaXplICgxNkspLCB3aHkg
+ZG8gd2UgbmVlZCBAYnVmX2xlbiBoZXJlPw0KPiANCj4gSSBoYXZlIGFkZGVkIGl0IHRvIHN1cHBv
+cnQgYnVmIGxlbmd0aCBjaGFuZ2VzIGluIGZ1dHVyZSAobGlrZSBhZGRpbmcgYQ0KPiBjb21tYW5k
+IGxpbmUgb3B0aW9uIHRvIGFsbG93IHVzZXIgY2hhbmdlIHRoZSBHRVRfUVVPVEVfTUFYX1NJWkUp
+LiAgQWxzbywNCj4gSU1PLCB1c2luZyBidWZfbGVuIGlzIG1vcmUgcmVhZGFibGUgdGhhbiBqdXN0
+IHVzaW5nIEdFVF9RVU9URV9NQVhfU0laRQ0KPiBtYWNybyBpbiBhbGwgcGxhY2VzLg0KPiANCj4g
+PiANCj4gPiBBbmQgd2h5IGRvIHdlIG5lZWQgQHZhbGlkPyAgSXQgc2VlbXMgLi4uDQo+IA0KPiBB
+cyBhIHByZWNhdXRpb24gYWdhaW5zdCBzcHVyaW91cyBldmVudCBub3RpZmljYXRpb24uIEkgYWxz
+byBiZWxpZXZlIHRoYXQgaW4NCj4gdGhlIGZ1dHVyZSwgZXZlbnQgbm90aWZpY2F0aW9uIElSUXMg
+bWF5IGJlIHVzZWQgZm9yIG90aGVyIHB1cnBvc2VzIHN1Y2ggYXMNCj4gdlRQTSBvciBvdGhlciBU
+RFZNQ0FMTCBzZXJ2aWNlcywgYW5kIHRoYXQgdGhpcyBoYW5kbGVyIG1heSBiZSB0cmlnZ2VyZWQN
+Cj4gd2l0aG91dCBhIHZhbGlkIEdldFF1b3RlIHJlcXVlc3QuIFNvLCBiZWZvcmUgd2UgcHJvY2Vz
+cyB0aGUgSVJRLCBJIHdhbnQgdG8NCj4gbWFrZSBzdXJlIHdlIGhhdmUgYSB2YWxpZCBidWZmZXIu
+DQoNCk9LLiAgVGhpcyBpcyBhbiBzaGFyZWQgSVJRIGJhc2ljYWxseSwgc28gd2UgbmVlZCB0byB0
+cmFjayB3aGV0aGVyIHdlIGhhdmUgYW55DQpHZXRRdW90ZSByZXF1ZXN0IHBlbmRpbmcuDQoNCkhv
+d2V2ZXIgSSBhbSB3b25kZXJpbmcgd2hldGhlciB3ZSBuZWVkIGEgZGVkaWNhdGVkIEB2YWxpZCBm
+b3IgdGhpcyBwdXJwb3NlLiAgSWYNCkkgcmVhZCBjb3JyZWN0bHksIHdlIHdpbGwgbWFrZSBzdXJl
+IHRoZSBidWZmZXIgaXMgemVyby1lZCB3aGVuIHRoZXJlJ3Mgbm8NCnJlcXVlc3QgcGVuZGluZywg
+dGh1cyBjYW4gd2UganVzdCB1c2Ugc29tZSBtZW1iZXIgaW4gJ3RkeF9xdW90ZV9oZHInIHRvIHRy
+YWNrPw0KDQpGb3IgaW5zdGFuY2UsIHBlci1HSENJIHRoZSAndmVyc2lvbicgbXVzdCBiZSBzZXQg
+dG8gMSBmb3IgYSB2YWxpZCByZXF1ZXN0LiAgQW5kDQpJIHRoaW5rIGluIGEgZm9yZXNlZWFibGUg
+ZnV0dXJlIHdlIGNhbiBhbHNvIGFzc3VtZSBAaW5fbGVuIGJlaW5nIHRoZSBzaXplIG9mDQpURFJF
+UE9SVF9TVFJVQ1QuICBDYW4gd2UgdXNlIG9uZSBvZiB0aGVtIChpLmUuIHZlcnNpb24pIGZvciB0
+aGlzIHB1cnBvc2U/DQoNCj4gDQo+ID4gDQo+ID4gPiArDQo+ID4gPiArLyogUXVvdGUgZGF0YSBl
+bnRyeSAqLw0KPiA+ID4gK3N0YXRpYyBzdHJ1Y3QgcXVvdGVfZW50cnkgKnFlbnRyeTsNCj4gPiA+
+ICsNCj4gPiA+ICsvKiBMb2NrIHRvIHN0cmVhbWxpbmUgcXVvdGUgcmVxdWVzdHMgKi8NCj4gPiA+
+ICtzdGF0aWMgREVGSU5FX01VVEVYKHF1b3RlX2xvY2spOw0KPiA+ID4gKw0KPiA+ID4gK3N0YXRp
+YyBpbnQgcXVvdGVfY2JfaGFuZGxlcih2b2lkICpkZXZfaWQpDQo+ID4gPiArew0KPiA+ID4gKwlz
+dHJ1Y3QgcXVvdGVfZW50cnkgKmVudHJ5ID0gZGV2X2lkOw0KPiA+ID4gKwlzdHJ1Y3QgdGR4X3F1
+b3RlX2hkciAqcXVvdGVfaGRyID0gZW50cnktPmJ1ZjsNCj4gPiA+ICsNCj4gPiA+ICsJaWYgKGVu
+dHJ5LT52YWxpZCAmJiBxdW90ZV9oZHItPnN0YXR1cyAhPSBHRVRfUVVPVEVfSU5fRkxJR0hUKQ0K
+PiA+ID4gKwkJY29tcGxldGUoJmVudHJ5LT5jb21wbCk7DQo+ID4gDQo+ID4gLi4uIHRoaXMgaGFu
+ZGxlciBpcyBvbmx5IGNhbGxlZCB3aGVuIHdlIGhhdmUgcmVjZWl2ZWQgdGhlIG5vdGlmaWNhdGlv
+biBmcm9tIHRoZQ0KPiA+IFZNTSwgc28gdGhlIFZNTSBtdXN0IGhhdmUgYWxyZWFkeSBwdXQgc29t
+ZXRoaW5nIGludG8gdGhlIGJ1ZmZlciwgbWVhbmluZyB0aGUNCj4gPiBidWZmZXIgaXMgYWxyZWFk
+eSB2YWxpZC4NCj4gPiANCj4gPiBDb3VsZCB5b3UgZXhwbGFpbiB3aHkgZG8gd2UgbmVlZCBAdmFs
+aWQ/DQo+ID4gDQo+ID4gVGhhdCBiZWluZyBzYWlkLCB0byBtZSBJIGZvdW5kIHRoZSAnc3RydWN0
+IHF1b3RlX2VudHJ5JyBpdHNlbGYgaXMgcXVpdGUNCj4gPiB1bm5lY2Vzc2FyeS4gIEl0IGxvb2tz
+IGxpa2UgYSBsZWZ0b3ZlciB0aGF0IHlvdSBkaWRuJ3QgcmVtb3ZlIHdoZW4gY2hhbmdpbmcgZnJv
+bQ0KPiA+IHN1cHBvcnRpbmcgbXVsdGlwbGUgR2V0UXVvdGUgcmVxdWVzdHMgaW4gcGFyYWxsZWwg
+dG8gb25seSBzdXBwb3J0aW5nIG9uZSByZXF1ZXN0DQo+ID4gYXQgb25lIHRpbWUuDQo+IA0KPiBJ
+IGRvbid0IHdhbnQgdG8gdXNlIG11bHRpcGxlIGdsb2JhbCB2YWx1ZXMuIFNvIEkgaGF2ZSBidW5k
+bGVkIGFsbCBRdW90ZSByZWxhdGVkDQo+IGJvb2sga2VlcGluZyAoY29tcGxldGlvbiBvYmplY3Qg
+b3IgYnVmZmVyIHBvaW50ZXIpIGluIHRoZSBzYW1lIHN0cnVjdC4NCg0KSU1ITyBib3RoIEBidWZf
+bGVuIGFuZCBAdmFsaWQgYXJlIG5vdCBuZWNlc3NhcnksIHNvIHlvdSBqdXN0IG5lZWQgYSBzdGF0
+aWMNCmJ1ZmZlciBwbHVzIGEgc3RhdGljIGNvbXBsZXRpb24uICBBbmQgeW91IGFscmVhZHkgaGF2
+ZSBhIHN0YXRpYyBAcXVvdGVfbG9jay4NCg0KQnV0IG5vIHZlcnkgc3Ryb25nIG9waW5pb24gaGVy
+ZS4uDQoNClsuLi5dDQoNCg0KPiA+ID4gKw0KPiA+ID4gKwkvKiBTdWJtaXQgR2V0UXVvdGUgUmVx
+dWVzdCB1c2luZyBHZXRRdW90ZSBoeXBlcmNhbGwgKi8NCj4gPiA+ICsJcmV0ID0gdGR4X2hjYWxs
+X2dldF9xdW90ZShxZW50cnktPmJ1ZiwgcWVudHJ5LT5idWZfbGVuKTsNCj4gPiA+ICsJaWYgKHJl
+dCkgew0KPiA+ID4gKwkJcHJfZXJyKCJHZXRRdW90ZSBoeXBlcmNhbGwgZmFpbGVkLCBzdGF0dXM6
+JWx4XG4iLCByZXQpOw0KPiA+ID4gKwkJcmV0ID0gLUVJTzsNCj4gPiA+ICsJCWdvdG8gcXVvdGVf
+ZmFpbGVkOw0KPiA+ID4gKwl9DQo+ID4gPiArDQo+ID4gPiArCS8qIFdhaXQgdGlsbCBHZXRRdW90
+ZSBjb21wbGV0aW9uICovDQo+ID4gPiArCXdhaXRfZm9yX2NvbXBsZXRpb24oJnFlbnRyeS0+Y29t
+cGwpOw0KPiA+IA0KPiA+IE5vbi1raWxsYWJsZSB3YWl0IHcvbyB0aW1lb3V0IHdvcnJpZXMgbWUg
+YSBsaXR0bGUgYml0LCBiZWNhdXNlIGl0IGNhbiB3YWl0DQo+ID4gZm9yZXZlciBpZiBWTU0gYWxz
+byBjb3VsZG4ndCBnZXQgdGhlIFF1b3RlIGZvciB3aGF0ZXZlciByZWFzb24gIGFuZCBkb2Vzbid0
+IGhhdmUNCj4gPiBpdCdzIG93biB0aW1lb3V0LiDCoFVuZm9ydHVuYXRlbHkgdGhlIEdIQ0kgZG9l
+c24ndCBwdXQgYW55IHJlcXVpcmVtZW50IHRvIHRoZSBWTU0NCj4gPiBvbiB0aGlzLCBzbyB3ZSBr
+aW5kYSBkZXBlbmQgb24gdGhlIFZNTS4NCj4gPiANCj4gPiBQZXJoYXBzIGZvciBub3cgaXQncyBP
+SyB0byBoYXZlIHRoaXMgc2ltcGxlIGltcGxlbWVudGF0aW9uLCBidXQgbG9va3Mgd2Ugc2hvdWxk
+DQo+ID4gYXQgbGVhc3QgY2FsbCBvdXQgdGhlIHJpc2sgaW4gdGhlIGNvbW1lbnQuDQo+IA0KPiBI
+b3cgYWJvdXQgdGhlIGZvbGxvd2luZyBjb21tZW50Pw0KPiANCj4gLyoNCj4gICogU2luY2UgVERY
+IEdIQ0kgc3BlY2lmaWNhdGlvbiBkb2VzIG5vdCBkZWZpbmUgYSB2YWxpZCB0aW1lb3V0IGZvciBH
+ZXRRdW90ZQ0KPiAgKiByZXF1ZXN0cywgd2FpdCB1bnRpbCBWTU0gc2VuZHMgdGhlIGNvbXBsZXRp
+b24gbm90aWZpY2F0aW9uLiBOb3RlIHRoYXQgdGhlcmUNCj4gICogaXMgYSByaXNrIHRoYXQgdGhp
+cyB3YWl0IGNhbiBiZSBpbmZpbml0ZS4NCj4gICovDQoNClRoaXMgY29tbWVudCBpcyBtaXNzaW5n
+IHRoZSBwb2ludCBJIHRoaW5rLg0KDQpUaGVyZSBhcmUgdHdvIHRoaW5ncyBhY3R1YWxseToNCg0K
+MSkgVGhlIHRpbWVvdXQgZnJvbSBWTU0NCg0KVGhlIEdIQ0kgc2hvdWxkIGV4cGxpY2l0bHkgcHV0
+IHNvbWUgcmVxdWlyZW1lbnQgb24gdGhlIFZNTSwgaS5lLiBzYXkgc29tZXRoaW5nDQpsaWtlICJ0
+aGUgVk1NIG11c3Qgbm90IHdhaXQgZm9yIHRoZSBRdW90ZSBpbmZpbml0ZWx5IGJ1dCBtdXN0IHNp
+Z25hbCB0aGUgVERYDQpndWVzdCBhZnRlciBhIGNlcnRhaW4gdGltZSwgd2hpY2ggY2FuIGJlIGlt
+cGxlbWVudGF0aW9uIHNwZWNpZmljIi4gIEluIHRoaXMNCmNhc2UsIHdlIGNhbiBiZSBzdXJlIHRo
+YXQgdGhlIGd1ZXN0IHdvbid0IHdhaXQgZm9yZXZlci4NCg0KMikgVGhlIHRpbWVvdXQgc3VwcG9y
+dCBpbiB0aGUgR2V0UXVvdGUgaXRzZWxmDQoNClRoaXMgYWxsb3dzIHRoZSBndWVzdCB0byBzcGVj
+aWZ5IGEgdGltZW91dCBpbiB0aGUgR2V0UXVvdGUgVERWTUNBTEwsIHNvIGd1ZXN0DQpjYW4gaGF2
+ZSBpdHMgb3duIGNvbnRyb2wgb24gaG93IGxvbmcgdG8gd2FpdC4NCg0KQUZBSUNUIGZvciBub3cg
+d2UgZG9uJ3QgaGF2ZSByZXF1aXJlbWVudCBvbiAyKS4gIFdoYXQgd2UgdHJ1bHkgd2FudCBpcyAx
+KSwNCmJlY2F1c2Ugd2UgY2VydGFpbmx5IGRvbid0IHdhbnQgdG8gd2FpdCBmb3JldmVyIGJlY2F1
+c2Ugb2Ygc29tZSBjYXJlbGVzcyBWTU0NCmltcGxlbWVudGF0aW9uLg0KDQpTbywgaG93IGFib3V0
+Og0KDQoJLyoNCgkgKiBBbHRob3VnaCB0aGUgR0hDSSBkb2Vzbid0IHNwZWNpZmljYWxseSBwdXQg
+YSBoYXJkIHJlcXVpcmVtZW50IG9uIHRoZQ0KCSAqIFZNTSB0aGF0IGl0IG11c3Qgbm90IHdhaXQg
+Zm9yIHRoZSBRdW90ZSBpbmZpbml0ZWx5LCBhIHNhbmUgVk1NDQpzaG91bGQNCgkgKiBhbHdheXMg
+bm90aWZ5IHRoZSBndWVzdCBhZnRlciBhIGNlcnRhaW4gdGltZSBubyBtYXR0ZXIgd2hldGhlcg0K
+CSAqIGdldHRpbmcgdGhlIFF1b3RlIGlzIHN1Y2Nlc3NmdWwgb3Igbm90LiAgRm9yIG5vdyBqdXN0
+IGRlcGVuZCBvbiB0aGUNCgkgKiBWTU0gdG8gZG8gc28uDQoJICovDQoNClsuLi5dDQoNCj4gDQo+
+ID4gPiAgDQo+ID4gPiAgc3RhdGljIGludCBfX2luaXQgdGR4X2d1ZXN0X2luaXQodm9pZCkNCj4g
+PiA+ICB7DQo+ID4gPiArCWludCByZXQ7DQo+ID4gPiArDQo+ID4gPiAgCWlmICgheDg2X21hdGNo
+X2NwdSh0ZHhfZ3Vlc3RfaWRzKSkNCj4gPiA+ICAJCXJldHVybiAtRU5PREVWOw0KPiA+ID4gIA0K
+PiA+ID4gLQlyZXR1cm4gbWlzY19yZWdpc3RlcigmdGR4X21pc2NfZGV2KTsNCj4gPiA+ICsJcmV0
+ID0gbWlzY19yZWdpc3RlcigmdGR4X21pc2NfZGV2KTsNCj4gPiA+ICsJaWYgKHJldCkNCj4gPiA+
+ICsJCXJldHVybiByZXQ7DQo+ID4gPiArDQo+ID4gPiArCXFlbnRyeSA9IGFsbG9jX3F1b3RlX2Vu
+dHJ5KEdFVF9RVU9URV9NQVhfU0laRSk7DQo+ID4gPiArCWlmICghcWVudHJ5KSB7DQo+ID4gPiAr
+CQlwcl9lcnIoIlF1b3RlIGVudHJ5IGFsbG9jYXRpb24gZmFpbGVkXG4iKTsNCj4gPiANCj4gPiBU
+aGlzIGlzIGEgcmF0aGVyIGNvbmZ1c2luZyBtZXNzYWdlIGZyb20gdXNlcidzIHBlcnNwZWN0aXZl
+LiAgVGhlIHJlc3VsdCBvZiB0aGlzDQo+ID4gZXJyb3IgaXNuJ3QgY2xlYXIgZnJvbSAgdGhpcyBt
+ZXNzYWdlLiAgSSB0aGluayB3ZSBzaG91bGQgaGF2ZSBjbGVhciBtZXNzYWdlIC4uLg0KPiANCj4g
+SSB3aWxsIHJlbW92ZSBpdC4NCg0KSSB0aGluayBpdCdzIGZpbmUgdG8ga2VlcCBpdCwgYnV0IG15
+IHBvaW50IGlzLCBiZXNpZGVzIGFib3ZlIGVycm9yIG1zZywgaXQncw0KYmV0dGVyIHRvIGV4cGxp
+Y2l0bHkgcHJpbnQgImF0dGVzdGF0aW9uIGlzIG5vdCBhdmFpbGFibGUiLCB3aGljaCBpcyB0aGUg
+cmVzdWx0DQpvZiBhYm92ZSBlcnJvciwgdG8gdGhlIHVzZXIuDQoNCldoZXRoZXIgdGhlIGFib3Zl
+IG1lc3NhZ2UgY2FuIGJlIGltcHJvdmVkIGlzIGFub3RoZXIgc3RvcnkuICBGb3IgaW5zdGFuY2Us
+IEkNCmJlbGlldmUgIkZhaWxlZCB0byBhbGxvY2F0ZSBRdW90ZSBidWZmZXIiIGlzIGJldHRlci4N
+Cg0KPiANCj4gPiANCj4gPiA+ICsJCXJldCA9IC1FTk9NRU07DQo+ID4gPiArCQlnb3RvIGZyZWVf
+bWlzYzsNCj4gPiA+ICsJfQ0KPiA+ID4gKw0KPiA+ID4gKwlyZXQgPSB0ZHhfcmVnaXN0ZXJfZXZl
+bnRfaXJxX2NiKHF1b3RlX2NiX2hhbmRsZXIsIHFlbnRyeSk7DQo+ID4gPiArCWlmIChyZXQpDQo+
+ID4gPiArCQlnb3RvIGZyZWVfcXVvdGU7DQo+ID4gPiArDQo+ID4gPiArCXJldHVybiAwOw0KPiA+
+ID4gKw0KPiA+ID4gK2ZyZWVfcXVvdGU6DQo+ID4gPiArCWZyZWVfcXVvdGVfZW50cnkocWVudHJ5
+KTsNCj4gPiA+ICtmcmVlX21pc2M6DQo+ID4gPiArCW1pc2NfZGVyZWdpc3RlcigmdGR4X21pc2Nf
+ZGV2KTsNCj4gPiANCj4gPiAuLi4gaGVyZSBzYXlpbmcgc29tZXRoaW5nIGxpa2UgIkF0dGVzdGF0
+aW9uIGlzIG5vdCBhdmFpbGFibGUiIHNvIHVzZXIgY2FuIGJlDQo+ID4gY2xlYXIgYWJvdXQgdGhp
+cy4NCj4gPiANCj4gPiA+ICsNCj4gPiA+ICsJcmV0dXJuIHJldDsNCj4gPiA+ICB9DQo+ID4gPiAg
+bW9kdWxlX2luaXQodGR4X2d1ZXN0X2luaXQpOw0KPiA+ID4gIA0KPiA+ID4gIHN0YXRpYyB2b2lk
+IF9fZXhpdCB0ZHhfZ3Vlc3RfZXhpdCh2b2lkKQ0KPiA+ID4gIHsNCj4gPiA+ICsJdGR4X3VucmVn
+aXN0ZXJfZXZlbnRfaXJxX2NiKHF1b3RlX2NiX2hhbmRsZXIsIHFlbnRyeSk7DQo+ID4gPiArCWZy
+ZWVfcXVvdGVfZW50cnkocWVudHJ5KTsNCj4gPiA+ICAJbWlzY19kZXJlZ2lzdGVyKCZ0ZHhfbWlz
+Y19kZXYpOw0KPiA+ID4gIH0NCj4gPiA+ICBtb2R1bGVfZXhpdCh0ZHhfZ3Vlc3RfZXhpdCk7DQo+
+ID4gPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS91YXBpL2xpbnV4L3RkeC1ndWVzdC5oIGIvaW5jbHVk
+ZS91YXBpL2xpbnV4L3RkeC1ndWVzdC5oDQo+ID4gPiBpbmRleCBhNmEyMDk4YzA4ZmYuLjUwMGNk
+ZmEwMjVhZCAxMDA2NDQNCj4gPiA+IC0tLSBhL2luY2x1ZGUvdWFwaS9saW51eC90ZHgtZ3Vlc3Qu
+aA0KPiA+ID4gKysrIGIvaW5jbHVkZS91YXBpL2xpbnV4L3RkeC1ndWVzdC5oDQo+ID4gPiBAQCAt
+MTcsNiArMTcsMTIgQEANCj4gPiA+ICAvKiBMZW5ndGggb2YgVERSRVBPUlQgdXNlZCBpbiBUREcu
+TVIuUkVQT1JUIFREQ0FMTCAqLw0KPiA+ID4gICNkZWZpbmUgVERYX1JFUE9SVF9MRU4gICAgICAg
+ICAgICAgICAgICAxMDI0DQo+ID4gPiAgDQo+ID4gPiArLyogVEQgUXVvdGUgc3RhdHVzIGNvZGVz
+ICovDQo+ID4gPiArI2RlZmluZSBHRVRfUVVPVEVfU1VDQ0VTUyAgICAgICAgICAgICAgIDANCj4g
+PiA+ICsjZGVmaW5lIEdFVF9RVU9URV9JTl9GTElHSFQgICAgICAgICAgICAgMHhmZmZmZmZmZmZm
+ZmZmZmZmDQo+ID4gPiArI2RlZmluZSBHRVRfUVVPVEVfRVJST1IgICAgICAgICAgICAgICAgIDB4
+ODAwMDAwMDAwMDAwMDAwMA0KPiA+ID4gKyNkZWZpbmUgR0VUX1FVT1RFX1NFUlZJQ0VfVU5BVkFJ
+TEFCTEUgICAweDgwMDAwMDAwMDAwMDAwMDENCj4gPiA+ICsNCj4gPiA+ICAvKioNCj4gPiA+ICAg
+KiBzdHJ1Y3QgdGR4X3JlcG9ydF9yZXEgLSBSZXF1ZXN0IHN0cnVjdCBmb3IgVERYX0NNRF9HRVRf
+UkVQT1JUMCBJT0NUTC4NCj4gPiA+ICAgKg0KPiA+ID4gQEAgLTMwLDYgKzM2LDM1IEBAIHN0cnVj
+dCB0ZHhfcmVwb3J0X3JlcSB7DQo+ID4gPiAgCV9fdTggdGRyZXBvcnRbVERYX1JFUE9SVF9MRU5d
+Ow0KPiA+ID4gIH07DQo+ID4gPiAgDQo+ID4gPiArLyogc3RydWN0IHRkeF9xdW90ZV9oZHI6IEZv
+cm1hdCBvZiBRdW90ZSByZXF1ZXN0IGJ1ZmZlciBoZWFkZXIuDQo+ID4gPiArICogQHZlcnNpb246
+IFF1b3RlIGZvcm1hdCB2ZXJzaW9uLCBmaWxsZWQgYnkgVEQuDQo+ID4gPiArICogQHN0YXR1czog
+U3RhdHVzIGNvZGUgb2YgUXVvdGUgcmVxdWVzdCwgZmlsbGVkIGJ5IFZNTS4NCj4gPiA+ICsgKiBA
+aW5fbGVuOiBMZW5ndGggb2YgVERSRVBPUlQsIGZpbGxlZCBieSBURC4NCj4gPiA+ICsgKiBAb3V0
+X2xlbjogTGVuZ3RoIG9mIFF1b3RlIGRhdGEsIGZpbGxlZCBieSBWTU0uDQo+ID4gPiArICogQGRh
+dGE6IFF1b3RlIGRhdGEgb24gb3V0cHV0IG9yIFREUkVQT1JUIG9uIGlucHV0Lg0KPiA+ID4gKyAq
+DQo+ID4gPiArICogTW9yZSBkZXRhaWxzIG9mIFF1b3RlIGRhdGEgaGVhZGVyIGNhbiBiZSBmb3Vu
+ZCBpbiBURFgNCj4gPiA+ICsgKiBHdWVzdC1Ib3N0IENvbW11bmljYXRpb24gSW50ZXJmYWNlIChH
+SENJKSBmb3IgSW50ZWwgVERYIDEuMCwNCj4gPiA+ICsgKiBzZWN0aW9uIHRpdGxlZCAiVERHLlZQ
+LlZNQ0FMTDxHZXRRdW90ZT4iDQo+ID4gPiArICovDQo+ID4gPiArc3RydWN0IHRkeF9xdW90ZV9o
+ZHIgew0KPiA+ID4gKwlfX3U2NCB2ZXJzaW9uOw0KPiA+ID4gKwlfX3U2NCBzdGF0dXM7DQo+ID4g
+PiArCV9fdTMyIGluX2xlbjsNCj4gPiA+ICsJX191MzIgb3V0X2xlbjsNCj4gPiA+ICsJX191NjQg
+ZGF0YVtdOw0KPiA+ID4gK307DQo+ID4gDQo+ID4gVGhpcyBzdHJ1Y3R1cmUgaXMgd2VpcmQuICBJ
+dCdzIGEgaGVhZGVyLCBidXQgaXQgY29udGFpbnMgdGhlIGR5bmFtaWMtc2l6ZQ0KPiA+IGJ1ZmZl
+ci4gIElmIHlvdSBoYXZlIF9fZGF0YVtdIGluIHRoaXMgc3RydWN0dXJlLCB0aGVuIGl0IGlzIGFs
+cmVhZHkgYSBidWZmZXIgZm9yDQo+ID4gdGhlIGVudGlyZSBRdW90ZSwgbm8/ICBUaGVuIHNob3Vs
+ZCB3ZSBqdXN0IGNhbGwgaXQgJ3N0cnVjdCB0ZHhfcXVvdGUnPw0KPiA+IA0KPiA+IE9yIGRvIHlv
+dSB3YW50IHRvIHJlbW92ZSBfX2RhdGFbXT8NCj4gDQo+IEkgY2FuIG5hbWUgaXQgYXMgc3RydWN0
+IHRkeF9xdW90ZV9kYXRhDQoNCklmIGdvIHdpdGggcm91dGUsIHdoeSBub3QganVzdCAndGR4X3F1
+b3RlJywgb3IgJ3RkeF90ZHF1b3RlJz8NCg0KT3IsIGFjdHVhbGx5IEkgdGhpbmsgJ3RkeF9xdW90
+ZScgKG9yICd0ZHhfdGRxdW90ZScpIHNlZW1zIHRvIGJlIHRoZSBmb3JtYXQgb2YNCnRoZSBfdHJ1
+ZV8gUXVvdGUsIHNvIHBlcmhhcHMgd2Ugd2FudCAnc3RydWN0IHRkeF9xdW90ZV9yZXFfYnVmJz8N
+Cg0KPiANCj4gPiANCj4gPiA+ICsNCj4gPiA+ICsvKiBzdHJ1Y3QgdGR4X3F1b3RlX3JlcTogUmVx
+dWVzdCBzdHJ1Y3QgZm9yIFREWF9DTURfR0VUX1FVT1RFIElPQ1RMLg0KPiA+ID4gKyAqIEBidWY6
+IEFkZHJlc3Mgb2YgdXNlciBidWZmZXIgdGhhdCBpbmNsdWRlcyBURFJFUE9SVC4gVXBvbiBzdWNj
+ZXNzZnVsDQo+ID4gPiArICoJIGNvbXBsZXRpb24gb2YgSU9DVEwsIG91dHB1dCBpcyBjb3BpZWQg
+YmFjayB0byB0aGUgc2FtZSBidWZmZXIuDQo+ID4gDQo+ID4gVGhpcyBkZXNjcmlwdGlvbiBpc24n
+dCBwcmVjaXNlLiAgInVzZXIgYnVmZmVyIHRoYXQgaW5jbHVkZXMgVERSRVBPUlQiIGRvZXNuJ3QN
+Cj4gPiB0ZWxsIGFwcGxpY2F0aW9uIHdyaXRlciB3aGVyZSB0byBwdXQgdGhlIFREUkVQT1JUIGF0
+IGFsbC4gIFdlIG5lZWQgdG8gZXhwbGljaXRseQ0KPiA+IGNhbGwgb3V0IHRoZSBidWZmZXIgc3Rh
+cnRzIHdpdGggJ3RkeF9xdW90ZV9oZHInIGZvbGxvd2VkIGJ5IFREUkVQT1JUDQo+ID4gaW1tZWRp
+YXRlbHkuDQo+IA0KPiBJIGhhdmUgc3BlY2lmaWVkIGl0IGluIHN0cnVjdCB0ZHhfcXVvdGVfaGRy
+LmRhdGEgaGVscCBjb250ZW50Lg0KDQpQZXJoYXBzIEkgbWlzc2VkIHNvbWV0aGluZyBidXQgSSBk
+aWRuJ3Qgc2F5IGF0IGFueSBwbGFjZSB0aGlzIGlzIGNsZWFybHkNCmRvY3VtZW50ZWQuICBUaGUg
+Y29tbWVudCBhcm91bmQgQGRhdGEgYWJvdmUgY2VydGFpbmx5IGRvZXNuJ3QuDQoNCkp1c3Qgc2F5
+IHNvbWV0aGluZyBsaWtlOg0KDQoJQGJ1ZjogVGhlIHVzZXJzcGFjZSBwb2ludGVyIHdoaWNoIHBv
+aW50cyB0byB0aGUNCgkgICAgICAnc3RydWN0IHRkeF9xdW90ZV9yZXFfYnVmJyAod2hhdGV2ZXIg
+dGhlIGZpbmFsIG5hbWUpDQoNCj4gDQo+ID4gIA0KPiA+ID4gKyAqIEBsZW46IExlbmd0aCBvZiB0
+aGUgUXVvdGUgYnVmZmVyLg0KPiA+ID4gKyAqLw0KPiA+ID4gK3N0cnVjdCB0ZHhfcXVvdGVfcmVx
+IHsNCj4gPiA+ICsJX191NjQgYnVmOw0KPiA+ID4gKwlfX3U2NCBsZW47DQo+ID4gPiArfTsNCj4g
+PiA+ICsNCj4gPiA+ICAvKg0KDQo=
