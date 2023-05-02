@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA9A6F42C2
+	by mail.lfdr.de (Postfix) with ESMTP id 6A69B6F42C3
 	for <lists+linux-kselftest@lfdr.de>; Tue,  2 May 2023 13:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbjEBL0p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 May 2023 07:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
+        id S233916AbjEBL0q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 May 2023 07:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjEBLZG (ORCPT
+        with ESMTP id S234104AbjEBLZK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 May 2023 07:25:06 -0400
-Received: from BL0PR02CU006.outbound.protection.outlook.com (mail-eastusazon11013004.outbound.protection.outlook.com [52.101.54.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D935FC8;
-        Tue,  2 May 2023 04:24:47 -0700 (PDT)
+        Tue, 2 May 2023 07:25:10 -0400
+Received: from BL0PR02CU006.outbound.protection.outlook.com (mail-eastusazon11013011.outbound.protection.outlook.com [52.101.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9297E5FC7;
+        Tue,  2 May 2023 04:24:48 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NYqEaCUmQH0jYH7IpFcQlQz2ccx57hLYwRmnB92KBOm3sD6yAZjde7kp8t4DC48upmkkXtgmVJTbFAVM8sElUWR8bLTmp9CT1yKvnzZZ1aa5Tkx2xtkJCIxIwHuuau5Mv7i4Cj5Q6r822syXE8lbiQOn4S45zOAedlX7hSI8ZzdFxB3zjVf7HLaHxeEy+rEDGk6agZKZ0H0vp6120/c2RSjdyLOiRiHKFNYee//NxKSlfOtRSFtXYBmoEDEjs79Hz2EDpZWJHw+o6EGpe/aYQ1RzeMx0olifyWOmf38M/T04GKFkaGivdcC/3p468gFZTJvf3U9DRsdJCX/T4AtVCQ==
+ b=HU5P3g9R9Q/lgiXNVsKHUl824kFC7CGzNaVXgXCWK9vuvEorYKXJRV7k/+DVQE1YxJe10k6hn+my7dHwI9cLJ1VpQmiHQmqmktIVjU4R84rIka/WbtEnW5Ikz+McBcxYNpIXj3ylOWJv2sKtMXvdS5LqENWIa3Awop425ccLyZKgnt37+KqySNdwe5vP3DMIfvFQnRsvBAlw2klKrlJcnOigYKF0NEkp2qTulRXDnVeLI6Bd5seKSEDdA6oYcVrIUPC79aShRdr1+U6cMcQc1H1Pz+kDAk7I1gBw97KSuLTj3my0pCknUmBHsgiHqWOp1JYcPYGCMGcW3BPjYEdk9w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uInKmho4B1o98gZBl2Y1AdyjuUqybZlbhrWd2mDIjDI=;
- b=DzttNHlFtRU5n7ZEwSkuVy21H+G83AZ6TS9qYOxS8OJ7rcX1dLgB5QPOlGhHbhUJybROBnMPHMyhptdrqqXaVhXQWvCIzzJkY93jgQRro7G0kAj0jFRDf3dZjy6J/WH7BV7e9w3Y9pFEg6Bp9/mkqWpOn+AgdRcmmZW7kEwMtDjNHHjJH8jzSA0eZa3O7+5r0fwtlpDb9sr0zHKuLKqNwARylNzTKdpO4etIhVKL14+J6C4sEFLVZ/WhvubnIpTvpKqXc3c89lzdNE9Q/KQ1diFEaU4rVmgiDJM8yZpjOIotarfCy+YbXGAgTUHcZFc/bqWqBotWk/tPPwJLlBCo6A==
+ bh=ERQimYWkxEJ0rbIEpqK/pcQLku99de6QyaNoG0OzoWw=;
+ b=Xs7Fbxhm40IC2Yd44EPpVOHhgDntIBkPQhkuGjzKpDM5GNWRkIE3vDTzMv828ULB/D/jYJpGH8PqXhqge8ogZqjoc+lk38Nxub/ACPxl3SYGjhChKOe1QD41oZQwpM94/m5ESeyuScq6on3xOxZT8YdqhWpK1dNVgz6LikNSw3ry5Q0Jqf8092JmuEfI4cNcOiXMH/FDgs9rR/C1vOd9J+A6jZh/Mawj2yPTz9RRnYsxMSLvxAfc843pyK+rcY+27wSHDV4nhKMaQRM5xz/VO3dxSSbRdK/J+CQHrct8IkP9se0ZkmrIndXoQ4D2XP0yX73tYJZrMCgRMfsg8wfN3w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
  dkim=pass header.d=vmware.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uInKmho4B1o98gZBl2Y1AdyjuUqybZlbhrWd2mDIjDI=;
- b=Beu7G/VxNRosAgKEWT+qpzD5BHqZqqYdaEKf+uAsC2nONvn8vehgkrb0tUYJ96RjtPC82/P9b0ZH9f+ePix/8vrbkNaf3HixIlsUoOIlJFJvxRFm59JY6fBtUYLfIMXzqs+OxB9ovy9hcq7VhRis2Y1y6S1g80f0fwaBWZjJy4g=
+ bh=ERQimYWkxEJ0rbIEpqK/pcQLku99de6QyaNoG0OzoWw=;
+ b=2hMnw5LyjAkIYO5YnBTXQ1KfQaGJj0v/M47lowlsjHUsnESjL91vOYF4kJAEBYJ8YYZ8lkWQT2KCnishL4pBRaN82VyU8MHc9KBIG+VQUMcLG1fWmYAFs0ZP3zGKndvKQF+rSW0H2uRRR0Zf1JsnLk0EPPnJM30ikALQssCBPFM=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vmware.com;
 Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
  by BYAPR05MB6648.namprd05.prod.outlook.com (2603:10b6:a03:ed::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
- 2023 11:24:22 +0000
+ 2023 11:24:23 +0000
 Received: from PH0PR05MB8703.namprd05.prod.outlook.com
  ([fe80::5631:475a:58d4:cf66]) by PH0PR05MB8703.namprd05.prod.outlook.com
  ([fe80::5631:475a:58d4:cf66%7]) with mapi id 15.20.6363.020; Tue, 2 May 2023
- 11:24:22 +0000
+ 11:24:23 +0000
 From:   Ajay Kaher <akaher@vmware.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org, shuah@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
@@ -48,9 +48,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
         amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
         er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
-Subject: [PATCH v2 7/9] eventfs: creating tracefs_inode_cache
-Date:   Tue,  2 May 2023 16:53:18 +0530
-Message-Id: <1683026600-13485-8-git-send-email-akaher@vmware.com>
+Subject: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
+Date:   Tue,  2 May 2023 16:53:19 +0530
+Message-Id: <1683026600-13485-9-git-send-email-akaher@vmware.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1683026600-13485-1-git-send-email-akaher@vmware.com>
 References: <1683026600-13485-1-git-send-email-akaher@vmware.com>
@@ -61,51 +61,51 @@ X-ClientProxiedBy: BYAPR11CA0101.namprd11.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PH0PR05MB8703:EE_|BYAPR05MB6648:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc1e70b2-96d4-471b-ed67-08db4affc740
+X-MS-Office365-Filtering-Correlation-Id: cedb92c1-bd7a-4e11-681d-08db4affc7e5
 X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PLypwlOTLCrY4O2skGwn5uBcDjjpz0SGzTLvDk287+BD4+Phsvbokqg0prPmg9oFwpUVSUcexD5qlYhMPQyGUJKUwO1sA2QFbLZqMKZwUCSkMN9AnaHp4xeXXB2iWKT8h92vzwVfSvzCQZ9+eImKrkhEW88ak6eUF+w6f70fAOjpt3fnQjCMt6PX5b9DVZsnSJGWZA/5l/rv6UIGgkG+rrpSWapHcGxGNHv/PLxhV8hw6CWaq11QYVYV3qdB9dV2Jr80iFEOMU53jzPUtY2grEHApsWLY7SZdWcb7re4lLCSmq8lg4BhNHu7zR+zzPKa0TQh4fccPagMVMrQxn8FtFTWWWulXt2Sv1GoZ5MWVzG+sJj7SITygj8a8uij0gPlGcBlv2p0xyjSEMMIa6JhH6y3PlxGEarWyQB7XXdS0eE7F0ukFz1YWudCMg0ikegItK/QpA32u6LVh+Q/boHTyGZTqCzW0Mxn8UY+eQcIGd5FuEGQmQ3fNH1uqsuUkOmczm/jibEBc3v91jsy/ukiP7UI0M2XMIH+27pL81D5Va60uPuRUxKvJkB+39/8NhRUHELYxgz51f0OJ+DqAOQv3hMtpEjtehS+3CXuhqU4ewz+D+d1iixaIgVz5SV46Xpg
+X-Microsoft-Antispam-Message-Info: 1xCfLuXhXfeoaAj8mTIxnJDfY2jV+MBGlS2pc+4YKBp5fhbvTa+1fEAnoh4W3yUIviUx8C4jgJeFfmR/FNTFPFxatqcqsv41nbWTKF3ItIYDgdbFkx5tV98b1z5zJGiZpcM9zUaxZ4yuJqcjkOJscK/Cdbv2ZulLG7UuyLYplBb9wZ7wrMrnIAWr3qDm3S0JmDVKkU1zGKLFc0+v09XDGe9BnoVRWqDHwbnaIjiBoliMKHbKKxTexg4Um6ALJkMFcDjkQI3b4A2qbkzRQyapVmNaN+PZMoM5WyyGAsJgwpYfuz4ZjiTGMAJmaKVilrJclU3+qEq1/clRivIqSxq9W0oajQLsVAecTkDONj6Nts8Vz69GRpEv1zwgHj/g3JMtZWlRPU8bSXrtopGIOFb311e9I7qfYt3mVxbMMHi6cc5VlNAU1NYE4zcfSTm4ShQ3ajJr+kdoC088kZ0brYPFcAXKtaqa6RrzkpZCuosGOlYEQ4ONJSMJPtHODP6SXaM8lYm5VE3NXhWbbjRVrHSmjsAV+r+Lfba6dYqW+RZj+EZVMV4lMuqXy7vaqCDmLpUv2N/CHDBSQpKPUFg+612a8Ks+GVxUreRuJaGWaYj53YEJB8YInOOV0jHfQodE50Xb
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(39860400002)(376002)(366004)(451199021)(6486002)(6666004)(52116002)(107886003)(38100700002)(38350700002)(2906002)(86362001)(41300700001)(66946007)(66556008)(66476007)(4326008)(478600001)(316002)(5660300002)(8676002)(8936002)(36756003)(6506007)(26005)(6512007)(186003)(2616005)(83380400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FAX4z+vI5hd737vvWi1urWDf6Nj8cJ9p/D8k6r6bm2NP/TGlLkfgrB7yjpUK?=
- =?us-ascii?Q?XWEmHkz8hjDoQNpBLT8UQgsRSGT2TDcdN4X70Ha7pAISUuaTvtInKjg2kpNQ?=
- =?us-ascii?Q?Z9fO+Y62vHiw0jGzUldkh714mk8VexmRpkb9ZMA9A1qlSfF5M9lxGS2uU981?=
- =?us-ascii?Q?EClLsYxnVkv5Xx4mUoJLL1QvIQvsniS3Jp9PqkcpPHONIQ2MVwPaDmZZ9MwB?=
- =?us-ascii?Q?zb4rSe6HoBLrduOTB977DRhAYv4aDJp8fE+hkyg6mLZbzbsd87WJYss0mp9E?=
- =?us-ascii?Q?4LAhOqWheweyUWMfvOkM/hJIblanDJ2LOKPAw6mPvl535Y+GRHfXWBZKjhvv?=
- =?us-ascii?Q?vtdUsG95qm4se/iG5f5nl4SmbHGsMbwCqzxQzXo+fApkNLvDDusGzGICDJov?=
- =?us-ascii?Q?0bVPMbBVL+GUlyokncX5HZUGcwSgZ+rmwU/cs4L4vi5BdCYuJ43I4smqepxg?=
- =?us-ascii?Q?3R/mKhPfNG8yz2Hf1ROJjf2mNuVjYurpmgNQt+MTcx6+XX+BuYDIKiiMOYma?=
- =?us-ascii?Q?x/bXe3VdU2M9aCBNO+mip0T3FJ8kIGdSYZSFBYHqoPqkMCSNJ1qGcM6CbP43?=
- =?us-ascii?Q?nnHFHqL8qyYn2rAUDm29AMlcmAhR9UD+G+SKRj8kuZ4rSh2Fxq181oGNjdTf?=
- =?us-ascii?Q?a17IAd9SEDA7jXgzpxGK8SxoGWttsbO6WzE9JhlNxadZnPhjdDVHdDLeR9h/?=
- =?us-ascii?Q?8NdV2x3WjmxbYcoWUfhkNz6Ugsxo2UTj5oVrCRgRSzX/D9/JS8P2YmTJ689R?=
- =?us-ascii?Q?4X+euEHQw1neCmYhfwPvOCfyMQ4Gfu/9VHU2qamxd+5+aGzqEUQvmQQmngrN?=
- =?us-ascii?Q?X0syGKarkxICgg0ILJeNrmdiU/ynE1Imtcl9g4sr9TfX9rO0zQ+ozsfNIbwy?=
- =?us-ascii?Q?S2d5l+D0H1EGt7/XX7WPtwQ95yfJOsSJX+Zg5CHhE9D9V7rg7pFcXd34Bp3W?=
- =?us-ascii?Q?82rlm4arEmjCN1lka41UJ8/Pcg+KfLiKeIrMJu1ZQU78Czj15FdCPeIrttPL?=
- =?us-ascii?Q?SM1bXsq4OmObU1QgST7klTs9sDEoZQ+Q1qRjHAHWBQAfxUftEKi0HGcUdyOd?=
- =?us-ascii?Q?kluCeWOb8zdJc7n41mKwHJWEHPZbz9iabX8RXLAu9h3kDcUqCS+JK9mzPdIA?=
- =?us-ascii?Q?fXzq5MLIyXZRiOFViwJBlLH4GGAuVjuCafjICGLsy8cG0t3UWoAbZZKqbD+B?=
- =?us-ascii?Q?xGwj7tKh/iOUA0NO8R9dAL+Reslv7nCCo0jmh65kUUm6hhqsqko6d6QG8PRK?=
- =?us-ascii?Q?tHKYZthDvLVvCHOO9qWjxquuf9ewWQz+wsHLwPijPiyQ5nwh5adPiwLDvVkG?=
- =?us-ascii?Q?+juk0OWsK7F717JvFtDdKPu+JrgjSKgWFxvr06j79CG8p5SiqwTwHpXeb9vX?=
- =?us-ascii?Q?qQPtSXrGLQPpTf4ampcdrCQ8KO7HMJs9pGTIr5OKXre4usDUQgRUmbaNhQEe?=
- =?us-ascii?Q?L9yIF0s6OdiZoFG1bQBuDfUuAfRexh0FcpB2tMF4cTwriqYvY2nZw6S8h7Yv?=
- =?us-ascii?Q?j80x9a7yDXxsScU258upFFVx+yM1W5GF8SMkqUlkoC+qNePxhXHT8XnQV/ll?=
- =?us-ascii?Q?s+vsUAse7RJxusdTYfGm2ay8h+LG3s4fFgkA8KKA?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JY6MxwQDC1VvJnbV+bVTFDse4SCWRMPULs13QkVken9ZHcr0TUhmrGWZrQxZ?=
+ =?us-ascii?Q?oZymtVA8olAZDLo7M3Ybv5xI5xiRuKABoxERFFMAPwdZ/9ZC9DwdxGdgJ8NW?=
+ =?us-ascii?Q?+dUryWH2t/cGjNcqyul2ZwZs4EAQ+mTvdWljuUdPmNZV1BTKU6MxpYjXJUjV?=
+ =?us-ascii?Q?7FLpsBkf8lgLc1eyLyNcGNuOX4BKp0LHPdrvV4TYgfcYoNqcBZVxEknS+mfy?=
+ =?us-ascii?Q?BTdF40kdsDsyQumz3NtHed4QojJIbfpUSkPvXu/DJu32MGksLDDDDDDonwQ8?=
+ =?us-ascii?Q?41Iq8X6EUNnkzxnfxdYjYclQwXOkWfovrYpt6s6hiA/QtJVDh1il2CoOOjuh?=
+ =?us-ascii?Q?8o1NkX89LqVMd3lpkwMTcEgVSvIh3jx8hAhXFMT6+W/zNWCrWqrGlLlQnSta?=
+ =?us-ascii?Q?tupnsLAfXiDC6MDM8ehVVU78iIPgQWFInF2Cr8TAP+oM+7V3fEphR7Hr6Qui?=
+ =?us-ascii?Q?Y0LmlL4r53Dx/ubnHEAAuaP+2Bi53nvAm2DmRc2EKFStZs64fznwDIPEZ3S4?=
+ =?us-ascii?Q?gerlVRv8sQx5aiJWG/h7wxp+kpcVEmDDzYTqYd61dpAtPtureadToAp5++EM?=
+ =?us-ascii?Q?+JyOiPjVGQFWHO212V0mJFQbUJQ8iFyyLS56hndsu6TcKX6snm/oBxvrxIXw?=
+ =?us-ascii?Q?YY2faauc3PWjNDa5v8OXc+zeoTx/WEHXB7mtbQLMBIVB9tzbi/3B5PysTa+p?=
+ =?us-ascii?Q?QwetWpUI0PsRK7wgvPzu/bnxLjJNEyVutigtBOCKlncbq2M/BmguR5YWDJPI?=
+ =?us-ascii?Q?WwrsJt8pRkhbLMtiyaSIEju09W7UtyfpDzYn7Ne4cG1BEFqbgoPlE2hxv8Su?=
+ =?us-ascii?Q?tstaaphQbO588pmvcLikLZZKhmXBadWMSDrqDzowA0EtL88qzD+i3vKvcFus?=
+ =?us-ascii?Q?ycxAy/E63odM6kYGP/yeR2L9YhioXxO7y0ac+a+8dqEERI/TeNITokcdSm3g?=
+ =?us-ascii?Q?dXxqOrYhjoWTRdyQTYksbuC5pBv7F7XxBMZq4nqY17J34wloI2+6ksPShhp9?=
+ =?us-ascii?Q?K/VW8BFgEKYdAPkFgbJyX4DHF9YwuzukMS8JfefVW8BqvA52aeXQNm6v1Srb?=
+ =?us-ascii?Q?IxDbk/V/i4KNscsQ49twvHg+JmDwcgn78kXBm2m68DTKAENE12YM3ihCIwSX?=
+ =?us-ascii?Q?rmcV8C15hcyjWis3TP2tO1IgDKUIAd26r5QlVeLFofxSQFfwtQh234wgpiSc?=
+ =?us-ascii?Q?cxJv8HS49seYV+57m8qbd1bI/GSWqLDPm7xpKI3utlcQyjEuqaQcBx5fqwXC?=
+ =?us-ascii?Q?8SVmIoHLCGvNFzLQ6GGzPKOdHsWsGk/eaKsQOl2mxMOx4mQTKVWXHxAgRXS4?=
+ =?us-ascii?Q?GZFfhgaOljrRe5lICqjQPpNuazDqMkIWyuBVi8Vi3KxHYkBlUOwW5cI1YOfr?=
+ =?us-ascii?Q?WxndLozBxY7/T00RPnnz3Q1W4WAOr7zr2B60aUP7I1/ruiLY3jwJCTg8Z2rb?=
+ =?us-ascii?Q?S2pUDojuvzKTaiMt7ptmcB5/8DrzbWG4Qo5qImEAdAG9Ci2x5nADIuu3WCj4?=
+ =?us-ascii?Q?8+NRlaG1EkIJIMSJFcmD3bMwzFURezW8wfikjI5W1JjF9fLdUlup6B/4hiAt?=
+ =?us-ascii?Q?YCU0yaCInxCqfdBjkz16yOEtxCduUOYu+LeYyXU3?=
 X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc1e70b2-96d4-471b-ed67-08db4affc740
+X-MS-Exchange-CrossTenant-Network-Message-Id: cedb92c1-bd7a-4e11-681d-08db4affc7e5
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 11:24:22.4737
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 11:24:23.5440
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oJlYoaGXw4hTISy/15RLsLMjRIIFoSsVjYwmC/YFB3KYHnY/BkqDXLjpByqrk/dN4SUuVcksNr7bPqcpNcnscA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: a5gIZDYEyRxegddG5/QeH1oiNb/ftwAvogcBOgikDXaVe9N427Tl7rKsqZ9GFgEPCGZdvlRWJyKnckEkSJ3E1w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR05MB6648
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -117,91 +117,295 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Creating tracefs_inode_cache which is a cache of tracefs_inode.
-Adding helping functions:
-tracefs_alloc_inode()
-tracefs_free_inode()
+Till now /sys/kernel/debug/tracing/events is a part of tracefs,
+with-in this patch creating 'events' and it's sub-dir as eventfs.
+Basically replacing tracefs calls with eventfs calls for 'events'.
 
 Signed-off-by: Ajay Kaher <akaher@vmware.com>
 Co-developed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Tested-by: Ching-lin Yu <chinglinyu@google.com>
 ---
- fs/tracefs/inode.c | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ fs/tracefs/inode.c           | 18 ++++++++++
+ include/linux/trace_events.h |  1 +
+ kernel/trace/trace.h         |  2 +-
+ kernel/trace/trace_events.c  | 66 +++++++++++++++++++-----------------
+ 4 files changed, 55 insertions(+), 32 deletions(-)
 
 diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
-index 66c4df734..76820d3e9 100644
+index 76820d3e9..a098d7153 100644
 --- a/fs/tracefs/inode.c
 +++ b/fs/tracefs/inode.c
-@@ -24,11 +24,30 @@
- #include "internal.h"
+@@ -374,6 +374,23 @@ static const struct super_operations tracefs_super_operations = {
+ 	.show_options	= tracefs_show_options,
+ };
  
- #define TRACEFS_DEFAULT_MODE	0700
-+static struct kmem_cache *tracefs_inode_cachep __ro_after_init;
- 
- static struct vfsmount *tracefs_mount;
- static int tracefs_mount_count;
- static bool tracefs_registered;
- 
-+static struct inode *tracefs_alloc_inode(struct super_block *sb)
++static void tracefs_dentry_iput(struct dentry *dentry, struct inode *inode)
 +{
 +	struct tracefs_inode *ti;
 +
-+	ti = kmem_cache_alloc(tracefs_inode_cachep, GFP_KERNEL);
-+	if (!ti)
-+		return NULL;
++	if (!dentry || !inode)
++		return;
 +
-+	ti->flags = 0;
-+
-+	return &ti->vfs_inode;
++	ti = get_tracefs(inode);
++	if (ti && ti->flags & TRACEFS_EVENT_INODE)
++		eventfs_set_ef_status_free(dentry);
++	iput(inode);
 +}
 +
-+static void tracefs_free_inode(struct inode *inode)
-+{
-+	kmem_cache_free(tracefs_inode_cachep, get_tracefs(inode));
-+}
++static const struct dentry_operations tracefs_dentry_operations = {
++	.d_iput = tracefs_dentry_iput,
++};
 +
- static ssize_t default_read_file(struct file *file, char __user *buf,
- 				 size_t count, loff_t *ppos)
+ static int trace_fill_super(struct super_block *sb, void *data, int silent)
  {
-@@ -347,6 +366,9 @@ static int tracefs_show_options(struct seq_file *m, struct dentry *root)
+ 	static const struct tree_descr trace_files[] = {{""}};
+@@ -396,6 +413,7 @@ static int trace_fill_super(struct super_block *sb, void *data, int silent)
+ 		goto fail;
+ 
+ 	sb->s_op = &tracefs_super_operations;
++	sb->s_d_op = &tracefs_dentry_operations;
+ 
+ 	tracefs_apply_options(sb, false);
+ 
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index 0e373222a..696843d46 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -635,6 +635,7 @@ struct trace_event_file {
+ 	struct list_head		list;
+ 	struct trace_event_call		*event_call;
+ 	struct event_filter __rcu	*filter;
++	struct eventfs_file             *ef;
+ 	struct dentry			*dir;
+ 	struct trace_array		*tr;
+ 	struct trace_subsystem_dir	*system;
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 3726725c8..ee9002852 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -1308,7 +1308,7 @@ struct trace_subsystem_dir {
+ 	struct list_head		list;
+ 	struct event_subsystem		*subsystem;
+ 	struct trace_array		*tr;
+-	struct dentry			*entry;
++	struct eventfs_file             *ef;
+ 	int				ref_count;
+ 	int				nr_events;
+ };
+diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+index 654ffa404..01bd3dda6 100644
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -988,7 +988,8 @@ static void remove_subsystem(struct trace_subsystem_dir *dir)
+ 		return;
+ 
+ 	if (!--dir->nr_events) {
+-		tracefs_remove(dir->entry);
++		if (dir->ef)
++			eventfs_remove(dir->ef);
+ 		list_del(&dir->list);
+ 		__put_system_dir(dir);
+ 	}
+@@ -1009,7 +1010,8 @@ static void remove_event_file_dir(struct trace_event_file *file)
+ 
+ 		tracefs_remove(dir);
+ 	}
+-
++	if (file->ef)
++		eventfs_remove(file->ef);
+ 	list_del(&file->list);
+ 	remove_subsystem(file->system);
+ 	free_event_filter(file->filter);
+@@ -2295,13 +2297,13 @@ create_new_subsystem(const char *name)
+ 	return NULL;
  }
  
- static const struct super_operations tracefs_super_operations = {
-+	.alloc_inode    = tracefs_alloc_inode,
-+	.free_inode     = tracefs_free_inode,
-+	.drop_inode     = generic_delete_inode,
- 	.statfs		= simple_statfs,
- 	.remount_fs	= tracefs_remount,
- 	.show_options	= tracefs_show_options,
-@@ -676,10 +698,26 @@ bool tracefs_initialized(void)
- 	return tracefs_registered;
- }
- 
-+static void init_once(void *foo)
-+{
-+	struct tracefs_inode *ti = (struct tracefs_inode *) foo;
-+
-+	inode_init_once(&ti->vfs_inode);
-+}
-+
- static int __init tracefs_init(void)
+-static struct dentry *
++static struct eventfs_file *
+ event_subsystem_dir(struct trace_array *tr, const char *name,
+ 		    struct trace_event_file *file, struct dentry *parent)
  {
- 	int retval;
+ 	struct event_subsystem *system, *iter;
+ 	struct trace_subsystem_dir *dir;
+-	struct dentry *entry;
++	int res;
  
-+	tracefs_inode_cachep = kmem_cache_create("tracefs_inode_cache",
-+						 sizeof(struct tracefs_inode),
-+						 0, (SLAB_RECLAIM_ACCOUNT|
-+						     SLAB_MEM_SPREAD|
-+						     SLAB_ACCOUNT),
-+						 init_once);
-+	if (!tracefs_inode_cachep)
-+		return -ENOMEM;
-+
- 	retval = sysfs_create_mount_point(kernel_kobj, "tracing");
- 	if (retval)
- 		return -EINVAL;
+ 	/* First see if we did not already create this dir */
+ 	list_for_each_entry(dir, &tr->systems, list) {
+@@ -2309,7 +2311,7 @@ event_subsystem_dir(struct trace_array *tr, const char *name,
+ 		if (strcmp(system->name, name) == 0) {
+ 			dir->nr_events++;
+ 			file->system = dir;
+-			return dir->entry;
++			return dir->ef;
+ 		}
+ 	}
+ 
+@@ -2333,8 +2335,8 @@ event_subsystem_dir(struct trace_array *tr, const char *name,
+ 	} else
+ 		__get_system(system);
+ 
+-	dir->entry = tracefs_create_dir(name, parent);
+-	if (!dir->entry) {
++	dir->ef = eventfs_add_subsystem_dir(name, parent, &tr->eventfs_rwsem);
++	if (IS_ERR(dir->ef)) {
+ 		pr_warn("Failed to create system directory %s\n", name);
+ 		__put_system(system);
+ 		goto out_free;
+@@ -2349,22 +2351,22 @@ event_subsystem_dir(struct trace_array *tr, const char *name,
+ 	/* the ftrace system is special, do not create enable or filter files */
+ 	if (strcmp(name, "ftrace") != 0) {
+ 
+-		entry = tracefs_create_file("filter", TRACE_MODE_WRITE,
+-					    dir->entry, dir,
++		res = eventfs_add_file("filter", TRACE_MODE_WRITE,
++					    dir->ef, dir,
+ 					    &ftrace_subsystem_filter_fops);
+-		if (!entry) {
++		if (res) {
+ 			kfree(system->filter);
+ 			system->filter = NULL;
+ 			pr_warn("Could not create tracefs '%s/filter' entry\n", name);
+ 		}
+ 
+-		trace_create_file("enable", TRACE_MODE_WRITE, dir->entry, dir,
++		eventfs_add_file("enable", TRACE_MODE_WRITE, dir->ef, dir,
+ 				  &ftrace_system_enable_fops);
+ 	}
+ 
+ 	list_add(&dir->list, &tr->systems);
+ 
+-	return dir->entry;
++	return dir->ef;
+ 
+  out_free:
+ 	kfree(dir);
+@@ -2418,6 +2420,7 @@ event_create_dir(struct dentry *parent, struct trace_event_file *file)
+ {
+ 	struct trace_event_call *call = file->event_call;
+ 	struct trace_array *tr = file->tr;
++	struct eventfs_file *ef_subsystem = NULL;
+ 	struct dentry *d_events;
+ 	const char *name;
+ 	int ret;
+@@ -2427,26 +2430,26 @@ event_create_dir(struct dentry *parent, struct trace_event_file *file)
+ 	 * then the system would be called "TRACE_SYSTEM".
+ 	 */
+ 	if (strcmp(call->class->system, TRACE_SYSTEM) != 0) {
+-		d_events = event_subsystem_dir(tr, call->class->system, file, parent);
+-		if (!d_events)
++		ef_subsystem = event_subsystem_dir(tr, call->class->system, file, parent);
++		if (!ef_subsystem)
+ 			return -ENOMEM;
+ 	} else
+ 		d_events = parent;
+ 
+ 	name = trace_event_name(call);
+-	file->dir = tracefs_create_dir(name, d_events);
+-	if (!file->dir) {
++	file->ef = eventfs_add_dir(name, ef_subsystem, &tr->eventfs_rwsem);
++	if (IS_ERR(file->ef)) {
+ 		pr_warn("Could not create tracefs '%s' directory\n", name);
+ 		return -1;
+ 	}
+ 
+ 	if (call->class->reg && !(call->flags & TRACE_EVENT_FL_IGNORE_ENABLE))
+-		trace_create_file("enable", TRACE_MODE_WRITE, file->dir, file,
++		eventfs_add_file("enable", TRACE_MODE_WRITE, file->ef, file,
+ 				  &ftrace_enable_fops);
+ 
+ #ifdef CONFIG_PERF_EVENTS
+ 	if (call->event.type && call->class->reg)
+-		trace_create_file("id", TRACE_MODE_READ, file->dir,
++		eventfs_add_file("id", TRACE_MODE_READ, file->ef,
+ 				  (void *)(long)call->event.type,
+ 				  &ftrace_event_id_fops);
+ #endif
+@@ -2462,27 +2465,27 @@ event_create_dir(struct dentry *parent, struct trace_event_file *file)
+ 	 * triggers or filters.
+ 	 */
+ 	if (!(call->flags & TRACE_EVENT_FL_IGNORE_ENABLE)) {
+-		trace_create_file("filter", TRACE_MODE_WRITE, file->dir,
++		eventfs_add_file("filter", TRACE_MODE_WRITE, file->ef,
+ 				  file, &ftrace_event_filter_fops);
+ 
+-		trace_create_file("trigger", TRACE_MODE_WRITE, file->dir,
++		eventfs_add_file("trigger", TRACE_MODE_WRITE, file->ef,
+ 				  file, &event_trigger_fops);
+ 	}
+ 
+ #ifdef CONFIG_HIST_TRIGGERS
+-	trace_create_file("hist", TRACE_MODE_READ, file->dir, file,
++	eventfs_add_file("hist", TRACE_MODE_READ, file->ef, file,
+ 			  &event_hist_fops);
+ #endif
+ #ifdef CONFIG_HIST_TRIGGERS_DEBUG
+-	trace_create_file("hist_debug", TRACE_MODE_READ, file->dir, file,
++	eventfs_add_file("hist_debug", TRACE_MODE_READ, file->ef, file,
+ 			  &event_hist_debug_fops);
+ #endif
+-	trace_create_file("format", TRACE_MODE_READ, file->dir, call,
++	eventfs_add_file("format", TRACE_MODE_READ, file->ef, call,
+ 			  &ftrace_event_format_fops);
+ 
+ #ifdef CONFIG_TRACE_EVENT_INJECT
+ 	if (call->event.type && call->class->reg)
+-		trace_create_file("inject", 0200, file->dir, file,
++		eventfs_add_file("inject", 0200, file->ef, file,
+ 				  &event_inject_fops);
+ #endif
+ 
+@@ -3635,21 +3638,22 @@ create_event_toplevel_files(struct dentry *parent, struct trace_array *tr)
+ {
+ 	struct dentry *d_events;
+ 	struct dentry *entry;
++	int error = 0;
+ 
+ 	entry = trace_create_file("set_event", TRACE_MODE_WRITE, parent,
+ 				  tr, &ftrace_set_event_fops);
+ 	if (!entry)
+ 		return -ENOMEM;
+ 
+-	d_events = tracefs_create_dir("events", parent);
+-	if (!d_events) {
++	d_events = eventfs_create_events_dir("events", parent, &tr->eventfs_rwsem);
++	if (IS_ERR(d_events)) {
+ 		pr_warn("Could not create tracefs 'events' directory\n");
+ 		return -ENOMEM;
+ 	}
+ 
+-	entry = trace_create_file("enable", TRACE_MODE_WRITE, d_events,
++	error = eventfs_add_top_file("enable", TRACE_MODE_WRITE, d_events,
+ 				  tr, &ftrace_tr_enable_fops);
+-	if (!entry)
++	if (error)
+ 		return -ENOMEM;
+ 
+ 	/* There are not as crucial, just warn if they are not created */
+@@ -3662,11 +3666,11 @@ create_event_toplevel_files(struct dentry *parent, struct trace_array *tr)
+ 			  &ftrace_set_event_notrace_pid_fops);
+ 
+ 	/* ring buffer internal formats */
+-	trace_create_file("header_page", TRACE_MODE_READ, d_events,
++	eventfs_add_top_file("header_page", TRACE_MODE_READ, d_events,
+ 				  ring_buffer_print_page_header,
+ 				  &ftrace_show_header_fops);
+ 
+-	trace_create_file("header_event", TRACE_MODE_READ, d_events,
++	eventfs_add_top_file("header_event", TRACE_MODE_READ, d_events,
+ 				  ring_buffer_print_entry_header,
+ 				  &ftrace_show_header_fops);
+ 
+@@ -3754,7 +3758,7 @@ int event_trace_del_tracer(struct trace_array *tr)
+ 
+ 	down_write(&trace_event_sem);
+ 	__trace_remove_event_dirs(tr);
+-	tracefs_remove(tr->event_dir);
++	eventfs_remove_events_dir(tr->event_dir);
+ 	up_write(&trace_event_sem);
+ 
+ 	tr->event_dir = NULL;
 -- 
 2.39.0
 
