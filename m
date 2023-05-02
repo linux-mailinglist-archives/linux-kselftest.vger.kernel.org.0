@@ -2,68 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC216F45F4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 May 2023 16:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC25E6F4708
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 May 2023 17:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbjEBOWe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 May 2023 10:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
+        id S234523AbjEBPYE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 May 2023 11:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEBOWd (ORCPT
+        with ESMTP id S234529AbjEBPYC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 May 2023 10:22:33 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31774C7;
-        Tue,  2 May 2023 07:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683037352; x=1714573352;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=okhpxlRDEQALG8h9nFGRMtX82IOIMhVCPENvPmmTTwE=;
-  b=M3ekXbAINca4tBa5rFdTtocydRJ8VLLYrf5Q9dU7NWasjnZKyhTXLtZn
-   Cfx0vSJPKz5/TBXAkKQ8jzlHlHK1aHzt9mqdYyE0Zu82lfv0IYNSwEqV3
-   XUOIItpeH+fkFaqMPJcaKEgPalRYcYDpPK3nNcYulYDrSJfBuaIYHOnFs
-   vWfCSsIWDImaJ7yQYtyqVwtV+MLqaUfwpdDAd5nshefBFeE43UDHrfqlM
-   VYg7HUcAeYl/v6l7yKUzi1pB2SX+v3gHIrGW31uMNmehSalH2bzsvy0mO
-   uuVkrPazjjhBqx2/yWZbdBAVrH1e4Gesvh0rVrS/VSuOWnyXyMe23chmT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="348453637"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="348453637"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 07:22:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="726758659"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="726758659"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 02 May 2023 07:22:27 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ptqte-000165-2O;
-        Tue, 02 May 2023 14:22:26 +0000
-Date:   Tue, 2 May 2023 22:21:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org, shuah@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, chinglinyu@google.com,
-        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
-        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
-Subject: Re: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove
- function
-Message-ID: <202305022234.nOgIYubz-lkp@intel.com>
-References: <1683026600-13485-5-git-send-email-akaher@vmware.com>
+        Tue, 2 May 2023 11:24:02 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0CC2733;
+        Tue,  2 May 2023 08:24:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2887F221E4;
+        Tue,  2 May 2023 15:24:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1683041040; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CW2LmtNuVSk94mDGCMJ1mJ80jVCNsh4d9/7vaIxHDh4=;
+        b=zmNqwLSpBWozv3WsgFDqblkqkj9YdB1XZJul6aUiQSjbiUCMHugcr7A/qB/Fc8IZEgsQuy
+        W5QfK5czrPgcnazCSULSiL7uuPkMs+eozDD0QfQIt8ZSFFR3hmCYWD4F7G/QyyCJ5IwVwO
+        NIFVSlNrRVnz1UsSSyNMx1F255/Ky/0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1683041040;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CW2LmtNuVSk94mDGCMJ1mJ80jVCNsh4d9/7vaIxHDh4=;
+        b=QPq4qeoLoFSA33UzVko5Z22yyv8ooaSf9wwviyeAHUoGDVBMTeOEUBFtQ6Gt3OJt7/tFNo
+        DTzIsExRsdEGGQCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C9F9F134FB;
+        Tue,  2 May 2023 15:23:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id erhcLw8rUWQGIAAAMHmgww
+        (envelope-from <mdoucha@suse.cz>); Tue, 02 May 2023 15:23:59 +0000
+Message-ID: <e61e2dd0-3ce6-e849-8ce8-2b9aeb236c69@suse.cz>
+Date:   Tue, 2 May 2023 17:23:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1683026600-13485-5-git-send-email-akaher@vmware.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Petr Vorel <pvorel@suse.cz>
+Cc:     Minchan Kim <minchan@kernel.org>, ltp@lists.linux.it,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Nitin Gupta <ngupta@vflare.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Yang Xu <xuyang2018.jy@fujitsu.com>
+References: <20221107191136.18048-1-pvorel@suse.cz>
+ <Y2l3vJb1y2Jynf50@google.com> <3ac740c0-954b-5e68-b413-0adc7bc5a2b5@suse.cz>
+ <Y22b3wWs2QfMjJHi@google.com> <9489dd1c-012c-8b5d-b670-a27213da287a@suse.cz>
+ <Y3zlrBQ8fgJyNm7G@pevik> <Y4WMxqyVlAt0Sp3g@google.com>
+Content-Language: en-US
+From:   Martin Doucha <mdoucha@suse.cz>
+Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
+In-Reply-To: <Y4WMxqyVlAt0Sp3g@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,90 +82,24 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Ajay,
+On 29. 11. 22 5:38, Sergey Senozhatsky wrote:
+> On (22/11/22 16:07), Petr Vorel wrote:
+>> Martin, thanks a lot for reruning tests. I wonder problems on /dev/zero is a
+>> kernel bug or just problem which should be workarounded.
+> 
+> Hmm. Does CONFIG_KASAN show anything interesting?
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on shuah-kselftest/next]
-[also build test WARNING on shuah-kselftest/fixes linus/master rostedt-trace/for-next v6.3 next-20230428]
-[cannot apply to rostedt-trace/for-next-urgent]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/1683026600-13485-5-git-send-email-akaher%40vmware.com
-patch subject: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove function
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20230502/202305022234.nOgIYubz-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
-        git checkout 9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/tracefs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305022234.nOgIYubz-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/tracefs/event_inode.c:379:6: warning: no previous prototype for 'eventfs_remove_rec' [-Wmissing-prototypes]
-     379 | void eventfs_remove_rec(struct eventfs_file *ef)
-         |      ^~~~~~~~~~~~~~~~~~
-   fs/tracefs/event_inode.c:58:13: warning: 'eventfs_up_read' defined but not used [-Wunused-function]
-      58 | static void eventfs_up_read(struct rw_semaphore *eventfs_rwsem)
-         |             ^~~~~~~~~~~~~~~
-   fs/tracefs/event_inode.c:47:13: warning: 'eventfs_down_read' defined but not used [-Wunused-function]
-      47 | static void eventfs_down_read(struct rw_semaphore *eventfs_rwsem)
-         |             ^~~~~~~~~~~~~~~~~
-   fs/tracefs/event_inode.c:31:29: warning: 'eventfs_dentry_to_rwsem' defined but not used [-Wunused-function]
-      31 | static struct rw_semaphore *eventfs_dentry_to_rwsem(struct dentry *dentry)
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/eventfs_remove_rec +379 fs/tracefs/event_inode.c
-
-   371	
-   372	/**
-   373	 * eventfs_remove_rec - remove eventfs dir or file from list
-   374	 * @ef: a pointer to eventfs_file to be removed.
-   375	 *
-   376	 * This function recursively remove eventfs_file which
-   377	 * contains info of file or dir.
-   378	 */
- > 379	void eventfs_remove_rec(struct eventfs_file *ef)
-   380	{
-   381		struct eventfs_file *ef_child, *n;
-   382	
-   383		if (!ef)
-   384			return;
-   385	
-   386		if (ef->ei) {
-   387			/* search for nested folders or files */
-   388			list_for_each_entry_safe(ef_child, n, &ef->ei->e_top_files, list) {
-   389				eventfs_remove_rec(ef_child);
-   390			}
-   391			kfree(ef->ei);
-   392		}
-   393	
-   394		if (ef->created && ef->dentry) {
-   395			d_invalidate(ef->dentry);
-   396			dput(ef->dentry);
-   397		}
-   398		list_del(&ef->list);
-   399		kfree(ef->name);
-   400		kfree(ef);
-   401	}
-   402	
+Sorry for the delay. We've tried to reproduce the bug with CONFIG_KASAN 
+enabled but the only affected arch is PPC64LE and KASAN is not available 
+there at all. Our kernel maintainers confirmed that if we need KASAN to 
+debug this, we're out of luck.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Martin Doucha   mdoucha@suse.cz
+QA Engineer for Software Maintenance
+SUSE LINUX, s.r.o.
+CORSO IIa
+Krizikova 148/34
+186 00 Prague 8
+Czech Republic
+
