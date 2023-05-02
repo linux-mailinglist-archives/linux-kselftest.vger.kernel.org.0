@@ -2,163 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FB26F47F2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 May 2023 18:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AAC6F480D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 May 2023 18:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbjEBQHZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 May 2023 12:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
+        id S233571AbjEBQKu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 May 2023 12:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBQHY (ORCPT
+        with ESMTP id S233694AbjEBQKN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 May 2023 12:07:24 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FBD1997;
-        Tue,  2 May 2023 09:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683043643; x=1714579643;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I2QZzh9qzfdA9J2tzysHsjo8wxyPgdS/fULekpS2MxY=;
-  b=SaDX/cbyrYqWsQWRUqNL/jikPr4MQnNnmit81WvwgMmjTVpHVy6IRemF
-   grJ+s9eonlk3/XjqoZ8hPngiX63BU6SLPj0mU11MsGrzRTBR689MOaWyF
-   mocVWAVRRt9qmrRL0qlSN+nqt6z2FOXAG+IFMhS2O76Z7PEZoLJBbX0W8
-   EC41utJMdM5zmfPBFyLH6erU0i7OxQzUPjxPZyokg14K3F+ETRru3a+/Z
-   Yp65CuW1DUdBo+xX/FXm9M8cyWGbsRlpMv1lmdtkZ8nU8XCO9qChtp5hh
-   RYs3kMEpq5dRs2C/tZtFglplrzn0Y89ZxtJkpgXNpGtPKmiT4xqhKoq6Y
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="337563677"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="337563677"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 09:04:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="696238977"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="696238977"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 May 2023 09:04:30 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ptsUP-000196-0O;
-        Tue, 02 May 2023 16:04:29 +0000
-Date:   Wed, 3 May 2023 00:04:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org, shuah@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, chinglinyu@google.com,
-        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
-        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
-Subject: Re: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove
- function
-Message-ID: <202305022354.fzV9RKTT-lkp@intel.com>
-References: <1683026600-13485-5-git-send-email-akaher@vmware.com>
+        Tue, 2 May 2023 12:10:13 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADB11997;
+        Tue,  2 May 2023 09:10:05 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5529f3b8623so37529507b3.2;
+        Tue, 02 May 2023 09:10:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683043805; x=1685635805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4B0HvX2nGzxUhkZvCD432MN6qQWUyvh7KEoB0EI6v8I=;
+        b=K/diUuseYVVyggeT9nylJBglUBxd5PPk72D3anqdElFClsXbdip6II6v3FUnX8avRl
+         tDu1SLsQInUXtEqPGQ1u8OZRShTVlF6vYHix73j+MO0XwDtvmQFAcrAFN6L+vj5WJnNH
+         X1f9Co65KPtfB7Xa2tXi6eyOVyQ9cZoYm1fXhd7a9x694ntbAdy49SPQ86jWEPqjir7D
+         vRFbu8Xd28h9I+5z5YHM9UKuWJQQVz2EaE4TXyAoPQADzCsTLivgcshpaYBWCHIpRkTx
+         dDfJLN8N0tQ3si+sidWfk7xz2yoWf4yVuVuVoeFO9wzotbtvhtsAaQlpwef2dD04UtZY
+         mlGQ==
+X-Gm-Message-State: AC+VfDyeCkGeCp8wA6ATJbQUW7bx0x4cpcPil3o/3cJ4vMoaGZLXFRHT
+        WbfrH26sm0foICenqdbWXL6TJ17QwUyapA==
+X-Google-Smtp-Source: ACHHUZ6j7sPS+7ctgZXxn7Mqb3pA6gtYjitizY4pnWxMo9S7RBTN04OPNGcgaIx2spG6okK/iTyrVA==
+X-Received: by 2002:a25:ea04:0:b0:b9a:7693:93f7 with SMTP id p4-20020a25ea04000000b00b9a769393f7mr15651671ybd.45.1683043804666;
+        Tue, 02 May 2023 09:10:04 -0700 (PDT)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id 62-20020a251241000000b00b9db62abff3sm1837597ybs.58.2023.05.02.09.10.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 09:10:03 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-55a829411b5so16329407b3.1;
+        Tue, 02 May 2023 09:10:02 -0700 (PDT)
+X-Received: by 2002:a25:142:0:b0:b9e:7613:fcb1 with SMTP id
+ 63-20020a250142000000b00b9e7613fcb1mr1967815ybb.63.1683043802650; Tue, 02 May
+ 2023 09:10:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1683026600-13485-5-git-send-email-akaher@vmware.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1683022164.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1683022164.git.geert+renesas@glider.be>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 2 May 2023 18:09:50 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVmfj8L24QbMGn54jW96rYkvX1gizmvgvEB7T3Jwevd+g@mail.gmail.com>
+Message-ID: <CAMuHMdVmfj8L24QbMGn54jW96rYkvX1gizmvgvEB7T3Jwevd+g@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Input: tests - miscellaneous fixes
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>, linux-input@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Ajay,
+Hi Javier,
 
-kernel test robot noticed the following build warnings:
+On Tue, May 2, 2023 at 12:17 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+> This patch series fixes a crash in the new input selftest, and makes the
+> test available when the KUnit framework is modular.
+>
+> Unfortunately test 3 still fails for me (tested on Koelsch (R-Car M2-W)
+> and ARAnyM):
+>
+>         KTAP version 1
+>         # Subtest: input_core
+>         1..3
+>     input: Test input device as /devices/virtual/input/input1
+>         ok 1 input_test_polling
+>     input: Test input device as /devices/virtual/input/input2
+>         ok 2 input_test_timestamp
+>     input: Test input device as /devices/virtual/input/input3
+>         # input_test_match_device_id: ASSERTION FAILED at # drivers/input/tests/input_test.c:99
+>         Expected input_match_device_id(input_dev, &id) to be true, but is false
+>         not ok 3 input_test_match_device_id
+>     # input_core: pass:2 fail:1 skip:0 total:3
+>     # Totals: pass:2 fail:1 skip:0 total:3
+>     not ok 1 input_core
 
-[auto build test WARNING on shuah-kselftest/next]
-[also build test WARNING on shuah-kselftest/fixes linus/master v6.3 next-20230428]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Adding more debug code shows that it's the test on evbit [1] in
+input_match_device_id() that fails.
+Looking at your input_test_match_device_id(), I think you expect
+the checks for the various bitmaps to be gated by
+"if (id->flags & INPUT_DEVICE_ID_MATCH_EVBIT)", like is done for the
+other checks?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/1683026600-13485-5-git-send-email-akaher%40vmware.com
-patch subject: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove function
-config: i386-randconfig-a011-20230501 (https://download.01.org/0day-ci/archive/20230502/202305022354.fzV9RKTT-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
-        git checkout 9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/tracefs/ kernel/trace/
+[1] https://elixir.bootlin.com/linux/latest/source/drivers/input/input.c#L1021
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305022354.fzV9RKTT-lkp@intel.com/
+Gr{oetje,eeting}s,
 
-All warnings (new ones prefixed by >>):
-
->> fs/tracefs/event_inode.c:379:6: warning: no previous prototype for function 'eventfs_remove_rec' [-Wmissing-prototypes]
-   void eventfs_remove_rec(struct eventfs_file *ef)
-        ^
-   fs/tracefs/event_inode.c:379:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void eventfs_remove_rec(struct eventfs_file *ef)
-   ^
-   static 
-   fs/tracefs/event_inode.c:31:29: warning: unused function 'eventfs_dentry_to_rwsem' [-Wunused-function]
-   static struct rw_semaphore *eventfs_dentry_to_rwsem(struct dentry *dentry)
-                               ^
-   fs/tracefs/event_inode.c:47:13: warning: unused function 'eventfs_down_read' [-Wunused-function]
-   static void eventfs_down_read(struct rw_semaphore *eventfs_rwsem)
-               ^
-   fs/tracefs/event_inode.c:58:13: warning: unused function 'eventfs_up_read' [-Wunused-function]
-   static void eventfs_up_read(struct rw_semaphore *eventfs_rwsem)
-               ^
-   4 warnings generated.
-
-
-vim +/eventfs_remove_rec +379 fs/tracefs/event_inode.c
-
-   371	
-   372	/**
-   373	 * eventfs_remove_rec - remove eventfs dir or file from list
-   374	 * @ef: a pointer to eventfs_file to be removed.
-   375	 *
-   376	 * This function recursively remove eventfs_file which
-   377	 * contains info of file or dir.
-   378	 */
- > 379	void eventfs_remove_rec(struct eventfs_file *ef)
-   380	{
-   381		struct eventfs_file *ef_child, *n;
-   382	
-   383		if (!ef)
-   384			return;
-   385	
-   386		if (ef->ei) {
-   387			/* search for nested folders or files */
-   388			list_for_each_entry_safe(ef_child, n, &ef->ei->e_top_files, list) {
-   389				eventfs_remove_rec(ef_child);
-   390			}
-   391			kfree(ef->ei);
-   392		}
-   393	
-   394		if (ef->created && ef->dentry) {
-   395			d_invalidate(ef->dentry);
-   396			dput(ef->dentry);
-   397		}
-   398		list_del(&ef->list);
-   399		kfree(ef->name);
-   400		kfree(ef);
-   401	}
-   402	
+                        Geert
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
