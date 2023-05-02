@@ -2,120 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D4E6F4CDB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 May 2023 00:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D1F6F4CDE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 May 2023 00:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbjEBW1a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 May 2023 18:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        id S229811AbjEBW2L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 May 2023 18:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBW13 (ORCPT
+        with ESMTP id S229806AbjEBW2J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 May 2023 18:27:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5E010E7;
-        Tue,  2 May 2023 15:27:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 58A8B21F42;
-        Tue,  2 May 2023 22:27:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683066446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VYMMl6QukjJ+AWKIxzwYKmP/x77nkL2kqwU3yC0/IAE=;
-        b=twfR7/D1Mak2ce6QwCqeTdus/uNI/7WRnQBvtx+NzXxn0Fj5eKkbNVZAK7QhBvYLti8zL7
-        AiNmE4199XoBMBtHzSn9dcoznncO9bmqgACe9SnzsjqwNTuCORcM6MUay4wJbyzTFM6rvZ
-        bqUL4+t/6cqzpUiWOZiSFZkM3NHvDmY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0DB9C134FB;
-        Tue,  2 May 2023 22:27:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IwtUAk6OUWTwYgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 02 May 2023 22:27:26 +0000
-Date:   Wed, 3 May 2023 00:27:24 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Message-ID: <ZFGOTHQj3k5rzmyR@blackbook>
-References: <ZDdYOI9LB87ra2t_@slm.duckdns.org>
- <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
- <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
- <ZDmFLfII8EUX_ocY@slm.duckdns.org>
- <c61ca9d0-c514-fb07-c2f2-3629e8898984@redhat.com>
- <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
- <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
- <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
- <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
- <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
+        Tue, 2 May 2023 18:28:09 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457021FCF
+        for <linux-kselftest@vger.kernel.org>; Tue,  2 May 2023 15:28:08 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-b9dcd91a389so5495259276.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 May 2023 15:28:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683066487; x=1685658487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lwFGIxh3mR4IxnfjO7Fh/+VSIOsZ1HZ3AsHMkzhJzVc=;
+        b=LV4Xm+Pf/B+mhX6Eux2/d4iyrBd+wh5nhjdM+6mLRXMO0SKOeWUfAlVseraSM1dEGE
+         zp84L/n/KBh/e0R29D/3dwDFGaI3EmTrw4gip9y8rvwrtj6zd510NLG9bCl8vpjqlLk6
+         o2KkipHhztX/aduTGfL4R2o2kOeTZ9dixM84r1Sqyq6Qo6RT5YMk02pcMg+hrqkPPtkf
+         btppu9GSiN7ZpCPLog7vQNKAz5X0GBqCYIc6rYgC6Xgwc7lFXuKzu5gZRkmivJTBYDGs
+         RXlaV1cyEDnI8lJFyjWOkhHyQhdqvPPGPVyeXM4agzscC27+w9gcBgbcS8H8+y6pNjoT
+         HrDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683066487; x=1685658487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lwFGIxh3mR4IxnfjO7Fh/+VSIOsZ1HZ3AsHMkzhJzVc=;
+        b=O5kdUldj1yAW9z96igWlWS+boT08KXCHaC2ltlxMRUPV0GRCRZRxxyngBSI59eTvWT
+         Fu7kQbkPdIVbvyEFNf0I4ViXiJ0OvZg7FcmuDObXP6BoSHF2pye/SHbiTCe4fNoEY6cE
+         Qst3X1BLZ8hO1e7pzcyrI3KY40j6Axf7DvIIq1FXVXCln3RdoQGzWjmOHIJMgR5aKiJa
+         KGs/0QABnRkvbRMd3ev9qt8JDd4X4jBTfbRu55xCdr1SZxV+loqU7n/8mqVLkbcgrzM7
+         cixSSawXLFJ6W1qsemmVb5tR6v49s8TOeMJQTsZW0NfqFbnUEe1vKn1uBvRbIEyCDse4
+         vO1A==
+X-Gm-Message-State: AC+VfDza1UlxRduxdOV5/wffmGXO1FJV6vBWlIr+9hX0U8jI8O9MpcFK
+        CRiM7/Vf5BArK4iwjKFmRgVgtEUxL+5HXDxSCka/1A==
+X-Google-Smtp-Source: ACHHUZ429eSlqZEB+CY548Pp/dt5SSi39y/Hd6nprAFMirATPj3cxRLNBRv8xuZqzR4rjXejkS2Zjep2a9MBdAJUsCs=
+X-Received: by 2002:a25:ad91:0:b0:b96:9160:8da4 with SMTP id
+ z17-20020a25ad91000000b00b9691608da4mr17677838ybi.17.1683066487198; Tue, 02
+ May 2023 15:28:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20230413034108.1902712-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20230413034108.1902712-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230413034108.1902712-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Chong Cai <chongc@google.com>
+Date:   Tue, 2 May 2023 15:27:53 -0700
+Message-ID: <CALRH0CjQhSzWhpjS2+Wp1xWswyK=eNmBGVpbVGr4sM0tMZT5pQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] virt: tdx-guest: Add Quote generation support
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 02, 2023 at 05:26:17PM -0400, Waiman Long <longman@redhat.com> =
-wrote:
-> In the new scheme, the available cpus are still directly passed down to a
-> descendant cgroup. However, isolated CPUs (or more generally CPUs dedicat=
-ed
-> to a partition) have to be exclusive. So what the cpuset.cpus.reserve does
-> is to identify those exclusive CPUs that can be excluded from the
-> effective_cpus of the parent cgroups before they are claimed by a child
-> partition. Currently this is done automatically when a child partition is
-> created off a parent partition root. The new scheme will break it into 2
-> separate steps without the requirement that the parent of a partition has=
- to
-> be a partition root itself.
+On Wed, Apr 12, 2023 at 8:42=E2=80=AFPM Kuppuswamy Sathyanarayanan
+<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+>
+> In TDX guest, the second stage in attestation process is to send the
+> TDREPORT to QE/QGS to generate the TD Quote. For platforms that does
+> not support communication channels like vsock or TCP/IP, implement
+> support to get TD Quote using hypercall. GetQuote hypercall can be used
+> by the TD guest to request VMM facilitate the Quote generation via
+> QE/QGS. More details about GetQuote hypercall can be found in TDX
+> Guest-Host Communication Interface (GHCI) for Intel TDX 1.0, section
+> titled "TDG.VP.VMCALL<GetQuote>".
+>
+> Add support for TDX_CMD_GET_QUOTE IOCTL to allow attestation agent
+> submit GetQuote requests from the user space using GetQuote hypercall.
+>
+> Since GetQuote is an asynchronous request hypercall, VMM will use
+> callback interrupt vector configured by SetupEventNotifyInterrupt
+> hypercall to notify the guest about Quote generation completion or
+> failure. So register an IRQ handler for it.
+>
+> GetQuote TDVMCALL requires TD guest pass a 4K aligned shared buffer
+> with TDREPORT data as input, which is further used by the VMM to copy
+> the TD Quote result after successful Quote generation. To create the
+> shared buffer, allocate the required memory using alloc_pages() and
+> mark it shared using set_memory_decrypted() in tdx_guest_init(). This
+> buffer will be re-used for GetQuote requests in TDX_CMD_GET_QUOTE
+> IOCTL handler.
+>
+> Although this method will reserve a fixed chunk of memory for
+> GetQuote requests during the init time, it is preferable to the
+> alternative choice of allocating/freeing the shared buffer in the
+> TDX_CMD_GET_QUOTE IOCTL handler, which will damage the direct map.
 
-new scheme
-  1st step:
-  echo C >p/cpuset.cpus.reserve
-  # p/cpuset.cpus.effective =3D=3D A-C (1)
-  2nd step (claim):
-  echo C' >p/c/cpuset.cpus # C'=E2=8A=86C
-  echo root >p/c/cpuset.cpus.partition
+Thanks Sathyanarayanan for the work. The patch looks good. Reserving a fixe=
+d
+chunk of memory for GetQuote makes sense to me.
 
-current scheme
-  1st step (configure):
-  echo C >p/c/cpuset.cpus
-  2nd step (reserve & claim):
-  echo root >p/c/cpuset.cpus.partition
-  # p/cpuset.cpus.effective =3D=3D A-C (2)
-
-As long as p/c is unpopulated, (1) and (2) are equal situations.
-Why is the (different) two step procedure needed?
-
-Also the relaxation of requirement of a parent being a partition
-confuses me -- if the parent is not a partition, i.e. it has no
-exclusive ownership of CPUs but it can still "give" it to children -- is
-child partition meant to be exclusive? (IOW can parent siblings reserve
-some same CPUs?)
-
-Thanks,
-Michal
+And just want to re-emphasize that the TDVMCALL approach is important for
+many use cases that cannot depend on virtio/vsock.
