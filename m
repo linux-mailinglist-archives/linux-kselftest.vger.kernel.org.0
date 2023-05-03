@@ -2,61 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD616F5E03
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 May 2023 20:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE1F6F5E0C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 May 2023 20:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbjECSfA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 May 2023 14:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S229564AbjECSjr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 May 2023 14:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbjECSew (ORCPT
+        with ESMTP id S229461AbjECSjq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 May 2023 14:34:52 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E155583C5;
-        Wed,  3 May 2023 11:34:31 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-94a342f7c4cso1063902666b.0;
-        Wed, 03 May 2023 11:34:31 -0700 (PDT)
+        Wed, 3 May 2023 14:39:46 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F1D4EDD;
+        Wed,  3 May 2023 11:39:45 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94f7a0818aeso908176166b.2;
+        Wed, 03 May 2023 11:39:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683138870; x=1685730870;
+        d=gmail.com; s=20221208; t=1683139184; x=1685731184;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xyL6ErGxtGK4gbcrXbY7+L3d/vbQkgK7HxYu2bCcYGY=;
-        b=Hyfqv2D/Vmdm2qFvoJ0/03cG9FwKp7F/gSIeqr4sgYcvejyBB87r94IUaNBhST7yVE
-         npRmmDaVs6LIVUbsUBG9t7M/UqpLPq+eftmvOBtGnYdRyHTXJjwJ6zesj+es8PaF5XHU
-         wQyE6sZfQ7VrBdLweKkk5Klq17iffIxZntoTmFywSrNt3Svyed2Eo8eiPNrba4aDEOPV
-         fPhImEWYSmvpS/IeAHtnG66QU3GSEUBLm9uq0DfOdC4NwBIDciwxNCEznXKkCIQQXj9X
-         vsupHh8Lu1hhe2h13Z4vKrlmL1PwA+QCTlrB+U2QRdVT/mGKSnD03QdOChUCv6figHdh
-         QUOQ==
+        bh=hXawo9kiP+Vmzoz/c2lQQeKzlye9OM2UYu1dHvknnKI=;
+        b=P5g/bc4CJxpECNiGqxkyLXl2+x+qXT/PsfKky592bnfOuaqHgctz1pzcGnk7c7DLnZ
+         Gzc0Hpanaeq/vQIbd13QXdC59a3FWr6QSzLyePt81dZE6WZ+5vh4Sv80Mx16dm6IOjrR
+         d+ZMEk7AvVPLGPFJ1k+0BD7CwwGzlQECTbpvZyIOhzTzmmoKObZlQlax8OvfOCYJDiNW
+         +U5pwJ7ao1sl+qOm1RX3j+4U2sQmXbjfP2himr8IuoMYgYp8OzdKeHnHoFPrhX1rsf5m
+         Bdj6V2AWvEAxoTb2IeiIo1Cbx69kfo7zi/80chUqTmKT8tdSP02tNURGpoaZ5cTyzva9
+         393g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683138870; x=1685730870;
+        d=1e100.net; s=20221208; t=1683139184; x=1685731184;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xyL6ErGxtGK4gbcrXbY7+L3d/vbQkgK7HxYu2bCcYGY=;
-        b=Fx7aXC0okIDAFpEsl9oq03lQgVGRbZFF9iPzu+ARlyXCpBNn0GCsDYe8+cPJ8hl8pZ
-         W5bhOymR15V62UWzJTbTDe1204jBG+dOay0u9FfA148Av9l5/DMfFdli63nULRdqxftR
-         TiIiTz1uK68WW2TmaPbH+pn5qcO7juBRTaXUED0bd19IWFSiCZlJcwqpRn1vQzRQCuHK
-         3MLabC1o4Zoa56W3Yj88mVhMTBXqtNuw3rXKEnycOvjPzzesWPePEX2+7pu0R2D5Xy2q
-         ZUkFE60bhIZGDWBaNAqHBcaa3dmIHLVXR0GL4SvtvtynxqGEgEVvkLIDiW/fFvPDUfkj
-         btKA==
-X-Gm-Message-State: AC+VfDyEkAo5O04FlTkjb4map6LSVND7FCSdHjp+zXmU3YCCqQRC1KuR
-        7cQvMZa1IK+1wTzKyum9KF+w+W3w6TisLQWKznZMC9M/
-X-Google-Smtp-Source: ACHHUZ7a+hQOAcN6OMpUgSZPHGzi8ZUj4EGszToNKziX2RB/Nt4YhgZDxNyVmWXTjd/63KKAyBsdDGJOjhhvuxX4Dmk=
-X-Received: by 2002:a17:907:9705:b0:94e:1764:b0b5 with SMTP id
- jg5-20020a170907970500b0094e1764b0b5mr4372303ejc.69.1683138870113; Wed, 03
- May 2023 11:34:30 -0700 (PDT)
+        bh=hXawo9kiP+Vmzoz/c2lQQeKzlye9OM2UYu1dHvknnKI=;
+        b=L7HxfH+wr0+eHqIXwRz4gsJuxCKBQQ4cCwKgbaoX8TK1eSoe8tHb/DjW+uGOfXH2Ho
+         Hl5GK6q5NuoWkeoUHH9tFuQp97f0yAY72fvFc9Wp+ygYzhJRVaATWZ53hFXCMdseHQwg
+         ONXIlLPnkeUBe9whipeUFjk0Ma1cv1rGtWNqs3agl9uy/ARJ8wuUSwCdgenWfJggMbVP
+         WbBpMf0mEcfMuQx8uBK+Z1MuvNZD2AipuF7wSM5Bz0+vfQLTsfmFSA9iC2WSBDYn4m2z
+         1A+Ki3YQb+MriQqN6RcqFfDuGnyZ1JCXxoFLURKQeKf7OO2KHcwRdQd3I6xSWyJooDEb
+         Lyow==
+X-Gm-Message-State: AC+VfDy44OizYVxzVF6suH/S91CnqdpXzuzypMhN+nBSW4ELz3h2fDDT
+        FgZA2aikp5KRbdhF2C5KVE8uEk+f6hC658bnhIU=
+X-Google-Smtp-Source: ACHHUZ4FqJhmXnUo/9MSvsx/rBHxAFjruUTH3c2eTKi/Fu9MUkFzjkK2ZGcho5F9Qo3igWXoBGNqZGNw/UV+gQwQJ7M=
+X-Received: by 2002:a17:907:1b08:b0:957:1df0:9cbf with SMTP id
+ mp8-20020a1709071b0800b009571df09cbfmr4694843ejc.19.1683139184132; Wed, 03
+ May 2023 11:39:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-3-drosen@google.com>
- <CAEf4BzakRfffU9+wLBNfhBi1dKxs03ibopJsMyEF6JAM-QJWjw@mail.gmail.com> <CA+PiJmQJ8m_W_SF3GPe9pqnwJX0gbkWuuOz-WXHWcA7JExgMyg@mail.gmail.com>
-In-Reply-To: <CA+PiJmQJ8m_W_SF3GPe9pqnwJX0gbkWuuOz-WXHWcA7JExgMyg@mail.gmail.com>
+References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-2-drosen@google.com>
+ <CAEf4BzbyX3i6k5eL6D-5enU+u58nVn_fK28zNBJ4w_Vm-+RiMQ@mail.gmail.com>
+ <CAADnVQ+jQG95kVqkajr=zz2-vs24XedEXcBgSx29oAjqUsFn2g@mail.gmail.com> <CA+PiJmST4WUH061KaxJ4kRL=fqy3X6+Wgb2E2rrLT5OYjUzxfQ@mail.gmail.com>
+In-Reply-To: <CA+PiJmST4WUH061KaxJ4kRL=fqy3X6+Wgb2E2rrLT5OYjUzxfQ@mail.gmail.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 3 May 2023 11:34:17 -0700
-Message-ID: <CAEf4BzbQthAhS_TzOuMecz45SXMf5zDL1c2XQ6xS6C5jpx-y+A@mail.gmail.com>
-Subject: Re: [PATCH 2/3] bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
+Date:   Wed, 3 May 2023 11:39:32 -0700
+Message-ID: <CAEf4Bza3ONHzV0OPu2q17g7Z6w4PD8hMAmjP6ov-hKstt7r55A@mail.gmail.com>
+Subject: Re: [PATCH 1/3] bpf: verifier: Accept dynptr mem as mem in helpers
 To:     Daniel Rosenberg <drosen@google.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -67,9 +70,11 @@ Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
+        Mykola Lysenko <mykolal@fb.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,24 +87,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 6:58=E2=80=AFPM Daniel Rosenberg <drosen@google.com=
-> wrote:
+On Mon, May 1, 2023 at 6:12=E2=80=AFPM Daniel Rosenberg <drosen@google.com>=
+ wrote:
 >
-> On Thu, Apr 6, 2023 at 2:09=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
+> On Thu, Apr 6, 2023 at 3:13=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
 > >
-> > would this work correctly if someone passes a non-null buffer with too
-> > small size? Can you please add a test for this use case.
-> >
-> Working on a test case for this, but the test case I wrote fails
-> without my patches.
-> I'm just declaring a buffer of size 9 on the stack, and then passing
-> in bpf_dynptr_slice that buffer, and size 10. That's passing the
-> verifier just fine. In fact, it loads successfully up to size 16. I'm
-> guessing that's adjusting for alignment? Still feels very strange. Is
-> that expected behavior?
+> > +1
+> > All of the DYNPTR_TYPE_FLAG_MASK flags cannot appear in type =3D=3D reg=
+->type
+> > here.
+> > They are either dynamic flags inside bpf_dynptr_kern->size
+> > or in arg_type.
+> > Like in bpf_dynptr_from_mem_proto.
+>
+> Looking at this a bit more, I believe this is to enforce packet
+> restrictions for DYNPTR_TYPE_SKB and DYNPTR_TYPE_XDP. When a helper
+> function alters a packet, dynptr slices of it are invalidated. If I
+> remove that annotation entirely, then the invalid_data_slice family of
+> tests fail. bpf_dynptr_from_mem_proto is fine since that's just local
+> dynptrs, which don't have any extra limitations.
 
-pointer to stack is trickier (verifier will just mark part of stack as
-overwritten with random data), it's best to use map value pointer as a
-source of buffer. So try using ARRAY map with small value_size, do
-lookup_elem, check for NULL, and pass non-NULL pointer as a buffer.
+
+Ah, ok, thanks for investigating!
