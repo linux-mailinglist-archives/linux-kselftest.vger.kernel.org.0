@@ -2,284 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33AE6F6347
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 May 2023 05:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FB86F6484
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 May 2023 07:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjEDDXv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 May 2023 23:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        id S229522AbjEDFnq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 May 2023 01:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEDDXu (ORCPT
+        with ESMTP id S229482AbjEDFnp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 May 2023 23:23:50 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3979910C6
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 May 2023 20:23:47 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-5208be24dcbso4110414a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 May 2023 20:23:47 -0700 (PDT)
+        Thu, 4 May 2023 01:43:45 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFF71FDA
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 May 2023 22:43:43 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3ef34c49cb9so628481cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 May 2023 22:43:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1683170626; x=1685762626;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yMX7++hY4TQk4m80chfBtqp/BoCVFUEBvGrPejwK03Y=;
-        b=C4XBk9y274W2MZ7bH+sTaioczMsRoir4gFPOMVgu9uzCnuwLNOkWPPcGV67y5ExYVD
-         Qs/sA4g7XAjLH/C5AWxTTdpD33HaN/OjezLLrf4v8LVw1w+4PBgpJaI+S0hi1VJLXmpm
-         1q5IC0Gz54xNAALsvaa38Fi5R2T3ysOEBpEWJJ0kn31LhKXD0MkjI8GKNOmD9UIXESY2
-         +5d0Qq4Dlyd6gUkPAJbKzYi8FIZePY9UXqyeQWE4GTVjMhFL6ck5aKqRjkohsexasajL
-         18uwX8wnAGe15RA4ojLl0Qp8V9ZN9N06cxJB7rzYx3IkFR4og6WjmM33iXS80EiaeFnb
-         MQjw==
+        d=google.com; s=20221208; t=1683179022; x=1685771022;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sKEkZFVH2KZiPZGQ6onZKDypE8VqSqbA6RJxh3D4iqQ=;
+        b=Curk6tJTkLFKybxwmRhdhOMhDNxdujlcyezyNSQuqzZfggOJNoM2EDpT5V4XZ6oapu
+         zvSeaSNeD2mM1fS4+ksRbGvxoNMfklBWHYPW2fxxgvcd+Cn1oWxDAG3ZB6UkDRtxgHnH
+         r2unq2szYHJNzNP0HuPrxQq+12Wk3ftDc7KWHswgtcc2z/9gMabf1AYtfCeGZgCZUEFR
+         GnmfDW3b1sDfyIkGHZ07v/dLE0OBZrvXnS9Umkyr/rrqiShf94DasX9ZyGTjGmU/f72i
+         ZLSQfR7GBXBHe4k6Nis2bbhKHjwRb9E0gl4x0lakCcsu/Mn7nqSeAZaiwKwRiZVD3UVf
+         vJRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683170626; x=1685762626;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yMX7++hY4TQk4m80chfBtqp/BoCVFUEBvGrPejwK03Y=;
-        b=CHUxTLTP4P2b4ZUEqTyahJR+ZwQrxSCC5nSXhgtbY7Sf8GslupHdOHQ/764EouDWm+
-         0XQI3qKkuMW46vl6XxtWwGXeCN2vSxosMn7Xr5Tx4sLmm1jJ/Y9ZAZqaGh2GBPxqtYoJ
-         SiitlaRftr5CUbiYN8Hvy+v6aBVQhW/e+akcT3lWb5Lfvcqp5VvdVU1dcBsJjKfcMQxx
-         lKfkLveWrn1Wn6WSalbSFL83YnxWKNy8i1JS1hIcSbC/W+92Rglsf+pz0NOeap5QscEF
-         dGRfo0VK9qw++RPU5A97Ri1XmEyg2nwv+quYhWk4RehiMUbbEQv1xytTSWBs7WF3xYix
-         p2Ug==
-X-Gm-Message-State: AC+VfDw4vLifKNz1ByxxRX0mURZjj7CsaoITW/XnI9hnEmZhxgiHvhUQ
-        Kn43+B1abEtCSdK2I/tYlvW0gw==
-X-Google-Smtp-Source: ACHHUZ4AuPD0NtWh5gENo1oMd69P666JefqAR3GyFSrWyfJDu0GtoP5UkGSKz57L+v4KKv5QrMqCEw==
-X-Received: by 2002:a17:902:8f97:b0:1a9:8ab1:9f3b with SMTP id z23-20020a1709028f9700b001a98ab19f3bmr2058724plo.14.1683170626614;
-        Wed, 03 May 2023 20:23:46 -0700 (PDT)
-Received: from [10.71.57.173] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id m1-20020a170902db0100b001aad2910194sm8675599plx.14.2023.05.03.20.23.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 20:23:46 -0700 (PDT)
-Message-ID: <f72e8dd0-25cc-e7a3-17bf-5ed2c25ac8d6@bytedance.com>
-Date:   Thu, 4 May 2023 11:23:36 +0800
+        d=1e100.net; s=20221208; t=1683179022; x=1685771022;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sKEkZFVH2KZiPZGQ6onZKDypE8VqSqbA6RJxh3D4iqQ=;
+        b=at2XT/nfMiryxrgUPzq+zBePYu2OnpdzIxChKOf3qzgsb2ghNi8yLrqf09EzexcR3R
+         G2S/LbAQPIHNKL1iXUxsqIPAkMJa8Ny7XUXshgWdAtZEY+x/P93jOq+8RJOYV9xDXZkM
+         fTTwrab3V0LitJhhCmPIBi7yzbZkBxKCDznPeZNZ4BWURuYOF012ujp78nv6D4OuBoLe
+         maLf+BjMNwQY+cdSrEa3ufHHTYoZiSa82r7rqJJLgrQcn56MSFIiZdqISHphXoLE9oY8
+         ASEAHayTmtttow1W+jj4iCjwzjqxPGg8Jxnj5JijVReBwYRrZhnmUsVncVy70XIzjfmj
+         WzVg==
+X-Gm-Message-State: AC+VfDypJE1/LPFAvGAQpQWV3Qv8iPA6X8oQ2QMIvBIfn2+RCIJHEuZ4
+        UG455cnDAD5tV3jRqszpRTlkjPWdbPo8IGNiyyoR1w==
+X-Google-Smtp-Source: ACHHUZ7RvWHRoqldbb67i60EZSm+acqQngBOgNM2wTe++snax2ecwD2gfyTdGVL3Jwl/t82usGOl2xAK1L+4QqJLqaE=
+X-Received: by 2002:ac8:5785:0:b0:3ef:3083:a437 with SMTP id
+ v5-20020ac85785000000b003ef3083a437mr240044qta.18.1683179022549; Wed, 03 May
+ 2023 22:43:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Add testcase for
- bpf_task_under_cgroup
-To:     Yonghong Song <yhs@meta.com>, martin.lau@linux.dev, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mykolal@fb.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-References: <20230428071737.43849-1-zhoufeng.zf@bytedance.com>
- <20230428071737.43849-3-zhoufeng.zf@bytedance.com>
- <218660da-f73d-d698-eb5e-f513379945bd@meta.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <218660da-f73d-d698-eb5e-f513379945bd@meta.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <b403478fc67715f955b8ff40c5c99ba7cc966063.1683021926.git.geert+renesas@glider.be>
+In-Reply-To: <b403478fc67715f955b8ff40c5c99ba7cc966063.1683021926.git.geert+renesas@glider.be>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 4 May 2023 13:43:30 +0800
+Message-ID: <CABVgOS=_ZLQSbAYevA3wYZpoqkJgRF8iipL8rwSzPqwhX=3-fw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: Modular tests should not depend on KUNIT=y
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sadiya Kazi <sadiyakazi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-在 2023/4/29 00:32, Yonghong Song 写道:
-> 
-> 
-> On 4/28/23 12:17 AM, Feng zhou wrote:
->> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>
->> test_progs:
->> Tests new kfunc bpf_task_under_cgroup().
->>
->> The bpf program saves the new task's pid within a given cgroup to
->> the remote_pid, which is convenient for the user-mode program to
->> verify the test correctness.
->>
->> The user-mode program creates its own mount namespace, and mounts the
->> cgroupsv2 hierarchy in there, call the fork syscall, then check if
->> remote_pid and local_pid are unequal.
->>
->> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
-> 
-> Ack with a few nits below.
-> 
-> Acked-by: Yonghong Song <yhs@fb.com>
-> 
->> ---
->>   tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
->>   .../bpf/prog_tests/task_under_cgroup.c        | 55 +++++++++++++++++++
->>   .../bpf/progs/test_task_under_cgroup.c        | 51 +++++++++++++++++
->>   3 files changed, 107 insertions(+)
->>   create mode 100644 
->> tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
->>   create mode 100644 
->> tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
->>
->> diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x 
->> b/tools/testing/selftests/bpf/DENYLIST.s390x
->> index c7463f3ec3c0..5061d9e24c16 100644
->> --- a/tools/testing/selftests/bpf/DENYLIST.s390x
->> +++ b/tools/testing/selftests/bpf/DENYLIST.s390x
->> @@ -26,3 +26,4 @@ user_ringbuf                             # failed to 
->> find kernel BTF type ID of
->>   verif_stats                              # 
->> trace_vprintk__open_and_load unexpected error: 
->> -9                           (?)
->>   xdp_bonding                              # failed to auto-attach 
->> program 'trace_on_entry': -524                        (trampoline)
->>   xdp_metadata                             # JIT does not support 
->> calling kernel function                                (kfunc)
->> +test_task_under_cgroup                   # JIT does not support 
->> calling kernel function                                (kfunc)
->> diff --git 
->> a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c 
->> b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
->> new file mode 100644
->> index 000000000000..5e79dff86dec
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
->> @@ -0,0 +1,55 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/* Copyright (c) 2023 Bytedance */
->> +
->> +#include <sys/syscall.h>
->> +#include <test_progs.h>
->> +#include <cgroup_helpers.h>
->> +#include "test_task_under_cgroup.skel.h"
->> +
->> +#define FOO    "/foo"
->> +
->> +void test_task_under_cgroup(void)
->> +{
->> +    struct test_task_under_cgroup *skel;
->> +    int ret, foo = -1;
->> +    pid_t pid;
->> +
->> +    foo = test__join_cgroup(FOO);
->> +    if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
->> +        return;
->> +
->> +    skel = test_task_under_cgroup__open();
->> +    if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
->> +        goto cleanup;
->> +
->> +    skel->rodata->local_pid = getpid();
->> +    skel->bss->remote_pid = getpid();
->> +    skel->rodata->cgid = get_cgroup_id(FOO);
->> +
->> +    ret = test_task_under_cgroup__load(skel);
->> +    if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
->> +        goto cleanup;
->> +
->> +    ret = test_task_under_cgroup__attach(skel);
->> +    if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
->> +        goto cleanup;
->> +
->> +    pid = fork();
->> +    if (pid == 0)
->> +        exit(0);
->> +    else if (pid == -1)
->> +        printf("Couldn't fork process!\n");
-> 
-> ASSERT_* is preferred compared to 'printf'. Maybe ASSERT_TRUE(0, 
-> "Couldn't fork process")?
-> 
+On Tue, 2 May 2023 at 18:06, Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+>
+> When the documentation was updated for modular tests, the dependency on
+> "KUNIT=y" was forgotten to be updated, now encouraging people to create
+> tests that cannot be enabled when the KUNIT framework itself is modular.
+> Fix this by changing the dependency to "KUNIT".
+>
+> Document when it is appropriate (and required) to depend on "KUNIT=y".
+>
+> Fixes: c9ef2d3e3f3b3e56 ("KUnit: Docs: make start.rst example Kconfig follow style.rst")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
 
-Will do.
+Nice catch: we definitely should be recommending that all tests are
+buildable as modules if possible.
 
->> +
->> +    wait(NULL);
->> +
->> +    test_task_under_cgroup__detach(skel);
->> +
->> +    ASSERT_NEQ(skel->bss->remote_pid, skel->rodata->local_pid,
->> +           "test task_under_cgroup");
->> +
->> +cleanup:
->> +    if (foo >= 0)
-> 
-> "if (foo >= 0)" is not needed. 'foo' is guaranteed ">= 0" as this point.
-> 
+(I think this is already the case in most of the rest of the
+documentation..., but the getting started guide really shouldn't be
+teaching bad habits.)
 
-Yes
+Reviewed-by: David Gow <davidgow@google.com>
 
->> +        close(foo);
->> +
->> +    test_task_under_cgroup__destroy(skel);
->> +}
->> diff --git 
->> a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c 
->> b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
->> new file mode 100644
->> index 000000000000..5bcb726d6d0a
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
->> @@ -0,0 +1,51 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/* Copyright (c) 2023 Bytedance */
->> +
->> +#include <vmlinux.h>
->> +#include <bpf/bpf_tracing.h>
->> +#include <bpf/bpf_helpers.h>
->> +
->> +#include "bpf_misc.h"
->> +
->> +struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
->> +long bpf_task_under_cgroup(struct task_struct *task, struct cgroup 
->> *ancestor) __ksym;
->> +void bpf_cgroup_release(struct cgroup *p) __ksym;
->> +struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
->> +void bpf_task_release(struct task_struct *p) __ksym;
->> +
->> +const volatile int local_pid;
->> +const volatile long cgid;
-> 
-> cgid cannot be a negative number. So let us do
-> const volatile __u64 cgid;
-> 
+Cheers,
+-- David
 
-Ok
 
->> +int remote_pid;
->> +
->> +SEC("tp_btf/task_newtask")
->> +int BPF_PROG(handle__task_newtask, struct task_struct *task, u64 
->> clone_flags)
->> +{
->> +    struct cgroup *cgrp = NULL;
->> +    struct task_struct *acquired = NULL;
-> 
-> "acquired = NULL" is not needed. Just do "struct task_struct *acquired;".
-> 
-
-Ok
-
->> +
->> +    if (local_pid != (bpf_get_current_pid_tgid() >> 32))
->> +        return 0;
->> +
->> +    acquired = bpf_task_acquire(task);
->> +    if (!acquired)
->> +        return 0;
->> +
->> +    if (local_pid == acquired->tgid)
->> +        goto out;
->> +
->> +    cgrp = bpf_cgroup_from_id(cgid);
->> +    if (!cgrp)
->> +        goto out;
->> +
->> +    if (bpf_task_under_cgroup(acquired, cgrp))
->> +        remote_pid = acquired->tgid;
->> +
->> +out:
->> +    if (acquired)
->> +        bpf_task_release(acquired);
->> +    if (cgrp)
->> +        bpf_cgroup_release(cgrp);
->> +    return 0;
->> +}
->> +
->> +char _license[] SEC("license") = "GPL";
-
+>  Documentation/dev-tools/kunit/start.rst | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> index c736613c9b199bff..9619a044093042ce 100644
+> --- a/Documentation/dev-tools/kunit/start.rst
+> +++ b/Documentation/dev-tools/kunit/start.rst
+> @@ -256,9 +256,12 @@ Now we are ready to write the test cases.
+>
+>         config MISC_EXAMPLE_TEST
+>                 tristate "Test for my example" if !KUNIT_ALL_TESTS
+> -               depends on MISC_EXAMPLE && KUNIT=y
+> +               depends on MISC_EXAMPLE && KUNIT
+>                 default KUNIT_ALL_TESTS
+>
+> +Note: If your test does not support being built as a loadable module (which is
+> +discouraged), replace tristate by bool, and depend on KUNIT=y instead of KUNIT.
+> +
+>  3. Add the following lines to ``drivers/misc/Makefile``:
+>
+>  .. code-block:: make
+> --
+> 2.34.1
+>
