@@ -2,111 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BB66F5E82
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 May 2023 20:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFAD6F631A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 May 2023 05:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjECSuR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 May 2023 14:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
+        id S229700AbjEDDCe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 May 2023 23:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjECSts (ORCPT
+        with ESMTP id S229612AbjEDDCd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 May 2023 14:49:48 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CE619A8;
-        Wed,  3 May 2023 11:49:28 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bc570b4a3so7792753a12.1;
-        Wed, 03 May 2023 11:49:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683139766; x=1685731766;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VD37naz1y4adnKBHCi37A5366cr37Qr3DhQA4M+9vdQ=;
-        b=jkHZIic4zMoD2D2yKKLHoDBj8KjdV3nyMVlwyyr0FnYbpXXvQv6KGvKRQHhFePhJwN
-         y4a4OrmvGg+JAf2TIM1ezAvyCU50MiMjI4z1u0bIQdNDaDaf7haDBipYJRCznMo2i34D
-         qEPDeWxhj8DyfuAPO50Ocg8KfSuYD+iBekQZ9cT3B/fjBzeADPWq95Zcwkw+Ha72wlpL
-         s2iH79GfwdYK15llrl7MI1tQ1dwdetsOMBH8A5cbzI5ndGgMNxhdu11RyoyfdVoB/Sbc
-         sSYeyMMt0h63uIaDqFvaAv0/yhBWU8dgHdoeJyMi+mUFXxuyG/3dMAOvY470EPraBy+j
-         XUjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683139766; x=1685731766;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VD37naz1y4adnKBHCi37A5366cr37Qr3DhQA4M+9vdQ=;
-        b=fZCq2oQqADWNkSvCpwh5JtAMddvcfNJAXdbvXUxoh+YGFt3FLqpmkmZyQgKPKzvrch
-         chLErvNpMmUzZUMnUpphgKubhioV/ZgpbRAc3JWhPxTxhTA/TBw0oxu6P8sOX/VHH6LZ
-         0cAjljzrJfc6dhW0oDIVrhDJLHavSnq18XvwdKLQOsbCqunTVMCYzoOgPgvqaeONNow1
-         OmSI4qck/x0dXpT/uQ40aCPIW+hjwndafAcuUJeEKKVJJdFNEf/rq7VrqoVU4tcVJ+o2
-         XC/j4WYqPaGN3ixGJSq2qGH9r9FUyOIIRl0/IVCPnjU0ttZiidCC1g1++Rq1eow03SMg
-         uGHQ==
-X-Gm-Message-State: AC+VfDyrJWQuqF1KEmwpyWx3Lc7l4BtXAVKQEQkbSp4k02GhyAWyiGaS
-        EXnwQu4OtPnZsWV3ZgLonw3bwcZrtDZcOb3NX4o=
-X-Google-Smtp-Source: ACHHUZ76xKnCcn1JyjJd+WU9V7ueR/fbedFqrncRZ2+mlvIPAVgSCt1aXT/zUpv+l+hsFpnaE1nmwvttE9XpEsKP6N0=
-X-Received: by 2002:a17:907:844:b0:961:69a2:c8d6 with SMTP id
- ww4-20020a170907084400b0096169a2c8d6mr4206788ejb.69.1683139766485; Wed, 03
- May 2023 11:49:26 -0700 (PDT)
+        Wed, 3 May 2023 23:02:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BB0172D
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 May 2023 20:01:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683169303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zwXrGnlynmWthuhj861VrvHW2/WpagpsgRCBG9/mDP0=;
+        b=bwipz1vmPKCNGcknb3ceVVvHulgNcnyYm/OhFGQg0zBk4lq3HMfkB1TSeF4924q4Vnm/Ka
+        l8vdhIAszM/ulMYDUdBxfaBzPy8scq73qWtbPlR09ZoAkmN/LlvZ8x1d9PE3M7HzHYeOPz
+        MiLJtPzi1bUsgoAEQRwmZlIxbfUGp7k=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-322-Dc2ExmcBNOecvx6fkKjDEw-1; Wed, 03 May 2023 23:01:37 -0400
+X-MC-Unique: Dc2ExmcBNOecvx6fkKjDEw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F6C21C08796;
+        Thu,  4 May 2023 03:01:37 +0000 (UTC)
+Received: from [10.22.17.228] (unknown [10.22.17.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4186740C2064;
+        Thu,  4 May 2023 03:01:36 +0000 (UTC)
+Message-ID: <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
+Date:   Wed, 3 May 2023 23:01:36 -0400
 MIME-Version: 1.0
-References: <20230502005218.3627530-1-drosen@google.com>
-In-Reply-To: <20230502005218.3627530-1-drosen@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 3 May 2023 11:49:14 -0700
-Message-ID: <CAEf4BzYtAhch7TrkO6QH6fnQ--9e-U1gRSNw_s_pMG-Jv9PxJw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
-To:     Daniel Rosenberg <drosen@google.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+References: <ZDdYOI9LB87ra2t_@slm.duckdns.org>
+ <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
+ <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
+ <ZDmFLfII8EUX_ocY@slm.duckdns.org>
+ <c61ca9d0-c514-fb07-c2f2-3629e8898984@redhat.com>
+ <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
+ <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
+ <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
+ <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
+ <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
+ <ZFGOTHQj3k5rzmyR@blackbook>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ZFGOTHQj3k5rzmyR@blackbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 1, 2023 at 5:52=E2=80=AFPM Daniel Rosenberg <drosen@google.com>=
- wrote:
->
-> bpf_dynptr_slice(_rw) uses a user provided buffer if it can not provide
-> a pointer to a block of contiguous memory. This buffer is unused in the
-> case of local dynptrs, and may be unused in other cases as well. There
-> is no need to require the buffer, as the kfunc can just return NULL if
-> it was needed and not provided.
->
-> This adds another kfunc annotation, __opt, which combines with __sz and
-> __szk to allow the buffer associated with the size to be NULL. If the
-> buffer is NULL, the verifier does not check that the buffer is of
-> sufficient size.
->
-> Signed-off-by: Daniel Rosenberg <drosen@google.com>
-> ---
 
-LGTM
+On 5/2/23 18:27, Michal Koutný wrote:
+> On Tue, May 02, 2023 at 05:26:17PM -0400, Waiman Long <longman@redhat.com> wrote:
+>> In the new scheme, the available cpus are still directly passed down to a
+>> descendant cgroup. However, isolated CPUs (or more generally CPUs dedicated
+>> to a partition) have to be exclusive. So what the cpuset.cpus.reserve does
+>> is to identify those exclusive CPUs that can be excluded from the
+>> effective_cpus of the parent cgroups before they are claimed by a child
+>> partition. Currently this is done automatically when a child partition is
+>> created off a parent partition root. The new scheme will break it into 2
+>> separate steps without the requirement that the parent of a partition has to
+>> be a partition root itself.
+> new scheme
+>    1st step:
+>    echo C >p/cpuset.cpus.reserve
+>    # p/cpuset.cpus.effective == A-C (1)
+>    2nd step (claim):
+>    echo C' >p/c/cpuset.cpus # C'⊆C
+>    echo root >p/c/cpuset.cpus.partition
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+It is something like that. However, the current scheme of automatic 
+reservation is also supported, i.e. cpuset.cpus.reserve will be set 
+automatically when the child cgroup becomes a valid partition as long as 
+the cpuset.cpus.reserve file is not written to. This is for backward 
+compatibility.
 
->  Documentation/bpf/kfuncs.rst | 23 ++++++++++++++++++++++-
->  include/linux/skbuff.h       |  2 +-
->  kernel/bpf/helpers.c         | 30 ++++++++++++++++++------------
->  kernel/bpf/verifier.c        | 17 +++++++++++++----
->  4 files changed, 54 insertions(+), 18 deletions(-)
+Once it is written to, automatic mode will end and users have to 
+manually set it afterward.
+
+
 >
+> current scheme
+>    1st step (configure):
+>    echo C >p/c/cpuset.cpus
+>    2nd step (reserve & claim):
+>    echo root >p/c/cpuset.cpus.partition
+>    # p/cpuset.cpus.effective == A-C (2)
+>
+> As long as p/c is unpopulated, (1) and (2) are equal situations.
+> Why is the (different) two step procedure needed?
+>
+> Also the relaxation of requirement of a parent being a partition
+> confuses me -- if the parent is not a partition, i.e. it has no
+> exclusive ownership of CPUs but it can still "give" it to children -- is
+> child partition meant to be exclusive? (IOW can parent siblings reserve
+> some same CPUs?)
 
-[...]
+A valid partition root has exclusive ownership of its CPUs. That is a 
+rule that won't be changed. As a result, an incoming partition root 
+cannot claim CPUs that have been allocated to another partition. To 
+simplify thing, transition to a valid partition root is not possible if 
+any of the CPUs in its cpuset.cpus are not in the cpuset.cpus.reserve of 
+its ancestor or have been allocated to another partition. The partition 
+root simply becomes invalid.
+
+The parent can virtually give the reserved CPUs from the root down the 
+hierarchy and a child can claim them once it becomes a partition root. 
+In manual mode, we need to check all the way up the hierarchy to the 
+root to figure out what CPUs in cpuset.cpus.reserve are valid. It has 
+higher overhead, but enabling partition is not a fast operation anyway.
+
+Cheers,
+Longman
+
