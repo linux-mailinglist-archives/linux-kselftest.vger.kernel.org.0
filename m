@@ -2,147 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFDEA6F6DF3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 May 2023 16:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A03256F6F7E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 May 2023 17:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjEDOrY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 May 2023 10:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
+        id S231378AbjEDP67 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 May 2023 11:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjEDOrX (ORCPT
+        with ESMTP id S231403AbjEDP6z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 May 2023 10:47:23 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAC61A8;
-        Thu,  4 May 2023 07:47:21 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 344CQ3ES013210;
-        Thu, 4 May 2023 07:46:45 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=3eOdXs7Fq33Z5QZNR2BQDcHSXudPVjPdqZey3eiuf+w=;
- b=RHcmmfF/VA+6uyW34rYXm+Nz0/WwsP5LI2qdHTwBsPiyWX6BevCYAVXFXSv3GvUuJUFT
- fwa5vSx/xw4ltAflvj+cToqR3QQomiw8/624h5065fF/wYPedt9v3qh/IBUSGgiPPH4x
- MrCTkcwLyG3HOBehzm1+OQVmlr27JJNPCCH9rxa9xpUHwcY3shCVMHm14AF4ontob6f7
- VCSVNh4AGXtx5W7se+S9jJgA/tzSlrbK3crweKYHq4x6GJhl5+QSD/Sjopq0WZnI1TLy
- pYb3mhOYNiy5jM8W7PVamGTPTvDAKrmvuQBLVouxeCNl7GQg9BH1gHETmHLwLPaBwc0C NA== 
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2045.outbound.protection.outlook.com [104.47.57.45])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3qccq00vn5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 07:46:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lNxczRSdr7tNsZJakZdChGvNwtZJiRQqmmI9Rc0icZ1JPs9i1y3rt6g0KAwCEjo6xOvx5yPRoSxPy5cINaVCNVozzp/JgCB4pxRSyB2QxQmYQ3qmsGCfhrG7xBaATNI/BrPwwMdrVAJGcdINQ26Ano1AMfziD5MIhVVPmOCz8gNRDfKZxseoxBTkFuLi08jUar+erSy1PkNOrzupOhHntuNET1O1NRaquhivmxkWHZ9GNVG0U/S6F7bhoSU6KajfWiXoj4tcQwoFh0Lsb+kGqQm4esf776qlMi7q3lWaX62jJA3hrqXAnoSxJm8l0Rox9gXBkg9f+D2gac8j9tu5QA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3eOdXs7Fq33Z5QZNR2BQDcHSXudPVjPdqZey3eiuf+w=;
- b=GP7VTLhKZNQl0N75HBu3GFnlzDBd57MiDoJpeDK9LhfcLmMGrJEFS8W9OsM2X1yTJ6ee4yUIwdsFX0LyUt1nZvrNFvHUYaDvAMe0YgJcFrIc9CEONm+QTlwTrRX9k0JPTuuLuEi92uWNGKQldMCNjS+wGdSPlfVh7OQH3PF0mAtss+ZjXNcoIBU4z0WDPP9JxDx8IISyeTq1kvZtg/l/0ypISikpV3mBqNPB0McjwzKVcnaMllCIXeyEGb81BsBn0KYMpnqWRU3PgX2klKbGbx8eQYDMQgUsYXfa+OOuWdWmdlWVLbMk40DDvoNp2tJxIfLF6LdD2FqN6jJuiosxlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BY1PR15MB5957.namprd15.prod.outlook.com (2603:10b6:a03:52b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Thu, 4 May
- 2023 14:46:43 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53%6]) with mapi id 15.20.6363.022; Thu, 4 May 2023
- 14:46:43 +0000
-Message-ID: <63138022-e28f-a63c-6f4c-61b61e585641@meta.com>
-Date:   Thu, 4 May 2023 07:46:38 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Add testcase for
- bpf_task_under_cgroup
-Content-Language: en-US
-To:     Feng zhou <zhoufeng.zf@bytedance.com>, martin.lau@linux.dev,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
-        shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-References: <20230504031513.13749-1-zhoufeng.zf@bytedance.com>
- <20230504031513.13749-3-zhoufeng.zf@bytedance.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <20230504031513.13749-3-zhoufeng.zf@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0164.namprd05.prod.outlook.com
- (2603:10b6:a03:339::19) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Thu, 4 May 2023 11:58:55 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6868C59C4;
+        Thu,  4 May 2023 08:58:53 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 091B25C03AF;
+        Thu,  4 May 2023 11:58:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 04 May 2023 11:58:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683215930; x=1683302330; bh=2ORXMgnZMkh7X
+        2qFN+Nty3xN4NmP1oMZ/3xO5IJoaB4=; b=A28ZEUd8kI53SAe9yB7iQPjTBGs53
+        y/lY6BzwWj9Umw6SD+2Un0WfhMYywJxvKqph5mKCVmmRL0xnufDUNehTnASDmCyk
+        Gmzdq2fAs7GgaLWm7QP9+rYPyCLJXM4NLAUXUFv69xCE7Kty1P0VIj6TdCoCc3ln
+        hvqRWRPMjiiZS4vQTdJ4lWq5sORK1IgaBbhjRDdzUKnj449AMgFzM9dwMtafQBWU
+        vp53Ai8LfrrHA8XOiplGw3ncshuw0/5QucALDHKZgK6OUnkyc5V9PqY6LQURyKBw
+        Ks2hFaZL93vrNbXn4G6wfhnxHNR6B0uAUMOTAnLIpKQFP+Joju/RuCnQQ==
+X-ME-Sender: <xms:OdZTZAIfEMGS5oM2f_ntJuJVoy-WR8hP6dI3Vqqh8l3ROyX4h0nBAQ>
+    <xme:OdZTZAIch0nn3xTRTYvZUs26BW4ONDGYHw1wlZR0MGmKNY-2Ll0H0fseKlsFendYH
+    SM2cp4oxCORVoo>
+X-ME-Received: <xmr:OdZTZAsR6TaqUMTq2Jp9N-CT_YnCrQ2CpzNSrHr70LjoOZ2BfnZZKIMzsWz0KzOzh4YJqoRmrzRlxsS6rI8PONScNxU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeftddgleehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnhephefhtdejvdeiffefudduvdffgeetieeigeeugfduffdvffdtfeehieejtdfh
+    jeeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:OdZTZNaPk0u0QtM645JcIaSr6U1vN3-h6yfi9N-tEzqJ7xObXBYHjg>
+    <xmx:OdZTZHZGmiqeiHQVAz0GK8eKcOgLquUt8WCYLOxK9u6es-gJ1SEFgQ>
+    <xmx:OdZTZJCgrIgSGvd0O6Wk26vyuoZKn8VGmI_jk-Q0gJccfiAodQVjXQ>
+    <xmx:OtZTZLSwNMcNSMfEU_mIhSwopUOo8ww0sGkAIKKn_Bw7b6MxAM8b-A>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 4 May 2023 11:58:49 -0400 (EDT)
+Date:   Thu, 4 May 2023 18:58:45 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Vladimir Nikishkin <vladimir@nikishkin.pw>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        eng.alaamohamedsoliman.am@gmail.com, gnault@redhat.com,
+        razor@blackwall.org, idosch@nvidia.com, liuhangbin@gmail.com,
+        eyal.birger@gmail.com, jtoppins@redhat.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v7 2/2] Add tests for vxlan nolocalbypass option.
+Message-ID: <ZFPWNXtV7sTmH/aQ@shredder>
+References: <20230501162530.26414-1-vladimir@nikishkin.pw>
+ <20230501162530.26414-2-vladimir@nikishkin.pw>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|BY1PR15MB5957:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b987b0a-7c68-4ff3-b65c-08db4cae6077
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hGX6mkWS6kxlzgLZOmEXBoE+V3AyLz3FKPmt5lduq0o6XWKXMF3LAiTIbIe/XL0RvuFvlVa+k8qZMBEXLnjwrungiqtCu4qXVNAQJJn/zaE0xbVhsEDDd65lASJ3WLs+Gd1eWat0bmjbkw8mVFaU9RCbAmXfdjDGJR0QG79dyy67wRU/qU/IjWKZOMLLg+tfQO73XoFeXUqmr0Q9g8d10izP8kq3ZMBzBWCX3FuVSUtmBUMcIM6kpX9v09d3gsanN8SG6qZnWSlwU9q95DbFKOHzzLxXBdU85z7aEx6LGYz46z/O30iYHNqM+VMNuA8G8M5PMj6eA6yU8SRQcSO8GmjRRSt1fG72TwFI3kINioGWm2tUO0WDrOMaCws7jnotOGqHYmakE6lyjcg9iYrpOKxmFhfw2PX+jbK9ESFWyv4eowE+ATVePNy/mrm815riWDE40Df1fZc08wCWaKjxhZSFioM+Vz1310+j9qp1XZ+4Aic7N9jAYCXQQCfpV2dpgjnj1aPpyvYu6Rl5HGaL0+zgUubRSUKRYEBtIGEpjaD/1xpQQQVTJJN6MR3KdicMfvUKyXfe5tVtjm2WeSNVox9jLyLpV2veQNdRbUfuL0R2KDSfpoT1TXyKk5gicV5Y38DbWA/tTqEt8m/1kDKEkKqY3qlWUnKmXO406zKF2Kk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(136003)(396003)(346002)(376002)(451199021)(921005)(8676002)(5660300002)(41300700001)(8936002)(38100700002)(66946007)(66556008)(66476007)(316002)(2906002)(7416002)(4326008)(86362001)(31696002)(6506007)(53546011)(6512007)(186003)(6486002)(83380400001)(6666004)(36756003)(31686004)(2616005)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eUpvb3FFNkVHeklSMDBFUG04WCtSM2xYaU1Iek5yZmJscmVQOFluYVhEMFBk?=
- =?utf-8?B?ME9oOWkzL0k5NEtEWVhpL2syWDdBWGdScTc2ZFlna2tGenhTOWZ4WGpBbkFP?=
- =?utf-8?B?TlFHOE42N0E0cWxWd0FwcjJPRVprK0drYWkyWllVMGNnTVpPRGRid1MreCtN?=
- =?utf-8?B?ZFdWd2FWdUxKem9XYm9aWmhJbjZnRngvY0o1Uzdld1M3WnEwM0tPWmg1ZTVI?=
- =?utf-8?B?Tmt3UmRvNGtFVlhZVC9GN3cwaHNLMUlOY1pvT1N4cmc3Q3NBMzRqL29oR1U1?=
- =?utf-8?B?QlJMS3FDZmJvbW5lOC9lcjRNRW0ybXhnekZjUWRsVlhCVnA5VXVNK2RaV05s?=
- =?utf-8?B?REhPSXB1cmZPLzkyTmxYSEtpdHAwUVdiTWorMGluNVYxOEszSkt2OGNtbVFr?=
- =?utf-8?B?UmVFZUg1ZEJIY2JhMFlUS1FJdmpqY2NWY1k5WXJRODBsVzM5S3RaQkQ5aHA1?=
- =?utf-8?B?ZWZUNEdQVkhoTWtyTFNJSHhUWE05SklETUxyM2RIb1dCcExyVG9iTVltL05i?=
- =?utf-8?B?azY5OERvTjgya3ZMTGZOeStuV0RUSzYzRWZ1WlZiT2JiblZLOEQwd0dkQkUv?=
- =?utf-8?B?TUxPZVVyQUZjbGYwZVdjYmJuZWR6d3JneW9pZ052ZkFVdGpUbEhmdVRuYWEw?=
- =?utf-8?B?WnNIRlZHcFNCNVQwNERBOCtxL2xsWEd5NGpqdlJYZHoyVWp4ZVBTd1lIeFpo?=
- =?utf-8?B?c2NUSXVDZGszamNuNWo1SzcwSi9xNk9pRWdJTjdvUTVMVkRBbXl0bVZodTcz?=
- =?utf-8?B?K1Q3NGpFa29PTU8vNUxDOTB2NENQVjcwc0tBRmJvcFhrV1h5enY0c3ZLQWkx?=
- =?utf-8?B?dGR4NTIzQ0Fzem80ak4wNEwvOHJHTzFOaUh2Qk9XN0MrenRXZjBIQWM1aGVl?=
- =?utf-8?B?VExPekpKNnJmdFJyYXRvbWwyRkdGaU1XZ1d2Z3RBYjduQnNlS2lKNktsNzc4?=
- =?utf-8?B?VTB5a3lWZjZDTTdmYklmK25Od2JqS1owTk5Yak1NeFl2YytwTlN2T0tGdm5Q?=
- =?utf-8?B?YjFIZzNNWDUvL2JnRmdrczhHeWhzdFZieVFlaGxod0UyT1JyMzVNRkFXek5T?=
- =?utf-8?B?QTFhK04vMUtDQU93TU5nNS9ocXdkajhLYzlobHVKUTBiOGVvUFFwTENrZEhB?=
- =?utf-8?B?cXczazliZGpvTUROSE1vQzNLSFEwalFoL0RKeWdtVHZTcVBwVHFORkZNbTho?=
- =?utf-8?B?SDkxVlBkdERDTVpNb3QzMXJEU1NJZWY5ZFYvODFCeHl2QXEwWXl1V1o1c2Zs?=
- =?utf-8?B?RXMwZVBoSmN0MFVmcXoyTEM5Y3VnNVVMWWk2cllkWWc4N0ZXYWdXUFlrYUts?=
- =?utf-8?B?WXY1NUlhTmdlaG1PV09BVU5tTFdXNUY2UWU1M3NOZWVFMk44b2lJb0YyOE9r?=
- =?utf-8?B?U2RyNHZ6N3QvQlp1MURyRk1ZMnZnWEJmNmVxc3ROMzVVNGljMzl4TnlhbG9N?=
- =?utf-8?B?Zm9UTThpRTh6REFNWFNJTXlBVk9pWFhnb1NTcFRsSU5pTTdSYzN1a05INm5C?=
- =?utf-8?B?SW92K1pZZDZ6UEhycFBsV2hsSXhsajN6TmNXMHNnWVlLcUNidkFtSkZiV3pO?=
- =?utf-8?B?SVg2STVpREpVVDhmejR6Smxxam5PSjJkMVhHY3lNWFIzeGoyUWdrdjhlbHBS?=
- =?utf-8?B?S29ZRlIya2pLZFhIUTcvMWcweWRUNkJFdDNZd0FJdGlsZ3dXS3VuQUJZTUVM?=
- =?utf-8?B?RGJ5bDdaZWpLQXZkQkxFMVBNTEZpU3pjZGVZcllBUmRyQ3lUK3E1K0VscENn?=
- =?utf-8?B?b1oyUnljR1BvbzlPclQrVWRwQ3hrcE1aSUVGMWlDVnowOGNUTEJ2dHRTbC9T?=
- =?utf-8?B?RVh1V3RHakFHVDA1enlGV0ZEZUN0TnFZMS9PZEpUVzJMcGMvdmlib2E3WDF3?=
- =?utf-8?B?MWtXeEFUTzNzWnUzWWlyamsrTHorM1NtYzVHOCs5M3ZuWnFSN2dhV2ljRzZH?=
- =?utf-8?B?ZEtFK28rNHZzT0orNVdRNDEySlEvYzBMMHI4OTFFQU9zaGhZMXBJRlZHZVBk?=
- =?utf-8?B?bkI3MWRrc3N5N0VENlJwdFFaZ3VyR0w5NmpmTzNMdEZWT2lzOENEWm5pMWZ3?=
- =?utf-8?B?Z0dONW54NGdPWEkzY0dYbk1jdVNSbklma0ZKNzB5OUQvbktTY08ydHUrRGph?=
- =?utf-8?B?OVBtaVFmTDJEL01EeGZuZVEya0RDcVRTVlVwYnJET2ZpM3ZPSWdxc3ROczN3?=
- =?utf-8?B?a2c9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b987b0a-7c68-4ff3-b65c-08db4cae6077
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 14:46:43.1425
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SbznlvFwJS51eesUAlivwHdDiHA16kmewgEkk5K8zdanv7/mK+mVbk6XzyqnVcTT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR15MB5957
-X-Proofpoint-ORIG-GUID: p2xkc6CMyYyaRM1qRyVsDkxHnt78Qsn8
-X-Proofpoint-GUID: p2xkc6CMyYyaRM1qRyVsDkxHnt78Qsn8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_10,2023-05-04_01,2023-02-09_01
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230501162530.26414-2-vladimir@nikishkin.pw>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -151,180 +78,271 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 5/3/23 8:15 PM, Feng zhou wrote:
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On Tue, May 02, 2023 at 12:25:30AM +0800, Vladimir Nikishkin wrote:
+> Add test to make sure that the localbypass option is on by default.
 > 
-> test_progs:
-> Tests new kfunc bpf_task_under_cgroup().
-> 
-> The bpf program saves the new task's pid within a given cgroup to
-> the remote_pid, which is convenient for the user-mode program to
-> verify the test correctness.
-> 
-> The user-mode program creates its own mount namespace, and mounts the
-> cgroupsv2 hierarchy in there, call the fork syscall, then check if
-> remote_pid and local_pid are unequal.
-> 
-> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+> Add test to change vxlan localbypass to nolocalbypass and check
+> that packets are delivered to userspace.
 
-Ack with a few nits below. You can carry my Ack in the
-next revision.
+What do you think about this version [1]? I ended up removing the socat
+usage because it was unnecessarily complicated (sorry). Note that this
+test does not pass without the diff I posted earlier [2].
 
-Acked-by: Yonghong Song <yhs@fb.com>
+Without the diff, "nolocalbypass" basically means "Perform a bypass only
+if there is a matching local VXLAN device, otherwise encapsulate the
+packet and deliver it locally".
 
+With the diff, "nolocalbypass" means "Never perform a bypass,
+encapsulate the packet and deliver it locally".
 
-> ---
->   tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
->   .../bpf/prog_tests/task_under_cgroup.c        | 54 +++++++++++++++++++
->   .../bpf/progs/test_task_under_cgroup.c        | 51 ++++++++++++++++++
->   3 files changed, 106 insertions(+)
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
->   create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-> 
-> diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-> index c7463f3ec3c0..5061d9e24c16 100644
-> --- a/tools/testing/selftests/bpf/DENYLIST.s390x
-> +++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-> @@ -26,3 +26,4 @@ user_ringbuf                             # failed to find kernel BTF type ID of
->   verif_stats                              # trace_vprintk__open_and_load unexpected error: -9                           (?)
->   xdp_bonding                              # failed to auto-attach program 'trace_on_entry': -524                        (trampoline)
->   xdp_metadata                             # JIT does not support calling kernel function                                (kfunc)
-> +test_task_under_cgroup                   # JIT does not support calling kernel function                                (kfunc)
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-> new file mode 100644
-> index 000000000000..fa3a98eae5ef
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-> @@ -0,0 +1,54 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2023 Bytedance */
-> +
-> +#include <sys/syscall.h>
-> +#include <test_progs.h>
-> +#include <cgroup_helpers.h>
-> +#include "test_task_under_cgroup.skel.h"
-> +
-> +#define FOO	"/foo"
-> +
-> +void test_task_under_cgroup(void)
-> +{
-> +	struct test_task_under_cgroup *skel;
-> +	int ret, foo = -1;
+I think my definition better suits the "nolocalbypass" name. It also
+means that user space see consistent behavior: Encapsulated packets are
+always visible on the loopback device, regardless if there is a matching
+local VXLAN device.
 
-You do not need to initialize 'foo' here.
+It is true that with or without the diff packets will end up in the
+local VXLAN device, assuming one exists.
 
-> +	pid_t pid;
-> +
-> +	foo = test__join_cgroup(FOO);
-> +	if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
-> +		return;
-> +
-> +	skel = test_task_under_cgroup__open();
-> +	if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
-> +		goto cleanup;
-> +
-> +	skel->rodata->local_pid = getpid();
-> +	skel->bss->remote_pid = getpid();
-> +	skel->rodata->cgid = get_cgroup_id(FOO);
-> +
-> +	ret = test_task_under_cgroup__load(skel);
-> +	if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
-> +		goto cleanup;
-> +
-> +	ret = test_task_under_cgroup__attach(skel);
-> +	if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
-> +		goto cleanup;
-> +
-> +	pid = fork();
-> +	if (pid == 0)
-> +		exit(0);
-> +
-> +	ret = (pid == -1);
-> +	if (ASSERT_OK(ret, "fork process"))
-> +		wait(NULL);
-> +
-> +	test_task_under_cgroup__detach(skel);
-> +
-> +	ASSERT_NEQ(skel->bss->remote_pid, skel->rodata->local_pid,
-> +		   "test task_under_cgroup");
-> +
-> +cleanup:
-> +	close(foo);
-> +
-> +	test_task_under_cgroup__destroy(skel);
+[1]
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
 
-Let us just do:
-cleanup:
-	test_task_under_cgroup__destroy(skel);
-	close(foo);
+# This test is for checking the [no]localbypass VXLAN device option. The test
+# configures two VXLAN devices in the same network namespace and a tc filter on
+# the loopback device that drops encapsulated packets. The test sends packets
+# from the first VXLAN device and verifies that by default these packets are
+# received by the second VXLAN device. The test then enables the nolocalbypass
+# option and verifies that packets are no longer received by the second VXLAN
+# device.
 
-This is the reverse order of test__join_cgroup() and 
-test_task_under_cgroup__open().
+ret=0
+# Kselftest framework requirement - SKIP code is 4.
+ksft_skip=4
 
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-> new file mode 100644
-> index 000000000000..79d98e65c7eb
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-> @@ -0,0 +1,51 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2023 Bytedance */
-> +
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +#include "bpf_misc.h"
-> +
-> +struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
-> +long bpf_task_under_cgroup(struct task_struct *task, struct cgroup *ancestor) __ksym;
-> +void bpf_cgroup_release(struct cgroup *p) __ksym;
-> +struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-> +void bpf_task_release(struct task_struct *p) __ksym;
-> +
-> +const volatile int local_pid;
-> +const volatile __u64 cgid;
-> +int remote_pid;
-> +
-> +SEC("tp_btf/task_newtask")
-> +int BPF_PROG(handle__task_newtask, struct task_struct *task, u64 clone_flags)
-> +{
-> +	struct cgroup *cgrp = NULL;
-> +	struct task_struct *acquired;
-> +
-> +	if (local_pid != (bpf_get_current_pid_tgid() >> 32))
-> +		return 0;
-> +
-> +	acquired = bpf_task_acquire(task);
-> +	if (!acquired)
-> +		return 0;
-> +
-> +	if (local_pid == acquired->tgid)
-> +		goto out;
-> +
-> +	cgrp = bpf_cgroup_from_id(cgid);
-> +	if (!cgrp)
-> +		goto out;
-> +
-> +	if (bpf_task_under_cgroup(acquired, cgrp))
-> +		remote_pid = acquired->tgid;
-> +
-> +out:
-> +	if (acquired)
-> +		bpf_task_release(acquired);
-> +	if (cgrp)
-> +		bpf_cgroup_release(cgrp);
+TESTS="
+	nolocalbypass
+"
+VERBOSE=0
+PAUSE_ON_FAIL=no
+PAUSE=no
 
-Let us do:
-out:
-	if (cgrp)
-		bpf_cgroup_release(cgrp);
-	bpf_task_release(acquired);
+################################################################################
+# Utilities
 
-> +	return 0;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
+log_test()
+{
+	local rc=$1
+	local expected=$2
+	local msg="$3"
+
+	if [ ${rc} -eq ${expected} ]; then
+		printf "TEST: %-60s  [ OK ]\n" "${msg}"
+		nsuccess=$((nsuccess+1))
+	else
+		ret=1
+		nfail=$((nfail+1))
+		printf "TEST: %-60s  [FAIL]\n" "${msg}"
+		if [ "$VERBOSE" = "1" ]; then
+			echo "    rc=$rc, expected $expected"
+		fi
+
+		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
+		echo
+			echo "hit enter to continue, 'q' to quit"
+			read a
+			[ "$a" = "q" ] && exit 1
+		fi
+	fi
+
+	if [ "${PAUSE}" = "yes" ]; then
+		echo
+		echo "hit enter to continue, 'q' to quit"
+		read a
+		[ "$a" = "q" ] && exit 1
+	fi
+
+	[ "$VERBOSE" = "1" ] && echo
+}
+
+run_cmd()
+{
+	local cmd="$1"
+	local out
+	local stderr="2>/dev/null"
+
+	if [ "$VERBOSE" = "1" ]; then
+		printf "COMMAND: $cmd\n"
+		stderr=
+	fi
+
+	out=$(eval $cmd $stderr)
+	rc=$?
+	if [ "$VERBOSE" = "1" -a -n "$out" ]; then
+		echo "    $out"
+	fi
+
+	return $rc
+}
+
+tc_check_packets()
+{
+	local ns=$1; shift
+	local id=$1; shift
+	local handle=$1; shift
+	local count=$1; shift
+	local pkts
+
+	sleep 0.1
+	pkts=$(tc -n $ns -j -s filter show $id \
+		| jq ".[] | select(.options.handle == $handle) | \
+		.options.actions[0].stats.packets")
+	[[ $pkts == $count ]]
+}
+
+################################################################################
+# Setup
+
+setup()
+{
+	ip netns add ns1
+
+	ip -n ns1 link set dev lo up
+	ip -n ns1 address add 192.0.2.1/32 dev lo
+	ip -n ns1 address add 198.51.100.1/32 dev lo
+
+	ip -n ns1 link add name vx0 up type vxlan id 100 local 198.51.100.1 \
+		dstport 4789 nolearning
+	ip -n ns1 link add name vx1 up type vxlan id 100 dstport 4790
+}
+
+cleanup()
+{
+	ip netns del ns1 &> /dev/null
+}
+
+################################################################################
+# Tests
+
+nolocalbypass()
+{
+	local smac=00:01:02:03:04:05
+	local dmac=00:0a:0b:0c:0d:0e
+
+	run_cmd "bridge -n ns1 fdb add $dmac dev vx0 self static dst 192.0.2.1 port 4790"
+
+	run_cmd "tc -n ns1 qdisc add dev vx1 clsact"
+	run_cmd "tc -n ns1 filter add dev vx1 ingress pref 1 handle 101 proto all flower src_mac $smac dst_mac $dmac action pass"
+
+	run_cmd "tc -n ns1 qdisc add dev lo clsact"
+	run_cmd "tc -n ns1 filter add dev lo ingress pref 1 handle 101 proto ip flower ip_proto udp dst_port 4790 action drop"
+
+	run_cmd "ip -n ns1 -d link show dev vx0 | grep ' localbypass'"
+	log_test $? 0 "localbypass enabled"
+
+	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
+
+	tc_check_packets "ns1" "dev vx1 ingress" 101 1
+	log_test $? 0 "Packet received by local VXLAN device - localbypass"
+
+	run_cmd "ip -n ns1 link set dev vx0 type vxlan nolocalbypass"
+
+	run_cmd "ip -n ns1 -d link show dev vx0 | grep 'nolocalbypass'"
+	log_test $? 0 "localbypass disabled"
+
+	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
+
+	tc_check_packets "ns1" "dev vx1 ingress" 101 1
+	log_test $? 0 "Packet not received by local VXLAN device - nolocalbypass"
+
+	run_cmd "ip -n ns1 link set dev vx0 type vxlan localbypass"
+
+	run_cmd "ip -n ns1 -d link show dev vx0 | grep ' localbypass'"
+	log_test $? 0 "localbypass enabled"
+
+	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
+
+	tc_check_packets "ns1" "dev vx1 ingress" 101 2
+	log_test $? 0 "Packet received by local VXLAN device - localbypass"
+}
+
+################################################################################
+# Usage
+
+usage()
+{
+	cat <<EOF
+usage: ${0##*/} OPTS
+
+        -t <test>   Test(s) to run (default: all)
+                    (options: $TESTS)
+        -p          Pause on fail
+        -P          Pause after each test before cleanup
+        -v          Verbose mode (show commands and output)
+EOF
+}
+
+################################################################################
+# Main
+
+trap cleanup EXIT
+
+while getopts ":t:pPvh" opt; do
+	case $opt in
+		t) TESTS=$OPTARG ;;
+		p) PAUSE_ON_FAIL=yes;;
+		P) PAUSE=yes;;
+		v) VERBOSE=$(($VERBOSE + 1));;
+		h) usage; exit 0;;
+		*) usage; exit 1;;
+	esac
+done
+
+# Make sure we don't pause twice.
+[ "${PAUSE}" = "yes" ] && PAUSE_ON_FAIL=no
+
+if [ "$(id -u)" -ne 0 ];then
+	echo "SKIP: Need root privileges"
+	exit $ksft_skip;
+fi
+
+if [ ! -x "$(command -v ip)" ]; then
+	echo "SKIP: Could not run test without ip tool"
+	exit $ksft_skip
+fi
+
+if [ ! -x "$(command -v bridge)" ]; then
+	echo "SKIP: Could not run test without bridge tool"
+	exit $ksft_skip
+fi
+
+if [ ! -x "$(command -v mausezahn)" ]; then
+	echo "SKIP: Could not run test without mausezahn tool"
+	exit $ksft_skip
+fi
+
+if [ ! -x "$(command -v jq)" ]; then
+	echo "SKIP: Could not run test without jq tool"
+	exit $ksft_skip
+fi
+
+ip link help vxlan 2>&1 | grep -q "localbypass"
+if [ $? -ne 0 ]; then
+	echo "SKIP: iproute2 ip too old, missing VXLAN nolocalbypass support"
+	exit $ksft_skip
+fi
+
+cleanup
+
+for t in $TESTS
+do
+	setup; $t; cleanup;
+done
+
+if [ "$TESTS" != "none" ]; then
+	printf "\nTests passed: %3d\n" ${nsuccess}
+	printf "Tests failed: %3d\n"   ${nfail}
+fi
+
+exit $ret
+
+[2] https://lore.kernel.org/netdev/ZFOthnnqvElorCM8@shredder/
