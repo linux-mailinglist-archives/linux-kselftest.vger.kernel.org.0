@@ -2,81 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBB46F86AD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 May 2023 18:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DC76F88CA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 May 2023 20:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbjEEQ0i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 May 2023 12:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S233272AbjEESoe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 May 2023 14:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232585AbjEEQ0h (ORCPT
+        with ESMTP id S233288AbjEESod (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 May 2023 12:26:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D8F18153
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 May 2023 09:25:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683303949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ttq1OS4Xt/+1PhRFtnRIzajv6W4m8JyhFIEC4N9Qslw=;
-        b=AMTgW6f8JQwWKi0V++eQlfE0ILV7gKfwkgqn97xRGkpbcIcTIUAEQqsctNkMODUGj5PuSP
-        ve2zTajPsyji70J5HHyw6UJjcrfzggyA4okKq/g+mSXFqwS6TVqL7gGjLusPmjO0iCmT7S
-        9MFqPwxUOVdhhYQ8KdIKgTqosWqEU6M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-OwwySg5LOY2dWxksbxreWQ-1; Fri, 05 May 2023 12:25:43 -0400
-X-MC-Unique: OwwySg5LOY2dWxksbxreWQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A8443100F650;
-        Fri,  5 May 2023 16:25:42 +0000 (UTC)
-Received: from [10.22.32.149] (unknown [10.22.32.149])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B65971410F23;
-        Fri,  5 May 2023 16:25:41 +0000 (UTC)
-Message-ID: <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
-Date:   Fri, 5 May 2023 12:25:41 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+        Fri, 5 May 2023 14:44:33 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519FE1F496;
+        Fri,  5 May 2023 11:44:30 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345A5C53024406;
+        Fri, 5 May 2023 11:43:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=EI00Bmw9fThIZBOdPvWOn7nlljNNWoHeO6RsGXz2JGY=;
+ b=Hgyz3DSiOk7Hc0itZtQbDHhGW2znt79TuHcnARxZjL0OCwvUU0GEplnaRdYLtHo+ZI/o
+ QJWrtvV/pvGDmJx6TUuakWSfjTHBscA6ZhVFyPGkGFAjGpUkM+u6svwNFr9QMrsUjJjE
+ /fnfqD/24ZFDwWHH3fGT/kBsNCDjP74aBViCdLovnN2nKLUEEYYY/tW0Gku63icqXldY
+ lzJGHpGph4EMCR/FSkOdQYMmqo2etNQ7l0qyC7r6YzaGjx+vLMKLBJBi2bIV4pzCjv5/
+ RDa1PcKtOUachYtRATun3PcSJPznrbJcgckoiavRbHRb6WMvddrfr8/il+rgYla6THl0 sA== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2109.outbound.protection.outlook.com [104.47.70.109])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qce9tj54y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 May 2023 11:43:54 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jPB2BVVmN3ETLSAJw6BCZSvcQMEYXvDx9LsJkQry1ynj3RVbNp4RG7Yj2r7wiCBrSbwIFETQ9zWVvrquMxJvG8orfRUauqEk4lBChBMWg20eK02C6DMeYOKeJg8MSD/JOvUdbmPoD+WT0IcmST0PtMvTr2JE9FaHIZi4gsIr8gFUkzS1Dzuyv92G2aBDigc8YCe7qk60NaF4Xm0dtSZX5fVlMXvifRuRp095e7Ocq6PFPfc9qlJrL7//hE8xFni260OvELTVgu3QN35cC1MzfRmS4ulaG0Blp5KxwUe1PwSQ3XIR3T5hULGhBX4dxzwsSbAQF9E2vKH96MnHZEd4Rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EI00Bmw9fThIZBOdPvWOn7nlljNNWoHeO6RsGXz2JGY=;
+ b=Dj2sj4HJZq3NH9W51ONpBZYBsVFXD9/amZ8qidTsHKb8u3vmzFt+TOGNVMJbFeTliJmQzc4ZNZpD6wYYjkabmnW7GJJXsA0zNA4RRhz794iyi8oEP+xs8ETI5P4Zzv4t4T6yKwt757W5pafli9nJEBJzDCBgc2fp8h/Tv0784I5IMtudCYLlUrUcKc5OOfnECiRME7fAGTPmLfIPZoETSFdWGVNKVj8yskHS+qGMt/+K66waFUlUBJx80oe7KgzYPGvlVQKqx94mlzgmMJcORPPhAMSZ6Nno/gqAFZxzV3ahy0yJjkli/CQvm8t1W7VI9fYIt4Y+LLXMU7GgUSG3Ng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by IA1PR15MB6247.namprd15.prod.outlook.com (2603:10b6:208:450::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Fri, 5 May
+ 2023 18:43:52 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53%6]) with mapi id 15.20.6363.027; Fri, 5 May 2023
+ 18:43:52 +0000
+Message-ID: <b592dba0-685b-942f-3e0a-88f656733eae@meta.com>
+Date:   Fri, 5 May 2023 11:43:49 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH bpf-next v6 1/2] bpf: Add bpf_task_under_cgroup() kfunc
 Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-References: <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
- <ZDmFLfII8EUX_ocY@slm.duckdns.org>
- <c61ca9d0-c514-fb07-c2f2-3629e8898984@redhat.com>
- <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
- <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
- <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
- <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
- <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
- <ZFGOTHQj3k5rzmyR@blackbook>
- <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
- <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
+To:     Feng Zhou <zhoufeng.zf@bytedance.com>, Hao Luo <haoluo@google.com>
+Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
+        shuah@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
+        wangdongdong.6@bytedance.com
+References: <20230505060818.60037-1-zhoufeng.zf@bytedance.com>
+ <20230505060818.60037-2-zhoufeng.zf@bytedance.com>
+ <CA+khW7g_gq1N=cNHC-5WG2nZ8a-wHSpwg_fc5=dQpkweGvROqA@mail.gmail.com>
+ <f7a85b88-aa8c-a26a-8ccb-a20c62a76faa@bytedance.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <f7a85b88-aa8c-a26a-8ccb-a20c62a76faa@bytedance.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: BYAPR04CA0003.namprd04.prod.outlook.com
+ (2603:10b6:a03:40::16) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|IA1PR15MB6247:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8829ae9d-6975-4e3f-4eb4-08db4d98ac4a
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eLd9YLyqx+mcSa1fMcmnwg5PYdF35xSmyePed/4a9LMAWpjHAZM0u/N+/jO+jhODEeX0S+VJxlQr4igS8D/75IVIAdQfbNGuiZKzZu94/8ftBIGOKfyjOLYWE/oZA8u2TBYKFwhETwxu3hKa9u+NxiUo0w5vCK5OskWFmjN1ZQTbW/k5IuE982PjzQEy/6NyAdE6EL3W+IqKK8Iny4GUjMlPkC+Kzxb+Bfr3PtDtXOxtxLoD3+YNDQy8W+DoF0t8hCq+oY6ssNfBjoh1sPJ4vFs+W4JhkkgG3vFN16TkfoZlvKRxKZQ7FNpHSzeyoSoMk22wCWMQaD5n2t1Gg6r8AegLNMD4R1IUK61TKB1KbWvYNRFQ0XvPAPudyQWHafxGnnySi8dB7vEY/F87BIGrk2Z/V0NiixmNB6Na2Qm74Peq5/MyDLNJLWOU8BWg+djtwPVLluTAwTv+joRqZwcNuMPVUyzST8DIi7qj15sLcu08xO3WNO8dkVjkIuqL7j396mmfwHov/kVc/cN2QAlqN8ygU3oI8Pyl/3GNx9oBW3B1L5QfD1x32nOaehLBQRYEgspnXnC8VFqapqO1krw3Og5wuVUdbWS7Q8vAKCTJTdr2u48OZf4HttoQ7ea7+KVPpCO/sic5MpNtTiY1GblT9w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199021)(31686004)(66946007)(4326008)(66476007)(66556008)(6486002)(478600001)(316002)(110136005)(36756003)(6666004)(31696002)(86362001)(83380400001)(53546011)(6512007)(6506007)(2616005)(41300700001)(8936002)(5660300002)(8676002)(7416002)(2906002)(38100700002)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aUJaOWV2RGxEcG82c0R0WnJ3SityVmFDWUt3WVJMN21xdEpwa0Fnc2NBSUZ4?=
+ =?utf-8?B?UEdLcVh6SjZtcEw5SVZ4LzhoeTR6UGpaanRWQ0hLU0MwSUllV09WZ25FNW5J?=
+ =?utf-8?B?RUZmYWhweFlpclE5Ly8raHRyZWZnWlJQVU1RRUhEVXUrSE1ia2xoSUZsZmIw?=
+ =?utf-8?B?ZTNYbTJPZkRPcVMwZUgwMytMdUZ2VzZpN3hXN25ESDFBTmdTenZWTFVjNGVN?=
+ =?utf-8?B?NDFMbVRPUWJKdXExT3BUYTlwelZTckpncmx2WHhpUVNrc1BvNE50VmpnbExO?=
+ =?utf-8?B?MFRLL2R0WENuYkp2QWhQOVJBSVZsNCtWYVJFWVhKMCtmdE5XWWJ4QlNTbW5F?=
+ =?utf-8?B?bmptdDNsQU9WL0ZBVmh0YU9Dd3IwV2orOEhoL1B4OVowMFpzS2FQVW0wK3c2?=
+ =?utf-8?B?T3pOa0o5ZXRXRG5DNDJ4SFY4NElDSkMvd3k2emRHekJWK2VZWlphcWg4TlFq?=
+ =?utf-8?B?MVN3MjBGdjY0SDRwK2dkVnBwd0lUR1ZUQnU0QnpwcTdCOE1VdUlGOWdpbmVR?=
+ =?utf-8?B?ak5NN2JNZlk3K1pTNVd5VTlGNlhzRmhYNG1ZZGR5Q0JxNjl1eUxFRTNpOTU4?=
+ =?utf-8?B?T0wwQThvcnM1T3FQWG5ZQTJkYmFUNll1am5kTzcycXpzYWdINExHR0pwUmo1?=
+ =?utf-8?B?K2UvYkhid0JxM1c3OU9qVjZmNUxXRVRmeFc5emw3d0REanRKLzYwK2xOa3Fp?=
+ =?utf-8?B?a2RYR1RTUVRIeU1WYURCR21xU29IblhhM0hVUW5Qd2k5V0o0T0p6QlQ5VVRS?=
+ =?utf-8?B?aWpEUjNxUDZPVGRBYk1SSmU5SS9weFh4WVNoUjhXSjBPR1FKT1krVGcyRVh4?=
+ =?utf-8?B?N0d3OW5OTWRpdWs2aUZqQnJJa1FxOWJueHhWTUF6WWtHVXhxRm5MYWJHWS9a?=
+ =?utf-8?B?TkR4UXJsVEVFWHZpTHE4WmtNM3JuazRoU1Z6TllZTFlkMkQva3YreitFaGpP?=
+ =?utf-8?B?MVR4UkRCUDdYeFFmVzJlNGsxMG9mQ2d5bmQ1bE0yRXlVUXVva0J3YVhQMU56?=
+ =?utf-8?B?eW5hVTRMeXl4NnBHTVVkcytYdkVTRkFpeitKeE5YNHU1UDJXUDljTjJEVCtN?=
+ =?utf-8?B?ZXBEeEFnMnJPN2R0WUlXT2pYS2dCSXBLdVFKWDVzaGlBeFFGS1FnOFk2c3U4?=
+ =?utf-8?B?b1RUNE1lSnArRmFpWXg2RGhZMWVIREc5dDJrVTlTc2E4UEtmclA2UmZUTFlN?=
+ =?utf-8?B?Z1RCZDZPT1ZrZzYvSUFBZzNQKzEvWTV3UmhtRVJaKzV2Z2FtQUsvMzE1WDVo?=
+ =?utf-8?B?aWRGa2JqNjkyK1d6dGF1L2NVaGFNRFNxclFYWTdNeUFaR0pYNllUN0h6Y09w?=
+ =?utf-8?B?ZEUraU1JTVN1TnBSOTNONjgzM2FydHJvQkV5UlEzTVgvdGtVQUxWYW82SjM5?=
+ =?utf-8?B?UEdGQld6QmkwczJwT3JFTkRkbEFVbXVHdTNNajFZakV4WDNzb0hZS0Jmbm9h?=
+ =?utf-8?B?bFdYVmlDNm1YUDNxNTBRaFc3eXNRaHFObWp1UnFsRzRCaG5oTFJPdnNXWFVp?=
+ =?utf-8?B?TzNxaFNTelRXN0VXZjdaeUh1elNqYVlWMVRKT2pObytEcm9EbWZYVlc1T3Z3?=
+ =?utf-8?B?RklqNitXdTNJV0JhenlEbDBNdkxYcXhIcXpTOE05YWtlaU5HOExSUlRrK2FZ?=
+ =?utf-8?B?ZVRHQWpsMFpFalNxeTZLN2toQnF3YzhCQjlCMnY2enRWaUNYTUNZZGROa2I0?=
+ =?utf-8?B?RzZ3Q0ZIcEtsbVJsYXovUGs2SjY3Zk40UVlSYUxNMkY4aTdzajZYOE1DNWk3?=
+ =?utf-8?B?QW15NHQ4UlVuajNHa1dTWWxwSmFWUno5dU9KZEMxdExVUHBIYjF0YlRrdk5l?=
+ =?utf-8?B?YU1hMlNlNlFKTlM4aStaaTNMeTg5Y2hIY2NncWsxR1d0WmNrdGRMY3lFd3Vt?=
+ =?utf-8?B?RnFLMXNnN3N2OE45dVc3RURiR2VJU1VEa2hwbEVtREY5OGpPS3ZRNDJtRWRm?=
+ =?utf-8?B?RkdzVDljeGhHdUlKY1BnaHZyWkpLRFNBbjVyQkRXN0JvZHZZYmNzb2U5Q2FM?=
+ =?utf-8?B?dW9vSDZNZVpXSEg4TWcvTm1QSHdMdHpOQVQ5MDNIMU5Ia0xpbmxsbWxRVVd5?=
+ =?utf-8?B?VjBaS2ZZSWNBZjdYR1IrVUdCMXh5eEhvVVJyQ2xFYWcvNG03bklRdEdyUWQ2?=
+ =?utf-8?B?SWRvZjk5OTY3SWQ5a3A5djkyQUhXTXNlaGlMQ1Vpc1JzbS96eGtLSUpzeDc5?=
+ =?utf-8?B?aWc9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8829ae9d-6975-4e3f-4eb4-08db4d98ac4a
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 18:43:52.6496
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pMBbmCWFcYdBqKEkCrAmGYq7MOnZjs7zlqf5B3hPbUn3GC1w3r090ezOCoN6xzHt
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR15MB6247
+X-Proofpoint-ORIG-GUID: wb-N9e0XtuKgBGxMzGnuvQ6A2Ni7Ts_3
+X-Proofpoint-GUID: wb-N9e0XtuKgBGxMzGnuvQ6A2Ni7Ts_3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-05_25,2023-05-05_01,2023-02-09_01
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,48 +152,96 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
-On 5/5/23 12:03, Tejun Heo wrote:
-> On Wed, May 03, 2023 at 11:01:36PM -0400, Waiman Long wrote:
->> On 5/2/23 18:27, Michal Koutný wrote:
->>> On Tue, May 02, 2023 at 05:26:17PM -0400, Waiman Long <longman@redhat.com> wrote:
->>>> In the new scheme, the available cpus are still directly passed down to a
->>>> descendant cgroup. However, isolated CPUs (or more generally CPUs dedicated
->>>> to a partition) have to be exclusive. So what the cpuset.cpus.reserve does
->>>> is to identify those exclusive CPUs that can be excluded from the
->>>> effective_cpus of the parent cgroups before they are claimed by a child
->>>> partition. Currently this is done automatically when a child partition is
->>>> created off a parent partition root. The new scheme will break it into 2
->>>> separate steps without the requirement that the parent of a partition has to
->>>> be a partition root itself.
->>> new scheme
->>>     1st step:
->>>     echo C >p/cpuset.cpus.reserve
->>>     # p/cpuset.cpus.effective == A-C (1)
->>>     2nd step (claim):
->>>     echo C' >p/c/cpuset.cpus # C'⊆C
->>>     echo root >p/c/cpuset.cpus.partition
->> It is something like that. However, the current scheme of automatic
->> reservation is also supported, i.e. cpuset.cpus.reserve will be set
->> automatically when the child cgroup becomes a valid partition as long as the
->> cpuset.cpus.reserve file is not written to. This is for backward
->> compatibility.
+
+On 5/5/23 12:18 AM, Feng Zhou wrote:
+> 在 2023/5/5 14:58, Hao Luo 写道:
+>> On Thu, May 4, 2023 at 11:08 PM Feng zhou <zhoufeng.zf@bytedance.com> 
+>> wrote:
+>>>
+>> <...>
+>>> ---
+>>>   kernel/bpf/helpers.c | 20 ++++++++++++++++++++
+>>>   1 file changed, 20 insertions(+)
+>>>
+>>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>>> index bb6b4637ebf2..453cbd312366 100644
+>>> --- a/kernel/bpf/helpers.c
+>>> +++ b/kernel/bpf/helpers.c
+>>> @@ -2149,6 +2149,25 @@ __bpf_kfunc struct cgroup 
+>>> *bpf_cgroup_from_id(u64 cgid)
+>>>                  return NULL;
+>>>          return cgrp;
+>>>   }
+>>> +
+>>> +/**
+>>> + * bpf_task_under_cgroup - wrap task_under_cgroup_hierarchy() as a 
+>>> kfunc, test
+>>> + * task's membership of cgroup ancestry.
+>>> + * @task: the task to be tested
+>>> + * @ancestor: possible ancestor of @task's cgroup
+>>> + *
+>>> + * Tests whether @task's default cgroup hierarchy is a descendant of 
+>>> @ancestor.
+>>> + * It follows all the same rules as cgroup_is_descendant, and only 
+>>> applies
+>>> + * to the default hierarchy.
+>>> + */
+>>> +__bpf_kfunc long bpf_task_under_cgroup(struct task_struct *task,
+>>> +                                      struct cgroup *ancestor)
+>>> +{
+>>> +       if (unlikely(!ancestor || !task))
+>>> +               return -EINVAL;
+>>> +
+>>> +       return task_under_cgroup_hierarchy(task, ancestor);
+>>> +}
+>>>   #endif /* CONFIG_CGROUPS */
+>>>
 >>
->> Once it is written to, automatic mode will end and users have to manually
->> set it afterward.
-> I really don't like the implicit switching behavior. This is interface
-> behavior modifying internal state that userspace can't view or control
-> directly. Regardless of how the rest of the discussion develops, this part
-> should be improved (e.g. would it work to always try to auto-reserve if the
-> cpu isn't already reserved?).
+>> I wonder in what situation a null 'task' or 'ancestor' can be passed.
+>> Please call out in the comment that the returned value can be a
+>> negative error, so that writing if(bpf_task_under_cgroup()) may cause
+>> surprising results.
+>>
+>> Hao
+> 
+> Hmm, you are right. As kfunc, the NULL value of the parameter is judged, 
+> and bpf verify will prompt the developer to add it. There is really no 
+> need to add this part of the judgment. See other people's opinions.
 
-After some more thought yesterday, I have a slight change in my design 
-that auto-reserve as it is now will stay for partitions that have a 
-partition root parent. For remote partition that doesn't have a 
-partition root parent, its creation will require pre-allocating 
-additional CPUs into top_cpuset's cpuset.cpus.reserve first. So there 
-will be no change in behavior for existing use cases whether a remote 
-partition is created or not.
+Thanks for pointing out Hou.
 
-Cheers,
-Longman
+Currently, bpf_task_under_cgroup() is marked as KF_RCU.
 
+Per documentation:
+2.4.7 KF_RCU flag
+-----------------
+
+The KF_RCU flag is a weaker version of KF_TRUSTED_ARGS. The kfuncs 
+marked with
+KF_RCU expect either PTR_TRUSTED or MEM_RCU arguments. The verifier 
+guarantees
+that the objects are valid and there is no use-after-free. The pointers 
+are not
+NULL, but the object's refcount could have reached zero. The kfuncs need to
+consider doing refcnt != 0 check, especially when returning a KF_ACQUIRE
+pointer. Note as well that a KF_ACQUIRE kfunc that is KF_RCU should very 
+likely
+also be KF_RET_NULL.
+
+
+The pointer cannot be NULL, so the following line of code can be removed:
+ >>> +       if (unlikely(!ancestor || !task))
+ >>> +               return -EINVAL;
+
+I think we do not need to check refcnt != 0 case since ancestor and
+task won't go away.
+
+In the example of second patch, both arguments are TRUSTED arguments
+which is stronger than RCU, so the test itself is okay.
+I am considering whether we should enforce arguments of the kfunc
+to be KF_TRUSTED_ARGS, but I think esp. in some cases, cgroup
+might be RCU protected e.g., task->cgroup->dfl_cgrp. So leaving argument
+requirement as KF_RCU should be better.
+
+> 
+>
