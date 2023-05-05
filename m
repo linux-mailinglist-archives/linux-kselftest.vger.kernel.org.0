@@ -2,216 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567246F7BA2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 May 2023 05:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C64B6F7CC5
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 May 2023 08:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjEEDuv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 May 2023 23:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56978 "EHLO
+        id S229905AbjEEGI5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 May 2023 02:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEEDut (ORCPT
+        with ESMTP id S230397AbjEEGI4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 May 2023 23:50:49 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DE4A5D6;
-        Thu,  4 May 2023 20:50:46 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QCGnL1S84zTk0X;
-        Fri,  5 May 2023 11:46:14 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 5 May 2023 11:50:44 +0800
-Message-ID: <758e8a34-30a4-1f4c-adff-8f0ce2d11b07@huawei.com>
-Date:   Fri, 5 May 2023 11:50:43 +0800
+        Fri, 5 May 2023 02:08:56 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7A414906
+        for <linux-kselftest@vger.kernel.org>; Thu,  4 May 2023 23:08:30 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b60366047so1023117b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 May 2023 23:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1683266910; x=1685858910;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pSta0d8rMPRbh+U2QgJPeyvHfLc6ifzE+V/ts4215w4=;
+        b=juItMXpkR4RnyffRyLs1wh8s/8701jzDW2VtsmFSD2zvi2i7VHcKO3u0TXhkFzZhdu
+         AX5b8VtEtnjrLlrb/dR1Tlz5d0txNH6h7XZC3JF/CXtQkGJWQyZsE/FGdwtP/FoNa6T7
+         roAR5j0Xn8H7OsV+7w48JglbFpS56Ofbib9v6Q5/c+Dcsiytbl61PAnkgWsk6UK4sFig
+         B6VIPv1N7PgVC0i5en+/ygo2siYo5wr1eIFjTzUAPsH1O3ljQoMxAJRpSmKX66IxEeSK
+         oCID+pd0GLqxfA4tTXmz7lJE5QU2SGJqsSqe6K7JfzrP9gat/3U3IFHLrWDz66Op5/gj
+         gJwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683266910; x=1685858910;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pSta0d8rMPRbh+U2QgJPeyvHfLc6ifzE+V/ts4215w4=;
+        b=MBQpx9YGuJDWFJIujfS9CxhTb4iOnxuHFB4iELLC0bz1s+hIePpBLSLLZ2xr5/kSAv
+         9UQt49jYnN2mVyPDYnhOQ8z3r72rjhOvL+5m1z986OiBTa9Zr2HizS5OxTy5xocu0kav
+         KnVdq5pvzlC6bH4nzwH4vNnB3rO4Mls0A67v9hNKYzVdVupC2kC91tWe3HX7f+t02SK9
+         hh4DRFVZFXnQcaqv1kVP0yWQgOWMlhXkUvqJ8qQRCbVdu+S7LHIK6Ww4jMvjJCh8vybb
+         DqLNHNLo37uTOtlX1eMiom3NGENAHxHWy0ylKjpX9J4YzooZPMCHu370BruN5XI1Xcxp
+         +9LA==
+X-Gm-Message-State: AC+VfDzrAQiQxlHXeoHittwDoyhaRACevUzGlprm9XyrjgYThCk9z8HQ
+        C0EiuV1n6pxAdc7HdAEcU/qUYQ==
+X-Google-Smtp-Source: ACHHUZ5Xrm8F82be2bnl9ESPtXrPj37oeZwDiAyWWRpUiCKlDm0Qa/z5/SRQTHsveMLnYKuVj1wsLw==
+X-Received: by 2002:a05:6a20:12c5:b0:f5:b4a5:73b4 with SMTP id v5-20020a056a2012c500b000f5b4a573b4mr523167pzg.27.1683266910194;
+        Thu, 04 May 2023 23:08:30 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id a15-20020aa780cf000000b0063799398eb9sm762160pfn.58.2023.05.04.23.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 23:08:29 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mykolal@fb.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        zhoufeng.zf@bytedance.com
+Subject: [PATCH bpf-next v6 0/2] Introduce a new kfunc of bpf_task_under_cgroup
+Date:   Fri,  5 May 2023 14:08:16 +0800
+Message-Id: <20230505060818.60037-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH -next v2 0/6] landlock: add chmod and chown support
-Content-Language: en-US
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
-        <shuah@kernel.org>, <corbet@lwn.net>
-CC:     <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <roberto.sassu@huawei.com>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christian Brauner <brauner@kernel.org>
-References: <20220827111215.131442-1-xiujianfeng@huawei.com>
- <d55baf4d-01d3-e4d7-e07f-9658d1606a8c@huawei.com>
- <a4dc7c12-b485-2eb2-add5-4f7a387a50fa@digikod.net>
- <5fc97b5b-e76f-99c7-7314-6bb16851f66e@huawei.com>
- <99c0648d-deec-c7e2-a54f-94a7f6a3a50f@digikod.net>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-In-Reply-To: <99c0648d-deec-c7e2-a54f-94a7f6a3a50f@digikod.net>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
+Trace sched related functions, such as enqueue_task_fair, it is necessary to
+specify a task instead of the current task which within a given cgroup.
 
-On 2023/4/26 21:58, Mickaël Salaün wrote:
-> 
-> 
-> On 24/04/2023 10:52, xiujianfeng wrote:
->>
->>
->> On 2023/4/21 1:40, Mickaël Salaün wrote:
->>>
->>> On 18/04/2023 12:53, xiujianfeng wrote:
->>>> Hi Mickael,
->>>>
->>>> Sorry about the long silence on this work, As we known this work
->>>> depends
->>>> on another work about changing argument from struct dentry to struct
->>>> path for some attr/xattr related lsm hooks, I'm stuck with this thing,
->>>> because IMA/EVM is a special security module which is not LSM-based
->>>> currently, and severely coupled with the file system. so I am waiting
->>>> for Roberto Sassu' work (Move IMA and EVM to the LSM infrastructure) to
->>>> be ready, I think it can make my work more easy. you can find
->>>> Roberto'work here,
->>>> https://lwn.net/ml/linux-kernel/20230303181842.1087717-1-roberto.sassu@huaweicloud.com/
->>>>
->>>> Any good idea are welcome, thanks.
->>>
->>> Thanks for the update Xiu.
->>>
->>> Which part would be needed from Roberto's patch series?
->>>
->> As we discussed before, the two access rights that need to be added and
->> their usage is as below:
->> LANDLOCK_ACCESS_FS_WRITE_METADATA controls
->> 1.inode_setattr
->> 2.inode_setxattr
->> 3.inode_removexattr
->> 4.inode_set_acl
->> 5.inode_remove_acl
->> LANDLOCK_ACCESS_FS_READ_METADATA controls
->> 1.inode_getattr
->> 2.inode_get_acl
->> 3.inode_getxattr
->> 4.inode_listxattr
->>
->> all these APIs should be changed to use struct path instead of dentry,
->> and then several vfs APIs as follows are invovled:
->> notify_change,
->> __vfs_setxattr_locked,
->> __vfs_removexattr_locked,
->> __vfs_setxattr_noperm
->> vfs_set_acl
->> vfs_remove_acl
->> vfs_getxattr
->> vfs_listxattr
->> vfs_get_acl
->> and also include some LSM hooks such as inode_post_setxattr and
->> inode_setsecctx.
->>
->> Since the original places where pass dentry to security_inode_xxx may
->> not have any struct path, we have to pass it from the top caller, so
->> this also touches lots of filesystems(e.g. cachefiles, ecryptfs, ksmbd,
->> nfsd, overlayfs...).
->>
->> Other LSMs such as selinux, smack can be easy to refator because they
->> are LSM-based, and if VFS passes path to security_inode_xxx and they can
->> just use path->dentry instead inside they own modules.
->>
->> AS for IMA/EVM, unfortunately they are not LSM-based and coupled with
->> the file system. To make things worse, there is a recursive dependency
->> situation during the update of extended attribute which happen as
->> follows:
->>
->> __vfs_setxattr_noperm
->>    => security_inode_post_setxattr
->>      => evm_inode_post_setxattr
->>        => evm_update_evmxattr
->> => __vfs_setxattr_noperm
->>
->> To change the argument of __vfs_setxattr_noperm from a dentry to the
->> path structure, the two EVM functions would have to be altered as well.
->> However, evm_update_evmxattr is called by 3 other EVM functions who
->> lives in the very heart of the complicated EVM framework. Any change to
->> them would cause a nasty chain reaction in EVM and, as IMA would trigger
->> EVM directly, in IMA as well.
->>
->> There is another callchain as follow:
->> ima_appraise_measurement
->>    =>evm_verifyxattr
->>      =>evm_verifyxattr
->>        =>evm_verify_hmac
->>     =>evm_calc_hash
->>        =>evm_calc_hmac_or_hash
->>          =>vfs_getxattr
->> Passing struct path into vfs_getxattr() would also affect this
->> callchain. Currently ima_appraise_measurment accepts a struct file, and
->> dentry is generated from file_dentry(file) in order to mitigate a
->> deadlock issue involving overlayfs(commit e71b9dff0634ed). Once
->> &file->f_path is passed through this callchain, and someone wants the
->> dentry, it will be using file->f_path.dentry, which is different from
->> file_dentry(file). In the overlayfs scenario, may this cause an issue?
-> 
-> I might be OK, but this need to be tested.
-> 
->>
->> The patchset of moving IMA and EVM into the LSM infrastructe would be
->> helpfull but still can not completely resolve this situation. more
->> refactor would be needed in EVM. That's all that's happening right now.
-> 
-> OK, thanks for the detailed explanation!
-> 
-> I guess you could start with easier hooks (e.g. inode_getattr and
-> inode_setattr) to see if there is potentially other implications, and
-> incrementally build on that.
+Feng Zhou (2):
+  bpf: Add bpf_task_under_cgroup() kfunc
+  selftests/bpf: Add testcase for bpf_task_under_cgroup
 
-I was thinking to get everything done at once, but it looks like we are
-having some troubles, so it's good advice to separate it into small
-works and upstream them on by one, Thanks.
+Changelog:
+v5->v6: Addressed comments from Yonghong Song
+- Some code format modifications.
+- Add ack-by
+Details in here:
+https://lore.kernel.org/all/20230504031513.13749-1-zhoufeng.zf@bytedance.com/
 
-Currently inode_getattr already takes a struct path argument in the
-mainline, I would send the patches about inode_setattr refactor and
-discuss the problem of file_dentry() on that thread.
+v4->v5: Addressed comments from Yonghong Song
+- Some code format modifications.
+Details in here:
+https://lore.kernel.org/all/20230428071737.43849-1-zhoufeng.zf@bytedance.com/
 
-> 
-> 
->>
->>>
->>>>
->>>>
->>>> On 2022/8/27 19:12, Xiu Jianfeng wrote:
->>>>> v2:
->>>>>    * abstract walk_to_visible_parent() helper
->>>>>    * chmod and chown rights only take affect on directory's context
->>>>>    * add testcase for fchmodat/lchown/fchownat
->>>>>    * fix other review issues
->>>>>
->>>>> Xiu Jianfeng (6):
->>>>>     landlock: expand access_mask_t to u32 type
->>>>>     landlock: abstract walk_to_visible_parent() helper
->>>>>     landlock: add chmod and chown support
->>>>>     landlock/selftests: add selftests for chmod and chown
->>>>>     landlock/samples: add chmod and chown support
->>>>>     landlock: update chmod and chown support in document
->>>>>
->>>>>    Documentation/userspace-api/landlock.rst     |   9 +-
->>>>>    include/uapi/linux/landlock.h                |  10 +-
->>>>>    samples/landlock/sandboxer.c                 |  13 +-
->>>>>    security/landlock/fs.c                       | 110 ++++++--
->>>>>    security/landlock/limits.h                   |   2 +-
->>>>>    security/landlock/ruleset.h                  |   2 +-
->>>>>    security/landlock/syscalls.c                 |   2 +-
->>>>>    tools/testing/selftests/landlock/base_test.c |   2 +-
->>>>>    tools/testing/selftests/landlock/fs_test.c   | 267
->>>>> ++++++++++++++++++-
->>>>>    9 files changed, 386 insertions(+), 31 deletions(-)
->>>>>
+v3->v4: Addressed comments from Yonghong Song
+- Modify test cases and test other tasks, not the current task.
+Details in here:
+https://lore.kernel.org/all/20230427023019.73576-1-zhoufeng.zf@bytedance.com/
+
+v2->v3: Addressed comments from Alexei Starovoitov
+- Modify the comment information of the function.
+- Narrow down the testcase's hook point
+Details in here:
+https://lore.kernel.org/all/20230421090403.15515-1-zhoufeng.zf@bytedance.com/
+
+v1->v2: Addressed comments from Alexei Starovoitov
+- Add kfunc instead.
+Details in here:
+https://lore.kernel.org/all/20230420072657.80324-1-zhoufeng.zf@bytedance.com/
+
+ kernel/bpf/helpers.c                          | 20 +++++++
+ tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
+ .../bpf/prog_tests/task_under_cgroup.c        | 53 +++++++++++++++++++
+ .../bpf/progs/test_task_under_cgroup.c        | 51 ++++++++++++++++++
+ 4 files changed, 125 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
+
+-- 
+2.20.1
+
