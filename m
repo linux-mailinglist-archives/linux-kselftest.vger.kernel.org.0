@@ -2,120 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6EA6F8D44
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 May 2023 02:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0446F8D8B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 May 2023 03:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbjEFA4M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 May 2023 20:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
+        id S231416AbjEFBbq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 May 2023 21:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbjEFA4K (ORCPT
+        with ESMTP id S231287AbjEFBbo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 May 2023 20:56:10 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79D17298
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 May 2023 17:56:03 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-ba1815e12efso2203381276.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 May 2023 17:56:03 -0700 (PDT)
+        Fri, 5 May 2023 21:31:44 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DF272A3
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 May 2023 18:31:42 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b9963a72fd9so4754095276.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 May 2023 18:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683334563; x=1685926563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uKg9ooWeNyIkgIgwiRq1E2syoa7nncxzMKLzyswsRsc=;
-        b=oEYCubX2MVaZ3lIzvYofKvwQIDmS/lXvTaPe+nx4JYIouIEOq7/VZNJBz/955TtNWl
-         rYZHJ+9qECqeg4RDvNtvrHP7Ui0lGMPDX2ubGmDW8gNEBQ4HBdjErLbRCtIQE4/ErBRb
-         UlUMiTVsTHoQ8RelA4t0FXBYWpOlPMnSpnz4cQsoVWkXnKmP9FEXp+ofhhYThW6YyuE1
-         IHUvMHy+BC8pzZGtWZNz6yAWNfS98wy2U8g8HBZK4UcJlfQuJKNgMLKe1XbotZB+DRQJ
-         E6hjwHB7/x0k7bAxrYPgZylFDAG4hiLFoxg569IPVzorgRuRk9NqLc9+2y4ttTt5sYY5
-         aecQ==
+        d=google.com; s=20221208; t=1683336702; x=1685928702;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6hp0Ifesb79HPJK/KIKzPfPQWNmnCC9SBcN/OAlybow=;
+        b=wn934bIjSlyYsjqUN/3i+nRgeyQ79+B1hcBs3GqYpWaJGFZXQA53NXLvputweRHFGw
+         LMfhnju5v1AaMaoz9f4P0qQIYb5kkxJLnRgq6S2mToWYINn6YFZSntYoHigHqeEq6SRH
+         41UinaAMctI7sBvB3z8E9//uz0Rbp52e9gIrDjgSBr6yw4JTzlIHjeObPY/CjBcsKX6O
+         3i3syYMHoqqPrAapT7KfPo6h+KYOWD/FKhXk0yctt6mi/6o53LfT6gF6XfKNQuYTu6Cy
+         wvc+4/7hWx1xbkRJOTC+2uMbg8jSKXBsY2oQ/eH/QSsFZs2JHRcIbHx9VIAXj/LEoAcy
+         Oy1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683334563; x=1685926563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uKg9ooWeNyIkgIgwiRq1E2syoa7nncxzMKLzyswsRsc=;
-        b=EXdoNFwCExaapjhYK6XG/pydpzSvQhj1cARPefZL8NgoHjjbJYKgQl8DBW0W2CKrHA
-         Fx1e7/boGV3xlnuUrPVFqwaSlX71zdxCMpikgB85rDMmZXs9HHGhDi6Ro1TFb+/s5A8G
-         dr69I5bgSHskNv3hI/wYa11ujHHM9Fv7GlzbJksYOKIRJ4RGZE7CeGL3GQet3U0Bzqne
-         1CHKdiWvO5yVE4mwAqNLz86hkr7DMA6GOrDOK3PRt1UVpPjSS74xBTpwTA9tie3Ox4UT
-         VwgOE7bLKg1xfFJnpDLSBVLAnugFBZ+BFDXlSnmtgVvcKpbgkil2zeFH4Aoue0HRswtD
-         8ayw==
-X-Gm-Message-State: AC+VfDzwXrWeAxWMK7RYLooRf+eZUczdn7BlFW5OMy7U16+Lc0+760aA
-        SinwlX/tFr0Rah/trCGjsBHhFFyFkVQyTx/zGoHfLw==
-X-Google-Smtp-Source: ACHHUZ7wTUegv3WyR7/Hq6e7DeiGJOrweEWBdXtRxu9dBQrh9sKO2r4H3TUs5GZtQPSXUUdXPbUlcJtY7oipXngdTpg=
-X-Received: by 2002:a0d:cb44:0:b0:556:b029:e101 with SMTP id
- n65-20020a0dcb44000000b00556b029e101mr3457366ywd.19.1683334562650; Fri, 05
- May 2023 17:56:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230421165305.804301-1-vipinsh@google.com> <20230421165305.804301-10-vipinsh@google.com>
- <86pm7xjh3y.wl-maz@kernel.org>
-In-Reply-To: <86pm7xjh3y.wl-maz@kernel.org>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Fri, 5 May 2023 17:55:26 -0700
-Message-ID: <CAHVum0d4W0emmyS0G8_nCXQuvgZN-8utDiT6TMYrOq7dF60aAw@mail.gmail.com>
-Subject: Re: [PATCH 9/9] KVM: arm64: Run clear-dirty-log under MMU read lock
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     oliver.upton@linux.dev, james.morse@arm.com,
-        suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
-        anup@brainfault.org, atishp@atishpatra.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
-        dmatlack@google.com, ricarkol@google.com,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+        d=1e100.net; s=20221208; t=1683336702; x=1685928702;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6hp0Ifesb79HPJK/KIKzPfPQWNmnCC9SBcN/OAlybow=;
+        b=diqzNVJMmk5ssSBzZvpWG/BE8fOGp+D6Ro/463XCcl8Ao9U5nKM6efB9f8em49b+3z
+         kCE2bgHkXxCtMlkY0fYXSfhHgzRN6ChGlgzx+spBOAkFkBJFDGn7BGfZZ3TB5Tc+mORc
+         OdRnDr3Wxq5nYZ9UrCx9RffKS77Ams/Ei6x8I4duNHl8t4WJbuObicM8W+tZ+m1yEC2Z
+         ofEjF/jPSIttKcgkWpQgYbDbsrlfs+Ga/pQXu8xpQAEnY1Legt4aXSLYvD0r0YaU0gPS
+         sLYXexADGyo5Ju9kPLnP/T9ZpxRY7VXHHcSJuGMWir87Z4dPKMT8ERhbrMfDSywY3BU3
+         ZuVw==
+X-Gm-Message-State: AC+VfDzlp/CG0YuoGLW8YuQglW7n3js5cgrf4vk8p5qFgX22/hKNcd8/
+        ku/VOlcxyawSCzHEflP+1zqFRYjBeBQ=
+X-Google-Smtp-Source: ACHHUZ41f8Sy+cWp32D8Fr5R8k9F7ETQDqrRG/yHewH0fB/t2EnZKA0kLgCgnG1g9wuRjbqZzUYo9wR+6UA=
+X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:201:6826:a1a:a426:bb4a])
+ (user=drosen job=sendgmr) by 2002:a05:6902:1021:b0:ba1:b908:364c with SMTP id
+ x1-20020a056902102100b00ba1b908364cmr2063343ybt.12.1683336702159; Fri, 05 May
+ 2023 18:31:42 -0700 (PDT)
+Date:   Fri,  5 May 2023 18:31:29 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
+Message-ID: <20230506013134.2492210-1-drosen@google.com>
+Subject: [PATCH bpf-next v3 0/5] Dynptr Verifier Adjustments
+From:   Daniel Rosenberg <drosen@google.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com,
+        Daniel Rosenberg <drosen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 10:11=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrot=
-e:
->
-> On Fri, 21 Apr 2023 17:53:05 +0100,
-> Vipin Sharma <vipinsh@google.com> wrote:
-> >
-> > Take MMU read lock for write protecting PTEs and use shared page table
-> > walker for clearing dirty logs.
-> >
-> > Clearing dirty logs are currently performed under MMU write locks. This
-> > means vCPUs write protection fault, which also take MMU read lock,  wil=
-l
-> > be blocked during this operation. This causes guest degradation and
-> > especially noticeable on VMs with lot of vCPUs.
-> >
-> > Taking MMU read lock will allow vCPUs to execute parallelly and reduces
-> > the impact on vCPUs performance.
->
-> Sure. Taking no lock whatsoever would be even better.
->
-> What I don't see is the detailed explanation that gives me the warm
-> feeling that this is safe and correct. Such an explanation is the
-> minimum condition for me to even read the patch.
->
+These patches relax a few verifier requirements around dynptrs.
+Patches 1-3 are unchanged from v2, apart from rebasing
+Patch 4 is the same as in v1, see
+https://lore.kernel.org/bpf/CA+PiJmST4WUH061KaxJ4kRL=fqy3X6+Wgb2E2rrLT5OYjUzxfQ@mail.gmail.com/
+Patch 5 adds a test for the change in Patch 4
 
-Thanks for freaking me out. Your not getting warm feeling hunch was
-right, stage2_attr_walker() and stage2_update_leaf_attrs() combo do
-not retry if cmpxchg fails for write protection. Write protection
-callers don't check what the return status of the API is and just
-ignores cmpxchg failure. This means a vCPU (MMU read lock user) can
-cause cmpxchg to fail for write protection operation (under read lock,
-which this patch does) and clear ioctl will happily return as if
-everything is good.
+Daniel Rosenberg (5):
+  bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
+  selftests/bpf: Test allowing NULL buffer in dynptr slice
+  selftests/bpf: Check overflow in optional buffer
+  bpf: verifier: Accept dynptr mem as mem in helpers
+  selftests/bpf: Accept mem from dynptr in helper funcs
 
-I will update the series and also work on validating the correctness
-to instill more confidence.
+ Documentation/bpf/kfuncs.rst                  | 23 ++++++++++-
+ include/linux/skbuff.h                        |  2 +-
+ kernel/bpf/helpers.c                          | 30 +++++++++------
+ kernel/bpf/verifier.c                         | 21 ++++++++--
+ .../testing/selftests/bpf/prog_tests/dynptr.c |  2 +
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 20 ++++++++++
+ .../selftests/bpf/progs/dynptr_success.c      | 38 +++++++++++++++++++
+ 7 files changed, 118 insertions(+), 18 deletions(-)
 
-Thanks
+
+base-commit: f4dea9689c5fea3d07170c2cb0703e216f1a0922
+-- 
+2.40.1.521.gf1e218fcd8-goog
+
