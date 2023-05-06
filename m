@@ -2,136 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21236F8D97
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 May 2023 03:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD65B6F8E3E
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 May 2023 05:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232621AbjEFBcK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 May 2023 21:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54728 "EHLO
+        id S229742AbjEFDQB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 May 2023 23:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbjEFBb5 (ORCPT
+        with ESMTP id S229460AbjEFDQA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 May 2023 21:31:57 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE437A83
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 May 2023 18:31:54 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a6eeea78cso21611198276.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 May 2023 18:31:54 -0700 (PDT)
+        Fri, 5 May 2023 23:16:00 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0697AB8
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 May 2023 20:15:58 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64115eef620so23644491b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 May 2023 20:15:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683336714; x=1685928714;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HpBXaqycDpeF1iiIRkKkU5q/FIeyp/QkzxqhW0Xulus=;
-        b=EjAImXESIDfPwZ9hTfrYy5t7T/PaXqRElM81DJgaDdmyku00koV3RJuwLs0CjXuMrH
-         QqxKeSjl2DRpviPJdfQpgpuUsjdK2dRS7YzYVp3Q6kjC7b122kwMli7b1PpS2xIWnG3Q
-         rSmea63nSwQhq/99fsm8Qu80HuHARS9brKGSc2t503R704eAKxAD/8zpSXAKI2e5luGD
-         dr7o6tyeENUuU3k8Fjq/x2rsYdMCccizaFRzIdNIjxamWCQEzd9UCHG9+5x+nLpgQFKd
-         R1LtLS36OG44zs6if6mN0eloUv/VbbsSCd28EmizmI3nMHsop4hqGEEoaeptveFR4ra1
-         uhMA==
+        d=bytedance.com; s=google; t=1683342958; x=1685934958;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0458uXF9RUz5p6djNQUrV1kPPJP26SNua7MTT7E+jsc=;
+        b=ah4y2BIozBAxspMXaFJpgiDEb9vP5JX7cXug6SoTtI1q35VtGELqCkcK22wupB2LTn
+         rFlXA5OtysZmdrni+jZjZJbkegVrSvCMi3Pzd4ilCJ94XUVOmQjsktn4aJ7FmbfKvQju
+         1KetyAbtvoy2iBX0pgCFL07tWfLyatxkynYL8ldrjnLJCVQwb7Q9feYEvRPHWMZu/2yd
+         dilSkSgXPiFYoKbGmzaGXEuhoY3dEM/eRaxJGdcWCwmbQTwlHVSmJnfLZUXDGVfGMD6O
+         ER1DK0eHWCfT2iqc/C7gNkAlYzhsEZAJVT9OQ2jPrvvHFRdfsdmQXSkRbzovbEMV9HJp
+         LGkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683336714; x=1685928714;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HpBXaqycDpeF1iiIRkKkU5q/FIeyp/QkzxqhW0Xulus=;
-        b=fkqE+XEc84u7gC0n52qN6Yb2sNS1/c4vKKodyd/UVMS5dTZE2yZQH0Xi36sKH7XwUc
-         e1HjQZY9cZDMkF1eH1r42Dbqpm6iiU8ChqmoDKSt+XooO1ohErOQ2p8XJc4ka+GfssCn
-         dpJ44DmamhNEPGl+Wp0w7MEMt7F5zH8M5rJc/ChahgjsxeP1NWdbAOUsTYTmQfuJWGcx
-         JhXWanVkjtqdzS2wJI1h78EWIHQASC/MLBWI2t8eStZOQxKCPtOiK4JBfv6yqgiUWPKC
-         ZNNpuxtMwFlWB8H0eRV61LDEuauLMOxwk4d8qYyAUBj90RNky9QQabheuzsrN/XvnjF2
-         Zdjw==
-X-Gm-Message-State: AC+VfDx9zzNHi9o48ZnafBaDUjXqVKCISrqVx8xzIFkv9fnY4zsi2RF6
-        07k8hRjGkd1Im61UwWP7ya2KuPQoXrQ=
-X-Google-Smtp-Source: ACHHUZ4A5/VQrgjM9CXLg0QZKufSjQAvXOBL5nKnEMH0jE2qlKOK/DEFBdZCQRuZx7hUTDgFmV9viNuQhQ4=
-X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:201:6826:a1a:a426:bb4a])
- (user=drosen job=sendgmr) by 2002:a25:6583:0:b0:b8e:efd8:f2c with SMTP id
- z125-20020a256583000000b00b8eefd80f2cmr1995609ybb.1.1683336713910; Fri, 05
- May 2023 18:31:53 -0700 (PDT)
-Date:   Fri,  5 May 2023 18:31:34 -0700
-In-Reply-To: <20230506013134.2492210-1-drosen@google.com>
-Mime-Version: 1.0
-References: <20230506013134.2492210-1-drosen@google.com>
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
-Message-ID: <20230506013134.2492210-6-drosen@google.com>
-Subject: [PATCH bpf-next v3 5/5] selftests/bpf: Accept mem from dynptr in
- helper funcs
-From:   Daniel Rosenberg <drosen@google.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com,
-        Daniel Rosenberg <drosen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683342958; x=1685934958;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0458uXF9RUz5p6djNQUrV1kPPJP26SNua7MTT7E+jsc=;
+        b=U+rwpKsPnHOpj7NsVBld8b2Si9EDSl3wQSVo+2besSxC9uBliWym4gXIh/22MjI+Q3
+         e9BKOq/yetA+0IjLwNRHmpx54ZjZFv/kZW0CvGmVSWtFfJpNuGOZjPZ58s/ppsRwMf2h
+         YjUej6nVNVpuMXHzgDrdvH85dLwGu0vox7eqigBuSPQ4Kq5N89HiGNTkHlTQ7eQmHkT/
+         WyGktzfjpCbifFiFCcGwTyZ0Bbnu0M3gBWxYcKYMvLJM1ndMSTCu1WTlaLuF4qAGmWAi
+         ZpSWuHcAdMru5/jwo7toskUOmvOdf/D56CQCn3FWMmGO7P42LwPQHhpLvz078k+Mq4jt
+         B1TQ==
+X-Gm-Message-State: AC+VfDytnPyBwnCS/1uQqewyv84XCpJW0Pj+CZen2h6fe8Z3R3BbisK5
+        j9dF2khy2Xbn4CvKkfguLMAAhg==
+X-Google-Smtp-Source: ACHHUZ6x3RXr+FRSOEa6ajuOd5q+SCqgNp5dyJfTZ6LVau6mi9v4AwFmvAli3FqgzM3yIg8OKhHanQ==
+X-Received: by 2002:a05:6a00:1f10:b0:63f:32ed:92b1 with SMTP id be16-20020a056a001f1000b0063f32ed92b1mr8660432pfb.7.1683342958117;
+        Fri, 05 May 2023 20:15:58 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id j1-20020aa783c1000000b0063a1e7d7439sm2256663pfn.69.2023.05.05.20.15.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 20:15:57 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mykolal@fb.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        zhoufeng.zf@bytedance.com
+Subject: [PATCH bpf-next v7 0/2] Introduce a new kfunc of bpf_task_under_cgroup
+Date:   Sat,  6 May 2023 11:15:43 +0800
+Message-Id: <20230506031545.35991-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This ensures that buffers retrieved from dynptr_data are allowed to be
-passed in to helpers that take mem, like bpf_strncmp
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-Signed-off-by: Daniel Rosenberg <drosen@google.com>
----
- .../testing/selftests/bpf/prog_tests/dynptr.c |  1 +
- .../selftests/bpf/progs/dynptr_success.c      | 21 +++++++++++++++++++
- 2 files changed, 22 insertions(+)
+Trace sched related functions, such as enqueue_task_fair, it is necessary to
+specify a task instead of the current task which within a given cgroup.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-index 13d4b9ab16e7..7cfac53c0d58 100644
---- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-@@ -27,6 +27,7 @@ static struct {
- 	{"test_dynptr_is_rdonly", SETUP_SKB_PROG},
- 	{"test_dynptr_clone", SETUP_SKB_PROG},
- 	{"test_dynptr_skb_no_buff", SETUP_SKB_PROG},
-+	{"test_dynptr_skb_strcmp", SETUP_SKB_PROG},
- };
- 
- static void verify_success(const char *prog_name, enum test_setup_type setup_type)
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
-index d299ef3b4d1f..0c053976f8f9 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_success.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
-@@ -522,3 +522,24 @@ int test_dynptr_skb_no_buff(struct __sk_buff *skb)
- 
- 	return !!data;
- }
-+
-+SEC("?cgroup_skb/egress")
-+int test_dynptr_skb_strcmp(struct __sk_buff *skb)
-+{
-+	struct bpf_dynptr ptr;
-+	char *data;
-+
-+	if (bpf_dynptr_from_skb(skb, 0, &ptr)) {
-+		err = 1;
-+		return 1;
-+	}
-+
-+	/* This may return NULL. SKB may require a buffer */
-+	data = bpf_dynptr_slice(&ptr, 0, NULL, 10);
-+	if (data) {
-+		bpf_strncmp(data, 10, "foo");
-+		return 1;
-+	}
-+
-+	return 1;
-+}
+Feng Zhou (2):
+  bpf: Add bpf_task_under_cgroup() kfunc
+  selftests/bpf: Add testcase for bpf_task_under_cgroup
+
+Changelog:
+v6->v7: Addressed comments from Hao Luo
+- Get rid of unnecessary check
+Details in here:
+https://lore.kernel.org/all/20230505060818.60037-1-zhoufeng.zf@bytedance.com/
+
+v5->v6: Addressed comments from Yonghong Song
+- Some code format modifications.
+- Add ack-by
+Details in here:
+https://lore.kernel.org/all/20230504031513.13749-1-zhoufeng.zf@bytedance.com/
+
+v4->v5: Addressed comments from Yonghong Song
+- Some code format modifications.
+Details in here:
+https://lore.kernel.org/all/20230428071737.43849-1-zhoufeng.zf@bytedance.com/
+
+v3->v4: Addressed comments from Yonghong Song
+- Modify test cases and test other tasks, not the current task.
+Details in here:
+https://lore.kernel.org/all/20230427023019.73576-1-zhoufeng.zf@bytedance.com/
+
+v2->v3: Addressed comments from Alexei Starovoitov
+- Modify the comment information of the function.
+- Narrow down the testcase's hook point
+Details in here:
+https://lore.kernel.org/all/20230421090403.15515-1-zhoufeng.zf@bytedance.com/
+
+v1->v2: Addressed comments from Alexei Starovoitov
+- Add kfunc instead.
+Details in here:
+https://lore.kernel.org/all/20230420072657.80324-1-zhoufeng.zf@bytedance.com/
+
+ kernel/bpf/helpers.c                          | 17 ++++++
+ tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
+ .../bpf/prog_tests/task_under_cgroup.c        | 53 +++++++++++++++++++
+ .../bpf/progs/test_task_under_cgroup.c        | 51 ++++++++++++++++++
+ 4 files changed, 122 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
+
 -- 
-2.40.1.521.gf1e218fcd8-goog
+2.20.1
 
