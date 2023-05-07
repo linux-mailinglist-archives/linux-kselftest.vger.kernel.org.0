@@ -2,61 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC3C6F9414
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 May 2023 23:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236826F9520
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 May 2023 02:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjEFVKV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 6 May 2023 17:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S229693AbjEGAAY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 6 May 2023 20:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjEFVKV (ORCPT
+        with ESMTP id S229460AbjEGAAX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 6 May 2023 17:10:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A9D11D97;
-        Sat,  6 May 2023 14:10:20 -0700 (PDT)
+        Sat, 6 May 2023 20:00:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B43E14355;
+        Sat,  6 May 2023 17:00:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01E7860FF4;
-        Sat,  6 May 2023 21:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4FBB2C433D2;
-        Sat,  6 May 2023 21:10:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 809C0612F2;
+        Sun,  7 May 2023 00:00:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D7433C4339B;
+        Sun,  7 May 2023 00:00:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683407419;
-        bh=S2SnPkSUSJ6su6J8UTAAsasVzLaGWiu3YCm9awqcdxc=;
+        s=k20201202; t=1683417620;
+        bh=EYWEM6o7wbF3/QheBJOmYtWD/MteDRvbuh7QTpPK59E=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=XXMFgn2GbwEZsWPvLu4R9QTtc95p45wE8QJCJge304gwgmnfEbVbIPwB5+MoZt7Zc
-         yKEEB6ZeKKN7n6h+YVe8aTVjK1I4ctIAkhwChVqaQ3rTWtONPXxEp88fXJ+LuErq4V
-         FEfqXC/4YciKJOqt7Zst0bviKcgbzEo1lrcUeizQ3LVqZRbUH3GrcAy8AqA/GlT/px
-         xzkguuHM7f04pzilaONWu9r3VES0mewn2QOCdbNv0k95Cp4thnIe6aVOoB+0BM6Jiw
-         jeLqGvT84gHPDbfAvQn+ScEjiwHkT/QWvDTJ17Ay/1Mb7CehRceSq23mO4NthYSaCS
-         UyhdyB3h5dzHQ==
+        b=URdPYTB2z1OAwWZ/wrLCR4k0ip7/HDClRnEeNJiqhWoGJUHpWHjxop6pg6ufzO4Yb
+         FXp+987Z86hSUF61Qp57yM33F7I76sXbIEMXc2m1tpRY6qOzQA4xafNx3jCBPESNp7
+         dAwMhnDoKjakok6GjJLFTdC/RIIcu+6wmi4xhkcgVcsGux1lMVonOSWzHqdwSaM4T0
+         sO9cVCpHvrwkSsvJC5f8MewaH5yObiP1OnIUyYJc3Dy7NQ79vvLUARhWoGXqfh+wFQ
+         ESlZB2+P9oNE3tqLoPz1NSlJXvJyOfzECBl/0TzXh1VoyHJFMzmQp2KMFgfh1PlyUq
+         Am3H7/IJ8rnTg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 312A9C395FD;
-        Sat,  6 May 2023 21:10:19 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4ACBC395FD;
+        Sun,  7 May 2023 00:00:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v7 0/2] Introduce a new kfunc of
- bpf_task_under_cgroup
+Subject: Re: [PATCH bpf-next v3 0/5] Dynptr Verifier Adjustments
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168340741918.8652.6550838631520181968.git-patchwork-notify@kernel.org>
-Date:   Sat, 06 May 2023 21:10:19 +0000
-References: <20230506031545.35991-1-zhoufeng.zf@bytedance.com>
-In-Reply-To: <20230506031545.35991-1-zhoufeng.zf@bytedance.com>
-To:     Feng zhou <zhoufeng.zf@bytedance.com>
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
-        wangdongdong.6@bytedance.com
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Message-Id: <168341762073.15595.436910654395923794.git-patchwork-notify@kernel.org>
+Date:   Sun, 07 May 2023 00:00:20 +0000
+References: <20230506013134.2492210-1-drosen@google.com>
+In-Reply-To: <20230506013134.2492210-1-drosen@google.com>
+To:     Daniel Rosenberg <drosen@google.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+        corbet@lwn.net, joannelkoong@gmail.com, mykolal@fb.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,23 +67,33 @@ Hello:
 This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Sat,  6 May 2023 11:15:43 +0800 you wrote:
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On Fri,  5 May 2023 18:31:29 -0700 you wrote:
+> These patches relax a few verifier requirements around dynptrs.
+> Patches 1-3 are unchanged from v2, apart from rebasing
+> Patch 4 is the same as in v1, see
+> https://lore.kernel.org/bpf/CA+PiJmST4WUH061KaxJ4kRL=fqy3X6+Wgb2E2rrLT5OYjUzxfQ@mail.gmail.com/
+> Patch 5 adds a test for the change in Patch 4
 > 
-> Trace sched related functions, such as enqueue_task_fair, it is necessary to
-> specify a task instead of the current task which within a given cgroup.
-> 
-> Feng Zhou (2):
->   bpf: Add bpf_task_under_cgroup() kfunc
->   selftests/bpf: Add testcase for bpf_task_under_cgroup
+> Daniel Rosenberg (5):
+>   bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
+>   selftests/bpf: Test allowing NULL buffer in dynptr slice
+>   selftests/bpf: Check overflow in optional buffer
+>   bpf: verifier: Accept dynptr mem as mem in helpers
+>   selftests/bpf: Accept mem from dynptr in helper funcs
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v7,1/2] bpf: Add bpf_task_under_cgroup() kfunc
-    https://git.kernel.org/bpf/bpf-next/c/b5ad4cdc46c7
-  - [bpf-next,v7,2/2] selftests/bpf: Add testcase for bpf_task_under_cgroup
-    https://git.kernel.org/bpf/bpf-next/c/49e0263ab40f
+  - [bpf-next,v3,1/5] bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
+    https://git.kernel.org/bpf/bpf-next/c/3bda08b63670
+  - [bpf-next,v3,2/5] selftests/bpf: Test allowing NULL buffer in dynptr slice
+    https://git.kernel.org/bpf/bpf-next/c/1ce33b6c846f
+  - [bpf-next,v3,3/5] selftests/bpf: Check overflow in optional buffer
+    https://git.kernel.org/bpf/bpf-next/c/3881fdfed21f
+  - [bpf-next,v3,4/5] bpf: verifier: Accept dynptr mem as mem in helpers
+    https://git.kernel.org/bpf/bpf-next/c/2012c867c800
+  - [bpf-next,v3,5/5] selftests/bpf: Accept mem from dynptr in helper funcs
+    https://git.kernel.org/bpf/bpf-next/c/798e48fc28fa
 
 You are awesome, thank you!
 -- 
