@@ -2,483 +2,312 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B896FA360
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 May 2023 11:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27BB76FB11D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 May 2023 15:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232313AbjEHJcd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 May 2023 05:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
+        id S232881AbjEHNPw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 May 2023 09:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjEHJcT (ORCPT
+        with ESMTP id S233267AbjEHNPu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 May 2023 05:32:19 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DE82269E;
-        Mon,  8 May 2023 02:32:11 -0700 (PDT)
-Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QFGHk3MWHzpWB4;
-        Mon,  8 May 2023 17:30:58 +0800 (CST)
-Received: from [10.67.110.218] (10.67.110.218) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 8 May 2023 17:32:09 +0800
-Message-ID: <ba8b6072-42b6-4275-83fd-5497654d77db@huawei.com>
-Date:   Mon, 8 May 2023 17:32:09 +0800
+        Mon, 8 May 2023 09:15:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636ED2D797;
+        Mon,  8 May 2023 06:15:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE25B62D42;
+        Mon,  8 May 2023 13:15:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9469AC433D2;
+        Mon,  8 May 2023 13:15:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683551747;
+        bh=Yx/d/vlSfUg1A+0BfdmAMW65S4eMBXSw23P4c1Qdsuo=;
+        h=From:Date:Subject:To:Cc:From;
+        b=iewibZCA5YkX7wJ83jSl3W8R0qv8D7QY5v6Foef7NOoPbVys+aKiLmQsFIi057WBF
+         vPXV8WD+H2T0/7H8XVXLqFOU0UOcCLb2HYNvJFyqJSbTWVVXleKZ0JmWZyE9AkYImI
+         42UuVnOVAavP2zUUR7BPEtF43uzD9CD08LZ3NmEpQDpbHpsCAkigTU6IS2hT6bOoK6
+         r79yUENbru7DXGzkUA5POfFRRvo88oQRoLjXlwdi67FUuxTQdC8IEM8qEfRUp9AK4q
+         RE6XKQf7BRUYUiseog1RHrNwGvjjy8v90DzZnSdLPH2I+Zpt5nJl1by12t8LoGEGxI
+         UCrusKl1xFVQA==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Mon, 08 May 2023 22:15:42 +0900
+Subject: [PATCH v2] selftests/ftrace: Improve integration with kselftest
+ runner
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 2/9] eventfs: adding eventfs dir add functions
-Content-Language: en-US
-To:     Ajay Kaher <akaher@vmware.com>, <rostedt@goodmis.org>,
-        <mhiramat@kernel.org>, <shuah@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <chinglinyu@google.com>,
-        <namit@vmware.com>, <srivatsab@vmware.com>,
-        <srivatsa@csail.mit.edu>, <amakhalov@vmware.com>,
-        <vsirnapalli@vmware.com>, <tkundu@vmware.com>,
-        <er.ajay.kaher@gmail.com>
-References: <1683026600-13485-1-git-send-email-akaher@vmware.com>
- <1683026600-13485-3-git-send-email-akaher@vmware.com>
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-In-Reply-To: <1683026600-13485-3-git-send-email-akaher@vmware.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.218]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500012.china.huawei.com (7.185.36.15)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <20230302-ftrace-kselftest-ktap-v2-1-ecc482212729@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAP31WGQC/4WNQQqDMBAAvyI5d0sSq1FP/UfxsOqqQRtlE6RF/
+ HujH+hxBobZhSe25EWV7IJps94uLoK+JaId0Q0EtosstNSpTKWGPjC2BJOnuQ/kA0wBVyg7U5g
+ iL1WWGRHbBj1Bw+ja8azDez3tytTbz3V71ZFH68PC32u+qdP++2wKFGDxQGnyrDHYPSdiR/N94
+ UHUx3H8AMmk61HRAAAA
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bfdf5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7774; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=Yx/d/vlSfUg1A+0BfdmAMW65S4eMBXSw23P4c1Qdsuo=;
+ b=owEBbAGT/pANAwAKASTWi3JdVIfQAcsmYgBkWPYAg3dhyoXZ+y4LAlxspmifvOKuzUu+/DSKz
+ CpmYMVjlNqJATIEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZFj2AAAKCRAk1otyXVSH
+ 0OHwB/joun9Ln9Cw6ohgcgBT0CTtYOUHOJPFeqT96+uRYUcmXVaxZ2rpeXD/oBkxxqJvoHfNd/V
+ Iqb+iWkk1Yy9lc1N9TAzxntQCNQZEnok1EkpyDVxlk7x25Z/qOBF6HdM22LlPdAzN0Nbs9Y64gL
+ 05PtmxL10DbgCr8uwaL9NBz3d3EXKvWlK1jFj6UqhUNuAidS9zne5AGoV7OzAqAWgBuJ3prCLXV
+ YwsqmO36bqWD1zc2dwZui4XK4KJrDbC/0h14cAbB1R+2tR3DgDE9YgfLQ0STE3e0jf+oYfzYRPb
+ Y9vQ3lxujIiIscn2VVz6bew0Dide6jL/9OS6uLSySQ0KUrs=
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/5/2 19:23, Ajay Kaher wrote:
-> Adding eventfs_file structure which will hold properties of file or dir.
-> 
-> Adding following functions to add dir in eventfs:
-> 
-> eventfs_create_events_dir() will directly create events dir with-in
-> tracing folder.
-> 
-> eventfs_add_subsystem_dir() will adds the info of subsystem_dir to
-> eventfs and dynamically create subsystem_dir as and when requires.
-> 
-> eventfs_add_dir() will add the info of dir (which is with-in
-> subsystem_dir) to eventfs and dynamically create these dir as
-> and when requires.
-> 
-> Signed-off-by: Ajay Kaher <akaher@vmware.com>
-> Co-developed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> Tested-by: Ching-lin Yu <chinglinyu@google.com>
-> ---
->   fs/tracefs/Makefile      |   1 +
->   fs/tracefs/event_inode.c | 252 +++++++++++++++++++++++++++++++++++++++
->   include/linux/tracefs.h  |  29 +++++
->   kernel/trace/trace.h     |   1 +
->   4 files changed, 283 insertions(+)
->   create mode 100644 fs/tracefs/event_inode.c
-> 
-> diff --git a/fs/tracefs/Makefile b/fs/tracefs/Makefile
-> index 7c35a282b..73c56da8e 100644
-> --- a/fs/tracefs/Makefile
-> +++ b/fs/tracefs/Makefile
-> @@ -1,5 +1,6 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   tracefs-objs	:= inode.o
-> +tracefs-objs	+= event_inode.o
->   
->   obj-$(CONFIG_TRACING)	+= tracefs.o
->   
-> diff --git a/fs/tracefs/event_inode.c b/fs/tracefs/event_inode.c
-> new file mode 100644
-> index 000000000..82caba7e9
-> --- /dev/null
-> +++ b/fs/tracefs/event_inode.c
-> @@ -0,0 +1,252 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + *  event_inode.c - part of tracefs, a pseudo file system for activating tracing
-> + *
-> + *  Copyright (C) 2020-22 VMware Inc, author: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> + *  Copyright (C) 2020-22 VMware Inc, author: Ajay Kaher <akaher@vmware.com>
-> + *
-> + *  eventfs is used to show trace events with one set of dentries
-> + *
-> + *  eventfs stores meta-data of files/dirs and skip to create object of
-> + *  inodes/dentries. As and when requires, eventfs will create the
-> + *  inodes/dentries for only required files/directories. Also eventfs
-> + *  would delete the inodes/dentries once no more requires but preserve
-> + *  the meta data.
-> + */
-> +#include <linux/fsnotify.h>
-> +#include <linux/fs.h>
-> +#include <linux/namei.h>
-> +#include <linux/security.h>
-> +#include <linux/tracefs.h>
-> +#include <linux/kref.h>
-> +#include <linux/delay.h>
-> +#include "internal.h"
-> +
-> +/**
-> + * eventfs_dentry_to_rwsem - Return corresponding eventfs_rwsem
-> + * @dentry: a pointer to dentry
-> + *
-> + * helper function to return crossponding eventfs_rwsem for given dentry
-> + */
-> +static struct rw_semaphore *eventfs_dentry_to_rwsem(struct dentry *dentry)
-> +{
-> +	if (S_ISDIR(dentry->d_inode->i_mode))
-> +		return (struct rw_semaphore *)dentry->d_inode->i_private;
-> +	else
-> +		return (struct rw_semaphore *)dentry->d_parent->d_inode->i_private;
-> +}
-> +
-> +/**
-> + * eventfs_down_read - acquire read lock function
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-> + *
-> + * helper function to perform read lock, skip locking if caller task already
-> + * own the lock. read lock requires for lookup(), release() and these also
-> + * called with-in open(), remove() which already hold the read/write lock.
-> + */
-> +static void eventfs_down_read(struct rw_semaphore *eventfs_rwsem)
-> +{
-> +	down_read_nested(eventfs_rwsem, SINGLE_DEPTH_NESTING);
-> +}
-> +
-> +/**
-> + * eventfs_up_read - release read lock function
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-> + *
-> + * helper function to release eventfs_rwsem lock if locked
-> + */
-> +static void eventfs_up_read(struct rw_semaphore *eventfs_rwsem)
-> +{
-> +	up_read(eventfs_rwsem);
-> +}
-> +
-> +/**
-> + * eventfs_down_write - acquire write lock function
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-> + *
-> + * helper function to perform write lock on eventfs_rwsem
-> + */
-> +static void eventfs_down_write(struct rw_semaphore *eventfs_rwsem)
-> +{
-> +	while (!down_write_trylock(eventfs_rwsem))
-> +		msleep(10);
-> +}
-> +
-> +/**
-> + * eventfs_up_write - release write lock function
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-> + *
-> + * helper function to perform write lock on eventfs_rwsem
-> + */
-> +static void eventfs_up_write(struct rw_semaphore *eventfs_rwsem)
-> +{
-> +	up_write(eventfs_rwsem);
-> +}
-> +
-> +static const struct file_operations eventfs_file_operations = {
-> +};
-> +
-> +static const struct inode_operations eventfs_root_dir_inode_operations = {
-> +};
-> +
-> +/**
-> + * eventfs_create_events_dir - create the trace event structure
-> + * @name: a pointer to a string containing the name of the directory to
-> + *        create.
-> + * @parent: a pointer to the parent dentry for this file.  This should be a
-> + *          directory dentry if set.  If this parameter is NULL, then the
-> + *          directory will be created in the root of the tracefs filesystem.
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-> + *
-> + * This function creates the top of the trace event directory.
-> + */
-> +struct dentry *eventfs_create_events_dir(const char *name,
-> +					 struct dentry *parent,
-> +					 struct rw_semaphore *eventfs_rwsem)
-> +{
-> +	struct dentry *dentry = tracefs_start_creating(name, parent);
-> +	struct eventfs_inode *ei;
-> +	struct tracefs_inode *ti;
-> +	struct inode *inode;
-> +
-> +	if (IS_ERR(dentry))
-> +		return dentry;
-> +
-> +	ei = kzalloc(sizeof(*ei), GFP_KERNEL);
-> +	if (!ei)
-> +		return ERR_PTR(-ENOMEM);
-> +	inode = tracefs_get_inode(dentry->d_sb);
-> +	if (unlikely(!inode)) {
-> +		kfree(ei);
-> +		tracefs_failed_creating(dentry);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	init_rwsem(eventfs_rwsem);
-> +	INIT_LIST_HEAD(&ei->e_top_files);
-> +
-> +	ti = get_tracefs(inode);
-> +	ti->flags |= TRACEFS_EVENT_INODE;
-> +	ti->private = ei;
-> +
-> +	inode->i_mode = S_IFDIR | S_IRWXU | S_IRUGO | S_IXUGO;
-> +	inode->i_op = &eventfs_root_dir_inode_operations;
-> +	inode->i_fop = &eventfs_file_operations;
-> +	inode->i_private = eventfs_rwsem;
-> +
-> +	/* directory inodes start off with i_nlink == 2 (for "." entry) */
-> +	inc_nlink(inode);
-> +	d_instantiate(dentry, inode);
-> +	inc_nlink(dentry->d_parent->d_inode);
-> +	fsnotify_mkdir(dentry->d_parent->d_inode, dentry);
-> +	return tracefs_end_creating(dentry);
-> +}
-> +
-> +/**
-> + * eventfs_add_subsystem_dir - add eventfs subsystem_dir to list to create later
-> + * @name: a pointer to a string containing the name of the file to create.
-> + * @parent: a pointer to the parent dentry for this dir.
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-> + *
-> + * This function adds eventfs subsystem dir to list.
-> + * And all these dirs are created on the fly when they are looked up,
-> + * and the dentry and inodes will be removed when they are done.
-> + */
-> +struct eventfs_file *eventfs_add_subsystem_dir(const char *name,
-> +					       struct dentry *parent,
-> +					       struct rw_semaphore *eventfs_rwsem)
-> +{
-> +	struct tracefs_inode *ti_parent;
-> +	struct eventfs_inode *ei_parent;
-> +	struct eventfs_file *ef;
-> +
-> +	if (!parent)
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	ti_parent = get_tracefs(parent->d_inode);
-> +	ei_parent = ti_parent->private;
-> +
-> +	ef = kzalloc(sizeof(*ef), GFP_KERNEL);
-> +	if (!ef)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	ef->ei = kzalloc(sizeof(*ef->ei), GFP_KERNEL);
-> +	if (!ef->ei) {
-> +		kfree(ef);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	INIT_LIST_HEAD(&ef->ei->e_top_files);
-> +
-> +	ef->name = kstrdup(name, GFP_KERNEL);
-> +	if (!ef->name) {
-> +		kfree(ef->ei);
-> +		kfree(ef);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	ef->mode = S_IFDIR | S_IRWXU | S_IRUGO | S_IXUGO;
-> +	ef->iop = &eventfs_root_dir_inode_operations;
-> +	ef->fop =  &eventfs_file_operations;
-> +	ef->dentry = NULL;
-> +	ef->created = false;
-> +	ef->d_parent = parent;
-> +	ef->data = eventfs_rwsem;
-> +
-> +	eventfs_down_write(eventfs_rwsem);
-> +	list_add_tail(&ef->list, &ei_parent->e_top_files);
-> +	eventfs_up_write(eventfs_rwsem);
-> +	return ef;
-> +}
-> +
-> +/**
-> + * eventfs_add_dir - add eventfs dir to list to create later
-> + * @name: a pointer to a string containing the name of the file to create.
-> + * @ef_parent: a pointer to the parent eventfs_file for this dir.
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-> + *
-> + * This function adds eventfs dir to list.
-> + * And all these dirs are created on the fly when they are looked up,
-> + * and the dentry and inodes will be removed when they are done.
-> + */
-> +struct eventfs_file *eventfs_add_dir(const char *name,
-> +				     struct eventfs_file *ef_parent,
-> +				     struct rw_semaphore *eventfs_rwsem)
-> +{
-> +	struct eventfs_file *ef;
-> +
-> +	if (!ef_parent)
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	ef = kzalloc(sizeof(*ef), GFP_KERNEL);
-> +	if (!ef)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	ef->ei = kzalloc(sizeof(*ef->ei), GFP_KERNEL);
-> +	if (!ef->ei) {
-> +		kfree(ef);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	INIT_LIST_HEAD(&ef->ei->e_top_files);
-> +
-> +	ef->name = kstrdup(name, GFP_KERNEL);
-> +	if (!ef->name) {
-> +		kfree(ef->ei);
-> +		kfree(ef);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	ef->mode = S_IFDIR | S_IRWXU | S_IRUGO | S_IXUGO;
-> +	ef->iop = &eventfs_root_dir_inode_operations;
-> +	ef->fop =  &eventfs_file_operations;
-> +	ef->created = false;
-> +	ef->dentry = NULL;
-> +	ef->d_parent = NULL;
-> +	ef->data = eventfs_rwsem;
-> +
-> +	eventfs_down_write(eventfs_rwsem);
-> +	list_add_tail(&ef->list, &ef_parent->ei->e_top_files);
-> +	eventfs_up_write(eventfs_rwsem);
-> +	return ef;
-> +}
+The ftrace selftests do not currently produce KTAP output, they produce a
+custom format much nicer for human consumption. This means that when run in
+automated test systems we just get a single result for the suite as a whole
+rather than recording results for individual test cases, making it harder
+to look at the test data and masking things like inappropriate skips.
 
-Hi,
-eventfs_add_subsystem_dir() and eventfs_add_dir() are almost the same,
-how about extract a common help function to simplify them, like:
+Address this by adding support for KTAP output to the ftracetest script and
+providing a trivial wrapper which will be invoked by the kselftest runner
+to generate output in this format by default, users using ftracetest
+directly will continue to get the existing output.
 
-+static struct eventfs_file *__eventfs_add_dir(const char *name,
-+                                             struct dentry *d_parent,
-+                                             struct eventfs_inode 
-*ei_parent,
-+                                             struct rw_semaphore 
-*eventfs_rwsem)
-+{
-+       struct eventfs_file *ef;
+This is not the most elegant solution but it is simple and effective. I
+did consider implementing this by post processing the existing output
+format but that felt more complex and likely to result in all output being
+lost if something goes seriously wrong during the run which would not be
+helpful. I did also consider just writing a separate runner script but
+there's enough going on with things like the signal handling for that to
+seem like it would be duplicating too much.
+
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+It might make sense to merge this via the ftrace tree - kselftests often
+get merged with the code they test.
+
+Changes in v2:
+- Rebase onto v6.4-rc1.
+- Link to v1: https://lore.kernel.org/r/20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org
+---
+ tools/testing/selftests/ftrace/Makefile        |  3 +-
+ tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
+ tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
+ 3 files changed, 70 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
+index d6e106fbce11..a1e955d2de4c 100644
+--- a/tools/testing/selftests/ftrace/Makefile
++++ b/tools/testing/selftests/ftrace/Makefile
+@@ -1,7 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ all:
+ 
+-TEST_PROGS := ftracetest
++TEST_PROGS_EXTENDED := ftracetest
++TEST_PROGS := ftracetest-ktap
+ TEST_FILES := test.d settings
+ EXTRA_CLEAN := $(OUTPUT)/logs/*
+ 
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index c3311c8c4089..2506621e75df 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
+ echo " Options:"
+ echo "		-h|--help  Show help message"
+ echo "		-k|--keep  Keep passed test logs"
++echo "		-K|--ktap  Output in KTAP format"
+ echo "		-v|--verbose Increase verbosity of test messages"
+ echo "		-vv        Alias of -v -v (Show all results in stdout)"
+ echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
+@@ -85,6 +86,10 @@ parse_opts() { # opts
+       KEEP_LOG=1
+       shift 1
+     ;;
++    --ktap|-K)
++      KTAP=1
++      shift 1
++    ;;
+     --verbose|-v|-vv|-vvv)
+       if [ $VERBOSE -eq -1 ]; then
+ 	usage "--console can not use with --verbose"
+@@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
+ TEST_CASES=`find_testcases $TEST_DIR`
+ LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
+ KEEP_LOG=0
++KTAP=0
+ DEBUG=0
+ VERBOSE=0
+ UNSUPPORTED_RESULT=0
+@@ -229,7 +235,7 @@ prlog() { # messages
+     newline=
+     shift
+   fi
+-  printf "$*$newline"
++  [ "$KTAP" != "1" ] && printf "$*$newline"
+   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
+ }
+ catlog() { #file
+@@ -260,11 +266,11 @@ TOTAL_RESULT=0
+ 
+ INSTANCE=
+ CASENO=0
++CASENAME=
+ 
+ testcase() { # testfile
+   CASENO=$((CASENO+1))
+-  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+-  prlog -n "[$CASENO]$INSTANCE$desc"
++  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+ }
+ 
+ checkreq() { # testfile
+@@ -277,40 +283,68 @@ test_on_instance() { # testfile
+   grep -q "^#[ \t]*flags:.*instance" $1
+ }
+ 
++ktaptest() { # result comment
++  if [ "$KTAP" != "1" ]; then
++    return
++  fi
 +
-+       ef = kzalloc(sizeof(*ef), GFP_KERNEL);
-+       if (!ef)
-+               return ERR_PTR(-ENOMEM);
++  local result=
++  if [ "$1" = "1" ]; then
++    result="ok"
++  else
++    result="not ok"
++  fi
++  shift
 +
-+       ef->ei = kzalloc(sizeof(*ef->ei), GFP_KERNEL);
-+       if (!ef->ei) {
-+               kfree(ef);
-+               return ERR_PTR(-ENOMEM);
-+       }
++  local comment=$*
++  if [ "$comment" != "" ]; then
++    comment="# $comment"
++  fi
 +
-+       INIT_LIST_HEAD(&ef->ei->e_top_files);
-+
-+       ef->name = kstrdup(name, GFP_KERNEL);
-+       if (!ef->name) {
-+               kfree(ef->ei);
-+               kfree(ef);
-+               return ERR_PTR(-ENOMEM);
-+       }
-+
-+       ef->mode = S_IFDIR | S_IRWXU | S_IRUGO | S_IXUGO;
-+       ef->iop = &eventfs_root_dir_inode_operations;
-+       ef->fop = &eventfs_file_operations;
-+       ef->dentry = NULL;
-+       ef->created = false;
-+       ef->d_parent = d_parent;
-+       ef->data = eventfs_rwsem;
-+
-+       eventfs_down_write(eventfs_rwsem);
-+       list_add_tail(&ef->list, &ei_parent->e_top_files);
-+       eventfs_up_write(eventfs_rwsem);
-+       return ef;
++  echo $CASENO $result $INSTANCE$CASENAME $comment
 +}
 +
-+struct eventfs_file *eventfs_add_subsystem_dir(const char *name,
-+                                              struct dentry *parent,
-+                                              struct rw_semaphore 
-*eventfs_rwsem)
-+{
-+       struct tracefs_inode *ti_parent;
-+       struct eventfs_inode *ei_parent;
+ eval_result() { # sigval
+   case $1 in
+     $PASS)
+       prlog "	[${color_green}PASS${color_reset}]"
++      ktaptest 1
+       PASSED_CASES="$PASSED_CASES $CASENO"
+       return 0
+     ;;
+     $FAIL)
+       prlog "	[${color_red}FAIL${color_reset}]"
++      ktaptest 0
+       FAILED_CASES="$FAILED_CASES $CASENO"
+       return 1 # this is a bug.
+     ;;
+     $UNRESOLVED)
+       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
++      ktaptest 0 UNRESOLVED
+       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
+       return $UNRESOLVED_RESULT # depends on use case
+     ;;
+     $UNTESTED)
+       prlog "	[${color_blue}UNTESTED${color_reset}]"
++      ktaptest 1 SKIP
+       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
+       return 0
+     ;;
+     $UNSUPPORTED)
+       prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
++      ktaptest 1 SKIP
+       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
+       return $UNSUPPORTED_RESULT # depends on use case
+     ;;
+     $XFAIL)
+       prlog "	[${color_green}XFAIL${color_reset}]"
++      ktaptest 1 XFAIL
+       XFAILED_CASES="$XFAILED_CASES $CASENO"
+       return 0
+     ;;
+     *)
+       prlog "	[${color_blue}UNDEFINED${color_reset}]"
++      ktaptest 0 error
+       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
+       return 1 # this must be a test bug
+     ;;
+@@ -371,6 +405,7 @@ __run_test() { # testfile
+ run_test() { # testfile
+   local testname=`basename $1`
+   testcase $1
++  prlog -n "[$CASENO]$INSTANCE$CASENAME"
+   if [ ! -z "$LOG_FILE" ] ; then
+     local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
+   else
+@@ -405,6 +440,17 @@ run_test() { # testfile
+ # load in the helper functions
+ . $TEST_DIR/functions
+ 
++if [ "$KTAP" = "1" ]; then
++  echo "TAP version 13"
 +
-+       if (!parent)
-+               return ERR_PTR(-EINVAL);
-+       ti_parent = get_tracefs(parent->d_inode);
-+       ei_parent = ti_parent->private;
-+       return __eventfs_add_dir(name, parent, ei_parent, eventfs_rwsem);
-+}
++  casecount=`echo $TEST_CASES | wc -w`
++  for t in $TEST_CASES; do
++    test_on_instance $t || continue
++    casecount=$((casecount+1))
++  done
++  echo "1..${casecount}"
++fi
 +
-+struct eventfs_file *eventfs_add_dir(const char *name,
-+                                    struct eventfs_file *ef_parent,
-+                                    struct rw_semaphore *eventfs_rwsem)
-+{
-+       if (!ef_parent)
-+               return ERR_PTR(-EINVAL);
-+       return __eventfs_add_dir(name, NULL, ef_parent->ei, eventfs_rwsem);
-+}
+ # Main loop
+ for t in $TEST_CASES; do
+   run_test $t
+@@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
+ prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
+ prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
+ 
++if [ "$KTAP" = "1" ]; then
++  echo -n "# Totals:"
++  echo -n " pass:"`echo $PASSED_CASES | wc -w`
++  echo -n " faii:"`echo $FAILED_CASES | wc -w`
++  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
++  echo -n " xpass:0"
++  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
++  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
++  echo
++fi
++
+ cleanup
+ 
+ # if no error, return 0
+diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
+new file mode 100755
+index 000000000000..b3284679ef3a
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/ftracetest-ktap
+@@ -0,0 +1,8 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
++#
++# Copyright (C) Arm Ltd., 2023
++
++./ftracetest -K
 
---
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230302-ftrace-kselftest-ktap-9d7878691557
 
 Best regards,
-Zheng Yejian
-
-> diff --git a/include/linux/tracefs.h b/include/linux/tracefs.h
-> index 999124459..aeca6761f 100644
-> --- a/include/linux/tracefs.h
-> +++ b/include/linux/tracefs.h
-> @@ -21,6 +21,35 @@ struct file_operations;
->   
->   #ifdef CONFIG_TRACING
->   
-> +struct eventfs_inode {
-> +	struct list_head		e_top_files;
-> +};
-> +
-> +struct eventfs_file {
-> +	const char                      *name;
-> +	struct dentry                   *d_parent;
-> +	struct dentry                   *dentry;
-> +	struct list_head                list;
-> +	struct eventfs_inode            *ei;
-> +	const struct file_operations    *fop;
-> +	const struct inode_operations   *iop;
-> +	void                            *data;
-> +	umode_t                         mode;
-> +	bool                            created;
-> +};
-> +
-> +struct dentry *eventfs_create_events_dir(const char *name,
-> +					 struct dentry *parent,
-> +					 struct rw_semaphore *eventfs_rwsem);
-> +
-> +struct eventfs_file *eventfs_add_subsystem_dir(const char *name,
-> +					       struct dentry *parent,
-> +					       struct rw_semaphore *eventfs_rwsem);
-> +
-> +struct eventfs_file *eventfs_add_dir(const char *name,
-> +				     struct eventfs_file *ef_parent,
-> +				     struct rw_semaphore *eventfs_rwsem);
-> +
->   struct dentry *tracefs_create_file(const char *name, umode_t mode,
->   				   struct dentry *parent, void *data,
->   				   const struct file_operations *fops);
-> diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-> index 616e1aa1c..3726725c8 100644
-> --- a/kernel/trace/trace.h
-> +++ b/kernel/trace/trace.h
-> @@ -359,6 +359,7 @@ struct trace_array {
->   	struct dentry		*options;
->   	struct dentry		*percpu_dir;
->   	struct dentry		*event_dir;
-> +	struct rw_semaphore     eventfs_rwsem;
->   	struct trace_options	*topts;
->   	struct list_head	systems;
->   	struct list_head	events;
+-- 
+Mark Brown,,, <broonie@kernel.org>
 
