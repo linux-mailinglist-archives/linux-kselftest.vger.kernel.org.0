@@ -2,108 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E436FB5CF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 May 2023 19:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FB76FB5D2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 May 2023 19:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbjEHRSG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 May 2023 13:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
+        id S233228AbjEHRTE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 May 2023 13:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbjEHRSF (ORCPT
+        with ESMTP id S232674AbjEHRS7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 May 2023 13:18:05 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF49A199A
-        for <linux-kselftest@vger.kernel.org>; Mon,  8 May 2023 10:18:03 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-763970c9a9eso15930939f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 May 2023 10:18:03 -0700 (PDT)
+        Mon, 8 May 2023 13:18:59 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89AC7289
+        for <linux-kselftest@vger.kernel.org>; Mon,  8 May 2023 10:18:36 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-760f040ecccso29815839f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 May 2023 10:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1683566283; x=1686158283;
+        d=linuxfoundation.org; s=google; t=1683566316; x=1686158316;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=w8qlp5XghttjEan5YOKeJGzJQmCiegmZ3khpFvV4ZPs=;
-        b=AO1hRYtglviVhhGSoTuSJwmjPi3RErsHCMTxnnQap1CnXC6UFQWMjmYvvxAatKg9VR
-         bkFSRlXrZOcFkVtIKyfLw+2PA6OKDphDtHeWdBqfxY1g+tGLMOkpkejSjKwV/sUJxi4X
-         cT0YryWbViHXgSNQO+9ytmYt7C8F8yvEhDTD8=
+        bh=FPp2h4EDEYJ2YkjNK6Cz8A2OUZJ0t46AiKfKnDtxUn8=;
+        b=MVqaHBGWzrfD00BXHCzkU7L4rPa8Z4ZtNfxO+vupCgS5WRXclzYBRUU/918dVqHyL/
+         LMhWXLaI5V9OVsio8TIK6chz1W4i1uQv2AFJeFOQnQNvp2zAKc8g7e6qd/HDMhbZzZO7
+         75vVkJfoR3aJO0XaNjwz01VK8Wh1t8VVzFX4M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683566283; x=1686158283;
+        d=1e100.net; s=20221208; t=1683566316; x=1686158316;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w8qlp5XghttjEan5YOKeJGzJQmCiegmZ3khpFvV4ZPs=;
-        b=bTK8fcvrWRPPAXQzks5K0xatKm7KU6wISb2aV2YpB+kyBJnolI+Z6+W9UucIe2P9DP
-         0gWQA47fMJ9j+1sskKknempA8OHpg2hYVbXc7OI9Y9q0QoBBguLpnFRRI7gCBjMgTRB4
-         s8IccuoxpyOMEV4l4PHrMTayFkVp1SCxt+OErCtP4wF2iShpJdDFjX1kvTVhYw9Cwk/V
-         OICdlujdiDkWexg3oqUDuz326Sc4u0LPDovbpBJ6DF580+sjRlYhjK7+qIjL9VJfO2hC
-         QK/hJm6ZPIMd3cESbvDMwzkxXfoM/EDQbjyXrrM9eud3PJ4Yvu0w3b1q44SdmPOeb8kN
-         gECA==
-X-Gm-Message-State: AC+VfDwczEGVystLXwl5ZNIzgX2u1lXyUTowj0lTaDbxl0xpM4yJH/i2
-        pQ0zTuixei6lGFUx/2HxvM9LGw==
-X-Google-Smtp-Source: ACHHUZ63FdKEvsQgOvOAIVrabDVRnQT5Xqa4b68JbCg4HQ9KHodRuCp9TmxxO1eWiLYMXUkpIl3nog==
-X-Received: by 2002:a05:6e02:1d05:b0:331:1129:b8a9 with SMTP id i5-20020a056e021d0500b003311129b8a9mr5643487ila.1.1683566283068;
-        Mon, 08 May 2023 10:18:03 -0700 (PDT)
+        bh=FPp2h4EDEYJ2YkjNK6Cz8A2OUZJ0t46AiKfKnDtxUn8=;
+        b=fb/QANRpGP4ahpWg6m6d1tJDxFlkMzAp8+bQ2/SUMkUUVZpemczwOSOKhw43JaFyHu
+         Y+lGtic/bgdRVFxlvm8/+AhLewkhrwihRR+9xP20Hdc6isq91S6NGUAi1DswehiZxC7r
+         2CIm4UDyxSPYOllsTyvzWUXicL5czYJ/j+jHQBeSYuP9kVAcxu13M4TXfhbLgW8j+Q5f
+         5mmS/TQO6/oV/v+SD1KsGgg6TpqWZWEHRUpms7BXSZB1QrC3Iaf41GFB8KaxO1i9ssVX
+         DwN1cBfZk22rBQ2pyjZP9FEqX3IlhbavQMqDX1nb9pGsyN/GmLVAUVhq1lR5/lJtrn9E
+         VFWg==
+X-Gm-Message-State: AC+VfDxtu2B745Su/FOy99Ktiif1XcptlYlRJZhgNfhob9MNGTh3zYOl
+        MQt1nSbpyTzcmrJ9m6t0dyGTCA==
+X-Google-Smtp-Source: ACHHUZ4meZeYyiPjUYlS9Zz76Hx/oG9htRP5jlKCsxRVY5RgaJ+4a0Rw/zsqyBGS+z7rLws6KtyR9g==
+X-Received: by 2002:a05:6e02:582:b0:332:fcce:c26d with SMTP id c2-20020a056e02058200b00332fccec26dmr4949876ils.0.1683566316035;
+        Mon, 08 May 2023 10:18:36 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a14-20020a92d34e000000b0032732e7c25esm2541449ilh.36.2023.05.08.10.18.02
+        by smtp.gmail.com with ESMTPSA id q1-20020a920501000000b0033181097e9esm2474757ile.51.2023.05.08.10.18.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 10:18:02 -0700 (PDT)
-Message-ID: <e886a835-f2d1-4fd0-8e02-82cc3a878870@linuxfoundation.org>
-Date:   Mon, 8 May 2023 11:18:01 -0600
+        Mon, 08 May 2023 10:18:35 -0700 (PDT)
+Message-ID: <31510739-c069-56fc-a1d2-43a0c86aeb2c@linuxfoundation.org>
+Date:   Mon, 8 May 2023 11:18:35 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2] selftests/ftrace: Improve integration with kselftest
- runner
+Subject: Re: [PATCH v2] tools/nolibc: Fix build of stdio.h due to header
+ ordering
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+To:     Mark Brown <broonie@kernel.org>, Willy Tarreau <w@1wt.eu>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20230302-ftrace-kselftest-ktap-v2-1-ecc482212729@kernel.org>
+References: <20230413-nolibc-stdio-fix-v2-1-6b6bbb045a80@kernel.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230302-ftrace-kselftest-ktap-v2-1-ecc482212729@kernel.org>
+In-Reply-To: <20230413-nolibc-stdio-fix-v2-1-6b6bbb045a80@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/8/23 07:15, Mark Brown wrote:
-> The ftrace selftests do not currently produce KTAP output, they produce a
-> custom format much nicer for human consumption. This means that when run in
-> automated test systems we just get a single result for the suite as a whole
-> rather than recording results for individual test cases, making it harder
-> to look at the test data and masking things like inappropriate skips.
+On 5/8/23 07:30, Mark Brown wrote:
+> When we added fd based file streams we created references to STx_FILENO in
+> stdio.h but these constants are declared in unistd.h which is the last file
+> included by the top level nolibc.h meaning those constants are not defined
+> when we try to build stdio.h. This causes programs using nolibc.h to fail
+> to build.
 > 
-> Address this by adding support for KTAP output to the ftracetest script and
-> providing a trivial wrapper which will be invoked by the kselftest runner
-> to generate output in this format by default, users using ftracetest
-> directly will continue to get the existing output.
+> Reorder the headers to avoid this issue.
 > 
-> This is not the most elegant solution but it is simple and effective. I
-> did consider implementing this by post processing the existing output
-> format but that felt more complex and likely to result in all output being
-> lost if something goes seriously wrong during the run which would not be
-> helpful. I did also consider just writing a separate runner script but
-> there's enough going on with things like the signal handling for that to
-> seem like it would be duplicating too much.
-> 
-> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Fixes: d449546c957f ("tools/nolibc: implement fd-based FILE streams")
+> Acked-by: Willy Tarreau <w@1wt.eu>
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
 
-Applied now to linux-kselftest fixes for Linux 6.4-rc2
+Applied now to linux-kselftest fixes for 6.4-rc2
 
 thanks,
 -- Shuah
