@@ -2,67 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BB76FB11D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 May 2023 15:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E686FB18C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 May 2023 15:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbjEHNPw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 May 2023 09:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
+        id S234131AbjEHNcT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 May 2023 09:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233267AbjEHNPu (ORCPT
+        with ESMTP id S234162AbjEHNcS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 May 2023 09:15:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636ED2D797;
-        Mon,  8 May 2023 06:15:48 -0700 (PDT)
+        Mon, 8 May 2023 09:32:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8AA25730;
+        Mon,  8 May 2023 06:32:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE25B62D42;
-        Mon,  8 May 2023 13:15:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9469AC433D2;
-        Mon,  8 May 2023 13:15:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C06863D1C;
+        Mon,  8 May 2023 13:32:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A0AEC433D2;
+        Mon,  8 May 2023 13:32:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683551747;
-        bh=Yx/d/vlSfUg1A+0BfdmAMW65S4eMBXSw23P4c1Qdsuo=;
+        s=k20201202; t=1683552729;
+        bh=BFbcQkbzLb4nPKXqpv19YJcpoC5MeNxkLoWEaXmzKEw=;
         h=From:Date:Subject:To:Cc:From;
-        b=iewibZCA5YkX7wJ83jSl3W8R0qv8D7QY5v6Foef7NOoPbVys+aKiLmQsFIi057WBF
-         vPXV8WD+H2T0/7H8XVXLqFOU0UOcCLb2HYNvJFyqJSbTWVVXleKZ0JmWZyE9AkYImI
-         42UuVnOVAavP2zUUR7BPEtF43uzD9CD08LZ3NmEpQDpbHpsCAkigTU6IS2hT6bOoK6
-         r79yUENbru7DXGzkUA5POfFRRvo88oQRoLjXlwdi67FUuxTQdC8IEM8qEfRUp9AK4q
-         RE6XKQf7BRUYUiseog1RHrNwGvjjy8v90DzZnSdLPH2I+Zpt5nJl1by12t8LoGEGxI
-         UCrusKl1xFVQA==
+        b=jIlc9eguDinI2BZ1xGzOU0lpUtej1txyRJ0U7m2jQZIQDUXdcvqR7VRWRdJNsRylW
+         1oHqGmzuA38luWJfqwy9UBRZ2m7BN/5T6fHAEc2y0+wpN1nlGAfbhwCSYgdOI2//iI
+         zTqdG8eO9YPt71RLp5qhx8bTmCfF7tBi3+3j1vNTlZRKvLIIledEfSXGpet+kylLFx
+         nUxmODKyFqQLf9RQ6de2+hyEtJmJFS4jldACqsXhdSJJuols3X9ADrks70k1hRoV0H
+         xo2dz4xUSiWH26RniJOHjXGIL1G4r71gnqK2U4CLAK4wEA99D52fG3S2fmLMw1XQ8Q
+         R0ElbDtKl6b2g==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 08 May 2023 22:15:42 +0900
-Subject: [PATCH v2] selftests/ftrace: Improve integration with kselftest
- runner
+Date:   Mon, 08 May 2023 22:30:36 +0900
+Subject: [PATCH v2] tools/nolibc: Fix build of stdio.h due to header
+ ordering
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230302-ftrace-kselftest-ktap-v2-1-ecc482212729@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAP31WGQC/4WNQQqDMBAAvyI5d0sSq1FP/UfxsOqqQRtlE6RF/
- HujH+hxBobZhSe25EWV7IJps94uLoK+JaId0Q0EtosstNSpTKWGPjC2BJOnuQ/kA0wBVyg7U5g
- iL1WWGRHbBj1Bw+ja8azDez3tytTbz3V71ZFH68PC32u+qdP++2wKFGDxQGnyrDHYPSdiR/N94
- UHUx3H8AMmk61HRAAAA
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+Message-Id: <20230413-nolibc-stdio-fix-v2-1-6b6bbb045a80@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAHv5WGQC/32NOw6DMBAFr4JcZyN/SEGq3COi8GcNK5AdrRFJh
+ Lh7DAdIOU9vNJsoyIRF3JtNMK5UKKcK+tIIP9o0IFCoLLTURrbKQMozOQ9lCZQh0geia3VA0wX
+ ZdaJqzhYExzb58RDfmadjfjHW91l69pVHKkvm7xle1bH+aawKFEQrb9EbZ1XEx4SccL5mHkS/7
+ /sPAEFBbMgAAAA=
+To:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-bfdf5
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7774; i=broonie@kernel.org;
- h=from:subject:message-id; bh=Yx/d/vlSfUg1A+0BfdmAMW65S4eMBXSw23P4c1Qdsuo=;
- b=owEBbAGT/pANAwAKASTWi3JdVIfQAcsmYgBkWPYAg3dhyoXZ+y4LAlxspmifvOKuzUu+/DSKz
- CpmYMVjlNqJATIEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZFj2AAAKCRAk1otyXVSH
- 0OHwB/joun9Ln9Cw6ohgcgBT0CTtYOUHOJPFeqT96+uRYUcmXVaxZ2rpeXD/oBkxxqJvoHfNd/V
- Iqb+iWkk1Yy9lc1N9TAzxntQCNQZEnok1EkpyDVxlk7x25Z/qOBF6HdM22LlPdAzN0Nbs9Y64gL
- 05PtmxL10DbgCr8uwaL9NBz3d3EXKvWlK1jFj6UqhUNuAidS9zne5AGoV7OzAqAWgBuJ3prCLXV
- YwsqmO36bqWD1zc2dwZui4XK4KJrDbC/0h14cAbB1R+2tR3DgDE9YgfLQ0STE3e0jf+oYfzYRPb
- Y9vQ3lxujIiIscn2VVz6bew0Dide6jL/9OS6uLSySQ0KUrs=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1444; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=BFbcQkbzLb4nPKXqpv19YJcpoC5MeNxkLoWEaXmzKEw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkWPnWK8WVwLwTN8yprcVowzUgMJXNs+7+VOyCg
+ lFnHGPRRiyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZFj51gAKCRAk1otyXVSH
+ 0F1bB/9GYlh/NzE9G7uwVV4dGZp7MeH2m/4VNUKkwMKNHsbxDy+pwDL7FgsLpfssm8FmLWyF7UY
+ powYh3PLr+gCsrCeL2KddzHMXIp+MsKn3hYQb9RkuLwcZNu5qnlx+Ydowi+SDoIALxhdhgWeJT5
+ WeipQuNyxzf3nvpta/fVT2V0Otnl1xSyIqmmNR3uEPXkS9EZnUWD8qGzzF7fePsN9QRAB+puN7F
+ gzrcoPAUn1HBT7kp3R2yYW8a6fpNCGYHO7uVuKZpmr6HyRpFkmFzjY1Hfnfm2IZd+wnhv6qfPwU
+ /5NY5c50le71sgCcEL7p6FNHmNTTGZhbHtJloGJG9DPwZ1tu
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,241 +70,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ftrace selftests do not currently produce KTAP output, they produce a
-custom format much nicer for human consumption. This means that when run in
-automated test systems we just get a single result for the suite as a whole
-rather than recording results for individual test cases, making it harder
-to look at the test data and masking things like inappropriate skips.
+When we added fd based file streams we created references to STx_FILENO in
+stdio.h but these constants are declared in unistd.h which is the last file
+included by the top level nolibc.h meaning those constants are not defined
+when we try to build stdio.h. This causes programs using nolibc.h to fail
+to build.
 
-Address this by adding support for KTAP output to the ftracetest script and
-providing a trivial wrapper which will be invoked by the kselftest runner
-to generate output in this format by default, users using ftracetest
-directly will continue to get the existing output.
+Reorder the headers to avoid this issue.
 
-This is not the most elegant solution but it is simple and effective. I
-did consider implementing this by post processing the existing output
-format but that felt more complex and likely to result in all output being
-lost if something goes seriously wrong during the run which would not be
-helpful. I did also consider just writing a separate runner script but
-there's enough going on with things like the signal handling for that to
-seem like it would be duplicating too much.
-
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Fixes: d449546c957f ("tools/nolibc: implement fd-based FILE streams")
+Acked-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-It might make sense to merge this via the ftrace tree - kselftests often
-get merged with the code they test.
-
 Changes in v2:
 - Rebase onto v6.4-rc1.
-- Link to v1: https://lore.kernel.org/r/20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org
+- This is now a fix for Linus' tree.
+- Link to v1: https://lore.kernel.org/r/20230413-nolibc-stdio-fix-v1-1-fa05fc3ba1fe@kernel.org
 ---
- tools/testing/selftests/ftrace/Makefile        |  3 +-
- tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
- tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
- 3 files changed, 70 insertions(+), 4 deletions(-)
+ tools/include/nolibc/nolibc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
-index d6e106fbce11..a1e955d2de4c 100644
---- a/tools/testing/selftests/ftrace/Makefile
-+++ b/tools/testing/selftests/ftrace/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- all:
+diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
+index 04739a6293c4..05a228a6ee78 100644
+--- a/tools/include/nolibc/nolibc.h
++++ b/tools/include/nolibc/nolibc.h
+@@ -99,11 +99,11 @@
+ #include "sys.h"
+ #include "ctype.h"
+ #include "signal.h"
++#include "unistd.h"
+ #include "stdio.h"
+ #include "stdlib.h"
+ #include "string.h"
+ #include "time.h"
+-#include "unistd.h"
+ #include "stackprotector.h"
  
--TEST_PROGS := ftracetest
-+TEST_PROGS_EXTENDED := ftracetest
-+TEST_PROGS := ftracetest-ktap
- TEST_FILES := test.d settings
- EXTRA_CLEAN := $(OUTPUT)/logs/*
- 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index c3311c8c4089..2506621e75df 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
- echo " Options:"
- echo "		-h|--help  Show help message"
- echo "		-k|--keep  Keep passed test logs"
-+echo "		-K|--ktap  Output in KTAP format"
- echo "		-v|--verbose Increase verbosity of test messages"
- echo "		-vv        Alias of -v -v (Show all results in stdout)"
- echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
-@@ -85,6 +86,10 @@ parse_opts() { # opts
-       KEEP_LOG=1
-       shift 1
-     ;;
-+    --ktap|-K)
-+      KTAP=1
-+      shift 1
-+    ;;
-     --verbose|-v|-vv|-vvv)
-       if [ $VERBOSE -eq -1 ]; then
- 	usage "--console can not use with --verbose"
-@@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
- TEST_CASES=`find_testcases $TEST_DIR`
- LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
- KEEP_LOG=0
-+KTAP=0
- DEBUG=0
- VERBOSE=0
- UNSUPPORTED_RESULT=0
-@@ -229,7 +235,7 @@ prlog() { # messages
-     newline=
-     shift
-   fi
--  printf "$*$newline"
-+  [ "$KTAP" != "1" ] && printf "$*$newline"
-   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
- }
- catlog() { #file
-@@ -260,11 +266,11 @@ TOTAL_RESULT=0
- 
- INSTANCE=
- CASENO=0
-+CASENAME=
- 
- testcase() { # testfile
-   CASENO=$((CASENO+1))
--  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
--  prlog -n "[$CASENO]$INSTANCE$desc"
-+  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
- }
- 
- checkreq() { # testfile
-@@ -277,40 +283,68 @@ test_on_instance() { # testfile
-   grep -q "^#[ \t]*flags:.*instance" $1
- }
- 
-+ktaptest() { # result comment
-+  if [ "$KTAP" != "1" ]; then
-+    return
-+  fi
-+
-+  local result=
-+  if [ "$1" = "1" ]; then
-+    result="ok"
-+  else
-+    result="not ok"
-+  fi
-+  shift
-+
-+  local comment=$*
-+  if [ "$comment" != "" ]; then
-+    comment="# $comment"
-+  fi
-+
-+  echo $CASENO $result $INSTANCE$CASENAME $comment
-+}
-+
- eval_result() { # sigval
-   case $1 in
-     $PASS)
-       prlog "	[${color_green}PASS${color_reset}]"
-+      ktaptest 1
-       PASSED_CASES="$PASSED_CASES $CASENO"
-       return 0
-     ;;
-     $FAIL)
-       prlog "	[${color_red}FAIL${color_reset}]"
-+      ktaptest 0
-       FAILED_CASES="$FAILED_CASES $CASENO"
-       return 1 # this is a bug.
-     ;;
-     $UNRESOLVED)
-       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
-+      ktaptest 0 UNRESOLVED
-       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
-       return $UNRESOLVED_RESULT # depends on use case
-     ;;
-     $UNTESTED)
-       prlog "	[${color_blue}UNTESTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
-       return 0
-     ;;
-     $UNSUPPORTED)
-       prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
-       return $UNSUPPORTED_RESULT # depends on use case
-     ;;
-     $XFAIL)
-       prlog "	[${color_green}XFAIL${color_reset}]"
-+      ktaptest 1 XFAIL
-       XFAILED_CASES="$XFAILED_CASES $CASENO"
-       return 0
-     ;;
-     *)
-       prlog "	[${color_blue}UNDEFINED${color_reset}]"
-+      ktaptest 0 error
-       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
-       return 1 # this must be a test bug
-     ;;
-@@ -371,6 +405,7 @@ __run_test() { # testfile
- run_test() { # testfile
-   local testname=`basename $1`
-   testcase $1
-+  prlog -n "[$CASENO]$INSTANCE$CASENAME"
-   if [ ! -z "$LOG_FILE" ] ; then
-     local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
-   else
-@@ -405,6 +440,17 @@ run_test() { # testfile
- # load in the helper functions
- . $TEST_DIR/functions
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo "TAP version 13"
-+
-+  casecount=`echo $TEST_CASES | wc -w`
-+  for t in $TEST_CASES; do
-+    test_on_instance $t || continue
-+    casecount=$((casecount+1))
-+  done
-+  echo "1..${casecount}"
-+fi
-+
- # Main loop
- for t in $TEST_CASES; do
-   run_test $t
-@@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
- prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
- prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo -n "# Totals:"
-+  echo -n " pass:"`echo $PASSED_CASES | wc -w`
-+  echo -n " faii:"`echo $FAILED_CASES | wc -w`
-+  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
-+  echo -n " xpass:0"
-+  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
-+  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
-+  echo
-+fi
-+
- cleanup
- 
- # if no error, return 0
-diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
-new file mode 100755
-index 000000000000..b3284679ef3a
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/ftracetest-ktap
-@@ -0,0 +1,8 @@
-+#!/bin/sh -e
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
-+#
-+# Copyright (C) Arm Ltd., 2023
-+
-+./ftracetest -K
+ /* Used by programs to avoid std includes */
 
 ---
 base-commit: ac9a78681b921877518763ba0e89202254349d1b
-change-id: 20230302-ftrace-kselftest-ktap-9d7878691557
+change-id: 20230413-nolibc-stdio-fix-fb42de39d099
 
 Best regards,
 -- 
