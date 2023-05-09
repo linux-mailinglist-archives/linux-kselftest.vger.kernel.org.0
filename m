@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29E46FBBD3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 May 2023 02:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F126FBBD5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 May 2023 02:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjEIAHK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 May 2023 20:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
+        id S233980AbjEIAHM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 May 2023 20:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233980AbjEIAHJ (ORCPT
+        with ESMTP id S233981AbjEIAHL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 May 2023 20:07:09 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE2D49D9
-        for <linux-kselftest@vger.kernel.org>; Mon,  8 May 2023 17:07:08 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6435bbedb4fso5609883b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 May 2023 17:07:08 -0700 (PDT)
+        Mon, 8 May 2023 20:07:11 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE8E49DA
+        for <linux-kselftest@vger.kernel.org>; Mon,  8 May 2023 17:07:10 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1ab05018381so48864745ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 May 2023 17:07:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1683590828; x=1686182828;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1683590829; x=1686182829;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=iv/3wQ5Rm2hXwyeA06Mys0dZcD/7Gx1c/bCnxWRdPbk=;
-        b=KD3u2YIF+e5JwDU+kUICT9dRIMFszt8OV13/ZdTkj3fsz2UJjoiURMvFlACv+sa/S7
-         2e84nAirX6WtRXIyLyZ2g6D2jr3353yJVUYD7sHL0AVZpM7uwklZ6FlMjEiCWNEsBZqB
-         T29u9Sf5U33a4TqYCWu0Q6LDNOa4kyH3opEwcDhz3OxvL8OFTU77YOCKpPr13m7JTqwj
-         yWpD+820LWNFRr3imvokCvQsYhpoLseHbG1LgJPkwSTtHbJY/EGe5QWFyTr1rqJCNarL
-         Tn8h2l+nIzegJU1mwi0wncGch8w4sbszIv6lfVJZDjv8pJalC1fjoAomq6Cyc6/1dN33
-         K0Mg==
+        bh=MrUshkEiBAaDWSEwfNSpygC5tZL7YyQGgWzh3n6GqdA=;
+        b=Ja3HJ+OoTRr6JB3YdFJTmqTsQ+eQCpk9jn0bBTYGHIXgA1l7GJ1Ee80Ucae3ADYhoQ
+         oINeRcoXsHwu6ha97DW+YBNTiiMuLZaRu4VUBTASge7BDEYeq+0IrJUtL6p0X4Sie7ec
+         6liO+0T49/mkSERj6dSFlyC+RGnJ4aK1F/ZC6rAGpVWHfCjxWkTBIQyNf8uVo9ixWXaa
+         c0D6C6b9ajJXDqdihG7Bm7GEtD845EXih2MDFaychz4E3UGDaNNdXugBzBVyJ4mGSIZD
+         1kd9Y2Mb9yUZInwiEsmHvlgBSnyXhbnC3FhIUXkgq1/0VCITxggJKRiO5eOMRmhAl5lM
+         cuDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683590828; x=1686182828;
+        d=1e100.net; s=20221208; t=1683590829; x=1686182829;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iv/3wQ5Rm2hXwyeA06Mys0dZcD/7Gx1c/bCnxWRdPbk=;
-        b=a1smZXE2j/tQigw/GLF6ndG+NVOLV0P1MMaOnOZP66EKmVlW9Lf+tAE/yxGCUjGj+5
-         RBa92rlMW218SF0QBFPhV+gShesQdfImgw0SsD7lgw7MgR2YF0Zl79iWhCKuTmhYigEo
-         gp6JZOD57cgVG+UOPn7V0tIIT+PioSi6cGxLXFfAQxllvUL2/MNLEB10mBCOdyIAIOmX
-         nkmEwGfLYzx/Om4MPFxe+P2d/AEkFgAuTWuRMHh+EwWCCe1fEYs2dTGjNOhANUL+3zKf
-         IJS4Czgmum0S+VxFEFS/tNIV6PXlpKgKNWLApQJvmgTs7iPjwb0RNEmVpNMOHHA+A/Hs
-         i03g==
-X-Gm-Message-State: AC+VfDzNV1ZiGGgMYKqcs79riYc7faPtky/ft44i9/+9oggdUthuouBZ
-        3PIHXBiTbYxR/w8jjrOdkuOt4w==
-X-Google-Smtp-Source: ACHHUZ4afV9ZfR3XpPPFztsuOHlLDGiIDEkntnpO3brSenFls0dGF+s1Eb56SqOiK+7C1R5kYcbfYw==
-X-Received: by 2002:a05:6a00:c85:b0:646:e18a:a002 with SMTP id a5-20020a056a000c8500b00646e18aa002mr1064129pfv.14.1683590827876;
-        Mon, 08 May 2023 17:07:07 -0700 (PDT)
+        bh=MrUshkEiBAaDWSEwfNSpygC5tZL7YyQGgWzh3n6GqdA=;
+        b=Z0LKIwKEdSNLw+VolL5h+DCGlfIWPGXonNwxrqfw4py57jD6IKgOh3w+v8FC1nPB0g
+         kCwpwStMjljW11VtBRo6+KAtI2wiTiiySCrjPHBifp03zRscOK7RmFsB0GQbF5sUnx98
+         mC+Rmshlvcva65RFLBJpgnfh7ZT596u/un3upq++H+n6P7Tr+HBpRvu/Y1XoFWO+nnzG
+         PIumz6Ff7vgKZu246CnojdcF0rtv8T/Wv+t2I+Yb8NIk5TFYrkyqP6UhnR0pNBXsVMD2
+         mMOeBRjY089K52h5de0HRvcnlscr9BMf1bBpTaRiCqFDulNe24CrMm3UOc/Z1/Yw8jsf
+         7svA==
+X-Gm-Message-State: AC+VfDwRBV95iPhZ8SUCZ/ccLTYz1ruSvNvukJGNvZ0DHH9Q50XfjFB2
+        T/ywXzHHPOvdpEq55i+jQoUb8w==
+X-Google-Smtp-Source: ACHHUZ4+qGgr7ty6FxT8gOTH/85bOMXGqWKFsvhQuoC29E039WC9g82MOCvJBH1aZkx+ClCf+efJxw==
+X-Received: by 2002:a17:902:db0e:b0:1ab:12cf:9e1c with SMTP id m14-20020a170902db0e00b001ab12cf9e1cmr14155867plx.32.1683590829628;
+        Mon, 08 May 2023 17:07:09 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j19-20020aa783d3000000b006460751222asm530474pfn.38.2023.05.08.17.07.07
+        by smtp.gmail.com with ESMTPSA id h6-20020a170902f7c600b001a6756a36f6sm65638plw.101.2023.05.08.17.07.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 17:07:07 -0700 (PDT)
-Message-ID: <64598eab.a70a0220.8f797.1d45@mx.google.com>
-Date:   Mon, 08 May 2023 17:07:07 -0700 (PDT)
+        Mon, 08 May 2023 17:07:08 -0700 (PDT)
+Message-ID: <64598eac.170a0220.82eb1.0300@mx.google.com>
+Date:   Mon, 08 May 2023 17:07:08 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -58,8 +58,8 @@ X-Kernelci-Branch: fixes
 X-Kernelci-Tree: kselftest
 X-Kernelci-Kernel: v6.4-rc1-3-gd7eafa64a158
 X-Kernelci-Report-Type: test
-Subject: kselftest/fixes kselftest-livepatch: 3 runs,
- 2 regressions (v6.4-rc1-3-gd7eafa64a158)
+Subject: kselftest/fixes kselftest-lkdtm: 7 runs,
+ 3 regressions (v6.4-rc1-3-gd7eafa64a158)
 To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
         shuah@kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -73,27 +73,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/fixes kselftest-livepatch: 3 runs, 2 regressions (v6.4-rc1-3-gd7e=
-afa64a158)
+kselftest/fixes kselftest-lkdtm: 7 runs, 3 regressions (v6.4-rc1-3-gd7eafa6=
+4a158)
 
 Regressions Summary
 -------------------
 
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-imx6q-sabrelite | arm   | lab-collabora | gcc-10   | multi_v7_defconfig+kse=
-lftest | 1          =
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+imx6q-sabrelite              | arm   | lab-collabora | gcc-10   | multi_v7_=
+defconfig+kselftest | 1          =
 
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 1          =
+mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
++kse...4-chromebook | 1          =
+
+mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
++kse...4-chromebook | 1          =
 
 
   Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/v6.=
-4-rc1-3-gd7eafa64a158/plan/kselftest-livepatch/
+4-rc1-3-gd7eafa64a158/plan/kselftest-lkdtm/
 
-  Test:     kselftest-livepatch
+  Test:     kselftest-lkdtm
   Tree:     kselftest
   Branch:   fixes
   Describe: v6.4-rc1-3-gd7eafa64a158
@@ -108,15 +111,15 @@ Test Regressions
 
 
 
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-imx6q-sabrelite | arm   | lab-collabora | gcc-10   | multi_v7_defconfig+kse=
-lftest | 1          =
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+imx6q-sabrelite              | arm   | lab-collabora | gcc-10   | multi_v7_=
+defconfig+kselftest | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64597d249582b592152e86ad
+  Details:     https://kernelci.org/test/plan/id/64597d1c9582b592152e869f
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: multi_v7_defconfig+kselftest
@@ -124,33 +127,32 @@ lftest | 1          =
 10110)
   Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.4-rc1-3-gd7=
 eafa64a158/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-=
-livepatch-imx6q-sabrelite.txt
+lkdtm-imx6q-sabrelite.txt
   HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.4-rc1-3-gd7=
 eafa64a158/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-=
-livepatch-imx6q-sabrelite.html
+lkdtm-imx6q-sabrelite.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
 elftest/20230421.0/armhf/initrd.cpio.gz =
 
 
 
-  * kselftest-livepatch.login: https://kernelci.org/test/case/id/64597d2495=
-82b592152e86ae
-        failing since 132 days (last pass: linux-kselftest-fixes-6.1-rc3-3-=
-g89c1017aac67, first fail: v6.2-rc1) =
+  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/64597d1c9582b5=
+92152e86a0
+        failing since 202 days (last pass: v6.0-rc1, first fail: v6.1-rc1) =
 
  =
 
 
 
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 1          =
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
++kse...4-chromebook | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/645984aa32a3f705092e861b
+  Details:     https://kernelci.org/test/plan/id/645984da15cf2dafcf2e85f3
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: defconfig+kselftest+arm64-chromebook
@@ -158,17 +160,51 @@ mebook | 1          =
 110)
   Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.4-rc1-3-gd7=
 eafa64a158/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-livepatch-mt8173-elm-hana.txt
+kselftest-lkdtm-mt8173-elm-hana.txt
   HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.4-rc1-3-gd7=
 eafa64a158/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-livepatch-mt8173-elm-hana.html
+kselftest-lkdtm-mt8173-elm-hana.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
 elftest/20230421.0/arm64/initrd.cpio.gz =
 
 
 
-  * kselftest-livepatch.login: https://kernelci.org/test/case/id/645984aa32=
-a3f705092e861c
+  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/645984da15cf2d=
+afcf2e85f4
+        failing since 201 days (last pass: linux-kselftest-fixes-6.0-rc3, f=
+irst fail: v6.1-rc1-5-gcb05c81ada76) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
++kse...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459855c4e1b9b65042e85e6
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.4-rc1-3-gd7=
+eafa64a158/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
+kselftest-lkdtm-mt8183-kukui-jacuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.4-rc1-3-gd7=
+eafa64a158/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
+kselftest-lkdtm-mt8183-kukui-jacuzzi-juniper-sku16.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20230421.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/6459855c4e1b9b=
+65042e85e7
         failing since 201 days (last pass: linux-kselftest-fixes-6.0-rc3, f=
 irst fail: v6.1-rc1-5-gcb05c81ada76) =
 
