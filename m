@@ -2,667 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8066FBFF5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 May 2023 09:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F301F6FC0FD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 May 2023 09:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235171AbjEIHFR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 May 2023 03:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S234950AbjEIHz1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 May 2023 03:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234839AbjEIHFQ (ORCPT
+        with ESMTP id S235289AbjEIHzF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 May 2023 03:05:16 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2C09AD33;
-        Tue,  9 May 2023 00:05:08 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8CxOuqj8FlkIt8GAA--.11313S3;
-        Tue, 09 May 2023 15:05:07 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxlrWf8FlkzT1SAA--.16926S2;
-        Tue, 09 May 2023 15:05:04 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: [RFC PATCH] asm-generic: Unify uapi bitsperlong.h
-Date:   Tue,  9 May 2023 15:05:03 +0800
-Message-Id: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8BxlrWf8FlkzT1SAA--.16926S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvAXoWfZFWUCF4DAw4DGFWUZry8AFb_yoW8KF17to
-        WagF1jkrWxGa1rXan5WF47Gay5ZF1v9r4xJw1fJ3y5Ga4fCr17Gr48WayIv3ZxCrn3t34U
-        WFWa9rZ8Xws2qwn3n29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUPqb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
-        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YV
-        CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2Iq
-        xVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jO-B_UUUUU=
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Tue, 9 May 2023 03:55:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78049E73F;
+        Tue,  9 May 2023 00:54:22 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3497nn7l011032;
+        Tue, 9 May 2023 07:53:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=21jTc8EXdIgaMQA0GKQNXnqo0ZOJ/DL4CkaLETzPvOs=;
+ b=Zws004RkSOv50uu79xH0GPxhhof2RILfEHezzEuxdBB3mkbUDlyiunHIKqxJ0nXjcBma
+ nYV5Wd+TRzCRLtCN+9qqOQHbefc2iq/dsY2bQAzRUSiQy8SUIpKR04WSiv4T8i0oD8IZ
+ TxGVE9UzQxDg188yzfTOCIx3iGme0RiFdoADg8lHAtVML222fjMPCWJvdyBO9WklYfdG
+ 4tXBaUZlP972Yo1lRA7NAWPH+IS8hcwpdfrZQHQBpni2nHKjBp+JN4psfVe5xscpy/dM
+ jvu30FNw5q5CIg3WbodSJB49gK1YphbGUjx3gBKvvUF9eg+17NEVdmKTX66OnbarDzAg Gg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qfgpxuc76-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 07:53:51 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3492j2jL021669;
+        Tue, 9 May 2023 07:53:49 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qf7nh08wx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 07:53:49 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3497rlqm43647646
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 9 May 2023 07:53:47 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 014E220043;
+        Tue,  9 May 2023 07:53:47 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D75CD20040;
+        Tue,  9 May 2023 07:53:46 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue,  9 May 2023 07:53:46 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] tools/nolibc: s390: provide custom implementation
+ for sys_fork
+References: <20230415-nolibc-fork-v1-0-9747c73651c5@weissschuh.net>
+        <20230415-nolibc-fork-v1-1-9747c73651c5@weissschuh.net>
+Date:   Tue, 09 May 2023 09:53:46 +0200
+In-Reply-To: <20230415-nolibc-fork-v1-1-9747c73651c5@weissschuh.net>
+ ("Thomas
+        =?utf-8?Q?Wei=C3=9Fschuh=22's?= message of "Sat, 15 Apr 2023 23:28:47
+ +0200")
+Message-ID: <yt9do7mudjp1.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FAF2NT-sDNc5FCT5KZKfbDNtm_EzrTcr
+X-Proofpoint-ORIG-GUID: FAF2NT-sDNc5FCT5KZKfbDNtm_EzrTcr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-09_04,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ impostorscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
+ adultscore=0 bulkscore=0 priorityscore=1501 suspectscore=0 mlxlogscore=549
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305090059
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now we specify the minimal version of GCC as 5.1 and Clang/LLVM as 11.0.0
-in Documentation/process/changes.rst, __CHAR_BIT__ and __SIZEOF_LONG__ are
-usable, just define __BITS_PER_LONG as (__CHAR_BIT__ * __SIZEOF_LONG__) in
-asm-generic uapi bitsperlong.h, simpler, works everywhere.
+Thomas Wei=C3=9Fschuh <linux@weissschuh.net> writes:
 
-Remove all the arch specific uapi bitsperlong.h which will be generated as
-arch/*/include/generated/uapi/asm/bitsperlong.h.
+> On s390 the first two arguments to the clone() syscall are swapped,
+> as documented in clone(2).
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> ---
+>  tools/include/nolibc/arch-s390.h | 8 ++++++++
+>  tools/include/nolibc/sys.h       | 2 ++
+>  2 files changed, 10 insertions(+)
 
-Suggested-by: Xi Ruoyao <xry111@xry111.site>
-Link: https://lore.kernel.org/all/d3e255e4746de44c9903c4433616d44ffcf18d1b.camel@xry111.site/
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-
-This is based on 6.4-rc1
-
- arch/alpha/include/uapi/asm/bitsperlong.h          |  9 --------
- arch/arm64/include/uapi/asm/bitsperlong.h          | 24 -------------------
- arch/ia64/include/uapi/asm/bitsperlong.h           |  9 --------
- arch/loongarch/include/uapi/asm/bitsperlong.h      |  9 --------
- arch/mips/include/uapi/asm/bitsperlong.h           |  9 --------
- arch/parisc/include/uapi/asm/bitsperlong.h         | 13 -----------
- arch/powerpc/include/uapi/asm/bitsperlong.h        | 13 -----------
- arch/riscv/include/uapi/asm/bitsperlong.h          | 14 -----------
- arch/s390/include/uapi/asm/bitsperlong.h           | 14 -----------
- arch/sparc/include/uapi/asm/bitsperlong.h          | 14 -----------
- arch/x86/include/uapi/asm/bitsperlong.h            | 14 -----------
- include/uapi/asm-generic/bitsperlong.h             | 11 +--------
- tools/arch/alpha/include/uapi/asm/bitsperlong.h    |  9 --------
- tools/arch/arm64/include/uapi/asm/bitsperlong.h    | 24 -------------------
- tools/arch/hexagon/include/uapi/asm/bitsperlong.h  | 27 ----------------------
- tools/arch/ia64/include/uapi/asm/bitsperlong.h     |  9 --------
- .../arch/loongarch/include/uapi/asm/bitsperlong.h  |  9 --------
- .../arch/microblaze/include/uapi/asm/bitsperlong.h |  2 --
- tools/arch/mips/include/uapi/asm/bitsperlong.h     |  9 --------
- tools/arch/parisc/include/uapi/asm/bitsperlong.h   | 15 ------------
- tools/arch/powerpc/include/uapi/asm/bitsperlong.h  | 13 -----------
- tools/arch/riscv/include/uapi/asm/bitsperlong.h    | 14 -----------
- tools/arch/s390/include/uapi/asm/bitsperlong.h     | 13 -----------
- tools/arch/sparc/include/uapi/asm/bitsperlong.h    | 13 -----------
- tools/arch/x86/include/uapi/asm/bitsperlong.h      | 13 -----------
- tools/include/uapi/asm-generic/bitsperlong.h       | 12 ++--------
- tools/include/uapi/asm/bitsperlong.h               | 24 -------------------
- 27 files changed, 3 insertions(+), 356 deletions(-)
- delete mode 100644 arch/alpha/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/arm64/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/ia64/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/mips/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/parisc/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/powerpc/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/riscv/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/s390/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/sparc/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/x86/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/alpha/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/arm64/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/hexagon/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/ia64/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/microblaze/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/mips/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/parisc/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/powerpc/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/riscv/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/s390/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/sparc/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/x86/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/include/uapi/asm/bitsperlong.h
-
-diff --git a/arch/alpha/include/uapi/asm/bitsperlong.h b/arch/alpha/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 6c5bf7d..0000000
---- a/arch/alpha/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_ALPHA_BITSPERLONG_H
--#define __ASM_ALPHA_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_ALPHA_BITSPERLONG_H */
-diff --git a/arch/arm64/include/uapi/asm/bitsperlong.h b/arch/arm64/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 485d60be..0000000
---- a/arch/arm64/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,24 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-- */
--#ifndef __ASM_BITSPERLONG_H
--#define __ASM_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif	/* __ASM_BITSPERLONG_H */
-diff --git a/arch/ia64/include/uapi/asm/bitsperlong.h b/arch/ia64/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 1146d55..0000000
---- a/arch/ia64/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_IA64_BITSPERLONG_H
--#define __ASM_IA64_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_IA64_BITSPERLONG_H */
-diff --git a/arch/loongarch/include/uapi/asm/bitsperlong.h b/arch/loongarch/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 00b4ba1..0000000
---- a/arch/loongarch/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_LOONGARCH_BITSPERLONG_H
--#define __ASM_LOONGARCH_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_LONG__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_LOONGARCH_BITSPERLONG_H */
-diff --git a/arch/mips/include/uapi/asm/bitsperlong.h b/arch/mips/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 7268380d..0000000
---- a/arch/mips/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_MIPS_BITSPERLONG_H
--#define __ASM_MIPS_BITSPERLONG_H
--
--#define __BITS_PER_LONG _MIPS_SZLONG
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_MIPS_BITSPERLONG_H */
-diff --git a/arch/parisc/include/uapi/asm/bitsperlong.h b/arch/parisc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 307e2ef..0000000
---- a/arch/parisc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_PARISC_BITSPERLONG_H
--#define __ASM_PARISC_BITSPERLONG_H
--
--#if defined(__LP64__)
--#define __BITS_PER_LONG 64
--#else
--#define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_PARISC_BITSPERLONG_H */
-diff --git a/arch/powerpc/include/uapi/asm/bitsperlong.h b/arch/powerpc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 46ece3e..0000000
---- a/arch/powerpc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_POWERPC_BITSPERLONG_H
--#define __ASM_POWERPC_BITSPERLONG_H
--
--#if defined(__powerpc64__)
--# define __BITS_PER_LONG 64
--#else
--# define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_POWERPC_BITSPERLONG_H */
-diff --git a/arch/riscv/include/uapi/asm/bitsperlong.h b/arch/riscv/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 7d0b32e..0000000
---- a/arch/riscv/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- * Copyright (C) 2015 Regents of the University of California
-- */
--
--#ifndef _UAPI_ASM_RISCV_BITSPERLONG_H
--#define _UAPI_ASM_RISCV_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_POINTER__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* _UAPI_ASM_RISCV_BITSPERLONG_H */
-diff --git a/arch/s390/include/uapi/asm/bitsperlong.h b/arch/s390/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index cceaf47..0000000
---- a/arch/s390/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_S390_BITSPERLONG_H
--#define __ASM_S390_BITSPERLONG_H
--
--#ifndef __s390x__
--#define __BITS_PER_LONG 32
--#else
--#define __BITS_PER_LONG 64
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_S390_BITSPERLONG_H */
--
-diff --git a/arch/sparc/include/uapi/asm/bitsperlong.h b/arch/sparc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index cd9a432..0000000
---- a/arch/sparc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_ALPHA_BITSPERLONG_H
--#define __ASM_ALPHA_BITSPERLONG_H
--
--#if defined(__sparc__) && defined(__arch64__)
--#define __BITS_PER_LONG 64
--#else
--#define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_ALPHA_BITSPERLONG_H */
--
-diff --git a/arch/x86/include/uapi/asm/bitsperlong.h b/arch/x86/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 5d72c845..0000000
---- a/arch/x86/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_X86_BITSPERLONG_H
--#define __ASM_X86_BITSPERLONG_H
--
--#if defined(__x86_64__) && !defined(__ILP32__)
--# define __BITS_PER_LONG 64
--#else
--# define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_X86_BITSPERLONG_H */
--
-diff --git a/include/uapi/asm-generic/bitsperlong.h b/include/uapi/asm-generic/bitsperlong.h
-index 693d9a4..a230ba3 100644
---- a/include/uapi/asm-generic/bitsperlong.h
-+++ b/include/uapi/asm-generic/bitsperlong.h
-@@ -2,15 +2,6 @@
- #ifndef _UAPI__ASM_GENERIC_BITS_PER_LONG
- #define _UAPI__ASM_GENERIC_BITS_PER_LONG
- 
--/*
-- * There seems to be no way of detecting this automatically from user
-- * space, so 64 bit architectures should override this in their
-- * bitsperlong.h. In particular, an architecture that supports
-- * both 32 and 64 bit user space must not rely on CONFIG_64BIT
-- * to decide it, but rather check a compiler provided macro.
-- */
--#ifndef __BITS_PER_LONG
--#define __BITS_PER_LONG 32
--#endif
-+#define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
- 
- #endif /* _UAPI__ASM_GENERIC_BITS_PER_LONG */
-diff --git a/tools/arch/alpha/include/uapi/asm/bitsperlong.h b/tools/arch/alpha/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 6c5bf7d..0000000
---- a/tools/arch/alpha/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_ALPHA_BITSPERLONG_H
--#define __ASM_ALPHA_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_ALPHA_BITSPERLONG_H */
-diff --git a/tools/arch/arm64/include/uapi/asm/bitsperlong.h b/tools/arch/arm64/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 485d60be..0000000
---- a/tools/arch/arm64/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,24 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-- */
--#ifndef __ASM_BITSPERLONG_H
--#define __ASM_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif	/* __ASM_BITSPERLONG_H */
-diff --git a/tools/arch/hexagon/include/uapi/asm/bitsperlong.h b/tools/arch/hexagon/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 5adca0d..0000000
---- a/tools/arch/hexagon/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,27 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * Copyright (c) 2010-2011, The Linux Foundation. All rights reserved.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 and
-- * only version 2 as published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-- * 02110-1301, USA.
-- */
--
--#ifndef __ASM_HEXAGON_BITSPERLONG_H
--#define __ASM_HEXAGON_BITSPERLONG_H
--
--#define __BITS_PER_LONG 32
--
--#include <asm-generic/bitsperlong.h>
--
--#endif
-diff --git a/tools/arch/ia64/include/uapi/asm/bitsperlong.h b/tools/arch/ia64/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 1146d55..0000000
---- a/tools/arch/ia64/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_IA64_BITSPERLONG_H
--#define __ASM_IA64_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_IA64_BITSPERLONG_H */
-diff --git a/tools/arch/loongarch/include/uapi/asm/bitsperlong.h b/tools/arch/loongarch/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 00b4ba1..0000000
---- a/tools/arch/loongarch/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_LOONGARCH_BITSPERLONG_H
--#define __ASM_LOONGARCH_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_LONG__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_LOONGARCH_BITSPERLONG_H */
-diff --git a/tools/arch/microblaze/include/uapi/asm/bitsperlong.h b/tools/arch/microblaze/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 76da34b..0000000
---- a/tools/arch/microblaze/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,2 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#include <asm-generic/bitsperlong.h>
-diff --git a/tools/arch/mips/include/uapi/asm/bitsperlong.h b/tools/arch/mips/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 7268380d..0000000
---- a/tools/arch/mips/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_MIPS_BITSPERLONG_H
--#define __ASM_MIPS_BITSPERLONG_H
--
--#define __BITS_PER_LONG _MIPS_SZLONG
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_MIPS_BITSPERLONG_H */
-diff --git a/tools/arch/parisc/include/uapi/asm/bitsperlong.h b/tools/arch/parisc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 23ac756..0000000
---- a/tools/arch/parisc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,15 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_PARISC_BITSPERLONG_H
--#define __ASM_PARISC_BITSPERLONG_H
--
--#if defined(__LP64__)
--#define __BITS_PER_LONG 64
--#define SHIFT_PER_LONG 6
--#else
--#define __BITS_PER_LONG 32
--#define SHIFT_PER_LONG 5
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_PARISC_BITSPERLONG_H */
-diff --git a/tools/arch/powerpc/include/uapi/asm/bitsperlong.h b/tools/arch/powerpc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 46ece3e..0000000
---- a/tools/arch/powerpc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_POWERPC_BITSPERLONG_H
--#define __ASM_POWERPC_BITSPERLONG_H
--
--#if defined(__powerpc64__)
--# define __BITS_PER_LONG 64
--#else
--# define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_POWERPC_BITSPERLONG_H */
-diff --git a/tools/arch/riscv/include/uapi/asm/bitsperlong.h b/tools/arch/riscv/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 0b9b58b..0000000
---- a/tools/arch/riscv/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- * Copyright (C) 2015 Regents of the University of California
-- */
--
--#ifndef _UAPI_ASM_RISCV_BITSPERLONG_H
--#define _UAPI_ASM_RISCV_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_POINTER__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* _UAPI_ASM_RISCV_BITSPERLONG_H */
-diff --git a/tools/arch/s390/include/uapi/asm/bitsperlong.h b/tools/arch/s390/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index d2bb620..0000000
---- a/tools/arch/s390/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_S390_BITSPERLONG_H
--#define __ASM_S390_BITSPERLONG_H
--
--#ifndef __s390x__
--#define __BITS_PER_LONG 32
--#else
--#define __BITS_PER_LONG 64
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_S390_BITSPERLONG_H */
-diff --git a/tools/arch/sparc/include/uapi/asm/bitsperlong.h b/tools/arch/sparc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 3b4e617..0000000
---- a/tools/arch/sparc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_ALPHA_BITSPERLONG_H
--#define __ASM_ALPHA_BITSPERLONG_H
--
--#if defined(__sparc__) && defined(__arch64__)
--#define __BITS_PER_LONG 64
--#else
--#define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_ALPHA_BITSPERLONG_H */
-diff --git a/tools/arch/x86/include/uapi/asm/bitsperlong.h b/tools/arch/x86/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index f8a92e0..0000000
---- a/tools/arch/x86/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_X86_BITSPERLONG_H
--#define __ASM_X86_BITSPERLONG_H
--
--#if defined(__x86_64__) && !defined(__ILP32__)
--# define __BITS_PER_LONG 64
--#else
--# define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_X86_BITSPERLONG_H */
-diff --git a/tools/include/uapi/asm-generic/bitsperlong.h b/tools/include/uapi/asm-generic/bitsperlong.h
-index 23e6c41..a230ba3 100644
---- a/tools/include/uapi/asm-generic/bitsperlong.h
-+++ b/tools/include/uapi/asm-generic/bitsperlong.h
-@@ -1,15 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
- #ifndef _UAPI__ASM_GENERIC_BITS_PER_LONG
- #define _UAPI__ASM_GENERIC_BITS_PER_LONG
- 
--/*
-- * There seems to be no way of detecting this automatically from user
-- * space, so 64 bit architectures should override this in their
-- * bitsperlong.h. In particular, an architecture that supports
-- * both 32 and 64 bit user space must not rely on CONFIG_64BIT
-- * to decide it, but rather check a compiler provided macro.
-- */
--#ifndef __BITS_PER_LONG
--#define __BITS_PER_LONG 32
--#endif
-+#define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
- 
- #endif /* _UAPI__ASM_GENERIC_BITS_PER_LONG */
-diff --git a/tools/include/uapi/asm/bitsperlong.h b/tools/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index da52065..0000000
---- a/tools/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,24 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#if defined(__i386__) || defined(__x86_64__)
--#include "../../../arch/x86/include/uapi/asm/bitsperlong.h"
--#elif defined(__aarch64__)
--#include "../../../arch/arm64/include/uapi/asm/bitsperlong.h"
--#elif defined(__powerpc__)
--#include "../../../arch/powerpc/include/uapi/asm/bitsperlong.h"
--#elif defined(__s390__)
--#include "../../../arch/s390/include/uapi/asm/bitsperlong.h"
--#elif defined(__sparc__)
--#include "../../../arch/sparc/include/uapi/asm/bitsperlong.h"
--#elif defined(__mips__)
--#include "../../../arch/mips/include/uapi/asm/bitsperlong.h"
--#elif defined(__ia64__)
--#include "../../../arch/ia64/include/uapi/asm/bitsperlong.h"
--#elif defined(__riscv)
--#include "../../../arch/riscv/include/uapi/asm/bitsperlong.h"
--#elif defined(__alpha__)
--#include "../../../arch/alpha/include/uapi/asm/bitsperlong.h"
--#elif defined(__loongarch__)
--#include "../../../arch/loongarch/include/uapi/asm/bitsperlong.h"
--#else
--#include <asm-generic/bitsperlong.h>
--#endif
--- 
-2.1.0
-
+Acked-by: Sven Schnelle <svens@linux.ibm.com>
