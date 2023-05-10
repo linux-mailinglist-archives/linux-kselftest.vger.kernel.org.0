@@ -2,69 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC776FDAA7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 May 2023 11:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A816FDBE6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 May 2023 12:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236829AbjEJJXO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 May 2023 05:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
+        id S236581AbjEJKuT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 May 2023 06:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236934AbjEJJW5 (ORCPT
+        with ESMTP id S236538AbjEJKuP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 May 2023 05:22:57 -0400
-X-Greylist: delayed 88224 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 May 2023 02:22:29 PDT
-Received: from mail.rawlinsfis.com (mail.rawlinsfis.com [89.40.118.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB2A8A4E
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 May 2023 02:22:29 -0700 (PDT)
-Received: by mail.rawlinsfis.com (Postfix, from userid 1001)
-        id 46748822AE; Tue,  9 May 2023 08:36:07 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rawlinsfis.com;
-        s=mail; t=1683617775;
-        bh=lDo1OjfzzJ3sOfR9tSDg5RMmT4aDyBP45hIVJCLtIrE=;
-        h=Date:From:To:Subject:From;
-        b=eFf0NZv3IdWqAnkvsAlD9p210+r+/QEp12uDWZjjFUv3pQ63q7oHkX/SswLi3ndS/
-         AyNhzP/mlkpj6dhQ3KmnnZHG9CtVI7wXn56ItKq6uTfb20WOpNvK+dZUI4VK/f306Q
-         ScbVbVPslOlINigJkTj1AWH5rz54YvTziRmOkVqBAQrwldJeu53fzmMECBn4gcsp9L
-         +DXbp4BOb8W/xp/PYeVGhXf8RoS10fS3jCE/ZNnQUjKk0povOkKzdUTfhbyyR9Aqll
-         oc0vVitPwUco161iHA7agRBz2Wx2C6S1kM0+LJTJg8ap9sjM0e+avN4z0BooZwL1lZ
-         E73Z1J386h8Aw==
-Received: by mail.rawlinsfis.com for <linux-kselftest@vger.kernel.org>; Tue,  9 May 2023 07:36:00 GMT
-Message-ID: <20230509074500-0.1.3e.5oyz.0.tph4vhcgkn@rawlinsfis.com>
-Date:   Tue,  9 May 2023 07:36:00 GMT
-From:   "Damian Hordych" <damian.hordych@rawlinsfis.com>
-To:     <linux-kselftest@vger.kernel.org>
-Subject: =?UTF-8?Q?Pompy_ciep=C5=82a_-_nowe_warunki_?=
-X-Mailer: mail.rawlinsfis.com
+        Wed, 10 May 2023 06:50:15 -0400
+Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com [99.78.197.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3458C40E2;
+        Wed, 10 May 2023 03:50:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1683715812; x=1715251812;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=D8G7zICS6PJVXNJOjDWWVFXKeW/ytHctEbQLqspKx3I=;
+  b=c8i5F1wC0iJ+qlFO0mrMiW7VnBoTzUB0evUZpP9nit1q5BtwACPe5/pJ
+   orYoPq30UbFXh/8ayt4+EQx2RiSQjKkqx+NRdxUnFBuQ/9ISXTtKm1Jc4
+   MwVQDNzRPaW8oPiTy9ShAssofwTn5NIU6ZSMlTy9KXVlblfM7B9ojtx5Y
+   g=;
+X-IronPort-AV: E=Sophos;i="5.99,264,1677542400"; 
+   d="scan'208";a="1857121"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-25ac6bd5.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80009.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 10:50:09 +0000
+Received: from EX19D002EUA003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1d-m6i4x-25ac6bd5.us-east-1.amazon.com (Postfix) with ESMTPS id F3D2B44256;
+        Wed, 10 May 2023 10:50:07 +0000 (UTC)
+Received: from EX19MTAUWB001.ant.amazon.com (10.250.64.248) by
+ EX19D002EUA003.ant.amazon.com (10.252.50.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 10 May 2023 10:50:06 +0000
+Received: from HFA15G9466L0F.amazon.com (10.106.82.11) by
+ mail-relay.amazon.com (10.250.64.254) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 10 May 2023 10:50:03 +0000
+From:   <amitbern@amazon.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC:     Amit Bernstein <amitbern@amazon.com>,
+        "Matushevsky, Alexander" <matua@amazon.com>,
+        Saeed Bshara <saeedb@amazon.com>,
+        "Kiyanovski, Arthur" <akiyano@amazon.com>,
+        "Dagan, Noam" <ndagan@amazon.com>,
+        "Agroskin, Shay" <shayagr@amazon.com>,
+        "Arinzon, David" <darinzon@amazon.com>,
+        "Itzko, Shahar" <itzko@amazon.com>,
+        "Abboud, Osama" <osamaabb@amazon.com>
+Subject: [PATCH v1] testptp: fix format specifier in nsec print
+Date:   Wed, 10 May 2023 13:49:58 +0300
+Message-ID: <20230510104958.13437-1-amitbern@amazon.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dzie=C5=84 dobry,
+From: Amit Bernstein <amitbern@amazon.com>
 
-w ramach nowej edycji programu Czyste Powietrze dla klient=C3=B3w indywid=
-ualnych mog=C4=85 otrzyma=C4=87 Pa=C5=84stwo do 135 tys. z=C5=82 wsparcia=
- na zakup pompy ciep=C5=82a.
+Fix printf to include leading zeros when the nsec component is less
+than 9 digits to ensure correct time representation of "sec.nsec".
 
-Pr=C3=B3cz wy=C5=BCszego dofinansowania program zak=C5=82ada m.in. podwy=C5=
-=BCszenie prog=C3=B3w dochodowych oraz mo=C5=BCliwo=C5=9B=C4=87 z=C5=82o=C5=
-=BCenia kolejnego wniosku o dofinansowanie dla tych, kt=C3=B3rzy ju=C5=BC=
- wcze=C5=9Bniej skorzystali z Programu.
+Signed-off-by: Amit Bernstein <amitbern@amazon.com>
+---
+ tools/testing/selftests/ptp/testptp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Jako firma specjalizuj=C4=85ca si=C4=99 w dostawie, monta=C5=BCu i serwis=
-ie pomp ciep=C5=82a pomo=C5=BCemy Pa=C5=84stwu w uzyskaniu dofinansowania=
- wraz z kompleksow=C4=85 realizacj=C4=85 ca=C5=82ego projektu.
+diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selftests/ptp/testptp.c
+index 198ad5f32..cfa9562f3 100644
+--- a/tools/testing/selftests/ptp/testptp.c
++++ b/tools/testing/selftests/ptp/testptp.c
+@@ -502,11 +502,11 @@ int main(int argc, char *argv[])
+ 			interval = t2 - t1;
+ 			offset = (t2 + t1) / 2 - tp;
+ 
+-			printf("system time: %lld.%u\n",
++			printf("system time: %lld.%09u\n",
+ 				(pct+2*i)->sec, (pct+2*i)->nsec);
+-			printf("phc    time: %lld.%u\n",
++			printf("phc    time: %lld.%09u\n",
+ 				(pct+2*i+1)->sec, (pct+2*i+1)->nsec);
+-			printf("system time: %lld.%u\n",
++			printf("system time: %lld.%09u\n",
+ 				(pct+2*i+2)->sec, (pct+2*i+2)->nsec);
+ 			printf("system/phc clock time offset is %" PRId64 " ns\n"
+ 			       "system     clock time delay  is %" PRId64 " ns\n",
+-- 
+2.17.1
 
-S=C4=85 Pa=C5=84stwo zainteresowani?
-
-Pozdrawiam
-Damian Hordych
