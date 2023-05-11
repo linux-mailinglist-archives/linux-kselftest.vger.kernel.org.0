@@ -2,67 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC0D6FF5E2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 May 2023 17:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD066FF5EA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 May 2023 17:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237687AbjEKP05 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 May 2023 11:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
+        id S238381AbjEKP14 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 May 2023 11:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238328AbjEKP04 (ORCPT
+        with ESMTP id S237754AbjEKP1z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 May 2023 11:26:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A31C197;
-        Thu, 11 May 2023 08:26:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAF5364F02;
-        Thu, 11 May 2023 15:26:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53101C433A0;
-        Thu, 11 May 2023 15:26:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683818814;
-        bh=yX+KBh46sRECtS54M5dooUORP+MvkRKDtoQcUIKDYzw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HK/bPiVJqW1AVZoDBZcQcpF3C9UZZYF2xCSZQzGAab9P99CPmY3Bw23JY/yL1RNju
-         RhX0Wpi+97Xg8oTi5oz17b+B/zkLUSnUsYkMsULkS6H71AuKvMXnbrlVIQKmDxYlN1
-         J1AYLBsb2Fb50/01yVioC6S5kKGkHXzwQ2IT8VM6mY2Rbbh8l+2fTD0ag8MQgWi4q/
-         sh/+KIJ+VkR8It0P4CHXC2WTm91kaB+Q5kVLg8j39cxEdeu1LWV2G/D1qYi7tY36EX
-         kpZ3akhhapolJvQy5zp2dAq9hzaQ5ajrNLIUdA9s4nehfUsHw/aLuTAwp6Yi458/er
-         UiDkmqqJ8IKnw==
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-44fd15d6824so3077202e0c.3;
-        Thu, 11 May 2023 08:26:54 -0700 (PDT)
-X-Gm-Message-State: AC+VfDz9YAVpZlQ4eAHuE6rSVyIDCUt2iuVICvgCPqC40fVAbOACZArC
-        mDHAVFaCqRYo6FdfumPzAP7I7QL8glsBbLn8Tb0=
-X-Google-Smtp-Source: ACHHUZ6k2Xr7l6KB/m8y+sPvxgkea/KIOkz7DRPfd3A5d1yrCF+9ae9dQBu0mje0wrDXblDj4E1P1R6H0vlAvguAzh4=
-X-Received: by 2002:a1f:c343:0:b0:450:17ac:47ca with SMTP id
- t64-20020a1fc343000000b0045017ac47camr6143019vkf.16.1683818813106; Thu, 11
- May 2023 08:26:53 -0700 (PDT)
+        Thu, 11 May 2023 11:27:55 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C4EDC;
+        Thu, 11 May 2023 08:27:54 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id A97B85C025A;
+        Thu, 11 May 2023 11:27:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 11 May 2023 11:27:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683818870; x=1683905270; bh=tq0xRJgFEn7zo
+        AuFPcq4UZUgJGgAiIZCfjImzNGnHt0=; b=BEs2HaKKzR+i6UMjnhkClU7U5zR7M
+        z95NspE0Sp1Ij/1OAWncYDL89LYlR16qkHaEd5iZr1+wFxb0PeJzcggfanQzokC2
+        e2M7wcSCUQvYsC4Pb0K1EswAB0LxoUO+QztxF+tM13D19JvvpHv1S1lLZttLMTSR
+        XTcw+8rWWQE4PBqSyDDfL7/OOzTbRJeeHZNN5qGcX+xWh/wGaPCg2CEL0Hyn1ycP
+        0J/3/tiNpsEy3BOQNWaPyT6i1k3oYFceJ8YoMjrbXxn1mQJuRvI3gsD0i2euIbkm
+        6onoMqKSHlEZhTKVxankiyIdmdcZSpCy81z9AxWkufLba3GwbY/VOcwrA==
+X-ME-Sender: <xms:dgldZGI0w7UwgoRM-O3MuLEbV3EC362WDR7dViBQrUanCFBLP9jSFQ>
+    <xme:dgldZOJ1e1NuiG3COHjKD7nHU3gv7SBi4pQ8tg0pVQehoIllfXTRU51LnGO1C2Ef3
+    s70w9JgNhcmjWU>
+X-ME-Received: <xmr:dgldZGuVMhc5ABffNGkCqaOj9T4WC5qo3fLCUOB_8XmEfNEne9XW_GIpo9XBQsb1v1psV8YgpQSRFH0WTvbGhaN1NB4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegkedgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdluddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddt
+    tddvnecuhfhrohhmpefkughoucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstg
+    hhrdhorhhgqeenucggtffrrghtthgvrhhnpeehhfdtjedviefffeduuddvffegteeiieeg
+    uefgudffvdfftdefheeijedthfejkeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguohhs
+    tghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:dgldZLYsTyB-AAf4S5xo2JUPW2_j3rQ15gzZuJ_Y5yb7AwefZeS21w>
+    <xmx:dgldZNZR7Stdum_cyWjXeQn-NOXUgsQIdA8AyRZPzT6W4asB_ASTYw>
+    <xmx:dgldZHC4wHHmLqfcWrosaiUOOctZoukoO5Xm_pe00O4YCqmzKTynLQ>
+    <xmx:dgldZBRzZevdjvVrMBGnN3VejRC2Z35gRWGCM95eSFeicbRRfr4smw>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 11 May 2023 11:27:49 -0400 (EDT)
+Date:   Thu, 11 May 2023 18:27:45 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Vladimir Nikishkin <vladimir@nikishkin.pw>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        eng.alaamohamedsoliman.am@gmail.com, gnault@redhat.com,
+        razor@blackwall.org, idosch@nvidia.com, liuhangbin@gmail.com,
+        eyal.birger@gmail.com, jtoppins@redhat.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v8 1/2] vxlan: Add nolocalbypass option to vxlan.
+Message-ID: <ZF0JcT5SSF9KLdQ5@shredder>
+References: <20230511032210.9146-1-vladimir@nikishkin.pw>
 MIME-Version: 1.0
-References: <20230414193845.2494120-1-mcgrof@kernel.org> <3f5c5c28-3814-3fea-dfbb-a3c7604e0edc@collabora.com>
-In-Reply-To: <3f5c5c28-3814-3fea-dfbb-a3c7604e0edc@collabora.com>
-From:   Luis Chamberlain <mcgrof@kernel.org>
-Date:   Thu, 11 May 2023 08:26:42 -0700
-X-Gmail-Original-Message-ID: <CAB=NE6Wx=PQ6n__hdseLzahNdkGoyUXDW4w9B5bBLvg-kVxbXA@mail.gmail.com>
-Message-ID: <CAB=NE6Wx=PQ6n__hdseLzahNdkGoyUXDW4w9B5bBLvg-kVxbXA@mail.gmail.com>
-Subject: Re: [PATCH] selftests: allow runners to override the timeout
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org,
-        tiwai@suse.de, tianfei.zhang@intel.com, russell.h.weight@intel.com,
-        keescook@chromium.org, tweek@google.com, a.manzanares@samsung.com,
-        dave@stgolabs.net, vincenzopalazzodev@gmail.com,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511032210.9146-1-vladimir@nikishkin.pw>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,30 +78,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 1:34=E2=80=AFAM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> On 4/15/23 12:38=E2=80=AFAM, Luis Chamberlain wrote:
-> > The default timeout for selftests tests is 45 seconds. Although
-> > we already have 13 settings for tests of about 96 sefltests which
-> > use a timeout greater than this, we want to try to avoid encouraging
-> > more tests to forcing a higher test timeout as selftests strives to
-> > run all tests quickly. Selftests also uses the timeout as a non-fatal
-> > error. Only tests runners which have control over a system would know
-> > if to treat a timeout as fatal or not.
-> >
-> > To help with all this:
-> >
-> >   o Enhance documentation to avoid future increases of insane timeouts
-> >   o Add the option to allow overriding the default timeout with test
-> >     runners with a command line option
-> >
-> > Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
-> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Tested-by:Muhammad Usama Anjum <usama.anjum@collabora.com>
+On Thu, May 11, 2023 at 11:22:09AM +0800, Vladimir Nikishkin wrote:
+> If a packet needs to be encapsulated towards a local destination IP,
+> the packet will be injected into the Rx path as if it was received by
+> the target VXLAN device without undergoing encapsulation. If such a
+> device does not exist, the packet will be dropped.
+> 
+> There are scenarios where we do not want to drop such packets and
+> instead want to let them be encapsulated and locally received by a user
+> space program that post-processes these VXLAN packets.
+> 
+> To that end, add a new VXLAN device attribute that controls whether such
+> packets are dropped or not. When set ("localbypass") packets are
+> dropped and when unset ("nolocalbypass") the packets are encapsulated
+> and locally delivered to the listening user space application. Default
+> to "localbypass" to maintain existing behavior.
+> 
+> Signed-off-by: Vladimir Nikishkin <vladimir@nikishkin.pw>
 
-Shuah, just a friendly poke! This is needed to allow me to enable full
-automation for kdevops for selftests.
+The code looks fine to me, so:
 
- Luis
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+
+But the commit message needs to be aligned to the code changes made in
+this version (which need to be noted the under the '---' [1]). I
+suggest:
+
+"
+If a packet needs to be encapsulated towards a local destination IP, the
+packet will undergo a "local bypass" and be injected into the Rx path as
+if it was received by the target VXLAN device without undergoing
+encapsulation. If such a device does not exist, the packet will be
+dropped.
+
+There are scenarios where we do not want to perform such a bypass, but
+instead want the packet to be encapsulated and locally received by a
+user space program for post-processing.
+
+To that end, add a new VXLAN device attribute that controls whether a
+"local bypass" is performed or not. Default to performing a bypass to
+maintain existing behavior.
+"
+
+[1] https://www.kernel.org/doc/html/latest/process/submitting-patches.html#the-canonical-patch-format
