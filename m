@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFFD6FF464
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 May 2023 16:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 052A66FF468
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 May 2023 16:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbjEKOcQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 May 2023 10:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
+        id S238583AbjEKOcV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 May 2023 10:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238556AbjEKObZ (ORCPT
+        with ESMTP id S238490AbjEKObZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 11 May 2023 10:31:25 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F87610E43;
-        Thu, 11 May 2023 07:30:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9CD11577;
+        Thu, 11 May 2023 07:30:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683815452; x=1715351452;
+  t=1683815453; x=1715351453;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nrDK8GkK0LqwlZMb1ilRfBE7tsHA7HCzaP978cfWRvc=;
-  b=cLJQPurYUAVIv5cnSG9Pu51wqeg6/KQZQdmu8Ba+ekKDP5JC3iIiEJw6
-   CKFQ/ntTTVZrjkOZEDBHETRUZjeso56eCn0Zm0RK1qTk669nhoscpgz6K
-   3epAvG0J+RChqsSa+ZmWVoBbpoIzi7871U4t9IEfaUPgSD8vq35j1EioX
-   fTs86MYPhUczPjaTJgqKXB/iBX8gysLnX8cs66qOz86ozKcvOTaqX/f92
-   KADb8s3Ew8PiEu1t96cuuS0UXWtQRcLRyaDZkRMNXHODo08sMrxZLOL16
-   SGApK93O0QgC01k6o6C4fuC4kDWg8eGhQQaIJ81IRzcHUPF/LUk97FnRd
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="378639871"
+  bh=RL/gFeFVo8864ppAdprslg9XDSPQ0Ngd+kRHVSRHTog=;
+  b=LX0hhKLEztkBNCyvtIyuXBZfi04gjOVGEJtef6ZqSU9cIZKgGdqO3qTh
+   Bfob9Dv/aOGVDUomIAKty68rAffSCUlQlG0aUOvgBrnZTHp4d2ORdvn6f
+   /exOv9E8lruDyaNW0eFV+p+SyTWBPGP1YSukwD9Oe7S8sgteUp9F1RP1r
+   xQzy9IlzIJAjj/tWT6THiblKeyT5SgA0Y0PDyf2d6rC3cEJsQVOQjkXPm
+   nxeubo3k6JwIjmXcrhgnU32LIBx7fsqd3+lI34QU1EbpmhuoMq6h901VE
+   6pdK92IOVrAmeb58sNXL3BCR86R0H9g66i4C8hEg3IEXG/5e+/Ytm1dMH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="378639890"
 X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="378639871"
+   d="scan'208";a="378639890"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 07:30:30 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 07:30:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="874004429"
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="874004445"
 X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="874004429"
+   d="scan'208";a="874004445"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga005.jf.intel.com with ESMTP; 11 May 2023 07:30:29 -0700
+  by orsmga005.jf.intel.com with ESMTP; 11 May 2023 07:30:31 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -51,9 +51,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com
-Subject: [PATCH v3 2/4] iommu: Add new iommu op to get iommu hardware information
-Date:   Thu, 11 May 2023 07:30:22 -0700
-Message-Id: <20230511143024.19542-3-yi.l.liu@intel.com>
+Subject: [PATCH v3 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
+Date:   Thu, 11 May 2023 07:30:23 -0700
+Message-Id: <20230511143024.19542-4-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230511143024.19542-1-yi.l.liu@intel.com>
 References: <20230511143024.19542-1-yi.l.liu@intel.com>
@@ -69,105 +69,198 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+Under nested IOMMU translation, userspace owns the stage-1 translation
+table (e.g. the stage-1 page table of Intel VT-d or the context table
+of ARM SMMUv3, and etc.). Stage-1 translation tables are vendor specific,
+and needs to be compatiable with the underlying IOMMU hardware. Hence,
+userspace should know the IOMMU hardware capability before creating and
+configuring the stage-1 translation table to kernel.
 
-Introduce a new iommu op to get the IOMMU hardware capabilities for
-iommufd. This information will be used by any vIOMMU driver which is
-owned by userspace.
+This adds IOMMU_DEVICE_GET_HW_INFO to query the IOMMU hardware information
+for a given device. The returned data is vendor specific, userspace needs
+to decode it with the structure mapped by the @out_data_type field.
 
-This op chooses to make the special parameters opaque to the core. This
-suits the current usage model where accessing any of the IOMMU device
-special parameters does require a userspace driver that matches the kernel
-driver. If a need for common parameters, implemented similarly by several
-drivers, arises then there's room in the design to grow a generic parameter
-set as well. No wrapper API is added as it is supposed to be used by
-iommufd only.
+As only physical devices have IOMMU hardware, so this will return error
+if the given device is not a physical device.
 
-Different IOMMU hardware would have different hardware information. So the
-information reported differs as well. To let the external user understand
-the difference. enum iommu_hw_info_type is defined. For the iommu drivers
-that are capable to report hardware information, it should have a unique
-iommu_hw_info_type. The iommu_hw_info_type is stored in struct iommu_ops.
-For the driver doesn't report hardware information, just use
-IOMMU_HW_INFO_TYPE_NONE.
-
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- include/linux/iommu.h        | 16 ++++++++++++++++
- include/uapi/linux/iommufd.h |  7 +++++++
- 2 files changed, 23 insertions(+)
+ drivers/iommu/iommufd/device.c          | 72 +++++++++++++++++++++++++
+ drivers/iommu/iommufd/iommufd_private.h |  1 +
+ drivers/iommu/iommufd/main.c            |  3 ++
+ include/uapi/linux/iommufd.h            | 37 +++++++++++++
+ 4 files changed, 113 insertions(+)
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index e7d70548e597..a748d60206e7 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -14,6 +14,7 @@
- #include <linux/err.h>
- #include <linux/of.h>
- #include <uapi/linux/iommu.h>
-+#include <uapi/linux/iommufd.h>
+diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+index 051bd8e99858..bc99d092de8f 100644
+--- a/drivers/iommu/iommufd/device.c
++++ b/drivers/iommu/iommufd/device.c
+@@ -263,6 +263,78 @@ u32 iommufd_device_to_id(struct iommufd_device *idev)
+ }
+ EXPORT_SYMBOL_NS_GPL(iommufd_device_to_id, IOMMUFD);
  
- #define IOMMU_READ	(1 << 0)
- #define IOMMU_WRITE	(1 << 1)
-@@ -222,6 +223,11 @@ struct iommu_iotlb_gather {
- /**
-  * struct iommu_ops - iommu ops and capabilities
-  * @capable: check capability
-+ * @hw_info: IOMMU hardware information. The type of the returned data is
-+ *           marked by @hw_info_type. The data buffer returned by this op
-+ *           is allocated in the IOMMU driver and the caller should free it
-+ *           after use. Return the data buffer if success, or ERR_PTR on
-+ *           failure.
-  * @domain_alloc: allocate iommu domain
-  * @probe_device: Add device to iommu driver handling
-  * @release_device: Remove device from iommu driver handling
-@@ -246,11 +252,20 @@ struct iommu_iotlb_gather {
-  * @remove_dev_pasid: Remove any translation configurations of a specific
-  *                    pasid, so that any DMA transactions with this pasid
-  *                    will be blocked by the hardware.
-+ * @hw_info_type: One of enum iommu_hw_info_type defined in
-+ *                include/uapi/linux/iommufd.h. It is used to tag the type
-+ *                of data returned by .hw_info callback. The drivers that
-+ *                support .hw_info callback should define a unique type
-+ *                in include/uapi/linux/iommufd.h. For the drivers that do
-+ *                not implement .hw_info callback, this field is
-+ *                IOMMU_HW_INFO_TYPE_NONE which is 0. Hence, such drivers
-+ *                do not need to care this field.
-  * @pgsize_bitmap: bitmap of all possible supported page sizes
-  * @owner: Driver module providing these ops
-  */
- struct iommu_ops {
- 	bool (*capable)(struct device *dev, enum iommu_cap);
-+	void *(*hw_info)(struct device *dev, u32 *length);
++static int iommufd_zero_fill_user(u64 ptr, int bytes)
++{
++	int index = 0;
++
++	for (; index < bytes; index++) {
++		if (put_user(0, (uint8_t __user *)u64_to_user_ptr(ptr + index)))
++			return -EFAULT;
++	}
++	return 0;
++}
++
++int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd)
++{
++	struct iommu_hw_info *cmd = ucmd->cmd;
++	unsigned int length = 0, data_len;
++	struct iommufd_device *idev;
++	const struct iommu_ops *ops;
++	void *data = NULL;
++	int rc = 0;
++
++	if (cmd->flags || cmd->__reserved || !cmd->data_len)
++		return -EOPNOTSUPP;
++
++	idev = iommufd_get_device(ucmd, cmd->dev_id);
++	if (IS_ERR(idev))
++		return PTR_ERR(idev);
++
++	ops = dev_iommu_ops(idev->dev);
++	if (!ops->hw_info)
++		goto done;
++
++	/* driver has hw_info callback should have a unique hw_info_type */
++	if (ops->hw_info_type == IOMMU_HW_INFO_TYPE_NONE) {
++		pr_warn_ratelimited("iommu driver set an invalid type\n");
++		rc = -ENODEV;
++		goto out_err;
++	}
++
++	data = ops->hw_info(idev->dev, &data_len);
++	if (IS_ERR(data)) {
++		rc = PTR_ERR(data);
++		goto out_err;
++	}
++
++	length = min(cmd->data_len, data_len);
++	if (copy_to_user(u64_to_user_ptr(cmd->data_ptr), data, length)) {
++		rc = -EFAULT;
++		goto out_err;
++	}
++
++	/*
++	 * Zero the trailing bytes if the user buffer is bigger than the
++	 * data size kernel actually has.
++	 */
++	if (length < cmd->data_len) {
++		rc = iommufd_zero_fill_user(cmd->data_ptr + length,
++					    cmd->data_len - length);
++		if (rc)
++			goto out_err;
++	}
++
++done:
++	cmd->data_len = length;
++	cmd->out_data_type = ops->hw_info_type;
++	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
++
++out_err:
++	kfree(data);
++	iommufd_put_object(&idev->obj);
++	return rc;
++}
++
+ static int iommufd_group_setup_msi(struct iommufd_group *igroup,
+ 				   struct iommufd_hw_pagetable *hwpt)
+ {
+diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+index dba730129b8c..69d6bb61d387 100644
+--- a/drivers/iommu/iommufd/iommufd_private.h
++++ b/drivers/iommu/iommufd/iommufd_private.h
+@@ -308,6 +308,7 @@ iommufd_get_device(struct iommufd_ucmd *ucmd, u32 id)
+ }
  
- 	/* Domain allocation and freeing by the iommu driver */
- 	struct iommu_domain *(*domain_alloc)(unsigned iommu_domain_type);
-@@ -279,6 +294,7 @@ struct iommu_ops {
- 	void (*remove_dev_pasid)(struct device *dev, ioasid_t pasid);
+ void iommufd_device_destroy(struct iommufd_object *obj);
++int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd);
  
- 	const struct iommu_domain_ops *default_domain_ops;
-+	enum iommu_hw_info_type hw_info_type;
- 	unsigned long pgsize_bitmap;
- 	struct module *owner;
- };
+ struct iommufd_access {
+ 	struct iommufd_object obj;
+diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
+index 3932fe26522b..5c24e8971f09 100644
+--- a/drivers/iommu/iommufd/main.c
++++ b/drivers/iommu/iommufd/main.c
+@@ -269,6 +269,7 @@ static int iommufd_option(struct iommufd_ucmd *ucmd)
+ union ucmd_buffer {
+ 	struct iommu_destroy destroy;
+ 	struct iommu_hwpt_alloc hwpt;
++	struct iommu_hw_info info;
+ 	struct iommu_ioas_alloc alloc;
+ 	struct iommu_ioas_allow_iovas allow_iovas;
+ 	struct iommu_ioas_copy ioas_copy;
+@@ -302,6 +303,8 @@ static const struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
+ 	IOCTL_OP(IOMMU_DESTROY, iommufd_destroy, struct iommu_destroy, id),
+ 	IOCTL_OP(IOMMU_HWPT_ALLOC, iommufd_hwpt_alloc, struct iommu_hwpt_alloc,
+ 		 __reserved),
++	IOCTL_OP(IOMMU_DEVICE_GET_HW_INFO, iommufd_device_get_hw_info,
++		 struct iommu_hw_info, __reserved),
+ 	IOCTL_OP(IOMMU_IOAS_ALLOC, iommufd_ioas_alloc_ioctl,
+ 		 struct iommu_ioas_alloc, out_ioas_id),
+ 	IOCTL_OP(IOMMU_IOAS_ALLOW_IOVAS, iommufd_ioas_allow_iovas,
 diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index 8245c01adca6..99bf0715f545 100644
+index 99bf0715f545..e9d42838dcbd 100644
 --- a/include/uapi/linux/iommufd.h
 +++ b/include/uapi/linux/iommufd.h
-@@ -370,4 +370,11 @@ struct iommu_hwpt_alloc {
- 	__u32 __reserved;
+@@ -46,6 +46,7 @@ enum {
+ 	IOMMUFD_CMD_OPTION,
+ 	IOMMUFD_CMD_VFIO_IOAS,
+ 	IOMMUFD_CMD_HWPT_ALLOC,
++	IOMMUFD_CMD_DEVICE_GET_HW_INFO,
  };
- #define IOMMU_HWPT_ALLOC _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_ALLOC)
+ 
+ /**
+@@ -377,4 +378,40 @@ struct iommu_hwpt_alloc {
+ enum iommu_hw_info_type {
+ 	IOMMU_HW_INFO_TYPE_NONE,
+ };
 +
 +/**
-+ * enum iommu_hw_info_type - IOMMU Hardware Info Types
++ * struct iommu_hw_info - ioctl(IOMMU_DEVICE_GET_HW_INFO)
++ * @size: sizeof(struct iommu_hw_info)
++ * @flags: Must be 0
++ * @dev_id: The device bound to the iommufd
++ * @data_len: Input the length of the user buffer in bytes. Output the
++ *            length of data filled in the user buffer.
++ * @data_ptr: Pointer to the user buffer
++ * @out_data_type: Output the iommu hardware info type as defined by
++ *                 enum iommu_hw_info_type.
++ * @__reserved: Must be 0
++ *
++ * Query the hardware iommu information for given device which has been
++ * bound to iommufd. @data_len is the size of the buffer which captures
++ * iommu type specific data and the data will be filled. Trailing bytes
++ * are zeroed if the user buffer is larger than the data kernel has.
++ *
++ * The type specific data would be used to sync capability between the
++ * virtual IOMMU and the hardware IOMMU. e.g. nested translation requires
++ * to check the hardware IOMMU capability so guest stage-1 page table
++ * uses a format compatible to the hardware IOMMU.
++ *
++ * The @out_data_type will be filled if the ioctl succeeds. It would
++ * be used to decode the data filled in the buffer pointed by @data_ptr.
 + */
-+enum iommu_hw_info_type {
-+	IOMMU_HW_INFO_TYPE_NONE,
++struct iommu_hw_info {
++	__u32 size;
++	__u32 flags;
++	__u32 dev_id;
++	__u32 data_len;
++	__aligned_u64 data_ptr;
++	__u32 out_data_type;
++	__u32 __reserved;
 +};
++#define IOMMU_DEVICE_GET_HW_INFO _IO(IOMMUFD_TYPE, IOMMUFD_CMD_DEVICE_GET_HW_INFO)
  #endif
 -- 
 2.34.1
