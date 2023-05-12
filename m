@@ -2,189 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24546FFFEC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 May 2023 07:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4A1700152
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 May 2023 09:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239831AbjELFjJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 May 2023 01:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S240271AbjELHVe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 May 2023 03:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjELFjI (ORCPT
+        with ESMTP id S240306AbjELHUo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 May 2023 01:39:08 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD95B4202;
-        Thu, 11 May 2023 22:39:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683869947; x=1715405947;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zC92a2N0m2Rf8NugNXwOSZnbIW4HBYFpSQTmsIkInWs=;
-  b=FQiMZC/3AFfp9eIkwt5suXD0SrjGI6ml9tGK2dKdUQVf27PiRYTInWha
-   8xP7HiEftoSJWAFo7oj2ZKsUHcE1QHhIppNU8vF44SRNove6GXuhOcErs
-   SP86aK8IG9cMTOZ+A/9Su+pDChmpiw+YOASdRZzvuaxj0n2+a5o+eLtnB
-   SC2uZl1piZfesss690XXV+iXgFAivUkzmKGNQeDt+XSnyKgWmwjyUnMON
-   XWEYZH7/VV+zshIUEGyb3EMrWFImtxK/RCeRL+WJyloZ+WLt7mtR0yyBX
-   pB2IaokNXOgldKNlELTBGKQ8b+I40UT3rurVAspfSQkUZozxeJV8odS/K
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="350734479"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="350734479"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 22:39:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="732893212"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="732893212"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by orsmga001.jf.intel.com with ESMTP; 11 May 2023 22:39:01 -0700
-Message-ID: <6ab2d63e-4dcc-6562-9698-d23300c7d1ae@linux.intel.com>
-Date:   Fri, 12 May 2023 13:38:31 +0800
+        Fri, 12 May 2023 03:20:44 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680052689;
+        Fri, 12 May 2023 00:20:42 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C79s53025587;
+        Fri, 12 May 2023 07:20:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=YYOSn4U1MhqyoYEGVbgEkoVO46zkgsZoG+XmtnWgVds=;
+ b=gOtvv6gI2X2njP6UQTMbZnl04+BE+bd1FrQyWwA9OMOvRPTe3BpyGf3I8htIgm347w+s
+ x4kDHCVohCeTZZdvuLazorLHMtI6kJr3OFeeshTng8DJxgd+k/bmqljwpjzP6pFm1EZr
+ 7nyxAwiWKoKvg4wXBz0Gc5uSjaT7NUkAnG0QyJRzN0dJatnMcNWnbcttThNGVif/c3hv
+ ENlJe21NPKlzHcL64xO/jvByKLNzxwBqhsEObWp//ADtsr5WlVtYdGHYR//nG2sfogmr
+ W3C2JRuJcJ41N6vkRuAvjiWDV+0a6sf3aKrEzuz1n/WhM82NNgY4iNCDf+Mq7AylEewx 3g== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qhg0w1wt1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 07:20:37 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34BL9TOX007034;
+        Fri, 12 May 2023 07:20:35 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qf896t6ab-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 07:20:35 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34C7KWvU47513934
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 May 2023 07:20:32 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 63D0520063;
+        Fri, 12 May 2023 07:20:32 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1464D2004F;
+        Fri, 12 May 2023 07:20:32 +0000 (GMT)
+Received: from [9.171.66.102] (unknown [9.171.66.102])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 12 May 2023 07:20:32 +0000 (GMT)
+Message-ID: <56258345-3e3c-3acd-e240-a0b348eb9df3@linux.ibm.com>
+Date:   Fri, 12 May 2023 09:20:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
-        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
-        peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com
-Subject: Re: [PATCH v3 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
+Subject: Re: [PATCH v2 1/2] KVM: s390: fix KVM_S390_GET_CMMA_BITS for GFNs in
+ memslot holes
 Content-Language: en-US
-To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
-        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
-        robin.murphy@arm.com
-References: <20230511143024.19542-1-yi.l.liu@intel.com>
- <20230511143024.19542-4-yi.l.liu@intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230511143024.19542-4-yi.l.liu@intel.com>
+To:     Nico Boehr <nrb@linux.ibm.com>, borntraeger@linux.ibm.com,
+        imbrenda@linux.ibm.com, shuah@kernel.org
+Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20230324145424.293889-1-nrb@linux.ibm.com>
+ <20230324145424.293889-2-nrb@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20230324145424.293889-2-nrb@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 1ZI_67EOK9umRujf4TPJ82qfnF4gPvVG
+X-Proofpoint-GUID: 1ZI_67EOK9umRujf4TPJ82qfnF4gPvVG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_04,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
+ mlxlogscore=784 priorityscore=1501 bulkscore=0 impostorscore=0
+ malwarescore=0 adultscore=0 phishscore=0 mlxscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305120059
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/11/23 10:30 PM, Yi Liu wrote:
-> Under nested IOMMU translation, userspace owns the stage-1 translation
-> table (e.g. the stage-1 page table of Intel VT-d or the context table
-> of ARM SMMUv3, and etc.). Stage-1 translation tables are vendor specific,
-> and needs to be compatiable with the underlying IOMMU hardware. Hence,
-> userspace should know the IOMMU hardware capability before creating and
-> configuring the stage-1 translation table to kernel.
+On 3/24/23 15:54, Nico Boehr wrote:
+> The KVM_S390_GET_CMMA_BITS ioctl may return incorrect values when userspace
+> specifies a start_gfn outside of memslots.
 > 
-> This adds IOMMU_DEVICE_GET_HW_INFO to query the IOMMU hardware information
-> for a given device. The returned data is vendor specific, userspace needs
-> to decode it with the structure mapped by the @out_data_type field.
+> This can occur when a VM has multiple memslots with a hole in between:
 > 
-> As only physical devices have IOMMU hardware, so this will return error
-> if the given device is not a physical device.
+> +-----+----------+--------+--------+
+> | ... | Slot N-1 | <hole> | Slot N |
+> +-----+----------+--------+--------+
+>        ^          ^        ^        ^
+>        |          |        |        |
+> GFN   A          A+B      |        |
+>                            A+B+C    |
+> 			           A+B+C+D
 > 
-> Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> ---
->   drivers/iommu/iommufd/device.c          | 72 +++++++++++++++++++++++++
->   drivers/iommu/iommufd/iommufd_private.h |  1 +
->   drivers/iommu/iommufd/main.c            |  3 ++
->   include/uapi/linux/iommufd.h            | 37 +++++++++++++
->   4 files changed, 113 insertions(+)
+> When userspace specifies a GFN in [A+B, A+B+C), it would expect to get the
+> CMMA values of the first dirty page in Slot N. However, userspace may get a
+> start_gfn of A+B+C+D with a count of 0, hence completely skipping over any
+> dirty pages in slot N.
 > 
-> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-> index 051bd8e99858..bc99d092de8f 100644
-> --- a/drivers/iommu/iommufd/device.c
-> +++ b/drivers/iommu/iommufd/device.c
-> @@ -263,6 +263,78 @@ u32 iommufd_device_to_id(struct iommufd_device *idev)
->   }
->   EXPORT_SYMBOL_NS_GPL(iommufd_device_to_id, IOMMUFD);
->   
-> +static int iommufd_zero_fill_user(u64 ptr, int bytes)
-> +{
-> +	int index = 0;
-> +
-> +	for (; index < bytes; index++) {
-> +		if (put_user(0, (uint8_t __user *)u64_to_user_ptr(ptr + index)))
-> +			return -EFAULT;
-> +	}
-> +	return 0;
-> +}
-> +
-> +int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd)
-> +{
-> +	struct iommu_hw_info *cmd = ucmd->cmd;
-> +	unsigned int length = 0, data_len;
-> +	struct iommufd_device *idev;
-> +	const struct iommu_ops *ops;
-> +	void *data = NULL;
-> +	int rc = 0;
-> +
-> +	if (cmd->flags || cmd->__reserved || !cmd->data_len)
-> +		return -EOPNOTSUPP;
-> +
-> +	idev = iommufd_get_device(ucmd, cmd->dev_id);
-> +	if (IS_ERR(idev))
-> +		return PTR_ERR(idev);
-> +
-> +	ops = dev_iommu_ops(idev->dev);
-> +	if (!ops->hw_info)
-> +		goto done;
+> The error is in kvm_s390_next_dirty_cmma(), which assumes
+> gfn_to_memslot_approx() will return the memslot _below_ the specified GFN
+> when the specified GFN lies outside a memslot. In reality it may return
+> either the memslot below or above the specified GFN.
+> 
+> When a memslot above the specified GFN is returned this happens:
+> 
+> - ofs is calculated, but since the memslot's base_gfn is larger than the
+>    specified cur_gfn, ofs will underflow to a huge number.
+> - ofs is passed to find_next_bit(). Since ofs will exceed the memslot's
+>    number of pages, the number of pages in the memslot is returned,
+>    completely skipping over all bits in the memslot userspace would be
+>    interested in.
+> 
+> Fix this by resetting ofs to zero when a memslot _above_ cur_gfn is
+> returned (cur_gfn < ms->base_gfn).
+> 
+> Signed-off-by: Nico Boehr <nrb@linux.ibm.com>
+> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-If the iommu driver doesn't provide a hw_info callback, it still
-returns success?
+Does this need a fix tag?
 
-> +
-> +	/* driver has hw_info callback should have a unique hw_info_type */
-> +	if (ops->hw_info_type == IOMMU_HW_INFO_TYPE_NONE) {
-> +		pr_warn_ratelimited("iommu driver set an invalid type\n");
-> +		rc = -ENODEV;
-> +		goto out_err;
-> +	}
-> +
-> +	data = ops->hw_info(idev->dev, &data_len);
-> +	if (IS_ERR(data)) {
-> +		rc = PTR_ERR(data);
-> +		goto out_err;
-> +	}
-> +
-> +	length = min(cmd->data_len, data_len);
-> +	if (copy_to_user(u64_to_user_ptr(cmd->data_ptr), data, length)) {
-> +		rc = -EFAULT;
-> +		goto out_err;
-> +	}
-> +
-> +	/*
-> +	 * Zero the trailing bytes if the user buffer is bigger than the
-> +	 * data size kernel actually has.
-> +	 */
-> +	if (length < cmd->data_len) {
-> +		rc = iommufd_zero_fill_user(cmd->data_ptr + length,
-> +					    cmd->data_len - length);
-> +		if (rc)
-> +			goto out_err;
-> +	}
-> +
-> +done:
-> +	cmd->data_len = length;
-> +	cmd->out_data_type = ops->hw_info_type;
-> +	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-> +
-> +out_err:
-> +	kfree(data);
-> +	iommufd_put_object(&idev->obj);
-> +	return rc;
-> +}
-> +
->   static int iommufd_group_setup_msi(struct iommufd_group *igroup,
->   				   struct iommufd_hw_pagetable *hwpt)
->   {
-
-Best regards,
-baolu
