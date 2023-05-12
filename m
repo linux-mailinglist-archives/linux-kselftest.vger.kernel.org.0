@@ -2,59 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4598370091E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 May 2023 15:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9F670092B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 May 2023 15:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241204AbjELNXj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 May 2023 09:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S241122AbjELNZu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 May 2023 09:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240734AbjELNXj (ORCPT
+        with ESMTP id S240424AbjELNZu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 May 2023 09:23:39 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2AD199A
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 May 2023 06:23:36 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f38a9918d1so1011901cf.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 May 2023 06:23:36 -0700 (PDT)
+        Fri, 12 May 2023 09:25:50 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A571715
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 May 2023 06:25:48 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3ef34c49cb9so1010321cf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 May 2023 06:25:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683897816; x=1686489816;
+        d=google.com; s=20221208; t=1683897948; x=1686489948;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HPuUjEoje+/x3LJYWD5ZpBVMggT1RgV3pBWK7hnLfIM=;
-        b=e8vn/ZqlpU5mZ4QkijvRWWTpKCtMaMyG1FPD3SUt2t2Dti6Zp009XklhScn2rs2yLO
-         TfI7OMWT2SFe7gMWWm+qZXKG7Bx5wnwrEESUtXer1VssU0bMmjSQhyPF97sqEPzaF/ok
-         Awx38FCWLm9/TnPUGjTTc56VZkXXIbuQyZM1dSaDUO5uOn6lyT/qUSXY+3nJjudGECgr
-         bPDtWCtrFvLaknbIPDDus7YBJzxyOJnVEFAdTaYgUcdRRScV4HbfL18i1Tv34s6Kg5yh
-         c9TzEAkmBpNuBSjmsjcmE8Ma6HuyWeJgBF8DZEws+jwSsJMxzVugrOyQmo+679e6IlEu
-         20xA==
+        bh=mbwZn6wbb6AWyMrRGtCopiudSvQ/zU2/r+76z+7YvMg=;
+        b=eqxzVZCdywYF0MYeWxFkG9lVsVh+8ezrwXRSbPQqcbObWjSMtIbdxXAJaATeelqNO3
+         kmQsm63IkVz+TmGXAIweWz3t3YM+kJY/J6jA0pysT+mIGOgHZHOyIEdUBK39F0eTkrCL
+         hFpPr3ZtfpZWqov9IUJgWSm9Bg2a2JrAspjbOtvSoKaWUE5z74jecRSviQ9DGqoBVjLh
+         q+Scc1LFgpxP2+vhaQcIzd0m1TNNbILCqN/jb2kyfPPveTP4yAfd9S1V8jcS7zpY8qTL
+         PAjM2A0Ypu2Oz2L+QOWXiIloSg/9Vum1GEaspiTa/S8rxrOxTRnDbbQmtHZKLBvxtMLS
+         8GAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683897816; x=1686489816;
+        d=1e100.net; s=20221208; t=1683897948; x=1686489948;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HPuUjEoje+/x3LJYWD5ZpBVMggT1RgV3pBWK7hnLfIM=;
-        b=EmlyxyBhMByofz3eaR19lIGzpO8d/m61yojH+AydWyHVPgj1Za6FF4pnD30JSW/A4G
-         CjBE7NGGCZlGedXcfEGRcOqfuR/t3dhccvx/5D8453XDJDrdD05Wd3zHtpNcDNamQaux
-         PGyeuZ4P8uV3Lizm03qexP7F2Q9KX+nb1F2JdthDkS3WVGEUxZoFMGqLL/WxaQ3+hEYc
-         Mr9Mh8R9LOX0ZpyECZ81CEkGeRcYwjDQWajoDv6hVyHEbJnd4MMs6SDUz989YnIWJqSo
-         oCZhz0anuMd9T28QLDKWvMUKDcpxSli48MmoTgVwwZdZohskZoJfpz0183PQuJHMlxcW
-         JYKA==
-X-Gm-Message-State: AC+VfDzpNinsXN4MJtC+QLgHVGmBtR0xve5FG567jVFqZaulW3dPHgpv
-        G5g7w0h6aHSHI3J8+0e5j91YT4E3t8cPBQ1HMcGKYw==
-X-Google-Smtp-Source: ACHHUZ4LFBoo6M5Sy4lh6dNFZ3J5WlpWwe5Z9jZ3gFM8kpxjGDsYjCQ0D8R3gvkHcwowoSS6PBIYP7/Tbb7CgRUiW/o=
-X-Received: by 2002:a05:622a:1812:b0:3ef:1c85:5b5e with SMTP id
- t18-20020a05622a181200b003ef1c855b5emr248121qtc.19.1683897815844; Fri, 12 May
- 2023 06:23:35 -0700 (PDT)
+        bh=mbwZn6wbb6AWyMrRGtCopiudSvQ/zU2/r+76z+7YvMg=;
+        b=C5me64Zr9DFlJjHfQPSYLvU9aZYApwnZsnri+O9X8U8aRZQk4ndASB9f1dPznSrUvb
+         PGSwLEwUQ+qWK8VNQC7wWQdJGu8uDSsDPNKqucpd8FGgIhV7o74bgvbms+1vmBdrPBCr
+         npyLuTmwcMrn5CBRMDrWYm25ekyW/u2xUqQvrlr8N1JsqjOFrBq7Er3sBSbw7VDg3HuX
+         dX/ilvMTOMvYRp+XzBkwYgCxEoo/IIroUWkuQ6oN1fD18R1FAEVA6Y6rH0L9ktL+MQfB
+         QUTm7xPdUrt+bEZjto3g2oZHHO1wxXdm+mJSzfGl8nlUZ2m+X0ie9HtU5LTGsSlhXf9d
+         olFg==
+X-Gm-Message-State: AC+VfDy94+ZZUwrBQV3LVE0EXhTl17kvHov47ln7s3+EVvOCCjNBRjZJ
+        RC4iE/ZnAPss+88XctZgkT4pJ7tVyurDEQLrb92wuw==
+X-Google-Smtp-Source: ACHHUZ6+1Nm2+X+9izGUHhc03e9MUXIkYFVBOa4gSfMOj6ABOozZ5qNSfQ096qd3bSQHuSVeoxUnYrxbFQXx+9CMy1w=
+X-Received: by 2002:a05:622a:c3:b0:3db:1c01:9d95 with SMTP id
+ p3-20020a05622a00c300b003db1c019d95mr382182qtw.4.1683897947838; Fri, 12 May
+ 2023 06:25:47 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230421141723.2405942-1-peternewman@google.com>
- <20230421141723.2405942-3-peternewman@google.com> <242db225-8ddc-968e-a754-6aaefd1b7da9@intel.com>
-In-Reply-To: <242db225-8ddc-968e-a754-6aaefd1b7da9@intel.com>
+ <20230421141723.2405942-4-peternewman@google.com> <38b9e6df-cccd-a745-da4a-1d1a0ec86ff3@intel.com>
+In-Reply-To: <38b9e6df-cccd-a745-da4a-1d1a0ec86ff3@intel.com>
 From:   Peter Newman <peternewman@google.com>
-Date:   Fri, 12 May 2023 15:23:25 +0200
-Message-ID: <CALPaoCg1Z4ucYibv4STe+DjB32o-ckuWm5PL4CmWwCgNWchoUg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/9] x86/resctrl: Hold a spinlock in __rmid_read() on AMD
+Date:   Fri, 12 May 2023 15:25:37 +0200
+Message-ID: <CALPaoCg76nUsJ7eYcU61gied8WBuAAmqy0Pqpsq5=Z-S52Qg6w@mail.gmail.com>
+Subject: Re: [PATCH v1 3/9] x86/resctrl: Add resctrl_mbm_flush_cpu() to
+ collect CPUs' MBM events
 To:     Reinette Chatre <reinette.chatre@intel.com>
 Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -70,7 +71,7 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,101 +80,147 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi Reinette,
 
-On Thu, May 11, 2023 at 11:36=E2=80=AFPM Reinette Chatre
+On Thu, May 11, 2023 at 11:37=E2=80=AFPM Reinette Chatre
 <reinette.chatre@intel.com> wrote:
 > On 4/21/2023 7:17 AM, Peter Newman wrote:
-> > From: Stephane Eranian <eranian@google.com>
-> >
-> > In AMD PQoS Versions 1.0 and 2.0, IA32_QM_EVTSEL MSR is shared by all
-> > processors in a QOS domain.  So there's a chance it can read a differen=
-t
-> > event when two processors are reading the counter concurrently.  Add a
-> > spinlock to prevent this race.
+> > Implement resctrl_mbm_flush_cpu(), which collects a domain's current MB=
+M
+> > event counts into its current software RMID. The delta for each CPU is
+> > determined by tracking the previous event counts in per-CPU data.  The
+> > software byte counts reside in the arch-independent mbm_state
+> > structures.
 >
-> This is unclear to me. As I understand it this changelog is written as
-> though there is a race that is being fixed. I believe that rdtgroup_mutex
-> currently protects against such races. I thus at first thought that
-> this is a prep patch for the introduction of the new soft RMID feature,
-> but instead this new spinlock is used independent of the soft RMID featur=
-e.
+> Could you elaborate why the arch-independent mbm_state was chosen?
+
+It largely had to do with how many soft RMIDs to implement. For our
+own needs, we were mainly concerned with getting back to the number of
+monitoring groups the hardware claimed to support, so there wasn't
+much internal motivation to support an unbounded number of soft RMIDs.
+
+However, breaking this artificial connection between supported HW and
+SW RMIDs to support arbitrarily-many monitoring groups could make the
+implementation conceptually cleaner. If you agree,  I would be happy
+to give it a try in the next series.
+
+
+> > +     /* cache occupancy events are disabled in this mode */
+> > +     WARN_ON(!is_mbm_event(evtid));
 >
-> I think the spinlock is unnecessary when the soft RMID feature is disable=
-d.
+> If this is hit it would trigger a lot, perhaps WARN_ON_ONCE?
 
-My understanding was that the race would happen a lot more when
-simultaneously IPI'ing all CPUs in a domain, but I had apparently
-overlooked that all of the counter reads were already serialized.
-
-
-> > + * @lock:    serializes counter reads when QM_EVTSEL MSR is shared per=
--domain
-> >   *
-> >   * Members of this structure are accessed via helpers that provide abs=
-traction.
-> >   */
-> > @@ -333,6 +334,7 @@ struct rdt_hw_domain {
-> >       u32                             *ctrl_val;
-> >       struct arch_mbm_state           *arch_mbm_total;
-> >       struct arch_mbm_state           *arch_mbm_local;
-> > +     raw_spinlock_t                  evtsel_lock;
-> >  };
->
-> Please note the difference between the member name in the struct ("evtsel=
-_lock")
-> and its description ("lock").
-
-Will fix, thanks.
-
-
-> > -static int __rmid_read(u32 rmid, enum resctrl_event_id eventid, u64 *v=
-al)
-> > +static int __rmid_read(struct rdt_hw_domain *hw_dom, u32 rmid,
-> > +                    enum resctrl_event_id eventid, u64 *val)
-> >  {
-> > +     unsigned long flags;
-> >       u64 msr_val;
-> >
-> > +     if (static_branch_likely(&rmid_read_locked))
->
-> Why static_branch_likely() as opposed to static_branch_unlikely()?
-
-I read the documentation for static branches and I agree that unlikely
-would make more sense so that the non-locked case is less impacted.
-
-This instance apparently confused my understanding of static branches
-and I will need to re-visit all uses of them in this patch series.
+Ok
 
 >
-> > +             raw_spin_lock_irqsave(&hw_dom->evtsel_lock, flags);
 > > +
-> >       /*
-> >        * As per the SDM, when IA32_QM_EVTSEL.EvtID (bits 7:0) is config=
-ured
-> >        * with a valid event code for supported resource type and the bi=
-ts
-> > @@ -161,6 +166,9 @@ static int __rmid_read(u32 rmid, enum resctrl_event=
-_id eventid, u64 *val)
-> >       wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
-> >       rdmsrl(MSR_IA32_QM_CTR, msr_val);
-> >
-> > +     if (static_branch_likely(&rmid_read_locked))
-> > +             raw_spin_unlock_irqrestore(&hw_dom->evtsel_lock, flags);
+> > +     if (evtid =3D=3D QOS_L3_MBM_LOCAL_EVENT_ID) {
+> > +             counter =3D &state->local;
+> > +     } else {
+> > +             WARN_ON(evtid !=3D QOS_L3_MBM_TOTAL_EVENT_ID);
+> > +             counter =3D &state->total;
+> > +     }
+> > +
+> > +     /*
+> > +      * Propagate the value read from the hw_rmid assigned to the curr=
+ent CPU
+> > +      * into the "soft" rmid associated with the current task or CPU.
+> > +      */
+> > +     m =3D get_mbm_state(d, soft_rmid, evtid);
+> > +     if (!m)
+> > +             return;
+> > +
+> > +     if (resctrl_arch_rmid_read(r, d, hw_rmid, evtid, &val))
+> > +             return;
 > > +
 >
-> If the first "if (static_branch_likely(&rmid_read_locked))" was taken the=
-n the second
-> if branch _has_ to be taken. It should not be optional to release a lock =
-if it was taken. I
-> think it would be more robust if a single test of the static key decides =
-whether the
-> spinlock should be used.
+> This all seems unsafe to run without protection. The code relies on
+> the rdt_domain but a CPU hotplug event could result in the domain
+> disappearing underneath this code. The accesses to the data structures
+> also appear unsafe to me. Note that resctrl_arch_rmid_read() updates
+> the architectural MBM state and this same state can be updated concurrent=
+ly
+> in other code paths without appropriate locking.
 
-Is the concern that the branch value could change concurrently and
-result in a deadlock?
+The domain is supposed to always be the current one, but I see that
+even a get_domain_from_cpu(smp_processor_id(), ...) call needs to walk
+a resource's domain list to find a matching entry, which could be
+concurrently modified when other domains are added/removed.
 
-I'm curious as to whether this case is performance critical enough to
-justify using a static branch. It's clear that we should be using them
-in the context switch path, but I'm confused about other places
-they're used when there are also memory flags.
+Similarly, when soft RMIDs are enabled, it should not be possible to
+call resctrl_arch_rmid_read() outside of on the current CPU's HW RMID.
+
+I'll need to confirm whether it's safe to access the current CPU's
+rdt_domain in an atomic context. If it isn't, I assume I would have to
+arrange all of the state used during flush to be per-CPU.
+
+I expect the constraints on what data can be safely accessed where is
+going to constrain how the state is ultimately arranged, so I will
+need to settle this before I can come back to the other questions
+about mbm_state.
+
+>
+> > +     /* Count bandwidth after the first successful counter read. */
+> > +     if (counter->initialized) {
+> > +             /* Assume that mbm_update() will prevent double-overflows=
+. */
+> > +             if (val !=3D counter->prev_bytes)
+> > +                     atomic64_add(val - counter->prev_bytes,
+> > +                                  &m->soft_rmid_bytes);
+> > +     } else {
+> > +             counter->initialized =3D true;
+> > +     }
+> > +
+> > +     counter->prev_bytes =3D val;
+>
+> I notice a lot of similarities between the above and the software control=
+ler,
+> see mbm_bw_count().
+
+Thanks for pointing this out, I'll take a look.
+
+>
+> > +}
+> > +
+> > +/*
+> > + * Called from context switch code __resctrl_sched_in() when the curre=
+nt soft
+> > + * RMID is changing or before reporting event counts to user space.
+> > + */
+> > +void resctrl_mbm_flush_cpu(void)
+> > +{
+> > +     struct rdt_resource *r =3D &rdt_resources_all[RDT_RESOURCE_L3].r_=
+resctrl;
+> > +     int cpu =3D smp_processor_id();
+> > +     struct rdt_domain *d;
+> > +
+> > +     d =3D get_domain_from_cpu(cpu, r);
+> > +     if (!d)
+> > +             return;
+> > +
+> > +     if (is_mbm_local_enabled())
+> > +             __mbm_flush(QOS_L3_MBM_LOCAL_EVENT_ID, r, d);
+> > +     if (is_mbm_total_enabled())
+> > +             __mbm_flush(QOS_L3_MBM_TOTAL_EVENT_ID, r, d);
+> > +}
+>
+> This (potentially) adds two MSR writes and two MSR reads to what could po=
+ssibly
+> be quite slow MSRs if it was not designed to be used in context switch. D=
+o you
+> perhaps have data on how long these MSR reads/writes take on these system=
+s to get
+> an idea about the impact on context switch? I think this data should feat=
+ure
+> prominently in the changelog.
+
+I can probably use ftrace to determine the cost of an __rmid_read()
+call on a few implementations.
+
+To understand the overall impact to context switch, I can put together
+a scenario where I can control whether the context switches being
+measured result in change of soft RMID to prevent the data from being
+diluted by non-flushing switches.
+
+
+Thank you for looking over these changes!
 
 -Peter
