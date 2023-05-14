@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F54701C84
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 May 2023 11:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CEE701C88
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 May 2023 11:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjENJSZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 May 2023 05:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
+        id S229927AbjENJVO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 May 2023 05:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjENJSY (ORCPT
+        with ESMTP id S229611AbjENJVN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 May 2023 05:18:24 -0400
+        Sun, 14 May 2023 05:21:13 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54458A0;
-        Sun, 14 May 2023 02:18:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A035C4;
+        Sun, 14 May 2023 02:21:12 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9297D21FF0;
-        Sun, 14 May 2023 09:18:21 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id ED0AD22043;
+        Sun, 14 May 2023 09:21:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684055901; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1684056070; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YbTG3QHxp4xkrUDBC3uMLRB5y/TSfnVZ4mREVa2fxCE=;
-        b=YYzOgtkIKMTo5ApVh3WkkM+zMdRBiHBYGIEQHqaspfVEWEuuJxHfHDRYelInR7fW3ujizU
-        hWBBTFGjbvE6kRCdpsFGU6m2V+IEjJvi56IKO7NyCL5FVwdEsUQpcSNMCLOEBWm/oCGYh8
-        xBYsbKQv9Jtq92G+ahsmj0KKO/XE4RY=
+        bh=NrSVGuN+ZkxpGnBq9VKUcBsPewYH/G3H0ud++SHyqbo=;
+        b=QpgO/QJZg2n4S4sEymYKQ+VxgADrvGa1ctJTJRfJsTZIX3dMxhRsFq0NkVATQFCZXJh3Sb
+        AMdI32XW2aMiLRODBHYAhrIqiL15afWYwy6uj/eH/kfF0/fNdsEiAvAeyawDkO7YOn/swW
+        7r2bCaase5KBE8U76mljZZGO/r5MWwk=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684055901;
+        s=susede2_ed25519; t=1684056070;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YbTG3QHxp4xkrUDBC3uMLRB5y/TSfnVZ4mREVa2fxCE=;
-        b=SUM2jczqVqNtlR26shiac1QIfpQGMBoUdxPlIfI+gXnnxU1iHIBbsLc5qryuKg6PQ51cLi
-        vS/KJrldFTlDp4CA==
+        bh=NrSVGuN+ZkxpGnBq9VKUcBsPewYH/G3H0ud++SHyqbo=;
+        b=ernnJwYMplEK4bqZIK9iCYJ69gRhfvoYnM7M0SDoYFwZXFwDbEEv6VGuFKz1JMpAeklBih
+        h9ZARNAI7gJW6zBQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 41991138F5;
-        Sun, 14 May 2023 09:18:21 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 99E29138F5;
+        Sun, 14 May 2023 09:21:10 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8IUQD12nYGTNTwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Sun, 14 May 2023 09:18:21 +0000
-Date:   Sun, 14 May 2023 11:18:20 +0200
-Message-ID: <878rdr8e5f.wl-tiwai@suse.de>
+        id 52S+JAaoYGSxUAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 14 May 2023 09:21:10 +0000
+Date:   Sun, 14 May 2023 11:21:10 +0200
+Message-ID: <877ctb8e0p.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Ivan Orlov <ivan.orlov0322@gmail.com>
 Cc:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
@@ -57,10 +57,9 @@ Cc:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
         alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
         gregkh@linuxfoundation.org, himadrispandya@gmail.com,
         linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH 2/3] ALSA: Implement the new virtual driver
-In-Reply-To: <20230513202037.158777-2-ivan.orlov0322@gmail.com>
+Subject: Re: [PATCH 1/3] docs: admin-guide: add valsa driver documentation
+In-Reply-To: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
 References: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
-        <20230513202037.158777-2-ivan.orlov0322@gmail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -74,8 +73,12 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 13 May 2023 22:20:36 +0200,
+On Sat, 13 May 2023 22:20:35 +0200,
 Ivan Orlov wrote:
+> 
+> Add documentation for the new Virtual ALSA driver. It covers all possible
+> usage cases: errors and delay injections, random and pattern-based data
+> generation, playback and ioctl redefinition functionalities testing.
 > 
 > We have a lot of different virtual media drivers, which can be used for
 > testing of the userspace applications and media subsystem middle layer.
@@ -94,6 +97,7 @@ Ivan Orlov wrote:
 > driver do:
 > 
 > - Simulate both capture and playback processes
+> - Check the playback stream for containing the looped pattern
 > - Generate random or pattern-based capture data
 > - Inject delays into the playback and capturing processes
 > - Inject errors during the PCM callbacks
@@ -104,36 +108,14 @@ Ivan Orlov wrote:
 > driver redefines the default RESET ioctl, and the selftest covers this PCM
 > API functionality as well.
 > 
-> Pattern-based capture stream data generation works in the following way:
-> user can set the pattern by writing to the 'fill_pattern' debugfs file.
-> After that, the capture stream in case of reading will be filled with this
-> pattern (for example, if the pattern is 'abc', the capture stream will
-> contain 'abcabcabc...'). The pattern itself can be up to 4096 bytes long.
-> 
-> After all, I think this driver would be a good start, and I believe in the
-> future we will see more virtual sound drivers.
-> 
 > Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+> ---
+>  Documentation/admin-guide/index.rst |   1 +
+>  Documentation/admin-guide/valsa.rst | 114 ++++++++++++++++++++++++++++
 
-The idea is interesting, and it's a definitely good thing to have.
-
-I wonder, though, whether it could be better provided as an extention
-to the existing snd-dummy driver.  The advantage of extending
-snd-dummy driver would be that it already supports different formats,
-etc.  OTOH, if we create an individual driver, the pro side is the
-simpleness of the code.
-
-I'm inclined to go with a separate driver, but I'm open about this.
-Maybe Jaroslav and Mark have some opinions?
-
-About this patch set: the driver name should be a bit more specific,
-as this isn't a generic virtual driver that is used for general
-purpose but it's only for testing.  And it's only for testing PCM.
-So, a name like snd-test-pcm would be more appropriate, IMO.
-
-And, we want the coverage of different formats, channels, rates and
-accesses (interleaved vs non-interleaved).  How can we extend somehow
-more for that?
+We have already subdirectories for the sound stuff
+(Documentation/sound/*), and this should go to there, I suppose
+(unless there is somewhere dedicated for each selftest scenario).
 
 
 thanks,
