@@ -2,74 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14FE7019A0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 May 2023 22:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15427701C17
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 May 2023 09:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjEMUVW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 13 May 2023 16:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S229462AbjENHYB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 May 2023 03:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEMUVV (ORCPT
+        with ESMTP id S229447AbjENHYA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 13 May 2023 16:21:21 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50632D6B;
-        Sat, 13 May 2023 13:21:19 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5068638856dso2583039a12.1;
-        Sat, 13 May 2023 13:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684009279; x=1686601279;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=phVfYEyjqUA1/8JzWnwWyJem9HZ6085CTPXJTMUib4g=;
-        b=jfdhvxTIOPKnh+n2ESRxn+iltKq4nh61eRKsxsBV3oW1Ii/X7aBXAv5Nou7cNo3LDK
-         RkQWrcskIMLc2WGI/FXV6llw+fSYLG8RM7SNaurWDObJLBtDDXxaJHfKN/k14P+q0wpT
-         r/R1zhu7SRLCOUKIRIxnvf4WSrTNIEwiGlwlpJnN3XTtUBv87y2s3BfYYYOxyjIO9tCs
-         MJDYr1yzY6cMjC8UXgHF6eC/UOXpuaiXRsfiKCRbj1/Z3s5TV+vNeMW/u1nrNA9I8zOp
-         UrHGgaaaTZOkwa9wtKPliidEM/bI0RQnKBFKIYuLx+/HlLFhzNmVsMa8PGoYxEldKW9c
-         GTrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684009279; x=1686601279;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=phVfYEyjqUA1/8JzWnwWyJem9HZ6085CTPXJTMUib4g=;
-        b=W4Z4Qez4NnIZpO0oRn4zNddvvBdXJrEtLwCVM9L4Ke385lCIYf1Wi/9U1A5ZYVxDxk
-         527Z0MR8zJEvynRhZrqBzgbooKCTsWn8zz1vtcMXtZxJ1JBvQn+4P/Mn1KHi55iahV/L
-         70qRMm2Tu50iOvibkzbIG7RLg92tUVnwQtZwqm9/DXtutUd/7JbRyU1P+G4+6LKjMwrG
-         Ss7+rp4RROiCWBkv996SyTQw50f4KWdapJNjtFqfau0/STqk1cFhvX2WC5iUqu+rVyas
-         mAlBdf6U5veDdfzhQBHbOCRNtIbrM8e49s4Z9LkohCtnltBfSSCGGVdfOaGUOtT0CV6F
-         AS1Q==
-X-Gm-Message-State: AC+VfDzhcL/K88AKkv1kTlflclpgVXhE6MpPSiG7H6QTyECYmhYCEETg
-        UfFeOZHp5tytcy3oPD8RB6U=
-X-Google-Smtp-Source: ACHHUZ6D50diLOr1mJEybUqQgqdZ/OhjmdX7JuUmJJIFtY8WY3xSxqG/VvvFG+eERIrAaYaD9xdCPg==
-X-Received: by 2002:a05:6402:3482:b0:508:40a5:beb4 with SMTP id v2-20020a056402348200b0050840a5beb4mr28652324edc.3.1684009279137;
-        Sat, 13 May 2023 13:21:19 -0700 (PDT)
-Received: from ivan-B550MH.. ([37.252.94.55])
-        by smtp.gmail.com with ESMTPSA id d14-20020a50fb0e000000b0050bc6d0e880sm5109637edq.61.2023.05.13.13.21.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 May 2023 13:21:18 -0700 (PDT)
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-To:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
-        tiwai@suse.com, broonie@kernel.org, skhan@linuxfoundation.org
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org,
-        himadrispandya@gmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH 3/3] selftests: ALSA: Add test for the 'valsa' driver
-Date:   Sun, 14 May 2023 00:20:37 +0400
-Message-Id: <20230513202037.158777-3-ivan.orlov0322@gmail.com>
+        Sun, 14 May 2023 03:24:00 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C0F199E;
+        Sun, 14 May 2023 00:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684049039; x=1715585039;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=npeBkINJGxSpUKevbIGygQlsBP2qc6pkrXvu4pgq/P0=;
+  b=cxCsUnthsil2N/LWw/zopFTfo0uRrDGlaIxYMecg1zSHGRGENx96OmfR
+   yaQ2b+yDwuuL7e3Pvft0IAECx0cLSver+2xoIYFtkduhq6OcKpVFG3yl9
+   M884sFg0y47xXX/mO3+AVAWgWZNnhldC9OBcqmyaeBSsa54WfiadVsdcI
+   o9bGs4622B99q09T7nHNiviEb9W2gAHXPqVBuhW2RU2zwtueo/2InAtt2
+   Tg2HfrKkMXRaYW67nXOiBR4WgmvlXBmczbb13YLrFLfuYJeQ7Tz3PCqn1
+   2jbk9GTxeO0N+ai6ewnqub2WNdi1UHHhWuj8FygdVPNMmtiUvwXEHDBZm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="354167273"
+X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
+   d="scan'208";a="354167273"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 00:23:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="731262936"
+X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
+   d="scan'208";a="731262936"
+Received: from mply-mobl1.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.212.130.17])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 00:23:57 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH v3 0/3] TDX Guest Quote generation support
+Date:   Sun, 14 May 2023 00:23:43 -0700
+Message-Id: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
-References: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,108 +73,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This test covers the new Virtual ALSA driver, including the capturing,
-playback and ioctl redefinition functionalities. This test is also helpful
-as an usage example of the 'valsa' driver.
+Hi All,
 
-We have a lot of different virtual media drivers, which can be used for
-testing of the userspace applications and media subsystem middle layer.
-However, all of them are aimed at testing the video functionality and
-simulating the video devices. For audio devices we have only snd-dummy
-module, which is good in simulating the correct behavior of an ALSA device.
-I decided to write a tool, which would help to test the userspace ALSA
-programs (and the PCM middle layer as well) under unusual circumstances
-to figure out how they would behave. So I came up with this Virtual ALSA
-Driver.
+In TDX guest, the attestation process is used to verify the TDX guest
+trustworthiness to other entities before provisioning secrets to the
+guest.
 
-This new Virtual ALSA Driver has several features which can be useful
-during the userspace ALSA applications testing/fuzzing, or testing/fuzzing
-of the PCM middle layer. Not all of them can be implemented using the
-existing virtual drivers (like dummy or loopback). Here is what can this
-driver do:
+The TDX guest attestation process consists of two steps:
 
-- Simulate both capture and playback processes
-- Generate random or pattern-based capture data
-- Check the playback stream for containing the looped pattern
-- Inject delays into the playback and capturing processes
-- Inject errors during the PCM callbacks
+1. TDREPORT generation
+2. Quote generation.
 
-Also, this driver can check the playback stream for containing the
-predefined pattern, which is used in the corresponding selftest to check
-the PCM middle layer data transferring functionality. Additionally, this
-driver redefines the default RESET ioctl, and the selftest covers this PCM
-API functionality as well.
+The First step (TDREPORT generation) involves getting the TDX guest
+measurement data in the format of TDREPORT which is further used to
+validate the authenticity of the TDX guest. The second step involves
+sending the TDREPORT to a Quoting Enclave (QE) server to generate a
+remotely verifiable Quote. TDREPORT by design can only be verified on
+the local platform. To support remote verification of the TDREPORT,
+TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT
+locally and convert it to a remotely verifiable Quote. Although
+attestation software can use communication methods like TCP/IP or
+vsock to send the TDREPORT to QE, not all platforms support these
+communication models. So TDX GHCI specification [1] defines a method
+for Quote generation via hypercalls. Please check the discussion from
+Google [2] and Alibaba [3] which clarifies the need for hypercall based
+Quote generation support. This patch set adds this support.
 
-After all, I think this driver would be a good start, and I believe in the
-future we will see more virtual sound drivers.
+Support for TDREPORT generation already exists in the TDX guest driver. 
+This patchset extends the same driver to add the Quote generation
+support.
 
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
----
- tools/testing/selftests/alsa/valsa-test.sh | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100755 tools/testing/selftests/alsa/valsa-test.sh
+Following are the details of the patch set:
 
-diff --git a/tools/testing/selftests/alsa/valsa-test.sh b/tools/testing/selftests/alsa/valsa-test.sh
-new file mode 100755
-index 000000000000..872dfac138c2
---- /dev/null
-+++ b/tools/testing/selftests/alsa/valsa-test.sh
-@@ -0,0 +1,55 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test for the 'valsa' virtual driver. It tests capture and playback functionalities,
-+# as well as the 'reset' ioctl redefinition.
-+
-+uid=$(id -u)
-+if [ $uid -ne 0 ]; then
-+	echo "$0: Must be run as root"
-+	exit 1
-+fi
-+
-+if ! which modprobe > /dev/null 2>&1; then
-+	echo "$0: You need modprobe installed"
-+        exit 4
-+fi
-+
-+if ! modinfo snd-valsa > /dev/null 2>&1; then
-+	echo "$0: You must have the following enabled in your kernel:"
-+	echo "CONFIG_SND_ALSAV=m"
-+	exit 4
-+fi
-+
-+modprobe snd-valsa
-+
-+if [ ! -e /sys/kernel/debug/valsa/pc_test ]; then
-+	mount -t debugfs none /sys/kernel/debug
-+
-+	if [ ! -e /sys/kernel/debug/valsa/pc_test ]; then
-+		echo "$0: Error mounting debugfs"
-+		exit 4
-+	fi
-+fi
-+
-+success="1"
-+arecord -D hw:CARD=valsa,DEV=0 -c 1 --buffer-size=8192 -f S16_LE -r 8000 --duration=4 out.wav
-+
-+if [[ $(< /sys/kernel/debug/valsa/ioctl_test) == "$success" ]]; then
-+	echo "$0: ioctl test: success"
-+else
-+	echo "$0: ioctl test: fail"
-+fi
-+
-+aplay -D hw:CARD=valsa,DEV=0 -c 1 --buffer-size=8192 -f S16_LE -r 8000 out.wav
-+
-+if [[ $(< /sys/kernel/debug/valsa/pc_test) == "$success" ]]; then
-+	echo "$0: playback test: success"
-+else
-+	echo "$0: playback test: fail"
-+fi
-+
-+rm -rf out.wav
-+if ! rmmod snd-valsa > /dev/null 2>&1; then
-+	echo "$0: Can't remove 'valsa' module: disable PulseAudio and unload it manually"
-+fi
+Patch 1/3 -> Adds event notification IRQ support.
+Patch 2/3 -> Adds Quote generation support.
+Patch 3/3 -> Adds selftest support for Quote generation feature.
+
+[1] https://cdrdv2.intel.com/v1/dl/getContent/726790, section titled "TDG.VP.VMCALL<GetQuote>".
+[2] https://lore.kernel.org/lkml/CAAYXXYxxs2zy_978GJDwKfX5Hud503gPc8=1kQ-+JwG_kA79mg@mail.gmail.com/
+[3] https://lore.kernel.org/lkml/a69faebb-11e8-b386-d591-dbd08330b008@linux.alibaba.com/
+
+Kuppuswamy Sathyanarayanan (3):
+  x86/tdx: Add TDX Guest event notify interrupt support
+  virt: tdx-guest: Add Quote generation support
+  selftests/tdx: Test GetQuote TDX attestation feature
+
+ Documentation/virt/coco/tdx-guest.rst        |  11 ++
+ arch/x86/coco/tdx/tdx.c                      | 194 +++++++++++++++++++
+ arch/x86/include/asm/tdx.h                   |   8 +
+ drivers/virt/coco/tdx-guest/tdx-guest.c      | 175 ++++++++++++++++-
+ include/uapi/linux/tdx-guest.h               |  44 +++++
+ tools/testing/selftests/tdx/tdx_guest_test.c |  65 ++++++-
+ 6 files changed, 490 insertions(+), 7 deletions(-)
+
 -- 
 2.34.1
 
