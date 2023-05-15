@@ -2,90 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF52C701CD8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 May 2023 12:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1AA70211D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 May 2023 03:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjENKMN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 May 2023 06:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S233993AbjEOB2i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 May 2023 21:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjENKMM (ORCPT
+        with ESMTP id S230281AbjEOB2h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 May 2023 06:12:12 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B5D1985;
-        Sun, 14 May 2023 03:12:11 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-504d149839bso2668031a12.1;
-        Sun, 14 May 2023 03:12:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684059130; x=1686651130;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3yluCXcosZrevjCC2JlavkuAfksHzxF5e6l5bTTacBE=;
-        b=iz+yyxzRQDLWnoppst1CEwUOmQtrnR+WlvFqDNxHCGjAIeYBxb6qPPyCwACmFvCMsC
-         Uyay+Ka36Nybojkh+aNRCqbV3TtPsOyOys25ywg1hMUdPmR2syoQ798Rxs539vYqN85R
-         dPEsGL6CYoLfnmNV3lfNftCjnKh5hBzTby0ZGcS3dlt90oaWJqGVnsvzZUmdOiBAhGcx
-         cH0+uEO+9igr+IDSq85yTogMKAWP1Judjc/QeWoubOiltGwdbvQx+esnEgsuLyComVPu
-         FRS19XpGr1KieeWX8+jraAcOzfBXfZh/EurqECNC853AdiNfIXOyuTn+Wm3pQXS2i+vK
-         HOew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684059130; x=1686651130;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3yluCXcosZrevjCC2JlavkuAfksHzxF5e6l5bTTacBE=;
-        b=SRgmQkyNXHlsODt7eYY9UMLuxUAEM35kIQE9vUsPXYpRGz5IO/zsXofRwmw84dRFSc
-         p4k3Zf34ZGLK83OJm2Nkx+4lcC0icCfcIsGVTT+6gdjxfqOqfuJywWQ0ri6EMQJ0YFLz
-         e5FG2KbfHsaztuMayNO+DKKA6Rbu0+UCslFUQb+IUc0HZkguafkihbdbohOj+FM8fhSG
-         NLsVWThMn8iyh/tq9ZKDBxjugd/+SpTL5lfeT6RPdSRtAGBfdet5S6wsJhpepKHbsh2e
-         JR8pkZg8V7s+EHSgsZgV+NgrzIr+cWK6mghgWtnMr9Wn3xhfQr0LrOUot7CHIOPecBf/
-         Vlfw==
-X-Gm-Message-State: AC+VfDzWYWxN4ovpsb6V+WbEhc7QX3c8Vw+4FhHSEatdC4nyfIRbQRha
-        1G6NgPADuVEnNSO7HrslWMs=
-X-Google-Smtp-Source: ACHHUZ53jcFiyqFVZaWmZ6BG5QzdtkqPc0CsOZ7DLrne5HaLi/baHvYx5HM2X79dfK8omAPCsAoDUg==
-X-Received: by 2002:a17:906:5185:b0:94e:d5d7:67eb with SMTP id y5-20020a170906518500b0094ed5d767ebmr22162527ejk.5.1684059129775;
-        Sun, 14 May 2023 03:12:09 -0700 (PDT)
-Received: from [192.168.10.10] ([37.252.94.55])
-        by smtp.gmail.com with ESMTPSA id v16-20020a056402185000b0050cc4461fc5sm5617797edy.92.2023.05.14.03.12.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 May 2023 03:12:09 -0700 (PDT)
-Message-ID: <1c4ab661-580c-caf5-f4c5-5a959b410ccb@gmail.com>
-Date:   Sun, 14 May 2023 14:12:07 +0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] docs: admin-guide: add valsa driver documentation
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
+        Sun, 14 May 2023 21:28:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5987AB9;
+        Sun, 14 May 2023 18:28:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E961560B20;
+        Mon, 15 May 2023 01:28:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14340C433EF;
+        Mon, 15 May 2023 01:28:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684114115;
+        bh=I20Qcx+0QMlKTWmytfbz1TfDFmdsrpzG804q+DcMxT0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G1Y2xdQfgmvkV3nlC0SWXnCZv8HEt7Eax23r2n7MNPoTbqzv/MyK3LUaH4mVX9nfx
+         +WQQ8nB54nSKvq1alqJITAVnLKiEL59gzUn1tQ4DT3DnCvU+WQyRwne2QkaBN8vvLa
+         OIAXkd3qBS/l1upiwA5SBn5NKWo7K0d77fqqUzJN0fyKqdri3RrGPA803A6g8riOtT
+         FpHDa+Tmkmkr1ZuLD+LZu8lcg19G+ucHnotuRi5srfdmH75F/m9MIoWJ1cqAXZNyrZ
+         MBPgJ3eB5XhqUpwVvtqGhIR8w6JYa8J7WrDw+mOOY/BifTtXRGuJEYqw1PV00I+loP
+         zd4xXi4/X080A==
+Date:   Mon, 15 May 2023 10:28:32 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Ivan Orlov <ivan.orlov0322@gmail.com>
 Cc:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
-        tiwai@suse.com, broonie@kernel.org, skhan@linuxfoundation.org,
+        tiwai@suse.com, skhan@linuxfoundation.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
         gregkh@linuxfoundation.org, himadrispandya@gmail.com,
         linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH 3/3] selftests: ALSA: Add test for the 'valsa' driver
+Message-ID: <ZGGKwA10shGGUr87@finisterre.sirena.org.uk>
 References: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
- <877ctb8e0p.wl-tiwai@suse.de>
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-In-Reply-To: <877ctb8e0p.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ <20230513202037.158777-3-ivan.orlov0322@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7tubSUVrD+xV4Inh"
+Content-Disposition: inline
+In-Reply-To: <20230513202037.158777-3-ivan.orlov0322@gmail.com>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/14/23 13:21, Takashi Iwai wrote:
-> We have already subdirectories for the sound stuff
-> (Documentation/sound/*), and this should go to there, I suppose
-> (unless there is somewhere dedicated for each selftest scenario).
 
-Alright, I'll move the documentation to the sound subfolder. Thank you!
+--7tubSUVrD+xV4Inh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Kind regards,
-Ivan Orlov.
+On Sun, May 14, 2023 at 12:20:37AM +0400, Ivan Orlov wrote:
+
+> +uid=$(id -u)
+> +if [ $uid -ne 0 ]; then
+> +	echo "$0: Must be run as root"
+> +	exit 1
+> +fi
+
+It is not an error to run the selftest as a non-root user, the test
+should be skipped.
+
+> +modprobe snd-valsa
+
+We don't check if the module was already loaded.
+
+> +if [ ! -e /sys/kernel/debug/valsa/pc_test ]; then
+> +	mount -t debugfs none /sys/kernel/debug
+> +
+> +	if [ ! -e /sys/kernel/debug/valsa/pc_test ]; then
+> +		echo "$0: Error mounting debugfs"
+> +		exit 4
+> +	fi
+> +fi
+
+This will unconditionally attempt to mount debugfs in a standard
+location and won't clean up after itself, if the system didn't have
+debugfs mounted for some reason then this will leave it sitting there.
+
+> +success="1"
+> +arecord -D hw:CARD=valsa,DEV=0 -c 1 --buffer-size=8192 -f S16_LE -r 8000 --duration=4 out.wav
+> +
+> +if [[ $(< /sys/kernel/debug/valsa/ioctl_test) == "$success" ]]; then
+> +	echo "$0: ioctl test: success"
+> +else
+> +	echo "$0: ioctl test: fail"
+> +fi
+
+Would it not be better to have a C program that actually calls the ioctl
+rather than a custom debugfs thing that may or may not be wired up to do
+the same thing as an ioctl would?  It seems like other than whatever
+this ioctl test actually does this is all just a simplified version of
+the existing pcm-test.
+
+--7tubSUVrD+xV4Inh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRhir8ACgkQJNaLcl1U
+h9DDEQf+IjmNUuTXgXNfQLkMLf76FazxTesXhLu7ittBq9lGs7S5/GQaJ8QTMgzC
+TddmGnsS6C774id02yqhg4QU04zGQQ66amxkeAcdylaQZlK8e7U4UwKtXHq4UTDU
+X79NmH2oYOE6keq6GYZ7r1KsmfOMD0flHA6+vuq2Lak8PEHms/OlHvQtyNmA7DTE
+YUYAzmBzh+zGmq5dbWloNGsJgmdgdcXh6x8eIMDiCDiCo4JKekDXNlY0f/G7wLuh
+3U5d9Ud/q2VmgXeCMLkCzKR7o9F1p4ym3MLLM2Up9GevfInfJwTih6XyvtW8WKyR
+GdU4RbkyizlI7hiqcmOyBJR1b0Ypcw==
+=E/Qm
+-----END PGP SIGNATURE-----
+
+--7tubSUVrD+xV4Inh--
