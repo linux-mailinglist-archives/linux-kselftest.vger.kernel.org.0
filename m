@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF37170247D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 May 2023 08:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1D070248E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 May 2023 08:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239252AbjEOGXa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 May 2023 02:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S239639AbjEOGYq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 May 2023 02:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjEOGXa (ORCPT
+        with ESMTP id S239350AbjEOGYn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 May 2023 02:23:30 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901319F;
-        Sun, 14 May 2023 23:23:21 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-24df4ef05d4so10520520a91.2;
-        Sun, 14 May 2023 23:23:21 -0700 (PDT)
+        Mon, 15 May 2023 02:24:43 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6CA9F;
+        Sun, 14 May 2023 23:24:40 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-52caed90d17so7778091a12.0;
+        Sun, 14 May 2023 23:24:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684131801; x=1686723801;
+        d=gmail.com; s=20221208; t=1684131880; x=1686723880;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mDHXdNQbYhXSREb9b4s64DzzPtUQRB9+Khu+X4RcHb8=;
-        b=ZeNtexfq5V2ww/s02fXWGGUBRJqKqYrmmFjDJafk3vXa/fPrFT799BakZLoKwsVFNv
-         izP6vKF1/85VbAMdjmsPkZt3PdteckEBye0bynlcVhmteIZjfeoIQgxsB6+Yy8Qnhtky
-         lMqpcHYhWYV8x40rRYT6YecJjtSmGOKV3sutT52Y5Ugx6ho8DMyPGJpGuSHFW3tuHWNO
-         5sPWCM/vFD+hzYghT1ekgimxBWT49Z+PxaqsXUgg3gs1E6Af6AHunZaZEv5mqeOHHpp9
-         2IqPIgZDENpO7xMJiLYAlPQSOzgURsxOIB/j89xuuAxZiKS7jmnCyvXKTzGVxFDo9Ow6
-         Bj5g==
+        bh=ipVfxboz2N3BTbhUZctFrasYMvC8E8GR8fiHDB5wG9A=;
+        b=K/Ds5UQDShQ1jfqjq8VIbQzq9KL8b4ueLhmM+jbfvGykQOm9udF30CIzh7yLh0AyyW
+         VYx2xlivf2OSEdspjfb8Gx7JMtCBsJInxMc/fFczq4kfjpAo0USZOFUZc6QxtZNJ4j3N
+         E79DBz4t+N8DzEbdPJRBFSlFxD+9mq6SDrSMmmWHAeKYSgfnh2tpWRcuuT+67GCsSXQ/
+         FP3HV5EZfoM11bfhNw1pyATMs6J2zLTpG+S2im1DBjb52UWpC5TQMtLjdJSk97kejt+d
+         ZrAzPOBGlVVTLZU9eegXT+l0o/7mv0ugLJBck6gy/AjW0mGGRfvrYJoYuhwH2BEWATXt
+         pymQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684131801; x=1686723801;
+        d=1e100.net; s=20221208; t=1684131880; x=1686723880;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mDHXdNQbYhXSREb9b4s64DzzPtUQRB9+Khu+X4RcHb8=;
-        b=B5/JfAufdOJNyVApEFmaDwzqexSfuFONFr3fR5KRLH7kFYkbaYjYXFnXzTj9Q5Ul1G
-         q5eKpdOsfXeh6DTj810nqSLlFraWg+c/icDu6ALXlFbRrxxzuWpAAezccLx8HJx/5Z4Q
-         PS7Hjj9kZ7dSiumVS+nHiZxDR5XLVQMi2wLvZHLCvL57bk2xaXWjasQuxdyfJOKlHR/m
-         ExTvFXlVFuv82HBEYyslgulSrWZTglSMT4HaMN6MtE8Kc7wZTxRJbzgvE337UA7Gz7Tg
-         OWW3KwUrixKGiwmgKLcAq6MIQu0O4oiYyWo/cJFVnFghY9GGvwNiZa4uhVezo2JyH/Mq
-         kAjQ==
-X-Gm-Message-State: AC+VfDw5Bhe1EnuTFBQsBzE5hpUDRghhtNhWaxI2rP5ss2FK5wCNsMlT
-        hlN3tn1XyEPdN/PQ5WWri8euMthsyIZxWwVWWoU=
-X-Google-Smtp-Source: ACHHUZ4GdM02yWWd/RVw6ZxMm0XmPUpxEPRJsgbK9JVDUKhxwEH/odjmbP5Y3hDS8qB0Pue4YJGzxOTNrLFlI4ViqR4=
-X-Received: by 2002:a17:90a:db49:b0:250:d137:e2ae with SMTP id
- u9-20020a17090adb4900b00250d137e2aemr17275992pjx.23.1684131800927; Sun, 14
- May 2023 23:23:20 -0700 (PDT)
+        bh=ipVfxboz2N3BTbhUZctFrasYMvC8E8GR8fiHDB5wG9A=;
+        b=Ob1oLNPv7UZCEYzxzV8UVeAv28qv3ZYiSly+mgYgoAKTiea9/Hnb1a45lINmSixoFS
+         hU12ipxaDR9Hur4wq2aT1G3LiLEB+aAbuAiggi7/5dWEghuwEo/bl/WOBM6YoAjdpaFe
+         NrD4P4a9gNb+OT75yYUWsxcKOMqkVAhWUEYXo0G3Uex+4O2stBsZ9W3FpWjFpggbfdnc
+         mDq6SyodrLnpI94fw0NYZSFPXpvUa38BmHSo0EeLikh6dUqpUtmHPSu7Y0XxgltX2Dws
+         7JwsT4sPrW5M22Q86IhkbAmAtUYEHZP4QlwPYdoYCv00no3Ld+rQtPkBM4MYN91Xlv66
+         ExBA==
+X-Gm-Message-State: AC+VfDyuMyne+u4KCGcf9EUjW7qw5v5d9uL3OwpL0tKF76HGBRPbVUus
+        G39kWewu1LGu4AXltoIYRtxmxOlkDG0I/NGMXSA=
+X-Google-Smtp-Source: ACHHUZ4wRiCLeYPgQOiKNNvZY75L/XiRY4hGc1xrqkwiizwTTiO+743uCn+9bRYh7GxEKf2LBVi2VCi/iVrz18zFAOQ=
+X-Received: by 2002:a17:90a:d48d:b0:252:a7b5:723f with SMTP id
+ s13-20020a17090ad48d00b00252a7b5723fmr11803679pju.2.1684131879992; Sun, 14
+ May 2023 23:24:39 -0700 (PDT)
 MIME-Version: 1.0
 References: <cover.1683791148.git.haibo1.xu@intel.com> <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
- <20230511-d0a207eebb30fc88de875e4f@orel>
-In-Reply-To: <20230511-d0a207eebb30fc88de875e4f@orel>
+ <20230511-boozy-comic-5bc8f297dc8e@spud> <20230511-leverage-backspin-34bcde885006@spud>
+In-Reply-To: <20230511-leverage-backspin-34bcde885006@spud>
 From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Mon, 15 May 2023 14:23:09 +0800
-Message-ID: <CAJve8o=3VaQkjtgPnqeTtOcnNLEptUJzekoUgqaZ86K6GAF08A@mail.gmail.com>
+Date:   Mon, 15 May 2023 14:24:28 +0800
+Message-ID: <CAJve8okYNEbk2PwXVzx+dMSq+uci=W_tpShNv3FER=pWRUymWw@mail.gmail.com>
 Subject: Re: [PATCH 1/2] riscv: kvm: Add KVM_GET_REG_LIST API support
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>,
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Haibo Xu <haibo1.xu@intel.com>, ajones@ventanamicro.com,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Anup Patel <anup@brainfault.org>,
@@ -80,58 +80,42 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 12, 2023 at 12:40=E2=80=AFAM Andrew Jones <ajones@ventanamicro.=
-com> wrote:
+On Fri, May 12, 2023 at 6:48=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
+te:
 >
-> On Thu, May 11, 2023 at 05:22:48PM +0800, Haibo Xu wrote:
-> > KVM_GET_REG_LIST API will return all registers that are available to
-> > KVM_GET/SET_ONE_REG APIs. It's very useful to identify some platform
-> > regression issue during VM migration.
+> On Thu, May 11, 2023 at 11:25:41PM +0100, Conor Dooley wrote:
+> > On Thu, May 11, 2023 at 05:22:48PM +0800, Haibo Xu wrote:
+> > > KVM_GET_REG_LIST API will return all registers that are available to
+> > > KVM_GET/SET_ONE_REG APIs. It's very useful to identify some platform
+> > > regression issue during VM migration.
+> > >
+> > > Since this API was already supported on arm64, it'd be straightforwar=
+d
+> > > to enable it on riscv with similar code structure.
 > >
-> > Since this API was already supported on arm64, it'd be straightforward
-> > to enable it on riscv with similar code structure.
-> >
-> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > ---
-> >  Documentation/virt/kvm/api.rst |   2 +-
-> >  arch/riscv/kvm/vcpu.c          | 346 +++++++++++++++++++++++++++++++++
-> >  2 files changed, 347 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/ap=
-i.rst
-> > index add067793b90..280e89abd004 100644
-> > --- a/Documentation/virt/kvm/api.rst
-> > +++ b/Documentation/virt/kvm/api.rst
-> > @@ -3499,7 +3499,7 @@ VCPU matching underlying host.
-> >  ---------------------
-> >
-> >  :Capability: basic
-> > -:Architectures: arm64, mips
-> > +:Architectures: arm64, mips, riscv
-> >  :Type: vcpu ioctl
-> >  :Parameters: struct kvm_reg_list (in/out)
-> >  :Returns: 0 on success; -1 on error
-> > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> > index 8bd9f2a8a0b9..fb8834e4fa15 100644
-> > --- a/arch/riscv/kvm/vcpu.c
-> > +++ b/arch/riscv/kvm/vcpu.c
-> > @@ -657,6 +657,334 @@ static int kvm_riscv_vcpu_set_reg_isa_ext(struct =
-kvm_vcpu *vcpu,
-> >       return 0;
-> >  }
-> >
-> > +static inline unsigned long num_config_regs(void)
-> > +{
-> > +     return sizeof(struct kvm_riscv_config) / sizeof(unsigned long);
+> > Applied on top of v6.4-rc1 this breaks the build :/
 >
-> We can't assume all config registers are present. For example,
-> zicbom and zicboz block size registers are only present when their
-> respective extensions are available.
+> I lied, I forgot W=3D1 is enabled for the allmodconfig builds in the
+> patchwork automation.
+> The warnings are trivial to fix, so you should fix them anyway!
 >
-> Thanks,
-> drew
 
-Yes, I will filter out these kinds of registers in the next version.
+sure, I will fix them in the next version.
 
 Thanks,
 Haibo
+
+> > warning: Function parameter or member 'vcpu' not described in 'kvm_risc=
+v_vcpu_num_regs'
+> > warning: Function parameter or member 'uindices' not described in 'kvm_=
+riscv_vcpu_copy_reg_indices'
+> > warning: Function parameter or member 'vcpu' not described in 'kvm_risc=
+v_vcpu_copy_reg_indices'
+> >
+> > You have a bunch of kerneldoc comments (the ones with /**) that are not
+> > valid kerneldoc. Apparently allmodconfig catches that!
+> >
+> > Cheers,
+> > Conor.
+>
+>
