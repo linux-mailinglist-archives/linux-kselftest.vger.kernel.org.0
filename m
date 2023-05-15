@@ -2,230 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6424703032
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 May 2023 16:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5D47032F5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 May 2023 18:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238322AbjEOOmP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 May 2023 10:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
+        id S242738AbjEOQb3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 May 2023 12:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234853AbjEOOmO (ORCPT
+        with ESMTP id S242718AbjEOQb0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 May 2023 10:42:14 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243D8E55
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 May 2023 07:42:13 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f38a9918d1so1441301cf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 May 2023 07:42:13 -0700 (PDT)
+        Mon, 15 May 2023 12:31:26 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA3C10F3;
+        Mon, 15 May 2023 09:31:17 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-306281edf15so12324816f8f.1;
+        Mon, 15 May 2023 09:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684161732; x=1686753732;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xivJhdpQaweyzm6nbX3Ea6ei977VI1nEaj15dJjfUJY=;
-        b=LfuJOEaIB58sGTFfv23yzuCJolheVTJXvLkYJ1qK1oPHaLr1UvzuZuRtTRvqpID3N6
-         jL5AV5D0cs/N9+U8AOpCLdWjAWZHCLaPvfYJcggpTqRZAEtz1N6nejos4oP2mwv74SUc
-         KCO0kiKYYL2d7MZqUZYVw0fepdUctVAE6/x7j0VnOVU7atm1aGQDKvK59K3fTJHLf+Nk
-         z98Pt572j6TiPVUf4g1nc0dOxUeUBrLF9i7xjR8TUPNTbkApLSQqFbmRINRkWHbGHqDJ
-         hVKMCCqHmM0LkmqjyWa+vIrmukdOJHQNq5oP1ZonuU2lRL5V4enNf44uWTocN9vr1lna
-         Y6yA==
+        d=gmail.com; s=20221208; t=1684168276; x=1686760276;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xj0LlUHkMs1f/PPwjZMnEi9vur/RUIxqtgTnxaH1HHs=;
+        b=Tej0A0SVFNljYQvApjPnFcxl/jMGuS4pY5Ha2t/wxklAj5BDMFqwnWeo4iWAqBlEBf
+         flToiFDTEQLXIJsENh8Gf373G1RY7yWUx5xsP4ZebDJjJkJT3BEbUrjeiC1EV1VHoTtF
+         /vKy/iZcG6d6Rdg3n+pmWu5HJm1lxcR3HU9LTMU2/KGJe7i608OmKmkfACFMxxMcmjkp
+         MLxFXOQdKOXqMH72A3hPIlD5zGkpGbmpK9X5IWL1MQsp+xmaGaPDP7CdJiAlfQTsn0Ow
+         lSIR0hJqBtxJLzIH4aQEGQxKRF78gqRo0lU4f6b6fXixUcI0UfN9u1hUykmqsiX4dQPe
+         dIrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684161732; x=1686753732;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xivJhdpQaweyzm6nbX3Ea6ei977VI1nEaj15dJjfUJY=;
-        b=az1l5T146dcD3cVSB0E+zxU1XSLK/huGcvo9W2RuDhkKK7NmN6ASlyYaA6Aayl3GsL
-         l0Sy9SLmZ5H7f2de6f2DX7EJErC3QGEOoK06d4znbY/BZ+0qhl9rgSroxHyY4ImZFtTo
-         TDppWkLYQfbDzvCjtlMMXfsy+wCfntjwx9ssNoWFbgHgoWEBY8vo4YQyF53uCyjg8I1F
-         xwKS0QkGPoEUrVnXwlUuHFYhHlTYR9VGqRewd5CcdABU9+8YFaHLV9to7khlJp37aBIx
-         UmlXFy+IuzgwYb+cFiU0u05iRtBHt62fB5D/B7MbPa0EN/X252Sbsw6vZgVwaQpKQYGJ
-         /oSg==
-X-Gm-Message-State: AC+VfDzpBT0IrIhmj8DrGqp0A7Y0myP1OKYYYVrgoXykgcgWLJjLkJXE
-        5dWuiBYL/ixjOOqhXbxd1ptC2Ey0BJE25+n2twK9ew==
-X-Google-Smtp-Source: ACHHUZ6afn6VrL2MCyAGl7ShdiUs37uFwI48FL1gg0fFLy7/ADtJp4aFqUMoAc4tT7/DiotY9KrN8q9Cy9n517Cb7KY=
-X-Received: by 2002:a05:622a:d5:b0:3f2:2c89:f1ef with SMTP id
- p21-20020a05622a00d500b003f22c89f1efmr7073qtw.5.1684161732039; Mon, 15 May
- 2023 07:42:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684168276; x=1686760276;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xj0LlUHkMs1f/PPwjZMnEi9vur/RUIxqtgTnxaH1HHs=;
+        b=iCUKK09LkbZ77epxwirx5UD4NLwh6QbwVBFu885VyO7T1ke40bbZFEdNxxe806ZzuD
+         7umEbc/IF3q6m+3V6V0Wlxuk/CDo6kKF2Mm66doulSBmzemxmIC/XuGjUd4sJV4uqf9f
+         7vpUaw8kUDCaAxHjAOQLItJsPEag42ZHU5iiyyrHdggLKK25WyDltJiBj+E9RneBv910
+         B6QPmin+NsMA0Jt+YC/2hgs7BKi2s2z0csBPQVdusMD8cSY5eB4vzQzgFkMgAN111RFo
+         SVI+ciyZOY6WS96eWwGSwKY8Z2FTbHq2f96emaMJRXZtM74gFU8sT+Ad4CD+1/Qmf8ns
+         s5zA==
+X-Gm-Message-State: AC+VfDxzKSrRT9Y4U2d8wh5q+GbSwhd3UQZ1glbhT9NfUgwoxJOJaOTb
+        Z9scVndsOJMWKRMDpktPfMc=
+X-Google-Smtp-Source: ACHHUZ4exiePmSzMSaub/V47LjNfg6KE9x175cxCNihSkCYAUDOuWxIYk+H2LH/BQb2PrKb5025TYQ==
+X-Received: by 2002:adf:e351:0:b0:306:2eab:fb8c with SMTP id n17-20020adfe351000000b003062eabfb8cmr26143380wrj.42.1684168275652;
+        Mon, 15 May 2023 09:31:15 -0700 (PDT)
+Received: from fedora ([94.73.33.248])
+        by smtp.gmail.com with ESMTPSA id 3-20020a05600c028300b003f4e4f51f64sm14756542wmk.7.2023.05.15.09.31.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 09:31:15 -0700 (PDT)
+Date:   Mon, 15 May 2023 18:31:13 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     David Gow <davidgow@google.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: uclogic: Modular KUnit tests should not depend on
+ KUNIT=y
+Message-ID: <ZGJeUd76XaFqHhN0@fedora>
+References: <36ddf432f0f46530875fa15f002012c921a380a3.1683022021.git.geert+renesas@glider.be>
+ <CABVgOSmYapFcpnrC60o4r5LznT92TpjteNb=1MQejvMDWC+2vw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230421141723.2405942-1-peternewman@google.com>
- <20230421141723.2405942-4-peternewman@google.com> <38b9e6df-cccd-a745-da4a-1d1a0ec86ff3@intel.com>
- <CALPaoCg76nUsJ7eYcU61gied8WBuAAmqy0Pqpsq5=Z-S52Qg6w@mail.gmail.com> <31993ea8-97e5-b8d5-b344-48db212bc9cf@intel.com>
-In-Reply-To: <31993ea8-97e5-b8d5-b344-48db212bc9cf@intel.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Mon, 15 May 2023 16:42:01 +0200
-Message-ID: <CALPaoCiPCxUeGKjZytxmse2oNs=qDBbRY9kH7AZGG6iXf1qtJw@mail.gmail.com>
-Subject: Re: [PATCH v1 3/9] x86/resctrl: Add resctrl_mbm_flush_cpu() to
- collect CPUs' MBM events
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stephane Eranian <eranian@google.com>,
-        James Morse <james.morse@arm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABVgOSmYapFcpnrC60o4r5LznT92TpjteNb=1MQejvMDWC+2vw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Reinette,
-
-On Fri, May 12, 2023 at 5:26=E2=80=AFPM Reinette Chatre
-<reinette.chatre@intel.com> wrote:
-> On 5/12/2023 6:25 AM, Peter Newman wrote:
-> > On Thu, May 11, 2023 at 11:37=E2=80=AFPM Reinette Chatre
-> > <reinette.chatre@intel.com> wrote:
-> >> On 4/21/2023 7:17 AM, Peter Newman wrote:
-> >>> Implement resctrl_mbm_flush_cpu(), which collects a domain's current =
-MBM
-> >>> event counts into its current software RMID. The delta for each CPU i=
-s
-> >>> determined by tracking the previous event counts in per-CPU data.  Th=
-e
-> >>> software byte counts reside in the arch-independent mbm_state
-> >>> structures.
-> >>
-> >> Could you elaborate why the arch-independent mbm_state was chosen?
+On Thu, May 04, 2023 at 02:04:18PM +0800, David Gow wrote:
+> On Tue, 2 May 2023 at 18:09, Geert Uytterhoeven <geert+renesas@glider.be> wrote:
 > >
-> > It largely had to do with how many soft RMIDs to implement. For our
-> > own needs, we were mainly concerned with getting back to the number of
-> > monitoring groups the hardware claimed to support, so there wasn't
-> > much internal motivation to support an unbounded number of soft RMIDs.
->
-> Apologies for not being explicit, I was actually curious why the
-> arch-independent mbm_state, as opposed to the arch-dependent state, was
-> chosen.
->
-> I think the lines are getting a bit blurry here with the software RMID
-> feature added as a resctrl filesystem feature (and thus non architectural=
-),
-> but it is specific to AMD architecture.
-
-The soft RMID solution applies conceptually to any system where the
-number of hardware counters is smaller than the number of desired
-monitoring groups, but at least as large as the number of CPUs. It's a
-solution we may need to rely on more in the future as it's easier for
-monitoring hardware to scale to the number of CPUs than (CPUs *
-mbm_domains). I believed the counts in bytes would apply to the user
-interface universally.
-
-However, I did recently rebase these changes onto one of James's MPAM
-snapshot branches and __mbm_flush() did end up fitting better on the
-arch-dependent side, so I was forced to move the counters over to
-arch_mbm_state because on the snapshot branch the arch-dependent code
-cannot see the arch-independent mbm_state structure. I then created
-resctrl_arch-() helpers for __mon_event_count() to read the counts
-from the arch_mbm_state.
-
-In hindsight, despite generic-looking code being able to retrieve the
-CPU counts with resctrl_arch_rmid_read(), the permanent assignment of
-a HW RMID to a CPU is an implementation-detail specific to the
-RDT/PQoS interface and would probably not align to a theoretical MPAM
-implementation.
-
->
-> > However, breaking this artificial connection between supported HW and
-> > SW RMIDs to support arbitrarily-many monitoring groups could make the
-> > implementation conceptually cleaner. If you agree,  I would be happy
-> > to give it a try in the next series.
->
-> I have not actually considered this. At first glance I think this would
-> add more tentacles into the core where currently the number of RMIDs
-> supported are queried from the device and supporting an arbitrary number
-> would impact that. At this time the RMID state is also pre-allocated
-> and thus not possible to support an "arbitrarily-many".
-
-Yes, this was the part that made me want to just leave the RMID count alone=
-.
-
-
->
-> >>> +/*
-> >>> + * Called from context switch code __resctrl_sched_in() when the cur=
-rent soft
-> >>> + * RMID is changing or before reporting event counts to user space.
-> >>> + */
-> >>> +void resctrl_mbm_flush_cpu(void)
-> >>> +{
-> >>> +     struct rdt_resource *r =3D &rdt_resources_all[RDT_RESOURCE_L3].=
-r_resctrl;
-> >>> +     int cpu =3D smp_processor_id();
-> >>> +     struct rdt_domain *d;
-> >>> +
-> >>> +     d =3D get_domain_from_cpu(cpu, r);
-> >>> +     if (!d)
-> >>> +             return;
-> >>> +
-> >>> +     if (is_mbm_local_enabled())
-> >>> +             __mbm_flush(QOS_L3_MBM_LOCAL_EVENT_ID, r, d);
-> >>> +     if (is_mbm_total_enabled())
-> >>> +             __mbm_flush(QOS_L3_MBM_TOTAL_EVENT_ID, r, d);
-> >>> +}
-> >>
-> >> This (potentially) adds two MSR writes and two MSR reads to what could=
- possibly
-> >> be quite slow MSRs if it was not designed to be used in context switch=
-. Do you
-> >> perhaps have data on how long these MSR reads/writes take on these sys=
-tems to get
-> >> an idea about the impact on context switch? I think this data should f=
-eature
-> >> prominently in the changelog.
+> > While KUnit tests that cannot be built as a loadable module must depend
+> > on "KUNIT=y", this is not true for modular tests, where it adds an
+> > unnecessary limitation.
 > >
-> > I can probably use ftrace to determine the cost of an __rmid_read()
-> > call on a few implementations.
->
-> On a lower level I think it may be interesting to measure more closely
-> just how long a wrmsr and rdmsr take on these registers. It may be intere=
-sting
-> if you, for example, use rdtsc_ordered() before and after these calls, an=
-d then
-> compare it to how long it takes to write the PQR register that has been
-> designed to be used in context switch.
->
-> > To understand the overall impact to context switch, I can put together
-> > a scenario where I can control whether the context switches being
-> > measured result in change of soft RMID to prevent the data from being
-> > diluted by non-flushing switches.
->
-> This sounds great. Thank you very much.
+> > Fix this by relaxing the dependency to "KUNIT".
+> >
+> > Fixes: 08809e482a1c44d9 ("HID: uclogic: KUnit best practices and naming conventions")
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > ---
+> 
+> This works here, and I definitely agree we should get rid of these
+> unnecessary constraints.
+> 
+> Let me know if this should go in via the kselftest/kunit tree, or if
+> it makes sense to take this via input?
+> 
+> Reviewed-by: David Gow <davidgow@google.com>
+> 
+> Cheers,
+> -- David
+> 
+> >  drivers/hid/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+> > index 4ce012f83253ec9f..b977450cac75265d 100644
+> > --- a/drivers/hid/Kconfig
+> > +++ b/drivers/hid/Kconfig
+> > @@ -1285,7 +1285,7 @@ config HID_MCP2221
+> >
+> >  config HID_KUNIT_TEST
+> >         tristate "KUnit tests for HID" if !KUNIT_ALL_TESTS
+> > -       depends on KUNIT=y
+> > +       depends on KUNIT
 
-I used a simple parent-child pipe loop benchmark with the parent in
-one monitoring group and the child in another to trigger 2M
-context-switches on the same CPU and compared the sample-based
-profiles on an AMD and Intel implementation. I used perf diff to
-compare the samples between hard and soft RMID switches.
+Tested here as well with different configurations for the UCLogic
+driver and it is working.
 
-Intel(R) Xeon(R) Platinum 8173M CPU @ 2.00GHz:
-
-              +44.80%  [kernel.kallsyms]  [k] __rmid_read
-    10.43%     -9.52%  [kernel.kallsyms]  [k] __switch_to
-
-AMD EPYC 7B12 64-Core Processor:
-
-              +28.27%  [kernel.kallsyms]  [k] __rmid_read
-    13.45%    -13.44%  [kernel.kallsyms]  [k] __switch_to
-
-Note that a soft RMID switch that doesn't change CLOSID skips the
-PQR_ASSOC write completely, so from this data I can roughly say that
-__rmid_read() is a little over 2x the length of a PQR_ASSOC write that
-changes the current RMID on the AMD implementation and about 4.5x
-longer on Intel.
-
-Let me know if this clarifies the cost enough or if you'd like to also
-see instrumented measurements on the individual WRMSR/RDMSR
-instructions.
-
-Thanks!
--Peter
+Reviewed-by: José Expósito <jose.exposito89@gmail.com>
