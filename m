@@ -2,93 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9C1702966
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 May 2023 11:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170337029CA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 May 2023 11:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbjEOJp3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 May 2023 05:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47370 "EHLO
+        id S240188AbjEOJ7X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 May 2023 05:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241052AbjEOJpE (ORCPT
+        with ESMTP id S240388AbjEOJ7T (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 May 2023 05:45:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F9110DD;
-        Mon, 15 May 2023 02:43:15 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a0c:5a83:9203:ad00:2382:dff5:d060:ac62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: rcn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6933966031D7;
-        Mon, 15 May 2023 10:43:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684143793;
-        bh=+MCskmCGmJIvWHAj2wGlAPgVjUersyVw3itl9FDTp5w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ka60WAbh4l1VgDuo+v2GG9+WQHy4LUUFlDeIMv+GY0t0i8NC2P1YMLiHO6akxXi+Y
-         Tx8aNMGzzrcof4O+eCPsPnUyAUwgaBIRHmcsbsrLM5hxhL92g0wkv+e72M3toM8Jv9
-         1ih7eTozqvjiNZUHWWKbt6RvEn87/R1LrtFE/StQuKYlLkydl120lRDXDZXSexyEoM
-         1evc/M2rz7U+NNKMsqbFjhwsUvQelBvDMJhiNy8FaxDBatvaW45ZoCGnfbssq9y6u8
-         WQewBeTvw2wttPsMIpy00MR0MR3txkWpsmM/g2mZqWdtCAWuPQKJ9P1QEbhrwCWdGu
-         ni22R/h32NcuQ==
-Date:   Mon, 15 May 2023 11:43:10 +0200
-From:   Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>,
-        kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftest/alsa: Increase kselftest timeout
-Message-ID: <20230515094310.hulpyhhtb4sxxn7i@rcn-XPS-13-9305>
-References: <20221213183242.1908249-1-nfraprado@collabora.com>
- <2ee34e21-44bd-71e7-6da2-f4bea9a35452@linuxfoundation.org>
+        Mon, 15 May 2023 05:59:19 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C4D136
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 May 2023 02:59:14 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-77d46c7dd10so57237379241.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 May 2023 02:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684144754; x=1686736754;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dkgDMUFKoJHfejJzBAn4bFUw4F0nEh6FJxDMkvZCPFA=;
+        b=V+Xvqp779ny2MsbmlIzw0OFrDjfs98TdIh+4XNR6CXe3+QJerVBMmM9b3g0pmNWKx0
+         0nXB8ienT+3A81SEtMTqehCNEG+f1Hjxp1PH7ji3EY4GIeflwUJhqDf0hFH8aganqKex
+         ngBBCQHJlSyvuyScA2a96peBUnij08ALJyR4W4WQK0Brm9f1+HQajBpuocaoWLApm0JR
+         JctNF3hCrLdKqRCSrZOYnBtcIgYr9pCXxPwAC542uvOx4DI6jnTNy1PWByN67/BqzNQ3
+         3X18zXr4j5ieLhaC85D/ahDZWzSAskZ0SiIIIaxuVhbj1A2rp7ob186xG7Zz1Z0llTDC
+         8NBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684144754; x=1686736754;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dkgDMUFKoJHfejJzBAn4bFUw4F0nEh6FJxDMkvZCPFA=;
+        b=SKbXRMN6g2vGSmlmhk4ydj6Unh0pc/7TZSfdNGM6gn2tvq/2aOmnFNRHhmCj1HDqWl
+         x15371EOslaj2IAKF4gZ0/S+InugzHpk8gggXResaoe/ZdJdCxLkcO+eSKSurx4UKrR/
+         hTnbNJyQdrzSFMxqIh0MS9E3daAqAtAbZ4Wx8OvZzvGMGeVp1/XVViWs0oiaNiMxAgID
+         4gHpnxBYB2A+BXzuuk9tnBK2HcntD0aEPRbUHNUllhMG3YfmouuIDy2yzgHFN/e87rHh
+         vIQM35E1fH5GS/rGikB/Z3RyS8lGdGdex4FcmBf+i1sR17ZBsLTfw0k24K2LQsIR61LJ
+         U3Mw==
+X-Gm-Message-State: AC+VfDwBdIy6WBDEJo0ZxbmDW83qczaWoHrBLDoJdrk1BNkd5yZBIBPL
+        b8mNYFMeH8GkfubRoAQ93rywpWZTxV4th4FEtyT7/g==
+X-Google-Smtp-Source: ACHHUZ5czZmpY3AQl04UbpcvPd0ySjdIS54jYs4VwPUYgvxWfc2h/VO2G8HK+SHK+QtrSclhacnC8fKI+PaRfRCzbQQ=
+X-Received: by 2002:a1f:5c90:0:b0:440:4946:fac with SMTP id
+ q138-20020a1f5c90000000b0044049460facmr11965983vkb.4.1684144753365; Mon, 15
+ May 2023 02:59:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2ee34e21-44bd-71e7-6da2-f4bea9a35452@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 15 May 2023 15:29:02 +0530
+Message-ID: <CA+G9fYuoB8Ug8PcTU-YGmemL7_eeEksXFihvxWF6OikD7sK7pA@mail.gmail.com>
+Subject: selftests: mincore: mincore_selftest fails only on qemu-armv7
+To:     open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc:     =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
+The selftests: mincore: mincore_selftest fails only on qemu-armv7 running
+Linux next, mainline and stable branches.
 
-Bumping an old thread, this is still an issue for this test [1] and it
-could end up affecting many others.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-On mar 13-12-2022 11:37:56, Shuah Khan wrote:
-> On 12/13/22 11:32, Nícolas F. R. A. Prado wrote:
-> > The default timeout for kselftests is 45 seconds, but pcm-test can take
-> > longer than that to run depending on the number of PCMs present on a
-> > device.
-> > 
-> > As a data point, running pcm-test on mt8192-asurada-spherion takes about
-> > 1m15s.
-> > 
-> > Set the timeout to 10 minutes, which should give enough slack to run the
-> > test even on devices with many PCMs.
-> > 
-> 
-> 10 minutes is way too long.
+# selftests: mincore: mincore_selftest
+# TAP version 13
+# 1..5
+# # Starting 5 tests from 1 test cases.
+# #  RUN           global.basic_interface ...
+# #            OK  global.basic_interface
+# ok 1 global.basic_interface
+# #  RUN           global.check_anonymous_locked_pages ...
+# #            OK  global.check_anonymous_locked_pages
+# ok 2 global.check_anonymous_locked_pages
+# #  RUN           global.check_huge_pages ...
+# # mincore_selftest.c:156:check_huge_pages:mmap error: Invalid argument
+# # mincore_selftest.c:159:check_huge_pages:Expected 0 (0) == retval (-1)
+# # check_huge_pages: Test terminated by assertion
+# #          FAIL  global.check_huge_pages
+# not ok 3 global.check_huge_pages
+# #  RUN           global.check_file_mmap ...
+# #            OK  global.check_file_mmap
+# ok 4 global.check_file_mmap
+# #  RUN           global.check_tmpfs_mmap ...
+# #            OK  global.check_tmpfs_mmap
+# ok 5 global.check_tmpfs_mmap
+# # FAILED: 4 / 5 tests passed.
+# # Totals: pass:4 fail:1 xfail:0 xpass:0 skip:0 error:0
 
-Is there a downside to that? There'll be some tests that take more time,
-I don't think that's a problem with the tests or a reason to let them
-timeout. IMO it's the test framework which should adapt to the needs of
-different types of tests, and the solution provided by this patch is
-good enough, it addresses the problem for this particular test suite.
+logs:
+https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2PnaQ12zfS0p4KS5pP37ZIHJR0U
 
-If the solution is still unacceptable, do you have an alternative
-proposal in mind that we can try to implement?
+History:
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.4-rc2/testrun/16947285/suite/kselftest-mincore/test/mincore_mincore_selftest/history/
 
-Thanks,
-Ricardo
 
-[1] https://linux.kernelci.org/test/case/id/646127cf62438996ba2e8648/
+Steps to reproduce:
+----------------
+# To install tuxrun on your system globally:
+# sudo pip3 install -U tuxrun==0.42.0
+#
+# See https://tuxrun.org/ for complete documentation.
+
+tuxrun   \
+ --runtime podman   \
+ --device qemu-armv7   \
+ --boot-args rw   \
+ --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2PnaP3qqppMDr51qUdKv971IZrE/zImage
+  \
+ --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2PnaP3qqppMDr51qUdKv971IZrE/modules.tar.xz
+  \
+ --rootfs https://storage.tuxboot.com/debian/bookworm/armhf/rootfs.ext4.xz   \
+ --parameters SKIPFILE=skipfile-lkft.yaml   \
+ --parameters KSELFTEST=https://storage.tuxsuite.com/public/linaro/lkft/builds/2PnaP3qqppMDr51qUdKv971IZrE/kselftest.tar.xz
+  \
+ --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f   \
+ --tests kselftest-mincore   \
+ --timeouts boot=30
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
