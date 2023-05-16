@@ -2,102 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962717050B2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 May 2023 16:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D0C70512B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 May 2023 16:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233901AbjEPO2C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 May 2023 10:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S234019AbjEPOpx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 May 2023 10:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233811AbjEPO17 (ORCPT
+        with ESMTP id S234016AbjEPOpv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 May 2023 10:27:59 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CA07EE8
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 May 2023 07:27:58 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f38824a025so1819981cf.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 May 2023 07:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684247277; x=1686839277;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AayuNIhRTV03xRUzarJZPTHvJp4e+UHEoTcw79g1j40=;
-        b=kwqcHYdkL7rFl3g+642wuNa0GbUpjcFfyO1NjDeeVfYnNMJJy+TmSlotRBJFoo+837
-         fqwQh5q8TdPYkbp/aMYqqFj/hNh3GFABRAc2z8CZyOGRY9E4tfq4R1C65QWVeQ15fbHs
-         /mCTPJ9hj2OYCuUKB/kbmLEBNJgEFWZnUFmRHyHprjObjtBL4zc1bznF91aXPHBKoUkt
-         B2/uhY2SPwQAJWacDXOAQvgy9lHF0VnF4ModaPbrtACRA2NtqkkJO7ZFCfcyLXUGjo38
-         Rr3e8DwslXe4gh8uyDIh9BtCL1nuJ2Vo91dyLeC+f5lC5UuWwtHchIOtFxMNghfglnEm
-         FYmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684247277; x=1686839277;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AayuNIhRTV03xRUzarJZPTHvJp4e+UHEoTcw79g1j40=;
-        b=JnHF2DxqBqbYQG+uYVNjn/UfkNVaq/L+mI/yA12s3hJ1IGOLL+/1iPiXaHTKyZwUCN
-         ZgRaJ00rSLIuLWOWfwf+OkgWCqr1vPg0Q8uFVgGSrphEJ00irqLSZoMvMUS1fad+VE5x
-         v+qjD4TUV3tl8kUrVGQR0x+cWeJD+r1ZPBDDeBfIQYe3ZwfVhRXI54v+j2e3o/7DSdgo
-         lfbmxOPyuTisEEbCfcL3BT+KtmxCztmuD+60PdO83GmyRE4Pp7/ZFEOwL8WWtNqhNewS
-         Y8d5QpZzl1nOlCyLhOYyO3QUiywHp/vXqPflwdHwgBV0+Lh2JKs/u8ShTs9nizt2JeXE
-         MKQA==
-X-Gm-Message-State: AC+VfDz4ynakTqDjTxsSqjOOocajYjlkZWiSXqUDaoSKNMZaPeX6OVkB
-        nMBjE9PdwnOXubSrtSsmSGD4WWIR6/zW1qqvE8gQmKGgWn2ze4m8Lf8=
-X-Google-Smtp-Source: ACHHUZ7hy9ErGHl7Q2627H6m7yBU8eMVeGoH11mFgv+H6UWXrnbD8ul2vnuUcwA4B5PG96UT0yYGss8DpU53mUFAH/g=
-X-Received: by 2002:ac8:7dcb:0:b0:3f5:2006:50f1 with SMTP id
- c11-20020ac87dcb000000b003f5200650f1mr341722qte.12.1684247277584; Tue, 16 May
- 2023 07:27:57 -0700 (PDT)
+        Tue, 16 May 2023 10:45:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE74A30FA;
+        Tue, 16 May 2023 07:45:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 645D5632DD;
+        Tue, 16 May 2023 14:45:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D53C433EF;
+        Tue, 16 May 2023 14:45:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684248345;
+        bh=M60Le/hi7ny2xMpvbfBJksM91CYUmDvuLDK42BEt2q8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lMU5dTStAJZci8Kol5YY/FGWHWlopYVFThWRFtIKPg1Lb+dvCj/1OL3q+TCODHsP2
+         1XUMVEXT50a/ftjHniHraG6tM50pj3JOgYs90pHvYa7sOceM4Fs0AvcqGBsg9Jc//Z
+         v7hwnNNPbUDoWdzyUCvOTopGnPGvXZ7Yb+NazGz87J6IvQ5807eJZzJfsMo4zLlomf
+         pIG9yoMbExH8xXiF8A6S9tVIsmhQCwPgCxc9AZZUjNolmX7ORQD0uWGE4CzY6Jn5VL
+         uoTc0VGykGQRFkWmL6Rqs4ZaAQUrb5GhR3jzs/XYq1WZjrhLiQxROL3lh+FWCr5rmy
+         JkUrbH/T21xAw==
+Date:   Tue, 16 May 2023 23:45:42 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
+ fpsimd_release_task
+Message-ID: <ZGOXFjJnSVz3Lss6@finisterre.sirena.org.uk>
+References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
+ <20230516134447.GB30894@willie-the-truck>
 MIME-Version: 1.0
-References: <20230421141723.2405942-1-peternewman@google.com>
- <20230421141723.2405942-4-peternewman@google.com> <38b9e6df-cccd-a745-da4a-1d1a0ec86ff3@intel.com>
- <CALPaoCg76nUsJ7eYcU61gied8WBuAAmqy0Pqpsq5=Z-S52Qg6w@mail.gmail.com> <CALPaoCgknY0pWkXaCayPx28otcA5=v5a5FFoLFx3At0cGvAykg@mail.gmail.com>
-In-Reply-To: <CALPaoCgknY0pWkXaCayPx28otcA5=v5a5FFoLFx3At0cGvAykg@mail.gmail.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Tue, 16 May 2023 16:27:46 +0200
-Message-ID: <CALPaoCj4a=ePOfdd1CKHkOP1B9DZTGLCDHeNb0QLvCophX941g@mail.gmail.com>
-Subject: Re: [PATCH v1 3/9] x86/resctrl: Add resctrl_mbm_flush_cpu() to
- collect CPUs' MBM events
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stephane Eranian <eranian@google.com>,
-        James Morse <james.morse@arm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="B2Htttz3A3se8jyc"
+Content-Disposition: inline
+In-Reply-To: <20230516134447.GB30894@willie-the-truck>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 16, 2023 at 4:18=E2=80=AFPM Peter Newman <peternewman@google.co=
-m> wrote:
-> According to cpu_hotplug.rst, the startup callbacks are called before
-> a CPU is started and the teardown callbacks are called after the CPU
-> has become dysfunctional, so it should always be safe for a CPU to
-> access its own data, so all I need to do here is avoid walking domain
-> lists in resctrl_mbm_flush_cpu().
->
-> However, this also means that resctrl_{on,off}line_cpu() call
-> clear_closid_rmid() on a different CPU, so whichever CPU executes
-> these will zap its own pqr_state struct and PQR_ASSOC MSR.
 
-Sorry, I read the wrong section. I was looking at PREPARE section
-callbacks. ONLINE callbacks are called on the CPU, so calling
-clear_closid_rmid() is fine.
+--B2Htttz3A3se8jyc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-It says the offline callback is called from the per-cpu hotplug
-thread, so I'm not sure if that means another context switch is
-possible after the teardown handler has run. To be safe, I can make
-resctrl_mbm_flush_cpu() check to see if it still has its domain state.
+On Tue, May 16, 2023 at 02:44:49PM +0100, Will Deacon wrote:
 
--Peter
+> Mark -- given that this is an SME allocation, please can you take a look?
+
+I'm on holiday.
+
+> I think the implication of the kfence report is that we're writing beyond
+> the end of 'task->thread.sme_state' at some point and corrupting the
+> redzone.
+
+> There are two reports here, so hopefully it's not too hard to repro.
+
+I think I *once* saw something that might be this but I've never
+reproduced it, and I suspect that if this just suddenly came up with
+LKFT in stable kernels when there's been no relevant changes AFAIR it's
+not showing up terribly reliably there either.
+
+--B2Htttz3A3se8jyc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRjlxQACgkQJNaLcl1U
+h9DF4Qf/Z7ilCYT2Cj93mUVCpgT3fU0hapi2LhsW6GtEd9ig8EhpUhsUU66FvDEi
+xSutCd+ZA/2Vr1UBOeRCAxrGuD+QLnKA5CcqliPfnip8QUK0arQ6CFx7KpWr1LEM
+M2hVfNquXQ1MgiGsUfnXJpFo07As7b/coy37uO1k23MjvneIb2irdkGtMxiTDxfJ
+1iCbhDZQt6eXXkcbVhCnaFVvrhtU5DtFd7cPsynQREf+DMeD0jQVlUYsuefkCd5g
+RmybWEEE8/ieOo5t5tHCjLcqt4jnswlzNS8PC8gHjDtG5WGR/hhD/4UWqkCwarYi
+NeBJvtdpzLf1qKuo81Ywi8YOzQ9fwA==
+=o7iP
+-----END PGP SIGNATURE-----
+
+--B2Htttz3A3se8jyc--
