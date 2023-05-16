@@ -2,123 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5D47032F5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 May 2023 18:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC93570431C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 May 2023 03:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242738AbjEOQb3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 May 2023 12:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        id S229637AbjEPBt5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 May 2023 21:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242718AbjEOQb0 (ORCPT
+        with ESMTP id S229553AbjEPBtz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 May 2023 12:31:26 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA3C10F3;
-        Mon, 15 May 2023 09:31:17 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-306281edf15so12324816f8f.1;
-        Mon, 15 May 2023 09:31:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684168276; x=1686760276;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xj0LlUHkMs1f/PPwjZMnEi9vur/RUIxqtgTnxaH1HHs=;
-        b=Tej0A0SVFNljYQvApjPnFcxl/jMGuS4pY5Ha2t/wxklAj5BDMFqwnWeo4iWAqBlEBf
-         flToiFDTEQLXIJsENh8Gf373G1RY7yWUx5xsP4ZebDJjJkJT3BEbUrjeiC1EV1VHoTtF
-         /vKy/iZcG6d6Rdg3n+pmWu5HJm1lxcR3HU9LTMU2/KGJe7i608OmKmkfACFMxxMcmjkp
-         MLxFXOQdKOXqMH72A3hPIlD5zGkpGbmpK9X5IWL1MQsp+xmaGaPDP7CdJiAlfQTsn0Ow
-         lSIR0hJqBtxJLzIH4aQEGQxKRF78gqRo0lU4f6b6fXixUcI0UfN9u1hUykmqsiX4dQPe
-         dIrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684168276; x=1686760276;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xj0LlUHkMs1f/PPwjZMnEi9vur/RUIxqtgTnxaH1HHs=;
-        b=iCUKK09LkbZ77epxwirx5UD4NLwh6QbwVBFu885VyO7T1ke40bbZFEdNxxe806ZzuD
-         7umEbc/IF3q6m+3V6V0Wlxuk/CDo6kKF2Mm66doulSBmzemxmIC/XuGjUd4sJV4uqf9f
-         7vpUaw8kUDCaAxHjAOQLItJsPEag42ZHU5iiyyrHdggLKK25WyDltJiBj+E9RneBv910
-         B6QPmin+NsMA0Jt+YC/2hgs7BKi2s2z0csBPQVdusMD8cSY5eB4vzQzgFkMgAN111RFo
-         SVI+ciyZOY6WS96eWwGSwKY8Z2FTbHq2f96emaMJRXZtM74gFU8sT+Ad4CD+1/Qmf8ns
-         s5zA==
-X-Gm-Message-State: AC+VfDxzKSrRT9Y4U2d8wh5q+GbSwhd3UQZ1glbhT9NfUgwoxJOJaOTb
-        Z9scVndsOJMWKRMDpktPfMc=
-X-Google-Smtp-Source: ACHHUZ4exiePmSzMSaub/V47LjNfg6KE9x175cxCNihSkCYAUDOuWxIYk+H2LH/BQb2PrKb5025TYQ==
-X-Received: by 2002:adf:e351:0:b0:306:2eab:fb8c with SMTP id n17-20020adfe351000000b003062eabfb8cmr26143380wrj.42.1684168275652;
-        Mon, 15 May 2023 09:31:15 -0700 (PDT)
-Received: from fedora ([94.73.33.248])
-        by smtp.gmail.com with ESMTPSA id 3-20020a05600c028300b003f4e4f51f64sm14756542wmk.7.2023.05.15.09.31.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 09:31:15 -0700 (PDT)
-Date:   Mon, 15 May 2023 18:31:13 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     David Gow <davidgow@google.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: uclogic: Modular KUnit tests should not depend on
- KUNIT=y
-Message-ID: <ZGJeUd76XaFqHhN0@fedora>
-References: <36ddf432f0f46530875fa15f002012c921a380a3.1683022021.git.geert+renesas@glider.be>
- <CABVgOSmYapFcpnrC60o4r5LznT92TpjteNb=1MQejvMDWC+2vw@mail.gmail.com>
+        Mon, 15 May 2023 21:49:55 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F511BD0;
+        Mon, 15 May 2023 18:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684201794; x=1715737794;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yoBH6vhYXirTJn4ngLQetM+EEw/EqS96eNcX9cDbZ/o=;
+  b=BR04lS4lP/ELMB8tQoS067kbCPNy39tya0lNKYcdtOBpA4roEG1G1Aeg
+   YKmAxRUCqlkp2q2j0JyBzgTQiNJ1dEl9N6D9TmHAXQ5sarZxgrrMEnLe5
+   X4E0cHVpBEepw1U5mB/YC1Cwg0cVf6TfE3ec8l4qb0aLbPd/nB4ckSYZg
+   qxq7/QjOBWaHSCrJh51nIX4JfsQuspI9Cbsea1wFqsZBobY8LThLt4ywt
+   lRPUw2Etu408HkPLbjRrmiNcnWQrOJw8ScCkqiaf5h6Niu3ki4Z6HTqEA
+   xjNug+iSQY8UxovqRQ/rDYrhsHiWnnovzBF6F0Qb+r/l6nu6ku6S+TstG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="340716246"
+X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
+   d="scan'208";a="340716246"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 18:49:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="790880836"
+X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
+   d="scan'208";a="790880836"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 May 2023 18:49:48 -0700
+Message-ID: <57101685-35c3-8a71-9a39-a6d9fd58414c@linux.intel.com>
+Date:   Tue, 16 May 2023 09:49:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABVgOSmYapFcpnrC60o4r5LznT92TpjteNb=1MQejvMDWC+2vw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Cc:     baolu.lu@linux.intel.com, "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v3 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
+Content-Language: en-US
+To:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>
+References: <20230511143024.19542-1-yi.l.liu@intel.com>
+ <20230511143024.19542-4-yi.l.liu@intel.com>
+ <6ab2d63e-4dcc-6562-9698-d23300c7d1ae@linux.intel.com>
+ <DS0PR11MB752940450312B2E0529C3DC6C3789@DS0PR11MB7529.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <DS0PR11MB752940450312B2E0529C3DC6C3789@DS0PR11MB7529.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 04, 2023 at 02:04:18PM +0800, David Gow wrote:
-> On Tue, 2 May 2023 at 18:09, Geert Uytterhoeven <geert+renesas@glider.be> wrote:
-> >
-> > While KUnit tests that cannot be built as a loadable module must depend
-> > on "KUNIT=y", this is not true for modular tests, where it adds an
-> > unnecessary limitation.
-> >
-> > Fix this by relaxing the dependency to "KUNIT".
-> >
-> > Fixes: 08809e482a1c44d9 ("HID: uclogic: KUnit best practices and naming conventions")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
+On 5/15/23 2:14 PM, Liu, Yi L wrote:
+>> -----Original Message-----
+>> From: Baolu Lu<baolu.lu@linux.intel.com>
+>> Sent: Friday, May 12, 2023 1:39 PM
+>> To: Liu, Yi L<yi.l.liu@intel.com>;joro@8bytes.org;alex.williamson@redhat.com;
+>> jgg@nvidia.com; Tian, Kevin<kevin.tian@intel.com>;robin.murphy@arm.com
+>> Cc:baolu.lu@linux.intel.com;cohuck@redhat.com;eric.auger@redhat.com;
+>> nicolinc@nvidia.com;kvm@vger.kernel.org;mjrosato@linux.ibm.com;
+>> chao.p.peng@linux.intel.com;yi.y.sun@linux.intel.com;peterx@redhat.com;
+>> jasowang@redhat.com;shameerali.kolothum.thodi@huawei.com;lulu@redhat.com;
+>> suravee.suthikulpanit@amd.com;iommu@lists.linux.dev;linux-kernel@vger.kernel.org;
+>> linux-kselftest@vger.kernel.org; Duan, Zhenzhong<zhenzhong.duan@intel.com>
+>> Subject: Re: [PATCH v3 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
+>>
+>> On 5/11/23 10:30 PM, Yi Liu wrote:
+>>> Under nested IOMMU translation, userspace owns the stage-1 translation
+>>> table (e.g. the stage-1 page table of Intel VT-d or the context table
+>>> of ARM SMMUv3, and etc.). Stage-1 translation tables are vendor specific,
+>>> and needs to be compatiable with the underlying IOMMU hardware. Hence,
+>>> userspace should know the IOMMU hardware capability before creating and
+>>> configuring the stage-1 translation table to kernel.
+>>>
+>>> This adds IOMMU_DEVICE_GET_HW_INFO to query the IOMMU hardware
+>> information
+>>> for a given device. The returned data is vendor specific, userspace needs
+>>> to decode it with the structure mapped by the @out_data_type field.
+>>>
+>>> As only physical devices have IOMMU hardware, so this will return error
+>>> if the given device is not a physical device.
+>>>
+>>> Co-developed-by: Nicolin Chen<nicolinc@nvidia.com>
+>>> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
+>>> Signed-off-by: Yi Liu<yi.l.liu@intel.com>
+>>> ---
+>>>    drivers/iommu/iommufd/device.c          | 72 +++++++++++++++++++++++++
+>>>    drivers/iommu/iommufd/iommufd_private.h |  1 +
+>>>    drivers/iommu/iommufd/main.c            |  3 ++
+>>>    include/uapi/linux/iommufd.h            | 37 +++++++++++++
+>>>    4 files changed, 113 insertions(+)
+>>>
+>>> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+>>> index 051bd8e99858..bc99d092de8f 100644
+>>> --- a/drivers/iommu/iommufd/device.c
+>>> +++ b/drivers/iommu/iommufd/device.c
+>>> @@ -263,6 +263,78 @@ u32 iommufd_device_to_id(struct iommufd_device *idev)
+>>>    }
+>>>    EXPORT_SYMBOL_NS_GPL(iommufd_device_to_id, IOMMUFD);
+>>>
+>>> +static int iommufd_zero_fill_user(u64 ptr, int bytes)
+>>> +{
+>>> +	int index = 0;
+>>> +
+>>> +	for (; index < bytes; index++) {
+>>> +		if (put_user(0, (uint8_t __user *)u64_to_user_ptr(ptr + index)))
+>>> +			return -EFAULT;
+>>> +	}
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd)
+>>> +{
+>>> +	struct iommu_hw_info *cmd = ucmd->cmd;
+>>> +	unsigned int length = 0, data_len;
+>>> +	struct iommufd_device *idev;
+>>> +	const struct iommu_ops *ops;
+>>> +	void *data = NULL;
+>>> +	int rc = 0;
+>>> +
+>>> +	if (cmd->flags || cmd->__reserved || !cmd->data_len)
+>>> +		return -EOPNOTSUPP;
+>>> +
+>>> +	idev = iommufd_get_device(ucmd, cmd->dev_id);
+>>> +	if (IS_ERR(idev))
+>>> +		return PTR_ERR(idev);
+>>> +
+>>> +	ops = dev_iommu_ops(idev->dev);
+>>> +	if (!ops->hw_info)
+>>> +		goto done;
+>> If the iommu driver doesn't provide a hw_info callback, it still
+>> returns success?
+> Yes, as noted in the cover letter. It's for a remark from Jason. In such
+> case, the out_data_type is NULL, it means no specific data is filled
+> in the buffer pointed by cmd->data_ptr.
 > 
-> This works here, and I definitely agree we should get rid of these
-> unnecessary constraints.
-> 
-> Let me know if this should go in via the kselftest/kunit tree, or if
-> it makes sense to take this via input?
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
-> 
-> Cheers,
-> -- David
-> 
-> >  drivers/hid/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-> > index 4ce012f83253ec9f..b977450cac75265d 100644
-> > --- a/drivers/hid/Kconfig
-> > +++ b/drivers/hid/Kconfig
-> > @@ -1285,7 +1285,7 @@ config HID_MCP2221
-> >
-> >  config HID_KUNIT_TEST
-> >         tristate "KUnit tests for HID" if !KUNIT_ALL_TESTS
-> > -       depends on KUNIT=y
-> > +       depends on KUNIT
+> - Let IOMMU_DEVICE_GET_HW_INFO succeed even the underlying iommu driver
+>     does not have driver-specific data to report per below remark.
+>     https://lore.kernel.org/kvm/ZAcwJSK%2F9UVI9LXu@nvidia.com/
 
-Tested here as well with different configurations for the UCLogic
-driver and it is working.
+Oh, I overlooked that. Thanks for the explanation. It's fair enough.
 
-Reviewed-by: José Expósito <jose.exposito89@gmail.com>
+Best regards,
+baolu
