@@ -2,244 +2,186 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9832704552
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 May 2023 08:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4387045C1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 May 2023 09:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjEPG25 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 May 2023 02:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        id S230454AbjEPHGt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 May 2023 03:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjEPG2z (ORCPT
+        with ESMTP id S230437AbjEPHGr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 May 2023 02:28:55 -0400
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA64A198D
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 May 2023 23:28:52 -0700 (PDT)
-Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-44f985f250aso4683039e0c.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 May 2023 23:28:52 -0700 (PDT)
+        Tue, 16 May 2023 03:06:47 -0400
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DBBFB
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 May 2023 00:06:46 -0700 (PDT)
+Received: by mail-ua1-x929.google.com with SMTP id a1e0cc1a2514c-783e5f8717aso49497241.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 May 2023 00:06:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684218531; x=1686810531;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=AgsSOatvvgnVAbY3fKEOd/H8oYsa3jb8AEbLxPV5lY0=;
-        b=eVoARu4468ITDHSNCRhZjPF7lkSK2YCIGRrh1q69aAufHbdXcutRIAG8Ta9yGXgMpG
-         aF9jDwGDV50Xm0JmAvPrp6rlti94eYb+EqcxUbR8MDH1CUYsKtHylzXxDawJ5L83d+9r
-         rzYcUV06wE0aC87B7hxxsF1qmTc4MftMBej5L6bLIZEB3MuhcdECnS4pvtalgTiPfjco
-         YdEqJWMqJyM2oiFCtLQrOSSgw0dg0+EHJxQStYp1g+3oEEeEB2UrUBuxEnT50cIS4ldd
-         CjB070YtvdHl6NF0eYA4c3KmfPBQhjSADCNQWLYumodFPfxmohLQ7RsRjgNsPRhsgCGm
-         TUGA==
+        d=google.com; s=20221208; t=1684220806; x=1686812806;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Retl2E3hf2qZjUkZ9FmRzH7qIpNcsvOvB4tHL8ZVm54=;
+        b=Tz8HRduGjWVjfa8N48jkJ6D14/yi5PCCwZBmVSaH8M9/hGad2Cati+sfi6X0JLEZ/c
+         xAg0jZcBw+xUBUcqxw49JG8bifwkOSgqGfyK1DtEIseCwI2ojzPPd5gsK2HqSTLKyP2F
+         Pfol2fVbWADs7zriQCk+pKNSLeqN8gWoX0P64gyLpT2TNl49dWq+1HSfL+KZMrzzqIz6
+         7uH9Qzprw9Q0e+YKVdc/LPTuqrkkV4hxm/zRx68w2U9tiN71paeX3T0v17V/OZtQt80z
+         D4Ikr5oixnA+ACInA/I7wYJO9MIkxzaxXPuT0RDL8fFvg2G6d5vxDHnRbvbe1G0/pPDJ
+         TNoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684218531; x=1686810531;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AgsSOatvvgnVAbY3fKEOd/H8oYsa3jb8AEbLxPV5lY0=;
-        b=UCtmD7rAjkF3aQDi0OaecmMaIG6m14XkKQtwrKfdRKkkvccahLNE+PQ+ONDEJDMbOl
-         Y63XyoxmqyINoy4Z9KRWuIgvQEbBCA6xcLs0Kek8qx2Y+FFO5WnoOqb0+jruj31ecq7w
-         OXNBzCykKgWF+OTuan7zZJY6tJKb90bftFHr4PJ4+1ON8GO7yV0PAyzmYkcxmPbduFNZ
-         eq2Vpho3CkKcKt4A4jwonO73KjNWtpzG+MOrW4Ghi6vqXkkef48hOHQ2svqNadJaWiBm
-         L0tKEudY+gCyu4PXBqVF30guGoHSqR3ux8Xro9weWXflViX5eUeseBo2kNPke/ItWFpV
-         7Yjw==
-X-Gm-Message-State: AC+VfDyKsgx8xkQoS0ta597Ir2lQAF9cl2slG/9qgqYLVoxugu07mor+
-        mTsT2iL3zgS7Z7CfotSZrZw9q54NCw1Snp1ftSXp5vQwE9mKonOfgaVc2A==
-X-Google-Smtp-Source: ACHHUZ7K88QWLW8FEDkPIsmlIrOleGCLDIgIB6J3mSc1D7Xs4dcjZNsV/EW+ls74lUPjZYX7u55XIblREzw3y/i/1hQ=
-X-Received: by 2002:a1f:4c87:0:b0:451:c0f9:f02a with SMTP id
- z129-20020a1f4c87000000b00451c0f9f02amr11362211vka.3.1684218531248; Mon, 15
- May 2023 23:28:51 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684220806; x=1686812806;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Retl2E3hf2qZjUkZ9FmRzH7qIpNcsvOvB4tHL8ZVm54=;
+        b=PImnbptWLs68fvc6apSv3Z21PHbI1MtJ+oI3crK27iraWcrdhiTjcKn2Ye6+NCNq7f
+         4lzuG6u/JjSSqJ7ihMjpbO72zoPCyz3BnKnGk1zJ9PR8PH0i4n2nPKj58ngtWndAciEA
+         wypCU8DLMKMp2xxygHsA7Ygenm8ftycV0DS3wLX0c9/xSFG4X3gb1ogL1QK/wfp94Ehe
+         HPfNQkFfY2qs9qDV+QNG0toUYU2BtMkR1SoGPoCIwcuShk9tKiOAzXv0mok/Fq8YsD9g
+         AFyOQRxgRkCbFop+mYx5FezwOWa1S5+22d72BDI03EqRfsH4FtjWyrmI0iiBINMDeYlL
+         mDRw==
+X-Gm-Message-State: AC+VfDzgJshvwJNoZcg3wAiguQutKGUGzrzY60mRQyWQ9LjbTXenm+65
+        w+bjFDBH+KZRrxoByn3XgEJkCdniM+C4ZnVOMvMTIg==
+X-Google-Smtp-Source: ACHHUZ6YMBZske92s3hiYyLqIjI3ZWWE5BnM4QHpfVwJeNE91XNKVFw3t7UMtHi/xkqPDxa7dFNeQviJ0EQnH9/QTC0=
+X-Received: by 2002:a05:6102:303a:b0:42f:efd4:f170 with SMTP id
+ v26-20020a056102303a00b0042fefd4f170mr12760499vsa.29.1684220805698; Tue, 16
+ May 2023 00:06:45 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 16 May 2023 11:58:40 +0530
-Message-ID: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
-Subject: arm64: fp-stress: BUG: KFENCE: memory corruption in fpsimd_release_task
-To:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230515130553.2311248-1-jeffxu@chromium.org> <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
+In-Reply-To: <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
+From:   =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>
+Date:   Tue, 16 May 2023 09:06:32 +0200
+Message-ID: <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        akpm@linux-foundation.org, jeffxu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000decded05fbca36dc"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Following kernel BUG noticed while running selftests arm64 fp-stress
-running stable rc kernel versions 6.1.29-rc1 and 6.3.3-rc1.
+--000000000000decded05fbca36dc
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Mon, May 15, 2023 at 4:28=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
+ wrote:
+>
+> On 5/15/23 06:05, jeffxu@chromium.org wrote:
+> > We're using PKU for in-process isolation to enforce control-flow integr=
+ity
+> > for a JIT compiler. In our threat model, an attacker exploits a
+> > vulnerability and has arbitrary read/write access to the whole process
+> > space concurrently to other threads being executed. This attacker can
+> > manipulate some arguments to syscalls from some threads.
+>
+> This all sounds like it hinges on the contents of PKRU in the attacker
+> thread.
+>
+> Could you talk a bit about how the attacker is prevented from running
+> WRPKRU, XRSTOR or compelling the kernel to write to PKRU like at sigretur=
+n?
 
-# selftests: arm64: fp-stress
-# TAP version 13
-# 1..80
-# # 8 CPUs, 3 SVE VLs, 3 SME VLs, SME2 absent
-# # Will run for 10s
-...
+(resending without html)
 
-# # ZA-VL-32-4: PID: 1091
-# # [  263.834190]
-==================================================================
-[  263.834270] BUG: KFENCE: memory corruption in fpsimd_release_task+0x28/0x50
-[  263.834270]
-ZA-V[  263.834419] Corrupted memory at 0x00000000d9c0a375 [ ! ! ! ! !
-! . . . . . . . . . . ] (in kfence-#158):
-L-64-[  263.834929]  fpsimd_release_task+0x28/0x50
-[  263.835074]  arch_release_task_struct+0x1c/0x30
-[  263.835221]  __put_task_struct+0x164/0x220
-[  263.835336]  delayed_put_task_struct+0x60/0x128
-4: [  263.835484]  rcu_core+0x318/0x950
-[  263.835632]  rcu_core_si+0x1c/0x30
-[  263.835770]  __do_softirq+0x110/0x3d8
-Stre[  263.835874]  run_ksoftirqd+0x40/0xe0
-[  263.835994]  smpboot_thread_fn+0x1d0/0x260
-[  263.836105]  kthread+0xec/0x190
-[  263.836221]  ret_from_fork+0x10/0x20
-[  263.836342]
-ami[  263.836393] kfence-#158: 0x00000000c8819329-0x000000009e00cc22,
-size=546, cache=kmalloc-1k
-[  263.836393]
-[  263.836527] allocated by task 1112 on cpu 5 at 252.422888s:
-[  263.836697]  do_sme_acc+0xa8/0x230
-ng m[  263.836821]  el0_sme_acc+0x40/0xa0
-[  263.836966]  el0t_64_sync_handler+0xa8/0xf0
-[  263.837114]  el0t_64_sync+0x190/0x198
-[  263.837224]
-ode[  263.837275] freed by task 15 on cpu 0 at 263.833793s:
-[  263.837500]  fpsimd_release_task+0x28/0x50
-[  263.837629]  arch_release_task_struct+0x1c/0x30
- ve[  263.837773]  __put_task_struct+0x164/0x220
-[  263.837886]  delayed_put_task_struct+0x60/0x128
-[  263.838032]  rcu_core+0x318/0x950
-cto[  263.838176]  rcu_core_si+0x1c/0x30
-[  263.838310]  __do_softirq+0x110/0x3d8
-[  263.838417]  run_ksoftirqd+0x40/0xe0
-[  263.838521]  smpboot_thread_fn+0x1d0/0x260
-[  263.838626]  kthread+0xec/0x190
-[  263.838742]  ret_from_fork+0x10/0x20
-[  263.838861]
-[  263.838913] CPU: 0 PID: 15 Comm: ksoftirqd/0 Not tainted 6.3.3-rc1 #1
-[  263.839037] Hardware name: FVP Base RevC (DT)
-[  263.839111] ==================================================================
-r length: 512 bits
-# # ZA-VL-64-4: PID: 1089
-# # SSVE-VL-64-4: Streaming mode Vector length: 512 bits
-# # SSVE-VL-64-4: PID: 1088
-# # ZA-VL-16-4: Streaming mode vector length: 128 bits
-# # ZA-VL-16-4: PID: 1093
-# # FPSIMD-5-0: Vector length: 128 bits
-# # FPSIMD-5-0: PID: 1094
-# # SVE-VL-32-5: Vector length: 256 bits
-# # SVE-VL-32-5: PID: 1096
-# # SSVE-VL-64-5: Streaming mode Vector length: 512 bits
-# # SVE-VL-64-5: Vector length: 512 bits
-# # SVE-VL-64-5: PID: 1095
-# # SSVE-VL-64-5: PID: 1098
-# # ZA-VL-64-5:[  263.905145]
-==================================================================
-[  263.905299] BUG: KFENCE: memory corruption in fpsimd_release_task+0x28/0x50
-[  263.905299]
- Str[  263.905444] Corrupted memory at 0x00000000e3d2342a [ ! ! ! ! !
-! . . . . . . . . . . ] (in kfence-#146):
-[  263.905957]  fpsimd_release_task+0x28/0x50
-eam[  263.906088]  arch_release_task_struct+0x1c/0x30
-[  263.906236]  __put_task_struct+0x164/0x220
-[  263.906348]  delayed_put_task_struct+0x60/0x128
-[  263.906499]  rcu_core+0x318/0x950
-[  263.906647]  rcu_core_si+0x1c/0x30
-in[  263.906786]  __do_softirq+0x110/0x3d8
-[  263.906892]  ____do_softirq+0x1c/0x30
-[  263.907015]  call_on_irq_stack+0x24/0x58
-g mo[  263.907139]  do_softirq_own_stack+0x28/0x40
-[  263.907305]  __irq_exit_rcu+0x94/0xf8
-[  263.907454]  irq_exit_rcu+0x1c/0x40
-de [  263.907599]  el0_interrupt+0x58/0x160
-[  263.907765]  __el0_irq_handler_common+0x18/0x28
-[  263.907879]  el0t_64_irq_handler+0x10/0x20
-[  263.907989]  el0t_64_irq+0x190/0x198
-[  263.908098]
-vect[  263.908149] kfence-#146: 0x000000005a8569e6-0x00000000c704c501,
-size=546, cache=kmalloc-1k
-[  263.908149]
-[  263.908282] allocated by task 1102 on cpu 0 at 251.030980s:
-[  263.908452]  do_sme_acc+0xa8/0x230
-or l[  263.908576]  el0_sme_acc+0x40/0xa0
-[  263.908725]  el0t_64_sync_handler+0xa8/0xf0
-[  263.908879]  el0t_64_sync+0x190/0x198
-[  263.908986]
-eng[  263.909036] freed by task 1 on cpu 3 at 263.904989s:
-[  263.909311]  fpsimd_release_task+0x28/0x50
-[  263.909439]  arch_release_task_struct+0x1c/0x30
-th:[  263.909584]  __put_task_struct+0x164/0x220
-[  263.909696]  delayed_put_task_struct+0x60/0x128
-[  263.909842]  rcu_core+0x318/0x950
-512 [  263.909986]  rcu_core_si+0x1c/0x30
-[  263.910175]  __do_softirq+0x110/0x3d8
-[  263.910279]  ____do_softirq+0x1c/0x30
-[  263.910399]  call_on_irq_stack+0x24/0x58
-[  263.910520]  do_softirq_own_stack+0x28/0x40
-[  263.910645]  __irq_exit_rcu+0x94/0xf8
-bits[  263.910792]  irq_exit_rcu+0x1c/0x40
-[  263.910937]  el0_interrupt+0x58/0x160
-[  263.911043]  __el0_irq_handler_common+0x18/0x28
-[  263.911154]  el0t_64_irq_handler+0x10/0x20
+Since we're using the feature for control-flow integrity, we assume
+the control-flow is still intact at this point. I.e. the attacker
+thread can't run arbitrary instructions.
+* For JIT code, we're going to scan it for wrpkru instructions before
+writing it to executable memory
+* For regular code, we only use wrpkru around short critical sections
+to temporarily enable write access
 
-[  263.911261]  el0t_64_irq+0x190/0x198
-# # [  263.911387]
-[  263.911448] CPU: 3 PID: 1 Comm: systemd Tainted: G    B
- 6.3.3-rc1 #1
-[  263.911575] Hardware name: FVP Base RevC (DT)
-[  263.911653] ==================================================================
-..
+Sigreturn is a separate problem that we hope to solve by adding pkey
+support to sigaltstack
 
-# ok 80 ZA-VL-16-7
-# # Totals: pass:80 fail:0 xfail:0 xpass:0 skip:0 error:0
-ok 32 selftests: arm64: fp-stress
+--000000000000decded05fbca36dc
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-
-Steps to reproduce:
-============
-
-# To install tuxrun on your system globally:
-# sudo pip3 install -U tuxrun==0.42.0
-#
-# See https://tuxrun.org/ for complete documentation.
-
-tuxrun   \
- --runtime podman   \
- --device fvp-aemva   \
- --boot-args rw   \
- --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLiBcWRMuy6lXftDVQMvca/Image.gz
-  \
- --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLiBcWRMuy6lXftDVQMvca/modules.tar.xz
-  \
- --rootfs https://storage.tuxboot.com/debian/bookworm/arm64/rootfs.ext4.xz   \
- --parameters SKIPFILE=skipfile-lkft.yaml   \
- --parameters KSELFTEST=https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLiBcWRMuy6lXftDVQMvca/kselftest.tar.xz
-  \
- --image tuxrun:fvp   \
- --tests kselftest-arm64   \
- --timeouts boot=60 kselftest-arm64=60
-
-
-Test log links:
-========
-
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/test/check-kernel-kfence/log
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/tests/
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.28-240-gb82733c0ff99/testrun/17007268/suite/kselftest-arm64/tests/
-
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/test/check-kernel-bug/log
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/tests/
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/kselftest-arm64/tests/
-
---
-Linaro LKFT
-https://lkft.linaro.org
+MIIPoQYJKoZIhvcNAQcCoIIPkjCCD44CAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz7MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+2DeNJUdew/schvbvw4wolIIwTAYDVR0gBEUwQzBBBgkrBgEEAaAyASgwNDAyBggrBgEFBQcCARYm
+aHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/BAIwADCBmgYI
+KwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2Nh
+L2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJlLmdsb2JhbHNp
+Z24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgwFoAUfMwKaNei
+6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9iYWxzaWduLmNv
+bS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEBAEWztMCBdTNW
+CGPLcNM/ovJHsl+VF/BsKdiiwJoodyWO9fmhOgEVex1vfc+njM0bkWC0b4U08iUPP91eksCFGhhi
+cCchsXpkAzfcKPJ7OsFd7J4xQUQPpi02r1P7Y9UKLa8nsNChf9ck1GAz1Skb77r1JWgSlHOcyuVZ
+UQ/JuUVMf/XW7flFfNybswGgFmfnBvDW1qrqBPHpEFmWeNYXISpFQj0UWyGmykQGKi8q44IPy5Qg
+uId+alGaBDlL5OAZQtmhRyh1MVd2wtgvGEfNGDGq603urx17nwEvM1gjSmOgnhEigOhhHH7DOeyt
+5zPYLaKguxLWPGXlZ0UUjA7lH3gxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQK
+ExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENB
+IDIwMjACEAGkX4MOebzHzp8Y/d5NuOkwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIE
+IJVVpRCxTP5/wfBGQ6crRxE/d5W5tzX2YtM+Eo0Dl+CyMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
+BwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUxNjA3MDY0NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgB
+ZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQow
+CwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCWxCFkhc3QuCkMi7q4
+2ydWFHKsiA4BeoL926PZfQi2aiitm/ctSWINJU/DkWH35UYtEQvvcEXN7t44S0wlIk9hwmfps2w2
+bh1CTVpstgL6AKCoHzu/BmXsKWeR+S4+WoDNZCB6WLgVdz7N2RLdj++Qw8r7AlSXdCFIQZRt24qY
+o2jIE83EUvhTjfwC9DdvjAEkNbXattou2meKUwl/Y1mA6d2OADdfisbaXdgKn7Y/0d7Hv/+xb66+
+Hqa1/ZGm3Jew+pl3Eo+m86d/FVSWk00azfo1Yrr+J4rR9sLmG2tOC6wx7u+FNY338kQlpTob6lN+
+7r73+5bVq2ZhEV2wkTPm
+--000000000000decded05fbca36dc--
