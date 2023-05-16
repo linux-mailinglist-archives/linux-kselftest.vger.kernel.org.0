@@ -2,165 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F56D705138
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 May 2023 16:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D395670565D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 May 2023 20:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbjEPOt0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 May 2023 10:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55998 "EHLO
+        id S230032AbjEPSvZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 May 2023 14:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbjEPOtZ (ORCPT
+        with ESMTP id S229502AbjEPSvX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 May 2023 10:49:25 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E0C10EC
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 May 2023 07:49:24 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3f38824a025so1826881cf.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 May 2023 07:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684248564; x=1686840564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rOyuxQWRj7mBxcG4uzXJBTcD+VFjWgiMqfEKYgz0FxE=;
-        b=Lz0TiqncdRoXeVjHg44OrLFE2qLcXpMeVi+QvnvDEREwT9C5xa+IqBu3GpPJCqw/Q2
-         CvlsVAr7+c0jqQC6ixXNANzKotTrwahGzP3+29GAM9ONPuJ7OWs8jSoRbhD2was1U3n+
-         lq3Y3ZwbsHYzT7dydr5i4WwmqlaNitZcKehrbdbtUk8DNeVT6/wJpMlnArEPxJpE+LQW
-         H9wGLfgaZVg0P6YGffsllV7wPquF4UpgSo32ORWhhZCX/blykpQ8/Dyw9yiLslVYoylD
-         E9/uqMDbmSjtjYCyzQ6bWrs0qRSNfZG6nldBlho4sNyOqiyEAcrfscCpm3D/+lcafV0f
-         JnkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684248564; x=1686840564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rOyuxQWRj7mBxcG4uzXJBTcD+VFjWgiMqfEKYgz0FxE=;
-        b=Fu/FieXEKlhNrQlprcnmTe4p8hdJk0j7sWczexMbZhuguolhzbXf3/T/3+crQljPjs
-         Fgjv/AdJByfs1yzOStpoofNKuUk+Kg9TSsjt1Lj2nsTAnbG6Ayb825er883jns50Bn8q
-         w4+B/o8mj+9sKgx01swVbw2NQ+/qVukexQfzwiS+rOtX0Sy0fqeB8FU9Q8Pi1XP3RktO
-         bmlxfuymVToyCItx31UAJTt7nE83Tfw912iQU2nFLVXFr6OBvY2l1mpcUrRFJZw+MpSP
-         esbRtvPHVR6rzRARfzAR2ysuHJF+cFd/Xe8lLJbOjHea04tsEvPkUDMl1j+CrIthp2qL
-         sw4w==
-X-Gm-Message-State: AC+VfDzRB60osGbkmApZ641cs41G7EuZI6IdGF+WnevKIh14lo1WcC0v
-        2h4wkk6oB96IkiF3XTA6klUnEpc893zmMY2DkqkKrw==
-X-Google-Smtp-Source: ACHHUZ5Yx61E/0FENVw2X66LL20VU83PcKIKc/B5iWAVRpCnrBdFVFUdFJqIPdT+Gyld7wf+dHsBbFnV8b1PCO4uHwc=
-X-Received: by 2002:a05:622a:1a24:b0:3bf:e4e0:26a0 with SMTP id
- f36-20020a05622a1a2400b003bfe4e026a0mr368805qtb.14.1684248563679; Tue, 16 May
- 2023 07:49:23 -0700 (PDT)
+        Tue, 16 May 2023 14:51:23 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2085.outbound.protection.outlook.com [40.107.243.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6884A25D;
+        Tue, 16 May 2023 11:51:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B2fLaCgXNNCBFIOX95yzrFxBbTYFgj+n3eGOiytnKxiR9Mo54oQXLGIrGhLBgCiMIH8iPg6ApFdv0uGODeEwyXg3qrt8Pb6RMoHjaQXsPIj2ogxGqS3LlaqqzhZRQZNMSc9ssULxS8VixAJ0rsePQzEfMZG+DRoTfyxP4ejRic89xBzbHsVLaOYKFA87naUctOsrwqlVANJXQ/L8lcgVM1+bUPDF8L4VrR0BM7EbZclSv/Ngu0Mj01JA8rADW5BYZ4u9191gj/J1bDAQDyBckyQCuNSvBpkwNtvTk9/O8jDK1+cyfsJT9AjdnP3+9ITUizaN+scM8XUHBbiTqNLBRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0eVPkCqJvqORf2uTwnoPSrDUxXoyQAa2Q/sK+x4fN0Y=;
+ b=a9YrNhdIrPLFtukWLT8pOYduAQ/9aHyTQ1fxlj+p2Xe+dkFbPvGGWdRZwlYH48BvWniU7qW6CKwYZcnmthkFMW3oWAaojrP7lpODxhCl/IhLWxcDVpYsbPEXIJvpx92WMnGLVZTd7msWE+m0FKqP3Uw0QiP8EQjIA7EppIxvI1ZDp8pspZCesytIGW+9PwqzRxdiTZRAeEOD5Ym7O/vci+nNCEixYFqxi1aBNM/Uxv/TOmM92E7l1rTp3svm23Ba7kigzFW9TYXlM7fCn36U+7YKKFkVnYFBpEv/8eGp7wQPuYDq3jgnyfOxUeB1WazpjbsVOIaMfvJN/QnHrIyHrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0eVPkCqJvqORf2uTwnoPSrDUxXoyQAa2Q/sK+x4fN0Y=;
+ b=fFozaJsCQLvlfr5r/Gm70o/nR6Xxg349LIDPS5VNttXBhi261SUlOiA0fhnWbgL6rUyEqd5MQhvG1FjOQcR0qUeKXCpeGVsrEleHLgtVhT3qHUoPCMJItSTsw4wBN4fKEFPya3f+gyn4pVCGvIGw/KkPPMjCg21cZS+Aik1Y/wIrxbhCKZ8kvJuvCL+/2oFd0GKRIdmyLiW0EkPO7YD54KKJchZWTFA61wZHxZ164UmpLEOYlXnVsSDTY/gUdZRcQOqs8dLUCV3gKMfdqJ+zyPds+Q6dmCpEB5E6u4HwknT+pTsSbflANK1cVU/82t1O/3D++wnFDmSFbuBg83wTJg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4373.namprd12.prod.outlook.com (2603:10b6:208:261::8)
+ by BY5PR12MB4901.namprd12.prod.outlook.com (2603:10b6:a03:1c5::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Tue, 16 May
+ 2023 18:51:20 +0000
+Received: from MN2PR12MB4373.namprd12.prod.outlook.com
+ ([fe80::5586:8b8c:1925:1e81]) by MN2PR12MB4373.namprd12.prod.outlook.com
+ ([fe80::5586:8b8c:1925:1e81%4]) with mapi id 15.20.6387.033; Tue, 16 May 2023
+ 18:51:20 +0000
+From:   Benjamin Poirier <bpoirier@nvidia.com>
+To:     netdev@vger.kernel.org
+Cc:     Amit Cohen <amcohen@nvidia.com>, linux-kselftest@vger.kernel.org,
+        Ido Schimmel <idosch@nvidia.com>
+Subject: [PATCH net] net: selftests: Fix optstring
+Date:   Tue, 16 May 2023 14:49:24 -0400
+Message-Id: <20230516184924.153498-1-bpoirier@nvidia.com>
+X-Mailer: git-send-email 2.40.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0188.namprd05.prod.outlook.com
+ (2603:10b6:a03:330::13) To MN2PR12MB4373.namprd12.prod.outlook.com
+ (2603:10b6:208:261::8)
 MIME-Version: 1.0
-References: <20230421141723.2405942-1-peternewman@google.com>
- <20230421141723.2405942-8-peternewman@google.com> <3816ccf6-4f74-6406-5ca0-580743efa2a1@intel.com>
-In-Reply-To: <3816ccf6-4f74-6406-5ca0-580743efa2a1@intel.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Tue, 16 May 2023 16:49:10 +0200
-Message-ID: <CALPaoCj76eMTF+VPT8_52_D+fKpWt2ENcyavJ4aooCOo9TYKFw@mail.gmail.com>
-Subject: Re: [PATCH v1 7/9] x86/resctrl: Assign HW RMIDs to CPUs for soft RMID
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stephane Eranian <eranian@google.com>,
-        James Morse <james.morse@arm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4373:EE_|BY5PR12MB4901:EE_
+X-MS-Office365-Filtering-Correlation-Id: a3004e39-ab1d-4c15-4732-08db563e8931
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ny2TIoZ1hsCFiIrnDHdCPJPYj02MqmIcQzcqkYwJfvBRqn5Gyyon1LjDgWOMNrgCjiZTn4duju1JW+wHXD/NtCc8s90gFV2Gyo1sizNqCQjU076LOj6keTfMp7A5yAvhN5P59/lGLNwqDCo/jjQPTWP8DL4St4F7sbEuErX3KKzV1O6nVleWqQ1DE3BDMNywpJ78dd/0FYqosz61qdUfJ4CR2xSp9YHW1ZwXUG3zVCndrJXUbZxye8MC/BkkCmG8ZlUpgj8XUJAA/2KEYb1kphDgYAfvCL4ahY7ElOHc/taKnu+VWSccLq8M9TNLmqbFCQYUIrLUDkHLxphYj0awnvUoOwyICSMIZDhH/551gcHOO+0Z9YS04n2ZckV620BnPG9jHD3UPPIVAlghpaeZd0YA983dIGzX8tyg+mokt/2BgwGa251gXTm/DavCe/ABSZwL8hJBmjaBz5sFJo4xSipeETL8UlIsxMd6/wQQTmdB1TZhQ8b50reai2xzvBsRTeK46cUxqvcgSG5HnBndt5fKvLdY/tE6/v5/0dzNXfGPoI9Cs7WUM2GNz2j1pVaG
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(366004)(136003)(39860400002)(451199021)(36756003)(6486002)(83380400001)(107886003)(1076003)(6506007)(6512007)(26005)(186003)(2616005)(5660300002)(54906003)(86362001)(41300700001)(450100002)(316002)(38100700002)(66476007)(66946007)(8936002)(8676002)(66556008)(6916009)(4744005)(478600001)(4326008)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xVvrd9I+McswoUZyJK3AQ0QTbr7oyHLXUui+QK6fKTD/rs0hd0UAC9aOizzI?=
+ =?us-ascii?Q?P5+fNlEihuJ4zvXaFuhR829ddK8/jZsiSZqXZPrdN9MPAQg+Sw1lej6TlNcY?=
+ =?us-ascii?Q?gLuQ0t0NooDrH7aL6Q/4CDAati0FilPHop9tAWqRjN6+S38NI/V5NSFwZrTv?=
+ =?us-ascii?Q?0R8evTeut3xKkAeM+zdTzdu0d+fy13tSnWAB5pyT23LNtbhfsiAdnkCsVuBQ?=
+ =?us-ascii?Q?gIuLWnQYQMpH6S8Q66RN5q1ePLbV1aZ7gqPV3hMLje+UsXb1eVbYTZ1sOh/t?=
+ =?us-ascii?Q?fLoTSTyMRqZoXolVY3jZTPulALBzkJYQSe7pJmsuEY8vrPMxWTE2WtWJ92Qj?=
+ =?us-ascii?Q?HvDE3MBJWFB0jKzOWx5Nw6MHh3g1KC9/ZUiTPEiH9oDz4nyxwX7L7YzIIqhV?=
+ =?us-ascii?Q?JMVejIfVpQF/Ue71LqoLJ/ezSM05FI3BNNzYeTWN/F6Zvgvj0Orw2RY/Bokt?=
+ =?us-ascii?Q?yEVV/lWeO55ekg/MzOuQjtQqeGjYgpLNoBD01hIPqup8UmuYaBen2AdfHPkn?=
+ =?us-ascii?Q?tWIBQ1liriZt9N5NrhVhXxng8h7Onkc+DyQBeFG1UH0gzz4bZxQS9qmh5nXN?=
+ =?us-ascii?Q?XVtjrR3hfOWcc7cdjlDjBZKIoy5fOhVP4ZffJOpG6tlqrPZi8s+03SVT/nkX?=
+ =?us-ascii?Q?1TQnwRIKp6ih68zdXa54iSnDp5UVRlt+sW7YfNqC8g9ZBXDjSRv+re+fcPiJ?=
+ =?us-ascii?Q?7wDDUGOudv+44y3NcbJJTNeli8uOMmubyyuiCjDmD4JGdjtzPShrZwCXDxO6?=
+ =?us-ascii?Q?cLId8heAO4ZWt6zx/B12I78HzkcBJRiGyXp+kWaOpQciwaBLzbMyC5vjxpgZ?=
+ =?us-ascii?Q?n3/skGynoND82XAivY/Ua1mw8ASVK7WciuJD2J/6/9sOpIpSMbwPrpr2+L3g?=
+ =?us-ascii?Q?GX2m75/UJcjxFAdt4BhYuNoeX0vXqHHjk6kOACIxTi4dU6zN4b3vdpFkwpLi?=
+ =?us-ascii?Q?BZZcd+Mj7hvC9z8Syq97mbti1jCNFftB5cTrPn1D4gpGaAc90w3uYGoUfkSj?=
+ =?us-ascii?Q?hj3JEGWr/y3eAr+FmtfOeaOGragtLL0GO4itWxNeMAKlEWgaFGpF5/V1cvM7?=
+ =?us-ascii?Q?wrdi1D5aOQO+UR2qOh4GUhvNCenHnMfgwWZcavEilQ19D2s3etxkHmce3w7r?=
+ =?us-ascii?Q?uSRS60ADOKhaAn5ZSvvHtK0Es1kXcIibP8KZzQHvmycoBsBaHaIv+ONVndZz?=
+ =?us-ascii?Q?AukPYK7DGqAZ0wLbmO0pJWYrlAGfUkkAu4t2kCiS4YDZwcJSa9loBEfMi6n7?=
+ =?us-ascii?Q?KI9ZOxrpLzn4k5bzdRYhmACtgvFEMBwRohAyMaKxZmB82NJEUiDw5YSXKyjz?=
+ =?us-ascii?Q?k6IYvNbn79r4GZG1qgTU6enJssJ5hnI8wLxKVI/ZF3PuzGVL8aPh+dv+xa/+?=
+ =?us-ascii?Q?EV5Ft4Sj6kmZC8qHicvlbs5DrQ56d3izkgHpEdfHgxbrWA/ZGIsbM3st7eIS?=
+ =?us-ascii?Q?WU3wvQUFV3TxpMWnHip3ZL5q8oFLunSRdB4UHs73zs7l8toZPWAlLG692Q3e?=
+ =?us-ascii?Q?YqAjGdn+vmK+cpaOY1xlkjejJ2Mbi2LN2RB9FNAzcNtMIad8XqkU3ZWbRLma?=
+ =?us-ascii?Q?s0vJzYxWuwOrD7oW8mBgtra7sV86UH/Fqt2Xq5QM?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3004e39-ab1d-4c15-4732-08db563e8931
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 18:51:20.2065
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cWoITr4nfyKxl2PoEtRGJyWqZE956B7v00alXcJ0ZV7MR3kT+8AkTOSCy3J4QekeZ2C7ioLuBG8Rc5I0RU/qrQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4901
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Reinette,
+The cited commit added a stray colon to the 'v' option. That makes the
+option work incorrectly.
 
-On Thu, May 11, 2023 at 11:40=E2=80=AFPM Reinette Chatre
-<reinette.chatre@intel.com> wrote:
-> On 4/21/2023 7:17 AM, Peter Newman wrote:
-> > +     /* Locate the cacheinfo for this CPU's L3 cache. */
-> > +     for (i =3D 0; i < ci->num_leaves; i++) {
-> > +             if (ci->info_list[i].level =3D=3D 3 &&
-> > +                 (ci->info_list[i].attributes & CACHE_ID)) {
-> > +                     l3ci =3D &ci->info_list[i];
-> > +                     break;
-> > +             }
-> > +     }
-> > +     WARN_ON(!l3ci);
-> > +
-> > +     if (!l3ci)
-> > +             return 0;
->
-> You can use "if (WARN_ON(..))"
+ex:
+tools/testing/selftests/net# ./fib_nexthops.sh -v
+(should enable verbose mode, instead it shows help text due to missing arg)
 
-Thanks, I'll look for the other changes in the series which would
-benefit from this.
+Fixes: 5feba4727395 ("selftests: fib_nexthops: Make ping timeout configurable")
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+---
+ tools/testing/selftests/net/fib_nexthops.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
+index a47b26ab48f2..0f5e88c8f4ff 100755
+--- a/tools/testing/selftests/net/fib_nexthops.sh
++++ b/tools/testing/selftests/net/fib_nexthops.sh
+@@ -2283,7 +2283,7 @@ EOF
+ ################################################################################
+ # main
+ 
+-while getopts :t:pP46hv:w: o
++while getopts :t:pP46hvw: o
+ do
+ 	case $o in
+ 		t) TESTS=$OPTARG;;
+-- 
+2.40.1
 
-> > +     rmid =3D 0;
-> > +     for_each_cpu(i, &l3ci->shared_cpu_map) {
-> > +             if (i =3D=3D cpu)
-> > +                     break;
-> > +             rmid++;
-> > +     }
-> > +
-> > +     return rmid;
-> > +}
->
-> I do not see any impact to the (soft) RMIDs that can be assigned to monit=
-or
-> groups, yet from what I understand a generic "RMID" is used as index to M=
-BM state.
-> Is this correct? A hardware RMID and software RMID would thus share the
-> same MBM state. If this is correct I think we need to work on making
-> the boundaries between hard and soft RMID more clear.
-
-The only RMID-indexed state used by soft RMIDs right now is
-mbm_state::soft_rmid_bytes. The other aspect of the boundary is
-ensuring that nothing will access the hard RMID-specific state for a
-soft RMID.
-
-The remainder of the mbm_state is only accessed by the software
-controller, which you suggested that I disable.
-
-The arch_mbm_state is accessed only through resctrl_arch_rmid_read()
-and resctrl_arch_reset_rmid(), which are called by __mon_event_count()
-or the limbo handler.
-
-__mon_event_count() is aware of soft RMIDs, so I would just need to
-ensure the software controller is disabled and never put any RMIDs on
-the limbo list. To be safe, I can also add
-WARN_ON_ONCE(rdt_mon_soft_rmid) to the rmid-indexing of the mbm_state
-arrays in the software controller and before the
-resctrl_arch_rmid_read() call in the limbo handler to catch if they're
-ever using soft RMIDs.
-
--Peter
-
-
-
->
-> > +
-> >  static void clear_closid_rmid(int cpu)
-> >  {
-> >       struct resctrl_pqr_state *state =3D this_cpu_ptr(&pqr_state);
-> > @@ -604,7 +636,12 @@ static void clear_closid_rmid(int cpu)
-> >       state->default_rmid =3D 0;
-> >       state->cur_closid =3D 0;
-> >       state->cur_rmid =3D 0;
-> > -     wrmsr(MSR_IA32_PQR_ASSOC, 0, 0);
-> > +     state->hw_rmid =3D 0;
-> > +
-> > +     if (static_branch_likely(&rdt_soft_rmid_enable_key))
-> > +             state->hw_rmid =3D determine_hw_rmid_for_cpu(cpu);
-> > +
-> > +     wrmsr(MSR_IA32_PQR_ASSOC, state->hw_rmid, 0);
-> >  }
-> >
-> >  static int resctrl_online_cpu(unsigned int cpu)
->
-> Reinette
