@@ -2,105 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D0C70512B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 May 2023 16:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F56D705138
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 May 2023 16:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbjEPOpx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 May 2023 10:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
+        id S232708AbjEPOt0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 May 2023 10:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234016AbjEPOpv (ORCPT
+        with ESMTP id S232509AbjEPOtZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 May 2023 10:45:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE74A30FA;
-        Tue, 16 May 2023 07:45:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 645D5632DD;
-        Tue, 16 May 2023 14:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D53C433EF;
-        Tue, 16 May 2023 14:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684248345;
-        bh=M60Le/hi7ny2xMpvbfBJksM91CYUmDvuLDK42BEt2q8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lMU5dTStAJZci8Kol5YY/FGWHWlopYVFThWRFtIKPg1Lb+dvCj/1OL3q+TCODHsP2
-         1XUMVEXT50a/ftjHniHraG6tM50pj3JOgYs90pHvYa7sOceM4Fs0AvcqGBsg9Jc//Z
-         v7hwnNNPbUDoWdzyUCvOTopGnPGvXZ7Yb+NazGz87J6IvQ5807eJZzJfsMo4zLlomf
-         pIG9yoMbExH8xXiF8A6S9tVIsmhQCwPgCxc9AZZUjNolmX7ORQD0uWGE4CzY6Jn5VL
-         uoTc0VGykGQRFkWmL6Rqs4ZaAQUrb5GhR3jzs/XYq1WZjrhLiQxROL3lh+FWCr5rmy
-         JkUrbH/T21xAw==
-Date:   Tue, 16 May 2023 23:45:42 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
- fpsimd_release_task
-Message-ID: <ZGOXFjJnSVz3Lss6@finisterre.sirena.org.uk>
-References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
- <20230516134447.GB30894@willie-the-truck>
+        Tue, 16 May 2023 10:49:25 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E0C10EC
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 May 2023 07:49:24 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3f38824a025so1826881cf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 May 2023 07:49:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684248564; x=1686840564;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rOyuxQWRj7mBxcG4uzXJBTcD+VFjWgiMqfEKYgz0FxE=;
+        b=Lz0TiqncdRoXeVjHg44OrLFE2qLcXpMeVi+QvnvDEREwT9C5xa+IqBu3GpPJCqw/Q2
+         CvlsVAr7+c0jqQC6ixXNANzKotTrwahGzP3+29GAM9ONPuJ7OWs8jSoRbhD2was1U3n+
+         lq3Y3ZwbsHYzT7dydr5i4WwmqlaNitZcKehrbdbtUk8DNeVT6/wJpMlnArEPxJpE+LQW
+         H9wGLfgaZVg0P6YGffsllV7wPquF4UpgSo32ORWhhZCX/blykpQ8/Dyw9yiLslVYoylD
+         E9/uqMDbmSjtjYCyzQ6bWrs0qRSNfZG6nldBlho4sNyOqiyEAcrfscCpm3D/+lcafV0f
+         JnkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684248564; x=1686840564;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rOyuxQWRj7mBxcG4uzXJBTcD+VFjWgiMqfEKYgz0FxE=;
+        b=Fu/FieXEKlhNrQlprcnmTe4p8hdJk0j7sWczexMbZhuguolhzbXf3/T/3+crQljPjs
+         Fgjv/AdJByfs1yzOStpoofNKuUk+Kg9TSsjt1Lj2nsTAnbG6Ayb825er883jns50Bn8q
+         w4+B/o8mj+9sKgx01swVbw2NQ+/qVukexQfzwiS+rOtX0Sy0fqeB8FU9Q8Pi1XP3RktO
+         bmlxfuymVToyCItx31UAJTt7nE83Tfw912iQU2nFLVXFr6OBvY2l1mpcUrRFJZw+MpSP
+         esbRtvPHVR6rzRARfzAR2ysuHJF+cFd/Xe8lLJbOjHea04tsEvPkUDMl1j+CrIthp2qL
+         sw4w==
+X-Gm-Message-State: AC+VfDzRB60osGbkmApZ641cs41G7EuZI6IdGF+WnevKIh14lo1WcC0v
+        2h4wkk6oB96IkiF3XTA6klUnEpc893zmMY2DkqkKrw==
+X-Google-Smtp-Source: ACHHUZ5Yx61E/0FENVw2X66LL20VU83PcKIKc/B5iWAVRpCnrBdFVFUdFJqIPdT+Gyld7wf+dHsBbFnV8b1PCO4uHwc=
+X-Received: by 2002:a05:622a:1a24:b0:3bf:e4e0:26a0 with SMTP id
+ f36-20020a05622a1a2400b003bfe4e026a0mr368805qtb.14.1684248563679; Tue, 16 May
+ 2023 07:49:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="B2Htttz3A3se8jyc"
-Content-Disposition: inline
-In-Reply-To: <20230516134447.GB30894@willie-the-truck>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230421141723.2405942-1-peternewman@google.com>
+ <20230421141723.2405942-8-peternewman@google.com> <3816ccf6-4f74-6406-5ca0-580743efa2a1@intel.com>
+In-Reply-To: <3816ccf6-4f74-6406-5ca0-580743efa2a1@intel.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Tue, 16 May 2023 16:49:10 +0200
+Message-ID: <CALPaoCj76eMTF+VPT8_52_D+fKpWt2ENcyavJ4aooCOo9TYKFw@mail.gmail.com>
+Subject: Re: [PATCH v1 7/9] x86/resctrl: Assign HW RMIDs to CPUs for soft RMID
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stephane Eranian <eranian@google.com>,
+        James Morse <james.morse@arm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi Reinette,
 
---B2Htttz3A3se8jyc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Thu, May 11, 2023 at 11:40=E2=80=AFPM Reinette Chatre
+<reinette.chatre@intel.com> wrote:
+> On 4/21/2023 7:17 AM, Peter Newman wrote:
+> > +     /* Locate the cacheinfo for this CPU's L3 cache. */
+> > +     for (i =3D 0; i < ci->num_leaves; i++) {
+> > +             if (ci->info_list[i].level =3D=3D 3 &&
+> > +                 (ci->info_list[i].attributes & CACHE_ID)) {
+> > +                     l3ci =3D &ci->info_list[i];
+> > +                     break;
+> > +             }
+> > +     }
+> > +     WARN_ON(!l3ci);
+> > +
+> > +     if (!l3ci)
+> > +             return 0;
+>
+> You can use "if (WARN_ON(..))"
 
-On Tue, May 16, 2023 at 02:44:49PM +0100, Will Deacon wrote:
+Thanks, I'll look for the other changes in the series which would
+benefit from this.
 
-> Mark -- given that this is an SME allocation, please can you take a look?
 
-I'm on holiday.
+> > +     rmid =3D 0;
+> > +     for_each_cpu(i, &l3ci->shared_cpu_map) {
+> > +             if (i =3D=3D cpu)
+> > +                     break;
+> > +             rmid++;
+> > +     }
+> > +
+> > +     return rmid;
+> > +}
+>
+> I do not see any impact to the (soft) RMIDs that can be assigned to monit=
+or
+> groups, yet from what I understand a generic "RMID" is used as index to M=
+BM state.
+> Is this correct? A hardware RMID and software RMID would thus share the
+> same MBM state. If this is correct I think we need to work on making
+> the boundaries between hard and soft RMID more clear.
 
-> I think the implication of the kfence report is that we're writing beyond
-> the end of 'task->thread.sme_state' at some point and corrupting the
-> redzone.
+The only RMID-indexed state used by soft RMIDs right now is
+mbm_state::soft_rmid_bytes. The other aspect of the boundary is
+ensuring that nothing will access the hard RMID-specific state for a
+soft RMID.
 
-> There are two reports here, so hopefully it's not too hard to repro.
+The remainder of the mbm_state is only accessed by the software
+controller, which you suggested that I disable.
 
-I think I *once* saw something that might be this but I've never
-reproduced it, and I suspect that if this just suddenly came up with
-LKFT in stable kernels when there's been no relevant changes AFAIR it's
-not showing up terribly reliably there either.
+The arch_mbm_state is accessed only through resctrl_arch_rmid_read()
+and resctrl_arch_reset_rmid(), which are called by __mon_event_count()
+or the limbo handler.
 
---B2Htttz3A3se8jyc
-Content-Type: application/pgp-signature; name="signature.asc"
+__mon_event_count() is aware of soft RMIDs, so I would just need to
+ensure the software controller is disabled and never put any RMIDs on
+the limbo list. To be safe, I can also add
+WARN_ON_ONCE(rdt_mon_soft_rmid) to the rmid-indexing of the mbm_state
+arrays in the software controller and before the
+resctrl_arch_rmid_read() call in the limbo handler to catch if they're
+ever using soft RMIDs.
 
------BEGIN PGP SIGNATURE-----
+-Peter
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRjlxQACgkQJNaLcl1U
-h9DF4Qf/Z7ilCYT2Cj93mUVCpgT3fU0hapi2LhsW6GtEd9ig8EhpUhsUU66FvDEi
-xSutCd+ZA/2Vr1UBOeRCAxrGuD+QLnKA5CcqliPfnip8QUK0arQ6CFx7KpWr1LEM
-M2hVfNquXQ1MgiGsUfnXJpFo07As7b/coy37uO1k23MjvneIb2irdkGtMxiTDxfJ
-1iCbhDZQt6eXXkcbVhCnaFVvrhtU5DtFd7cPsynQREf+DMeD0jQVlUYsuefkCd5g
-RmybWEEE8/ieOo5t5tHCjLcqt4jnswlzNS8PC8gHjDtG5WGR/hhD/4UWqkCwarYi
-NeBJvtdpzLf1qKuo81Ywi8YOzQ9fwA==
-=o7iP
------END PGP SIGNATURE-----
 
---B2Htttz3A3se8jyc--
+
+>
+> > +
+> >  static void clear_closid_rmid(int cpu)
+> >  {
+> >       struct resctrl_pqr_state *state =3D this_cpu_ptr(&pqr_state);
+> > @@ -604,7 +636,12 @@ static void clear_closid_rmid(int cpu)
+> >       state->default_rmid =3D 0;
+> >       state->cur_closid =3D 0;
+> >       state->cur_rmid =3D 0;
+> > -     wrmsr(MSR_IA32_PQR_ASSOC, 0, 0);
+> > +     state->hw_rmid =3D 0;
+> > +
+> > +     if (static_branch_likely(&rdt_soft_rmid_enable_key))
+> > +             state->hw_rmid =3D determine_hw_rmid_for_cpu(cpu);
+> > +
+> > +     wrmsr(MSR_IA32_PQR_ASSOC, state->hw_rmid, 0);
+> >  }
+> >
+> >  static int resctrl_online_cpu(unsigned int cpu)
+>
+> Reinette
