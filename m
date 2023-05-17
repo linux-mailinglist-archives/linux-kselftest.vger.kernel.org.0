@@ -2,122 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0877706B36
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 May 2023 16:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12128706B9B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 May 2023 16:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjEQOfL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 May 2023 10:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S231611AbjEQOv7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 May 2023 10:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbjEQOfK (ORCPT
+        with ESMTP id S229924AbjEQOv6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 May 2023 10:35:10 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1C272BB;
-        Wed, 17 May 2023 07:35:09 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HEY5CQ028967;
-        Wed, 17 May 2023 14:35:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=XV543IhCd2Bpd07S0y+6zMd4kb7cCwwJDkuKr5netPY=;
- b=N9F87kYgRbM6I+iBA00itDCGtKJTVSUDdIsoKrTzG/uHA4QiKR1KdkprfVXi8sVw++yA
- +aj/g8icbaNtAw8GlRTwVjqQYWv1Dddr5yWmFsiS5BSFdGjLbm4ptVrA3Qvz0vPzOXOe
- n/jQKAIihRmOIKs9fFcEdlTtiAUyQASUMn/k/v4dayVEBjIqP0opN2yXxx7802mxqICS
- EX+Z0/EnpBWVsDjTUEYh0ocv02tJrfn2EnIgfHSYNfMaMJD2gM+jDpjPU9WpzifZvDBM
- j/K0y8cUcQddRA/eoS4JItnTsYgjd+a/nCF8RA5B3xIE7bZZobFAqx1MXyk7Mjwy7qtF Mw== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmytajcqc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 14:35:04 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34HE8Y5h031816;
-        Wed, 17 May 2023 14:34:29 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3qj264sudt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 14:34:29 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34HEYQhs24576386
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 14:34:26 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34A3120049;
-        Wed, 17 May 2023 14:34:25 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F13F820043;
-        Wed, 17 May 2023 14:34:24 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.66])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 17 May 2023 14:34:24 +0000 (GMT)
-Date:   Wed, 17 May 2023 16:34:23 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Nico Boehr <nrb@linux.ibm.com>
-Cc:     borntraeger@linux.ibm.com, frankja@linux.ibm.com, shuah@kernel.org,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] KVM: s390: CMMA migration selftest and small
- bugfix
-Message-ID: <20230517163423.2e8a5bce@p-imbrenda>
-In-Reply-To: <168379811019.9368.1588862499018469612@t14-nrb>
-References: <20230324145424.293889-1-nrb@linux.ibm.com>
-        <168379811019.9368.1588862499018469612@t14-nrb>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GOqBpNTEMYaObwTe0G-svS34s224qb5w
-X-Proofpoint-ORIG-GUID: GOqBpNTEMYaObwTe0G-svS34s224qb5w
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 adultscore=0 impostorscore=0 mlxscore=0 phishscore=0
- clxscore=1011 malwarescore=0 mlxlogscore=999 bulkscore=0
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305170119
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 May 2023 10:51:58 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF912D7E;
+        Wed, 17 May 2023 07:51:56 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 10A63320030E;
+        Wed, 17 May 2023 10:51:50 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 17 May 2023 10:51:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684335110; x=1684421510; bh=U9
+        81mgJN5ZcIFGHHfNRtTYm9tIIshD/j5t+czAqBesk=; b=Ca9f/D4SJr14QvZGkc
+        +q7KTRGXT7JBFRrs75d+HJ2OHOSFueAY0un/ZGcKbVEoscZFW6SjqbiPXereZTY1
+        4lcT5rbc2J//JZIJSnLiqFoKjl+7sEm3mRPxHdA8kVhx6i+8Gv6Gs3tgeghB9AVx
+        tiFExJee1gfnnXfCGEqrMCOAyztqrVmVbbh4Vx8kBzBcchhCWGq9jE4AWpdrn/zc
+        KlbDH9cn2VZKKpo3BlHq2vmDVsjsuLASyEKUhF08I7lpQUUHqQi2ze3FpKl0U9IV
+        yp0n5gg/GsUfq8IoMt1JUB+wlGdGrbDiz4LfVQ/hM2UiQ/AKZgZzMrsWIQF+mwUG
+        o5Pg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684335110; x=1684421510; bh=U981mgJN5ZcIF
+        GHHfNRtTYm9tIIshD/j5t+czAqBesk=; b=EMWrwTfyiN4WwFm97r9VWWS6w2uAq
+        LgvmOB2bNzX3Nj1iJRBecCwthhPNqACErPlWa7ntFlYoaEwBhGN78KcLN3yBTNyu
+        Aqk3H67Dg6iVzIE2eoyn3hmWBvqBblRgzb3TZygGJHtSCh3YrmYDvNM1AlrxXI+/
+        YZMWcHS8mskGNb1OcG10Hh5tBRVj/WtG2lS25NQwWzGjSsjt1yoy6lceEwD7hdEp
+        ICxlryjGqFpBvOblk/or/mLmEinMRAIO7vCr/4QUi2/F6B8hv2rXwNtgp21zzcmi
+        W3WRrfgi52k7r9ApnTs4X2/2idzkX3KZD72Lp+8DQ9oBBrfMF6Te9k6Qg==
+X-ME-Sender: <xms:BOpkZAX-ah2gC9qXHRhxL9Jdqt9kqu-VKcGSuWg1GW_5ZN0t_KBOcg>
+    <xme:BOpkZEnCWHECQenDSE928iVzgjeKtfqwlYib_ujabtOEKkQ-iVrevetsmAAqV2PXz
+    oO1vUF8ZrqpGe5ciQc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiuddgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:BOpkZEanBGI8-zi50JEHLFiN5OCN7u3f1N-fS6wbkXOhNFZcQlB9RQ>
+    <xmx:BOpkZPWIrxfeze0hM1uxKpTiRjSQF0E2dM8RjNSgq_9LgDgcz5l8Gg>
+    <xmx:BOpkZKky6b4GKmAWHHstx-M_Q2MTJ0Mg84yM6a-OyBPfxMEqp1e5aA>
+    <xmx:BupkZNFPTGYv1tkCdtIpLzc7PK5bJcAAEF0LFfyPqwuQNavihPAm3g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9F93DB60086; Wed, 17 May 2023 10:51:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <83422cf8-5d77-4e2f-a854-c2b9a9a94d75@app.fastmail.com>
+In-Reply-To: <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
+References: <20230517131102.934196-5-arnd@kernel.org>
+ <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
+Date:   Wed, 17 May 2023 16:51:28 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Paul Moore" <paul@paul-moore.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, "Russell King" <linux@armlinux.org.uk>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, "Michal Simek" <monstr@monstr.eu>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Helge Deller" <deller@gmx.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Heiko Carstens" <hca@linux.ibm.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, x86@kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Eric Paris" <eparis@redhat.com>,
+        "Dennis Zhou" <dennis@kernel.org>, "Tejun Heo" <tj@kernel.org>,
+        "Christoph Lameter" <cl@linux.com>, "Pavel Machek" <pavel@ucw.cz>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Waiman Long" <longman@redhat.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        audit@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 4/14] audit: avoid missing-prototype warnings
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 11 May 2023 11:41:50 +0200
-Nico Boehr <nrb@linux.ibm.com> wrote:
+On Wed, May 17, 2023, at 16:33, Paul Moore wrote:
+> On May 17, 2023 Arnd Bergmann <arnd@kernel.org> wrote:
 
-> Quoting Nico Boehr (2023-03-24 15:54:22)
-> > v2:
-> > ---
-> > * swap order of patches (thanks Claudio)
-> > * add r-b
-> > * add comment why memslots are zeroed
-> > 
-> > Add a new selftest for CMMA migration. Also fix a small issue found during
-> > development of the test.
-> > 
-> > Nico Boehr (2):
-> >   KVM: s390: fix KVM_S390_GET_CMMA_BITS for GFNs in memslot holes
-> >   KVM: s390: selftests: add selftest for CMMA migration
-> > 
-> >  arch/s390/kvm/kvm-s390.c                      |   4 +
-> >  tools/testing/selftests/kvm/Makefile          |   1 +
-> >  tools/testing/selftests/kvm/s390x/cmma_test.c | 680 ++++++++++++++++++
-> >  3 files changed, 685 insertions(+)
-> >  create mode 100644 tools/testing/selftests/kvm/s390x/cmma_test.c
-> > 
-> > -- 
-> > 2.39.1
-> >   
-> 
-> Polite ping.
+> We probably should move the audit_serial() and auditsc_get_stamp()
+> away from the watch/mark/tree functions, but that isn't your problem.
+>
+> Anyway, this looks okay to me; do you have a problem if I merge this
+> via the audit/next branch or were you hoping to have this go in
+> through a different tree?
 
-Ooops, I thought this had already been picked
+Merging it through your tree is probably best, Andrew can either
+pick the ones that nobody else took, or I can resend the rest.
 
-I'll queue it for 6.5
 
+    Arnd
