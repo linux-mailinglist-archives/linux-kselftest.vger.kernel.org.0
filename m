@@ -2,102 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 749B1706CE4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 May 2023 17:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30774706D53
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 May 2023 17:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbjEQPcI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 May 2023 11:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
+        id S232148AbjEQPwi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 May 2023 11:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbjEQPcH (ORCPT
+        with ESMTP id S231637AbjEQPwV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 May 2023 11:32:07 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73A5A5C6;
-        Wed, 17 May 2023 08:31:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684337488; x=1715873488;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=s7w7liuVQK6OILCFceYzFS73/MrLg8U8eXJ3628P3TM=;
-  b=oDe4Q3O/gq9qyielJx7TYnzEIPkGcm6qtYwenQBd6n7YLgzA8M+Dfaqv
-   Ov/MEl30m1XUjcoHwI7CYYg9AW6yljgSMyL8tx1otenpLYhFILHkA+1R1
-   5b8Z+hgYAkO1yKPOtPLUxIvGsCIrto82xC3PFAQ+8O04qn5cxtm66CaNX
-   AohGwjXOwYhMFp3nU4sPuAiYfH9smv46gzCMxQzTKtoYkzR8aUtW3PN75
-   y1T52Ih4Tgc9vQ+EQ6X2sR1QE7nVsoaC/l1JvUYv86Ff3TgK3u0blu/Nl
-   ELAsfTvH6pZDbg+xS5bOMt3F07ql7jViJDTvyZcX9axG5gOCN2JjfHIaJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="349294763"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="349294763"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 08:29:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="695907865"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="695907865"
-Received: from cbrown-mobl1.amr.corp.intel.com (HELO [10.212.129.207]) ([10.212.129.207])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 08:29:47 -0700
-Message-ID: <b69f6809-b483-158f-8be9-4976fad918d8@intel.com>
-Date:   Wed, 17 May 2023 08:29:47 -0700
+        Wed, 17 May 2023 11:52:21 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4814DDC68
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 08:51:16 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5617d793160so10748917b3.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 08:51:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1684338674; x=1686930674;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f/BiToevvpXZU69/oSETGaqYlCzMkDhIUSch995c2x4=;
+        b=PxKg2pRCl/MeEqp5uvc8FI6+YOF8ZQ0EzboQ7hpfbuFJX3IIqChekL0/PSY6f6ZBkZ
+         urHQTw8B9Qu+ZY/1vJzTnbXCr75YfIhdSyy686/eLISuhgZHB6UQ3EVsl6FD9v625A/w
+         tjxES+HrRzg6bCh5g/2aKxK6aL5WAXk6n5hL6cNQ4DLvHOdkJN6i/f12VZINOcSbVDWY
+         Ht8TqiZDvyXTZ0hs/EBmu3kHn7bK+REyjKbHcdjwjITX645yBU2SclzoGsnZb8Qs2uwx
+         3eg3Vv2wpF9jKUnxeZFE5DWnz2u2DGzEAq8Ck0m/CDBEkeEBn1RCKj2gBMDNc7cK4SzS
+         DFJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684338674; x=1686930674;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f/BiToevvpXZU69/oSETGaqYlCzMkDhIUSch995c2x4=;
+        b=gpsWtZeC6OK2O8FRrvBGsgmJlDE1GqOlWW47ekm8DwmxT67zAvzGRyO4R7o/3mKWXN
+         nS59bSY0TN8puby6IjqgpmFJ2Ox+j97SyBhmTurTlp8odVZq1Dy1FOQawneqXM7vl0b3
+         DzWnEoZfhE/U9ZztrdFZusZPuV9FeZLugJjBb7M73T7bzsImnQLNIOc6TyZDcmKRh7WD
+         /TO4x1L4avQPolFXU29keQVrRdMXDuwhcmUCIyPtEcZ1lBMhBRRmgdOasvKaoQ5IUpg5
+         GJJLXfA5LEzbMWLvp6JiAZtiZPblPIQQ+RZO0mOWKr3NX6Eb6V3BwYMVOb+YG/36sIY1
+         b28w==
+X-Gm-Message-State: AC+VfDyJddzTSLimRWYn7S4rDf6O0W4eY24ofZTI3dPStx0sqntvDqy5
+        7taXgQKy+JPnnIy2y1nwQxS8IahK0+9SGmkqsJFe
+X-Google-Smtp-Source: ACHHUZ7m7iuWUD5omxnx19xTgvLnN/+5Wgfo2oM56GLLAkTkIZomD+UUzUvvSVfeDFHavflonxguaAqx7fdYrFqY+DA=
+X-Received: by 2002:a81:53c5:0:b0:55d:c2c3:fbb8 with SMTP id
+ h188-20020a8153c5000000b0055dc2c3fbb8mr34245755ywb.40.1684338674184; Wed, 17
+ May 2023 08:51:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
-Content-Language: en-US
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     =?UTF-8?Q?Stephen_R=c3=b6ttger?= <sroettger@google.com>,
-        jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
-        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org
-References: <20230515130553.2311248-1-jeffxu@chromium.org>
- <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
- <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
- <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com>
- <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
- <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com>
- <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230517131102.934196-5-arnd@kernel.org> <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
+ <83422cf8-5d77-4e2f-a854-c2b9a9a94d75@app.fastmail.com>
+In-Reply-To: <83422cf8-5d77-4e2f-a854-c2b9a9a94d75@app.fastmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 17 May 2023 11:51:03 -0400
+Message-ID: <CAHC9VhQZyxVhDb0uB-+q7H=e++yq0qEAZGssPjepgnZ3i3_pnA@mail.gmail.com>
+Subject: Re: [PATCH 4/14] audit: avoid missing-prototype warnings
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Eric Paris <eparis@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        audit@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/17/23 08:21, Jeff Xu wrote:
->>> I’m not sure I follow the details, can you give an example of an asynchronous
->>> mechanism to do this? E.g. would this be the kernel writing to the memory in a
->>> syscall for example?
->> I was thinking of all of the IORING_OP_*'s that can write to memory or
->> aio(7).
-> IORING is challenging from security perspectives, for now, it is 
-> disabled in ChromeOS. Though I'm not sure how aio is related ?
+On Wed, May 17, 2023 at 10:51=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
+e:
+> On Wed, May 17, 2023, at 16:33, Paul Moore wrote:
+> > On May 17, 2023 Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> > We probably should move the audit_serial() and auditsc_get_stamp()
+> > away from the watch/mark/tree functions, but that isn't your problem.
+> >
+> > Anyway, this looks okay to me; do you have a problem if I merge this
+> > via the audit/next branch or were you hoping to have this go in
+> > through a different tree?
+>
+> Merging it through your tree is probably best, Andrew can either
+> pick the ones that nobody else took, or I can resend the rest.
 
-Let's say you're the attacking thread and you're the *only* attacking
-thread.  You have three things at your disposal:
+Easy enough, merged to audit/next, thanks.
 
- 1. A benign thread doing aio_read()
- 2. An arbitrary write primitive
- 3. You can send signals to yourself
- 4. You can calculate where your signal stack will be
-
-You calculate the address of PKRU on the future signal stack.  You then
-leverage the otherwise benign aio_write() to write a 0 to that PKRU
-location.  Then, send a signal to yourself.  The attacker's PKRU value
-will be written to the stack.  If you can time it right, the AIO will
-complete while the signal handler is in progress and PKRU is on the
-stack.  On sigreturn, the kernel restores the aio_read()-placed,
-attacker-provided PKRU value.  Now the attacker has PKRU==0.  It
-effectively build a WRPKRU primitive out of those other pieces.
-
-
+--=20
+paul-moore.com
