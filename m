@@ -2,66 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23D0705BA2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 May 2023 02:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2420C705BA4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 May 2023 02:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjEQAG1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 May 2023 20:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
+        id S231393AbjEQAGl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 May 2023 20:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjEQAG0 (ORCPT
+        with ESMTP id S231357AbjEQAGk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 May 2023 20:06:26 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5B22D66;
-        Tue, 16 May 2023 17:06:24 -0700 (PDT)
+        Tue, 16 May 2023 20:06:40 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A70655A6;
+        Tue, 16 May 2023 17:06:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684281984; x=1715817984;
+  t=1684281997; x=1715817997;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=rPt43MNebs/5znkgjxwha/576Cc5dLJmayIDy5S1SaE=;
-  b=hLS4zRhd/9gh5BXJbX65ugXOSZetJZpYtEczqeFkItbSrGc7dVyH5wC9
-   5fT0iiYTkAXQJs8LbiampfuIuf6qobkF0wcYs6x79mITJLatnHpvnW+xT
-   DdI+IYqchQo5HG/FW+eClcsLEUDEPiheVsCUGLwKy21YVsmH58CzXuVi0
-   nrkLNF6ikfQWd21XpJSHDZEKc0G2XcN1Zg3+tOzydfTKPNfVdSNXhDxvv
-   P64IhIKBAVdM3/yiLGhZVMKsXGoiu/CyS4DZ2mxQqmqOIgFRhZIYtt9jP
-   tjssGz7xzFnGjHf3j2UiXIMv2ne0mJ/HT1zUCqVKmiBo59D4AOZLFAFvN
+  bh=fQNsDJh2/ldPNFQ6uS8H92azdCe2R9W7ur2Ss8el/i8=;
+  b=mzS+cKUw0MwycfnQ2ArbtnuLKoXTnJtvlOc+FjaXsxc4/dRfsEK5hn3W
+   /YfdB9tHxgwWfYHyO5HfFbUziGy6Yo70IvmKwwFZxuOdO/wqmJhxlod3k
+   fR/ST6HZ0D9qTfeGOd93eALOqQOCmCMWNDB96UHJU573p06K7t6rH5wE5
+   argDqjVdeG372sxa6dwRJsmeXQRA+oYP4ZhG9+rO5RuaIUx8huzKa/3vO
+   Y1lYelQulBwRgSOyFx4FxJVIKNT0U7ktq6T7c7BPKYy1BB+Q32FPWCVOh
+   FCYyaUHkY0hp78KLqki/sHO2zXcdgYifnUxJjtQMDVg4dlXjqfupx6S1g
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="341001780"
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="331982870"
 X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="341001780"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 17:06:23 -0700
+   d="scan'208";a="331982870"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 17:06:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="1031470654"
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="948051076"
 X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="1031470654"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga005.fm.intel.com with ESMTP; 16 May 2023 17:06:01 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+   d="scan'208";a="948051076"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga006.fm.intel.com with ESMTP; 16 May 2023 17:06:36 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 16 May 2023 17:06:01 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ 15.1.2507.23; Tue, 16 May 2023 17:06:36 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 16 May 2023 17:06:00 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ 15.1.2507.23; Tue, 16 May 2023 17:06:36 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 16 May 2023 17:06:00 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.170)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ 15.1.2507.23 via Frontend Transport; Tue, 16 May 2023 17:06:36 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 16 May 2023 17:06:00 -0700
+ 15.1.2507.23; Tue, 16 May 2023 17:06:35 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G9TAh1uRgl/iDznsNTvkOiwrGoXAT+pIvKOClEVDRx/5pyI6lSeI6KHS6p/vi3PDjys2SCGPGLQLpbBbHoqxvFRvilLqeqaafV30DlO6kZgrNQikeKVN+2fSp5lZhZnR8Vj7jaPsh3/EfHryjJQ5Y7xD4UBfTtWhzfHFmAqBmWK57aHvCI4OvGrWiP3lvdtGfHxdw0mafx3KX+0efpZpvXT06LZbi0UtdR3ZGfyRtcvpr5l510jkXV97jf5Sad/rNKdssrfSMoaI1TbXoi9P61UhPRzZhVZNzhjDNNlL/cr+9hPEZ7oFwNi9BTSdSCLsHHd/3APz6Ssf3uH31Oy/1Q==
+ b=ew0CHpW0h4GJ5/BzN9k/5mZ6hWy9cW9jGtK3rh0Nnd9YoOedrCbv6HesYpa+o0USfp/96U/u32T4afa8RYRwimF35dkvz4Br4govYNltm33BD38DmU8uNkRyEE3dZBV+LJttT/Sw8VYMe0PzrfWfcZU6Cth4QJ3IYMgn8Tp9GGCxrBAZ7HphsbZf6y5ijBGmOOpBqE9keQZzvgoCFL5PrZ/AZbVfVHpwCNy6WhvY9/3//OxyvUssb/n+rmViEajLVdyClDp5vkmJ1X/KTkN92M4gX1vMtJ59GkYdS5IEZAGo0O3Kzb81F4HjFdVogX5xaMms7L/Dj8THTzsPfyMJPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZlvvTSWJTBr5E9lAuJsO0+GxWRFspTtmxRfOvrkj82w=;
- b=K8squHSokgDFbaOU6x/0Ow73as+/UEQfIowCy8WAf+Z1/4wKA/l0FZzYMW/c28+iVF66Qm1GPRj3TVOYCjGDesRt7lDMR6FxOIAm7EsBnwMpMYzFcDSIoFKGZ6zvPP5G0hf9Fa5BhyBYWC5YC3MBgSUrs6s7Tj4DV8wnUHoGAs0IB6/g3WJ6kzu7IycACSQBjuGDh13xJ21kP+FXpUMukgFdKge5UrdoGfeaOdV9w5R+eiBCZ0TYTNGCax9dBLaI+dtKog1RDCpgE+k1nirgVCEtzfOjKsxxWk6VBy4OK+Mzci4G2jg+7Vv8fMZ7l7WxMEBIp3IE18IYiQ9ZuxmbHw==
+ bh=mVwj6FBpNi37jQpuimJwxE4P1QcDLATX4EmW+QIRONs=;
+ b=i+Kc5YC6QuTJ0wN9F5A10M1L6ouCKNIzIftpkWoTvZGGiktk9+Y2X21VXMY7i+Jiay9JmmLuihZfS/q9xHLTajc7pr30e8esm/BGnzxM3c/00CGvpI/9Ohn9Q8h31UzUbrLl3o/Yur+2IZ54QwGpIARpskc1U08xAUKBsMKibKxjVziZPC3DW5NKGiGCOCtIKdtpMIWNX68k5uOWgVeEdAHCLfgsYcIxSGs+Ogt+4FJ+1vb6qaTs/WaIZVw91i48DeVGniELvkLfP/ntN6IaCZ6rdmjC3Emcv/FhbGiW6I7DORK4XGHBEwtiDZYqw+tu/c1FKc7iMNaUS6DtfoAyBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -71,17 +71,16 @@ Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
  by IA0PR11MB7911.namprd11.prod.outlook.com (2603:10b6:208:40e::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Wed, 17 May
- 2023 00:05:52 +0000
+ 2023 00:06:33 +0000
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::591f:4873:fd80:9a6d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::591f:4873:fd80:9a6d%6]) with mapi id 15.20.6387.028; Wed, 17 May 2023
- 00:05:52 +0000
-Message-ID: <04c9eb5e-3395-05e6-f0cc-bc8f054a6031@intel.com>
-Date:   Tue, 16 May 2023 17:05:50 -0700
+ 00:06:33 +0000
+Message-ID: <00b0c70d-eed8-8dc1-8046-25764d991bf4@intel.com>
+Date:   Tue, 16 May 2023 17:06:31 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v1 3/9] x86/resctrl: Add resctrl_mbm_flush_cpu() to
- collect CPUs' MBM events
+Subject: Re: [PATCH v1 7/9] x86/resctrl: Assign HW RMIDs to CPUs for soft RMID
 Content-Language: en-US
 To:     Peter Newman <peternewman@google.com>
 CC:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
@@ -93,82 +92,79 @@ CC:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
         James Morse <james.morse@arm.com>,
         <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 References: <20230421141723.2405942-1-peternewman@google.com>
- <20230421141723.2405942-4-peternewman@google.com>
- <38b9e6df-cccd-a745-da4a-1d1a0ec86ff3@intel.com>
- <CALPaoCg76nUsJ7eYcU61gied8WBuAAmqy0Pqpsq5=Z-S52Qg6w@mail.gmail.com>
- <31993ea8-97e5-b8d5-b344-48db212bc9cf@intel.com>
- <CALPaoCiPCxUeGKjZytxmse2oNs=qDBbRY9kH7AZGG6iXf1qtJw@mail.gmail.com>
+ <20230421141723.2405942-8-peternewman@google.com>
+ <3816ccf6-4f74-6406-5ca0-580743efa2a1@intel.com>
+ <CALPaoCj76eMTF+VPT8_52_D+fKpWt2ENcyavJ4aooCOo9TYKFw@mail.gmail.com>
 From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <CALPaoCiPCxUeGKjZytxmse2oNs=qDBbRY9kH7AZGG6iXf1qtJw@mail.gmail.com>
+In-Reply-To: <CALPaoCj76eMTF+VPT8_52_D+fKpWt2ENcyavJ4aooCOo9TYKFw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR03CA0371.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1::16) To SJ2PR11MB7573.namprd11.prod.outlook.com
+X-ClientProxiedBy: SJ0PR03CA0384.namprd03.prod.outlook.com
+ (2603:10b6:a03:3a1::29) To SJ2PR11MB7573.namprd11.prod.outlook.com
  (2603:10b6:a03:4d2::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|IA0PR11MB7911:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5e6af65d-43be-4f45-7472-08db566a7a72
+X-MS-Office365-Filtering-Correlation-Id: 8533b289-7258-4152-fe05-08db566a92bf
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eUeWZ38Ckquq4KQ7Vya9yeZN3o4FXvld0JqHz1XeWBLjDBO5mgejRE9kn5RmCdTuvG/YPj3jGpCnsTAFZFpYwOSPQsMdN8vnA9eFeVqitjIONvNTN0At655wdqA/Nhw8oMNkwZL83pc3MJqK7vM8S/HaSCo3dCG776ot09WdBBvdu3kFJy/+Y6+iwHFPWxlQjilFLimWdE0QIeFgMCx9x6nvZg9hZY2J0WI87kqCZBOaoANZI1+Mb/GttVq56cKpp/aoJ3F/VMxopFUMiOeyzzsyQU7fGkFQfJ8sHKwoLftOlC7KSoudt/2xuE/nJ5Iz8k4FMjibDxkVI2TKiJcVwx2c2COOtz5SD0YmAqfobrWkVBj/Mq9UvfHm5E7V7HF0RWYqR5SMpm+SebTUrL1OPFOpEW9gv7pPeQyisWPhkJRxNiNOGqCNNfl8l2OW1VFnNZ8csu1HbqeQNLhiONglwxE9/Kxcpw69IyrgpjGrvb3/hb7hEI/QbEepNtlh9FDBzdmRJrTMRPEY4DHR/XhEBus7e/5kiHIIjnYOwRB/PYzdI2ETKIHt6uTVMX+W0rpssUSABiqzR7WdSec72Ws09iHxmFK30t+WA4QHR08TywGSY81nmQaiCAl4gTHu3rvL71f6EqJuUsgE48Eb9c6a+g==
+X-Microsoft-Antispam-Message-Info: XjmuMKYBe/HctcHz38HzIgLbvtbXE4XPg+XSmm3+lhbtiG8ybCU8XryGP+k3ivIE8mrUW8K2DKmp2awQFjLhCpZFhxaQTd6uvEi1HnZAvPcrR3kjakD/wuJBmlV0shA9IikDYSAk/OWaXGVl8UisH+UqowvK97mQdQZtWbu8SyX7+IhelCPxkMVl86LsLHt8+SHtkQsJc7MYqrKhLYYtbTfXSsid0gMenys9c1Z9j9A/HinWxIgbJUmma7k1PgmIAzgwD7Od2SWY0SmqUdEVDe3wo2rjAuvpmDs27LXaKeGisto7uB4Clf8rivSjz9ky7O1PrPz6vGnOTy87ednv2Pfk2ImmXJeAeL/t+5e1HAO4JaQCr+wMv5MDPMnC1isM3V9hjkQUEUhNffLJc3uCrgb0MghVNxNJO3GwPv37hIbfB85+ADHhA/4WG+m2xc6VbAXmXbsyg1WyMtW/VrHJJBaR2rZVPlC2gHeyQ35ShZP+tOAheDpnysfy3G6kHYgouTdMMHvaahmXVuum4MG0Vzbb17p3a3NTobE2xWB+9Ov6juSD0NUzxsBllYqhpwUj2GYZ4j++hjPnqOFDcUyWeEuV80UkstJbSZGBZ6g0BRLI7GZAiWnesWNOL4y4nI/83qZTA9GGgLygWC22gQHSgg==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(376002)(396003)(366004)(136003)(346002)(451199021)(31696002)(86362001)(54906003)(478600001)(36756003)(186003)(53546011)(6512007)(26005)(6506007)(7416002)(6486002)(316002)(38100700002)(41300700001)(66946007)(66476007)(66556008)(4326008)(6916009)(8676002)(31686004)(82960400001)(5660300002)(44832011)(83380400001)(2906002)(8936002)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T0hSekJNMXJDZThhRXlNWEdDcmtKV0wxZlpYcnVDMHZjTzYzbWhNcW1Hdjl6?=
- =?utf-8?B?RTdVcjJTcUZXbmRnNlNXSnVrbVVrQ0FuOHMvZzFqMmN3MWNkeVY5SVY3dnF0?=
- =?utf-8?B?OGdyd0VpbzNWZm1UWlMzSWUvY1ZuVzBLdWFWdVArdStyc0gvSzRJU05pSndu?=
- =?utf-8?B?am1kek4yV1NYK0pORWpSRGFKMkt2QWhXc0hEa0FrZUpFZ2JQekk1L1M2L2V1?=
- =?utf-8?B?WmszNS9wc1loQnIycUhFQmw3c3h0d2tqelBwbzN3T3d6RWZ0eXpwalVOYUFw?=
- =?utf-8?B?VVVjQnVvYlphVENhR09KTG5mMTRZUEJWWkMxUncvQ0YrVy85MnFreHN4cGZY?=
- =?utf-8?B?QmRNSGgzNUduZTNjNjVhMmk3RVZrY1NQTkg4VDJFYVptOEtGNU5OZHBSdzZJ?=
- =?utf-8?B?bm1OOHVnVEZPdDR2Z1NjYXpob2xUZTJscWk1dVBQaHp4bjRRdTZKM3A5eVoy?=
- =?utf-8?B?Y0FoTkEyUUZKc1J2SVFFSXVZRTlUQ0I3SjRrb2M0S2dOTXJUVmtlckhsaXVp?=
- =?utf-8?B?NVhTelM3STl4R0JQaHdqZXB6ZXFlK0NOOTFqS0JyR2ZNcmJ0SjNEdWdkOUlM?=
- =?utf-8?B?UC95d2lBZDNmcTB3M3B5dURQZlRrRzJNOVlvV2g5K0IvRXR4U1c2TVVoK0VJ?=
- =?utf-8?B?dVp0Ykk1TCtBMjZLOXVadlg1MGg2cWNrN1pWU1RJdVBjb1Y2MkFLTnZ5aVVX?=
- =?utf-8?B?akZsNFF4UXdWYnhUMk5Pd1JUZFZLTlpwcjBXaUNhbjZDS1ljRTd1eFh2L29K?=
- =?utf-8?B?dnFpMUE3N3lZL1AzZWxWTGlPTGFCSVN6amx3dUk3NjNSTUlVNGpMZ29UZVVX?=
- =?utf-8?B?R0JOUWJJTHhyTXFXdkh4bllLdnlMWmtSaEhmdkNnenpMaUJpeTVLWlRSRUlN?=
- =?utf-8?B?eFY4R0k3OG90NGhvdUpBeUN1TFQ4M2xyRkZGOWVsQnZCbnJSakxzVU13d2F0?=
- =?utf-8?B?U05LaHVhdlpxWSttT25qMnpzc1NpbEQ1Rjd1V0NNWkxlOVVqK3FoeUhYSVpV?=
- =?utf-8?B?Q3hiU3ZZTVQyS1hrQWFkemFmdEFjYlZwSE80WEpsWHpqYnExOTJzOVArZEhw?=
- =?utf-8?B?ZEI4V3M2SVVzWFFtS0NxVGtxOVRMdUlDZGRxclJPclRGY1prbGFnSVFGMm13?=
- =?utf-8?B?RktyMUluSW4vWXNXcE41dFkvZHZBcW4zaC8rNHRTeUpNLytiOTdWemRwb3dU?=
- =?utf-8?B?aGFnemJmTDBKLzlCQWd1a0E0V3dDd0tNZjBMcGV5TTBSWDJ0VzdZNjdDWnRx?=
- =?utf-8?B?TXZEK3l0d3prK0xmeUxwZEpOakw2Z0ZRRk5vby9GZW1ldTl1YkZMVDJvdDRv?=
- =?utf-8?B?MUlhOVU2cEdyYU5Oa3l3dGM3U2tybSticlE3K2JnWU1vMloxR2x6azQyUCsv?=
- =?utf-8?B?SWRrdExnTVcwY0d4bUxpUkRFLy84L1Y1QkVoWjNhelhJNjlWMTA1aENJV2x6?=
- =?utf-8?B?SW1hNjloNWFUSk5mSytpSmVEU2VvQmUvckQ1NDlmMEp5Mzk0SUtYZHlGKzQ2?=
- =?utf-8?B?dUNWSzh3UElHVmdUc2RtaDJoUGVHanN0d2RpaUpzc2c5REpNMHNCa3VsQi9y?=
- =?utf-8?B?T253S2loOXB3ZkRrRGJBNmEvTUd6WHQ4Uk44NnJjSzU5N0UyUmJLY1U4VU1l?=
- =?utf-8?B?TWxNK0Zwc3ZmRFl3V1h0bWNPTjZsQ3BVUG5nNzJqRkw0QXRQQ3NLVitqanZv?=
- =?utf-8?B?aWNBOXdkMmpjL1FDMWZ6OUIyOHliRmpCaXdGa2JKeldQSHZHVDJpYkV0cEhk?=
- =?utf-8?B?cEcxeWQ4Zm8vbXhNcDRMWFVpb1BpVDNZVFpiNUVXQVBlMWpuTmsycmpvQVlI?=
- =?utf-8?B?NkExYk9DYW1LMEhhWFp6bEFtK3R2b3R3cmU1YXBsMnMrTitrMDV4aU9PN0V2?=
- =?utf-8?B?anFPYjRKNVBDajNodUpnMHVLTk5QTWx5WEJlSG5aQzA5dlY2K2lQdzQyQTZD?=
- =?utf-8?B?OUQ5dVdrY0JNM0RrSGJESGRnc3lyM3F3RFR2dTlzbHVFN0FKVnE3WFdReFhD?=
- =?utf-8?B?R080SVZQdHpwS2J6QTZhZTJFdC9jWG9ZeHl3VmloV05JZys0bEFDdzBON0Qr?=
- =?utf-8?B?RU9DTEVuV1ZIY2FRek9JamJYVzZZajRCYjJ0VFYzSmpiOSsvWkVrYlRKVVlR?=
- =?utf-8?B?QTVqUlhqa0UrSEFUSGhDQ1Z3OThTNEQ1dFJORVdYVno4YVlhcGQvTERNTVhM?=
- =?utf-8?B?WkE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e6af65d-43be-4f45-7472-08db566a7a72
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RE9HcjBUZWIvNVVjV0JUZWJ1Y2NrRGZMZVZpak5PNkN2T2FMZFRzVzd2blY4?=
+ =?utf-8?B?STE5TWFIYS84LzdZbkg0aDhvdytxYy9rdzZ4aThLNWJ4K0ZTMHBMK2FBZDFC?=
+ =?utf-8?B?N1VtRHVUR1c4QmNicHZtd2o4MnNrNnRmaUQ5S0FmOWg1VkJadkpCT1E2MUU2?=
+ =?utf-8?B?a3hNMXFNVTBZK1UvS3V1M2drNUNwVklDa0FmTGtuREcvdU51YVpCTHJVNENx?=
+ =?utf-8?B?d0tsQlYrMHZnZzJBbUNFRVY2ZHJ4R1NpMS91em1Sa2xYay8wRG92V1NyTW1N?=
+ =?utf-8?B?QUVSeHhmZ01HbW8vYjVob1pWZUxra2FKelZ1bnZHVHlxSWdwYlpNOVlJNTBN?=
+ =?utf-8?B?RkcxelRKdFJOd2VhWGtmZ1FvNmhaeHYyU01QWHh4QzV2QUNLK0t1RFllSEk1?=
+ =?utf-8?B?SmlsTmpNYXZ1NjhyZTRCcEd3TzVTRDBNV2xKQzEvdG52MFhNSUY3eHVsNFB4?=
+ =?utf-8?B?WHdaUFBYeHF0Mkk3Q0tNd3JkLzdaSVhWSHF0VnB3T2w2aFRhTS9EMENYSkNX?=
+ =?utf-8?B?cmxIbDNNdnc5UW5OYVNUaXluN1dmS0hCTkEvWmtaZzhSWDNLS3ZPV3RNN0pE?=
+ =?utf-8?B?b3pSUzZ4dWhJWVlsT0JBUEUrY25aTnhHbVBCNld4dllTK1lYOEt5QW5IbmRz?=
+ =?utf-8?B?cU1Oc285MGZjRVRIblZ2TmdISDEzdzdLZ3N6ZkZuRDlmMVVRUi85a0NHRS8v?=
+ =?utf-8?B?RnBwZ01rZzFXazQ3NEYxd0xaakVCQTQ3RkIzOTA2bm96YmVkRzI2b0Y3bmx5?=
+ =?utf-8?B?R1JSZ0Z6RE5ET1BXUEJXQTJyRW95WWJvaGNUV0FYclRFUWpieENwV2w4YjZZ?=
+ =?utf-8?B?NTJFQm1PT2E1WVVpOE82NjRTbytoT2luUzVTTWVhdTBUdFRxVDZHUlNrZVpD?=
+ =?utf-8?B?WFIrZ2FOOGwzNWRSWVpCSW0xMmVwOVkwTDMyd3k3Z2ZOMkIrWmhOQWwzSk9w?=
+ =?utf-8?B?R3p3R2p0dG01ZlBZNTFnWmZxRjVCM1ZCbWV2MkxzT2lTMER0bEcyQjYvb1pZ?=
+ =?utf-8?B?WmJzQUtyVVZweWVaQU1qL3ZiYnhsUzZ1dUQ5M1dmdnpWUUtISHRhUTBWQUtY?=
+ =?utf-8?B?ZTY1T1VwQUYrNHRYaEtnOTd0dkYyUDBJVEJ6aUFvTzROYVQ2Y0UydW9iZHBn?=
+ =?utf-8?B?ZjVqenZJaVZmOEc0ai9vWE5wWW1TZE1MK1ZNWVoraVRCMStxVWI5RnNlaUxB?=
+ =?utf-8?B?N2Q0aVczZzhnYTl4THRLcFVpYnMwVWY2S01LbkhpRDl2eW1QNm1WWXk0N1lJ?=
+ =?utf-8?B?Q2oyQlYxckN5anBnWnVGQm1FL1Y3SWttcC9lb25mTTh2MWEyRzRJSlh6WXJu?=
+ =?utf-8?B?elRsbWF5VWxIRjhiQ2NkNW1lMUFudzZGZk5JY1lSVEhiVTlla1pGeTdMeGxt?=
+ =?utf-8?B?M2VHUFRrTjBrRm5hUTdrVzlZUzF2VGdVZllveHJKemdTWU1WMEx6YU5HK29N?=
+ =?utf-8?B?ejIyTUJxVk43a0NEVzdmUjlZcnd4cW1YR0lZaWMxTlZpRjZkQ1FZS1ZkTXJZ?=
+ =?utf-8?B?Lzd6RWZ4VFFMaUR2MllaNkYrSnZBQVlST2Y5Rm9WOUdScFpjVVJFNUIwMFFp?=
+ =?utf-8?B?UWJMZXlSdTR4MmdxZzY5TXJBUWo1RVhVQjBsTWFqUUdYMnpRZ295K01KRWlq?=
+ =?utf-8?B?bUg0Mm5kWTI4U2dHRDE2dFVmemtSZkM4U0hRTWU3QzM2dCtzSEMydjFESWkz?=
+ =?utf-8?B?bjdDV3Jkb3FJcEhERGIrTm5UTFJRbG5WMVlCVmd1WkN1eHpVOHR3aWFSRklN?=
+ =?utf-8?B?UjBnVmh6RDJ5eU5pZVhmZFg0dnBhdlQwWW9CS2s1bW5scFdMTmt4empSMk45?=
+ =?utf-8?B?ZEF0M1paMjZKK3Z2dWJLeXNGcktUOGljTGdWQXFyYnhvMXNHQUJVTTgwYzFl?=
+ =?utf-8?B?aWgySjBsREZwcGQ2TmduSkNNK3VucmNpOTFGYVpQSkVIN0NYaVFvcUlUTEFI?=
+ =?utf-8?B?Rm5idkFhTjFidHV4NXE4bHVZTm9nQU4zZkd2NGJLT2JLdVVFT3JjN3Jyb0Vt?=
+ =?utf-8?B?TUp2SllxMVErdmJ2OHdPSEVVYVJXK2ZJVkh0VmdCeFlYMm9rMkJTSEY0Ulhu?=
+ =?utf-8?B?cVJpazBtZlZRckpxVWd3MTg3ME8wWHc2bzlRYkZQOFFadTRMcVBvNFQvL0xu?=
+ =?utf-8?B?SmI3QU1BSU4wL2xRdEFLNlpJakl1Y0ovank4ZTV0RUVDNkFXbEt3bjBWSG5Q?=
+ =?utf-8?B?SlE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8533b289-7258-4152-fe05-08db566a92bf
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 00:05:52.5607
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 00:06:33.2947
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LQ+1R9K1JbqK+9UsP/Sf62fzlwJpkfYSYb7ASWG09ho+GlNpbTHT5HFJ4ShdjmHMXnXsxtcVj9YdrFgLarAdIR4PTWZLVL8MrV/bS4OtuXY=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4URbqEVDBN0iN8hMaKENXvHVttgN6HVCo0x+UgE8b0RxQ9m0ratY5/u7cKJG5beAodOpvGfq2MTacSLPRMxaZyB6sz3RFbimleJb+EoPL9M=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7911
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -177,151 +173,57 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi Peter,
 
-On 5/15/2023 7:42 AM, Peter Newman wrote:
-> Hi Reinette,
-> 
-> On Fri, May 12, 2023 at 5:26 PM Reinette Chatre
+On 5/16/2023 7:49 AM, Peter Newman wrote:
+> On Thu, May 11, 2023 at 11:40 PM Reinette Chatre
 > <reinette.chatre@intel.com> wrote:
->> On 5/12/2023 6:25 AM, Peter Newman wrote:
->>> On Thu, May 11, 2023 at 11:37 PM Reinette Chatre
->>> <reinette.chatre@intel.com> wrote:
->>>> On 4/21/2023 7:17 AM, Peter Newman wrote:
->>>>> Implement resctrl_mbm_flush_cpu(), which collects a domain's current MBM
->>>>> event counts into its current software RMID. The delta for each CPU is
->>>>> determined by tracking the previous event counts in per-CPU data.  The
->>>>> software byte counts reside in the arch-independent mbm_state
->>>>> structures.
->>>>
->>>> Could you elaborate why the arch-independent mbm_state was chosen?
->>>
->>> It largely had to do with how many soft RMIDs to implement. For our
->>> own needs, we were mainly concerned with getting back to the number of
->>> monitoring groups the hardware claimed to support, so there wasn't
->>> much internal motivation to support an unbounded number of soft RMIDs.
+>> On 4/21/2023 7:17 AM, Peter Newman wrote:
+>>> +     rmid = 0;
+>>> +     for_each_cpu(i, &l3ci->shared_cpu_map) {
+>>> +             if (i == cpu)
+>>> +                     break;
+>>> +             rmid++;
+>>> +     }
+>>> +
+>>> +     return rmid;
+>>> +}
 >>
->> Apologies for not being explicit, I was actually curious why the
->> arch-independent mbm_state, as opposed to the arch-dependent state, was
->> chosen.
->>
->> I think the lines are getting a bit blurry here with the software RMID
->> feature added as a resctrl filesystem feature (and thus non architectural),
->> but it is specific to AMD architecture.
+>> I do not see any impact to the (soft) RMIDs that can be assigned to monitor
+>> groups, yet from what I understand a generic "RMID" is used as index to MBM state.
+>> Is this correct? A hardware RMID and software RMID would thus share the
+>> same MBM state. If this is correct I think we need to work on making
+>> the boundaries between hard and soft RMID more clear.
 > 
-> The soft RMID solution applies conceptually to any system where the
-> number of hardware counters is smaller than the number of desired
-> monitoring groups, but at least as large as the number of CPUs. It's a
-> solution we may need to rely on more in the future as it's easier for
-> monitoring hardware to scale to the number of CPUs than (CPUs *
-> mbm_domains). I believed the counts in bytes would apply to the user
-> interface universally.
+> The only RMID-indexed state used by soft RMIDs right now is
+> mbm_state::soft_rmid_bytes. The other aspect of the boundary is
+> ensuring that nothing will access the hard RMID-specific state for a
+> soft RMID.
 > 
-> However, I did recently rebase these changes onto one of James's MPAM
-> snapshot branches and __mbm_flush() did end up fitting better on the
-> arch-dependent side, so I was forced to move the counters over to
-> arch_mbm_state because on the snapshot branch the arch-dependent code
-> cannot see the arch-independent mbm_state structure. I then created
-> resctrl_arch-() helpers for __mon_event_count() to read the counts
-> from the arch_mbm_state.
+> The remainder of the mbm_state is only accessed by the software
+> controller, which you suggested that I disable.
 > 
-> In hindsight, despite generic-looking code being able to retrieve the
-> CPU counts with resctrl_arch_rmid_read(), the permanent assignment of
-> a HW RMID to a CPU is an implementation-detail specific to the
-> RDT/PQoS interface and would probably not align to a theoretical MPAM
-> implementation.
+> The arch_mbm_state is accessed only through resctrl_arch_rmid_read()
+> and resctrl_arch_reset_rmid(), which are called by __mon_event_count()
+> or the limbo handler.
+> 
+> __mon_event_count() is aware of soft RMIDs, so I would just need to
+> ensure the software controller is disabled and never put any RMIDs on
+> the limbo list. To be safe, I can also add
+> WARN_ON_ONCE(rdt_mon_soft_rmid) to the rmid-indexing of the mbm_state
+> arrays in the software controller and before the
+> resctrl_arch_rmid_read() call in the limbo handler to catch if they're
+> ever using soft RMIDs.
 
-Indeed. There are a couple of points in this work that blurs the clear
-boundary that the MPAM enabling is trying to establish. We should keep
-this in mind when looking how this should be solved so that it does
-not create another item that needs to be untangled. A small but significant
-start may be to start referring to this as "soft mon id" or something
-else that is generic. Especially since this is proposed as a mount
-option and thus tied to the filesystem.
+I understand and trust that you can ensure that this implementation is
+done safely. Please also consider how future changes to resctrl may stumble
+if there are not clear boundaries. You may be able to "ensure the software
+controller is disabled and never put any RMIDs on the limbo list", but
+consider if these rules will be clear to somebody who comes along in a year
+or more.
 
-
->>>>> +/*
->>>>> + * Called from context switch code __resctrl_sched_in() when the current soft
->>>>> + * RMID is changing or before reporting event counts to user space.
->>>>> + */
->>>>> +void resctrl_mbm_flush_cpu(void)
->>>>> +{
->>>>> +     struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
->>>>> +     int cpu = smp_processor_id();
->>>>> +     struct rdt_domain *d;
->>>>> +
->>>>> +     d = get_domain_from_cpu(cpu, r);
->>>>> +     if (!d)
->>>>> +             return;
->>>>> +
->>>>> +     if (is_mbm_local_enabled())
->>>>> +             __mbm_flush(QOS_L3_MBM_LOCAL_EVENT_ID, r, d);
->>>>> +     if (is_mbm_total_enabled())
->>>>> +             __mbm_flush(QOS_L3_MBM_TOTAL_EVENT_ID, r, d);
->>>>> +}
->>>>
->>>> This (potentially) adds two MSR writes and two MSR reads to what could possibly
->>>> be quite slow MSRs if it was not designed to be used in context switch. Do you
->>>> perhaps have data on how long these MSR reads/writes take on these systems to get
->>>> an idea about the impact on context switch? I think this data should feature
->>>> prominently in the changelog.
->>>
->>> I can probably use ftrace to determine the cost of an __rmid_read()
->>> call on a few implementations.
->>
->> On a lower level I think it may be interesting to measure more closely
->> just how long a wrmsr and rdmsr take on these registers. It may be interesting
->> if you, for example, use rdtsc_ordered() before and after these calls, and then
->> compare it to how long it takes to write the PQR register that has been
->> designed to be used in context switch.
->>
->>> To understand the overall impact to context switch, I can put together
->>> a scenario where I can control whether the context switches being
->>> measured result in change of soft RMID to prevent the data from being
->>> diluted by non-flushing switches.
->>
->> This sounds great. Thank you very much.
-> 
-> I used a simple parent-child pipe loop benchmark with the parent in
-> one monitoring group and the child in another to trigger 2M
-> context-switches on the same CPU and compared the sample-based
-> profiles on an AMD and Intel implementation. I used perf diff to
-> compare the samples between hard and soft RMID switches.
-> 
-> Intel(R) Xeon(R) Platinum 8173M CPU @ 2.00GHz:
-> 
->               +44.80%  [kernel.kallsyms]  [k] __rmid_read
->     10.43%     -9.52%  [kernel.kallsyms]  [k] __switch_to
-> 
-> AMD EPYC 7B12 64-Core Processor:
-> 
->               +28.27%  [kernel.kallsyms]  [k] __rmid_read
->     13.45%    -13.44%  [kernel.kallsyms]  [k] __switch_to
-> 
-> Note that a soft RMID switch that doesn't change CLOSID skips the
-> PQR_ASSOC write completely, so from this data I can roughly say that
-> __rmid_read() is a little over 2x the length of a PQR_ASSOC write that
-> changes the current RMID on the AMD implementation and about 4.5x
-> longer on Intel.
-> 
-> Let me know if this clarifies the cost enough or if you'd like to also
-> see instrumented measurements on the individual WRMSR/RDMSR
-> instructions.
-
-I can see from the data the portion of total time spent in __rmid_read().
-It is not clear to me what the impact on a context switch is. Is it
-possible to say with this data that: this solution makes a context switch
-x% slower?
-
-I think it may be optimistic to view this as a replacement of a PQR write.
-As you point out, that requires that a CPU switches between tasks with the
-same CLOSID. You demonstrate that resctrl already contributes a significant
-delay to __switch_to - this work will increase that much more, it has to
-be clear about this impact and motivate that it is acceptable.
+Documenting the data structures with these unique usages will help. 
+Specific accessors can sometimes be useful to make it obvious in which state
+the data is being accessed and what data can be accessed. Using WARN
+as you suggest is a useful tool.
 
 Reinette
-
-
-
-
-
-
 
