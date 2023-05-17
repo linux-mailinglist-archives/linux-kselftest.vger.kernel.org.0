@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB5970693D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 May 2023 15:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13208706946
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 May 2023 15:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjEQNNS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 May 2023 09:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
+        id S231908AbjEQNNb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 May 2023 09:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbjEQNNP (ORCPT
+        with ESMTP id S231910AbjEQNN2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 May 2023 09:13:15 -0400
+        Wed, 17 May 2023 09:13:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BF283C2;
-        Wed, 17 May 2023 06:12:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540ED30C8;
+        Wed, 17 May 2023 06:13:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31D0864703;
-        Wed, 17 May 2023 13:12:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7145AC4331F;
-        Wed, 17 May 2023 13:12:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD1146470B;
+        Wed, 17 May 2023 13:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC7AC433A1;
+        Wed, 17 May 2023 13:12:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684329167;
-        bh=GzyYzd/7tEPxQhzzg+PJ/PWcyEzzBXzJLcduAakWhaY=;
+        s=k20201202; t=1684329175;
+        bh=jyfIU4kb2iohIZExECeJDgccrpywO2d4N5RO4/Lz9/o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=niHVPUaD0YGdt5iRkDpEydf7mr631oogoVQvkL81qpJ5TW0/YDUHFkUu/ZKWJdSyH
-         WVXjhzTUAGxnOs0Vegl0ZmfHCdPZuJ7YUjlFkitUTUNbJVo7lI5FO1LgLzd52JuqCx
-         Wr1JJezEgRxZbp9NdZwExiCGViAREtrVIVavopDauE3wvvOAYNu+BznmFcHd0fJK4u
-         wZIaM4wBxCe+a/H0IRCT0p9ml11d7gsP+vlmdEZuhfHUfwxnHCQLwlRz2WmfAlqtqM
-         +0195gf2dqreO3HDtP8xhqKkWgE47ff7qay5jg24K0FITidNlAbdN4XuegelYOnMhE
-         eS4jr0xmyomCA==
+        b=a5AKMGQ6H8c4SmWJA9acjTbaFCzZ0AA2wm05BPlzt7RdfOUiogdQAYWE+G+NGcZdX
+         yDjsODiNdpDTqKlvtQXPCuaGA3VC6/f234nMehw9xGV/czmg096DJmqiZsDf12qqFe
+         ej546ikNtCrc67wnEUFw1c3f59H4n265vxwBWYFw7f1ACFpU/dNvgnfSCj3KARvmhc
+         okU5JO6mfHibgPJap1ViK2c3byQdkDKbjHgzIgRlSYBev2T0JJyKlGkP2OUNIdoni8
+         hQe43lij086yvsSwf3Lz908iMLuTejdjlTVVg35FM3ecRVrHkCom9/KKxw7ZIB2uTs
+         DJJKGGvs0X6mw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
@@ -59,9 +59,9 @@ Cc:     linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         audit@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH 09/14] kunit: include debugfs header file
-Date:   Wed, 17 May 2023 15:10:57 +0200
-Message-Id: <20230517131102.934196-10-arnd@kernel.org>
+Subject: [PATCH 10/14] suspend: add a arch_resume_nosmt() prototype
+Date:   Wed, 17 May 2023 15:10:58 +0200
+Message-Id: <20230517131102.934196-11-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230517131102.934196-1-arnd@kernel.org>
 References: <20230517131102.934196-1-arnd@kernel.org>
@@ -79,31 +79,33 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-An extra #include statement is needed to ensure the prototypes
-for debugfs interfaces are visible, avoiding this warning:
+The arch_resume_nosmt() has a __weak definition, plus an x86
+specific override, but no prototype that ensures the two have
+the same arguments. This causes a W=1 warning:
 
-lib/kunit/debugfs.c:28:6: error: no previous prototype for 'kunit_debugfs_cleanup' [-Werror=missing-prototypes]
-lib/kunit/debugfs.c:33:6: error: no previous prototype for 'kunit_debugfs_init' [-Werror=missing-prototypes]
-lib/kunit/debugfs.c:102:6: error: no previous prototype for 'kunit_debugfs_create_suite' [-Werror=missing-prototypes]
-lib/kunit/debugfs.c:118:6: error: no previous prototype for 'kunit_debugfs_destroy_suite' [-Werror=missing-prototypes]
+arch/x86/power/hibernate.c:189:5: error: no previous prototype for 'arch_resume_nosmt' [-Werror=missing-prototypes]
+
+Add the prototype in linux/suspend.h, which is included in
+both places.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- lib/kunit/debugfs.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/suspend.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index b08bb1fba106..22c5c496a68f 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -10,6 +10,7 @@
- #include <kunit/test.h>
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index f16653f7be32..bc911fecb8e8 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -472,6 +472,8 @@ static inline int hibernate_quiet_exec(int (*func)(void *data), void *data) {
+ }
+ #endif /* CONFIG_HIBERNATION */
  
- #include "string-stream.h"
-+#include "debugfs.h"
- 
- #define KUNIT_DEBUGFS_ROOT             "kunit"
- #define KUNIT_DEBUGFS_RESULTS          "results"
++int arch_resume_nosmt(void);
++
+ #ifdef CONFIG_HIBERNATION_SNAPSHOT_DEV
+ int is_hibernate_resume_dev(dev_t dev);
+ #else
 -- 
 2.39.2
 
