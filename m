@@ -2,78 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12128706B9B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 May 2023 16:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C47ED706BA4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 May 2023 16:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbjEQOv7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 May 2023 10:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        id S232182AbjEQOw3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 May 2023 10:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjEQOv6 (ORCPT
+        with ESMTP id S230092AbjEQOw3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 May 2023 10:51:58 -0400
+        Wed, 17 May 2023 10:52:29 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF912D7E;
-        Wed, 17 May 2023 07:51:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1434E19B0;
+        Wed, 17 May 2023 07:52:28 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 10A63320030E;
-        Wed, 17 May 2023 10:51:50 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id 08E9E3200903;
+        Wed, 17 May 2023 10:52:24 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 17 May 2023 10:51:53 -0400
+  by compute6.internal (MEProxy); Wed, 17 May 2023 10:52:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1684335110; x=1684421510; bh=U9
-        81mgJN5ZcIFGHHfNRtTYm9tIIshD/j5t+czAqBesk=; b=Ca9f/D4SJr14QvZGkc
-        +q7KTRGXT7JBFRrs75d+HJ2OHOSFueAY0un/ZGcKbVEoscZFW6SjqbiPXereZTY1
-        4lcT5rbc2J//JZIJSnLiqFoKjl+7sEm3mRPxHdA8kVhx6i+8Gv6Gs3tgeghB9AVx
-        tiFExJee1gfnnXfCGEqrMCOAyztqrVmVbbh4Vx8kBzBcchhCWGq9jE4AWpdrn/zc
-        KlbDH9cn2VZKKpo3BlHq2vmDVsjsuLASyEKUhF08I7lpQUUHqQi2ze3FpKl0U9IV
-        yp0n5gg/GsUfq8IoMt1JUB+wlGdGrbDiz4LfVQ/hM2UiQ/AKZgZzMrsWIQF+mwUG
-        o5Pg==
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1684335144; x=1684421544; bh=5mas8wApaiArBzc/k2qYZpcPuHFX2rPvIJz
+        00K7T8oE=; b=PgX23426o57WwtsjjYljjBuol/IGj/CdwDxYdVlzVn9DGm1wDMv
+        2FycDR3if/94TiLb5t1Sgx5wgRwymx1kDyNIwk42/KtXRE8cVroHeWsgAD7udiIQ
+        lgw15YyHjlw6cKboUDmX2B1BGrMyHuKGFtiHdt3MvWYZYTx0y51flCEMGqwb8oOS
+        MDnNcvNC5dTNFZZfjgtys4wAotOWdl5aYw1QNDn9N/EY+a3j4FgO17JnmwNzwyLW
+        +L1RWjgOGzhOPrZbZBhgqgdOKvnd6ooChaSPW1J2BgIsil9IBQl3xkgEMrGVh+g1
+        nSWTQV1EHEbBLvFTg/YnzpTPVw0G7mO1DaQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684335110; x=1684421510; bh=U981mgJN5ZcIF
-        GHHfNRtTYm9tIIshD/j5t+czAqBesk=; b=EMWrwTfyiN4WwFm97r9VWWS6w2uAq
-        LgvmOB2bNzX3Nj1iJRBecCwthhPNqACErPlWa7ntFlYoaEwBhGN78KcLN3yBTNyu
-        Aqk3H67Dg6iVzIE2eoyn3hmWBvqBblRgzb3TZygGJHtSCh3YrmYDvNM1AlrxXI+/
-        YZMWcHS8mskGNb1OcG10Hh5tBRVj/WtG2lS25NQwWzGjSsjt1yoy6lceEwD7hdEp
-        ICxlryjGqFpBvOblk/or/mLmEinMRAIO7vCr/4QUi2/F6B8hv2rXwNtgp21zzcmi
-        W3WRrfgi52k7r9ApnTs4X2/2idzkX3KZD72Lp+8DQ9oBBrfMF6Te9k6Qg==
-X-ME-Sender: <xms:BOpkZAX-ah2gC9qXHRhxL9Jdqt9kqu-VKcGSuWg1GW_5ZN0t_KBOcg>
-    <xme:BOpkZEnCWHECQenDSE928iVzgjeKtfqwlYib_ujabtOEKkQ-iVrevetsmAAqV2PXz
-    oO1vUF8ZrqpGe5ciQc>
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684335144; x=1684421544; bh=5mas8wApaiArBzc/k2qYZpcPuHFX2rPvIJz
+        00K7T8oE=; b=xFz/jAwV3qJ5yapPW/ZMpohG53y24e2YAUcXPuy6+uQd5ShtE1S
+        nbNkfhIECkF4nDilsZdooexk1mf11q39LZVWpdl6P52J/kzZsoB2N0SFf8gocyGD
+        DMtBEVRH+WgNUlJPkRfXnJGbmi99k5CknZw2t4g1UhJg3NsLgE5zB0Q9C55B/0F4
+        JNDlIYNtMogx+WHJANRHNZRztj1wLJJ2IpebT0ltPcIwhY34S42Pgq6Z5ZbvkDPD
+        WJTl1ujvi6Ata9f6/+6uuox7hxfXhVkCc+wDEet+vGxY07P0aV10Ih5tLNtm0ji8
+        0k7xvpekdrytg0TcK5ykd3p8oZ1pS3qsf8g==
+X-ME-Sender: <xms:JupkZHJXUwAnZPNa3E8RuTbb2CNWsCwq_Z5tikjt7ADc18n-mdUfzQ>
+    <xme:JupkZLLDGsX9lwAFQBl3acQpMglzqnsfJXPOSxDYTRNJifjsUqnnrrooI49gkDc3o
+    kJ1JoyxhrDHMXiN7qU>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiuddgkedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:BOpkZEanBGI8-zi50JEHLFiN5OCN7u3f1N-fS6wbkXOhNFZcQlB9RQ>
-    <xmx:BOpkZPWIrxfeze0hM1uxKpTiRjSQF0E2dM8RjNSgq_9LgDgcz5l8Gg>
-    <xmx:BOpkZKky6b4GKmAWHHstx-M_Q2MTJ0Mg84yM6a-OyBPfxMEqp1e5aA>
-    <xmx:BupkZNFPTGYv1tkCdtIpLzc7PK5bJcAAEF0LFfyPqwuQNavihPAm3g>
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:JupkZPuWr7PbkG8y0OQs8W5jkT7165Fs-hGwQ1dSVjNGZJuoctIlOg>
+    <xmx:JupkZAY3sGGDQXi7i1jIpaf7oriSryY6KsNIDvNuiwje_IZhC_FwBQ>
+    <xmx:JupkZOaVQhNp_7gXeWPUGsIHD_hREdvTHdUUFKKteLVNN_aws7nsAg>
+    <xmx:KOpkZC4wS1szrrY0RrweYZ6FC1I75qf26i68Ll0F1kXm2bXHzRy53Q>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9F93DB60086; Wed, 17 May 2023 10:51:48 -0400 (EDT)
+        id EB947B60086; Wed, 17 May 2023 10:52:21 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
 Mime-Version: 1.0
-Message-Id: <83422cf8-5d77-4e2f-a854-c2b9a9a94d75@app.fastmail.com>
-In-Reply-To: <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
-References: <20230517131102.934196-5-arnd@kernel.org>
- <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
-Date:   Wed, 17 May 2023 16:51:28 +0200
+Message-Id: <6b7f6f66-7890-47a3-a22d-e29f2944823a@app.fastmail.com>
+In-Reply-To: <CAJZ5v0h0spuxK-7LBJSU9BK2TEOUeMjf7hhKScadkxFN_RwStQ@mail.gmail.com>
+References: <20230517131102.934196-1-arnd@kernel.org>
+ <20230517131102.934196-11-arnd@kernel.org>
+ <CAJZ5v0h0spuxK-7LBJSU9BK2TEOUeMjf7hhKScadkxFN_RwStQ@mail.gmail.com>
+Date:   Wed, 17 May 2023 16:52:01 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Paul Moore" <paul@paul-moore.com>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, "Russell King" <linux@armlinux.org.uk>,
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Andrew Morton" <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        "Russell King" <linux@armlinux.org.uk>,
         "Catalin Marinas" <catalin.marinas@arm.com>,
         "Will Deacon" <will@kernel.org>, "Michal Simek" <monstr@monstr.eu>,
         "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
@@ -83,7 +85,7 @@ Cc:     linux-mm@kvack.org, "Russell King" <linux@armlinux.org.uk>,
         "Heiko Carstens" <hca@linux.ibm.com>,
         "Thomas Gleixner" <tglx@linutronix.de>,
         "Ingo Molnar" <mingo@redhat.com>, x86@kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Paul Moore" <paul@paul-moore.com>,
         "Eric Paris" <eparis@redhat.com>,
         "Dennis Zhou" <dennis@kernel.org>, "Tejun Heo" <tj@kernel.org>,
         "Christoph Lameter" <cl@linux.com>, "Pavel Machek" <pavel@ucw.cz>,
@@ -96,8 +98,9 @@ Cc:     linux-mm@kvack.org, "Russell King" <linux@armlinux.org.uk>,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         audit@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH 4/14] audit: avoid missing-prototype warnings
-Content-Type: text/plain
+Subject: Re: [PATCH 10/14] suspend: add a arch_resume_nosmt() prototype
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -108,18 +111,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 17, 2023, at 16:33, Paul Moore wrote:
-> On May 17, 2023 Arnd Bergmann <arnd@kernel.org> wrote:
-
-> We probably should move the audit_serial() and auditsc_get_stamp()
-> away from the watch/mark/tree functions, but that isn't your problem.
+On Wed, May 17, 2023, at 15:48, Rafael J. Wysocki wrote:
+> On Wed, May 17, 2023 at 3:12=E2=80=AFPM Arnd Bergmann <arnd@kernel.org=
+> wrote:
+>>
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> The arch_resume_nosmt() has a __weak definition, plus an x86
+>> specific override, but no prototype that ensures the two have
+>> the same arguments. This causes a W=3D1 warning:
+>>
+>> arch/x86/power/hibernate.c:189:5: error: no previous prototype for 'a=
+rch_resume_nosmt' [-Werror=3Dmissing-prototypes]
+>>
+>> Add the prototype in linux/suspend.h, which is included in
+>> both places.
+>>
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 >
-> Anyway, this looks okay to me; do you have a problem if I merge this
-> via the audit/next branch or were you hoping to have this go in
-> through a different tree?
+> Do you want me to pick this up?
 
-Merging it through your tree is probably best, Andrew can either
-pick the ones that nobody else took, or I can resend the rest.
+Yes, please do. Thanks,
 
-
-    Arnd
+     Arnd
