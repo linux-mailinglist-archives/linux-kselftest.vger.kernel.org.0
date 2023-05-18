@@ -2,56 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE687707B00
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 May 2023 09:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD059707BA2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 May 2023 10:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjERHd2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 May 2023 03:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
+        id S229812AbjERIKr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 May 2023 04:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjERHd0 (ORCPT
+        with ESMTP id S229651AbjERIKq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 May 2023 03:33:26 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966B530C8
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 00:33:06 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f42c86543bso10990415e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 00:33:06 -0700 (PDT)
+        Thu, 18 May 2023 04:10:46 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674BC97;
+        Thu, 18 May 2023 01:10:45 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-25368740ff6so226268a91.0;
+        Thu, 18 May 2023 01:10:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1684395176; x=1686987176;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Nr3DCNB0Ixq72umVN8Ju8XfUzmslSWPo/26RuL/v64=;
-        b=lgWrWFUqwIldB1/V3hLGpdkSWhVDPycAmU8Mb4DgAs8Kdp50VYkKtRMkBE/iO7HR6K
-         YG22U7m0sQNRC4eEWVXiAuLVpZu37bDV9Stsuo+uvxVhf3HszKROh7xNWvhlcT5VzGmn
-         Ltw6vxOCDiTdALmS//YmL9KOGZmOkdGpQJDxWxy5ocrzN2eZlhLShQtKcTUT/432p8qT
-         MU2XTtGY1N/K2fdCulWo4u/0/4v3T37U+TdX5fvFeYpldD1wtaumhvjDzTjiSPZEZ/in
-         Ac0nQnbghlggU1O6LnzFQ33nJ94VD5brGYVGvSgEpxvfBA6LvcKWlJx2fhXAWhEOlsAj
-         Bu8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684395176; x=1686987176;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684397445; x=1686989445;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/Nr3DCNB0Ixq72umVN8Ju8XfUzmslSWPo/26RuL/v64=;
-        b=WHkZBete9mNIKolV/wL9uopsfLJaaQrlcPzBNOBfaHjCQMcEYdlxd8m6M97KPfh8f7
-         GfErDYOhb1+8h1umAzG75t53hRWq3SIMcWOHLGPOkmeJpuYEdF847QLBlWvZMkV5kviZ
-         4cpfFMrTamtDF5jRSXFiW+xX+eB7SeIuEtvVwOfmTbGzNdFwN9eQu5ozLp+vDd73rmek
-         6/xgrT5D72JgFat5l01T8OUIdAVJpAF66apxQM6RwrQvvOlHxP/d/hszRJ4/bVMSCUKv
-         YogzOv4WIy7chdBjOQ58z22kxrelrquf0DrLB8E3iofIvEo0HY4wU2azABM7vLIDE+nT
-         S2Rw==
-X-Gm-Message-State: AC+VfDzEe9nEoFI127Icy6KP1ciZ/fEDnzg+j0h4GAO9Uf8/sy/WYpIp
-        sSLsLrYMP6IodX5E+k37ISi6sg==
-X-Google-Smtp-Source: ACHHUZ7xPFCjfZgnxJjwQ1q3sKhEpq9jWYbgE8XVf82gwX/CzK1u2s1hoM6OrcuqCwZHD2o13qE15g==
-X-Received: by 2002:a5d:4fce:0:b0:307:86fb:dada with SMTP id h14-20020a5d4fce000000b0030786fbdadamr818073wrw.36.1684395176400;
-        Thu, 18 May 2023 00:32:56 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id g8-20020adfe408000000b002f9e04459desm1160629wrm.109.2023.05.18.00.32.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 00:32:56 -0700 (PDT)
-Date:   Thu, 18 May 2023 09:32:55 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <xiaobo55x@gmail.com>
+        bh=S0YTm0IoXUd5c4n5YN9L5DUYWH7WIf1ootPhSesQtpw=;
+        b=ZcxKVWxTbbBRXRzIs4OQ4ef+VAjO+ndMZFtzZExu3rBaoSOYhiRDwTrHtb1FY0hdJG
+         HGUxEL1az8vR0xr+PEWkNyfoZC7VZmxHQS8puY4JFtyDdFdQdEYCq982C2v+7yQiHUTh
+         2CcMtV71QYcBV9Rd/bRK9tb3hDnWe8UdCiSe01V+/0u30JCDIBXYS27rsgHe3ATjCoJA
+         VK9YXNtMXWhb9c2YGvxMkJ2Y3Joq5SDZMHybJnW4WPe47EY9cGMiT9Du9pGgftpjuTf4
+         HQXcKIEsJ/dQ001VUznykafhZ8OKqYbGpZPg9PjPfzyONW9OZTc1r3x9VXJKDVRo4n9D
+         G4Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684397445; x=1686989445;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S0YTm0IoXUd5c4n5YN9L5DUYWH7WIf1ootPhSesQtpw=;
+        b=P2piGP6bZQ342RcgkKaHMPk1UtPjsjyLeHH5cHvvzB7yCtnXdyi+BoUjQzVJL+YBf1
+         J/VcOIO9C/WCYeVneTNlQNf3RVDx22P1VzHCQwT1eB67n2+Zw4AL6uU0n3h51uaE1IBW
+         H4wEhfezz3CUeoJVcHL2ND5ktc2PxGHsxYMQGk6+t0l3f8W32cgY/x+/CzxlapQ2WlOi
+         0rs5amt5jQ2laqMl8ORJny1CdZNLwiOte4hdrGjHUx/A3fC/DmZ/5k78LNiHwIDv6WrH
+         GCtZl8eNAdNQG3xu2or/SbCSZ5C7yMQyxX5Gx6sBxgvxFypkRAC6D83e3Zjswtp2lVMW
+         Xvhw==
+X-Gm-Message-State: AC+VfDy+Yixd7HidZ5wIyLMPwRrjlsyCJk3FOydKt2wdG0xJh9rlkW7B
+        gHlGFb51UUc0Ko4TuOKR/9LOrazpTirnItKcu3c=
+X-Google-Smtp-Source: ACHHUZ6onfAai2ygXURVPYRaxZVnlUv+nfcC3Xm7KTFlJ9Cq8cFTmGv8mjKjQj7PLNnBVWE+ADL4xKVZrtzP+tH9rm0=
+X-Received: by 2002:a17:90a:764d:b0:253:30f9:1849 with SMTP id
+ s13-20020a17090a764d00b0025330f91849mr1748821pjl.12.1684397444829; Thu, 18
+ May 2023 01:10:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1683791148.git.haibo1.xu@intel.com> <751a84a9691c86df0e65cdb02abf1e073892d1ca.1683791148.git.haibo1.xu@intel.com>
+ <20230511-28ec368a8168342c68ca2187@orel> <CAJve8okVFr-m6go6dCg7Cf=Uq3Yt9Xmxi0Z3B2vbWvahvx4GgA@mail.gmail.com>
+ <20230518-60da3b82641bdaccec589b8b@orel>
+In-Reply-To: <20230518-60da3b82641bdaccec589b8b@orel>
+From:   Haibo Xu <xiaobo55x@gmail.com>
+Date:   Thu, 18 May 2023 16:10:33 +0800
+Message-ID: <CAJve8on1qzEZ6MsaV4ZOJoKHwymeEPtd_vmY6ki1Nq9bnUPT2g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Add riscv get-reg-list test
+To:     Andrew Jones <ajones@ventanamicro.com>
 Cc:     Haibo Xu <haibo1.xu@intel.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -67,66 +72,69 @@ Cc:     Haibo Xu <haibo1.xu@intel.com>,
         Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
         Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Add riscv get-reg-list test
-Message-ID: <20230518-60da3b82641bdaccec589b8b@orel>
-References: <cover.1683791148.git.haibo1.xu@intel.com>
- <751a84a9691c86df0e65cdb02abf1e073892d1ca.1683791148.git.haibo1.xu@intel.com>
- <20230511-28ec368a8168342c68ca2187@orel>
- <CAJve8okVFr-m6go6dCg7Cf=Uq3Yt9Xmxi0Z3B2vbWvahvx4GgA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJve8okVFr-m6go6dCg7Cf=Uq3Yt9Xmxi0Z3B2vbWvahvx4GgA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 18, 2023 at 12:17:18PM +0800, Haibo Xu wrote:
-...
-> > The idea of these *to_str functions is to dump output that can be
-> > copy+pasted into a reg array (hence the trailing commas in print_reg
-> > lines). So we can't just print random lines here or return '##UNKOWN##',
-> > as that won't compile. Instead, the default should return
+On Thu, May 18, 2023 at 3:32=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
+>
+> On Thu, May 18, 2023 at 12:17:18PM +0800, Haibo Xu wrote:
+> ...
+> > > The idea of these *to_str functions is to dump output that can be
+> > > copy+pasted into a reg array (hence the trailing commas in print_reg
+> > > lines). So we can't just print random lines here or return '##UNKOWN#=
+#',
+> > > as that won't compile. Instead, the default should return
+> > >
+> > >   str_with_index("KVM_REG_RISCV_CONFIG_REG(##)", reg_off)
+> > >
 > >
-> >   str_with_index("KVM_REG_RISCV_CONFIG_REG(##)", reg_off)
-> >
-> 
-> Thanks for sharing the detailed idea, will fix it in next version!
-
-I guess we could also return a string like,
-
-"KVM_REG_RISCV_CONFIG_REG(##) /* UNKNOWN */"
-
-as that would still compile and also convey the message that this
-register doesn't have a name because the test doesn't know it yet.
-
-...
-> > We should share all the code above, except print_reg(), with aarch64.
-> > I'll send a patch series that splits the arch-neutral code out of
-> > the aarch64 test that you can base this test on.
-> >
-> 
-> Good idea! I will rebase the patch based on your work.
+> > Thanks for sharing the detailed idea, will fix it in next version!
+>
+> I guess we could also return a string like,
+>
+> "KVM_REG_RISCV_CONFIG_REG(##) /* UNKNOWN */"
+>
+> as that would still compile and also convey the message that this
+> register doesn't have a name because the test doesn't know it yet.
 >
 
-Ok, I've pushed patches to [1]. This series introduces two things to KVM
-selftests. Primarily it splits the aarch64/get-reg-list test into a
-cross-arch get-reg-list test and an $ARCH_DIR/get-reg-list.o object file,
-which the cross-arch test depends on. To do that, it also introduces the
-concept of a "split test", a test that has a cross-arch part which depends
-on an arch-specific part. Using a split test is cleaner than the
-#ifdeffery we usually do for cross-arch tests.
+Yes, that's more friendly and self explanatory. Thanks for the suggestion!
 
-I've added kvmarm@lists.linux.dev, Marc, Oliver, and Sean to the CC of
-this message. You'll want to add them when you post v2 as well.
+> ...
+> > > We should share all the code above, except print_reg(), with aarch64.
+> > > I'll send a patch series that splits the arch-neutral code out of
+> > > the aarch64 test that you can base this test on.
+> > >
+> >
+> > Good idea! I will rebase the patch based on your work.
+> >
+>
+> Ok, I've pushed patches to [1]. This series introduces two things to KVM
+> selftests. Primarily it splits the aarch64/get-reg-list test into a
+> cross-arch get-reg-list test and an $ARCH_DIR/get-reg-list.o object file,
+> which the cross-arch test depends on. To do that, it also introduces the
+> concept of a "split test", a test that has a cross-arch part which depend=
+s
+> on an arch-specific part. Using a split test is cleaner than the
+> #ifdeffery we usually do for cross-arch tests.
+>
+> I've added kvmarm@lists.linux.dev, Marc, Oliver, and Sean to the CC of
+> this message. You'll want to add them when you post v2 as well.
+>
 
-[1] https://github.com/jones-drew/linux/commits/arm64/kself/get-reg-list
+Sure, I will rebase your patch in v2. Thanks for your review!
 
-Thanks,
-drew
+> [1] https://github.com/jones-drew/linux/commits/arm64/kself/get-reg-list
+>
+> Thanks,
+> drew
