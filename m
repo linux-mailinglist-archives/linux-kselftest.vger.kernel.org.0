@@ -2,62 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C897077AE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 May 2023 03:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EA57077EF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 May 2023 04:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjERBw6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 May 2023 21:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S229761AbjERCSq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 May 2023 22:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjERBw4 (ORCPT
+        with ESMTP id S229662AbjERCSp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 May 2023 21:52:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905E6E43;
-        Wed, 17 May 2023 18:52:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28BA764BD6;
-        Thu, 18 May 2023 01:52:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0969AC433D2;
-        Thu, 18 May 2023 01:52:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684374754;
-        bh=pjtLE8555bztw1J0Al/PR1KoBtn+ImBs40JDlz7is80=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JFnYh8Zz+wV5EXMIhPo3LnVldEDYwm94leuR+iw8Ad8NMxt5HOynVPeF7rOUbby9B
-         RrBtO97mswYgVodxmH+5JAEEPZY0ZGc7MRDGO7qhs4E+1k68G3QYWtcmNadkvmPsy/
-         aqog5QbA8WuZCz06vEW7HMcEB1+l2qe9vOx4JbCQTd0luso9tsnK22hkKb2ojW68oU
-         8LPyxErqSAmKhU9pElhwx/IWVjN8FPvfTX7JBxmtg1Fa2AeLqW1hCOgeClj+vMffTN
-         38044sJxW+viNIGBjP7slrvQSJEP81+zZpvopwMvoYzzmeV/lUWxx4+b9KanD6Kz+o
-         OwcAwzh5BD/zA==
-Date:   Thu, 18 May 2023 10:52:31 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Wed, 17 May 2023 22:18:45 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05F6210C
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 19:18:44 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f52d303bcdso16412571cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 19:18:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1684376324; x=1686968324;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pCu7Ak9sgK0WMAL5249Y718D7sduRnnJz2HjRJyEMOs=;
+        b=F4rW5UP8TqTkd/lQXeAReTFK35lieoXOx8Yw8Zu20T3/n6psCNhmevEoHClkJcitLV
+         BnqyTQVgrRo9mC7D/ko++Kn6HsZStPa2GXnAGX2DaRkFr5JistFH30eCNIND7IFOBo/N
+         hh6+RcUE1+w+HMBAAcDWj+XCeEWEFz2cLA6z0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684376324; x=1686968324;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pCu7Ak9sgK0WMAL5249Y718D7sduRnnJz2HjRJyEMOs=;
+        b=hCUvuhq8KgO97Oit7fldOTfa07ifoG1IOixRHspXHprHQWJPfxD3ymH0y6dh9vVpLS
+         BjgrUHiG+FbTk5SSSIXb6oCspRXXDcOH3DagDDDi6Kftjez4ubZRd0lhmMVgC5AMfud6
+         ibdy6BxdwUBizf9QmjbtLSRDxW9nhqgIa4JE6xcHoBG9kq+Xna6EdygEtr8UO6c+pL5Q
+         zjnQcVBvB+p3zj03OHqUGi8+L6xSZrGAJoAVaCNEnTsV6H1tVTZwf1YmJXTScTSosS0h
+         FatOcPpBSq/amiVGgwDajNoYucVaOXhFu4yTwjymvROMRyMjIUXGF/uxPq5SCeuXl/Fu
+         KinA==
+X-Gm-Message-State: AC+VfDwFKDBH/0q9LlBzVoYyW4gALaJW809ytYjv9oLrm1rkYDmuvjus
+        PrnXAophTZHpLUZx9fS5nIXRhw==
+X-Google-Smtp-Source: ACHHUZ6b19lX6KtHk/RmSTe5aPH5FrPt1j5ndazqzwGpCqf9Nutq5nFVszhWb6vLIYsJKGruXC0/YA==
+X-Received: by 2002:ac8:594e:0:b0:3f4:cfed:96b5 with SMTP id 14-20020ac8594e000000b003f4cfed96b5mr3360483qtz.59.1684376323817;
+        Wed, 17 May 2023 19:18:43 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id j13-20020a05620a000d00b007577ccf566asm85082qki.93.2023.05.17.19.18.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 19:18:43 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
- fpsimd_release_task
-Message-ID: <ZGWE36pSRMsIHCCa@finisterre.sirena.org.uk>
-References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
- <2d9a04d8-c09e-49aa-95eb-32b4679f7eba@kili.mountain>
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH RFC 0/4] Optimize mremap during mutual alignment within PMD
+Date:   Thu, 18 May 2023 02:18:21 +0000
+Message-ID: <20230518021825.712742-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rY0voc5PYG++8Gkl"
-Content-Disposition: inline
-In-Reply-To: <2d9a04d8-c09e-49aa-95eb-32b4679f7eba@kili.mountain>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,54 +74,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hello,
 
---rY0voc5PYG++8Gkl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I am posting this as an RFC for any feedback. I have tested them suitably and I
+am continuing to test them.
 
-On Wed, May 17, 2023 at 10:30:29PM +0300, Dan Carpenter wrote:
+These patches optimizes the start addresses in move_page_tables(). It addresses a
+warning [1] that occurs due to a downward, overlapping move on a mutually-aligned
+offset within a PMD during exec. By initiating the copy process at the PMD
+level when such alignment is present, we can prevent this warning and speed up
+the copying process at the same time. Linus Torvalds suggested this idea.
 
-> I don't know this code at all so probably this is dumb...  I don't
-> undestand how vec_set_vector_length() ensures that sme_state_size()
-> stays in sync with the actual size allocated in sme_alloc()
+Please check the individual patches for more details.
 
->    866          vl = find_supported_vector_length(type, vl);
+thanks,
 
-> type is ARM64_VEC_SVE.  I've looked at this function for a while and
-> I don't see anything which ensures that "vl" is less than the current
-> value.
+ - Joel
 
-It could be either ARM64_VEC_SVE or ARM64_VEC_SME.
+[1] https://lore.kernel.org/all/ZB2GTBD%2FLWTrkOiO@dhcp22.suse.cz/
 
->    917          task_set_vl(task, type, vl);
+Joel Fernandes (Google) (4):
+mm/mremap: Optimize the start addresses in move_page_tables()
+selftests: mm: Fix failure case when new remap region was not found
+selftests: mm: Add a test for mutually aligned moves > PMD size
+selftests: mm: Add a test for remapping to area immediately after
+existing mapping
 
-> "vl" is set here.  This is fine if we are setting it to a smaller value,
-> but if we are setting it to a larger value then I think we need to
-> realloc the ->sme_state buffer.
+mm/mremap.c                              | 49 +++++++++++++++++
+tools/testing/selftests/mm/mremap_test.c | 69 +++++++++++++++++++++---
+2 files changed, 112 insertions(+), 6 deletions(-)
 
-> When we call sme_alloc() it will say the buffer is already allocated
-> and just zero out what we need for "vl", but the existing buffer is too
-> small.
+--
+2.40.1.606.ga4b1b128d6-goog
 
-If we are setting the SVE vector length we do not need to reallocate the
-SME state since the size of the data stored in the sme_state buffer is
-influenced only by the SME vector length, not the SVE vector length.  We
-unconditionally free the SVE state (causing it to be reallocated when
-needed) since the size needed for it depends on both vector lengths.
-
---rY0voc5PYG++8Gkl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRlhN4ACgkQJNaLcl1U
-h9DqRwf/X+zviCsIKHpmhoquFCDxBAHtifbeY9wb7j1UxogJFbYb63W1KLOdVX9h
-uUTSjLgP3G1TwWgx+MNbcFpJUdANp+ED/6415lmyMYVZiigyYi83JrQWYq83+bnX
-uKcvoO78r1sJcj3NUdnhkkzZ/evhtd1Psznv216yAG7/FqaPWW455HlYfb69nqvK
-TQxV4sOUeJdn3h4lPMd97aYlwmHbc34lwXHvAShPsn5G/7zRH0/dtF1r1A+CFUwJ
-sGK9zUZ2pyRegWb3NCJwu3r2f0FxYUvZrIQuokwUjaKWVq/1pWubTVQUHpebXxF+
-NgpH6W6CZg4nWCoS4bEgiqnAYVS2uw==
-=uVOX
------END PGP SIGNATURE-----
-
---rY0voc5PYG++8Gkl--
