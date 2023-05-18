@@ -2,221 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DB87078A6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 May 2023 05:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34EB7078CE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 May 2023 06:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjERDzD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 May 2023 23:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        id S229650AbjEREMg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 May 2023 00:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjERDzA (ORCPT
+        with ESMTP id S229982AbjEREMc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 May 2023 23:55:00 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C78B1BC7
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 20:54:57 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-33164ec77ccso89665ab.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 20:54:57 -0700 (PDT)
+        Thu, 18 May 2023 00:12:32 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B73435BF
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 21:12:30 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bcb4a81ceso2739770a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 21:12:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684382096; x=1686974096;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dnbMqjA1A5hqxR5mdHCQtAZNo9b0lLaufw2WdCNcBdg=;
-        b=4YmCMclLKp4aRU7owoZ17CleoBSHTfjB+PPL9AXLteMWlkvd22aa2aigovZsddi515
-         kEBmZVo9+q8dV0133g1DY9++JgvsWFBMx+z7HVLeY12idIqJ+oSJiLsi8aY/Ix18DoAF
-         eZnr5gQjIDsRKumwGwPi2zIydckQdlzr7GUwKIJxtL/QbrRV6sBUGDGGzI70LEZNekoS
-         BkUGySCKes4GG8JIaBuf3XlGEhUMfhLZb0J/0nrLVoJ+4RjXLtrKP+zyec+7pwHls1xh
-         bz+pulxK2TLUelIfHqVJfpE2tV3X87UaTgbhrgRm4CYs9GwECw7z/FQnKiKXkkmoDTgl
-         OIvQ==
+        d=linux-foundation.org; s=google; t=1684383148; x=1686975148;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XBiK7zqzCv4YO32S9qrBa6a2V7ip3iodPxLIsQgbycE=;
+        b=OC3DpLAIgwgMaxu6536uxiVSMkMWAXUyAUvvt8zzh0qHAfQTnsw+BOdZRupUy8lRnD
+         Hh20CVgnPKpn+PgPJWDcgb1QLr8gClJ+Dkc1pcPBYxq30E2BhVGtwuVOOlIi6LY8LHVg
+         31i5lr+0NacNWWrKyG+0WMIzz3jqeTJ0jN/9k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684382096; x=1686974096;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dnbMqjA1A5hqxR5mdHCQtAZNo9b0lLaufw2WdCNcBdg=;
-        b=DKDElidcEHE1IKZB9oxi1fOOoFAnmCIQXJSQ+7AprLZpdSC/IspQdP5PhtCHMTFC+G
-         n/47fC/1RfysKy9CjZX6B7MtujbHQ6tmM8lC6XW0RjuRDVH2xr1m7aoGqgmgOBJV/nsT
-         dtI0LYcde6ipz6xWPd9TV9grnKNauaefPUDvGLB71iiHiuzwUz2gFx2FsujtEDgoD5c/
-         x+Xmtymgd4FuRwyfxP+GIRXBFxOqL0So5nEbbqPE52fdtTrKYYjpRpNqWHaoSt7UtuoZ
-         871MyMBghIEADVCtSzB2C1VNUKuQiq/kzvXHaN8OYEy/Z5KjSdr+GTl7bRqmpSTduoxx
-         oumw==
-X-Gm-Message-State: AC+VfDy1jOTkWb/sUMUflfRf7wqoWb+FMfQy7mW86OisfD6E3qQ+o8e4
-        +bE9qg6xHhomLzNwsEw+Awi5X2+lQDUYbTbZ9qldMw==
-X-Google-Smtp-Source: ACHHUZ717zmrczolPQ87hbWdJhPbrvKwtnmjQulUOZnWQ5Q0uegRkL12ChK1bcl526dLzNN00CxdtF2jaAUwZjfOdVw=
-X-Received: by 2002:a05:6e02:2145:b0:331:4d3c:db55 with SMTP id
- d5-20020a056e02214500b003314d3cdb55mr133492ilv.4.1684382096471; Wed, 17 May
- 2023 20:54:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684383148; x=1686975148;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XBiK7zqzCv4YO32S9qrBa6a2V7ip3iodPxLIsQgbycE=;
+        b=Drur3xkgrzQ9oJQyjtKFONztzHaoSGO+bhfLYkQZZknEK8jYB6w6Pl33PjzOu8XD4D
+         WEmfWKeT4GNJfsEs9hIjIkowjjQdn6+aR+LtY8wxDCK0a0PxbMlc1mKsyabuhy76S2tS
+         rjFWsrvZ8Xl1CT4Cp4n8Mig1T0tV4PrdVC8HpZhODaGmCPVUeTv2ieNYd9zfj8EvytVY
+         F2hzWQdP/WnYG0NXHYSPgCGQzyst1eHNSHmD1IdZjsfPV+wuiG6jJv1vZMgtORu+WuvP
+         p1+8gX6OT+y7ExqCqViJYFD4hMyr95IHSxEGU2Gphpo2P3jvZr7yhcjFvbBvu9NSeh3n
+         rGJQ==
+X-Gm-Message-State: AC+VfDzwQfsJOm6KL3hyY1BoaLDAhs6l6Y5+mGXRcO8LHAcgbyJZR6K1
+        CHHsx95W5MuNhrgeqGTvs1d31cv8uq2RzaAai26ncoQG
+X-Google-Smtp-Source: ACHHUZ7fHaXJ63hxaUiuXrNY3TYyN31xBEJRwLCFE3HuFcuBM2leC3y3dLUutgG/SROswt2G9Sh1OA==
+X-Received: by 2002:a17:907:6d8d:b0:96a:3e39:f567 with SMTP id sb13-20020a1709076d8d00b0096a3e39f567mr26348486ejc.47.1684383148325;
+        Wed, 17 May 2023 21:12:28 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id l7-20020a170906414700b00965d294e633sm408422ejk.58.2023.05.17.21.12.25
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 21:12:26 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-510b869fe0dso2726936a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 21:12:25 -0700 (PDT)
+X-Received: by 2002:a17:906:da8c:b0:94f:7a8:a902 with SMTP id
+ xh12-20020a170906da8c00b0094f07a8a902mr31637538ejb.14.1684383145429; Wed, 17
+ May 2023 21:12:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230517131102.934196-1-arnd@kernel.org> <20230517131102.934196-10-arnd@kernel.org>
-In-Reply-To: <20230517131102.934196-10-arnd@kernel.org>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 18 May 2023 11:54:44 +0800
-Message-ID: <CABVgOSnu4B2O49O012=ywvmskso3cfbYRbdhX2RXA1C1v-ymSw@mail.gmail.com>
-Subject: Re: [PATCH 09/14] kunit: include debugfs header file
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        audit@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008d16cd05fbefc4fa"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230518021825.712742-1-joel@joelfernandes.org> <20230518021825.712742-2-joel@joelfernandes.org>
+In-Reply-To: <20230518021825.712742-2-joel@joelfernandes.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 17 May 2023 21:12:07 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi20GzWeK=vUoreX6AXOEmeJKczou1McCOC9JytVO=TQg@mail.gmail.com>
+Message-ID: <CAHk-=wi20GzWeK=vUoreX6AXOEmeJKczou1McCOC9JytVO=TQg@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/4] mm/mremap: Optimize the start addresses in move_page_tables()
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000008d16cd05fbefc4fa
-Content-Type: text/plain; charset="UTF-8"
+On Wed, May 17, 2023 at 7:18=E2=80=AFPM Joel Fernandes (Google)
+<joel@joelfernandes.org> wrote:
+>
+> This warning will only trigger when there is mutual alignment in the
+> move operation. A solution, as suggested by Linus Torvalds [2], is to
+> initiate the copy process at the PMD level whenever such alignment is
+> present.
 
-On Wed, 17 May 2023 at 21:12, Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> An extra #include statement is needed to ensure the prototypes
-> for debugfs interfaces are visible, avoiding this warning:
->
-> lib/kunit/debugfs.c:28:6: error: no previous prototype for 'kunit_debugfs_cleanup' [-Werror=missing-prototypes]
-> lib/kunit/debugfs.c:33:6: error: no previous prototype for 'kunit_debugfs_init' [-Werror=missing-prototypes]
-> lib/kunit/debugfs.c:102:6: error: no previous prototype for 'kunit_debugfs_create_suite' [-Werror=missing-prototypes]
-> lib/kunit/debugfs.c:118:6: error: no previous prototype for 'kunit_debugfs_destroy_suite' [-Werror=missing-prototypes]
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+So this patch is actually simpler than I thought it would be.
 
-Nice catch, thanks. I'm fine with this going in via -mm, but if you'd
-prefer it to go via kselftest/kunit, let me know.
+But I'm a bit nervous about it. In particular, it ends doing
 
-Reviewed-by: David Gow <davidgow@google.com>
+        old_end =3D old_addr + len;
+        ... expand old_addr/new_addr down to the pmd boundary ..
+        return len + old_addr - old_end;        /* how much done */
 
-Cheers,
--- David
+doesn't that return value end up being nonsensical now?
 
->  lib/kunit/debugfs.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index b08bb1fba106..22c5c496a68f 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -10,6 +10,7 @@
->  #include <kunit/test.h>
->
->  #include "string-stream.h"
-> +#include "debugfs.h"
->
->  #define KUNIT_DEBUGFS_ROOT             "kunit"
->  #define KUNIT_DEBUGFS_RESULTS          "results"
-> --
-> 2.39.2
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230517131102.934196-10-arnd%40kernel.org.
+In particular, I think it can return a *negative* value, because of
+how old_addr was moved down, and the "now much done" might indeed be
+"negative" in the sense that it failed the move even "before" the
+original starting point.
 
---0000000000008d16cd05fbefc4fa
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+And that negative value then ends up being a large positive one as an
+"unsigned long", of course.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-9IGQSBx2i4m+hGXJpET+MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQCRI3Z4cAidgFcv
-Usqdz765x6KMZSfg/WtFrYg8ewsP2NpCxVM2+EhPyyEQ0k0DhtzdtGoI/Ug+jdFDyCKB9P2+EPLh
-iMjMnFILp7Zs4r18ECHlvZuDZfH9m0BchXIxu5jLIuQyKUWrCRDZZEDNr510ZhhVfYSFPA8ms1nk
-jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
-jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
-FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDy
-NkOhXvFQzVSUzEL0U7yvjVToTpRRBqjD19aTuf2q2DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA1MTgwMzU0NTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEASZj0gEQ+5lxvkjrq4q9q
-5mjjTag80+oStNj31xLxqT9znMHS6iSot1ydtlpdvi9KdzvHQkJ5IfDglO7zxa85QP3Lhwohu3HQ
-1cbrnbPsqFIuxwtIedSAC+CdtmId3fIoU+8q92Zza/gTeeyK3s8SRAEIR+zVMTo6nht+KGLmnbjS
-jDw7GiibXzfchEqEe8JdqMANIZ8AcQHWuSZ38ur+pCivS7W1SNK9aGCYOOnal1mK/1wdBSpcih2H
-Vn7dKVT/tdMUCJlrZroJgr8RVfnmuLzPayYKnQyrYyEvM41vYYv6cMaW24VTXfFEaf5srz2yzOhq
-zEItkzXw9MlVZ+tLJA==
---0000000000008d16cd05fbefc4fa--
+So I get the feeling that it wants something like
+
+        if (old_addr + len < old_end)
+                return 0;
+
+there at the end.
+
+But maybe there is something in there that guarantees that that case
+never happens. I didn't think too deeply about it, I just felt this
+looked odd.
+
+               Linus
