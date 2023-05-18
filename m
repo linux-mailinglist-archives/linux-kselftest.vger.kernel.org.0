@@ -2,274 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FED6708592
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 May 2023 18:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861CC7086C1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 May 2023 19:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjERQGE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 May 2023 12:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
+        id S229942AbjERR03 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 May 2023 13:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjERQGD (ORCPT
+        with ESMTP id S229712AbjERR02 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 May 2023 12:06:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B661AD
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 09:05:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684425914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dxoCY1idzW72cG8lj4UwFyENZYdTkejsmFcoUP3trcY=;
-        b=RLV/jFmc1VyYcj3ZZBhpXGse2yhcwG3UqsDiPzz44TeXjllyWSiWU/FeYc1sBR3fK64mUS
-        zSkdzI7W80yn7cY5Knhtm7MLmSqI7ZuzQ2/1rysCtHSxsg5MNq9TydUxLNkv53R4jkyJM8
-        ybGLlJaLaAO8emGIuP0ujJ1EqZWvoMo=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-505-Zwtl_LS5OqqHtwwtrIWzwQ-1; Thu, 18 May 2023 12:05:13 -0400
-X-MC-Unique: Zwtl_LS5OqqHtwwtrIWzwQ-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f393bf5546so4498841cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 09:05:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684425912; x=1687017912;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dxoCY1idzW72cG8lj4UwFyENZYdTkejsmFcoUP3trcY=;
-        b=h4pmBcbBVNUNwY20m3EgOeMM5l0FNsTBT4K4V9NolgytiizsYIDfLQJGSFmjfhzDUF
-         1RzAu5NTOLwhyx6dROETAHcDhXs2ZUmIShTE7XLFixFReYjvqI8nalAIoe/byyi8pRaD
-         Z1olP+OWHhfCzx00tkBhLhmLg+4ywsY12I7fCNwChRJdEojzchfBgrqukhJE5G024xTk
-         qWB5IzRiMOo9GJJ7hwBdcGZtD9KqNMlWJxNR/wqnWLkuBMrYO0wyM2z+AOv0d/tcHdi8
-         kB0Qfv2A7HJdYHfsgVQ36eMtvNT09yvi7Z9BRzbb24Me5ZEllHAPWvPx82TS0HP7LnMa
-         J4Kw==
-X-Gm-Message-State: AC+VfDxcgPoKjbELmxb3VzzQCht7wjhFAmdBhjbeymQo49R46w1Zz58u
-        90452YQdJ2SsFoJyKLOZtp8O5OH2ZtOrQo/QBMl6AjViZVL8hKZu3xKjgG/Ek5GGcG3UVMs7Hkh
-        Pazh1ll2gE7wSC9sClUfcIRDe6cS8
-X-Received: by 2002:ac8:7d06:0:b0:3f5:29b9:59e3 with SMTP id g6-20020ac87d06000000b003f529b959e3mr12767392qtb.3.1684425911768;
-        Thu, 18 May 2023 09:05:11 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6MThlIG8MkjsWiWPRuNlJRUj+J7W48kgRW4lartjNEX9g+DjGZeayuZK5PtQ7wZWYOKk2yMA==
-X-Received: by 2002:ac8:7d06:0:b0:3f5:29b9:59e3 with SMTP id g6-20020ac87d06000000b003f529b959e3mr12767348qtb.3.1684425911419;
-        Thu, 18 May 2023 09:05:11 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id fg9-20020a05622a580900b003f3963d24ebsm598380qtb.30.2023.05.18.09.05.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 09:05:10 -0700 (PDT)
-Date:   Thu, 18 May 2023 12:05:08 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Jiaqi Yan <jiaqiyan@google.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anish Moorthy <amoorthy@google.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-Message-ID: <ZGZMtK6PzoTuLZ1b@x1n>
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
- <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
- <ZGVRUeCWr8209m8d@x1n>
- <ZGVTMnVKNcQDM0x4@x1n>
- <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
- <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Thu, 18 May 2023 13:26:28 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2121.outbound.protection.outlook.com [40.107.220.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FA7136;
+        Thu, 18 May 2023 10:26:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S7GTWNXpcvZePhOXjFotnYcj8lejKv0+3mbHbPzL35KFtJ2zZac0bD2TjCHehpNurefDpgMxZwG62sl7PiUH6JJZULR4tJm97mHzBnFKhoscAbn2KH7fuUcViq/4jsDD5NcIPO4wCS1tLSaxMm/PmTutwrMwX/ecb/DtxtXMAx9rSoPOiji1rD/O1gNt3M9gNsN0HaifYqnTCnJpt4SN2SpzjkuxJzYemSkhdqPJMi5giIjmv0OdR5tYNqG2UEMisCRPu0mrquu//v9WQGk8T677CCjcLm1kN+/l+fI5FVlUhAIsiCSbDKN1yhyQlthV3IVlgtgB1cIkFBKFBTRv1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NofiKyrLAR6E282D4kaVXdt+NtF8LEK8gL1gGJf7SDI=;
+ b=O+bSmPLlUE81mXJEyzY3DavK2UnY51KVOmcR1VxkNzM9qIMZqwl3zCi9rrOeSIe/B/Sgh4/9LZd6XRHlCQA6IkwrqmJIxCPU973juD3wJGExg2l+2Zyz5d2JjM49IQtrxkk7ODRDNPKHyPyYgMqisp4r7d8m/oeKzdBCJLPe185uW5YndIx4x2TUBNwQ8wWwukLTInMpbgHEH0p50gHp85OcLO34EmIYPXNyj3/IEElwBjw0D9VKq3LYIwp1jrv+gQe50CHdA8JFvdxGGwLdlhgLBxLQnw81ZCLmznZODi6Z8+IvwFnh1gJt+xePm65MEwGGFvlYNHgXFnvGRvm7vQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NofiKyrLAR6E282D4kaVXdt+NtF8LEK8gL1gGJf7SDI=;
+ b=ZCrN7B49x18Qb8BaViPGlRE8IUnhlyy43tcxTTeDIFUFr1ZC9TB4HO7ZewuAmY7BFZwGiNKk7NE+upDVhQJC0/+Yj0CnQRL1ZwwcYkegbPLWA7f+iwyFyKzPDsnlZ2KDDC/X1cPsotm5OqtEv1vNiFiVH/4xFn1ziVCDsi0I0PQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH7PR13MB6219.namprd13.prod.outlook.com (2603:10b6:510:248::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Thu, 18 May
+ 2023 17:26:23 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 17:26:23 +0000
+Date:   Thu, 18 May 2023 19:26:15 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, roxana.nicolescu@canonical.com,
+        shuah@kernel.org, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net
+Subject: Re: [PATCHv3 net] selftests: fib_tests: mute cleanup error message
+Message-ID: <ZGZft4ydH3p2+aNU@corigine.com>
+References: <20230518043759.28477-1-po-hsu.lin@canonical.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230518043759.28477-1-po-hsu.lin@canonical.com>
+X-ClientProxiedBy: AM0PR01CA0077.eurprd01.prod.exchangelabs.com
+ (2603:10a6:208:10e::18) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6219:EE_
+X-MS-Office365-Filtering-Correlation-Id: 28805ac8-dc5c-40db-125d-08db57c5008a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WzWH6dysDAhRzwIZdOkEHusVFVoO4gFzlHjwnAf8PAu71v7fc49UsiyA7iqt/om3dUaQv5DbxVTFeHrDWuhRzmSgk2E4KW4yg0OgYOncRPVkr2mPri1mhsbRASnPVTqIeFeuZ6uQtEyJtjFjEJTRpKgItQJKQDtc7uUUa/ZP29WKpUBxHdlF3ItpZ0kSu2a5MHaIJbfELrpunEEiYfgEO6wsakcRhLBDZkrTn80Xp0x3wpGHnFPkyAOOa5B9seHBs61lyoXJdKV6h4ODpVevMKFqQj/DS7IyOv3zuFoy2mESEl0WVjJETfbWnGNnp0htPrGWFE1EslZJKhKxke96U1k7ZufNAd7Lc0q3NqmAZ6v+Q2+ssKU/d1TbjPGyZZ2zGOmAZYtdOPctyHMXDjMbBUA0CFAqG39C2WFdd3H5sbI7q/CBbsjQUjK77+/5C3NUWVOlMgiMLSrz1t5IhrNq/iNWcyJpN3PoVHxviE6X1yLAoKTZZKz92Qoj/v0exq7KoUYVG+Szhl8U1Bzo5wCG1/JgwvJ9RO6RymkAqF34ltFiOakI9Scnmq++xP+PZWc+/Ch8DjB7UQ3AgUemFj5YR55oNkPEjrvyk+QaxzE0Ovo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(346002)(366004)(39840400004)(451199021)(6506007)(15650500001)(4744005)(186003)(2906002)(86362001)(6512007)(2616005)(83380400001)(36756003)(38100700002)(6666004)(6486002)(4326008)(66476007)(6916009)(316002)(41300700001)(66556008)(66946007)(478600001)(44832011)(7416002)(5660300002)(8676002)(8936002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0yDJF4x9V1hM3EHIvUfKKPscZq8G7v0TlY2RrwiYbhMk1xlPp3WKRR8QKLy9?=
+ =?us-ascii?Q?NswTpEPBLukDHLm7DfUNOOr4ngZpF5mX6KIlsOIRneXZB95uPEOZORWUslw9?=
+ =?us-ascii?Q?Q8q1QIYygWdCytx5OO/ah8SGFEnOWLTWXpnVlrF2Puk9Hcv5oukKJF6uy4Yt?=
+ =?us-ascii?Q?9t0UgEvRmIHC3PAgYJywGrYwxvvR16r5y9moITBRaILirkbnRNPr5S8oN/Lr?=
+ =?us-ascii?Q?hG+grlsbcTXm/CAw3gxn4cAd1Mashi0+5r0lM+/2lguUxr+IUeXnY5gYrSX3?=
+ =?us-ascii?Q?0aKHTVbIKYZ6DDKzEAdH5eq/tye0vE8YmGkBlHzXobrbMkAfoXSGF2KKij5M?=
+ =?us-ascii?Q?ENTn8HUsXyg8z+QuwH3U3wbXWlYtE7PoGZIoOM1J069prRXskn2KZl59bXqq?=
+ =?us-ascii?Q?b3eL/rHGdyyAILOPau30g0MhC9mh1dHPfSWEifhghL88hLjycdq5EOOHUuBh?=
+ =?us-ascii?Q?u2gQKdSc3s4Ws/J+wYSJcbYJVo6W58sr/Imi8nMeJoNGmlzaSKQfVbnDvL7s?=
+ =?us-ascii?Q?woDCDxH1txLgzCJVXCW4UIoLcH6huiF2IbXlZVFWLXoz0BWvr9Yx4hdEl3TQ?=
+ =?us-ascii?Q?smvQ0xYBWB7cSLujaHrejAsNv/nCXMBHRasRseKyBLoaJjl0kwd+yCnmT80t?=
+ =?us-ascii?Q?BxkjEbE1u5754CRMk+XlOeHZLvdPNf8kUa5fn8hCX4vQcJ+dfg2EukdCeiOT?=
+ =?us-ascii?Q?uUe/vtIm3rMO1UCQBsrfJciNN/n5qZbZo5+/Xeq96Y2XCDjxyI+rRprvCShV?=
+ =?us-ascii?Q?wP4asre9WjSAPyR2uBgpLopuHSwrQJNXd121vuuxdy4uPwzjo32pWKr0/1qY?=
+ =?us-ascii?Q?C71QYF3ubULKfTr6TGTIYIS8fDrQuAK57Hp5vSPPa1F4I4kaFe1Rs0H8aUfc?=
+ =?us-ascii?Q?0NbmwV6xrBEx+QNj3nQGhP86ylk0PWfvS1IX2Dp64zwqVnLB8lzNmad5n432?=
+ =?us-ascii?Q?urKVfIHtP4QmkSpdeqvXJD0Nunt7SrjTg/eWoCxcmhu2jvp5rN3EOrbF+mo0?=
+ =?us-ascii?Q?ue46jmLVTjt8/iV4gAxmnaEjKIuoIe7pdX9l4ruEUHwNWcPbWh+rVBVKSAKJ?=
+ =?us-ascii?Q?W6VJ2mAIyFmUeC+cQpVKOf0wUYEnq8vhs9XLFvjJ+GDsuflgM622xqzOPVOD?=
+ =?us-ascii?Q?0RRzFo+5tq8Jvk2DZjFgLURkJGH2UvmZxMkqJBRpL73IxHdCYK8n4dkXr8G/?=
+ =?us-ascii?Q?ZwHJwpIyrK2SlVQ2rBOVuJI3kGwE6v6fW5Y7RBut5FePw6HUmgo3wJypVpQl?=
+ =?us-ascii?Q?v3FF0JwZS2JpZps34clxzvtUn9hbrEzmt5am7vUeGEW/PFhARdLwCCGmFR/K?=
+ =?us-ascii?Q?RyXw+NmlIWQ+BUBivNG8LOc/Wls9bh3KvQe24E0M5q3yThBjHyDmvZIBAm3U?=
+ =?us-ascii?Q?92Zj26yoMVj8+bnWEQiBvQC2DgqHATGfzpmy17/uKoKVWqT+rFYY1cic8AhA?=
+ =?us-ascii?Q?eGuE1eAgIPu7hAkTUrHPCr9J6+elJuqvXMax1WBXU/drnzSd1h/afCMibDL3?=
+ =?us-ascii?Q?D9aJ1e/NWvOCkbVto8hhrHDwx+rAiBOAuPUppaAxbv9YuONDSmCvPgebV6Lf?=
+ =?us-ascii?Q?Uc9y74pX6UlTzEcsSmmhO9U6T5fhVFNIpIyOHfCntF1dEVL0uj9UQLn6iFem?=
+ =?us-ascii?Q?nK8Q7CFJjjnaPmMYSUQmIrH1/73UhWjSeJOv34nkfn3c0NBRBStoy2BiAosD?=
+ =?us-ascii?Q?65RJtQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28805ac8-dc5c-40db-125d-08db57c5008a
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 17:26:23.4230
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4EZm6JpjHKmde69PNrD3aEjltDRlv8xLgt3aJWZRXg6Cwn99UFj51VvdRG7361QSp0i1jTbN7VmXAwmAfTJSk2Ya62vpaqH1TSaTs8msz4s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6219
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 17, 2023 at 05:43:53PM -0700, Jiaqi Yan wrote:
-> On Wed, May 17, 2023 at 3:29 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
-> >
-> > On Wed, May 17, 2023 at 3:20 PM Peter Xu <peterx@redhat.com> wrote:
-> > >
-> > > On Wed, May 17, 2023 at 06:12:33PM -0400, Peter Xu wrote:
-> > > > On Thu, May 11, 2023 at 03:00:09PM -0700, James Houghton wrote:
-> > > > > On Thu, May 11, 2023 at 11:24 AM Axel Rasmussen
-> > > > > <axelrasmussen@google.com> wrote:
-> > > > > >
-> > > > > > So the basic way to use this new feature is:
-> > > > > >
-> > > > > > - On the new host, the guest's memory is registered with userfaultfd, in
-> > > > > >   either MISSING or MINOR mode (doesn't really matter for this purpose).
-> > > > > > - On any first access, we get a userfaultfd event. At this point we can
-> > > > > >   communicate with the old host to find out if the page was poisoned.
-> > > > > > - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
-> > > > > >   so any future accesses will SIGBUS. Because the pte is now "present",
-> > > > > >   future accesses won't generate more userfaultfd events, they'll just
-> > > > > >   SIGBUS directly.
-> > > > >
-> > > > > I want to clarify the SIGBUS mechanism here when KVM is involved,
-> > > > > keeping in mind that we need to be able to inject an MCE into the
-> > > > > guest for this to be useful.
-> > > > >
-> > > > > 1. vCPU gets an EPT violation --> KVM attempts GUP.
-> > > > > 2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGBUS.
-> > > > > 3. KVM finds that GUP failed and returns -EFAULT.
-> > > > >
-> > > > > This is different than if GUP found poison, in which case KVM will
-> > > > > actually queue up a SIGBUS *containing the address of the fault*, and
-> > > > > userspace can use it to inject an appropriate MCE into the guest. With
-> > > > > UFFDIO_SIGBUS, we are missing the address!
-> > > > >
-> > > > > I see three options:
-> > > > > 1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I think
-> > > > > this is pointless.
-> > > > > 2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead have a
-> > > > > UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_SIGBUS
-> > > > > instead of VM_FAULT_RETRY. We will keep getting userfaults on repeated
-> > > > > accesses, just like how we get repeated signals for real poison.
-> > > > > 3. Use this in conjunction with the additional KVM EFAULT info that
-> > > > > Anish proposed (the first part of [1]).
-> > > > >
-> > > > > I think option 3 is fine. :)
-> > > >
-> > > > Or... option 4) just to use either MADV_HWPOISON or hwpoison-inject? :)
-> > >
-> > > I just remember Axel mentioned this in the commit message, and just in case
-> > > this is why option 4) was ruled out:
-> > >
-> > >         They expect that once poisoned, pages can never become
-> > >         "un-poisoned". So, when we live migrate the VM, we need to preserve
-> > >         the poisoned status of these pages.
-> > >
-> > > Just to supplement on this point: we do have unpoison (echoing to
-> > > "debug/hwpoison/hwpoison_unpoison"), or am I wrong?
+On Thu, May 18, 2023 at 12:37:59PM +0800, Po-Hsu Lin wrote:
+> In the end of the test, there will be an error message induced by the
+> `ip netns del ns1` command in cleanup()
 > 
-> If I read unpoison_memory() correctly, once there is a real hardware
-> memory corruption (hw_memory_failure will be set), unpoison will stop
-> working and return EOPNOTSUPP.
+>   Tests passed: 201
+>   Tests failed:   0
+>   Cannot remove namespace file "/run/netns/ns1": No such file or directory
 > 
-> I know some cloud providers evacuating VMs once a single memory error
-> happens, so not supporting unpoison is probably not a big deal for
-> them. BUT others do keep VM running until more errors show up later,
-> which could be long after the 1st error.
-
-We're talking about postcopy migrating a VM has poisoned page on src,
-rather than on dst host, am I right?  IOW, the dest hwpoison should be
-fake.
-
-If so, then I would assume that's the case where all the pages on the dest
-host is still all good (so hw_memory_failure not yet set, or I doubt the
-judgement of being a migration target after all)?
-
-The other thing is even if dest host has hw poisoned page, I'm not sure
-whether hw_memory_failure is the only way to solve this.
-
-I saw that this is something got worked on before from Zhenwei, David used
-to have some reasoning on why it was suggested like using a global knob:
-
-https://lore.kernel.org/all/d7927214-e433-c26d-7a9c-a291ced81887@redhat.com/
-
-Two major issues here afaics:
-
-  - Zhenwei's approach only considered x86 hwpoison - it relies on kpte
-    having !present in entries but that's x86 specific rather than generic
-    to memory_failure.c.
-
-  - It is _assumed_ that hwpoison injection is for debugging only.
-
-I'm not sure whether you can fix 1) by some other ways, e.g., what if the
-host just remember all the hardware poisoned pfns (or remember
-soft-poisoned ones, but then here we need to be careful on removing them
-from the list when it's hwpoisoned for real)?  It sounds like there's
-opportunity on providing a generic solution rather than relying on
-!pte_present().
-
-For 2) IMHO that's not a big issue, you can declare it'll be used in !debug
-but production systems so as to boost the feature importance with a real
-use case.
-
-So far I'd say it'll be great to leverage what it's already there in linux
-and make it as generic as possible. The only issue is probably
-CAP_ADMIN... not sure whether we can have some way to provide !ADMIN
-somehow, or you can simply work around this issue.
-
+> This can even be reproduced with just `./fib_tests.sh -h` as we're
+> calling cleanup() on exit.
 > 
-> > >
-> > > >
-> > > > Besides what James mentioned on "missing addr", I didn't quickly see what's
-> > > > the major difference comparing to the old hwpoison injection methods even
-> > > > without the addr requirement. If we want the addr for MCE then it's more of
-> > > > a question to ask.
-> > > >
-> > > > I also didn't quickly see why for whatever new way to inject a pte error we
-> > > > need to have it registered with uffd.  Could it be something like
-> > > > MADV_PGERR (even if MADV_HWPOISON won't suffice) so you can inject even
-> > > > without an userfault context (but still usable when uffd registered)?
-> > > >
-> > > > And it'll be alawys nice to have a cover letter too (if there'll be a new
-> > > > version) explaining the bits.
-> >
-> > I do plan a v2, if for no other reason than to update the
-> > documentation. Happy to add a cover letter with it as well.
-> >
-> > +Jiaqi back to CC, this is one piece of a larger memory poisoning /
-> > recovery design Jiaqi is working on, so he may have some ideas why
-> > MADV_HWPOISON or MADV_PGER will or won't work.
+> Redirect the error message to /dev/null to mute it.
 > 
-> Per https://man7.org/linux/man-pages/man2/madvise.2.html,
-> MADV_HWPOISON "is available only for privileged (CAP_SYS_ADMIN)
-> processes." So for a non-root VMM, MADV_HWPOISON is out of option.
-
-It makes sense to me especially when the page can be shared with other
-tasks.
-
+> V2: Update commit message and fixes tag.
+> V3: resubmit due to missing netdev ML in V2
 > 
-> Another issue with MADV_HWPOISON is, it requires to first successfully
-> get_user_pages_fast(). I don't think it will work if memory is not
-> mapped yet.
+> Fixes: b60417a9f2b8 ("selftest: fib_tests: Always cleanup before exit")
+> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
 
-Fair point, so probably current MADV_HWPOISON got ruled out.
-hwpoison-inject seems fine where only the PFN is needed rather than the
-pte. But same issue on CAP_ADMIN indeed.
-
-> 
-> With the UFFDIO_SIGBUS feature introduced in this patchset, it may
-> even be possible to free the emulated-hwpoison page back to the kernel
-> so we don't lose a 4K page.
-> 
-> I didn't find any ref/doc for MADV_PGERR. Is it something you suggest
-> to build, Peter?
-
-That's something I made up just to show my question on why such an
-interface (even if wanted) needs to be bound to userfaultfd, e.g. a
-madvise() seems working if someone sololy want to install a poisoned pte.
-
-IIUC even with an madvise one may not need CAP_ADMIN since we can limit the
-op to current mm only, I assume it's safe.
-
-Here you'd want to return VM_FAULT_HWPOISON for whatever swap pte you'd
-like to install (in do_swap_page) with whatever new interface (assuming
-still a new madvise). As James mentioned, I think KVM liked that to
-recognize -EHWPOISON from -EFAULT.  I'd say we can even consider reusing
-PTE_MARKER_SWAPIN_ERROR to let it just return VM_FAULT_HWPOISON directly if
-so.
-
-Thanks,
-
--- 
-Peter Xu
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
