@@ -2,218 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F4F707A90
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 May 2023 09:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE687707B00
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 May 2023 09:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjERHGG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 May 2023 03:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
+        id S230137AbjERHd2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 May 2023 03:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjERHGE (ORCPT
+        with ESMTP id S230119AbjERHd0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 May 2023 03:06:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0C92D56;
-        Thu, 18 May 2023 00:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684393561; x=1715929561;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9agQxg5bvZCEiPO3PP4r8dyZAobzZ5RKZtw1oa41Muo=;
-  b=E6jX7H6oAhRkIQ0HW97p6S7PEYPKz7FCKYHozKeyrjyE0sanUnNfmiLT
-   h+/gDyU+Pl0mYn6R7JJKLIJ3oXERdODNvAjDZlTiHr+v/sLZZFrzMCvau
-   KYyefvI/BjbSWPXgq/fQ08CP3gI1WGL2YFB3I+KFcxf5xBSPBJ2g7uPxX
-   Y2XhfcYplhC6iWwxy0CWx02StjHCAtENAZFY3Ff8fLKTH7TSre0mIybH5
-   0GeBfY5qHa2v9i7tawOOt+j8i7XzyJsanejf6KQi8pTpQqsh3Mo7gAmHR
-   DIywhnRwy14UmpeFiwwGngVvD2LxTcWYEezbLn6epBno9y0a97JGeH8gu
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="380196151"
-X-IronPort-AV: E=Sophos;i="5.99,284,1677571200"; 
-   d="scan'208";a="380196151"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 00:06:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="767079155"
-X-IronPort-AV: E=Sophos;i="5.99,284,1677571200"; 
-   d="scan'208";a="767079155"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.255.30.48]) ([10.255.30.48])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 00:05:25 -0700
-Message-ID: <5cdc1a83-f29b-6862-d513-dbfd5c500807@linux.intel.com>
-Date:   Thu, 18 May 2023 15:05:23 +0800
+        Thu, 18 May 2023 03:33:26 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966B530C8
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 00:33:06 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f42c86543bso10990415e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 00:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1684395176; x=1686987176;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Nr3DCNB0Ixq72umVN8Ju8XfUzmslSWPo/26RuL/v64=;
+        b=lgWrWFUqwIldB1/V3hLGpdkSWhVDPycAmU8Mb4DgAs8Kdp50VYkKtRMkBE/iO7HR6K
+         YG22U7m0sQNRC4eEWVXiAuLVpZu37bDV9Stsuo+uvxVhf3HszKROh7xNWvhlcT5VzGmn
+         Ltw6vxOCDiTdALmS//YmL9KOGZmOkdGpQJDxWxy5ocrzN2eZlhLShQtKcTUT/432p8qT
+         MU2XTtGY1N/K2fdCulWo4u/0/4v3T37U+TdX5fvFeYpldD1wtaumhvjDzTjiSPZEZ/in
+         Ac0nQnbghlggU1O6LnzFQ33nJ94VD5brGYVGvSgEpxvfBA6LvcKWlJx2fhXAWhEOlsAj
+         Bu8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684395176; x=1686987176;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/Nr3DCNB0Ixq72umVN8Ju8XfUzmslSWPo/26RuL/v64=;
+        b=WHkZBete9mNIKolV/wL9uopsfLJaaQrlcPzBNOBfaHjCQMcEYdlxd8m6M97KPfh8f7
+         GfErDYOhb1+8h1umAzG75t53hRWq3SIMcWOHLGPOkmeJpuYEdF847QLBlWvZMkV5kviZ
+         4cpfFMrTamtDF5jRSXFiW+xX+eB7SeIuEtvVwOfmTbGzNdFwN9eQu5ozLp+vDd73rmek
+         6/xgrT5D72JgFat5l01T8OUIdAVJpAF66apxQM6RwrQvvOlHxP/d/hszRJ4/bVMSCUKv
+         YogzOv4WIy7chdBjOQ58z22kxrelrquf0DrLB8E3iofIvEo0HY4wU2azABM7vLIDE+nT
+         S2Rw==
+X-Gm-Message-State: AC+VfDzEe9nEoFI127Icy6KP1ciZ/fEDnzg+j0h4GAO9Uf8/sy/WYpIp
+        sSLsLrYMP6IodX5E+k37ISi6sg==
+X-Google-Smtp-Source: ACHHUZ7xPFCjfZgnxJjwQ1q3sKhEpq9jWYbgE8XVf82gwX/CzK1u2s1hoM6OrcuqCwZHD2o13qE15g==
+X-Received: by 2002:a5d:4fce:0:b0:307:86fb:dada with SMTP id h14-20020a5d4fce000000b0030786fbdadamr818073wrw.36.1684395176400;
+        Thu, 18 May 2023 00:32:56 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id g8-20020adfe408000000b002f9e04459desm1160629wrm.109.2023.05.18.00.32.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 00:32:56 -0700 (PDT)
+Date:   Thu, 18 May 2023 09:32:55 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <xiaobo55x@gmail.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.linux.dev,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Add riscv get-reg-list test
+Message-ID: <20230518-60da3b82641bdaccec589b8b@orel>
+References: <cover.1683791148.git.haibo1.xu@intel.com>
+ <751a84a9691c86df0e65cdb02abf1e073892d1ca.1683791148.git.haibo1.xu@intel.com>
+ <20230511-28ec368a8168342c68ca2187@orel>
+ <CAJve8okVFr-m6go6dCg7Cf=Uq3Yt9Xmxi0Z3B2vbWvahvx4GgA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     baolu.lu@linux.intel.com,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Lixiao Yang <lixiao.yang@intel.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>
-Subject: Re: [PATCH v7 03/19] iommufd: Replace the hwpt->devices list with
- iommufd_group
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-References: <3-v7-6c0fd698eda2+5e3-iommufd_alloc_jgg@nvidia.com>
- <569b959e-a702-fc19-3d67-0dde4e77251a@linux.intel.com>
- <ZGN2yvhpIvrvu74r@nvidia.com>
- <852e85b3-9fd2-bfc2-6080-82cea7ab6abd@linux.intel.com>
- <BN9PR11MB5276DE1BC30E90B1032C0E468C7E9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZGTMCSJKvgpyYxG/@nvidia.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <ZGTMCSJKvgpyYxG/@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJve8okVFr-m6go6dCg7Cf=Uq3Yt9Xmxi0Z3B2vbWvahvx4GgA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/5/17 20:43, Jason Gunthorpe wrote:
-> On Wed, May 17, 2023 at 06:33:30AM +0000, Tian, Kevin wrote:
->>> From: Baolu Lu <baolu.lu@linux.intel.com>
->>> Sent: Wednesday, May 17, 2023 12:15 PM
->>>
->>> On 5/16/23 8:27 PM, Jason Gunthorpe wrote:
->>>> On Tue, May 16, 2023 at 11:00:16AM +0800, Baolu Lu wrote:
->>>>> On 5/15/23 10:00 PM, Jason Gunthorpe wrote:
->>>>>> The devices list was used as a simple way to avoid having per-group
->>>>>> information. Now that this seems to be unavoidable, just commit to
->>>>>> per-group information fully and remove the devices list from the HWPT.
->>>>>>
->>>>>> The iommufd_group stores the currently assigned HWPT for the entire
->>> group
->>>>>> and we can manage the per-device attach/detach with a list in the
->>>>>> iommufd_group.
->>>>>
->>>>> I am preparing the patches to route I/O page faults to user space
->>>>> through iommufd. The iommufd page fault handler knows the hwpt and
->>> the
->>>>> device pointer, but it needs to convert the device pointer into its
->>>>> iommufd object id and pass the id to user space.
->>>>>
->>>>> It's fine that we remove the hwpt->devices here, but perhaps I need to
->>>>> add the context pointer in ioas later,
->>>>>
->>>>> struct iommufd_ioas {
->>>>>           struct io_pagetable iopt;
->>>>>           struct mutex mutex;
->>>>>           struct list_head hwpt_list;
->>>>> +       struct iommufd_ctx *ictx;
->>>>>    };
->>>>>
->>>>> and, use below helper to look up the device id.
->>>>>
->>>>> +u32 iommufd_get_device_id(struct iommufd_ctx *ictx, struct device *dev)
->>>>> +{
->>>>> +       struct iommu_group *group = iommu_group_get(dev);
->>>>> +       u32 dev_id = IOMMUFD_INVALID_OBJ_ID;
->>>>> +       struct iommufd_group *igroup;
->>>>> +       struct iommufd_device *cur;
->>>>> +       unsigned int id;
->>>>> +
->>>>> +       if (!group)
->>>>> +               return IOMMUFD_INVALID_OBJ_ID;
->>>>> +
->>>>> +       id = iommu_group_id(group);
->>>>> +       xa_lock(&ictx->groups);
->>>>> +       igroup = xa_load(&ictx->groups, id);
->>>>> +       if (!iommufd_group_try_get(igroup, group)) {
->>>>> +               xa_unlock(&ictx->groups);
->>>>> +               iommu_group_put(group);
->>>>> +               return IOMMUFD_INVALID_OBJ_ID;
->>>>> +        }
->>>>> +        xa_unlock(&ictx->groups);
->>>>> +
->>>>> +       mutex_lock(&igroup->lock);
->>>>> +       list_for_each_entry(cur, &igroup->device_list, group_item) {
->>>>> +               if (cur->dev == dev) {
->>>>> +                       dev_id = cur->obj.id;
->>>>> +                       break;
->>>>> +               }
->>>>> +       }
->>>>
->>>> I dislike how slow this is on something resembling a fastish path :\
->>>
->>> Yes, agreed.
->>>
->>>> Maybe we should stash something in the dev_iommu instead?
->>>>
->>>> Or can the PRI stuff provide a cookie per-device?
->>>
->>> We already have a per-device fault cookie:
->>>
->>> /**
->>>    * struct iommu_fault_param - per-device IOMMU fault data
->>>    * @handler: Callback function to handle IOMMU faults at device level
->>>    * @data: handler private data
->>>    * @faults: holds the pending faults which needs response
->>>    * @lock: protect pending faults list
->>>    */
->>> struct iommu_fault_param {
->>>           iommu_dev_fault_handler_t handler;
->>>           void *data;
->>>           struct list_head faults;
->>>           struct mutex lock;
->>> };
->>>
->>> Perhaps we can add a @dev_id memory here?
->>>
->>
->> what about SIOV? There is only one cookie per parent device.
+On Thu, May 18, 2023 at 12:17:18PM +0800, Haibo Xu wrote:
+...
+> > The idea of these *to_str functions is to dump output that can be
+> > copy+pasted into a reg array (hence the trailing commas in print_reg
+> > lines). So we can't just print random lines here or return '##UNKOWN##',
+> > as that won't compile. Instead, the default should return
+> >
+> >   str_with_index("KVM_REG_RISCV_CONFIG_REG(##)", reg_off)
+> >
 > 
-> It doesn't make any sense to store a struct like that in dev_iommu.
+> Thanks for sharing the detailed idea, will fix it in next version!
+
+I guess we could also return a string like,
+
+"KVM_REG_RISCV_CONFIG_REG(##) /* UNKNOWN */"
+
+as that would still compile and also convey the message that this
+register doesn't have a name because the test doesn't know it yet.
+
+...
+> > We should share all the code above, except print_reg(), with aarch64.
+> > I'll send a patch series that splits the arch-neutral code out of
+> > the aarch64 test that you can base this test on.
+> >
 > 
-> The fault handler should come from the domain and we should be able to
-> have a unique 'void *data' cookie linked to the (dev,PASID) to go
-> along with the fault handler.
+> Good idea! I will rebase the patch based on your work.
+>
 
-If I get your point correctly, the iommu core should provide some places
-for the iommufd to put a cookie for each pair of {device, pasid}, and
-provide interfaces to manage it. For example,
+Ok, I've pushed patches to [1]. This series introduces two things to KVM
+selftests. Primarily it splits the aarch64/get-reg-list test into a
+cross-arch get-reg-list test and an $ARCH_DIR/get-reg-list.o object file,
+which the cross-arch test depends on. To do that, it also introduces the
+concept of a "split test", a test that has a cross-arch part which depends
+on an arch-specific part. Using a split test is cleaner than the
+#ifdeffery we usually do for cross-arch tests.
 
-void iommu_set_device_fault_cookie(struct device *dev,
-				   ioasit_t pasid,
-				   void *fault_cookie);
+I've added kvmarm@lists.linux.dev, Marc, Oliver, and Sean to the CC of
+this message. You'll want to add them when you post v2 as well.
 
-void *iommu_get_device_fault_cookie(struct device *dev,
-				    ioasit_t pasid)
+[1] https://github.com/jones-drew/linux/commits/arm64/kself/get-reg-list
 
-If so, perhaps we need some special treatment for ARM as a user hwpt
-actually presents the PASID table of the device and the guest setting
-pasid table entry will not be propagated to host. Then, the @pasid in
-above interfaces is meaningless.
-
-> This is all going to need some revising before we can expose it to
-> iommufd
-
-Yes, agreed. i will post a preparation series to do this. Besides the
-fault cookie, at least, I want to do the following preparation.
-
-1) Move iommu faults uapi from uapi/linux/iommu.h to uapi/linux
-   /iommufd.h and remove the former.
-
-2) Add a device id in the iommu_fault structure.
-  struct iommu_fault {
-         __u32   type;
--       __u32   padding;
-+       __u32   dev_id;
-         union {
-                 struct iommu_fault_unrecoverable event;
-                 struct iommu_fault_page_request prm;
-
-3) Add the device pointer to the parameters of domain fault handler.
-
-4) Decouple I/O page fault handling from IOMMU_SVA in the iommu core and
-    the drivers.
-
-Best regards,
-baolu
+Thanks,
+drew
