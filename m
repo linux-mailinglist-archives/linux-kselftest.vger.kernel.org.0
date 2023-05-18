@@ -2,98 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8996708ABE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 May 2023 23:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E275E708BEA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 00:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjERVvu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 May 2023 17:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S230406AbjERWwS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 May 2023 18:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjERVvt (ORCPT
+        with ESMTP id S229557AbjERWwR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 May 2023 17:51:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87257E6E
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 14:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684446661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3PTxJzjUCnDeLKGxq08Q4RltGGG7TNyuXuOM81PDsCQ=;
-        b=ehJ6/tQpER+6utwgWlzS7qx0XKYsMLHum2jfb6OCoi2KcVdz08yS0GXVhN1uFElpFf27gY
-        FXDuJovjQrSjK+oo41jcyuwcFEu9isSFOiJ+qEnV8KHEqbkw9eYtb9WY4UoIVKq/H+MI93
-        NpnsoDkFT893j4dWAvbYeUYV6LczMDA=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-516-eGga8p9mNqy8HMHYzhWPeQ-1; Thu, 18 May 2023 17:51:00 -0400
-X-MC-Unique: eGga8p9mNqy8HMHYzhWPeQ-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-757e1673827so19798885a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 14:51:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684446660; x=1687038660;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Thu, 18 May 2023 18:52:17 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02BBE66
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 15:52:16 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-510e5a8704bso1531a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 15:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684450335; x=1687042335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3PTxJzjUCnDeLKGxq08Q4RltGGG7TNyuXuOM81PDsCQ=;
-        b=C4jwMIYqa38psrNTSDaeA+fA8WCX50kswksnV77eGl85HIlgWnJNjli1cpeyCWIfaA
-         8QIHyR6WD1D83TbxrHnLnXMLbeVc3n3G3BqnUVu+RZABgOGn6jRMSbl/8V8Zah1vu8qU
-         b5NKltItt0exnahOI9dYyFgTWs6Wv/ayRCG+r7dfkZ4csuyQN98hBl5kg7G+MSEdyv6C
-         y6r/m3AhdtR2Db+whjhf9zBrnixrU5nurCV+cS7gYappGNGD7sLkg+X69f8JMQEFLTSD
-         jasrVUfNkUJfmxVCe2+w+eV1vcN5Jlgv09n5pFMX0vkA40svrNFqy+zeEBEJDhi0G8RX
-         I2cQ==
-X-Gm-Message-State: AC+VfDyq/rUXXbFsfZhi23Dl8kKk467CJBiiYPKQkf+jVt0Bxm/HPxrp
-        IJfdoH+wXKGq80sMfw0gvbMGAmz7E/U25Ka8laZB8TSAfezJ7C6aMRkHE1SPfGeiBbgZKJrwHJf
-        +vBemXwiBWkSS7ANNdamjYONNcFpA
-X-Received: by 2002:a05:6214:519a:b0:621:7d4:e05b with SMTP id kl26-20020a056214519a00b0062107d4e05bmr1024266qvb.0.1684446659898;
-        Thu, 18 May 2023 14:50:59 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6hwLLJfjckQ3qXnTQ5Jvs59iaTcg3CL+DRiXVyjoA2RxvwVhuDUKynLqHROugZ/mgJauTrRA==
-X-Received: by 2002:a05:6214:519a:b0:621:7d4:e05b with SMTP id kl26-20020a056214519a00b0062107d4e05bmr1024242qvb.0.1684446659694;
-        Thu, 18 May 2023 14:50:59 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id c30-20020a0ca9de000000b0061f7cf8207asm818958qvb.133.2023.05.18.14.50.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 14:50:58 -0700 (PDT)
-Date:   Thu, 18 May 2023 17:50:56 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Jiaqi Yan <jiaqiyan@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anish Moorthy <amoorthy@google.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-Message-ID: <ZGadwEDlsvIxnsvq@x1n>
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
- <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
- <ZGVRUeCWr8209m8d@x1n>
- <ZGVTMnVKNcQDM0x4@x1n>
- <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
- <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com>
- <ZGZMtK6PzoTuLZ1b@x1n>
- <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
- <ZGaaxjS4jWUio+f6@x1n>
+        bh=jWnUteL7v7/EAzuWn1drf3iWgiZd3P6BMPM7r3CRrU4=;
+        b=p1QNWoXOV1xgKiAp3Uawa5ywP62PFwgqLlo1IX/Z7lbukYiaO8h726vLk1ksYI/7qK
+         SMove0r+bWiZcvsiSYWZVvJStA74wecehJFZuXtuZYpVjAd5Xlsi2RjcYi7IHBrmOv7i
+         yzKLfoDu7FGmybhsjsdzoQ8+9IPnyeexOugE2vYPc8H+CF77m1kr5AMWA0qoQIpVvUeK
+         sftIpAXu/jlLnagqS/IEHrCGZFL3YaUrmtF/yOHMwzEYlCPnOXXqpTnBBR/ORpDE38EB
+         3+IEJL2Q7VHbtlApuj2xkqYqRwVdFB0cMzSDD/LVhIzYEr1abR+8elMLu/GsxPG1m3us
+         Utsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684450335; x=1687042335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jWnUteL7v7/EAzuWn1drf3iWgiZd3P6BMPM7r3CRrU4=;
+        b=gDDjxVNNyIzVfFGO2pY8x6jyPtDcPQD17OBInWLOWjzcOJEOpr7WH/EUdTHZxV266G
+         npj6a7xwxxhZvdcHrfgkO+XDvfDje6/RaQVnw+KObHBhXffb1nsxrX4I4AehASs/alz1
+         pmakbCrBXhSYv45vH5MTyZveo7DbVen+A6BTeVkSjNr2XRO0xfYpv3H69vYRLb2zrujx
+         u8TbM328t3oKZY94F3KN1TuyG+BP1vJAYxgSL7HEQMp/WHGdBU41mU8KREsBk0GjtdrC
+         o6w6LyTbDdX+wZqVqmPyGUuZ7yfsFOs50HGqaTikYmwWN8H0d1Nw1vGFNPlKJjGmwmwP
+         s7cg==
+X-Gm-Message-State: AC+VfDyVrugS898sgRIUuNCdrJa7fEEELYgnrJYvobmxrm6QwyT4jymG
+        dtuT0/6DshUS7luMVpnMZkHazlknM/zrKICn4PDIVw==
+X-Google-Smtp-Source: ACHHUZ58Y4oMqMeXjqbXsW1ohvNxVWhDEQwCHRAmPCAwpg14J9f/4DWK5igsACs1JEnPwKg/pJtqoSJ6YjSrESVBaLo=
+X-Received: by 2002:a50:aac5:0:b0:502:2af:7b1d with SMTP id
+ r5-20020a50aac5000000b0050202af7b1dmr18114edc.3.1684450334862; Thu, 18 May
+ 2023 15:52:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZGaaxjS4jWUio+f6@x1n>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230515130553.2311248-1-jeffxu@chromium.org> <20230515130553.2311248-3-jeffxu@chromium.org>
+ <6dbbc3da-78c9-8101-d52a-0be47da9d67e@intel.com>
+In-Reply-To: <6dbbc3da-78c9-8101-d52a-0be47da9d67e@intel.com>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Thu, 18 May 2023 15:51:38 -0700
+Message-ID: <CALmYWFtu-WzOTEs2aWU3zMW=KZUjaaL7OTE7hQtHjfwQfQNyEA@mail.gmail.com>
+Subject: Re: [PATCH 2/6] PKEY: Add arch_check_pkey_enforce_api()
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        sroettger@google.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,13 +74,68 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 18, 2023 at 05:38:14PM -0400, Peter Xu wrote:
-> If with uffd, perhaps avoid calling it sigbus? As we have FEATURE_SIGBUS
-> and I'm afraid it'll cause confusion.  UFFDIO_HWPOISON may sound more
-> suitable?
+On Thu, May 18, 2023 at 2:43=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
+ wrote:
+>
+> On 5/15/23 06:05, jeffxu@chromium.org wrote:
+> > +static inline int __arch_check_vma_pkey_for_write(struct vm_area_struc=
+t *vma)
+> > +{
+> > +     int pkey =3D vma_pkey(vma);
+> > +
+> > +     if (mm_pkey_enforce_api(vma->vm_mm, pkey)) {
+> > +             if (!__pkru_allows_write(read_pkru(), pkey))
+> > +                     return -EACCES;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+>
+> Please think very carefully about what I'm about to say:
+>
+> What connects vma->vm_mm to read_pkru() here?
+>
+> Now think about what happens when we have kthread_use_mm() or a ptrace()
+> doing get_task_mm() and working on another process's mm or VMA.
+>
+> Look at arch_vma_access_permitted() and notice how it avoids read_pkru()
+> for 'foreign' aka. 'remote' accesses:
+>
+> > static inline bool arch_vma_access_permitted(struct vm_area_struct *vma=
+,
+> >                 bool write, bool execute, bool foreign)
+> > {
+> ...
+> >         if (foreign || vma_is_foreign(vma))
+> >                 return true;
+> >         return // check read_pkru()
+> > }
+>
+> In other words, it lets all remote accesses right through.  That's
+> because there is *NOTHING* that fundamentally and tightly connects the
+> PKRU value in this context to the VMA or the context that initiated this
+> operation.
+>
+> If your security model depends on PKRU protection, this 'remote'
+> disconnection is problematic.  The PKRU enforcement inside the kernel is
+> best-effort.  That usually doesn't map into the security space very well.
+>
+> Do you have a solid handle on all call paths that will reach
+> __arch_check_vma_pkey_for_write() and can you ensure they are all
+> non-remote?
 
-Or UFFDIO_POISON (to identify it from real hw poisons)..
+Is this about the attack scenario where the attacker uses ptrace()
+into the chrome process ? if so it is not in our threat model, and
+that is more related to sandboxing on the host.
 
--- 
-Peter Xu
+Or is this about io_uring? Yes, io_uring kernel thread breaks our
+expectations of PKRU & user space threads, however I thought the break
+is not just for this - any syscall involved in memory operation will
+break after into io_uring ?
 
+Other than those, yes, I try to ensure the check is only used at the
+beginning of syscall entry in all cases, which should be non-remote I
+hope.
+
+Thanks
+-Jeff
