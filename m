@@ -2,246 +2,320 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2765C7091C7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 10:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9A07091D2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 10:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjESIj0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 May 2023 04:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
+        id S230376AbjESImQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 May 2023 04:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjESIjV (ORCPT
+        with ESMTP id S229932AbjESImM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 May 2023 04:39:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D839C2
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 01:38:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684485514;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tX9NkuaMfOfCKs1FCdEqGfDAsl8Ds/2jqifxpDMQKog=;
-        b=D561lFdafay1NhkBb2dY5VSEopkbivV0wVlMjM2FUN4R9i+vG/RKCdF8PIDm4N5dXwrXUM
-        P3MtwE0klO9m6NKPCyPgWWZVqXZX8QU1OaEDXc+29BFc3tnzBZl2U8aahZCoPSHc3z+hdG
-        VSYTgO8h66KyfxhQdysTG8+By1y5z7s=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-319-YIRLoajmOlu8_66MzwOmAw-1; Fri, 19 May 2023 04:38:33 -0400
-X-MC-Unique: YIRLoajmOlu8_66MzwOmAw-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f426ffdbc6so17244545e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 01:38:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684485512; x=1687077512;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tX9NkuaMfOfCKs1FCdEqGfDAsl8Ds/2jqifxpDMQKog=;
-        b=jOUkDGzRMdMEq+BiAH4etZthIfsD+0OtKvK8J09A9fwLwaYYNAEV3y7PqUeUomj5vi
-         mCfFLmdS5lK0dopQ3MnG4rbGRatr/tZ/2cJxk8agYDgmOHO0Oa0M3BjNbv+BHDzukRuB
-         8ZJWa0xvmZV3EKF8semwY6Mfyvid+ivBKJLyfjZ8YT0+3+aYCpgtWW7rWSrBntKrKwI9
-         qP/JzsCN8Je0lUBryHUkz5noJr/V9UnOvEcIMEdnkIk7qGrVSCo3w19J/DTvY6kMW56I
-         JPj2N0t7m6fp6tkd+q8XyoXAlXIoGuPqtRAtOZZ57Ds9/rqYuST6M+LpwQQQulNG9vyr
-         6CBQ==
-X-Gm-Message-State: AC+VfDzIiqcU6f8pK9E5rAqKhsTpAV+iVBXYBay2yc/0jCbcUW5paAHg
-        hvJg9IrC4pS7wrpDU9Han6tvjw/nR1+oVNQ6u6sXvVF45McG51i4XosH9rSxApveTGpjSoB+HbJ
-        uZDVAt5B8us/e56fy/pwkd9hmdx3R
-X-Received: by 2002:a7b:c39a:0:b0:3f4:2198:dc2b with SMTP id s26-20020a7bc39a000000b003f42198dc2bmr693569wmj.37.1684485511863;
-        Fri, 19 May 2023 01:38:31 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7LtglJFB9R2JhDU+tff4uPwmts/Q/Nk8YQIEhGQ9liamKeS2OKMjiL1/ZjRuXRD48OUaDpuA==
-X-Received: by 2002:a7b:c39a:0:b0:3f4:2198:dc2b with SMTP id s26-20020a7bc39a000000b003f42198dc2bmr693547wmj.37.1684485511344;
-        Fri, 19 May 2023 01:38:31 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c722:9d00:7421:54d8:9227:a3e8? (p200300cbc7229d00742154d89227a3e8.dip0.t-ipconnect.de. [2003:cb:c722:9d00:7421:54d8:9227:a3e8])
-        by smtp.gmail.com with ESMTPSA id q28-20020a056000137c00b003093a412310sm4570816wrz.92.2023.05.19.01.38.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 01:38:30 -0700 (PDT)
-Message-ID: <32fdc2c8-b86b-92f3-1d5e-64db6be29126@redhat.com>
-Date:   Fri, 19 May 2023 10:38:29 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-To:     Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     Jiaqi Yan <jiaqiyan@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anish Moorthy <amoorthy@google.com>
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
- <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
- <ZGVRUeCWr8209m8d@x1n> <ZGVTMnVKNcQDM0x4@x1n>
- <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
- <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com>
- <ZGZMtK6PzoTuLZ1b@x1n>
- <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
+        Fri, 19 May 2023 04:42:12 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CED9C2;
+        Fri, 19 May 2023 01:42:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684485731; x=1716021731;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=YBDD61LYc+8YyV9IHFS+UX0XRgQWBsc6LAg20rZ53AY=;
+  b=HqATrXLjs5G89/RG+47ZMn9TkOdTDJ8794BSLBYC+HwoJuKBMS+DaWBA
+   7XkmwcNU+nCveMVDsI7NtdmxyfrPN2RfbJKP50FLv9SDKVoLZH7iiHuNc
+   O/FmnKCZa4BSG7Wf/VRq/pXsj1dWqItu6NYRMNcqJeUFaxPN+L8duETPf
+   DE5kW+Cu8uxb/tIFuUfAdqEwiF2rCBocdGEn9Bayi/JmFC1YgA/E50mbp
+   t9PIEsyWG1qFoq49Pt9b2qexMX5UrRhC7Xu3Ep0ZrQYgk10859AmaRHux
+   vgVMUF2tN1jS4eo0UFDIRyNAedJSpgMw380oABOazMDRbjAOZ+7oeWOtJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="349833894"
+X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
+   d="scan'208";a="349833894"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 01:42:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="652975528"
+X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
+   d="scan'208";a="652975528"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga003.jf.intel.com with ESMTP; 19 May 2023 01:42:10 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 19 May 2023 01:42:09 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 19 May 2023 01:42:09 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 19 May 2023 01:42:09 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 19 May 2023 01:42:09 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RqjwiHx7rfb8+rnkHnbmFtARJ4GmPzxRq823aHLj7MqtdW1dHa4nTkn4UUHkX0HdtXRq185S+CpayKIZLRaHqHA8AEZY6xtcojLG/wkxhM21/J81L1I6Kby0Qm7jFmm6IzmP67CU2EhOVsKbjtDqwE0mKWeJypJfcLmbHQFVsilk7kLVM4vqOrootdF3VXQlA+Krz0FT90BZO6TiYlNZZryicWEYoj7lzG83yGybGyQhNoY2MzIHZb2Edhyg74vKTeLXUnuzpQOmqltf8iMRaLXyfiaYuSyLYoy1VA0aJnNbgBjAqx0JCc+fCw+tcqwNBrw81fqppuuv0UYGZJsiQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nqWPpKV/SDoufZb+WRyFoUiAVCVv7Jid7ZhuWp4XsRk=;
+ b=Ibjg4SHLQTtbj4pmYF5uYDb6J2tARlKxFLGZFoi7jX7jt140nU6sZNDFAsIG36MnffwsJ/6XE+xA8ug0fbCjm2FMnbVItIYqVJ05wsYv3OzbT9olyE5iDfMAvrem3AhYf2LyvbLGuXWVJYBZgLC2Sv53nTHSXHxBQOEQ3zKrC5WxuWxPzYKKMm06JnPQm1BBDgakBZYqOeNyJ23we8cv31uo9HvkXVUy41oUsFAhmTY6SLEGHMh/CKxEtbyIdcjF2Kbu7bZRQ+wrzUn1SYK2x86B0pzhDRQFJ8ujS8F7upUuvowz7BeTFP7lFpCaDDdJXnJGYwsEJoHpPbvB/e7OiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5271.namprd11.prod.outlook.com (2603:10b6:208:31a::21)
+ by PH8PR11MB6563.namprd11.prod.outlook.com (2603:10b6:510:1c2::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Fri, 19 May
+ 2023 08:42:07 +0000
+Received: from BL1PR11MB5271.namprd11.prod.outlook.com
+ ([fe80::6f80:cda7:a88f:3cc1]) by BL1PR11MB5271.namprd11.prod.outlook.com
+ ([fe80::6f80:cda7:a88f:3cc1%3]) with mapi id 15.20.6411.021; Fri, 19 May 2023
+ 08:42:07 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: RE: [PATCH v3 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
+Thread-Topic: [PATCH v3 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
+Thread-Index: AQHZhBUvZZEu1sIxqEeJFXndXH1dUK9hUM+A
+Date:   Fri, 19 May 2023 08:42:07 +0000
+Message-ID: <BL1PR11MB527103529CB229A58C2439FF8C7C9@BL1PR11MB5271.namprd11.prod.outlook.com>
+References: <20230511143024.19542-1-yi.l.liu@intel.com>
+ <20230511143024.19542-4-yi.l.liu@intel.com>
+In-Reply-To: <20230511143024.19542-4-yi.l.liu@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-In-Reply-To: <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5271:EE_|PH8PR11MB6563:EE_
+x-ms-office365-filtering-correlation-id: d47e08bd-d38d-4b57-482b-08db5844edd6
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: S2Q6zRvtJ+M5oIAySc0QQmj+5lYqY86kI1b73VOWvO7vwYtpOaor517PawQmdb5Hs/hV02yQN46YBeo4Im1ZJTsy70S1WJnByJyI9CbUUIaPfU2hPRPQ0ZtTOckIQY+W2/SN9efJtpUuUvZ50rTsxSs0u7R7XwkbMzd8W7Z4yNACLEVhbzEy1Hw8keydEejlZhhpYp/jrc/NDScw0LRRa2prFwW8TbL1CubWVPDRoPGrVIZtUyoZb34fPTWEJReaTqO5ucGy21jDhs54ZtNwvxTiEHcXyV0YQ2sKKURBcqV5f2uVWUt5fzuAVrOi9Jb6sQG3lvpFhYStHkBhmdjQBBs8sVGFBVRbHQ7yPxDB1g7RrwxwBhXaKnY5L0VK3ZAl8duETxO0tzBnXIErydCxBlPkQdOnA0JvUa5qnQmMZ6Xs0jStZl2itatI8XUHudvCntd6hnUmVOccTta6sIhESdZ5v7ImY5r798jo/8t4UgY0JDGUws4+136QdirQuQWnkeJjeldcIKI/5DhJaYA1bHgpH091O/CEqcLb17TXT70qVm1Pki4vjQ1987/vr4JQftKNikRE9VbPOIUhHDdYzV/m3lzg/39QdhboXZjzIzcUUMJptG1SSfQ18gcJ8l6u
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5271.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(39860400002)(346002)(396003)(366004)(451199021)(86362001)(5660300002)(52536014)(41300700001)(71200400001)(2906002)(83380400001)(122000001)(38100700002)(38070700005)(82960400001)(33656002)(9686003)(186003)(6506007)(8936002)(7416002)(8676002)(55016003)(66446008)(66556008)(66476007)(66946007)(64756008)(76116006)(478600001)(7696005)(110136005)(54906003)(316002)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pk1PU/6VVA+XVYn3/jTJ5weRXA5FTrZXYFaBxdR5gSDhEgVAJWw5/wpnZhEx?=
+ =?us-ascii?Q?coLgtlPggaAfSTDVpjOmRAyc+doaRWzeJFhMCjAD/GgWP2aUwkpix09ofY4h?=
+ =?us-ascii?Q?8p+8KsnKyzkJ9/9rc0KIonaSWvKsCojIGj6tUNkFEr+OD8dgSQaTPHNmsLXH?=
+ =?us-ascii?Q?5sAAjQ4Ly9HzzW41botWY6ayYXpcx/64j9B0copoiAQ7OAgASKTCAB0/cFOm?=
+ =?us-ascii?Q?siPDp2GdSL+kC+p/y6DrLDIYYhtPo+oGv6+bmxFnee4A/TFXwWI57tPxZdcD?=
+ =?us-ascii?Q?bcAh9A99l51JAP66+N2IKmJtCgnq6q4XbHP9BZQXU3e9JTQqTb/l33Wu907+?=
+ =?us-ascii?Q?ibYsxkYuqvvNYV/MSSOFHBX1HVPKOrsT07PAsbD2mmoxmkUQTKkz6UK7JJEo?=
+ =?us-ascii?Q?k/joLEhlpUtbXvS6q6MlipVHtq8t9BJ1l9oJWoennWS8Mv+Y6QYb9OxPH3pi?=
+ =?us-ascii?Q?YsxvPgB01r44Ke9QNfgLLrHlZnaL/yZnoeNJZyaPtWOXg2krasN69bxbkqJC?=
+ =?us-ascii?Q?2fvThUoDKaRuVNarvcTPZNppfcxGZvrLgwoHGGW9na801LDeA0rzH+NSauzD?=
+ =?us-ascii?Q?cRUQ3jJAaAYT/mTT4xFOOsCbZFG4Cw6ZPTqVEXCrrvoEngEVsXVNir1gAvTa?=
+ =?us-ascii?Q?PQ6zCQ1h0V1fuNvA6cSXaohW36spnaFDB187R/6KA1cLSCIhKdK0kiqtQo7i?=
+ =?us-ascii?Q?3XASJ7rzVWwTx+jm16gsfdQAD0bMhkfuqIpkLptJTRxPpMQBzfJ+VWCg0MCL?=
+ =?us-ascii?Q?VbJP3ieoIzXP2Qn+043CrKXnuWLw/6QS45Ex7YAOuTl4cpyHnXim1aB6n4P7?=
+ =?us-ascii?Q?CqNhLkjKwdVF/ei7ABiwOfKrqK0pWc1Mq4Aw0tNDyrndVrvC2yEWqsXj94Zr?=
+ =?us-ascii?Q?CiWKXgpOCs5aOxFzCqwqob9DmGqzamvf/viqRaOp9CV46BfY1pRz7MC2Bz3r?=
+ =?us-ascii?Q?L2BKQMXajYYfnnBAwMJ+52XswgW/S+WyJeDkgTTKflvzDY3UR6rgSb9shydz?=
+ =?us-ascii?Q?u9S5RfvQBHoiksUdow2Dc9K7OtHiYY0DQFc4dugFk1+N2cH3I1hA/xpfGlt9?=
+ =?us-ascii?Q?tqMV3Dq+CNLkyjQ7D8CqbeNHBNAVkpCo9QbluNV1n5eVwJD+LlTSFK/Vgq8/?=
+ =?us-ascii?Q?T0w0GXSTfmlyox01HjcwWcvQEuHoAo55BP/JmS7XF+LksJRHTyDF6vCh6m7r?=
+ =?us-ascii?Q?xFlpoW+CO8Xfngw7iWQZ63LAker27rD0pElRn7RG65qaSzCLCMLIOQdK6J5w?=
+ =?us-ascii?Q?Irl2akIhnPh+2hxP8vs92WKhYjiWXqwnq8g8KheJZntaLKvzDJsBh/Mk42+7?=
+ =?us-ascii?Q?DpA+UYmqgW+FCIzAiPELPpBDOWaRo7DThrjp++7isWH/XgJw7nsRHcMcK5jK?=
+ =?us-ascii?Q?/8SxeYTppupe7nDxENV1ZiwRtzBrUH9cierZx4EQVUJiZzqIJD8AHHXk0Ohq?=
+ =?us-ascii?Q?SXCMsbb/03qAHmlp+Mpg7148kSqsIMCPXBsUaSDnceJSJJdY9ejX2HgnBTNn?=
+ =?us-ascii?Q?zw2WtdhNOaY3Xp9QjIbsCBOg0+p2IhntjjJ3g1/SV39na6dCZp4aq+hi1th5?=
+ =?us-ascii?Q?kiePFANt5QGObooFiCA=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5271.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d47e08bd-d38d-4b57-482b-08db5844edd6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2023 08:42:07.3925
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SUPD3W9m/cuh9BXjL3V5yolCTU5h0U+X/jOygi/Bn9pEs7JjQ5Ahl8WWzwB/qMPpwe/U7H56M5+kJZ4wgbmBOw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6563
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 18.05.23 22:38, Axel Rasmussen wrote:
-> On Thu, May 18, 2023 at 9:05 AM Peter Xu <peterx@redhat.com> wrote:
->>
->> On Wed, May 17, 2023 at 05:43:53PM -0700, Jiaqi Yan wrote:
->>> On Wed, May 17, 2023 at 3:29 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
->>>>
->>>> On Wed, May 17, 2023 at 3:20 PM Peter Xu <peterx@redhat.com> wrote:
->>>>>
->>>>> On Wed, May 17, 2023 at 06:12:33PM -0400, Peter Xu wrote:
->>>>>> On Thu, May 11, 2023 at 03:00:09PM -0700, James Houghton wrote:
->>>>>>> On Thu, May 11, 2023 at 11:24 AM Axel Rasmussen
->>>>>>> <axelrasmussen@google.com> wrote:
->>>>>>>>
->>>>>>>> So the basic way to use this new feature is:
->>>>>>>>
->>>>>>>> - On the new host, the guest's memory is registered with userfaultfd, in
->>>>>>>>    either MISSING or MINOR mode (doesn't really matter for this purpose).
->>>>>>>> - On any first access, we get a userfaultfd event. At this point we can
->>>>>>>>    communicate with the old host to find out if the page was poisoned.
->>>>>>>> - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
->>>>>>>>    so any future accesses will SIGBUS. Because the pte is now "present",
->>>>>>>>    future accesses won't generate more userfaultfd events, they'll just
->>>>>>>>    SIGBUS directly.
->>>>>>>
->>>>>>> I want to clarify the SIGBUS mechanism here when KVM is involved,
->>>>>>> keeping in mind that we need to be able to inject an MCE into the
->>>>>>> guest for this to be useful.
->>>>>>>
->>>>>>> 1. vCPU gets an EPT violation --> KVM attempts GUP.
->>>>>>> 2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGBUS.
->>>>>>> 3. KVM finds that GUP failed and returns -EFAULT.
->>>>>>>
->>>>>>> This is different than if GUP found poison, in which case KVM will
->>>>>>> actually queue up a SIGBUS *containing the address of the fault*, and
->>>>>>> userspace can use it to inject an appropriate MCE into the guest. With
->>>>>>> UFFDIO_SIGBUS, we are missing the address!
->>>>>>>
->>>>>>> I see three options:
->>>>>>> 1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I think
->>>>>>> this is pointless.
->>>>>>> 2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead have a
->>>>>>> UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_SIGBUS
->>>>>>> instead of VM_FAULT_RETRY. We will keep getting userfaults on repeated
->>>>>>> accesses, just like how we get repeated signals for real poison.
->>>>>>> 3. Use this in conjunction with the additional KVM EFAULT info that
->>>>>>> Anish proposed (the first part of [1]).
->>>>>>>
->>>>>>> I think option 3 is fine. :)
->>>>>>
->>>>>> Or... option 4) just to use either MADV_HWPOISON or hwpoison-inject? :)
->>>>>
->>>>> I just remember Axel mentioned this in the commit message, and just in case
->>>>> this is why option 4) was ruled out:
->>>>>
->>>>>          They expect that once poisoned, pages can never become
->>>>>          "un-poisoned". So, when we live migrate the VM, we need to preserve
->>>>>          the poisoned status of these pages.
->>>>>
->>>>> Just to supplement on this point: we do have unpoison (echoing to
->>>>> "debug/hwpoison/hwpoison_unpoison"), or am I wrong?
->>>
->>> If I read unpoison_memory() correctly, once there is a real hardware
->>> memory corruption (hw_memory_failure will be set), unpoison will stop
->>> working and return EOPNOTSUPP.
->>>
->>> I know some cloud providers evacuating VMs once a single memory error
->>> happens, so not supporting unpoison is probably not a big deal for
->>> them. BUT others do keep VM running until more errors show up later,
->>> which could be long after the 1st error.
->>
->> We're talking about postcopy migrating a VM has poisoned page on src,
->> rather than on dst host, am I right?  IOW, the dest hwpoison should be
->> fake.
->>
->> If so, then I would assume that's the case where all the pages on the dest
->> host is still all good (so hw_memory_failure not yet set, or I doubt the
->> judgement of being a migration target after all)?
->>
->> The other thing is even if dest host has hw poisoned page, I'm not sure
->> whether hw_memory_failure is the only way to solve this.
->>
->> I saw that this is something got worked on before from Zhenwei, David used
->> to have some reasoning on why it was suggested like using a global knob:
->>
->> https://lore.kernel.org/all/d7927214-e433-c26d-7a9c-a291ced81887@redhat.com/
->>
->> Two major issues here afaics:
->>
->>    - Zhenwei's approach only considered x86 hwpoison - it relies on kpte
->>      having !present in entries but that's x86 specific rather than generic
->>      to memory_failure.c.
->>
->>    - It is _assumed_ that hwpoison injection is for debugging only.
->>
->> I'm not sure whether you can fix 1) by some other ways, e.g., what if the
->> host just remember all the hardware poisoned pfns (or remember
->> soft-poisoned ones, but then here we need to be careful on removing them
->> from the list when it's hwpoisoned for real)?  It sounds like there's
->> opportunity on providing a generic solution rather than relying on
->> !pte_present().
->>
->> For 2) IMHO that's not a big issue, you can declare it'll be used in !debug
->> but production systems so as to boost the feature importance with a real
->> use case.
->>
->> So far I'd say it'll be great to leverage what it's already there in linux
->> and make it as generic as possible. The only issue is probably
->> CAP_ADMIN... not sure whether we can have some way to provide !ADMIN
->> somehow, or you can simply work around this issue.
-> 
-> As you mention below I think the key distinction is the scope - I
-> think MADV_HWPOISON affects the whole system, including other
-> processes.
-> 
-> For our purposes, we really just want to "poison" this particular
-> virtual address (the HVA, from the VM's perspective), not even other
-> mappings of the same shared memory. I think that behavior is different
-> from MADV_HWPOISON, at least.
+> From: Liu, Yi L <yi.l.liu@intel.com>
+> Sent: Thursday, May 11, 2023 10:30 PM
+> +
+> +int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd)
+> +{
+> +	struct iommu_hw_info *cmd =3D ucmd->cmd;
+> +	unsigned int length =3D 0, data_len;
+> +	struct iommufd_device *idev;
+> +	const struct iommu_ops *ops;
+> +	void *data =3D NULL;
+> +	int rc =3D 0;
+> +
+> +	if (cmd->flags || cmd->__reserved || !cmd->data_len)
+> +		return -EOPNOTSUPP;
+> +
+> +	idev =3D iommufd_get_device(ucmd, cmd->dev_id);
+> +	if (IS_ERR(idev))
+> +		return PTR_ERR(idev);
+> +
+> +	ops =3D dev_iommu_ops(idev->dev);
+> +	if (!ops->hw_info)
+> +		goto done;
+> +
+> +	/* driver has hw_info callback should have a unique hw_info_type */
+> +	if (ops->hw_info_type =3D=3D IOMMU_HW_INFO_TYPE_NONE) {
+> +		pr_warn_ratelimited("iommu driver set an invalid type\n");
+> +		rc =3D -ENODEV;
+> +		goto out_err;
+> +	}
 
-MADV_HWPOISON really is the wrong interface to use. See "man madvise".
+this should be a WARN_ON_ONCE() since it's a driver bug.
 
-We don't want to allow arbitrary users to hwpoison+offline absolutely 
-healthy physical memory, which is what MADV_HWPOISON is all about.
+> +
+> +	data =3D ops->hw_info(idev->dev, &data_len);
+> +	if (IS_ERR(data)) {
+> +		rc =3D PTR_ERR(data);
+> +		goto out_err;
+> +	}
+> +
+> +	length =3D min(cmd->data_len, data_len);
+> +	if (copy_to_user(u64_to_user_ptr(cmd->data_ptr), data, length)) {
+> +		rc =3D -EFAULT;
+> +		goto out_err;
+> +	}
+> +
+> +	/*
+> +	 * Zero the trailing bytes if the user buffer is bigger than the
+> +	 * data size kernel actually has.
+> +	 */
+> +	if (length < cmd->data_len) {
+> +		rc =3D iommufd_zero_fill_user(cmd->data_ptr + length,
+> +					    cmd->data_len - length);
+> +		if (rc)
+> +			goto out_err;
+> +	}
+> +
+> +done:
+> +	cmd->data_len =3D length;
+> +	cmd->out_data_type =3D ops->hw_info_type;
+> +	rc =3D iommufd_ucmd_respond(ucmd, sizeof(*cmd));
 
-As you say, we want to turn an unpopulated (!present) virtual address to 
-mimic like we had a MCE on a page that would have been previously mapped 
-here: install a hwpoison marker without actually poisoning any present 
-page. In fact, we'd even want to fail if there *is* something mapped.
+the 'done' label should be moved before above zero_fill. Otherwise
+in !ops->hw_info case the user buffer is not cleared.
 
-Sure, one could teach MADV_HWPOISON to allow unprivileged users to do 
-that for !present PTE entries, and fail for unprivileged users if there 
-is a present PTE entry. I'm not sure if that's the cleanest approach, 
-though, and a new MADV as suggested in this thread would eventually be 
-cleaner.
+>  union ucmd_buffer {
+>  	struct iommu_destroy destroy;
+>  	struct iommu_hwpt_alloc hwpt;
+> +	struct iommu_hw_info info;
 
--- 
-Thanks,
+follow alphabetic order this should be ahead of hwpt.
 
-David / dhildenb
+> @@ -302,6 +303,8 @@ static const struct iommufd_ioctl_op
+> iommufd_ioctl_ops[] =3D {
+>  	IOCTL_OP(IOMMU_DESTROY, iommufd_destroy, struct
+> iommu_destroy, id),
+>  	IOCTL_OP(IOMMU_HWPT_ALLOC, iommufd_hwpt_alloc, struct
+> iommu_hwpt_alloc,
+>  		 __reserved),
+> +	IOCTL_OP(IOMMU_DEVICE_GET_HW_INFO,
+> iommufd_device_get_hw_info,
+> +		 struct iommu_hw_info, __reserved),
 
+before IOMMU_HWPT_ALLOC
+
+> +
+> +/**
+> + * struct iommu_hw_info - ioctl(IOMMU_DEVICE_GET_HW_INFO)
+> + * @size: sizeof(struct iommu_hw_info)
+> + * @flags: Must be 0
+> + * @dev_id: The device bound to the iommufd
+> + * @data_len: Input the length of the user buffer in bytes. Output the
+> + *            length of data filled in the user buffer.
+> + * @data_ptr: Pointer to the user buffer
+> + * @out_data_type: Output the iommu hardware info type as defined by
+> + *                 enum iommu_hw_info_type.
+> + * @__reserved: Must be 0
+> + *
+> + * Query the hardware iommu information for given device which has been
+> + * bound to iommufd. @data_len is the size of the buffer which captures
+> + * iommu type specific data and the data will be filled. Trailing bytes
+> + * are zeroed if the user buffer is larger than the data kernel has.
+> + *
+> + * The type specific data would be used to sync capability between the
+> + * virtual IOMMU and the hardware IOMMU. e.g. nested translation
+> requires
+> + * to check the hardware IOMMU capability so guest stage-1 page table
+> + * uses a format compatible to the hardware IOMMU.
+> + *
+> + * The @out_data_type will be filled if the ioctl succeeds. It would
+> + * be used to decode the data filled in the buffer pointed by @data_ptr.
+> + */
+> +struct iommu_hw_info {
+> +	__u32 size;
+> +	__u32 flags;
+> +	__u32 dev_id;
+> +	__u32 data_len;
+> +	__aligned_u64 data_ptr;
+> +	__u32 out_data_type;
+> +	__u32 __reserved;
+
+it's unusual to have reserved field in the end. It makes more sense
+to move data_ptr to the end to make it meaningful.
+
+> +};
+> +#define IOMMU_DEVICE_GET_HW_INFO _IO(IOMMUFD_TYPE,
+> IOMMUFD_CMD_DEVICE_GET_HW_INFO)
+>  #endif
+
+Here we have a naming confusion.
+
+'IOMMU' is the prefix of iommufd ioctls.
+
+'DEVICE' is the subjective.
+
+Then "GET_HW_INFO" implies getting hardware info related to
+this device. then it should not be restricted to the iommu info.
+
+with that it's clearer to call it IOMMU_DEVICE_GET_IOMMU_INFO.
+
+similarly for struct iommu_hw_info.
+
+'iommu' is the prefix for all iommufd ioctl structures.
+
+then 'hw_info' is too broard.
+
+iommu_device_iommu_info reads better? though having two
+iommu's in the name is a little bit annoying...
