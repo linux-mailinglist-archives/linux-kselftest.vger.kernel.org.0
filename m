@@ -2,186 +2,306 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1BD7096C2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 13:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A252E709AD6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 17:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbjESLti (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 May 2023 07:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S232065AbjESPEZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 May 2023 11:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbjESLth (ORCPT
+        with ESMTP id S231991AbjESPEY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 May 2023 07:49:37 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2042.outbound.protection.outlook.com [40.107.92.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9519711F;
-        Fri, 19 May 2023 04:49:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pgu6uW5sorwMvCMlnrjJudEUup3oDOWBkJzTvW4eLtk91SYJXZcJUvCYytfRf/f5xw8chW9RZ5Du+w9YulJtsS0BzVgcUkEzIr1VyQRNE6igrcUHJK+XkWApuo0MtA/lkxr6a/VLcKJC5UKtVbuFXrWA+NQGpwfn7erpZhnBP4d+t8cAD2C5f8S0CMjfqvpVrlb7WlsKjnBGc6IUnubds+F52C2EVvfBYskVkOife0NftDg88qHPzakXAQ0dNpB9Pzku65/SSramUHbPH3d2Hz16h9kJCy2z37u+6x/yr9P53hZTaUOW1kh6ZQPBGKPVSdN1KeXsGM1CmMZnTWGNrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dYCEccyjVVHHEL8YiKRgZixiCuNwRpwe1/9oN7WVvgw=;
- b=hvheQoO7HeLvrUkuDfU5ZoeGQj6+9ki8IwGCbgG3wXrF2qkXX7zKtuWLMvq/tnzTaHCV8+QQG7yfokMC9aJIOmNKCrwiBtjm3BHY7cRbCCDsPFOGXeTQb8K4HOwzdjYv7E/l6vBsF45YkOlMKBHwxmhmVC8QvH7ZawBlejWw3JgLujDuRD6TSYId5P0Ny8DJB7ELdCfSQIXlMPn+Vbk7rj+oiayNBAcTVYR85hD1CE28NCCHxpWSxlhucH0K46jJMTmcVqN3XhwdqcqjYfI8TI7RKAPl6pVctYDHQTudZRcVVyG35Ulhkc2UcAeid9N/Of+Bde9iqxe2pZnIMF49Zg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dYCEccyjVVHHEL8YiKRgZixiCuNwRpwe1/9oN7WVvgw=;
- b=Ts9ibQr5QlhzHieH0elPdCMiAnM5aZGVT7G9F8SeidYcZes8YIeODLu9I3G7ISevx+QH+q9LHd3lkABEC+FESoSrx8WLQ++HXKAsDn0vjp+YPkVH/SLX09g3oUDcjVnaYWaCP3QX/p/Vy/hVPmOKpD95F3rXGjqqKXzS75IfFyhZd/fLwErhBYUzREZnOFkDwkSZs5yV70PD15Y1TVtPND/ABMtU+3BmbHK7F95wRBcGcVxEsRGAUIIq9JVIruteS79jWI7AS8bxRqk4Z/mRYXjMLmpnFtU8Nvji+vbfIH04d3135WyLP1Kj41g9N+LpltGBdO7lgkIXnaVQ1VpMKQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH7PR12MB6465.namprd12.prod.outlook.com (2603:10b6:510:1f7::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Fri, 19 May
- 2023 11:49:32 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6411.021; Fri, 19 May 2023
- 11:49:32 +0000
-Date:   Fri, 19 May 2023 08:49:31 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v2 00/11] iommufd: Add nesting infrastructure
-Message-ID: <ZGdiS2m8jcd5OOt5@nvidia.com>
-References: <20230511143844.22693-1-yi.l.liu@intel.com>
- <BN9PR11MB5276DAF0A11809CF8433EE338C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276DAF0A11809CF8433EE338C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL1PR13CA0111.namprd13.prod.outlook.com
- (2603:10b6:208:2b9::26) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 19 May 2023 11:04:24 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7F5121
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 08:04:21 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-563874afe98so7765977b3.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 08:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684508661; x=1687100661;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xDD6929/PsmGdeBcOFBnrXj2UmWCz3zY8a5EUQcTCVg=;
+        b=YFraaOBPQk++05jDqMJE64OoHf6aoqZeLYd0vIINGS4+aAU49U8PJRr7iryNDzxwmH
+         LMKJgrJ67lk2cwqVAtLL0oz9qwTxKwaeBb4a2VknJdmFf/Tev3/FrtFsdsYEqtRi1zTN
+         ReCgz4mtxb5FUywwnlh8fgZcK/Xaz/knh4g1V2BGoy/Pw1dwdzNRn6vBNfm2x4XltVaS
+         RDPRhkJOjcwFzLLiE+neD4j7VK/0byITNhW+jYZpVdnKuIXpohbXLAt2WkpvnR4U2IEe
+         7Y99fwk52mq7JjAN3Zj52kznqyz0OxJiPnqv59TxdfVlEQbeJcUSmIKYB4Ee23iVvjT3
+         YxDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684508661; x=1687100661;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xDD6929/PsmGdeBcOFBnrXj2UmWCz3zY8a5EUQcTCVg=;
+        b=KctqXO1gW6pI5aekG+Y4PFjlEQtuM4FEl22uFTvBwhEkf8U0L5m+i8f+9g718/MK6h
+         id5JTi4zv3y5rmDkIynXDgwdBCIswPFg68ggfaSH/2PoHN+eY0tKZdK1ehmJjT2iFFQK
+         CjCqX7tb+assNaTDRamNOhz2eYqtuDFoMdO+8gnhcVXzj2qIbpRGoDLx+AMYspVrW4c8
+         ni9M2ipKu32m0356Yh2dLTGvdJPdDGZdJRyeFN6JzY656TGQ40BqAuaDLNcMLDUA8NFH
+         sGr9Q5uHdsRUDjPtGQcRRIxRtzfus7gntMkuMclhKB2eCIYO8aMlFq2l9BNjghMZJ3wn
+         94vg==
+X-Gm-Message-State: AC+VfDxfk2wuFuBExf+ZnzfmkubZ6+VlfEpxXWgCr80YsxhSyhVjWeRg
+        AxM0Em7CW3DAdgg8phHKHPwdc7QUAsV8umq9TCbjkA==
+X-Google-Smtp-Source: ACHHUZ6hgP8/+eeHDFwygDimQd8NE4HBu+PZcJJxwPp6d7y9EoK810kGjbxXl/SD8C3mvZ+ZbsSYsPmkkMXGf2kVPHU=
+X-Received: by 2002:a0d:f407:0:b0:559:ea89:7c2c with SMTP id
+ d7-20020a0df407000000b00559ea897c2cmr1903416ywf.33.1684508660474; Fri, 19 May
+ 2023 08:04:20 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB6465:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9427c1a7-23ad-4d83-0535-08db585f1c5f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FNyN1ad6DIOO+5OO0pmtWQ0apLCGI6g6ghfUAt6HU7FcGwUmExKf182XfDjXPpMa0+BepzAoZB+cbkK60Uek5kxtkgbJe6Ck5KQdCJ52ToWeaM9LV8oMlqsgq3MX2OS9cualuzUJiiKno+iaIa+0XV6TtvvQz7POY0lhQWhDKe+ojSA5d6gL7vVpmDmjntpDMZK8WpPLsoc79Er8AKIatDlwVMWQ6b9KJuvFXoElMoTGIuEAhD64sihgaCr+aZ2CA9rGzzzD1hEKxy5uQE5PNSxxrEVfASrTbpRw37tFPhAGpP0t3TK2aUmVLO5e8dPW13LfRj9c6Xs8oeF2MeyDnj4Kfe5k4RVVBPItSCeK5ltbDVwugPe3WwNPjYoVSgHur+z2UVoFVDS9i6EO2DX74p8aS0LUxeW4MvmS/cweVcUn4cG58Fi3v7GhcF5zAh7d3E8rKrXgNX34iLzA/7DW5vD3Lt3VIwuiQbygjJku8ZEAS9ZLtV2QZbXgiQH4NKZGZs7eZljqkPaoN/N7EcaN9SiHF2IABFVXSYLx9rhGJndUg7PwE39kSbLdLXFF1FkW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(39860400002)(396003)(346002)(136003)(451199021)(4326008)(478600001)(316002)(7416002)(2906002)(8936002)(6916009)(41300700001)(66476007)(66556008)(66946007)(8676002)(54906003)(5660300002)(6486002)(6506007)(6512007)(26005)(186003)(83380400001)(36756003)(2616005)(38100700002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fBzpjkqnMigWDhrTUVzgahCJsegj5A22WKLhKQegI+P3T+DSLmDzHfLETjl+?=
- =?us-ascii?Q?mVM7if36P2rjT+SpGryBEGc9PP5PIIuEqWpl8JuavfnwDXXSuDf08ZU/iIgX?=
- =?us-ascii?Q?PH8seeH0pxEJVt23CavE3ZX8GSdag2PoDEqkEBnrssGJjOwiCxq/X3KpVkFv?=
- =?us-ascii?Q?zbzlNevbD5bFMCrae+xRohotsTopS2mcnD6YqpJjkg3UL+teDiq5p9bDcWQy?=
- =?us-ascii?Q?I76+ZgBvL+E21nufE+wj/i48rTS+VbYeteUwcWxd/YdCkn24UVVHtoVqAyQ4?=
- =?us-ascii?Q?RjolyThU/RUdd1Osfi77MPurPHAkn/AOptXZot2lStBN4KqYmqZ0XrwR90Hb?=
- =?us-ascii?Q?esyudKByPVoHBT1YZVGhZR+r/snGkDYFNjsJDBlEyUdFwQU1Knf2rDraM592?=
- =?us-ascii?Q?4PBJCNLxdrFVGYzl10yxXidl7QhW82nhOCV4/jMXgwD2daQ5EvLdRj134Kp5?=
- =?us-ascii?Q?3I5b2e5qRV3ITThn8ItGsBfEKm6fvIemI2xN4bkA0IHrA+yNCd1Y+22TtBhu?=
- =?us-ascii?Q?DiwhCCbt1wY2lUjvc6Dn1hSDzZd5nUNjchbBHQrGWh4j9k/IoNUlatB1G4P3?=
- =?us-ascii?Q?tJziBcy9SbSBkRaRKNXWQjecTTX8WSW7hU1bVFwoYVMLJJuKJ36X5BaSkv4p?=
- =?us-ascii?Q?nQAvRz5kZ5+jOkUDeDc0Sfu3a4h+6ZdL0DQcs1RiHvbeHlNgojoCOpJ+9Cvv?=
- =?us-ascii?Q?6StjWiMj3qln7OqYy8ppm9crAhu78DlLH4bshEC4sFLHkhukNrbZhEZBcF5b?=
- =?us-ascii?Q?WOMZ9j+G75hsUFvR2OHY9ilba6kdJo5NF2F9xv+HknUjNWsL4MX21Zp1s5FN?=
- =?us-ascii?Q?bu1ZhgsH6cDdNG/z+G+OfY7lIE0XKzbim2JiVcBKM3+izzhhikntKYapKX/w?=
- =?us-ascii?Q?0FAsXfAvU7ZdmSS+ldYohs7nvpKshwI8r8X5lwW+KfaXGXAjYD5FQbIIqj0D?=
- =?us-ascii?Q?TrB+bcICPred8OSPuA7vp29ar8D/uzlF7TOyn88byqkRbLxD7fa3TEybpK/X?=
- =?us-ascii?Q?gBO8FcBi+BuxGErAKSszYSAFAKbkfhMTXvKlmFktLlPTEqEs66ZuugKZjw6i?=
- =?us-ascii?Q?ybI1nIwjpODH95+SnJdiVvvgaUFutLNvgowoME/mni7d6DAXOo74tbR21Lrk?=
- =?us-ascii?Q?jRhr0+bQmHhMb8kvw/qQyr5AGpIwsuDHhrVRBpDUfN9CHgPKKIBIqvet+8BZ?=
- =?us-ascii?Q?9ac3H3xvQmSecl2r8ArSaRyBawlZEpuOG7OyhqH+qAEsVXgT4rZLWvU1bqgM?=
- =?us-ascii?Q?fGPZQI5va1sNZCNTUSsdwCJECRaM9SQEipSm2QUo4vI5HPtBnhecbgtkeRGc?=
- =?us-ascii?Q?BC9WsPc9ZNCx8EQaIX+cvxqDJzkLWuhOskg7CdoGI3dkftl4z0SvxzYDsUqV?=
- =?us-ascii?Q?+kKdAUUCB82mZrzYGJ0Nu9aHd0/bypSaavcl0Z4ADHbIo52UblWkLB0L/xf2?=
- =?us-ascii?Q?a/+D29emTxYTpgGBRYDw1K24w1/78kgeTb16ZGq2p7WkzabVMxAwMznLB98F?=
- =?us-ascii?Q?f6vQzr5KrX4sx3HHKtkga2F1/Ac4hRd5amXsQ5NQPZN6A72a/zCQd4cbfN04?=
- =?us-ascii?Q?pOg1uS4hU1il0NLxLhsHe5uabspydudV0vEZx+g2?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9427c1a7-23ad-4d83-0535-08db585f1c5f
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 11:49:32.5689
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d8nGwLuFVBGV/F9LYAbEfUN7BuhnBedEUSfdpiS3HGHaDTR3m7N1mf3GEOPzMOW8
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6465
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230511182426.1898675-1-axelrasmussen@google.com>
+ <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
+ <ZGVRUeCWr8209m8d@x1n> <ZGVTMnVKNcQDM0x4@x1n> <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
+ <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com>
+ <ZGZMtK6PzoTuLZ1b@x1n> <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
+ <32fdc2c8-b86b-92f3-1d5e-64db6be29126@redhat.com>
+In-Reply-To: <32fdc2c8-b86b-92f3-1d5e-64db6be29126@redhat.com>
+From:   Jiaqi Yan <jiaqiyan@google.com>
+Date:   Fri, 19 May 2023 08:04:09 -0700
+Message-ID: <CACw3F50qvf13-fUx4XrL1jkhbo2mQ5sPV=E_i7_Gt2NaWXJfnQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Huang Ying <ying.huang@intel.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Anish Moorthy <amoorthy@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 19, 2023 at 09:56:04AM +0000, Tian, Kevin wrote:
-> > From: Liu, Yi L <yi.l.liu@intel.com>
-> > Sent: Thursday, May 11, 2023 10:39 PM
-> > 
-> > Lu Baolu (2):
-> >   iommu: Add new iommu op to create domains owned by userspace
-> >   iommu: Add nested domain support
-> > 
-> > Nicolin Chen (5):
-> >   iommufd/hw_pagetable: Do not populate user-managed hw_pagetables
-> >   iommufd/selftest: Add domain_alloc_user() support in iommu mock
-> >   iommufd/selftest: Add coverage for IOMMU_HWPT_ALLOC with user data
-> >   iommufd/selftest: Add IOMMU_TEST_OP_MD_CHECK_IOTLB test op
-> >   iommufd/selftest: Add coverage for IOMMU_HWPT_INVALIDATE ioctl
-> > 
-> > Yi Liu (4):
-> >   iommufd/hw_pagetable: Use domain_alloc_user op for domain allocation
-> >   iommufd: Pass parent hwpt and user_data to
-> >     iommufd_hw_pagetable_alloc()
-> >   iommufd: IOMMU_HWPT_ALLOC allocation with user data
-> >   iommufd: Add IOMMU_HWPT_INVALIDATE
-> > 
-> 
-> I didn't see any change in iommufd_hw_pagetable_attach() to handle
-> stage-1 hwpt differently.
-> 
-> In concept whatever reserved regions existing on a device should be
-> directly reflected on the hwpt which the device is attached to.
-> 
-> So with nesting presumably the reserved regions of the device have
-> been reported to the userspace and it's user's responsibility to avoid
-> allocating IOVA from those reserved regions in stage-1 hwpt.
+On Fri, May 19, 2023 at 1:38=E2=80=AFAM David Hildenbrand <david@redhat.com=
+> wrote:
+>
+> On 18.05.23 22:38, Axel Rasmussen wrote:
+> > On Thu, May 18, 2023 at 9:05=E2=80=AFAM Peter Xu <peterx@redhat.com> wr=
+ote:
+> >>
+> >> On Wed, May 17, 2023 at 05:43:53PM -0700, Jiaqi Yan wrote:
+> >>> On Wed, May 17, 2023 at 3:29=E2=80=AFPM Axel Rasmussen <axelrasmussen=
+@google.com> wrote:
+> >>>>
+> >>>> On Wed, May 17, 2023 at 3:20=E2=80=AFPM Peter Xu <peterx@redhat.com>=
+ wrote:
+> >>>>>
+> >>>>> On Wed, May 17, 2023 at 06:12:33PM -0400, Peter Xu wrote:
+> >>>>>> On Thu, May 11, 2023 at 03:00:09PM -0700, James Houghton wrote:
+> >>>>>>> On Thu, May 11, 2023 at 11:24=E2=80=AFAM Axel Rasmussen
+> >>>>>>> <axelrasmussen@google.com> wrote:
+> >>>>>>>>
+> >>>>>>>> So the basic way to use this new feature is:
+> >>>>>>>>
+> >>>>>>>> - On the new host, the guest's memory is registered with userfau=
+ltfd, in
+> >>>>>>>>    either MISSING or MINOR mode (doesn't really matter for this =
+purpose).
+> >>>>>>>> - On any first access, we get a userfaultfd event. At this point=
+ we can
+> >>>>>>>>    communicate with the old host to find out if the page was poi=
+soned.
+> >>>>>>>> - If so, we can respond with a UFFDIO_SIGBUS - this places a swa=
+p marker
+> >>>>>>>>    so any future accesses will SIGBUS. Because the pte is now "p=
+resent",
+> >>>>>>>>    future accesses won't generate more userfaultfd events, they'=
+ll just
+> >>>>>>>>    SIGBUS directly.
+> >>>>>>>
+> >>>>>>> I want to clarify the SIGBUS mechanism here when KVM is involved,
+> >>>>>>> keeping in mind that we need to be able to inject an MCE into the
+> >>>>>>> guest for this to be useful.
+> >>>>>>>
+> >>>>>>> 1. vCPU gets an EPT violation --> KVM attempts GUP.
+> >>>>>>> 2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGBUS=
+.
+> >>>>>>> 3. KVM finds that GUP failed and returns -EFAULT.
+> >>>>>>>
+> >>>>>>> This is different than if GUP found poison, in which case KVM wil=
+l
+> >>>>>>> actually queue up a SIGBUS *containing the address of the fault*,=
+ and
+> >>>>>>> userspace can use it to inject an appropriate MCE into the guest.=
+ With
+> >>>>>>> UFFDIO_SIGBUS, we are missing the address!
+> >>>>>>>
+> >>>>>>> I see three options:
+> >>>>>>> 1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I thin=
+k
+> >>>>>>> this is pointless.
+> >>>>>>> 2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead have=
+ a
+> >>>>>>> UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_SI=
+GBUS
+> >>>>>>> instead of VM_FAULT_RETRY. We will keep getting userfaults on rep=
+eated
+> >>>>>>> accesses, just like how we get repeated signals for real poison.
+> >>>>>>> 3. Use this in conjunction with the additional KVM EFAULT info th=
+at
+> >>>>>>> Anish proposed (the first part of [1]).
+> >>>>>>>
+> >>>>>>> I think option 3 is fine. :)
+> >>>>>>
+> >>>>>> Or... option 4) just to use either MADV_HWPOISON or hwpoison-injec=
+t? :)
+> >>>>>
+> >>>>> I just remember Axel mentioned this in the commit message, and just=
+ in case
+> >>>>> this is why option 4) was ruled out:
+> >>>>>
+> >>>>>          They expect that once poisoned, pages can never become
+> >>>>>          "un-poisoned". So, when we live migrate the VM, we need to=
+ preserve
+> >>>>>          the poisoned status of these pages.
+> >>>>>
+> >>>>> Just to supplement on this point: we do have unpoison (echoing to
+> >>>>> "debug/hwpoison/hwpoison_unpoison"), or am I wrong?
+> >>>
+> >>> If I read unpoison_memory() correctly, once there is a real hardware
+> >>> memory corruption (hw_memory_failure will be set), unpoison will stop
+> >>> working and return EOPNOTSUPP.
+> >>>
+> >>> I know some cloud providers evacuating VMs once a single memory error
+> >>> happens, so not supporting unpoison is probably not a big deal for
+> >>> them. BUT others do keep VM running until more errors show up later,
+> >>> which could be long after the 1st error.
+> >>
+> >> We're talking about postcopy migrating a VM has poisoned page on src,
+> >> rather than on dst host, am I right?  IOW, the dest hwpoison should be
+> >> fake.
 
-Presumably
- 
-> It's not necessarily to add reserved regions to the IOAS of the parent
-> hwpt since the device doesn't access that address space after it's
-> attached to stage-1. The parent is used only for address translation
-> in the iommu side.
+Yes, for this we are on the same page. The scenario I want to describe is..=
+.
 
-But if we don't put them in the IOAS of the parent there is no way for
-userspace to learn what they are to forward to the VM ?
+> >>
+> >> If so, then I would assume that's the case where all the pages on the =
+dest
+> >> host is still all good (so hw_memory_failure not yet set, or I doubt t=
+he
 
-Since we expect the parent IOAS to be usable in an identity mode I
-think they should be added, at least I can't see a reason not to add
-them.
+...target VM can get hw error anytime: before precopy (if cloud
+provider is not carefully monitoring the machine health), during
+precopy from src to target, during src blackout, during postcopy,
+after migration done, and keep running on host. Both MADV_HWPOISON[1]
+and hwpoison-inject[2] are subject to hw_memory_failure, so they just
+seems unreliable to me: if target is in memory error trouble before or
+in early phase of migration, we lose the unpoison feature in kernel.
 
-Which is definately complicating some parts of this..
+[1] https://github.com/torvalds/linux/blob/2d1bcbc6cd703e64caf8df314e3669b4=
+786e008a/mm/madvise.c#L1130
+[2] https://github.com/torvalds/linux/blob/2d1bcbc6cd703e64caf8df314e3669b4=
+786e008a/mm/hwpoison-inject.c#L51
 
-Jason
+> >> judgement of being a migration target after all)?
+> >>
+> >> The other thing is even if dest host has hw poisoned page, I'm not sur=
+e
+> >> whether hw_memory_failure is the only way to solve this.
+> >>
+> >> I saw that this is something got worked on before from Zhenwei, David =
+used
+> >> to have some reasoning on why it was suggested like using a global kno=
+b:
+> >>
+> >> https://lore.kernel.org/all/d7927214-e433-c26d-7a9c-a291ced81887@redha=
+t.com/
+> >>
+> >> Two major issues here afaics:
+> >>
+> >>    - Zhenwei's approach only considered x86 hwpoison - it relies on kp=
+te
+> >>      having !present in entries but that's x86 specific rather than ge=
+neric
+> >>      to memory_failure.c.
+> >>
+> >>    - It is _assumed_ that hwpoison injection is for debugging only.
+> >>
+> >> I'm not sure whether you can fix 1) by some other ways, e.g., what if =
+the
+> >> host just remember all the hardware poisoned pfns (or remember
+> >> soft-poisoned ones, but then here we need to be careful on removing th=
+em
+> >> from the list when it's hwpoisoned for real)?  It sounds like there's
+> >> opportunity on providing a generic solution rather than relying on
+> >> !pte_present().
+> >>
+> >> For 2) IMHO that's not a big issue, you can declare it'll be used in !=
+debug
+> >> but production systems so as to boost the feature importance with a re=
+al
+> >> use case.
+> >>
+> >> So far I'd say it'll be great to leverage what it's already there in l=
+inux
+> >> and make it as generic as possible. The only issue is probably
+> >> CAP_ADMIN... not sure whether we can have some way to provide !ADMIN
+> >> somehow, or you can simply work around this issue.
+
+I don't think CAP_ADMIN is something we can work around: a VMM must be
+a good citizen to avoid introducing any vulnerability to the host or
+guest.
+
+On the other hand, "Userfaults allow the implementation of on-demand
+paging from userland and more generally they allow userland to take
+control of various memory page faults, something otherwise only the
+kernel code could do." [3]. I am not familiar with the UFFD internals,
+but our use case seems to match what UFFD wants to provide: without
+affecting the whole world, give a specific userspace (without
+CAP_ADMIN) the ability to handle page faults (indirectly emulate a
+HWPOISON page (in my mind I treat it as SetHWPOISON(page) +
+TestHWPOISON(page) operation in kernel's PF code)). So is it fair to
+say what Axel provided here is "provide !ADMIN somehow"?
+
+[3]https://docs.kernel.org/admin-guide/mm/userfaultfd.html
+
+> >
+> > As you mention below I think the key distinction is the scope - I
+> > think MADV_HWPOISON affects the whole system, including other
+> > processes.
+> >
+> > For our purposes, we really just want to "poison" this particular
+> > virtual address (the HVA, from the VM's perspective), not even other
+> > mappings of the same shared memory. I think that behavior is different
+> > from MADV_HWPOISON, at least.
+>
+> MADV_HWPOISON really is the wrong interface to use. See "man madvise".
+>
+> We don't want to allow arbitrary users to hwpoison+offline absolutely
+> healthy physical memory, which is what MADV_HWPOISON is all about.
+>
+> As you say, we want to turn an unpopulated (!present) virtual address to
+> mimic like we had a MCE on a page that would have been previously mapped
+> here: install a hwpoison marker without actually poisoning any present
+> page. In fact, we'd even want to fail if there *is* something mapped.
+>
+> Sure, one could teach MADV_HWPOISON to allow unprivileged users to do
+> that for !present PTE entries, and fail for unprivileged users if there
+> is a present PTE entry. I'm not sure if that's the cleanest approach,
+> though, and a new MADV as suggested in this thread would eventually be
+> cleaner.
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>
