@@ -2,209 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A9170A00E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 21:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D64170A2EC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 May 2023 00:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjESTs6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 May 2023 15:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
+        id S229671AbjESWwn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 May 2023 18:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjESTs4 (ORCPT
+        with ESMTP id S229508AbjESWwm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 May 2023 15:48:56 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDDE19F;
-        Fri, 19 May 2023 12:48:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IK08sKhD3nomrv8OZT1PVztWfyoQKBHoIZIfKTb9yJSh/4lUbyFacTNzdlO8QFyfTFRgMz+t6iSttvUkdcMXFMiouoUgRrCQPYjMYoDGYdHvqWpl86XkAS+PIHjFDiPsh/lc9dfdOZteRNf1ODupwiM8cT4Odi0h7QssUldHTffqTViP6L8qfBWHXEjaMLXotQOIlJilhv1CZxY6Ijwkq9XpCXLRqQbCNRzNXpChNo7nBbCCF5eSNRzILfKGFpLxSlja7JOm3k5NKveE14JXnuJbad3ETwMP+OvW3wvEC1uOjMqja+VTV0YUkg8lSvhMMffM/sl2nQDOimJP9gl1Hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9jxEsXgJI98k/z3IqOECTL/vn2LsOyK0Yvtu0DxcwS0=;
- b=khj+LcpKqC70AjT4ZXxix7V6vHCGoLuF7UUG3/v+0fR/H65h+ZGRiXPo4HHLIgDUvs9BMlfFumJZq1bXUBniXW9csZ2/Degnirygbp+QO1FueHb31twrfQFHHZl9uYLSGS848Uk+vyVVW3srB1iI7laodRKww5z8fSPMNz6J4Ln0dv1AZAFOKRIRqcYUCTD5HzoE4c3iqLMXJ3Y1B8MuOZ770iEtN0iH7FqMJpXAE2/9S4TMuPllpQnGhUEzLgC6fsjjOzAdRVFGprAS7WHikaB/4CSOZZAb7MVpwypyxYRqiY4aetfk0BbCPjbQ7GBP+WNFLBXYSJ11PmA5zfWO3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9jxEsXgJI98k/z3IqOECTL/vn2LsOyK0Yvtu0DxcwS0=;
- b=fI6Y/d5U2Jy+922AcZRhL4q1k/9vPhrgrR+G8Fd3JL3g+Snizc5d6hRnB3FyJj1l5g3f+XTg8+wAstEzufwbyLj3pT0FmdfnpVGvMG5I3iu5F9BjnLperRi8kN/X0GsiO/wt3igZL3n5b/U3gQR2XPol1CxQ3Fnq+mK9NMgtwkEMVfSmlrSsPbGnuhSv17z4n8s6/U+uPVluwAsyt6qW5FIrxJXwmYmVveJi0fTM95azzPnbhd82aHRWeIK4vHCKFfHcba7V11yZnfIOX1AjUBJOcEM9TBQxy4cQAZxKwBqqw3Z/jYcgjLfZ55J9sCJscuvc7ZPPzFNg7WqU+W0BKA==
-Received: from BL0PR05CA0025.namprd05.prod.outlook.com (2603:10b6:208:91::35)
- by SJ1PR12MB6337.namprd12.prod.outlook.com (2603:10b6:a03:456::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
- 2023 19:48:49 +0000
-Received: from BL02EPF000145BA.namprd05.prod.outlook.com
- (2603:10b6:208:91:cafe::92) by BL0PR05CA0025.outlook.office365.com
- (2603:10b6:208:91::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.15 via Frontend
- Transport; Fri, 19 May 2023 19:48:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL02EPF000145BA.mail.protection.outlook.com (10.167.241.210) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6433.7 via Frontend Transport; Fri, 19 May 2023 19:48:48 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 19 May 2023
- 12:48:32 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 19 May
- 2023 12:48:31 -0700
-Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Fri, 19 May 2023 12:48:30 -0700
-Date:   Fri, 19 May 2023 12:48:29 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v2 06/11] iommufd: IOMMU_HWPT_ALLOC allocation with user
- data
-Message-ID: <ZGfSjYMA06PmaI+Y@Asurada-Nvidia>
-References: <20230511143844.22693-1-yi.l.liu@intel.com>
- <20230511143844.22693-7-yi.l.liu@intel.com>
- <BN9PR11MB52767257B1AC401121F3B24F8C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Fri, 19 May 2023 18:52:42 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0025D2
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 15:52:40 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-561b7729a12so20812057b3.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 15:52:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1684536760; x=1687128760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+/3ocS24eoYwGfIiVCx+gEjnY3f1UvtwZkxMJpeF2sY=;
+        b=Bm7Gn5uUyfgUHvaKPJ4LmsdJPZK2xKqqBjYyzSawEtA1LUx1q99FH0bUZ8bhJXkqx0
+         BjSWlp0rUtqb3tM3m9ZuvGEVk+kVvX/XEEubgANORpKrLPx4JR4A+3HXCeNbJPmfCoLt
+         s76O1K/E4hO/SxtsdXpVaFvXHjR+cf5KY0bJ4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684536760; x=1687128760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+/3ocS24eoYwGfIiVCx+gEjnY3f1UvtwZkxMJpeF2sY=;
+        b=fB1f6TphmZmaxW5paEaR7TLGp9DrOWCMHHOMqSKUrr2MOOIwwFOfw5t/Ge14zhQ+qP
+         nwgIUVTT9+ayfIsazwSOVeQiMUP/KivYARoEmLnSKd5qxWxP+CPcyqQwEUrqyEsVEOC/
+         PFRbsY5b9Z7WveNTH1501S96hHRJiPifC+5XuJRb8+OJKer3bjnKsK1seFlnK9YbNmE4
+         VXdQ700SWHgGt8UHv3qwG3tC6O5V+G66j3F2YLjIH9ACAi5HctxJVAKhRRAFyLNPQWUJ
+         j/F6N9Mh1Gezj6G3VVbqEZoLrLUYXG7MB5VqgiJn3+aCzRo8IZxckCbHT0hYiFyT1t/5
+         jBhg==
+X-Gm-Message-State: AC+VfDz95iThY1774lTeG1otcD9pHbl/XjZkgNnnqPS9OndabIPAMRj1
+        pdvUcydYLRM1HbfW2azK489OjyudRCm8itHRwTk48w==
+X-Google-Smtp-Source: ACHHUZ7ubDlJqjJI1E7K4aq6HRBx5jm4+SfR8lOnAWCsWDXbiLMZpymdcz9+wOHWwd0FQNHTPXwVAV6gw/PonDW6jso=
+X-Received: by 2002:a81:9b0a:0:b0:561:b5c7:d764 with SMTP id
+ s10-20020a819b0a000000b00561b5c7d764mr3602262ywg.18.1684536759920; Fri, 19
+ May 2023 15:52:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52767257B1AC401121F3B24F8C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000145BA:EE_|SJ1PR12MB6337:EE_
-X-MS-Office365-Filtering-Correlation-Id: 65411883-5093-45cd-75bb-08db58a2103a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZucyivpXTxXVoKGnd4mXmcLFKYMxsxMRqdVM4ywVP1HbXjOHccSE9HZcb5AXrw253ECBRYBtUnDV3v7RiQ5AkXNMo8mCZ0WF8YLGqDsyDCFZ5tCWOnipnLmO9izElz4yCQR2w1p1/msAL6D+CzLqJ+TfKLSQGI8t2qG5o6pg02dRGBtKjorK2jjhyp94Tes2sl4ep5htGVuIjkN2ok447GvbEeJQXkhGh4zLQiIqZE1J5EIiKOlDDRJvMNyb45ZTCHPnXbd9sS6IboOBFkKwu71RSk0/qY2RSdwqL9Vt/7pyj4Dg14s+MnKIJDXAB08dZPgUL8gyewescSOXyw5kKRVQOw87gJahAltvE3kHs+szrl0toHgHDFJvoksdRJnEKrkP8wfJI9QLXy3AmoekzSyfJ4rNNmXc7EfGihBgbjxHMAhmmpG7fVnGZcKW2lXr7JicwxPSQTPTRquLfTFHZ+hYZFCY3YIhRP6AAwJzVCDef99xTNOgn5aShmQHcweWhhYRCQfYYdCot5pY9Wagi99xoD3UDdpupblccKyS5QxabNI/+ezTyKvnGxVsEi6Ywt6WF4YJVa7/9nntP3wuPhJWqci/T8lYKmJbI+hEKMJBrWpDMS6spQjBTkvXvlPpMJCiH6QBFer00EkXTHqtqf5dlGIfLbxePnveTq5rY9v2bECvJC4kgIemlRyC6edfyG/SwAQcM4j87kehYtRijR1ikzZ2Y3WGPrWNGWKYmIi7Ot5StXAnLxJNaPfYXiiTPM01f8x3PDo0e9DBV6TyGw==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(346002)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(33716001)(356005)(82310400005)(7636003)(82740400003)(40460700003)(40480700001)(2906002)(55016003)(54906003)(478600001)(86362001)(36860700001)(186003)(26005)(9686003)(70586007)(70206006)(316002)(4326008)(8676002)(5660300002)(8936002)(6916009)(41300700001)(7416002)(47076005)(426003)(336012)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 19:48:48.1395
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65411883-5093-45cd-75bb-08db58a2103a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145BA.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6337
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230519190934.339332-1-joel@joelfernandes.org>
+ <20230519190934.339332-2-joel@joelfernandes.org> <CAHk-=whoajP4bZMbZC_VYmBhmhCpXsBesszwWUH0i6SpK_dAtw@mail.gmail.com>
+In-Reply-To: <CAHk-=whoajP4bZMbZC_VYmBhmhCpXsBesszwWUH0i6SpK_dAtw@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 19 May 2023 18:52:28 -0400
+Message-ID: <CAEXW_YQ4wdGVa5M6jZfi5d-pdJOp1Nu7qTBvWYS=255AnYWZCw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] mm/mremap: Optimize the start addresses in move_page_tables()
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 19, 2023 at 09:41:00AM +0000, Tian, Kevin wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> > From: Yi Liu <yi.l.liu@intel.com>
-> > Sent: Thursday, May 11, 2023 10:39 PM
-> > +     if (cmd->hwpt_type != IOMMU_HWPT_TYPE_DEFAULT) {
-> > +             if (!ops->domain_alloc_user_data_len) {
-> > +                     rc = -EOPNOTSUPP;
-> > +                     goto out_put_idev;
-> > +             }
-> > +             klen = ops->domain_alloc_user_data_len(cmd->hwpt_type);
-> > +             if (WARN_ON(klen < 0)) {
-> > +                     rc = -EINVAL;
-> > +                     goto out_put_pt;
-> > +             }
-> > +     }
-> 
-> What about passing the user pointer to the iommu driver which
-> then does the copy so we don't need an extra @data_len()
-> callback for every driver?
+Hi Linus,
 
-It's doable by letting the driver do copy_from_user(), yet I
-recall that Jason suggested to keep it in the iommufd. Also,
-we are reusing the ucmd_buffer for the user_data. And the klen
-isn't really being used for its value here. So, it is likely
-enough to have an ops->hwpt_type_is_supported.
-
+On Fri, May 19, 2023 at 3:21=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, May 19, 2023 at 12:09=E2=80=AFPM Joel Fernandes (Google)
+> <joel@joelfernandes.org> wrote:
 > >
-> > +     switch (pt_obj->type) {
-> > +     case IOMMUFD_OBJ_IOAS:
-> > +             ioas = container_of(pt_obj, struct iommufd_ioas, obj);
-> > +             break;
-> 
-> this should fail if parent is specified.
-
-I don't think that's necessaray: the parent is NULL by default
-and only specified (if IOMMUFD_OBJ_HW_PAGETABLE) by the exact
-pt_id/pt_obj here.
-
-> > +     case IOMMUFD_OBJ_HW_PAGETABLE:
-> > +             /* pt_id points HWPT only when hwpt_type
-> > is !IOMMU_HWPT_TYPE_DEFAULT */
-> > +             if (cmd->hwpt_type == IOMMU_HWPT_TYPE_DEFAULT) {
-> > +                     rc = -EINVAL;
-> > +                     goto out_put_pt;
-> > +             }
+> > +static bool check_addr_in_prev(struct vm_area_struct *vma, unsigned lo=
+ng addr,
+> > +                              unsigned long mask)
+> > +{
+> > +       int addr_masked =3D addr & mask;
+> > +       struct vm_area_struct *prev =3D NULL, *cur =3D NULL;
 > > +
-> > +             parent = container_of(pt_obj, struct iommufd_hw_pagetable,
-> > obj);
-> > +             /*
-> > +              * Cannot allocate user-managed hwpt linking to
-> > auto_created
-> > +              * hwpt. If the parent hwpt is already a user-managed hwpt,
-> > +              * don't allocate another user-managed hwpt linking to it.
-> > +              */
-> > +             if (parent->auto_domain || parent->parent) {
-> > +                     rc = -EINVAL;
-> > +                     goto out_put_pt;
-> > +             }
-> > +             ioas = parent->ioas;
-> 
-> for nesting why is ioas required? In concept we can just pass NULL ioas
-> to iommufd_hw_pagetable_alloc() for this hwpt. If within that function
-> there is a need to toggle ioas for the parent it can always retrieve it
-> from the parent hwpt.
+> > +       /* If the masked address is within vma, there is no prev mappin=
+g of concern. */
+> > +       if (vma->vm_start <=3D addr_masked)
+> > +               return false;
+>
+> Hmm.
+>
+> I should have caught this last time, but I didn't.
+>
+> That test smells bad to me. Or maybe it's just the comment.
+>
+> I *suspect* that the test is literally just for the stack movement
+> case by execve, where it catches the case where we're doing the
+> movement entirely within the one vma we set up.
 
-Jason suggested this for simplicity. As I replied in another
-email, a user hwpt still needs ioas's refcount and mutex, so
-it would otherwise have a duplicated code in the beginning of
-most of hwpt_ functions:
-	if (hwpt->parent)
-		ioas = hwpt->parent->ioas;
-	else (hwpt->ioas)
-		ioas = hwpt->ioas;
-	else
-		WARN_ON(1);
+Yes that's right, the test is only for the stack movement case. For
+the regular mremap case, I don't think there is a way for it to
+trigger.
 
-Thanks
-Nic
+> But in the *general* case I think the above is horribly wrong: if you
+> want to move pages within an existing mapping, the page moving code
+> can't just randomly say "I'll expand the area you wanted to move".
+> Again, in that general mremap() case (as opposed to the special stack
+> moving case for execve), I *think* that the caller has already split
+> the vma's at the point of the move, and this test simply cannot ever
+> trigger.
+
+Yes, the test simply cannot ever trigger for mremap() but we still
+need the test for the stack case. That's why I had considered adding
+it and I had indeed reviewed the stack case when adding the test. I
+could update the comment to mention that, if you want.
+
+> So I think the _code_ works, but I think the comment in particular is
+> questionable, and I'm a bit surprised about the code too,. because I
+> thought execve() only expanded to exactly the moving area.
+
+It expands to cover both the new start and the old end of the stack AFAICS:
+          /*
+           * cover the whole range: [new_start, old_end)
+           */
+          if (vma_expand(&vmi, vma, new_start, old_end, vma->vm_pgoff, NULL=
+))
+                  return -ENOMEM;
+
+In this case, it will trigger for the stack because this same expanded
+vma is passed as both the new vma and the old vma to
+move_page_tables().
+
+           */
+          if (length !=3D move_page_tables(vma, old_start,
+                                         vma, new_start, length, false))
+                  return -ENOMEM;
+
+So AFAICS, it is possible that old_start will start later than this
+newly expanded VMA. So for such a situation, old_start can be
+realigned to PMD and the test allows that by saying it need not worry
+about aligning down to an existing VMA.
+
+> End result: I think the patch on the whole looks nice, and smaller
+> than I expected. I also suspect it works in practice, but I'd like
+> that test clarified. Does it *actually* trigger for the stack moving
+> case? Because I think it must (never* trigger for the mremap case?
+
+You are right that the test will not trigger for the mremap case. But
+from a correctness standpoint, I thought of leaving it there for the
+stack (and who knows for what other future reasons the test may be needed).
+I can update the comment describing the stack if you like.
+
+> And maybe I'm the one confused here, and all I really need is an
+> explanation with small words and simple grammar starting with "No,
+> Linus, this is for case xyz"
+
+Hopefully it is clear now and you agree. Let me know if you want me to
+do something more. I can make some time next week to trace the stack
+case a bit more if you like and report back on any behaviors, however
+the mremap tests I did are looking good and working as expected.
+
+thanks,
+
+ - Joel
