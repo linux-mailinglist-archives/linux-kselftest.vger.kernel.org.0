@@ -2,262 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D306709FBE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 21:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97249709FC4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 21:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjESTK3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 May 2023 15:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
+        id S229665AbjESTOV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 May 2023 15:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjESTKY (ORCPT
+        with ESMTP id S229641AbjESTOU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 May 2023 15:10:24 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D344D10E6
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 12:09:50 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-783fdeed241so986562241.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 12:09:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1684523390; x=1687115390;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SWo1p3DpVmU0T9mj5qOdTODFP5dx/UDqRA4JPzC/zFM=;
-        b=TcMQgimlGvWiy+Yq9tzs5x+tIAK1mp22aFzOi9aGMKUkP8PwsWwCwhComvsSo4eIKL
-         T1d/hEYoCC9WFsUyijPJFPrQAANt3Hi+H3ilcgnn0iAghrq2U37nMJFcBIWziF4XZgdK
-         7bKnjZnjYy7fZ+3+sj1+U/9UYLbq0lSUVkjRY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684523390; x=1687115390;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SWo1p3DpVmU0T9mj5qOdTODFP5dx/UDqRA4JPzC/zFM=;
-        b=N6kwX5Dq53/yP8MmfAZ8zyfOOanv5d58BBhG5J6W2EPTfSqOMJ6bcqGtgtUfdClhu/
-         7jeg+tYMxCOJgyRoAyJwKxfQMDpOMoy47/CTz3jYMBS6w4LCAWDBjfK1ogXR1OXiFuCx
-         x4PT7uJ/Mj9lXbTuN6CkwSW+fRo10HtSwqGOp3nVfj4iw/nBrSNTvrdGbIGn792iqJdT
-         8M+Sz+6C6b8kagoF/Skuqe/A9ljz8wSTbw8Vr3kTQmOdt6RGssChDDXtI7U06ug8yW9y
-         +ap+Lq8xK/eZoeWGA8a3BFAm31dNRZjgQt+8Ee+Z6YfE/9FDfthg/n9baACpOX4wZSZI
-         h7Pg==
-X-Gm-Message-State: AC+VfDzD6IUrumprSFV7yWSvwHymBO2V2pcvuDYUfcTNfSpvGDN1ACcP
-        QL4SEDexcczal6dlmH+PqNcWLw==
-X-Google-Smtp-Source: ACHHUZ5Yk4gah/ju4JKpHlXFRbbbY0acrjXAxd6nBOFP7q9w3aEit22E9N+b9+SyAwAbuG1o5wr0aw==
-X-Received: by 2002:a67:f101:0:b0:439:30df:6bb1 with SMTP id n1-20020a67f101000000b0043930df6bb1mr202282vsk.1.1684523389774;
-        Fri, 19 May 2023 12:09:49 -0700 (PDT)
-Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id q20-20020ae9e414000000b0074e1ee30478sm1317611qkc.37.2023.05.19.12.09.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 12:09:49 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: [PATCH v2 4/4] selftests: mm: Add a test for remapping to area immediately after existing mapping
-Date:   Fri, 19 May 2023 19:09:34 +0000
-Message-ID: <20230519190934.339332-5-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-In-Reply-To: <20230519190934.339332-1-joel@joelfernandes.org>
-References: <20230519190934.339332-1-joel@joelfernandes.org>
+        Fri, 19 May 2023 15:14:20 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2054.outbound.protection.outlook.com [40.107.244.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AFA1716;
+        Fri, 19 May 2023 12:13:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iQbOSfgzkQqiV57VKrNMvbybCbVJ91jqM+Te3i/mBMfB7iz8ncvCZ7dAopBYs2yBivl8jjEa6MiGoQoaVTKODMkrR8mYeMCqt4XAV5eNZ2c0F1TnUE27E+1S2r/qNghkCQlkcY3CdJY8Xb31GiEaQx9HS6b1UKfO5rBP1nn3gguvPuD/UT/hNRCzAyGOs8NmYs3s6db6qhD5VJ7r9Pt4hVMX29hofYVsZVh9BTgjza1ORRv1KGu9L0rbmJzvh8aSVv+A4xJWm+uaaI2f/VKBGx3KGtfn8K6osMo6RATTpdmoR26IL2cBKFrNamrDwV3+IQX+OaqiutUKWqZrTW+IAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0dl/WyyBfeeB1KEpB8Ws+VEh905olhnnkh/xk3KAS08=;
+ b=YvE+1UuTiwCtRJwjBeK9HBehu4a6sWPuh9QRH2gWQ9gGYze3Vaf64dyheqP4HkB5EleBU1eEnpTRs9L6a0myVaM0FRLxPpcza5YBTCbjUE7jOdFjhHSh/m/7gLbYpq0kPnz3CwzqI1Sb3JSD0bLyIu7ITx8k/pZMQfn/OexJdKhVtrfCBjnOyZgG0RDidVqctkkgHkkNbyTv/nTRIf6TasKSM1YRZKPkngbTimHZjVpAZak8M++tzT/dHLJY3gA4EYTXKoFY/+vuK22gViddupzzmulqlEfXshc5B0trG8ruATvxBvl4aVXomnvwTc4ezTs+hSjbf1eMgoP9EpKMdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0dl/WyyBfeeB1KEpB8Ws+VEh905olhnnkh/xk3KAS08=;
+ b=fBi5XoMyrrzAW07Nn0LRHCwvpFzBcbr+e1DatiXWwz+9Yr5hmqhJCWDdQCy5f0dPfLGEkcIb267NK9722/bilKLDQLSqKKOD87cJO4+29e4JJF2lsdi5CDD+q8nbjcs9QqMG0/qBLV+iZo9MB6SwNkNgJQxSmR8DT8YRgO1n4M+izSWI3CfEwBiJCvyqn1RjWZUTMfPgABS50jbFjcWbybF6y26IsW3a4k8W8OrS7chz9jZ1FbaZEWeY0/X0Ae+9j2flzdCx7uptnqCMLIsSZ7wSaJmZVkr0MKu5+E/vi8gYz5KauHjPxpQooX/MHWOZXIIwBMHfkCkPBm75411w1Q==
+Received: from DM6PR04CA0020.namprd04.prod.outlook.com (2603:10b6:5:334::25)
+ by CH3PR12MB8727.namprd12.prod.outlook.com (2603:10b6:610:173::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
+ 2023 19:12:37 +0000
+Received: from DM6NAM11FT089.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:334:cafe::c6) by DM6PR04CA0020.outlook.office365.com
+ (2603:10b6:5:334::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.20 via Frontend
+ Transport; Fri, 19 May 2023 19:12:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT089.mail.protection.outlook.com (10.13.173.82) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.21 via Frontend Transport; Fri, 19 May 2023 19:12:36 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 19 May 2023
+ 12:12:28 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 19 May
+ 2023 12:12:28 -0700
+Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.6)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
+ Transport; Fri, 19 May 2023 12:12:26 -0700
+Date:   Fri, 19 May 2023 12:12:25 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v2 04/11] iommufd: Pass parent hwpt and user_data to
+ iommufd_hw_pagetable_alloc()
+Message-ID: <ZGfKGR7NfYzEbIxz@Asurada-Nvidia>
+References: <20230511143844.22693-1-yi.l.liu@intel.com>
+ <20230511143844.22693-5-yi.l.liu@intel.com>
+ <BN9PR11MB52764DEA24B824F640FA0CD58C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB52764DEA24B824F640FA0CD58C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT089:EE_|CH3PR12MB8727:EE_
+X-MS-Office365-Filtering-Correlation-Id: db462825-ba81-4feb-3c54-08db589d01b9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hPYVcbVmIF9ZbQ/ZRPqLZnZR0jJeWaUJZIKd6LsHglWAiI4Fz5aHuPo/CZnGKKwrkZtMWQOWV9HQ6spWn39W+RDXAbZ+4J1oS4ETjLf7kPc9rYVV3q2xAeTjomdaNnNIlC+pdyHRMrXzb1Jb7NetMPaO0rTUFk7qP61rQO0R+cFIIFBpOIlc19rBMdCb43imHisqyFeAZ9FeHN3jaNh4LUcFcjDvkYbgucesKmYQe/5DQItPyMoMpoFo0FKqetmIGk9I1v806a6setPL26zUTQNZ4tvR35OvBO17gXF6yntdDLFZykfv3tb4Sp+Lt9MFxV1HfiVbnlh/ne5Q966rYPbn/HwVzApTqBeIH+VQGKMGZAs5jXhF01LtWs38EXM8OYZ7gxdJeJi398fIEa+9+aOdhQ0m2inWJvTaEnBqI0kzqgJyfIwJOXtbNhPZ1HG2n3o21caPAH45sCESjLjUacQe27NfeaSYpIDCXuleyzGftRMiovXgBBimp354fZEbGiYKqyBqeqegiLfVYeaklpOMUUctI4sAmUX7Q+k59WAi1OuYjLeMeZNo/W6yz4bZKmJjnxborg1nTs+wQr2V6yXMtXrTGpJ5p0xIuD5KVlTT4MKDLwVD8HdAaPsZsY6YY0p+KX0ZYUf18BkRxs79wwAMhYIkBv3DjzW10cVeMmkgnVWzvD328oOrtl4vyduu9tNMWyxaqVMuiJAKfziaiBVIZ+LAnMe5c97WOcZ06pI=
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(376002)(396003)(451199021)(36840700001)(40470700004)(46966006)(316002)(86362001)(4326008)(41300700001)(8936002)(6916009)(8676002)(5660300002)(7416002)(356005)(82310400005)(54906003)(7636003)(33716001)(82740400003)(478600001)(4744005)(2906002)(70586007)(70206006)(336012)(426003)(40480700001)(36860700001)(26005)(47076005)(186003)(40460700003)(9686003)(55016003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 19:12:36.3677
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: db462825-ba81-4feb-3c54-08db589d01b9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT089.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8727
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch adds support for verifying that we correctly handle the
-situation where something is already mapped before the destination of the remap.
+On Fri, May 19, 2023 at 09:34:38AM +0000, Tian, Kevin wrote:
 
-Any realignment of destination address and PMD-copy will destroy that
-existing mapping. In such cases, we need to avoid doing the optimization.
+> > From: Liu, Yi L <yi.l.liu@intel.com>
+> > Sent: Thursday, May 11, 2023 10:39 PM
+> > @@ -89,9 +101,15 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx
+> > *ictx, struct iommufd_ioas *ioas,
+> >       /* Pairs with iommufd_hw_pagetable_destroy() */
+> >       refcount_inc(&ioas->obj.users);
+> >       hwpt->ioas = ioas;
+> 
+> presumably a user hwpt doesn't need store ioas?
 
-To test this, we map an area called the preamble before the remap
-region. Then we verify after the mremap operation that this region did not get
-corrupted.
+hwpt->ioas has the refcount and mutex that are used by a user
+hwpt too throughout the hwpt functions.
 
-Putting some prints in the kernel, I verified that we optimize
-correctly in different situations:
-
-Optimize when there is alignment and no previous mapping (this is tested
-by previous patch).
-<prints>
-check_addr_in_prev(old_vma->vm_start=2900000, old_addr=2900000, mask=-2097152): 0
-check_addr_in_prev(new_vma->vm_start=2f00000, new_addr=2f00000, mask=-2097152): 0
-=== Starting move_page_tables ===
-Doing PUD move for 2800000 -> 2e00000 of extent=200000 <-- Optimization
-Doing PUD move for 2a00000 -> 3000000 of extent=200000
-Doing PUD move for 2c00000 -> 3200000 of extent=200000
-</prints>
-
-Don't optimize when there is alignment but there is previous mapping
-(this is tested by this patch).
-Notice that check_addr_in_prev() returns 1 for the destination mapping
-as we detected there is something there.
-<prints>
-check_addr_in_prev(old_vma->vm_start=2900000, old_addr=2900000, mask=-2097152): 0
-check_addr_in_prev(new_vma->vm_start=5700000, new_addr=5700000, mask=-2097152): 1
-=== Starting move_page_tables ===
-Doing move_ptes for 2900000 -> 5700000 of extent=100000 <-- Unoptimized
-Doing PUD move for 2a00000 -> 5800000 of extent=200000
-Doing PUD move for 2c00000 -> 5a00000 of extent=200000
-</prints>
-
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- tools/testing/selftests/mm/mremap_test.c | 57 +++++++++++++++++++++---
- 1 file changed, 52 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index 6304eb0947a3..d7366074e2a8 100644
---- a/tools/testing/selftests/mm/mremap_test.c
-+++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -29,6 +29,7 @@ struct config {
- 	unsigned long long dest_alignment;
- 	unsigned long long region_size;
- 	int overlapping;
-+	int dest_preamble_size;
- };
- 
- struct test {
-@@ -283,7 +284,7 @@ static void *get_source_mapping(struct config c)
- static long long remap_region(struct config c, unsigned int threshold_mb,
- 			      char pattern_seed)
- {
--	void *addr, *src_addr, *dest_addr;
-+	void *addr, *src_addr, *dest_addr, *dest_preamble_addr;
- 	unsigned long long i;
- 	struct timespec t_start = {0, 0}, t_end = {0, 0};
- 	long long  start_ns, end_ns, align_mask, ret, offset;
-@@ -300,7 +301,7 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 		goto out;
- 	}
- 
--	/* Set byte pattern */
-+	/* Set byte pattern for source block. */
- 	srand(pattern_seed);
- 	for (i = 0; i < threshold; i++)
- 		memset((char *) src_addr + i, (char) rand(), 1);
-@@ -312,6 +313,9 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 	addr = (void *) (((unsigned long long) src_addr + c.region_size
- 			  + offset) & align_mask);
- 
-+	/* Remap after the destination block preamble. */
-+	addr += c.dest_preamble_size;
-+
- 	/* See comment in get_source_mapping() */
- 	if (!((unsigned long long) addr & c.dest_alignment))
- 		addr = (void *) ((unsigned long long) addr | c.dest_alignment);
-@@ -327,6 +331,24 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 		addr += c.dest_alignment;
- 	}
- 
-+	if (c.dest_preamble_size) {
-+		dest_preamble_addr = mmap((void *) addr - c.dest_preamble_size, c.dest_preamble_size,
-+					  PROT_READ | PROT_WRITE,
-+					  MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
-+							-1, 0);
-+		if (dest_preamble_addr == MAP_FAILED) {
-+			ksft_print_msg("Failed to map dest preamble region: %s\n",
-+					strerror(errno));
-+			ret = -1;
-+			goto clean_up_src;
-+		}
-+
-+		/* Set byte pattern for the dest preamble block. */
-+		srand(pattern_seed);
-+		for (i = 0; i < c.dest_preamble_size; i++)
-+			memset((char *) dest_preamble_addr + i, (char) rand(), 1);
-+	}
-+
- 	clock_gettime(CLOCK_MONOTONIC, &t_start);
- 	dest_addr = mremap(src_addr, c.region_size, c.region_size,
- 					  MREMAP_MAYMOVE|MREMAP_FIXED, (char *) addr);
-@@ -335,7 +357,7 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 	if (dest_addr == MAP_FAILED) {
- 		ksft_print_msg("mremap failed: %s\n", strerror(errno));
- 		ret = -1;
--		goto clean_up_src;
-+		goto clean_up_dest_preamble;
- 	}
- 
- 	/* Verify byte pattern after remapping */
-@@ -353,6 +375,23 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 		}
- 	}
- 
-+	/* Verify the dest preamble byte pattern after remapping */
-+	if (c.dest_preamble_size) {
-+		srand(pattern_seed);
-+		for (i = 0; i < c.dest_preamble_size; i++) {
-+			char c = (char) rand();
-+
-+			if (((char *) dest_preamble_addr)[i] != c) {
-+				ksft_print_msg("Preamble data after remap doesn't match at offset %d\n",
-+					       i);
-+				ksft_print_msg("Expected: %#x\t Got: %#x\n", c & 0xff,
-+					       ((char *) dest_preamble_addr)[i] & 0xff);
-+				ret = -1;
-+				goto clean_up_dest;
-+			}
-+		}
-+	}
-+
- 	start_ns = t_start.tv_sec * NS_PER_SEC + t_start.tv_nsec;
- 	end_ns = t_end.tv_sec * NS_PER_SEC + t_end.tv_nsec;
- 	ret = end_ns - start_ns;
-@@ -365,6 +404,9 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
-  */
- clean_up_dest:
- 	munmap(dest_addr, c.region_size);
-+clean_up_dest_preamble:
-+	if (c.dest_preamble_size && dest_preamble_addr)
-+		munmap(dest_preamble_addr, c.dest_preamble_size);
- clean_up_src:
- 	munmap(src_addr, c.region_size);
- out:
-@@ -440,7 +482,7 @@ static int parse_args(int argc, char **argv, unsigned int *threshold_mb,
- 	return 0;
- }
- 
--#define MAX_TEST 14
-+#define MAX_TEST 15
- #define MAX_PERF_TEST 3
- int main(int argc, char **argv)
- {
-@@ -449,7 +491,7 @@ int main(int argc, char **argv)
- 	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
- 	unsigned int pattern_seed;
- 	int num_expand_tests = 2;
--	struct test test_cases[MAX_TEST];
-+	struct test test_cases[MAX_TEST] = {};
- 	struct test perf_test_cases[MAX_PERF_TEST];
- 	int page_size;
- 	time_t t;
-@@ -510,6 +552,11 @@ int main(int argc, char **argv)
- 	test_cases[13] = MAKE_TEST(_1MB, _1MB, _5MB, NON_OVERLAPPING, EXPECT_SUCCESS,
- 				  "5MB mremap - Source 1MB-aligned, Destination 1MB-aligned");
- 
-+	/* Src and Dest addr 1MB aligned. 5MB mremap. */
-+	test_cases[14] = MAKE_TEST(_1MB, _1MB, _5MB, NON_OVERLAPPING, EXPECT_SUCCESS,
-+				  "5MB mremap - Source 1MB-aligned, Dest 1MB-aligned with 40MB Preamble");
-+	test_cases[14].config.dest_preamble_size = 10 * _4MB;
-+
- 	perf_test_cases[0] =  MAKE_TEST(page_size, page_size, _1GB, NON_OVERLAPPING, EXPECT_SUCCESS,
- 					"1GB mremap - Source PTE-aligned, Destination PTE-aligned");
- 	/*
--- 
-2.40.1.698.g37aff9b760-goog
-
+Thanks
+Nic
