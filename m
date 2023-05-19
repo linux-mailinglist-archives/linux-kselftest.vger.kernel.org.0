@@ -2,177 +2,246 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8651D7091B7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 10:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2765C7091C7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 10:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjESIa5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 May 2023 04:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
+        id S230267AbjESIj0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 May 2023 04:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjESIa4 (ORCPT
+        with ESMTP id S229572AbjESIjV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 May 2023 04:30:56 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF069E52;
-        Fri, 19 May 2023 01:30:54 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-643a1fed360so2164634b3a.3;
-        Fri, 19 May 2023 01:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684485054; x=1687077054;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5+hG6iy80bqSgMH7VGr3vhYMvwvtMpezDygF3zvikaA=;
-        b=Jb6ajGyQnjmgZ/0uerlE40XGFd3Ay9CMjGPxuwEXMnbMLaGdlhXANamtUyR4dxvFLp
-         3/xYeHAgYn3bIvWS/qGnan61MIGtcZriEIOE4tiECkZH7D+ruDxdJNDRRqqI2C3zBFAd
-         QJKHHnHCOecykYBsD8dCqhiN7eQw2Apd1BNK5MEJSTSOeR2pAfjMBWtnEOSwi8+liWlv
-         cVN5vroxIX+TJsDKM9LnzCrwsNWksYW2k9r5kcPyHVevi/xUe0/rwHM6r3ql+lr94x4c
-         NSysP04jU4cIRJslZnB+q0eGh5SV0W6YNAilHbEDzexk3YVswaoaUiUEswYgvgRB5b9g
-         p04Q==
+        Fri, 19 May 2023 04:39:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D839C2
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 01:38:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684485514;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tX9NkuaMfOfCKs1FCdEqGfDAsl8Ds/2jqifxpDMQKog=;
+        b=D561lFdafay1NhkBb2dY5VSEopkbivV0wVlMjM2FUN4R9i+vG/RKCdF8PIDm4N5dXwrXUM
+        P3MtwE0klO9m6NKPCyPgWWZVqXZX8QU1OaEDXc+29BFc3tnzBZl2U8aahZCoPSHc3z+hdG
+        VSYTgO8h66KyfxhQdysTG8+By1y5z7s=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-319-YIRLoajmOlu8_66MzwOmAw-1; Fri, 19 May 2023 04:38:33 -0400
+X-MC-Unique: YIRLoajmOlu8_66MzwOmAw-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f426ffdbc6so17244545e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 01:38:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684485054; x=1687077054;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5+hG6iy80bqSgMH7VGr3vhYMvwvtMpezDygF3zvikaA=;
-        b=KCqBB5wDME3beUmOZ3Efym+PVXasetDtz6vzehpE+YBPm7jErkR5CHRY2rDlP8j44w
-         SWQ5ON+7qgeNDs2SstWA0rke+QNo2hYv9RtsgdBlAFGHHWq866ZrgSiPpKQHI+1So3oU
-         sbuFs1L8f6VxIX+PY4lp93/WqyGFAE/3cLu5mWyP847e64SQqELQdJnjF9gnQIBTiQcd
-         gr6MyM978Tq/jrg8yz4MXG/Z9NajAyeLfSPNLfH63IhtDh+FOJeneIfnjPMqBjH2GBqE
-         GQtSkS4nhVoulzAMR2+DAnNVcGrneIBmgj4drCxBCGaFOkGOQr+H2hmppsse7u7OgyLZ
-         mBKA==
-X-Gm-Message-State: AC+VfDylNT9SgaOlcROBbFqARBGqWZ0JpOggd//Ont0uleJwo0v8qf5M
-        0CPnhOq4OH1l4skMesJI2N8=
-X-Google-Smtp-Source: ACHHUZ5Q5NHDENKdyqYnnuOQljMbapkDtEe8OGddKJCTZG7EWD0VCcV9vXIMLkGTeb2AHaGFdFVm/g==
-X-Received: by 2002:a17:902:6505:b0:1ac:40f7:8b52 with SMTP id b5-20020a170902650500b001ac40f78b52mr1601646plk.64.1684485054251;
-        Fri, 19 May 2023 01:30:54 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-39.three.co.id. [116.206.28.39])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170902c08600b001ac2be26340sm2818252pld.222.2023.05.19.01.30.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 01:30:53 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id BECF51056A0; Fri, 19 May 2023 15:30:48 +0700 (WIB)
-Date:   Fri, 19 May 2023 15:30:47 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     David Gow <davidgow@google.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Benjamin Berg <benjamin@sipsolutions.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Rae Moar <rmoar@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] Documentation: kunit: Add usage notes for
- kunit_add_action()
-Message-ID: <ZGcztwtEvf/c0kGg@debian.me>
-References: <20230518083849.2631178-1-davidgow@google.com>
- <20230518083849.2631178-4-davidgow@google.com>
+        d=1e100.net; s=20221208; t=1684485512; x=1687077512;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tX9NkuaMfOfCKs1FCdEqGfDAsl8Ds/2jqifxpDMQKog=;
+        b=jOUkDGzRMdMEq+BiAH4etZthIfsD+0OtKvK8J09A9fwLwaYYNAEV3y7PqUeUomj5vi
+         mCfFLmdS5lK0dopQ3MnG4rbGRatr/tZ/2cJxk8agYDgmOHO0Oa0M3BjNbv+BHDzukRuB
+         8ZJWa0xvmZV3EKF8semwY6Mfyvid+ivBKJLyfjZ8YT0+3+aYCpgtWW7rWSrBntKrKwI9
+         qP/JzsCN8Je0lUBryHUkz5noJr/V9UnOvEcIMEdnkIk7qGrVSCo3w19J/DTvY6kMW56I
+         JPj2N0t7m6fp6tkd+q8XyoXAlXIoGuPqtRAtOZZ57Ds9/rqYuST6M+LpwQQQulNG9vyr
+         6CBQ==
+X-Gm-Message-State: AC+VfDzIiqcU6f8pK9E5rAqKhsTpAV+iVBXYBay2yc/0jCbcUW5paAHg
+        hvJg9IrC4pS7wrpDU9Han6tvjw/nR1+oVNQ6u6sXvVF45McG51i4XosH9rSxApveTGpjSoB+HbJ
+        uZDVAt5B8us/e56fy/pwkd9hmdx3R
+X-Received: by 2002:a7b:c39a:0:b0:3f4:2198:dc2b with SMTP id s26-20020a7bc39a000000b003f42198dc2bmr693569wmj.37.1684485511863;
+        Fri, 19 May 2023 01:38:31 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7LtglJFB9R2JhDU+tff4uPwmts/Q/Nk8YQIEhGQ9liamKeS2OKMjiL1/ZjRuXRD48OUaDpuA==
+X-Received: by 2002:a7b:c39a:0:b0:3f4:2198:dc2b with SMTP id s26-20020a7bc39a000000b003f42198dc2bmr693547wmj.37.1684485511344;
+        Fri, 19 May 2023 01:38:31 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c722:9d00:7421:54d8:9227:a3e8? (p200300cbc7229d00742154d89227a3e8.dip0.t-ipconnect.de. [2003:cb:c722:9d00:7421:54d8:9227:a3e8])
+        by smtp.gmail.com with ESMTPSA id q28-20020a056000137c00b003093a412310sm4570816wrz.92.2023.05.19.01.38.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 01:38:30 -0700 (PDT)
+Message-ID: <32fdc2c8-b86b-92f3-1d5e-64db6be29126@redhat.com>
+Date:   Fri, 19 May 2023 10:38:29 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QNlhZ+8rjoCCRHiA"
-Content-Disposition: inline
-In-Reply-To: <20230518083849.2631178-4-davidgow@google.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+To:     Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     Jiaqi Yan <jiaqiyan@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Huang Ying <ying.huang@intel.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Anish Moorthy <amoorthy@google.com>
+References: <20230511182426.1898675-1-axelrasmussen@google.com>
+ <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
+ <ZGVRUeCWr8209m8d@x1n> <ZGVTMnVKNcQDM0x4@x1n>
+ <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
+ <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com>
+ <ZGZMtK6PzoTuLZ1b@x1n>
+ <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
+In-Reply-To: <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 18.05.23 22:38, Axel Rasmussen wrote:
+> On Thu, May 18, 2023 at 9:05 AM Peter Xu <peterx@redhat.com> wrote:
+>>
+>> On Wed, May 17, 2023 at 05:43:53PM -0700, Jiaqi Yan wrote:
+>>> On Wed, May 17, 2023 at 3:29 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
+>>>>
+>>>> On Wed, May 17, 2023 at 3:20 PM Peter Xu <peterx@redhat.com> wrote:
+>>>>>
+>>>>> On Wed, May 17, 2023 at 06:12:33PM -0400, Peter Xu wrote:
+>>>>>> On Thu, May 11, 2023 at 03:00:09PM -0700, James Houghton wrote:
+>>>>>>> On Thu, May 11, 2023 at 11:24 AM Axel Rasmussen
+>>>>>>> <axelrasmussen@google.com> wrote:
+>>>>>>>>
+>>>>>>>> So the basic way to use this new feature is:
+>>>>>>>>
+>>>>>>>> - On the new host, the guest's memory is registered with userfaultfd, in
+>>>>>>>>    either MISSING or MINOR mode (doesn't really matter for this purpose).
+>>>>>>>> - On any first access, we get a userfaultfd event. At this point we can
+>>>>>>>>    communicate with the old host to find out if the page was poisoned.
+>>>>>>>> - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
+>>>>>>>>    so any future accesses will SIGBUS. Because the pte is now "present",
+>>>>>>>>    future accesses won't generate more userfaultfd events, they'll just
+>>>>>>>>    SIGBUS directly.
+>>>>>>>
+>>>>>>> I want to clarify the SIGBUS mechanism here when KVM is involved,
+>>>>>>> keeping in mind that we need to be able to inject an MCE into the
+>>>>>>> guest for this to be useful.
+>>>>>>>
+>>>>>>> 1. vCPU gets an EPT violation --> KVM attempts GUP.
+>>>>>>> 2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGBUS.
+>>>>>>> 3. KVM finds that GUP failed and returns -EFAULT.
+>>>>>>>
+>>>>>>> This is different than if GUP found poison, in which case KVM will
+>>>>>>> actually queue up a SIGBUS *containing the address of the fault*, and
+>>>>>>> userspace can use it to inject an appropriate MCE into the guest. With
+>>>>>>> UFFDIO_SIGBUS, we are missing the address!
+>>>>>>>
+>>>>>>> I see three options:
+>>>>>>> 1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I think
+>>>>>>> this is pointless.
+>>>>>>> 2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead have a
+>>>>>>> UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_SIGBUS
+>>>>>>> instead of VM_FAULT_RETRY. We will keep getting userfaults on repeated
+>>>>>>> accesses, just like how we get repeated signals for real poison.
+>>>>>>> 3. Use this in conjunction with the additional KVM EFAULT info that
+>>>>>>> Anish proposed (the first part of [1]).
+>>>>>>>
+>>>>>>> I think option 3 is fine. :)
+>>>>>>
+>>>>>> Or... option 4) just to use either MADV_HWPOISON or hwpoison-inject? :)
+>>>>>
+>>>>> I just remember Axel mentioned this in the commit message, and just in case
+>>>>> this is why option 4) was ruled out:
+>>>>>
+>>>>>          They expect that once poisoned, pages can never become
+>>>>>          "un-poisoned". So, when we live migrate the VM, we need to preserve
+>>>>>          the poisoned status of these pages.
+>>>>>
+>>>>> Just to supplement on this point: we do have unpoison (echoing to
+>>>>> "debug/hwpoison/hwpoison_unpoison"), or am I wrong?
+>>>
+>>> If I read unpoison_memory() correctly, once there is a real hardware
+>>> memory corruption (hw_memory_failure will be set), unpoison will stop
+>>> working and return EOPNOTSUPP.
+>>>
+>>> I know some cloud providers evacuating VMs once a single memory error
+>>> happens, so not supporting unpoison is probably not a big deal for
+>>> them. BUT others do keep VM running until more errors show up later,
+>>> which could be long after the 1st error.
+>>
+>> We're talking about postcopy migrating a VM has poisoned page on src,
+>> rather than on dst host, am I right?  IOW, the dest hwpoison should be
+>> fake.
+>>
+>> If so, then I would assume that's the case where all the pages on the dest
+>> host is still all good (so hw_memory_failure not yet set, or I doubt the
+>> judgement of being a migration target after all)?
+>>
+>> The other thing is even if dest host has hw poisoned page, I'm not sure
+>> whether hw_memory_failure is the only way to solve this.
+>>
+>> I saw that this is something got worked on before from Zhenwei, David used
+>> to have some reasoning on why it was suggested like using a global knob:
+>>
+>> https://lore.kernel.org/all/d7927214-e433-c26d-7a9c-a291ced81887@redhat.com/
+>>
+>> Two major issues here afaics:
+>>
+>>    - Zhenwei's approach only considered x86 hwpoison - it relies on kpte
+>>      having !present in entries but that's x86 specific rather than generic
+>>      to memory_failure.c.
+>>
+>>    - It is _assumed_ that hwpoison injection is for debugging only.
+>>
+>> I'm not sure whether you can fix 1) by some other ways, e.g., what if the
+>> host just remember all the hardware poisoned pfns (or remember
+>> soft-poisoned ones, but then here we need to be careful on removing them
+>> from the list when it's hwpoisoned for real)?  It sounds like there's
+>> opportunity on providing a generic solution rather than relying on
+>> !pte_present().
+>>
+>> For 2) IMHO that's not a big issue, you can declare it'll be used in !debug
+>> but production systems so as to boost the feature importance with a real
+>> use case.
+>>
+>> So far I'd say it'll be great to leverage what it's already there in linux
+>> and make it as generic as possible. The only issue is probably
+>> CAP_ADMIN... not sure whether we can have some way to provide !ADMIN
+>> somehow, or you can simply work around this issue.
+> 
+> As you mention below I think the key distinction is the scope - I
+> think MADV_HWPOISON affects the whole system, including other
+> processes.
+> 
+> For our purposes, we really just want to "poison" this particular
+> virtual address (the HVA, from the VM's perspective), not even other
+> mappings of the same shared memory. I think that behavior is different
+> from MADV_HWPOISON, at least.
 
---QNlhZ+8rjoCCRHiA
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+MADV_HWPOISON really is the wrong interface to use. See "man madvise".
 
-On Thu, May 18, 2023 at 04:38:46PM +0800, David Gow wrote:
-> +Registering Cleanup Actions
-> +---------------------------
-> +
-> +If you need to perform some cleanup beyond simple use of ``kunit_kzalloc=
-``,
-> +you can register a cusom "deferred action", which is a cleanup function
-> +run when the test exits (whether cleanly, or via a failed assertion).
-> +
-> +Actions are simple functions with no return value, and a single ``void*``
-> +context argument, and forfil the same role as "cleanup" functions in Pyt=
-hon
-"... fulfill the same role ..."?
+We don't want to allow arbitrary users to hwpoison+offline absolutely 
+healthy physical memory, which is what MADV_HWPOISON is all about.
 
-> +and Go tests, "defer" statements in languages which support them, and
-> +(in some cases) destructors in RAII languages.
-> +
-> +These are very useful for unregistering things from global lists, closing
-> +files or other resources, or freeing resources.
-> +
-> +For example:
-> +
-> +.. code-block:: C
-> +
-> +	static void cleanup_device(void *ctx)
-> +	{
-> +		struct device *dev =3D (struct device *)ctx;
-> +
-> +		device_unregister(dev);
-> +	}
-> +
-> +	void example_device_test(struct kunit *test)
-> +	{
-> +		struct my_device dev;
-> +
-> +		device_register(&dev);
-> +
-> +		kunit_add_action(test, &cleanup_device, &dev);
-> +	}
-> +
-> +Note that, for functions like device_unregister which only accept a sing=
-le
-> +pointer-sized argument, it's possible to directly cast that function to
-> +a ``kunit_action_t`` rather than writing a wrapper function, for example:
-> +
-> +.. code-block:: C
-> +
-> +	kunit_add_action(test, (kunit_action_t *)&device_unregister, &dev);
-> +
-> +``kunit_add_action`` can fail if, for example, the system is out of memo=
-ry.
-> +You can use ``kunit_add_action_or_reset`` instead which runs the action
-> +immediately if it cannot be deferred.
-> +
-> +If you need more control over when the cleanup function is called, you
-> +can trigger it early using ``kunit_release_action``, or cancel it entire=
-ly
-> +with ``kunit_remove_action``.
-> +
-> =20
->  Testing Static Functions
->  ------------------------
+As you say, we want to turn an unpopulated (!present) virtual address to 
+mimic like we had a MCE on a page that would have been previously mapped 
+here: install a hwpoison marker without actually poisoning any present 
+page. In fact, we'd even want to fail if there *is* something mapped.
 
-The rest is LGTM.
+Sure, one could teach MADV_HWPOISON to allow unprivileged users to do 
+that for !present PTE entries, and fail for unprivileged users if there 
+is a present PTE entry. I'm not sure if that's the cleanest approach, 
+though, and a new MADV as suggested in this thread would eventually be 
+cleaner.
 
---=20
-An old man doll... just what I always wanted! - Clara
+-- 
+Thanks,
 
---QNlhZ+8rjoCCRHiA
-Content-Type: application/pgp-signature; name="signature.asc"
+David / dhildenb
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGczrQAKCRD2uYlJVVFO
-o/9jAQDrHL35jfTcr1SjBI6FfCy61zx+YCt53C13kD/XIJCcwAEA7U8wmdm73+Rh
-MIbRXJdpUi02nfl88HIERDTHo5VFOAw=
-=lpla
------END PGP SIGNATURE-----
-
---QNlhZ+8rjoCCRHiA--
