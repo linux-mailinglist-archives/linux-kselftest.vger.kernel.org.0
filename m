@@ -2,224 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C303A708D47
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 03:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E27708D9F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 May 2023 04:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjESBW0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 May 2023 21:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
+        id S229807AbjESCEP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 May 2023 22:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjESBWY (ORCPT
+        with ESMTP id S229641AbjESCEO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 May 2023 21:22:24 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15059171E
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 18:22:02 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f423c17bafso29175e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 18:22:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684459320; x=1687051320;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UqVmcIUSI4Xw+jP09wSJXm4OiN2hCwHu9FnNFUiMdYo=;
-        b=wEdgpcJ7Dj3UtTNIU2HlM1dn84V1NZeOPc9e5NTTZ9Qn8Ec7oCYJok2TaVM4qFxyRM
-         FbcmfZ9z2gaRNvuKFS2K8atqsFjmPb2UE2b0ugJLBPHiSjwFZgv5e6KPjpBEIq8m8afm
-         XJHV0AN3KeoKo4bZoTm14Q1q8fo6IEKrrGU8fpXh6lu+6jeIuuAX/nECVHVPC9b3mlK3
-         ym1FsB2/o21Em8ybiFGt4mpC7RspE4ILcTv8bq64xXEA4gccNf8v5xfOp1bGvPOWJl0v
-         iSuFttY/MFvWUYEG0bu9PDAsRNQXBKlE1hQDE8ckKFe8niEpj9AyfVYkSUuvzNuYMhZw
-         Fbwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684459320; x=1687051320;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UqVmcIUSI4Xw+jP09wSJXm4OiN2hCwHu9FnNFUiMdYo=;
-        b=TlisAZLyzXN9cjXiIgBHAzUQlD/aXx5KSs0PXev368mG7juUow1/ug50FeZLJwwbA1
-         EwUh7p+bItR4mBAD8mNrKnnBSjRIgm2pxSZGgyY9Krot4jufbzfB7rh8FdeyO5eHsLPD
-         u/j4IDa9uV5qaxowOA2G2gvEk6j+RVfN7uVzUP125NmduCvFFlpTtNRFOsvW7a4Gqovr
-         IHhj9GFtSX6yaJ9lKbnUtP9ZTU85Gak0l0nARpokFAQ4/Wmt7UpudJLSlVsm1A9byGBe
-         WuGWbeQDV5g+aOsmNbaZYPvwbqBp+m7BN7nh/fn3WaLs11TNukjobfHgpYRRMjVpVi9+
-         HGXA==
-X-Gm-Message-State: AC+VfDyyJEAVcnbfgimG9Q8IMg2MQtYTbZMHKUg8txDCQmvfmLyNQXde
-        KW16fabor/m9g0wJHHuFV7aHSiks0qa6ejikk7FgTw==
-X-Google-Smtp-Source: ACHHUZ7M3/IbFNzSZ64MwfOjccnIXsHjJKpFlglqiau7g+2UhDxPQvtvdYUvEozRiR7XUuS8QbUg7zk5NYucG8i726c=
-X-Received: by 2002:a05:600c:4994:b0:3f1:758c:dd23 with SMTP id
- h20-20020a05600c499400b003f1758cdd23mr89382wmp.7.1684459320145; Thu, 18 May
- 2023 18:22:00 -0700 (PDT)
+        Thu, 18 May 2023 22:04:14 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166B1192;
+        Thu, 18 May 2023 19:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684461853; x=1715997853;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bigg4gk47lNFdVx20xWM4FyRwF5SyiVXdpidC4nBQUs=;
+  b=eEbhIjgznOLYznoFm/eG99PcMQipNbW9ibqhp4iFz31Xs1KvrQi2iiZC
+   d7RlNefv91Ccv6hArQFf9stw1shpbCVAJSynjXvZdKslfzS+wwPffvHbr
+   U0DRxy2eZEbIHVffdUV/ZnHMZtaZSwsnQ1q8aOX6X35ALog6s6jvJ5TUB
+   PEMzKBMuO09q50Cnt2KBaYfeG5yUkkFI0lJTTb/jEnIIa9hrQHfmqKi5W
+   6farGXKFBXth1Hm9NWGerFFMPQaXucppsWhCiPpI+BsWjK2XIlqbYsuWq
+   rYaFBM6mzGtr786gBXnH2ZEX10cQjpM72w11xeHEyiiiuPkbbiX30ECB9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="351093602"
+X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
+   d="scan'208";a="351093602"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 19:04:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="876673929"
+X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
+   d="scan'208";a="876673929"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.210.160]) ([10.254.210.160])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 19:03:59 -0700
+Message-ID: <d99e284d-31b1-6d04-cf14-d7b160ee3f44@linux.intel.com>
+Date:   Fri, 19 May 2023 10:03:57 +0800
 MIME-Version: 1.0
-References: <20230519011915.846407-1-jeffxu@chromium.org>
-In-Reply-To: <20230519011915.846407-1-jeffxu@chromium.org>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Thu, 18 May 2023 18:21:24 -0700
-Message-ID: <CALmYWFvk8mbx4JSddRnHVZ0EmeZKKA7gKMa2zsVkJ4GWcCMcLw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/6] Memory Mapping (VMA) protection using PKU - set 1
-To:     jeffxu@chromium.org
-Cc:     dave.hansen@intel.com, luto@kernel.org, jorgelo@chromium.org,
-        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
-        sroettger@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     baolu.lu@linux.intel.com, "Tian, Kevin" <kevin.tian@intel.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Lixiao Yang <lixiao.yang@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: Re: [PATCH v7 03/19] iommufd: Replace the hwpt->devices list with
+ iommufd_group
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <3-v7-6c0fd698eda2+5e3-iommufd_alloc_jgg@nvidia.com>
+ <569b959e-a702-fc19-3d67-0dde4e77251a@linux.intel.com>
+ <ZGN2yvhpIvrvu74r@nvidia.com>
+ <852e85b3-9fd2-bfc2-6080-82cea7ab6abd@linux.intel.com>
+ <BN9PR11MB5276DE1BC30E90B1032C0E468C7E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZGTMCSJKvgpyYxG/@nvidia.com>
+ <5cdc1a83-f29b-6862-d513-dbfd5c500807@linux.intel.com>
+ <ZGYT8RmGM+vwNzDa@nvidia.com>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZGYT8RmGM+vwNzDa@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is updating code comments from v0.
-There are on-going discussions related to threat-model and io_uring
-which we can use the V0 thread.
+On 2023/5/18 20:02, Jason Gunthorpe wrote:
+> On Thu, May 18, 2023 at 03:05:23PM +0800, Baolu Lu wrote:
+> 
+>>> It doesn't make any sense to store a struct like that in dev_iommu.
+>>>
+>>> The fault handler should come from the domain and we should be able to
+>>> have a unique 'void *data' cookie linked to the (dev,PASID) to go
+>>> along with the fault handler.
+>>
+>> If I get your point correctly, the iommu core should provide some places
+>> for the iommufd to put a cookie for each pair of {device, pasid}, and
+>> provide interfaces to manage it. For example,
+> 
+> I'd say when you attach a PRI capable domain (eg to a PASID) then provide
+> a 'void * data' during the attach.
+> 
+>> If so, perhaps we need some special treatment for ARM as a user hwpt
+>> actually presents the PASID table of the device and the guest setting
+>> pasid table entry will not be propagated to host. Then, the @pasid in
+>> above interfaces is meaningless.
+> 
+> As above, when attaching to a RID you'd still pass in the *data
 
-On Thu, May 18, 2023 at 6:19=E2=80=AFPM <jeffxu@chromium.org> wrote:
->
-> From: Jeff Xu <jeffxu@google.com>
->
-> This is the first set of Memory mapping (VMA) protection patches using PK=
-U.
->
-> * * *
->
-> Background:
->
-> As discussed previously in the kernel mailing list [1], V8 CFI [2] uses
-> PKU to protect memory, and Stephen R=C3=B6ttger proposes to extend the PK=
-U to
-> memory mapping [3].
->
-> We're using PKU for in-process isolation to enforce control-flow integrit=
-y
-> for a JIT compiler. In our threat model, an attacker exploits a
-> vulnerability and has arbitrary read/write access to the whole process
-> space concurrently to other threads being executed. This attacker can
-> manipulate some arguments to syscalls from some threads.
->
-> Under such a powerful attack, we want to create a =E2=80=9Csafe/isolated=
-=E2=80=9D
-> thread environment. We assign dedicated PKUs to this thread,
-> and use those PKUs to protect the threads=E2=80=99 runtime environment.
-> The thread has exclusive access to its run-time memory. This
-> includes modifying the protection of the memory mapping, or
-> munmap the memory mapping after use. And the other threads
-> won=E2=80=99t be able to access the memory or modify the memory mapping
-> (VMA) belonging to the thread.
->
-> * * *
->
-> Proposed changes:
->
-> This patch introduces a new flag, PKEY_ENFORCE_API, to the pkey_alloc()
-> function. When a PKEY is created with this flag, it is enforced that any
-> thread that wants to make changes to the memory mapping (such as mprotect=
-)
-> of the memory must have write access to the PKEY. PKEYs created without
-> this flag will continue to work as they do now, for backwards
-> compatibility.
->
-> Only PKEY created from user space can have the new flag set, the PKEY
-> allocated by the kernel internally will not have it. In other words,
-> ARCH_DEFAULT_PKEY(0) and execute_only_pkey won=E2=80=99t have this flag s=
-et,
-> and continue work as today.
->
-> This flag is checked only at syscall entry, such as mprotect/munmap in
-> this set of patches. It will not apply to other call paths. In other
-> words, if the kernel want to change attributes of VMA for some reasons,
-> the kernel is free to do that and not affected by this new flag.
->
-> This set of patch covers mprotect/munmap, I plan to work on other
-> syscalls after this.
->
-> * * *
->
-> Testing:
->
-> I have tested this patch on a Linux kernel 5.15, 6,1, and 6.4-rc1,
-> new selftest is added in: pkey_enforce_api.c
->
-> * * *
->
-> Discussion:
->
-> We believe that this patch provides a valuable security feature.
-> It allows us to create =E2=80=9Csafe/isolated=E2=80=9D thread environment=
-s that are
-> protected from attackers with arbitrary read/write access to
-> the process space.
->
-> We believe that the interface change and the patch don't
-> introduce backwards compatibility risk.
->
-> We would like to disucss this patch in Linux kernel community
-> for feedback and support.
->
-> * * *
->
-> Reference:
->
-> [1]https://lore.kernel.org/all/202208221331.71C50A6F@keescook/
-> [2]https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdvxQ=
-MyXgeaRHo/edit?usp=3Dsharing
-> [3]https://docs.google.com/document/d/1qqVoVfRiF2nRylL3yjZyCQvzQaej1HRPh3=
-f5wj1AS9I/edit
->
-> * * *
-> Current status:
->
-> There are on-going discussion related to threat model, io_uring, we will =
-continue discuss using v0 thread.
->
-> * * *
-> PATCH history:
->
-> v1: update code related review comments:
-> mprotect.c:
->         remove syscall from do_mprotect_pkey()
->         remove pr_warn_ratelimited
->
-> munmap.c:
->         change syscall to enum caller_origin
->         remove pr_warn_ratelimited
->
-> v0:
-> https://lore.kernel.org/linux-mm/20230515130553.2311248-1-jeffxu@chromium=
-.org/
->
-> Best Regards,
-> -Jeff Xu
->
->
-> Jeff Xu (6):
->   PKEY: Introduce PKEY_ENFORCE_API flag
->   PKEY: Add arch_check_pkey_enforce_api()
->   PKEY: Apply PKEY_ENFORCE_API to mprotect
->   PKEY:selftest pkey_enforce_api for mprotect
->   PKEY: Apply PKEY_ENFORCE_API to munmap
->   PKEY:selftest pkey_enforce_api for munmap
->
->  arch/powerpc/include/asm/pkeys.h              |   19 +-
->  arch/x86/include/asm/mmu.h                    |    7 +
->  arch/x86/include/asm/pkeys.h                  |   92 +-
->  arch/x86/mm/pkeys.c                           |    2 +-
->  include/linux/mm.h                            |    8 +-
->  include/linux/pkeys.h                         |   18 +-
->  include/uapi/linux/mman.h                     |    5 +
->  mm/mmap.c                                     |   31 +-
->  mm/mprotect.c                                 |   17 +-
->  mm/mremap.c                                   |    6 +-
->  tools/testing/selftests/mm/Makefile           |    1 +
->  tools/testing/selftests/mm/pkey_enforce_api.c | 1312 +++++++++++++++++
->  12 files changed, 1499 insertions(+), 19 deletions(-)
->  create mode 100644 tools/testing/selftests/mm/pkey_enforce_api.c
->
->
-> base-commit: ba0ad6ed89fd5dada3b7b65ef2b08e95d449d4ab
-> --
-> 2.40.1.606.ga4b1b128d6-goog
->
+Yes! Merging these with hwpt attach/detach would be more logical.
+
+> 
+>> 1) Move iommu faults uapi from uapi/linux/iommu.h to uapi/linux
+>>    /iommufd.h and remove the former.
+> 
+> Please no, delete all the dead code from here and move whatever is
+> still in use into include/linux/
+> 
+> Then we can talk about what parts of it become uAPI and how best to
+> manage that on a patch by patch basis.
+
+Okay, let's rebuild it from the ground up.
+
+> 
+>> 2) Add a device id in the iommu_fault structure.
+>>   struct iommu_fault {
+>>          __u32   type;
+>> -       __u32   padding;
+>> +       __u32   dev_id;
+> 
+> Why? This is iommufd internal, the void * above should cover it.
+
+This is actually part of 1). :-)
+
+> 
+>> 3) Add the device pointer to the parameters of domain fault handler.
+> 
+> That makes some sense
+>   
+>> 4) Decouple I/O page fault handling from IOMMU_SVA in the iommu core and
+>>     the drivers.
+> 
+> Definately, this SVA stuff need to be scrubbed out.
+> 
+> SVA is only a special domain type that takes the page table top from a
+> mmu_stuct and a shared fault handler in the core code to do handle_mm_fault()
+> 
+> It should not be in drivers any more deeply than that. We still have a
+> ways to go.
+
+Agreed. In addition to fault handler, SVA usually needs to register a
+callback to mm_notifier to keep the IO or device TLB cache consistent.
+This part of code could also be consolidated to the core.
+
+There are still things to do here, but the priority (from my point of
+view) is to make the iopf handling framework in the iommu core more
+generic, rather than just serving SVA.
+
+Best regards,
+baolu
