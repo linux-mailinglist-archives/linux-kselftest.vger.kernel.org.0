@@ -2,57 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D64170A2EC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 May 2023 00:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE8270A4A5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 May 2023 04:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjESWwn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 May 2023 18:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S229577AbjETCei (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 May 2023 22:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjESWwm (ORCPT
+        with ESMTP id S229543AbjETCeh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 May 2023 18:52:42 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0025D2
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 15:52:40 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-561b7729a12so20812057b3.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 15:52:40 -0700 (PDT)
+        Fri, 19 May 2023 22:34:37 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE63DB4
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 19:34:35 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-965b5f3b9ffso306196266b.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 19:34:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1684536760; x=1687128760;
+        d=linux-foundation.org; s=google; t=1684550074; x=1687142074;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+/3ocS24eoYwGfIiVCx+gEjnY3f1UvtwZkxMJpeF2sY=;
-        b=Bm7Gn5uUyfgUHvaKPJ4LmsdJPZK2xKqqBjYyzSawEtA1LUx1q99FH0bUZ8bhJXkqx0
-         BjSWlp0rUtqb3tM3m9ZuvGEVk+kVvX/XEEubgANORpKrLPx4JR4A+3HXCeNbJPmfCoLt
-         s76O1K/E4hO/SxtsdXpVaFvXHjR+cf5KY0bJ4=
+        bh=oh6ejcxyOpbBR//bKhui3rhhiC+Sm3sNdu/qK016ndc=;
+        b=OQcKi5k5k9XXumfuSZD9JCNyPj5HBzWl3UfJjcJuClfHqKpP+G1rT6ZRN1ecmI3Sfd
+         3m6aWD1GKngDr7LJ7oqhRdVD6wem5B4GEAScIexykGLVZGIvvyo1AnnWJD1vfru0XHq+
+         nDIDC+61tqhMHE02wGw2CseqYoe2EObBVNvA8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684536760; x=1687128760;
+        d=1e100.net; s=20221208; t=1684550074; x=1687142074;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+/3ocS24eoYwGfIiVCx+gEjnY3f1UvtwZkxMJpeF2sY=;
-        b=fB1f6TphmZmaxW5paEaR7TLGp9DrOWCMHHOMqSKUrr2MOOIwwFOfw5t/Ge14zhQ+qP
-         nwgIUVTT9+ayfIsazwSOVeQiMUP/KivYARoEmLnSKd5qxWxP+CPcyqQwEUrqyEsVEOC/
-         PFRbsY5b9Z7WveNTH1501S96hHRJiPifC+5XuJRb8+OJKer3bjnKsK1seFlnK9YbNmE4
-         VXdQ700SWHgGt8UHv3qwG3tC6O5V+G66j3F2YLjIH9ACAi5HctxJVAKhRRAFyLNPQWUJ
-         j/F6N9Mh1Gezj6G3VVbqEZoLrLUYXG7MB5VqgiJn3+aCzRo8IZxckCbHT0hYiFyT1t/5
-         jBhg==
-X-Gm-Message-State: AC+VfDz95iThY1774lTeG1otcD9pHbl/XjZkgNnnqPS9OndabIPAMRj1
-        pdvUcydYLRM1HbfW2azK489OjyudRCm8itHRwTk48w==
-X-Google-Smtp-Source: ACHHUZ7ubDlJqjJI1E7K4aq6HRBx5jm4+SfR8lOnAWCsWDXbiLMZpymdcz9+wOHWwd0FQNHTPXwVAV6gw/PonDW6jso=
-X-Received: by 2002:a81:9b0a:0:b0:561:b5c7:d764 with SMTP id
- s10-20020a819b0a000000b00561b5c7d764mr3602262ywg.18.1684536759920; Fri, 19
- May 2023 15:52:39 -0700 (PDT)
+        bh=oh6ejcxyOpbBR//bKhui3rhhiC+Sm3sNdu/qK016ndc=;
+        b=AUOIQbPyA2S+Jk8DhiGa69bGC2W9joKhnVy5PF5SqhdxiE7wZTkq1Rq8VA/nUn2dzk
+         Pxo7nJJThzptCmq014rsvehf7E3N9u5WdBvmj9QZKPYowzvwdbuvyShWUfoO/7M+y425
+         Jt5jJNCR8FoFLFvPsFWzJBOoYtWnxBV+U7zu+9v7hjL7TEjtRD6TP5aqpiBZEIkfMgXR
+         3r4Jn2R4QMVfz4VdFeHT1DhEpqN3yvyvfkeRlaffdiGngnnMKeL4146RwBRx/Elx31TY
+         rGRKtc9iC28QIUlNkzaFg68ZMFJQcOG7LefInyKGDIxLT60suQPKFytRyTo7OGQZgypS
+         yJtw==
+X-Gm-Message-State: AC+VfDwzdDIr/zt0LNKO9fo47uoNQZStif9Rg+AGw4FeUfJI49/eTTJP
+        biesxQAHEa26MVm3Cx3jbVQ9lTv/t0n47cZUysm6YYJw
+X-Google-Smtp-Source: ACHHUZ5UFjcfqwx4ttGBgGdLk3uKAEDPA3EyxnrZMlVvxBrf+3rQA5kVbMM0fe2KRuexDxiimRCl3Q==
+X-Received: by 2002:a17:907:6d26:b0:966:5fac:2e52 with SMTP id sa38-20020a1709076d2600b009665fac2e52mr3808508ejc.9.1684550074264;
+        Fri, 19 May 2023 19:34:34 -0700 (PDT)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
+        by smtp.gmail.com with ESMTPSA id e18-20020a1709062c1200b0096b524b160asm282384ejh.82.2023.05.19.19.34.32
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 19:34:32 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-95fde138693so304417366b.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 May 2023 19:34:32 -0700 (PDT)
+X-Received: by 2002:a17:907:6e25:b0:96a:a76c:41d5 with SMTP id
+ sd37-20020a1709076e2500b0096aa76c41d5mr3159482ejc.12.1684550072290; Fri, 19
+ May 2023 19:34:32 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230519190934.339332-1-joel@joelfernandes.org>
  <20230519190934.339332-2-joel@joelfernandes.org> <CAHk-=whoajP4bZMbZC_VYmBhmhCpXsBesszwWUH0i6SpK_dAtw@mail.gmail.com>
-In-Reply-To: <CAHk-=whoajP4bZMbZC_VYmBhmhCpXsBesszwWUH0i6SpK_dAtw@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Fri, 19 May 2023 18:52:28 -0400
-Message-ID: <CAEXW_YQ4wdGVa5M6jZfi5d-pdJOp1Nu7qTBvWYS=255AnYWZCw@mail.gmail.com>
+ <CAEXW_YQ4wdGVa5M6jZfi5d-pdJOp1Nu7qTBvWYS=255AnYWZCw@mail.gmail.com>
+In-Reply-To: <CAEXW_YQ4wdGVa5M6jZfi5d-pdJOp1Nu7qTBvWYS=255AnYWZCw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 19 May 2023 19:34:15 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj9j+puqhe+E-AcG5j-5nP_tQ7DmAcb=Cb6v7n4mpxXjQ@mail.gmail.com>
+Message-ID: <CAHk-=wj9j+puqhe+E-AcG5j-5nP_tQ7DmAcb=Cb6v7n4mpxXjQ@mail.gmail.com>
 Subject: Re: [PATCH v2 1/4] mm/mremap: Optimize the start addresses in move_page_tables()
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>,
@@ -64,108 +75,92 @@ Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Suren Baghdasaryan <surenb@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Linus,
-
-On Fri, May 19, 2023 at 3:21=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, May 19, 2023 at 12:09=E2=80=AFPM Joel Fernandes (Google)
-> <joel@joelfernandes.org> wrote:
+On Fri, May 19, 2023 at 3:52=E2=80=AFPM Joel Fernandes <joel@joelfernandes.=
+org> wrote:
 > >
-> > +static bool check_addr_in_prev(struct vm_area_struct *vma, unsigned lo=
-ng addr,
-> > +                              unsigned long mask)
-> > +{
-> > +       int addr_masked =3D addr & mask;
-> > +       struct vm_area_struct *prev =3D NULL, *cur =3D NULL;
-> > +
-> > +       /* If the masked address is within vma, there is no prev mappin=
-g of concern. */
-> > +       if (vma->vm_start <=3D addr_masked)
-> > +               return false;
+> > I *suspect* that the test is literally just for the stack movement
+> > case by execve, where it catches the case where we're doing the
+> > movement entirely within the one vma we set up.
 >
-> Hmm.
->
-> I should have caught this last time, but I didn't.
->
-> That test smells bad to me. Or maybe it's just the comment.
->
-> I *suspect* that the test is literally just for the stack movement
-> case by execve, where it catches the case where we're doing the
-> movement entirely within the one vma we set up.
-
-Yes that's right, the test is only for the stack movement case. For
-the regular mremap case, I don't think there is a way for it to
-trigger.
-
-> But in the *general* case I think the above is horribly wrong: if you
-> want to move pages within an existing mapping, the page moving code
-> can't just randomly say "I'll expand the area you wanted to move".
-> Again, in that general mremap() case (as opposed to the special stack
-> moving case for execve), I *think* that the caller has already split
-> the vma's at the point of the move, and this test simply cannot ever
+> Yes that's right, the test is only for the stack movement case. For
+> the regular mremap case, I don't think there is a way for it to
 > trigger.
 
-Yes, the test simply cannot ever trigger for mremap() but we still
-need the test for the stack case. That's why I had considered adding
-it and I had indeed reviewed the stack case when adding the test. I
-could update the comment to mention that, if you want.
+So I feel the test is simply redundant.
 
-> So I think the _code_ works, but I think the comment in particular is
-> questionable, and I'm a bit surprised about the code too,. because I
-> thought execve() only expanded to exactly the moving area.
+For the regular mremap case, it never triggers.
 
-It expands to cover both the new start and the old end of the stack AFAICS:
-          /*
-           * cover the whole range: [new_start, old_end)
-           */
-          if (vma_expand(&vmi, vma, new_start, old_end, vma->vm_pgoff, NULL=
-))
-                  return -ENOMEM;
+And for the stack movement case by execve, I don't think it matters if
+you just were to change the logic of the subsequent checks a bit.
 
-In this case, it will trigger for the stack because this same expanded
-vma is passed as both the new vma and the old vma to
-move_page_tables().
+In particular, you do this:
 
-           */
-          if (length !=3D move_page_tables(vma, old_start,
-                                         vma, new_start, length, false))
-                  return -ENOMEM;
+        /* If the masked address is within vma, there is no prev
+mapping of concern. */
+        if (vma->vm_start <=3D addr_masked)
+                return false;
 
-So AFAICS, it is possible that old_start will start later than this
-newly expanded VMA. So for such a situation, old_start can be
-realigned to PMD and the test allows that by saying it need not worry
-about aligning down to an existing VMA.
+        /*
+         * Attempt to find vma before prev that contains the address.
+         * On any issue, assume the address is within a previous mapping.
+         * @mmap write lock is held here, so the lookup is safe.
+         */
+        cur =3D find_vma_prev(vma->vm_mm, vma->vm_start, &prev);
+        if (!cur || cur !=3D vma || !prev)
+                return true;
 
-> End result: I think the patch on the whole looks nice, and smaller
-> than I expected. I also suspect it works in practice, but I'd like
-> that test clarified. Does it *actually* trigger for the stack moving
-> case? Because I think it must (never* trigger for the mremap case?
+        /* The masked address fell within a previous mapping. */
+        if (prev->vm_end > addr_masked)
+                return true;
 
-You are right that the test will not trigger for the mremap case. But
-from a correctness standpoint, I thought of leaving it there for the
-stack (and who knows for what other future reasons the test may be needed).
-I can update the comment describing the stack if you like.
+        return false;
 
-> And maybe I'm the one confused here, and all I really need is an
-> explanation with small words and simple grammar starting with "No,
-> Linus, this is for case xyz"
+And I think that
 
-Hopefully it is clear now and you agree. Let me know if you want me to
-do something more. I can make some time next week to trace the stack
-case a bit more if you like and report back on any behaviors, however
-the mremap tests I did are looking good and working as expected.
+        if (!cur || cur !=3D vma || !prev)
+                return true;
 
-thanks,
+is actively wrong, because if there is no 'prev', then you should return fa=
+lse.
 
- - Joel
+So I *think* all of the above could just be replaced with this instead:
+
+        find_vma_prev(vma->vm_mm, vma->vm_start, &prev);
+        return prev && prev->vm_end  > addr_masked;
+
+because only if we have a 'prev', and the prev is into that masked
+address, do we need to avoid doing the masking.
+
+With that simplified test, do you even care about that whole "the
+masked address was already in the vma"? Not that I can see.
+
+And we don't even care about the return value of 'find_vma_prev()',
+because it had better be 'vma'. We're giving it 'vma->vm_start' as an
+address, for chrissake!
+
+So if you *really* wanted to, you could do something like
+
+        cur =3D find_vma_prev(..);
+        if (WARN_ON_ONCE(cut !=3D vma))
+                return true;
+
+but even that WARN_ON_ONCE() seems pretty bogus. If it triggers, we
+have some serious corruption going on.
+
+So I stil find that whole "vma->vm_start <=3D addr_masked" test a bit
+confusing, since it seems entirely redundant.
+
+Is it just because you wanted to avoid calling "find_vma_prev()" at
+all? Maybe just say that in the comment.
+
+                  Linus
