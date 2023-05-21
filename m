@@ -2,161 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8071970AC48
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 May 2023 06:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2826D70AD45
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 May 2023 11:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjEUEDc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 May 2023 00:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S230114AbjEUJhS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 21 May 2023 05:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjEUD7c (ORCPT
+        with ESMTP id S230164AbjEUJhH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 20 May 2023 23:59:32 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED6451A7;
-        Sat, 20 May 2023 20:58:41 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 34L3wDfn016942;
-        Sun, 21 May 2023 05:58:13 +0200
-Date:   Sun, 21 May 2023 05:58:13 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     thomas@t-8ch.de, aou@eecs.berkeley.edu,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, shuah@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] selftests/nolibc: Fix up compile error for rv32
-Message-ID: <ZGmW1YEUWASzEJ13@1wt.eu>
-References: <20230520140949.GA27611@1wt.eu>
- <20230520183022.35929-1-falcon@tinylab.org>
+        Sun, 21 May 2023 05:37:07 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76D0119;
+        Sun, 21 May 2023 02:36:46 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1684661803;
+        bh=IRUupTWokl6bSvN/Qk4Ov6+kUGTwoo0KFMWwChixIDM=;
+        h=From:Subject:Date:To:Cc:From;
+        b=cqxlSIQDXcaATq4ZkEomg3mY2IIrtqss61smptg9yb0lL1E7hdITHmKOiQkYwWMPr
+         dSUmlXT3YXWXIAj6wIKV373n/HOdFYkU8neAUuRNG4U2Y55s6Mf3AQV4YgSKua8BCn
+         gEy2ZeaIjLoDyfdEpiNxt0KJb6Awa7KExEknuKus=
+Subject: [PATCH 0/7] tools/nolibc: autodetect stackprotector availability
+ from compiler
+Date:   Sun, 21 May 2023 11:36:28 +0200
+Message-Id: <20230521-nolibc-automatic-stack-protector-v1-0-dad6c80c51c1@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230520183022.35929-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIABzmaWQC/x2NQQrCMBAAv1L27EIbraJfkR4268YuxqRsUhFK/
+ 27wOHOY2aCIqRS4dRuYfLRoTg2GQwc8U3oK6qMxuN4d+9ENmHJUz0hrzW+qylgq8QsXy1W4ZkN
+ /CpdA/ipnN0LLeCqC3ijx3EJpjbHJxSTo9/+9T/v+A6RUit+HAAAA
+To:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684661802; l=1743;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=IRUupTWokl6bSvN/Qk4Ov6+kUGTwoo0KFMWwChixIDM=;
+ b=+KCHXIX7ZFxeWvKYgiPiXSHck8c9OJAqiZ1m8d98eL9+rckJEWvb6uDCavW+0/kuvJ7Fdte+g
+ m1VE13Y0y6WDZ5dPNcWR/VP/9J98CEzoH+Wt4RH1E7OYcJxR3RLRXIu
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, May 21, 2023 at 02:30:22AM +0800, Zhangjin Wu wrote:
-> > > The goal of this second test was to make sure that arguments are passed
-> > > in the correct order. For this I tried to have a syscall were the
-> > > checked error is generated from a non-first argument.
-> > > (The NULL generating the EFAULT).
-> > > So the new check does not fullfil this goal anymore.
-> > 
-> > Ah OK good to know.
-> >
-> 
-> does this meet the requirement? the 3rd argument shouldn't < 0, otherwise, there is an EFAULT. 
-> 
->     CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_read, 1, &tmp, -1), -1, EFAULT); break;
-> 
-> It get such test result:
-> 
->     70 syscall_args = -1 EFAULT                                      [OK]
+As suggested by Willy it is possible to detect the availability of
+stackprotector via preprocessor defines.
+Make use of that to simplify the code and interface of nolibc.
 
-I think what Thomas meant is that he wants to be sure the call doesn't
-end up as read(-1, &tmp, 1). Here you could have -EBADF or -EFAULT, it
-depends. Anyway other solutions can be found if necessary. Another
-approach could be to switch back to __NR_fstat and condition it to its
-definition.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (7):
+      tools/nolibc: fix typo pint -> point
+      tools/nolibc: x86_64: disable stack protector for _start
+      tools/nolibc: ensure stack protector guard is never zero
+      tools/nolibc: add test for __stack_chk_guard initialization
+      tools/nolibc: reformat list of headers to be installed
+      tools/nolibc: add autodetection for stackprotector support
+      tools/nolibc: simplify stackprotector compiler flags
 
-> > > Maybe we can find a new syscall to test with?
-> > 
-> > Maybe it would be worth considering pselect() or equivalent which
-> > involve many arguments. I don't know if rv32 has fstatat() or
-> > lstat() for example, that could be used as alternatives ?
-> >
-> 
-> Unfortuantely, none of them is available in rv32, we have the same tricks you used in another reply:
-> 
->     $ echo "#include <asm/unistd.h>" | \
->         riscv64-linux-gnu-gcc -march=rv32im -mabi=ilp32 -Wl,-melf32lriscv_ilp32 -xc - -E -dM | \
->         grep -E "pselect|fstat|lstat"
->     #define __NR_pselect6_time64 413
->     #define __NR3264_fstatfs 44
->     #define __NR_fstatfs64 __NR3264_fstatfs
+ tools/include/nolibc/Makefile                | 19 +++++++++++++++++--
+ tools/include/nolibc/arch-aarch64.h          |  6 +++---
+ tools/include/nolibc/arch-arm.h              |  6 +++---
+ tools/include/nolibc/arch-i386.h             |  6 +++---
+ tools/include/nolibc/arch-loongarch.h        |  6 +++---
+ tools/include/nolibc/arch-mips.h             |  6 +++---
+ tools/include/nolibc/arch-riscv.h            |  6 +++---
+ tools/include/nolibc/arch-x86_64.h           |  8 ++++----
+ tools/include/nolibc/arch.h                  |  2 +-
+ tools/include/nolibc/compiler.h              | 15 +++++++++++++++
+ tools/include/nolibc/stackprotector.h        | 15 ++++++---------
+ tools/testing/selftests/nolibc/Makefile      | 13 ++-----------
+ tools/testing/selftests/nolibc/nolibc-test.c | 10 +++++++++-
+ 13 files changed, 72 insertions(+), 46 deletions(-)
+---
+base-commit: 606343b7478c319cb30291a39ecbceddb42229d6
+change-id: 20230521-nolibc-automatic-stack-protector-b4f7fab9e625
 
-Then probably fstatfs should work equally for this test.
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
-> Or, use the rv32 test result as a crude reference:
-(... trimmed to keep only the failed ones ...)
-> 
->     15 chmod_net = -1 ENOENT                                        [FAIL]
->     16 chmod_self = -1 ENOENT  != (-1 EPERM)                        [FAIL]
->     17 chown_self = -1 ENOENT  != (-1 EPERM)                        [FAIL]
->     20 chroot_exe = -1 ENOENT  != (-1 ENOTDIR)                      [FAIL]
->     30 fork = 1 ENOSYS                                              [FAIL]
->     33 gettimeofday_null = -1 ENOSYS                                [FAIL]
->     35 gettimeofday_bad1 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
->     36 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
->     37 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
->     45 link_cross = -1 ENOENT  != (-1 EXDEV)                        [FAIL]
->     51 poll_null = -1 ENOSYS                                        [FAIL]
->     52 poll_stdout = -1 ENOSYS                                      [FAIL]
->     53 poll_fault = -1 ENOSYS  != (-1 EFAULT)                       [FAIL]
->     56 select_null = -1 ENOSYS                                      [FAIL]
->     57 select_stdout = -1 ENOSYS                                    [FAIL]
->     58 select_fault = -1 ENOSYS  != (-1 EFAULT)                     [FAIL]
->     64 wait_child = -1 ENOSYS  != (-1 ECHILD)                       [FAIL]
->     65 waitpid_min = -1 ENOSYS  != (-1 ESRCH)                       [FAIL]
->     66 waitpid_child = -1 ENOSYS  != (-1 ECHILD)                    [FAIL]
->     Errors during this test: 19
-
-So that's a lot of failures and we should start to blindly degrade other
-tests just for the sake of fixing these ones here, it should be done more
-carefully.
-
-> As my latest reply here [1] explains, this error is not really rv32 specific,
-> all of the time32 based syscalls and even the other 32bit syscalls have been
-> disabled by default for new architectures (add the author of commit
-> "c8ce48f06503" in the cc list), rv32 here is a very good test case for such
-> trend.
-
-I'm fine with going in that direction if that's the future, and using
-rv32 as a guide towards this. *BUT* it doesn't mean we have to break
-the rest that currently works on existing platforms and is currently
-used by various programs. Maybe it means that some of these tests
-should be grouped together into a time32_syscall category that's only
-tested when __ARCH_WANT_TIME32_SYSCALLS is defined. It would also help
-figure what is wrong for some of them. For example chmod/chown/link above
-seem to indicate that /proc is not mounted in your test config, not that
-the syscalls are not supported. This it seems to me that on this platform
-we should still see these syscalls fail and the other ones not executed.
-
-Another approach would be to just group them for easier detection of
-the __ARCH_WANT_TIME32_SYSCALLS vs other ones, but not disable them, so
-that we can watch the progress made on supporting the mapping of these
-ones on new syscalls instead.
-
-And for the one that you changed from __NR_stat to __NR_read, I'm
-proposing that either we find another one that works everywhere, or
-that we just revert the change and guard it under an ifdef, because
-having a direct reference to a syscall number requires that it exists
-and I agree that we must not break the build in such a case.
-
-My preference for the short term would be the following:
-  1) make sure we fix build issues for all platforms, including rv32
-  2) make sure Thomas' work on syscall() and STKP works fine where it
-     should, as it used to till now on other platforms
-
-  => this should be added to the 6.5 queue, and for this I don't want
-     to make this series regress as it should be queued quickly so that
-     test code used by other developers working on 6.5 is reasonably
-     stabilized.
-
-  3) evaluate what needs to be done regarding time32, this implies
-     working in the lower abstraction layers to depend on
-     __ARCH_WANT_TIME32_SYSCALLS and use the new syscalls instead.
-
-  => I don't know how much work it requires; if it's trivial this
-     could possibly be for 6.5, otherwise it will have to be postponed.
-
-Thanks,
-Willy
