@@ -2,137 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB9A70C15C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 May 2023 16:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DBD70C1D8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 May 2023 17:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbjEVOnX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 May 2023 10:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
+        id S234475AbjEVPDR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 May 2023 11:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjEVOnX (ORCPT
+        with ESMTP id S234397AbjEVPDB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 May 2023 10:43:23 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C297999;
-        Mon, 22 May 2023 07:43:21 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id A9A8260174;
-        Mon, 22 May 2023 16:43:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684766598; bh=gFAip1LpaBAenVLmxO9SERe2dCyBM+Uu9Yhp1b8WsqY=;
-        h=Date:To:From:Subject:From;
-        b=O2OcQeTHZtCybT1uEFwFLD6C5AAHkcuFGXrIXxSSTkqPzYTyZgPg9EKZT8QuqpD1t
-         5cLJty0R1fMaP7zt5M7qq3P1yvh4NkSGKKzbJzKA9uYDikOSf9HqGje+QkU2XqfxU0
-         FhxQs7z+uFLqUUm0h7rzMYrPXeBNpIifLTbcWwZgydOFF/0F1q9ZSRpELJIK2+XUtV
-         1wFJkqj+L7GFR609dJ470+/EBWqfPhe2C17d9Ga2H7Ao75ueZuTwpuAatKgcAOR+5A
-         hZ4g1JoKQYw9fy6GHxTd5zHgQlYMEgew0FgVlspYeI4F363Lq8BrSa+GYb4RoVgQsC
-         ePlZcUiIrrfYQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 0hV_zlYnz9Z8; Mon, 22 May 2023 16:43:16 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 3510460173;
-        Mon, 22 May 2023 16:43:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684766596; bh=gFAip1LpaBAenVLmxO9SERe2dCyBM+Uu9Yhp1b8WsqY=;
-        h=Date:To:From:Subject:From;
-        b=DlvhoQKPuRU2FSQHkaWepSFFk9Yw+guaNw8MWMZCJdbFh6gcpVTVCnpo/7f8boqRu
-         MIz6tv3qJT9bMaxbzgfEmpgbdehVT36EQxVPbAH6iBwGuNxdMeusX7MJmHrjYvLVJM
-         c4RqfBwiEA3FxcyCXVyPBpwtyY3/8tJJ6/t/oLqrd2KAJLTXpSra3iVQd0bHiwTjlX
-         TPX9TM4e4uKiHLhTZ83CbTIB3EE6CEXznmdcaPx4UOFuDHiYgTGdPSzf0YiK/5e25z
-         bg2HDxxLFXw8ZGuHSx+hKMAEEwoQJC0aw7L8JtUL05nsb1pWtirVg1wPJERnA0m6ty
-         RGu47tn3T8ybQ==
-Message-ID: <0ed660e3-1261-7c97-8fa7-7145743c4650@alu.unizg.hr>
-Date:   Mon, 22 May 2023 16:43:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, hr
-To:     Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: selftests: memfd/memfd_test.c: does not compile under AlmaLinux 8.7
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 11:03:01 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977B9E66
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 May 2023 08:02:28 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-518d6f87a47so3338187a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 May 2023 08:02:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684767746; x=1687359746;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fziBUujOdJNTcKGtA3v1WWZ5akyg74yfYnasIYCQmVE=;
+        b=HcZv/RpK2iBwC+f4vi/2f3lsrUt9sB5Xp0sQoLPhl6BZvI5rq6oJ5seV6rkxUjltDh
+         z+XaHfSk8xydvcuKnU141hRJLQM7v5oFtk8rtn90XKl7u4iiMB5pEMRrYLMu+5S0PfpE
+         X/PPbfRycd5kFT7jBcxn5y8lXFWLF+CBJiSwo10DwgBkq2Sq5I89XFdAhba9jCeZoVe9
+         jWNxCVIYvpVNF/3zT21bNiJX2X5nhqJtxYfXsAubShMQqVRjg3K5PNAGtD+PV5xM8RT/
+         kJ5JLjneNERnVI6oYbBxlQb2J2TTW+g0IKEEB0z7YMKJxtYLO+JP7vJFn1t6oQZNLEji
+         MWHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684767746; x=1687359746;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fziBUujOdJNTcKGtA3v1WWZ5akyg74yfYnasIYCQmVE=;
+        b=SkcbJLejyLvEWYirfNEsdmve+XXV867tXb0yp2en+J/M9AkPnUzYjslVWhrRzjHtrt
+         V1/tEGOW2iS1XCac1mY8Y6DvTIGBuWpqdVFRh+5oHO07KdhtrBSrgeK9jorM6p1y2v0k
+         BmMXotvwIHND4Sgdd4DeT8g6KYIXdPXYdS5gWam5ufcydsdXlVuv3s06AsFI6a6cWs90
+         6KROf5iDJtsEJV8kGgbJjNy9MKoTNGviWbwvN7AKru4HshzGfO7EWKvMmbGDpKz/Vfj2
+         xqhpXVtt6vbX9O2s7Z0gp7RF/IMmoTSIGVY/dNY4KjawNI8r/1EMMHu0op5q4lcZOnKL
+         OYLA==
+X-Gm-Message-State: AC+VfDzSW8BXVjqeOowsz4btscjgOnije9qagpCo9kkh6rxbvitz0nje
+        ffTdqPrFh5YRDGNeOUIVxoFp+0JVYRo=
+X-Google-Smtp-Source: ACHHUZ5ERPoEbvr+APfX86NeehfWSJRtftrHA1EpWYpuPBCCqx86gSOrtlzcu9bkQmisMJ0L0wFjRF9edFg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:6854:0:b0:530:8be8:5ab6 with SMTP id
+ q20-20020a656854000000b005308be85ab6mr2513207pgt.8.1684767746328; Mon, 22 May
+ 2023 08:02:26 -0700 (PDT)
+Date:   Mon, 22 May 2023 08:02:24 -0700
+In-Reply-To: <CAFg_LQVfECWsmcSXJWnnyJK5mZAbjdCTX-RXP3aoDAECTspqkA@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230420104622.12504-1-ljrcore@126.com> <CAFg_LQVfECWsmcSXJWnnyJK5mZAbjdCTX-RXP3aoDAECTspqkA@mail.gmail.com>
+Message-ID: <ZGuD1LRE4MkKg++D@google.com>
+Subject: Re: [PATCH v2 0/7] KVM: selftests: Add tests for pmu event filter
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On Mon, May 22, 2023, Jinrong Liang wrote:
+> Jinrong Liang <ljr.kernel@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=8820=
+=E6=97=A5=E5=91=A8=E5=9B=9B 18:46=E5=86=99=E9=81=93=EF=BC=9A
+> > Jinrong Liang (7):
+> >   KVM: selftests: Replace int with uint32_t for nevents
+> >   KVM: selftests: Apply create_pmu_event_filter() to fixed ctrs
+> >   KVM: selftests: Test unavailable event filters are rejected
+> >   KVM: x86/pmu: Add documentation for fixed ctr on PMU filter
+> >   KVM: selftests: Check if pmu_event_filter meets expectations on fixed
+> >     ctrs
+> >   KVM: selftests: Check gp event filters without affecting fixed event
+> >     filters
+> >   KVM: selftests: Test pmu event filter with incompatible
+> >     kvm_pmu_event_filter
+> >
+> >  Documentation/virt/kvm/api.rst                |  21 ++
+> >  .../kvm/x86_64/pmu_event_filter_test.c        | 239 ++++++++++++++++--
+> >  2 files changed, 243 insertions(+), 17 deletions(-)
+> >
+> >
+> > base-commit: a25497a280bbd7bbcc08c87ddb2b3909affc8402
+> > --
+> > 2.31.1
+> >
+>=20
+> Polite ping.
 
-On AlmaLinux 8.7, make kselftest-all fails at memfd/memfd_test.c:
+Sorry for the delay, I'm finally getting into review mode for the 6.5 cycle=
+.
 
-make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd'
-gcc -D_FILE_OFFSET_BITS=64 -isystem /home/marvin/linux/kernel/linux_torvalds/usr/include     memfd_test.c common.c  -o 
-/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd/memfd_test
-memfd_test.c: In function ‘test_seal_future_write’:
-memfd_test.c:916:27: error: ‘F_SEAL_FUTURE_WRITE’ undeclared (first use in this function); did you mean ‘F_SEAL_WRITE’?
-   mfd_assert_add_seals(fd, F_SEAL_FUTURE_WRITE);
-                            ^~~~~~~~~~~~~~~~~~~
-                            F_SEAL_WRITE
-memfd_test.c:916:27: note: each undeclared identifier is reported only once for each function it appears in
-memfd_test.c: In function ‘test_exec_seal’:
-memfd_test.c:36:7: error: ‘F_SEAL_FUTURE_WRITE’ undeclared (first use in this function); did you mean ‘F_SEAL_WRITE’?
-        F_SEAL_FUTURE_WRITE | \
-        ^~~~~~~~~~~~~~~~~~~
-memfd_test.c:1058:27: note: in expansion of macro ‘F_WX_SEALS’
-   mfd_assert_has_seals(fd, F_WX_SEALS);
-                            ^~~~~~~~~~
-make[2]: *** [../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd/memfd_test] Error 1
-make[2]: Leaving directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd'
+> Should I post version 3 to fix the problem of two "From: Jinrong Liang
+> <cloudliang@tencent.com>"?
 
-Apparently, the include file include/uapi/linux/fcntl.h defines this
-F_SEAL_FUTURE_WRITE as 0x0010:
-
-include/uapi/linux/fcntl.h:45:#define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
-
-This patch fixed the issue:
-
----
-  tools/testing/selftests/memfd/memfd_test.c | 8 +++++++-
-  1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index dba0e8ba002f..868f17c02e32 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -28,7 +28,13 @@
-  #define MFD_DEF_SIZE 8192
-  #define STACK_SIZE 65536
-
--#define F_SEAL_EXEC    0x0020
-+#ifndef F_SEAL_FUTURE_WRITE
-+#define F_SEAL_FUTURE_WRITE    0x0010
-+#endif
-+
-+#ifndef F_SEAL_EXEC
-+#define F_SEAL_EXEC            0x0020
-+#endif
-
-  #define F_WX_SEALS (F_SEAL_SHRINK | \
-                     F_SEAL_GROW | \
-
-
-Hope this helps.
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
+No need, that's trivial to fixup when applying (if it even requires fixup).
