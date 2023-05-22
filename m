@@ -2,115 +2,221 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DBD70C1D8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 May 2023 17:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D7470C269
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 May 2023 17:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234475AbjEVPDR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 May 2023 11:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
+        id S231143AbjEVPcT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 May 2023 11:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234397AbjEVPDB (ORCPT
+        with ESMTP id S229692AbjEVPcS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 May 2023 11:03:01 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977B9E66
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 May 2023 08:02:28 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-518d6f87a47so3338187a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 May 2023 08:02:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684767746; x=1687359746;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fziBUujOdJNTcKGtA3v1WWZ5akyg74yfYnasIYCQmVE=;
-        b=HcZv/RpK2iBwC+f4vi/2f3lsrUt9sB5Xp0sQoLPhl6BZvI5rq6oJ5seV6rkxUjltDh
-         z+XaHfSk8xydvcuKnU141hRJLQM7v5oFtk8rtn90XKl7u4iiMB5pEMRrYLMu+5S0PfpE
-         X/PPbfRycd5kFT7jBcxn5y8lXFWLF+CBJiSwo10DwgBkq2Sq5I89XFdAhba9jCeZoVe9
-         jWNxCVIYvpVNF/3zT21bNiJX2X5nhqJtxYfXsAubShMQqVRjg3K5PNAGtD+PV5xM8RT/
-         kJ5JLjneNERnVI6oYbBxlQb2J2TTW+g0IKEEB0z7YMKJxtYLO+JP7vJFn1t6oQZNLEji
-         MWHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684767746; x=1687359746;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fziBUujOdJNTcKGtA3v1WWZ5akyg74yfYnasIYCQmVE=;
-        b=SkcbJLejyLvEWYirfNEsdmve+XXV867tXb0yp2en+J/M9AkPnUzYjslVWhrRzjHtrt
-         V1/tEGOW2iS1XCac1mY8Y6DvTIGBuWpqdVFRh+5oHO07KdhtrBSrgeK9jorM6p1y2v0k
-         BmMXotvwIHND4Sgdd4DeT8g6KYIXdPXYdS5gWam5ufcydsdXlVuv3s06AsFI6a6cWs90
-         6KROf5iDJtsEJV8kGgbJjNy9MKoTNGviWbwvN7AKru4HshzGfO7EWKvMmbGDpKz/Vfj2
-         xqhpXVtt6vbX9O2s7Z0gp7RF/IMmoTSIGVY/dNY4KjawNI8r/1EMMHu0op5q4lcZOnKL
-         OYLA==
-X-Gm-Message-State: AC+VfDzSW8BXVjqeOowsz4btscjgOnije9qagpCo9kkh6rxbvitz0nje
-        ffTdqPrFh5YRDGNeOUIVxoFp+0JVYRo=
-X-Google-Smtp-Source: ACHHUZ5ERPoEbvr+APfX86NeehfWSJRtftrHA1EpWYpuPBCCqx86gSOrtlzcu9bkQmisMJ0L0wFjRF9edFg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:6854:0:b0:530:8be8:5ab6 with SMTP id
- q20-20020a656854000000b005308be85ab6mr2513207pgt.8.1684767746328; Mon, 22 May
- 2023 08:02:26 -0700 (PDT)
-Date:   Mon, 22 May 2023 08:02:24 -0700
-In-Reply-To: <CAFg_LQVfECWsmcSXJWnnyJK5mZAbjdCTX-RXP3aoDAECTspqkA@mail.gmail.com>
-Mime-Version: 1.0
-References: <20230420104622.12504-1-ljrcore@126.com> <CAFg_LQVfECWsmcSXJWnnyJK5mZAbjdCTX-RXP3aoDAECTspqkA@mail.gmail.com>
-Message-ID: <ZGuD1LRE4MkKg++D@google.com>
-Subject: Re: [PATCH v2 0/7] KVM: selftests: Add tests for pmu event filter
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jinrong Liang <ljr.kernel@gmail.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Aaron Lewis <aaronlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 11:32:18 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D054E0;
+        Mon, 22 May 2023 08:32:16 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id D265D6017E;
+        Mon, 22 May 2023 17:32:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684769534; bh=RqvuOsJ8S7XdjoXvu70wev1e9QQK7l1N40NzkMAHzX8=;
+        h=Date:From:Subject:To:Cc:From;
+        b=LT5j5SjAGNIFjpZFPLIxMxTA8kJEM6iiS/Cx4UJNgNxQyU6aU2vmu5fC4bQTS/1S2
+         fqdEYzhR++jqx8rT5uU2u0j+waMJv9Th92bfHCd1AWZeXtjF/m8PCvHohjyjtemRFa
+         jPD++DKXZ8Y67dbSVXKImbjz3Dq/sUgYSxLClTtPQ7SLeaSvutlVGi93HaG3IUKwY5
+         hoad7FZ1SmRvoT9dcooE0T0S7n6Y0hH08hQ9Ud9Edr0QoPGKn8Go9K6+/mKnjmDlOU
+         QeAvYxWUAqPzHQnpy6JGj2tN/tgEp7BLYipxOc5uWYHtuTxDZPUiaJm0mAn4qvl1Do
+         eWTfXolOUaL4A==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id cccNu_K_Opy5; Mon, 22 May 2023 17:32:12 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 971516017C;
+        Mon, 22 May 2023 17:32:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684769532; bh=RqvuOsJ8S7XdjoXvu70wev1e9QQK7l1N40NzkMAHzX8=;
+        h=Date:From:Subject:To:Cc:From;
+        b=b2MBIAjoXrkkWbHzTTNiaL8Ybasp/aWQctqNzYBXy5Sdat2DFo2HG4enNPsO56KFl
+         jldM9PvrgPVvCHxV+VNf4JoqLlC9E3eD6eVflKp0V0WpxMWC8K9yXvu7wKmbjRgn+A
+         BDb69+8SFkxyrg00mceEXwoOVTov9duFzJyAxV06WjzQgruLqqrfaEHA/Lnj2CP0K0
+         nowm7CBa3qhHwOXGSlyWMHQ1ydOawOAIup9QWGUFafUvuGm9RYZIqUTzMESzJIrKb0
+         uquXjs5lmCu6xSSfp+EVWJlOhChF9k9ADeYaNEaSK8nYUFDeNZMslrvBWTr6JF4BuR
+         VbRR6eNJnjBSQ==
+Message-ID: <edac34c9-190c-0d80-8d95-2f42971cc870@alu.unizg.hr>
+Date:   Mon, 22 May 2023 17:32:11 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US, hr
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: [BUG] selftests: af_unix: unix:diag.c does not compile on AlmaLinux
+ 8.7
+To:     linux-kselftest@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 22, 2023, Jinrong Liang wrote:
-> Jinrong Liang <ljr.kernel@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=8820=
-=E6=97=A5=E5=91=A8=E5=9B=9B 18:46=E5=86=99=E9=81=93=EF=BC=9A
-> > Jinrong Liang (7):
-> >   KVM: selftests: Replace int with uint32_t for nevents
-> >   KVM: selftests: Apply create_pmu_event_filter() to fixed ctrs
-> >   KVM: selftests: Test unavailable event filters are rejected
-> >   KVM: x86/pmu: Add documentation for fixed ctr on PMU filter
-> >   KVM: selftests: Check if pmu_event_filter meets expectations on fixed
-> >     ctrs
-> >   KVM: selftests: Check gp event filters without affecting fixed event
-> >     filters
-> >   KVM: selftests: Test pmu event filter with incompatible
-> >     kvm_pmu_event_filter
-> >
-> >  Documentation/virt/kvm/api.rst                |  21 ++
-> >  .../kvm/x86_64/pmu_event_filter_test.c        | 239 ++++++++++++++++--
-> >  2 files changed, 243 insertions(+), 17 deletions(-)
-> >
-> >
-> > base-commit: a25497a280bbd7bbcc08c87ddb2b3909affc8402
-> > --
-> > 2.31.1
-> >
->=20
-> Polite ping.
+Hi,
 
-Sorry for the delay, I'm finally getting into review mode for the 6.5 cycle=
-.
+On vanilla AlmaLinux 8.7 (CentOS fork) selftests/net/af_unix/diag_uid.c doesn't
+compile out of the box, giving the errors:
 
-> Should I post version 3 to fix the problem of two "From: Jinrong Liang
-> <cloudliang@tencent.com>"?
+make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix'
+gcc     diag_uid.c  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
+diag_uid.c:36:16: error: ‘UDIAG_SHOW_UID’ undeclared here (not in a function); did you mean ‘UDIAG_SHOW_VFS’?
+   .udiag_show = UDIAG_SHOW_UID
+                 ^~~~~~~~~~~~~~
+                 UDIAG_SHOW_VFS
+In file included from diag_uid.c:17:
+diag_uid.c: In function ‘render_response’:
+diag_uid.c:128:28: error: ‘UNIX_DIAG_UID’ undeclared (first use in this function); did you mean ‘UNIX_DIAG_VFS’?
+   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
+                             ^~~~~~~~~~~~~
+../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
+   __typeof__(_seen) __seen = (_seen); \
+              ^~~~~
+diag_uid.c:128:2: note: in expansion of macro ‘ASSERT_EQ’
+   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
+   ^~~~~~~~~
+diag_uid.c:128:28: note: each undeclared identifier is reported only once for each function it appears in
+   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
+                             ^~~~~~~~~~~~~
+../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
+   __typeof__(_seen) __seen = (_seen); \
+              ^~~~~
+diag_uid.c:128:2: note: in expansion of macro ‘ASSERT_EQ’
+   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
+   ^~~~~~~~~
+make[2]: *** [../../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid] Error 1
 
-No need, that's trivial to fixup when applying (if it even requires fixup).
+The correct value is in <uapi/linux/unix_diag.h>:
+
+include/uapi/linux/unix_diag.h:23:#define UDIAG_SHOW_UID		0x00000040	/* show socket's UID */
+
+The fix is as follows:
+
+---
+  tools/testing/selftests/net/af_unix/diag_uid.c | 4 ++++
+  1 file changed, 4 insertions(+)
+
+diff --git a/tools/testing/selftests/net/af_unix/diag_uid.c b/tools/testing/selftests/net/af_unix/diag_uid.c
+index 5b88f7129fea..66d75b646d35 100644
+--- a/tools/testing/selftests/net/af_unix/diag_uid.c
++++ b/tools/testing/selftests/net/af_unix/diag_uid.c
+@@ -16,6 +16,10 @@
+
+  #include "../../kselftest_harness.h"
+
++#ifndef UDIAG_SHOW_UID
++#define UDIAG_SHOW_UID         0x00000040      /* show socket's UID */
++#endif
++
+  FIXTURE(diag_uid)
+  {
+         int netlink_fd;
+
+--
+
+However, this patch reveals another undefined value:
+
+make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix'
+gcc     diag_uid.c  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
+In file included from diag_uid.c:17:
+diag_uid.c: In function ‘render_response’:
+diag_uid.c:132:28: error: ‘UNIX_DIAG_UID’ undeclared (first use in this function); did you mean ‘UNIX_DIAG_VFS’?
+   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
+                             ^~~~~~~~~~~~~
+../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
+   __typeof__(_seen) __seen = (_seen); \
+              ^~~~~
+diag_uid.c:132:2: note: in expansion of macro ‘ASSERT_EQ’
+   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
+   ^~~~~~~~~
+diag_uid.c:132:28: note: each undeclared identifier is reported only once for each function it appears in
+   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
+                             ^~~~~~~~~~~~~
+../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
+   __typeof__(_seen) __seen = (_seen); \
+              ^~~~~
+diag_uid.c:132:2: note: in expansion of macro ‘ASSERT_EQ’
+   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
+   ^~~~~~~~~
+make[2]: *** [../../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid] Error 1
+
+Apparently, AlmaLinux 8.7 lacks this enum UNIX_DIAG_UID:
+
+diff -u /usr/include/linux/unix_diag.h include/uapi/linux/unix_diag.h
+--- /usr/include/linux/unix_diag.h	2023-05-16 13:47:51.000000000 +0200
++++ include/uapi/linux/unix_diag.h	2022-10-12 07:35:58.253481367 +0200
+@@ -20,6 +20,7 @@
+  #define UDIAG_SHOW_ICONS	0x00000008	/* show pending connections */
+  #define UDIAG_SHOW_RQLEN	0x00000010	/* show skb receive queue len */
+  #define UDIAG_SHOW_MEMINFO	0x00000020	/* show memory info of a socket */
++#define UDIAG_SHOW_UID		0x00000040	/* show socket's UID */
+
+  struct unix_diag_msg {
+  	__u8	udiag_family;
+@@ -40,6 +41,7 @@
+  	UNIX_DIAG_RQLEN,
+  	UNIX_DIAG_MEMINFO,
+  	UNIX_DIAG_SHUTDOWN,
++	UNIX_DIAG_UID,
+
+  	__UNIX_DIAG_MAX,
+  };
+
+Now, this is a change in enums and there doesn't seem to an easy way out
+here. (I think I saw an example, but I cannot recall which thread. I will do
+more research.)
+
+When I included
+
+# gcc -I ../../../../include diag_uid.c
+
+I've got the following error:
+
+[marvin@pc-mtodorov linux_torvalds]$ cd tools/testing/selftests/net/af_unix/
+[marvin@pc-mtodorov af_unix]$ gcc  -I ../../../../../include   diag_uid.c  -o 
+/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
+In file included from ../../../../../include/linux/build_bug.h:5,
+                  from ../../../../../include/linux/bits.h:21,
+                  from ../../../../../include/linux/capability.h:18,
+                  from ../../../../../include/linux/netlink.h:6,
+                  from diag_uid.c:8:
+../../../../../include/linux/compiler.h:246:10: fatal error: asm/rwonce.h: No such file or directory
+  #include <asm/rwonce.h>
+           ^~~~~~~~~~~~~~
+compilation terminated.
+[marvin@pc-mtodorov af_unix]$
+
+At this point I gave up, as it would be an overkill to change kernel system
+header to make a test pass, and this probably wouldn't be accepted upsteam?
+
+Hope this helps. (If we still want to build on CentOS/AlmaLinux/Rocky 8?)
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
