@@ -2,248 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7907C70C34F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 May 2023 18:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0CE70C3A0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 May 2023 18:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232445AbjEVQ3P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 May 2023 12:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S233096AbjEVQl0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 May 2023 12:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232736AbjEVQ3L (ORCPT
+        with ESMTP id S231615AbjEVQlZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 May 2023 12:29:11 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017A1BF;
-        Mon, 22 May 2023 09:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1684772950; x=1716308950;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=StoaUf4MTFj8hPRC2I4MEUwAB5OXpi+q278AO8q0Ss8=;
-  b=fZmzZakn6cPplV4ln7YC6DiKCrXXwtQVYIolohm8WijlzRRCNaYie47V
-   N1Hr1LtFH05s9Elir2nhaZAZxdyHX/1bxBitKKDit7ayC2l8oDvUETfVS
-   BGmuGx09Oxs1r0gw1dNd3GgMbK3AHwzhS1cAwPPAylRPx9M99Rc3FHYdy
-   o=;
-X-IronPort-AV: E=Sophos;i="6.00,184,1681171200"; 
-   d="scan'208";a="327665802"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-529f0975.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 16:29:05 +0000
-Received: from EX19MTAUWA002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-m6i4x-529f0975.us-east-1.amazon.com (Postfix) with ESMTPS id B47C744088;
-        Mon, 22 May 2023 16:29:02 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 22 May 2023 16:28:54 +0000
-Received: from 88665a182662.ant.amazon.com (10.119.123.82) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 22 May 2023 16:28:51 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <mirsad.todorovac@alu.unizg.hr>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <shuah@kernel.org>
-Subject: Re: [BUG] selftests: af_unix: unix:diag.c does not compile on AlmaLinux 8.7
-Date:   Mon, 22 May 2023 09:28:43 -0700
-Message-ID: <20230522162843.49731-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <edac34c9-190c-0d80-8d95-2f42971cc870@alu.unizg.hr>
-References: <edac34c9-190c-0d80-8d95-2f42971cc870@alu.unizg.hr>
+        Mon, 22 May 2023 12:41:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F71D8F;
+        Mon, 22 May 2023 09:41:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D4F2619EB;
+        Mon, 22 May 2023 16:41:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 980EEC433EF;
+        Mon, 22 May 2023 16:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684773683;
+        bh=wOWjsw7FGhZJlOxCLfZT/zgyM2RvGweBByAEWOjqL98=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iVTAUwC8osMQC/P0zy2Vo+d0HMoNKdC1vjUp6tZZJvzDJcMzuHbUVrnGXlCYVl4ZC
+         JZf1J+Moj4+FBb1J/sUOPMGdpgSp1gCaJatSHPviWQ3vXE/kMp7aRUUBrCh25+fM+h
+         i/xHNftuyNO0C/0vm7OWfbe2dbcEPinNGMKmavxADKsqWIUE1XIJ5kfUnWflqdm1I1
+         Uzg9Ox50+Z2mIrr+Or7DvMZjKguhj2o0jovHtzFstNHFX5OdVrxgJmMXXJ0S3vzOCi
+         Ku4ZQFC7l62PqXqbDa0TnSsaIhPN53Mvv5OkxuDoDNByHHUZuaHZeUoyMr76BIG4FQ
+         4MWCMbMlUrXAQ==
+Date:   Mon, 22 May 2023 17:41:17 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>, broonie@kernel.org
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
+ fpsimd_release_task
+Message-ID: <20230522164117.GA6342@willie-the-truck>
+References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
+ <20230516134447.GB30894@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.119.123.82]
-X-ClientProxiedBy: EX19D041UWA002.ant.amazon.com (10.13.139.121) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516134447.GB30894@willie-the-truck>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Date: Mon, 22 May 2023 17:32:11 +0200
-> Hi,
-> 
-> On vanilla AlmaLinux 8.7 (CentOS fork) selftests/net/af_unix/diag_uid.c doesn't
-> compile out of the box, giving the errors:
-> 
-> make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix'
-> gcc     diag_uid.c  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
-> diag_uid.c:36:16: error: ‘UDIAG_SHOW_UID’ undeclared here (not in a function); did you mean ‘UDIAG_SHOW_VFS’?
->    .udiag_show = UDIAG_SHOW_UID
->                  ^~~~~~~~~~~~~~
->                  UDIAG_SHOW_VFS
-> In file included from diag_uid.c:17:
-> diag_uid.c: In function ‘render_response’:
-> diag_uid.c:128:28: error: ‘UNIX_DIAG_UID’ undeclared (first use in this function); did you mean ‘UNIX_DIAG_VFS’?
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->                              ^~~~~~~~~~~~~
-> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->    __typeof__(_seen) __seen = (_seen); \
->               ^~~~~
-> diag_uid.c:128:2: note: in expansion of macro ‘ASSERT_EQ’
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->    ^~~~~~~~~
-> diag_uid.c:128:28: note: each undeclared identifier is reported only once for each function it appears in
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->                              ^~~~~~~~~~~~~
-> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->    __typeof__(_seen) __seen = (_seen); \
->               ^~~~~
-> diag_uid.c:128:2: note: in expansion of macro ‘ASSERT_EQ’
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->    ^~~~~~~~~
-> make[2]: *** [../../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid] Error 1
-> 
-> The correct value is in <uapi/linux/unix_diag.h>:
-> 
-> include/uapi/linux/unix_diag.h:23:#define UDIAG_SHOW_UID		0x00000040	/* show socket's UID */
-> 
-> The fix is as follows:
-> 
-> ---
->   tools/testing/selftests/net/af_unix/diag_uid.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/af_unix/diag_uid.c b/tools/testing/selftests/net/af_unix/diag_uid.c
-> index 5b88f7129fea..66d75b646d35 100644
-> --- a/tools/testing/selftests/net/af_unix/diag_uid.c
-> +++ b/tools/testing/selftests/net/af_unix/diag_uid.c
-> @@ -16,6 +16,10 @@
-> 
->   #include "../../kselftest_harness.h"
-> 
-> +#ifndef UDIAG_SHOW_UID
-> +#define UDIAG_SHOW_UID         0x00000040      /* show socket's UID */
-> +#endif
-> +
->   FIXTURE(diag_uid)
->   {
->          int netlink_fd;
-> 
-> --
-> 
-> However, this patch reveals another undefined value:
-> 
-> make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix'
-> gcc     diag_uid.c  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
-> In file included from diag_uid.c:17:
-> diag_uid.c: In function ‘render_response’:
-> diag_uid.c:132:28: error: ‘UNIX_DIAG_UID’ undeclared (first use in this function); did you mean ‘UNIX_DIAG_VFS’?
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->                              ^~~~~~~~~~~~~
-> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->    __typeof__(_seen) __seen = (_seen); \
->               ^~~~~
-> diag_uid.c:132:2: note: in expansion of macro ‘ASSERT_EQ’
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->    ^~~~~~~~~
-> diag_uid.c:132:28: note: each undeclared identifier is reported only once for each function it appears in
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->                              ^~~~~~~~~~~~~
-> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->    __typeof__(_seen) __seen = (_seen); \
->               ^~~~~
-> diag_uid.c:132:2: note: in expansion of macro ‘ASSERT_EQ’
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->    ^~~~~~~~~
-> make[2]: *** [../../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid] Error 1
-> 
-> Apparently, AlmaLinux 8.7 lacks this enum UNIX_DIAG_UID:
-> 
-> diff -u /usr/include/linux/unix_diag.h include/uapi/linux/unix_diag.h
-> --- /usr/include/linux/unix_diag.h	2023-05-16 13:47:51.000000000 +0200
-> +++ include/uapi/linux/unix_diag.h	2022-10-12 07:35:58.253481367 +0200
-> @@ -20,6 +20,7 @@
->   #define UDIAG_SHOW_ICONS	0x00000008	/* show pending connections */
->   #define UDIAG_SHOW_RQLEN	0x00000010	/* show skb receive queue len */
->   #define UDIAG_SHOW_MEMINFO	0x00000020	/* show memory info of a socket */
-> +#define UDIAG_SHOW_UID		0x00000040	/* show socket's UID */
-> 
->   struct unix_diag_msg {
->   	__u8	udiag_family;
-> @@ -40,6 +41,7 @@
->   	UNIX_DIAG_RQLEN,
->   	UNIX_DIAG_MEMINFO,
->   	UNIX_DIAG_SHUTDOWN,
-> +	UNIX_DIAG_UID,
-> 
->   	__UNIX_DIAG_MAX,
->   };
-> 
-> Now, this is a change in enums and there doesn't seem to an easy way out
-> here. (I think I saw an example, but I cannot recall which thread. I will do
-> more research.)
-> 
-> When I included
-> 
-> # gcc -I ../../../../include diag_uid.c
-> 
-> I've got the following error:
-> 
-> [marvin@pc-mtodorov linux_torvalds]$ cd tools/testing/selftests/net/af_unix/
-> [marvin@pc-mtodorov af_unix]$ gcc  -I ../../../../../include   diag_uid.c  -o 
-> /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
-> In file included from ../../../../../include/linux/build_bug.h:5,
->                   from ../../../../../include/linux/bits.h:21,
->                   from ../../../../../include/linux/capability.h:18,
->                   from ../../../../../include/linux/netlink.h:6,
->                   from diag_uid.c:8:
-> ../../../../../include/linux/compiler.h:246:10: fatal error: asm/rwonce.h: No such file or directory
->   #include <asm/rwonce.h>
->            ^~~~~~~~~~~~~~
-> compilation terminated.
-> [marvin@pc-mtodorov af_unix]$
-> 
-> At this point I gave up, as it would be an overkill to change kernel system
-> header to make a test pass, and this probably wouldn't be accepted upsteam?
-> 
-> Hope this helps. (If we still want to build on CentOS/AlmaLinux/Rocky 8?)
+Naresh,
 
-I launched AlmaLinux/RockyLinux 8.7 and 9.2 with images listed in the pages
-below.
-
-  https://wiki.almalinux.org/cloud/AWS.html#community-amis
-  https://rockylinux.org/cloud-images/
-
-The kernel versions in each image were :
-
-  8.7:
-  Alma  : 4.18.0-425.3.1.el8.x86_64
-  Rocky : 4.18.0-425.10.1.el8_7.x86_64
-
-  9.2:
-  Alma  : 5.14.0-284.11.1.el9_2.x86_64
-  Rocky : 5.14.0-284.11.1.el9_2.x86_64
-
-So, this is not a bug.  It's just because v4.18 does not support
-UNIX_DIAG_UID, which was introduced in v5.3.
-
-You should install 5.3+ kernel if you want to build the test.
-
-Thanks,
-Kuniyuki
-
-
+On Tue, May 16, 2023 at 02:44:49PM +0100, Will Deacon wrote:
+> On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
+> > Following kernel BUG noticed while running selftests arm64 fp-stress
+> > running stable rc kernel versions 6.1.29-rc1 and 6.3.3-rc1.
 > 
-> Best regards,
-> Mirsad
-> 
-> -- 
-> Mirsad Goran Todorovac
-> Sistem inženjer
-> Grafički fakultet | Akademija likovnih umjetnosti
-> Sveučilište u Zagrebu
-> 
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb, Republic of Croatia
+> Is there a known-good build so that we could attempt a bisection?
+
+FWIW, I've been trying (and failing) all day to reproduce this in QEMU.
+I matched the same VL configuration as you have in the fastmodel and
+tried enabling additional memory debugging options too, but I'm yet to
+see a kfence splat (or any other splat fwiw).
+
+How often do you see this?
+
+Will
