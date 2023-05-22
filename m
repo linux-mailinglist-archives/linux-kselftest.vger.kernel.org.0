@@ -2,181 +2,228 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7310F70C997
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 May 2023 21:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82E870CD92
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 May 2023 00:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235366AbjEVTto (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 May 2023 15:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S229477AbjEVWM6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 May 2023 18:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235357AbjEVTtn (ORCPT
+        with ESMTP id S232404AbjEVWM5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 May 2023 15:49:43 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992AFA3;
-        Mon, 22 May 2023 12:49:41 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-2532d6c7ef2so2837679a91.0;
-        Mon, 22 May 2023 12:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684784981; x=1687376981;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ko/ib0DbbBIkYeF2ySdhWs5YudE4zxsP9MRqrw+BLoI=;
-        b=BHPHExlQjMdC1v2AlWCLoTJz495eSqFbI+OF9by02n2sfozwxdUWrjSK+k5DNG+tFM
-         0jXmVCZy15YjYtpqRupyHQWDzCgOMrfYB8x7fusFUnIIOy7OWv+0Ur+/tulnIG8ionbK
-         5ACCwNe65d9/G8bQONpgwu7gPsz6di3IeHfd9NgbznMRGplWO/LSP66bzPAlIxFbTuhp
-         l0EohHPfuCQsy8XwLElVEnFKB8GUXEZXoPVpbwGRG8kjSvspXtSzoW+59K8LbNccSI+U
-         Zy8GgtoF7Ak+whIz33YDy2AXryq4EL7GgumSVCjXzPWRAWU/tu4xO1EHkrANlY42nsDJ
-         T/6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684784981; x=1687376981;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ko/ib0DbbBIkYeF2ySdhWs5YudE4zxsP9MRqrw+BLoI=;
-        b=gUQwOXGp3T4TtQzPgdNYBbIrN+O/J9td8y7Hkk8bI3ybJjX65wtwMW/bOruYgZml41
-         inPZ4Vr6nzQT/wwKJG9sVA1k6pDDjIx74kfkHZiPA2lW9O3DMBEQM+tZjgnw0VanWNVb
-         t6a1Dm2Ll6Rd63sFHJqMfP16JTKgU93jXG2xFzX0+cNsA0Mi425cNtmcLAQplBVXO4lg
-         ktCybJKHPNmc6HbepjhkLddwfyUsRNmSYRrxUexvNLDTQzfdeEyUwEqknHDoX2oMpMMM
-         U3F0HiW0pyTRMiS9NS3tOM36oFpUszwsjOQvkTTeA8ePq2YQPZ7skGzX+Q5AS6DzLFAB
-         Ox8A==
-X-Gm-Message-State: AC+VfDxvIlOhfERAB8sTrKIJCUcBUPlw+dlxmBOh0bAFR/iYXPbFQx/M
-        UjX6n9aEAnZi69E5OeAEOvo=
-X-Google-Smtp-Source: ACHHUZ5QZsEXUqRwS+75+b0XYbOYkR60j+9cNSvxOsTssb9PY6x40z/YDZ9Ic1uwFVbvFMQpA6XbIg==
-X-Received: by 2002:a17:90a:3189:b0:250:648b:781d with SMTP id j9-20020a17090a318900b00250648b781dmr16653356pjb.23.1684784980565;
-        Mon, 22 May 2023 12:49:40 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:39c])
-        by smtp.gmail.com with ESMTPSA id gj19-20020a17090b109300b0024e4f169931sm6335848pjb.2.2023.05.22.12.49.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 12:49:40 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 22 May 2023 09:49:38 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Message-ID: <ZGvHUjOCjwat91Gq@slm.duckdns.org>
-References: <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
- <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
- <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
- <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
- <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
- <ZFGOTHQj3k5rzmyR@blackbook>
- <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
- <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
- <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
- <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
+        Mon, 22 May 2023 18:12:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A119E;
+        Mon, 22 May 2023 15:12:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A3CA62C2E;
+        Mon, 22 May 2023 22:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C6D6C433EF;
+        Mon, 22 May 2023 22:12:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684793574;
+        bh=YGJwc6bWE3d3AqOr6NZmZMERlp0hgMqroZJvgRuW1IE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q4JBT9vCZaRWHOzdZrl4zHCehpYtYUfitwXHG3v3lC4cxqnHjI1bq3vTO6bsItMvv
+         CQEv7BI6g4CnL9x3XRcywxfRbBtBt5ajPspF1WJY+WoI3+2taOlSMp5A1w4GUNMFdP
+         tQDPEUII0UENTqyvx4LyicBINPj8OqGNdJ1qPrnVXwvayyoXzho7AKuvlmEdhWDaYr
+         AK0Lo/hXsIU3F5OcpEcl0MCWcsuv1cAVdhCQtcNrssuTYojd0ocdZvYrMMISjpZ3H1
+         2vdkXTLWbgYRGSsyT3xpKo6djU4ddxnpAYI/c7vSlCcMvBzqVtoP9l3+iFwLYnYBxW
+         UHbx20GTQQiTA==
+Date:   Mon, 22 May 2023 23:12:48 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
+ fpsimd_release_task
+Message-ID: <b4bfd69f-2092-4d15-b7ce-b814f5f10ff2@sirena.org.uk>
+References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t8ki7xtWQaeXytDL"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
+X-Cookie: HOST SYSTEM RESPONDING, PROBABLY UP...
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello, Waiman.
 
-On Sun, May 07, 2023 at 09:03:44PM -0400, Waiman Long wrote:
-...
->   cpuset.cpus.reserve
->     A read-write multiple values file which exists only on root
->     cgroup.
-> 
->     It lists all the CPUs that are reserved for adjacent and remote
->     partitions created in the system.  See the next section for
->     more information on what an adjacent or remote partitions is.
-> 
->     Creation of adjacent partition does not require touching this
->     control file as CPU reservation will be done automatically.
->     In order to create a remote partition, the CPUs needed by the
->     remote partition has to be written to this file first.
-> 
->     A "+" prefix can be used to indicate a list of additional
->     CPUs that are to be added without disturbing the CPUs that are
->     originally there.  For example, if its current value is "3-4",
->     echoing ""+5" to it will change it to "3-5".
->
->     Once a remote partition is destroyed, its CPUs have to be
->     removed from this file or no other process can use them.  A "-"
->     prefix can be used to remove a list of CPUs from it.  However,
->     removing CPUs that are currently used in existing partitions
->     may cause those partitions to become invalid.  A single "-"
->     character without any number can be used to indicate removal
->     of all the free CPUs not allocated to any partitions to avoid
->     accidental partition invalidation.
+--t8ki7xtWQaeXytDL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Why is the syntax different from .cpus? Wouldn't it be better to keep them
-the same?
+On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
 
->   cpuset.cpus.partition
->     A read-write single value file which exists on non-root
->     cpuset-enabled cgroups.  This flag is owned by the parent cgroup
->     and is not delegatable.
-> 
->     It accepts only the following input values when written to.
-> 
->       ==========    =====================================
->       "member"    Non-root member of a partition
->       "root"    Partition root
->       "isolated"    Partition root without load balancing
->       ==========    =====================================
-> 
->     A cpuset partition is a collection of cgroups with a partition
->     root at the top of the hierarchy and its descendants except
->     those that are separate partition roots themselves and their
->     descendants.  A partition has exclusive access to the set of
->     CPUs allocated to it.  Other cgroups outside of that partition
->     cannot use any CPUs in that set.
-> 
->     There are two types of partitions - adjacent and remote.  The
->     parent of an adjacent partition must be a valid partition root.
->     Partition roots of adjacent partitions are all clustered around
->     the root cgroup.  Creation of adjacent partition is done by
->     writing the desired partition type into "cpuset.cpus.partition".
-> 
->     A remote partition does not require a partition root parent.
->     So a remote partition can be formed far from the root cgroup.
->     However, its creation is a 2-step process.  The CPUs needed
->     by a remote partition ("cpuset.cpus" of the partition root)
->     has to be written into "cpuset.cpus.reserve" of the root
->     cgroup first.  After that, "isolated" can be written into
->     "cpuset.cpus.partition" of the partition root to form a remote
->     isolated partition which is the only supported remote partition
->     type for now.
-> 
->     All remote partitions are terminal as adjacent partition cannot
->     be created underneath it.
+> # To install tuxrun on your system globally:
+> # sudo pip3 install -U tuxrun=3D=3D0.42.0
 
-Can you elaborate this extra restriction a bit further?
+I'm not thrilled about the idea of installing some Python package
+outside of my distro package manager, especially not running as root,
+but I *do* have a checked out copy of tuxrun which normally seems to do
+something...
 
-In general, I think it'd be really helpful if the document explains the
-reasoning behind the design decisions. ie. Why is reserving for? What
-purpose does it serve that the regular isolated ones cannot? That'd help
-clarifying the design decisions.
+> #
+> # See https://tuxrun.org/ for complete documentation.
+>=20
+> tuxrun   \
+>  --runtime podman   \
+>  --device fvp-aemva   \
+>  --boot-args rw   \
+>  --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLi=
+BcWRMuy6lXftDVQMvca/Image.gz
+>   \
+>  --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvL=
+iBcWRMuy6lXftDVQMvca/modules.tar.xz
+>   \
+>  --rootfs https://storage.tuxboot.com/debian/bookworm/arm64/rootfs.ext4.x=
+z   \
+>  --parameters SKIPFILE=3Dskipfile-lkft.yaml   \
+>  --parameters KSELFTEST=3Dhttps://storage.tuxsuite.com/public/linaro/lkft=
+/builds/2Pq5NvLiBcWRMuy6lXftDVQMvca/kselftest.tar.xz
+>   \
+>  --image tuxrun:fvp   \
+>  --tests kselftest-arm64   \
+>  --timeouts boot=3D60 kselftest-arm64=3D60
 
-Thanks.
+This command does not work for me, after fixing up the fact that
+multiple lines have continuation characters that are nonfunctional due
+to being wrapped onto the next line I get:
 
--- 
-tejun
+| Error: error getting default registries to try: short-name "tuxrun:fvp" d=
+id not resolve to an alias and no unqualified-search registries are defined=
+ in "/etc/containers/registries.conf"
+
+Trying tip of tree tuxrun gives the same result.  Grovelling around in
+the documentation I see there's a need to manually build some containers
+for the FVP so I was able to get the above command to boot with the
+--image option removed and switching to docker as the runtime but after
+faffing for a very large amount of time even by the standards of the
+model it appeared to just shut down the model without starting
+kselftest, possibly due to having mounted some of the filesystems read
+only:
+
+2023-05-22T21:03:43 Using a character delay of 50 (ms)
+2023-05-22T21:03:43 #=E2=8F=8E
+2023-05-22T21:03:43 [?2004l[?2004hroot@runner-pqlayms-project-40964107-conc=
+urrent-5:~# #
+2023-05-22T21:03:43 lava-test-shell: Wait for prompt ['root@(.*):[/~]#'] (t=
+imeout 01:00:00)
+2023-05-22T21:03:43 #
+2023-05-22T21:03:43 Using /lava-1
+2023-05-22T21:03:43 Sending with 50 millisecond of delay
+2023-05-22T21:03:43 export SHELL=3D/bin/sh=E2=8F=8E
+2023-05-22T21:03:45 [?2004l[?2004hroot@runner-pqlayms-project-40964107-conc=
+urrent-5:~# export SHELL=3D/bin/sh
+2023-05-22T21:03:45 export SHELL=3D/bin/sh
+2023-05-22T21:03:45 Sending with 50 millisecond of delay
+2023-05-22T21:03:45 . /lava-1/environment=E2=8F=8E
+2023-05-22T21:03:47 [?2004l[?2004hroot@runner-pqlayms-project-40964107-conc=
+urrent-5:~# . /lava-1/environment
+2023-05-22T21:03:47 . /lava-1/environment
+2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_1' for 1 second
+2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_2' for 1 second
+2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_3' for 1 second
+2023-05-22T21:03:47 Sending with 50 millisecond of delay
+2023-05-22T21:03:47 /lava-1/bin/lava-test-runner /lava-1/0=E2=8F=8E
+2023-05-22T21:03:51 [?2004l[?2004hroot@runner-pqlayms-project-40964107-conc=
+urrent-5:~# /lava-1/bin/lava-test-runner /lava-1/0
+2023-05-22T21:03:51 Test shell timeout: 10s (minimum of the action and conn=
+ection timeout)
+2023-05-22T21:03:51 /lava-1/bin/lava-test-runne r /lava-1/0
+2023-05-22T21:03:52 [?2004lmkdir: cannot create directory =E2=80=98/lava-1/=
+0/results=E2=80=99: Read-only file system
+2023-05-22T21:03:53 mv: cannot move '/lava-1/0/lava-test-runner.conf' to '/=
+lava-1/0/lava-test-runner.conf-1684789015': Read-only file system
+2023-05-22T21:03:54 cat: /lava-1/0/lava-test-runner.conf-1684789015: No suc=
+h file or directory
+2023-05-22T21:03:55 ok: lava_test_shell seems to have completed
+2023-05-22T21:03:55 end: 3.1 lava-test-shell (duration 00:00:12) [common]
+2023-05-22T21:03:55 end: 3 lava-test-retry (duration 00:00:12) [common]
+2023-05-22T21:03:55 start: 4 finalize (timeout 00:10:00) [common]
+2023-05-22T21:03:55 start: 4.1 power-off (timeout 00:01:00) [common]
+2023-05-22T21:03:55 end: 4.1 power-off (duration 00:00:00) [common]
+2023-05-22T21:03:55 start: 4.2 read-feedback (timeout 00:10:00) [common]
+
+Attempting to use podman as the runtime as your command said had various
+problems:
+
+2023-05-22T21:07:01 start: 2.1.1 check-fvp-version (timeout 01:00:00) [comm=
+on]
+2023-05-22T21:07:01 sh -c docker run --rm fvp:aemva-11.21.15 /opt/model/FVP=
+_AEMvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version
+2023-05-22T21:07:01 Parsed command exited 1.
+2023-05-22T21:07:01 action: check-fvp-version
+command: ['sh', '-c', 'docker run --rm fvp:aemva-11.21.15 /opt/model/FVP_AE=
+MvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version']
+message: Command '['sh', '-c', 'docker run --rm fvp:aemva-11.21.15 /opt/mod=
+el/FVP_AEMvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version']' retu=
+rned non-zero exit status 1.
+output: Missing runtime '/usr/bin/podman'
+return code: 1
+
+(I do have podman installed though I rarely use it, this looks to be in
+the LAVA container though)
+
+> Test log links:
+> =3D=3D=3D=3D=3D=3D=3D=3D
+>=20
+>  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v=
+6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/test/check-=
+kernel-kfence/log
+>  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v=
+6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/tests/
+>  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v=
+6.1.28-240-gb82733c0ff99/testrun/17007268/suite/kselftest-arm64/tests/
+>=20
+>  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v=
+6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/test/check-k=
+ernel-bug/log
+>  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v=
+6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/tests/
+>  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v=
+6.3.2-247-g5a952cfef67c/testrun/17015127/suite/kselftest-arm64/tests/
+
+None of these seem to provide me with information like what kernel
+config was used but I did manage to find
+
+  https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLiBcWRMuy6lX=
+ftDVQMvca/config
+
+which might be it?  Or one of them?  However even trying to use that I'm
+unable to reproduce issues with either the FVP or qemu.
+
+--t8ki7xtWQaeXytDL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRr6OAACgkQJNaLcl1U
+h9D7/Af/a6J1nMAJHOQgusWnZsDlQB3Sq/V9wdUYbqJ1iW5mhElmMApArvbqkApt
+/FsXyKLlIBRu7nvjmMW3s7tZud7IIOwLo6e5zrJHwYKJ+TT0M2pQn1hIXvxcVPcQ
+kZwgmAgOd9hGnZyuSqfaFceb1C7EYbOaZzTx9mog+HwoUNJtmZrrziiFfLyVwznD
+XYmcqAtfmH6SQqB4ZMlpK3a6itNVrv/q74FDeK8n8DJRWI1ySedKol0sRGLF3AsE
+Tok2eARj2tXwa+3ikSaaoxZb3cLaZ5RzRQGF5E7GPc+S6Ghb/NL5OZZTtd/vaQuk
+9BCRKlmNzZyN80Gl7qPhioWjpL15pA==
+=xG1w
+-----END PGP SIGNATURE-----
+
+--t8ki7xtWQaeXytDL--
