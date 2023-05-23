@@ -2,183 +2,264 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F00070E4FB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 May 2023 20:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB3670E5DF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 May 2023 21:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233260AbjEWS51 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 May 2023 14:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        id S238269AbjEWToB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 May 2023 15:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjEWS50 (ORCPT
+        with ESMTP id S230117AbjEWToA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 May 2023 14:57:26 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F409491;
-        Tue, 23 May 2023 11:57:23 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 34NIuQ9H014160;
-        Tue, 23 May 2023 20:56:26 +0200
-Date:   Tue, 23 May 2023 20:56:26 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     thomas@t-8ch.de, aou@eecs.berkeley.edu, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, shuah@kernel.org
-Subject: Re: [PATCH] selftests/nolibc: Fix up compile error for rv32
-Message-ID: <ZG0MWgK81xeq96K5@1wt.eu>
-References: <20230521180823.164289-1-falcon@tinylab.org>
- <20230523180340.466619-1-falcon@tinylab.org>
+        Tue, 23 May 2023 15:44:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DDDE5
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 May 2023 12:43:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684871006;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nVYTJz+ohmzpkMyzlI3AmODU2ocVBa7FPjYPfOIXS4Y=;
+        b=GuweMaCMDkvRewac06tK8kulZFvk3DitZuyF4FR4hO4fBCVNRO9p8Bp/XFw4kVgwOXSS+Q
+        1zeHvnZ4pziB7iKJmJxDuYlRe382ABKUpIDkM3Q4jMNu3XyMZvA2dBiC4BXh2c3QBOQyfR
+        1P136iWSFzvNXJ8jaJ2ZEtcdVzh50dY=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-258-CyZhWUDnP22vRncvCb8XNg-1; Tue, 23 May 2023 15:43:16 -0400
+X-MC-Unique: CyZhWUDnP22vRncvCb8XNg-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-625917b68cbso4906d6.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 May 2023 12:43:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684870996; x=1687462996;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nVYTJz+ohmzpkMyzlI3AmODU2ocVBa7FPjYPfOIXS4Y=;
+        b=MNLeIlw/EHnOX0WMT580szi3gzVqQZBfLWIyoR88DlZ9pb69SqlsuiGncOQjbX3NXZ
+         gQ+cHCq5afIBGHuDMZ4bSmuJmUTo7r7MHiKw37xGEIQgS1oV7zd9gEajAtTuuoekztsM
+         IWV3mhHiqXOEzGtcJ8KIGrtDhV2YV/bPCk3wiS8tr1T5EJqTIhmxK82rWsSKcVFdzldh
+         r9taUtA+sb7uaKpvReqCrz8UMXQBvSAeHNHE2e6+hMbLFsmc1tkX/0CB/q/LqCHjVz1D
+         Vowf0rSj4WfjLW1P5ghKAxGhxaq2rzqUV1EYnRL9By/X86msEwblo5SsGmyOaZN685Xw
+         fx5Q==
+X-Gm-Message-State: AC+VfDy3BwNWiGB9esZhEzvzV1EI4o596HmcExlilhuyvilf+topDHuy
+        xgXwlj/lqQsK/Htap8NypRfYfRWfY+O0VvP7RC3xBSdQxRKm0NppzY70bzaWxd4URDvb6jhyrw1
+        TilPFQvemalyJuyfxU+yNjkaqdgw4
+X-Received: by 2002:a05:622a:1802:b0:3e3:c889:ecf9 with SMTP id t2-20020a05622a180200b003e3c889ecf9mr388733qtc.1.1684870996309;
+        Tue, 23 May 2023 12:43:16 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5WPyPlIU7Z5o5ojcdnyYSYz4FQtg+28gg19z5Uhb8BtRa2nhggXZCu6QGD9c50PH29b6aRwg==
+X-Received: by 2002:a05:622a:1802:b0:3e3:c889:ecf9 with SMTP id t2-20020a05622a180200b003e3c889ecf9mr388715qtc.1.1684870995947;
+        Tue, 23 May 2023 12:43:15 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id ch13-20020a05622a40cd00b003ef573e24cfsm1919236qtb.12.2023.05.23.12.43.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 12:43:15 -0700 (PDT)
+Date:   Tue, 23 May 2023 15:43:13 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     linux-mm@kvack.org, Paul Gofman <pgofman@codeweavers.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Nadav Amit <namit@vmware.com>
+Subject: Re: [PATCH RESEND v15 2/5] fs/proc/task_mmu: Implement IOCTL to get
+ and optionally clear info about PTEs
+Message-ID: <ZG0XUZSBI2I3/3bY@x1n>
+References: <20230420060156.895881-1-usama.anjum@collabora.com>
+ <20230420060156.895881-3-usama.anjum@collabora.com>
+ <fd9ddd43-6737-88bd-4054-3d5b94534271@collabora.com>
+ <ZEkxh6dbnAOuYuJj@x1n>
+ <ff17a13f-ccc2-fc39-7731-6d794c7dd980@collabora.com>
+ <0edfaf12-66f2-86d3-df1c-f5dff10fb743@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230523180340.466619-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0edfaf12-66f2-86d3-df1c-f5dff10fb743@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Zhangjin,
+Hi, Muhammad,
 
-On Wed, May 24, 2023 at 02:03:40AM +0800, Zhangjin Wu wrote:
-> Hi, Willy, Thomas
-> 
-> Good news, I just fixed up all of the time32 syscalls related build and
-> test failures for rv32 and plan to send out the whole patchset tomorrow.
+On Mon, May 22, 2023 at 04:26:07PM +0500, Muhammad Usama Anjum wrote:
+> On 5/22/23 3:24 PM, Muhammad Usama Anjum wrote:
+> > On 4/26/23 7:13 PM, Peter Xu wrote:
+> >> Hi, Muhammad,
+> >>
+> >> On Wed, Apr 26, 2023 at 12:06:23PM +0500, Muhammad Usama Anjum wrote:
+> >>> On 4/20/23 11:01 AM, Muhammad Usama Anjum wrote:
+> >>>> +/* Supported flags */
+> >>>> +#define PM_SCAN_OP_GET	(1 << 0)
+> >>>> +#define PM_SCAN_OP_WP	(1 << 1)
+> >>> We have only these flag options available in PAGEMAP_SCAN IOCTL.
+> >>> PM_SCAN_OP_GET must always be specified for this IOCTL. PM_SCAN_OP_WP can
+> >>> be specified as need. But PM_SCAN_OP_WP cannot be specified without
+> >>> PM_SCAN_OP_GET. (This was removed after you had asked me to not duplicate
+> >>> functionality which can be achieved by UFFDIO_WRITEPROTECT.)
+> >>>
+> >>> 1) PM_SCAN_OP_GET | PM_SCAN_OP_WP
+> >>> vs
+> >>> 2) UFFDIO_WRITEPROTECT
+> >>>
+> >>> After removing the usage of uffd_wp_range() from PAGEMAP_SCAN IOCTL, we are
+> >>> getting really good performance which is comparable just like we are
+> >>> depending on SOFT_DIRTY flags in the PTE. But when we want to perform wp,
+> >>> PM_SCAN_OP_GET | PM_SCAN_OP_WP is more desirable than UFFDIO_WRITEPROTECT
+> >>> performance and behavior wise.
+> >>>
+> >>> I've got the results from someone else that UFFDIO_WRITEPROTECT block
+> >>> pagefaults somehow which PAGEMAP_IOCTL doesn't. I still need to verify this
+> >>> as I don't have tests comparing them one-to-one.
+> >>>
+> >>> What are your thoughts about it? Have you thought about making
+> >>> UFFDIO_WRITEPROTECT perform better?
+> >>>
+> >>> I'm sorry to mention the word "performance" here. Actually we want better
+> >>> performance to emulate Windows syscall. That is why we are adding this
+> >>> functionality. So either we need to see what can be improved in
+> >>> UFFDIO_WRITEPROTECT or can I please add only PM_SCAN_OP_WP back in
+> >>> pagemap_ioctl?
+> >>
+> >> I'm fine if you want to add it back if it works for you.  Though before
+> >> that, could you remind me why there can be a difference on performance?
+> > I've looked at the code again and I think I've found something. Lets look
+> > at exact performance numbers:
+> > 
+> > I've run 2 different tests. In first test UFFDIO_WRITEPROTECT is being used
+> > for engaging WP. In second test PM_SCAN_OP_WP is being used. I've measured
+> > the average write time to the same memory which is being WP-ed and total
+> > time of execution of these APIs:
 
-Ah that's excellent!
+What is the steps of the test?  Is it as simple as "writeprotect",
+"unprotect", then write all pages in a single thread?
 
-> The patchset is based on 20230520-nolibc-rv32+stkp2 of [1] and the new
-> statckprotect patchset [2] (If v2 is ready, I prefer to rebase on v2).
+Is UFFDIO_WRITEPROTECT sent in one range covering all pages?
 
-I'm really sorry for still failing to merge Thomas' branch but I'm on
-the last mile to a release (next week) and collecting last minute stuff
-from everywhere and my days and nights are really too short these days :-(
+Maybe you can attach the test program here too.
 
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-> [2]: https://lore.kernel.org/linux-riscv/20230521100818.GA29408@1wt.eu/T/#t
-> 
-> For the fstat compile issue, I prefer to use a __NR_statx for rv32
-> instead of using fstatfs, because of different fstatfs* have different
-> errno's, it is ugly to use lots of macros ;-) what's your suggestion?
-> 
-> Here is the __NR_statx version:
-> 
->     +static int test_syscall_args(void)
->     +{
->     +#ifdef __NR_statx
->     +	return syscall(__NR_statx, 0, NULL, 0, 0, NULL);
->     +#elif defined(__NR_fstat)
->     +	return syscall(__NR_fstat, 0, NULL);
->     +#else
->     +#error Neither __NR_statx nor __NR_fstat defined, cannot implement syscall_args test
->     +#endif
->     +}
-> 
-> And the fstatfs version:
-> 
->     +#ifdef __NR_fstatfs64
->     +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstatfs64, 0, 0, NULL), -1, EINVAL)
->     +#elif defined(__NR_fstatfs)
->     +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstatfs, 0, NULL), -1, EFAULT)
->     +#elif defined(__NR_fstat)
->     +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT)
->     +#else
->     +#error None of __NR_fstatfs64, __NR_fstatfs and __NR_fstat defined, cannot implement syscall_args test
->     +#endif
+> > 
+> > **avg write time:**
+> > | No of pages            | 2000 | 8192 | 100000 | 500000 |
+> > |------------------------|------|------|--------|--------|
+> > | UFFDIO_WRITEPROTECT    | 2200 | 2300 | 4100   | 4200   |
+> > | PM_SCAN_OP_WP          | 2000 | 2300 | 2500   | 2800   |
+> > 
+> > **Execution time measured in rdtsc:**
+> > | No of pages            | 2000 | 8192  | 100000 | 500000 |
+> > |------------------------|------|-------|--------|--------|
+> > | UFFDIO_WRITEPROTECT    | 3200 | 14000 | 59000  | 58000  |
+> > | PM_SCAN_OP_WP          | 1900 | 7000  | 38000  | 40000  |
+> > 
+> > Avg write time for UFFDIO_WRITEPROTECT is 1.3 times slow. The execution
+> > time is 1.5 times slower in the case of UFFDIO_WRITEPROTECT. So
+> > UFFDIO_WRITEPROTECT is making writes slower to the pages and execution time
+> > is also slower.
+> > 
+> > This proves that PM_SCAN_OP_WP is better than UFFDIO_WRITEPROTECT. Although
+> > PM_SCAN_OP_WP and UFFDIO_WRITEPROTECT have been implemented differently. We
+> > should have seen no difference in performance. But we have quite a lot of
+> > difference in performance here. PM_SCAN_OP_WP takes read mm lock, uses
+> > walk_page_range() to walk over pages which finds VMAs from address ranges
+> > to walk over them and pagemap_scan_pmd_entry() is handling most of the work
+> > including tlb flushing. UFFDIO_WRITEPROTECT is also taking the mm lock and
+> > iterating from all the different page directories until a pte is found and
+> > then flags are updated there and tlb is flushed for every pte.
+> > 
+> > My next deduction would be that we are getting worse performance as we are
+> > flushing tlb for one page at a time in case of UFFDIO_WRITEPROTECT. While
+> > we flush tlb for 512 pages (moslty) at a time in case of PM_SCAN_OP_WP.
+> > I've just verified this by adding some logs to the change_pte_range() and
+> > pagemap_scan_pmd_entry(). Logs are attached. I've allocated memory of 1000
+> > pages and write-protected it with UFFDIO_WRITEPROTECT and PM_SCAN_OP_WP.
+> > The logs show that UFFDIO_WRITEPROTECT has flushed tlb 1000 times of size 1
+> > page each time. While PM_SCAN_OP_WP has flushed only 3 times of bigger
+> > sizes. I've learned over my last experience that tlb flush is very
+> > expensive. Probably this is what we need to improve if we don't want to add
+> > PM_SCAN_OP_WP?
+> > 
+> > The UFFDIO_WRITEPROTECT uses change_pte_range() which is very generic
+> > function and I'm not sure if can try to not do tlb flushes if uffd_wp is
+> > true. We can try to do flush somewhere else and hopefully we should do only
+> > one flush if possible. It will not be so straight forward to move away from
+> > generic fundtion. Thoughts?
+> I've just tested this theory of not doing per pte flushes and only did one
+> flush on entire range in uffd_wp_range(). But it didn't improve the
+> situation either. I was wrong that tlb flushes may be the cause.
 
-The first one indeed looks cleaner, I agree! Can't we just use statx
-for all archs then and further simplify this ?
+I had a feeling that you were trapping tlb_flush_pte_range(), which is
+actually not really sending any TLB flushes but updating mmu_gather object
+for the addr range for future invalidations.
 
-> And I plan to move __NR_fstat as the first branch to make sure it works
-> as before on the other platforms.
+That's probably why it didn't show an effect when you comment it out.
 
-Note that it was very recently added (recent batch of updates from
-Thomas) and still only queued in my branch, so we can reorder everything
-as we want and if in the end we drop some of these patches or change some
-approaches to be more portable from the beginning, that's always better.
+I am not sure whether the wr-protect path difference can be caused by the
+arch hooks, namely arch_enter_lazy_mmu_mode() / arch_leave_lazy_mmu_mode().
 
-> >     30 fork = 1 ENOSYS                                              [FAIL]
-> >     33 gettimeofday_null = -1 ENOSYS                                [FAIL]
-> >     35 gettimeofday_bad1 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
-> >     36 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
-> >     37 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
-> >     51 poll_null = -1 ENOSYS                                        [FAIL]
-> >     52 poll_stdout = -1 ENOSYS                                      [FAIL]
-> >     53 poll_fault = -1 ENOSYS  != (-1 EFAULT)                       [FAIL]
-> >     56 select_null = -1 ENOSYS                                      [FAIL]
-> >     57 select_stdout = -1 ENOSYS                                    [FAIL]
-> >     58 select_fault = -1 ENOSYS  != (-1 EFAULT)                     [FAIL]
-> >     64 wait_child = -1 ENOSYS  != (-1 ECHILD)                       [FAIL]
-> >     65 waitpid_min = -1 ENOSYS  != (-1 ESRCH)                       [FAIL]
-> >     66 waitpid_child = -1 ENOSYS  != (-1 ECHILD)                    [FAIL]
-> >
-> 
-> All of the above failures have been fixed up, some of them are very
-> easy, some of them are a little hard.
-> 
-> 1. 30, 64-66 depends on wait4, use waitid instead
-> 2. 33-37 depends on gettimeofday, use clock_gettime64 instead
-> 3. 51-53 depends on ppoll, use ppoll_time64 instead
-> 4. 56-58 depends on pselect*, use pselect_time64 instead
+On x86 I saw that it's actually hooked onto some PV calls.  I had a feeling
+that this is for optimization only, but maybe it's still a good idea you
+also take that into your new code:
 
-Awesome!
+static inline void arch_enter_lazy_mmu_mode(void)
+{
+	PVOP_VCALL0(mmu.lazy_mode.enter);
+}
 
-> And I have found there are two same 'gettimeofday_bad2', is it designed?
-> If no, I will send a patch to dedup it:
-> 
->     CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
->     CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+The other thing is I think you're flushing tlb outside pgtable lock in your
+new code.  IIUC that's racy, see:
 
-I remember this one and I couldn't spot it last time. We had two accidental
-duplicates, I searched them and managed to find the first one (which I
-dropped a version or two ago) and didn't spot the remaining one so I
-thought it was already gone. Apparently not! Fell free to send a patch
-to kill it, of course!
+commit 6ce64428d62026a10cb5d80138ff2f90cc21d367
+Author: Nadav Amit <namit@vmware.com>
+Date:   Fri Mar 12 21:08:17 2021 -0800
 
-> > My suggestion is directly fix up the failures one by one in current stage,
-> > because nolibc currently only uses part of the time32 syscalls, it may be not
-> > that complex to fix up them. Have read the code of musl and glibc today, both
-> > of them have good time64 syscalls support, I plan to fix up the above failures
-> > in several days, hope so but no promise ;-)
-> >
-> 
-> both musl and glibc help a lot, but also encounter some critical issues, for
-> example, to pass some test cases, it is required to emulate the same path of
-> the target syscalls and return the same errno's for them, the code comment will
-> exaplain the details.
+    mm/userfaultfd: fix memory corruption due to writeprotect
 
-OK but you know, we're only entitled to respect the documented syscall
-errors. If we've used some in our tests because "it's just how they happen
-to work" and the behavior changes on a different implementation while still
-matching the man page, we may have to adjust some of our tests. On the
-other hand if a remapped syscall doesn't respect the man page, it will
-break some existing code and needs to be fixed (which is exactly the
-purpose of nolibc-test in the first place).
+So you may want to put it at least into pgtable lock critical section, or
+IIUC you can also do inc_tlb_flush_pending() then dec_tlb_flush_pending()
+just like __tlb_gather_mmu(), to make sure do_wp_page() will properly flush
+the page when unluckily hit some of the page.
 
-> > And another question: for the new changes, If a platform support both of the
-> > 32bit and 64bit syscalls, do we need to put the 64bit syscalls at first?
-> >
-> 
-> To make sure not touch too much on the code and reduce test cost, the patchset
-> just kept the default code order and let the old code in the first branch.
+That's also the spot (the flush_tlb_page() in 6ce64428d) that made me think
+on whether it caused the slowness on writting to those pages.  But it
+really depends on your test program, e.g. if it's a single threaded I don't
+think it'll trigger because when writting mm_tlb_flush_pending() should
+start to return 0 already, so the tlb should logically not be needed.  If
+you want maybe you can double check that.
 
-I'm fine with this. I absolutely don't care a single second about the
-tests performance (they're instantaneous right now, an extra "if" will
-not even be noticeable). Similarly we'll care about the code size when
-the resulting binary reaches hundreds of kB. What matters for now is
-that regular contributors like Thomas, Mark and you find it easy enough
-to add or fix some entries without having to think about tons of stuff
-to do it properly. The rest is just accessory.
+So in short, I had a feeling that the new PM_SCAN_OP_WP just misses
+something here and there so it's faster - it means even if it's faster it
+may also be prone to race conditions etc so we'd better figure it out..
 
-> I plan to send the whole patchset tomorrow.
+Thanks,
 
-OK thank you! I prefer to warn you that it's unlikely that I'll be able
-to work on it before the week-end, though, so take your time.
+-- 
+Peter Xu
 
-Thanks again,
-Willy
