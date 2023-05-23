@@ -2,264 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB3670E5DF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 May 2023 21:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90D9770E64E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 May 2023 22:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238269AbjEWToB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 May 2023 15:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
+        id S238488AbjEWUNs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 May 2023 16:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjEWToA (ORCPT
+        with ESMTP id S230160AbjEWUNs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 May 2023 15:44:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DDDE5
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 May 2023 12:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684871006;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nVYTJz+ohmzpkMyzlI3AmODU2ocVBa7FPjYPfOIXS4Y=;
-        b=GuweMaCMDkvRewac06tK8kulZFvk3DitZuyF4FR4hO4fBCVNRO9p8Bp/XFw4kVgwOXSS+Q
-        1zeHvnZ4pziB7iKJmJxDuYlRe382ABKUpIDkM3Q4jMNu3XyMZvA2dBiC4BXh2c3QBOQyfR
-        1P136iWSFzvNXJ8jaJ2ZEtcdVzh50dY=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-258-CyZhWUDnP22vRncvCb8XNg-1; Tue, 23 May 2023 15:43:16 -0400
-X-MC-Unique: CyZhWUDnP22vRncvCb8XNg-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-625917b68cbso4906d6.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 May 2023 12:43:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684870996; x=1687462996;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nVYTJz+ohmzpkMyzlI3AmODU2ocVBa7FPjYPfOIXS4Y=;
-        b=MNLeIlw/EHnOX0WMT580szi3gzVqQZBfLWIyoR88DlZ9pb69SqlsuiGncOQjbX3NXZ
-         gQ+cHCq5afIBGHuDMZ4bSmuJmUTo7r7MHiKw37xGEIQgS1oV7zd9gEajAtTuuoekztsM
-         IWV3mhHiqXOEzGtcJ8KIGrtDhV2YV/bPCk3wiS8tr1T5EJqTIhmxK82rWsSKcVFdzldh
-         r9taUtA+sb7uaKpvReqCrz8UMXQBvSAeHNHE2e6+hMbLFsmc1tkX/0CB/q/LqCHjVz1D
-         Vowf0rSj4WfjLW1P5ghKAxGhxaq2rzqUV1EYnRL9By/X86msEwblo5SsGmyOaZN685Xw
-         fx5Q==
-X-Gm-Message-State: AC+VfDy3BwNWiGB9esZhEzvzV1EI4o596HmcExlilhuyvilf+topDHuy
-        xgXwlj/lqQsK/Htap8NypRfYfRWfY+O0VvP7RC3xBSdQxRKm0NppzY70bzaWxd4URDvb6jhyrw1
-        TilPFQvemalyJuyfxU+yNjkaqdgw4
-X-Received: by 2002:a05:622a:1802:b0:3e3:c889:ecf9 with SMTP id t2-20020a05622a180200b003e3c889ecf9mr388733qtc.1.1684870996309;
-        Tue, 23 May 2023 12:43:16 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5WPyPlIU7Z5o5ojcdnyYSYz4FQtg+28gg19z5Uhb8BtRa2nhggXZCu6QGD9c50PH29b6aRwg==
-X-Received: by 2002:a05:622a:1802:b0:3e3:c889:ecf9 with SMTP id t2-20020a05622a180200b003e3c889ecf9mr388715qtc.1.1684870995947;
-        Tue, 23 May 2023 12:43:15 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id ch13-20020a05622a40cd00b003ef573e24cfsm1919236qtb.12.2023.05.23.12.43.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 12:43:15 -0700 (PDT)
-Date:   Tue, 23 May 2023 15:43:13 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     linux-mm@kvack.org, Paul Gofman <pgofman@codeweavers.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Tue, 23 May 2023 16:13:48 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D3BB11D;
+        Tue, 23 May 2023 13:13:45 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 34NKCcxC014675;
+        Tue, 23 May 2023 22:12:38 +0200
+Date:   Tue, 23 May 2023 22:12:38 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Zhangjin Wu <falcon@tinylab.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        Nadav Amit <namit@vmware.com>
-Subject: Re: [PATCH RESEND v15 2/5] fs/proc/task_mmu: Implement IOCTL to get
- and optionally clear info about PTEs
-Message-ID: <ZG0XUZSBI2I3/3bY@x1n>
-References: <20230420060156.895881-1-usama.anjum@collabora.com>
- <20230420060156.895881-3-usama.anjum@collabora.com>
- <fd9ddd43-6737-88bd-4054-3d5b94534271@collabora.com>
- <ZEkxh6dbnAOuYuJj@x1n>
- <ff17a13f-ccc2-fc39-7731-6d794c7dd980@collabora.com>
- <0edfaf12-66f2-86d3-df1c-f5dff10fb743@collabora.com>
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 7/7] tools/nolibc: simplify stackprotector compiler flags
+Message-ID: <ZG0eNtYH1VvXdLBN@1wt.eu>
+References: <20230521-nolibc-automatic-stack-protector-v1-0-dad6c80c51c1@weissschuh.net>
+ <20230521-nolibc-automatic-stack-protector-v1-7-dad6c80c51c1@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0edfaf12-66f2-86d3-df1c-f5dff10fb743@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230521-nolibc-automatic-stack-protector-v1-7-dad6c80c51c1@weissschuh.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Muhammad,
+Hi Thomas, Zhangjin,
 
-On Mon, May 22, 2023 at 04:26:07PM +0500, Muhammad Usama Anjum wrote:
-> On 5/22/23 3:24 PM, Muhammad Usama Anjum wrote:
-> > On 4/26/23 7:13 PM, Peter Xu wrote:
-> >> Hi, Muhammad,
-> >>
-> >> On Wed, Apr 26, 2023 at 12:06:23PM +0500, Muhammad Usama Anjum wrote:
-> >>> On 4/20/23 11:01 AM, Muhammad Usama Anjum wrote:
-> >>>> +/* Supported flags */
-> >>>> +#define PM_SCAN_OP_GET	(1 << 0)
-> >>>> +#define PM_SCAN_OP_WP	(1 << 1)
-> >>> We have only these flag options available in PAGEMAP_SCAN IOCTL.
-> >>> PM_SCAN_OP_GET must always be specified for this IOCTL. PM_SCAN_OP_WP can
-> >>> be specified as need. But PM_SCAN_OP_WP cannot be specified without
-> >>> PM_SCAN_OP_GET. (This was removed after you had asked me to not duplicate
-> >>> functionality which can be achieved by UFFDIO_WRITEPROTECT.)
-> >>>
-> >>> 1) PM_SCAN_OP_GET | PM_SCAN_OP_WP
-> >>> vs
-> >>> 2) UFFDIO_WRITEPROTECT
-> >>>
-> >>> After removing the usage of uffd_wp_range() from PAGEMAP_SCAN IOCTL, we are
-> >>> getting really good performance which is comparable just like we are
-> >>> depending on SOFT_DIRTY flags in the PTE. But when we want to perform wp,
-> >>> PM_SCAN_OP_GET | PM_SCAN_OP_WP is more desirable than UFFDIO_WRITEPROTECT
-> >>> performance and behavior wise.
-> >>>
-> >>> I've got the results from someone else that UFFDIO_WRITEPROTECT block
-> >>> pagefaults somehow which PAGEMAP_IOCTL doesn't. I still need to verify this
-> >>> as I don't have tests comparing them one-to-one.
-> >>>
-> >>> What are your thoughts about it? Have you thought about making
-> >>> UFFDIO_WRITEPROTECT perform better?
-> >>>
-> >>> I'm sorry to mention the word "performance" here. Actually we want better
-> >>> performance to emulate Windows syscall. That is why we are adding this
-> >>> functionality. So either we need to see what can be improved in
-> >>> UFFDIO_WRITEPROTECT or can I please add only PM_SCAN_OP_WP back in
-> >>> pagemap_ioctl?
-> >>
-> >> I'm fine if you want to add it back if it works for you.  Though before
-> >> that, could you remind me why there can be a difference on performance?
-> > I've looked at the code again and I think I've found something. Lets look
-> > at exact performance numbers:
-> > 
-> > I've run 2 different tests. In first test UFFDIO_WRITEPROTECT is being used
-> > for engaging WP. In second test PM_SCAN_OP_WP is being used. I've measured
-> > the average write time to the same memory which is being WP-ed and total
-> > time of execution of these APIs:
+I merged and pushed this series on top of the previous series, it's in
+branch 20230523-nolibc-rv32+stkp3.
 
-What is the steps of the test?  Is it as simple as "writeprotect",
-"unprotect", then write all pages in a single thread?
+However, Thomas, I found an issue with this last patch that I partially
+reverted in a last patch I pushed as well so that we can discuss it:
 
-Is UFFDIO_WRITEPROTECT sent in one range covering all pages?
+On Sun, May 21, 2023 at 11:36:35AM +0200, Thomas Wei�schuh wrote:
+>  
+> -CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
+> -			$(call cc-option,-mstack-protector-guard=global) \
+> -			$(call cc-option,-fstack-protector-all)
+> -CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_arm64 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_arm = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_mips = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_loongarch = $(CFLAGS_STACKPROTECTOR)
+> +CFLAGS_STACKPROTECTOR = $(call cc-option,-mstack-protector-guard=global -fstack-protector-all)
+>  CFLAGS_s390 = -m64
+>  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+>  		$(call cc-option,-fno-stack-protector) \
+> +		$(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all)) \
+>  		$(CFLAGS_STKP_$(ARCH)) $(CFLAGS_$(ARCH))
 
-Maybe you can attach the test program here too.
+By doing so, we reintroduce the forced stack-protector mechanism
+that cannot be disabled anymore. The ability to disable it was the
+main point of the options above. In fact checking __SSP__* was a
+solution to save the user from having to set -DNOLIBC_STACKPROTECTOR
+to match their compiler's flags, but here in the nolibc-test we still
+want to be able to forcefully disable stkp for a run (at least to
+unbreak gcc-9, and possibly to confirm that non-stkp builds still
+continue to work when your local toolchain has it by default).
 
-> > 
-> > **avg write time:**
-> > | No of pages            | 2000 | 8192 | 100000 | 500000 |
-> > |------------------------|------|------|--------|--------|
-> > | UFFDIO_WRITEPROTECT    | 2200 | 2300 | 4100   | 4200   |
-> > | PM_SCAN_OP_WP          | 2000 | 2300 | 2500   | 2800   |
-> > 
-> > **Execution time measured in rdtsc:**
-> > | No of pages            | 2000 | 8192  | 100000 | 500000 |
-> > |------------------------|------|-------|--------|--------|
-> > | UFFDIO_WRITEPROTECT    | 3200 | 14000 | 59000  | 58000  |
-> > | PM_SCAN_OP_WP          | 1900 | 7000  | 38000  | 40000  |
-> > 
-> > Avg write time for UFFDIO_WRITEPROTECT is 1.3 times slow. The execution
-> > time is 1.5 times slower in the case of UFFDIO_WRITEPROTECT. So
-> > UFFDIO_WRITEPROTECT is making writes slower to the pages and execution time
-> > is also slower.
-> > 
-> > This proves that PM_SCAN_OP_WP is better than UFFDIO_WRITEPROTECT. Although
-> > PM_SCAN_OP_WP and UFFDIO_WRITEPROTECT have been implemented differently. We
-> > should have seen no difference in performance. But we have quite a lot of
-> > difference in performance here. PM_SCAN_OP_WP takes read mm lock, uses
-> > walk_page_range() to walk over pages which finds VMAs from address ranges
-> > to walk over them and pagemap_scan_pmd_entry() is handling most of the work
-> > including tlb flushing. UFFDIO_WRITEPROTECT is also taking the mm lock and
-> > iterating from all the different page directories until a pte is found and
-> > then flags are updated there and tlb is flushed for every pte.
-> > 
-> > My next deduction would be that we are getting worse performance as we are
-> > flushing tlb for one page at a time in case of UFFDIO_WRITEPROTECT. While
-> > we flush tlb for 512 pages (moslty) at a time in case of PM_SCAN_OP_WP.
-> > I've just verified this by adding some logs to the change_pte_range() and
-> > pagemap_scan_pmd_entry(). Logs are attached. I've allocated memory of 1000
-> > pages and write-protected it with UFFDIO_WRITEPROTECT and PM_SCAN_OP_WP.
-> > The logs show that UFFDIO_WRITEPROTECT has flushed tlb 1000 times of size 1
-> > page each time. While PM_SCAN_OP_WP has flushed only 3 times of bigger
-> > sizes. I've learned over my last experience that tlb flush is very
-> > expensive. Probably this is what we need to improve if we don't want to add
-> > PM_SCAN_OP_WP?
-> > 
-> > The UFFDIO_WRITEPROTECT uses change_pte_range() which is very generic
-> > function and I'm not sure if can try to not do tlb flushes if uffd_wp is
-> > true. We can try to do flush somewhere else and hopefully we should do only
-> > one flush if possible. It will not be so straight forward to move away from
-> > generic fundtion. Thoughts?
-> I've just tested this theory of not doing per pte flushes and only did one
-> flush on entire range in uffd_wp_range(). But it didn't improve the
-> situation either. I was wrong that tlb flushes may be the cause.
+So I reverted that part and only dropped -DNOLIBC_STACKPROTECTOR.
+This way I could run the test on all archs with gcc-9 by forcing
+CFLAGS_STACKPROTECTOR= and verified it was still possible to
+disable it for a specific arch only by setting CFLAGS_STKP_$ARCH.
 
-I had a feeling that you were trapping tlb_flush_pte_range(), which is
-actually not really sending any TLB flushes but updating mmu_gather object
-for the addr range for future invalidations.
+If you're fine with this we can squash this one into your cleanup
+patch.
 
-That's probably why it didn't show an effect when you comment it out.
+Zhangjin I think this branch should work well enough for you to
+serve as a base for your upcoming series. We'll clean it up later
+once we all agree on the stat() replacement for syscall() and on
+the various remaining points including your time32 alternatives.
 
-I am not sure whether the wr-protect path difference can be caused by the
-arch hooks, namely arch_enter_lazy_mmu_mode() / arch_leave_lazy_mmu_mode().
+Thanks to you both,
+Willy
 
-On x86 I saw that it's actually hooked onto some PV calls.  I had a feeling
-that this is for optimization only, but maybe it's still a good idea you
-also take that into your new code:
-
-static inline void arch_enter_lazy_mmu_mode(void)
-{
-	PVOP_VCALL0(mmu.lazy_mode.enter);
-}
-
-The other thing is I think you're flushing tlb outside pgtable lock in your
-new code.  IIUC that's racy, see:
-
-commit 6ce64428d62026a10cb5d80138ff2f90cc21d367
-Author: Nadav Amit <namit@vmware.com>
-Date:   Fri Mar 12 21:08:17 2021 -0800
-
-    mm/userfaultfd: fix memory corruption due to writeprotect
-
-So you may want to put it at least into pgtable lock critical section, or
-IIUC you can also do inc_tlb_flush_pending() then dec_tlb_flush_pending()
-just like __tlb_gather_mmu(), to make sure do_wp_page() will properly flush
-the page when unluckily hit some of the page.
-
-That's also the spot (the flush_tlb_page() in 6ce64428d) that made me think
-on whether it caused the slowness on writting to those pages.  But it
-really depends on your test program, e.g. if it's a single threaded I don't
-think it'll trigger because when writting mm_tlb_flush_pending() should
-start to return 0 already, so the tlb should logically not be needed.  If
-you want maybe you can double check that.
-
-So in short, I had a feeling that the new PM_SCAN_OP_WP just misses
-something here and there so it's faster - it means even if it's faster it
-may also be prone to race conditions etc so we'd better figure it out..
-
-Thanks,
-
--- 
-Peter Xu
+PS: we're still carrying a long CC list of individuals who are likely
+    not that much interested in our discussion, I propose that we trim
+    it on next exchanges and only keep us 3 and the lists, in order to
+    remove some of their e-mail pollution.
 
