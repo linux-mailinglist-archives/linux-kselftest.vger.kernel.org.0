@@ -2,71 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E688D70E38C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 May 2023 19:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A203570E44E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 May 2023 20:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237663AbjEWR2J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 May 2023 13:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57956 "EHLO
+        id S234355AbjEWR76 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 May 2023 13:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237650AbjEWR2G (ORCPT
+        with ESMTP id S238038AbjEWR7t (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 May 2023 13:28:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291E01BB
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 May 2023 10:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684862829;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cImDjprrbyCagqgL7hx5cC+l1diu0Ysptat3mQQx7iI=;
-        b=ALUHuU4tuOxCJfIJdheYXu73BxOkjGikFjHKh8HQYMwDCS9B0WiOLosdGPz8WwJQP+WqJO
-        6s/y1NCqZxO/9pXISsIXBGHp/EGiGP63Cdl72nqn1hCkBoFsaTPAU58tmEcOMMIPpPvibg
-        MNVzc6MKbtFcX+KjIQaQIuvZi52lQhg=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-263-U5Ao-SFvPXSsvC-65Vbnqw-1; Tue, 23 May 2023 13:27:07 -0400
-X-MC-Unique: U5Ao-SFvPXSsvC-65Vbnqw-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75b175cf0d1so2013485a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 May 2023 10:27:07 -0700 (PDT)
+        Tue, 23 May 2023 13:59:49 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2B7132
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 May 2023 10:59:42 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-75b0b2d0341so14145585a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 May 2023 10:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684864781; x=1687456781;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=00YNi4Cu7qALK7ZrE5+b3vbAtwriNVrLEo9f8Doh2Cg=;
+        b=XK9WQE+qexCqRZ0FDIoJQ7d+N+HRkZwHaHYZhFGQQbQbSNcl0hlwtFeZEKbJkyONJc
+         kwZaf5eUSDPwXz9paBCTr+GV4EvYGs/TS9XbXiMc43GAX4Y6ZOmCx9IGwPGZa4Q4HPPI
+         GxSVFSfuL1V+BkuvA8H/svHj5aAXf/UevD4TtKveDcsvSr9gMQoC/ZcE5VfF5Gi6+Qa4
+         i64JSyTTKKISD1fyz9nWHaXUpfQtsTUFEg038V0P5+JJrC03eypdufGMpoo35ir9wnVw
+         ZX1dDiULB2JyV+vBYrFK3wZIvrWRnoHfHAUvZ6JW8ScHnUNrEemBGfurDgW7GlPbV+zS
+         L+kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684862827; x=1687454827;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cImDjprrbyCagqgL7hx5cC+l1diu0Ysptat3mQQx7iI=;
-        b=JFLiq6qRrTqwNNnRXWNLU7OfOM+/JK73K2iLr1NDbFUyeE7UBnirVN+rj7Ln5Uu96o
-         ITGIqVXOSl8CM5CB23nqtsFd+2Zjn4A9fYYm4ubSK7oLcIoFbeCN0U5hzm/SQR3SECUF
-         SdO+9PfK0NsoZ+RTUI6Dt79H6EE16qvsDDq1B9IGCtEGaRWaUhrUnMKsjixNDDZHbK4w
-         Ia1/K8vbQV0+hM7ZlgIi0cf+Y41nNj+WbFSwmUZd1YHfzmyi6OrYUiGJnrKgivx+DgPW
-         SNbC0JtOp96XoX3dV1Lb/NN/9SHU1gbpHMg3VzcolC2RedLUD8HMXidlYSr7RhrxiHVI
-         Mnpw==
-X-Gm-Message-State: AC+VfDz6LvXi1VhbOJK08HtpqPzHslGy9dFDfdowf1DFOHbRbb1WNLPy
-        tzr1b47GIMfIFLcUlXynDA9MQwY31+1/34asSf/GdS07cztn2LH4pqfPzO8dTwkBEewoehmWHIB
-        /5uYQzaetded+a5wmNyVu8omYV57m
-X-Received: by 2002:a05:620a:2b0a:b0:75b:23a1:69ec with SMTP id do10-20020a05620a2b0a00b0075b23a169ecmr5378373qkb.3.1684862826879;
-        Tue, 23 May 2023 10:27:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4M4RNfGC67mMFT70JEPLNT3I+5EAh4zo0m/jamb1QJmcX791dEziFSsudincKhZfjyQdFDIg==
-X-Received: by 2002:a05:620a:2b0a:b0:75b:23a1:69ec with SMTP id do10-20020a05620a2b0a00b0075b23a169ecmr5378348qkb.3.1684862826591;
-        Tue, 23 May 2023 10:27:06 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id fc10-20020ad44f2a000000b0062439f05b87sm2869456qvb.45.2023.05.23.10.27.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 10:27:05 -0700 (PDT)
-Date:   Tue, 23 May 2023 13:27:04 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Jiaqi Yan <jiaqiyan@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        James Houghton <jthoughton@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+        d=1e100.net; s=20221208; t=1684864781; x=1687456781;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=00YNi4Cu7qALK7ZrE5+b3vbAtwriNVrLEo9f8Doh2Cg=;
+        b=JAJtZue9xYNstC1D2pFKdxXdj/IAxW0BjnyGNMLMnjuVIi/LXKxkENVrZ4oAbFRhbu
+         RmwIBH5vwpnDcVAzsXf7F66iq+mmL0/VF+vIj4Yl9A6T9g57Si6Z0bNID7tURdW1TVQn
+         MgB61n5WLdBKgSWSSBEISnsplW7JHtlLADFcYBkEpOZW0rQkjG1EXRTVYmByeOt2FMZI
+         kKwNn0uUntb1jfUwsB3QQ1WcEDB5F1i+xmeJ7q/Y1LA7LvPA8ptxRmWWat9lxg+O+/ea
+         dyjmukczjv0jJql45CDB0zJzLgXgLG8uASSQf4WtnQMJRuWWu18Zk/StQOjsGEi4xwDn
+         p9Qg==
+X-Gm-Message-State: AC+VfDxtrm+Q6DKVgJ9gxjeZdSdVB2jdkBooN4qqGeRR4oOoKWM1gfmu
+        DJU0lG+Uliy1T/qJ4eX7HPV1UEZbVx6gkqtmBYCsEA==
+X-Google-Smtp-Source: ACHHUZ4Nv8x86rr9l/ohMFat+iBcBygRbKiiC6l/gOvLEN61ygVOQv1Ay/qDZ66B/YCydqw3RtZS0p6/wjBwLrEVCdY=
+X-Received: by 2002:a05:6214:27e9:b0:56f:796e:c3a5 with SMTP id
+ jt9-20020a05621427e900b0056f796ec3a5mr21564373qvb.4.1684864781187; Tue, 23
+ May 2023 10:59:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230511182426.1898675-1-axelrasmussen@google.com> <ZGz3LeRyghnv4wwZ@x1n>
+In-Reply-To: <ZGz3LeRyghnv4wwZ@x1n>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Tue, 23 May 2023 10:59:05 -0700
+Message-ID: <CAJHvVcjh6hOrZyr1t92v07+PVNVJH-BnPDs+ZSUWsLVjpLEuHA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
         Hongchen Zhang <zhanghongchen@loongson.cn>,
         Huang Ying <ying.huang@intel.com>,
+        James Houghton <jthoughton@google.com>,
         "Liam R. Howlett" <Liam.Howlett@oracle.com>,
         Miaohe Lin <linmiaohe@huawei.com>,
         "Mike Rapoport (IBM)" <rppt@kernel.org>,
@@ -75,28 +70,13 @@ Cc:     Jiaqi Yan <jiaqiyan@google.com>,
         Shuah Khan <shuah@kernel.org>,
         ZhangPeng <zhangpeng362@huawei.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anish Moorthy <amoorthy@google.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-Message-ID: <ZGz3aNvcnP82b8L6@x1n>
-References: <ZGVRUeCWr8209m8d@x1n>
- <ZGVTMnVKNcQDM0x4@x1n>
- <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
- <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com>
- <ZGZMtK6PzoTuLZ1b@x1n>
- <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
- <32fdc2c8-b86b-92f3-1d5e-64db6be29126@redhat.com>
- <CACw3F50qvf13-fUx4XrL1jkhbo2mQ5sPV=E_i7_Gt2NaWXJfnQ@mail.gmail.com>
- <ZGehyTCtAtTneiE8@x1n>
- <CAJHvVcgVcGigruVdCyOZ2gyrOMboHjuMBwyx9+9LFiv_xH2Q5A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJHvVcgVcGigruVdCyOZ2gyrOMboHjuMBwyx9+9LFiv_xH2Q5A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,68 +84,422 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 19, 2023 at 10:32:13AM -0700, Axel Rasmussen wrote:
-> On Fri, May 19, 2023 at 9:20 AM Peter Xu <peterx@redhat.com> wrote:
+On Tue, May 23, 2023 at 10:26=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote=
+:
+>
+> On Thu, May 11, 2023 at 11:24:24AM -0700, Axel Rasmussen wrote:
+> > The basic idea here is to "simulate" memory poisoning for VMs. A VM
+> > running on some host might encounter a memory error, after which some
+> > page(s) are poisoned (i.e., future accesses SIGBUS). They expect that
+> > once poisoned, pages can never become "un-poisoned". So, when we live
+> > migrate the VM, we need to preserve the poisoned status of these pages.
 > >
-> > Hi, Jiaqi,
+> > When live migrating, we try to get the guest running on its new host as
+> > quickly as possible. So, we start it running before all memory has been
+> > copied, and before we're certain which pages should be poisoned or not.
 > >
-> > On Fri, May 19, 2023 at 08:04:09AM -0700, Jiaqi Yan wrote:
-> > > I don't think CAP_ADMIN is something we can work around: a VMM must be
-> > > a good citizen to avoid introducing any vulnerability to the host or
-> > > guest.
-> > >
-> > > On the other hand, "Userfaults allow the implementation of on-demand
-> > > paging from userland and more generally they allow userland to take
-> > > control of various memory page faults, something otherwise only the
-> > > kernel code could do." [3]. I am not familiar with the UFFD internals,
-> > > but our use case seems to match what UFFD wants to provide: without
-> > > affecting the whole world, give a specific userspace (without
-> > > CAP_ADMIN) the ability to handle page faults (indirectly emulate a
-> > > HWPOISON page (in my mind I treat it as SetHWPOISON(page) +
-> > > TestHWPOISON(page) operation in kernel's PF code)). So is it fair to
-> > > say what Axel provided here is "provide !ADMIN somehow"?
-> > >
-> > > [3]https://docs.kernel.org/admin-guide/mm/userfaultfd.html
+> > So the basic way to use this new feature is:
 > >
-> > Userfault keywords on "user", IMHO.  We don't strictly need userfault to
-> > resolve anything regarding CAP_ADMIN problems.  MADV_DONTNEED also dosn't
-> > need CAP_ADMIN, same to any new madvise() if we want to make it useful for
-> > injecting poisoned ptes with !ADMIN and limit it within current->mm.
+> > - On the new host, the guest's memory is registered with userfaultfd, i=
+n
+> >   either MISSING or MINOR mode (doesn't really matter for this purpose)=
+.
+> > - On any first access, we get a userfaultfd event. At this point we can
+> >   communicate with the old host to find out if the page was poisoned.
+> > - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marke=
+r
+>
+> [as used to suggest..] maybe UFFDIO_POISON sounds better.
+>
+> >   so any future accesses will SIGBUS. Because the pte is now "present",
+> >   future accesses won't generate more userfaultfd events, they'll just
+> >   SIGBUS directly.
 > >
-> > But I think you're right that userfaultfd always tried to avoid having
-> > ADMIN and keep everything within its own scope of permissions.
+> > UFFDIO_SIGBUS does not handle unmapping previously-present PTEs. This
+> > isn't needed, because during live migration we want to intercept
+> > all accesses with userfaultfd (not just writes, so WP mode isn't useful
+> > for this). So whether minor or missing mode is being used (or both), th=
+e
+> > PTE won't be present in any case, so handling that case isn't needed.
 > >
-> > So again, totally no objection on make it uffd specific for now if you guys
-> > are all happy with it, but just to be clear that it's (to me) mostly for
-> > avoiding another WAKE, and afaics that's not really for solving the ADMIN
-> > issue here.
-> 
-> How about this plan:
-> 
-> Since the concrete use case we have (postcopy live migration) is
-> UFFD-specific, let's leave it as a UFFDIO_* operation for now.
-> 
-> If in the future we come up with a non-UFFD use case, we can add a new
-> MADV_* which does this operation at that point. From my perspective
-> they could even share most of the same implementation code.
-> 
-> I don't think it's a big problem keeping the UFFDIO_* version too at
-> that point, because it still provides some (perhaps small) value:
-> 
-> - Combines the operation + waking into one syscall
-> - It allows us to support additional UFFD flags which modify / extend
-> the operation in UFFD-specific ways, if we want to add those in the
-> future
-> 
-> Seem reasonable?
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > ---
+> >  fs/userfaultfd.c                 | 63 ++++++++++++++++++++++++++++++++
+> >  include/linux/swapops.h          |  3 +-
+> >  include/linux/userfaultfd_k.h    |  4 ++
+> >  include/uapi/linux/userfaultfd.h | 25 +++++++++++--
+> >  mm/memory.c                      |  4 ++
+> >  mm/userfaultfd.c                 | 62 ++++++++++++++++++++++++++++++-
+> >  6 files changed, 156 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> > index 0fd96d6e39ce..edc2928dae2b 100644
+> > --- a/fs/userfaultfd.c
+> > +++ b/fs/userfaultfd.c
+> > @@ -1966,6 +1966,66 @@ static int userfaultfd_continue(struct userfault=
+fd_ctx *ctx, unsigned long arg)
+> >       return ret;
+> >  }
+> >
+> > +static inline int userfaultfd_sigbus(struct userfaultfd_ctx *ctx, unsi=
+gned long arg)
+> > +{
+> > +     __s64 ret;
+> > +     struct uffdio_sigbus uffdio_sigbus;
+> > +     struct uffdio_sigbus __user *user_uffdio_sigbus;
+> > +     struct userfaultfd_wake_range range;
+> > +
+> > +     user_uffdio_sigbus =3D (struct uffdio_sigbus __user *)arg;
+> > +
+> > +     ret =3D -EAGAIN;
+> > +     if (atomic_read(&ctx->mmap_changing))
+> > +             goto out;
+> > +
+> > +     ret =3D -EFAULT;
+> > +     if (copy_from_user(&uffdio_sigbus, user_uffdio_sigbus,
+> > +                        /* don't copy the output fields */
+> > +                        sizeof(uffdio_sigbus) - (sizeof(__s64))))
+> > +             goto out;
+> > +
+> > +     ret =3D validate_range(ctx->mm, uffdio_sigbus.range.start,
+> > +                          uffdio_sigbus.range.len);
+> > +     if (ret)
+> > +             goto out;
+> > +
+> > +     ret =3D -EINVAL;
+> > +     /* double check for wraparound just in case. */
+> > +     if (uffdio_sigbus.range.start + uffdio_sigbus.range.len <=3D
+> > +         uffdio_sigbus.range.start) {
+> > +             goto out;
+> > +     }
+> > +     if (uffdio_sigbus.mode & ~UFFDIO_SIGBUS_MODE_DONTWAKE)
+> > +             goto out;
+> > +
+> > +     if (mmget_not_zero(ctx->mm)) {
+> > +             ret =3D mfill_atomic_sigbus(ctx->mm, uffdio_sigbus.range.=
+start,
+> > +                                       uffdio_sigbus.range.len,
+> > +                                       &ctx->mmap_changing, 0);
+> > +             mmput(ctx->mm);
+> > +     } else {
+> > +             return -ESRCH;
+> > +     }
+> > +
+> > +     if (unlikely(put_user(ret, &user_uffdio_sigbus->updated)))
+> > +             return -EFAULT;
+> > +     if (ret < 0)
+> > +             goto out;
+> > +
+> > +     /* len =3D=3D 0 would wake all */
+> > +     BUG_ON(!ret);
+> > +     range.len =3D ret;
+> > +     if (!(uffdio_sigbus.mode & UFFDIO_SIGBUS_MODE_DONTWAKE)) {
+> > +             range.start =3D uffdio_sigbus.range.start;
+> > +             wake_userfault(ctx, &range);
+> > +     }
+> > +     ret =3D range.len =3D=3D uffdio_sigbus.range.len ? 0 : -EAGAIN;
+> > +
+> > +out:
+> > +     return ret;
+> > +}
+> > +
+> >  static inline unsigned int uffd_ctx_features(__u64 user_features)
+> >  {
+> >       /*
+> > @@ -2067,6 +2127,9 @@ static long userfaultfd_ioctl(struct file *file, =
+unsigned cmd,
+> >       case UFFDIO_CONTINUE:
+> >               ret =3D userfaultfd_continue(ctx, arg);
+> >               break;
+> > +     case UFFDIO_SIGBUS:
+> > +             ret =3D userfaultfd_sigbus(ctx, arg);
+> > +             break;
+> >       }
+> >       return ret;
+> >  }
+> > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> > index 3a451b7afcb3..fa778a0ae730 100644
+> > --- a/include/linux/swapops.h
+> > +++ b/include/linux/swapops.h
+> > @@ -405,7 +405,8 @@ typedef unsigned long pte_marker;
+> >
+> >  #define  PTE_MARKER_UFFD_WP                  BIT(0)
+> >  #define  PTE_MARKER_SWAPIN_ERROR             BIT(1)
+> > -#define  PTE_MARKER_MASK                     (BIT(2) - 1)
+> > +#define  PTE_MARKER_UFFD_SIGBUS                      BIT(2)
+> > +#define  PTE_MARKER_MASK                     (BIT(3) - 1)
+>
+> [as used to suggest..] I'd consider reusing SWAPIN_ERROR directly.
+>
+> Actually.. I think maybe we should have 1 patch changing SWAPIN_ERROR fro=
+m
+> VM_FAULT_SIGBUS to VM_FAULT_HWPOISON.
+>
+> Let's imagine a VM having anonymous page backing and got a swapin error
+> when faulted on one of the guest page.  Instead of crashing the hyperviso=
+r
+> with sigbus we should probably make it a MCE injected into the guest too,
+> because there's no page corrupt in bare metal in this specific case,
+> however to the guest it's the same as having one page corrupted just like=
+ a
+> real MCE.
 
-Ok here.
+This is a great idea, you're right that injecting an MCE into the
+guest is exactly the end goal, and it seems like VM_FAULT_HWPOISON
+will "just work". Also the name UFFDIO_POISON resolves any confusion
+with UFFD_FEATURE_SIGBUS, so that's a nice side benefit.
 
-> 
-> If so, I'll send a v2 with documentation updates.
+I'll make this change in v2, thanks for the idea Peter!
 
-I've reviewed v1 in this case, please have a look, thanks.
+>
+> >
+> >  static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
+> >  {
+> > diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_=
+k.h
+> > index d78b01524349..6de1084939c5 100644
+> > --- a/include/linux/userfaultfd_k.h
+> > +++ b/include/linux/userfaultfd_k.h
+> > @@ -46,6 +46,7 @@ enum mfill_atomic_mode {
+> >       MFILL_ATOMIC_COPY,
+> >       MFILL_ATOMIC_ZEROPAGE,
+> >       MFILL_ATOMIC_CONTINUE,
+> > +     MFILL_ATOMIC_SIGBUS,
+> >       NR_MFILL_ATOMIC_MODES,
+> >  };
+> >
+> > @@ -83,6 +84,9 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct=
+ *dst_mm,
+> >  extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigne=
+d long dst_start,
+> >                                    unsigned long len, atomic_t *mmap_ch=
+anging,
+> >                                    uffd_flags_t flags);
+> > +extern ssize_t mfill_atomic_sigbus(struct mm_struct *dst_mm, unsigned =
+long start,
+> > +                                unsigned long len, atomic_t *mmap_chan=
+ging,
+> > +                                uffd_flags_t flags);
+> >  extern int mwriteprotect_range(struct mm_struct *dst_mm,
+> >                              unsigned long start, unsigned long len,
+> >                              bool enable_wp, atomic_t *mmap_changing);
+> > diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/user=
+faultfd.h
+> > index 66dd4cd277bd..616e33d3db97 100644
+> > --- a/include/uapi/linux/userfaultfd.h
+> > +++ b/include/uapi/linux/userfaultfd.h
+> > @@ -39,7 +39,8 @@
+> >                          UFFD_FEATURE_MINOR_SHMEM |           \
+> >                          UFFD_FEATURE_EXACT_ADDRESS |         \
+> >                          UFFD_FEATURE_WP_HUGETLBFS_SHMEM |    \
+> > -                        UFFD_FEATURE_WP_UNPOPULATED)
+> > +                        UFFD_FEATURE_WP_UNPOPULATED |        \
+> > +                        UFFD_FEATURE_SIGBUS_IOCTL)
+> >  #define UFFD_API_IOCTLS                              \
+> >       ((__u64)1 << _UFFDIO_REGISTER |         \
+> >        (__u64)1 << _UFFDIO_UNREGISTER |       \
+> > @@ -49,12 +50,14 @@
+> >        (__u64)1 << _UFFDIO_COPY |             \
+> >        (__u64)1 << _UFFDIO_ZEROPAGE |         \
+> >        (__u64)1 << _UFFDIO_WRITEPROTECT |     \
+> > -      (__u64)1 << _UFFDIO_CONTINUE)
+> > +      (__u64)1 << _UFFDIO_CONTINUE |         \
+> > +      (__u64)1 << _UFFDIO_SIGBUS)
+> >  #define UFFD_API_RANGE_IOCTLS_BASIC          \
+> >       ((__u64)1 << _UFFDIO_WAKE |             \
+> >        (__u64)1 << _UFFDIO_COPY |             \
+> > +      (__u64)1 << _UFFDIO_WRITEPROTECT |     \
+> >        (__u64)1 << _UFFDIO_CONTINUE |         \
+> > -      (__u64)1 << _UFFDIO_WRITEPROTECT)
+> > +      (__u64)1 << _UFFDIO_SIGBUS)
+> >
+> >  /*
+> >   * Valid ioctl command number range with this API is from 0x00 to
+> > @@ -71,6 +74,7 @@
+> >  #define _UFFDIO_ZEROPAGE             (0x04)
+> >  #define _UFFDIO_WRITEPROTECT         (0x06)
+> >  #define _UFFDIO_CONTINUE             (0x07)
+> > +#define _UFFDIO_SIGBUS                       (0x08)
+> >  #define _UFFDIO_API                  (0x3F)
+> >
+> >  /* userfaultfd ioctl ids */
+> > @@ -91,6 +95,8 @@
+> >                                     struct uffdio_writeprotect)
+> >  #define UFFDIO_CONTINUE              _IOWR(UFFDIO, _UFFDIO_CONTINUE, \
+> >                                     struct uffdio_continue)
+> > +#define UFFDIO_SIGBUS                _IOWR(UFFDIO, _UFFDIO_SIGBUS, \
+> > +                                   struct uffdio_sigbus)
+> >
+> >  /* read() structure */
+> >  struct uffd_msg {
+> > @@ -225,6 +231,7 @@ struct uffdio_api {
+> >  #define UFFD_FEATURE_EXACT_ADDRESS           (1<<11)
+> >  #define UFFD_FEATURE_WP_HUGETLBFS_SHMEM              (1<<12)
+> >  #define UFFD_FEATURE_WP_UNPOPULATED          (1<<13)
+> > +#define UFFD_FEATURE_SIGBUS_IOCTL            (1<<14)
+> >       __u64 features;
+> >
+> >       __u64 ioctls;
+> > @@ -321,6 +328,18 @@ struct uffdio_continue {
+> >       __s64 mapped;
+> >  };
+> >
+> > +struct uffdio_sigbus {
+> > +     struct uffdio_range range;
+> > +#define UFFDIO_SIGBUS_MODE_DONTWAKE          ((__u64)1<<0)
+> > +     __u64 mode;
+> > +
+> > +     /*
+> > +      * Fields below here are written by the ioctl and must be at the =
+end:
+> > +      * the copy_from_user will not read past here.
+> > +      */
+> > +     __s64 updated;
+> > +};
+> > +
+> >  /*
+> >   * Flags for the userfaultfd(2) system call itself.
+> >   */
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index f69fbc251198..e4b4207c2590 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -3675,6 +3675,10 @@ static vm_fault_t handle_pte_marker(struct vm_fa=
+ult *vmf)
+> >       if (WARN_ON_ONCE(!marker))
+> >               return VM_FAULT_SIGBUS;
+> >
+> > +     /* SIGBUS explicitly requested for this PTE. */
+> > +     if (marker & PTE_MARKER_UFFD_SIGBUS)
+> > +             return VM_FAULT_SIGBUS;
+> > +
+> >       /* Higher priority than uffd-wp when data corrupted */
+> >       if (marker & PTE_MARKER_SWAPIN_ERROR)
+> >               return VM_FAULT_SIGBUS;
+> > diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> > index e97a0b4889fc..933587eebd5d 100644
+> > --- a/mm/userfaultfd.c
+> > +++ b/mm/userfaultfd.c
+> > @@ -278,6 +278,51 @@ static int mfill_atomic_pte_continue(pmd_t *dst_pm=
+d,
+> >       goto out;
+> >  }
+> >
+> > +/* Handles UFFDIO_SIGBUS for all non-hugetlb VMAs. */
+> > +static int mfill_atomic_pte_sigbus(pmd_t *dst_pmd,
+> > +                                struct vm_area_struct *dst_vma,
+> > +                                unsigned long dst_addr,
+> > +                                uffd_flags_t flags)
+> > +{
+> > +     int ret;
+> > +     struct mm_struct *dst_mm =3D dst_vma->vm_mm;
+> > +     pte_t _dst_pte, *dst_pte;
+> > +     spinlock_t *ptl;
+> > +
+> > +     _dst_pte =3D make_pte_marker(PTE_MARKER_UFFD_SIGBUS);
+> > +     dst_pte =3D pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
+> > +
+> > +     if (vma_is_shmem(dst_vma)) {
+> > +             struct inode *inode;
+> > +             pgoff_t offset, max_off;
+> > +
+> > +             /* serialize against truncate with the page table lock */
+> > +             inode =3D dst_vma->vm_file->f_inode;
+> > +             offset =3D linear_page_index(dst_vma, dst_addr);
+> > +             max_off =3D DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> > +             ret =3D -EFAULT;
+> > +             if (unlikely(offset >=3D max_off))
+> > +                     goto out_unlock;
+> > +     }
+> > +
+> > +     ret =3D -EEXIST;
+> > +     /*
+> > +      * For now, we don't handle unmapping pages, so only support fill=
+ing in
+> > +      * none PTEs, or replacing PTE markers.
+> > +      */
+> > +     if (!pte_none_mostly(*dst_pte))
+> > +             goto out_unlock;
+> > +
+> > +     set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+> > +
+> > +     /* No need to invalidate - it was non-present before */
+> > +     update_mmu_cache(dst_vma, dst_addr, dst_pte);
+> > +     ret =3D 0;
+> > +out_unlock:
+> > +     pte_unmap_unlock(dst_pte, ptl);
+> > +     return ret;
+> > +}
+> > +
+> >  static pmd_t *mm_alloc_pmd(struct mm_struct *mm, unsigned long address=
+)
+> >  {
+> >       pgd_t *pgd;
+> > @@ -328,8 +373,12 @@ static __always_inline ssize_t mfill_atomic_hugetl=
+b(
+> >        * supported by hugetlb.  A PMD_SIZE huge pages may exist as used
+> >        * by THP.  Since we can not reliably insert a zero page, this
+> >        * feature is not supported.
+> > +      *
+> > +      * PTE marker handling for hugetlb is a bit special, so for now
+> > +      * UFFDIO_SIGBUS is not supported.
+>
+> Can you be more specific on this?
+>
+> What's the plan when HGM will be merged?  Is it possible that all memory
+> just support this always so we only need 1 feature flag?
 
--- 
-Peter Xu
+We'll want hugetlbfs support for this operation too, but it's only
+really useful (at least for our use case) after HGM is merged. But,
+there's no strong reason not to just implement both all at once - I'll
+extend v2 to also work properly with hugetlbfs. Probably it isn't too
+hard, I just need to do a bit more reading of how swap markers are
+handled in hugetlbfs.
 
+
+>
+> >        */
+> > -     if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE)) {
+> > +     if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE) ||
+> > +         uffd_flags_mode_is(flags, MFILL_ATOMIC_SIGBUS)) {
+> >               mmap_read_unlock(dst_mm);
+> >               return -EINVAL;
+> >       }
+> > @@ -473,6 +522,9 @@ static __always_inline ssize_t mfill_atomic_pte(pmd=
+_t *dst_pmd,
+> >       if (uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE)) {
+> >               return mfill_atomic_pte_continue(dst_pmd, dst_vma,
+> >                                                dst_addr, flags);
+> > +     } else if (uffd_flags_mode_is(flags, MFILL_ATOMIC_SIGBUS)) {
+> > +             return mfill_atomic_pte_sigbus(dst_pmd, dst_vma,
+> > +                                            dst_addr, flags);
+> >       }
+> >
+> >       /*
+> > @@ -694,6 +746,14 @@ ssize_t mfill_atomic_continue(struct mm_struct *ds=
+t_mm, unsigned long start,
+> >                           uffd_flags_set_mode(flags, MFILL_ATOMIC_CONTI=
+NUE));
+> >  }
+> >
+> > +ssize_t mfill_atomic_sigbus(struct mm_struct *dst_mm, unsigned long st=
+art,
+> > +                         unsigned long len, atomic_t *mmap_changing,
+> > +                         uffd_flags_t flags)
+> > +{
+> > +     return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
+> > +                         uffd_flags_set_mode(flags, MFILL_ATOMIC_SIGBU=
+S));
+> > +}
+> > +
+> >  long uffd_wp_range(struct vm_area_struct *dst_vma,
+> >                  unsigned long start, unsigned long len, bool enable_wp=
+)
+> >  {
+> > --
+> > 2.40.1.606.ga4b1b128d6-goog
+> >
+>
+> --
+> Peter Xu
+>
