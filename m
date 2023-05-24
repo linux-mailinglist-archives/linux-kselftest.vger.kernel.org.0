@@ -2,135 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE6870FE5E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 21:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8713970FEB8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 21:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjEXTQw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 May 2023 15:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
+        id S235866AbjEXTtY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 May 2023 15:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjEXTQv (ORCPT
+        with ESMTP id S229551AbjEXTtW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 May 2023 15:16:51 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E3A12F;
-        Wed, 24 May 2023 12:16:49 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id E38276019E;
-        Wed, 24 May 2023 21:16:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684955806; bh=yLzaJ3BZwmUfDHcCkUlzajM4xei2/G1Dqqs+yKtQYnw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FwExTAdritu5OMXZ1qimA82muaBvAAZZP9XBYSiUddU0pu0CSSAIeiku1fL1gF1y3
-         8EK/gCCmyEga+zgVCB2NfEgYdD64pQDj59fti+yQBcsDDYQLU8nQEglkyaQnbSzcUB
-         ALVYZpu9C7Vo6WTt+2w3JEtwox0IcKUhmk9HkARI4u7JB161oEorrGKgAw2kq+YNc5
-         O3Z8JwiY8ZQ7TAcxQk1ciBtRiUqn1Vjj2mcXeeW6ddyQk08RwQJRL/4jE1VgeD/aQB
-         6u9Cu0Np+gUO0Xt+ua81WcpoY3xdu0SqTmKbI3ekVyqYPYGZhPjaKPEi6UIOdHlEiz
-         WFePpPOkjoy4Q==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GjDZ7k-lC9gp; Wed, 24 May 2023 21:16:44 +0200 (CEST)
-Received: from defiant.. (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id 4223F601A1;
-        Wed, 24 May 2023 21:16:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684955804; bh=yLzaJ3BZwmUfDHcCkUlzajM4xei2/G1Dqqs+yKtQYnw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=u7TmgFJs2EolMF9HnPBHEVBeNWJMWTMs5t+225/p8LX5Dt/IADJxHsgO4k6VH5Tn/
-         OS+4VGrPeIma2C3Mj+3T4iXihBQZBoH/HsXG4Y7pg0bx8NSzwxwGQorHiK3MrvyeyK
-         x+r6AxPcZ6ZbZh/ZgTBJdTradXznD0Rbrdy0rYsb3c0FdJpw5sRF9Hr38zx1E6FEYb
-         gryy52wn3nADaEkPq61+RoqBtc35H6bmGeGHejPcFnECNZOiMxLlcQx7F5C571z3zq
-         7N/RPnI1YMbTo4GzTs2pr83GpzeflkEcYideSpWU4lzhWwSHu/uMOvSpayLDEoLnfu
-         RXjxMeYZJMXzA==
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Takashi Iwai <tiwai@suse.de>, Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Takashi Iwai <tiwai@suse.com>, Shuah Khan <shuah@kernel.org>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: [PATCH v1 1/1] selftests: alsa: pcm-test: Fix compiler warnings about the format
-Date:   Wed, 24 May 2023 21:15:29 +0200
-Message-Id: <20230524191528.13203-1-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.34.1
+        Wed, 24 May 2023 15:49:22 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F874139;
+        Wed, 24 May 2023 12:49:18 -0700 (PDT)
+Date:   Wed, 24 May 2023 21:49:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1684957756; bh=ZaelfMuK9nEHZvEYR6H9kLGszov8JzRnhm0N2fM3xgc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V5YQaFPevn8tMPELIZ3rL/vARmEGIWBtjWcHmaPhYF+yDj//no8UtMhib8t1RCkgD
+         2Qx7BcHZAYGtIOSIglBrEkhtnKk7vUQ+wwzP5FZ4tpjHk02fB++Qe+2p0hXbCVEoF0
+         7NG4Qy6bNq2lDmpXMc3SwckumYi786BO2HxEJScI=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     w@1wt.eu, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com
+Subject: Re: [PATCH 04/13] selftests/nolibc: syscall_args: use __NR_statx for
+ rv32
+Message-ID: <09d60dc2-e298-4c22-8e2f-8375861bd9be@t-8ch.de>
+References: <cover.1684949267.git.falcon@tinylab.org>
+ <b306ae7b53d67acad6d1e2f63d43505d79f81241.1684949267.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b306ae7b53d67acad6d1e2f63d43505d79f81241.1684949267.git.falcon@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-GCC 11.3.0 issues warnings in this module about wrong sizes of format
-specifiers:
+On 2023-05-25 01:48:11+0800, Zhangjin Wu wrote:
+> When compile nolibc-test.c for rv32, we got such error:
+> 
+>     tools/testing/selftests/nolibc/nolibc-test.c:599:57: error: ‘__NR_fstat’ undeclared (first use in this function)
+>       599 |   CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
+> 
+> The generic include/uapi/asm-generic/unistd.h used by rv32 doesn't
+> support __NR_fstat, use __NR_statx instead:
+> 
+>     Running test 'syscall'
+>     69 syscall_noargs = 1                                            [OK]
+>     70 syscall_args = -1 EFAULT                                      [OK]
+> 
+> As tools/include/nolibc/sys.h shows, __NR_statx is either not supported
+> by all platforms, so, both __NR_fstat and __NR_statx are required.
+> 
+> Btw, the latest riscv libc6-dev package is required, otherwise, we would
+> also get such error:
+> 
+>     In file included from /usr/riscv64-linux-gnu/include/sys/cdefs.h:452,
+>                      from /usr/riscv64-linux-gnu/include/features.h:461,
+>                      from /usr/riscv64-linux-gnu/include/bits/libc-header-start.h:33,
+>                      from /usr/riscv64-linux-gnu/include/limits.h:26,
+>                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:194,
+>                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/syslimits.h:7,
+>                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:34,
+>                      from /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/nolibc-test.c:6:
+>     /usr/riscv64-linux-gnu/include/bits/wordsize.h:28:3: error: #error "rv32i-based targets are not supported"
+>        28 | # error "rv32i-based targets are not supported"
+> 
+> The glibc commit 5b6113d62efa ("RISC-V: Support the 32-bit ABI
+> implementation") fixed up above error, so, glibc >= 2.33 (who includes
+> this commit) is required.
 
-pcm-test.c: In function ‘test_pcm_time’:
-pcm-test.c:384:68: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 5 \
-				has type ‘unsigned int’ [-Wformat=]
-  384 |                 snprintf(msg, sizeof(msg), "rate mismatch %ld != %ld", rate, rrate);
-pcm-test.c:455:53: warning: format ‘%d’ expects argument of type ‘int’, but argument 4 has \
-				type ‘long int’ [-Wformat=]
-  455 |                                          "expected %d, wrote %li", rate, frames);
-pcm-test.c:462:53: warning: format ‘%d’ expects argument of type ‘int’, but argument 4 has \
-				type ‘long int’ [-Wformat=]
-  462 |                                          "expected %d, wrote %li", rate, frames);
-pcm-test.c:467:53: warning: format ‘%d’ expects argument of type ‘int’, but argument 4 has \
-				type ‘long int’ [-Wformat=]
-  467 |                                          "expected %d, wrote %li", rate, frames);
+It seems weird to require limits.h from the system libc at all.
 
-Simple fix according to compiler's suggestion removed the warnings.
+The only thing used from there are INT_MAX and INT_MIN.
+Instead we could define our own versions of INT_MAX and INT_MIN in
+stdint.h.
 
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
----
- tools/testing/selftests/alsa/pcm-test.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+#ifndef INT_MAX
+#define INT_MAX __INT_MAX__
+#endif
 
-diff --git a/tools/testing/selftests/alsa/pcm-test.c b/tools/testing/selftests/alsa/pcm-test.c
-index 3e390fe67eb9..b7eef32addb4 100644
---- a/tools/testing/selftests/alsa/pcm-test.c
-+++ b/tools/testing/selftests/alsa/pcm-test.c
-@@ -381,7 +381,7 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
- 		goto __close;
- 	}
- 	if (rrate != rate) {
--		snprintf(msg, sizeof(msg), "rate mismatch %ld != %ld", rate, rrate);
-+		snprintf(msg, sizeof(msg), "rate mismatch %ld != %d", rate, rrate);
- 		goto __close;
- 	}
- 	rperiod_size = period_size;
-@@ -447,24 +447,24 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
- 			frames = snd_pcm_writei(handle, samples, rate);
- 			if (frames < 0) {
- 				snprintf(msg, sizeof(msg),
--					 "Write failed: expected %d, wrote %li", rate, frames);
-+					 "Write failed: expected %ld, wrote %li", rate, frames);
- 				goto __close;
- 			}
- 			if (frames < rate) {
- 				snprintf(msg, sizeof(msg),
--					 "expected %d, wrote %li", rate, frames);
-+					 "expected %ld, wrote %li", rate, frames);
- 				goto __close;
- 			}
- 		} else {
- 			frames = snd_pcm_readi(handle, samples, rate);
- 			if (frames < 0) {
- 				snprintf(msg, sizeof(msg),
--					 "expected %d, wrote %li", rate, frames);
-+					 "expected %ld, wrote %li", rate, frames);
- 				goto __close;
- 			}
- 			if (frames < rate) {
- 				snprintf(msg, sizeof(msg),
--					 "expected %d, wrote %li", rate, frames);
-+					 "expected %ld, wrote %li", rate, frames);
- 				goto __close;
- 			}
- 		}
--- 
-2.34.1
+#ifndef INT_MIN
+#define INT_MIN (- __INT_MAX__ - 1)
+#endif
 
+Thomas
