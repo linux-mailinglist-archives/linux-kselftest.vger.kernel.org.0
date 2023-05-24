@@ -2,120 +2,187 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFEA70FF52
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 22:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CA470FFEC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 23:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236112AbjEXUfB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 May 2023 16:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
+        id S230430AbjEXVXF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 May 2023 17:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236149AbjEXUev (ORCPT
+        with ESMTP id S229792AbjEXVXF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 May 2023 16:34:51 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9628E1AC;
-        Wed, 24 May 2023 13:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xfybRCqfmly451via0zB+H/Q+AApSu2iaDmN5fGZ/x4=; b=IgXiGZt/AjIkZyk47M6JmzSETo
-        5JvYqmTY0S/6CNcf6rOgIUGkx8fCELILrDrVXemYkb5BPYKAn0HI2Y6XB5K+3xzooX2AKsZSw2rzz
-        mh9MKJ/BLQiIqzzeKOeINobvgbeJqtrrw702L1m+480O4PgbeQxZTVHsPTxFOgTQXwjhkEFw9ES3j
-        jYrlmoMd2O6KMc0tFDq7r+mdPcC6sbWD0mdmLQKvSrN/CRbmjwjlImLpNC1DyVuMY2O6L3UPugOJF
-        IUkQyLOL6dwpJlAiac2Dvj+LDhnldubALNgI54EHmr7EPEHVm08LfHTcHZ65apsu3c2zLqTuflfCR
-        76pcnqHw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q1vAx-00BWOr-Uz; Wed, 24 May 2023 20:33:40 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AD8D830013F;
-        Wed, 24 May 2023 22:33:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D6F5F20A78733; Wed, 24 May 2023 22:33:36 +0200 (CEST)
-Date:   Wed, 24 May 2023 22:33:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Kautuk Consul <kconsul@linux.vnet.ibm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
-Message-ID: <20230524203336.GC3447678@hirez.programming.kicks-ass.net>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-9-chao.p.peng@linux.intel.com>
- <ZGxo9ylqYI8JXjGn@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <ZGzLf4zgxpBjghaF@google.com>
- <ZG2qv9sWl2RUnGqd@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <ZG5wg3VbG4rCYrfk@google.com>
+        Wed, 24 May 2023 17:23:05 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4556E132
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 14:23:03 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51400fa347dso2801a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 14:23:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684963382; x=1687555382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T8Qg2K654YRlKmz23V8WpWN+Y6cHXvK/b2p7jnK6OQs=;
+        b=t5sPqCEeZFf9HQQ4ntEgMZTuOcPaVIMzfbEpscsappcH0P0d2ASkDmPicxu7wnamVk
+         fP7ckKxxzZ8Oa9e8Y9KxlAfJjjPM4n8ovg48npe8rUJGnj7kJB9mv+7kiXrASjqNkq5S
+         HPROKIUIYb5aqkZrRAAnNwuIAEmtdGTHM/cDqQd8FPOPOnje75XJUaV+Q09uhuVLt1T9
+         PD5ShFEzQOAIiyfSv9ZpYIXNf+CmJFUy+EMFb0xxxyEyumo7jL/Awq1K/4H3SO2dKs3p
+         1dM9K37a6Go1bNHi7BE+tQSRYg8qJUjyB/Lpfxuo3TZAxAHFUUP0hfPsR+l7dFF/rLuc
+         CWQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684963382; x=1687555382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T8Qg2K654YRlKmz23V8WpWN+Y6cHXvK/b2p7jnK6OQs=;
+        b=Qz1aEiZoPxdz91mEJb+w8VjW8mwPJAL+RDMK90auAPDcnkHc5coFenWB3vRR6/2Dz9
+         KMlhwIkhwTOgFRVxdP4JP+X9KlEoTDTqXFR8AkjK49HCMCiizZg727nzL2rDIObYh7pu
+         BPhFXcWQHUUftIa512coETsZfZGxmc01hzCZXaCVphf95/44LCRpgL+EwINyM0lql5sY
+         7MQBZtC0Y2lki14fcTwAVDIOpCpTbQbcvmQupQKgauewkG0iArhwRNv7SiTZap/mI1xE
+         fAszD3PB4jl+cO1l1cRcN8dVuDRhCdkodhtRsieYay9ZomCVtN7vrj6ZxDGx1Fp84n+1
+         9qYg==
+X-Gm-Message-State: AC+VfDxF0/7kGW4+2Hs2EeDtzNt8X/SBtXNlUBQr2afBEmfeuwOR4tjt
+        jwSlyEl4LrO41or02MgrGaHQxG3Urrpkvc73TWq/xA==
+X-Google-Smtp-Source: ACHHUZ5yTS6/RmEjOM02kGVgahV7AKQIXPIdgnvD5TrNps0XUfGtHGCFrSRoBOWokdISojFDAn2sBb1/6+NP+V2CyXM=
+X-Received: by 2002:a50:9317:0:b0:506:b280:4993 with SMTP id
+ m23-20020a509317000000b00506b2804993mr48726eda.2.1684963381628; Wed, 24 May
+ 2023 14:23:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZG5wg3VbG4rCYrfk@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230518083849.2631178-1-davidgow@google.com> <20230518083849.2631178-4-davidgow@google.com>
+In-Reply-To: <20230518083849.2631178-4-davidgow@google.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Wed, 24 May 2023 17:22:49 -0400
+Message-ID: <CA+GJov6nq+RHsc5wU_WJw8nfMO=YEW=f2OsHM+_=hZP7xf92wQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] Documentation: kunit: Add usage notes for kunit_add_action()
+To:     David Gow <davidgow@google.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Benjamin Berg <benjamin@sipsolutions.net>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 24, 2023 at 01:16:03PM -0700, Sean Christopherson wrote:
+On Thu, May 18, 2023 at 4:39=E2=80=AFAM David Gow <davidgow@google.com> wro=
+te:
+>
+> Add some basic documentation for kunit_add_action() and related
+> deferred action functions.
 
-> Atomics aren't memory barriers on all architectures, e.g. see the various
-> definitions of smp_mb__after_atomic().
-> 
-> Even if atomic operations did provide barriers, using an atomic would be overkill
-> and a net negative.  On strongly ordered architectures like x86, memory barriers are
-> just compiler barriers, whereas atomics may be more expensive. 
+Hi David!
 
-Not quite, smp_{r,w}mb() and smp_mb__{before,after}_atomic() are
-compiler barriers on the TSO archs, but smp_mb() very much isn't. TSO
-still allows stores to be delayed vs later loads (iow it doesn't pretend
-to hide the store buffer).
+This looks good to me. Just two typos below. Thanks!
 
-> Of course, the only
-> accesses outside of mmu_lock are reads, so on x86 that "atomic" access is just a
-> READ_ONCE() load, but that's not the case for all architectures.
+Reviewed-by: Rae Moar <rmoar@google.com>
 
-This is true on *all* archs. atomic_set() and atomic_read() are no more
-and no less than WRITE_ONCE() / READ_ONCE().
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>
+> This patch is new in v2.
+>
+> ---
+>  Documentation/dev-tools/kunit/usage.rst | 51 +++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>
+> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-=
+tools/kunit/usage.rst
+> index 46957d1cbcbb..c2f0ed648385 100644
+> --- a/Documentation/dev-tools/kunit/usage.rst
+> +++ b/Documentation/dev-tools/kunit/usage.rst
+> @@ -615,6 +615,57 @@ For example:
+>                 KUNIT_ASSERT_STREQ(test, buffer, "");
+>         }
+>
+> +Registering Cleanup Actions
+> +---------------------------
+> +
+> +If you need to perform some cleanup beyond simple use of ``kunit_kzalloc=
+``,
+> +you can register a cusom "deferred action", which is a cleanup function
 
-> Anyways, the point is that atomics and memory barriers are different things that
-> serve different purposes.
+Looks like a typo here: "custom"
 
-This is true; esp. on the weakly ordered architectures where atomics do
-not naturally imply any ordering.
+> +run when the test exits (whether cleanly, or via a failed assertion).
+> +
+> +Actions are simple functions with no return value, and a single ``void*`=
+`
+> +context argument, and forfil the same role as "cleanup" functions in Pyt=
+hon
+
+Another small typo here as Bagas noted.
+
+> +and Go tests, "defer" statements in languages which support them, and
+> +(in some cases) destructors in RAII languages.
+> +
+> +These are very useful for unregistering things from global lists, closin=
+g
+> +files or other resources, or freeing resources.
+> +
+> +For example:
+> +
+> +.. code-block:: C
+> +
+> +       static void cleanup_device(void *ctx)
+> +       {
+> +               struct device *dev =3D (struct device *)ctx;
+> +
+> +               device_unregister(dev);
+> +       }
+> +
+> +       void example_device_test(struct kunit *test)
+> +       {
+> +               struct my_device dev;
+> +
+> +               device_register(&dev);
+> +
+> +               kunit_add_action(test, &cleanup_device, &dev);
+> +       }
+> +
+> +Note that, for functions like device_unregister which only accept a sing=
+le
+> +pointer-sized argument, it's possible to directly cast that function to
+> +a ``kunit_action_t`` rather than writing a wrapper function, for example=
+:
+> +
+> +.. code-block:: C
+> +
+> +       kunit_add_action(test, (kunit_action_t *)&device_unregister, &dev=
+);
+> +
+> +``kunit_add_action`` can fail if, for example, the system is out of memo=
+ry.
+> +You can use ``kunit_add_action_or_reset`` instead which runs the action
+> +immediately if it cannot be deferred.
+> +
+> +If you need more control over when the cleanup function is called, you
+> +can trigger it early using ``kunit_release_action``, or cancel it entire=
+ly
+> +with ``kunit_remove_action``.
+> +
+>
+>  Testing Static Functions
+>  ------------------------
+> --
+> 2.40.1.698.g37aff9b760-goog
+>
