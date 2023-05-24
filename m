@@ -2,134 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001E770F9BE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 17:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBC370FA23
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 17:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235449AbjEXPGi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 May 2023 11:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        id S235966AbjEXPc5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 May 2023 11:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232950AbjEXPGh (ORCPT
+        with ESMTP id S235952AbjEXPc4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 May 2023 11:06:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3A1119
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 08:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684940753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C1IKq4W7kXMUcZYad8O4aYshE6tNJx+8XRtusGP3BwA=;
-        b=QJqgdYbXa0g6GRMXw5usVbdPiN0y5xICoRwFWdLNeOkfzvZ72Xn9Du+otHLp4J7KQ0Y+mc
-        ND3TZcUT+WfuQv0M9oSo4OsJvPkQpUJv6hn71djvcovqczmYhWrV7DM/JIWTH35onQczVs
-        CQ4KNouko0sfd+NSl90Fje9vIVdQfE0=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-480-8Zj2hkodP9-K8UqYoAw3_g-1; Wed, 24 May 2023 11:05:51 -0400
-X-MC-Unique: 8Zj2hkodP9-K8UqYoAw3_g-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75b175cf0d1so24929685a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 08:05:46 -0700 (PDT)
+        Wed, 24 May 2023 11:32:56 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4A499
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 08:32:52 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-75affe977abso157098785a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 08:32:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1684942371; x=1687534371;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nQdM6MRoHyYb9DC9yBJL0H8qT9Rd4+LN5oK5C3g/OFE=;
+        b=MPLMVQxRe96+SScpLaw8sLhMl9jpbVWZCvBa0rCNYDN96vZxeF0ygWtHPUZfTLVFll
+         LZYL98Fz8Ha5Mdlj1XTzG476kwQTbO/JagVHybCAAoCisF44cGs38w6xWO8O/rFwfCUV
+         gRs7TDeLJxTyJdgA0zA6rgObFAv+d7YRK6me0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684940746; x=1687532746;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C1IKq4W7kXMUcZYad8O4aYshE6tNJx+8XRtusGP3BwA=;
-        b=VZXAPXJ9KjMOhE7Kfqm0XeJ6RyJ7mpkZfrLGwIf4XEcE7qP33nWcYyZ+tG0thIq7fL
-         swig2UdG3047BeV2KoJe83fbAit7pGgxfEjoPwhx/8vQl8irL0TenPdSycrPya7JKxCi
-         ELmMq37xsS2DhFVpL+dFMC2UyPejWA8LMhjCrMJaNkFL3o0ugyMFDCN1GPVx4HVqKqr+
-         IWioT2/2OyXmL8dO4/kkiMzTr/7LPNItPhxL/HC/S0JRZBqMJ8oa24YgZ3T4tDuNFx5K
-         rLu8PGr+uNtMgV2MqrRa3avTEeexxqzvJGUKnyLU2uo++7iWakhpKpfN4Vik4eFHhCtd
-         03Bw==
-X-Gm-Message-State: AC+VfDxaFP+ithglQMNuEI4GLA6Hegidb2YrgsFM4EdVijn9GPbtino5
-        7/bkbvEPJZW58lBg9YpYN/5aI5CH/0Dbjg1IpIEAE6jh+aGVuadHtFoO1yYP8vYaJSmUB65LLtQ
-        qj8Edxc1LLtqPRESEtFXLEJcZyUjB
-X-Received: by 2002:ad4:5961:0:b0:625:aa49:a48b with SMTP id eq1-20020ad45961000000b00625aa49a48bmr2106789qvb.6.1684940746118;
-        Wed, 24 May 2023 08:05:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5u2JsTk1mmNXoqf84VPpm8+rDS0A+qmShWJLS/640lXVGHgY6BmYlqoYyLv6ghI1O3C3OnlA==
-X-Received: by 2002:ad4:5961:0:b0:625:aa49:a48b with SMTP id eq1-20020ad45961000000b00625aa49a48bmr2106736qvb.6.1684940745557;
-        Wed, 24 May 2023 08:05:45 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id v10-20020a0cf90a000000b0062136626e09sm3625337qvn.57.2023.05.24.08.05.43
+        d=1e100.net; s=20221208; t=1684942371; x=1687534371;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nQdM6MRoHyYb9DC9yBJL0H8qT9Rd4+LN5oK5C3g/OFE=;
+        b=Lgubg+rhSUBxDjAM3YziNprbf28zTMOgxOQDNtj1KMnKKKaihewGyCzd6Zh19YdWKW
+         EFQMpKCc3Njw4FYe2FpRGX7rxZ+y9pH0jHAnnmArOlML5FOq6SW0hkXNs9+/1pI017cZ
+         y9nRGGd31oyk1gLxhTJdEM0ue43wztLWRNczypdBjnlsGAdjZUm/Hj6XOML630NgwUNe
+         uKaO1f39yRV7szbdrlVW0W6JbDUrDGh1Sq8QxfXvFT1rx3U228Kg0rNdki8Ogu15CgvS
+         jVAjKDJ8rgiPMZHIpyENv6myjgVEkhZB9D2ePzHMgICsCugtWnKBw4Z8Zmn91KCelSuJ
+         c+Ng==
+X-Gm-Message-State: AC+VfDzgwLbQWDfyv0G7PCEeMJejaCiy5fhbbFLuSQbwoFJSRMxpzM6M
+        rgyhRCCwM/oEsXnc8iK1lXMwog==
+X-Google-Smtp-Source: ACHHUZ6SizGJwGcv9Tz+/DPOYdhE0AkVtVTHOSlxAS8WGojoltL4coJB+lXtG6Wg8raxf+U9m8k6dg==
+X-Received: by 2002:a05:620a:1d4b:b0:75b:23a1:361d with SMTP id dm11-20020a05620a1d4b00b0075b23a1361dmr8178488qkb.46.1684942371650;
+        Wed, 24 May 2023 08:32:51 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id v18-20020a05620a123200b007590aa4b115sm3296906qkj.87.2023.05.24.08.32.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 08:05:44 -0700 (PDT)
-Date:   Wed, 24 May 2023 11:05:43 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        James Houghton <jthoughton@google.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Wed, 24 May 2023 08:32:51 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-Message-ID: <ZG4nxwdbWzhtR4pP@x1n>
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
- <ZGz3LeRyghnv4wwZ@x1n>
- <CAJHvVcjh6hOrZyr1t92v07+PVNVJH-BnPDs+ZSUWsLVjpLEuHA@mail.gmail.com>
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>
+Subject: [PATCH v3 0/6] Optimize mremap during mutual alignment within PMD
+Date:   Wed, 24 May 2023 15:32:33 +0000
+Message-ID: <20230524153239.3036507-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJHvVcjh6hOrZyr1t92v07+PVNVJH-BnPDs+ZSUWsLVjpLEuHA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:59:05AM -0700, Axel Rasmussen wrote:
-> > Actually.. I think maybe we should have 1 patch changing SWAPIN_ERROR from
-> > VM_FAULT_SIGBUS to VM_FAULT_HWPOISON.
-> >
-> > Let's imagine a VM having anonymous page backing and got a swapin error
-> > when faulted on one of the guest page.  Instead of crashing the hypervisor
-> > with sigbus we should probably make it a MCE injected into the guest too,
-> > because there's no page corrupt in bare metal in this specific case,
-> > however to the guest it's the same as having one page corrupted just like a
-> > real MCE.
-> 
-> This is a great idea, you're right that injecting an MCE into the
-> guest is exactly the end goal, and it seems like VM_FAULT_HWPOISON
-> will "just work". Also the name UFFDIO_POISON resolves any confusion
-> with UFFD_FEATURE_SIGBUS, so that's a nice side benefit.
+Hello!
 
-Hopefully!  Please double check it with KVM running altogether to make sure
-the patch works exactly as expected.
+Here is v3 of the mremap start address optimization / fix for exec warning.
 
-[...]
+The main changes are:
+1. Care to be taken to move purely within a VMA, in other words this check
+   in call_align_down():
+    if (vma->vm_start <= addr_masked)
+            return false;
 
-> We'll want hugetlbfs support for this operation too, but it's only
-> really useful (at least for our use case) after HGM is merged. But,
-> there's no strong reason not to just implement both all at once - I'll
-> extend v2 to also work properly with hugetlbfs. Probably it isn't too
-> hard, I just need to do a bit more reading of how swap markers are
-> handled in hugetlbfs.
+    As an example of why this is needed:
+    Consider the following range which is 2MB aligned and is
+    a part of a larger 10MB range which is not shown. Each
+    character is 256KB below making the source and destination
+    2MB each. The lower case letters are moved (s to d) and the
+    upper case letters are not moved.
 
-Sure.  We have too many flags separating different types of memory, so I
-think it'll be nice if when it can still trivially work for everything.
+    |DDDDddddSSSSssss|
 
-For this specific case, since your goal is definitely having hugetlb hgm
-supported so it'll be even more trickier if only hgm will be supported but
-not !hgm hugetlbs, so we'd better target it initially with all mem types.
+    If we align down 'ssss' to start from the 'SSSS', we will end up destroying
+    SSSS. The above if statement prevents that and I verified it.
 
-Thanks,
+    I also added a test for this in the last patch.
 
--- 
-Peter Xu
+2. Handle the stack case separately. We do not care about #1 for stack movement
+   because the 'SSSS' does not matter during this move. Further we need to do this
+   to prevent the stack move warning.
+
+    if (!for_stack && vma->vm_start <= addr_masked)
+            return false;
+
+History of patches
+==================
+v2->v3:
+1. Masked address was stored in int, fixed it to unsigned long to avoid truncation.
+2. We now handle moves happening purely within a VMA, a new test is added to handle this.
+3. More code comments.
+
+v1->v2:
+1. Trigger the optimization for mremaps smaller than a PMD. I tested by tracing
+that it works correctly.
+
+2. Fix issue with bogus return value found by Linus if we broke out of the
+above loop for the first PMD itself.
+
+v1: Initial RFC.
+
+Description of patches
+======================
+These patches optimizes the start addresses in move_page_tables() and tests the
+changes. It addresses a warning [1] that occurs due to a downward, overlapping
+move on a mutually-aligned offset within a PMD during exec. By initiating the
+copy process at the PMD level when such alignment is present, we can prevent
+this warning and speed up the copying process at the same time. Linus Torvalds
+suggested this idea.
+
+Please check the individual patches for more details.
+
+thanks,
+
+ - Joel
+
+[1] https://lore.kernel.org/all/ZB2GTBD%2FLWTrkOiO@dhcp22.suse.cz/
+
+Joel Fernandes (Google) (6):
+mm/mremap: Optimize the start addresses in move_page_tables()
+mm/mremap: Allow moves within the same VMA
+selftests: mm: Fix failure case when new remap region was not found
+selftests: mm: Add a test for mutually aligned moves > PMD size
+selftests: mm: Add a test for remapping to area immediately after
+existing mapping
+selftests: mm: Add a test for remapping within a range
+
+fs/exec.c                                |   2 +-
+include/linux/mm.h                       |   2 +-
+mm/mremap.c                              |  69 ++++++++++-
+tools/testing/selftests/mm/mremap_test.c | 148 +++++++++++++++++++++--
+4 files changed, 209 insertions(+), 12 deletions(-)
+
+--
+2.40.1.698.g37aff9b760-goog
 
