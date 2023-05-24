@@ -2,97 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7254271001C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 23:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0A7710138
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 00:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234131AbjEXVjz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 May 2023 17:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        id S237435AbjEXW6f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 May 2023 18:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjEXVjy (ORCPT
+        with ESMTP id S233308AbjEXW6e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 May 2023 17:39:54 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2409AC5
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 14:39:53 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561eb6c66f6so16825197b3.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 14:39:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684964392; x=1687556392;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u+lTI9LGfJCIeH9eUZOS37jnh9XivOrfiNHxwExkkPU=;
-        b=1OM2n6A6XJR4jj8vE2JD/qVka6KhOa37sATKkJGdtzfw5ejGSX46cgRyM3KxfTglOD
-         0RNiltYW0aqpSJK1ylM7pyVuNywmw3i8GLhqy6D8KbpUnlsiq///5XlVQOyARTMakL95
-         sruDKzgA0kJWIRgwdNf60tHMZ2lnfSldT/PHutYtTTub50wqJp62S52UJsWvKQ7jpGPj
-         JBND0HA8P6pXYHkEPXwT4zPgdYSplBBE7ttHpAHPL1RPyn6nSmxfEos2auwOVntQ9sEN
-         x6n9gU3Z0Y/wI8zE55ONSW8DBiSo/6ReRvhBCmqYQEuA2BiS/6yDjqxNIpbAGpQ1wAiT
-         KtGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684964392; x=1687556392;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u+lTI9LGfJCIeH9eUZOS37jnh9XivOrfiNHxwExkkPU=;
-        b=TAEy0aTbkATEV29cRKAVd6rE7tABfBhVcG/tbPj5bluFPi3iMSwNwLRUJHHXugpWaj
-         cCoyQUdWlE9exWviseO8qMvgzKTbN8RZpMf8w2P2V1geHocWi5k7c6ySPPe+0mjF06j8
-         Gfsc3LYuQ1IPapgKYKgGU7hzl5S8kBCuuYJFktjN5YphBQyPsuKSuHHINzZ3GJTIzAD/
-         Ti3V7IwdcYEHKC6cb5FLA1QRhtCzZ78Z+9/Hycx9AogySAHMP3RSH3H1wVTIEZvmm0zN
-         krHQmFiln/9/oKqTuDncVrd8VyBmgsjYO4jRcTWb+HyR59WDCvyx9E4Xxz2chAtZR01J
-         yDCQ==
-X-Gm-Message-State: AC+VfDwPrZCbiUWxlQVJZQPwiJP1BdCaHlq2eyGy715pmh9oDVRWgO4+
-        P+T9NFuafUyUaIUbGFOaNL4Xlpz9+Ys=
-X-Google-Smtp-Source: ACHHUZ4gGkG32f/WDPDY+8DnC86QiU6Z2uyq9N2VVLscH3WfhLiakxSPFeyk8pWCaiTnq1AgYyU2vpbztC4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ae14:0:b0:561:8bfb:feb1 with SMTP id
- m20-20020a81ae14000000b005618bfbfeb1mr12005442ywh.10.1684964392193; Wed, 24
- May 2023 14:39:52 -0700 (PDT)
-Date:   Wed, 24 May 2023 14:39:50 -0700
-In-Reply-To: <20230524203336.GC3447678@hirez.programming.kicks-ass.net>
-Mime-Version: 1.0
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-9-chao.p.peng@linux.intel.com> <ZGxo9ylqYI8JXjGn@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <ZGzLf4zgxpBjghaF@google.com> <ZG2qv9sWl2RUnGqd@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <ZG5wg3VbG4rCYrfk@google.com> <20230524203336.GC3447678@hirez.programming.kicks-ass.net>
-Message-ID: <ZG6EJoXbduApRsgV@google.com>
-Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kautuk Consul <kconsul@linux.vnet.ibm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Wed, 24 May 2023 18:58:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3638BB;
+        Wed, 24 May 2023 15:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=kJ4Oy2Yrdt9sPa79KIijN8nSLPO32FE6oEphCMooz00=; b=NLhNyk/g75PlT2Vy8EtY+i9Odn
+        zZ2va5B8EA39HX8C8P1rIs28BuCofS6gBUo88Y2C68QA68+cdUtM/X1sJiIm6QHolBK1pGnU6ssmt
+        hC3RtAjCaEAEY32dHq+Alm5rFbqUpvGdH9E2O0vjtJ9rkkXgEbQ/MwOJzmLET6KhQ4T86vVZZ/dSd
+        EiiWPDCZIaVnzkGHpPKyWQERl+aufoelypWlWKlESSS2J979o7eUOvwXuIiqwdZRwxxvk5ld7HXd/
+        bz8bY+beCVerWZ7WgrZo8kSknXOL4yaXSR897XrRKAFp7wNunxJZMntX0MIGBRbIfwl4fT3lZLmw3
+        6MFiZKwg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1xR7-00EsNL-2V;
+        Wed, 24 May 2023 22:58:29 +0000
+Date:   Wed, 24 May 2023 15:58:29 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org,
+        tiwai@suse.de, tianfei.zhang@intel.com, russell.h.weight@intel.com,
+        keescook@chromium.org, tweek@google.com, a.manzanares@samsung.com,
+        dave@stgolabs.net, vincenzopalazzodev@gmail.com,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: Re: [PATCH] selftests: allow runners to override the timeout
+Message-ID: <ZG6WlUZZN4etzM2k@bombadil.infradead.org>
+References: <20230414193845.2494120-1-mcgrof@kernel.org>
+ <3f5c5c28-3814-3fea-dfbb-a3c7604e0edc@collabora.com>
+ <CAB=NE6Wx=PQ6n__hdseLzahNdkGoyUXDW4w9B5bBLvg-kVxbXA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAB=NE6Wx=PQ6n__hdseLzahNdkGoyUXDW4w9B5bBLvg-kVxbXA@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,40 +61,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 24, 2023, Peter Zijlstra wrote:
-> On Wed, May 24, 2023 at 01:16:03PM -0700, Sean Christopherson wrote:
-> > Of course, the only accesses outside of mmu_lock are reads, so on x86 that
-> > "atomic" access is just a READ_ONCE() load, but that's not the case for all
-> > architectures.
+On Thu, May 11, 2023 at 08:26:42AM -0700, Luis Chamberlain wrote:
+> On Fri, Apr 28, 2023 at 1:34 AM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+> >
+> > On 4/15/23 12:38 AM, Luis Chamberlain wrote:
+> > > The default timeout for selftests tests is 45 seconds. Although
+> > > we already have 13 settings for tests of about 96 sefltests which
+> > > use a timeout greater than this, we want to try to avoid encouraging
+> > > more tests to forcing a higher test timeout as selftests strives to
+> > > run all tests quickly. Selftests also uses the timeout as a non-fatal
+> > > error. Only tests runners which have control over a system would know
+> > > if to treat a timeout as fatal or not.
+> > >
+> > > To help with all this:
+> > >
+> > >   o Enhance documentation to avoid future increases of insane timeouts
+> > >   o Add the option to allow overriding the default timeout with test
+> > >     runners with a command line option
+> > >
+> > > Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+> > > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> > Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> > Tested-by:Muhammad Usama Anjum <usama.anjum@collabora.com>
 > 
-> This is true on *all* archs. atomic_set() and atomic_read() are no more
-> and no less than WRITE_ONCE() / READ_ONCE().
+> Shuah, just a friendly poke! This is needed to allow me to enable full
+> automation for kdevops for selftests.
 
-Ah, I take it s390's handcoded assembly routines are just a paranoid equivalents
-and not truly special?  "l" and "st" do sound quite generic...
+Shuah, friendly re-poke.
 
-  commit 7657e41a0bd16c9d8b3cefe8fd5d6ac3c25ae4bf
-  Author: Heiko Carstens <hca@linux.ibm.com>
-  Date:   Thu Feb 17 13:13:58 2011 +0100
-
-    [S390] atomic: use inline asm
-    
-    Use inline assemblies for atomic_read/set(). This way there shouldn't
-    be any questions or subtle volatile semantics left.
-
-static inline int __atomic_read(const atomic_t *v)
-{
-	int c;
-
-	asm volatile(
-		"	l	%0,%1\n"
-		: "=d" (c) : "R" (v->counter));
-	return c;
-}
-
-static inline void __atomic_set(atomic_t *v, int i)
-{
-	asm volatile(
-		"	st	%1,%0\n"
-		: "=R" (v->counter) : "d" (i));
-}
+  Luis
