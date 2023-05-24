@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3A570FD44
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 19:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C427870FD4C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 19:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235265AbjEXRyk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 May 2023 13:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
+        id S231446AbjEXR4Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 May 2023 13:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjEXRyj (ORCPT
+        with ESMTP id S229622AbjEXR4X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 May 2023 13:54:39 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7131BB6;
-        Wed, 24 May 2023 10:54:36 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1684950871teid7j3l
+        Wed, 24 May 2023 13:56:23 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10F7D3;
+        Wed, 24 May 2023 10:56:21 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1684950976taj01xsk
 Received: from linux-lab-host.localdomain ( [116.30.125.36])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 May 2023 01:54:30 +0800 (CST)
+        id ; Thu, 25 May 2023 01:56:14 +0800 (CST)
 X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: ILHsT53NKPiQNaLNfvtQg60iCEjU86KTaag2QHiPU3ih6Rb4YpBvqJza1CLGu
-        LpFlDQrCd1CzUUzmNws22YxZUV8d6W8jYPZ2nrEDEaDmsZpm8iPmoW9lOOfcyOqguLm1+zY
-        2K7WSkALc/5XCjQUw2A2znLCN1tjC1H9y9lzWCm0I/PH1PsorxoBge3kGufcq0lhKqef5e+
-        CVmpEhsvbuFluOifXkdyczY4POc8Y4WJ4pvpPA80rp4wtPUOpsnYC4ZwPE+ZmXe13mDpm5R
-        oYI+sqLkgRmeyX24IgJ2tlqgWzMkjR5iyKIG0UMIDDV0BFXbEJZqwkNZiE2lhmIzdCQFt3r
-        amaHK22+U+HoGiOcPDSAkQo8WB4QmfyssStP9B443w1uR+/5UunbTM1SORuiw==
+X-QQ-FEAT: 3M0okmaRx3heRPkZGAvThL5q8yJbl4iq2g+n/V08QcrkuDixKCO+Kd5/chZ81
+        RzQT/uozjLZp+bJTDwM4DrjefAVoP6YAkePF7XNpTK/nJeuf9WQLmw0zG25rrehB1prqfgh
+        Mxe/FZ2oQE83jxi0IwkPYBpg1nhziKdy250rcb2fxzd2Y14WfvDQutJBG35HFVq8BnVLs7O
+        P8KDx0A/JpQyxXInpBxAh2ptKYxoEApcMkJMZmv56mSHAl/oZrtg2VYwPJm4gT9nt9jEq1L
+        c4eGTgncEQWLJLlWkWX99AdeN6dGvF7IcjRuEmGdHroUaPPPUybeEoz2wiy/oTiy6tvnQ3v
+        Dn5Dy/0Ii+6Wiu+MMEXg7lf4YzUemtxh5Zhk5Dp+Tsn/rDdZtH0dxeEjPUGUQ==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11833202980194447425
+X-BIZMAIL-ID: 1222464122104175739
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
         palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de
-Subject: [PATCH 07/13] selftests/nolibc: remove the duplicated gettimeofday_bad2
-Date:   Thu, 25 May 2023 01:54:19 +0800
-Message-Id: <f26de8e1abb27035442e9c7c58aecf18bb4e902c.1684949268.git.falcon@tinylab.org>
+Subject: [PATCH 08/13] tools/nolibc: sys_lseek: riscv: use __NR_llseek for rv32
+Date:   Thu, 25 May 2023 01:55:39 +0800
+Message-Id: <f25526b466803d6826dd9c5bb1489a5276cf58b0.1684949268.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1684949267.git.falcon@tinylab.org>
 References: <cover.1684949267.git.falcon@tinylab.org>
@@ -52,23 +52,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 1 -
- 1 file changed, 1 deletion(-)
+riscv uses the generic include/uapi/asm-generic/unistd.h, it has code
+like this:
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index c86ff6018c7f..a9c07018ac9d 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -575,7 +575,6 @@ int run_syscall(int min, int max)
- #ifdef NOLIBC
- 		CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
- 		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
--		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
- #endif
- 		CASE_TEST(getpagesize);       EXPECT_SYSZR(1, test_getpagesize()); break;
- 		CASE_TEST(ioctl_tiocinq);     EXPECT_SYSZR(1, ioctl(0, TIOCINQ, &tmp)); break;
+  #if __BITS_PER_LONG == 64 && !defined(__SYSCALL_COMPAT)
+  #define __NR_lseek __NR3264_lseek
+  #else
+  #define __NR_llseek __NR3264_lseek
+  #endif
+
+There is no __NR_lseek for rv32, use __NR_llseek instead.
+
+This code is based on sysdeps/unix/sysv/linux/lseek.c of glibc.
+
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+---
+ tools/include/nolibc/std.h |  1 +
+ tools/include/nolibc/sys.h | 18 ++++++++++++++++++
+ 2 files changed, 19 insertions(+)
+
+diff --git a/tools/include/nolibc/std.h b/tools/include/nolibc/std.h
+index 933bc0be7e1c..83c0b0cb9564 100644
+--- a/tools/include/nolibc/std.h
++++ b/tools/include/nolibc/std.h
+@@ -32,5 +32,6 @@ typedef   signed long         off_t;
+ typedef   signed long     blksize_t;
+ typedef   signed long      blkcnt_t;
+ typedef   signed long        time_t;
++typedef     long long        loff_t;
+ 
+ #endif /* _NOLIBC_STD_H */
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index d5792a5de70b..0ff77c0a06d7 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -671,7 +671,25 @@ int link(const char *old, const char *new)
+ static __attribute__((unused))
+ off_t sys_lseek(int fd, off_t offset, int whence)
+ {
++#ifdef __NR_lseek
+ 	return my_syscall3(__NR_lseek, fd, offset, whence);
++#elif defined(__NR_llseek)
++	loff_t result;
++	off_t retval;
++	int ret;
++
++	ret = my_syscall5(__NR_llseek, fd, (long) (((uint64_t) (offset)) >> 32), (long) offset, &result, whence);
++	if (ret)
++		return ret;
++
++	retval = (off_t) result;
++	if (retval != result)
++		return -EOVERFLOW;
++
++	return retval;
++#else
++#error Neither __NR_lseek nor __NR_llseek defined, cannot implement sys_lseek()
++#endif
+ }
+ 
+ static __attribute__((unused))
 -- 
 2.25.1
 
