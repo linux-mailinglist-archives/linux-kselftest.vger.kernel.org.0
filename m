@@ -2,219 +2,238 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BFC70F81B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 15:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8717170F867
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 16:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235591AbjEXN4t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 May 2023 09:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
+        id S229972AbjEXOPj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 May 2023 10:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234058AbjEXN4s (ORCPT
+        with ESMTP id S229919AbjEXOPi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 May 2023 09:56:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAB6AA
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 06:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684936565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zqvJBcdP4jWNQEKJ2URv+kldtu3J4d9i0mGEu6ibPxU=;
-        b=JK9TdI1Obgk0C6Zpv5jhW7Gey8NK0fXzMuxz3kOnWx9C4v4st7MG3axd7yDNJiXG+ssE7z
-        SarlZ0fJATvxr8rPuL+vM5vEW/T2s9vyBxJjfgsUSenK9pASCzINn7ghniTeqLUCxIMv/i
-        nsteSD5k6xSULWual6kVk52vSfUVP8g=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-472-XUWViPgHPsGPmkYw10FdQg-1; Wed, 24 May 2023 09:56:03 -0400
-X-MC-Unique: XUWViPgHPsGPmkYw10FdQg-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-625891d5ad5so1928676d6.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 06:56:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684936563; x=1687528563;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zqvJBcdP4jWNQEKJ2URv+kldtu3J4d9i0mGEu6ibPxU=;
-        b=eDzKbQWZNhajbxdv2H+cmiksDI8IShEc146cExor+laJIfWH/+S1DUzrT7TtNd89/M
-         fjGqqw2O3nJW6Vl78Cp6E59D1cnXfbv7jHdM3WWgFSI3v+qPMrLDf+/x4Z0h10KosHkI
-         DRIafxNVlhSvwLcfm65ROGgK8O71qTw75HZfom13luCZqsJ4xxhGbTDYyff4dkubf+rW
-         HN+As4MKa8v3RLKI5T+a0qsuKEo9pwYXgu0k2Uq7IU3dhjTsHRzLWRUMY+U62aU3ghGh
-         G1WZlljo0QAwN8ChQT2ayhNifSOy0mUg6DSme5KKHYbbV8ar99Nr0Tnmtx4JScwEfjex
-         iXaQ==
-X-Gm-Message-State: AC+VfDyjFg/K6tRrtV+8P7b37mXooiEnspod5IRy0HQhhu9y12Tb0Y0W
-        rQkGLQwrWpDjJ64J4Wv0QWuwC0VAJwXQwIbq5RZby6LaX0lTrT3daxtKKBgoEUbzdEz+TXISuFa
-        G0C5KqkZyXz4wn/857EwsfyxG99Cc
-X-Received: by 2002:a05:6214:3016:b0:624:dcc5:819f with SMTP id ke22-20020a056214301600b00624dcc5819fmr18149960qvb.1.1684936563056;
-        Wed, 24 May 2023 06:56:03 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4pBPX7+qaDYGxlQoeY6OyplIaXhpMsb5ATbOBD7baiqgZdqLz61HHPSv2R+xgeCMZ81/JTEw==
-X-Received: by 2002:a05:6214:3016:b0:624:dcc5:819f with SMTP id ke22-20020a056214301600b00624dcc5819fmr18149935qvb.1.1684936562709;
-        Wed, 24 May 2023 06:56:02 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id v16-20020a0ccd90000000b00604ee171d99sm3516206qvm.106.2023.05.24.06.56.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 06:56:01 -0700 (PDT)
-Date:   Wed, 24 May 2023 09:55:59 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     linux-mm@kvack.org, Paul Gofman <pgofman@codeweavers.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        Nadav Amit <namit@vmware.com>
-Subject: Re: [PATCH RESEND v15 2/5] fs/proc/task_mmu: Implement IOCTL to get
- and optionally clear info about PTEs
-Message-ID: <ZG4Xb3rYK0p8BoB9@x1n>
-References: <20230420060156.895881-1-usama.anjum@collabora.com>
- <20230420060156.895881-3-usama.anjum@collabora.com>
- <fd9ddd43-6737-88bd-4054-3d5b94534271@collabora.com>
- <ZEkxh6dbnAOuYuJj@x1n>
- <ff17a13f-ccc2-fc39-7731-6d794c7dd980@collabora.com>
- <0edfaf12-66f2-86d3-df1c-f5dff10fb743@collabora.com>
- <ZG0XUZSBI2I3/3bY@x1n>
- <a2615158-a0a6-9c2f-b04a-964dfa932aec@collabora.com>
+        Wed, 24 May 2023 10:15:38 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A0F11D;
+        Wed, 24 May 2023 07:15:34 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 3AB9F60171;
+        Wed, 24 May 2023 16:15:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684937732; bh=jX+U2qFkL9kOsl3dg0r8zNgfUzZNcOzw0PDQGkAamNs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WUBXTR/QeyhHwgnNm5r9PJ08PA2rzdgAlfNohV9mnHMW66F+rg0dv1yrVcv68Wj3F
+         QLKiwDGgaElv61Ic0NPqI28uEQPIbW3fZjkW2QpAT76fRbB/y26oMUJFNdj8VFpq9+
+         G37RE/Hp314P9PiX4RsqKB4R2eq5DKjJoFAA//wgIYH6WEMhBDFVaQZ2G1Esln2afZ
+         LMPHp2Buc3KImvskb8zu/XQWGGdgsnBJE4v3JrFThSRosVoRWZu0zfGtzY7or8OGYb
+         zberJTyZXT/bnn0756FfXt5xCrxMuIzX/pQ6+8d+sJFdajCqZJ+dH4uYIEkhgbDkCu
+         1QaOmR6ot9eTg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9N6Spi061kV4; Wed, 24 May 2023 16:15:29 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id A02346016E;
+        Wed, 24 May 2023 16:15:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684937729; bh=jX+U2qFkL9kOsl3dg0r8zNgfUzZNcOzw0PDQGkAamNs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aa3ToDy02ohu1xgY1IJSmLT7oZGksuVgdPch5gQYpB2oMOrHuwOxAXyqsTGxReO9R
+         0yCvpf4aImJqhxZfQN/u/V7bN/stV7Sigf1Hbnf2PpvO2pK9XNLIt3bdRW6oNkqzZn
+         9e2+oCGCkhSn5VetrIgRHcq0sk3SHPclLVk0lpvowgd4xJASFgFRZKl4vNiALPSTe9
+         h1PMX5MMhxVpWyoAX0gmeqvm6n4rq2xU7zVG0fH/KQ6Ut6Ls09L40NnYa/B3dRXQkp
+         G1CsBzLlZBFHABcN0dLjirMPwZQEv5ok4iyrIeD4aQFe2BL37ROF2I6v+z4/Fgykiz
+         iFFns9Yzs2HVQ==
+Message-ID: <29ae885c-cb7f-412a-43c7-22df8052831b@alu.unizg.hr>
+Date:   Wed, 24 May 2023 16:15:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [BUG] selftests: af_unix: unix:diag.c does not compile on
+ AlmaLinux 8.7
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org
+References: <c993180f-22a8-130a-8487-74fbe4c81335@alu.unizg.hr>
+ <20230522182623.67385-1-kuniyu@amazon.com>
+Content-Language: en-US, hr
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230522182623.67385-1-kuniyu@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a2615158-a0a6-9c2f-b04a-964dfa932aec@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 24, 2023 at 04:26:33PM +0500, Muhammad Usama Anjum wrote:
-> On 5/24/23 12:43 AM, Peter Xu wrote:
-> > Hi, Muhammad,
-> > 
-> > On Mon, May 22, 2023 at 04:26:07PM +0500, Muhammad Usama Anjum wrote:
-> >> On 5/22/23 3:24 PM, Muhammad Usama Anjum wrote:
-> >>> On 4/26/23 7:13 PM, Peter Xu wrote:
-> >>>> Hi, Muhammad,
-> >>>>
-> >>>> On Wed, Apr 26, 2023 at 12:06:23PM +0500, Muhammad Usama Anjum wrote:
-> >>>>> On 4/20/23 11:01 AM, Muhammad Usama Anjum wrote:
-> >>>>>> +/* Supported flags */
-> >>>>>> +#define PM_SCAN_OP_GET	(1 << 0)
-> >>>>>> +#define PM_SCAN_OP_WP	(1 << 1)
-> >>>>> We have only these flag options available in PAGEMAP_SCAN IOCTL.
-> >>>>> PM_SCAN_OP_GET must always be specified for this IOCTL. PM_SCAN_OP_WP can
-> >>>>> be specified as need. But PM_SCAN_OP_WP cannot be specified without
-> >>>>> PM_SCAN_OP_GET. (This was removed after you had asked me to not duplicate
-> >>>>> functionality which can be achieved by UFFDIO_WRITEPROTECT.)
-> >>>>>
-> >>>>> 1) PM_SCAN_OP_GET | PM_SCAN_OP_WP
-> >>>>> vs
-> >>>>> 2) UFFDIO_WRITEPROTECT
-> >>>>>
-> >>>>> After removing the usage of uffd_wp_range() from PAGEMAP_SCAN IOCTL, we are
-> >>>>> getting really good performance which is comparable just like we are
-> >>>>> depending on SOFT_DIRTY flags in the PTE. But when we want to perform wp,
-> >>>>> PM_SCAN_OP_GET | PM_SCAN_OP_WP is more desirable than UFFDIO_WRITEPROTECT
-> >>>>> performance and behavior wise.
-> >>>>>
-> >>>>> I've got the results from someone else that UFFDIO_WRITEPROTECT block
-> >>>>> pagefaults somehow which PAGEMAP_IOCTL doesn't. I still need to verify this
-> >>>>> as I don't have tests comparing them one-to-one.
-> >>>>>
-> >>>>> What are your thoughts about it? Have you thought about making
-> >>>>> UFFDIO_WRITEPROTECT perform better?
-> >>>>>
-> >>>>> I'm sorry to mention the word "performance" here. Actually we want better
-> >>>>> performance to emulate Windows syscall. That is why we are adding this
-> >>>>> functionality. So either we need to see what can be improved in
-> >>>>> UFFDIO_WRITEPROTECT or can I please add only PM_SCAN_OP_WP back in
-> >>>>> pagemap_ioctl?
-> >>>>
-> >>>> I'm fine if you want to add it back if it works for you.  Though before
-> >>>> that, could you remind me why there can be a difference on performance?
-> >>> I've looked at the code again and I think I've found something. Lets look
-> >>> at exact performance numbers:
-> >>>
-> >>> I've run 2 different tests. In first test UFFDIO_WRITEPROTECT is being used
-> >>> for engaging WP. In second test PM_SCAN_OP_WP is being used. I've measured
-> >>> the average write time to the same memory which is being WP-ed and total
-> >>> time of execution of these APIs:
-> > 
-> > What is the steps of the test?  Is it as simple as "writeprotect",
-> > "unprotect", then write all pages in a single thread?
-> > 
-> > Is UFFDIO_WRITEPROTECT sent in one range covering all pages?
-> > 
-> > Maybe you can attach the test program here too.
+Hi,
+
+On 5/22/23 20:26, Kuniyuki Iwashima wrote:
+>>>
+>>> I launched AlmaLinux/RockyLinux 8.7 and 9.2 with images listed in the pages
+>>> below.
+>>>
+>>>     https://wiki.almalinux.org/cloud/AWS.html#community-amis
+>>>     https://rockylinux.org/cloud-images/
+>>>
+>>> The kernel versions in each image were :
+>>>
+>>>     8.7:
+>>>     Alma  : 4.18.0-425.3.1.el8.x86_64
+>>>     Rocky : 4.18.0-425.10.1.el8_7.x86_64
+>>>
+>>>     9.2:
+>>>     Alma  : 5.14.0-284.11.1.el9_2.x86_64
+>>>     Rocky : 5.14.0-284.11.1.el9_2.x86_64
+>>>
+>>> So, this is not a bug.  It's just because v4.18 does not support
+>>> UNIX_DIAG_UID, which was introduced in v5.3.
+>>>
+>>> You should install 5.3+ kernel if you want to build the test.
+>>>
+>>> Thanks,
+>>> Kuniyuki
+>>
+>> Hi, Kuniyuki,
+>>
+>> Good point. However, newer kernel won't save me from old /usr/include
+>> headers, will it?
 > 
-> I'd not attached the test earlier as I thought that you wouldn't be
-> interested in running the test. I've attached it now. The test has multiple
-
-Thanks.  No plan to run it, just to make sure I understand why such a
-difference.
-
-> threads where one thread tries to get status of flags and reset them, while
-> other threads write to that memory. In main(), we call the pagemap_scan
-> ioctl to get status of flags and reset the memory area as well. While in N
-> threads, the memory is written.
+> Sorry, I meant kernel and kernel-headers package that should be
+> updated along with kernel.
 > 
-> I usually run the test by following where memory area is of 100000 * pages:
-> ./win2_linux 8 100000 1 1 0
+> You should use proper header files that match to the actual kernel
+> version running on the machine.
 > 
-> I'm running tests on real hardware. The results are pretty consistent. I'm
-> also testing only on x86_64. PM_SCAN_OP_WP wins every time as compared to
-> UFFDIO_WRITEPROTECT.
+> 
+>> I was actually testing the 6.4-rc3 on AlmaLinux 8.7, as it is my only
+>> RHEL-based box ...
+>>
+>> What would then be the right action?
+> 
+> make headers_install ?
 
-If it's multi-threaded test especially when the ioctl runs together with
-the writers, then I'd assume it's caused by writers frequently need to
-flush tlb (when writes during UFFDIO_WRITEPROTECT), the flush target could
-potentially also include the core running the main thread who is also
-trying to reprotect because they run on the same mm.
+I would rather not to. For the installation to remain manageable,
+preferably I'd have a kernel-devel RPM built.
 
-This makes me think that your current test case probably is the worst case
-of Nadav's patch 6ce64428d6 because (1) the UFFDIO_WRITEPROTECT covers a
-super large range, and (2) there're a _lot_ of concurrent writers during
-the ioctl, so all of them will need to trigger a tlb flush, and that tlb
-flush will further slow down the ioctl sender.
+>> If it was a #define instead of enum, I'd probably work around and
+>> exclude the test that doesn't fit the kernel, or the system call
+>> would return -EINVAL?
+>>
+>> Including from the includes that came with the kernel might be
+>> a solution:
+>>
+>> ../../../../../include/uapi/linux/unix_diag.h:44:	UNIX_DIAG_UID,
+>>
+>> Alas, when I try to include, I get these ugly errors:
+>>
+>> [marvin@pc-mtodorov af_unix]$ gcc -I ../../../../../include/ diag_uid.c
+>> In file included from ../../../../../include/linux/build_bug.h:5,
+>>                    from ../../../../../include/linux/bits.h:21,
+>>                    from ../../../../../include/linux/capability.h:18,
+>>                    from ../../../../../include/linux/netlink.h:6,
+>>                    from diag_uid.c:8:
+>> ../../../../../include/linux/compiler.h:246:10: fatal error:
+>> asm/rwonce.h: No such file or directory
+>>    #include <asm/rwonce.h>
+>>             ^~~~~~~~~~~~~~
+> 
+> FWIW, this is provided by kernel-devel package.
 
-While I think that's the optimal case sometimes, of having minimum tlb
-flush on the ioctl(UFFDIO_WRITEPROTECT), so maybe it makes sense somewhere
-else where concurrent writers are not that much. I'll need to rethink a bit
-on all these to find out whether we can have a good way for both..
+Actually, what is provided is essentially the same as before:
 
-For now, if your workload is mostly exactly like your test case, maybe you
-can have your pagemap version of WP-only op there, making sure tlb flush is
-within the pgtable lock critical section (so you should be safe even
-without Nadav's patch).  If so, I'd appreciate you can add some comment
-somewhere about such difference of using pagemap WP-only and
-ioctl(UFFDIO_WRITEPROTECT), though.  In short, functional-wise they should
-be the same, but trivial detail difference on performance as TBD (maybe one
-day we can have a good approach for all and make them aligned again, but
-maybe that also doesn't need to block your work).
+[root@pc-mtodorov kernel]# rpm -q --fileprovide kernel-devel-6.3.3 | grep rwonce.h
+/usr/src/kernels/6.3.3-100.fc37.x86_64/arch/x86/include/generated/asm/rwonce.h	
+/usr/src/kernels/6.3.3-100.fc37.x86_64/include/asm-generic/rwonce.h	
+[root@pc-mtodorov kernel]#
+
+>> compilation terminated.
+>> [marvin@pc-mtodorov af_unix]$ vi +246
+>> ../../../../../include/linux/compiler.h
+>> [marvin@pc-mtodorov af_unix]$ find ../../../../../include -name rwonce.h
+>> ../../../../../include/asm-generic/rwonce.h
+>> [marvin@pc-mtodorov af_unix]$
+>>
+>> Minimum reproducer is:
+>>
+>> [marvin@pc-mtodorov af_unix]$ gcc -I ../../../../../include/ reproducer.c
+>> In file included from ../../../../../include/linux/build_bug.h:5,
+>>                    from ../../../../../include/linux/bits.h:21,
+>>                    from ../../../../../include/linux/capability.h:18,
+>>                    from ../../../../../include/linux/netlink.h:6,
+>>                    from reproducer.c:5:
+>> ../../../../../include/linux/compiler.h:246:10: fatal error:
+>> asm/rwonce.h: No such file or directory
+>>    #include <asm/rwonce.h>
+>>             ^~~~~~~~~~~~~~
+>> compilation terminated.
+>> [marvin@pc-mtodorov af_unix]$
+>>
+>> [marvin@pc-mtodorov af_unix]$ nl reproducer.c
+>>
+>>        1	#define _GNU_SOURCE
+>>        2	#include <linux/netlink.h>
+>>
+>> [marvin@pc-mtodorov af_unix]$
+>>
+>> Am I doing something very stupid right now, for actually I see
+>>
+>> #include <asm/rwonce.h>
+>>
+>> in "include/linux/compiler.h" 248L, 7843C
+>>
+>> while actual rwonce.h is in <asm-generic/rwonce.h>
+>>
+>> [marvin@pc-mtodorov af_unix]$ find ../../../../../include -name rwonce.h
+>> ../../../../../include/asm-generic/rwonce.h
+>> [marvin@pc-mtodorov af_unix]$
+>>
+>> I must be doing something wrong, for I see that the kernel compiled
+>> despite not having include/asm ?
+>>
+>> When looking at the invocations of rwonce.h in the kernel, they seem to
+>> be equally spread between <asm-generic/rwonce.h> and <asm/rwonce.h> :
+>>
+>> [marvin@pc-mtodorov af_unix]$ grep --include="*.[ch]" -n -w rwonce.h -r ../../../../.. 2> /dev/null | less
+>> ../../../../../arch/alpha/include/asm/rwonce.h:33:#include <asm-generic/rwonce.h>
+>> ../../../../../arch/arm64/include/asm/rwonce.h:71:#include <asm-generic/rwonce.h>
+>> ../../../../../arch/arm64/kvm/hyp/include/nvhe/spinlock.h:18:#include <asm/rwonce.h>
+>> ../../../../../arch/s390/include/asm/rwonce.h:29:#include <asm-generic/rwonce.h>
+>> ../../../../../arch/x86/include/generated/asm/rwonce.h:1:#include <asm-generic/rwonce.h>
+>> ../../../../../include/asm-generic/barrier.h:18:#include <asm/rwonce.h>
+>> ../../../../../include/kunit/test.h:29:#include <asm/rwonce.h>
+>> ../../../../../include/linux/compiler.h:246:#include <asm/rwonce.h>
+>>
+>> I figured out I must be doing something wrong or the kernel otherwise
+>> would not build for me.
+>>
+>> Eventually, the UNIX_DIAG_UID enum is used in only one place:
+>>
+>>           ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
+>>
+>> That particular test should fail in case of kernel older than 5.3.
+> 
+> We don't expect it to be run on older kernels in the first place.
+
+Certainly.
+
+>> However, I fell into a terrible mess where one thing breaks the other.
+>>
+>> I can't seem to make this work.
+>>
+>> Thanks,
+>> Mirsad
 
 -- 
-Peter Xu
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
