@@ -2,159 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5597101AA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 01:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E7E7101CF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 01:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236597AbjEXXXb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 May 2023 19:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
+        id S229772AbjEXXu7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 May 2023 19:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbjEXXXa (ORCPT
+        with ESMTP id S229650AbjEXXu6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 May 2023 19:23:30 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170F699
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 16:23:29 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bcb4a81ceso3172858a12.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 16:23:29 -0700 (PDT)
+        Wed, 24 May 2023 19:50:58 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04067135
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 16:50:57 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64d25a89baeso907269b3a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 16:50:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684970607; x=1687562607;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IjfvWGxrDOW5fKfb30oP8LD/BgqVeZF9JPPMTcWyoW0=;
-        b=PyGvbXNCuLE00GODAd9mW/JkI8NoPtC2g9w0ueTtjeuZD2mm9FaCKV3JZlWbeMOzRj
-         Qw0Je89BQ10M7UBitfu86C6+/W3sI+Oc2k13an9qjrcgqMM+SVUUdrx6aUcZBoIbZHmO
-         FEaZidIvvcn5mUKRtaxC8t0Oan8KihIQupnG8=
+        d=google.com; s=20221208; t=1684972256; x=1687564256;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSR7SiejqAADkjtE2sfBUw7kBDCwXi6R0Pqg2+hbZ5M=;
+        b=sBgm/c/eypRScnM/5VK84NQJotHmdUBdtdu7k+AA2ntAYB6j5QG/rkORL1OXol+KHR
+         V8olrWLcq19w9iPuiX8It70T0bWgLUavXKJVcMFrc9Lcc5uNtTL3TSMcBs6peyxVYbHz
+         8TJwNaRveyodUpGx9k1rKBmJBq6fJYXXo3pftEa2308DCGiNODq5j7xEaVXVbBilzMZR
+         nUvrsvFQxCd4Jh1hWPgKLPYY84wfc/rszy2CSOGTQIirnhWYC64OIaDAYkPGm4obhw+Q
+         KvfboAFt7XMNOhnDUGg7wdUu6I1fkWo6S+YncB0LvSAtW8ZcIyBYPPGeODVGBwdqcnBI
+         4/vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684970607; x=1687562607;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IjfvWGxrDOW5fKfb30oP8LD/BgqVeZF9JPPMTcWyoW0=;
-        b=S8TdAQvb7v+qbMhyHIb6HyFLJo/58kQ4DqNN/l2h8xorCEqFVlooeN7Ho1prXPZEdq
-         6222Qk0QCtF3x3d68JHyUMeT+0h0BkAmNXnFY4+9emURue8TdLIqBUjDbzwl1PP3TNdS
-         pmGfEFcg61C10LL7XrUIafMNiNTq4KKV3S4L3Eo48PJx49quGP2mDQLTtgoQl6GoL4GU
-         mxv4S1ltY9lGNtgysqAhagYmUeFj0zez2ZFzjwhEsYsLVs9hysDQKw+/OUFZnaPFVtGV
-         4SwMjvh3t3DgsJmvIjtSX0wXknf3R1FMKr65eYasv7k1PCLnxQQc6C03kWevnRuTEQdr
-         4ZXQ==
-X-Gm-Message-State: AC+VfDxp3TRlVsWfLy00V89woJUfdJyzj+uYbSVyoOJFwCMCsyqVZkIp
-        ZwS/P652+uGaCOL1YJ7wg9q7E0Otc6PgKROTHtY8lijL
-X-Google-Smtp-Source: ACHHUZ4ZSU68vjZdwbug+O4+rAckzghymQOgElNNJHkkPmEhqD472R3fwpNPYcXFkwTTaPll4e+2lA==
-X-Received: by 2002:a17:906:9b84:b0:94f:5b91:7952 with SMTP id dd4-20020a1709069b8400b0094f5b917952mr20750345ejc.21.1684970607409;
-        Wed, 24 May 2023 16:23:27 -0700 (PDT)
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
-        by smtp.gmail.com with ESMTPSA id e6-20020a170906504600b00965ac1510f8sm10782ejk.185.2023.05.24.16.23.26
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 16:23:26 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-96f850b32caso278517066b.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 16:23:26 -0700 (PDT)
-X-Received: by 2002:a17:906:974b:b0:96f:8b64:c0 with SMTP id
- o11-20020a170906974b00b0096f8b6400c0mr20082278ejy.39.1684970605797; Wed, 24
- May 2023 16:23:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230524153239.3036507-1-joel@joelfernandes.org> <20230524153239.3036507-2-joel@joelfernandes.org>
-In-Reply-To: <20230524153239.3036507-2-joel@joelfernandes.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 24 May 2023 16:23:09 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiNUe7YjK9fmZk+2ZQhjLH-64WrkwnXO9813_iLuaFXuQ@mail.gmail.com>
-Message-ID: <CAHk-=wiNUe7YjK9fmZk+2ZQhjLH-64WrkwnXO9813_iLuaFXuQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] mm/mremap: Optimize the start addresses in move_page_tables()
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684972256; x=1687564256;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSR7SiejqAADkjtE2sfBUw7kBDCwXi6R0Pqg2+hbZ5M=;
+        b=bMM5hCqNZEJ/6mf0M61UMb2GA6XbYLHCA4/nAK4b68AJRPuSzfl8xTq+Ts22blPdtR
+         Ynuyg6h1t/5qkLl2V8kKilEn97RtYhVBVWUayoPfOzfeHMbUIrmvPMOU7A/y+ettQV00
+         2PDxBNNViWi8Gf97TjyQ9kgA2HLAwGs/6sMh2RJQMKiUtjlWGLccBCT010UIZoe97PHi
+         4QgnHh1W8y5Fp7O4cQ38KDV37vS1NTIcaSvhCaPkAhXw1SI43LBtTQ5H0SbC0SD0bPpa
+         WsmzKPulqRT9CMRxM7SWSbN/8w3G5onvqo/XSJUwQ1Fouj7KQXriHZ0jFLgaDe24ZZxV
+         t6cA==
+X-Gm-Message-State: AC+VfDwy+EyEaAn26DtcXumJFDwQ/HImWfTlZ1SA5mAcGqey3U1LqcFJ
+        e1qEdycHYfvseuJx5kqRy3r2hUUOf24=
+X-Google-Smtp-Source: ACHHUZ5++i/grgISdAgXADrF+3dpyM58oC7OV69ywkCye0aodewP+oJLe6AqjUhs2UrhIZ1ob43Es59MFt0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:189c:b0:63a:ff2a:bf9f with SMTP id
+ x28-20020a056a00189c00b0063aff2abf9fmr1730016pfh.2.1684972256482; Wed, 24 May
+ 2023 16:50:56 -0700 (PDT)
+Date:   Wed, 24 May 2023 16:50:54 -0700
+In-Reply-To: <20230420104622.12504-8-ljrcore@126.com>
+Mime-Version: 1.0
+References: <20230420104622.12504-1-ljrcore@126.com> <20230420104622.12504-8-ljrcore@126.com>
+Message-ID: <ZG6i3sqOcZDg/UCG@google.com>
+Subject: Re: [PATCH v2 7/7] KVM: selftests: Test pmu event filter with
+ incompatible kvm_pmu_event_filter
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hmm. I'm still quite unhappy about your can_align_down().
+On Thu, Apr 20, 2023, Jinrong Liang wrote:
+> From: Jinrong Liang <cloudliang@tencent.com>
+> 
+> From: Jinrong Liang <cloudliang@tencent.com>
+> 
+> Add test to verify the behavior of the pmu event filter when an
+> incomplete kvm_pmu_event_filter structure is used. By running the
+> test, we can ensure that the pmu event filter correctly handles
+> incomplete structures and does not allow events to be counted when
+> they should not be.
+> 
+> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+> ---
+>  .../kvm/x86_64/pmu_event_filter_test.c        | 23 +++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> index 9be4c6f8fb7e..a6b6e0d086ae 100644
+> --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> @@ -881,6 +881,24 @@ static bool fixed_ctr_is_allowed(uint8_t idx, uint32_t action, uint32_t bitmap)
+>  		(action == KVM_PMU_EVENT_DENY && !(bitmap & BIT_ULL(idx)));
+>  }
+>  
+> +struct incompatible_pmu_event_filter {
+> +	__u32 action;
+> +	__u32 nevents;
+> +	__u32 fixed_counter_bitmap;
+> +};
+> +
+> +static uint64_t test_incompatible_filter(struct kvm_vcpu *vcpu, uint32_t action,
+> +					 uint32_t bitmap)
+> +{
+> +	struct incompatible_pmu_event_filter err_f;
+> +
+> +	err_f.action = action;
+> +	err_f.fixed_counter_bitmap = bitmap;
+> +	ioctl((vcpu->vm)->fd, KVM_SET_PMU_EVENT_FILTER, &err_f.action);
 
-On Wed, May 24, 2023 at 8:32=E2=80=AFAM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
->
-> +       /* If the masked address is within vma, we cannot align the addre=
-ss down. */
-> +       if (vma->vm_start <=3D addr_masked)
-> +               return false;
+This is completely busted.  It "passes" by luck, not because it's a valid test.
+The size of the argument is embedded in the IOCTL number itself, which means that
+unless glibc is being very nice and using a macro + typeof + sizeof to sanity check
+things, which I highly doubt is the case, this ioctl() is passing random stack data,
+a.k.a. garbage, to KVM.
 
-I don't think this test is right.
-
-The test should not be "is the mapping still there at the point we
-aligned down to".
-
-No, the test should be whether there is any part of the mapping below
-the point we're starting with:
-
-        if (vma->vm_start < addr_to_align)
-                return false;
-
-because we can do the "expand the move down" *only* if it's the
-beginning of the vma (because otherwise we'd be moving part of the vma
-that precedes the address!)
-
-(Alternatively, just make that "<" be "!=3D" - we're basically saying
-that we can expand moving ptes to a pmd boundary *only* if this vma
-starts at that point. No?).
-
-> +       cur =3D find_vma_prev(vma->vm_mm, vma->vm_start, &prev);
-> +       if (!cur || cur !=3D vma || !prev)
-> +               return false;
-
-I've mentioned this test before, and I still find it actively misleading.
-
-First off, the "!cur || cur !=3D vma" test is clearly redundant. We know
-'vma' isn't NULL (we just dereferenced it!). So "cur !=3D vma" already
-includes the "!cur" test.
-
-So that "!cur" part of the test simply *cannot* be sensible.
-
-And the "!prev" test still makes no sense to me. You tried to explain
-it to me earlier, and I clearly didn't get it. It seems actively
-wrong. I still think "!prev" should return true.
-
-You seemed to think that "!prev" couldn';t actually happen and would
-be a sign of some VM problem, but that doesn't make any sense to me.
-Of course !prev can happen - if "vma" is the first vma in the VM and
-there is no previous.
-
-It may be *rare*, but I still don't understand why you'd make that
-"there is no vma below us" mean "we cannot expand the move below us
-because there's something there".
-
-So I continue to think that this test should just be
-
-        if (WARN_ON_ONCE(cur !=3D vma))
-                return false;
-
-because if it ever returns something that *isn't* the same as vma,
-then we do indeed have serious problems. But that WARN_ON_ONCE() shows
-that that's a "cannot happen" thing, not some kind of "if this happens
-than don't do it" test.
-
-and then the *real* test  for "can we align down" should just be
-
-        return !prev || prev->vm_end <=3D addr_masked;
-
-Because while I think your code _works_, it really doesn't seem to
-make much sense as it stands in your patch. The tests are actively
-misleading. No?
-
-                 Linus
+In short, drop this patch.
