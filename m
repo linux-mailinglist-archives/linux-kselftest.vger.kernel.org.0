@@ -2,153 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BB270F86F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 16:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001E770F9BE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 17:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235683AbjEXOQd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 May 2023 10:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
+        id S235449AbjEXPGi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 May 2023 11:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235635AbjEXOQa (ORCPT
+        with ESMTP id S232950AbjEXPGh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 May 2023 10:16:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F45212F;
-        Wed, 24 May 2023 07:16:28 -0700 (PDT)
-Received: from [192.168.10.48] (unknown [119.155.11.156])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AFC8E6605943;
-        Wed, 24 May 2023 15:16:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684937786;
-        bh=AuJTdSQvXF6YuhHcmscNAwhCf5setc7Hta7xDcqui0k=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=fIm4enJ3OeMwYz3UmiX6os2xp2qfzmCLKiUjTfJ4WEheyVlpslMtqmurhm5tWkKaE
-         B5c862c9aeNgkl2gI4F0CHbOHo9bCwe0x1uvKAZ/Ysnlpi3cIWXeQ2Bz3HiLhkEeRM
-         9a8r0sAzu0TsuTVvBmJ4/eabCHK0KDuQFc/s+dr0jaSKCc0cjrKYJEahnBrOKm4PRi
-         QLsTEsZBuLUD9wscuazomaYC3KRhTITFTzEJJ+rp00hx1mdxxV5Ijtx4xWfAaB52sm
-         xDB1AKaJuABxKR46EqktjF1zovF2M9Zmgm1WFZ4OkXRpgzwW3Q6Qb/m0OIcDkaoDUD
-         ByXuRdFihANXg==
-Message-ID: <8947d94d-8229-f8ee-e981-9b73462ecb94@collabora.com>
-Date:   Wed, 24 May 2023 19:16:02 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        linux-mm@kvack.org, Paul Gofman <pgofman@codeweavers.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Wed, 24 May 2023 11:06:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3A1119
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 08:05:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684940753;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C1IKq4W7kXMUcZYad8O4aYshE6tNJx+8XRtusGP3BwA=;
+        b=QJqgdYbXa0g6GRMXw5usVbdPiN0y5xICoRwFWdLNeOkfzvZ72Xn9Du+otHLp4J7KQ0Y+mc
+        ND3TZcUT+WfuQv0M9oSo4OsJvPkQpUJv6hn71djvcovqczmYhWrV7DM/JIWTH35onQczVs
+        CQ4KNouko0sfd+NSl90Fje9vIVdQfE0=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-480-8Zj2hkodP9-K8UqYoAw3_g-1; Wed, 24 May 2023 11:05:51 -0400
+X-MC-Unique: 8Zj2hkodP9-K8UqYoAw3_g-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75b175cf0d1so24929685a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 08:05:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684940746; x=1687532746;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C1IKq4W7kXMUcZYad8O4aYshE6tNJx+8XRtusGP3BwA=;
+        b=VZXAPXJ9KjMOhE7Kfqm0XeJ6RyJ7mpkZfrLGwIf4XEcE7qP33nWcYyZ+tG0thIq7fL
+         swig2UdG3047BeV2KoJe83fbAit7pGgxfEjoPwhx/8vQl8irL0TenPdSycrPya7JKxCi
+         ELmMq37xsS2DhFVpL+dFMC2UyPejWA8LMhjCrMJaNkFL3o0ugyMFDCN1GPVx4HVqKqr+
+         IWioT2/2OyXmL8dO4/kkiMzTr/7LPNItPhxL/HC/S0JRZBqMJ8oa24YgZ3T4tDuNFx5K
+         rLu8PGr+uNtMgV2MqrRa3avTEeexxqzvJGUKnyLU2uo++7iWakhpKpfN4Vik4eFHhCtd
+         03Bw==
+X-Gm-Message-State: AC+VfDxaFP+ithglQMNuEI4GLA6Hegidb2YrgsFM4EdVijn9GPbtino5
+        7/bkbvEPJZW58lBg9YpYN/5aI5CH/0Dbjg1IpIEAE6jh+aGVuadHtFoO1yYP8vYaJSmUB65LLtQ
+        qj8Edxc1LLtqPRESEtFXLEJcZyUjB
+X-Received: by 2002:ad4:5961:0:b0:625:aa49:a48b with SMTP id eq1-20020ad45961000000b00625aa49a48bmr2106789qvb.6.1684940746118;
+        Wed, 24 May 2023 08:05:46 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5u2JsTk1mmNXoqf84VPpm8+rDS0A+qmShWJLS/640lXVGHgY6BmYlqoYyLv6ghI1O3C3OnlA==
+X-Received: by 2002:ad4:5961:0:b0:625:aa49:a48b with SMTP id eq1-20020ad45961000000b00625aa49a48bmr2106736qvb.6.1684940745557;
+        Wed, 24 May 2023 08:05:45 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id v10-20020a0cf90a000000b0062136626e09sm3625337qvn.57.2023.05.24.08.05.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 08:05:44 -0700 (PDT)
+Date:   Wed, 24 May 2023 11:05:43 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
         David Hildenbrand <david@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        Nadav Amit <namit@vmware.com>
-Subject: Re: [PATCH RESEND v15 2/5] fs/proc/task_mmu: Implement IOCTL to get
- and optionally clear info about PTEs
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230420060156.895881-1-usama.anjum@collabora.com>
- <20230420060156.895881-3-usama.anjum@collabora.com>
- <fd9ddd43-6737-88bd-4054-3d5b94534271@collabora.com> <ZEkxh6dbnAOuYuJj@x1n>
- <ff17a13f-ccc2-fc39-7731-6d794c7dd980@collabora.com>
- <0edfaf12-66f2-86d3-df1c-f5dff10fb743@collabora.com> <ZG0XUZSBI2I3/3bY@x1n>
- <a2615158-a0a6-9c2f-b04a-964dfa932aec@collabora.com> <ZG4Xb3rYK0p8BoB9@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZG4Xb3rYK0p8BoB9@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Huang Ying <ying.huang@intel.com>,
+        James Houghton <jthoughton@google.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
+Message-ID: <ZG4nxwdbWzhtR4pP@x1n>
+References: <20230511182426.1898675-1-axelrasmussen@google.com>
+ <ZGz3LeRyghnv4wwZ@x1n>
+ <CAJHvVcjh6hOrZyr1t92v07+PVNVJH-BnPDs+ZSUWsLVjpLEuHA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJHvVcjh6hOrZyr1t92v07+PVNVJH-BnPDs+ZSUWsLVjpLEuHA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/24/23 6:55 PM, Peter Xu wrote:
-...
->>> What is the steps of the test?  Is it as simple as "writeprotect",
->>> "unprotect", then write all pages in a single thread?
->>>
->>> Is UFFDIO_WRITEPROTECT sent in one range covering all pages?
->>>
->>> Maybe you can attach the test program here too.
->>
->> I'd not attached the test earlier as I thought that you wouldn't be
->> interested in running the test. I've attached it now. The test has multiple
+On Tue, May 23, 2023 at 10:59:05AM -0700, Axel Rasmussen wrote:
+> > Actually.. I think maybe we should have 1 patch changing SWAPIN_ERROR from
+> > VM_FAULT_SIGBUS to VM_FAULT_HWPOISON.
+> >
+> > Let's imagine a VM having anonymous page backing and got a swapin error
+> > when faulted on one of the guest page.  Instead of crashing the hypervisor
+> > with sigbus we should probably make it a MCE injected into the guest too,
+> > because there's no page corrupt in bare metal in this specific case,
+> > however to the guest it's the same as having one page corrupted just like a
+> > real MCE.
 > 
-> Thanks.  No plan to run it, just to make sure I understand why such a
-> difference.
-> 
->> threads where one thread tries to get status of flags and reset them, while
->> other threads write to that memory. In main(), we call the pagemap_scan
->> ioctl to get status of flags and reset the memory area as well. While in N
->> threads, the memory is written.
->>
->> I usually run the test by following where memory area is of 100000 * pages:
->> ./win2_linux 8 100000 1 1 0
->>
->> I'm running tests on real hardware. The results are pretty consistent. I'm
->> also testing only on x86_64. PM_SCAN_OP_WP wins every time as compared to
->> UFFDIO_WRITEPROTECT.
-> 
-> If it's multi-threaded test especially when the ioctl runs together with
-> the writers, then I'd assume it's caused by writers frequently need to
-> flush tlb (when writes during UFFDIO_WRITEPROTECT), the flush target could
-> potentially also include the core running the main thread who is also
-> trying to reprotect because they run on the same mm.
-> 
-> This makes me think that your current test case probably is the worst case
-> of Nadav's patch 6ce64428d6 because (1) the UFFDIO_WRITEPROTECT covers a
-> super large range, and (2) there're a _lot_ of concurrent writers during
-> the ioctl, so all of them will need to trigger a tlb flush, and that tlb
-> flush will further slow down the ioctl sender.
-> 
-> While I think that's the optimal case sometimes, of having minimum tlb
-> flush on the ioctl(UFFDIO_WRITEPROTECT), so maybe it makes sense somewhere
-> else where concurrent writers are not that much. I'll need to rethink a bit
-> on all these to find out whether we can have a good way for both..
-> 
-> For now, if your workload is mostly exactly like your test case, maybe you
-> can have your pagemap version of WP-only op there, making sure tlb flush is
-> within the pgtable lock critical section (so you should be safe even
-> without Nadav's patch).  If so, I'd appreciate you can add some comment
-> somewhere about such difference of using pagemap WP-only and
-> ioctl(UFFDIO_WRITEPROTECT), though.  In short, functional-wise they should
-> be the same, but trivial detail difference on performance as TBD (maybe one
-> day we can have a good approach for all and make them aligned again, but
-> maybe that also doesn't need to block your work).
-Thank you for understanding what I've been trying to convey. We are going
-to translate Windows syscall to this new ioctl. So it is very difficult to
-find out the exact use cases as application must be using this syscall in
-several different ways. There is one thing for sure is that we want to get
-best performance possible which we are getting by adding WP-only. I'll add
-it and send v16. I think that we are almost there.
+> This is a great idea, you're right that injecting an MCE into the
+> guest is exactly the end goal, and it seems like VM_FAULT_HWPOISON
+> will "just work". Also the name UFFDIO_POISON resolves any confusion
+> with UFFD_FEATURE_SIGBUS, so that's a nice side benefit.
 
-> 
+Hopefully!  Please double check it with KVM running altogether to make sure
+the patch works exactly as expected.
+
+[...]
+
+> We'll want hugetlbfs support for this operation too, but it's only
+> really useful (at least for our use case) after HGM is merged. But,
+> there's no strong reason not to just implement both all at once - I'll
+> extend v2 to also work properly with hugetlbfs. Probably it isn't too
+> hard, I just need to do a bit more reading of how swap markers are
+> handled in hugetlbfs.
+
+Sure.  We have too many flags separating different types of memory, so I
+think it'll be nice if when it can still trivially work for everything.
+
+For this specific case, since your goal is definitely having hugetlb hgm
+supported so it'll be even more trickier if only hgm will be supported but
+not !hgm hugetlbs, so we'd better target it initially with all mem types.
+
+Thanks,
 
 -- 
-BR,
-Muhammad Usama Anjum
+Peter Xu
+
