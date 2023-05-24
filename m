@@ -2,116 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A4D70F60B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 14:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BFC70F81B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 May 2023 15:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjEXMRR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 May 2023 08:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S235591AbjEXN4t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 May 2023 09:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjEXMRQ (ORCPT
+        with ESMTP id S234058AbjEXN4s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 May 2023 08:17:16 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586429E;
-        Wed, 24 May 2023 05:17:15 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id B814360171;
-        Wed, 24 May 2023 14:17:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684930632; bh=7oaHgsYtGJMz7ohGu+nRJErGUb5J0i5cHkLkmjiGsqE=;
-        h=Date:From:Subject:To:Cc:From;
-        b=gDdy0PmrUhfA8awUg01ac5maTXvy/enMvSPmzLB6HNBXtfjkDT6dJP0mBeq4F+Ve8
-         1KRKVaUk5BcAz7dfo8VPuD9C0aNb24/AQu6sNzLEQxh7dkYwiesJeUvRTuurhwxbnF
-         Z49M0ygHp+wciR92alsYw9q+/WLXSnhvzZcFTmojl8iLoCRt8N1gIW6ppg1Dle/6xk
-         W4rszBHGzYquAgXsrZ/W5nKtS3ho4jVrmWOB1wdVP2oHm0/ba6r8LY5vcujpUBRPZh
-         QBU1eEvAXGE84OZqWm0evlTCE5LWdHTqaVVPURlS+N+wU9xgN3vjrHD0OUSzIT0ExX
-         VGybdFkWpegRw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1gKch49mTtPy; Wed, 24 May 2023 14:17:10 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id D1A0F6016E;
-        Wed, 24 May 2023 14:17:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684930630; bh=7oaHgsYtGJMz7ohGu+nRJErGUb5J0i5cHkLkmjiGsqE=;
-        h=Date:From:Subject:To:Cc:From;
-        b=kAARxCy4DpHwrwqLgbkQcCFSYZ8BUmT2gtK70wCHT8fOKyfvApClcRkl+tlDiOsgl
-         revW1jwANOS/d32z3UUr+ZHyYneFumPFWTNzVDcDvYM30h/ABAlzdgczUESxdzqDFc
-         3qGhvZoNzjK+FkcBPA3WEMjyLgolJ1vHEeOotfP7OUWNHQWmKcZSYkVVgTtQ6vR4gZ
-         89CQfrMJ7mAJ76Qd9dkCLTSZD35AamRNjmqc3meQkHWnnbGDxam/aWiiKCVJRNezc9
-         yo6PHklYMVm+jh0CrYvAcojQNhkQhd+xKOIkFtxLV9hgDc82/jBWPKTZzo+502UPl2
-         5QfgyMlBZRrNQ==
-Message-ID: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
-Date:   Wed, 24 May 2023 14:17:09 +0200
+        Wed, 24 May 2023 09:56:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAB6AA
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 06:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684936565;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zqvJBcdP4jWNQEKJ2URv+kldtu3J4d9i0mGEu6ibPxU=;
+        b=JK9TdI1Obgk0C6Zpv5jhW7Gey8NK0fXzMuxz3kOnWx9C4v4st7MG3axd7yDNJiXG+ssE7z
+        SarlZ0fJATvxr8rPuL+vM5vEW/T2s9vyBxJjfgsUSenK9pASCzINn7ghniTeqLUCxIMv/i
+        nsteSD5k6xSULWual6kVk52vSfUVP8g=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-472-XUWViPgHPsGPmkYw10FdQg-1; Wed, 24 May 2023 09:56:03 -0400
+X-MC-Unique: XUWViPgHPsGPmkYw10FdQg-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-625891d5ad5so1928676d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 06:56:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684936563; x=1687528563;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zqvJBcdP4jWNQEKJ2URv+kldtu3J4d9i0mGEu6ibPxU=;
+        b=eDzKbQWZNhajbxdv2H+cmiksDI8IShEc146cExor+laJIfWH/+S1DUzrT7TtNd89/M
+         fjGqqw2O3nJW6Vl78Cp6E59D1cnXfbv7jHdM3WWgFSI3v+qPMrLDf+/x4Z0h10KosHkI
+         DRIafxNVlhSvwLcfm65ROGgK8O71qTw75HZfom13luCZqsJ4xxhGbTDYyff4dkubf+rW
+         HN+As4MKa8v3RLKI5T+a0qsuKEo9pwYXgu0k2Uq7IU3dhjTsHRzLWRUMY+U62aU3ghGh
+         G1WZlljo0QAwN8ChQT2ayhNifSOy0mUg6DSme5KKHYbbV8ar99Nr0Tnmtx4JScwEfjex
+         iXaQ==
+X-Gm-Message-State: AC+VfDyjFg/K6tRrtV+8P7b37mXooiEnspod5IRy0HQhhu9y12Tb0Y0W
+        rQkGLQwrWpDjJ64J4Wv0QWuwC0VAJwXQwIbq5RZby6LaX0lTrT3daxtKKBgoEUbzdEz+TXISuFa
+        G0C5KqkZyXz4wn/857EwsfyxG99Cc
+X-Received: by 2002:a05:6214:3016:b0:624:dcc5:819f with SMTP id ke22-20020a056214301600b00624dcc5819fmr18149960qvb.1.1684936563056;
+        Wed, 24 May 2023 06:56:03 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4pBPX7+qaDYGxlQoeY6OyplIaXhpMsb5ATbOBD7baiqgZdqLz61HHPSv2R+xgeCMZ81/JTEw==
+X-Received: by 2002:a05:6214:3016:b0:624:dcc5:819f with SMTP id ke22-20020a056214301600b00624dcc5819fmr18149935qvb.1.1684936562709;
+        Wed, 24 May 2023 06:56:02 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id v16-20020a0ccd90000000b00604ee171d99sm3516206qvm.106.2023.05.24.06.56.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 06:56:01 -0700 (PDT)
+Date:   Wed, 24 May 2023 09:55:59 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     linux-mm@kvack.org, Paul Gofman <pgofman@codeweavers.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Nadav Amit <namit@vmware.com>
+Subject: Re: [PATCH RESEND v15 2/5] fs/proc/task_mmu: Implement IOCTL to get
+ and optionally clear info about PTEs
+Message-ID: <ZG4Xb3rYK0p8BoB9@x1n>
+References: <20230420060156.895881-1-usama.anjum@collabora.com>
+ <20230420060156.895881-3-usama.anjum@collabora.com>
+ <fd9ddd43-6737-88bd-4054-3d5b94534271@collabora.com>
+ <ZEkxh6dbnAOuYuJj@x1n>
+ <ff17a13f-ccc2-fc39-7731-6d794c7dd980@collabora.com>
+ <0edfaf12-66f2-86d3-df1c-f5dff10fb743@collabora.com>
+ <ZG0XUZSBI2I3/3bY@x1n>
+ <a2615158-a0a6-9c2f-b04a-964dfa932aec@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, hr
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL] in vrf "bind - ns-B
- IPv6 LLA" test
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Guillaume Nault <gnault@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a2615158-a0a6-9c2f-b04a-964dfa932aec@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On Wed, May 24, 2023 at 04:26:33PM +0500, Muhammad Usama Anjum wrote:
+> On 5/24/23 12:43 AM, Peter Xu wrote:
+> > Hi, Muhammad,
+> > 
+> > On Mon, May 22, 2023 at 04:26:07PM +0500, Muhammad Usama Anjum wrote:
+> >> On 5/22/23 3:24 PM, Muhammad Usama Anjum wrote:
+> >>> On 4/26/23 7:13 PM, Peter Xu wrote:
+> >>>> Hi, Muhammad,
+> >>>>
+> >>>> On Wed, Apr 26, 2023 at 12:06:23PM +0500, Muhammad Usama Anjum wrote:
+> >>>>> On 4/20/23 11:01 AM, Muhammad Usama Anjum wrote:
+> >>>>>> +/* Supported flags */
+> >>>>>> +#define PM_SCAN_OP_GET	(1 << 0)
+> >>>>>> +#define PM_SCAN_OP_WP	(1 << 1)
+> >>>>> We have only these flag options available in PAGEMAP_SCAN IOCTL.
+> >>>>> PM_SCAN_OP_GET must always be specified for this IOCTL. PM_SCAN_OP_WP can
+> >>>>> be specified as need. But PM_SCAN_OP_WP cannot be specified without
+> >>>>> PM_SCAN_OP_GET. (This was removed after you had asked me to not duplicate
+> >>>>> functionality which can be achieved by UFFDIO_WRITEPROTECT.)
+> >>>>>
+> >>>>> 1) PM_SCAN_OP_GET | PM_SCAN_OP_WP
+> >>>>> vs
+> >>>>> 2) UFFDIO_WRITEPROTECT
+> >>>>>
+> >>>>> After removing the usage of uffd_wp_range() from PAGEMAP_SCAN IOCTL, we are
+> >>>>> getting really good performance which is comparable just like we are
+> >>>>> depending on SOFT_DIRTY flags in the PTE. But when we want to perform wp,
+> >>>>> PM_SCAN_OP_GET | PM_SCAN_OP_WP is more desirable than UFFDIO_WRITEPROTECT
+> >>>>> performance and behavior wise.
+> >>>>>
+> >>>>> I've got the results from someone else that UFFDIO_WRITEPROTECT block
+> >>>>> pagefaults somehow which PAGEMAP_IOCTL doesn't. I still need to verify this
+> >>>>> as I don't have tests comparing them one-to-one.
+> >>>>>
+> >>>>> What are your thoughts about it? Have you thought about making
+> >>>>> UFFDIO_WRITEPROTECT perform better?
+> >>>>>
+> >>>>> I'm sorry to mention the word "performance" here. Actually we want better
+> >>>>> performance to emulate Windows syscall. That is why we are adding this
+> >>>>> functionality. So either we need to see what can be improved in
+> >>>>> UFFDIO_WRITEPROTECT or can I please add only PM_SCAN_OP_WP back in
+> >>>>> pagemap_ioctl?
+> >>>>
+> >>>> I'm fine if you want to add it back if it works for you.  Though before
+> >>>> that, could you remind me why there can be a difference on performance?
+> >>> I've looked at the code again and I think I've found something. Lets look
+> >>> at exact performance numbers:
+> >>>
+> >>> I've run 2 different tests. In first test UFFDIO_WRITEPROTECT is being used
+> >>> for engaging WP. In second test PM_SCAN_OP_WP is being used. I've measured
+> >>> the average write time to the same memory which is being WP-ed and total
+> >>> time of execution of these APIs:
+> > 
+> > What is the steps of the test?  Is it as simple as "writeprotect",
+> > "unprotect", then write all pages in a single thread?
+> > 
+> > Is UFFDIO_WRITEPROTECT sent in one range covering all pages?
+> > 
+> > Maybe you can attach the test program here too.
+> 
+> I'd not attached the test earlier as I thought that you wouldn't be
+> interested in running the test. I've attached it now. The test has multiple
 
-The very recent 6.4-rc3 kernel build with AlmaLinux 8.7 on LENOVO 10TX000VCR
-desktop box fails one test:
+Thanks.  No plan to run it, just to make sure I understand why such a
+difference.
 
-[root@host net]# ./fcnal-test.sh
-[...]
-TEST: ping out, vrf device+address bind - ns-B loopback IPv6                  [ OK ]
-TEST: ping out, vrf device+address bind - ns-B IPv6 LLA                       [FAIL]
-TEST: ping in - ns-A IPv6                                                     [ OK ]
-[...]
-Tests passed: 887
-Tests failed:   1
-[root@host net]#
+> threads where one thread tries to get status of flags and reset them, while
+> other threads write to that memory. In main(), we call the pagemap_scan
+> ioctl to get status of flags and reset the memory area as well. While in N
+> threads, the memory is written.
+> 
+> I usually run the test by following where memory area is of 100000 * pages:
+> ./win2_linux 8 100000 1 1 0
+> 
+> I'm running tests on real hardware. The results are pretty consistent. I'm
+> also testing only on x86_64. PM_SCAN_OP_WP wins every time as compared to
+> UFFDIO_WRITEPROTECT.
 
-Please find the config, + dmesg and lshw output here:
+If it's multi-threaded test especially when the ioctl runs together with
+the writers, then I'd assume it's caused by writers frequently need to
+flush tlb (when writes during UFFDIO_WRITEPROTECT), the flush target could
+potentially also include the core running the main thread who is also
+trying to reprotect because they run on the same mm.
 
-https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-fcnal-test/config-6.4-rc3
-https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-fcnal-test/dmesg.log
-https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-fcnal-test/lshw.txt
+This makes me think that your current test case probably is the worst case
+of Nadav's patch 6ce64428d6 because (1) the UFFDIO_WRITEPROTECT covers a
+super large range, and (2) there're a _lot_ of concurrent writers during
+the ioctl, so all of them will need to trigger a tlb flush, and that tlb
+flush will further slow down the ioctl sender.
 
-I believe that I have all required configs merged for the selftest/net tests.
+While I think that's the optimal case sometimes, of having minimum tlb
+flush on the ioctl(UFFDIO_WRITEPROTECT), so maybe it makes sense somewhere
+else where concurrent writers are not that much. I'll need to rethink a bit
+on all these to find out whether we can have a good way for both..
 
-Maybe we have a regression?
-
-My knowledge of fcnal-test.sh isn't sufficient to build a smaller reproducer.
-
-Guillaume said in January he could help with the net/fcnal-test.sh, but I was doing
-the other things in the meantime. Tempus fugit :-/
-
-Best regards,
-Mirsad
+For now, if your workload is mostly exactly like your test case, maybe you
+can have your pagemap version of WP-only op there, making sure tlb flush is
+within the pgtable lock critical section (so you should be safe even
+without Nadav's patch).  If so, I'd appreciate you can add some comment
+somewhere about such difference of using pagemap WP-only and
+ioctl(UFFDIO_WRITEPROTECT), though.  In short, functional-wise they should
+be the same, but trivial detail difference on performance as TBD (maybe one
+day we can have a good approach for all and make them aligned again, but
+maybe that also doesn't need to block your work).
 
 -- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+Peter Xu
 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-
-"What’s this thing suddenly coming towards me very fast? Very very fast.
-... I wonder if it will be friends with me?"
