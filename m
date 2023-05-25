@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA53710655
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 09:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5D471065B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 09:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239275AbjEYHfS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 May 2023 03:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
+        id S239380AbjEYHfY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 May 2023 03:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238376AbjEYHfQ (ORCPT
+        with ESMTP id S239374AbjEYHfV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 May 2023 03:35:16 -0400
+        Thu, 25 May 2023 03:35:21 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B76186;
-        Thu, 25 May 2023 00:35:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8280D1B4;
+        Thu, 25 May 2023 00:35:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685000115; x=1716536115;
+  t=1685000120; x=1716536120;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=f527YugtekorTYjnVJ/ClZh5W6FzG4rfed15FmLtlHo=;
-  b=EAlxunOQbRBttQD2qHYW4ZAfrcE5+0rhC0ECCsQ15zUZ3Sj6Y2zCB+8a
-   zqT20hUNs823q1lRfIGgX1I4LkY+PR/BSDy5w0x9hV+tzKEORUC/Y6jUg
-   3XvavOH4TPVRl43vXKL2CownNlR+CYFiL+jwo6z63mcGbloREqzywqP9D
-   GeXM7OnB0LnHbXprmXhgc5Da7yyCRHR5Zu+BKWv6tTXSQqZhgn6wQt81P
-   ZCMg3j2WxZYVytGwJNWOnkvvnm/CgeskuW2KrQneNayhneyxgmyJK7MoK
-   /TJvcBjqYykTpA10N6lBsda19PLiYsp3mjVmQ6yI2vCeQlT6vWmUwRTW9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="417280896"
+  bh=c+5BYx6uxDzf2AOSUkteXATXATp9lAsrDmetUgOlVVk=;
+  b=lMPmTih9SnsLYtUi2njKtoKwcJ08vzwSCYZn34IQD1iWvmNa3ZRSVPbW
+   7i5zgFYQAXXDgoKwhoq++6qfGaT7D6E316Xkmu8Si9XZAeamz/MVuOnDd
+   I4sxUOrUCognQBTfSqZ/l8TIZFPcohq1I9yx1IWDTwnFLvYgdClMdyfmQ
+   xjHFU1AKhVuD+Y+kOVY+sTz9aAoiOhW78zZFXiAvQw5nmxFLkEsNCB/tV
+   KdxyyMs65or/AmtJE/4E2VSa5Wh4c9Gx6W+oSuxmvb26aQLMaibnHtGrl
+   MBs6S6Z4fIyu+QECsv+NULNl/bEIXFyDYrwW0hUIVR1noOOvpeVSbeL1X
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="417280977"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="417280896"
+   d="scan'208";a="417280977"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 00:32:53 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 00:33:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="769774695"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="769774904"
 X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="769774695"
+   d="scan'208";a="769774904"
 Received: from haibo-optiplex-7090.sh.intel.com ([10.239.159.132])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 00:32:46 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 00:33:00 -0700
 From:   Haibo Xu <haibo1.xu@intel.com>
 Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         maz@kernel.org, oliver.upton@linux.dev, seanjc@google.com,
@@ -61,9 +61,9 @@ Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: [PATCH v2 01/11] KVM: arm64: selftests: Replace str_with_index with strdup_printf
-Date:   Thu, 25 May 2023 15:38:25 +0800
-Message-Id: <ddec70e63111a2869028c356e177c4de4e1a4b8d.1684999824.git.haibo1.xu@intel.com>
+Subject: [PATCH v2 02/11] KVM: arm64: selftests: Drop SVE cap check in print_reg
+Date:   Thu, 25 May 2023 15:38:26 +0800
+Message-Id: <259df68b544dd7254fe4a65be8f39e9d766ac6da.1684999824.git.haibo1.xu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1684999824.git.haibo1.xu@intel.com>
 References: <cover.1684999824.git.haibo1.xu@intel.com>
@@ -82,125 +82,48 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Andrew Jones <ajones@ventanamicro.com>
 
-The original author of aarch64/get-reg-list.c (me) was wearing
-tunnel vision goggles when implementing str_with_index(). There's
-no reason to have such a special case string function. Instead,
-take inspiration from glib and implement strdup_printf. The
-implementation builds on vasprintf() which requires _GNU_SOURCE,
-but we require _GNU_SOURCE in most files already.
+The check doesn't prove much anyway, as the reg lists could be
+messed up too. Just drop the check to simplify making print_reg
+more independent.
 
 Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
 ---
- .../selftests/kvm/aarch64/get-reg-list.c      | 23 ++++---------------
- .../testing/selftests/kvm/include/test_util.h |  2 ++
- tools/testing/selftests/kvm/lib/test_util.c   | 15 ++++++++++++
- 3 files changed, 22 insertions(+), 18 deletions(-)
+ .../testing/selftests/kvm/aarch64/get-reg-list.c  | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-index d4e1f4af29d6..c152523a5ed4 100644
+index c152523a5ed4..915272c342f9 100644
 --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
 +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-@@ -132,19 +132,6 @@ static bool find_reg(__u64 regs[], __u64 nr_regs, __u64 reg)
- 	return false;
+@@ -100,16 +100,6 @@ static const char *config_name(struct vcpu_config *c)
+ 	return c->name;
  }
  
--static const char *str_with_index(const char *template, __u64 index)
+-static bool has_cap(struct vcpu_config *c, long capability)
 -{
--	char *str, *p;
--	int n;
+-	struct reg_sublist *s;
 -
--	str = strdup(template);
--	p = strstr(str, "##");
--	n = sprintf(p, "%lld", index);
--	strcat(p + n, strstr(template, "##") + 2);
--
--	return (const char *)str;
+-	for_each_sublist(c, s)
+-		if (s->capability == capability)
+-			return true;
+-	return false;
 -}
 -
- #define REG_MASK (KVM_REG_ARCH_MASK | KVM_REG_SIZE_MASK | KVM_REG_ARM_COPROC_MASK)
- 
- #define CORE_REGS_XX_NR_WORDS	2
-@@ -163,7 +150,7 @@ static const char *core_id_to_str(struct vcpu_config *c, __u64 id)
- 	     KVM_REG_ARM_CORE_REG(regs.regs[30]):
- 		idx = (core_off - KVM_REG_ARM_CORE_REG(regs.regs[0])) / CORE_REGS_XX_NR_WORDS;
- 		TEST_ASSERT(idx < 31, "%s: Unexpected regs.regs index: %lld", config_name(c), idx);
--		return str_with_index("KVM_REG_ARM_CORE_REG(regs.regs[##])", idx);
-+		return strdup_printf("KVM_REG_ARM_CORE_REG(regs.regs[%lld])", idx);
- 	case KVM_REG_ARM_CORE_REG(regs.sp):
- 		return "KVM_REG_ARM_CORE_REG(regs.sp)";
- 	case KVM_REG_ARM_CORE_REG(regs.pc):
-@@ -178,12 +165,12 @@ static const char *core_id_to_str(struct vcpu_config *c, __u64 id)
- 	     KVM_REG_ARM_CORE_REG(spsr[KVM_NR_SPSR - 1]):
- 		idx = (core_off - KVM_REG_ARM_CORE_REG(spsr[0])) / CORE_SPSR_XX_NR_WORDS;
- 		TEST_ASSERT(idx < KVM_NR_SPSR, "%s: Unexpected spsr index: %lld", config_name(c), idx);
--		return str_with_index("KVM_REG_ARM_CORE_REG(spsr[##])", idx);
-+		return strdup_printf("KVM_REG_ARM_CORE_REG(spsr[%lld])", idx);
- 	case KVM_REG_ARM_CORE_REG(fp_regs.vregs[0]) ...
- 	     KVM_REG_ARM_CORE_REG(fp_regs.vregs[31]):
- 		idx = (core_off - KVM_REG_ARM_CORE_REG(fp_regs.vregs[0])) / CORE_FPREGS_XX_NR_WORDS;
- 		TEST_ASSERT(idx < 32, "%s: Unexpected fp_regs.vregs index: %lld", config_name(c), idx);
--		return str_with_index("KVM_REG_ARM_CORE_REG(fp_regs.vregs[##])", idx);
-+		return strdup_printf("KVM_REG_ARM_CORE_REG(fp_regs.vregs[%lld])", idx);
- 	case KVM_REG_ARM_CORE_REG(fp_regs.fpsr):
- 		return "KVM_REG_ARM_CORE_REG(fp_regs.fpsr)";
- 	case KVM_REG_ARM_CORE_REG(fp_regs.fpcr):
-@@ -212,13 +199,13 @@ static const char *sve_id_to_str(struct vcpu_config *c, __u64 id)
- 		n = (id >> 5) & (KVM_ARM64_SVE_NUM_ZREGS - 1);
- 		TEST_ASSERT(id == KVM_REG_ARM64_SVE_ZREG(n, 0),
- 			    "%s: Unexpected bits set in SVE ZREG id: 0x%llx", config_name(c), id);
--		return str_with_index("KVM_REG_ARM64_SVE_ZREG(##, 0)", n);
-+		return strdup_printf("KVM_REG_ARM64_SVE_ZREG(%lld, 0)", n);
- 	case KVM_REG_ARM64_SVE_PREG_BASE ...
- 	     KVM_REG_ARM64_SVE_PREG_BASE + (1ULL << 5) * KVM_ARM64_SVE_NUM_PREGS - 1:
- 		n = (id >> 5) & (KVM_ARM64_SVE_NUM_PREGS - 1);
- 		TEST_ASSERT(id == KVM_REG_ARM64_SVE_PREG(n, 0),
- 			    "%s: Unexpected bits set in SVE PREG id: 0x%llx", config_name(c), id);
--		return str_with_index("KVM_REG_ARM64_SVE_PREG(##, 0)", n);
-+		return strdup_printf("KVM_REG_ARM64_SVE_PREG(%lld, 0)", n);
- 	case KVM_REG_ARM64_SVE_FFR_BASE:
- 		TEST_ASSERT(id == KVM_REG_ARM64_SVE_FFR(0),
- 			    "%s: Unexpected bits set in SVE FFR id: 0x%llx", config_name(c), id);
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index a6e9f215ce70..7e0182f837b5 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -186,4 +186,6 @@ static inline uint32_t atoi_non_negative(const char *name, const char *num_str)
- 	return num;
- }
- 
-+char *strdup_printf(const char *fmt, ...) __attribute__((format(printf, 1, 2), nonnull(1)));
-+
- #endif /* SELFTEST_KVM_TEST_UTIL_H */
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index b772193f6c18..3e36019eeb4a 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -5,6 +5,9 @@
-  * Copyright (C) 2020, Google LLC.
-  */
- 
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <stdarg.h>
- #include <assert.h>
- #include <ctype.h>
- #include <limits.h>
-@@ -377,3 +380,15 @@ int atoi_paranoid(const char *num_str)
- 
- 	return num;
- }
-+
-+char *strdup_printf(const char *fmt, ...)
-+{
-+	va_list ap;
-+	char *str;
-+
-+	va_start(ap, fmt);
-+	vasprintf(&str, fmt, ap);
-+	va_end(ap);
-+
-+	return str;
-+}
+ static bool filter_reg(__u64 reg)
+ {
+ 	/*
+@@ -287,10 +277,7 @@ static void print_reg(struct vcpu_config *c, __u64 id)
+ 		printf("\tKVM_REG_ARM_FW_FEAT_BMAP_REG(%lld),\n", id & 0xffff);
+ 		break;
+ 	case KVM_REG_ARM64_SVE:
+-		if (has_cap(c, KVM_CAP_ARM_SVE))
+-			printf("\t%s,\n", sve_id_to_str(c, id));
+-		else
+-			TEST_FAIL("%s: KVM_REG_ARM64_SVE is an unexpected coproc type in reg id: 0x%llx", config_name(c), id);
++		printf("\t%s,\n", sve_id_to_str(c, id));
+ 		break;
+ 	default:
+ 		TEST_FAIL("%s: Unexpected coproc type: 0x%llx in reg id: 0x%llx",
 -- 
 2.34.1
 
