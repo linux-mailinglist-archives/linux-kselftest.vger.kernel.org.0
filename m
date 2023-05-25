@@ -2,166 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2EC710408
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 06:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB977105FA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 09:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238102AbjEYEWP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 May 2023 00:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S237059AbjEYHKn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 May 2023 03:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234004AbjEYEWF (ORCPT
+        with ESMTP id S233652AbjEYHKm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 May 2023 00:22:05 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51264189
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 21:21:59 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb7aaa605so274698276.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 May 2023 21:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684988518; x=1687580518;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=98GS1yBDh3h/h+5NjI7rziULFIid1JDrRb2JVZKNFRg=;
-        b=TrJRb1gjIODGA9G7zYo/ODm6PuuPJltD0EoZbN0FAIcLUYYdMaLXh/5IU8HVTcKVNC
-         k5wzgdMdFokn8teszJWIGewAhgthSJ74xEx25ozikYO4GrC1VIY3sorovF/gMq6ZX8Zx
-         RSDyJE4ZK71g5Sayo/ckvyuUtEdT58zK8TiCXOs845fYwWqyYgM6t/IlPm9s94x46BPA
-         QYa/+wL5NzxrwcR94nzoNAE5aOkb8ZCSVbdSXHWA6Ppz8CUSLXOWnbJFX696ET55oULe
-         HtqAD7LaZhWbSRN9YFONBTv1QH4ns7fJ+2CdjxdLZeiNql45+MpaB+baDQF3WYiyYyUb
-         0wtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684988518; x=1687580518;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=98GS1yBDh3h/h+5NjI7rziULFIid1JDrRb2JVZKNFRg=;
-        b=ihFHzxeZu+m1Jyx26Kt4mQZXWXB7kAJ+fsjumC3N3Hz5zcmD8D+3od28cRK58VyR7x
-         LHU26rsF4rAlKaMaHQxCFReIT3+DQZ4QapKtMbdqNzIz2cJ7GKOt7jdMBzQ30Y4V6SnX
-         LXHo6WEnutz3MsIllIBlTOSOKL0XzN8m86Nl6Jztx3HlaR/LbJqA7mVhkR67A/KMtWA6
-         zMDXV5u4N9qdNt02aCFRyTSst+/kNYepTl+OeY5roiycL2J/K2hltCR/1p89BwnP6KLb
-         n8gUO4l7+pUU4U1O+yYRGKGWL4M8PPji9chPtkG8UOB1pBg+Me/M0cwxO2xxi8JAwSTX
-         EQMQ==
-X-Gm-Message-State: AC+VfDylWJxkeSl/xgJ29Y5wfT3mYjvaSI5wmDZDcUA6+7jbzs75MSqz
-        QBbAKv5RUrkLTeRpvlCAOp6ngRbryS+IOQ==
-X-Google-Smtp-Source: ACHHUZ7gMiNS3iV21rOO3brq86ZzcHBDRBwpvNy6cIuEboXIgU711R2ZSvPfIrHn1P2qoneGVAb2ZjtNAv4qNQ==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:1024:b0:ba8:6422:7fc with SMTP
- id x4-20020a056902102400b00ba8642207fcmr1455878ybt.7.1684988518586; Wed, 24
- May 2023 21:21:58 -0700 (PDT)
-Date:   Thu, 25 May 2023 12:21:31 +0800
-In-Reply-To: <20230525042133.212534-1-davidgow@google.com>
-Mime-Version: 1.0
-References: <20230525042133.212534-1-davidgow@google.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230525042133.212534-4-davidgow@google.com>
-Subject: [PATCH v3 4/4] Documentation: kunit: Add usage notes for kunit_add_action()
-From:   David Gow <davidgow@google.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Benjamin Berg <benjamin@sipsolutions.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Rae Moar <rmoar@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 03:10:42 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8697E19D;
+        Thu, 25 May 2023 00:10:29 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1684998623tlsn9f2l
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 25 May 2023 15:10:22 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: CR3LFp2JE4kc3pygKDDUtJn39vE4Fmng3uwhG01MZ6x96u4i0xrEu8jidY6KF
+        5LIn2dky9FChTAvw70bQd9V3YXqgsFXT9XOcCHlIUtq/BlhasJ5GDPxSOVybTX2GzL2SdTF
+        Cy9+lJVOpqy2BqRKTsa/7hvTm+6tLB3DQsVE8gfL77TWmpV1LIFxnTct1mL2DFCgrmbj44u
+        yvlo+Ru0JKK/txynsYD2yYLA/lPIuJ4o3pwL3apINnuVVXdnlcZQBxrlMavqHxpGPQnYd1o
+        6pJ5c1eWvkUz6nPe1TRye4KJwMooBdw5zaKOuotp5LAcSVmcXevPRP0Y6q/veUNqJiCB63L
+        caopRqfllIHHckm32A7Flqkwmt6aAbtHH68/+KQGqx9l95K/3eiVKStGIcsXb/tdFusUokR
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15606333847527544035
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, w@1wt.eu
+Subject: Re: [PATCH 11/13] tools/nolibc: sys_select: riscv: use __NR_pselect6_time64 for rv32
+Date:   Thu, 25 May 2023 15:10:21 +0800
+Message-Id: <20230525071021.77223-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <83339ea6-6653-41fe-af75-e0d51a4fa920@t-8ch.de>
+References: <83339ea6-6653-41fe-af75-e0d51a4fa920@t-8ch.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some basic documentation for kunit_add_action() and related
-deferred action functions.
+Hi, Thomas
 
-Reviewed-by: Rae Moar <rmoar@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
----
+> On 2023-05-25 01:59:55+0800, Zhangjin Wu wrote:
+> > rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
+> > __NR_pselect6 after kernel commit d4c08b9776b3 ("riscv: Use latest
+> > system call ABI"), use __NR_pselect6_time64 instead.
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/include/nolibc/sys.h | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > index c0335a84f880..00c7197dcd50 100644
+> > --- a/tools/include/nolibc/sys.h
+> > +++ b/tools/include/nolibc/sys.h
+> > @@ -1041,8 +1041,13 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
+> >  		struct timeval *t;
+> >  	} arg = { .n = nfds, .r = rfds, .w = wfds, .e = efds, .t = timeout };
+> >  	return my_syscall1(__NR_select, &arg);
+> > -#elif defined(__ARCH_WANT_SYS_PSELECT6) && defined(__NR_pselect6)
+> > +#elif defined(__ARCH_WANT_SYS_PSELECT6) && (defined(__NR_pselect6) || defined(__NR_pselect6_time64))
+> > +#ifdef __NR_pselect6
+> >  	struct timespec t;
+> > +#else
+> > +	struct timespec64 t;
+> > +#define __NR_pselect6 __NR_pselect6_time64
+> 
+> Wouldn't this #define leak to the users of nolibc and lead to calls to
+> pselect6_time64 with the ABI of the __NR_pselect6 if userspace is doing
+> its own raw syscalls?
+>
 
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20230518083849.2631178-4-davidgow@google.com/
-- Fix a couple of typos (Thanks Bagas, Rae)
-- Add Rae's Reviewed-by.
+Yeah, it would break the user-side raw __NR_pselect6 syscall for nolibc is a
+header-only libc, so, it is not safe to use such method like glibc.
 
-This patch is new in v2.
+Something like this will let the syscall call to pselect6_time64 instead of the
+user-required __NR_pselect6 and pass the wrong type of argument.
 
----
- Documentation/dev-tools/kunit/usage.rst | 51 +++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+    #include "nolibc.h"  // If no __NR_pselect6 defined, __NR_pselect6 = __NR_pselect6_time64
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 46957d1cbcbb..c27e1646ecd9 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -615,6 +615,57 @@ For example:
- 		KUNIT_ASSERT_STREQ(test, buffer, "");
- 	}
- 
-+Registering Cleanup Actions
-+---------------------------
-+
-+If you need to perform some cleanup beyond simple use of ``kunit_kzalloc``,
-+you can register a custom "deferred action", which is a cleanup function
-+run when the test exits (whether cleanly, or via a failed assertion).
-+
-+Actions are simple functions with no return value, and a single ``void*``
-+context argument, and fulfill the same role as "cleanup" functions in Python
-+and Go tests, "defer" statements in languages which support them, and
-+(in some cases) destructors in RAII languages.
-+
-+These are very useful for unregistering things from global lists, closing
-+files or other resources, or freeing resources.
-+
-+For example:
-+
-+.. code-block:: C
-+
-+	static void cleanup_device(void *ctx)
-+	{
-+		struct device *dev = (struct device *)ctx;
-+
-+		device_unregister(dev);
-+	}
-+
-+	void example_device_test(struct kunit *test)
-+	{
-+		struct my_device dev;
-+
-+		device_register(&dev);
-+
-+		kunit_add_action(test, &cleanup_device, &dev);
-+	}
-+
-+Note that, for functions like device_unregister which only accept a single
-+pointer-sized argument, it's possible to directly cast that function to
-+a ``kunit_action_t`` rather than writing a wrapper function, for example:
-+
-+.. code-block:: C
-+
-+	kunit_add_action(test, (kunit_action_t *)&device_unregister, &dev);
-+
-+``kunit_add_action`` can fail if, for example, the system is out of memory.
-+You can use ``kunit_add_action_or_reset`` instead which runs the action
-+immediately if it cannot be deferred.
-+
-+If you need more control over when the cleanup function is called, you
-+can trigger it early using ``kunit_release_action``, or cancel it entirely
-+with ``kunit_remove_action``.
-+
- 
- Testing Static Functions
- ------------------------
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+    #ifdef __NR_pselect6
+        struct timespec t;  // come here for __NR_pselect6_time64, but t is not timespec64, broken
+        syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
+    #else
+        struct timespec64 t;
+        syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
+    #endif
 
+I have used something like __NR_pselect6_time3264 locally, before
+sending the patchset, I found a cleaner method already used in sys.h:
+
+    #ifndef __NR__newselect
+    #define __NR__newselect __NR_select
+    #endif
+
+But I forgot the arguments mixing issue, __NR__newselect and __NR_select
+share the same type of arguments, but __NR_pselect6 and
+__NR_pselect6_time64 not, so, I will use back the old method but still
+need to find a better string, just like __NR__newselect, __NR__pselect6
+may be used in kernel space in the future, and __NR_pselect6_time3264 is
+too long, what about this?
+
+    #ifdef __NR_pselect6
+            struct timespec t;
+    #define __NR_pselect6__ __NR_pselect6
+    #else
+            struct timespec64 t;
+    #define __NR_pselect6__ __NR_pselect6_time64
+    #endif
+
+Or even ___NR_pselect6?
+
+The same issue is in this patch:
+
+    [PATCH 13/13] tools/nolibc: sys_gettimeofday: riscv: use __NR_clock_gettime64
+
+will solve it with the same method.
+
+Thanks,
+Zhangjin
+
+> 
+> > +#endif
+> >  
+> >  	if (timeout) {
+> >  		t.tv_sec  = timeout->tv_sec;
+> > -- 
+> > 2.25.1
+> > 
