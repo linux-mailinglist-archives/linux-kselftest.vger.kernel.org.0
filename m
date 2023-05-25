@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76F8711598
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 20:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBA671157F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 20:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242198AbjEYSp4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 May 2023 14:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        id S242268AbjEYSp5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 May 2023 14:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242397AbjEYSoK (ORCPT
+        with ESMTP id S242831AbjEYSpb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 May 2023 14:44:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC3A199E;
-        Thu, 25 May 2023 11:40:41 -0700 (PDT)
+        Thu, 25 May 2023 14:45:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332BF3C33;
+        Thu, 25 May 2023 11:41:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E77AF648C2;
-        Thu, 25 May 2023 18:39:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 403D9C433EF;
-        Thu, 25 May 2023 18:39:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B67664952;
+        Thu, 25 May 2023 18:41:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B8EBC4339C;
+        Thu, 25 May 2023 18:41:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039947;
+        s=k20201202; t=1685040072;
         bh=fOu7aQcdH9a75fn0kj1O5zPfCCsrrlNUKFdNhS5qr+0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e+oMM+E52so2ORQUFZP4jqcR0eSUAAW7D5cW1Bxkj3zYY3oRcf0hY9PldwGdZMVmB
-         OhJy9te0ELM6ZjKW7sn5yo8WICD7WiNvdIrxEy0uRW/MeO5DDuKa7HLxjVO3UcXIyL
-         SuosLwrosXpaQWE8nTDOyKS4fd1sbda6jJIGCPyVrbNvMQCARBHNRHqoLh//7dyk5b
-         Vs0Wx+H96LXzH6H69MFueI28DpLZOK7wisaEGYMIfCeun2hRhw55oC7oj0l9k/m0KX
-         +8rgMPmaZgzFOfEKgEDYHo4NOM9ce1ybtsu//H9wZ7IRdfjY+DM4tjC/oTstFiHN1K
-         qTQvRKSYqLF2w==
+        b=PXQ2auti+e/BlgqZOMnLk6aO+GcdHTQKW3rjuWbeh4UyqRRNXNSZjX+0buUrqdY5U
+         6bZRoZkd2yMJu6eNbo1oW2urN/GK0aQ2hKRKmDsiKmm8lEx7xpwo9QxK02AMH6iM6f
+         iMU7G7v9ETSfNT/maUfXvS2jm67xg22fLOJbrRzYjG3jc2tnDU06mDWkPhjv+YWw+b
+         qe3wcpDXFP7zk0InhfT4+9Hizgbdb0IiNd9zpdsCSRrQLrX9xGbBtfz93s05jOmwj/
+         gMiVj7GZpXAK1ZfBFqAGXwLD6EWpUg8Pw3vSfmZD1RYLDNM64EDJXD2qm/E5gnL87k
+         Q1YdamsvUUIlg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -40,18 +40,18 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 04/43] selftests/ftrace: Improve integration with kselftest runner
-Date:   Thu, 25 May 2023 14:38:15 -0400
-Message-Id: <20230525183854.1855431-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 02/31] selftests/ftrace: Improve integration with kselftest runner
+Date:   Thu, 25 May 2023 14:40:33 -0400
+Message-Id: <20230525184105.1909399-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525183854.1855431-1-sashal@kernel.org>
-References: <20230525183854.1855431-1-sashal@kernel.org>
+In-Reply-To: <20230525184105.1909399-1-sashal@kernel.org>
+References: <20230525184105.1909399-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
