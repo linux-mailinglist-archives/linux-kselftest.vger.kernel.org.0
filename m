@@ -2,295 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBA671157F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 20:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D617117AB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 21:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242268AbjEYSp5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 May 2023 14:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
+        id S240643AbjEYTv4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 May 2023 15:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242831AbjEYSpb (ORCPT
+        with ESMTP id S241954AbjEYTvz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 May 2023 14:45:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332BF3C33;
-        Thu, 25 May 2023 11:41:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B67664952;
-        Thu, 25 May 2023 18:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B8EBC4339C;
-        Thu, 25 May 2023 18:41:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040072;
-        bh=fOu7aQcdH9a75fn0kj1O5zPfCCsrrlNUKFdNhS5qr+0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PXQ2auti+e/BlgqZOMnLk6aO+GcdHTQKW3rjuWbeh4UyqRRNXNSZjX+0buUrqdY5U
-         6bZRoZkd2yMJu6eNbo1oW2urN/GK0aQ2hKRKmDsiKmm8lEx7xpwo9QxK02AMH6iM6f
-         iMU7G7v9ETSfNT/maUfXvS2jm67xg22fLOJbrRzYjG3jc2tnDU06mDWkPhjv+YWw+b
-         qe3wcpDXFP7zk0InhfT4+9Hizgbdb0IiNd9zpdsCSRrQLrX9xGbBtfz93s05jOmwj/
-         gMiVj7GZpXAK1ZfBFqAGXwLD6EWpUg8Pw3vSfmZD1RYLDNM64EDJXD2qm/E5gnL87k
-         Q1YdamsvUUIlg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 02/31] selftests/ftrace: Improve integration with kselftest runner
-Date:   Thu, 25 May 2023 14:40:33 -0400
-Message-Id: <20230525184105.1909399-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525184105.1909399-1-sashal@kernel.org>
-References: <20230525184105.1909399-1-sashal@kernel.org>
+        Thu, 25 May 2023 15:51:55 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2F0D8
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 May 2023 12:51:35 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-56187339d6eso1769717b3.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 May 2023 12:51:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1685044295; x=1687636295;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dQtVi/2EvKDxLlI3bV7/HKRrNErdeyi9JL2Y1lgW7U0=;
+        b=Swg9j2dX6OFqvp/TbbvMAvLSnvq4lrSFepdc7WisPr485X0zxndyAOTcnYAWuQlJnD
+         PWBVlHe9ycm6hZ1quoMvEnRLVj6JFbsPmhJaylAoUIIUCaxFkkFWYjRngOn75C4lG5dq
+         0rT6q9ds9flykVL2GXwJMgoWlC05gr+EpUapg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685044295; x=1687636295;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dQtVi/2EvKDxLlI3bV7/HKRrNErdeyi9JL2Y1lgW7U0=;
+        b=YJgfQuChKv4Oeh5gAeYP2wq1xXWO/HnMUzXZTAKy+53pbL/Xmsy5+9vqXK6/6vFKEN
+         zf37G84hZbsPB2f6fP0KBCTdhNw+9z73nxQhg2DGDlqRaMKLsoZiimV5LbNjnOInGui1
+         Ld/uEO7RXUcropmTED0glQBW5qN30owEIecDLnyXxfzSY//DmASjtwOYKUiayyUziiZo
+         PgwIvCsWc2E+7tx/Crq/Gw3T9D3Jz7acUn8+6Y1RCeP/dSQxT9nbPBDtVKkNmgY+W04P
+         rbdLc5w3FrCB/AXf8lkc9RWkqpgFyHCfRqwUYhNs2dLYC1rMDhttTlYfJRdsgDDsK0c/
+         ujFQ==
+X-Gm-Message-State: AC+VfDwbpEbkFNp8ASv7aryr9am4sYGgA9EoNqt0UfPMFTFy11d7kmud
+        uAzqY7DfET3Ka8Hkohiq93/uoIL2pDzeNg/Sc6auFw==
+X-Google-Smtp-Source: ACHHUZ48YLnlxKAvKA5r3j7SV3FxQvvF2F8Z3cb2tPTI6RLteNgzhMgofaL8DiLyWzreAJOpz+qbXIlc7eGttaRZhwI=
+X-Received: by 2002:a81:6bd6:0:b0:564:dd8d:b0d0 with SMTP id
+ g205-20020a816bd6000000b00564dd8db0d0mr774098ywc.22.1685044294749; Thu, 25
+ May 2023 12:51:34 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230524153239.3036507-1-joel@joelfernandes.org>
+ <20230524153239.3036507-2-joel@joelfernandes.org> <CAHk-=wiNUe7YjK9fmZk+2ZQhjLH-64WrkwnXO9813_iLuaFXuQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wiNUe7YjK9fmZk+2ZQhjLH-64WrkwnXO9813_iLuaFXuQ@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 25 May 2023 15:51:23 -0400
+Message-ID: <CAEXW_YQO5-=4HRiZFiJ7ZsAHSLFEhHP29czqODFkH5mmVeqjZQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] mm/mremap: Optimize the start addresses in move_page_tables()
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+Hi Linus,
 
-[ Upstream commit dbcf76390eb9a65d5d0c37b0cd57335218564e37 ]
+On Wed, May 24, 2023 at 7:23=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Hmm. I'm still quite unhappy about your can_align_down().
+>
+> On Wed, May 24, 2023 at 8:32=E2=80=AFAM Joel Fernandes (Google)
+> <joel@joelfernandes.org> wrote:
+> >
+> > +       /* If the masked address is within vma, we cannot align the add=
+ress down. */
+> > +       if (vma->vm_start <=3D addr_masked)
+> > +               return false;
+>
+> I don't think this test is right.
+>
+> The test should not be "is the mapping still there at the point we
+> aligned down to".
+>
+> No, the test should be whether there is any part of the mapping below
+> the point we're starting with:
+>
+>         if (vma->vm_start < addr_to_align)
+>                 return false;
+>
+> because we can do the "expand the move down" *only* if it's the
+> beginning of the vma (because otherwise we'd be moving part of the vma
+> that precedes the address!)
 
-The ftrace selftests do not currently produce KTAP output, they produce a
-custom format much nicer for human consumption. This means that when run in
-automated test systems we just get a single result for the suite as a whole
-rather than recording results for individual test cases, making it harder
-to look at the test data and masking things like inappropriate skips.
+You are right, I missed that. Funny I did think about this case you
+mentioned. I will fix it in the next revision, thanks.
 
-Address this by adding support for KTAP output to the ftracetest script and
-providing a trivial wrapper which will be invoked by the kselftest runner
-to generate output in this format by default, users using ftracetest
-directly will continue to get the existing output.
+> (Alternatively, just make that "<" be "!=3D" - we're basically saying
+> that we can expand moving ptes to a pmd boundary *only* if this vma
+> starts at that point. No?).
 
-This is not the most elegant solution but it is simple and effective. I
-did consider implementing this by post processing the existing output
-format but that felt more complex and likely to result in all output being
-lost if something goes seriously wrong during the run which would not be
-helpful. I did also consider just writing a separate runner script but
-there's enough going on with things like the signal handling for that to
-seem like it would be duplicating too much.
+Yes, I prefer the "!=3D" check. I will use that.
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/ftrace/Makefile       |  3 +-
- tools/testing/selftests/ftrace/ftracetest     | 63 ++++++++++++++++++-
- .../testing/selftests/ftrace/ftracetest-ktap  |  8 +++
- 3 files changed, 70 insertions(+), 4 deletions(-)
- create mode 100755 tools/testing/selftests/ftrace/ftracetest-ktap
+>
+> > +       cur =3D find_vma_prev(vma->vm_mm, vma->vm_start, &prev);
+> > +       if (!cur || cur !=3D vma || !prev)
+> > +               return false;
+>
+> I've mentioned this test before, and I still find it actively misleading.
+>
+> First off, the "!cur || cur !=3D vma" test is clearly redundant. We know
+> 'vma' isn't NULL (we just dereferenced it!). So "cur !=3D vma" already
+> includes the "!cur" test.
+>
+> So that "!cur" part of the test simply *cannot* be sensible.
 
-diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
-index d6e106fbce11c..a1e955d2de4cc 100644
---- a/tools/testing/selftests/ftrace/Makefile
-+++ b/tools/testing/selftests/ftrace/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- all:
- 
--TEST_PROGS := ftracetest
-+TEST_PROGS_EXTENDED := ftracetest
-+TEST_PROGS := ftracetest-ktap
- TEST_FILES := test.d settings
- EXTRA_CLEAN := $(OUTPUT)/logs/*
- 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index 8ec1922e974eb..9a73a110a8bfc 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
- echo " Options:"
- echo "		-h|--help  Show help message"
- echo "		-k|--keep  Keep passed test logs"
-+echo "		-K|--ktap  Output in KTAP format"
- echo "		-v|--verbose Increase verbosity of test messages"
- echo "		-vv        Alias of -v -v (Show all results in stdout)"
- echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
-@@ -85,6 +86,10 @@ parse_opts() { # opts
-       KEEP_LOG=1
-       shift 1
-     ;;
-+    --ktap|-K)
-+      KTAP=1
-+      shift 1
-+    ;;
-     --verbose|-v|-vv|-vvv)
-       if [ $VERBOSE -eq -1 ]; then
- 	usage "--console can not use with --verbose"
-@@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
- TEST_CASES=`find_testcases $TEST_DIR`
- LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
- KEEP_LOG=0
-+KTAP=0
- DEBUG=0
- VERBOSE=0
- UNSUPPORTED_RESULT=0
-@@ -229,7 +235,7 @@ prlog() { # messages
-     newline=
-     shift
-   fi
--  printf "$*$newline"
-+  [ "$KTAP" != "1" ] && printf "$*$newline"
-   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
- }
- catlog() { #file
-@@ -260,11 +266,11 @@ TOTAL_RESULT=0
- 
- INSTANCE=
- CASENO=0
-+CASENAME=
- 
- testcase() { # testfile
-   CASENO=$((CASENO+1))
--  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
--  prlog -n "[$CASENO]$INSTANCE$desc"
-+  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
- }
- 
- checkreq() { # testfile
-@@ -277,40 +283,68 @@ test_on_instance() { # testfile
-   grep -q "^#[ \t]*flags:.*instance" $1
- }
- 
-+ktaptest() { # result comment
-+  if [ "$KTAP" != "1" ]; then
-+    return
-+  fi
-+
-+  local result=
-+  if [ "$1" = "1" ]; then
-+    result="ok"
-+  else
-+    result="not ok"
-+  fi
-+  shift
-+
-+  local comment=$*
-+  if [ "$comment" != "" ]; then
-+    comment="# $comment"
-+  fi
-+
-+  echo $CASENO $result $INSTANCE$CASENAME $comment
-+}
-+
- eval_result() { # sigval
-   case $1 in
-     $PASS)
-       prlog "	[${color_green}PASS${color_reset}]"
-+      ktaptest 1
-       PASSED_CASES="$PASSED_CASES $CASENO"
-       return 0
-     ;;
-     $FAIL)
-       prlog "	[${color_red}FAIL${color_reset}]"
-+      ktaptest 0
-       FAILED_CASES="$FAILED_CASES $CASENO"
-       return 1 # this is a bug.
-     ;;
-     $UNRESOLVED)
-       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
-+      ktaptest 0 UNRESOLVED
-       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
-       return $UNRESOLVED_RESULT # depends on use case
-     ;;
-     $UNTESTED)
-       prlog "	[${color_blue}UNTESTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
-       return 0
-     ;;
-     $UNSUPPORTED)
-       prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
-       return $UNSUPPORTED_RESULT # depends on use case
-     ;;
-     $XFAIL)
-       prlog "	[${color_green}XFAIL${color_reset}]"
-+      ktaptest 1 XFAIL
-       XFAILED_CASES="$XFAILED_CASES $CASENO"
-       return 0
-     ;;
-     *)
-       prlog "	[${color_blue}UNDEFINED${color_reset}]"
-+      ktaptest 0 error
-       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
-       return 1 # this must be a test bug
-     ;;
-@@ -371,6 +405,7 @@ __run_test() { # testfile
- run_test() { # testfile
-   local testname=`basename $1`
-   testcase $1
-+  prlog -n "[$CASENO]$INSTANCE$CASENAME"
-   if [ ! -z "$LOG_FILE" ] ; then
-     local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
-   else
-@@ -405,6 +440,17 @@ run_test() { # testfile
- # load in the helper functions
- . $TEST_DIR/functions
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo "TAP version 13"
-+
-+  casecount=`echo $TEST_CASES | wc -w`
-+  for t in $TEST_CASES; do
-+    test_on_instance $t || continue
-+    casecount=$((casecount+1))
-+  done
-+  echo "1..${casecount}"
-+fi
-+
- # Main loop
- for t in $TEST_CASES; do
-   run_test $t
-@@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
- prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
- prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo -n "# Totals:"
-+  echo -n " pass:"`echo $PASSED_CASES | wc -w`
-+  echo -n " faii:"`echo $FAILED_CASES | wc -w`
-+  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
-+  echo -n " xpass:0"
-+  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
-+  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
-+  echo
-+fi
-+
- cleanup
- 
- # if no error, return 0
-diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
-new file mode 100755
-index 0000000000000..b3284679ef3af
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/ftracetest-ktap
-@@ -0,0 +1,8 @@
-+#!/bin/sh -e
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
-+#
-+# Copyright (C) Arm Ltd., 2023
-+
-+./ftracetest -K
--- 
-2.39.2
+Ok, I agree with you now.
 
+> And the "!prev" test still makes no sense to me. You tried to explain
+> it to me earlier, and I clearly didn't get it. It seems actively
+> wrong. I still think "!prev" should return true.
+
+Yes, ok. Sounds good.
+
+> You seemed to think that "!prev" couldn';t actually happen and would
+> be a sign of some VM problem, but that doesn't make any sense to me.
+> Of course !prev can happen - if "vma" is the first vma in the VM and
+> there is no previous.
+>
+> It may be *rare*, but I still don't understand why you'd make that
+> "there is no vma below us" mean "we cannot expand the move below us
+> because there's something there".
+>
+> So I continue to think that this test should just be
+>
+>         if (WARN_ON_ONCE(cur !=3D vma))
+>                 return false;
+
+I agree with this now.
+
+>
+> because if it ever returns something that *isn't* the same as vma,
+> then we do indeed have serious problems. But that WARN_ON_ONCE() shows
+> that that's a "cannot happen" thing, not some kind of "if this happens
+> than don't do it" test.
+>
+> and then the *real* test  for "can we align down" should just be
+>
+>         return !prev || prev->vm_end <=3D addr_masked;
+
+Agreed, that's cleaner.
+
+> Because while I think your code _works_, it really doesn't seem to
+> make much sense as it stands in your patch. The tests are actively
+> misleading. No?
+
+True, your approach makes me want to improve on writing cleaner code
+than being excessively paranoid. So thank you for that.
+
+These patches have been tricky to get right so thank you for your
+continued input and quick feedback.
+
+I will add a test for the case you mentioned above where the address
+to realign wasn't in the VMA's beginning.
+
+thanks,
+
+- Joel
