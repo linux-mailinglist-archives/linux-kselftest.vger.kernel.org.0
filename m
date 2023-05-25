@@ -2,143 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23687102CC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 04:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8F47102D9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 04:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236656AbjEYCUB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 May 2023 22:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
+        id S229459AbjEYCYQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 May 2023 22:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237551AbjEYCT6 (ORCPT
+        with ESMTP id S236525AbjEYCYP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 May 2023 22:19:58 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569A112E;
-        Wed, 24 May 2023 19:19:57 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso9037266b.0;
-        Wed, 24 May 2023 19:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684981196; x=1687573196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S52oQA0/VeO5+jyq6l06Dvqhz2AgZ7EQ+KLBmziYDnM=;
-        b=Fzva5FWVqV/5xC30wA4lZUgXN9VgTPyU6CQ26eRLuSjH1YI5JJZC+5cu5BTbuAOsYp
-         3BJ96JISVhpgwQDkT7WDf8xvGVcfwskKILfV/xGolHelLuERNyIRTn+Kp95wT5Ihp5yP
-         6t6uY6MUdalUBM5VYqm+0cblXix9FwkIG8TqrPITAPMIcfqQGHly4ueQvlyG5tpqDpz3
-         Suc2h/8cyiPmp8WHhwqfyeD0VxCyv5TZ0fFC846O1Yl1cmIf9rHCiTACZLvOMO8XfJW8
-         lmfZI9CNlEHaMqsOA6Q5YrjzW7r+3U8EJN9CZ8Qu6xbL+5iP18dwrdrq7r4ZqFdmm4J2
-         /4zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684981196; x=1687573196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S52oQA0/VeO5+jyq6l06Dvqhz2AgZ7EQ+KLBmziYDnM=;
-        b=M+vmHsSyRYvqeVKIkG4Ccg4dimEngzsc9r1iKIne3bFBqznG5BjXzqCuMweDHbjiRB
-         9cYcGcIeX+eibIeRhYTQN6h/pbTnSePxAQoR24kf3lB+3ac6iuzC4NWFa/44zzlCne1B
-         giguUitWQ3ImwBOZo/UmgaHzmJF3WAKyllzoLZLnxo7rRiVo78vXQRLl1/HvT0WOYSH8
-         COc9z1fHswKK9moHqmYtB6RQO4UTg7Ld+6s3CowE4aCvuB0/uASfhzgJfnguPIi0dR/s
-         Mspp+1HW9Ecz58BXx2M3JEkdmYLiIRmGImwNfbsOLixSaUQOZO+Jf4zSIsX9ILmRkQz4
-         h8Jg==
-X-Gm-Message-State: AC+VfDyRmJ4GxP3p2F0fWTa6BDIubcTRujXxNXT2NH1+pFuyoLwozNpv
-        GYkecdrN03IISLCik/RWsE5QJfyDTsubLK4r11o=
-X-Google-Smtp-Source: ACHHUZ71v53srzTdEIill3Ck8fMuSehVnushOsYQveW7RfM+JUszp/kGVTpAsuq7kxIjPbKV9pie9hagRqd+/UH6fqk=
-X-Received: by 2002:a17:906:6a0f:b0:969:e88a:6071 with SMTP id
- qw15-20020a1709066a0f00b00969e88a6071mr38037ejc.61.1684981195615; Wed, 24 May
- 2023 19:19:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230420104622.12504-1-ljrcore@126.com> <20230420104622.12504-8-ljrcore@126.com>
- <ZG6i3sqOcZDg/UCG@google.com>
-In-Reply-To: <ZG6i3sqOcZDg/UCG@google.com>
-From:   Jinrong Liang <ljr.kernel@gmail.com>
-Date:   Thu, 25 May 2023 10:19:44 +0800
-Message-ID: <CAFg_LQWdSnNOd+VwTu8pQezL7qaN=4L_YffHVQUQWJiV5U76wQ@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] KVM: selftests: Test pmu event filter with
- incompatible kvm_pmu_event_filter
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Wed, 24 May 2023 22:24:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68117139;
+        Wed, 24 May 2023 19:24:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03EB1635A0;
+        Thu, 25 May 2023 02:24:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0FEC433D2;
+        Thu, 25 May 2023 02:24:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684981453;
+        bh=1XyJN682bKPmnrFMOUA/Rz8FyBhig9nJpB9ztqCBcMA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UDEj8I3OQISu5wf/9VcTweiPKsdAojV5u/bdpiZ76ZZeRJmm0NuU7d2PHyvTL7njK
+         d8A3DpR/AMg7zrSetNBn/55/5Pza0YtFdIa1gBPMaKMEdDWqnNgTYnRKHLGXjuK7/U
+         WF/mQ7Hj/+wVbSO/gMBsnUPvndFEW5x+k+l0WgzjrO1aoMnDePhaHyLqb9ZKNFUi6G
+         zyZxqHGByC7Ds0cjyCxvWacmZrytuaPkhQ57OjM5fuRl1J7H/DCAdTgNSjDPsF+MBv
+         6MN1Eqc1YhJud4XYlX5di0PEFunkYoxqOkqg/nn6loUCe8yFTzWo4JECqhvOyaYZWe
+         eAR7Fy5Kq1lMQ==
+Date:   Thu, 25 May 2023 10:24:08 +0800
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux trace kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Shuah Khan <shuah@kernel.org>,
-        Aaron Lewis <aaronlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] tracing/selftests: Update synthetic event selftest to
+ use common_stacktrace
+Message-Id: <20230525102408.4b2750621cb1deeb05e58980@kernel.org>
+In-Reply-To: <20230523225402.55951f2f@rorschach.local.home>
+References: <20230523225402.55951f2f@rorschach.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> =E4=BA=8E2023=E5=B9=B45=E6=9C=8825=
-=E6=97=A5=E5=91=A8=E5=9B=9B 07:50=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Apr 20, 2023, Jinrong Liang wrote:
-> > From: Jinrong Liang <cloudliang@tencent.com>
-> >
-> > From: Jinrong Liang <cloudliang@tencent.com>
-> >
-> > Add test to verify the behavior of the pmu event filter when an
-> > incomplete kvm_pmu_event_filter structure is used. By running the
-> > test, we can ensure that the pmu event filter correctly handles
-> > incomplete structures and does not allow events to be counted when
-> > they should not be.
-> >
-> > Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
-> > ---
-> >  .../kvm/x86_64/pmu_event_filter_test.c        | 23 +++++++++++++++++++
-> >  1 file changed, 23 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c=
- b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> > index 9be4c6f8fb7e..a6b6e0d086ae 100644
-> > --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> > +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> > @@ -881,6 +881,24 @@ static bool fixed_ctr_is_allowed(uint8_t idx, uint=
-32_t action, uint32_t bitmap)
-> >               (action =3D=3D KVM_PMU_EVENT_DENY && !(bitmap & BIT_ULL(i=
-dx)));
-> >  }
-> >
-> > +struct incompatible_pmu_event_filter {
-> > +     __u32 action;
-> > +     __u32 nevents;
-> > +     __u32 fixed_counter_bitmap;
-> > +};
-> > +
-> > +static uint64_t test_incompatible_filter(struct kvm_vcpu *vcpu, uint32=
-_t action,
-> > +                                      uint32_t bitmap)
-> > +{
-> > +     struct incompatible_pmu_event_filter err_f;
-> > +
-> > +     err_f.action =3D action;
-> > +     err_f.fixed_counter_bitmap =3D bitmap;
-> > +     ioctl((vcpu->vm)->fd, KVM_SET_PMU_EVENT_FILTER, &err_f.action);
->
-> This is completely busted.  It "passes" by luck, not because it's a valid=
- test.
-> The size of the argument is embedded in the IOCTL number itself, which me=
-ans that
-> unless glibc is being very nice and using a macro + typeof + sizeof to sa=
-nity check
-> things, which I highly doubt is the case, this ioctl() is passing random =
-stack data,
-> a.k.a. garbage, to KVM.
->
-> In short, drop this patch.
+On Tue, 23 May 2023 22:54:29 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Thank you for letting us know about the issues with the patch. I will
-drop the patch as suggested. Would you advise me to prepare version 3
-to remove this patch?
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> With the rename of the stacktrace field to common_stacktrace, update the
+> selftests to reflect this change. Copy the current selftest to test the
+> backward compatibility "stacktrace" keyword. Also the "requires" of that
+> test was incorrect, so it would never actually ran before. That is fixed
+> now.
+> 
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+Looks good to me.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thanks,
+
+> ---
+>  .../trigger-synthetic-event-stack-legacy.tc   | 24 +++++++++++++++++++
+>  .../trigger-synthetic-event-stack.tc          |  5 ++--
+>  2 files changed, 26 insertions(+), 3 deletions(-)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc
+> new file mode 100644
+> index 000000000000..d0cd91a93069
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc
+> @@ -0,0 +1,24 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +# description: event trigger - test inter-event histogram trigger trace action with dynamic string param (legacy stack)
+> +# requires: set_event synthetic_events events/sched/sched_process_exec/hist "long[] stack' >> synthetic_events":README
+> +
+> +fail() { #msg
+> +    echo $1
+> +    exit_fail
+> +}
+> +
+> +echo "Test create synthetic event with stack"
+> +
+> +# Test the old stacktrace keyword (for backward compatibility)
+> +echo 's:wake_lat pid_t pid; u64 delta; unsigned long[] stack;' > dynamic_events
+> +echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=stacktrace  if prev_state == 1||prev_state == 2' >> events/sched/sched_switch/trigger
+> +echo 'hist:keys=prev_pid:delta=common_timestamp.usecs-$ts,s=$st:onmax($delta).trace(wake_lat,prev_pid,$delta,$s)' >> events/sched/sched_switch/trigger
+> +echo 1 > events/synthetic/wake_lat/enable
+> +sleep 1
+> +
+> +if ! grep -q "=>.*sched" trace; then
+> +    fail "Failed to create synthetic event with stack"
+> +fi
+> +
+> +exit 0
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
+> index 755dbe94ccf4..8f1cc9a86a06 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test inter-event histogram trigger trace action with dynamic string param
+> -# requires: set_event synthetic_events events/sched/sched_process_exec/hist "long[]' >> synthetic_events":README
+> +# requires: set_event synthetic_events events/sched/sched_process_exec/hist "can be any field, or the special string 'common_stacktrace'":README
+>  
+>  fail() { #msg
+>      echo $1
+> @@ -10,9 +10,8 @@ fail() { #msg
+>  
+>  echo "Test create synthetic event with stack"
+>  
+> -
+>  echo 's:wake_lat pid_t pid; u64 delta; unsigned long[] stack;' > dynamic_events
+> -echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=stacktrace  if prev_state == 1||prev_state == 2' >> events/sched/sched_switch/trigger
+> +echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=common_stacktrace  if prev_state == 1||prev_state == 2' >> events/sched/sched_switch/trigger
+>  echo 'hist:keys=prev_pid:delta=common_timestamp.usecs-$ts,s=$st:onmax($delta).trace(wake_lat,prev_pid,$delta,$s)' >> events/sched/sched_switch/trigger
+>  echo 1 > events/synthetic/wake_lat/enable
+>  sleep 1
+> -- 
+> 2.39.2
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
