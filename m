@@ -2,134 +2,295 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF96B711355
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 20:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9E07113C6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 20:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234095AbjEYSMj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 May 2023 14:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S240824AbjEYScj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 May 2023 14:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbjEYSMi (ORCPT
+        with ESMTP id S240825AbjEYSci (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 May 2023 14:12:38 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3A3E2
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 May 2023 11:12:36 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-517c06c1a1bso1275652a12.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 May 2023 11:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685038356; x=1687630356;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3+IxoBoebOsPjsV+diUVwrxPrkn1mNdsKoZUJH//gMM=;
-        b=asq73AO5EW4oiv2rz/cLLjTKTOMfwul5iEyKEl8XBvFpZk1slUgRJeAxEZiuyOH1il
-         u6vWzpiV/+J0VP2thxrbC0sqUAY8L6T1NcUDmCBfLxl6d4IEhC0+Bjuld2ZOJpvagjNb
-         L0xcP0fnuRpHSql/df5vWdxhu0Td5JGTOmuAxT8GCskaoktlIhL8NaZwrJ53m1zmSJr8
-         MJnhsoTOl8hUPUXSB0Kkd+Ve89P/BiBAft9a1eXs7qZSCwL7jQbkiQIf3EGHP2Qv93he
-         vM1Br6nOaSA/7+oc7SgfBTLePi7DLwbUGNSJ95gGLU8ytW/gI9SPrOsgpeGiuJTdA0cg
-         jMTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685038356; x=1687630356;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3+IxoBoebOsPjsV+diUVwrxPrkn1mNdsKoZUJH//gMM=;
-        b=kBRNZ0jw0XNxiuqA6EHFTIskR91Z/Dz0BrhaH9Ur7hW2w+HEUf9LhhUbcmGdCiJscR
-         LNI5+G+tLbqNLXfyvLqrUYnhRRD8lCC/Ulas01SjIsUU44ETSVCkMFa+hp38f2i/z2H7
-         OgwmIVm5yiUVWup8tT3H0AzHeRuE2wYsMcMPzbfQPGngpp+8rMzR4Ta26mMR8stzqPn+
-         s0fsnBxb1UE98W9tmI6AdYocVl6WzBGi+XgHhEu+DqaXDZ7hTgTRCDN0UryPqEU+1N91
-         x6nthdPLWBMXvt2ghDaJofipx3ngghkuKyY0tmSJkgyQRrUzlcIDkXEfHi8ebp9yoFCC
-         +Jbw==
-X-Gm-Message-State: AC+VfDwh78IBE0/7cMDSn5Gj2iG7T+/X2QGTUodpb2DMyey/xBWv09rT
-        /Bd1+d004w9FhWK5lhbLT7EEJ4yxGtk=
-X-Google-Smtp-Source: ACHHUZ6bh9fTP225CcehXePeNmklaWj/m62wIsPxSDwvjGLsrPGwpHJr1bq64xWWbip8kwiimsbB77Woop4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:5b45:0:b0:53f:265a:a662 with SMTP id
- y5-20020a655b45000000b0053f265aa662mr691222pgr.4.1685038356418; Thu, 25 May
- 2023 11:12:36 -0700 (PDT)
-Date:   Thu, 25 May 2023 11:12:34 -0700
-In-Reply-To: <20230420104622.12504-7-ljrcore@126.com>
-Mime-Version: 1.0
-References: <20230420104622.12504-1-ljrcore@126.com> <20230420104622.12504-7-ljrcore@126.com>
-Message-ID: <ZG+lEmoiJqB9H5tg@google.com>
-Subject: Re: [PATCH v2 6/7] KVM: selftests: Check gp event filters without
- affecting fixed event filters
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jinrong Liang <ljr.kernel@gmail.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Aaron Lewis <aaronlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 14:32:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50108E63;
+        Thu, 25 May 2023 11:32:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C27C06489C;
+        Thu, 25 May 2023 18:32:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D081AC433EF;
+        Thu, 25 May 2023 18:32:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685039543;
+        bh=HFdrnqkcnUQg9uWpFJ+udX6fWvMx3SLmIe6cCrti5OM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=clfOKxOX2v7F5jrxSKvZiWtZTP9J89qDoEm3D6m1PHVJ5nCygIv5O107Zb+8sPgmG
+         iJq8Smp6tbYhctNMx+HH83yRo491ZVlP1IjA0cvTUeBToZihjU3Tezj69UP3yVLrFf
+         yDGKbOog3f0VwvHXGJlI77s/KjtuaHnBcWnI0rEMFy8iSJTPEfkfxvht06dxV/j897
+         F2UyRjJGwTTlHPJA8PrS+K6i2GPuw0fkQ3ZTmGtQ2nLeYX807juosF4Jf9X0rmr4KF
+         YP/KXNw6YQg5M7Vm7OCa73qTjREMWC/ClWpF2mC49pmvHOD2rGo7l97MM/GRsnyPpx
+         DGOeu9bZ8hhCA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 07/67] selftests/ftrace: Improve integration with kselftest runner
+Date:   Thu, 25 May 2023 14:30:44 -0400
+Message-Id: <20230525183144.1717540-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230525183144.1717540-1-sashal@kernel.org>
+References: <20230525183144.1717540-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 20, 2023, Jinrong Liang wrote:
-> From: Jinrong Liang <cloudliang@tencent.com>
-> 
-> From: Jinrong Liang <cloudliang@tencent.com>
-> 
-> Add a test to ensure that setting both generic and fixed performance
-> event filters does not affect the consistency of the fixed performance
-> filter behavior in KVM. This test helps to ensure that the fixed
-> performance filter works as expected even when generic performance
-> event filters are also set.
-> 
-> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
-> ---
->  .../selftests/kvm/x86_64/pmu_event_filter_test.c   | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> index 0f54c53d7fff..9be4c6f8fb7e 100644
-> --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> @@ -889,6 +889,7 @@ static void test_fixed_ctr_action_and_bitmap(struct kvm_vcpu *vcpu,
->  	uint32_t bitmap;
->  	uint64_t count;
->  	bool expected;
-> +	struct kvm_pmu_event_filter *f;
->  
->  	/*
->  	 * Check the fixed performance counter can count normally works when
-> @@ -902,6 +903,19 @@ static void test_fixed_ctr_action_and_bitmap(struct kvm_vcpu *vcpu,
->  			expected = fixed_ctr_is_allowed(fixed_ctr_idx, actions[i], bitmap);
->  			count = test_fixed_ctr_with_filter(vcpu, actions[i], bitmap);
->  
-> +			TEST_ASSERT(expected == !!count,
-> +				    "Fixed event filter does not work as expected.");
-> +
-> +			/*
-> +			 * Check that setting both events[] and fixed_counter_bitmap
-> +			 * does not affect the consistency of the fixed ctrs' behaviour.
-> +			 *
-> +			 * Note, the fixed_counter_bitmap rule has high priority.
+From: Mark Brown <broonie@kernel.org>
 
-"high" is ambiguous without a baseline.  I believe what you want to say is
-"the fixed_counter_bitmap has higher priority than the events list".
+[ Upstream commit dbcf76390eb9a65d5d0c37b0cd57335218564e37 ]
 
-> +			 */
-> +			f = event_filter(actions[i]);
-> +			f->fixed_counter_bitmap = bitmap;
-> +			count = test_with_filter(vcpu, f);
-> +
->  			TEST_ASSERT(expected == !!count,
->  				    "Fixed event filter does not work as expected.");
->  		}
-> -- 
-> 2.31.1
-> 
+The ftrace selftests do not currently produce KTAP output, they produce a
+custom format much nicer for human consumption. This means that when run in
+automated test systems we just get a single result for the suite as a whole
+rather than recording results for individual test cases, making it harder
+to look at the test data and masking things like inappropriate skips.
+
+Address this by adding support for KTAP output to the ftracetest script and
+providing a trivial wrapper which will be invoked by the kselftest runner
+to generate output in this format by default, users using ftracetest
+directly will continue to get the existing output.
+
+This is not the most elegant solution but it is simple and effective. I
+did consider implementing this by post processing the existing output
+format but that felt more complex and likely to result in all output being
+lost if something goes seriously wrong during the run which would not be
+helpful. I did also consider just writing a separate runner script but
+there's enough going on with things like the signal handling for that to
+seem like it would be duplicating too much.
+
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/ftrace/Makefile       |  3 +-
+ tools/testing/selftests/ftrace/ftracetest     | 63 ++++++++++++++++++-
+ .../testing/selftests/ftrace/ftracetest-ktap  |  8 +++
+ 3 files changed, 70 insertions(+), 4 deletions(-)
+ create mode 100755 tools/testing/selftests/ftrace/ftracetest-ktap
+
+diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
+index d6e106fbce11c..a1e955d2de4cc 100644
+--- a/tools/testing/selftests/ftrace/Makefile
++++ b/tools/testing/selftests/ftrace/Makefile
+@@ -1,7 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ all:
+ 
+-TEST_PROGS := ftracetest
++TEST_PROGS_EXTENDED := ftracetest
++TEST_PROGS := ftracetest-ktap
+ TEST_FILES := test.d settings
+ EXTRA_CLEAN := $(OUTPUT)/logs/*
+ 
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index c3311c8c40890..2506621e75dfb 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
+ echo " Options:"
+ echo "		-h|--help  Show help message"
+ echo "		-k|--keep  Keep passed test logs"
++echo "		-K|--ktap  Output in KTAP format"
+ echo "		-v|--verbose Increase verbosity of test messages"
+ echo "		-vv        Alias of -v -v (Show all results in stdout)"
+ echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
+@@ -85,6 +86,10 @@ parse_opts() { # opts
+       KEEP_LOG=1
+       shift 1
+     ;;
++    --ktap|-K)
++      KTAP=1
++      shift 1
++    ;;
+     --verbose|-v|-vv|-vvv)
+       if [ $VERBOSE -eq -1 ]; then
+ 	usage "--console can not use with --verbose"
+@@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
+ TEST_CASES=`find_testcases $TEST_DIR`
+ LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
+ KEEP_LOG=0
++KTAP=0
+ DEBUG=0
+ VERBOSE=0
+ UNSUPPORTED_RESULT=0
+@@ -229,7 +235,7 @@ prlog() { # messages
+     newline=
+     shift
+   fi
+-  printf "$*$newline"
++  [ "$KTAP" != "1" ] && printf "$*$newline"
+   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
+ }
+ catlog() { #file
+@@ -260,11 +266,11 @@ TOTAL_RESULT=0
+ 
+ INSTANCE=
+ CASENO=0
++CASENAME=
+ 
+ testcase() { # testfile
+   CASENO=$((CASENO+1))
+-  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+-  prlog -n "[$CASENO]$INSTANCE$desc"
++  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+ }
+ 
+ checkreq() { # testfile
+@@ -277,40 +283,68 @@ test_on_instance() { # testfile
+   grep -q "^#[ \t]*flags:.*instance" $1
+ }
+ 
++ktaptest() { # result comment
++  if [ "$KTAP" != "1" ]; then
++    return
++  fi
++
++  local result=
++  if [ "$1" = "1" ]; then
++    result="ok"
++  else
++    result="not ok"
++  fi
++  shift
++
++  local comment=$*
++  if [ "$comment" != "" ]; then
++    comment="# $comment"
++  fi
++
++  echo $CASENO $result $INSTANCE$CASENAME $comment
++}
++
+ eval_result() { # sigval
+   case $1 in
+     $PASS)
+       prlog "	[${color_green}PASS${color_reset}]"
++      ktaptest 1
+       PASSED_CASES="$PASSED_CASES $CASENO"
+       return 0
+     ;;
+     $FAIL)
+       prlog "	[${color_red}FAIL${color_reset}]"
++      ktaptest 0
+       FAILED_CASES="$FAILED_CASES $CASENO"
+       return 1 # this is a bug.
+     ;;
+     $UNRESOLVED)
+       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
++      ktaptest 0 UNRESOLVED
+       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
+       return $UNRESOLVED_RESULT # depends on use case
+     ;;
+     $UNTESTED)
+       prlog "	[${color_blue}UNTESTED${color_reset}]"
++      ktaptest 1 SKIP
+       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
+       return 0
+     ;;
+     $UNSUPPORTED)
+       prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
++      ktaptest 1 SKIP
+       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
+       return $UNSUPPORTED_RESULT # depends on use case
+     ;;
+     $XFAIL)
+       prlog "	[${color_green}XFAIL${color_reset}]"
++      ktaptest 1 XFAIL
+       XFAILED_CASES="$XFAILED_CASES $CASENO"
+       return 0
+     ;;
+     *)
+       prlog "	[${color_blue}UNDEFINED${color_reset}]"
++      ktaptest 0 error
+       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
+       return 1 # this must be a test bug
+     ;;
+@@ -371,6 +405,7 @@ __run_test() { # testfile
+ run_test() { # testfile
+   local testname=`basename $1`
+   testcase $1
++  prlog -n "[$CASENO]$INSTANCE$CASENAME"
+   if [ ! -z "$LOG_FILE" ] ; then
+     local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
+   else
+@@ -405,6 +440,17 @@ run_test() { # testfile
+ # load in the helper functions
+ . $TEST_DIR/functions
+ 
++if [ "$KTAP" = "1" ]; then
++  echo "TAP version 13"
++
++  casecount=`echo $TEST_CASES | wc -w`
++  for t in $TEST_CASES; do
++    test_on_instance $t || continue
++    casecount=$((casecount+1))
++  done
++  echo "1..${casecount}"
++fi
++
+ # Main loop
+ for t in $TEST_CASES; do
+   run_test $t
+@@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
+ prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
+ prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
+ 
++if [ "$KTAP" = "1" ]; then
++  echo -n "# Totals:"
++  echo -n " pass:"`echo $PASSED_CASES | wc -w`
++  echo -n " faii:"`echo $FAILED_CASES | wc -w`
++  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
++  echo -n " xpass:0"
++  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
++  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
++  echo
++fi
++
+ cleanup
+ 
+ # if no error, return 0
+diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
+new file mode 100755
+index 0000000000000..b3284679ef3af
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/ftracetest-ktap
+@@ -0,0 +1,8 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
++#
++# Copyright (C) Arm Ltd., 2023
++
++./ftracetest -K
+-- 
+2.39.2
+
