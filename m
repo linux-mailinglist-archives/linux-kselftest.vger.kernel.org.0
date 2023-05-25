@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1436C711344
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 20:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF96B711355
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 20:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240387AbjEYSLe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 May 2023 14:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40246 "EHLO
+        id S234095AbjEYSMj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 May 2023 14:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbjEYSLd (ORCPT
+        with ESMTP id S232203AbjEYSMi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 May 2023 14:11:33 -0400
+        Thu, 25 May 2023 14:12:38 -0400
 Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279151B1
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 May 2023 11:11:24 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-521262a6680so1906957a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 May 2023 11:11:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3A3E2
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 May 2023 11:12:36 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-517c06c1a1bso1275652a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 May 2023 11:12:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685038283; x=1687630283;
+        d=google.com; s=20221208; t=1685038356; x=1687630356;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=24LANnmej8B3PcoImBJ8uEUDYvKnZqxjGN/SizttJ88=;
-        b=tfbNBx83T6bPZDxFw2ZWGuTGQOsaah7q9ig8ugF86C5fhG52SQ/fOUUWwUl4r+W7Jq
-         iKCuG4jyFuJ4zEbeIWoQ5eTXgHX4pe+AHekLx2MiZIGuAl5TACh0y2SJi5StGgDeOhva
-         zJsSCsRi/AWap5Z+nFg7hf7oNOOgjMr+K0fTQqEN2MBGQ3O0ooQ2HBP9c6FMiIvOIc/6
-         yHdrovfpytnGEv5gYTr4XVrf4OE7USNO7lH2b9ctcXJCEJ9YqcMFPR0ysoJIi2gO0Gp/
-         xa0gz0fEanoleg1GN1aZCzkIA38WMLOhMikwyxym85m2e4pSxnOXOSgUme05YV+teuJG
-         rdWA==
+        bh=3+IxoBoebOsPjsV+diUVwrxPrkn1mNdsKoZUJH//gMM=;
+        b=asq73AO5EW4oiv2rz/cLLjTKTOMfwul5iEyKEl8XBvFpZk1slUgRJeAxEZiuyOH1il
+         u6vWzpiV/+J0VP2thxrbC0sqUAY8L6T1NcUDmCBfLxl6d4IEhC0+Bjuld2ZOJpvagjNb
+         L0xcP0fnuRpHSql/df5vWdxhu0Td5JGTOmuAxT8GCskaoktlIhL8NaZwrJ53m1zmSJr8
+         MJnhsoTOl8hUPUXSB0Kkd+Ve89P/BiBAft9a1eXs7qZSCwL7jQbkiQIf3EGHP2Qv93he
+         vM1Br6nOaSA/7+oc7SgfBTLePi7DLwbUGNSJ95gGLU8ytW/gI9SPrOsgpeGiuJTdA0cg
+         jMTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685038283; x=1687630283;
+        d=1e100.net; s=20221208; t=1685038356; x=1687630356;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=24LANnmej8B3PcoImBJ8uEUDYvKnZqxjGN/SizttJ88=;
-        b=Bu0X9hMVOkog3awqd9zZPQFKp/YdsOiMDRdc8H2+b3hiF7+M3cC/k1RhZDtWMmT7FL
-         VN/2fNZOSamVE9DgXrMHkzot9VqMM4rYBWE/4YNRo4PPhftDLk7ozwvbQaXnKdtAOzwu
-         bZVoA3HT7fg55LKF/llLNpZc+qQQKaFSwgfCos7ewQoXV8BEpGbBXp0kI5HUryJDWWqI
-         shxzo2mn54Uxn13sqKRhmPfhZyulT3uk04faMmUg/gxvA44a02fMTKhQL4EoAsmacrjT
-         oPQjkMoNzMcLpxRD/3onr27wlwJGNN8pG4ck+iAEmTAgnJAERYZWc7UzjJtKNlTJ/EU2
-         1u5g==
-X-Gm-Message-State: AC+VfDyLksJzjhBEKyWZj9kfBFpEUzTccM3mBUqNiz6ppn7c4ZqFTkzm
-        reaubTtRZd94JndzTQR9f1HG0Mow9hA=
-X-Google-Smtp-Source: ACHHUZ5bIKgjRyFxtN7gSChcpUakbsaH1V3Ik5uR+3HRpu33XfaUepEJ5Tou44ROLmaQZn2Z1cbN7hH+k/M=
+        bh=3+IxoBoebOsPjsV+diUVwrxPrkn1mNdsKoZUJH//gMM=;
+        b=kBRNZ0jw0XNxiuqA6EHFTIskR91Z/Dz0BrhaH9Ur7hW2w+HEUf9LhhUbcmGdCiJscR
+         LNI5+G+tLbqNLXfyvLqrUYnhRRD8lCC/Ulas01SjIsUU44ETSVCkMFa+hp38f2i/z2H7
+         OgwmIVm5yiUVWup8tT3H0AzHeRuE2wYsMcMPzbfQPGngpp+8rMzR4Ta26mMR8stzqPn+
+         s0fsnBxb1UE98W9tmI6AdYocVl6WzBGi+XgHhEu+DqaXDZ7hTgTRCDN0UryPqEU+1N91
+         x6nthdPLWBMXvt2ghDaJofipx3ngghkuKyY0tmSJkgyQRrUzlcIDkXEfHi8ebp9yoFCC
+         +Jbw==
+X-Gm-Message-State: AC+VfDwh78IBE0/7cMDSn5Gj2iG7T+/X2QGTUodpb2DMyey/xBWv09rT
+        /Bd1+d004w9FhWK5lhbLT7EEJ4yxGtk=
+X-Google-Smtp-Source: ACHHUZ6bh9fTP225CcehXePeNmklaWj/m62wIsPxSDwvjGLsrPGwpHJr1bq64xWWbip8kwiimsbB77Woop4=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:6792:0:b0:530:3aaa:81b5 with SMTP id
- e18-20020a656792000000b005303aaa81b5mr5048751pgr.8.1685038283578; Thu, 25 May
- 2023 11:11:23 -0700 (PDT)
-Date:   Thu, 25 May 2023 11:11:21 -0700
-In-Reply-To: <20230420104622.12504-6-ljrcore@126.com>
+ (user=seanjc job=sendgmr) by 2002:a65:5b45:0:b0:53f:265a:a662 with SMTP id
+ y5-20020a655b45000000b0053f265aa662mr691222pgr.4.1685038356418; Thu, 25 May
+ 2023 11:12:36 -0700 (PDT)
+Date:   Thu, 25 May 2023 11:12:34 -0700
+In-Reply-To: <20230420104622.12504-7-ljrcore@126.com>
 Mime-Version: 1.0
-References: <20230420104622.12504-1-ljrcore@126.com> <20230420104622.12504-6-ljrcore@126.com>
-Message-ID: <ZG+kyWjyhr7cg/xb@google.com>
-Subject: Re: [PATCH v2 5/7] KVM: selftests: Check if pmu_event_filter meets
- expectations on fixed ctrs
+References: <20230420104622.12504-1-ljrcore@126.com> <20230420104622.12504-7-ljrcore@126.com>
+Message-ID: <ZG+lEmoiJqB9H5tg@google.com>
+Subject: Re: [PATCH v2 6/7] KVM: selftests: Check gp event filters without
+ affecting fixed event filters
 From:   Sean Christopherson <seanjc@google.com>
 To:     Jinrong Liang <ljr.kernel@gmail.com>
 Cc:     Like Xu <like.xu.linux@gmail.com>,
@@ -83,194 +83,53 @@ On Thu, Apr 20, 2023, Jinrong Liang wrote:
 > 
 > From: Jinrong Liang <cloudliang@tencent.com>
 > 
-> Add tests to cover that pmu_event_filter works as expected when
-> it's applied to fixed performance counters, even if there is none
-> fixed counter exists (e.g. Intel guest pmu version=1 or AMD guest).
+> Add a test to ensure that setting both generic and fixed performance
+> event filters does not affect the consistency of the fixed performance
+> filter behavior in KVM. This test helps to ensure that the fixed
+> performance filter works as expected even when generic performance
+> event filters are also set.
 > 
 > Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
 > ---
->  .../kvm/x86_64/pmu_event_filter_test.c        | 109 ++++++++++++++++++
->  1 file changed, 109 insertions(+)
+>  .../selftests/kvm/x86_64/pmu_event_filter_test.c   | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
 > diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> index a3d5c30ce914..0f54c53d7fff 100644
+> index 0f54c53d7fff..9be4c6f8fb7e 100644
 > --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
 > +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> @@ -31,6 +31,7 @@
->  #define PMU_EVENT_FILTER_INVALID_ACTION		(KVM_PMU_EVENT_DENY + 1)
->  #define PMU_EVENT_FILTER_INVALID_FLAGS			(KVM_PMU_EVENT_FLAG_MASKED_EVENTS + 1)
->  #define PMU_EVENT_FILTER_INVALID_NEVENTS		(MAX_FILTER_EVENTS + 1)
-> +#define INTEL_PMC_IDX_FIXED 32
->  
->  /*
->   * This is how the event selector and unit mask are stored in an AMD
-> @@ -817,6 +818,113 @@ static void test_filter_ioctl(struct kvm_vcpu *vcpu)
->  	}
->  }
->  
-> +static void intel_guest_run_fixed_counters(uint8_t fixed_ctr_idx)
-> +{
-> +	for (;;) {
-> +		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0);
-> +		wrmsr(MSR_CORE_PERF_FIXED_CTR0 + fixed_ctr_idx, 0);
-> +
-> +		/* Only OS_EN bit is enabled for fixed counter[idx]. */
-> +		wrmsr(MSR_CORE_PERF_FIXED_CTR_CTRL, BIT_ULL(4 * fixed_ctr_idx));
-> +		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL,
-> +		      BIT_ULL(INTEL_PMC_IDX_FIXED + fixed_ctr_idx));
-> +		__asm__ __volatile__("loop ." : "+c"((int){NUM_BRANCHES}));
-> +		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0);
-> +
-> +		GUEST_SYNC(rdmsr(MSR_CORE_PERF_FIXED_CTR0 + fixed_ctr_idx));
-> +	}
-> +}
-> +
-> +static struct kvm_vcpu *new_vcpu(void *guest_code)
-> +{
-> +	struct kvm_vm *vm;
-> +	struct kvm_vcpu *vcpu;
-> +
-> +	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-> +	vm_init_descriptor_tables(vm);
-> +	vcpu_init_descriptor_tables(vcpu);
-
-Unnecessary copy+paste, this test doesn't setup a #GP handler.
-
-> +
-> +	return vcpu;
-> +}
-> +
-> +static void free_vcpu(struct kvm_vcpu *vcpu)
-> +{
-> +	kvm_vm_free(vcpu->vm);
-> +}
-> +
-> +static uint64_t test_fixed_ctr_without_filter(struct kvm_vcpu *vcpu)
-> +{
-> +	return run_vcpu_to_sync(vcpu);
-> +}
-
-Please don't add a wrappers that are single line passthroughs.
-
-> +static const uint32_t actions[] = {
-> +	KVM_PMU_EVENT_ALLOW,
-> +	KVM_PMU_EVENT_DENY,
-> +};
-
-(a) don't define global variables with super common names (this test sets a bad
-precedent).  (b) this array is used in *one* function, i.e. it can be a local
-variable.  (c) using an array doesn't save you code and just obfuscates what's
-happening.
-
-> +static uint64_t test_fixed_ctr_with_filter(struct kvm_vcpu *vcpu,
-
-Don't abbreviate "counter", there's really no need and "ctr" versus "ctrl" is
-already confusing enough.
-
-> +					   uint32_t action,
-> +					   uint32_t bitmap)
-> +{
+> @@ -889,6 +889,7 @@ static void test_fixed_ctr_action_and_bitmap(struct kvm_vcpu *vcpu,
+>  	uint32_t bitmap;
+>  	uint64_t count;
+>  	bool expected;
 > +	struct kvm_pmu_event_filter *f;
-> +	uint64_t r;
-> +
-> +	f = create_pmu_event_filter(0, 0, action, 0, bitmap);
-> +	r = test_with_filter(vcpu, f);
-> +	free(f);
-> +	return r;
-> +}
-> +
-> +static bool fixed_ctr_is_allowed(uint8_t idx, uint32_t action, uint32_t bitmap)
-> +{
-> +	return (action == KVM_PMU_EVENT_ALLOW && (bitmap & BIT_ULL(idx))) ||
-> +		(action == KVM_PMU_EVENT_DENY && !(bitmap & BIT_ULL(idx)));
-
-This helper shouldn't exist.  It's largely a symptom of using an array.
-> +}
-> +
-> +static void test_fixed_ctr_action_and_bitmap(struct kvm_vcpu *vcpu,
-> +					     uint8_t fixed_ctr_idx,
-> +					     uint8_t max_fixed_num)
-> +{
-> +	uint8_t i;
-> +	uint32_t bitmap;
-> +	uint64_t count;
-> +	bool expected;
-> +
-> +	/*
-> +	 * Check the fixed performance counter can count normally works when
-> +	 * KVM userspace doesn't set any pmu filter.
-> +	 */
-> +	TEST_ASSERT(max_fixed_num && test_fixed_ctr_without_filter(vcpu),
-> +		    "Fixed counter does not exist or does not work as expected.");
-> +
-> +	for (i = 0; i < ARRAY_SIZE(actions); i++) {
-> +		for (bitmap = 0; bitmap < BIT_ULL(max_fixed_num); bitmap++) {
-
-You're comparing a 32-bit value against a 64-bit value.
-
-> +			expected = fixed_ctr_is_allowed(fixed_ctr_idx, actions[i], bitmap);
-> +			count = test_fixed_ctr_with_filter(vcpu, actions[i], bitmap);
-> +
+>  
+>  	/*
+>  	 * Check the fixed performance counter can count normally works when
+> @@ -902,6 +903,19 @@ static void test_fixed_ctr_action_and_bitmap(struct kvm_vcpu *vcpu,
+>  			expected = fixed_ctr_is_allowed(fixed_ctr_idx, actions[i], bitmap);
+>  			count = test_fixed_ctr_with_filter(vcpu, actions[i], bitmap);
+>  
 > +			TEST_ASSERT(expected == !!count,
 > +				    "Fixed event filter does not work as expected.");
-> +		}
-> +	}
-
-static uint64_t test_with_fixed_counter_filter(struct kvm_vcpu *vcpu,
-					       uint32_t action, uint32_t bitmap)
-{
-	...
-
-}
-
-static void __test_fixed_counter_bitmap(...)
-{
-	uint32_t bitmap;
-
-	TEST_ASSERT(nr_fixed_counters < sizeof(bitmap));
-
-	for (i = 0; i < BIT(nr_fixed_counters); i++) {
-		count = test_with_fixed_counter_filter(vcpu, KVM_PMU_EVENT_ALLOW,
-						       bitmap);
-		TEST_ASSERT(!!count == !!(bitmap & BIT(idx)));
-
-		count = test_with_fixed_counter_filter(vcpu, KVM_PMU_EVENT_DENY,
-						       bitmap);
-		TEST_ASSERT(!!count == !(bitmap & BIT(idx)));
-
-	}
-}
-
-> +}
 > +
-> +static void test_fixed_counter_bitmap(void)
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +	uint8_t idx, max_fixed_num = get_kvm_supported_fixed_num();
+> +			/*
+> +			 * Check that setting both events[] and fixed_counter_bitmap
+> +			 * does not affect the consistency of the fixed ctrs' behaviour.
+> +			 *
+> +			 * Note, the fixed_counter_bitmap rule has high priority.
+
+"high" is ambiguous without a baseline.  I believe what you want to say is
+"the fixed_counter_bitmap has higher priority than the events list".
+
+> +			 */
+> +			f = event_filter(actions[i]);
+> +			f->fixed_counter_bitmap = bitmap;
+> +			count = test_with_filter(vcpu, f);
 > +
-> +	/*
-> +	 * Check that pmu_event_filter works as expected when it's applied to
-> +	 * fixed performance counters.
-> +	 */
-> +	for (idx = 0; idx < max_fixed_num; idx++) {
-> +		vcpu = new_vcpu(intel_guest_run_fixed_counters);
-> +		vcpu_args_set(vcpu, 1, idx);
-> +		test_fixed_ctr_action_and_bitmap(vcpu, idx, max_fixed_num);
-> +		free_vcpu(vcpu);
-> +	}
-> +}
-> +
->  int main(int argc, char *argv[])
->  {
->  	void (*guest_code)(void);
-> @@ -860,6 +968,7 @@ int main(int argc, char *argv[])
->  	kvm_vm_free(vm);
->  
->  	test_pmu_config_disable(guest_code);
-> +	test_fixed_counter_bitmap();
->  
->  	return 0;
->  }
+>  			TEST_ASSERT(expected == !!count,
+>  				    "Fixed event filter does not work as expected.");
+>  		}
 > -- 
 > 2.31.1
 > 
