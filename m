@@ -2,44 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB977105FA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 09:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B6D71061F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 May 2023 09:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237059AbjEYHKn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 May 2023 03:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
+        id S231126AbjEYHUQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 May 2023 03:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbjEYHKm (ORCPT
+        with ESMTP id S230051AbjEYHUP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 May 2023 03:10:42 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8697E19D;
-        Thu, 25 May 2023 00:10:29 -0700 (PDT)
-X-QQ-mid: bizesmtp66t1684998623tlsn9f2l
+        Thu, 25 May 2023 03:20:15 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E1AA9;
+        Thu, 25 May 2023 00:20:13 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1684999208te24henb
 Received: from linux-lab-host.localdomain ( [119.123.130.80])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 May 2023 15:10:22 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: CR3LFp2JE4kc3pygKDDUtJn39vE4Fmng3uwhG01MZ6x96u4i0xrEu8jidY6KF
-        5LIn2dky9FChTAvw70bQd9V3YXqgsFXT9XOcCHlIUtq/BlhasJ5GDPxSOVybTX2GzL2SdTF
-        Cy9+lJVOpqy2BqRKTsa/7hvTm+6tLB3DQsVE8gfL77TWmpV1LIFxnTct1mL2DFCgrmbj44u
-        yvlo+Ru0JKK/txynsYD2yYLA/lPIuJ4o3pwL3apINnuVVXdnlcZQBxrlMavqHxpGPQnYd1o
-        6pJ5c1eWvkUz6nPe1TRye4KJwMooBdw5zaKOuotp5LAcSVmcXevPRP0Y6q/veUNqJiCB63L
-        caopRqfllIHHckm32A7Flqkwmt6aAbtHH68/+KQGqx9l95K/3eiVKStGIcsXb/tdFusUokR
+        id ; Thu, 25 May 2023 15:20:06 +0800 (CST)
+X-QQ-SSF: 00200000000000D0V000000A0000000
+X-QQ-FEAT: Q40xx9djesR71y0DVBMSVqb0OB8JvjMOQvnH/KC7DVtwDqMquhU67lAmpEDDm
+        hbAf1eZ+0xinoQqUjGbKuiN2C8Df2P279pX7plJZfUj5i0uR3laz/qvsRZW49i1gTd823Qe
+        Pu+6f1es9OrUPzbE9i+0Ojj0Va73paf9p0Z9g2LnvRwwSXcN9RN1vHhfzLLZnc0c5KbGYlG
+        7OXDeJb1Nb3YVpQHlA2ImiJfRehTLMB6/KGxOPc0uHF5Q4RgFYIPEoYvtLaYpI42pzBeCTA
+        eV/51v6GyHOmnwef1j5VyqTWcrTSusTIOZWIbGTkRDLOpH3sriihuVhci9KjweWWG6SQ0ux
+        uZinBD86WNqojgeRc2Domv3Nq3Zj1mmhPxNRC1BKWVIKvu3fPpmJc1pq37FHgowjBIKREX0
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15606333847527544035
+X-BIZMAIL-ID: 3158394778450214080
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de
 Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
         palmer@dabbelt.com, paul.walmsley@sifive.com, w@1wt.eu
-Subject: Re: [PATCH 11/13] tools/nolibc: sys_select: riscv: use __NR_pselect6_time64 for rv32
-Date:   Thu, 25 May 2023 15:10:21 +0800
-Message-Id: <20230525071021.77223-1-falcon@tinylab.org>
+Subject: Re: [PATCH 04/13] selftests/nolibc: syscall_args: use __NR_statx for rv32
+Date:   Thu, 25 May 2023 15:20:01 +0800
+Message-Id: <20230525072001.77353-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <83339ea6-6653-41fe-af75-e0d51a4fa920@t-8ch.de>
-References: <83339ea6-6653-41fe-af75-e0d51a4fa920@t-8ch.de>
+In-Reply-To: <09d60dc2-e298-4c22-8e2f-8375861bd9be@t-8ch.de>
+References: <09d60dc2-e298-4c22-8e2f-8375861bd9be@t-8ch.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
@@ -54,91 +55,61 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi, Thomas
 
-> On 2023-05-25 01:59:55+0800, Zhangjin Wu wrote:
-> > rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
-> > __NR_pselect6 after kernel commit d4c08b9776b3 ("riscv: Use latest
-> > system call ABI"), use __NR_pselect6_time64 instead.
+> On 2023-05-25 01:48:11+0800, Zhangjin Wu wrote:
+> > When compile nolibc-test.c for rv32, we got such error:
 > > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/include/nolibc/sys.h | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> >     tools/testing/selftests/nolibc/nolibc-test.c:599:57: error: ‘__NR_fstat’ undeclared (first use in this function)
+> >       599 |   CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
 > > 
-> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > index c0335a84f880..00c7197dcd50 100644
-> > --- a/tools/include/nolibc/sys.h
-> > +++ b/tools/include/nolibc/sys.h
-> > @@ -1041,8 +1041,13 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
-> >  		struct timeval *t;
-> >  	} arg = { .n = nfds, .r = rfds, .w = wfds, .e = efds, .t = timeout };
-> >  	return my_syscall1(__NR_select, &arg);
-> > -#elif defined(__ARCH_WANT_SYS_PSELECT6) && defined(__NR_pselect6)
-> > +#elif defined(__ARCH_WANT_SYS_PSELECT6) && (defined(__NR_pselect6) || defined(__NR_pselect6_time64))
-> > +#ifdef __NR_pselect6
-> >  	struct timespec t;
-> > +#else
-> > +	struct timespec64 t;
-> > +#define __NR_pselect6 __NR_pselect6_time64
+> > The generic include/uapi/asm-generic/unistd.h used by rv32 doesn't
+> > support __NR_fstat, use __NR_statx instead:
+> > 
+> >     Running test 'syscall'
+> >     69 syscall_noargs = 1                                            [OK]
+> >     70 syscall_args = -1 EFAULT                                      [OK]
+> > 
+> > As tools/include/nolibc/sys.h shows, __NR_statx is either not supported
+> > by all platforms, so, both __NR_fstat and __NR_statx are required.
+> > 
+> > Btw, the latest riscv libc6-dev package is required, otherwise, we would
+> > also get such error:
+> > 
+> >     In file included from /usr/riscv64-linux-gnu/include/sys/cdefs.h:452,
+> >                      from /usr/riscv64-linux-gnu/include/features.h:461,
+> >                      from /usr/riscv64-linux-gnu/include/bits/libc-header-start.h:33,
+> >                      from /usr/riscv64-linux-gnu/include/limits.h:26,
+> >                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:194,
+> >                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/syslimits.h:7,
+> >                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:34,
+> >                      from /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/nolibc-test.c:6:
+> >     /usr/riscv64-linux-gnu/include/bits/wordsize.h:28:3: error: #error "rv32i-based targets are not supported"
+> >        28 | # error "rv32i-based targets are not supported"
+> > 
+> > The glibc commit 5b6113d62efa ("RISC-V: Support the 32-bit ABI
+> > implementation") fixed up above error, so, glibc >= 2.33 (who includes
+> > this commit) is required.
 > 
-> Wouldn't this #define leak to the users of nolibc and lead to calls to
-> pselect6_time64 with the ABI of the __NR_pselect6 if userspace is doing
-> its own raw syscalls?
+> It seems weird to require limits.h from the system libc at all.
+>
+> The only thing used from there are INT_MAX and INT_MIN.
+> Instead we could define our own versions of INT_MAX and INT_MIN in
+> stdint.h.
+> 
+> #ifndef INT_MAX
+> #define INT_MAX __INT_MAX__
+> #endif
+> 
+> #ifndef INT_MIN
+> #define INT_MIN (- __INT_MAX__ - 1)
+> #endif
 >
 
-Yeah, it would break the user-side raw __NR_pselect6 syscall for nolibc is a
-header-only libc, so, it is not safe to use such method like glibc.
+Just verified and prepared a patch, it did work perfectly, thanks.
 
-Something like this will let the syscall call to pselect6_time64 instead of the
-user-required __NR_pselect6 and pass the wrong type of argument.
+The above commit message exactly the error info will be cleaned up in
+v2.
 
-    #include "nolibc.h"  // If no __NR_pselect6 defined, __NR_pselect6 = __NR_pselect6_time64
-
-    #ifdef __NR_pselect6
-        struct timespec t;  // come here for __NR_pselect6_time64, but t is not timespec64, broken
-        syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
-    #else
-        struct timespec64 t;
-        syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
-    #endif
-
-I have used something like __NR_pselect6_time3264 locally, before
-sending the patchset, I found a cleaner method already used in sys.h:
-
-    #ifndef __NR__newselect
-    #define __NR__newselect __NR_select
-    #endif
-
-But I forgot the arguments mixing issue, __NR__newselect and __NR_select
-share the same type of arguments, but __NR_pselect6 and
-__NR_pselect6_time64 not, so, I will use back the old method but still
-need to find a better string, just like __NR__newselect, __NR__pselect6
-may be used in kernel space in the future, and __NR_pselect6_time3264 is
-too long, what about this?
-
-    #ifdef __NR_pselect6
-            struct timespec t;
-    #define __NR_pselect6__ __NR_pselect6
-    #else
-            struct timespec64 t;
-    #define __NR_pselect6__ __NR_pselect6_time64
-    #endif
-
-Or even ___NR_pselect6?
-
-The same issue is in this patch:
-
-    [PATCH 13/13] tools/nolibc: sys_gettimeofday: riscv: use __NR_clock_gettime64
-
-will solve it with the same method.
-
-Thanks,
+Best regards,
 Zhangjin
 
-> 
-> > +#endif
-> >  
-> >  	if (timeout) {
-> >  		t.tv_sec  = timeout->tv_sec;
-> > -- 
-> > 2.25.1
-> > 
+> Thomas
