@@ -2,41 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBD3712433
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 12:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EFB712492
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 12:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242591AbjEZKIF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 May 2023 06:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
+        id S242910AbjEZKZo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 May 2023 06:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjEZKIE (ORCPT
+        with ESMTP id S236978AbjEZKZn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 May 2023 06:08:04 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FA519E;
-        Fri, 26 May 2023 03:08:02 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 34QA6Oum011800;
-        Fri, 26 May 2023 12:06:24 +0200
-Date:   Fri, 26 May 2023 12:06:24 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
+        Fri, 26 May 2023 06:25:43 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3ED3E46;
+        Fri, 26 May 2023 03:25:25 -0700 (PDT)
+X-QQ-mid: bizesmtp85t1685096719te1p3ayz
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 26 May 2023 18:25:18 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: +ynUkgUhZJk/BOqp0oA9cBg1YsH89tL5W5qI5R9skNk3ZDlWFZ9Rn3nuDLHs6
+        r+jdJjJ6RsVhmT4f02tw/MUiR95J8ZHDs3wLyf7AK1WOAA4EIeTLghnosNldvidGC0l67Gg
+        2wYkd1Z5Tp0KBw74IMW4oY64DEXTsLZTXdoOMnfzfQfg3GspMKUW0w+aX/PB1XNeHKCJ7ki
+        rKwLr5llWwScHgLl/T/iRZLUbfPOilCzMWy+UioDCh9PuWaWLKFbQ7RhzPSDtCYJ0tJYlnv
+        QcwgLYeEKtu0tr1zpA4GKs/VRufTXnJiYTkUJXcC2xgJq1V6qzS/+WgbkejKpVxpTvwS0AE
+        pTyFJWz+eWpelE0SrSj+8C6mQRZa5VcSQVR8AnV0Hdew0584nkZshTSqBqhgn8mgsYKynPR
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 12828852806642903950
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>, thomas@t-8ch.de
-Subject: Re: [PATCH 04/13] selftests/nolibc: syscall_args: use __NR_statx for
- rv32
-Message-ID: <ZHCEoKXHSDlDvI5u@1wt.eu>
-References: <cover.1684949267.git.falcon@tinylab.org>
- <b306ae7b53d67acad6d1e2f63d43505d79f81241.1684949267.git.falcon@tinylab.org>
- <ee8b1f02-ded1-488b-a3a5-68774f0349b5@app.fastmail.com>
+        palmer@dabbelt.com, paul.walmsley@sifive.com, w@1wt.eu
+Subject: Re: [PATCH 06/13] selftests/nolibc: allow specify a bios for qemu
+Date:   Fri, 26 May 2023 18:25:18 +0800
+Message-Id: <20230526102518.150058-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <2ab94136-d341-4a26-964e-6d6c32e66c9b@t-8ch.de>
+References: <2ab94136-d341-4a26-964e-6d6c32e66c9b@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ee8b1f02-ded1-488b-a3a5-68774f0349b5@app.fastmail.com>
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,50 +52,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Arnd,
+Hi, Thomas
 
-On Fri, May 26, 2023 at 11:21:02AM +0200, Arnd Bergmann wrote:
-> On Wed, May 24, 2023, at 19:48, Zhangjin Wu wrote:
+> On 2023-05-25 01:52:29+0800, Zhangjin Wu wrote:
+> > riscv qemu has a builtin bios (opensbi), but it may not match the latest
+> > kernel and some old versions may hang during boot, let's allow user pass
+> > a newer version to qemu via the -bios option.
 > 
-> > 
-> > +static int test_syscall_args(void)
-> > +{
-> > +#ifdef __NR_fstat
-> > +	return syscall(__NR_fstat, 0, NULL);
-> > +#elif defined(__NR_statx)
-> > +	return syscall(__NR_statx, 0, NULL, 0, 0, NULL);
-> > +#else
-> > +#error Neither __NR_fstat nor __NR_statx defined, cannot implement 
-> > syscall_args test
-> > +#endif
-> > +}
+> Nitpick:
 > 
-> Does this need to work on old kernels? My impression was that
-> this is only intended to be used with the kernel that ships the
-> copy, so you can just rely on statx to be defined and drop
-> the old fallbacks (same as for pselect6_time64 as I commented).
+> This seems very specific and hopefully only necessary temporarily.
+>
 
-Yes, as much as possible this is desirable because the purpose is
-clearly to simplify the build of applications. The reason is that
-some applications might want to run as well on older kernels, but
-may miss some syscalls on the nolibc shipped with these older ones.
-Since the project is quite young, it lags a lot behind what each
-kernel supports, so it's expected that users will take the most
-recent nolibc version to benefit from support of syscalls that were
-already present in older ones.
+RISC-V is such a new ISA and the Spec (especially the SBI) changes very
+frequently ;-)
 
-The alternative would be to take the project out of the kernel as it
-was before but this would likely complicate contributions.
+> Instead it could be changed to some generic mechanim like
+> "QEMU_ARGS_EXTRA"?
+>
 
-However the selftest code is clearly specific to a kernel IMHO, since
-its goal is to be used to check that the shipped version of nolibc works
-on this kernel.
-
-As such, my view on this is that as long as it doesn't require
-unreasonable efforts to support older kernels for the userland code,
-we should try. If sometimes it's a big pain, we should not insist too
-much, but at least making sure that only the feature in question will
-not work would be desirable.
+Good point, will apply it.
 
 Thanks,
-Willy
+Zhangjin
+
+> > we can use it like this:
+> > 
+> >     $ make run BIOS=/path/to/new-bios ...
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/testing/selftests/nolibc/Makefile | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > index 9adc8944dd80..9213763ab3b6 100644
+> > --- a/tools/testing/selftests/nolibc/Makefile
+> > +++ b/tools/testing/selftests/nolibc/Makefile
+> > @@ -70,7 +70,8 @@ QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+> >  QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+> >  QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+> >  QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+> > -QEMU_ARGS            = $(QEMU_ARGS_$(ARCH))
+> > +QEMU_ARGS_BIOS       = $(if $(BIOS),-bios $(BIOS))
+> > +QEMU_ARGS            = $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_BIOS)
+> >  
+> >  # OUTPUT is only set when run from the main makefile, otherwise
+> >  # it defaults to this nolibc directory.
