@@ -2,135 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6CA712AD9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 18:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7059B712AEB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 18:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236684AbjEZQki (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 May 2023 12:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        id S236835AbjEZQoB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 May 2023 12:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjEZQkh (ORCPT
+        with ESMTP id S229790AbjEZQoA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 May 2023 12:40:37 -0400
-Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [IPv6:2001:1600:3:17::190f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8A6DF
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 May 2023 09:40:33 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QSVz13cjDzMqfBn;
-        Fri, 26 May 2023 18:40:29 +0200 (CEST)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QSVyz2XFlzMppDv;
-        Fri, 26 May 2023 18:40:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1685119229;
-        bh=qgneZctsmZu9NYVEqwCZ63IYebRwqPZkfQJshIM+ino=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=g8vn7bbw22o6LUCPBxp8u7iUChoXbXrE80j7X4tDjpPDGZ0CJMqSE7T8+XlA+teCx
-         ImuLqBbgQ0molZYHgkbRsstgprjuS6zYERZMvEKj3KrStLFOhClSCU2A/jKXfrDii2
-         i+FZof4I6D1lcDjYLsiTvh8LNbXn8dOv0y65+dPw=
-Message-ID: <8249dd59-ce08-2253-1697-301ad082d905@digikod.net>
-Date:   Fri, 26 May 2023 18:40:26 +0200
+        Fri, 26 May 2023 12:44:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB783D9;
+        Fri, 26 May 2023 09:43:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B32A617A1;
+        Fri, 26 May 2023 16:43:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE30C433EF;
+        Fri, 26 May 2023 16:43:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685119438;
+        bh=Z/ch5nJkQyaxrmN1rRuD6Zg08kQpZg1acmK+3khx85E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hT82lZ1GYXwKZ3QyfJyhu12TOwN6oQstsGuNbmlXcwBuDDULVbbZ1dh3lPvrex2DD
+         RF9Ig7Bx4mdzowwgjgWTQkXt9Xagfua8Xh9YmwXQTdHqkztG4L66CaHFmOoXcIJcDJ
+         S/JFEo91ouORTBBrIbDHSZe2CZc1ZIlgiOvUrDlE=
+Date:   Fri, 26 May 2023 17:43:55 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Lorenz Bauer <lmb@isovalent.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Martin KaFai Lau <martin.lau@kernel.org>,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        shuah@kernel.org, yhs@fb.com, eddyz87@gmail.com, sdf@google.com,
+        error27@gmail.com, iii@linux.ibm.com, memxor@gmail.com,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.2 08/30] selftests/bpf: check that modifier
+ resolves after pointer
+Message-ID: <2023052647-tacking-wince-85c5@gregkh>
+References: <20230320005258.1428043-1-sashal@kernel.org>
+ <20230320005258.1428043-8-sashal@kernel.org>
+ <CAN+4W8g6AcQQWe7rrBVOFYoqeQA-1VbUP_W7DPS3q0k-czOLfg@mail.gmail.com>
+ <ZBiAPngOtzSwDhFz@kroah.com>
+ <CAN+4W8jAyJTdFL=tgp3wCpYAjGOs5ggo6vyOg8PbaW+tJP8TKA@mail.gmail.com>
+ <CAN+4W8j5qe6p3YV90g-E0VhV7AmYyAvt0z50dfDSombbGghkww@mail.gmail.com>
+ <2023041100-oblong-enamel-5893@gregkh>
+ <CAN+4W8hmSgbb-wO4da4A=6B4y0oSjvUTTVia_0PpUXShP4NX4Q@mail.gmail.com>
+ <2023052435-xbox-dislike-0ab2@gregkh>
+ <CAN+4W8iMcwwVjmSekZ9txzZNxOZ0x98nBXo4cEoTU9G2zLe8HA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v1 1/5] hostfs: Fix ephemeral inodes
-Content-Language: en-US
-To:     Richard Weinberger <richard@nod.at>
-Cc:     anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>,
-        kuba <kuba@kernel.org>, James Morris <jmorris@namei.org>,
-        Jeff Xu <jeffxu@google.com>, Kees Cook <keescook@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Ritesh Raj Sarraf <ritesh@collabora.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sjoerd Simons <sjoerd@collabora.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-References: <20230309165455.175131-1-mic@digikod.net>
- <20230309165455.175131-2-mic@digikod.net>
- <133970354.9328381.1684703636966.JavaMail.zimbra@nod.at>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <133970354.9328381.1684703636966.JavaMail.zimbra@nod.at>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAN+4W8iMcwwVjmSekZ9txzZNxOZ0x98nBXo4cEoTU9G2zLe8HA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-On 21/05/2023 23:13, Richard Weinberger wrote:
-> ----- Ursprüngliche Mail -----
->> Von: "Mickaël Salaün" <mic@digikod.net>
->> hostfs creates a new inode for each opened or created file, which created
->> useless inode allocations and forbade identifying a host file with a kernel
->> inode.
->>
->> Fix this uncommon filesystem behavior by tying kernel inodes to host
->> file's inode and device IDs.  Even if the host filesystem inodes may be
->> recycled, this cannot happen while a file referencing it is open, which
->> is the case with hostfs.  It should be noted that hostfs inode IDs may
->> not be unique for the same hostfs superblock because multiple host's
->> (backed) superblocks may be used.
->>
->> Delete inodes when dropping them to force backed host's file descriptors
->> closing.
->>
->> This enables to entirely remove ARCH_EPHEMERAL_INODES, and then makes
->> Landlock fully supported by UML.  This is very useful for testing
->> (ongoing and backported) changes.
+On Wed, May 24, 2023 at 06:04:43PM +0100, Lorenz Bauer wrote:
+> On Wed, May 24, 2023 at 5:04 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > Great, any specific commits that fix this issue would be appreciated to
+> > be pointed at so we can apply them.
 > 
-> Removing ARCH_EPHEMERAL_INODES should be a patch on its own, IMHO.
+> The problem was introduced by commit f4b8c0710ab6 ("selftests/bpf: Add
+> verifier test for release_reference()") in your tree. Seems like
+> fixup_map_ringbuf was introduced in upstream commit 4237e9f4a962
+> ("selftests/bpf: Add verifier test for PTR_TO_MEM spill") but that
+> wasn't backported.
 
-OK, I'll do that in the next series.
+So what tree(s) does this need to be backported to?  I'm confused, this
+is a 6.2 email thread which is long end-of-life.
 
-> 
->> These changes also factor out and simplify some helpers thanks to the
->> new hostfs_inode_update() and the hostfs_iget() revamp: read_name(),
->> hostfs_create(), hostfs_lookup(), hostfs_mknod(), and
->> hostfs_fill_sb_common().
->>
->> A following commit with new Landlock tests check this new hostfs inode
->> consistency.
->>
->> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
->> Cc: Johannes Berg <johannes@sipsolutions.net>
->> Cc: Richard Weinberger <richard@nod.at>
->> Cc: <stable@vger.kernel.org> # 5.15.x: ce72750f04d6: hostfs: Fix writeback of
->> dirty pages
->> Cc: <stable@vger.kernel.org> # 5.15+
-> 
-> I'm not sure whether this patch qualifies as stable material.
-> While I fully agree that the current behavoir is odd, nothing user visible
-> is really broken so far.
-I added the ARCH_EPHEMERAL_INODES knob to avoid unexpected behavior. 
-Thanks to that there is no regression for Landlock, but it's unfortunate 
-that we could not use UML to test old kernel versions. According to this 
-odd behavior, I guess some user space may not work with hostfs because 
-of this issue, hence this Cc. I can remove it if you think it is not the 
-case.
+> To restate my original question: how can we avoid breaking BPF
+> selftests? From personal experience this happens somewhat regularly.
 
+It can be avoided by people testing and letting me know when things
+break :)
 
-> 
->> Signed-off-by: Mickaël Salaün <mic@digikod.net>
->> Link: https://lore.kernel.org/r/20230309165455.175131-2-mic@digikod.net
-> 
-> Other than that, patch looks good to me.
+thanks,
 
-Good, I'll send a new series with your suggestions.
-
-> 
-> Thanks,
-> //richard
+greg k-h
