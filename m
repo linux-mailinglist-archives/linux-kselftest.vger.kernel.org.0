@@ -2,59 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35011711B09
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 02:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F328A711D18
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 03:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjEZAOU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 May 2023 20:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
+        id S231344AbjEZBuq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 May 2023 21:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjEZAOU (ORCPT
+        with ESMTP id S229523AbjEZBuq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 May 2023 20:14:20 -0400
-X-Greylist: delayed 461 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 May 2023 17:14:18 PDT
-Received: from out-28.mta0.migadu.com (out-28.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C84194
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 May 2023 17:14:18 -0700 (PDT)
-Message-ID: <8f2d47dc-b19c-eb83-c390-885b4f9980a0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685059593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BIeHNJ1XVcZV8vmS7jmkvR/TSg5peYc2pW5NNIH/+uI=;
-        b=KzKq7EJNna0q87U7tFoSD/MrnkRd9LS9mA90ZrzPsxhl6h7rkCrXnSWi1X+oDmabRnQRkx
-        vt3kE4WV+2N8waAhGtUZ504oPn6vcxaaBt2e7g+7GA7aautQjMnsJIKMTD0PcwE4sWQTPe
-        X5ga8rAmChHS329qha/QtUxxOkNEcOk=
-Date:   Thu, 25 May 2023 17:06:29 -0700
+        Thu, 25 May 2023 21:50:46 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93E5194;
+        Thu, 25 May 2023 18:50:43 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1685065838tfibdc44
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 26 May 2023 09:50:37 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: eSZ1CZgv+JCfU+Q/Ek/ByeU4a4AcvGPfBDxLuzVFFnBqpvoCh57Xxdo1gHof2
+        DKr4mZ4kV32WaG5tW5yVOn0mzE2srmKCy20Wly4IDPnhzsNIFzH8Ag5oMY2wbxji9SEJrIc
+        xvZ1OFXmdBbzmpsBzEhyTlrbTbAbTKbbKsQJuXoqqjwGsiKWOwV54KwCJ+GwOmWBSWxIqvX
+        TdyIfspVyKxfH/7TPKd/GL+n2HqFsSJ0wVBV5B+mE2RgJg6H5I9Qfk4fbp4GZNJDwC5iSGb
+        401ADIKHmUHRf0C55yg65WZ3Qde3Eqh2HXjK0SQixho7yC3iCwEd6oL4fZI1Maez5Dq55Ca
+        21pxKHG+TjqEZX04sB4RVmaRnlK+A==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 17809865514302005706
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        w@1wt.eu
+Subject: Re: [PATCH 11/13] tools/nolibc: sys_select: riscv: use __NR_pselect6_time64 for rv32
+Date:   Fri, 26 May 2023 09:50:37 +0800
+Message-Id: <20230526015037.6455-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <76a5f9a0-eec4-415a-9c5d-ac3bca4d4b0e@t-8ch.de>
+References: <76a5f9a0-eec4-415a-9c5d-ac3bca4d4b0e@t-8ch.de>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Test that SO_REUSEPORT can be
- used with sk_assign helper
-Content-Language: en-US
-To:     Lorenz Bauer <lmb@isovalent.com>
-Cc:     Joe Stringer <joe@cilium.io>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-References: <20230525081923.8596-1-lmb@isovalent.com>
- <20230525081923.8596-2-lmb@isovalent.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20230525081923.8596-2-lmb@isovalent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,265 +52,108 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/25/23 1:19 AM, Lorenz Bauer wrote:
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-> index a105c0cd008a..8a33bcea97de 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
-> @@ -423,6 +423,9 @@ struct nstoken *open_netns(const char *name)
->   
->   void close_netns(struct nstoken *token)
->   {
-> +	if (!token)
-> +		return;
+> On 2023-05-25 15:10:21+0800, Zhangjin Wu wrote:
+> > Hi, Thomas
+> > 
+> > > On 2023-05-25 01:59:55+0800, Zhangjin Wu wrote:
+> > > > rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
+> > > > __NR_pselect6 after kernel commit d4c08b9776b3 ("riscv: Use latest
+> > > > system call ABI"), use __NR_pselect6_time64 instead.
+> > > > 
+> > > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > > ---
+> > > >  tools/include/nolibc/sys.h | 7 ++++++-
+> > > >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > > > index c0335a84f880..00c7197dcd50 100644
+> > > > --- a/tools/include/nolibc/sys.h
+> > > > +++ b/tools/include/nolibc/sys.h
+> > > > @@ -1041,8 +1041,13 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
+> > > >  		struct timeval *t;
+> > > >  	} arg = { .n = nfds, .r = rfds, .w = wfds, .e = efds, .t = timeout };
+> > > >  	return my_syscall1(__NR_select, &arg);
+> > > > -#elif defined(__ARCH_WANT_SYS_PSELECT6) && defined(__NR_pselect6)
+> > > > +#elif defined(__ARCH_WANT_SYS_PSELECT6) && (defined(__NR_pselect6) || defined(__NR_pselect6_time64))
+> > > > +#ifdef __NR_pselect6
+> > > >  	struct timespec t;
+> > > > +#else
+> > > > +	struct timespec64 t;
+> > > > +#define __NR_pselect6 __NR_pselect6_time64
+> > > 
+> > > Wouldn't this #define leak to the users of nolibc and lead to calls to
+> > > pselect6_time64 with the ABI of the __NR_pselect6 if userspace is doing
+> > > its own raw syscalls?
+> > >
+> > 
+> > Yeah, it would break the user-side raw __NR_pselect6 syscall for nolibc is a
+> > header-only libc, so, it is not safe to use such method like glibc.
+> > 
+> > Something like this will let the syscall call to pselect6_time64 instead of the
+> > user-required __NR_pselect6 and pass the wrong type of argument.
+> > 
+> >     #include "nolibc.h"  // If no __NR_pselect6 defined, __NR_pselect6 = __NR_pselect6_time64
+> > 
+> >     #ifdef __NR_pselect6
+> >         struct timespec t;  // come here for __NR_pselect6_time64, but t is not timespec64, broken
+> >         syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
+> >     #else
+> >         struct timespec64 t;
+> >         syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
+> >     #endif
+> > 
+> > I have used something like __NR_pselect6_time3264 locally, before
+> > sending the patchset, I found a cleaner method already used in sys.h:
+> > 
+> >     #ifndef __NR__newselect
+> >     #define __NR__newselect __NR_select
+> >     #endif
+> > 
+> > But I forgot the arguments mixing issue, __NR__newselect and __NR_select
+> > share the same type of arguments, but __NR_pselect6 and
+> > __NR_pselect6_time64 not, so, I will use back the old method but still
+> > need to find a better string, just like __NR__newselect, __NR__pselect6
+> > may be used in kernel space in the future, and __NR_pselect6_time3264 is
+> > too long, what about this?
+> > 
+> >     #ifdef __NR_pselect6
+> >             struct timespec t;
+> >     #define __NR_pselect6__ __NR_pselect6
+> >     #else
+> >             struct timespec64 t;
+> >     #define __NR_pselect6__ __NR_pselect6_time64
+> >     #endif
+> > 
+> > Or even ___NR_pselect6?
+> 
+> What about:
+> 
+> #ifdef __NR_pselect6
+>         struct timespec t;
+>         const long nr_pselect = __NR_pselect6;
+> #else
+>         struct timespec64 t;
+>         const long nr_pselect = __NR_pselect6_time64;
+> #endif
+>
 
-+1. :)
+It looks better and cleaner, will apply this method, thanks!
 
-> +
->   	ASSERT_OK(setns(token->orig_netns_fd, CLONE_NEWNET), "setns");
->   	close(token->orig_netns_fd);
->   	free(token);
-> diff --git a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-> new file mode 100644
-> index 000000000000..2cb9bb591e71
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-> @@ -0,0 +1,280 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2023 Isovalent */
-> +#include <uapi/linux/if_link.h>
-> +#include <test_progs.h>
-> +
-> +#include <netinet/tcp.h>
-> +#include <netinet/udp.h>
-> +
-> +#include "network_helpers.h"
-> +#include "test_assign_reuse.skel.h"
-> +
-> +#define NS_TEST "assign_reuse"
-> +#define LOOPBACK 1
-> +#define PORT 4443
-> +
-> +static int attach_reuseport(int sock_fd, int prog_fd)
-> +{
-> +	return setsockopt(sock_fd, SOL_SOCKET, SO_ATTACH_REUSEPORT_EBPF,
-> +			  &prog_fd, sizeof(prog_fd));
-> +}
-> +
-> +static socklen_t inetaddr_len(const struct sockaddr_storage *addr)
-> +{
-> +	return addr->ss_family == AF_INET  ? sizeof(struct sockaddr_in) :
-> +	       addr->ss_family == AF_INET6 ? sizeof(struct sockaddr_in6) :
-> +					     0;
-> +}
-> +
-> +static bool is_ipv6(const char *ip)
-> +{
-> +	return !!strchr(ip, ':');
-> +}
-> +
-> +static int make_socket(int sotype, const char *ip, int port,
-> +		       struct sockaddr_storage *addr)
-> +{
-> +	struct timeval timeo = { .tv_usec = 500000 /* 500 ms */ };
-> +	int family = is_ipv6(ip) ? AF_INET6 : AF_INET;
-> +	int ret, fd;
-> +
-> +	ret = make_sockaddr(family, ip, port, addr, NULL);
-> +	if (!ASSERT_OK(ret, "make_sockaddr"))
-> +		return -1;
-> +	fd = socket(addr->ss_family, sotype, 0);
-> +	if (!ASSERT_GE(fd, 0, "socket"))
-> +		return -1;
-> +	ret = setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
-> +	if (!ASSERT_OK(ret, "sndtimeo")) {
-> +		close(fd);
-> +		return -1;
-> +	}
-> +	ret = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo));
-> +	if (!ASSERT_OK(ret, "rcvtimeo")) {
-> +		close(fd);
-> +		return -1;
-> +	}
-> +	return fd;
-> +}
-> +
-> +static int create_server(int sotype, const char *ip, int port, int prog_fd)
-> +{
-> +	struct sockaddr_storage addr = {};
-> +	const int one = 1;
-> +	int ret, fd;
-> +
-> +	fd = make_socket(sotype, ip, port, &addr);
-> +	if (fd < 0)
-> +		return -1;
-> +	if (sotype == SOCK_STREAM) {
-> +		ret = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one,
-> +				 sizeof(one));
-> +		if (!ASSERT_OK(ret, "reuseaddr"))
-> +			goto cleanup;
-> +	}
-> +	if (prog_fd >= 0) {
-> +		ret = setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &one,
-> +				 sizeof(one));
-> +		if (!ASSERT_OK(ret, "reuseport"))
-> +			goto cleanup;
-> +		ret = attach_reuseport(fd, prog_fd);
-> +		if (!ASSERT_OK(ret, "attach_reuseport"))
-> +			goto cleanup;
-> +	}
-> +	ret = bind(fd, (void *)&addr, inetaddr_len(&addr));
-> +	if (!ASSERT_OK(ret, "bind"))
-> +		goto cleanup;
-> +	if (sotype == SOCK_STREAM) {
-> +		ret = listen(fd, SOMAXCONN);
-> +		if (!ASSERT_OK(ret, "listen"))
-> +			goto cleanup;
-> +	}
-> +	return fd;
-> +cleanup:
-> +	close(fd);
-> +	return -1;
-> +}
-> +
-> +static int create_client(int sotype, const char *ip, int port)
-> +{
-> +	struct sockaddr_storage addr = {};
-> +	int ret, fd;
-> +
-> +	fd = make_socket(sotype, ip, port, &addr);
-> +	if (fd < 0)
-> +		return -1;
-> +	ret = connect(fd, (void *)&addr, inetaddr_len(&addr));
-> +	if (ret)
-> +		goto cleanup;
-> +	return fd;
-> +cleanup:
-> +	close(fd);
-> +	return -1;
-> +}
+> > 
+> > The same issue is in this patch:
+> > 
+> >     [PATCH 13/13] tools/nolibc: sys_gettimeofday: riscv: use __NR_clock_gettime64
+> > 
+> > will solve it with the same method.
+>
 
-I believe a lot of the above can be done by start_reuseport_server() and 
-connect_to_fd() from network_helpers.c.
+And also this one:
 
-[ ... ]
+    [PATCH 09/13] tools/nolibc: sys_poll: riscv: use __NR_ppoll_time64
 
-> +void serial_test_assign_reuse(void)
+Have tested all of them, will send a v2 later.
 
-Remove "serial_" .
+Best regards,
+Zhangjin
 
-
-> +{
-> +	struct nstoken *tok = NULL;
-> +
-> +	SYS(out, "ip netns add %s", NS_TEST);
-> +	SYS(cleanup, "ip -net %s link set dev lo up", NS_TEST);
-> +
-> +	tok = open_netns(NS_TEST);
-> +	if (!ASSERT_OK_PTR(tok, "netns token"))
-> +		return;
-> +
-> +	if (test__start_subtest("tcpv4"))
-> +		run_assign_reuse(SOCK_STREAM, "127.0.0.1", PORT);
-> +	if (test__start_subtest("tcpv6"))
-> +		run_assign_reuse(SOCK_STREAM, "::1", PORT);
-> +	if (test__start_subtest("udpv4"))
-> +		run_assign_reuse(SOCK_DGRAM, "127.0.0.1", PORT);
-> +	if (test__start_subtest("udpv6"))
-> +		run_assign_reuse(SOCK_DGRAM, "::1", PORT);
-> +
-> +cleanup:
-> +	close_netns(tok);
-> +	SYS_NOFAIL("ip netns delete %s", NS_TEST);
-> +out:
-> +	return;
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_assign_reuse.c b/tools/testing/selftests/bpf/progs/test_assign_reuse.c
-> new file mode 100644
-> index 000000000000..c83e870b2612
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_assign_reuse.c
-> @@ -0,0 +1,142 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2023 Isovalent */
-> +#include <stdbool.h>
-> +#include <linux/bpf.h>
-> +#include <linux/if_ether.h>
-> +#include <linux/in.h>
-> +#include <linux/ip.h>
-> +#include <linux/ipv6.h>
-> +#include <linux/tcp.h>
-> +#include <linux/udp.h>
-> +#include <bpf/bpf_endian.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <linux/pkt_cls.h>
-> +
-> +char LICENSE[] SEC("license") = "GPL";
-> +
-> +__u64 sk_cookie_seen;
-> +__u64 reuseport_executed;
-> +union {
-> +	struct tcphdr tcp;
-> +	struct udphdr udp;
-> +} headers;
-> +
-> +const volatile __u16 dest_port;
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-> +	__uint(max_entries, 1);
-> +	__type(key, __u32);
-> +	__type(value, __u64);
-> +} sk_map SEC(".maps");
-> +
-> +SEC("sk_reuseport")
-> +int reuse_accept(struct sk_reuseport_md *ctx)
-> +{
-> +	reuseport_executed++;
-> +
-> +	if (ctx->ip_protocol == IPPROTO_TCP) {
-> +		if (ctx->data + sizeof(headers.tcp) > ctx->data_end)
-> +			return SK_DROP;
-> +
-> +		if (__builtin_memcmp(&headers.tcp, ctx->data, sizeof(headers.tcp)) != 0)
-> +			return SK_DROP;
-> +	} else if (ctx->ip_protocol == IPPROTO_UDP) {
-> +		if (ctx->data + sizeof(headers.udp) > ctx->data_end)
-> +			return SK_DROP;
-> +
-> +		if (__builtin_memcmp(&headers.udp, ctx->data, sizeof(headers.udp)) != 0)
-> +			return SK_DROP;
-> +	} else {
-> +		return SK_DROP;
-> +	}
-> +
-> +	sk_cookie_seen = bpf_get_socket_cookie(ctx->sk);
-> +	return SK_PASS;
-> +}
-> +
-> +SEC("sk_reuseport")
-> +int reuse_drop(struct sk_reuseport_md *ctx)
-> +{
-> +	reuseport_executed++;
-> +	sk_cookie_seen = 0;
-> +	return SK_DROP;
-> +}
-> +
-> +static inline int
-
-nit. inline is no longer a must. Same for a few functions below.
-
-> +assign_sk(struct __sk_buff *skb)
-> +{
-> +	int zero = 0, ret = 0;
-> +	struct bpf_sock *sk;
-> +
-> +	sk = bpf_map_lookup_elem(&sk_map, &zero);
-> +	if (!sk)
-> +		return TC_ACT_SHOT;
-> +	ret = bpf_sk_assign(skb, sk, 0);
-> +	bpf_sk_release(sk);
-> +	return ret ? TC_ACT_SHOT : TC_ACT_OK;
-> +}
-> +
-
+> Thanks!
