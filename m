@@ -2,58 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC5171295A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 17:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6CA712AD9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 18:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244126AbjEZPYL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 May 2023 11:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S236684AbjEZQki (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 May 2023 12:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244115AbjEZPX5 (ORCPT
+        with ESMTP id S229977AbjEZQkh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 May 2023 11:23:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2447E5E;
-        Fri, 26 May 2023 08:23:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0A48650E5;
-        Fri, 26 May 2023 15:23:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A6B7C433D2;
-        Fri, 26 May 2023 15:23:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685114619;
-        bh=sSJgHGhspOdtf9IZ1Lw+Z6mc2TQf02OhlSH49aYKpf0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TgkbPW2CX2koGBwD13BHHB9ycraKbxKDJj124gfbGxpLSf5dZkRE09eYfW56u16fp
-         mBZtQ2cwEruSCMHVE/APUDJ/Lt49KSwqxwikIOE/GHGE/Gi9gr7IxD0stinVwOUNiP
-         mplAxxjn6h88TxOKI467EUM0nvdESpqO1RBjRP7v9fJshcPggf3tG89akIJTTIQ1Iq
-         6UVr8KzKdjej2szrcuaBDW6rRe6HMMsKL7VOIoMPy5GhqLnEM8nWLoCQ6e3eEbx6uc
-         +rFVjzydlRhdGMCShhxBgJhKjSzLtV/lnzwMtDlNYJENmR2EvtepFYNaf/yl70KbEh
-         kD+vbnE+4oKqA==
-Date:   Fri, 26 May 2023 16:23:33 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.3 07/67] selftests/ftrace: Improve integration
- with kselftest runner
-Message-ID: <276d5748-40c4-43b4-9241-9d30a5a64d0e@sirena.org.uk>
-References: <20230525183144.1717540-1-sashal@kernel.org>
- <20230525183144.1717540-7-sashal@kernel.org>
+        Fri, 26 May 2023 12:40:37 -0400
+Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [IPv6:2001:1600:3:17::190f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8A6DF
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 May 2023 09:40:33 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QSVz13cjDzMqfBn;
+        Fri, 26 May 2023 18:40:29 +0200 (CEST)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QSVyz2XFlzMppDv;
+        Fri, 26 May 2023 18:40:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1685119229;
+        bh=qgneZctsmZu9NYVEqwCZ63IYebRwqPZkfQJshIM+ino=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=g8vn7bbw22o6LUCPBxp8u7iUChoXbXrE80j7X4tDjpPDGZ0CJMqSE7T8+XlA+teCx
+         ImuLqBbgQ0molZYHgkbRsstgprjuS6zYERZMvEKj3KrStLFOhClSCU2A/jKXfrDii2
+         i+FZof4I6D1lcDjYLsiTvh8LNbXn8dOv0y65+dPw=
+Message-ID: <8249dd59-ce08-2253-1697-301ad082d905@digikod.net>
+Date:   Fri, 26 May 2023 18:40:26 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uFSV+DBTeD1SzadS"
-Content-Disposition: inline
-In-Reply-To: <20230525183144.1717540-7-sashal@kernel.org>
-X-Cookie: A Smith & Wesson beats four aces.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: 
+Subject: Re: [PATCH v1 1/5] hostfs: Fix ephemeral inodes
+Content-Language: en-US
+To:     Richard Weinberger <richard@nod.at>
+Cc:     anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>,
+        kuba <kuba@kernel.org>, James Morris <jmorris@namei.org>,
+        Jeff Xu <jeffxu@google.com>, Kees Cook <keescook@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Ritesh Raj Sarraf <ritesh@collabora.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sjoerd Simons <sjoerd@collabora.com>,
+        Willem de Bruijn <willemb@google.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+References: <20230309165455.175131-1-mic@digikod.net>
+ <20230309165455.175131-2-mic@digikod.net>
+ <133970354.9328381.1684703636966.JavaMail.zimbra@nod.at>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <133970354.9328381.1684703636966.JavaMail.zimbra@nod.at>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,39 +71,66 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---uFSV+DBTeD1SzadS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 21/05/2023 23:13, Richard Weinberger wrote:
+> ----- Ursprüngliche Mail -----
+>> Von: "Mickaël Salaün" <mic@digikod.net>
+>> hostfs creates a new inode for each opened or created file, which created
+>> useless inode allocations and forbade identifying a host file with a kernel
+>> inode.
+>>
+>> Fix this uncommon filesystem behavior by tying kernel inodes to host
+>> file's inode and device IDs.  Even if the host filesystem inodes may be
+>> recycled, this cannot happen while a file referencing it is open, which
+>> is the case with hostfs.  It should be noted that hostfs inode IDs may
+>> not be unique for the same hostfs superblock because multiple host's
+>> (backed) superblocks may be used.
+>>
+>> Delete inodes when dropping them to force backed host's file descriptors
+>> closing.
+>>
+>> This enables to entirely remove ARCH_EPHEMERAL_INODES, and then makes
+>> Landlock fully supported by UML.  This is very useful for testing
+>> (ongoing and backported) changes.
+> 
+> Removing ARCH_EPHEMERAL_INODES should be a patch on its own, IMHO.
 
-On Thu, May 25, 2023 at 02:30:44PM -0400, Sasha Levin wrote:
-> From: Mark Brown <broonie@kernel.org>
->=20
-> [ Upstream commit dbcf76390eb9a65d5d0c37b0cd57335218564e37 ]
->=20
-> The ftrace selftests do not currently produce KTAP output, they produce a
-> custom format much nicer for human consumption. This means that when run =
-in
-> automated test systems we just get a single result for the suite as a who=
-le
-> rather than recording results for individual test cases, making it harder
-> to look at the test data and masking things like inappropriate skips.
+OK, I'll do that in the next series.
 
-This seems to be very much a new feature rather than a fix?
+> 
+>> These changes also factor out and simplify some helpers thanks to the
+>> new hostfs_inode_update() and the hostfs_iget() revamp: read_name(),
+>> hostfs_create(), hostfs_lookup(), hostfs_mknod(), and
+>> hostfs_fill_sb_common().
+>>
+>> A following commit with new Landlock tests check this new hostfs inode
+>> consistency.
+>>
+>> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+>> Cc: Johannes Berg <johannes@sipsolutions.net>
+>> Cc: Richard Weinberger <richard@nod.at>
+>> Cc: <stable@vger.kernel.org> # 5.15.x: ce72750f04d6: hostfs: Fix writeback of
+>> dirty pages
+>> Cc: <stable@vger.kernel.org> # 5.15+
+> 
+> I'm not sure whether this patch qualifies as stable material.
+> While I fully agree that the current behavoir is odd, nothing user visible
+> is really broken so far.
+I added the ARCH_EPHEMERAL_INODES knob to avoid unexpected behavior. 
+Thanks to that there is no regression for Landlock, but it's unfortunate 
+that we could not use UML to test old kernel versions. According to this 
+odd behavior, I guess some user space may not work with hostfs because 
+of this issue, hence this Cc. I can remove it if you think it is not the 
+case.
 
---uFSV+DBTeD1SzadS
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+> 
+>> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+>> Link: https://lore.kernel.org/r/20230309165455.175131-2-mic@digikod.net
+> 
+> Other than that, patch looks good to me.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRwzvUACgkQJNaLcl1U
-h9D7LggAgOwulEbrQyGLRizOAvifu4pqbEIPNrfraY7R4yMLY92GKTHnomcrhJti
-SPWK4+mWzqJBlkgQy7fH8rGSoQB2rBo8RQ1qnWv85nkLiVF5K+uFUJVJKuBVo1k6
-X8YMdEzvgBjWuKqCeAYKEsXiGOxm+dxgVm+pLwfnZDt0QDSkAGkLTRIZpps9THCT
-UgE5GVCfklHhzT0zqXabEcYMBwc6+uFlXVtLxac5Z0I4ju2BfTHGRAOALdRP/MOM
-DKGo804L9VERy35Xs+Yf/eRHfRnI4fQA7UYGYXGel+oAXps1H8InhFWRNDbpju6n
-zSAwhu421iD24Eh68Kpmcs54I4SE7Q==
-=sfjq
------END PGP SIGNATURE-----
+Good, I'll send a new series with your suggestions.
 
---uFSV+DBTeD1SzadS--
+> 
+> Thanks,
+> //richard
