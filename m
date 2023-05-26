@@ -2,100 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EFB712492
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 12:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8E67124D5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 12:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242910AbjEZKZo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 May 2023 06:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S230315AbjEZKg5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 May 2023 06:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236978AbjEZKZn (ORCPT
+        with ESMTP id S229669AbjEZKg5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 May 2023 06:25:43 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3ED3E46;
-        Fri, 26 May 2023 03:25:25 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1685096719te1p3ayz
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 26 May 2023 18:25:18 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: +ynUkgUhZJk/BOqp0oA9cBg1YsH89tL5W5qI5R9skNk3ZDlWFZ9Rn3nuDLHs6
-        r+jdJjJ6RsVhmT4f02tw/MUiR95J8ZHDs3wLyf7AK1WOAA4EIeTLghnosNldvidGC0l67Gg
-        2wYkd1Z5Tp0KBw74IMW4oY64DEXTsLZTXdoOMnfzfQfg3GspMKUW0w+aX/PB1XNeHKCJ7ki
-        rKwLr5llWwScHgLl/T/iRZLUbfPOilCzMWy+UioDCh9PuWaWLKFbQ7RhzPSDtCYJ0tJYlnv
-        QcwgLYeEKtu0tr1zpA4GKs/VRufTXnJiYTkUJXcC2xgJq1V6qzS/+WgbkejKpVxpTvwS0AE
-        pTyFJWz+eWpelE0SrSj+8C6mQRZa5VcSQVR8AnV0Hdew0584nkZshTSqBqhgn8mgsYKynPR
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12828852806642903950
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, w@1wt.eu
+        Fri, 26 May 2023 06:36:57 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E855C13A;
+        Fri, 26 May 2023 03:36:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685097404; x=1716633404;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Jv3kgjC1n5+JrmCIQo2+tQziiqBHBuOGDCYusXZdTHk=;
+  b=dMI2kHnLo9lbrAEjhxEQix+oD1vBZ8xM7+OO8mkE+t5fyz4f4cK6UWSV
+   b3jiQBZnJWsEwwrNZVka7nq77vyBgZkcppvW19aCJRfHjCzvIjpwIjB4Q
+   R3Ra3zcZM2tqmJHRJTr02IpMZVpHXXgAiFYPGV4Tzwm1XKWID/f18pcYj
+   vrCvKtSqdNWDr+tnfQGEA9GZEXjEDgab9famTtKR9nilSVk3+TOFCvEeR
+   lqdO0XdQiB/CtnfCoL/yoKtWwRDy2Xjwr9wVjJRDFpgykyUwzmTvOLFaT
+   gmhKmU9luCHIvwfzaZfzlNwdgKDcRG9n9sUmxIXM1xl64nCxlEqhQvQKd
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
+   d="asc'?scan'208";a="154077255"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 May 2023 03:36:43 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 26 May 2023 03:36:42 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 26 May 2023 03:36:40 -0700
+Date:   Fri, 26 May 2023 11:36:18 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Zhangjin Wu <falcon@tinylab.org>
+CC:     <thomas@t-8ch.de>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <palmer@dabbelt.com>,
+        <paul.walmsley@sifive.com>, <w@1wt.eu>
 Subject: Re: [PATCH 06/13] selftests/nolibc: allow specify a bios for qemu
-Date:   Fri, 26 May 2023 18:25:18 +0800
-Message-Id: <20230526102518.150058-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2ab94136-d341-4a26-964e-6d6c32e66c9b@t-8ch.de>
+Message-ID: <20230526-clover-litter-1f41398cd820@wendy>
 References: <2ab94136-d341-4a26-964e-6d6c32e66c9b@t-8ch.de>
+ <20230526102518.150058-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="+DgvsBgu6jRefMs1"
+Content-Disposition: inline
+In-Reply-To: <20230526102518.150058-1-falcon@tinylab.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Thomas
+--+DgvsBgu6jRefMs1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On 2023-05-25 01:52:29+0800, Zhangjin Wu wrote:
-> > riscv qemu has a builtin bios (opensbi), but it may not match the latest
-> > kernel and some old versions may hang during boot, let's allow user pass
-> > a newer version to qemu via the -bios option.
-> 
-> Nitpick:
-> 
-> This seems very specific and hopefully only necessary temporarily.
->
+On Fri, May 26, 2023 at 06:25:18PM +0800, Zhangjin Wu wrote:
 
-RISC-V is such a new ISA and the Spec (especially the SBI) changes very
-frequently ;-)
+> > On 2023-05-25 01:52:29+0800, Zhangjin Wu wrote:
+> > > riscv qemu has a builtin bios (opensbi), but it may not match the lat=
+est
+> > > kernel and some old versions may hang during boot, let's allow user p=
+ass
+> > > a newer version to qemu via the -bios option.
+> >=20
+> > Nitpick:
+> >=20
+> > This seems very specific and hopefully only necessary temporarily.
+> >
+>=20
+> RISC-V is such a new ISA and the Spec (especially the SBI) changes very
+> frequently ;-)
 
-> Instead it could be changed to some generic mechanim like
-> "QEMU_ARGS_EXTRA"?
->
 
-Good point, will apply it.
+Huh. Could you please expand on which versions of QEMU will hang while
+booting an upstream or stable kernel? Which kernels would be good to
+know too.
 
 Thanks,
-Zhangjin
+Conor.
 
-> > we can use it like this:
-> > 
-> >     $ make run BIOS=/path/to/new-bios ...
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/Makefile | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > index 9adc8944dd80..9213763ab3b6 100644
-> > --- a/tools/testing/selftests/nolibc/Makefile
-> > +++ b/tools/testing/selftests/nolibc/Makefile
-> > @@ -70,7 +70,8 @@ QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> >  QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> >  QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> >  QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> > -QEMU_ARGS            = $(QEMU_ARGS_$(ARCH))
-> > +QEMU_ARGS_BIOS       = $(if $(BIOS),-bios $(BIOS))
-> > +QEMU_ARGS            = $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_BIOS)
-> >  
-> >  # OUTPUT is only set when run from the main makefile, otherwise
-> >  # it defaults to this nolibc directory.
+--+DgvsBgu6jRefMs1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHCLogAKCRB4tDGHoIJi
+0kjpAPwML0wLmXcsHy9jNdLnSR8p4LF+9ZCZ/8pv1hm0Fgq9IQEA7ZLOR0N6gyxT
+UTASO3uvvgtigCW04/NkCWF9NWVS1A8=
+=VBPR
+-----END PGP SIGNATURE-----
+
+--+DgvsBgu6jRefMs1--
