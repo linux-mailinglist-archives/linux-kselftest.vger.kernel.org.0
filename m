@@ -2,97 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053AD712CDA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 20:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53630712D27
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 21:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbjEZSwT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 May 2023 14:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S229990AbjEZTVp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 May 2023 15:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjEZSwS (ORCPT
+        with ESMTP id S229502AbjEZTVo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 May 2023 14:52:18 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930A3125
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 May 2023 11:52:17 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3f6c6320d4eso25101cf.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 May 2023 11:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685127136; x=1687719136;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sR4oeJqmOlTeZziilw2pYUhae8MRA2mQQoVrekapX1Y=;
-        b=Qz+BYl7aT9JXo13xkBr+cg6STdDW/DISzgnu/3q2a7KyoW7PWXvRA5tR1QExlGRTMe
-         dstv/G7jyoflL/mHoOp0kVBZwuvRLpIh57Sc684zPHJl7dYwyPE2eJ6B6NwhlvLyUZJc
-         oCmeRsJKn8TkUAR0kPTPn7Oz1RPZDVjb+DbTlQ3PhC6IKW1bawvX6xZhoFwJcSUSKKDL
-         j8RV15cRmPe4W6k17A6IBv6xodfpfVUFAmA/gK7L9CiIlcCk3qDkelwDFoKj6VNT4WLf
-         5Zn2kSD17s4VM3Td2gDFJaEiJ8W7f1b7G/TYc9G/rkYTu+vH4ko6RDMRLg/C1DCc0yEl
-         Zy6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685127136; x=1687719136;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sR4oeJqmOlTeZziilw2pYUhae8MRA2mQQoVrekapX1Y=;
-        b=AmDlVHlclpnvK5sM1UY8o73es9F2zKD7g+UmWAPixUGUYGDI5jLEm6hBnVDLrsa/+V
-         xxY68tes5GR+IEFYFzc73QcN2W6L1avmWiBDSF4iQvVoEPvmGRBOHjpROUjF0nUSHLd0
-         fCD10p8PYjiHKMlM8h393H3Ys8+ouyrEdGIhdIWFhovr0Wceu9OyIrNbw+bwUNt/A10V
-         +u27CUwtfKvrvXZXTc775n/sr9PRq6teGtv/OjkP+86V4xEAX84qkVUSKcdvJVlaZ/uI
-         CyrvvabfqiMmlqiyDoyH6xuj+qQh+nKKJFs5N6+/l5eydZXI6fyh55+Q9JjzfCJqdndx
-         6ISQ==
-X-Gm-Message-State: AC+VfDxpE70tm1djNYdRuwJeHuh8S/OjE5ExpBMgFfXWWqagLymOmxtl
-        Y+jNo8rwezT7dEmfIjk9/JrLe9TERy2bhvLAGexcWA==
-X-Google-Smtp-Source: ACHHUZ4M8DEI0Tdun8SLqksnPN4JKE0wIBIzq0MYbMAD1vEq1DPyQajDwvrOFQryT8+84i8dQvJP2sY44u/hWQ+/3Ck=
-X-Received: by 2002:a05:622a:2d4:b0:3f7:ffc8:2f6f with SMTP id
- a20-20020a05622a02d400b003f7ffc82f6fmr22879qtx.28.1685127136612; Fri, 26 May
- 2023 11:52:16 -0700 (PDT)
+        Fri, 26 May 2023 15:21:44 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A509E13A;
+        Fri, 26 May 2023 12:21:42 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 6D0D860204;
+        Fri, 26 May 2023 21:21:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1685128900; bh=gdnV35r+qZer6ioSJSPnjms1VtPejxd0IlIT7RFCCbg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IQ/qNCriuge2j3d/O+15dL1nZPwlXbH+pDg9rJjS16liWnpzqTXbR7RVINDaCWIjF
+         jmqP1qNdOImAt6lNiPow4lUeUIP+IPnTsYv0OSUTObsWiXQBdf76Q1BPZKSmxi726f
+         qmKBGTborb3ZPnQzRsDeX5ofYhGkevMRh7+UNE/HyMywPZI0xbNmdNA1I4HhlfwHF1
+         VB6nX75KaEXWShSXkIqZZIWkCVDlCXWBKVt92xyXFlq/GeFzcJ1Ajw1XJTl5tNEEd7
+         0dkZw8XQvEeNbzBC33JLKVPyXoLj4/abakkFtIoX9FwI+qGofhSI6uXOhvKg4ljcPn
+         G8BaBKky+fevw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id EjSdx_xuliag; Fri, 26 May 2023 21:21:38 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id EE76A60203;
+        Fri, 26 May 2023 21:21:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1685128898; bh=gdnV35r+qZer6ioSJSPnjms1VtPejxd0IlIT7RFCCbg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=W9FRbhl898RDurbIWAG9elsTFrdcuRfZcsxKAIHKgpgJqhBCwFuf1NlyfZnpB6ojj
+         PY0aBzU9IVi0yfT2ZO78/7KNaqzOvmsTuzoI4SgEDU2ZZQvxsxpFEoi882VNIG6GuP
+         Jc+D6Tv4ca2y0hwq7l/HMaoIATrcAswvWxt0yGSlK6NSw1EF4szHWzZjwVo927hBJi
+         2zSiAxrDTqvNYIOYnx1jVHgr9+gXrLxbqMnLq4efex86sixX8cTZdXX8D1iP04BkZV
+         MKjNbKNyGn/hDL+WgFF9J5KoH9i5G649CVKQ5ru7rlX2JHY6ow/PkacpRId2n/esWO
+         p/wjtDeu1AIOA==
+Message-ID: <8412fb0f-4b7c-b305-0947-ae68701bad20@alu.unizg.hr>
+Date:   Fri, 26 May 2023 21:21:03 +0200
 MIME-Version: 1.0
-References: <20230526075355.586335-1-davidgow@google.com>
-In-Reply-To: <20230526075355.586335-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 26 May 2023 11:52:05 -0700
-Message-ID: <CAGS_qxqJeMDXA1b_MJrHSg8rGEM6K2UXqaxNVmwW_oQEFwQ1Xw@mail.gmail.com>
-Subject: Re: [RFC PATCH] kunit: Move kunit_abort() call out of kunit_do_failed_assertion()
-To:     David Gow <davidgow@google.com>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESEND PATCH v5 2/3] test_firmware: fix a memory leak with reqs
+ buffer
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei Zhang <tianfei.zhang@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        Dan Carpenter <error27@gmail.com>, Takashi Iwai <tiwai@suse.de>
+References: <20230509084746.48259-1-mirsad.todorovac@alu.unizg.hr>
+ <20230509084746.48259-2-mirsad.todorovac@alu.unizg.hr>
+ <256bc822-ba20-c41a-1f3b-5b6aacead32e@alu.unizg.hr>
+ <f9212fd0-0a52-4076-a97a-c5af8de194cf@kili.mountain>
+ <72257758-a0e6-1118-f397-431ac9ec3059@alu.unizg.hr>
+ <828b1d4c-dac8-4a64-9f1d-452762dc07bd@kili.mountain>
+ <ZG2h34KzhQWONNec@bombadil.infradead.org>
+Content-Language: en-US
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZG2h34KzhQWONNec@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 26, 2023 at 12:54=E2=80=AFAM David Gow <davidgow@google.com> wr=
-ote:
->
-> KUnit aborts the current thread when an assertion fails. Currently, this
-> is done conditionally as part of the kunit_do_failed_assertion()
-> function, but this hides the kunit_abort() call from the compiler
-> (particularly if it's in another module). This, in turn, can lead to
-> both suboptimal code generation (the compiler can't know if
-> kunit_do_failed_assertion() will return), and to static analysis tools
-> like smatch giving false positives.
+On 5/24/23 07:34, Luis Chamberlain wrote:
+> On Thu, May 18, 2023 at 06:20:37PM +0300, Dan Carpenter wrote:
+>> On Fri, May 12, 2023 at 08:58:58PM +0200, Mirsad Goran Todorovac wrote:
+>>> On 12. 05. 2023. 15:09, Dan Carpenter wrote:
+>>>> On Fri, May 12, 2023 at 02:34:29PM +0200, Mirsad Todorovac wrote:
+>>>>>> @@ -1011,6 +1016,11 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
+>>>>>>     	mutex_lock(&test_fw_mutex);
+>>>>>> +	if (test_fw_config->reqs) {
+>>>>>> +		rc = -EBUSY;
+>>>>>> +		goto out_bail;
+>>>>>> +	}
+>>>>>> +
+>>>>>>     	test_fw_config->reqs =
+>>>>>>     		vzalloc(array3_size(sizeof(struct test_batched_req),
+>>>>>>     				    test_fw_config->num_requests, 2));
+>>>>>
+>>>>> I was just thinking, since returning -EBUSY for the case of already allocated
+>>>>> test_fw_config->reqs was your suggestion and your idea, maybe it would be OK
+>>>>> to properly reflect that in Co-developed-by: or Signed-off-by: , but if I
+>>>>> understood well, the CoC requires that I am explicitly approved of those?
+>>>>>
+>>>>
+>>>> If everyone else is okay, let's just apply this as-is.  You did all the
+>>>> hard bits.
+>>>>
+>>>> regards,
+>>>> dan carpenter
+>>>
+>>> If it is OK with you, then I hope I have your Reviewed-by:
+>>>
+>>
+>> Wow.  Sorry for all the delay on this.
+>>
+>> Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
+>>
+> 
+> Thanks for doing this work! It looks much better now split up!
 
-Another thought: this impacts
-https://github.com/Rust-for-Linux/linux/blob/rust/rust/kernel/kunit.rs.
-They're currently calling kunit_do_failed_assert() always with type=3DASSER=
-TION.
+No problem. It's a great exercise for the little grey cells :-)
 
-This change would actually make things better since they could handle
-shutting down the thread themselves instead of having it happen behind
-an opaque FFI layer.
-But we'd just need to make sure we get that code updated around when
-this change goes in.
+> For all 3 patches:
+> 
+> Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Daniel
+Thanks,
+Mirsad
+
+> Greg, can you pick these up?
+> 
+>    Luis
