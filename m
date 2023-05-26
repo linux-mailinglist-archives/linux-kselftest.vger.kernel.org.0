@@ -2,70 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E58B712BB9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 19:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088F0712C67
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 20:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237116AbjEZR0O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 May 2023 13:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
+        id S229736AbjEZS1c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 May 2023 14:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjEZR0N (ORCPT
+        with ESMTP id S229694AbjEZS1b (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 May 2023 13:26:13 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F83F7
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 May 2023 10:26:12 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f6a6e9d90dso10161cf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 May 2023 10:26:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685121971; x=1687713971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=71Kxf0k6A8M4TUhFFp1r7IpZ1IkXMD6IyhPra1EhXqk=;
-        b=6JFoJvMoUmS488Gtv5rl7bYHx5RMyM4Q08SLX7BHAkIhGlTVYeCKY0OSn4E2eCugXu
-         zmcrRvPdhswhmrwoyPrWt/85tQkdfzXl+guWml4trv26xbngKx5ndaDqFjPruY1c/4HC
-         xMDd8SUGj6dkvJvHQ4fSlyqWqxMa92Lo64ZJIiiTo4E+Q+2UDX/lTnuARHB+hiXDOvfH
-         sMECPMUfU1H1XsD9r0q+067weg2m4FE4Fog1AXYEQR0HfjT3usMO+Qn1AP1n9gk+kWJq
-         3VCtjAkl4jE38cyeT/X1Tky/qBuNrFQ3WZ1ALZpljVkB+B5cJWW7Wsh3cBFqKqUyBlAl
-         JsaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685121971; x=1687713971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=71Kxf0k6A8M4TUhFFp1r7IpZ1IkXMD6IyhPra1EhXqk=;
-        b=EmalOK4qOBNUbJElSmc3jMJ+M5anO28cJxSevIK8I6gfCGZLIEaZkXP10spPTQwICy
-         aTzjlfSm9dZ7+X+SgwbajQbrCkZkqdwRGfkUhb8o1Cfzxs2pSysbfpnWDC0zugLkeAwp
-         Qhd0yBUFtcRzFDZyU6Ij8vBnTgFME1G1GvoRBUyaoUwCTzvDLkTqBNz8gDfVu+RYrr51
-         T05NNou60Bbz/ouEPy/pQg1epImnKHKx3xBQ7aGlCAVFyHMxYLJPjxChJME1GtG1DuSn
-         jZ/rhsoFgnfKEZ2TKY/W9G3iO+OLA2OaNtGEqrvQNnXkMno4T+RcKS3SvCHjDpMuhboX
-         q+qg==
-X-Gm-Message-State: AC+VfDzZfYjhIYP63of4iRCntDtwUwsL8TtJQlHVcwXww7h2mSMiM7+s
-        ds1RL3p+c1v3LAyTUPlUY8Mlvem5EPivG56QBEE21g==
-X-Google-Smtp-Source: ACHHUZ6OCA1JGkLdbuikHU8V1AixK0LKLrs9AT8xGtOvZ6eNwRyFt1Scz9BlSLQpwFsl4F5nru3SB5f1MSvM66Ydhqo=
-X-Received: by 2002:a05:622a:1a15:b0:3f6:97b4:1a4b with SMTP id
- f21-20020a05622a1a1500b003f697b41a4bmr132708qtb.21.1685121971305; Fri, 26 May
- 2023 10:26:11 -0700 (PDT)
+        Fri, 26 May 2023 14:27:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3BED3;
+        Fri, 26 May 2023 11:27:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77E2E60ACA;
+        Fri, 26 May 2023 18:27:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52505C433EF;
+        Fri, 26 May 2023 18:27:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685125649;
+        bh=B9a2+71TulzKBO9c2ZxBPHtYPJB9s9lgR7ZlY+O6qkU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yzH6gnNir81Oov6JCgRSOSjBEmZ4NR3JxsObBl2m+Rm4Oc3/T1dpci6YSkL4MohI/
+         lHmxJgwFGQFguSb3LbMIZpV81P/lUP+Ni3f3YUTam9ZFR0JwwTx4Ki6KfVN278UulY
+         KQbZ6akaW78CjenlW0TLGwlTt9hTzrieTn/zIynU=
+Date:   Fri, 26 May 2023 19:27:26 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dragos-Marian Panait <dragos.panait@windriver.com>
+Cc:     stable@vger.kernel.org, wenxu <wenxu@ucloud.cn>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        William Zhao <wizhao@redhat.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 5.10 0/3] Fix for CVE-2022-4269
+Message-ID: <2023052617-preorder-universal-1b5d@gregkh>
+References: <20230516190040.636627-1-dragos.panait@windriver.com>
 MIME-Version: 1.0
-References: <20230526075355.586335-1-davidgow@google.com>
-In-Reply-To: <20230526075355.586335-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 26 May 2023 10:26:00 -0700
-Message-ID: <CAGS_qxp3vNeUdFEpTZdD_kazhc+YJ_EumyPTFEwxgkOP4RPn9Q@mail.gmail.com>
-Subject: Re: [RFC PATCH] kunit: Move kunit_abort() call out of kunit_do_failed_assertion()
-To:     David Gow <davidgow@google.com>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516190040.636627-1-dragos.panait@windriver.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,23 +62,12 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 26, 2023 at 12:54=E2=80=AFAM David Gow <davidgow@google.com> wr=
-ote:
->
-> KUnit aborts the current thread when an assertion fails. Currently, this
-> is done conditionally as part of the kunit_do_failed_assertion()
-> function, but this hides the kunit_abort() call from the compiler
-> (particularly if it's in another module). This, in turn, can lead to
-> both suboptimal code generation (the compiler can't know if
-> kunit_do_failed_assertion() will return), and to static analysis tools
-> like smatch giving false positives.
->
-> Moving the kunit_abort() call into the macro should give the compiler
-> and tools a better chance at understanding what's going on. Doing so
-> requires exporting kunit_abort(), though it's recommended to continue to
-> use assertions in lieu of aborting directly.
+On Tue, May 16, 2023 at 10:00:37PM +0300, Dragos-Marian Panait wrote:
+> The following commits are needed to fix CVE-2022-4269:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa6d639930ee5cd3f932cc314f3407f07a06582d
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=78dcdffe0418ac8f3f057f26fe71ccf4d8ed851f
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ca22da2fbd693b54dc8e3b7b54ccc9f7e9ba3640
 
-Should we rename it to __kunit_abort() to discourage that?
-That would match what we do with __kunit_test_suites_init().
+All now queued up, thanks.
 
-Daniel
+greg k-h
