@@ -2,46 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE41971217F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 09:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3C8712181
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 May 2023 09:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236059AbjEZHvY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 May 2023 03:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
+        id S242533AbjEZHv0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 May 2023 03:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242496AbjEZHvX (ORCPT
+        with ESMTP id S242512AbjEZHvY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 May 2023 03:51:23 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4B5134;
-        Fri, 26 May 2023 00:51:22 -0700 (PDT)
+        Fri, 26 May 2023 03:51:24 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F79E135;
+        Fri, 26 May 2023 00:51:23 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1685087480;
-        bh=Zyhdh9ZuPo+ME50q2El6he6ySdHrvo67VyZNo1LLr7c=;
-        h=From:Subject:Date:To:Cc:From;
-        b=kJXGtny1GsJg3RMvIQSM8MtCYqHctFeCKIxZWqMdRE/+MvsFn5bCsnfEb3lFHMp9x
-         OfFgF+Tano/572BXd4w5AnL+Ui1mV4zkhAGSFWWfsfvnavw8SzgYXS+UfAFaL0iwLv
-         5zjFiYLvj9p9aTLGFi/XYGpD0U97Njm8SkuTZhXo=
-Subject: [PATCH v2 0/2] tools/nolibc: avoid coredumps and speed up tests
-Date:   Fri, 26 May 2023 09:51:18 +0200
-Message-Id: <20230526-nolibc-test-no-dump-v2-0-a66500bf73fc@weissschuh.net>
+        s=mail; t=1685087481;
+        bh=DkJgAJcAvtdVnot+t7IOseLE6pLBA89qfDYOzqzRxr4=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=lLn5Ra4UT5W+7hPi/W7hyftOnWvQtbYt+RnnVvKlguWzQzyC0CwMO2hGXzu6ur9yH
+         qfmUquarnq6NgvYS+xMiQ8MFmMW45qi4cvdFJu3NugZ30I2j+u6vl7Wz5c3sc1gHEz
+         6DY8wQXm+P5v9F77hDDwcSJsc8sUYdW2ttJUKJJQ=
+Date:   Fri, 26 May 2023 09:51:19 +0200
+Subject: [PATCH v2 1/2] tools/nolibc: add support for prctl()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAPZkcGQC/32NTQ6CMBBGr0K6dgytAuLKexgW/RnsJFhIp6CGc
- HcrB3D3vS95eatgjIQsrsUqIi7ENIYM6lAI63V4IJDLLFSpTmWlagjjQMZCQk55g5ufE2hppGu
- rqnH9RWTTaEYwUQfrsxvmYcjnFLGn9566d5k9cRrjZy8v8vf+jywSSqgVNuqs29oZdXshMbP1s
- z8GTKLbtu0LCAyznNAAAAA=
+Message-Id: <20230526-nolibc-test-no-dump-v2-1-a66500bf73fc@weissschuh.net>
+References: <20230526-nolibc-test-no-dump-v2-0-a66500bf73fc@weissschuh.net>
+In-Reply-To: <20230526-nolibc-test-no-dump-v2-0-a66500bf73fc@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685087479; l=896;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685087479; l=2797;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=Zyhdh9ZuPo+ME50q2El6he6ySdHrvo67VyZNo1LLr7c=;
- b=lhFCnONVLCvjgo3bPQSrTE2QYVYVMBqDGxEknyxufSq0kos06yFsUc9d+ZGq58A7dQOPfV6LA
- 6EbRK97jzyABM13PBu/HwBHFJcYhFzgNoOxC4M+BMa54nh1iB0GuViq
+ bh=DkJgAJcAvtdVnot+t7IOseLE6pLBA89qfDYOzqzRxr4=;
+ b=1qmpuRz+hs8ZGEviZzteWWt0ML8v4Ia8/JBkYrADdw2L0sSJWamEoTw3a3mzpd35T6OfV0d2/
+ uvz8xMz4/LmC5SqdGi/Jv4+cymN2dC0aC+H8ojsYN0kyrYw8n7SMt0n
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -54,31 +52,81 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Small optimization to avoid coredump writing during the stack protector
-tests.
-Adds prctl() as prerequisite.
-
-This series is based on nolibc/20230524-nolibc-rv32+stkp4
+It will be used to disable core dumps from the child spawned to validate
+the stack protector functionality.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Changes in v2:
-- Fix compilation warning in prctl() testcase
-- Link to v1: https://lore.kernel.org/r/20230526-nolibc-test-no-dump-v1-0-62e724a96db2@weissschuh.net
-
----
-Thomas Weißschuh (2):
-      tools/nolibc: add support for prctl()
-      selftests/nolibc: prevent coredumps during test execution
-
  tools/include/nolibc/sys.h                   | 27 +++++++++++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c |  3 +++
- 2 files changed, 30 insertions(+)
----
-base-commit: 1974a2b5fd434812b32952b09df7b79fdee8104d
-change-id: 20230526-nolibc-test-no-dump-a1b1d9557df8
+ tools/testing/selftests/nolibc/nolibc-test.c |  2 ++
+ 2 files changed, 29 insertions(+)
 
-Best regards,
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 7874062bea95..3d521feffad6 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -22,6 +22,7 @@
+ #include <linux/fcntl.h> /* for O_* and AT_* */
+ #include <linux/stat.h>  /* for statx() */
+ #include <linux/reboot.h> /* for LINUX_REBOOT_* */
++#include <linux/prctl.h>
+ 
+ #include "arch.h"
+ #include "errno.h"
+@@ -894,6 +895,32 @@ int open(const char *path, int flags, ...)
+ }
+ 
+ 
++/*
++ * int prctl(int option, unsigned long arg2, unsigned long arg3,
++ *                       unsigned long arg4, unsigned long arg5);
++ */
++
++static __attribute__((unused))
++int sys_prctl(int option, unsigned long arg2, unsigned long arg3,
++		          unsigned long arg4, unsigned long arg5)
++{
++	return my_syscall5(__NR_prctl, option, arg2, arg3, arg4, arg5);
++}
++
++static __attribute__((unused))
++int prctl(int option, unsigned long arg2, unsigned long arg3,
++		      unsigned long arg4, unsigned long arg5)
++{
++	int ret = sys_prctl(option, arg2, arg3, arg4, arg5);
++
++	if (ret < 0) {
++		SET_ERRNO(-ret);
++		ret = -1;
++	}
++	return ret;
++}
++
++
+ /*
+  * int pivot_root(const char *new, const char *old);
+  */
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 6e0a4dbe321e..95ff2867a91d 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -22,6 +22,7 @@
+ #include <sys/ioctl.h>
+ #include <sys/mman.h>
+ #include <sys/mount.h>
++#include <sys/prctl.h>
+ #include <sys/reboot.h>
+ #include <sys/stat.h>
+ #include <sys/syscall.h>
+@@ -580,6 +581,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
+ 		CASE_TEST(poll_stdout);       EXPECT_SYSNE(1, ({ struct pollfd fds = { 1, POLLOUT, 0}; poll(&fds, 1, 0); }), -1); break;
+ 		CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll((void *)1, 1, 0), -1, EFAULT); break;
++		CASE_TEST(prctl);             EXPECT_SYSER(1, prctl(PR_SET_NAME, (unsigned long)NULL, 0, 0, 0), -1, EFAULT); break;
+ 		CASE_TEST(read_badf);         EXPECT_SYSER(1, read(-1, &tmp, 1), -1, EBADF); break;
+ 		CASE_TEST(sched_yield);       EXPECT_SYSZR(1, sched_yield()); break;
+ 		CASE_TEST(select_null);       EXPECT_SYSZR(1, ({ struct timeval tv = { 0 }; select(0, NULL, NULL, NULL, &tv); })); break;
+
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.40.1
 
