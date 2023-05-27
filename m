@@ -2,158 +2,263 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4ED7131F0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 May 2023 04:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1419471322F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 May 2023 05:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjE0C1E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 May 2023 22:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S229708AbjE0Dju (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 May 2023 23:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjE0C1D (ORCPT
+        with ESMTP id S229522AbjE0Djr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 May 2023 22:27:03 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192AEC9;
-        Fri, 26 May 2023 19:27:02 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b011cffef2so11925005ad.3;
-        Fri, 26 May 2023 19:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685154421; x=1687746421;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yGd3VhznQ2I/NQDk+4roFWXHVSOBmaxtJ+oHTP+UbGk=;
-        b=n7sDEKh6jt4tjfPVQPZjuftdEuC76pajkpfPSZEdFb7ieTmVQ5SpkxQNB5yMcm06QN
-         isB+1LbRGBHRIUuoBTXYa6Y702+fLmeOCqWjOutS3GZWlk7ZHJbef/Kcn2GDtcXt7Di5
-         B0F10QB32YuiJwlAvNLeESVDkmplddaavJBcbyNa2aP2XC3bQ0hI5yR8F/Yxwe5RODhi
-         Wb72xgb9IQXkByEhjLGwZbvv1kua9AC/H/Pkq96DLHrfA9rxhbQVjVHhbgkQ1B/bXkAB
-         aHgoCQgsq+/XaBn2ddmY+9Iwi18VcA5IRBqMr6/eWKC+vitweWJ0fDlo+tr2j1vcbrHE
-         eJ+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685154421; x=1687746421;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yGd3VhznQ2I/NQDk+4roFWXHVSOBmaxtJ+oHTP+UbGk=;
-        b=RoreXIaO1cV//+dZ4Q5L7Jg8UBM/HBLCa8SGfk0qWsX6EpTCSaah62Kf8vj4rKnmOz
-         F+QKuNJw6QlmNm69UdiIQikMgE7PzRI5xYT8lpZhIiaktHgPPWISFYPvd7LvwJH405Wn
-         FdU5w7JqWPYTRX761kwzbeQQAkaswj1zjDADp5btEthHTwx4LMoeLx+kkuh+1xk6dPJI
-         MQj1c9cj+efcvUTZRq/Lu03rO4uHlym77QxuVpLFK7JIKbFqOHQtWcke7wAEHltSR2a2
-         YE4ydo0wZTNXA02Y4ZJ+CFbPkxKrpT1YQ8ZfdFEkmWgybqm6OOA0FPK1D4pYDeqNxDWc
-         mHnw==
-X-Gm-Message-State: AC+VfDyFEUPFdw8jQwcWdV8TZ5sTRBzMqHgTP5Xo0DbqyTScn/26JJAU
-        JFm3VKkeVBK2NBrhsA3wnhVBq40hgo4GOOI/xvg=
-X-Google-Smtp-Source: ACHHUZ6aAeSR4JF6rBXm5cC75wX5zCQJnq/3rFEcZQpE51VFfD85Rkd+KHCNiQAQXbtR9I84BTrFBx+V7cy+Ct2ere0=
-X-Received: by 2002:a17:903:2345:b0:1af:f4f5:6fae with SMTP id
- c5-20020a170903234500b001aff4f56faemr5778765plh.54.1685154421346; Fri, 26 May
- 2023 19:27:01 -0700 (PDT)
+        Fri, 26 May 2023 23:39:47 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EE8EA;
+        Fri, 26 May 2023 20:39:43 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1685158778t8e4mrur
+Received: from localhost.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 27 May 2023 11:39:36 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: mdpNu8XZCyCi4LvvLx7OdFvp/vpXARmkS5idFTDCHgkzfDC+fj4NC1rFle0VI
+        GnqswCHld1I8GbOisvsAwaXT56Nqz1LLLITw4ScrHKahWQ11jT7qd+jg+rzxm7pMLJobVIc
+        b8dQy4FC90bUzdU3FHaS+FkKyvDFBc8WCppDNR8MeMwGmcvD0N0zqcR9D8g0TXOQfpYmXT3
+        R3zSr31KMyHXSypSzO9YrBjsKkdF3KBklmWgPvxXLuQXR1sXoCNUz/64JvXL+UOR6500Uz1
+        9M4N4lvYsdNIVWOxyLgClmLASSsiCliY5IkhiTKTGsgw+ylpx7X1+KeQ5LXgEA+4kgpmTKs
+        gSPu7krzk1vGffxhBiYhZku264mr6N034GMkEiwafPA8WwecF158JAxo4Az6Q==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 827569819390505217
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com
+Subject: Re: [PATCH 13/13] tools/nolibc: sys_gettimeofday: riscv: use __NR_clock_gettime64 for rv32
+Date:   Sat, 27 May 2023 11:39:36 +0800
+Message-Id: <20230527033936.15465-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230527012635.19595-1-falcon@tinylab.org>
+References: <20230527012635.19595-1-falcon@tinylab.org>
 MIME-Version: 1.0
-References: <cover.1684999824.git.haibo1.xu@intel.com> <26dea518fc5e8da51e61db279d175364bfecd009.1684999824.git.haibo1.xu@intel.com>
- <20230525-705ddcbcd43aa63e3fd356c8@orel> <CAJve8onF9MFuaVsThFnhjWr6ZomB0Lhr9WXGvMiJDt5vrjeKLg@mail.gmail.com>
- <20230526-d8d768a23cd6bdc274bc165c@orel>
-In-Reply-To: <20230526-d8d768a23cd6bdc274bc165c@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Sat, 27 May 2023 10:26:51 +0800
-Message-ID: <CAJve8on=5NtnzR=iAQs2D4B2Ly=KFXF-0ZDtkXFuz-SdxTGGmA@mail.gmail.com>
-Subject: Re: [PATCH v2 09/11] KVM: riscv: selftests: Make check_supported arch specific
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 26, 2023 at 4:44=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
-om> wrote:
->
-> On Fri, May 26, 2023 at 03:50:32PM +0800, Haibo Xu wrote:
-> > On Fri, May 26, 2023 at 12:40=E2=80=AFAM Andrew Jones <ajones@ventanami=
-cro.com> wrote:
-> > >
-> > > On Thu, May 25, 2023 at 03:38:33PM +0800, Haibo Xu wrote:
-> > > > check_supported() was used to verify whether a feature/extension wa=
-s
-> > > > supported in a guest in the get-reg-list test. Currently this info
-> > > > can be retrieved through the KVM_CAP_ARM_* API in aarch64, but in
-> > > > riscv, this info was only exposed through the KVM_GET_ONE_REG on
-> > > > KVM_REG_RISCV_ISA_EXT pseudo registers.
-> > > >
-> > > > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > > > ---
-> > > >  tools/testing/selftests/kvm/get-reg-list.c | 32 +++++++++++-------=
-----
-> > > >  1 file changed, 16 insertions(+), 16 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/tes=
-ting/selftests/kvm/get-reg-list.c
-> > > > index f6ad7991a812..f1fc113e9719 100644
-> > > > --- a/tools/testing/selftests/kvm/get-reg-list.c
-> > > > +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> > > > @@ -99,6 +99,20 @@ void __weak print_reg(const char *prefix, __u64 =
-id)
-> > > >  }
-> > > >
-> > > >  #ifdef __aarch64__
-> > > > +static void check_supported(struct vcpu_reg_list *c)
-> > > > +{
-> > > > +     struct vcpu_reg_sublist *s;
-> > > > +
-> > > > +     for_each_sublist(c, s) {
-> > > > +             if (!s->capability)
-> > > > +                     continue;
-> > >
-> > > I was going to say that making this function aarch64 shouldn't be
-> > > necessary, since riscv leaves capability set to zero and this functio=
-n
-> > > doesn't do anything, but then looking ahead I see riscv is abusing
-> > > capability by putting isa extensions in it. IMO, capability should
-> > > only be set to KVM_CAP_* values. Since riscv doesn't use it, then it
-> > > should be left zero.
-> > >
-> > > If we're going to abuse something, then I'd rather abuse the 'feature=
-'
-> > > member, but since it's only an int (not an unsigned long), then let's
-> > > just add an 'unsigned long extension' member.
-> > >
-> >
-> > Good idea!
-> >
-> > For the new 'extension' member in riscv, I think its use case should be
-> > identical to the 'feature' member in aarch64(KVM_RISCV_ISA_EXT_F
-> > was similar to KVM_ARM_VCPU_SVE)? If so, I think we can just reuse
-> > the 'feature' member since the data type was not a big deal.
->
-> You're right. An int is fine for the isa extension index, which is all we
-> need to represent.
->
-> Thanks,
-> drew
+Hi, Thomas, Willy
 
-Thanks for the suggestion! I will include the change in v3 soon.
+> > On 2023-05-25 02:03:32+0800, Zhangjin Wu wrote:
+> > > rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
+> > > __NR_gettimeofday and __NR_clock_gettime after kernel commit d4c08b9776b3
+> > > ("riscv: Use latest system call ABI"), use __NR_clock_gettime64 instead.
+> > > 
+> > > This code is based on src/time/gettimeofday.c of musl and
+> > > sysdeps/unix/sysv/linux/clock_gettime.c of glibc.
+> > > 
+> > > Both __NR_clock_gettime and __NR_clock_gettime64 are added for
+> > > sys_gettimeofday() for they share most of the code.
+> > > 
+> > > Notes:
+> > > 
+> > > * Both tv and tz are not directly passed to kernel clock_gettime*
+> > >   syscalls, so, it isn't able to check the pointer automatically with the
+> > >   get_user/put_user helpers just like kernel gettimeofday syscall does.
+> > >   instead, we emulate (but not completely) such checks in our new
+> > >   __NR_clock_gettime* branch of nolibc.
+> > > 
+> > > * kernel clock_gettime* syscalls can not get tz info, just like musl and
+> > >   glibc do, we set tz to zero to avoid a random number.
+> > > 
+> > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > ---
+> > >  tools/include/nolibc/sys.h | 46 ++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 46 insertions(+)
+> > > 
+> > > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > > index 2642b380c6aa..ad38cc3856be 100644
+> > > --- a/tools/include/nolibc/sys.h
+> > > +++ b/tools/include/nolibc/sys.h
+> > > @@ -26,6 +26,7 @@
+> > >  
+> > >  #include "arch.h"
+> > >  #include "errno.h"
+> > > +#include "string.h"
+> > >  #include "types.h"
+> > >  
+> > >  
+> > > @@ -51,6 +52,11 @@
+> > >   * should not be placed here.
+> > >   */
+> > >  
+> > > +/*
+> > > + * This is the first address past the end of the text segment (the program code).
+> > > + */
+> > > +
+> > > +extern char etext;
+> > >  
+> > >  /*
+> > >   * int brk(void *addr);
+> > > @@ -554,7 +560,47 @@ long getpagesize(void)
+> > >  static __attribute__((unused))
+> > >  int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
+> > >  {
+> > > +#ifdef __NR_gettimeofday
+> > >  	return my_syscall2(__NR_gettimeofday, tv, tz);
+> > > +#elif defined(__NR_clock_gettime) || defined(__NR_clock_gettime64)
+> > > +#ifdef __NR_clock_gettime
+> > > +	struct timespec ts;
+> > > +#else
+> > > +	struct timespec64 ts;
+> > > +#define __NR_clock_gettime __NR_clock_gettime64
+> > > +#endif
+> > > +	int ret;
+> > > +
+> > > +	/* make sure tv pointer is at least after code segment */
+> > > +	if (tv != NULL && (char *)tv <= &etext)
+> > > +		return -EFAULT;
+> > 
+> > To me the weird etext comparisions don't seem to be worth it, to be
+> > honest.
+> >
+> 
+> This is the issue we explained in commit message:
+> 
+>     * Both tv and tz are not directly passed to kernel clock_gettime*
+>       syscalls, so, it isn't able to check the pointer automatically with the
+>       get_user/put_user helpers just like kernel gettimeofday syscall does.
+>       instead, we emulate (but not completely) such checks in our new
+>       __NR_clock_gettime* branch of nolibc.
+> 
+> but not that deeply described the direct cause, the direct cause is that the
+> test case passes a '(void *)1' and the kernel space of gettimeofday can simply
+> 'fixup' this issue by the get_user/put_user helpers, but our user-space tv and
+> tz code has no such function, just emulate such 'fixup' by a stupid etext
+> compare to at least make sure the data pointer is in data range. Welcome better
+> solution.
+> 
+>     CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
+>     CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+> 
+> Without this ugly check, the above cases would get such error:
+> 
+>     35 gettimeofday_bad1init[1]: unhandled signal 11 code 0x1 at 0x00000002 in init[10000+5000]
+>     CPU: 0 PID: 1 Comm: init Not tainted 6.4.0-rc1-00134-gf929c7b7184f-dirty #20
+>     Hardware name: riscv-virtio,qemu (DT)
+>     epc : 00012ccc ra : 00012ca8 sp : 9d254d90
+>      gp : 00016800 tp : 00000000 t0 : 00000000
+>      t1 : 0000000a t2 : 00000000 s0 : 00000001
+>      s1 : 00016008 a0 : 00000000 a1 : 9d254da8
+>      a2 : 00000014 a3 : 00000000 a4 : 00000000
+>      a5 : 00000000 a6 : 00000001 a7 : 00000193
+>      s2 : 00000023 s3 : 9d254da4 s4 : 00000000
+>      s5 : 00000000 s6 : 0000541b s7 : 00000007
+>      s8 : 9d254dcc s9 : 000144e8 s10: 00016000
+>      s11: 00000006 t3 : 00000000 t4 : ffffffff
+>      t5 : 00000000 t6 : 00000000
+>     status: 00000020 badaddr: 00000002 cause: 0000000f
+> 
+> Will at least append this test error in the commit message of the coming new
+> revision of this patch.
+> 
+> Hi, Willy, this also require your discussion, simply remove the above
+> two test cases may be not a good idea too, the check for gettimeofday is
+> perfectly ok.
+> 
+
+What about this? Just like Willy did in 1da02f51088 ("selftests/nolibc:
+support glibc as well"), Let's only limit the test case under the
+__NR_gettimeofday #ifdef:
+
+    diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+    index 702bf449f8d7..d52f3720918e 100644
+    --- a/tools/testing/selftests/nolibc/nolibc-test.c
+    +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+    @@ -563,7 +563,7 @@ int run_syscall(int min, int max)
+     		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
+     		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
+     		CASE_TEST(gettimeofday_null); EXPECT_SYSZR(1, gettimeofday(NULL, NULL)); break;
+    -#ifdef NOLIBC
+    +#if defined(NOLIBC) && defined(__NR_gettimeofday)
+     		CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
+     		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+     #endif
+
+With the above change, we can simply remove the ugly etext check like this:
+
+    diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+    index d1d26da306b7..ebe8ed018db6 100644
+    --- a/tools/include/nolibc/sys.h
+    +++ b/tools/include/nolibc/sys.h
+    @@ -572,17 +572,9 @@ int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
+     #endif
+     	int ret;
+     
+    -	/* make sure tv pointer is at least after code segment */
+    -	if (tv != NULL && (char *)tv <= &etext)
+    -		return -EFAULT;
+    -
+     	/* set tz to zero to avoid random number */
+    -	if (tz != NULL) {
+    -		if ((char *)tz > &etext)
+    -			memset(tz, 0, sizeof(struct timezone));
+    -		else
+    -			return -EFAULT;
+    -	}
+    +	if (tz != NULL)
+    +		memset(tz, 0, sizeof(struct timezone));
+     
+     	if (tv == NULL)
+     		return 0;
+    
+
+If agree, will apply this method in the next revision.
+
+> The same 'emulate' method is used in the waitid patch, but that only
+> requires to compare 'pid == INT_MIN', which is not that weird.
+> 
+> > > +
+> > > +	/* set tz to zero to avoid random number */
+> > > +	if (tz != NULL) {
+> > > +		if ((char *)tz > &etext)
+> > > +			memset(tz, 0, sizeof(struct timezone));
+> > > +		else
+> > > +			return -EFAULT;
+> > > +	}
+> > > +
+> 
+> The same issue here.
+>
+
+And the one for waitid may work like this:
+
+    @@ -1390,10 +1382,6 @@ pid_t sys_wait4(pid_t pid, int *status, int options, struct rusage *rusage)
+     	int idtype = P_PID;
+     	int ret;
+     
+    -	/* emulate the 'pid == INT_MIN' path of wait4 */
+    -	if (pid == INT_MIN)
+    -		return -ESRCH;
+    -
+     	if (pid < -1) {
+     		idtype = P_PGID;
+     		pid *= -1;
+    @@ -593,7 +593,9 @@ int run_syscall(int min, int max)
+     		CASE_TEST(unlink_root);       EXPECT_SYSER(1, unlink("/"), -1, EISDIR); break;
+     		CASE_TEST(unlink_blah);       EXPECT_SYSER(1, unlink("/proc/self/blah"), -1, ENOENT); break;
+     		CASE_TEST(wait_child);        EXPECT_SYSER(1, wait(&tmp), -1, ECHILD); break;
+    +#ifdef __NR_wait4
+     		CASE_TEST(waitpid_min);       EXPECT_SYSER(1, waitpid(INT_MIN, &tmp, WNOHANG), -1, ESRCH); break;
+    +#endif
+     		CASE_TEST(waitpid_child);     EXPECT_SYSER(1, waitpid(getpid(), &tmp, WNOHANG), -1, ECHILD); break;
+     		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
+     		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
+
+Best regards,
+Zhangjin
