@@ -2,205 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1721713A4A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 May 2023 17:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00715713B27
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 May 2023 19:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjE1PEy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 28 May 2023 11:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
+        id S229592AbjE1RgK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 28 May 2023 13:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjE1PEx (ORCPT
+        with ESMTP id S229486AbjE1RgJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 May 2023 11:04:53 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D3EB1;
-        Sun, 28 May 2023 08:04:50 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3093eb8cd1fso1473074f8f.1;
-        Sun, 28 May 2023 08:04:50 -0700 (PDT)
+        Sun, 28 May 2023 13:36:09 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EBCBD
+        for <linux-kselftest@vger.kernel.org>; Sun, 28 May 2023 10:36:03 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f601c57d8dso18234405e9.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 28 May 2023 10:36:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685286289; x=1687878289;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lmu2fGgKtj6ACiAeNAU++2qaCys/oPeAAPciVcyRr8E=;
-        b=VNTP3hIvPOJbJsHZd6LRbIC6MWhK1sardjlLZ64M0YHRKy2jGfyQbZIvleOVdxpIzY
-         hP1TLHTpTANUc/qjU7v4MOJBmXjXCUDkzRJybmuQJY7tHdM+r9rlACjXnJYuL5VnzZqz
-         KPx5JfBorA1LjDZwtpVDN3Ytr0TYOjjq8yQlnN2W6CKkqhqGg85XJ9q79ZrzcDEVLGLE
-         kZQs9rfB/rlGjAJqoSqfB5pDBUxFMmbraGczJTs1cyqKgWNLt75xxEoznyI+oRZlKnMQ
-         Bsp+JGXCGU456WqvlKEcMCo3QRlUqVjV1jja8qFZJVYQnjg8p++9b30UtQDOauoLgWej
-         mRkA==
+        d=tessares.net; s=google; t=1685295362; x=1687887362;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VgPDfFpDepN09tAvzxisbxa58llXbpe18nSgqJnJRjU=;
+        b=rgj5G2s+N52emvHq9W1ntw8O5uPxq+pFx+5FwzcifTQGSiHAVomnhwVHf1nnidWt6q
+         NrIujJh8uDAKJiVEE2AO+RaCfhYUiVuG0bcdG8m17Zt7PxdybGrfmJRSr/bJcL9zIB3t
+         bALRae5eRglG6ztQSpzYuISK6BCpS0ttutLSZenNkgg56GBcfDlsFeO0bOBrIVIG29W0
+         oFD5E1UKAIS6mRSN9YmJenVDqSCujgfmoCF52NYyyOfHDs4CYcbxG77k8++6omrvvUNu
+         xBWCslqPWucSlU2a0ghvYOqCiF3LeEISxTb6aUughSQlgc2OQvWsKVK1ZPP23IEUHdZQ
+         EyIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685286289; x=1687878289;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lmu2fGgKtj6ACiAeNAU++2qaCys/oPeAAPciVcyRr8E=;
-        b=INjroT7facXiaAU7UFweunD7100JszZKkEQP+BzizVD5iw6l6L3lJmBheEzSwVqAZj
-         ykULHosaob657CvmTEEQCo6wyY1iGZBMDni+2+x6Qj0JfuWxBAKZ3hNe9GadfvpUYUmj
-         QqIA+FPdfqhlr4fX+8BafbCUC9dOtWDfaQAffWs4hO++r93rWS/pjwdMx+PJkYFhliwb
-         lY9renFWq1vdm0vnbFFS5VU8yDXXwDsxaNtdJfCTFxVVECLfwgIbQiFXr3rIKZlR3LdJ
-         TMqkhoFpkDbWG2+KgT8ohTEWNRDNX25/tx2gv7zqtUz3YuNnhgR0cPuSWagI1YAmlf4G
-         E84w==
-X-Gm-Message-State: AC+VfDwRbNVLqu0hLKPZUYi7SViYeXJTRquNOZ2Pdo/L+Lwl6y1aZC7Z
-        0m511iRLRbL65iwstOgaw/7z0nNPQNU=
-X-Google-Smtp-Source: ACHHUZ5ROSZcIZxIZBRpBPo23jhUI5J74WfJyx14MDTpJxtVMUuL7kjNwe6vOgiT2cypRwPL0RLIDw==
-X-Received: by 2002:adf:f412:0:b0:306:2d3d:a108 with SMTP id g18-20020adff412000000b003062d3da108mr5913759wro.11.1685286289090;
-        Sun, 28 May 2023 08:04:49 -0700 (PDT)
-Received: from localhost (host81-154-179-160.range81-154.btcentralplus.com. [81.154.179.160])
-        by smtp.gmail.com with ESMTPSA id e8-20020a5d65c8000000b0030649242b72sm10939674wrw.113.2023.05.28.08.04.48
+        d=1e100.net; s=20221208; t=1685295362; x=1687887362;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VgPDfFpDepN09tAvzxisbxa58llXbpe18nSgqJnJRjU=;
+        b=T4D5YGoesOpB7/tZHQPSs1T32/45UOk5DAl9+TB2GQmM5IgJITt3ARcyPyZZF9EKIb
+         vFCOyEcjMb/oGz3BYMlABMgDRkhVQgS72+fvecdXVxJGxOE5/Nnkt+YmCGvp8z6mFcC7
+         M4FiXHfoqMdQO2dOX3RSJDeuAXYdV+Rjpx+U6M+Mwhvn5j4rly/o3sIB8m5SvJNDn1NO
+         GSfYCKITPT0Cph4rQ7yL2PhhE+N4BSFpIhSBx3l7NBDMV7ts4FBk8nXKlppTgmaSXS/o
+         6BQAD132INqw7wvAkaPzaZ9c/nCk2CchPPPt9A2g2MBPTwP2niK6hSJqdLmQFxb19CyO
+         wL8Q==
+X-Gm-Message-State: AC+VfDyM37PeXs6bC9iY1CKnE3eMeqxPPZJe3xprPRHAa8+QUUK17Kas
+        kONoalPfAolVObSloEX0MiIkvQ==
+X-Google-Smtp-Source: ACHHUZ5z6UUO9qErx7rddM51YnwXRZiYQBfzXxkC1QPVxR3oFA3IrRiJbAnW7uzu+eZzQY+dbKlJ4Q==
+X-Received: by 2002:a7b:ca42:0:b0:3f6:8ba:6ea2 with SMTP id m2-20020a7bca42000000b003f608ba6ea2mr4894454wml.15.1685295362339;
+        Sun, 28 May 2023 10:36:02 -0700 (PDT)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id z10-20020a7bc7ca000000b003f602e2b653sm15334523wmk.28.2023.05.28.10.36.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 08:04:48 -0700 (PDT)
-Date:   Sun, 28 May 2023 16:04:47 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH v1 3/3] selftests/mm: gup_longterm: add liburing tests
-Message-ID: <91f08840-4a43-4678-a116-ead7d3d77d19@lucifer.local>
-References: <20230519102723.185721-1-david@redhat.com>
- <20230519102723.185721-4-david@redhat.com>
+        Sun, 28 May 2023 10:36:02 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH net 0/8] selftests: mptcp: skip tests not supported by old
+ kernels (part 1)
+Date:   Sun, 28 May 2023 19:35:25 +0200
+Message-Id: <20230528-upstream-net-20230528-mptcp-selftests-support-old-kernels-part-1-v1-0-a32d85577fc6@tessares.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519102723.185721-4-david@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAN6Qc2QC/z2O0QqCQBBFf0XmuSFdK6RfiR7WdcwlXYeZMQLx3
+ 1uDerzncjl3BSWJpHAtVhB6RY1zyqE6FBAGnx6EscsZXOnq8uwaXFhNyE+YyPBPJ7bAqDT2Rmq
+ KujDPYjiPHT5JEo2K7DOoMA8uddOfujaUkDWtV8JWfArDLrLjz7CXLNTH9/ffDbIR7tv2ATEX4
+ d20AAAA
+To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Florian Westphal <fw@strlen.de>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Kishen Maloor <kishen.maloor@intel.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3353;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=75HYeXxG55KPo56OT1QMXARO4lwKjONuoUweD6PxHRY=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkc5EA0+GzNb8nihOX2uRnYncESRC+xg4pKxRCH
+ 3sJCo5oNgiJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZHORAAAKCRD2t4JPQmmg
+ c/j5D/sH3eiNSTv3LwOpchmkjY6MqFbvbi6mOgFz//+ZA0bTiNqOHHdCPpT54xqZaA3w79kikmr
+ A3Nn57sA4oAQNkhsrDKLIhZ74yita2bAjZTAa9xsO9BcIrTv2K59oz+2g/tydCEetWEp77iQsF1
+ qF8S8+OVYuKBsU8VtXf+Or49hbqu6RwzbE2VdMGy0OZjm4ZAJFWN0mmUTI0BeblLUrJYdFVfidQ
+ IhVhot7uV/NMKB/ih5GxWEXkll5zmLlkD976ykMnsOkWZDsupmnCXujpoKSKwjnAexP1nNZvuRP
+ xQJ00+M7iSNgzmMVWQT4LBqGs+eQ6McrpHVLKeoQea+bcCuaUJ9O/+DY/JIDH3zlVDV2ce0yNrc
+ lqyurAfO1rrs6HCOt4oJbF+dZLE81nHck5wgCh6txZwx3Ho7AwK61Yz9h5WU+n5k76dK1gVHd+I
+ gZykh5/XdL/vs2PoQa2IzWALvXThrdaVmT8iaaKSVWnlB7nBE0nR4uK6DzyfGKnu09vFBL1UZU2
+ LnJBV+pDuMkBZ8/MKofyiF4H6mtwBGthu/qX0b0Ws2YQnh1iVlR1txdAv5ulwbseJVWSb/7xF4N
+ 2h3Qm7xQFoUfJRE7UJC0QiGlwrGyoDugRPS+fihDgB4RraM4Cl9BykS+bvq77erhoyzGZ5D9liD
+ c7IFbmwDq/IFJjw==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 19, 2023 at 12:27:23PM +0200, David Hildenbrand wrote:
-> Similar to the COW selftests, also use io_uring fixed buffers to test
-> if long-term page pinning works as expected.
->
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  tools/testing/selftests/mm/gup_longterm.c | 73 +++++++++++++++++++++++
->  1 file changed, 73 insertions(+)
->
-> diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
-> index 44a3617fd423..d33d3e68ffab 100644
-> --- a/tools/testing/selftests/mm/gup_longterm.c
-> +++ b/tools/testing/selftests/mm/gup_longterm.c
-> @@ -22,6 +22,9 @@
->  #include <linux/memfd.h>
->
->  #include "local_config.h"
-> +#ifdef LOCAL_CONFIG_HAVE_LIBURING
-> +#include <liburing.h>
-> +#endif /* LOCAL_CONFIG_HAVE_LIBURING */
->
->  #include "../../../../mm/gup_test.h"
->  #include "../kselftest.h"
-> @@ -80,6 +83,9 @@ enum test_type {
->  	TEST_TYPE_RO_FAST,
->  	TEST_TYPE_RW,
->  	TEST_TYPE_RW_FAST,
-> +#ifdef LOCAL_CONFIG_HAVE_LIBURING
-> +	TEST_TYPE_IOURING,
-> +#endif /* LOCAL_CONFIG_HAVE_LIBURING */
->  };
->
->  static void do_test(int fd, size_t size, enum test_type type, bool shared)
-> @@ -173,6 +179,51 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
->  		ksft_test_result(should_work, "Should have worked\n");
->  		break;
->  	}
-> +#ifdef LOCAL_CONFIG_HAVE_LIBURING
-> +	case TEST_TYPE_IOURING: {
-> +		struct io_uring ring;
-> +		struct iovec iov;
-> +
-> +		/* io_uring always pins pages writable. */
-> +		if (shared && fs_is_unknown(fs_type)) {
-> +			ksft_test_result_skip("Unknown filesystem\n");
-> +			return;
-> +		}
-> +		should_work = !shared ||
-> +			      fs_supports_writable_longterm_pinning(fs_type);
-> +
-> +		/* Skip on errors, as we might just lack kernel support. */
-> +		ret = io_uring_queue_init(1, &ring, 0);
-> +		if (ret < 0) {
-> +			ksft_test_result_skip("io_uring_queue_init() failed\n");
-> +			break;
-> +		}
-> +		/*
-> +		 * Register the range as a fixed buffer. This will FOLL_WRITE |
-> +		 * FOLL_PIN | FOLL_LONGTERM the range.
-> +		 */
-> +		iov.iov_base = mem;
-> +		iov.iov_len = size;
-> +		ret = io_uring_register_buffers(&ring, &iov, 1);
-> +		/* Only new kernels return EFAULT. */
-> +		if (ret && (errno == ENOSPC || errno == EOPNOTSUPP ||
-> +			    errno == EFAULT)) {
-> +			ksft_test_result(!should_work, "Should have failed\n");
-> +		} else if (ret) {
-> +			/*
-> +			 * We might just lack support or have insufficient
-> +			 * MEMLOCK limits.
-> +			 */
-> +			ksft_test_result_skip("io_uring_register_buffers() failed\n");
-> +		} else {
-> +			ksft_test_result(should_work, "Should have worked\n");
-> +			io_uring_unregister_buffers(&ring);
-> +		}
-> +
-> +		io_uring_queue_exit(&ring);
-> +		break;
-> +	}
-> +#endif /* LOCAL_CONFIG_HAVE_LIBURING */
->  	default:
->  		assert(false);
->  	}
-> @@ -310,6 +361,18 @@ static void test_private_ro_fast_pin(int fd, size_t size)
->  	do_test(fd, size, TEST_TYPE_RO_FAST, false);
->  }
->
-> +#ifdef LOCAL_CONFIG_HAVE_LIBURING
-> +static void test_shared_iouring(int fd, size_t size)
-> +{
-> +	do_test(fd, size, TEST_TYPE_IOURING, true);
-> +}
-> +
-> +static void test_private_iouring(int fd, size_t size)
-> +{
-> +	do_test(fd, size, TEST_TYPE_IOURING, false);
-> +}
-> +#endif /* LOCAL_CONFIG_HAVE_LIBURING */
-> +
->  static const struct test_case test_cases[] = {
->  	{
->  		"R/W longterm GUP pin in MAP_SHARED file mapping",
-> @@ -343,6 +406,16 @@ static const struct test_case test_cases[] = {
->  		"R/O longterm GUP-fast pin in MAP_PRIVATE file mapping",
->  		test_private_ro_fast_pin,
->  	},
-> +#ifdef LOCAL_CONFIG_HAVE_LIBURING
-> +	{
-> +		"io_uring fixed buffer with MAP_SHARED file mapping",
-> +		test_shared_iouring,
-> +	},
-> +	{
-> +		"io_uring fixed buffer with MAP_PRIVATE file mapping",
-> +		test_private_iouring,
-> +	},
-> +#endif /* LOCAL_CONFIG_HAVE_LIBURING */
->  };
->
->  static void run_test_case(struct test_case const *test_case)
-> --
-> 2.40.1
->
+After a few years of increasing test coverage in the MPTCP selftests, we
+realised [1] the last version of the selftests is supposed to run on old
+kernels without issues.
 
-All good,
+Supporting older versions is not that easy for this MPTCP case: these
+selftests are often validating the internals by checking packets that
+are exchanged, when some MIB counters are incremented after some
+actions, how connections are getting opened and closed in some cases,
+etc. In other words, it is not limited to the socket interface between
+the userspace and the kernelspace. In addition, the current selftests
+run a lot of different sub-tests but the TAP13 protocol used in the
+selftests don't support sub-tests: in other words, one failure in
+sub-tests implies that the whole selftest is seen as failed at the end
+because sub-tests are not tracked. It is then important to skip
+sub-tests not supported by old kernels.
 
-Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+To minimise the modifications and reduce the complexity to support old
+versions, the idea is to look at external signs and skip the whole
+selftests or just some sub-tests before starting them.
+
+This first part focuses on marking the different selftests as skipped
+if MPTCP is not even supported. That's what is done in patches 2 to 8.
+Patch 2/8 introduces a new file (mptcp_lib.sh) to be able to re-use some
+helpers in the different selftests. The first MPTCP selftest has been
+introduced in v5.6.
+
+Patch 1/8 is a bit different but still linked: it modifies mptcp_join.sh
+selftest not to use 'cmp --bytes' which is not supported by the BusyBox
+implementation. It is apparently quite common to use BusyBox in CI
+environments. This tool is needed for a subtest introduced in v6.1.
+
+Link: https://lore.kernel.org/stable/CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com/ [1]
+Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+Matthieu Baerts (8):
+      selftests: mptcp: join: avoid using 'cmp --bytes'
+      selftests: mptcp: connect: skip if MPTCP is not supported
+      selftests: mptcp: pm nl: skip if MPTCP is not supported
+      selftests: mptcp: join: skip if MPTCP is not supported
+      selftests: mptcp: diag: skip if MPTCP is not supported
+      selftests: mptcp: simult flows: skip if MPTCP is not supported
+      selftests: mptcp: sockopt: skip if MPTCP is not supported
+      selftests: mptcp: userspace pm: skip if MPTCP is not supported
+
+ tools/testing/selftests/net/mptcp/Makefile         |  2 +-
+ tools/testing/selftests/net/mptcp/diag.sh          |  4 +++
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh |  4 +++
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    | 17 +++++++--
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     | 40 ++++++++++++++++++++++
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh |  4 +++
+ tools/testing/selftests/net/mptcp/pm_netlink.sh    |  4 +++
+ tools/testing/selftests/net/mptcp/simult_flows.sh  |  4 +++
+ tools/testing/selftests/net/mptcp/userspace_pm.sh  |  4 +++
+ 9 files changed, 80 insertions(+), 3 deletions(-)
+---
+base-commit: 9b9e46aa07273ceb96866b2e812b46f1ee0b8d2f
+change-id: 20230528-upstream-net-20230528-mptcp-selftests-support-old-kernels-part-1-305638f4dbc0
+
+Best regards,
+-- 
+Matthieu Baerts <matthieu.baerts@tessares.net>
+
