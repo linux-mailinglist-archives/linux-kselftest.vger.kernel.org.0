@@ -2,112 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59022714A18
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 May 2023 15:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503C2714CA9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 May 2023 17:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbjE2NRQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 May 2023 09:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
+        id S229544AbjE2PHb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 May 2023 11:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjE2NRN (ORCPT
+        with ESMTP id S229796AbjE2PHa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 May 2023 09:17:13 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFAC10C;
-        Mon, 29 May 2023 06:16:37 -0700 (PDT)
-X-QQ-mid: bizesmtp79t1685366138tuh7hwm2
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 29 May 2023 21:15:37 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: Bt6VvACH2lxPDSqLKk8oIpBVhB33MD55CoUCVpzQ9ygXQNimNUvEkUlPf0ILF
-        XgQDDzZu334LYd4VWLUHTb6l5t44PodGFC44Sj9m29ix6L3usWzz7F1hY5HpmH/TZAJFAhv
-        webS86/IrzS4fW/ZYl6eR/LRpVClD+cdFOF190p35yX6rNGT6tEYUg3B+mMLG8fewYgR0NM
-        6iVECGjzITrPvUjBPEK7TB2sibfaEs5093+0IqA7CHieBb4Y02XfJXtetvVxZ5XuGsZfwMi
-        NzBDvh64IRFpTUsY4fjqEncEl/hqCw6A+guWHJc0Bs3QLOGrPJDU7o4E83ypK7S3XIkXUBW
-        TdnU7W4QhefRz/kSCAIksuSE/RqIy/bo/jXAITzMZrdgTr4sqPvuuYIJi2wIw==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1046913872741626693
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v2 3/7] selftests/nolibc: fix up compile warning with glibc on x86_64
-Date:   Mon, 29 May 2023 21:15:36 +0800
-Message-Id: <20230529131536.80183-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230529130449.GA2813@1wt.eu>
-References: <20230529130449.GA2813@1wt.eu>
+        Mon, 29 May 2023 11:07:30 -0400
+X-Greylist: delayed 609 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 29 May 2023 08:07:27 PDT
+Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc08])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62464E8
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 May 2023 08:07:27 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QVJXW2WkFzMpyk5;
+        Mon, 29 May 2023 16:57:15 +0200 (CEST)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QVJXS2kmszMq014;
+        Mon, 29 May 2023 16:57:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1685372235;
+        bh=k2yksphiVr17PfyANZFLI9Exwg8Jhb/+C2VCBIF3McU=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=vnqdvI7B2gcSPoa7xG8gAG2+wFvjlop8mh8W0i0AQQCQpGtFQWtCyZw5X1UmldqHK
+         tyXavk+wtMv7AztQ2Am3KJETPgAycVz0ahjWSwI3uyosYnEBM8/hQROg2eos2b6C+5
+         QIm1JmslgodAazXJaphzDWQX+cq57AuR2F6jmPDc=
+Message-ID: <a0c3e6d4-2827-d9b4-8f4e-aef25997fa8a@digikod.net>
+Date:   Mon, 29 May 2023 16:57:11 +0200
 MIME-Version: 1.0
+User-Agent: 
+Subject: Re: [PATCH v1 1/5] hostfs: Fix ephemeral inodes
+Content-Language: en-US
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+To:     Richard Weinberger <richard@nod.at>
+Cc:     anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>,
+        kuba <kuba@kernel.org>, James Morris <jmorris@namei.org>,
+        Jeff Xu <jeffxu@google.com>, Kees Cook <keescook@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Ritesh Raj Sarraf <ritesh@collabora.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sjoerd Simons <sjoerd@collabora.com>,
+        Willem de Bruijn <willemb@google.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+References: <20230309165455.175131-1-mic@digikod.net>
+ <20230309165455.175131-2-mic@digikod.net>
+ <133970354.9328381.1684703636966.JavaMail.zimbra@nod.at>
+ <8249dd59-ce08-2253-1697-301ad082d905@digikod.net>
+In-Reply-To: <8249dd59-ce08-2253-1697-301ad082d905@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On Mon, May 29, 2023 at 09:00:01PM +0800, Zhangjin Wu wrote:
-> > Compiling nolibc-test.c with gcc on x86_64 got such warning:
-> > 
-> > tools/testing/selftests/nolibc/nolibc-test.c: In function 'expect_eq':
-> > tools/testing/selftests/nolibc/nolibc-test.c:177:24: warning: format '%lld' expects argument of type 'long long int', but argument 2 has type 'uint64_t' {aka 'long unsigned int'} [-Wformat=]
-> >   177 |  llen += printf(" = %lld ", expr);
-> >       |                     ~~~^    ~~~~
-> >       |                        |    |
-> >       |                        |    uint64_t {aka long unsigned int}
-> >       |                        long long int
-> >       |                     %ld
-> > 
-> > It because that glibc defines uint64_t as "unsigned long int" when word
-> > size (means sizeof(long)) is 64bit (see include/bits/types.h), but
-> > nolibc directly use the 64bit "unsigned long long" (see
-> > tools/include/nolibc/stdint.h), which is simpler, seems kernel uses it
-> > too (include/uapi/asm-generic/int-ll64.h).
-> > 
-> > It is able to do like glibc, defining __WORDSIZE for all of platforms
-> > and using "unsigned long int" to define uint64_t when __WORDSIZE is
-> > 64bits, but here uses a simpler solution: nolibc always requires %lld to
-> > match "unsigned long long", for others, only require %lld when word size
-> > is 32bit.
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index d417ca5d976f..7f9b716fd9b1 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -174,7 +174,11 @@ static int expect_eq(uint64_t expr, int llen, uint64_t val)
-> >  {
-> >  	int ret = !(expr == val);
-> >  
-> > +#if __SIZEOF_LONG__ == 4 || defined(NOLIBC)
-> >  	llen += printf(" = %lld ", expr);
-> > +#else
-> > +	llen += printf(" = %ld ", expr);
-> > +#endif
-> >  	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
-> >  	return ret;
-> >  }
-> 
-> Please don't proceed like this. There's much easier to do here for a printf,
-> just cast the expression to the type printf expects:
-> 
-> -  	llen += printf(" = %lld ", expr);
-> +  	llen += printf(" = %lld ", (long long)expr);
 
-Yes, this conversion is better, my method make things more complex ;-)
+On 26/05/2023 18:40, Mickaël Salaün wrote:
+> 
+> On 21/05/2023 23:13, Richard Weinberger wrote:
+>> ----- Ursprüngliche Mail -----
+>>> Von: "Mickaël Salaün" <mic@digikod.net>
+>>> hostfs creates a new inode for each opened or created file, which created
+>>> useless inode allocations and forbade identifying a host file with a kernel
+>>> inode.
+>>>
+>>> Fix this uncommon filesystem behavior by tying kernel inodes to host
+>>> file's inode and device IDs.  Even if the host filesystem inodes may be
+>>> recycled, this cannot happen while a file referencing it is open, which
+>>> is the case with hostfs.  It should be noted that hostfs inode IDs may
+>>> not be unique for the same hostfs superblock because multiple host's
+>>> (backed) superblocks may be used.
+>>>
+>>> Delete inodes when dropping them to force backed host's file descriptors
+>>> closing.
+>>>
+>>> This enables to entirely remove ARCH_EPHEMERAL_INODES, and then makes
+>>> Landlock fully supported by UML.  This is very useful for testing
+>>> (ongoing and backported) changes.
+>>
+>> Removing ARCH_EPHEMERAL_INODES should be a patch on its own, IMHO.
+> 
+> OK, I'll do that in the next series.
 
-Thanks,
-Zhangjin
+Well, I added ARCH_EPHEMERAL_INODES for Landlock specifically because of 
+this hostfs inconsistency, and it is not used by anything else in the 
+kernel: https://git.kernel.org/torvalds/c/cb2c7d1a1776
+I then think it makes sense to remove this Kconfig option with the 
+hostfs change. Moreover, this protects against erroneously backporting 
+the ARCH_EPHEMERAL_INODES change, which would silently introduce a bug 
+for Landlock.
+
 
 > 
-> Willy
+>>
+>>> These changes also factor out and simplify some helpers thanks to the
+>>> new hostfs_inode_update() and the hostfs_iget() revamp: read_name(),
+>>> hostfs_create(), hostfs_lookup(), hostfs_mknod(), and
+>>> hostfs_fill_sb_common().
+>>>
+>>> A following commit with new Landlock tests check this new hostfs inode
+>>> consistency.
+>>>
+>>> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+>>> Cc: Johannes Berg <johannes@sipsolutions.net>
+>>> Cc: Richard Weinberger <richard@nod.at>
+>>> Cc: <stable@vger.kernel.org> # 5.15.x: ce72750f04d6: hostfs: Fix writeback of
+>>> dirty pages
+>>> Cc: <stable@vger.kernel.org> # 5.15+
+>>
+>> I'm not sure whether this patch qualifies as stable material.
+>> While I fully agree that the current behavoir is odd, nothing user visible
+>> is really broken so far.
+> I added the ARCH_EPHEMERAL_INODES knob to avoid unexpected behavior.
+> Thanks to that there is no regression for Landlock, but it's unfortunate
+> that we could not use UML to test old kernel versions. According to this
+> odd behavior, I guess some user space may not work with hostfs because
+> of this issue, hence this Cc. I can remove it if you think it is not the
+> case.
+> 
+> 
+>>
+>>> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+>>> Link: https://lore.kernel.org/r/20230309165455.175131-2-mic@digikod.net
+>>
+>> Other than that, patch looks good to me.
+> 
+> Good, I'll send a new series with your suggestions.
+
+Can I add your Signed-off-by to this patch (without touching 
+ARCH_EPHEMERAL_INODES changes, but removing the Cc stable)?
+
+Are you OK for me to push this patch (with the whole series) in the 
+Landlock and next tree?
+
+I'll send a new series splitting the Landlock tests to make a patch 
+dedicated to Landlock with hostfs tests (not backported), and with 
+another patch containing backportable and independent new Landlock FS tests.
