@@ -2,45 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015AA715018
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 May 2023 21:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C2271501A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 May 2023 21:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjE2T4a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 May 2023 15:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        id S229559AbjE2T5q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 May 2023 15:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjE2T43 (ORCPT
+        with ESMTP id S229536AbjE2T5q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 May 2023 15:56:29 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D5B92;
-        Mon, 29 May 2023 12:56:26 -0700 (PDT)
-X-QQ-mid: bizesmtp78t1685390175tmckq6oi
+        Mon, 29 May 2023 15:57:46 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAC2CF;
+        Mon, 29 May 2023 12:57:43 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1685390254t729c4zv
 Received: from linux-lab-host.localdomain ( [119.123.130.80])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 03:56:14 +0800 (CST)
+        id ; Tue, 30 May 2023 03:57:32 +0800 (CST)
 X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: CRJwvrMA7Ii5QGhWTR7gAjDn/im3cUJTMJLrKCItiu9//IedHrZO8VPqve9CI
-        JREbxHhECEfjcwj3iOLI7AtJRxZhcfwcuO1SA3a+CkIkUPFo9ONYVTiml7M01fxeghXu0CT
-        vdthD4zOS6F9DsGvD+yFqUeF+tsLVoWmREiNsqk8v4emuWimsNWz2q3X91Rr5bTzuDeRHu1
-        8SYxkOwE40helGX0uZm1e7sq9E+ub2TQrpXIWvhGbqB2tcaoNclftY75ysAHMxF/uv56ubI
-        q3Ha1mhj6elqdQbHhlOWR2LgMgKeKz4aGx+iiiglqpb3OKP3Sh2pYWRiEYiiIwD3rL2aP6Z
-        skaIKTfTv2vEIU7Boxl8Xp2wT5XTgRGw92F+cgkFVvRT1zRnHdRY8A885R47PP8mfLT54NQ
-        3BjvdTpJLo4=
+X-QQ-FEAT: OXH3MF60TyUJojDygxgZs4OMGkp1TUBtXvEWJdTtHAxot7E3XnB+0jWSYs5Qa
+        BpmJ83k0gOTutEc9dsST9cB8jNwauzivhsGGJ+WxNBuD9M9eNdiIZUiSovoSAwtJzVLUqNm
+        6l1RtQ45rz9J2I3WLQmOeHihNwFnMtTRziVyjB0iz59ARI+qIWT0VVbOhERipkWFJ3lGSgs
+        z31bSq9gRuFfFjPOr/TnPG9HYs05G8i6RHx6VH+8NqisChYzoHDYOtLHXrJQ9UnnJ5xgUiG
+        dFCN5lljhXjqrqsg4PxpyT3yteKfbL1fTzNCP55FIWq10KjWQOyKMweMhP0WyvDzHbgWZJr
+        TFKLrgmQR/8gwTpM43kNKwXTRSuAGZdl+qjEyHibORah4Pf6S3xUE86Z/xwAHoNYlmIeKbK
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 14858657345865464071
+X-BIZMAIL-ID: 9056491278207555835
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH v2 08/13] tools/nolibc: add pure 64bit time structs
-Date:   Tue, 30 May 2023 03:56:01 +0800
-Message-Id: <c6bf754329eeb61a1ffe8f9e04ec70cb02e1a2ed.1685387484.git.falcon@tinylab.org>
+        thomas@t-8ch.de,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v2 09/13] tools/nolibc: sys_select: add pure 64bit select
+Date:   Tue, 30 May 2023 03:57:23 +0800
+Message-Id: <fa047211708451779ddbfabeff749c4d692031ff.1685387484.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1685387484.git.falcon@tinylab.org>
 References: <cover.1685387484.git.falcon@tinylab.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
@@ -56,101 +57,109 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 It's time to provide 64bit time structs for all platforms, for y2038 is
 near.
 
-There are still old "struct timeval" and "struct itimerval" in
-include/uapi/linux/time.h, remove "#include <linux/time.h>" and add our
-own pure 64bit ones.
+pselect6_time64 has been added from v4.20 and the last arch support is
+at least from v5.0.0.
 
+Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
+Link: https://lore.kernel.org/linux-riscv/76a5f9a0-eec4-415a-9c5d-ac3bca4d4b0e@t-8ch.de/
 Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/linux-riscv/9e4064fc-f0c5-4dd3-941f-344d2150e1cd@app.fastmail.com/
+Link: https://lore.kernel.org/linux-riscv/bf3e07c1-75f5-425b-9124-f3f2b230e63a@app.fastmail.com/
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/sys.h   |  2 --
- tools/include/nolibc/types.h | 49 +++++++++++++++++++++++++++++++++++-
- 2 files changed, 48 insertions(+), 3 deletions(-)
+ tools/include/nolibc/arch-aarch64.h   |  3 ---
+ tools/include/nolibc/arch-loongarch.h |  3 ---
+ tools/include/nolibc/arch-riscv.h     |  3 ---
+ tools/include/nolibc/sys.h            | 25 ++++++++++---------------
+ 4 files changed, 10 insertions(+), 24 deletions(-)
 
+diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
+index 11f294a406b7..53255a3a326f 100644
+--- a/tools/include/nolibc/arch-aarch64.h
++++ b/tools/include/nolibc/arch-aarch64.h
+@@ -47,10 +47,7 @@ struct sys_stat_struct {
+  *   - the arguments are cast to long and assigned into the target registers
+  *     which are then simply passed as registers to the asm code, so that we
+  *     don't have to experience issues with register constraints.
+- *
+- * On aarch64, select() is not implemented so we have to use pselect6().
+  */
+-#define __ARCH_WANT_SYS_PSELECT6
+ 
+ #define my_syscall0(num)                                                      \
+ ({                                                                            \
+diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
+index ad3f266e7093..973fdca96651 100644
+--- a/tools/include/nolibc/arch-loongarch.h
++++ b/tools/include/nolibc/arch-loongarch.h
+@@ -18,10 +18,7 @@
+  *   - the arguments are cast to long and assigned into the target
+  *     registers which are then simply passed as registers to the asm code,
+  *     so that we don't have to experience issues with register constraints.
+- *
+- * On LoongArch, select() is not implemented so we have to use pselect6().
+  */
+-#define __ARCH_WANT_SYS_PSELECT6
+ 
+ #define my_syscall0(num)                                                      \
+ ({                                                                            \
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index a2e8564e66d6..713eb9d2c91d 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -53,10 +53,7 @@ struct sys_stat_struct {
+  *   - the arguments are cast to long and assigned into the target
+  *     registers which are then simply passed as registers to the asm code,
+  *     so that we don't have to experience issues with register constraints.
+- *
+- * On riscv, select() is not implemented so we have to use pselect6().
+  */
+-#define __ARCH_WANT_SYS_PSELECT6
+ 
+ #define my_syscall0(num)                                                      \
+ ({                                                                            \
 diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index d0720af84b6d..1b3675d4c5fc 100644
+index 1b3675d4c5fc..db648b5b9a1c 100644
 --- a/tools/include/nolibc/sys.h
 +++ b/tools/include/nolibc/sys.h
-@@ -17,7 +17,6 @@
- #include <asm/mman.h>
- #include <linux/fs.h>
- #include <linux/loop.h>
--#include <linux/time.h>
- #include <linux/auxvec.h>
- #include <linux/fcntl.h> /* for O_* and AT_* */
- #include <linux/stat.h>  /* for statx() */
-@@ -28,7 +27,6 @@
- #include "errno.h"
- #include "types.h"
+@@ -1046,28 +1046,23 @@ int sched_yield(void)
+ static __attribute__((unused))
+ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *timeout)
+ {
+-#if defined(__ARCH_WANT_SYS_OLD_SELECT) && !defined(__NR__newselect)
+-	struct sel_arg_struct {
+-		unsigned long n;
+-		fd_set *r, *w, *e;
+-		struct timeval *t;
+-	} arg = { .n = nfds, .r = rfds, .w = wfds, .e = efds, .t = timeout };
+-	return my_syscall1(__NR_select, &arg);
+-#elif defined(__ARCH_WANT_SYS_PSELECT6) && defined(__NR_pselect6)
++#if defined(__NR_pselect6) || defined(__NR_pselect6_time64)
++#ifdef __NR_pselect6_time64
++	const long nr_pselect = __NR_pselect6_time64;
++#elif __SIZEOF_LONG__ == 8
++	const long nr_pselect = __NR_pselect6;
++#else
++#error No __NR_pselect6_time64 defined, cannot implement time64 sys_select()
++#endif
+ 	struct timespec t;
  
--
- /* Functions in this file only describe syscalls. They're declared static so
-  * that the compiler usually decides to inline them while still being allowed
-  * to pass a pointer to one of their instances. Each syscall exists in two
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index 698d859fc6e2..4ff35b7ea2bb 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -8,10 +8,57 @@
- #define _NOLIBC_TYPES_H
+ 	if (timeout) {
+ 		t.tv_sec  = timeout->tv_sec;
+ 		t.tv_nsec = timeout->tv_usec * 1000;
+ 	}
+-	return my_syscall6(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
+-#elif defined(__NR__newselect) || defined(__NR_select)
+-#ifndef __NR__newselect
+-#define __NR__newselect __NR_select
+-#endif
+-	return my_syscall5(__NR__newselect, nfds, rfds, wfds, efds, timeout);
++	return my_syscall6(nr_pselect, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
+ #else
+-#error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
++#error Neither __NR_pselect6 nor __NR_pselect6_time64 defined, cannot implement sys_select()
+ #endif
+ }
  
- #include "std.h"
--#include <linux/time.h>
-+#include <linux/time_types.h>
- #include <linux/stat.h>
- #include <linux/wait.h>
- 
-+/* based on linux/time.h but with pure 64bit time structs */
-+#define timespec __kernel_timespec
-+#define itimerspec __kernel_itimerspec
-+
-+/* timeval is only provided for users, not compatible with syscalls */
-+struct timeval {
-+	__kernel_time64_t tv_sec;	/* seconds */
-+	__s64 tv_usec;			/* microseconds */
-+};
-+
-+struct timezone {
-+	int tz_minuteswest;		/* minutes west of Greenwich */
-+	int tz_dsttime;			/* type of dst correction */
-+};
-+
-+/* itimerval is only provided for users, not compatible with syscalls */
-+struct itimerval {
-+	struct timeval it_interval;	/* timer interval */
-+	struct timeval it_value;	/* current value */
-+};
-+
-+/*
-+ * Names of the interval timers, and structure
-+ * defining a timer setting:
-+ */
-+#define ITIMER_REAL			0
-+#define ITIMER_VIRTUAL			1
-+#define ITIMER_PROF			2
-+
-+/*
-+ * The IDs of the various system clocks (for POSIX.1b interval timers):
-+ */
-+#define CLOCK_REALTIME			0
-+#define CLOCK_MONOTONIC			1
-+#define CLOCK_PROCESS_CPUTIME_ID	2
-+#define CLOCK_THREAD_CPUTIME_ID		3
-+#define CLOCK_MONOTONIC_RAW		4
-+#define CLOCK_REALTIME_COARSE		5
-+#define CLOCK_MONOTONIC_COARSE		6
-+#define CLOCK_BOOTTIME			7
-+#define CLOCK_REALTIME_ALARM		8
-+#define CLOCK_BOOTTIME_ALARM		9
-+
-+/*
-+ * The various flags for setting POSIX.1b interval timers:
-+ */
-+#define TIMER_ABSTIME			0x01
- 
- /* Only the generic macros and types may be defined here. The arch-specific
-  * ones such as the O_RDONLY and related macros used by fcntl() and open(), or
 -- 
 2.25.1
 
