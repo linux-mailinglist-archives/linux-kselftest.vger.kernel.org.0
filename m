@@ -2,97 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6F57149D9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 May 2023 15:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEF87149DC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 May 2023 15:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjE2NFm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 May 2023 09:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36750 "EHLO
+        id S229460AbjE2NH6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 May 2023 09:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjE2NFR (ORCPT
+        with ESMTP id S229457AbjE2NH5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 May 2023 09:05:17 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02B4BD8;
-        Mon, 29 May 2023 06:05:13 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 34TD4ndg002822;
-        Mon, 29 May 2023 15:04:49 +0200
-Date:   Mon, 29 May 2023 15:04:49 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        Mon, 29 May 2023 09:07:57 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693B091;
+        Mon, 29 May 2023 06:07:55 -0700 (PDT)
+X-QQ-mid: bizesmtp85t1685365665tgzca5zc
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 29 May 2023 21:07:44 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: hvKw+PyJ8U6+uRVu/0AXG0i6+eBsNcwRbz2CZsT5niaVOLEjABKXMEbu2AisN
+        uImWTWIWpl/bgpjuSuZqGv9sxOil3B8sj88KJEHleCbTRcmkdCIZoLB6KuLdqDUTW/bfNHC
+        qcNmAe1dPOSnMPzWdJrTK1Ms82OBZOdRa1pz17Cotzmwgaz+8DZqQVeH3+/EUj/1QaNFLGz
+        b2cbQLpbMgX9/StyBR2UmwLCa8hQ3pd50wYkdVem43lLqUAUknVygFLGVgwnoRvuXt9XlD+
+        WyFHJ5lc3V/61Lo3BiaP/0HyPHI9bUnvaaUqXjUNVMv/vv4BLH2GeBCvf6tk9glgdi9gP0O
+        rWlZSsaWPXG4mlGnUKp0F+MP099LijaKfcqzPbPVlQN2SixFKEGVRTrwrpVqUAPa09QjuW9
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 13225124570130202105
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
         thomas@t-8ch.de
-Subject: Re: [PATCH v2 3/7] selftests/nolibc: fix up compile warning with
- glibc on x86_64
-Message-ID: <20230529130449.GA2813@1wt.eu>
+Subject: [PATCH v2 6/7] tools/nolibc: arm: add missing my_syscall6
+Date:   Mon, 29 May 2023 21:07:42 +0800
+Message-Id: <ba91771d72f9a9dc869513155240deab196e4fd7.1685362482.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1685362482.git.falcon@tinylab.org>
 References: <cover.1685362482.git.falcon@tinylab.org>
- <aeb48b9cf6fc4674f7560166f22c7dc87d02302d.1685362482.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aeb48b9cf6fc4674f7560166f22c7dc87d02302d.1685362482.git.falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 29, 2023 at 09:00:01PM +0800, Zhangjin Wu wrote:
-> Compiling nolibc-test.c with gcc on x86_64 got such warning:
-> 
-> tools/testing/selftests/nolibc/nolibc-test.c: In function 'expect_eq':
-> tools/testing/selftests/nolibc/nolibc-test.c:177:24: warning: format '%lld' expects argument of type 'long long int', but argument 2 has type 'uint64_t' {aka 'long unsigned int'} [-Wformat=]
->   177 |  llen += printf(" = %lld ", expr);
->       |                     ~~~^    ~~~~
->       |                        |    |
->       |                        |    uint64_t {aka long unsigned int}
->       |                        long long int
->       |                     %ld
-> 
-> It because that glibc defines uint64_t as "unsigned long int" when word
-> size (means sizeof(long)) is 64bit (see include/bits/types.h), but
-> nolibc directly use the 64bit "unsigned long long" (see
-> tools/include/nolibc/stdint.h), which is simpler, seems kernel uses it
-> too (include/uapi/asm-generic/int-ll64.h).
-> 
-> It is able to do like glibc, defining __WORDSIZE for all of platforms
-> and using "unsigned long int" to define uint64_t when __WORDSIZE is
-> 64bits, but here uses a simpler solution: nolibc always requires %lld to
-> match "unsigned long long", for others, only require %lld when word size
-> is 32bit.
-> 
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/testing/selftests/nolibc/nolibc-test.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index d417ca5d976f..7f9b716fd9b1 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -174,7 +174,11 @@ static int expect_eq(uint64_t expr, int llen, uint64_t val)
->  {
->  	int ret = !(expr == val);
->  
-> +#if __SIZEOF_LONG__ == 4 || defined(NOLIBC)
->  	llen += printf(" = %lld ", expr);
-> +#else
-> +	llen += printf(" = %ld ", expr);
-> +#endif
->  	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
->  	return ret;
->  }
+This is required by the coming removal of the oldselect and newselect
+support.
 
-Please don't proceed like this. There's much easier to do here for a printf,
-just cast the expression to the type printf expects:
+pselect6/pselect6_time64 will be used unconditionally, they have 6
+arguments.
 
--  	llen += printf(" = %lld ", expr);
-+  	llen += printf(" = %lld ", (long long)expr);
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/linux-riscv/20230524182431.268908-1-falcon@tinylab.org/T/#t
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-arm.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-Willy
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index 45b89ffe8247..ca4c66987497 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -198,6 +198,29 @@ struct sys_stat_struct {
+ 	_arg1;                                                                \
+ })
+ 
++#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                  \
++({                                                                            \
++	register long _num  __asm__(_NOLIBC_SYSCALL_REG) = (num);             \
++	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
++	register long _arg2 __asm__ ("r1") = (long)(arg2);                    \
++	register long _arg3 __asm__ ("r2") = (long)(arg3);                    \
++	register long _arg4 __asm__ ("r3") = (long)(arg4);                    \
++	register long _arg5 __asm__ ("r4") = (long)(arg5);                    \
++	register long _arg6 __asm__ ("r5") = (long)(arg6);                    \
++	                                                                      \
++	__asm__  volatile (                                                   \
++		_NOLIBC_THUMB_SET_R7                                          \
++		"svc #0\n"                                                    \
++		_NOLIBC_THUMB_RESTORE_R7                                      \
++		: "=r"(_arg1), "=r" (_num)                                    \
++		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
++		  "r"(_arg6), "r"(_num)                                       \
++		: "memory", "cc", "lr"                                        \
++	);                                                                    \
++	_arg1;                                                                \
++})
++
++
+ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
+ 
+-- 
+2.25.1
+
