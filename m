@@ -2,48 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA98D7154E5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 07:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237667154F6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 07:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjE3FVs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 May 2023 01:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        id S229620AbjE3Fia (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 May 2023 01:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjE3FVr (ORCPT
+        with ESMTP id S229843AbjE3Fi3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 May 2023 01:21:47 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0F7AD;
-        Mon, 29 May 2023 22:21:44 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1685424093t09pbsru
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 13:21:32 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: q+yjhizk/eK4Twfz5/tkrE7vplCQXvJ4uATWgDp4FlclbHqgTQzECLOaM/5aW
-        ciP3qrlZXDUOoqXXgEGPnefG1bscVwQQcb7SNzzTIUIyuSYUnjA8MKAIs/4DWDkTv1UZ/hm
-        RMJH3jBhaBXbW+jZobqHikfj6kgNNqri+YL8Wf/avB5c+itkx6m82TmJENM86el0C6f/Hah
-        qDPSYwt8xGHJ0WHIxeW8UvilJGfwXk5SfSfWmTbHMizcoiuPY/0TCVlG/oPymB/LEqFCkxa
-        jd4aj/2GFDHuQnp5eeriEYwyGxXrr+Y3YlUbxdCrz7RaTK2mcAvBq2mBB0Fb9NGSN+dEcTt
-        TpvzNke228KrB4bPGDkzB13vfe9pBxTtmH12H0PsMyn3IJ2toM=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6904062556633079927
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, arnd@arndb.de, w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 04/13] tools/nolibc: add missing nanoseconds support for __NR_statx
-Date:   Tue, 30 May 2023 13:21:32 +0800
-Message-Id: <20230530052132.364685-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <3a3edd48-1ace-4c89-89e8-9c594dd1b3c9@t-8ch.de>
-References: <3a3edd48-1ace-4c89-89e8-9c594dd1b3c9@t-8ch.de>
+        Tue, 30 May 2023 01:38:29 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D852EA;
+        Mon, 29 May 2023 22:38:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685425107; x=1716961107;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SlmVU0gCOJtKzGhhoLJtPHVYcv/MzAh06Xb0nC+R2xw=;
+  b=eCe/hlL2QJFzeMkcb5OxWRZk4o47Lb1qQ7XYBp1Kh41KfRW/E5gJBZU0
+   cgvHvpxuOgu1DNTR9XdXTU02OK26xa+/FXtcDIxvFSTFRVMlqOVDoSH2w
+   ubt8ZLVQVsfU4VuGWDn5uXQaJLE8MSApYNf/S5qFrD48WKujGjmN8MDx8
+   6MmINFuTepaxFPegwhnZyPzqQzKST/6+6a1NjCxScBa6Sl6SvYOs4DsH3
+   2VdjzoiN2qI0nNDezcOb6HZBeBhf4QlARNlwX0GLErN5F3jhwBHJAWgHJ
+   2IgpRI0xx3AX+zepaDtjhd76Ypnb7D34xK8iVY9PwEkisvaXs73eT9Bat
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="420579570"
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="scan'208";a="420579570"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 22:38:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="739369265"
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="scan'208";a="739369265"
+Received: from allen-box.sh.intel.com ([10.239.159.127])
+  by orsmga001.jf.intel.com with ESMTP; 29 May 2023 22:38:20 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc:     iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
+Date:   Tue, 30 May 2023 13:37:07 +0800
+Message-Id: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,80 +66,103 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thomas, Arnd, Willy
+Hi folks,
 
-> On 2023-05-30 03:50:34+0800, Zhangjin Wu wrote:
-> > Commit a89c937d781a ("tools/nolibc: support nanoseconds in stat()")
-> > added nanoseconds for stat() but missed the statx case, this adds it.
-> 
-> Welp, I should have thought of that.
-> At least the testcase seems to have been useful.
->
+This series implements the functionality of delivering IO page faults to
+user space through the IOMMUFD framework. The use case is nested
+translation, where modern IOMMU hardware supports two-stage translation
+tables. The second-stage translation table is managed by the host VMM
+while the first-stage translation table is owned by the user space.
+Hence, any IO page fault that occurs on the first-stage page table
+should be delivered to the user space and handled there. The user space
+should respond the page fault handling result to the device top-down
+through the IOMMUFD response uAPI.
 
-yeah, your testcase telled me this issue.
+User space indicates its capablity of handling IO page faults by setting
+a user HWPT allocation flag IOMMU_HWPT_ALLOC_FLAGS_IOPF_CAPABLE. IOMMUFD
+will then setup its infrastructure for page fault delivery. Together
+with the iopf-capable flag, user space should also provide an eventfd
+where it will listen on any down-top page fault messages.
 
-> Thanks for the fix!
-> 
-> > The stx_atime, stx_mtime, stx_ctime are in type of 'struct
-> > statx_timestamp', which is incompatible with 'struct timespec', should
-> > convert explicitly.
-> > 
-> >     /* include/uapi/linux/stat.h */
-> > 
-> >     struct statx_timestamp {
-> >     	__s64	tv_sec;
-> >     	__u32	tv_nsec;
-> >     	__s32	__reserved;
-> >     };
-> > 
-> >     /* include/uapi/linux/time_types.h */
-> >     struct __kernel_timespec {
-> >     	__kernel_time64_t       tv_sec;                 /* seconds */
-> >     	long long               tv_nsec;                /* nanoseconds */
-> >     };
-> > 
-> >     /* tools/include/nolibc/types.h */
-> >     #define timespec __kernel_timespec
-> > 
-> > Without this patch, the stat_timestamps test case would fail on rv32.
-> > 
-> > Fixes: a89c937d781a ("tools/nolibc: support nanoseconds in stat()")
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/include/nolibc/sys.h | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > index 154194056962..98cfa2f6d021 100644
-> > --- a/tools/include/nolibc/sys.h
-> > +++ b/tools/include/nolibc/sys.h
-> > @@ -1175,9 +1175,9 @@ int sys_stat(const char *path, struct stat *buf)
-> >  	buf->st_size    = statx.stx_size;
-> >  	buf->st_blksize = statx.stx_blksize;
-> >  	buf->st_blocks  = statx.stx_blocks;
-> > -	buf->st_atime   = statx.stx_atime.tv_sec;
-> > -	buf->st_mtime   = statx.stx_mtime.tv_sec;
-> > -	buf->st_ctime   = statx.stx_ctime.tv_sec;
-> > +	buf->st_atim    = (struct timespec){ .tv_sec = statx.stx_atime.tv_sec, .tv_nsec = statx.stx_atime.tv_nsec };
-> > +	buf->st_mtim    = (struct timespec){ .tv_sec = statx.stx_mtime.tv_sec, .tv_nsec = statx.stx_mtime.tv_nsec };
-> > +	buf->st_ctim    = (struct timespec){ .tv_sec = statx.stx_ctime.tv_sec, .tv_nsec = statx.stx_ctime.tv_nsec };
-> 
-> I would prefer to split the compound assignment into two single
-> assignments, though.
-> 
-> buf->st_ctim.tv_sec = statx.stx_ctime.tv_sec;
-> buf->st_ctim.tv_nsec = statx.stx_ctime.tv_nsec;
->
+On a successful return of the allocation of iopf-capable HWPT, a fault
+fd will be returned. User space can open and read fault messages from it
+once the eventfd is signaled.
 
-Ok, will update it in the v3 revision.
+Besides the overall design, I'd like to hear comments about below
+designs:
 
-And further, what about removing the other !statx parts
-(__NR_newfstatat, __NR_stat)? just like we are doing for the other 64bit
-syscalls (llseek and time65).
+- The IOMMUFD fault message format. It is very similar to that in
+  uapi/linux/iommu which has been discussed before and partially used by
+  the IOMMU SVA implementation. I'd like to get more comments on the
+  format when it comes to IOMMUFD.
+
+- The timeout value for the pending page fault messages. Ideally we
+  should determine the timeout value from the device configuration, but
+  I failed to find any statement in the PCI specification (version 6.x).
+  A default 100 milliseconds is selected in the implementation, but it
+  leave the room for grow the code for per-device setting.
+
+This series is only for review comment purpose. I used IOMMUFD selftest
+to verify the hwpt allocation, attach/detach and replace. But I didn't
+get a chance to run it with real hardware yet. I will do more test in
+the subsequent versions when I am confident that I am heading on the
+right way.
+
+This series is based on the latest implementation of the nested
+translation under discussion. The whole series and related patches are
+available on gitbub:
+
+https://github.com/LuBaolu/intel-iommu/commits/iommufd-io-pgfault-delivery-v1
 
 Best regards,
-Zhangjin
+baolu
 
-> >  	return ret;
-> >  }
-> >  #else
+Lu Baolu (17):
+  iommu: Move iommu fault data to linux/iommu.h
+  iommu: Support asynchronous I/O page fault response
+  iommu: Add helper to set iopf handler for domain
+  iommu: Pass device parameter to iopf handler
+  iommu: Split IO page fault handling from SVA
+  iommu: Add iommu page fault cookie helpers
+  iommufd: Add iommu page fault data
+  iommufd: IO page fault delivery initialization and release
+  iommufd: Add iommufd hwpt iopf handler
+  iommufd: Add IOMMU_HWPT_ALLOC_FLAGS_USER_PASID_TABLE for hwpt_alloc
+  iommufd: Deliver fault messages to user space
+  iommufd: Add io page fault response support
+  iommufd: Add a timer for each iommufd fault data
+  iommufd: Drain all pending faults when destroying hwpt
+  iommufd: Allow new hwpt_alloc flags
+  iommufd/selftest: Add IOPF feature for mock devices
+  iommufd/selftest: Cover iopf-capable nested hwpt
+
+ include/linux/iommu.h                         | 175 +++++++++-
+ drivers/iommu/{iommu-sva.h => io-pgfault.h}   |  25 +-
+ drivers/iommu/iommu-priv.h                    |   3 +
+ drivers/iommu/iommufd/iommufd_private.h       |  32 ++
+ include/uapi/linux/iommu.h                    | 161 ---------
+ include/uapi/linux/iommufd.h                  |  73 +++-
+ tools/testing/selftests/iommu/iommufd_utils.h |  20 +-
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |   2 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |   2 +-
+ drivers/iommu/intel/iommu.c                   |   2 +-
+ drivers/iommu/intel/svm.c                     |   2 +-
+ drivers/iommu/io-pgfault.c                    |   7 +-
+ drivers/iommu/iommu-sva.c                     |   4 +-
+ drivers/iommu/iommu.c                         |  50 ++-
+ drivers/iommu/iommufd/device.c                |  64 +++-
+ drivers/iommu/iommufd/hw_pagetable.c          | 318 +++++++++++++++++-
+ drivers/iommu/iommufd/main.c                  |   3 +
+ drivers/iommu/iommufd/selftest.c              |  71 ++++
+ tools/testing/selftests/iommu/iommufd.c       |  17 +-
+ MAINTAINERS                                   |   1 -
+ drivers/iommu/Kconfig                         |   4 +
+ drivers/iommu/Makefile                        |   3 +-
+ drivers/iommu/intel/Kconfig                   |   1 +
+ 23 files changed, 837 insertions(+), 203 deletions(-)
+ rename drivers/iommu/{iommu-sva.h => io-pgfault.h} (71%)
+ delete mode 100644 include/uapi/linux/iommu.h
+
+-- 
+2.34.1
+
