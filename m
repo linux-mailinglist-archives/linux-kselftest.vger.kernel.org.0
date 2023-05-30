@@ -2,47 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66167715C33
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 12:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB28F715C45
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 12:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbjE3Kse (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 May 2023 06:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
+        id S229741AbjE3Kw5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 May 2023 06:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231659AbjE3Kr5 (ORCPT
+        with ESMTP id S229739AbjE3Kwz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 May 2023 06:47:57 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910D8102;
-        Tue, 30 May 2023 03:47:50 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1685443664twnpak60
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 18:47:43 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: C46Rb8GPIEfLZaiD+Tj2Qw68S6CmHsgj7w+vsvgLRgBtK+77c1nm1Y+dZQciE
-        yMI6X0Dlof9TqnGRL08Kb5tY/A2buyMdyGThpzwm1QqEHoKx4+PP5RZVSQGL6e09Ea2ij32
-        pPlQiDnGe+eyZW3rXAOllns96irDaF1DQpNSoiDmefKR8ZO5cCnENDJLPXotANFNbd81R+Y
-        MiTH03hSIMCL7dPxdORkEpZqOKy7IzSF54yu/EZozLuPdDxiZXEZkCLD9UtK56W3I2zckfd
-        HIY0mB8eeNxgNNPDkUCYIK9Awd6LZ1jompcNnI9riAwkgLIieRr3LCP0yt7i4pzAAoUxlcU
-        4jPq803VQxMD7rewyydupUZpW5wDtbxi7hA247/bsd/DPeXpc4lyUaSL+QCT5H2ADuk79yh
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 14120017678416040009
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH 0/4] selftests/nolibc: add user-space 'efault' handler
-Date:   Tue, 30 May 2023 18:47:38 +0800
-Message-Id: <cover.1685443199.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 May 2023 06:52:55 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB31893;
+        Tue, 30 May 2023 03:52:54 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id B567032009BB;
+        Tue, 30 May 2023 06:52:53 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 30 May 2023 06:52:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1685443973; x=1685530373; bh=6D
+        AjeLvw+wKEwgsFPhuXSaW+FtA9B09IvVBcjDHsLhs=; b=SzxpiHYjP+znZcj7so
+        Z7zuEwScbae3+nH65JrfNeoZoaEN4CZa6HWU4qpKwVcdmcGQw1fsCih0VLq3eVu1
+        bFxDpEB2P7KL+76wtoP52giLaTm7gFigWOoGfpgVKEgHKCa2VetwRZIyZUfO6mjY
+        6jLPT/4VJXrpHfIZaJJ0ZWuMrCnkiSFnW+XY71voBKVFm2+VR2QQ+OWlNrfaxcN1
+        c6MkA0CW6SMQdJ8DQrCZyn+vww68auRp9N8yjTWXi98Y5HPkBw2GxqbMbdgFcfdG
+        k6HtzaS+BC9mw+YrJtmFzDInN5qshngRilZufAumfygk4e5HsoqCQFqLhK+JZAkS
+        p6Og==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685443973; x=1685530373; bh=6DAjeLvw+wKEw
+        gsFPhuXSaW+FtA9B09IvVBcjDHsLhs=; b=CpgMy1TY6ldkyZPtfK/yqn91MRYqp
+        i7vDR1vOo7cc3DIoIA/Fw0P8oceSrzdYm9RbnStammq+oR9xGWh8K9oKXNTRo1rH
+        +MoxmvqHhF0GfIYntgmazn0ZR0vSB1dDdkI1t0a6lmoqaN4kOFy096dpiw8ZjqgF
+        SE7t2D3lDLjtL2tQoanDHAQv6PB3MeruR9ZTR9Ex3kJcqfzbzpyBJbyX3x0W6BwS
+        K7Oazm/G/BPtz4Vzta3O3SJeigM3uix218tuDL7I8kwGCAeXDJ+389haZyny2169
+        LB3jvu/Be3AVcktJbV/UMcE9f79FtGI9Or9Wkijli0SS0b9NXyYczeOUw==
+X-ME-Sender: <xms:hdV1ZFWGv5qQ5bEtfKIjQZQ6VOC-3u4XZSCax5uLtEllmeqT60-Q3Q>
+    <xme:hdV1ZFmsjsor_hQPPlgQHSnwaCL30DH6HAO1qAhTJUfXOqz4thymV6w8rqD682tQn
+    z5vGhl1cjNOjOrPEBQ>
+X-ME-Received: <xmr:hdV1ZBawA3XutzMaQ-Cs16jHn5ZqTyxX4fVUgl9GndZdpidOTTnFi4qq__gcG-EU7zFdnbkp-CvHUx-hpnPbqaLJG3h4To4Z_gdvgPgfiH-6MA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgfedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepvfgrkhgrshhh
+    ihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
+    eqnecuggftrfgrthhtvghrnhepffdvueelffevkeduhfetjeduffeghfettdfguedtgfdv
+    gfeufeduheevheevkeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
+X-ME-Proxy: <xmx:hdV1ZIUp8c9MuoXqIr2VsSvlGt0r88ZEoNH45rnA6NcsdX5PjwpxZg>
+    <xmx:hdV1ZPnv2w2uywAiDK6KPvcOJUJVpQYyimqiPloJnxzx9ezkGG7NdQ>
+    <xmx:hdV1ZFd_sShtAnoHWtzg-9ikDUDcXkQ46hj_SU3qgDJQ-fCX5hGcgw>
+    <xmx:hdV1ZKtzlOVdSglq7A1Lc70euJE0LF6ApyBsQ0LPFAKOvXegGYxbEw>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 May 2023 06:52:51 -0400 (EDT)
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Documentation: Kunit: add MODULE_LICENSE to sample code
+Date:   Tue, 30 May 2023 19:52:48 +0900
+Message-Id: <20230530105248.68238-1-o-takashi@sakamocchi.jp>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,96 +84,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy, Thomas
+The sample code has Kconfig for tristate configuration. In the case, it
+could be friendly to developers that the code has MODULE_LICENSE, since
+the missing MODULE_LICENSE brings error to modpost when the code is built
+as loadable kernel module.
 
-This is not really for merge, but only let it work as a demo code to
-test whether it is possible to restore the next test when there is a bad
-pointer access in user-space [1].
-
-Besides, a new 'run' command is added to 'NOLIBC_TEST' environment
-variable or arguments to control the running iterations, this may be
-used to test the reentrancy issues, but no failures found currently ;-)
-
-With glibc, it works as following:
-
-    $ ./nolibc-test run:2,syscall:28-30,stdlib:1
-    Running iteration(s): 2
-
-    Current iteration: 1
-
-    Running test 'syscall', from 28 to 30
-    28 dup3_m1 = -1 EBADF                                            [OK]
-    29 efault_handler ! 11 SIGSEGV                                   [OK]
-    30 execve_root = -1 EACCES                                       [OK]
-    Errors during this test: 0
-
-    Running test 'stdlib'
-    1 getenv_blah = <(null)>                                         [OK]
-    Errors during this test: 0
-
-    Total number of errors in the 1 iteration(s): 0
-
-    Current iteration: 2
-
-    Running test 'syscall'
-    28 dup3_m1 = -1 EBADF                                            [OK]
-    29 efault_handler ! 11 SIGSEGV                                   [OK]
-    30 execve_root = -1 EACCES                                       [OK]
-    Errors during this test: 0
-
-    Running test 'stdlib'
-    1 getenv_blah = <(null)>                                         [OK]
-    Errors during this test: 0
-
-    Total number of errors in the 2 iteration(s): 0
-
-With nolibc, it will be skipped (run:2,syscall:28-30,stdlib:10):
-
-    Running iteration(s): 2
-
-    Current iteration: 1
-
-    Running test 'syscall', from 28 to 30
-    28 dup3_m1 = -1 EBADF                                            [OK]
-    29 efault_handler                                               [SKIPPED]
-    30 execve_root = -1 EACCES                                       [OK]
-    Errors during this test: 0
-
-    Running test 'stdlib', from 10 to 10
-    10 strrchr_foobar_o = <obar>                                     [OK]
-    Errors during this test: 0
-
-    Total number of errors in the 1 iteration(s): 0
-
-    Current iteration: 2
-
-    Running test 'syscall', from 28 to 30
-    28 dup3_m1 = -1 EBADF                                            [OK]
-    29 efault_handler                                               [SKIPPED]
-    30 execve_root = -1 EACCES                                       [OK]
-    Errors during this test: 0
-
-    Running test 'stdlib', from 10 to 10
-    10 strrchr_foobar_o = <obar>                                     [OK]
-    Errors during this test: 0
-
-    Total number of errors in the 2 iteration(s): 0
-
-Best regards,
-Zhangjin
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 ---
+ Documentation/dev-tools/kunit/start.rst | 2 ++
+ 1 file changed, 2 insertions(+)
 
-[1]: https://lore.kernel.org/linux-riscv/20230529113143.GB2762@1wt.eu/ 
-
-Zhangjin Wu (4):
-  selftests/nolibc: allow rerun with the same settings
-  selftests/nolibc: add rerun support
-  selftests/nolibc: add user space efault handler
-  selftests/nolibc: add user-space efault restore test case
-
- tools/testing/selftests/nolibc/nolibc-test.c | 247 +++++++++++++++++--
- 1 file changed, 221 insertions(+), 26 deletions(-)
-
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index c736613c9b19..d4f99ef94f71 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -250,6 +250,8 @@ Now we are ready to write the test cases.
+ 	};
+ 	kunit_test_suite(misc_example_test_suite);
+ 
++	MODULE_LICENSE("GPL");
++
+ 2. Add the following lines to ``drivers/misc/Kconfig``:
+ 
+ .. code-block:: kconfig
 -- 
-2.25.1
+2.39.2
 
