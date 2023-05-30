@@ -2,86 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5727162A0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 15:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA967162B5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 15:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjE3NvB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 May 2023 09:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
+        id S230191AbjE3Nyw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 May 2023 09:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbjE3Nuv (ORCPT
+        with ESMTP id S232414AbjE3Nys (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 May 2023 09:50:51 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED81C7;
-        Tue, 30 May 2023 06:50:48 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1685454646;
-        bh=ewKaB6L/DOQhgS1mAFK+x7nHWfw99pCSgv44oWr0O2s=;
-        h=From:Date:Subject:To:Cc:From;
-        b=f/ainB77OmlT/tnhTcCJlKECpiK3d5BaPjznu6BchuIkeJvxudG70JXwPvjm5dOK8
-         wrp9iPEMnGvr1K1RidZDiPjfZTsXpDXiZ4xzgJLkI3exuF9jv+WnaSJNpL/oxfk8Uo
-         CfNCJzDaTaALHxAjVZ9Yg8aMyRs7Bq2CAwuzG/I8=
-Date:   Tue, 30 May 2023 15:48:48 +0200
-Subject: [PATCH] selftests/nolibc: remove test gettimeofday_null
+        Tue, 30 May 2023 09:54:48 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132A08E;
+        Tue, 30 May 2023 06:54:45 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1685454874tcbczm6n
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 30 May 2023 21:54:33 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: xwvWJGGFd7M6Lf9NrCrasfk6SUbNPheOBSL8ua9DdJsxRZlXQL39nTjnTvL+d
+        XLdpGp9SJk9zYuni6DU/NAh7tFSEqaWm7zDN6JJbcoR9OmNKi9eEzB8kiWo06NR4+QJwJek
+        E07Tsl/YYyT5/LMOIPqhsXJaey7sesek4fBbqIZJjUpPPCWiF/nyzN5OQFsNv0/EVNAfKEA
+        tiOsJO2gCV132ZfqipSRr17DV49vHO0GcMmZsXh1r1ok7mw8jjufV6jL00g3s1kawQ4aCMd
+        JRF+DFJ8gSGzm9bI0ZTGRTuepiJIUBs7L+9IWBple5DQXdVqYQmTgbjkgNEHBXU4JMXKFpn
+        AIEZI3yhqlGyRoKT96g9LDL1yqF719Sphr20qfdQ1JWK1TbhJm0kAwMwj5wUf1heIRNNMOT
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 9011537490340992174
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     arnd@arndb.de
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de, w@1wt.eu
+Subject: Re: [PATCH v2 07/13] tools/nolibc: sys_lseek: add pure 64bit lseek
+Date:   Tue, 30 May 2023 21:54:33 +0800
+Message-Id: <20230530135433.405051-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com>
+References: <5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230530-nolibc-gettimeofday-v1-1-7307441a002b@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAL/+dWQC/x2NywrCMBAAf6Xs2YU8UMFfEQ+bdNsuxI0krSil/
- +7icQaG2aFzE+5wG3Zo/JYuVQ38aYC8kM6MMhpDcCG6c3SotUjKOPO6ypPrNNIXL/kayLtEniJ
- YmagzpkaaF2t1K8Xkq/Ekn//q/jiOH+pRPy16AAAA
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, arnd@arndb.de,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685454646; l=1443;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=ewKaB6L/DOQhgS1mAFK+x7nHWfw99pCSgv44oWr0O2s=;
- b=Z8MDlQoaPcLC133hYM9Us5kfgdVZVL3gf6AOJU1IEB7PatMjliQbZmD5Q70/c/iXG0sX/0uRj
- vZrEPWB6rQ7A35JVulyxB+2rJrbcqI0DfMoEMddcFEyTVAaFXCvAfMw
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-gettimeofday() is not guaranteed by posix to handle a NULL value as first
-argument gracefully.
-On glibc for example it crashes. (When not going through the vdso)
+Hi, Arnd, Willy
 
-Link: https://lore.kernel.org/lkml/96f1134d-ce6e-4d82-ae00-1cd4038809c4@t-8ch.de/
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 1 -
- 1 file changed, 1 deletion(-)
+> On Mon, May 29, 2023, at 21:54, Zhangjin Wu wrote:
+> > use sys_llseek instead of sys_lseek to add 64bit seek even in 32bit
+> > platforms.
+> >
+> > This code is based on sysdeps/unix/sysv/linux/lseek.c of glibc and
+> > src/unistd/lseek.c of musl.
+> >
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > Signed-off-by: Willy Tarreau <w@1wt.eu>
+> > ---
+> >  tools/include/nolibc/sys.h | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > index 98cfa2f6d021..d0720af84b6d 100644
+> > --- a/tools/include/nolibc/sys.h
+> > +++ b/tools/include/nolibc/sys.h
+> > @@ -672,7 +672,17 @@ int link(const char *old, const char *new)
+> >  static __attribute__((unused))
+> >  off_t sys_lseek(int fd, off_t offset, int whence)
+> >  {
+> > +#if defined(__NR_llseek) || defined(__NR__llseek)
+> > +#ifndef __NR__llseek
+> > +#define __NR__llseek __NR_llseek
+> > +#endif
+> > +	off_t result;
+> > +	return my_syscall5(__NR__llseek, fd, offset >> 32, offset, &result, 
+> > whence) ?: result;
+> > +#elif defined(__NR_lseek)
+> >  	return my_syscall3(__NR_lseek, fd, offset, whence);
+> > +#else
+> > +#error None of __NR_lseek, __NR_llseek nor __NR__llseek defined, 
+> > cannot implement sys_lseek()
+> > +#endif
+> >  }
+> 
+> This is not technically wrong, but I think a different approach
+> would be clearer: Instead of having a sys_lseek() that works
+> differently depending on the macros, why not define the low-level
+> helpers to match the kernel arguments like
+> 
+> static inline __attribute__((unused))
+> __kernel_loff_t sys_lseek(int fd, __kernel_loff_t offset, int whence)
+> {
+> #ifdef __NR__llseek
+> 	__kernel_loff_t result;
+> 	return my_syscall5(__NR__llseek, fd, offset >> 32, offset, &result,  whence) ?: result;
+> #else
+>         
+> #endif
+> }
+> 
+> static inline __attribute__((unused))
+> __kernel_off_t sys_lseek(int fd, __kernel_off_t offset, int whence)
+> {
+> #ifdef __NR_lseek
+> 	return my_syscall3(__NR_lseek, fd, offset, whence);
+> #else
+>         return -ENOSYS;
+> #endif
+> }
+> 
+> And then do the selection inside of the actual lseek,
+> something like
+> 
+> static __attribute__((unused))
+> off_t lseek(int fd, off_t offset, int whence)
+> {
+>         off_t ret = -ENOSYS;
+> 
+>         if (BITS_PER_LONG == 32)
+>                ret = sys_llseek(fd, offset, whence);
+> 
+>         if (ret == -ENOSYS)
+>                ret = sys_lseek(fd, offset, whence);
+> 
+>         if (ret < 0) {
+>                 SET_ERRNO(-ret);
+>                 ret = -1;
+>         }
+>         return ret;
+>        
+> }
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 7de46305f419..0fe615ebb086 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -583,7 +583,6 @@ int run_syscall(int min, int max)
- 		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork()); break;
- 		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
- 		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
--		CASE_TEST(gettimeofday_null); EXPECT_SYSZR(1, gettimeofday(NULL, NULL)); break;
- #ifdef NOLIBC
- 		CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
- 		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+Yes, It is clearer, thanks. will learn carefully about the kernel types.
 
----
-base-commit: 5b21219d67d3483144d10332709d0c04f733ab93
-change-id: 20230530-nolibc-gettimeofday-6c72a10ba1a3
+> 
+> For the loff_t selection, there is no real need to handle the
+> fallback, so this could just be an if()/else to select 32-bit
+> or 64-bit, but for the time_t ones the fallback is required
+> for pre-5.6 kernels.
+>
+
+Ok, will test it on the pre-5.6 versions too.
+
+Hi, Willy, what's your suggestion about the oldest kernel versions we plan to support? ;-)
 
 Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+Zhangjin
 
+>        Arnd
