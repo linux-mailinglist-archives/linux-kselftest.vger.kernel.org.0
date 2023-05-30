@@ -2,95 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7143715CDA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 13:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B6A715D1B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 13:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjE3LSH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 May 2023 07:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
+        id S231893AbjE3LYt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 May 2023 07:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjE3LSG (ORCPT
+        with ESMTP id S231897AbjE3LYp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 May 2023 07:18:06 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D45B0;
-        Tue, 30 May 2023 04:18:03 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1685445474t3vd91jk
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 19:17:53 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: rZJGTgY0+YO42EliYbWrQYWGNgKZOfXEKsGvnSlMHd2cAkAzcp4YFeJPsIZBU
-        71DWcf1qi8lHwUTiAzzmiaNRz90Js9jdIUW2B36Eoq42HFPUGr061h7dPSa+Jl7S56WJdAH
-        +z4B/uI2ZzRfOD16kuuVqj0hsqe82IGm+RrDlxmqkxMqUtRAZ2Cbp/IgyzkvrG4n2aw/Le3
-        F/zy85a1qsGhtmxmqSCkR5aWR2nXWH4DRT88MmhT3Pwe/VF2JhpUn/j0g7GEbggdo5ufWbo
-        FwPrxKcuWH1rBNaxmX2viRu9MHD4VmpLcXj+KoSXXr/qbcy8fOopse8ujCD1ZwHAXE2QIhe
-        DHVkHCdyiGc3EwBTeV3H+8BAaIoCsjGYcaqBvlxYjP2WxvTnBnSIBL00YHNrJ6KjLEJSytk
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1363702751823665213
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        w@1wt.eu
-Subject: Re: [PATCH 2/2] selftests/nolibc: add sizeof test for the new 64bit data types
-Date:   Tue, 30 May 2023 19:17:53 +0800
-Message-Id: <20230530111753.403722-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <c68a6f60-0906-408a-9454-419085df695e@t-8ch.de>
-References: <c68a6f60-0906-408a-9454-419085df695e@t-8ch.de>
+        Tue, 30 May 2023 07:24:45 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADB811D
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 May 2023 04:24:40 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-973bf581759so788685466b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 May 2023 04:24:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1685445879; x=1688037879;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HDFiw2NZ2KPcPpdOWrLyKHVOdaWV9rOrIcNk9rFAJRc=;
+        b=i/QmtubuVM5MXH8DA6zZPIe05w2yzKv2VkvS6nhZLXeFg6+6ZtRk3/YDiN6HNB4425
+         Tw3kt53UYfd2M1nPEFiZPz3+pJjC4PhSsA/DnFy9xARG6DXhHVsyF0WPwMPZF1p5xnC0
+         3IiBJ0THyE1OohLscl0jiff0LCgQbT+nLP0wwfLx7qM+vV1GTIx87zgvAoc93RhW7ZQg
+         LArelhyfYpfAvgMKFiYaZejvHJw9+CeKKqj0yyl+L5ZlcQxTQfU5mlhlmRAxopO6t0iU
+         f9X8bBkOCBXmpPmHhs/CF+pImoecahnK2jUFqEJim2bpygqWyy6jY+6TB/ChFcCR8FM6
+         vm2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685445879; x=1688037879;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HDFiw2NZ2KPcPpdOWrLyKHVOdaWV9rOrIcNk9rFAJRc=;
+        b=LN3LmgrK8tYNSV48q+fEPq6GRG9hM8g1TT8zvz5QKyTD56zhy1RBaz6iHjdtZem6Tv
+         5ph4g2J5ptwm3fc8a2Y2B1HTxx78Fo2da1iNTV56YpiN8TuRS+KT4DetIIDek3Ep3QSr
+         Xi0Yz0rBIAVTyYQra3EyseMelNbk2Tb/gSHD5vyWaI1AAyf29dae+yios0tsQFJe3s+Z
+         xLF2pjIT/Aua9bI1Dg3/AmRrWvXhbbxzNWYlMymW3Danl9QBmXosrpJ4esnE79CMHuY1
+         RaorJndwEDuxx7oX7i7TCXnarfvbxNc9I7xDy/InIIh4yzV4Cr54XYllx5IlK3VlG/O9
+         /54w==
+X-Gm-Message-State: AC+VfDxq/WhXl28mqsrAc6xAe4+JZ9TF9PuinOa1RQTrKF9fCGohiS4a
+        KXPpcZLrBM/kio9no9F8JBMplM6BDg8yQVf5vXHh0g==
+X-Google-Smtp-Source: ACHHUZ6/dT2hu/yep7lq+BIWR9UpAUh4DvHp9z8hf5OQTL0ymetEwXH+zNo8RGxKxATCFM3qtOL55x2t8vcbijVb6xk=
+X-Received: by 2002:a17:907:961a:b0:973:91f7:5092 with SMTP id
+ gb26-20020a170907961a00b0097391f75092mr2957498ejc.2.1685445879235; Tue, 30
+ May 2023 04:24:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230320005258.1428043-1-sashal@kernel.org> <20230320005258.1428043-8-sashal@kernel.org>
+ <CAN+4W8g6AcQQWe7rrBVOFYoqeQA-1VbUP_W7DPS3q0k-czOLfg@mail.gmail.com>
+ <ZBiAPngOtzSwDhFz@kroah.com> <CAN+4W8jAyJTdFL=tgp3wCpYAjGOs5ggo6vyOg8PbaW+tJP8TKA@mail.gmail.com>
+ <CAN+4W8j5qe6p3YV90g-E0VhV7AmYyAvt0z50dfDSombbGghkww@mail.gmail.com>
+ <2023041100-oblong-enamel-5893@gregkh> <CAN+4W8hmSgbb-wO4da4A=6B4y0oSjvUTTVia_0PpUXShP4NX4Q@mail.gmail.com>
+ <2023052435-xbox-dislike-0ab2@gregkh> <CAN+4W8iMcwwVjmSekZ9txzZNxOZ0x98nBXo4cEoTU9G2zLe8HA@mail.gmail.com>
+ <2023052647-tacking-wince-85c5@gregkh>
+In-Reply-To: <2023052647-tacking-wince-85c5@gregkh>
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Tue, 30 May 2023 13:24:28 +0200
+Message-ID: <CAN+4W8jn2P9LtB=4FtWxFikmEdGGbaxBvUg7swkip+EzqfzHPg@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 6.2 08/30] selftests/bpf: check that modifier
+ resolves after pointer
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Martin KaFai Lau <martin.lau@kernel.org>,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        shuah@kernel.org, yhs@fb.com, eddyz87@gmail.com, sdf@google.com,
+        error27@gmail.com, iii@linux.ibm.com, memxor@gmail.com,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On 2023-05-30 14:42:56+0800, Zhangjin Wu wrote:
-> > These test cases are required to make sure the new added data types are
-> > really 64bit based.
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index 20d184da9a2b..43ce4d34b596 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -721,6 +721,14 @@ int run_stdlib(int min, int max)
-> >  #else
-> >  # warning "__SIZEOF_LONG__ is undefined"
-> >  #endif /* __SIZEOF_LONG__ */
-> > +		CASE_TEST(sizeof_time_t);           EXPECT_EQ(1, 8,                sizeof(time_t)); break;
-> > +		CASE_TEST(sizeof_timespec);         EXPECT_EQ(1, 16,               sizeof(struct timespec)); break;
-> > +#ifdef NOLIBC
-> > +		CASE_TEST(sizeof_itimerspec);       EXPECT_EQ(1, 32,               sizeof(struct itimerspec)); break;
-> > +#endif
-> > +		CASE_TEST(sizeof_timeval);          EXPECT_EQ(1, 16,               sizeof(struct timeval)); break;
-> > +		CASE_TEST(sizeof_itimerval);        EXPECT_EQ(1, 32,               sizeof(struct itimerval)); break;
-> > +		CASE_TEST(sizeof_off_t);            EXPECT_EQ(1, 8,                sizeof(off_t)); break;
-> 
-> These will break on 32bit glibc configurations.
-> (At least on x86)
+On Fri, May 26, 2023 at 6:43=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> So what tree(s) does this need to be backported to?  I'm confused, this
+> is a 6.2 email thread which is long end-of-life.
 
-Yes, I added a big #ifdef at first, but narrowed it down after a default
-x86_64 gcc+glibc test, 32bit has been ignored from my mind ;-(
+That would be 5.10 from what I can tell. Other LTS kernels have
+working tools/testing/selftests/bpf.
 
-Will add the big #ifdef back.
+I replied here because you asked for examples :)
 
-Thanks,
-Zhangjin
+> It can be avoided by people testing and letting me know when things
+> break :)
 
-> 
-> >  		case __LINE__:
-> >  			return ret; /* must be last */
-> >  		/* note: do not set any defaults so as to permit holes above */
-> > -- 
+Fair enough. Earlier you said:
+
+> And selftests should NOT be broken on stable releases, if so, something
+> is wrong as no other subsystem has that happen.
+
+Why is bpf special in this regard then?
+
+Best
+Lorenz
