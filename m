@@ -2,98 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EFB715288
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 02:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA98D7154E5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 07:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjE3ARi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 May 2023 20:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S229688AbjE3FVs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 May 2023 01:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjE3ARh (ORCPT
+        with ESMTP id S229507AbjE3FVr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 May 2023 20:17:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F9ED9
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 May 2023 17:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685405809;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cBl3q2i812Jlu/HY8zePZKnZZJeg4miQ7XeIUUOuIUs=;
-        b=EC8IjAlaEJeGBXv9msEe2PdkvOHjVXRikyqJlItGhZoe36YjqmxzdlK8Xusjb+bAPiqU1d
-        Pd9R5CwwQwv14isZMokhEHJtOQjvrhAPxvS1sHuCbIeSEv2NQf3GNmqS4NICocYOWj0MWH
-        gtau7H3FlWceDAlkbuGcACATVJVvFhI=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-317-SiEXZEtGMB2A_uegZ8il2g-1; Mon, 29 May 2023 20:16:47 -0400
-X-MC-Unique: SiEXZEtGMB2A_uegZ8il2g-1
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-33b4cbdd21aso22877895ab.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 May 2023 17:16:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685405807; x=1687997807;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cBl3q2i812Jlu/HY8zePZKnZZJeg4miQ7XeIUUOuIUs=;
-        b=iq4A0lzODNdLBSsd2bB5G4FDYmhTBPjaNmnW4Hr9RiHWKGAPzbvQxFb9J0aD1S1m5p
-         cJOCd/rT25B72PxgVK/2TvN+D4ouMxq5msiJANqlEZlrpA5+r8IY6CaqKEQooaYKpOxc
-         aNp1Ivg8HSLNlgMAJlDXf4oMXB7bZs6wUAkAuHD4bIHAaxpxt4vQfVv4estQ031pD1/g
-         NTk/0p8VLQ96Q4JiUzBcWMbr1S7Ibe7Zny7+Rm06g2G3vwLv/J+yRYd8/IFWAds0n6Pc
-         II/FX6zwWPNSGZ97qxHgHq3fCEe1sPScNx7sVDcW+NwoA8m+/0mmUS9p0w8oqq4NzINL
-         7J5A==
-X-Gm-Message-State: AC+VfDzE+SYtLbChZhliod+L2GkkIhsuRnXkbgtrWrevb9ieQvhbm7ch
-        yFpO2+Y2TVjYctBaM6doR+wQ/wWCJoOPwLExOGCGJDFgwSJOAXnEcqh0Re7yXsnMYev2dv3gIQv
-        4YHzZGNvh1Cp/v1qUCKm+WWZLvHT8
-X-Received: by 2002:a92:dcc1:0:b0:328:8770:b9c2 with SMTP id b1-20020a92dcc1000000b003288770b9c2mr507362ilr.14.1685405807097;
-        Mon, 29 May 2023 17:16:47 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ73yMhHh+AVUWd+tWnEm39ZtbwzqfO2AHakkj3n4fptb2pthTIWuj5Tj1tTy9hAry5+QAej4w==
-X-Received: by 2002:a92:dcc1:0:b0:328:8770:b9c2 with SMTP id b1-20020a92dcc1000000b003288770b9c2mr507347ilr.14.1685405806881;
-        Mon, 29 May 2023 17:16:46 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id d6-20020a926806000000b003248469e5easm590655ilc.43.2023.05.29.17.16.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 17:16:46 -0700 (PDT)
-Date:   Mon, 29 May 2023 18:16:44 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v3 00/10] Add Intel VT-d nested translation
-Message-ID: <20230529181644.3a6a5c7b.alex.williamson@redhat.com>
-In-Reply-To: <ZHTyNgnjj/bOkIgi@nvidia.com>
-References: <20230511145110.27707-1-yi.l.liu@intel.com>
-        <BN9PR11MB52765FA8255FB8F8A1A6F11B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <ZHTyNgnjj/bOkIgi@nvidia.com>
-Organization: Red Hat
+        Tue, 30 May 2023 01:21:47 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0F7AD;
+        Mon, 29 May 2023 22:21:44 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1685424093t09pbsru
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 30 May 2023 13:21:32 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: q+yjhizk/eK4Twfz5/tkrE7vplCQXvJ4uATWgDp4FlclbHqgTQzECLOaM/5aW
+        ciP3qrlZXDUOoqXXgEGPnefG1bscVwQQcb7SNzzTIUIyuSYUnjA8MKAIs/4DWDkTv1UZ/hm
+        RMJH3jBhaBXbW+jZobqHikfj6kgNNqri+YL8Wf/avB5c+itkx6m82TmJENM86el0C6f/Hah
+        qDPSYwt8xGHJ0WHIxeW8UvilJGfwXk5SfSfWmTbHMizcoiuPY/0TCVlG/oPymB/LEqFCkxa
+        jd4aj/2GFDHuQnp5eeriEYwyGxXrr+Y3YlUbxdCrz7RaTK2mcAvBq2mBB0Fb9NGSN+dEcTt
+        TpvzNke228KrB4bPGDkzB13vfe9pBxTtmH12H0PsMyn3IJ2toM=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 6904062556633079927
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, arnd@arndb.de, w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 04/13] tools/nolibc: add missing nanoseconds support for __NR_statx
+Date:   Tue, 30 May 2023 13:21:32 +0800
+Message-Id: <20230530052132.364685-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <3a3edd48-1ace-4c89-89e8-9c594dd1b3c9@t-8ch.de>
+References: <3a3edd48-1ace-4c89-89e8-9c594dd1b3c9@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,19 +51,80 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 29 May 2023 15:43:02 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+Thomas, Arnd, Willy
 
-> On Wed, May 24, 2023 at 08:59:43AM +0000, Tian, Kevin wrote:
+> On 2023-05-30 03:50:34+0800, Zhangjin Wu wrote:
+> > Commit a89c937d781a ("tools/nolibc: support nanoseconds in stat()")
+> > added nanoseconds for stat() but missed the statx case, this adds it.
 > 
-> > At least this looks a reasonable tradeoff to some proprietary VMMs
-> > which never adds RO mappings in stage-2 today.  
+> Welp, I should have thought of that.
+> At least the testcase seems to have been useful.
+>
+
+yeah, your testcase telled me this issue.
+
+> Thanks for the fix!
 > 
-> What is the reason for the RO anyhow?
+> > The stx_atime, stx_mtime, stx_ctime are in type of 'struct
+> > statx_timestamp', which is incompatible with 'struct timespec', should
+> > convert explicitly.
+> > 
+> >     /* include/uapi/linux/stat.h */
+> > 
+> >     struct statx_timestamp {
+> >     	__s64	tv_sec;
+> >     	__u32	tv_nsec;
+> >     	__s32	__reserved;
+> >     };
+> > 
+> >     /* include/uapi/linux/time_types.h */
+> >     struct __kernel_timespec {
+> >     	__kernel_time64_t       tv_sec;                 /* seconds */
+> >     	long long               tv_nsec;                /* nanoseconds */
+> >     };
+> > 
+> >     /* tools/include/nolibc/types.h */
+> >     #define timespec __kernel_timespec
+> > 
+> > Without this patch, the stat_timestamps test case would fail on rv32.
+> > 
+> > Fixes: a89c937d781a ("tools/nolibc: support nanoseconds in stat()")
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/include/nolibc/sys.h | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > index 154194056962..98cfa2f6d021 100644
+> > --- a/tools/include/nolibc/sys.h
+> > +++ b/tools/include/nolibc/sys.h
+> > @@ -1175,9 +1175,9 @@ int sys_stat(const char *path, struct stat *buf)
+> >  	buf->st_size    = statx.stx_size;
+> >  	buf->st_blksize = statx.stx_blksize;
+> >  	buf->st_blocks  = statx.stx_blocks;
+> > -	buf->st_atime   = statx.stx_atime.tv_sec;
+> > -	buf->st_mtime   = statx.stx_mtime.tv_sec;
+> > -	buf->st_ctime   = statx.stx_ctime.tv_sec;
+> > +	buf->st_atim    = (struct timespec){ .tv_sec = statx.stx_atime.tv_sec, .tv_nsec = statx.stx_atime.tv_nsec };
+> > +	buf->st_mtim    = (struct timespec){ .tv_sec = statx.stx_mtime.tv_sec, .tv_nsec = statx.stx_mtime.tv_nsec };
+> > +	buf->st_ctim    = (struct timespec){ .tv_sec = statx.stx_ctime.tv_sec, .tv_nsec = statx.stx_ctime.tv_nsec };
 > 
-> Would it be so bad if it was DMA mapped as RW due to the errata?
+> I would prefer to split the compound assignment into two single
+> assignments, though.
+> 
+> buf->st_ctim.tv_sec = statx.stx_ctime.tv_sec;
+> buf->st_ctim.tv_nsec = statx.stx_ctime.tv_nsec;
+>
 
-What if it's the zero page?  Thanks,
+Ok, will update it in the v3 revision.
 
-Alex
+And further, what about removing the other !statx parts
+(__NR_newfstatat, __NR_stat)? just like we are doing for the other 64bit
+syscalls (llseek and time65).
 
+Best regards,
+Zhangjin
+
+> >  	return ret;
+> >  }
+> >  #else
