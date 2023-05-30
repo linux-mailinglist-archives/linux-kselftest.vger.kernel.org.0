@@ -2,83 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641C27155A3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 08:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DD37157B7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 09:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjE3GnN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 May 2023 02:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S229623AbjE3H4f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 May 2023 03:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbjE3GnM (ORCPT
+        with ESMTP id S229744AbjE3H4c (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 May 2023 02:43:12 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D967AB2;
-        Mon, 29 May 2023 23:43:09 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1685428979t23ocw7f
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 14:42:58 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: QityeSR92A2o5sTwmGCD+PqYMSq7MB3IEE8O3t1qtWOzFpvckQlLvvdZrNOgE
-        uarJb402gzy9fGIWVhjEYpQDyVh3pANl+z9B3bRnf03I3oT4Z8IS23/bof7tQtzq8n306zg
-        rfkF9nyJz0EwgB6+lRhH48uRW1Yn26Wa63FhSP+VEpWjL4h88ydg+O9QTlN1tjcPMc1t78H
-        Lu0IRV35MhW/3iu3iLPjt2I6GN62hUKHRs8usz00u+QHRmd27bfqhcoZ1YUR/uHt3KJZ/Vw
-        tQDkvr5b+CSZZca3/Zlcg1e1Kta/IIJVePMt3sGEWhxF7kPE1xfj8pZlQvEA7kEfwwJmTWj
-        SiRjvuntBLs2VvV4oWQ47+LPVOAvuJ4gnoct3RfMo8LyztoU7oMHjwGgkJujDhOIhrVpOhd
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9349735140151722294
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH 2/2] selftests/nolibc: add sizeof test for the new 64bit data types
-Date:   Tue, 30 May 2023 14:42:56 +0800
-Message-Id: <d1f4073e1dd9a51be93ea9e14ebd746b312646a4.1685428087.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685428087.git.falcon@tinylab.org>
-References: <cover.1685428087.git.falcon@tinylab.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 30 May 2023 03:56:32 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BCB138
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 May 2023 00:56:11 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-565a1788f3fso88743667b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 May 2023 00:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685433371; x=1688025371;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=K7ytfWF+UN+RaMrVhdC48WtmycV9AzSbc9oaKd9zjxk=;
+        b=hOUtLNfZE60vJA625/94v7A5IkhIJF8qwaDymhZkbTk20AZUukm+XNUXuRkmOqBxTQ
+         emjuInDHpiaGcWk91ywLezj4ftmluptwp8vSo4w8KefDtWj+D2Ps2OOU1mbcK1i5du9q
+         yMy3ZkSEaRjVafp68Qak+SPnUEp1k5F7V+1YHfWozVmiQcFDYWWNL39pvnJS6RdEHRkV
+         mqqbnxM6DNQZ5I1bY2FVhqtq2EL1PeXX8affZ7fIFz9mMhdRvy2yrCUJ1bhyB4zfv9Lh
+         jZBiWW68kOSEKWOgWGv3/UQVe5AWDzLldoYAa5pbq6d3fxUtiv4OqwznQkvfId9VTOdJ
+         29ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685433371; x=1688025371;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K7ytfWF+UN+RaMrVhdC48WtmycV9AzSbc9oaKd9zjxk=;
+        b=KVe4g2Ow+uJrQ95Dn2e+CmclWN3X9lXU3zxYFxuP75ue4B+Qeou0SIJvsx36tpbeal
+         IhCHqzehG3a76Izh3eb6xlXek4W0Isj43g0qPNRnOk9xkF5moU1OTxv1hzzu+iYD0DMH
+         AxbXid0MhKlulSZxC+JDK8lUz2jbwLDS+Hso4r+Pyfh+kcLWtrqyUmy5c1jBgWnO2cBp
+         emX+gM5q0ipZJpmbe5juCI889TIeeGZ6s2gFtZICXTmm4vD+TDwQED8zhbNX9cHbIMA+
+         iTKw/HEGJ6gv/R3GYgd23sFxMnNJA7ZITRyDGtkn8a9ToBWuBs7MH2NdSD71N+apU4X9
+         B0kg==
+X-Gm-Message-State: AC+VfDzvBso2ts0PmS2b8egYLiTfv2JrO1fYKdxLLsMAv+dAfF/EEm4m
+        i4pwYvIEpomKpUIAW9faiwl8vMzNKUiezw==
+X-Google-Smtp-Source: ACHHUZ5JSMwZMnDvGVI6Ii/vsemPy+HbaWLd8oh0flzFpYKfGfN+sd93pJ/SZfyB3wUb5YMJUtNRmqnRoHcAaA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a81:ae09:0:b0:560:d237:43dc with SMTP id
+ m9-20020a81ae09000000b00560d23743dcmr911546ywh.3.1685433371096; Tue, 30 May
+ 2023 00:56:11 -0700 (PDT)
+Date:   Tue, 30 May 2023 15:55:57 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230530075557.1558422-2-davidgow@google.com>
+Subject: [PATCH] kunit: Fix obsolete name in documentation headers (func->action)
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Benjamin Berg <benjamin.berg@intel.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-These test cases are required to make sure the new added data types are
-really 64bit based.
+The kunit_add_action() and related functions named the kunit_action_t
+parameter 'func' in early drafts, which was later renamed to 'action'
+However, the doc comments were not properly updated.
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Fix these to avoid confusion and 'make htmldocs' warnings.
+
+Fixes: b9dce8a1ed3e ("kunit: Add kunit_add_action() to defer a call until test exit")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Closes: https://lore.kernel.org/lkml/20230530151840.16a56460@canb.auug.org.au/
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ include/kunit/resource.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 20d184da9a2b..43ce4d34b596 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -721,6 +721,14 @@ int run_stdlib(int min, int max)
- #else
- # warning "__SIZEOF_LONG__ is undefined"
- #endif /* __SIZEOF_LONG__ */
-+		CASE_TEST(sizeof_time_t);           EXPECT_EQ(1, 8,                sizeof(time_t)); break;
-+		CASE_TEST(sizeof_timespec);         EXPECT_EQ(1, 16,               sizeof(struct timespec)); break;
-+#ifdef NOLIBC
-+		CASE_TEST(sizeof_itimerspec);       EXPECT_EQ(1, 32,               sizeof(struct itimerspec)); break;
-+#endif
-+		CASE_TEST(sizeof_timeval);          EXPECT_EQ(1, 16,               sizeof(struct timeval)); break;
-+		CASE_TEST(sizeof_itimerval);        EXPECT_EQ(1, 32,               sizeof(struct itimerval)); break;
-+		CASE_TEST(sizeof_off_t);            EXPECT_EQ(1, 8,                sizeof(off_t)); break;
- 		case __LINE__:
- 			return ret; /* must be last */
- 		/* note: do not set any defaults so as to permit holes above */
+diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+index b64eb783b1bc..c7383e90f5c9 100644
+--- a/include/kunit/resource.h
++++ b/include/kunit/resource.h
+@@ -393,7 +393,7 @@ typedef void (kunit_action_t)(void *);
+ /**
+  * kunit_add_action() - Call a function when the test ends.
+  * @test: Test case to associate the action with.
+- * @func: The function to run on test exit
++ * @action: The function to run on test exit
+  * @ctx: Data passed into @func
+  *
+  * Defer the execution of a function until the test exits, either normally or
+@@ -415,7 +415,7 @@ int kunit_add_action(struct kunit *test, kunit_action_t *action, void *ctx);
+ /**
+  * kunit_add_action_or_reset() - Call a function when the test ends.
+  * @test: Test case to associate the action with.
+- * @func: The function to run on test exit
++ * @action: The function to run on test exit
+  * @ctx: Data passed into @func
+  *
+  * Defer the execution of a function until the test exits, either normally or
+@@ -441,7 +441,7 @@ int kunit_add_action_or_reset(struct kunit *test, kunit_action_t *action,
+ /**
+  * kunit_remove_action() - Cancel a matching deferred action.
+  * @test: Test case the action is associated with.
+- * @func: The deferred function to cancel.
++ * @action: The deferred function to cancel.
+  * @ctx: The context passed to the deferred function to trigger.
+  *
+  * Prevent an action deferred via kunit_add_action() from executing when the
+@@ -459,7 +459,7 @@ void kunit_remove_action(struct kunit *test,
+ /**
+  * kunit_release_action() - Run a matching action call immediately.
+  * @test: Test case the action is associated with.
+- * @func: The deferred function to trigger.
++ * @action: The deferred function to trigger.
+  * @ctx: The context passed to the deferred function to trigger.
+  *
+  * Execute a function deferred via kunit_add_action()) immediately, rather than
 -- 
-2.25.1
+2.41.0.rc0.172.g3f132b7071-goog
 
