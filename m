@@ -2,177 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857F071580E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 10:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CF77159B8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 11:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjE3IKn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 May 2023 04:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S229708AbjE3JSK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 May 2023 05:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjE3IKm (ORCPT
+        with ESMTP id S229663AbjE3JSJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 May 2023 04:10:42 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D10090;
-        Tue, 30 May 2023 01:10:40 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4DDB75C0193;
-        Tue, 30 May 2023 04:10:37 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 30 May 2023 04:10:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1685434237; x=1685520637; bh=uf
-        gkqQI0rYCB4h44qKb7lixkTsQc+fvfFQk8IuGt6LA=; b=rcHTFo83aXUuRRTFc9
-        KrOTd8KZv4rPYE7B/RhVmRvKug8CMK7Pfl4sVE0tjR9UZgfA9hfce2hfHS1jP4q3
-        +TIgzSROcDOGEFMeJD3NrjW4aPpcMKs1wJpxClo6LlibFSuITND3EZqB62iPbZzy
-        0t1xY3IEPVi3rQrpLki76l+uzSYfFMl/Z/toQa8X+vuckP58AUODZZ1RoC12aaJ/
-        UVsvZsrBRIEnpJoTIy2SLplyoXLy+ZwJWAsLA+5XdEquy2N/eMZxKcFmgXhUYtU0
-        sXWJuRCMLoaCJT8ep4LHteivocNfvuLe/EaeHI5ePK+VQeOmltDVWYVw8SeWEu74
-        MBbA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685434237; x=1685520637; bh=ufgkqQI0rYCB4
-        h44qKb7lixkTsQc+fvfFQk8IuGt6LA=; b=hH2183mjAtoZDHb8H+VmAJEMeLSof
-        PjvwgCsGgYSOopRKlzEOTSiXrtb+P8a+02t1cY6VfRc+gfEkPtuXyZnJyyBin7z4
-        Z4ymmWE31Ko//dC2g679fBeDZ4aXTeJ9DuuDmvXIe/XF1PPNJGIJJ1gdMetyni9q
-        b7pbyVG2xtKr90Qy/9WBSrgZi8spOx63VGpgJcbJn7MqNHPB4UQ7xrg2NicEhGhJ
-        uOGqSqA7BvugwjYTC2+kJkB9WiO3hVok/L4L7AG0Cyp8g+QfGP+1l7uYiOn1N4hS
-        0Jt9qOC4k+bme2YUUGG9pXkfAjwjPlB4qPmz5gG9MgVQtsdjlcqvhCIaA==
-X-ME-Sender: <xms:fK91ZELoz7pUblCI_cnYejkvcwyJuVM2e2XSNP90tolX5F6DaNtPiQ>
-    <xme:fK91ZEJM__V7Xs6zuiJ_x3hEXw4IQTkls_b5cJFSnm-9bHckf8pkz7raPbdJpWYMG
-    7Z3t1UO9JLE4YH-90A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekiedguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:fK91ZEscb5yO3T5OVK15KU6OzVCwdPBgcyepqn-SWacoNEJDqQx8KQ>
-    <xmx:fK91ZBbawdLoTh9OPwtW0vh77edvEwxy29566UgfBkEfwF-CaxBfdw>
-    <xmx:fK91ZLZjBUOCvTPASwQnHG3aLL9Tu-GEt45v5FBqQmlM1rFYF0sJkw>
-    <xmx:fa91ZHHEp5jsDuAMK00ingcS5yaKs768aqWfWqtp3wi9MsMc8y5_FQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 53C43B60086; Tue, 30 May 2023 04:10:36 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
-Mime-Version: 1.0
-Message-Id: <5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com>
-In-Reply-To: <2f5c3338898da65210ad3f62d7b7773a96f6d251.1685387484.git.falcon@tinylab.org>
-References: <cover.1685387484.git.falcon@tinylab.org>
- <2f5c3338898da65210ad3f62d7b7773a96f6d251.1685387484.git.falcon@tinylab.org>
-Date:   Tue, 30 May 2023 10:10:16 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Zhangjin Wu" <falcon@tinylab.org>, "Willy Tarreau" <w@1wt.eu>
+        Tue, 30 May 2023 05:18:09 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC40FE8;
+        Tue, 30 May 2023 02:18:07 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1685438285;
+        bh=GOtVnXfIJlGURLj2ERPngUrj5IRyyiUMPq6o2r0EbhE=;
+        h=From:Date:Subject:To:Cc:From;
+        b=pmfwR3LJPtVG6ULCMXXmvrxPwnuXsJA93eTyeeR2KUCBvHrcOQCj8ziKxAiXM6HLr
+         5zgIjk0MgL1AFO0UJok7z0u1jI4FoXILUU0Tha0vv4ZVtGyIwxJ0ctKXkEhY2BdEcB
+         wZ+MBssUXnaSTB8qkwiSdOVsrBPzqzgShQ0p4MGk=
+Date:   Tue, 30 May 2023 11:18:00 +0200
+Subject: [PATCH] tools/nolibc: ensure fast64 integer types have 64 bits
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230530-nolibc-fast64-v1-1-883dea6bc666@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAEe/dWQC/x2NywrCQAwAf6XkbGD70BV/RTzspqkNLKlsWhFK/
+ 93Q4wwMs4NxFTZ4NDtU/orJog7tpQGak74ZZXSGLnR9uPYBdSmSCadk623Ae4yRxkyRQwve5GS
+ MuSal2SvdSnH5qTzJ75w8X8fxB/hkzyR0AAAA
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Vincent Dagonneau <v@vda.io>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Subject: Re: [PATCH v2 07/13] tools/nolibc: sys_lseek: add pure 64bit lseek
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685438284; l=2858;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=GOtVnXfIJlGURLj2ERPngUrj5IRyyiUMPq6o2r0EbhE=;
+ b=eCm+xH2GZu1IbNP0TDgCOh3vmlEw8pcefoAp5YcxRxoQ89BgMVhVmIKnNAIN7VtZCVE6oxyuL
+ iRk3stIxcuAD3qkezPIEcO+xISsIk8tnq6efc6yysJpg/5vfTIb5wti
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 29, 2023, at 21:54, Zhangjin Wu wrote:
-> use sys_llseek instead of sys_lseek to add 64bit seek even in 32bit
-> platforms.
->
-> This code is based on sysdeps/unix/sysv/linux/lseek.c of glibc and
-> src/unistd/lseek.c of musl.
->
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> Signed-off-by: Willy Tarreau <w@1wt.eu>
-> ---
->  tools/include/nolibc/sys.h | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> index 98cfa2f6d021..d0720af84b6d 100644
-> --- a/tools/include/nolibc/sys.h
-> +++ b/tools/include/nolibc/sys.h
-> @@ -672,7 +672,17 @@ int link(const char *old, const char *new)
->  static __attribute__((unused))
->  off_t sys_lseek(int fd, off_t offset, int whence)
->  {
-> +#if defined(__NR_llseek) || defined(__NR__llseek)
-> +#ifndef __NR__llseek
-> +#define __NR__llseek __NR_llseek
-> +#endif
-> +	off_t result;
-> +	return my_syscall5(__NR__llseek, fd, offset >> 32, offset, &result, 
-> whence) ?: result;
-> +#elif defined(__NR_lseek)
->  	return my_syscall3(__NR_lseek, fd, offset, whence);
-> +#else
-> +#error None of __NR_lseek, __NR_llseek nor __NR__llseek defined, 
-> cannot implement sys_lseek()
-> +#endif
->  }
+On 32bit platforms size_t is not enough to represent [u]int_fast64_t.
 
-This is not technically wrong, but I think a different approach
-would be clearer: Instead of having a sys_lseek() that works
-differently depending on the macros, why not define the low-level
-helpers to match the kernel arguments like
+Fixes: 3e9fd4e9a1d5 ("tools/nolibc: add integer types and integer limit macros")
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Cc: Vincent Dagonneau <v@vda.io>
 
-static inline __attribute__((unused))
-__kernel_loff_t sys_lseek(int fd, __kernel_loff_t offset, int whence)
-{
-#ifdef __NR__llseek
-	__kernel_loff_t result;
-	return my_syscall5(__NR__llseek, fd, offset >> 32, offset, &result,  whence) ?: result;
-#else
-        
-#endif
-}
+Note: We could also fall back to compiler-provided data like:
 
-static inline __attribute__((unused))
-__kernel_off_t sys_lseek(int fd, __kernel_off_t offset, int whence)
-{
-#ifdef __NR_lseek
-	return my_syscall3(__NR_lseek, fd, offset, whence);
-#else
-        return -ENOSYS;
-#endif
-}
+__UINT_FAST{8,16,32,64}_{TYPE,MIN,MAX}__
+---
+ tools/include/nolibc/stdint.h                | 4 ++--
+ tools/testing/selftests/nolibc/nolibc-test.c | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-And then do the selection inside of the actual lseek,
-something like
+diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
+index c1ce4f5e0603..3fc418cfc3d7 100644
+--- a/tools/include/nolibc/stdint.h
++++ b/tools/include/nolibc/stdint.h
+@@ -36,8 +36,8 @@ typedef  ssize_t       int_fast16_t;
+ typedef   size_t      uint_fast16_t;
+ typedef  ssize_t       int_fast32_t;
+ typedef   size_t      uint_fast32_t;
+-typedef  ssize_t       int_fast64_t;
+-typedef   size_t      uint_fast64_t;
++typedef  int64_t       int_fast64_t;
++typedef uint64_t      uint_fast64_t;
+ 
+ typedef  int64_t           intmax_t;
+ typedef uint64_t          uintmax_t;
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 7de46305f419..65be0317d184 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -696,9 +696,9 @@ int run_stdlib(int min, int max)
+ 		CASE_TEST(limit_int_fast32_min);    EXPECT_EQ(1, INT_FAST32_MIN,   (int_fast32_t)    INTPTR_MIN); break;
+ 		CASE_TEST(limit_int_fast32_max);    EXPECT_EQ(1, INT_FAST32_MAX,   (int_fast32_t)    INTPTR_MAX); break;
+ 		CASE_TEST(limit_uint_fast32_max);   EXPECT_EQ(1, UINT_FAST32_MAX,  (uint_fast32_t)   UINTPTR_MAX); break;
+-		CASE_TEST(limit_int_fast64_min);    EXPECT_EQ(1, INT_FAST64_MIN,   (int_fast64_t)    INTPTR_MIN); break;
+-		CASE_TEST(limit_int_fast64_max);    EXPECT_EQ(1, INT_FAST64_MAX,   (int_fast64_t)    INTPTR_MAX); break;
+-		CASE_TEST(limit_uint_fast64_max);   EXPECT_EQ(1, UINT_FAST64_MAX,  (uint_fast64_t)   UINTPTR_MAX); break;
++		CASE_TEST(limit_int_fast64_min);    EXPECT_EQ(1, INT_FAST64_MIN,   (int_fast64_t)    INT64_MIN); break;
++		CASE_TEST(limit_int_fast64_max);    EXPECT_EQ(1, INT_FAST64_MAX,   (int_fast64_t)    INT64_MAX); break;
++		CASE_TEST(limit_uint_fast64_max);   EXPECT_EQ(1, UINT_FAST64_MAX,  (uint_fast64_t)   UINT64_MAX); break;
+ #if __SIZEOF_LONG__ == 8
+ 		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,       (intptr_t)        0x8000000000000000LL); break;
+ 		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,       (intptr_t)        0x7fffffffffffffffLL); break;
 
-static __attribute__((unused))
-off_t lseek(int fd, off_t offset, int whence)
-{
-        off_t ret = -ENOSYS;
+---
+base-commit: 5b21219d67d3483144d10332709d0c04f733ab93
+change-id: 20230530-nolibc-fast64-8777cdbc7e01
 
-        if (BITS_PER_LONG == 32)
-               ret = sys_llseek(fd, offset, whence);
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
-        if (ret == -ENOSYS)
-               ret = sys_lseek(fd, offset, whence);
-
-        if (ret < 0) {
-                SET_ERRNO(-ret);
-                ret = -1;
-        }
-        return ret;
-       
-}
-
-For the loff_t selection, there is no real need to handle the
-fallback, so this could just be an if()/else to select 32-bit
-or 64-bit, but for the time_t ones the fallback is required
-for pre-5.6 kernels.
-
-       Arnd
