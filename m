@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872BC715CA7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 13:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7143715CDA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 13:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjE3LI7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 May 2023 07:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        id S229535AbjE3LSH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 May 2023 07:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjE3LI5 (ORCPT
+        with ESMTP id S229660AbjE3LSG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 May 2023 07:08:57 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB89115;
-        Tue, 30 May 2023 04:08:51 -0700 (PDT)
-X-QQ-mid: bizesmtp80t1685444926t3zkui9c
+        Tue, 30 May 2023 07:18:06 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D45B0;
+        Tue, 30 May 2023 04:18:03 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1685445474t3vd91jk
 Received: from linux-lab-host.localdomain ( [119.123.130.226])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 19:08:45 +0800 (CST)
+        id ; Tue, 30 May 2023 19:17:53 +0800 (CST)
 X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: 3M0okmaRx3gelAiWP5RoGbm4vjCvwZfJGtFNG1quZBYLTu71sj9RkgohxK606
-        a+q+BffDHTGq7hGQggq49Yc7b00q60k9Z0+rpko1hv5Qylsrh5Ru5dO7bo9KIloRo5ONmwQ
-        GxwAFUFc1x9e2wF81rgdmybkUrKQU2849rW+NYEvCIxyaTAiLxdNDZOpLSFnXpfxH1KVTqA
-        kWZIjSdm5YfAh46ijTIDBYTyYWqbWGo7WiVpC7CQnofDv7czmI4JoOidGAbFsd3/zSmwz2M
-        FtPx6NDMyIuosDDfYQm61GFTCo77Rlg8fJ/j2ZP4WDsV+0lFlJ8ptgtuyJp1957ue6tLVJi
-        LhH20tTwUUWtfUWeW8whrClc1ayhenyHlIvd/B9P/KKnGSV0gae3vPZ63kNu3sDlcC/m0Qm
+X-QQ-FEAT: rZJGTgY0+YO42EliYbWrQYWGNgKZOfXEKsGvnSlMHd2cAkAzcp4YFeJPsIZBU
+        71DWcf1qi8lHwUTiAzzmiaNRz90Js9jdIUW2B36Eoq42HFPUGr061h7dPSa+Jl7S56WJdAH
+        +z4B/uI2ZzRfOD16kuuVqj0hsqe82IGm+RrDlxmqkxMqUtRAZ2Cbp/IgyzkvrG4n2aw/Le3
+        F/zy85a1qsGhtmxmqSCkR5aWR2nXWH4DRT88MmhT3Pwe/VF2JhpUn/j0g7GEbggdo5ufWbo
+        FwPrxKcuWH1rBNaxmX2viRu9MHD4VmpLcXj+KoSXXr/qbcy8fOopse8ujCD1ZwHAXE2QIhe
+        DHVkHCdyiGc3EwBTeV3H+8BAaIoCsjGYcaqBvlxYjP2WxvTnBnSIBL00YHNrJ6KjLEJSytk
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1574217579638465516
+X-BIZMAIL-ID: 1363702751823665213
 From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH 4/4] selftests/nolibc: add user-space efault restore test case
-Date:   Tue, 30 May 2023 19:08:43 +0800
-Message-Id: <69e9464e92fe8c60a421d6571a1139980103e8fd.1685443199.git.falcon@tinylab.org>
+        w@1wt.eu
+Subject: Re: [PATCH 2/2] selftests/nolibc: add sizeof test for the new 64bit data types
+Date:   Tue, 30 May 2023 19:17:53 +0800
+Message-Id: <20230530111753.403722-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685443199.git.falcon@tinylab.org>
-References: <cover.1685443199.git.falcon@tinylab.org>
+In-Reply-To: <c68a6f60-0906-408a-9454-419085df695e@t-8ch.de>
+References: <c68a6f60-0906-408a-9454-419085df695e@t-8ch.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
@@ -52,77 +52,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-while the libc supports sigaction/sigsetjmp/siglongjump, it is able to
-restore next test after an invalid data pointer access, add such a test
-case for these libcs, otherwise, skip it.
+> On 2023-05-30 14:42:56+0800, Zhangjin Wu wrote:
+> > These test cases are required to make sure the new added data types are
+> > really 64bit based.
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/testing/selftests/nolibc/nolibc-test.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> > index 20d184da9a2b..43ce4d34b596 100644
+> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > @@ -721,6 +721,14 @@ int run_stdlib(int min, int max)
+> >  #else
+> >  # warning "__SIZEOF_LONG__ is undefined"
+> >  #endif /* __SIZEOF_LONG__ */
+> > +		CASE_TEST(sizeof_time_t);           EXPECT_EQ(1, 8,                sizeof(time_t)); break;
+> > +		CASE_TEST(sizeof_timespec);         EXPECT_EQ(1, 16,               sizeof(struct timespec)); break;
+> > +#ifdef NOLIBC
+> > +		CASE_TEST(sizeof_itimerspec);       EXPECT_EQ(1, 32,               sizeof(struct itimerspec)); break;
+> > +#endif
+> > +		CASE_TEST(sizeof_timeval);          EXPECT_EQ(1, 16,               sizeof(struct timeval)); break;
+> > +		CASE_TEST(sizeof_itimerval);        EXPECT_EQ(1, 32,               sizeof(struct itimerval)); break;
+> > +		CASE_TEST(sizeof_off_t);            EXPECT_EQ(1, 8,                sizeof(off_t)); break;
+> 
+> These will break on 32bit glibc configurations.
+> (At least on x86)
 
-With glibc/musl:
+Yes, I added a big #ifdef at first, but narrowed it down after a default
+x86_64 gcc+glibc test, 32bit has been ignored from my mind ;-(
 
-    29 efault_handler ! 11 SIGSEGV                                   [OK]
+Will add the big #ifdef back.
 
-With current nolibc:
+Thanks,
+Zhangjin
 
-    29 efault_handler                                               [SKIPPED]
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 9f9a09529a4f..6b4ebe4be4d6 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -248,6 +248,15 @@ static void register_trap_handler(void)
- 	}
- }
- 
-+static int test_efault(void)
-+{
-+	char *addr = (void *)1;
-+
-+	*addr = 'a';
-+
-+	return -1;
-+}
-+
- #define has_user_space_efault() (1)
- #else
- #define record_test_context(idx, iteration, iterations) do { } while (0)
-@@ -255,6 +264,7 @@ static void register_trap_handler(void)
- #define register_expect_trap(experr1, experr2) do { } while (0)
- #define register_trap_handler() do { } while (0)
- #define has_user_space_efault() (0)
-+#define test_efault(addr) (-1)
- #endif
- 
- static void putcharn(char c, size_t n)
-@@ -690,6 +700,7 @@ int run_syscall(int min, int max)
- 	struct stat stat_buf;
- 	int euid0;
- 	int proc;
-+	int efault;
- 	int test;
- 	int tmp;
- 	int ret = 0;
-@@ -701,6 +712,9 @@ int run_syscall(int min, int max)
- 	/* this will be used to skip certain tests that can't be run unprivileged */
- 	euid0 = geteuid() == 0;
- 
-+	/* user-space efault handler support */
-+	efault = has_user_space_efault();
-+
- 	for (test = min; test >= 0 && test <= max; test++) {
- 		int llen = 0; /* line length */
- 
-@@ -737,6 +751,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(dup2_m1);           tmp = dup2(-1, 100); EXPECT_SYSER(1, tmp, -1, EBADF); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(dup3_0);            tmp = dup3(0, 100, 0);  EXPECT_SYSNE(1, tmp, -1); close(tmp); break;
- 		CASE_TEST(dup3_m1);           tmp = dup3(-1, 100, 0); EXPECT_SYSER(1, tmp, -1, EBADF); if (tmp != -1) close(tmp); break;
-+		CASE_TEST(efault_handler);    EXPECT_SYSER(efault, test_efault(), -1, EFAULT); break;
- 		CASE_TEST(execve_root);       EXPECT_SYSER(1, execve("/", (char*[]){ [0] = "/", [1] = NULL }, NULL), -1, EACCES); break;
- 		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork()); break;
- 		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
--- 
-2.25.1
-
+> 
+> >  		case __LINE__:
+> >  			return ret; /* must be last */
+> >  		/* note: do not set any defaults so as to permit holes above */
+> > -- 
