@@ -2,49 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA967162B5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 15:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D4571632E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 May 2023 16:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbjE3Nyw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 May 2023 09:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
+        id S232933AbjE3OIj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 May 2023 10:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbjE3Nys (ORCPT
+        with ESMTP id S232937AbjE3OIh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 May 2023 09:54:48 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132A08E;
-        Tue, 30 May 2023 06:54:45 -0700 (PDT)
-X-QQ-mid: bizesmtp67t1685454874tcbczm6n
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 21:54:33 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: xwvWJGGFd7M6Lf9NrCrasfk6SUbNPheOBSL8ua9DdJsxRZlXQL39nTjnTvL+d
-        XLdpGp9SJk9zYuni6DU/NAh7tFSEqaWm7zDN6JJbcoR9OmNKi9eEzB8kiWo06NR4+QJwJek
-        E07Tsl/YYyT5/LMOIPqhsXJaey7sesek4fBbqIZJjUpPPCWiF/nyzN5OQFsNv0/EVNAfKEA
-        tiOsJO2gCV132ZfqipSRr17DV49vHO0GcMmZsXh1r1ok7mw8jjufV6jL00g3s1kawQ4aCMd
-        JRF+DFJ8gSGzm9bI0ZTGRTuepiJIUBs7L+9IWBple5DQXdVqYQmTgbjkgNEHBXU4JMXKFpn
-        AIEZI3yhqlGyRoKT96g9LDL1yqF719Sphr20qfdQ1JWK1TbhJm0kAwMwj5wUf1heIRNNMOT
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9011537490340992174
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     arnd@arndb.de
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de, w@1wt.eu
-Subject: Re: [PATCH v2 07/13] tools/nolibc: sys_lseek: add pure 64bit lseek
-Date:   Tue, 30 May 2023 21:54:33 +0800
-Message-Id: <20230530135433.405051-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com>
-References: <5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com>
+        Tue, 30 May 2023 10:08:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3E3F7;
+        Tue, 30 May 2023 07:08:33 -0700 (PDT)
+Received: from [192.168.10.48] (unknown [119.152.142.14])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 74D9A6606E9A;
+        Tue, 30 May 2023 15:07:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685455711;
+        bh=hgt7uema1jYmxhZbh16DKDBu9S2qqPFKN4QZoBvJjIM=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=NvPt1Ad9joh8QVkoMqjoIwRWfEsN8wNhhNHIiR+/Mns+bD9KqfEyPpbzEilXq8o2z
+         Zm5Vvg7SlhjuafhrA2/K35FMQ3rclBjktKGk7NGhivI+hD/L3YEMPoRBmUoz/xIPN0
+         3qoFZQf7FHGt22YnVwWvSVaub35aBbu8tonwYpV9+aR1XT5pcwT3HQ4jYx18ZBAMZe
+         WOkHC9fbvCq8QtKhDGPeCI7YkwCc/TT1qUiVT1m18Wrf9FGGPGMvhqNg7FOthCY5Gb
+         2z9wzg2tGemc2YTfT/R53RdiRj4Bo8z1igye1fj0xg9eGKatGJRaBLT/Z7bB4L48Uj
+         1jSP/wcksNVZw==
+Message-ID: <598965cb-85d3-5b33-a1d4-2f49e94ee8ea@collabora.com>
+Date:   Tue, 30 May 2023 19:07:44 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Nadav Amit <namit@vmware.com>
+Subject: Re: [PATCH v16 0/5] Implement IOCTL to get and optionally clear info
+ about PTEs
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>
+References: <20230525085517.281529-1-usama.anjum@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230525085517.281529-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,106 +82,272 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Arnd, Willy
+Hello Peter, David, Michal, Mike, Danylo and Andrei,
 
-> On Mon, May 29, 2023, at 21:54, Zhangjin Wu wrote:
-> > use sys_llseek instead of sys_lseek to add 64bit seek even in 32bit
-> > platforms.
-> >
-> > This code is based on sysdeps/unix/sysv/linux/lseek.c of glibc and
-> > src/unistd/lseek.c of musl.
-> >
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > Signed-off-by: Willy Tarreau <w@1wt.eu>
-> > ---
-> >  tools/include/nolibc/sys.h | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > index 98cfa2f6d021..d0720af84b6d 100644
-> > --- a/tools/include/nolibc/sys.h
-> > +++ b/tools/include/nolibc/sys.h
-> > @@ -672,7 +672,17 @@ int link(const char *old, const char *new)
-> >  static __attribute__((unused))
-> >  off_t sys_lseek(int fd, off_t offset, int whence)
-> >  {
-> > +#if defined(__NR_llseek) || defined(__NR__llseek)
-> > +#ifndef __NR__llseek
-> > +#define __NR__llseek __NR_llseek
-> > +#endif
-> > +	off_t result;
-> > +	return my_syscall5(__NR__llseek, fd, offset >> 32, offset, &result, 
-> > whence) ?: result;
-> > +#elif defined(__NR_lseek)
-> >  	return my_syscall3(__NR_lseek, fd, offset, whence);
-> > +#else
-> > +#error None of __NR_lseek, __NR_llseek nor __NR__llseek defined, 
-> > cannot implement sys_lseek()
-> > +#endif
-> >  }
-> 
-> This is not technically wrong, but I think a different approach
-> would be clearer: Instead of having a sys_lseek() that works
-> differently depending on the macros, why not define the low-level
-> helpers to match the kernel arguments like
-> 
-> static inline __attribute__((unused))
-> __kernel_loff_t sys_lseek(int fd, __kernel_loff_t offset, int whence)
-> {
-> #ifdef __NR__llseek
-> 	__kernel_loff_t result;
-> 	return my_syscall5(__NR__llseek, fd, offset >> 32, offset, &result,  whence) ?: result;
-> #else
->         
-> #endif
-> }
-> 
-> static inline __attribute__((unused))
-> __kernel_off_t sys_lseek(int fd, __kernel_off_t offset, int whence)
-> {
-> #ifdef __NR_lseek
-> 	return my_syscall3(__NR_lseek, fd, offset, whence);
-> #else
->         return -ENOSYS;
-> #endif
-> }
-> 
-> And then do the selection inside of the actual lseek,
-> something like
-> 
-> static __attribute__((unused))
-> off_t lseek(int fd, off_t offset, int whence)
-> {
->         off_t ret = -ENOSYS;
-> 
->         if (BITS_PER_LONG == 32)
->                ret = sys_llseek(fd, offset, whence);
-> 
->         if (ret == -ENOSYS)
->                ret = sys_lseek(fd, offset, whence);
-> 
->         if (ret < 0) {
->                 SET_ERRNO(-ret);
->                 ret = -1;
->         }
->         return ret;
->        
-> }
+I hope you are well. You (and some other) guys have been helping and
+reviewing up to this point. Thank you so much! Please review them again and
+mention if anything comes to your mind. Please send review tags or tested
+by tags in the hope that we merge these soon for next release. Current
+patches fulfill all of our requirement regarding ABI and performance. I
+guess, we should merge now (if somethings comes up, we can always fix them
+along the way).
 
-Yes, It is clearer, thanks. will learn carefully about the kernel types.
+Any thoughts/comments are welcome. I'm sending this email as we have not
+had much reviews in the past 3-4 revisions.
 
+Thanks,
+Usama
+
+On 5/25/23 1:55 PM, Muhammad Usama Anjum wrote:
+> *Changes in v16*
+> - Fix a corner case
+> - Add exclusive PM_SCAN_OP_WP back
 > 
-> For the loff_t selection, there is no real need to handle the
-> fallback, so this could just be an if()/else to select 32-bit
-> or 64-bit, but for the time_t ones the fallback is required
-> for pre-5.6 kernels.
->
+> *Changes in v15*
+> - Build fix (Add missed build fix in RESEND)
+> 
+> *Changes in v14*
+> - Fix build error caused by #ifdef added at last minute in some configs
+> 
+> *Changes in v13*
+> - Rebase on top of next-20230414
+> - Give-up on using uffd_wp_range() and write new helpers, flush tlb only
+>   once
+> 
+> *Changes in v12*
+> - Update and other memory types to UFFD_FEATURE_WP_ASYNC
+> - Rebaase on top of next-20230406
+> - Review updates
+> 
+> *Changes in v11*
+> - Rebase on top of next-20230307
+> - Base patches on UFFD_FEATURE_WP_UNPOPULATED
+> - Do a lot of cosmetic changes and review updates
+> - Remove ENGAGE_WP + !GET operation as it can be performed with
+>   UFFDIO_WRITEPROTECT
+> 
+> *Changes in v10*
+> - Add specific condition to return error if hugetlb is used with wp
+>   async
+> - Move changes in tools/include/uapi/linux/fs.h to separate patch
+> - Add documentation
+> 
+> *Changes in v9:*
+> - Correct fault resolution for userfaultfd wp async
+> - Fix build warnings and errors which were happening on some configs
+> - Simplify pagemap ioctl's code
+> 
+> *Changes in v8:*
+> - Update uffd async wp implementation
+> - Improve PAGEMAP_IOCTL implementation
+> 
+> *Changes in v7:*
+> - Add uffd wp async
+> - Update the IOCTL to use uffd under the hood instead of soft-dirty
+>   flags
+> 
+> *Motivation*
+> The real motivation for adding PAGEMAP_SCAN IOCTL is to emulate Windows
+> GetWriteWatch() syscall [1]. The GetWriteWatch{} retrieves the addresses of
+> the pages that are written to in a region of virtual memory.
+> 
+> This syscall is used in Windows applications and games etc. This syscall is
+> being emulated in pretty slow manner in userspace. Our purpose is to
+> enhance the kernel such that we translate it efficiently in a better way.
+> Currently some out of tree hack patches are being used to efficiently
+> emulate it in some kernels. We intend to replace those with these patches.
+> So the whole gaming on Linux can effectively get benefit from this. It
+> means there would be tons of users of this code.
+> 
+> CRIU use case [2] was mentioned by Andrei and Danylo:
+>> Use cases for migrating sparse VMAs are binaries sanitized with ASAN,
+>> MSAN or TSAN [3]. All of these sanitizers produce sparse mappings of
+>> shadow memory [4]. Being able to migrate such binaries allows to highly
+>> reduce the amount of work needed to identify and fix post-migration
+>> crashes, which happen constantly.
+> 
+> Andrei's defines the following uses of this code:
+> * it is more granular and allows us to track changed pages more
+>   effectively. The current interface can clear dirty bits for the entire
+>   process only. In addition, reading info about pages is a separate
+>   operation. It means we must freeze the process to read information
+>   about all its pages, reset dirty bits, only then we can start dumping
+>   pages. The information about pages becomes more and more outdated,
+>   while we are processing pages. The new interface solves both these
+>   downsides. First, it allows us to read pte bits and clear the
+>   soft-dirty bit atomically. It means that CRIU will not need to freeze
+>   processes to pre-dump their memory. Second, it clears soft-dirty bits
+>   for a specified region of memory. It means CRIU will have actual info
+>   about pages to the moment of dumping them.
+> * The new interface has to be much faster because basic page filtering
+>   is happening in the kernel. With the old interface, we have to read
+>   pagemap for each page.
+> 
+> *Implementation Evolution (Short Summary)*
+> From the definition of GetWriteWatch(), we feel like kernel's soft-dirty
+> feature can be used under the hood with some additions like:
+> * reset soft-dirty flag for only a specific region of memory instead of
+> clearing the flag for the entire process
+> * get and clear soft-dirty flag for a specific region atomically
+> 
+> So we decided to use ioctl on pagemap file to read or/and reset soft-dirty
+> flag. But using soft-dirty flag, sometimes we get extra pages which weren't
+> even written. They had become soft-dirty because of VMA merging and
+> VM_SOFTDIRTY flag. This breaks the definition of GetWriteWatch(). We were
+> able to by-pass this short coming by ignoring VM_SOFTDIRTY until David
+> reported that mprotect etc messes up the soft-dirty flag while ignoring
+> VM_SOFTDIRTY [5]. This wasn't happening until [6] got introduced. We
+> discussed if we can revert these patches. But we could not reach to any
+> conclusion. So at this point, I made couple of tries to solve this whole
+> VM_SOFTDIRTY issue by correcting the soft-dirty implementation:
+> * [7] Correct the bug fixed wrongly back in 2014. It had potential to cause
+> regression. We left it behind.
+> * [8] Keep a list of soft-dirty part of a VMA across splits and merges. I
+> got the reply don't increase the size of the VMA by 8 bytes.
+> 
+> At this point, we left soft-dirty considering it is too much delicate and
+> userfaultfd [9] seemed like the only way forward. From there onward, we
+> have been basing soft-dirty emulation on userfaultfd wp feature where
+> kernel resolves the faults itself when WP_ASYNC feature is used. It was
+> straight forward to add WP_ASYNC feature in userfautlfd. Now we get only
+> those pages dirty or written-to which are really written in reality. (PS
+> There is another WP_UNPOPULATED userfautfd feature is required which is
+> needed to avoid pre-faulting memory before write-protecting [9].)
+> 
+> All the different masks were added on the request of CRIU devs to create
+> interface more generic and better.
+> 
+> [1] https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-getwritewatch
+> [2] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com
+> [3] https://github.com/google/sanitizers
+> [4] https://github.com/google/sanitizers/wiki/AddressSanitizerAlgorithm#64-bit
+> [5] https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com
+> [6] https://lore.kernel.org/all/20220725142048.30450-1-peterx@redhat.com/
+> [7] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
+> [8] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
+> [9] https://lore.kernel.org/all/20230306213925.617814-1-peterx@redhat.com
+> [10] https://lore.kernel.org/all/20230125144529.1630917-1-mdanylo@google.com
+> 
+> * Original Cover letter from v8*
+> Hello,
+> 
+> Note:
+> Soft-dirty pages and pages which have been written-to are synonyms. As
+> kernel already has soft-dirty feature inside which we have given up to
+> use, we are using written-to terminology while using UFFD async WP under
+> the hood.
+> 
+> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+> the info about page table entries. The following operations are
+> supported in this ioctl:
+> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>   (PAGE_IS_SWAPPED).
+> - Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
+>   pages have been written-to.
+> - Find pages which have been written-to and write protect the pages
+>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
+> 
+> It is possible to find and clear soft-dirty pages entirely in userspace.
+> But it isn't efficient:
+> - The mprotect and SIGSEGV handler for bookkeeping
+> - The userfaultfd wp (synchronous) with the handler for bookkeeping
+> 
+> Some benchmarks can be seen here[1]. This series adds features that weren't
+> present earlier:
+> - There is no atomic get soft-dirty/Written-to status and clear present in
+>   the kernel.
+> - The pages which have been written-to can not be found in accurate way.
+>   (Kernel's soft-dirty PTE bit + sof_dirty VMA bit shows more soft-dirty
+>   pages than there actually are.)
+> 
+> Historically, soft-dirty PTE bit tracking has been used in the CRIU
+> project. The procfs interface is enough for finding the soft-dirty bit
+> status and clearing the soft-dirty bit of all the pages of a process.
+> We have the use case where we need to track the soft-dirty PTE bit for
+> only specific pages on-demand. We need this tracking and clear mechanism
+> of a region of memory while the process is running to emulate the
+> getWriteWatch() syscall of Windows.
+> 
+> *(Moved to using UFFD instead of soft-dirtyi feature to find pages which
+> have been written-to from v7 patch series)*:
+> Stop using the soft-dirty flags for finding which pages have been
+> written to. It is too delicate and wrong as it shows more soft-dirty
+> pages than the actual soft-dirty pages. There is no interest in
+> correcting it [2][3] as this is how the feature was written years ago.
+> It shouldn't be updated to changed behaviour. Peter Xu has suggested
+> using the async version of the UFFD WP [4] as it is based inherently
+> on the PTEs.
+> 
+> So in this patch series, I've added a new mode to the UFFD which is
+> asynchronous version of the write protect. When this variant of the
+> UFFD WP is used, the page faults are resolved automatically by the
+> kernel. The pages which have been written-to can be found by reading
+> pagemap file (!PM_UFFD_WP). This feature can be used successfully to
+> find which pages have been written to from the time the pages were
+> write protected. This works just like the soft-dirty flag without
+> showing any extra pages which aren't soft-dirty in reality.
+> 
+> The information related to pages if the page is file mapped, present and
+> swapped is required for the CRIU project [5][6]. The addition of the
+> required mask, any mask, excluded mask and return masks are also required
+> for the CRIU project [5].
+> 
+> The IOCTL returns the addresses of the pages which match the specific
+> masks. The page addresses are returned in struct page_region in a compact
+> form. The max_pages is needed to support a use case where user only wants
+> to get a specific number of pages. So there is no need to find all the
+> pages of interest in the range when max_pages is specified. The IOCTL
+> returns when the maximum number of the pages are found. The max_pages is
+> optional. If max_pages is specified, it must be equal or greater than the
+> vec_size. This restriction is needed to handle worse case when one
+> page_region only contains info of one page and it cannot be compacted.
+> This is needed to emulate the Windows getWriteWatch() syscall.
+> 
+> The patch series include the detailed selftest which can be used as an
+> example for the uffd async wp test and PAGEMAP_IOCTL. It shows the
+> interface usages as well.
+> 
+> [1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+> [2] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
+> [3] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
+> [4] https://lore.kernel.org/all/Y6Hc2d+7eTKs7AiH@x1n
+> [5] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com/
+> [6] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com/
+> 
+> Regards,
+> Muhammad Usama Anjum
+> 
+> Muhammad Usama Anjum (4):
+>   fs/proc/task_mmu: Implement IOCTL to get and optionally clear info
+>     about PTEs
+>   tools headers UAPI: Update linux/fs.h with the kernel sources
+>   mm/pagemap: add documentation of PAGEMAP_SCAN IOCTL
+>   selftests: mm: add pagemap ioctl tests
+> 
+> Peter Xu (1):
+>   userfaultfd: UFFD_FEATURE_WP_ASYNC
+> 
+>  Documentation/admin-guide/mm/pagemap.rst     |   58 +
+>  Documentation/admin-guide/mm/userfaultfd.rst |   35 +
+>  fs/proc/task_mmu.c                           |  503 ++++++
+>  fs/userfaultfd.c                             |   26 +-
+>  include/linux/userfaultfd_k.h                |   21 +-
+>  include/uapi/linux/fs.h                      |   53 +
+>  include/uapi/linux/userfaultfd.h             |    9 +-
+>  mm/hugetlb.c                                 |   32 +-
+>  mm/memory.c                                  |   27 +-
+>  tools/include/uapi/linux/fs.h                |   53 +
+>  tools/testing/selftests/mm/.gitignore        |    1 +
+>  tools/testing/selftests/mm/Makefile          |    3 +-
+>  tools/testing/selftests/mm/config            |    1 +
+>  tools/testing/selftests/mm/pagemap_ioctl.c   | 1459 ++++++++++++++++++
+>  tools/testing/selftests/mm/run_vmtests.sh    |    4 +
+>  15 files changed, 2262 insertions(+), 23 deletions(-)
+>  create mode 100644 tools/testing/selftests/mm/pagemap_ioctl.c
+>  mode change 100644 => 100755 tools/testing/selftests/mm/run_vmtests.sh
+> 
 
-Ok, will test it on the pre-5.6 versions too.
-
-Hi, Willy, what's your suggestion about the oldest kernel versions we plan to support? ;-)
-
-Best regards,
-Zhangjin
-
->        Arnd
+-- 
+BR,
+Muhammad Usama Anjum
