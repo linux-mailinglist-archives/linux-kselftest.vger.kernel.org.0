@@ -2,104 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC8A717900
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 May 2023 09:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FC0717B9A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 May 2023 11:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234769AbjEaHwv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 May 2023 03:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S235405AbjEaJRz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 May 2023 05:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234878AbjEaHwA (ORCPT
+        with ESMTP id S235391AbjEaJRy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 May 2023 03:52:00 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D695D10CB
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 00:51:06 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30af86a96b4so1142503f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 00:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685519464; x=1688111464;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aCiP4MMSibYW0/yekwWeN83nPjDqo+zmYCQqXPfMlsQ=;
-        b=KxIFXc3XbPO+1gYgOOk/90oGm/JEIHXeR2xRaiberGS4qS5Ft1bgxYhViYOJ9s9u2G
-         TPbiQ9+NRrBGoJ6eQeUm4EJcwNjBx+248VxuHpZeViPIYwvhD+oVqEljD8IvuMpoWTh1
-         bo1HPvf++ADfbDTg3tQ2VgwHdN0GVyM1jqcz7d06N+Cf5sP/YW2UbgBV7IlZl+sxfVdh
-         zq0gOxE9E3ARbDhXsx8kRBM4xjBy52oEiEd/QvnVMv65IRb1YXSEjb7jgyHs/veUura8
-         NPFse5oBNr2AEkJseF5DIVcB2YmrqcqS5+QUv4zgUHvB6FHmOyc+K0yWvVPW8UAMKrMp
-         wplQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685519464; x=1688111464;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aCiP4MMSibYW0/yekwWeN83nPjDqo+zmYCQqXPfMlsQ=;
-        b=MTfKtka/MDeG0vCrRjFa/Ii3CyKBwCaTRTamnWCOsjhsIy1L38gcV7bpLIXoVgb3Nl
-         gpbgIOrA5soW3oYpMv1PnO++TazIp/jGWUgxEg6TkBT8hj+46aCPzr5H5zMOXqvHBQtd
-         UYJAQCOCc2UkkdmVxAHeL/w+fFHIvkfxDHnrjrH69wAeTPlB86vb3Rpcu7FBPbD7YyzS
-         FcMlvuD9emPktpzPG2k2M9SEXcjdIX2WxGgO2hG3L7P/2emnChoLa8KkwNjSMEG8QTkw
-         sXOG4O5tMavnwGMKayHuqeMxCVsLdDXuU/YN1wcCzOp+MCuPzzU95nPTsJfSah8fJjZ/
-         Vh+g==
-X-Gm-Message-State: AC+VfDw/tFkAxfUhnfrGJNIzmCvU9XmL+rUUq+EWU2Pxj0RVq+KYxqpx
-        1zS+spt4qfs3IK/KVO79xoyl0wJqdPa8Voa9e0A=
-X-Google-Smtp-Source: ACHHUZ74iLhzQbLTZgd+gSEU1rRIICluXbvzT8dhVDP0yuOM+iJ9KQ/9veKaCtGt6UjCh5xcmstC9w==
-X-Received: by 2002:a5d:6084:0:b0:307:8c47:a266 with SMTP id w4-20020a5d6084000000b003078c47a266mr3278298wrt.61.1685519464415;
-        Wed, 31 May 2023 00:51:04 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id g3-20020a5d46c3000000b002f28de9f73bsm5786231wrs.55.2023.05.31.00.51.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 00:51:02 -0700 (PDT)
-Date:   Wed, 31 May 2023 10:50:59 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kunit: Move kunit_abort() call out of
- kunit_do_failed_assertion()
-Message-ID: <7faac99b-8bb9-4015-9b64-789587542d20@kili.mountain>
-References: <20230531052158.1788232-1-davidgow@google.com>
+        Wed, 31 May 2023 05:17:54 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B668124;
+        Wed, 31 May 2023 02:17:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685524672; x=1717060672;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=bmNwWz+Sl3NGLRCdcR2hGpS3AQE5LBSVmGQYcIBJFS4=;
+  b=X1ONqH5Xc1B2PqUZTLRLimF4Yb4beDk7PEuqGUFBh9G6cig+CvkzQKU+
+   RtCpbkNjZLDSek8R85SA8jGWIRejvMOki2h2yuauZN9Rdw0oroC5kRUkt
+   NYg9eexrKD5dTQVXltf4LElhlW5BAIjOCvKAvqiVJdje+JvlTRRRr6dDX
+   Bs8ysUhRUBOLaQxaidGzSPI1umggzrZGmIj+uX8gODTEiPl/2CV5Z89Zz
+   kpbiITBEbrpBasltPiSbIqhKxX62k2ZEgjp2xLMU9K23xBc9J0wYCqMqR
+   WWP1bVEkSicTu0PYxPPzq3Cne6T8EjnXeEXG662u4Jgmqc8s49A/7mCrD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="352680551"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="352680551"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 02:17:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="851139174"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="851139174"
+Received: from lmmelle-mobl1.ger.corp.intel.com ([10.252.47.216])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 02:17:44 -0700
+Date:   Wed, 31 May 2023 12:17:23 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
+cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 21/24] selftests/resctrl: Read in less obvious order
+ to defeat prefetch optimizations
+In-Reply-To: <OSZPR01MB6328F2713E40CC7D383035A48B489@OSZPR01MB6328.jpnprd01.prod.outlook.com>
+Message-ID: <c21fb16d-d3ad-bbcb-daed-28f153b64525@linux.intel.com>
+References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-22-ilpo.jarvinen@linux.intel.com> <OSZPR01MB6328F2713E40CC7D383035A48B489@OSZPR01MB6328.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531052158.1788232-1-davidgow@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-566315524-1685524665=:5379"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 31, 2023 at 01:21:57PM +0800, David Gow wrote:
-> KUnit aborts the current thread when an assertion fails. Currently, this
-> is done conditionally as part of the kunit_do_failed_assertion()
-> function, but this hides the kunit_abort() call from the compiler
-> (particularly if it's in another module). This, in turn, can lead to
-> both suboptimal code generation (the compiler can't know if
-> kunit_do_failed_assertion() will return), and to static analysis tools
-> like smatch giving false positives.
-> 
-> Moving the kunit_abort() call into the macro should give the compiler
-> and tools a better chance at understanding what's going on. Doing so
-> requires exporting kunit_abort(), though it's recommended to continue to
-> use assertions in lieu of aborting directly.
-> 
-> In addition, kunit_abort() and kunit_do_failed_assertion() are renamed
-> to make it clear they they're intended for internal KUnit use, to:
-> __kunit_do_failed_assertion() and __kunit_abort()
-> 
-> Suggested-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Signed-off-by: David Gow <davidgow@google.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Fantastic!  Thanks so much!
+--8323329-566315524-1685524665=:5379
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 
-regards,
-dan carpenter
+On Wed, 31 May 2023, Shaopeng Tan (Fujitsu) wrote:
 
+> Hi Ilpo,
+> 
+> > When reading memory in order, HW prefetching optimizations will interfere
+> > with measuring how caches and memory are being accessed. This adds noise
+> > into the results.
+> > 
+> > Change the fill_buf reading loop to not use an obvious in-order access using
+> > multiply by a prime and modulo.
+> > 
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  tools/testing/selftests/resctrl/fill_buf.c | 17 ++++++++++-------
+> >  1 file changed, 10 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/resctrl/fill_buf.c
+> > b/tools/testing/selftests/resctrl/fill_buf.c
+> > index 7e0d3a1ea555..049a520498a9 100644
+> > --- a/tools/testing/selftests/resctrl/fill_buf.c
+> > +++ b/tools/testing/selftests/resctrl/fill_buf.c
+> > @@ -88,14 +88,17 @@ static void *malloc_and_init_memory(size_t s)
+> > 
+> >  static int fill_one_span_read(unsigned char *start_ptr, unsigned char
+> > *end_ptr)  {
+> > -	unsigned char sum, *p;
+> > -
+> > +	unsigned int size = (end_ptr - start_ptr) / (CL_SIZE / 2);
+> > +	unsigned int count = size;
+> > +	unsigned char sum;
+> > +
+> > +	/*
+> > +	 * Read the buffer in an order that is unexpected by HW prefetching
+> > +	 * optimizations to prevent them interfering with the caching pattern.
+> > +	 */
+> >  	sum = 0;
+> > -	p = start_ptr;
+> > -	while (p < end_ptr) {
+> > -		sum += *p;
+> > -		p += (CL_SIZE / 2);
+> > -	}
+> > +	while (count--)
+> > +		sum += start_ptr[((count * 59) % size) * CL_SIZE / 2];
+>
+> Could you please elaborate why 59 is used?
+
+The main reason is that it's a prime number ensuring the whole buffer 
+gets read. I picked something that doesn't make it to wrap on almost 
+every iteration.
+
+-- 
+ i.
+
+--8323329-566315524-1685524665=:5379--
