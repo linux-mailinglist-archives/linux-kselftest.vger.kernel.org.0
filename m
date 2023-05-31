@@ -2,141 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C46717CF9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 May 2023 12:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D289718079
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 May 2023 14:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235082AbjEaKOh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 May 2023 06:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
+        id S236060AbjEaM4O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 May 2023 08:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235839AbjEaKOf (ORCPT
+        with ESMTP id S232177AbjEaM4N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 May 2023 06:14:35 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB66E126;
-        Wed, 31 May 2023 03:14:29 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-565ee3d14c2so45746797b3.2;
-        Wed, 31 May 2023 03:14:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685528069; x=1688120069;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kcBlv7ROHShPNFgMUnoXENeAS79cglbgmJID7lt/8Gc=;
-        b=psYImgfhyuC3PMyN9Om88iXyMoetT5C39ZIu8+c95gdaKq9EyqmrfKe+w+Dnf3OqBC
-         EedRR1JQNJ0xjy8PZOqB2iuZ5wAmfGedcyDxCJbuw/USKMklcszHVl1SstJ1ZN/XmkX5
-         cCLpkq7BI/fVLHW2GSDOB4g3gzTUCQipH73TLphqUEejDczh6SU3w7N8D5QX1otobw0r
-         PwC74dvi2y3l3G1aj5j2ZuyAxBQF7IwFXQvJ1eJjx4nVPETU+xSIYfWqLxtJM1yCSGZm
-         unDNT5MCcfqceB+4ZMojRMJelBz6VmbeANmrafztkVnmDqGQqcWgM5FDopZ7CSUkaxDM
-         NN3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685528069; x=1688120069;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kcBlv7ROHShPNFgMUnoXENeAS79cglbgmJID7lt/8Gc=;
-        b=ACVyIHJKM22WBmjv7SCRszE57yJJvjEOyxbOeKlD1u6RbPADo1roO7RZFKJeTshPAZ
-         n+iZeVoOfgs1x1P3xYEvBP6X2xwAaH2GDzXSMf303n8bIJPzNath531R+k066oXFCRWm
-         6NIqEu4itELK/cdIO4tIKkCzu2C+gWzlwZsIGDOoeE16fiNZToOFf8iCIMnl6mnnbnj3
-         FDJe2PJgh75SOhrV/++K1wZmC7EPljgpP/DW1LJ7bzNzLWa9de7SBeHOZ2YHtuOR1hZ0
-         XVpBynIOlBrOYp6wn0MtpVReHGr8IPhKv+0Mi0fg4wjH0wNl3WKgirpVcSsAERUiTME/
-         cPIg==
-X-Gm-Message-State: AC+VfDzhtCNZlmEOp5QjELbDz1/T+H02Ygcugr21kldlajnBRySuVI1P
-        y5ClY11ATP0OeGEoXwKpssBvjnuIza6OHgpJHhM=
-X-Google-Smtp-Source: ACHHUZ6Q6nc/uVWpWjiXbdhpr3UaiX3TvBSiAFPfo0ypKf+4YNekhgLbZm5kMNkyoiLe0V4y0xlSqIQe0Pcyys1m+fI=
-X-Received: by 2002:a0d:dc86:0:b0:55d:8cee:96e9 with SMTP id
- f128-20020a0ddc86000000b0055d8cee96e9mr5029207ywe.5.1685528068941; Wed, 31
- May 2023 03:14:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230531052158.1788232-1-davidgow@google.com>
-In-Reply-To: <20230531052158.1788232-1-davidgow@google.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 31 May 2023 12:14:17 +0200
-Message-ID: <CANiq72mdpMMRLS7CQ-yWcd9xBbJPVC36Gy7BQK9OBzr_8=dS9g@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Move kunit_abort() call out of kunit_do_failed_assertion()
+        Wed, 31 May 2023 08:56:13 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83ACAE43;
+        Wed, 31 May 2023 05:55:37 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 095FD3200344;
+        Wed, 31 May 2023 08:55:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 31 May 2023 08:55:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1685537713; x=1685624113; bh=TN
+        miHdZhWOkezbPkUch2xBo3I6cLpUI+xAR+spYzjUU=; b=P3ZVR313xaZq1L9ex6
+        1/B8heApIn8lIi3m/LT92rCZ7zSV0ipqrTHOSO/LPVKNif4jRuhYw5P33PVP3I7f
+        aGIQ5QtAy45a7v1j0jIWvGLrss/SKEmARHG0BD4vhOmdTY4jgDp9YYABJpkl/VsK
+        8A542RsnJZBrbWiIOxnmFOu1IiK7BbS2cMGniKUIh+Y+KU4xVUBw4THAn2Blzb8v
+        8GgKFjJezXe0f7xD1w7A2H9IrwXBrcpjp17L1jBAYnxoAGeLRKNgBxUvfzHQeTT3
+        eqYYdqA0MyBVTUqGME7INEzU9tsUindb8RzJyQHH8zbxX03j3vs5YT2S6yPg0w1J
+        kL1Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685537713; x=1685624113; bh=TNmiHdZhWOkez
+        bPkUch2xBo3I6cLpUI+xAR+spYzjUU=; b=V9+odI0IaCSY/FDVJcpaFyaxW5VJ3
+        99AB4sDFI6CFyo8AM0pvmHJYXerBcTtB8HERBvSofZ1FgZn0SzDYwf9u2t3njj76
+        sF789RmZ7o+HHVJOETxarS/J5pOvCGtvVuB8c4G609a6H4nyIZYHInIGeZ4mcl1H
+        f0UXH7UK0iXUrAvrYyKCrH4fHqU1f9CqYxni881rXKKUVscQuiK25IuxHqgFoJZz
+        hGuN+3wOhie8nr6sPNUhtyCvdAq0CY5c9D31qiZQpMYKhudKmTCyerMA4C7/0E8p
+        /CKjqeScN19zMvw0ywoAoiT2roOy9s96VCGoWWDOGcko07baKTvZ6sdMg==
+X-ME-Sender: <xms:sUN3ZH5mlIOARJn5ScOXCAiO-hGrzE5Izsq5fJZ1UZ5nXdAKLKNuuA>
+    <xme:sUN3ZM7zYmL1Q4j_x8TlV2B_WZyPDKZbnCXAkx0DKqQY6GogzArdinzPTwuJbZeHB
+    26ngIZ0f3MdF8nRbDY>
+X-ME-Received: <xmr:sUN3ZOc6dSisFmh9o142Aqo_OAxU97Z9ZVQG2RK21OMrqC_SYHEQ0vVyWJmMnG8fga-7Z81FtqzITJGMAouVwQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekledgheeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtgfdukeeigeeuhfelheeftdfhgfegfefgudeuiefhueeuleekveetvdei
+    tddvieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:sUN3ZIIKrXCnFCu0HkDm8PbHXzBAO3FvhwV-CQcGjGArrx5tt4v3yA>
+    <xmx:sUN3ZLIJOhmSIVi2nx-SPHZv75wPrLYlGWW2PP8ky9gKQVEPN2O5DA>
+    <xmx:sUN3ZBypaq-brivOa1VpJGCp4HewVR_R1WFGqMpzh3Fm4p35JypmTQ>
+    <xmx:sUN3ZD9nAO5G58EsfdNgsV-sSZTaJj26Y3QRogr56gWwLGvn9CpHNQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 31 May 2023 08:55:12 -0400 (EDT)
+Date:   Wed, 31 May 2023 14:55:10 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
 To:     David Gow <davidgow@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Benjamin Berg <benjamin.berg@intel.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH] kunit: Fix obsolete name in documentation headers
+ (func->action)
+Message-ID: <3fv3ev3nuxzr7bej7beglrm6qoptyvzngbzdmwpjpobdhmc45v@4utejosaezjk>
+References: <20230530075557.1558422-2-davidgow@google.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ssq2ktuf4cygn225"
+Content-Disposition: inline
+In-Reply-To: <20230530075557.1558422-2-davidgow@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 31, 2023 at 7:22=E2=80=AFAM David Gow <davidgow@google.com> wro=
-te:
->
-> KUnit aborts the current thread when an assertion fails. Currently, this
-> is done conditionally as part of the kunit_do_failed_assertion()
-> function, but this hides the kunit_abort() call from the compiler
-> (particularly if it's in another module). This, in turn, can lead to
-> both suboptimal code generation (the compiler can't know if
-> kunit_do_failed_assertion() will return), and to static analysis tools
-> like smatch giving false positives.
->
-> Moving the kunit_abort() call into the macro should give the compiler
-> and tools a better chance at understanding what's going on. Doing so
-> requires exporting kunit_abort(), though it's recommended to continue to
-> use assertions in lieu of aborting directly.
->
-> In addition, kunit_abort() and kunit_do_failed_assertion() are renamed
-> to make it clear they they're intended for internal KUnit use, to:
-> __kunit_do_failed_assertion() and __kunit_abort()
->
-> Suggested-by: Dan Carpenter <dan.carpenter@linaro.org>
+
+--ssq2ktuf4cygn225
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, May 30, 2023 at 03:55:57PM +0800, David Gow wrote:
+> The kunit_add_action() and related functions named the kunit_action_t
+> parameter 'func' in early drafts, which was later renamed to 'action'
+> However, the doc comments were not properly updated.
+>=20
+> Fix these to avoid confusion and 'make htmldocs' warnings.
+>=20
+> Fixes: b9dce8a1ed3e ("kunit: Add kunit_add_action() to defer a call until=
+ test exit")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/lkml/20230530151840.16a56460@canb.auug.or=
+g.au/
 > Signed-off-by: David Gow <davidgow@google.com>
 
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+Reviewed-by: Maxime Ripard <mripard@kernel.org>
 
-Also tested on top of the Rust doctests KUnit changes with [1].
+Maxime
 
-Thanks!
+--ssq2ktuf4cygn225
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Cheers,
-Miguel
+-----BEGIN PGP SIGNATURE-----
 
-[1]
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZHdDrgAKCRDj7w1vZxhR
+xRahAP9tI8OwmLz3baTjIvsQJ7UwE6w3c/Ei+8UNZpftVn1mEgD9GTT+1unOzR5k
+zLgUGlh52rfTHKqhPj7y8I/0pcjECAQ=
+=4uQN
+-----END PGP SIGNATURE-----
 
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index 48adb992da936..3fae6284abbc2 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -61,7 +61,7 @@ macro_rules! kunit_assert {
-             //     next test runs, that test failures should be fixed
-and that KUnit is explicitly
-             //     documented as not suitable for production
-environments, we feel it is reasonable.
-             unsafe {
--                $crate::bindings::kunit_do_failed_assertion(
-+                $crate::bindings::__kunit_do_failed_assertion(
-                     $test,
-                     core::ptr::addr_of!(LOCATION.0),
-                     $crate::bindings::kunit_assert_type_KUNIT_ASSERTION,
-@@ -70,6 +70,13 @@ macro_rules! kunit_assert {
-                     core::ptr::null(),
-                 );
-             }
-+
-+            // SAFETY: FFI call; the `test` pointer is valid because
-this hidden macro should only
-+            // be called by the generated documentation tests which
-forward the test pointer given
-+            // by KUnit.
-+            unsafe {
-+                $crate::bindings::__kunit_abort($test);
-+            }
-         }
-     }};
- }
+--ssq2ktuf4cygn225--
