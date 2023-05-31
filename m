@@ -2,301 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42019718D72
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 May 2023 23:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9DB718E14
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jun 2023 00:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjEaVrW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 May 2023 17:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
+        id S230267AbjEaWIf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 May 2023 18:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjEaVrV (ORCPT
+        with ESMTP id S230383AbjEaWIf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 May 2023 17:47:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64132A3
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 14:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685569598;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=igYFvs+c9N5WeBPgjDiciSp0VkV0okfe8MCEg9xv7Mk=;
-        b=J6vf+b9YqlhROrKGpyJcQK0s14OJBFxBuYLhYaY9bJZn/9DFmDVxXX79Wppt5M/pa2WZFe
-        z4gyBEU6X8Um0DV4MF5Q+5RlP8Z03haHApSMpmbCX7upV7+ircay05iaLz4W+ekC8PHNAR
-        59uiQfGV+OCZfrdnNb/rMqFeK/SSp6Y=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-99-PF--ctJSNtytY3WRW1-0Mw-1; Wed, 31 May 2023 17:46:37 -0400
-X-MC-Unique: PF--ctJSNtytY3WRW1-0Mw-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-62632620f00so448106d6.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 14:46:37 -0700 (PDT)
+        Wed, 31 May 2023 18:08:35 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFDA1B4
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 15:08:17 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f6ac005824so57615111cf.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 15:08:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1685570897; x=1688162897;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a9UmohLXWQfSsyaexxE0Gnc7j5lYDh6s2uLniOqWFR8=;
+        b=maER3qwKrfySMzpZBIGNPSz0QucIMJOWJ/8tXglPc9i7Eku9bOpQiPUJnfXjKF78uU
+         CQpfI7d5My1BnbVmZo1nSUnkPn4GtVqJG9hnLkY7GlpqDc8M5bx5nWL4TJAiebzPUX09
+         otCg7pZYzL0vgu0/5rXeR00m+NAgieXxUZy+Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685569597; x=1688161597;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=igYFvs+c9N5WeBPgjDiciSp0VkV0okfe8MCEg9xv7Mk=;
-        b=jkpHjlkCL5zrdb/AsNdaj8ymGJY2XhAujanOrMu2EosT3G3xsXEAl8hoJuSlRNEjj0
-         JlrAX1SQiq+pBdOYpVXWKRxcqXmGBaQRwcbbviyqga+XAkHglkMr33tJdMGxGn1qNby1
-         v8OCaLZ5ahF0ogUvutbxr2Oa8Ui6belxLg0NzYxhxMcuwLUlu3xJV6WCBYqnhPair3B4
-         bhGJoX5BBceSsFP1T3S98/HTZ58v614duIyfqimgV3j08gEpUxM3vWdKlRxS0WttmImw
-         yXAGIAwFaGiKW2gyUji5THMP/Pa2x0wK0v+ZP8bg78HgTvlvXT4mRKDIDR2Li4Xw0b/z
-         /7ug==
-X-Gm-Message-State: AC+VfDxeX28HdU7YMgDKeT+BpYCgbroLj1o2XY+OKXtDwJUB2sB8jP+5
-        LhqdnQR/3rb7DKsQtf/rjWZS5xgF7g4xD14TUs5HxCrFeVAAITTAughivpgFkzm20qkFtrjPKt0
-        WgcnJfww6ySxQjmy4Cce2iUvyeHNG
-X-Received: by 2002:a05:6214:4013:b0:626:273e:c35c with SMTP id kd19-20020a056214401300b00626273ec35cmr7808918qvb.2.1685569596874;
-        Wed, 31 May 2023 14:46:36 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6bWGqnMQLL01DCWUi2wXYQyUExSGN2qKxzwSnBwQ/iA3qijQefM33xIvhj7QAsoSK7L4uFJQ==
-X-Received: by 2002:a05:6214:4013:b0:626:273e:c35c with SMTP id kd19-20020a056214401300b00626273ec35cmr7808878qvb.2.1685569596504;
-        Wed, 31 May 2023 14:46:36 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id i27-20020a05620a151b00b0075932cd3ca0sm5728059qkk.69.2023.05.31.14.46.33
+        d=1e100.net; s=20221208; t=1685570897; x=1688162897;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a9UmohLXWQfSsyaexxE0Gnc7j5lYDh6s2uLniOqWFR8=;
+        b=Bp6tbqo9ID5Yx6mzwYM6gh/LtS99WXzgFbL95IFCzcmGvwALhHxBRYHITr0JZ96PM7
+         7CJXWR2ur06ZJYoNI5bzUwHxiH+6CBjf5SCAtKjERD8mRo1zyOuoFNnmZ/Qh3Ey3daZs
+         kY7I/+VFqD8AvRY9W1quztVT5TYOAbaHnnSj5irsx81e8b/KkI26IR86PccbBOts7f+X
+         kaGSt8bPj6f5Ggg4QBEHEnKhhEzxWC80rt5lW3ejdNgPqjtCCP1EQct+fvv15OCRWJER
+         bfI9YIz5ROEP0zdYy2M+zp0M0KqUvJB3kX4O9tk0BOuAry+mwCYlb1xSaooSwJVzUqCe
+         hktA==
+X-Gm-Message-State: AC+VfDx2DuPw9xGQGHxBr0VgSDyEUVgt63v3Hj7DGWJs+6mjLc3GlAiZ
+        UZ5rqrfBUgbAKDWO30shDAHI5g==
+X-Google-Smtp-Source: ACHHUZ4KJUIxH9kd325Fiaf0aLOebkiLTME5jx55cOnJ2WGeirOZcbDBH1RpvtjvBg3BOaOH0jDlUQ==
+X-Received: by 2002:ac8:594d:0:b0:3f3:9240:3265 with SMTP id 13-20020ac8594d000000b003f392403265mr8248942qtz.49.1685570896987;
+        Wed, 31 May 2023 15:08:16 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id f2-20020ac87f02000000b003f6b0f4126fsm6666172qtk.8.2023.05.31.15.08.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 14:46:35 -0700 (PDT)
-Date:   Wed, 31 May 2023 17:46:32 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Wed, 31 May 2023 15:08:16 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <ZHfAOAKj1ZQJ+zSy@x1n>
-References: <20230525085517.281529-1-usama.anjum@collabora.com>
- <20230525085517.281529-3-usama.anjum@collabora.com>
+        Kalesh Singh <kaleshsingh@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Vineeth Pillai <vineeth@bitbyteword.org>
+Subject: [PATCH v4 0/7] Optimize mremap during mutual alignment within PMD
+Date:   Wed, 31 May 2023 22:08:00 +0000
+Message-ID: <20230531220807.2048037-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230525085517.281529-3-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Muhammad,
+Hello!
 
-Sorry, I probably can only review the non-interface part, and leave the
-interface/buffer handling, etc. review for others and real potential users
-of it..
+Here is v4 of the mremap start address optimization / fix for exec warning.  It
+took me a while to write a test that catches the issue me/Linus discussed in
+the last version. And I verified kernel crashes without the check. See below.
 
-On Thu, May 25, 2023 at 01:55:14PM +0500, Muhammad Usama Anjum wrote:
-> +static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
-> +					 unsigned long addr, pte_t *ptep,
-> +					 pte_t ptent)
-> +{
-> +	pte_t old_pte;
-> +
-> +	if (!huge_pte_none(ptent)) {
-> +		old_pte = huge_ptep_modify_prot_start(vma, addr, ptep);
-> +		ptent = huge_pte_mkuffd_wp(old_pte);
-> +		ptep_modify_prot_commit(vma, addr, ptep, old_pte, ptent);
+The main changes in this series is:
+Care to be taken to move purely within a VMA, in other words this check
+   in call_align_down():
+    if (vma->vm_start != addr_masked)
+            return false;
 
-huge_ptep_modify_prot_start()?
+    As an example of why this is needed:
+    Consider the following range which is 2MB aligned and is
+    a part of a larger 10MB range which is not shown. Each
+    character is 256KB below making the source and destination
+    2MB each. The lower case letters are moved (s to d) and the
+    upper case letters are not moved.
 
-The other thing is what if it's a pte marker already?  What if a hugetlb
-migration entry?  Please check hugetlb_change_protection().
+    |DDDDddddSSSSssss|
 
-> +	} else {
-> +		set_huge_pte_at(vma->vm_mm, addr, ptep,
-> +				make_pte_marker(PTE_MARKER_UFFD_WP));
-> +	}
-> +}
-> +#endif
+    If we align down 'ssss' to start from the 'SSSS', we will end up destroying
+    SSSS. The above if statement prevents that and I verified it.
 
-[...]
+    I also added a test for this in the last patch.
 
-> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
-> +				  unsigned long end, struct mm_walk *walk)
-> +{
-> +	struct pagemap_scan_private *p = walk->private;
-> +	struct vm_area_struct *vma = walk->vma;
-> +	unsigned long addr = end;
-> +	pte_t *pte, *orig_pte;
-> +	spinlock_t *ptl;
-> +	bool is_written;
-> +	int ret = 0;
-> +
-> +	arch_enter_lazy_mmu_mode();
-> +
-> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> +	ptl = pmd_trans_huge_lock(pmd, vma);
-> +	if (ptl) {
-> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
-> +
-> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
-> +			n_pages = p->max_pages - p->found_pages;
-> +
-> +		is_written = !is_pmd_uffd_wp(*pmd);
-> +
-> +		/*
-> +		 * Break huge page into small pages if the WP operation need to
-> +		 * be performed is on a portion of the huge page.
-> +		 */
-> +		if (is_written && IS_PM_SCAN_WP(p->flags) &&
-> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
-> +			spin_unlock(ptl);
-> +
-> +			split_huge_pmd(vma, pmd, start);
-> +			goto process_smaller_pages;
-> +		}
-> +
-> +		if (IS_PM_SCAN_GET(p->flags))
-> +			ret = pagemap_scan_output(is_written, vma->vm_file,
-> +						  pmd_present(*pmd),
-> +						  is_swap_pmd(*pmd),
-> +						  p, start, n_pages);
-> +
-> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
-> +			make_uffd_wp_pmd(vma, addr, pmd);
-> +
-> +		if (IS_PM_SCAN_WP(p->flags))
-> +			flush_tlb_range(vma, start, end);
-> +
-> +		spin_unlock(ptl);
-> +
-> +		arch_leave_lazy_mmu_mode();
-> +		return ret;
-> +	}
-> +
-> +process_smaller_pages:
-> +	if (pmd_trans_unstable(pmd)) {
-> +		arch_leave_lazy_mmu_mode();
-> +		return 0;
+History of patches
+==================
+v3->v4:
+1. Make sure to check address to align is beginning of VMA
+2. Add test to check this (test fails with a kernel crash if we don't do this).
 
-I'm not sure whether this is right..  Shouldn't you return with -EAGAIN and
-let the user retry?  Returning 0 means you'll move on with the next pmd
-afaict and ignoring this one.
+v2->v3:
+1. Masked address was stored in int, fixed it to unsigned long to avoid truncation.
+2. We now handle moves happening purely within a VMA, a new test is added to handle this.
+3. More code comments.
 
-> +	}
-> +#endif
-> +
-> +	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+v1->v2:
+1. Trigger the optimization for mremaps smaller than a PMD. I tested by tracing
+that it works correctly.
 
-Just a heads-up that this may start to fail at some point if Hugh's work
-will land earlier:
+2. Fix issue with bogus return value found by Linus if we broke out of the
+above loop for the first PMD itself.
 
-https://lore.kernel.org/linux-mm/68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com/
+v1: Initial RFC.
 
-> +	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
-> +		is_written = !is_pte_uffd_wp(*pte);
-> +
-> +		if (IS_PM_SCAN_GET(p->flags))
-> +			ret = pagemap_scan_output(is_written, vma->vm_file,
-> +						  pte_present(*pte),
-> +						  is_swap_pte(*pte),
-> +						  p, addr, 1);
-> +
-> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
-> +			make_uffd_wp_pte(vma, addr, pte);
-> +	}
-> +
-> +	if (IS_PM_SCAN_WP(p->flags))
-> +		flush_tlb_range(vma, start, addr);
-> +
-> +	pte_unmap_unlock(orig_pte, ptl);
-> +	arch_leave_lazy_mmu_mode();
-> +
-> +	cond_resched();
-> +	return ret;
-> +}
-> +
-> +#ifdef CONFIG_HUGETLB_PAGE
-> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
-> +				      unsigned long start, unsigned long end,
-> +				      struct mm_walk *walk)
-> +{
-> +	unsigned long n_pages = (end - start)/PAGE_SIZE;
-> +	struct pagemap_scan_private *p = walk->private;
-> +	struct vm_area_struct *vma = walk->vma;
-> +	struct hstate *h = hstate_vma(vma);
-> +	spinlock_t *ptl;
-> +	bool is_written;
-> +	int ret = 0;
-> +	pte_t pte;
-> +
-> +	arch_enter_lazy_mmu_mode();
+Description of patches
+======================
+These patches optimizes the start addresses in move_page_tables() and tests the
+changes. It addresses a warning [1] that occurs due to a downward, overlapping
+move on a mutually-aligned offset within a PMD during exec. By initiating the
+copy process at the PMD level when such alignment is present, we can prevent
+this warning and speed up the copying process at the same time. Linus Torvalds
+suggested this idea.
 
-This _seems_ to be not needed for hugetlb entries.
+Please check the individual patches for more details.
 
-> +
-> +	if (p->max_pages && n_pages > p->max_pages - p->found_pages)
-> +		n_pages = p->max_pages - p->found_pages;
-> +
-> +	if (IS_PM_SCAN_WP(p->flags)) {
-> +		i_mmap_lock_write(vma->vm_file->f_mapping);
-> +		ptl = huge_pte_lock(h, vma->vm_mm, ptep);
-> +	}
-> +
-> +	pte = huge_ptep_get(ptep);
-> +	is_written = !is_huge_pte_uffd_wp(pte);
-> +
-> +	/*
-> +	 * Partial hugetlb page clear isn't supported
-> +	 */
-> +	if (is_written && IS_PM_SCAN_WP(p->flags) &&
-> +	    n_pages < HPAGE_SIZE/PAGE_SIZE) {
-> +		ret = -EPERM;
-> +		goto unlock_and_return;
-> +	}
-> +
-> +	if (IS_PM_SCAN_GET(p->flags)) {
-> +		ret = pagemap_scan_output(is_written, vma->vm_file,
-> +					  pte_present(pte), is_swap_pte(pte),
-> +					  p, start, n_pages);
-> +		if (ret < 0)
-> +			goto unlock_and_return;
-> +	}
-> +
-> +	if (is_written && IS_PM_SCAN_WP(p->flags)) {
-> +		make_uffd_wp_huge_pte(vma, start, ptep, pte);
-> +		flush_hugetlb_tlb_range(vma, start, end);
-> +	}
-> +
-> +unlock_and_return:
-> +	if (IS_PM_SCAN_WP(p->flags)) {
-> +		spin_unlock(ptl);
-> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
-> +	}
-> +
-> +	arch_leave_lazy_mmu_mode();
+thanks,
 
-Same here.
+ - Joel
 
-> +
-> +	return ret;
-> +}
+[1] https://lore.kernel.org/all/ZB2GTBD%2FLWTrkOiO@dhcp22.suse.cz/
 
-[...]
+Joel Fernandes (Google) (7):
+mm/mremap: Optimize the start addresses in move_page_tables()
+mm/mremap: Allow moves within the same VMA for stack
+selftests: mm: Fix failure case when new remap region was not found
+selftests: mm: Add a test for mutually aligned moves > PMD size
+selftests: mm: Add a test for remapping to area immediately after
+existing mapping
+selftests: mm: Add a test for remapping within a range
+selftests: mm: Add a test for moving from an offset from start of
+mapping
 
--- 
-Peter Xu
+fs/exec.c                                |   2 +-
+include/linux/mm.h                       |   2 +-
+mm/mremap.c                              |  63 ++++-
+tools/testing/selftests/mm/mremap_test.c | 301 +++++++++++++++++++----
+4 files changed, 319 insertions(+), 49 deletions(-)
+
+--
+2.41.0.rc2.161.g9c6817b8e7-goog
 
