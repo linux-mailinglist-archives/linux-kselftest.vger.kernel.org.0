@@ -2,115 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3998971901D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jun 2023 03:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A686071915B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jun 2023 05:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjFABjt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 May 2023 21:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
+        id S229851AbjFADci (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 May 2023 23:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbjFABjs (ORCPT
+        with ESMTP id S229610AbjFADch (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 May 2023 21:39:48 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C3D121
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 18:39:45 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1a1b95cc10eso450226fac.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 18:39:45 -0700 (PDT)
+        Wed, 31 May 2023 23:32:37 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B4D128
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 20:32:36 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f6c6320d4eso71751cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 20:32:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685583584; x=1688175584;
+        d=google.com; s=20221208; t=1685590355; x=1688182355;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tMAT58qbQXF1B/aV0JXyDKL3tKS6p5XVrEhxiBvvom8=;
-        b=QqnSID8TL++2yzRRDDuaMkHhVp8lsXcS+ymgGQb5lDd4sYMhG/oQFCl2NU1I8d59+b
-         6e5ESL6nze+ez1VHvS6R/k/V3uRvZvufAgrj1cS/yr1tMkBARrKMK25VaRl7bEdsYe3J
-         KAVU7aCxUJijFS63DKZwrheTh7hF6OQyZBKYo=
+        bh=6175I9U/z2jyxRP5N7Vtw8M+q5AaoRaoSYJrLNH/s4o=;
+        b=5v6ZpiB5hBHGtpLmWsr/G5Bm5asWzbwElN6SVqvBw/6/h3hztBwvE0zC/99KCQdEMs
+         usB4S0l6T0zL6TeBMPMZBZ/1/GUX1vWZw/OpAeYI4i/rGa3f3ULfAvr5A79BvCDa5oJ9
+         m0SvFY9s+7a8uEUu+sCH/yoWpxRTinMCICL2LhOPpGaZygfNaNdkQZeypV70XX5BLIla
+         X8SvF3MfvSxLW+XOgKOE0NOi5en9ESXSwde9Yag4GP0Eyee/BxeX5UKKkDorkP4Ih9Pq
+         S6wvfstmgp2w52JJEyBHVLFpVl//B+fklw+d86nkDFnSbQVrkJs+Ti2xO6u4Wzx5rK75
+         p1Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685583584; x=1688175584;
+        d=1e100.net; s=20221208; t=1685590355; x=1688182355;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tMAT58qbQXF1B/aV0JXyDKL3tKS6p5XVrEhxiBvvom8=;
-        b=G4Eqt9EzdY7fNWFV9GBhcuIK9UPE7AXNjHVGbXoooOyqCDR2/0gYardxombB2D04U9
-         FSDjN4FMdikeITjD0wMtuA8D5p76XDv30TQLxYZefumixqTl2mgWDUUe9B5uIprjbK4P
-         1yWfHmOIuyAb4HxOomz5I1wBLS1Bp6QcW919gtj24AsO13fdh9harnV4nng01SJkzs4/
-         WlIcUYy/IcO7oCauuzP6qcXMk4AibCHaVF5N1wGIkYAMLMFm5S3nU6D3wcfM+8gp9zWw
-         6NQuXiGjvz1N6kOlFa8FtrorDc22T25ZSzHoX64SO5oSHCdYRZVTU/ypWG7usE/TSIIv
-         J6YQ==
-X-Gm-Message-State: AC+VfDwUNQp1eCAvaShBKZSzAMhV4EGzMlnBwV2TuuGu20Wu65lZ/PJ/
-        7F4+5vfX7VpgK7CwMcCDhVttgVe3EIl4GLjC9Ij2fw==
-X-Google-Smtp-Source: ACHHUZ6rQCmNsdIpMKJMXK5OdEAeSR/Lg451aSaAFhfhWDOg0vW1ZMH240lxWejfpSLYVnJNiBt9Y9Q9npi1VNxCgO8=
-X-Received: by 2002:a05:6870:d411:b0:192:7111:d8c9 with SMTP id
- i17-20020a056870d41100b001927111d8c9mr5718936oag.42.1685583584692; Wed, 31
- May 2023 18:39:44 -0700 (PDT)
+        bh=6175I9U/z2jyxRP5N7Vtw8M+q5AaoRaoSYJrLNH/s4o=;
+        b=EdvYKxy8tVkvL9LkA9H82I28GDQlYOJvb56DR+/mi4VKVPYf53gb2g/KvmbpLhmFEO
+         4clXvN/mKyVIi4ejOMmlrKOCx9ZYuONqwU5Aoi61KEqLE++JnRbaSmEAhjbFQbmMEDXz
+         CgayJxOpSsHziTVkeNjr+0MYuK/WLZI5B0quO45yTZfPsoc3CvDlsSq03pDOw84FI3fS
+         EAGAVkEazCoGcHTyDXxCWz7E9YC/38SpKye8Eo2FU3DUC8P76PlWm4871XjLv3id8cWm
+         OLPq62abpwLXKD9wTV9/gUfXnU3rRdt4hjlcTvKJTug0UIlT6U/wsrJX1bH/bzgN357y
+         yQdQ==
+X-Gm-Message-State: AC+VfDwIiJhjD2ixblH/EFGGnkk4ReE8wTmb0WgUWvFZby3fhWiAulab
+        X48nveB52alM5HlN0/e6XDOuAGqr/oFkLgup7lFVGQ==
+X-Google-Smtp-Source: ACHHUZ6PeP0dJFnpyBW4HYDQxYzM4RhtgpshSEM7pWOeuJTY3YYvhDujeh0DNRolFzarjROHGGYmRGJyVzM2Y6d8rX8=
+X-Received: by 2002:ac8:7f82:0:b0:3f6:97b4:1a4f with SMTP id
+ z2-20020ac87f82000000b003f697b41a4fmr60870qtj.25.1685590355219; Wed, 31 May
+ 2023 20:32:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230515130553.2311248-1-jeffxu@chromium.org> <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
- <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
- <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com> <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
- <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com> <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
- <b69f6809-b483-158f-8be9-4976fad918d8@intel.com> <CALmYWFs5Vgosz2JUYWkoc4YwDbiB0tT32MFpo-y6aX4kwuoz8Q@mail.gmail.com>
- <2b14036e-aed8-4212-bc0f-51ec4fe5a5c1@intel.com> <CALmYWFuSTc5Q7Hrra8FijE11+Y1KiROa=xCZWL1D3ifthrrDMQ@mail.gmail.com>
- <9d64c949-6d5f-06c0-47ef-caade67477e5@intel.com>
-In-Reply-To: <9d64c949-6d5f-06c0-47ef-caade67477e5@intel.com>
-From:   Jeff Xu <jeffxu@chromium.org>
-Date:   Wed, 31 May 2023 18:39:00 -0700
-Message-ID: <CABi2SkVmAw379G-o26sZnmt5p2FY8atoDfRMfKv0yFsfJOe7rA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Jeff Xu <jeffxu@google.com>,
-        =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>,
-        luto@kernel.org, jorgelo@chromium.org, keescook@chromium.org,
-        groeck@chromium.org, jannh@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+References: <20230531052158.1788232-1-davidgow@google.com>
+In-Reply-To: <20230531052158.1788232-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 31 May 2023 20:32:23 -0700
+Message-ID: <CAGS_qxp33qfcrW=jcUJipY-oPmJ8Z32_AWTrezAknJE-FLu0_A@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Move kunit_abort() call out of kunit_do_failed_assertion()
+To:     David Gow <davidgow@google.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Rae Moar <rmoar@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dave,
-Thanks for feedback, regarding sigaltstack:
-
-On Thu, May 18, 2023 at 2:04=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
- wrote:
-> >
-> > Agreed on signaling handling is a tough part: what do you think about
-> > the approach (modifying PKRU from saved stack after XSAVE), is there a
-> > blocker ?
+On Tue, May 30, 2023 at 10:22=E2=80=AFPM David Gow <davidgow@google.com> wr=
+ote:
 >
-> Yes, signal entry and sigreturn are not necessarily symmetric so you
-> can't really have a stack.
+> KUnit aborts the current thread when an assertion fails. Currently, this
+> is done conditionally as part of the kunit_do_failed_assertion()
+> function, but this hides the kunit_abort() call from the compiler
+> (particularly if it's in another module). This, in turn, can lead to
+> both suboptimal code generation (the compiler can't know if
+> kunit_do_failed_assertion() will return), and to static analysis tools
+> like smatch giving false positives.
 >
+> Moving the kunit_abort() call into the macro should give the compiler
+> and tools a better chance at understanding what's going on. Doing so
+> requires exporting kunit_abort(), though it's recommended to continue to
+> use assertions in lieu of aborting directly.
+>
+> In addition, kunit_abort() and kunit_do_failed_assertion() are renamed
+> to make it clear they they're intended for internal KUnit use, to:
+> __kunit_do_failed_assertion() and __kunit_abort()
+>
+> Suggested-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-To clarify: I mean this option below:
-- before get_sigframe(), save PKUR =3D> tmp
-- modify thread's PKRU so it can write to sigframe
-- XSAVE
-- save tmp =3D> sigframe
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-I believe you proposed this in a previous discussion [1]:
-and I quote here:
-"There's a delicate point when building the stack frame that the
-kernel would need to move over to the new PKRU value to build the
-frame before it writes the *OLD* value to the frame.  But, it's far
-from impossible."
+Minor note, there's a reference to the old `kunit_abort` name still.
 
-sigreturn will restore thread's original PKRU from sigframe.
-In case of asymmetrics caused by siglongjmp, user space doesn't call
-sigreturn, the application needs to set desired PKRU before siglongjmp.
+Documentation/dev-tools/kunit/architecture.rst
+122:              ``void __noreturn kunit_abort(struct kunit *)``.
+124:            - ``kunit_abort`` calls the function:
 
-I think this solution should work.
-
-[1] https://lore.kernel.org/lkml/b4f0dca5-1d15-67f7-4600-9a0a91e9d0bd@intel=
-.com/
-
-Best regards,
--Jeff
+Note that this comes from commit bc145b370c11 ("Documentation: KUnit:
+Added KUnit Architecture").
+I had forgotten this existed until now.
