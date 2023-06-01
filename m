@@ -2,111 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7377719645
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jun 2023 11:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C246E71965F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jun 2023 11:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbjFAJCd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Jun 2023 05:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
+        id S232476AbjFAJHq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Jun 2023 05:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbjFAJCR (ORCPT
+        with ESMTP id S232434AbjFAJH3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:02:17 -0400
-Received: from DM4PR02CU002.outbound.protection.outlook.com (mail-centralusazon11013010.outbound.protection.outlook.com [52.101.64.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69BF192;
-        Thu,  1 Jun 2023 02:01:41 -0700 (PDT)
+        Thu, 1 Jun 2023 05:07:29 -0400
+Received: from BL0PR02CU006.outbound.protection.outlook.com (mail-eastusazon11013006.outbound.protection.outlook.com [52.101.54.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA7E119;
+        Thu,  1 Jun 2023 02:07:25 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BW9rSuoVZzQ56h1txT6VWGrd6OW89vz4ypTBxmWqA7c48jSZBKKJSYo5ExOYEMnqQgLQw5YXN69gdrnVmKYIQLRGRS7UIiI6GeQZWsmBcVS+kGlrefgz39CS1/jdwJIrVGh3ZQPt1MociHszbLS2QhrcG1fR5O+EL5t9R2fUQS1jwxfpbsh2XsbPuBqSSl4dch8TM/sxjSoYyNv+91Z+/XZsXWm7lh3zoiRyARvxN1rp99dCfFobpC+gGT/bKDj0gwfp3FkUGkU1rKvOaaKm9Anzw0iCsY5iyR1MoW1EPxxz0dk2liHpZhnk9GVGcp3qfNIRuk1mo7LIe9Kl014vdg==
+ b=fen3ZWDnq3o7V3WpIvbMWyRss0Vx9ckbEIJucMvtnUHvXK5aIMZow5WZb5Ab1rbJ0JLLpbm74EDTWWwkerAn4O2VjnaBoMGtD3/pyWQ/7ENvZoIvvJ5SDZ65kJxXcWsgMJjJbBHW2H9DhhcJHqaF+YcF/neC3bh6R7R3ByD6JxlQYBuG6VsFja7RUYhEjLdMH6SJ131Qv67JNZZcL6qJYDxn2l7XX/zFB8UvnbFm5uPDG+W86xW3LrCNSnZrmZWZ5SqDOX92e/e/qMMtHyOIBhUWAXXL9U2v6uwyY376BCxRKVVNyyuRBJPRkmOkCYWk1jtPZbCmRdyd3R4DmPhyLA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H9bnRNg1BLztg/RndOvyjdrwv2dOtmc68BkZNs0p/m8=;
- b=FQgYYjhmT1a5zXp8Vk+pxe/JXwWshZAj9rCLMTDLCd97Vkn2xdDRqlSILXUCEcJ8pDhfQeothu08zyeu470NKSbJFBS3LJXISfNb0z+SPTsQ1d4lUXN/eNU+9VxNTRv1R3s61SbrC6uoCRp+uAqz49WnJVAlAmUNX/uw847heo8WIkC727UMpsdo432qbInaAs5WxTCuPzEYEZ6vhGs3DRapLfXnX5jxQkcA5/6nWBQj8h++ia3osU5+2yOVz+K+t0C96VTPAu7pfozcucYQVkt2atBYnQ90dWuwXnmO4wPeqocJ1okwMEMInEGsm1ZHLGPyjHEYbxEvkaHXt4oQCQ==
+ bh=NjvdS9vBs9MdDO0gSp4VYeruSrLj48l9jEIMyZTt/3U=;
+ b=lTg31ScGGOi+5703+5TVClnna3/8JCs0Jh0LTcaAKQdNH28YUtGAj9J/AnD4h4JMRxqxV/fnJk1/GJtHln9QzQbDzLujK62iAVVZxYN0BaPHLQ9TiFeBwJ8Paq8u7fEx181yh8QVfYxG7U0Dq/q4hiCiXn2Drw77IkUa5tqi8TuRF3MlWVcykwofjusSlk6qD07ZlVM5oKUHljsvgSocGY1sKKgBrkwdjr3cWenG2s9WHME1EIxkjm1nT0pMlcOg99xCa5+NMUm/c4K7HN1Gj2hhhgrzccGLcmp7Q8u85K5sVBUscz8jJaAVdjkalQjF5Z4e4ZTdZtgBs0iyTBATLg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
  dkim=pass header.d=vmware.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H9bnRNg1BLztg/RndOvyjdrwv2dOtmc68BkZNs0p/m8=;
- b=ivdUw5iNXO8DxA6oOuPXrCb6TjF1qXqNSM+I79/dEAH/0yB/+QspgRuU1Q3lLJShDMPOM38D2HBCtKSYZUGwkQWZQj2u/bx16keqxtAyJV0dHxHgTB8iC1YHNRxYgpjusotsOhCpQyeEwMe9SJlDHlkE/AIOEfRNfyXOhPu7Hsg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
+ bh=NjvdS9vBs9MdDO0gSp4VYeruSrLj48l9jEIMyZTt/3U=;
+ b=q6DVgJsq7rLFgq4f37NSbQXh0aqHMhhCo6g3qgD110grrLxa55WNhx9+NpSAU6xdG9W6SllaMD2bJwzzVYHeB4LHn49C8bCDiD5DqZXPgLx/uQ9yGkCbZzIIeHyC6PrQRnRKlHfZAIW8hxUfobmN56neMYopiKQzjmYkU1W/JUk=
 Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
- by MW4PR05MB8617.namprd05.prod.outlook.com (2603:10b6:303:120::20) with
+ by IA1PR05MB10303.namprd05.prod.outlook.com (2603:10b6:208:3ad::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Thu, 1 Jun
- 2023 09:01:15 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Thu, 1 Jun
+ 2023 09:07:22 +0000
 Received: from PH0PR05MB8703.namprd05.prod.outlook.com
  ([fe80::5631:475a:58d4:cf66]) by PH0PR05MB8703.namprd05.prod.outlook.com
  ([fe80::5631:475a:58d4:cf66%6]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
- 09:01:15 +0000
+ 09:07:22 +0000
 From:   Ajay Kaher <akaher@vmware.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org, shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, chinglinyu@google.com,
-        namit@vmware.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        vsirnapalli@vmware.com, tkundu@vmware.com, er.ajay.kaher@gmail.com,
-        Ajay Kaher <akaher@vmware.com>
-Subject: [PATCH v3 10/10] test: ftrace: fix kprobe test for eventfs
-Date:   Thu,  1 Jun 2023 14:30:13 +0530
-Message-Id: <1685610013-33478-11-git-send-email-akaher@vmware.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1685610013-33478-1-git-send-email-akaher@vmware.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "chinglinyu@google.com" <chinglinyu@google.com>,
+        Nadav Amit <namit@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        Tapas Kundu <tkundu@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
+Subject: Re: [PATCH v3 00/10] tracing: introducing eventfs
+Thread-Topic: [PATCH v3 00/10] tracing: introducing eventfs
+Thread-Index: AQHZlGeSoCEyu7THQ0iKwxE3Uhr81a91qBaA
+Date:   Thu, 1 Jun 2023 09:07:22 +0000
+Message-ID: <2FE3777F-4BE0-4F77-B563-3A16BE05B988@vmware.com>
 References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0181.namprd03.prod.outlook.com
- (2603:10b6:a03:2ef::6) To PH0PR05MB8703.namprd05.prod.outlook.com
- (2603:10b6:510:bd::5)
+In-Reply-To: <1685610013-33478-1-git-send-email-akaher@vmware.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.500.231)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR05MB8703:EE_|IA1PR05MB10303:EE_
+x-ms-office365-filtering-correlation-id: 7299b42e-c02c-4896-fe8d-08db627f9c3b
+x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: moWE+bH/o+0zoYSbduK9KHFvmIuf0zJDe1xZj9kBvH4MWAoVDYh1xS7KniVKKPgC3HCiziZA5cMfQb4GlfXNEi3fMpmG9T/suRD3cX31/yyQITie8tQkpCqSf7P4sXSdLVjnVoWaKGLrf1CruocZyEqaxEVvSEggiIqSo5lXQujqLEoInliQEWUSIiwqIt6NlbAj+8g2kpVY0F2ZKAv49RClb4fXNgoM7W8/cRagmG0ftG1YCoyWMQVcNMFApbhO72yiVviIy/umrz+5maenWxyFjSwD0cUFcBR06kIhvh78pL4t2+79OWCqxrWuWzRaqkTM3IKyOiq81bj7oEgd5BI5HelwYhLk1EEJgb6g05I6eALfQ1+0UvCXeatxtkFPpBIlcta3nas53GTOPPIRfsfk+gi+HQP+ZgWr7lPo871FK+SHLtcJuFpbpq95gR+/sJGUBWlb7mvjj4+XJqJlDIVd37wjV95L8be0dTukOYtg3OMd6PCqxkoDRLaOC0KAcgCR0GgcxnatA2qEb7dmX0UnzF+ZpjnyfRePo2aFOB+JJnJCYpitR+FURjELMejhw8wzgjjz4jODxDFjaypaOG0LPOzJnorcyoSIFO6KCz58TnWRsiBas0/5JGOR8FkYsdIRUuloUIk26rt2DietQtPNf2vwjFH72jtNxeNgfVwAEJaRh3ViuS0jq5uTCLOzxoldq9KdqGfvn6Hcbbk++A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(366004)(396003)(346002)(451199021)(66476007)(91956017)(66446008)(4744005)(2906002)(76116006)(41300700001)(316002)(8676002)(4326008)(66556008)(66946007)(64756008)(54906003)(110136005)(8936002)(5660300002)(6486002)(53546011)(186003)(6506007)(2616005)(26005)(83380400001)(6512007)(86362001)(38070700005)(71200400001)(478600001)(33656002)(36756003)(122000001)(38100700002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DxSgOtJtBJ5uQroLRYNdBua+ATaitzBSysf+Ey52Q7taZ5tj4LTiRDenzC6j?=
+ =?us-ascii?Q?Ha6j1tR85Mb9Or3mpdrrgs1yf2qWOf0uuchndIUTLYOFxxu/dyB4dV/Qr9e/?=
+ =?us-ascii?Q?kXBd1dE1ycnItgEfv6Sa2CqhsPdIXfOV18/OJIvJoxsN+xr5X40E1d8Ed4JO?=
+ =?us-ascii?Q?WLZE71XFwXyOOolWxz1DylcwL/optL6aiQp5OZBYebkUZtG0MAkvKLjTnhac?=
+ =?us-ascii?Q?jI9AZu0aQG/rFx32u3LsEWiVjP3N1uPxN5UBx6UclRs9JTylaWAbHQSdD6JP?=
+ =?us-ascii?Q?I4Q+s/dut7UZlwDpp+EzbylIV5rC3K/Rl09Tm9ucEl/cPYqdnnUGv1ZSicJn?=
+ =?us-ascii?Q?nCZfwoxRoZRy6yaQAUhtz28Mk1gDaHUVJq3MeA5DuQMf+iO/9c+4AtHRq22U?=
+ =?us-ascii?Q?hah1zTfquuTZ0BBqruQMqBN/G4ybeOtnbXo04Zw47egz20JvHfWKiBl3vTVS?=
+ =?us-ascii?Q?Yw7e5c3sRCZApUErpTzMN6XK0T/UJLZtQDlgMro0heXBHXROnnsxRZ9asvFV?=
+ =?us-ascii?Q?Q8kbTH6dR90S5WzfkOAwBFRIRovYCfTipk4MZwXrH7R56Tu2iFuGK15aH+IR?=
+ =?us-ascii?Q?guJ4j76jUe/wPsDl0QiMbqv4kEk4JXCSG0j1FXkurlPB/ivra4L2u6NIEnTo?=
+ =?us-ascii?Q?U7JFZygXDcEL1Mi2dbEfCJG6B+b17OF4lj1zu8xmJcjGaeiNHRs3MWTVAquJ?=
+ =?us-ascii?Q?MZR/GTHyGAGUHt+wr8c1uhJSxxgnKulhZi/UVzCCdXgOPwCPwif5IlasY8Bj?=
+ =?us-ascii?Q?TWtYzwm1qvDvisbRa90j6rQx9rUOiBKntxfywU6u+9zNXt3IK4V4OFfZjAJc?=
+ =?us-ascii?Q?MXk4XXbXz6gg/HjlOqKOBiii4m2XhVbRCHSOF7UcCo3s+M8Shm/55KwivB/3?=
+ =?us-ascii?Q?oU2SgK5lrslNxFArTngtfxaFFME8xBGsbtY4owHM0tVzzSB0RbwZlH/+vSmh?=
+ =?us-ascii?Q?olZZJPSJRJqz2c38P6ScHIr938UWivOR4PF6BLjQ+AGe0QYTUfh1CBRp6BJB?=
+ =?us-ascii?Q?mlJe3sjQMY6vR1usP0algzmYdmECvwIScs0d7ctZQcpP/ddX0M7QCeyueqee?=
+ =?us-ascii?Q?0tchHP0yDtvSi3AlJxxT90mrnQVJyndk+0XNMdf8iFGZpoxRzovX5m/8/Qqx?=
+ =?us-ascii?Q?cYXDwB7Ml0+4K7PTdHY41zPfdnhg6CwXDI4yNG5YXT7Qx4XMf2NnArtq0eRO?=
+ =?us-ascii?Q?x4KxLJBGY02UbMfyC1x0grjDeq0lW9EOSwz+cb+I7Jc3aWZsIJ2hR1Wa5tce?=
+ =?us-ascii?Q?zbAZ2yRRh/txGE8Czjrgh4N7xT2JpPMw+Ro+mUVySs052fB5SGei+oHHv1en?=
+ =?us-ascii?Q?gKyXt/ClnuEd7PHy6LKKPU2SfE090WBvypTty9LeVfYAQ/cG3Z2Jq+/uUeD2?=
+ =?us-ascii?Q?yZCmvn/YGvhK3rNh737GxbtKQa8MTlDateGz2QcbB3JUG7Ad6q6iBkonwxtE?=
+ =?us-ascii?Q?YvxBjhTS8oV+e/0uwJhBBwXAWfCKqSKHZynLMlShtmFmIHgBDJF0DFoDSDMK?=
+ =?us-ascii?Q?QyWSNRvhRh9y5VlZtuqfU+Q5gPBCP4bDOo87YqTFXiurvuX/VhTvFkhs18UC?=
+ =?us-ascii?Q?ub/DnlFCLJZuJNpRPJJ+IQjGmkhynUIbOzIL9NsB?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D4CDDEB0576FB4469F4F9B2EEA902423@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR05MB8703:EE_|MW4PR05MB8617:EE_
-X-MS-Office365-Filtering-Correlation-Id: ffb13d27-3ef1-46b9-b132-08db627ec141
-X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: r7EsGjq3XoPnkYQxI5OpWWVVTCUGxXVXPdauEY10ptvfMm0C66ypqIUA9c4aCGNN+vAeNTkaLx311PEH5xL8lEZG4eLWPmKwruyT3NOWsnXjilfIJLe1YsTfxruWJKbqEF6hVkJ7aj1y67jR9/ug8DjoCGwoCG6qSqXbKd6d2TWOLN5QFaj3AWP81aFlqicwtkhA9T9vT7/Jr58qn/aWsgUci1ZEIr+UbnPKbb6OmhSfHniOnxiDIjnxy43fXp85uvgT6cVs7T+ySNFWisrdHcXZtWqvWRvtIy6qkCSLoVHIZYb3X45wnFoki1ofv1+5dPbwcCFVBuq1NKEAPJJnBWimHa5mqjh4FM45CXl37GHpmPackBigvRj5bM/KTCz3K60muufMQqbFXjIdLNgkS8hQIzPVC1qy8hV6YQ57S/cOurx0F5bg/GP1fvYv2nYX4SBceuztbYfOJJ3CsqinmJKN0NZMgUYs19uhDyyEQDXFqMRR0/8KVkW6QbeHOJnGe7FmZvDPFrooNR2Jn9jwSzeywMIXNM17spCb0nR0CvuT+Q+0fJub4S1Bwdq7X+SpdGrfMJHhrxLtlq7Zzr2qd8RV/zhaYk33zvAAsb7+cR3QWiCUKalF7YLCqhIIiWLo
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(136003)(376002)(366004)(451199021)(52116002)(6486002)(186003)(5660300002)(41300700001)(107886003)(36756003)(8676002)(38100700002)(8936002)(26005)(6506007)(38350700002)(83380400001)(4326008)(66946007)(2906002)(66556008)(478600001)(66476007)(2616005)(6512007)(86362001)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/t9ccRGjdmE27Jrlrw7K0DkVhVg+KFMZgiplvlxVX6jw63sQPxeHsaChyitm?=
- =?us-ascii?Q?srMiiZK8yrFB+Lnb9OmpB5UDB4PP4ASIPEc658g+HsYGXIw3GRBOJbN51nQz?=
- =?us-ascii?Q?Zb5BiqM5xUzHP1Pwj5gp1c5wcaPGsqeHcKiOyRyVYITVyRDvvIv/UVdeTwDA?=
- =?us-ascii?Q?H2k9EaPennUK4kaxE4gYlFgIzZcB1EkzBwY1LYT/g8vDFEAGvRCQHGc1roBP?=
- =?us-ascii?Q?I2VvjXmePxnT4rZVgl97vsKbLoEVEVJI+MLlnKF+v517vEMbMsLo+pYPzS7k?=
- =?us-ascii?Q?4MbttEqN2sCZ2xERGM/TZOj5mjAdznm6z4sX8ZcMihZN9NnoyRd1KCkRKsHi?=
- =?us-ascii?Q?0oqTX562jqWbY33AmGV/r5pbIS8wEvt6v3/fMZV5+ld8lfQ7QQ2JC5SX9x7v?=
- =?us-ascii?Q?IdtI3vVrd2B//KdpOSyx55in5K21jf71O+KWoe/cucqE5vBKtiZNt8L73wGC?=
- =?us-ascii?Q?q77bLJ+9tI09K13WiKMYR7fXaQHqcwT4IBQ4G/PCLOg+OmKLln5rJyHQf/u3?=
- =?us-ascii?Q?OIb3lIwgFVIX20MAc8IoTArOmkeNpXMqFhPLI4siP9sT25K13GEy1G6fajAI?=
- =?us-ascii?Q?3pFVGKUpHucZUxZ0mU8yfIAxmZjbAbBE7Mb0xUNQJeU4IaiG2q2wO7qWSTtn?=
- =?us-ascii?Q?G5Ej2ZpCyMBORAFnV2n5VHup4qHncntn+tNPhKZyNWtbwBOWcIESxu30iUK6?=
- =?us-ascii?Q?yLsExoqXQuP2zfrNJcxeIrLzBvnFgDRNa7B7crvk8hmu+gYzbGHDye8ug6pd?=
- =?us-ascii?Q?G/PNJO98uj7dpxl/3mDyJOffevlTSMxaJA0z2HzHO5yUg1quPKoLHff+f06Z?=
- =?us-ascii?Q?9ZqAkDWZ4JXynu93QdSsvRJ+zsqIrd8C6IADpMGRau6u6nEEJdl6b1pCTkBT?=
- =?us-ascii?Q?Od9EgpmeAis5tetM7i+aKMsPuS/dOhy3JmmRUV2DxK+K/pASn8u6dFRVAKCt?=
- =?us-ascii?Q?rqqjHCip+b/Y0NgKhxagdcG0vXpdZ/EOZW2RK8BeVmeZ7h9wR6eoXWvT1X3Z?=
- =?us-ascii?Q?jqzf117KN7AGo4BdOulVzvEXr3vRw3BheL22/Wbb/EDa8ZuEpg8koAQ5o1/4?=
- =?us-ascii?Q?xS17O+BSMHkF7X8L5Bx26d5zfsB2/VWiik73UqGFtz1m2x8BW1TZxnPOeFx7?=
- =?us-ascii?Q?5spPYDXaQf4hen7fbpXBh+Au3u7mgJMEeiI4RnjugvxpAtdfjS6IHEI+CNAY?=
- =?us-ascii?Q?C1WHRQ2iReIROCRnO5N8wsQE4FrMoAuUBRqO7dnB5PEVrkXSEMTzhwdWO1OV?=
- =?us-ascii?Q?JyLauGB/WvTUbLRGYjBOBpPm2goY1qqheeFl9GZDzc6aR8JHdwy+C5uaSH5k?=
- =?us-ascii?Q?gLdCKH6IyQyZVKpX9ckAgRHwW6XN/LI1hMPkspvg0RdZz+X0edhOiT7G0X51?=
- =?us-ascii?Q?idxos9HUwAE0BDXScniR4sk9Ws9sv3ka0d4MhP+zGGBSrjKsz3WfXG3nW7jS?=
- =?us-ascii?Q?VW56HjrvvBZniPiyl1v370Athm6N33DY3dO3vUs4ordMQMBPSlDguPhdZLoN?=
- =?us-ascii?Q?uAKB5BkUD5IvrzMQ0hz7AZzmLs/No4mTuLj0QkZRGjxQ57lA/lTuWaGum1dW?=
- =?us-ascii?Q?owde0/8T+AbCC7kI4HUHrqbJJLiMpb90o6agqgyK?=
 X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffb13d27-3ef1-46b9-b132-08db627ec141
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 09:01:15.2284
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7299b42e-c02c-4896-fe8d-08db627f9c3b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 09:07:22.4574
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vSaCirSIiqjd5eMB5T+b+dkaluRY2BMpjRFRQUAIGemE8LPMzC3rPu4rEQZFJsJJNZebdRcqiwmOOId1bGEGSQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR05MB8617
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CcIInNHocKf441bo/9mIS8y1eDID4p+f8tH1d62XZBrbgJ2e1tjYFW/o7zU6wfKY0ZGgYj/NRvA+yvqS6gE4cA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR05MB10303
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -117,60 +130,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kprobe_args_char.tc, kprobe_args_string.tc has validation check
-for tracefs_create_dir, for eventfs it should be eventfs_create_dir.
 
-Signed-off-by: Ajay Kaher <akaher@vmware.com>
-Co-developed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Tested-by: Ching-lin Yu <chinglinyu@google.com>
----
- .../selftests/ftrace/test.d/kprobe/kprobe_args_char.tc        | 4 ++--
- .../selftests/ftrace/test.d/kprobe/kprobe_args_string.tc      | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
-index 285b4770e..523cfb645 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
-@@ -34,14 +34,14 @@ mips*)
- esac
- 
- : "Test get argument (1)"
--echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char" > kprobe_events
-+echo "p:testprobe eventfs_add_dir arg1=+0(${ARG1}):char" > kprobe_events
- echo 1 > events/kprobes/testprobe/enable
- echo "p:test $FUNCTION_FORK" >> kprobe_events
- grep -qe "testprobe.* arg1='t'" trace
- 
- echo 0 > events/kprobes/testprobe/enable
- : "Test get argument (2)"
--echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char arg2=+0(${ARG1}):char[4]" > kprobe_events
-+echo "p:testprobe eventfs_add_dir arg1=+0(${ARG1}):char arg2=+0(${ARG1}):char[4]" > kprobe_events
- echo 1 > events/kprobes/testprobe/enable
- echo "p:test $FUNCTION_FORK" >> kprobe_events
- grep -qe "testprobe.* arg1='t' arg2={'t','e','s','t'}" trace
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
-index a4f8e7c53..b9f8c3f8b 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
-@@ -37,14 +37,14 @@ loongarch*)
- esac
- 
- : "Test get argument (1)"
--echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):string" > kprobe_events
-+echo "p:testprobe eventfs_add_dir arg1=+0(${ARG1}):string" > kprobe_events
- echo 1 > events/kprobes/testprobe/enable
- echo "p:test $FUNCTION_FORK" >> kprobe_events
- grep -qe "testprobe.* arg1=\"test\"" trace
- 
- echo 0 > events/kprobes/testprobe/enable
- : "Test get argument (2)"
--echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):string arg2=+0(${ARG1}):string" > kprobe_events
-+echo "p:testprobe eventfs_add_dir arg1=+0(${ARG1}):string arg2=+0(${ARG1}):string" > kprobe_events
- echo 1 > events/kprobes/testprobe/enable
- echo "p:test $FUNCTION_FORK" >> kprobe_events
- grep -qe "testprobe.* arg1=\"test\" arg2=\"test\"" trace
--- 
-2.40.0
+> On 01-Jun-2023, at 2:30 PM, Ajay Kaher <akaher@vmware.com> wrote:
+>=20
+> Events Tracing infrastructure contains lot of files, directories
+> (internally in terms of inodes, dentries). And ends up by consuming
+> memory in MBs. We can have multiple events of Events Tracing, which
+> further requires more memory.
+>=20
+> Instead of creating inodes/dentries, eventfs could keep meta-data and
+> skip the creation of inodes/dentries. As and when require, eventfs will
+> create the inodes/dentries only for required files/directories.
+> Also eventfs would delete the inodes/dentries once no more requires
+> but preserve the meta data.
+>=20
+> Tracing events took ~9MB, with this approach it took ~4.5MB
+> for ~10K files/dir.
+>=20
+
+Steve, I have used nested rw-semaphore for eventfs locking (same as in cifs=
+).
+As per Amit Nadav, this has to be revisited/reviewed. Please have a look an=
+d
+share your thoughts.
+
+-Ajay
 
