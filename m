@@ -2,56 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74535719625
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jun 2023 10:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8895719533
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jun 2023 10:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbjFAI6b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Jun 2023 04:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S231669AbjFAIQw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Jun 2023 04:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbjFAI6a (ORCPT
+        with ESMTP id S231151AbjFAIQw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:58:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56447132;
-        Thu,  1 Jun 2023 01:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685609909; x=1717145909;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lAcYtInKsopDQxJmwLovdpYraiB6bLABcfqZaZEP/bA=;
-  b=hr0E/i/Carr7jpUivviGHY0neE+xZHcet2QuN1XNukBmT92nT/QkvFVi
-   dlRRyrf7iqm4wYed0vJB+S191FHgMPQZJwAlpq5i3hOyYAUXc2VSWNb/1
-   mLA53OybmI8tkw1f0AMzQSpYRN72yxpjQ5jr0EKeOm7pTk8feh7b6MhHY
-   kKwk4fUZYGZFMy0W/udbLqBFC3rgsWXImnlBL93iu4OszNM67hij2MfvZ
-   uyKyNOgyzZKQo/4M+Bu9cgZ82CvaKlYbf5uSaT4DueKa9jEGs4MecJFVk
-   XdVoaqQqlntI+T9aqVwwWKjwX0pvLUnMHHZbk1RLwzXtdLu0JbThJlQGI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="354354439"
-X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="354354439"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 01:58:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="710411048"
-X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="710411048"
-Received: from skxmcp01.bj.intel.com ([10.240.193.86])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Jun 2023 01:58:25 -0700
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     seanjc@google.com, pbonzini@redhat.com, shuah@kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] KVM: selftests: Add new CFLAGS to generate dependency files
-Date:   Thu,  1 Jun 2023 16:03:38 +0800
-Message-Id: <20230601080338.212942-1-yu.c.zhang@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Jun 2023 04:16:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D119F;
+        Thu,  1 Jun 2023 01:16:50 -0700 (PDT)
+Received: from [192.168.127.158] (unknown [118.107.131.147])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 995F86606E8C;
+        Thu,  1 Jun 2023 09:16:37 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685607409;
+        bh=BA3QmEKFqxqHdhhS4O9rOqqxg4EqkWr8qScJTtUpscw=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=BW8rTdw4F+NWs34EXLaSqYAKE0lj+Cv98P4+2+RNl+iH0+ECZUTXf4/7QhoYlrZJ1
+         tHsJU8Mv9S2CiDymCEnw6J1uQVLylqwpKTuU8OZx7ObMcJ6tDqmYGsaOaV9XWTrlKu
+         0TDMFNgWAZ2pXvXEwxr7mtw9LLAIOXXiW/Hz3wy1p6ZQk2aJiqZzKluI8obkWl5yyf
+         Dfe93RFyS8Q7qzJ7hH6RxATRLtXGd8q7qpubaBB6coat4mHcZcaSgYe5F0ubVvzUws
+         APPbBmq5x4AxTM/ddC2/4NMC2YoQisDIS3nI3YOhZAFLyM5eMAOzLpFTvwEfjbukgV
+         poxEWcIJUaduA==
+Message-ID: <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com>
+Date:   Thu, 1 Jun 2023 13:16:14 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Peter Xu <peterx@redhat.com>
+References: <20230525085517.281529-1-usama.anjum@collabora.com>
+ <20230525085517.281529-3-usama.anjum@collabora.com> <ZHfAOAKj1ZQJ+zSy@x1n>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZHfAOAKj1ZQJ+zSy@x1n>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,69 +83,258 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add "-MD" in CFLAGS to generate dependency files. Currently, each
-time a header file is updated in KVM selftest, we will have to run
-"make clean && make" to rebuild the whole test suite. By adding new
-compiling flags and dependent rules in Makefile, we do not need to
-make clean && make each time a header file is updated.
+On 6/1/23 2:46 AM, Peter Xu wrote:
+> Muhammad,
+> 
+> Sorry, I probably can only review the non-interface part, and leave the
+> interface/buffer handling, etc. review for others and real potential users
+> of it..
+Thank you so much for the review. I think mostly we should be okay with
+interface as everybody has been making suggestions over the past revisions.
 
-Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
-v3: Strip the $(OUTPUT) prefix from source files to fix the build
-    failure reported by kernel test robot <lkp@intel.com> in
-    https://lore.kernel.org/oe-kbuild-all/202305302015.D8PglEU7-lkp@intel.com/
+> 
+> On Thu, May 25, 2023 at 01:55:14PM +0500, Muhammad Usama Anjum wrote:
+>> +static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+>> +					 unsigned long addr, pte_t *ptep,
+>> +					 pte_t ptent)
+>> +{
+>> +	pte_t old_pte;
+>> +
+>> +	if (!huge_pte_none(ptent)) {
+>> +		old_pte = huge_ptep_modify_prot_start(vma, addr, ptep);
+>> +		ptent = huge_pte_mkuffd_wp(old_pte);
+>> +		ptep_modify_prot_commit(vma, addr, ptep, old_pte, ptent);
+> 
+> huge_ptep_modify_prot_start()?
+Sorry, I didn't realized that huge_ptep_modify_prot_start() is different
+from its pte version.
 
-v2: Use "-MD" in CFLAGS instead of "EXTRA_CFLAGS". [Sean]
----
+> 
+> The other thing is what if it's a pte marker already?  What if a hugetlb
+> migration entry?  Please check hugetlb_change_protection().
+I've updated it in more better way. Please let me know what do you think
+about the following:
 
- tools/testing/selftests/kvm/Makefile | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+					 unsigned long addr, pte_t *ptep,
+					 pte_t ptent)
+{
+	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
+		return;
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 7a5ff646e7e7..dd16969aaf6c 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -183,6 +183,8 @@ TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(ARCH_DIR))
- TEST_GEN_PROGS_EXTENDED += $(TEST_GEN_PROGS_EXTENDED_$(ARCH_DIR))
- LIBKVM += $(LIBKVM_$(ARCH_DIR))
- 
-+OVERRIDE_TARGETS = 1
-+
- # lib.mak defines $(OUTPUT), prepends $(OUTPUT)/ to $(TEST_GEN_PROGS), and most
- # importantly defines, i.e. overwrites, $(CC) (unless `make -e` or `make CC=`,
- # which causes the environment variable to override the makefile).
-@@ -197,7 +199,7 @@ else
- LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
- endif
- CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
--	-Wno-gnu-variable-sized-type-not-at-end \
-+	-Wno-gnu-variable-sized-type-not-at-end -MD\
- 	-fno-builtin-memcmp -fno-builtin-memcpy -fno-builtin-memset \
- 	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
- 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
-@@ -224,7 +226,18 @@ LIBKVM_S_OBJ := $(patsubst %.S, $(OUTPUT)/%.o, $(LIBKVM_S))
- LIBKVM_STRING_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_STRING))
- LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ)
- 
--EXTRA_CLEAN += $(LIBKVM_OBJS) cscope.*
-+TEST_GEN_OBJ = $(patsubst %, %.o, $(TEST_GEN_PROGS))
-+TEST_GEN_OBJ += $(patsubst %, %.o, $(TEST_GEN_PROGS_EXTENDED))
-+TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_OBJ))
-+TEST_DEP_FILES += $(patsubst %.o, %.d, $(LIBKVM_OBJS))
-+-include $(TEST_DEP_FILES)
-+
-+$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM_OBJS) $(LDLIBS) -o $@
-+$(TEST_GEN_OBJ): $(OUTPUT)/%.o: %.c
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
-+
-+EXTRA_CLEAN += $(LIBKVM_OBJS) $(TEST_DEP_FILES) $(TEST_GEN_OBJ) cscope.*
- 
- x := $(shell mkdir -p $(sort $(dir $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ))))
- $(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c
+	if (is_hugetlb_entry_migration(ptent))
+		set_huge_pte_at(vma->vm_mm, addr, ptep,
+				pte_swp_mkuffd_wp(ptent));
+	else if (!huge_pte_none(ptent))
+		ptep_modify_prot_commit(vma, addr, ptep, ptent,
+					huge_pte_mkuffd_wp(ptent));
+	else
+		set_huge_pte_at(vma->vm_mm, addr, ptep,
+				make_pte_marker(PTE_MARKER_UFFD_WP));
+}
 
-base-commit: 56f413f2cd373d6ed7c4ecb2e0e3e740cc2fdc8c
+As we always set UNPOPULATED, so markers are always set on none ptes
+initially. Is it possible that a none pte becomes present, then swapped and
+finally none again? So I'll do the following addition for make_uffd_wp_pte():
+
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
+vm_area_struct *vma,
+ 	} else if (is_swap_pte(ptent)) {
+ 		ptent = pte_swp_mkuffd_wp(ptent);
+ 		set_pte_at(vma->vm_mm, addr, pte, ptent);
++	} else {
++		set_pte_at(vma->vm_mm, addr, pte,
++			   make_pte_marker(PTE_MARKER_UFFD_WP));
+ 	}
+ }
+
+
+
+
+> 
+>> +	} else {
+>> +		set_huge_pte_at(vma->vm_mm, addr, ptep,
+>> +				make_pte_marker(PTE_MARKER_UFFD_WP));
+>> +	}
+>> +}
+>> +#endif
+> 
+> [...]
+> 
+>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>> +				  unsigned long end, struct mm_walk *walk)
+>> +{
+>> +	struct pagemap_scan_private *p = walk->private;
+>> +	struct vm_area_struct *vma = walk->vma;
+>> +	unsigned long addr = end;
+>> +	pte_t *pte, *orig_pte;
+>> +	spinlock_t *ptl;
+>> +	bool is_written;
+>> +	int ret = 0;
+>> +
+>> +	arch_enter_lazy_mmu_mode();
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +	ptl = pmd_trans_huge_lock(pmd, vma);
+>> +	if (ptl) {
+>> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +
+>> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +			n_pages = p->max_pages - p->found_pages;
+>> +
+>> +		is_written = !is_pmd_uffd_wp(*pmd);
+>> +
+>> +		/*
+>> +		 * Break huge page into small pages if the WP operation need to
+>> +		 * be performed is on a portion of the huge page.
+>> +		 */
+>> +		if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>> +			spin_unlock(ptl);
+>> +
+>> +			split_huge_pmd(vma, pmd, start);
+>> +			goto process_smaller_pages;
+>> +		}
+>> +
+>> +		if (IS_PM_SCAN_GET(p->flags))
+>> +			ret = pagemap_scan_output(is_written, vma->vm_file,
+>> +						  pmd_present(*pmd),
+>> +						  is_swap_pmd(*pmd),
+>> +						  p, start, n_pages);
+>> +
+>> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+>> +			make_uffd_wp_pmd(vma, addr, pmd);
+>> +
+>> +		if (IS_PM_SCAN_WP(p->flags))
+>> +			flush_tlb_range(vma, start, end);
+>> +
+>> +		spin_unlock(ptl);
+>> +
+>> +		arch_leave_lazy_mmu_mode();
+>> +		return ret;
+>> +	}
+>> +
+>> +process_smaller_pages:
+>> +	if (pmd_trans_unstable(pmd)) {
+>> +		arch_leave_lazy_mmu_mode();
+>> +		return 0;
+> 
+> I'm not sure whether this is right..  Shouldn't you return with -EAGAIN and
+> let the user retry?  Returning 0 means you'll move on with the next pmd
+> afaict and ignoring this one.
+This has come up before. We are just replicating pagemap_pmd_range() here
+as we are doing almost the same thing through IOCTL. It doesn't return any
+error in this case and just skips it. So we are doing the same.
+
+> 
+>> +	}
+>> +#endif
+>> +
+>> +	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+> 
+> Just a heads-up that this may start to fail at some point if Hugh's work
+> will land earlier:
+> 
+> https://lore.kernel.org/linux-mm/68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com/
+Thank you so much for the heads up.
+
+> 
+>> +	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
+>> +		is_written = !is_pte_uffd_wp(*pte);
+>> +
+>> +		if (IS_PM_SCAN_GET(p->flags))
+>> +			ret = pagemap_scan_output(is_written, vma->vm_file,
+>> +						  pte_present(*pte),
+>> +						  is_swap_pte(*pte),
+>> +						  p, addr, 1);
+>> +
+>> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+>> +			make_uffd_wp_pte(vma, addr, pte);
+>> +	}
+>> +
+>> +	if (IS_PM_SCAN_WP(p->flags))
+>> +		flush_tlb_range(vma, start, addr);
+>> +
+>> +	pte_unmap_unlock(orig_pte, ptl);
+>> +	arch_leave_lazy_mmu_mode();
+>> +
+>> +	cond_resched();
+>> +	return ret;
+>> +}
+>> +
+>> +#ifdef CONFIG_HUGETLB_PAGE
+>> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
+>> +				      unsigned long start, unsigned long end,
+>> +				      struct mm_walk *walk)
+>> +{
+>> +	unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +	struct pagemap_scan_private *p = walk->private;
+>> +	struct vm_area_struct *vma = walk->vma;
+>> +	struct hstate *h = hstate_vma(vma);
+>> +	spinlock_t *ptl;
+>> +	bool is_written;
+>> +	int ret = 0;
+>> +	pte_t pte;
+>> +
+>> +	arch_enter_lazy_mmu_mode();
+> 
+> This _seems_ to be not needed for hugetlb entries.
+I'll remove it.
+
+> 
+>> +
+>> +	if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +		n_pages = p->max_pages - p->found_pages;
+>> +
+>> +	if (IS_PM_SCAN_WP(p->flags)) {
+>> +		i_mmap_lock_write(vma->vm_file->f_mapping);
+>> +		ptl = huge_pte_lock(h, vma->vm_mm, ptep);
+>> +	}
+>> +
+>> +	pte = huge_ptep_get(ptep);
+>> +	is_written = !is_huge_pte_uffd_wp(pte);
+>> +
+>> +	/*
+>> +	 * Partial hugetlb page clear isn't supported
+>> +	 */
+>> +	if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>> +	    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>> +		ret = -EPERM;
+>> +		goto unlock_and_return;
+>> +	}
+>> +
+>> +	if (IS_PM_SCAN_GET(p->flags)) {
+>> +		ret = pagemap_scan_output(is_written, vma->vm_file,
+>> +					  pte_present(pte), is_swap_pte(pte),
+>> +					  p, start, n_pages);
+>> +		if (ret < 0)
+>> +			goto unlock_and_return;
+>> +	}
+>> +
+>> +	if (is_written && IS_PM_SCAN_WP(p->flags)) {
+>> +		make_uffd_wp_huge_pte(vma, start, ptep, pte);
+>> +		flush_hugetlb_tlb_range(vma, start, end);
+>> +	}
+>> +
+>> +unlock_and_return:
+>> +	if (IS_PM_SCAN_WP(p->flags)) {
+>> +		spin_unlock(ptl);
+>> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
+>> +	}
+>> +
+>> +	arch_leave_lazy_mmu_mode();
+> 
+> Same here.
+> 
+>> +
+>> +	return ret;
+>> +}
+> 
+> [...]
+> 
+
 -- 
-2.25.1
-
+BR,
+Muhammad Usama Anjum
