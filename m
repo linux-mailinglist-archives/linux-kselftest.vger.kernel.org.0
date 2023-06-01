@@ -2,99 +2,207 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD55F718F10
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jun 2023 01:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7C1718F64
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jun 2023 02:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjEaXdq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 May 2023 19:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+        id S230247AbjFAAIg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 May 2023 20:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjEaXdp (ORCPT
+        with ESMTP id S229469AbjFAAIg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 May 2023 19:33:45 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDB712F
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 16:33:43 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5147e441c33so666321a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 16:33:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685576021; x=1688168021;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oC5kQss/K4YNkiA3t8ssQaf48GcVeZPJDAECVwcI7aE=;
-        b=bHcrVWqLHuOGdNjqH4yHqFgc5fE5p3hGNrFpdHBIN9XpYxYCwLH5w4weJ4Jcp8uSQt
-         fwlMBEXymH6kjT9J/Hmbip/2+32v8K+ITR44/uHh/Dt1o3tTrca12Rf5gNwA+qoq1M+Q
-         aEuFDzU3ExSTfn3EqsvmRmgQL/Wnn+Kj858SQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685576021; x=1688168021;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oC5kQss/K4YNkiA3t8ssQaf48GcVeZPJDAECVwcI7aE=;
-        b=UzXhmMPaOqoGDhwmABwXVRQAayDOz6vobso36NT3wxMTw80Ajr7GdxhkBxVm9KMf67
-         Z92S8GTDVclqWdLdJqIVnCBeBGbksLUjFqQ9ClUR7YGI1D70wvqfDzcyaZC0Yv4t9XV/
-         XXHiuV037vGym17wgrPLwHNge5fYAPjuWgrF03uaObIuWlU+qszo6iJHKyYhcZgKOKaV
-         sCN0KHmObdSYZ2zh+0JPvqkRr0gNUhxrx8Yw3oup1OaHKgn6Ui1dW9JdbGshLRtpf9As
-         tTdjTkpwT2yOSmxI4FfZuDmiPEcPpBJ/GdNA0saz7C6m0JWAEPnqXbOdUzmQ+Tbnmk8s
-         Cigw==
-X-Gm-Message-State: AC+VfDzPk4GdEUaMoCWZ6tjyhoIuTy04Id8UC5HHaoawAGB/LT/6gPXP
-        C8Fkxo6i9mdrDtCnx+Ji+/qVXifThirH1NXmUeSVQl5R
-X-Google-Smtp-Source: ACHHUZ6yc3G6rLlNyy94psyXOMymWJ4vGwM27rbiipG62tX8WdHRSymV9GwOwcFnMXHCMITiWXhdJA==
-X-Received: by 2002:a05:6402:2713:b0:514:94be:323c with SMTP id y19-20020a056402271300b0051494be323cmr94950edd.10.1685576021478;
-        Wed, 31 May 2023 16:33:41 -0700 (PDT)
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
-        by smtp.gmail.com with ESMTPSA id h26-20020aa7c95a000000b0051421010690sm6528224edt.21.2023.05.31.16.33.40
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 16:33:41 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-96fab30d1e1so67345266b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 16:33:40 -0700 (PDT)
-X-Received: by 2002:a17:907:7f9f:b0:96f:5511:8803 with SMTP id
- qk31-20020a1709077f9f00b0096f55118803mr91233ejc.22.1685576020461; Wed, 31 May
- 2023 16:33:40 -0700 (PDT)
+        Wed, 31 May 2023 20:08:36 -0400
+Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41FF124;
+        Wed, 31 May 2023 17:08:31 -0700 (PDT)
+Date:   Thu, 01 Jun 2023 00:08:17 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rhysre.net;
+        s=protonmail2; t=1685578109; x=1685837309;
+        bh=ZmyJWhx3fktYZQdFy32ON1t+Qe9jELp1qwHtWiiLc5o=;
+        h=Date:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=YqKetOG3WbWUUv3XHh2wvRPvRb8Gty+KWMZ92uXnAXBtKzh3jY8TBgGg5BQUJ7J8c
+         oPyHeFmv2QS3b1UQg62ZrWtNAfKA4P7YVvee0kYKlN0tvScB9E3TqXvRulDKCGYGig
+         e4yBS/4o3qFRpMBrJDGinbdLB/ducPL2ii/NwKyE2rjn7R7N5QmOqaCAqKYQ0WPFC0
+         eW9exkcABk04r3r/b5QLorTeQtN5B9PeVRuMEBDKtg63WWYyy7qkFsitKupsxyCFQs
+         beGXFRzFIiqTmTgLh96Mugy3NF17FEJUN6E6TT4gT81JlnL50favtern6UshI65JPb
+         4MWmjoV3TdJgA==
+From:   Rhys Rustad-Elliott <me@rhysre.net>
+Cc:     me@rhysre.net, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf] bpf: Fix elem_size not being set for inner maps
+Message-ID: <20230601000713.506358-1-me@rhysre.net>
+Feedback-ID: 51368404:user:proton
 MIME-Version: 1.0
-References: <20230531220807.2048037-1-joel@joelfernandes.org>
-In-Reply-To: <20230531220807.2048037-1-joel@joelfernandes.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 31 May 2023 19:33:23 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wgumv=8d=CqEeoYMRgqgJXePk7k5q-yi_+mO+AkdZv3hg@mail.gmail.com>
-Message-ID: <CAHk-=wgumv=8d=CqEeoYMRgqgJXePk7k5q-yi_+mO+AkdZv3hg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/7] Optimize mremap during mutual alignment within PMD
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,MISSING_HEADERS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 31, 2023 at 6:08=E2=80=AFPM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
->
-> Here is v4 of the mremap start address optimization / fix for exec warnin=
-g.
+Commit d937bc3449fa ("bpf: make uniform use of array->elem_size
+everywhere in arraymap.c") changed array_map_gen_lookup to use
+array->elem_size instead of round_up(map->value_size, 8) as the element
+size when generating code to access a value in an array map.
 
-I don't see anything suspicious here.
+array->elem_size, however, is not set by bpf_map_meta_alloc when
+initializing an BPF_MAP_TYPE_ARRAY_OF_MAPS or BPF_MAP_TYPE_HASH_OF_MAPS.
+This results in array_map_gen_lookup incorrectly outputting code that
+always accesses index 0 in the array (as the index will be calculated
+via a multiplication with the element size, which is incorrectly set to
+0).
 
-Not that that probably means much, but the test coverage looks reasonable t=
-oo.
+Set elem_size on the bpf_array object when allocating an array or hash
+of maps and add a selftest that accesses an inner map at a nonzero index
+to prevent regressions.
 
-            Linus
+Fixes: d937bc3449fa ("bpf: make uniform use of array->elem_size everywhere =
+in arraymap.c")
+Signed-off-by: Rhys Rustad-Elliott <me@rhysre.net>
+---
+ kernel/bpf/map_in_map.c                       |  8 +++-
+ .../map_in_map_inner_array_lookup.c           | 33 ++++++++++++++
+ .../test_map_in_map_inner_array_lookup.c      | 45 +++++++++++++++++++
+ 3 files changed, 84 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/map_in_map_inner=
+_array_lookup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_map_in_map_inner=
+_array_lookup.c
+
+diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+index 2c5c64c2a53b..8d65b12e0834 100644
+--- a/kernel/bpf/map_in_map.c
++++ b/kernel/bpf/map_in_map.c
+@@ -69,9 +69,13 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
+ =09/* Misc members not needed in bpf_map_meta_equal() check. */
+ =09inner_map_meta->ops =3D inner_map->ops;
+ =09if (inner_map->ops =3D=3D &array_map_ops) {
++=09=09struct bpf_array *inner_array_meta =3D
++=09=09=09container_of(inner_map_meta, struct bpf_array, map);
++=09=09struct bpf_array *inner_array =3D container_of(inner_map, struct bpf=
+_array, map);
++
++=09=09inner_array_meta->index_mask =3D inner_array->index_mask;
++=09=09inner_array_meta->elem_size =3D round_up(inner_map->value_size, 8);
+ =09=09inner_map_meta->bypass_spec_v1 =3D inner_map->bypass_spec_v1;
+-=09=09container_of(inner_map_meta, struct bpf_array, map)->index_mask =3D
+-=09=09     container_of(inner_map, struct bpf_array, map)->index_mask;
+ =09}
+=20
+ =09fdput(f);
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_=
+lookup.c b/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lo=
+okup.c
+new file mode 100644
+index 000000000000..264d4788e5fd
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lookup.=
+c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <test_progs.h>
++
++#include "test_map_in_map_inner_array_lookup.skel.h"
++
++static int duration;
++
++void test_map_in_map_inner_array_lookup(void)
++{
++=09int map1_fd, err;
++=09int key =3D 3;
++=09int val =3D 1;
++=09struct test_map_in_map_inner_array_lookup *skel;
++
++=09skel =3D test_map_in_map_inner_array_lookup__open_and_load();
++=09if (CHECK(!skel, "skel_open", "failed to open&load skeleton\n"))
++=09=09return;
++
++=09err =3D test_map_in_map_inner_array_lookup__attach(skel);
++=09if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++=09=09goto cleanup;
++
++=09map1_fd =3D bpf_map__fd(skel->maps.inner_map1);
++=09bpf_map_update_elem(map1_fd, &key, &val, 0);
++=09usleep(1);
++=09/* Probe should have set the element at index 3 to 2 */
++=09bpf_map_lookup_elem(map1_fd, &key, &val);
++=09CHECK(val !=3D 2, "inner1", "got %d !=3D exp %d\n", val, 2);
++
++cleanup:
++=09test_map_in_map_inner_array_lookup__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_=
+lookup.c b/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lo=
+okup.c
+new file mode 100644
+index 000000000000..c2c8f2fa451d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lookup.=
+c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct inner_map {
++=09__uint(type, BPF_MAP_TYPE_ARRAY);
++=09__uint(max_entries, 5);
++=09__type(key, int);
++=09__type(value, int);
++} inner_map1 SEC(".maps");
++
++struct outer_map {
++=09__uint(type, BPF_MAP_TYPE_HASH_OF_MAPS);
++=09__uint(max_entries, 3);
++=09__type(key, int);
++=09__array(values, struct inner_map);
++} outer_map1 SEC(".maps") =3D {
++=09.values =3D {
++=09=09[2] =3D &inner_map1,
++=09},
++};
++
++SEC("raw_tp/sys_enter")
++int handle__sys_enter(void *ctx)
++{
++=09int outer_key =3D 2, inner_key =3D 3;
++=09int *val;
++=09void *map;
++
++=09map =3D bpf_map_lookup_elem(&outer_map1, &outer_key);
++=09if (!map)
++=09=09return 1;
++
++=09val =3D bpf_map_lookup_elem(map, &inner_key);
++=09if (!val)
++=09=09return 1;
++
++=09if (*val =3D=3D 1)
++=09=09*val =3D 2;
++
++=09return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+--=20
+2.40.1
+
+
