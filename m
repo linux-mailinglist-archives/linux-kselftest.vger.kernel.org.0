@@ -2,41 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D78B71FF76
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 12:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84A2720003
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 13:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235595AbjFBKg1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 06:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
+        id S234920AbjFBLHB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 07:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234751AbjFBKf5 (ORCPT
+        with ESMTP id S234421AbjFBLHA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:35:57 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB84E43;
-        Fri,  2 Jun 2023 03:34:41 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 12:33:43 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1685702025; bh=BFaP0Bc5Ii+o8/5LmJhFs9l0FX4Zgrji4nYoQeGg2r0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sHe2c8Yid9GaHV+KwNK8KEx8ByjVCeqLMVJHyFuOswJWYF7lxAheuxCdbPVZBJ8zQ
-         ZCVi7YO2XrKDvrNnHIna/35ybCrpPHeBHdUXjUcq4OrCz36FadA9lrew7Fyp9QUQp8
-         ta6kDxFR/V+huCFYFPUYSaq0vN5VS2aV8lyx2tJ8=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, w@1wt.eu, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 13/13] selftests/nolibc: riscv: customize makefile for
- rv32
-Message-ID: <f7cb4209-a70f-4f59-8b11-2d189908f18c@t-8ch.de>
-References: <6f065441a6be9e63238ffb3d43cf09a6e4ac6773.1685387485.git.falcon@tinylab.org>
- <20230602040625.24373-1-falcon@tinylab.org>
+        Fri, 2 Jun 2023 07:07:00 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6929AE54
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 04:06:43 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230602110641euoutp02b790a573a10793ee83e4e9602bcf2958~k0tuyqg5J2929129291euoutp02q
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 11:06:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230602110641euoutp02b790a573a10793ee83e4e9602bcf2958~k0tuyqg5J2929129291euoutp02q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1685704001;
+        bh=/IvdWLJTufhWWn69HB/rMKuMcUhIzU3EVWuNWQ6mpUM=;
+        h=From:To:CC:Subject:Date:References:From;
+        b=ptrVYktW4BYAvj2ZGPBazSZXMo0/4zI7icnu0l9YWHsUyHQBLDJUZhyv1S6lm/c12
+         3jH1NTyjBHM5lJrEM3e3idkWEz35q2yxBvBBr95uCKYD8Za6cs+2exQCMWV8B2Dln8
+         7kBk6hiTn2V25oCvnk3LHKEJmwD2fDV10D75YnqY=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230602110640eucas1p279fa8c4ec67c6f8356cc210b6efbf637~k0tuFa9CM2052220522eucas1p2Y;
+        Fri,  2 Jun 2023 11:06:40 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id F8.67.11320.04DC9746; Fri,  2
+        Jun 2023 12:06:40 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230602110640eucas1p11b79cbd7f116be6828a670f9873ed24e~k0ttmYNQO0212702127eucas1p1S;
+        Fri,  2 Jun 2023 11:06:40 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230602110640eusmtrp109aa7063083d030c74088e9a6b687fac~k0ttl66xg2194821948eusmtrp1O;
+        Fri,  2 Jun 2023 11:06:40 +0000 (GMT)
+X-AuditID: cbfec7f4-993ff70000022c38-67-6479cd406f96
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id A2.A9.10549.04DC9746; Fri,  2
+        Jun 2023 12:06:40 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230602110640eusmtip1d6d2f7eb83ffec13792372da0c4b1d35~k0ttX_WIb0527605276eusmtip1K;
+        Fri,  2 Jun 2023 11:06:40 +0000 (GMT)
+Received: from localhost (106.210.248.205) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Fri, 2 Jun 2023 12:06:39 +0100
+From:   Joel Granados <j.granados@samsung.com>
+To:     <mcgrof@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Joel Granados <j.granados@samsung.com>
+Subject: [PATCH 0/8] Remove child from struct ctl_table
+Date:   Fri, 2 Jun 2023 13:06:30 +0200
+Message-ID: <20230602110638.789426-1-j.granados@samsung.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602040625.24373-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [106.210.248.205]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOIsWRmVeSWpSXmKPExsWy7djPc7oOZytTDPYc17LYs/cki8XlXXPY
+        LKbfec9mcWPCU0YHFo9NqzrZPD5vkgtgiuKySUnNySxLLdK3S+DK+Nh9i6nggVDFqU2r2RoY
+        T/B1MXJySAiYSHybNIe5i5GLQ0hgBaPEo8n/mCCcL4wSBy4uYIRwPjNKTPi3iK2LkQOs5eoJ
+        LYj4ckaJr60nmeCKTk+/AzVrC6PEw4P/mUCWsAnoSJx/A5Lg5BAREJc4cXoz2FhmgQmMEn3r
+        frGAJIQFzCWeX94DZrMIqEjM3HKOEcTmFbCRmLNnDTPEtfISbdenQ8UFJU7OfAJWzwwUb946
+        mxnClpA4+OIFVL2yxIR1v1kh7FqJU1tugZ0qIbCSQ+LStAZ2iISLxI97/SwQtrDEq+NboOIy
+        Eqcn97BANExmlNj/7wM7hLOaUWJZ41cmiCpriZYrT9ghIeMoseV+KYTJJ3HjrSDEQXwSk7ZN
+        Z4YI80p0tAlBNKpJrL73hmUCo/IsJO/MQvLOLCTvLGBkXsUonlpanJueWmyUl1quV5yYW1ya
+        l66XnJ+7iRGYNk7/O/5lB+PyVx/1DjEycTAeYpTgYFYS4RUKK08R4k1JrKxKLcqPLyrNSS0+
+        xCjNwaIkzqttezJZSCA9sSQ1OzW1ILUIJsvEwSnVwGRisHynp5ZV7KGzr5LM+28YCnRqVncE
+        /Tf9zrUw4/ePiw8en6+Uyj94M6RQpP8N3wODtNsRIkqvLTvOCfi1MInqb5jgK3vRg3d+6O0f
+        KX/agwo8RWtK4i8GN6+fyCz6yz9t/sXe20+1I42/fRKceq0sX0W5e45ZXbtbnyvv3Sblt7t7
+        73DPf3L0Vdlu8aTOOavc5l1wS/tnJ+2lbWWiftny4Cy/fY7GxjbuMqf/qTFKarltFP+Z6zr1
+        SXXGiSf7/l0svhX5btmLK6mLVHW4q8U9GI9uX3mnVNGQadM/C+91+Yp1wtZnuL8znjo66c5D
+        feXb0xtfH72x5csT21k5t2Z1za2v47ktHKt/RvSLkRJLcUaioRZzUXEiAIFino6KAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjkeLIzCtJLcpLzFFi42I5/e/4XV2Hs5UpBpe+cFrs2XuSxeLyrjls
+        FtPvvGezuDHhKaMDi8emVZ1sHp83yQUwRenZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hka
+        m8daGZkq6dvZpKTmZJalFunbJehlfOy+xVTwQKji1KbVbA2MJ/i6GDk4JARMJK6e0Opi5OIQ
+        EljKKPF6wQr2LkZOoLiMxMYvV1khbGGJP9e62EBsIYGPjBJzv4hBNGxhlLjweQ0zSIJNQEfi
+        /Js7YLaIgLjEidObGUGKmAUmMEr0rfvFApIQFjCXeH55D5jNIqAiMXPLOUYQm1fARmLOHohB
+        EgLyEm3Xp0PFBSVOznwCVs8MFG/eOpsZwpaQOPjiBVS9ssSEdb+hLq2V+Pz3GeMERqFZSNpn
+        IWmfhaR9ASPzKkaR1NLi3PTcYkO94sTc4tK8dL3k/NxNjMAI2Xbs5+YdjPNefdQ7xMjEwXiI
+        UYKDWUmEVyisPEWINyWxsiq1KD++qDQntfgQoynQPxOZpUST84ExmlcSb2hmYGpoYmZpYGpp
+        ZqwkzutZ0JEoJJCeWJKanZpakFoE08fEwSnVwBQcWr2h80FwUsQG/1VF1c18X56ZuBe5PXCK
+        m+4/q32vv+BVvi+LVELqtwVNalxlovb13uR/OZ4Kt92srpxbxul+5ODFttunNU5bfr+6QFUs
+        J3TG+fprbPUX/kktNrm8yeyHwSLh0MjFqmuX7tDqbXIsKS9bOUFr2bZFrMU5NziYwl0ro6we
+        /djLoL3td0+C0d7dTIyLCiZei93yof3GjQ9SH+fzaTAzhq30SNbQdLARD9nQ9T6waZJEwOzd
+        lybs3bazJLLp0taZ589qBIl8nDGd3V7S60quvaL10t1iRULFM1z0/uf4BrDNs+zdculL1eXC
+        wkynlXb75u//vbDhXkjbbKOkpyzFn1rnHVSeeUiJpTgj0VCLuag4EQCNM0bwGQMAAA==
+X-CMS-MailID: 20230602110640eucas1p11b79cbd7f116be6828a670f9873ed24e
+X-Msg-Generator: CA
+X-RootMTR: 20230602110640eucas1p11b79cbd7f116be6828a670f9873ed24e
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230602110640eucas1p11b79cbd7f116be6828a670f9873ed24e
+References: <CGME20230602110640eucas1p11b79cbd7f116be6828a670f9873ed24e@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,149 +114,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-06-02 12:06:25+0800, Zhangjin Wu wrote:
-> Willy, Arnd and Thomas
-> 
-> Based on your suggestions, in the comming v3, I plan to split the whole rv32
-> support to something like this:
+Resending as the first set got mangled with smtp error.
 
-Is each of these parts a new patchset?
-I would suggest to do so.
+This is part of the effort to remove the empty element of the ctl_table
+structures (used to calculate size) and replace it with an ARRAY_SIZE call. By
+replacing the child element in struct ctl_table with a flags element we make
+sure that there are no forward recursions on child nodes and therefore set
+ourselves up for just using an ARRAY_SIZE. We also added some self tests to
+make sure that we do not break anything.
 
-> 1. Generic part1
-> 
->    (The old feedbacks are applied with the new Suggested-by lines, welcome your
->     additional feedbacks if there are ;-))
-> 
->     selftests/nolibc: syscall_args: use generic __NR_statx
->     tools/nolibc: add missing nanoseconds support for __NR_statx
->     selftests/nolibc: allow specify extra arguments for qemu
->     selftests/nolibc: fix up compile warning with glibc on x86_64
->     selftests/nolibc: not include limits.h for nolibc
->     selftests/nolibc: use INT_MAX instead of __INT_MAX__
->     tools/nolibc: arm: add missing my_syscall6
->     tools/nolibc: open: fix up compile warning for arm
->     selftests/nolibc: support two errnos with EXPECT_SYSER2()
->     selftests/nolibc: remove gettimeofday_bad1/2 completely
->     selftests/nolibc: add new gettimeofday test cases
+Patchset is separated in 4: parport fixes, selftests fixes, selftests additions and
+replacement of child element. Tested everything with sysctl self tests and everything
+seems "ok".
 
-These all look good and non-controversial.
+1. parport fixes: @mcgrof: this is related to my previous series and it plugs a
+   sysct table leak in the parport driver. Please tell me if you want me to repost
+   the parport series with this one stiched in.
 
-> 2. Add Compile support for rv32
-> 
->    (Convert all of the unsupported syscalls to a return of -ENOSYS, this
->     allows us to fix up the test failures one by one not that urgently later)
-> 
->     tools/nolibc: fix up #error compile failures with -ENOSYS
->     tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
+2. Selftests fixes: Remove the prefixed zeros when passing a awk field to the
+   awk print command because it was causing $0009 to be interpreted as $0.
+   Replaced continue with return in sysctl.sh(test_case) so the test actually
+   gets skipped. The skip decision is now in sysctl.sh(skip_test).
 
-These should be their own series in my opinion.
-It will likely generate some discussion.
+3. Selftest additions: New test to confirm that unregister actually removes
+   targets. New test to confirm that permanently empty targets are indeed
+   created and that no other targets can be created "on top".
 
->     selftests/nolibc: riscv: customize makefile for rv32
-> 
->    (The first two are new but clear enough, based on the idea of suggestion from Arnd [1])
-> 
-> 3. Fix up the left test failures one by one
+4. Replaced the child pointer in struct ctl_table with a u8 flag. The flag
+   is used to differentiate between permanently empty targets and non-empty ones.
 
-I'm not a fan of adding an "official" rv32 support with still failing
-tests.
+Comments/feedback greatly appreciated
 
->    (Plan to add everyone as a standalone patchset, which will easier the review
->     and merge progress)
-> 
->    wait4 -> waitid
->    lseek -> llseek
->    gettimeofday -> clock_gettime/clock_gettime64
->    select -> pselect6/pselect6_time64
->    ppoll -> ppoll_time64
+Best
+Joel
 
-I guess these new codepaths will also be used on non-rv32 architectures
-and will therefore validated without rv32.
+Joel Granados (8):
+  parport: plug a sysctl register leak
+  test_sysctl: Fix test metadata getters
+  test_sysctl: Group node sysctl test under one func
+  test_sysctl: Add an unregister sysctl test
+  test_sysctl: Add an option to prevent test skip
+  test_sysclt: Test for registering a mount point
+  sysctl: Remove debugging dump_stack
+  sysctl: replace child with a flags var
 
-So you could submit these before the final rv32 patch in a series.
+ drivers/parport/procfs.c                 |  23 ++---
+ fs/proc/proc_sysctl.c                    |  82 ++++------------
+ include/linux/sysctl.h                   |   4 +-
+ lib/test_sysctl.c                        |  91 ++++++++++++++++--
+ tools/testing/selftests/sysctl/sysctl.sh | 115 +++++++++++++++++------
+ 5 files changed, 204 insertions(+), 111 deletions(-)
 
-> 4. Clean up some old test cases one by one
-> 
->    Like statx ...
-> 
-> Best regards,
-> Zhangjin
-> 
-> [1]: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
-> 
-> > Both riscv64 and riscv32 have:
-> > 
-> > * the same ARCH value, it is riscv
-> > * the same arch/riscv source code tree
-> > 
-> > The only differences are:
-> > 
-> > * riscv64 uses defconfig, riscv32 uses rv32_defconfig
-> > * riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
-> > * riscv32 has different compiler options (-march= and -mabi=)
-> > 
-> > So, riscv32 can share most of the settings with riscv64, there is no
-> > need to add it as a whole new architecture but just need a flag to
-> > record and reflect the difference.
-> > 
-> > The 32bit mips and loongarch may be able to use the same method, so,
-> > let's use a meaningful flag: CONFIG_32BIT. If required in the future,
-> > this flag can also be automatically loaded from
-> > include/config/auto.conf.
-> > 
-> > With this patch, it is able to run nolibc test for rv32 like this:
-> > 
-> >     $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/Makefile | 11 +++++++++--
-> >  1 file changed, 9 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > index 44088535682e..ea434a0acdc1 100644
-> > --- a/tools/testing/selftests/nolibc/Makefile
-> > +++ b/tools/testing/selftests/nolibc/Makefile
-> > @@ -14,6 +14,12 @@ include $(srctree)/scripts/subarch.include
-> >  ARCH = $(SUBARCH)
-> >  endif
-> >  
-> > +# Allow pass ARCH=riscv|riscv32|riscv64, riscv implies riscv64
-> > +ifneq ($(findstring xriscv,x$(ARCH)),)
-> > +  CONFIG_32BIT := $(if $(findstring 32x,$(ARCH)x),1)
-> > +  override ARCH := riscv
-> > +endif
-> > +
-> >  # kernel image names by architecture
-> >  IMAGE_i386       = arch/x86/boot/bzImage
-> >  IMAGE_x86_64     = arch/x86/boot/bzImage
-> > @@ -34,7 +40,7 @@ DEFCONFIG_x86        = defconfig
-> >  DEFCONFIG_arm64      = defconfig
-> >  DEFCONFIG_arm        = multi_v7_defconfig
-> >  DEFCONFIG_mips       = malta_defconfig
-> > -DEFCONFIG_riscv      = defconfig
-> > +DEFCONFIG_riscv      = $(if $(CONFIG_32BIT),rv32_defconfig,defconfig)
-> >  DEFCONFIG_s390       = defconfig
-> >  DEFCONFIG_loongarch  = defconfig
-> >  DEFCONFIG            = $(DEFCONFIG_$(ARCH))
-> > @@ -49,7 +55,7 @@ QEMU_ARCH_x86        = x86_64
-> >  QEMU_ARCH_arm64      = aarch64
-> >  QEMU_ARCH_arm        = arm
-> >  QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
-> > -QEMU_ARCH_riscv      = riscv64
-> > +QEMU_ARCH_riscv      = $(if $(CONFIG_32BIT),riscv32,riscv64)
-> >  QEMU_ARCH_s390       = s390x
-> >  QEMU_ARCH_loongarch  = loongarch64
-> >  QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
-> > @@ -76,6 +82,7 @@ else
-> >  Q=@
-> >  endif
-> >  
-> > +CFLAGS_riscv = $(if $(CONFIG_32BIT),-march=rv32i -mabi=ilp32)
-> >  CFLAGS_s390 = -m64
-> >  CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
-> >  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
-> > -- 
-> > 2.25.1
-> 
+-- 
+2.30.2
+
