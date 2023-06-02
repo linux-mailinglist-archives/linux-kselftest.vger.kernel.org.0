@@ -2,154 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F1072076B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 18:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEF6720781
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 18:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236500AbjFBQWf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 12:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
+        id S236844AbjFBQZo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 12:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236814AbjFBQWc (ORCPT
+        with ESMTP id S236850AbjFBQZi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:22:32 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2088.outbound.protection.outlook.com [40.107.93.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E7DE55;
-        Fri,  2 Jun 2023 09:22:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YFPKddFdVkpmm+Ad1vROGPv9A4PoGEW9VMNURshy8ckUglmXiWtv0mCeZY/MOtpbpF1v/X+nZ9vvTWTSwxyFAvU+5QyvIoESofVUf5vM4a5vxwbE+9KUAhZDwpa+8iDB2Y/PTvGo7Kkc1x0Kalz6qD/ZX2doO//LrN0GFswxQ/4mPTjwFZ2nYm47Jt5U2MtUvtMnL+poS8HJbd/Mbgy4B8kaUN1Y7oIBocoD4QnYpj/2z7Sd/swx55zJGFU2lrVHGfeGmJPUwYaPdLeGk7TP3uwWUixuYu8HDIn3BHQWTmqyBPl6k4soZYgayOWy3z+PfFJP+jvoH4Z6mf9e/PBHXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U3lsimMA0ii/AP2+R03TRG7R10RPbyRiOm+fJHshXt0=;
- b=HcGSdS0qiVS/xoPnDDRDtYIJlXb0ugXE6yYRzMsqURtvXvqqofHrNnQroNZaUwO1xzOqKNTs+SGA3C9KDxBqNOolt1iSNfslUfrwbapeJmnfkPKMjXC/8Z8RHreoy8HP5Sn+JR8hv7tgnHwSlz4RS6YGjLazdogrPdwNV9bjmUVzLE0NZZ9X9fTxEec3eCpRShq6u/rD3MJ6aF6rNtOmrNJv7sBNlycl9vMW9D0FzFPX/LUQ5krt38YFwF0K6sv9/pzCfEh4wgsbjX57P5caTpARi5yNWTc2bN898dLS1Z/AZXQ3lF+mviFYDAkgZl9aBmmBHr0Pz8Y/xnX5AMDCkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U3lsimMA0ii/AP2+R03TRG7R10RPbyRiOm+fJHshXt0=;
- b=DYayi3fld+EpQfqyxD1PJJFyyHThNBw1E2pCwWd6UBJtDp/o7RqeAl+cQ+PflfhVLEOEcFgTKaW4896D7jcmTeW9zlhgx3cd7poQVfuHckWrVDLRFdVIBN0urChHe/P29STevQqOIlPfLI5RBpVeFzJb+eb8MDnJ7aXBwH5pQy3wGdTeCett5Pbu3Rx6Pw/Xa6Sbcozug37X/C55k0bFPP5Nbz9cVywTeSNAMAGjEOQNCLPqI07Ns3BoMUmr0R1+sIz2Lz4EnjqXDoTNjt4buMo1YzCwLUHWJEt8wUJgOFZSqcbr2bMZ+Exa0/A6fBYf0EXRTgAxlwuKJbe7VcstDg==
-Received: from DS7PR06CA0020.namprd06.prod.outlook.com (2603:10b6:8:2a::21) by
- CH0PR12MB5186.namprd12.prod.outlook.com (2603:10b6:610:b9::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.22; Fri, 2 Jun 2023 16:21:08 +0000
-Received: from DM6NAM11FT085.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2a:cafe::e2) by DS7PR06CA0020.outlook.office365.com
- (2603:10b6:8:2a::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26 via Frontend
- Transport; Fri, 2 Jun 2023 16:21:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT085.mail.protection.outlook.com (10.13.172.236) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.24 via Frontend Transport; Fri, 2 Jun 2023 16:21:06 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
- 09:20:49 -0700
-Received: from localhost.localdomain (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
- 09:20:46 -0700
-From:   Petr Machata <petrm@nvidia.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>
-CC:     Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
-        "Amit Cohen" <amcohen@nvidia.com>,
-        Danielle Ratson <danieller@nvidia.com>,
-        <linux-kselftest@vger.kernel.org>, <mlxsw@nvidia.com>
-Subject: [PATCH net-next 8/8] selftests: router_bridge_vlan: Set vlan_default_pvid 0 on the bridge
-Date:   Fri, 2 Jun 2023 18:20:12 +0200
-Message-ID: <fe6ab58d0c666ec0c557217098322a7dbd55ab35.1685720841.git.petrm@nvidia.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1685720841.git.petrm@nvidia.com>
-References: <cover.1685720841.git.petrm@nvidia.com>
+        Fri, 2 Jun 2023 12:25:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02CBE44;
+        Fri,  2 Jun 2023 09:25:24 -0700 (PDT)
+Received: from [192.168.10.48] (unknown [119.152.150.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A69526603219;
+        Fri,  2 Jun 2023 17:25:20 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685723123;
+        bh=C47gbnaLE3FpJnFXLSuBsIZ0ri3JV8UzEv6qEz546uE=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=d5Sfx7KGHO1wZ3AQtdiU3MWsx4Y1GYIBZWGc8oAf1N/Pfu5FOzaAvY9D3oWWG6bAa
+         4FYzQoNqEfGJOVifEUx3cX+kyYgcI1JfKlPPgO34CbwELpMjCAaM/7iopfwcRk/Pcs
+         N5YVsmFHt1agKn2NLRz9TQAw8T9HWSEfiP4RoPWYQl0WTCmbREcocVvYCECa6+QFq7
+         DuQ9wv2/6vuA40K09aycN+oGyy+LLtZf8hqmebLoBNwLsNypZYNMD8VA0E/uvmfh/i
+         2jS1DUoKs5tfUYtvLnzqMuwnwgYvsr0jcIXfia8ft2iujVq/nikpW6GNBpoSFTXK92
+         fAj+ZTaTUKm7A==
+Message-ID: <bf910fa5-0c96-3707-cce4-5bcc656b6274@collabora.com>
+Date:   Fri, 2 Jun 2023 21:25:15 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 11/12] selftests/mm: fix missing UFFDIO_CONTINUE_MODE_WP
+ and similar build failures
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-12-jhubbard@nvidia.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230602013358.900637-12-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT085:EE_|CH0PR12MB5186:EE_
-X-MS-Office365-Filtering-Correlation-Id: e9a36647-1b60-4587-65dc-08db63855e40
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8OcyxdsAFyfMQ+L0fMXi5U4AX7meWa5dz+y+VYyyaaT5gvBnqlA/I/dj3wrFUkpMrIjtooErN0mBVJAeFStqoc+MB+l0NrJcRSRx3yZOKt1YCMjmmQmWZTnDb2ca8DO6CC142F3XIVyA+PYdfI8DkxMAB7lW/vN2IdkKodteh8L4NmWpVb1edDmDIoy5oLwKPbRRZasshKhaGyRMqNSrztWFTauylHwNnZZXbnphPLIfjFwq1CWmzsi2yQ3BFupBJ3aA1aGUYWBmm9GZKswx851HbkhmD0rNli89ooGY98L271BxstTMSrbKZEnzUZJVLHWyJkpJaF3GQoPGkMck6WOI/23hTn4bD60mjNCEgf8RElQbC4VneghVwszuIGVaOzA9FFHo4YPOY00fAnoyhE6nbJ0Q6KaOmz4uzVGEJh2MSuoytXC8N3W+5BldyST73pWIVjGI6pS6SgGTAug9GPnye2ujJgHuam0i9yRjWUnLrEZLkFSqLoVZU5FOIEmiuCDmt2iLFx9wNRsJjqEJLg2BWh96V4mnicCuhz0Wq6IvVxOzlufXokdg8Z6RWI6arrSSroGFRxK3dv744CLz4mWqTeGnUD7RIcpCFe6Ry3NfAUflmKDEQCVE/Vj7UpX+pBheHD3JvMOiC9ocje8OYW+wtmlI34Eo1XBZD7zLwGqLezb/XBNKk+l2cnX1ycVuKeIJqHNHtJFAuxj1qUsjnVHRu1r5OYRHorYNDR4naYU=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199021)(36840700001)(40470700004)(46966006)(186003)(40480700001)(6666004)(16526019)(40460700003)(107886003)(26005)(316002)(70206006)(4326008)(70586007)(82310400005)(86362001)(8676002)(8936002)(5660300002)(82740400003)(7636003)(356005)(426003)(41300700001)(47076005)(36756003)(83380400001)(66574015)(54906003)(36860700001)(110136005)(478600001)(336012)(2616005)(2906002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 16:21:06.4729
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9a36647-1b60-4587-65dc-08db63855e40
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT085.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5186
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When everything is configured, VLAN membership on the bridge in this
-selftest are as follows:
+On 6/2/23 6:33 AM, John Hubbard wrote:
+> UFFDIO_CONTINUE_MODE_WP, UFFD_FEATURE_WP_UNPOPULATED, USERFAULTFD_IOC,
+> and USERFAULTFD_IOC_NEW are needed lately, but they are not in my host
+> (Arch Linux) distro's userfaultfd.h yet. So put them in here.
+Selftests are never supposed to build with native header files. Build the
+headers in kernel source first. Then building the selftests picks up these
+newly built headers by itself. The method to build header files has changed
+to `make headers`. The following command builds the mm selftests
+successfully every time for me.
 
-    # bridge vlan show
-    port              vlan-id
-    swp2              1 PVID Egress Untagged
-                      555
-    br1               1 Egress Untagged
-                      555 PVID Egress Untagged
+make headers && make -C tools/testing/selftests/mm
 
-Note that it is possible for untagged traffic to just flow through as VLAN
-1, instead of using VLAN 555 as intended by the test. This configuration
-seems too close to "works by accident", and it would be better to just shut
-out VLAN 1 altogether.
+Please let me know if this doesn't work for you. I'll try to reproduce and fix.
 
-To that end, configure vlan_default_pvid of 0:
+> 
+> A better approach would be to include the uapi version of userfaultfd.h
+> from the kernel tree, but that currently fails with rather difficult
+> linker problems (__packed is defined multiple times, ugg), so defer that
+> to another day and just fix the build for now.
+> 
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  tools/testing/selftests/mm/uffd-common.h | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+> index a1cdb78c0762..98847e41ecf9 100644
+> --- a/tools/testing/selftests/mm/uffd-common.h
+> +++ b/tools/testing/selftests/mm/uffd-common.h
+> @@ -36,6 +36,23 @@
+>  
+>  #define UFFD_FLAGS	(O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY)
+>  
+> +#ifndef UFFDIO_CONTINUE_MODE_WP
+> +#define UFFDIO_CONTINUE_MODE_WP			((__u64)1<<1)
+> +#endif
+> +
+> +#ifndef UFFD_FEATURE_WP_UNPOPULATED
+> +#define UFFD_FEATURE_WP_UNPOPULATED		(1<<13)
+> +#endif
+> +
+> +/* ioctls for /dev/userfaultfd */
+> +#ifndef USERFAULTFD_IOC
+> +#define USERFAULTFD_IOC 0xAA
+> +#endif
+> +
+> +#ifndef USERFAULTFD_IOC_NEW
+> +#define USERFAULTFD_IOC_NEW _IO(USERFAULTFD_IOC, 0x00)
+> +#endif
+> +
+>  #define _err(fmt, ...)						\
+>  	do {							\
+>  		int ret = errno;				\
 
-    # bridge vlan show
-    port              vlan-id
-    swp2              555
-    br1               555 PVID Egress Untagged
-
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Reviewed-by: Amit Cohen <amcohen@nvidia.com>
----
- tools/testing/selftests/net/forwarding/router_bridge_vlan.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh b/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
-index 695ef1f12e56..de2b2d5480dd 100755
---- a/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
-+++ b/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
-@@ -63,7 +63,7 @@ h2_destroy()
- 
- router_create()
- {
--	ip link add name br1 type bridge vlan_filtering 1
-+	ip link add name br1 type bridge vlan_filtering 1 vlan_default_pvid 0
- 	ip link set dev br1 up
- 
- 	ip link set dev $swp1 master br1
 -- 
-2.40.1
-
+BR,
+Muhammad Usama Anjum
