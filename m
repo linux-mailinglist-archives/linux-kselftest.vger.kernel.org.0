@@ -2,181 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAEF71F91D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 06:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E599271F97D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 07:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbjFBEIg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 00:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
+        id S233250AbjFBFAY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 01:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjFBEIf (ORCPT
+        with ESMTP id S232124AbjFBFAX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 00:08:35 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B05128;
-        Thu,  1 Jun 2023 21:08:32 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1685678786t4wn6335
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 02 Jun 2023 12:06:25 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: BYUemv+qiN00SL9J7hzmONdu3OZstgKNbrJCS/RRwXSBpL7bT/bRmqMRkg8CW
-        Ub97Boxh6WfawPQfsJhqZEI6F6nZCq6cTRpbyRS8BJWRqrq39Vw1bAp9JdnBRm+ABFCnEbE
-        1yR48jc2hx1tooPYIMDmTEihsV386Mq8NrkyPMqm/HO0fooBT/+XhamhDgH3NvkF0jY1BgQ
-        0wxDHC1iiVtUr9tDMXIDCamjBfFm/TrM2IhBFaFEBZ+Uiks7HIp7ojQ9UGeWdSCCGuKjCz2
-        BCuOaFXSWkIrZhUPm2CQCjLGOiyMCixD//jSlCrcStjvY4g3cWlk/rXEPx0vzqsqDsKqD9p
-        DfAqQ2S8CkI1XvMwTB6/cgeUleZYbvQE+Bf7dGy6h9igC15u98XtBJ1LnaNig==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 2670584436313738676
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     arnd@arndb.de, thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v2 13/13] selftests/nolibc: riscv: customize makefile for rv32
-Date:   Fri,  2 Jun 2023 12:06:25 +0800
-Message-Id: <20230602040625.24373-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <6f065441a6be9e63238ffb3d43cf09a6e4ac6773.1685387485.git.falcon@tinylab.org>
-References: <6f065441a6be9e63238ffb3d43cf09a6e4ac6773.1685387485.git.falcon@tinylab.org>
+        Fri, 2 Jun 2023 01:00:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEBF137
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Jun 2023 22:00:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C81564C42
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 05:00:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BE17EC433EF;
+        Fri,  2 Jun 2023 05:00:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685682020;
+        bh=+0YnzVPdvfQsJB2IuBvdw3uDqzNe7nGlUfPDVvc5UBg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=a8xpx63iAQKFimh6//rF1YQg63ucpL6/jE0B2luM+zu+4jNvwNFsZtgcZj0zBmO5+
+         Ksyg/nItb0PWwQfUZUv40zyvzvGvOK0lwbIdTWLMd7IsXfSjqdc8XvIAqPMuD59PBr
+         oyqL4v3Qv7wO/yQsedSX2cUzCDG39iy4XcZsTHn/sraZiDKK4gh+XVdwL8NSuQ3ucc
+         /CL0bm5Ilnj1w0gg6aiDOaANyF0xs92cFZlURtuOLYEgq0cIXomqnVciFDhY2HATVE
+         PPiuHaSjgnJTbNu0Xq3I5/YXXSD5p96tASJ7O6JXYPLnqWrefab5gWXnuLfnjXbtD8
+         vQjejlw5uJrFg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A2746E29F3E;
+        Fri,  2 Jun 2023 05:00:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Subject: Re: [PATCH net-next,v2] selftests/tc-testing: replace mq with invalid
+ parent ID
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168568202066.24823.18027233483936915493.git-patchwork-notify@kernel.org>
+Date:   Fri, 02 Jun 2023 05:00:20 +0000
+References: <20230601012250.52738-1-shaozhengchao@huawei.com>
+In-Reply-To: <20230601012250.52738-1-shaozhengchao@huawei.com>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        shuah@kernel.org, kuba@kernel.org, victor@mojatatu.com,
+        peilin.ye@bytedance.com, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com, pctammela@mojatatu.com
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Willy, Arnd and Thomas
+Hello:
 
-Based on your suggestions, in the comming v3, I plan to split the whole rv32
-support to something like this:
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-1. Generic part1
-
-   (The old feedbacks are applied with the new Suggested-by lines, welcome your
-    additional feedbacks if there are ;-))
-
-    selftests/nolibc: syscall_args: use generic __NR_statx
-    tools/nolibc: add missing nanoseconds support for __NR_statx
-    selftests/nolibc: allow specify extra arguments for qemu
-    selftests/nolibc: fix up compile warning with glibc on x86_64
-    selftests/nolibc: not include limits.h for nolibc
-    selftests/nolibc: use INT_MAX instead of __INT_MAX__
-    tools/nolibc: arm: add missing my_syscall6
-    tools/nolibc: open: fix up compile warning for arm
-    selftests/nolibc: support two errnos with EXPECT_SYSER2()
-    selftests/nolibc: remove gettimeofday_bad1/2 completely
-    selftests/nolibc: add new gettimeofday test cases
-
-2. Add Compile support for rv32
-
-   (Convert all of the unsupported syscalls to a return of -ENOSYS, this
-    allows us to fix up the test failures one by one not that urgently later)
-
-    tools/nolibc: fix up #error compile failures with -ENOSYS
-    tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
-    selftests/nolibc: riscv: customize makefile for rv32
-
-   (The first two are new but clear enough, based on the idea of suggestion from Arnd [1])
-
-3. Fix up the left test failures one by one
-
-   (Plan to add everyone as a standalone patchset, which will easier the review
-    and merge progress)
-
-   wait4 -> waitid
-   lseek -> llseek
-   gettimeofday -> clock_gettime/clock_gettime64
-   select -> pselect6/pselect6_time64
-   ppoll -> ppoll_time64
-
-4. Clean up some old test cases one by one
-
-   Like statx ...
-
-Best regards,
-Zhangjin
-
-[1]: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
-
-> Both riscv64 and riscv32 have:
+On Thu, 1 Jun 2023 09:22:50 +0800 you wrote:
+> The test case shown in [1] triggers the kernel to access the null pointer.
+> Therefore, add related test cases to mq.
+> The test results are as follows:
 > 
-> * the same ARCH value, it is riscv
-> * the same arch/riscv source code tree
+> ./tdc.py -e 0531
+> 1..1
+> ok 1 0531 - Replace mq with invalid parent ID
 > 
-> The only differences are:
-> 
-> * riscv64 uses defconfig, riscv32 uses rv32_defconfig
-> * riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
-> * riscv32 has different compiler options (-march= and -mabi=)
-> 
-> So, riscv32 can share most of the settings with riscv64, there is no
-> need to add it as a whole new architecture but just need a flag to
-> record and reflect the difference.
-> 
-> The 32bit mips and loongarch may be able to use the same method, so,
-> let's use a meaningful flag: CONFIG_32BIT. If required in the future,
-> this flag can also be automatically loaded from
-> include/config/auto.conf.
-> 
-> With this patch, it is able to run nolibc test for rv32 like this:
-> 
->     $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
-> 
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/testing/selftests/nolibc/Makefile | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> index 44088535682e..ea434a0acdc1 100644
-> --- a/tools/testing/selftests/nolibc/Makefile
-> +++ b/tools/testing/selftests/nolibc/Makefile
-> @@ -14,6 +14,12 @@ include $(srctree)/scripts/subarch.include
->  ARCH = $(SUBARCH)
->  endif
->  
-> +# Allow pass ARCH=riscv|riscv32|riscv64, riscv implies riscv64
-> +ifneq ($(findstring xriscv,x$(ARCH)),)
-> +  CONFIG_32BIT := $(if $(findstring 32x,$(ARCH)x),1)
-> +  override ARCH := riscv
-> +endif
-> +
->  # kernel image names by architecture
->  IMAGE_i386       = arch/x86/boot/bzImage
->  IMAGE_x86_64     = arch/x86/boot/bzImage
-> @@ -34,7 +40,7 @@ DEFCONFIG_x86        = defconfig
->  DEFCONFIG_arm64      = defconfig
->  DEFCONFIG_arm        = multi_v7_defconfig
->  DEFCONFIG_mips       = malta_defconfig
-> -DEFCONFIG_riscv      = defconfig
-> +DEFCONFIG_riscv      = $(if $(CONFIG_32BIT),rv32_defconfig,defconfig)
->  DEFCONFIG_s390       = defconfig
->  DEFCONFIG_loongarch  = defconfig
->  DEFCONFIG            = $(DEFCONFIG_$(ARCH))
-> @@ -49,7 +55,7 @@ QEMU_ARCH_x86        = x86_64
->  QEMU_ARCH_arm64      = aarch64
->  QEMU_ARCH_arm        = arm
->  QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
-> -QEMU_ARCH_riscv      = riscv64
-> +QEMU_ARCH_riscv      = $(if $(CONFIG_32BIT),riscv32,riscv64)
->  QEMU_ARCH_s390       = s390x
->  QEMU_ARCH_loongarch  = loongarch64
->  QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
-> @@ -76,6 +82,7 @@ else
->  Q=@
->  endif
->  
-> +CFLAGS_riscv = $(if $(CONFIG_32BIT),-march=rv32i -mabi=ilp32)
->  CFLAGS_s390 = -m64
->  CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
->  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
-> -- 
-> 2.25.1
+> [...]
+
+Here is the summary with links:
+  - [net-next,v2] selftests/tc-testing: replace mq with invalid parent ID
+    https://git.kernel.org/netdev/net-next/c/a395b8d1c7c3
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
