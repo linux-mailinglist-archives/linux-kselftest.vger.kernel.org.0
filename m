@@ -2,79 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F5B72008A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 13:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C05D720101
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 13:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbjFBLlS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 07:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S234826AbjFBL5j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 07:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233858AbjFBLlR (ORCPT
+        with ESMTP id S234816AbjFBL5i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:41:17 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C624194;
-        Fri,  2 Jun 2023 04:41:16 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30aebe2602fso1742481f8f.3;
-        Fri, 02 Jun 2023 04:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685706075; x=1688298075;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S5hQQFCwShPSSScGGAdLrTYkT/tD/8Ppruf6EVNZak0=;
-        b=lpbCdDPo8oqAMBTDL1Pyq7/5WqGuqEiJgj6UDO6zCALtYKOEEhbYxfHnIp1i1ZLcyE
-         C40XPj7gAbyUo6iTXQPbCO6OT5vlmnUb2ogK8faQhMMWcojPmoYlRhaYpYS5bN/Xtcoy
-         ABi6uOJuhwhxw+CPNvQkzbEu/vr76XgYSF6x3HTzVqes7CH+8A456Z2EDsMr8HWOutey
-         NNohMcpJt414mu62Ey0YzRoKMBshp+dJQ3WF4LzT+KHtbnQCEip8pp1HbW9tok62g9UY
-         7F1f1GloeQzzaDywlH8EREfajW55km7Zv21qkDjyHQNMXd6Le5y5/K7C3uPVmj09Tgzs
-         +YQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685706075; x=1688298075;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S5hQQFCwShPSSScGGAdLrTYkT/tD/8Ppruf6EVNZak0=;
-        b=KEvhg64piE2PBr2lLAXaYzP2iTxVQ11v/aWuKkTL0IIGTIJM1Xchr1M44ucoPGE8Y0
-         GtjcbH+O5QN6OZSEZuoLNAzPbk/fI9FN+Rq3acq8u/w0+DB1uuAybKmrfjFG+kln6C9W
-         Vm1LrWvBjuX+6JyIZzY1yFd2LWzRIWbk/nmt04eAbu+ZSHz4/aaK7DcG59S58Zm7/IIV
-         ySHxFirGH02gh2tRvjshB24CaAsoK5q3S9Nb9P0cW0T8pSeFAkNWbR9XYSTNFSsNqnJ6
-         3/wAGrIScMextxOSukhR0A4CKTm77gtuWeBvQXSUN4YUAXnOhDvXdTSnroMBNGaA1tRc
-         QXLA==
-X-Gm-Message-State: AC+VfDyHIIIUHYD10NB71iJDmMbVKcFHWdQLj6JhGVeQ8t0P4i6vzFFI
-        +T85riF6323NaodnP+a+Iyg=
-X-Google-Smtp-Source: ACHHUZ6hh2gZb9y18fFjrWO/Hxn65WfbcwBixv/26O788m4ZGG3U1oJHAl9uReT5uWDiXo28Y4Augw==
-X-Received: by 2002:adf:edc2:0:b0:30a:ceb3:26bd with SMTP id v2-20020adfedc2000000b0030aceb326bdmr4045669wro.56.1685706074839;
-        Fri, 02 Jun 2023 04:41:14 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id d6-20020a5d5386000000b00307c46f4f08sm1443538wrv.79.2023.06.02.04.41.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 04:41:14 -0700 (PDT)
-Message-ID: <b7b32af9-993c-2f88-30b6-3af9ed87c7af@gmail.com>
-Date:   Fri, 2 Jun 2023 12:41:13 +0100
+        Fri, 2 Jun 2023 07:57:38 -0400
+X-Greylist: delayed 28230 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Jun 2023 04:57:07 PDT
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65D9E51;
+        Fri,  2 Jun 2023 04:57:07 -0700 (PDT)
+X-QQ-mid: bizesmtp64t1685706961t67k8i2u
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 02 Jun 2023 19:56:00 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: k0mQ4ihyJQP+tm91rx4PnDCmNQx5PlLwmtBQSrIufi4NAs5P4d+to5cY+J9hh
+        j6hHs7pOK7V5F+ibUiR11d0sToIwGWe4Ram8/xcpzKIE3vKMmmMNKmt8lz3Wn4olhM06oWt
+        H666d4tbc+l4sQjOCxcsEi5CPTLfiWEy3j8hSQ/HT8sy7+4y/BpjoXyFyUMUIv27G8oBf0X
+        JZ5ho8q4c59oWMl+xPMHaK1TQAAu09sFAG5T37oZv3VC+IXrokEIWxC+2TGn3CXq0W96ggQ
+        PNT9foAp++WO8LIezYegS8gXGU1TuVM0kVqt6u232qWUwFow2Hl6T5UbKHOnBM69z3hc88e
+        Nv8frKO+BPnA3F94Ey691NDgdk66n7I452RQ/xYaGM3PZhOntByV/5svIRIRg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 7108637236776978947
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        w@1wt.eu
+Subject: Re: [PATCH v2 13/13] selftests/nolibc: riscv: customize makefile for rv32
+Date:   Fri,  2 Jun 2023 19:56:00 +0800
+Message-Id: <20230602115600.80382-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <f7cb4209-a70f-4f59-8b11-2d189908f18c@t-8ch.de>
+References: <f7cb4209-a70f-4f59-8b11-2d189908f18c@t-8ch.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH][next] KVM: s390: selftests: Fix spelling mistake
- "initally" -> "initially"
-Content-Language: en-US
-To:     Janosch Frank <frankja@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230602102330.1230734-1-colin.i.king@gmail.com>
- <f0f0587b-5f19-82bd-3d58-bdb89ff59f8c@linux.ibm.com>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <f0f0587b-5f19-82bd-3d58-bdb89ff59f8c@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,29 +53,110 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 02/06/2023 12:07, Janosch Frank wrote:
-> On 6/2/23 12:23, Colin Ian King wrote:
->> There is a spelling mistake in literal string. Fix it.
->>
->> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> On 2023-06-02 12:06:25+0800, Zhangjin Wu wrote:
+> > Willy, Arnd and Thomas
+> > 
+> > Based on your suggestions, in the comming v3, I plan to split the whole rv32
+> > support to something like this:
 > 
-> Hey Colin,
+> Is each of these parts a new patchset?
+
+Yeah, It is also my plan, just like the v2 series.
+
+> I would suggest to do so.
 > 
-> I'm not a big fan of such fixes since they are most of the time more 
-> work for the maintainers than they are worth and accepting one can 
-> result in a flood of similar new patches. If this would have been your 
-> first ever patch I might have considered picking this but that's not the 
-> case.
+> > 1. Generic part1
+> > 
+> >    (The old feedbacks are applied with the new Suggested-by lines, welcome your
+> >     additional feedbacks if there are ;-))
+> > 
+> >     selftests/nolibc: syscall_args: use generic __NR_statx
+> >     tools/nolibc: add missing nanoseconds support for __NR_statx
+> >     selftests/nolibc: allow specify extra arguments for qemu
+> >     selftests/nolibc: fix up compile warning with glibc on x86_64
+> >     selftests/nolibc: not include limits.h for nolibc
+> >     selftests/nolibc: use INT_MAX instead of __INT_MAX__
+> >     tools/nolibc: arm: add missing my_syscall6
+> >     tools/nolibc: open: fix up compile warning for arm
+> >     selftests/nolibc: support two errnos with EXPECT_SYSER2()
+> >     selftests/nolibc: remove gettimeofday_bad1/2 completely
+> >     selftests/nolibc: add new gettimeofday test cases
+> 
+> These all look good and non-controversial.
+> 
+> > 2. Add Compile support for rv32
+> > 
+> >    (Convert all of the unsupported syscalls to a return of -ENOSYS, this
+> >     allows us to fix up the test failures one by one not that urgently later)
+> > 
+> >     tools/nolibc: fix up #error compile failures with -ENOSYS
+> >     tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
+> 
+> These should be their own series in my opinion.
+> It will likely generate some discussion.
 
-I understand. However, customer facing typos make the kernel look 
-shabby, hence the fix.
-
-Colin
+The 1st one is not rv32 specific, but the 2nd one requires rv32 compile support
+to be validated.
 
 > 
-> That being said, if one of the other maintainers choose to pick it I 
-> won't stand in their way.
+> >     selftests/nolibc: riscv: customize makefile for rv32
+> > 
+> >    (The first two are new but clear enough, based on the idea of suggestion from Arnd [1])
+> > 
+> > 3. Fix up the left test failures one by one
 > 
-> Cheers,
-> Janosch
+> I'm not a fan of adding an "official" rv32 support with still failing
+> tests.
+>
 
+That is reasonable, but in another side, without the rv32 compile support, It
+may be a little hard to test the left patchsets (see below explain).
+
+The other reasons for rv32 compile support is:
+
+* Some people may use nolibc without the left syscalls.
+* It is able to detect the new test failures.
+
+But anyway, the compile support is not urgent.
+
+> >    (Plan to add everyone as a standalone patchset, which will easier the review
+> >     and merge progress)
+> > 
+> >    wait4 -> waitid
+> >    lseek -> llseek
+> >    gettimeofday -> clock_gettime/clock_gettime64
+> >    select -> pselect6/pselect6_time64
+> >    ppoll -> ppoll_time64
+> 
+> I guess these new codepaths will also be used on non-rv32 architectures
+> and will therefore validated without rv32.
+>
+
+Unfortunately, most of them are time32 syscalls related (except the
+llseek), rv32 is the first architecture who has no kernel side time32
+syscalls support, that's why I plan to add compile support at first ;-)
+
+If the new time64 syscalls will be added as the first 'branch', then, they will
+be validated on the other 32bit architecture, but some of them may be not added
+as the first 'branch', for example, the waitid() emulated wait4() is bigger
+than the original one.
+
+> So you could submit these before the final rv32 patch in a series.
+>
+
+Thanks for your suggestion.
+
+I'm working on cleaning up them independently and carefully, will send them out
+as standalone patchsets.
+
+Best regards,
+Zhangjin
+ 
+> > 4. Clean up some old test cases one by one
+> > 
+> >    Like statx ...
+> > 
+> > Best regards,
+> > Zhangjin
+> > 
+> > [1]: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
