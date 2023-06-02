@@ -2,60 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A910371FB30
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 09:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A4871FC02
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 10:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234417AbjFBHlF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 03:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
+        id S234580AbjFBI1R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 04:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234383AbjFBHk5 (ORCPT
+        with ESMTP id S234577AbjFBI0Z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 03:40:57 -0400
-Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D77E1A1;
-        Fri,  2 Jun 2023 00:40:55 -0700 (PDT)
-Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-568bb833462so18651147b3.1;
-        Fri, 02 Jun 2023 00:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685691654; x=1688283654;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oM3fAwJKm3WQ26amYPUOEVz+QzB/5EEs4dGWk0XfUBQ=;
-        b=EpcDldyc/xJAJSWsy4/nbiCnWjNh4lnuQsxXsmfzFcKyo0NOCYcjD6HcsAT+oVgKHP
-         70MQvmc8G7+kcKUTlKQflJop4tjllC2G8QfpoSrVnf4GMZlkQEEhYS4sQgJbmXb34dq4
-         NipGqJ/juk0rk3B5Rp0k57Z4TsFF3OxeAisgoW0oP++iiphEP53dJPy016b1vAhS7lWb
-         GAFDOkaD9OxNrBkkqxBHmMF5stHiMJKXjOaCU9q218iA5rYNMin3xs7c1RqsClrIj0MC
-         /mANooql1iZXtf52FZN9VtANxbeVPdKi3wnNBDvJIL8ic73tcVwt+bIrXwp17dQkvf5U
-         DMRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685691654; x=1688283654;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oM3fAwJKm3WQ26amYPUOEVz+QzB/5EEs4dGWk0XfUBQ=;
-        b=OXnSdvAkg/M7dLvNViKnsxsOS0L8cIBZRjvcBWnxTsxY+qGxTRySnT3Lsjv9gilNEn
-         XM8NVWICUKmVDkgI2nmjEQFI1qYPCP1c8Y0l3vGEQCBYMDoepWfEPY5NoaVHAvYp1/cz
-         KGaVkBxipbbFRlj4lv28A9R9qFwJoj0k7/LKsXU4ixT3aokyqb4ZSzddzevxJbN4S4ru
-         bexmA+YO1SAPuA0uj5oOWTSWKm5BhYzKXZGvoYHxZy50Bvi+wZ0l36c9PlOuSwqsPwgb
-         0ogL2r0SHZf4AgZNm8euxz88I1naavdLY98i16lCv9ME3JJa+nwadX67ZpqbVKr5SfzC
-         Y1Og==
-X-Gm-Message-State: AC+VfDy6pZZCXdEmMChOUJ527piNylJdvI7K6TwuuPn17ie1VT59t54o
-        irYlOR5lyiROunxXbllfW4scRP8iNoqwh5Y0PtA=
-X-Google-Smtp-Source: ACHHUZ7dq+nyoMyR2vPjTFZyqws79z3rSs3uYbsWdIBlshpIKWvybc79mfHHaow3yloEzFhAu+wmAO1J8m6WapVESns=
-X-Received: by 2002:a81:4e11:0:b0:561:81b:734b with SMTP id
- c17-20020a814e11000000b00561081b734bmr11667281ywb.39.1685691654522; Fri, 02
- Jun 2023 00:40:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230602065958.2869555-1-imagedong@tencent.com> <20230602065958.2869555-3-imagedong@tencent.com>
-In-Reply-To: <20230602065958.2869555-3-imagedong@tencent.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Fri, 2 Jun 2023 15:40:43 +0800
-Message-ID: <CADxym3ZnmD_DhvS_KaJo4yt6PteaUDvifj4dp4gBBRuvoks=-g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/5] bpf, x86: allow function arguments up to
- 14 for TRACING
-To:     olsajiri@gmail.com
+        Fri, 2 Jun 2023 04:26:25 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A201810EA;
+        Fri,  2 Jun 2023 01:26:07 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3528KFNL020378;
+        Fri, 2 Jun 2023 08:24:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=h70zp1YYaP1c1Q4jhojCWUhiXW7/bbCQSBpBuQKrsYk=;
+ b=ZKyyijq2+gSB5mUvHaIAzKgdcWKc2+rZlJuNdUZpp3i+1AxDzso6gNVr8elp5mQBwyih
+ OomIUR6D+vNcDkWXO5+Q8gKdQX61v9mU+n8ATTEZhsSMyquxL/gqeLAJVBZk7YCnr/NO
+ oU3ylEgDHq41p/+ZeyZAwRAfxpD0pixDUa2+b1z2jjwXH41RE8pHgGKimHI7dxewQMFK
+ qG/JI5n4fZ1NsEA8f4Op1Ufyi82NHOm2pflAmpf68/ChszyMGIyROFT+MmhirOJG7UnJ
+ fuAPZUf5T/OOaHvM8O1b1iGg+XcC0wMi87WWJDZYZk5Z7j/3GjZOBUP/bp5wvYDBJwQo Sg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qycts82hp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Jun 2023 08:24:47 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3528KdJf021011;
+        Fri, 2 Jun 2023 08:24:46 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qycts82gp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Jun 2023 08:24:46 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3524PFwY029727;
+        Fri, 2 Jun 2023 08:24:44 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3qu9g52etr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Jun 2023 08:24:44 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3528OgO620841096
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 2 Jun 2023 08:24:42 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ECF0E20043;
+        Fri,  2 Jun 2023 08:24:41 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AFDAA20040;
+        Fri,  2 Jun 2023 08:24:39 +0000 (GMT)
+Received: from [9.171.86.130] (unknown [9.171.86.130])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  2 Jun 2023 08:24:39 +0000 (GMT)
+Message-ID: <69103b6f490309c381432cae5fdabf02d80a4397.camel@linux.ibm.com>
+Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: add testcase for
+ FENTRY/FEXIT with 6+ arguments
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     menglong8.dong@gmail.com, olsajiri@gmail.com
 Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
         song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
@@ -64,56 +71,97 @@ Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
         hpa@zytor.com, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, mykolal@fb.com, shuah@kernel.org,
-        benbjiang@tencent.com, iii@linux.ibm.com, imagedong@tencent.com,
-        xukuohai@huawei.com, chantr4@gmail.com, zwisler@google.com,
-        eddyz87@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        benbjiang@tencent.com, imagedong@tencent.com, xukuohai@huawei.com,
+        chantr4@gmail.com, zwisler@google.com, eddyz87@gmail.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date:   Fri, 02 Jun 2023 10:24:39 +0200
+In-Reply-To: <20230602065958.2869555-6-imagedong@tencent.com>
+References: <20230602065958.2869555-1-imagedong@tencent.com>
+         <20230602065958.2869555-6-imagedong@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: OZyo1V2gEqpo0OuYbksRCJYMsJID6uEH
+X-Proofpoint-GUID: 2OlGBRXo8-YeGGwoA2SUDD3sHjlaOaZ3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-02_05,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ clxscore=1011 bulkscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 suspectscore=0
+ adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306020061
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 3:01=E2=80=AFPM <menglong8.dong@gmail.com> wrote:
->
+On Fri, 2023-06-02 at 14:59 +0800, menglong8.dong@gmail.com wrote:
 > From: Menglong Dong <imagedong@tencent.com>
-> @@ -2262,6 +2327,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
-age *im, void *image, void *i
->
->         if (flags & BPF_TRAMP_F_CALL_ORIG) {
->                 restore_regs(m, &prog, nr_regs, regs_off);
-> +               prepare_origin_stack(m, &prog, nr_regs, arg_stack_off);
->
->                 if (flags & BPF_TRAMP_F_ORIG_STACK) {
->                         emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8)=
-;
-> @@ -2321,14 +2387,14 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_=
-image *im, void *image, void *i
->         if (save_ret)
->                 emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, -8);
->
-> -       EMIT1(0x5B); /* pop rbx */
-> +       emit_ldx(&prog, BPF_DW, BPF_REG_6, BPF_REG_FP, -rbx_off);
->         EMIT1(0xC9); /* leave */
->         if (flags & BPF_TRAMP_F_SKIP_FRAME)
->                 /* skip our return address and return to parent */
->                 EMIT4(0x48, 0x83, 0xC4, 8); /* add rsp, 8 */
->         emit_return(&prog, prog);
->         /* Make sure the trampoline generation logic doesn't overflow */
-> -       if (WARN_ON_ONCE(prog > (u8 *)image_end - BPF_INSN_SAFETY)) {
-> +       if (prog > (u8 *)image_end - BPF_INSN_SAFETY) {
+>=20
+> Add test7/test12/test14 in fexit_test.c and fentry_test.c to test the
+> fentry and fexit whose target function have 7/12/14 arguments.
+>=20
+> And the testcases passed:
+>=20
+> ./test_progs -t fexit
+> $71=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fentry_fexit:OK
+> $73/1=C2=A0=C2=A0=C2=A0 fexit_bpf2bpf/target_no_callees:OK
+> $73/2=C2=A0=C2=A0=C2=A0 fexit_bpf2bpf/target_yes_callees:OK
+> $73/3=C2=A0=C2=A0=C2=A0 fexit_bpf2bpf/func_replace:OK
+> $73/4=C2=A0=C2=A0=C2=A0 fexit_bpf2bpf/func_replace_verify:OK
+> $73/5=C2=A0=C2=A0=C2=A0 fexit_bpf2bpf/func_sockmap_update:OK
+> $73/6=C2=A0=C2=A0=C2=A0 fexit_bpf2bpf/func_replace_return_code:OK
+> $73/7=C2=A0=C2=A0=C2=A0 fexit_bpf2bpf/func_map_prog_compatibility:OK
+> $73/8=C2=A0=C2=A0=C2=A0 fexit_bpf2bpf/func_replace_multi:OK
+> $73/9=C2=A0=C2=A0=C2=A0 fexit_bpf2bpf/fmod_ret_freplace:OK
+> $73/10=C2=A0=C2=A0 fexit_bpf2bpf/func_replace_global_func:OK
+> $73/11=C2=A0=C2=A0 fexit_bpf2bpf/fentry_to_cgroup_bpf:OK
+> $73/12=C2=A0=C2=A0 fexit_bpf2bpf/func_replace_progmap:OK
+> $73=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fexit_bpf2bpf:OK
+> $74=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fexit_sleep:OK
+> $75=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fexit_stress:OK
+> $76=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fexit_test:OK
+> Summary: 5/12 PASSED, 0 SKIPPED, 0 FAILED
+>=20
+> ./test_progs -t fentry
+> $71=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fentry_fexit:OK
+> $72=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fentry_test:OK
+> $140=C2=A0=C2=A0=C2=A0=C2=A0 module_fentry_shadow:OK
+> Summary: 3/0 PASSED, 0 SKIPPED, 0 FAILED
+>=20
+> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+> =C2=A0net/bpf/test_run.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 30 +++++++++++++++-
+> =C2=A0.../testing/selftests/bpf/progs/fentry_test.c | 34
+> ++++++++++++++++++
+> =C2=A0.../testing/selftests/bpf/progs/fexit_test.c=C2=A0 | 35
+> +++++++++++++++++++
+> =C2=A03 files changed, 98 insertions(+), 1 deletion(-)
 
-Oops, this line is a mistake, and I should keep it still.
+Don't you also need
 
->                 ret =3D -EFAULT;
->                 goto cleanup;
->         }
-> --
-> 2.40.1
->
+--- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+@@ -34,7 +34,7 @@ void test_fentry_fexit(void)
+        fentry_res =3D (__u64 *)fentry_skel->bss;
+        fexit_res =3D (__u64 *)fexit_skel->bss;
+        printf("%lld\n", fentry_skel->bss->test1_result);
+-       for (i =3D 0; i < 8; i++) {
++       for (i =3D 0; i < 11; i++) {
+                ASSERT_EQ(fentry_res[i], 1, "fentry result");
+                ASSERT_EQ(fexit_res[i], 1, "fexit result");
+        }
+
+to verify the results of the new tests?
