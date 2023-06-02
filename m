@@ -2,115 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A22071FEDA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 12:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65B071FF37
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 12:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbjFBKUn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 06:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S235587AbjFBK0B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 06:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233986AbjFBKUj (ORCPT
+        with ESMTP id S235584AbjFBKYx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:20:39 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B66194;
-        Fri,  2 Jun 2023 03:20:38 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 12:20:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1685701235; bh=p8zy09hQZDIIVHzkSV9VXJxDfAUWj/mvEvyOT3k7A/Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HXAY/JzAJzZGzRxkerz7y+d+s64mDEh57DaAujLAWHIUZJkFJSVPGYOa+IvRPH32t
-         MTKDzLcBUTuikb6NM8VUOjmr9e63fAiEmOGZKG7pTGvVmorEemK6nGONfxAY38evcp
-         WWvGkvyaAQTYpX3dXfxbB5L60xEVkWEpTRDqH9l8=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: test_fork: fix up duplicated print
-Message-ID: <a72cac9d-609f-4c4f-a7f8-7c6b89837e0a@t-8ch.de>
-References: <61bdfe7bacebdef8aa9195f6f2550a5b0d33aab3.1685426545.git.falcon@tinylab.org>
- <20230602024157.11151-1-falcon@tinylab.org>
+        Fri, 2 Jun 2023 06:24:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB66E75
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 03:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685701412;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PxTIvBa280tFX1Ziuv3vXhP9JFFIHvNa5gTAJi66bKg=;
+        b=gnH58Su0r+IJpal9J81SX4ylFfEgi73wbPHyq/vLywSvoWfIaTRNy0vtegKS/jMfz162Ho
+        qIZPTH8WbzfMnfK/jKLZMwotx9YpWEozvnPDVN02GhYB1MUt35yiWHtAxNAhlcTZcpNGX4
+        xG+6bORrSfWYtc6E6ja99Bh73nOJiOc=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-456-iXYIf9ukNR6Xidu9dgOOvA-1; Fri, 02 Jun 2023 06:23:31 -0400
+X-MC-Unique: iXYIf9ukNR6Xidu9dgOOvA-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30af222c5feso1022899f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jun 2023 03:23:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685701410; x=1688293410;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PxTIvBa280tFX1Ziuv3vXhP9JFFIHvNa5gTAJi66bKg=;
+        b=aR0zFrqSNin1Mt4bztJOUqHpCxwcNKztCltHTnsyOBUY0pgzOQa+Q79mZzp9mGK2X7
+         spO/jiIuuULwE9Ld5E7QaPQGnIF4/FPGaSLMlWZsOpzx6SMAsvxz70U7QgpU+lIiYZsS
+         PBwG14c31Iptsr1zyG2CHyd4eceoUghzRYl2oj+ZRp5g6/JeU2QtI1i38TXfprN6uDyz
+         VVttyHvOHFiyM5rH07zcQnS/0lzAoyGT7uAlzyqRRr4XMGZya2WK6FRf92PPrm7bfh+/
+         oo4wgYbwZOiWa7RdOQBDAT+OyloatDCGgrikJRSNIGTXiQk/VvStUUcWccTaHkonEY2b
+         BG5g==
+X-Gm-Message-State: AC+VfDxrq4A0K1kcbbfHrQVfkJNySlJz5fvZ7r7CK6RpCYkZTYgZoxOd
+        2a1RqlNtvpAJYUVXH6q9ts/+o2NvCgx+PtplaNEXAQkS6h6BZKsf1CSUhY8R9IwTA0TRvXR/EV8
+        9NV3uvBpyy6D6/pLzRlP7fs+qNGDH
+X-Received: by 2002:adf:e905:0:b0:30a:e499:e5ff with SMTP id f5-20020adfe905000000b0030ae499e5ffmr4186473wrm.30.1685701410384;
+        Fri, 02 Jun 2023 03:23:30 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5VxWw+nvusOgvfBrsCuX+swQ9iMsm5wh4JYGmC+BxQY+ezR55VhpYbTbnv+HzMc9NMkzKcbQ==
+X-Received: by 2002:adf:e905:0:b0:30a:e499:e5ff with SMTP id f5-20020adfe905000000b0030ae499e5ffmr4186466wrm.30.1685701410071;
+        Fri, 02 Jun 2023 03:23:30 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
+        by smtp.gmail.com with ESMTPSA id w1-20020a5d6081000000b0030adc30e9f1sm1249661wrt.68.2023.06.02.03.23.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 03:23:29 -0700 (PDT)
+Message-ID: <7a999b80-e266-2b7e-f198-869b1ac7cde7@redhat.com>
+Date:   Fri, 2 Jun 2023 12:23:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230602024157.11151-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 11/12] selftests/mm: fix missing UFFDIO_CONTINUE_MODE_WP
+ and similar build failures
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-12-jhubbard@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230602013358.900637-12-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-06-02 10:41:57+0800, Zhangjin Wu wrote:
-> Hi, Willy
+On 02.06.23 03:33, John Hubbard wrote:
+> UFFDIO_CONTINUE_MODE_WP, UFFD_FEATURE_WP_UNPOPULATED, USERFAULTFD_IOC,
+> and USERFAULTFD_IOC_NEW are needed lately, but they are not in my host
+> (Arch Linux) distro's userfaultfd.h yet. So put them in here.
 > 
-> What about this one for 2023xxxx-nolibc-rv32+stkp6?
+> A better approach would be to include the uapi version of userfaultfd.h
+> from the kernel tree, but that currently fails with rather difficult
+> linker problems (__packed is defined multiple times, ugg), so defer that
+> to another day and just fix the build for now.
 > 
-> @Thomas, welcome your Reviewed-by If it is ok for you ;-)
-
-Indeed, good catch!
-
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-
-> Best regards,
-> Zhangjin
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>   tools/testing/selftests/mm/uffd-common.h | 17 +++++++++++++++++
+>   1 file changed, 17 insertions(+)
 > 
-> > running nolibc-test with glibc on x86_64 got such print issue:
-> > 
-> >     29 execve_root = -1 EACCES                                       [OK]
-> >     30 fork30 fork = 0                                                      [OK]
-> >     31 getdents64_root = 712                                         [OK]
-> > 
-> > The fork test case has three printf calls:
-> > 
-> >     (1) llen += printf("%d %s", test, #name);
-> >     (2) llen += printf(" = %d %s ", expr, errorname(errno));
-> >     (3) llen += pad_spc(llen, 64, "[FAIL]\n"); --> vfprintf()
-> > 
-> > In the following scene, the above issue happens:
-> > 
-> >     (a) The parent calls (1)
-> >     (b) The parent calls fork()
-> >     (c) The child runs and shares the print buffer of (1)
-> >     (d) The child exits, flushs the print buffer and closes its own stdout/stderr
-> >         * "30 fork" is printed at the first time.
-> >     (e) The parent calls (2) and (3), with "\n" in (3), it flushs the whole buffer
-> >         * "30 fork = 0 ..." is printed
-> > 
-> > Therefore, there are two "30 fork" in the stdout.
-> > 
-> > Between (a) and (b), if flush the stdout (and the sterr), the child in
-> > stage (c) will not be able to 'see' the print buffer.
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index 7de46305f419..88323a60aa4a 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -486,7 +486,13 @@ static int test_getpagesize(void)
-> >  static int test_fork(void)
-> >  {
-> >  	int status;
-> > -	pid_t pid = fork();
-> > +	pid_t pid;
-> > +
-> > +	/* flush the printf buffer to avoid child flush it */
-> > +	fflush(stdout);
-> > +	fflush(stderr);
-> > +
-> > +	pid = fork();
-> >  
-> >  	switch (pid) {
-> >  	case -1:
-> > -- 
-> > 2.25.1
-> > 
-> > 
+> diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+> index a1cdb78c0762..98847e41ecf9 100644
+> --- a/tools/testing/selftests/mm/uffd-common.h
+> +++ b/tools/testing/selftests/mm/uffd-common.h
+> @@ -36,6 +36,23 @@
+>   
+>   #define UFFD_FLAGS	(O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY)
+>   
+> +#ifndef UFFDIO_CONTINUE_MODE_WP
+> +#define UFFDIO_CONTINUE_MODE_WP			((__u64)1<<1)
+> +#endif
+> +
+> +#ifndef UFFD_FEATURE_WP_UNPOPULATED
+> +#define UFFD_FEATURE_WP_UNPOPULATED		(1<<13)
+> +#endif
+> +
+> +/* ioctls for /dev/userfaultfd */
+> +#ifndef USERFAULTFD_IOC
+> +#define USERFAULTFD_IOC 0xAA
+> +#endif
+> +
+> +#ifndef USERFAULTFD_IOC_NEW
+> +#define USERFAULTFD_IOC_NEW _IO(USERFAULTFD_IOC, 0x00)
+> +#endif
+> +
+>   #define _err(fmt, ...)						\
+>   	do {							\
+>   		int ret = errno;				\
+
+Unfortunately, that seems to be the ugly way to handle this because
+including the in-tree headers seems to not work and I yet haven't
+figured out why (there were some changes back and forth so I lost track).
+
+CFLAGS = -Wall -I $(top_srcdir) -I $(top_srcdir)/tools/include/uapi $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+
