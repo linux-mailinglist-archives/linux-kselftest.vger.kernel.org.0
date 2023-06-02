@@ -2,141 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5341C720229
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 14:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD5B72024E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 14:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234838AbjFBMfs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 08:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
+        id S235423AbjFBMmz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 08:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234454AbjFBMfr (ORCPT
+        with ESMTP id S235099AbjFBMmz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 08:35:47 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9DA1AD;
-        Fri,  2 Jun 2023 05:35:45 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id EC9D36022A;
-        Fri,  2 Jun 2023 14:35:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1685709341; bh=GiY3PCo8QniBGQj8UyN1CTuqS77BAaXgU5sGuqLnEdY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FLnNLs1dcZL5+6rWxY58jjfclTzOGkjXmGlj5p0yNu4qy3DGX6V4QugUz22jOAc2D
-         OZApZNCrULkT3JnEPAE8iSkgir7xUovMMqyrMCO/WfXWKAWSQVhV+rsI095EPX/Eod
-         rSQq0TLMVx32SF2Zrsa6Hj/x54QiOUZWdOjZmnmXiR+u8T7Q0WlEiVf3e3RpYYfSG6
-         6nRen4vk+2HREtDi8BqyjK/IfAX9AA8vFfhUBgIwbB1sW3Nc7CMX0hb5SmpHLteDt4
-         EFRE0881ZZ/EYppYJ/1oUXoD9rmPsdz5g3z9+oQouLTlkD5Uhq8XyqAkq3wY+AQLXI
-         1uAvpClXoyDdQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4Pd8hLSxYaBA; Fri,  2 Jun 2023 14:35:39 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id EB7C560228;
-        Fri,  2 Jun 2023 14:35:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1685709339; bh=GiY3PCo8QniBGQj8UyN1CTuqS77BAaXgU5sGuqLnEdY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RKvZ3VSztT9yChVj5zizTrLrpxx2oTMy1YPAZVIFuGCSG3uaICafD5G6MlwZXIQtC
-         k4x8u3lvcKo01ltXVvBbW3dRBSs0h0muB1OBOPul+EF1J6EufFac5iIqBQkzg0cvdo
-         P5ukL7/mv3ncuGHvN32+P7pIDdPxRsPkQGSbUSAEwTZBv2MP4Kv9VdoRptx2OvjU7V
-         VJvMjTtNRy4ogAnyypHkOkp5SegP8rtDOM8zKXxFaW8bFqA4/LJLxfB5uM7KeCCxM8
-         1hjR9Nwh/CTrRWDPwOcYPL8lHGCQmJjHUX0NqQEyY2Ys6SneMvc/kody3lrOSbtAs8
-         0Kzv+wUkGjVFA==
-Message-ID: <015f6430-f6f3-61e3-25b8-2d989f4f3496@alu.unizg.hr>
-Date:   Fri, 2 Jun 2023 14:35:20 +0200
+        Fri, 2 Jun 2023 08:42:55 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A6A196
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 05:42:53 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f6a6e9d90dso213331cf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jun 2023 05:42:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685709772; x=1688301772;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6JCTvniZ12mr+m+9b8RtDFwDRmM7sUAnvwKqhY7Pabw=;
+        b=sm13f6K2f8Fb1b27q819RtEObuwO6Dn+jj3C81BOG8A0rgXFLXg02UJxkBnqunFpEQ
+         MwvFGvQBhy7JhvE+/50TABk2lqxlCmVlB/OjHzw+rYI7vwSthAihNrIwVEgmcy5fr+F4
+         nf/idPVXHFhINwULTGV5eeid5SKHI4AlQwczeTmvTaYMbFfPIvFWirhr9JHap2dqr7nr
+         xFm2mxTCbsHXgndL95QoNq7t/hgXtMW3Hj/sMHz5KWwE5XAPn7fgkoDanPXGQxHYbbv8
+         YTCx1JSG4Fj8TChtKRbnR6bJkkN2qonAFIkrikDd372VB6jj/iV4Kpjhk6lFj53wr3gc
+         UE/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685709772; x=1688301772;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6JCTvniZ12mr+m+9b8RtDFwDRmM7sUAnvwKqhY7Pabw=;
+        b=ZgxrKT+GvnC4GZ0QWsQi8cPFFBOiDd9tbIWJCU95I03hOjhekemLnLBIZYFK9i9P/9
+         op3DMrI6PSXkAXmxbusNCl+0dATXoV9DlhXES8yOsITitIgfJvuSrUIb50vAB6jYVTUV
+         5orblTYe1tsM2gaOks9ul1RW8xNc4QmE+WHp14gFydsdPxflAwA4Wj8O0RSLetdi4ig+
+         ZAi9BKvbHC50/ivjsw6wU5KDcenBRcw03Gm4Zq9ZjVnTBVJQQabhvoCIqS9Bp/OCgF1y
+         cGYEVI8jmFh6qtrLlcFGiIFY8xstCiNGCmFToz7JWUAadIzTHXklN+8hctXJnwoUAcKO
+         9GGA==
+X-Gm-Message-State: AC+VfDyDsTzALXyFVyPhJ9RC20pbpeE4zEY65Os9ai6IeeocIipjmNTO
+        um1nd1YWr/todxAmROJpQb6TuyV9NvI2GsfsVNPqLQ==
+X-Google-Smtp-Source: ACHHUZ45RXhxoQvn5SzZNHD16ojn6LjWG4pZNYIxIujy/hJ+5sqvE6H0YdN3WyjGCLOFnFD3CIG0D1c/qLQnMfevDUk=
+X-Received: by 2002:a05:622a:91:b0:3f8:1db6:201c with SMTP id
+ o17-20020a05622a009100b003f81db6201cmr161246qtw.13.1685709772498; Fri, 02 Jun
+ 2023 05:42:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL] in vrf "bind -
- ns-B IPv6 LLA" test
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+References: <20230421141723.2405942-1-peternewman@google.com>
+ <20230421141723.2405942-9-peternewman@google.com> <c27972ef-1b17-36dd-50b8-790f7994733f@intel.com>
+In-Reply-To: <c27972ef-1b17-36dd-50b8-790f7994733f@intel.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Fri, 2 Jun 2023 14:42:41 +0200
+Message-ID: <CALPaoCjQkZvW+11KV+j23EiY8EV=rV6ai6pCVBR+=6SdS24KOg@mail.gmail.com>
+Subject: Re: [PATCH v1 8/9] x86/resctrl: Use mbm_update() to push soft RMID counts
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stephane Eranian <eranian@google.com>,
+        James Morse <james.morse@arm.com>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
- <ZHeN3bg28pGFFjJN@debian>
-Content-Language: en-US
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZHeN3bg28pGFFjJN@debian>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/31/23 20:11, Guillaume Nault wrote:
-> On Wed, May 24, 2023 at 02:17:09PM +0200, Mirsad Todorovac wrote:
->> Hi,
-> 
-> Hi Mirsad,
+Hi Reinette,
 
-Hi Guillaume,
+On Thu, May 11, 2023 at 11:40=E2=80=AFPM Reinette Chatre
+<reinette.chatre@intel.com> wrote:
+> On 4/21/2023 7:17 AM, Peter Newman wrote:
+> >       list_for_each_entry(prgrp, &rdt_all_groups, rdtgroup_list) {
+> > -             mbm_update(r, d, prgrp->mon.rmid);
+> > +             /*
+> > +              * mbm_update() on every RMID would result in excessive I=
+PIs
+> > +              * when RMIDs are soft.
+> > +              */
+> > +             if (!rdt_mon_soft_rmid) {
+> > +                     mbm_update(r, d, prgrp->mon.rmid);
+> >
+> > -             head =3D &prgrp->mon.crdtgrp_list;
+> > -             list_for_each_entry(crgrp, head, mon.crdtgrp_list)
+> > -                     mbm_update(r, d, crgrp->mon.rmid);
+> > +                     head =3D &prgrp->mon.crdtgrp_list;
+> > +                     list_for_each_entry(crgrp, head, mon.crdtgrp_list=
+)
+> > +                             mbm_update(r, d, crgrp->mon.rmid);
+> > +             }
+> >
+> >               if (is_mba_sc(NULL))
+> >                       update_mba_bw(prgrp, d);
+>
+>
+> hmmm ... I think that update_mba_bw() relies on mbm_update() to call
+> mbm_bw_count() to update the data it depends on. Keeping update_mba_bw()
+> while dropping mbm_update() thus seems problematic. AMD does not support =
+the
+> software controller though so it may make things simpler if support for
+> software RMIDs disables support for software controller (in a clear way).
 
->> The very recent 6.4-rc3 kernel build with AlmaLinux 8.7 on LENOVO 10TX000VCR
->> desktop box fails one test:
->>
->> [root@host net]# ./fcnal-test.sh
->> [...]
->> TEST: ping out, vrf device+address bind - ns-B loopback IPv6                  [ OK ]
->> TEST: ping out, vrf device+address bind - ns-B IPv6 LLA                       [FAIL]
->> TEST: ping in - ns-A IPv6                                                     [ OK ]
->> [...]
->> Tests passed: 887
->> Tests failed:   1
->> [root@host net]#
-> 
-> This test also fails on -net. The problem is specific to ping sockets
-> (same test passes with raw sockets). I believe this test has always
-> failed since fcnal-test.sh started using net.ipv4.ping_group_range
-> (commit e71b7f1f44d3 ("selftests: add ping test with ping_group_range
-> tuned")).
-> 
-> The executed command is:
-> 
-> ip netns exec ns-A ip vrf exec red /usr/bin/ping6 -c1 -w1 -I 2001:db8:3::1 fe80::a846:b5ff:fe4c:da4e%eth1
-> 
-> So ping6 is executed inside VRF 'red' and sets .sin6_scope_id to 'eth1'
-> (which is a slave device of VRF 'red'). Therefore, we have
-> sk->sk_bound_dev_if == 'red' and .sin6_scope_id == 'eth1'. This fails
-> because ping_v6_sendmsg() expects them to be equal:
-> 
-> static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
-> {
-> ...
->                  if (__ipv6_addr_needs_scope_id(ipv6_addr_type(daddr)))
->                          oif = u->sin6_scope_id;
-> ...
->          if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
->              (addr_type & IPV6_ADDR_MAPPED) ||
->              (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if)) <-- oif='eth1', but ->sk_bound_dev_if='red'
->                  return -EINVAL;
-> ...
-> }
+I looked over this again and realized that the rationale for skipping
+mbm_update() in this patch is incorrect.
+__mon_event_count_soft_rmid() does not send any IPIs, so it's
+perfectly fine to call mbm_update() and update_mba_bw() when using
+soft RMIDs.
 
-Thank you for your thorough investigation. It helps a great deal to
-understand the issue.
+Even if we don't use the software controller on AMD, it seems
+conceptually cleaner to just allow soft and hard RMIDs to be used
+interchangeably wherever they work.
 
-I am really not that into the network stack, though I can always smuggle
-the work on the network stack as a work on high-bandwidth multimedia
-and do it in day hours.
-
-Probably I need to catch up with the network stack homework.
-
-> I believe this condition should be relaxed to allow the case where
-> ->sk_bound_dev_if is oif's master device (and maybe there are other
-> VRF cases to also consider).
-
-I have looked into the code, but currently my knowledge of the code is
-not sufficient for the intervention.
-
-Thank you,
-Mirsad
+-Peter
