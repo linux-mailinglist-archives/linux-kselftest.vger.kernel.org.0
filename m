@@ -2,50 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C05D720101
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 13:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43601720121
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 14:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234826AbjFBL5j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 07:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
+        id S235551AbjFBMIm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 08:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbjFBL5i (ORCPT
+        with ESMTP id S234948AbjFBMI1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:57:38 -0400
-X-Greylist: delayed 28230 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Jun 2023 04:57:07 PDT
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65D9E51;
-        Fri,  2 Jun 2023 04:57:07 -0700 (PDT)
-X-QQ-mid: bizesmtp64t1685706961t67k8i2u
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 02 Jun 2023 19:56:00 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: k0mQ4ihyJQP+tm91rx4PnDCmNQx5PlLwmtBQSrIufi4NAs5P4d+to5cY+J9hh
-        j6hHs7pOK7V5F+ibUiR11d0sToIwGWe4Ram8/xcpzKIE3vKMmmMNKmt8lz3Wn4olhM06oWt
-        H666d4tbc+l4sQjOCxcsEi5CPTLfiWEy3j8hSQ/HT8sy7+4y/BpjoXyFyUMUIv27G8oBf0X
-        JZ5ho8q4c59oWMl+xPMHaK1TQAAu09sFAG5T37oZv3VC+IXrokEIWxC+2TGn3CXq0W96ggQ
-        PNT9foAp++WO8LIezYegS8gXGU1TuVM0kVqt6u232qWUwFow2Hl6T5UbKHOnBM69z3hc88e
-        Nv8frKO+BPnA3F94Ey691NDgdk66n7I452RQ/xYaGM3PZhOntByV/5svIRIRg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 7108637236776978947
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        w@1wt.eu
-Subject: Re: [PATCH v2 13/13] selftests/nolibc: riscv: customize makefile for rv32
-Date:   Fri,  2 Jun 2023 19:56:00 +0800
-Message-Id: <20230602115600.80382-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <f7cb4209-a70f-4f59-8b11-2d189908f18c@t-8ch.de>
-References: <f7cb4209-a70f-4f59-8b11-2d189908f18c@t-8ch.de>
+        Fri, 2 Jun 2023 08:08:27 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEA8E7
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 05:08:25 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f6094cb2d2so20089535e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jun 2023 05:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685707704; x=1688299704;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6N5RSBDUYVnk68nNFO5iJo36EpLGHeNx7EXSoald+6Y=;
+        b=vbCorPrw3tzdPss9fLKN2Jev52SLfxSgOQqoKYqSY65ZLrLB+P74BJBRbJMFFlcFg2
+         V7Ot2gZjxhSVBPFfbnvwW9yQnphdHhOVXVBSwm4xRuxJ7ex+cLBItdHMh0IW9kYNykOa
+         7ioPtcQlOz5kRi11B/L0Pqn/A4DqxsPhLJciZSe5it+Ilkag+UN92q1nxXIWDU/bW0qK
+         6n+AgA2OZjG9C+NW4fCSkwSci3fkVM85PC1Jj5pey0miF/c1R/uevQGKz7/OoRj2qh4D
+         /Wvth9lpOh+tzo6e1tyb8kTh0oojqqD8BaMgr10akG2ABdWDuoArukXsPjYCzyfN3h4D
+         0dPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685707704; x=1688299704;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6N5RSBDUYVnk68nNFO5iJo36EpLGHeNx7EXSoald+6Y=;
+        b=iXeLmgkTp/hSjmCKDTIelpUxOX3ujupdMD/sUec5Nck3zxU1jcYp3icuOlmv5TDAkM
+         7/kdr4TE/p3kXu/BwR/M85XuP4QJ4MHP7YywezIYPZnK/mCnzjCUeejbiko2GwWo8jN1
+         5ApBRpFBg272nzjRzmjmF0KAt2zUj/srkUiXmVKO3uQ/7Rhg4wthVCmYMfLvJvL9dD91
+         IyOIB0wvw7mEoHRiH2sGoR5TQDCXJj3C86f9KwvXsAW0zCn2+EPWe4xfMYRKyCSL95NM
+         5B4d+VsCVM6xnih8p2UvczmMxPYMlVFo4Iu2GnTL6/dSE9K0J0pLSQldp+F3hTd4z8mX
+         3vwQ==
+X-Gm-Message-State: AC+VfDzLGfZj/n7ED8HgTaJOa9UhjhvISUMIxabFG1qIz7I8qPOW12lL
+        J3jdUwLSXbHkyuS02S2N3kJrXQ==
+X-Google-Smtp-Source: ACHHUZ7oZo7G5GE5Au7PiQOHzixE8gijDSexUoXlU0n8rp+47guVjLqwzhNWj3i4s1C/PP2kjor3sg==
+X-Received: by 2002:a7b:c3cb:0:b0:3f4:c28b:ec88 with SMTP id t11-20020a7bc3cb000000b003f4c28bec88mr1799069wmj.41.1685707704172;
+        Fri, 02 Jun 2023 05:08:24 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id a19-20020a05600c225300b003f42d8dd7ffsm1784513wmm.19.2023.06.02.05.08.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 05:08:22 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 15:08:19 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Janosch Frank <frankja@linux.ibm.com>
+Cc:     Colin Ian King <colin.i.king@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] KVM: s390: selftests: Fix spelling mistake
+ "initally" -> "initially"
+Message-ID: <bbd79f29-f490-4fe4-b5b9-2a0a85c31431@kadam.mountain>
+References: <20230602102330.1230734-1-colin.i.king@gmail.com>
+ <f0f0587b-5f19-82bd-3d58-bdb89ff59f8c@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0f0587b-5f19-82bd-3d58-bdb89ff59f8c@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,110 +79,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On 2023-06-02 12:06:25+0800, Zhangjin Wu wrote:
-> > Willy, Arnd and Thomas
+On Fri, Jun 02, 2023 at 01:07:45PM +0200, Janosch Frank wrote:
+> On 6/2/23 12:23, Colin Ian King wrote:
+> > There is a spelling mistake in literal string. Fix it.
 > > 
-> > Based on your suggestions, in the comming v3, I plan to split the whole rv32
-> > support to something like this:
+> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > 
-> Is each of these parts a new patchset?
-
-Yeah, It is also my plan, just like the v2 series.
-
-> I would suggest to do so.
+> Hey Colin,
 > 
-> > 1. Generic part1
-> > 
-> >    (The old feedbacks are applied with the new Suggested-by lines, welcome your
-> >     additional feedbacks if there are ;-))
-> > 
-> >     selftests/nolibc: syscall_args: use generic __NR_statx
-> >     tools/nolibc: add missing nanoseconds support for __NR_statx
-> >     selftests/nolibc: allow specify extra arguments for qemu
-> >     selftests/nolibc: fix up compile warning with glibc on x86_64
-> >     selftests/nolibc: not include limits.h for nolibc
-> >     selftests/nolibc: use INT_MAX instead of __INT_MAX__
-> >     tools/nolibc: arm: add missing my_syscall6
-> >     tools/nolibc: open: fix up compile warning for arm
-> >     selftests/nolibc: support two errnos with EXPECT_SYSER2()
-> >     selftests/nolibc: remove gettimeofday_bad1/2 completely
-> >     selftests/nolibc: add new gettimeofday test cases
+> I'm not a big fan of such fixes since they are most of the time more work
+> for the maintainers than they are worth and accepting one can result in a
+> flood of similar new patches. If this would have been your first ever patch
+> I might have considered picking this but that's not the case.
 > 
-> These all look good and non-controversial.
-> 
-> > 2. Add Compile support for rv32
-> > 
-> >    (Convert all of the unsupported syscalls to a return of -ENOSYS, this
-> >     allows us to fix up the test failures one by one not that urgently later)
-> > 
-> >     tools/nolibc: fix up #error compile failures with -ENOSYS
-> >     tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
-> 
-> These should be their own series in my opinion.
-> It will likely generate some discussion.
+> That being said, if one of the other maintainers choose to pick it I won't
+> stand in their way.
 
-The 1st one is not rv32 specific, but the 2nd one requires rv32 compile support
-to be validated.
+I kind of get dread when people ask me to fix a typo in my commit
+message.  The drudgery of Sort by thread, Up arrow to the patch, Hit e,
+Fix the typo, Add the v2 to the subject, The little note under the
+--- cut off, and Hit send.  FML, right?  So I sympathize about not
+caring about spelling.  But this is a user visible string.  Kind of.
+It's testing code...
 
-> 
-> >     selftests/nolibc: riscv: customize makefile for rv32
-> > 
-> >    (The first two are new but clear enough, based on the idea of suggestion from Arnd [1])
-> > 
-> > 3. Fix up the left test failures one by one
-> 
-> I'm not a fan of adding an "official" rv32 support with still failing
-> tests.
->
+You should improve your process so it's easier to apply patches.  For
+me, I type "i" to review this patch in context.  Then "ESC:q" to leave
+vim.  Then "ap" to apply the patch.  It's six key strokes.  Anything
+more than 10 key strokes to review and apply a patch is not Web Scale.
 
-That is reasonable, but in another side, without the rv32 compile support, It
-may be a little hard to test the left patchsets (see below explain).
-
-The other reasons for rv32 compile support is:
-
-* Some people may use nolibc without the left syscalls.
-* It is able to detect the new test failures.
-
-But anyway, the compile support is not urgent.
-
-> >    (Plan to add everyone as a standalone patchset, which will easier the review
-> >     and merge progress)
-> > 
-> >    wait4 -> waitid
-> >    lseek -> llseek
-> >    gettimeofday -> clock_gettime/clock_gettime64
-> >    select -> pselect6/pselect6_time64
-> >    ppoll -> ppoll_time64
-> 
-> I guess these new codepaths will also be used on non-rv32 architectures
-> and will therefore validated without rv32.
->
-
-Unfortunately, most of them are time32 syscalls related (except the
-llseek), rv32 is the first architecture who has no kernel side time32
-syscalls support, that's why I plan to add compile support at first ;-)
-
-If the new time64 syscalls will be added as the first 'branch', then, they will
-be validated on the other 32bit architecture, but some of them may be not added
-as the first 'branch', for example, the waitid() emulated wait4() is bigger
-than the original one.
-
-> So you could submit these before the final rv32 patch in a series.
->
-
-Thanks for your suggestion.
-
-I'm working on cleaning up them independently and carefully, will send them out
-as standalone patchsets.
-
-Best regards,
-Zhangjin
- 
-> > 4. Clean up some old test cases one by one
-> > 
-> >    Like statx ...
-> > 
-> > Best regards,
-> > Zhangjin
-> > 
-> > [1]: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
+regards,
+dan carpenter
