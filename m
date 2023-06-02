@@ -2,218 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3025B71FE99
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 12:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E8971FEBE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 12:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235204AbjFBKIb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 06:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
+        id S234451AbjFBKQb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 06:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235202AbjFBKIX (ORCPT
+        with ESMTP id S234416AbjFBKQa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:08:23 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C1C1AD
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 03:08:19 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230602100817euoutp01a92605cb8aaa4830493aa5e79e744950~kz6vKrk4_0248402484euoutp01W
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 10:08:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230602100817euoutp01a92605cb8aaa4830493aa5e79e744950~kz6vKrk4_0248402484euoutp01W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1685700497;
-        bh=f1HjrLD6njVVPjduaddJfi5+Ds9joRkOIy3esLq1bnY=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=ZpZ8dW85nTYstRrklw7jGepnTiGBveS5HeGJPFdQ2cdTyjfCrydvKtCVD8AaS40hm
-         +cMvD7ssylGvBGm7rzHBkH5ANmlLZtNYJRH021nPz1PPu+LzDuAEbV5w6zTQHGGq+8
-         MzWlo+UULNbe3B+64ZUKHH5gMa3GJ+Swv1lK0Sd4=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230602100817eucas1p2a857bad455aa25270c84dfb1ff6ee0a5~kz6vDIJOP1995219952eucas1p2x;
-        Fri,  2 Jun 2023 10:08:17 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id F1.30.42423.19FB9746; Fri,  2
-        Jun 2023 11:08:17 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230602100816eucas1p2c945884b8fd81603dbb39f65f1189f42~kz6uvPKLb1573615736eucas1p29;
-        Fri,  2 Jun 2023 10:08:16 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230602100816eusmtrp13ae771f8a5597a66fa213d5326d501b4~kz6usXowp1803818038eusmtrp1U;
-        Fri,  2 Jun 2023 10:08:16 +0000 (GMT)
-X-AuditID: cbfec7f2-a3bff7000002a5b7-bc-6479bf914b3b
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 5C.34.14344.09FB9746; Fri,  2
-        Jun 2023 11:08:16 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230602100816eusmtip19e65f13776df3900286781284b8272be~kz6uf3oq-0246202462eusmtip1I;
-        Fri,  2 Jun 2023 10:08:16 +0000 (GMT)
-Received: from localhost (106.210.248.205) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Fri, 2 Jun 2023 11:08:15 +0100
-From:   Joel Granados <j.granados@samsung.com>
-To:     <mcgrof@kernel.org>
-CC:     <linux-kselftest@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Joel Granados <j.granados@samsung.com>
-Subject: [PATCH 4/8] test_sysctl: Add an unregister sysctl test
-Date:   Fri, 2 Jun 2023 12:08:01 +0200
-Message-ID: <20230602100805.777917-5-j.granados@samsung.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230602100805.777917-1-j.granados@samsung.com>
+        Fri, 2 Jun 2023 06:16:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E30E7
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 03:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685700947;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uPvme/9+RDZ+9w0fYgLw3wyLzBbpYxFjL26wqZOhscw=;
+        b=WEQsl9T0eIBrIHOzjFeW1b+jJ+lO5FZLNv5netpkSbEB9orxaDpEKykUe5ejjtYptG6l0R
+        81gumJOSqvSqDjdY0rW/Bp0hLtjT4oJAKjySIZOGIffvxecNNFG+YWMXuI+ZUk3BxVoc4U
+        gGq+LCbJFnoz16HsWQMsMBwk49yR6qk=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-437-iFeVIj9ZPQW5ZHdtq-nVmg-1; Fri, 02 Jun 2023 06:15:46 -0400
+X-MC-Unique: iFeVIj9ZPQW5ZHdtq-nVmg-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4ecb00906d0so1452600e87.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jun 2023 03:15:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685700944; x=1688292944;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uPvme/9+RDZ+9w0fYgLw3wyLzBbpYxFjL26wqZOhscw=;
+        b=DGSvoFtRyZltuWg45w3iYO2PDsvSVATWFg17olaKJnJQ+hOsu60s9IGUzZb115KRUL
+         Pcq2jfAhjKlxNGcn5JgxwBLXLYcPS2wy6gVANQ4Y+hPRxgig03bCmTX3tyUhqj5MTdgb
+         XZPP+/Ergd2wJJ85VCPembyxGGF8/DosCFnhTepNDGOnDkonAwMge1XH1Dty1Ku9ddgO
+         9H0sCJpD9jcrzCH5dJJutCEZb48WyowIaWWkI5dYU+ankGaWJUv3s/Es2UxbajhL05BQ
+         J0QiB5CCHxGDnnP7YwWubimaDcfrKIiocn5mtbzLJPgJ9lsB3GD1sDYAXq5N0s7X62Nd
+         CJxg==
+X-Gm-Message-State: AC+VfDzvFQf20LSNO+9LkQ51PXD2jBCWUHIEPOoJxEi1zEPqE1xoYaC0
+        j27HKNriFGMg7yylb6PEHmixx3zpWZDzJOIgRuzZ8EDhI71G15dzvBf8B0E9My7Us0yoGCzPDQe
+        G7TlEgCydwzE4cO4MY9nmOfuvdUx4
+X-Received: by 2002:ac2:532d:0:b0:4ec:8a12:9e70 with SMTP id f13-20020ac2532d000000b004ec8a129e70mr1334467lfh.46.1685700944737;
+        Fri, 02 Jun 2023 03:15:44 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7IemvF/IUVgg95b8zFHrHq1WWMIhPUj3/5NhLu7ZmNjrVXcZp17cOt/tYACTTH5SJF+gqVJg==
+X-Received: by 2002:ac2:532d:0:b0:4ec:8a12:9e70 with SMTP id f13-20020ac2532d000000b004ec8a129e70mr1334465lfh.46.1685700944385;
+        Fri, 02 Jun 2023 03:15:44 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
+        by smtp.gmail.com with ESMTPSA id f18-20020a1cc912000000b003f4e3ed98ffsm1446681wmb.35.2023.06.02.03.15.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 03:15:43 -0700 (PDT)
+Message-ID: <4faf7915-761c-c471-399f-3fcdfc208fd8@redhat.com>
+Date:   Fri, 2 Jun 2023 12:15:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [106.210.248.205]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBIsWRmVeSWpSXmKPExsWy7djPc7oT91emGLxpYLHYs/cki8XlXXPY
-        LKbfec9mcWPCU0YHFo9NqzrZPD5vkgtgiuKySUnNySxLLdK3S+DKONSyhLHgtEjFqv67LA2M
-        bwS6GDk5JARMJE5daWTpYuTiEBJYwSgx781FZgjnC6PEiT1v2SGcz4wS/2dPZ4RpaV4zGapq
-        OaPEs8enGeGqju18D5XZwijx4eFHVpAWNgEdifNv7jCD2CIC4hInTm8GG8UsMIFRYtYhDhBb
-        WMBeYt6xa0wgNouAisSKX+/ZQGxeARuJtzf3s0Oslpdouw5xBqeArcSyGU+ZIGoEJU7OfMIC
-        MVNeonnrbGYIW0Li4IsXzBC9yhIT1v1mhbBrJU5tucUEcqiEwB4OiSW7VkMVuUjsnfUDqkhY
-        4tXxLVCLZSROT+5hgWiYzCix/98HdghnNaPEssavTBBV1hItV55AdThK/J71FuhUDiCbT+LG
-        W0GIi/gkJm2bzgwR5pXoaBOawKgyC8kPs5D8MAvJDwsYmVcxiqeWFuempxYb5qWW6xUn5haX
-        5qXrJefnbmIEJo7T/45/2sE499VHvUOMTByMhxglOJiVRHiFwspThHhTEiurUovy44tKc1KL
-        DzFKc7AoifNq255MFhJITyxJzU5NLUgtgskycXBKNTCllCYxfN0W415uU8gR++7KpbLXcVP+
-        Om2ZKCW+6Vfv/riI2+Y6Bz3Wr0yf4KB16+C+XzYf19fqPz8SISkuYDpZ5iObaYvG/gTb689F
-        Lu2VqfwX94/HqmFDh8aZqCyx9p+3jrzbu3z+7Ve/X962P/gm32rKXla1rmbbjvW/hQuMnLj3
-        xuRc1eHoC10WncPnW/5E8L32on0Nhc+KPnvOiWLvY9NzykhJWqfemvZy/ebT8qLboiSVJ216
-        9n9+lJWb8o0Dh3NSW4+ocvpvW5lpYzIv0Sh5qoNo9OLiLaG7fHtCOOLYza5MYVZ4YPbtgfi/
-        hNsr502ZN2mb9H2Fs71Hw25eVj3jbHzJU4m1++sxXSklluKMREMt5qLiRACa29ZmiwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPIsWRmVeSWpSXmKPExsVy+t/xu7oT9lemGPzu1rTYs/cki8XlXXPY
-        LKbfec9mcWPCU0YHFo9NqzrZPD5vkgtgitKzKcovLUlVyMgvLrFVija0MNIztLTQMzKx1DM0
-        No+1MjJV0rezSUnNySxLLdK3S9DLONSyhLHgtEjFqv67LA2MbwS6GDk5JARMJJrXTGbuYuTi
-        EBJYyihx8sFVNoiEjMTGL1dZIWxhiT/Xutggij4ySkzZehHK2cIo0bl1IVgVm4COxPk3d5hB
-        bBEBcYkTpzczgtjMAhMYJWYd4gCxhQXsJeYdu8YEYrMIqEis+PUebBuvgI3E25v72SG2yUu0
-        XZ8O1sspYCuxbMZTsHohoJrzjyYxQ9QLSpyc+YQFYr68RPPW2cwQtoTEwRcvmCHmKEtMWPcb
-        6oNaic9/nzFOYBSZhaR9FpL2WUjaFzAyr2IUSS0tzk3PLTbSK07MLS7NS9dLzs/dxAiMqW3H
-        fm7Zwbjy1Ue9Q4xMHIyHGCU4mJVEeIXCylOEeFMSK6tSi/Lji0pzUosPMZoC/TmRWUo0OR8Y
-        1Xkl8YZmBqaGJmaWBqaWZsZK4ryeBR2JQgLpiSWp2ampBalFMH1MHJxSDUyl8nIHRKRnxDqs
-        nRudve7986SADffllJ6Hz9/+fTvLLMlDIRfSPBv4zppMa9m1bOmtx59WezcGJdue0WLoKZtr
-        kMq4yymKw0CM3XnvK/X5/44nFeUelrvP8FQsfj7nARefMq/1LC86wn1tFoSEGs3bclTlNm/9
-        z0LlqSwJRbu4Si76+bLo5DBXsSkslf236E+TxWrt9zv7LIJbDzql9s74ePnOovup3ftf3p83
-        v07rAZ9jhB/nDve2Uo0nu4Uzk298MX3VcOAUq8CsstCGb0biXf7hS32lnDIvWiq1HQ3RSBVZ
-        9JyZy1clvXJij/Gj0IutpbNal206Erd/C9/HDfG8vkWLmOfzXnpc4MpqpMRSnJFoqMVcVJwI
-        AKZM7RIyAwAA
-X-CMS-MailID: 20230602100816eucas1p2c945884b8fd81603dbb39f65f1189f42
-X-Msg-Generator: CA
-X-RootMTR: 20230602100816eucas1p2c945884b8fd81603dbb39f65f1189f42
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230602100816eucas1p2c945884b8fd81603dbb39f65f1189f42
-References: <20230602100805.777917-1-j.granados@samsung.com>
-        <CGME20230602100816eucas1p2c945884b8fd81603dbb39f65f1189f42@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 07/12] selftests/mm: set -Wno-format-security to avoid
+ uffd build warnings
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-8-jhubbard@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230602013358.900637-8-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test that checks that the unregistered directory is removed from
-/proc/sys/debug
+On 02.06.23 03:33, John Hubbard wrote:
+> The uffd_test_start() is perhaps a little too elaborate about how it
+> dispatches tests, leading to a clang warning that looks roughly like
+> this:
+> 
+> "uffd-unit-tests.c:1198:20: warning: format string is not a string literal
+> (potentially insecure) [-Wformat-security] ...note: treat the string as
+> an argument to avoid this.
+>      uffd_test_start(test_name);
+> "
+> 
+> However, it doesn't seem worth it to rewrite the way uffd_test_start()
+> works, given that these tests are already deeply unsafe to begin with.
+> 
+> Fix this by just disabling the compiler warning, but only for
+> uffd-unit-tests.
+> 
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>   tools/testing/selftests/mm/Makefile | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index 23af4633f0f4..473bf1811552 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -170,6 +170,8 @@ $(OUTPUT)/ksm_tests: LDLIBS += -lnuma
+>   
+>   $(OUTPUT)/migration: LDLIBS += -lnuma
+>   
+> +$(OUTPUT)/uffd-unit-tests: CFLAGS += -Wno-format-security
+> +
+>   local_config.mk local_config.h: check_config.sh
+>   	/bin/sh ./check_config.sh $(CC)
+>   
 
-Signed-off-by: Joel Granados <j.granados@samsung.com>
+Maybe the following will silence the warning by removing test_name
+completely:
+
+
 ---
- lib/test_sysctl.c                        | 30 ++++++++++++++++++++++++
- tools/testing/selftests/sysctl/sysctl.sh | 16 +++++++++++++
- 2 files changed, 46 insertions(+)
+  tools/testing/selftests/mm/uffd-unit-tests.c | 5 +----
+  1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
-index 0cf7c547d61a..555244687443 100644
---- a/lib/test_sysctl.c
-+++ b/lib/test_sysctl.c
-@@ -170,12 +170,42 @@ static int test_sysctl_setup_node_tests(void)
- 	return 0;
- }
- 
-+/* Used to test that unregister actually removes the directory */
-+static struct ctl_table test_table_unregister[] = {
-+	{
-+		.procname	= "unregister_error",
-+		.data		= &test_data.int_0001,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+	},
-+	{}
-+};
-+
-+static int test_sysctl_run_unregister_nested(void)
-+{
-+	struct ctl_table_header *unregister;
-+
-+	unregister = register_sysctl("debug/test_sysctl/unregister_error",
-+				   test_table_unregister);
-+	if (!unregister)
-+		return -ENOMEM;
-+
-+	unregister_sysctl_table(unregister);
-+	return 0;
-+}
-+
- static int __init test_sysctl_init(void)
- {
- 	int err;
- 
- 	err = test_sysctl_setup_node_tests();
-+	if (err)
-+		goto out;
- 
-+	err = test_sysctl_run_unregister_nested();
-+
-+out:
- 	return err;
- }
- module_init(test_sysctl_init);
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index cb8f83dfe16b..a6d79d7a36e4 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -31,6 +31,7 @@ ALL_TESTS="$ALL_TESTS 0005:3:1:int_0003"
- ALL_TESTS="$ALL_TESTS 0006:50:1:bitmap_0001"
- ALL_TESTS="$ALL_TESTS 0007:1:1:boot_int"
- ALL_TESTS="$ALL_TESTS 0008:1:1:match_int"
-+ALL_TESTS="$ALL_TESTS 0009:1:1:unregister_error"
- 
- function allow_user_defaults()
- {
-@@ -797,6 +798,20 @@ sysctl_test_0008()
- 	return 0
- }
- 
-+sysctl_test_0009()
-+{
-+	TARGET="${SYSCTL}/$(get_test_target 0009)"
-+	echo -n "Testing if $TARGET unregistered correctly ..."
-+	if [ -d $TARGET ]; then
-+		echo "TEST FAILED"
-+		rc=1
-+		test_rc
-+	fi
-+
-+	echo "ok"
-+	return 0
-+}
-+
- list_tests()
- {
- 	echo "Test ID list:"
-@@ -813,6 +828,7 @@ list_tests()
- 	echo "0006 x $(get_test_count 0006) - tests proc_do_large_bitmap()"
- 	echo "0007 x $(get_test_count 0007) - tests setting sysctl from kernel boot param"
- 	echo "0008 x $(get_test_count 0008) - tests sysctl macro values match"
-+	echo "0009 x $(get_test_count 0009) - tests sysct unregister"
- }
- 
- usage()
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 269c86768a02..15c76ce972be 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -1149,7 +1149,6 @@ int main(int argc, char *argv[])
+  	uffd_test_case_t *test;
+  	mem_type_t *mem_type;
+  	uffd_test_args_t args;
+-	char test_name[128];
+  	const char *errmsg;
+  	int has_uffd, opt;
+  	int i, j;
+@@ -1192,10 +1191,8 @@ int main(int argc, char *argv[])
+  			mem_type = &mem_types[j];
+  			if (!(test->mem_targets & mem_type->mem_flag))
+  				continue;
+-			snprintf(test_name, sizeof(test_name),
+-				 "%s on %s", test->name, mem_type->name);
+  
+-			uffd_test_start(test_name);
++			uffd_test_start("%s on %s", test->name, mem_type->name);
+  			if (!uffd_feature_supported(test)) {
+  				uffd_test_skip("feature missing");
+  				continue;
+
+
+Still gives me
+
+Testing register-ioctls on anon... done
+Testing register-ioctls on shmem... done
+Testing register-ioctls on shmem-private... done
+Testing register-ioctls on hugetlb... skipped [reason: memory allocation failed]
+Testing register-ioctls on hugetlb-private... skipped [reason: memory allocation failed]
+...
+
 -- 
-2.30.2
+Thanks,
+
+David / dhildenb
 
