@@ -2,46 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD8371F88C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 04:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523D971F88F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 04:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233326AbjFBCkm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Jun 2023 22:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S233189AbjFBCmF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Jun 2023 22:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233189AbjFBCkl (ORCPT
+        with ESMTP id S231628AbjFBCmE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Jun 2023 22:40:41 -0400
-X-Greylist: delayed 121 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Jun 2023 19:40:39 PDT
+        Thu, 1 Jun 2023 22:42:04 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2186F18D;
-        Thu,  1 Jun 2023 19:40:38 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1685673506t6z2puxi
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49631192;
+        Thu,  1 Jun 2023 19:42:03 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1685673718t57gxjvm
 Received: from linux-lab-host.localdomain ( [119.123.130.226])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 02 Jun 2023 10:38:25 +0800 (CST)
+        id ; Fri, 02 Jun 2023 10:41:57 +0800 (CST)
 X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: rZJGTgY0+YPGzwdzjqt7t/X/3VhreyvgOCYXCo0QKg7NFzI7XTezdNzxMJFju
-        Dcb4D8N/iXPWBhFeou+IcHl/zMt1j6LkDSgdrCx88ZcJ8nV/wEc7POcC7Lk5G8aJR7imUF3
-        sBGcqW9lbc4To4y84j+j4tNkWcQJ1NWg/GTgYTYVtvMT7E2PbaR7623iotEG8+Ux9Rq2dfh
-        TKfjZMjiFnsq5/zninxuVLxAZqku15fJtVJv6pzFclKs/U9yABHDEUdgkEGBTSLSOz/fU7B
-        VmglamnjsEsOVfe0uCpwWxthmIGIqtyLJEMmMdlOII3T+Iz+vNXKN04P6pwNlbm3k279DpO
-        4M9XqwV7RTCscln5DuuojQjct66ZBXJzX6ok0NC
+X-QQ-FEAT: rZJGTgY0+YPwgiakv+THh63hc5GL5wrSfdcmfDhOS6QGyKlpj/pA1lPZrNBJn
+        S2PuA7MPx5NA7C1rfVlK3kj2oDOohD86hqt9rTiKaOmnIgqgVP1kADXNm87bE0Qjkw65H4U
+        Nk9O/OhkDoD3LA8P7zp7FuOKWxCdZpUNdmU7cvTZ6vv60Gb06wmNjrL7npQ2VQtR77Ms9bn
+        FhHFtI3iToYyuF/K5irzIZWEtJQ83vw6ixMp0RFD6a39kGH8a3EItulQB9mugw/QJIGni7K
+        YVEhSnLbvNOgOu9eKMAAAc9ZnX4ISwso9Qu6n+Y3Htb7DVp9u9YwaMT+rHmhp9T5wkgsOuv
+        zjad4G8I8vZgaCL4E70g98xApxdF/8qQqRtJWpxFMb+MOMgF8izKZjerhpXPQ==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6246330034441517476
+X-BIZMAIL-ID: 6459984539969045256
 From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     linux@weissschuh.net, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [PATCH] selftests/nolibc: remove test gettimeofday_null
-Date:   Fri,  2 Jun 2023 10:38:24 +0800
-Message-Id: <20230602023824.11004-1-falcon@tinylab.org>
+To:     falcon@tinylab.org, thomas@t-8ch.de, w@1wt.eu
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/nolibc: test_fork: fix up duplicated print
+Date:   Fri,  2 Jun 2023 10:41:57 +0800
+Message-Id: <20230602024157.11151-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230530-nolibc-gettimeofday-v1-1-7307441a002b@weissschuh.net>
-References: <20230530-nolibc-gettimeofday-v1-1-7307441a002b@weissschuh.net>
+In-Reply-To: <61bdfe7bacebdef8aa9195f6f2550a5b0d33aab3.1685426545.git.falcon@tinylab.org>
+References: <61bdfe7bacebdef8aa9195f6f2550a5b0d33aab3.1685426545.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
@@ -57,53 +53,65 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi, Willy
 
-I plan to send the v3 of rv32 series, but this patch may conflict with:
+What about this one for 2023xxxx-nolibc-rv32+stkp6?
 
-    selftests/nolibc: remove gettimeofday_bad1/2 completely [1]
-
-If this is mergable, perhaps I should wait for your new
-2023xxxx-nolibc-rv32+stkp6 ;-)
-
-And I plan to add the gettimeofday_tv and gettimeofday_tv_tz in the new generic
-part1.
-
-    selftests/nolibc: add new gettimeofday test cases [2]
+@Thomas, welcome your Reviewed-by If it is ok for you ;-)
 
 Best regards,
 Zhangjin
 
-[1]: https://lore.kernel.org/linux-riscv/485fe4e27c1fd1a84d11e9fc47178a48de39263b.1685387484.git.falcon@tinylab.org/T/#u
-[2]: https://lore.kernel.org/linux-riscv/20230530112806.404017-1-falcon@tinylab.org/T/#u
-
-> gettimeofday() is not guaranteed by posix to handle a NULL value as first
-> argument gracefully.
-> On glibc for example it crashes. (When not going through the vdso)
+> running nolibc-test with glibc on x86_64 got such print issue:
 > 
-> Link: https://lore.kernel.org/lkml/96f1134d-ce6e-4d82-ae00-1cd4038809c4@t-8ch.de/
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+>     29 execve_root = -1 EACCES                                       [OK]
+>     30 fork30 fork = 0                                                      [OK]
+>     31 getdents64_root = 712                                         [OK]
+> 
+> The fork test case has three printf calls:
+> 
+>     (1) llen += printf("%d %s", test, #name);
+>     (2) llen += printf(" = %d %s ", expr, errorname(errno));
+>     (3) llen += pad_spc(llen, 64, "[FAIL]\n"); --> vfprintf()
+> 
+> In the following scene, the above issue happens:
+> 
+>     (a) The parent calls (1)
+>     (b) The parent calls fork()
+>     (c) The child runs and shares the print buffer of (1)
+>     (d) The child exits, flushs the print buffer and closes its own stdout/stderr
+>         * "30 fork" is printed at the first time.
+>     (e) The parent calls (2) and (3), with "\n" in (3), it flushs the whole buffer
+>         * "30 fork = 0 ..." is printed
+> 
+> Therefore, there are two "30 fork" in the stdout.
+> 
+> Between (a) and (b), if flush the stdout (and the sterr), the child in
+> stage (c) will not be able to 'see' the print buffer.
+> 
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 > ---
->  tools/testing/selftests/nolibc/nolibc-test.c | 1 -
->  1 file changed, 1 deletion(-)
+>  tools/testing/selftests/nolibc/nolibc-test.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
 > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index 7de46305f419..0fe615ebb086 100644
+> index 7de46305f419..88323a60aa4a 100644
 > --- a/tools/testing/selftests/nolibc/nolibc-test.c
 > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -583,7 +583,6 @@ int run_syscall(int min, int max)
->  		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork()); break;
->  		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
->  		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
-> -		CASE_TEST(gettimeofday_null); EXPECT_SYSZR(1, gettimeofday(NULL, NULL)); break;
->  #ifdef NOLIBC
->  		CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
->  		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
-> 
-> ---
-> base-commit: 5b21219d67d3483144d10332709d0c04f733ab93
-> change-id: 20230530-nolibc-gettimeofday-6c72a10ba1a3
-> 
-> Best regards,
+> @@ -486,7 +486,13 @@ static int test_getpagesize(void)
+>  static int test_fork(void)
+>  {
+>  	int status;
+> -	pid_t pid = fork();
+> +	pid_t pid;
+> +
+> +	/* flush the printf buffer to avoid child flush it */
+> +	fflush(stdout);
+> +	fflush(stderr);
+> +
+> +	pid = fork();
+>  
+>  	switch (pid) {
+>  	case -1:
 > -- 
-> Thomas Weißschuh <linux@weissschuh.net>
-
-
+> 2.25.1
+> 
+> 
