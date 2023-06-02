@@ -2,82 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37AF72088A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 19:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFD572089B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 19:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236971AbjFBRnB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 13:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
+        id S236678AbjFBRvo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 13:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236969AbjFBRnA (ORCPT
+        with ESMTP id S236039AbjFBRvn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 13:43:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FFF1A8;
-        Fri,  2 Jun 2023 10:42:58 -0700 (PDT)
-Received: from [192.168.10.48] (unknown [119.152.150.198])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9B04F6603219;
-        Fri,  2 Jun 2023 18:42:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685727776;
-        bh=L0+U78HTWagUwT0U3upt9ZPc9drPbE7g2HOGcZx4mCE=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=LeJMYY6wKBnv7EDGH62hwm8At5cqeLNlFPvkpvffEz6xuhvDCPrUML8prH4kUTDRR
-         JWO4lQM4PnBtnd4Ie/+Y1VOsOwW6kLMnfVilkXRxe65jBrW3IBDTYTGYTWshApZNbx
-         VL23DSeorVLuptfblOWGCDJzB4owZi6JxtNrBooOmZFEV1TeDdpI1FwWrYrzLgYiGe
-         9a1jZx4e3hzcx6jChuICMDluuWFoWO1ld0oNxypjaXN8FHRoSyTgSbIYdphtLCFrAu
-         H58NQIimv07V0LLPHu4HZYXfl7LTWU6a+CGMcujHO+m0/DHLDw/L29/ZDVFL6LyGEh
-         ncRw+pPm5ykSQ==
-Message-ID: <be70e76a-3875-6e1b-a5aa-b89d2368b904@collabora.com>
-Date:   Fri, 2 Jun 2023 22:42:45 +0500
+        Fri, 2 Jun 2023 13:51:43 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2057.outbound.protection.outlook.com [40.107.220.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04DA1A8;
+        Fri,  2 Jun 2023 10:51:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n2eoj55633ReNzJe0eQ4GPWiAYD5uIeA1arVHcxPqj5MPA2JDWQKD3H9tzXnXu63XHWBGTx/24/ctzzHUpNoctnGgMzoQwKJvexrGyeDyI8KrCbOAGsTn4VWouY8wNXy1apBPM+9FFco9G7Qg+rLjIsoBGQ/HovmuXZwBT4pD2zc6oOPn14PGwr3hYBPjGNbQ2/QRjwGWVxCdTIs3RUlPeODkkJUtlw4kyesL/B44Ci+w0BXQGSbbh/PYWxFeoGtzDcVVBlnHpsUsai/cswBtB65Gr0bVqHONanXI2HZ0uB1/4ZFE+kNMUD59Oo5lKqpygKuvPPNdvmneEibs/4bxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ArlhBNWfrfYLvdDT6FH5+CuEOoZGmmwVcCeIvrcZbH8=;
+ b=kT+3IC+FliQWe8HgzIvFJn+xZvFakGQg2MjmyHWpc6eoVGsMHREGZbOCdgxy++klAF1covrFWh2OWRdV9bisHCUrAFIsVFa3mbkjC8p3KOKr2rlDb0FalImthP70ynUi+ISnRinPlKeksnUqyD1sRfjSmx+A1D3CKvTOr+eqatzjn9MP1QDlfGpbXhsigefa4mOloYAU0Sizq4bALy33ZLlPfnPmt7q9cqXDpAFAUwIy3N78oDa52HJNUpJdKsg+a4bm7BbHSPM88TT/UjRDucV+2BTOcDchXX/5HdbXcSGdh7L2i5EiGJeQo0bA25XQuBnus2h5sG+F+3/rqkZXQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ArlhBNWfrfYLvdDT6FH5+CuEOoZGmmwVcCeIvrcZbH8=;
+ b=UpXZ901Urg5Sq8tZfwKuYFuSHWSTwigOYE3UjFbGqzwR38WNxr33VRn1rh4qB6OAUhjBVxgRAXH4c+hlZktag7zDLJsnatlfM71+8WWxim1LKP5SZjtlLMFklcLVFznsADnogR2/iCqTZ7VZACGtA9B5Qsx2PaZM1RqApJAyVE9AW/7w8+wVXz/5HGS60Apii6zwWp3xMtY3xML8KdYbaDcJ8e9xuFfaJ+aBG4BgJ/WyqhUPS/6XjK0ufjSUnKSM6Ro4KzsapseddRpiL/QPjn6nStpfp3FNruW1029I1gaQ67vwsLMLSUSpUebD0EkzO6STs5Kdta31+dlv9jYgbw==
+Received: from CYXPR02CA0029.namprd02.prod.outlook.com (2603:10b6:930:cc::27)
+ by DM4PR12MB5747.namprd12.prod.outlook.com (2603:10b6:8:5e::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Fri, 2 Jun
+ 2023 17:51:39 +0000
+Received: from CY4PEPF0000EE38.namprd03.prod.outlook.com
+ (2603:10b6:930:cc:cafe::4d) by CYXPR02CA0029.outlook.office365.com
+ (2603:10b6:930:cc::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26 via Frontend
+ Transport; Fri, 2 Jun 2023 17:51:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CY4PEPF0000EE38.mail.protection.outlook.com (10.167.242.12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.18 via Frontend Transport; Fri, 2 Jun 2023 17:51:39 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
+ 10:51:22 -0700
+Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
+ 10:51:21 -0700
+Message-ID: <2a826310-f948-66a7-2003-dcbf36e16caf@nvidia.com>
+Date:   Fri, 2 Jun 2023 10:51:21 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 00/12] A minor flurry of selftest/mm fixes
+To:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "Nathan Chancellor" <nathan@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <78c0b444-8a95-396e-5f5e-8175f94a49cc@redhat.com>
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230525085517.281529-1-usama.anjum@collabora.com>
- <20230525085517.281529-3-usama.anjum@collabora.com> <ZHfAOAKj1ZQJ+zSy@x1n>
- <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com> <ZHj7jmJ5fKla1Rax@x1n>
- <3589803d-5594-71de-d078-ad4499f233b6@collabora.com> <ZHodIFQesrCA53To@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZHodIFQesrCA53To@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <78c0b444-8a95-396e-5f5e-8175f94a49cc@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE38:EE_|DM4PR12MB5747:EE_
+X-MS-Office365-Filtering-Correlation-Id: aee756e1-1af3-4899-1301-08db6392047e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Dm2nSvV9bJQBcOpP0YpoaRNFs/YJvHL95jrlI547bhEzJF9VAeI7eM95HlDt+XctkEH6OMzGqA3B5T7sxypIh4ErefTj+XseE4g1a4pvdwFvtvkezaeDbUbMMHzvcPN5anDp8RZheKDhs62Rv28B/v/fooCXyWYJFzvpkK5WsStlVkzH3Vq9KX0Ydq5XPSV32MRjbw2Bw+V5Ldg0hVARIvdlIYEaSMGtn7MZpbR8C4sisCFLQN1Np0RcE9KuMoyqSHmp372m3V1rD28qLD0FSe0WYO4PcQ0Air/C2sB0urx2yCgI/6EWKD9drK/DeDv7r6SA3j0wTOuV1EO8hjUjOfmiQA/dZhtk0gZTmds9N1ZFcpE1v3pv+wJIQyg+wHN/5gFIVPncY55Mz0mV+EzNKrxHwvBB6N4yLF+wCmyptKnHPwlJKbFenAtDw2O1d9Dm4HiepAuk3AtqUdrllPSsvkxqnM6jhyitroPFT3/2ybhzjhOnQlJbObyr1kDm91FevWar2qk1uenNcfFzLjxGUHX8RLheX78uMjREMfdwi5Q3zurNXCk5CITJsxh2oRwT3tvG1axPqyRlh7OfzteaK8h3ppKja6cUcXvpLz/NqD5JK+0fvtTRngRNTEAAmin3XewgrOo9mbuA6yuipZxAEBvGQV/KPwPzfpS9f+fV3fOt1YUqnlr3zyrkJi9AA+G5WTfTWZY0iYtqfeD/yv2xMabRX9c7Mxmjs+bkcD11NUBQaRfpjrviQI7IklheeT2WnQaMO1LEjPLOWCMSgLQcPA==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(39860400002)(136003)(451199021)(46966006)(40470700004)(36840700001)(31696002)(36860700001)(2616005)(426003)(356005)(86362001)(336012)(26005)(40460700003)(83380400001)(7636003)(40480700001)(47076005)(4326008)(316002)(70206006)(8936002)(41300700001)(16526019)(8676002)(70586007)(36756003)(186003)(16576012)(478600001)(53546011)(110136005)(54906003)(82740400003)(5660300002)(82310400005)(31686004)(2906002)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 17:51:39.3709
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aee756e1-1af3-4899-1301-08db6392047e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE38.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5747
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,113 +111,32 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thank you for reviewing and helping out.
-
-On 6/2/23 9:47 PM, Peter Xu wrote:
-[...]
->>>> static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
->>>> 					 unsigned long addr, pte_t *ptep,
->>>> 					 pte_t ptent)
->>>> {
->>>> 	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
->>>> 		return;
->>>>
->>>> 	if (is_hugetlb_entry_migration(ptent))
->>>> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
->>>> 				pte_swp_mkuffd_wp(ptent));
->>>> 	else if (!huge_pte_none(ptent))
->>>> 		ptep_modify_prot_commit(vma, addr, ptep, ptent,
->>>> 					huge_pte_mkuffd_wp(ptent));
->>>> 	else
->>>> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
->>>> 				make_pte_marker(PTE_MARKER_UFFD_WP));
->>>> }
->>>
->>> the is_pte_marker() check can be extended to double check
->>> pte_marker_uffd_wp() bit, but shouldn't matter a lot since besides the
->>> uffd-wp bit currently we only support swapin error which should sigbus when
->>> accessed, so no point in tracking anyway.
->> Yeah, we are good with what we have as even if more bits are supported in
->> pte markers, this function is only reached when UNPOPULATED + ASYNC WP are
->> enabled. So no other bit would be set on the marker.
-> 
-> I think we don't know?  swapin error bit can be set there afaiu, if someone
-> swapoff -a and found a swap device broken for some swapped out ptes.
-Oops, so I remove returning on pte marker detection. Instead the last else
-is already setting marker wp-ed.
-
-> 
-> But again I think that's fine for now.
-> 
+On 6/2/23 02:32, David Hildenbrand wrote:
+> On 02.06.23 03:33, John Hubbard wrote:
+>> It turned out that an even dozen patches were required in order to get the
+>> selftests building cleanly, and all running, once again. I made it worse on
+>> myself by insisting on using clang, which seems to uncover a few more warnings
+>> than gcc these days.
 >>
->>>
->>>>
->>>> As we always set UNPOPULATED, so markers are always set on none ptes
->>>> initially. Is it possible that a none pte becomes present, then swapped and
->>>> finally none again? So I'll do the following addition for make_uffd_wp_pte():
->>>>
->>>> --- a/fs/proc/task_mmu.c
->>>> +++ b/fs/proc/task_mmu.c
->>>> @@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
->>>> vm_area_struct *vma,
->>>>  	} else if (is_swap_pte(ptent)) {
->>>>  		ptent = pte_swp_mkuffd_wp(ptent);
->>>>  		set_pte_at(vma->vm_mm, addr, pte, ptent);
->>>> +	} else {
->>>> +		set_pte_at(vma->vm_mm, addr, pte,
->>>> +			   make_pte_marker(PTE_MARKER_UFFD_WP));
->>>>  	}
->>>>  }
->>>
->>> Makes sense, you can leverage userfaultfd_wp_use_markers() here, and you
->>> should probably keep the protocol (only set the marker when WP_UNPOPULATED
->>> for anon).
->> This function is only reachable when UNPOPULATED + Async WP are set. So we
->> don't need to use userfaultfd_wp_use_markers().
+>> So I still haven't gotten to my original goal of running a new HMM test that
+>> Alistair handed me (it's not here yet), but at least this fixes everything I ran
+>> into just now.
 > 
-> I don't remember where you explicitly checked that to make sure it'll
-> always be the case, but if you do it'll still be nice if you can add a
-> comment right above here explaining.
-I was only testing for WP and WP Async in pagemap_scan_test_walk() as WP
-async can only be enabled if unpopulated is enabled which in turn enables
-the markers. I'll add userfaultfd_wp_use_markers() to pagemap_scan_test_walk().
+> Thanks, now I can stop commenting out some (IIRC primarily uffd-related) tests when just wanting to run some specific tests on some of odd installations :D
+
+aha! :)
 
 > 
-> Or, maybe you can still use userfaultfd_wp_use_markers() here, then you can
-> just WARN_ON_ONCE() on it, which looks even better?
-> 
-> [...]
-> 
->>> Hmm, is it a bug for pagemap?  pagemapread.buffer should be linear to the
->>> address range to be scanned to me.  If it skips some unstable pmd without
->>> filling in anything it seems everything later will be shifted with
->>> PMD_SIZE..  I had a feeling that it should set walk->action==ACTION_AGAIN
->>> before return.
->> I don't think this is a bug if this is how it was implemented in the first
->> place. In this task_mmu.c file, we can find several examples of the same
->> pattern that error isn't returned if pmd_trans_unstable() succeeds.
-> 
-> I don't see why multiple same usages mean it's correct.. maybe they're all
-> buggy?
-> 
-> I can post a patch for this to collect opinions to see if I missed
-> something. I'd suggest you figure out what's the right thing to do for the
-> new interface and make it right from the start, no matter how it was
-> implemented elsewhere.
-Alright. At first sight, it seems I should return -EAGAIN here. But there
-maybe a case where there are 3 THPs. I've cleared WP over the first THP and
-put data in the user buffer. If I return -EAGAIN, the data in the user
-buffer would be not used by the user correctly as negative value has been
-returned. So the best way here would be to skip this second VMA and don't
-abort the operation. Thus we'll not be giving any information about the
-second THP as it was in transition.
-
-I'll think about it again before sending next version.
-
-> 
-> Thanks,
+> I assume this round you only consideres 64bit builds, right? My last attempts with 32bit revealed a lot of issues, and I only fixed what I really wanted to test (COW).
 > 
 
+Yes, that's correct. I only tested on 64-bit. I've drifted into a
+"32 bit is mostly just for embedded systems" sort of mindset lately,
+and don't have anything set up for testing those locally.
+
+
+thanks,
 -- 
-BR,
-Muhammad Usama Anjum
+John Hubbard
+NVIDIA
+
