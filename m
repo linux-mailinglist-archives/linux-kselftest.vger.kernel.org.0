@@ -2,119 +2,269 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1DD2720025
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 13:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22FE720043
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 13:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235973AbjFBLIg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 07:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S235873AbjFBLTO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 07:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235974AbjFBLIX (ORCPT
+        with ESMTP id S235883AbjFBLTK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:08:23 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D4D1710;
-        Fri,  2 Jun 2023 04:07:59 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352AqmCM014170;
-        Fri, 2 Jun 2023 11:07:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=pGya8gbdF37FSuz5J6jvG9DnJK9JltewPjXiMfAALR8=;
- b=S2KWtDBzbKLFVl9LxUYtuBRurQ8xTXbNNzKYZ/g1dSkUAoWA6cyVCiamTOvY1aTVi+MW
- edG13xljTCr0FcmRAxH18S+RaLrAWAfATxl7ZMI62HHTJRmTPm/EdBhiwEUJFYZzigFj
- yEVnyREi7k0IrIyY3CojXrXAEulALoOVbdlvzvJ+f6IxBRzI+Dbc2uD75+Kl9w80cV5s
- JTHMp+ZUOOlNoubgMC5D8Krmi43cmk43abx+9r6esX6UINNHD0Z/vMxnPtP5Codt3tY4
- w6fHUDRJ/zLgfgOuLF2oLKepqp9xFWJR0JR3ipd+rORYmbhvDcMiA/b5USwl/fL8Bclr gw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qyf28gafh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 11:07:53 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 352AtWLg020700;
-        Fri, 2 Jun 2023 11:07:52 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qyf28gacv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 11:07:52 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3527NFDc002406;
-        Fri, 2 Jun 2023 11:07:50 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3qu94eag6r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 11:07:50 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 352B7kqu42860992
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 2 Jun 2023 11:07:46 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 87EF420043;
-        Fri,  2 Jun 2023 11:07:46 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0721C20040;
-        Fri,  2 Jun 2023 11:07:46 +0000 (GMT)
-Received: from [9.171.82.186] (unknown [9.171.82.186])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  2 Jun 2023 11:07:45 +0000 (GMT)
-Message-ID: <f0f0587b-5f19-82bd-3d58-bdb89ff59f8c@linux.ibm.com>
-Date:   Fri, 2 Jun 2023 13:07:45 +0200
+        Fri, 2 Jun 2023 07:19:10 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28BCE53;
+        Fri,  2 Jun 2023 04:18:50 -0700 (PDT)
+Received: from [192.168.10.48] (unknown [119.152.150.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D34AA6605835;
+        Fri,  2 Jun 2023 12:18:42 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685704729;
+        bh=W110dc+egvPhy7okk5EJDPoLL/gsrq4vUY4VfhaGHKs=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=jx7CVIBVrhjV5mkDEuSTZY3aWoyg0qNNIy8j0C3nRt+RuIQa6df7dHBAbYTZda4JM
+         HVtLzd6b7IQcfJ+fDfHz3db0ft+aPtL6q/j2oBmkCVRrkyr8RuaPe+055GK26uBULi
+         lVgh7nDLg9qqyYNcy1T3j5zUKKjIMaQ/xd6xV3zGiWXr1S8O5Fj5IM8P+TBq+IDHP+
+         m/VyYrvx5xThKFh7nrb1BVQYKUYKIBf7MyMjV67gx2JsjXb70FR4emk4f/PJr2tUT1
+         H04+H7LHk1RYmI09goMFibovTGJ/fehAC4rOvR2PO5moM36bQyxCzQRCCrt9i7pdbL
+         xsq8F3TGg61gQ==
+Message-ID: <3589803d-5594-71de-d078-ad4499f233b6@collabora.com>
+Date:   Fri, 2 Jun 2023 16:18:38 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230602102330.1230734-1-colin.i.king@gmail.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH][next] KVM: s390: selftests: Fix spelling mistake
- "initally" -> "initially"
-In-Reply-To: <20230602102330.1230734-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: x0dr5-b2j6XCGUtdtX4DRET1146Shs3I
-X-Proofpoint-ORIG-GUID: 7SCG-4IUZG_NfqZv6-Eo3nP17NC7wYkt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-02_08,2023-06-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=916 adultscore=0 suspectscore=0 bulkscore=0 clxscore=1011
- impostorscore=0 spamscore=0 malwarescore=0 priorityscore=1501 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306020082
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Peter Xu <peterx@redhat.com>
+References: <20230525085517.281529-1-usama.anjum@collabora.com>
+ <20230525085517.281529-3-usama.anjum@collabora.com> <ZHfAOAKj1ZQJ+zSy@x1n>
+ <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com> <ZHj7jmJ5fKla1Rax@x1n>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZHj7jmJ5fKla1Rax@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/2/23 12:23, Colin Ian King wrote:
-> There is a spelling mistake in literal string. Fix it.
+On 6/2/23 1:11 AM, Peter Xu wrote:
+> On Thu, Jun 01, 2023 at 01:16:14PM +0500, Muhammad Usama Anjum wrote:
+>> On 6/1/23 2:46 AM, Peter Xu wrote:
+>>> Muhammad,
+>>>
+>>> Sorry, I probably can only review the non-interface part, and leave the
+>>> interface/buffer handling, etc. review for others and real potential users
+>>> of it..
+>> Thank you so much for the review. I think mostly we should be okay with
+>> interface as everybody has been making suggestions over the past revisions.
+>>
+>>>
+>>> On Thu, May 25, 2023 at 01:55:14PM +0500, Muhammad Usama Anjum wrote:
+>>>> +static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+>>>> +					 unsigned long addr, pte_t *ptep,
+>>>> +					 pte_t ptent)
+>>>> +{
+>>>> +	pte_t old_pte;
+>>>> +
+>>>> +	if (!huge_pte_none(ptent)) {
+>>>> +		old_pte = huge_ptep_modify_prot_start(vma, addr, ptep);
+>>>> +		ptent = huge_pte_mkuffd_wp(old_pte);
+>>>> +		ptep_modify_prot_commit(vma, addr, ptep, old_pte, ptent);
+>>>
+>>> huge_ptep_modify_prot_start()?
+>> Sorry, I didn't realized that huge_ptep_modify_prot_start() is different
+>> from its pte version.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Here I meant huge_ptep_modify_prot_commit()..
+I'll update.
 
-Hey Colin,
+> 
+>>
+>>>
+>>> The other thing is what if it's a pte marker already?  What if a hugetlb
+>>> migration entry?  Please check hugetlb_change_protection().
+>> I've updated it in more better way. Please let me know what do you think
+>> about the following:
+>>
+>> static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+>> 					 unsigned long addr, pte_t *ptep,
+>> 					 pte_t ptent)
+>> {
+>> 	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
+>> 		return;
+>>
+>> 	if (is_hugetlb_entry_migration(ptent))
+>> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
+>> 				pte_swp_mkuffd_wp(ptent));
+>> 	else if (!huge_pte_none(ptent))
+>> 		ptep_modify_prot_commit(vma, addr, ptep, ptent,
+>> 					huge_pte_mkuffd_wp(ptent));
+>> 	else
+>> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
+>> 				make_pte_marker(PTE_MARKER_UFFD_WP));
+>> }
+> 
+> the is_pte_marker() check can be extended to double check
+> pte_marker_uffd_wp() bit, but shouldn't matter a lot since besides the
+> uffd-wp bit currently we only support swapin error which should sigbus when
+> accessed, so no point in tracking anyway.
+Yeah, we are good with what we have as even if more bits are supported in
+pte markers, this function is only reached when UNPOPULATED + ASYNC WP are
+enabled. So no other bit would be set on the marker.
 
-I'm not a big fan of such fixes since they are most of the time more 
-work for the maintainers than they are worth and accepting one can 
-result in a flood of similar new patches. If this would have been your 
-first ever patch I might have considered picking this but that's not the 
-case.
+> 
+>>
+>> As we always set UNPOPULATED, so markers are always set on none ptes
+>> initially. Is it possible that a none pte becomes present, then swapped and
+>> finally none again? So I'll do the following addition for make_uffd_wp_pte():
+>>
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+>> @@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
+>> vm_area_struct *vma,
+>>  	} else if (is_swap_pte(ptent)) {
+>>  		ptent = pte_swp_mkuffd_wp(ptent);
+>>  		set_pte_at(vma->vm_mm, addr, pte, ptent);
+>> +	} else {
+>> +		set_pte_at(vma->vm_mm, addr, pte,
+>> +			   make_pte_marker(PTE_MARKER_UFFD_WP));
+>>  	}
+>>  }
+> 
+> Makes sense, you can leverage userfaultfd_wp_use_markers() here, and you
+> should probably keep the protocol (only set the marker when WP_UNPOPULATED
+> for anon).
+This function is only reachable when UNPOPULATED + Async WP are set. So we
+don't need to use userfaultfd_wp_use_markers().
 
-That being said, if one of the other maintainers choose to pick it I 
-won't stand in their way.
+> 
+>>
+>>
+>>
+>>
+>>>
+>>>> +	} else {
+>>>> +		set_huge_pte_at(vma->vm_mm, addr, ptep,
+>>>> +				make_pte_marker(PTE_MARKER_UFFD_WP));
+>>>> +	}
+>>>> +}
+>>>> +#endif
+>>>
+>>> [...]
+>>>
+>>>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>>>> +				  unsigned long end, struct mm_walk *walk)
+>>>> +{
+>>>> +	struct pagemap_scan_private *p = walk->private;
+>>>> +	struct vm_area_struct *vma = walk->vma;
+>>>> +	unsigned long addr = end;
+>>>> +	pte_t *pte, *orig_pte;
+>>>> +	spinlock_t *ptl;
+>>>> +	bool is_written;
+>>>> +	int ret = 0;
+>>>> +
+>>>> +	arch_enter_lazy_mmu_mode();
+>>>> +
+>>>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>>>> +	ptl = pmd_trans_huge_lock(pmd, vma);
+>>>> +	if (ptl) {
+>>>> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
+>>>> +
+>>>> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>>>> +			n_pages = p->max_pages - p->found_pages;
+>>>> +
+>>>> +		is_written = !is_pmd_uffd_wp(*pmd);
+>>>> +
+>>>> +		/*
+>>>> +		 * Break huge page into small pages if the WP operation need to
+>>>> +		 * be performed is on a portion of the huge page.
+>>>> +		 */
+>>>> +		if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>>>> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>>>> +			spin_unlock(ptl);
+>>>> +
+>>>> +			split_huge_pmd(vma, pmd, start);
+>>>> +			goto process_smaller_pages;
+>>>> +		}
+>>>> +
+>>>> +		if (IS_PM_SCAN_GET(p->flags))
+>>>> +			ret = pagemap_scan_output(is_written, vma->vm_file,
+>>>> +						  pmd_present(*pmd),
+>>>> +						  is_swap_pmd(*pmd),
+>>>> +						  p, start, n_pages);
+>>>> +
+>>>> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+>>>> +			make_uffd_wp_pmd(vma, addr, pmd);
+>>>> +
+>>>> +		if (IS_PM_SCAN_WP(p->flags))
+>>>> +			flush_tlb_range(vma, start, end);
+>>>> +
+>>>> +		spin_unlock(ptl);
+>>>> +
+>>>> +		arch_leave_lazy_mmu_mode();
+>>>> +		return ret;
+>>>> +	}
+>>>> +
+>>>> +process_smaller_pages:
+>>>> +	if (pmd_trans_unstable(pmd)) {
+>>>> +		arch_leave_lazy_mmu_mode();
+>>>> +		return 0;
+>>>
+>>> I'm not sure whether this is right..  Shouldn't you return with -EAGAIN and
+>>> let the user retry?  Returning 0 means you'll move on with the next pmd
+>>> afaict and ignoring this one.
+>> This has come up before. We are just replicating pagemap_pmd_range() here
+>> as we are doing almost the same thing through IOCTL. It doesn't return any
+>> error in this case and just skips it. So we are doing the same.
+> 
+> Hmm, is it a bug for pagemap?  pagemapread.buffer should be linear to the
+> address range to be scanned to me.  If it skips some unstable pmd without
+> filling in anything it seems everything later will be shifted with
+> PMD_SIZE..  I had a feeling that it should set walk->action==ACTION_AGAIN
+> before return.
+I don't think this is a bug if this is how it was implemented in the first
+place. In this task_mmu.c file, we can find several examples of the same
+pattern that error isn't returned if pmd_trans_unstable() succeeds.
 
-Cheers,
-Janosch
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
