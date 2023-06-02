@@ -2,195 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5579672071A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 18:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3D6720760
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 18:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236885AbjFBQLP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 12:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S235208AbjFBQVi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 12:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236802AbjFBQK6 (ORCPT
+        with ESMTP id S235123AbjFBQVh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:10:58 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED2C1B8
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 09:10:12 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-650abd6d92eso1061041b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jun 2023 09:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685722192; x=1688314192;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pnaTvciscS5chSJrFdy/XWmGw+v5DL+sKG313yn6vtE=;
-        b=3qM+gPLnKOcFkte53nrFJ4yxYHfRvj6VAQ74elJ+qIzLMj97WYlQnMm+LRqHDvoho4
-         8AW7RUIjuOvTDqJRc6MGpLfknZTHUVt0ac+jf1e4fznmqTNQB1YeAez2Pbf+vu4gX/wo
-         xA9uw3YiFJ59xCiKuG3PqvgkOpwn1kfOyfDGnV3P6/41gfMjzqB9OHhb0wbZKNfck3ux
-         QuubqPWPIMr2dr+usJ/0oHW/nWAg0PkVCfHTFjYBlz4FbohVSt4JZLXej+/lCcVIkw51
-         dikq26nIlv8414HoG8qlckcW0gk8fed5eU7B/bJPELllDOCa6K4cYwpu/yZBPdgX/sdW
-         NMYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685722192; x=1688314192;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pnaTvciscS5chSJrFdy/XWmGw+v5DL+sKG313yn6vtE=;
-        b=dhk2iiPKRBtDNJNkF28Jv9VJKYVMAaiTym66hlUJy6GOmEmfuJAndgzBTfv9kIOp33
-         eO9wLHVPXU82KxfVqG8if0PDe78G64pefDTxH3Ro44DJnvmPITTyZ+cLhcw/GC0SRmu4
-         AlbYUv8z9wVrqnpqOedF0+zTF2goo39SNoXquyw11eQ88/Xsu+feFB16FaQCV6khlPqW
-         6y72UVdLEImdUUJofCKAoNzOlKdG9a1X9qwF8VZYxcfCkpaQlfJ2uUydjudOBWhIQj7e
-         uRQhmI0Cs1PIPcZYymerk62Tb5vE0FDMBcBbyVDrkoEZEGsnrKQnDeXn5aT7pbHIEzxk
-         MP6w==
-X-Gm-Message-State: AC+VfDzEnjt65icU7ZirQORE4oaIOnZ1qhbvcjZbGLfcjBnx4BuyY1tk
-        Wo7KC4X5nhVKZoukC66Nu2CbpkVnMXfv
-X-Google-Smtp-Source: ACHHUZ7CrgQcXBBk0scZtBwPutYqwQ0i1jeHWFv03iHedZStcHfAHgjqtsGQJinldbGkFtIY3nwdqwhDBsPu
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a05:6a00:2e1a:b0:64f:9e1b:d4a8 with SMTP
- id fc26-20020a056a002e1a00b0064f9e1bd4a8mr4922796pfb.1.1685722192061; Fri, 02
- Jun 2023 09:09:52 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 09:09:14 -0700
-In-Reply-To: <20230602160914.4011728-1-vipinsh@google.com>
-Mime-Version: 1.0
-References: <20230602160914.4011728-1-vipinsh@google.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230602160914.4011728-17-vipinsh@google.com>
-Subject: [PATCH v2 16/16] KVM: arm64: Split huge pages during clear-dirty-log
- under MMU read lock
-From:   Vipin Sharma <vipinsh@google.com>
-To:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
-        suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
-        anup@brainfault.org, atishp@atishpatra.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
-        dmatlack@google.com, ricarkol@google.com
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 2 Jun 2023 12:21:37 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2066.outbound.protection.outlook.com [40.107.223.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EE3E55;
+        Fri,  2 Jun 2023 09:21:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KN2FwpI+EOqS9vAYMfS+F2ye2GR08/C5A6M4VUM95Y6xUsH8ao31FYON7GNGlRh4cpV27jHx5VLEzKJnonVt5rL2hen0GLzml5NeEG1m35Qpj57LO3l5CXKasOTt4HYQinEBSpfjSn2jKGw3SpSHKFy4rX5tA3KAU+XTMwfSugIZErptN3M/Ps00sIWL2u0Zo0+vPTxCLi4QpFwwOxqv2HNAFzyfUNCGvaL47TNoawHcW8HFKodpckpKd1NLnoateTXtjls3mdb+MG0mrZYFH84tQgB834DxL90eIaWnjbX0ISPp9k/m7qm6LZVvaYrghNvKvjeF9q4JJGeUIyvDDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=855/DLlKiFeNQS4YmjvpO65TksLfn0yaNoyWQZ7a/hY=;
+ b=Yg+WGdrAu8quwdPG3d+5ehs0866D7xPsxmybsW2Xqsau39h+OF2k7ZOxWS5JW+eg9hM1Zd51gh1A1oRCvnLTPCdbOlIZMCt0KVvCZ87izk10BTixrWzERlecBxjQR9ZGHwMKafulSrvzIQ8y4AUAU1cfLLhBIKd7+Ebvobnhhf0ewYbbuFvR04w7LIPidpw7MSp9B/IG2hky5rohsaLRMnG25HTL2ehh6y2UhPN6vNLU+igeGCjFNxgLhUy+PXHvgCtlV35oKMcgJtgezQqDEhp2WNvjLjguYDdhFf2DhSI5Hk1yrHUB9xZ5lNqBoGmbJlxtYCcXCZXXUPP1jRXMFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=855/DLlKiFeNQS4YmjvpO65TksLfn0yaNoyWQZ7a/hY=;
+ b=U0DY9SuN/rwGDUkVbNIboxNWRAW+XHJfrgezTbTd2xAEN6YxQtY3quXfLxCTf7uQLoaG0+YL3F3JRBAKKfkDGUJfW8Zm1K7wJvMIi8ePjZdESdFI9bBKaWbXReRqexm7ra/aa4hwPVCwW//yLnMfNrNZ0K+ErpA8HLnDRoLDl4mY5dJ1F7eYejVA5X44t7JeGlHdZlJz4DaTk4I+FkSK8GcutV2N8bho2GoyRpaiIuv59ZWN2qqtiMBSgv61GE9yacvGeQoyRmu5ebcvq9VPivb5Q5WD4It7ERKi6SzUr9aWdUsPpxtoE244BFIKj4YisqwRAvt02VhsYJgCq1DYPA==
+Received: from BN9PR03CA0962.namprd03.prod.outlook.com (2603:10b6:408:109::7)
+ by SJ2PR12MB8183.namprd12.prod.outlook.com (2603:10b6:a03:4f4::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Fri, 2 Jun
+ 2023 16:20:43 +0000
+Received: from BN8NAM11FT071.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:109:cafe::db) by BN9PR03CA0962.outlook.office365.com
+ (2603:10b6:408:109::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26 via Frontend
+ Transport; Fri, 2 Jun 2023 16:20:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT071.mail.protection.outlook.com (10.13.177.92) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.24 via Frontend Transport; Fri, 2 Jun 2023 16:20:42 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
+ 09:20:26 -0700
+Received: from localhost.localdomain (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
+ 09:20:24 -0700
+From:   Petr Machata <petrm@nvidia.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>
+CC:     Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
+        "Amit Cohen" <amcohen@nvidia.com>,
+        Danielle Ratson <danieller@nvidia.com>,
+        <linux-kselftest@vger.kernel.org>, <mlxsw@nvidia.com>
+Subject: [PATCH net-next 0/8] mlxsw, selftests: Cleanups
+Date:   Fri, 2 Jun 2023 18:20:04 +0200
+Message-ID: <cover.1685720841.git.petrm@nvidia.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT071:EE_|SJ2PR12MB8183:EE_
+X-MS-Office365-Filtering-Correlation-Id: 00b21503-61aa-4789-a052-08db6385503f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WcZdHfIwFFTVW2P5Wz+uCP51YawKOKpGH+8Y8KFpnP17V4P3Bn0D7kvDoFx0C+Rleww8zVDNMr38+xgN159jwGGkCblDmquLaFTKrW2QAGyfyoei/3v/GkSZzRNe0rbGvkg9zcQmgia6WpYb3r42ZECzE2W6+dAUYJOjxSgLUebVd0UtmG++jpuhZ7rf5CUaUiYNQuCKRyiTp2VtPWduFk3IeKpmMVNau6Ak4T5MfZJUAPr3mixGCxVjSiwyz23xz7aE+yH0gpEBuLVtjx7yZZPATJgNhW7DcN1NdCykY1/mVGL7tqF+7AiVw+9dwxnOrNCthnO+/cjMh+4+Pzihor+MFZ7Q1AWB8k3GcQOEjnRz7Sm8VPTjM+55xNiD9AuAAz5CmtlkSOet3qerXacS/d2PQuZu6c+fXG/Q5lvWaD0ldPk6BntpVlOdecM4+sKxU0u0EDkb2tenWQaCBWRgd5wVkFyr8Pq+h3XELXM8p+81mBI9QcpXucZRG2lm/eDQEEe25jjm2Z70Mx6wpylWWjDEdvrh7yJyoouzzXdk5sddOltm/45VGozHQlQfGVDap+0yXvSXgo9C5iUFxYQF/Q7mSnJbQ8QsndBbRDODUnxnC7d5BVdzFeQ9D2hxYfteR7THMSJmQC3V0UIOpjM3DarQjFm7QXfRc6sq/+VLJoLPZ1Kcpd6C4dWRdru53Qm/fZpo2ztTHLYd7uGPL5KBLsPT7eQLRo/+8rzf6DOtpbrZv3BX+y66V8WDGfeVJpjL
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(376002)(136003)(451199021)(36840700001)(40470700004)(46966006)(54906003)(110136005)(8676002)(8936002)(4326008)(2906002)(70586007)(70206006)(478600001)(41300700001)(5660300002)(316002)(86362001)(107886003)(40460700003)(6666004)(26005)(356005)(40480700001)(186003)(16526019)(83380400001)(47076005)(336012)(36756003)(66574015)(7636003)(82740400003)(82310400005)(36860700001)(2616005)(426003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 16:20:42.9173
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00b21503-61aa-4789-a052-08db6385503f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT071.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8183
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Split huge pages under MMU read lock instead of write when clearing
-dirty log.
+This patchset consolidates a number of disparate items that can all be
+considered cleanups. They are all related to mlxsw in that they are
+directly in mlxsw code, or in selftests that mlxsw heavily uses.
 
-Running huge page split under read lock will unblock vCPUs execution and
-allow whole clear-dirty-log operation run parallelly to vCPUs.
+- patch #1 fixes a comment, patch #2 propagates an extack
 
-Note that splitting huge pages involves two walkers. First walker calls
-stage2_split_walker() callback on each huge page. This callback will call
-another walker which creates an unlinked page table. This commit makes
-first walker as shared page walker which means, -EAGAIN will be retried.
-Before this patch, -EAGAIN would have been ignored and walker would go
-to next huge page. In practice this would not happen as the first walker
-was holding MMU write lock. Inner walker is unchanged as it is working
-on unlinked page table so no other thread will have access to it.
+- patches #3 and #4 tweak several loops to query a resource once and cache
+  in a local variable instead of querying on each iteration
 
-To improve confidence in correctness tested via dirty_log_test.
+- patches #5 and #6 fix selftest diagrams, and #7 adds a missing diagram
+  into an existing test
 
-To measure performance improvement tested via dirty_log_perf_test.
+- patch #8 disables a PVID on a bridge in a selftest that should not need
+  said PVID
 
-Set up:
--------
-Host: ARM Ampere Altra host (64 CPUs, 256 GB memory and single NUMA
-      node)
+Petr Machata (8):
+  mlxsw: spectrum_router: Clarify a comment
+  mlxsw: spectrum_router: Use extack in
+    mlxsw_sp~_rif_ipip_lb_configure()
+  mlxsw: spectrum_router: Do not query MAX_RIFS on each iteration
+  mlxsw: spectrum_router: Do not query MAX_VRS on each iteration
+  selftests: mlxsw: ingress_rif_conf_1d: Fix the diagram
+  selftests: mlxsw: egress_vid_classification: Fix the diagram
+  selftests: router_bridge_vlan: Add a diagram
+  selftests: router_bridge_vlan: Set vlan_default_pvid 0 on the bridge
 
-Test VM: 48 vCPU, 192 GB total memory.
+ .../ethernet/mellanox/mlxsw/spectrum_router.c | 26 ++++++++++++-------
+ .../net/mlxsw/egress_vid_classification.sh    |  5 ++--
+ .../drivers/net/mlxsw/ingress_rif_conf_1d.sh  |  5 ++--
+ .../net/forwarding/router_bridge_vlan.sh      | 24 ++++++++++++++++-
+ 4 files changed, 43 insertions(+), 17 deletions(-)
 
-Ran dirty_log_perf_test for 400 iterations.
- ./dirty_log_perf_test -k 192G -v 48 -b 4G -m 2 -i 4000 -s anonymous_hugetlb_2mb -j
-
-Observation:
-------------
-
-+==================+=============================+===================+
-| Clear Chunk size | Clear dirty log time change | vCPUs improvement |
-+==================+=============================+===================+
-| 192GB            | 56%                         | 152%              |
-+------------------+-----------------------------+-------------------+
-| 1GB              | -81%                        | 72%               |
-+------------------+-----------------------------+-------------------+
-
-When larger chunks are used, clear dirty log time increases due to lots
-of cmpxchg() but vCPUs are also able to execute parallelly causing
-better performance of guest.
-
-When chunk size is small, read lock is very fast in clearing dirty logs
-as it is not waiting for MMU write lock and vCPUs are also able to run
-parallelly.
-
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
----
- arch/arm64/kvm/mmu.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
-
-diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index 6dd964e3682c..aa278f5d27a2 100644
---- a/arch/arm64/kvm/mmu.c
-+++ b/arch/arm64/kvm/mmu.c
-@@ -126,7 +126,10 @@ static int kvm_mmu_split_huge_pages(struct kvm *kvm, phys_addr_t addr,
- 	int ret, cache_capacity;
- 	u64 next, chunk_size;
- 
--	lockdep_assert_held_write(&kvm->mmu_lock);
-+	if (flags & KVM_PGTABLE_WALK_SHARED)
-+		lockdep_assert_held_read(&kvm->mmu_lock);
-+	else
-+		lockdep_assert_held_write(&kvm->mmu_lock);
- 
- 	chunk_size = kvm->arch.mmu.split_page_chunk_size;
- 	cache_capacity = kvm_mmu_split_nr_page_tables(chunk_size);
-@@ -138,13 +141,19 @@ static int kvm_mmu_split_huge_pages(struct kvm *kvm, phys_addr_t addr,
- 
- 	do {
- 		if (need_split_memcache_topup_or_resched(kvm)) {
--			write_unlock(&kvm->mmu_lock);
-+			if (flags & KVM_PGTABLE_WALK_SHARED)
-+				read_unlock(&kvm->mmu_lock);
-+			else
-+				write_unlock(&kvm->mmu_lock);
- 			cond_resched();
- 			/* Eager page splitting is best-effort. */
- 			ret = __kvm_mmu_topup_memory_cache(cache,
- 							   cache_capacity,
- 							   cache_capacity);
--			write_lock(&kvm->mmu_lock);
-+			if (flags & KVM_PGTABLE_WALK_SHARED)
-+				read_lock(&kvm->mmu_lock);
-+			else
-+				write_lock(&kvm->mmu_lock);
- 			if (ret)
- 				break;
- 		}
-@@ -1139,9 +1148,7 @@ void kvm_arch_mmu_enable_log_dirty_pt_masked(struct kvm *kvm,
- 
- 	read_lock(&kvm->mmu_lock);
- 	stage2_wp_range(&kvm->arch.mmu, start, end, KVM_PGTABLE_WALK_SHARED);
--	read_unlock(&kvm->mmu_lock);
- 
--	write_lock(&kvm->mmu_lock);
- 	/*
- 	 * Eager-splitting is done when manual-protect is set.  We
- 	 * also check for initially-all-set because we can avoid
-@@ -1151,8 +1158,8 @@ void kvm_arch_mmu_enable_log_dirty_pt_masked(struct kvm *kvm,
- 	 * again.
- 	 */
- 	if (kvm_dirty_log_manual_protect_and_init_set(kvm))
--		kvm_mmu_split_huge_pages(kvm, start, end, 0);
--	write_unlock(&kvm->mmu_lock);
-+		kvm_mmu_split_huge_pages(kvm, start, end, KVM_PGTABLE_WALK_SHARED);
-+	read_unlock(&kvm->mmu_lock);
- }
- 
- static void kvm_send_hwpoison_signal(unsigned long address, short lsb)
 -- 
-2.41.0.rc0.172.g3f132b7071-goog
+2.40.1
 
