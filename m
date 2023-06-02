@@ -2,58 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E599271F97D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 07:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E25271FA7B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 09:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233250AbjFBFAY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 01:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S234146AbjFBHBX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 03:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbjFBFAX (ORCPT
+        with ESMTP id S234156AbjFBHA7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 01:00:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEBF137
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Jun 2023 22:00:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C81564C42
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 05:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BE17EC433EF;
-        Fri,  2 Jun 2023 05:00:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685682020;
-        bh=+0YnzVPdvfQsJB2IuBvdw3uDqzNe7nGlUfPDVvc5UBg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=a8xpx63iAQKFimh6//rF1YQg63ucpL6/jE0B2luM+zu+4jNvwNFsZtgcZj0zBmO5+
-         Ksyg/nItb0PWwQfUZUv40zyvzvGvOK0lwbIdTWLMd7IsXfSjqdc8XvIAqPMuD59PBr
-         oyqL4v3Qv7wO/yQsedSX2cUzCDG39iy4XcZsTHn/sraZiDKK4gh+XVdwL8NSuQ3ucc
-         /CL0bm5Ilnj1w0gg6aiDOaANyF0xs92cFZlURtuOLYEgq0cIXomqnVciFDhY2HATVE
-         PPiuHaSjgnJTbNu0Xq3I5/YXXSD5p96tASJ7O6JXYPLnqWrefab5gWXnuLfnjXbtD8
-         vQjejlw5uJrFg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A2746E29F3E;
-        Fri,  2 Jun 2023 05:00:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 2 Jun 2023 03:00:59 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701651B9;
+        Fri,  2 Jun 2023 00:00:47 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id 6a1803df08f44-628f267aa5aso1177036d6.1;
+        Fri, 02 Jun 2023 00:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685689246; x=1688281246;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5+Dwvdqn0Nc+03wWkuuIbg+roLTPzxNXIEQmZzt/hu4=;
+        b=GTw6Eipm5S+VJeux5pubyt5ODlplECcBv00WjTFzhxwM5uiLPBp0HMHU+q4PaZYJp4
+         miKnL9tEPl9Cvug/XCS1Fc16h1s6W8QiX6E6xkntXvUYIERJ33BPFreVKg2XDcRZZiV0
+         qNhJr68zq9qeb6eXpqlnEXiGBv0ZzEJfQxRXVSdsP6PM7vssI5SHQFRbxvbnmU+m/Bsb
+         BFDmNI9jagVqSU/+JmIauQ0dOAeSjtXhXHrR6tix5J2EEkUx7okarpNE96agpK6tDjWt
+         tB7eti1gz/rBqPRTb51QofB4KsinH/4dUH8J3KkIO7n1SnWYlD/g8YwonxjAa5vDE4O9
+         3siA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685689246; x=1688281246;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5+Dwvdqn0Nc+03wWkuuIbg+roLTPzxNXIEQmZzt/hu4=;
+        b=KRXEayaWpHSh/GOmnoJQ18y/b50aUpZqclrw2EHlccTF22Je2eQBqFadbXulLiWzPE
+         FNlcs+s1H5/61uYVns5yKsqMHCzmhA2GIaeQMOin8tlI8syaLUvLnTbjZ2z6A10QosAC
+         tVJcNkmoNPAotHXmxM/i0y98RlJvjWHPGbFCfC2gr+KI7Quknum2wnex5yqsBPM/1glu
+         mK/5eViUefAMkP2yB1MLm0evkz3Jc/LUV/GbhwoseFJVSZ+6h68JJhkK1wGO0wHbjP5n
+         sVigbqfPkQjEq88z2VCfx1NmndgedtyNWHcAqDif8/yxxd4jWPjSboXW7E4arhmNg3bO
+         5IPA==
+X-Gm-Message-State: AC+VfDzMmTeXTFDB+7a0qL35poJqkZHO9ZJwXqb1CKn6N4hc1ODHHQf/
+        /2lrm0doK39iQWtacN8OTizq2nDvDUU++jyH
+X-Google-Smtp-Source: ACHHUZ6JzhZeLPUw8GX3KsQoF6VZHf0ewEJBuUixnXCbPihdMYOeiS8ui+TZC0md2WulZw7AvUnvTw==
+X-Received: by 2002:a05:6214:c8b:b0:626:1906:bcac with SMTP id r11-20020a0562140c8b00b006261906bcacmr12587680qvr.0.1685689246444;
+        Fri, 02 Jun 2023 00:00:46 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.24])
+        by smtp.gmail.com with ESMTPSA id jk11-20020a170903330b00b001ac7c725c1asm572716plb.6.2023.06.02.00.00.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 00:00:45 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     olsajiri@gmail.com
+Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mykolal@fb.com, shuah@kernel.org,
+        benbjiang@tencent.com, iii@linux.ibm.com, imagedong@tencent.com,
+        xukuohai@huawei.com, chantr4@gmail.com, zwisler@google.com,
+        eddyz87@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/5] bpf, x86: allow function arguments up to 14 for TRACING
+Date:   Fri,  2 Jun 2023 14:59:53 +0800
+Message-Id: <20230602065958.2869555-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next,v2] selftests/tc-testing: replace mq with invalid
- parent ID
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168568202066.24823.18027233483936915493.git-patchwork-notify@kernel.org>
-Date:   Fri, 02 Jun 2023 05:00:20 +0000
-References: <20230601012250.52738-1-shaozhengchao@huawei.com>
-In-Reply-To: <20230601012250.52738-1-shaozhengchao@huawei.com>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        shuah@kernel.org, kuba@kernel.org, victor@mojatatu.com,
-        peilin.ye@bytedance.com, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com, pctammela@mojatatu.com
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,29 +80,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+From: Menglong Dong <imagedong@tencent.com>
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+on the kernel functions whose arguments count less than 6. This is not
+friendly at all, as too many functions have arguments count more than 6.
 
-On Thu, 1 Jun 2023 09:22:50 +0800 you wrote:
-> The test case shown in [1] triggers the kernel to access the null pointer.
-> Therefore, add related test cases to mq.
-> The test results are as follows:
-> 
-> ./tdc.py -e 0531
-> 1..1
-> ok 1 0531 - Replace mq with invalid parent ID
-> 
-> [...]
+Therefore, let's enhance it by increasing the function arguments count
+allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
 
-Here is the summary with links:
-  - [net-next,v2] selftests/tc-testing: replace mq with invalid parent ID
-    https://git.kernel.org/netdev/net-next/c/a395b8d1c7c3
+In the 1th patch, we make MAX_BPF_FUNC_ARGS 14, according to our
+statistics.
 
-You are awesome, thank you!
+In the 2th patch, we make arch_prepare_bpf_trampoline() support to copy
+function arguments in stack for x86 arch. Therefore, the maximum
+arguments can be up to MAX_BPF_FUNC_ARGS for FENTRY and FEXIT.
+
+And the 3-5th patches are for the testcases of the 2th patch.
+
+Changes since v1:
+- change the maximun function arguments to 14 from 12
+- add testcases (Jiri Olsa)
+- instead EMIT4 with EMIT3_off32 for "lea" to prevent overflow
+
+Menglong Dong (5):
+  bpf: make MAX_BPF_FUNC_ARGS 14
+  bpf, x86: allow function arguments up to 14 for TRACING
+  libbpf: make BPF_PROG support 15 function arguments
+  selftests/bpf: rename bpf_fentry_test{7,8,9} to bpf_fentry_test_ptr*
+  selftests/bpf: add testcase for FENTRY/FEXIT with 6+ arguments
+
+ arch/x86/net/bpf_jit_comp.c                   | 96 ++++++++++++++++---
+ include/linux/bpf.h                           |  9 +-
+ net/bpf/test_run.c                            | 40 ++++++--
+ tools/lib/bpf/bpf_helpers.h                   |  9 +-
+ tools/lib/bpf/bpf_tracing.h                   | 10 +-
+ .../selftests/bpf/prog_tests/bpf_cookie.c     | 24 ++---
+ .../bpf/prog_tests/kprobe_multi_test.c        | 16 ++--
+ .../testing/selftests/bpf/progs/fentry_test.c | 50 ++++++++--
+ .../testing/selftests/bpf/progs/fexit_test.c  | 51 ++++++++--
+ .../selftests/bpf/progs/get_func_ip_test.c    |  2 +-
+ .../selftests/bpf/progs/kprobe_multi.c        | 12 +--
+ .../bpf/progs/verifier_btf_ctx_access.c       |  2 +-
+ .../selftests/bpf/verifier/atomic_fetch_add.c |  4 +-
+ 13 files changed, 249 insertions(+), 76 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.40.1
 
