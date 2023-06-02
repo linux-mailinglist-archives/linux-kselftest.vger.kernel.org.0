@@ -2,83 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5834071FDF2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 11:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4C471FE29
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jun 2023 11:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233994AbjFBJdx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Jun 2023 05:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S234510AbjFBJpK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Jun 2023 05:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233875AbjFBJdt (ORCPT
+        with ESMTP id S232404AbjFBJpJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:33:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EF4C0
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 02:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685698364;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zGO5HytmLACgK9GKNF+3cgvVOya1l1UlgEMwgI/rmuY=;
-        b=E6Xv5+wUcQbk+xtHAsSPyIUd2cX0xxhCrW6NDVMGFUcBgE15zvSyjSWCTiJkENMuVHQIih
-        Ruem2Kbw5QAWznUNuxm5X2RLHJTZ2OJ1wb6Ww2cw7FnvMmsQ318KYd9gWUwUlhIU71Ywgo
-        bODJLq3uVu3JaMVwGdGX1rBr6TrszyE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-516-2q2ZKQySPviUOUxBiEw9Dw-1; Fri, 02 Jun 2023 05:32:42 -0400
-X-MC-Unique: 2q2ZKQySPviUOUxBiEw9Dw-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30aeef6f601so1010115f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jun 2023 02:32:42 -0700 (PDT)
+        Fri, 2 Jun 2023 05:45:09 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DE4134;
+        Fri,  2 Jun 2023 02:45:08 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id 3f1490d57ef6-bacf5b89da7so1993280276.2;
+        Fri, 02 Jun 2023 02:45:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685699108; x=1688291108;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sO9CYKq3zsyFP6OrznRGehjIWLTIrAXykOQSpEJEjfc=;
+        b=c6IdsA3jP2haZ6HorJDy1WTeD7Ii7Z2qg/GiS0h1mQjOI3zcuhZvcZ78Gjmvgeir3o
+         FvpdyAt1cx8GTHk3QFDFIRe3jq0AaJnFDVUtfmoH0LbI8uKuSrKo+MKiDBotn1trb2tR
+         tgGYnNihC3nr/sgM6EyaKSdD6pzJkt7Ttx4nIYf0o5pavjZzRrYwLgeAtysz62QHhVLm
+         6H94i+p4AE0eSwHnY/abShLK6E3JeGf+rOQHOBG7g/WFtro49tzCtsKmZ1ocmIcAGm3d
+         K5U12MsezDSY5rVrdbv5ppdhccK6Yyj5PKUByZpeM/6LtfP3ssFvTRKgGU638nI3Xytb
+         +Tog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685698361; x=1688290361;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zGO5HytmLACgK9GKNF+3cgvVOya1l1UlgEMwgI/rmuY=;
-        b=C5hx1mCbW0SyTITWHfWhOhFDctLfmQYxjVxDcVujGmHgWX7uqvCGgIzgSi42dokyaL
-         Il/xAfVJAM3T9EHsCeVSQAip27qvk1f3V2sfbLcwOkk5vuY0xIPIesLnKaLArQSqKRGj
-         sD+a+mL5YymvO94kcEZ0ihy6l60Yz25QfuuXYhlirf88ETntncKDjbzJkA85OVD0QEbi
-         p8VcxWwWMA6pRHNVRf5n4/Lnb6ru7+GxBRAGkqbYidj1Juw9ko4EzGiLbSaRLU2Eljv2
-         YUnA12q0c18t8oR4W+GJuNZIaHr42Iv2UWoy0om2xFYMgAjnehSSURXawJJyPyhJr/AD
-         Ertg==
-X-Gm-Message-State: AC+VfDzo5EDsXYlixAf8wMzxqQYSEEsBN+RHVrzAQbiCH9nxQAkfVKc2
-        UywQICe1fiw6d5FAZuouwaImZtza3cKN6F/oyG8EW7K9eoHkeK6ZRhLSG/fqPaJvw7CcG7A2BWi
-        n6/Qe71F6POS5sk0VS2xokx0aL2wx
-X-Received: by 2002:a7b:ce0a:0:b0:3f4:fc5e:fbf2 with SMTP id m10-20020a7bce0a000000b003f4fc5efbf2mr1343873wmc.8.1685698361249;
-        Fri, 02 Jun 2023 02:32:41 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5qXLoMOUyOwyxB8QJi5/lh8XWNUX/jSwFh9mmS99bJj5kctxTuQ4RoxvaIPaaRHATi9LX5Ug==
-X-Received: by 2002:a7b:ce0a:0:b0:3f4:fc5e:fbf2 with SMTP id m10-20020a7bce0a000000b003f4fc5efbf2mr1343855wmc.8.1685698360862;
-        Fri, 02 Jun 2023 02:32:40 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
-        by smtp.gmail.com with ESMTPSA id m16-20020a7bcb90000000b003f6028a4c85sm4897350wmi.16.2023.06.02.02.32.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 02:32:40 -0700 (PDT)
-Message-ID: <78c0b444-8a95-396e-5f5e-8175f94a49cc@redhat.com>
-Date:   Fri, 2 Jun 2023 11:32:39 +0200
+        d=1e100.net; s=20221208; t=1685699108; x=1688291108;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sO9CYKq3zsyFP6OrznRGehjIWLTIrAXykOQSpEJEjfc=;
+        b=Vyj/ahWEkr22k+ptLgKQi/8pmC3y8PVZvQZLKYl42NG1GKz3hEpnKfEQkKmdw3fpEx
+         x3JaRWhQ4uIqmN2rKYRPhOuQV6VG9hFh8cLJrgKJZbP7rkN2WKIaDIesJoRti5yQs3M0
+         +c15+jdQN4GBUhHR6LerTjX5W/Lie01Ko+qI8k0sLHl26p+lKA+l2AOPbtpp/S3zvspK
+         d1rBw6LCQHPqXAf31dQ9jOnnY4+6zHUFtNwkaOYSAy8h/jNHCLsmbqzFunedNDr28vpX
+         MySZCjsdw3oAmGfcDRa9Keb4DCWxkhz3T5ZtgsomSC9M0XP/zYPixHS3/LiS7iCUCUl2
+         emPA==
+X-Gm-Message-State: AC+VfDzF/1VtAV5VElnDgDwmjWRMLl1PjkXzeAhVW4jvBPQABP32FP1V
+        cPHPZ1zCZTylu8Eq0jWNJroIU5qBG+V9fWXVO/E=
+X-Google-Smtp-Source: ACHHUZ7K2EOgjVq4WoCi44uJ9i/tvSnqHqw52MlY2vtO1cg3EMJxhBOLXPIBd6eWR9XrxZj65pTK1oOmh5KREk2hdV4=
+X-Received: by 2002:a25:9d89:0:b0:ba8:620b:38a7 with SMTP id
+ v9-20020a259d89000000b00ba8620b38a7mr2334349ybp.53.1685699107625; Fri, 02 Jun
+ 2023 02:45:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 00/12] A minor flurry of selftest/mm fixes
-Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230602013358.900637-1-jhubbard@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230602013358.900637-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230602065958.2869555-1-imagedong@tencent.com> <20230602065958.2869555-5-imagedong@tencent.com>
+In-Reply-To: <20230602065958.2869555-5-imagedong@tencent.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Fri, 2 Jun 2023 17:44:56 +0800
+Message-ID: <CADxym3ZTEvh2nrdY2PXhuApuU8=6MjNF71R_VSd4VDxp3URe8g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/5] selftests/bpf: rename bpf_fentry_test{7,8,9}
+ to bpf_fentry_test_ptr*
+To:     olsajiri@gmail.com
+Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mykolal@fb.com, shuah@kernel.org,
+        benbjiang@tencent.com, iii@linux.ibm.com, imagedong@tencent.com,
+        xukuohai@huawei.com, chantr4@gmail.com, zwisler@google.com,
+        eddyz87@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,26 +80,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 02.06.23 03:33, John Hubbard wrote:
-> It turned out that an even dozen patches were required in order to get the
-> selftests building cleanly, and all running, once again. I made it worse on
-> myself by insisting on using clang, which seems to uncover a few more warnings
-> than gcc these days.
-> 
-> So I still haven't gotten to my original goal of running a new HMM test that
-> Alistair handed me (it's not here yet), but at least this fixes everything I ran
-> into just now.
+On Fri, Jun 2, 2023 at 3:03=E2=80=AFPM <menglong8.dong@gmail.com> wrote:
+>
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> To make it more clear, let's make the N in bpf_fentry_testN as the count
+> of target function arguments. Therefore, let's rename
+> bpf_fentry_test{7,8,9} to bpf_fentry_test_ptr{1,2,3}.
+>
+> Meanwhile, to stop the checkpatch complaining, move the "noinline" ahead
+> of "int".
+>
+> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+>  net/bpf/test_run.c                            | 12 +++++-----
+>  .../selftests/bpf/prog_tests/bpf_cookie.c     | 24 +++++++++----------
+>  .../bpf/prog_tests/kprobe_multi_test.c        | 16 ++++++-------
+>  .../testing/selftests/bpf/progs/fentry_test.c | 16 ++++++-------
+>  .../testing/selftests/bpf/progs/fexit_test.c  | 16 ++++++-------
+>  .../selftests/bpf/progs/get_func_ip_test.c    |  2 +-
+>  .../selftests/bpf/progs/kprobe_multi.c        | 12 +++++-----
+>  .../bpf/progs/verifier_btf_ctx_access.c       |  2 +-
+>  .../selftests/bpf/verifier/atomic_fetch_add.c |  4 ++--
+>  9 files changed, 52 insertions(+), 52 deletions(-)
+>
 
-Thanks, now I can stop commenting out some (IIRC primarily uffd-related) 
-tests when just wanting to run some specific tests on some of odd 
-installations :D
+Sadly, this patch breaks the "bpf_fentry_test?" pattern in
+kprobe_multi.c and kprobe_multi_test.c.
 
-I assume this round you only consideres 64bit builds, right? My last 
-attempts with 32bit revealed a lot of issues, and I only fixed what I 
-really wanted to test (COW).
+I'm considering changing the "bpf_fentry_test?" to
+"bpf_fentry_test*" to solve this problem.
 
--- 
-Thanks,
+Another option, we can remove kretprobe_test7_result
+and kretprobe_test8_result and only check
+bpf_fentry_test1~6 in kprobe_multi_check.
 
-David / dhildenb
-
+Or......maybe I shouldn't rename them?
