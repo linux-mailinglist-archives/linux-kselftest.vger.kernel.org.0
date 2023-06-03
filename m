@@ -2,128 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D82720ED8
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jun 2023 11:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C62720EDA
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jun 2023 11:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237036AbjFCJFC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 3 Jun 2023 05:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
+        id S229658AbjFCJGX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 3 Jun 2023 05:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjFCJFB (ORCPT
+        with ESMTP id S229513AbjFCJGT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 3 Jun 2023 05:05:01 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017F6E56;
-        Sat,  3 Jun 2023 02:04:59 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1685783090tuggc0mf
+        Sat, 3 Jun 2023 05:06:19 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2EE1B5;
+        Sat,  3 Jun 2023 02:06:17 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1685783167t32ijw6q
 Received: from linux-lab-host.localdomain ( [119.123.130.226])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 03 Jun 2023 17:04:49 +0800 (CST)
-X-QQ-SSF: 00200000000000D0V000000A0000000
-X-QQ-FEAT: 7aHzntQn+UDHWzdTWpnJ/o+QEDhVowL/EH/i/fZBEdZqSAhhL5+pk34byH2Y5
-        kzLZBz9qzzO0LP7M+PHEtGEIMj8KpN0Glze3AWMa2ZIfxU/SvPwyc9Aa+8xPzPVir/sy1Aq
-        KT3Zbu29n8BjDugTZ9m11vay+P3VJC2mSUwnJ4qxmYg4oTSyqLFXJgJ+WZPFXp993qh/a+Z
-        zCdQJ/oTJCl6Q+WrnkmPUwenBidK5AngUE7qtZZvIDdjHmT03Us1ykhpzts22qNACVokfWX
-        UEWPEo9i8QuM2Ge+WRNEkvl9tU5a/xj5WytSvIRNnldYygYj9PtwEo5FCjzizT0ZAQPHGK5
-        8qirc5kUl/BjHnumj7Hv6kkmRw0JMb+ifxJwUlYqlQ9HPJzHwKu2zfUKDBaW/uGb4mFlarp
-        2I9DDIpEOdw=
+        id ; Sat, 03 Jun 2023 17:06:06 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: XBN7tc9DADKW+yryutXgxkBktiocyVQWqIBJpHLPEYQQnedoqzSogJlmBvRch
+        UNUBX4WxjurDWKmNTfPSC/M9TEYXV3HyQsc69/eU2u2ydk/ZOAHadlF7T5yBR9SLziXeNzZ
+        y1gbAvQGaP56JA+VTBffneB/pGSwFKsN2TqmsgnrvnBijWdEtG7Y8erMbLLlXrxyDVCTrQ8
+        j8uK1oQLbkgTFGAkrh72oZHh3CPMlzfII5e1tfN9lPwP0daM8tuwo4UiidXJWrt3BGnZKxK
+        Z7GsmYsjGBzzVQGbj2jFO/yv1qhOoGd/u+TOzIWqYCmBCV1sofw9bJAhaAYDVNolJpIwBlT
+        84q6FFYa13cajHnJq4k/YKSwLSfRZBWrfOTHJ/0y+pUcOspWnourKnqNfE7msxkJesw9aYe
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10955599285119131163
+X-BIZMAIL-ID: 10907565282954652268
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
         thomas@t-8ch.de
-Subject: [PATCH v3 2/3] tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
-Date:   Sat,  3 Jun 2023 17:04:17 +0800
-Message-Id: <a81040d90ad9f2042f653acdeb1d53b29a259028.1685780412.git.falcon@tinylab.org>
+Subject: [PATCH v3 3/3] selftests/nolibc: riscv: customize makefile for rv32
+Date:   Sat,  3 Jun 2023 17:05:58 +0800
+Message-Id: <ca162c288c3eeda309c33049711b5272eb80f8e2.1685780412.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1685780412.git.falcon@tinylab.org>
 References: <cover.1685780412.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Compiling nolibc for rv32 got such errors:
+Both riscv64 and riscv32 have:
 
-    nolibc/sysroot/riscv/include/sys.h: In function ‘sys_gettimeofday’:
-    nolibc/sysroot/riscv/include/sys.h:557:21: error: ‘__NR_gettimeofday’ undeclared (first use in this function); did you mean ‘sys_gettimeofday’?
-      557 |  return my_syscall2(__NR_gettimeofday, tv, tz);
-          |                     ^~~~~~~~~~~~~~~~~
-    nolibc/sysroot/riscv/include/sys.h: In function ‘sys_lseek’:
-    nolibc/sysroot/riscv/include/sys.h:675:21: error: ‘__NR_lseek’ undeclared (first use in this function)
-      675 |  return my_syscall3(__NR_lseek, fd, offset, whence);
-          |                     ^~~~~~~~~~
-    nolibc/sysroot/riscv/include/sys.h: In function ‘sys_wait4’:
-    nolibc/sysroot/riscv/include/sys.h:1341:21: error: ‘__NR_wait4’ undeclared (first use in this function)
-     1341 |  return my_syscall4(__NR_wait4, pid, status, options, rusage);
+* the same ARCH value, it is riscv
+* the same arch/riscv source code tree
 
-If a syscall macro is not supported by a target platform, wrap it with
-'#ifdef' and 'return -ENOSYS' for the '#else' branch, which lets the
-other syscalls work as-is and allows developers to fix up the test
-failures reported by nolibc-test one by one later.
+The only differences are:
 
-This wraps all of the failed syscall macros with '#ifdef' and 'return
--ENOSYS' for the '#else' branch, so, all of the undeclared failures are
-fixed.
+* riscv64 uses defconfig, riscv32 uses rv32_defconfig
+* riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
+* riscv32 has different compiler options (-march= and -mabi=)
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
+So, riscv32 can share most of the settings with riscv64, there is no
+need to add it as a whole new architecture but just need a flag to
+record and reflect the difference.
+
+The 32bit mips and loongarch may be able to use the same method, so,
+let's use a meaningful flag: CONFIG_32BIT. If required in the future,
+this flag can also be automatically loaded from
+include/config/auto.conf.
+
+With this patch, it is able to run nolibc test for rv32 like this:
+
+    $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
+
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/sys.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ tools/testing/selftests/nolibc/Makefile | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 78c86f124335..5464f93e863e 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -554,7 +554,11 @@ long getpagesize(void)
- static __attribute__((unused))
- int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
- {
-+#ifdef __NR_gettimeofday
- 	return my_syscall2(__NR_gettimeofday, tv, tz);
-+#else
-+	return -ENOSYS;
-+#endif
- }
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 44088535682e..ea434a0acdc1 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -14,6 +14,12 @@ include $(srctree)/scripts/subarch.include
+ ARCH = $(SUBARCH)
+ endif
  
- static __attribute__((unused))
-@@ -672,7 +676,11 @@ int link(const char *old, const char *new)
- static __attribute__((unused))
- off_t sys_lseek(int fd, off_t offset, int whence)
- {
-+#ifdef __NR_lseek
- 	return my_syscall3(__NR_lseek, fd, offset, whence);
-+#else
-+	return -ENOSYS;
-+#endif
- }
++# Allow pass ARCH=riscv|riscv32|riscv64, riscv implies riscv64
++ifneq ($(findstring xriscv,x$(ARCH)),)
++  CONFIG_32BIT := $(if $(findstring 32x,$(ARCH)x),1)
++  override ARCH := riscv
++endif
++
+ # kernel image names by architecture
+ IMAGE_i386       = arch/x86/boot/bzImage
+ IMAGE_x86_64     = arch/x86/boot/bzImage
+@@ -34,7 +40,7 @@ DEFCONFIG_x86        = defconfig
+ DEFCONFIG_arm64      = defconfig
+ DEFCONFIG_arm        = multi_v7_defconfig
+ DEFCONFIG_mips       = malta_defconfig
+-DEFCONFIG_riscv      = defconfig
++DEFCONFIG_riscv      = $(if $(CONFIG_32BIT),rv32_defconfig,defconfig)
+ DEFCONFIG_s390       = defconfig
+ DEFCONFIG_loongarch  = defconfig
+ DEFCONFIG            = $(DEFCONFIG_$(ARCH))
+@@ -49,7 +55,7 @@ QEMU_ARCH_x86        = x86_64
+ QEMU_ARCH_arm64      = aarch64
+ QEMU_ARCH_arm        = arm
+ QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
+-QEMU_ARCH_riscv      = riscv64
++QEMU_ARCH_riscv      = $(if $(CONFIG_32BIT),riscv32,riscv64)
+ QEMU_ARCH_s390       = s390x
+ QEMU_ARCH_loongarch  = loongarch64
+ QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
+@@ -76,6 +82,7 @@ else
+ Q=@
+ endif
  
- static __attribute__((unused))
-@@ -1338,7 +1346,11 @@ int unlink(const char *path)
- static __attribute__((unused))
- pid_t sys_wait4(pid_t pid, int *status, int options, struct rusage *rusage)
- {
-+#ifdef __NR_wait4
- 	return my_syscall4(__NR_wait4, pid, status, options, rusage);
-+#else
-+	return -ENOSYS;
-+#endif
- }
- 
- static __attribute__((unused))
++CFLAGS_riscv = $(if $(CONFIG_32BIT),-march=rv32i -mabi=ilp32)
+ CFLAGS_s390 = -m64
+ CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
+ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
 -- 
 2.25.1
 
