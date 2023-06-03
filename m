@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF31720E9B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jun 2023 10:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B75720E9D
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jun 2023 10:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjFCIDP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 3 Jun 2023 04:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
+        id S232328AbjFCIEf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 3 Jun 2023 04:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjFCIDO (ORCPT
+        with ESMTP id S229712AbjFCIEd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 3 Jun 2023 04:03:14 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAE3E40;
-        Sat,  3 Jun 2023 01:03:12 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1685779382tnnl2ip3
+        Sat, 3 Jun 2023 04:04:33 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADC8E41;
+        Sat,  3 Jun 2023 01:04:31 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1685779463tf50ulh5
 Received: from linux-lab-host.localdomain ( [119.123.130.226])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 03 Jun 2023 16:03:01 +0800 (CST)
+        id ; Sat, 03 Jun 2023 16:04:21 +0800 (CST)
 X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: /+iK7ZpVlLQCQXqPSdOBhJJtHOaA/uGGRHPayXIRaGu+YhAFWsPazE+ULSLgS
-        s96RiiK7GwzPd6n89GHKQ6SFyVzhAqWyrFlaMYaOWdhjhbHb+VixYEAYRUPKZ/rQtyNckdi
-        Zi25NQ0xylNsTwAaSxVLoioPCOMe8dtaR7JxTZ1xYpMFZ283x4epDN6y5QixLz8+iZP0EfJ
-        HvS+E4mwJnyo4BzYB8Dnvkv08tDSmnmlt5WxwR5X2dw2THx/n7ZPVm+0e8Wgc04QLzraW17
-        ZNGSqreCAtS/IQdHnr/1E2GfnX2rLYl70mHTMeCkWhU9d+Udx4qEAgNftIJGCjPiNotnHYR
-        f3WDBW5fL5oG0fLP3oLir4hW+hIQGRTVyTaQu9rpMwP+WLysZ3z9Hgl46OfyXFXNEC80Cml
-        2uhx01xuDXA=
+X-QQ-FEAT: zT6n3Y95oi1dVQM7LOUCe4ZErci7J0hzthPkaKsmZlRivSBkUu9oKsHTpK5iT
+        0ibxDOemCdi1l+T/yHYtBufVQx/bK105xvHta2f1ev1UfOGQW6UR4QI8ILpFABfBDs4Ldez
+        PAIAwuuORwFw2j7gb6/FXc65FaEcYepkFvSrRQ+mRb0nTBmRtEeYBQdeoG5IsQTuHg6VWav
+        0XZceUgZxFEPKf0G/yYLqWteHLu+lfLWS/+wYVs2QNOYFcxJMAnjdiSQk+lk6r2ocBR3AjR
+        QLOOVtbExyU2MM7yVMPK98ZL0kXlKhtPYmONaR6j9SstlAplCc+Pims0s10/tmrw8QxRuiR
+        IkIiRQzDdA2jVEQHfKba8VIwrwOw2Q6CM6UeZHSgi5U3tez1D1Ql2UI0yb7HcSFf3/LWydY
+        mcX+sxskv5U=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15194475891504528648
+X-BIZMAIL-ID: 11632177116397536855
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
         thomas@t-8ch.de,
         =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v3 02/12] tools/nolibc: add missing nanoseconds support for __NR_statx
-Date:   Sat,  3 Jun 2023 16:02:04 +0800
-Message-Id: <bcb69a382bbb68826f974ef4f521c8f1c60e47bc.1685777982.git.falcon@tinylab.org>
+Subject: [PATCH v3 03/12] selftests/nolibc: allow specify extra arguments for qemu
+Date:   Sat,  3 Jun 2023 16:04:10 +0800
+Message-Id: <6763a735c95fe0fea8109450411c7501e02ce2b6.1685777982.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1685777982.git.falcon@tinylab.org>
 References: <cover.1685777982.git.falcon@tinylab.org>
@@ -46,96 +46,58 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit a89c937d781a ("tools/nolibc: support nanoseconds in stat()")
-added nanoseconds for stat() but missed the statx case, this adds it.
+The opensbi package from Ubuntu 20.04 only provides rv64 firmwares:
 
-The stx_atime, stx_mtime, stx_ctime are in type of 'struct
-statx_timestamp', which is incompatible with 'struct timespec', should
-convert explicitly.
+    $ dpkg -S opensbi | grep -E "fw_.*bin|fw_.*elf" | uniq
+    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_dynamic.bin
+    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_jump.bin
+    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_dynamic.elf
+    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_jump.elf
 
-    /* include/uapi/linux/stat.h */
+To run this nolibc test for rv32, users must build opensbi or download a
+prebuilt one from qemu repository:
 
-    struct statx_timestamp {
-    	__s64	tv_sec;
-    	__u32	tv_nsec;
-    	__s32	__reserved;
-    };
+    https://gitlab.com/qemu-project/qemu/-/blob/master/pc-bios/opensbi-riscv32-generic-fw_dynamic.bin
 
-    /* include/uapi/linux/time.h */
-    struct timespec {
-    	__kernel_old_time_t	tv_sec;		/* seconds */
-    	long			tv_nsec;	/* nanoseconds */
-    };
+And then use -bios to tell qemu use it to avoid such failure:
 
-Without this patch, the stat_timestamps test case would fail when
-__NR_statx defined.
+    $ qemu-system-riscv32 -display none -no-reboot -kernel /path/to/arch/riscv/boot/Image -serial stdio -M virt -append "console=ttyS0 panic=-1"
+    qemu-system-riscv32: Unable to load the RISC-V firmware "opensbi-riscv32-generic-fw_dynamic.bin"
 
-Fixes: a89c937d781a ("tools/nolibc: support nanoseconds in stat()")
+To run from makefile, QEMU_ARGS_EXTRA is added to allow pass extra
+arguments like -bios:
+
+    $ make run QEMU_ARGS_EXTRA="-bios /path/to/opensbi-riscv32-generic-fw_dynamic.bin" ...
+
 Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/linux-riscv/3a3edd48-1ace-4c89-89e8-9c594dd1b3c9@t-8ch.de/
+Link: https://lore.kernel.org/linux-riscv/2ab94136-d341-4a26-964e-6d6c32e66c9b@t-8ch.de/
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/sys.h | 37 ++++++++++++++++++++-----------------
- 1 file changed, 20 insertions(+), 17 deletions(-)
+ tools/testing/selftests/nolibc/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 1d6f33f58629..0160605444e7 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -1161,23 +1161,26 @@ int sys_stat(const char *path, struct stat *buf)
- 	long ret;
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 47c3c89092e4..44088535682e 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -64,7 +64,7 @@ QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+-QEMU_ARGS            = $(QEMU_ARGS_$(ARCH))
++QEMU_ARGS            = $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_EXTRA)
  
- 	ret = sys_statx(AT_FDCWD, path, AT_NO_AUTOMOUNT, STATX_BASIC_STATS, &statx);
--	buf->st_dev     = ((statx.stx_dev_minor & 0xff)
--			  | (statx.stx_dev_major << 8)
--			  | ((statx.stx_dev_minor & ~0xff) << 12));
--	buf->st_ino     = statx.stx_ino;
--	buf->st_mode    = statx.stx_mode;
--	buf->st_nlink   = statx.stx_nlink;
--	buf->st_uid     = statx.stx_uid;
--	buf->st_gid     = statx.stx_gid;
--	buf->st_rdev    = ((statx.stx_rdev_minor & 0xff)
--			  | (statx.stx_rdev_major << 8)
--			  | ((statx.stx_rdev_minor & ~0xff) << 12));
--	buf->st_size    = statx.stx_size;
--	buf->st_blksize = statx.stx_blksize;
--	buf->st_blocks  = statx.stx_blocks;
--	buf->st_atime   = statx.stx_atime.tv_sec;
--	buf->st_mtime   = statx.stx_mtime.tv_sec;
--	buf->st_ctime   = statx.stx_ctime.tv_sec;
-+	buf->st_dev          = ((statx.stx_dev_minor & 0xff)
-+			       | (statx.stx_dev_major << 8)
-+			       | ((statx.stx_dev_minor & ~0xff) << 12));
-+	buf->st_ino          = statx.stx_ino;
-+	buf->st_mode         = statx.stx_mode;
-+	buf->st_nlink        = statx.stx_nlink;
-+	buf->st_uid          = statx.stx_uid;
-+	buf->st_gid          = statx.stx_gid;
-+	buf->st_rdev         = ((statx.stx_rdev_minor & 0xff)
-+			       | (statx.stx_rdev_major << 8)
-+			       | ((statx.stx_rdev_minor & ~0xff) << 12));
-+	buf->st_size         = statx.stx_size;
-+	buf->st_blksize      = statx.stx_blksize;
-+	buf->st_blocks       = statx.stx_blocks;
-+	buf->st_atim.tv_sec  = statx.stx_atime.tv_sec;
-+	buf->st_atim.tv_nsec = statx.stx_atime.tv_nsec;
-+	buf->st_mtim.tv_sec  = statx.stx_mtime.tv_sec;
-+	buf->st_mtim.tv_nsec = statx.stx_mtime.tv_nsec;
-+	buf->st_ctim.tv_sec  = statx.stx_ctime.tv_sec;
-+	buf->st_ctim.tv_nsec = statx.stx_ctime.tv_nsec;
- 	return ret;
- }
- #else
+ # OUTPUT is only set when run from the main makefile, otherwise
+ # it defaults to this nolibc directory.
 -- 
 2.25.1
-
 
