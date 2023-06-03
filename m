@@ -2,131 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E43720E96
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jun 2023 09:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB43720E99
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jun 2023 10:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjFCH7z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 3 Jun 2023 03:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        id S234011AbjFCIBK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 3 Jun 2023 04:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjFCH7y (ORCPT
+        with ESMTP id S229572AbjFCIBJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 3 Jun 2023 03:59:54 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E5FE41;
-        Sat,  3 Jun 2023 00:59:49 -0700 (PDT)
-X-QQ-mid: bizesmtp74t1685779178tv1c2476
+        Sat, 3 Jun 2023 04:01:09 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812D81B6;
+        Sat,  3 Jun 2023 01:01:06 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1685779256tfrhwl1v
 Received: from linux-lab-host.localdomain ( [119.123.130.226])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 03 Jun 2023 15:59:37 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: iDzLjIm7mlbPeIpKhf0L/FoYc5sBCuLlmD1uXZ6PLTeLTNqoaWw5vVBt4RZJB
-        5nE1u/X8VOHe4a2rR+f7qxdPnaataTsBE75Oo4mGR2USddqN+9RQQPyA/5wd+P1RNg+61hT
-        T4ihHHsbzzkJRV4iR5QslKSjQPbWr51ZPYBKeCRHy+oGzp323hJBYRC8MJJxxsCRic62xGL
-        ITChxxvvC1tCoY2knphq+S5rHgRqy+N1sUTxEzMkPMc4Wc6gKtQFPqVfzGFhF0AMi3yem4B
-        IKCZuEyBe2QNxxuKAHqKATlXoBfkF0tk216ifnrEK8YL3kzCnQLRs5Cbn2P/6+hCCQjQ90i
-        YcItibezI442FD77p6lUKtGFX33/1dqqP10oZvk
+        id ; Sat, 03 Jun 2023 16:00:55 +0800 (CST)
+X-QQ-SSF: 00200000000000D0V000000A0000000
+X-QQ-FEAT: k0mQ4ihyJQNgkVwygW0yshuGkeM5gEbPP6qD3JPq1MQNFpbusU7tTU0lbB22l
+        A/5UcKnooUQIfO7IdU6An49Ew/yF6sQud/gbxCL4QnanhGzK5jwDlyfGoBThAEWl768oPaN
+        eBs1jfQtfGszTLv2Ika597BM+IvXXcun0tPnrU6tHzcRc2UZUueBk6bih+duFmLswS5oeaG
+        vFxXt7CE38Pel27vLsN2UsJz//tO/rgvA+hJSXSRHAQTde1zwQCX9o42qUvx0BGe+Zs2U5Z
+        2CNFuUUZWezBEgy6ORi06eutXif6JZYh+Pnlp3AnWar+2IW0xvGRO9ed1T643iOLM4zGfFm
+        dF/cgTkjCgfOoncc6p43EE+tkxQsdBQsYmRC9NXrF1fNybD8O6YFpEQI/CODCNYAvg059yP
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8921411248983777273
+X-BIZMAIL-ID: 13312987647065387357
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
         thomas@t-8ch.de
-Subject: [PATCH v3 00/12] nolibc: add generic part1 of prepare for rv32
-Date:   Sat,  3 Jun 2023 15:59:29 +0800
-Message-Id: <cover.1685777982.git.falcon@tinylab.org>
+Subject: [PATCH v3 01/12] selftests/nolibc: syscall_args: use generic __NR_statx
+Date:   Sat,  3 Jun 2023 16:00:46 +0800
+Message-Id: <d61b1251af808b91f79f49e5b9a773141aa86eaf.1685777982.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1685777982.git.falcon@tinylab.org>
+References: <cover.1685777982.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
+Compiling nolibc-test.c for rv32 got such error:
 
-This is the v3 generic part1 for rv32, all of the found issues of v2
-part1 [1] have been fixed up, several generic patches have been fixed up
-and merged from v2 part2 [2] to this series, the standalone test_fork
-patch [4] is merged with a Reviewed-by line into this series too.
+    tools/testing/selftests/nolibc/nolibc-test.c:599:57: error: ‘__NR_fstat’ undeclared (first use in this function)
+      599 |   CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
 
-This series is based on 20230528-nolibc-rv32+stkp5 branch of [5].
+The generic include/uapi/asm-generic/unistd.h used by rv32 doesn't
+support __NR_fstat, use the more generic __NR_statx instead:
 
-Changes from v2 -> v3:
+    Running test 'syscall'
+    69 syscall_noargs = 1                                            [OK]
+    70 syscall_args = -1 EFAULT                                      [OK]
 
-* selftests/nolibc: fix up compile warning with glibc on x86_64
+__NR_statx has been added from v4.10:
 
-  Use simpler 'long long' conversion instead of old #ifdef ...
-  (Suggestion from Willy)
+    commit a528d35e8bfc ("statx: Add a system call to make enhanced file info available")
 
-* tools/nolibc: add missing nanoseconds support for __NR_statx
+It has been supported by all of the platforms since at least from v4.20.
 
-  Split the compound assignment into two single assignments
-  (Suggestion from Thomas)
-
-* selftests/nolibc: add new gettimeofday test cases
-
-  Removed the gettimeofday(NULL, &tz)
-  (Suggestion from Thomas)
-
-All of the commit messages have been re-checked, some missing
-Suggested-by lines are added.
-
-The whole patchset have been tested on arm, aarch64, rv32 and rv64, no
-regressions (the next compile patchset is required to do rv32 test).
-
-The nolibc-test has been tested with glibc on x86_64 too.
-
-Btw, we have found such poll failures on arm (not introduced by this
-patchset), this will be fixed in our coming ppoll_time64 patchset:
-
-48 poll_null = -1 ENOSYS                                        [FAIL]
-49 poll_stdout = -1 ENOSYS                                      [FAIL]
-50 poll_fault = -1 ENOSYS  != (-1 EFAULT)                       [FAIL]
-
-And the gettimeofday_null removal patch from Thomas [3] may conflicts
-with the gettimeofday removal and addition patches, but it is not hard
-to fix.
-
-Best regards,
-Zhangjin
+Fixes: 8e3ab529bef9 ("tools/nolibc/unistd: add syscall()")
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/linux-riscv/ee8b1f02-ded1-488b-a3a5-68774f0349b5@app.fastmail.com/
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
+ tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[1]: https://lore.kernel.org/linux-riscv/cover.1685362482.git.falcon@tinylab.org/T/#t
-[2]: https://lore.kernel.org/linux-riscv/cover.1685387484.git.falcon@tinylab.org/T/#t
-[3]: https://lore.kernel.org/lkml/20230530-nolibc-gettimeofday-v1-1-7307441a002b@weissschuh.net/
-[4]: https://lore.kernel.org/lkml/61bdfe7bacebdef8aa9195f6f2550a5b0d33aab3.1685426545.git.falcon@tinylab.org/
-[5]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-
-Zhangjin Wu (12):
-  selftests/nolibc: syscall_args: use generic __NR_statx
-  tools/nolibc: add missing nanoseconds support for __NR_statx
-  selftests/nolibc: allow specify extra arguments for qemu
-  selftests/nolibc: fix up compile warning with glibc on x86_64
-  selftests/nolibc: not include limits.h for nolibc
-  selftests/nolibc: use INT_MAX instead of __INT_MAX__
-  tools/nolibc: arm: add missing my_syscall6
-  tools/nolibc: open: fix up compile warning for arm
-  selftests/nolibc: support two errnos with EXPECT_SYSER2()
-  selftests/nolibc: remove gettimeofday_bad1/2 completely
-  selftests/nolibc: add new gettimeofday test cases
-  selftests/nolibc: test_fork: fix up duplicated print
-
- tools/include/nolibc/arch-arm.h              | 23 +++++++++++
- tools/include/nolibc/stdint.h                | 14 +++++++
- tools/include/nolibc/sys.h                   | 39 +++++++++---------
- tools/testing/selftests/nolibc/Makefile      |  2 +-
- tools/testing/selftests/nolibc/nolibc-test.c | 42 ++++++++++++--------
- 5 files changed, 85 insertions(+), 35 deletions(-)
-
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 7de46305f419..d417ca5d976f 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -621,7 +621,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
+ 		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
+ 		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
+-		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
++		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_statx, 0, NULL, 0, 0, NULL), -1, EFAULT); break;
+ 		case __LINE__:
+ 			return ret; /* must be last */
+ 		/* note: do not set any defaults so as to permit holes above */
 -- 
 2.25.1
 
