@@ -2,99 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98294721971
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jun 2023 21:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C24872197C
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jun 2023 21:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjFDTOs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 4 Jun 2023 15:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S229886AbjFDTVO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 4 Jun 2023 15:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjFDTOs (ORCPT
+        with ESMTP id S229449AbjFDTVO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 4 Jun 2023 15:14:48 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7BAFA4;
-        Sun,  4 Jun 2023 12:14:42 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 354JETSX003679;
-        Sun, 4 Jun 2023 21:14:29 +0200
-Date:   Sun, 4 Jun 2023 21:14:29 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 0/4] selftests/nolibc: add user-space 'efault' handler
-Message-ID: <ZHzilYf5bGx3w+yE@1wt.eu>
-References: <cover.1685443199.git.falcon@tinylab.org>
- <ZHxv7kIm2kEAfin2@1wt.eu>
- <c6129c15-7e95-4f6c-b4db-c6b5daa6d3cc@t-8ch.de>
+        Sun, 4 Jun 2023 15:21:14 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6841A7;
+        Sun,  4 Jun 2023 12:21:11 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 21:21:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1685906469; bh=1UClnzbPKFLgB8+m4Ye4NhmglZ0eNYJbm+haocS29Dk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MHF1QbHZGPslYjUKOjgngaUKFdFNWbjneJMTIO4Dx43CHu6UxHzxKpry/lClXyJ46
+         B+i7Qp5tyXzU3frQnpC5kEegItHMHDnt+hA4FcENSbs9tIhkbXpWVcTtcL7QbldFEs
+         uo7Im8wBP/JfQph7F8Vf3H024I4lnFrqYV0HHSRA=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 1/4] tools/nolibc: unistd.h: add __syscall() and
+ __syscall_ret() helpers
+Message-ID: <ea4e7442-7223-4211-ba29-70821e907888@t-8ch.de>
+References: <cover.1685856497.git.falcon@tinylab.org>
+ <f549b27981484b429b7c7f98e212bf3c5561724f.1685856497.git.falcon@tinylab.org>
+ <ZHyKoeSMaOHtSr58@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c6129c15-7e95-4f6c-b4db-c6b5daa6d3cc@t-8ch.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZHyKoeSMaOHtSr58@1wt.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 09:07:25PM +0200, Thomas Weißschuh wrote:
-> On 2023-06-04 13:05:18+0200, Willy Tarreau wrote:
-> > Hi Zhangjin,
-> > 
-> > On Tue, May 30, 2023 at 06:47:38PM +0800, Zhangjin Wu wrote:
-> > > Hi, Willy, Thomas
-> > > 
-> > > This is not really for merge, but only let it work as a demo code to
-> > > test whether it is possible to restore the next test when there is a bad
-> > > pointer access in user-space [1].
-> > > 
-> > > Besides, a new 'run' command is added to 'NOLIBC_TEST' environment
-> > > variable or arguments to control the running iterations, this may be
-> > > used to test the reentrancy issues, but no failures found currently ;-)
-> > 
-> > Since the tests we're running are essentially API tests, I'm having
-> > a hard time seeing in which case it can be useful to repeat the tests.
-> > I'm not necessarily against doing it, I'm used to repeating tests for
-> > example in anything sensitive to timing or race conditions, it's just
-> > that here I'm not seeing the benefit. And the fact you found no failure
-> > is rather satisfying because the opposite would have surprised me.
-> > 
-> > Regarding the efault handler, I don't think it's a good idea until we
-> > have signal+longjmp support in nolibc. Because running different tests
-> > with different libcs kind of defeats the purpose of the test in the
-> > first place. The reason why I wanted nolibc-test to be portable to at
-> > least one other libc is to help the developer figure if a failure is in
-> > the nolibc syscall they're implementing or in the test itself. Here if
-> > we start to say that some parts cannot be tested similarly, the benefit
-> > disappears.
-> > 
-> > I mentioned previously that I'm not particularly impatient to work on
-> > signals and longjmp. But in parallel I understand how this can make the
-> > life of some developers easier and even allow to widen the spectrum of
-> > some tests. Thus, maybe in the end it could be beneficial to make progress
-> > on this front and support these. We should make sure that this doesn't
-> > inflate the code base however. I guess I'd be fine with ignoring libc-
-> > based restarts on EINTR, alt stacks and so on and keeping this minimal
-> > (i.e. catch a segfault/bus error/sigill in a test program, or a Ctrl-C
-> > in a tiny shell).
-> > 
-> > Just let us know if you think that's something you could be interested
-> > in exploring. There might be differences between architectures, I have
-> > not checked.
+On 2023-06-04 14:59:13+0200, Willy Tarreau wrote:
+> Hi Zhangjin,
 > 
-> If the goal is to handle hard errors like segfaults more gracefully,
-> would it not be easier to run each testcase in a subprocess?
+> On Sun, Jun 04, 2023 at 01:34:29PM +0800, Zhangjin Wu wrote:
+> > most of the library routines share the same code model, let's add some
+> > macros to simplify the coding and shrink the code lines too.
+> > 
+> > One added for syscall return, one added for syscall call, both of them
+> > can get the typeof 'return value' automatically.
+> > 
+> > To get the return type of syscalls, __auto_type is better than typeof(),
+> > but it is not supported by the old compilers (before 2013, see [1]), so,
+> > use typeof() here.
+> > 
+> > [1]: https://gcc.gnu.org/legacy-ml/gcc-patches/2013-11/msg01378.html
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/include/nolibc/sys.h | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> > 
+> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > index 1d6f33f58629..937a8578e3d4 100644
+> > --- a/tools/include/nolibc/sys.h
+> > +++ b/tools/include/nolibc/sys.h
+> > @@ -28,6 +28,21 @@
+> >  #include "errno.h"
+> >  #include "types.h"
+> >  
+> > +/* Syscall call and return helpers */
+> > +#define __syscall_ret(ret)						\
+> > +({									\
+> > +	if (ret < 0) {							\
+> > +		SET_ERRNO(-ret);					\
+> > +		ret = (typeof(ret))-1;					\
+> > +	}								\
+> > +	ret;								\
+> > +})
+> > +
+> > +#define __syscall(name, ...)						\
+> > +({									\
+> > +	typeof(sys_##name(__VA_ARGS__)) ret = sys_##name(__VA_ARGS__);	\
+> > +	__syscall_ret(ret);						\
+> > +})
 > 
-> Then we can just check if the child exited successfully.
+> Well, I personally don't find that it increases legibility, on the
+> opposite. At first when reading the series, I thought you had dropped
+> errno setting on return. I think the reason is that when reading that
+> last macro, it's not at all obvious that __syscall_ret() is actually
+> modifying this ret value *and* returning it as the macro's result.
 > 
-> It should also be completely architecture agnostic.
+> If we'd want to go down that route, I suspect that something like this
+> would at least hint about what is being returned:
+> 
+> +#define __syscall(name, ...)						\
+> +({									\
+> +	typeof(sys_##name(__VA_ARGS__)) ret = sys_##name(__VA_ARGS__);	\
+> +	ret = __syscall_ret(ret);					\
+> +})
+> 
+> But I'm interested in others' opinion on this, particularly Thomas and
+> Arnd who review a significant number of patches. For now I prefer not
+> to take it before we've settled on a choice.
 
-Could be, indeed. However it would complexify a bit strace debugging,
-but yeah that might be something to think about.
+While I see the value in factoring out this pattern I'm also not really
+happy with the implementation.
+Especially the magic delegation to "sys_##name".
 
-Willy
+What about something like this:
+
+static inline long __ret_as_errno(long ret) /* or some other name */
+{
+	if (ret < 0) {
+		SET_ERRNO(-ret);
+		ret = -1;
+	}
+	return ret;
+}
+
+This avoids another macro by using a normal function.
+
+Syscall return values should always fit into long, at least
+extrapolating from syscall(2) and the fact that they are returned in
+registers.
+
+It would be a bit more verbose:
+
+int chdir(const char *path)
+{
+	return __ret_as_errno(sys_chdir(path));
+}
+
+But it's clear what's going on and also just one line.
+
+Thomas
