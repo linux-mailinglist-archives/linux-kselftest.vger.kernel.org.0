@@ -2,79 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A95372175C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jun 2023 15:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D39872196B
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jun 2023 21:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjFDNU1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 4 Jun 2023 09:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
+        id S231375AbjFDTH3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 4 Jun 2023 15:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjFDNU0 (ORCPT
+        with ESMTP id S230437AbjFDTH2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 4 Jun 2023 09:20:26 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E121B8;
-        Sun,  4 Jun 2023 06:20:24 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 354DKBHP002547;
-        Sun, 4 Jun 2023 15:20:11 +0200
-Date:   Sun, 4 Jun 2023 15:20:11 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: nolibc patches, still possible for 6.5 ?
-Message-ID: <ZHyPi29q3MKiNAQZ@1wt.eu>
+        Sun, 4 Jun 2023 15:07:28 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21072A4;
+        Sun,  4 Jun 2023 12:07:27 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 21:07:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1685905645; bh=tVL6rua96sFgrYX+hG+hECHYZwYEGKbaivsDiNvbYyc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sa7eVeipLe2kCWP0XMt2fU3wqRXYQ5/Xf+VesjJK5KPZMG3Loir696DyY/gMAmOVq
+         R+P2+Yz/Gasv1bgoR+57TyuWfQi1YbWHUluQsgyiQvOnS69jUgmzuURcr+laWblmRz
+         BAR3FOS5k0JdfPSZr2hDYzPc/bTRqq2h1/5idb74=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 0/4] selftests/nolibc: add user-space 'efault' handler
+Message-ID: <c6129c15-7e95-4f6c-b4db-c6b5daa6d3cc@t-8ch.de>
+References: <cover.1685443199.git.falcon@tinylab.org>
+ <ZHxv7kIm2kEAfin2@1wt.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZHxv7kIm2kEAfin2@1wt.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Paul,
+On 2023-06-04 13:05:18+0200, Willy Tarreau wrote:
+> Hi Zhangjin,
+> 
+> On Tue, May 30, 2023 at 06:47:38PM +0800, Zhangjin Wu wrote:
+> > Hi, Willy, Thomas
+> > 
+> > This is not really for merge, but only let it work as a demo code to
+> > test whether it is possible to restore the next test when there is a bad
+> > pointer access in user-space [1].
+> > 
+> > Besides, a new 'run' command is added to 'NOLIBC_TEST' environment
+> > variable or arguments to control the running iterations, this may be
+> > used to test the reentrancy issues, but no failures found currently ;-)
+> 
+> Since the tests we're running are essentially API tests, I'm having
+> a hard time seeing in which case it can be useful to repeat the tests.
+> I'm not necessarily against doing it, I'm used to repeating tests for
+> example in anything sensitive to timing or race conditions, it's just
+> that here I'm not seeing the benefit. And the fact you found no failure
+> is rather satisfying because the opposite would have surprised me.
+> 
+> Regarding the efault handler, I don't think it's a good idea until we
+> have signal+longjmp support in nolibc. Because running different tests
+> with different libcs kind of defeats the purpose of the test in the
+> first place. The reason why I wanted nolibc-test to be portable to at
+> least one other libc is to help the developer figure if a failure is in
+> the nolibc syscall they're implementing or in the test itself. Here if
+> we start to say that some parts cannot be tested similarly, the benefit
+> disappears.
+> 
+> I mentioned previously that I'm not particularly impatient to work on
+> signals and longjmp. But in parallel I understand how this can make the
+> life of some developers easier and even allow to widen the spectrum of
+> some tests. Thus, maybe in the end it could be beneficial to make progress
+> on this front and support these. We should make sure that this doesn't
+> inflate the code base however. I guess I'd be fine with ignoring libc-
+> based restarts on EINTR, alt stacks and so on and keeping this minimal
+> (i.e. catch a segfault/bus error/sigill in a test program, or a Ctrl-C
+> in a tiny shell).
+> 
+> Just let us know if you think that's something you could be interested
+> in exploring. There might be differences between architectures, I have
+> not checked.
 
-Thomas and Zhangjin have provided significant nolibc cleanups, and
-fixes, as well as preparation work to later support riscv32.
+If the goal is to handle hard errors like segfaults more gracefully,
+would it not be easier to run each testcase in a subprocess?
 
-These consist in the following main series:
-  - generalization of stackprotector to other archs that were not
-    previously supported (riscv, mips, loongarch, arm, arm64)
+Then we can just check if the child exited successfully.
 
-  - general cleanups of the makefile, test report output, deduplication
-    of certain tests
+It should also be completely architecture agnostic.
 
-  - slightly better compliance of some tests performed on certain syscalls
-    (e.g. no longer pass (void*)1 to gettimeofday() since glibc hates it).
-
-  - add support for nanoseconds in stat() and statx()
-
-  - fixes for some syscalls (e.g. ppoll() has 5 arguments not 4)
-
-  - fixes around limits.h and  INT_MAX / INT_FAST64_MAX
-
-I rebased the whole series on top of your latest dev branch (d19a9ca3d5)
-and it works fine for all archs.
-
-I don't know if you're still planning on merging new stuff in this area
-for 6.5 or not (since I know that it involves new series of tests on your
-side as well), but given that Zhangjin will engage into deeper changes
-later for riscv32 that will likely imply to update more syscalls to use
-the time64 ones, I would prefer to split the cleanups from the hard stuff,
-but I'll let you judge based on the current state of what's pending for
-6.5.
-
-In any case I'm putting all this here for now (not for merge yet):
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230604-nolibc-rv32+stkp6
-
-I'd like Thomas and Zhangjin to perform a last check to confirm they're
-OK with this final integration.
-
-Thanks!
-Willy
+Thomas
