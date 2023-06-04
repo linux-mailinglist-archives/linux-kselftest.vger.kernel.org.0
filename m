@@ -2,142 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C24872197C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jun 2023 21:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02385721AEE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 00:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjFDTVO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 4 Jun 2023 15:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
+        id S231328AbjFDW55 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 4 Jun 2023 18:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFDTVO (ORCPT
+        with ESMTP id S229799AbjFDW54 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 4 Jun 2023 15:21:14 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6841A7;
-        Sun,  4 Jun 2023 12:21:11 -0700 (PDT)
-Date:   Sun, 4 Jun 2023 21:21:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1685906469; bh=1UClnzbPKFLgB8+m4Ye4NhmglZ0eNYJbm+haocS29Dk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MHF1QbHZGPslYjUKOjgngaUKFdFNWbjneJMTIO4Dx43CHu6UxHzxKpry/lClXyJ46
-         B+i7Qp5tyXzU3frQnpC5kEegItHMHDnt+hA4FcENSbs9tIhkbXpWVcTtcL7QbldFEs
-         uo7Im8wBP/JfQph7F8Vf3H024I4lnFrqYV0HHSRA=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+        Sun, 4 Jun 2023 18:57:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB7FCD;
+        Sun,  4 Jun 2023 15:57:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 326E160A4D;
+        Sun,  4 Jun 2023 22:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9771DC433D2;
+        Sun,  4 Jun 2023 22:57:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685919474;
+        bh=8XjDS4iDM+8yMwrflnTpmcp6OBQrO3wSWyu/IjlMnOc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=K86udc3+sYRhmGHEjKvJPbToeCeRxFc0MjWBTRcq539T9stICCyuW92bLfxV1iTVg
+         2WM3n+1my2y1PFF0NB5x9MNslxvHye86tnDkCE859zck65NB15+Td/UB0bmjHnFRvj
+         3XiYImin54MjZtR+AHKGPaWpesFj3Z2SNRE1HOcusFCgSi74QVtQErspj2TqTYmGXI
+         1dVoXk1qOu9MOroz1Tdk7WujTGRBd2Teb8DQT3Y/syt8IlJ5U9w+0BNN9VaDUSvRgR
+         e4fRVaCuDSgnYiW9sF+k8q2p7gOtBff3Kz7gTBUeGTXysdWq9iamy3FnLdjejQ8KbH
+         VREF+Ov4ueWmA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2957CCE04DD; Sun,  4 Jun 2023 15:57:54 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 15:57:54 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 1/4] tools/nolibc: unistd.h: add __syscall() and
- __syscall_ret() helpers
-Message-ID: <ea4e7442-7223-4211-ba29-70821e907888@t-8ch.de>
-References: <cover.1685856497.git.falcon@tinylab.org>
- <f549b27981484b429b7c7f98e212bf3c5561724f.1685856497.git.falcon@tinylab.org>
- <ZHyKoeSMaOHtSr58@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: nolibc patches, still possible for 6.5 ?
+Message-ID: <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <ZHyPi29q3MKiNAQZ@1wt.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZHyKoeSMaOHtSr58@1wt.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZHyPi29q3MKiNAQZ@1wt.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-06-04 14:59:13+0200, Willy Tarreau wrote:
-> Hi Zhangjin,
+On Sun, Jun 04, 2023 at 03:20:11PM +0200, Willy Tarreau wrote:
+> Hello Paul,
 > 
-> On Sun, Jun 04, 2023 at 01:34:29PM +0800, Zhangjin Wu wrote:
-> > most of the library routines share the same code model, let's add some
-> > macros to simplify the coding and shrink the code lines too.
-> > 
-> > One added for syscall return, one added for syscall call, both of them
-> > can get the typeof 'return value' automatically.
-> > 
-> > To get the return type of syscalls, __auto_type is better than typeof(),
-> > but it is not supported by the old compilers (before 2013, see [1]), so,
-> > use typeof() here.
-> > 
-> > [1]: https://gcc.gnu.org/legacy-ml/gcc-patches/2013-11/msg01378.html
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/include/nolibc/sys.h | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> > 
-> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > index 1d6f33f58629..937a8578e3d4 100644
-> > --- a/tools/include/nolibc/sys.h
-> > +++ b/tools/include/nolibc/sys.h
-> > @@ -28,6 +28,21 @@
-> >  #include "errno.h"
-> >  #include "types.h"
-> >  
-> > +/* Syscall call and return helpers */
-> > +#define __syscall_ret(ret)						\
-> > +({									\
-> > +	if (ret < 0) {							\
-> > +		SET_ERRNO(-ret);					\
-> > +		ret = (typeof(ret))-1;					\
-> > +	}								\
-> > +	ret;								\
-> > +})
-> > +
-> > +#define __syscall(name, ...)						\
-> > +({									\
-> > +	typeof(sys_##name(__VA_ARGS__)) ret = sys_##name(__VA_ARGS__);	\
-> > +	__syscall_ret(ret);						\
-> > +})
+> Thomas and Zhangjin have provided significant nolibc cleanups, and
+> fixes, as well as preparation work to later support riscv32.
 > 
-> Well, I personally don't find that it increases legibility, on the
-> opposite. At first when reading the series, I thought you had dropped
-> errno setting on return. I think the reason is that when reading that
-> last macro, it's not at all obvious that __syscall_ret() is actually
-> modifying this ret value *and* returning it as the macro's result.
+> These consist in the following main series:
+>   - generalization of stackprotector to other archs that were not
+>     previously supported (riscv, mips, loongarch, arm, arm64)
 > 
-> If we'd want to go down that route, I suspect that something like this
-> would at least hint about what is being returned:
+>   - general cleanups of the makefile, test report output, deduplication
+>     of certain tests
 > 
-> +#define __syscall(name, ...)						\
-> +({									\
-> +	typeof(sys_##name(__VA_ARGS__)) ret = sys_##name(__VA_ARGS__);	\
-> +	ret = __syscall_ret(ret);					\
-> +})
+>   - slightly better compliance of some tests performed on certain syscalls
+>     (e.g. no longer pass (void*)1 to gettimeofday() since glibc hates it).
 > 
-> But I'm interested in others' opinion on this, particularly Thomas and
-> Arnd who review a significant number of patches. For now I prefer not
-> to take it before we've settled on a choice.
+>   - add support for nanoseconds in stat() and statx()
+> 
+>   - fixes for some syscalls (e.g. ppoll() has 5 arguments not 4)
+> 
+>   - fixes around limits.h and  INT_MAX / INT_FAST64_MAX
+> 
+> I rebased the whole series on top of your latest dev branch (d19a9ca3d5)
+> and it works fine for all archs.
+> 
+> I don't know if you're still planning on merging new stuff in this area
+> for 6.5 or not (since I know that it involves new series of tests on your
+> side as well), but given that Zhangjin will engage into deeper changes
+> later for riscv32 that will likely imply to update more syscalls to use
+> the time64 ones, I would prefer to split the cleanups from the hard stuff,
+> but I'll let you judge based on the current state of what's pending for
+> 6.5.
+> 
+> In any case I'm putting all this here for now (not for merge yet):
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230604-nolibc-rv32+stkp6
+> 
+> I'd like Thomas and Zhangjin to perform a last check to confirm they're
+> OK with this final integration.
 
-While I see the value in factoring out this pattern I'm also not really
-happy with the implementation.
-Especially the magic delegation to "sys_##name".
+Given that the testing converges by the end of this week, I can't see
+any reason why these cannot make v6.5.  (There were some kernel test
+robot complaints as well, valid or not I am not sure.)
 
-What about something like this:
-
-static inline long __ret_as_errno(long ret) /* or some other name */
-{
-	if (ret < 0) {
-		SET_ERRNO(-ret);
-		ret = -1;
-	}
-	return ret;
-}
-
-This avoids another macro by using a normal function.
-
-Syscall return values should always fit into long, at least
-extrapolating from syscall(2) and the fact that they are returned in
-registers.
-
-It would be a bit more verbose:
-
-int chdir(const char *path)
-{
-	return __ret_as_errno(sys_chdir(path));
-}
-
-But it's clear what's going on and also just one line.
-
-Thomas
+							Thanx, Paul
