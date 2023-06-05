@@ -2,116 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566DD72244D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 13:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3F17224B4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 13:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjFELMk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Jun 2023 07:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S232448AbjFELgv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Jun 2023 07:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjFELMi (ORCPT
+        with ESMTP id S232455AbjFELgu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:12:38 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3587FF9;
-        Mon,  5 Jun 2023 04:12:32 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1685963542tue2ikmf
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 05 Jun 2023 19:12:20 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: OFQdrTmJ2CTPW1rKDCObcDNnOiZf5G7OS3ydy8gWgcFCDkj+ygtkUgsn400hH
-        XcSUWjIUNzPtaf8xdx7SFAnkqm4qlz8q1TNpP2NF7JMWaqIsoZlribWjxH/w1NEo7SbyC5b
-        F92p0FGK7JG8wnYKGctbxx6aeT4sz7bKph2fDS5AZpiMLMwk24QctEz8nrwFI6Q1E6Pib2U
-        jt5K73G2WlUJGRP5WBbIheVih803jE07C36L5wdUjHC/1cpE/7qTPuGiphDybYWA+244CtI
-        jRzwIlx9YqZfIlDJqF99mh2vl/FSgqnL3nxqsgmq1plH+Gxcjh4nrk1izDcpUc34YW5KdsJ
-        KLxbUW52+5Oc0+lMblXBmrdRMNdM1huR0Axg8p3D0BBu+d+7gxM6YL82yirIg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5716039531870868684
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v3 11/12] selftests/nolibc: add new gettimeofday test cases
-Date:   Mon,  5 Jun 2023 19:12:20 +0800
-Message-Id: <20230605111220.252069-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZHx1OliMqHx9U1Lw@1wt.eu>
-References: <ZHx1OliMqHx9U1Lw@1wt.eu>
+        Mon, 5 Jun 2023 07:36:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3A4EA
+        for <linux-kselftest@vger.kernel.org>; Mon,  5 Jun 2023 04:36:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685964961;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kYARy8HibsJRuVCsxN/w1opXBP1A7Z939kJomrPeo3k=;
+        b=gx4+vO5yukSO1rHywesm9BglIwuDitnv5aHOAz/JdDAZEmHmFi062i9Ag/BEpoDFiCHf2e
+        GyYbEXPU3NkinCbbVHle0LBnEx1H8PdKDCtxHz8a7ghK17EQG0Q/5bDmL2iFH697T1hJxO
+        KyUzoZPnyWDTJslsoyH67IpvM/7MZvo=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-647-oADSrv4sMZCipmSr0Uj1ig-1; Mon, 05 Jun 2023 07:36:00 -0400
+X-MC-Unique: oADSrv4sMZCipmSr0Uj1ig-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f5fa06debcso28210305e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jun 2023 04:36:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685964959; x=1688556959;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kYARy8HibsJRuVCsxN/w1opXBP1A7Z939kJomrPeo3k=;
+        b=VyPZKUx4OoRNDD4n0/UnYBjPWfZ7h2EHhprpmzTD8jMhWxS/IniBUaofkzPFdtL4vf
+         uDatxbnsxL4bAKs2oTb/EoN8MpXZ/8nHt/JY3fErWrDe/YQj/JJrJ72n6xbS2RjQWuNe
+         IolZakjHrF23BSjEQGwXfVlreymMLUF9EDzqZd8KSJau0XrKOfs1fovEXfRmi9JKZZbB
+         IfrwyRPuEOoozDrpl6WZBxVwfCPiQbmghoAOngmIBYJQ5p1hD8r1y+HbwiMvBlalUXcs
+         OZNquVmAZNlQY+aG0eDCSRXHuYEl/YrpuQ/jSwOP/sZ4rQSAZ2Cmzst9RP2wI64sLh1e
+         pxSg==
+X-Gm-Message-State: AC+VfDzhxASn137orveJG4TNv4fgv7lozgzlyL/xdaPY0X/9dxdAzWrv
+        OSVe++ld1ZVDFt36gPucG/AwUYqlToTYjvq4u8U7l8J+7Vrdz+C3mf8IM9JPr1VeUjLCl/z3o4H
+        +Bx4UEbOSw3yo7X3YmtBfBr7qARgRU7HjxPQD
+X-Received: by 2002:a1c:7208:0:b0:3f7:4961:52ad with SMTP id n8-20020a1c7208000000b003f7496152admr2513975wmc.3.1685964959154;
+        Mon, 05 Jun 2023 04:35:59 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4kqLKmA6Uaca3flnGm41wNf/22uPch19FG6pqRuK+wk+si/v/bT8+LCR0C/BaP0urg5ol3tQ==
+X-Received: by 2002:a1c:7208:0:b0:3f7:4961:52ad with SMTP id n8-20020a1c7208000000b003f7496152admr2513963wmc.3.1685964958842;
+        Mon, 05 Jun 2023 04:35:58 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c737:8f00:ed9:16b8:4e22:5820? (p200300cbc7378f000ed916b84e225820.dip0.t-ipconnect.de. [2003:cb:c737:8f00:ed9:16b8:4e22:5820])
+        by smtp.gmail.com with ESMTPSA id n2-20020a5d4c42000000b00306415ac69asm9435530wrt.15.2023.06.05.04.35.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 04:35:58 -0700 (PDT)
+Message-ID: <0764cf72-26fe-627b-f56c-b0d2629bc9e3@redhat.com>
+Date:   Mon, 5 Jun 2023 13:35:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 02/11] selftests/mm: fix unused variable warnings in
+ hugetlb-madvise.c, migration.c
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230603021558.95299-1-jhubbard@nvidia.com>
+ <20230603021558.95299-3-jhubbard@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230603021558.95299-3-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On Sun, Jun 04, 2023 at 11:24:39AM +0200, Arnd Bergmann wrote:
-> > On Sun, Jun 4, 2023, at 10:29, ??? wrote:
-> > >
-> > > Sorry for missing part of your feedbacks, I will check if -nostdlib 
-> > > stops the linking of libgcc_s or my own separated test script forgot 
-> > > linking the libgcc_s manually.
-> > 
-> > According to the gcc documentation, -nostdlib drops libgcc.a, but
-> > adding -lgcc is the recommended way to bring it back.
-> > 
-> > > And as suggestion from Thomas' reply,
-> > >
-> > >>> Perhaps we really need to add the missing __divdi3 and __aeabi_ldivmod and the
-> > >>> ones for the other architectures, or get one from lib/math/div64.c.
-> > >
-> > >>No, these ones come from the compiler via libgcc_s, we must not try to
-> > > reimplement them. And we should do our best to avoid depending on them
-> > > to avoid the error you got above.
-> > >
-> > > So, the explicit conversion is used instead in the patch.
-> > 
-> > I think a cast to a 32-bit type is ideal when converting the
-> > clock_gettime() result into microseconds, since the kernel guarantees
-> > that the timespec value is normalized, with all zeroes in the
-> > upper 34 bits. Going through __aeabi_ldivmod would make the
-> > conversion much slower.
-> > 
-
-Perfectly, this message is really required to be added to the coming
-clock_gettime/time64 patches, I did worry about the (unsigned int)
-conversion may lose the upper bits, thanks Arnd.
-
-> > For user supplied non-normalized timeval values, it's not obvious
-> > whether we need the full 64-bit division
+On 03.06.23 04:15, John Hubbard wrote:
+> Dummy variables are required in order to make these two (similar)
+> routines work, so in both cases, declare the variables as volatile in
+> order to avoid the clang compiler warning.
 > 
-> We don't have to care about these here for the microsecond part,
-> because for decades these were exclusively 32-bit. Also the only
-> one consuming this field would have been settimeofday() and it's
-> already documented as returning EINVAL if tv_usec is not within
-> the expected 0..999999 range.
+> Furthermore, in order to ensure that each test actually does what is
+> intended, add an asm volatile invocation (thanks to David Hildenbrand
+> for the suggestion), with a clarifying comment so that it survives
+> future maintenance.
 > 
-
-And this one, thanks Willy.
-
-> And when in doubt we should keep in mind that nolibc's purpose is not
-> to become a yet-another full-blown libc alternative but just a small
-> piece of software allowing to produce portable and compact binaries
-> for testing or booting. Being a bit stricter than other libcs for the
-> sake of code compactness is better here. Originally for example it was
-> necessary to always pass the 3 arguments to open(). Over time we managed
-> to make simple code compile with both glibc and nolibc, but when it
-> comes at the cost of adding size and burden for the developers, such
-> as forcing them to add libgcc, I prefer that we slightly limit the
-> domain of application instead.
-
-This explains why it is 'no' libc ;-)
-
-Best regards,
-Zhangjin
-
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>   tools/testing/selftests/mm/hugetlb-madvise.c | 8 ++++++--
+>   tools/testing/selftests/mm/migration.c       | 5 ++++-
+>   2 files changed, 10 insertions(+), 3 deletions(-)
 > 
-> Thanks!
-> Willy
+> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+> index 28426e30d9bc..d55322df4b73 100644
+> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
+> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+> @@ -65,11 +65,15 @@ void write_fault_pages(void *addr, unsigned long nr_pages)
+>   
+>   void read_fault_pages(void *addr, unsigned long nr_pages)
+>   {
+> -	unsigned long dummy = 0;
+> +	volatile unsigned long dummy = 0;
+>   	unsigned long i;
+>   
+> -	for (i = 0; i < nr_pages; i++)
+> +	for (i = 0; i < nr_pages; i++) {
+>   		dummy += *((unsigned long *)(addr + (i * huge_page_size)));
+> +
+> +		/* Prevent the compiler from optimizing out the entire loop: */
+> +		asm volatile("" : "+r" (dummy));
+> +	}
+>   }
+>   
+>   int main(int argc, char **argv)
+> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+> index 1cec8425e3ca..379581567f27 100644
+> --- a/tools/testing/selftests/mm/migration.c
+> +++ b/tools/testing/selftests/mm/migration.c
+> @@ -95,12 +95,15 @@ int migrate(uint64_t *ptr, int n1, int n2)
+>   
+>   void *access_mem(void *ptr)
+>   {
+> -	uint64_t y = 0;
+> +	volatile uint64_t y = 0;
+>   	volatile uint64_t *x = ptr;
+>   
+>   	while (1) {
+>   		pthread_testcancel();
+>   		y += *x;
+> +
+> +		/* Prevent the compiler from optimizing out the writes to y: */
+> +		asm volatile("" : "+r" (y));
+>   	}
+>   
+>   	return NULL;
+
+With the asm, I think the "volatile" might be completely unnecessary. 
+But it doesn't hurt.
+
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Cheers,
+
+David / dhildenb
+
