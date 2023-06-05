@@ -2,147 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75047228E9
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 16:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1509722B5E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 17:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232973AbjFEOgJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Jun 2023 10:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
+        id S234747AbjFEPj5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Jun 2023 11:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234127AbjFEOgI (ORCPT
+        with ESMTP id S234880AbjFEPjs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:36:08 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346EBED;
-        Mon,  5 Jun 2023 07:36:06 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50d897af77bso684379a12.1;
-        Mon, 05 Jun 2023 07:36:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685975764; x=1688567764;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/nEIx2pKx8MANmuUD53PuQCkyn4NP8umHBPTpshdhtE=;
-        b=X4pOGtiEGzl58GIFHbyV096t93IrJzELqcypLc4QMyHeBwAan/aALSMopAZ+lqPIs/
-         PZNtR1f+KboWQSY8gUKV8bP6VLPOPyLj9X+PcDBik6Rb1GkoW1dQzGRxs/VB+cefUAHk
-         oqOoq9ZzN1ix9J54M/O922WWDlAgpQE5AKeuQY1UWV5aftGRdFXROUT/wO25J2bq7tvJ
-         ntDFTIewi2nWrpz4P99jP9etHFIKzZEQQ2s93Ttnro2HDYWUBGQU+f9mpHNbRQ5IlJbB
-         1OEzF7yvggyK3Clsj7G1B3wcFoRHXo6xJ+JId++mQ9eGPjlFHkVYB7SLL19lfxy+iJ6r
-         HQbw==
+        Mon, 5 Jun 2023 11:39:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04805D2
+        for <linux-kselftest@vger.kernel.org>; Mon,  5 Jun 2023 08:39:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685979543;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MQkr2X8nA9Tbhw8fess+euxrCcam9DnIxmBl/XeagVo=;
+        b=G8bCimn1Vkb9ZXVgJC58KymE6MrdiadGdNj4/qljGJK2Dlj2ziXqIC96zLyrVwp5GoCAiQ
+        eNZZhdW04+F9ovO8YGLzPZ39sEr5hOnDmud8yUKdQVbvBMkeXo43Na7M/aBvMFweL4c8dB
+        f63WzgB9NY2pOD/K6YDPAOtGUJFVa9c=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-518-1tIwtJVpOFymUoiXcHgWHg-1; Mon, 05 Jun 2023 11:39:02 -0400
+X-MC-Unique: 1tIwtJVpOFymUoiXcHgWHg-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f899ba8dc1so2710921cf.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jun 2023 08:39:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685975764; x=1688567764;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/nEIx2pKx8MANmuUD53PuQCkyn4NP8umHBPTpshdhtE=;
-        b=SdyEPM1jdpO9UOjc0wb88OGty/2k7gzfz84pMrlR/hf04x2sNQsdH1kLGenOSnkhxC
-         Xed8E54J/t3ug3QhcTKKK9S6FyI+GU2Nfdy8cGyACpdQSsAJJ5OFZ1LEYjBQIb0EkKQI
-         tJJXJxCHPvOLDAw4vDc4XhESB+5cK7+73Rb3lgOuasUOzGUJK37tQ2cXI1+WCiuxAInz
-         o181SDEEJ3+Vhd+oKmOzYltAwTl6rm6kl+wGo0zJEQpEs6aEkoZ59zeV0cjGMG3vAhlx
-         alKcLY3f9/woPFYXzZHbAJgs4sRWY+Oz0rP4+K7vORK2mCY8PoBfWMRqewxfYcGb40WL
-         mClg==
-X-Gm-Message-State: AC+VfDwVqPXhfqSKpU9vMuVKLCbgVychtSfjpQQQ9MfKX1HXgt/fCgeD
-        EPuFSTDv/gyQV+PxqlAhg+c=
-X-Google-Smtp-Source: ACHHUZ64cK7Y08p9XC1fThPd/qyz85iOAi9xrRj76BmDStiQbKH5iM+XYS3Sd25RTQiQg9fupo3QbA==
-X-Received: by 2002:a17:906:7a17:b0:974:56cb:9dfc with SMTP id d23-20020a1709067a1700b0097456cb9dfcmr9788715ejo.1.1685975764343;
-        Mon, 05 Jun 2023 07:36:04 -0700 (PDT)
-Received: from localhost ([134.191.220.83])
-        by smtp.gmail.com with ESMTPSA id i21-20020a170906851500b00965e9a23f2bsm4364473ejx.134.2023.06.05.07.35.34
+        d=1e100.net; s=20221208; t=1685979541; x=1688571541;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MQkr2X8nA9Tbhw8fess+euxrCcam9DnIxmBl/XeagVo=;
+        b=LZ+726HMbiwqe/xr1aPFuoEJ1WuZTmDkKZDYD0cgIL+Ed4IFhoSzdyK8w4Tt5GaWXY
+         PKAN8pfM+DzkVrNary7qiDMwl3UEaurwAj+x7X8Xlg8xewY4Cl27JPvzB+syu6dPddsc
+         oV5rWJzdIM//A5ErLNKPk5MSOXWFb/uZDJAedKtkGzN+4d5Vu41u6vTFYbgDie8ve4QR
+         MuKclLrLdc7OSGMFpVBIx1arcOFWjTUZUl9JbwvjHpLwJLMHxBm3kjXHJa4HFi5XrUta
+         SpE1FpNkuRwkwGB4YUuHORUjgNMtIstzyOdpfXxdp1kOXfzZQkaZ5K4oA3o6BVPI7cO8
+         lDvw==
+X-Gm-Message-State: AC+VfDwwY/YoGvGW+z2xOby96d0q92PMtONrt0HclaD7OK/9ceQ8zv+V
+        qgG8lCsDtpCmolPo7vsdsbQmUIhtJZk2t/KGfpVUDO61mKt+58uY4M2TtLBLaWpTucjaMO1XJIE
+        8MTbmVdIZm3Ou0RNwuWL/t/kpiDfJin8wpshz
+X-Received: by 2002:ac8:5c50:0:b0:3f5:315f:5c1d with SMTP id j16-20020ac85c50000000b003f5315f5c1dmr25510662qtj.4.1685979541286;
+        Mon, 05 Jun 2023 08:39:01 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6X9CYQMUlZYA93CXYoJuh/J/dQRSbdRkTjm8X+EToYZM1MmiRsxpa17vOq+AzSo0GpunfjUA==
+X-Received: by 2002:ac8:5c50:0:b0:3f5:315f:5c1d with SMTP id j16-20020ac85c50000000b003f5315f5c1dmr25510636qtj.4.1685979540993;
+        Mon, 05 Jun 2023 08:39:00 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id h8-20020ac87448000000b003e635f80e72sm4780407qtr.48.2023.06.05.08.38.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 07:36:04 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 22:35:20 +0800
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
-        suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
-        anup@brainfault.org, atishp@atishpatra.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
-        dmatlack@google.com, ricarkol@google.com,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 09/16] KVM: arm64: Document the page table walker
- actions based on the callback's return value
-Message-ID: <20230605223520.00007fbd.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230602160914.4011728-10-vipinsh@google.com>
-References: <20230602160914.4011728-1-vipinsh@google.com>
-        <20230602160914.4011728-10-vipinsh@google.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 05 Jun 2023 08:39:00 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 11:38:58 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 04/12] selftests/mm: fix a char* assignment in
+ mlock2-tests.c
+Message-ID: <ZH4BkqDh0MXqx8ae@x1n>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-5-jhubbard@nvidia.com>
+ <18e69073-1007-07d8-bf0d-5f400ecab8ea@redhat.com>
+ <ZHoJxAWtwBo33l6B@x1n>
+ <f61fb7c1-64ab-c3c3-bd95-92a962f07226@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f61fb7c1-64ab-c3c3-bd95-92a962f07226@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri,  2 Jun 2023 09:09:07 -0700
-Vipin Sharma <vipinsh@google.com> wrote:
-
-> Document what the page table walker do when walker callback function returns
-> a value.
+On Fri, Jun 02, 2023 at 11:52:42AM -0700, John Hubbard wrote:
+> On 6/2/23 08:24, Peter Xu wrote:
+> > On Fri, Jun 02, 2023 at 12:04:57PM +0200, David Hildenbrand wrote:
+> > > On 02.06.23 03:33, John Hubbard wrote:
+> > > > The stop variable is a char*, so use "\0" when assigning to it, rather
+> > > > than attempting to assign a character type. This was generating a
+> > > > warning when compiling with clang.
+> > > > 
+> > > > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> > > > ---
+> > > >    tools/testing/selftests/mm/mlock2-tests.c | 2 +-
+> > > >    1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
+> > > > index 11b2301f3aa3..8ee95077dc25 100644
+> > > > --- a/tools/testing/selftests/mm/mlock2-tests.c
+> > > > +++ b/tools/testing/selftests/mm/mlock2-tests.c
+> > > > @@ -50,7 +50,7 @@ static int get_vm_area(unsigned long addr, struct vm_boundaries *area)
+> > > >    			printf("cannot parse /proc/self/maps\n");
+> > > >    			goto out;
+> > > >    		}
+> > > > -		stop = '\0';
+> > > > +		stop = "\0";
+> > > >    		sscanf(line, "%lx", &start);
+> > > >    		sscanf(end_addr, "%lx", &end);
+> > > 
+> > > 
+> > > I'm probably missing something, but what is the stop variable supposed to do
+> > > here? It's completely unused, no?
+> > > 
+> > > if (!strchr(end_addr, ' ')) {
+> > > 	printf("cannot parse /proc/self/maps\n");
+> > > 	goto out;
+> > > }
 > 
-> Current documentation is not correct as negative error of -EAGAIN on a
-> non-shared page table walker doesn't terminate the walker and continues
-> to the next step.
+> Yes it is! I certainly had tunnel vision on that one. I've changed the
+> patch to simply delete that line, for v2, thanks.
 > 
-> There might be a better place to keep this information, for now this
-> documentation will work as a reference guide until a better way is
-> found.
->
-
-After reading the whole patch series, I was thinking it might be a good
-time to improve the way how the visitor function and page table walker
-talk to each other. The error code is good enough before, but its meaning
-seems limited and vague when the visitor function wants to express more about
-what exactly happens inside. I am not sure if it is a good idea to continue
-that way: 1. found a new situation. 2. choosing a error code for visitor
-function. 3. walker translates the error code into the situation to
-handle. 4. document the error code and its actual meaning.
-
-Eventually I am afraid that we are going to abuse the error code.
-
-What about introducing a set of flags for the visitor function to express
-what happened and simplify the existing error code?
-
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> ---
->  arch/arm64/include/asm/kvm_pgtable.h | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
+> > 
+> > I guess it wanted to do "*stop = '\0'" but it just didn't matter a lot
+> > since the sscanf() just worked..
+> > 
 > 
-> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
-> index 8ef7e8f3f054..957bc20dab00 100644
-> --- a/arch/arm64/include/asm/kvm_pgtable.h
-> +++ b/arch/arm64/include/asm/kvm_pgtable.h
-> @@ -711,8 +711,19 @@ int kvm_pgtable_stage2_split(struct kvm_pgtable *pgt, u64 addr, u64 size,
->   * after invoking the walker callback, allowing the walker to descend into
->   * a newly installed table.
->   *
-> - * Returning a negative error code from the walker callback function will
-> - * terminate the walk immediately with the same error code.
-> + * Depending on the return value from the walker callback function, the page
-> + * table walk will continue or exit the walk. This is also dependent on the
-> + * type of the walker, i.e. shared walker (vCPU fault handlers) or non-shared
-> + * walker.
-> + *
-> + * Walker Type  | Callback         | Walker action
-> + * -------------|------------------|--------------
-> + * Non-Shared   | 0                | Continue
-> + * Non-Shared   | -EAGAIN          | Continue
-> + * Non-Shared   | Any other        | Exit
-> + * -------------|------------------|--------------
-> + * Shared       | 0                | Continue
-> + * Shared       | Any other        | Exit
->   *
->   * Return: 0 on success, negative error code on failure.
->   */
+> Maybe, yes. Hard to tell the original intent at this point...it might
+> have been used in an early draft version of the loop that didn't get
+> posted, perhaps.
+
+I'm pretty sure of it.. see the pattern:
+
+		end_addr = strchr(line, '-');
+		if (!end_addr) {
+			printf("cannot parse /proc/self/maps\n");
+			goto out;
+		}
+		*end_addr = '\0';
+
+And...
+
+		stop = strchr(end_addr, ' ');
+		if (!stop) {
+			printf("cannot parse /proc/self/maps\n");
+			goto out;
+		}
+		stop = '\0';    <------------------- only diff here
+
+-- 
+Peter Xu
 
