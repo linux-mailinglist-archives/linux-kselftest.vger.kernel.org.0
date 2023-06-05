@@ -2,88 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493EA721F34
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 09:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3676F721F58
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 09:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbjFEHNp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Jun 2023 03:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
+        id S231293AbjFEHQ0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Jun 2023 03:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjFEHNi (ORCPT
+        with ESMTP id S231287AbjFEHQX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:13:38 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1468E62;
-        Mon,  5 Jun 2023 00:13:13 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1685948709t0hdsv4v
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 05 Jun 2023 15:05:08 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: OFQdrTmJ2CQhbplmT8464RTU9RxGWO3Kw3No1opfWzZH7Zxfd+SQf/zCI/8jA
-        0OD5hugEKHGAd2AcaRlNrPRLaqnz7hsclaHKVSrHCvZ+igZofhh/0KFX5FKNuTIubQhLUfg
-        qjyHhhjzPKSrKefFylb5NVNvQrHj5q/jW0D6nGDeB3EXdS7ylej2rj3remKaojhuxZoIju+
-        i6eHd7dRdEE2IFPrnyIjqt5ft9tPppa6qFv3gb9t2C0NXlA90wJ26hrgpXwWVP7l3ypaL8S
-        vrHcEKu9MrupV5qwrGRgITGP488xmeehnZ8BkW76B6ilaErZE2wUPMCj6u5MZnGypA7YCnO
-        MbK0H1tEaqXX9bX2kIvPVzDVi595oRaynbtLLHC8vBwkt300dycQEXnDZCq4plr5a4Cvub4
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10052685616247688945
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH 3/4] selftests/nolibc: always print the log file
-Date:   Mon,  5 Jun 2023 15:05:08 +0800
-Message-Id: <20230605070508.153407-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZH1ioKUVOYGgDUj7@1wt.eu>
-References: <ZH1ioKUVOYGgDUj7@1wt.eu>
-MIME-Version: 1.0
+        Mon, 5 Jun 2023 03:16:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01987E9;
+        Mon,  5 Jun 2023 00:16:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id ADBEC21B1F;
+        Mon,  5 Jun 2023 07:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1685949364; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VvobikAyYLd5tNbqhgR0HiS99+mLLI7sqkpLdjdt9Xg=;
+        b=hbrZ7RHtTFh3lFSwfJewIoVWFCNd9Px6YYoyfhk7e/uh9RWcNA/giRTxp9+hQPPd75w85v
+        1DPwh8BysAYVNAay9JCa0zpKgcM443KdZ6Ok/xg8jqV4a1Pn8+srPcKITlOGnMatARggA1
+        9anQs9brs8F5xPY83o5oIRM3YboqzXw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1685949364;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VvobikAyYLd5tNbqhgR0HiS99+mLLI7sqkpLdjdt9Xg=;
+        b=Pw4S27pJNwrpqHa1bM5XY4yVGTEztYBGKUXEq/wFpQjP9Sjzr+7hb0QVLaTIe330wmNr0Y
+        zUSYVvThQZsLx6CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7CABD139C7;
+        Mon,  5 Jun 2023 07:16:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GzdUHbSLfWRcZgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 05 Jun 2023 07:16:04 +0000
+Date:   Mon, 05 Jun 2023 09:16:04 +0200
+Message-ID: <871qiqjs5n.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v1 1/1] selftests: alsa: pcm-test: Fix compiler warnings about the format
+In-Reply-To: <20230524191528.13203-1-mirsad.todorovac@alu.unizg.hr>
+References: <20230524191528.13203-1-mirsad.todorovac@alu.unizg.hr>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-7
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On Mon, Jun 05, 2023 at 11:57:44AM +0800, Zhangjin Wu wrote:
-> > This allows to check the other issues of the output file manually even
-> > when all of them passed.
+On Wed, 24 May 2023 21:15:29 +0200,
+Mirsad Goran Todorovac wrote:
 > 
-> Till now I preferred not to see it when everything was OK since it was
-> useless and permitted a quick visual check in the reports. Do you
-> really think it's useful ? If others prefer it that way we can change
-> it but I purposely added this test to "improve" the output (for me at
-> least). I'm interested in opinions here.
->
+> GCC 11.3.0 issues warnings in this module about wrong sizes of format
+> specifiers:
+> 
+> pcm-test.c: In function ¡test_pcm_time¢:
+> pcm-test.c:384:68: warning: format ¡%ld¢ expects argument of type ¡long int¢, but argument 5 \
+> 				has type ¡unsigned int¢ [-Wformat=]
+>   384 |                 snprintf(msg, sizeof(msg), "rate mismatch %ld != %ld", rate, rrate);
+> pcm-test.c:455:53: warning: format ¡%d¢ expects argument of type ¡int¢, but argument 4 has \
+> 				type ¡long int¢ [-Wformat=]
+>   455 |                                          "expected %d, wrote %li", rate, frames);
+> pcm-test.c:462:53: warning: format ¡%d¢ expects argument of type ¡int¢, but argument 4 has \
+> 				type ¡long int¢ [-Wformat=]
+>   462 |                                          "expected %d, wrote %li", rate, frames);
+> pcm-test.c:467:53: warning: format ¡%d¢ expects argument of type ¡int¢, but argument 4 has \
+> 				type ¡long int¢ [-Wformat=]
+>   467 |                                          "expected %d, wrote %li", rate, frames);
+> 
+> Simple fix according to compiler's suggestion removed the warnings.
+> 
+> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-I planed to add detailed potential issues to check in the commit
-message, but didn't do that eventually.
+Applied now.  Thanks.
 
-The potential 'issues' may be:
 
-1. string alignment, I found one character offset in the user-space
-   'efault' handler patchset
-2. duplicated print, the one like '30 fork' we have fixed up
-3. kernel messages (may provide some important info)
-
-I did add this manually several times in the past weeks, so, if the path
-is there, I can simply copy it and cat it, hope we can print the path by
-default ;-) 
-
-The commit message may be changed to something like this:
-
-    This allows us to check the details in the log file even when all of
-    them passed, from the log details, we can check the string
-    alignment, duplicated print and kernel messages.
-
-Best regards,
-Zhangjin
-
-> Willy
+Takashi
