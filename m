@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3717721C1F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 04:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352D7721C2E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 04:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbjFECuI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 4 Jun 2023 22:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
+        id S230378AbjFECzE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 4 Jun 2023 22:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbjFECuH (ORCPT
+        with ESMTP id S229886AbjFECzD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 4 Jun 2023 22:50:07 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533E0BC;
-        Sun,  4 Jun 2023 19:50:06 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id 3f1490d57ef6-ba86ea269e0so5303305276.1;
-        Sun, 04 Jun 2023 19:50:06 -0700 (PDT)
+        Sun, 4 Jun 2023 22:55:03 -0400
+Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6E2A9;
+        Sun,  4 Jun 2023 19:55:02 -0700 (PDT)
+Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-568928af8f5so65242317b3.1;
+        Sun, 04 Jun 2023 19:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685933405; x=1688525405;
+        d=gmail.com; s=20221208; t=1685933701; x=1688525701;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6KhfVPYZ7vtB0w+jSRd90gM6VmUDM45T4v5y5RR1xVo=;
-        b=bPRbKmPnQH58sMcv8MdpzwRbB4HT9uLs4Y1b9vbCYHaVMI5fVqA0UbOhVBdZUKVLwL
-         474L+1gaDfOxkB5SM7VhDEjtpAXYAQeoyfGucp0hQ6P5k9vt/6LujP0M1+SAAiBTzOYS
-         whC7qWxHmjevNdG/6xnEyJU4h4A6USgsJ+lgMElD8Pcn5zwjL1LzQvwC+kTnbuBnehmA
-         LKgzQq3T2ALRXU9YAhmRbv0PLKC0iLwiq2/yjl0NYeb44AC1Rf+L7PWlWdO6wUpwm0tO
-         rvRWMni7+yIwkFxgx+Cx5Q0mS4d9yPGuTuWC6U8M72487CdKYVvdmQeXtVSgg7H1TwIG
-         z7Aw==
+        bh=2IVNYUufQ9JCjk49iI258fSjZYigZQWdzvsQcVbQviE=;
+        b=dV4piXu9PusE2f0xIH/vuYYIZdmUHuPOvQr2y4/6tZM/3HCW6JWkANpKLIamWlR+En
+         QBAqp0fj1ylVJ9flBMXgLswL4Mba1+U8kXlIXVHKLX/RQGTc/bH8dPhsoQoXNu9hYnoK
+         LXYNp1/JiP77RxyUi2sA4r5LmJ454in3rYb1kcH4rx31l85gOul/8oXTc2yN/7TLPGc7
+         w2cBC99uUg7+ZeA2MECeBp7Us+A9ag/H2J+buTYBX2zUxn2tgOrMJ+AALc9pDxZqD8xY
+         yqJ8cIMGJZ1YkIls9DlAWl40+NsnRKJo72aF6tpXNEnVewqP4ToM6YMs7YADGn+nznFL
+         o/4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685933405; x=1688525405;
+        d=1e100.net; s=20221208; t=1685933701; x=1688525701;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6KhfVPYZ7vtB0w+jSRd90gM6VmUDM45T4v5y5RR1xVo=;
-        b=ANJ9zfjPrIwAOgbzMnY6oUDhp/mPVAMHeNvY6ujMhvvoDDAqTl40z7ksaYCVN5JI+C
-         7ASoL1g8dkqUgPIknMEZ0xIoFSMtL800uiBQ1DMsuR3aZ/TjnEhmLnBJJY1AkM4qg8T3
-         5eJRsfFsNkf8Q0wD9dQiBRSKaav1hvpJBoUhYrNV6xp92GuL5hZUxFJRwzR1IXTr0Ksy
-         A2MikQwGZqTz0U4Z3ATPT0VXymknoWFk6t4LzCLYZaysGBXlZGmRxE8XNNoAECiAR7jM
-         D97sZ6AKqvmdA8ZV75OxTHV4BKgN9gauoMvzcWsQFAQ4QYDI5GN91RCwjrLXCUqX/bE/
-         QEhQ==
-X-Gm-Message-State: AC+VfDz5uzaEuYkjH52/3YpfuKvrElzXkoJvGeNA8i7sW/uuemG8BS5k
-        HzTm++LXkRRJo4EgqEpFlVu9nTyOCiljnXnervI=
-X-Google-Smtp-Source: ACHHUZ74FdG0iKtKcNrPsKROiROAqLv5sHCMmlS9F8x1ranHkY8n6l50USMKgmrr+k18R15OmrZiud2HhRHkD83ny2k=
-X-Received: by 2002:a25:84d2:0:b0:b96:1c8c:9d8c with SMTP id
- x18-20020a2584d2000000b00b961c8c9d8cmr10752423ybm.46.1685933405500; Sun, 04
- Jun 2023 19:50:05 -0700 (PDT)
+        bh=2IVNYUufQ9JCjk49iI258fSjZYigZQWdzvsQcVbQviE=;
+        b=Z1A5LXKYAyaa1CMatC0mOlcCxkZ8Zuwn0k/4joLghz5xOGdJypgLP4QEyz0zMObRlG
+         NRzGJJvyfdsnN4EyFwOC3YCB9xNncz7g6Jw51EyS0JPjjQ3HaYpcItbRyO6Irpd9Kt1A
+         yrHjycyVtsa1mUGKJmnDVpk9x7AR5fz+VipE3dQwjjZ7mjvfAuEEYLSJfmmCJh/j+ohE
+         gogo0BBvtzyDKuoZUf6itsr1CGuTArX4hxLSzZZutlu5XxVXEP6+0JIDrJhTH1u5l0xa
+         /uQPPhF4/dHB4cQLB0c3U1+yWrnhzSwLlXCyeCWeR9PtqfwOMdbAyw/YupFuHOOrySDI
+         FJlw==
+X-Gm-Message-State: AC+VfDyLbiy0WKTc8VS1IKq8Wsqyhw0oYU1fFxlOfEYzBK7C7PtOMlQB
+        l4FYvhEd0Anl2eB+66KNMbnWJeUNUR/UFyElvfQ=
+X-Google-Smtp-Source: ACHHUZ6zEr+Ej5npCdWeeKOW11wHgcDU72TKKo9FL4I1iy8UiIFdkMZ8gslHsEFdQ23W6OqOiH84NCNySnDIMcqoCzI=
+X-Received: by 2002:a0d:ea45:0:b0:561:9bcc:6c81 with SMTP id
+ t66-20020a0dea45000000b005619bcc6c81mr6969492ywe.24.1685933701633; Sun, 04
+ Jun 2023 19:55:01 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230602065958.2869555-1-imagedong@tencent.com>
- <20230602065958.2869555-2-imagedong@tencent.com> <CAADnVQL8F23zxfYBacD9mFt_2uWRXN8Cno3tZGce4W3QC8iSew@mail.gmail.com>
-In-Reply-To: <CAADnVQL8F23zxfYBacD9mFt_2uWRXN8Cno3tZGce4W3QC8iSew@mail.gmail.com>
+ <20230602065958.2869555-2-imagedong@tencent.com> <ZHtKl8UE3AmJ3OpH@corigine.com>
+In-Reply-To: <ZHtKl8UE3AmJ3OpH@corigine.com>
 From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Mon, 5 Jun 2023 10:49:54 +0800
-Message-ID: <CADxym3bp-KeFX4Mxo8Xhh9_NUWp5hw_bTQBOhTgJzskH7d_k_A@mail.gmail.com>
+Date:   Mon, 5 Jun 2023 10:54:50 +0800
+Message-ID: <CADxym3ZKi2WV=FBCzU+DrSmtbPC36BZKCs1=_QHXfCbapgU30w@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v2 1/5] bpf: make MAX_BPF_FUNC_ARGS 14
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Simon Horman <simon.horman@corigine.com>
 Cc:     Jiri Olsa <olsajiri@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         David Ahern <dsahern@kernel.org>,
@@ -82,11 +82,10 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jun 3, 2023 at 2:17=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Sat, Jun 3, 2023 at 10:13=E2=80=AFPM Simon Horman <simon.horman@corigine=
+.com> wrote:
 >
-> On Fri, Jun 2, 2023 at 12:01=E2=80=AFAM <menglong8.dong@gmail.com> wrote:
-> >
+> On Fri, Jun 02, 2023 at 02:59:54PM +0800, menglong8.dong@gmail.com wrote:
 > > From: Menglong Dong <imagedong@tencent.com>
 > >
 > > According to the current kernel version, below is a statistics of the
@@ -113,40 +112,33 @@ tf
 > > Therefore, let's make the maximum of function arguments count 14. It us=
 ed
 > > to be 12, but it seems that there is no harm to make it big enough.
+> >
+> > Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+> >  include/linux/bpf.h | 9 +++++----
+> >  1 file changed, 5 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index f58895830ada..8b997779faf7 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -961,10 +961,10 @@ enum bpf_cgroup_storage_type {
+> >
+> >  #define MAX_BPF_CGROUP_STORAGE_TYPE __BPF_CGROUP_STORAGE_MAX
+> >
+> > -/* The longest tracepoint has 12 args.
+> > - * See include/trace/bpf_probe.h
+> > +/* The maximun number of the kernel function arguments.
 >
-> I think we're just fine at 12.
-> People need to fix their code. ZSTD_buildCTable should be first in line.
-> Passing arguments on the stack is not efficient from performance pov.
+> Hi Menglong Dong,
+>
+> as it looks like there will be a v3 anyway, please
+> consider correcting the spelling of maximum.
+>
 
-But we still need to keep this part:
+According to the advice of Alexei Starovoitov, it seems
+we don't need to modify it here anymore. Anyway,
+Thank you for reminding me of this spelling mistake :)
 
-@@ -2273,7 +2273,8 @@ bool btf_ctx_access(int off, int size, enum
-bpf_access_type type,
- static inline bool bpf_tracing_ctx_access(int off, int size,
-                                          enum bpf_access_type type)
- {
--       if (off < 0 || off >=3D sizeof(__u64) * MAX_BPF_FUNC_ARGS)
-+       /* "+1" here is for FEXIT return value. */
-+       if (off < 0 || off >=3D sizeof(__u64) * (MAX_BPF_FUNC_ARGS + 1))
-                return false;
-        if (type !=3D BPF_READ)
-                return false;
-
-Isn't it? Otherwise, it will make that the maximum arguments
-is 12 for FENTRY, but 11 for FEXIT, as FEXIT needs to store
-the return value in ctx.
-
-How about that we change bpf_tracing_ctx_access() into:
-
-static inline bool bpf_tracing_ctx_access(int off, int size,
-                      enum bpf_access_type type,
-                      int max_args)
-
-And the caller can pass MAX_BPF_FUNC_ARGS to
-it on no-FEXIT, and 'MAX_BPF_FUNC_ARGS + 1'
-on FEXIT.
-
-What do you think?
-
-Thanks!
-Menglong Dong
+> ...
