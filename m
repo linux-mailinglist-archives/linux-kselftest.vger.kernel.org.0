@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17969721E96
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 08:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493EA721F34
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 09:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjFEGz3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Jun 2023 02:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        id S229449AbjFEHNp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Jun 2023 03:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjFEGz2 (ORCPT
+        with ESMTP id S229469AbjFEHNi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jun 2023 02:55:28 -0400
+        Mon, 5 Jun 2023 03:13:38 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF592E9;
-        Sun,  4 Jun 2023 23:55:20 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1685948110tj3ia4jc
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1468E62;
+        Mon,  5 Jun 2023 00:13:13 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1685948709t0hdsv4v
 Received: from linux-lab-host.localdomain ( [61.141.77.49])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 05 Jun 2023 14:55:09 +0800 (CST)
+        id ; Mon, 05 Jun 2023 15:05:08 +0800 (CST)
 X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: L0h5767YwF7UouhZzhBXRX0J562z4mUQF/JwTWKNazvGipvhUulKq4xIkj7LR
-        rGYqbiKejXCJRm9OO38WToeR8vgorbsgvCzKbe7x3dLf3w8/Pbt6Oca5ph0NXLYk3m18W5q
-        HQhS4qt73pq0qu21Ii7nuvMT4ePnsvJ9oLnofCcL43Wfi0slj9dT5cBidHaA340DOM83Xpx
-        XJ4T1DcJO1d7KEcrnhFLcMuowaEEJTEZvz8KGw4CBuHCRaAQ4x6n/kBZzFqscvr8Qf9Ac8T
-        4DkWW6a+7pbxpCd3aumbhdiA40RpcUJODeQsfbUDUKFnNscJqL3k21Xm5rUt6ycUp6d+Eik
-        yWJrsR6bAdss3QbnejPFsBdI3sJm9CjUV48Lh8u9A251MTegrBxyPdKPVzUXehTL+Ec6zPS
+X-QQ-FEAT: OFQdrTmJ2CQhbplmT8464RTU9RxGWO3Kw3No1opfWzZH7Zxfd+SQf/zCI/8jA
+        0OD5hugEKHGAd2AcaRlNrPRLaqnz7hsclaHKVSrHCvZ+igZofhh/0KFX5FKNuTIubQhLUfg
+        qjyHhhjzPKSrKefFylb5NVNvQrHj5q/jW0D6nGDeB3EXdS7ylej2rj3remKaojhuxZoIju+
+        i6eHd7dRdEE2IFPrnyIjqt5ft9tPppa6qFv3gb9t2C0NXlA90wJ26hrgpXwWVP7l3ypaL8S
+        vrHcEKu9MrupV5qwrGRgITGP488xmeehnZ8BkW76B6ilaErZE2wUPMCj6u5MZnGypA7YCnO
+        MbK0H1tEaqXX9bX2kIvPVzDVi595oRaynbtLLHC8vBwkt300dycQEXnDZCq4plr5a4Cvub4
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 14854381511492938161
+X-BIZMAIL-ID: 10052685616247688945
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
         thomas@t-8ch.de
-Subject: Re: [PATCH 1/4] selftests/nolibc: add a test-report target
-Date:   Mon,  5 Jun 2023 14:54:59 +0800
-Message-Id: <20230605065459.153001-1-falcon@tinylab.org>
+Subject: Re: [PATCH 3/4] selftests/nolibc: always print the log file
+Date:   Mon,  5 Jun 2023 15:05:08 +0800
+Message-Id: <20230605070508.153407-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZH1iDne+PiyZmIIB@1wt.eu>
-References: <ZH1iDne+PiyZmIIB@1wt.eu>
+In-Reply-To: <ZH1ioKUVOYGgDUj7@1wt.eu>
+References: <ZH1ioKUVOYGgDUj7@1wt.eu>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
@@ -52,89 +52,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On Mon, Jun 05, 2023 at 11:48:52AM +0800, Zhangjin Wu wrote:
-> > A standalone test-report target is added to let the run, run-user and
-> > rerun targets share them.
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/Makefile | 26 ++++++++++++-------------
-> >  1 file changed, 13 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > index be4159837494..8149ace2938a 100644
-> > --- a/tools/testing/selftests/nolibc/Makefile
-> > +++ b/tools/testing/selftests/nolibc/Makefile
-> > @@ -127,14 +127,18 @@ nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
-> >  libc-test: nolibc-test.c
-> >  	$(QUIET_CC)$(CC) -o $@ $<
-> >  
-> > -# qemu user-land test
-> > -run-user: nolibc-test
-> > -	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
-> > +test-report:
-> >  	$(Q)awk '/\[OK\]$$/{p++} /\[FAIL\]$$/{f++} /\[SKIPPED\]$$/{s++} \
-> >  	         END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
-> >  	         if (s+f > 0) printf(" See all results in %s\n", ARGV[1]); else print; }' \
-> >  	         $(CURDIR)/run.out
-> >  
-> > +# qemu user-land test
-> > +_run-user: nolibc-test
-> > +	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
-> > +
-> > +run-user: _run-user test-report
-> > +
+> On Mon, Jun 05, 2023 at 11:57:44AM +0800, Zhangjin Wu wrote:
+> > This allows to check the other issues of the output file manually even
+> > when all of them passed.
 > 
-> This will not reliably work, there's no ordering here, nothing guarantees
-> that test-report will run *after* _run-user (e.g. make -j). Another
-> approach is needed if you want to factor this, but in general creating
-> sequences in makefiles is difficult and often more painful than having
-> 3 times the same 3 lines.
+> Till now I preferred not to see it when everything was OK since it was
+> useless and permitted a quick visual check in the reports. Do you
+> really think it's useful ? If others prefer it that way we can change
+> it but I purposely added this test to "improve" the output (for me at
+> least). I'm interested in opinions here.
 >
 
-Ok, thanks, what about this?
+I planed to add detailed potential issues to check in the commit
+message, but didn't do that eventually.
 
-    # LOG_REPORT: report the test results
-    LOG_REPORT   := awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++} /\[SKIPPED\][\r]*$$/{s++} \
-	                 END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
-	                 printf(" See all results in %s\n", ARGV[1]); }'
+The potential 'issues' may be:
 
-    run-user: nolibc-test
-	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
-	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+1. string alignment, I found one character offset in the user-space
+   'efault' handler patchset
+2. duplicated print, the one like '30 fork' we have fixed up
+3. kernel messages (may provide some important info)
 
-    run: kernel
-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+I did add this manually several times in the past weeks, so, if the path
+is there, I can simply copy it and cat it, hope we can print the path by
+default ;-) 
 
-    rerun:
-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+The commit message may be changed to something like this:
 
-Or we directly add a standalone test report script? something like
-tools/testing/selftests/nolibc/report.sh
-
-    #!/bin/sh
-    #
-    # report.sh -- report the test results of nolibc-test
-    #
-    
-    LOG_FILE=$1
-    [ ! -f "$LOG_FILE" ] && echo "Usage: $0 /path/to/run.out"
-    
-    awk '
-        /\[OK\][\r]*$$/{ p++ }
-        /\[FAIL\][\r]*$$/{ f++ }
-        /\[SKIPPED\][\r]*$$/{ s++ }
-    
-        END {
-            printf("%d test(s) passed, %d skipped, %d failed.", p, s, f);
-            printf(" See all results in %s\n", ARGV[1]);
-        }' $LOG_FILE
-
-And use it like this:
-
-    LOG_REPORT           = $(CURDIR)/report.sh
+    This allows us to check the details in the log file even when all of
+    them passed, from the log details, we can check the string
+    alignment, duplicated print and kernel messages.
 
 Best regards,
 Zhangjin
