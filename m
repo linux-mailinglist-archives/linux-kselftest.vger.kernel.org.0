@@ -2,93 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13490722E42
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 20:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319C8722EDC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 20:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235664AbjFESEZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Jun 2023 14:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
+        id S230039AbjFESp7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Jun 2023 14:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235529AbjFESEF (ORCPT
+        with ESMTP id S229529AbjFESp6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:04:05 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DE0E49;
-        Mon,  5 Jun 2023 11:03:44 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-65299178ac5so4624490b3a.1;
-        Mon, 05 Jun 2023 11:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685988224; x=1688580224;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y7uQ8QjbEIiqKEh+gAYz/364Mw8hqnIeWQ0ws9py8v4=;
-        b=ZZUUkU1id25XUT7xzdMGrfSeQBz12c6CsXPYvy99BkUDyNpTI8Nk3dtBpa6o0bB3Ye
-         T1BzhXQbKlgXLWz0ONNcVvg9J2srMSm979nKkowd2Tdai2MxNYcR4Xv/Fd+gNnGWEcBj
-         +tdGktnKGB7IHV4jcDkT+7h+8GuTAnS8BZ/YTER7GeCghLjr31+D8KWBUIX77NMsFRXr
-         vmNig4VJKob0X9z1WU80jFxOmYtnYoopLn04QN6/gnTovH9KHRNJkTn++D1D+7SFcD3w
-         qwL1PMsm3g0eokamoTOQwHPmREB1nQ9b/UD+TnHhjVjUblG4u0o9R3NUrwLkSZcNYgTD
-         VHpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685988224; x=1688580224;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y7uQ8QjbEIiqKEh+gAYz/364Mw8hqnIeWQ0ws9py8v4=;
-        b=edGu9C9Gaa/DO3/C3sRFyYTReTpdGOd5vixEwt35quKW3mAA80YdnpoLM3V2kW79KP
-         579YHBTcj5l/2WYV1oN8sCkBwVhmFze4B01qL6Od/H4ArQUe2tnT1xUc8YtGTG2pN+OE
-         F6ryygVmPjbcqlKjgk0fwOpzTRd+atorUJozsG/keEcpY1djrbtmztGQETIHGo+4P66Y
-         ehMYdgXjC7v+dNalJUadY8kq4s1zPZYfdHb62l5IXO6JO2SI9TPAMA25FuNKT+P89vRC
-         8krvaZKX7uRo/aiDl73SRYlqmSDTDwXWtWH0F4v2ddyFwDdEOzMdo4O+OMxSzdYRT9v7
-         O9zg==
-X-Gm-Message-State: AC+VfDzldN8eINa72ENGsGphOj18sgR7WBEwkAF4ftTmwpKc8KHLfQDV
-        BpbVquob0hiyZXog6eFIN7g=
-X-Google-Smtp-Source: ACHHUZ4Eb3dRTX7BPtTzDnDRnFPVDzzGWQOhROXaY3q99Qhi0JUFr7PXGrwliw8sAT5rh0+4Y0EevA==
-X-Received: by 2002:a05:6a20:5495:b0:111:4a86:f70 with SMTP id i21-20020a056a20549500b001114a860f70mr9430752pzk.6.1685988223898;
-        Mon, 05 Jun 2023 11:03:43 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id x5-20020a636305000000b0053051d50a48sm6090200pgb.79.2023.06.05.11.03.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 11:03:43 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 5 Jun 2023 08:03:42 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Message-ID: <ZH4jfmypOXGJPu0D@slm.duckdns.org>
-References: <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
- <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
- <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
- <ZFGOTHQj3k5rzmyR@blackbook>
- <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
- <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
- <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
- <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
- <ZGvHUjOCjwat91Gq@slm.duckdns.org>
- <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
+        Mon, 5 Jun 2023 14:45:58 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2063.outbound.protection.outlook.com [40.107.212.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85DBCD;
+        Mon,  5 Jun 2023 11:45:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QM/+Qa/JZgVQ9hQD7L007metcDkf5MIGgZSYH815d5TZC25PRh1ChCf1rpLeiemIGE49jywAy1lmNwb8yybiaatJiZg1M9sIA4Y93FI3n4cm7aiCAwCxV9DucSMDzVDavMAEC1Tl71Gjk+SKSsTjvYXy2woKerpau4l2lUvpLiUxWgk1vq3IID2QsLFe4C9tM4lYixsvbJKe0C23K+aGeaYaSnM9T8X8CWOgO4No9/9W8/AnlxeNeelspwwPr9tj7UAYz0bFr8UauVaZ8COmh+SDr3U6sa3aP/6A7q8xvZ429LybxqNZmJgcqgAeKTn4LkQwOlrFT+pOQxD4j40hgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ScM44XN/sTIIV8+HD+uJL/SUy+T4f338lVor4+vf5aU=;
+ b=ldc/7gMfdMX9+grA0EpyP2+P62D0w0F/5uSOdkvmTEWT20kfSF0iJaQjkUyvDa4seIkbKbtUYONkC40ND6bMKEZEC7h2Md64fK9dQBwII5Gm3i/8iAkKZj7JPaxeRSUdVUN4fWkAVEHEfv+Ql9ihg9jeVv8ywSih2lU8wE6TKw6477ZuOvO+g8x7id8AeN381ZgKlnbl9wPyDfRi6gHqOSTZiRyLp4ZfkZMokdPPlTak/jLNrtwBTPtLbDovD+UdgbTXETgdTB4pKxVydmZzWZSOLNdyyeAxzttAqkS2b3SGRb4YC+QUoRq85XymIZE6AGdKuCddYbdIKcwK2QPdew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ScM44XN/sTIIV8+HD+uJL/SUy+T4f338lVor4+vf5aU=;
+ b=j+PWzaB4ZL/Dw2+dXe+moiklob1q2pG5Gpq4iBgiojOfy+mFDsOJW/O/7KloVhMLxSsgYnA71HYiPhO9oCzZw1uLQRx301a/E3RtUXxCPS79slF0MuDZbYVH0yd7iOs6KOdJAuLhpjtUbsvJ/zqXJIUw2l9lEISslqUWP5NcPw74HVXwQs0oLesLHS7F2z+YwviWrW25ndsdfJbWToyIHx/6lwVCvNpIjZps2VxfjBlwlmu1Y6vCzlGrrOv9G1HJqsfwz85fNXE/Hf7m68KwWsNvTkDKhF2qLsoIIwDR5LhcIYrjsM9KOUVhClLhYcI5x910EfkA1fV+/a4rPsFagw==
+Received: from SN1PR12CA0044.namprd12.prod.outlook.com (2603:10b6:802:20::15)
+ by PH8PR12MB6745.namprd12.prod.outlook.com (2603:10b6:510:1c0::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
+ 2023 18:45:55 +0000
+Received: from SN1PEPF000252A3.namprd05.prod.outlook.com
+ (2603:10b6:802:20:cafe::7a) by SN1PR12CA0044.outlook.office365.com
+ (2603:10b6:802:20::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
+ Transport; Mon, 5 Jun 2023 18:45:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SN1PEPF000252A3.mail.protection.outlook.com (10.167.242.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6477.13 via Frontend Transport; Mon, 5 Jun 2023 18:45:55 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 5 Jun 2023
+ 11:45:36 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 5 Jun 2023
+ 11:45:35 -0700
+Message-ID: <58ff372c-a917-e580-80ff-f1118f82320a@nvidia.com>
+Date:   Mon, 5 Jun 2023 11:45:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 04/12] selftests/mm: fix a char* assignment in
+ mlock2-tests.c
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+CC:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-5-jhubbard@nvidia.com>
+ <18e69073-1007-07d8-bf0d-5f400ecab8ea@redhat.com> <ZHoJxAWtwBo33l6B@x1n>
+ <f61fb7c1-64ab-c3c3-bd95-92a962f07226@nvidia.com> <ZH4BkqDh0MXqx8ae@x1n>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <ZH4BkqDh0MXqx8ae@x1n>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF000252A3:EE_|PH8PR12MB6745:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e7776cf-433e-4508-e042-08db65f5186d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FBanSuRMnoKzYlEwYvgBq573IXfYiW28QvRv534LzG6GwJ0z3xNDP4Fvp1n1i79u94zfGD21IZcvrO48Ks6UOPvAUiV95U9PP3zw7RehgwJXl8bGxYYY/j2B6RWsgxvPTXm92LqHcLSE3XNYW72rlV+u1pyRPOaBGCy4wr2+lUGERnaBX7c9nU+uetsnfGls3Xl/3zrvjssMdSLCBTQWQ8p9+cVQv1+DqDZLJibtgTwTNGE4vTI9hCyby73r59dtU4iT4rybm61ElSZgfgXPccxssrDC0MhiDLwc8R0Kjn0aLXKxMNYMLfOfRUBbZlAN7niotMDzRjhKe62P5MijsjGyOhVuLGJmsgYXnvQGmvS/hklYsYN7dRtg4AyB80xUDuy2tbZh7gL+Sw01hycTwECAbl4WY35yVYoYQ/FPf9ba4eThzKx09Z+10Pvknv5v2lErRXq6qM4C17ulA7RsGiWfDCaT/YSHOyEro2ojoJjkp9CZqCsqDg8AaLFWEY+yg9vVb6GHPGGOk2kBqzY8k01BTJC2cXcMVD3CXiDshW2JVOf+cjVAaWJflD+sgdpxkBb/UgGZliEgcAwAzMk36vMk/Gsc4Bj97+g+iPoMBorBOHNnl5PiEXbgI8/SwY+ZQDes419FsskweKZLvAQBSCex0vWlwSrPKqS5uGbv+fwUI90ZVkdDLU2Mn6/PI5A0YDx25ZCeSTaONe4ghEAj6jNYv1ndJoW4LOoAvph+riak9SfYC+27wfrASGABRLW5YJwTSoDFWzFWaC///ZWDog==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(36756003)(2906002)(86362001)(31696002)(82310400005)(5660300002)(31686004)(40480700001)(47076005)(83380400001)(16526019)(426003)(336012)(186003)(36860700001)(26005)(53546011)(356005)(7636003)(478600001)(82740400003)(16576012)(40460700003)(54906003)(70586007)(70206006)(6916009)(316002)(4326008)(2616005)(41300700001)(8936002)(8676002)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 18:45:55.3054
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e7776cf-433e-4508-e042-08db65f5186d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF000252A3.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6745
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,84 +115,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello, Waiman.
-
-On Sun, May 28, 2023 at 05:18:50PM -0400, Waiman Long wrote:
-> On 5/22/23 15:49, Tejun Heo wrote:
-> Sorry for the late reply as I had been off for almost 2 weeks due to PTO.
-
-And me too. Just moved.
-
-> > Why is the syntax different from .cpus? Wouldn't it be better to keep them
-> > the same?
-> 
-> Unlike cpuset.cpus, cpuset.cpus.reserve is supposed to contains CPUs that
-> are used in multiple partitions. Also automatic reservation of adjacent
-> partitions can happen in parallel. That is why I think it will be safer if
-
-Ah, I see, this is because cpu.reserve is only in the root cgroup, so you
-can't say that the knob is owned by the parent cgroup and thus access is
-controlled that way.
-
+On 6/5/23 08:38, Peter Xu wrote:
 ...
-> > >      There are two types of partitions - adjacent and remote.  The
-> > >      parent of an adjacent partition must be a valid partition root.
-> > >      Partition roots of adjacent partitions are all clustered around
-> > >      the root cgroup.  Creation of adjacent partition is done by
-> > >      writing the desired partition type into "cpuset.cpus.partition".
-> > > 
-> > >      A remote partition does not require a partition root parent.
-> > >      So a remote partition can be formed far from the root cgroup.
-> > >      However, its creation is a 2-step process.  The CPUs needed
-> > >      by a remote partition ("cpuset.cpus" of the partition root)
-> > >      has to be written into "cpuset.cpus.reserve" of the root
-> > >      cgroup first.  After that, "isolated" can be written into
-> > >      "cpuset.cpus.partition" of the partition root to form a remote
-> > >      isolated partition which is the only supported remote partition
-> > >      type for now.
-> > > 
-> > >      All remote partitions are terminal as adjacent partition cannot
-> > >      be created underneath it.
-> >
-> > Can you elaborate this extra restriction a bit further?
+>>>> I'm probably missing something, but what is the stop variable supposed to do
+>>>> here? It's completely unused, no?
+>>>>
+>>>> if (!strchr(end_addr, ' ')) {
+>>>> 	printf("cannot parse /proc/self/maps\n");
+>>>> 	goto out;
+>>>> }
+>>
+>> Yes it is! I certainly had tunnel vision on that one. I've changed the
+>> patch to simply delete that line, for v2, thanks.
+>>
+>>>
+>>> I guess it wanted to do "*stop = '\0'" but it just didn't matter a lot
+>>> since the sscanf() just worked..
+>>>
+>>
+>> Maybe, yes. Hard to tell the original intent at this point...it might
+>> have been used in an early draft version of the loop that didn't get
+>> posted, perhaps.
 > 
-> Are you referring to the fact that only remote isolated partitions are
-> supported? I do not preclude the support of load balancing remote
-> partitions. I keep it to isolated partitions for now for ease of
-> implementation and I am not currently aware of a use case where such a
-> remote partition type is needed.
->
-> If you are talking about remote partition being terminal. It is mainly
-> because it can be more tricky to support hierarchical adjacent partitions
-> underneath it especially if it is not isolated. We can certainly support it
-> if a use case arises. I just don't want to implement code that nobody is
-> really going to use.
+> I'm pretty sure of it.. see the pattern:
 > 
-> BTW, with the current way the remote partition is created, it is not
-> possible to have another remote partition underneath it.
+> 		end_addr = strchr(line, '-');
+> 		if (!end_addr) {
+> 			printf("cannot parse /proc/self/maps\n");
+> 			goto out;
+> 		}
+> 		*end_addr = '\0';
+> 
+> And...
+> 
+> 		stop = strchr(end_addr, ' ');
+> 		if (!stop) {
+> 			printf("cannot parse /proc/self/maps\n");
+> 			goto out;
+> 		}
+> 		stop = '\0';    <------------------- only diff here
+> 
 
-The fact that the control is spread across a root-only file and per-cgroup
-file seems hacky to me. e.g. How would it interact with namespacing? Are
-there reasons why this can't be properly hierarchical other than the amount
-of work needed? For example:
+Yes, and that pattern shows why it wants to be "*stop = '\0';", but
+it doesn't show why the author wasted a line of code in the first
+place, setting a variable that is not used afterwards.
 
-  cpuset.cpus.exclusive is a per-cgroup file and represents the mask of CPUs
-  that the cgroup holds exclusively. The mask is always a subset of
-  cpuset.cpus. The parent loses access to a CPU when the CPU is given to a
-  child by setting the CPU in the child's cpus.exclusive and the CPU can't
-  be given to more than one child. IOW, exclusive CPUs are available only to
-  the leaf cgroups that have them set in their .exclusive file.
+In other words, changing this to "*stop = '\0';" would make it
+look pretty, but it's a non-functional line of code to add. Which
+is why I think it should just be deleted at this point.
 
-  When a cgroup is turned into a partition, its cpuset.cpus and
-  cpuset.cpus.exclusive should be the same. For backward compatibility, if
-  the cgroup's parent is already a partition, cpuset will automatically
-  attempt to add all cpus in cpuset.cpus into cpuset.cpus.exclusive.
-
-I could well be missing something important but I'd really like to see
-something like the above where the reservation feature blends in with the
-rest of cpuset.
-
-Thanks.
-
+thanks,
 -- 
-tejun
+John Hubbard
+NVIDIA
+
