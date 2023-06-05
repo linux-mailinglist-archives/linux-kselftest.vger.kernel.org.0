@@ -2,101 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09081722FEB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 21:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CA172309C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 22:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235488AbjFETkY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Jun 2023 15:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
+        id S236295AbjFEUBk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Jun 2023 16:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234525AbjFETkX (ORCPT
+        with ESMTP id S235923AbjFEUBf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:40:23 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E7B9C
-        for <linux-kselftest@vger.kernel.org>; Mon,  5 Jun 2023 12:40:22 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-33d0c740498so2434515ab.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jun 2023 12:40:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1685994021; x=1688586021;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pSCTHh0/+bNATByAsUgmwiP+hFeMNJkT6J92qlZVpFs=;
-        b=dtAHvThcg4aNGSQ913U3mJcT51DfHlnPIomJIPoaOYJC7ydC/a08Yi/nkRlzyL/fDX
-         1qitrjr/BugM2dN/4FJe8AejRktG+yrcV8u6jm8GiynuSiVxsv5fwMyYqFG+QZFdm8f+
-         TxW8rnJKe6895GHa/gt96mubg1XpaqQ5nTF3A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685994021; x=1688586021;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pSCTHh0/+bNATByAsUgmwiP+hFeMNJkT6J92qlZVpFs=;
-        b=Mz1jQLea7Z2fyHQ494eAT5J+6EFj7Dl/cDT4bN6wb/en4zC7/8qIt6cOIYLmK9rDGY
-         xvlTBiYTvki4hdYRNQOXjon6kMmtrtsVhiCV/6H6uUxB1mAKkBcQXzYWa1FA2umZbb0r
-         a+Km/9CHIrC4CQoItXmzP1xWs/o2ZJW5rIAv35jdJCsMIvVYNe2zoQ0Q70Gd7Lu8cz1B
-         DctAp6iHky1E0mfcSGYUBF/lV/RVn6UgUwPy35NeBX9xqp8i15W1cJC1jAeOTC1O2qMJ
-         o+RLcN57V9fz5EmhyiHvO98iMpmBlE9DPKj4Vn6sPU0FSHYczTNvfvK7RVG+2rj7FDI5
-         CB/A==
-X-Gm-Message-State: AC+VfDx9VR+wBx9GJrtUdhs3m53QNmEXdSme654a5xPeqLNIhGdA8l1c
-        cruVg2XnDEJ6/T1eIaQfrtz2JOWHZ/5p7wHGmx4=
-X-Google-Smtp-Source: ACHHUZ4ALFEeOShyYs4ZR1D96r9L04QZMWgT8pY9pitWcfD/3Roa1gTw3zGYN6dsxwB4LDSQ1eT5Dg==
-X-Received: by 2002:a6b:8d8e:0:b0:777:a5a4:c6cb with SMTP id p136-20020a6b8d8e000000b00777a5a4c6cbmr117369iod.1.1685994021528;
-        Mon, 05 Jun 2023 12:40:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a5-20020a6b6c05000000b0075c37601b5csm2713016ioh.4.2023.06.05.12.40.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 12:40:21 -0700 (PDT)
-Message-ID: <93651468-daa2-1530-f94e-b66a4fd4bdf8@linuxfoundation.org>
-Date:   Mon, 5 Jun 2023 13:40:20 -0600
+        Mon, 5 Jun 2023 16:01:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD88D9
+        for <linux-kselftest@vger.kernel.org>; Mon,  5 Jun 2023 13:00:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685995244;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0I6F66ZIa/tgx7QAKJtZG0czi9R4RbNmqFbBvhdUYFM=;
+        b=Q7H4cAOqHBgqVJkSeWSsAeUGLzH3P9w+OR4f5X+THOxiassLywXNqCxwZYb5uHHM41e7jt
+        PFOdknHlbNVA9E7NUn6rIkpgCSU6Nd56BpiZ1TV2KnWtsDUEPAeo4u7kcwE4J+Z/ahaQJn
+        l+SE/MUYoGGSxggfXOGGQyM+kXaoQME=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-122-_QZEDCkuNTaN2rwTYIO-fA-1; Mon, 05 Jun 2023 16:00:41 -0400
+X-MC-Unique: _QZEDCkuNTaN2rwTYIO-fA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B713B8015D8;
+        Mon,  5 Jun 2023 20:00:40 +0000 (UTC)
+Received: from [10.22.10.186] (unknown [10.22.10.186])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C8847C1603B;
+        Mon,  5 Jun 2023 20:00:39 +0000 (UTC)
+Message-ID: <be64a569-4388-9dd9-3e06-36d716a54f6c@redhat.com>
+Date:   Mon, 5 Jun 2023 16:00:39 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] kselftests: Sort the collections list to avoid duplicate
- tests
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
 Content-Language: en-US
-To:     Rishabh Bhatnagar <risbhat@amazon.com>, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230601211112.12724-1-risbhat@amazon.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230601211112.12724-1-risbhat@amazon.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+References: <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
+ <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
+ <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
+ <ZFGOTHQj3k5rzmyR@blackbook>
+ <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
+ <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
+ <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
+ <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
+ <ZGvHUjOCjwat91Gq@slm.duckdns.org>
+ <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
+ <ZH4jfmypOXGJPu0D@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ZH4jfmypOXGJPu0D@slm.duckdns.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/1/23 15:11, Rishabh Bhatnagar wrote:
-> If the collections list is not sorted uniq doesn't weed out duplicate
-> tests correctly. Make sure to sort it before running uniq.
-> 
-> Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
-> ---
->   tools/testing/selftests/run_kselftest.sh | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
-> index 97165a83df63..e0cb10c85169 100755
-> --- a/tools/testing/selftests/run_kselftest.sh
-> +++ b/tools/testing/selftests/run_kselftest.sh
-> @@ -85,7 +85,7 @@ if [ -n "$TESTS" ]; then
->   	available="$(echo "$valid" | sed -e 's/ /\n/g')"
->   fi
->   
-> -collections=$(echo "$available" | cut -d: -f1 | uniq)
-> +collections=$(echo "$available" | cut -d: -f1 | sort | uniq)
->   for collection in $collections ; do
->   	[ -w /dev/kmsg ] && echo "kselftest: Running tests in $collection" >> /dev/kmsg
->   	tests=$(echo "$available" | grep "^$collection:" | cut -d: -f2)
+On 6/5/23 14:03, Tejun Heo wrote:
+> Hello, Waiman.
+>
+> On Sun, May 28, 2023 at 05:18:50PM -0400, Waiman Long wrote:
+>> On 5/22/23 15:49, Tejun Heo wrote:
+>> Sorry for the late reply as I had been off for almost 2 weeks due to PTO.
+> And me too. Just moved.
+>
+>>> Why is the syntax different from .cpus? Wouldn't it be better to keep them
+>>> the same?
+>> Unlike cpuset.cpus, cpuset.cpus.reserve is supposed to contains CPUs that
+>> are used in multiple partitions. Also automatic reservation of adjacent
+>> partitions can happen in parallel. That is why I think it will be safer if
+> Ah, I see, this is because cpu.reserve is only in the root cgroup, so you
+> can't say that the knob is owned by the parent cgroup and thus access is
+> controlled that way.
+>
+> ...
+>>>>       There are two types of partitions - adjacent and remote.  The
+>>>>       parent of an adjacent partition must be a valid partition root.
+>>>>       Partition roots of adjacent partitions are all clustered around
+>>>>       the root cgroup.  Creation of adjacent partition is done by
+>>>>       writing the desired partition type into "cpuset.cpus.partition".
+>>>>
+>>>>       A remote partition does not require a partition root parent.
+>>>>       So a remote partition can be formed far from the root cgroup.
+>>>>       However, its creation is a 2-step process.  The CPUs needed
+>>>>       by a remote partition ("cpuset.cpus" of the partition root)
+>>>>       has to be written into "cpuset.cpus.reserve" of the root
+>>>>       cgroup first.  After that, "isolated" can be written into
+>>>>       "cpuset.cpus.partition" of the partition root to form a remote
+>>>>       isolated partition which is the only supported remote partition
+>>>>       type for now.
+>>>>
+>>>>       All remote partitions are terminal as adjacent partition cannot
+>>>>       be created underneath it.
+>>> Can you elaborate this extra restriction a bit further?
+>> Are you referring to the fact that only remote isolated partitions are
+>> supported? I do not preclude the support of load balancing remote
+>> partitions. I keep it to isolated partitions for now for ease of
+>> implementation and I am not currently aware of a use case where such a
+>> remote partition type is needed.
+>>
+>> If you are talking about remote partition being terminal. It is mainly
+>> because it can be more tricky to support hierarchical adjacent partitions
+>> underneath it especially if it is not isolated. We can certainly support it
+>> if a use case arises. I just don't want to implement code that nobody is
+>> really going to use.
+>>
+>> BTW, with the current way the remote partition is created, it is not
+>> possible to have another remote partition underneath it.
+> The fact that the control is spread across a root-only file and per-cgroup
+> file seems hacky to me. e.g. How would it interact with namespacing? Are
+> there reasons why this can't be properly hierarchical other than the amount
+> of work needed? For example:
+>
+>    cpuset.cpus.exclusive is a per-cgroup file and represents the mask of CPUs
+>    that the cgroup holds exclusively. The mask is always a subset of
+>    cpuset.cpus. The parent loses access to a CPU when the CPU is given to a
+>    child by setting the CPU in the child's cpus.exclusive and the CPU can't
+>    be given to more than one child. IOW, exclusive CPUs are available only to
+>    the leaf cgroups that have them set in their .exclusive file.
+>
+>    When a cgroup is turned into a partition, its cpuset.cpus and
+>    cpuset.cpus.exclusive should be the same. For backward compatibility, if
+>    the cgroup's parent is already a partition, cpuset will automatically
+>    attempt to add all cpus in cpuset.cpus into cpuset.cpus.exclusive.
+>
+> I could well be missing something important but I'd really like to see
+> something like the above where the reservation feature blends in with the
+> rest of cpuset.
 
-Applied to linux-kselftest next for Linux 6.5-rc1.
+It can certainly be made hierarchical as you suggest. It does increase 
+complexity from both user and kernel point of view.
 
-thanks,
--- Shuah
+ From the user point of view, there is one more knob to manage 
+hierarchically which is not used that often.
+
+ From the kernel point of view, we may need to have one more cpumask per 
+cpuset as the current subparts_cpus is used to track automatic 
+reservation. We need another cpumask to contain extra exclusive CPUs not 
+allocated through automatic reservation. The fact that you mention this 
+new control file as a list of exclusively owned CPUs for this cgroup. 
+Creating a partition is in fact allocating exclusive CPUs to a cgroup. 
+So it kind of overlaps with the cpuset.cpus.partititon file. Can we fail 
+a write to cpuset.cpus.exclusive if those exclusive CPUs cannot be 
+granted or will this exclusive list is only valid if a valid partition 
+can be formed. So we need to properly manage the dependency between 
+these 2 control files.
+
+Alternatively, I have no problem exposing cpuset.cpus.exclusive as a 
+read-only file. It is a bit problematic if we need to make it writable.
+
+As for namespacing, you do raise a good point. I was thinking mostly 
+from a whole system point of view as the use case that I am aware of 
+does not needs that. To allow delegation of exclusive CPUs to a child 
+cgroup, that cgroup has to be a partition root itself. One compromise 
+that I can think of is to only allow automatic reservation only in such 
+a scenario. In that case, I need to support a remote load balanced 
+partition as well and hierarchical sub-partitions underneath it. That 
+can be done with some extra code to the existing v2 patchset without 
+introducing too much complexity.
+
+IOW, the use of remote partition is only allowed on the whole system 
+level where one has access to the cgroup root. Exclusive CPUs 
+distribution within a container can only be done via the use of adjacent 
+partitions with automatic reservation. Will that be a good enough 
+compromise from your point of view?
+
+Cheers,
+Longman
+
