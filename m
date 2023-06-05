@@ -2,101 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E5472237D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 12:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6D57223BA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jun 2023 12:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbjFEKa3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Jun 2023 06:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
+        id S231185AbjFEKoR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Jun 2023 06:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbjFEKa2 (ORCPT
+        with ESMTP id S229659AbjFEKoQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:30:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1879FD
-        for <linux-kselftest@vger.kernel.org>; Mon,  5 Jun 2023 03:30:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F93262260
-        for <linux-kselftest@vger.kernel.org>; Mon,  5 Jun 2023 10:30:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E7B8BC4339B;
-        Mon,  5 Jun 2023 10:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685961025;
-        bh=2L2uK0B49nA6JvrAKIky0xpu2CygDXxBs5ZD6P03gvo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=qdAYBpcdi+Zx+xbnjtmDBFfQEQdyaURz/1UR9jpGjYErT8Wqm29ZdSziK0S212mgl
-         BRUvQ+8dNuTNKw/KHVaw6pQVqrns5H5O7w6GtCWnvH2yRvffSHTD8/ZpNPib6TA9oP
-         WS+PKZg0Zu/yXLX6vNNNCPNSvGYS7DbNGMTeAO/jjltYjm4Nwao5y5LxU1He9wxOuf
-         iurizaIFFnobsNdZYKJBle6MuAuMVQUtaHLG3K5LwB/FaiG23A8qK1GYzy49+M6pnf
-         EvK7J1zgh+qVssHHlia9QBOj3eMY5l7W6ZWYv1ir5LtAde/mZOnXUdTggfFiZc7x09
-         wnCXOA20n1cFQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B6F28E49FA8;
-        Mon,  5 Jun 2023 10:30:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 5 Jun 2023 06:44:16 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D9FDB;
+        Mon,  5 Jun 2023 03:44:05 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 12:44:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1685961843; bh=QVXyqBCquC6KdHJ2hKV41XXOd2PcXVnhiGJ6lkZSGh8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OFoLM42HarKpIpgmpD0JvmgFXbHhALDzJteiBvE43G4AM8jHPZSHw2XiCkwSZznMO
+         P+3A6rextkavC9qqPSIqlJC0tc40q5JXwtRxCce+UWa6B8DWTHzUDC4pw7de2H6KF3
+         kSr2ok55U33JsNJrUcfSWUUsiJ1K5/y9pKwzPSlY=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: nolibc patches, still possible for 6.5 ?
+Message-ID: <1fc53bcf-f7ec-4d74-a984-da4ee38e938f@t-8ch.de>
+References: <ZHyPi29q3MKiNAQZ@1wt.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/8] mlxsw, selftests: Cleanups
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168596102474.26938.22774406358566950.git-patchwork-notify@kernel.org>
-Date:   Mon, 05 Jun 2023 10:30:24 +0000
-References: <cover.1685720841.git.petrm@nvidia.com>
-In-Reply-To: <cover.1685720841.git.petrm@nvidia.com>
-To:     Petr Machata <petrm@nvidia.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org, idosch@nvidia.com,
-        amcohen@nvidia.com, danieller@nvidia.com,
-        linux-kselftest@vger.kernel.org, mlxsw@nvidia.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHyPi29q3MKiNAQZ@1wt.eu>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NO_DNS_FOR_FROM,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 2 Jun 2023 18:20:04 +0200 you wrote:
-> This patchset consolidates a number of disparate items that can all be
-> considered cleanups. They are all related to mlxsw in that they are
-> directly in mlxsw code, or in selftests that mlxsw heavily uses.
+On 2023-06-04 15:20:11+0200, Willy Tarreau wrote:
+> Hello Paul,
 > 
-> - patch #1 fixes a comment, patch #2 propagates an extack
+> Thomas and Zhangjin have provided significant nolibc cleanups, and
+> fixes, as well as preparation work to later support riscv32.
 > 
-> - patches #3 and #4 tweak several loops to query a resource once and cache
->   in a local variable instead of querying on each iteration
+> These consist in the following main series:
+>   - generalization of stackprotector to other archs that were not
+>     previously supported (riscv, mips, loongarch, arm, arm64)
 > 
-> [...]
+>   - general cleanups of the makefile, test report output, deduplication
+>     of certain tests
+> 
+>   - slightly better compliance of some tests performed on certain syscalls
+>     (e.g. no longer pass (void*)1 to gettimeofday() since glibc hates it).
+> 
+>   - add support for nanoseconds in stat() and statx()
+> 
+>   - fixes for some syscalls (e.g. ppoll() has 5 arguments not 4)
+> 
+>   - fixes around limits.h and  INT_MAX / INT_FAST64_MAX
+> 
+> I rebased the whole series on top of your latest dev branch (d19a9ca3d5)
+> and it works fine for all archs.
+> 
+> I don't know if you're still planning on merging new stuff in this area
+> for 6.5 or not (since I know that it involves new series of tests on your
+> side as well), but given that Zhangjin will engage into deeper changes
+> later for riscv32 that will likely imply to update more syscalls to use
+> the time64 ones, I would prefer to split the cleanups from the hard stuff,
+> but I'll let you judge based on the current state of what's pending for
+> 6.5.
+> 
+> In any case I'm putting all this here for now (not for merge yet):
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230604-nolibc-rv32+stkp6
+> 
+> I'd like Thomas and Zhangjin to perform a last check to confirm they're
+> OK with this final integration.
 
-Here is the summary with links:
-  - [net-next,1/8] mlxsw: spectrum_router: Clarify a comment
-    https://git.kernel.org/netdev/net-next/c/be35db17c872
-  - [net-next,2/8] mlxsw: spectrum_router: Use extack in mlxsw_sp~_rif_ipip_lb_configure()
-    https://git.kernel.org/netdev/net-next/c/5afef6748c19
-  - [net-next,3/8] mlxsw: spectrum_router: Do not query MAX_RIFS on each iteration
-    https://git.kernel.org/netdev/net-next/c/3903249ee1af
-  - [net-next,4/8] mlxsw: spectrum_router: Do not query MAX_VRS on each iteration
-    https://git.kernel.org/netdev/net-next/c/75426cc0b316
-  - [net-next,5/8] selftests: mlxsw: ingress_rif_conf_1d: Fix the diagram
-    https://git.kernel.org/netdev/net-next/c/204cc3d04fe2
-  - [net-next,6/8] selftests: mlxsw: egress_vid_classification: Fix the diagram
-    https://git.kernel.org/netdev/net-next/c/34ad708d1b43
-  - [net-next,7/8] selftests: router_bridge_vlan: Add a diagram
-    https://git.kernel.org/netdev/net-next/c/812de4dfab98
-  - [net-next,8/8] selftests: router_bridge_vlan: Set vlan_default_pvid 0 on the bridge
-    https://git.kernel.org/netdev/net-next/c/f5136877f421
+(Talking about 20230605-nolibc-rv32+stkp7,
+but the same issue is in stkp6)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I noticed that the commit introducing prctl() comes *after* the one
+making use of it.
 
+8389cb4b55ae ("selftests/nolibc: prevent coredumps during test execution")
+033c01b5a8f4 ("tools/nolibc: add support for prctl()")
 
+This can lead to compiler errors and break bisectability.
+
+They just need to be swapped.
+
+Thomas
