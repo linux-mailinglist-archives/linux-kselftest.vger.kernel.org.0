@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C20723ABF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 09:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A09723AC5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 09:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234881AbjFFH5e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 03:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
+        id S230220AbjFFH6k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 03:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236149AbjFFH5T (ORCPT
+        with ESMTP id S232770AbjFFH6W (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:57:19 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB2B30E0;
-        Tue,  6 Jun 2023 00:54:39 -0700 (PDT)
+        Tue, 6 Jun 2023 03:58:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBCA1FC1;
+        Tue,  6 Jun 2023 00:55:38 -0700 (PDT)
 Received: from [192.168.10.48] (unknown [119.152.150.198])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E1FA96606E98;
-        Tue,  6 Jun 2023 08:54:34 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3B73D6600359;
+        Tue,  6 Jun 2023 08:55:19 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686038077;
-        bh=pIGKvYGDq4T5r3V/OOhF4iPvxLXerjQw652JcJRg8XM=;
+        s=mail; t=1686038121;
+        bh=fLoyE29jwAeZymQXtcLwzwFxwOHx58ue1ihixP2knDc=;
         h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=ZhwgoBkNEfc858rFfDwHEziWJCXBGbCiT9KcASsdCA1q+WF96wi7NcL913qqnfzWU
-         OPeqri3jdY5sJsn5g+juVYRmfcgDM+vSgOcFxtV7FYAMN3fpM5YyQIihMqehaRnDZp
-         MGfQ3GHISalJizfUUjfbhgJZz+UCCD+iLcqz3vHtO3Yg6r631UGJK9pfXPIMaWGlAl
-         xyUQhWWlgBvXcUSoDVWec1YElRBvaM4sOctVQ8xjZBsD+KfEJhtUeDIWUcVPcpPgzV
-         zYZJkUZlJjRRTo2B9OpHAgiZ3e5mFOf2mhABP8nUsvajUV2shBACl6VLLFilTs5qpp
-         ZmUylZSLjUvbg==
-Message-ID: <53862bd4-c991-a17f-eacb-25ab2aa1e7b0@collabora.com>
-Date:   Tue, 6 Jun 2023 12:54:30 +0500
+        b=H0Sfp4f89qEuDMkNJ8J/XXRTGjc69n7zYEiu4g3yPCu41jdMi1mWoJybEs9Zlf/A1
+         kjuPQwGabfoTINNKRCBVzF4l68/qtBZCcwp89Ty7odG2oR63eiWFKHkf9eEQImh/Mx
+         cSPJa4nnO5ojWa9jZp9wk/LqqfisW88lCSBX4/7/hkpi9NmWg1yDpZCPIh4pgmr7Mm
+         VObjbe5iFx/KqGYDIpGwbBS3gk2BFs1LYCYcpmwcNdPUPkBAc7rV3R+725+7ePltF+
+         ABa5rNyjy70Q6oFf4RGnXrsVKrMU376LPpxNTrAg5NwkIeN4dmb3aEpy3rOMRG2Fyj
+         PLJ7J8Lv2/HNQ==
+Message-ID: <1acf4b3a-71b7-3412-fe83-a9b730530583@collabora.com>
+Date:   Tue, 6 Jun 2023 12:55:16 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
@@ -43,15 +43,15 @@ Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 06/11] selftests/mm: fix two -Wformat-security warnings
- in uffd builds
+Subject: Re: [PATCH v3 07/11] selftests/mm: fix a "possibly uninitialized"
+ warning in pkey-x86.h
 Content-Language: en-US
 To:     John Hubbard <jhubbard@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>
 References: <20230606071637.267103-1-jhubbard@nvidia.com>
- <20230606071637.267103-7-jhubbard@nvidia.com>
+ <20230606071637.267103-8-jhubbard@nvidia.com>
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20230606071637.267103-7-jhubbard@nvidia.com>
+In-Reply-To: <20230606071637.267103-8-jhubbard@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -65,70 +65,32 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 6/6/23 12:16 PM, John Hubbard wrote:
-> The uffd tests generate two compile time warnings from clang's
-> -Wformat-security setting. These trigger at the call sites for
-> uffd_test_start() and uffd_test_skip().
-> 
-> 1) Fix the uffd_test_start() issue by removing the intermediate
-> test_name variable (thanks to David Hildenbrand for showing how to do
-> this).
-> 
-> 2) Fix the uffd_test_skip() issue by observing that there is no need for
-> a macro and a variable args approach, because all callers of
-> uffd_test_skip() pass in a simple char* string, without any format
-> specifiers. So just change uffd_test_skip() into a regular C function.
+> This fixes a real bug, too, because xstate_size()  was assuming that
+> the stack variable xstate_size was initialized to zero. That's not
+> guaranteed nor even especially likely.
 > 
 > Reviewed-by: David Hildenbrand <david@redhat.com>
-> Reviewed-by: Peter Xu <peterx@redhat.com>
+> Cc: Peter Xu <peterx@redhat.com>
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
 > ---
->  tools/testing/selftests/mm/uffd-unit-tests.c | 16 ++++++----------
->  1 file changed, 6 insertions(+), 10 deletions(-)
+>  tools/testing/selftests/mm/pkey-x86.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-> index 269c86768a02..04d91f144d1c 100644
-> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
-> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-> @@ -109,12 +109,11 @@ static void uffd_test_pass(void)
->  		ksft_inc_fail_cnt();		\
->  	} while (0)
+> diff --git a/tools/testing/selftests/mm/pkey-x86.h b/tools/testing/selftests/mm/pkey-x86.h
+> index 72c14cd3ddc7..e32ae8a1cd99 100644
+> --- a/tools/testing/selftests/mm/pkey-x86.h
+> +++ b/tools/testing/selftests/mm/pkey-x86.h
+> @@ -132,7 +132,7 @@ int pkey_reg_xstate_offset(void)
+>  	unsigned int ecx;
+>  	unsigned int edx;
+>  	int xstate_offset;
+> -	int xstate_size;
+> +	int xstate_size = 0;
+>  	unsigned long XSTATE_CPUID = 0xd;
+>  	int leaf;
 >  
-> -#define  uffd_test_skip(...)  do {		\
-> -		printf("skipped [reason: ");	\
-> -		printf(__VA_ARGS__);		\
-> -		printf("]\n");			\
-> -		ksft_inc_xskip_cnt();		\
-> -	} while (0)
-> +static void uffd_test_skip(const char *message)
-> +{
-> +	printf("skipped [reason: %s]\n", message);
-> +	ksft_inc_xskip_cnt();
-> +}
->  
->  /*
->   * Returns 1 if specific userfaultfd supported, 0 otherwise.  Note, we'll
-> @@ -1149,7 +1148,6 @@ int main(int argc, char *argv[])
->  	uffd_test_case_t *test;
->  	mem_type_t *mem_type;
->  	uffd_test_args_t args;
-> -	char test_name[128];
->  	const char *errmsg;
->  	int has_uffd, opt;
->  	int i, j;
-> @@ -1192,10 +1190,8 @@ int main(int argc, char *argv[])
->  			mem_type = &mem_types[j];
->  			if (!(test->mem_targets & mem_type->mem_flag))
->  				continue;
-> -			snprintf(test_name, sizeof(test_name),
-> -				 "%s on %s", test->name, mem_type->name);
->  
-> -			uffd_test_start(test_name);
-> +			uffd_test_start("%s on %s", test->name, mem_type->name);
->  			if (!uffd_feature_supported(test)) {
->  				uffd_test_skip("feature missing");
->  				continue;
 
 -- 
 BR,
