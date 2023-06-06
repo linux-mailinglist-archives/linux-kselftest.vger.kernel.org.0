@@ -2,84 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AE572455F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 16:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE75724563
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 16:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbjFFOMP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 10:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S237485AbjFFOMR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 10:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbjFFOMO (ORCPT
+        with ESMTP id S237115AbjFFOMQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:12:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E80E139
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 07:11:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686060688;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fw9T5rxLrJVKHG27fIjocIY1CyjQERL7+8LiZXQNd7E=;
-        b=T6kEkJo7M7K6+ERM990+riMYZU8QiIuLLv33HPUuqtQkqXIcrNcnz8n8YxIOPiM75ILA7a
-        3wL9VDhRoau9qkGRlTrxJ1/vwSG0uAxG64WzqVwqUegOoqR6ges3IskXpJvzOSgckcPxKO
-        WEeg+Xc6wjuq+wmQdImQNLiAAMUf5mo=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-396-UoeWHc28NqKa0mwh3w3rUw-1; Tue, 06 Jun 2023 10:11:27 -0400
-X-MC-Unique: UoeWHc28NqKa0mwh3w3rUw-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f7678c74beso14908505e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 07:11:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686060686; x=1688652686;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fw9T5rxLrJVKHG27fIjocIY1CyjQERL7+8LiZXQNd7E=;
-        b=lR3fFlDj6IV/LHaE3RCd/2R/PrbSFdWjAUprInt4XcJtVKwKGXb8iDC/kb9KntG1CY
-         nmiMtkqPnAlsXEoJILTj19xd5hMhsVm9fpKruXIvBpjR9L2gw+XoIo1IAHAdJEAvt3+3
-         wjvkEGsQbsZ9lRV/MmRn03Sl+bdRZwoWmyVWxWyowfmCIxYrgOmT4N0L6jp7ElnEGVl1
-         wrIewAVRbp3D7pt3jpGtp2VhtKzEfXpDf3G0wp63AWKDu4TNV9Q/yD6vie4wbAHFRB/b
-         rHm17VlqaAVb2D3OBL5JnxeBsqxwJWe3w+7mJ+KUFVGYzssTVGiV9Y/9Smfyx9HS4Xa4
-         IY5Q==
-X-Gm-Message-State: AC+VfDzm8KeDSpTQG4WZb4yKIiSJMl2/92fiVT4darHx8KT4ZHY2ZZvx
-        gYbICQmF0vqrCrId4vetu0CNQQ/5nIa/ZNsjFE4UrX7fGtXH4KrQnOTHLfUozInet11I8q8wGSl
-        bOnLvLPyhxf3237YIO8XqT3+Ct+O4
-X-Received: by 2002:a1c:7912:0:b0:3f7:33cf:7080 with SMTP id l18-20020a1c7912000000b003f733cf7080mr2254964wme.36.1686060686553;
-        Tue, 06 Jun 2023 07:11:26 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5wOLgLIb3XMmyPMrwryL9a1f6reu3dJklYXOBS8ZHG+qjkBneUwt1XyrlPOPxqX+dpQ7I6Tw==
-X-Received: by 2002:a1c:7912:0:b0:3f7:33cf:7080 with SMTP id l18-20020a1c7912000000b003f733cf7080mr2254940wme.36.1686060686230;
-        Tue, 06 Jun 2023 07:11:26 -0700 (PDT)
-Received: from debian (2a01cb058d652b00fa0f162c47a2f35b.ipv6.abo.wanadoo.fr. [2a01:cb05:8d65:2b00:fa0f:162c:47a2:f35b])
-        by smtp.gmail.com with ESMTPSA id e21-20020a05600c219500b003f736735424sm9067513wme.43.2023.06.06.07.11.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 07:11:25 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 16:11:24 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL] in vrf "bind -
- ns-B IPv6 LLA" test
-Message-ID: <ZH8+jLjottBw2zuD@debian>
-References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
- <ZHeN3bg28pGFFjJN@debian>
- <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
- <ZH84zGEODT97TEXG@debian>
- <60f78eaa-ace7-c27d-8e45-4777ecf3faa2@alu.unizg.hr>
+        Tue, 6 Jun 2023 10:12:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2E1D3;
+        Tue,  6 Jun 2023 07:12:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4999561DB8;
+        Tue,  6 Jun 2023 14:12:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05CD5C433D2;
+        Tue,  6 Jun 2023 14:12:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686060734;
+        bh=nYj9AbUU59HCaqannbEYbVUupazB1udPANPd7R8v5fQ=;
+        h=From:Date:Subject:To:Cc:From;
+        b=U513mg2pt/PkVILvX0n/tTQXpeUHYZtOFnWFoFW0UwGt6DSqq+qp7w0DZytaZL7X3
+         7IIvxbwVDW/vIBcFzkyRO0EA+l+xCTer77JfX8KA289KyQm7D+ZXH7u8w3cFES7MTo
+         UBerx5hAMQtTvyZk9QTFFlJoujvTd4oK7D/ECPsLRci25/Fq8gSxibITHNizCqcpnT
+         bTc8cLvdXs05pbBlds+Jg8w540qG8R4J6yynxoWLL7HecSO2Jcgc07bUvu14u9KKtd
+         ZQuOGdUvcSylgdhKaclPeiC73awgc/EBvPcoBjM9HiedsWaHaRhBKYo7zow6Nauxns
+         Tav0rZFR1wVnw==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Tue, 06 Jun 2023 15:11:49 +0100
+Subject: [PATCH] selftests/cpufreq: Don't enable generic lock debugging
+ options
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <60f78eaa-ace7-c27d-8e45-4777ecf3faa2@alu.unizg.hr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230605-kselftest-cpufreq-options-v1-1-d4621e0c7cbe@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKQ+f2QC/x2NywrDIBBFfyXMugNW0xT6K6ULo2MjKWpn7ANC/
+ j0my3PhnLuAEEcSuHULMH2jxJwanE8duMmmJ2H0jUErbdSgLjgLvUIlqejKJzC9MZfaJEEd/OD
+ 7a6+NMdD80QrhyDa5aS/8Ms/7XJhC/B+X98e6bj8VZnOCAAAA
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bfdf5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2394; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=nYj9AbUU59HCaqannbEYbVUupazB1udPANPd7R8v5fQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkfz670xVO01Ifmckeit23E9d7DWAFVjrMqaG6WWQv
+ 8TuP8bCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZH8+uwAKCRAk1otyXVSH0LdwB/
+ 9IqeAx8yIONur8WnWgUToSGK2QrJMUBBj6P+M47oCrhbFaOvAis3W6FvK6RoXLxtCy96o+eycqABqr
+ lBlwSy9EAS7ePr+qZdI5kJVIwamhwvc5sfuFSHEvGfhLlwDZx5ztUYZ9mpL3TshKL0/Vgqq9Dh/1ty
+ WleOs4db9hWDhQcIqTLFOFsPgf5AZNYEgfyizWATaDsyi3P3Jt+dwm95c7+quAYL7GW4WS2OA2oWY9
+ iKRsRYZcbWLL+2L9333+3tP6gQqb92bfaEenhRRWdYj1eZqke7t/lihOtj1hdi8/ty2YzF5k4wXENX
+ wN5uw1FcMUmDEHzXqr6GkflmaPct+J
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,76 +70,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 03:57:35PM +0200, Mirsad Todorovac wrote:
-> diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
-> index c4835dbdfcff..c1d81c49b775 100644
-> --- a/net/ipv6/ping.c
-> +++ b/net/ipv6/ping.c
-> @@ -73,6 +73,10 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->         struct rt6_info *rt;
->         struct pingfakehdr pfh;
->         struct ipcm6_cookie ipc6;
-> +       struct net *net = sock_net(sk);
-> +       struct net_device *dev = NULL;
-> +       struct net_device *mdev = NULL;
-> +       struct net_device *bdev = NULL;
-> 
->         err = ping_common_sendmsg(AF_INET6, msg, len, &user_icmph,
->                                   sizeof(user_icmph));
-> @@ -111,10 +115,26 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->         else if (!oif)
->                 oif = np->ucast_oif;
-> 
-> +       if (oif) {
-> +               rcu_read_lock();
-> +               dev = dev_get_by_index_rcu(net, oif);
-> +               rcu_read_unlock();
+Currently the the config fragment for cpufreq enables a lot of generic
+lock debugging.  While these options are useful when testing cpufreq
+they aren't actually required to run the tests and are therefore out of
+scope for the cpufreq fragement, they are more of a thing that it's good
+to enable while doing testing than an actual requirement for cpufreq
+testing specifically.  Having these debugging options enabled,
+especially the mutex and spinlock instrumentation, mean that any build
+that includes the cpufreq fragment is both very much larger than a
+standard defconfig (eg, I'm seeing 35% on x86_64) and also slower at
+runtime.
 
-You can't assume '*dev' is still valid after rcu_read_unlock() unless
-you hold a reference on it.
+This is causing real problems for CI systems.  In order to avoid
+building large numbers of kernels they try to group kselftest fragments
+together, frequently just grouping all the kselftest fragments into a
+single block.  The increased size is an issue for memory constrained
+systems and is also problematic for systems with fixed storage
+allocations for kernel images (eg, typical u-boot systems) where it
+frequently causes the kernel to overflow the storage space allocated for
+kernels.  The reduced performance isn't too bad with real hardware but
+can be disruptive on emulated platforms.
 
-> +               rtnl_lock();
-> +               mdev = netdev_master_upper_dev_get(dev);
-> +               rtnl_unlock();
+In order to avoid these issues remove these generic instrumentation
+options from the cpufreq fragment, bringing the cpufreq fragment into
+line with other fragments which generally set requirements for testing
+rather than nice to haves.
 
-Because of that, 'dev' might have already disappeared at the time
-netdev_master_upper_dev_get() is called. So it may dereference an
-invalid pointer here.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/cpufreq/config | 8 --------
+ 1 file changed, 8 deletions(-)
 
-> +       }
-> +
-> +       if (sk->sk_bound_dev_if) {
-> +               rcu_read_lock();
-> +               bdev = dev_get_by_index_rcu(net, sk->sk_bound_dev_if);
-> +               rcu_read_unlock();
-> +       }
-> +
->         addr_type = ipv6_addr_type(daddr);
->         if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
->             (addr_type & IPV6_ADDR_MAPPED) ||
-> -           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
-> +           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
-> +                   !(mdev && sk->sk_bound_dev_if && bdev && mdev == bdev)))
->                 return -EINVAL;
-> 
->         ipcm6_init_sk(&ipc6, np);
-> 
-> However, this works by the test (888 passed) but your two liner is obviously
-> better :-)
+diff --git a/tools/testing/selftests/cpufreq/config b/tools/testing/selftests/cpufreq/config
+index 75e900793e8a..ce5068f5a6a2 100644
+--- a/tools/testing/selftests/cpufreq/config
++++ b/tools/testing/selftests/cpufreq/config
+@@ -5,11 +5,3 @@ CONFIG_CPU_FREQ_GOV_USERSPACE=y
+ CONFIG_CPU_FREQ_GOV_ONDEMAND=y
+ CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
+ CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
+-CONFIG_DEBUG_RT_MUTEXES=y
+-CONFIG_DEBUG_PLIST=y
+-CONFIG_DEBUG_SPINLOCK=y
+-CONFIG_DEBUG_MUTEXES=y
+-CONFIG_DEBUG_LOCK_ALLOC=y
+-CONFIG_PROVE_LOCKING=y
+-CONFIG_LOCKDEP=y
+-CONFIG_DEBUG_ATOMIC_SLEEP=y
 
-:)
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230605-kselftest-cpufreq-options-2fd6d4742333
 
-> Best regards,
-> Mirsad
-> 
-> -- 
-> Mirsad Goran Todorovac
-> Sistem inženjer
-> Grafički fakultet | Akademija likovnih umjetnosti
-> Sveučilište u Zagrebu
-> 
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb, Republic of Croatia
-> 
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
