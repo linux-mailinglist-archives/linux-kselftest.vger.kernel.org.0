@@ -2,131 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043B2724D6D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 21:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789D1724D97
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 21:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239174AbjFFTpc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 15:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
+        id S239596AbjFFT6m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 15:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239166AbjFFTpF (ORCPT
+        with ESMTP id S234125AbjFFT6l (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:45:05 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2059.outbound.protection.outlook.com [40.107.244.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D900B2134;
-        Tue,  6 Jun 2023 12:44:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P8S2yfE1N66eB57k9hwfEMtzCakBEPy2xNyX+YcsLS+pWBCm6PvW6mpU3k62raZONFL/5XDo/5B2B7BXCoq+Fjdkizr/rDF3c6slf7Vt9JFIEAgxRNSnqxAbSrgR0Xdyowdr9JK2fPoBiblgwzDQRYnn9Wr60o3AYMv+zPJRzCb+6Vfaip6Su7iu6HV3d+kItVihKgrv8sMAbg5kFyF9rdIvysj+8p8xWgpEDE1kVbEGUYWs5YGom4TeBp7IC+rwCFSNH6Ot7gPOfUtmMRw5vATf3OpNBRPbeQNHY+rbgoe8ZAlxPx2pWjTEYRluD++0nc37xk5eTTyMOHy+9SbqlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NzwLM7tqhc9OKLlV9fUwWpLi98qt50iX+1TF65zsujg=;
- b=ZtbgeU2h2/2q4MIAgV5/j32H4ZDPLzGAeu5sDqEO55stGfDvp3LNZxx+dMg3aSaFsXYayCo+gfoBJzlkPQ/MAtJRi4hITvEJ1s9A2vSQrFL+xFlgSNm+DYIf8d+zJi49joaei5guFQ1VMQBx4JgWuMQRHENsrVDIE3AxUIHBC3tj/JfucbF7aUwlN/Epd3eDuvRhlSA2gvPqgA8A9MYnBaUN1IVPsFAb4Khkx1Ko50gYkibKvjs2xvIslqRiUyJYcotl7n2k83qyRlgIU5rCBURYuw0UiLF3ug6pkBhbAxm1LZK12a5zabNr12/Cap5daZukvmYRpwfltdRkQ4QdQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NzwLM7tqhc9OKLlV9fUwWpLi98qt50iX+1TF65zsujg=;
- b=Z6WdesgTKAHbaURcYnsN1mzhXb4GBuyJwelEoOj3L7ZDRoV6ANcCGjAlBMmfO2oJamtt09ncdcK394cGx+13eGU8dc6V+l6xdQkcsFVetblZOw9EiV2VLNhBvPLtSYE85MeFYBA8P9+ONpfAzIGB3b+lfgjDuBAIBttUPomp3jm21ZDlPifQ1b+DdSVTeV8OYpknBIF4HL4bPVrlhc7QQgw6TIL487blQbfk3ornGg2BMQF8yudqiarzQpT+nnGISF5vYAX88JjPk0KiFmHDIR0dySYLXyvkTh6t+1MXYC//+XF/3boUGZQY9aRhd9S/0bQxKpFF59gYvmtno1oyHg==
-Received: from BYAPR11CA0049.namprd11.prod.outlook.com (2603:10b6:a03:80::26)
- by DS0PR12MB7874.namprd12.prod.outlook.com (2603:10b6:8:141::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Tue, 6 Jun
- 2023 19:44:04 +0000
-Received: from DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:80:cafe::17) by BYAPR11CA0049.outlook.office365.com
- (2603:10b6:a03:80::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36 via Frontend
- Transport; Tue, 6 Jun 2023 19:44:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT011.mail.protection.outlook.com (10.13.172.108) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.33 via Frontend Transport; Tue, 6 Jun 2023 19:44:03 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 6 Jun 2023
- 12:43:47 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 6 Jun 2023
- 12:43:46 -0700
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Tue, 6 Jun 2023 12:43:45 -0700
-Date:   Tue, 6 Jun 2023 12:43:44 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v2 01/11] iommu: Add new iommu op to create domains owned
- by userspace
-Message-ID: <ZH+McCPS14Wc25JL@Asurada-Nvidia>
-References: <20230511143844.22693-1-yi.l.liu@intel.com>
- <20230511143844.22693-2-yi.l.liu@intel.com>
- <BL1PR11MB5271B553140BB729AF4389AB8C7C9@BL1PR11MB5271.namprd11.prod.outlook.com>
- <ZGfDrRDI50oGih2r@Asurada-Nvidia>
- <BN9PR11MB52766A760580E6FBB995A33F8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZG2fVj41GgosR1dk@Asurada-Nvidia>
- <BN9PR11MB5276F1410A11ED631CE6824F8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZG681VohNlw2vvLD@Asurada-Nvidia>
- <ZH897AGywGVbt51Z@nvidia.com>
+        Tue, 6 Jun 2023 15:58:41 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB2583;
+        Tue,  6 Jun 2023 12:58:40 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-55554c33bf3so4788563eaf.2;
+        Tue, 06 Jun 2023 12:58:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686081519; x=1688673519;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9fzXlbPINbB7MLh0jxJ+Y5UChf2gkHO8C34dmKugRUg=;
+        b=S03UnzPuSlaqndpGm3fYnzSEuVrAJXVaDyv5zhRB0i5qOf5lMwHRzbOjDYKhZQ3YSo
+         K6JFXzTmnc5Eo0jMOnKFw9HQej3OKTiE/yaKVmk6JZ6cXrcoQ9HDNrj6Ulu/ThSN+8zH
+         XELNofQ9A4CjY/LWiTTYEyPJ0ej0qw0h/zran7xqQiuRfvTLultwGtjYlcq8sS4ed+sK
+         8hQjSnUD1/E3QK+CRaXt8pS2dKD7rK+nMC/dWUUVKcU5y9DBDO6YlOV/O/PkkLmBRN4X
+         sBGC4cB3XiFMOmPvIfiknCyFlxijBSnkSJdGYSFYSDsdnyHBdclop9rTWD/UjH1tKS26
+         2GMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686081519; x=1688673519;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9fzXlbPINbB7MLh0jxJ+Y5UChf2gkHO8C34dmKugRUg=;
+        b=I65QxiSV57kpPiSj8434muByZR8CMhPa9Vq8u5Sc0fvz9vLTxJCVhY9PlUCGVYSU3L
+         AAOEx0kIYNTi5l8QNmLjx7IHHzUCPTqaDDw3s5Yuu+ZJjS9VnNOGQ5/Bno0WWFlrGaIW
+         urDJ0Ga0JLsF0cCJ2MRG3dBD3/ZhHK9ZV6rGGBa3rJ5L3l/hr8ST/XJCx4A0/zvpUsIp
+         sg6hz80cRgVZq8mRRrtOmdpTSC9DsOtLfSSljoSm6QPDFGiqBekQyGeZH3MHJuy6YNOi
+         ttzjMUj31vQcfqzHs+N+IcvZPjdrtkLIItgyt7u9Z8gwXxBWH9MbGyvSL0Vsqsy5Z5Fu
+         YCww==
+X-Gm-Message-State: AC+VfDwjwgF87b5TgvqcxsCq0K6CYkzfmxyWqG2ej8O+D+CSjUuaNavV
+        VFCjdoo450es5MJPrfM49+A=
+X-Google-Smtp-Source: ACHHUZ42dMHLfPyqDY8aY4eB6lc3Uaa0wqGPVYy7FN7kzsPrKQYtfFllGNzJqCzN0j4iAu3TvEb9ZA==
+X-Received: by 2002:a05:6359:2a0:b0:129:cc43:2ebd with SMTP id ek32-20020a05635902a000b00129cc432ebdmr929433rwb.23.1686081519068;
+        Tue, 06 Jun 2023 12:58:39 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id fe19-20020a056a002f1300b0065055ad5754sm7196408pfb.64.2023.06.06.12.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 12:58:38 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 6 Jun 2023 09:58:37 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Message-ID: <ZH-P7X_yjnVfhy7b@slm.duckdns.org>
+References: <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
+ <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
+ <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
+ <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
+ <ZGvHUjOCjwat91Gq@slm.duckdns.org>
+ <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
+ <ZH4jfmypOXGJPu0D@slm.duckdns.org>
+ <be64a569-4388-9dd9-3e06-36d716a54f6c@redhat.com>
+ <ZH5FNc6wjlGPsaaO@slm.duckdns.org>
+ <a2220c9f-7a8d-da82-ecc0-b39f3807408c@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZH897AGywGVbt51Z@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT011:EE_|DS0PR12MB7874:EE_
-X-MS-Office365-Filtering-Correlation-Id: de3576b0-930e-4642-5b42-08db66c661d6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EBhlW+md1V6cTSKeaRdIj/WeTxh3jBMlTYGXtKGEKNqu5ab7zqXE1fJ+yu4DqDzugc2luV3qgsoJ8fraPJBb9Bamkro7RAz6phG0fLGGg3p1YWuOlIw52c0FwtB69J14uP1xlhAT4Cvue2vPF8QnNeOFFh1Qqljt1VG++JWa054g5nHdkiVi8Y/Bxhs7qKtLI2dGUjggJHGKOWf/sMkoBJnEVbYWE2Yyw89PUx6d47fsKST/sZR946dOwVzfkBVc54v90Kd3eSi6RrN1zdxJkU930sFjGx6MvFD4yl46Ks0dCN5JL+evfoii6sAGV0WmDXwrNamIduk4sGEHaNGFyKdQE5N65dxjZPR1/SnqZVGWme1YtGO1OaRt+XS7D7Z1JIpamROJdt486c79QolREqnq2Cw4iuKwozP5d6ZO6sF/fysTJhtbhJ/LQpKAN32EzFNvSVbjhXA8L3Oj3keXNAVLA+XQUSQaV3vTQswDw4Qx7O36MwjzO+XGOfL3ShfLDc9uFBgzQ6viokc13kmPOmhAmyZoHKkYquj1a01gOoDJlXqb9e0kcBM9ff9ORfSsN8DA1yJnQ8LrcxY4EOYbRdX+At9t/GsOH/XF4bH2g2xQtD3fVVgl2wYfjetZKJEQfZddveaJiWeiiLsAsxC2LWMwCf9iYKO+pfmnjC9lyim0jGcgCdFCchuXCIxE/rN25o8miVfeneqScG6lJe0K2XIi1sSLnqVFhtLHlVPyM/McFVRBrpcpqpGkG8P1kYos9Iafb22Fg5tyRb1Qfyrdmw==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(36840700001)(46966006)(40470700004)(7416002)(6862004)(5660300002)(8676002)(8936002)(4326008)(41300700001)(4744005)(2906002)(70206006)(6636002)(70586007)(316002)(54906003)(26005)(426003)(336012)(9686003)(186003)(66899021)(47076005)(36860700001)(356005)(33716001)(478600001)(7636003)(82740400003)(40460700003)(82310400005)(55016003)(40480700001)(86362001)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 19:44:03.2646
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: de3576b0-930e-4642-5b42-08db66c661d6
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7874
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+In-Reply-To: <a2220c9f-7a8d-da82-ecc0-b39f3807408c@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -134,18 +95,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 11:08:44AM -0300, Jason Gunthorpe wrote:
-> On Wed, May 24, 2023 at 06:41:41PM -0700, Nicolin Chen wrote:
+Hello, Waiman.
+
+On Mon, Jun 05, 2023 at 10:47:08PM -0400, Waiman Long wrote:
+...
+> I had a different idea on the semantics of the cpuset.cpus.exclusive at the
+> beginning. My original thinking is that it was the actual exclusive CPUs
+> that are allocated to the cgroup. Now if we treat this as a hint of what
+> exclusive CPUs should be used and it becomes valid only if the cgroup can
+
+I wouldn't call it a hint. It's still hard allocation of the CPUs to the
+cgroups that own them. Setting up a partition requires exclusive CPUs and
+thus would depend on exclusive allocations set up accordingly.
+
+> become a valid partition. I can see it as a value that can be hierarchically
+> set throughout the whole cpuset hierarchy.
 > 
-> > Upon a quick check, I think we could. Though it'd be slightly
-> > mismatched with the domain_alloc op, it should be fine since
-> > iommufd is likely to be the only caller.
+> So a transition to a valid partition is possible iff
 > 
-> Ideally the main op would return ERR_PTR too
+> 1) cpuset.cpus.exclusive is a subset of cpuset.cpus and is a subset of
+> cpuset.cpus.exclusive of all its ancestors.
 
-Yea. It just seems to be a bit painful to change it for that.
+Yes.
 
-Worth a big series?
+> 2) If its parent is not a partition root, none of the CPUs in
+> cpuset.cpus.exclusive are currently allocated to other partitions. This the
 
-Thanks
-Nic
+Not just that, the CPUs aren't available to cgroups which don't have them
+set in the .exclusive file. IOW, if a CPU is in cpus.exclusive of some
+cgroups, it shouldn't appear in cpus.effective of cgroups which don't have
+the CPU in their cpus.exclusive.
+
+So, .exclusive explicitly establishes exclusive ownership of CPUs and
+partitions depend on that with an implicit "turn CPUs exclusive" behavior in
+case the parent is a partition root for backward compatibility.
+
+> same remote partition concept in my v2 patch. If its parent is a partition
+> root, part of its exclusive CPUs will be distributed to this child partition
+> like the current behavior of cpuset partition.
+
+Yes, similar in a sense. Please do away with the "once .reserve is used, the
+behavior is switched" part. Instead, it can be sth like "if the parent is a
+partition root, cpuset implicitly tries to set all CPUs in its cpus file in
+its cpus.exclusive file" so that user-visible behavior stays unchanged
+depending on past history.
+
+Thanks.
+
+-- 
+tejun
