@@ -2,138 +2,217 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FEB6724BF5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 20:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCE0724C08
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 21:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239167AbjFFS6D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 14:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S239202AbjFFTEQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 15:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238172AbjFFS6B (ORCPT
+        with ESMTP id S238931AbjFFTEP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:58:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8BE9E
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 11:57:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686077835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=31JVF3l6gUDbROIl4YxBKRo91pCNMIATPATdnGp3EPo=;
-        b=UZqXYyWEHDklJ0UWitqrK4ExKxdyUTwPtfTs4PqYORbtJDmUQ+Apu4O4eYHoel4RqSgwYi
-        KVZijhcV6PxqlXP4cFmAOZyqbDwFTsvuDIGvNjus8dprNh1+MKbHwQEWh6dIlm/wqcmlIE
-        /QYgCh2gkpL/kZOpW/DvjGEJujVp75s=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-113-cfWGiFKhMbCpciBNQh3byw-1; Tue, 06 Jun 2023 14:57:12 -0400
-X-MC-Unique: cfWGiFKhMbCpciBNQh3byw-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f7e7a6981cso9741095e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 11:57:12 -0700 (PDT)
+        Tue, 6 Jun 2023 15:04:15 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66CF10F1
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 12:04:13 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba81b24b878so10280598276.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 12:04:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686078253; x=1688670253;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/joJEhBBdzxQgynNGH7peDx/QfEr6GsPkjZ482ouABQ=;
+        b=MCnDuiOdaiqemGK+B9Wcg2SOCR5FqYrZoFyJJMxj8OcQTvGJd46LgU8813yFq4OLu7
+         oxHawS6NtHSn47FD97mwhGbAiG58ujpvOTG0QKQ4duIfdH2pTgFT7ia1AZxbbcr3ih+7
+         R0vp77j8ghcoOJNy8K3dZ61GW2OiUnJ991eqFbjtcZnx3wsx6YbEjQH50Ze0UWl2SR14
+         x0iygVg9EVNacsgk4nhQ62VJMBm+3y9KBWw+Gq9TnkIyJiGCZqpaH27nWgEGB+3I3Sui
+         4bYDl+vG7ScgFNu0van73yt1DCU3OG2JXehWtrcz9fihEkacxto7+YCuNAN9BCX1WiGD
+         qdxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686077831; x=1688669831;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=31JVF3l6gUDbROIl4YxBKRo91pCNMIATPATdnGp3EPo=;
-        b=N+8Wc51LDJFvDsL1OPo6Lbj8EKM1Od71ISZkPFq9gLTTsfsNeBNea31r6x5yMrAtWk
-         ubLcm355F/72fUFvArFsVefEMYYshcXPSDmY/kFAxC2hhm/Kdqs4yirrA7PlZLgHajgo
-         RQXEIdJFEpMMqBaN+4+SVzxHBx/Eso+aRFNQHUaYBlHKHIDSD8LVn0H4fi6yxbz6V0N0
-         qYL+KpXLAIq4Lw2MWVuO+TfTsw4KKV1fk1PkXAsecN/sMcOydOEGH4WW1u23luLoQHoA
-         WpkQMbA6FfewbL8jHx16H24K748sL9y5MQFPx4011wZgG8c5XXE9mFXiUgs5uy7TGBeA
-         Gu4Q==
-X-Gm-Message-State: AC+VfDy1xaERRoTbwUq22Dk64XwRoPZrceMBeZqHXlAIZCvpVtSsfeiy
-        3RZqcyjT+cWYYvEmBmTLkOAxK47x2Pq00Sev9iZkQjNfTwUZTB8gUNxMLzrJcU6awdOT+YttcL+
-        Vn/4VFx2g7ojdrjM/7rZXfKBE0U1Y
-X-Received: by 2002:a7b:c858:0:b0:3f7:3991:e128 with SMTP id c24-20020a7bc858000000b003f73991e128mr2707046wml.2.1686077831254;
-        Tue, 06 Jun 2023 11:57:11 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ61P0R8sqac5ijSKL835rH/AuF3V6x11y/N9t9GsB91bZ5m/eBP7wH0Dj0CykwQ9ZrpciOtVQ==
-X-Received: by 2002:a7b:c858:0:b0:3f7:3991:e128 with SMTP id c24-20020a7bc858000000b003f73991e128mr2707034wml.2.1686077830994;
-        Tue, 06 Jun 2023 11:57:10 -0700 (PDT)
-Received: from debian (2a01cb058d652b00fa0f162c47a2f35b.ipv6.abo.wanadoo.fr. [2a01:cb05:8d65:2b00:fa0f:162c:47a2:f35b])
-        by smtp.gmail.com with ESMTPSA id z19-20020a7bc7d3000000b003f7ead9be7fsm2685045wmk.38.2023.06.06.11.57.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 11:57:10 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 20:57:08 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL][FIX TESTED] in
- vrf "bind - ns-B IPv6 LLA" test
-Message-ID: <ZH+BhFzvJkWyjBE0@debian>
-References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
- <ZHeN3bg28pGFFjJN@debian>
- <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
- <ZH84zGEODT97TEXG@debian>
- <48cfd903-ad2f-7da7-e5a6-a22392dc8650@alu.unizg.hr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <48cfd903-ad2f-7da7-e5a6-a22392dc8650@alu.unizg.hr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1686078253; x=1688670253;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/joJEhBBdzxQgynNGH7peDx/QfEr6GsPkjZ482ouABQ=;
+        b=NyukOOJsf7YhKi0xrTNAkmS4Jo2gxRAKJNRf0VDzq8yTM4gG6s7RN00E5n48Ck2T5C
+         ii2wt+EliJ2vFQrnQHkAB8E2xctoD+/LSpXY0L3uuEtO6pq4xaEJeqGJAN/2Oa+gb01e
+         UCMI8cB04wpwLs+jQmTUMKmfgkNRCuJj0+W8D54ku9TvmyqjadA9VyEkW92SlGACTZn9
+         lytrFqZJpjdfBq+mNkF8tnOoPNx3OvSFey4mKsh9aHxVw9ScZm70k4K+7jnYjwS94W79
+         ZbUlv4WAhAVoQidfYDli/KbiLKpgDvcpFVsPtQS5P4JfOPFJyEKKIUbGBr1qkTugxfwA
+         ZohQ==
+X-Gm-Message-State: AC+VfDxI0VZrFNH1l0N5h0oVQnSjpFW7luP8Hp27ya9oe+GiMZ+yCN2V
+        jmBm6ul9Oby0hxpt+H1Y9Vl9LSEQ3iVjvWmf+A==
+X-Google-Smtp-Source: ACHHUZ4mPNkOsDu9C8Eiuye4FOnWmREtZe3ZknvM1VWa8zvgrZkllOp4bORlEobPosGcDw7BEWu+PuC75l4g5O+J5Q==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a25:b53:0:b0:ba8:918a:ceec with SMTP
+ id 80-20020a250b53000000b00ba8918aceecmr1077064ybl.4.1686078252995; Tue, 06
+ Jun 2023 12:04:12 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 19:03:45 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <cover.1686077275.git.ackerleytng@google.com>
+Subject: [RFC PATCH 00/19] hugetlb support for KVM guest_mem
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        muchun.song@linux.dev, pbonzini@redhat.com, seanjc@google.com,
+        shuah@kernel.org, willy@infradead.org
+Cc:     brauner@kernel.org, chao.p.peng@linux.intel.com,
+        coltonlewis@google.com, david@redhat.com, dhildenb@redhat.com,
+        dmatlack@google.com, erdemaktas@google.com, hughd@google.com,
+        isaku.yamahata@gmail.com, jarkko@kernel.org, jmattson@google.com,
+        joro@8bytes.org, jthoughton@google.com, jun.nakajima@intel.com,
+        kirill.shutemov@linux.intel.com, liam.merwick@oracle.com,
+        mail@maciej.szmigiero.name, mhocko@suse.com, michael.roth@amd.com,
+        qperret@google.com, rientjes@google.com, rppt@kernel.org,
+        steven.price@arm.com, tabba@google.com, vannapurve@google.com,
+        vbabka@suse.cz, vipinsh@google.com, vkuznets@redhat.com,
+        wei.w.wang@intel.com, yu.c.zhang@linux.intel.com,
+        kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        qemu-devel@nongnu.org, x86@kernel.org,
+        Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 08:07:36PM +0200, Mirsad Goran Todorovac wrote:
-> On 6/6/23 15:46, Guillaume Nault wrote:
-> > diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
-> > index c4835dbdfcff..f804c11e2146 100644
-> > --- a/net/ipv6/ping.c
-> > +++ b/net/ipv6/ping.c
-> > @@ -114,7 +114,8 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
-> >   	addr_type = ipv6_addr_type(daddr);
-> >   	if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
-> >   	    (addr_type & IPV6_ADDR_MAPPED) ||
-> > -	    (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
-> > +	    (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
-> > +	     l3mdev_master_ifindex_by_index(sock_net(sk), oif) != sk->sk_bound_dev_if))
-> >   		return -EINVAL;
-> >   	ipcm6_init_sk(&ipc6, np);
-> 
-> The problem appears to be fixed:
-> 
-> # ./fcnal-test.sh
-> [...]
-> TEST: ping out, vrf device+address bind - ns-B loopback IPv6                  [ OK ]
-> TEST: ping out, vrf device+address bind - ns-B IPv6 LLA                       [ OK ]
-> TEST: ping in - ns-A IPv6                                                     [ OK ]
-> [...]
-> Tests passed: 888
-> Tests failed:   0
-> #
-> 
-> The test passed in both environments that manifested the bug.
-> 
-> Tested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Hello,
 
-Thanks. I'll review and post this patch (probably tomorrow).
+This patchset builds upon a soon-to-be-published WIP patchset that Sean
+published at https://github.com/sean-jc/linux/tree/x86/kvm_gmem_solo, mentioned
+at [1].
 
-> However, test on my AMD Ubuntu 22.04 box with 6.4-rc5 commit a4d7d7011219
-> has shown additional four failed tests:
-> 
-> root@host # grep -n FAIL ../fcnal-test-4.log
-> 90:TEST: ping local, VRF bind - VRF IP                                           [FAIL]
-> 92:TEST: ping local, device bind - ns-A IP                                       [FAIL]
-> 116:TEST: ping local, VRF bind - VRF IP                                           [FAIL]
-> 118:TEST: ping local, device bind - ns-A IP                                       [FAIL]
-> root@host #
-> 
-> But you would probably want me to file a separate bug report?
+The tree can be found at:
+https://github.com/googleprodkernel/linux-cc/tree/gmem-hugetlb-rfc-v1
 
-Are these new failures? Do they also happen on the -net tree?
+In this patchset, hugetlb support for KVM's guest_mem (aka gmem) is introduced,
+allowing VM private memory (for confidential computing) to be backed by hugetlb
+pages.
 
-> Best regards,
-> Mirsad
-> 
+guest_mem provides userspace with a handle, with which userspace can allocate
+and deallocate memory for confidential VMs without mapping the memory into
+userspace.
 
+Why use hugetlb instead of introducing a new allocator, like gmem does for 4K
+and transparent hugepages?
+
++ hugetlb provides the following useful functionality, which would otherwise
+  have to be reimplemented:
+    + Allocation of hugetlb pages at boot time, including
+        + Parsing of kernel boot parameters to configure hugetlb
+        + Tracking of usage in hstate
+        + gmem will share the same system-wide pool of hugetlb pages, so users
+          don't have to have separate pools for hugetlb and gmem
+    + Page accounting with subpools
+        + hugetlb pages are tracked in subpools, which gmem uses to reserve
+          pages from the global hstate
+    + Memory charging
+        + hugetlb provides code that charges memory to cgroups
+    + Reporting: hugetlb usage and availability are available at /proc/meminfo,
+      etc
+
+The first 11 patches in this patchset is a series of refactoring to decouple
+hugetlb and hugetlbfs.
+
+The central thread binding the refactoring is that some functions (like
+inode_resv_map(), inode_subpool(), inode_hstate(), etc) rely on a hugetlbfs
+concept, that the resv_map, subpool, hstate, are in a specific field in a
+hugetlb inode.
+
+Refactoring to parametrize functions by hstate, subpool, resv_map will allow
+hugetlb to be used by gmem and in other places where these data structures
+aren't necessarily stored in the same positions in the inode.
+
+The refactoring proposed here is just the minimum required to get a
+proof-of-concept working with gmem. I would like to get opinions on this
+approach before doing further refactoring. (See TODOs)
+
+TODOs:
+
++ hugetlb/hugetlbfs refactoring
+    + remove_inode_hugepages() no longer needs to be exposed, it is hugetlbfs
+      specific and used only in inode.c
+    + remove_mapping_hugepages(), remove_inode_single_folio(),
+      hugetlb_unreserve_pages() shouldn't need to take inode as a parameter
+        + Updating inode->i_blocks can be refactored to a separate function and
+          called from hugetlbfs and gmem
+    + alloc_hugetlb_folio_from_subpool() shouldn't need to be parametrized by
+      vma
+    + hugetlb_reserve_pages() should be refactored to be symmetric with
+      hugetlb_unreserve_pages()
+        + It should be parametrized by resv_map
+        + alloc_hugetlb_folio_from_subpool() could perhaps use
+          hugetlb_reserve_pages()?
++ gmem
+    + Figure out if resv_map should be used by gmem at all
+        + Probably needs more refactoring to decouple resv_map from hugetlb
+          functions
+
+Questions for the community:
+
+1. In this patchset, every gmem file backed with hugetlb is given a new
+   subpool. Is that desirable?
+    + In hugetlbfs, a subpool always belongs to a mount, and hugetlbfs has one
+      mount per hugetlb size (2M, 1G, etc)
+    + memfd_create(MFD_HUGETLB) effectively returns a full hugetlbfs file, so it
+      (rightfully) uses the hugetlbfs kernel mounts and their subpools
+    + I gave each file a subpool mostly to speed up implementation and still be
+      able to reserve hugetlb pages from the global hstate based on the gmem
+      file size.
+    + gmem, unlike hugetlbfs, isn't meant to be a full filesystem, so
+        + Should there be multiple mounts, one for each hugetlb size?
+        + Will the mounts be initialized on boot or on first gmem file creation?
+        + Or is one subpool per gmem file fine?
+2. Should resv_map be used for gmem at all, since gmem doesn't allow userspace
+   reservations?
+
+[1] https://lore.kernel.org/lkml/ZEM5Zq8oo+xnApW9@google.com/
+
+---
+
+Ackerley Tng (19):
+  mm: hugetlb: Expose get_hstate_idx()
+  mm: hugetlb: Move and expose hugetlbfs_zero_partial_page
+  mm: hugetlb: Expose remove_inode_hugepages
+  mm: hugetlb: Decouple hstate, subpool from inode
+  mm: hugetlb: Allow alloc_hugetlb_folio() to be parametrized by subpool
+    and hstate
+  mm: hugetlb: Provide hugetlb_filemap_add_folio()
+  mm: hugetlb: Refactor vma_*_reservation functions
+  mm: hugetlb: Refactor restore_reserve_on_error
+  mm: hugetlb: Use restore_reserve_on_error directly in filesystems
+  mm: hugetlb: Parametrize alloc_hugetlb_folio_from_subpool() by
+    resv_map
+  mm: hugetlb: Parametrize hugetlb functions by resv_map
+  mm: truncate: Expose preparation steps for truncate_inode_pages_final
+  KVM: guest_mem: Refactor kvm_gmem fd creation to be in layers
+  KVM: guest_mem: Refactor cleanup to separate inode and file cleanup
+  KVM: guest_mem: hugetlb: initialization and cleanup
+  KVM: guest_mem: hugetlb: allocate and truncate from hugetlb
+  KVM: selftests: Add basic selftests for hugetlbfs-backed guest_mem
+  KVM: selftests: Support various types of backing sources for private
+    memory
+  KVM: selftests: Update test for various private memory backing source
+    types
+
+ fs/hugetlbfs/inode.c                          | 102 ++--
+ include/linux/hugetlb.h                       |  86 ++-
+ include/linux/mm.h                            |   1 +
+ include/uapi/linux/kvm.h                      |  25 +
+ mm/hugetlb.c                                  | 324 +++++++-----
+ mm/truncate.c                                 |  24 +-
+ .../testing/selftests/kvm/guest_memfd_test.c  |  33 +-
+ .../testing/selftests/kvm/include/test_util.h |  14 +
+ tools/testing/selftests/kvm/lib/test_util.c   |  74 +++
+ .../kvm/x86_64/private_mem_conversions_test.c |  38 +-
+ virt/kvm/guest_mem.c                          | 488 ++++++++++++++----
+ 11 files changed, 882 insertions(+), 327 deletions(-)
+
+--
+2.41.0.rc0.172.g3f132b7071-goog
