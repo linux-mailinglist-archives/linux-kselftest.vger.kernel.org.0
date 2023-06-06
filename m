@@ -2,49 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276E97241AA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 14:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D5B72440C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 15:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233475AbjFFMIP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 08:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S238296AbjFFNOQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 09:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbjFFMIM (ORCPT
+        with ESMTP id S238218AbjFFNOC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:08:12 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EF410CA;
-        Tue,  6 Jun 2023 05:08:08 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1686053276t98i3jm8
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 06 Jun 2023 20:07:55 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: znfcQSa1hKajglO8GZtD0A58FeSeP/1PWkijK+XI8S8AKw25d1Xb+aXkSwg95
-        VXWtowwEFO26BQ6vjp5rwC4OER1H/C6bkt8J6uWQUpDWTXJRIyfj2Tl7DigynoKIlhSuuef
-        y3e1ZDlBMrHDjQh+D3etgEaknwArG/fyPuJnNEAETwq3KKDgPc/cudmG4X7cRac6bJc2AkB
-        oGzctCe+d/8x/OxpUDappP96VYMrcR6GmSN4B73vtAZhn+1sy3PFy0QhxkCPgg7TjOPsoix
-        NsvI9M4jP8vSIvK+RY7BLn7aqui/ejj+lsvfO+wNw2uWhcdW7VsiapkLwqRcMSxXqx9vo3v
-        5Bcb0SvhrHFJYPuBe2jSfPHw7Fsin1dQ+KiZ6sNs53cp6pm7HWHgcoxWTXcHQ==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 14342564991954658318
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     arnd@arndb.de
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de, w@1wt.eu
-Subject: Re: [PATCH v3 3/3] selftests/nolibc: riscv: customize makefile for rv32
-Date:   Tue,  6 Jun 2023 20:07:55 +0800
-Message-Id: <20230606120755.548017-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <63133024-e986-44e2-86f5-efc1c42207ac@app.fastmail.com>
-References: <63133024-e986-44e2-86f5-efc1c42207ac@app.fastmail.com>
+        Tue, 6 Jun 2023 09:14:02 -0400
+Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1F419A3;
+        Tue,  6 Jun 2023 06:13:28 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qb9cb4Z7xz9xrdM;
+        Tue,  6 Jun 2023 21:02:39 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBH_0W2MH9kQGQOAw--.4161S2;
+        Tue, 06 Jun 2023 14:12:36 +0100 (CET)
+Message-ID: <a1aff2baa9f54f534894887d58c470851a945b1f.camel@huaweicloud.com>
+Subject: Re: [PATCH v1 1/5] hostfs: Fix ephemeral inodes
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Richard Weinberger <richard@nod.at>
+Cc:     Christopher Obbard <chris.obbard@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        =?ISO-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        James Morris <jmorris@namei.org>, Jeff Xu <jeffxu@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Ritesh Raj Sarraf <ritesh@collabora.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sjoerd Simons <sjoerd@collabora.com>,
+        Willem de Bruijn <willemb@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, stable@vger.kernel.org
+Date:   Tue, 06 Jun 2023 15:12:19 +0200
+In-Reply-To: <20230309165455.175131-2-mic@digikod.net>
+References: <20230309165455.175131-1-mic@digikod.net>
+         <20230309165455.175131-2-mic@digikod.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+X-CM-TRANSID: GxC2BwBH_0W2MH9kQGQOAw--.4161S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3tw1kWFyDtr4rArWDXFy3twb_yoW8JFyfKo
+        WfuF17Xw4kXr13ArW7K3s2qayUWa97Cr48AFW5Krs5uF9xt34vkw1xKa1UZ3WUWFZ5tr4k
+        u34Iqay7Xan3A345n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUYb7kC6x804xWl14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK
+        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
+        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAABF1jj4pMJQAAsU
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,219 +78,468 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On Tue, Jun 6, 2023, at 13:12, Zhangjin Wu wrote:
-> >> On Sat, Jun 3, 2023, at 11:05, Zhangjin Wu wrote:
-> >> would seem more consistent with how x86 is handled, and would
-> >> probably be more easily extensible if we want to also make
-> >> this work with other sub-targets like mipseb, armv5 or ppc32
-> >> in the future.
-> >
-> > As Arnd and Thomas suggested to align with x86, I just tried to find a
-> > solution to avoid mixing the use of _ARCH and ARCH in this Makefile.
-> >
-> > Since both riscv32 and riscv64 share the same SRCARCH=riscv (arch/riscv),
-> > and the kernel side doesn't accept riscv32 or riscv64 currently, we need to
-> > manually convert them to _ARCH=riscv and pass them to the kernel makefile
-> > like this: ARCH=$(_ARCH), it mixes the use of _ARCH and ARCH, this is why I
-> > used the '$(if' method currently.
-> >
-> > The solution is adding something like x86 in the kernel Makefile:
-> >
-> >     diff --git a/Makefile b/Makefile
-> >     index 9d765ebcccf1..a442c893d795 100644
-> >     --- a/Makefile
-> >     +++ b/Makefile
-> >     @@ -415,6 +415,14 @@ ifeq ($(ARCH),parisc64)
-> >             SRCARCH := parisc
-> >      endif
-> >
-> >     +# Additional ARCH settings for riscv
-> >     +ifeq ($(ARCH),riscv32)
-> >     +        SRCARCH := riscv
-> >     +endif
-> >     +ifeq ($(ARCH),riscv64)
-> >     +        SRCARCH := riscv
-> >     +endif
-> >     +
-> >      export cross_compiling :=
-> >      ifneq ($(SRCARCH),$(SUBARCH))
-> >      cross_compiling := 1
->
-> I've never been a big fan of the top-level $(ARCH) setting
-> in the kernel, is there a reason this has to be the same
-> as the variable in tools/include/nolibc? If not, I'd just
-> leave the Linux Makefile unchanged.
->
-> For userspace we have a lot more target names than
-> arch/*/ directories in the kernel, and I don't think
-> I'd want to enumerate all the possibilities in the
-> build system globally.
+On Thu, 2023-03-09 at 17:54 +0100, Mickaël Salaün wrote:
+> hostfs creates a new inode for each opened or created file, which created
+> useless inode allocations and forbade identifying a host file with a kernel
+> inode.
+> 
+> Fix this uncommon filesystem behavior by tying kernel inodes to host
+> file's inode and device IDs.  Even if the host filesystem inodes may be
+> recycled, this cannot happen while a file referencing it is open, which
+> is the case with hostfs.  It should be noted that hostfs inode IDs may
+> not be unique for the same hostfs superblock because multiple host's
+> (backed) superblocks may be used.
 
-Ok, agree very much, it is the root cause why we used the old method
-before, because I don't want to touch the top-level Makefile, here
-explains the details again just as did for Thomas and Willy [1] ;-)
+I hoped that this patch solved an issue when testing the
+inode_setsecurity and inode_getsecurity combination. Unfortunately, it
+does not work, since after inode_setsecurity the inode is dropped. At
+the time inode_getsecurity is called, the security blob is lost.
 
-Without the top-level makefile change, we must add something in
-selftests/nolibc/Makefile like this, because the kernel makefile doesn't
-accept something like ARCH=riscv32 and ARCH=riscv64 currently, it only
-accepts ARCH=riscv (will paste the code later).
+Roberto
 
-    ifneq ($(findstring riscv,$(ARCH)),)
-      _ARCH = riscv
-    else
-      _ARCH = $(ARCH)
-    endif
-
-    ...
-
-    sysroot/$(ARCH)/include:
-	$(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
-	$(QUIET_MKDIR)mkdir -p sysroot
-	$(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(_ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
-	$(Q)mv sysroot/sysroot sysroot/$(ARCH)
-
-    defconfig:
-    	$(Q)$(MAKE) -C $(srctree) ARCH=$(_ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-
-    kernel: initramfs
-    	$(Q)$(MAKE) -C $(srctree) ARCH=$(_ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
-
-The above change really works, but it looks not that good, this is the
-mixing use of _ARCH and ARCH I mentioned in last reply.
-
-Otherwise, we will get such error:
-
-    $ make run ARCH=riscv64 CROSS_COMPILE=riscv64-linux-gnu-
-      MKDIR   sysroot/riscv64/include
-    make[1]: Entering directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
-    make[2]: Entering directory '/labs/linux-lab/src/linux-stable'
-    Makefile:763: arch/riscv64/Makefile: No such file or directory
-    make[2]: *** No rule to make target 'arch/riscv64/Makefile'.  Stop.
-    make[2]: Leaving directory '/labs/linux-lab/src/linux-stable'
-    make[1]: *** [Makefile:87: headers_standalone] Error 2
-    make[1]: Leaving directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
-    make: *** [Makefile:129: sysroot/riscv64/include] Error 2
-    $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu-
-      MKDIR   sysroot/riscv32/include
-    make[1]: Entering directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
-    make[2]: Entering directory '/labs/linux-lab/src/linux-stable'
-    Makefile:763: arch/riscv32/Makefile: No such file or directory
-    make[2]: *** No rule to make target 'arch/riscv32/Makefile'.  Stop.
-    make[2]: Leaving directory '/labs/linux-lab/src/linux-stable'
-    make[1]: *** [Makefile:87: headers_standalone] Error 2
-    make[1]: Leaving directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
-    make: *** [Makefile:129: sysroot/riscv32/include] Error 2
-
-That's because in top-level Makefile, it doesn't accept ARCH=riscv32 and
-ARCH=riscv64, but x86 and sparc and even parisc support such variants,
-this allows the ARCH variants share the same arch/<SRCARCH>/ source code
-tree, otherwise, they will directly find the arch/<ARCH>/ source code,
-then fails.
-
-    top-level Makefile:
-
-    ...
-    ARCH            ?= $(SUBARCH)
-
-    # Architecture as present in compile.h
-    UTS_MACHINE     := $(ARCH)
-    SRCARCH         := $(ARCH)   ---> SRCARCH is assigned as ARCH by default
-
-    # Additional ARCH settings for x86
-    ifeq ($(ARCH),i386)
-            SRCARCH := x86
-    endif
-    ifeq ($(ARCH),x86_64)
-            SRCARCH := x86
-    endif
-
-    # Additional ARCH settings for sparc
-    ifeq ($(ARCH),sparc32)
-           SRCARCH := sparc
-    endif
-    ifeq ($(ARCH),sparc64)
-           SRCARCH := sparc
-    endif
-
-    # Additional ARCH settings for parisc
-    ifeq ($(ARCH),parisc64)
-           SRCARCH := parisc
-    endif
-
-So, to really align with x86, we should let the top-level makefile be
-able to get the right SRCARCH for riscv32 and riscv64 too ;-)
-
-I even tried to pass SRCARCH=riscv to the top-level Makefile, but it
-failed:
-
-    diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-    index 1b2247a6365d..04067776b569 100644
-    --- a/tools/testing/selftests/nolibc/Makefile
-    +++ b/tools/testing/selftests/nolibc/Makefile
-    @@ -14,6 +14,10 @@ include $(srctree)/scripts/subarch.include
-     ARCH = $(SUBARCH)
-     endif
-
-    +ifneq ($(findstring riscv,$(ARCH)),)
-    +SRCARCH := SRCARCH=riscv
-    +endif
-    +
-     # kernel image names by architecture
-     IMAGE_i386       = arch/x86/boot/bzImage
-     IMAGE_x86_64     = arch/x86/boot/bzImage
-    @@ -126,7 +130,7 @@ sysroot: sysroot/$(ARCH)/include
-     sysroot/$(ARCH)/include:
-            $(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
-            $(QUIET_MKDIR)mkdir -p sysroot
-    -       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
-    +       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) $(SRCARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
-            $(Q)mv sysroot/sysroot sysroot/$(ARCH)
-
-     nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
-    @@ -150,10 +154,10 @@ initramfs: nolibc-test
-            $(Q)cp nolibc-test initramfs/init
-
-     defconfig:
-    -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-    +       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) $(SRCARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-
-     kernel: initramfs
-    -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
-    +       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) $(SRCARCH )CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
-
-     # run the tests after building the kernel
-     run: kernel
-
-    $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- QEMU_ARGS_EXTRA="-bios /labs/linux-lab/opensbi-riscv32-generic-fw_dynamic.bin"
-      MKDIR   sysroot/riscv32/include
-    make[1]: Entering directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
-    make[2]: Entering directory '/labs/linux-lab/src/linux-stable'
-    Makefile:397: srcarch: riscv
-    make[2]: Leaving directory '/labs/linux-lab/src/linux-stable'
-    make[2]: Entering directory '/labs/linux-lab/src/linux-stable'
-    Makefile:397: srcarch: riscv
-      INSTALL /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/sysroot/sysroot/include
-    make[2]: Leaving directory '/labs/linux-lab/src/linux-stable'
-    make[1]: Leaving directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
-      CC      nolibc-test
-      MKDIR   initramfs
-      INSTALL initramfs/init
-    make[1]: Entering directory '/labs/linux-lab/src/linux-stable'
-    Makefile:397: srcarch: riscv32
-      SYNC    include/config/auto.conf.cmd
-    Makefile:397: srcarch: riscv32
-    Makefile:687: arch/riscv32/Makefile: No such file or directory
-    make[2]: *** No rule to make target 'arch/riscv32/Makefile'.  Stop.
-    make[1]: *** [Makefile:795: include/config/auto.conf.cmd] Error 2
-    make[1]: Leaving directory '/labs/linux-lab/src/linux-stable'
-
-So, to keep consistent eventually, perhaps we do need to touch the
-top-level Makefile.
-
-Best regards,
-Zhangjin
-
-[1]: https://lore.kernel.org/linux-riscv/20230526092029.149351-1-falcon@tinylab.org/
-
->     Arnd
+> Delete inodes when dropping them to force backed host's file descriptors
+> closing.
+> 
+> This enables to entirely remove ARCH_EPHEMERAL_INODES, and then makes
+> Landlock fully supported by UML.  This is very useful for testing
+> (ongoing and backported) changes.
+> 
+> These changes also factor out and simplify some helpers thanks to the
+> new hostfs_inode_update() and the hostfs_iget() revamp: read_name(),
+> hostfs_create(), hostfs_lookup(), hostfs_mknod(), and
+> hostfs_fill_sb_common().
+> 
+> A following commit with new Landlock tests check this new hostfs inode
+> consistency.
+> 
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Johannes Berg <johannes@sipsolutions.net>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: <stable@vger.kernel.org> # 5.15.x: ce72750f04d6: hostfs: Fix writeback of dirty pages
+> Cc: <stable@vger.kernel.org> # 5.15+
+> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> Link: https://lore.kernel.org/r/20230309165455.175131-2-mic@digikod.net
+> ---
+>  arch/Kconfig              |   7 --
+>  arch/um/Kconfig           |   1 -
+>  fs/hostfs/hostfs.h        |   1 +
+>  fs/hostfs/hostfs_kern.c   | 213 +++++++++++++++++++-------------------
+>  fs/hostfs/hostfs_user.c   |   1 +
+>  security/landlock/Kconfig |   2 +-
+>  6 files changed, 109 insertions(+), 116 deletions(-)
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index e3511afbb7f2..d5f0841ac3c1 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1156,13 +1156,6 @@ config COMPAT_32BIT_TIME
+>  config ARCH_NO_PREEMPT
+>  	bool
+>  
+> -config ARCH_EPHEMERAL_INODES
+> -	def_bool n
+> -	help
+> -	  An arch should select this symbol if it doesn't keep track of inode
+> -	  instances on its own, but instead relies on something else (e.g. the
+> -	  host kernel for an UML kernel).
+> -
+>  config ARCH_SUPPORTS_RT
+>  	bool
+>  
+> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+> index 541a9b18e343..4057d5267c6a 100644
+> --- a/arch/um/Kconfig
+> +++ b/arch/um/Kconfig
+> @@ -5,7 +5,6 @@ menu "UML-specific options"
+>  config UML
+>  	bool
+>  	default y
+> -	select ARCH_EPHEMERAL_INODES
+>  	select ARCH_HAS_FORTIFY_SOURCE
+>  	select ARCH_HAS_GCOV_PROFILE_ALL
+>  	select ARCH_HAS_KCOV
+> diff --git a/fs/hostfs/hostfs.h b/fs/hostfs/hostfs.h
+> index 69cb796f6270..0239e3af3945 100644
+> --- a/fs/hostfs/hostfs.h
+> +++ b/fs/hostfs/hostfs.h
+> @@ -65,6 +65,7 @@ struct hostfs_stat {
+>  	unsigned long long blocks;
+>  	unsigned int maj;
+>  	unsigned int min;
+> +	dev_t dev;
+>  };
+>  
+>  extern int stat_file(const char *path, struct hostfs_stat *p, int fd);
+> diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
+> index 28b4f15c19eb..19496f732016 100644
+> --- a/fs/hostfs/hostfs_kern.c
+> +++ b/fs/hostfs/hostfs_kern.c
+> @@ -26,6 +26,7 @@ struct hostfs_inode_info {
+>  	fmode_t mode;
+>  	struct inode vfs_inode;
+>  	struct mutex open_mutex;
+> +	dev_t dev;
+>  };
+>  
+>  static inline struct hostfs_inode_info *HOSTFS_I(struct inode *inode)
+> @@ -182,14 +183,6 @@ static char *follow_link(char *link)
+>  	return ERR_PTR(n);
+>  }
+>  
+> -static struct inode *hostfs_iget(struct super_block *sb)
+> -{
+> -	struct inode *inode = new_inode(sb);
+> -	if (!inode)
+> -		return ERR_PTR(-ENOMEM);
+> -	return inode;
+> -}
+> -
+>  static int hostfs_statfs(struct dentry *dentry, struct kstatfs *sf)
+>  {
+>  	/*
+> @@ -228,6 +221,7 @@ static struct inode *hostfs_alloc_inode(struct super_block *sb)
+>  		return NULL;
+>  	hi->fd = -1;
+>  	hi->mode = 0;
+> +	hi->dev = 0;
+>  	inode_init_once(&hi->vfs_inode);
+>  	mutex_init(&hi->open_mutex);
+>  	return &hi->vfs_inode;
+> @@ -240,6 +234,7 @@ static void hostfs_evict_inode(struct inode *inode)
+>  	if (HOSTFS_I(inode)->fd != -1) {
+>  		close_file(&HOSTFS_I(inode)->fd);
+>  		HOSTFS_I(inode)->fd = -1;
+> +		HOSTFS_I(inode)->dev = 0;
+>  	}
+>  }
+>  
+> @@ -265,6 +260,7 @@ static int hostfs_show_options(struct seq_file *seq, struct dentry *root)
+>  static const struct super_operations hostfs_sbops = {
+>  	.alloc_inode	= hostfs_alloc_inode,
+>  	.free_inode	= hostfs_free_inode,
+> +	.drop_inode	= generic_delete_inode,
+>  	.evict_inode	= hostfs_evict_inode,
+>  	.statfs		= hostfs_statfs,
+>  	.show_options	= hostfs_show_options,
+> @@ -512,18 +508,31 @@ static const struct address_space_operations hostfs_aops = {
+>  	.write_end	= hostfs_write_end,
+>  };
+>  
+> -static int read_name(struct inode *ino, char *name)
+> +static int hostfs_inode_update(struct inode *ino, const struct hostfs_stat *st)
+> +{
+> +	set_nlink(ino, st->nlink);
+> +	i_uid_write(ino, st->uid);
+> +	i_gid_write(ino, st->gid);
+> +	ino->i_atime =
+> +		(struct timespec64){ st->atime.tv_sec, st->atime.tv_nsec };
+> +	ino->i_mtime =
+> +		(struct timespec64){ st->mtime.tv_sec, st->mtime.tv_nsec };
+> +	ino->i_ctime =
+> +		(struct timespec64){ st->ctime.tv_sec, st->ctime.tv_nsec };
+> +	ino->i_size = st->size;
+> +	ino->i_blocks = st->blocks;
+> +	return 0;
+> +}
+> +
+> +static int hostfs_inode_set(struct inode *ino, void *data)
+>  {
+> +	struct hostfs_stat *st = data;
+>  	dev_t rdev;
+> -	struct hostfs_stat st;
+> -	int err = stat_file(name, &st, -1);
+> -	if (err)
+> -		return err;
+>  
+>  	/* Reencode maj and min with the kernel encoding.*/
+> -	rdev = MKDEV(st.maj, st.min);
+> +	rdev = MKDEV(st->maj, st->min);
+>  
+> -	switch (st.mode & S_IFMT) {
+> +	switch (st->mode & S_IFMT) {
+>  	case S_IFLNK:
+>  		ino->i_op = &hostfs_link_iops;
+>  		break;
+> @@ -535,7 +544,7 @@ static int read_name(struct inode *ino, char *name)
+>  	case S_IFBLK:
+>  	case S_IFIFO:
+>  	case S_IFSOCK:
+> -		init_special_inode(ino, st.mode & S_IFMT, rdev);
+> +		init_special_inode(ino, st->mode & S_IFMT, rdev);
+>  		ino->i_op = &hostfs_iops;
+>  		break;
+>  	case S_IFREG:
+> @@ -547,17 +556,42 @@ static int read_name(struct inode *ino, char *name)
+>  		return -EIO;
+>  	}
+>  
+> -	ino->i_ino = st.ino;
+> -	ino->i_mode = st.mode;
+> -	set_nlink(ino, st.nlink);
+> -	i_uid_write(ino, st.uid);
+> -	i_gid_write(ino, st.gid);
+> -	ino->i_atime = (struct timespec64){ st.atime.tv_sec, st.atime.tv_nsec };
+> -	ino->i_mtime = (struct timespec64){ st.mtime.tv_sec, st.mtime.tv_nsec };
+> -	ino->i_ctime = (struct timespec64){ st.ctime.tv_sec, st.ctime.tv_nsec };
+> -	ino->i_size = st.size;
+> -	ino->i_blocks = st.blocks;
+> -	return 0;
+> +	HOSTFS_I(ino)->dev = st->dev;
+> +	ino->i_ino = st->ino;
+> +	ino->i_mode = st->mode;
+> +	return hostfs_inode_update(ino, st);
+> +}
+> +
+> +static int hostfs_inode_test(struct inode *inode, void *data)
+> +{
+> +	const struct hostfs_stat *st = data;
+> +
+> +	return inode->i_ino == st->ino && HOSTFS_I(inode)->dev == st->dev;
+> +}
+> +
+> +static struct inode *hostfs_iget(struct super_block *sb, char *name)
+> +{
+> +	struct inode *inode;
+> +	struct hostfs_stat st;
+> +	int err = stat_file(name, &st, -1);
+> +
+> +	if (err)
+> +		return ERR_PTR(err);
+> +
+> +	inode = iget5_locked(sb, st.ino, hostfs_inode_test, hostfs_inode_set,
+> +			     &st);
+> +	if (!inode)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	if (inode->i_state & I_NEW) {
+> +		unlock_new_inode(inode);
+> +	} else {
+> +		spin_lock(&inode->i_lock);
+> +		hostfs_inode_update(inode, &st);
+> +		spin_unlock(&inode->i_lock);
+> +	}
+> +
+> +	return inode;
+>  }
+>  
+>  static int hostfs_create(struct mnt_idmap *idmap, struct inode *dir,
+> @@ -565,62 +599,48 @@ static int hostfs_create(struct mnt_idmap *idmap, struct inode *dir,
+>  {
+>  	struct inode *inode;
+>  	char *name;
+> -	int error, fd;
+> -
+> -	inode = hostfs_iget(dir->i_sb);
+> -	if (IS_ERR(inode)) {
+> -		error = PTR_ERR(inode);
+> -		goto out;
+> -	}
+> +	int fd;
+>  
+> -	error = -ENOMEM;
+>  	name = dentry_name(dentry);
+>  	if (name == NULL)
+> -		goto out_put;
+> +		return -ENOMEM;
+>  
+>  	fd = file_create(name, mode & 0777);
+> -	if (fd < 0)
+> -		error = fd;
+> -	else
+> -		error = read_name(inode, name);
+> +	if (fd < 0) {
+> +		__putname(name);
+> +		return fd;
+> +	}
+>  
+> +	inode = hostfs_iget(dir->i_sb, name);
+>  	__putname(name);
+> -	if (error)
+> -		goto out_put;
+> +	if (IS_ERR(inode))
+> +		return PTR_ERR(inode);
+>  
+>  	HOSTFS_I(inode)->fd = fd;
+>  	HOSTFS_I(inode)->mode = FMODE_READ | FMODE_WRITE;
+>  	d_instantiate(dentry, inode);
+>  	return 0;
+> -
+> - out_put:
+> -	iput(inode);
+> - out:
+> -	return error;
+>  }
+>  
+>  static struct dentry *hostfs_lookup(struct inode *ino, struct dentry *dentry,
+>  				    unsigned int flags)
+>  {
+> -	struct inode *inode;
+> +	struct inode *inode = NULL;
+>  	char *name;
+> -	int err;
+> -
+> -	inode = hostfs_iget(ino->i_sb);
+> -	if (IS_ERR(inode))
+> -		goto out;
+>  
+> -	err = -ENOMEM;
+>  	name = dentry_name(dentry);
+> -	if (name) {
+> -		err = read_name(inode, name);
+> -		__putname(name);
+> -	}
+> -	if (err) {
+> -		iput(inode);
+> -		inode = (err == -ENOENT) ? NULL : ERR_PTR(err);
+> +	if (name == NULL)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	inode = hostfs_iget(ino->i_sb, name);
+> +	__putname(name);
+> +	if (IS_ERR(inode)) {
+> +		if (PTR_ERR(inode) == -ENOENT)
+> +			inode = NULL;
+> +		else
+> +			return ERR_CAST(inode);
+>  	}
+> - out:
+> +
+>  	return d_splice_alias(inode, dentry);
+>  }
+>  
+> @@ -704,35 +724,23 @@ static int hostfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
+>  	char *name;
+>  	int err;
+>  
+> -	inode = hostfs_iget(dir->i_sb);
+> -	if (IS_ERR(inode)) {
+> -		err = PTR_ERR(inode);
+> -		goto out;
+> -	}
+> -
+> -	err = -ENOMEM;
+>  	name = dentry_name(dentry);
+>  	if (name == NULL)
+> -		goto out_put;
+> +		return -ENOMEM;
+>  
+>  	err = do_mknod(name, mode, MAJOR(dev), MINOR(dev));
+> -	if (err)
+> -		goto out_free;
+> +	if (err) {
+> +		__putname(name);
+> +		return err;
+> +	}
+>  
+> -	err = read_name(inode, name);
+> +	inode = hostfs_iget(dir->i_sb, name);
+>  	__putname(name);
+> -	if (err)
+> -		goto out_put;
+> +	if (IS_ERR(inode))
+> +		return PTR_ERR(inode);
+>  
+>  	d_instantiate(dentry, inode);
+>  	return 0;
+> -
+> - out_free:
+> -	__putname(name);
+> - out_put:
+> -	iput(inode);
+> - out:
+> -	return err;
+>  }
+>  
+>  static int hostfs_rename2(struct mnt_idmap *idmap,
+> @@ -929,49 +937,40 @@ static int hostfs_fill_sb_common(struct super_block *sb, void *d, int silent)
+>  	sb->s_maxbytes = MAX_LFS_FILESIZE;
+>  	err = super_setup_bdi(sb);
+>  	if (err)
+> -		goto out;
+> +		return err;
+>  
+>  	/* NULL is printed as '(null)' by printf(): avoid that. */
+>  	if (req_root == NULL)
+>  		req_root = "";
+>  
+> -	err = -ENOMEM;
+>  	sb->s_fs_info = host_root_path =
+>  		kasprintf(GFP_KERNEL, "%s/%s", root_ino, req_root);
+>  	if (host_root_path == NULL)
+> -		goto out;
+> -
+> -	root_inode = new_inode(sb);
+> -	if (!root_inode)
+> -		goto out;
+> +		return -ENOMEM;
+>  
+> -	err = read_name(root_inode, host_root_path);
+> -	if (err)
+> -		goto out_put;
+> +	root_inode = hostfs_iget(sb, host_root_path);
+> +	if (IS_ERR(root_inode))
+> +		return PTR_ERR(root_inode);
+>  
+>  	if (S_ISLNK(root_inode->i_mode)) {
+> -		char *name = follow_link(host_root_path);
+> -		if (IS_ERR(name)) {
+> -			err = PTR_ERR(name);
+> -			goto out_put;
+> -		}
+> -		err = read_name(root_inode, name);
+> +		char *name;
+> +
+> +		iput(root_inode);
+> +		name = follow_link(host_root_path);
+> +		if (IS_ERR(name))
+> +			return PTR_ERR(name);
+> +
+> +		root_inode = hostfs_iget(sb, name);
+>  		kfree(name);
+> -		if (err)
+> -			goto out_put;
+> +		if (IS_ERR(root_inode))
+> +			return PTR_ERR(root_inode);
+>  	}
+>  
+> -	err = -ENOMEM;
+>  	sb->s_root = d_make_root(root_inode);
+>  	if (sb->s_root == NULL)
+> -		goto out;
+> +		return -ENOMEM;
+>  
+>  	return 0;
+> -
+> -out_put:
+> -	iput(root_inode);
+> -out:
+> -	return err;
+>  }
+>  
+>  static struct dentry *hostfs_read_sb(struct file_system_type *type,
+> diff --git a/fs/hostfs/hostfs_user.c b/fs/hostfs/hostfs_user.c
+> index 5ecc4706172b..840619e39a1a 100644
+> --- a/fs/hostfs/hostfs_user.c
+> +++ b/fs/hostfs/hostfs_user.c
+> @@ -36,6 +36,7 @@ static void stat64_to_hostfs(const struct stat64 *buf, struct hostfs_stat *p)
+>  	p->blocks = buf->st_blocks;
+>  	p->maj = os_major(buf->st_rdev);
+>  	p->min = os_minor(buf->st_rdev);
+> +	p->dev = buf->st_dev;
+>  }
+>  
+>  int stat_file(const char *path, struct hostfs_stat *p, int fd)
+> diff --git a/security/landlock/Kconfig b/security/landlock/Kconfig
+> index 8e33c4e8ffb8..c1e862a38410 100644
+> --- a/security/landlock/Kconfig
+> +++ b/security/landlock/Kconfig
+> @@ -2,7 +2,7 @@
+>  
+>  config SECURITY_LANDLOCK
+>  	bool "Landlock support"
+> -	depends on SECURITY && !ARCH_EPHEMERAL_INODES
+> +	depends on SECURITY
+>  	select SECURITY_PATH
+>  	help
+>  	  Landlock is a sandboxing mechanism that enables processes to restrict
 
