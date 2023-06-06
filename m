@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E06723A91
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 09:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6858B723A9F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 09:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236570AbjFFHw6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 03:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56346 "EHLO
+        id S235857AbjFFHyC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 03:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbjFFHwc (ORCPT
+        with ESMTP id S231174AbjFFHx2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:52:32 -0400
+        Tue, 6 Jun 2023 03:53:28 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB12270C;
-        Tue,  6 Jun 2023 00:48:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB8910DE;
+        Tue,  6 Jun 2023 00:49:57 -0700 (PDT)
 Received: from [192.168.10.48] (unknown [119.152.150.198])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B02776602242;
-        Tue,  6 Jun 2023 08:48:32 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E9FA46602242;
+        Tue,  6 Jun 2023 08:49:53 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686037715;
-        bh=JhbByRlc6EGRRYGw0Ja885SVDTyM19OMADJSBxVAHMQ=;
+        s=mail; t=1686037796;
+        bh=usPMufmDzuBOCEzo23gPEz247KJx0Gj7Q/7CWBmyGBg=;
         h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=jZCrUbuXc5HBQl7ZnAG9GwfIUKrSJyfWYwn/H5AzCKlu/M5kCg7hlaPhvkcCIBgaO
-         tJYP4dhCc4+2UV/R48mZsep/zKOErtgFWKOV7wUwpkibe++m/f2UzSI/z9WzT3zCf3
-         lsyO6u8o5iGF8vJI0QSyrMiM4gaRtftzzAp6GZvd4juO54Ra2JxRI+xNmQKr2yQCie
-         NH6KrJy6dvj2V1w/FubZH8QPHrd3SnkygET47BviXOPwhHfUxEdl0HI7N81idecZ2F
-         sJsAtzo2bEJ4+yOew7Ay/+/KT6mpkNxkrqnR1/uGPa8YiZ7Ltah9RvL4/2pT20ma0d
-         4589MziVr8rmg==
-Message-ID: <b069d5c5-7ea0-6960-74de-dcc6caf81a5e@collabora.com>
-Date:   Tue, 6 Jun 2023 12:48:29 +0500
+        b=AfuYw65rewPWEzEcE2cn1a8WpAnJngEFkPjO/j2Z2N19zqvHa5LXIyBhg+ORY3Mfr
+         P3OXJuPYtlpS7QSs0+l6Gyw6ndruGDu2bfwLwm27JatkLAacYx1J0dQCuDvX1lE1pZ
+         VU5Tkq4GFhoOiMAk/5/hwuAjPxEwXdIiaqF1IPEiqymjLzLlOFfYucky1MxklhJdiN
+         b6XHGNnOEtCWkjvV9esaPWT9eldKyo2DA/YzjJhGOfrCPco5OVluLHDS7osFvNUF7q
+         6fQpaSynIgl6BKsMoGPPEbTxpN35wDxvXi2Vh5lM0Nnjxng9O/r3Sm4tcHR7xiW9tY
+         ND61zjbCfQ9qw==
+Message-ID: <08bf8e05-3c64-1f1b-d6d7-f542a7026c6f@collabora.com>
+Date:   Tue, 6 Jun 2023 12:49:49 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
@@ -43,15 +43,15 @@ Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 02/11] selftests/mm: fix unused variable warnings in
- hugetlb-madvise.c, migration.c
+Subject: Re: [PATCH v3 03/11] selftests/mm: fix "warning: expression which
+ evaluates to zero..." in mlock2-tests.c
 Content-Language: en-US
 To:     John Hubbard <jhubbard@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>
 References: <20230606071637.267103-1-jhubbard@nvidia.com>
- <20230606071637.267103-3-jhubbard@nvidia.com>
+ <20230606071637.267103-4-jhubbard@nvidia.com>
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20230606071637.267103-3-jhubbard@nvidia.com>
+In-Reply-To: <20230606071637.267103-4-jhubbard@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -65,14 +65,12 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 6/6/23 12:16 PM, John Hubbard wrote:
-> Dummy variables are required in order to make these two (similar)
-> routines work, so in both cases, declare the variables as volatile in
-> order to avoid the clang compiler warning.
+> The stop variable is a char*, and the code was assigning a char value to
+> it. This was generating a warning when compiling with clang.
 > 
-> Furthermore, in order to ensure that each test actually does what is
-> intended, add an asm volatile invocation (thanks to David Hildenbrand
-> for the suggestion), with a clarifying comment so that it survives
-> future maintenance.
+> However, as both David and Peter pointed out, stop is not even used
+> after the problematic assignment to a char type. So just delete that
+> line entirely.
 > 
 > Reviewed-by: David Hildenbrand <david@redhat.com>
 > Reviewed-by: Peter Xu <peterx@redhat.com>
@@ -80,53 +78,21 @@ On 6/6/23 12:16 PM, John Hubbard wrote:
 Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
 > ---
->  tools/testing/selftests/mm/hugetlb-madvise.c | 8 ++++++--
->  tools/testing/selftests/mm/migration.c       | 5 ++++-
->  2 files changed, 10 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/mm/mlock2-tests.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
-> index 28426e30d9bc..d55322df4b73 100644
-> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
-> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
-> @@ -65,11 +65,15 @@ void write_fault_pages(void *addr, unsigned long nr_pages)
+> diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
+> index 11b2301f3aa3..80cddc0de206 100644
+> --- a/tools/testing/selftests/mm/mlock2-tests.c
+> +++ b/tools/testing/selftests/mm/mlock2-tests.c
+> @@ -50,7 +50,6 @@ static int get_vm_area(unsigned long addr, struct vm_boundaries *area)
+>  			printf("cannot parse /proc/self/maps\n");
+>  			goto out;
+>  		}
+> -		stop = '\0';
 >  
->  void read_fault_pages(void *addr, unsigned long nr_pages)
->  {
-> -	unsigned long dummy = 0;
-> +	volatile unsigned long dummy = 0;
->  	unsigned long i;
->  
-> -	for (i = 0; i < nr_pages; i++)
-> +	for (i = 0; i < nr_pages; i++) {
->  		dummy += *((unsigned long *)(addr + (i * huge_page_size)));
-> +
-> +		/* Prevent the compiler from optimizing out the entire loop: */
-> +		asm volatile("" : "+r" (dummy));
-> +	}
->  }
->  
->  int main(int argc, char **argv)
-> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-> index 1cec8425e3ca..379581567f27 100644
-> --- a/tools/testing/selftests/mm/migration.c
-> +++ b/tools/testing/selftests/mm/migration.c
-> @@ -95,12 +95,15 @@ int migrate(uint64_t *ptr, int n1, int n2)
->  
->  void *access_mem(void *ptr)
->  {
-> -	uint64_t y = 0;
-> +	volatile uint64_t y = 0;
->  	volatile uint64_t *x = ptr;
->  
->  	while (1) {
->  		pthread_testcancel();
->  		y += *x;
-> +
-> +		/* Prevent the compiler from optimizing out the writes to y: */
-> +		asm volatile("" : "+r" (y));
->  	}
->  
->  	return NULL;
+>  		sscanf(line, "%lx", &start);
+>  		sscanf(end_addr, "%lx", &end);
 
 -- 
 BR,
