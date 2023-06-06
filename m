@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9AD724C5E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 21:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB27724C66
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 21:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239424AbjFFTGS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 15:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
+        id S239361AbjFFTHC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 15:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239408AbjFFTFB (ORCPT
+        with ESMTP id S239368AbjFFTF1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:05:01 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB611BE1
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 12:04:40 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-256b2c2baf1so5844425a91.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 12:04:40 -0700 (PDT)
+        Tue, 6 Jun 2023 15:05:27 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733F41BFE
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 12:04:52 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b24203563fso2139715ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 12:04:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686078277; x=1688670277;
+        d=google.com; s=20221208; t=1686078279; x=1688670279;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l7m/+H3bbKiFYeplsxMS6SzLQH+bOrcqP3X6Nh5dkpY=;
-        b=14V+ikDqPeP4Yv1OdmN8nd7QZ5MMjeGKWKaRSYFOZag9l1JWEXWB4ucnpLMnABlXZA
-         EKyjA/Hep4b5XPLE3jo+/oAtPajUrqdw+KeK/h9os1d0usuctIgWW9M+esmzYCfBXl4x
-         ASFKNceH4Dvr96zHhOZ0uM2fLtsPSrNxdz17wPPKIRFX8xmJyoeEp2adnxvZEKqN8X4Y
-         OM4Rksx4vK290PDLeLyuR9aPGnO/Zd4sMVHFMKGC9zk+GBNtZUBayI8BLZ7Yas0LD8pw
-         GLTAE9YptousowvGxGw0V5tbYjLuLpB0CEXyROZYUG+NBDy7fuPXlo1tE0nXFLN+WEBW
-         wc/Q==
+        bh=wXM9JnRppggpXADZsSU7oZSsG9y4s1gBipK1U/D+HWI=;
+        b=VWeSODpWaBqW4mQpMFylMZsGjqz9x2cJWtAJkF8pA6jBSLPJ/ks6MKmLjF0le7g30t
+         JnmedBVXzjwth3hzxEtFKbLpgTPpii8AIYI3pjk/s5jbK19NEFa6oqTQ13vB92hVQiL8
+         ViOM5skTjTy0akJXm7D62mzzCwjuX5DC11svxqniq47zqTKpG8FGJ6kwksqVcEgjbsdr
+         Q2K/qR6ANqCdLydEwlvpleG5wsmCc5RNcdR6s83XxomLHgCDxLDz6X0Nkjd7UZ2zKFsM
+         UtKOTh+fe/f2a9gAwgpw1N4/+Q8OfnwiS90nL6ITis3W2ib2nbVxkWVf59u885V77XDE
+         HbzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686078277; x=1688670277;
+        d=1e100.net; s=20221208; t=1686078279; x=1688670279;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l7m/+H3bbKiFYeplsxMS6SzLQH+bOrcqP3X6Nh5dkpY=;
-        b=EuJj1UinzsQTaOdHYW3Wxhvl/kR7JeTmxVwZUbikw3WsHg7hqOMNcQZeWtpNlCfRCQ
-         FsInCNaYxMkwfHTDA+yy/vwLbm9aU2/BVoWXTrCxBJT/z1iW7Fgt0Op7bAxQqZFjMl1D
-         PYkycpTckP6JiGJb/hgol7qNBv/stJredbNZlY6XlQka+HHoMyrr/NjUyBcYC5hRE51j
-         W4SKa2i3cXTpmOK0WhQJKePapzVR+1vA/ullsFNQiZKPCnf/ZHdxQUorfOrCtdcqK9oQ
-         zu7zvRfhNJQXC1WDSMx/AkzeU3a7gn5SZg5V4aLGOCG6OMx3VrHCsCTTvdG7bjtAXiIh
-         aXvQ==
-X-Gm-Message-State: AC+VfDw1dloESXTshqGW3sHq9Pm9KYJrusHMbxMIKcfMqfhRwqWlywSv
-        vNHouopkimGTeuyCgTEu8lNaaYe04iYOBwLcig==
-X-Google-Smtp-Source: ACHHUZ400PPpzSqOQyBrlXwnbK9H57gIHhF9scqTSjoAqyx8OcXSiJ7wdR2icZ3OG98VTDSuHd/HQ93iA5Sxt1cqNg==
+        bh=wXM9JnRppggpXADZsSU7oZSsG9y4s1gBipK1U/D+HWI=;
+        b=h1dBk7yg/kfNjcibAlaRQK8mx7jZT1+616txYFOUuD6+sOHlafDpyLHZGcHNsPTCwq
+         3fPk9qmqXil+YaR2cQQy0pb4fjHD7vshMZG36W0TaOlYzPUqK+ksE38oMKTDUIviaI0e
+         CdnLXCydQyz/8MEC/tckFdbvTiOtUnVYgZTbj04AsY8QODUd2SKdVAUm/FsfeMQgLT/2
+         yBXBxFikyb4R3p5PuviYl1o7OAxH/N6iilrx8C5JKH4wNgrUcYLB0ZlR3enoaNG5Gjii
+         o4NQ1nygkahlecDoHAuadNWe8+RdCwljgFldCAAr6CtpadIaOp7zCarbT0yhJkadloTE
+         qcbw==
+X-Gm-Message-State: AC+VfDzABjc+/Ko8lLUQ8hXsOOaH5Yuh5WgGsND9jHf22j23WssK65Z9
+        XqINr0ZLcgp02A1v8iYMe8YwO0/kdhSWheL4cA==
+X-Google-Smtp-Source: ACHHUZ7ZdtfDieT/Oervi6LGRC4PY5HZ9dIjkRC61ZAb5O1fokMpY3zuDqGBxtoVMfmrEF+ZlDZD/kzUef5/lnoKEw==
 X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a17:90b:3003:b0:253:4808:7587 with
- SMTP id hg3-20020a17090b300300b0025348087587mr772798pjb.7.1686078277257; Tue,
- 06 Jun 2023 12:04:37 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 19:03:58 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a17:902:7c03:b0:1b2:690:23ff with SMTP
+ id x3-20020a1709027c0300b001b2069023ffmr991531pll.11.1686078279112; Tue, 06
+ Jun 2023 12:04:39 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 19:03:59 +0000
 In-Reply-To: <cover.1686077275.git.ackerleytng@google.com>
 Mime-Version: 1.0
 References: <cover.1686077275.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <67168b07e8d4a0c714fce5f030671b376d8ca001.1686077275.git.ackerleytng@google.com>
-Subject: [RFC PATCH 13/19] KVM: guest_mem: Refactor kvm_gmem fd creation to be
- in layers
+Message-ID: <44ac051fab6315161905949caefed78381b6c5fe.1686077275.git.ackerleytng@google.com>
+Subject: [RFC PATCH 14/19] KVM: guest_mem: Refactor cleanup to separate inode
+ and file cleanup
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
         muchun.song@linux.dev, pbonzini@redhat.com, seanjc@google.com,
@@ -85,146 +85,147 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-First create a gmem inode, then create a gmem file using the inode,
-then install the file into an fd.
+Cleanup in kvm_gmem_release() should be the reverse of
+kvm_gmem_create_file().
 
-Creating the file in layers separates inode concepts (struct kvm_gmem)
-from file concepts and makes cleaning up in stages neater.
+Cleanup in kvm_gmem_evict_inode() should be the reverse of
+kvm_gmem_create_inode().
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- virt/kvm/guest_mem.c | 86 +++++++++++++++++++++++++-------------------
- 1 file changed, 50 insertions(+), 36 deletions(-)
+ virt/kvm/guest_mem.c | 105 +++++++++++++++++++++++++++++--------------
+ 1 file changed, 71 insertions(+), 34 deletions(-)
 
 diff --git a/virt/kvm/guest_mem.c b/virt/kvm/guest_mem.c
-index 8708139822d3..2f69ef666871 100644
+index 2f69ef666871..13253af40be6 100644
 --- a/virt/kvm/guest_mem.c
 +++ b/virt/kvm/guest_mem.c
-@@ -375,41 +375,27 @@ static const struct inode_operations kvm_gmem_iops = {
- 	.setattr	= kvm_gmem_setattr,
- };
+@@ -247,42 +247,13 @@ static long kvm_gmem_fallocate(struct file *file, int mode, loff_t offset,
  
--static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags,
--			     struct vfsmount *mnt)
-+static struct inode *kvm_gmem_create_inode(struct kvm *kvm, loff_t size, u64 flags,
-+					   struct vfsmount *mnt)
+ static int kvm_gmem_release(struct inode *inode, struct file *file)
  {
-+	int err;
-+	struct inode *inode;
-+	struct kvm_gmem *gmem;
- 	const char *anon_name = "[kvm-gmem]";
- 	const struct qstr qname = QSTR_INIT(anon_name, strlen(anon_name));
--	struct kvm_gmem *gmem;
--	struct inode *inode;
--	struct file *file;
--	int fd, err;
+-	struct kvm_gmem *gmem = inode->i_mapping->private_data;
+-	struct kvm_memory_slot *slot;
+-	struct kvm *kvm = gmem->kvm;
+-	unsigned long index;
 -
--	fd = get_unused_fd_flags(0);
--	if (fd < 0)
--		return fd;
- 
- 	inode = alloc_anon_inode(mnt->mnt_sb);
--	if (IS_ERR(inode)) {
--		err = PTR_ERR(inode);
--		goto err_fd;
--	}
-+	if (IS_ERR(inode))
-+		return inode;
- 
- 	err = security_inode_init_security_anon(inode, &qname, NULL);
- 	if (err)
- 		goto err_inode;
- 
--	file = alloc_file_pseudo(inode, mnt, "kvm-gmem", O_RDWR, &kvm_gmem_fops);
--	if (IS_ERR(file)) {
--		err = PTR_ERR(file);
--		goto err_inode;
--	}
+ 	/*
+-	 * Prevent concurrent attempts to *unbind* a memslot.  This is the last
+-	 * reference to the file and thus no new bindings can be created, but
+-	 * deferencing the slot for existing bindings needs to be protected
+-	 * against memslot updates, specifically so that unbind doesn't race
+-	 * and free the memslot (kvm_gmem_get_file() will return NULL).
++	 * This is called when the last reference to the file is released. Only
++	 * clean up file-related stuff. struct kvm_gmem is also referred to in
++	 * the inode, so clean that up in kvm_gmem_evict_inode().
+ 	 */
+-	mutex_lock(&kvm->slots_lock);
 -
-+	err = -ENOMEM;
- 	gmem = kzalloc(sizeof(*gmem), GFP_KERNEL);
--	if (!gmem) {
--		err = -ENOMEM;
--		goto err_file;
--	}
+-	xa_for_each(&gmem->bindings, index, slot)
+-		rcu_assign_pointer(slot->gmem.file, NULL);
+-
+-	synchronize_rcu();
+-
+-	/*
+-	 * All in-flight operations are gone and new bindings can be created.
+-	 * Free the backing memory, and more importantly, zap all SPTEs that
+-	 * pointed at this file.
+-	 */
+-	kvm_gmem_invalidate_begin(kvm, gmem, 0, -1ul);
+-	truncate_inode_pages_final(file->f_mapping);
+-	kvm_gmem_invalidate_end(kvm, gmem, 0, -1ul);
+-
+-	mutex_unlock(&kvm->slots_lock);
+-
+-	WARN_ON_ONCE(!(mapping_empty(file->f_mapping)));
+-
+-	xa_destroy(&gmem->bindings);
+-	kfree(gmem);
+-
+-	kvm_put_kvm(kvm);
++	file->f_mapping = NULL;
++	file->private_data = NULL;
+ 
+ 	return 0;
+ }
+@@ -603,11 +574,77 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+ }
+ EXPORT_SYMBOL_GPL(kvm_gmem_get_pfn);
+ 
++static void kvm_gmem_evict_inode(struct inode *inode)
++{
++	struct kvm_gmem *gmem = inode->i_mapping->private_data;
++	struct kvm_memory_slot *slot;
++	struct kvm *kvm;
++	unsigned long index;
++
++	/*
++	 * If iput() was called before inode is completely set up due to some
++	 * error in kvm_gmem_create_inode(), gmem will be NULL.
++	 */
 +	if (!gmem)
-+		goto err_inode;
- 
- 	xa_init(&gmem->bindings);
- 
-@@ -426,24 +412,41 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags,
- 	mapping_set_large_folios(inode->i_mapping);
- 	mapping_set_unevictable(inode->i_mapping);
- 
--	file->f_flags |= O_LARGEFILE;
--	file->f_mapping = inode->i_mapping;
--	file->private_data = gmem;
--
--	fd_install(fd, file);
--	return fd;
-+	return inode;
- 
--err_file:
--	fput(file);
- err_inode:
- 	iput(inode);
--err_fd:
--	put_unused_fd(fd);
--	return err;
-+	return ERR_PTR(err);
++		goto basic_cleanup;
++
++	kvm = gmem->kvm;
++
++	/*
++	 * Prevent concurrent attempts to *unbind* a memslot.  This is the last
++	 * reference to the file and thus no new bindings can be created, but
++	 * deferencing the slot for existing bindings needs to be protected
++	 * against memslot updates, specifically so that unbind doesn't race
++	 * and free the memslot (kvm_gmem_get_file() will return NULL).
++	 */
++	mutex_lock(&kvm->slots_lock);
++
++	xa_for_each(&gmem->bindings, index, slot)
++		rcu_assign_pointer(slot->gmem.file, NULL);
++
++	synchronize_rcu();
++
++	/*
++	 * All in-flight operations are gone and new bindings can be created.
++	 * Free the backing memory, and more importantly, zap all SPTEs that
++	 * pointed at this file.
++	 */
++	kvm_gmem_invalidate_begin(kvm, gmem, 0, -1ul);
++	truncate_inode_pages_final(inode->i_mapping);
++	kvm_gmem_invalidate_end(kvm, gmem, 0, -1ul);
++
++	mutex_unlock(&kvm->slots_lock);
++
++	WARN_ON_ONCE(!(mapping_empty(inode->i_mapping)));
++
++	xa_destroy(&gmem->bindings);
++	kfree(gmem);
++
++	kvm_put_kvm(kvm);
++
++basic_cleanup:
++	clear_inode(inode);
 +}
 +
++static const struct super_operations kvm_gmem_super_operations = {
++	/*
++	 * TODO update statfs handler for kvm_gmem. What should the statfs
++	 * handler return?
++	 */
++	.statfs		= simple_statfs,
++	.evict_inode	= kvm_gmem_evict_inode,
++};
 +
-+static struct file *kvm_gmem_create_file(struct kvm *kvm, loff_t size, u64 flags,
-+					 struct vfsmount *mnt)
-+{
-+	struct file *file;
-+	struct inode *inode;
-+
-+	inode = kvm_gmem_create_inode(kvm, size, flags, mnt);
-+	if (IS_ERR(inode))
-+		return ERR_CAST(inode);
-+
-+	file = alloc_file_pseudo(inode, mnt, "kvm-gmem", O_RDWR, &kvm_gmem_fops);
-+	if (IS_ERR(file)) {
-+		iput(inode);
-+		return file;
-+	}
-+
-+	file->f_flags |= O_LARGEFILE;
-+	file->f_mapping = inode->i_mapping;
-+	file->private_data = inode->i_mapping->private_data;
-+
-+	return file;
- }
- 
- int kvm_gmem_create(struct kvm *kvm, struct kvm_create_guest_memfd *gmem)
+ static int kvm_gmem_init_fs_context(struct fs_context *fc)
  {
-+	int fd;
-+	struct file *file;
- 	loff_t size = gmem->size;
- 	u64 flags = gmem->flags;
- 
-@@ -462,7 +465,18 @@ int kvm_gmem_create(struct kvm *kvm, struct kvm_create_guest_memfd *gmem)
- #endif
- 	}
- 
--	return __kvm_gmem_create(kvm, size, flags, kvm_gmem_mnt);
-+	fd = get_unused_fd_flags(0);
-+	if (fd < 0)
-+		return fd;
++	struct pseudo_fs_context *ctx;
 +
-+	file = kvm_gmem_create_file(kvm, size, flags, kvm_gmem_mnt);
-+	if (IS_ERR(file)) {
-+		put_unused_fd(fd);
-+		return PTR_ERR(file);
-+	}
+ 	if (!init_pseudo(fc, GUEST_MEMORY_MAGIC))
+ 		return -ENOMEM;
+ 
++	ctx = fc->fs_private;
++	ctx->ops = &kvm_gmem_super_operations;
 +
-+	fd_install(fd, file);
-+	return fd;
+ 	return 0;
  }
  
- int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
