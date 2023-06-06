@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC41724C49
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 21:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F132F724C50
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 21:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239354AbjFFTF1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 15:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S239392AbjFFTFo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 15:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239359AbjFFTEt (ORCPT
+        with ESMTP id S239367AbjFFTEu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:04:49 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFDC1BC3
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 12:04:34 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53450fa3a18so5632165a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 12:04:34 -0700 (PDT)
+        Tue, 6 Jun 2023 15:04:50 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26756173A
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 12:04:35 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-65320a6e90dso1617139b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 12:04:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686078273; x=1688670273;
+        d=google.com; s=20221208; t=1686078275; x=1688670275;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DUcXaEC48I4Bm1WwWPPkFcaYKFbZrdo62sI7Vn9jtKM=;
-        b=EsMzcu7MCofZV1M6N8qLTVGfCobRb2m9UBd1k4rqImHaaV90eE+7yVgqGJTlHLVTGg
-         WYLYzf9nuh7wT2wl0ong7Pm+JdEwy0XrWnw7A67dAqqNLmKKthrxFKAZNZCPEmg+Gm9l
-         1/jfZjJbtssIps71Hn10bsoNM3+P1vWpJqtgmuCPP7gyVh3snIw/tKY/Poj3vjuiFMIm
-         hWDohY5CuxRIZJ1XCd6YRMkjU3OFa1a+IZrlt5R6w1j+nUqvdL8ryozxcFEC3Inu+RpX
-         MrblT0sw+GiuzKbFJnN8KErIkyQh7K372xpyIXAqppgkeoG3kQADStwWWL0FGczDjczb
-         yaGA==
+        bh=gCnAmjEfrZv4hWergm9cCKqGSfxeJstUIVXgvQlsrbM=;
+        b=0RfjN0vYiusk5ioCQS1nAlCQ9SwNbpNkrAGoCc3DzbyiTfogeskfW/k35AUHJjbjvh
+         qcmNficgsPHY7IzjLRZ7Fx7yHknnSVBialc9Lm2HDy+G56wJLuQdJfrCE1L/whTYztSX
+         0nMD1VG7QI0IeJ7NlJ0RqSFpSkllQWKP+8SH5M4Tworj/X9kHQ6JcXzt+NcdmrYuQcSD
+         ftcLroNPDkUfGiCVt5bzuOWxk/1vZL8CVOd3YhjEG4x4yYR8uQvEHMIVWqF9xF36YlZ+
+         oP2GU9HlO/y1x/wbpPSXD25KiOaXofjmCzoeXIdkiuAzfcG5mWunKS1qCnW27bnXJIzu
+         pIkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686078273; x=1688670273;
+        d=1e100.net; s=20221208; t=1686078275; x=1688670275;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DUcXaEC48I4Bm1WwWPPkFcaYKFbZrdo62sI7Vn9jtKM=;
-        b=LASuqKUm80KbIFFmZr63bU0pmQ/iHJWHE6apNi+16c9RIAMr6R9LofcAJBE8FcAZW0
-         faK0rjZ0D7yQUzhTeREshCYFruDYSXQpPwu/5KCAiSMtnZ5A69ibelmNtM3wtCvN83WZ
-         NGHZyNFF2dsw2Yl1C4ZzcJIcOba2RWOHFu0auj9yRTk2JUo9KsSkSpdBq5+Tfj4bzsg4
-         PzJXPjcRYkZApjSEf8Tfv79ya4NavbLRdnBbt9VImANO6HDiYTLWkhHIvLHZpzTS3Sva
-         Vx0qKb1AOGYjLM1FF4oIOnu7QMNbGnTzoBlBbqBkyBNHZEAyMAqKsewy+zAGbT8xQvaM
-         zgcw==
-X-Gm-Message-State: AC+VfDzJVPVObR8bDtG88CNtiXhA7htyQjCwAZjordiitbJQROwlTwN5
-        YMpN/Kr5CWSMq0ExCKiCPFvlCzkB+L4KPK8E4g==
-X-Google-Smtp-Source: ACHHUZ4v54k8mWqyJRdVfnADxQ7LxuS0BkTdcogjdbP6mmP0fUtChdx6VWMt3kG2rI14jmGLU8WGRs/GoPhwfnEqcg==
+        bh=gCnAmjEfrZv4hWergm9cCKqGSfxeJstUIVXgvQlsrbM=;
+        b=EmAO9NmNkj+9VxKlZDwiEKM3xSY5X9n5vNNNSlt7RvcYHSYkiT1VNiIZd/KPrcdENl
+         OsnnUuZOcJuNRfo7/dd3W5IL16nX4fxPPrXXJslP6eO1NA2yF7N+hsB4EbNMH8R356u5
+         Cm6Sg1fl2KAxChGxExeAqOOYBWR9vfWvOpac9cVaJ7ZOXJJCIszQcnG+84VrIiMh3Im5
+         JPatCtqVtSlVr5xBmyJFi8I73peB+D6p5ihaLmdCGdl0Ewgrp02RCTuiBhssTfr8GsJx
+         tDV7Xap+QyAJjiCPUD4b6ZGA084+UT3wnjrr33htaXtt79fw1bQQIH9aDwlT0ub/dYlV
+         hKYQ==
+X-Gm-Message-State: AC+VfDznf4ch/cKtfxLCXSh9pVK5U4NhjGF9en6XpnRBR8kO0ojUkBDz
+        lzLX6wwvMnoOwrSbMD7R+7d9lFHJKXwpB31Bug==
+X-Google-Smtp-Source: ACHHUZ7oX0XJdw6EGaS/GrZQZU2JbZA6pR7i2na5qTVNAmby/QbfNP6VXG9VMvls4TqYrSTNJjMknJRBHdMlJ61Amg==
 X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a65:5c8b:0:b0:53f:b396:6f32 with SMTP
- id a11-20020a655c8b000000b0053fb3966f32mr628734pgt.3.1686078273321; Tue, 06
- Jun 2023 12:04:33 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 19:03:56 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a05:6a00:148d:b0:63b:234e:d641 with
+ SMTP id v13-20020a056a00148d00b0063b234ed641mr1369654pfu.4.1686078275306;
+ Tue, 06 Jun 2023 12:04:35 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 19:03:57 +0000
 In-Reply-To: <cover.1686077275.git.ackerleytng@google.com>
 Mime-Version: 1.0
 References: <cover.1686077275.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <1d0337d32f40b781f9b7509cb40448b81bde6b00.1686077275.git.ackerleytng@google.com>
-Subject: [RFC PATCH 11/19] mm: hugetlb: Parametrize hugetlb functions by resv_map
+Message-ID: <0c1144b9c5cd620cd0acf7ee033fef8d311b97ba.1686077275.git.ackerleytng@google.com>
+Subject: [RFC PATCH 12/19] mm: truncate: Expose preparation steps for truncate_inode_pages_final
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
         muchun.song@linux.dev, pbonzini@redhat.com, seanjc@google.com,
@@ -77,134 +77,76 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Parametrize remove_mapping_hugepages() and hugetlb_unreserve_pages()
-by resv_map to remove the use of inode_resv_map() and decouple hugetlb
-with hugetlbfs.
+This will allow preparation steps to be shared
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- fs/hugetlbfs/inode.c    | 16 ++++++++++------
- include/linux/hugetlb.h |  6 ++++--
- mm/hugetlb.c            |  4 ++--
- 3 files changed, 16 insertions(+), 10 deletions(-)
+ include/linux/mm.h |  1 +
+ mm/truncate.c      | 24 ++++++++++++++----------
+ 2 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 53f6a421499d..a7791b1390a6 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -560,8 +560,8 @@ hugetlb_vmdelete_list(struct rb_root_cached *root, pgoff_t start, pgoff_t end,
-  */
- static bool remove_mapping_single_folio(
- 	struct address_space *mapping, struct folio *folio, pgoff_t index,
--	struct hstate *h, struct hugepage_subpool *spool, struct inode *inode,
--	bool truncate_op)
-+	struct hstate *h, struct hugepage_subpool *spool, struct resv_map *resv_map,
-+	struct inode *inode, bool truncate_op)
- {
- 	bool ret = false;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 1f79667824eb..7a8f6b810de0 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3053,6 +3053,7 @@ extern unsigned long vm_unmapped_area(struct vm_unmapped_area_info *info);
+ extern void truncate_inode_pages(struct address_space *, loff_t);
+ extern void truncate_inode_pages_range(struct address_space *,
+ 				       loff_t lstart, loff_t lend);
++extern void truncate_inode_pages_final_prepare(struct address_space *mapping);
+ extern void truncate_inode_pages_final(struct address_space *);
  
-@@ -586,7 +586,8 @@ static bool remove_mapping_single_folio(
- 	hugetlb_delete_from_page_cache(folio);
- 	ret = true;
- 	if (!truncate_op) {
--		if (unlikely(hugetlb_unreserve_pages(h, spool, inode, index, index + 1, 1)))
-+		if (unlikely(hugetlb_unreserve_pages(h, spool, resv_map,
-+						     inode, index, index + 1, 1)))
- 			hugetlb_fix_reserve_counts(h, spool);
- 	}
- 
-@@ -623,6 +624,7 @@ static bool remove_mapping_single_folio(
-  */
- void remove_mapping_hugepages(struct address_space *mapping,
- 			      struct hstate *h, struct hugepage_subpool *spool,
-+			      struct resv_map *resv_map,
- 			      struct inode *inode, loff_t lstart, loff_t lend)
- {
- 	const pgoff_t start = lstart >> huge_page_shift(h);
-@@ -647,7 +649,7 @@ void remove_mapping_hugepages(struct address_space *mapping,
- 			 * Remove folio that was part of folio_batch.
- 			 */
- 			if (remove_mapping_single_folio(mapping, folio, index,
--							h, spool, inode, truncate_op))
-+							h, spool, resv_map, inode, truncate_op))
- 				freed++;
- 
- 			mutex_unlock(&hugetlb_fault_mutex_table[hash]);
-@@ -657,7 +659,8 @@ void remove_mapping_hugepages(struct address_space *mapping,
- 	}
- 
- 	if (truncate_op)
--		(void)hugetlb_unreserve_pages(h, spool, inode, start, LONG_MAX, freed);
-+		(void)hugetlb_unreserve_pages(h, spool, resv_map, inode,
-+					      start, LONG_MAX, freed);
+ /* generic vm_area_ops exported for stackable file systems */
+diff --git a/mm/truncate.c b/mm/truncate.c
+index 7b4ea4c4a46b..4a7ae87e03b5 100644
+--- a/mm/truncate.c
++++ b/mm/truncate.c
+@@ -449,16 +449,7 @@ void truncate_inode_pages(struct address_space *mapping, loff_t lstart)
  }
+ EXPORT_SYMBOL(truncate_inode_pages);
  
- void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend)
-@@ -665,8 +668,9 @@ void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend)
- 	struct address_space *mapping = &inode->i_data;
- 	struct hstate *h = hstate_inode(inode);
- 	struct hugepage_subpool *spool = subpool_inode(inode);
-+	struct resv_map *resv_map = inode_resv_map(inode);
- 
--	return remove_mapping_hugepages(mapping, h, spool, inode, lstart, lend);
-+	return remove_mapping_hugepages(mapping, h, spool, resv_map, inode, lstart, lend);
- }
- 
- static void hugetlbfs_evict_inode(struct inode *inode)
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index d564802ace4b..af04588a5afe 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -172,7 +172,8 @@ bool hugetlb_reserve_pages(struct hstate *h, struct hugepage_subpool *spool,
- 			   struct vm_area_struct *vma,
- 			   vm_flags_t vm_flags);
- long hugetlb_unreserve_pages(struct hstate *h, struct hugepage_subpool *spool,
--			     struct inode *inode, long start, long end, long freed);
-+			     struct resv_map *resv_map, struct inode *inode,
-+			     long start, long end, long freed);
- bool isolate_hugetlb(struct folio *folio, struct list_head *list);
- int get_hwpoison_hugetlb_folio(struct folio *folio, bool *hugetlb, bool unpoison);
- int get_huge_page_for_hwpoison(unsigned long pfn, int flags,
-@@ -263,6 +264,7 @@ void hugetlb_zero_partial_page(struct hstate *h, struct address_space *mapping,
- 
- void remove_mapping_hugepages(struct address_space *mapping,
- 			      struct hstate *h, struct hugepage_subpool *spool,
-+			      struct resv_map *resv_map,
- 			      struct inode *inode, loff_t lstart, loff_t lend);
- void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend);
- 
-@@ -479,7 +481,7 @@ static inline void hugetlb_zero_partial_page(
- 
- static inline void remove_mapping_hugepages(
- 	struct address_space *mapping, struct hstate *h, struct hugepage_subpool *spool,
--	struct inode *inode, loff_t lstart, loff_t lend) {}
-+	struct resv_map *resv_map, struct inode *inode, loff_t lstart, loff_t lend) {}
- static inline void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend) {}
- 
- #endif /* !CONFIG_HUGETLB_PAGE */
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index aebdd8c63439..a1cbda457aa7 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6954,9 +6954,9 @@ bool hugetlb_reserve_pages(struct hstate *h, struct hugepage_subpool *spool,
-  * Returns 0 on success.
-  */
- long hugetlb_unreserve_pages(struct hstate *h, struct hugepage_subpool *spool,
--			     struct inode *inode, long start, long end, long freed)
-+			     struct resv_map *resv_map, struct inode *inode,
-+			     long start, long end, long freed)
+-/**
+- * truncate_inode_pages_final - truncate *all* pages before inode dies
+- * @mapping: mapping to truncate
+- *
+- * Called under (and serialized by) inode->i_rwsem.
+- *
+- * Filesystems have to use this in the .evict_inode path to inform the
+- * VM that this is the final truncate and the inode is going away.
+- */
+-void truncate_inode_pages_final(struct address_space *mapping)
++void truncate_inode_pages_final_prepare(struct address_space *mapping)
  {
--	struct resv_map *resv_map = inode_resv_map(inode);
- 	long chg = 0;
- 	long gbl_reserve;
+ 	/*
+ 	 * Page reclaim can not participate in regular inode lifetime
+@@ -479,7 +470,20 @@ void truncate_inode_pages_final(struct address_space *mapping)
+ 		xa_lock_irq(&mapping->i_pages);
+ 		xa_unlock_irq(&mapping->i_pages);
+ 	}
++}
  
++/**
++ * truncate_inode_pages_final - truncate *all* pages before inode dies
++ * @mapping: mapping to truncate
++ *
++ * Called under (and serialized by) inode->i_rwsem.
++ *
++ * Filesystems have to use this in the .evict_inode path to inform the
++ * VM that this is the final truncate and the inode is going away.
++ */
++void truncate_inode_pages_final(struct address_space *mapping)
++{
++	truncate_inode_pages_final_prepare(mapping);
+ 	truncate_inode_pages(mapping, 0);
+ }
+ EXPORT_SYMBOL(truncate_inode_pages_final);
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
