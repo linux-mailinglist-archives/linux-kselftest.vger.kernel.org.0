@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60853723AD1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 10:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9957723AD3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 10:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbjFFIAf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S231334AbjFFIAf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Tue, 6 Jun 2023 04:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237050AbjFFIAN (ORCPT
+        with ESMTP id S236880AbjFFIAB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:00:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3929B2D4E;
-        Tue,  6 Jun 2023 00:57:42 -0700 (PDT)
+        Tue, 6 Jun 2023 04:00:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521AA1701;
+        Tue,  6 Jun 2023 00:57:22 -0700 (PDT)
 Received: from [192.168.10.48] (unknown [119.152.150.198])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ED6636600359;
-        Tue,  6 Jun 2023 08:56:50 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AB02B6602242;
+        Tue,  6 Jun 2023 08:57:17 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686038213;
-        bh=IwGH7O6yfy2pLElm5a7Z4qnsrbwSCuHpRSxYI2fRk0c=;
+        s=mail; t=1686038240;
+        bh=dJtVN800iAdfG6CXzYYZqT/neQHYc3IrMQgEit0f8wc=;
         h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=h7mZ87VWxltGhn4xDgLOGheOC2AlbsLZa9LzJrZ90HEK5lTkylQDoR1X+bPH2ZpDB
-         E2uSYT5gXfLbzvNuwTG6hd2mg9DUll9UShRrUKkRu5MvDnfeEycK2WYTOq3BIzfQvz
-         lX/eZhjfi7/cqqtwhh7mUiumavsuqdT86T7MfW4qGcuhv8MEL5Xv/AQGok0HpK54Kc
-         HYN91AHAmhkAj2tDAAWAIfVpp5RZjqL4012JPJPwRqCSpXKoouvb4rkyEPqbHkvaBa
-         9+mI1tYsh3N0+FIazeXt2r0HYm8WfPGIQk/pwl5Gt8UWFwyAKyDyvBxlOnsCIkE32M
-         IsHrBS1CNsBxQ==
-Message-ID: <41fa2d6e-9655-32c6-fb48-d7a1495c8bd4@collabora.com>
-Date:   Tue, 6 Jun 2023 12:56:47 +0500
+        b=T1C3aAq66y3wj7+W1Khrrvy7RTIpSiw+Uvnx1xeap31IJZZgxRZR4REQONavel+nV
+         oLUM+7W7k1QSlZq9I0cBA1et5P0hB0MxkEK53PciylO6OTZjyNsY8ceZH6d8hqQsEw
+         31Ry3hLxKP7/+ASkqt2j4JxXY4DPxEYFZNYeg20tGiKw3LxGe71ndDbaWNHR60xAyK
+         yF+ZT6SQrRoip7IAK5gdHCOlyGVO3ZHCHUFITZD5BekIm0wmd/qiiHZnufCErZLoC+
+         oF2wNbl3bXX3cqO6om+gI9S9+g+QhVcsf8XF3JkBaqEVYu0gYwc3WAnbiw7ukxuXM5
+         9dftH1605Gwcw==
+Message-ID: <c10cac6f-7170-0865-bca9-52310196df56@collabora.com>
+Date:   Tue, 6 Jun 2023 12:57:13 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
@@ -42,16 +42,17 @@ Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 09/11] selftests/mm: move certain uffd*() routines from
- vm_util.c to uffd-common.c
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 10/11] Documentation: kselftest: "make headers" is a
+ prerequisite
 Content-Language: en-US
 To:     John Hubbard <jhubbard@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>
 References: <20230606071637.267103-1-jhubbard@nvidia.com>
- <20230606071637.267103-10-jhubbard@nvidia.com>
+ <20230606071637.267103-11-jhubbard@nvidia.com>
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20230606071637.267103-10-jhubbard@nvidia.com>
+In-Reply-To: <20230606071637.267103-11-jhubbard@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -65,195 +66,40 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 6/6/23 12:16 PM, John Hubbard wrote:
-> There are only three uffd*() routines that are used outside of the uffd
-> selftests. Leave these in vm_util.c, where they are available to any mm
-> selftest program:
+> As per a discussion with Muhammad Usama Anjum [1], the following is how
+> one is supposed to build selftests:
 > 
->     uffd_register()
->     uffd_unregister()
->     uffd_register_with_ioctls().
+>     make headers && make -C tools/testing/selftests/mm
 > 
-> A few other uffd*() routines, however, are only used by the uffd-focused
-> tests found in uffd-stress.c and uffd-unit-tests.c. Move those routines
-> into uffd-common.c.
+> However, that's not yet documented anywhere. So add it to
+> Documentation/dev-tools/kselftest.rst .
+> 
+> [1] https://lore.kernel.org/all/bf910fa5-0c96-3707-cce4-5bcc656b6274@collabora.com/
 > 
 > Cc: Peter Xu <peterx@redhat.com>
-> Acked-by: David Hildenbrand <david@redhat.com>
+> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Reviewed-by: David Hildenbrand <david@redhat.com>
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
 > ---
->  tools/testing/selftests/mm/uffd-common.c | 59 ++++++++++++++++++++++++
->  tools/testing/selftests/mm/uffd-common.h |  5 ++
->  tools/testing/selftests/mm/vm_util.c     | 59 ------------------------
->  tools/testing/selftests/mm/vm_util.h     |  4 --
->  4 files changed, 64 insertions(+), 63 deletions(-)
+>  Documentation/dev-tools/kselftest.rst | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-> index 61c6250adf93..ba20d7504022 100644
-> --- a/tools/testing/selftests/mm/uffd-common.c
-> +++ b/tools/testing/selftests/mm/uffd-common.c
-> @@ -616,3 +616,62 @@ int copy_page(int ufd, unsigned long offset, bool wp)
->  {
->  	return __copy_page(ufd, offset, false, wp);
->  }
-> +
-> +int uffd_open_dev(unsigned int flags)
-> +{
-> +	int fd, uffd;
-> +
-> +	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
-> +	if (fd < 0)
-> +		return fd;
-> +	uffd = ioctl(fd, USERFAULTFD_IOC_NEW, flags);
-> +	close(fd);
-> +
-> +	return uffd;
-> +}
-> +
-> +int uffd_open_sys(unsigned int flags)
-> +{
-> +#ifdef __NR_userfaultfd
-> +	return syscall(__NR_userfaultfd, flags);
-> +#else
-> +	return -1;
-> +#endif
-> +}
-> +
-> +int uffd_open(unsigned int flags)
-> +{
-> +	int uffd = uffd_open_sys(flags);
-> +
-> +	if (uffd < 0)
-> +		uffd = uffd_open_dev(flags);
-> +
-> +	return uffd;
-> +}
-> +
-> +int uffd_get_features(uint64_t *features)
-> +{
-> +	struct uffdio_api uffdio_api = { .api = UFFD_API, .features = 0 };
-> +	/*
-> +	 * This should by default work in most kernels; the feature list
-> +	 * will be the same no matter what we pass in here.
-> +	 */
-> +	int fd = uffd_open(UFFD_USER_MODE_ONLY);
-> +
-> +	if (fd < 0)
-> +		/* Maybe the kernel is older than user-only mode? */
-> +		fd = uffd_open(0);
-> +
-> +	if (fd < 0)
-> +		return fd;
-> +
-> +	if (ioctl(fd, UFFDIO_API, &uffdio_api)) {
-> +		close(fd);
-> +		return -errno;
-> +	}
-> +
-> +	*features = uffdio_api.features;
-> +	close(fd);
-> +
-> +	return 0;
-> +}
-> diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
-> index 6068f2346b86..197f5262fe0d 100644
-> --- a/tools/testing/selftests/mm/uffd-common.h
-> +++ b/tools/testing/selftests/mm/uffd-common.h
-> @@ -110,6 +110,11 @@ int __copy_page(int ufd, unsigned long offset, bool retry, bool wp);
->  int copy_page(int ufd, unsigned long offset, bool wp);
->  void *uffd_poll_thread(void *arg);
+> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+> index 12b575b76b20..6e35d042199c 100644
+> --- a/Documentation/dev-tools/kselftest.rst
+> +++ b/Documentation/dev-tools/kselftest.rst
+> @@ -36,6 +36,7 @@ Running the selftests (hotplug tests are run in limited mode)
 >  
-> +int uffd_open_dev(unsigned int flags);
-> +int uffd_open_sys(unsigned int flags);
-> +int uffd_open(unsigned int flags);
-> +int uffd_get_features(uint64_t *features);
-> +
->  #define TEST_ANON	1
->  #define TEST_HUGETLB	2
->  #define TEST_SHMEM	3
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 9b06a5034808..681277615839 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -242,62 +242,3 @@ int uffd_unregister(int uffd, void *addr, uint64_t len)
+>  To build the tests::
 >  
->  	return ret;
->  }
-> -
-> -int uffd_open_dev(unsigned int flags)
-> -{
-> -	int fd, uffd;
-> -
-> -	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
-> -	if (fd < 0)
-> -		return fd;
-> -	uffd = ioctl(fd, USERFAULTFD_IOC_NEW, flags);
-> -	close(fd);
-> -
-> -	return uffd;
-> -}
-> -
-> -int uffd_open_sys(unsigned int flags)
-> -{
-> -#ifdef __NR_userfaultfd
-> -	return syscall(__NR_userfaultfd, flags);
-> -#else
-> -	return -1;
-> -#endif
-> -}
-> -
-> -int uffd_open(unsigned int flags)
-> -{
-> -	int uffd = uffd_open_sys(flags);
-> -
-> -	if (uffd < 0)
-> -		uffd = uffd_open_dev(flags);
-> -
-> -	return uffd;
-> -}
-> -
-> -int uffd_get_features(uint64_t *features)
-> -{
-> -	struct uffdio_api uffdio_api = { .api = UFFD_API, .features = 0 };
-> -	/*
-> -	 * This should by default work in most kernels; the feature list
-> -	 * will be the same no matter what we pass in here.
-> -	 */
-> -	int fd = uffd_open(UFFD_USER_MODE_ONLY);
-> -
-> -	if (fd < 0)
-> -		/* Maybe the kernel is older than user-only mode? */
-> -		fd = uffd_open(0);
-> -
-> -	if (fd < 0)
-> -		return fd;
-> -
-> -	if (ioctl(fd, UFFDIO_API, &uffdio_api)) {
-> -		close(fd);
-> -		return -errno;
-> -	}
-> -
-> -	*features = uffdio_api.features;
-> -	close(fd);
-> -
-> -	return 0;
-> -}
-> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> index 07f39ed2efba..c2d4ff798b91 100644
-> --- a/tools/testing/selftests/mm/vm_util.h
-> +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -48,10 +48,6 @@ unsigned long default_huge_page_size(void);
->  int uffd_register(int uffd, void *addr, uint64_t len,
->  		  bool miss, bool wp, bool minor);
->  int uffd_unregister(int uffd, void *addr, uint64_t len);
-> -int uffd_open_dev(unsigned int flags);
-> -int uffd_open_sys(unsigned int flags);
-> -int uffd_open(unsigned int flags);
-> -int uffd_get_features(uint64_t *features);
->  int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
->  			      bool miss, bool wp, bool minor, uint64_t *ioctls);
+> +  $ make headers
+>    $ make -C tools/testing/selftests
 >  
+>  To run the tests::
 
 -- 
 BR,
