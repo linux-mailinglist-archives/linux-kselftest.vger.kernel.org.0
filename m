@@ -2,70 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CEA724AD2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 20:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0978A724B83
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 20:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238909AbjFFSH5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 14:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S232116AbjFFShC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 14:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238894AbjFFSHu (ORCPT
+        with ESMTP id S238346AbjFFShC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:07:50 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0590710DB;
-        Tue,  6 Jun 2023 11:07:47 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 98F0560222;
-        Tue,  6 Jun 2023 20:07:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1686074865; bh=2Qg6Hnn/GT3M9jXFEGMttEB5iGyXDH66CaSOdMgoKRM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=xMDYvAjjsa89sBGCrrgceRWguk+MiYlIZB/pJEermeUqf/6V+y7VvCC5ywxmFMyXJ
-         q5OLIu8P0Yhxys0zEvdV5kk1qiHYjZLqvBkVmakncLOEuoKdSiSBAmV6SBxQOkBopJ
-         JTdHwFjuK0yRsLJpnC3zgU+uE7yWpKrtLcDSO1MBrkkm1ocIYwxQBr45Ocz21BcdGg
-         P8sMjY/yFCfok2tIdtMjz4SKh1OlntBYuzVv5xBFCCi7n9I4NsCA3hlOzQv6DG4t24
-         5WUhNc7POaq9VbMTngk+lXaM0dyefVCiVltsZzjVs3iQWlIYRDiShYhcvsLTek9hQn
-         TI2HZsPv9ccGA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id gMziTJrY3cfX; Tue,  6 Jun 2023 20:07:43 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id CD6916021E;
-        Tue,  6 Jun 2023 20:07:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1686074863; bh=2Qg6Hnn/GT3M9jXFEGMttEB5iGyXDH66CaSOdMgoKRM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QMbZnORBnmqf7lIHAwuOEAtgNtuI47NhSZQgTEL/CYP/khqojqSg9jXJFrT9JDZhr
-         a/U0HJ1bozdgQxJyCrnPi0STAF+50M98GaqPyt3d9xX31JxVveHM+Jj1SH/S+kIMvR
-         Zgc5gJc5fBnm4gfqXo6n/w7tlDg649/zpKeCGOIJQW48oI95Aw6qYq4gxnxvNYBf35
-         f56Tjn0KjBZtUi091G1gUTSXRAimKP9jrE37ARyL0Xcnq5Pnvl4utwm0wVlt45UTuU
-         l86zYe/GavN+WnB7pL9yBJiBqQn+nho+O0Gs8QFzuoT6ypbIKPFxu0AVyscSHWYt6M
-         Y9IK6MgqRINOg==
-Message-ID: <48cfd903-ad2f-7da7-e5a6-a22392dc8650@alu.unizg.hr>
-Date:   Tue, 6 Jun 2023 20:07:36 +0200
+        Tue, 6 Jun 2023 14:37:02 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE88D11B;
+        Tue,  6 Jun 2023 11:36:57 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 20:36:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1686076615; bh=OjRLqwrxR3FBsWW4XS2Cc09XFAFldwpVvvt9U+Wh0WI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jUN+GWhoyrtMbFAKRDwmRGykG90E96Ekg0Tfu8T7zUUwutFn9MeQJuZ2SLG3d6UDe
+         +LU5lzDLMfsmeBrCSWiGWbK7znlbqv0VHMFVPcppLKCCZ7dUOSXSU4kyKVpwZro48S
+         5oCiYmxg1TZDtAe01th4fdo17Nc0/TM9939V4HoQ=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>, w@1wt.eu
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 4/4] tools/nolibc: sys.h: apply __syscall() helper
+Message-ID: <7e76f099-4198-421c-8157-430201970c4c@t-8ch.de>
+References: <cover.1686036862.git.falcon@tinylab.org>
+ <ee86e33d9f0031da5932b0de798f188535308dd7.1686036862.git.falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL][FIX TESTED] in
- vrf "bind - ns-B IPv6 LLA" test
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
- <ZHeN3bg28pGFFjJN@debian> <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
- <ZH84zGEODT97TEXG@debian>
-Content-Language: en-US
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZH84zGEODT97TEXG@debian>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee86e33d9f0031da5932b0de798f188535308dd7.1686036862.git.falcon@tinylab.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,116 +44,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/6/23 15:46, Guillaume Nault wrote:
-> On Tue, Jun 06, 2023 at 08:24:54AM +0200, Mirsad Goran Todorovac wrote:
->> On 5/31/23 20:11, Guillaume Nault wrote:
->>> I believe this condition should be relaxed to allow the case where
->>> ->sk_bound_dev_if is oif's master device (and maybe there are other
->>> VRF cases to also consider).
->>
->> I've tried something like this, but something makes the kernel stuck
->> here:
->>
->> TEST: ping out, blocked by route - ns-B loopback IPv6                         [ OK ]
->> TEST: ping out, device bind, blocked by route - ns-B loopback IPv6            [ OK ]
->> TEST: ping in, blocked by route - ns-A loopback IPv6                          [ OK ]
->> TEST: ping out, unreachable route - ns-B loopback IPv6                        [ OK ]
->> TEST: ping out, device bind, unreachable route - ns-B loopback IPv6           [ OK ]
->>
->> #################################################################
->> With VRF
->>
->> [hanged process and kernel won't shutdown]
->>
->> The code is:
->>
->> ---
->>   net/ipv6/ping.c | 12 +++++++++++-
->>   1 file changed, 11 insertions(+), 1 deletion(-)
->>
->> diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
->> index c4835dbdfcff..81293e902293 100644
->> --- a/net/ipv6/ping.c
->> +++ b/net/ipv6/ping.c
->> @@ -73,6 +73,9 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->>          struct rt6_info *rt;
->>          struct pingfakehdr pfh;
->>          struct ipcm6_cookie ipc6;
->> +       struct net *net = sock_net(sk);
->> +       struct net_device *dev = NULL;
->> +       struct net_device *mdev = NULL;
->>          err = ping_common_sendmsg(AF_INET6, msg, len, &user_icmph,
->>                                    sizeof(user_icmph));
->> @@ -111,10 +114,17 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->>          else if (!oif)
->>                  oif = np->ucast_oif;
->> +       if (oif) {
->> +               dev = dev_get_by_index(net, oif);
->> +               mdev = netdev_master_upper_dev_get(dev);
->> +       }
->> +
->>          addr_type = ipv6_addr_type(daddr);
->>          if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
->>              (addr_type & IPV6_ADDR_MAPPED) ||
->> -           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
->> +           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
->> +                   !(mdev && sk->sk_bound_dev_if &&
->> +                             mdev != dev_get_by_index(net, sk->sk_bound_dev_if))))
->>                  return -EINVAL;
->>          ipcm6_init_sk(&ipc6, np);
->>
->> I am obviously doing something very stupid.
+Hi Zhangjin,
+
+On 2023-06-06 16:17:38+0800, Zhangjin Wu wrote:
+> Use __syscall() helper to shrink 252 lines of code.
 > 
-> The problem is that dev_get_by_index() holds a reference on 'dev' which
-> your code never releases. Also netdev_master_upper_dev_get() needs rtnl
-> protection. These should have generated some kernel oops.
+>     $ git show HEAD^:tools/include/nolibc/sys.h | wc -l
+>     1425
+>     $ git show HEAD:tools/include/nolibc/sys.h | wc -l
+>     1173
+>     $ echo "1425-1173" | bc -l
+>     252
 > 
-> You can try this instead:
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> ---
+>  tools/include/nolibc/sys.h | 336 +++++--------------------------------
+>  1 file changed, 42 insertions(+), 294 deletions(-)
 > 
-> -------- >8 --------
-> 
-> diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
-> index c4835dbdfcff..f804c11e2146 100644
-> --- a/net/ipv6/ping.c
-> +++ b/net/ipv6/ping.c
-> @@ -114,7 +114,8 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->   	addr_type = ipv6_addr_type(daddr);
->   	if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
->   	    (addr_type & IPV6_ADDR_MAPPED) ||
-> -	    (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
-> +	    (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
-> +	     l3mdev_master_ifindex_by_index(sock_net(sk), oif) != sk->sk_bound_dev_if))
->   		return -EINVAL;
->   
->   	ipcm6_init_sk(&ipc6, np);
+> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> index f6e3168b3e50..0cfc5157845a 100644
+> --- a/tools/include/nolibc/sys.h
+> +++ b/tools/include/nolibc/sys.h
+> @@ -108,13 +108,7 @@ int sys_chdir(const char *path)
+>  static __attribute__((unused))
+>  int chdir(const char *path)
+>  {
+> -	int ret = sys_chdir(path);
+> -
+> -	if (ret < 0) {
+> -		SET_ERRNO(-ret);
+> -		ret = -1;
+> -	}
+> -	return ret;
+> +	return __syscall(chdir, path);
 
-The problem appears to be fixed:
+To be honest I'm still not a big fan of the __syscall macro.
+It's a bit too magic for too little gain.
 
-# ./fcnal-test.sh
-[...]
-TEST: ping out, vrf device+address bind - ns-B loopback IPv6                  [ OK ]
-TEST: ping out, vrf device+address bind - ns-B IPv6 LLA                       [ OK ]
-TEST: ping in - ns-A IPv6                                                     [ OK ]
-[...]
-Tests passed: 888
-Tests failed:   0
-#
+The commit message argues that the patches make the code shorter.
 
-The test passed in both environments that manifested the bug.
+However doing 
 
-Tested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+__sysret(sys_chdir(path));
 
-However, test on my AMD Ubuntu 22.04 box with 6.4-rc5 commit a4d7d7011219
-has shown additional four failed tests:
+instead of
 
-root@host # grep -n FAIL ../fcnal-test-4.log
-90:TEST: ping local, VRF bind - VRF IP                                           [FAIL]
-92:TEST: ping local, device bind - ns-A IP                                       [FAIL]
-116:TEST: ping local, VRF bind - VRF IP                                           [FAIL]
-118:TEST: ping local, device bind - ns-A IP                                       [FAIL]
-root@host #
+__syscall(chdir, path);
 
-But you would probably want me to file a separate bug report?
+is only three characters longer and the same amout of lines.
 
-Best regards,
-Mirsad
+Otherwise we would have syscall() _syscall() and __syscall() each doing
+different things.
+
+And __syscall does not behave like a regular function.
+
+The rest of the patchset looks great.
+
+Maybe Willy can break the tie?
+
+
+Thomas
+
+
+Note: If we figure out a way to build syscall() without macros I would
+like that also :-)
