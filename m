@@ -2,127 +2,229 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39067724DC7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 22:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E26724E7B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 23:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239606AbjFFUNf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 16:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
+        id S239614AbjFFVI0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 17:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234673AbjFFUNe (ORCPT
+        with ESMTP id S230504AbjFFVIY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 16:13:34 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB1EB0;
-        Tue,  6 Jun 2023 13:13:33 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6b28fc460bcso1592212a34.1;
-        Tue, 06 Jun 2023 13:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686082412; x=1688674412;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4fV7Pb5i2MwRKtXI+L72eacF/AO/0yqXx0MJ01SSud0=;
-        b=pDP+yL9WN+pff/JjCduS7JvbmoHcUSbG+eB9kCz+wqvdammYyaHY7+8vJHuvMS2fq/
-         wiDeLf7KOGZcqtQNbGAEc8cfZqZ03MuVCAWl7EFXiUe4r2M3mpMpPBs3vzm9/Bo/75Lx
-         9BQjCpEmrUs9QbozWlAryEHce3fGTg8unUtkNcIsLsEbC87BqGdI/b2EUZjbVWjLf58a
-         zelXaH1SDbvnKF5pNVwCS69lLvPBQLsjYLmUOVlxC0+SblWdlOdmN5POjSpacS5wXzdW
-         kKAwGzBoG4g4vye8rCXAQcekBLgJRqhfL3YzPy42XeTh0addYmx2XSyBsIhIO743iW5y
-         8a9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686082412; x=1688674412;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4fV7Pb5i2MwRKtXI+L72eacF/AO/0yqXx0MJ01SSud0=;
-        b=LiXBXWZAkDuB65ntKty2uYqsaNFN7VsRIyHigLqWCwqhUUzXQkgmnFHIxPr9zMsvOw
-         cN5gNRD0hN+HPs0hR7IIWhCFNGdXFtQDTXor33VvPFwPESgL/UOplRG239EVE6mSwElh
-         3pAfMpFu4MnIxP+fcoCttZF/mzQptGjM2FObXj5xuswV21nBodiyGUyGPOmcGbFiKsEo
-         QN9dKL+urjAHA7GLCME3DclckjcPpJVlsP7Kx26LZteorVMp20mIQwfwNp1uvDdirqcD
-         V4QtYF4UTVEwvb6arQ3IgkiwRZW3yQ7xwvWeGxtG6N9F8HjwDXB5+rCsnacDvX4ouydr
-         gYgA==
-X-Gm-Message-State: AC+VfDy3Q9lJjyY+4Kl8yw2pALOrlbRwqwlOQmYvMgaYFWBIM60suz0N
-        Pos4oDjDMh86NYCEtMHptUy1F8i8+t4=
-X-Google-Smtp-Source: ACHHUZ4iLr+olIDpe6s8ZRWHjb0zuQyQc8mlYCwoYHuAuIvcatBpGiqxjkl/qs78RZxnA9Jw8tY6zg==
-X-Received: by 2002:a9d:6253:0:b0:6af:9eb0:5de1 with SMTP id i19-20020a9d6253000000b006af9eb05de1mr3007443otk.36.1686082412201;
-        Tue, 06 Jun 2023 13:13:32 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id b16-20020aa78710000000b00646e7d2b5a7sm7157908pfo.112.2023.06.06.13.13.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 13:13:31 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 6 Jun 2023 10:13:31 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Message-ID: <ZH-Ta7jDozegNo3o@slm.duckdns.org>
-References: <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
- <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
- <ZGvHUjOCjwat91Gq@slm.duckdns.org>
- <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
- <ZH4jfmypOXGJPu0D@slm.duckdns.org>
- <be64a569-4388-9dd9-3e06-36d716a54f6c@redhat.com>
- <ZH5FNc6wjlGPsaaO@slm.duckdns.org>
- <a2220c9f-7a8d-da82-ecc0-b39f3807408c@redhat.com>
- <ZH-P7X_yjnVfhy7b@slm.duckdns.org>
- <563fd5e1-650a-e329-8aab-2fa1953a9f49@redhat.com>
+        Tue, 6 Jun 2023 17:08:24 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635461726;
+        Tue,  6 Jun 2023 14:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686085702; x=1717621702;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TE+hsFEtgKTdemjU0rpyelI4HlRWI8H2qWCPy0IYQto=;
+  b=Lo2BoPp4DzQ0FPA7KvqSqWf2tYuIgndIVvncp/bueojDsE03Tp1bu442
+   GvsMgrq0/yUWB/h3lxFKM68pZVs/z+wBf8CNsjCtEsuFBrB4UIZopv9eR
+   t1to4/VAgA/NfyGlpHUfz3rWkE08fc5OY36zkMl7YKYBsPFA8swO09YEL
+   7XF63LPiI0Iz5maUB6BdGsbzBETMHgRTXrW4fVJuDLqdNHZp6ouOVP6zn
+   xEh5wZOA07WGcYIqRVfjiq7593xpOXfz+dI5GjdqC08576hhw9XcdKmD6
+   PQvV3VtrRTsbsGFVGkDvrL4z9z1gKuAdva0zzHYpCSx++6nkmUHD6rCML
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="422642039"
+X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
+   d="scan'208";a="422642039"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 14:08:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="833392520"
+X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
+   d="scan'208";a="833392520"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 06 Jun 2023 14:08:14 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6duY-0005kp-09;
+        Tue, 06 Jun 2023 21:08:14 +0000
+Date:   Wed, 7 Jun 2023 05:08:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
+Subject: Re: [PATCH v17 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <202306070414.XDn2ITuw-lkp@intel.com>
+References: <20230606060822.1065182-3-usama.anjum@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <563fd5e1-650a-e329-8aab-2fa1953a9f49@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230606060822.1065182-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+Hi Muhammad,
 
-On Tue, Jun 06, 2023 at 04:11:02PM -0400, Waiman Long wrote:
-...
-> The current CPU exclusive behavior is limited to sibling cgroups only.
-> Because of the hierarchical nature of cpu distribution, the set of exclusive
-> CPUs have to appear in all its ancestors. When partition is enabled, we do a
-> sibling exclusivity test at that point to verify that it is exclusive. It
-> looks like you want to do an exclusivity test even when the partition isn't
-> active. I can certainly do that when the file is being updated. However, it
-> will fail the write if the exclusivity test fails just like the v1
-> cpuset.cpus.exclusive flag if you are OK with that.
+kernel test robot noticed the following build errors:
 
-Yeah, doesn't look like there's a way around it if we want to make
-.exclusive a feature which is useful on its own.
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on next-20230606]
+[cannot apply to linus/master v6.4-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > Instead, it can be sth like "if the parent is a
-> > partition root, cpuset implicitly tries to set all CPUs in its cpus file in
-> > its cpus.exclusive file" so that user-visible behavior stays unchanged
-> > depending on past history.
-> 
-> If parent is a partition root, auto reservation will be done and
-> cpus.exclusive will be set automatically just like before. So existing
-> applications using partition will not be affected.
+url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230606-141114
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230606060822.1065182-3-usama.anjum%40collabora.com
+patch subject: [PATCH v17 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20230607/202306070414.XDn2ITuw-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch akpm-mm mm-everything
+        git checkout akpm-mm/mm-everything
+        b4 shazam https://lore.kernel.org/r/20230606060822.1065182-3-usama.anjum@collabora.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-Sounds great.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306070414.XDn2ITuw-lkp@intel.com/
 
-Thanks.
+All errors (new ones prefixed by >>):
+
+   fs/proc/task_mmu.c: In function 'pagemap_scan_pmd_entry':
+>> fs/proc/task_mmu.c:1960:31: error: 'HPAGE_SIZE' undeclared (first use in this function); did you mean 'PAGE_SIZE'?
+    1960 |                     n_pages < HPAGE_SIZE/PAGE_SIZE) {
+         |                               ^~~~~~~~~~
+         |                               PAGE_SIZE
+   fs/proc/task_mmu.c:1960:31: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +1960 fs/proc/task_mmu.c
+
+  1931	
+  1932	static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+  1933					  unsigned long end, struct mm_walk *walk)
+  1934	{
+  1935		struct pagemap_scan_private *p = walk->private;
+  1936		struct vm_area_struct *vma = walk->vma;
+  1937		unsigned long addr = end;
+  1938		pte_t *pte, *orig_pte;
+  1939		spinlock_t *ptl;
+  1940		bool is_written;
+  1941		int ret = 0;
+  1942	
+  1943		arch_enter_lazy_mmu_mode();
+  1944	
+  1945	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+  1946		ptl = pmd_trans_huge_lock(pmd, vma);
+  1947		if (ptl) {
+  1948			unsigned long n_pages = (end - start)/PAGE_SIZE;
+  1949	
+  1950			if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+  1951				n_pages = p->max_pages - p->found_pages;
+  1952	
+  1953			is_written = !is_pmd_uffd_wp(*pmd);
+  1954	
+  1955			/*
+  1956			 * Break huge page into small pages if the WP operation need to
+  1957			 * be performed is on a portion of the huge page.
+  1958			 */
+  1959			if (is_written && IS_PM_SCAN_WP(p->flags) &&
+> 1960			    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+  1961				spin_unlock(ptl);
+  1962	
+  1963				split_huge_pmd(vma, pmd, start);
+  1964				goto process_smaller_pages;
+  1965			}
+  1966	
+  1967			if (IS_PM_SCAN_GET(p->flags))
+  1968				ret = pagemap_scan_output(is_written, vma->vm_file,
+  1969							  pmd_present(*pmd),
+  1970							  is_swap_pmd(*pmd),
+  1971							  p, start, n_pages);
+  1972	
+  1973			if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+  1974				make_uffd_wp_pmd(vma, addr, pmd);
+  1975	
+  1976			if (IS_PM_SCAN_WP(p->flags))
+  1977				flush_tlb_range(vma, start, end);
+  1978	
+  1979			spin_unlock(ptl);
+  1980	
+  1981			arch_leave_lazy_mmu_mode();
+  1982			return ret;
+  1983		}
+  1984	
+  1985	process_smaller_pages:
+  1986		if (pmd_trans_unstable(pmd)) {
+  1987			arch_leave_lazy_mmu_mode();
+  1988			walk->action = ACTION_AGAIN;
+  1989			return 0;
+  1990		}
+  1991	#endif
+  1992	
+  1993		orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+  1994		for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
+  1995			is_written = !is_pte_uffd_wp(*pte);
+  1996	
+  1997			if (IS_PM_SCAN_GET(p->flags))
+  1998				ret = pagemap_scan_output(is_written, vma->vm_file,
+  1999							  pte_present(*pte),
+  2000							  is_swap_pte(*pte),
+  2001							  p, addr, 1);
+  2002	
+  2003			if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+  2004				make_uffd_wp_pte(vma, addr, pte);
+  2005		}
+  2006	
+  2007		if (IS_PM_SCAN_WP(p->flags))
+  2008			flush_tlb_range(vma, start, addr);
+  2009	
+  2010		pte_unmap_unlock(orig_pte, ptl);
+  2011		arch_leave_lazy_mmu_mode();
+  2012	
+  2013		cond_resched();
+  2014		return ret;
+  2015	}
+  2016	
 
 -- 
-tejun
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
