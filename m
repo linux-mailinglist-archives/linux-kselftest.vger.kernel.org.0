@@ -2,93 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CDE7237FF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 08:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C21272386D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jun 2023 09:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbjFFGpu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 02:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
+        id S229880AbjFFHJo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 03:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234634AbjFFGps (ORCPT
+        with ESMTP id S229693AbjFFHJm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:45:48 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CE6DE40;
-        Mon,  5 Jun 2023 23:45:46 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 3566jWuo018103;
-        Tue, 6 Jun 2023 08:45:32 +0200
-Date:   Tue, 6 Jun 2023 08:45:32 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v3 0/3] nolibc: add part2 of support for rv32
-Message-ID: <ZH7WDDgACvzVzV6e@1wt.eu>
-References: <ZH65QKQ1dlY+HsK7@1wt.eu>
- <20230606063421.355411-1-falcon@tinylab.org>
+        Tue, 6 Jun 2023 03:09:42 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44280C5
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 00:09:40 -0700 (PDT)
+Received: from [IPV6:2a0c:5a83:9203:ad00:6f2e:82dd:9a04:a2e5] (unknown [IPv6:2a0c:5a83:9203:ad00:6f2e:82dd:9a04:a2e5])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: rcn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7AF986602242;
+        Tue,  6 Jun 2023 08:09:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686035378;
+        bh=cYoWDMoDcjTeMLvh8Xz6kkQiQ4ez9mh85N9FBggJspY=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=INKnr224ZO1Z0tefrx+dmy9dfwLqgX3re5MXGhgPthhQGWIio+g2hiWybcQGSjz9h
+         l8G/GEMDEwNFt4fG+IQPPu8vKPJ9zfsg7JJvMf8I0ECryN0SbJN1zFvADGu6DF1Wsd
+         K7EqkBW5b20E+d6UGjVGDzh68/vjtDWu36HytTTLJr7Ot+1WPKuDlxMVO/4mSK4Wwe
+         kmX3mBe2bwscL6qPHMmxzSgecn3aez1s41sR80X8xCLhwu3HMT5L6nOx6lN3Gop7Zg
+         ei6K8ZWITmW6OcFlOaYrQwTqv8ofBoePzAA8jekNOy8d2UrbDdg/1otMM3Hc3UMeVk
+         Y5/n7NLxgLy0g==
+Message-ID: <f11ad370-62f5-9437-5b65-7ed515de17b9@collabora.com>
+Date:   Tue, 6 Jun 2023 09:09:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606063421.355411-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] selftests/mincore: fix skip condition for
+ check_huge_pages test
+Content-Language: en-US
+From:   =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>
+To:     shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, kernel@collabora.com,
+        naresh.kamboju@linaro.org, dan.carpenter@linaro.org
+References: <20230515132643.119809-1-ricardo.canuelo@collabora.com>
+In-Reply-To: <20230515132643.119809-1-ricardo.canuelo@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 02:34:21PM +0800, Zhangjin Wu wrote:
-> Willy, Thomas, Arnd
-> 
-> > Hi Zhangjin,
-> > 
-> > On Tue, Jun 06, 2023 at 12:25:35PM +0800, Zhangjin Wu wrote:
-> > > The first two convert all compile failures to a return of -ENOSYS, if you do
-> > > like it, welcome your Reviewed-by. These two are required by the coming new
-> > > time64 syscalls for rv32, because they depends on how we cope with the
-> > > unsupported syscalls, returning -ENOSYS is really better than simply fail the
-> > > compiling.
-> > 
-> > I had a look now and I can sya that I like this. Initially the supported
-> > syscalls were so restricted that it was not even imaginable to accept to
-> > build without any of them, but now that we're completing the list, some
-> > of them are less critical and I don't see why we'd fail to build just
-> > because one is missing. So yeah, a big +1 for -ENOSYS.
-> >
-> 
-> Cool, I will prepare the new patchsets on them, welcome your new branch
-> with both of them, of course, still weclome Reviewed-by from Arnd and Thomas.
+Hi Shuah,
 
-I don't even think a new branch is needed, I can take them as-is it seems.
+On 15/5/23 15:26, Ricardo Cañuelo wrote:
+> The check_huge_pages test was failing instead of skipping on qemu-armv7
+> because the skip condition wasn't handled properly. Add an additional
+> check to fix it.
+> 
+> Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Closes: https://lore.kernel.org/all/CA+G9fYuoB8Ug8PcTU-YGmemL7_eeEksXFihvxWF6OikD7sK7pA@mail.gmail.com
 
-> > > The third one is not that urgent, because some important syscalls are
-> > > still missing for rv32. It is added here only for compile test.
-> > 
-> > I personally have no opinion on this one. I can't judge whether it will
-> > make things easier or more complicated at this point. It seems to me
-> > that for now it's just avoiding one extra line at the expense of some
-> > $(if) on several lines. Maybe it could help add more such archs, or
-> > maybe it can make them more complicated to debug, I don't know. I'm
-> > interested in others' opinions as well.
-> 
-> As I explained why we did it in current way in this reply [1], Thomas had no
-> more questions on it, so I think Thomas was happy with it now and I got his
-> only left suggestion is that may be this patch should be applied after the
-> missing 64bit syscalls being added for there are several important test
-> failures currently, for me, it is ok before or after.
-> 
-> Thomas, welcome your Reviewed-by on the makefile patch itself If you are really
-> happy with it now, thanks very much ;-)
-> 
-> Willy, I will send the v2 syscalls helpers (also required by the coming 64bit
-> syscalls) and some other patches (mainly for test with faster kernel build)
-> about selftests/nolibc later, because we have not enough time for v6.5 test,
-> so, I suggest we can create new branch for v6.6 and my new patchsets will be
-> for v6.6.
+Gentle ping about this, I still haven't seen it merged.
 
-Agreed, thank you!
-Willy
+Cheers,
+Ricardo
