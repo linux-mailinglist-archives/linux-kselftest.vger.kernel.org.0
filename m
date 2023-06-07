@@ -2,84 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890827251AA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 03:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CB1725227
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 04:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239980AbjFGBog (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 21:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
+        id S240444AbjFGCnB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 22:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240534AbjFGBoI (ORCPT
+        with ESMTP id S234906AbjFGCm6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:44:08 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2921BC7;
-        Tue,  6 Jun 2023 18:44:04 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so501283e87.2;
-        Tue, 06 Jun 2023 18:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686102243; x=1688694243;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cydTVkBZ9wwA36xiKOsKWVLXBix81SsiChs8AFPXSco=;
-        b=WipqcehkIxHd2tQDwpQumUKrwlpxPGp4/5QgqPivgYOTZ/VBLupHzlAYXUT5nWDHrr
-         EIlP4+KC2/1f1oQ1f3+eC4KsCaVHMCu8E/3xm8KExPpLFV18XqoULPnAQnJSUsSBi82v
-         s+U8cTPMYzoGrOXN2B/+Hf7hkUTUwZyhFXbbfPoEn9nfoCm1B1N4n/LYXMt1/0JndYkw
-         JGM7bJlxgifFi+rnfyk3XHr/PTp2mWPIzTKLCnK0nJyJ0LSYZT+5yeux5KuBcseosu7n
-         lZP1YzPXtVl0oxZCWjGcSUcWj9aX4rYjQwZc7nmBd6Zy1bTbQ0VH1+QlQVqdBuLOdNcF
-         9ypw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686102243; x=1688694243;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cydTVkBZ9wwA36xiKOsKWVLXBix81SsiChs8AFPXSco=;
-        b=AiBr1JoOvmHidxQtzQZcFCPSV88e/0B2joG8WGOGAo7b+SulzzyDn1Pk1GFSgnZvFL
-         u2Ybt6lSEOPMtD1xBzbgZfb6T1KsmW2pm71d9LKri1S/2RQ8sPpHlvIeuXGcgL9mdvw3
-         uIq9f1B0byFgdIVaN7FdKlhK0yAT1kIQ8wyndgC0r0MiO8zeI99ZgFDqwhNUqLOJGUir
-         0PucDpEI9xZLQFNqhIjSUlsRn0caauf0tL4ZroR9Og23J0Q/IGAmkED4ohgnqWrTmTSe
-         4dFFu6g1VyUTAb0b733MmWhwCQI5NMQkkMtn0q1GgG7zReyQFS+zh5RIT397kzRouhZF
-         xikw==
-X-Gm-Message-State: AC+VfDyOTYD4G4fmDuA5850zfM0iYEIDm1kj0Dm0Q1VEF/e8znxRUBhA
-        n7/GEWHQ2xPD2GXViqoOv2yfypbVLAo3OcM4Cn/lIryg
-X-Google-Smtp-Source: ACHHUZ4wqElTlOsU89vFlZCDs9eKYShpLYo1+aomjTwzh+9Iw5GujYy0qPuQenPOiw2SH0Cm+NhFYWjpGLhcVJA2Hm8=
-X-Received: by 2002:ac2:511d:0:b0:4f6:3c67:ddfc with SMTP id
- q29-20020ac2511d000000b004f63c67ddfcmr971952lfb.23.1686102242851; Tue, 06 Jun
- 2023 18:44:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230606214246.403579-1-maxtram95@gmail.com> <20230606214246.403579-3-maxtram95@gmail.com>
-In-Reply-To: <20230606214246.403579-3-maxtram95@gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 6 Jun 2023 18:43:51 -0700
-Message-ID: <CAADnVQ+urU87JnBi5fLTTzG0V0_Bi5o7eGPPTjmbTqtfLEqgag@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Add test cases to assert proper
- ID tracking on spill
-To:     Maxim Mikityanskiy <maxtram95@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Maxim Mikityanskiy <maxim@isovalent.com>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 6 Jun 2023 22:42:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A6210D2;
+        Tue,  6 Jun 2023 19:42:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF727639EC;
+        Wed,  7 Jun 2023 02:42:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB98BC433EF;
+        Wed,  7 Jun 2023 02:42:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1686105776;
+        bh=HPX7TTyNLy9QYOmc7IjiU6+RwLEOPn30MEW3zhLSVew=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ubl2ySokBAZpXZwrtyG/EsPwhz9RPRnQArXZM1uSLVtRQErDCIvCbrOlqlQwiZJuP
+         pvnpnlZM8Fymg8yhxYliosgbG7NmiKRNuWadMn+zpFbJJsQ6OsLL+4wc8Mu5PpiXv0
+         oOm9Q5g9thm7ySWqbMML8TYWZ0QyZSIF2UjCxWlM=
+Date:   Tue, 6 Jun 2023 19:42:54 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     John Hubbard <jhubbard@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Peter Xu <peterx@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v1 2/3] selftests/mm: gup_longterm: new functional test
+ for FOLL_LONGTERM
+Message-Id: <20230606194254.5e26642b28dfbd0e198d24e8@linux-foundation.org>
+In-Reply-To: <e099e2c1-322c-0a64-0f5b-5da621fedca1@redhat.com>
+References: <20230519102723.185721-1-david@redhat.com>
+        <20230519102723.185721-3-david@redhat.com>
+        <ea3548ae-de27-fb67-5b2a-34aca006005c@nvidia.com>
+        <e099e2c1-322c-0a64-0f5b-5da621fedca1@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,34 +60,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 2:43=E2=80=AFPM Maxim Mikityanskiy <maxtram95@gmail.=
-com> wrote:
->
-> From: Maxim Mikityanskiy <maxim@isovalent.com>
->
-> The previous commit fixed a verifier bypass by ensuring that ID is not
-> preserved on narrowing spills. Add the test cases to check the
-> problematic patterns.
->
-> Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
-> ---
->  .../selftests/bpf/progs/verifier_spill_fill.c | 198 ++++++++++++++++++
->  1 file changed, 198 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/to=
-ols/testing/selftests/bpf/progs/verifier_spill_fill.c
-> index 136e5530b72c..999677acc8ae 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-> @@ -371,4 +371,202 @@ __naked void and_then_at_fp_8(void)
->  "      ::: __clobber_all);
->  }
->
-> +SEC("xdp")
-> +__description("32-bit spill of 64-bit reg should clear ID")
-> +__failure __msg("math between ctx pointer and 4294967295 is not allowed"=
-)
-> +__naked void spill_32bit_of_64bit_fail(void)
+On Tue, 6 Jun 2023 09:10:22 +0200 David Hildenbrand <david@redhat.com> wrote:
 
-It's an overkill to test all possible combinations.
-32_of_64 and 16_of_32 would be enough.
+> On 06.06.23 08:23, John Hubbard wrote:
+> > On 5/19/23 03:27, David Hildenbrand wrote:
+> > ...
+> >> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> >> index 23af4633f0f4..95acb099315e 100644
+> >> --- a/tools/testing/selftests/mm/Makefile
+> >> +++ b/tools/testing/selftests/mm/Makefile
+> >> @@ -34,6 +34,7 @@ LDLIBS = -lrt -lpthread
+> >>   
+> >>   TEST_GEN_PROGS = cow
+> >>   TEST_GEN_PROGS += compaction_test
+> >> +TEST_GEN_PROGS += gup_longterm
+> > 
+> > Hi David,
+> > 
+> > Peter Xu just pointed out that we need a .gitignore entry for
+> > gup_longterm [1]. That logically belongs in this patch, I think.
+> 
+> Yes, although I don't care if it's in a follow-up patch (we're talking 
+> testcases after all).
+> 
+> @Andrew can you include that hunk in that patch or do you want a resend?
+
+I added this:
+
+From: Andrew Morton <akpm@linux-foundation.org>
+Subject: selftests-mm-gup_longterm-new-functional-test-for-foll_longterm-fix
+Date: Tue Jun  6 07:41:28 PM PDT 2023
+
+update .gitignore for gup_longterm, per Peter
+
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Lorenzo Stoakes <lstoakes@gmail.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+ tools/testing/selftests/mm/.gitignore |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/tools/testing/selftests/mm/.gitignore~selftests-mm-gup_longterm-new-functional-test-for-foll_longterm-fix
++++ a/tools/testing/selftests/mm/.gitignore
+@@ -39,3 +39,4 @@ local_config.h
+ local_config.mk
+ ksm_functional_tests
+ mdwe_test
++gup_longterm
+_
+
