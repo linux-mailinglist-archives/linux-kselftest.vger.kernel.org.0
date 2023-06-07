@@ -2,162 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA201725FCF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 14:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17080726025
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 14:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235708AbjFGMqR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 08:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
+        id S234768AbjFGM7X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 08:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234352AbjFGMqQ (ORCPT
+        with ESMTP id S234402AbjFGM7X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:46:16 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FDC6E6B;
-        Wed,  7 Jun 2023 05:46:14 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 357Cjhfj003458;
-        Wed, 7 Jun 2023 14:45:43 +0200
-Date:   Wed, 7 Jun 2023 14:45:43 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH 1/4] selftests/nolibc: add a test-report target
-Message-ID: <ZIB792FtG6ibOudp@1wt.eu>
-References: <20230605065459.153001-1-falcon@tinylab.org>
- <20230607055200.667447-1-falcon@tinylab.org>
+        Wed, 7 Jun 2023 08:59:23 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01980173A;
+        Wed,  7 Jun 2023 05:59:22 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id d2e1a72fcca58-651ffcc1d3dso4220980b3a.3;
+        Wed, 07 Jun 2023 05:59:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686142761; x=1688734761;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=txvj5oWtc/P31GV0Uh1xo1g1fJq1FY4eNv//yMt29W4=;
+        b=YEmcdpxFcB9I3H+YO71oKMJvqeEPaPcKcpdXTTDvzrTc7gGD8VD4dGMLnaMfPGrlEK
+         kgd/2SmEYn0uauk1LiXglu9G5fkPmtGTQwBYi3Vh5UJHui64HY8Y7OxkJqq5NsUksjDV
+         SuNMs7eTRqhxTk47UMXzVWZPdGWghqJ9+cG21kmfzB3Exxa+3WN8XUBC/AlI7mWZWZhT
+         wifR3esCLt84eJqCP+UOTIEcd0MymXErhnLDIZOEYH0aDMMuvippZcq3LG5QtjEYl6Ag
+         +XVOgenvomX9fmzX+rjQTVMR5NbrX9UeLMe6O1O1SlEsbKMcTMsWnU620A84ovYMLUhP
+         2MvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686142761; x=1688734761;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=txvj5oWtc/P31GV0Uh1xo1g1fJq1FY4eNv//yMt29W4=;
+        b=VOAWvqZmrv8J4RXRGWW2OBsUFdXKv55AK1daE/6/fayEF1Iz4DIC9ltcoGSy7Uy/uB
+         3twsOsG5OYBtO4B+GuuhTL+DV7yIXIid8+F6mR9G+RN0DdsnB66mWOFHLWq+BMrzHrAJ
+         2gw3cmDLvyJlxBuKq5Tvr9ph85tm0tOdO7UQDyAH98rB0mb2GoQktcqJZcAOz1YLj6D+
+         BXYidzSSmP29Y2VEFmNCCxzigGfzBv0kiZYft3tqbtMJLjdJphQVAdO+HGsbq14VdG/b
+         UaV25d9mJ83JBxsQO60bQ4e2y7l2I+Wh7oNBQCc17sKg2R08V3Ri9rHTdxcHvwEJ8SV9
+         WP5Q==
+X-Gm-Message-State: AC+VfDy7XqIVxM0aAhEXxVK7BB3Lb/QIo3E93SwI/To49eduWn4+8Kqc
+        d57N/aoMh0Wjw1o9M/IaoGU=
+X-Google-Smtp-Source: ACHHUZ468ZYczZiHpClqRTXLv/5ahvrbiFFb9eGS1+/PHOQ/d1103CXBz38d+Eo892TcGqARMCXQAQ==
+X-Received: by 2002:a05:6a00:14d4:b0:646:b165:1b29 with SMTP id w20-20020a056a0014d400b00646b1651b29mr4246139pfu.23.1686142761234;
+        Wed, 07 Jun 2023 05:59:21 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.83])
+        by smtp.gmail.com with ESMTPSA id p1-20020a62ab01000000b0065434edd521sm7094982pff.196.2023.06.07.05.59.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 05:59:20 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     alexei.starovoitov@gmail.com
+Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, x86@kernel.org,
+        imagedong@tencent.com, benbjiang@tencent.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/3] bpf, x86: allow function arguments up to 12 for TRACING
+Date:   Wed,  7 Jun 2023 20:59:08 +0800
+Message-Id: <20230607125911.145345-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607055200.667447-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Zhangjin,
+From: Menglong Dong <imagedong@tencent.com>
 
-On Wed, Jun 07, 2023 at 01:52:00PM +0800, Zhangjin Wu wrote:
-> Hi, Willy
-> 
-> > > On Mon, Jun 05, 2023 at 11:48:52AM +0800, Zhangjin Wu wrote:
-> > > > A standalone test-report target is added to let the run, run-user and
-> > > > rerun targets share them.
-> > > > 
-> > > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > > > ---
-> > > >  tools/testing/selftests/nolibc/Makefile | 26 ++++++++++++-------------
-> > > >  1 file changed, 13 insertions(+), 13 deletions(-)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > > > index be4159837494..8149ace2938a 100644
-> > > > --- a/tools/testing/selftests/nolibc/Makefile
-> > > > +++ b/tools/testing/selftests/nolibc/Makefile
-> > > > @@ -127,14 +127,18 @@ nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
-> > > >  libc-test: nolibc-test.c
-> > > >  	$(QUIET_CC)$(CC) -o $@ $<
-> > > >  
-> > > > -# qemu user-land test
-> > > > -run-user: nolibc-test
-> > > > -	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
-> > > > +test-report:
-> > > >  	$(Q)awk '/\[OK\]$$/{p++} /\[FAIL\]$$/{f++} /\[SKIPPED\]$$/{s++} \
-> > > >  	         END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
-> > > >  	         if (s+f > 0) printf(" See all results in %s\n", ARGV[1]); else print; }' \
-> > > >  	         $(CURDIR)/run.out
-> > > >  
-> > > > +# qemu user-land test
-> > > > +_run-user: nolibc-test
-> > > > +	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
-> > > > +
-> > > > +run-user: _run-user test-report
-> > > > +
-> > > 
-> > > This will not reliably work, there's no ordering here, nothing guarantees
-> > > that test-report will run *after* _run-user (e.g. make -j). Another
-> > > approach is needed if you want to factor this, but in general creating
-> > > sequences in makefiles is difficult and often more painful than having
-> > > 3 times the same 3 lines.
-> > >
-> > 
-> > Ok, thanks, what about this?
-> > 
-> >     # LOG_REPORT: report the test results
-> >     LOG_REPORT   := awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++} /\[SKIPPED\][\r]*$$/{s++} \
-> > 	                 END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
-> > 	                 printf(" See all results in %s\n", ARGV[1]); }'
-> > 
-> >     run-user: nolibc-test
-> > 	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
-> > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
-> > 
-> >     run: kernel
-> > 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-> > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
-> > 
-> >     rerun:
-> > 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-> > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
-> > 
-> > Or we directly add a standalone test report script? something like
-> > tools/testing/selftests/nolibc/report.sh
-> > 
-> >     #!/bin/sh
-> >     #
-> >     # report.sh -- report the test results of nolibc-test
-> >     #
-> >     
-> >     LOG_FILE=$1
-> >     [ ! -f "$LOG_FILE" ] && echo "Usage: $0 /path/to/run.out"
-> >     
-> >     awk '
-> >         /\[OK\][\r]*$$/{ p++ }
-> >         /\[FAIL\][\r]*$$/{ f++ }
-> >         /\[SKIPPED\][\r]*$$/{ s++ }
-> >     
-> >         END {
-> >             printf("%d test(s) passed, %d skipped, %d failed.", p, s, f);
-> >             printf(" See all results in %s\n", ARGV[1]);
-> >         }' $LOG_FILE
-> > 
-> > And use it like this:
-> > 
-> >     LOG_REPORT           = $(CURDIR)/report.sh
-> >
-> 
-> I plan to renew this patchset, which one of the above methods do you
-> prefer?
+For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+on the kernel functions whose arguments count less than 6. This is not
+friendly at all, as too many functions have arguments count more than 6.
 
-IFF it needs to be done I prefer the macro in the Makefile to avoid
-depending on external scripts that are useless outside of the makefile.
-BUT, my point remains that I adopted this so that I could quickly and
-visually check that everything was OK. I'm fine with any other method
-but I do not want to have to carefully read all these lines to make
-sure I'm not mixing a "8" with a "0" (I'm mentioning this one because
-it's exactly the one I had when I decided to add the extra values).
-For example if you prepend "FAILURE: ", "WARNING: ", "SUCCESS: " in
-front of these lines to summarize them depending on the highest level
-encountered (success, skipped, failed), then I'm fine because it's
-easy to check that all lines show the same word.
+Therefore, let's enhance it by increasing the function arguments count
+allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
 
-> For the always print statement:
-> 
->     printf(" See all results in %s\n", ARGV[1]); }'
+In the 1st patch, we make arch_prepare_bpf_trampoline() support to copy
+function arguments in stack for x86 arch. Therefore, the maximum
+arguments can be up to MAX_BPF_FUNC_ARGS for FENTRY and FEXIT.
 
-Then please put it on its own line without the leading space, this
-will be even more readable.
+In the 2nd patch, we clean garbage value in upper bytes of the trampoline
+when we store the arguments from regs into stack.
 
-> I will paste the reason why I need it, as mentioned in [1], if you still
-> need a clean test report, I will give up this change ;-)
+And the 3rd patches are for the testcases of the 1st patch.
 
-No worries, I don't want to be annoying if you need something, but I
-don't want to be annoyed by changes either :-)
+Changes since v2:
+- keep MAX_BPF_FUNC_ARGS still
+- clean garbage value in upper bytes in the 2nd patch
+- move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
+  bpf_testmod_fentry_test{7,12} meanwhile in the 3rd patch
 
-thanks,
-Willy
+Changes since v1:
+- change the maximun function arguments to 14 from 12
+- add testcases (Jiri Olsa)
+- instead EMIT4 with EMIT3_off32 for "lea" to prevent overflow
+
+
+Menglong Dong (3):
+  bpf, x86: allow function arguments up to 12 for TRACING
+  bpf, x86: clean garbage value in the stack of trampoline
+  selftests/bpf: add testcase for FENTRY/FEXIT with 6+ arguments
+
+ arch/x86/net/bpf_jit_comp.c                   | 105 +++++++++++++++---
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  19 +++-
+ .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
+ .../selftests/bpf/prog_tests/fentry_test.c    |   2 +
+ .../selftests/bpf/prog_tests/fexit_test.c     |   2 +
+ .../testing/selftests/bpf/progs/fentry_test.c |  21 ++++
+ .../testing/selftests/bpf/progs/fexit_test.c  |  33 ++++++
+ 7 files changed, 169 insertions(+), 17 deletions(-)
+
+-- 
+2.40.1
+
