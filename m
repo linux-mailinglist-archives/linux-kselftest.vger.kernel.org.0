@@ -2,82 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341D1727083
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 23:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6732972707F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 23:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbjFGVWt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 17:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S229641AbjFGVWK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 17:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjFGVWr (ORCPT
+        with ESMTP id S230450AbjFGVWJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:22:47 -0400
-X-Greylist: delayed 1086 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Jun 2023 14:22:44 PDT
-Received: from antelope.pear.relay.mailchannels.net (antelope.pear.relay.mailchannels.net [23.83.216.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8831BD5
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 14:22:43 -0700 (PDT)
+        Wed, 7 Jun 2023 17:22:09 -0400
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Jun 2023 14:22:08 PDT
+Received: from cheetah.elm.relay.mailchannels.net (cheetah.elm.relay.mailchannels.net [23.83.212.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1528519BA
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 14:22:07 -0700 (PDT)
 X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id E843D8817D0
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 21:04:25 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTP id 027493405C1
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 21:04:34 +0000 (UTC)
 Received: from pdx1-sub0-mail-a233.dreamhost.com (unknown [127.0.0.6])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 7AE7C881647
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 21:04:25 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686171865; a=rsa-sha256;
+        by relay.mailchannels.net (Postfix) with ESMTPA id 93919341D68
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 21:04:33 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686171873; a=rsa-sha256;
         cv=none;
-        b=jm5nW62orikAhRPLMFIaQESiyzokygJg2iatBVtfJhWR24fzMVo+5lQoJHxWq32fp+tGcU
-        zF8E+Z8RlIetEWd4QN//Q7WKnRLJ6vPL8IxpBnZCXGE2d9zBGd76ptPBPjLNzt/o7GgsxM
-        yL5z6KPVj5IHalRrxlbP+vyQUQo8UK8nUp4MqUTdlzld8j7iVzVXw3CYkNUimNdc+p/XrH
-        Cd/Ks5sq2pGqO3Ye/IWaLLcCh3PlrCiFSgsMVZmrwO40HOB+cPKQnVo7blWlW4nmsZ9ObJ
-        b+0xY6SQiD2u3hdkOFzeoAy/rBfk0atHmlcQpKMzJB+f5cMQAqC9ozaEwIkH0w==
+        b=eGFjd6I2eaoG5z3hceeruUmTK3mcI96FXQv/X2ynaP5Sf1LXeePxizO+9KLGnPWyIkygVz
+        RwdPZ5juonyMnCEj77bLZ1j/XoywPHloeHp2zTL9f6lJoN6GLFz/Nee3uaRNZT80U9Jc41
+        3YYqvBq+xZh3URlQFNqGIKs4DWgdJ8Qry4yAGGPHcu9dHTeu05cjBU1n4UsnnXqG7Yxfc/
+        6TkTZ8fh4ustKNueceNPZxHItHot2mzv2lc3UKownbuHrDM9MaTzICcCtujb1eG3ZgsdA9
+        0a8Mf1/7zyx89WGZADlL687OOrQtPGWN2UdFr8ZTnJE8pM9O4EwUcmySOPoXGg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-        s=arc-2022; t=1686171865;
+        s=arc-2022; t=1686171873;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=eifjIpcveeYQIutCiintfEZJ5k80v2oThAAUP+q2Fx0=;
-        b=gnmHS2b4cH3Jp80/2uHozRugyiLxmwP17dA/LK0hoJ6AZug0N+Ib1oz/uXnfZaoOyaWTTf
-        GLV+AUtMdH6bdr/nOCey9/johtM6Vtn4m81o0W8x2XLbx9NAfBHF9u/+afR1k+BE7917ev
-        8G8jdtZpYm7O7SoMXFoUvqmEjKY9g8rhjXY8iK5T+QzdLbnGaH6z1Na11AHYdCv5VPutlS
-        ePsswk/KIuVVkWOsZHdYNZjwIB6/g3B80aN0oBiL2BRtwenlZNYLG8zOX/1QkSkNEzvVs+
-        DQDkotCR5w0D1fzMtOOnAIHskDIdZSIh/NDJvIOM7l3FJjOpasRtIlz3tC2/OA==
+        bh=GNnQmH+wS+zURx3eyS+tueWtQk84sc6MMvTdEAlLPgk=;
+        b=i6d5PtONtLMGQMbAuvpFETAKfGOEEczPydFUlSmgb2G+VN33UAApUHTf0apf7BHnDZpNp1
+        w+AGNVBvivDK8wlLL3sYnq3XcYB9Ed6A5vpiwLylWwWaP+yQbbjzkkBTKQWCvXAMwc9c14
+        Jcn2httvqCwlrgIP+ixsMG7LL7zpyjPRSNeSSPSaeiX/iT8SaYfKDDsYW8OGC1su6fDBF6
+        cKHi6sqtYEcsnW0/KJ+Epnk9e4cbQk5kWQWzqg4OjGdi8seG6g3vGbRar5BfIsrk0Iphr+
+        RwXNbO30mDzpQt3SUvaPnLwxSosDgwTnE2IgevNx2OraZBsqfSDwDyoa2rt6Ig==
 ARC-Authentication-Results: i=1;
-        rspamd-6f5cfd578c-jwvbw;
+        rspamd-6f5cfd578c-qjfqd;
         auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
 X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
 X-MC-Relay: Good
 X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
 X-MailChannels-Auth-Id: dreamhost
-X-Language-Whimsical: 7e4a6cfb3297032a_1686171865748_2971824342
-X-MC-Loop-Signature: 1686171865748:3565379666
-X-MC-Ingress-Time: 1686171865748
+X-Supply-Wiry: 336ba39254bd7b17_1686171873818_3232545307
+X-MC-Loop-Signature: 1686171873818:509787909
+X-MC-Ingress-Time: 1686171873818
 Received: from pdx1-sub0-mail-a233.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
         by 100.127.59.22 (trex/6.8.1);
-        Wed, 07 Jun 2023 21:04:25 +0000
+        Wed, 07 Jun 2023 21:04:33 +0000
 Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a233.dreamhost.com (Postfix) with ESMTPSA id 4Qc0G06BBRzmL
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 14:04:24 -0700 (PDT)
+        by pdx1-sub0-mail-a233.dreamhost.com (Postfix) with ESMTPSA id 4Qc0G86Phczfv
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 14:04:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1686171864;
-        bh=eifjIpcveeYQIutCiintfEZJ5k80v2oThAAUP+q2Fx0=;
+        s=dreamhost; t=1686171872;
+        bh=GNnQmH+wS+zURx3eyS+tueWtQk84sc6MMvTdEAlLPgk=;
         h=Date:From:To:Cc:Subject:Content-Type;
-        b=DAjseFSUVCokHmOC9QZYobC49oJKsrIGdkoZ2oNfxmMzAXnUUq0PYhJwBiVRUIAXI
-         5FqEGDJBx1TwtNC/BDZZrFCdQro2J2sTT1PzkgB+u5Ae+Evm5rh6U6pJodVgCIi8ao
-         u+eli7vX3520aR1d1So/WJWuiB4dVpyjmIYCxM3o=
+        b=S9bzB4RJPOCOTOBe1eHyTI2ybvqkq7haGr0inpIci+G56RBFJf1PH6YsHOAlTxm0N
+         qB15gt4jUq4eDHjdp9QECico3dubCY4Lmd5qPH20vn8Io3UlzN+0xHouAGzOZy41CS
+         f/BbPxLP8Ea87E2RvSCJ3ehO1sNJ1Tfml7i+ckzM=
 Received: from johansen (uid 1000)
         (envelope-from kjlx@templeofstupid.com)
         id e005f
         by kmjvbox (DragonFly Mail Agent v0.12);
-        Wed, 07 Jun 2023 14:04:23 -0700
-Date:   Wed, 7 Jun 2023 14:04:23 -0700
+        Wed, 07 Jun 2023 14:04:31 -0700
+Date:   Wed, 7 Jun 2023 14:04:31 -0700
 From:   Krister Johansen <kjlx@templeofstupid.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -92,8 +92,8 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         stable@vger.kernel.org
-Subject: [PATCH bpf v2 1/2] selftests/bpf: add a test for subprogram extables
-Message-ID: <c3d55cfd8ce7ed989c997d1e3ea2678879227300.1686166633.git.kjlx@templeofstupid.com>
+Subject: [PATCH bpf v2 2/2] bpf: ensure main program has an extable
+Message-ID: <de425e99876dc6c344e1a4254894a3c81e71a2ec.1686166633.git.kjlx@templeofstupid.com>
 References: <cover.1686166633.git.kjlx@templeofstupid.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -109,138 +109,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In certain situations a program with subprograms may have a NULL
-extable entry.  This should not happen, and when it does, it turns a
-single trap into multiple.  Add a test case for further debugging and to
-prevent regressions.  N.b: without any other patches this can panic or
-oops a kernel.
+When bpf subprograms are in use, the main program is not jit'd after the
+subprograms because jit_subprogs sets a value for prog->bpf_func upon
+success.  Subsequent calls to the JIT are bypassed when this value is
+non-NULL.  This leads to a situation where the main program and its
+func[0] counterpart are both in the bpf kallsyms tree, but only func[0]
+has an extable.  Extables are only created during JIT.  Now there are
+two nearly identical program ksym entries in the tree, but only one has
+an extable.  Depending upon how the entries are placed, there's a chance
+that a fault will call search_extable on the aux with the NULL entry.
 
+Since jit_subprogs already copies state from func[0] to the main
+program, include the extable pointer in this state duplication.  The
+alternative is to skip adding the main program to the bpf_kallsyms
+table, but that would mean adding a check for subprograms into the
+middle of bpf_prog_load.
+
+Cc: stable@vger.kernel.org
+Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function programs")
 Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
 ---
- .../bpf/prog_tests/subprogs_extable.c         | 35 +++++++++
- .../bpf/progs/test_subprogs_extable.c         | 71 +++++++++++++++++++
- 2 files changed, 106 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_subprogs_extable.c
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-new file mode 100644
-index 000000000000..18169b7eedf8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+
-+#include <test_progs.h>
-+#include <stdbool.h>
-+#include "test_subprogs_extable.skel.h"
-+
-+static int duration;
-+
-+void test_subprogs_extable(void)
-+{
-+	const int READ_SZ = 456;
-+	struct test_subprogs_extable *skel;
-+	int err;
-+
-+	skel = test_subprogs_extable__open();
-+	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
-+		return;
-+
-+	err = test_subprogs_extable__load(skel);
-+	if (CHECK(err, "skel_load", "failed to load skeleton\n"))
-+		return;
-+
-+	err = test_subprogs_extable__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	/* trigger tracepoint */
-+	ASSERT_OK(trigger_module_test_read(READ_SZ), "trigger_read");
-+
-+	test_subprogs_extable__detach(skel);
-+
-+cleanup:
-+	test_subprogs_extable__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_subprogs_extable.c b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-new file mode 100644
-index 000000000000..408137eaaa07
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+#include "../bpf_testmod/bpf_testmod.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 8);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} test_array SEC(".maps");
-+
-+static __u64 test_cb(struct bpf_map *map, __u32 *key, __u64 *val, void *data)
-+{
-+	return 1;
-+}
-+
-+static __u64 test_cb2(struct bpf_map *map, __u32 *key, __u64 *val, void *data)
-+{
-+	return 1;
-+}
-+
-+static __u64 test_cb3(struct bpf_map *map, __u32 *key, __u64 *val, void *data)
-+{
-+	return 1;
-+}
-+
-+SEC("fexit/bpf_testmod_return_ptr")
-+int BPF_PROG(handle_fexit_ret_subprogs, int arg, struct file *ret)
-+{
-+	long buf = 0;
-+
-+	bpf_probe_read_kernel(&buf, 8, ret);
-+	bpf_probe_read_kernel(&buf, 8, (char *)ret + 256);
-+	*(volatile long long *)ret;
-+	*(volatile int *)&ret->f_mode;
-+	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_testmod_return_ptr")
-+int BPF_PROG(handle_fexit_ret_subprogs2, int arg, struct file *ret)
-+{
-+	long buf = 0;
-+
-+	bpf_probe_read_kernel(&buf, 8, ret);
-+	bpf_probe_read_kernel(&buf, 8, (char *)ret + 256);
-+	*(volatile long long *)ret;
-+	*(volatile int *)&ret->f_mode;
-+	bpf_for_each_map_elem(&test_array, test_cb2, NULL, 0);
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_testmod_return_ptr")
-+int BPF_PROG(handle_fexit_ret_subprogs3, int arg, struct file *ret)
-+{
-+	long buf = 0;
-+
-+	bpf_probe_read_kernel(&buf, 8, ret);
-+	bpf_probe_read_kernel(&buf, 8, (char *)ret + 256);
-+	*(volatile long long *)ret;
-+	*(volatile int *)&ret->f_mode;
-+	bpf_for_each_map_elem(&test_array, test_cb3, NULL, 0);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5871aa78d01a..d6939db9fbf9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17242,6 +17242,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 	prog->jited = 1;
+ 	prog->bpf_func = func[0]->bpf_func;
+ 	prog->jited_len = func[0]->jited_len;
++	prog->aux->extable = func[0]->aux->extable;
+ 	prog->aux->func = func;
+ 	prog->aux->func_cnt = env->subprog_cnt;
+ 	bpf_prog_jit_attempt_done(prog);
 -- 
 2.25.1
 
