@@ -2,180 +2,532 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71A2726280
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 16:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A740726359
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 16:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235374AbjFGOPW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 10:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        id S241120AbjFGOxN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 10:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235922AbjFGOPW (ORCPT
+        with ESMTP id S241184AbjFGOxL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:15:22 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE298E;
-        Wed,  7 Jun 2023 07:15:18 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1686147307tuwgirwz
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 22:15:06 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: 3M0okmaRx3hda9yjQxBgTlXDIeBYTBUIZhPiyCqr68M1QLHysxyV/Xa++1dWh
-        rpU9PDVQlvesrGXg026N1n2+/rgrAcLuq595b0CjO6OtAr+2sxNPZqiE55B2FEOMX6/4Abc
-        4vtLVfieMXgVqyCsKSIWVbefp0PGu0NR+F3rAPHofh8HdqKa/RdqfsJB7tWet5EJYfNqRa3
-        Ff0pU+GCV3Vb3RlVPuRQpZQGI+etbFV9MrY9uEVo+p36OYJSY1fIfeDOEDj9t2ohDU5ni7u
-        Y3iqQuhQde84KL3NTEoFLys2uVvrYWzmJUjg88P2U5j5WLUaHC8g2FivR5cfFTbMsAffjqS
-        gpdJZfQkXSS5bKN6xJ0mFziyLhuNdgKun18rpVx4xTq69dQxjrqjzVlXOEjTqD+w3RTGThY
-        YQs49fGsni8=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9306648573384316120
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH 1/4] selftests/nolibc: add a test-report target
-Date:   Wed,  7 Jun 2023 22:15:02 +0800
-Message-Id: <20230607141502.864645-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZIB792FtG6ibOudp@1wt.eu>
-References: <ZIB792FtG6ibOudp@1wt.eu>
+        Wed, 7 Jun 2023 10:53:11 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97241BD2
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 07:53:06 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so9504a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jun 2023 07:53:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686149585; x=1688741585;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8a7arGbwRESChqwYt5SMynjhqmAQ0Pvl0NJIjD6VxSs=;
+        b=bXgIViNBJeQbkH5t3badUy+1tgMHK2q2IDtIVnB9eEA7Hz7CSiRLfmqMVjtg0ZLUTS
+         HlB/0lUMHmj9epZEtccnOw84i61Rz2CUsaxXZygxAi4CtZj/LNH8Fr6btJtipxgY25SW
+         ZFuQ5A1ofJMkN8ToWlgSqp4mHRf6l8908xDWDVbuyjeAAW89Otb0bDPk0075GZC2Dhc8
+         5MzAXVOGqngopxxTWVqvDGVfa17mUJgKUIo50OE9kloR/qd6DmM3r4JYsHMrK0itmLMV
+         08s0KjfuCiGYtZ3oSRbAwSDWL3bL1BesfO9wmSKnCgE58iHhn9JDaxsre/mdq2JDc05c
+         sN7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686149585; x=1688741585;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8a7arGbwRESChqwYt5SMynjhqmAQ0Pvl0NJIjD6VxSs=;
+        b=cUL9kuhyAaIpc1BRzL0LUz5RXrX7Vng4s2MzQVuPNlcFMRHT8lTuAQf0rrQm7TcOSt
+         YQ9TP8fYoTLRSbpTNtrAVg2/bqxsAg270rF8WXGiEqJoz/aAAzY6hbU8m9+NdbwZb/nY
+         HkOVMaeFqOOTeDL0kpWHj1XxTaSA38vby5cuU891mdiEA7QBrWFMSr2P9iYpAUqnJGK/
+         jKB2eqAsXUFMzc0MakxA8XrjeH3OFnqaLW89lP1nW5X8OX6mVxgbQLix3utRZ68rST2+
+         dY7WB0yI6ppMAyZg9PVIuPVWwgxBPoMRaEN4l0MDNdWE3CcXWr8Qp4sGqysJVNyVEeWw
+         +ACg==
+X-Gm-Message-State: AC+VfDzL4RPgxhKVP9OGu3R3Rk8LQomxZwsHhR+TjvujXXYU84wsFWwy
+        qoMaGsHfwKOw9noZRLUiPMJkd6GFokkR/Q2TE8tXMw==
+X-Google-Smtp-Source: ACHHUZ4VkU4pTZ74qRZpgUZgIm2LZXRRMWlJHqKisze2T0S3N9eI4j4Cpqj2awqGey+GxLJlZduOpnmyE0BOCWbET9I=
+X-Received: by 2002:a50:d6cf:0:b0:514:95d4:c2bb with SMTP id
+ l15-20020a50d6cf000000b0051495d4c2bbmr136575edj.2.1686149584902; Wed, 07 Jun
+ 2023 07:53:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230606060822.1065182-1-usama.anjum@collabora.com> <20230606060822.1065182-3-usama.anjum@collabora.com>
+In-Reply-To: <20230606060822.1065182-3-usama.anjum@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Wed, 7 Jun 2023 16:52:53 +0200
+Message-ID: <CABb0KFGUSDwbMHQymCbPDwPiDit1+1JHbgTzzxXL04vQMUxo5w@mail.gmail.com>
+Subject: Re: [PATCH v17 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 01:52:00PM +0800, Zhangjin Wu wrote:
-> > Hi, Willy
-> > 
-> (...)
-> > > 
-> > > Ok, thanks, what about this?
-> > > 
-> > >     # LOG_REPORT: report the test results
-> > >     LOG_REPORT   := awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++} /\[SKIPPED\][\r]*$$/{s++} \
-> > > 	                 END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
-> > > 	                 printf(" See all results in %s\n", ARGV[1]); }'
-> > > 
-> > >     run-user: nolibc-test
-> > > 	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
-> > > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
-> > > 
-> > >     run: kernel
-> > > 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-> > > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
-> > > 
-> > >     rerun:
-> > > 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-> > > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
-> > > 
-> > > Or we directly add a standalone test report script? something like
-> > > tools/testing/selftests/nolibc/report.sh
-> > > 
-> > >     #!/bin/sh
-> > >     #
-> > >     # report.sh -- report the test results of nolibc-test
-> > >     #
-> > >     
-> > >     LOG_FILE=$1
-> > >     [ ! -f "$LOG_FILE" ] && echo "Usage: $0 /path/to/run.out"
-> > >     
-> > >     awk '
-> > >         /\[OK\][\r]*$$/{ p++ }
-> > >         /\[FAIL\][\r]*$$/{ f++ }
-> > >         /\[SKIPPED\][\r]*$$/{ s++ }
-> > >     
-> > >         END {
-> > >             printf("%d test(s) passed, %d skipped, %d failed.", p, s, f);
-> > >             printf(" See all results in %s\n", ARGV[1]);
-> > >         }' $LOG_FILE
-> > > 
-> > > And use it like this:
-> > > 
-> > >     LOG_REPORT           = $(CURDIR)/report.sh
-> > >
-> > 
-> > I plan to renew this patchset, which one of the above methods do you
-> > prefer?
-> 
-> IFF it needs to be done I prefer the macro in the Makefile to avoid
-> depending on external scripts that are useless outside of the makefile.
-> BUT, my point remains that I adopted this so that I could quickly and
-> visually check that everything was OK. I'm fine with any other method
-> but I do not want to have to carefully read all these lines to make
-> sure I'm not mixing a "8" with a "0" (I'm mentioning this one because
-> it's exactly the one I had when I decided to add the extra values).
-> For example if you prepend "FAILURE: ", "WARNING: ", "SUCCESS: " in
-> front of these lines to summarize them depending on the highest level
-> encountered (success, skipped, failed), then I'm fine because it's
-> easy to check that all lines show the same word.
-> 
-
-Ok.
-
-> > For the always print statement:
-> > 
-> >     printf(" See all results in %s\n", ARGV[1]); }'
-> 
-> Then please put it on its own line without the leading space, this
-> will be even more readable.
+On Tue, 6 Jun 2023 at 08:08, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+> the info about page table entries. The following operations are supported
+> in this ioctl:
+> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN)=
+,
+>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>   (PAGE_IS_SWAPPED).
+> - Find pages which have been written-to and/or write protect the pages
+>   (atomic PM_SCAN_OP_GET + PM_SCAN_OP_WP)
 >
+> This IOCTL can be extended to get information about more PTE bits.
+[...]
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+[...]
+> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> +static inline bool is_pmd_uffd_wp(pmd_t pmd)
+> +{
+> +       return (pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
+> +              (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd));
+> +}
+[...]
+> +#ifdef CONFIG_HUGETLB_PAGE
+> +static inline bool is_huge_pte_uffd_wp(pte_t pte)
+> +{
+> +       return ((pte_present(pte) && huge_pte_uffd_wp(pte)) ||
+> +              pte_swp_uffd_wp_any(pte));
 
-It is a good balance.
+Nit: please remove the outer parentheses (it is already done for
+similar finctuons above).
 
-This may be more useful if we run this from the kselftest framework,
-seems it is not able to run it from the 'kselftest' target currently,
-here shares something I have tried:
+> +}
 
-I tried something like this, seems run-user works, but defconfig and run
-not.
+> +static inline bool pagemap_scan_check_page_written(struct pagemap_scan_p=
+rivate *p)
+> +{
+> +       return (p->required_mask | p->anyof_mask | p->excluded_mask) &
+> +              PAGE_IS_WRITTEN;
+> +}
 
-    diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-    index 4a3a105e1fdf..70693f6501c6 100644
-    --- a/tools/testing/selftests/nolibc/Makefile
-    +++ b/tools/testing/selftests/nolibc/Makefile
-    @@ -83,6 +83,8 @@ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
-                    $(CFLAGS_$(ARCH)) $(CFLAGS_STACKPROTECTOR)
-     LDFLAGS := -s
-   
-    +NOLIBC_SUBTARGETS ?= run-user
-    +
-     help:
-            @echo "Supported targets under selftests/nolibc:"
-            @echo "  all          call the \"run\" target below"
-    @@ -110,7 +112,9 @@ help:
-            @echo "  IMAGE_NAME    = $(if $(IMAGE_NAME),$(IMAGE_NAME),UNKNOWN_ARCH) [determined from \$$ARCH]"
-            @echo ""
+This could be precalculated and put as a flag into
+pagemap_scan_private - it is kernel-private structure and there are a
+few spare bits in `flags` if you'd prefer not to add an explicit
+boolean.
 
-    -all: run
-    +run_tests: $(NOLIBC_SUBTARGETS)
-    +
-    +all: $(NOLIBC_SUBTARGETS)
+[...]
+> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
+> +                              struct pagemap_scan_private *p,
+> +                              unsigned long addr, unsigned int n_pages)
+> +{
+> +       unsigned long bitmap =3D PM_SCAN_BITMAP(wt, file, pres, swap);
+> +       struct page_region *cur =3D &p->cur;
+> +
+> +       if (!n_pages)
+> +               return -EINVAL;
+> +
+> +       if ((p->required_mask & bitmap) !=3D p->required_mask)
+> +               return 0;
+> +       if (p->anyof_mask && !(p->anyof_mask & bitmap))
+> +               return 0;
+> +       if (p->excluded_mask & bitmap)
+> +               return 0;
+> +
+> +       bitmap &=3D p->return_mask;
+> +       if (!bitmap)
+> +               return 0;
+> +
+> +       if (cur->bitmap =3D=3D bitmap &&
+> +           cur->start + cur->len * PAGE_SIZE =3D=3D addr) {
+> +               cur->len +=3D n_pages;
+> +               p->found_pages +=3D n_pages;
+> +       } else {
+> +               /*
+> +                * All data is copied to cur first. When more data is fou=
+nd, we
+> +                * push cur to vec and copy new data to cur. The vec_inde=
+x
+> +                * represents the current index of vec array. We add 1 to=
+ the
+> +                * vec_index while performing checks to account for data =
+in cur.
+> +                */
+> +               if (cur->len && (p->vec_index + 1) >=3D p->vec_len)
+> +                       return -ENOSPC;
+> +
+> +               if (cur->len) {
+> +                       memcpy(&p->vec[p->vec_index], cur, sizeof(*p->vec=
+));
+> +                       p->vec_index++;
+> +               }
+> +
+> +               cur->start =3D addr;
+> +               cur->len =3D n_pages;
+> +               cur->bitmap =3D bitmap;
+> +               p->found_pages +=3D n_pages;
+> +       }
+> +
+> +       if (p->max_pages && (p->found_pages =3D=3D p->max_pages))
+> +               return PM_SCAN_FOUND_MAX_PAGES;
+> +
+> +       return 0;
+> +}
+> +
+> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+> +                                 unsigned long end, struct mm_walk *walk=
+)
+> +{
+> +       struct pagemap_scan_private *p =3D walk->private;
+> +       struct vm_area_struct *vma =3D walk->vma;
+> +       unsigned long addr =3D end;
+> +       pte_t *pte, *orig_pte;
+> +       spinlock_t *ptl;
+> +       bool is_written;
+> +       int ret =3D 0;
+> +
+> +       arch_enter_lazy_mmu_mode();
+> +
+> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> +       ptl =3D pmd_trans_huge_lock(pmd, vma);
+> +       if (ptl) {
+> +               unsigned long n_pages =3D (end - start)/PAGE_SIZE;
+> +
+> +               if (p->max_pages && n_pages > p->max_pages - p->found_pag=
+es)
+> +                       n_pages =3D p->max_pages - p->found_pages;
 
-This can be triggered from the top-level kselftest framework:
+Since p->found_pages is only ever increased in `pagemap_scan_output()`
+and that function is only called for GET or GET+WP operations, maybe
+the logic could be folded to pagemap_scan_output() to avoid
+duplication?
+In this function the calculation is used only when WP op is done to
+split the HP if n_pages limit would be hit, but if using plain WP
+(without GET) it doesn't make sense to use the limit.
+(pagemap_scan_output() is trivial enough so I think it could be pulled
+inside the spinlocked region.)
 
-    $ make -C /path/to/linux-stable kselftest TARGETS=nolibc NOLIBC_SUBTARGETS=run-user
+> +
+> +               is_written =3D !is_pmd_uffd_wp(*pmd);
+> +
+> +               /*
+> +                * Break huge page into small pages if the WP operation n=
+eed to
+> +                * be performed is on a portion of the huge page.
+> +                */
+> +               if (is_written && IS_PM_SCAN_WP(p->flags) &&
+> +                   n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> +                       spin_unlock(ptl);
+> +
+> +                       split_huge_pmd(vma, pmd, start);
+> +                       goto process_smaller_pages;
+> +               }
+> +
+> +               if (IS_PM_SCAN_GET(p->flags))
+> +                       ret =3D pagemap_scan_output(is_written, vma->vm_f=
+ile,
+> +                                                 pmd_present(*pmd),
+> +                                                 is_swap_pmd(*pmd),
+> +                                                 p, start, n_pages);
+> +
+> +               if (ret >=3D 0 && is_written && IS_PM_SCAN_WP(p->flags))
+> +                       make_uffd_wp_pmd(vma, addr, pmd);
+> +
+> +               if (IS_PM_SCAN_WP(p->flags))
 
-And seems we still not support O= currently either.
+Why `is_written` is not checked? If is_written is false, then the WP
+op should be a no-op and so won't need TLB flushing, will it? [Same
+for the PTE case below.]
 
-> > I will paste the reason why I need it, as mentioned in [1], if you still
-> > need a clean test report, I will give up this change ;-)
-> 
-> No worries, I don't want to be annoying if you need something, but I
-> don't want to be annoyed by changes either :-)
-> 
+> +                       flush_tlb_range(vma, start, end);
+> +
+[...]
+> +       if (IS_PM_SCAN_WP(p->flags))
+> +               flush_tlb_range(vma, start, addr);
+> +
+> +       pte_unmap_unlock(orig_pte, ptl);
+> +       arch_leave_lazy_mmu_mode();
+> +
+> +       cond_resched();
+> +       return ret;
+> +}
+> +
+> +#ifdef CONFIG_HUGETLB_PAGE
+> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
+> +                                     unsigned long start, unsigned long =
+end,
+> +                                     struct mm_walk *walk)
+> +{
+> +       unsigned long n_pages =3D (end - start)/PAGE_SIZE;
+> +       struct pagemap_scan_private *p =3D walk->private;
+> +       struct vm_area_struct *vma =3D walk->vma;
+> +       struct hstate *h =3D hstate_vma(vma);
+> +       spinlock_t *ptl;
+> +       bool is_written;
+> +       int ret =3D 0;
+> +       pte_t pte;
+> +
+> +       if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+> +               n_pages =3D p->max_pages - p->found_pages;
+> +
+> +       if (IS_PM_SCAN_WP(p->flags)) {
+> +               i_mmap_lock_write(vma->vm_file->f_mapping);
+> +               ptl =3D huge_pte_lock(h, vma->vm_mm, ptep);
+> +       }
+> +
+> +       pte =3D huge_ptep_get(ptep);
+> +       is_written =3D !is_huge_pte_uffd_wp(pte);
+> +
+> +       /*
+> +        * Partial hugetlb page clear isn't supported
+> +        */
+> +       if (is_written && IS_PM_SCAN_WP(p->flags) &&
+> +           n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> +               ret =3D -EPERM;
 
-Thanks,
-Zhangjin
+Shouldn't this be ENOSPC, conveying that the operation would overflow
+the n_pages limit?
 
-> thanks,
-> Willy
+> +               goto unlock_and_return;
+> +       }
+> +
+> +       if (IS_PM_SCAN_GET(p->flags)) {
+> +               ret =3D pagemap_scan_output(is_written, vma->vm_file,
+> +                                         pte_present(pte), is_swap_pte(p=
+te),
+> +                                         p, start, n_pages);
+> +               if (ret < 0)
+> +                       goto unlock_and_return;
+> +       }
+> +
+> +       if (is_written && IS_PM_SCAN_WP(p->flags)) {
+
+Oh, this case does check `is_written` before flushing TLB, contrary to
+what the cases above do.
+
+> +               make_uffd_wp_huge_pte(vma, start, ptep, pte);
+> +               flush_hugetlb_tlb_range(vma, start, end);
+> +       }
+> +
+> +unlock_and_return:
+> +       if (IS_PM_SCAN_WP(p->flags)) {
+> +               spin_unlock(ptl);
+> +               i_mmap_unlock_write(vma->vm_file->f_mapping);
+> +       }
+> +
+> +       return ret;
+> +}
+> +#else
+> +#define pagemap_scan_hugetlb_entry NULL
+> +#endif
+> +
+> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
+> +                                int depth, struct mm_walk *walk)
+> +{
+> +       unsigned long n_pages =3D (end - addr)/PAGE_SIZE;
+> +       struct pagemap_scan_private *p =3D walk->private;
+> +       struct vm_area_struct *vma =3D walk->vma;
+> +       int ret =3D 0;
+> +
+> +       if (!vma || !IS_PM_SCAN_GET(p->flags))
+> +               return 0;
+> +
+> +       if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+> +               n_pages =3D p->max_pages - p->found_pages;
+
+Nit: If the page flags don't match (wouldn't be output), the limit
+would not be hit and the calculation is unnecessary. But if it was
+done in pagemap_scan_output() instead after all the flags checks...
+
+> +       ret =3D pagemap_scan_output(false, vma->vm_file, false, false, p,=
+ addr,
+> +                                 n_pages);
+> +
+> +       return ret;
+> +}
+[...]
+> +static long do_pagemap_scan(struct mm_struct *mm,
+> +                           struct pm_scan_arg __user *uarg)
+> +{
+> +       unsigned long start, end, walk_start, walk_end;
+> +       unsigned long empty_slots, vec_index =3D 0;
+> +       struct mmu_notifier_range range;
+> +       struct page_region __user *vec;
+> +       struct pagemap_scan_private p;
+> +       struct pm_scan_arg arg;
+> +       int ret =3D 0;
+> +
+> +       if (copy_from_user(&arg, uarg, sizeof(arg)))
+> +               return -EFAULT;
+> +
+> +       start =3D untagged_addr((unsigned long)arg.start);
+> +       vec =3D (struct page_region *)untagged_addr((unsigned long)arg.ve=
+c);
+> +
+> +       ret =3D pagemap_scan_args_valid(&arg, start, vec);
+> +       if (ret)
+> +               return ret;
+> +
+> +       end =3D start + arg.len;
+> +       p.max_pages =3D arg.max_pages;
+> +       p.found_pages =3D 0;
+> +       p.flags =3D arg.flags;
+> +       p.required_mask =3D arg.required_mask;
+> +       p.anyof_mask =3D arg.anyof_mask;
+> +       p.excluded_mask =3D arg.excluded_mask;
+> +       p.return_mask =3D arg.return_mask;
+> +       p.cur.start =3D p.cur.len =3D p.cur.bitmap =3D 0;
+> +       p.vec =3D NULL;
+> +       p.vec_len =3D PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+
+If p.vec_len would not count the entry held in `cur` (IOW: vec_len =3D
+WALK_SIZE - 1), then pagemap_scan_output() wouldn't need the big
+comment about adding or subtracting 1 when checking for overflow. The
+output vector needs to have space for at least one entrry to make GET
+useful. Maybe `cur` could be renamed or annotated to express that it
+always holds the last entry?
+
+> +
+> +       /*
+> +        * Allocate smaller buffer to get output from inside the page wal=
+k
+> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks=
+. As
+> +        * we want to return output to user in compact form where no two
+> +        * consecutive regions should be continuous and have the same fla=
+gs.
+> +        * So store the latest element in p.cur between different walks a=
+nd
+> +        * store the p.cur at the end of the walk to the user buffer.
+> +        */
+> +       if (IS_PM_SCAN_GET(p.flags)) {
+> +               p.vec =3D kmalloc_array(p.vec_len, sizeof(*p.vec), GFP_KE=
+RNEL);
+> +               if (!p.vec)
+> +                       return -ENOMEM;
+> +       }
+> +
+> +       if (IS_PM_SCAN_WP(p.flags)) {
+> +               mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA=
+, 0,
+> +                                       mm, start, end);
+> +               mmu_notifier_invalidate_range_start(&range);
+> +       }
+> +
+> +       walk_start =3D walk_end =3D start;
+> +       while (walk_end < end && !ret) {
+> +               if (IS_PM_SCAN_GET(p.flags)) {
+> +                       p.vec_index =3D 0;
+> +
+> +                       empty_slots =3D arg.vec_len - vec_index;
+
+Can `empty_slots` be zero here? I don't see anything prohibiting this case.
+
+> +                       p.vec_len =3D min(p.vec_len, empty_slots);
+
+( If not counting `cur`, it would be min(p.vec_len, empty_slots - 1); )
+
+> +               }
+> +
+> +               walk_end =3D (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_W=
+ALK_MASK;
+> +               if (walk_end > end)
+> +                       walk_end =3D end;
+> +
+> +               ret =3D mmap_read_lock_killable(mm);
+> +               if (ret)
+> +                       goto free_data;
+> +               ret =3D walk_page_range(mm, walk_start, walk_end,
+> +                                     &pagemap_scan_ops, &p);
+> +               mmap_read_unlock(mm);
+> +
+> +               if (ret && ret !=3D -ENOSPC && ret !=3D PM_SCAN_FOUND_MAX=
+_PAGES)
+> +                       goto free_data;
+> +
+> +               walk_start =3D walk_end;
+> +               if (IS_PM_SCAN_GET(p.flags) && p.vec_index) {
+> +                       if (copy_to_user(&vec[vec_index], p.vec,
+> +                                        p.vec_index * sizeof(*p.vec))) {
+> +                               /*
+> +                                * Return error even though the OP succee=
+ded
+> +                                */
+> +                               ret =3D -EFAULT;
+> +                               goto free_data;
+> +                       }
+> +                       vec_index +=3D p.vec_index;
+> +               }
+> +       }
+> +
+> +       if (IS_PM_SCAN_GET(p.flags) && p.cur.len) {
+
+Nit: p.cur.len can be non-zero only if we do a GET (or GET+WP) operation.
+
+> +               if (copy_to_user(&vec[vec_index], &p.cur, sizeof(*p.vec))=
+) {
+
+Nit: sizeof(*p.cur); (even though this is the same type)
+
+> +                       ret =3D -EFAULT;
+> +                       goto free_data;
+> +               }
+> +               vec_index++;
+> +       }
+> +
+> +       ret =3D vec_index;
+> +
+> +free_data:
+> +       if (IS_PM_SCAN_WP(p.flags))
+> +               mmu_notifier_invalidate_range_end(&range);
+> +
+> +       kfree(p.vec);
+> +       return ret;
+> +}
+> +
+> +static long do_pagemap_cmd(struct file *file, unsigned int cmd,
+> +                          unsigned long arg)
+> +{
+> +       struct pm_scan_arg __user *uarg =3D (struct pm_scan_arg __user *)=
+arg;
+
+The cast should be in do_pagemap_scan() as if there comes another
+`cmd`, then it might use a different argument type.
+
+> +       struct mm_struct *mm =3D file->private_data;
+> +
+> +       switch (cmd) {
+> +       case PAGEMAP_SCAN:
+> +               return do_pagemap_scan(mm, uarg);
+> +
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +}
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
