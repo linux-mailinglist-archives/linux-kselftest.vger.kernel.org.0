@@ -2,40 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DA4725D16
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 13:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BBC725D20
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 13:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240174AbjFGL3V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 07:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        id S240343AbjFGLar (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 07:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240261AbjFGL3U (ORCPT
+        with ESMTP id S240361AbjFGLaq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:29:20 -0400
+        Wed, 7 Jun 2023 07:30:46 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E261B19BD;
-        Wed,  7 Jun 2023 04:29:14 -0700 (PDT)
-X-QQ-mid: bizesmtp79t1686137341tbhfj5g6
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B2519A4;
+        Wed,  7 Jun 2023 04:30:41 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1686137431txjb0ruo
 Received: from linux-lab-host.localdomain ( [61.141.77.49])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 19:29:00 +0800 (CST)
+        id ; Wed, 07 Jun 2023 19:30:30 +0800 (CST)
 X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: q+yjhizk/eL77uWPsAdnep0mzHEQMbth2xOfZxpWL32hs5VqgL/zmKwk14/Wu
-        i9q8XPfvyhdXG9+3oacVYSQr6FunSQbFvOVbwZwjQv24RB6YKbMH//08rrGS+LL+BSbrRqZ
-        CwnbEjY/+7z/JMzsKqgv6sbEgj0I452l0mX23xA7jCjrQIbCkImtOj7EoGL6pyYUt7UkshA
-        mWct2lQuEKCpcF6JthwUcMbUeXZmqiBPya1w7LlWWa2RniMpOLmdCMGYKkdpMIdFoR87xBT
-        zyVt0HFh417TKiCcYhGJVjDY+gvn/0l9+8eHCG/KlDx+j6PvBTx4Y+0SVn6yaSZXvaY5j0m
-        QAJRD4PQlmSCcB1jJ9qo7Maw3XVxr15+CFbQOZhB8hlaYSTTbAJE1ybwp7nzPPkcOY8DcJL
+X-QQ-FEAT: PS/N6jJLnDYwJEGZC7QAtJWPa/AlKwXo0vmdJ7kjq/mWA0tEQux5qfVTlr0zq
+        V0mQ4yl64VpUmbvnsqbSN7zmeSevRUHmbKOZoV2RqIOt8edl233rqbjgHL+q7xdbYk7qw0T
+        oDbzE70YdzBu94Fz3kB0Vxyk73oAMss5RRcIEMdMbDAKZGDHbrmqZ3shDB9YNI4GPLQbbyC
+        YpefZjfBLWxIf0z9U6lv0MnP+rAzGLTBXjOtyEUJdteCy8j1LYn7FPmZtLhHlVEj+dAmryn
+        bRmbdeOXlRWDFL3U2JhqQGtudiei24trgW3jAVgqAa8iUyA/xMvOA7v8ihmxArblu03CWvf
+        A7TJ2iCs1KR4AhETgTAsng5OTvPUqWD1dzD8jIRVnYXh9ApTgLCxOG2o/o+ts6irrjY3CNF
+        F0Q8oxfdQOU=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6806432981910364890
+X-BIZMAIL-ID: 11378213777674272868
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v3 0/3] tools/nolibc: add a new syscall helper
-Date:   Wed,  7 Jun 2023 19:28:58 +0800
-Message-Id: <cover.1686135913.git.falcon@tinylab.org>
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v3 1/3] tools/nolibc: sys.h: add a syscall return helper
+Date:   Wed,  7 Jun 2023 19:30:09 +0800
+Message-Id: <7cad207c4c4deb41151bd12fa658fb3fc64a5bf1.1686135913.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1686135913.git.falcon@tinylab.org>
+References: <cover.1686135913.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -43,83 +47,58 @@ X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Willy, Thomas
+Most of the library routines share the same syscall return logic:
 
-This is the revision of the v2 syscall helpers [1], it is based on
-20230606-nolibc-rv32+stkp7a of [2]. It doesn't conflict with the v4 of
--ENOSYS patchset [3], so, it is ok to simply merge both of them.
+  In general, a 0 return value indicates success.  A -1 return value
+  indicates an error, and an error number is stored in errno. [1]
 
-This revision mainly applied Thomas' method, removed the __syscall()
-helper and replaced it with __sysret() instead, because __syscall()
-looks like _syscall() and syscall(), it may mixlead the developers.
+Let's add a __sysret() helper for the above logic to simplify the coding
+and shrink the code lines too.
 
-Changes from v2 -> v3:
+Thomas suggested to use inline function instead of macro for __sysret().
 
-* tools/nolibc: sys.h: add a syscall return helper
+Willy suggested to make __sysret() be always inline.
 
-  * The __syscall() is removed.
+[1]: https://man7.org/linux/man-pages/man2/syscall.2.html
 
-  * Align the code style of __sysret() with the others, and use
-    __inline__ instead of inline (like stdlib.h) to let it work with
-    the default -std=c89 in tools/testing/selftests/nolibc/Makefile
-
-* tools/nolibc: unistd.h: apply __sysret() helper
-
-  As v2.
-
-* tools/nolibc: sys.h: apply __sysret() helper
-
-  replaced __syscall() with __sysret() and merged two separated patches of v2 to one.
-
-Did run-user tests for rv32 (with [3]), rv64 and arm64.
-
-BTW, two questions for Thomas,
-
-* This commit 659a49abc9c2 ("tools/nolibc: validate C89 compatibility")
-  enables -std=c89, why not gnu11 used by kernel ? ;-)
-
-* Do we need to tune the order of the macros in unistd.h like this:
-
-    #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
-    #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
-    #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
-    #define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
-    #define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
-
-  Before, It works but seems not put in using order:
-
-    #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
-    #define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
-    #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
-    #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
-    #define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
-
-Thanks.
-
-Best regards,
-Zhangjin
-
+Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/linux-riscv/ZH1+hkhiA2+ItSvX@1wt.eu/
+Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
+Link: https://lore.kernel.org/linux-riscv/ea4e7442-7223-4211-ba29-70821e907888@t-8ch.de/
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
-[1]: https://lore.kernel.org/linux-riscv/cover.1686036862.git.falcon@tinylab.org/
-[2]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-[3]: https://lore.kernel.org/linux-riscv/cover.1686128703.git.falcon@tinylab.org/T/#t
+ tools/include/nolibc/sys.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Zhangjin Wu (3):
-  tools/nolibc: sys.h: add a syscall return helper
-  tools/nolibc: unistd.h: apply __sysret() helper
-  tools/nolibc: sys.h: apply __sysret() helper
-
- tools/include/nolibc/sys.h    | 364 +++++-----------------------------
- tools/include/nolibc/unistd.h |  11 +-
- 2 files changed, 55 insertions(+), 320 deletions(-)
-
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 856249a11890..150777207468 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -28,6 +28,16 @@
+ #include "errno.h"
+ #include "types.h"
+ 
++/* Syscall return helper, set errno as -ret when ret < 0 */
++static __inline__ __attribute__((unused, always_inline))
++long __sysret(long ret)
++{
++	if (ret < 0) {
++		SET_ERRNO(-ret);
++		ret = -1;
++	}
++	return ret;
++}
+ 
+ /* Functions in this file only describe syscalls. They're declared static so
+  * that the compiler usually decides to inline them while still being allowed
 -- 
 2.25.1
 
