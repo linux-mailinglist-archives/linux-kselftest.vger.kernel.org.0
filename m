@@ -2,171 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8D37264C0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 17:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232EB7264C4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 17:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbjFGPf5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 11:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
+        id S241099AbjFGPgb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 11:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241205AbjFGPf4 (ORCPT
+        with ESMTP id S240598AbjFGPgb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:35:56 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF01C1BE2;
-        Wed,  7 Jun 2023 08:35:51 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3578bfcP010042;
-        Wed, 7 Jun 2023 08:35:31 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=jFyyI1+lujXI8YManbdB9Lqw3Ml3vMRKrk7dTB4n5mQ=;
- b=f5opnhrg4jfu2iYYK8vHBTkwa5x3NL8Zrrpmvk+86F9vnXRRcM0gZbdX/MrmAigc4YNT
- nc/3qTlDyQvWwAFmA3gFgdPgoFjIAdaCSraMfRzUo47/xUJIsjykaKa70mieTFNeN1nJ
- kJYiqMv526aZzL0+jLpfFkpfKoXxMNV35Kg54qWPgOj2lTvEnyLAHM5S3eyy1/GNwjjb
- iTo4iLwbH8uAfQSuNSzMoZY7ZwfOckE3U8SynjrIyoDoNpD/oUxYiU/BjxD9ZsuKWdmI
- 5A35HHLoK0Lqpby/45beB+B2xeCrr47/DaJqKYx7xLuJTwOFUmwJujnkskHYw82Rpz5P dg== 
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r2a89q9hr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Jun 2023 08:35:31 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W/OKrqfHF5vZGXt4OpkRTNAz+0SjE8sx+uDH/j7CoFNw27IyNwIuti9+NdLaeAPQA4VbF/onwquCmbkjXyQZo+FEJWm+NOvvzuSxLA0WisurU1+zay1ux8IprhlqHLbW1bo1AIbjvgcqPfCV3DcBAVUqHom1SHRKT2GUmdquo5hH9K/uCgmm6O8A8+CoO9ptvsXNLUw+H3wZdkAp9m9VXqd1/AVb9j+0LqtvTRLq/qEbR7dQOJzF7GaRvxjXNgHieCzpZTmORgP0PWnvdy/Wj5NT/kFnMyRznbg1iMpCIHq9S11bLmK/soDyFKq8EUgzq/W8vP5TxXv7b6LRDnMsrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jFyyI1+lujXI8YManbdB9Lqw3Ml3vMRKrk7dTB4n5mQ=;
- b=D4vnzgQog+ImH3Ct8V1e/VC5gz1y7mP7zyOf33/HI5fZ0BoMlrcpReywaVpoJOklm7jnVcKVlUFlPl4NDHOS8yNbnjhfo9RY9iwn/4V+6fu1hdy88f6H/3qnwF8Z4XW7lHBpmBgMN1HY9S49BEI95nL+g/Ag/NmuPNVFCRenkBOui3+tYLqoiAnEKx88Fb1SzkXSq1jmXMCpstQU54UGAOu2tKt2MZplM6XlBESUGTl5seaZv6imRgFd4XGJUPR/xAec/GPXWmdj1ZrYaBLK+GlepxuXpbHld/hVAixNm3BjReRJ0aStZP5icIRMFemFMHzjW1GWZunsfwMTZ7ySag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SJ0PR15MB4456.namprd15.prod.outlook.com (2603:10b6:a03:375::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Wed, 7 Jun
- 2023 15:35:27 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::bf7d:a453:b8d9:cf0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::bf7d:a453:b8d9:cf0%6]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
- 15:35:26 +0000
-Message-ID: <44c1da5c-251a-fd92-2a14-655d2e99bf03@meta.com>
-Date:   Wed, 7 Jun 2023 08:35:23 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH bpf v4 2/2] selftests/bpf: Add test cases to assert proper
- ID tracking on spill
-Content-Language: en-US
-To:     Maxim Mikityanskiy <maxtram95@gmail.com>, bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Maxim Mikityanskiy <maxim@isovalent.com>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-References: <20230607123951.558971-1-maxtram95@gmail.com>
- <20230607123951.558971-3-maxtram95@gmail.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <20230607123951.558971-3-maxtram95@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR02CA0034.namprd02.prod.outlook.com
- (2603:10b6:a02:ee::47) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Wed, 7 Jun 2023 11:36:31 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6558E;
+        Wed,  7 Jun 2023 08:36:29 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977e7d6945aso560211066b.2;
+        Wed, 07 Jun 2023 08:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686152188; x=1688744188;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yw8NnBB2eVrIeNQ76jclUnfMKFC0ZCvSsvCVA2pp0w8=;
+        b=r+lieSHxxcxOsum/U4sQs6DxlvivqcGA1Qi7YMCYD0+6yMmaBhxQ2ijmuSOcC7Sfgo
+         JoHN/K+5zkj2h4tBDBr2p93HRjLvTbNd2jwyRGLGoezeE4EALPmA5Rajd8+gyh+m4hGh
+         UdfW3ccM2D7UJoXvv9LzRyLHdyr2ZhmcUG7yhhoa6s+0Yx/h1tZ5gavYMKbBIlZWHCVx
+         Wikgl/6evBRKD2ZAQ+2wtud6CP0QRoJgPkTiYXbjyMBXcuaFhFQ5c6HNwjmDmmmIx5VX
+         /802K+cKYLt7E6nbzAEbuVZ+gWENIdcYdQEnDLwF55PSd5Ep9m3dWrEK7eobb6qYrnaF
+         mWBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686152188; x=1688744188;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yw8NnBB2eVrIeNQ76jclUnfMKFC0ZCvSsvCVA2pp0w8=;
+        b=YJuwaC3YJHo5mOFO+A04QlQTz0mOUDqOpxKvF0Hd+q9B0FaBZ1nXYip57ElmwpXCm7
+         6pQNAUppOifgWxUCca/FpMvi1T57TTxVepMftymYkGv8h6BAipse9dCa7jyaQpNObCvI
+         57jWAVgkEEdUbIyJ3EwmyKfeIXUSscPfJHWAIPGA53CMw+zsRcLSq0Wy+Ti5H3IGB+Ne
+         WQ6SL9x0u6gev4qnf04fautnAwpSJCkPEYFJC+KJCIRNJXEXK46i9Bj2AFLBiRvrLINv
+         OylZDSlBEYSnnbzL+t92kgTUHMgLN6oNQ05hLlvlof7pTPZ+B3tfouxXVbSMiweYcuHv
+         mONg==
+X-Gm-Message-State: AC+VfDxevl3dRQjYB3YxDkBtdl7guJOJSYZf88TUU/FknOIYjSGMP3ak
+        fle8S12jP+0oRABCZ6X4mj4BMIYdgbM=
+X-Google-Smtp-Source: ACHHUZ4XhyIYxYG6b0ch4xFGUEd+1+0mvfa7mu2cF1vBE0T20wV4Jz1+L+fVUql4PBxWt55WwxqX9w==
+X-Received: by 2002:a17:907:6d98:b0:96f:ea85:3ef6 with SMTP id sb24-20020a1709076d9800b0096fea853ef6mr6869464ejc.62.1686152187484;
+        Wed, 07 Jun 2023 08:36:27 -0700 (PDT)
+Received: from Osmten.. ([103.84.150.92])
+        by smtp.gmail.com with ESMTPSA id p22-20020a170906499600b0097866bc5119sm2398069eju.200.2023.06.07.08.36.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 08:36:27 -0700 (PDT)
+From:   Osama Muhammad <osmtendev@gmail.com>
+To:     shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Osama Muhammad <osmtendev@gmail.com>
+Subject: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_NAME
+Date:   Wed,  7 Jun 2023 20:36:00 +0500
+Message-Id: <20230607153600.15816-1-osmtendev@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SJ0PR15MB4456:EE_
-X-MS-Office365-Filtering-Correlation-Id: c511f25f-f5f7-43d5-7fdb-08db676cd0b0
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Cq/XnkFEctA2OcMYeCvbDA6dfCDWeTCrj2cmtVOX1i+5wtTc5IxQ7e3oGNdmeLH6RH7V+1kehJvZ0kFlwDRLGWIjN9uR+4x+hX16S+3cLKqojgmh3VzXfzkkzN8PheWrr7f8mi2/HDU5qOArjKV89d4o/HqEbmPrFdhxBsEb7I8tvStXqRflno8CEWM4QRExvMV2sdz1Q0Y2HySVevAFwK8EdY2fGiFjYI3xDKGYoCrg2e6CPXeNglVPATlWVzC7t/ITvU6q3QXWsrJPtA9Dky4DgDCpPrSkZuLWHqNuY1Cirv75Y/lYMPmaiG69Y/vayigMSNx6u3tdT85EeDOz2+k+4MOGa9R0hbi/M2maBrhYvPwaWwwV+JNARSlGKRb5nF5yda6aYAUwAZRitlLdGWUwdXqjxHZed1h6rSbxXdMEA26lFjVZvjsLI8WB2C+yk1IalaSyUBMaTBg10cJgrInIRcpzRkQF43o5evvfPMP84ZWtnaekXMI509RbEi9Zbuv/UFuxstw8ZHq5Ip0IekJg2lNqHWsLv+1sqTI1jPNVFzadh5DAmxD1S1rohS7NCAEdW5J81bi36OW75fx2L+jhYcQ9dtCvUChQp+yAI7/RNPCsrTX5tf+kGcf9SPtvGwGKl7A+w/9/QTwIKsohsQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(366004)(39860400002)(346002)(376002)(451199021)(53546011)(86362001)(186003)(7416002)(6506007)(6512007)(31696002)(6486002)(2616005)(31686004)(6666004)(8936002)(8676002)(5660300002)(478600001)(36756003)(54906003)(38100700002)(2906002)(4744005)(316002)(41300700001)(4326008)(66946007)(66556008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MXV1YUxEd1AyRmd1NjlDTThMY2g0bWtOeWVUR0ZXZU5XQ25tM1FvT1NXczZp?=
- =?utf-8?B?TjY1RHkwaUVzaWpaYmhBc2Z3bWVWRE8wSzRHMkNMajNhUlkwREpjanpXZjF6?=
- =?utf-8?B?YmFIRjIzSjFrQUlXcFlGTmU2YTBjdXpnUVhyZFFuTEljcjZNdDRDSkc1VE81?=
- =?utf-8?B?SU5jNkIzQmllZzdUdWtVS1ZoYnFqWkQ2TUxjYVJPZWNiVnp4ZzV2d010NnRW?=
- =?utf-8?B?YysxNk9wWDBDeGxVNjlkWHBzQjVmMUxiT2ltTVd0a1JnalBLVURTWkVnNFkz?=
- =?utf-8?B?SzU4R0FlZEY2S2NzdkRLckxsYWVhR3pWQ2pubHBXdWRadDZhVjJtb2NidFVy?=
- =?utf-8?B?SGZleXVQZlpCbmNoUWtIMGk1elBRRXVOUjEyNGQwWGhxaThTR0FJMk1GNkZj?=
- =?utf-8?B?ZEJKbVVvS1VEMEJJRHdoZnFkSUs4bTJmSHBUTHpLenlWRUtma3REaVhqRDE2?=
- =?utf-8?B?ajF4OU5LbDZ3MXc1QUd5VG1KOGcxODBmNTc1TWpTUzBrTGlrWjdvd09wMFNO?=
- =?utf-8?B?dkp5V2pIZ1QwOGZZY2MvcVFiUHFnUktSTnIzdE1FdmJteUhyL0dBcGorTXhT?=
- =?utf-8?B?ZG5TVWxqV3FoTGtJZW96azJLdlBUZVJmeUYvbGlucXQ5NDYwQjhpdjY2eUlm?=
- =?utf-8?B?WW9RS2dHTjJ4ZVhqaDlxOFBpTGQvcjRnVEEyVmpQV1NYRjg3Q1VGd21hTXRO?=
- =?utf-8?B?MHp4WGF0RUM3eHllbXExM0w0WTl0YzVwV1lOVHZIL3VmSTI4WmpNMXp3emlj?=
- =?utf-8?B?UjBxUWNiajUxSVJRWFhPWlhvV3VVY0s4eWFwQlpuZnc1N2RGeUhVZURkdWV0?=
- =?utf-8?B?Wk41elQzVElrMzhQRlA4RDByVnVLTlVwVk1ReEp0MlMrSUhXbjh2SnFWQk45?=
- =?utf-8?B?VDNJSHNoNFRCQWhleFF1eVJvc2FXNkxOSFUySy9oWWNzTG1weXR1T2VkcEFx?=
- =?utf-8?B?T3VSdldaUDFKaFFCSjBzYlUyZ011S0NxMGhHMjRDek9GUXhTQ1VMcVJCNnVC?=
- =?utf-8?B?WG0xc2FYUC82QVJiNlVZUEZOUnVMeW05OFhzNEpyQVNTbTZNa21LZVhPVllx?=
- =?utf-8?B?amdlREwzRVNyL2xPakNxNUlnU3QwQVZoVjgxSHhJNFIzU0dKNHpsMmpEODU0?=
- =?utf-8?B?dkdpaFhtTjBYSHFqTGlpcXRvdUs3Z25ZWnRiSXBYcGxmVFBFeUdWU21BN1ps?=
- =?utf-8?B?dGEzRndYeWozOU4wY2trVDA0OW5GNDR3Ly9wZzVlaVZBNDhUZFpkRFIzRnpu?=
- =?utf-8?B?UGRsMGsrRk5qOFliZnRlY2FXbzluYnhPUWJYT1hSQk85eVY2RjNjNkRiWmY2?=
- =?utf-8?B?bXNXWStUOUcvck1MaFhqcnFMSE52M1ZBYWtJWllHTGN5SFFIcE9SaHNsWTB2?=
- =?utf-8?B?dmxYK2lWSUg5cDU0TGJzM08vWlZPMUwyblJ6TU5zODMySVBlQ0ZqMloxK3FG?=
- =?utf-8?B?RzBvRC8yYTdsVXM4U3dUdFR0UzR4ZWNvQVNMakE5Y2djMVZQZWN2ODluTGJQ?=
- =?utf-8?B?Z1hZR1NkcE1JOGlhNy8rTmQ2WHI5ZmU2VHZvREgxYzVVcGJRR1dOaDVOSTBQ?=
- =?utf-8?B?aDVLUHJWbEJNQXFBOUNLYUlvU2E5Rzh6QWVhTVlmSWxrMlZXMGFVWFdOVmdm?=
- =?utf-8?B?cVdJY0tVekszWHNLRTJBbkw0alBsQ2hDOUU5QnhjbmQ5Z0Y1MTV5Z2dsTHFq?=
- =?utf-8?B?TGRNSXNiQWlYWEpBNTM4VzlPSFh0Q1g3TzloVWxVbEZ2eitSTXRUOHhJZmtE?=
- =?utf-8?B?U2FRRFlaRHk2dElqN0FkSWdVVjJkZUhWaFNpSEMweG9yTGVHT2JxbmE1Szla?=
- =?utf-8?B?RjMzRVdNcjlpNXRsTXZyeGIvMi95aTN5c2RRSnhWWmdLSkt0Tjk0bk04UVRS?=
- =?utf-8?B?aVdUMFplSC95SXNUTzRaT0JrYlNQMFRGT1dtWnljMUd2cncraXI2OERSbE00?=
- =?utf-8?B?L0dHME9ObFN5ZUZnRG53ZG93Wmg3b3pCYTB3L3VvYy9ML3hiMk1LdnVPcjVu?=
- =?utf-8?B?S3ZKTFZxbVk2a3oyVEVnZ0l3ZGEzU2Z5RWppRjVFczNRYkx4MFhscFpuM3pu?=
- =?utf-8?B?L1ZwV2RCdnRnbm1Wck1wNEtKVEp4Y2ZPd2ZyWklhWXpFMWNFQW9MZ0k5VS92?=
- =?utf-8?B?eStZdUc0QjllM1htN0NXd2g2UWFxeXNqdjJDRFNzaVk3eDVVKzVQNWdqekRM?=
- =?utf-8?B?OWc9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c511f25f-f5f7-43d5-7fdb-08db676cd0b0
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 15:35:25.9890
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kgEAyXXWAaWY6M9p2T4hA6f2yu6ckeJBwFh1vZV2PQDSsLXutP7QN/1hkEIjW69t
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4456
-X-Proofpoint-GUID: pssZgoUQIRZmSIPEg0kQK-DKvrsZwpZk
-X-Proofpoint-ORIG-GUID: pssZgoUQIRZmSIPEg0kQK-DKvrsZwpZk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-07_07,2023-06-07_01,2023-05-22_02
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+This patch will add the new test, which covers the prctl call
+PR_SET_NAME command. The test tries to give a name using the PR_SET_NAME
+call and then confirm it that it changed correctly by using  PR_GET_NAME.
+It also tries to rename it with empty name.In the test PR_GET_NAME is
+tested by passing null pointer to it and check its behaviour.
 
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
 
-On 6/7/23 5:39 AM, Maxim Mikityanskiy wrote:
-> From: Maxim Mikityanskiy <maxim@isovalent.com>
-> 
-> The previous commit fixed a verifier bypass by ensuring that ID is not
-> preserved on narrowing spills. Add the test cases to check the
-> problematic patterns.
-> 
-> Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
+---
+changes since v1:
+	-Used TASK_COMM_LEN instead of using numerical value 16.
+	 
+---
+ tools/testing/selftests/prctl/Makefile        |  2 +-
+ .../selftests/prctl/set-process-name.c        | 62 +++++++++++++++++++
+ 2 files changed, 63 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/prctl/set-process-name.c
 
-Acked-by: Yonghong Song <yhs@fb.com>
+diff --git a/tools/testing/selftests/prctl/Makefile b/tools/testing/selftests/prctl/Makefile
+index c058b81ee..cfc35d29f 100644
+--- a/tools/testing/selftests/prctl/Makefile
++++ b/tools/testing/selftests/prctl/Makefile
+@@ -5,7 +5,7 @@ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+ 
+ ifeq ($(ARCH),x86)
+ TEST_PROGS := disable-tsc-ctxt-sw-stress-test disable-tsc-on-off-stress-test \
+-		disable-tsc-test set-anon-vma-name-test
++		disable-tsc-test set-anon-vma-name-test set-process-name
+ all: $(TEST_PROGS)
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/prctl/set-process-name.c b/tools/testing/selftests/prctl/set-process-name.c
+new file mode 100644
+index 000000000..3bc5e0e09
+--- /dev/null
++++ b/tools/testing/selftests/prctl/set-process-name.c
+@@ -0,0 +1,62 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This test covers the PR_SET_NAME functionality of prctl calls
++ */
++
++#include <errno.h>
++#include <sys/prctl.h>
++#include <string.h>
++
++#include "../kselftest_harness.h"
++
++#define CHANGE_NAME "changename"
++#define EMPTY_NAME ""
++#define TASK_COMM_LEN 16
++
++int set_name(char *name)
++{
++	int res;
++
++	res = prctl(PR_SET_NAME, name, NULL, NULL, NULL);
++
++	if (res < 0)
++		return -errno;
++	return res;
++}
++
++int check_is_name_correct(char *check_name)
++{
++	char name[TASK_COMM_LEN];
++	int res;
++
++	res = prctl(PR_GET_NAME, name, NULL, NULL, NULL);
++
++	if (res < 0)
++		return -errno;
++
++	return !strcmp(name, check_name);
++}
++
++int check_null_pointer(char *check_name)
++{
++	char *name = NULL;
++	int res;
++
++	res = prctl(PR_GET_NAME, name, NULL, NULL, NULL);
++
++	return res;
++}
++
++TEST(rename_process) {
++
++	EXPECT_GE(set_name(CHANGE_NAME), 0);
++	EXPECT_TRUE(check_is_name_correct(CHANGE_NAME));
++
++	EXPECT_GE(set_name(EMPTY_NAME), 0);
++	EXPECT_TRUE(check_is_name_correct(EMPTY_NAME));
++
++	EXPECT_GE(set_name(CHANGE_NAME), 0);
++	EXPECT_LT(check_null_pointer(CHANGE_NAME), 0);
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.34.1
+
