@@ -2,223 +2,201 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72007725704
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 10:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3622725713
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 10:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239176AbjFGILW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 04:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S238513AbjFGINZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 04:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbjFGILV (ORCPT
+        with ESMTP id S239391AbjFGINY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:11:21 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0691C95;
-        Wed,  7 Jun 2023 01:11:18 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1686125468tf9po345
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 16:11:07 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: t+YzzcYcY/yIcYJBJAauvIxKKd3tsAr7koUSEaZ8zaovQMdGosVaKCJWd1dp3
-        3AznNfz7xPXMB8v22KQ8la1jDw6ACQcuAKPOVu7cB1q7cKLlyIcQZXGavNxuFNICM4jCdPQ
-        nZrcg4DQXzkFRYrT/IojBq86LZRVcJQqGP1AScW7qZp08DggRkTsU6bdmqtrIp+BmEtqmkR
-        2G2ci7QeoAEVBkMnnD6+HfWm/zydQlvvTIAfL1Vb868dLorSnZjS7qZay+c4VTzR5XLZ7O7
-        KLS1kzeO6ZT4y4b3pGClyfonwGhBZ8IrLpFBzwruN8EXA20Q5XX1xsuPUDrl3YmD+9DamKs
-        60AenKfN4R3T8cpMJEV+s5zy7QMho8seioMXwWLzM+UGSb69+GuhKP4LxYV01+hKo2YYlq4
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15885581524704403754
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v3 3/3] selftests/nolibc: riscv: customize makefile for rv32
-Date:   Wed,  7 Jun 2023 16:11:03 +0800
-Message-Id: <20230607081103.746962-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZIAywHvr6UB1J4of@1wt.eu>
-References: <ZIAywHvr6UB1J4of@1wt.eu>
+        Wed, 7 Jun 2023 04:13:24 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F3F10F8;
+        Wed,  7 Jun 2023 01:13:22 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230607081319euoutp02ba206291cc16219583f81eb14fd24aa0~mUkya1ABq2541525415euoutp02I;
+        Wed,  7 Jun 2023 08:13:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230607081319euoutp02ba206291cc16219583f81eb14fd24aa0~mUkya1ABq2541525415euoutp02I
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1686125599;
+        bh=3DPXiR/hjyfEzK7m9HH5XmbFqxbHSFl1tAr4AZcydFk=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=nD1t9nwk/zIO3Zo/sh2GTi8aAQR48SdDNHZ79t+ooGr+eu5d5RftK51ZS7+//LZru
+         13YLrWajmJKg4uk/Mq+MHnG/Ds9F+fZvgFLwJBYPPCNWeAx5lw+ZZ87ir3u4Rk5K/k
+         akJAF3sc6NSCjaOTTs8wreiNYV8wDmxPQ+DJjj24=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230607081319eucas1p1201a9cb1a327701cfda8116b790bd093~mUkyK8Cvh3228032280eucas1p1p;
+        Wed,  7 Jun 2023 08:13:19 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id F1.E0.11320.F1C30846; Wed,  7
+        Jun 2023 09:13:19 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230607081318eucas1p1c5adbc6abaa1bd9b236e596f7a08b2fb~mUkxqu-ZS0835808358eucas1p1y;
+        Wed,  7 Jun 2023 08:13:18 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230607081318eusmtrp21efa925f6e52fc458e9528eac5814e52~mUkxqOiP02069120691eusmtrp2a;
+        Wed,  7 Jun 2023 08:13:18 +0000 (GMT)
+X-AuditID: cbfec7f4-993ff70000022c38-7c-64803c1f9329
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 0E.93.10549.E1C30846; Wed,  7
+        Jun 2023 09:13:18 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230607081318eusmtip289b582a54a5ca24c7a7e99924d10757c~mUkxYrL8K2854628546eusmtip20;
+        Wed,  7 Jun 2023 08:13:18 +0000 (GMT)
+Received: from localhost (106.110.32.133) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Wed, 7 Jun 2023 09:13:17 +0100
+Date:   Wed, 7 Jun 2023 10:13:16 +0200
+From:   Joel Granados <j.granados@samsung.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 0/8] Remove child from struct ctl_table
+Message-ID: <20230607081316.wlnj5w5megkphcbd@localhost>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="tzto3k5whkt5xwze"
+Content-Disposition: inline
+In-Reply-To: <ZH+BWiQOSQGNDQCv@bombadil.infradead.org>
+X-Originating-IP: [106.110.32.133]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNKsWRmVeSWpSXmKPExsWy7djPc7ryNg0pBm93s1vs2XuSxeLyrjls
+        FtPvvGezuDHhKaMDi8emVZ1sHp83yQUwRXHZpKTmZJalFunbJXBlPFn4hLngtETF/V89jA2M
+        80S6GDk5JARMJOb9amDuYuTiEBJYwShxZPdjKOcLo8SV759ZQaqEBD4zSjybqdHFyAHW0XlW
+        BKJmOaPEgcdPGCEcoJoVH94wQTibGSU+33zBAtLNIqAi8erBdCYQm01AR+L8mzvMILaIgIbE
+        vgm9YHFmgQyJVS+ug8WFBawlDi06BbaZV8Bc4vCr/4wQtqDEyZlPWECuYBaokFjfmQBhSkss
+        /8cBUsEpYCbRMHcZK8RnShJf3/RC2bUSp7bcAjtNQuANh8T/1nUsEM+4SBydXwJRIyzx6vgW
+        dghbRuL/zvlQ9ZMZJfb/+8AO4axmlFjW+JUJospaouXKE3aIQY4SW+6XQph8EjfeCkJ8xScx
+        adt0Zogwr0RHmxBEo5rE6ntvWCYwKs9C8tcshL9mIfw1C2yOjsSC3Z/YMIS1JZYtfM0MYdtK
+        rFv3nmUBI/sqRvHU0uLc9NRio7zUcr3ixNzi0rx0veT83E2MwDR0+t/xLzsYl7/6qHeIkYmD
+        8RCjClDzow2rLzBKseTl56UqifBm2denCPGmJFZWpRblxxeV5qQWH2KU5mBREufVtj2ZLCSQ
+        nliSmp2aWpBaBJNl4uCUamDazCqass124xmh006Lnr4LO5CYNXn5FfvzM05kVWSoH2vYrLDT
+        kn+1Y1Lvt41G8s1TNomknM/cNr9to7Vk2fyymNPeX/mlH2wRy1GylE7I54n4lznvo7T1/l2b
+        2n9MNPcUS1jGET9HyZTXwyy4ozBYbq/YliqPiEPi5w4Flkcc8943r2lm6AUFpS9nrsmuP2Fe
+        4/f6ZmRmXpKlefiirQaJitccbNf9XHXtyZ/3t0W+u9RE/t//965J3uN9re8kVrbd3qhgk/ek
+        6n1AxQfTgg2tztFffm+Kk3LjCmkQONP1tt/D+nDotfKE+o3Gx1M2VL04llzd0Cb1v1qvwZ6r
+        2cvv9Zon3JzxL1VCZnqsFldiKc5INNRiLipOBADsGXEAvgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNIsWRmVeSWpSXmKPExsVy+t/xe7pyNg0pBm37VSz27D3JYnF51xw2
+        i+l33rNZ3JjwlNGBxWPTqk42j8+b5AKYovRsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyN
+        zWOtjEyV9O1sUlJzMstSi/TtEvQyvn75xlxwUqLi2d9OpgbGOSJdjBwcEgImEp1ngUxODiGB
+        pYwSm98WgtgSAjISG79cZYWwhSX+XOti62LkAqr5yCixaGkLE4SzmVHi387t7CBVLAIqEq8e
+        TGcCsdkEdCTOv7nDDGKLCGhI7JvQCxZnFsiQWPXiOlhcWMBa4tCiU2AbeAXMJQ6/+s8IMXQP
+        o8T9Lw+YIRKCEidnPmGBaC6TuPqtkQ3kamYBaYnl/zhAwpwCZhINc5dBXaok8fVNL5RdK/H5
+        7zPGCYzCs5BMmoVk0iyESRBhLYkb/14yYQhrSyxb+JoZwraVWLfuPcsCRvZVjCKppcW56bnF
+        hnrFibnFpXnpesn5uZsYgTG57djPzTsY5736qHeIkYmD8RCjClDnow2rLzBKseTl56UqifBm
+        2denCPGmJFZWpRblxxeV5qQWH2I0BYbiRGYp0eR8YLLIK4k3NDMwNTQxszQwtTQzVhLn9Szo
+        SBQSSE8sSc1OTS1ILYLpY+LglGpgmnH607G8YOZNf1YYim68b7VjiuW9S7+PZXOwZirMLOM5
+        u3layezmJWtdnf9u6mHf9ln8+USf6+9lV0Y0XGHZde/qb0OW3/MWJhbqdb7fMzfprqPI9pw0
+        6ZkHOjUnnJK7f+K4+N3T+plN9zUO7X71edGCjKx5j83PbXp+op5T8fmEqXoyuu539L7atu5b
+        mbux2sc1IjXraFlO9yr5dxNv5P5YuyM+42b2rMf33fRcDlryl7W4Fp5g85ryo5apf3eYTpN4
+        Qun79DPzt1mkJ92/+GAbn2XG2fkC1/JaeHxqtrZ9FV0w3eT+oRqzXqU1PqU1gd98xPo9cvZO
+        VvD9c6/x+s6TT2b7P52U9Hshc8n/VSeUWIozEg21mIuKEwEO9LqmXgMAAA==
+X-CMS-MailID: 20230607081318eucas1p1c5adbc6abaa1bd9b236e596f7a08b2fb
+X-Msg-Generator: CA
+X-RootMTR: 20230602110640eucas1p11b79cbd7f116be6828a670f9873ed24e
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230602110640eucas1p11b79cbd7f116be6828a670f9873ed24e
+References: <CGME20230602110640eucas1p11b79cbd7f116be6828a670f9873ed24e@eucas1p1.samsung.com>
+        <20230602110638.789426-1-j.granados@samsung.com>
+        <ZH+BWiQOSQGNDQCv@bombadil.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On Wed, Jun 07, 2023 at 02:33:14PM +0800, Zhangjin Wu wrote:
-> >
-> >     ifneq ($(findstring riscv,$(ARCH)),)
-> >       KARCH = riscv
-> >     else
-> >       KARCH = $(ARCH)
-> >     endif
-> (...)
->
-> At least it suggests what it's going to be used for instead of just
-> being marked as "special" (something the underscore does).
->
+--tzto3k5whkt5xwze
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yeah.
+On Tue, Jun 06, 2023 at 11:56:26AM -0700, Luis Chamberlain wrote:
+> On Fri, Jun 02, 2023 at 01:06:30PM +0200, Joel Granados wrote:
+> > Resending as the first set got mangled with smtp error.
+> >=20
+> > This is part of the effort to remove the empty element of the ctl_table
+> > structures (used to calculate size) and replace it with an ARRAY_SIZE c=
+all. By
+> > replacing the child element in struct ctl_table with a flags element we=
+ make
+> > sure that there are no forward recursions on child nodes and therefore =
+set
+> > ourselves up for just using an ARRAY_SIZE. We also added some self test=
+s to
+> > make sure that we do not break anything.
+> >=20
+> > Patchset is separated in 4: parport fixes, selftests fixes, selftests a=
+dditions and
+> > replacement of child element. Tested everything with sysctl self tests =
+and everything
+> > seems "ok".
+> >=20
+> > 1. parport fixes: @mcgrof: this is related to my previous series and it=
+ plugs a
+> >    sysct table leak in the parport driver. Please tell me if you want m=
+e to repost
+> >    the parport series with this one stiched in.
+> >=20
+> > 2. Selftests fixes: Remove the prefixed zeros when passing a awk field =
+to the
+> >    awk print command because it was causing $0009 to be interpreted as =
+$0.
+> >    Replaced continue with return in sysctl.sh(test_case) so the test ac=
+tually
+> >    gets skipped. The skip decision is now in sysctl.sh(skip_test).
+> >=20
+> > 3. Selftest additions: New test to confirm that unregister actually rem=
+oves
+> >    targets. New test to confirm that permanently empty targets are inde=
+ed
+> >    created and that no other targets can be created "on top".
+> >=20
+> > 4. Replaced the child pointer in struct ctl_table with a u8 flag. The f=
+lag
+> >    is used to differentiate between permanently empty targets and non-e=
+mpty ones.
+> >=20
+> > Comments/feedback greatly appreciated
+>=20
+> This all looks great, thanks so much for doing all this work! I pushed
+> to sysctl-next.
+I have a version where I replace the u8 flag with an enumeration with
+two memebers. Tell me if it make sense to post the V2 and I'll send it
+out after fixing it up a bit.
 
-> > but the new method mentioned here differs, it split the whole Makefile
-> > to two 'parts', the before part accept something like ARCH=riscv32,
-> > ARCH=riscv64, ARCH=riscv, the after part use the ARCH=riscv, this avoid
-> > touch the targets context:
->
-> We don't care about touching *code*. What is important is that it scales
-> and is understandable, thus maintainable. Code that has many exceptions
-> or requires a lot of head scratching to figure what's being done is a
-> pain to maintain and nobody wants to take the risk to touch it. That was
-> exactly the purpose of the enumeration of per-target args, flags etc in
-> the makefile: nobody needs to be expert in multiple areas to touch their
-> own area. If we face a showstopper, we need to address it, and not work
-> around it for the sake of touching less context.
->
+Best
 
-Get it clearly.
+Joel Granados
 
-> >     ... variable assignments before this line ...
-> >
-> >     +# Some architectures share the same arch/<ARCH>/ source code tree among the <ARCH>xyz variants
-> >     +# Top-level kernel Makefile only accepts ARCH=<ARCH>, override <ARCH>xyz variants to make kernel happy
-> >     +ARCHS := riscv
-> >     +_ARCH := $(strip $(foreach arch, $(ARCHS), $(if $(findstring x$(arch),x$(ARCH)),$(arch))))
-> >     +ifneq ($(_ARCH),)
-> >     +override ARCH := $(_ARCH)
-> >     +endif
-> >     +
->
-> So actually this is a perfect example of head scratching for me. I suspect
-> it would replace x86_64 with x86 if x86 would be placed there for example,
-> though it would not change anything for i386. Maybe for s390/s390x,
-> arm/arm64 or ppc/ppc64 etc it would act similarly while these are different
-> archs. Thus this seems to be trying to generalize a rule around a single
-> particular case.
->
+--tzto3k5whkt5xwze
+Content-Type: application/pgp-signature; name="signature.asc"
 
-It is true, we did worry about when users wrongly add new ARCH in the
-list, a generic way is very hard before we really use them.
+-----BEGIN PGP SIGNATURE-----
 
-> Probably that instead this particular case should be addressed explicitly
-> until we find a generalization (if ever) to other archs:
->
->   ifeq($(ARCH),riscv32)
->   override ARCH := riscv
->   else ifeq($(ARCH),riscv64)
->   override ARCH := riscv
->   endif
->   endif
->
-> Or maybe even better you can decide to remap arch names explicitly:
->
->   # use KARCH_from=to to rename ARCH from $from to $to past this point.
->   KARCH_riscv32 := riscv
->   KARCH_riscv64 := riscv
->   ...
->   ifneq($(KARCH_$(ARCH)),)
->   override ARCH := $(KARCH_$(ARCH))
->   endif
->
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmSAPBYACgkQupfNUreW
+QU/B3Qv7BliPNCxcKiu609ndtujxW6iO7EA/HFy7swUM+02NicOH2cjTWtW68W/n
+4oT534vjY9rCTopitHQ6xqgJIqM02L5YFRAoq+BV2NyX2X/qNIcEb1Sv7+j1cPzO
+z0D+UvnlqIb9Fu46dg3uLdWIXT2gzUuObwPfC4FTM1D2j8pp7ZdS4mQwSvDSNCSw
+p2KzQQPsWzRt4UNAFsXo3cuDfPs/K3TiC7Cs3aV68MuH8MhUm3LjfKIw6FSlhqPi
+pegwNEj+mGgABl0K/cPf0uuKaieQKNmx2PORr/3nZ5d14aUuYR/k6JSyWNq2DmJT
+siBGSAz5l1BaqCKvVmVUbjfAXF3wTKOV+idoh0W1IGZnExu3EToAIIGLlghbOfYc
+CNsp6LDRoGo2VFVveKhG01GYRSfv9fAbgwYjNDj0tHICB+vdRUAii2Y4pIwyDeGu
+8Zw63t+SYhyOH94EJatbTDlCw187ypm35l5G8aEpNzYDu35L9VwESwckvupRK4wU
+SWuXixYO
+=lAan
+-----END PGP SIGNATURE-----
 
-This did inspire me a lot, so, what about simply go back to the KARCH
-method without any overriding:
-
-    diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-    index 4a3a105e1fdf..bde635b083f4 100644
-    --- a/tools/testing/selftests/nolibc/Makefile
-    +++ b/tools/testing/selftests/nolibc/Makefile
-    @@ -14,6 +14,12 @@ include $(srctree)/scripts/subarch.include
-     ARCH = $(SUBARCH)
-     endif
-
-    +# kernel supported ARCH names by architecture
-    +KARCH_riscv32    = riscv
-    +KARCH_riscv64    = riscv
-    +KARCH_riscv      = riscv
-    +KARCH            = $(or $(KARCH_$(ARCH)),$(ARCH))
-    +
-     # kernel image names by architecture
-     IMAGE_i386       = arch/x86/boot/bzImage
-     IMAGE_x86_64     = arch/x86/boot/bzImage
-    @@ -21,6 +27,8 @@ IMAGE_x86        = arch/x86/boot/bzImage
-     IMAGE_arm64      = arch/arm64/boot/Image
-     IMAGE_arm        = arch/arm/boot/zImage
-     IMAGE_mips       = vmlinuz
-
-And this:
-
-    @@ -117,7 +132,7 @@ sysroot: sysroot/$(ARCH)/include
-     sysroot/$(ARCH)/include:
-            $(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
-            $(QUIET_MKDIR)mkdir -p sysroot
-    -       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
-    +       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(KARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
-            $(Q)mv sysroot/sysroot sysroot/$(ARCH)
-
-     nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
-    @@ -141,10 +156,10 @@ initramfs: nolibc-test
-            $(Q)cp nolibc-test initramfs/init
-
-     defconfig:
-    -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-    +       $(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-
-     kernel: initramfs
-    -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
-    +       $(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
-
-It is almost consistent with the original Makefile now.
-
-I do like this method more than the override method now, the override
-method may break the maintainability a lot especially that the
-developers may be hard to know which ARCH value it is when he touch a
-line of the Makefile.
-
-> And this does deserve an explicit note in the makefile that anything
-> using $(ARCH) using a macro will see the renamed arch while anything
-> using it as a variable before that line will see the original one.
->
-> If you want to avoid the '=' vs ':=' mess you can even keep a copy of
-> the original ARCH at the beginning of the makefile:
->
->   # keep a copy of the arch name requested by the user, for use later
->   # when the original form is preferred over the kernel's arch name.
->   USER_ARCH = $(ARCH)
->
-
-Yeah, a copy is good for the override case.
-
-> > Willy, Which one do you prefer?
->
-> The most explicit ones like above. Generally speaking when you try to
-> add support for your own arch here, you look there for similar ones,
-> where commands are called, and read in reverse mode till the beginning,
-> hoping to understand the transformations. I think the current ones and
-> the proposed ones above are self-explanatory. Anything doing too much
-> magic renaming or doing too much hard-coded automatic stuff can quickly
-> obfuscate the principle and make things more complicated. I already
-> despise "override" because it messes up with macros, but I agree it can
-> sometimes have some value. If you dup it into ORIG_ARCH or USER_ARCH,
-> and modify the few lines overriding arch in an explicit manner, I think
-> it would preserve its maintainability.
->
-
-Agree, let's give up the 'override' stuff.
-
-> What do you think ?
-
-So, let's go with the KARCH method if you agree too.
-
-Best regards,
-Zhangjin
-
->
-> thanks,
-> Willy
+--tzto3k5whkt5xwze--
