@@ -2,321 +2,250 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB75725175
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 03:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C672572518D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 03:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234810AbjFGBUw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Jun 2023 21:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
+        id S234861AbjFGBdJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Jun 2023 21:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234417AbjFGBUu (ORCPT
+        with ESMTP id S234428AbjFGBdH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:20:50 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6890C172E;
-        Tue,  6 Jun 2023 18:20:45 -0700 (PDT)
-X-QQ-mid: bizesmtp66t1686100833tz2j48dv
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 09:20:32 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: 7L1V3dHhUFMsfd35czEmyWETdLhMVp6SYRjgwRWVg9MmptT9JY9519xTNirDi
-        RvxCPeIRNFYA1zr82KGsW0uilN6omuKDe+odKZWD7UYDOw5L4ZjZBEliz9PyyRQYe/DRPKN
-        cYc/vXHBFtRDYcB7kZ3bSHEHhQ4C4ntPeTQPNm0kMRXZxj8OD2TGwzKfJFK3wPiqjqKm67r
-        Bx8mN+x8RWESUtgL5rpCSexyw2q0L5+LLi37NVgIdgZaHSlnOLoPm2rkm1TO2O3f7Qrdp2F
-        toEihqiEjsk+sHDVece2x7laAgbNDaTGi9s+PR/xViJGAxvbtiVPjeJpByQTRQTw/Nxp257
-        50w+u9sJlc2hKqdPJmwB/F1ivDKCza4EV1sbnTHxnCnjhjwd5IyrgT+iMnqEg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 4645098387505124349
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     arnd@arndb.de, thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 3/3] selftests/nolibc: riscv: customize makefile for rv32
-Date:   Wed,  7 Jun 2023 09:20:32 +0800
-Message-Id: <20230607012032.585223-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230606120755.548017-1-falcon@tinylab.org>
-References: <20230606120755.548017-1-falcon@tinylab.org>
+        Tue, 6 Jun 2023 21:33:07 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19C21984;
+        Tue,  6 Jun 2023 18:33:04 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356IelG8032684;
+        Tue, 6 Jun 2023 18:32:43 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=e2EPiJ1XjgBHXfouynQzOa8jk8cBACIVK5AjH7/z+cY=;
+ b=i01kxM+iX+JheeEJXqYvYJ7d96x0xIGvG9eYdVsoSQ5MaQxlcB2SKpb52a4b9zNkOavU
+ FCS/zalESDwDHFFkPEmkXcqZXOrhU09DzmXpIBB6pWq1eDGuXzJ2KHqBFvF5LTawqlKC
+ 5mq/x7nGIGYj4DhmLmfLgkVaQ3Des6RDqsykHtYCETe8LZnhfCljyhZ/t4swpay8tkhm
+ z11jfRgsv+UlNSZFwayqPSlZ+m70JL/ZCQzl85hZbGjUsNkrwFPGk7/tRg2lQ0REBAw2
+ CJjnp8/Y/AFZRSieLp1ZJysifRhGiNbiZNeNesFF6aUuFUhMXcpQ2ltC3UVAW07JVIHd nQ== 
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2041.outbound.protection.outlook.com [104.47.73.41])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r2a72jmnk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 18:32:43 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HcLgy6LjAokQxccxnVGcoT4zlAtxyA3P5H9b1IINFTqfOjBHDVOq1eUqU5cY0dq3AZedY06boE6gdqr1bwxP4J3YUmCQhdMXAN95PFcDHszWFSadj+BQLFFextj2oa44Dn53v/GxaNBwCTXVsGqYa7Z5bkylIqMIfUwVD4qW0tPg92DoyConyDeddpL/PRCiz647yO/iI0EsFpzeLBBgTYKDRztJlPFIKwvpDnAJyKKSan5K/+iMifpSvDdxI3AV31ZOoi+Hyd0sOLfTA/1igVvdMDtWpVF0GKrGw3rT+O7bQf6Wa3RK19+e8Sf/s9P7LzuKLzRVo4Z186h6Ij0e/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e2EPiJ1XjgBHXfouynQzOa8jk8cBACIVK5AjH7/z+cY=;
+ b=LzAMOMVo/Om6BH3Hc8npT4tTHQYaR2agfVl8Rj4Ipx3BKIG+dwqJ1KnSHZV1abEXWjN9KgLbwCM+MiAx222Z8lkuK8whSUQ4N3o6h8C4YlPgIispBZa5DYayjqeEyLGH2/mvwwH3VAJbOtJz8la+fmXfGM6B93g/C1chulXZbRjqu4PXPI/adPkNbTQszpL9ANWAdekuePMnoFw4YeMrftXdmRJTI4aC+ZXzadIr2aWsK8HQTUXDmjXd/uSEo25H7fTeiENnOObc1XYy0cyOPjOnBUqIvXIhmYbwoULt2CmFsMksmxu+GXZveUOFvkHfwgbH9UdLTGSnId3ivPTs3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SA1PR15MB4545.namprd15.prod.outlook.com (2603:10b6:806:198::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Wed, 7 Jun
+ 2023 01:32:41 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::bf7d:a453:b8d9:cf0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::bf7d:a453:b8d9:cf0%6]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 01:32:41 +0000
+Message-ID: <11eb089f-9e71-856f-7f01-375176bd5edf@meta.com>
+Date:   Tue, 6 Jun 2023 18:32:37 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [PATCH bpf v3 1/2] bpf: Fix verifier tracking scalars on spill
+Content-Language: en-US
+To:     Maxim Mikityanskiy <maxtram95@gmail.com>, bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Maxim Mikityanskiy <maxim@isovalent.com>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
+References: <20230606214246.403579-1-maxtram95@gmail.com>
+ <20230606214246.403579-2-maxtram95@gmail.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20230606214246.403579-2-maxtram95@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY3PR05CA0025.namprd05.prod.outlook.com
+ (2603:10b6:a03:254::30) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SA1PR15MB4545:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4be64775-fff3-4278-3335-08db66f7159c
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3zcGIccMaDU4jDAmZC26HwUuBLterHnyHA7r6Z/znN7YqmuKmtnCaUCzXZepm17CWTODdheO0zPzLUGIRvQYyYtPNHlkcNmQN6bUXiBQ/Zc7pKvTqZEEcFRt71R9SMOIIIhHkSWJbFRKVYDNJDfVCU8IDRgJTjj14flNlfoBv59K9lF9VfQJ8oyRbIehdyR3ac755bbgNNhQflu5MsxXtwYiKt3znzZQ2A33aAXFqllh5q+yMBJcjx41pKOtyDQvjWWX2cdeTVT0NZokdn9WuquP6nTkq88jwvNTirS8DW3o2ztmBS30nu0e6j7ABIVzBsHbsCo85nMDCLJn9pEXPA4V/YC36ZJHUgWR7P1v7WvHWpf14gJZOIhSciniYwdpyswRbRa+eaBrZUA/LKrWIxEtmWLGDETGCC/OtPLS+Zq8iAPodxAknvOL5x8zKLXMJuEMnjCPlPibTqQ/8/XIQlK4N59H+GKHQQeOGY6Q6ZspYORx6YjsYzM9rhdw+YEDQTCauzTdZecl1kgarAVzZhz7EjOkpz0RM+c5fGw556tcC/2EUInSKQfjwkMTNz7GM+6nXLw0GJaqdrUfk/YDKYY8k73Ggg4i54IVR0mwh2OEKHSwNNH0gQtNSd3dmb7hWU0S+YpT64EpGKsnEkiZVA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(396003)(366004)(346002)(451199021)(53546011)(6506007)(6512007)(2616005)(38100700002)(41300700001)(6666004)(83380400001)(6486002)(31686004)(186003)(478600001)(54906003)(4326008)(66556008)(316002)(66476007)(66946007)(7416002)(8676002)(5660300002)(8936002)(86362001)(2906002)(31696002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S2l5RmRrclR2bEwweXBEeHdVRUhXZm9JSWF0QVovUjFHYU5yZklZTGcvSDJU?=
+ =?utf-8?B?bFFCbThPSHN0eHQzOGl5c2tYU09pRFBhaEllWnJmKy9lQWRaUDNjY0JhNzBR?=
+ =?utf-8?B?Y1p5bng4OFBVSC82VTdUMHJYSGsyUFhhRWN2SXR0Y2t1V0tETVozNVZ6Z2tT?=
+ =?utf-8?B?cXlHNVoxcDVEcXZiWG5oQUdaSTYrNTJ2bzZFTWFxdFJCSFZEc3IxQnptQVdO?=
+ =?utf-8?B?MTMrOXdqdmtIY1pOc1pqTi9NblFpMW11VklVRUcrMW5xay9lYUN0UVZ4WExr?=
+ =?utf-8?B?Z0dNVDhJUDZVbWQ0SWJZaDRsRWhTM3c2cEIrUlNyQ1J6bUNIVCtsakxPZ1B6?=
+ =?utf-8?B?emttV0hnSUI0N3FYeTVyNEw2ekwrY2Z3VjM4WnZlcTQwbWhKN1ZZRXNZeFpN?=
+ =?utf-8?B?YTQ3ZmZoVkdqVUdhQVhBMEpIQVdERGRyWWR2cEZrVnU4cHNmTDJyZElNRTlL?=
+ =?utf-8?B?YVVNMStEU2g0ZjI2YlpuNnVpRUcwb2F5a2xSRm9XS3huKzlqN3lPZHFoL0Nx?=
+ =?utf-8?B?cTBFdGJiRnNHQzd4dFdXRVZHMS9wdWloa0dGaWpNNk5XeVNaeTh2TjllckdG?=
+ =?utf-8?B?ZWZVMlJxbHNpQ2YveHdiaGd0VkgzR3J2VC9neDFYdUdFY2dlMVR4Z2wrdGFP?=
+ =?utf-8?B?T3lYUkpKM1VBRHpmbTZZRU5kbWdCbldFaVdsTHJ2RWREMWw2YmVQR0lZWDIv?=
+ =?utf-8?B?aWM0eG9DMkJucVMyS0k5N2dzNmcxOEhWZ3NFajl0eDFFWVoxTDRndmRiaXNN?=
+ =?utf-8?B?RW9CWVdIOU1CcU1na2wyN0JpNlYwdVpwT3UyTDk0djRSWGpaOWljZXNOWVU2?=
+ =?utf-8?B?b085Q1ZmaGoyM1NHSVptSTRHR2NlaFcrLzdTNERMb0FKS01vM2M5UGNsaUEv?=
+ =?utf-8?B?SEZoQUl3T2FvN0x2MVh1aVB0YTZmbStMTGhIMTg3S1VBekxZSzFOOWhmQWs5?=
+ =?utf-8?B?Mms2SnNxRWZXYWg2ZUMydElHS296cVY1a0E5YWVCaTk4SHV6dlYxdnV2citM?=
+ =?utf-8?B?TVJ1TW5VamJnV3h2YVVxbFZ0ajRvaEY5aXVYZ3lCV042V3pFSko0b0dsTjR5?=
+ =?utf-8?B?UkN6Slg5c2FzYVB3Y3Q0RVBjdXRHVTUxMXVLN3hxMnRLOGNPSWVkTzJtUjIz?=
+ =?utf-8?B?SFBUcWNFZ2pjTXdUK2tPMlNrSTlpbVZSZ1A3eGV4VUJHVXFSanpkUlpobWRH?=
+ =?utf-8?B?THlyV1lFOVhha2o3N0dvQ3FCa3ZBbERwSHlMSy90aFZsUE5DbzRLUXVVMXA4?=
+ =?utf-8?B?R0s0QTkzc0FEWjh4NSs5VjhIdGQ2TnZzdE05aUZ4akRCVUdkaFRXc25qUkdi?=
+ =?utf-8?B?OC9zMmxjdTFGVXZXNXljWTl6Z21oOUNsNVB1WUdhK2ZNdENva2c3cVhFUWNm?=
+ =?utf-8?B?RU5yQ1AwcklHYnRmUE1RbFh3OHBDUjJJd1FTVTZaenhsMEkvVmZEQ1FBb2dv?=
+ =?utf-8?B?UzI2a1RPNFk1NmMrQmdjOVE4N0RKL2U4UmRrZit1QXpEMTNoMUZ3dE93WjMr?=
+ =?utf-8?B?WW1abndzQzBKRFpVaWtRT0szeXN4eWtXS083Ujg0dWMwNjk2ekEyaHZtZFB6?=
+ =?utf-8?B?M1p4bjBXbWRiMkpOMS9BK0haV2RXdVR0R21IWStZV0t4QnJWVkpTVHozY3Jv?=
+ =?utf-8?B?WE5xREhpRFFMbmpVdGFCTk5ZbkUwa0NXNFZlV3JmTEZLcjdvL3c5aG1UMGhv?=
+ =?utf-8?B?UlFCa3BjcTVmZlhxeWZsaUtkbTNzejArNktaM1ZmUEQ5Sm9IaFFxc2NLQ0pO?=
+ =?utf-8?B?UExDa0FRcE1oQ1dYRnZZREJyZXB6L1JFbWNLYW9vTVJMMVdHbnQyWkEvT0FZ?=
+ =?utf-8?B?N1FoNCtQUGpuKzByK2JLaUNjYUpOcGlQcGhWK1hRSDFhZEJGTkc2bVNORmF0?=
+ =?utf-8?B?SXcyekFCYVJ4LytZVzMrU2xBZXROZzZKeEsxME5oaERxeUdyckNDeG1JUVpH?=
+ =?utf-8?B?TjFvTmp5Z3BNbXBYd2o2QklCM1lyZ3FuTExKb242dE55MjJ4c2Zsb1dPSkNH?=
+ =?utf-8?B?Wk80b3RzWTZDNkg5SXZ4MmdjVFVuWXBONG5uZ3JGYXl2M0dsb3hOeHlJOWpB?=
+ =?utf-8?B?YTdlTWJEWHE4bHdjRnRFLy93MFFXVlJvbzNLZmlDR0k5bk5NcEVIRmxQdzlT?=
+ =?utf-8?B?V1YzZFkyOUVERHMrTGdWL2JZOEVxZXdOYUY2c1JWRndTU3BjQW96clcvczVs?=
+ =?utf-8?B?SWc9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4be64775-fff3-4278-3335-08db66f7159c
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 01:32:41.0165
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4XVraXoOzGyS1pulTNCFT2eZF596pNIbkEpkYoIQgBYqWiTlJjh60AQO1uk0drY5
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4545
+X-Proofpoint-GUID: _dreRhtNCyrIcZA5pgE78x7lX1bAeMFU
+X-Proofpoint-ORIG-GUID: _dreRhtNCyrIcZA5pgE78x7lX1bAeMFU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_18,2023-06-06_02,2023-05-22_02
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Arnd, Thomas, Willy
 
-> > >     +# Additional ARCH settings for riscv
-> > >     +ifeq ($(ARCH),riscv32)
-> > >     +        SRCARCH := riscv
-> > >     +endif
-> > >     +ifeq ($(ARCH),riscv64)
-> > >     +        SRCARCH := riscv
-> > >     +endif
-> > >     +
-> > >      export cross_compiling :=
-> > >      ifneq ($(SRCARCH),$(SUBARCH))
-> > >      cross_compiling := 1
-> >
-> > I've never been a big fan of the top-level $(ARCH) setting
-> > in the kernel, is there a reason this has to be the same
-> > as the variable in tools/include/nolibc? If not, I'd just
-> > leave the Linux Makefile unchanged.
-> >
-> > For userspace we have a lot more target names than
-> > arch/*/ directories in the kernel, and I don't think
-> > I'd want to enumerate all the possibilities in the
-> > build system globally.
->
 
-Good news, I did find a better solution without touching the top-level
-Makefile, that is overriding the ARCH to 'riscv' just before the targets
-and after we got the necessary settings with the original ARCH=riscv32
-or ARCH=riscv64, but it requires to convert the '=' assignments to ':=',
-which is not that hard to do and it is more acceptable, just verified it
-and it worked well.
+On 6/6/23 2:42 PM, Maxim Mikityanskiy wrote:
+> From: Maxim Mikityanskiy <maxim@isovalent.com>
+> 
+> The following scenario describes a verifier bypass in privileged mode
+> (CAP_BPF or CAP_SYS_ADMIN):
+> 
+> 1. Prepare a 32-bit rogue number.
+> 2. Put the rogue number into the upper half of a 64-bit register, and
+>     roll a random (unknown to the verifier) bit in the lower half. The
+>     rest of the bits should be zero (although variations are possible).
+> 3. Assign an ID to the register by MOVing it to another arbitrary
+>     register.
+> 4. Perform a 32-bit spill of the register, then perform a 32-bit fill to
+>     another register. Due to a bug in the verifier, the ID will be
+>     preserved, although the new register will contain only the lower 32
+>     bits, i.e. all zeros except one random bit.
+> 
+> At this point there are two registers with different values but the same
+> ID, which means the integrity of the verifier state has been corrupted.
+> Next steps show the actual bypass:
+> 
+> 5. Compare the new 32-bit register with 0. In the branch where it's
+>     equal to 0, the verifier will believe that the original 64-bit
+>     register is also 0, because it has the same ID, but its actual value
+>     still contains the rogue number in the upper half.
+>     Some optimizations of the verifier prevent the actual bypass, so
+>     extra care is needed: the comparison must be between two registers,
+>     and both branches must be reachable (this is why one random bit is
+>     needed). Both branches are still suitable for the bypass.
+> 6. Right shift the original register by 32 bits to pop the rogue number.
+> 7. Use the rogue number as an offset with any pointer. The verifier will
+>     believe that the offset is 0, while in reality it's the given number.
+> 
+> The fix is similar to the 32-bit BPF_MOV handling in check_alu_op for
+> SCALAR_VALUE. If the spill is narrowing the actual register value, don't
+> keep the ID, make sure it's reset to 0.
+> 
+> Fixes: 354e8f1970f8 ("bpf: Support <8-byte scalar spill and refill")
+> Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
 
-    ...
+LGTM with a small nit below.
 
-     LDFLAGS := -s
+Acked-by: Yonghong Song <yhs@fb.com>
 
-    +# top-level kernel Makefile only accept ARCH=riscv, override ARCH to make kernel happy
-    +ifneq ($(findstring riscv,$(ARCH)),)
-    +override ARCH := riscv
-    +endif
-    +
-     help:
-            @echo "Supported targets under selftests/nolibc:"
-            @echo "  all          call the \"run\" target below"
+> ---
+>   kernel/bpf/verifier.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 5871aa78d01a..7be23eced561 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3856,6 +3856,8 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+>   	mark_stack_slot_scratched(env, spi);
+>   	if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) &&
+>   	    !register_is_null(reg) && env->bpf_capable) {
+> +		bool reg_value_fits;
+> +
+>   		if (dst_reg != BPF_REG_FP) {
+>   			/* The backtracking logic can only recognize explicit
+>   			 * stack slot address like [fp - 8]. Other spill of
+> @@ -3867,7 +3869,12 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+>   			if (err)
+>   				return err;
+>   		}
+> +
+> +		reg_value_fits = fls64(reg->umax_value) <= BITS_PER_BYTE * size;
+>   		save_register_state(state, spi, reg, size);
+> +		/* Break the relation on a narrowing spill. */
+> +		if (!reg_value_fits)
+> +			state->stack[spi].spilled_ptr.id = 0;
 
-This change is not that big, and the left changes can keep consistent with the
-other platforms. but I still need to add a standalone patch to convert the '='
-to ':=' to avoid the before setting using our new overridded ARCH.
+I think the code can be simplied like below:
 
-    ++ b/tools/testing/selftests/nolibc/Makefile
-    @@ -26,7 +26,7 @@ IMAGE_riscv64    = arch/riscv/boot/Image
-     IMAGE_riscv      = arch/riscv/boot/Image
-     IMAGE_s390       = arch/s390/boot/bzImage
-     IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
-    -IMAGE            = $(IMAGE_$(ARCH))
-    +IMAGE           := $(IMAGE_$(ARCH))
-     IMAGE_NAME       = $(notdir $(IMAGE))
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4230,6 +4230,8 @@ static int check_stack_write_fixed_off(struct 
+bpf_verifier_env *env,
+                                 return err;
+                 }
+                 save_register_state(state, spi, reg, size);
++               if (fls64(reg->umax_value) > BITS_PER_BYTE * size)
++                       state->stack[spi].spilled_ptr.id = 0;
+         } else if (!reg && !(off % BPF_REG_SIZE) && is_bpf_st_mem(insn) &&
+                    insn->imm != 0 && env->bpf_capable) {
+                 struct bpf_reg_state fake_reg = {};
 
-     # default kernel configurations that appear to be usable
-    @@ -41,7 +41,7 @@ DEFCONFIG_riscv64    = defconfig
-     DEFCONFIG_riscv      = defconfig
-     DEFCONFIG_s390       = defconfig
-     DEFCONFIG_loongarch  = defconfig
-    -DEFCONFIG            = $(DEFCONFIG_$(ARCH))
-    +DEFCONFIG           := $(DEFCONFIG_$(ARCH))
-
-     # optional tests to run (default = all)
-     TEST =
-    @@ -58,7 +58,7 @@ QEMU_ARCH_riscv64    = riscv64
-     QEMU_ARCH_riscv      = riscv64
-     QEMU_ARCH_s390       = s390x
-     QEMU_ARCH_loongarch  = loongarch64
-    -QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
-    +QEMU_ARCH           := $(QEMU_ARCH_$(ARCH))
-
-     # QEMU_ARGS : some arch-specific args to pass to qemu
-     QEMU_ARGS_i386       = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-    @@ -72,7 +72,7 @@ QEMU_ARGS_riscv64    = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_T
-     QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-     QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-     QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-    -QEMU_ARGS            = $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_EXTRA)
-    +QEMU_ARGS           := $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_EXTRA)
-
-     # OUTPUT is only set when run from the main makefile, otherwise
-     # it defaults to this nolibc directory.
-    @@ -87,11 +87,18 @@ endif
-     CFLAGS_riscv32 = -march=rv32im -mabi=ilp32
-     CFLAGS_s390 = -m64
-     CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
-    -CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
-    +CFLAGS_default := -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
-                    $(call cc-option,-fno-stack-protector) \
-                    $(CFLAGS_$(ARCH)) $(CFLAGS_STACKPROTECTOR)
-    +
-    +CFLAGS  ?= $(CFLAGS_default)
-
-Thanks a lot, will send v4 later.
-
-Best regards,
-Zhangjin
-
-> Ok, agree very much, it is the root cause why we used the old method
-> before, because I don't want to touch the top-level Makefile, here
-> explains the details again just as did for Thomas and Willy [1] ;-)
->
-> Without the top-level makefile change, we must add something in
-> selftests/nolibc/Makefile like this, because the kernel makefile doesn't
-> accept something like ARCH=riscv32 and ARCH=riscv64 currently, it only
-> accepts ARCH=riscv (will paste the code later).
->
->     ifneq ($(findstring riscv,$(ARCH)),)
->       _ARCH = riscv
->     else
->       _ARCH = $(ARCH)
->     endif
->
->     ...
->
->     sysroot/$(ARCH)/include:
-> 	$(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
-> 	$(QUIET_MKDIR)mkdir -p sysroot
-> 	$(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(_ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
-> 	$(Q)mv sysroot/sysroot sysroot/$(ARCH)
->
->     defconfig:
->     	$(Q)$(MAKE) -C $(srctree) ARCH=$(_ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
->
->     kernel: initramfs
->     	$(Q)$(MAKE) -C $(srctree) ARCH=$(_ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
->
-> The above change really works, but it looks not that good, this is the
-> mixing use of _ARCH and ARCH I mentioned in last reply.
->
-> Otherwise, we will get such error:
->
->     $ make run ARCH=riscv64 CROSS_COMPILE=riscv64-linux-gnu-
->       MKDIR   sysroot/riscv64/include
->     make[1]: Entering directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
->     make[2]: Entering directory '/labs/linux-lab/src/linux-stable'
->     Makefile:763: arch/riscv64/Makefile: No such file or directory
->     make[2]: *** No rule to make target 'arch/riscv64/Makefile'.  Stop.
->     make[2]: Leaving directory '/labs/linux-lab/src/linux-stable'
->     make[1]: *** [Makefile:87: headers_standalone] Error 2
->     make[1]: Leaving directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
->     make: *** [Makefile:129: sysroot/riscv64/include] Error 2
->     $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu-
->       MKDIR   sysroot/riscv32/include
->     make[1]: Entering directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
->     make[2]: Entering directory '/labs/linux-lab/src/linux-stable'
->     Makefile:763: arch/riscv32/Makefile: No such file or directory
->     make[2]: *** No rule to make target 'arch/riscv32/Makefile'.  Stop.
->     make[2]: Leaving directory '/labs/linux-lab/src/linux-stable'
->     make[1]: *** [Makefile:87: headers_standalone] Error 2
->     make[1]: Leaving directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
->     make: *** [Makefile:129: sysroot/riscv32/include] Error 2
->
-> That's because in top-level Makefile, it doesn't accept ARCH=riscv32 and
-> ARCH=riscv64, but x86 and sparc and even parisc support such variants,
-> this allows the ARCH variants share the same arch/<SRCARCH>/ source code
-> tree, otherwise, they will directly find the arch/<ARCH>/ source code,
-> then fails.
->
->     top-level Makefile:
->
->     ...
->     ARCH            ?= $(SUBARCH)
->
->     # Architecture as present in compile.h
->     UTS_MACHINE     := $(ARCH)
->     SRCARCH         := $(ARCH)   ---> SRCARCH is assigned as ARCH by default
->
->     # Additional ARCH settings for x86
->     ifeq ($(ARCH),i386)
->             SRCARCH := x86
->     endif
->     ifeq ($(ARCH),x86_64)
->             SRCARCH := x86
->     endif
->
->     # Additional ARCH settings for sparc
->     ifeq ($(ARCH),sparc32)
->            SRCARCH := sparc
->     endif
->     ifeq ($(ARCH),sparc64)
->            SRCARCH := sparc
->     endif
->
->     # Additional ARCH settings for parisc
->     ifeq ($(ARCH),parisc64)
->            SRCARCH := parisc
->     endif
->
-> So, to really align with x86, we should let the top-level makefile be
-> able to get the right SRCARCH for riscv32 and riscv64 too ;-)
->
-> I even tried to pass SRCARCH=riscv to the top-level Makefile, but it
-> failed:
->
->     diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
->     index 1b2247a6365d..04067776b569 100644
->     --- a/tools/testing/selftests/nolibc/Makefile
->     +++ b/tools/testing/selftests/nolibc/Makefile
->     @@ -14,6 +14,10 @@ include $(srctree)/scripts/subarch.include
->      ARCH = $(SUBARCH)
->      endif
->
->     +ifneq ($(findstring riscv,$(ARCH)),)
->     +SRCARCH := SRCARCH=riscv
->     +endif
->     +
->      # kernel image names by architecture
->      IMAGE_i386       = arch/x86/boot/bzImage
->      IMAGE_x86_64     = arch/x86/boot/bzImage
->     @@ -126,7 +130,7 @@ sysroot: sysroot/$(ARCH)/include
->      sysroot/$(ARCH)/include:
->             $(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
->             $(QUIET_MKDIR)mkdir -p sysroot
->     -       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
->     +       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) $(SRCARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
->             $(Q)mv sysroot/sysroot sysroot/$(ARCH)
->
->      nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
->     @@ -150,10 +154,10 @@ initramfs: nolibc-test
->             $(Q)cp nolibc-test initramfs/init
->
->      defconfig:
->     -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
->     +       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) $(SRCARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
->
->      kernel: initramfs
->     -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
->     +       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) $(SRCARCH )CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
->
->      # run the tests after building the kernel
->      run: kernel
->
->     $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- QEMU_ARGS_EXTRA="-bios /labs/linux-lab/opensbi-riscv32-generic-fw_dynamic.bin"
->       MKDIR   sysroot/riscv32/include
->     make[1]: Entering directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
->     make[2]: Entering directory '/labs/linux-lab/src/linux-stable'
->     Makefile:397: srcarch: riscv
->     make[2]: Leaving directory '/labs/linux-lab/src/linux-stable'
->     make[2]: Entering directory '/labs/linux-lab/src/linux-stable'
->     Makefile:397: srcarch: riscv
->       INSTALL /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/sysroot/sysroot/include
->     make[2]: Leaving directory '/labs/linux-lab/src/linux-stable'
->     make[1]: Leaving directory '/labs/linux-lab/src/linux-stable/tools/include/nolibc'
->       CC      nolibc-test
->       MKDIR   initramfs
->       INSTALL initramfs/init
->     make[1]: Entering directory '/labs/linux-lab/src/linux-stable'
->     Makefile:397: srcarch: riscv32
->       SYNC    include/config/auto.conf.cmd
->     Makefile:397: srcarch: riscv32
->     Makefile:687: arch/riscv32/Makefile: No such file or directory
->     make[2]: *** No rule to make target 'arch/riscv32/Makefile'.  Stop.
->     make[1]: *** [Makefile:795: include/config/auto.conf.cmd] Error 2
->     make[1]: Leaving directory '/labs/linux-lab/src/linux-stable'
->
-> So, to keep consistent eventually, perhaps we do need to touch the
-> top-level Makefile.
->
-> Best regards,
-> Zhangjin
->
-> [1]: https://lore.kernel.org/linux-riscv/20230526092029.149351-1-falcon@tinylab.org/
->
-> >     Arnd
+>   	} else if (!reg && !(off % BPF_REG_SIZE) && is_bpf_st_mem(insn) &&
+>   		   insn->imm != 0 && env->bpf_capable) {
+>   		struct bpf_reg_state fake_reg = {};
