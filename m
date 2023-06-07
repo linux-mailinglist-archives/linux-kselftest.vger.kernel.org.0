@@ -2,174 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B3B72722D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 00:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6247C727287
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 00:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbjFGWzC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 18:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S229944AbjFGW6F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 18:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233139AbjFGWzA (ORCPT
+        with ESMTP id S229499AbjFGW6E (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 18:55:00 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D8F1FEA
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 15:54:54 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-97458c97333so881866b.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jun 2023 15:54:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686178493; x=1688770493;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=ZyieX1JAoOA7e6VkLdF85cS2BY4cQvDbL6o+xYaiiDE75fbNNMeoWverOzT52D4k2S
-         UYxoSJ2sm5xGBh8kGc5D0kAtYSbrkHKN7yaUsJGKRZoZXYrBXYeNkJg7vpsqI0ZjAmch
-         3x4lCBRFtDEICvCdIQ19CxXIxIMp7RqH7HgNNtZzrb+GNtp7UmkWpCYK0Mqw+TGqa2DT
-         Wvk1MhQkef7IdoZAN3IJWtskq7+eTMruF3Uq3kN0Wjfw07kba3wtEsWoMqE1Zay+Onj3
-         n2iJopnA3FIssXaBEX6Uelz+337ycjqTLZUyQ07MpeQf4qzAhsJurfOMFWTBWT4Ke8x2
-         t7lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686178493; x=1688770493;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=EWOZOresL0wViOEmDQI4xeGzy8W4NtaQt01/dhkjwn1GZxhJQYKI6nbeMMuFFQYdww
-         n3QNrCM6aomS7fLmkhetFG+7iG/uHCS+yebiIIWSSxuHc5XRY2zQQAB7d1l8RqHyD4Ie
-         Y+pILfLIYjyFa9U5Nz8f+ZxNXy+82Ejsw6J3mgGs1dSzcCJB2q8W0d1M4ExownJzBoUi
-         XjstzlsSl/Okfal4X3ZHYwgzm4Bx9rPZ+DxsrZNFzGzLxfT1IgOIh+KSOAVP/DDEZJys
-         fMYv8+Bysb2aZ4ffsjuKLfafcK/xmbnTcdmD24FRynALutalcJwYUEOwbILI53k4kV3x
-         FXHA==
-X-Gm-Message-State: AC+VfDxiU8AnxvTSJa3evZFYyAT8PMrkHb5eD3pHXqHgVgwyiGbbG+qh
-        qmAWh8/wwaoVuHNxiJ2hCLG7OT+V/W3+pNG8sbU=
-X-Google-Smtp-Source: ACHHUZ5q9v5E8VuN7LGrTh1boUYVANIIUnJnBwlK4YNL8XVT+z7GalrAexguq0b795Op+2qoCUEoHnMN8sFXq0M0ebg=
-X-Received: by 2002:a17:907:8a15:b0:96f:d154:54f7 with SMTP id
- sc21-20020a1709078a1500b0096fd15454f7mr7113590ejc.42.1686178492570; Wed, 07
- Jun 2023 15:54:52 -0700 (PDT)
+        Wed, 7 Jun 2023 18:58:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0630172E;
+        Wed,  7 Jun 2023 15:58:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B8C96155F;
+        Wed,  7 Jun 2023 22:58:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC0E3C433D2;
+        Wed,  7 Jun 2023 22:58:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686178681;
+        bh=A0HX1RU1GSuXaRTz85AGqKCyQ3aEmW4bTVShh6uh+us=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=u654hnPOwu3yv0r5oPOC05geLIuaqYHTSGEfNn+S98AuqAiF41Xfeu1NNbTjrMMBz
+         T9zh8zKmyAaxcyDFD+xyvW1vHp2jNsupflM5zNzcPuf5x0e0tC6AeMNud7lHnvvwQf
+         FP614UxphJJSbQGRac5rJPG0cN2+WJ7sIMbn4A8CqZ9JKUGB7TMjZsqKRlQSQOUcsw
+         W0yYDnBXbNwG1EhR/gok8UJz0jSLlnKw2cF1TRatrRgr8SPmzC8Yyt+6x4qt3h9BG+
+         3VkxUJ+CBDI81ucXlo6BUT9h7XU+Y5TZhulPYrifH3kammVfyobhl5E2okvzP3s2J0
+         n05Yll5tCp+MQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 44B77CE3A6C; Wed,  7 Jun 2023 15:58:01 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 15:58:01 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: nolibc patches, still possible for 6.5 ?
+Message-ID: <66c0e446-846c-47a6-ab60-948dc0118cec@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <ZHyPi29q3MKiNAQZ@1wt.eu>
+ <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
+ <ZID0b+nIcypMjV0y@1wt.eu>
 MIME-Version: 1.0
-Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
- 15:54:52 -0700 (PDT)
-Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
-From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
-        <successikolo@gmail.com>
-Date:   Wed, 7 Jun 2023 15:54:52 -0700
-Message-ID: <CADFNGJ8vkgORi1jPvvhP+FQnPCNqs4cr588+_a-ywDXpqf+qKA@mail.gmail.com>
-Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:635 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [successikolo[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
-        *  0.0 MONEY_FORM Lots of money if you fill out a form
-        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZID0b+nIcypMjV0y@1wt.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-UNITED NATION DEPUTY SECRETARY-GENERAL.
+On Wed, Jun 07, 2023 at 11:19:43PM +0200, Willy Tarreau wrote:
+> Hello Paul,
+> 
+> On Sun, Jun 04, 2023 at 03:57:54PM -0700, Paul E. McKenney wrote:
+> > On Sun, Jun 04, 2023 at 03:20:11PM +0200, Willy Tarreau wrote:
+> > > Hello Paul,
+> > > 
+> > > Thomas and Zhangjin have provided significant nolibc cleanups, and
+> > > fixes, as well as preparation work to later support riscv32.
+> > > 
+> > > These consist in the following main series:
+> > >   - generalization of stackprotector to other archs that were not
+> > >     previously supported (riscv, mips, loongarch, arm, arm64)
+> > > 
+> > >   - general cleanups of the makefile, test report output, deduplication
+> > >     of certain tests
+> > > 
+> > >   - slightly better compliance of some tests performed on certain syscalls
+> > >     (e.g. no longer pass (void*)1 to gettimeofday() since glibc hates it).
+> > > 
+> > >   - add support for nanoseconds in stat() and statx()
+> > > 
+> > >   - fixes for some syscalls (e.g. ppoll() has 5 arguments not 4)
+> > > 
+> > >   - fixes around limits.h and  INT_MAX / INT_FAST64_MAX
+> > > 
+> > > I rebased the whole series on top of your latest dev branch (d19a9ca3d5)
+> > > and it works fine for all archs.
+> > > 
+> > > I don't know if you're still planning on merging new stuff in this area
+> > > for 6.5 or not (since I know that it involves new series of tests on your
+> > > side as well), but given that Zhangjin will engage into deeper changes
+> > > later for riscv32 that will likely imply to update more syscalls to use
+> > > the time64 ones, I would prefer to split the cleanups from the hard stuff,
+> > > but I'll let you judge based on the current state of what's pending for
+> > > 6.5.
+> > > 
+> > > In any case I'm putting all this here for now (not for merge yet):
+> > > 
+> > >    git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230604-nolibc-rv32+stkp6
+> > > 
+> > > I'd like Thomas and Zhangjin to perform a last check to confirm they're
+> > > OK with this final integration.
+> > 
+> > Given that the testing converges by the end of this week, I can't see
+> > any reason why these cannot make v6.5.  (There were some kernel test
+> > robot complaints as well, valid or not I am not sure.)
+> 
+> After Thomas' and Zhangjin's reviews and checks, I could run a mostly
+> complete check:
+>   - arm64, i386, x86_64 show 100% success
+>   - arm, mips: 100% success, stackprotector skipped
+>   - s390x, riscv64: run-user OK, kernel build fails (see below)
+>   - loongarch: build OK, just not executed (need to upgrade my qemu
+>     and I hate doing it late when some tests results are needed)
 
-This is to official inform you that we have been having meetings for
-the past three (3) weeks which ended two days ago with MR. JIM YONG
-KIM the world bank president and other seven continent presidents on
-the congress we treated on solution to scam victim problems.
+Very good!
 
- Note: we have decided to contact you following the reports we
-received from anti-fraud international monitoring group your
-name/email has been submitted to us therefore the united nations have
-agreed to compensate you with the sum of (USD$ 1.5 Million) this
-compensation is also including international business that failed you
-in the past due to government problems etc.
+> Regarding the build failure affecting s390x and riscv64, it's a regular
+> kernel resulting from "make defconfig". For both archs, I'm getting this
+> failure:
+> 
+>   In file included from kernel/rcu/update.c:649:
+>   kernel/rcu/tasks.h: In function 'get_rcu_tasks_gp_kthread':
+>     CC      fs/kernfs/dir.o
+>     CC      security/bpf/hooks.o
+>   kernel/rcu/tasks.h:1939:16: error: 'rcu_tasks' undeclared (first use in this function)
+>    1939 |         return rcu_tasks.kthread_ptr;
+>         |                ^~~~~~~~~
+>   kernel/rcu/tasks.h:1939:16: note: each undeclared identifier is reported only once for each function it appears in
+>   kernel/rcu/tasks.h:1940:1: error: control reaches end of non-void function [-Werror=return-type]
+>    1940 | }
+>         | ^
+>   cc1: some warnings being treated as errors
+> 
+> I rebased the branch on top of 6.4-rc5 and got the same. I'm building
+> with gcc-11.3.0 from kernel.org. I'm not sure whether this comes from
+> my build environment or recent changes to the kernel, but I'm sure I
+> haven't seen that error during 6.3-rc cycle. However, given that
+> Zhangjin seems to have successfully built it for riscv, there might
+> be something odd on my side.
 
- We have arranged your payment through our ATM Master Card and
-deposited it in DHL Office to deliver it to you which is the latest
-instruction from the World Bank president MR. JIM YONG KIM, For your
-information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
-he
-only money you will send to DHL office south Korea is
-($500). for security keeping fee, U.N coordinator already paid for
-others charges fees for delivery except the security keeping fee, the
-director of DHL refused to collect the security keeping fee from U.N
-coordinator, the Director of DHL office said that they don=E2=80=99t know
-exactly time you will contact them to reconfirm your details to avoid
-counting demur-rage that is why they refused collecting the ($500) .
-for security keeping fee.
+That line of code is in rcu/dev but not in mainline yet.  In fact, it
+is not yet in -next.
 
- Therefore be advice to contact DHL Office agent south Korea. Rev:John
-Lee Tae-seok
-who is in position to deliver your ATM
-Master Card to your location address, contact DHL Office immediately
-with the bellow email & phone number as listed below.
+But it is a bug.  One that my Kconfig laziness hid from me.  Easy fix,
+but it is clearly time for me to stop being lazy about that part of the
+Kconfig setup.  :-/
 
- Contact name: John Lee Tae-seok
+So thank you for reporting it!
 
- Email:( dhlgeneralheadquartersrepublic@gmail.com )
+> Given that this build issue is not dependent on the selftest, I'm fine
+> with the branch getting merged as-is, and can provide feedback on this
+> build error if needed:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230606-nolibc-rv32+stkp7a
+> 
+> Just let me know if you prefer that I resend the whole series or need
+> more info etc, as usual.
 
- Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
+I will pull it from your tree, test it, and if all goes well, rebase it
+on my existing nolibc stack.
 
- read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
+Longer term, both to avoid you having to deal with RCU bugs and to make
+it easier to have multiple administrative nolibc maintainers, it might
+work better for you to base your stack on vX.y-rc1.  That way, I could
+just pull directly from your tree.
 
- Make sure you reconfirmed DHL Office your details ASAP as stated
-below to avoid wrong delivery.
+This works because you buffer up the commits and test them, which
+makes it completely reasonable for me to simply pull your new stack
+and merge them in.  Which also means that if there are multiple nolibc
+administrative maintainers, we have exactly the same set of nolibc
+commits in our respective trees, right down to the SHA-1 hashes.
 
- Your full name..........
+This approach is used a lot, for example, back when my RCU patches
+went through Ingo Molnar, he pulled from my tree so that mainline's RCU
+patches were identical to mine, again, right down to the SHA-1 hashes.
 
- Home address:.........
+This is something to think about for some upcoming cycle, given that
+we are already pretty much set up for the upcoming merge window.
 
- Your country...........
+Your choice, either way works for me.
 
- Your city..............
-
- Telephone......
-
- Occupation:.......
-
- Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
-
- Let us know as soon as possible you receive your ATM MasterCard
-for proper verification.
-
- Regards,
-
- Mrs Vivian kakadu.
-
- DEPUTY SECRETARY-GENERAL (U.N)
+							Thanx, Paul
