@@ -2,40 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9441725AA3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 11:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539B7725AE3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 11:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239356AbjFGJg1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 05:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
+        id S239492AbjFGJn2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 05:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239837AbjFGJgZ (ORCPT
+        with ESMTP id S239485AbjFGJn1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:36:25 -0400
+        Wed, 7 Jun 2023 05:43:27 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18A31BC2;
-        Wed,  7 Jun 2023 02:36:03 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1686130553tmsdhqdy
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C132EB;
+        Wed,  7 Jun 2023 02:43:24 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1686130994t5ggma8m
 Received: from linux-lab-host.localdomain ( [61.141.77.49])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 17:35:52 +0800 (CST)
-X-QQ-SSF: 00200000000000D0V000000A0000000
-X-QQ-FEAT: lkL5M32tl2CKtzfdmJppNXVfPo4dxxS2i5yjRnmFQwVRtg9qihhO/bdGb8f45
-        yWn2uxZLxaR03l3EEyG3ZSe+rmOHf0zQcc978/tiuiHl9/xeA/a5gsfw1Iz5iwm9HgXYtxx
-        PP8ebuEvcyWxkYw5KtdUj/NMNt0ADHXsRQs4S7w5o7GFUXvGt70EaVa1Z9M2HAzmkU0j/3+
-        Ly/ztVpho8T0NWn1hGi9u1c3QjZoSjFOtbvsYaVB9tnmAOJ4B3oiKbDMiv+FjFA+JDdXPCE
-        Izip3hN+MT1jbZAgpNtiTLAHenU2xXWtiLfC3EzFz8W4ty+E3z3Xdes0vghwexbdeA149FC
-        1h5T5I9ph8YUWFsHRh2goaMbO2tFv9l+YES8qlLlsYf4mDSk5c1NABZFvisRPFGLWZakBFf
-        qSvd39YkcwE=
+        id ; Wed, 07 Jun 2023 17:43:13 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: CR3LFp2JE4mfAn2LSTK1xi8qQ4UyRaoYMHxJsMRywKHgdAG3qZj5i/iI8Gq2F
+        qluTGaMPCQg796dEjFelUhz3yE2cRQpMvoRAnhlccXre+mIYL9qQKu4FMQhAgYBJSweglF9
+        kr/0leOh4j8oBKxFg2gyyU9V4K8lOvNTc9+IyvSJpknvm0Jzi96r0jlC9kGPAKAOg3NKisU
+        cWrZgto44qMqQuSFpnk1OcEj3Tt/+aCPDl2NgC+RN85mQQVMP0ndJNtF9xySZ9dMSJM1XLq
+        byk1dnIYv3TABQOU5bFFTJIe9OxHppx3H3IykqTdkFIjFRI8u00KYm8ryj+Vx4BSU5xFBNZ
+        6I11YXK6OZjQJ06s26jew+8E/pe+8Dosv1Fu1grJgVykfNd5N/UZrVsKqjH/WsYVgpQ9RTJ
+        r2CCAVQVlBKzO2SjacAyKA==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 14568529187218780332
+X-BIZMAIL-ID: 1815332739325030604
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v4 2/3] tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
-Date:   Wed,  7 Jun 2023 17:27:52 +0800
-Message-Id: <1b2ace57de2f47ae0da4457845594baf59f7e06d.1686128703.git.falcon@tinylab.org>
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v4 3/3] selftests/nolibc: riscv: customize makefile for rv32
+Date:   Wed,  7 Jun 2023 17:37:01 +0800
+Message-Id: <3698e3629148550146b986cda61539a647ebd589.1686128703.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1686128703.git.falcon@tinylab.org>
 References: <cover.1686128703.git.falcon@tinylab.org>
@@ -53,77 +54,130 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Compiling nolibc for rv32 got such errors:
+Both riscv64 and riscv32 have:
 
-    nolibc/sysroot/riscv/include/sys.h: In function ‘sys_gettimeofday’:
-    nolibc/sysroot/riscv/include/sys.h:557:21: error: ‘__NR_gettimeofday’ undeclared (first use in this function); did you mean ‘sys_gettimeofday’?
-      557 |  return my_syscall2(__NR_gettimeofday, tv, tz);
-          |                     ^~~~~~~~~~~~~~~~~
-    nolibc/sysroot/riscv/include/sys.h: In function ‘sys_lseek’:
-    nolibc/sysroot/riscv/include/sys.h:675:21: error: ‘__NR_lseek’ undeclared (first use in this function)
-      675 |  return my_syscall3(__NR_lseek, fd, offset, whence);
-          |                     ^~~~~~~~~~
-    nolibc/sysroot/riscv/include/sys.h: In function ‘sys_wait4’:
-    nolibc/sysroot/riscv/include/sys.h:1341:21: error: ‘__NR_wait4’ undeclared (first use in this function)
-     1341 |  return my_syscall4(__NR_wait4, pid, status, options, rusage);
+* the same arch/riscv source code tree
+* the same tools/include/nolibc/arch-riscv.h
+* the same ARCH=riscv value passed to top-level kernel Makefile
 
-If a syscall macro is not supported by a target platform, wrap it with
-'#ifdef' and 'return -ENOSYS' for the '#else' branch, which lets the
-other syscalls work as-is and allows developers to fix up the test
-failures reported by nolibc-test one by one later.
+The only differences are:
 
-This wraps all of the failed syscall macros with '#ifdef' and 'return
--ENOSYS' for the '#else' branch, so, all of the undeclared failures are
-fixed.
+* riscv64 uses defconfig, riscv32 uses rv32_defconfig
+* riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
+* riscv32 has different compiler options (-march= and -mabi=)
 
+So, riscv32 can share most of the settings with riscv64, add riscv32
+support like the original ARCH=riscv support.
+
+To align with x86, the default riscv is reserved for riscv64 and a new
+riscv64 is also added to allow users pass ARCH=riscv64 directly.
+
+Since top-level kernel Makefile only accept ARCH=riscv, to make it
+happy, let's add a KARCH, set it as riscv for riscv32 and riscv64, and
+set it as original ARCH for the others, at last pass it to kernel
+targets with ARCH=$(KARCH).
+
+The same ARCH=$(KARCH) passed to tools/include/nolibc/Makefile, for both
+arch-riscv.h and the headers_standalone target require it too.
+
+Usage:
+
+    $ make defconfig ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
+    $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
+
+Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
+Link: https://lore.kernel.org/linux-riscv/4a3b1cdf-91d5-4668-925e-21f8f5c64a92@t-8ch.de/
 Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/linux-riscv/d1c83340-af4c-4780-a101-b9d22b47379c@app.fastmail.com/
+Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/lkml/ZIAywHvr6UB1J4of@1wt.eu/
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/sys.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ tools/testing/selftests/nolibc/Makefile | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 78c86f124335..5464f93e863e 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -554,7 +554,11 @@ long getpagesize(void)
- static __attribute__((unused))
- int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
- {
-+#ifdef __NR_gettimeofday
- 	return my_syscall2(__NR_gettimeofday, tv, tz);
-+#else
-+	return -ENOSYS;
-+#endif
- }
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 4a3a105e1fdf..48fa22817d90 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -14,6 +14,11 @@ include $(srctree)/scripts/subarch.include
+ ARCH = $(SUBARCH)
+ endif
  
- static __attribute__((unused))
-@@ -672,7 +676,11 @@ int link(const char *old, const char *new)
- static __attribute__((unused))
- off_t sys_lseek(int fd, off_t offset, int whence)
- {
-+#ifdef __NR_lseek
- 	return my_syscall3(__NR_lseek, fd, offset, whence);
-+#else
-+	return -ENOSYS;
-+#endif
- }
++# kernel supported ARCH names by architecture
++KARCH_riscv32    = riscv
++KARCH_riscv64    = riscv
++KARCH            = $(or $(KARCH_$(ARCH)),$(ARCH))
++
+ # kernel image names by architecture
+ IMAGE_i386       = arch/x86/boot/bzImage
+ IMAGE_x86_64     = arch/x86/boot/bzImage
+@@ -21,6 +26,8 @@ IMAGE_x86        = arch/x86/boot/bzImage
+ IMAGE_arm64      = arch/arm64/boot/Image
+ IMAGE_arm        = arch/arm/boot/zImage
+ IMAGE_mips       = vmlinuz
++IMAGE_riscv32    = arch/riscv/boot/Image
++IMAGE_riscv64    = arch/riscv/boot/Image
+ IMAGE_riscv      = arch/riscv/boot/Image
+ IMAGE_s390       = arch/s390/boot/bzImage
+ IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
+@@ -34,6 +41,8 @@ DEFCONFIG_x86        = defconfig
+ DEFCONFIG_arm64      = defconfig
+ DEFCONFIG_arm        = multi_v7_defconfig
+ DEFCONFIG_mips       = malta_defconfig
++DEFCONFIG_riscv32    = rv32_defconfig
++DEFCONFIG_riscv64    = defconfig
+ DEFCONFIG_riscv      = defconfig
+ DEFCONFIG_s390       = defconfig
+ DEFCONFIG_loongarch  = defconfig
+@@ -49,6 +58,8 @@ QEMU_ARCH_x86        = x86_64
+ QEMU_ARCH_arm64      = aarch64
+ QEMU_ARCH_arm        = arm
+ QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
++QEMU_ARCH_riscv32    = riscv32
++QEMU_ARCH_riscv64    = riscv64
+ QEMU_ARCH_riscv      = riscv64
+ QEMU_ARCH_s390       = s390x
+ QEMU_ARCH_loongarch  = loongarch64
+@@ -61,6 +72,8 @@ QEMU_ARGS_x86        = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(
+ QEMU_ARGS_arm64      = -M virt -cpu cortex-a53 -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_arm        = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_riscv32    = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_riscv64    = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+@@ -76,6 +89,7 @@ else
+ Q=@
+ endif
  
- static __attribute__((unused))
-@@ -1338,7 +1346,11 @@ int unlink(const char *path)
- static __attribute__((unused))
- pid_t sys_wait4(pid_t pid, int *status, int options, struct rusage *rusage)
- {
-+#ifdef __NR_wait4
- 	return my_syscall4(__NR_wait4, pid, status, options, rusage);
-+#else
-+	return -ENOSYS;
-+#endif
- }
++CFLAGS_riscv32 = -march=rv32im -mabi=ilp32
+ CFLAGS_s390 = -m64
+ CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
+ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+@@ -117,7 +131,7 @@ sysroot: sysroot/$(ARCH)/include
+ sysroot/$(ARCH)/include:
+ 	$(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
+ 	$(QUIET_MKDIR)mkdir -p sysroot
+-	$(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
++	$(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(KARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
+ 	$(Q)mv sysroot/sysroot sysroot/$(ARCH)
  
- static __attribute__((unused))
+ nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
+@@ -141,10 +155,10 @@ initramfs: nolibc-test
+ 	$(Q)cp nolibc-test initramfs/init
+ 
+ defconfig:
+-	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
++	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+ 
+ kernel: initramfs
+-	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
++	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
+ 
+ # run the tests after building the kernel
+ run: kernel
 -- 
 2.25.1
 
