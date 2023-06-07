@@ -2,38 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24EC7252C3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 06:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87892725343
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 07:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbjFGEVl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 00:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S233006AbjFGFTa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 01:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234126AbjFGEVT (ORCPT
+        with ESMTP id S230504AbjFGFT3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 00:21:19 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB106273A;
-        Tue,  6 Jun 2023 21:18:13 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 3574HDVJ030768;
-        Wed, 7 Jun 2023 06:17:13 +0200
-Date:   Wed, 7 Jun 2023 06:17:13 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, thomas@t-8ch.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 3/3] selftests/nolibc: riscv: customize makefile for
- rv32
-Message-ID: <ZIAEybZdXywKv43C@1wt.eu>
-References: <20230606120755.548017-1-falcon@tinylab.org>
- <20230607012032.585223-1-falcon@tinylab.org>
+        Wed, 7 Jun 2023 01:19:29 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808051735;
+        Tue,  6 Jun 2023 22:19:26 -0700 (PDT)
+X-QQ-mid: bizesmtp71t1686115155t27gq16b
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 07 Jun 2023 13:19:14 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: G46xFj+wOV9ykUVNNQSk0ai1FCe8wBOCLmMzZ7Pq9KMAMo+Ve+JiiOCA59xXL
+        LB+wGdNEQ5CzSFxziqNgxV9VzBrE8HihejgKfwc/We1fHyyT2wAfikXPh26ziGGx97VgxAR
+        83s5NEOIzdP0+/C0LsLXZqD2C7eJw9tWBBvEWyf5wILHUYui/R4KysjOnWWAkUrkyPZ/Ain
+        /+3yOZNyyrP9hKwwUj2867Yzp2MSXS7ySdlYuMGqfzxJjNZk6lj3LtDpHpadq6mIp1P4snf
+        A6h3q1T1eI1OCqfzYqaS17X89RyvzKsGlHkm3d0GjyktR60s98HEBmzD8vO+VKCUFK095h+
+        VO/5+WyaSOTdsgTnCHpjrCpEsbn4EmrUgfyPFlWN4JnWE0tQxvOotFuzblVkx648JDWe2HX
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 4025936494722067388
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     arnd@arndb.de, w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v3 1/3] tools/nolibc: fix up #error compile failures with -ENOSYS
+Date:   Wed,  7 Jun 2023 13:19:14 +0800
+Message-Id: <20230607051914.667047-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <4fcdd08c-e6fb-40b7-9f2b-77f96e798b37@app.fastmail.com>
+References: <4fcdd08c-e6fb-40b7-9f2b-77f96e798b37@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607012032.585223-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,126 +53,98 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+> On Sat, Jun 3, 2023, at 11:01, Zhangjin Wu wrote:
+> >
+> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > Link:
+> > https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/include/nolibc/sys.h | 26 +++++++++++++-------------
+> >  1 file changed, 13 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > index 856249a11890..78c86f124335 100644
+> > --- a/tools/include/nolibc/sys.h
+> > +++ b/tools/include/nolibc/sys.h
+> > @@ -124,7 +124,7 @@ int sys_chmod(const char *path, mode_t mode)
+> >  #elif defined(__NR_chmod)
+> >  	return my_syscall2(__NR_chmod, path, mode);
+> >  #else
+> > -#error Neither __NR_fchmodat nor __NR_chmod defined, cannot implement
+> > sys_chmod()
+> > +	return -ENOSYS;
+> >  #endif
+> >  }
+>
+> I think the most logical would be to have each syscall (chmod,
+> fchmodat, ...) have its own function that returns -ENOSYS if
+> that is not defined, and have the logic that decides which one
+> to use as a separate function.
+>
 
-On Wed, Jun 07, 2023 at 09:20:32AM +0800, Zhangjin Wu wrote:
-> Arnd, Thomas, Willy
-> 
-> > > >     +# Additional ARCH settings for riscv
-> > > >     +ifeq ($(ARCH),riscv32)
-> > > >     +        SRCARCH := riscv
-> > > >     +endif
-> > > >     +ifeq ($(ARCH),riscv64)
-> > > >     +        SRCARCH := riscv
-> > > >     +endif
-> > > >     +
-> > > >      export cross_compiling :=
-> > > >      ifneq ($(SRCARCH),$(SUBARCH))
-> > > >      cross_compiling := 1
-> > >
-> > > I've never been a big fan of the top-level $(ARCH) setting
-> > > in the kernel, is there a reason this has to be the same
-> > > as the variable in tools/include/nolibc? If not, I'd just
-> > > leave the Linux Makefile unchanged.
-> > >
-> > > For userspace we have a lot more target names than
-> > > arch/*/ directories in the kernel, and I don't think
-> > > I'd want to enumerate all the possibilities in the
-> > > build system globally.
+Yeah, agreed, we can clean up them one by one, If split them to their own
+syscalls, I have two questions (for Arnd, and Willy too):
 
-Actually it's not exactly used by nolibc, except to pass to the kernel
-for the install part to extract kernel headers (make headers_install).
-It's one of the parts that has required to stick to most of the kernel's
-variables very closely (the other one being for nolibc-test which needs
-to build a kernel).
+1. do we need to add the corresponding library routines at the same time?
 
-> Good news, I did find a better solution without touching the top-level
-> Makefile, that is overriding the ARCH to 'riscv' just before the targets
-> and after we got the necessary settings with the original ARCH=riscv32
-> or ARCH=riscv64, but it requires to convert the '=' assignments to ':=',
-> which is not that hard to do and it is more acceptable, just verified it
-> and it worked well.
-> 
->     ...
-> 
->      LDFLAGS := -s
-> 
->     +# top-level kernel Makefile only accept ARCH=riscv, override ARCH to make kernel happy
->     +ifneq ($(findstring riscv,$(ARCH)),)
->     +override ARCH := riscv
->     +endif
->     +
+  Use llseek() as an example, there will be llseek() and lsee64(). If off_t
+  would be converted to 64bit, then, they can be simply added as follows:
 
-That can be one approach indeed. Another one if we continue to face
-difficulties for this one would be to use a distinct KARCH variable
-to assign to ARCH in all kernel-specific operations.
+    #define lseek64 lseek
+    #define llseek lseek
 
->      help:
->             @echo "Supported targets under selftests/nolibc:"
->             @echo "  all          call the \"run\" target below"
-> 
-> This change is not that big, and the left changes can keep consistent with the
-> other platforms. but I still need to add a standalone patch to convert the '='
-> to ':=' to avoid the before setting using our new overridded ARCH.
+  Or something like this:
 
-I don't even see why the other ones below are needed, given that as
-long as they remain assigned as macros, they will be replaced in-place
-where they are used, so they will reference the last known assignment
-to ARCH.
+    static __attribute__((unused))
+    loff_t lseek(int fd, loff_t offset, int whence)
+    {
+    	return lseek(fd, offset, whence);
+    }
 
->     ++ b/tools/testing/selftests/nolibc/Makefile
->     @@ -26,7 +26,7 @@ IMAGE_riscv64    = arch/riscv/boot/Image
->      IMAGE_riscv      = arch/riscv/boot/Image
->      IMAGE_s390       = arch/s390/boot/bzImage
->      IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
->     -IMAGE            = $(IMAGE_$(ARCH))
->     +IMAGE           := $(IMAGE_$(ARCH))
->      IMAGE_NAME       = $(notdir $(IMAGE))
-> 
->      # default kernel configurations that appear to be usable
->     @@ -41,7 +41,7 @@ DEFCONFIG_riscv64    = defconfig
->      DEFCONFIG_riscv      = defconfig
->      DEFCONFIG_s390       = defconfig
->      DEFCONFIG_loongarch  = defconfig
->     -DEFCONFIG            = $(DEFCONFIG_$(ARCH))
->     +DEFCONFIG           := $(DEFCONFIG_$(ARCH))
-> 
->      # optional tests to run (default = all)
->      TEST =
->     @@ -58,7 +58,7 @@ QEMU_ARCH_riscv64    = riscv64
->      QEMU_ARCH_riscv      = riscv64
->      QEMU_ARCH_s390       = s390x
->      QEMU_ARCH_loongarch  = loongarch64
->     -QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
->     +QEMU_ARCH           := $(QEMU_ARCH_$(ARCH))
-> 
->      # QEMU_ARGS : some arch-specific args to pass to qemu
->      QEMU_ARGS_i386       = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->     @@ -72,7 +72,7 @@ QEMU_ARGS_riscv64    = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_T
->      QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->      QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->      QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->     -QEMU_ARGS            = $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_EXTRA)
->     +QEMU_ARGS           := $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_EXTRA)
-> 
->      # OUTPUT is only set when run from the main makefile, otherwise
->      # it defaults to this nolibc directory.
->     @@ -87,11 +87,18 @@ endif
->      CFLAGS_riscv32 = -march=rv32im -mabi=ilp32
->      CFLAGS_s390 = -m64
->      CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
->     -CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
->     +CFLAGS_default := -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
->                     $(call cc-option,-fno-stack-protector) \
->                     $(CFLAGS_$(ARCH)) $(CFLAGS_STACKPROTECTOR)
->     +
->     +CFLAGS  ?= $(CFLAGS_default)
+    static __attribute__((unused))
+    off64_t lseek(int fd, off64_t offset, int whence)
+    {
+    	return lseek(fd, offset, whence);
+    }
 
-Why did you need to split this one like this instead of proceeding
-like for the other ones ? Because of the "?=" maybe ? Please
-double-check that you really need to turn this from a macro to a
-variable, if as I suspect it it's not needed, it would be even
-simpler.
+  This one aligns with the other already added library routines.
 
-Thanks,
-Willy
+  Which one do you like more?
+
+2. If so, how to cope with the new types when add the library routines?
+
+  Still use the above llseek() as an example, If not use '#define' method,
+  We may need to declare loff_t and off64_t in std.h too:
+
+    #define off64_t off_t
+    #define loff_t off_t
+
+  Or align with the other new types, use 'typedef' instead of '#define'.
+
+  And further, use poll() as an example, in its manpage [1], there may be some
+  new types, such as 'nfds_t', but 'int' is used in tools/include/nolibc/sys.h
+  currently, do we need to add nfds_t?
+
+  The 'idtypes_t' and 'id_t' types used by waitid() [2] is similar, both
+  of them can simply use the 'int' type.
+
+The above two questions are important to the coming patches, it may determine
+how I should tune the new llseek() and waitid() syscalls and their library
+routines. very welcome your suggestions.
+
+> This patch is a step in that direction though, so I think that's
+> totally fine.
+
+Thanks, so, can I pick your Reviewed-by for the first two patches? I'm ready to
+send v4 now ;-)
+
+Best regards,
+Zhangjin
+
+---
+[1]: https://linux.die.net/man/2/poll
+[2]: https://linux.die.net/man/2/waitid
+
+>
+>      Arnd
