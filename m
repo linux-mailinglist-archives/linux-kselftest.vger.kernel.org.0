@@ -2,49 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC79726DDD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 22:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD79726DE3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 22:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234725AbjFGUq0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 16:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
+        id S234886AbjFGUq3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 16:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234712AbjFGUqL (ORCPT
+        with ESMTP id S234893AbjFGUqO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:46:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D1C26A3;
-        Wed,  7 Jun 2023 13:45:53 -0700 (PDT)
+        Wed, 7 Jun 2023 16:46:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AF826A5;
+        Wed,  7 Jun 2023 13:45:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 715A864696;
-        Wed,  7 Jun 2023 20:45:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 581CFC433EF;
-        Wed,  7 Jun 2023 20:45:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0429764640;
+        Wed,  7 Jun 2023 20:45:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E387BC4339B;
+        Wed,  7 Jun 2023 20:45:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686170752;
-        bh=ZB6M39BeMbXHSEc2iHAHssPsPmPBgdQZVXezDDSODgM=;
+        s=korg; t=1686170755;
+        bh=b4oGrHUU4PlZn58yeBa1vTwhXg4J0f1XcSHjsV6FHiY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LnbcHsaztEYpes20dQS64ixdoAdOSe6QSEf9xPja1mcuwN58lEMvYysZfptjK02oe
-         e7cWGLasdVa7JN9KD0okhl/iKiYK5eRBJgg3r5n9lFRyEdIrZNSI+t924a7w5qvaAE
-         hvlx1gsFFzE2b3mgoInQ7ceEd5dPgvY1dFNibfNs=
+        b=OanPyMD4jNvQqWbXRJsI/VPVTsUKqz/Db4UmpAZjNWIy7grP8EuiN1Btoz77lwYQ5
+         Q0NRcHP2vNYoiREuNIY38Pp+v8kzXnZyF/C3u3sEzLXxPuZ1KRjKzERgIhmSQB1zSh
+         Wq/eXElGlNhGXTHfMYpcnafvAgRUezitrXHu+OKo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kselftest@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>,
+        patches@lists.linux.dev,
         Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: [PATCH 6.1 204/225] test_firmware: fix a memory leak with reqs buffer
-Date:   Wed,  7 Jun 2023 22:16:37 +0200
-Message-ID: <20230607200921.037409650@linuxfoundation.org>
+        Dan Carpenter <error27@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 6.1 205/225] test_firmware: fix the memory leak of the allocated firmware buffer
+Date:   Wed,  7 Jun 2023 22:16:38 +0200
+Message-ID: <20230607200921.070241596@linuxfoundation.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230607200913.334991024@linuxfoundation.org>
 References: <20230607200913.334991024@linuxfoundation.org>
@@ -52,8 +55,8 @@ User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,65 +67,179 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-commit be37bed754ed90b2655382f93f9724b3c1aae847 upstream.
+commit 48e156023059e57a8fc68b498439832f7600ffff upstream.
 
-Dan Carpenter spotted that test_fw_config->reqs will be leaked if
-trigger_batched_requests_store() is called two or more times.
-The same appears with trigger_batched_requests_async_store().
+The following kernel memory leak was noticed after running
+tools/testing/selftests/firmware/fw_run_tests.sh:
 
-This bug wasn't trigger by the tests, but observed by Dan's visual
-inspection of the code.
+[root@pc-mtodorov firmware]# cat /sys/kernel/debug/kmemleak
+.
+.
+.
+unreferenced object 0xffff955389bc3400 (size 1024):
+  comm "test_firmware-0", pid 5451, jiffies 4294944822 (age 65.652s)
+  hex dump (first 32 bytes):
+    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
+    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
+    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
+    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
+    [<ffffffff95fd813b>] kthread+0x10b/0x140
+    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
+unreferenced object 0xffff9553c334b400 (size 1024):
+  comm "test_firmware-1", pid 5452, jiffies 4294944822 (age 65.652s)
+  hex dump (first 32 bytes):
+    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
+    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
+    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
+    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
+    [<ffffffff95fd813b>] kthread+0x10b/0x140
+    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
+unreferenced object 0xffff9553c334f000 (size 1024):
+  comm "test_firmware-2", pid 5453, jiffies 4294944822 (age 65.652s)
+  hex dump (first 32 bytes):
+    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
+    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
+    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
+    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
+    [<ffffffff95fd813b>] kthread+0x10b/0x140
+    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
+unreferenced object 0xffff9553c3348400 (size 1024):
+  comm "test_firmware-3", pid 5454, jiffies 4294944822 (age 65.652s)
+  hex dump (first 32 bytes):
+    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
+    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
+    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
+    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
+    [<ffffffff95fd813b>] kthread+0x10b/0x140
+    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
+[root@pc-mtodorov firmware]#
 
-The recommended workaround was to return -EBUSY if test_fw_config->reqs
-is already allocated.
+Note that the size 1024 corresponds to the size of the test firmware
+buffer. The actual number of the buffers leaked is around 70-110,
+depending on the test run.
 
+The cause of the leak is the following:
+
+request_partial_firmware_into_buf() and request_firmware_into_buf()
+provided firmware buffer isn't released on release_firmware(), we
+have allocated it and we are responsible for deallocating it manually.
+This is introduced in a number of context where previously only
+release_firmware() was called, which was insufficient.
+
+Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf")
-Cc: Luis Chamberlain <mcgrof@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Dan Carpenter <error27@gmail.com>
+Cc: Takashi Iwai <tiwai@suse.de>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
 Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Tianfei Zhang <tianfei.zhang@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>
+Cc: Tianfei zhang <tianfei.zhang@intel.com>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Zhengchao Shao <shaozhengchao@huawei.com>
 Cc: Colin Ian King <colin.i.king@gmail.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Scott Branden <sbranden@broadcom.com>
+Cc: Luis R. Rodriguez <mcgrof@kernel.org>
 Cc: linux-kselftest@vger.kernel.org
 Cc: stable@vger.kernel.org # v5.4
-Suggested-by: Dan Carpenter <error27@gmail.com>
-Suggested-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-Link: https://lore.kernel.org/r/20230509084746.48259-2-mirsad.todorovac@alu.unizg.hr
+Link: https://lore.kernel.org/r/20230509084746.48259-3-mirsad.todorovac@alu.unizg.hr
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/test_firmware.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ lib/test_firmware.c |   19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
 --- a/lib/test_firmware.c
 +++ b/lib/test_firmware.c
-@@ -894,6 +894,11 @@ static ssize_t trigger_batched_requests_
+@@ -44,6 +44,7 @@ struct test_batched_req {
+ 	bool sent;
+ 	const struct firmware *fw;
+ 	const char *name;
++	const char *fw_buf;
+ 	struct completion completion;
+ 	struct task_struct *task;
+ 	struct device *dev;
+@@ -174,8 +175,14 @@ static void __test_release_all_firmware(
+ 
+ 	for (i = 0; i < test_fw_config->num_requests; i++) {
+ 		req = &test_fw_config->reqs[i];
+-		if (req->fw)
++		if (req->fw) {
++			if (req->fw_buf) {
++				kfree_const(req->fw_buf);
++				req->fw_buf = NULL;
++			}
+ 			release_firmware(req->fw);
++			req->fw = NULL;
++		}
+ 	}
+ 
+ 	vfree(test_fw_config->reqs);
+@@ -651,6 +658,8 @@ static ssize_t trigger_request_store(str
  
  	mutex_lock(&test_fw_mutex);
- 
-+	if (test_fw_config->reqs) {
-+		rc = -EBUSY;
-+		goto out_bail;
-+	}
-+
- 	test_fw_config->reqs =
- 		vzalloc(array3_size(sizeof(struct test_batched_req),
- 				    test_fw_config->num_requests, 2));
-@@ -992,6 +997,11 @@ ssize_t trigger_batched_requests_async_s
+ 	release_firmware(test_firmware);
++	if (test_fw_config->reqs)
++		__test_release_all_firmware();
+ 	test_firmware = NULL;
+ 	rc = request_firmware(&test_firmware, name, dev);
+ 	if (rc) {
+@@ -751,6 +760,8 @@ static ssize_t trigger_async_request_sto
+ 	mutex_lock(&test_fw_mutex);
+ 	release_firmware(test_firmware);
+ 	test_firmware = NULL;
++	if (test_fw_config->reqs)
++		__test_release_all_firmware();
+ 	rc = request_firmware_nowait(THIS_MODULE, 1, name, dev, GFP_KERNEL,
+ 				     NULL, trigger_async_request_cb);
+ 	if (rc) {
+@@ -793,6 +804,8 @@ static ssize_t trigger_custom_fallback_s
  
  	mutex_lock(&test_fw_mutex);
- 
-+	if (test_fw_config->reqs) {
-+		rc = -EBUSY;
-+		goto out_bail;
-+	}
-+
- 	test_fw_config->reqs =
- 		vzalloc(array3_size(sizeof(struct test_batched_req),
- 				    test_fw_config->num_requests, 2));
+ 	release_firmware(test_firmware);
++	if (test_fw_config->reqs)
++		__test_release_all_firmware();
+ 	test_firmware = NULL;
+ 	rc = request_firmware_nowait(THIS_MODULE, FW_ACTION_NOUEVENT, name,
+ 				     dev, GFP_KERNEL, NULL,
+@@ -855,6 +868,8 @@ static int test_fw_run_batch_request(voi
+ 						 test_fw_config->buf_size);
+ 		if (!req->fw)
+ 			kfree(test_buf);
++		else
++			req->fw_buf = test_buf;
+ 	} else {
+ 		req->rc = test_fw_config->req_firmware(&req->fw,
+ 						       req->name,
+@@ -915,6 +930,7 @@ static ssize_t trigger_batched_requests_
+ 		req->fw = NULL;
+ 		req->idx = i;
+ 		req->name = test_fw_config->name;
++		req->fw_buf = NULL;
+ 		req->dev = dev;
+ 		init_completion(&req->completion);
+ 		req->task = kthread_run(test_fw_run_batch_request, req,
+@@ -1019,6 +1035,7 @@ ssize_t trigger_batched_requests_async_s
+ 	for (i = 0; i < test_fw_config->num_requests; i++) {
+ 		req = &test_fw_config->reqs[i];
+ 		req->name = test_fw_config->name;
++		req->fw_buf = NULL;
+ 		req->fw = NULL;
+ 		req->idx = i;
+ 		init_completion(&req->completion);
 
 
