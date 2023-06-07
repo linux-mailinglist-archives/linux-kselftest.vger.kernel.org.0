@@ -2,408 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7459E7264B4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 17:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8D37264C0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 17:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241017AbjFGPca (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 11:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
+        id S234921AbjFGPf5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 11:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241052AbjFGPc2 (ORCPT
+        with ESMTP id S241205AbjFGPf4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:32:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7899F188;
-        Wed,  7 Jun 2023 08:32:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 062B961790;
-        Wed,  7 Jun 2023 15:32:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A36C433D2;
-        Wed,  7 Jun 2023 15:32:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686151944;
-        bh=5hhZRxX2WWgW0sPLPamoyhkZr9xNbcuFiVquE58MnA4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=r5cyogrjCKLhqXI1ii7LXr6kUxd70C1Souo5RNpulj79nqY/szsqwu/hmhlkRJtLP
-         p1PYr5K4SQCY2C3RpCf2rVbMpxEScHPTRkJTU5iRRJB1JnDapPmTB3db60HSEQmFnR
-         SQGQTGPXu7aJaYaCXBAlCvm4Zc/lQCgxuhivyAPtfy9U2vyCE7R6+ALFgEBdI5oO2m
-         dVWXdgbiJtIjfOALESgsxfPADGBLRylbPGBxe0hEaaH1U2UGnumSyxsaKbw2MDCxdC
-         4LUuI5x5qJHo6uQ5o9Q/sdkyaAb0ZMFCUjhhZU7I4woVquAzJNKwt2mvCR56wF4qXX
-         75kGjRN+qPsAA==
-From:   Enric Balletbo i Serra <eballetbo@kernel.org>
-To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Dana Elfassy <delfassy@redhat.com>,
-        linux-input@vger.kernel.org, phuttere@redhat.com,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Enric Balletbo i Serra <eballetbo@kernel.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: [PATCH v3] selftests/input: Introduce basic tests for evdev ioctls
-Date:   Wed,  7 Jun 2023 17:32:14 +0200
-Message-Id: <20230607153214.15933-1-eballetbo@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Wed, 7 Jun 2023 11:35:56 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF01C1BE2;
+        Wed,  7 Jun 2023 08:35:51 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3578bfcP010042;
+        Wed, 7 Jun 2023 08:35:31 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=jFyyI1+lujXI8YManbdB9Lqw3Ml3vMRKrk7dTB4n5mQ=;
+ b=f5opnhrg4jfu2iYYK8vHBTkwa5x3NL8Zrrpmvk+86F9vnXRRcM0gZbdX/MrmAigc4YNT
+ nc/3qTlDyQvWwAFmA3gFgdPgoFjIAdaCSraMfRzUo47/xUJIsjykaKa70mieTFNeN1nJ
+ kJYiqMv526aZzL0+jLpfFkpfKoXxMNV35Kg54qWPgOj2lTvEnyLAHM5S3eyy1/GNwjjb
+ iTo4iLwbH8uAfQSuNSzMoZY7ZwfOckE3U8SynjrIyoDoNpD/oUxYiU/BjxD9ZsuKWdmI
+ 5A35HHLoK0Lqpby/45beB+B2xeCrr47/DaJqKYx7xLuJTwOFUmwJujnkskHYw82Rpz5P dg== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r2a89q9hr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 08:35:31 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W/OKrqfHF5vZGXt4OpkRTNAz+0SjE8sx+uDH/j7CoFNw27IyNwIuti9+NdLaeAPQA4VbF/onwquCmbkjXyQZo+FEJWm+NOvvzuSxLA0WisurU1+zay1ux8IprhlqHLbW1bo1AIbjvgcqPfCV3DcBAVUqHom1SHRKT2GUmdquo5hH9K/uCgmm6O8A8+CoO9ptvsXNLUw+H3wZdkAp9m9VXqd1/AVb9j+0LqtvTRLq/qEbR7dQOJzF7GaRvxjXNgHieCzpZTmORgP0PWnvdy/Wj5NT/kFnMyRznbg1iMpCIHq9S11bLmK/soDyFKq8EUgzq/W8vP5TxXv7b6LRDnMsrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jFyyI1+lujXI8YManbdB9Lqw3Ml3vMRKrk7dTB4n5mQ=;
+ b=D4vnzgQog+ImH3Ct8V1e/VC5gz1y7mP7zyOf33/HI5fZ0BoMlrcpReywaVpoJOklm7jnVcKVlUFlPl4NDHOS8yNbnjhfo9RY9iwn/4V+6fu1hdy88f6H/3qnwF8Z4XW7lHBpmBgMN1HY9S49BEI95nL+g/Ag/NmuPNVFCRenkBOui3+tYLqoiAnEKx88Fb1SzkXSq1jmXMCpstQU54UGAOu2tKt2MZplM6XlBESUGTl5seaZv6imRgFd4XGJUPR/xAec/GPXWmdj1ZrYaBLK+GlepxuXpbHld/hVAixNm3BjReRJ0aStZP5icIRMFemFMHzjW1GWZunsfwMTZ7ySag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SJ0PR15MB4456.namprd15.prod.outlook.com (2603:10b6:a03:375::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Wed, 7 Jun
+ 2023 15:35:27 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::bf7d:a453:b8d9:cf0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::bf7d:a453:b8d9:cf0%6]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 15:35:26 +0000
+Message-ID: <44c1da5c-251a-fd92-2a14-655d2e99bf03@meta.com>
+Date:   Wed, 7 Jun 2023 08:35:23 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [PATCH bpf v4 2/2] selftests/bpf: Add test cases to assert proper
+ ID tracking on spill
+Content-Language: en-US
+To:     Maxim Mikityanskiy <maxtram95@gmail.com>, bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Maxim Mikityanskiy <maxim@isovalent.com>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
+References: <20230607123951.558971-1-maxtram95@gmail.com>
+ <20230607123951.558971-3-maxtram95@gmail.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20230607123951.558971-3-maxtram95@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR02CA0034.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::47) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SJ0PR15MB4456:EE_
+X-MS-Office365-Filtering-Correlation-Id: c511f25f-f5f7-43d5-7fdb-08db676cd0b0
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Cq/XnkFEctA2OcMYeCvbDA6dfCDWeTCrj2cmtVOX1i+5wtTc5IxQ7e3oGNdmeLH6RH7V+1kehJvZ0kFlwDRLGWIjN9uR+4x+hX16S+3cLKqojgmh3VzXfzkkzN8PheWrr7f8mi2/HDU5qOArjKV89d4o/HqEbmPrFdhxBsEb7I8tvStXqRflno8CEWM4QRExvMV2sdz1Q0Y2HySVevAFwK8EdY2fGiFjYI3xDKGYoCrg2e6CPXeNglVPATlWVzC7t/ITvU6q3QXWsrJPtA9Dky4DgDCpPrSkZuLWHqNuY1Cirv75Y/lYMPmaiG69Y/vayigMSNx6u3tdT85EeDOz2+k+4MOGa9R0hbi/M2maBrhYvPwaWwwV+JNARSlGKRb5nF5yda6aYAUwAZRitlLdGWUwdXqjxHZed1h6rSbxXdMEA26lFjVZvjsLI8WB2C+yk1IalaSyUBMaTBg10cJgrInIRcpzRkQF43o5evvfPMP84ZWtnaekXMI509RbEi9Zbuv/UFuxstw8ZHq5Ip0IekJg2lNqHWsLv+1sqTI1jPNVFzadh5DAmxD1S1rohS7NCAEdW5J81bi36OW75fx2L+jhYcQ9dtCvUChQp+yAI7/RNPCsrTX5tf+kGcf9SPtvGwGKl7A+w/9/QTwIKsohsQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(366004)(39860400002)(346002)(376002)(451199021)(53546011)(86362001)(186003)(7416002)(6506007)(6512007)(31696002)(6486002)(2616005)(31686004)(6666004)(8936002)(8676002)(5660300002)(478600001)(36756003)(54906003)(38100700002)(2906002)(4744005)(316002)(41300700001)(4326008)(66946007)(66556008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MXV1YUxEd1AyRmd1NjlDTThMY2g0bWtOeWVUR0ZXZU5XQ25tM1FvT1NXczZp?=
+ =?utf-8?B?TjY1RHkwaUVzaWpaYmhBc2Z3bWVWRE8wSzRHMkNMajNhUlkwREpjanpXZjF6?=
+ =?utf-8?B?YmFIRjIzSjFrQUlXcFlGTmU2YTBjdXpnUVhyZFFuTEljcjZNdDRDSkc1VE81?=
+ =?utf-8?B?SU5jNkIzQmllZzdUdWtVS1ZoYnFqWkQ2TUxjYVJPZWNiVnp4ZzV2d010NnRW?=
+ =?utf-8?B?YysxNk9wWDBDeGxVNjlkWHBzQjVmMUxiT2ltTVd0a1JnalBLVURTWkVnNFkz?=
+ =?utf-8?B?SzU4R0FlZEY2S2NzdkRLckxsYWVhR3pWQ2pubHBXdWRadDZhVjJtb2NidFVy?=
+ =?utf-8?B?SGZleXVQZlpCbmNoUWtIMGk1elBRRXVOUjEyNGQwWGhxaThTR0FJMk1GNkZj?=
+ =?utf-8?B?ZEJKbVVvS1VEMEJJRHdoZnFkSUs4bTJmSHBUTHpLenlWRUtma3REaVhqRDE2?=
+ =?utf-8?B?ajF4OU5LbDZ3MXc1QUd5VG1KOGcxODBmNTc1TWpTUzBrTGlrWjdvd09wMFNO?=
+ =?utf-8?B?dkp5V2pIZ1QwOGZZY2MvcVFiUHFnUktSTnIzdE1FdmJteUhyL0dBcGorTXhT?=
+ =?utf-8?B?ZG5TVWxqV3FoTGtJZW96azJLdlBUZVJmeUYvbGlucXQ5NDYwQjhpdjY2eUlm?=
+ =?utf-8?B?WW9RS2dHTjJ4ZVhqaDlxOFBpTGQvcjRnVEEyVmpQV1NYRjg3Q1VGd21hTXRO?=
+ =?utf-8?B?MHp4WGF0RUM3eHllbXExM0w0WTl0YzVwV1lOVHZIL3VmSTI4WmpNMXp3emlj?=
+ =?utf-8?B?UjBxUWNiajUxSVJRWFhPWlhvV3VVY0s4eWFwQlpuZnc1N2RGeUhVZURkdWV0?=
+ =?utf-8?B?Wk41elQzVElrMzhQRlA4RDByVnVLTlVwVk1ReEp0MlMrSUhXbjh2SnFWQk45?=
+ =?utf-8?B?VDNJSHNoNFRCQWhleFF1eVJvc2FXNkxOSFUySy9oWWNzTG1weXR1T2VkcEFx?=
+ =?utf-8?B?T3VSdldaUDFKaFFCSjBzYlUyZ011S0NxMGhHMjRDek9GUXhTQ1VMcVJCNnVC?=
+ =?utf-8?B?WG0xc2FYUC82QVJiNlVZUEZOUnVMeW05OFhzNEpyQVNTbTZNa21LZVhPVllx?=
+ =?utf-8?B?amdlREwzRVNyL2xPakNxNUlnU3QwQVZoVjgxSHhJNFIzU0dKNHpsMmpEODU0?=
+ =?utf-8?B?dkdpaFhtTjBYSHFqTGlpcXRvdUs3Z25ZWnRiSXBYcGxmVFBFeUdWU21BN1ps?=
+ =?utf-8?B?dGEzRndYeWozOU4wY2trVDA0OW5GNDR3Ly9wZzVlaVZBNDhUZFpkRFIzRnpu?=
+ =?utf-8?B?UGRsMGsrRk5qOFliZnRlY2FXbzluYnhPUWJYT1hSQk85eVY2RjNjNkRiWmY2?=
+ =?utf-8?B?bXNXWStUOUcvck1MaFhqcnFMSE52M1ZBYWtJWllHTGN5SFFIcE9SaHNsWTB2?=
+ =?utf-8?B?dmxYK2lWSUg5cDU0TGJzM08vWlZPMUwyblJ6TU5zODMySVBlQ0ZqMloxK3FG?=
+ =?utf-8?B?RzBvRC8yYTdsVXM4U3dUdFR0UzR4ZWNvQVNMakE5Y2djMVZQZWN2ODluTGJQ?=
+ =?utf-8?B?Z1hZR1NkcE1JOGlhNy8rTmQ2WHI5ZmU2VHZvREgxYzVVcGJRR1dOaDVOSTBQ?=
+ =?utf-8?B?aDVLUHJWbEJNQXFBOUNLYUlvU2E5Rzh6QWVhTVlmSWxrMlZXMGFVWFdOVmdm?=
+ =?utf-8?B?cVdJY0tVekszWHNLRTJBbkw0alBsQ2hDOUU5QnhjbmQ5Z0Y1MTV5Z2dsTHFq?=
+ =?utf-8?B?TGRNSXNiQWlYWEpBNTM4VzlPSFh0Q1g3TzloVWxVbEZ2eitSTXRUOHhJZmtE?=
+ =?utf-8?B?U2FRRFlaRHk2dElqN0FkSWdVVjJkZUhWaFNpSEMweG9yTGVHT2JxbmE1Szla?=
+ =?utf-8?B?RjMzRVdNcjlpNXRsTXZyeGIvMi95aTN5c2RRSnhWWmdLSkt0Tjk0bk04UVRS?=
+ =?utf-8?B?aVdUMFplSC95SXNUTzRaT0JrYlNQMFRGT1dtWnljMUd2cncraXI2OERSbE00?=
+ =?utf-8?B?L0dHME9ObFN5ZUZnRG53ZG93Wmg3b3pCYTB3L3VvYy9ML3hiMk1LdnVPcjVu?=
+ =?utf-8?B?S3ZKTFZxbVk2a3oyVEVnZ0l3ZGEzU2Z5RWppRjVFczNRYkx4MFhscFpuM3pu?=
+ =?utf-8?B?L1ZwV2RCdnRnbm1Wck1wNEtKVEp4Y2ZPd2ZyWklhWXpFMWNFQW9MZ0k5VS92?=
+ =?utf-8?B?eStZdUc0QjllM1htN0NXd2g2UWFxeXNqdjJDRFNzaVk3eDVVKzVQNWdqekRM?=
+ =?utf-8?B?OWc9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c511f25f-f5f7-43d5-7fdb-08db676cd0b0
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 15:35:25.9890
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kgEAyXXWAaWY6M9p2T4hA6f2yu6ckeJBwFh1vZV2PQDSsLXutP7QN/1hkEIjW69t
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4456
+X-Proofpoint-GUID: pssZgoUQIRZmSIPEg0kQK-DKvrsZwpZk
+X-Proofpoint-ORIG-GUID: pssZgoUQIRZmSIPEg0kQK-DKvrsZwpZk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_07,2023-06-07_01,2023-05-22_02
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This provides a basic infrastructure for the creation of tests for the evdev
-interface. Most of this code is adapted from the libevdev wrapper library. While
-most of evdev ioctls are covered and tested using libevdev tests there are some
-evdev ioctls that aren't because are not supported (and will not be supported)
-by libevdev [1]. So, adding, at least those tests, would make sense.
 
-The test creates an uinput device (and an evdev device) so you can
-call the wanted ioctl from userspace. So, to run those tests you need
-to have support for uinput and evdev as well.
 
-[1] For example, libevdev doesn't support setting EV_REP because it's inherently
-racy - one libevdev context to set those values via the ioctl would cause all
-other libevdev contexts on the same device to be out of sync. Since we do not
-get notifications when the values changed, libevdev's buffered values for EV_REP
-will remain whatever they were initially.
+On 6/7/23 5:39 AM, Maxim Mikityanskiy wrote:
+> From: Maxim Mikityanskiy <maxim@isovalent.com>
+> 
+> The previous commit fixed a verifier bypass by ensuring that ID is not
+> preserved on narrowing spills. Add the test cases to check the
+> problematic patterns.
+> 
+> Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
 
-Signed-off-by: Enric Balletbo i Serra <eballetbo@kernel.org>
-Acked-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-Test output:
-
-	TAP version 13
-	1..3
-	# Starting 3 tests from 1 test cases.
-	#  RUN           global.eviocgname_get_device_name ...
-	#            OK  global.eviocgname_get_device_name
-	ok 1 global.eviocgname_get_device_name
-	#  RUN           global.eviocgrep_get_repeat_settings ...
-	#            OK  global.eviocgrep_get_repeat_settings
-	ok 2 global.eviocgrep_get_repeat_settings
-	#  RUN           global.eviocsrep_set_repeat_settings ...
-	#            OK  global.eviocsrep_set_repeat_settings
-	ok 3 global.eviocsrep_set_repeat_settings
-	# PASSED: 3 / 3 tests passed.
-	# Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Changes since v1:
-- As UI_GET_SYSNAME has been around 3.15 remove the fallback code that
-  pre-dates that ioctl.
-- Fix a bug in the va-args handling in selftest_uinput_create_device
-  calls.
-- Fix typo s/an/and
-- Implement a test case for EVIOCSREP.
-
-Changes since v2:
-- Fix a buf left in the va-args handling in
-  selftest_uinput_create_device calls.
-- Replace fetch_syspath_and_devnode() function to open_devnode()
-  function that return the openend file descriptor, so we can reduce the
-  code.
-
- tools/testing/selftests/Makefile           |   1 +
- tools/testing/selftests/input/.gitignore   |   2 +
- tools/testing/selftests/input/Makefile     |   5 +
- tools/testing/selftests/input/config       |   3 +
- tools/testing/selftests/input/evioc-test.c | 237 +++++++++++++++++++++
- 5 files changed, 248 insertions(+)
- create mode 100644 tools/testing/selftests/input/.gitignore
- create mode 100644 tools/testing/selftests/input/Makefile
- create mode 100644 tools/testing/selftests/input/config
- create mode 100644 tools/testing/selftests/input/evioc-test.c
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 90a62cf75008..29fc77168aa7 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -28,6 +28,7 @@ TARGETS += futex
- TARGETS += gpio
- TARGETS += hid
- TARGETS += intel_pstate
-+TARGETS += input
- TARGETS += iommu
- TARGETS += ipc
- TARGETS += ir
-diff --git a/tools/testing/selftests/input/.gitignore b/tools/testing/selftests/input/.gitignore
-new file mode 100644
-index 000000000000..37f5dff3255b
---- /dev/null
-+++ b/tools/testing/selftests/input/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+evioc-test
-diff --git a/tools/testing/selftests/input/Makefile b/tools/testing/selftests/input/Makefile
-new file mode 100644
-index 000000000000..031729be0628
---- /dev/null
-+++ b/tools/testing/selftests/input/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS +=  -D_GNU_SOURCE -std=gnu99 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
-+
-+TEST_GEN_PROGS := evioc-test
-+include ../lib.mk
-diff --git a/tools/testing/selftests/input/config b/tools/testing/selftests/input/config
-new file mode 100644
-index 000000000000..b7512f3e6d8d
---- /dev/null
-+++ b/tools/testing/selftests/input/config
-@@ -0,0 +1,3 @@
-+CONFIG_INPUT=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_INPUT_UINPUT=m
-diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
-new file mode 100644
-index 000000000000..ad7b93fe39cf
---- /dev/null
-+++ b/tools/testing/selftests/input/evioc-test.c
-@@ -0,0 +1,237 @@
-+// SPDX-License-Identifier: MIT
-+/*
-+ * Copyright © 2023 Red Hat, Inc.
-+ *
-+ * Part of the code in this file is inspired and copied from the libevdev wrapper library
-+ * for evdev devices written by Peter Hutterer.
-+ */
-+
-+#include <dirent.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/uinput.h>
-+#include <poll.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/stat.h>
-+#include <time.h>
-+#include <unistd.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#define TEST_DEVICE_NAME "selftest input device"
-+
-+struct selftest_uinput {
-+	int uinput_fd; /** file descriptor to uinput */
-+	int evdev_fd; /** file descriptor to evdev */
-+};
-+
-+static int is_event_device(const struct dirent *dent)
-+{
-+	return strncmp("event", dent->d_name, 5) == 0;
-+}
-+
-+static int open_devnode(struct selftest_uinput *uidev)
-+{
-+#define SYS_INPUT_DIR "/sys/devices/virtual/input/"
-+	char buf[sizeof(SYS_INPUT_DIR) + 64] = SYS_INPUT_DIR;
-+	struct dirent **namelist;
-+	char *devnode = NULL;
-+	int ndev, i;
-+	int rc;
-+
-+	rc = ioctl(uidev->uinput_fd,
-+		   UI_GET_SYSNAME(sizeof(buf) - strlen(SYS_INPUT_DIR)),
-+		   &buf[strlen(SYS_INPUT_DIR)]);
-+	if (rc == -1) {
-+		fprintf(stderr, "cannot get the sysfs name of the uinput device (%d)\n", rc);
-+		return rc;
-+	}
-+
-+	ndev = scandir(buf, &namelist, is_event_device, alphasort);
-+	if (ndev <= 0)
-+		return -1;
-+
-+	/* ndev should only ever be 1 */
-+
-+	for (i = 0; i < ndev; i++) {
-+		if (!devnode && asprintf(&devnode, "/dev/input/%s",
-+					 namelist[i]->d_name) == -1)
-+			devnode = NULL;
-+		free(namelist[i]);
-+	}
-+
-+	free(namelist);
-+
-+	return open(devnode, O_RDONLY);
-+#undef SYS_INPUT_DIR
-+}
-+
-+static void selftest_uinput_destroy(struct selftest_uinput *uidev)
-+{
-+	if (!uidev)
-+		return;
-+
-+	if (uidev->uinput_fd >= 0)
-+		ioctl(uidev->uinput_fd, UI_DEV_DESTROY, NULL);
-+
-+	close(uidev->evdev_fd);
-+	close(uidev->uinput_fd);
-+
-+	free(uidev);
-+}
-+
-+static int selftest_uinput_create_device(struct selftest_uinput **uidev, ...)
-+{
-+	struct selftest_uinput *new_device;
-+	struct uinput_setup setup;
-+	va_list args;
-+	int rc, fd;
-+	int type;
-+
-+	new_device = calloc(1, sizeof(struct selftest_uinput));
-+	if (!new_device)
-+		return -ENOMEM;
-+
-+	memset(&setup, 0, sizeof(setup));
-+	strncpy(setup.name, TEST_DEVICE_NAME, UINPUT_MAX_NAME_SIZE - 1);
-+	setup.id.vendor = 0x1234; /* sample vendor */
-+	setup.id.product = 0x5678; /* sample product */
-+	setup.id.bustype = BUS_USB;
-+
-+	fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
-+	if (fd < 0) {
-+		fprintf(stderr, "cannot open uinput (%d): %m\n", errno);
-+		goto error;
-+	}
-+
-+	va_start(args, uidev);
-+	rc = 0;
-+	do {
-+		type = va_arg(args, int);
-+		if (type == -1)
-+			break;
-+		rc = ioctl(fd, UI_SET_EVBIT, type);
-+	} while (rc == 0);
-+	va_end(args);
-+
-+	rc = ioctl(fd, UI_DEV_SETUP, &setup);
-+	if (rc == -1)
-+		goto error;
-+
-+	rc = ioctl(fd, UI_DEV_CREATE, NULL);
-+	if (rc == -1)
-+		goto error;
-+
-+	new_device->uinput_fd = fd;
-+
-+	fd = open_devnode(new_device);
-+	if (fd < 0) {
-+		fprintf(stderr, "cannot open event device node (%d): %m\n", errno);
-+		goto error;
-+	}
-+
-+	new_device->evdev_fd = fd;
-+	*uidev = new_device;
-+
-+	return 0;
-+
-+error:
-+	rc = -errno;
-+	selftest_uinput_destroy(new_device);
-+	return rc;
-+}
-+
-+TEST(eviocgname_get_device_name)
-+{
-+	struct selftest_uinput *uidev;
-+	char buf[256];
-+	int rc;
-+
-+	rc = selftest_uinput_create_device(&uidev);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	memset(buf, 0, sizeof(buf));
-+	/* ioctl to get the name */
-+	rc = ioctl(uidev->evdev_fd, EVIOCGNAME(sizeof(buf) - 1), buf);
-+	ASSERT_GE(rc, 0);
-+	ASSERT_STREQ(TEST_DEVICE_NAME, buf);
-+
-+	selftest_uinput_destroy(uidev);
-+}
-+
-+TEST(eviocgrep_get_repeat_settings)
-+{
-+	struct selftest_uinput *uidev;
-+	int rep_values[2];
-+	int rc;
-+
-+	memset(rep_values, 0, sizeof(rep_values));
-+
-+	rc = selftest_uinput_create_device(&uidev, -1);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	/* ioctl to get the repeat rates values */
-+	rc = ioctl(uidev->evdev_fd, EVIOCGREP, rep_values);
-+	/* should fail because EV_REP is not set */
-+	ASSERT_EQ(-1, rc);
-+
-+	selftest_uinput_destroy(uidev);
-+
-+	rc = selftest_uinput_create_device(&uidev, EV_REP, -1);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	/* ioctl to get the repeat rates values */
-+	rc = ioctl(uidev->evdev_fd, EVIOCGREP, rep_values);
-+	ASSERT_EQ(0, rc);
-+	/* should get the default delay and period values set by the kernel */
-+	ASSERT_EQ(rep_values[0], 250);
-+	ASSERT_EQ(rep_values[1], 33);
-+
-+	selftest_uinput_destroy(uidev);
-+}
-+
-+TEST(eviocsrep_set_repeat_settings)
-+{
-+	struct selftest_uinput *uidev;
-+	int rep_values[2];
-+	int rc;
-+
-+	memset(rep_values, 0, sizeof(rep_values));
-+
-+	rc = selftest_uinput_create_device(&uidev, -1);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	/* ioctl to set the repeat rates values */
-+	rc = ioctl(uidev->evdev_fd, EVIOCSREP, rep_values);
-+	/* should fail because EV_REP is not set */
-+	ASSERT_EQ(-1, rc);
-+
-+	selftest_uinput_destroy(uidev);
-+
-+	rc = selftest_uinput_create_device(&uidev, EV_REP, -1);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	/* ioctl to set the repeat rates values */
-+	rep_values[0] = 500;
-+	rep_values[1] = 200;
-+	rc = ioctl(uidev->evdev_fd, EVIOCSREP, rep_values);
-+	ASSERT_EQ(0, rc);
-+
-+	/* ioctl to get the repeat rates values */
-+	rc = ioctl(uidev->evdev_fd, EVIOCGREP, rep_values);
-+	ASSERT_EQ(0, rc);
-+	/* should get the delay and period values set previously */
-+	ASSERT_EQ(rep_values[0], 500);
-+	ASSERT_EQ(rep_values[1], 200);
-+
-+	selftest_uinput_destroy(uidev);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.40.1
-
+Acked-by: Yonghong Song <yhs@fb.com>
