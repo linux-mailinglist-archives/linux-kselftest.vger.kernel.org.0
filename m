@@ -2,191 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C7D725FBA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 14:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA201725FCF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jun 2023 14:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240290AbjFGMlK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 08:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
+        id S235708AbjFGMqR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 08:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240996AbjFGMlI (ORCPT
+        with ESMTP id S234352AbjFGMqQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:41:08 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB901988;
-        Wed,  7 Jun 2023 05:40:43 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51491b87565so1475729a12.1;
-        Wed, 07 Jun 2023 05:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686141600; x=1688733600;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pBz2MV4ztkt691mrrB3N7hlq0WVgCYoQcpwdekr5XV0=;
-        b=r2axeMD7pa5eUbn2PSOaNvou4awVkiAgtBMdK05OnUTiPTCNRzbsd93yB5KWdJAJBx
-         aiuEEXNMcyJ57TyABJqi5ZxU734RrU2egayQDci3VyFmGNurNFS1JQ7HLvZQCpU48UqE
-         Ap9kQUa1/6B6ePXRseYcrMLJ1b0vTVlLh2u7cYQFlSuTrpqW2zRceIkVkhxtt/609MxD
-         YrUZfExyl4o8aph+EGVGOEQ5BewO7xJXi6lPvKzfMxt5kZ+P3AvVHuzQ8UCCBYcVDPBC
-         /I+XnERJ3HJbel9+ZQj8JlFFpSO9vaV+pUiWtKsKg4rer9L7QV42hJ9rneqmeSOu2YaJ
-         wwjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686141600; x=1688733600;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pBz2MV4ztkt691mrrB3N7hlq0WVgCYoQcpwdekr5XV0=;
-        b=cv/gEE7hIzttfpJK+ZSzGESztde3c2/lmm1XcqO9c8BdddnbITBg9y1U7ELFlLc7tZ
-         nTNCAoDKzjM9VL+QE+WgvZaOo5ZEO5dkK2D8ltTP1kKitL7F2z9BlOIrpdjMLO/w4wnP
-         kR/pv+aEJlXY4Vaq8BOpsayFm1zEolqruTj9MBtieI6QK8aIvS9/p1g2XGHUyAmPOCDP
-         6VZO4f7a+osdZfQrAZOsVeuvBBrPuUBbJ05kBJp0J+rnePuIemcRScTdSeUYaqAqSvUi
-         cGvqI6kEPY6oLjwziogyaZiuGJgvAVEnMlGRKt/kXtGTGDK5pj0O1KmtjsOvYEVKs0Jl
-         +afA==
-X-Gm-Message-State: AC+VfDw+v9RgtmZp42lfULGoFPl3pzEAFn91rod7+mmaDQrbTCIGqleL
-        /d5t9BIFnqNGymej2JaToRxXNlgp3WXWROW/Rh8=
-X-Google-Smtp-Source: ACHHUZ6FxDnAxua6geAAvzRbOYl0As0JGMHFLUcojlHJZyN1WrWlLUBxp3/J6donrAgh3Njt7XtM1Q==
-X-Received: by 2002:aa7:c507:0:b0:50c:3dc:2262 with SMTP id o7-20020aa7c507000000b0050c03dc2262mr3653027edq.39.1686141599613;
-        Wed, 07 Jun 2023 05:39:59 -0700 (PDT)
-Received: from localhost (tor-exit-48.for-privacy.net. [185.220.101.48])
-        by smtp.gmail.com with ESMTPSA id c26-20020aa7df1a000000b0051560edc8d4sm6151436edy.45.2023.06.07.05.39.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 05:39:59 -0700 (PDT)
-From:   Maxim Mikityanskiy <maxtram95@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Maxim Mikityanskiy <maxim@isovalent.com>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: [PATCH bpf v4 2/2] selftests/bpf: Add test cases to assert proper ID tracking on spill
-Date:   Wed,  7 Jun 2023 15:39:51 +0300
-Message-Id: <20230607123951.558971-3-maxtram95@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230607123951.558971-1-maxtram95@gmail.com>
-References: <20230607123951.558971-1-maxtram95@gmail.com>
+        Wed, 7 Jun 2023 08:46:16 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FDC6E6B;
+        Wed,  7 Jun 2023 05:46:14 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 357Cjhfj003458;
+        Wed, 7 Jun 2023 14:45:43 +0200
+Date:   Wed, 7 Jun 2023 14:45:43 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH 1/4] selftests/nolibc: add a test-report target
+Message-ID: <ZIB792FtG6ibOudp@1wt.eu>
+References: <20230605065459.153001-1-falcon@tinylab.org>
+ <20230607055200.667447-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607055200.667447-1-falcon@tinylab.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Maxim Mikityanskiy <maxim@isovalent.com>
+Hi Zhangjin,
 
-The previous commit fixed a verifier bypass by ensuring that ID is not
-preserved on narrowing spills. Add the test cases to check the
-problematic patterns.
+On Wed, Jun 07, 2023 at 01:52:00PM +0800, Zhangjin Wu wrote:
+> Hi, Willy
+> 
+> > > On Mon, Jun 05, 2023 at 11:48:52AM +0800, Zhangjin Wu wrote:
+> > > > A standalone test-report target is added to let the run, run-user and
+> > > > rerun targets share them.
+> > > > 
+> > > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > > ---
+> > > >  tools/testing/selftests/nolibc/Makefile | 26 ++++++++++++-------------
+> > > >  1 file changed, 13 insertions(+), 13 deletions(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > > > index be4159837494..8149ace2938a 100644
+> > > > --- a/tools/testing/selftests/nolibc/Makefile
+> > > > +++ b/tools/testing/selftests/nolibc/Makefile
+> > > > @@ -127,14 +127,18 @@ nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
+> > > >  libc-test: nolibc-test.c
+> > > >  	$(QUIET_CC)$(CC) -o $@ $<
+> > > >  
+> > > > -# qemu user-land test
+> > > > -run-user: nolibc-test
+> > > > -	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+> > > > +test-report:
+> > > >  	$(Q)awk '/\[OK\]$$/{p++} /\[FAIL\]$$/{f++} /\[SKIPPED\]$$/{s++} \
+> > > >  	         END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
+> > > >  	         if (s+f > 0) printf(" See all results in %s\n", ARGV[1]); else print; }' \
+> > > >  	         $(CURDIR)/run.out
+> > > >  
+> > > > +# qemu user-land test
+> > > > +_run-user: nolibc-test
+> > > > +	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+> > > > +
+> > > > +run-user: _run-user test-report
+> > > > +
+> > > 
+> > > This will not reliably work, there's no ordering here, nothing guarantees
+> > > that test-report will run *after* _run-user (e.g. make -j). Another
+> > > approach is needed if you want to factor this, but in general creating
+> > > sequences in makefiles is difficult and often more painful than having
+> > > 3 times the same 3 lines.
+> > >
+> > 
+> > Ok, thanks, what about this?
+> > 
+> >     # LOG_REPORT: report the test results
+> >     LOG_REPORT   := awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++} /\[SKIPPED\][\r]*$$/{s++} \
+> > 	                 END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
+> > 	                 printf(" See all results in %s\n", ARGV[1]); }'
+> > 
+> >     run-user: nolibc-test
+> > 	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+> > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+> > 
+> >     run: kernel
+> > 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+> > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+> > 
+> >     rerun:
+> > 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+> > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+> > 
+> > Or we directly add a standalone test report script? something like
+> > tools/testing/selftests/nolibc/report.sh
+> > 
+> >     #!/bin/sh
+> >     #
+> >     # report.sh -- report the test results of nolibc-test
+> >     #
+> >     
+> >     LOG_FILE=$1
+> >     [ ! -f "$LOG_FILE" ] && echo "Usage: $0 /path/to/run.out"
+> >     
+> >     awk '
+> >         /\[OK\][\r]*$$/{ p++ }
+> >         /\[FAIL\][\r]*$$/{ f++ }
+> >         /\[SKIPPED\][\r]*$$/{ s++ }
+> >     
+> >         END {
+> >             printf("%d test(s) passed, %d skipped, %d failed.", p, s, f);
+> >             printf(" See all results in %s\n", ARGV[1]);
+> >         }' $LOG_FILE
+> > 
+> > And use it like this:
+> > 
+> >     LOG_REPORT           = $(CURDIR)/report.sh
+> >
+> 
+> I plan to renew this patchset, which one of the above methods do you
+> prefer?
 
-Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
----
- .../selftests/bpf/progs/verifier_spill_fill.c | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
+IFF it needs to be done I prefer the macro in the Makefile to avoid
+depending on external scripts that are useless outside of the makefile.
+BUT, my point remains that I adopted this so that I could quickly and
+visually check that everything was OK. I'm fine with any other method
+but I do not want to have to carefully read all these lines to make
+sure I'm not mixing a "8" with a "0" (I'm mentioning this one because
+it's exactly the one I had when I decided to add the extra values).
+For example if you prepend "FAILURE: ", "WARNING: ", "SUCCESS: " in
+front of these lines to summarize them depending on the highest level
+encountered (success, skipped, failed), then I'm fine because it's
+easy to check that all lines show the same word.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 136e5530b72c..6115520154e3 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -371,4 +371,83 @@ __naked void and_then_at_fp_8(void)
- "	::: __clobber_all);
- }
- 
-+SEC("xdp")
-+__description("32-bit spill of 64-bit reg should clear ID")
-+__failure __msg("math between ctx pointer and 4294967295 is not allowed")
-+__naked void spill_32bit_of_64bit_fail(void)
-+{
-+	asm volatile ("					\
-+	r6 = r1;					\
-+	/* Roll one bit to force the verifier to track both branches. */\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0x8;					\
-+	/* Put a large number into r1. */		\
-+	r1 = 0xffffffff;				\
-+	r1 <<= 32;					\
-+	r1 += r0;					\
-+	/* Assign an ID to r1. */			\
-+	r2 = r1;					\
-+	/* 32-bit spill r1 to stack - should clear the ID! */\
-+	*(u32*)(r10 - 8) = r1;				\
-+	/* 32-bit fill r2 from stack. */		\
-+	r2 = *(u32*)(r10 - 8);				\
-+	/* Compare r2 with another register to trigger find_equal_scalars.\
-+	 * Having one random bit is important here, otherwise the verifier cuts\
-+	 * the corners. If the ID was mistakenly preserved on spill, this would\
-+	 * cause the verifier to think that r1 is also equal to zero in one of\
-+	 * the branches, and equal to eight on the other branch.\
-+	 */						\
-+	r3 = 0;						\
-+	if r2 != r3 goto l0_%=;				\
-+l0_%=:	r1 >>= 32;					\
-+	/* At this point, if the verifier thinks that r1 is 0, an out-of-bounds\
-+	 * read will happen, because it actually contains 0xffffffff.\
-+	 */						\
-+	r6 += r1;					\
-+	r0 = *(u32*)(r6 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("xdp")
-+__description("16-bit spill of 32-bit reg should clear ID")
-+__failure __msg("dereference of modified ctx ptr R6 off=65535 disallowed")
-+__naked void spill_16bit_of_32bit_fail(void)
-+{
-+	asm volatile ("					\
-+	r6 = r1;					\
-+	/* Roll one bit to force the verifier to track both branches. */\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0x8;					\
-+	/* Put a large number into r1. */		\
-+	w1 = 0xffff0000;				\
-+	r1 += r0;					\
-+	/* Assign an ID to r1. */			\
-+	r2 = r1;					\
-+	/* 16-bit spill r1 to stack - should clear the ID! */\
-+	*(u16*)(r10 - 8) = r1;				\
-+	/* 16-bit fill r2 from stack. */		\
-+	r2 = *(u16*)(r10 - 8);				\
-+	/* Compare r2 with another register to trigger find_equal_scalars.\
-+	 * Having one random bit is important here, otherwise the verifier cuts\
-+	 * the corners. If the ID was mistakenly preserved on spill, this would\
-+	 * cause the verifier to think that r1 is also equal to zero in one of\
-+	 * the branches, and equal to eight on the other branch.\
-+	 */						\
-+	r3 = 0;						\
-+	if r2 != r3 goto l0_%=;				\
-+l0_%=:	r1 >>= 16;					\
-+	/* At this point, if the verifier thinks that r1 is 0, an out-of-bounds\
-+	 * read will happen, because it actually contains 0xffff.\
-+	 */						\
-+	r6 += r1;					\
-+	r0 = *(u32*)(r6 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.40.1
+> For the always print statement:
+> 
+>     printf(" See all results in %s\n", ARGV[1]); }'
 
+Then please put it on its own line without the leading space, this
+will be even more readable.
+
+> I will paste the reason why I need it, as mentioned in [1], if you still
+> need a clean test report, I will give up this change ;-)
+
+No worries, I don't want to be annoying if you need something, but I
+don't want to be annoyed by changes either :-)
+
+thanks,
+Willy
