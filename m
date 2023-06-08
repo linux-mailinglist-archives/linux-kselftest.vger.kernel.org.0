@@ -2,138 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB017273F1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 03:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1AF727407
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 03:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbjFHBFL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 21:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S230520AbjFHBQK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 21:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjFHBFK (ORCPT
+        with ESMTP id S230450AbjFHBQK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 21:05:10 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CD72115;
-        Wed,  7 Jun 2023 18:05:09 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0398F5C01C1;
-        Wed,  7 Jun 2023 21:05:06 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 07 Jun 2023 21:05:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nikishkin.pw; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1686186305; x=1686272705; bh=5bBEe0GLjb
-        aVn4rHmIVTM0XdFdXFWe1qA/2vtDozbkE=; b=G87mFfNmCgyVNGCRBB/ZB/msgR
-        9JzsONBr/2QBSoi9Oka1zKzyG3BYIFjG7pZyeqQL6NnCOgPn0uEQwmidzGGYPzLh
-        zdRSoFukUsWGb2/hnNtnx7eHLFxNhubg3GJeSopodiB1sc8aZfH9stFOOAhX8mzo
-        oT29F7ZNeVQ2rLcO62b9oFgYL5SH1RYkSL/7/wtyw7AwhBV718y9TZBv/vj0vycu
-        RV6FwmWO7XYViZCyuHCL3EdiQk3GRWOlbjjFvSAeFdY59HXgPRS8WYZxshMjz0wK
-        2axJUVDMoD/85Q6Mdy7afFvX22SLXX8JwcHW6HafNT6k7QwixGSL/hqm9Aeg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686186305; x=1686272705; bh=5bBEe0GLjbaVn
-        4rHmIVTM0XdFdXFWe1qA/2vtDozbkE=; b=NIZtki5vdypFuIOFWNgmEnAJWtklg
-        UCAHVUD9BtyQLF1wd6/5ybTUaBd/IGVzfKektdtjn23eUfEVCerhYjVXm3iO48AD
-        /8KoSM3E4t00X3YKPDp1HzyiA4EqLo5t3ICPg8x3/iXPTSkB8r81X7ckK3yzkaRQ
-        J+vyuUrGiitlH70witBSlfWTxWSqOTXv9zk0bxLDe5mKR8O71ecQCEuIBOgPu5fc
-        vLdMRrqa6KexGl5wgRaJ7+euFS6jNyXg20tUFn6+GgqveUY9Qp6sXtYLY/Tq20kV
-        kKbS5LpSpc030CcnU7NTfzZ+FVuo1LKUc8syu30Bml4arAe/9fDIiiKJg==
-X-ME-Sender: <xms:QSmBZNOZQej5zlJlhqXQ5UxP-dbhd01FrEH6537xKFFQoI7lmBWcfw>
-    <xme:QSmBZP8snORl42tTAH1-RGGpqcx2vFkZGPrRXOab20MxtN96TTu14VbYEthKNSiAQ
-    26PdcboBBkgoAnrDzI>
-X-ME-Received: <xmr:QSmBZMSaYDu73p5ybZkmSO29hx_AP9ZQ2zVYDV_PE8Ft6Nt4xNsaNi8FY5kZSBN-6C2x4DC8qzY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedthedggedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfedtmdenucfjughrpefhvf
-    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpegglhgrughimhhirhcupfhikhhi
-    shhhkhhinhcuoehvlhgrughimhhirhesnhhikhhishhhkhhinhdrphifqeenucggtffrrg
-    htthgvrhhnpefgheegleetjeffveehhfffudejfeffhefhleelgfejtddtieeivddtleev
-    veevieenucffohhmrghinhepmhgvshhsrghgvgdrthhoohhlshdpthgvshhtvhiglhgrnh
-    hnohhlohgtrghlsgihphgrshhsrdhshhenucevlhhushhtvghrufhiiigvpedtnecurfgr
-    rhgrmhepmhgrihhlfhhrohhmpehvlhgrughimhhirhesnhhikhhishhhkhhinhdrphif
-X-ME-Proxy: <xmx:QSmBZJtpwfwu_VsuktXGyBqV-NdmflqoGYR2jAhnl5GKf86V-BhrTw>
-    <xmx:QSmBZFf9YmTnSy3gK2etYd4ma42Qqk1cqj17LZSDromdWkMu9E_Rlw>
-    <xmx:QSmBZF2k3CxLiBZ8BZuAOXsXbIa_6A91AbB2xQtER9j0WMpB1QaPAQ>
-    <xmx:QSmBZA3oKTi3VK4LncJW_kX09248SLuH7BSTxMh9oR7iIVhdxdx-Ew>
-Feedback-ID: id3b446c5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Jun 2023 21:05:00 -0400 (EDT)
-From:   Vladimir Nikishkin <vladimir@nikishkin.pw>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, eng.alaamohamedsoliman.am@gmail.com,
-        gnault@redhat.com, razor@blackwall.org, idosch@nvidia.com,
-        liuhangbin@gmail.com, eyal.birger@gmail.com, jtoppins@redhat.com,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        stephen@networkplumber.org,
-        Vladimir Nikishkin <vladimir@nikishkin.pw>
-Subject: [PATCH net-next v1] selftests: net: vxlan: Fix selftest regression after changes in iproute2.
-Date:   Thu,  8 Jun 2023 09:04:00 +0800
-Message-Id: <20230608010400.30115-1-vladimir@nikishkin.pw>
-X-Mailer: git-send-email 2.35.8
+        Wed, 7 Jun 2023 21:16:10 -0400
+Received: from mail-oa1-f65.google.com (mail-oa1-f65.google.com [209.85.160.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDB2269F;
+        Wed,  7 Jun 2023 18:16:08 -0700 (PDT)
+Received: by mail-oa1-f65.google.com with SMTP id 586e51a60fabf-19f675022d8so70619fac.0;
+        Wed, 07 Jun 2023 18:16:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686186968; x=1688778968;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ueYNpwpPQw4FdttuUeyvSQxlAk/WNLmJ1r90VUlwt2o=;
+        b=N1g0H3NqtWF1GWQ7VhG/qgs2XfUiHlEzd8w37/ftHoU6oWJL8yk606QhWwELkYKPq7
+         4J7kwsOSBmtn0E3FG4Bu06Lk6z5WXhRA5eF2gffcV8ymY0AlDSPnnUjG4OXnT2p4A3ax
+         UPyIIu4sH3+HICtFYeADSpREirehim/V5GGMhTn1Po7ewrQ/KoV2FqHscmmJqQwEs8IG
+         /U7g+XjJVnq3g2glbbO/o99X1HUujruXvqTFTPOxJZNl+s9Og5r0eatltsAPLljLO0Ym
+         ce/jmJub1mMYMPGiibxUf4+LOMBsRyu2a4rUOKonVtJRGhyr4JQDi5n4W4FD7Fc8U/p7
+         xx7Q==
+X-Gm-Message-State: AC+VfDxBZkBUPWresA+TAco5Hz0UDs0mcWc6gCQqWhqFqlDnOqVxj/Mg
+        mordz47uHjfsBzS9WRqX5g==
+X-Google-Smtp-Source: ACHHUZ5yAlJTEqzE7X+xjo9wvbXWM8Gk3iZbjXjA4RVOAqphuLGPY6TerfW3Gfx6Y6pBJGYcKEe5Cw==
+X-Received: by 2002:a05:6870:8581:b0:19e:efe5:dfc8 with SMTP id f1-20020a056870858100b0019eefe5dfc8mr4108299oal.44.1686186967877;
+        Wed, 07 Jun 2023 18:16:07 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id g11-20020a17090a128b00b00250334d97dasm1906691pja.31.2023.06.07.18.16.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 18:16:07 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     mhiramat@kernel.org, beaub@linux.microsoft.com,
+        rostedt@goodmis.org, shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kelulanainsley@gmail.com,
+        sunliming <sunliming@kylinos.cn>
+Subject: [PATCH 0/3] tracing/user_events: Fix incorrect return value for
+Date:   Thu,  8 Jun 2023 09:15:51 +0800
+Message-Id: <20230608011554.1181097-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The iproute2 output that eventually landed upstream is different than
-the one used in this test, resulting in failures. Fix by adjusting the
-test to use iproute2's JSON output, which is more stable than regular
-output.
+Now the  writing operation return the count of writes whether events are
+enabled or disabled. Fix this by just return -EFAULT when events are disabled.
 
-Fixes: 305c04189997 ("selftests: net: vxlan: Add tests for vxlan nolocalbypass option.")
-Signed-off-by: Vladimir Nikishkin <vladimir@nikishkin.pw>
----
-v0=>v1: Fix spaces in indentation. Correct commit message.
+sunliming (3):
+  tracing/user_events: Fix incorrect return value for writing operation
+    when events are disabled
+  selftests/user_events: Enable the event before write_fault test in
+    ftrace self-test
+  selftests/user_events: Add test cases when event is disabled
 
-tools/testing/selftests/net/test_vxlan_nolocalbypass.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/trace/trace_events_user.c                  | 3 ++-
+ tools/testing/selftests/user_events/ftrace_test.c | 7 +++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh b/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
-index 46067db53068..3ce630e4a18b 100755
---- a/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
-+++ b/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
-@@ -130,7 +130,7 @@ nolocalbypass()
- 	run_cmd "tc -n ns1 qdisc add dev lo clsact"
- 	run_cmd "tc -n ns1 filter add dev lo ingress pref 1 handle 101 proto ip flower ip_proto udp dst_port 4790 action drop"
- 
--	run_cmd "ip -n ns1 -d link show dev vx0 | grep ' localbypass'"
-+        run_cmd "ip -n ns1 -d -j link show dev vx0 | jq -e '.[][\"linkinfo\"][\"info_data\"][\"localbypass\"] == true'"
- 	log_test $? 0 "localbypass enabled"
- 
- 	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
-@@ -140,7 +140,7 @@ nolocalbypass()
- 
- 	run_cmd "ip -n ns1 link set dev vx0 type vxlan nolocalbypass"
- 
--	run_cmd "ip -n ns1 -d link show dev vx0 | grep 'nolocalbypass'"
-+        run_cmd "ip -n ns1 -d -j link show dev vx0 | jq -e '.[][\"linkinfo\"][\"info_data\"][\"localbypass\"] == false'"
- 	log_test $? 0 "localbypass disabled"
- 
- 	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
-@@ -150,7 +150,7 @@ nolocalbypass()
- 
- 	run_cmd "ip -n ns1 link set dev vx0 type vxlan localbypass"
- 
--	run_cmd "ip -n ns1 -d link show dev vx0 | grep ' localbypass'"
-+	run_cmd "ip -n ns1 -d -j link show dev vx0 | jq -e '.[][\"linkinfo\"][\"info_data\"][\"localbypass\"] == true'"
- 	log_test $? 0 "localbypass enabled"
- 
- 	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
 -- 
-2.35.8
-
---
-Fastmail.
+2.25.1
 
