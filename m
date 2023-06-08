@@ -2,89 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B8472740D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 03:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CCC727585
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 05:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbjFHBQ3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 21:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
+        id S233958AbjFHDR7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 23:17:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbjFHBQ0 (ORCPT
+        with ESMTP id S231753AbjFHDR6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 21:16:26 -0400
-Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DD726AE;
-        Wed,  7 Jun 2023 18:16:22 -0700 (PDT)
-Received: by mail-pj1-f65.google.com with SMTP id 98e67ed59e1d1-256766a1c43so34154a91.1;
-        Wed, 07 Jun 2023 18:16:22 -0700 (PDT)
+        Wed, 7 Jun 2023 23:17:58 -0400
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9EFE43;
+        Wed,  7 Jun 2023 20:17:57 -0700 (PDT)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-565de553de1so3138997b3.0;
+        Wed, 07 Jun 2023 20:17:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686194276; x=1688786276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V7fMdE8eaW7BeuJ297fgloLKjwJdfmPyym4SYRcLyPI=;
+        b=gIimOiJmtBiXZ/AfGv9nbO9GUOUxWMjMHVDRQMd8A7YFdE8Dk/pmt/ao6FozOnablT
+         F7uU/1ol0VP7EEzjNS80q8nrViUR6/VoRT3dkTGUStdVjAQ2k0/LMN0GQ5WpJ34pRtMC
+         yxkmwGi8jPVDb/7pHSxyno9EDCyBpjjUagh9PxB88BS4TAJqScbUXBTYFaWXuR5SPSkl
+         8H/cphHwNeEZKS94o/sg/g85q93Ka0Cwa3L1XpWzgHoNfp2saysc8FWyvjnM/aZoMTqH
+         dFKdJQTnYHgny1px4n1+UyNLk1CJbSkh0Q3WmHOu4M43M0sHrJ7XmUpay7orEF/9VXpM
+         GTiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686186982; x=1688778982;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686194276; x=1688786276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4fjZocQuLj2YEu+oxrRPhJbmjewTJfCmZq5g1FLSCZg=;
-        b=P+4Dm75tmNxsfJSCwrBUJY0zB9KiieawRmiA2LFkOL5uoFE1xNqB6YpnTGpplIky2e
-         0O6ANUn/oX0HDKufycEe4b/XvmGevWnKZYrXMwyN9pqDwtAtqAPWpvyoDHFgPXmncBvZ
-         KgeN+VMKCPlw7AogKxwWp3tFyO501ZvUMLmSPF5ZW7Jq5ItVEasDHibe4GgUJ1AwFgyD
-         py270dOzzo6UN4MKT6YVW1zZaa5sMtVMO6ZoKKIYomWTv/iPo92WwrNNphHqnho4Yns8
-         D8gQE+0FDZzfcSlg3kQe3tRahTTTTWGG9sJQYRc26+sDC0hwN8v6qVF53R/eWZSsB4+1
-         d0KA==
-X-Gm-Message-State: AC+VfDxaRQwvUmaSpw6PSkh2YEDm3FpKb3ueb7ibpx0uDeSTxAHk0emO
-        yg3UBPOcnRSg6Kn/PlIrZA==
-X-Google-Smtp-Source: ACHHUZ5QvjEgG6Q8wAbgsgYjwXcFIa3cbvGL6K23v78TkeyNYGSc8+d804DIT9DZNEJ7ivrFsCrBqA==
-X-Received: by 2002:a17:90b:e8a:b0:255:f693:cf91 with SMTP id fv10-20020a17090b0e8a00b00255f693cf91mr3490612pjb.30.1686186981761;
-        Wed, 07 Jun 2023 18:16:21 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id g11-20020a17090a128b00b00250334d97dasm1906691pja.31.2023.06.07.18.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 18:16:21 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     mhiramat@kernel.org, beaub@linux.microsoft.com,
-        rostedt@goodmis.org, shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kelulanainsley@gmail.com,
-        sunliming <sunliming@kylinos.cn>
-Subject: [PATCH 3/3] selftests/user_events: Add test cases when event is disabled
-Date:   Thu,  8 Jun 2023 09:15:54 +0800
-Message-Id: <20230608011554.1181097-4-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230608011554.1181097-1-sunliming@kylinos.cn>
-References: <20230608011554.1181097-1-sunliming@kylinos.cn>
+        bh=V7fMdE8eaW7BeuJ297fgloLKjwJdfmPyym4SYRcLyPI=;
+        b=cZ55G5YIQsN7n4sVeB1nAfdsbiK2m6iNzA7lnCQhHRrdh5iR0zcHq7H5Xa4rFzBvdU
+         OYnlvm1z162YoYjVKKhoM7kI4c5b/SkKSu4xzQzaw31mBpyB/dtdrEPpLXQ3OWY0zzEl
+         ZMHaZETmX7dt7B3iX/tKaaHnkMHfFWss16PLdfvBku5gTgZWqFt6RnFxk3T8AhirZH0G
+         E03GJKEHFMyEo5Vzlt/j0hh8cJSqrUwF1GmcJSsbrjRMe/kEiRkfOhi1awplYueZWDWI
+         MaCoEHQFKENdeMWo64qxHT8oKsY2+Na4gD0Ok8JM0PrCseoDGMit+lVMQxN/6RgxJGpc
+         WjYA==
+X-Gm-Message-State: AC+VfDxI/h13Lmrd6YMbBuvc+xMP9IGJl9sOh1qjauT1R16kiS6gbyC3
+        jkFs35EhEH3EgJ4AIHO6aH9c3J+x/aaZWEwrlYgIUxQuIzwAfJ66
+X-Google-Smtp-Source: ACHHUZ5dPBEvyBVjI47c0kbRPC2Y0VkP2Lilanf4uyMojOYEDQLHVku5t53NLCaZ3cNkXLbvQCdyYer6yxkBkHGAyGQ=
+X-Received: by 2002:a0d:e8d2:0:b0:561:9bcc:6c81 with SMTP id
+ r201-20020a0de8d2000000b005619bcc6c81mr1218726ywe.24.1686194276278; Wed, 07
+ Jun 2023 20:17:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230607125911.145345-1-imagedong@tencent.com>
+ <20230607125911.145345-2-imagedong@tencent.com> <20230607200905.5tbosnupodvydezq@macbook-pro-8.dhcp.thefacebook.com>
+In-Reply-To: <20230607200905.5tbosnupodvydezq@macbook-pro-8.dhcp.thefacebook.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Thu, 8 Jun 2023 11:17:45 +0800
+Message-ID: <CADxym3abYOZ5JVa4FP5R-Vi7HAk=n_0vTmMGveDH8xvFtuaBDw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] bpf, x86: allow function arguments up to
+ 12 for TRACING
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, x86@kernel.org,
+        imagedong@tencent.com, benbjiang@tencent.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When user_events are disabled, it's write operation should be fail. Add
-this test cases.
+On Thu, Jun 8, 2023 at 4:09=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Jun 07, 2023 at 08:59:09PM +0800, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+> > on the kernel functions whose arguments count less than 6. This is not
+> > friendly at all, as too many functions have arguments count more than 6=
+.
+> >
+> > Therefore, let's enhance it by increasing the function arguments count
+> > allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+> >
+> > For the case that we don't need to call origin function, which means
+> > without BPF_TRAMP_F_CALL_ORIG, we need only copy the function arguments
+> > that stored in the frame of the caller to current frame. The arguments
+> > of arg6-argN are stored in "$rbp + 0x18", we need copy them to
+> > "$rbp - regs_off + (6 * 8)".
+> >
+> > For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the arguments
+> > in stack before call origin function, which means we need alloc extra
+> > "8 * (arg_count - 6)" memory in the top of the stack. Note, there shoul=
+d
+> > not be any data be pushed to the stack before call the origin function.
+> > Then, we have to store rbx with 'mov' instead of 'push'.
+>
+> x86-64 psABI requires stack to be 16-byte aligned when args are passed on=
+ the stack.
+> I don't see this logic in the patch.
 
-Signed-off-by: sunliming <sunliming@kylinos.cn>
----
- tools/testing/selftests/user_events/ftrace_test.c | 3 +++
- 1 file changed, 3 insertions(+)
+Yeah, it seems I missed this logic......:)
 
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index d33bd31425db..d3240a97f23d 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -297,6 +297,9 @@ TEST_F(user, write_events) {
- 	io[0].iov_base = &reg.write_index;
- 	io[0].iov_len = sizeof(reg.write_index);
- 
-+	/* Write should fail when event is not enabled */
-+	ASSERT_EQ(-1, writev(self->data_fd, (const struct iovec *)io, 3));
-+
- 	/* Enable event */
- 	self->enable_fd = open(enable_file, O_RDWR);
- 	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
--- 
-2.25.1
+I have not figure out the rule of the alignment, but after
+observing the behavior of the compiler, the stack seems
+should be like this:
 
+------ stack frame begin
+rbp
+
+xxx   -- this part should be aligned in 16-byte
+
+------ end of arguments in stack
+xxx
+------ begin of arguments in stack
+
+So the code should be:
+
++       if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG)) {
++                stack_size =3D ALIGN(stack_size, 16);
++                stack_size +=3D (nr_regs - 6) * 8;
++       }
+
+Am I right?
+
+Thanks!
+Menglong Dong
