@@ -2,146 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64605727C07
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 11:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2598727C5F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 12:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235211AbjFHJ6w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 05:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
+        id S230290AbjFHKKU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jun 2023 06:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234793AbjFHJ6v (ORCPT
+        with ESMTP id S235932AbjFHKKR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:58:51 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6FB2706
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 02:58:50 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30af20f5f67so421480f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jun 2023 02:58:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1686218329; x=1688810329;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bro8SCdRCjEHWuDcBtldZHsndfar0M9rwEdZ8SQ0W0s=;
-        b=DWLlXBMjR+In9QMk6WByU+4r6ZJwRxIdZLTZafSYiCKOJbbbT6swcxcbDLzxBWXjSp
-         1fbhQV7xgyvNNKARmYmQiulH1nZx4WLvUTDj3K4StImn2hgIxDj2+ikZyPIKdWisMOTf
-         POkUvZLouPzWG0TFB+pG8Fqpf4v308cP9MheL82rSXAkIQHV8FTqswIFUo3ofKEZH1T5
-         gBAYnPnURVTOhHfQfMReB4ybwIfvFPWb9VgzTP9BzQ4nEZKp69qw8Fh1mVAeJnQ4O6Qb
-         hvdyiWTomMIhVCmxq/xcYY3sZSRGDpAgFxYDyLLQmROw3quJagxDYH4kZcjPI1PfZRLY
-         vJdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686218329; x=1688810329;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bro8SCdRCjEHWuDcBtldZHsndfar0M9rwEdZ8SQ0W0s=;
-        b=YOutyNU8JTpl3/Z+fFPHD4W3ThPKb763FIoUcpqYmnRBStK48uqQ5pRVb4y4xZGWm4
-         X7AwfPnTLtBWLxtEjzxAFCpKqwdvnOXwgwLAijB4s8+C51LOg9kFHqg2F3wNPukpsB59
-         lKbDKq7CnCGhUrUd79ZjPl+QonLeKkSK6eEc0zAij7cL/rZOuQL0FqsGCrtD/Hjej0gd
-         wl8F621gNqQol4itRIdgjzqH0nsRGaitNzeThl9lv5WC/Mb0ihWZexqsTHCc1AHE09vs
-         ZelELJ4pxeuZwDiwmPZ0lYyXdn4YgId/Z2Kn7CdST4AJARZxTvtj/Ej8okcGcxzE0KSd
-         lYUQ==
-X-Gm-Message-State: AC+VfDyZISeOdaoAnPQUCPRP4VDqMsSFGWfe17pXTAIHMEC046g5SZJS
-        ZCR15nNCJdo17hzqopoBktlHWw==
-X-Google-Smtp-Source: ACHHUZ6f6RLGsz44l11hXuy9AWjs8GZ3O0KJYqBLOUqFSQ6jSeZDCKr+qhXxSeHoE89ty7CpeH4xmQ==
-X-Received: by 2002:a5d:6550:0:b0:30a:9014:838d with SMTP id z16-20020a5d6550000000b0030a9014838dmr6419901wrv.11.1686218329062;
-        Thu, 08 Jun 2023 02:58:49 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id q12-20020a05600000cc00b002ff2c39d072sm1065586wrx.104.2023.06.08.02.58.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 02:58:48 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 11:58:47 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <xiaobo55x@gmail.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH v2 11/11] KVM: riscv: selftests: Add get-reg-list test
-Message-ID: <20230608-344953a953eeb63ef6c26fb8@orel>
-References: <cover.1684999824.git.haibo1.xu@intel.com>
- <da390e6200e838fce320a2a43b2f87951b4e0bbb.1684999824.git.haibo1.xu@intel.com>
- <20230525-2bab5376987792eab73507ac@orel>
- <CAJve8okR_iH4vF9DV9zTkDaeYe25kP7KUcKQphmjG5q-iVb-KA@mail.gmail.com>
+        Thu, 8 Jun 2023 06:10:17 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B787D1FDF;
+        Thu,  8 Jun 2023 03:10:14 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1686219003tjya3x6c
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 08 Jun 2023 18:10:02 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: OY3aTMibIIceE4+5YMhobSaP1h6B+Or/hGya94VrcWvAEv5xCwQu0Z/MZpJYV
+        Ar2k1rxgj+mzz5Bred1gka6b/wnlYIcP2cznOwc6Q1lWV/QtRGQABsAD0iPVkazj5zrKEJJ
+        4yenMpsSY6eaUXToKdoAMu5DGmacd4TafyDwCTMFzbnIotUEcJ73LUN7gNa4nJiMVrNuBpF
+        nML9dz03A9tNi3xoi3xhNNftGCzmqafbEFd7rzuUOpxPqFa2BDMuvXHvh/Kw6KUfW79UO6Q
+        T7LMJFZRNlWpeARnV94EZnsNovZu0P4Bk1QOktX9Mx6dIifpGuG/dr0RZfCjHS3fwCZ49TK
+        2yVeO4XsPkG13xVZ/RbYpxQNEO2/PfbEfxLHtUqM5SLXwTv2pTp1Qb3O2z4VQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 13470355492363888723
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        w@1wt.eu
+Subject: Re: [PATCH v3 0/3] tools/nolibc: add a new syscall helper
+Date:   Thu,  8 Jun 2023 18:10:01 +0800
+Message-Id: <20230608101001.38243-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <87e7a391-b97b-4001-b12a-76d20790563e@t-8ch.de>
+References: <87e7a391-b97b-4001-b12a-76d20790563e@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJve8okR_iH4vF9DV9zTkDaeYe25kP7KUcKQphmjG5q-iVb-KA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 05:45:21PM +0800, Haibo Xu wrote:
-> On Fri, May 26, 2023 at 1:18 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+> On 2023-06-07 19:28:58+0800, Zhangjin Wu wrote:
+> > Willy, Thomas
+> > 
+> > This is the revision of the v2 syscall helpers [1], it is based on
+> > 20230606-nolibc-rv32+stkp7a of [2]. It doesn't conflict with the v4 of
+> > -ENOSYS patchset [3], so, it is ok to simply merge both of them.
+> > 
+> > This revision mainly applied Thomas' method, removed the __syscall()
+> > helper and replaced it with __sysret() instead, because __syscall()
+> > looks like _syscall() and syscall(), it may mixlead the developers.
 > >
+(...)
+> > BTW, two questions for Thomas,
+> > 
+> > * This commit 659a49abc9c2 ("tools/nolibc: validate C89 compatibility")
+> >   enables -std=c89, why not gnu11 used by kernel ? ;-)
 > 
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_REG_RISCV_CORE_REG(mode),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sstatus),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sie),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(stvec),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sscratch),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sepc),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(scause),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(stval),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sip),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(satp),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(scounteren),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(frequency),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(time),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(compare),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(state),
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_A,
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_C,
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_D,
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_F,
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_H,
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_I,
-> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_M,
+> Because nolibc needs to support whatever its users need.
+> As nolibc is header-only all of it needs to work everywhere.
+> C89 should work for everybody :-)
+> 
+
+Get it, thanks.
+
+> The kernel on the other hand is compiled standalone and is not limited
+> by its users.
+> 
+> See the discussion here:
+> 
+> https://lore.kernel.org/all/20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net/
+> https://lore.kernel.org/all/20230328-nolibc-c99-v1-1-a8302fb19f19@weissschuh.net/
+>
+
+Thanks very much for sharing the whole history info.
+
+And as the your commit 063b6bc5b39f ("tools/nolibc: use __inline__ syntax")
+explains, the 'inline' keyword has been used in many headers of include/uapi/,
+so, how our -std=c89 work with them? I did find the clue eventually, here maybe:
+
+    $ grep -n inline scripts/headers_install.sh
+    11:	echo "asm/inline/volatile keywords."
+    37:	s/(^|[[:space:](])(inline|asm|volatile)([[:space:](]|$)/\1__\2__\3/g
+
+The headers_install target helped us convert all of the new keywords to the old
+ones, it's magic ;-)
+
+So, it should work if people not want to try a -I/path/to/include/uapi/, I did
+this for musl before, even If we do this, this may help:
+
+    diff --git a/tools/include/nolibc/std.h b/tools/include/nolibc/std.h
+    index 933bc0be7e1c..33d546cf9af0 100644
+    --- a/tools/include/nolibc/std.h
+    +++ b/tools/include/nolibc/std.h
+    @@ -7,6 +7,14 @@
+     #ifndef _NOLIBC_STD_H
+     #define _NOLIBC_STD_H
+     
+    +#ifndef NOLIBC_TEST
+    +#ifndef __STDC_VERSION__
+    +#define inline __inline__
+    +#define asm __asm__
+    +#define volatile __volatile__
+    +#endif
+    +#endif
+    +
+     /* Declare a few quite common macros and types that usually are in stdlib.h,
+      * stdint.h, ctype.h, unistd.h and a few other common locations. Please place
+      * integer type definitions and generic macros here, but avoid OS-specific and
+    diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+    index 4a3a105e1fdf..46f061a4458a 100644
+    --- a/tools/testing/selftests/nolibc/Makefile
+    +++ b/tools/testing/selftests/nolibc/Makefile
+    @@ -78,7 +78,7 @@ endif
+
+     CFLAGS_s390 = -m64
+     CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
+    -CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+    +CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -DNOLIBC_TEST \
+                    $(call cc-option,-fno-stack-protector) \
+                    $(CFLAGS_$(ARCH)) $(CFLAGS_STACKPROTECTOR)
+
+Is this worth a new patch? I do think it is not required.
+
+> > * Do we need to tune the order of the macros in unistd.h like this:
+> > 
+> >     #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
+> >     #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
+> >     #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
+> >     #define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
+> >     #define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
+> > 
+> >   Before, It works but seems not put in using order:
+> > 
+> >     #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
+> >     #define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
+> >     #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
+> >     #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
+> >     #define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
+> 
+> Not sure it makes a big difference.
+> If you want to change it, go for it.
+>
+
+Only switched two of them, oh, just found the '_sycall_narg' did miss a 's'
+character, it may be really worth a patch now, I know why I focused on the
+order so much, because the missing 's' made it not aligned well ;-)
+ 
 > >
-> > I think all the above should have the size KVM_REG_SIZE_ULONG. Please also
-> > test with a 32-bit host.
-> >
+(...) 
+> >  tools/include/nolibc/sys.h    | 364 +++++-----------------------------
+> >  tools/include/nolibc/unistd.h |  11 +-
+> >  2 files changed, 55 insertions(+), 320 deletions(-)
 > 
-> Hi Andrew,
+> For the full series:
 > 
-> Just noticed the RISC-V 32-bit kvm selftests was not supported currently.
+> Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+>
 
-Oh, right.
+Thanks a lot, I'm really appreciated.
 
-> Even though I tried to remove the below check for 32-bit, there were
-> still many warning and error messages during compiling.
-> It seems 32-bit KVM selftests was not supported either for ARM/x86. Do
-> we have a plan to support it on risc-v?
-
-No plan and, if there was, it would be super low priority. So for stuff
-like using KVM_REG_SIZE_ULONG, we'll just have to try and get it right
-without testing. If somebody adds 32-bit support to these tests someday,
-then, hopefully, it'll just work (I'm allowed one overly optimistic
-comment per day).
-
-Thanks,
-drew
+Best regards,
+Zhangjin
+ 
+> Thanks,
+> Thomas
