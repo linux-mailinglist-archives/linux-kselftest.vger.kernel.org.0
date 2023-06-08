@@ -2,227 +2,582 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F759728949
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 22:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B228F728966
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 22:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234568AbjFHUR7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 16:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S236338AbjFHU12 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jun 2023 16:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjFHUR7 (ORCPT
+        with ESMTP id S235943AbjFHU1O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 16:17:59 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F4D30C2
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 13:17:45 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-977d6aa3758so188733766b.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jun 2023 13:17:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686255464; x=1688847464;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yFfOuXxs8iGOdfT2qhI1JEq3SXtax8RxnY5/Fc1nskw=;
-        b=tOrPL690XMDizppt1902CZdnVhRRGiAVY2h6pQOMPMquGW96yGqxA0WIbSxFO2hzYj
-         QJWnaa2e9gObU8AZ2JFs1RnUAEJIDlYvyz3Vk0eN8oMhXzeUPdODFYrHIciSsxP+IkvB
-         jQwIzPalMrRq9DKz/4lf8td/DpbRjoc5ifdZhGCvIzaMTootBnpupjCsIyoRUICz4e/t
-         s7DCsNccifNfK4D9fga3PZMYqo8cjQOHa1g5+0GmjGcyvRnrUycsTbOan/Dr+m5rK0cw
-         99nId16qyeJxOEnOuTWeiopCyGHCtsnDGSzjOlTPx/PNiWyaKL9qyVPA3bhi1oIBq4wV
-         bWXw==
+        Thu, 8 Jun 2023 16:27:14 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA6530D7
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 13:26:57 -0700 (PDT)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5D79D3F363
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 20:26:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686256016;
+        bh=0r3w+p7lLL3IiUaSzQ8Wv51gElYa/s7NhvJj2biMB0Y=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=GSPXOJ8DRBd8f2rmVZ8U+Hz+L0sB5qEy6rPp83xRC/f0KJe3dn8Bo3bSIxUlKkwjI
+         LmDNg7Ru7S9wDcPDllNXEXxqsqZQnJPjgUQTt1BScXmcC8qGn2KGpiELHxGyPK9IXw
+         xY0BSnpRdofl6X/DDsggxYBEcjz7eVSztmPykAXWNSRCqJTqSXbLnfuqWhYFW1mTQV
+         0R44XI0V4Uidmc0+dcuq4ComvUNNOX74qut8Md91nUsdXxKxFWCBH43OtRmhu0AVQS
+         4yrvmDlMgvLlAccmuW18wqA41gfHXC3QxIStyr6AuYMH200X7Z7zMaSToJuU+nuOuc
+         fMmIasqLSBjJA==
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-97888a89775so96445666b.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jun 2023 13:26:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686255464; x=1688847464;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686256015; x=1688848015;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yFfOuXxs8iGOdfT2qhI1JEq3SXtax8RxnY5/Fc1nskw=;
-        b=MHeJjW2tDf0eW6P1xxBp6+snXeRqMZcgf11An0R5V7O4bajspWVg3sutCBtfJPHJRH
-         UgE8QFJpSfv+nMHb9z6j1LtNuUle7HkMnKEqE61HJlz5dX/TJFTIdAmhP5qwgyDFMjzj
-         mQPssx3BgOU/PP9oqkxZGK/ARjY8zbKmpbqHWbFDxcPt7LUsBw2Vkwn92EMWXh//8mFN
-         vzO1GIZxNjgGTuRfKqUxjYyilc9kmi/cBdCWsLKtdfaoaUfCLHULrroKw9iwRzVQmZoO
-         NHqHpLLXsHF2w9k0xpkPHsBYYO3nho2JVkxK1dG3DcMRpSyYQ1hso9WxzQw7hvAMSG3o
-         M6Bw==
-X-Gm-Message-State: AC+VfDysM4S4ERBvEpK3jZn7TPXuJBYuOVvlmW4VANKy1L972zsYFrfP
-        TAzTxm+4uObivwfHFmBpuuzanDtAXUM/Ccp6lSKdYA==
-X-Google-Smtp-Source: ACHHUZ5rIRRCqsHv8Mj5sYTFvVoPuCCGYYh1ahL9p64lBD/iRVAni/xzcUb+JGKF5FFtYateiNco/3eYHVsT49XamTA=
-X-Received: by 2002:a17:907:c13:b0:973:d846:cd5d with SMTP id
- ga19-20020a1709070c1300b00973d846cd5dmr154165ejc.74.1686255464184; Thu, 08
- Jun 2023 13:17:44 -0700 (PDT)
+        bh=0r3w+p7lLL3IiUaSzQ8Wv51gElYa/s7NhvJj2biMB0Y=;
+        b=H16It1bZGkH4M4WFb7YHgKjhptPCkZmfQaanbLbT0vOmvIQncHrjsYaW7RIAQDW5Tr
+         Zhq7vMgmtIf8ifm3Qz97YcCYcgBnbZ7TTo/OXYnmDvEW6vrLQSSS6C+R4NUEEUF7DnVs
+         Z+J0fzs8GzLrblEd8NOrUqytod0lx+y6Eq7MJ02uaL+UXIOKTVOKx5r+TedCFjOYwqWX
+         1/WrO/pcjUNwY5pjg9V4G4+tvPLyzF/WblS4dcb8N+22vG5kfBWenIPkx4BZ5sRxhM0b
+         WG8UjkaFLBQlxqva7Qr8OtvMiOiHcf8RuWVVVWBipGe6Ry5EWUg92QNKFTt9XftLln66
+         PWCw==
+X-Gm-Message-State: AC+VfDyc2xUf7LlYR4LZ7qDIC8to6ciJhurq755zJWFkhr5xpWNMINFs
+        6PIdMxXJGz8OIkQefzlTq+XqKIw5bKr4irvvJglPT0CdnJAfNPdyK8zvcQYRlJyB79fEowKhupl
+        FLZEMB83/5WGQ6Gze2xXLc899c8w4MdJjPE67P6Zh4cNq9g==
+X-Received: by 2002:a17:907:944b:b0:973:d7cd:44ac with SMTP id dl11-20020a170907944b00b00973d7cd44acmr176705ejc.54.1686256015070;
+        Thu, 08 Jun 2023 13:26:55 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5OqIkjFjFu8cNVyETJd9yeOg3BSteHd7YbZqtC7eBIZ/A0y8zQDmeLZwaSdcHhPJF/CeHYYA==
+X-Received: by 2002:a17:907:944b:b0:973:d7cd:44ac with SMTP id dl11-20020a170907944b00b00973d7cd44acmr176695ejc.54.1686256014830;
+        Thu, 08 Jun 2023 13:26:54 -0700 (PDT)
+Received: from amikhalitsyn.local (dslb-002-205-064-187.002.205.pools.vodafone-ip.de. [2.205.64.187])
+        by smtp.gmail.com with ESMTPSA id b16-20020a170906491000b0095342bfb701sm315592ejq.16.2023.06.08.13.26.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 13:26:54 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     davem@davemloft.net
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v7 3/4] selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
+Date:   Thu,  8 Jun 2023 22:26:27 +0200
+Message-Id: <20230608202628.837772-4-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230608202628.837772-1-aleksandr.mikhalitsyn@canonical.com>
+References: <20230608202628.837772-1-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-References: <20230602160914.4011728-1-vipinsh@google.com> <20230602160914.4011728-10-vipinsh@google.com>
- <20230605223520.00007fbd.zhi.wang.linux@gmail.com> <ZH9tQjQk7QLyhUQR@google.com>
- <20230607203711.000054ae.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230607203711.000054ae.zhi.wang.linux@gmail.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Thu, 8 Jun 2023 13:17:08 -0700
-Message-ID: <CAHVum0dtZ2wW+itsOE=a7wwATu4VcGN-dQH1zF7Pz1LYy7J4UQ@mail.gmail.com>
-Subject: Re: [PATCH v2 09/16] KVM: arm64: Document the page table walker
- actions based on the callback's return value
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
-        suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
-        anup@brainfault.org, atishp@atishpatra.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
-        dmatlack@google.com, ricarkol@google.com,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 5:37=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com> =
-wrote:
->
-> On Tue, 6 Jun 2023 10:30:42 -0700
-> Vipin Sharma <vipinsh@google.com> wrote:
->
-> > On Mon, Jun 05, 2023 at 10:35:20PM +0800, Zhi Wang wrote:
-> > > On Fri,  2 Jun 2023 09:09:07 -0700
-> > > Vipin Sharma <vipinsh@google.com> wrote:
-> > >
-> > > > Document what the page table walker do when walker callback functio=
-n returns
-> > > > a value.
-> > > >
-> > > > Current documentation is not correct as negative error of -EAGAIN o=
-n a
-> > > > non-shared page table walker doesn't terminate the walker and conti=
-nues
-> > > > to the next step.
-> > > >
-> > > > There might be a better place to keep this information, for now thi=
-s
-> > > > documentation will work as a reference guide until a better way is
-> > > > found.
-> > > >
-> > >
-> > > After reading the whole patch series, I was thinking it might be a go=
-od
-> > > time to improve the way how the visitor function and page table walke=
-r
-> > > talk to each other. The error code is good enough before, but its mea=
-ning
-> > > seems limited and vague when the visitor function wants to express mo=
-re about
-> > > what exactly happens inside. I am not sure if it is a good idea to co=
-ntinue
-> > > that way: 1. found a new situation. 2. choosing a error code for visi=
-tor
-> > > function. 3. walker translates the error code into the situation to
-> > > handle. 4. document the error code and its actual meaning.
-> > >
-> > > Eventually I am afraid that we are going to abuse the error code.
-> >
-> > I agree that error numbers are not sufficient and this will become more
-> > difficult and cumbersome for more cases in future if we need different
-> > behavior based on different error codes for different visitor functions=
-.
-> >
-> > >
-> > > What about introducing a set of flags for the visitor function to exp=
-ress
-> > > what happened and simplify the existing error code?
-> > >
-> >
-> > If I understood correctly what you meant, I think this will also end up
-> > having the same issue down the line, we are just switching errors with
-> > flags as they might not be able to express everything.
-> >
-> > "Flags for visitor function to express what happened"  - This is what
-> > ret val and errors do.
-> >
->
-> Thanks so much for the efforts of the sample code.
->
-> But when the "ret val" is an error code for pgtable matters, It turns vag=
-ue.
-> We have -EAGAIN to represent "retry" and "-ENONET" to represent PTE not t=
-here,
-> and they seems end up with different behaviors in different types of pgta=
-ble
-> walk. That is what I feels off.
->
-> visitor_cb has two different requirements of returning the status: 1)
-> something wrong happens *not* related to the pgtable, e.g. failing to
-> allocate memory. 2) something happens related to the pgtable. e.g PTE doe=
-sn't
-> exists.
->
-> For 1) It is natural to return an error code and the caller might just ba=
-il out
-> via its error handling path.
->
-> I think the core problem is: the two different usages are mixed and they =
-don't
-> actually fit with each other. 2) is requiring more details in the future =
-other
-> than a simple error code.
->
->
-> For 2) I think it is better have a set of flags. the name of the flags ca=
-n
-> carry more explicit meanings than error code. E.g.:
->
-> ------------------
->
-> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/as=
-m/kvm_pgtable.h
-> index 4cd6762bda80..b3f24b321cd7 100644
-> --- a/arch/arm64/include/asm/kvm_pgtable.h
-> +++ b/arch/arm64/include/asm/kvm_pgtable.h
-> @@ -204,6 +204,15 @@ enum kvm_pgtable_walk_flags {
->         KVM_PGTABLE_WALK_HANDLE_FAULT           =3D BIT(4),
->  };
->
-> +struct kvm_pgtable_walk_status {
-> +       union {
-> +               u8 raw;
-> +               struct {
-> +                       unsigned retry:1;
-> +                       unsigned stop:1;
-> +                       unsigned ignore:1;
-> +                       /* more to come */
-> +               };
-> +       };
-> +};
-> +
->  struct kvm_pgtable_visit_ctx {
->         kvm_pte_t                               *ptep;
->         kvm_pte_t                               old;
-> @@ -213,8 +222,10 @@ struct kvm_pgtable_visit_ctx {
->         u64                                     end;
->         u32                                     level;
->         enum kvm_pgtable_walk_flags             flags;
-> +       struct kvm_pgtable_walk_status          *status;
->  };
->
->  typedef int (*kvm_pgtable_visitor_fn_t)(const struct kvm_pgtable_visit_c=
-tx *ctx,
->                                         enum kvm_pgtable_walk_flags visit=
-);
->
-> ----------------
->
-> Visitor functions sets the flags via ctx->status and kvm_pgtable_walk_xxx=
- can
-> check the bits in the ctx to decide what to do for the next.
->
-> I can cook a patch for re-factoring this part if we think it is a good id=
-ea.
->
+Basic test to check consistency between:
+- SCM_CREDENTIALS and SCM_PIDFD
+- SO_PEERCRED and SO_PEERPIDFD
 
-This can also be one option. I will wait till others also weigh in on
-how to make walkers and callbacks work together for more use cases.
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+---
+v3:
+	- started using kselftest lib (thanks to Kuniyuki Iwashima for suggestion/review)
+	- now test covers abstract sockets too and SOCK_DGRAM sockets
+---
+ tools/testing/selftests/net/.gitignore        |   1 +
+ tools/testing/selftests/net/af_unix/Makefile  |   3 +-
+ .../testing/selftests/net/af_unix/scm_pidfd.c | 430 ++++++++++++++++++
+ 3 files changed, 433 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/net/af_unix/scm_pidfd.c
+
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index f27a7338b60e..501854a89cc0 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -29,6 +29,7 @@ reuseport_bpf_numa
+ reuseport_dualstack
+ rxtimestamp
+ sctp_hello
++scm_pidfd
+ sk_bind_sendto_listen
+ sk_connect_zero_addr
+ socket
+diff --git a/tools/testing/selftests/net/af_unix/Makefile b/tools/testing/selftests/net/af_unix/Makefile
+index 1e4b397cece6..221c387a7d7f 100644
+--- a/tools/testing/selftests/net/af_unix/Makefile
++++ b/tools/testing/selftests/net/af_unix/Makefile
+@@ -1,3 +1,4 @@
+-TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect
++CFLAGS += $(KHDR_INCLUDES)
++TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect scm_pidfd
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/net/af_unix/scm_pidfd.c b/tools/testing/selftests/net/af_unix/scm_pidfd.c
+new file mode 100644
+index 000000000000..a86222143d79
+--- /dev/null
++++ b/tools/testing/selftests/net/af_unix/scm_pidfd.c
+@@ -0,0 +1,430 @@
++// SPDX-License-Identifier: GPL-2.0 OR MIT
++#define _GNU_SOURCE
++#include <error.h>
++#include <limits.h>
++#include <stddef.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/socket.h>
++#include <linux/socket.h>
++#include <unistd.h>
++#include <string.h>
++#include <errno.h>
++#include <sys/un.h>
++#include <sys/signal.h>
++#include <sys/types.h>
++#include <sys/wait.h>
++
++#include "../../kselftest_harness.h"
++
++#define clean_errno() (errno == 0 ? "None" : strerror(errno))
++#define log_err(MSG, ...)                                                   \
++	fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", __FILE__, __LINE__, \
++		clean_errno(), ##__VA_ARGS__)
++
++#ifndef SCM_PIDFD
++#define SCM_PIDFD 0x04
++#endif
++
++static void child_die()
++{
++	exit(1);
++}
++
++static int safe_int(const char *numstr, int *converted)
++{
++	char *err = NULL;
++	long sli;
++
++	errno = 0;
++	sli = strtol(numstr, &err, 0);
++	if (errno == ERANGE && (sli == LONG_MAX || sli == LONG_MIN))
++		return -ERANGE;
++
++	if (errno != 0 && sli == 0)
++		return -EINVAL;
++
++	if (err == numstr || *err != '\0')
++		return -EINVAL;
++
++	if (sli > INT_MAX || sli < INT_MIN)
++		return -ERANGE;
++
++	*converted = (int)sli;
++	return 0;
++}
++
++static int char_left_gc(const char *buffer, size_t len)
++{
++	size_t i;
++
++	for (i = 0; i < len; i++) {
++		if (buffer[i] == ' ' || buffer[i] == '\t')
++			continue;
++
++		return i;
++	}
++
++	return 0;
++}
++
++static int char_right_gc(const char *buffer, size_t len)
++{
++	int i;
++
++	for (i = len - 1; i >= 0; i--) {
++		if (buffer[i] == ' ' || buffer[i] == '\t' ||
++		    buffer[i] == '\n' || buffer[i] == '\0')
++			continue;
++
++		return i + 1;
++	}
++
++	return 0;
++}
++
++static char *trim_whitespace_in_place(char *buffer)
++{
++	buffer += char_left_gc(buffer, strlen(buffer));
++	buffer[char_right_gc(buffer, strlen(buffer))] = '\0';
++	return buffer;
++}
++
++/* borrowed (with all helpers) from pidfd/pidfd_open_test.c */
++static pid_t get_pid_from_fdinfo_file(int pidfd, const char *key, size_t keylen)
++{
++	int ret;
++	char path[512];
++	FILE *f;
++	size_t n = 0;
++	pid_t result = -1;
++	char *line = NULL;
++
++	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", pidfd);
++
++	f = fopen(path, "re");
++	if (!f)
++		return -1;
++
++	while (getline(&line, &n, f) != -1) {
++		char *numstr;
++
++		if (strncmp(line, key, keylen))
++			continue;
++
++		numstr = trim_whitespace_in_place(line + 4);
++		ret = safe_int(numstr, &result);
++		if (ret < 0)
++			goto out;
++
++		break;
++	}
++
++out:
++	free(line);
++	fclose(f);
++	return result;
++}
++
++static int cmsg_check(int fd)
++{
++	struct msghdr msg = { 0 };
++	struct cmsghdr *cmsg;
++	struct iovec iov;
++	struct ucred *ucred = NULL;
++	int data = 0;
++	char control[CMSG_SPACE(sizeof(struct ucred)) +
++		     CMSG_SPACE(sizeof(int))] = { 0 };
++	int *pidfd = NULL;
++	pid_t parent_pid;
++	int err;
++
++	iov.iov_base = &data;
++	iov.iov_len = sizeof(data);
++
++	msg.msg_iov = &iov;
++	msg.msg_iovlen = 1;
++	msg.msg_control = control;
++	msg.msg_controllen = sizeof(control);
++
++	err = recvmsg(fd, &msg, 0);
++	if (err < 0) {
++		log_err("recvmsg");
++		return 1;
++	}
++
++	if (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC)) {
++		log_err("recvmsg: truncated");
++		return 1;
++	}
++
++	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg != NULL;
++	     cmsg = CMSG_NXTHDR(&msg, cmsg)) {
++		if (cmsg->cmsg_level == SOL_SOCKET &&
++		    cmsg->cmsg_type == SCM_PIDFD) {
++			if (cmsg->cmsg_len < sizeof(*pidfd)) {
++				log_err("CMSG parse: SCM_PIDFD wrong len");
++				return 1;
++			}
++
++			pidfd = (void *)CMSG_DATA(cmsg);
++		}
++
++		if (cmsg->cmsg_level == SOL_SOCKET &&
++		    cmsg->cmsg_type == SCM_CREDENTIALS) {
++			if (cmsg->cmsg_len < sizeof(*ucred)) {
++				log_err("CMSG parse: SCM_CREDENTIALS wrong len");
++				return 1;
++			}
++
++			ucred = (void *)CMSG_DATA(cmsg);
++		}
++	}
++
++	/* send(pfd, "x", sizeof(char), 0) */
++	if (data != 'x') {
++		log_err("recvmsg: data corruption");
++		return 1;
++	}
++
++	if (!pidfd) {
++		log_err("CMSG parse: SCM_PIDFD not found");
++		return 1;
++	}
++
++	if (!ucred) {
++		log_err("CMSG parse: SCM_CREDENTIALS not found");
++		return 1;
++	}
++
++	/* pidfd from SCM_PIDFD should point to the parent process PID */
++	parent_pid =
++		get_pid_from_fdinfo_file(*pidfd, "Pid:", sizeof("Pid:") - 1);
++	if (parent_pid != getppid()) {
++		log_err("wrong SCM_PIDFD %d != %d", parent_pid, getppid());
++		return 1;
++	}
++
++	return 0;
++}
++
++struct sock_addr {
++	char sock_name[32];
++	struct sockaddr_un listen_addr;
++	socklen_t addrlen;
++};
++
++FIXTURE(scm_pidfd)
++{
++	int server;
++	pid_t client_pid;
++	int startup_pipe[2];
++	struct sock_addr server_addr;
++	struct sock_addr *client_addr;
++};
++
++FIXTURE_VARIANT(scm_pidfd)
++{
++	int type;
++	bool abstract;
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, stream_pathname)
++{
++	.type = SOCK_STREAM,
++	.abstract = 0,
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, stream_abstract)
++{
++	.type = SOCK_STREAM,
++	.abstract = 1,
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, dgram_pathname)
++{
++	.type = SOCK_DGRAM,
++	.abstract = 0,
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, dgram_abstract)
++{
++	.type = SOCK_DGRAM,
++	.abstract = 1,
++};
++
++FIXTURE_SETUP(scm_pidfd)
++{
++	self->client_addr = mmap(NULL, sizeof(*self->client_addr), PROT_READ | PROT_WRITE,
++				 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
++	ASSERT_NE(MAP_FAILED, self->client_addr);
++}
++
++FIXTURE_TEARDOWN(scm_pidfd)
++{
++	close(self->server);
++
++	kill(self->client_pid, SIGKILL);
++	waitpid(self->client_pid, NULL, 0);
++
++	if (!variant->abstract) {
++		unlink(self->server_addr.sock_name);
++		unlink(self->client_addr->sock_name);
++	}
++}
++
++static void fill_sockaddr(struct sock_addr *addr, bool abstract)
++{
++	char *sun_path_buf = (char *)&addr->listen_addr.sun_path;
++
++	addr->listen_addr.sun_family = AF_UNIX;
++	addr->addrlen = offsetof(struct sockaddr_un, sun_path);
++	snprintf(addr->sock_name, sizeof(addr->sock_name), "scm_pidfd_%d", getpid());
++	addr->addrlen += strlen(addr->sock_name);
++	if (abstract) {
++		*sun_path_buf = '\0';
++		addr->addrlen++;
++		sun_path_buf++;
++	} else {
++		unlink(addr->sock_name);
++	}
++	memcpy(sun_path_buf, addr->sock_name, strlen(addr->sock_name));
++}
++
++static void client(FIXTURE_DATA(scm_pidfd) *self,
++		   const FIXTURE_VARIANT(scm_pidfd) *variant)
++{
++	int err;
++	int cfd;
++	socklen_t len;
++	struct ucred peer_cred;
++	int peer_pidfd;
++	pid_t peer_pid;
++	int on = 0;
++
++	cfd = socket(AF_UNIX, variant->type, 0);
++	if (cfd < 0) {
++		log_err("socket");
++		child_die();
++	}
++
++	if (variant->type == SOCK_DGRAM) {
++		fill_sockaddr(self->client_addr, variant->abstract);
++
++		if (bind(cfd, (struct sockaddr *)&self->client_addr->listen_addr, self->client_addr->addrlen)) {
++			log_err("bind");
++			child_die();
++		}
++	}
++
++	if (connect(cfd, (struct sockaddr *)&self->server_addr.listen_addr,
++		    self->server_addr.addrlen) != 0) {
++		log_err("connect");
++		child_die();
++	}
++
++	on = 1;
++	if (setsockopt(cfd, SOL_SOCKET, SO_PASSCRED, &on, sizeof(on))) {
++		log_err("Failed to set SO_PASSCRED");
++		child_die();
++	}
++
++	if (setsockopt(cfd, SOL_SOCKET, SO_PASSPIDFD, &on, sizeof(on))) {
++		log_err("Failed to set SO_PASSPIDFD");
++		child_die();
++	}
++
++	close(self->startup_pipe[1]);
++
++	if (cmsg_check(cfd)) {
++		log_err("cmsg_check failed");
++		child_die();
++	}
++
++	/* skip further for SOCK_DGRAM as it's not applicable */
++	if (variant->type == SOCK_DGRAM)
++		return;
++
++	len = sizeof(peer_cred);
++	if (getsockopt(cfd, SOL_SOCKET, SO_PEERCRED, &peer_cred, &len)) {
++		log_err("Failed to get SO_PEERCRED");
++		child_die();
++	}
++
++	len = sizeof(peer_pidfd);
++	if (getsockopt(cfd, SOL_SOCKET, SO_PEERPIDFD, &peer_pidfd, &len)) {
++		log_err("Failed to get SO_PEERPIDFD");
++		child_die();
++	}
++
++	/* pid from SO_PEERCRED should point to the parent process PID */
++	if (peer_cred.pid != getppid()) {
++		log_err("peer_cred.pid != getppid(): %d != %d", peer_cred.pid, getppid());
++		child_die();
++	}
++
++	peer_pid = get_pid_from_fdinfo_file(peer_pidfd,
++					    "Pid:", sizeof("Pid:") - 1);
++	if (peer_pid != peer_cred.pid) {
++		log_err("peer_pid != peer_cred.pid: %d != %d", peer_pid, peer_cred.pid);
++		child_die();
++	}
++}
++
++TEST_F(scm_pidfd, test)
++{
++	int err;
++	int pfd;
++	int child_status = 0;
++
++	self->server = socket(AF_UNIX, variant->type, 0);
++	ASSERT_NE(-1, self->server);
++
++	fill_sockaddr(&self->server_addr, variant->abstract);
++
++	err = bind(self->server, (struct sockaddr *)&self->server_addr.listen_addr, self->server_addr.addrlen);
++	ASSERT_EQ(0, err);
++
++	if (variant->type == SOCK_STREAM) {
++		err = listen(self->server, 1);
++		ASSERT_EQ(0, err);
++	}
++
++	err = pipe(self->startup_pipe);
++	ASSERT_NE(-1, err);
++
++	self->client_pid = fork();
++	ASSERT_NE(-1, self->client_pid);
++	if (self->client_pid == 0) {
++		close(self->server);
++		close(self->startup_pipe[0]);
++		client(self, variant);
++		exit(0);
++	}
++	close(self->startup_pipe[1]);
++
++	if (variant->type == SOCK_STREAM) {
++		pfd = accept(self->server, NULL, NULL);
++		ASSERT_NE(-1, pfd);
++	} else {
++		pfd = self->server;
++	}
++
++	/* wait until the child arrives at checkpoint */
++	read(self->startup_pipe[0], &err, sizeof(int));
++	close(self->startup_pipe[0]);
++
++	if (variant->type == SOCK_DGRAM) {
++		err = sendto(pfd, "x", sizeof(char), 0, (struct sockaddr *)&self->client_addr->listen_addr, self->client_addr->addrlen);
++		ASSERT_NE(-1, err);
++	} else {
++		err = send(pfd, "x", sizeof(char), 0);
++		ASSERT_NE(-1, err);
++	}
++
++	close(pfd);
++	waitpid(self->client_pid, &child_status, 0);
++	ASSERT_EQ(0, WIFEXITED(child_status) ? WEXITSTATUS(child_status) : 1);
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.34.1
+
