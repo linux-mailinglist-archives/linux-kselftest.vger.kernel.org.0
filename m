@@ -2,88 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91987727EA0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 13:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CCD727ED9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 13:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbjFHLWE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 07:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
+        id S235500AbjFHLei (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jun 2023 07:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233739AbjFHLWD (ORCPT
+        with ESMTP id S235456AbjFHLeg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:22:03 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D893D1FF3;
-        Thu,  8 Jun 2023 04:22:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=HCCNTmzmcrLed5PCeHmXazM06d4SBCeRlB+khMYifVc=; b=F/UQ+8+1KoKAfFsg7r/qJXxlsn
-        V0hj72RKbeNkOew3exhJuK9bmYoNVek8k/VSUmEwQjpAFePVRwsjFQfnzgvqDRGIJrVBOjXJBwT39
-        LVJa98e12CXAPJoQnHjXw1bsWHRZWl4R+bwo2JxDI5An1nq/c7eWGsvNFz20uB+2YM3mNMGS+DsRq
-        n6f/535zfVkma4gqE/2c1uA89w2djddQ5E045uH71frA7fkNpZ3kJPjExRXbYfiu/G0LeAp42gEWF
-        jfPCqcFE+YNFu0ydP5xvSWbYrk0d0zI7lywVxjhBahVsA/6VmzvoJfqV6zx0vsY8WgLHgJ9LCg/4w
-        pT9THivQ==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1q7DiI-0009Yt-Jt; Thu, 08 Jun 2023 13:21:58 +0200
-Received: from [178.197.248.31] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1q7DiH-0000aI-T4; Thu, 08 Jun 2023 13:21:57 +0200
-Subject: Re: [PATCH bpf v4 0/2] Fix verifier id tracking of scalars on spill
-To:     Maxim Mikityanskiy <maxtram95@gmail.com>, bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Maxim Mikityanskiy <maxim@isovalent.com>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-References: <20230607123951.558971-1-maxtram95@gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <404e95a2-34fb-3cd2-6fc4-817fd6b8c038@iogearbox.net>
-Date:   Thu, 8 Jun 2023 13:21:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 8 Jun 2023 07:34:36 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D97583;
+        Thu,  8 Jun 2023 04:34:35 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id 98e67ed59e1d1-25676b4fb78so268452a91.2;
+        Thu, 08 Jun 2023 04:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686224074; x=1688816074;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hYkpzdCbWh+eQgWxe3n3N+6lA3Jl6cnlNf1r2AHxRsk=;
+        b=O6cZyBgz4zna9mbthyeOV5zlT04YyoA9Rs0mMniENpyOXs4DoHR1bHk3x6BaEJy9no
+         SDOM+aHTrompYSc3SZYHd0febNeP9F+SQDulgR/l3OsZGTN4oOerkGDgw7igIu57xZzB
+         8JMrjfpYi5nBSaZBGzvOoeocfqaMAzVJx3W827yHym7IeU+ACIf2cPOXChFUs6VsC9Ut
+         PEvJ1aii7MVdCTWF5gK0GszBdFsRpTyrnSEV/vubzdhLXeWgmwtV+iOWIPPkGw6UC8m/
+         4hEqsjOiJlWmiHhLlrf+WJDlBMDotC0hEhsthSNDUJ6DIT8FtEr7X9xfarTz9wG2cXXp
+         b5Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686224074; x=1688816074;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hYkpzdCbWh+eQgWxe3n3N+6lA3Jl6cnlNf1r2AHxRsk=;
+        b=jUKj2hVT+uKEiF1LXNQeHE1tO0nBs9o6G9NSqFdgEDRO1bmykWdq4BSk4N870zPwGy
+         s9uWC7dcf+Eq7nFOsmIUBqzdq/HyJIJANpgViV/3ZHPmXYRBTjaO644m9rlp0omo6CFQ
+         +6HueZuvoxv1kVwCEwYOe+lQTa3r823ZPJz8BY5Xvqi/yxTiElgIkYWZlKLMfNxiLgk5
+         /PCxy+a2EcQBPjgTMDARRIeVo4MQCReUcocc8gj8OcYlMxYa+rkjJTtz6lJoTOQfYJxx
+         u4wWcHCA4RLHhUIkBB7voIujX8ibUNOC3c31OELh030EXOQeiO0BCxYvyetVvphdx3Uf
+         l0Ow==
+X-Gm-Message-State: AC+VfDw2VQdC+k36oteyhBMkBW+lllMegvkBmpBmiGno9ojJGJrHoMHl
+        uOfytFiFgqqd645N/XmIU8s=
+X-Google-Smtp-Source: ACHHUZ7uJQMwUDnxXgeqAP4WRd9/9hkWnSt6fNJvgQcKuiM+cUC+VXn7ME4w9h8qPqU1oQHY6RWahQ==
+X-Received: by 2002:a17:90a:a08e:b0:255:a904:7a7b with SMTP id r14-20020a17090aa08e00b00255a9047a7bmr4127968pjp.26.1686224074441;
+        Thu, 08 Jun 2023 04:34:34 -0700 (PDT)
+Received: from CLOUDLIANG-MB2.tencent.com ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id qa2-20020a17090b4fc200b002310ed024adsm2900456pjb.12.2023.06.08.04.34.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 04:34:33 -0700 (PDT)
+From:   Jinrong Liang <ljr.kernel@gmail.com>
+X-Google-Original-From: Jinrong Liang <cloudliang@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] KVM: selftests: Add tests for PEBS and MSR_IA32_DS_AREA
+Date:   Thu,  8 Jun 2023 19:34:18 +0800
+Message-Id: <20230608113420.14695-1-cloudliang@tencent.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-In-Reply-To: <20230607123951.558971-1-maxtram95@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26933/Thu Jun  8 09:26:06 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/7/23 2:39 PM, Maxim Mikityanskiy wrote:
-[...]
-> v4 changes:
-> 
-> Dropped supposedly redundant tests, kept the ones that result in
-> different verifier verdicts. Dropped the variable that is not yet
-> useful in this patch. Rephrased the commit message with Daniel's
-> suggestions.
+Hi,
 
-Andrii mentioned he did some veristat measurements and they looked good
-to him. Looks like patchbot didn't reply, I've pushed it to bpf, thanks!
+This patch series introduces two tests to further enhance and
+verify the functionality of the KVM subsystem. These tests focus
+on MSR_IA32_DS_AREA and MSR_IA32_PERF_CAPABILITIES.
+
+The first patch adds tests to verify the correct behavior when
+trying to set MSR_IA32_DS_AREA with a non-classical address. It
+checks that KVM is correctly faulting these non-classical addresses,
+ensuring the accuracy and stability of the KVM subsystem.
+
+The second patch includes a comprehensive PEBS test that checks all
+possible combinations of PEBS-related bits in MSR_IA32_PERF_CAPABILITIES.
+This helps to ensure the accuracy of PEBS functionality.
+
+Feedback and suggestions are welcomed and appreciated.
+
+Sincerely,
+Jinrong Liang
+
+Jinrong Liang (2):
+  KVM: selftests: Test consistency of setting MSR_IA32_DS_AREA
+  KVM: selftests: Add PEBS test for MSR_IA32_PERF_CAPABILITIES
+
+ .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  | 171 ++++++++++++++++++
+ 1 file changed, 171 insertions(+)
+
+
+base-commit: 31b4fc3bc64aadd660c5bfa5178c86a7ba61e0f7
+-- 
+2.31.1
+
