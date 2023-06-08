@@ -2,81 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C147282D4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 16:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F30728493
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 18:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236831AbjFHOgA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 10:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
+        id S231439AbjFHQGW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jun 2023 12:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236887AbjFHOf6 (ORCPT
+        with ESMTP id S230526AbjFHQGW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:35:58 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37DE2715
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 07:35:55 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-267-NXZg-_eNOaO8RckaE_lZ0g-1; Thu, 08 Jun 2023 15:35:52 +0100
-X-MC-Unique: NXZg-_eNOaO8RckaE_lZ0g-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 8 Jun
- 2023 15:35:49 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 8 Jun 2023 15:35:49 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Zhangjin Wu' <falcon@tinylab.org>,
-        "thomas@t-8ch.de" <thomas@t-8ch.de>, "w@1wt.eu" <w@1wt.eu>
-CC:     "arnd@arndb.de" <arnd@arndb.de>,
+        Thu, 8 Jun 2023 12:06:22 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A94134;
+        Thu,  8 Jun 2023 09:06:18 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 18:06:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1686240377; bh=PLbGY4orS7r/OO9ChDGkyjxNSJlc51OFBzDXVDH4Ii4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LgZCtK5CqJi7+kGUwNDw+NV2XHBX6YW+VlVYYRIh7g472vEfThJkLzBg7zz6OQz9q
+         1REcTFqGgqztBtkaxjzSA+u+UUQNllwVj0yL2elkwYkZ0Gndk6DuLrBtvjfdIHkOsO
+         FRLX/2O510m2f9t3t7X2D97I+/nQi4JqlRJ0y4SM=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Zhangjin Wu' <falcon@tinylab.org>, "w@1wt.eu" <w@1wt.eu>,
+        "arnd@arndb.de" <arnd@arndb.de>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        =?utf-8?B?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
-Subject: RE: [PATCH v2 1/4] tools/nolibc: sys.h: add __syscall() and
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v2 1/4] tools/nolibc: sys.h: add __syscall() and
  __sysret() helpers
-Thread-Topic: [PATCH v2 1/4] tools/nolibc: sys.h: add __syscall() and
- __sysret() helpers
-Thread-Index: AQHZmE5QSUsfyUxi2UiZnouHjWtcta+A+37Q
-Date:   Thu, 8 Jun 2023 14:35:49 +0000
-Message-ID: <94dd5170929f454fbc0a10a2eb3b108d@AcuMS.aculab.com>
+Message-ID: <9edb16b4-0d3f-4355-a7b1-684a28f9b4cb@t-8ch.de>
 References: <cover.1686036862.git.falcon@tinylab.org>
  <a42fb9e1bbe0daf7d8a48ea8f44135ef851030d7.1686036862.git.falcon@tinylab.org>
-In-Reply-To: <a42fb9e1bbe0daf7d8a48ea8f44135ef851030d7.1686036862.git.falcon@tinylab.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ <94dd5170929f454fbc0a10a2eb3b108d@AcuMS.aculab.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94dd5170929f454fbc0a10a2eb3b108d@AcuMS.aculab.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-RnJvbTogWmhhbmdqaW4gV3UNCj4gU2VudDogMDYgSnVuZSAyMDIzIDA5OjEwDQo+IA0KPiBtb3N0
-IG9mIHRoZSBsaWJyYXJ5IHJvdXRpbmVzIHNoYXJlIHRoZSBzYW1lIGNvZGUgbW9kZWwsIGxldCdz
-IGFkZCB0d28NCj4gaGVscGVycyB0byBzaW1wbGlmeSB0aGUgY29kaW5nIGFuZCBzaHJpbmsgdGhl
-IGNvZGUgbGluZXMgdG9vLg0KPiANCi4uLg0KPiArLyogU3lzY2FsbCByZXR1cm4gaGVscGVyLCBz
-ZXQgZXJybm8gYXMgLXJldCB3aGVuIHJldCA8IDAgKi8NCj4gK3N0YXRpYyBpbmxpbmUgX19hdHRy
-aWJ1dGVfXygoYWx3YXlzX2lubGluZSkpIGxvbmcgX19zeXNyZXQobG9uZyByZXQpDQo+ICt7DQo+
-ICsJaWYgKHJldCA8IDApIHsNCj4gKwkJU0VUX0VSUk5PKC1yZXQpOw0KPiArCQlyZXQgPSAtMTsN
-Cj4gKwl9DQo+ICsJcmV0dXJuIHJldDsNCj4gK30NCg0KSWYgdGhhdCByaWdodD8NCkkgdGhvdWdo
-dCB0aGF0IHRoYXQgb25seSB0aGUgZmlyc3QgZmV3ICgxMDI0PykgbmVnYXRpdmUgdmFsdWVzDQpn
-b3QgdXNlZCBhcyBlcnJubyB2YWx1ZXMuDQoNCkRvIGFsbCBMaW51eCBhcmNoaXRlY3R1cmVzIGV2
-ZW4gdXNlIG5lZ2F0aXZlcyBmb3IgZXJyb3I/DQpJIHRob3VnaHQgYXQgbGVhc3Qgc29tZSB1c2Vk
-IHRoZSBjYXJyeSBmbGFnLg0KKEl0IGlzIHRoZSBoaXN0b3JpYyBtZXRob2Qgb2YgaW5kaWNhdGlu
-ZyBhIHN5c3RlbSBjYWxsIGZhaWx1cmUuKQ0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRy
-ZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1L
-MSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Hi David,
 
+On 2023-06-08 14:35:49+0000, David Laight wrote:
+> From: Zhangjin Wu
+> > Sent: 06 June 2023 09:10
+> > 
+> > most of the library routines share the same code model, let's add two
+> > helpers to simplify the coding and shrink the code lines too.
+> > 
+> ...
+> > +/* Syscall return helper, set errno as -ret when ret < 0 */
+> > +static inline __attribute__((always_inline)) long __sysret(long ret)
+> > +{
+> > +	if (ret < 0) {
+> > +		SET_ERRNO(-ret);
+> > +		ret = -1;
+> > +	}
+> > +	return ret;
+> > +}
+> 
+> If that right?
+> I thought that that only the first few (1024?) negative values
+> got used as errno values.
+> 
+> Do all Linux architectures even use negatives for error?
+> I thought at least some used the carry flag.
+> (It is the historic method of indicating a system call failure.)
+
+I guess you are thinking about the architectures native systemcall ABI.
+
+In nolibc these are abstracted away in the architecture-specific
+assembly wrappers: my_syscall0 to my_syscall6.
+(A good example would be arch-mips.h)
+
+These normalize the architecture systemcall ABI to negative errornumbers
+which then are returned from the sys_* wrapper functions.
+
+The sys_* wrapper functions in turn are used by the libc function which
+translate the negative error number to the libc-style
+"return -1 and set errno" mechanism.
+At this point the new __sysret function is used.
+
+Returning negative error numbers in between has the advantage that it
+can be used without having to set up a global/threadlocal errno
+variable.
+
+In hope this helped,
+Thomas
