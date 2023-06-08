@@ -2,140 +2,265 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55C3727638
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 06:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC49B727685
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 07:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233258AbjFHEjd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 00:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
+        id S231650AbjFHFOS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jun 2023 01:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233881AbjFHEja (ORCPT
+        with ESMTP id S230300AbjFHFOR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 00:39:30 -0400
-Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9B8270D;
-        Wed,  7 Jun 2023 21:39:25 -0700 (PDT)
-Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-56974f42224so1535187b3.1;
-        Wed, 07 Jun 2023 21:39:25 -0700 (PDT)
+        Thu, 8 Jun 2023 01:14:17 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B6626B5;
+        Wed,  7 Jun 2023 22:14:16 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b00ecabdf2so933425ad.2;
+        Wed, 07 Jun 2023 22:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686199164; x=1688791164;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/XropgKuXeNQLqvQa8YUz1hw0VwuOoe/8nudVDeT830=;
-        b=HZRUATZlAV3IbhAQbkizborzvV4BZ2on/7dHPQngEeVxl5seGnMnlU6tYjxSjjgqB1
-         GS1QzbUQCLOeB7piOsSw0ulZKqNjSwg7CTV5bzfX4qBc3bey+lbbzfhj0gvq3+PEAH+R
-         ApVVYyBQg2LWTVYrVdQPu0xprqKc80RfGX+SAFoszk5Odqe6FlLylOJaYRAPVF48SadG
-         tXdzaAobh2iyoz01X8BMFNL1iqrgOAPzwncoplOlvbMXZHcP/lppHopj0wxFYZGNArvN
-         /wsBFj1SkS5pVqR7jWR5g2cGT1/IJk2G1XmpNo5Pz8KsgCPw6Zs4+jG6ZBtrxAR6Hn5N
-         zIQg==
+        d=gmail.com; s=20221208; t=1686201256; x=1688793256;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bpAU5WkVE/wtFEVm7r+ibR0BKuprOl5u/o3sLZZPjdU=;
+        b=JiLj0k/kt8UytBRW9NDnQPfNyI1FzzcS1zD8eSiGWFHmHsXEHkZHMgIdVQmx2TbbYL
+         Sg/6aXsoIlV3Rafg81/vh2k7MFwQ0cTAjC49qdSKNbDM5yOR2aRa1LBUkTJrKEh1t1hc
+         Yuctujxh65UjI0r6pe2rnKfs10v6vlLxvM8nCPRMzD9/x++VltFTLKRt1TOqYRMc6hEu
+         YDRAhryE8swk60466ySyVM1e++NDP175JGoJrlACgLDs+anSrXsL5tnL4ZtpvJi9x5hY
+         Dc4abXqrLa9K6aftYEiY6E0ab1voy45A1NdC9oPYkMmH7l2u+63pbUqZ6PV9B6iNtfH9
+         QTOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686199164; x=1688791164;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/XropgKuXeNQLqvQa8YUz1hw0VwuOoe/8nudVDeT830=;
-        b=Lw84vZjf0NmWISGA1e54+BunVuNgHBRwDFP0ZR5WxwmPVHW5iN1/P//KBIxueYqieI
-         H2m/dWpKQmm9sydYyHtLFT7heSQQ5l+r/tgZA4ui1/KDqAMGr3Q5Sq126iHSHjx2CWzn
-         P8y5gFRZYuli4MYU0QXEsO73O/416ToWuHuFpguIlTv27tATy/bixbvH+HC9G5ECvqEm
-         ymGV/EjK01or+E+h2cave4cXOHyeKgKxRm63Vt8aHz4cZm80TlKgqglU4pQ9nEgEZxBm
-         rLmqngYu3tdGMdvVW73ruSe256glK9aA9PRjB9DOVi0Mfw9FsaXz57aKbw4V3kX1nVOw
-         vasQ==
-X-Gm-Message-State: AC+VfDzAe9Vu4WYEK5EgliESXsiBzsnVDctevHB7jgTWYGu/6YqGOTBw
-        HNhTqYWGUYrA/wnwZtVza/qgM3tYG10zwYvKdIk=
-X-Google-Smtp-Source: ACHHUZ6OG73GM5QzW+HSafnvVrns5acdoJKJu1ieTPBMXSLI9Sb+r22xRZb6JdEjVbAZEYfMLH5yz8ftCwiFPq/khSY=
-X-Received: by 2002:a81:8450:0:b0:565:b22c:4165 with SMTP id
- u77-20020a818450000000b00565b22c4165mr9757512ywf.11.1686199164563; Wed, 07
- Jun 2023 21:39:24 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686201256; x=1688793256;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bpAU5WkVE/wtFEVm7r+ibR0BKuprOl5u/o3sLZZPjdU=;
+        b=NpMJTWxUcZUurK/FG/HBiFs4QPhYZrYbjzyow5eJOxZq0b2ijB5d+qz9bFJLW4fTsw
+         GRIyOQf2V8d1BE5+iIZix3VXYwjzzi5O2+8GB1ShbbS+GbqzbKO1O/63V9EuA30RlTNv
+         wWuFcwSv0L+gdDdkGIGve0Kmh+mzQjY7Wm9E111Lvb07JAljYos2rcXnC9+p/HHzbfeh
+         yu91/elPBzpcDJN5GBQfttoY6DmtEL72zcCs0b+vXPLJMWmxbZPUqReN1k8l8yVmfRMK
+         +8bORUFHRH4DwbQ3vUziqZ3cG097ys9kK1dPlXcCvEfEbjBgDZzfwsmuOqhlqoz7Y9xc
+         XyVA==
+X-Gm-Message-State: AC+VfDx8pTTWBxd98GpWO+H4tam0XZcEuamoztHQRtOJz/BbwPvOyX+j
+        yUBxvrpJMnQNi06sPsUPldQI/RT87vftmQ==
+X-Google-Smtp-Source: ACHHUZ7PsZUhyvqZvDzdteGKDPRW07qivbilkfyHjFiAtWZ7dNWv1WVJ4+MYga1/UpWAi96+fh/w/g==
+X-Received: by 2002:a17:903:4295:b0:1ae:5914:cbec with SMTP id ju21-20020a170903429500b001ae5914cbecmr7531015plb.10.1686201255924;
+        Wed, 07 Jun 2023 22:14:15 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-10.three.co.id. [180.214.233.10])
+        by smtp.gmail.com with ESMTPSA id i12-20020a17090332cc00b001b04949e0acsm396483plr.232.2023.06.07.22.14.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 22:14:15 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 16A921069EA; Thu,  8 Jun 2023 12:14:10 +0700 (WIB)
+Date:   Thu, 8 Jun 2023 12:14:10 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Ivan Orlov <ivan.orlov0322@gmail.com>, perex@perex.cz,
+        tiwai@suse.com, corbet@lwn.net, broonie@kernel.org,
+        skhan@linuxfoundation.org
+Cc:     alsa-devel@alsa-project.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        gregkh@linuxfoundation.org, himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH v3 1/3] docs: sound: add 'pcmtest' driver documentation
+Message-ID: <ZIFjog1a93_FFBPF@debian.me>
+References: <20230606133807.14089-1-ivan.orlov0322@gmail.com>
 MIME-Version: 1.0
-References: <20230607125911.145345-1-imagedong@tencent.com>
- <20230607125911.145345-4-imagedong@tencent.com> <20230607201008.662mecxnksxiees3@macbook-pro-8.dhcp.thefacebook.com>
-In-Reply-To: <20230607201008.662mecxnksxiees3@macbook-pro-8.dhcp.thefacebook.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Thu, 8 Jun 2023 12:39:13 +0800
-Message-ID: <CADxym3bLP1kSzXgCakRMtGGp_jk1DR-nZA=jafZdemzLe3omtA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: add testcase for
- FENTRY/FEXIT with 6+ arguments
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, x86@kernel.org,
-        imagedong@tencent.com, benbjiang@tencent.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lJm1/npRizm0mCUv"
+Content-Disposition: inline
+In-Reply-To: <20230606133807.14089-1-ivan.orlov0322@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 4:10=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Jun 07, 2023 at 08:59:11PM +0800, menglong8.dong@gmail.com wrote:
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > Add test9/test10 in fexit_test.c and fentry_test.c to test the fentry
-> > and fexit whose target function have 7/12 arguments.
-> >
-> > Correspondingly, add bpf_testmod_fentry_test7() and
-> > bpf_testmod_fentry_test12() to bpf_testmod.c
-> >
-> > And the testcases passed:
-> >
-> > ./test_progs -t fexit
-> > Summary: 5/12 PASSED, 0 SKIPPED, 0 FAILED
-> >
-> > ./test_progs -t fentry
-> > Summary: 3/0 PASSED, 0 SKIPPED, 0 FAILED
-> >
-> > Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
-> > v3:
-> > - move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
-> >   bpf_testmod_fentry_test{7,12} meanwhile
-> > - get return value by bpf_get_func_ret() in
-> >   "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cast=
-()
-> >   in this version
-> > ---
-> >  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++-
-> >  .../selftests/bpf/prog_tests/fentry_fexit.c   |  4 ++-
-> >  .../selftests/bpf/prog_tests/fentry_test.c    |  2 ++
-> >  .../selftests/bpf/prog_tests/fexit_test.c     |  2 ++
-> >  .../testing/selftests/bpf/progs/fentry_test.c | 21 ++++++++++++
-> >  .../testing/selftests/bpf/progs/fexit_test.c  | 33 +++++++++++++++++++
-> >  6 files changed, 79 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/to=
-ols/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> > index cf216041876c..66615fdbe3df 100644
-> > --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> > +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> > @@ -191,6 +191,19 @@ noinline int bpf_testmod_fentry_test3(char a, int =
-b, u64 c)
-> >       return a + b + c;
-> >  }
-> >
-> > +noinline int bpf_testmod_fentry_test7(u64 a, void *b, short c, int d,
-> > +                                   void *e, u64 f, u64 g)
-> > +{
-> > +     return a + (long)b + c + d + (long)e + f + g;
-> > +}
-> > +
-> > +noinline int bpf_testmod_fentry_test12(u64 a, void *b, short c, int d,
-> > +                                    void *e, u64 f, u64 g, u64 h,
-> > +                                    u64 i, u64 j, u64 k, u64 l)
->
-> Please switch args to a combination of u8,u16,u32,u64.
-> u64 only args might hide bugs.
 
-Okay, that makes sense.
+--lJm1/npRizm0mCUv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jun 06, 2023 at 05:38:05PM +0400, Ivan Orlov wrote:
+> diff --git a/Documentation/sound/cards/pcmtest.rst b/Documentation/sound/=
+cards/pcmtest.rst
+> new file mode 100644
+> index 000000000000..e163522f3205
+> --- /dev/null
+> +++ b/Documentation/sound/cards/pcmtest.rst
+> @@ -0,0 +1,120 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +The Virtual PCM Test Driver
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> +
+> +The Virtual PCM Test Driver emulates a generic PCM device, and can be us=
+ed for
+> +testing/fuzzing of the userspace ALSA applications, as well as for testi=
+ng/fuzzing of
+> +the PCM middle layer. Additionally, it can be used for simulating hard t=
+o reproduce
+> +problems with PCM devices.
+> +
+> +What can this driver do?
+> +~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +At this moment the driver can do the following things:
+> +	* Simulate both capture and playback processes
+> +	* Generate random or pattern-based capturing data
+> +	* Inject delays into the playback and capturing processes
+> +	* Inject errors during the PCM callbacks
+> +
+> +It supports up to 8 substreams and 4 channels. Also it supports both int=
+erleaved and
+> +non-interleaved access modes.
+> +
+> +Also, this driver can check the playback stream for containing the prede=
+fined pattern,
+> +which is used in the corresponding selftest (alsa/pcmtest-test.sh) to ch=
+eck the PCM middle
+> +layer data transferring functionality. Additionally, this driver redefin=
+es the default
+> +RESET ioctl, and the selftest covers this PCM API functionality as well.
+> +
+> +Configuration
+> +-------------
+> +
+> +The driver has several parameters besides the common ALSA module paramet=
+ers:
+> +
+> +	* fill_mode (bool) - Buffer fill mode (see below)
+> +	* inject_delay (int)
+> +	* inject_hwpars_err (bool)
+> +	* inject_prepare_err (bool)
+> +	* inject_trigger_err (bool)
+> +
+> +
+> +Capture Data Generation
+> +-----------------------
+> +
+> +The driver has two modes of data generation: the first (0 in the fill_mo=
+de parameter)
+> +means random data generation, the second (1 in the fill_mode) - pattern-=
+based
+> +data generation. Let's look at the second mode.
+> +
+> +First of all, you may want to specify the pattern for data generation. Y=
+ou can do it
+> +by writing the pattern to the debugfs file. There are pattern buffer deb=
+ugfs entries
+> +for each channel, as well as entries which contain the pattern buffer le=
+ngth.
+> +
+> +	* /sys/kernel/debug/pcmtest/fill_pattern[0-3]
+> +	* /sys/kernel/debug/pcmtest/fill_pattern[0-3]_len
+> +
+> +To set the pattern for the channel 0 you can execute the following comma=
+nd:
+> +
+> +.. code-block:: bash
+> +
+> +	echo -n mycoolpattern > /sys/kernel/debug/pcmtest/fill_pattern0
+> +
+> +Then, after every capture action performed on the 'pcmtest' device the b=
+uffer for the
+> +channel 0 will contain 'mycoolpatternmycoolpatternmycoolpatternmy...'.
+> +
+> +The pattern itself can be up to 4096 bytes long.
+> +
+> +Delay injection
+> +---------------
+> +
+> +The driver has 'inject_delay' parameter, which has very self-descriptive=
+ name and
+> +can be used for time delay/speedup simulations. The parameter has intege=
+r type, and
+> +it means the delay added between module's internal timer ticks.
+> +
+> +If the 'inject_delay' value is positive, the buffer will be filled slowe=
+r, if it is
+> +negative - faster. You can try it yourself by starting a recording in any
+> +audiorecording application (like Audacity) and selecting the 'pcmtest' d=
+evice as a
+> +source.
+> +
+> +This parameter can be also used for generating a huge amount of sound da=
+ta in a very
+> +short period of time (with the negative 'inject_delay' value).
+> +
+> +Errors injection
+> +----------------
+> +
+> +This module can be used for injecting errors into the PCM communication =
+process. This
+> +action can help you to figure out how the userspace ALSA program behaves=
+ under unusual
+> +circumstances.
+> +
+> +For example, you can make all 'hw_params' PCM callback calls return EBUS=
+Y error by
+> +writing '1' to the 'inject_hwpars_err' module parameter:
+> +
+> +.. code-block:: bash
+> +
+> +	echo 1 > /sys/module/snd_pcmtest/parameters/inject_hwpars_err
+> +
+> +Errors can be injected into the following PCM callbacks:
+> +
+> +	* hw_params (EBUSY)
+> +	* prepare (EINVAL)
+> +	* trigger (EINVAL)
+> +
+> +Playback test
+> +-------------
+> +
+> +This driver can be also used for the playback functionality testing - ev=
+ery time you
+> +write the playback data to the 'pcmtest' PCM device and close it, the dr=
+iver checks the
+> +buffer for containing the looped pattern (which is specified in the fill=
+_pattern
+> +debugfs file for each channel). If the playback buffer content represent=
+s the looped
+> +pattern, 'pc_test' debugfs entry is set into '1'. Otherwise, the driver =
+sets it to '0'.
+> +
+> +ioctl redefinition test
+> +-----------------------
+> +
+> +The driver redefines the 'reset' ioctl, which is default for all PCM dev=
+ices. To test
+> +this functionality, we can trigger the reset ioctl and check the 'ioctl_=
+test' debugfs
+> +entry:
+> +
+> +.. code-block:: bash
+> +
+> +	cat /sys/kernel/debug/pcmtest/ioctl_test
+> +
+> +If the ioctl is triggered successfully, this file will contain '1', and =
+'0' otherwise.
+
+LGTM, thanks!
+
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--lJm1/npRizm0mCUv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIFjmgAKCRD2uYlJVVFO
+o/VoAQDOriEk9HJC+190k8ieuW500QCJ/NEFQxzXMk7or87YlAEA5QHYfRdTu/of
+gQzNqexUMffrXbfMLkuxIG7SEeWA/QE=
+=riD2
+-----END PGP SIGNATURE-----
+
+--lJm1/npRizm0mCUv--
