@@ -2,138 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7860B72778E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 08:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC06727818
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 09:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234665AbjFHGp1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 02:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S235164AbjFHHEg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jun 2023 03:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235044AbjFHGpU (ORCPT
+        with ESMTP id S235193AbjFHHE3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 02:45:20 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117AB2688;
-        Wed,  7 Jun 2023 23:45:18 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 5291C32002E2;
-        Thu,  8 Jun 2023 02:45:17 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 08 Jun 2023 02:45:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nikishkin.pw; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1686206716; x=1686293116; bh=WraTAWRIoJ
-        lEuzvCd9vVHpuOSFjr8/vh4GpgMoUHTF8=; b=AZUWFCkMpStl8ZEtBObdwGGS+j
-        wrhjX5YrgboeNJ8BPrZru9V8v6Ip7Uvur+YwQVf8N7nvTvqIBJwNH7CGfsgP9y6n
-        6uUraY3tqj1lKtJn0dMjqOgzbuFqfvIxtjSMvgs041wY9Y73JVbBz5E16frEZHpq
-        2vKy3A8/95xBKHs5EGCXHeLuBDQdjD8ieYPtTWty0wTIogLZvEIc3IpBW7OWc4pV
-        phKI0nBX0KJHebkhaXZjf2EaDu1mT4GmUOpAcmS6fzXD2oPeIJp4FOdAAMgOrvvu
-        U0gFK/3k89sTED75FZAxGWyItY4xkZbnZR43mSY5aUU5SJZJ0h23kEbkRb4g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686206716; x=1686293116; bh=WraTAWRIoJlEu
-        zvCd9vVHpuOSFjr8/vh4GpgMoUHTF8=; b=RBj6DoydqjlpF02pdbUcroxdy/k7C
-        pUQweQFTmGRqED/UXPA1TwamNbLSAd/vM42z6pTGCzyOAY6+hcAr32nIUi4zw9un
-        PQfUxOvF3IMMfDxhdaNapGDWENylSy3Ek3NyvBTdDDK91xbDTTDxyRiB8CgrFH1b
-        +woAqobM8gZEUvCfgTTr1SnarhIqsWc2Trc+TUHkcKaXH6NBQxZXYTKEL/eIBpof
-        ZS8xxkYRyvd1AEuKnL9RRGd5HSi9IBGvMjid6eqaIqXD6GEEGKh5WI6p+iuq22SQ
-        GAwdHHD6ct/Q1qxL6aTjLhcdSUVqTbG6grDs5Njb3HNJaS5h8FPC8VnqQ==
-X-ME-Sender: <xms:_HiBZGAKqzbVJuggcdFaONnyrCYbLRzIwkOvzNL7VEdj1xZQzEp0UQ>
-    <xme:_HiBZAjHmwpnKTzjXzpuCWS-KzWsueugRWFDNK-sQ-fIsHDDMw7gTiGvr-koQmwqp
-    K3wE26SOIgb1bM5LjE>
-X-ME-Received: <xmr:_HiBZJlG5dufbLJm1mmGWquj4hE3Ux9VnKO2fgmqUgen_xD7bgnqtiq1bRSA4qedL83BJovLuSE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedthedgudduudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdeftddmnecujfgurhephf
-    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepgghlrgguihhmihhrucfpihhk
-    ihhshhhkihhnuceovhhlrgguihhmihhrsehnihhkihhshhhkihhnrdhpfieqnecuggftrf
-    grthhtvghrnhepgffhvdffheehveffheelleeiudetheefhfeftdfgteetkedvueegvdef
-    teejheejnecuffhomhgrihhnpehtrggsshdrthhoohhlshdpthgvshhtvhiglhgrnhhnoh
-    hlohgtrghlsgihphgrshhsrdhshhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
-    mhepmhgrihhlfhhrohhmpehvlhgrughimhhirhesnhhikhhishhhkhhinhdrphif
-X-ME-Proxy: <xmx:_HiBZEzx-6V1UO454EpbVWJB8-bBfjPyDTt87viWfdjN2B6kgpm6_w>
-    <xmx:_HiBZLTJY52kfIwDzKqI1XMS7vC7qL_FgJb4XQ4w5gquqptrcitaaw>
-    <xmx:_HiBZPY1izXMKB6cpLZys0OjhflcdNnPEetMnGKevBGjSABVyF3hxg>
-    <xmx:_HiBZHqindj9JP2p5hHKeu9SuC7w3uoGfh2iin26xTDG0y66NchPMw>
-Feedback-ID: id3b446c5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Jun 2023 02:45:12 -0400 (EDT)
-From:   Vladimir Nikishkin <vladimir@nikishkin.pw>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, eng.alaamohamedsoliman.am@gmail.com,
-        gnault@redhat.com, razor@blackwall.org, idosch@nvidia.com,
-        liuhangbin@gmail.com, eyal.birger@gmail.com, jtoppins@redhat.com,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        stephen@networkplumber.org,
-        Vladimir Nikishkin <vladimir@nikishkin.pw>
-Subject: [PATCH net-next v2] selftests: net: vxlan: Fix selftest regression after changes in iproute2.
-Date:   Thu,  8 Jun 2023 14:44:48 +0800
-Message-Id: <20230608064448.2437-1-vladimir@nikishkin.pw>
-X-Mailer: git-send-email 2.35.8
+        Thu, 8 Jun 2023 03:04:29 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40B8826B9;
+        Thu,  8 Jun 2023 00:04:18 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Dx_+twfYFkNXIAAA--.1855S3;
+        Thu, 08 Jun 2023 15:04:16 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC8ptfYFk49MGAA--.13616S3;
+        Thu, 08 Jun 2023 15:04:14 +0800 (CST)
+Subject: Re: [RFC PATCH] asm-generic: Unify uapi bitsperlong.h
+To:     Arnd Bergmann <arnd@arndb.de>
+References: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
+ <b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com>
+Cc:     linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <76d3be65-91df-7969-5303-38231a7df926@loongson.cn>
+Date:   Thu, 8 Jun 2023 15:04:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8BxC8ptfYFk49MGAA--.13616S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxXw1UJry5Ww1rXr47ZrW8AFc_yoW5Ww1UpF
+        47Jw12gF4qkr1ftrn7Gw47Za45Jwn3Ka1ak39agryxZFW5Wry7trZF9rWagFykXrW8tF4q
+        vrZ8tryjkay8AagCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUmlb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AF
+        wI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxV
+        AFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+        zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr
+        1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+        CwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjxUc9mRUUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The iproute2 output that eventually landed upstream is different than
-the one used in this test, resulting in failures. Fix by adjusting the
-test to use iproute2's JSON output, which is more stable than regular
-output.
+Hi all,
 
-Fixes: 305c04189997 ("selftests: net: vxlan: Add tests for vxlan nolocalbypass option.")
-Signed-off-by: Vladimir Nikishkin <vladimir@nikishkin.pw>
----
-v1=>v2: Fix indentation by tabs.
+On 05/09/2023 05:37 PM, Arnd Bergmann wrote:
+> On Tue, May 9, 2023, at 09:05, Tiezhu Yang wrote:
+>> Now we specify the minimal version of GCC as 5.1 and Clang/LLVM as 11.0.0
+>> in Documentation/process/changes.rst, __CHAR_BIT__ and __SIZEOF_LONG__ are
+>> usable, just define __BITS_PER_LONG as (__CHAR_BIT__ * __SIZEOF_LONG__) in
+>> asm-generic uapi bitsperlong.h, simpler, works everywhere.
+>>
+>> Remove all the arch specific uapi bitsperlong.h which will be generated as
+>> arch/*/include/generated/uapi/asm/bitsperlong.h.
+>>
+>> Suggested-by: Xi Ruoyao <xry111@xry111.site>
+>> Link:
+>> https://lore.kernel.org/all/d3e255e4746de44c9903c4433616d44ffcf18d1b.camel@xry111.site/
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>
+> I originally introduced the bitsperlong.h header, and I'd love to
+> see it removed if it's no longer needed. Your patch certainly
+> seems like it does this well.
+>
+> There is one minor obstacle to this, which is that the compiler
+> requirements for uapi headers are not the same as for kernel
+> internal code. In particular, the uapi headers may be included
+> by user space code that is built with an older compiler version,
+> or with a compiler that is not gcc or clang.
+>
+> I think we are completely safe on the architectures that were
+> added since the linux-3.x days (arm64, riscv, csky, openrisc,
+> loongarch, nios2, and hexagon), but for the older ones there
+> is a regression risk. Especially on targets that are not that
+> actively maintained (sparc, alpha, ia64, sh, ...) there is
+> a good chance that users are stuck on ancient toolchains.
+>
+> It's probably also a safe assumption that anyone with an older
+> libc version won't be using the latest kernel headers, so
+> I think we can still do this across architectures if both
+> glibc and musl already require a compiler that is new enough,
+> or alternatively if we know that the kernel headers require
+> a new compiler for other reasons and nobody has complained.
+>
+> For glibc, it looks the minimum compiler version was raised
+> from gcc-5 to gcc-8 four years ago, so we should be fine.
+>
+> In musl, the documentation states that at least gcc-3.4 or
+> clang-3.2 are required, which probably predate the
+> __SIZEOF_LONG__ macro. On the other hand, musl was only
+> released in 2011, and building musl itself explicitly
+> does not require kernel uapi headers, so this may not
+> be too critical.
+>
+> There is also uClibc, but I could not find any minimum
+> supported compiler version for that. Most commonly, this
+> one is used for cross-build environments, so it's also
+> less likely to have libc/gcc/headers being wildly out of
+> sync. Not sure.
+>
+>       Arnd
+>
+> [1] https://sourceware.org/pipermail/libc-alpha/2019-January/101010.html
+>
 
- tools/testing/selftests/net/test_vxlan_nolocalbypass.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thanks Arnd for the detailed reply.
+Any more comments? What should I do in the next step?
 
-diff --git a/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh b/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
-index 46067db53068..f75212bf142c 100755
---- a/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
-+++ b/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
-@@ -130,7 +130,7 @@ nolocalbypass()
- 	run_cmd "tc -n ns1 qdisc add dev lo clsact"
- 	run_cmd "tc -n ns1 filter add dev lo ingress pref 1 handle 101 proto ip flower ip_proto udp dst_port 4790 action drop"
- 
--	run_cmd "ip -n ns1 -d link show dev vx0 | grep ' localbypass'"
-+	run_cmd "ip -n ns1 -d -j link show dev vx0 | jq -e '.[][\"linkinfo\"][\"info_data\"][\"localbypass\"] == true'"
- 	log_test $? 0 "localbypass enabled"
- 
- 	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
-@@ -140,7 +140,7 @@ nolocalbypass()
- 
- 	run_cmd "ip -n ns1 link set dev vx0 type vxlan nolocalbypass"
- 
--	run_cmd "ip -n ns1 -d link show dev vx0 | grep 'nolocalbypass'"
-+	run_cmd "ip -n ns1 -d -j link show dev vx0 | jq -e '.[][\"linkinfo\"][\"info_data\"][\"localbypass\"] == false'"
- 	log_test $? 0 "localbypass disabled"
- 
- 	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
-@@ -150,7 +150,7 @@ nolocalbypass()
- 
- 	run_cmd "ip -n ns1 link set dev vx0 type vxlan localbypass"
- 
--	run_cmd "ip -n ns1 -d link show dev vx0 | grep ' localbypass'"
-+	run_cmd "ip -n ns1 -d -j link show dev vx0 | jq -e '.[][\"linkinfo\"][\"info_data\"][\"localbypass\"] == true'"
- 	log_test $? 0 "localbypass enabled"
- 
- 	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
--- 
-2.35.8
-
---
-Fastmail.
+Thanks,
+Tiezhu
 
