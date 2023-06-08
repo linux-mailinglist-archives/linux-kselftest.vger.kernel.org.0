@@ -2,102 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0E77272B2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 01:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB017273F1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 03:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbjFGXGk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Jun 2023 19:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
+        id S232165AbjFHBFL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Jun 2023 21:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjFGXGj (ORCPT
+        with ESMTP id S230418AbjFHBFK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:06:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8553D11A;
-        Wed,  7 Jun 2023 16:06:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24A4364AF3;
-        Wed,  7 Jun 2023 23:06:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E92C433D2;
-        Wed,  7 Jun 2023 23:06:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686179197;
-        bh=0m/PD+a5Q4hNH8VOTTNxtiGJuWQbyimWt10i3W7S5XU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=T0QxSCUfYJwG7bdctzIZxKussCT3Nx8Hn5ZRY7LgDxmgY/IaFmSLsrkjzPa396tAj
-         XgMP9fmoRW6QV/KyLvJ0SbZrPlTlTNSc2DUV5q4q1lBsP7iP+XfgSXhGpv+4mwhxXM
-         KuatpxcsTAo5b+mNkeATRLEG0B+bcYJCzZohvjmZLSYVNlU77elADoIsIOr8v7TVWa
-         WV3CFfv33Z3BHrq5Loh1Hw9pRmSkqdFIIU70rkCIr9OqCqhwdGJIn0NlxN9K2mBP++
-         gMzzL1kzXoJ2zwt242AdmuSpMwYbPHWZpquIWbTl4YDR4A8pr5TOlnjn2hdj47BvzF
-         azfceEGlNqH5A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1B332CE3A6C; Wed,  7 Jun 2023 16:06:37 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 16:06:37 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: nolibc patches, still possible for 6.5 ?
-Message-ID: <208b317e-8553-4d0d-b97c-a0e808fe98f2@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ZHyPi29q3MKiNAQZ@1wt.eu>
- <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
- <ZH1V21rhUQlvRgnU@1wt.eu>
- <ec85bd36-9b39-458c-9618-af500656ca7b@paulmck-laptop>
- <ZID1LnvAj1lamHhv@1wt.eu>
+        Wed, 7 Jun 2023 21:05:10 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CD72115;
+        Wed,  7 Jun 2023 18:05:09 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0398F5C01C1;
+        Wed,  7 Jun 2023 21:05:06 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Wed, 07 Jun 2023 21:05:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nikishkin.pw; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1686186305; x=1686272705; bh=5bBEe0GLjb
+        aVn4rHmIVTM0XdFdXFWe1qA/2vtDozbkE=; b=G87mFfNmCgyVNGCRBB/ZB/msgR
+        9JzsONBr/2QBSoi9Oka1zKzyG3BYIFjG7pZyeqQL6NnCOgPn0uEQwmidzGGYPzLh
+        zdRSoFukUsWGb2/hnNtnx7eHLFxNhubg3GJeSopodiB1sc8aZfH9stFOOAhX8mzo
+        oT29F7ZNeVQ2rLcO62b9oFgYL5SH1RYkSL/7/wtyw7AwhBV718y9TZBv/vj0vycu
+        RV6FwmWO7XYViZCyuHCL3EdiQk3GRWOlbjjFvSAeFdY59HXgPRS8WYZxshMjz0wK
+        2axJUVDMoD/85Q6Mdy7afFvX22SLXX8JwcHW6HafNT6k7QwixGSL/hqm9Aeg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686186305; x=1686272705; bh=5bBEe0GLjbaVn
+        4rHmIVTM0XdFdXFWe1qA/2vtDozbkE=; b=NIZtki5vdypFuIOFWNgmEnAJWtklg
+        UCAHVUD9BtyQLF1wd6/5ybTUaBd/IGVzfKektdtjn23eUfEVCerhYjVXm3iO48AD
+        /8KoSM3E4t00X3YKPDp1HzyiA4EqLo5t3ICPg8x3/iXPTSkB8r81X7ckK3yzkaRQ
+        J+vyuUrGiitlH70witBSlfWTxWSqOTXv9zk0bxLDe5mKR8O71ecQCEuIBOgPu5fc
+        vLdMRrqa6KexGl5wgRaJ7+euFS6jNyXg20tUFn6+GgqveUY9Qp6sXtYLY/Tq20kV
+        kKbS5LpSpc030CcnU7NTfzZ+FVuo1LKUc8syu30Bml4arAe/9fDIiiKJg==
+X-ME-Sender: <xms:QSmBZNOZQej5zlJlhqXQ5UxP-dbhd01FrEH6537xKFFQoI7lmBWcfw>
+    <xme:QSmBZP8snORl42tTAH1-RGGpqcx2vFkZGPrRXOab20MxtN96TTu14VbYEthKNSiAQ
+    26PdcboBBkgoAnrDzI>
+X-ME-Received: <xmr:QSmBZMSaYDu73p5ybZkmSO29hx_AP9ZQ2zVYDV_PE8Ft6Nt4xNsaNi8FY5kZSBN-6C2x4DC8qzY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedthedggedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfedtmdenucfjughrpefhvf
+    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpegglhgrughimhhirhcupfhikhhi
+    shhhkhhinhcuoehvlhgrughimhhirhesnhhikhhishhhkhhinhdrphifqeenucggtffrrg
+    htthgvrhhnpefgheegleetjeffveehhfffudejfeffhefhleelgfejtddtieeivddtleev
+    veevieenucffohhmrghinhepmhgvshhsrghgvgdrthhoohhlshdpthgvshhtvhiglhgrnh
+    hnohhlohgtrghlsgihphgrshhsrdhshhenucevlhhushhtvghrufhiiigvpedtnecurfgr
+    rhgrmhepmhgrihhlfhhrohhmpehvlhgrughimhhirhesnhhikhhishhhkhhinhdrphif
+X-ME-Proxy: <xmx:QSmBZJtpwfwu_VsuktXGyBqV-NdmflqoGYR2jAhnl5GKf86V-BhrTw>
+    <xmx:QSmBZFf9YmTnSy3gK2etYd4ma42Qqk1cqj17LZSDromdWkMu9E_Rlw>
+    <xmx:QSmBZF2k3CxLiBZ8BZuAOXsXbIa_6A91AbB2xQtER9j0WMpB1QaPAQ>
+    <xmx:QSmBZA3oKTi3VK4LncJW_kX09248SLuH7BSTxMh9oR7iIVhdxdx-Ew>
+Feedback-ID: id3b446c5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Jun 2023 21:05:00 -0400 (EDT)
+From:   Vladimir Nikishkin <vladimir@nikishkin.pw>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, eng.alaamohamedsoliman.am@gmail.com,
+        gnault@redhat.com, razor@blackwall.org, idosch@nvidia.com,
+        liuhangbin@gmail.com, eyal.birger@gmail.com, jtoppins@redhat.com,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        stephen@networkplumber.org,
+        Vladimir Nikishkin <vladimir@nikishkin.pw>
+Subject: [PATCH net-next v1] selftests: net: vxlan: Fix selftest regression after changes in iproute2.
+Date:   Thu,  8 Jun 2023 09:04:00 +0800
+Message-Id: <20230608010400.30115-1-vladimir@nikishkin.pw>
+X-Mailer: git-send-email 2.35.8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZID1LnvAj1lamHhv@1wt.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 11:22:54PM +0200, Willy Tarreau wrote:
-> On Wed, Jun 07, 2023 at 02:03:17PM -0700, Paul E. McKenney wrote:
-> > > > (There were some kernel test
-> > > > robot complaints as well, valid or not I am not sure.)
-> > > 
-> > > You mean in relation with nolibc stuff (or nolibc-test) or something
-> > > totally different ?
-> > 
-> > Apologies, this was me being confused and failing to look closely.
-> > 
-> > The complaints were not about nolibc, but rather about my patches that
-> > they were on top of.  Not your problem!
-> 
-> Ah no problem :-)
-> 
-> > And please let me know when the next batch from your tree are ready to go.
-> > (You might have been saying that they were in your recent emails, but
-> > I thought I should double-check.)
-> 
-> No pb, I just sent it while you were writing and our emails have crossed :-)
-> 
-> In short, it's ready now with branch 20230606-nolibc-rv32+stkp7a but if you
-> need any more info (more detailed summary, a public repost of the whole
-> series etc), just let me know. And I faced 2 kernel build errors on s390x
-> and riscv about rcu_task something, though you might be interested :-/
+The iproute2 output that eventually landed upstream is different than
+the one used in this test, resulting in failures. Fix by adjusting the
+test to use iproute2's JSON output, which is more stable than regular
+output.
 
-And I pulled them in and got this from "make run":
+Fixes: 305c04189997 ("selftests: net: vxlan: Add tests for vxlan nolocalbypass option.")
+Signed-off-by: Vladimir Nikishkin <vladimir@nikishkin.pw>
+---
+v0=>v1: Fix spaces in indentation. Correct commit message.
 
-138 test(s) passed, 0 skipped, 0 failed.[    2.416045] reboot: Power down
+tools/testing/selftests/net/test_vxlan_nolocalbypass.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-And this from "make run-user":
+diff --git a/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh b/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
+index 46067db53068..3ce630e4a18b 100755
+--- a/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
++++ b/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
+@@ -130,7 +130,7 @@ nolocalbypass()
+ 	run_cmd "tc -n ns1 qdisc add dev lo clsact"
+ 	run_cmd "tc -n ns1 filter add dev lo ingress pref 1 handle 101 proto ip flower ip_proto udp dst_port 4790 action drop"
+ 
+-	run_cmd "ip -n ns1 -d link show dev vx0 | grep ' localbypass'"
++        run_cmd "ip -n ns1 -d -j link show dev vx0 | jq -e '.[][\"linkinfo\"][\"info_data\"][\"localbypass\"] == true'"
+ 	log_test $? 0 "localbypass enabled"
+ 
+ 	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
+@@ -140,7 +140,7 @@ nolocalbypass()
+ 
+ 	run_cmd "ip -n ns1 link set dev vx0 type vxlan nolocalbypass"
+ 
+-	run_cmd "ip -n ns1 -d link show dev vx0 | grep 'nolocalbypass'"
++        run_cmd "ip -n ns1 -d -j link show dev vx0 | jq -e '.[][\"linkinfo\"][\"info_data\"][\"localbypass\"] == false'"
+ 	log_test $? 0 "localbypass disabled"
+ 
+ 	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
+@@ -150,7 +150,7 @@ nolocalbypass()
+ 
+ 	run_cmd "ip -n ns1 link set dev vx0 type vxlan localbypass"
+ 
+-	run_cmd "ip -n ns1 -d link show dev vx0 | grep ' localbypass'"
++	run_cmd "ip -n ns1 -d -j link show dev vx0 | jq -e '.[][\"linkinfo\"][\"info_data\"][\"localbypass\"] == true'"
+ 	log_test $? 0 "localbypass enabled"
+ 
+ 	run_cmd "ip netns exec ns1 mausezahn vx0 -a $smac -b $dmac -c 1 -p 100 -q"
+-- 
+2.35.8
 
-136 test(s) passed, 2 skipped, 0 failed. See all results in /home/git/linux-rcu/tools/testing/selftests/nolibc/run.out
+--
+Fastmail.
 
-And run.out looks as it has before, so all looks good at this end.
-
-Thus, unless you tell me otherwise, I will move these to my nolibc branch
-for the upcoming merge window.
-
-							Thanx, Paul
