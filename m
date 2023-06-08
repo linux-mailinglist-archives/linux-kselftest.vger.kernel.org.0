@@ -2,60 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C94728536
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 18:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216BA728546
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 18:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjFHQio (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 12:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        id S236383AbjFHQj2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jun 2023 12:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234010AbjFHQim (ORCPT
+        with ESMTP id S235604AbjFHQjO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:38:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013F63599;
-        Thu,  8 Jun 2023 09:38:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B77764F06;
-        Thu,  8 Jun 2023 16:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE13BC4339B;
-        Thu,  8 Jun 2023 16:37:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686242254;
-        bh=oXUT5oQvjYSEjb3Lc/kuaZbdEGwNN5fuS6434CRKp8A=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=dSdOYNmAcsUQ36ZKmxctSbZhqqpGcUgQSExQgpAuI8Y7k0q4AJvJnXoh+d+KwlDcs
-         VLdX0HCapLR6qKCNwW2x/psZc7hliH2QR4IeHkhA/nxWmdWHFZ/WTkMxSefYQZD5b0
-         7QEH4yyXzmwZRuH5CaYKeiTZcZSbAh+glQzpvAs2d+VOq8iJrGyMeD6cLPeKUD1ucv
-         c4CKp7h25VVADQD5V94t6zarwL07gHx6XgSvQvcz7Gj/vLhjHH7rNx/5qaLXzNgHZ/
-         KWnTd8Z8KvSwcbElIVgrSVdJ6mVuh111Qd3e1hkqNuW4HIoWw0KFUmeCuSerHlPdJj
-         fN7VYfwxo++Tg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4891ACE14DD; Thu,  8 Jun 2023 09:37:34 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 09:37:34 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: nolibc patches, still possible for 6.5 ?
-Message-ID: <c4b7c058-4c9f-4804-ba00-e7a9f2df4e3e@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ZHyPi29q3MKiNAQZ@1wt.eu>
- <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
- <ZH1V21rhUQlvRgnU@1wt.eu>
- <ec85bd36-9b39-458c-9618-af500656ca7b@paulmck-laptop>
- <ZID1LnvAj1lamHhv@1wt.eu>
- <208b317e-8553-4d0d-b97c-a0e808fe98f2@paulmck-laptop>
- <ZIFZxLvMlUXxLGJE@1wt.eu>
+        Thu, 8 Jun 2023 12:39:14 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167EE3583
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 09:38:53 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30c2bd52f82so885050f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jun 2023 09:38:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1686242332; x=1688834332;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JGgFYG4pTXXEQQu9pOYaZxnZKEc0m4h2k2KonONr7Wo=;
+        b=7wooIIWCeGgJJhsnKiLE5SkY2xW4XCFyD+DC2fxuMLfinQfLFC9uyKFhg3Tw2D0WSb
+         gWDpm8bq3Q5ho78f6gI+HIJZa1ffQ3YWiJN8Lu6OQPEQG970FkHeD2vvgGDUZ9q0m+MR
+         QgAfM+Bk2xpi7WOYhz+KZe2voiECA3PUVHA4ZCMM1RuNHyriaSm/ylGy6KNHEIq2trFB
+         /Be7SVvI5IU6QVpA2M1DG/pz8cv5d9ht1unUFcwz1vW+AWnH4NeVMPzHs/+nQODUgsyE
+         xCurIfzfmCyFOpLffD5se4UdzqfsVKW600+GbO+emyhBWg+1KFO7dX3V0kfkXCSy9UKc
+         xCfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686242332; x=1688834332;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JGgFYG4pTXXEQQu9pOYaZxnZKEc0m4h2k2KonONr7Wo=;
+        b=KkK158uQE4DCQD9NYk5PWKhlkPim1XIjURu5sHBI5ZnCm+mKxgFo7t948elqic+q+Q
+         +/Z3qgG6yDIYK3W9K8oF39mqZz9O0+wh9vnJZ9Vh0WvU3QIR81DAGeM6/PPWY+ywWfDx
+         CD3VUNoYo4ci3JQjMU1//abgWWNN2PNkduR5XDhc8BY1GPemOzznUMJKzyA7GmHmFxrp
+         6pIsUaiRyO/pImMfhEUgdYH7Z3J6B/hpXj/TRcckIa6WFj4E3Hu1kpWTRxa7G8oF51BO
+         0tc/FQu59DimCzjaMCX9lTdSt//fGpScJPcrZFVLLKhWoGV33W6MKaczzJ+suRd1IiiB
+         PirQ==
+X-Gm-Message-State: AC+VfDxgePiBMMVgOxcnjwMZLRQCxrS3cLYjeLN0n7LtJGnYtGXGTpC7
+        cu3/sXSVZRnbi7gu5E048r6QLwbR5tdlFW0Hjtf+oQ==
+X-Google-Smtp-Source: ACHHUZ6epwBQynkAq+k63HyqJ3Kc0r0/nDQBYZBDFh0kYhXJ/uYtT7MYYArs1t46Mz31dpKedZeaFw==
+X-Received: by 2002:adf:d083:0:b0:30e:46d4:64ee with SMTP id y3-20020adfd083000000b0030e46d464eemr8058706wrh.29.1686242331961;
+        Thu, 08 Jun 2023 09:38:51 -0700 (PDT)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id e13-20020adfef0d000000b0030aeb3731d0sm2038215wro.98.2023.06.08.09.38.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 09:38:51 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH net 00/14] selftests: mptcp: skip tests not supported by
+ old kernels (part 2)
+Date:   Thu, 08 Jun 2023 18:38:42 +0200
+Message-Id: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-0-20997a6fd841@tessares.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIFZxLvMlUXxLGJE@1wt.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABIEgmQC/z2OQQ6CMBBFr0K6dpICBoxXMS4K/UgjlMlMMSaEu
+ 1tYuHxv8d/fjEIC1NyLzQg+QcMSM5SXwvSjiy9Q8JlNZavaNvZGK2sSuJkiEv3tzKlnUkxDgiY
+ lXZkXSbRMnt6QiEmJXRYVNajrFuVgr603OdM5BXXiYj8eoTx7WBYM4Xsee5zuue8/X0el2K0AA
+ AA=
+To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Dmytro Shytyi <dmytro@shytyi.net>,
+        Menglong Dong <imagedong@tencent.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Kishen Maloor <kishen.maloor@intel.com>
+Cc:     Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5301;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=m2lTbvzBdpE+8eV+owavMq2thTouVcd8Yc3fJnRY1Gw=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkggQZF01YMhPS8hRbSdmSkS4jEyIE9KiZM5PyF
+ SimTTPsA4+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZIIEGQAKCRD2t4JPQmmg
+ c1LAD/9DCGzokFCh1orVI7Q/oe4PoaItTHw2275MikLkfafFgBeM9gy7Kal2dnHpTNJMXU3KF2t
+ BeTOGJXYKgRzLAJ+NkfDyQtKrFpNLuNzUVQ0PbT3ZSdK7ebIjXJNZwLP4rvXJM69KmuboSb7GGj
+ yQZ7BJWVl2SpFFBowvdFcJ3FwMUPsESAttJIHx466poyQi+ib2TCjK1+vdzE/Vj9F8i2IACWzUh
+ y3gDRMOsw5Z6TcOZ70DwizSt+fGVpgPTpb6V4JCeWp6Pd55Y4ujPJt4ZSro09w+HGNOLJwqpvaQ
+ DViQjNsv5HBJBS9ohh1RfWMwW8OZITNfb0PF3hYR2eKXwUlwx+cIzPoygTbFk74/V8CnXjCjzxS
+ 7n4Ih6KeeyTjA+O2q8+gkjpJPO+z5Jevto46HJVU4asO9OJXJfubrzbDu+qDWFIw1SoYSqoopcC
+ UK3/4pg/4oXydfOazgWKIpFOULrpezg77WmQnaeqOBOi/1x69koGNmKXyRKoKB+JwSZnla3HLvb
+ F0Fn7yWqdUtNirLL9c6z65fA6BYF0mS/aMpbFvK3PC8HHnGwX3nwltUhFSCpnmyICFr27uiW9x1
+ Oo7nrDWVL6WBc/tRm3BA67ISHlXBguC905eqcGN/TfRZnhAesREJOalNA6o0qQ74Ds4p+MLMDwP
+ mLKmkEFsyhxybOg==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,49 +103,108 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 06:32:04AM +0200, Willy Tarreau wrote:
-> On Wed, Jun 07, 2023 at 04:06:37PM -0700, Paul E. McKenney wrote:
-> > On Wed, Jun 07, 2023 at 11:22:54PM +0200, Willy Tarreau wrote:
-> > > On Wed, Jun 07, 2023 at 02:03:17PM -0700, Paul E. McKenney wrote:
-> > > > > > (There were some kernel test
-> > > > > > robot complaints as well, valid or not I am not sure.)
-> > > > > 
-> > > > > You mean in relation with nolibc stuff (or nolibc-test) or something
-> > > > > totally different ?
-> > > > 
-> > > > Apologies, this was me being confused and failing to look closely.
-> > > > 
-> > > > The complaints were not about nolibc, but rather about my patches that
-> > > > they were on top of.  Not your problem!
-> > > 
-> > > Ah no problem :-)
-> > > 
-> > > > And please let me know when the next batch from your tree are ready to go.
-> > > > (You might have been saying that they were in your recent emails, but
-> > > > I thought I should double-check.)
-> > > 
-> > > No pb, I just sent it while you were writing and our emails have crossed :-)
-> > > 
-> > > In short, it's ready now with branch 20230606-nolibc-rv32+stkp7a but if you
-> > > need any more info (more detailed summary, a public repost of the whole
-> > > series etc), just let me know. And I faced 2 kernel build errors on s390x
-> > > and riscv about rcu_task something, though you might be interested :-/
-> > 
-> > And I pulled them in and got this from "make run":
-> > 
-> > 138 test(s) passed, 0 skipped, 0 failed.[    2.416045] reboot: Power down
-> > 
-> > And this from "make run-user":
-> > 
-> > 136 test(s) passed, 2 skipped, 0 failed. See all results in /home/git/linux-rcu/tools/testing/selftests/nolibc/run.out
-> > 
-> > And run.out looks as it has before, so all looks good at this end.
-> > 
-> > Thus, unless you tell me otherwise, I will move these to my nolibc branch
-> > for the upcoming merge window.
-> 
-> Perfect, thank you very much Paul!
+After a few years of increasing test coverage in the MPTCP selftests, we
+realised [1] the last version of the selftests is supposed to run on old
+kernels without issues.
 
-And done!
+Supporting older versions is not that easy for this MPTCP case: these
+selftests are often validating the internals by checking packets that
+are exchanged, when some MIB counters are incremented after some
+actions, how connections are getting opened and closed in some cases,
+etc. In other words, it is not limited to the socket interface between
+the userspace and the kernelspace.
 
-							Thanx, Paul
+In addition to that, the current MPTCP selftests run a lot of different
+sub-tests but the TAP13 protocol used in the selftests don't support
+sub-tests: one failure in sub-tests implies that the whole selftest is
+seen as failed at the end because sub-tests are not tracked. It is then
+important to skip sub-tests not supported by old kernels.
+
+To minimise the modifications and reduce the complexity to support old
+versions, the idea is to look at external signs and skip the whole
+selftests or just some sub-tests before starting them. This cannot be
+applied in all cases.
+
+This second part focuses on marking different sub-tests as skipped if
+some MPTCP features are not supported. A few techniques are used here:
+
+- Before starting some tests:
+
+  - Check if a file (sysctl knob) is present: that's what patch 13/14 is
+    doing for the userspace PM feature.
+
+  - Check if a symbol is present in /proc/kallsyms: patch 1/14 adds some
+    helpers in mptcp_lib.sh to ease its use. Then these helpers are used
+    in patches 2, 3, 4, 10, 11 and 14/14.
+
+  - Set a flag and get the status to check if a feature is supported:
+    patch 8/14 is doing that with the 'fullmesh' flag.
+
+- After having launched the tests:
+
+  - Retrieve the counters after a test and check if they are different
+    than 0. Similar to the check with the flag, that's not ideal but in
+    this case, the counters were already present before the introduction
+    of MPTCP but they have been supported by MPTCP sockets only later.
+    Patches 5 and 6/14 are using this technique.
+
+Before skipping tests, SELFTESTS_MPTCP_LIB_EXPECT_ALL_FEATURES env var
+value is checked: if it is set to 1, the test is marked as "failed"
+instead of "skipped". MPTCP public CI expects to have all features
+supported and it sets this env var to 1 to catch regressions in these
+new checks.
+
+Patches 7/14 and 9/14 are a bit different because they don't skip tests:
+
+- Patch 7/14 retrieves the default values instead of using hardcoded
+  ones because these default values have been modified at some points.
+  Then the comparisons are done with the default values.
+
+- patch 9/14 relaxes the expected returned size from MPTCP's getsockopt
+  because the different structures gathering various info can get new
+  fields and get bigger over time. We cannot expect that the userspace
+  is using the same structure as the kernel.
+
+Patch 12/14 marks the test as "skipped" instead of "failed" if the "ip"
+tool is not available.
+
+In this second part, the "mptcp_join" selftest is not modified yet. This
+will come soon after in the third part with quite a few patches.
+
+Link: https://lore.kernel.org/stable/CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com/ [1]
+Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+Matthieu Baerts (14):
+      selftests: mptcp: lib: skip if missing symbol
+      selftests: mptcp: connect: skip transp tests if not supported
+      selftests: mptcp: connect: skip disconnect tests if not supported
+      selftests: mptcp: connect: skip TFO tests if not supported
+      selftests: mptcp: diag: skip listen tests if not supported
+      selftests: mptcp: diag: skip inuse tests if not supported
+      selftests: mptcp: pm nl: remove hardcoded default limits
+      selftests: mptcp: pm nl: skip fullmesh flag checks if not supported
+      selftests: mptcp: sockopt: relax expected returned size
+      selftests: mptcp: sockopt: skip getsockopt checks if not supported
+      selftests: mptcp: sockopt: skip TCP_INQ checks if not supported
+      selftests: mptcp: userspace pm: skip if 'ip' tool is unavailable
+      selftests: mptcp: userspace pm: skip if not supported
+      selftests: mptcp: userspace pm: skip PM listener events tests if unavailable
+
+ tools/testing/selftests/net/mptcp/config           |  1 +
+ tools/testing/selftests/net/mptcp/diag.sh          | 42 +++++++++-------------
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh | 20 +++++++++++
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     | 38 ++++++++++++++++++++
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.c  | 18 ++++++----
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh | 20 +++++++++--
+ tools/testing/selftests/net/mptcp/pm_netlink.sh    | 27 ++++++++------
+ tools/testing/selftests/net/mptcp/userspace_pm.sh  | 13 ++++++-
+ 8 files changed, 135 insertions(+), 44 deletions(-)
+---
+base-commit: 6c0ec7ab5aaff3706657dd4946798aed483b9471
+change-id: 20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-6e337e1f047d
+
+Best regards,
+-- 
+Matthieu Baerts <matthieu.baerts@tessares.net>
+
