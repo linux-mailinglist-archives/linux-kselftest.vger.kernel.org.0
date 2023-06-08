@@ -2,62 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC167289ED
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 23:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1FC728A05
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 23:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236465AbjFHVH6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 17:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        id S236897AbjFHVNm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jun 2023 17:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232085AbjFHVH5 (ORCPT
+        with ESMTP id S237008AbjFHVNl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 17:07:57 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B71F2D42;
-        Thu,  8 Jun 2023 14:07:55 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 358Gmvaa020704;
-        Thu, 8 Jun 2023 14:07:11 -0700
+        Thu, 8 Jun 2023 17:13:41 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6E12D74;
+        Thu,  8 Jun 2023 14:13:39 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 358GmS3G016818;
+        Thu, 8 Jun 2023 14:12:55 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
  subject : to : cc : references : from : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=n63nSmaJuUIoK1z2sPRQ4AfXZLgi0W4CcBjJZp2U1xk=;
- b=SGyiU3kyk73AlxxlhOo8+ommK54fye8xSPI2cQeJ+CnU+/txGJaPhnb71JELAaeDUT0v
- gl0Ck4adRxqe5mJ+9ioncAVVzQIx+84JuCTEshBemeDE2ZwWNEYHm6+aHGVpk2nVKfCd
- SVj35SEwiPy7yBDiIQyxoFGLzyjBNbLeqwOlLlY7rOQRwPO9o/CHRyX43hvIA2Sx14tX
- HfbP4nJ7nd1lAqgxjLZ7rO3laMiSjSy0zEakjZCwqbXPPGK7QMGzIyO7BYhDq90aGcQo
- 6mLYJRzcfuKZYkn+KV8pmEskOJ+I8iTd+vMTIS6GWwb/Cr7H5zS81a9mtVWbaPinLFx3 YQ== 
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3r34d0yaqr-1
+ bh=4wr8b+paBWEP/y+xRSVouRil5605j63PYXpW58nMnXo=;
+ b=h3xa74gDN3zwnJKeqqzUAnCkULX5QoMGtpDilB8uRxuJw4Pyeni7H8qKE4iJPaWN0yHN
+ o/7APJaw3C5898r+OHcx93E/gWSfmc1DKW8+kV7B4ay9aqwceZVLW+q0isCzEw+9sHNz
+ XasUy97RiAwjBE026QHSwM9WargRqZLFvHSOLhVbhZWB8uNKu/PYT7c2inb/e2aTZa/y
+ KAA4TPQhs7BJXIt8od6yqcwFHrBiujZo+BFKSnxhmwsH4+VIuEb7WEp+TqL9KHQbqMoK
+ bKOOrOWDecGvIshMRWwIyKnUtoaq27vmX8z+tfdSzwvKnsv/nKHZoVsJ5BuIlEQ/AByk NA== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r2qbsn1jd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 14:07:11 -0700
+        Thu, 08 Jun 2023 14:12:55 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ahBET+gjuCryrG72W7denPT0LUI8KM0C9UnjHKBBdOQZ0Y3zLsyQBbKMGqbEcpNUGyln3QwLhYmakYPacc2/hSylirD9u2zXq58miUDF3E5zdCwgFWBVkCrYLybnd+zkNAqV/BFo1sJE3tW0Kln4kZyJbZh+v4hRDhyWxPtPHRb/4FzrdWpo6mpz7N5d38HE0iRQ2P1ApozEP3gd84l7BogpxV2z0zVftUiJoYgpNlHxW18jpjflpGeckwM3DxN3rdHV14L52Y5Pslhql7O7q1Mh4Xu9WDnhikSDiSJbaSBGGBCFDZlAjasDcUCsJ8GM5UdSmRzwz7bqcIPbbUUrrw==
+ b=AK0EyPaWwEr1kKSazmABeMRU7JCAjTnjQXQur2BCj+g6HEQNXb7Afg/O1pegmafVD61z3U4qPDca0YKSLwritZeEhfvpI/ORYP/hA7WLicizgbUnwvrkefq+TdJ68BNxWJEBVHGDq4M9vt4jlt1LDP5HElWHfxmeh0cPWTLEFjYZa2ZRJAjO1BS1m90/l0Os8cJlt8ts+BxeUInrHT7AzEfxFYxZFUWfX56nmCgluPrLnpH/mjth2cL2fxgc8PNNTwYD0BP51k4XXExneUhy1/s6oW3lBKdscdBf/niqL9lUZv276wlY5/f/wBQHGwoQjwdLchGDxFAqvufCDg6jlA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n63nSmaJuUIoK1z2sPRQ4AfXZLgi0W4CcBjJZp2U1xk=;
- b=hQ/mb9RFn/R4sozFZCo/FU1LqvzcSitqkbTJMcdv+f3wMk7iJgbL80cFCwlBL4x9txz1adj5Lg0R6l0D++YjIcaGc++hA37/5xIqWxejC8M5maLrAD1gusatb7wEcPj2PW14Oe6OMHlUFWcJZnEYTkp/c5iuR4/v1U2fwRjWLq+gUkcpf8qls6SyRoYOXFkbxbvQR+lqT886bTPM6y/CrxxTcp4XCu2g9WUNVThnnQeoowDM4JLdNgv/JhYpbD45KguU5ocqSWSFchAKFBUxSqO/z0BUKC8KUWs0TaciI8bsgfPlBIc3b80PlThoPmg8o53A4o9HaeRMAy5ZIDJJNQ==
+ bh=4wr8b+paBWEP/y+xRSVouRil5605j63PYXpW58nMnXo=;
+ b=icWxDL0O+2YunEGziMRtGIDiXAzT0gG/kUNZteu1qW0hIGBpVN2Jn07qJ8HwkS86ZFp+lE9NOflWQciTZ2HPvPgA56GM/tFkJjFewrmZ7iMp3WcXlt4xX++4r/BJLiaViG1BbK4Uo13RkYzrhr8NISH98L2Zz3Br8pDGYkR3ueiPxd+uvplrH+Oc6X/0yABUngtsN83RShoKVwSl5s7/iRMAZG13n5hvS2y86a7CDyMo2G8rHce/O2zxTYa9As0L3d4CFkH6GR6yVnFFNqbJJZTzA3oMVJ5tkSJtDNW6K8CYNv7Dt1x0xgzBp9MdnMaIJfF+24r96v7vp19idXn3ZA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
  dkim=pass header.d=meta.com; arc=none
 Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SJ2PR15MB5647.namprd15.prod.outlook.com (2603:10b6:a03:4d1::16) with
+ by DM4PR15MB5565.namprd15.prod.outlook.com (2603:10b6:8:10e::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Thu, 8 Jun
- 2023 21:07:09 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Thu, 8 Jun
+ 2023 21:12:52 +0000
 Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
  ([fe80::bf7d:a453:b8d9:cf0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
  ([fe80::bf7d:a453:b8d9:cf0%6]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
- 21:07:08 +0000
-Message-ID: <4ca27e23-b027-0e39-495b-2ba3376342cc@meta.com>
-Date:   Thu, 8 Jun 2023 14:07:05 -0700
+ 21:12:52 +0000
+Message-ID: <2fb8c454-1ae7-27cd-a9fa-0d8dda18a900@meta.com>
+Date:   Thu, 8 Jun 2023 14:12:49 -0700
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.11.2
 Subject: Re: [PATCH bpf-next v3 1/3] bpf, x86: allow function arguments up to
  12 for TRACING
 Content-Language: en-US
-To:     menglong8.dong@gmail.com, alexei.starovoitov@gmail.com
+To:     Menglong Dong <menglong8.dong@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
         song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
@@ -67,74 +68,76 @@ Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20230607125911.145345-1-imagedong@tencent.com>
  <20230607125911.145345-2-imagedong@tencent.com>
+ <20230607200905.5tbosnupodvydezq@macbook-pro-8.dhcp.thefacebook.com>
+ <CADxym3abYOZ5JVa4FP5R-Vi7HAk=n_0vTmMGveDH8xvFtuaBDw@mail.gmail.com>
 From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <20230607125911.145345-2-imagedong@tencent.com>
+In-Reply-To: <CADxym3abYOZ5JVa4FP5R-Vi7HAk=n_0vTmMGveDH8xvFtuaBDw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0086.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::31) To SN6PR1501MB2064.namprd15.prod.outlook.com
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR03CA0295.namprd03.prod.outlook.com
+ (2603:10b6:a03:39e::30) To SN6PR1501MB2064.namprd15.prod.outlook.com
  (2603:10b6:805:d::27)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SJ2PR15MB5647:EE_
-X-MS-Office365-Filtering-Correlation-Id: d781b75c-4733-41f5-6d3b-08db6864520a
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|DM4PR15MB5565:EE_
+X-MS-Office365-Filtering-Correlation-Id: bf545347-1364-490e-c88f-08db68651f1a
 X-FB-Source: Internal
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mhbHtT4SHGVbjeG9+peYTt0TTV7rEqv9lHgRArqxTHCNuMGnRpyIPIj8pLZbY4oERhHtcDW36KooCZGu6rjWd7cmwVh+9nCZ6sVgqlq6XnqwABaaY3GcXbK7cFhg0FVcwMhXZ248/Thh1233YT62SI8seMFlw13pPGw0YKBT7BCsrkhyo+X7l02T+g7pQDBLBTXAfc0iqEHAZv/o6bpEIbjiMzu09bdk2refV2xC72OUKPvks7lJOea5H2BiXN6qaLcWzoDvkEAbKuuSkdpAU+OfYsPef2AkHu/yN+R5NIPoV3Uuj1mCnrvuBPPmDR4AzMISidoRARNBCiTJ0Gm61Pl6R7SstRaH6Wp01DeH/MadvDNhkMrxmj9uq5LB6bhvrAPN91gR6eiDunBQmanBjm0bjWVbWUog+po5yIGN3xIxAffY6KlC1umesiT4aLlN027tGrVUZgMG7eCGl7GxooBpOprGeowfGbn1z2VIMbOD8/czEp4iO35W1hRAwJ8wXgeE9uU0OAgdLp2apoZm8VvxEJrA0BrE2/kEV5g76aGqn+2dS+GBk5rmFwP0PY+s89/V6mCchOIT7rGCUQcKmRSEROxGKZ+7EwBHCz5kRXdhPa0gfYY4j2wHLm4rOsC4jW6lKAr/FXTMKHh1sEgdhw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(376002)(346002)(396003)(39860400002)(451199021)(31686004)(6512007)(6506007)(41300700001)(5660300002)(186003)(53546011)(36756003)(7416002)(4326008)(66476007)(66556008)(6666004)(66946007)(8936002)(83380400001)(8676002)(2616005)(478600001)(2906002)(86362001)(31696002)(6486002)(316002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: lEz6Zf7sfOv8mqiQQq+x1KUJJNVIpOUTU9hQQurv443qR9Cmb5gaOyGzDlPKpoAOx07yYwMGCKptNiiFSzCzRkt81Aw+70Xcd8k5TlMHGw5OiJsD5HVgSXDyiCcWqemJ+QndqYm0NaeVVuMJQoduUS1c8pSqvOxeih6zxOFGYMZ+B8G6ypel5qk3VVGiF9zQRhJZNYtdZR8bpqhuZvbwlFw5UIC+bM2m4w1yZBO+HSFgnYuQi1SuW8dRZv29oCAjlJcwp2ssguGsoLNzKiVVDjrIjcdOc4q8rnjzPZ+Kwh9/BHHrlUnta/Y7Rb51qnNwZwd3bZYuCJbOjfxdDF4MuY/l2idIAmrPE264w28XfdM1SxLfts210g9pRf+3Q2ikI0CXiWB74NY4MIi5a2Zny2YSuDbuDsGVgMstUDW/1/DNDq7Zyk/2T6ejc2+dQG22Mv3Z5dxajj7+OTc+gZhcU66lfZ/k8wqeL1OhPTcccRoJhvI8CFHm59zN1pTGViCIawMUmxGzH0edaYsSxTRArOKb4W+G3cqvRLmLYPchLrBuNgAolpNHGLuFH2tgrE8Ksn7qwl/zDI0QoNio0nqVbtvaYIe1iYOa3+ZQuj0oOBSOvFA5aHS5tbeonnES++zETP3DU86rB1xm8F0vv+HASMIbM32WYduQC0YH4rfGLbc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(39860400002)(136003)(366004)(451199021)(7416002)(31686004)(2906002)(41300700001)(8936002)(5660300002)(8676002)(316002)(66556008)(66946007)(4326008)(110136005)(478600001)(66476007)(6666004)(36756003)(6486002)(186003)(53546011)(31696002)(86362001)(2616005)(6512007)(6506007)(38100700002)(21314003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UG12aUVrWGNFL3FCYllTRGVqSVhiZytIRUJxRE95NE9IRzlGd1NQM3JDUXB6?=
- =?utf-8?B?ekJzWUY5WnR1NXhBUThSUzAyWXFqVS9iQjRZVWlGZnQ1MThqOHVHaWlDOWZ6?=
- =?utf-8?B?d2FlNzYrLzV5L21ySkVJQkFGNGJuNnNzNzFMc3hBbm1YR1JoRFdoNFZmQjVV?=
- =?utf-8?B?RlVkMU0wMGFqZEJHejZpbkp5RExkQUtyZlRzMndjLzNXcDk4emcrOHphMlhD?=
- =?utf-8?B?VC9VUVBiVUhoU1ZKN2RPek9UeHlmSGZNSVFNeXMyT1ZhZ0ZPS09UWm5QRUFF?=
- =?utf-8?B?MWxVNVROclFtbnZuaERBclFjbG8yN2hjZkVBOC80Zjdmd0pXWE1GSnVIQUV5?=
- =?utf-8?B?R2NDMUxIZXEwS2RCNnVSdDVLbnh3ZFZxVTQwYUZHalZyOWxCT0tGNFozL0hv?=
- =?utf-8?B?SWdNeUN3aTE0dm45RisweVJ0NWlYaUl1S0N2YkdNbTVLTW1ISlVpUGFjTVky?=
- =?utf-8?B?bWhIWVZNWTJuT3B3eTd3anU5QU9WV1cxMWd5bC96dGZMY3RjSTcyWXRoaVJH?=
- =?utf-8?B?VTY4VzVRaldLQ2QyZkNKenRlMmtIV1RvVzdTUTU2R3pOZVFXejBuRGUvWFpC?=
- =?utf-8?B?cWhxWWhMNXEzckw4czRwZGdzb0xuQ0p2bGp2a2R0a1dwWVRid29HMUpheEdE?=
- =?utf-8?B?YjB5eHNCcXA2ZDNSaTRTZlNSbXZkVVM5VHFKMHFEaG9LOUJ1UVdraXhKRDVp?=
- =?utf-8?B?ZHhGS0xmcFp0bktXd1hZLzVadDFDZUY3Uzl2T1d5cHRGc3MzQ3RTVTMzeGhF?=
- =?utf-8?B?dGM2bG96U3BJazRPdUNHZ0cwMFoyZndGK0xscE1CYlhVMHN5OXZMK0hPbFpq?=
- =?utf-8?B?ZDdBN0tzWjdwbUF3QlB2SGlRWS8zaWZIYkJlaVk5Z1VxK2orcU8rUzNiTEUw?=
- =?utf-8?B?ZnBOUkhrbFlQQ25jY2hWNUxqTzduNVdnQmNGOG02MjNUenpiaGNTV29OUkQ0?=
- =?utf-8?B?UkZTdjRNYVE2L2JZTXp1dUIybnM5Y2d2eU8yZ0pucFo3dVN6dWV1RWU0MFlR?=
- =?utf-8?B?M2Q0QUtOWHBlaDM2UUs5YWlySmtjZ0JnMzNlVXdxSE84c09xekFSSFY0S3cr?=
- =?utf-8?B?eFZMUkk5Rjc5SmJ4U1gwYjJOcHJHMUdoRm1HYmhPbEFMajViQ1VTaENNKzRF?=
- =?utf-8?B?WndzWUdkYi9iT1NtaTFLRzhwdm51ZHQrZEFaZnlReUh0eXJnOGYwNGQ4LzUx?=
- =?utf-8?B?UW5mY2xKN1hQby9TbTl2Z092bjhpbHZXaVVUYzMzRDFEbVdkaXQ4VTM1RWQ4?=
- =?utf-8?B?bmhObEk5d2hWODVLQUVkWWRDVlA5YWNIR1krby9mMWJEWWMxZ2E5YnYxeXNJ?=
- =?utf-8?B?MVZaYmFsekI2RUtjRFVnSVp0ckJWU1VxVGJoVFU5VGxWU0RPblA4NDUySG8v?=
- =?utf-8?B?U2padUpNY1lqdXN6NW5JUWtYREJ6a24rUUp1MGcvUGZtM0hIQVpLamFKMm4z?=
- =?utf-8?B?YUNGclp0a1F2dWJYQVBOWGJKS1ZDQXVQRCtrVmMrbnc1WGg0MFJrcVdBRGtz?=
- =?utf-8?B?RWtIT0hRRFZpanFheEJlczQwaEZPcVVOY2VzRzUvZjNGMHZoZDNIWk5jQkp2?=
- =?utf-8?B?KzZWK3kvNHZrQ2o1bldSUGVLT3krU09ZUk9WY2ZCU01ud0dKK3VPUGEvWHJ0?=
- =?utf-8?B?QnBHeDNFSzZZejhHSzg3QWp3RHRKYkdZbUtLaUNvU253dVArSnpkUHpMMVMv?=
- =?utf-8?B?MVVFaGh4bUpzUFJWMEZIWDJScmRBUXJHZ1A3bWxRMVdlVUhBU3FtYmtZd2to?=
- =?utf-8?B?RVN0SldFa2hVMmMzRGZlNnpOc3NrWmhUUTJxN3lVb2JvRWNlMnpiTFJnVU1G?=
- =?utf-8?B?dlluNGM1dElBS3RxSEI2ZVBMMU1MQjJkVWJkWVVWeHo3OVdDWXZqUGxmeTV3?=
- =?utf-8?B?azVwcWxWVk1FSlIyYXR5bTRhNDljSXEzckhEb1JQQzdYanFlNjNVem5HcnJW?=
- =?utf-8?B?ZjFYbHRsUVhHbkZ4VHFvWjl3U3VuaHVUR2pFU0xYK3JsWFRGRHM3bW84UUM2?=
- =?utf-8?B?MG9sZ1IrQWx2SU9kSDVJZVg0NVI4UE9vb3IvYVpMdFVHbFNQb2FwT0pjMURW?=
- =?utf-8?B?Q00xUURJZGh6YjFhU2RNb3FydThFS3FBQ2ZjbHljbFpBejZiNE9OOVdnK1dY?=
- =?utf-8?B?T0hRV21yL3VIQW9YaVA4ZEJqdWhFSy83YjFWT0pCeWt3K2QzRVQ2SWdHc2ty?=
- =?utf-8?B?MFE9PQ==?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZVovZXVka2NzNUl4UzNMaGhXeCtBMkFZL2h0c2ZSV3N3bEFETHBrcWY4N3hq?=
+ =?utf-8?B?NHpyWUJBaHlNWCtLaklXc01SMGhBelhKNGFVbHMzZDhPa0xuWnZ4YmdJR0hR?=
+ =?utf-8?B?MlFCTlFZaXFHNEY3TkEwOW5HZzQ3UWdadDF4TitvV2RsMEdoVkw2WVN1aVFr?=
+ =?utf-8?B?VW1FK1g0clcwdDlDbzVtMTJpQmpBcWlaeWpwdVlkMGhPWHFGZ3o3UkVBd0Nt?=
+ =?utf-8?B?Z3QyUGJJSGpPcmJQRGdVSFVmZWpOaytVa0RzLzZPVWsrQTloeTVBeUhOcUdE?=
+ =?utf-8?B?N3R0aW1ibEZFbkVLWU9QL0IvYk1hcmdTYlNtV0d4LzNyVnpaT01tZCt6cjBZ?=
+ =?utf-8?B?cklZdGR2MVg5ZkVsemVFVWM2S1Yzc3d6YXBvemxsWURZVXU2YWJQS3RtcjVu?=
+ =?utf-8?B?UTgvdHJGQ09NR2VtdEpuTmlDZUxxckovdW9HSnprK0lwM3hxTmErSnZHRFpk?=
+ =?utf-8?B?TUlYcy9hczNEcXJQOUZPZnl6anZJeW5Td2ZMdmhkR2lDRWRreHNta2VQQklh?=
+ =?utf-8?B?dzNBVUJrcWhjUDVLam9ESzI4c1BPTldGVlVWbmFlRTk4ZmlDWHM4NXNuemtX?=
+ =?utf-8?B?S1J4NjZtL0Nta1pXalpyVlVjNjhmQmhndnRnNlg1c2JuSzV0WUJqMzNORjJW?=
+ =?utf-8?B?YUhhWUdrYW9teFB5dUR3OU12VGpaNEsrczdNTmZST1NXamFsRDh2NEdiajg3?=
+ =?utf-8?B?Yk45OG93WVEvM1ZHUW84R3RmUHVqbnU0NG9EVFExYVJtT3Z1U0JFVTNFeFRh?=
+ =?utf-8?B?aFNFTDRXeVpUWUkyMGQ3MkRhVDZ1b1BFaVh4c1JreTgwRHd2NzJla2dUUmlw?=
+ =?utf-8?B?QUJaOHF2elUySFd6OWpodUZMUUxFZHg1a29oYW1EcFhXeUVyUWJUaWdFYzlo?=
+ =?utf-8?B?a0dCcnlGdXIxOEFsdjA4UVp2UVVneWwzdEhscFEzMTFQaXl6MUJmOVJuL2c0?=
+ =?utf-8?B?M1hhT3RHVXFycDdMTTVKcEZPYkkyaG1YOTZUNit2ejl1cktIanhOaXZ1VlJn?=
+ =?utf-8?B?U2NtR21mTjN0cTVRSlhtbVJmUUhhUnh3RTZlazNTZDJDTVZqN0RxU2dOS1dt?=
+ =?utf-8?B?ckc1OUZQbHl5cFdDelZRMFVSbitDME9sTUxRdEZCcS9xYXRkVG0rRGlHckxn?=
+ =?utf-8?B?UWdnWGRmcjlCbFJtS0hsckhnWTR1S29vNGpJM1FPSnUrSFBKY3IxdjloL0FJ?=
+ =?utf-8?B?WnhNazVicWN4cjJGRklmUWtDWXQ4enIyODlCM05tczlPc3dlczZiSVg5d1F5?=
+ =?utf-8?B?UEYvcjlkTVJSZ2wveDRxM2trUVNQMkhjbUxGZ2RFdll1NXN5V0hqRDgyVHhM?=
+ =?utf-8?B?TU9kYnZYOGtJRmN1aGNLNTkwcTlxRERiczN0Y1dBdEErcURKZUdrMVNlZWhs?=
+ =?utf-8?B?dzZrOTBHbGpXUjNIOHh4UlhibmUyNGd3MkNtcll5ajl6Mm1YVUJGckVVUTQ1?=
+ =?utf-8?B?bmIrUzY1ZHdsYUZFUStSbXZBN0l1R0YxeElKL0F6NEJteCtDSVkwb3pCTnpR?=
+ =?utf-8?B?UDF4RkVCLzc3ZDZMbmxDSlpjaEpBMTgxeVR0bCtSODVDZEFHNUdIREJkTXJK?=
+ =?utf-8?B?Y2FMbjhjYVdOTnRxSFZwelRZL1hHU0I3VUNJNWFiVU1oN3pHTHU5Y3FvL04x?=
+ =?utf-8?B?RFpoWnR0aXhyajFPNzhBellKUlI0NmtPTFVrWlRsMWIvdS9leWVLYnVZUm12?=
+ =?utf-8?B?cmQ5THZ4ZkRhK2tMcUNJOUdRNzVSM01hWFJGTnZlalI4Uy8yUFJ5bW4rNDRw?=
+ =?utf-8?B?T1hSMTVrN25CRDllNXUxZ2YzL3IzUGlETmJYdkNlUkFDSzM2ZVFiTWFhTGYr?=
+ =?utf-8?B?amU4TU8rYzFkcG10NnlsZlNWVzdlL1p4L0hjVjVPM2t3NHpzZjFOU2tHNndY?=
+ =?utf-8?B?OFlkSFBTZlNDQmJ6KzAreWl3M29pd0szTExFeUxMbW5pYzNzSXM5Sy9xczA2?=
+ =?utf-8?B?ZE9TYzlpekdXYXpzVmRXV3RieUN6WFYyc3hmbDc1YVhKWXVJbTNBYkRNSk1Q?=
+ =?utf-8?B?ZlBlQXhXbFFyRUM1UUlROEUyc2c3STUzVjJQY3BkWThPMXBIQXB1Nk4xQldx?=
+ =?utf-8?B?dmJqSnpkWjJvNXc2Q1pESHpTT1crZTVFZlh0TkkvUXZQSnFuc01QVjlTcm9R?=
+ =?utf-8?B?LzVONGEyZlEwZVh5TjdVRElMMDVjM1VhdUNES09VZnhrU2xIeU1rM3FNdklm?=
+ =?utf-8?B?M2c9PQ==?=
 X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d781b75c-4733-41f5-6d3b-08db6864520a
+X-MS-Exchange-CrossTenant-Network-Message-Id: bf545347-1364-490e-c88f-08db68651f1a
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 21:07:08.9294
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 21:12:52.7842
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qSWejcwrRj5TwA/CTWfDHqTWtaVG4UtUrNfnze6Y307H5qyX45TW/kPN2oc6P7QA
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR15MB5647
-X-Proofpoint-GUID: 2JpqSjwo74rTcOOZSe2HqLP4KWF56roJ
-X-Proofpoint-ORIG-GUID: 2JpqSjwo74rTcOOZSe2HqLP4KWF56roJ
+X-MS-Exchange-CrossTenant-UserPrincipalName: rLFfQIak2TMBwTyaFgi+HnpKzW4Ydf2SwGYKhAfvuxtfxjR+2VzNO7THnu5YFBtl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR15MB5565
+X-Proofpoint-ORIG-GUID: Nge8sMlHz9LD4SY7U6nYejA66eDt3qU9
+X-Proofpoint-GUID: Nge8sMlHz9LD4SY7U6nYejA66eDt3qU9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-06-08_16,2023-06-08_01,2023-05-22_02
@@ -150,68 +153,61 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 
-On 6/7/23 5:59 AM, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
+On 6/7/23 8:17 PM, Menglong Dong wrote:
+> On Thu, Jun 8, 2023 at 4:09 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+>>
+>> On Wed, Jun 07, 2023 at 08:59:09PM +0800, menglong8.dong@gmail.com wrote:
+>>> From: Menglong Dong <imagedong@tencent.com>
+>>>
+>>> For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+>>> on the kernel functions whose arguments count less than 6. This is not
+>>> friendly at all, as too many functions have arguments count more than 6.
+>>>
+>>> Therefore, let's enhance it by increasing the function arguments count
+>>> allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+>>>
+>>> For the case that we don't need to call origin function, which means
+>>> without BPF_TRAMP_F_CALL_ORIG, we need only copy the function arguments
+>>> that stored in the frame of the caller to current frame. The arguments
+>>> of arg6-argN are stored in "$rbp + 0x18", we need copy them to
+>>> "$rbp - regs_off + (6 * 8)".
+>>>
+>>> For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the arguments
+>>> in stack before call origin function, which means we need alloc extra
+>>> "8 * (arg_count - 6)" memory in the top of the stack. Note, there should
+>>> not be any data be pushed to the stack before call the origin function.
+>>> Then, we have to store rbx with 'mov' instead of 'push'.
+>>
+>> x86-64 psABI requires stack to be 16-byte aligned when args are passed on the stack.
+>> I don't see this logic in the patch.
 > 
-> For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
-> on the kernel functions whose arguments count less than 6. This is not
-> friendly at all, as too many functions have arguments count more than 6.
-
-Since you already have some statistics, maybe listed in the commit message.
-
+> Yeah, it seems I missed this logic......:)
 > 
-> Therefore, let's enhance it by increasing the function arguments count
-> allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+> I have not figure out the rule of the alignment, but after
+> observing the behavior of the compiler, the stack seems
+> should be like this:
 > 
-> For the case that we don't need to call origin function, which means
-> without BPF_TRAMP_F_CALL_ORIG, we need only copy the function arguments
-> that stored in the frame of the caller to current frame. The arguments
-> of arg6-argN are stored in "$rbp + 0x18", we need copy them to
-> "$rbp - regs_off + (6 * 8)".
-
-Maybe I missed something, could you explain why it is '$rbp + 0x18'?
-
-In the current upstream code, we have
-
-         /* Generated trampoline stack layout:
-          *
-          * RBP + 8         [ return address  ]
-          * RBP + 0         [ RBP             ]
-          *
-          * RBP - 8         [ return value    ]  BPF_TRAMP_F_CALL_ORIG or
-          * 
-BPF_TRAMP_F_RET_FENTRY_RET flags
-          *
-          *                 [ reg_argN        ]  always
-          *                 [ ...             ]
-          * RBP - regs_off  [ reg_arg1        ]  program's ctx pointer
-          *
-          * RBP - nregs_off [ regs count      ]  always
-          *
-          * RBP - ip_off    [ traced function ]  BPF_TRAMP_F_IP_ARG flag
-          *
-          * RBP - run_ctx_off [ bpf_tramp_run_ctx ]
-          */
-
-Next on-stack argument will be RBP + 16, right?
-
+> ------ stack frame begin
+> rbp
 > 
-> For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the arguments
-> in stack before call origin function, which means we need alloc extra
-> "8 * (arg_count - 6)" memory in the top of the stack. Note, there should
-> not be any data be pushed to the stack before call the origin function.
-> Then, we have to store rbx with 'mov' instead of 'push'.
+> xxx   -- this part should be aligned in 16-byte
 > 
-> We use EMIT3_off32() or EMIT4() for "lea" and "sub". The range of the
-> imm in "lea" and "sub" is [-128, 127] if EMIT4() is used. Therefore,
-> we use EMIT3_off32() instead if the imm out of the range.
+> ------ end of arguments in stack
+> xxx
+> ------ begin of arguments in stack
 > 
-> It works well for the FENTRY and FEXIT, I'm not sure if there are other
-> complicated cases.
+> So the code should be:
+> 
+> +       if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG)) {
+> +                stack_size = ALIGN(stack_size, 16);
+> +                stack_size += (nr_regs - 6) * 8;
+> +       }
+> 
+> Am I right?
 
-MODIFY_RETURN is also impacted by this patch.
+This is the stack_size, you should ensure stack pointer is 16-byte aligned.
 
 > 
-> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-[...]
+> Thanks!
+> Menglong Dong
