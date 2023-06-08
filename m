@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14608727631
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 06:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55C3727638
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jun 2023 06:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbjFHEin (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 00:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        id S233258AbjFHEjd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jun 2023 00:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234140AbjFHEih (ORCPT
+        with ESMTP id S233881AbjFHEja (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 00:38:37 -0400
-Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B504272B;
-        Wed,  7 Jun 2023 21:38:35 -0700 (PDT)
-Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-568928af8f5so3489197b3.1;
-        Wed, 07 Jun 2023 21:38:35 -0700 (PDT)
+        Thu, 8 Jun 2023 00:39:30 -0400
+Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9B8270D;
+        Wed,  7 Jun 2023 21:39:25 -0700 (PDT)
+Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-56974f42224so1535187b3.1;
+        Wed, 07 Jun 2023 21:39:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686199114; x=1688791114;
+        d=gmail.com; s=20221208; t=1686199164; x=1688791164;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=k2JsskG49VjWJfT73tF3irTp5aLOY9bRkVhiXnj04Ck=;
-        b=fqncFh2vZGdwEr/7SVimGxwbGcBm2werxnOOqG/EuVM5l2UVMbhjfYp6twgUElGhHD
-         IhYM4a6JPfjTnEwwRVDj7nNISnUAAVJOshKMOzBSd9u5iPQxKxTl+gEbEz5vfjzvfY+g
-         T5AUxo2xfC+gb7hSP70hj+y+uDOsADRb2ms18/0jzqAPP4KMrmw6baN4+vB1p+2+TZDd
-         UZAyzvfvFWU/1FtKhgux0wTR1O2EKggx07EXX8rYukx3OOW4WvhtTPZ+3Rnyo2TUSG1D
-         jTktlwXiizBkp1SPDCDnF89arE67vAXbffSxhSlntIVAMz8ByghvEgTdCsHModLKu4Xz
-         c6pw==
+        bh=/XropgKuXeNQLqvQa8YUz1hw0VwuOoe/8nudVDeT830=;
+        b=HZRUATZlAV3IbhAQbkizborzvV4BZ2on/7dHPQngEeVxl5seGnMnlU6tYjxSjjgqB1
+         GS1QzbUQCLOeB7piOsSw0ulZKqNjSwg7CTV5bzfX4qBc3bey+lbbzfhj0gvq3+PEAH+R
+         ApVVYyBQg2LWTVYrVdQPu0xprqKc80RfGX+SAFoszk5Odqe6FlLylOJaYRAPVF48SadG
+         tXdzaAobh2iyoz01X8BMFNL1iqrgOAPzwncoplOlvbMXZHcP/lppHopj0wxFYZGNArvN
+         /wsBFj1SkS5pVqR7jWR5g2cGT1/IJk2G1XmpNo5Pz8KsgCPw6Zs4+jG6ZBtrxAR6Hn5N
+         zIQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686199114; x=1688791114;
+        d=1e100.net; s=20221208; t=1686199164; x=1688791164;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=k2JsskG49VjWJfT73tF3irTp5aLOY9bRkVhiXnj04Ck=;
-        b=gszl81os443GCIfhvvLwavDa1NgLFclyak8LzJO6ormN/+AyrI+nOlxNACLhkh4kuk
-         IRXjJ9AFr/obAaI6K4u8dp2RK59hfwD+J9egOFORcTrueqEXVSJht9PJUs2Id7/grVmu
-         +UisLswR6zhXhEC7kyFbgyulJvxlEX67ZckaSSjuhaLmTgzZnYC/oi4lrdk/sDAxGSyo
-         5nnFQbdSndL74LbAhHWBoCJcAby+sucJz3oAMFBH+YnhLLeRRwJHT80ZHLc2/Vyg/zVc
-         1FlclalpWX0VohVLJ1Xn5To2+OQtlNJMcVDs9SSsOl9R/2Amgn8ncjDpQ+oyU5+nlOe/
-         jqRg==
-X-Gm-Message-State: AC+VfDzgVvd6FMZcJbY1IeqsQsvFJerPKY8fYuH1cBXU9I9WFBk2zly9
-        KvSv9mHDGsuF9wsk6VKpkT4ULuozBWF/qgtJeRqATAfl/yA+Pw==
-X-Google-Smtp-Source: ACHHUZ6xuJN3X1TjrO5TM4mHv7s+84gAYt9I6Svi/x4Ce/D9Gh3m7DjeN+msxH3HUJxGNDWuu/c1V5/TRAy1rKe0+e8=
-X-Received: by 2002:a0d:d811:0:b0:568:f050:7c47 with SMTP id
- a17-20020a0dd811000000b00568f0507c47mr1410905ywe.0.1686199114561; Wed, 07 Jun
- 2023 21:38:34 -0700 (PDT)
+        bh=/XropgKuXeNQLqvQa8YUz1hw0VwuOoe/8nudVDeT830=;
+        b=Lw84vZjf0NmWISGA1e54+BunVuNgHBRwDFP0ZR5WxwmPVHW5iN1/P//KBIxueYqieI
+         H2m/dWpKQmm9sydYyHtLFT7heSQQ5l+r/tgZA4ui1/KDqAMGr3Q5Sq126iHSHjx2CWzn
+         P8y5gFRZYuli4MYU0QXEsO73O/416ToWuHuFpguIlTv27tATy/bixbvH+HC9G5ECvqEm
+         ymGV/EjK01or+E+h2cave4cXOHyeKgKxRm63Vt8aHz4cZm80TlKgqglU4pQ9nEgEZxBm
+         rLmqngYu3tdGMdvVW73ruSe256glK9aA9PRjB9DOVi0Mfw9FsaXz57aKbw4V3kX1nVOw
+         vasQ==
+X-Gm-Message-State: AC+VfDzAe9Vu4WYEK5EgliESXsiBzsnVDctevHB7jgTWYGu/6YqGOTBw
+        HNhTqYWGUYrA/wnwZtVza/qgM3tYG10zwYvKdIk=
+X-Google-Smtp-Source: ACHHUZ6OG73GM5QzW+HSafnvVrns5acdoJKJu1ieTPBMXSLI9Sb+r22xRZb6JdEjVbAZEYfMLH5yz8ftCwiFPq/khSY=
+X-Received: by 2002:a81:8450:0:b0:565:b22c:4165 with SMTP id
+ u77-20020a818450000000b00565b22c4165mr9757512ywf.11.1686199164563; Wed, 07
+ Jun 2023 21:39:24 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230607125911.145345-1-imagedong@tencent.com>
- <20230607125911.145345-3-imagedong@tencent.com> <20230607200348.dprmfvpzdvk5ldpp@macbook-pro-8.dhcp.thefacebook.com>
-In-Reply-To: <20230607200348.dprmfvpzdvk5ldpp@macbook-pro-8.dhcp.thefacebook.com>
+ <20230607125911.145345-4-imagedong@tencent.com> <20230607201008.662mecxnksxiees3@macbook-pro-8.dhcp.thefacebook.com>
+In-Reply-To: <20230607201008.662mecxnksxiees3@macbook-pro-8.dhcp.thefacebook.com>
 From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Thu, 8 Jun 2023 12:38:23 +0800
-Message-ID: <CADxym3a+5t9tMun6Pid+38UmFgcQkMYC4esWdENGs2E24zornA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/3] bpf, x86: clean garbage value in the
- stack of trampoline
+Date:   Thu, 8 Jun 2023 12:39:13 +0800
+Message-ID: <CADxym3bLP1kSzXgCakRMtGGp_jk1DR-nZA=jafZdemzLe3omtA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: add testcase for
+ FENTRY/FEXIT with 6+ arguments
 To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
@@ -76,106 +76,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 4:03=E2=80=AFAM Alexei Starovoitov
+On Thu, Jun 8, 2023 at 4:10=E2=80=AFAM Alexei Starovoitov
 <alexei.starovoitov@gmail.com> wrote:
 >
-> On Wed, Jun 07, 2023 at 08:59:10PM +0800, menglong8.dong@gmail.com wrote:
+> On Wed, Jun 07, 2023 at 08:59:11PM +0800, menglong8.dong@gmail.com wrote:
 > > From: Menglong Dong <imagedong@tencent.com>
 > >
-> > There are garbage values in upper bytes when we store the arguments
-> > into stack in save_regs() if the size of the argument less then 8.
+> > Add test9/test10 in fexit_test.c and fentry_test.c to test the fentry
+> > and fexit whose target function have 7/12 arguments.
 > >
-> > As we already reserve 8 byte for the arguments in regs and stack,
-> > it is ok to store/restore the regs in BPF_DW size. Then, the garbage
-> > values in upper bytes will be cleaned.
+> > Correspondingly, add bpf_testmod_fentry_test7() and
+> > bpf_testmod_fentry_test12() to bpf_testmod.c
+> >
+> > And the testcases passed:
+> >
+> > ./test_progs -t fexit
+> > Summary: 5/12 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > ./test_progs -t fentry
+> > Summary: 3/0 PASSED, 0 SKIPPED, 0 FAILED
 > >
 > > Reviewed-by: Jiang Biao <benbjiang@tencent.com>
 > > Signed-off-by: Menglong Dong <imagedong@tencent.com>
 > > ---
-> >  arch/x86/net/bpf_jit_comp.c | 19 ++++++-------------
-> >  1 file changed, 6 insertions(+), 13 deletions(-)
+> > v3:
+> > - move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
+> >   bpf_testmod_fentry_test{7,12} meanwhile
+> > - get return value by bpf_get_func_ret() in
+> >   "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cast=
+()
+> >   in this version
+> > ---
+> >  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++-
+> >  .../selftests/bpf/prog_tests/fentry_fexit.c   |  4 ++-
+> >  .../selftests/bpf/prog_tests/fentry_test.c    |  2 ++
+> >  .../selftests/bpf/prog_tests/fexit_test.c     |  2 ++
+> >  .../testing/selftests/bpf/progs/fentry_test.c | 21 ++++++++++++
+> >  .../testing/selftests/bpf/progs/fexit_test.c  | 33 +++++++++++++++++++
+> >  6 files changed, 79 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> > index 413b986b5afd..e9bc0b50656b 100644
-> > --- a/arch/x86/net/bpf_jit_comp.c
-> > +++ b/arch/x86/net/bpf_jit_comp.c
-> > @@ -1878,20 +1878,16 @@ static void save_regs(const struct btf_func_mod=
-el *m, u8 **prog, int nr_regs,
+> > diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/to=
+ols/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > index cf216041876c..66615fdbe3df 100644
+> > --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > @@ -191,6 +191,19 @@ noinline int bpf_testmod_fentry_test3(char a, int =
+b, u64 c)
+> >       return a + b + c;
+> >  }
 > >
-> >               if (i <=3D 5) {
-> >                       /* copy function arguments from regs into stack *=
-/
-> > -                     emit_stx(prog, bytes_to_bpf_size(arg_size),
-> > -                              BPF_REG_FP,
-> > +                     emit_stx(prog, BPF_DW, BPF_REG_FP,
-> >                                i =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + i,
-> >                                -(stack_size - i * 8));
+> > +noinline int bpf_testmod_fentry_test7(u64 a, void *b, short c, int d,
+> > +                                   void *e, u64 f, u64 g)
+> > +{
+> > +     return a + (long)b + c + d + (long)e + f + g;
+> > +}
+> > +
+> > +noinline int bpf_testmod_fentry_test12(u64 a, void *b, short c, int d,
+> > +                                    void *e, u64 f, u64 g, u64 h,
+> > +                                    u64 i, u64 j, u64 k, u64 l)
 >
-> This is ok,
->
-> >               } else {
-> >                       /* copy function arguments from origin stack fram=
-e
-> >                        * into current stack frame.
-> >                        */
-> > -                     emit_ldx(prog, bytes_to_bpf_size(arg_size),
-> > -                              BPF_REG_0, BPF_REG_FP,
-> > +                     emit_ldx(prog, BPF_DW, BPF_REG_0, BPF_REG_FP,
-> >                                (i - 6) * 8 + 0x18);
-> > -                     emit_stx(prog, bytes_to_bpf_size(arg_size),
-> > -                              BPF_REG_FP,
-> > -                              BPF_REG_0,
-> > +                     emit_stx(prog, BPF_DW, BPF_REG_FP, BPF_REG_0,
-> >                                -(stack_size - i * 8));
->
-> But this is not.
-> See https://godbolt.org/z/qW17f6cYe
-> mov dword ptr [rsp], 6
->
-> the compiler will store 32-bit only. The upper 32-bit are still garbage.
+> Please switch args to a combination of u8,u16,u32,u64.
+> u64 only args might hide bugs.
 
-Enn......I didn't expect this case, and it seems
-that this only happens on clang. With gcc,
-"push 6" is used.
-
-I haven't found a solution for this case, and it seems
-not worth it to add an extra insn to clean the garbage
-values.
-
-Does anyone have any ideas here?
-
-Thanks!
-Menglong Dong
-
->
-> >               }
-> >
-> > @@ -1918,7 +1914,7 @@ static void restore_regs(const struct btf_func_mo=
-del *m, u8 **prog, int nr_regs,
-> >                       next_same_struct =3D !next_same_struct;
-> >               }
-> >
-> > -             emit_ldx(prog, bytes_to_bpf_size(arg_size),
-> > +             emit_ldx(prog, BPF_DW,
-> >                        i =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + i,
-> >                        BPF_REG_FP,
-> >                        -(stack_size - i * 8));
-> > @@ -1949,12 +1945,9 @@ static void prepare_origin_stack(const struct bt=
-f_func_model *m, u8 **prog,
-> >               }
-> >
-> >               if (i > 5) {
-> > -                     emit_ldx(prog, bytes_to_bpf_size(arg_size),
-> > -                              BPF_REG_0, BPF_REG_FP,
-> > +                     emit_ldx(prog, BPF_DW, BPF_REG_0, BPF_REG_FP,
-> >                                (i - 6) * 8 + 0x18);
-> > -                     emit_stx(prog, bytes_to_bpf_size(arg_size),
-> > -                              BPF_REG_FP,
-> > -                              BPF_REG_0,
-> > +                     emit_stx(prog, BPF_DW, BPF_REG_FP, BPF_REG_0,
-> >                                -(stack_size - (i - 6) * 8));
-> >               }
-> >
-> > --
-> > 2.40.1
-> >
+Okay, that makes sense.
