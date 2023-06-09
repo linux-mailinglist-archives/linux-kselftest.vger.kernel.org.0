@@ -2,146 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A31728EB2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 05:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34545728EED
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 06:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjFIDxo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 23:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35966 "EHLO
+        id S229935AbjFIEaM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Jun 2023 00:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjFIDxn (ORCPT
+        with ESMTP id S229689AbjFIEaL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:53:43 -0400
+        Fri, 9 Jun 2023 00:30:11 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD461BE2;
-        Thu,  8 Jun 2023 20:53:42 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3592MmaM005131;
-        Thu, 8 Jun 2023 20:53:15 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065DB30C1;
+        Thu,  8 Jun 2023 21:30:10 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3592HDck031344;
+        Thu, 8 Jun 2023 21:29:24 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
  subject : to : cc : references : from : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=O4ggu1nA10sjCipcwOJ5AV/6iItrZpMgdRTNDWMgEOQ=;
- b=g9FYCSm8HAQQxo3TILSez4AJTHtoTZVkOFXVPQdN04JrBaSRB0v3C7ErdWS/A6NK26v1
- AJ2gU1sXGgnRC7PeVyW+5wqjO4Z638c7YXeUdvSS/nEG6+7P+/ChgIe77qlZb/YhT9yR
- G9Ni0OwV3h1czrR0GnHsFjHKw0+zB+jnP6RpL2g6n79uoQD7q8lUDZ3x6hKo1+YbDsoU
- zg4MXrVIC9jvg1W58ogCbhZ7gBsehjlKFgt50uZwWVRGa6221xyXdI1TEaLTx5UoYUnY
- tnumrGHtWDtUMXPzFhlrZlsq8sfZKKb1FVCO23PXjEpmgioNnsjfdLj3OXJ6uZvvuxAV Zg== 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2107.outbound.protection.outlook.com [104.47.55.107])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r36g60sak-1
+ bh=Vt7kyDgJX1zPXAy3RccHC/D8aLZm4ZPCapeFdKXaMys=;
+ b=MuCQNSmfsJvQILUO5FGsOuEVYRSDk2iCNktQ+0vhH8UTMcWiEHZWpq6xmXhp6jmgRZJc
+ c+DZVXcnwdEiCLrCZAg0ClPz2y/Goc6cZShwYYDQLKDGzDd8Id+d0vkA1rrrsEWeQdJW
+ PNOhb/LcHmUh+0N3/xkhn5M2OI8b6NEn9X9VG1tX3lhu/zj+ENuot+Ldno1llxFC7GAj
+ d7Aow7Xegxdtr/raDgdGgsFfxhXyrMG0inydOGqcCn03b7j7REXyevGDHVoM6LmpNWYU
+ Yb7hus8k4dnjQNVQWO1IdWJkIJqks3VcKTkqJFb1EoGO+LWjJn/AmdpOFSj9hMUbCkim VQ== 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r3cynewum-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 20:53:15 -0700
+        Thu, 08 Jun 2023 21:29:24 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gAN+PulR8SIkhKfWrflZo0xb+cD2wTtGjgxXx0hY/oPfqa2eZ8x5GCjKbmAKH32kb16IJC2IVxyQ1c+YDL3UV3mAtqoNW36bCk+Ngqa6RHoPPS+BHgB9A4qWPXdSFn2WvM0+T18WMH8qJIvYNoYPCM6DYKPAXAp8tAHsvMm939be/xFEk8XFQPi6vzSt5Lf1T6cyG1hwILIrpdPl2SJCOX6b/JLD6SldBsCvjjPaBkFT1Us78iXgvC3fvqPQUlygfMmhVKeAr116DxC8QnvxQtVPh5H9F9s6k3lcwkkIS6fNPyxdAoj9376cBHkOa9vGE2gCZe068wHmaF167GCZVQ==
+ b=HYchyGvmfcEH3a4gb8y/I2YYF249K/6MqnUyT6+0ZSK0NulsFEM/NfaQApfk65ZbRnEUcAVaKYALQPn2eVdwqDJE0t53p0z1dVhYNFDA3b+iDtRimh9gvTu0qN5CxqMpNVi7B+2LFgLcsEeYFIibJSdGk6tZe/7vA7UYWyBCXW5GVSBGMieH5/DU1FjEEJTBaTXGbvzroH/Uzh87DZQVxhhGVu0fzEdBEJSY6oaWFd3x0ptdWKjgNlW5u4XnFUt37Bx+i/H+aTx6J/aT64uF/byZUbkdYuJ8t/1/nZqh06630dSdoZ3sLC5VApexxQetD3Dl7QRHFsn/WOqa4g4yAA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O4ggu1nA10sjCipcwOJ5AV/6iItrZpMgdRTNDWMgEOQ=;
- b=YtxW74bhQiVgWgw18ig9kRdrai3ZdttxRIY2wkPFycaid4Af8w1x0uFYcaDtVf2u0VbxB3rfvS+mCR30iRTpc3aOJe7L5ansfA4NEhVOJEBqWw22X+0kwPSfCPIZXYujeVW17uK7r6OSOo7/5BQUVmFpiUNgxBI2ZSRDyGTg5/ro2QA/ZvMsBcrXZtn8+onPnqOQ348tV6SETQm6wnJR46YuyXkRZEVrzaJsKnbks1D1UV5x4WZu4s2yqXWRsfOoBtFoNvv8MMyxbjtBQOcIoO14+z4RlKAPRGVD7VVyOkOonI7SvhuRTvGHq0KcttgV6AKWA704ENZ4Rrdv8AHNCQ==
+ bh=Vt7kyDgJX1zPXAy3RccHC/D8aLZm4ZPCapeFdKXaMys=;
+ b=nwZYTHnikHltIYP+wlEvUZmPKNm3oTsXI32iF1afNlkNRGEv69Wu/9tSV3IJNOe2Ji63rfoe5UYU91vOke3SDHiPvMNQmyaqs6qkRY1PohMbXXGdHgCxr6WKa6Nmvj87cFTIF6R+kyM2bausvraP9UjzDuG0GnFQPaHuoz2NBt6xUw3Did1FBvafj9UMW1cHlZRSBYcKPEjO6NoEUvp9rbqefQYiwyzrHprnKwXp6LGuqgF5B+s1frXFMz/yt9HylfUio0DJsoGBQ/zKPtCAQ8E/b0mtcn0cpaF5s3gCEQqa2HUopoOvWFUsAAx9utZVjabm3b7whCxlXmdKtl1XzA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
  dkim=pass header.d=meta.com; arc=none
 Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by PH0PR15MB4624.namprd15.prod.outlook.com (2603:10b6:510:8c::8) with
+ by CY8PR15MB5604.namprd15.prod.outlook.com (2603:10b6:930:9c::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Fri, 9 Jun
- 2023 03:52:41 +0000
+ 2023 04:29:21 +0000
 Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
  ([fe80::bf7d:a453:b8d9:cf0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
  ([fe80::bf7d:a453:b8d9:cf0%6]) with mapi id 15.20.6455.030; Fri, 9 Jun 2023
- 03:52:41 +0000
-Message-ID: <49a8216a-4333-a044-ceea-c59980913966@meta.com>
-Date:   Thu, 8 Jun 2023 20:52:36 -0700
+ 04:29:21 +0000
+Message-ID: <38957384-2129-4440-5e82-37f8afcf23c3@meta.com>
+Date:   Thu, 8 Jun 2023 21:29:17 -0700
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: add a test for subprogram
- extables
+Subject: Re: [PATCH bpf-next v3 1/3] bpf, x86: allow function arguments up to
+ 12 for TRACING
 Content-Language: en-US
-To:     Krister Johansen <kjlx@templeofstupid.com>, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     alexei.starovoitov@gmail.com, davem@davemloft.net,
+        dsahern@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, x86@kernel.org, imagedong@tencent.com,
+        benbjiang@tencent.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <cover.1686268304.git.kjlx@templeofstupid.com>
- <9e3041e182a75f558f1132f915ddf2ee7e859c6e.1686268304.git.kjlx@templeofstupid.com>
+References: <20230607125911.145345-1-imagedong@tencent.com>
+ <20230607125911.145345-2-imagedong@tencent.com>
+ <4ca27e23-b027-0e39-495b-2ba3376342cc@meta.com>
+ <CADxym3a=_FF3NUG3-210GQN0JSvbcsGdYRiVwBEQzGTtqN3kVQ@mail.gmail.com>
 From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <9e3041e182a75f558f1132f915ddf2ee7e859c6e.1686268304.git.kjlx@templeofstupid.com>
+In-Reply-To: <CADxym3a=_FF3NUG3-210GQN0JSvbcsGdYRiVwBEQzGTtqN3kVQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR17CA0040.namprd17.prod.outlook.com
- (2603:10b6:a03:167::17) To SN6PR1501MB2064.namprd15.prod.outlook.com
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR08CA0003.namprd08.prod.outlook.com
+ (2603:10b6:a03:100::16) To SN6PR1501MB2064.namprd15.prod.outlook.com
  (2603:10b6:805:d::27)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|PH0PR15MB4624:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b6ff9c2-705b-4386-e6cc-08db689cf92d
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|CY8PR15MB5604:EE_
+X-MS-Office365-Filtering-Correlation-Id: a5ca161a-1eac-4fae-e81d-08db68a218cb
 X-FB-Source: Internal
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S25UkXj2mto44E6New7x+mjZLjI+F/xMAQQrw+8VlwzwZbdrAhahPS9BGqjuzdEIsvYfTa8A4BJiOSKtGZOuPorJN3/G0BDb3hPrgF0P8hgMWZe3GE4wrcwKJvvvirpdWW2V8x11O4L1c0ZE5R7ahnHyZ2KX7c50kQt4If8krt/49iUK+qQOcvM89vYkHMariZ6Pk0EN5KVAx+LPZw21F94+rFZ1MyHHAhCgP7tqEqb382M42sfMgddTpebnQOL9hj17zXPyBTawfrVFDIDUXxNoIYWMrQbzuEhgYsUttGh7kp2mGB/K/PChmF1ZL4HRYpkvZHpVeQr9pxqaHP3M1HvXLC8L/H3LPWxSiP11DkKVvXdKkp+Inyaxs9yGAQMRDpES0DYbLoRmp+rvzHW9FtTba5ZSSUsdMfCPXinrusKR8UzB2b583T7NU/hpFU+cq5SDR2inX8vpHWh4SBzt+HE8F6SLev3APDwNqyrGoz+6mrsQtreLeIlD9MA4SWoz+V2mfjYaReIqxK5xSE3e8pdHzcHjGaYL2VNimHAbDEKq0V/EgEBFB6HXy0ST/qs/KbTxb/kOezitnvehqY+Zm8vURGzu/bs3ARU2/A7HHT+5yqIoq77Rl4hPzUTDvtIwOU2Ijao/UHn4mUn7YaWp1Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(396003)(136003)(39860400002)(346002)(451199021)(41300700001)(86362001)(83380400001)(7416002)(6486002)(478600001)(36756003)(316002)(8676002)(8936002)(66476007)(31696002)(4326008)(66946007)(66556008)(54906003)(5660300002)(38100700002)(6666004)(2906002)(6512007)(186003)(6506007)(31686004)(53546011)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: kqUuRGuYRK9CD9IHKG2ZrFVJhGJsArdRDgjbY3y4B4tbTWeJ0u8GjOllfJI4Qo3Sqq0H/4g+bGiSFttn1XBFh2YWLN5Hf7KkmB2JMeO/ygIILpO57Ji93RAsOpgTDF0AIjU76yjIMZ20A6MD29pOKwvABaSySqAIF5NgxdQraUXDGjmmotkq5SOwpSojcXyBWeDL7YMnmOBHIbN09bQh1w9JpPajXXZ1YcBaPdbvEAwQcsgT9wDT/dO+j8LYVZJE1dZHXLo18aFjJb12hGYTnc4IePnBrx8MzukY+lDUTBbNH8ecXWcsQsxu8CoSHk3ziLOyuCfem872dWrwMMi2IbBQkcgQ2Lo84GLzOOidT6q1gwYIQnaXAD1FtEeYbmi1ay02l/yxf/nIU4DPAQGGI5A8qlehgv+kJJ7lQVn3YEdY8hY6c9+pWLmiDqMfG+SQYfYDUFJoD7/y9PGUNRu/QdDzu6xSLYLOsIVJ9WykEvlSKcr0+lLKV8FIn3wREv89SovxnmyL4hCYPLD6CKHbnwX+yZR5YHEtzrbe1K6IbBbROMuN3+bBgdFD95aRjT+HAYZcbnxoAvhs3M8livvK2ABOXoKJR1Fz55Ai8/NMTkg+X9IUZlucGWyK5XgM1l/4zh37yFJAkVg/xG76icNnaw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(366004)(136003)(346002)(451199021)(2616005)(6512007)(53546011)(38100700002)(6506007)(41300700001)(31686004)(6486002)(6666004)(83380400001)(186003)(478600001)(4326008)(316002)(66946007)(8676002)(66556008)(7416002)(66476007)(6916009)(8936002)(2906002)(5660300002)(31696002)(86362001)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OEQxd3JaNzhtN0E1QWRISjN0b0xCYXgzSXZsRitHUjBWRjVPTnV6cGpIck5q?=
- =?utf-8?B?ekYyeVVoMko3ZEU0d2NWS3E1UUNiNWZ3dzRtMStLMk5UWmhkdWlqN3o2Ukhz?=
- =?utf-8?B?anJ5WFhLQUFPYUg1VkNmN2UvZ0hGN05zZzV4NkVTYTJ4eGFsWmdHR3I2aUhU?=
- =?utf-8?B?Mnh2YU55Zjh0Yjc0OEgvelpWbkVTSi83NVJJU2J6UXNEY21ldzQ3MzlESFpZ?=
- =?utf-8?B?TWlxY2RhVmk0eFoxSFhZVjF3WHd0UzFpSjRGSDdhQmVuU0xSQ0I4aTU3OURG?=
- =?utf-8?B?SEpRMW5vWnUzM2pyOER6YUN3Q3pNQnRIUE1ubXREZWZQejVWNTEzdjRBbXlN?=
- =?utf-8?B?V3pDdEl6V2JDR0sycG5tMWVCbXdudFZZZ1JwMFVjMVYybUpNcHZQSE96Y2xS?=
- =?utf-8?B?NlhHdERxYUlLa0ZpRHJIbXU2WVVnaG9LOElsYTdsMWJXei8zQVY0cytCT2hQ?=
- =?utf-8?B?enRjckFQUnhCYkNmbi90dmdPZ0YxVjJQN015ZTZiZ2dNVHdzREFPeTM2Nmow?=
- =?utf-8?B?ZWZ6WGdXYVFtRDUzOXUvOVNQZzNobUpKc0k4OEJqYWV5a1FzeXNXNVpBK0tP?=
- =?utf-8?B?bzlTb3BZbWRqcHYzVXg4V2gzelg4cWhWNXhIT3kyUEVDM3RLSExvSGRKZnd5?=
- =?utf-8?B?eno1WjRMZThxYTFYWWt4ZDJMT1RiYTZmYlBLN09GampFaDc4OTdFZ0VkeGps?=
- =?utf-8?B?SXN3cUtJTDBOa3VMRFl5bkxsSmx4aWRYa21ZYytsZjdCMUpRamx4WlorNGZu?=
- =?utf-8?B?NXNDSVEyUGFYVGNhUE9xRGxBdUF5OGtPTU9IS0lIOUhxZnM1c0VkTWV1MnBE?=
- =?utf-8?B?VEdGTGVvUUpvZ2RKNEJxY1h6M1QzVXQzQitQVm5NcFpzKzRIbTVleThvSjlG?=
- =?utf-8?B?VSszcW4ya0ZyVkwvK1ZKY1FRMmYxNFlRN3ZtczMrU2FGTUNIRHBZVzYrcGNV?=
- =?utf-8?B?WkNFSDM1N2UvMHlHYWEvSG5JV0xpd2tBbk5EeTR5MnpXOHVKYjRKSWdBb2Z6?=
- =?utf-8?B?Q2o5Q2lpVk9FT1FuTCtLck1ZU3VtWGUwckUySHVHTzl2NVZiK0tQTVhWUkF4?=
- =?utf-8?B?L1NldkhONnY5akZHVGFFVDY2QjlRRk5ZWS8wbWNUWEdZQkFaQjYxWkxObG1p?=
- =?utf-8?B?TGxiSkx4d3NmUWlzUUtJU0JScE9Sc29nZ3ZLbVBvS1ZKNmxpZW53aDFnVGVy?=
- =?utf-8?B?b1pwbm5ISENWdGtWOW1FSkJQR2txdVdQTUFUKzlaV25ycUNiVGoxdVQycXZa?=
- =?utf-8?B?NjlodzJKWEJUbndha2ttZTB1eURwZjRTb29IczJYQ3VSelpvZ1hLNW0zZndV?=
- =?utf-8?B?MG4zcGxZdGU1SzF5SnJIVno5K2VpcDNtcDExTCtxcXhDczZYUUQxdW1kOWNm?=
- =?utf-8?B?Y2ZydWphWjRTS3VXS3laRjRMMzgyam1UVWtpd015dTRCQzVIVlBvakYvOEZX?=
- =?utf-8?B?SkNkamRzbkZxTjVYc1k0d0tvS016NUNxRUVaUGU1MnZsTFhNeW1VOVpCVm9u?=
- =?utf-8?B?MGVaWlZqUVZHMExqajZUdjZjUWc0eGlyeUlXU0JlQU54b3JQQUxWR040eGE5?=
- =?utf-8?B?aitHSVMyc1ZFdkR4enlVK3VFbnJpb0MwQ2tlYkM3R2oxcU9RQnFHQXBtWFgr?=
- =?utf-8?B?dFg0VkhKYUNYQm82a0ltSFF5T1lvYnhoRjFRUUcySmNaVWI0bi95MlpNVVFv?=
- =?utf-8?B?QmZueUdDZ3BFRkpKemxDODN1WWRBRldpbW1UTUJudFVLRFRJNmRhditoeXRB?=
- =?utf-8?B?Zk5ucWk3OUtmTjhmUDVOS1QwTlBUeEZQcSszSzRNQkNYVzh6M2I0akZ2RVh0?=
- =?utf-8?B?c2ttaWlwb2wzTjE4ZEhHL1Q2N2FleTM3eDdTTFV0Z0NvYUhxNmxjYndrM3Nv?=
- =?utf-8?B?LzY1cjFPTVE5Y1BiaUliamQ2Z29MZlVKdFY1WlR5bUVlenJidmZ0VmVWSzYw?=
- =?utf-8?B?V2h2K0tPYkRjemh6Q3Zyd3VDWW01TEdhbm5nUDdxOW1DUEZZUTZsQXVQaFpU?=
- =?utf-8?B?RFE4SnlFQTVVM0Jmc0tYOGJPQmhwbFRSbjQxQ2RlMGl3UEZ0aWxkRlJkZWhu?=
- =?utf-8?B?RjE5VDRUWnA4ZTExUjQyTzBGS3Jid3V6UXR6emFoMjBRelhzcG0wWjMxbm4v?=
- =?utf-8?B?RVdzN2psQjVJcjFnYnRKMkxjNlE3UFU4OW5vNHJWUmtaa2lGVzZDWW9uZE5Q?=
- =?utf-8?B?TUE9PQ==?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RHVnV0QxQWxOZzZSVjcxdlR2K3BZM282VUljTjVib2dLZWI2UC9MZm1nQnV5?=
+ =?utf-8?B?bE9UZmFROVdaRDlhUTJuci9ybC9wVmpuSk16QzMrTTg4aUpSUHVBZ2t4ZFEw?=
+ =?utf-8?B?TTdqYk1MS0x3U1dEQjFxRWxYakxPYTE3V2tJdjM4dnV6NEFHZXJ5OTVQVFIw?=
+ =?utf-8?B?aDZOa1Fqd09HbkE3N0E1QWFNS2c5eG5rUTBieG5sNjdSSUpYT1pVeFBEOVFm?=
+ =?utf-8?B?MUY0M0VBVW1oaUNMVnM0ci82akN6bllOeklsUUx4L0ZLUmVJRTVGdFk2TlV3?=
+ =?utf-8?B?eHFyc2lFVXU0QVVkQmtCMW1RdmRDMkE0Qmtabkl5aDBjcXhVeTBPS2VVRTRu?=
+ =?utf-8?B?TXN6ZjNsZllNRXUxZEdDSklndEU0UnZ1RDdyZ2VMcVBWdDZRRmNlQW9Yc25F?=
+ =?utf-8?B?VUdua2hpVDd5V2JXMmZGeWwyRk14Snc1akJtd2VwbVBiZXJPenBDVW1tYVNi?=
+ =?utf-8?B?ajIrUFV1T3RoWUpoU3BoWis5OWVIQ1BBZm8reDJtcEVqeXY4NkU2QmtTNHgy?=
+ =?utf-8?B?b3VTWFZ0VXA2ZGUxd0FjWm5UZFFEV2NsRlc2VDFXTVVmTTF2dm10WHFuakZy?=
+ =?utf-8?B?UTI1bzJrTm5YU2FJS1V0OWxKQWhOYk8zbHI4aHZvYnFzbFg3V3FRVUNsVjRj?=
+ =?utf-8?B?ajliS1dTRjNuc0ZZdFlzQzQ5ZnRENVZFZUtSRVdnK3U1cjFjNktxUTR5b05D?=
+ =?utf-8?B?Mms3Tlp4dXVyb2YvRW1ka01WT1JqMWFPaGZIMk1uRS9uMENsODJjaWpPbmNr?=
+ =?utf-8?B?L2orVldVSGZoZld1eXFKTHViMDZpdjZBVnlhRlJ3WFdENlFDUjZ0VHZnckN5?=
+ =?utf-8?B?WkUrK1ZJQjlOTUpLOFJ1N2tPZEpEeG1EQ1A3REwvaFk1RU9KRG5mYU9xbXRB?=
+ =?utf-8?B?VEFWYW1ialNUTkxNd1c1b1J6bGJlU3dPOW9nS1EzeUh1cVp6V1lGZ1pzWnRi?=
+ =?utf-8?B?OFF0K1M5MkNlOEF2cmROOStZMDhCd09NaG9mNWNjYnB0YThFNzgzazlnRFRp?=
+ =?utf-8?B?Skc2UTJDU1hEL3JvZ0J2aE9vQlBZbC95M2MrenQvaEVBTUxTQnJuYVpJdnRE?=
+ =?utf-8?B?Ym54c3ZnS042U2MvRDRIQVI5NHFSWFBtZVlrNUdJRWx4SXZYMllYR3RVd0RU?=
+ =?utf-8?B?R2lta3ZCazdncG9KQnRqNFFBVmN0VTBSN1NCN0EyVlU3VW9yZWNpbGcrVFZn?=
+ =?utf-8?B?UmdtS2Fqdm01aWFNY05QZjFvblFwMnBkYXdUK2dWYVllVHFyTmdDZjBzR3BO?=
+ =?utf-8?B?K0VmdkwvZXB0ZXh4UXF3YUlYVk5mK0ZSUWNuT05sVWo5Q0RML3k1MEw4V2tj?=
+ =?utf-8?B?K1BmQlcxS1lOMWxGTDZkZzNWYjIxUjhPbTkvSHhYY2xnSFArRnAvaUR5VEYx?=
+ =?utf-8?B?Zng0a3dtTmhLN204TXJ0dU9wdU52eTlXOHFacUVBbVRTZ2hwSGVmS1NoNXJJ?=
+ =?utf-8?B?OGNLdEVRNFMzcjdQaUdsT0FiS01TSk54OFRhQzhPaFM1T05uaDJhc2dHR0N1?=
+ =?utf-8?B?ZHJtczdXL3M1MnR3K0xKelBmbjZ3cmtNa2JkLytZbGtVWXFyRVlGYjFYdklZ?=
+ =?utf-8?B?cWxWVkN2NDBoUW03TGpwNXluMXQvWnFTRmRtb0FTc2d4QUo4Z2t3OHEzaDRp?=
+ =?utf-8?B?L0tOV2tQNnAxY0g2eGNFSHlDb0pwUWxacnRNNG1oL0V5dTUwZUJ5bVFQcllB?=
+ =?utf-8?B?SjZIaHFJVG1UWlVrRnk0ZWh1VlpXcDNocnRSZVB6b0hSbzd4a3lNaEFJaFh3?=
+ =?utf-8?B?WUlMVmt0SDJ0aE9tTk9oVngzVkRlZEROQ0NmQXkwK1lUalpuaGwvbFM0OERC?=
+ =?utf-8?B?M3FhbzFmV28wUlcrbU9vR1l0cHF2VkVGaWxDUHZNdCtYMC9ucnJwYXZiUGwr?=
+ =?utf-8?B?eHRVRHV4dlJRMnBZSXZHQjExNEU0dkVIVHBqT3AzcE4rM3E3ZXltVktTR3dF?=
+ =?utf-8?B?R2VieWdTL2E3T2RreVB2WXNiM2hlZnp0cHROTTBnUnpxekpqQlBMQ0N6WGdl?=
+ =?utf-8?B?K0R4SjNtN1BYUU1SYVViRVA2bHFnTXF4VHhRV1Nud2N0NUZLY3h3aE1xTXVs?=
+ =?utf-8?B?d0lVbXIzM2RJL08wK0U1NlhRN05zSGhENUNxYWZUbkJDL05oZHgwVVNvbVJB?=
+ =?utf-8?B?dzdVNC9rMDFsOHVRRWErMWFNbUpkMEl6OVZ0R1NiS291RjFvSlhWZHNyZ2R3?=
+ =?utf-8?B?akE9PQ==?=
 X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b6ff9c2-705b-4386-e6cc-08db689cf92d
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5ca161a-1eac-4fae-e81d-08db68a218cb
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 03:52:40.8996
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 04:29:21.4592
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: H8wpTLZwA9GDDWCX1qUNh0jHVzV8dmmka+jJjzPq1XKFxURGvALbOhSBvyE68crK
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB4624
-X-Proofpoint-ORIG-GUID: OBP3Xchy1-O1cRGMaRmK0esp2ZjxBL6D
-X-Proofpoint-GUID: OBP3Xchy1-O1cRGMaRmK0esp2ZjxBL6D
+X-MS-Exchange-CrossTenant-UserPrincipalName: KKHMukAUjBgexhoKfUvooKCOijLQJEv37T/SnoX96CkZI+AaUAH9bxjHGP79jK4S
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR15MB5604
+X-Proofpoint-GUID: puWXXHbHXaAZpCd6P7ICHNK7vl3bjClX
+X-Proofpoint-ORIG-GUID: puWXXHbHXaAZpCd6P7ICHNK7vl3bjClX
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_01,2023-06-08_01,2023-05-22_02
+ definitions=2023-06-09_02,2023-06-08_01,2023-05-22_02
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
@@ -155,132 +153,97 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 
-On 6/8/23 5:11 PM, Krister Johansen wrote:
-> In certain situations a program with subprograms may have a NULL
-> extable entry.  This should not happen, and when it does, it turns a
-> single trap into multiple.  Add a test case for further debugging and to
-> prevent regressions.  N.b: without any other patches this can panic or
-> oops a kernel.
+On 6/8/23 7:12 PM, Menglong Dong wrote:
+> On Fri, Jun 9, 2023 at 5:07 AM Yonghong Song <yhs@meta.com> wrote:
+>>
+>>
+>>
+>> On 6/7/23 5:59 AM, menglong8.dong@gmail.com wrote:
+>>> From: Menglong Dong <imagedong@tencent.com>
+>>>
+>>> For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+>>> on the kernel functions whose arguments count less than 6. This is not
+>>> friendly at all, as too many functions have arguments count more than 6.
+>>
+>> Since you already have some statistics, maybe listed in the commit message.
+>>
+>>>
+>>> Therefore, let's enhance it by increasing the function arguments count
+>>> allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+>>>
+>>> For the case that we don't need to call origin function, which means
+>>> without BPF_TRAMP_F_CALL_ORIG, we need only copy the function arguments
+>>> that stored in the frame of the caller to current frame. The arguments
+>>> of arg6-argN are stored in "$rbp + 0x18", we need copy them to
+>>> "$rbp - regs_off + (6 * 8)".
+>>
+>> Maybe I missed something, could you explain why it is '$rbp + 0x18'?
+>>
+>> In the current upstream code, we have
+>>
+>>           /* Generated trampoline stack layout:
+>>            *
+>>            * RBP + 8         [ return address  ]
+>>            * RBP + 0         [ RBP             ]
+>>            *
+>>            * RBP - 8         [ return value    ]  BPF_TRAMP_F_CALL_ORIG or
+>>            *
+>> BPF_TRAMP_F_RET_FENTRY_RET flags
+>>            *
+>>            *                 [ reg_argN        ]  always
+>>            *                 [ ...             ]
+>>            * RBP - regs_off  [ reg_arg1        ]  program's ctx pointer
+>>            *
+>>            * RBP - nregs_off [ regs count      ]  always
+>>            *
+>>            * RBP - ip_off    [ traced function ]  BPF_TRAMP_F_IP_ARG flag
+>>            *
+>>            * RBP - run_ctx_off [ bpf_tramp_run_ctx ]
+>>            */
+>>
+>> Next on-stack argument will be RBP + 16, right?
+>>
+> 
+> Sorry for the confusing, it seems there should be
+> some comments here.
+> 
+> It's not the next on-stack argument, but the next next on-stack
+> argument. The call chain is:
+> 
+> caller -> origin call -> trampoline
+> 
+> So, we have to skip the "RIP" in the stack frame of "origin call",
+> which means RBP + 16 + 8. To be clear, there are only 8-byte
+> in the stack frame of "origin call".
 
-It would be great if you can add the panic call stack in the commit message.
-
-Please also mention that three identical bpf programs in the test
-significantly increased the 'oops' chance. Just one program may
-not be able to trigger the issue.
+Thanks. It does make sense now. So we have
+   caller -> origin call -> (5 nops changed to a call) -> trampoline
+          8 bytes                                    8 bytes
+and inside trampoline we have 8 bytes in stack with 'push rbp'.
+Yes, it would be great there is an explanation in the code.
 
 > 
-> Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-> ---
->   .../bpf/prog_tests/subprogs_extable.c         | 31 +++++++++++++
->   .../bpf/progs/test_subprogs_extable.c         | 46 +++++++++++++++++++
->   2 files changed, 77 insertions(+)
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
->   create mode 100644 tools/testing/selftests/bpf/progs/test_subprogs_extable.c
+> Thanks!
+> Menglong Dong
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> new file mode 100644
-> index 000000000000..2201988274a4
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> @@ -0,0 +1,31 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <test_progs.h>
-> +#include "test_subprogs_extable.skel.h"
-> +
-> +void test_subprogs_extable(void)
-> +{
-> +	const int READ_SZ = 456;
-
-There is no need to use uppercase for READ_SZ.
-Just do
-	const int read_sz = 456;
-is sufficient.
-
-> +	struct test_subprogs_extable *skel;
-> +	int err;
-> +
-> +	skel = test_subprogs_extable__open();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
-> +		return;
-> +
-> +	err = test_subprogs_extable__load(skel);
-> +	if (!ASSERT_OK(err, "skel_load"))
-> +		goto cleanup;
-
-You can combine the above open and load with a single one
-    test_subprogs_extable__open_and_load().
-
-> +
-> +	err = test_subprogs_extable__attach(skel);
-> +	if (!ASSERT_OK(err, "skel_attach"))
-> +		goto cleanup;
-> +
-> +	/* trigger tracepoint */
-> +	ASSERT_OK(trigger_module_test_read(READ_SZ), "trigger_read");
-
-I think we should at least ensure that the program is triggered. For 
-example, add a global variable 'triggered' in the program and
-triggered will be set to 1 in the program if the program is running.
-Here check
-	skel->bss->triggered
-must be 1.
-
-> +
-> +	test_subprogs_extable__detach(skel);
-> +
-> +cleanup:
-> +	test_subprogs_extable__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_subprogs_extable.c b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> new file mode 100644
-> index 000000000000..c3ff66bf4cbe
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> @@ -0,0 +1,46 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__uint(max_entries, 8);
-> +	__type(key, __u32);
-> +	__type(value, __u64);
-> +} test_array SEC(".maps");
-> +
-> +static __u64 test_cb(struct bpf_map *map, __u32 *key, __u64 *val, void *data)
-> +{
-> +	return 1;
-> +}
-> +
-> +SEC("fexit/bpf_testmod_return_ptr")
-> +int BPF_PROG(handle_fexit_ret_subprogs, int arg, struct file *ret)
-> +{
-> +	*(volatile long *)ret;
-> +	*(volatile int *)&ret->f_mode;
-> +	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> +	return 0;
-> +}
-> +
-> +SEC("fexit/bpf_testmod_return_ptr")
-> +int BPF_PROG(handle_fexit_ret_subprogs2, int arg, struct file *ret)
-> +{
-> +	*(volatile long *)ret;
-> +	*(volatile int *)&ret->f_mode;
-> +	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> +	return 0;
-> +}
-> +
-> +SEC("fexit/bpf_testmod_return_ptr")
-> +int BPF_PROG(handle_fexit_ret_subprogs3, int arg, struct file *ret)
-> +{
-> +	*(volatile long *)ret;
-> +	*(volatile int *)&ret->f_mode;
-> +	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> +	return 0;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
+> 
+>>>
+>>> For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the arguments
+>>> in stack before call origin function, which means we need alloc extra
+>>> "8 * (arg_count - 6)" memory in the top of the stack. Note, there should
+>>> not be any data be pushed to the stack before call the origin function.
+>>> Then, we have to store rbx with 'mov' instead of 'push'.
+>>>
+>>> We use EMIT3_off32() or EMIT4() for "lea" and "sub". The range of the
+>>> imm in "lea" and "sub" is [-128, 127] if EMIT4() is used. Therefore,
+>>> we use EMIT3_off32() instead if the imm out of the range.
+>>>
+>>> It works well for the FENTRY and FEXIT, I'm not sure if there are other
+>>> complicated cases.
+>>
+>> MODIFY_RETURN is also impacted by this patch.
+>>
+>>>
+>>> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+>>> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+>> [...]
