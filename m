@@ -2,94 +2,174 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A8D728DB3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 04:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9FD728E15
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 04:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233244AbjFICRQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 22:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38408 "EHLO
+        id S229496AbjFICeq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jun 2023 22:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbjFICRP (ORCPT
+        with ESMTP id S232126AbjFICep (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 22:17:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15B2269A;
-        Thu,  8 Jun 2023 19:17:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 780AA652FB;
-        Fri,  9 Jun 2023 02:17:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B09CC433EF;
-        Fri,  9 Jun 2023 02:17:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686277033;
-        bh=S6ApcEn9GU1V4Bvwrm/WCn0EJZfoTA9IJ2LkI8W+x+s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ROelIoKFL2Cp4FfiyMijD6fyI8FQ+FthHHRJ6DxBbWS0r0PDkvjO+PJGEbpj8knCc
-         I6YlAvqxHWmFORuCgV8W5coUltR16QOXBHAJl6ZGmgETg2vh7+ZyhD80prWvO0QS3W
-         DA+T+wo2UjT7RpdlGVFnzJQYirf4ONJ1b8PRpy/YUWtetlRdKEkvIpsAt/Ydjte3rU
-         C/NCKyleh+u5vsPVvPC12gj4kAGl3icsyUk1IvQdcN6bruPikpu9fl2W3PU+XqA6sy
-         aHBOGsQbPM85VtD60jbJyFwiSeX7+5r9ch/UnxL00Yn2o/ox2snv70HW0rUYCSeAo7
-         yU2WSeLjCw7lw==
-Date:   Thu, 8 Jun 2023 19:17:12 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Magali Lemes <magali.lemes@canonical.com>
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        shuah@kernel.org, vfedorenko@novek.ru,
-        tianjia.zhang@linux.alibaba.com, andrei.gherzan@canonical.com,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/3] selftests: net: tls: check if FIPS mode is
- enabled
-Message-ID: <20230608191712.483dfe35@kernel.org>
-In-Reply-To: <20230607174302.19542-2-magali.lemes@canonical.com>
-References: <20230607174302.19542-1-magali.lemes@canonical.com>
-        <20230607174302.19542-2-magali.lemes@canonical.com>
+        Thu, 8 Jun 2023 22:34:45 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F81F1993;
+        Thu,  8 Jun 2023 19:34:44 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id d75a77b69052e-3f9c2e3914aso9544051cf.3;
+        Thu, 08 Jun 2023 19:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686278083; x=1688870083;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YkLcX6B6WSlNdg/K0cMsRbNItTJ8LTlhdnmPvGk8+4E=;
+        b=iqdVVzSiVHpUjKb/j+Dwp26pCM/IcL7+wiS2XORZFeatoH9ZipAomeJAzWv0URa/Cw
+         1o15Ral2iftlE4iZdwVyY+OkF53jiT8YAXpxzRgQjAoaUXESCj8hCzJyldFaNLbB3lci
+         2QTuoVB9KAB+XYiabxB3I+EEzkWZiXr/PU9O05CwDxjb/ONVIjUqMXIJRgDYG/c2v0wY
+         lQd8rcV0+z3U4yWEseoSf6f9x89vLUll3ZjeIQWFrgva/LWHmvHLkHRVoZv6boK68ucF
+         V1pyb2XUBFNI5siqYqV0q3oZ8Kl/js/LCMenoOBq8JTbuuLVZreRj8hHjK8ccHZ2RdoF
+         NorQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686278083; x=1688870083;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YkLcX6B6WSlNdg/K0cMsRbNItTJ8LTlhdnmPvGk8+4E=;
+        b=hD+SJsewWR5wcNvtwZWHSjxcatJryKxk0zApq1GtpUnUD+IIlZOOTpTgzCoxFvS/Yz
+         cxHRqSoe2AyENjsMgvEzxNvtBk6xfgzeZtK0Yam/mlau2mGPRtVu0YyV1l7RxOEBybJj
+         HAwhUGge4rgaeSV3QSojNz1OY5KKULGu2qoKsBEuiUf9gA3deh2+OYoAnDcknu3NkJEy
+         UBG1oN/3rsqdQIv0LlmhdCjVg7xZ16lG4+idsIiBbQ4a4eslw+zpEsxvv9/wOlQgn+W/
+         tvqxlaFxRHiQ7Ijr9ZhdVFA8xcTkxB8YmgZR6S3xVB9iJkU8WB4OMTPGBKVnMRH9xV8U
+         TWuw==
+X-Gm-Message-State: AC+VfDwr+aqYfOkEWJpzODdA+ar7npVuynXJmGMs9XE0kO3Svb64vkA/
+        gxRZNTzbilHauyg9KFn6mWRhsnSCLBu76nqJ4L+WQXeB19DT8QYa
+X-Google-Smtp-Source: ACHHUZ4KM2xWMmwOMrRL2HoBURxXB8RhziHa5Tlm0Qa5gS6GMsIPAfQDmDiKNbVBLkqdCJZXHomFOF6meU4TlSjxmHk=
+X-Received: by 2002:a05:622a:85:b0:3f5:3851:873f with SMTP id
+ o5-20020a05622a008500b003f53851873fmr311290qtw.8.1686278083524; Thu, 08 Jun
+ 2023 19:34:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230607125911.145345-1-imagedong@tencent.com>
+ <20230607125911.145345-2-imagedong@tencent.com> <20230607200905.5tbosnupodvydezq@macbook-pro-8.dhcp.thefacebook.com>
+ <CADxym3abYOZ5JVa4FP5R-Vi7HAk=n_0vTmMGveDH8xvFtuaBDw@mail.gmail.com> <2fb8c454-1ae7-27cd-a9fa-0d8dda18a900@meta.com>
+In-Reply-To: <2fb8c454-1ae7-27cd-a9fa-0d8dda18a900@meta.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Fri, 9 Jun 2023 10:34:32 +0800
+Message-ID: <CADxym3Y03+n+pDupWbdrFtXU96vsWR6h40PSrVC+jJzwov=A5Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] bpf, x86: allow function arguments up to
+ 12 for TRACING
+To:     Yonghong Song <yhs@meta.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, x86@kernel.org,
+        imagedong@tencent.com, benbjiang@tencent.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed,  7 Jun 2023 14:43:00 -0300 Magali Lemes wrote:
->  FIXTURE(tls)
->  {
-> -	int fd, cfd;
-> +	int fd, cfd, fips_enabled;
+On Fri, Jun 9, 2023 at 5:12=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote:
+>
+>
+>
+> On 6/7/23 8:17 PM, Menglong Dong wrote:
+> > On Thu, Jun 8, 2023 at 4:09=E2=80=AFAM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> >>
+> >> On Wed, Jun 07, 2023 at 08:59:09PM +0800, menglong8.dong@gmail.com wro=
+te:
+> >>> From: Menglong Dong <imagedong@tencent.com>
+> >>>
+> >>> For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be us=
+ed
+> >>> on the kernel functions whose arguments count less than 6. This is no=
+t
+> >>> friendly at all, as too many functions have arguments count more than=
+ 6.
+> >>>
+> >>> Therefore, let's enhance it by increasing the function arguments coun=
+t
+> >>> allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+> >>>
+> >>> For the case that we don't need to call origin function, which means
+> >>> without BPF_TRAMP_F_CALL_ORIG, we need only copy the function argumen=
+ts
+> >>> that stored in the frame of the caller to current frame. The argument=
+s
+> >>> of arg6-argN are stored in "$rbp + 0x18", we need copy them to
+> >>> "$rbp - regs_off + (6 * 8)".
+> >>>
+> >>> For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the argument=
+s
+> >>> in stack before call origin function, which means we need alloc extra
+> >>> "8 * (arg_count - 6)" memory in the top of the stack. Note, there sho=
+uld
+> >>> not be any data be pushed to the stack before call the origin functio=
+n.
+> >>> Then, we have to store rbx with 'mov' instead of 'push'.
+> >>
+> >> x86-64 psABI requires stack to be 16-byte aligned when args are passed=
+ on the stack.
+> >> I don't see this logic in the patch.
+> >
+> > Yeah, it seems I missed this logic......:)
+> >
+> > I have not figure out the rule of the alignment, but after
+> > observing the behavior of the compiler, the stack seems
+> > should be like this:
+> >
+> > ------ stack frame begin
+> > rbp
+> >
+> > xxx   -- this part should be aligned in 16-byte
+> >
+> > ------ end of arguments in stack
+> > xxx
+> > ------ begin of arguments in stack
+> >
+> > So the code should be:
+> >
+> > +       if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG)) {
+> > +                stack_size =3D ALIGN(stack_size, 16);
+> > +                stack_size +=3D (nr_regs - 6) * 8;
+> > +       }
+> >
+> > Am I right?
+>
+> This is the stack_size, you should ensure stack pointer is 16-byte aligne=
+d.
 
-put bool fips_non_compliant into the variant, and mark down
-the cases which need to be skipped. There is fewer variants
-than tests
+Oh, I see. Considering the begin of the stack frame
+should already be 16-byte aligned, what we should
+do here is to make the size of the current stack frame
+16-byte aligned. Then, rsp will be 16-byte aligned.
 
->  	bool notls;
->  };
->  
-> @@ -309,7 +309,22 @@ FIXTURE_SETUP(tls)
->  {
->  	struct tls_crypto_info_keys tls12;
->  	int one = 1;
-> -	int ret;
-> +	int ret, res;
-> +	FILE *f;
-> +
-> +	self->fips_enabled = 0;
-> +	f = fopen("/proc/sys/crypto/fips_enabled", "r");
-> +	if (f) {
-> +		res = fscanf(f, "%d", &self->fips_enabled);
-> +		if (res != 1)
-> +			ksft_print_msg("ERROR: Couldn't read /proc/sys/crypto/fips_enabled\n");
-> +		fclose(f);
-> +	}
+Am I right?
 
-Cache the fips_enabled in a static global variable, no point reading 
-it every time.
--- 
-pw-bot: cr
+Which means the code should be:
+
++       if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG)) {
++               stack_size +=3D (nr_regs - 6) * 8;
++               stack_size =3D ALIGN(stack_size, 16);
++       }
+
+Then, the size of current stack frame will be:
+stack_size + 8(rbp) + 8(rip)
+
+This is the example that I refer to:
+https://godbolt.org/z/7o9nh4nbc
+
+>
+> >
+> > Thanks!
+> > Menglong Dong
