@@ -2,112 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB0E72A50D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 22:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719F872A51C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 23:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjFIU7R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Jun 2023 16:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
+        id S231452AbjFIVIr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Jun 2023 17:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjFIU7P (ORCPT
+        with ESMTP id S229530AbjFIVIq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Jun 2023 16:59:15 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A9230FD
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Jun 2023 13:59:14 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-650c8cb68aeso1959148b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Jun 2023 13:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1686344354; x=1688936354;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=o/nbv8QU8+Uhsj0CuVGum8Z7f7SUSUOBiGBXSuD/tRY=;
-        b=0b9X7+DPTpXJ/SwM/3VfdswB62bNufjsEnT6SRY6sP/HRiynZii5NzGDDMOXit8xM/
-         NAUyT9vtaGB1JJZlNueb4W0FvH7mNAJ55k9wQVC8SeMOV6VtdpJ6S2vCepdWxwdfW+i2
-         yQOVE0mBlMR8bx3atZxcVUWcHN6eo4+ZQY0lpiTBxQEYmVoiNrNZmLlYbfZLGIjpg4TJ
-         7XH6iIDd9hO+Nfb38+xYlUdM4jEecSoLlF8aT2rlM+h87MC40QRBUaSp9vuzoqtIcbbC
-         FTJXWQWvPlGil9gyM1o8cz7IXacKVawfHtuYoiJ0tXhw6M+0xL4J6sLPdj0SnmsyBITe
-         wWkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686344354; x=1688936354;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o/nbv8QU8+Uhsj0CuVGum8Z7f7SUSUOBiGBXSuD/tRY=;
-        b=IrXioK8/jLw+/T2igA7q/qQVnY1mqBRq8uZC6OnBQ0k1bModW585VnuTi20yfYwi4y
-         8u3j5puftCF93huh28UtNB5eMU/O0CSJ/9Kk05xMIoXz2lC6796kr3VDW4cAROPVKXb7
-         NzCDM9adXtaCj7RkPzvXgR7EDdjjw4IHd0g2n4C/wL3TR06HtmEbze//z0iDhlky+egh
-         h0gbbhTZuzpg2JIOvtXHPzb49mwCEV4ExdLVYWXElzXXE1Zwad0LBr7p9SgFSJFtdkCP
-         3GRcwvj7Q3WU7tp91G+VuYtTTMqOzzfB7iPttYmD9A1KLw5f6/2LIhB1GK9S1HAysqpO
-         NZsg==
-X-Gm-Message-State: AC+VfDwpW84yYsponsJGrl6yoQ6rmkly796xRYRGvyxE5P3/3y8uwbBD
-        dcKXGKJTLJh0Sg0xhxAfBTk4qwEd1NZDbJ/JuNuDKQ==
-X-Google-Smtp-Source: ACHHUZ70GGJlv2KtLnpvx3W+mxfonumSLjtptyelSRdlaxaxBfv8kODfQ5e0JI5cHguWcaDv2oYOIg==
-X-Received: by 2002:a05:6a00:39a8:b0:650:6e3e:a8e3 with SMTP id fi40-20020a056a0039a800b006506e3ea8e3mr2110717pfb.26.1686344353854;
-        Fri, 09 Jun 2023 13:59:13 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id q24-20020a62e118000000b0063b85893633sm3014772pfh.197.2023.06.09.13.59.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 13:59:13 -0700 (PDT)
-Message-ID: <648392a1.620a0220.62524.6743@mx.google.com>
-Date:   Fri, 09 Jun 2023 13:59:13 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 9 Jun 2023 17:08:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9C01FDC;
+        Fri,  9 Jun 2023 14:08:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5357B65B87;
+        Fri,  9 Jun 2023 21:08:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312F0C433EF;
+        Fri,  9 Jun 2023 21:08:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686344924;
+        bh=khMjJZ6SbRtiHSzoAiJYcCLwvpHE55DPi59sRUk9SnA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EPwq+3SVS8hpxxiCv7rr8f9wFYJwjqxeQoWOBcRM374UN7xGFI1xqLQix1de/69rs
+         mzSKQ2vsWaothpzV/NFEyqhlOanSvTSMOsuJjwPr3fNID8aTiJBypYwjufjDvFM/SO
+         /VDFyzRbixe+F1NWRWKhzGNQUNVq0yLdyVmmHwJ0qoTO1YRqU2wm9DkbMj+3sgEBsI
+         yWoBtYIC1jxiyzAzp8N+onYpJng/asUqh8dxb0fbpTm3J+IM0DuAyBCExuuU3IHD+V
+         RB52HW+NYCIG4Ye+w1p8jQuYEdC/Y8pGUd9yUkj2zYf9hIAlH7PN4PeuQ/JXbSs7Ab
+         3klNk7thwj8Xw==
+Date:   Fri, 9 Jun 2023 14:08:43 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Magali Lemes do Sacramento <magali.lemes@canonical.com>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        shuah@kernel.org, vfedorenko@novek.ru,
+        tianjia.zhang@linux.alibaba.com, andrei.gherzan@canonical.com,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2 1/3] selftests: net: tls: check if FIPS mode is
+ enabled
+Message-ID: <20230609140843.4444e444@kernel.org>
+In-Reply-To: <CAO9q4O1SctX1323-8JDO0=ovsLfNpv4EjOSdP_PwYDJ76tAQiQ@mail.gmail.com>
+References: <20230609164324.497813-1-magali.lemes@canonical.com>
+        <20230609164324.497813-2-magali.lemes@canonical.com>
+        <20230609105307.492cd1f2@kernel.org>
+        <CAO9q4O1SctX1323-8JDO0=ovsLfNpv4EjOSdP_PwYDJ76tAQiQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.4-rc1-9-gd51a218328e0
-Subject: kselftest/next build: 3 builds: 0 failed,
- 3 passed (v6.4-rc1-9-gd51a218328e0)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next build: 3 builds: 0 failed, 3 passed (v6.4-rc1-9-gd51a218328e=
-0)
+On Fri, 9 Jun 2023 17:15:38 -0300 Magali Lemes do Sacramento wrote:
+> > Eh, let me help you, this should really be part of the SETUP() function
+> > but SETUP() doesn't currently handle SKIP(). So you'll need to add this
+> > to your series:  
+> 
+> May I add your Suggested-by tag to this upcoming patch in this patchset v3?
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.4-rc1-9-gd51a218328e0/
-
-Tree: kselftest
-Branch: next
-Git Describe: v6.4-rc1-9-gd51a218328e0
-Git Commit: d51a218328e0be533ca0b10bc29060aaec70432d
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 2 unique architectures
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+No strong preference but sure, why not :)
