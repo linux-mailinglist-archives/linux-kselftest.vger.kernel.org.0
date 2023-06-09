@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AFD872A2DD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 21:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC5F72A2F2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 21:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjFITJk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Jun 2023 15:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
+        id S229912AbjFITQa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Jun 2023 15:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjFITJk (ORCPT
+        with ESMTP id S229900AbjFITQ1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Jun 2023 15:09:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763B6210A;
-        Fri,  9 Jun 2023 12:09:39 -0700 (PDT)
+        Fri, 9 Jun 2023 15:16:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25191E62;
+        Fri,  9 Jun 2023 12:16:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 139BB65B31;
-        Fri,  9 Jun 2023 19:09:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B053AC433D2;
-        Fri,  9 Jun 2023 19:09:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEE8F65B41;
+        Fri,  9 Jun 2023 19:16:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A48C4339C;
+        Fri,  9 Jun 2023 19:16:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686337778;
-        bh=6dzCM0l3yez6xLMwZhhp3ZeNdCkNfftfdY4FRAKrm/k=;
+        s=k20201202; t=1686338185;
+        bh=tJjWk6hGIUwDfmPq3y89WUdeFFNwy2a0cWqN5OR7kJ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=proX85yrQ4KXKICb6x2F9PlW27QVZSo9A7mG6/JFIM9ErnSvBws3NjbLxasa7fsEa
-         1u10sj69wI/XP2nOsZWYjjaf+fe/G9twt+fnnzA9qmaJhZRlAISTFeG0PMlMedhlPI
-         q2QljvcQgABuYZhv1n1qfYfWeZpWcedL7wwrMjAJ2zgLSSMjN//2P5iWSKZpRe0IY3
-         h4NwiUrTCQknKqp9S9bbC9lu/mb54+GoF/RD/i7od6hMpFZ/teNbX9fT19dHNqlMCj
-         pMGoM23FnT6lz/e0X5IUeETjz6icBp1b3pQPL2mYRw/jAjKq47aQ/XSOluGnJ3IhRU
-         R4eg7no5Itn3Q==
+        b=KF5au+WfV0NuB0ror1osdkBAbZLKNTlIzfO7xdF9/kwLYpsNE6bOUjL7l4mW218XN
+         Zswfyuk+qs/TjZiP60VijNjhYEQb3fvxWDeXRcmfeTizhr1nMK7uc4kGXMeveApGzU
+         DaTl9qgAo/giDkLqZFy3Kwoh0oLKcXvsOGe9H6wBVmdyAvgdDeHEqTwJ1DoKUB3omv
+         EfD04rIlueqhUKXR5cJFhOxX3v44n2ltyE02VWNXRKLAbQryQA5ntHT5YM1gN6JypB
+         bVNXhWX34B7ujj5CH/cxteXyMcsiZ18cGgH8ZBt46a3Sw1/kY/GgPhkn5fv+mZ3Lxp
+         fhCegvfX8DQJQ==
 From:   SeongJae Park <sj@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com,
-        rmoar@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, johannes@sipsolutions.net,
-        SeongJae Park <sj@kernel.org>
-Subject: Re: [PATCH] kunit: tool: undo type subscripts for subprocess.Popen
-Date:   Fri,  9 Jun 2023 19:09:36 +0000
-Message-Id: <20230609190936.30045-1-sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org,
+        Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: Re: [PATCHv2] selftests: damon: add config file
+Date:   Fri,  9 Jun 2023 19:16:22 +0000
+Message-Id: <20230609191622.80289-1-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CABVgOSmUxDoWHWOaJYmayCE8FnfS5bUoAJoosO44x=gwKdtLng@mail.gmail.com>
+In-Reply-To: <20230412165806.80672-1-sj@kernel.org>
 References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,56 +57,72 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi David and Brendan,
+On Wed, 12 Apr 2023 16:58:06 +0000 SeongJae Park <sj@kernel.org> wrote:
 
-On Tue, 2 May 2023 08:04:20 +0800 David Gow <davidgow@google.com> wrote:
+> Hi Anders,
+> 
+> On Wed, 12 Apr 2023 11:28:54 +0200 Anders Roxell <anders.roxell@linaro.org> wrote:
+> 
+> > Building and running the subsuite 'damon' of kselftest, shows the
+> > following issues:
+> >  selftests: damon: debugfs_attrs.sh
+> >   /sys/kernel/debug/damon not found
+> > 
+> > By creating a config file enabling DAMON fragments in the
+> > selftests/damon/ directory the tests pass.
+> > 
+> > Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> 
+> checkpatch.pl is warning as below:
+> 
+>     WARNING: Reported-by: should be immediately followed by Link: with a URL to the report
+>     #20:
+>     Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>     Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> 
+> The reason for the warning can be found from commit d7f1d71e5ef6 ("checkpatch:
+> warn when Reported-by: is not followed by Link:")'s commit message.  Do you
+> have a link to put here?  I guess the report was made inside Linaro, so might
+> have no publicly available link.  Maybe better to add some notes or some funny
+> tag like "Link: N/A # no publicly-available link of the report" for convincing
+> the tool, but I don't think this should be a blocker for this patch.
+> 
+> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> 
+> Reviewed-by: SeongJae Park <sj@kernel.org>
 
-> [-- Attachment #1: Type: text/plain, Size: 1473 bytes --]
-> 
-> On Tue, 2 May 2023 at 02:16, 'Daniel Latypov' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > Writing `subprocess.Popen[str]` requires python 3.9+.
-> > kunit.py has an assertion that the python version is 3.7+, so we should
-> > try to stay backwards compatible.
-> >
-> > This conflicts a bit with commit 1da2e6220e11 ("kunit: tool: fix
-> > pre-existing `mypy --strict` errors and update run_checks.py"), since
-> > mypy complains like so
-> > > kunit_kernel.py:95: error: Missing type parameters for generic type "Popen"  [type-arg]
-> >
-> > Note: `mypy --strict --python-version 3.7` does not work.
-> >
-> > We could annotate each file with comments like
-> >   `# mypy: disable-error-code="type-arg"
-> > but then we might still get nudged to break back-compat in other files.
-> >
-> > This patch adds a `mypy.ini` file since it seems like the only way to
-> > disable specific error codes for all our files.
-> >
-> > Note: run_checks.py doesn't need to specify `--config_file mypy.ini`,
-> > but I think being explicit is better, particularly since most kernel
-> > devs won't be familiar with how mypy works.
-> >
-> > Fixes: 695e26030858 ("kunit: tool: add subscripts for type annotations where appropriate")
-> > Reported-by: SeongJae Park <sj@kernel.org>
-> > Link: https://lore.kernel.org/linux-kselftest/20230501171520.138753-1-sj@kernel.org
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
-> 
-> Thanks for jumping on this.
-> 
-> Looks good to me!
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
+Shuah, may I ask your opinion on this patch?
 
-Looks like this patch is still not merged in the mainline.  May I ask the ETA,
-or any concern if you have?
+I'm also cc-ing Andrew, as he may also interested in picking this patch.
 
 
 Thanks,
 SJ
 
 > 
-> Cheers,
-> -- David
+> 
+> Thanks,
+> SJ
+> 
+> > ---
+> >  tools/testing/selftests/damon/config | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >  create mode 100644 tools/testing/selftests/damon/config
+> > 
+> > diff --git a/tools/testing/selftests/damon/config b/tools/testing/selftests/damon/config
+> > new file mode 100644
+> > index 000000000000..0daf38974eb0
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/damon/config
+> > @@ -0,0 +1,7 @@
+> > +CONFIG_DAMON=y
+> > +CONFIG_DAMON_SYSFS=y
+> > +CONFIG_DAMON_DBGFS=y
+> > +CONFIG_DAMON_PADDR=y
+> > +CONFIG_DAMON_VADDR=y
+> > +CONFIG_DAMON_RECLAIM=y
+> > +CONFIG_DAMON_LRU_SORT=y
+> > -- 
+> > 2.39.2
+> 
