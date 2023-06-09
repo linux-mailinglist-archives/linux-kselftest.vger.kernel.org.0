@@ -2,84 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFE4728ADC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 00:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FA6728C32
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 02:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236585AbjFHWFs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Jun 2023 18:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S237680AbjFIAJX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Jun 2023 20:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235685AbjFHWFr (ORCPT
+        with ESMTP id S235685AbjFIAJW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 18:05:47 -0400
-Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69A030CF
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 15:05:44 -0700 (PDT)
+        Thu, 8 Jun 2023 20:09:22 -0400
+Received: from tiger.tulip.relay.mailchannels.net (tiger.tulip.relay.mailchannels.net [23.83.218.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEF11706
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 17:09:19 -0700 (PDT)
 X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id DEE497E1B97
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 22:05:43 +0000 (UTC)
-Received: from pdx1-sub0-mail-a287.dreamhost.com (unknown [127.0.0.6])
+        by relay.mailchannels.net (Postfix) with ESMTP id 30377500BF3
+        for <linux-kselftest@vger.kernel.org>; Fri,  9 Jun 2023 00:09:16 +0000 (UTC)
+Received: from pdx1-sub0-mail-a313.dreamhost.com (unknown [127.0.0.6])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 42ABA7E13A5
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 22:05:43 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686261943; a=rsa-sha256;
+        by relay.mailchannels.net (Postfix) with ESMTPA id AE6BD500B48
+        for <linux-kselftest@vger.kernel.org>; Fri,  9 Jun 2023 00:09:15 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686269355; a=rsa-sha256;
         cv=none;
-        b=9JeYfu3HFzN/bZMZ9eL+e51+9kW3yN6tX3d+2nS5USJOawZm9fzf4uC+JvyM46uYRwwyfO
-        N+dL0egUKThNjoTSJz7yJb1A1Ze+mJdbVD+RNEYmWd1Ph3d4/DNi4fEQafkhTTQ+04Ue3K
-        OTj8F+hQJhT3WsX2drOOEg8dT6lBtm8UxVfhRO87P9YpRz1TL89NL2qZfQqRurrvP7vnaC
-        8Mn4uZIuPhy86DcfHCpfJedlQae+N1x82pJ8+NTHTq0kXLfzitzYae6MiDaBIHnKSqQyIq
-        ApQoolrR76McdIR0WuKJWOGygg4bpzcnfOP+OWAlIbUWjoDuwYm6XX35VW/YFg==
+        b=W3u401YWVLHooPA7ky8JTPf0tEGj1ueQowQ9HNfr6yq/UvscVO6Vxkj+T++XIk/0qopVRU
+        UVQr12vyEtLnAEqrQayfwiuF+ZdxG6q0CY/Mneb8FQw2CSsxOkN70ekZuGgN0pEAYLmT6V
+        CiP1AbOo8Hxl6EwXZjwItOGoPgc1ZXhYmMAH+Fa9sGQ9jeV/yoMTHJpZV6Pj5DxxaMnHOq
+        X5Bm6Skg70ZEV5mlhqMLKmQDqozmkpw1PQGdRavPZxPsINnVFyktZNOSm0qMYsqNR/C13m
+        MaT3zuRAR7cCTddg7KoRvkulW+UuRnkjUwuNHoAE+uUM4kJe369vpz55maKXUg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-        s=arc-2022; t=1686261943;
+        s=arc-2022; t=1686269355;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=6VFcr740ClHDgfooQ+FLHb4V9tJxfdRe/N7zQ7funAE=;
-        b=R/eu2UYbnNC4peOZJCqsMZ+CrN6OXtZJ141cA0+30q7cxMER/qq6qpYj0kZTCrv4Cmc6y+
-        aojBP7w7zpaG9O5H2A1FLPwq+rlOUODgxQJRnvT3KOVluB+w640lge1pD+X+QwnQIjTrsB
-        /zXHN9fn5oGbDdhEbqU7bHLW3LabtTOPKZq5a7oSv/mRyD4rVy50Bd0Pybmaf6VOkof2Hq
-        I9ayC1LO8GpqeDu3Qgoh13bkYZLrSP/N5ay/HJF/sAeTEoeNFtNgCphtjaHCkS7nWUrACe
-        DFyQB2hkYlj3JlbA7LtAxD24I+LMrpFwT+hE8xqNF3HH1u1N+lMaam6kYFJ1cA==
+        bh=lQJUql2528Cy+DS6D/lrrawtBMQvuJVlQtJ26lBfYIk=;
+        b=nxCHSGRg3ZJkxRy8SBBy57H+IEcLM5Tkw0MS40CrfH8CGirPp79zFfRrFTmQCeRwKQniia
+        8a1XoRqxLi5CPrtqkEBgIRf1Ub1dwswZOyKazoFnbMEJrmBwOQZQ6DDj7fS2CUaNYu1nUE
+        d7QkoVPGXyMdum0i1Y9ygfxlyNa4Qb8dmA3txPkdOSqtHl2+agK614vmr68CCc5M1J46fx
+        NrxI3Z7ILlECRqDfKsOKFDMb+z4jP18dvk9Ugf5sjDcDXnN1A2UxuEvB0u17+MWtlXJ/ib
+        jIvnSlsFdvFRSzI0zSc4l5EQvT3nhjcJ3wkSPeNS2j63XyJlQ/TDFMzRvThbwA==
 ARC-Authentication-Results: i=1;
-        rspamd-fcb9f4dcf-t49wj;
+        rspamd-fcb9f4dcf-gg558;
         auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
 X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
 X-MailChannels-Auth-Id: dreamhost
-X-Thread-Language: 526a82cf2c823833_1686261943705_1904226046
-X-MC-Loop-Signature: 1686261943705:1426623357
-X-MC-Ingress-Time: 1686261943705
-Received: from pdx1-sub0-mail-a287.dreamhost.com (pop.dreamhost.com
+X-Army-Unite: 146eaa1e74c98d3d_1686269355927_3673106434
+X-MC-Loop-Signature: 1686269355927:41386030
+X-MC-Ingress-Time: 1686269355927
+Received: from pdx1-sub0-mail-a313.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.125.42.131 (trex/6.8.1);
-        Thu, 08 Jun 2023 22:05:43 +0000
+        by 100.115.252.249 (trex/6.8.1);
+        Fri, 09 Jun 2023 00:09:15 +0000
 Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a287.dreamhost.com (Postfix) with ESMTPSA id 4QcdZH0GTyzBC
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 15:05:42 -0700 (PDT)
+        by pdx1-sub0-mail-a313.dreamhost.com (Postfix) with ESMTPSA id 4QchJq3WP6zWN
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 17:09:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1686261943;
-        bh=6VFcr740ClHDgfooQ+FLHb4V9tJxfdRe/N7zQ7funAE=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=fcWyME1PTxbcYwVPtejuIEGcMXGEkL8T6ddygN281e8u+RFnlTxdv4vSPPJtIhu3G
-         qx3B8C5XxtwKHUse6/Utr33nINbAXeENOMcXU5ZX2q3A0IQreZZomJupaWTqr5WrN/
-         LWi0PaiU7QyHVgI2H8zkDd6/3NWY8p2GZTFI67bo=
+        s=dreamhost; t=1686269355;
+        bh=lQJUql2528Cy+DS6D/lrrawtBMQvuJVlQtJ26lBfYIk=;
+        h=Date:From:To:Cc:Subject:Content-Type:Content-Transfer-Encoding;
+        b=dDoHPKhVC+rSbuXrQXH1ctahyAjgA25ZAMjDsDW+522psbJy33cRsO9a2Cg/4XYOi
+         Ltrq5G01Y8FBynl/M4J7Vkd2TZtyVkvfX5p5/NuGhPauvEr5fCwwfu8xzC/sb8vZqG
+         PipsXZb9CtdoVe3oOri82oo52gIu8s+CmmhxOwWw=
 Received: from johansen (uid 1000)
         (envelope-from kjlx@templeofstupid.com)
         id e0042
         by kmjvbox (DragonFly Mail Agent v0.12);
-        Thu, 08 Jun 2023 15:05:42 -0700
-Date:   Thu, 8 Jun 2023 15:05:42 -0700
+        Thu, 08 Jun 2023 17:09:14 -0700
+Date:   Thu, 8 Jun 2023 17:09:14 -0700
 From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     Yonghong Song <yhs@meta.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
@@ -89,59 +90,53 @@ Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        stable@vger.kernel.org
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
 Subject: Re: [PATCH bpf v2 2/2] bpf: ensure main program has an extable
-Message-ID: <20230608220542.GA2057@templeofstupid.com>
+Message-ID: <20230609000914.GA4980@templeofstupid.com>
 References: <cover.1686166633.git.kjlx@templeofstupid.com>
  <de425e99876dc6c344e1a4254894a3c81e71a2ec.1686166633.git.kjlx@templeofstupid.com>
- <33c52b4c-2a16-7578-f782-51267deff750@meta.com>
+ <CAADnVQJd=_OZJUWVcQH7OtaH2cv8FLsB7kBhxZANsR9O3+AfZA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <33c52b4c-2a16-7578-f782-51267deff750@meta.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJd=_OZJUWVcQH7OtaH2cv8FLsB7kBhxZANsR9O3+AfZA@mail.gmail.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
         DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 10:38:12AM -0700, Yonghong Song wrote:
+On Thu, Jun 08, 2023 at 03:01:36PM -0700, Alexei Starovoitov wrote:
+> On Wed, Jun 7, 2023 at 2:04 PM Krister Johansen <kjlx@templeofstupid.com> wrote:
+> > Cc: stable@vger.kernel.org
+> > Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function programs")
+> > Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
+> > ---
+> >  kernel/bpf/verifier.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 5871aa78d01a..d6939db9fbf9 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -17242,6 +17242,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+> >         prog->jited = 1;
+> >         prog->bpf_func = func[0]->bpf_func;
+> >         prog->jited_len = func[0]->jited_len;
+> > +       prog->aux->extable = func[0]->aux->extable;
 > 
-> 
-> On 6/7/23 2:04 PM, Krister Johansen wrote:
-> > When bpf subprograms are in use, the main program is not jit'd after the
-> > subprograms because jit_subprogs sets a value for prog->bpf_func upon
-> > success.  Subsequent calls to the JIT are bypassed when this value is
-> > non-NULL.  This leads to a situation where the main program and its
-> > func[0] counterpart are both in the bpf kallsyms tree, but only func[0]
-> > has an extable.  Extables are only created during JIT.  Now there are
-> > two nearly identical program ksym entries in the tree, but only one has
-> > an extable.  Depending upon how the entries are placed, there's a chance
-> > that a fault will call search_extable on the aux with the NULL entry.
-> > 
-> > Since jit_subprogs already copies state from func[0] to the main
-> > program, include the extable pointer in this state duplication.  The
-> > alternative is to skip adding the main program to the bpf_kallsyms
-> > table, but that would mean adding a check for subprograms into the
-> > middle of bpf_prog_load.
-> 
-> I think having two early identical program ksym entries is bad.
-> When people 'cat /proc/kallsyms | grep <their program name>',
-> they will find two programs with identical kernel address but different
-> hash value. This is just very confusing. I think removing the
-> duplicate in kallsyms is better from user's perspective.
+> Why not to do this hunk and what I suggested earlier: start from func=1 ?
+> That will address double ksym insertion that Yonghong mentioned.
 
-Thanks for all the feedback.
+Sure thing.  Yonghong and you have convinced me.
 
-In terms of resolving this confusion my inclination is to use the main
-program. That way users see in kallsyms the same tag that is reported by
-bpftool.  On the other hand, the tag in kallsyms won't match the sha1 of
-that actual chunk of code.  Is anything relying on the hash in the tag
-and the digest of the code agreeing?
+I'll send out a v3 with all changes requested so far.
 
 -K
