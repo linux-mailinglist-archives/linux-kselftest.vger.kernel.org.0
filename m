@@ -2,193 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A56972961C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 11:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06521729A0C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jun 2023 14:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241971AbjFIJ6t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Jun 2023 05:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
+        id S230423AbjFIMb0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Jun 2023 08:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241672AbjFIJ5y (ORCPT
+        with ESMTP id S231858AbjFIMbZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:57:54 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE6B34ED5;
-        Fri,  9 Jun 2023 02:50:10 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Cx8OjR9YJkYQIBAA--.1209S3;
-        Fri, 09 Jun 2023 17:50:09 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxCOXP9YJkRpsKAA--.32216S4;
-        Fri, 09 Jun 2023 17:50:08 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kselftest@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: [PATCH 2/2] selftests/vDSO: Get version and name for all archs
-Date:   Fri,  9 Jun 2023 17:50:07 +0800
-Message-Id: <1686304207-13045-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1686304207-13045-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1686304207-13045-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8CxCOXP9YJkRpsKAA--.32216S4
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxuFy5Gw1UAFWkKF1kGF48uFX_yoWrAFWrpa
-        n7Kry2kw48tay5Kw1Iyw1Dur4rJrn7Ga18Aw48AFW3AF47Zw48JrWDGFyrX3ZxurWvvr45
-        u3WFgr4F9aykJagCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-        AKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-        6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xII
-        jxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
-        0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
-        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Gii3UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 9 Jun 2023 08:31:25 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B382330F4
+        for <linux-kselftest@vger.kernel.org>; Fri,  9 Jun 2023 05:30:48 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so2095519e87.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Jun 2023 05:30:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1686313843; x=1688905843;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8h26DQt30aCyEhPT/ooAbXH6FQid93QFBSmTC7V6R+4=;
+        b=A1lJFrFXashPyOVE6TwjfXwLaFl61XNjBlCsCbs7HxXdXlscKu2aQeb9jnMUEWsnFP
+         Gqa4zxdJoUevS4rlfUKzeXGooNKBl4E8McMllHfEube1l2jxq71XlpYKaEuc/AZTzZGU
+         FsJEx0y3rWxOwbP1p8DZ4JU1y29iK9r7H2K4jK3YiLEIbADb92nGDzMy8FKbGTP1EjBu
+         3917iiGGQ3TOwK7VW37L0tpiNLdcO/xRJYaSVn899cvVXqbC0NpJnY27H3fNnzr7Hp3R
+         YkdzhR8Zn3sKS5jyM7PVZnwGzGYfrvHrwJrvRUDWtwkbk8efwrHQ7bTVrSq6sPp2DS0N
+         OEaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686313843; x=1688905843;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8h26DQt30aCyEhPT/ooAbXH6FQid93QFBSmTC7V6R+4=;
+        b=i646JsoUbJpLDZDIZ8kKfJIh9TebFv+0donjGlDqnqirf8l/BOAuol02ydXl8C45Be
+         SG9WFJFoHHEPa6sWQFKWhqCshoqbCcRObZ9tlWzfYAJHZr4DWBPXV5yF3udakbR245ag
+         VJnSIFzvSay9f+nVuYCMpeZr3lnx3aIT7otYzVU2AqmXjbuSGGSjRmycL+mXW2KPo7QF
+         UqINuByb/Cdj2WMGEG13Nw4RT0ulw4InoHdtXPs43oRDFcuuLirpxzHl3tFpI0iVAyzt
+         Q63c5v2RWMX9xbocno6CdVEWFq3kmqUF+yYTiBUXobA6YJ/z/YADtGv+sMGJwDJU1CX+
+         CGKQ==
+X-Gm-Message-State: AC+VfDyvSa2TyGSlSQXSySg8bpKIFRKjZN2qofAYYG7fdyWJG+PArQZX
+        6xbMk+jC3SmbvKRCA0eR5E5lrQ==
+X-Google-Smtp-Source: ACHHUZ7LLidgDgGdihFdLBcYHtdurgJJ/J4UsIY+yeDDqqFfP2vMmCiYedKW6YkV6nfEzVsYqhM/Ow==
+X-Received: by 2002:ac2:5bd0:0:b0:4f2:40dd:e2cf with SMTP id u16-20020ac25bd0000000b004f240dde2cfmr773184lfn.55.1686313843048;
+        Fri, 09 Jun 2023 05:30:43 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id v26-20020aa7dbda000000b0050cc4461fc5sm1703120edt.92.2023.06.09.05.30.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 05:30:42 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 14:30:41 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, maz@kernel.org, oliver.upton@linux.dev,
+        seanjc@google.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [PATCH v3 07/10] KVM: arm64: selftests: Finish generalizing
+ get-reg-list
+Message-ID: <20230609-b900162a66c26a004b751b1f@orel>
+References: <cover.1686275310.git.haibo1.xu@intel.com>
+ <450cb59db52ebeaa68f3d77f1bd995618f3612b8.1686275310.git.haibo1.xu@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <450cb59db52ebeaa68f3d77f1bd995618f3612b8.1686275310.git.haibo1.xu@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It could not find __vdso_getcpu and __vdso_gettimeofday when test
-getcpu and gettimeofday on LoongArch.
+On Fri, Jun 09, 2023 at 10:12:15AM +0800, Haibo Xu wrote:
+> From: Andrew Jones <ajones@ventanamicro.com>
+> 
+> Add some unfortunate #ifdeffery to ensure the common get-reg-list.c
+> can be compiled and run with other architectures. The next
+> architecture to support get-reg-list should now only need to provide
+> $(ARCH_DIR)/get-reg-list.c where arch-specific print_reg() and
+> vcpu_configs[] get defined.
+> 
+> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+> ---
+>  tools/testing/selftests/kvm/get-reg-list.c | 24 ++++++++++++++++++----
+>  1 file changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/selftests/kvm/get-reg-list.c
+> index 69bb91087081..c4bd5a5259da 100644
+> --- a/tools/testing/selftests/kvm/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/get-reg-list.c
+> @@ -98,6 +98,7 @@ void __weak print_reg(const char *prefix, __u64 id)
+>  	printf("\t0x%llx,\n", id);
+>  }
+>  
+> +#ifdef __aarch64__
+>  static void prepare_vcpu_init(struct vcpu_reg_list *c, struct kvm_vcpu_init *init)
+>  {
+>  	struct vcpu_reg_sublist *s;
+> @@ -120,6 +121,24 @@ static void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
+>  	}
+>  }
+>  
+> +static struct kvm_vcpu *vcpu_config_get_vcpu(struct vcpu_reg_list *c, struct kvm_vm *vm)
+> +{
+> +	struct kvm_vcpu_init init = { .target = -1, };
+> +	struct kvm_vcpu *vcpu;
+> +
+> +	prepare_vcpu_init(c, &init);
+> +	vcpu = __vm_vcpu_add(vm, 0);
+> +	aarch64_vcpu_setup(vcpu, &init);
+> +
+> +	return vcpu;
+> +}
+> +#else
+> +static struct kvm_vcpu *vcpu_config_get_vcpu(struct vcpu_reg_list *c, struct kvm_vm *vm)
+> +{
+> +	return __vm_vcpu_add(vm, 0);
+> +}
+> +#endif
+> +
+>  static void check_supported(struct vcpu_reg_list *c)
+>  {
+>  	struct vcpu_reg_sublist *s;
+> @@ -139,7 +158,6 @@ static bool print_filtered;
+>  
+>  static void run_test(struct vcpu_reg_list *c)
+>  {
+> -	struct kvm_vcpu_init init = { .target = -1, };
+>  	int new_regs = 0, missing_regs = 0, i, n;
+>  	int failed_get = 0, failed_set = 0, failed_reject = 0;
+>  	struct kvm_vcpu *vcpu;
+> @@ -149,9 +167,7 @@ static void run_test(struct vcpu_reg_list *c)
+>  	check_supported(c);
+>  
+>  	vm = vm_create_barebones();
+> -	prepare_vcpu_init(c, &init);
+> -	vcpu = __vm_vcpu_add(vm, 0);
+> -	aarch64_vcpu_setup(vcpu, &init);
+> +	vcpu = vcpu_config_get_vcpu(c, vm);
+>  	finalize_vcpu(vcpu, c);
 
-  # cd tools/testing/selftests/vDSO && make
-  # ./vdso_test_getcpu
-  Could not find __vdso_getcpu
-  # ./vdso_test_gettimeofday
-  Could not find __vdso_gettimeofday
+I just noticed that this has been modified from what I posted to leave
+the finalize_vcpu() call here, despite it now being inside the #ifdef
+__aarch64__. That breaks the purpose of the patch. Please make sure this
+file compiles for other architectures without requiring additional
+patches, which would keep the commit message honest. You can either
+revert this to what I posted, and then readd the finalize_vcpu() call in
+another patch, or you can add a finalize_vcpu() stub to the #else part
+of the ifdef in this patch.
 
-One simple way is to add LoongArch case to define version and name,
-just like commit d942f231afc0 ("selftests/vDSO: Add riscv getcpu &
-gettimeofday test"), but it is not the best way.
+Also please don't modify patches authored by others without calling out
+the modifications somewhere, either the commit message or under the ---
+of the patch or in the cover letter.
 
-Since each architecture has already defined names and versions in
-vdso_config.h, it is proper to include vdso_config.h to get version
-and name for all archs.
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/testing/selftests/vDSO/vdso_test_getcpu.c    | 16 +++++--------
- .../selftests/vDSO/vdso_test_gettimeofday.c        | 26 ++++++----------------
- 2 files changed, 13 insertions(+), 29 deletions(-)
-
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getcpu.c b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-index 1df5d05..b758f68 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-@@ -13,13 +13,7 @@
- 
- #include "../kselftest.h"
- #include "parse_vdso.h"
--
--#if defined(__riscv)
--const char *version = "LINUX_4.15";
--#else
--const char *version = "LINUX_2.6";
--#endif
--const char *name = "__vdso_getcpu";
-+#include "vdso_config.h"
- 
- struct getcpu_cache;
- typedef long (*getcpu_t)(unsigned int *, unsigned int *,
-@@ -27,6 +21,8 @@ typedef long (*getcpu_t)(unsigned int *, unsigned int *,
- 
- int main(int argc, char **argv)
- {
-+	const char *version = versions[VDSO_VERSION];
-+	const char **name = (const char **)&names[VDSO_NAMES];
- 	unsigned long sysinfo_ehdr;
- 	unsigned int cpu, node;
- 	getcpu_t get_cpu;
-@@ -40,9 +36,9 @@ int main(int argc, char **argv)
- 
- 	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
- 
--	get_cpu = (getcpu_t)vdso_sym(version, name);
-+	get_cpu = (getcpu_t)vdso_sym(version, name[4]);
- 	if (!get_cpu) {
--		printf("Could not find %s\n", name);
-+		printf("Could not find %s\n", name[4]);
- 		return KSFT_SKIP;
- 	}
- 
-@@ -50,7 +46,7 @@ int main(int argc, char **argv)
- 	if (ret == 0) {
- 		printf("Running on CPU %u node %u\n", cpu, node);
- 	} else {
--		printf("%s failed\n", name);
-+		printf("%s failed\n", name[4]);
- 		return KSFT_FAIL;
- 	}
- 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-index e411f28..ee4f1ca 100644
---- a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-@@ -18,25 +18,13 @@
- 
- #include "../kselftest.h"
- #include "parse_vdso.h"
--
--/*
-- * ARM64's vDSO exports its gettimeofday() implementation with a different
-- * name and version from other architectures, so we need to handle it as
-- * a special case.
-- */
--#if defined(__aarch64__)
--const char *version = "LINUX_2.6.39";
--const char *name = "__kernel_gettimeofday";
--#elif defined(__riscv)
--const char *version = "LINUX_4.15";
--const char *name = "__vdso_gettimeofday";
--#else
--const char *version = "LINUX_2.6";
--const char *name = "__vdso_gettimeofday";
--#endif
-+#include "vdso_config.h"
- 
- int main(int argc, char **argv)
- {
-+	const char *version = versions[VDSO_VERSION];
-+	const char **name = (const char **)&names[VDSO_NAMES];
-+
- 	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
- 	if (!sysinfo_ehdr) {
- 		printf("AT_SYSINFO_EHDR is not present!\n");
-@@ -47,10 +35,10 @@ int main(int argc, char **argv)
- 
- 	/* Find gettimeofday. */
- 	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
--	gtod_t gtod = (gtod_t)vdso_sym(version, name);
-+	gtod_t gtod = (gtod_t)vdso_sym(version, name[0]);
- 
- 	if (!gtod) {
--		printf("Could not find %s\n", name);
-+		printf("Could not find %s\n", name[0]);
- 		return KSFT_SKIP;
- 	}
- 
-@@ -61,7 +49,7 @@ int main(int argc, char **argv)
- 		printf("The time is %lld.%06lld\n",
- 		       (long long)tv.tv_sec, (long long)tv.tv_usec);
- 	} else {
--		printf("%s failed\n", name);
-+		printf("%s failed\n", name[0]);
- 		return KSFT_FAIL;
- 	}
- 
--- 
-2.1.0
-
+Thanks,
+drew
