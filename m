@@ -2,59 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C372772A87B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jun 2023 04:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2426D72A883
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jun 2023 04:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjFJCfh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Jun 2023 22:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S232397AbjFJCkG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Jun 2023 22:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjFJCfh (ORCPT
+        with ESMTP id S229735AbjFJCkF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Jun 2023 22:35:37 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3369235B3;
-        Fri,  9 Jun 2023 19:35:36 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-65314ee05c6so2103964b3a.1;
-        Fri, 09 Jun 2023 19:35:36 -0700 (PDT)
+        Fri, 9 Jun 2023 22:40:05 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959441BD6;
+        Fri,  9 Jun 2023 19:40:04 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-52c30fa5271so908117a12.0;
+        Fri, 09 Jun 2023 19:40:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686364535; x=1688956535;
+        d=gmail.com; s=20221208; t=1686364804; x=1688956804;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B+cQ2OwbycVyxFVqiOSniKxXaS+hWOW1t5Cl7Mhvz3A=;
-        b=Kb6eH8l3yhks8jc06qIZNQE1A8b6Q8s5z7YxYMQtG84G5idJNCwHY54K2aO+07BVS5
-         kVtoqyGLMuNUelZqpalq41FDA8pNkYCcXjCVGGBapbfFqUJ4WSsdkvz7PCNssfTj/Xa8
-         5MeFd1LjBHZo35Zu32oCkV1iO99HnUueFmuPioQlNu6KFlTDvjXnvErrqP+mmyAkZtbF
-         gka37/1OCMSyGaD6KC6epfW2C0i/wirz53++DZI0bR0cNqJfWjqW/1PpEyU5NZDpv7O0
-         CnKTY14bKBRCa5kXDZSvXPOsmMxbMOpwlAqTcIhkUC/6dIUhbTKPiD7sS5/BZgVX7Mvt
-         xkow==
+        bh=yMfpDCLRI5dKyF0E3U+UoBzddcbMW1WQlUnfVbM4Nck=;
+        b=VSuYniOmVJm4APmLKKeLvXMbE8TljXjUNMlgLVlYqWsuBrwnlWGOug6dLADTZoR5yA
+         ephPwS8VQPss1j9EmzvIDKo9ZNOJbRFmv9sLV7BvT81ptJMdJ1Jsf6FY68mSy7Z/yT+w
+         zPM8hWOQqosCzowr7LFwZWo/7kb3G0ygsv8PQKDeobDoEJvyEwakZAsJRFlJr3s09+LR
+         peQnmNKTDneKDR7PuVNA4OwMT2KzLLl75sKBurccopF5L0tCZRpP3NWJk+wMJGaGWEnw
+         +m5cvDgsfjKaJv8Zxh+y+jk/ey/C488Aqi8NbLPpK6egHx1lvb2dC5ffAgMbjTneiznw
+         fY8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686364535; x=1688956535;
+        d=1e100.net; s=20221208; t=1686364804; x=1688956804;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B+cQ2OwbycVyxFVqiOSniKxXaS+hWOW1t5Cl7Mhvz3A=;
-        b=XRMb230QOqwq7aOVqVp4EQ/mssGd75/Hh08god+OrQ//ZVgyukOCSRUgBja138j3q0
-         F2lNaiXZWjWn2jif9Wfkgvr/348bklRcFMRalecCcS0+MRELeJoHzf/+VeMHe8kUzlZI
-         ZKY5Efi3OOcFK4stNFTQgoFGp8LB4ZAsQWHHmzjKmIpGTjAfV1Eu65eRNTIe+HU7p2sy
-         MFrQmVfIgO5Zsi57HZEV3ei0Ly88r3DOGQWH+2a8gCm3gtxjYmEz1wnXai0Xves86AYh
-         dbQ0NE+VynBBYykUx4QDfMwyACgGYGbYb1J/DIsMgp6y28S2aWkhAWHlnC1RJLcE5Qkw
-         8Cww==
-X-Gm-Message-State: AC+VfDyjD5MeFZF+zw1C+KCPVMBzTvNgY/B+MtemiDhCzGv+EG8NcKOH
-        EtCWSHFL6cj9bgzoUX7tIisLZUKCLxLqTJHQ32c=
-X-Google-Smtp-Source: ACHHUZ6rNnkh2m1Yt4Pj3/pGOqJ4UHP9zSc6CE3jFoWY+FrVfA5ENGv5ysmIcDXuIOSFDb9BxkKoP9BiytTg0kXa/dU=
-X-Received: by 2002:a05:6a20:e616:b0:105:94e5:f5c5 with SMTP id
- my22-20020a056a20e61600b0010594e5f5c5mr2595006pzb.56.1686364535616; Fri, 09
- Jun 2023 19:35:35 -0700 (PDT)
+        bh=yMfpDCLRI5dKyF0E3U+UoBzddcbMW1WQlUnfVbM4Nck=;
+        b=KRxafi7UlNyC54K8Rr+qTffQm0Un7X4T2tgagMFQ9mbC1xuFEhXM0C2KhjK3v2GiZ6
+         2BL6GhP8nkDMFj6Tag+ooeR9fp8uxVfTYL9cpErZx2APjrGHxb2/LSLDZzjMW5vatbgc
+         BdiK2LPdELXLDx+twe4fA5fVhneu/x6iZ3zUt5W9yYkAhzipg47jLq72tfDDi4npd4rj
+         Lszyc1PBkWPcntSI8AfkLWUHLcZQtQNA9b/UWc5PWlcPhW7ZXttoZDM+0mEP5+CXEgpN
+         52S1diOXpdtdKxWi4lxz/RS8FVPyDFhzHSFBBePvNHpz3PaqOf8EbumJkkU2K2HgxJ6g
+         YUNw==
+X-Gm-Message-State: AC+VfDzg/Yg/ofGQSsEzuxECwwXmyNo4j2ZWiJ9e1MDPLLvQenGktdAo
+        8joKHA1nOSgLbAw/esDB7CZXAEr8QUZWDESg8Lk=
+X-Google-Smtp-Source: ACHHUZ6Ncw/ed/aBOi55gkdHjQX9HI8UMmlQmib8fd4hYlllg8RalvCIvinsLeBFbe5+qY0bpgqSSep+1aWI0UyuIEo=
+X-Received: by 2002:a05:6a20:7f87:b0:118:5d5a:f26f with SMTP id
+ d7-20020a056a207f8700b001185d5af26fmr2768582pzj.12.1686364803807; Fri, 09 Jun
+ 2023 19:40:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1686275310.git.haibo1.xu@intel.com> <73045958d9ab71d5266d012f1e13061afa8c5331.1686275310.git.haibo1.xu@intel.com>
- <20230609-05521f954b0485c69612f00b@orel>
-In-Reply-To: <20230609-05521f954b0485c69612f00b@orel>
+References: <cover.1686275310.git.haibo1.xu@intel.com> <450cb59db52ebeaa68f3d77f1bd995618f3612b8.1686275310.git.haibo1.xu@intel.com>
+ <20230609-b900162a66c26a004b751b1f@orel>
+In-Reply-To: <20230609-b900162a66c26a004b751b1f@orel>
 From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Sat, 10 Jun 2023 10:35:24 +0800
-Message-ID: <CAJve8omPV_XgCSvw8POZwisb6uTOFMJU4FyAKArryui2SAsqtw@mail.gmail.com>
-Subject: Re: [PATCH v3 09/10] KVM: riscv: selftests: Skip some registers set operation
+Date:   Sat, 10 Jun 2023 10:39:52 +0800
+Message-ID: <CAJve8ontMqvxyXWCY2DWziqti5umRuO+YOiWkXqLhyONWWsLKg@mail.gmail.com>
+Subject: Re: [PATCH v3 07/10] KVM: arm64: selftests: Finish generalizing get-reg-list
 To:     Andrew Jones <ajones@ventanamicro.com>
 Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
         oliver.upton@linux.dev, seanjc@google.com,
@@ -81,118 +81,107 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 5:24=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
+On Fri, Jun 9, 2023 at 8:30=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
 m> wrote:
 >
-> On Fri, Jun 09, 2023 at 10:12:17AM +0800, Haibo Xu wrote:
-> > Set operation on some riscv registers(mostly pesudo ones) was not
-> > supported and should be skipped in the get-reg-list test. Just
-> > reuse the rejects_set utilities to handle it in riscv.
+> On Fri, Jun 09, 2023 at 10:12:15AM +0800, Haibo Xu wrote:
+> > From: Andrew Jones <ajones@ventanamicro.com>
 > >
+> > Add some unfortunate #ifdeffery to ensure the common get-reg-list.c
+> > can be compiled and run with other architectures. The next
+> > architecture to support get-reg-list should now only need to provide
+> > $(ARCH_DIR)/get-reg-list.c where arch-specific print_reg() and
+> > vcpu_configs[] get defined.
+> >
+> > Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
 > > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 > > ---
-> >  tools/testing/selftests/kvm/get-reg-list.c | 20 +++++++++++++-------
-> >  1 file changed, 13 insertions(+), 7 deletions(-)
+> >  tools/testing/selftests/kvm/get-reg-list.c | 24 ++++++++++++++++++----
+> >  1 file changed, 20 insertions(+), 4 deletions(-)
 > >
 > > diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing=
 /selftests/kvm/get-reg-list.c
-> > index c4bd5a5259da..abacb95c21c6 100644
+> > index 69bb91087081..c4bd5a5259da 100644
 > > --- a/tools/testing/selftests/kvm/get-reg-list.c
 > > +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> > @@ -211,16 +211,22 @@ static void run_test(struct vcpu_reg_list *c)
-> >                       ++failed_get;
-> >               }
+> > @@ -98,6 +98,7 @@ void __weak print_reg(const char *prefix, __u64 id)
+> >       printf("\t0x%llx,\n", id);
+> >  }
 > >
-> > -             /* rejects_set registers are rejected after KVM_ARM_VCPU_=
-FINALIZE */
-> > +             /*
-> > +              * rejects_set registers are rejected after KVM_ARM_VCPU_=
-FINALIZE on aarch64,
-> > +              * or registers that should skip set operation on riscv.
-> > +              */
-> >               for_each_sublist(c, s) {
-> >                       if (s->rejects_set && find_reg(s->rejects_set, s-=
->rejects_set_n, reg.id)) {
-> >                               reject_reg =3D true;
-> > -                             ret =3D __vcpu_ioctl(vcpu, KVM_SET_ONE_RE=
-G, &reg);
-> > -                             if (ret !=3D -1 || errno !=3D EPERM) {
-> > -                                     printf("%s: Failed to reject (ret=
-=3D%d, errno=3D%d) ", config_name(c), ret, errno);
-> > -                                     print_reg(config_name(c), reg.id)=
-;
-> > -                                     putchar('\n');
-> > -                                     ++failed_reject;
-> > +                             if ((reg.id & KVM_REG_ARCH_MASK) =3D=3D K=
-VM_REG_ARM64) {
-> > +                                     ret =3D __vcpu_ioctl(vcpu, KVM_SE=
-T_ONE_REG, &reg);
-> > +                                     if (ret !=3D -1 || errno !=3D EPE=
-RM) {
-> > +                                             printf("%s: Failed to rej=
-ect (ret=3D%d, errno=3D%d) ",
-> > +                                                             config_na=
-me(c), ret, errno);
-> > +                                             print_reg(config_name(c),=
- reg.id);
-> > +                                             putchar('\n');
-> > +                                             ++failed_reject;
-> > +                                     }
+> > +#ifdef __aarch64__
+> >  static void prepare_vcpu_init(struct vcpu_reg_list *c, struct kvm_vcpu=
+_init *init)
+> >  {
+> >       struct vcpu_reg_sublist *s;
+> > @@ -120,6 +121,24 @@ static void finalize_vcpu(struct kvm_vcpu *vcpu, s=
+truct vcpu_reg_list *c)
+> >       }
+> >  }
+> >
+> > +static struct kvm_vcpu *vcpu_config_get_vcpu(struct vcpu_reg_list *c, =
+struct kvm_vm *vm)
+> > +{
+> > +     struct kvm_vcpu_init init =3D { .target =3D -1, };
+> > +     struct kvm_vcpu *vcpu;
+> > +
+> > +     prepare_vcpu_init(c, &init);
+> > +     vcpu =3D __vm_vcpu_add(vm, 0);
+> > +     aarch64_vcpu_setup(vcpu, &init);
+> > +
+> > +     return vcpu;
+> > +}
+> > +#else
+> > +static struct kvm_vcpu *vcpu_config_get_vcpu(struct vcpu_reg_list *c, =
+struct kvm_vm *vm)
+> > +{
+> > +     return __vm_vcpu_add(vm, 0);
+> > +}
+> > +#endif
+> > +
+> >  static void check_supported(struct vcpu_reg_list *c)
+> >  {
+> >       struct vcpu_reg_sublist *s;
+> > @@ -139,7 +158,6 @@ static bool print_filtered;
+> >
+> >  static void run_test(struct vcpu_reg_list *c)
+> >  {
+> > -     struct kvm_vcpu_init init =3D { .target =3D -1, };
+> >       int new_regs =3D 0, missing_regs =3D 0, i, n;
+> >       int failed_get =3D 0, failed_set =3D 0, failed_reject =3D 0;
+> >       struct kvm_vcpu *vcpu;
+> > @@ -149,9 +167,7 @@ static void run_test(struct vcpu_reg_list *c)
+> >       check_supported(c);
+> >
+> >       vm =3D vm_create_barebones();
+> > -     prepare_vcpu_init(c, &init);
+> > -     vcpu =3D __vm_vcpu_add(vm, 0);
+> > -     aarch64_vcpu_setup(vcpu, &init);
+> > +     vcpu =3D vcpu_config_get_vcpu(c, vm);
+> >       finalize_vcpu(vcpu, c);
 >
-> Thinking about this some more, shouldn't we attempt the set ioctl for
-> riscv reject registers as well, but look for different error numbers?
+> I just noticed that this has been modified from what I posted to leave
+> the finalize_vcpu() call here, despite it now being inside the #ifdef
+> __aarch64__. That breaks the purpose of the patch. Please make sure this
+> file compiles for other architectures without requiring additional
+> patches, which would keep the commit message honest. You can either
+> revert this to what I posted, and then readd the finalize_vcpu() call in
+> another patch, or you can add a finalize_vcpu() stub to the #else part
+> of the ifdef in this patch.
+>
+> Also please don't modify patches authored by others without calling out
+> the modifications somewhere, either the commit message or under the ---
+> of the patch or in the cover letter.
 >
 
-Yes, we can. Currently, 2 different errno(EOPNOTSUPP/EINVAL) would be
-reported for the rejected registers in risc-v.
-These 2 errnos can be handled specially like below:
+Thanks for pointing it out! I will have a check about it.
 
-diff --git a/tools/testing/selftests/kvm/get-reg-list.c
-b/tools/testing/selftests/kvm/get-reg-list.c
-index 73f40e0842b8..f3f2c4519318 100644
---- a/tools/testing/selftests/kvm/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/get-reg-list.c
-@@ -255,6 +255,15 @@ static void run_test(struct vcpu_reg_list *c)
-                                                putchar('\n');
-                                                ++failed_reject;
-                                        }
-+                } else {
-+                                       ret =3D __vcpu_ioctl(vcpu,
-KVM_SET_ONE_REG, &reg);
-+                                       if (ret !=3D -1 || (errno !=3D
-EINVAL && errno !=3D EOPNOTSUPP)) {
-+                                               printf("%s: Failed to
-reject (ret=3D%d, errno=3D%d) ",
-+
-config_name(c), ret, errno);
-+
-print_reg(config_name(c), reg.id);
-+                                               putchar('\n');
-+                                               ++failed_reject;
-+                                       }
-
-One possible issue for the above change is that when new registers
-that don't support sets were added, we need
-to add them to the reject registers list, or the test would fail.
-
-Initially, in the v1 patch, the design was to just skip the EOPNOTSUPP
-errno in set operations for all registers
-since it's a known errno for registers that don't support sets. This
-change cover all the registers even for future
-new ones.
-
-What's your opinion?
-
-Thanks,
-Haibo
 > Thanks,
 > drew
