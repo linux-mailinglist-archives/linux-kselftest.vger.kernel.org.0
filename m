@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED2372ACFC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jun 2023 18:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04AB72AD03
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jun 2023 18:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjFJQM5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 10 Jun 2023 12:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S231547AbjFJQMp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 10 Jun 2023 12:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbjFJQMf (ORCPT
+        with ESMTP id S230096AbjFJQMP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 10 Jun 2023 12:12:35 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1071B3595
-        for <linux-kselftest@vger.kernel.org>; Sat, 10 Jun 2023 09:12:17 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f7368126a6so20275885e9.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 10 Jun 2023 09:12:16 -0700 (PDT)
+        Sat, 10 Jun 2023 12:12:15 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64823C00
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Jun 2023 09:12:04 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f7f4819256so21176065e9.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Jun 2023 09:12:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1686413523; x=1689005523;
+        d=tessares.net; s=google; t=1686413524; x=1689005524;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Od7XJ6McPFlfq5BVWjPNQjjhHIXM4eR5h7tKrhJC2l8=;
-        b=AG1l4DxAFRmzXMX0WAMATVJca9oFAqM/k34dReGnbtJtmbqt+oUm0ZOuAZxJFVIJtt
-         gDMHDt44o7XZXaJqqkfl/8FHus6Ea44FFb45GVLbuq7v6t4TNHEUZwI44gzipSC9R1v+
-         rF8jynoFAeJ6MmWQpSgTnAzO5JWwH6nOy11nURKEYLYtBLBu1Q3SIQOR7aocsnjp6Pzv
-         z5uPjR1tuEpGZx10OS0UxWos+8UE+bTFswqhDMzKaaVzIAPR/pxLJzhn0XxW72qtTO2p
-         BJAD+hzaJiRae9L/89UPeLHMjVfALK+3X6weOjla0PrExW683UpwpCe1yDL0pIHxdwU2
-         OnQg==
+        bh=VbmmsXne9lBZDp9Sn/ZgZd5tJQZXSAy6sdaXotYsvUM=;
+        b=OR4L99G4HwnJ1EdllP03KiFrRSjZedqP1NneYA6aNckQdAHuuEa4cCvEdIOoMUeObt
+         qPqmg7CtTZS+88WBRsNNxMOvn1Cv2Iw5CUGFmEhVvZn2NvZK5QTFm1sA/bg+vv56oFsZ
+         6T18FCKP0Pt0SlLIyETXI/7dZFJvFHDdUENMjDHaOt64g9b4wJ1cVa3z1YC0Ydg7yqyF
+         jnxPsfrDQoaImusU/ksCLldoe9zPSi7OFpOgkbHIK7cTqPo8db6zcLprkYpcvvHNufH6
+         t5EdLrq/1RMS0KP0RHtdz8hlPW2J8jU3HEDnifaVorS9XXejIJr9+MdmPi+QPsRFWHe+
+         DWqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686413523; x=1689005523;
+        d=1e100.net; s=20221208; t=1686413524; x=1689005524;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Od7XJ6McPFlfq5BVWjPNQjjhHIXM4eR5h7tKrhJC2l8=;
-        b=Bj4IFdeIGGmugPFM+QJIx/XpT+c3/siuwOJS4CvZ+mL7rh53W6omcjRF7u/RrlSCOA
-         Gq/DehL++OZ18L8pabMyeUtpko3qG+nS++GRcd8xg7PvoiEFYBw1T1PaS754R8mGoRZ8
-         uXqrbK4/Aj/YW6ztcedNmmyoBCS9Vy6w3ssUH4DYd9vK5q6s2/GrrR8D6O2/iwc8a6Mn
-         Kta35XOP8yZFA44KzYdyNsb6UIHkeGW6oEU4NpilYefEhHUiTxay7Rg06/7B50sLN1p5
-         AqJXEKgCxm/KAHaUWqhQu14bWoUuKpHcPrnH62vAN/JAqGfKytXY3nuodGeGFj+aKMQP
-         4/RQ==
-X-Gm-Message-State: AC+VfDyi1AtSU3/6jn3h8tuU/j1Ra404dI6Tc55sSGdUQlCuW5FXzUFd
-        NUSzmmwwOsxy1mooE30sAFU+Ug==
-X-Google-Smtp-Source: ACHHUZ6grhXr9hKvTkfHddjkVEcFAtkr3ZIU2fUb+rdyksEP/vi6ecpJdycjy5Qed7ZMG0JSwXrg0g==
-X-Received: by 2002:a1c:f718:0:b0:3f7:3526:d96f with SMTP id v24-20020a1cf718000000b003f73526d96fmr2828491wmh.27.1686413522892;
-        Sat, 10 Jun 2023 09:12:02 -0700 (PDT)
+        bh=VbmmsXne9lBZDp9Sn/ZgZd5tJQZXSAy6sdaXotYsvUM=;
+        b=Wm2L//W43+scjHryqSwf3UcFUyug/ThEaxdxhcLe9Oe0Vub2iP1tqzDyqrvKZ91wf4
+         LQBk5UFNDTP0HiFsH4xfXT2vf9kQEns5i5u0NpBUALMbk8st8YUR4phZtLnI5ecCFb1f
+         E4DVraGJQW5g3rRP8jsrn+opDocDSYX/8Fpb4Dqvw0SHC1SdJrShHWMGYV6+ib9vpmH4
+         c62TqBVG0pVCClDsDvOChhiI6qhaBELO45Ab8mBkhfOXcqH0UxSKUstrng+5gUZVuZVQ
+         4FC5h+DEoBobmmvrs1tYA9vhSE2RyFNp/Y8H6Pl7WZNNsdexFQDsOM7VT5W8cHdrVfaO
+         uANA==
+X-Gm-Message-State: AC+VfDzRkZAwVmdg6bJpVp2A4CK2n0OJuTZumUWN/rSV01rfhKb74Ya2
+        5REQZ2ceavOBQO3xi1n9Qi7Jmg==
+X-Google-Smtp-Source: ACHHUZ7htSHEHhoR8p2Q8ku8T3iUp3nRjhQvfhpUAPmFVuD+UA1St4Rez8cT+y/aOXvH82l1XrJm4w==
+X-Received: by 2002:a5d:49ca:0:b0:309:4f23:e52d with SMTP id t10-20020a5d49ca000000b003094f23e52dmr1346961wrs.43.1686413524327;
+        Sat, 10 Jun 2023 09:12:04 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id u9-20020a5d4349000000b003079c402762sm7431145wrr.19.2023.06.10.09.12.01
+        by smtp.gmail.com with ESMTPSA id u9-20020a5d4349000000b003079c402762sm7431145wrr.19.2023.06.10.09.12.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jun 2023 09:12:02 -0700 (PDT)
+        Sat, 10 Jun 2023 09:12:03 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Sat, 10 Jun 2023 18:11:48 +0200
-Subject: [PATCH net 13/17] selftests: mptcp: join: skip fail tests if not
- supported
+Date:   Sat, 10 Jun 2023 18:11:49 +0200
+Subject: [PATCH net 14/17] selftests: mptcp: join: skip MPC backups tests
+ if not supported
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230609-upstream-net-20230610-mptcp-selftests-support-old-kernels-part-3-v1-13-2896fe2ee8a3@tessares.net>
+Message-Id: <20230609-upstream-net-20230610-mptcp-selftests-support-old-kernels-part-3-v1-14-2896fe2ee8a3@tessares.net>
 References: <20230609-upstream-net-20230610-mptcp-selftests-support-old-kernels-part-3-v1-0-2896fe2ee8a3@tessares.net>
 In-Reply-To: <20230609-upstream-net-20230610-mptcp-selftests-support-old-kernels-part-3-v1-0-2896fe2ee8a3@tessares.net>
 To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
@@ -75,27 +75,27 @@ Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
         stable@vger.kernel.org
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1309;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2543;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=/IBWHeyor9yWKvvK4XMwcSzwOR/XkUMWWIef4BnwJKM=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkhKC+1AHuF+8qskPv3iMOrnzCYwCBBR38BpkVc
- m4Lk/VVR12JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZISgvgAKCRD2t4JPQmmg
- czubD/9H8/pP3KWsx+e9hBmkboJqLVUAC+tnzLfxQtpt/FLS11K/ImZ0P/Hf3WoFJaKT7qfpwMF
- vt9Wk6GX7fF6WAfwqBexKj0jKvvWkw5yNYZ1Nmn5HAxO8rTbaH0NQXuSuASQerpEQNgYKyKf+e5
- 9bAUrh0Z4Tr3FwC7JT8VqPRNH2tA6uUbiQ8whBlBFiB4z8yCVXF9RxfHjsQz+TUxzOOUJpdWqkb
- ilcr0xeIxPTfK/yuDNwLQsi6QiA0LAU5lgnUw/M9FZ3sjv4aBRpqw7oeOgIVI3cbA+KlOLh6t/I
- 3DA8CSyWo6PtDZDu5UQicuRUqR7vVtaJio+CJJCxSGMBYLiUI36nDA6yRcYjVdKexNYFv7atFw5
- 36abp3AGYKqTXSrDWe1FVjrh4+fzfKBDKzryEyDNLwYxyNnDvloVn3kbS1POW8tJGnWcvQPZrda
- sqNJooY2UjV4///p1GiIrJNFq86y+DiJFTHtN7ALv9l+qhHwMOnx0UCVEjHExiYlBtZ1yiYlliA
- POZwNt6o2h7IqF2Q1jeijUwOSxD9MPCjtetqXxiwXbXVk5FJe0/PcELXY3lEy6TUMGOXsy/wQdM
- jbrlyBt7ayZW0pTlBGWyV70gZnpj26oJ7xJA+yW/3giMUEtQkk0ZedfiWU4kleMRRFSUIeOSy1k
- OKHuKk8sJx6SW4Q==
+ bh=BsRVkTeR5aGWlyqCY68sJFSqvmvIGz5WWgXLNAhE4WU=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkhKC+RaVYSNlxR0uL/RIHvGnDUPeCrdycTjaiJ
+ lgCwc13n9OJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZISgvgAKCRD2t4JPQmmg
+ c9eFD/9YTn+w5OQPaFF8RVr9ORXioVsgRjp1fbU8D+f1Sv5G1ihqj/R9TnH6GJtt+Oyo8fsHHaK
+ 5sPfdwwYSzV0eGVssqxnOhpSUaAsfTM8TDH+HKWrHClE8ZWnQatTBLCEbN+YoO4znBCTCwuKZj3
+ 62R4Ylp8uTRsZeNiDqvWH2RhGIhAvozgG8vCzpGmjgyYSQNBKXoR46Pjy8ZdfVo4Y8I+Er8YjrW
+ td2PWbHhh4sty7iEQ137yl8boK+H9QA9YCAMgO7ealZ8MvDZxwDQlrj+lPENhx8zqsmyk2p5/8q
+ QQGwvFrOAvoTQ/n73IGn5z3lpzpyucy2wzz3NQ/MaVyIVLP3Qrgmd6GjvcRamPQEuquoF+zpNvU
+ TcGuWXe2BiQPe/P647grtHygknDMtlDhptFbec+56ZDEvIuqOidz0IngXRI/iI0d/vNDM300ZPn
+ BhPzDpje+4tCNjOk13y8A5sgLc2Vk1qOXrzr5QgbIAJwArkC/kYtAwBhIkjOf3vW0avJnm2RGAw
+ TG87DFtVrbYejgSCSYAsLiAr7+ss4RuZKywsntO2Yxi4M/ySERDOH93CyDDbk3Tp9XjIq56QOIT
+ 5RUdN9ddRdRUZcRFtZTgT7Qom3D/AolPogJN+FosUnxSO6b+WRCVVX8r/BXPT2U6FYr5ILj6ajQ
+ rc7A4gzmiMXnTlg==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -105,35 +105,65 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 Selftests are supposed to run on any kernels, including the old ones not
 supporting all MPTCP features.
 
-One of them is the support of the MP_FAIL / infinite mapping introduced
-by commit 1e39e5a32ad7 ("mptcp: infinite mapping sending") and the
-following ones.
+One of them is the support of sending an MP_PRIO signal for the initial
+subflow, introduced by commit c157bbe776b7 ("mptcp: allow the in kernel
+PM to set MPC subflow priority").
 
-It is possible to look for one of the infinite mapping counters to know
-in advance if the this feature is available.
+It is possible to look for "mptcp_subflow_send_ack" in kallsyms because
+it was needed to introduce the mentioned feature. So we can know in
+advance if the feature is supported instead of trying and accepting any
+results.
 
 Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
-Fixes: b6e074e171bc ("selftests: mptcp: add infinite map testcase")
+Fixes: 914f6a59b10f ("selftests: mptcp: add MPC backup tests")
 Cc: stable@vger.kernel.org
-Fixes: 2ba18161d407 ("selftests: mptcp: add MP_FAIL reset testcase")
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index f9161ed69b86..7867bad59253 100755
+index 7867bad59253..554fcafd6e8a 100755
 --- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
 +++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -384,7 +384,7 @@ setup_fail_rules()
+@@ -2713,14 +2713,16 @@ backup_tests()
+ 		chk_prio_nr 1 1
+ 	fi
  
- reset_with_fail()
- {
--	reset "${1}" || return 1
-+	reset_check_counter "${1}" "MPTcpExtInfiniteMapTx" || return 1
- 	shift
+-	if reset "mpc backup"; then
++	if reset "mpc backup" &&
++	   continue_if mptcp_lib_kallsyms_doesnt_have "mptcp_subflow_send_ack$"; then
+ 		pm_nl_add_endpoint $ns2 10.0.1.2 flags subflow,backup
+ 		run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow
+ 		chk_join_nr 0 0 0
+ 		chk_prio_nr 0 1
+ 	fi
  
- 	ip netns exec $ns1 sysctl -q net.mptcp.checksum_enabled=1
+-	if reset "mpc backup both sides"; then
++	if reset "mpc backup both sides" &&
++	   continue_if mptcp_lib_kallsyms_doesnt_have "mptcp_subflow_send_ack$"; then
+ 		pm_nl_add_endpoint $ns1 10.0.1.1 flags subflow,backup
+ 		pm_nl_add_endpoint $ns2 10.0.1.2 flags subflow,backup
+ 		run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow
+@@ -2728,14 +2730,16 @@ backup_tests()
+ 		chk_prio_nr 1 1
+ 	fi
+ 
+-	if reset "mpc switch to backup"; then
++	if reset "mpc switch to backup" &&
++	   continue_if mptcp_lib_kallsyms_doesnt_have "mptcp_subflow_send_ack$"; then
+ 		pm_nl_add_endpoint $ns2 10.0.1.2 flags subflow
+ 		run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow backup
+ 		chk_join_nr 0 0 0
+ 		chk_prio_nr 0 1
+ 	fi
+ 
+-	if reset "mpc switch to backup both sides"; then
++	if reset "mpc switch to backup both sides" &&
++	   continue_if mptcp_lib_kallsyms_doesnt_have "mptcp_subflow_send_ack$"; then
+ 		pm_nl_add_endpoint $ns1 10.0.1.1 flags subflow
+ 		pm_nl_add_endpoint $ns2 10.0.1.2 flags subflow
+ 		run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow backup
 
 -- 
 2.40.1
