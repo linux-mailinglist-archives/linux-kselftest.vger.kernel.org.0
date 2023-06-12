@@ -2,39 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABD472CF45
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jun 2023 21:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6119372CF94
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jun 2023 21:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235438AbjFLTWx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Jun 2023 15:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
+        id S238239AbjFLTcC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Jun 2023 15:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238104AbjFLTOw (ORCPT
+        with ESMTP id S238089AbjFLTbz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jun 2023 15:14:52 -0400
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ae])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE38E5F
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 12:14:46 -0700 (PDT)
+        Mon, 12 Jun 2023 15:31:55 -0400
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ad])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8217E62
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 12:31:50 -0700 (PDT)
 Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Qg1b81s3LzMqCyZ;
-        Mon, 12 Jun 2023 19:14:44 +0000 (UTC)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Qg1b75Tf7z1WQB;
-        Mon, 12 Jun 2023 21:14:43 +0200 (CEST)
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Qg1ys1TW9zMpnRX;
+        Mon, 12 Jun 2023 19:31:49 +0000 (UTC)
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Qg1yq3Vpxz1WQ5;
+        Mon, 12 Jun 2023 21:31:47 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1686597284;
-        bh=rdq7EKwH+l6EhCxvoupgKx8qdCnnuE3Os8siRpqviNw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Aj6RUB32YFovramb9TLjqqZlUyMhPrODkprhKMa2gNJOB5yCe3nk0/Q+cJ0nS93Za
-         o44bVYwF5zkBAKig0VZO37R6v7p2lg9tUq45TXjF1v1tfiavqA0brzv2CXQaj0PbBI
-         5F3+Hctn70LtjlTYCg+XNXutHIDkeJ5/DPFMB4EI=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+        s=20191114; t=1686598309;
+        bh=GasM/PXAmdVQmu/wE7etpr/UWkPXIvJ3I4943s9ioxk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AkpOP6gUurW0lypup7R9nHzfaSYxcp2Tcqu5RkaRVnjte7hc2hVjrPBac+pHpJrej
+         l9zmNJWb/uMOEGaE5QV+hGyI6cIY8qOzOYF6uyXR+50EXns+yi2OzI6WJYNEdSQAx8
+         bBHElHZ/k+/pZRMpSSz32d187kN2M7Sd+jzArugA=
+Message-ID: <06d7e926-87fe-af66-c612-39ea57d0238a@digikod.net>
+Date:   Mon, 12 Jun 2023 21:31:46 +0200
+MIME-Version: 1.0
+User-Agent: 
+Subject: Re: [PATCH v2 0/6] Landlock support for UML
+Content-Language: en-US
 To:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Johannes Berg <johannes@sipsolutions.net>,
-        Richard Weinberger <richard@nod.at>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Christopher Obbard <chris.obbard@collabora.com>,
+        Richard Weinberger <richard@nod.at>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+Cc:     Christopher Obbard <chris.obbard@collabora.com>,
         Guenter Roeck <groeck@chromium.org>,
-        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         James Morris <jmorris@namei.org>, Jeff Xu <jeffxu@google.com>,
         Kees Cook <keescook@chromium.org>,
@@ -48,18 +53,15 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v2 6/6] selftests/landlock: Add hostfs tests
-Date:   Mon, 12 Jun 2023 21:14:30 +0200
-Message-ID: <20230612191430.339153-7-mic@digikod.net>
-In-Reply-To: <20230612191430.339153-1-mic@digikod.net>
 References: <20230612191430.339153-1-mic@digikod.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <20230612191430.339153-1-mic@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,110 +69,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add tests for the hostfs filesystems to make sure it has a consistent
-inode management, which is required for Landlock's file hierarchy
-identification.  This adds 5 new tests for layout3_fs with the hostfs
-variant.
+I've push this series into -next. Thanks Richard!
 
-Add hostfs to the new (architecture-specific) config.um file.
-
-The hostfs filesystem, only available for an User-Mode Linux kernel, is
-special because we cannot explicitly mount it.  The layout3_fs.hostfs
-variant tests are skipped if the current test directory is not backed by
-this filesystem.
-
-The layout3_fs.hostfs.tag_inode_dir_child and
-layout3_fs.hostfs.tag_inode_file tests pass thanks to a previous commit
-fixing hostfs inode management.  Without this fix, the deny-by-default
-policy would apply and all access requests would be denied.
-
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- tools/testing/selftests/landlock/config.um |  1 +
- tools/testing/selftests/landlock/fs_test.c | 28 +++++++++++++++++++++-
- 2 files changed, 28 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/landlock/config.um
-
-diff --git a/tools/testing/selftests/landlock/config.um b/tools/testing/selftests/landlock/config.um
-new file mode 100644
-index 000000000000..40937c0395d6
---- /dev/null
-+++ b/tools/testing/selftests/landlock/config.um
-@@ -0,0 +1 @@
-+CONFIG_HOSTFS=y
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 2911b5241583..83d565569512 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -10,6 +10,7 @@
- #define _GNU_SOURCE
- #include <fcntl.h>
- #include <linux/landlock.h>
-+#include <linux/magic.h>
- #include <sched.h>
- #include <stdio.h>
- #include <string.h>
-@@ -19,6 +20,7 @@
- #include <sys/sendfile.h>
- #include <sys/stat.h>
- #include <sys/sysmacros.h>
-+#include <sys/vfs.h>
- #include <unistd.h>
- 
- #include "common.h"
-@@ -135,6 +137,19 @@ static bool supports_filesystem(const char *const filesystem)
- 	return res;
- }
- 
-+static bool cwd_matches_fs(unsigned int fs_magic)
-+{
-+	struct statfs statfs_buf;
-+
-+	if (!fs_magic)
-+		return true;
-+
-+	if (statfs(".", &statfs_buf))
-+		return true;
-+
-+	return statfs_buf.f_type == fs_magic;
-+}
-+
- static void mkdir_parents(struct __test_metadata *const _metadata,
- 			  const char *const path)
- {
-@@ -4500,6 +4515,7 @@ FIXTURE_VARIANT(layout3_fs)
- {
- 	const struct mnt_opt mnt;
- 	const char *const file_path;
-+	unsigned int cwd_fs_magic;
- };
- 
- /* clang-format off */
-@@ -4538,13 +4554,23 @@ FIXTURE_VARIANT_ADD(layout3_fs, sysfs) {
- 	.file_path = TMP_DIR "/kernel/notes",
- };
- 
-+FIXTURE_VARIANT_ADD(layout3_fs, hostfs) {
-+	.mnt = {
-+		.source = TMP_DIR,
-+		.flags = MS_BIND,
-+	},
-+	.file_path = TMP_DIR "/dir/file",
-+	.cwd_fs_magic = HOSTFS_SUPER_MAGIC,
-+};
-+
- FIXTURE_SETUP(layout3_fs)
- {
- 	struct stat statbuf;
- 	const char *slash;
- 	size_t dir_len;
- 
--	if (!supports_filesystem(variant->mnt.type)) {
-+	if (!supports_filesystem(variant->mnt.type) ||
-+	    !cwd_matches_fs(variant->cwd_fs_magic)) {
- 		self->skip_test = true;
- 		SKIP(return, "this filesystem is not supported (setup)");
- 	}
--- 
-2.41.0
-
+On 12/06/2023 21:14, Mickaël Salaün wrote:
+> Hi,
+> 
+> Commit cb2c7d1a1776 ("landlock: Support filesystem access-control")
+> introduced a new ARCH_EPHEMERAL_INODES configuration, only enabled for
+> User-Mode Linux.  The reason was that UML's hostfs managed inodes in an
+> ephemeral way: from the kernel point of view, the same inode struct
+> could be created several times while being used by user space because
+> the kernel didn't hold references to inodes.  Because Landlock (and
+> probably other subsystems) ties properties (i.e. access rights) to inode
+> objects, it wasn't possible to create rules that match inodes and then
+> allow specific accesses.
+> 
+> This patch series fixes the way UML manages inodes according to the
+> underlying filesystem.  They are now properly handles as for other
+> filesystems, which enables to support Landlock (and probably other
+> features).
+> 
+> Changes since v1:
+> https://lore.kernel.org/r/20230309165455.175131-1-mic@digikod.net
+> - Remove Cc stable@ (suggested by Richard).
+> - Add Acked-by: Richard Weinberger to the first patch.
+> - Split the test patch into two patches: one for the common
+>    pseudo-filesystems, and another patch dedicated to hostfs.
+> - Remove CONFIG_SECURITY_PATH because it is useless for merge_config.sh
+> - Move CONFIG_HOSTFS to a new config.um file.
+> - Fix commit message spelling and test warnings.
+> - Improve prepare_layout_opt() with remove_path() call to avoid
+>    cascading errors when some tested filesystems are not supported.
+> - Remove cgroup-v1 tests because this filesystem cannot really be
+>    mounted several times.
+> - Add test coverage with and without kernel debug code, according to
+>    GCC 12 and GCC 13.
+> 
+> Regards,
+> 
+> Mickaël Salaün (6):
+>    hostfs: Fix ephemeral inodes
+>    selftests/landlock: Don't create useless file layouts
+>    selftests/landlock: Add supports_filesystem() helper
+>    selftests/landlock: Make mounts configurable
+>    selftests/landlock: Add tests for pseudo filesystems
+>    selftests/landlock: Add hostfs tests
+> 
+>   arch/Kconfig                               |   7 -
+>   arch/um/Kconfig                            |   1 -
+>   fs/hostfs/hostfs.h                         |   1 +
+>   fs/hostfs/hostfs_kern.c                    | 213 ++++++------
+>   fs/hostfs/hostfs_user.c                    |   1 +
+>   security/landlock/Kconfig                  |   2 +-
+>   tools/testing/selftests/landlock/config    |   9 +-
+>   tools/testing/selftests/landlock/config.um |   1 +
+>   tools/testing/selftests/landlock/fs_test.c | 387 +++++++++++++++++++--
+>   9 files changed, 478 insertions(+), 144 deletions(-)
+>   create mode 100644 tools/testing/selftests/landlock/config.um
+> 
+> 
+> base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
