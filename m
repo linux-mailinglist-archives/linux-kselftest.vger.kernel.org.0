@@ -2,153 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E229F72B93C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jun 2023 09:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A2472B96B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jun 2023 09:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235851AbjFLHxR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Jun 2023 03:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
+        id S231909AbjFLH7V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Jun 2023 03:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236037AbjFLHxC (ORCPT
+        with ESMTP id S232732AbjFLH66 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jun 2023 03:53:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B775A2717;
-        Mon, 12 Jun 2023 00:51:57 -0700 (PDT)
-Received: from [192.168.10.55] (unknown [119.152.150.198])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8C41066056AA;
-        Mon, 12 Jun 2023 08:42:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686555747;
-        bh=jaXgQtw+3VAkdUzI7Dmasonlno9daKl/YokJZ/nQOdQ=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=HmFlYt84rHySyKYTzkAvoEwDVJBcltGzygCAaH8aQEDBATyrzU8pKiWTrNTkmrM6i
-         v4n4y/kp58PSf+LFZYxjlS+3RXrrNQk8i5uk8Ez+Bu6Z+IeT0N3eMKmwPyN62Z7G8w
-         TT/4VK4c4bN0mMA1XyCMJ+LAmIzC0fnjy7uJh/KXJEyj5mVX8aGl2gi4NK/DTrjgka
-         EeXPV1Vxdai9pAhvFnHTJNOD2Hw2BQ0zIiM7rBxj6vgAyT6PbPmod/w3O7RWH7bD9e
-         5Fs1kRQPcMATzpCHT4LZqIHdAh2yRf6VwrdtlcYOqgjbEoNXGccK2Tb1fmqnc7TUe0
-         X1P18g1Tsz/2w==
-Message-ID: <e6ca3de5-fbd2-1d93-6011-5ae0765b826d@collabora.com>
-Date:   Mon, 12 Jun 2023 12:42:21 +0500
+        Mon, 12 Jun 2023 03:58:58 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2062c.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B3E171F;
+        Mon, 12 Jun 2023 00:58:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ANZIZuNg/sqJjxy4/wiY0PxuYOz2USpWckGwRqPECOdyvW1IECDr9WKOpx5wohT5pqqGAiqqq1cAi29ecCFsiIgig9JEQX8H0EarXyfODAO+uDKLYpLHIm2D895Z6exhSzwNw5rBU0IkKpU6FkujXpEAZt2j6Tm/UGQNqUXLSfC1VwcSudt/nB3ETEd8kesBqSIugXzxG4wSFuAJ27fFYdTSoKyi0nEeoIicSIrQyHkMt1U3rSv+VXNwRvvE3zfkEh0gWAiHO+abiDtiAnJSP0y+xvS45pJSIkzPzA6lWaZxG+Ximu9mOSXJdrbMjaI6MTAmgXak6gV8pIFRpKTNCw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Nabgudca77iuNWJJYGGzOlbxMQdCLWawTxuTfhnEO5s=;
+ b=dhl6NpxpgE9e2sj8hV9JH8S/XwBj++Za/C5KwqQSFp6Uu68Tl20mjbmW/GYG0Nya11ubRbLKWsEshq7u5EcOVT63L6FtfAIBFXUuShBZTqklkMkLPbCBiG/fMJeULgBlDTLVDntLTeRpuTa9TsF+IPpS/HpR9szS2k6SeVFdre1vsZKWJvsFVm4JWmTnLK+qJ/mKMF8RbWk9V+hvlt/tj3Hfbyfjb3tmnO68I3S3hJhhoP5DylIXPj09gTntgM29d0nau/EoVOCWM0VDaMQlIBowIZUwMzh7x2Qy/2SXu5SbDWkvvDKIX98VYl5DadCnVsWZxaxYfCPH/81Z4g1mXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Nabgudca77iuNWJJYGGzOlbxMQdCLWawTxuTfhnEO5s=;
+ b=b4JaldvKPKqNnwQz/CXXqHIGCGE/P4Jl71mAoeqcowgLWiRcOGcPSKfQzpkZphaq4gcv8I5aFJ2PUIuquyrRgmCr9ZN04bWgcqkwJheej/ckhaoPPar+rTSFL2gVghlatSWMOp1pHiorP7cDnWp9nOFNCgY581LLtqJys3aUUPEUewJa9xI4WwUgptYWoc+kJmWytP78YWlO/G+B8Y67fXZ0u/LZ7ejrJCOxBzyuxso2uWYVxwV1w66NUJAt5bMVMJEN5YmqDjCnY2zih25zqtMbL2bzpfMVbo933Psipcyd26ZszhnKLEplzNSB6GIE1/DyrtWWbR2ccpWS/MyqoA==
+Received: from MW4PR03CA0343.namprd03.prod.outlook.com (2603:10b6:303:dc::18)
+ by CH2PR12MB4907.namprd12.prod.outlook.com (2603:10b6:610:68::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Mon, 12 Jun
+ 2023 07:57:45 +0000
+Received: from CO1PEPF000044F3.namprd05.prod.outlook.com
+ (2603:10b6:303:dc:cafe::63) by MW4PR03CA0343.outlook.office365.com
+ (2603:10b6:303:dc::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.33 via Frontend
+ Transport; Mon, 12 Jun 2023 07:57:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1PEPF000044F3.mail.protection.outlook.com (10.167.241.73) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.21 via Frontend Transport; Mon, 12 Jun 2023 07:57:44 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 12 Jun 2023
+ 00:57:30 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 12 Jun
+ 2023 00:57:29 -0700
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Mon, 12 Jun
+ 2023 00:57:26 -0700
+From:   Vlad Buslov <vladbu@nvidia.com>
+To:     <pabeni@redhat.com>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <shuah@kernel.org>, <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>,
+        <jiri@resnulli.us>
+CC:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <marcelo.leitner@gmail.com>, <shaozhengchao@huawei.com>,
+        <victor@mojatatu.com>, Vlad Buslov <vladbu@nvidia.com>
+Subject: [PATCH net 0/4] Fix small bugs and annoyances in tc-testing
+Date:   Mon, 12 Jun 2023 09:57:08 +0200
+Message-ID: <20230612075712.2861848-1-vladbu@nvidia.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] selftests: mm: uufd-unit-tests: remove a format
- warning in printf
-Content-Language: en-US
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-References: <20230610235016.438460-1-mirsad.todorovac@alu.unizg.hr>
- <109d9c47-9c0e-e8ca-2bc1-cb741bc45a1b@collabora.com>
- <138905be-3963-cd67-c217-7aa561372293@alu.unizg.hr>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <138905be-3963-cd67-c217-7aa561372293@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044F3:EE_|CH2PR12MB4907:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2baabe31-3209-435f-29cb-08db6b1ab49d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hDkl+vTnJ/TCw+g932dBlz3EkYDLOsC1VLs+0i5UwKT0bxaKuRKHNUT+ydrKXmXWU0iXRLtSY0emt6jUrzbP7V8EysWOc8Jv78yhuVnrp3ip+3M57fr/K73rnEm6QgyM/IFZljBQIXpoZ4DLEM1L/s4mpOQv1zGGylxKbw2c+Z8sm/Uz51MXSK2DBdxKjqtMuVOU0Bl0pWt0A5Jt3e6oNytT05yAjMrQ8dcG+FRXeTfp1K4n2X2jyR6FLkup+j/b0dPDQoYXqvvgbaulu4uP1k4UE0WDYGdM5fUlGo3GGPHzXTeDXgV7yxrKbRHz2NIl/RP41lBXmzL0PgQYBk+C1/EdlxeIgqgWXhbW+xr0u090vPysEV4LJURVCDIomSi9CO2ay9YdEi7UP+56J66yk4wfWfYLTSuq/7dZvUD9PTc5EpDBgPC+8kGGRr4IPqOfoOBh1/hO1+i4jZU+8BUec8wGe/30MMF/MaARPuZv5uDiElrM/zYuHe9QhakaAnREnJstgsWS6TUuziJCUGwSP7e1iGQNBQWZlvtkrStv/zXMODb67iqgiXADDMRkWWM06gEQG67Gy+vbEcqqoy4wKVlT5V8hGIUaS4LZsSlzZcBbmUhlYtypz3q2scLlVYxkLFRuhJBRKNz+H13wWdq9rh/esMN/KGPeYNbnuQarjIFgNjcXlFHrsclXEJfQd7trduUqx7i3L1Qt+2R7bzJIpW8taq50nOh7I7UDGR1nT8fHChStbYrGsbhCFC/4QFxF
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(39860400002)(346002)(451199021)(36840700001)(40470700004)(46966006)(110136005)(70206006)(70586007)(478600001)(54906003)(7696005)(316002)(41300700001)(4326008)(8936002)(8676002)(5660300002)(6666004)(107886003)(7416002)(26005)(1076003)(186003)(83380400001)(36860700001)(426003)(47076005)(336012)(2616005)(82740400003)(7636003)(356005)(86362001)(82310400005)(36756003)(40460700003)(4744005)(2906002)(40480700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 07:57:44.5015
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2baabe31-3209-435f-29cb-08db6b1ab49d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044F3.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4907
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/12/23 5:11 AM, Mirsad Goran Todorovac wrote:
-> Apologies Muhammad then, didn't follow that branch.
-No problem.
+Vlad Buslov (4):
+  selftests/tc-testing: Fix Error: Specified qdisc kind is unknown.
+  selftests/tc-testing: Fix Error: failed to find target LOG
+  selftests/tc-testing: Fix SFB db test
+  selftests/tc-testing: Remove configs that no longer exist
 
-> 
-> Regards,
-> Mirsad
-> 
-> On 6/11/23 14:30, Muhammad Usama Anjum wrote:
->> The fix has already been picked up by Andew in mm unstable:
->>
->> https://lore.kernel.org/all/20230607023727.0E011C433D2@smtp.kernel.org
->>
->> On 6/11/23 4:50 AM, Mirsad Todorovac wrote:
->>> GCC 11.3.0 issued warnings about macros and types of arguments [edited]:
->>>
->>> gcc -Wall -I ../tools/testing/selftests/../../.. \
->>>     -I ../tools/testing/selftests/../../../tools/include/uapi \
->>>     -isystem ../usr/include -no-pie uffd-unit-tests.c vm_util.c \
->>>     uffd-common.c -lrt -lpthread -o \
->>>     ../tools/testing/selftests/mm/uffd-unit-tests
->>> uffd-unit-tests.c: In function ‘main’:
->>> uffd-unit-tests.c:1198:41: warning: format not a string literal and no \
->>>     format arguments [-Wformat-security]
->>>   1198 |                         uffd_test_start(test_name);
->>>        |                                         ^~~~~~~~~
->>> uffd-unit-tests.c:100:24: note: in definition of macro ‘uffd_test_start’
->>>    100 |                 printf(__VA_ARGS__);            \
->>>        |                        ^~~~~~~~~~~
->>> uffd-unit-tests.c:1205:33: warning: format not a string literal and no \
->>>     format arguments [-Wformat-security]
->>>   1205 |                                 uffd_test_skip(errmsg);
->>>        |                                 ^~~~~~~~~~~~~~
->>>
->>> The macros are defined as:
->>>
->>>   #define  uffd_test_start(...)  do {             \
->>>                  printf("Testing ");             \
->>>                  printf(__VA_ARGS__);            \
->>>                  printf("... ");                 \
->>>                  fflush(stdout);                 \
->>>          } while (0)
->>>
->>>   #define  uffd_test_skip(...)  do {              \
->>>                  printf("skipped [reason: ");    \
->>>                  printf(__VA_ARGS__);            \
->>>                  printf("]\n");                  \
->>>                  ksft_inc_xskip_cnt();           \
->>>          } while (0)
->>>
->>> Minor workaround, adding "%s" first argument to macro expansion calls seems
->>> to be the easiest way to eliminate the warnings.
->>>
->>> Cc: Peter Xu <peterx@redhat.com>
->>> Cc: linux-mm@kvack.org
->>> Cc: linux-kselftest@vger.kernel.org
->>> Fixes: 43759d44dc34 ("selftests/mm: add uffdio register ioctls test")
->>> Fixes: 16a45b57cbf2 ("selftests/mm: add framework for uffd-unit-test")
->>> Signed-off-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
->>> ---
->>>   tools/testing/selftests/mm/uffd-unit-tests.c | 4 ++--
->>>   1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c
->>> b/tools/testing/selftests/mm/uffd-unit-tests.c
->>> index 269c86768a02..d356dd271c84 100644
->>> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
->>> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
->>> @@ -1195,14 +1195,14 @@ int main(int argc, char *argv[])
->>>               snprintf(test_name, sizeof(test_name),
->>>                    "%s on %s", test->name, mem_type->name);
->>>   -            uffd_test_start(test_name);
->>> +            uffd_test_start("%s", test_name);
->>>               if (!uffd_feature_supported(test)) {
->>>                   uffd_test_skip("feature missing");
->>>                   continue;
->>>               }
->>>               if (uffd_setup_environment(&args, test, mem_type,
->>>                              &errmsg)) {
->>> -                uffd_test_skip(errmsg);
->>> +                uffd_test_skip("%s", errmsg);
->>>                   continue;
->>>               }
->>>               test->uffd_fn(&args);
->>
+ tools/testing/selftests/tc-testing/config                   | 6 +-----
+ tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfb.json | 4 ++--
+ tools/testing/selftests/tc-testing/tdc.sh                   | 1 +
+ 3 files changed, 4 insertions(+), 7 deletions(-)
 
 -- 
-BR,
-Muhammad Usama Anjum
+2.39.2
+
