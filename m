@@ -2,82 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E636272BE9A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jun 2023 12:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6403572C055
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jun 2023 12:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbjFLKRa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Jun 2023 06:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
+        id S234830AbjFLKvy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Jun 2023 06:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232971AbjFLKRO (ORCPT
+        with ESMTP id S235761AbjFLKve (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:17:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCE010FF
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 02:57:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686563786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7erq9mCXu6YfPjb1swyfCVbQPxq89IutQ/4dZgRd0RM=;
-        b=OLwsPy9QilIVP2tx0pWVeCHYYEz3I0CPdCLIJN6B02eknOX7dxwTwjuCPHAehcKvl891V2
-        hnI1nSroS2OT38Tf5uUJ0OHuFAXOi7DZ/HqFE8g+I8MrY7fe4ZqqO8fPNjveLxVjOa2GRL
-        J/VKT8Lg0C/9oe0A940rgClpO4sLLWA=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-659-52Joyw-bPT-eY92BjDt1vA-1; Mon, 12 Jun 2023 05:56:24 -0400
-X-MC-Unique: 52Joyw-bPT-eY92BjDt1vA-1
-Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b331898229so909051fa.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 02:56:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686563782; x=1689155782;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7erq9mCXu6YfPjb1swyfCVbQPxq89IutQ/4dZgRd0RM=;
-        b=g38lVLgF2sjPev08uGCOPROYEsOHB3EcWBmrN+dLb9VHLn9+DnpwjENaZR5+y8djIf
-         LzU1E/FHVEpO0A04oflgmjJ0sbcNiUSHecM14O0BdD1sOQsmBHiqqBqh4JKgxlWX6t9r
-         ddd2gscUQnBtDGxkutyGEBpW7wYnnkwd4wZHpBO3k4gUUJJ+Cg4Oi0sbvKHIlIUhuerA
-         dQQQEiP5KDyRBz79kPz9+Wviba+bbUVq//YattmLExDlzm2K7Mn+RUyk/pWv3LpmdHyQ
-         udBxNPNk0lHhqfj6PW0Z9PpVcqYxzY3iTEkYBdxfFGDI2TijcRkrs6Aitwig0eVEyFAc
-         7bLQ==
-X-Gm-Message-State: AC+VfDw2dyfAKX36FTOvQLT0cISGr/J1Lf2EqIZkaK8zHa44Qo8dlxjm
-        zbsQXI8Wr5JCOY1emR8SOEFZeQsHnSd0kvoKzDK+QOKc9jUgvVdBcEbojsSsP1VtMlXERRgFuU6
-        9DZqlaFrWdMeo4ZNB+Jm6TbkS39zdKfXAWHOL
-X-Received: by 2002:a19:4f4c:0:b0:4f3:b222:1eed with SMTP id a12-20020a194f4c000000b004f3b2221eedmr3525795lfk.2.1686563782586;
-        Mon, 12 Jun 2023 02:56:22 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4U7pGmP/JxxfD47wW6q0zz8WCn++HEA7IpRLWH5Pgnbq09E9OG/AArBNmozy2NqofxEpwZXA==
-X-Received: by 2002:a19:4f4c:0:b0:4f3:b222:1eed with SMTP id a12-20020a194f4c000000b004f3b2221eedmr3525779lfk.2.1686563782187;
-        Mon, 12 Jun 2023 02:56:22 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e? (p200300cbc74e16004f6725b23e8c2a4e.dip0.t-ipconnect.de. [2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e])
-        by smtp.gmail.com with ESMTPSA id f9-20020a7bc8c9000000b003f8140763c7sm5747410wml.30.2023.06.12.02.56.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 02:56:21 -0700 (PDT)
-Message-ID: <c287f70c-7eab-8835-de9f-f68db4e54510@redhat.com>
-Date:   Mon, 12 Jun 2023 11:56:20 +0200
+        Mon, 12 Jun 2023 06:51:34 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2399023;
+        Mon, 12 Jun 2023 03:35:57 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qfnyh6TN5zqSJ1;
+        Mon, 12 Jun 2023 18:30:52 +0800 (CST)
+Received: from [10.174.178.66] (10.174.178.66) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 12 Jun 2023 18:35:47 +0800
+Message-ID: <6bcd42ad-4818-dff1-96a7-36b117610e85@huawei.com>
+Date:   Mon, 12 Jun 2023 18:35:46 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/2] selftests: mm: remove wrong kernel header inclusion
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Stefan Roesch <shr@devkernel.io>
-Cc:     kernel@collabora.com, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230612095347.996335-1-usama.anjum@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230612095347.996335-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH net 1/4] selftests/tc-testing: Fix Error: Specified qdisc
+ kind is unknown.
+To:     Vlad Buslov <vladbu@nvidia.com>, <pabeni@redhat.com>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <shuah@kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>
+CC:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <marcelo.leitner@gmail.com>, <victor@mojatatu.com>
+References: <20230612075712.2861848-1-vladbu@nvidia.com>
+ <20230612075712.2861848-2-vladbu@nvidia.com>
+From:   shaozhengchao <shaozhengchao@huawei.com>
+In-Reply-To: <20230612075712.2861848-2-vladbu@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [10.174.178.66]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,39 +53,71 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12.06.23 11:53, Muhammad Usama Anjum wrote:
-> It is wrong to include unprocessed user header files directly. They are
-> processed to "<source_tree>/usr/include" by running "make headers" and
-> they are included in selftests by kselftest makefiles automatically with
-> help of KHDR_INCLUDES variable. These headers should always bulilt
-> first before building kselftests.
+
+
+On 2023/6/12 15:57, Vlad Buslov wrote:
+> All TEQL tests assume that sch_teql module is loaded. Load module in tdc.sh
+> before running qdisc tests.
 > 
-> Fixes: 07115fcc15b4 ("selftests/mm: add new selftests for KSM")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Fixes following example error when running tests via tdc.sh for all TEQL
+> tests:
+> 
+>   # $ sudo ./tdc.py -d eth2 -e 84a0
+>   #  -- ns/SubPlugin.__init__
+>   # Test 84a0: Create TEQL with default setting
+>   # exit: 2
+>   # exit: 0
+>   # Error: Specified qdisc kind is unknown.
+>   #
+>   # -----> teardown stage *** Could not execute: "$TC qdisc del dev $DUMMY handle 1: root"
+>   #
+>   # -----> teardown stage *** Error message: "Error: Invalid handle.
+>   # "
+>   # returncode 2; expected [0]
+>   #
+>   # -----> teardown stage *** Aborting test run.
+>   #
+>   # <_io.BufferedReader name=3> *** stdout ***
+>   #
+>   # <_io.BufferedReader name=5> *** stderr ***
+>   # "-----> teardown stage" did not complete successfully
+>   # Exception <class '__main__.PluginMgrTestFail'> ('teardown', 'Error: Specified qdisc kind is unknown.\n', '"-----> teardown stage" did not complete successfully') (caught in test_runner, running test 2 84a0 Create TEQL with default setting stage teardown)
+>   # ---------------
+>   # traceback
+>   #   File "/images/src/linux/tools/testing/selftests/tc-testing/./tdc.py", line 495, in test_runner
+>   #     res = run_one_test(pm, args, index, tidx)
+>   #   File "/images/src/linux/tools/testing/selftests/tc-testing/./tdc.py", line 434, in run_one_test
+>   #     prepare_env(args, pm, 'teardown', '-----> teardown stage', tidx['teardown'], procout)
+>   #   File "/images/src/linux/tools/testing/selftests/tc-testing/./tdc.py", line 245, in prepare_env
+>   #     raise PluginMgrTestFail(
+>   # ---------------
+>   # accumulated output for this test:
+>   # Error: Specified qdisc kind is unknown.
+>   #
+>   # ---------------
+>   #
+>   # All test results:
+>   #
+>   # 1..1
+>   # ok 1 84a0 - Create TEQL with default setting # skipped - "-----> teardown stage" did not complete successfully
+> 
+> Fixes: cc62fbe114c9 ("selftests/tc-testing: add selftests for teql qdisc")
+> Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
 > ---
->   tools/testing/selftests/mm/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   tools/testing/selftests/tc-testing/tdc.sh | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> index 95acb099315e..e6cd60ca9e48 100644
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -29,7 +29,7 @@ MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/p
->   # LDLIBS.
->   MAKEFLAGS += --no-builtin-rules
+> diff --git a/tools/testing/selftests/tc-testing/tdc.sh b/tools/testing/selftests/tc-testing/tdc.sh
+> index afb0cd86fa3d..eb357bd7923c 100755
+> --- a/tools/testing/selftests/tc-testing/tdc.sh
+> +++ b/tools/testing/selftests/tc-testing/tdc.sh
+> @@ -2,5 +2,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
 >   
-> -CFLAGS = -Wall -I $(top_srcdir) -I $(top_srcdir)/tools/include/uapi $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
-> +CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
->   LDLIBS = -lrt -lpthread
->   
->   TEST_GEN_PROGS = cow
-
-Still compiles after "make headers", so
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
--- 
-Cheers,
-
-David / dhildenb
-
+>   modprobe netdevsim
+> +modprobe sch_teql
+I think not only the sch_teql module needs to be imported, but all test
+modules need to be imported before testing. Modifying the config file
+looks more appropriate.
+>   ./tdc.py -c actions --nobuildebpf
+>   ./tdc.py -c qdisc
