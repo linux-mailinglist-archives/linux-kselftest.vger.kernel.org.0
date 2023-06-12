@@ -2,292 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E19872D431
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 00:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F3972D46C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 00:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238785AbjFLWMd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Jun 2023 18:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S236772AbjFLWcO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Jun 2023 18:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238782AbjFLWMc (ORCPT
+        with ESMTP id S229807AbjFLWcO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jun 2023 18:12:32 -0400
-Received: from aye.elm.relay.mailchannels.net (aye.elm.relay.mailchannels.net [23.83.212.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373D110CB
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 15:12:30 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 792E2762B2C
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 22:12:29 +0000 (UTC)
-Received: from pdx1-sub0-mail-a251.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 033BC762C50
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 22:12:29 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686607949; a=rsa-sha256;
-        cv=none;
-        b=G7biQ7W1cTn5OGOd8dDSN+fZ9AbuhCXGIRX3cUgWsHSMusBynqNLShfdLctjCUPmttk9kx
-        nGMLx6h/AIxtF/XfCrG0qsj2fsUrdDKa/iVqIGiTKYuj1j6M7I2jZjscElCtVLG00nU/Tw
-        UgnRqFpeeujobAyKxmLq/TUbxr+sttOO3YV++ZM2k/7gXMNXJcr+W8qlB33W+fYPFKP0q2
-        8IV/iQWrZyLoeE2nZN3AH8lLuPnYIkjd6c9SEMXNm4jvIEYaf7Gw08pk+nu01gAOW+W1eP
-        j1BgFnwIEILksW4m4PAQumTS7CJqyADy5YgJUg0WcLyaTFzxgp7K91GnFn8G8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1686607949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=Uw+jdfJkDSDc1rZ9hM9IyUE6VppD4X6NU4hjQZ4wAUI=;
-        b=cV7Y3lZI5GfgT5R8swnkbXL+uIkqvWlOd77jh0aJyvbihDYdO42SMTYevrR9A5iYGDwMnZ
-        +UeN+Gb2v43nzHawtkPWGqZ++SdqG/wUMXEdqTgEqqMwSWw/hKwrfl/BPjqDg6bRel+SVc
-        jUfZo/aLtkuwZJeMOPX02yqYjH1CGfluaOytXLz7vE1eEVwYvOn9SCyEdYjeCoulRelRjE
-        AenDZVwJpAyp0xGQOc9SfNDyMo/AKm3HIy32HbT0Rjz0tSPMREncujP6eCRNaFIW5CT7vk
-        mfX7alvaGxmauubGCp+YOBbbz3xU3pE08Ris8mkRobalJVuMtsKg+mTqFyZyRA==
-ARC-Authentication-Results: i=1;
-        rspamd-6c69b8658d-x5df5;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Spot-Battle: 70effe3a7c00384a_1686607949267_3414739719
-X-MC-Loop-Signature: 1686607949267:2901581566
-X-MC-Ingress-Time: 1686607949266
-Received: from pdx1-sub0-mail-a251.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.126.30.17 (trex/6.8.1);
-        Mon, 12 Jun 2023 22:12:29 +0000
-Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a251.dreamhost.com (Postfix) with ESMTPSA id 4Qg5XD0JStzZf
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 15:12:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1686607948;
-        bh=Uw+jdfJkDSDc1rZ9hM9IyUE6VppD4X6NU4hjQZ4wAUI=;
-        h=Date:From:To:Cc:Subject:Content-Type:Content-Transfer-Encoding;
-        b=oP6zL20uUwr9+8TuQ77C4zC4lKxRJDffnxSj+NkVnjk0dYhMtPpNRlrYcwPVlhJNW
-         RrZ5ycHfytz5x1E08xVYbxl2ZgM9yRVUDWUy6qeydXghr7YLl+HX5O4rc1zX377e7T
-         gNUet93sZ7QJHlTUznClPFJ7KSIqyQiLkvfvP8oc=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e0085
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Mon, 12 Jun 2023 15:12:26 -0700
-Date:   Mon, 12 Jun 2023 15:12:26 -0700
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
-        Krister Johansen <kjlx@templeofstupid.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: add a test for subprogram
- extables
-Message-ID: <20230612221226.GA2077@templeofstupid.com>
-References: <cover.1686268304.git.kjlx@templeofstupid.com>
- <9e3041e182a75f558f1132f915ddf2ee7e859c6e.1686268304.git.kjlx@templeofstupid.com>
- <CAADnVQKAmbb2mTNem+3wvCSS44mvmydDCjWj-4V9VZd93vgksQ@mail.gmail.com>
- <ef33f004f1f20c7a4cc7c963eea628df7bec0c53.camel@linux.ibm.com>
- <CAADnVQLWNt0KsXoYVGFD0i089YMivYJ+ZeWmutUiefcdK=eOrw@mail.gmail.com>
+        Mon, 12 Jun 2023 18:32:14 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82C91715
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 15:32:11 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-77ae75c75deso34143239f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 15:32:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1686609131; x=1689201131;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zO8aM9RsIffIjx4jAwj5YcVlYgxgznlqdMEphKaCDWk=;
+        b=eGRWpJQyLSZ6IJ+0Ht1B84epSUoTv4pGbA2zVUUlO+1PNHFgxxNITeeSnByn3mXOTx
+         Qi4G578qXQJw2cI1mU5N4iGZkTcyjm5XG1NKGzusRMBQWN3pJvILgFsUxYr+9e1OykwC
+         RVIzfpZWwskQp9n7U40PWoJmEH7D5W+BV8qKo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686609131; x=1689201131;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zO8aM9RsIffIjx4jAwj5YcVlYgxgznlqdMEphKaCDWk=;
+        b=W9PmObN9wJFRKJh+Nvy3+P51L7s0RTv5+4Q4y0if0fqXfPLDTkcozc11h0GBXrgzrq
+         JVYlcXkqtcc8rodelKoDZSA90e8XO94XZ/N5O2x2ZQ4TozlKruc3uOkzUISXuj8u8LsU
+         fG/blGnmfS3ntkrpGAJ4Tsq8wUeaROBq9txRvclWuhfbioExxemiCSGmfNZu8Y8LFxyc
+         vttDoZHpQL7Yvm4QQlRRj76zO3GPSCBWUITdVWhlw+XL6eiqDnsAvWtZ7Khtv4FfgRqr
+         eW+V4/2mepD+54a3Klg1LNv+W1U0f6QhOMw0295xue4UgM/ym7FEIGn6upBMhifwajUF
+         s7Mw==
+X-Gm-Message-State: AC+VfDxO6RSkW72pO8ucG8DfpffPrvtHdzkF3iQPkKq2rjlhTnbjS42A
+        u9txumxPkXqJYwykMHxTJ/6AYg==
+X-Google-Smtp-Source: ACHHUZ4faLgbaPTuPJztAFxODz/u7zHgz+n9zvWgBtWNe3m/0cIMYBx82V/NN7XO82lNQl6eKLSOag==
+X-Received: by 2002:a05:6e02:585:b0:33b:3a14:c14c with SMTP id c5-20020a056e02058500b0033b3a14c14cmr5983221ils.3.1686609131185;
+        Mon, 12 Jun 2023 15:32:11 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id 6-20020a920d06000000b0033d136f248esm3474021iln.5.2023.06.12.15.32.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 15:32:10 -0700 (PDT)
+Message-ID: <b9dd402c-d8d6-e6e9-f17b-304a1dc8a578@linuxfoundation.org>
+Date:   Mon, 12 Jun 2023 16:32:10 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLWNt0KsXoYVGFD0i089YMivYJ+ZeWmutUiefcdK=eOrw@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCHv2] selftests: damon: add config file
+Content-Language: en-US
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org,
+        Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230609191622.80289-1-sj@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230609191622.80289-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 03:07:22PM -0700, Alexei Starovoitov wrote:
-> On Mon, Jun 12, 2023 at 6:46 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
-> >
-> > On Fri, 2023-06-09 at 11:15 -0700, Alexei Starovoitov wrote:
-> > > On Thu, Jun 8, 2023 at 5:11 PM Krister Johansen
-> > > <kjlx@templeofstupid.com> wrote:
-> > > >
-> > > > In certain situations a program with subprograms may have a NULL
-> > > > extable entry.  This should not happen, and when it does, it turns
-> > > > a
-> > > > single trap into multiple.  Add a test case for further debugging
-> > > > and to
-> > > > prevent regressions.  N.b: without any other patches this can panic
-> > > > or
-> > > > oops a kernel.
-> > > >
-> > > > Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-> > > > ---
-> > > >  .../bpf/prog_tests/subprogs_extable.c         | 31 +++++++++++++
-> > > >  .../bpf/progs/test_subprogs_extable.c         | 46
-> > > > +++++++++++++++++++
-> > > >  2 files changed, 77 insertions(+)
-> > > >  create mode 100644
-> > > > tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > >  create mode 100644
-> > > > tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > >
-> > > > diff --git
-> > > > a/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > > b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > > new file mode 100644
-> > > > index 000000000000..2201988274a4
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > > @@ -0,0 +1,31 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +#include <test_progs.h>
-> > > > +#include "test_subprogs_extable.skel.h"
-> > > > +
-> > > > +void test_subprogs_extable(void)
-> > > > +{
-> > > > +       const int READ_SZ = 456;
-> > > > +       struct test_subprogs_extable *skel;
-> > > > +       int err;
-> > > > +
-> > > > +       skel = test_subprogs_extable__open();
-> > > > +       if (!ASSERT_OK_PTR(skel, "skel_open"))
-> > > > +               return;
-> > > > +
-> > > > +       err = test_subprogs_extable__load(skel);
-> > > > +       if (!ASSERT_OK(err, "skel_load"))
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       err = test_subprogs_extable__attach(skel);
-> > > > +       if (!ASSERT_OK(err, "skel_attach"))
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       /* trigger tracepoint */
-> > > > +       ASSERT_OK(trigger_module_test_read(READ_SZ),
-> > > > "trigger_read");
-> > > > +
-> > > > +       test_subprogs_extable__detach(skel);
-> > > > +
-> > > > +cleanup:
-> > > > +       test_subprogs_extable__destroy(skel);
-> > > > +}
-> > > > diff --git
-> > > > a/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > > b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > > new file mode 100644
-> > > > index 000000000000..c3ff66bf4cbe
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > > @@ -0,0 +1,46 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +#include "vmlinux.h"
-> > > > +#include <bpf/bpf_helpers.h>
-> > > > +#include <bpf/bpf_tracing.h>
-> > > > +
-> > > > +struct {
-> > > > +       __uint(type, BPF_MAP_TYPE_ARRAY);
-> > > > +       __uint(max_entries, 8);
-> > > > +       __type(key, __u32);
-> > > > +       __type(value, __u64);
-> > > > +} test_array SEC(".maps");
-> > > > +
-> > > > +static __u64 test_cb(struct bpf_map *map, __u32 *key, __u64 *val,
-> > > > void *data)
-> > > > +{
-> > > > +       return 1;
-> > > > +}
-> > > > +
-> > > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > > +int BPF_PROG(handle_fexit_ret_subprogs, int arg, struct file *ret)
-> > > > +{
-> > > > +       *(volatile long *)ret;
-> > > > +       *(volatile int *)&ret->f_mode;
-> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > > +int BPF_PROG(handle_fexit_ret_subprogs2, int arg, struct file
-> > > > *ret)
-> > > > +{
-> > > > +       *(volatile long *)ret;
-> > > > +       *(volatile int *)&ret->f_mode;
-> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > > +int BPF_PROG(handle_fexit_ret_subprogs3, int arg, struct file
-> > > > *ret)
-> > > > +{
-> > > > +       *(volatile long *)ret;
-> > > > +       *(volatile int *)&ret->f_mode;
-> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > > +       return 0;
-> > > > +}
-> > >
-> > > What is the point of attaching 3 the same progs to the same hook?
-> > > One would be enough to test it, no?
-> > >
-> > > In other news...
-> > > Looks like this test is triggering a bug on s390.
-> > >
-> > > Ilya,
-> > > please take a look:
-> > > https://github.com/kernel-patches/bpf/actions/runs/5216942096/jobs/9416404780
-> > >
-> > > bpf_prog_78c0d4c618ed2df7_handle_fexit_ret_subprogs3
-> > > is crashing the kernel.
-> > > A bug in extable logic on s390?
-> >
-> > I think we also need this:
-> >
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -17664,6 +17664,7 @@ static int jit_subprogs(struct bpf_verifier_env
-> > *env)
-> >         prog->bpf_func = func[0]->bpf_func;
-> >         prog->jited_len = func[0]->jited_len;
-> >         prog->aux->extable = func[0]->aux->extable;
-> > +       prog->aux->num_exentries = func[0]->aux->num_exentries;
-> >         prog->aux->func = func;
-> >         prog->aux->func_cnt = env->subprog_cnt;
-> >         bpf_prog_jit_attempt_done(prog);
-> >
-> > The reason is that s390 JIT doubles the number of extable entries due
-> > to how the hardware works (some exceptions point to the failing insn,
-> > some point to the next one).
-> >
-> > With that:
-> >
-> > Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> > Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> >
-> > for the v4 series.
+On 6/9/23 13:16, SeongJae Park wrote:
+> On Wed, 12 Apr 2023 16:58:06 +0000 SeongJae Park <sj@kernel.org> wrote:
 > 
-> Great.
+>> Hi Anders,
+>>
+>> On Wed, 12 Apr 2023 11:28:54 +0200 Anders Roxell <anders.roxell@linaro.org> wrote:
+>>
+>>> Building and running the subsuite 'damon' of kselftest, shows the
+>>> following issues:
+>>>   selftests: damon: debugfs_attrs.sh
+>>>    /sys/kernel/debug/damon not found
+>>>
+>>> By creating a config file enabling DAMON fragments in the
+>>> selftests/damon/ directory the tests pass.
+>>>
+>>> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
+>>> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>>
+>> checkpatch.pl is warning as below:
+>>
+>>      WARNING: Reported-by: should be immediately followed by Link: with a URL to the report
+>>      #20:
+>>      Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>>      Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+>>
+>> The reason for the warning can be found from commit d7f1d71e5ef6 ("checkpatch:
+>> warn when Reported-by: is not followed by Link:")'s commit message.  Do you
+>> have a link to put here?  I guess the report was made inside Linaro, so might
+>> have no publicly available link.  Maybe better to add some notes or some funny
+>> tag like "Link: N/A # no publicly-available link of the report" for convincing
+>> the tool, but I don't think this should be a blocker for this patch.
+>>
+>>> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+>>
+>> Reviewed-by: SeongJae Park <sj@kernel.org>
 > 
-> Krister,
-> could you please resubmit v5 adding the above change and Ilya's tags to patch 1?
+> Shuah, may I ask your opinion on this patch?
 > 
-> I'd like to see green BPF CI on all platforms before landing.
+> I'm also cc-ing Andrew, as he may also interested in picking this patch.
+> 
 
-Thanks Alexei and Ilya, and yes, absolutely.  I'm hoping to have a v5 out
-a little later this afternoon.
+If Andrew wants to pick this up:
 
--K
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
+
