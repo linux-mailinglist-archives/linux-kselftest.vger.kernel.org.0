@@ -2,397 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9DD72BE82
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jun 2023 12:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E636272BE9A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jun 2023 12:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbjFLKNw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Jun 2023 06:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
+        id S232917AbjFLKRa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Jun 2023 06:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233269AbjFLKNW (ORCPT
+        with ESMTP id S232971AbjFLKRO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:13:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EAD46A6;
-        Mon, 12 Jun 2023 02:54:16 -0700 (PDT)
-Received: from localhost.localdomain (unknown [119.152.150.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 89B476606E9A;
-        Mon, 12 Jun 2023 10:54:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686563655;
-        bh=SjDGf2SNMcjDK66xmbsxwO0e5mfU/9DarkBr2D33KK0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d5xPMxchf9475mvOgqV8KOXB51ccreXiNMBeNfeEElbq3ZYRVna6om8JKgIiYTnG3
-         x2Yvek0sRb81U+y3PTdeRR/osPnnf+hKxljHUB+94udHC3aJWhoCAkFVHeDyDhe32Q
-         0FV8lDdfeCD12yeFfv5hkuNmEKaxPR6fqT6HW9nlRwzuRpbh7UcUAcsEUhA5jzigSe
-         XU2nlXOEpkQ4D97Qly830Ffo0EA+BIj+5w5u5s4w2DuAHLHlmdHa0kSBNDAyxBrwoU
-         it2aPS02XNfoyFnqrpqzM1RoQXS5RSKXhE7R5htjdOVWg6b2przC+iVc88ORuAradl
-         +YPfBOZ3E3aNQ==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests: mm: remove duplicate unneeded defines
-Date:   Mon, 12 Jun 2023 14:53:47 +0500
-Message-Id: <20230612095347.996335-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230612095347.996335-1-usama.anjum@collabora.com>
-References: <20230612095347.996335-1-usama.anjum@collabora.com>
+        Mon, 12 Jun 2023 06:17:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCE010FF
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 02:57:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686563786;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7erq9mCXu6YfPjb1swyfCVbQPxq89IutQ/4dZgRd0RM=;
+        b=OLwsPy9QilIVP2tx0pWVeCHYYEz3I0CPdCLIJN6B02eknOX7dxwTwjuCPHAehcKvl891V2
+        hnI1nSroS2OT38Tf5uUJ0OHuFAXOi7DZ/HqFE8g+I8MrY7fe4ZqqO8fPNjveLxVjOa2GRL
+        J/VKT8Lg0C/9oe0A940rgClpO4sLLWA=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-659-52Joyw-bPT-eY92BjDt1vA-1; Mon, 12 Jun 2023 05:56:24 -0400
+X-MC-Unique: 52Joyw-bPT-eY92BjDt1vA-1
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b331898229so909051fa.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 02:56:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686563782; x=1689155782;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7erq9mCXu6YfPjb1swyfCVbQPxq89IutQ/4dZgRd0RM=;
+        b=g38lVLgF2sjPev08uGCOPROYEsOHB3EcWBmrN+dLb9VHLn9+DnpwjENaZR5+y8djIf
+         LzU1E/FHVEpO0A04oflgmjJ0sbcNiUSHecM14O0BdD1sOQsmBHiqqBqh4JKgxlWX6t9r
+         ddd2gscUQnBtDGxkutyGEBpW7wYnnkwd4wZHpBO3k4gUUJJ+Cg4Oi0sbvKHIlIUhuerA
+         dQQQEiP5KDyRBz79kPz9+Wviba+bbUVq//YattmLExDlzm2K7Mn+RUyk/pWv3LpmdHyQ
+         udBxNPNk0lHhqfj6PW0Z9PpVcqYxzY3iTEkYBdxfFGDI2TijcRkrs6Aitwig0eVEyFAc
+         7bLQ==
+X-Gm-Message-State: AC+VfDw2dyfAKX36FTOvQLT0cISGr/J1Lf2EqIZkaK8zHa44Qo8dlxjm
+        zbsQXI8Wr5JCOY1emR8SOEFZeQsHnSd0kvoKzDK+QOKc9jUgvVdBcEbojsSsP1VtMlXERRgFuU6
+        9DZqlaFrWdMeo4ZNB+Jm6TbkS39zdKfXAWHOL
+X-Received: by 2002:a19:4f4c:0:b0:4f3:b222:1eed with SMTP id a12-20020a194f4c000000b004f3b2221eedmr3525795lfk.2.1686563782586;
+        Mon, 12 Jun 2023 02:56:22 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4U7pGmP/JxxfD47wW6q0zz8WCn++HEA7IpRLWH5Pgnbq09E9OG/AArBNmozy2NqofxEpwZXA==
+X-Received: by 2002:a19:4f4c:0:b0:4f3:b222:1eed with SMTP id a12-20020a194f4c000000b004f3b2221eedmr3525779lfk.2.1686563782187;
+        Mon, 12 Jun 2023 02:56:22 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e? (p200300cbc74e16004f6725b23e8c2a4e.dip0.t-ipconnect.de. [2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e])
+        by smtp.gmail.com with ESMTPSA id f9-20020a7bc8c9000000b003f8140763c7sm5747410wml.30.2023.06.12.02.56.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 02:56:21 -0700 (PDT)
+Message-ID: <c287f70c-7eab-8835-de9f-f68db4e54510@redhat.com>
+Date:   Mon, 12 Jun 2023 11:56:20 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] selftests: mm: remove wrong kernel header inclusion
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Stefan Roesch <shr@devkernel.io>
+Cc:     kernel@collabora.com, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230612095347.996335-1-usama.anjum@collabora.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230612095347.996335-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove all defines which aren't needed after correctly including the
-kernel header files.
+On 12.06.23 11:53, Muhammad Usama Anjum wrote:
+> It is wrong to include unprocessed user header files directly. They are
+> processed to "<source_tree>/usr/include" by running "make headers" and
+> they are included in selftests by kselftest makefiles automatically with
+> help of KHDR_INCLUDES variable. These headers should always bulilt
+> first before building kselftests.
+> 
+> Fixes: 07115fcc15b4 ("selftests/mm: add new selftests for KSM")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>   tools/testing/selftests/mm/Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index 95acb099315e..e6cd60ca9e48 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -29,7 +29,7 @@ MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/p
+>   # LDLIBS.
+>   MAKEFLAGS += --no-builtin-rules
+>   
+> -CFLAGS = -Wall -I $(top_srcdir) -I $(top_srcdir)/tools/include/uapi $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+> +CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+>   LDLIBS = -lrt -lpthread
+>   
+>   TEST_GEN_PROGS = cow
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/mm/cow.c               |  1 +
- tools/testing/selftests/mm/hugepage-shm.c      |  4 ----
- tools/testing/selftests/mm/hugepage-vmemmap.c  |  4 ----
- tools/testing/selftests/mm/khugepaged.c        |  1 +
- tools/testing/selftests/mm/madv_populate.c     |  7 -------
- .../testing/selftests/mm/map_fixed_noreplace.c |  4 ----
- tools/testing/selftests/mm/map_hugetlb.c       | 12 ------------
- tools/testing/selftests/mm/map_populate.c      |  2 --
- tools/testing/selftests/mm/mlock-random-test.c |  1 +
- tools/testing/selftests/mm/mlock2.h            |  8 --------
- tools/testing/selftests/mm/mrelease_test.c     | 10 +---------
- tools/testing/selftests/mm/mremap_dontunmap.c  |  4 ----
- tools/testing/selftests/mm/on-fault-limit.c    |  4 ----
- tools/testing/selftests/mm/pkey-powerpc.h      |  3 ---
- tools/testing/selftests/mm/pkey-x86.h          | 18 ------------------
- tools/testing/selftests/mm/protection_keys.c   | 13 ++-----------
- tools/testing/selftests/mm/vm_util.h           | 10 ----------
- 17 files changed, 6 insertions(+), 100 deletions(-)
+Still compiles after "make headers", so
 
-diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
-index e4c5095e74fc..7324ce5363c0 100644
---- a/tools/testing/selftests/mm/cow.c
-+++ b/tools/testing/selftests/mm/cow.c
-@@ -15,6 +15,7 @@
- #include <errno.h>
- #include <fcntl.h>
- #include <assert.h>
-+#include <linux/mman.h>
- #include <sys/mman.h>
- #include <sys/ioctl.h>
- #include <sys/wait.h>
-diff --git a/tools/testing/selftests/mm/hugepage-shm.c b/tools/testing/selftests/mm/hugepage-shm.c
-index e2527f32005b..478bb1e989e9 100644
---- a/tools/testing/selftests/mm/hugepage-shm.c
-+++ b/tools/testing/selftests/mm/hugepage-shm.c
-@@ -35,10 +35,6 @@
- #include <sys/shm.h>
- #include <sys/mman.h>
- 
--#ifndef SHM_HUGETLB
--#define SHM_HUGETLB 04000
--#endif
--
- #define LENGTH (256UL*1024*1024)
- 
- #define dprintf(x)  printf(x)
-diff --git a/tools/testing/selftests/mm/hugepage-vmemmap.c b/tools/testing/selftests/mm/hugepage-vmemmap.c
-index 557bdbd4f87e..5b354c209e93 100644
---- a/tools/testing/selftests/mm/hugepage-vmemmap.c
-+++ b/tools/testing/selftests/mm/hugepage-vmemmap.c
-@@ -13,10 +13,6 @@
- 
- #define MAP_LENGTH		(2UL * 1024 * 1024)
- 
--#ifndef MAP_HUGETLB
--#define MAP_HUGETLB		0x40000	/* arch specific */
--#endif
--
- #define PAGE_SIZE		4096
- 
- #define PAGE_COMPOUND_HEAD	(1UL << 15)
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index e88ee039d0eb..030667cb5533 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -11,6 +11,7 @@
- #include <string.h>
- #include <unistd.h>
- 
-+#include <linux/mman.h>
- #include <sys/mman.h>
- #include <sys/wait.h>
- #include <sys/types.h>
-diff --git a/tools/testing/selftests/mm/madv_populate.c b/tools/testing/selftests/mm/madv_populate.c
-index 262eae6b58f2..60547245e479 100644
---- a/tools/testing/selftests/mm/madv_populate.c
-+++ b/tools/testing/selftests/mm/madv_populate.c
-@@ -20,13 +20,6 @@
- #include "../kselftest.h"
- #include "vm_util.h"
- 
--#ifndef MADV_POPULATE_READ
--#define MADV_POPULATE_READ	22
--#endif /* MADV_POPULATE_READ */
--#ifndef MADV_POPULATE_WRITE
--#define MADV_POPULATE_WRITE	23
--#endif /* MADV_POPULATE_WRITE */
--
- /*
-  * For now, we're using 2 MiB of private anonymous memory for all tests.
-  */
-diff --git a/tools/testing/selftests/mm/map_fixed_noreplace.c b/tools/testing/selftests/mm/map_fixed_noreplace.c
-index eed44322d1a6..598159f3df1f 100644
---- a/tools/testing/selftests/mm/map_fixed_noreplace.c
-+++ b/tools/testing/selftests/mm/map_fixed_noreplace.c
-@@ -13,10 +13,6 @@
- #include <stdlib.h>
- #include <unistd.h>
- 
--#ifndef MAP_FIXED_NOREPLACE
--#define MAP_FIXED_NOREPLACE 0x100000
--#endif
--
- static void dump_maps(void)
- {
- 	char cmd[32];
-diff --git a/tools/testing/selftests/mm/map_hugetlb.c b/tools/testing/selftests/mm/map_hugetlb.c
-index 312889edb84a..193281560b61 100644
---- a/tools/testing/selftests/mm/map_hugetlb.c
-+++ b/tools/testing/selftests/mm/map_hugetlb.c
-@@ -19,18 +19,6 @@
- #define LENGTH (256UL*1024*1024)
- #define PROTECTION (PROT_READ | PROT_WRITE)
- 
--#ifndef MAP_HUGETLB
--#define MAP_HUGETLB 0x40000 /* arch specific */
--#endif
--
--#ifndef MAP_HUGE_SHIFT
--#define MAP_HUGE_SHIFT 26
--#endif
--
--#ifndef MAP_HUGE_MASK
--#define MAP_HUGE_MASK 0x3f
--#endif
--
- /* Only ia64 requires this */
- #ifdef __ia64__
- #define ADDR (void *)(0x8000000000000000UL)
-diff --git a/tools/testing/selftests/mm/map_populate.c b/tools/testing/selftests/mm/map_populate.c
-index 6b8aeaa0bf7a..240f2d9dae7a 100644
---- a/tools/testing/selftests/mm/map_populate.c
-+++ b/tools/testing/selftests/mm/map_populate.c
-@@ -17,9 +17,7 @@
- #include <string.h>
- #include <unistd.h>
- 
--#ifndef MMAP_SZ
- #define MMAP_SZ		4096
--#endif
- 
- #define BUG_ON(condition, description)					\
- 	do {								\
-diff --git a/tools/testing/selftests/mm/mlock-random-test.c b/tools/testing/selftests/mm/mlock-random-test.c
-index 782ea94dee2f..1fba77df7f62 100644
---- a/tools/testing/selftests/mm/mlock-random-test.c
-+++ b/tools/testing/selftests/mm/mlock-random-test.c
-@@ -7,6 +7,7 @@
- #include <sys/resource.h>
- #include <sys/capability.h>
- #include <sys/mman.h>
-+#include <linux/mman.h>
- #include <fcntl.h>
- #include <string.h>
- #include <sys/ipc.h>
-diff --git a/tools/testing/selftests/mm/mlock2.h b/tools/testing/selftests/mm/mlock2.h
-index 2a6e76c226bc..8e02991b313c 100644
---- a/tools/testing/selftests/mm/mlock2.h
-+++ b/tools/testing/selftests/mm/mlock2.h
-@@ -4,14 +4,6 @@
- #include <stdio.h>
- #include <stdlib.h>
- 
--#ifndef MLOCK_ONFAULT
--#define MLOCK_ONFAULT 1
--#endif
--
--#ifndef MCL_ONFAULT
--#define MCL_ONFAULT (MCL_FUTURE << 1)
--#endif
--
- static int mlock2_(void *start, size_t len, int flags)
- {
- #ifdef __NR_mlock2
-diff --git a/tools/testing/selftests/mm/mrelease_test.c b/tools/testing/selftests/mm/mrelease_test.c
-index 37b6d33b9e84..dca21042b679 100644
---- a/tools/testing/selftests/mm/mrelease_test.c
-+++ b/tools/testing/selftests/mm/mrelease_test.c
-@@ -9,18 +9,10 @@
- #include <stdlib.h>
- #include <sys/wait.h>
- #include <unistd.h>
-+#include <asm-generic/unistd.h>
- #include "vm_util.h"
--
- #include "../kselftest.h"
- 
--#ifndef __NR_pidfd_open
--#define __NR_pidfd_open -1
--#endif
--
--#ifndef __NR_process_mrelease
--#define __NR_process_mrelease -1
--#endif
--
- #define MB(x) (x << 20)
- #define MAX_SIZE_MB 1024
- 
-diff --git a/tools/testing/selftests/mm/mremap_dontunmap.c b/tools/testing/selftests/mm/mremap_dontunmap.c
-index f01dc4a85b0b..ca2359835e75 100644
---- a/tools/testing/selftests/mm/mremap_dontunmap.c
-+++ b/tools/testing/selftests/mm/mremap_dontunmap.c
-@@ -15,10 +15,6 @@
- 
- #include "../kselftest.h"
- 
--#ifndef MREMAP_DONTUNMAP
--#define MREMAP_DONTUNMAP 4
--#endif
--
- unsigned long page_size;
- char *page_buffer;
- 
-diff --git a/tools/testing/selftests/mm/on-fault-limit.c b/tools/testing/selftests/mm/on-fault-limit.c
-index 634d87dfb2a4..b5888d613f34 100644
---- a/tools/testing/selftests/mm/on-fault-limit.c
-+++ b/tools/testing/selftests/mm/on-fault-limit.c
-@@ -6,10 +6,6 @@
- #include <sys/time.h>
- #include <sys/resource.h>
- 
--#ifndef MCL_ONFAULT
--#define MCL_ONFAULT (MCL_FUTURE << 1)
--#endif
--
- static int test_limit(void)
- {
- 	int ret = 1;
-diff --git a/tools/testing/selftests/mm/pkey-powerpc.h b/tools/testing/selftests/mm/pkey-powerpc.h
-index 1ebb586b2fbc..ae5df26104e5 100644
---- a/tools/testing/selftests/mm/pkey-powerpc.h
-+++ b/tools/testing/selftests/mm/pkey-powerpc.h
-@@ -3,9 +3,6 @@
- #ifndef _PKEYS_POWERPC_H
- #define _PKEYS_POWERPC_H
- 
--#ifndef SYS_mprotect_key
--# define SYS_mprotect_key	386
--#endif
- #ifndef SYS_pkey_alloc
- # define SYS_pkey_alloc		384
- # define SYS_pkey_free		385
-diff --git a/tools/testing/selftests/mm/pkey-x86.h b/tools/testing/selftests/mm/pkey-x86.h
-index e32ae8a1cd99..814758e109c0 100644
---- a/tools/testing/selftests/mm/pkey-x86.h
-+++ b/tools/testing/selftests/mm/pkey-x86.h
-@@ -5,29 +5,11 @@
- 
- #ifdef __i386__
- 
--#ifndef SYS_mprotect_key
--# define SYS_mprotect_key	380
--#endif
--
--#ifndef SYS_pkey_alloc
--# define SYS_pkey_alloc		381
--# define SYS_pkey_free		382
--#endif
--
- #define REG_IP_IDX		REG_EIP
- #define si_pkey_offset		0x14
- 
- #else
- 
--#ifndef SYS_mprotect_key
--# define SYS_mprotect_key	329
--#endif
--
--#ifndef SYS_pkey_alloc
--# define SYS_pkey_alloc		330
--# define SYS_pkey_free		331
--#endif
--
- #define REG_IP_IDX		REG_RIP
- #define si_pkey_offset		0x20
- 
-diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
-index 0381c34fdd56..48dc151f8fca 100644
---- a/tools/testing/selftests/mm/protection_keys.c
-+++ b/tools/testing/selftests/mm/protection_keys.c
-@@ -294,15 +294,6 @@ void pkey_access_deny(int pkey)
- 	pkey_disable_set(pkey, PKEY_DISABLE_ACCESS);
- }
- 
--/* Failed address bound checks: */
--#ifndef SEGV_BNDERR
--# define SEGV_BNDERR		3
--#endif
--
--#ifndef SEGV_PKUERR
--# define SEGV_PKUERR		4
--#endif
--
- static char *si_code_str(int si_code)
- {
- 	if (si_code == SEGV_MAPERR)
-@@ -476,7 +467,7 @@ int sys_mprotect_pkey(void *ptr, size_t size, unsigned long orig_prot,
- 			ptr, size, orig_prot, pkey);
- 
- 	errno = 0;
--	sret = syscall(SYS_mprotect_key, ptr, size, orig_prot, pkey);
-+	sret = syscall(__NR_pkey_mprotect, ptr, size, orig_prot, pkey);
- 	if (errno) {
- 		dprintf2("SYS_mprotect_key sret: %d\n", sret);
- 		dprintf2("SYS_mprotect_key prot: 0x%lx\n", orig_prot);
-@@ -1684,7 +1675,7 @@ void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
- 		return;
- 	}
- 
--	sret = syscall(SYS_mprotect_key, ptr, size, PROT_READ, pkey);
-+	sret = syscall(__NR_pkey_mprotect, ptr, size, PROT_READ, pkey);
- 	pkey_assert(sret < 0);
- }
- 
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index e57ace1323a7..c7fa61f0dff8 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -60,13 +60,3 @@ int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
- 
- #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
- #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
--
--#ifndef MADV_PAGEOUT
--#define MADV_PAGEOUT 21
--#endif
--#ifndef MADV_POPULATE_READ
--#define MADV_POPULATE_READ 22
--#endif
--#ifndef MADV_COLLAPSE
--#define MADV_COLLAPSE 25
--#endif
+Acked-by: David Hildenbrand <david@redhat.com>
+
 -- 
-2.39.2
+Cheers,
+
+David / dhildenb
 
