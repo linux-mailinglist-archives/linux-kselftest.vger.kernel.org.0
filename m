@@ -2,71 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB0F72C501
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jun 2023 14:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA5A72C506
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jun 2023 14:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235659AbjFLMvk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Jun 2023 08:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S235719AbjFLMvt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Jun 2023 08:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235651AbjFLMva (ORCPT
+        with ESMTP id S235662AbjFLMvl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:51:30 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430F010D3
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 05:51:25 -0700 (PDT)
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
+        Mon, 12 Jun 2023 08:51:41 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D51A1709
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 05:51:32 -0700 (PDT)
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com [209.85.160.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 036F13F377
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 12:51:24 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 49E113F4B3
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 12:51:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686574284;
-        bh=53EQLqkSYcnfUW7tWTa0tl0p5nwMGKAhLFezoflGDnw=;
+        s=20210705; t=1686574290;
+        bh=9WA1GnTKde4fTKucBDNJJp1kdZH51ghqRlq/wPSryAw=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=em66Y0x0xK6FWG+1lf/NjIPCTgDURMm49rSxe4/PG7NCnSqjVK5+2NqC5TE3zpuOf
-         bq0VMge0MjifR68KwWTOd35JAmnQEi1T0pULT/FnXmH7IS0vR03VQVHNWLoOvtWNU5
-         2GIhl5AH0Apj6h/Q6ar0UGTwPJGRhMxMWwhHOmVt70eu3rE3DMSR8+N4+CnFOuDXlY
-         yrUZDVNTc3erNVfs1jsHYkrg4zbvSswRJrOwFtZxR+kBRMpmufbzoc1JOLF7GKPXGK
-         hm+oykrUMQkPXE9jfGowjSrXCsq90lRmWJYBcj9wzweQzPApw1Bu5GCQfbPDiqfSnT
-         h+YiSStHtN4bg==
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1a689be8e85so800558fac.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 05:51:23 -0700 (PDT)
+        b=pxZ3WHoGBgraAbMu4KSPBKHD6VDxmJHOm33spjJLz+ZQbaQnWHQ/Ja818bv+3zKdu
+         pkAYBOEeXjEx49fk9jVw5FYtJ7sVyVNlN48fAuiqTKJGd5fLWSkPW0NPLX6M9PPcyd
+         fc2jfUO7hbqn4L7X83j5Cfb71RebOeFMN4bEs4KT+pw2B9kzR+/RJYMrQVbEpH+4fb
+         RyhSi1JDe56/jrNMlr8QQqNQtOQnVTChSJhTMHkWVE/gl1vssmuzOwbFeFYmjgywlN
+         0dHvfR/VRrGIPLHB8Q82Fh3YDPscysWCLbQktB8ml7xWftrYDFxSjdtoSg1aldqNpg
+         O3jHIEFk+hnHw==
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-19f97a46598so2139230fac.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 05:51:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686574283; x=1689166283;
+        d=1e100.net; s=20221208; t=1686574288; x=1689166288;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=53EQLqkSYcnfUW7tWTa0tl0p5nwMGKAhLFezoflGDnw=;
-        b=guyaoTjPOs6ceNXdtxAO7YZexQIYJ/YcpYupx8HfnqLFv2qtEWnPC8T/dVsb/qEn/e
-         XHuwLIpZocTMVowgpe0bluI1L0KJlekh0hKPiYOyFo738kDl0d8BgqHJy08PAGrKA4UF
-         X8QQ+jup61DghpIlCjtoqq5uXvkj6C3m4IxmFuInJiEcnA2yUGdBIHPOu2EXfOA9yx6f
-         opjPlZ0iOxBALC7xg6+2nZLXey1s00KfJYHm9bvzy7aeYfR0Mn0JJJ+mMEKrsRqV3GyF
-         5mYTAbNOU7Z3q+BFAx9yEIVdD0d/ui6MpBCSKDKnxS50HAPq8TDESMjdciPpdFmjOwK1
-         zd/A==
-X-Gm-Message-State: AC+VfDzxjMscXT4sEQTZ9W6CmAxgoMeQLIVVGBtM1g/5ih28WIkStxXS
-        Sx4dh78rDf800wbd1qPtTOJ8gRC7Y1H4vMyASZI3vtooJqchaXgkRFzSfPywNrOgaYOIBUUjJKU
-        HMYuulc+jRTufwDCUfIybKeHPQdqc1DuKW6IgfF5Qb0O39g==
-X-Received: by 2002:a05:6870:8785:b0:1a6:88c4:5815 with SMTP id r5-20020a056870878500b001a688c45815mr2399848oam.57.1686574282897;
-        Mon, 12 Jun 2023 05:51:22 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7d6CuEdbi4X+dikuOxYc7owlwRtCAJacFJFzXKOQlEcvp7Jz/z6S00gZUboMLR6TJ52c8YVQ==
-X-Received: by 2002:a05:6870:8785:b0:1a6:88c4:5815 with SMTP id r5-20020a056870878500b001a688c45815mr2399831oam.57.1686574282715;
-        Mon, 12 Jun 2023 05:51:22 -0700 (PDT)
+        bh=9WA1GnTKde4fTKucBDNJJp1kdZH51ghqRlq/wPSryAw=;
+        b=ljnYoVOUBYGBI6QPwDhRygJCWFq3HVcSSkalgoWM70xV2qPXLKVNC4AjtbmdU1dKcC
+         K32kOfpxvPs+EfVKW+wMfETF/KXJxlB/Ox63u88A3dgZHv6ywT6vCXn2emlVbJunYpZ3
+         KnEIed+Emuukj0QFIx4a7o78diZviCNz1OGvMjmJhqnl7qbPuc5dwpWeNDPLGsGSv0Ua
+         XS9aOFVc29UvyxpmZanHnJx0WaLkzkD/p9HcAx5Fh7udtlgUhZsicrCwblzEopLWrAAH
+         Iogs4tAiyYGGYbXU3nUomUgNBfdDqoRHhq5xXbSCRAeqBxDUS/4usOUXIOjbmugteCqO
+         +KZw==
+X-Gm-Message-State: AC+VfDywtAqEY+lfYHiQkuP9E5fGaPKCTGxa2OecRK1fhQePoLsNRryq
+        mbt3uuCEGYKS/crgDKttRm7VflHnuQvI/DPeQsD6IbNnIj99cKMgOi3n4FzBNha0S4oHH8erTMe
+        OEQIu+0ph1vFdeQL5E3Spl7bJlAExyqW9+ZpFQ5n+r64B1g==
+X-Received: by 2002:a05:6870:6256:b0:196:8dc3:4e16 with SMTP id r22-20020a056870625600b001968dc34e16mr6011824oak.39.1686574287735;
+        Mon, 12 Jun 2023 05:51:27 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4zWRS7ZviV1sYFayuCJ8VhSxwjQK/79tiCchsPFEkiZDfJBlJWhoUWPx7Bd1s+FgghYjeJMw==
+X-Received: by 2002:a05:6870:6256:b0:196:8dc3:4e16 with SMTP id r22-20020a056870625600b001968dc34e16mr6011809oak.39.1686574287496;
+        Mon, 12 Jun 2023 05:51:27 -0700 (PDT)
 Received: from magali.. ([2804:14c:bbe3:4606:d612:b95d:6bdc:8f6d])
-        by smtp.gmail.com with ESMTPSA id j22-20020a4ad196000000b00529cc3986c8sm3157193oor.40.2023.06.12.05.51.18
+        by smtp.gmail.com with ESMTPSA id j22-20020a4ad196000000b00529cc3986c8sm3157193oor.40.2023.06.12.05.51.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 05:51:22 -0700 (PDT)
+        Mon, 12 Jun 2023 05:51:27 -0700 (PDT)
 From:   Magali Lemes <magali.lemes@canonical.com>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, vfedorenko@novek.ru,
-        tianjia.zhang@linux.alibaba.com
+        pabeni@redhat.com, shuah@kernel.org, dsahern@gmail.com
 Cc:     andrei.gherzan@canonical.com, netdev@vger.kernel.org,
+        David Ahern <dsahern@kernel.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/4] selftests: net: tls: check if FIPS mode is enabled
-Date:   Mon, 12 Jun 2023 09:51:05 -0300
-Message-Id: <20230612125107.73795-3-magali.lemes@canonical.com>
+Subject: [PATCH v3 3/4] selftests: net: vrf-xfrm-tests: change authentication and encryption algos
+Date:   Mon, 12 Jun 2023 09:51:06 -0300
+Message-Id: <20230612125107.73795-4-magali.lemes@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230612125107.73795-1-magali.lemes@canonical.com>
 References: <20230612125107.73795-1-magali.lemes@canonical.com>
@@ -74,7 +74,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,115 +82,105 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-TLS selftests use the ChaCha20-Poly1305 and SM4 algorithms, which are not
-FIPS compliant. When fips=1, this set of tests fails. Add a check and only
-run these tests if not in FIPS mode.
+The vrf-xfrm-tests tests use the hmac(md5) and cbc(des3_ede)
+algorithms for performing authentication and encryption, respectively.
+This causes the tests to fail when fips=1 is set, since these algorithms
+are not allowed in FIPS mode. Therefore, switch from hmac(md5) and
+cbc(des3_ede) to hmac(sha1) and cbc(aes), which are FIPS compliant.
 
-Fixes: 4f336e88a870 ("selftests/tls: add CHACHA20-POLY1305 to tls selftests")
-Fixes: e506342a03c7 ("selftests/tls: add SM4 GCM/CCM to tls selftests")
+Fixes: 3f251d741150 ("selftests: Add tests for vrf and xfrms")
+Reviewed-by: David Ahern <dsahern@kernel.org>
 Signed-off-by: Magali Lemes <magali.lemes@canonical.com>
 ---
-Changes in v3:
- - No need to initialize static variable to zero.
- - Skip tests during test setup only.
- - Use the constructor attribute to set fips_enabled before entering
- main().
+No change in v3.
  
 Changes in v2:
- - Put fips_non_compliant into the variants.
- - Turn fips_enabled into a static global variable.
- - Read /proc/sys/crypto/fips_enabled only once at main().
+ - Add R-b tag.
 
- tools/testing/selftests/net/tls.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/vrf-xfrm-tests.sh | 32 +++++++++----------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index e699548d4247..e4efe80d55e9 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -25,6 +25,8 @@
- #define TLS_PAYLOAD_MAX_LEN 16384
- #define SOL_TLS 282
+diff --git a/tools/testing/selftests/net/vrf-xfrm-tests.sh b/tools/testing/selftests/net/vrf-xfrm-tests.sh
+index 184da81f554f..452638ae8aed 100755
+--- a/tools/testing/selftests/net/vrf-xfrm-tests.sh
++++ b/tools/testing/selftests/net/vrf-xfrm-tests.sh
+@@ -264,60 +264,60 @@ setup_xfrm()
+ 	ip -netns host1 xfrm state add src ${HOST1_4} dst ${HOST2_4} \
+ 	    proto esp spi ${SPI_1} reqid 0 mode tunnel \
+ 	    replay-window 4 replay-oseq 0x4 \
+-	    auth-trunc 'hmac(md5)' ${AUTH_1} 96 \
+-	    enc 'cbc(des3_ede)' ${ENC_1} \
++	    auth-trunc 'hmac(sha1)' ${AUTH_1} 96 \
++	    enc 'cbc(aes)' ${ENC_1} \
+ 	    sel src ${h1_4} dst ${h2_4} ${devarg}
  
-+static int fips_enabled;
-+
- struct tls_crypto_info_keys {
- 	union {
- 		struct tls12_crypto_info_aes_gcm_128 aes128;
-@@ -235,7 +237,7 @@ FIXTURE_VARIANT(tls)
- {
- 	uint16_t tls_version;
- 	uint16_t cipher_type;
--	bool nopad;
-+	bool nopad, fips_non_compliant;
- };
+ 	ip -netns host2 xfrm state add src ${HOST1_4} dst ${HOST2_4} \
+ 	    proto esp spi ${SPI_1} reqid 0 mode tunnel \
+ 	    replay-window 4 replay-oseq 0x4 \
+-	    auth-trunc 'hmac(md5)' ${AUTH_1} 96 \
+-	    enc 'cbc(des3_ede)' ${ENC_1} \
++	    auth-trunc 'hmac(sha1)' ${AUTH_1} 96 \
++	    enc 'cbc(aes)' ${ENC_1} \
+ 	    sel src ${h1_4} dst ${h2_4}
  
- FIXTURE_VARIANT_ADD(tls, 12_aes_gcm)
-@@ -254,24 +256,28 @@ FIXTURE_VARIANT_ADD(tls, 12_chacha)
- {
- 	.tls_version = TLS_1_2_VERSION,
- 	.cipher_type = TLS_CIPHER_CHACHA20_POLY1305,
-+	.fips_non_compliant = true,
- };
  
- FIXTURE_VARIANT_ADD(tls, 13_chacha)
- {
- 	.tls_version = TLS_1_3_VERSION,
- 	.cipher_type = TLS_CIPHER_CHACHA20_POLY1305,
-+	.fips_non_compliant = true,
- };
+ 	ip -netns host1 xfrm state add src ${HOST2_4} dst ${HOST1_4} \
+ 	    proto esp spi ${SPI_2} reqid 0 mode tunnel \
+ 	    replay-window 4 replay-oseq 0x4 \
+-	    auth-trunc 'hmac(md5)' ${AUTH_2} 96 \
+-	    enc 'cbc(des3_ede)' ${ENC_2} \
++	    auth-trunc 'hmac(sha1)' ${AUTH_2} 96 \
++	    enc 'cbc(aes)' ${ENC_2} \
+ 	    sel src ${h2_4} dst ${h1_4} ${devarg}
  
- FIXTURE_VARIANT_ADD(tls, 13_sm4_gcm)
- {
- 	.tls_version = TLS_1_3_VERSION,
- 	.cipher_type = TLS_CIPHER_SM4_GCM,
-+	.fips_non_compliant = true,
- };
+ 	ip -netns host2 xfrm state add src ${HOST2_4} dst ${HOST1_4} \
+ 	    proto esp spi ${SPI_2} reqid 0 mode tunnel \
+ 	    replay-window 4 replay-oseq 0x4 \
+-	    auth-trunc 'hmac(md5)' ${AUTH_2} 96 \
+-	    enc 'cbc(des3_ede)' ${ENC_2} \
++	    auth-trunc 'hmac(sha1)' ${AUTH_2} 96 \
++	    enc 'cbc(aes)' ${ENC_2} \
+ 	    sel src ${h2_4} dst ${h1_4}
  
- FIXTURE_VARIANT_ADD(tls, 13_sm4_ccm)
- {
- 	.tls_version = TLS_1_3_VERSION,
- 	.cipher_type = TLS_CIPHER_SM4_CCM,
-+	.fips_non_compliant = true,
- };
  
- FIXTURE_VARIANT_ADD(tls, 12_aes_ccm)
-@@ -311,6 +317,9 @@ FIXTURE_SETUP(tls)
- 	int one = 1;
- 	int ret;
+ 	ip -6 -netns host1 xfrm state add src ${HOST1_6} dst ${HOST2_6} \
+ 	    proto esp spi ${SPI_1} reqid 0 mode tunnel \
+ 	    replay-window 4 replay-oseq 0x4 \
+-	    auth-trunc 'hmac(md5)' ${AUTH_1} 96 \
+-	    enc 'cbc(des3_ede)' ${ENC_1} \
++	    auth-trunc 'hmac(sha1)' ${AUTH_1} 96 \
++	    enc 'cbc(aes)' ${ENC_1} \
+ 	    sel src ${h1_6} dst ${h2_6} ${devarg}
  
-+	if (fips_enabled && variant->fips_non_compliant)
-+		SKIP(return, "Unsupported cipher in FIPS mode");
-+
- 	tls_crypto_info_init(variant->tls_version, variant->cipher_type,
- 			     &tls12);
+ 	ip -6 -netns host2 xfrm state add src ${HOST1_6} dst ${HOST2_6} \
+ 	    proto esp spi ${SPI_1} reqid 0 mode tunnel \
+ 	    replay-window 4 replay-oseq 0x4 \
+-	    auth-trunc 'hmac(md5)' ${AUTH_1} 96 \
+-	    enc 'cbc(des3_ede)' ${ENC_1} \
++	    auth-trunc 'hmac(sha1)' ${AUTH_1} 96 \
++	    enc 'cbc(aes)' ${ENC_1} \
+ 	    sel src ${h1_6} dst ${h2_6}
  
-@@ -406,6 +415,7 @@ static void chunked_sendfile(struct __test_metadata *_metadata,
  
- TEST_F(tls, multi_chunk_sendfile)
- {
-+
- 	chunked_sendfile(_metadata, self, 4096, 4096);
- 	chunked_sendfile(_metadata, self, 4096, 0);
- 	chunked_sendfile(_metadata, self, 4096, 1);
-@@ -1865,4 +1875,17 @@ TEST(prequeue) {
- 	close(cfd);
+ 	ip -6 -netns host1 xfrm state add src ${HOST2_6} dst ${HOST1_6} \
+ 	    proto esp spi ${SPI_2} reqid 0 mode tunnel \
+ 	    replay-window 4 replay-oseq 0x4 \
+-	    auth-trunc 'hmac(md5)' ${AUTH_2} 96 \
+-	    enc 'cbc(des3_ede)' ${ENC_2} \
++	    auth-trunc 'hmac(sha1)' ${AUTH_2} 96 \
++	    enc 'cbc(aes)' ${ENC_2} \
+ 	    sel src ${h2_6} dst ${h1_6} ${devarg}
+ 
+ 	ip -6 -netns host2 xfrm state add src ${HOST2_6} dst ${HOST1_6} \
+ 	    proto esp spi ${SPI_2} reqid 0 mode tunnel \
+ 	    replay-window 4 replay-oseq 0x4 \
+-	    auth-trunc 'hmac(md5)' ${AUTH_2} 96 \
+-	    enc 'cbc(des3_ede)' ${ENC_2} \
++	    auth-trunc 'hmac(sha1)' ${AUTH_2} 96 \
++	    enc 'cbc(aes)' ${ENC_2} \
+ 	    sel src ${h2_6} dst ${h1_6}
  }
  
-+static void __attribute__((constructor)) fips_check(void) {
-+	int res;
-+	FILE *f;
-+
-+	f = fopen("/proc/sys/crypto/fips_enabled", "r");
-+	if (f) {
-+		res = fscanf(f, "%d", &fips_enabled);
-+		if (res != 1)
-+			ksft_print_msg("ERROR: Couldn't read /proc/sys/crypto/fips_enabled\n");
-+		fclose(f);
-+	}
-+}
-+
- TEST_HARNESS_MAIN
 -- 
 2.34.1
 
