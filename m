@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9A372ED43
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 22:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A49C72ED70
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 22:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240192AbjFMUpG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Jun 2023 16:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
+        id S234789AbjFMU6q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Jun 2023 16:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234214AbjFMUpC (ORCPT
+        with ESMTP id S234663AbjFMU6p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:45:02 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACD9E57
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 13:45:00 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so3841a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 13:45:00 -0700 (PDT)
+        Tue, 13 Jun 2023 16:58:45 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6F91BC5
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 13:58:43 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so651a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 13:58:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686689099; x=1689281099;
+        d=google.com; s=20221208; t=1686689921; x=1689281921;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w3I43KAuJAocXaniTcVrq9SXL9Lvm/1crVtr2GDT8u8=;
-        b=5Zm5sKRkHMVDZPW2Y1FNVHlOcAFdOb/jk3DvGjuiLGPssaDk+mymtYebDfdKQu0tkX
-         adUO3QTRnBddXET8vlONIyHU/MHqu+0/pRYg2sjjepoS9aOvmJiG9nt2iJnRU8u8frvG
-         CmDWTEpHuADJ6v39wAZvIgTNDyLw7VUYqpfOwtFnnnCZnBuxTUoMv2KmfdQdRVFOHAZm
-         ynorB8ZtdBPyca8D3c3g0O1x9IlUfar31fSFerUJ2kAhNNKMe/z2fQW8WIG/6tR8EyJH
-         VTMJqXMDMVAdiIlEIp8L0SGS9bq9pkPPNl92Mh71c3lz6DNxIhH6wLOLRe2f0EbC2rKn
-         0fBQ==
+        bh=IAKJIDFpZuSxjbq11Sivsx7j8EhbMPSluCQPJIPFOeY=;
+        b=3wvY99jVUR4aRlrh2JJ3n4XR/82x8Kmm6awdM03ZnnU+AjfX8vl1vS9BU6SUoQOgWL
+         yKQCBUjxJf9WazFAHgYv7mpumPoB44lvFBO6dsdaC+eQAw6ciu8hD5HacFQ5P4OkRt1H
+         LZSb1MZD5UgpFuigznxpri1Q17ISsXb7ZJto36DI2PBRcHgk4y6fu6W3PKWvFPqK5WoZ
+         dtXqxEwL0K09H1j8crTja0ZJGkZTXFE/+QL5t4Ojh2wze1SDTwbkZn2rEUGBqVwT7z8Q
+         3YX0m4SZaALjPCmLp/hQvKb/7ohYWQj60SUKXEisBqd4oyHujuXiHDO4iz0dFsiiwPp2
+         9Xxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686689099; x=1689281099;
+        d=1e100.net; s=20221208; t=1686689921; x=1689281921;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=w3I43KAuJAocXaniTcVrq9SXL9Lvm/1crVtr2GDT8u8=;
-        b=GaBlDrkRSGDooZiWMHvXvN0K7vmE5gC0kVaVY8dntVx5Au3Hk6wTo40xxA6zLliory
-         pZA3gyLyVCsMyI6J4eww9vnJJNC/Kjz5mKHiUHrzkRpt/TiU/1/7IQ/xYkTPy5iVLgnZ
-         7j+bFBk464YvPNGQ8V0PHVXm4sxv5k9EXwJOIaKkvDoiBTR5CKV8QphBjgc2Ndysj0v1
-         jg2VNqcSzqoUWcqsTssv9amoU7Vdtlghpc1ysCveBR8cCJmLEyGSLqrr3xOQpFvMjy+Y
-         UsIuRyqMowseR1Vs3VH0lwAGOq1YP+uShQjGnS+hyq+uagPfPuhW/gizFwwFLRc38OiI
-         R+sw==
-X-Gm-Message-State: AC+VfDzaIVMPMJLao0jx2iFlkqKHcPzS/nb5qbqZvXG4LE7JtyWYchyZ
-        2zbp5xjy/qYz3uMGTorsJKmOCJNbFeYh81AkwE3d/A==
-X-Google-Smtp-Source: ACHHUZ58WJEANk7OZrTLn1q96CvAJiH4uGdd3nBCTWwrgtjjdrmlkWJXrFAweZHcEfVBn8g33KV6l4BEWsYWZoALSi0=
-X-Received: by 2002:a50:d0d1:0:b0:518:7076:74bc with SMTP id
- g17-20020a50d0d1000000b00518707674bcmr22868edf.1.1686689099093; Tue, 13 Jun
- 2023 13:44:59 -0700 (PDT)
+        bh=IAKJIDFpZuSxjbq11Sivsx7j8EhbMPSluCQPJIPFOeY=;
+        b=AcBAhl6yTMVzBB+lsPGfvD3Pecjr5VMSUFedvzHEL+5/ybuhauw62Xc3SqPdLbXQg5
+         oyosiGqmqmu4Ag4c0URKlDtTdeFnfh5o0NzPwQsYGudTVXMCuxqdp2xr+MpSmDr73Nv6
+         u3J7eNshFugpmiIoHjN6O/cChJVdpx5tmX4lM1r7ZcA73lHMd2amx0k0WiPEZ6cfsmrU
+         6dlxhSpL/1iQV9ESsMumuuMz1iEsjKNORMYD6QoVIsppFuPgjCe7emJfVSALe87wnOaI
+         AuGKDDAg7pWMapLFuDc5Kfv9YBfdCcuD/NwowTANhEzZLELFKLqi9rskxmC1T9KPT2+H
+         DSeQ==
+X-Gm-Message-State: AC+VfDz9T5pb7OjGGYiCdntp/EfcePyUjr+QSqBKKsg/l3mPbTY804cG
+        s+Tgg6fiYRPYP5A4l2Gon2Lc88+IEPnlOGzr7kQyeA==
+X-Google-Smtp-Source: ACHHUZ4+Sx/OVELnVq7juOYWbkf7lKyjpQO6KHH4OztkJBMF/OX6VD0uZMZsQf3W8LLsd0ZxTGuxxVFlR4EQMy5V6SI=
+X-Received: by 2002:a50:baa9:0:b0:510:b2b7:8a78 with SMTP id
+ x38-20020a50baa9000000b00510b2b78a78mr17708ede.5.1686689921506; Tue, 13 Jun
+ 2023 13:58:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230610005149.1145665-1-rmoar@google.com> <20230610005149.1145665-6-rmoar@google.com>
- <CABVgOSkKYzynFcAdSKbdbVjL0bYnXtgM8XbkkRc2+9mef1wCzQ@mail.gmail.com>
-In-Reply-To: <CABVgOSkKYzynFcAdSKbdbVjL0bYnXtgM8XbkkRc2+9mef1wCzQ@mail.gmail.com>
+References: <20230610005149.1145665-1-rmoar@google.com> <20230610005149.1145665-4-rmoar@google.com>
+ <202306131324.5B69ABC@keescook>
+In-Reply-To: <202306131324.5B69ABC@keescook>
 From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 13 Jun 2023 16:44:48 -0400
-Message-ID: <CA+GJov5ug3DjXe4f0_G1emt7FPVZACqtyhoQtNmxZ81tLH_feA@mail.gmail.com>
-Subject: Re: [RFC v1 5/6] kunit: memcpy: Mark tests as slow using test attributes
-To:     David Gow <davidgow@google.com>
-Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
+Date:   Tue, 13 Jun 2023 16:58:30 -0400
+Message-ID: <CA+GJov6FjojVU6FhbkFfosGQveqFG2a2fuc4Pw83Cs7dbhuhDw@mail.gmail.com>
+Subject: Re: [RFC v1 3/6] kunit: Add ability to filter attributes
+To:     Kees Cook <keescook@chromium.org>
+Cc:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
+        brendan.higgins@linux.dev, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
         linux-hardening@vger.kernel.org, jstultz@google.com,
         tglx@linutronix.de, sboyd@kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -66,83 +66,61 @@ Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 4:29=E2=80=AFAM David Gow <davidgow@google.com> wro=
-te:
+On Tue, Jun 13, 2023 at 4:26=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
+rote:
 >
-> On Sat, 10 Jun 2023 at 08:52, Rae Moar <rmoar@google.com> wrote:
+> On Sat, Jun 10, 2023 at 12:51:46AM +0000, Rae Moar wrote:
+> > Add filtering of test attributes. Users can filter tests using a
+> > module_param_array called "filter". This functionality will be added to
+> > kunit.py in the next patch.
 > >
-> > Mark slow memcpy KUnit tests using test attributes.
+> > The filters will be imputed in the format:
+> > "<attribute_name><operation><attribute_value>"
 > >
-> > Tests marked as slow are as follows: memcpy_large_test, memmove_test,
-> > memmove_large_test, and memmove_overlap_test.
+> > Example: "speed>slow"
 > >
-> > These tests were the slowest of the memcpy tests and relatively slower =
-to
-> > most other KUnit tests. Most of these tests are already skipped when
-> > CONFIG_MEMCPY_SLOW_KUNIT_TEST is not enabled.
+> > Operations include: >, <, >=3D, <=3D, !=3D, and =3D. These operations d=
+o not need
+> > to act the same for every attribute.
 >
-> I assume the plan will be to eventually remove the
-> CONFIG_MEMCPY_SLOW_KUNIT_TEST option and just rely on the "speed"
-> attribute to filter these out. That has the disadvantage that the
-> tests will still be built, but is probably the nicer long-term
-> solution.
+> How is the "default" filter specified? Is explicitly unfiltered? (i.e.
+> "slow" stuff will run by default?) Or should there be a default filter
+> of "speed<slow" for the memcpy conversion?
 >
-> I suppose we could remove it in this patch, too, but I suspect it
-> makes more sense to have a deprecation period to make sure the
-> attributes are working well. That being said, maybe add a note to the
-> CONFIG_MEMCPY_SLOW_KUNIT_TEST help text to advertise this?
+> But yes, I'm a fan of this whole series! I would much prefer this to
+> having one-off CONFIGs for slow tests. :)
 >
 
-Yes that was the plan but I should definitely document that here and
-then I like the idea for adding the note with
-CONFIG_MEMCPY_SLOW_KUNIT_TEST.
+Hello!
+
+Great to hear that you are happy to see this series.
+
+Currently if no filter is specified, tests will run unfiltered (so the
+slow tests will run by default).
+
+But I think the idea of having a "default" filter is really
+interesting. I would definitely be open to adding a default filter
+that only runs tests with speeds faster than slow, which could then be
+overridden by any filter input.
+
+This also means there could be suite specific default filters but that
+may be a future implementation since we currently only have one
+attribute.
+
+Or alternatively we could have a file that includes a list of default
+filters that could then be inputted and altered based on suite.
 
 Thanks!
--Rae
+Rae
 
-
->
-> >
-> > These tests can now be filtered on using the KUnit test attribute filte=
-ring
-> > feature. Example: --filter "speed>slow". This will run only the tests t=
-hat
-> > have speeds faster than slow. The slow attribute will also be outputted=
- in
-> > KTAP.
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
-> > ---
-> >  lib/memcpy_kunit.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
-> > index 887926f04731..440aee705ccc 100644
-> > --- a/lib/memcpy_kunit.c
-> > +++ b/lib/memcpy_kunit.c
-> > @@ -551,10 +551,10 @@ static void strtomem_test(struct kunit *test)
-> >  static struct kunit_case memcpy_test_cases[] =3D {
-> >         KUNIT_CASE(memset_test),
-> >         KUNIT_CASE(memcpy_test),
-> > -       KUNIT_CASE(memcpy_large_test),
-> > -       KUNIT_CASE(memmove_test),
-> > -       KUNIT_CASE(memmove_large_test),
-> > -       KUNIT_CASE(memmove_overlap_test),
-> > +       KUNIT_CASE_SLOW(memcpy_large_test),
-> > +       KUNIT_CASE_SLOW(memmove_test),
-> > +       KUNIT_CASE_SLOW(memmove_large_test),
-> > +       KUNIT_CASE_SLOW(memmove_overlap_test),
-> >         KUNIT_CASE(strtomem_test),
-> >         {}
-> >  };
-> > --
-> > 2.41.0.162.gfafddb0af9-goog
-> >
+> --
+> Kees Cook
