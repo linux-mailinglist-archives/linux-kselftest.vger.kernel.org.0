@@ -2,61 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002AF72DEE5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 12:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170A172DEEB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 12:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241683AbjFMKPO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Jun 2023 06:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
+        id S240690AbjFMKPR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Jun 2023 06:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241166AbjFMKPG (ORCPT
+        with ESMTP id S241559AbjFMKPM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:15:06 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F0E18C
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 03:15:04 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30aeee7c8a0so3943129f8f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 03:15:04 -0700 (PDT)
+        Tue, 13 Jun 2023 06:15:12 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C43189
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 03:15:06 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f8cc042e2bso2869615e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 03:15:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1686651303; x=1689243303;
+        d=isovalent.com; s=google; t=1686651304; x=1689243304;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rUrpSFAbYZ/Kx7Q/Mv3h3i//CU/VSXI4LMvr8LpxmhI=;
-        b=MZm+lUMh442N5nZ/uhW387Ax9a5HGiMbjKOfiGW7++VHHZ9fNpglFMWdrCpp2v6riw
-         sobyQ75f3IBXtZNDOFy77OEvAUYu/OnletVtP75IFDwk8eQFzDq4oroAjdeQe99VSA1k
-         MzRjWQ/74t8rr1G3Y+bl7J3zkJBhByUmO59klQSLimOpfXSd/e2Kk9Y+SmKz/hVE39N1
-         O/os2vqai8U19jKcdBmyNP1N8KOplKS92StTHQ6HVg6EYdxvyql/ovQ1lN2nsK3p6cOn
-         Xk0rJXhY6rbdPZtGHyXDBh4Vdcnp4e1EFtjyqu5SAQRkMUOAOENW4Buy2y5xxMTwWwFg
-         6d6g==
+        bh=rHwA68FEDYeOk8tUAO5Jk0KSGY++DaKS34uczmd9os4=;
+        b=TNJg/bGcJ1sLA2Qufy7t9ZzUZMyC0Bub5mPNwPylxTrrM8GSgD8nNVvWwJldPtURRp
+         2m1n1DcTfz+aM3+hm9kWHQymF4McTaIcETHulWpVlGr3gFeXF7eahafGyfZULqiK/FOO
+         vQo23OjmxFfQQOosaMpurTz+6xkExqn4z4L1yyrAZ+XoptkrmKU2Lyvc6Zf+AM1LFLly
+         U8xc7TUNx6bnxKn72SW/9yIq6CSESa8JaKgwHRzDyOKku61Miz8SkTB0u+TZDgUF+sIP
+         n8Es7EY6FeFBqZGuHdiJeGCkIHrRhQZ65dC64MK7K1HtU87A1c8ZIH296asfstgMm74M
+         4PHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686651303; x=1689243303;
+        d=1e100.net; s=20221208; t=1686651304; x=1689243304;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rUrpSFAbYZ/Kx7Q/Mv3h3i//CU/VSXI4LMvr8LpxmhI=;
-        b=LnRTk+5sHDbgI8hA405dB7DSsldf0/88/EjbW8lH9CHtZy+joMmDtf1HPsmhBLX/7r
-         5rHNk4k/34nfLsvWIt5+hfsJ9j036gTPc0rXB4yU70vyHyAzjRFae7brTNjcFda0Kr+N
-         3ACghHmWWm/vUQyr5vNblOwvK90lMuoswMYIs38qBcyijGek2JHWW3R1RmTcgwcsf5nA
-         fXLGBgdskA6Hd2IS60Kd1s6IbacksAuZyW9Q/uj/K0W7e0XpXEKKdN/lOxvMkG0L6nyk
-         g5N6nF/r+0RswrymBrHK1+rWbODdk6HXCtoF5ntcA2sz+v7Pt04iY/34B5Zgu0sLkifb
-         iYfw==
-X-Gm-Message-State: AC+VfDxqiV5DKSGmVw/+2+tPA4KeaXRcMORM1/QoIiivYRxZoNe6lL7T
-        w/ihEFxgo6fh56lb4UMCFPwaPQ==
-X-Google-Smtp-Source: ACHHUZ4msN9rPR8QjB8GX6d9AlgjceBhSGH+v0okKIS7YpeZbBLOGz8dcV1oT2JvqxkLyuOhfZ4ZHg==
-X-Received: by 2002:a05:6000:10c2:b0:30f:bdad:19db with SMTP id b2-20020a05600010c200b0030fbdad19dbmr5016183wrx.10.1686651303389;
-        Tue, 13 Jun 2023 03:15:03 -0700 (PDT)
+        bh=rHwA68FEDYeOk8tUAO5Jk0KSGY++DaKS34uczmd9os4=;
+        b=fvMF9cXGY8h1DC3jRGQw+5BK+xzd6m0eahiLn/973kFilXux8gALEEQAgPB/T6gpsf
+         bTz9SfhEmnxgd9XixFxrPb4teRFT6MTswOGEOn110ZML0QhaVlQVQvnCE6M3hK4Jzo5L
+         lcHfX230CM5uEAZiSSmTbs4qzcwrbWXmNPJim4nP6K8vohVpqDLSWN/kSF6SI/awLWDr
+         ZjJMZLY/9vNa7Qfza2mcyDczRovtZ/vq+giZYf7qwD8TW3AFKYv3OAl+KQnE5bs+f2k+
+         dhy6TJTLTNQXD5Hj6MQ8rFSQBgnpZ7IaZWM1PWey2DPAiCIbKMvBaNFZIGDMTBNJU03b
+         i5Mw==
+X-Gm-Message-State: AC+VfDy2r6+pGUuT/JS54JabQyPA3/owiD1edzaz/24RQEOrEJFdALHw
+        6b20gkKp9L1t/o8hq7aS/Ffm0Q==
+X-Google-Smtp-Source: ACHHUZ7Mm1wWhOgmioSxN7n+Us0O52P06pEkHAORe5bdXS2x96V7flM7KLE7stp4migy6x5pLM5ZDA==
+X-Received: by 2002:adf:f642:0:b0:2f0:2dfe:e903 with SMTP id x2-20020adff642000000b002f02dfee903mr5099880wrp.69.1686651304646;
+        Tue, 13 Jun 2023 03:15:04 -0700 (PDT)
 Received: from [192.168.133.193] ([5.148.46.226])
-        by smtp.gmail.com with ESMTPSA id k15-20020a5d6e8f000000b0030e6096afb6sm15075020wrz.12.2023.06.13.03.15.02
+        by smtp.gmail.com with ESMTPSA id k15-20020a5d6e8f000000b0030e6096afb6sm15075020wrz.12.2023.06.13.03.15.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 03:15:03 -0700 (PDT)
+        Tue, 13 Jun 2023 03:15:04 -0700 (PDT)
 From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Tue, 13 Jun 2023 11:14:59 +0100
-Subject: [PATCH bpf-next v2 4/6] net: remove duplicate sk_lookup helpers
+Date:   Tue, 13 Jun 2023 11:15:00 +0100
+Subject: [PATCH bpf-next v2 5/6] bpf, net: Support SO_REUSEPORT sockets
+ with bpf_sk_assign
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230613-so-reuseport-v2-4-b7c69a342613@isovalent.com>
+Message-Id: <20230613-so-reuseport-v2-5-b7c69a342613@isovalent.com>
 References: <20230613-so-reuseport-v2-0-b7c69a342613@isovalent.com>
 In-Reply-To: <20230613-so-reuseport-v2-0-b7c69a342613@isovalent.com>
 To:     "David S. Miller" <davem@davemloft.net>,
@@ -79,281 +80,352 @@ To:     "David S. Miller" <davem@davemloft.net>,
         Kuniyuki Iwashima <kuniyu@amazon.com>
 Cc:     Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>
+        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>,
+        Joe Stringer <joe@cilium.io>
 X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that inet[6]_lookup_reuseport are parameterised on the ehashfn
-we can remove two sk_lookup helpers.
+Currently the bpf_sk_assign helper in tc BPF context refuses SO_REUSEPORT
+sockets. This means we can't use the helper to steer traffic to Envoy,
+which configures SO_REUSEPORT on its sockets. In turn, we're blocked
+from removing TPROXY from our setup.
 
+The reason that bpf_sk_assign refuses such sockets is that the
+bpf_sk_lookup helpers don't execute SK_REUSEPORT programs. Instead,
+one of the reuseport sockets is selected by hash. This could cause
+dispatch to the "wrong" socket:
+
+    sk = bpf_sk_lookup_tcp(...) // select SO_REUSEPORT by hash
+    bpf_sk_assign(skb, sk) // SK_REUSEPORT wasn't executed
+
+Fixing this isn't as simple as invoking SK_REUSEPORT from the lookup
+helpers unfortunately. In the tc context, L2 headers are at the start
+of the skb, while SK_REUSEPORT expects L3 headers instead.
+
+Instead, we execute the SK_REUSEPORT program when the assigned socket
+is pulled out of the skb, further up the stack. This creates some
+trickiness with regards to refcounting as bpf_sk_assign will put both
+refcounted and RCU freed sockets in skb->sk. reuseport sockets are RCU
+freed. We can infer that the sk_assigned socket is RCU freed if the
+reuseport lookup succeeds, but convincing yourself of this fact isn't
+straight forward. Therefore we defensively check refcounting on the
+sk_assign sock even though it's probably not required in practice.
+
+Fixes: 8e368dc72e86 ("bpf: Fix use of sk->sk_reuseport from sk_assign")
+Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
+Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+Cc: Joe Stringer <joe@cilium.io>
+Link: https://lore.kernel.org/bpf/CACAyw98+qycmpQzKupquhkxbvWK4OFyDuuLMBNROnfWMZxUWeA@mail.gmail.com/
 ---
- include/net/inet6_hashtables.h |  9 +++++++++
- include/net/inet_hashtables.h  |  7 +++++++
- net/ipv4/inet_hashtables.c     | 26 +++++++++++++-------------
- net/ipv4/udp.c                 | 32 +++++---------------------------
- net/ipv6/inet6_hashtables.c    | 30 +++++++++++++++---------------
- net/ipv6/udp.c                 | 34 +++++-----------------------------
- 6 files changed, 54 insertions(+), 84 deletions(-)
+ include/net/inet6_hashtables.h | 59 ++++++++++++++++++++++++++++++++++++++----
+ include/net/inet_hashtables.h  | 52 +++++++++++++++++++++++++++++++++++--
+ include/net/sock.h             |  7 +++--
+ include/uapi/linux/bpf.h       |  3 ---
+ net/core/filter.c              |  2 --
+ net/ipv4/udp.c                 |  8 ++++--
+ net/ipv6/udp.c                 | 10 ++++---
+ tools/include/uapi/linux/bpf.h |  3 ---
+ 8 files changed, 122 insertions(+), 22 deletions(-)
 
 diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-index 49d586454287..4d2a1a3c0be7 100644
+index 4d2a1a3c0be7..4d300af6ccb6 100644
 --- a/include/net/inet6_hashtables.h
 +++ b/include/net/inet6_hashtables.h
-@@ -73,6 +73,15 @@ struct sock *inet6_lookup_listener(struct net *net,
- 				   const unsigned short hnum,
- 				   const int dif, const int sdif);
+@@ -103,6 +103,49 @@ static inline struct sock *__inet6_lookup(struct net *net,
+ 				     daddr, hnum, dif, sdif);
+ }
  
-+struct sock *inet6_lookup_run_sk_lookup(struct net *net,
-+					int protocol,
-+					struct sk_buff *skb, int doff,
-+					const struct in6_addr *saddr,
-+					const __be16 sport,
-+					const struct in6_addr *daddr,
-+					const u16 hnum, const int dif,
-+					inet6_ehashfn_t ehashfn);
++static inline
++struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int doff,
++			      const struct in6_addr *saddr, const __be16 sport,
++			      const struct in6_addr *daddr, const __be16 dport,
++			      bool *refcounted, inet6_ehashfn_t ehashfn)
++{
++	struct sock *sk, *reuse_sk;
++	bool prefetched;
 +
- static inline struct sock *__inet6_lookup(struct net *net,
- 					  struct inet_hashinfo *hashinfo,
- 					  struct sk_buff *skb, int doff,
++	sk = skb_steal_sock(skb, refcounted, &prefetched);
++	if (!sk)
++		return NULL;
++
++	if (!prefetched)
++		return sk;
++
++	if (sk->sk_protocol == IPPROTO_TCP) {
++		if (sk->sk_state != TCP_LISTEN)
++			return sk;
++	} else if (sk->sk_protocol == IPPROTO_UDP) {
++		if (sk->sk_state != TCP_CLOSE)
++			return sk;
++	} else {
++		return sk;
++	}
++
++	reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
++					  saddr, sport, daddr, ntohs(dport),
++					  ehashfn);
++	if (!reuse_sk || reuse_sk == sk)
++		return sk;
++
++	/* We've chosen a new reuseport sock which is never refcounted.
++	 * sk might be refcounted however, drop the reference if necessary.
++	 */
++	if (*refcounted) {
++		sock_put(sk);
++		*refcounted = false;
++	}
++
++	return reuse_sk;
++}
++
+ static inline struct sock *__inet6_lookup_skb(struct inet_hashinfo *hashinfo,
+ 					      struct sk_buff *skb, int doff,
+ 					      const __be16 sport,
+@@ -110,14 +153,20 @@ static inline struct sock *__inet6_lookup_skb(struct inet_hashinfo *hashinfo,
+ 					      int iif, int sdif,
+ 					      bool *refcounted)
+ {
+-	struct sock *sk = skb_steal_sock(skb, refcounted);
+-
++	struct net *net = dev_net(skb_dst(skb)->dev);
++	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
++	struct sock *sk;
++
++	sk = inet6_steal_sock(net, skb, doff, &ip6h->saddr, sport, &ip6h->daddr, dport,
++			      refcounted, inet6_ehashfn);
++	if (IS_ERR(sk))
++		return NULL;
+ 	if (sk)
+ 		return sk;
+ 
+-	return __inet6_lookup(dev_net(skb_dst(skb)->dev), hashinfo, skb,
+-			      doff, &ipv6_hdr(skb)->saddr, sport,
+-			      &ipv6_hdr(skb)->daddr, ntohs(dport),
++	return __inet6_lookup(net, hashinfo, skb,
++			      doff, &ip6h->saddr, sport,
++			      &ip6h->daddr, ntohs(dport),
+ 			      iif, sdif, refcounted);
+ }
+ 
 diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
-index 51ab6a1a3601..aa02f1db1f86 100644
+index aa02f1db1f86..2c405d9df300 100644
 --- a/include/net/inet_hashtables.h
 +++ b/include/net/inet_hashtables.h
-@@ -393,6 +393,13 @@ struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
- 				   __be32 daddr, unsigned short hnum,
- 				   inet_ehashfn_t ehashfn);
- 
-+struct sock *inet_lookup_run_sk_lookup(struct net *net,
-+				       int protocol,
-+				       struct sk_buff *skb, int doff,
-+				       __be32 saddr, __be16 sport,
-+				       __be32 daddr, u16 hnum, const int dif,
-+				       inet_ehashfn_t ehashfn);
-+
- static inline struct sock *
- 	inet_lookup_established(struct net *net, struct inet_hashinfo *hashinfo,
- 				const __be32 saddr, const __be16 sport,
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index 1ec895fd9905..47f57b060e9e 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -404,25 +404,23 @@ static struct sock *inet_lhash2_lookup(struct net *net,
- 	return result;
+@@ -449,6 +449,49 @@ static inline struct sock *inet_lookup(struct net *net,
+ 	return sk;
  }
  
--static inline struct sock *inet_lookup_run_bpf(struct net *net,
--					       struct inet_hashinfo *hashinfo,
--					       struct sk_buff *skb, int doff,
--					       __be32 saddr, __be16 sport,
--					       __be32 daddr, u16 hnum, const int dif)
-+struct sock *inet_lookup_run_sk_lookup(struct net *net,
-+				       int protocol,
-+				       struct sk_buff *skb, int doff,
-+				       __be32 saddr, __be16 sport,
-+				       __be32 daddr, u16 hnum, const int dif,
-+				       inet_ehashfn_t ehashfn)
++static inline
++struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int doff,
++			     const __be32 saddr, const __be16 sport,
++			     const __be32 daddr, const __be16 dport,
++			     bool *refcounted, inet_ehashfn_t ehashfn)
++{
++	struct sock *sk, *reuse_sk;
++	bool prefetched;
++
++	sk = skb_steal_sock(skb, refcounted, &prefetched);
++	if (!sk)
++		return NULL;
++
++	if (!prefetched)
++		return sk;
++
++	if (sk->sk_protocol == IPPROTO_TCP) {
++		if (sk->sk_state != TCP_LISTEN)
++			return sk;
++	} else if (sk->sk_protocol == IPPROTO_UDP) {
++		if (sk->sk_state != TCP_CLOSE)
++			return sk;
++	} else {
++		return sk;
++	}
++
++	reuse_sk = inet_lookup_reuseport(net, sk, skb, doff,
++					 saddr, sport, daddr, ntohs(dport),
++					 ehashfn);
++	if (!reuse_sk || reuse_sk == sk)
++		return sk;
++
++	/* We've chosen a new reuseport sock which is never refcounted.
++	 * sk might be refcounted however, drop the reference if necessary.
++	 */
++	if (*refcounted) {
++		sock_put(sk);
++		*refcounted = false;
++	}
++
++	return reuse_sk;
++}
++
+ static inline struct sock *__inet_lookup_skb(struct inet_hashinfo *hashinfo,
+ 					     struct sk_buff *skb,
+ 					     int doff,
+@@ -457,13 +500,18 @@ static inline struct sock *__inet_lookup_skb(struct inet_hashinfo *hashinfo,
+ 					     const int sdif,
+ 					     bool *refcounted)
  {
- 	struct sock *sk, *reuse_sk;
- 	bool no_reuseport;
+-	struct sock *sk = skb_steal_sock(skb, refcounted);
++	struct net *net = dev_net(skb_dst(skb)->dev);
+ 	const struct iphdr *iph = ip_hdr(skb);
++	struct sock *sk;
  
--	if (hashinfo != net->ipv4.tcp_death_row.hashinfo)
--		return NULL; /* only TCP is supported */
--
--	no_reuseport = bpf_sk_lookup_run_v4(net, IPPROTO_TCP, saddr, sport,
-+	no_reuseport = bpf_sk_lookup_run_v4(net, protocol, saddr, sport,
- 					    daddr, hnum, dif, &sk);
- 	if (no_reuseport || IS_ERR_OR_NULL(sk))
++	sk = inet_steal_sock(net, skb, doff, iph->saddr, sport, iph->daddr, dport,
++			     refcounted, inet_ehashfn);
++	if (IS_ERR(sk))
++		return NULL;
+ 	if (sk)
  		return sk;
  
- 	reuse_sk = inet_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum,
--					 inet_ehashfn);
-+					 ehashfn);
- 	if (reuse_sk)
- 		sk = reuse_sk;
- 	return sk;
-@@ -440,9 +438,11 @@ struct sock *__inet_lookup_listener(struct net *net,
- 	unsigned int hash2;
+-	return __inet_lookup(dev_net(skb_dst(skb)->dev), hashinfo, skb,
++	return __inet_lookup(net, hashinfo, skb,
+ 			     doff, iph->saddr, sport,
+ 			     iph->daddr, dport, inet_iif(skb), sdif,
+ 			     refcounted);
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 656ea89f60ff..5645570c2a64 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -2806,20 +2806,23 @@ sk_is_refcounted(struct sock *sk)
+  * skb_steal_sock - steal a socket from an sk_buff
+  * @skb: sk_buff to steal the socket from
+  * @refcounted: is set to true if the socket is reference-counted
++ * @prefetched: is set to true if the socket was assigned from bpf
+  */
+ static inline struct sock *
+-skb_steal_sock(struct sk_buff *skb, bool *refcounted)
++skb_steal_sock(struct sk_buff *skb, bool *refcounted, bool *prefetched)
+ {
+ 	if (skb->sk) {
+ 		struct sock *sk = skb->sk;
  
- 	/* Lookup redirect from BPF */
--	if (static_branch_unlikely(&bpf_sk_lookup_enabled)) {
--		result = inet_lookup_run_bpf(net, hashinfo, skb, doff,
--					     saddr, sport, daddr, hnum, dif);
-+	if (static_branch_unlikely(&bpf_sk_lookup_enabled) &&
-+	    hashinfo == net->ipv4.tcp_death_row.hashinfo) {
-+		result = inet_lookup_run_sk_lookup(net, IPPROTO_TCP, skb, doff,
-+						   saddr, sport, daddr, hnum, dif,
-+						   inet_ehashfn);
- 		if (result)
- 			goto done;
+ 		*refcounted = true;
+-		if (skb_sk_is_prefetched(skb))
++		*prefetched = skb_sk_is_prefetched(skb);
++		if (*prefetched)
+ 			*refcounted = sk_is_refcounted(sk);
+ 		skb->destructor = NULL;
+ 		skb->sk = NULL;
+ 		return sk;
  	}
++	*prefetched = false;
+ 	*refcounted = false;
+ 	return NULL;
+ }
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index a7b5e91dd768..d6fb6f43b0f3 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4158,9 +4158,6 @@ union bpf_attr {
+  *		**-EOPNOTSUPP** if the operation is not supported, for example
+  *		a call from outside of TC ingress.
+  *
+- *		**-ESOCKTNOSUPPORT** if the socket type is not supported
+- *		(reuseport).
+- *
+  * long bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
+  *	Description
+  *		Helper is overloaded depending on BPF program type. This
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 428df050d021..d4be0a1d754c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7278,8 +7278,6 @@ BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
+ 		return -EOPNOTSUPP;
+ 	if (unlikely(dev_net(skb->dev) != sock_net(sk)))
+ 		return -ENETUNREACH;
+-	if (unlikely(sk_fullsock(sk) && sk->sk_reuseport))
+-		return -ESOCKTNOSUPPORT;
+ 	if (sk_is_refcounted(sk) &&
+ 	    unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
+ 		return -ENOENT;
 diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 10468fe144d0..2500e92050a0 100644
+index 2500e92050a0..a3fa781432b9 100644
 --- a/net/ipv4/udp.c
 +++ b/net/ipv4/udp.c
-@@ -449,30 +449,6 @@ static struct sock *udp4_lib_lookup2(struct net *net,
- 	return result;
- }
+@@ -2373,7 +2373,11 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 	if (udp4_csum_init(skb, uh, proto))
+ 		goto csum_error;
  
--static struct sock *udp4_lookup_run_bpf(struct net *net,
--					struct udp_table *udptable,
--					struct sk_buff *skb,
--					__be32 saddr, __be16 sport,
--					__be32 daddr, u16 hnum, const int dif)
--{
--	struct sock *sk, *reuse_sk;
--	bool no_reuseport;
+-	sk = skb_steal_sock(skb, &refcounted);
++	sk = inet_steal_sock(net, skb, sizeof(struct udphdr), saddr, uh->source, daddr, uh->dest,
++			     &refcounted, udp_ehashfn);
++	if (IS_ERR(sk))
++		goto no_sk;
++
+ 	if (sk) {
+ 		struct dst_entry *dst = skb_dst(skb);
+ 		int ret;
+@@ -2394,7 +2398,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 	sk = __udp4_lib_lookup_skb(skb, uh->source, uh->dest, udptable);
+ 	if (sk)
+ 		return udp_unicast_rcv_skb(sk, skb, uh);
 -
--	if (udptable != net->ipv4.udp_table)
--		return NULL; /* only UDP is supported */
--
--	no_reuseport = bpf_sk_lookup_run_v4(net, IPPROTO_UDP, saddr, sport,
--					    daddr, hnum, dif, &sk);
--	if (no_reuseport || IS_ERR_OR_NULL(sk))
--		return sk;
--
--	reuse_sk = inet_lookup_reuseport(net, sk, skb, sizeof(struct udphdr),
--					 saddr, sport, daddr, hnum, udp_ehashfn);
--	if (reuse_sk)
--		sk = reuse_sk;
--	return sk;
--}
--
- /* UDP is nearly always wildcards out the wazoo, it makes no sense to try
-  * harder than this. -DaveM
-  */
-@@ -497,9 +473,11 @@ struct sock *__udp4_lib_lookup(struct net *net, __be32 saddr,
- 		goto done;
- 
- 	/* Lookup redirect from BPF */
--	if (static_branch_unlikely(&bpf_sk_lookup_enabled)) {
--		sk = udp4_lookup_run_bpf(net, udptable, skb,
--					 saddr, sport, daddr, hnum, dif);
-+	if (static_branch_unlikely(&bpf_sk_lookup_enabled) &&
-+	    udptable == net->ipv4.udp_table) {
-+		sk = inet_lookup_run_sk_lookup(net, IPPROTO_UDP, skb, sizeof(struct udphdr),
-+					       saddr, sport, daddr, hnum, dif,
-+					       udp_ehashfn);
- 		if (sk) {
- 			result = sk;
- 			goto done;
-diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
-index a350ee40141c..80bf97669fc9 100644
---- a/net/ipv6/inet6_hashtables.c
-+++ b/net/ipv6/inet6_hashtables.c
-@@ -178,27 +178,25 @@ static struct sock *inet6_lhash2_lookup(struct net *net,
- 	return result;
- }
- 
--static inline struct sock *inet6_lookup_run_bpf(struct net *net,
--						struct inet_hashinfo *hashinfo,
--						struct sk_buff *skb, int doff,
--						const struct in6_addr *saddr,
--						const __be16 sport,
--						const struct in6_addr *daddr,
--						const u16 hnum, const int dif)
-+struct sock *inet6_lookup_run_sk_lookup(struct net *net,
-+					int protocol,
-+					struct sk_buff *skb, int doff,
-+					const struct in6_addr *saddr,
-+					const __be16 sport,
-+					const struct in6_addr *daddr,
-+					const u16 hnum, const int dif,
-+					inet6_ehashfn_t ehashfn)
- {
- 	struct sock *sk, *reuse_sk;
- 	bool no_reuseport;
- 
--	if (hashinfo != net->ipv4.tcp_death_row.hashinfo)
--		return NULL; /* only TCP is supported */
--
--	no_reuseport = bpf_sk_lookup_run_v6(net, IPPROTO_TCP, saddr, sport,
-+	no_reuseport = bpf_sk_lookup_run_v6(net, protocol, saddr, sport,
- 					    daddr, hnum, dif, &sk);
- 	if (no_reuseport || IS_ERR_OR_NULL(sk))
- 		return sk;
- 
- 	reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
--					  saddr, sport, daddr, hnum, inet6_ehashfn);
-+					  saddr, sport, daddr, hnum, ehashfn);
- 	if (reuse_sk)
- 		sk = reuse_sk;
- 	return sk;
-@@ -216,9 +214,11 @@ struct sock *inet6_lookup_listener(struct net *net,
- 	unsigned int hash2;
- 
- 	/* Lookup redirect from BPF */
--	if (static_branch_unlikely(&bpf_sk_lookup_enabled)) {
--		result = inet6_lookup_run_bpf(net, hashinfo, skb, doff,
--					      saddr, sport, daddr, hnum, dif);
-+	if (static_branch_unlikely(&bpf_sk_lookup_enabled) &&
-+	    hashinfo == net->ipv4.tcp_death_row.hashinfo) {
-+		result = inet6_lookup_run_sk_lookup(net, IPPROTO_TCP, skb, doff,
-+						    saddr, sport, daddr, hnum, dif,
-+						    inet6_ehashfn);
- 		if (result)
- 			goto done;
- 	}
++no_sk:
+ 	if (!xfrm4_policy_check(NULL, XFRM_POLICY_IN, skb))
+ 		goto drop;
+ 	nf_reset_ct(skb);
 diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 2af3a595f38a..961b7e61f02c 100644
+index 961b7e61f02c..0a90f34696ad 100644
 --- a/net/ipv6/udp.c
 +++ b/net/ipv6/udp.c
-@@ -192,32 +192,6 @@ static struct sock *udp6_lib_lookup2(struct net *net,
- 	return result;
- }
+@@ -910,9 +910,9 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 	enum skb_drop_reason reason = SKB_DROP_REASON_NOT_SPECIFIED;
+ 	const struct in6_addr *saddr, *daddr;
+ 	struct net *net = dev_net(skb->dev);
++	bool refcounted;
+ 	struct udphdr *uh;
+ 	struct sock *sk;
+-	bool refcounted;
+ 	u32 ulen = 0;
  
--static inline struct sock *udp6_lookup_run_bpf(struct net *net,
--					       struct udp_table *udptable,
--					       struct sk_buff *skb,
--					       const struct in6_addr *saddr,
--					       __be16 sport,
--					       const struct in6_addr *daddr,
--					       u16 hnum, const int dif)
--{
--	struct sock *sk, *reuse_sk;
--	bool no_reuseport;
--
--	if (udptable != net->ipv4.udp_table)
--		return NULL; /* only UDP is supported */
--
--	no_reuseport = bpf_sk_lookup_run_v6(net, IPPROTO_UDP, saddr, sport,
--					    daddr, hnum, dif, &sk);
--	if (no_reuseport || IS_ERR_OR_NULL(sk))
--		return sk;
--
--	reuse_sk = inet6_lookup_reuseport(net, sk, skb, sizeof(struct udphdr),
--					  saddr, sport, daddr, hnum, udp6_ehashfn);
--	if (reuse_sk)
--		sk = reuse_sk;
--	return sk;
--}
--
- /* rcu_read_lock() must be held */
- struct sock *__udp6_lib_lookup(struct net *net,
- 			       const struct in6_addr *saddr, __be16 sport,
-@@ -242,9 +216,11 @@ struct sock *__udp6_lib_lookup(struct net *net,
- 		goto done;
+ 	if (!pskb_may_pull(skb, sizeof(struct udphdr)))
+@@ -949,7 +949,11 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 		goto csum_error;
  
- 	/* Lookup redirect from BPF */
--	if (static_branch_unlikely(&bpf_sk_lookup_enabled)) {
--		sk = udp6_lookup_run_bpf(net, udptable, skb,
--					 saddr, sport, daddr, hnum, dif);
-+	if (static_branch_unlikely(&bpf_sk_lookup_enabled) &&
-+	    udptable == net->ipv4.udp_table) {
-+		sk = inet6_lookup_run_sk_lookup(net, IPPROTO_UDP, skb, sizeof(struct udphdr),
-+						saddr, sport, daddr, hnum, dif,
-+						udp6_ehashfn);
- 		if (sk) {
- 			result = sk;
- 			goto done;
+ 	/* Check if the socket is already available, e.g. due to early demux */
+-	sk = skb_steal_sock(skb, &refcounted);
++	sk = inet6_steal_sock(net, skb, sizeof(struct udphdr), saddr, uh->source, daddr, uh->dest,
++			      &refcounted, udp6_ehashfn);
++	if (IS_ERR(sk))
++		goto no_sk;
++
+ 	if (sk) {
+ 		struct dst_entry *dst = skb_dst(skb);
+ 		int ret;
+@@ -983,7 +987,7 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 			goto report_csum_error;
+ 		return udp6_unicast_rcv_skb(sk, skb, uh);
+ 	}
+-
++no_sk:
+ 	reason = SKB_DROP_REASON_NO_SOCKET;
+ 
+ 	if (!uh->check)
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index a7b5e91dd768..d6fb6f43b0f3 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4158,9 +4158,6 @@ union bpf_attr {
+  *		**-EOPNOTSUPP** if the operation is not supported, for example
+  *		a call from outside of TC ingress.
+  *
+- *		**-ESOCKTNOSUPPORT** if the socket type is not supported
+- *		(reuseport).
+- *
+  * long bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
+  *	Description
+  *		Helper is overloaded depending on BPF program type. This
 
 -- 
 2.40.1
