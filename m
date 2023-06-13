@@ -2,169 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCD272DFAA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 12:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0033472E314
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 14:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240111AbjFMKg1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Jun 2023 06:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
+        id S236086AbjFMMcj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Jun 2023 08:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239026AbjFMKgE (ORCPT
+        with ESMTP id S240312AbjFMMcf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:36:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB51E55;
-        Tue, 13 Jun 2023 03:35:57 -0700 (PDT)
-Received: from [192.168.10.54] (unknown [119.155.33.163])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 13 Jun 2023 08:32:35 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB3210EC
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 05:32:34 -0700 (PDT)
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F391660000E;
-        Tue, 13 Jun 2023 11:35:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686652555;
-        bh=HbdSMphLp1/aGNarPBMTAmoMfCdZYDwXjyzqGZPOGtA=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=eCbyTU2BUbopMEp0/l014XJDWH7zLmxfwh6N+IuQqSPT8pAD5HNik18UCjw7Dsc7G
-         /vqmj4fttKTO0BVCwJiqnn48/01nNX5aJ0czU9q13HY6d5YgAECt/27yeFOtmBpd5+
-         1cpwi9XnJK3ImYUXPXD7oHwevazumaZiK+213l1QbvXH3obGgIQcOM8NZ+b6+7nVDX
-         nRzqIZebJjG/SqbTFdtsx9sGMAlu6nQlFv73gbfOQKnr0k8dXPJ3QIrX4IWQdOrzEQ
-         /Y962W7NI2pvyTejjNeSukWiaANvS0kljQtCv2nU/ewwoBDQK0Q3Wtevvf6mii2biX
-         uqIW8Jt3z6Rcg==
-Message-ID: <0e6b318a-bbf8-3701-00af-1802c6347897@collabora.com>
-Date:   Tue, 13 Jun 2023 15:35:44 +0500
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 603703F26B
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 12:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686659552;
+        bh=4Cl9VWUxsTMXwPPmsKYIpp+y5A1Gig+mMIFIzxHEGrw=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=DiRrVMZqPHGJXH1bHgtis6pTlqscWUI01amTpq5v1Y+lHW7avH7dDnQmgNPr6BSfG
+         q5tQPFWtsm9hkl2zSLZ2JLve/lZoXf56+RowEc3ukeWesjLtUfcUd2d/REffcfC6ar
+         NE07SuFt5myPEatfpwJ2X9AGbguleY278aqBCIpNcLT3f1tPbkIjXH0xhtCiPYmcR1
+         KP8m5d7/txmmIjE9G4GebvGCKJXTIdk7va3mOiQhxC1ucfTlhCEv3FH1x2pp4mCbve
+         GyToEmjnl7JkIiN36hjRTTp0Imh1cDGjF0bLS0C1gBt6QXxQTugI+S9ui3Etc04kRc
+         TAalJ74ZoWzTQ==
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-395fd55e523so3025920b6e.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 05:32:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686659551; x=1689251551;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4Cl9VWUxsTMXwPPmsKYIpp+y5A1Gig+mMIFIzxHEGrw=;
+        b=Ad054Dut4jEATJSH56xnRADCLxeC6vHZFUt15fDX2EEVK9aLSYfPXHf4T+/gQMt19C
+         9LYbHMQIXOx1qK/JxsbpK1dbENBppA9+6RQ3hKyriPJk9BuASyaN1u/DgI5jzsjVZNV1
+         1nokJ4tlp0rahhJplY8hSaoMZxBSEy64xss1YnkrtWN/Y+u20sJcq3wBjtMyrytKCk9E
+         zEep7P0/IN3pnF+mw8occ/Eod857RFuN1O87i7cu9xoxMADkNtUzfgyi/Vk9n50jF64h
+         s4Gh/HOWVxX5s9bpZQt2FDCHYww6V2W6NXOFg8DmLKfM1DYAj3PxDuGXSWuM3HHQhqRM
+         icEw==
+X-Gm-Message-State: AC+VfDyxwJoZVUk77q9rXT+6qZ0WGay+Kkn3d4mhQcJ5lkmbhUdVCugJ
+        Mz0OK+w2CD+/kxjLavXAgJXyuTmK6q8jqhmUF21PIw0SDixrizKAE29u0NgIJOIqGsZkR4SO+tq
+        x/OW2cxIGYurOcspriM62IV0A46LXSYx5eHMoxMquQhUx3w==
+X-Received: by 2002:a05:6808:1b06:b0:39a:be57:964b with SMTP id bx6-20020a0568081b0600b0039abe57964bmr8825624oib.13.1686659550785;
+        Tue, 13 Jun 2023 05:32:30 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4JQJTAQ2NTad3LIh15eMndn6uBTwp05kyoejhWNzvWLQ3pSHSq3WyIrued9k1ZJLfgR4nV1A==
+X-Received: by 2002:a05:6808:1b06:b0:39a:be57:964b with SMTP id bx6-20020a0568081b0600b0039abe57964bmr8825601oib.13.1686659550505;
+        Tue, 13 Jun 2023 05:32:30 -0700 (PDT)
+Received: from magali.. ([2804:14c:bbe3:4606:ac1a:e505:990c:70e9])
+        by smtp.gmail.com with ESMTPSA id z26-20020a056808049a00b0039c532c9ae1sm4838116oid.55.2023.06.13.05.32.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 05:32:30 -0700 (PDT)
+From:   Magali Lemes <magali.lemes@canonical.com>
+To:     davem@davemloft.net, dsahern@gmail.com, edumazet@google.com,
+        keescook@chromium.org, kuba@kernel.org, pabeni@redhat.com,
+        shuah@kernel.org, tianjia.zhang@linux.alibaba.com,
+        vfedorenko@novek.ru
+Cc:     andrei.gherzan@canonical.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 0/4] Check if FIPS mode is enabled when running selftests
+Date:   Tue, 13 Jun 2023 09:32:18 -0300
+Message-Id: <20230613123222.631897-1-magali.lemes@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>,
-        kernel test robot <lkp@intel.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     Vineet Gupta <vgupta@kernel.org>,
-        linux-snps-arc@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>
-References: <20230406074005.1784728-3-usama.anjum@collabora.com>
- <202304061914.N1Hmx12N-lkp@intel.com>
- <e3c82373-256a-6297-bcb4-5e1179a2cbe2@collabora.com>
- <9d8b5b8e-47c9-16dd-050a-45d917d73c07@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <9d8b5b8e-47c9-16dd-050a-45d917d73c07@collabora.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Vineet,
+Some test cases from net/tls, net/fcnal-test and net/vrf-xfrm-tests
+that rely on cryptographic functions to work and use non-compliant FIPS
+algorithms fail in FIPS mode.
 
-It seems arc architecture supports CONFIG_TRANSPARENT_HUGEPAGE, but it
-doesn't define HPAGE_SIZE. It only defines PAGE_SIZE in
-include/uapi/asm/page.h? AFAIK HPAGE_SIZE must be defined when
-CONFIG_TRANSPARENT_HUGEPAGE is enabled. What can be the solution here for arc?
+In order to allow these tests to pass in a wider set of kernels,
+ - for net/tls, skip the test variants that use the ChaCha20-Poly1305
+and SM4 algorithms, when FIPS mode is enabled;
+ - for net/fcnal-test, skip the MD5 tests, when FIPS mode is enabled;
+ - for net/vrf-xfrm-tests, replace the algorithms that are not
+FIPS-compliant with compliant ones.
 
-Should I just compile out this code for arc architecture specifically?
+Changes in v4:
+ - Remove extra newline.
+ - Add R-b tag.
 
-Thanks,
-Usama
+Changes in v3:
+ - Add new commit to allow skipping test directly from test setup.
+ - No need to initialize static variable to zero.
+ - Skip tests during test setup only.
+ - Use the constructor attribute to set fips_enabled before entering
+ main().
 
+Changes in v2:
+ - Add R-b tags.
+ - Put fips_non_compliant into the variants.
+ - Turn fips_enabled into a static global variable.
+ - Read /proc/sys/crypto/fips_enabled only once at main().
 
-On 6/7/23 10:45 AM, Muhammad Usama Anjum wrote:
-> On 4/6/23 5:56 PM, Muhammad Usama Anjum wrote:
->> On 4/6/23 4:40 PM, kernel test robot wrote:
->>> Hi Muhammad,
->>>
->>> kernel test robot noticed the following build errors:
->>>
->>> [auto build test ERROR on akpm-mm/mm-everything]
->>> [also build test ERROR on next-20230406]
->>> [cannot apply to linus/master v6.3-rc5]
->>> [If your patch is applied to the wrong git tree, kindly drop us a note.
->>> And when submitting patch, we suggest to use '--base' as documented in
->>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>>
->>> url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230406-154314
->>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
->>> patch link:    https://lore.kernel.org/r/20230406074005.1784728-3-usama.anjum%40collabora.com
->>> patch subject: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
->>> config: arc-randconfig-r023-20230405 (https://download.01.org/0day-ci/archive/20230406/202304061914.N1Hmx12N-lkp@intel.com/config)
->>> compiler: arceb-elf-gcc (GCC) 12.1.0
->>> reproduce (this is a W=1 build):
->>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>         chmod +x ~/bin/make.cross
->>>         # https://github.com/intel-lab-lkp/linux/commit/f13abb36f64c77913509da8ca157512d2fb9f031
->>>         git remote add linux-review https://github.com/intel-lab-lkp/linux
->>>         git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230406-154314
->>>         git checkout f13abb36f64c77913509da8ca157512d2fb9f031
->>>         # save the config file
->>>         mkdir build_dir && cp config build_dir/.config
->>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
->>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/proc/
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>> | Link: https://lore.kernel.org/oe-kbuild-all/202304061914.N1Hmx12N-lkp@intel.com/
->>>
->>> All error/warnings (new ones prefixed by >>):
->>>
->>>    fs/proc/task_mmu.c: In function 'pagemap_scan_pmd_entry':
->>>>> fs/proc/task_mmu.c:1921:37: error: 'HPAGE_SIZE' undeclared (first use in this function); did you mean 'PAGE_SIZE'?
->>>     1921 |                     ((end - start < HPAGE_SIZE) ||
->>>          |                                     ^~~~~~~~~~
->>>          |                                     PAGE_SIZE
->> It seems arc architecture supports CONFIG_TRANSPARENT_HUGEPAGE, but it
->> doesn't define HPAGE_SIZE. It only defines PAGE_SIZE in
->> include/uapi/asm/page.h? AFAIK HPAGE_SIZE must be defined when
->> CONFIG_TRANSPARENT_HUGEPAGE is enabled. What can be the solution here for arc?
-> I'm still looking for solution. Vineet do you have some thoughts?
-> 
->>
->> The remaining build failures are because the wrong tree. I base my patches
->> on latest next, while the bot has based patches on mm-everything. I guess
->> today's next would have latest mm stuff, a rebase would make things correct
->> or I'll shift to mm-everything.
->>
->>
-> 
+v1: https://lore.kernel.org/netdev/20230607174302.19542-1-magali.lemes@canonical.com/
+v2: https://lore.kernel.org/netdev/20230609164324.497813-1-magali.lemes@canonical.com/
+v3: https://lore.kernel.org/netdev/20230612125107.73795-1-magali.lemes@canonical.com/
+
+Magali Lemes (4):
+  selftests/harness: allow tests to be skipped during setup
+  selftests: net: tls: check if FIPS mode is enabled
+  selftests: net: vrf-xfrm-tests: change authentication and encryption
+    algos
+  selftests: net: fcnal-test: check if FIPS mode is enabled
+
+ tools/testing/selftests/kselftest_harness.h   |  6 ++--
+ tools/testing/selftests/net/fcnal-test.sh     | 27 +++++++++++-----
+ tools/testing/selftests/net/tls.c             | 24 +++++++++++++-
+ tools/testing/selftests/net/vrf-xfrm-tests.sh | 32 +++++++++----------
+ 4 files changed, 61 insertions(+), 28 deletions(-)
 
 -- 
-BR,
-Muhammad Usama Anjum
+2.34.1
+
