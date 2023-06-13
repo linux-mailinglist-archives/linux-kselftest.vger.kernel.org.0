@@ -2,158 +2,237 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF37E72E73E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 17:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6619F72E7FC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 18:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239886AbjFMPdN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Jun 2023 11:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        id S243023AbjFMQNd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Jun 2023 12:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235653AbjFMPdM (ORCPT
+        with ESMTP id S243069AbjFMQNU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:33:12 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB139122;
-        Tue, 13 Jun 2023 08:33:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MwKes3603RrayNNuMZFNdhWjwUEQ8zC9T2OVKNN3bSpUkvhm9FF7X1Fr5VpZ4DP4PAHE2SH44Mv0HEVBqFzDirz4nwoPSAnI7v2pGjDc+AT+z/vqgE6ADYoECRBZoSN9QbXXne/R8bx5/GKLNy0qSKIKkeW2hQWJY909DY4QnkRfs+kmechC7CB7XulYc0Agj1JFfSvz8sJtyslqLtk9fB8yAYUhJcX9GRtcFTrTUHcoNFW/rFuq7a6ZPpnTNgcQ6AoJIkY5V2rxIWeus17ZF+1GtiD1uta+wRGE2VKWFnrZ0qhUh1ryrjKbY//+JRi6jPEp3b/OFXNvcssRYj0TnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wY6nbD63njEF69MqY7MHUOZb7ouAcePEVsZm67cRfFE=;
- b=VXDQBR58uav4W7w2hxjfDFNoRHTm5cmDehLOOqncGQmi0j73GgocpUWK0HOgcKjFG8SC1w3gGASUUyY9oJnjh/EtTMalMRhK+sCyzkRJobWlM7SDsGnJagZ7IOZLHye8dcsOpezrnZf0MM2OWtU3bcNFgEu30TWXhrBk0h9Gi1o2KQxauZDUcXx/OeUFDGmiEi6phePO9xdUaSsuvlllQjiqjUlq3BCuD8IFp7Plkqsa4XK6434zeYOuFOsA+w+PRRqFVg373W94eSgHj8dCSVFblvt5GzJ/uuy7MglWfsvJkSsVl/MfNCXGumTkNNGO8rnzQZ4V2fGhi9yT7JRi5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wY6nbD63njEF69MqY7MHUOZb7ouAcePEVsZm67cRfFE=;
- b=JvC5HI9aA6yzWQDMRrRuigPkFyYcAUEOnBN4wDTgPgjs2JTqtyms5eFbv6/F/uZUXHpzF5/sQc19EDmm5jH3a19X6m1D6QO4h6a4SraO16RlfHqAWFQyejdH9tN5RtD25oeqXIg4ZnRv0AoqapQ4bsaF8OXWD8Cp3F0lCIPWJgw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MN2PR13MB4040.namprd13.prod.outlook.com (2603:10b6:208:262::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Tue, 13 Jun
- 2023 15:33:07 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6477.028; Tue, 13 Jun 2023
- 15:33:07 +0000
-Date:   Tue, 13 Jun 2023 17:32:58 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Lorenz Bauer <lmb@isovalent.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Joe Stringer <joe@wand.net.nz>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 3/6] net: remove duplicate reuseport_lookup
- functions
-Message-ID: <ZIiMKgt6iQwJ6vCx@corigine.com>
-References: <20230613-so-reuseport-v2-0-b7c69a342613@isovalent.com>
- <20230613-so-reuseport-v2-3-b7c69a342613@isovalent.com>
+        Tue, 13 Jun 2023 12:13:20 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2151BDA;
+        Tue, 13 Jun 2023 09:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686672785; x=1718208785;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yulm3bjtOhAx++5hy7jnoRy12hPcqf9WnybGIldX7jo=;
+  b=UFoE1f1BtIWNoxmpkbwVxq9tFlCDkZp3nkMLQzNxyeLlNB1HJf403H+b
+   /p173LC2vzQKFa/K+G3XSvA3eH49uZlhd0Q9VeIxwzvtETFMMrwaFfZW1
+   5adScc9cndnHg4crVi4RL228BTs55sL6+I47hUBEMTRos/mYcoGIWxDRy
+   Gr5dhHiwTe+4dapVpuo95jYd8LuSfI2klhznZ1CGLV8sDC2IojDmOsvDq
+   8QEiyZVLQWTu97MjM8SfZvKImQzBUnYwJg2UXhrjNhKbRBoFa7wogLLG/
+   whKpTHJE7d/NFYceLDJUBon2VHsAW8A6W+xg41GDEQIItUNIClN5LcKnI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="343070690"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="343070690"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 09:12:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="835937291"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="835937291"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 13 Jun 2023 09:12:06 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q96cn-0001WA-0T;
+        Tue, 13 Jun 2023 16:12:05 +0000
+Date:   Wed, 14 Jun 2023 00:11:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <202306132324.Npiix2ct-lkp@intel.com>
+References: <20230613102905.2808371-3-usama.anjum@collabora.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230613-so-reuseport-v2-3-b7c69a342613@isovalent.com>
-X-ClientProxiedBy: AM0PR02CA0202.eurprd02.prod.outlook.com
- (2603:10a6:20b:28f::9) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MN2PR13MB4040:EE_
-X-MS-Office365-Filtering-Correlation-Id: 986f8eff-82cc-4638-71b0-08db6c237cb0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a457Mer8PiihF2dWi5nRawe3d9wXR75GBToQekQ60gdl/qKpTUppJoYuZOubiqwRiup5XwLPRF6AyeaHmyVxQdkdBA1OIPbkZBQHYL694bgK9I56uUM3G9jVKH/HolqLUWDPa5cCMww+WVbHFMpkQ59BvJxjAusnWpvjYHq2JtVInfVIn4zh1GeEiMBQRxl4pcIsxDIGeLrJscds65vhHQVFybWHaEq/CzPnGg6GCxN17mEGsRs4xkEvIKIO58UViM5OR6hVzznL49XwJ0qcsFcnzCiQdnxuV9TAn0b+T3QSFGnk8cN7tEirpLcBS0JnJxPeotzXiylFIk+CcVyzlGxNZO8H9qUfcKcz/FQwyv78OO0NXJa4+dQ4QIhDgYpXYFZnHLlMSvWd+fJXof7CFgrgFdawGdq+sEDI1sX8bO2HXZqPZmZrG6cSlrqbA+WOciaAMjMB6eILRpTxs3cOM4VNOOVdx+4Iei66DPJ4LHjXQSEtbG77Or/ufEUie7j1WCFYp6bcgH6xBVWclt7+vGBrtxophncWlolZgBHRYxjp9ll+mfnPg7fmllLNOcCmEyXZl2uQRh+PDcIXsH84h4ipmE0OGKSErqyF4JQ8ND8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39840400004)(136003)(346002)(366004)(376002)(451199021)(6486002)(6666004)(36756003)(2616005)(38100700002)(86362001)(6512007)(6506007)(186003)(4744005)(2906002)(5660300002)(54906003)(8936002)(44832011)(41300700001)(316002)(7416002)(8676002)(6916009)(4326008)(66946007)(66556008)(66476007)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SluJtbNVc0bVwOTPYHz1aBl+GfQLMOisceiH4E0fUNKD6X5WmWQ5e6+qccCR?=
- =?us-ascii?Q?eOGrcrOcWrMVG6PVoVXfceF2ibnQagFkKT/+sJVM5XTq1WkiWOmKu7KjsQhV?=
- =?us-ascii?Q?Th1Nx+sGNKUC+/G/nNIhES/FZSl4lFwDRa2Y1LBrWm3xjUpxxOJLSxhIyt5x?=
- =?us-ascii?Q?UpuWrdVk27+oKQlT19w0q/tE2sg/Vx7j15cxI2OJ/Bwvydelu6xDwllsRJjm?=
- =?us-ascii?Q?uetDMJLeekaTDCRDq27LIcZkE664ZPZMbjwwoAljE8kVLb9WnXxFyBKhH9UW?=
- =?us-ascii?Q?sCsGzWtXDgqIhzpPrcE+uhbDF2XJgTvg0XGDjhWcopjgjaJAJ1n0hrhvYmEf?=
- =?us-ascii?Q?M06m+2YOdF8cxUwEukZcxChiAF9f7r/00T8GXW85/maCf5PjP9rQergGetiS?=
- =?us-ascii?Q?ateueyIQGWRrf0/n2cnibAG5vz3fDEiPutX8jnCOwhAP/UD1lYCNMVqfuL3y?=
- =?us-ascii?Q?7Ko/hGrCO1yEUCGKkSkSXwxtLAvJxsiHCUZSnobC/XfEWAzucgXIwG89uQDz?=
- =?us-ascii?Q?E8fMxe30/vH9z7+Lww29NCWInitxd7LXzkvhCSwp1HwH/zu0kjreNz9pYxFR?=
- =?us-ascii?Q?LSK5OveZylaiOJr1L0tDFTxikFW7G9hKaGzjW0tXRLAcnc3xUTAc1aMKXU6T?=
- =?us-ascii?Q?GRw2UT2ZP6Al3qYB4JAACBgBd6iG7aIH+TVWWO5GSCc7eNwvsGpYKkk/MaiD?=
- =?us-ascii?Q?3LPwH898OQlOndS+gKQZNiHmLrsUNF3YEJv7v9KkZ3YV0QCwx59RcplADa5q?=
- =?us-ascii?Q?JH43RpZAouTG9fodJz57O2zaucZsk9Ko9uerwLWguDfeDrDDw/XWyX8qyPJS?=
- =?us-ascii?Q?b1m6nhw+2E4uwriKSgv+ayvHpoyWP/zZJE3mn71w4qQL5G4T5176Mz8Q+TCR?=
- =?us-ascii?Q?Kw9DhVljZUVmRe4cKlO5+8xj1/1tNDfbEkpEUV/c1D96ygR7jiZpseaBUyrE?=
- =?us-ascii?Q?c8+484WbYV1bcukV96QSD/Vb8h42YaFqNkCOzBW2fkKD2t1LR/IiLHfLQfjz?=
- =?us-ascii?Q?facIC+Ne1J4vLR/gZGQbyZtg+4iFoMe6ImtGbMPkgUG+Et5GmI6GETe0DKd/?=
- =?us-ascii?Q?o4fEukJgJkOwwHGjOUCpG5KZyYYpDv3+IKzGJ+L2GhuSTLhga6yyLKpW5TJw?=
- =?us-ascii?Q?SXX8TJJ7L+qk34zPDJoE7kiIyGfUMYunOTVZNRrBrNJuZtpn92xQFvqYNbg+?=
- =?us-ascii?Q?GaVlvrXp++UjimYdr4S74c58GZWC9XdhO97vrN2DtVzP0lk/zygt4y38/noU?=
- =?us-ascii?Q?tyljODgo/vwWTERJ2CLCuHbAafYlnEyll4oSMF2TVFTDXUeulkVsP9iW1+SP?=
- =?us-ascii?Q?VvwnPakvw/1luInPOLP9218pCuAGoYB+hKCfiBJc4nrVUwY2NNy3u5iKkP+j?=
- =?us-ascii?Q?uxjkAchtjCKgiqF2atSu6ItwToKt68RmFrwGdvJYVsb6hj0f1A2eHrqXWFKM?=
- =?us-ascii?Q?c3Pt1OEQc4zSeqoapr6ZvXjrCVur1N7gBApRKRy9rVB1xXq4UxCgne67IWZD?=
- =?us-ascii?Q?qlZiEyVD2W0cxZDgr6fkNc6uDmg9Vtk5Bdv9LV23O3CxaH0qx6iAGshhDvKF?=
- =?us-ascii?Q?+5G0drDRTiMoNqIjEOWyRBJn9cqWySL0ze/JlA/AJBE5P9dUwntfUfMrN6jo?=
- =?us-ascii?Q?c6VRO01h4AbFXtja3whTEwMGY28gNDd3gYiqoHzQYeiAuZSjnXKY3vR5zpyH?=
- =?us-ascii?Q?wMbsng=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 986f8eff-82cc-4638-71b0-08db6c237cb0
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 15:33:07.6725
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /PjNtM+8z6j+lGwBDOggZVh6fA4E+7b/LmVZ3HUu/7kdR607wgD3xFg/tGyitdVMItZSzUl4mwm5DtNkZ7GyuX0XnHvhG5CbGyXUh0/acBY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR13MB4040
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230613102905.2808371-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 11:14:58AM +0100, Lorenz Bauer wrote:
+Hi Muhammad,
 
-...
+kernel test robot noticed the following build warnings:
 
-> @@ -332,6 +332,10 @@ static inline int compute_score(struct sock *sk, struct net *net,
->  	return score;
->  }
->  
-> +INDIRECT_CALLABLE_DECLARE(u32 udp_ehashfn(const struct net *,
-> +					  const __be32, const __u16,
-> +					  const __be32, const __be16));
-> +
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on next-20230613]
+[cannot apply to linus/master v6.4-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Hi Lorenz,
+url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230613-183334
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230613102905.2808371-3-usama.anjum%40collabora.com
+patch subject: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
+config: hexagon-randconfig-r041-20230612 (https://download.01.org/0day-ci/archive/20230613/202306132324.Npiix2ct-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch akpm-mm mm-everything
+        git checkout akpm-mm/mm-everything
+        b4 shazam https://lore.kernel.org/r/20230613102905.2808371-3-usama.anjum@collabora.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/proc/
 
-Would this be better placed in a header file?
-GCC complains that in udp.c this function is neither static nor
-has a prototype.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306132324.Npiix2ct-lkp@intel.com/
 
-Liksewise for udp6_ehashfn()
+All warnings (new ones prefixed by >>):
 
-...
+   In file included from fs/proc/task_mmu.c:3:
+   In file included from include/linux/mm_inline.h:7:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from fs/proc/task_mmu.c:3:
+   In file included from include/linux/mm_inline.h:7:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from fs/proc/task_mmu.c:3:
+   In file included from include/linux/mm_inline.h:7:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> fs/proc/task_mmu.c:1866:18: warning: shift count >= width of type [-Wshift-count-overflow]
+    1866 |         if ((p->flags & PM_SCAN_OP_WRITE) && (!userfaultfd_wp_async(vma) ||
+         |                         ^~~~~~~~~~~~~~~~
+   fs/proc/task_mmu.c:1769:26: note: expanded from macro 'PM_SCAN_OP_WRITE'
+    1769 | #define PM_SCAN_OP_WRITE        BIT(63)
+         |                                 ^~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   fs/proc/task_mmu.c:2102:22: warning: shift count >= width of type [-Wshift-count-overflow]
+    2102 |                 PAGE_IS_WRITTEN) ? PM_SCAN_OP_WRITE : 0;
+         |                                    ^~~~~~~~~~~~~~~~
+   fs/proc/task_mmu.c:1769:26: note: expanded from macro 'PM_SCAN_OP_WRITE'
+    1769 | #define PM_SCAN_OP_WRITE        BIT(63)
+         |                                 ^~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   8 warnings generated.
+
+
+vim +1866 fs/proc/task_mmu.c
+
+  1859	
+  1860	static int pagemap_scan_test_walk(unsigned long start, unsigned long end,
+  1861					  struct mm_walk *walk)
+  1862	{
+  1863		struct pagemap_scan_private *p = walk->private;
+  1864		struct vm_area_struct *vma = walk->vma;
+  1865	
+> 1866		if ((p->flags & PM_SCAN_OP_WRITE) && (!userfaultfd_wp_async(vma) ||
+  1867		    !userfaultfd_wp_use_markers(vma)))
+  1868			return -EPERM;
+  1869	
+  1870		if (vma->vm_flags & VM_PFNMAP)
+  1871			return 1;
+  1872	
+  1873		return 0;
+  1874	}
+  1875	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
