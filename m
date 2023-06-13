@@ -2,102 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1306372EB7A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 21:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D685672EC1D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 21:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbjFMTEE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Jun 2023 15:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        id S230461AbjFMTma (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Jun 2023 15:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjFMTED (ORCPT
+        with ESMTP id S231529AbjFMTm2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:04:03 -0400
-Received: from smtp-fw-52002.amazon.com (smtp-fw-52002.amazon.com [52.119.213.150])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7F292;
-        Tue, 13 Jun 2023 12:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1686683044; x=1718219044;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=K5+Giq/eW/XK8GIxl1uK5VSys+gvOj3g0+/asIlylGs=;
-  b=TvQ3cI+mHVKQ9cP5FMZ8kSQwTihgj7kFjSTGVGL+4sES/OzjNKaia0vR
-   18CcbyX2vW5mxJIYJ6G69rASToeP/X0oTQyym3UneDqwPr37jyoHF+jHb
-   VoykzFx1dsQr3ORSPqV5RbdQ72MWzAJITS64smuE6Ge2bsPg3ZBFxpPNh
-   U=;
-X-IronPort-AV: E=Sophos;i="6.00,240,1681171200"; 
-   d="scan'208";a="566395106"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-3e1fab07.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-52002.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 19:04:01 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-m6i4x-3e1fab07.us-east-1.amazon.com (Postfix) with ESMTPS id 8AD4580D31;
-        Tue, 13 Jun 2023 19:03:54 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 13 Jun 2023 19:03:53 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.95.246.146) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 13 Jun 2023 19:03:47 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <lmb@isovalent.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
-        <hemanthmalla@gmail.com>, <joe@wand.net.nz>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
-        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
+        Tue, 13 Jun 2023 15:42:28 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630CF1A5;
+        Tue, 13 Jun 2023 12:42:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686685346; x=1718221346;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lz85jrU6iR9R6CqSIYyzCsTLAAEFjmrL/CeWk5ErFa4=;
+  b=iQQxk6I7l1FBUDdGXqtX1KiKIU1jxMaQ1vHC8W5tFi+LVCEIaUthKohU
+   /83XBqWEpZ+SRbSN70WmSRsQWtmCGAsQmfDA+aXzG2zTeat6yJOFvxmnI
+   il1hKjicb3A+h9jEq9Pie2DPoHrDbUxkLeyLNHiTC2/Wki8dCHvCqHqS/
+   hOTqiN7wecHdXXBn7QOKuxJS5YnVNsNLJ8/DjRl+fgsV0IAH8r7LR4rIO
+   MVs9AtBcnPBAN8vpZ0uKCfCvnAUB2R9kNjqT5EpjYqYD3joFA0A3IyH91
+   BFhSjz5G+EKgA2/9kX+bU5IqAwVvfaj2V8/3W1I44rOAxUPfmEq8NDjAg
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="355935118"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="355935118"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 12:42:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856242508"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="856242508"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Jun 2023 12:42:19 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q99uE-0001ia-0x;
+        Tue, 13 Jun 2023 19:42:18 +0000
+Date:   Wed, 14 Jun 2023 03:41:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lorenz Bauer <lmb@isovalent.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        netdev@vger.kernel.org, Hemanth Malla <hemanthmalla@gmail.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>
 Subject: Re: [PATCH bpf-next v2 4/6] net: remove duplicate sk_lookup helpers
-Date:   Tue, 13 Jun 2023 12:03:39 -0700
-Message-ID: <20230613190339.65042-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230613-so-reuseport-v2-4-b7c69a342613@isovalent.com>
+Message-ID: <202306140351.Y1JjOIxo-lkp@intel.com>
 References: <20230613-so-reuseport-v2-4-b7c69a342613@isovalent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.95.246.146]
-X-ClientProxiedBy: EX19D046UWA003.ant.amazon.com (10.13.139.18) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613-so-reuseport-v2-4-b7c69a342613@isovalent.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Tue, 13 Jun 2023 11:14:59 +0100
-> Now that inet[6]_lookup_reuseport are parameterised on the ehashfn
-> we can remove two sk_lookup helpers.
-> 
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
-> ---
->  include/net/inet6_hashtables.h |  9 +++++++++
->  include/net/inet_hashtables.h  |  7 +++++++
->  net/ipv4/inet_hashtables.c     | 26 +++++++++++++-------------
->  net/ipv4/udp.c                 | 32 +++++---------------------------
->  net/ipv6/inet6_hashtables.c    | 30 +++++++++++++++---------------
->  net/ipv6/udp.c                 | 34 +++++-----------------------------
->  6 files changed, 54 insertions(+), 84 deletions(-)
-> 
-> diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-> index 49d586454287..4d2a1a3c0be7 100644
-> --- a/include/net/inet6_hashtables.h
-> +++ b/include/net/inet6_hashtables.h
-> @@ -73,6 +73,15 @@ struct sock *inet6_lookup_listener(struct net *net,
->  				   const unsigned short hnum,
->  				   const int dif, const int sdif);
->  
-> +struct sock *inet6_lookup_run_sk_lookup(struct net *net,
+Hi Lorenz,
 
-I understand this comes from SEC("sk_lookup"), but this sounds
-redundant and run_bpf is clearer for non-BPF folks.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 25085b4e9251c77758964a8e8651338972353642]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lorenz-Bauer/net-export-inet_lookup_reuseport-and-inet6_lookup_reuseport/20230613-181619
+base:   25085b4e9251c77758964a8e8651338972353642
+patch link:    https://lore.kernel.org/r/20230613-so-reuseport-v2-4-b7c69a342613%40isovalent.com
+patch subject: [PATCH bpf-next v2 4/6] net: remove duplicate sk_lookup helpers
+config: hexagon-randconfig-r041-20230612 (https://download.01.org/0day-ci/archive/20230614/202306140351.Y1JjOIxo-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git checkout 25085b4e9251c77758964a8e8651338972353642
+        b4 shazam https://lore.kernel.org/r/20230613-so-reuseport-v2-4-b7c69a342613@isovalent.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306140351.Y1JjOIxo-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "inet6_lookup_run_sk_lookup" [net/ipv6/ipv6.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
