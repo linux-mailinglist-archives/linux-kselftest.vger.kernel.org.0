@@ -2,78 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BAF72EF18
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 00:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4775A72EF8A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 00:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbjFMWUY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Jun 2023 18:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58780 "EHLO
+        id S240835AbjFMWgl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Jun 2023 18:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235279AbjFMWUS (ORCPT
+        with ESMTP id S229514AbjFMWgk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Jun 2023 18:20:18 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E8E1FCE;
-        Tue, 13 Jun 2023 15:20:06 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b1ac373c9eso344491fa.0;
-        Tue, 13 Jun 2023 15:20:06 -0700 (PDT)
+        Tue, 13 Jun 2023 18:36:40 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6171E127
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 15:36:37 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so4712a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 15:36:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686694805; x=1689286805;
+        d=google.com; s=20221208; t=1686695796; x=1689287796;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NYeMigch2qnrSoGYhm73AILcfdoJpBTi7JKRyKYYyCk=;
-        b=PZCesWE4DaYOP18PmGDorKj9OLJ3ApomZcQzCge4oFExlX8JTrnjBV/KTYwd05NoAP
-         KKeVhguMor5LJsM2yCCJ8PUW2w1Dq/yqjioNmhkUQmOpcCZTnk1K48r8I5LomoRpIThu
-         Xwl/7j4WMhEbZfouIdiGnJyrEcwY6bdiYCWD9fymCGPiIoMCSEEKaldqqdeCNp99UvEi
-         CaeFH1WLWuiAe9q+MF5bWzUj4+3CXjwAg6x1poUjQ3aWf6qcW2Pnu0aUGeWN+lf8OVYU
-         ANUfZokY/ed1pKKYBkkS0bELeIcZOSFnH2ly0YthjYXw+Qn/XHkA9c+pOrM4zT1UVB3y
-         kfog==
+        bh=PvWX2bD0pqjf2LH9LS1XjF7500hItj0+6/IMn+0hUyQ=;
+        b=3Glh+mv9w/hlsr3HtW9bHUVgiWBnoxfzOAwjquvJ1AtpWmAxPHzA/8KB9rQGLI6bPW
+         f7qGlGThGtdA47ymx+HgiBOoyHoX8jWor32TAvaO+WmUaWX3Xn1BpcQf2f1XZitWH15J
+         MDv06bVTji5Ik3ErHeafLVYLUfoKp++ieuFYgvwKgCKflAvoHh5Ewq6xg9zaJ+jxAdsg
+         lyTmXYkYfQvktXvGcfRQcvhxjg6Ujut2b0YJFUIhzfQVJ5PzkiNsrvcO0ZYmSN5sFFLX
+         0WJW3uVykV1WNvlLlgmXEDrdroLofKmh8799uzbRJ6beNn6YsvBet8ulVt1JaK5KjEaQ
+         NW8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686694805; x=1689286805;
+        d=1e100.net; s=20221208; t=1686695796; x=1689287796;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NYeMigch2qnrSoGYhm73AILcfdoJpBTi7JKRyKYYyCk=;
-        b=eUR/LM7BfjkjEn/WgUgYNoLa6YPrSB4mpLyN4YghA/bkEyxpw7L/lohEr2A2ZZ7M8n
-         1bTDRKEa3mr3wzUjxPfRu+qfu2ho9pk/vBobSWoGaU9lElV1hgCqvI9Z+VdPHr7BO+wN
-         o7Onkrs/EQ4Y+kLrKNUKF2r3dcoQiTXKJrNwaDTWtjTjmJcQzkCy3mysEPy1f/mjFkI/
-         hnIoQLcv1rBJrzQPoT8zLMIJ7YRcBjQ8/KXFxPMzGTHbiPw1zbg2oFHsA+1TAqkC36AK
-         S68BoCvm8tW9Yzt/tDEGjkAyK2nz/KOUkEWi6Jr15KNcBHzWyimswMqqdGvD8S+NDNnF
-         Cr4A==
-X-Gm-Message-State: AC+VfDwIAjuddBIIqlLEZHbFvfmtbNn4p524GTL+J2GEbA2G3xJXUIAt
-        oUrzgWa0VEqCPhMhysMmjntW04WkGh3r4exM/iv+Nxrt
-X-Google-Smtp-Source: ACHHUZ4F2wBvbvprp7cHLESqQNB/qMvpDKYm5iumWiUbmHKZoPtfFVUNgGzg4Muy+I8sfB5rKe5k4wY2KmiQaJZu8h0=
-X-Received: by 2002:a2e:a0ce:0:b0:2af:1dd5:b068 with SMTP id
- f14-20020a2ea0ce000000b002af1dd5b068mr5939374ljm.48.1686694804634; Tue, 13
- Jun 2023 15:20:04 -0700 (PDT)
+        bh=PvWX2bD0pqjf2LH9LS1XjF7500hItj0+6/IMn+0hUyQ=;
+        b=XIBNaaAa0z5f9yAQkzvQsJE//rzCHTIKKb7wmqbj0qSQsHS/uGYc/hTvXhUh+vpBoh
+         BzUzXegz5TPXBhmXL0omr0ZzCb/xqWiWInjl/1BY3yt5rytb7tIzTgdcrgRZphfHi0MT
+         dDt9zCsruDtC9bm+lH1v5h2IQ+lTQNZ7wINCTfgImo2G0v40VMlQg4moANasoB1JYvzi
+         2B88gAqZUYAI4i2u15sHxUJbshi/N4PWoRNcY6pEx0YrCwF0cE+2OWQA/HVG/B8xtEAR
+         ydakNhJ5aQf7PZgrasyp5nf562SHDsAvqQrudNIaOas/gqbHKj5b4aGn3da6X5T3B5Ku
+         lyOA==
+X-Gm-Message-State: AC+VfDxu97pu+tNao5ByNk+k7/znrk8rVUoFJ4PzWeelhEyIUuT6axgF
+        7LDQAxHUQzlXLx6h/p6xKmZCERiNOdhEl7a0dA0eaQ==
+X-Google-Smtp-Source: ACHHUZ4b9ZmvHIHuVqiKCGkay8zIJtZ17R+nhtVYSufNYgAsmJA4+02HPCuDfftyIn3PNzWLVqxf8ToCsmK0FXHe7fI=
+X-Received: by 2002:a50:cc9a:0:b0:506:90c4:b63b with SMTP id
+ q26-20020a50cc9a000000b0050690c4b63bmr36356edi.4.1686695795711; Tue, 13 Jun
+ 2023 15:36:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1686616663.git.kjlx@templeofstupid.com> <6de9b2f4b4724ef56efbb0339daaa66c8b68b1e7.1686616663.git.kjlx@templeofstupid.com>
-In-Reply-To: <6de9b2f4b4724ef56efbb0339daaa66c8b68b1e7.1686616663.git.kjlx@templeofstupid.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 13 Jun 2023 15:19:52 -0700
-Message-ID: <CAADnVQ+ewk9QHobAMisC5=gT=sfTSzbx029Ahgc5ZUzGuyH6cQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v5 1/2] bpf: ensure main program has an extable
-To:     Krister Johansen <kjlx@templeofstupid.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+References: <20230613102905.2808371-1-usama.anjum@collabora.com> <20230613102905.2808371-3-usama.anjum@collabora.com>
+In-Reply-To: <20230613102905.2808371-3-usama.anjum@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Wed, 14 Jun 2023 00:36:24 +0200
+Message-ID: <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,33 +93,205 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 5:44=E2=80=AFPM Krister Johansen
-<kjlx@templeofstupid.com> wrote:
+On Tue, 13 Jun 2023 at 12:29, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
 >
-> When subprograms are in use, the main program is not jit'd after the
-> subprograms because jit_subprogs sets a value for prog->bpf_func upon
-> success.  Subsequent calls to the JIT are bypassed when this value is
-> non-NULL.  This leads to a situation where the main program and its
-> func[0] counterpart are both in the bpf kallsyms tree, but only func[0]
-> has an extable.  Extables are only created during JIT.  Now there are
-> two nearly identical program ksym entries in the tree, but only one has
-> an extable.  Depending upon how the entries are placed, there's a chance
-> that a fault will call search_extable on the aux with the NULL entry.
+> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+> the info about page table entries. The following operations are supported
+> in this ioctl:
+> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN)=
+,
+>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>   (PAGE_IS_SWAPPED).
+> - Find pages which have been written-to and/or write protect the pages
+>   (atomic PM_SCAN_OP_GET + PM_SCAN_OP_WP)
 >
-> Since jit_subprogs already copies state from func[0] to the main
-> program, include the extable pointer in this state duplication.
-> Additionally, ensure that the copy of the main program in func[0] is not
-> added to the bpf_prog_kallsyms table. Instead, let the main program get
-> added later in bpf_prog_load().  This ensures there is only a single
-> copy of the main program in the kallsyms table, and that its tag matches
-> the tag observed by tooling like bpftool.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function progra=
-ms")
-> Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-> Acked-by: Yonghong Song <yhs@fb.com>
-> Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> This IOCTL can be extended to get information about more PTE bits.
+[...]
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+[...]
+> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
+> +                              struct pagemap_scan_private *p,
+> +                              unsigned long addr, unsigned int n_pages)
+> +{
+> +       unsigned long bitmap =3D PM_SCAN_BITMAP(wt, file, pres, swap);
+> +       struct page_region *cur_buf =3D &p->cur_buf;
 
-Applied. Thanks
+Maybe we can go a step further and say here `cur_buf =3D
+&p->vec_buf[p->vec_buf_index];` and remove `p->cur_buf` entirely?
+
+> +
+> +       if (!n_pages)
+> +               return -EINVAL;
+> +
+> +       if ((p->required_mask & bitmap) !=3D p->required_mask)
+> +               return 0;
+> +       if (p->anyof_mask && !(p->anyof_mask & bitmap))
+> +               return 0;
+> +       if (p->excluded_mask & bitmap)
+> +               return 0;
+> +
+> +       bitmap &=3D p->return_mask;
+> +       if (!bitmap)
+> +               return 0;
+> +
+> +       if (cur_buf->bitmap =3D=3D bitmap &&
+> +           cur_buf->start + cur_buf->len * PAGE_SIZE =3D=3D addr) {
+> +               cur_buf->len +=3D n_pages;
+> +               p->found_pages +=3D n_pages;
+> +       } else {
+> +               if (cur_buf->len && p->vec_buf_index >=3D p->vec_buf_len)
+> +                       return -ENOMEM;
+
+Shouldn't this be -ENOSPC? -ENOMEM usually signifies that the kernel
+ran out of memory when allocating, not that there is no space in a
+user-provided buffer.
+
+BTW, the check could be inside the if() below for easier reading and
+less redundancy.
+
+> +               if (cur_buf->len) {
+> +                       memcpy(&p->vec_buf[p->vec_buf_index], cur_buf,
+> +                              sizeof(*p->vec_buf));
+> +                       p->vec_buf_index++;
+> +               }
+> +
+> +               cur_buf->start =3D addr;
+> +               cur_buf->len =3D n_pages;
+> +               cur_buf->bitmap =3D bitmap;
+> +               p->found_pages +=3D n_pages;
+> +       }
+> +
+> +       if (p->max_pages && (p->found_pages =3D=3D p->max_pages))
+
+Since `p->found_pages > 0` holds here, the first check is redundant.
+Nit: the parentheses around =3D=3D are not needed.
+
+> +               return PM_SCAN_FOUND_MAX_PAGES;
+> +
+> +       return 0;
+> +}
+[...]
+> +static inline unsigned long pagemap_scan_check_page_written(struct pagem=
+ap_scan_private *p)
+> +{
+> +       return ((p->required_mask | p->anyof_mask | p->excluded_mask) &
+> +               PAGE_IS_WRITTEN) ? PM_SCAN_OP_WRITE : 0;
+> +}
+
+Please inline at the single callsite.
+
+For flags name: PM_REQUIRE_WRITE_ACCESS?
+Or Is it intended to be checked only if doing WP (as the current name
+suggests) and so it would be redundant as WP currently requires
+`p->required_mask =3D PAGE_IS_WRITTEN`?
+
+> +static int pagemap_scan_args_valid(struct pm_scan_arg *arg, unsigned lon=
+g start,
+> +                                  struct page_region __user *vec)
+> +{
+> +       /* Detect illegal size, flags, len and masks */
+> +       if (arg->size !=3D sizeof(struct pm_scan_arg))
+> +               return -EINVAL;
+> +       if (arg->flags & ~PM_SCAN_OPS)
+> +               return -EINVAL;
+> +       if (!arg->len)
+> +               return -EINVAL;
+> +       if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask |
+> +            arg->return_mask) & ~PM_SCAN_BITS_ALL)
+> +               return -EINVAL;
+> +       if (!arg->required_mask && !arg->anyof_mask &&
+> +           !arg->excluded_mask)
+> +               return -EINVAL;
+> +       if (!arg->return_mask)
+> +               return -EINVAL;
+
+I just noticed that `!arg->return_mask =3D=3D !IS_PM_SCAN_GET()`. So the
+OP_GET is redundant and can be removed from the `flags` if checking
+`return_mask` instead. That way there won't be a "flags-encoded ops"
+thing as it would be a 'scan' with optional 'write-protect'.
+
+> +
+> +       /* Validate memory range */
+> +       if (!IS_ALIGNED(start, PAGE_SIZE))
+> +               return -EINVAL;
+> +       if (!access_ok((void __user *)start, arg->len))
+> +               return -EFAULT;
+> +
+> +       if (IS_PM_SCAN_GET(arg->flags)) {
+> +               if (!arg->vec)
+> +                       return -EINVAL;
+
+access_ok() -> -EFAULT (an early fail-check) (the vec_len should be
+checked first then, failing with -EINVAL if 0)
+
+> +               if (arg->vec_len =3D=3D 0)
+> +                       return -EINVAL;
+> +       }
+> +
+> +       if (IS_PM_SCAN_WP(arg->flags)) {
+> +               if (!IS_PM_SCAN_GET(arg->flags) && arg->max_pages)
+> +                       return -EINVAL;
+> +
+> +               if ((arg->required_mask | arg->anyof_mask | arg->excluded=
+_mask) &
+> +                   ~PAGE_IS_WRITTEN)
+
+Is `excluded_mask =3D PAGE_IS_WRITTEN` intended to be allowed? It would
+make WP do nothing, unless the required/anyof/excluded masks are not
+supposed to limit WP?
+
+
+> +                       return -EINVAL;
+> +       }
+
+If `flags =3D=3D 0` (and `return_mask =3D=3D 0` in case my earlier comment =
+is
+applied) it should fail with -EINVAL.
+
+[...]
+> --- a/include/uapi/linux/fs.h
+> +++ b/include/uapi/linux/fs.h
+> +/*
+> + * struct page_region - Page region with bitmap flags
+> + * @start:     Start of the region
+> + * @len:       Length of the region in pages
+> + * bitmap:     Bits sets for the region
+
+'@' is missing for the third field. BTW, maybe we can call it
+something like `flags` or `category` (something that hints at the
+meaning of the value instead of its data representation).
+
+> +/*
+> + * struct pm_scan_arg - Pagemap ioctl argument
+> + * @size:              Size of the structure
+> + * @flags:             Flags for the IOCTL
+> + * @start:             Starting address of the region
+> + * @len:               Length of the region (All the pages in this lengt=
+h are included)
+
+Maybe `scan_start`, `scan_len` - so that there is a better distinction
+from the structure's `size` field?
+
+> + * @vec:               Address of page_region struct array for output
+> + * @vec_len:           Length of the page_region struct array
+> + * @max_pages:         Optional max return pages
+> + * @required_mask:     Required mask - All of these bits have to be set =
+in the PTE
+> + * @anyof_mask:                Any mask - Any of these bits are set in t=
+he PTE
+> + * @excluded_mask:     Exclude mask - None of these bits are set in the =
+PTE
+> + * @return_mask:       Bits that are to be reported in page_region
+> + */
+
+I skipped most of the page walk implementation as maybe the comments
+above could make it simpler. Reading this patch and the documentation
+I still feel confused about how the filtering/limiting parameters
+should affect GET, WP and WP+GET. Should they limit the pages walked
+(and WP-ed)? Or only the GET's output? How about GET+WP case?
+
+Best Regards
+
+Micha=C5=82 Miros=C5=82aw
