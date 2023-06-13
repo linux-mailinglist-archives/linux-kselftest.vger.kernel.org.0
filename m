@@ -2,130 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D63872DCEC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 10:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4B572DEDD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jun 2023 12:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238274AbjFMIpK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Jun 2023 04:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
+        id S239817AbjFMKPD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Jun 2023 06:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241864AbjFMIpF (ORCPT
+        with ESMTP id S240539AbjFMKPC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:45:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEA1A0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 01:44:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686645855;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DwCdfz6qIzvNJOkrJ4ckCc4rA0w83T1zH7jefpl3y6I=;
-        b=D1YeR1RzA5/q+94ZSdJM0DH9jc36QQyrmsYQ55sUUZlS9R2/INJfO37th4Dhwt8puQQN44
-        pfdeEilnpXiCRyqYs+2GjTraDLpOInb9PtM76arATwYdyEY7/oTQ03WkZwmyns0pN2P6j2
-        JlbGBrATpfiRBJK7zS44q2fc/JiWZsA=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-18-jMq7Ky4XMF-ZTCiUP1u29Q-1; Tue, 13 Jun 2023 04:44:13 -0400
-X-MC-Unique: jMq7Ky4XMF-ZTCiUP1u29Q-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4f621c76606so3507096e87.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 01:44:13 -0700 (PDT)
+        Tue, 13 Jun 2023 06:15:02 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC3F187
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 03:15:00 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30e3caa6aa7so5265563f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 03:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1686651298; x=1689243298;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E2rY2E6D+8oZww/s6pZwAJAnOm0HX7caGb8hYSApwkk=;
+        b=N2eh1qFFzWhwKedcB6rJTdohEMIovo8r4HL1dbMAK7fCafO8iorJVG7M/yIW0+4wKn
+         0iXMYd/OYFcWPYfnfRVxLTpMjKMUvMwWqaiG7ccSgIIgRdQzEXThxKvnq8VIUIOWg6MG
+         ObadDouxom16RacsAMbDim3lGMidBi/l++OdNp7KyEqq7+uUC6rqJDfBJmynCbQYycBj
+         72GiSWho1X55JR8MKrKy1X+eB76x7cp5m0AodJm4fJgqXAOOBCMKEIe/pVvuBZl75/78
+         PqRPPMo/1MIb3nRxQNP0SrCLfKQho3DjhGvNQlCMHBh0SzqotRHMpMKa3kEYopk+5ow5
+         7gQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686645852; x=1689237852;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1686651298; x=1689243298;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DwCdfz6qIzvNJOkrJ4ckCc4rA0w83T1zH7jefpl3y6I=;
-        b=HGvUgr/pKO459q/GTBA0vQ8JmsWO6uhHR5k6OZAkDihBdt9GWsQJpGhxi5fBi93sHK
-         gRxEjPtIcYzVOmWESSM+kY5jpauU6M+rT+xFEtw+/lnIpX/xWuqRfdy9jmUkMjT0Yxw1
-         R0kzxg/eP5xN4byrzDYgnUt5pA6FpVd7LiDwpb5ba5nzHzU++ydycZ+VGwd8Vosa14Vj
-         bRVUy33DfOZsq6CJ0dxc08PR36my79AvwQu38WgUmep42LdiXqZYSFbE7hYtg06FSrOl
-         gho9nDIAFWjCy3E3ikV32RS1xQ4euzYt9K+BgKRGoSUKBTHSXc6ijQ0iv51UARtZloAv
-         9omQ==
-X-Gm-Message-State: AC+VfDx+Q0rH5Ws1ZfnJd9VfahDwHtRGJwlKeIqPvDlZwcCGzRmbIouh
-        gqPTdyREza/xTa/MB6JVpdI+Bi1Ox7+ZtCcMzEf0H3l2MtcA62RlOgSrDEuyEXqCSYel87w5Ak5
-        2qLmKZd5z0bbFu2opInORJqu4JlAa
-X-Received: by 2002:a19:2d4e:0:b0:4f6:3ef4:5c78 with SMTP id t14-20020a192d4e000000b004f63ef45c78mr4880070lft.50.1686645852115;
-        Tue, 13 Jun 2023 01:44:12 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ76OwP/icHsCrkIlrQSybTRFDNzeJVkIcmQL7YrFmVBPuSL+xWxlAH6cjj+YWuxrRnJybU+Ww==
-X-Received: by 2002:a19:2d4e:0:b0:4f6:3ef4:5c78 with SMTP id t14-20020a192d4e000000b004f63ef45c78mr4880059lft.50.1686645851644;
-        Tue, 13 Jun 2023 01:44:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c710:ff00:1a06:80f:733a:e8c6? (p200300cbc710ff001a06080f733ae8c6.dip0.t-ipconnect.de. [2003:cb:c710:ff00:1a06:80f:733a:e8c6])
-        by smtp.gmail.com with ESMTPSA id 14-20020a05600c024e00b003f8044b3448sm13350961wmj.9.2023.06.13.01.44.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 01:44:11 -0700 (PDT)
-Message-ID: <e05c4897-ea77-bd1e-0bdd-e897107a614f@redhat.com>
-Date:   Tue, 13 Jun 2023 10:44:10 +0200
+        bh=E2rY2E6D+8oZww/s6pZwAJAnOm0HX7caGb8hYSApwkk=;
+        b=V0nyozHewO2itpncLuBGvAUH5K7+aAGOYG/ttW6qIDpdMvzRdBww9FYyRt2MLHokSF
+         h3IVcZ1ie1sWyKhEQVULsiBA4rk/j3Fa0UC3VPngfidHRCt4H1OJUcL4Bbbr29NWuc7S
+         CYp4u+t6awoZVdYw4s6x8oZqKbgCNoWkkVzFahQaTOdycCLMClRGYMttNC8zheaf4pCE
+         wK7NnEwnOGOGgiqqnp6xveP8I7iXAkHDhjSSGWli5eOHIoq9gVccw9+FTpCKn+rOnsA2
+         kmEoPKpAXvFU7ssAUZsf1eqAdTkcWIiOCrYhrpE5jXEj7JeeO+Vq4HzUkB1DENo/hEtP
+         wmqQ==
+X-Gm-Message-State: AC+VfDwn0Ith1PVSvMaaS7djTxSmvF0zMQUbqLBz7O1hymgOZBbWqxtj
+        VoWEA8pt8MYj6xbqbLDQNY+hGw==
+X-Google-Smtp-Source: ACHHUZ65N13abVrzLfeul76h7ocBpY5DJ46OtoJAPzwn6WdPIiMQgBL1EoYrygCdkLhCxe52FmASyg==
+X-Received: by 2002:a05:6000:1951:b0:30e:5428:c322 with SMTP id e17-20020a056000195100b0030e5428c322mr6153431wry.44.1686651298384;
+        Tue, 13 Jun 2023 03:14:58 -0700 (PDT)
+Received: from [192.168.133.193] ([5.148.46.226])
+        by smtp.gmail.com with ESMTPSA id k15-20020a5d6e8f000000b0030e6096afb6sm15075020wrz.12.2023.06.13.03.14.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 03:14:57 -0700 (PDT)
+From:   Lorenz Bauer <lmb@isovalent.com>
+Subject: [PATCH bpf-next v2 0/6] Add SO_REUSEPORT support for TC
+ bpf_sk_assign
+Date:   Tue, 13 Jun 2023 11:14:55 +0100
+Message-Id: <20230613-so-reuseport-v2-0-b7c69a342613@isovalent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] selftests: lib.mk: fix out-of-tree builds
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230613074931.666966-1-anders.roxell@linaro.org>
- <cf6eb3f1-276a-bdcc-7d63-7f4ab3f9cdce@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <cf6eb3f1-276a-bdcc-7d63-7f4ab3f9cdce@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJ9BiGQC/02NQQrCMBBFr1Jm7UCbYEWvIi6S+Gtnk4SZKoXSu
+ 5u6cvl4//E3MqjA6NZtpPiISckN3KmjNIf8AsuzMbne+X4cPFthxdtQiy6Mq0tnNw4XD1BLYjB
+ w1JDTfET/20NXxSTr7+1OsU6csS702Pcvt0gtuYcAAAA=
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>,
+        Joe Stringer <joe@cilium.io>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 13.06.23 10:16, Muhammad Usama Anjum wrote:
-> This patch needs to go through mm tree as the commit which it fixes is in mm.
-> 
-> On 6/13/23 12:49 PM, Anders Roxell wrote:
->> Since commit ("selftests: error out if kernel header files are not yet
->> built") got merged, the kselftest build correctly because the
->> KBUILD_OUTPUT isn't set when building out-of-tree and specifying 'O='
->> This is the error message that pops up.
->>
->> make --silent --keep-going --jobs=32 O=/home/anders/.cache/tuxmake/builds/1482/build INSTALL_PATH=/home/anders/.cache/tuxmake/builds/1482/build/kselftest_install ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- V=1 CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- kselftest-install
->> make[3]: Entering directory '/home/anders/src/kernel/next/tools/testing/selftests/alsa'
->>
->> -e [1;31merror[0m: missing kernel header files.
->> Please run this and try again:
->>
->>      cd /home/anders/src/kernel/next/tools/testing/selftests/../../..
->>      make headers
->>
->> make[3]: Leaving directory '/home/anders/src/kernel/next/tools/testing/selftests/alsa'
->> make[3]: *** [../lib.mk:77: kernel_header_files] Error 1
->>
->> Fixing the issue by assigning KBUILD_OUTPUT the same way how its done in
->> kselftest's Makefile. By adding 'KBUILD_OUTPUT := $(O)' 'if $(origin O)'
->> is set to 'command line'. This will set the the BUILD dir to
->> KBUILD_OUTPUT/kselftest when doing out-of-tree builds which makes them
->> in its own separete output directory.
->>
->> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> Please add fixes tag. ("selftests: error out if kernel header files are not
-> yet built")
-> 
-> Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+We want to replace iptables TPROXY with a BPF program at TC ingress.
+To make this work in all cases we need to assign a SO_REUSEPORT socket
+to an skb, which is currently prohibited. This series adds support for
+such sockets to bpf_sk_assing. See patch 5 for details.
 
-This should get squashed into the original patch unless it's already in 
-mm-stable (which it isn't) and we have a stable commit id.
+I did some refactoring to cut down on the amount of duplicate code. The
+key to this is to use INDIRECT_CALL in the reuseport helpers. To show
+that this approach is not just beneficial to TC sk_assign I removed
+duplicate code for bpf_sk_lookup as well.
 
+Changes from v1:
+- Correct commit abbrev length (Kuniyuki)
+- Reduce duplication (Kuniyuki)
+- Add checks on sk_state (Martin)
+- Split exporting inet[6]_lookup_reuseport into separate patch (Eric)
+
+Joint work with Daniel Borkmann.
+
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+---
+Daniel Borkmann (1):
+      selftests/bpf: Test that SO_REUSEPORT can be used with sk_assign helper
+
+Lorenz Bauer (5):
+      net: export inet_lookup_reuseport and inet6_lookup_reuseport
+      net: document inet[6]_lookup_reuseport sk_state requirements
+      net: remove duplicate reuseport_lookup functions
+      net: remove duplicate sk_lookup helpers
+      bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
+
+ include/net/inet6_hashtables.h                     |  84 ++++++++-
+ include/net/inet_hashtables.h                      |  77 +++++++-
+ include/net/sock.h                                 |   7 +-
+ include/uapi/linux/bpf.h                           |   3 -
+ net/core/filter.c                                  |   2 -
+ net/ipv4/inet_hashtables.c                         |  69 +++++---
+ net/ipv4/udp.c                                     |  73 +++-----
+ net/ipv6/inet6_hashtables.c                        |  71 +++++---
+ net/ipv6/udp.c                                     |  85 +++------
+ tools/include/uapi/linux/bpf.h                     |   3 -
+ tools/testing/selftests/bpf/network_helpers.c      |   3 +
+ .../selftests/bpf/prog_tests/assign_reuse.c        | 197 +++++++++++++++++++++
+ .../selftests/bpf/progs/test_assign_reuse.c        | 142 +++++++++++++++
+ 13 files changed, 637 insertions(+), 179 deletions(-)
+---
+base-commit: 25085b4e9251c77758964a8e8651338972353642
+change-id: 20230613-so-reuseport-e92c526173ee
+
+Best regards,
 -- 
-Cheers,
-
-David / dhildenb
+Lorenz Bauer <lmb@isovalent.com>
 
