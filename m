@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E45872F59A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 09:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE6A72F694
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 09:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235268AbjFNHMs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Jun 2023 03:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
+        id S235014AbjFNHml (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Jun 2023 03:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235223AbjFNHMr (ORCPT
+        with ESMTP id S234847AbjFNHml (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:12:47 -0400
+        Wed, 14 Jun 2023 03:42:41 -0400
 Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D540819B7
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 00:12:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930A81BC5
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 00:42:37 -0700 (PDT)
 Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QgxT72gnqzBQJYP
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 15:12:43 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTP id 4Qgy7Z69zgzBQJYw
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 15:42:34 +0800 (CST)
 Authentication-Results: mail.208.org (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)" header.d=208.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
         content-transfer-encoding:content-type:message-id:user-agent
         :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686726763; x=1689318764; bh=c7RaFsDa5kAGNhcFOSGO7z6+FkC
-        thRmwJp7Hw4Z60gs=; b=AB1SzX7lR5CKs5uEHH8+G0KuN2jcD7M89WKDMBX6fSC
-        iiFhJLoWldyy7H6+TJn2fVidX4EYoSCzVaTRSIz+NOJkDghePBzOpbHgsRO+kkiA
-        EZmJnul1e/MWaBnGynFrSyvTyYq63eAYhfRg5oFzzdWSN0ELP4V6HE7yO15tvcze
-        hlCtOfiSpXYGHeJX4yofzl5m21aAsAHuCMYxj/z1FeVO2S1Yu2zMWbRQ6Ve4MS32
-        BUpYcDj2/oT6ogMREifncICyQuj8SmliRVbrfUbAvdPszw0Y6mJVto40gkfNo0OZ
-        7TCd6ApbJcSXgfhJNNOIYGkuYDqqn01aRUl3b92gDBQ==
+        dkim; t=1686728554; x=1689320555; bh=snMogAIL9y2byMbsZXqj+hiozP/
+        +XS6VEZBwL8D7BD8=; b=QCwMuqdVsxZLhCViwgbZUgy8hRFEaVoU5f6prngM7lj
+        xh2B+HTGC5E3icZpe9pcHYrn82WrJ1tZCRJGtZSoCn11TzJ/ipPmkRhM7SiTpdVM
+        Qv+Zu7eV8KP/vOOwyulFckqmtzXtLw7j5exUW/EKRv3CxWfBpVLWEMmd9v0Lr72E
+        t5KiUlLOcM9QjZ86AO1w/3jf1pN79SKgVmkMEJU/VFf5nNA1Iwhot9YOZLLNJNVj
+        01KjzIjRF3jYDx8i99yzBXy/rEYG/bB05ZA5PS0KQ+LWeDRl+jIQwU+Sy7mu9uV4
+        1rZP7f1F/+zWHkWUqdD5cCGhscrvrtoOM4M3njOn4Lg==
 X-Virus-Scanned: amavisd-new at mail.208.org
 Received: from mail.208.org ([127.0.0.1])
         by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id xDA2kjHUg7ht for <linux-kselftest@vger.kernel.org>;
-        Wed, 14 Jun 2023 15:12:43 +0800 (CST)
+        with ESMTP id 5I_SSF-f8Rkz for <linux-kselftest@vger.kernel.org>;
+        Wed, 14 Jun 2023 15:42:34 +0800 (CST)
 Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QgxT70W8GzBJLB3;
-        Wed, 14 Jun 2023 15:12:43 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTPSA id 4Qgy7Z3WNczBQJYk;
+        Wed, 14 Jun 2023 15:42:34 +0800 (CST)
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 15:12:42 +0800
+Date:   Wed, 14 Jun 2023 15:42:34 +0800
 From:   wuyonggang001@208suo.com
-To:     shuah@kernel.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+To:     andrii@kernel.org, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/powerpc: Remove unneeded variable
-In-Reply-To: <20230614070926.36395-1-zhanglibing@cdjrlc.com>
-References: <20230614070926.36395-1-zhanglibing@cdjrlc.com>
+Subject: [PATCH] selftests/bpf: Fix the address is NULL
+In-Reply-To: <20230614073443.4894-1-zhanglibing@cdjrlc.com>
+References: <20230614073443.4894-1-zhanglibing@cdjrlc.com>
 User-Agent: Roundcube Webmail
-Message-ID: <553bb6053c7b7bee60eda3ca90470ac3@208suo.com>
+Message-ID: <7f34bd3ce377d9d89626c2df8fa584e0@208suo.com>
 X-Sender: wuyonggang001@208suo.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -62,126 +62,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the following coccicheck warning:
+Fix the following coccicheck error:
 
-tools/testing/selftests/powerpc/alignment/alignment_handler.c:558:5-7: 
-Unneeded variable: "rc". Return "0"
+tools/testing/selftests/bpf/progs/test_ksyms_weak.c:53:6-20: ERROR: test 
+of a variable/field address
 
 Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
 ---
-  .../powerpc/alignment/alignment_handler.c     | 24 +++++++++----------
-  1 file changed, 12 insertions(+), 12 deletions(-)
+  tools/testing/selftests/bpf/progs/test_ksyms_weak.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git 
-a/tools/testing/selftests/powerpc/alignment/alignment_handler.c 
-b/tools/testing/selftests/powerpc/alignment/alignment_handler.c
-index 33ee34fc0828..4980656c3f70 100644
---- a/tools/testing/selftests/powerpc/alignment/alignment_handler.c
-+++ b/tools/testing/selftests/powerpc/alignment/alignment_handler.c
-@@ -332,7 +332,7 @@ int test_alignment_handler_vsx_206(void)
-      STORE_VSX_XFORM_TEST(stxvd2x);
-      STORE_VSX_XFORM_TEST(stxvw4x);
-      STORE_VSX_XFORM_TEST(stxsdx);
--    return rc;
-+    return 0;
-  }
+diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_weak.c 
+b/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
+index d00268c91e19..768a4d6ee6f5 100644
+--- a/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
++++ b/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
+@@ -50,7 +50,7 @@ int pass_handler(const void *ctx)
+      /* tests non-existent symbols. */
+      out__non_existent_typed = (__u64)&bpf_link_fops2;
 
-  int test_alignment_handler_vsx_207(void)
-@@ -348,7 +348,7 @@ int test_alignment_handler_vsx_207(void)
-      LOAD_VSX_XFORM_TEST(lxsiwzx);
-      STORE_VSX_XFORM_TEST(stxsspx);
-      STORE_VSX_XFORM_TEST(stxsiwx);
--    return rc;
-+    return 0;
-  }
+-    if (&bpf_link_fops2) /* can't happen */
++    if (&bpf_link_fops2 != NULL) /* can't happen */
+          out__non_existent_typed = 
+(__u64)bpf_per_cpu_ptr(&bpf_link_fops2, 0);
 
-  int test_alignment_handler_vsx_300(void)
-@@ -380,7 +380,7 @@ int test_alignment_handler_vsx_300(void)
-      STORE_VSX_XFORM_TEST(stxvx);
-      STORE_VSX_XFORM_TEST(stxvl);
-      STORE_VSX_XFORM_TEST(stxvll);
--    return rc;
-+    return 0;
-  }
-
-  int test_alignment_handler_vsx_prefix(void)
-@@ -399,7 +399,7 @@ int test_alignment_handler_vsx_prefix(void)
-      STORE_VSX_8LS_PREFIX_TEST(PSTXSSP, 0);
-      STORE_VSX_8LS_PREFIX_TEST(PSTXV0, 0);
-      STORE_VSX_8LS_PREFIX_TEST(PSTXV1, 1);
--    return rc;
-+    return 0;
-  }
-
-  int test_alignment_handler_integer(void)
-@@ -458,7 +458,7 @@ int test_alignment_handler_integer(void)
-      STORE_DFORM_TEST(stmw);
-  #endif
-
--    return rc;
-+    return 0;
-  }
-
-  int test_alignment_handler_integer_206(void)
-@@ -473,7 +473,7 @@ int test_alignment_handler_integer_206(void)
-      LOAD_XFORM_TEST(ldbrx);
-      STORE_XFORM_TEST(stdbrx);
-
--    return rc;
-+    return 0;
-  }
-
-  int test_alignment_handler_integer_prefix(void)
-@@ -494,7 +494,7 @@ int test_alignment_handler_integer_prefix(void)
-      STORE_MLS_PREFIX_TEST(PSTH);
-      STORE_MLS_PREFIX_TEST(PSTW);
-      STORE_8LS_PREFIX_TEST(PSTD);
--    return rc;
-+    return 0;
-  }
-
-  int test_alignment_handler_vmx(void)
-@@ -522,7 +522,7 @@ int test_alignment_handler_vmx(void)
-      STORE_VMX_XFORM_TEST(stvehx);
-      STORE_VMX_XFORM_TEST(stvewx);
-      STORE_VMX_XFORM_TEST(stvxl);
--    return rc;
-+    return 0;
-  }
-
-  int test_alignment_handler_fp(void)
-@@ -550,7 +550,7 @@ int test_alignment_handler_fp(void)
-      STORE_FLOAT_XFORM_TEST(stfsux);
-      STORE_FLOAT_XFORM_TEST(stfiwx);
-
--    return rc;
-+    return 0;
-  }
-
-  int test_alignment_handler_fp_205(void)
-@@ -568,7 +568,7 @@ int test_alignment_handler_fp_205(void)
-      STORE_FLOAT_DFORM_TEST(stfdp);
-      STORE_FLOAT_XFORM_TEST(stfdpx);
-
--    return rc;
-+    return 0;
-  }
-
-  int test_alignment_handler_fp_206(void)
-@@ -582,7 +582,7 @@ int test_alignment_handler_fp_206(void)
-
-      LOAD_FLOAT_XFORM_TEST(lfiwzx);
-
--    return rc;
-+    return 0;
-  }
-
-@@ -599,7 +599,7 @@ int test_alignment_handler_fp_prefix(void)
-      LOAD_FLOAT_MLS_PREFIX_TEST(PLFD);
-      STORE_FLOAT_MLS_PREFIX_TEST(PSTFS);
-      STORE_FLOAT_MLS_PREFIX_TEST(PSTFD);
--    return rc;
-+    return 0;
-  }
-
-  void usage(char *prog)
+      if (!bpf_ksym_exists(bpf_task_acquire))
