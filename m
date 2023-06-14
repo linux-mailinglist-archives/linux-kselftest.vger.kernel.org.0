@@ -2,250 +2,380 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94F272FF61
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 15:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5EE73005B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 15:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243988AbjFNNDG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Jun 2023 09:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56118 "EHLO
+        id S245110AbjFNNrA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Jun 2023 09:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244078AbjFNNDF (ORCPT
+        with ESMTP id S245098AbjFNNqy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:03:05 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C44199C;
-        Wed, 14 Jun 2023 06:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686747784; x=1718283784;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=WDPEbxVFdzvoZ3lt67W/3QT8Nr5+/zJbjhuLHHdJoRo=;
-  b=Jmk8aRSzCkp1o/6x5bWqUU7ad8rft0d+LuO+kuwHvnKm4VtL9e8CdIMU
-   HcY7icrFK6woaLqnMH7Pgm3O1DVap7M8B+hs1ZCh7Ffuja7yUgx/yeDeh
-   nv1Xt2KcC4hu5tCBF5hNue6VC06s68C2CPfYRo8XAvOvuyxnEcnfiGWFV
-   o9jy65h0oST3F8deSSBxpIUf98ahVDVJesABJnfjVl9P3mPcZQZDbveXk
-   0t35vZC87/ahPZONOH9xRup4UVwm64IoJii+5OltI/BN06Q+ohoylAXQs
-   voM54L7HxNZzsx5SXkDBGox9MXDQALl+vQ68J4rD0caU3xUL1ODLlFjM7
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="343300799"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="343300799"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 06:03:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="856496471"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="856496471"
-Received: from ijarvine-mobl2.ger.corp.intel.com ([10.252.34.126])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 06:02:56 -0700
-Date:   Wed, 14 Jun 2023 16:02:43 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
-cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 21/24] selftests/resctrl: Read in less obvious order
- to defeat prefetch optimizations
-In-Reply-To: <TYAPR01MB6330025B5E6537F94DA49ACB8B499@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-Message-ID: <b7dfc9b-74da-5fe2-9060-fd36eb636c6@linux.intel.com>
-References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-22-ilpo.jarvinen@linux.intel.com> <OSZPR01MB6328F2713E40CC7D383035A48B489@OSZPR01MB6328.jpnprd01.prod.outlook.com> <c21fb16d-d3ad-bbcb-daed-28f153b64525@linux.intel.com>
- <TYAPR01MB6330025B5E6537F94DA49ACB8B499@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+        Wed, 14 Jun 2023 09:46:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C771FFA;
+        Wed, 14 Jun 2023 06:46:51 -0700 (PDT)
+Received: from [192.168.10.54] (unknown [119.155.33.163])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DC7DE6606F20;
+        Wed, 14 Jun 2023 14:46:42 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686750409;
+        bh=Cq5M4lwyqoBqWQ1eWw0gmvlCQBKHVEqfvS5019IznPE=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=UXHcDCmSSzzVdfy/KhFc9BPZiTOcUSzjFZq7g92WQvr9nygUV5XsCLnpfJh4G+XqF
+         QrGZkkSASv9ttJ7rvHhwCUfb5IgEnNbSIpS/BJoUTX/kaNOJjN6lg3+tk3GWeCW2cc
+         TnXl5hu5wAWzU5QclKwi9KlzmUmtvXKpiRTWl/dhyLDzCYbzGhMOveptJmYR1X03gc
+         MAKQO5lCXIV6e1YxYuUq9IJjCrY43wYO6PI/wE8rzD893Ouaht/UkpnvXNuzGAPdAa
+         lart6D6tGa5i6y5zUr/GtEcveae1ktpSfRHXCUtjOQZoXAgLFbatVTR0SvB0MegCuh
+         N78ixIbGBcpaA==
+Message-ID: <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com>
+Date:   Wed, 14 Jun 2023 18:46:37 +0500
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-376779887-1686747778=:3473"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230613102905.2808371-1-usama.anjum@collabora.com>
+ <20230613102905.2808371-3-usama.anjum@collabora.com>
+ <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-376779887-1686747778=:3473
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 1 Jun 2023, Shaopeng Tan (Fujitsu) wrote:
-> > > > When reading memory in order, HW prefetching optimizations will
-> > > > interfere with measuring how caches and memory are being accessed.
-> > > > This adds noise into the results.
-> > > >
-> > > > Change the fill_buf reading loop to not use an obvious in-order
-> > > > access using multiply by a prime and modulo.
-> > > >
-> > > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > > ---
-> > > >  tools/testing/selftests/resctrl/fill_buf.c | 17 ++++++++++-------
-> > > >  1 file changed, 10 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/resctrl/fill_buf.c
-> > > > b/tools/testing/selftests/resctrl/fill_buf.c
-> > > > index 7e0d3a1ea555..049a520498a9 100644
-> > > > --- a/tools/testing/selftests/resctrl/fill_buf.c
-> > > > +++ b/tools/testing/selftests/resctrl/fill_buf.c
-> > > > @@ -88,14 +88,17 @@ static void *malloc_and_init_memory(size_t s)
-> > > >
-> > > >  static int fill_one_span_read(unsigned char *start_ptr, unsigned
-> > > > char
-> > > > *end_ptr)  {
-> > > > -	unsigned char sum, *p;
-> > > > -
-> > > > +	unsigned int size = (end_ptr - start_ptr) / (CL_SIZE / 2);
-> > > > +	unsigned int count = size;
-> > > > +	unsigned char sum;
-> > > > +
-> > > > +	/*
-> > > > +	 * Read the buffer in an order that is unexpected by HW prefetching
-> > > > +	 * optimizations to prevent them interfering with the caching pattern.
-> > > > +	 */
-> > > >  	sum = 0;
-> > > > -	p = start_ptr;
-> > > > -	while (p < end_ptr) {
-> > > > -		sum += *p;
-> > > > -		p += (CL_SIZE / 2);
-> > > > -	}
-> > > > +	while (count--)
-> > > > +		sum += start_ptr[((count * 59) % size) * CL_SIZE / 2];
-> > >
-> > > Could you please elaborate why 59 is used?
-> > 
-> > The main reason is that it's a prime number ensuring the whole buffer gets read.
-> > I picked something that doesn't make it to wrap on almost every iteration.
+On 6/14/23 3:36 AM, Michał Mirosław wrote:
+> On Tue, 13 Jun 2023 at 12:29, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+>> the info about page table entries. The following operations are supported
+>> in this ioctl:
+>> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>>   (PAGE_IS_SWAPPED).
+>> - Find pages which have been written-to and/or write protect the pages
+>>   (atomic PM_SCAN_OP_GET + PM_SCAN_OP_WP)
+>>
+>> This IOCTL can be extended to get information about more PTE bits.
+> [...]
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+> [...]
+>> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
+>> +                              struct pagemap_scan_private *p,
+>> +                              unsigned long addr, unsigned int n_pages)
+>> +{
+>> +       unsigned long bitmap = PM_SCAN_BITMAP(wt, file, pres, swap);
+>> +       struct page_region *cur_buf = &p->cur_buf;
 > 
-> Thanks for your explanation. It seems there is no problem.
+> Maybe we can go a step further and say here `cur_buf =
+> &p->vec_buf[p->vec_buf_index];` and remove `p->cur_buf` entirely?
+No, this cannot be done. vec_buf_index represents overall index in vec_buf
+which is a user buffer. We cannot access it conveniently. This is why I'd
+added cur_buf in the fisrt place.
+
 > 
-> Perhaps you have already tested this patch in your environment and got a test result of "ok". 
-> Because HW prefetching does not work well,
-> the IMC counter fluctuates a lot in my environment,
-> and the test result is "not ok". 
+>> +
+>> +       if (!n_pages)
+>> +               return -EINVAL;
+>> +
+>> +       if ((p->required_mask & bitmap) != p->required_mask)
+>> +               return 0;
+>> +       if (p->anyof_mask && !(p->anyof_mask & bitmap))
+>> +               return 0;
+>> +       if (p->excluded_mask & bitmap)
+>> +               return 0;
+>> +
+>> +       bitmap &= p->return_mask;
+>> +       if (!bitmap)
+>> +               return 0;
+>> +
+>> +       if (cur_buf->bitmap == bitmap &&
+>> +           cur_buf->start + cur_buf->len * PAGE_SIZE == addr) {
+>> +               cur_buf->len += n_pages;
+>> +               p->found_pages += n_pages;
+>> +       } else {
+>> +               if (cur_buf->len && p->vec_buf_index >= p->vec_buf_len)
+>> +                       return -ENOMEM;
 > 
-> In order to ensure this test set runs in any environments and gets "ok",
-> would you consider changing the value of MAX_DIFF_PERCENT of each test?
-> or changing something else?
+> Shouldn't this be -ENOSPC? -ENOMEM usually signifies that the kernel
+> ran out of memory when allocating, not that there is no space in a
+> user-provided buffer.
+There are 3 kinds of return values here:
+* PM_SCAN_FOUND_MAX_PAGES (1) ---> max_pages have been found. Abort the
+page walk from next entry
+* 0 ---> continue the page walk
+* -ENOMEM --> Abort the page walk from current entry, user buffer is full
+which is not error, but only a stop signal. This -ENOMEM is just
+differentiater from (1). This -ENOMEM is for internal use and isn't
+returned to user.
+
+I think it would be better to use following in place of -ENOMEM:
+#define PM_SCAN_BUFFER_FULL	(-256)
+
+I'll update.
+
 > 
-> ```
-> Environment:
->  Kernel: 6.4.0-rc2
->  CPU: Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz
+> BTW, the check could be inside the if() below for easier reading and
+> less redundancy.
+Sure.
+
 > 
-> Test result(MBM as an example):
-> # # Starting MBM BW change ...
-> # # Mounting resctrl to "/sys/fs/resctrl"
-> # # Benchmark PID: 8671
-> # # Writing benchmark parameters to resctrl FS
-> # # Write schema "MB:0=100" to resctrl FS
-> # # Checking for pass/fail
-> # # Fail: Check MBM diff within 5%
-> # # avg_diff_per: 9%
-> # # Span in bytes: 262144000
-> # # avg_bw_imc: 6202
-> # # avg_bw_resc: 5585
-> # not ok 1 MBM: bw change
-> ```
+>> +               if (cur_buf->len) {
+>> +                       memcpy(&p->vec_buf[p->vec_buf_index], cur_buf,
+>> +                              sizeof(*p->vec_buf));
+>> +                       p->vec_buf_index++;
+>> +               }
+>> +
+>> +               cur_buf->start = addr;
+>> +               cur_buf->len = n_pages;
+>> +               cur_buf->bitmap = bitmap;
+>> +               p->found_pages += n_pages;
+>> +       }
+>> +
+>> +       if (p->max_pages && (p->found_pages == p->max_pages))
+> 
+> Since `p->found_pages > 0` holds here, the first check is redundant.
+I didn't get it. As the max_pages is optional, its validity needs to be
+checked first.
 
-Could you try if the approach below works better (I think it should apply 
-cleanly on top of the fixes+cleanups v3 series which you recently tested, 
-no need to have the other CAT test changes).
+> Nit: the parentheses around == are not needed.
+Sure, I'll update.
 
-The biggest difference in terms of result stability my tests come from 
-these factors:
-- Removed reversed index order.
-- Open-coded the modulo in the loop to subtraction.
+> 
+>> +               return PM_SCAN_FOUND_MAX_PAGES;
+>> +
+>> +       return 0;
+>> +}
+> [...]
+>> +static inline unsigned long pagemap_scan_check_page_written(struct pagemap_scan_private *p)
+>> +{
+>> +       return ((p->required_mask | p->anyof_mask | p->excluded_mask) &
+>> +               PAGE_IS_WRITTEN) ? PM_SCAN_OP_WRITE : 0;
+>> +}
+> 
+> Please inline at the single callsite.
+Sure.
 
-In addition, I changed the prime to one which works slightly better than 
-59. The MBM/MBA results were already <5% with 59 too due to the other two 
-changes, but using 23 lowered them further in my tests (with Platinum 
-8260L).
+> 
+> For flags name: PM_REQUIRE_WRITE_ACCESS?
+> Or Is it intended to be checked only if doing WP (as the current name
+> suggests) and so it would be redundant as WP currently requires
+> `p->required_mask = PAGE_IS_WRITTEN`?
+This is intended to indicate that if userfaultfd is needed. If
+PAGE_IS_WRITTEN is mentioned in any of mask, we need to check if
+userfaultfd has been initialized for this memory. I'll rename to
+PM_SCAN_REQUIRE_UFFD.
 
----
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-[PATCH] selftests/resctrl: Read in less obvious order to defeat prefetch optimizations
+> 
+>> +static int pagemap_scan_args_valid(struct pm_scan_arg *arg, unsigned long start,
+>> +                                  struct page_region __user *vec)
+>> +{
+>> +       /* Detect illegal size, flags, len and masks */
+>> +       if (arg->size != sizeof(struct pm_scan_arg))
+>> +               return -EINVAL;
+>> +       if (arg->flags & ~PM_SCAN_OPS)
+>> +               return -EINVAL;
+>> +       if (!arg->len)
+>> +               return -EINVAL;
+>> +       if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask |
+>> +            arg->return_mask) & ~PM_SCAN_BITS_ALL)
+>> +               return -EINVAL;
+>> +       if (!arg->required_mask && !arg->anyof_mask &&
+>> +           !arg->excluded_mask)
+>> +               return -EINVAL;
+>> +       if (!arg->return_mask)
+>> +               return -EINVAL;
+> 
+> I just noticed that `!arg->return_mask == !IS_PM_SCAN_GET()`. So the
+> OP_GET is redundant and can be removed from the `flags` if checking
+> `return_mask` instead. That way there won't be a "flags-encoded ops"
+> thing as it would be a 'scan' with optional 'write-protect'.
+I know it makes flags checking easier if we remove PM_SCAN_OP_GET. But
+it'll created complications later if more OPs are added to the IOCTL. Lets
+not remove it.
 
-When reading memory in order, HW prefetching optimizations will
-interfere with measuring how caches and memory are being accessed. This
-adds noise into the results.
+Some history:
+I'd PM_SCAN_OP_GET. Then someone asked me to remove it. Then someone asked
+me to add it back.
 
-Change the fill_buf reading loop to not use an obvious in-order access
-using multiply by a prime and modulo.
+> 
+>> +
+>> +       /* Validate memory range */
+>> +       if (!IS_ALIGNED(start, PAGE_SIZE))
+>> +               return -EINVAL;
+>> +       if (!access_ok((void __user *)start, arg->len))
+>> +               return -EFAULT;
+>> +
+>> +       if (IS_PM_SCAN_GET(arg->flags)) {
+>> +               if (!arg->vec)
+>> +                       return -EINVAL;
+> 
+> access_ok() -> -EFAULT (an early fail-check) (the vec_len should be
+> checked first then, failing with -EINVAL if 0)
+I'd access_ok() for vec. But I removed it after discussion with you. Now I
+only check that vec shouldn't be NULL:
+https://lore.kernel.org/all/CABb0KFGru9xFCxyVHBcE+dkXe58=5wiCbvZGSWhuTfr4gn=MRQ@mail.gmail.com
 
-Using a prime multiplier with modulo ensures the entire buffer is
-eventually read. 23 is small enough that the reads are spread out but
-wrapping does not occur very frequently (wrapping too often can trigger
-L2 hits more frequently which causes noise to the test because getting
-the data from LLC is not required).
 
-It was discovered that not all primes work equally well and some can
-cause wildly unstable results (e.g., in an earlier version of this
-patch, the reads were done in reversed order and 59 was used as the
-prime resulting in unacceptably high and unstable results in MBA and
-MBM test on some architectures).
+[...]
+>>> +       if (!access_ok((void __user *)vec,
+>>> +                      arg->vec_len * sizeof(struct page_region)))
+>>> +               return false;
+>>
+>> Is there a provision that userspace threads are all blocked from
+>> manipulating mmaps during this ioctl()? If not, this is a TOCTOU bug
+>> and the writes should be checked each time as another userspace thread
+>> could remap the memory while the ioctl() is working.
+> mincore() syscall is doing in the same way. It checks the validity in the
+> start only. What provision should I add? Isn't it obvious that the user
+> should not remap such memory?
 
-Link: https://lore.kernel.org/linux-kselftest/TYAPR01MB6330025B5E6537F94DA49ACB8B499@TYAPR01MB6330.jpnprd01.prod.outlook.com/
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+On the second look, I think the code already checks that while doing
+copy_to_user(), so this check is redundant and can be removed.
 
----
- tools/testing/selftests/resctrl/fill_buf.c | 38 +++++++++++++++++++++++-------
- 1 file changed, 30 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-index f9893edda869..afde37d3fca0 100644
---- a/tools/testing/selftests/resctrl/fill_buf.c
-+++ b/tools/testing/selftests/resctrl/fill_buf.c
-@@ -74,16 +74,38 @@ static void *malloc_and_init_memory(size_t buf_size)
- 	return p;
- }
- 
-+/*
-+ * Buffer index step advance to workaround HW prefetching interfering with
-+ * the measurements.
-+ *
-+ * Must be a prime to step through all indexes of the buffer.
-+ *
-+ * Some primes work better than others on some architectures (from MBA/MBM
-+ * result stability point of view).
-+ */
-+#define FILL_IDX_MULT	23
-+
- static int fill_one_span_read(unsigned char *buf, size_t buf_size)
- {
--	unsigned char *end_ptr = buf + buf_size;
--	unsigned char sum, *p;
--
--	sum = 0;
--	p = buf;
--	while (p < end_ptr) {
--		sum += *p;
--		p += (CL_SIZE / 2);
-+	unsigned int size = buf_size / (CL_SIZE / 2);
-+	unsigned int i, idx = 0;
-+	unsigned char sum = 0;
-+
-+	/*
-+	 * Read the buffer in an order that is unexpected by HW prefetching
-+	 * optimizations to prevent them interfering with the caching pattern.
-+	 *
-+	 * The read order is (in terms of halves of cachelines):
-+	 *	i * FILL_IDX_MULT % size
-+	 * The formula is open-coded below to avoiding modulo inside the loop
-+	 * as it improves MBA/MBM result stability on some architectures.
-+	 */
-+	for (i = 0; i < size; i++) {
-+		sum += buf[idx * (CL_SIZE / 2)];
-+
-+		idx += FILL_IDX_MULT;
-+		while (idx >= size)
-+			idx -= size;
- 	}
- 
- 	return sum;
+> 
+>> +               if (arg->vec_len == 0)
+>> +                       return -EINVAL;
+>> +       }
+>> +
+>> +       if (IS_PM_SCAN_WP(arg->flags)) {
+>> +               if (!IS_PM_SCAN_GET(arg->flags) && arg->max_pages)
+>> +                       return -EINVAL;
+>> +
+>> +               if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask) &
+>> +                   ~PAGE_IS_WRITTEN)
+> 
+> Is `excluded_mask = PAGE_IS_WRITTEN` intended to be allowed? It would
+> make WP do nothing, unless the required/anyof/excluded masks are not
+> supposed to limit WP?
+My intention is that no other flag than PAGE_IS_WRITTEN must be specified
+in all masks if WP op is specified.
+
+If exluded_mask = PAGE_IS_WRITTEN,
+* the page would be rejected if page is written. No need to WP these.
+* Only those pages would be allowed which aren't written. Then would also
+not write protected.
+
+So write protect operation wouldn't happen logically. It is on user for not
+comprehending the combined meaning of WP op and excluded mask.
+
+Do you agree or do you want me to reject WP op if excluded = PAGE_IS_WRITTEN?
+
+> 
+> 
+>> +                       return -EINVAL;
+>> +       }
+> 
+> If `flags == 0` (and `return_mask == 0` in case my earlier comment is
+> applied) it should fail with -EINVAL.
+I'll add flags==0 condition.
+
+> 
+> [...]
+>> --- a/include/uapi/linux/fs.h
+>> +++ b/include/uapi/linux/fs.h
+>> +/*
+>> + * struct page_region - Page region with bitmap flags
+>> + * @start:     Start of the region
+>> + * @len:       Length of the region in pages
+>> + * bitmap:     Bits sets for the region
+> 
+> '@' is missing for the third field. BTW, maybe we can call it
+> something like `flags` or `category` (something that hints at the
+> meaning of the value instead of its data representation).
+The deification of this struct says, "with bitmap flags". Bitmap was a
+different name. I'll update it to flags.
+
+> 
+>> +/*
+>> + * struct pm_scan_arg - Pagemap ioctl argument
+>> + * @size:              Size of the structure
+>> + * @flags:             Flags for the IOCTL
+>> + * @start:             Starting address of the region
+>> + * @len:               Length of the region (All the pages in this length are included)
+> 
+> Maybe `scan_start`, `scan_len` - so that there is a better distinction
+> from the structure's `size` field?
+As start and len already communicate the meaning. We are making things more
+verbose.
+
+> 
+>> + * @vec:               Address of page_region struct array for output
+>> + * @vec_len:           Length of the page_region struct array
+>> + * @max_pages:         Optional max return pages
+>> + * @required_mask:     Required mask - All of these bits have to be set in the PTE
+>> + * @anyof_mask:                Any mask - Any of these bits are set in the PTE
+>> + * @excluded_mask:     Exclude mask - None of these bits are set in the PTE
+>> + * @return_mask:       Bits that are to be reported in page_region
+>> + */
+> 
+> I skipped most of the page walk implementation as maybe the comments
+> above could make it simpler. Reading this patch and the documentation
+> I still feel confused about how the filtering/limiting parameters
+I'm really sad to hear this. I've been working on making this series from
+so many revisions. I was hopping that it would make complete sense to
+reviewers and later to users.
+
+What do you think is missing which is restricting these patches getting
+accepted to upstream?
+
+> should affect GET, WP and WP+GET. Should they limit the pages walked
+> (and WP-ed)? Or only the GET's output? How about GET+WP case?
+The address range needs to be walked until max pages pages are found, user
+buffer is full or whole range is walked. If the page will be added to user
+buffer or not depends on the selection criteria (*masks). There is no
+difference in case of walk for GET, WP and GET+WP. Only that WP doesn't
+take any user buffer and just WPs the whole region.
+
+
+> 
+> Best Regards
+> 
+> Michał Mirosław
 
 -- 
-tg: (68d2d0512b91..) refactor/read-fuzzing (depends on: refactor/remove-test-globals)
---8323329-376779887-1686747778=:3473--
+BR,
+Muhammad Usama Anjum
