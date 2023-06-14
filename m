@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512BA730930
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 22:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F05F773092F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 22:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234823AbjFNUcv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Jun 2023 16:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S235420AbjFNUcw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Jun 2023 16:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbjFNUc0 (ORCPT
+        with ESMTP id S233271AbjFNUca (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jun 2023 16:32:26 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DBA2132
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 13:32:25 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bce829aca1bso1240164276.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 13:32:25 -0700 (PDT)
+        Wed, 14 Jun 2023 16:32:30 -0400
+Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0492137
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 13:32:28 -0700 (PDT)
+Received: by mail-ej1-x649.google.com with SMTP id a640c23a62f3a-977e50b0120so104133666b.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 13:32:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686774744; x=1689366744;
+        d=google.com; s=20221208; t=1686774747; x=1689366747;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
         bh=czEjt+NjAyuH0cAt6yqFee89woVRFsyvQrYC+0eGV9Y=;
-        b=rqUNnuSZmxyZA+3FLRLmQGXXAuPP+K6OhcSMkEMWjmz/+X0E9WWAWceF6qaPJbCEf/
-         +LcOMoxwadWXOKYaeGEP5rRGpXeZIo2Ksngu9HPwa+EZT5o3QpyOEXoCV4P6jyxRyf4z
-         yWVmZv74htbg2qR4hiKLnGjDsjcl3vWgVEkG1DzdRTsfbNLSgOcTuO26AXNwqwdXtcOA
-         UeAJLb8lLD0tGurvvkXdA0mc9wvIPjhd6tj4jtVcOfnRz2vdzx++nU84LteJJPgzAW96
-         UR/fgVmwczusNfVrjQz9DGIvzbZpSABZQs7RTDWi/j6hWmRIFZ6+FWkU5QfTKYLLs45R
-         1Wag==
+        b=xTtVN4Z1Q88g5rTsccodRHtuT93zYjcUCBrJT95LZIYNDADStxnQxZyTD2EJ2BW+EQ
+         gG9WCiqzycuFhB6BgXwWMlIppjT0CNI8UMkUsdxitpwlvLRaBXOIX+CaKxN3iL8IawY+
+         4esEjsAM7hRAtYvRzMgVmR9vSolLSnj+kPwM1wlEcomxT4tuscwRvYZ30cqXIjRZ7AFw
+         wpfkcDaqNEGH5bwnGlHbj6F5zl51FHU2M19UQIGZSAKRHHsbwNEwK/7ilANmFsnAOzJU
+         vDutlW9DFkMHsGVZF254iPq8SURQag7SygVMF8UeUTIN8cRHVAUiAvVUpGHKMl83Fcch
+         heGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686774744; x=1689366744;
+        d=1e100.net; s=20221208; t=1686774747; x=1689366747;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
         bh=czEjt+NjAyuH0cAt6yqFee89woVRFsyvQrYC+0eGV9Y=;
-        b=i1pL4NtBFUjyB7VkfnhEo8s5At/NlMk4KTho7Q0+rrLTlhXWpfGf8T/e7AwbySJjkv
-         fNhqFn/TTw6FgZy0e2sFrgWQcwhK5PqzgcGbSmmG9Z6uxPX8ixYnWFYgNBDVaMHdtmT9
-         oKqw1QIoII5db/jASYyI+Ay7PcdMvKZTHY4tFng1mlGxMqBptouaTkL885YazAlx/LLK
-         K+3hx4v15mYbfoXuG6F5V6TNXfdQrdDREikSi2ZAjpEOvatT/wheCAYtCg87STo3CISJ
-         D2epLLmGIv+jJL8ojL1uRU2zhW+02xEb6SRwn5UqZX5RYNyssKdCEc7YQWVsxcqIpNFx
-         8NVQ==
-X-Gm-Message-State: AC+VfDzcHuMoljNr6gb7l0jMKCa5Jf6Zdvxe3GcnfC7ouxaFv1dIHG7p
-        Gwtl5Nz5YNSaUo3TBCe58ekRYUQwgDEytOw=
-X-Google-Smtp-Source: ACHHUZ4lKrCgpFpHSKe1jrlgkrwHsdQtUzGMLfno8/6282W4EFvNEysptvz1ncztZ8ndlqxGsU2He2vAPn/OwjA=
+        b=YtJzffO4ir1yxO0tq1Vv9DYqtwawya9TaVhMDcZLASdSLGl0P4EebtwlYpxlzBT5On
+         Zu0/tEx4M+4ykueVsi1cvLXE/Z/K/ndVbrdb1KjZymmXP0IP+2q+8/YHRKnacZL7H8tL
+         OE0kCQ3aOSBmy3iEo4LN1wHWDtM3oX60XKXOXrQUGUGaHnV8GgGy2sRCQUawpClzyOPG
+         dyhmca6PIMunXX8TYRuZNy7+Fhy9z78GzaWp2QBVPgSCo8+bjcwbmSqdzLF/bPvfp8/i
+         LhBvn4RGr5PMpLUejP7ozE3Ee8KvwC0qqpWnt9VOX1VBp3GMRan4X+yuybS/iUlrOzXD
+         6vwA==
+X-Gm-Message-State: AC+VfDy28e6es4hduBHVf3kVJ+0ih9AP2ChNiK9RpeL/XF69vrYCQFwA
+        qbEOo06zOxi79BhChi2uimv/FZ43BfO7hN8=
+X-Google-Smtp-Source: ACHHUZ6QRTP5WMGlZF6ouKyzQXFEVXAvPfgRaI2C78nvnu3bQtIOBOvXIr1gBV+MPRyzc5u+ThXTy0T5ROzw65g=
 X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a25:5087:0:b0:bc5:9faa:24d4 with SMTP id
- e129-20020a255087000000b00bc59faa24d4mr482042ybb.11.1686774744749; Wed, 14
- Jun 2023 13:32:24 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 20:32:22 +0000
-In-Reply-To: <20230614180837.630180-4-ojeda@kernel.org>
+ (user=aliceryhl job=sendgmr) by 2002:a17:907:2bf0:b0:982:9e1c:ddc5 with SMTP
+ id gv48-20020a1709072bf000b009829e1cddc5mr8045ejc.0.1686774747408; Wed, 14
+ Jun 2023 13:32:27 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 20:32:25 +0000
+In-Reply-To: <20230614180837.630180-5-ojeda@kernel.org>
 Mime-Version: 1.0
-References: <20230614180837.630180-4-ojeda@kernel.org>
+References: <20230614180837.630180-5-ojeda@kernel.org>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230614203222.2909418-1-aliceryhl@google.com>
-Subject: Re: [PATCH 3/6] rust: sync: make doctests compilable/testable
+Message-ID: <20230614203225.2909756-1-aliceryhl@google.com>
+Subject: Re: [PATCH 4/6] rust: types: make doctests compilable/testable
 From:   Alice Ryhl <aliceryhl@google.com>
 To:     ojeda@kernel.org
 Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
