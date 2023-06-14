@@ -2,158 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EF57309B1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 23:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84969730A66
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jun 2023 00:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjFNVTK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Jun 2023 17:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S234331AbjFNWJN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Jun 2023 18:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjFNVTJ (ORCPT
+        with ESMTP id S234019AbjFNWJN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jun 2023 17:19:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15111BEC;
-        Wed, 14 Jun 2023 14:19:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DBD364263;
-        Wed, 14 Jun 2023 21:19:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 268C5C433C8;
-        Wed, 14 Jun 2023 21:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686777547;
-        bh=UEhz/kpeox3MvxRfpolw9Y3cKpiMR3f1Bj+mCSrsu+w=;
-        h=From:Date:Subject:To:Cc:From;
-        b=GzJN/pOX0gp/xstmlig24vmyKpwxXIYsnKum50WEILylD4i6NTZFzKYVhffUDxW1Z
-         XfP3kJEiqS+53Z56BzKvRJWl4cEsXDphkVNy+DQNzIwXOwcsHHjnpj3L1guuKBw/hK
-         Nti/cS6HDhwvoFs/OnnPPv1R5aTlFX7llyepiWR9tdJTSxhyAmaw13FMj/V+4t+m12
-         omVscywuF6a6xs8I2zCR2jW1FVzEqxEHt2YFQtmnSO2O0XYMsJR9ULTbp5It/FMSeI
-         scbeCkf0FRyKN6q71Lilt9y90n4UZqGzYZzM5XUc8GNfEr8dGEUIBk9Ks9ZHFkdoQ8
-         YTK3QY5/fgFzw==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Wed, 14 Jun 2023 22:18:58 +0100
-Subject: [PATCH] selftests/mm: Fix cross compilation with LLVM
+        Wed, 14 Jun 2023 18:09:13 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFDD1A1;
+        Wed, 14 Jun 2023 15:09:12 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bd6446528dcso1070710276.2;
+        Wed, 14 Jun 2023 15:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686780551; x=1689372551;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1ZY8IYbBCwqFgvXl6puz847AvvCr9iy7X2X1F65i07c=;
+        b=qo4/gsWJ49ZV1RB1v9Hag7fSKofMhHFr1Yb7+yLi+CrZbmi+/fIuin5MH/8Tl4CNnz
+         4Z4+5viyR5gSk/SfWjh28CJRg2X5Rqf/91o3cpPKNlrAyhS8+kWcTkk3P+mYEC10xVb7
+         4NjuEzf/rN8Xe/iB1VoTALNNo5Auue5tlDCL2gU576oMLQMNboy+JhgiM124otpssHvs
+         UIeupf1PHsM7N/nBZXDLJXE5bzSdp6XHcNGF/6qqnmGF9y4ZD1L7f2GtkmH98pBzvRMy
+         QoChaQyLB4L2h39C2PAotdwpDz+S6fUuk/K7roJFjOV9qXwCNkfs7/HB+MvA5PxRUiOK
+         iXrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686780551; x=1689372551;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1ZY8IYbBCwqFgvXl6puz847AvvCr9iy7X2X1F65i07c=;
+        b=ZeviJZ4EBXRRp7DcLwguvAa5U0P5cbEKzZDAJtQn7R1tLC/NExs/NaMfGiK47aQ6km
+         tUHo4nuWk/7xJhhmqTrtQAsRzxwkr/hTn+HMOrmerGMk5e9drPEtNqRtitBqt+W88OOA
+         2tM3rpdDS9lh43j3ad6Fn1iJr1HiD2cdIcvYwbN+fIhTTis2E+Rjgf6CQGU3t2un5KGD
+         5n1IFONCcFuR2qGIMrYszVAzpHNc+v2uTpPNpsvCKtSWtt/uRwC5QS472kRNkCBX0OIF
+         WU+e0kktCLnoud1Lx71QO/uKbj3l2KvLnYg/j95p2Fsue4/6D9XcGLVVgdUw2X7exQOO
+         oBww==
+X-Gm-Message-State: AC+VfDyezzAU7b+9bI35l/ZtvpchhVahjzbkU8rL0dGI8FCHVdvH6ufM
+        bEQOpeHo6mgRMxXuBzQuSkCEFAUZoxbq7qtspGo=
+X-Google-Smtp-Source: ACHHUZ73VU9isra/qJrbZ9eQzPjDJFWewvwYjUqCmdZqS2Lkk2a0g9gKp33Fa1FYuwamE3ks65eoCOh+SYJDegLKPVE=
+X-Received: by 2002:a25:d86:0:b0:bd5:ddcd:bc9e with SMTP id
+ 128-20020a250d86000000b00bd5ddcdbc9emr3275028ybn.17.1686780551502; Wed, 14
+ Jun 2023 15:09:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230614-kselftest-mm-llvm-v1-1-180523f277d3@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMIuimQC/x2NQQqDQAwAvyI5N6Db1kK/UnqImtTg7loSsQXx7
- 117nIFhNnA2ZYd7tYHxqq5zLtCcKuhHyi9GHQpDqMO5bpsLTs5RFvYFU8IY14QUrnQbSIRagdJ
- 15IydUe7Ho/zMNh36bSz6/a8ez33/AdkJN7h6AAAA
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-c6835
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3189; i=broonie@kernel.org;
- h=from:subject:message-id; bh=UEhz/kpeox3MvxRfpolw9Y3cKpiMR3f1Bj+mCSrsu+w=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkii7IGttHdFnUF0lmq6L7TPI3idmAEp2wD+7pMnu+
- wqAt+VyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZIouyAAKCRAk1otyXVSH0OZoCA
- CB/4e2WEwUuvnxjdo+IKA2oPKHQrf9LrGE8Bum4qjdJu1TWsTJNE2T1qrdmYPXAQZFQYlmViy7AeDT
- l21o4NRfo4DZmLv6rx3O49Lq+orAst4ATm/P3+uFGOH08jBnhGTAULa/4edYKGQO/xVq3BKr8zSyBn
- 2at4XPXbnZzWMqx/LUDYTS699PrfTxw3ZA1q78EnuQMxxhn+RYZdESgpPYMs7kd6wkGE+d5ZUJbJqL
- ku8wS2yMyX66n13s89P4L824wzcEDcenfJDGTyiQyh3xBP1kueox5NrVPUwAT63but7/Wz82WcRQGZ
- DGUl9W9QiMMHEckJYUrVY6fLz5cnkt
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230614180837.630180-6-ojeda@kernel.org> <20230614203803.2910957-1-aliceryhl@google.com>
+In-Reply-To: <20230614203803.2910957-1-aliceryhl@google.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 15 Jun 2023 00:09:00 +0200
+Message-ID: <CANiq72n-WocEegVc2-Em6muU4pOTOh+Lf8RAwiAtjuUUjnysbQ@mail.gmail.com>
+Subject: Re: [PATCH 5/6] rust: support running Rust documentation tests as
+ KUnit ones
+To:     Alice Ryhl <aliceryhl@google.com>
+Cc:     ojeda@kernel.org, alex.gaynor@gmail.com, benno.lossin@proton.me,
+        bjorn3_gh@protonmail.com, boqun.feng@gmail.com,
+        brendan.higgins@linux.dev, davidgow@google.com, gary@garyguo.net,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, nmi@metaspace.dk,
+        patches@lists.linux.dev, philip.li@intel.com,
+        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the MM selftests attempt to work out the target architecture by
-using CROSS_COMPILE or otherwise querying the host machine, storing the
-target architecture in a variable called MACHINE rather than the usual ARCH
-though as far as I can tell (including for x86_64) the value is the same as
-we would use for architecture.
+On Wed, Jun 14, 2023 at 10:38=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> =
+wrote:
+>
+> This could just be
+>
+> std::fs::write(path, body.as_bytes());
 
-When cross compiling with LLVM we don't need a CROSS_COMPILE as LLVM can
-support many target architectures in a single build so this logic does not
-work, CROSS_COMPILE is not set and we end up selecting tests for the host
-rather than target architecture. Fix this by using the more standard ARCH
-to describe the architecture, taking it from the environment if specified.
++1, simpler, less `use`s needed and less size:
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/mm/Makefile | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+     320429      12736        368     333533      516dd
+scripts/rustdoc_test_builder
+     314701      12440        368     327509      4ff55
+scripts/rustdoc_test_builder
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 23af4633f0f4..4f0c50c33ba7 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -5,12 +5,15 @@ LOCAL_HDRS += $(selfdir)/mm/local_config.h $(top_srcdir)/mm/gup_test.h
- 
- include local_config.mk
- 
-+ifeq ($(ARCH),)
-+
- ifeq ($(CROSS_COMPILE),)
- uname_M := $(shell uname -m 2>/dev/null || echo not)
- else
- uname_M := $(shell echo $(CROSS_COMPILE) | grep -o '^[a-z0-9]\+')
- endif
--MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/ppc64/')
-+ARCH ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/ppc64/')
-+endif
- 
- # Without this, failed build products remain, with up-to-date timestamps,
- # thus tricking Make (and you!) into believing that All Is Well, in subsequent
-@@ -65,7 +68,7 @@ TEST_GEN_PROGS += ksm_tests
- TEST_GEN_PROGS += ksm_functional_tests
- TEST_GEN_PROGS += mdwe_test
- 
--ifeq ($(MACHINE),x86_64)
-+ifeq ($(ARCH),x86_64)
- CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
- CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
- CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
-@@ -87,13 +90,13 @@ TEST_GEN_PROGS += $(BINARIES_64)
- endif
- else
- 
--ifneq (,$(findstring $(MACHINE),ppc64))
-+ifneq (,$(findstring $(ARCH),ppc64))
- TEST_GEN_PROGS += protection_keys
- endif
- 
- endif
- 
--ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sparc64 x86_64))
-+ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sparc64 x86_64))
- TEST_GEN_PROGS += va_high_addr_switch
- TEST_GEN_PROGS += virtual_address_range
- TEST_GEN_PROGS += write_to_hugetlbfs
-@@ -112,7 +115,7 @@ $(TEST_GEN_PROGS): vm_util.c
- $(OUTPUT)/uffd-stress: uffd-common.c
- $(OUTPUT)/uffd-unit-tests: uffd-common.c
- 
--ifeq ($(MACHINE),x86_64)
-+ifeq ($(ARCH),x86_64)
- BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
- BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
- 
+Thanks for the review!
 
----
-base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
-change-id: 20230614-kselftest-mm-llvm-a25a7daffa6f
+Cheers,
+Miguel
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+diff --git a/scripts/rustdoc_test_builder.rs b/scripts/rustdoc_test_builder=
+.rs
+index e3b7138fb4f9..e5894652f12c 100644
+--- a/scripts/rustdoc_test_builder.rs
++++ b/scripts/rustdoc_test_builder.rs
+@@ -15,8 +15,7 @@
+ //! from that. For the moment, we generate ourselves a new name,
+`{file}_{number}` instead, in
+ //! the `gen` script (done there since we need to be aware of all the
+tests in a given file).
 
+-use std::fs::File;
+-use std::io::{BufWriter, Read, Write};
++use std::io::Read;
+
+ fn main() {
+     let mut stdin =3D std::io::stdin().lock();
+@@ -69,5 +68,5 @@ fn main() {
+
+     let path =3D format!("rust/test/doctests/kernel/{name}");
+
+-    write!(BufWriter::new(File::create(path).unwrap()), "{body}").unwrap()=
+;
++    std::fs::write(path, body.as_bytes()).unwrap();
+ }
