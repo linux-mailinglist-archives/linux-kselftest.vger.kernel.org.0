@@ -2,134 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F7372FD6B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 13:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94F272FF61
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 15:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243961AbjFNLw4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Jun 2023 07:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
+        id S243988AbjFNNDG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Jun 2023 09:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjFNLwz (ORCPT
+        with ESMTP id S244078AbjFNNDF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:52:55 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2086.outbound.protection.outlook.com [40.107.243.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F4A1BF3;
-        Wed, 14 Jun 2023 04:52:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SKGjutLgHbV5Obwzh9+ZYr7Mxi0TAku/QB5ghO8lJy4VByeANhhzoVqLmPkXV/2dJznzithchbdyu+ccOMdoxHZYDRyq5+t7Xaz7FaCUKgImiRX5cYGYk6sG+cTjx4hvqYAIte8nRZNvJDp/7sQrFmB0QY/4aslWwfIP6fnnOwQE1hvT7/P/PhKpZHwFtTpANpaqQmDpUa0x+5RQDcijAP7p57fh0EodyrFhbcEHuUrHrnkdjRM+x7QUfOTIz2LCelaeL69f0WBngNnwZnixBtXlrZodPEscrqKVqp8tv2la7rswMAAkziTW1kFnC9yToQX0fyx7y08xbQjtXE/tEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lwkUQq7bXC3QFqlS4jAf+w/NtuH95RA0DfP2hnm5J9I=;
- b=GynbzcOxEEHzOGC0nhnuc12xo5JAoo1143yDM9WRFvUUsWu4sLEK7PWgh42bfEiE/A4m8+Ge3+eDiEPGpM+Y+/HZ/2JWT/Dfg0mCUzCBD2B/WqrjfkxRFACT1eJgYhNy8SS47a6SCn3qt19tbBf+wlQfW4CbcINaT76zQ+93uVpjEA0+C4J6Wo5XhT26nwp5Im1xZi07m7mrzOSjHSw/wFAm5M91bnZn3OwSm5mW6S0jyNVG/8fYPPj16b9i56K80u7xTU0MbZuPiGm8/5jpfFqMtWAwIt5orjLXzQ+QmTbD2adJjmqzQdgOnjGB7CP5YcTvZ2BVKDW0EyljqA4Z4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lwkUQq7bXC3QFqlS4jAf+w/NtuH95RA0DfP2hnm5J9I=;
- b=g3evwp6zeTT6nEuQQTE9ulwMnm4o0tRWilMJ8/ZL1TDVHQqygzSQ1p2RKUOKv/6O+d3S0Hnd5yEbL63lj1PrVj7OOht0hudFsI6PJYMHK9ICfBRTrqDYM4uzd03kvpzeEnkRHPVLs0P6daoxvDLstr3PLDwYFASg8rshG0OwLmOUNEEraohUh+G8hu6c5lE9MEptcmFQVK80/NhupR8PzIkHXY6tWrb/jVoMrbDrPuSscj6WieDVPZw1b59rS1xebF0BZi3D2O86w+mMBHSe2gGzMqBWFCa5/6DsTkdM9/Kc46G3h1N2TPYeuJeDzU4wWpBfIlKYqbOp2VYsOswpIw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA1PR12MB8358.namprd12.prod.outlook.com (2603:10b6:208:3fa::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Wed, 14 Jun
- 2023 11:52:52 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6477.037; Wed, 14 Jun 2023
- 11:52:52 +0000
-Date:   Wed, 14 Jun 2023 08:52:49 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v3 00/10] Add Intel VT-d nested translation
-Message-ID: <ZImqERPS0UV6mBsG@nvidia.com>
-References: <20230511145110.27707-1-yi.l.liu@intel.com>
- <BN9PR11MB52765FA8255FB8F8A1A6F11B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZHTyNgnjj/bOkIgi@nvidia.com>
- <BN9PR11MB5276B15B4709F595B2A5A84A8C5AA@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276B15B4709F595B2A5A84A8C5AA@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BYAPR05CA0048.namprd05.prod.outlook.com
- (2603:10b6:a03:74::25) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 14 Jun 2023 09:03:05 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C44199C;
+        Wed, 14 Jun 2023 06:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686747784; x=1718283784;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=WDPEbxVFdzvoZ3lt67W/3QT8Nr5+/zJbjhuLHHdJoRo=;
+  b=Jmk8aRSzCkp1o/6x5bWqUU7ad8rft0d+LuO+kuwHvnKm4VtL9e8CdIMU
+   HcY7icrFK6woaLqnMH7Pgm3O1DVap7M8B+hs1ZCh7Ffuja7yUgx/yeDeh
+   nv1Xt2KcC4hu5tCBF5hNue6VC06s68C2CPfYRo8XAvOvuyxnEcnfiGWFV
+   o9jy65h0oST3F8deSSBxpIUf98ahVDVJesABJnfjVl9P3mPcZQZDbveXk
+   0t35vZC87/ahPZONOH9xRup4UVwm64IoJii+5OltI/BN06Q+ohoylAXQs
+   voM54L7HxNZzsx5SXkDBGox9MXDQALl+vQ68J4rD0caU3xUL1ODLlFjM7
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="343300799"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="343300799"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 06:03:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="856496471"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="856496471"
+Received: from ijarvine-mobl2.ger.corp.intel.com ([10.252.34.126])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 06:02:56 -0700
+Date:   Wed, 14 Jun 2023 16:02:43 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
+cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 21/24] selftests/resctrl: Read in less obvious order
+ to defeat prefetch optimizations
+In-Reply-To: <TYAPR01MB6330025B5E6537F94DA49ACB8B499@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+Message-ID: <b7dfc9b-74da-5fe2-9060-fd36eb636c6@linux.intel.com>
+References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-22-ilpo.jarvinen@linux.intel.com> <OSZPR01MB6328F2713E40CC7D383035A48B489@OSZPR01MB6328.jpnprd01.prod.outlook.com> <c21fb16d-d3ad-bbcb-daed-28f153b64525@linux.intel.com>
+ <TYAPR01MB6330025B5E6537F94DA49ACB8B499@TYAPR01MB6330.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB8358:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2cede1bd-078e-4a22-7d7b-08db6ccde206
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UbzHHhqDNw/hiwiKPjw/slMzHdGhcI5Jj2v/rRiQw6DPfbtSRYG0ExUYnUp146LqsZmF4cwVvllThHlTiqaqM7lsZG0gtmSpvs3lhhp3W0uWOLqGCwM6r1B0Zkg5Grkdbwxlw9232bmb7Fpib9wsoiCByXX70ACO6hmW2UV7eIa0E7rUlRabohUfFh8kRy+tpW0H9LP6ophvofMRdVkfPQ/PdbFcTtXnnrdQ/uxkXzDo8LnyIJWYPxf3OyuSEhJkCcnqcmHOikk9G7YKoG6LBD2yEkGWh78bJsSV57XfiRU8z3nIMvKkw8RaTfeNn5AvvfgywR/0qNLfeUkg/5TOyrc052VYU1WwNPkWqxSyvB0FI/Me1V232HgF98fLnhwAAW7lpESWVayHKIYHsFJtmqZdbT9DWv612W7hk72WZNG9KgYlA+NhG79xS8A5dvb7RKkxkk4Qz6xBDvWgR86dknzT3RMfHuHL3fRIXN+joT1CGkdybyqV4Tp2NFDeu1oaFQaxvqZOiwEYzcVPuqSSW0DT1jTVEgtS78L0jjCXNDG7Xu42PkFKlLEJtl0SkgE+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(396003)(136003)(376002)(451199021)(26005)(186003)(6512007)(6506007)(38100700002)(86362001)(7416002)(2616005)(2906002)(4744005)(6486002)(66946007)(66556008)(66476007)(41300700001)(316002)(6666004)(6916009)(4326008)(36756003)(54906003)(478600001)(5660300002)(8936002)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?59D7FWtHi5QvKDstFNEIW5B7d+YNnto6hm+p1GGNLCb1nAqIQ7W0VnmqPIY2?=
- =?us-ascii?Q?+4HySCCt0CzgCa4toV+Id53H6kIkL12l/k2cRT0BjcN26goSjK8PqR+UJOra?=
- =?us-ascii?Q?l3nK7LeCMEnSlC0AxngzemUI+rWWlxZtj1apoQSs3mrNeY7fiy9scUhlLIwb?=
- =?us-ascii?Q?R67V61EXXVIY3LBdBOSmCDBqe57DPuRMlj8u/j+ZjJoR9twOHvyeMgseGqqg?=
- =?us-ascii?Q?q+UqMvFywaGv7H46zA/ASMdvQMqYozkwkHuaW7+FdLcP+A5Yrtmzk6sSzSiE?=
- =?us-ascii?Q?XF8oxNSoJH5LD05NKuUzonYsxT181VDhHUfXWTK4asYD3sbAVH654i7kI6hF?=
- =?us-ascii?Q?zAVdUAWeZEjyG/Ny7dYHisM1h/QsIHYfs6TVuSve2a0nFDJtwSI49YH1ZCtd?=
- =?us-ascii?Q?ATXuZLRKHpv8poU9wxt22ZvUAa5+8v3jdBc5YnnscpJJswjcCt6o+znyvEa7?=
- =?us-ascii?Q?PPesU8jkksqc+0j+pU+3TZWFf8PYZZ4OXT5Eslcf3QEcqUl/hox1m68jJc4X?=
- =?us-ascii?Q?kYd6h21OsEVtcu2ebFpfD3K6xhI1A/LsH5p3aHWrneOoE2Xnk7IGsSn10TjW?=
- =?us-ascii?Q?0vNt2x9cmsbQwKyidx9uqGlxTN5yxaTCh7sGo5HYOV8j71+CC2ERu43WRgwf?=
- =?us-ascii?Q?1n72UYsB8S+NWTxVv6mmEaddl+OG/0dwhg3aHflu9C4jpGisU6VJNQi5yT9u?=
- =?us-ascii?Q?FdMqB1zhmvg5NLtSm7VGGIJEImGqUwKz+JDxNhNovaY3173E98TTv8POV8pl?=
- =?us-ascii?Q?2vvNOQjQyboAfL23COP1jdbd5v+Z3XqjnA0Es9qb4uhqOC7JOxPQP0O3lg/m?=
- =?us-ascii?Q?bn8xflSB4A9EFp1A4Yal+jY+vvYQKGlEM9HmyktKEs8Z5dHk7yM86NGqPwny?=
- =?us-ascii?Q?w5nae1pYbi7dc5HFM8eiDZsraP2qKKMDcYrsHeWqfZWhWtOK76OuG4pJIsvK?=
- =?us-ascii?Q?wFx35+AbZ0hOA0EbiVGrrCnZnOnqs0xErtrSY/099qYeRptp6x8RJ/SVw3+b?=
- =?us-ascii?Q?HRi+4xJ2XzGbemztxr+/brJpt+kq1Lnt9z1XkHfUN2SXwD6TuClgVSYK69p/?=
- =?us-ascii?Q?/YvxEU8niE4uF1vXMZS80qrhZH0wBFdUoHEWAIRfDNNWxvW1RezVQ5iT762h?=
- =?us-ascii?Q?NixXJwOBRA9uEPFjjBTIwEwDDYef8wtnpBw3CMvaA9JE6BHVILPVLz+79NUB?=
- =?us-ascii?Q?IkRISfefts3uV+JUQ6nLCDQRKFdfiQqK3HRFspUIbCnhIGJL0rz/hX13Ow4g?=
- =?us-ascii?Q?dPa/tUUqoeN/lnM6r5t3ddZiZ37b3GS0CJMXxxA7zFl80ZwX+3X+bQyl87Gm?=
- =?us-ascii?Q?8OCRt7Cx41m7NB+hdPSTAPTuiUhoGtZ+nESGVX0nzbDK3OVt1/2CuvfVrmjv?=
- =?us-ascii?Q?q7jMpCLei6AyduR65P3h9LnrmwmeLoGbQ10tS+CpHTojtWmIVgzJ77C/gwIO?=
- =?us-ascii?Q?q/SgErfzlUA6A2ajbCMithgJ2EsvDZU4p6LzlqwtnQrHHgIVDqAiO6nj8nqJ?=
- =?us-ascii?Q?wVRGf91dyKMRNQ0pxNf19SG3pcOY/kbKrxuThRLPqFR/Rp46w8pvkBP6MDpK?=
- =?us-ascii?Q?zJ0GMAt+sXZ8VkdYTEgOaj4xsfVJLhza2Wkf6Ony?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2cede1bd-078e-4a22-7d7b-08db6ccde206
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 11:52:52.2656
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: s21TLjNjIlRhwI7c57C705+tQx/GUinN/rcgFSSxADK1YlRH+zei02LXo6EVXVta
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8358
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: multipart/mixed; boundary="8323329-376779887-1686747778=:3473"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,13 +65,187 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 08:07:30AM +0000, Tian, Kevin wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-> think of a scenario where the vbios memory is shared by multiple qemu
-> instances then RW allows a malicious VM to modify the shared content
-> then potentially attacking other VMs.
+--8323329-376779887-1686747778=:3473
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 
-qemu would have to map the vbios as MAP_PRIVATE WRITE before the iommu
-side could map it writable, so this is not a real worry.
+On Thu, 1 Jun 2023, Shaopeng Tan (Fujitsu) wrote:
+> > > > When reading memory in order, HW prefetching optimizations will
+> > > > interfere with measuring how caches and memory are being accessed.
+> > > > This adds noise into the results.
+> > > >
+> > > > Change the fill_buf reading loop to not use an obvious in-order
+> > > > access using multiply by a prime and modulo.
+> > > >
+> > > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > > ---
+> > > >  tools/testing/selftests/resctrl/fill_buf.c | 17 ++++++++++-------
+> > > >  1 file changed, 10 insertions(+), 7 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/resctrl/fill_buf.c
+> > > > b/tools/testing/selftests/resctrl/fill_buf.c
+> > > > index 7e0d3a1ea555..049a520498a9 100644
+> > > > --- a/tools/testing/selftests/resctrl/fill_buf.c
+> > > > +++ b/tools/testing/selftests/resctrl/fill_buf.c
+> > > > @@ -88,14 +88,17 @@ static void *malloc_and_init_memory(size_t s)
+> > > >
+> > > >  static int fill_one_span_read(unsigned char *start_ptr, unsigned
+> > > > char
+> > > > *end_ptr)  {
+> > > > -	unsigned char sum, *p;
+> > > > -
+> > > > +	unsigned int size = (end_ptr - start_ptr) / (CL_SIZE / 2);
+> > > > +	unsigned int count = size;
+> > > > +	unsigned char sum;
+> > > > +
+> > > > +	/*
+> > > > +	 * Read the buffer in an order that is unexpected by HW prefetching
+> > > > +	 * optimizations to prevent them interfering with the caching pattern.
+> > > > +	 */
+> > > >  	sum = 0;
+> > > > -	p = start_ptr;
+> > > > -	while (p < end_ptr) {
+> > > > -		sum += *p;
+> > > > -		p += (CL_SIZE / 2);
+> > > > -	}
+> > > > +	while (count--)
+> > > > +		sum += start_ptr[((count * 59) % size) * CL_SIZE / 2];
+> > >
+> > > Could you please elaborate why 59 is used?
+> > 
+> > The main reason is that it's a prime number ensuring the whole buffer gets read.
+> > I picked something that doesn't make it to wrap on almost every iteration.
+> 
+> Thanks for your explanation. It seems there is no problem.
+> 
+> Perhaps you have already tested this patch in your environment and got a test result of "ok". 
+> Because HW prefetching does not work well,
+> the IMC counter fluctuates a lot in my environment,
+> and the test result is "not ok". 
+> 
+> In order to ensure this test set runs in any environments and gets "ok",
+> would you consider changing the value of MAX_DIFF_PERCENT of each test?
+> or changing something else?
+> 
+> ```
+> Environment:
+>  Kernel: 6.4.0-rc2
+>  CPU: Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz
+> 
+> Test result(MBM as an example):
+> # # Starting MBM BW change ...
+> # # Mounting resctrl to "/sys/fs/resctrl"
+> # # Benchmark PID: 8671
+> # # Writing benchmark parameters to resctrl FS
+> # # Write schema "MB:0=100" to resctrl FS
+> # # Checking for pass/fail
+> # # Fail: Check MBM diff within 5%
+> # # avg_diff_per: 9%
+> # # Span in bytes: 262144000
+> # # avg_bw_imc: 6202
+> # # avg_bw_resc: 5585
+> # not ok 1 MBM: bw change
+> ```
 
-Jason
+Could you try if the approach below works better (I think it should apply 
+cleanly on top of the fixes+cleanups v3 series which you recently tested, 
+no need to have the other CAT test changes).
+
+The biggest difference in terms of result stability my tests come from 
+these factors:
+- Removed reversed index order.
+- Open-coded the modulo in the loop to subtraction.
+
+In addition, I changed the prime to one which works slightly better than 
+59. The MBM/MBA results were already <5% with 59 too due to the other two 
+changes, but using 23 lowered them further in my tests (with Platinum 
+8260L).
+
+---
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+[PATCH] selftests/resctrl: Read in less obvious order to defeat prefetch optimizations
+
+When reading memory in order, HW prefetching optimizations will
+interfere with measuring how caches and memory are being accessed. This
+adds noise into the results.
+
+Change the fill_buf reading loop to not use an obvious in-order access
+using multiply by a prime and modulo.
+
+Using a prime multiplier with modulo ensures the entire buffer is
+eventually read. 23 is small enough that the reads are spread out but
+wrapping does not occur very frequently (wrapping too often can trigger
+L2 hits more frequently which causes noise to the test because getting
+the data from LLC is not required).
+
+It was discovered that not all primes work equally well and some can
+cause wildly unstable results (e.g., in an earlier version of this
+patch, the reads were done in reversed order and 59 was used as the
+prime resulting in unacceptably high and unstable results in MBA and
+MBM test on some architectures).
+
+Link: https://lore.kernel.org/linux-kselftest/TYAPR01MB6330025B5E6537F94DA49ACB8B499@TYAPR01MB6330.jpnprd01.prod.outlook.com/
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+---
+ tools/testing/selftests/resctrl/fill_buf.c | 38 +++++++++++++++++++++++-------
+ 1 file changed, 30 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+index f9893edda869..afde37d3fca0 100644
+--- a/tools/testing/selftests/resctrl/fill_buf.c
++++ b/tools/testing/selftests/resctrl/fill_buf.c
+@@ -74,16 +74,38 @@ static void *malloc_and_init_memory(size_t buf_size)
+ 	return p;
+ }
+ 
++/*
++ * Buffer index step advance to workaround HW prefetching interfering with
++ * the measurements.
++ *
++ * Must be a prime to step through all indexes of the buffer.
++ *
++ * Some primes work better than others on some architectures (from MBA/MBM
++ * result stability point of view).
++ */
++#define FILL_IDX_MULT	23
++
+ static int fill_one_span_read(unsigned char *buf, size_t buf_size)
+ {
+-	unsigned char *end_ptr = buf + buf_size;
+-	unsigned char sum, *p;
+-
+-	sum = 0;
+-	p = buf;
+-	while (p < end_ptr) {
+-		sum += *p;
+-		p += (CL_SIZE / 2);
++	unsigned int size = buf_size / (CL_SIZE / 2);
++	unsigned int i, idx = 0;
++	unsigned char sum = 0;
++
++	/*
++	 * Read the buffer in an order that is unexpected by HW prefetching
++	 * optimizations to prevent them interfering with the caching pattern.
++	 *
++	 * The read order is (in terms of halves of cachelines):
++	 *	i * FILL_IDX_MULT % size
++	 * The formula is open-coded below to avoiding modulo inside the loop
++	 * as it improves MBA/MBM result stability on some architectures.
++	 */
++	for (i = 0; i < size; i++) {
++		sum += buf[idx * (CL_SIZE / 2)];
++
++		idx += FILL_IDX_MULT;
++		while (idx >= size)
++			idx -= size;
+ 	}
+ 
+ 	return sum;
+
+-- 
+tg: (68d2d0512b91..) refactor/read-fuzzing (depends on: refactor/remove-test-globals)
+--8323329-376779887-1686747778=:3473--
