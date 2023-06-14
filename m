@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B943D73071C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 20:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307BC730728
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 20:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbjFNSKy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Jun 2023 14:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S241105AbjFNSLy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Jun 2023 14:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbjFNSKk (ORCPT
+        with ESMTP id S241546AbjFNSLe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:10:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345FC2D4F;
-        Wed, 14 Jun 2023 11:09:58 -0700 (PDT)
+        Wed, 14 Jun 2023 14:11:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9981C2D45;
+        Wed, 14 Jun 2023 11:11:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3491564592;
-        Wed, 14 Jun 2023 18:09:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6764C433D9;
-        Wed, 14 Jun 2023 18:09:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EADC60B50;
+        Wed, 14 Jun 2023 18:09:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D662C433C9;
+        Wed, 14 Jun 2023 18:09:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686766174;
-        bh=yuicnU1+K5kamMw4AKK6QIF4bp4V9ExVM3jTIfRBEOw=;
+        s=k20201202; t=1686766178;
+        bh=ehcluNxu9TSlphXGqNkHOa/SpBNYxUq22Vm5jtRhQQU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G38HL9+74I16rMOjwjJnhHjOLlUbn3uZEChcDwRfH6N6PITDqjR2o+2U4crPNMyqj
-         igjbV068IX0zfVweh8fbiZTDv+XKVNNOkyEc/kH5jnA39c4vQ+5sTrKYQxUHHBGF8b
-         fZ9HRRI0vE9qhbla4pFDDIBzLRJo4nlrjbPGGYwgObKFNSCbC4Rfzy5SsGO9PiIYF7
-         sW/h3vbDpkWLaLzts7tZIS6ouR8ovcnvyFYuh22R2lRyERDvDtEqiHvWtC1KdDNvSa
-         eEXUKCp9wOusXG4/9uyAmks3iBdFx1FB1lc1TYaDFSEAGNXH+L8a1PloQIZcyvhon9
-         yISoA5LF5C4og==
+        b=oT2G6znf/4h74wnGmSfriDkF2nvXPdzTqMI4UMOv+vWu3KFM9VaVXeGXH0g5Vjy7Z
+         SORLaZWOttT/1lVnc56iIxYDSGEfBO2/dwxvZLgyKUDvn9wS0NJRNaoKliVqZKPruh
+         FC30wTiLC7Tp5k0qFdl8brvltePdc0M3OOlTgOxfrGRizWVOgmldXKqq7mTuV+3ykb
+         3QpJjdx+pyFADdUWuF989LJjFAPWyTNjfCS1yvN6TPdSfITrg81O41ACS5aEbIDsrM
+         TR7hBTRSuNiDqYDj2va8BL3InVnvLJyTdUmE6QddoICDQFNSI5Rj7bDkBLkB2LZAEu
+         fa3Bs9ZYFGmZQ==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -47,15 +47,15 @@ Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
         linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: [PATCH 3/6] rust: sync: make doctests compilable/testable
-Date:   Wed, 14 Jun 2023 20:08:27 +0200
-Message-ID: <20230614180837.630180-4-ojeda@kernel.org>
+Subject: [PATCH 4/6] rust: types: make doctests compilable/testable
+Date:   Wed, 14 Jun 2023 20:08:28 +0200
+Message-ID: <20230614180837.630180-5-ojeda@kernel.org>
 In-Reply-To: <20230614180837.630180-1-ojeda@kernel.org>
 References: <20230614180837.630180-1-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,95 +71,40 @@ may start enforcing it.
 
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/sync/arc.rs           | 9 +++++++--
- rust/kernel/sync/lock/mutex.rs    | 1 +
- rust/kernel/sync/lock/spinlock.rs | 1 +
- 3 files changed, 9 insertions(+), 2 deletions(-)
+ rust/kernel/types.rs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index a89843cacaad..1ecb2efab51e 100644
---- a/rust/kernel/sync/arc.rs
-+++ b/rust/kernel/sync/arc.rs
-@@ -73,6 +73,7 @@
- /// assert_eq!(cloned.b, 20);
- ///
- /// // The refcount drops to zero when `cloned` goes out of scope, and the memory is freed.
-+/// # Ok::<(), Error>(())
+diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+index 1e5380b16ed5..696d6c5a3b9d 100644
+--- a/rust/kernel/types.rs
++++ b/rust/kernel/types.rs
+@@ -109,7 +109,7 @@ unsafe fn from_foreign(_: *const core::ffi::c_void) -> Self {}
+ /// In the example below, we have multiple exit paths and we want to log regardless of which one is
+ /// taken:
  /// ```
+-/// # use kernel::ScopeGuard;
++/// # use kernel::types::ScopeGuard;
+ /// fn example1(arg: bool) {
+ ///     let _log = ScopeGuard::new(|| pr_info!("example1 completed\n"));
  ///
- /// Using `Arc<T>` as the type of `self`:
-@@ -98,6 +99,7 @@
- /// let obj = Arc::try_new(Example { a: 10, b: 20 })?;
- /// obj.use_reference();
- /// obj.take_over();
-+/// # Ok::<(), Error>(())
+@@ -127,7 +127,7 @@ unsafe fn from_foreign(_: *const core::ffi::c_void) -> Self {}
+ /// In the example below, we want to log the same message on all early exits but a different one on
+ /// the main exit path:
  /// ```
+-/// # use kernel::ScopeGuard;
++/// # use kernel::types::ScopeGuard;
+ /// fn example2(arg: bool) {
+ ///     let log = ScopeGuard::new(|| pr_info!("example2 returned early\n"));
  ///
- /// Coercion from `Arc<Example>` to `Arc<dyn MyTrait>`:
-@@ -121,6 +123,7 @@
- ///
- /// // `coerced` has type `Arc<dyn MyTrait>`.
- /// let coerced: Arc<dyn MyTrait> = obj;
-+/// # Ok::<(), Error>(())
+@@ -148,7 +148,7 @@ unsafe fn from_foreign(_: *const core::ffi::c_void) -> Self {}
+ /// In the example below, we need a mutable object (the vector) to be accessible within the log
+ /// function, so we wrap it in the [`ScopeGuard`]:
  /// ```
- pub struct Arc<T: ?Sized> {
-     ptr: NonNull<ArcInner<T>>,
-@@ -337,7 +340,7 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
- /// # Example
- ///
- /// ```
--/// use crate::sync::{Arc, ArcBorrow};
-+/// use kernel::sync::{Arc, ArcBorrow};
- ///
- /// struct Example;
- ///
-@@ -350,12 +353,13 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
- ///
- /// // Assert that both `obj` and `cloned` point to the same underlying object.
- /// assert!(core::ptr::eq(&*obj, &*cloned));
-+/// # Ok::<(), Error>(())
- /// ```
- ///
- /// Using `ArcBorrow<T>` as the type of `self`:
- ///
- /// ```
--/// use crate::sync::{Arc, ArcBorrow};
-+/// use kernel::sync::{Arc, ArcBorrow};
- ///
- /// struct Example {
- ///     a: u32,
-@@ -370,6 +374,7 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
- ///
- /// let obj = Arc::try_new(Example { a: 10, b: 20 })?;
- /// obj.as_arc_borrow().use_reference();
-+/// # Ok::<(), Error>(())
- /// ```
- pub struct ArcBorrow<'a, T: ?Sized + 'a> {
-     inner: NonNull<ArcInner<T>>,
-diff --git a/rust/kernel/sync/lock/mutex.rs b/rust/kernel/sync/lock/mutex.rs
-index 923472f04af4..09276fedc091 100644
---- a/rust/kernel/sync/lock/mutex.rs
-+++ b/rust/kernel/sync/lock/mutex.rs
-@@ -63,6 +63,7 @@ macro_rules! new_mutex {
- /// assert_eq!(e.c, 10);
- /// assert_eq!(e.d.lock().a, 20);
- /// assert_eq!(e.d.lock().b, 30);
-+/// # Ok::<(), Error>(())
- /// ```
- ///
- /// The following example shows how to use interior mutability to modify the contents of a struct
-diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/spinlock.rs
-index 979b56464a4e..91eb2c9e9123 100644
---- a/rust/kernel/sync/lock/spinlock.rs
-+++ b/rust/kernel/sync/lock/spinlock.rs
-@@ -61,6 +61,7 @@ macro_rules! new_spinlock {
- /// assert_eq!(e.c, 10);
- /// assert_eq!(e.d.lock().a, 20);
- /// assert_eq!(e.d.lock().b, 30);
-+/// # Ok::<(), Error>(())
- /// ```
- ///
- /// The following example shows how to use interior mutability to modify the contents of a struct
+-/// # use kernel::ScopeGuard;
++/// # use kernel::types::ScopeGuard;
+ /// fn example3(arg: bool) -> Result {
+ ///     let mut vec =
+ ///         ScopeGuard::new_with_data(Vec::new(), |v| pr_info!("vec had {} elements\n", v.len()));
 -- 
 2.41.0
 
