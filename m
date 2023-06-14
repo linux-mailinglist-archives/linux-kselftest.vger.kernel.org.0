@@ -2,58 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE07872F33C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 05:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29A072F361
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jun 2023 06:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233418AbjFNDu2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Jun 2023 23:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        id S232425AbjFNEJ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Jun 2023 00:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242197AbjFNDuZ (ORCPT
+        with ESMTP id S242423AbjFNEJq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Jun 2023 23:50:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A4C10FE
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jun 2023 20:50:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCC7B63D43
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 03:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1823EC433CC;
-        Wed, 14 Jun 2023 03:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686714622;
-        bh=kwMRYXkuWmggGRz82SguwJ3azvlmOneNI3FH5Meh8v0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=MP42FaDDIweDOctj5xT06STy3N2pknfgzFIGzFgPEku9f9iSFZXWWK86xvn77bPr/
-         Hvalo9LD6omM0y9uitiZc+dTA7gvY93w8oE1rwL+sLJdSEtqdWsPUMd1wgKxeITpuZ
-         H0UaJ4MYQbg18oP9WzWhely0GLc3ZVOmyDFrUQ+zidsOjbbPXgClZ8szIJ6jen7F9J
-         ledqlJ7PUT65ThEegjL6wCno/uMRS62JxA3BVyT9OzA80pKTEGQfHDAsTcDNNHq/+d
-         FKdUg6NSFGEp1Oe0o5+W+Mj36CEwTctAtOOry22bU1frow7mWT5HBPcLlGhRVmzHkd
-         P3POSnULeTuuw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EDBFFC2BBFC;
-        Wed, 14 Jun 2023 03:50:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 14 Jun 2023 00:09:46 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBD51989;
+        Tue, 13 Jun 2023 21:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=KDMD/K5V222tTU27qxn19y0A6GVvL5QoX6is6LqN0fE=; b=45aGLkI4kRodLhj0fUaQatQYZM
+        iXLWGkFwyCAcjzR+9r1Mtl8Ycf7fZmtnUQGxafpkulq9qkPYM87imZBPG0JGCZWN8a8pU8zV7A+5x
+        TW5JxS6qYXKzR+RLbIP+7rVRPFvMfxiZRuSHVcV5sR4x3qEDlcGq21qqoI//2Ad9zbHloZdswkjwi
+        JUmEJE+LV+yjYh7/4ZWjqU/xNhiiqIDRkSQUN+Z9WG+4e0d/oTRVFDeSDJe52wQKUtpeU1mdXR3v9
+        HLRkJCOcP4sdqHux+A1gUaqzYCGK8XshHE617DnY7YwvAUS7TT7G2M7R/DrORjdlxASiFvJh+iEd2
+        tEmk5TGw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9Hos-009vRc-2D;
+        Wed, 14 Jun 2023 04:09:18 +0000
+Message-ID: <dacfde0b-bc72-dae7-e823-7905f27ff296@infradead.org>
+Date:   Tue, 13 Jun 2023 21:09:17 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/4] Fix small bugs and annoyances in tc-testing
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168671462196.18215.15524979692740732010.git-patchwork-notify@kernel.org>
-Date:   Wed, 14 Jun 2023 03:50:21 +0000
-References: <20230612075712.2861848-1-vladbu@nvidia.com>
-In-Reply-To: <20230612075712.2861848-1-vladbu@nvidia.com>
-To:     Vlad Buslov <vladbu@nvidia.com>
-Cc:     pabeni@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        shuah@kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
-        jiri@resnulli.us, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, marcelo.leitner@gmail.com,
-        shaozhengchao@huawei.com, victor@mojatatu.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+References: <20230613102905.2808371-1-usama.anjum@collabora.com>
+ <20230613102905.2808371-3-usama.anjum@collabora.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230613102905.2808371-3-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,36 +80,22 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 12 Jun 2023 09:57:08 +0200 you wrote:
-> Vlad Buslov (4):
->   selftests/tc-testing: Fix Error: Specified qdisc kind is unknown.
->   selftests/tc-testing: Fix Error: failed to find target LOG
->   selftests/tc-testing: Fix SFB db test
->   selftests/tc-testing: Remove configs that no longer exist
-> 
->  tools/testing/selftests/tc-testing/config                   | 6 +-----
->  tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfb.json | 4 ++--
->  tools/testing/selftests/tc-testing/tdc.sh                   | 1 +
->  3 files changed, 4 insertions(+), 7 deletions(-)
+On 6/13/23 03:29, Muhammad Usama Anjum wrote:
+> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+> index b7b56871029c..47879c38ce2f 100644
+> --- a/include/uapi/linux/fs.h
+> +++ b/include/uapi/linux/fs.h
+> @@ -305,4 +305,57 @@ typedef int __bitwise __kernel_rwf_t;
+>  #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
+>  			 RWF_APPEND)
+>  
+> +/* Pagemap ioctl */
+> +#define PAGEMAP_SCAN	_IOWR('f', 16, struct pm_scan_arg)
 
-Here is the summary with links:
-  - [net,1/4] selftests/tc-testing: Fix Error: Specified qdisc kind is unknown.
-    https://git.kernel.org/netdev/net/c/aef6e908b542
-  - [net,2/4] selftests/tc-testing: Fix Error: failed to find target LOG
-    https://git.kernel.org/netdev/net/c/b849c566ee9c
-  - [net,3/4] selftests/tc-testing: Fix SFB db test
-    https://git.kernel.org/netdev/net/c/b39d8c41c7a8
-  - [net,4/4] selftests/tc-testing: Remove configs that no longer exist
-    https://git.kernel.org/netdev/net/c/11b8b2e70a9b
+Please update Documentation/userspace-api/ioctl/ioctl-number.rst also.
 
-You are awesome, thank you!
+thanks.
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+~Randy
