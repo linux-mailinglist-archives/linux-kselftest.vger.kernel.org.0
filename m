@@ -2,141 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212B273124E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jun 2023 10:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE63731342
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jun 2023 11:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245178AbjFOIfo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Jun 2023 04:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S245432AbjFOJLi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Jun 2023 05:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245309AbjFOIfK (ORCPT
+        with ESMTP id S245471AbjFOJLg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:35:10 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2060.outbound.protection.outlook.com [40.107.100.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6300272E;
-        Thu, 15 Jun 2023 01:35:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NDgHJh7WWv9zaFoE/50z2p0Q2T3PRB9OWfQ+12D6JrEMdNhclOZt0uPBzG8SH7zCJf9uQ9IvvoxUz3lKFWyp8cc+OLkGehcakEUdDxKvntJgPncgR497lWomNWoxgDAhRL4IMMFG7Fi6ZKY/0nqGOAc2h9e/JL+gynlKuz8Zkgv6mIsUkGgB7pYB1mZ/fCRouZ9oIpYSK8ahhwh14ilMk7L8ZkikdEQrv5Of3bLye5CYZqt7X25FjJh1K8dfldWU1fYk6IPXGe6d5d16dlALjQBu+VOY2nsJyEsNkCS4ktjHJOGNQw5qFe0O7Zs524BuYCFmqk/b9PpBA7teJR79vg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B5zF1HH++J+LEtjiQBhek6aV3vh47zkQNgm8Dw3IDys=;
- b=SIL2Cf/sS/ACRegDMOzd+kz0fkS2b53sIjZL/eN8C16XQFvB3/maWW+gk6otyWmODjpFSDhwHsII8kRWdh6+u8hKvvZE2px2/od0tL58ZWlNcF0YrrAUjRw6nfTAtsSIrYPZtCLD+jz+ITAG9f8ne8SZn2BixCO3LAE233FLAldFgjbx6V7DBW2EpnPHaVxNrxeTh/baE/qbRfBNU44ucIwBTeI/Dzu3/bAMMJcLbNJ/KDcGQyAheHz4jSN2Idusv538ymrDLuzbrNN5hzcAQry27ZDn08MfrW4LO54RP4E4vgYjycrohPUgld1q5cPw2ztIKFtQ2NTt3g0INjsdng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B5zF1HH++J+LEtjiQBhek6aV3vh47zkQNgm8Dw3IDys=;
- b=ePagilp8+0KNKC7gGUSDLGQ1shHFo3qAQbRv+vy/1Q+YUIyWvKj4vLMNxmih3jUx+sSttfRTLCFLnsGPU2yuANMyfv0rNZGz8WbVL3wRiUX7Wx6x1R583/HHkLEcoQO+BL7wpkrwal4uQFdUU0vUvkXh34Vs9t3P/kqo4u/HpT8=
-Received: from SN7PR18CA0007.namprd18.prod.outlook.com (2603:10b6:806:f3::27)
- by PH0PR12MB7486.namprd12.prod.outlook.com (2603:10b6:510:1e9::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Thu, 15 Jun
- 2023 08:35:07 +0000
-Received: from SN1PEPF00026369.namprd02.prod.outlook.com
- (2603:10b6:806:f3:cafe::73) by SN7PR18CA0007.outlook.office365.com
- (2603:10b6:806:f3::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25 via Frontend
- Transport; Thu, 15 Jun 2023 08:35:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SN1PEPF00026369.mail.protection.outlook.com (10.167.241.134) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.27 via Frontend Transport; Thu, 15 Jun 2023 08:35:06 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
- 2023 03:35:06 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
- 2023 03:34:52 -0500
-Received: from xcbamaftei43x.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23 via Frontend
- Transport; Thu, 15 Jun 2023 03:34:51 -0500
-From:   Alex Maftei <alex.maftei@amd.com>
-To:     <richardcochran@gmail.com>, <shuah@kernel.org>
-CC:     Alex Maftei <alex.maftei@amd.com>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-Subject: [PATCH] selftests/ptp: Fix timestamp printf format for PTP_SYS_OFFSET
-Date:   Thu, 15 Jun 2023 09:34:04 +0100
-Message-ID: <20230615083404.57112-1-alex.maftei@amd.com>
-X-Mailer: git-send-email 2.28.0
+        Thu, 15 Jun 2023 05:11:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D55D2D53
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 02:10:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686820239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jv6KFAXoteYK0f5ZCcCQQ5YKb/PGt9uZ7PhLXZP3wzo=;
+        b=CqJC38lgP1ZI3HkagMlOZlhDASc97lYbliGkr5MtprGhdmAC6+s4TYAVlzUrKaeOvKamcK
+        K79/Wkz0VQNSppepAQ4t0QkjH8I5VE1sX+GDg4XLNyzCApZxiqm2oJFHYGG3gn62NiTZj+
+        AU4aAoQZwan0LsikGuOlQfP/pa6n4ZM=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-645-HgD-t6QwPN6lqxfWs3DzEA-1; Thu, 15 Jun 2023 05:10:36 -0400
+X-MC-Unique: HgD-t6QwPN6lqxfWs3DzEA-1
+Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4f59c4df0f9so6287546e87.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 02:10:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686820234; x=1689412234;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jv6KFAXoteYK0f5ZCcCQQ5YKb/PGt9uZ7PhLXZP3wzo=;
+        b=kuGxAuQrxd6xq8PCbwJIIsaoo32cQFxyAucgC6CjbzvDWZQ06/hblPiqE6w6UZWopo
+         AknaDor9HpsrcEG6ZumaQggIFLHUmx93jR4VFtfG9/Oy6JvGMtKiqGEolgsizkT6W+4U
+         /c+Gsatn9ZWOGSfkUu3ppzmyxLLdf82qUPhTj7nSZlAIxqeziC6ssR5KhRqHW3I5JaSy
+         RlwMJNDDP+qWgYmzwr460KXp4UVVxJOXaVS8I1vLOjrNf2cf0rceRK3bj7YAYOMXVrDP
+         dA8yDT8XAnvQ6+oM85FoJqyxMsDhStw+7YkX9DuDXB02aVB/phA/BPDtGAlypYagBrmn
+         73tA==
+X-Gm-Message-State: AC+VfDyG7AgZR2v867AdX9pNa9oiEcMDaMeDvKYMZ+VTm86vyucGdWTL
+        0cvstArJEEl3Ul8KzcfW6VeSOIwwkaYnKfCyz8LjwsuO22x79AcJuWgaIL9EnTL8shVaJCbyOl+
+        H0L7Og7h2kEGN5WPODwtlBI51+snID75XPar9
+X-Received: by 2002:a19:5f45:0:b0:4f7:6238:4e52 with SMTP id a5-20020a195f45000000b004f762384e52mr3949938lfj.8.1686820234617;
+        Thu, 15 Jun 2023 02:10:34 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6c7QHcOyyddXm/rvL/xzVuaqmg0YuBctpdwXuD1hdnqKekHOPO+8Z+yTYcUcl2HnLjM/QyLw==
+X-Received: by 2002:a19:5f45:0:b0:4f7:6238:4e52 with SMTP id a5-20020a195f45000000b004f762384e52mr3949914lfj.8.1686820234141;
+        Thu, 15 Jun 2023 02:10:34 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id z20-20020a1c4c14000000b003f80946116dsm18381265wmf.45.2023.06.15.02.10.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 02:10:33 -0700 (PDT)
+Message-ID: <c31e9046-02c1-9d4a-92d1-b96a8ed92cdf@redhat.com>
+Date:   Thu, 15 Jun 2023 11:10:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF00026369:EE_|PH0PR12MB7486:EE_
-X-MS-Office365-Filtering-Correlation-Id: 40ee98b5-0b43-4151-7fc8-08db6d7b6c6d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G50gFVdYKkNimGyLIU3SASDVD0jb3fStG6RqVEf+fm553IOfYsoTJi040Hx449s9icsxkXCa2RhxOTD0XWBnrXfTzsyi7Egy5WckScp1noxz3FVIDtX5aoSAa9V9Zprwha/eNeT7VVNQBguYD9gdCRemOTmJAA+XsnHwsUIk+hwg2afEBfuFXBWpul9TKLYESs6/gE6eY87r9vDl2rZmrn1Zp1yOjCQrNwh50mRBzNKZ3CaM9GUAuGLFWtZoPnmmmPB/gzzjZ4HcLvRw+CAZdhaiotuLfsF2HzjbUiQjzh7Xcpocsk/9i5cmOUBh04I+hR7/3gmjIq3e1XAuQQcVgXyQzqbzIv41H0qfPOV3hcx9Uu3ip3lNLNAk0vCZYo2wrE2H5SzzVYOmzKG9SXqAXu0QdaMJMSWkY/yk1NhSAljCp2y+AhtW2OURHJLHZABUcsnYyveY40OxKJyzBX0rfzMgvuLtC7yaNjtukBNfoWHboWpttQ/MhU3BKVbxUVUcmRtQ0N5nOeCMb+YWM6svase923IfTvYbMljBHY13S9u9s63VQuM2AnaEjXYu9nger17TM476d5gORSfRg2rD7i923Q4L8EvhIO2smVVHqlAz5eJorJgw67Cj91ogIFai6uVYv7c/cwLTV4+/8EwtmkNUaQBx964nL55dXVJT1isEXGeNjzUPLWc+gH75vzPNkWTgApe4mlT5hOdP8E0oYul8eCHLH33awZanAsRMsaAKFYZOTFxgxBAgsJD00uImgDECnei4Vusf4eEGP6LbAg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(396003)(136003)(451199021)(46966006)(40470700004)(36840700001)(5660300002)(83380400001)(426003)(336012)(186003)(40480700001)(44832011)(2906002)(47076005)(2616005)(36860700001)(41300700001)(8936002)(26005)(40460700003)(8676002)(316002)(110136005)(54906003)(6666004)(82740400003)(36756003)(478600001)(81166007)(356005)(82310400005)(4326008)(86362001)(70206006)(70586007)(1076003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 08:35:06.9952
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40ee98b5-0b43-4151-7fc8-08db6d7b6c6d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF00026369.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7486
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] selftests/mm: Add missing gitignore entries
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230614-kselftest-mm-gitignore-v1-1-9c2643a25bbe@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230614-kselftest-mm-gitignore-v1-1-9c2643a25bbe@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Previously, timestamps were printed using "%lld.%u" which is incorrect
-for nanosecond values lower than 100,000,000 as they're fractional
-digits, therefore leading zeros are meaningful.
+On 15.06.23 01:23, Mark Brown wrote:
+> We added the mkdirty and va_high_addr_switch tests but did not add the
+> resulting binaries to .gitignore, do so.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>   tools/testing/selftests/mm/.gitignore | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+> index 8917455f4f51..a94238e4fbc5 100644
+> --- a/tools/testing/selftests/mm/.gitignore
+> +++ b/tools/testing/selftests/mm/.gitignore
+> @@ -10,6 +10,7 @@ map_hugetlb
+>   map_populate
+>   thuge-gen
+>   compaction_test
+> +mkdirty
+>   migration
+>   mlock2-tests
+>   mrelease_test
+> @@ -28,6 +29,7 @@ mlock-random-test
+>   virtual_address_range
+>   gup_test
+>   va_128TBswitch
+> +va_high_addr_switch
+>   map_fixed_noreplace
+>   write_to_hugetlbfs
+>   hmm-tests
+> 
+> ---
+> base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+> change-id: 20230614-kselftest-mm-gitignore-491da13f8ada
+> 
+> Best regards,
 
-This patch changes the format strings to "%lld.%09u" in order to add
-leading zeros to the nanosecond value.
+See
 
-Fixes: 568ebc5985f5 ("ptp: add the PTP_SYS_OFFSET ioctl to the testptp program")
-Fixes: 4ec54f95736f ("ptp: Fix compiler warnings in the testptp utility")
-Fixes: 6ab0e475f1f3 ("Documentation: fix misc. warnings")
-Signed-off-by: Alex Maftei <alex.maftei@amd.com>
----
- tools/testing/selftests/ptp/testptp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+https://lkml.kernel.org/r/20230606071637.267103-6-jhubbard@nvidia.com
 
-diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selftests/ptp/testptp.c
-index 198ad5f32187..cfa9562f3cd8 100644
---- a/tools/testing/selftests/ptp/testptp.c
-+++ b/tools/testing/selftests/ptp/testptp.c
-@@ -502,11 +502,11 @@ int main(int argc, char *argv[])
- 			interval = t2 - t1;
- 			offset = (t2 + t1) / 2 - tp;
- 
--			printf("system time: %lld.%u\n",
-+			printf("system time: %lld.%09u\n",
- 				(pct+2*i)->sec, (pct+2*i)->nsec);
--			printf("phc    time: %lld.%u\n",
-+			printf("phc    time: %lld.%09u\n",
- 				(pct+2*i+1)->sec, (pct+2*i+1)->nsec);
--			printf("system time: %lld.%u\n",
-+			printf("system time: %lld.%09u\n",
- 				(pct+2*i+2)->sec, (pct+2*i+2)->nsec);
- 			printf("system/phc clock time offset is %" PRId64 " ns\n"
- 			       "system     clock time delay  is %" PRId64 " ns\n",
 -- 
-2.28.0
+Cheers,
+
+David / dhildenb
 
