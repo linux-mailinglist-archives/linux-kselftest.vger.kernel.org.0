@@ -2,161 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B2D731C43
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jun 2023 17:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3EC731D46
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jun 2023 18:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345018AbjFOPQe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Jun 2023 11:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S230108AbjFOQCZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Jun 2023 12:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345038AbjFOPQ0 (ORCPT
+        with ESMTP id S229853AbjFOQCY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Jun 2023 11:16:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315B22D5D;
-        Thu, 15 Jun 2023 08:16:22 -0700 (PDT)
-Received: from [192.168.10.55] (unknown [119.155.33.163])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E82676606F67;
-        Thu, 15 Jun 2023 16:16:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686842180;
-        bh=C0LEQtiOTpGeaCKA+5bOCExcFaAsKTYF2+EXB06sxLI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=biOA/gL+FCKC1STuGTkA27txM7KGqLoOY5QAg/CEkPhfmvwgSp4HyueREBL5JRNqo
-         qj12DWxyl8+iwhbx1is/3rVI2TgwihjblFnKhEiwT0CRQe3bsZ3A7MLBi5IYFik1CN
-         bWkEmO3IjEfyzzb4s4qY6hubBX69vPgsH1+O+Tarr0UCdZyItIpbnGFzdV4YDfksk8
-         NqAoN9vn37M6FC8PW9CQdX98oLmDNfisTmkUh5PmujzhkiCnydIez85QLaRm9IvmpL
-         u2atqKkAwbY2FkCQs5XbUXDoZYn6hm32m9VEfdXIvulNOYgh4UaDN+Cmu/vG2VaUM/
-         +x8t9wZ93KyZA==
-Message-ID: <43c96533-8009-e42f-721c-4b2d1e142f5d@collabora.com>
-Date:   Thu, 15 Jun 2023 20:16:10 +0500
+        Thu, 15 Jun 2023 12:02:24 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86481E4;
+        Thu, 15 Jun 2023 09:02:22 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31109cd8d8cso1699621f8f.2;
+        Thu, 15 Jun 2023 09:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686844941; x=1689436941;
+        h=content-transfer-encoding:subject:cc:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SuwWGq/HZTxd+1ns842IDWBOssilEnZa9jIQGRloFJA=;
+        b=f3q81OD5ezF4qhYMYUbnN+WtLhIvVBfMYV4g1xtJKhjK7wFmV5gErSXzTP1kZ6LBG5
+         60ghM80tKdOR7U3UAP5VnGZSurLa+9hP1j9otZXiyL26B6cwyTDoxIhxdi9svkB3zLhk
+         esXYJlm5FDk+2iiQY7csUZcjPJXM6uQG9V0ooaVGBejvlB9DSyKK+3+JvHItNmChoS17
+         pixbcCgLEDzf3i6Q+dyVGxsLaf8/Qg/0LXxMWlskC4BAQzxxT66stQ9zr8SNfBR0QRn1
+         pYJ2+8NGv7p4tMZWMcDyCPV7iC2tc5XMix76b+LpytznRXLHnjkSXEAA5UKBVcZ3QG/i
+         iQDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686844941; x=1689436941;
+        h=content-transfer-encoding:subject:cc:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SuwWGq/HZTxd+1ns842IDWBOssilEnZa9jIQGRloFJA=;
+        b=Zd2OrDFi0cuc5aESUjIG6VmBb/qF5EhynJ8C7UhuyQCFiJSOBMa1ajJQQ/J+TjiXJi
+         fCOysuGNTEzTbWZ6n0aJnlXpXu9adOe3necv7Tgn7iOczqpiIsyQDQaNg+NUNJqmw+l2
+         u/xs42/iLVDobbgvPSt3FGfwHgwUa4SNWkEtrCIJaPgTThJJP4vxSsu1BHLWfrjRWWCD
+         xkWSzP+3QP3h9chzrJnA4gVvXDLuszpYjwi3eY7I7t1i0q/12VYQdcR3HOFrfnQm4c15
+         Fm1tkVVnluCj9wggjKABgGviYeK7soB8bT9ikSNgT2DNRS2Dt2MkRf4zsCBIrHi1gYyR
+         JUPQ==
+X-Gm-Message-State: AC+VfDyXQhk9DdN5RQCoedyVbmuMwzKtVKUcwvFHEYAbm4jLxO+vQP40
+        wLFSU6pS6TCMElxc0dvl3uM0GhYfo0Pxjg==
+X-Google-Smtp-Source: ACHHUZ5MqPAJT3yys/PhcsaiSphe9kaP3XoGrFoelWEJzR7ufELNuAC+SxXIe55D9uq6SoyF4MjE5A==
+X-Received: by 2002:adf:ff87:0:b0:311:1b27:74a6 with SMTP id j7-20020adfff87000000b003111b2774a6mr569553wrr.28.1686844940673;
+        Thu, 15 Jun 2023 09:02:20 -0700 (PDT)
+Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id f9-20020a5d6649000000b0030f9dc63ff1sm19454197wrw.88.2023.06.15.09.02.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 09:02:20 -0700 (PDT)
+Message-ID: <7a853516-9da5-811b-1e9c-84e5483a8a08@gmail.com>
+Date:   Thu, 15 Jun 2023 17:02:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
+ Thunderbird/102.12.0
 Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-3-usama.anjum@collabora.com>
- <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
- <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com>
- <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
- <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com>
- <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
- <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com>
- <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
- <CABb0KFGuqoDh-+FKcsZXxpSFWSM3mcLVQkotGE3RcNiFKh-a2g@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFGuqoDh-+FKcsZXxpSFWSM3mcLVQkotGE3RcNiFKh-a2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Shuah Khan <shuah@kernel.org>,
+        Nicholas Miehlbradt <nicholas@linux.ibm.com>,
+        Nicholas Miehlbradt <nicholas@linux.ibm.com>,
+        Benjamin Gray <bgray@linux.ibm.com>
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: file removal issue in tools/testing/selftests/powerpc/mm/tlbie_test.c
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Please review the v19. I hope to get your reviewed by tag soon.
+Hi,
 
-On 6/15/23 7:58 PM, Michał Mirosław wrote:
-> On Thu, 15 Jun 2023 at 16:52, Michał Mirosław <emmir@google.com> wrote:
->> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
->> <usama.anjum@collabora.com> wrote:
->>> I'll send next revision now.
->>> On 6/14/23 11:00 PM, Michał Mirosław wrote:
->>>> (A quick reply to answer open questions in case they help the next version.)
->>>>
->>>> On Wed, 14 Jun 2023 at 19:10, Muhammad Usama Anjum
->>>> <usama.anjum@collabora.com> wrote:
->>>>> On 6/14/23 8:14 PM, Michał Mirosław wrote:
->>>>>> On Wed, 14 Jun 2023 at 15:46, Muhammad Usama Anjum
->>>>>> <usama.anjum@collabora.com> wrote:
->>>>>>>
->>>>>>> On 6/14/23 3:36 AM, Michał Mirosław wrote:
->>>>>>>> On Tue, 13 Jun 2023 at 12:29, Muhammad Usama Anjum
->>>>>>>> <usama.anjum@collabora.com> wrote:
->>>>>>>> For flags name: PM_REQUIRE_WRITE_ACCESS?
->>>>>>>> Or Is it intended to be checked only if doing WP (as the current name
->>>>>>>> suggests) and so it would be redundant as WP currently requires
->>>>>>>> `p->required_mask = PAGE_IS_WRITTEN`?
->>>>>>> This is intended to indicate that if userfaultfd is needed. If
->>>>>>> PAGE_IS_WRITTEN is mentioned in any of mask, we need to check if
->>>>>>> userfaultfd has been initialized for this memory. I'll rename to
->>>>>>> PM_SCAN_REQUIRE_UFFD.
->>>>>>
->>>>>> Why do we need that check? Wouldn't `is_written = false` work for vmas
->>>>>> not registered via uffd?
->>>>> UFFD_FEATURE_WP_ASYNC and UNPOPULATED needs to be set on the memory region
->>>>> for it to report correct written values on the memory region. Without UFFD
->>>>> WP ASYNC and UNPOUPULATED defined on the memory, we consider UFFD_WP state
->>>>> undefined. If user hasn't initialized memory with UFFD, he has no right to
->>>>> set is_written = false.
->>>>
->>>> How about calculating `is_written = is_uffd_registered() &&
->>>> is_uffd_wp()`? This would enable a user to apply GET+WP for the whole
->>>> address space of a process regardless of whether all of it is
->>>> registered.
->>> I wouldn't want to check if uffd is registered again and again. This is why
->>> we are doing it only once every walk in pagemap_scan_test_walk().
->>
->> There is no need to do the checks repeatedly. If I understand the code
->> correctly, uffd registration is per-vma, so it can be communicated
->> from test_walk to entry/hole callbacks via a field in
->> pagemap_scan_private.
-> 
-> Actually... this could be exposed as a page category for the filter
-> (e.g. PAGE_USES_UFFD_WP) and then you could just make the ioctl() to
-> work for your usecase without tracking the ranges at the userspace
-> side.
-I'm not sure about page category. ASAIK the current check isn't bad when we
-already mention in documentation that memory must be registered with UFFD
-WP before using write feature of the IOCTL.
+Static analysis with cppcheck has found an issue in the following commit:
 
-Just like mincore mentions in documentation that user buffer will be filled
-with values based on the length of the region. Kernel doesn't care if user
-had provided smaller buffer and kernel overwrites because of user's own
-issue. I want to follow the same path. If user doesn't read documentation
-and follow it, he should be punished with the error.
+commit 047e6575aec71d75b765c22111820c4776cd1c43
+Author: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Date:   Tue Sep 24 09:22:53 2019 +0530
 
-> 
-> Best Regards
-> Michał Mirosław
+     powerpc/mm: Fixup tlbie vs mtpidr/mtlpidr ordering issue on POWER9
 
--- 
-BR,
-Muhammad Usama Anjum
+
+The issue in tools/testing/selftests/powerpc/mm/tlbie_test.c in 
+end_verification_log() is as follows:
+
+static inline void end_verification_log(unsigned int tid, unsigned 
+nr_anamolies)
+{
+         FILE *f = fp[tid];
+         char logfile[30];
+         char path[LOGDIR_NAME_SIZE + 30];
+         char separator[] = "/";
+
+         fclose(f);
+
+         if (nr_anamolies == 0) {
+                 remove(path);
+                 return;
+         }
+	.... etc
+
+
+in the case where nr_anamolies is zero the remove(path) call is using an 
+uninitialized path, this potentially could contain uninitialized garbage 
+on the stack (and if one is unlucky enough it may be a valid filename 
+that one does not want to be removed).
+
+Not sure what the original intention was, but this code looks incorrect 
+to me.
+
+Colin
