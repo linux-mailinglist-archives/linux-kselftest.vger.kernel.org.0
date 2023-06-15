@@ -2,237 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EF773209A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jun 2023 22:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2137320A8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jun 2023 22:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjFOUHj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Jun 2023 16:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
+        id S229983AbjFOULM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Jun 2023 16:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbjFOUHh (ORCPT
+        with ESMTP id S235994AbjFOULI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Jun 2023 16:07:37 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1B21BC
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 13:07:36 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so315a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 13:07:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686859654; x=1689451654;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TcXKgHkINlZtkH6FcAJl31LqrUpiNimJraZYTIfEacY=;
-        b=grNeFjMFUEplWpGORmy77WwGAa6tuYg9L3WkV5mckN5vDk/zbhDik+lHM/UNgpP4pd
-         hOOm+WnJ7a4iQyAmGfMIEHtYCyEjiOB4fybvLRjQ953HrpODT7pybSJLC9oyrmvc1uAa
-         Q5t0iw3S7Cu+ZA/WqgFLv0n3V0z2Iv+BsFTHoBDgXWNu+X4LTbCrMOKZdBHMF2+Gz+9E
-         C8mezgnBZ0C8B3l28HKwJtAiDRd/qOx2CFcehRN62EOe8r6f8Izc6DyVxQ48aAB/jfzZ
-         Fbunklgz4dlOAoPmDadl7tLsJBvnhxposHcHyBr7ITs8tsH4/taorio4KkE5YTJeEn/y
-         +CYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686859654; x=1689451654;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TcXKgHkINlZtkH6FcAJl31LqrUpiNimJraZYTIfEacY=;
-        b=Yp625IYi4AT5lQD3WzHiNPeiT7VFZ2DbQGsLRlzsIB4jCmw1WCfxoTjhOkk+f8PNMY
-         GMKKCeUODbIYY3G6/0P2pymAAMyjDZbOKkyrTJQDmDQFSaTYzXDeBrv5zn9zVKn45sem
-         wF3ipTOqmOy+manuFMvfJpaA+fgKqEnia20DheUkGZy2ik1iG11BQ2eEElnjiB5giVtM
-         mFzS+YwdeccIjWuk/SyNIBXIslSLsIKOLM5mWkH23g7oYivFgc0bYIb+VsC4BZzimdZb
-         ngBzYxP8kPGAzF3AVzW+8FfhlnhaMZgdosQeeUPO93zZ/Q7Ax/gcE7BdblIYWdEiql/f
-         Nr/w==
-X-Gm-Message-State: AC+VfDyP1y7XCnKJwJZN8ILwkbmhujtciaMgRa+63EYA2LaYkTc3Kq2c
-        dgClfDDmJaqBkOVvCcQuk4IzZi9VYnXeUo1aV5IIZg==
-X-Google-Smtp-Source: ACHHUZ4X+9erQPhmydL6aaFuWi9P+BEB8cvKp3i4+5UPNoYBQtJLxjzSx6pSUJJ8b5JUmvgtrKsHYgvI4lYLFVRURZE=
-X-Received: by 2002:a50:a6d3:0:b0:51a:1ffd:10e with SMTP id
- f19-20020a50a6d3000000b0051a1ffd010emr133474edc.3.1686859654409; Thu, 15 Jun
- 2023 13:07:34 -0700 (PDT)
+        Thu, 15 Jun 2023 16:11:08 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020D31BC;
+        Thu, 15 Jun 2023 13:10:59 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 8D1FF60304;
+        Thu, 15 Jun 2023 22:10:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686859845; bh=uukwmcuMYyFo0+uF/3NGwM7VYyyngg3AIaPUOReXkV8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HH2qoWkoKpWC5a5ltWnDz8kJiFKyq0nBa6RF7kKfZtDw8N3lDZKUnURqquNsKebg3
+         AqqxW4gYuMYvZjp1ELlumQNpV0bp28x1cObTAhW4/zISJ61GQFsG4DKqwBAEMJBHod
+         SNYyI37EMYIRJNVMUJuOgwj/iQOrkgIROJZzY5m3qS+bbhJTLE72+54eCnwMNqU0kB
+         cnBp/uBdKR7kSe9DngY5ubXuYUchQ13wxYBGnlFgYaGiT1QuOwnCNrAoAiUgFTN1Xj
+         0DjTrOvwe/isXOJZQgR3iNxdjnOjCXEb+EP9+FxpMua8oVtEjbRhXdhTdbq1C0iQZE
+         6P9qbtVA+4PRA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Z5yJhetaoLVu; Thu, 15 Jun 2023 22:10:43 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id BAF1260303;
+        Thu, 15 Jun 2023 22:10:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686859843; bh=uukwmcuMYyFo0+uF/3NGwM7VYyyngg3AIaPUOReXkV8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UaDmI+vN/XSjRDZc4BsRC2qXr8H50gp48GJoXxMUcyeTqwj0Ze8Q0kIgoKfNTPgs9
+         e9nbpmZt6bXatFGlIhvsC4JPRxZB342NRIZ5aJ+5gmp0VJSMiIGHFzwk66ARmBd4zu
+         vutqwmIXwzTgS/O4zQ7919zeFAuONOjM5f/7tUvLnd61m0pqwm2HNq+PgO9aJJTtsB
+         5KfwcQVS2hGkkySw+/2ka2/I8r8xBz/GDRL1b+6rkdudq9m0Uk2FRK5Tor8+yk4JA3
+         lsSr0TmXkyBbezM/A4JSwg3CQwY2kms//onp8gPENGF8iLh+V3pV+jOrk3HpQ6zk5z
+         ZNq2Lhvc3M8vQ==
+Message-ID: <2d129924-d8c7-0aab-2766-950042b7a801@alu.unizg.hr>
+Date:   Thu, 15 Jun 2023 22:10:42 +0200
 MIME-Version: 1.0
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-3-usama.anjum@collabora.com> <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
- <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com> <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
- <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com> <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
- <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com> <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
- <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com>
-In-Reply-To: <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Thu, 15 Jun 2023 22:07:22 +0200
-Message-ID: <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
-Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL][FIX TESTED] in
+ vrf "bind - ns-B IPv6 LLA" test
+Content-Language: en-US
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <ZHeN3bg28pGFFjJN@debian>
+ <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr> <ZH84zGEODT97TEXG@debian>
+ <48cfd903-ad2f-7da7-e5a6-a22392dc8650@alu.unizg.hr> <ZH+BhFzvJkWyjBE0@debian>
+ <a3b2891d-d355-dacd-24ec-af9f8aacac57@alu.unizg.hr> <ZIC1r6IHOM5nr9QD@debian>
+ <884d9eb7-0e8e-3e59-cf6d-2c6931da35ee@alu.unizg.hr> <ZINPuawVp2KKoCjS@debian>
+ <a74fbb54-2594-fd37-c5fe-3a027d9a5ea3@alu.unizg.hr> <ZIl+k8zJ7A0vFKpB@debian>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZIl+k8zJ7A0vFKpB@debian>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 15 Jun 2023 at 17:11, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 6/15/23 7:52=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >> I'll send next revision now.
-> >> On 6/14/23 11:00=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>> (A quick reply to answer open questions in case they help the next ve=
-rsion.)
-> >>>
-> >>> On Wed, 14 Jun 2023 at 19:10, Muhammad Usama Anjum
-> >>> <usama.anjum@collabora.com> wrote:
-> >>>> On 6/14/23 8:14=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>>>> On Wed, 14 Jun 2023 at 15:46, Muhammad Usama Anjum
-> >>>>> <usama.anjum@collabora.com> wrote:
-> >>>>>>
-> >>>>>> On 6/14/23 3:36=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>>>>>> On Tue, 13 Jun 2023 at 12:29, Muhammad Usama Anjum
-> >>>>>>> <usama.anjum@collabora.com> wrote:
-> >>> [...]
-> >>>>>>>> +       if (cur_buf->bitmap =3D=3D bitmap &&
-> >>>>>>>> +           cur_buf->start + cur_buf->len * PAGE_SIZE =3D=3D add=
-r) {
-> >>>>>>>> +               cur_buf->len +=3D n_pages;
-> >>>>>>>> +               p->found_pages +=3D n_pages;
-> >>>>>>>> +       } else {
-> >>>>>>>> +               if (cur_buf->len && p->vec_buf_index >=3D p->vec=
-_buf_len)
-> >>>>>>>> +                       return -ENOMEM;
-> >>>>>>>
-> >>>>>>> Shouldn't this be -ENOSPC? -ENOMEM usually signifies that the ker=
-nel
-> >>>>>>> ran out of memory when allocating, not that there is no space in =
-a
-> >>>>>>> user-provided buffer.
-> >>>>>> There are 3 kinds of return values here:
-> >>>>>> * PM_SCAN_FOUND_MAX_PAGES (1) ---> max_pages have been found. Abor=
-t the
-> >>>>>> page walk from next entry
-> >>>>>> * 0 ---> continue the page walk
-> >>>>>> * -ENOMEM --> Abort the page walk from current entry, user buffer =
-is full
-> >>>>>> which is not error, but only a stop signal. This -ENOMEM is just
-> >>>>>> differentiater from (1). This -ENOMEM is for internal use and isn'=
-t
-> >>>>>> returned to user.
-> >>>>>
-> >>>>> But why ENOSPC is not good here? I was used before, I think.
-> >>>> -ENOSPC is being returned in form of true error from
-> >>>> pagemap_scan_hugetlb_entry(). So I'd to remove -ENOSPC from here as =
-it
-> >>>> wasn't true error here, it was only a way to abort the walk immediat=
-ely.
-> >>>> I'm liking the following erturn code from here now:
-> >>>>
-> >>>> #define PM_SCAN_BUFFER_FULL     (-256)
-> >>>
-> >>> I guess this will be reworked anyway, but I'd prefer this didn't need
-> >>> custom errors etc. If we agree to decoupling the selection and GET
-> >>> output, it could be:
-> >>>
-> >>> bool is_interesting_page(p, flags); // this one does the
-> >>> required/anyof/excluded match
-> >>> size_t output_range(p, start, len, flags); // this one fills the
-> >>> output vector and returns how many pages were fit
-> >>>
-> >>> In this setup, `is_interesting_page() && (n_out =3D output_range()) <
-> >>> n_pages` means this is the final range, no more will fit. And if
-> >>> `n_out =3D=3D 0` then no pages fit and no WP is needed (no other spec=
-ial
-> >>> cases).
-> >> Right now, pagemap_scan_output() performs the work of both of these tw=
-o
-> >> functions. The part can be broken into is_interesting_pages() and we c=
-an
-> >> leave the remaining part as it is.
-> >>
-> >> Saying that n_out < n_pages tells us the buffer is full covers one cas=
-e.
-> >> But there is case of maximum pages have been found and walk needs to b=
-e
-> >> aborted.
-> >
-> > This case is exactly what `n_out < n_pages` will cover (if scan_output
-> > uses max_pages properly to limit n_out).
-> > Isn't it that when the buffer is full we want to abort the scan always
-> > (with WP if `n_out > 0`)?
-> Wouldn't it be duplication of condition if buffer is full inside
-> pagemap_scan_output() and just outside it. Inside pagemap_scan_output() w=
-e
-> check if we have space before putting data inside it. I'm using this same
-> condition to indicate that buffer is full.
+On 6/14/23 10:47, Guillaume Nault wrote:
+> On Sat, Jun 10, 2023 at 08:04:02PM +0200, Mirsad Goran Todorovac wrote:
+>> This also works on the Lenovo IdeaPad 3 Ubuntu 22.10 laptop, but on the AlmaLinux 8.8
+>> Lenovo desktop I have a problem:
+>>
+>> [root@pc-mtodorov net]# grep FAIL ../fcnal-test-4.log
+>> TEST: ping local, VRF bind - ns-A IP                                          [FAIL]
+>> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+>> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+>> TEST: ping local, VRF bind - ns-A IP                                          [FAIL]
+>> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+>> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+>> [root@pc-mtodorov net]#
+>>
+>> Kernel is the recent one:
+>>
+>> [root@pc-mtodorov net]# uname -rms
+>> Linux 6.4.0-rc5-testnet-00003-g5b23878f7ed9 x86_64
+>> [root@pc-mtodorov net]#
+> 
+> Maybe a problem with the ping version used by the distribution.
+> You can try "./fcnal-test.sh -t ipv4_ping -p -v" to view the commands
+> run and make the script stop when there's a test failure (so that you
+> can see the ping output and try your own commands in the testing
+> environment).
 
-I'm not sure what do you mean? The buffer-full conditions would be
-checked in ..scan_output() and communicated to the caller by returning
-N less than `n_pages` passed in. This is exactly how e.g. read()
-works: if you get less than requested you've hit the end of the file.
-If the file happens to have size that is equal to the provided buffer
-length, the next read() will return 0.
+Thank you for taking the time for the reply. And thanks for the hint.
+But I am sort of on ebb tide on this.
 
-> >>>>> While here, I wonder if we really need to fail the call if there ar=
-e
-> >>>>> unknown bits in those masks set: if this bit set is expanded with
-> >>>>> another category flags, a newer userspace run on older kernel would
-> >>>>> get EINVAL even if the "treat unknown as 0" be what it requires.
-> >>>>> There is no simple way in the API to discover what bits the kernel
-> >>>>> supports. We could allow a no-op (no WP nor GET) call to help with
-> >>>>> that and then rejecting unknown bits would make sense.
-> >>>> I've not seen any examples of this. But I've seen examples of return=
-ing
-> >>>> error if kernel doesn't support a feature. Each new feature comes wi=
-th a
-> >>>> kernel version, greater than this version support this feature. If u=
-ser is
-> >>>> trying to use advanced feature which isn't present in a kernel, we s=
-hould
-> >>>> return error and not proceed to confuse the user/kernel. In fact if =
-we look
-> >>>> at userfaultfd_api(), we return error immediately if feature has som=
-e bit
-> >>>> set which kernel doesn't support.
-> >>>
-> >>> I think we should have a way of detecting the supported flags if we
-> >>> don't want a forward compatibility policy for flags here. Maybe it
-> >>> would be enough to allow all the no-op combinations for this purpose?
-> >> Again I don't think UFFD is doing anything like this.
-> >
-> > If it's cheap and easy to provide a user with a way to detect the
-> > supported features - why not do it?
-> I'm sorry. But it would bring up something new and iterations will be
-> needed to just play around. I like the UFFD way.
+It would be good to have the test run on both versions of Linux to test
+the actual kernel faults. Maybe pack a version of ping command w the test?
+But I cannot deploy too much time in this.
 
-Let's then first agree on what would have to be changed. I guess we
-could leverage that `scan_len =3D 0` doesn't make much sense otherwise
-and let it be used to check the other fields for support.
+I hope then the upgrade AlmaLinux 8.8 -> 9.x (or CentOS clones in general)
+would solve the issue, but it is not guaranteed, and I would lose bisect
+to the old kernels. Which is why I do not upgrade to the latest releases
+in the first place. :-/
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+If it is just the AlmaLinux ping, then it is just an exotic distro, but it
+is a CentOS clone, so the issue might exist in the more popular Rocky, too.
+
+I am not sure what is the right way to do in this case or I would already
+have done it. Presumptuous maybe, but true.
+
+>>>> However, I have a question:
+>>>>
+>>>> In the ping + "With VRF" section, the tests with net.ipv4.raw_l3mdev_accept=1
+>>>> are repeated twice, while "No VRF" section has the versions:
+>>>>
+>>>> SYSCTL: net.ipv4.raw_l3mdev_accept=0
+>>>>
+>>>> and
+>>>>
+>>>> SYSCTL: net.ipv4.raw_l3mdev_accept=1
+>>>>
+>>>> The same happens with the IPv6 ping tests.
+>>>>
+>>>> In that case, it could be that we have only 2 actual FAIL cases,
+>>>> because the error is reported twice.
+>>>>
+>>>> Is this intentional?
+>>>
+>>> I don't know why the non-VRF tests are run once with raw_l3mdev_accept=0
+>>> and once with raw_l3mdev_accept=1. Unless I'm missing something, this
+>>> option shouldn't affect non-VRF users. Maybe the objective is to make
+>>> sure that it really doesn't affect them. David certainly knows better.
+>>
+>> The problem appears to be that non-VRF tests are being ran with
+>> raw_l3mdev_accept={0|1}, while VRF tests w raw_l3mdev_accept={1|1} ...
+> 
+> The reason the VRF tests run twice is to test both raw and ping sockets
+> (using the "net.ipv4.ping_group_range" sysctl). It doesn't seem anyone
+> ever intended to run the VRF tests with raw_l3mdev_accept=0.
+> 
+> Only the non-VRF tests were intended to be tested with
+> raw_l3mdev_accept=0 (see commit c032dd8cc7e2 ("selftests: Add ipv4 ping
+> tests to fcnal-test")). But I have no idea why.
+
+Well, you are not to blame if it is not documented.
+
+This thing doesn't come out of the testsuite save by prayer and fasting,
+I'm afraid ;-)
+
+Best regards,
+Mirsad
