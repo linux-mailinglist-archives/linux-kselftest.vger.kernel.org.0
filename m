@@ -2,122 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3EC731D46
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jun 2023 18:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE241731E04
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jun 2023 18:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjFOQCZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Jun 2023 12:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S235699AbjFOQmS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Jun 2023 12:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjFOQCY (ORCPT
+        with ESMTP id S234656AbjFOQlt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:02:24 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86481E4;
-        Thu, 15 Jun 2023 09:02:22 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31109cd8d8cso1699621f8f.2;
-        Thu, 15 Jun 2023 09:02:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686844941; x=1689436941;
-        h=content-transfer-encoding:subject:cc:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SuwWGq/HZTxd+1ns842IDWBOssilEnZa9jIQGRloFJA=;
-        b=f3q81OD5ezF4qhYMYUbnN+WtLhIvVBfMYV4g1xtJKhjK7wFmV5gErSXzTP1kZ6LBG5
-         60ghM80tKdOR7U3UAP5VnGZSurLa+9hP1j9otZXiyL26B6cwyTDoxIhxdi9svkB3zLhk
-         esXYJlm5FDk+2iiQY7csUZcjPJXM6uQG9V0ooaVGBejvlB9DSyKK+3+JvHItNmChoS17
-         pixbcCgLEDzf3i6Q+dyVGxsLaf8/Qg/0LXxMWlskC4BAQzxxT66stQ9zr8SNfBR0QRn1
-         pYJ2+8NGv7p4tMZWMcDyCPV7iC2tc5XMix76b+LpytznRXLHnjkSXEAA5UKBVcZ3QG/i
-         iQDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686844941; x=1689436941;
-        h=content-transfer-encoding:subject:cc:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SuwWGq/HZTxd+1ns842IDWBOssilEnZa9jIQGRloFJA=;
-        b=Zd2OrDFi0cuc5aESUjIG6VmBb/qF5EhynJ8C7UhuyQCFiJSOBMa1ajJQQ/J+TjiXJi
-         fCOysuGNTEzTbWZ6n0aJnlXpXu9adOe3necv7Tgn7iOczqpiIsyQDQaNg+NUNJqmw+l2
-         u/xs42/iLVDobbgvPSt3FGfwHgwUa4SNWkEtrCIJaPgTThJJP4vxSsu1BHLWfrjRWWCD
-         xkWSzP+3QP3h9chzrJnA4gVvXDLuszpYjwi3eY7I7t1i0q/12VYQdcR3HOFrfnQm4c15
-         Fm1tkVVnluCj9wggjKABgGviYeK7soB8bT9ikSNgT2DNRS2Dt2MkRf4zsCBIrHi1gYyR
-         JUPQ==
-X-Gm-Message-State: AC+VfDyXQhk9DdN5RQCoedyVbmuMwzKtVKUcwvFHEYAbm4jLxO+vQP40
-        wLFSU6pS6TCMElxc0dvl3uM0GhYfo0Pxjg==
-X-Google-Smtp-Source: ACHHUZ5MqPAJT3yys/PhcsaiSphe9kaP3XoGrFoelWEJzR7ufELNuAC+SxXIe55D9uq6SoyF4MjE5A==
-X-Received: by 2002:adf:ff87:0:b0:311:1b27:74a6 with SMTP id j7-20020adfff87000000b003111b2774a6mr569553wrr.28.1686844940673;
-        Thu, 15 Jun 2023 09:02:20 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id f9-20020a5d6649000000b0030f9dc63ff1sm19454197wrw.88.2023.06.15.09.02.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 09:02:20 -0700 (PDT)
-Message-ID: <7a853516-9da5-811b-1e9c-84e5483a8a08@gmail.com>
-Date:   Thu, 15 Jun 2023 17:02:18 +0100
+        Thu, 15 Jun 2023 12:41:49 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8381D26BE;
+        Thu, 15 Jun 2023 09:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686847308; x=1718383308;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UTdtQ48myodzviQFiluUyD/WYttOZ7wHOsyrQVk4600=;
+  b=mcqyMS2noeM720S+aSmOABbNdgJV7qco1TtkwL3g0CBVJJl7XUTBL4Ac
+   18JViy1HgMwf8Kj7364sgWCYO4DZitE/h0s4BOKzNx2LZ1JR/+wQoFeJA
+   J8GbG+eQazrTzjMtqC2jEb5wIFIB8CdlWmqI4RKTAR400pZ8Zf5+SSUtk
+   U/WY8XI6w8IEtznMvJ058iEEev4CBYe47NENa8mZSUarYiotKLXZPCA1o
+   A0Zlgr2TpD/HYPJYvLSUjtEUGJIzDghJqx06RuFNYIBxm1z8q2VGsFZSq
+   uYZXL4Ges8y2R2zVKQttHuqjx7DeIZck/x+aqHI+gVCnCJAA/6gRe8RVP
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="422608736"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="422608736"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 09:41:47 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="745644899"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="745644899"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 15 Jun 2023 09:41:40 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q9q2V-0000Ag-18;
+        Thu, 15 Jun 2023 16:41:39 +0000
+Date:   Fri, 16 Jun 2023 00:40:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
+Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <202306160006.dNg0cOoc-lkp@intel.com>
+References: <20230615141144.665148-3-usama.anjum@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Shuah Khan <shuah@kernel.org>,
-        Nicholas Miehlbradt <nicholas@linux.ibm.com>,
-        Nicholas Miehlbradt <nicholas@linux.ibm.com>,
-        Benjamin Gray <bgray@linux.ibm.com>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: file removal issue in tools/testing/selftests/powerpc/mm/tlbie_test.c
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615141144.665148-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Hi Muhammad,
 
-Static analysis with cppcheck has found an issue in the following commit:
+kernel test robot noticed the following build warnings:
 
-commit 047e6575aec71d75b765c22111820c4776cd1c43
-Author: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Date:   Tue Sep 24 09:22:53 2019 +0530
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on next-20230615]
+[cannot apply to linus/master v6.4-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-     powerpc/mm: Fixup tlbie vs mtpidr/mtlpidr ordering issue on POWER9
+url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230615-225037
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230615141144.665148-3-usama.anjum%40collabora.com
+patch subject: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230616/202306160006.dNg0cOoc-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch akpm-mm mm-everything
+        git checkout akpm-mm/mm-everything
+        b4 shazam https://lore.kernel.org/r/20230615141144.665148-3-usama.anjum@collabora.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash fs/proc/
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306160006.dNg0cOoc-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/asm-generic/bug.h:5,
+                    from arch/m68k/include/asm/bug.h:32,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/mm.h:6,
+                    from include/linux/pagewalk.h:5,
+                    from fs/proc/task_mmu.c:2:
+   fs/proc/task_mmu.c: In function 'pagemap_scan_args_valid':
+>> fs/proc/task_mmu.c:2148:32: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    2148 |                 if (!access_ok((void __user *)arg->vec,
+         |                                ^
+   include/linux/compiler.h:76:45: note: in definition of macro 'likely'
+      76 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   fs/proc/task_mmu.c:2148:22: note: in expansion of macro 'access_ok'
+    2148 |                 if (!access_ok((void __user *)arg->vec,
+         |                      ^~~~~~~~~
 
 
-The issue in tools/testing/selftests/powerpc/mm/tlbie_test.c in 
-end_verification_log() is as follows:
+vim +2148 fs/proc/task_mmu.c
 
-static inline void end_verification_log(unsigned int tid, unsigned 
-nr_anamolies)
-{
-         FILE *f = fp[tid];
-         char logfile[30];
-         char path[LOGDIR_NAME_SIZE + 30];
-         char separator[] = "/";
+  2115	
+  2116	static int pagemap_scan_args_valid(struct pm_scan_arg *arg, unsigned long start,
+  2117					   struct page_region __user *vec)
+  2118	{
+  2119		/* Detect illegal size, flags, len and masks */
+  2120		if (arg->size != sizeof(struct pm_scan_arg))
+  2121			return -EINVAL;
+  2122		if (!arg->flags)
+  2123			return -EINVAL;
+  2124		if (arg->flags & ~PM_SCAN_OPS)
+  2125			return -EINVAL;
+  2126		if (!arg->len)
+  2127			return -EINVAL;
+  2128		if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask |
+  2129		     arg->return_mask) & ~PM_SCAN_BITS_ALL)
+  2130			return -EINVAL;
+  2131		if (!arg->required_mask && !arg->anyof_mask &&
+  2132		    !arg->excluded_mask)
+  2133			return -EINVAL;
+  2134		if (!arg->return_mask)
+  2135			return -EINVAL;
+  2136	
+  2137		/* Validate memory range */
+  2138		if (!IS_ALIGNED(start, PAGE_SIZE))
+  2139			return -EINVAL;
+  2140		if (!access_ok((void __user *)start, arg->len))
+  2141			return -EFAULT;
+  2142	
+  2143		if (IS_PM_SCAN_GET(arg->flags)) {
+  2144			if (!arg->vec)
+  2145				return -EINVAL;
+  2146			if (arg->vec_len == 0)
+  2147				return -EINVAL;
+> 2148			if (!access_ok((void __user *)arg->vec,
+  2149				       arg->vec_len * sizeof(struct page_region)))
+  2150				return -EFAULT;
+  2151		}
+  2152	
+  2153		if (IS_PM_SCAN_WP(arg->flags) && !IS_PM_SCAN_GET(arg->flags) &&
+  2154		    arg->max_pages)
+  2155			return -EINVAL;
+  2156	
+  2157		return 0;
+  2158	}
+  2159	
 
-         fclose(f);
-
-         if (nr_anamolies == 0) {
-                 remove(path);
-                 return;
-         }
-	.... etc
-
-
-in the case where nr_anamolies is zero the remove(path) call is using an 
-uninitialized path, this potentially could contain uninitialized garbage 
-on the stack (and if one is unlucky enough it may be a valid filename 
-that one does not want to be removed).
-
-Not sure what the original intention was, but this code looks incorrect 
-to me.
-
-Colin
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
