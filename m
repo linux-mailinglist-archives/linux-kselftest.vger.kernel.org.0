@@ -2,64 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D3A732649
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jun 2023 06:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A09732656
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jun 2023 06:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjFPEo6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Jun 2023 00:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
+        id S230227AbjFPEve (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Jun 2023 00:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbjFPEo5 (ORCPT
+        with ESMTP id S229680AbjFPEvd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Jun 2023 00:44:57 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8082D60
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 21:44:54 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f7e4953107so35395e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 21:44:54 -0700 (PDT)
+        Fri, 16 Jun 2023 00:51:33 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AB32D5E
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 21:51:30 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f7f7dfc037so63815e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 21:51:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686890693; x=1689482693;
+        d=google.com; s=20221208; t=1686891089; x=1689483089;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SMFTyYpDhe02h6zqRBcNOLQgrG+39PW2kTyx/lH9zFs=;
-        b=c1suV+5wdjLre9OVPmGTW2w2qkCAQPUMx1Mocox291QMT37D8SZPz3fXUTC61DYDde
-         VpXkoRIRsLLSEfB8y5Pw5Mcm3BO5sKLDUB9tFiPhHbpwx8bDdKUJVOVvT+pY3M66+3qO
-         ZEc/xjfDzvrPX/G3ZIfcCrLmbwbYUg754+p5yEVQY6a/wB2vvT3Oei6H9yRt/IhFEqyO
-         8GD/LnkxCL0XxfXsg3UPppqeKMNzYkx+eq5Uj4cop2J6nWDIzih/9784XQbj28gGPfZ8
-         z0Jg8u3A6Tz4rYrOepSDbZmp0d74H1Ad3by+CU5NVRI4Ivepy+jYrTE+N8BsQ/+VdBLA
-         5ELQ==
+        bh=Z56boQSsNwOBqLSY9wFGdNBHgu9yQ7dwEWW7p2DORcU=;
+        b=CDDp1pDSxj0LkHfYQiczu7uOPESvyCX8ED+qtso/R8hnBRQsGPjCdd5LKVADCcuxVk
+         4LJZ+134cEQ3ki1Pqz453dVuZ+IzZp36g/dR+Cl/DdCs0+afheVTTth+esOD6GkWwLr7
+         I9knD2Ae6rIl9LnsnnV/Sm3k+eNDjF3erVxYxf63OqOls+W2g4qtxCK48X30JmlE3Mz9
+         AoNdlYBM0BpO+qwLBfOWJ1wgw4eebkAcQ6tXCWO4mmZyp4x7a5CmcNNcAprx5eFb9feu
+         T1fP1iUgmY3ZOT9xFsYXZnY+LD7/GOteZcjvx7DDsCwImgOewjLdrzSafclWMIzutXsL
+         higw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686890693; x=1689482693;
+        d=1e100.net; s=20221208; t=1686891089; x=1689483089;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SMFTyYpDhe02h6zqRBcNOLQgrG+39PW2kTyx/lH9zFs=;
-        b=D2uOa46uSzGAAgh/sSjJMcdFPhlqPskzBgRcd4z9lfWO/Dzumu3ylTWDYySmmhRm0s
-         wNBz08Y+0YMBslfJa90nWIvPBmcAmy9T/HjWcryS4OJnoR0XXAUZrw8O3WOhgk8lvt1S
-         zdqhJEGzfA7kpgy+rFsXJef/N+zGIHLauXLFKb2+VD+sIBVdlYWxKyXCkfBxbz5L8ghx
-         XzV1Dp0PKtMhCSO18Ev9vX1W2mXHlTOaS3Ds+wcXNdCuAT8dM2FA0/6t3WafYaHx7jgu
-         xNThtfogOAd+ooP8hDivYOYyVpDSIytJXWk0tjW7PVhu1jQVYgBTSZLiaS2wRFlW+ot9
-         jI/Q==
-X-Gm-Message-State: AC+VfDxo968PQUnYFx0L5GG653OWEav/t3ocSNapg7znEEgLNhKs6iqD
-        CQgC321Mr7miOH3oScRi9abH2UP+wYocpKk+gKPzJg==
-X-Google-Smtp-Source: ACHHUZ43T5o0/QcnCpa8gkggBRo9TYwSRv+3WKVupAW34Bzg40C99N9GCRCSwIj91wqKxc5fZjUj1tZiPKO3LcVPVIQ=
-X-Received: by 2002:a05:600c:2255:b0:3f7:e463:a0d6 with SMTP id
- a21-20020a05600c225500b003f7e463a0d6mr355264wmm.0.1686890692987; Thu, 15 Jun
- 2023 21:44:52 -0700 (PDT)
+        bh=Z56boQSsNwOBqLSY9wFGdNBHgu9yQ7dwEWW7p2DORcU=;
+        b=gaS9sG4E1kIzH2GIFIw2bRHpDhZBSNPRAC1oZRagSGRItISgkKkRXhCqoJZHZoDWGP
+         uQ6lNjXTc4a77hlRQ/9WYniHI6d9VhMmc2Pb3K75RDP+VTCBSpLrOYnWC6EYDcE1P9sT
+         ZILNQyRA/N3ys5vJ0KxgYfV3QIjzDwJlUCvOVxw3HDM7mRfVESz1G8Tx1yaxbtinOc4y
+         XoIRavxuTt5Uk5oUhWvIMcs+oMFjQMwL/oepY8s/0ewTdlmpic5pclAc87cc5vk3KNrQ
+         E4R75rLzHd3tOwU5SY/ynqIzdl6wbECtF6JbrbJeSx6UMtWYACPES2JAadeCJl+u7uQc
+         o4ZA==
+X-Gm-Message-State: AC+VfDyydRH2f+pYEGNfVf0RycA9LzjVaGcwn20Igxb6xffy2dO9b5oF
+        QWdeDoTAkX+mvcGf3XdEH6EnkKJ0AstUZcYsfLaipw==
+X-Google-Smtp-Source: ACHHUZ7FR3MPBinMMBNYI1cpnVFLVNY1HWK/H3/0/hgiIgUYEYCAqFHD2AIQ7yOQiQsq3WJSFAR3iKQKYM9g/iLtAog=
+X-Received: by 2002:a05:600c:4e52:b0:3f7:e4d8:2569 with SMTP id
+ e18-20020a05600c4e5200b003f7e4d82569mr328353wmq.5.1686891089101; Thu, 15 Jun
+ 2023 21:51:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230614180837.630180-1-ojeda@kernel.org> <ZIps86MbJF/iGIzd@boqun-archlinux>
- <CANiq72kHEddR-D17Ykr3xtU20rDJn517fqHRUX+-kWHjYqu9PA@mail.gmail.com>
-In-Reply-To: <CANiq72kHEddR-D17Ykr3xtU20rDJn517fqHRUX+-kWHjYqu9PA@mail.gmail.com>
+References: <20230614180837.630180-1-ojeda@kernel.org>
+In-Reply-To: <20230614180837.630180-1-ojeda@kernel.org>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 16 Jun 2023 12:44:39 +0800
-Message-ID: <CABVgOSk8bK-xzp-681t0E4j3+tjuraCysD+uUaLaC5otPZzRCQ@mail.gmail.com>
+Date:   Fri, 16 Jun 2023 12:51:15 +0800
+Message-ID: <CABVgOSnprvxzi-z42KFjOZsiRUv7u7E2poVGJNmTfS2OU4x4AA@mail.gmail.com>
 Subject: Re: [PATCH 0/6] KUnit integration for Rust doctests
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
         Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
         Benno Lossin <benno.lossin@proton.me>,
         Alice Ryhl <aliceryhl@google.com>,
@@ -68,104 +66,104 @@ Cc:     Boqun Feng <boqun.feng@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
         linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
         linux-kernel@vger.kernel.org, patches@lists.linux.dev
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008db85005fe37d8c9"
+        boundary="0000000000002aa5ba05fe37f094"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL,WEIRD_PORT autolearn=ham autolearn_force=no
-        version=3.4.6
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000008db85005fe37d8c9
+--0000000000002aa5ba05fe37f094
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, 15 Jun 2023 at 16:20, Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
+On Thu, 15 Jun 2023 at 02:09, Miguel Ojeda <ojeda@kernel.org> wrote:
 >
-> On Thu, Jun 15, 2023 at 3:44=E2=80=AFAM Boqun Feng <boqun.feng@gmail.com>=
- wrote:
-> >
-> > Great work! I've played this for a while, and it's really useful ;-)
+> This is the initial KUnit integration for running Rust documentation
+> tests within the kernel.
 >
-> Thanks!
+> Thank you to the KUnit team for all the input and feedback on this
+> over the months, as well as the Intel LKP 0-Day team!
 >
-> > The assertion warning only says line 35 but which file? Yes, the
-> > ".._sync_lock_spinlock_rs" name does provide the lead, however since we
-> > generate the test code, so we actually know the line # for each real
-> > test body, so I come up a way to give us the following:
-> >
-> >         [..] # rust_doctest_kernel_sync_lock_spinlock_rs_0: ASSERTION F=
-AILED at rust/kernel/sync/lock/spinlock.rs:61
-> >         [..] Expected e.c =3D=3D 11 to be true, but is false
-> >         [..] [FAILED] rust_doctest_kernel_sync_lock_spinlock_rs_0
-> >
-> > Thoughts?
-
-I like it.
-
-A part of me would like to keep the
-kernel::kunit::info(format_args!("    # Doctest from line {line}\n"));
-
-If only so we can preserve the line information when the tests
-actually pass. This is something that'd probably ultimately fit as a
-"test attribute":
-https://lore.kernel.org/linux-kselftest/20230610005149.1145665-1-rmoar@goog=
-le.com/
-
-For C tests we're not bothering outputting line numbers now (though
-again, are considering if we can do it with an attribute), but those
-tests have much more searchable names, so I think it still makes sense
-for the Rust ones.
-
-How about printing something like:
-    # source_line: {}
-
-kunit.py will hide this when the test passes unless the user
-explicitly passes --raw_output.
-
+> This may be merged through either the KUnit or the Rust trees. If
+> the KUnit team wants to merge it, then that would be great.
 >
-> Sounds good to me. However, David/Philip, is this OK or do you really
-> need/use the actual/compiled source file there? If you don't need it,
-> does it need to exist / be a real file at least? If the latter answer
-> is a "yes", which I guess it may be likely, then:
-
-I don't think there's anything automated using the file:line in
-assertion messages, it's just for human consumption.
-This may change in the future (and there are probably some text
-editors around which will turn a path like that into, e.g., a
-clickable link now), but we're not currently doing anything which
-would actually open the file.
-
+> Please see the message in the main commit for the details.
 >
-> > +        let src_file =3D format!("rust/kernel/{}", file.replace("_rs",=
- ".rs").replace("_", "/"));
 >
-> This would not work for files with a `_` in their name, like
-> `locked_by.rs`. I guess we could still find the real filename based on
-> that information walking the dir, which is another hack I recall
-> considering at some point.
->
-> Otherwise, if "fake" filenames in the line above are OK for
-> David/Philip (I suspect they may want to open them for reporting?),
-> then I guess the `file` one may be good enough and eventually we
-> should get `rustdoc` to give us the proper metadata anyway.
 
-Personally, I'd think a "fake filename" is okay (especially if it's
-temporary until we can get the right one), though I'd prefer there to
-be some indication that it's "fake": maybe leaving the _ separator in,
-or wrapping it in brackets, or something? Unless the whole
-walk-the-filesystem technique ends up being worth doing, so we don't
-have a significant chance of the filename being dud.
+Thanks very much for putting this together! I've been looking forward
+to it, and it works well here.
 
+I've been running it on linux-next to get both the pending KUnit and
+Rust changes, and it works well apart from needing to fix a couple of
+conflicts from
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=260755184cbdb267a046e7ffd397c1d2ba09bb5e
+
+In particular, the tests run with:
+./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_RUST=y
+--make_options LLVM=1 'rust_doctests_kernel'
+
+And also under QEMU / x86_64 with:
+./tools/testing/kunit/kunit.py run --arch x86_64 --kconfig_add
+CONFIG_RUST=y --make_options LLVM=1 'rust_doctests_kernel'
+
+(And I'm looking forward to trying out the other architecture support
+patches with it, too)
+
+The doctests also run nicely as part of the default test suite when
+CONFIG_RUST=y. At some point, we might want to add a Rust-specific
+.kunitconfig to make it easier to just run Rust-related test suites,
+but it's not a big deal for just these.
+
+I assume we'll take this in via the kselftest/kunit tree for 6.6, but
+if you'd rather take them via the Rust tree, that's fine too.
+
+Cheers,
 -- David
 
---0000000000008db85005fe37d8c9
+> Miguel Ojeda (6):
+>   rust: init: make doctests compilable/testable
+>   rust: str: make doctests compilable/testable
+>   rust: sync: make doctests compilable/testable
+>   rust: types: make doctests compilable/testable
+>   rust: support running Rust documentation tests as KUnit ones
+>   MAINTAINERS: add Rust KUnit files to the KUnit entry
+>
+>  MAINTAINERS                       |   2 +
+>  lib/Kconfig.debug                 |  13 +++
+>  rust/.gitignore                   |   2 +
+>  rust/Makefile                     |  29 ++++++
+>  rust/bindings/bindings_helper.h   |   1 +
+>  rust/helpers.c                    |   7 ++
+>  rust/kernel/init.rs               |  25 +++--
+>  rust/kernel/kunit.rs              | 156 ++++++++++++++++++++++++++++
+>  rust/kernel/lib.rs                |   2 +
+>  rust/kernel/str.rs                |   4 +-
+>  rust/kernel/sync/arc.rs           |   9 +-
+>  rust/kernel/sync/lock/mutex.rs    |   1 +
+>  rust/kernel/sync/lock/spinlock.rs |   1 +
+>  rust/kernel/types.rs              |   6 +-
+>  scripts/.gitignore                |   2 +
+>  scripts/Makefile                  |   4 +
+>  scripts/rustdoc_test_builder.rs   |  73 ++++++++++++++
+>  scripts/rustdoc_test_gen.rs       | 162 ++++++++++++++++++++++++++++++
+>  18 files changed, 484 insertions(+), 15 deletions(-)
+>  create mode 100644 rust/kernel/kunit.rs
+>  create mode 100644 scripts/rustdoc_test_builder.rs
+>  create mode 100644 scripts/rustdoc_test_gen.rs
+>
+>
+> base-commit: d2e3115d717197cb2bc020dd1f06b06538474ac3
+> --
+> 2.41.0
+>
+
+--0000000000002aa5ba05fe37f094
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -232,14 +230,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBI
-P+O6+dazwqrc99kmjSiKXG19WMYN3V8rL7GAvD4E+DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA2MTYwNDQ0NTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBh
+brAPq8qwowPYpxbubQesKqsKSMPOB3lxN08UqPGxxDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA2MTYwNDUxMjlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEACxnsFaji0414XS7qtM7N
-uqz+d5OLI+GKrv4wlG/1kcK20DsR5CbqeGZqFsAkTw5QTgYaXCVSBXrzrNKJ9He2e5pTJsvnDbv7
-/KrT4qBd+0e2ECpB82eMnM9E2reOzgULuiurWKi4btSP7vgH+VLwxlk7oY2tSSkEvngvsWblTw94
-bAcbxoXP8J9TWH3oDQYjlaS3kMu6U++2HSda5GjFjsPzNSf/1X+0CqzgdOnMMxPYyXpyn6x1Ofmn
-CS5maYnM8guZNT2lU9KWytFWCyPxogp+W+lND2xhNSgkeEjc6IJE3RhzpKU3A0g5TRkgd157YD5y
-ppLj1PbSJLUw1yWw6g==
---0000000000008db85005fe37d8c9--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAc9R1iFjzspMO7nbxCAhO
+3MFy0KH6RDo6pHQHqT7ZF/OK5QxG/ws+Qs0pQmWKaAJUHjsLM+mqNS8SqKZbzASP27S7f7j6KOk4
+dkuhRqoOs6i8xNT6VdBCiUXT4bzUsU8l7RWUdq1Rn2N9C8UAfdOqBBrlAlUOCmyR5656B+cayImE
+lcB5WW3JE7c+vbDOOBHUd0mrZHHtYjsNUf5Ebr04h6EICAU8XCZp/WmjOM45Gx420XEaGigoOnZg
+t8S0GWd7T4Wqn41v9YzqNI+v6DMpjTi+ezpX2zo79Vd7AT9/luC69khIkyLTOrE3JH4p980uG4kI
+mEXTmwrD15dTnw0CqA==
+--0000000000002aa5ba05fe37f094--
