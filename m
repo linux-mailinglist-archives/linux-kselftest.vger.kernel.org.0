@@ -2,98 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DAE7326A0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jun 2023 07:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC3D7327B2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jun 2023 08:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241221AbjFPFan (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Jun 2023 01:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S242017AbjFPGfR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Jun 2023 02:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240942AbjFPFa1 (ORCPT
+        with ESMTP id S233557AbjFPGfG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Jun 2023 01:30:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAAE2D6A;
-        Thu, 15 Jun 2023 22:30:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9CD561DA9;
-        Fri, 16 Jun 2023 05:30:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E6EF4C433C9;
-        Fri, 16 Jun 2023 05:30:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686893423;
-        bh=r4MmrsvbionKD2QAyPaftFnsfjcVFtcE4wKGX9A+nyg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rbNYM5iOqMZwA0fvSJKEHMPeMs+wOHMqX03lVuV5evWb2i2XECQKFLGniibVI3duN
-         IDRY9QXhQMJDO+DCS8HUZX8xAZSLz7i+tanQTlnpTgMtU14oIT43oTJNCcVA1ra1fS
-         U6RhX8GciNo+dzkPNx7ZlVizYl/mesE15VxoD4CQpfi8DHnYpXVN2Rs2J9zp9safBK
-         jPOZRsxPgS79jGir7MfDyV5JLUFVqI1pKvJaI3RHEtrEi+AK++Qr7fHCPew2eD1p7p
-         AwSOumVYrRQGyB1mFUb6FTjI2gOfMn/Y3NpFE4CTzilYmTj7+1K8By9HdWNQwVq1+F
-         aZKJEosZCpOmg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C50DCC3274B;
-        Fri, 16 Jun 2023 05:30:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 16 Jun 2023 02:35:06 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FCC2713;
+        Thu, 15 Jun 2023 23:34:55 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1686897289tpepxrqb
+Received: from linux-lab-host.localdomain ( [116.30.128.97])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 16 Jun 2023 14:34:48 +0800 (CST)
+X-QQ-SSF: 00200000000000D0V000000A0000000
+X-QQ-FEAT: 3M0okmaRx3iREJ5lnYaDqqM4+04IMqux9Ah0gOBvfj2Y69UC1s6BhbgKVLLuG
+        NPijFSGCVcoH89fMsKVosOAFKdxmoGNY1CYWLLGH5BbPgon+uIGWeXEGKUa3xVONkw6qU/q
+        HwJTCzvgKm7mTH4r8ewGpQYUk3VMp0VCMlchCtPo1vT/j5UEr3Syg5TvDCQ92x7FkIjVyOC
+        +RULS07OVpQ0M9Ev+hv9zP2kd+hnHJdktYdJUo1FWVSV4anFWrgJPuv8r5lLmZm8D5cLser
+        nqOX3qbWrYR0jBjafK+4DlwS6ingv8XFuo1ppSbRO6+xk9VDwcRQ9IBFqQZ+/p2kVUgsQJT
+        LXUJkZJ1WfzrBqlWJ4aoyRfRhZQtg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 4452696690556417832
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     wuyonggang001@208suo.com
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, w@1wt.eu
+Subject: [PATCH] selftests/nolibc: Remove unneeded variable
+Date:   Fri, 16 Jun 2023 14:34:48 +0800
+Message-Id: <20230616063448.14099-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <f964d3dbc6362c2cae56bdbdc05befea@208suo.com>
+References: <f964d3dbc6362c2cae56bdbdc05befea@208suo.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 0/4] Check if FIPS mode is enabled when running selftests
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168689342279.5522.4120374614331476094.git-patchwork-notify@kernel.org>
-Date:   Fri, 16 Jun 2023 05:30:22 +0000
-References: <20230613123222.631897-1-magali.lemes@canonical.com>
-In-Reply-To: <20230613123222.631897-1-magali.lemes@canonical.com>
-To:     Magali Lemes <magali.lemes@canonical.com>
-Cc:     davem@davemloft.net, dsahern@gmail.com, edumazet@google.com,
-        keescook@chromium.org, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, tianjia.zhang@linux.alibaba.com,
-        vfedorenko@novek.ru, andrei.gherzan@canonical.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+Hi, Yonggang
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+The 'ret' variable is extractly used by the macros to record the
+failures, removing it would directly break the compiling.
 
-On Tue, 13 Jun 2023 09:32:18 -0300 you wrote:
-> Some test cases from net/tls, net/fcnal-test and net/vrf-xfrm-tests
-> that rely on cryptographic functions to work and use non-compliant FIPS
-> algorithms fail in FIPS mode.
+    $ gcc -o nolibc-test tools/testing/selftests/nolibc/nolibc-test.c
+    tools/testing/selftests/nolibc/nolibc-test.c: In function ‘run_syscall’:
+    tools/testing/selftests/nolibc/nolibc-test.c:285:57: error: ‘ret’ undeclared (first use in this function)
+      285 |  do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_sysne(expr, llen, val); } while (0)
+
+You can re-check all of the used 'ret' like this:
+
+    $ grep "ret += expect" -ur tools/testing/selftests/nolibc/nolibc-test.c
+
+To avoid sending such patches, simple local tests are required, for this patch,
+the 'libc-test' or 'nolibc-test' target may help us to find the above compile
+error:
+
+    $ cd tools/testing/selftests/nolibc/
+    $ make libc-test
+    or
+    $ make nolibc-test
+
+Thanks,
+Zhangjin
+
+> Fix the following coccicheck warning:
 > 
-> In order to allow these tests to pass in a wider set of kernels,
->  - for net/tls, skip the test variants that use the ChaCha20-Poly1305
-> and SM4 algorithms, when FIPS mode is enabled;
->  - for net/fcnal-test, skip the MD5 tests, when FIPS mode is enabled;
->  - for net/vrf-xfrm-tests, replace the algorithms that are not
-> FIPS-compliant with compliant ones.
+> tools/testing/selftests/nolibc/nolibc-test.c:646:5-8: Unneeded variable: 
+> "ret". Return "0"
 > 
-> [...]
-
-Here is the summary with links:
-  - [v4,1/4] selftests/harness: allow tests to be skipped during setup
-    https://git.kernel.org/netdev/net/c/372b304c1e51
-  - [v4,2/4] selftests: net: tls: check if FIPS mode is enabled
-    https://git.kernel.org/netdev/net/c/d113c395c67b
-  - [v4,3/4] selftests: net: vrf-xfrm-tests: change authentication and encryption algos
-    https://git.kernel.org/netdev/net/c/cb43c60e64ca
-  - [v4,4/4] selftests: net: fcnal-test: check if FIPS mode is enabled
-    https://git.kernel.org/netdev/net/c/d7a2fc1437f7
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
+> ---
+>   tools/testing/selftests/nolibc/nolibc-test.c | 15 ++++++---------
+>   1 file changed, 6 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c 
+> b/tools/testing/selftests/nolibc/nolibc-test.c
+> index 486334981e60..2b723354e085 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -546,7 +546,6 @@ int run_syscall(int min, int max)
+>       int proc;
+>       int test;
+>       int tmp;
+> -    int ret = 0;
+>       void *p1, *p2;
+> 
+>       /* <proc> indicates whether or not /proc is mounted */
+> @@ -632,18 +631,17 @@ int run_syscall(int min, int max)
+>           CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, 
+> syscall(__NR_getpid), getpid()); break;
+>           CASE_TEST(syscall_args);      EXPECT_SYSER(1, 
+> syscall(__NR_statx, 0, NULL, 0, 0, NULL), -1, EFAULT); break;
+>           case __LINE__:
+> -            return ret; /* must be last */
+> +            return 0; /* must be last */
+>           /* note: do not set any defaults so as to permit holes above */
+>           }
+>       }
+> -    return ret;
+> +    return 0;
+>   }
+> 
+>   int run_stdlib(int min, int max)
+>   {
+>       int test;
+>       int tmp;
+> -    int ret = 0;
+>       void *p1, *p2;
+> 
+>       for (test = min; test >= 0 && test <= max; test++) {
+> @@ -726,11 +724,11 @@ int run_stdlib(int min, int max)
+>   # warning "__SIZEOF_LONG__ is undefined"
+>   #endif /* __SIZEOF_LONG__ */
+>           case __LINE__:
+> -            return ret; /* must be last */
+> +            return 0; /* must be last */
+>           /* note: do not set any defaults so as to permit holes above */
+>           }
+>       }
+> -    return ret;
+> +    return 0;
+>   }
+> 
+>   #define EXPECT_VFPRINTF(c, expected, fmt, ...)                \
+> @@ -790,7 +788,6 @@ static int run_vfprintf(int min, int max)
+>   {
+>       int test;
+>       int tmp;
+> -    int ret = 0;
+>       void *p1, *p2;
+> 
+>       for (test = min; test >= 0 && test <= max; test++) {
+> @@ -810,11 +807,11 @@ static int run_vfprintf(int min, int max)
+>           CASE_TEST(hex);          EXPECT_VFPRINTF(1, "f", "%x", 0xf); 
+> break;
+>           CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x1", "%p", (void 
+> *) 0x1); break;
+>           case __LINE__:
+> -            return ret; /* must be last */
+> +            return 0; /* must be last */
+>           /* note: do not set any defaults so as to permit holes above */
+>           }
+>       }
+> -    return ret;
+> +    return 0;
+>   }
+> 
+>   static int smash_stack(void)
+> 
