@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD5073265A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jun 2023 06:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAAB73265D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jun 2023 06:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbjFPEwJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Jun 2023 00:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
+        id S238959AbjFPEwX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Jun 2023 00:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232349AbjFPEwF (ORCPT
+        with ESMTP id S232562AbjFPEwL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Jun 2023 00:52:05 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2AB30C5
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 21:52:00 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so3501a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 21:51:59 -0700 (PDT)
+        Fri, 16 Jun 2023 00:52:11 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA42F2D61
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 21:52:07 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so6018a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jun 2023 21:52:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686891118; x=1689483118;
+        d=google.com; s=20221208; t=1686891126; x=1689483126;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2CqFlenyv6GNiYZq9+pxwSbrjfGK5zQB0E2cS/Kxx7E=;
-        b=E74GasDSXHwmrcUpR56cWlLGt2cyUPZjtjrOXPXQER7f37wW8GiztJcW6zXPH8wb0U
-         Wn9LIL7ykzUa6fUPVZl/GVMRhoHrwac5fi+CaF6laFltYfPX1Sz11UEdzi5ne29mP+RL
-         sykhuHVl+UuWpD2ZAr11HNA8LmyP2ZI+VqT85m2UwRBqUtPVm0JUqA3p+8c5QOYHJLuS
-         Ef8IcnL5FcQ2EZdFc/o6YwrRrTLebKqq5307Ib9mWDrtacu/SaLWqQxz/1de4sEHHc/U
-         y1pLCEAIg9a+XczNAzXQw/2ggy53miYtBsHEkwxNEKRUoO+CPd3OAyrxlQix8K5ZR1af
-         fKRg==
+        bh=2KLYJ0Pxk37JP4tsduiVQ1WfJC97h+ikHPOopdeBTx0=;
+        b=UkI4DEfRbqhNF/3+CN2KG+/OuRGTT5Z69gHx04C0FrTT7RffJk9UdddN7a0lLXfifZ
+         rRU2u9IYktZ0SvSMzbGe4v8703E6rdVIcrvDlbFLReQX8egn5bmAveLJ/PzuIu5K3Yno
+         Lxzdxj1wvL+ZEnBhrXfONqk0dx2wRQapBj6wHbb53TI6MCKFtQYgE+agZ6YsiljezbJW
+         TxOAIJCZURHLB+5twoK7erYDMcbrkWBgGaFmRebkmu1E7GHiPvdN8uNI8zewKpOB/LLy
+         oew+7OtTHoJE41D56FlIESs7T78cVy8QPgyKdsJr7rt8E38pL2XXMCFR2MDmDpZCKsE3
+         m6Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686891118; x=1689483118;
+        d=1e100.net; s=20221208; t=1686891126; x=1689483126;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2CqFlenyv6GNiYZq9+pxwSbrjfGK5zQB0E2cS/Kxx7E=;
-        b=Wo+kD9E2EDtgiFeHeVMpgtTuTEEKsHOdeBF/7QSbPfv6kn37SMD42EPPX0PQ2NF+OJ
-         q1ek9lZB61Ev9y0WlJZ4fYpyssLt3z8yqOXXWDftKmL2SWrW9+3ig3xdz1Jcp78JAz2j
-         7I8p6S48942Rkdw/1dH9+k3Ars331Oce8J+lTNm5e2GcqlwIU7/2wM4NKk9pGqPI8sP5
-         e2gT5mMWkEb7CsJ4RLksunfjBm9JxD2iUw0+3wtNc9Y9/LEnDrUU/yTf1vsck3lcZjgk
-         KDaYdJgIut1FSa3v7pJo8uKf8C/TIVJBGNoHmHHHuviHUC0+rEfoR0EzlDA8nr7EdIaM
-         OwhA==
-X-Gm-Message-State: AC+VfDwhRrimJ+PUEZjOG9pMBtOatDEHaUgDaCJv8K8GNnYj4SJ9sJfo
-        z6nW3OhXK044t7LlAzC86nFkPz6y2VXo5b8uTTmwLA==
-X-Google-Smtp-Source: ACHHUZ6JWBa85IlWLJvPlnOzrt+9MRvefm4pO1BHPoZcsgHo88qjT6jD2BCZgslnMBaDLnXvo7yeGRpZnbfi7ZhmAlQ=
-X-Received: by 2002:a50:9351:0:b0:518:7076:74bc with SMTP id
- n17-20020a509351000000b00518707674bcmr198686eda.1.1686891118309; Thu, 15 Jun
- 2023 21:51:58 -0700 (PDT)
+        bh=2KLYJ0Pxk37JP4tsduiVQ1WfJC97h+ikHPOopdeBTx0=;
+        b=blU9+Mhsuq6nB6b6atrVw+9QMUrXCCvRDjkXGo5A1N9lDPmdNKKgwlQ6dn+A22kMtD
+         tejWi3XY73S8ptURVi0WDu//WqCHHsBaFSwCvof18T88E1+Wps0AfktW6emzTW8sUlzO
+         KskrwGVvNIdTEDFeuQv07NAmIHYP203LPYBOYl0OEeHjIeA28qtCNYnrepR2XZGsR+Zm
+         3G5GHA4/fjhZm/2ydmOpyihUU35XFT+cptkPKvE5wQ9xv0kSoTRiyJliYkOn2M2tuqh4
+         3Y7cAHhbnmYMr1qC2emWbr0Wra/l3nTCIOF2arPEqlW56jbJAzRHaA/m/4iQyH3R26aE
+         z7Mw==
+X-Gm-Message-State: AC+VfDxCJbKrCRODKUZe2YZQUKfQUx0jpjRZmQKln5t7b25USNm02uzK
+        m4GmToy+q9mECz99ymHRZwtQyPffuqGC/7foC4Q0Yw==
+X-Google-Smtp-Source: ACHHUZ7FGNkQTslA9+9FMI/TbImuoNBv0YUrUgYHRM3CAn4xmLu3xqS1im6Rrwy87UAmmue1F1931XAOszBjnihvqiE=
+X-Received: by 2002:a50:d09c:0:b0:51a:1f15:9ddc with SMTP id
+ v28-20020a50d09c000000b0051a1f159ddcmr192604edd.6.1686891126223; Thu, 15 Jun
+ 2023 21:52:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230614180837.630180-1-ojeda@kernel.org> <20230614180837.630180-3-ojeda@kernel.org>
-In-Reply-To: <20230614180837.630180-3-ojeda@kernel.org>
+References: <20230614180837.630180-1-ojeda@kernel.org> <20230614180837.630180-4-ojeda@kernel.org>
+In-Reply-To: <20230614180837.630180-4-ojeda@kernel.org>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 16 Jun 2023 12:51:45 +0800
-Message-ID: <CABVgOS=-1gLk1w0cyKsLU+HufbWHpQ87-tFuW5yHh8Vx9ghfDg@mail.gmail.com>
-Subject: Re: [PATCH 2/6] rust: str: make doctests compilable/testable
+Date:   Fri, 16 Jun 2023 12:51:54 +0800
+Message-ID: <CABVgOSkUhrnic7YV1853n2bo9bHBwJCPBp8Yp7AQdfH1Vv0qkw@mail.gmail.com>
+Subject: Re: [PATCH 3/6] rust: sync: make doctests compilable/testable
 To:     Miguel Ojeda <ojeda@kernel.org>
 Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -66,7 +66,7 @@ Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
         linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
         linux-kernel@vger.kernel.org, patches@lists.linux.dev
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e60bd905fe37f149"
+        boundary="0000000000005e3bdc05fe37f258"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -78,7 +78,7 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000e60bd905fe37f149
+--0000000000005e3bdc05fe37f258
 Content-Type: text/plain; charset="UTF-8"
 
 On Thu, 15 Jun 2023 at 02:09, Miguel Ojeda <ojeda@kernel.org> wrote:
@@ -91,12 +91,14 @@ On Thu, 15 Jun 2023 at 02:09, Miguel Ojeda <ojeda@kernel.org> wrote:
 > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 > ---
 
+Looks good, thanks!
+
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
---000000000000e60bd905fe37f149
+--0000000000005e3bdc05fe37f258
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -163,14 +165,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDV
-s+HrfvJPm73WGg9CXP5/AtP5KX2laG3hZRJy5reREzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA2MTYwNDUxNThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBo
+JX7NdQkwBx6iX1a0EatAWcDVdFQOb2IcOo4rk6T5eTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA2MTYwNDUyMDZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAb6fA13cfBUvDL0yt/y5i
-j5gn0LQf2Qd5pPhJ9o7KSXd6Vnf1Otdrp0Nz4vYYEyx//RtzKAH7+7kIn5HZiqFrGMtuFaNHbpJD
-u+rtAazmg2t8CiNS5pGEPCnAWuTGRYMXZxgleTyyqJfgmXP9m1fF4vKvXyJlHla1ooO1FzEOVFpN
-rPk9eWxf4FlN92WzGuvOj0FhlZb49TEz+K5OLs23pp4As+jgph5mnurG1XnmkXkTdp2D485HRUB9
-DQTXuZtw+Og+MI0gT2dGMlKBEqS3QwgDN0s6l6Oy6jQ3T7giA21c54DKh+zQCoQGEDzMBtQpZdR/
-Ihw3vhZ8hHogI7hkQA==
---000000000000e60bd905fe37f149--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAJAcFiRTUJUyLiiPwd8cp
+lrnUaHY8BRUrM5V1ewsn6P4edMJ6K37sM1+T2UnvMx1J8qjuZiGxl0ik/BCsehwVwMLp/xu084o4
+Se6bgdL7SUIMOIDIw098akeFuHpOU3eooL7CgNZeMP7TesGg+upQAaWZRneQTEyK1MICsFBpoMau
+DqdpeYY582lTbzhZtKbaOyrZPatZCiuFyYx1wtKBre3tFaXPAqZN/oz4o735HMhYVPFRkGkWr7Pr
+poed5BNKPNoQBn6pzBNO0ZhA/SXP9UZv1xcbR+dXYUOwJrMqFXeok998QWPkmcdVI1KJQnT/QTL8
+BYOXRXeniFj6nL0vHA==
+--0000000000005e3bdc05fe37f258--
