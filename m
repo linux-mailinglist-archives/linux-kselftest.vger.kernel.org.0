@@ -2,136 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F60732FE2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jun 2023 13:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B4B73356D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jun 2023 18:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjFPLce (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Jun 2023 07:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        id S235091AbjFPQIx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Jun 2023 12:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbjFPLcd (ORCPT
+        with ESMTP id S229526AbjFPQIw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:32:33 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1092713
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jun 2023 04:32:32 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f642a24568so745309e87.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jun 2023 04:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686915151; x=1689507151;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2nuyRQlcqUJ1I+sHmU3UQhaVpsWzNHbMeXA40SLBfto=;
-        b=DH5R7s1yTiVsAJI1g99s6OalFVFW9cM5DAnNDqJJfwlRotOUA96IF3DT5skABPinz5
-         E4IcsKOQ3I0Rl1kStGkLFAxRCwwg624eQLqtopcQdxXR3xBLUA2PpbggQ7ZzEgEqRcbe
-         zLF4TFVCygtMwuugGFfMrYnwW9LYL8yD4irsAG/DyJmz0CufETPyYE1jSdmH8wJwQ6tx
-         vSjOiWjZxCKLbz+1fw0d11obwbqVVFSHTsLjqc7E95c4rZrMb4MBr8n0fUJ+UFj2gDls
-         a5bE+ElDJi7ADNbMc9uGiuwj+Q1wcaJHUu12vHRDhSs8Nb7M2gleCC8WcLdhD9mV7s2o
-         YiUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686915151; x=1689507151;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2nuyRQlcqUJ1I+sHmU3UQhaVpsWzNHbMeXA40SLBfto=;
-        b=CCgUIj28y0vT5REj1JOQG+eWrzt6DRIokoiGtPre8RjYlzhHW6O5JgbhxdY/IdcMMS
-         eVZokX4+cF1dxpfUqXh4xf/tZGDjoHtOUvHIQqgvThDCidBT7i21+Z3QCdcfE5dhFeMo
-         deCwH8CO7DsXSC8/PzH3rqCtuUNKiJQ64jgOjygRQPwJz727r97Wt7xhUUNCsDyqDs4l
-         Luqc9ZwOU89+65agELz05srKa0EWeXwhOkvOTme3l15OIRFoY05Re+pqshAHy9BzUVkk
-         lvYd2cQ5qXa9X/jnaUjIXa9aqinCHkkqilMlY6V+1fcp0gPRDhqRxcD4Ep4YkWElT4yv
-         uqxg==
-X-Gm-Message-State: AC+VfDzQVzlm6iNxWAolghG1BEQ2q5kbuDxm4GSFy9In0912spHT6ufC
-        E07VYf9JqQDeqniCiInCZv9E2w==
-X-Google-Smtp-Source: ACHHUZ4vwQur9icwi+r14RxKea4abemDipKgtryepasg7loeFJIpKxEcaQTsVhSGPpckiB9/VJ/YOA==
-X-Received: by 2002:a19:4409:0:b0:4f3:b07e:7eb8 with SMTP id r9-20020a194409000000b004f3b07e7eb8mr1138136lfa.29.1686915150597;
-        Fri, 16 Jun 2023 04:32:30 -0700 (PDT)
-Received: from myrica (5750a5b3.skybroadband.com. [87.80.165.179])
-        by smtp.gmail.com with ESMTPSA id w21-20020a1cf615000000b003f8126bcf34sm1879491wmc.48.2023.06.16.04.32.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 04:32:29 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 12:32:32 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Yi Liu <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
-Message-ID: <20230616113232.GA84678@myrica>
-References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+        Fri, 16 Jun 2023 12:08:52 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 320602132;
+        Fri, 16 Jun 2023 09:08:51 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6925A20FF4EB;
+        Fri, 16 Jun 2023 09:08:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6925A20FF4EB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1686931730;
+        bh=Edk+Pe6dwWUZBN6lSPEQX7bkpxex/hiXHOA1uOpPkwE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E5LoPW3oKOYnFRFodgCb2JIWTgMcTLH+kzuuAzQFIzAoYif9rLOtJ69ZTYldyOOu2
+         eSIbQFTVEF5xrcRPAqPP2/GT6JBqSv3a+FPtKZOQZlX4PdgzyiYAkyQnCGrfOlRZTA
+         NtAGF2gtuCz/14xwYnf34enPt5hm3fLTvm1t6ms0=
+Date:   Fri, 16 Jun 2023 09:08:45 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     mhiramat@kernel.org, rostedt@goodmis.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kelulanainsley@gmail.com
+Subject: Re: [PATCH v2 1/3] tracing/user_events: Fix incorrect return value
+ for writing operation when events are disabled
+Message-ID: <20230616160845.GA88@W11-BEAU-MD.localdomain>
+References: <20230609030302.1278716-1-sunliming@kylinos.cn>
+ <20230609030302.1278716-2-sunliming@kylinos.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230530053724.232765-1-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230609030302.1278716-2-sunliming@kylinos.cn>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Baolu,
+On Fri, Jun 09, 2023 at 11:03:00AM +0800, sunliming wrote:
+> The writing operation return the count of writes whether events are
+> enabled or disabled. This is incorrect when events are disabled. Fix
+> this by just return -ENOENT when events are disabled.
+> 
 
-On Tue, May 30, 2023 at 01:37:07PM +0800, Lu Baolu wrote:
-> - The timeout value for the pending page fault messages. Ideally we
->   should determine the timeout value from the device configuration, but
->   I failed to find any statement in the PCI specification (version 6.x).
->   A default 100 milliseconds is selected in the implementation, but it
->   leave the room for grow the code for per-device setting.
+When testing this patch locally I found that we would occasionally get
+-ENOENT when events were enabled, but then become disabled, since writes
+do not have any locking around the tracepoint checks for performance
+reasons.
 
-If it helps we had some discussions about this timeout [1]. It's useful to
-print out a warning for debugging, but I don't think completing the fault
-on timeout is correct, we should leave the fault pending. Given that the
-PCI spec does not indicate a timeout, the guest can wait as long as it
-wants to complete the fault (and 100ms may even be reasonable on an
-emulator, who knows how many layers and context switches the fault has to
-go through).
+I've asked a few peers of mine their thoughts on this, whether an error
+should result when there are no enabled events. The consensus I've heard
+back is that they would not consider this case an actual error, just as
+writing to /dev/null does not actually return an error.
 
-
-Another outstanding issue was what to do for PASID stop. When the guest
-device driver stops using a PASID it issues a PASID stop request to the
-device (a device-specific mechanism). If the device is not using PRI stop
-markers it waits for pending PRs to complete and we're fine. Otherwise it
-sends a stop marker which is flushed to the PRI queue, but does not wait
-for pending PRs.
-
-Handling stop markers is annoying. If the device issues one, then the PRI
-queue contains stale faults, a stop marker, followed by valid faults for
-the next address space bound to this PASID. The next address space will
-get all the spurious faults because the fault handler doesn't know that
-there is a stop marker coming. Linux is probably alright with spurious
-faults, though maybe not in all cases, and other guests may not support
-them at all.
-
-We might need to revisit supporting stop markers: request that each device
-driver declares whether their device uses stop markers on unbind() ("This
-mechanism must indicate that a Stop Marker Message will be generated."
-says the spec, but doesn't say if the function always uses one or the
-other mechanism so it's per-unbind). Then we still have to synchronize
-unbind() with the fault handler to deal with the pending stop marker,
-which might have already gone through or be generated later.
-
-Currently we ignore all that and just flush the PRI queue, followed by the
-IOPF queue, to get rid of any stale fault before reassigning the PASID. A
-guest however would also need to first flush the HW PRI queue, but doesn't
-have a direct way to do that. If we want to support guests that don't deal
-with stop markers, the host needs to flush the PRI queue when a PASID is
-detached. I guess on Intel detaching the PASID goes through the host which
-can flush the host queue. On Arm we'll probably need to flush the queue
-when receiving a PASID cache invalidation, which the guest issues after
-clearing a PASID table entry.
+However, if you feel strongly we need this and have a good use case, it
+seems better to enable this logic behind a flag instead of having it
+default based on my conversations with others.
 
 Thanks,
-Jean
+-Beau
 
-[1] https://lore.kernel.org/linux-iommu/20180423153622.GC38106@ostrya.localdomain/
-    Also unregistration, not sure if relevant here
-    https://lore.kernel.org/linux-iommu/20190605154553.0d00ad8d@jacob-builder/
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> ---
+>  kernel/trace/trace_events_user.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index 1ac5ba5685ed..92204bbe79da 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -1957,7 +1957,8 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+>  
+>  		if (unlikely(faulted))
+>  			return -EFAULT;
+> -	}
+> +	} else
+> +		return -ENOENT;
+>  
+>  	return ret;
+>  }
+> -- 
+> 2.25.1
