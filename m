@@ -2,186 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE527733C96
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Jun 2023 00:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1E6733D5E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Jun 2023 02:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbjFPWuC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Jun 2023 18:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S229506AbjFQA6L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Jun 2023 20:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345651AbjFPWt5 (ORCPT
+        with ESMTP id S229483AbjFQA6K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Jun 2023 18:49:57 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6036A358C;
-        Fri, 16 Jun 2023 15:49:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AD3e5A7jQeRYx41wLkGsZIzvGPIEu3I64GnhW+7W7lOuo1elumXyYCyKPaE4XcxYMMUlotj60z2WhrD9rJPy1xLS5sU/7UA93XM0+MiNkVxxN55m1FS+/lLgKltfKThZffUsiWy0qzDC6Nq/AuxIVRfWBecE+5Cj1oBPNtET7hpFpjHsczMmMM0WkLybpWghRJvHNGbLv3IBCru0/WLRwV/61jAtbpHp4xU/r1o98R7F4PcTbnF01S60px36r0UH3eFZRe8KE1PBzc4krkWpuGXMH1R6RLIbgd2ZxJHFhs6NlGunZdhbKVSLgK4ND+alFHEUSF+uWwSRNAzCL9+46A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X8kC5IsxcdzTebW+gcgoHiserpY8qf4nEWO57q30iwo=;
- b=FsyJHNfVbgqroxE67zZSqWlq4udnQ24vpLlXU4OBdGW0y2NVJKUIS9+H/OHKJJDSw616dCNvzCHIn20eN7NC4NkWrASSlOn/f+sO8asTowLfnEZK343O/K+epuqgJHH32CJ25p2ABJpTZQYs6XC7qFnfKYfeZJ9WQH33CoXuZXizx6zHFIRIv7i9djsO626Ezsneb0sGxNWlsUXgjDNYcjl5nfX3LkOJZH/b52f2IUJXr8g72ZApdUZV4Ijds8hQh4605mTx/W7lb2j5N2a6/KzFmwKHOqcIZIysTJuC8YCk9hXTFnnGs/uvACfHFu0AIOOhK6g8A1Cj2rfHrKAgGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X8kC5IsxcdzTebW+gcgoHiserpY8qf4nEWO57q30iwo=;
- b=azRAqm1mxqo0ekQgUZbhXEK8jCFcx/SgmY2MXg5LtZgRyBhfHPxQoHDSOA9TE29lCCKPCxtoHof0rdW4/rMGN/aIXpwWHPJ/TdgqjtOaVxdElHwl0IuOMHhws1VXo5MEM+koWz+mSy/pjr8jdkoyiiL/XyoN/CajGG2EVqNSDsA=
-Received: from BN0PR08CA0015.namprd08.prod.outlook.com (2603:10b6:408:142::31)
- by SN7PR12MB7853.namprd12.prod.outlook.com (2603:10b6:806:348::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27; Fri, 16 Jun
- 2023 22:49:53 +0000
-Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:142:cafe::f3) by BN0PR08CA0015.outlook.office365.com
- (2603:10b6:408:142::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29 via Frontend
- Transport; Fri, 16 Jun 2023 22:49:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT016.mail.protection.outlook.com (10.13.176.97) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.25 via Frontend Transport; Fri, 16 Jun 2023 22:49:53 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 16 Jun
- 2023 17:49:52 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 16 Jun
- 2023 17:49:52 -0500
-Received: from xcbamaftei43x.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23 via Frontend
- Transport; Fri, 16 Jun 2023 17:49:51 -0500
-From:   Alex Maftei <alex.maftei@amd.com>
-To:     <richardcochran@gmail.com>, <shuah@kernel.org>
-CC:     Alex Maftei <alex.maftei@amd.com>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-Subject: [PATCH net 2/2] selftests/ptp: Add -X option for testing PTP_SYS_OFFSET_PRECISE
-Date:   Fri, 16 Jun 2023 23:48:45 +0100
-Message-ID: <e679110fb29bbf3d8bc7f27a60c48a25e1fa6600.1686955631.git.alex.maftei@amd.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <cover.1686955631.git.alex.maftei@amd.com>
+        Fri, 16 Jun 2023 20:58:10 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD1C3AA8;
+        Fri, 16 Jun 2023 17:58:09 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b3f9a96606so2012305ad.0;
+        Fri, 16 Jun 2023 17:58:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686963489; x=1689555489;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u8rPlv3Ywh/NUyCYpCykVWdpi8JntsuNA88J8AvL8Ck=;
+        b=g+tl+YZvyAJouiUMIa5HQBdhD5zB7uhMwjonJBFdiSAAaotfzGLq46vTcwO+NqpfpP
+         hqL+3YSQcN/6pELHfNCAhLcTnmvAgkTvYAnkk2mqs/7zCfgnHHfhlhYLNs4k4PhQ+i1n
+         xrfF+czMXg2pZSugIH8TrO0KhU67s+zTFl0k81Dp6HJ4uieS3HEuZ8vHgt1OkxxSy9Re
+         wdDcKpwUYpD9dxZkTsYwbwJtRaf+DgOX+gxEMAYll9Bm78kIQMcyxIhTA1+5eWnBzLTb
+         w8i3luLGZQT8ZHCGfV4qkcYVgjW59rfcjeS7k7jj9RJqJkE/327OZaSjbDMFGyU878Td
+         XxkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686963489; x=1689555489;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u8rPlv3Ywh/NUyCYpCykVWdpi8JntsuNA88J8AvL8Ck=;
+        b=d+ZSvNfkQYkjmjIb7/Y5KmlyF2CuysbCFbyXmagAYalO/IwUfwIiEnuCH2xDGq5TVU
+         5+ckWm3xdJBv0PdZGix1HJtzJJdGNnWyIJGNYqF6TJXbQlVkS2zpUg0RoHwKUUh3sliM
+         bkrTu0o3gbVsjsDEaMmqYdfJ8huE+fgOald7NtVxorJmT2hJVGK2drSyRKW41w8BzxZ5
+         mFzV9K4f0/DBxLAeQ0XEiRG9LlbaIXo6njjNCtcnZlCfPi71weUNkgbF+TKxJuyjb9jl
+         3CR4vASSL1sxMrDxU1G1+w/O7MlRO0y9bwfUduip0vp2Ybo+g+MNSb6o3UzilgX4jwkh
+         wJOA==
+X-Gm-Message-State: AC+VfDytvqggiNyjULtANgfgjsq14PjCgzVQCc/dPUh9GrH8hSt4OisJ
+        ULDwgk8IcgGGFih1h3bwtVA=
+X-Google-Smtp-Source: ACHHUZ7az4sIy8eKKlwLxocvFC/eqUqPa0gN/k1TpxoNbQsT+t2yVkT6gjt/mPsl9/THLbKs2aN0uw==
+X-Received: by 2002:a17:902:f691:b0:1af:adc2:ab5b with SMTP id l17-20020a170902f69100b001afadc2ab5bmr4152524plg.0.1686963489235;
+        Fri, 16 Jun 2023 17:58:09 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2601:640:8200:e:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902694100b001b025aba9edsm16342899plt.220.2023.06.16.17.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 17:58:08 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 17:58:06 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Alex Maftei <alex.maftei@amd.com>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net 0/2] selftests/ptp: Add support for new timestamp
+ IOCTLs
+Message-ID: <ZI0FHsWm37BZ0W4N@hoboy.vegasvil.org>
 References: <cover.1686955631.git.alex.maftei@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT016:EE_|SN7PR12MB7853:EE_
-X-MS-Office365-Filtering-Correlation-Id: 246ec6a7-878b-4cdd-7404-08db6ebbffbd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tTkhzkrdcs/rS/m4xfQsDYMZhAIREEI1v4sOC0DQiEjRA+qUtGCRTkb+dTRxVjP8KQ9nSGpJb1ylPhzh8lN5+/XJY/zMGzbADutbXDe6fb9LlFoT2rSCrs9TtPdjmT02rAPn6m9H7N3XuREYq9lSrDwTYXXS7sAo1gXoQ7kLeWr/0r9NAIxKQ/MCMR/0fqRq1SlGJUOTHpNjCeFeHu/skl7ryVOMStloesG8a73l+Zfqs/dp6YTMXHa3vfGnUDMbDX+bfQmwJFhzBMH4AMydLI/XDl9zaGTZUGNLPdR5MhYdLRsy/i5Dm/QrmTwrMlBHZGRng/RZzU7FXGWqzpI6OrWl/De1BUd6+gRYvvd9vw8MSjownjz53NKsU5Vp805Gi0ffFBdtNq7JlwVU2pVXRID/TTGhSYoWR9N/ohORrnChGgSJ6vh0kc1Pzd/vfPHGRnEfCNyx2POsP+rVHsoC/TjnodRTPw/HpPbrKRlkRDpHHT+BhJwYpSoOMh3rU86mq1bJ861otBiLsH9p24D8aWs4Av16Z8U+U8uE5UFqx/U3U9WUOpLO0oxi/ezIIlKcJe0rDaDRSr6RGMzoYYjvtPpzfK7FHsARSFSYswxUNzSOLnilE1+ia5v711B3bjJU/BfEh6qL/4g5//n77kaCIuQTdeAztemQFKAdxrLv6W+utCD5ZwE19CQuUXs5aDYtsOT958Ctv1Q362lVRBB3MeKpdZta0HLP+H9q5TpqH2JvmeRtP457+t0D5xzsHMVtSLxWcwzOPYcqAYczQjJU4g==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(396003)(451199021)(36840700001)(40470700004)(46966006)(26005)(83380400001)(82740400003)(5660300002)(81166007)(2616005)(336012)(426003)(2906002)(186003)(356005)(36860700001)(47076005)(44832011)(478600001)(40480700001)(40460700003)(70206006)(316002)(8936002)(6666004)(86362001)(41300700001)(82310400005)(8676002)(4326008)(36756003)(70586007)(110136005)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 22:49:53.1134
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 246ec6a7-878b-4cdd-7404-08db6ebbffbd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7853
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1686955631.git.alex.maftei@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The -X option was chosen because X looks like a cross, and the underlying
-callback is 'get cross timestamp'.
+On Fri, Jun 16, 2023 at 11:48:43PM +0100, Alex Maftei wrote:
+> PTP_SYS_OFFSET_EXTENDED was added in November 2018 in
+> 361800876f80 (" ptp: add PTP_SYS_OFFSET_EXTENDED ioctl")
+> and PTP_SYS_OFFSET_PRECISE was added in February 2016 in
+> 719f1aa4a671 ("ptp: Add PTP_SYS_OFFSET_PRECISE for driver crosstimestamping")
+> 
+> The PTP selftest code is lacking support for these two IOCTLS.
+> This short series of patches adds support for them.
 
-Signed-off-by: Alex Maftei <alex.maftei@amd.com>
----
- tools/testing/selftests/ptp/testptp.c | 29 +++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+This is new functionality, so the target branch should be net-next.
 
-diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selftests/ptp/testptp.c
-index 2a99973ffc1b..6ab5836b53ff 100644
---- a/tools/testing/selftests/ptp/testptp.c
-+++ b/tools/testing/selftests/ptp/testptp.c
-@@ -143,6 +143,7 @@ static void usage(char *progname)
- 		" -t val     shift the ptp clock time by 'val' seconds\n"
- 		" -T val     set the ptp clock time to 'val' seconds\n"
- 		" -x val     get an extended ptp clock time with the desired number of samples (up to %d)\n"
-+		" -X         get a ptp clock cross timestamp\n"
- 		" -z         test combinations of rising/falling external time stamp flags\n",
- 		progname, PTP_MAX_SAMPLES);
- }
-@@ -159,6 +160,7 @@ int main(int argc, char *argv[])
- 	struct ptp_clock_time *pct;
- 	struct ptp_sys_offset *sysoff;
- 	struct ptp_sys_offset_extended *soe;
-+	struct ptp_sys_offset_precise *xts;
- 
- 	char *progname;
- 	unsigned int i;
-@@ -177,6 +179,7 @@ int main(int argc, char *argv[])
- 	int list_pins = 0;
- 	int pct_offset = 0;
- 	int getextended = 0;
-+	int getcross = 0;
- 	int n_samples = 0;
- 	int pin_index = -1, pin_func;
- 	int pps = -1;
-@@ -260,6 +263,9 @@ int main(int argc, char *argv[])
- 				return -1;
- 			}
- 			break;
-+		case 'X':
-+			getcross = 1;
-+			break;
- 		case 'z':
- 			flagtest = 1;
- 			break;
-@@ -554,6 +560,29 @@ int main(int argc, char *argv[])
- 		free(soe);
- 	}
- 
-+	if (getcross) {
-+		xts = calloc(1, sizeof(*xts));
-+		if (!xts) {
-+			perror("calloc");
-+			return -1;
-+		}
-+
-+		if (ioctl(fd, PTP_SYS_OFFSET_PRECISE, xts))
-+			perror("PTP_SYS_OFFSET_PRECISE");
-+		else {
-+			puts("system and phc crosstimestamping request okay");
-+
-+			printf("device time: %lld.%09u\n",
-+			       xts->device.sec, xts->device.nsec);
-+			printf("system time: %lld.%09u\n",
-+			       xts->sys_realtime.sec, xts->sys_realtime.nsec);
-+			printf("monoraw time: %lld.%09u\n",
-+			       xts->sys_monoraw.sec, xts->sys_monoraw.nsec);
-+		}
-+
-+		free(xts);
-+	}
-+
- 	close(fd);
- 	return 0;
- }
--- 
-2.28.0
+Thanks,
+Richard
+
 
