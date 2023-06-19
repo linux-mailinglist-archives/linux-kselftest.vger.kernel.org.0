@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A75735353
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jun 2023 12:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4DF7354EC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jun 2023 13:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjFSKoZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Jun 2023 06:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
+        id S232206AbjFSLAQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Jun 2023 07:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjFSKnu (ORCPT
+        with ESMTP id S232513AbjFSK7R (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Jun 2023 06:43:50 -0400
+        Mon, 19 Jun 2023 06:59:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A280CD;
-        Mon, 19 Jun 2023 03:43:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D77319B1;
+        Mon, 19 Jun 2023 03:58:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CE9560B82;
-        Mon, 19 Jun 2023 10:43:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A374C433C0;
-        Mon, 19 Jun 2023 10:43:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B88A760B94;
+        Mon, 19 Jun 2023 10:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6020C433C0;
+        Mon, 19 Jun 2023 10:58:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687171415;
-        bh=lzPBLcmwnZZVUC70fh24Tc3Qold7CWdjiwWc5mtEE6w=;
+        s=korg; t=1687172303;
+        bh=fdlPoKwCUC02K5lW/QydWldXt7w7BSrfpk9lXH2yN3g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aydTk/GIREFF2+KFyDMhJgoA0kUvU+UwaeFu/Nyaj4tKJN+0NTXryn8vm/TF6po0u
-         /VkixA7XybvKqj28oTQbGbKoypOCF86BJuxWUTvZOTZGq53lb4aam9gKsMTb0kLeEN
-         3sQZmWrfn4yacsz3fbvTW5Xm8arhB5fP6tY6n664=
+        b=clCx4YGC/GOH18CLnvPlKi/HzaQPVyBxaSrOAoD+9kyIyxLi6etfzoNnTWZAiZ/Tu
+         wyVPX47UwgFLELLQLzrpoIgjE1PS2uAAcvvAXigesSs55HnjcX4chNiTxDEj9GoFNy
+         nRj1jzzDbTOlZ/b27bemffGcmlKuNouoM92JZLpI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -43,12 +43,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
         Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.1 003/166] test_firmware: prevent race conditions by a correct implementation of locking
-Date:   Mon, 19 Jun 2023 12:28:00 +0200
-Message-ID: <20230619102154.786118291@linuxfoundation.org>
+Subject: [PATCH 5.15 002/107] test_firmware: prevent race conditions by a correct implementation of locking
+Date:   Mon, 19 Jun 2023 12:29:46 +0200
+Message-ID: <20230619102141.657503136@linuxfoundation.org>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230619102154.568541872@linuxfoundation.org>
-References: <20230619102154.568541872@linuxfoundation.org>
+In-Reply-To: <20230619102141.541044823@linuxfoundation.org>
+References: <20230619102141.541044823@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -184,10 +184,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 35 insertions(+), 17 deletions(-)
 
 diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 6ef3e6926da8a..13d3fa6aa972c 100644
+index 0b4e3de3f1748..4ad01dbe7e729 100644
 --- a/lib/test_firmware.c
 +++ b/lib/test_firmware.c
-@@ -360,16 +360,26 @@ static ssize_t config_test_show_str(char *dst,
+@@ -321,16 +321,26 @@ static ssize_t config_test_show_str(char *dst,
  	return len;
  }
  
@@ -216,7 +216,7 @@ index 6ef3e6926da8a..13d3fa6aa972c 100644
  	mutex_unlock(&test_fw_mutex);
  
  	return ret;
-@@ -380,7 +390,8 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
+@@ -341,7 +351,8 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
  	return snprintf(buf, PAGE_SIZE, "%d\n", val);
  }
  
@@ -226,7 +226,7 @@ index 6ef3e6926da8a..13d3fa6aa972c 100644
  					 size_t size,
  					 size_t *cfg)
  {
-@@ -391,9 +402,7 @@ static int test_dev_config_update_size_t(const char *buf,
+@@ -352,9 +363,7 @@ static int test_dev_config_update_size_t(const char *buf,
  	if (ret)
  		return ret;
  
@@ -236,7 +236,7 @@ index 6ef3e6926da8a..13d3fa6aa972c 100644
  
  	/* Always return full write size even if we didn't consume all */
  	return size;
-@@ -409,7 +418,7 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
+@@ -370,7 +379,7 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
  	return snprintf(buf, PAGE_SIZE, "%d\n", val);
  }
  
@@ -245,7 +245,7 @@ index 6ef3e6926da8a..13d3fa6aa972c 100644
  {
  	u8 val;
  	int ret;
-@@ -418,14 +427,23 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+@@ -379,14 +388,23 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
  	if (ret)
  		return ret;
  
@@ -271,7 +271,7 @@ index 6ef3e6926da8a..13d3fa6aa972c 100644
  static ssize_t test_dev_config_show_u8(char *buf, u8 val)
  {
  	return snprintf(buf, PAGE_SIZE, "%u\n", val);
-@@ -478,10 +496,10 @@ static ssize_t config_num_requests_store(struct device *dev,
+@@ -413,10 +431,10 @@ static ssize_t config_num_requests_store(struct device *dev,
  		mutex_unlock(&test_fw_mutex);
  		goto out;
  	}
@@ -285,7 +285,7 @@ index 6ef3e6926da8a..13d3fa6aa972c 100644
  
  out:
  	return rc;
-@@ -525,10 +543,10 @@ static ssize_t config_buf_size_store(struct device *dev,
+@@ -460,10 +478,10 @@ static ssize_t config_buf_size_store(struct device *dev,
  		mutex_unlock(&test_fw_mutex);
  		goto out;
  	}
@@ -299,7 +299,7 @@ index 6ef3e6926da8a..13d3fa6aa972c 100644
  
  out:
  	return rc;
-@@ -555,10 +573,10 @@ static ssize_t config_file_offset_store(struct device *dev,
+@@ -490,10 +508,10 @@ static ssize_t config_file_offset_store(struct device *dev,
  		mutex_unlock(&test_fw_mutex);
  		goto out;
  	}
