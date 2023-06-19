@@ -2,204 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA9D734B86
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jun 2023 08:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B6F734BE1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jun 2023 08:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjFSGGy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Jun 2023 02:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
+        id S230079AbjFSGwu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Jun 2023 02:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjFSGGy (ORCPT
+        with ESMTP id S230073AbjFSGwt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Jun 2023 02:06:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC73B83;
-        Sun, 18 Jun 2023 23:06:50 -0700 (PDT)
-Received: from [192.168.10.54] (unknown [119.155.63.248])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C077B6606EAC;
-        Mon, 19 Jun 2023 07:06:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687154808;
-        bh=LaJGH3yqvxiz7d1XRjjTwc0675jX+65TTloxqyBYO7U=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=ZZBnyw/q0oyg8M5onwbOGeUldCra5i4t8Y6TXg1FATA0XytwqnkyLKYhtlljOmxHV
-         x9VXbAAAsUjR4O9YFEcumZ97jQ4PyYDmvE95A76O9+QBEKLGOgsN/pYLlXJ5WWhYcJ
-         K7TQEkKyAOm9qxrb5qpg5S/67YsjIYCrXycQbpYWezJ7Su/m/1R52fjGdWc5F7WQkr
-         zpwqMpA27VIRaiVqH+AMuDMjzgP+UQcYo0ow+xTKjvXSau3C2wi38EHDVTMRrVFqx0
-         B486VTYWSShgUMcfp21eXciYZyGJRkwDloqCPcGDQ5tNSyKozpZCDzEk5nEqWBcdah
-         E4an2PlXpZDHg==
-Message-ID: <212e331f-35b0-5ae7-6371-26caa577d637@collabora.com>
-Date:   Mon, 19 Jun 2023 11:06:36 +0500
+        Mon, 19 Jun 2023 02:52:49 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F6313D;
+        Sun, 18 Jun 2023 23:52:47 -0700 (PDT)
+X-QQ-mid: bizesmtp90t1687157554t1cra7mz
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 19 Jun 2023 14:52:33 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: znfcQSa1hKZ+NGpj3oD46dIA48fe5ZoaCtfXnjdgTtVrivNDEHeffwS9NNGjG
+        t5B31cuxF/A7gM2Ih3CbXVlpH7UbdETPcQhNC1ycItKmtVm1oKQWXs4GTJkiSGgHgMOmlSS
+        pNI0yQ0WeMraVLa+62zph4fBy4F3FSlco3tYkO7MH0tVAx0V6f5wmr4pNkrMj4v6LNlVss+
+        0HXtNYaedqpkLqAfxjcWxMoBhfyeNegcuzhN32YDApzcS6eJqed+0OIMgvdgCOcIHiX5lYq
+        TvgQXE8SOeX37vbCwnYNmOcgJyIyeLXAp3xXJdFnDmE/gNUZb8RGyV4CM49VsERrCOaz/b4
+        ShgxfKy1tCGdKRvm0GMzScfysOmbw==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 5458119425882349837
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: [PATCH v2 0/3] selftests/nolibc: improve test report support
+Date:   Mon, 19 Jun 2023 14:52:31 +0800
+Message-Id: <cover.1687156559.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Andrei Vagin <avagin@gmail.com>
-References: <20230615141144.665148-1-usama.anjum@collabora.com>
- <20230615141144.665148-3-usama.anjum@collabora.com>
- <ZI1VGsaOZ2a1HiKN@gmail.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZI1VGsaOZ2a1HiKN@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/17/23 11:39 AM, Andrei Vagin wrote:
-> On Thu, Jun 15, 2023 at 07:11:41PM +0500, Muhammad Usama Anjum wrote:
->> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
->> +				  unsigned long end, struct mm_walk *walk)
->> +{
->> +	bool is_written, flush = false, is_interesting = true;
->> +	struct pagemap_scan_private *p = walk->private;
->> +	struct vm_area_struct *vma = walk->vma;
->> +	unsigned long bitmap, addr = end;
->> +	pte_t *pte, *orig_pte, ptent;
->> +	spinlock_t *ptl;
->> +	int ret = 0;
->> +
->> +	arch_enter_lazy_mmu_mode();
->> +
->> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->> +	ptl = pmd_trans_huge_lock(pmd, vma);
->> +	if (ptl) {
->> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
->> +
->> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
->> +			n_pages = p->max_pages - p->found_pages;
->> +
->> +		is_written = !is_pmd_uffd_wp(*pmd);
->> +
->> +		/*
->> +		 * Break huge page into small pages if the WP operation need to
->> +		 * be performed is on a portion of the huge page.
->> +		 */
->> +		if (is_written && IS_PM_SCAN_WP(p->flags) &&
->> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
->> +			spin_unlock(ptl);
->> +
->> +			split_huge_pmd(vma, pmd, start);
->> +			goto process_smaller_pages;
->> +		}
->> +
->> +		bitmap = PM_SCAN_FLAGS(is_written, (bool)vma->vm_file,
->> +				       pmd_present(*pmd), is_swap_pmd(*pmd));
->> +
->> +		if (IS_PM_SCAN_GET(p->flags)) {
->> +			is_interesting = pagemap_scan_is_interesting_page(bitmap, p);
->> +			if (is_interesting)
->> +				ret = pagemap_scan_output(bitmap, p, start, n_pages);
->> +		}
->> +
->> +		if (IS_PM_SCAN_WP(p->flags) && is_written && is_interesting &&
->> +		    ret >= 0) {
->> +			make_uffd_wp_pmd(vma, start, pmd);
->> +			flush_tlb_range(vma, start, end);
->> +		}
->> +
->> +		spin_unlock(ptl);
->> +
->> +		arch_leave_lazy_mmu_mode();
->> +		return ret;
->> +	}
->> +
->> +process_smaller_pages:
->> +#endif
->> +
->> +	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
->> +	if (!pte) {
-> 
-> Do we need to unlock ptl here?
-> 
-> 		spin_unlock(ptl);
-No, please look at these recently merged patches:
-https://lore.kernel.org/all/c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com
+Hi, Willy
 
-> 
->> +		walk->action = ACTION_AGAIN;
->> +		return 0;
->> +	}
->> +
->> +	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
->> +		ptent = ptep_get(pte);
->> +		is_written = !is_pte_uffd_wp(ptent);
->> +
->> +		bitmap = PM_SCAN_FLAGS(is_written, (bool)vma->vm_file,
->> +				       pte_present(ptent), is_swap_pte(ptent));
-> 
-> The vma->vm_file check isn't correct in this case. You can look when
-> pte_to_pagemap_entry sets PM_FILE. This flag is used to detect what
-> pages have a file backing store and what pages are anonymous.
-I'll update.
+Here is the v2 of our old patchset about test report [1].
 
-> 
-> I was trying to integrate this new interace into CRIU and I found
-> one more thing that is required. We need to detect zero pages.
-Should we name it ZERO_PFN_PRESENT_PAGE to be exact or what?
+The trailing '\r' fixup has been merged, so, here only resend the left
+parts with an additional patch to restore the failed tests print.
 
-> 
-> It should look something like this:
-> 
-> #define PM_SCAN_FLAGS(wt, file, present, swap, zero)   \
->        ((wt) | ((file) << 1) | ((present) << 2) | ((swap) << 3) | ((zero) << 4))
-> 
-> 
-> bitmap = PM_SCAN_FLAGS(is_written, page && !PageAnon(page),
-> 		      pte_present(ptent), is_swap_pte(ptent),
-> 		      pte_present(ptent) && is_zero_pfn(pte_pfn(ptent)));
-Okay. Can you please confirm my assumptions:
-- A THP cannot be file backed. (PM_FILE isn't being set for THP case)
-- A hole is also not file backed.
+This patchset is rebased on the dev.2023.06.14a	branch of linux-rcu [2].
 
-A hole isn't present in memory. So its pfn would be zero. But as it isn't
-present, it shouldn't report zero page. Right? For hole::
+Tests have passed for 'x86 run':
 
-PM_SCAN_FLAGS(false, false, false, false, false)
+    138 test(s) passed, 0 skipped, 0 failed.
+    See all results in /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/run.out
 
+Also did 'run-user' for x86, mips and arm64.
 
-> 
-> Thanks,
-> Andrei
+Changes from v1 -> v2:
+
+1. selftests/nolibc: add a standalone test report macro
+
+  As Willy pointed out, the old method with additional test-report
+  target not work in 'make -j'.
+
+  A new macro is added to share the same report logic among the
+  run-user, run and rerun targets, the path to test log file is 
+
+2. selftests/nolibc: always print the path to test log file
+
+  Always print the path to test log file, but move it to a new line to
+  avoid annoying people when the test pass without any failures.
+
+3. selftests/nolibc: restore the failed tests print
+
+  Restore printing of the failed tests to avoid manually opening
+  the test log file when there are really failues.
+
+Best regards,
+Zhangjin
+---
+[1]: https://lore.kernel.org/lkml/cover.1685936428.git.falcon@tinylab.org/
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/
+
+Zhangjin Wu (3):
+  selftests/nolibc: add a standalone test report macro
+  selftests/nolibc: always print the path to test log file
+  selftests/nolibc: restore the failed tests print
+
+ tools/testing/selftests/nolibc/Makefile | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
 -- 
-BR,
-Muhammad Usama Anjum
+2.25.1
+
