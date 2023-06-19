@@ -2,40 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4AC735B78
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jun 2023 17:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4C1735B84
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jun 2023 17:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjFSPre (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Jun 2023 11:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
+        id S229571AbjFSPud (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Jun 2023 11:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjFSPrd (ORCPT
+        with ESMTP id S229877AbjFSPuc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:47:33 -0400
+        Mon, 19 Jun 2023 11:50:32 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB56A4;
-        Mon, 19 Jun 2023 08:47:31 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1687189637tfw3qus3
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB789A4;
+        Mon, 19 Jun 2023 08:50:29 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1687189816tdj31vkq
 Received: from linux-lab-host.localdomain ( [116.30.126.60])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 19 Jun 2023 23:47:15 +0800 (CST)
+        id ; Mon, 19 Jun 2023 23:50:14 +0800 (CST)
 X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: FVl8EHhfVR5hTM2MdejT0GIbTUMQnvvUQOWCRxCGR49gRYux9d12G2vVb1lRF
-        8nq44JbZnU0bAxj0jSCsfcBSnRc0JIxf/jv3bG/13gWzc3g2D0LkkHTvfJF2apjjfviXc7Z
-        CzsdtFb6SMoG0Rg4aRXlRooX7fXnpjG/6m4wWa+KcgD8bp8m+4QaoymFemrnQ4SBC5aTwHe
-        C5zEEEN2nDn46AjT8WhSfRULcj588bZGxRL3Nq6UQirUYAVy/3YPM7NnaEH63bX6VUzD6lt
-        V0gXqP6ju6pyEStUUX71fZJeb/rH0LOdpd3lRFsptbPeM4NeKX51kaJi+AKMiikSpDE90/C
-        P4rfTz822WFFf8KcwQRa8FJoB+Azztezxzl3qZrnw/JLJlyL3pXca5bRlaU81/rWwt1HFvf
+X-QQ-FEAT: lJ9dImo9Gpeyz8IOKq+GcNXt5bf5lKsHx4krldfzto/2klwvpwlW5zu4HsFMO
+        T3D5l8mDvV8FkGonqQzuWoU43QdE6GRR6PIVIB0HxaHgFBH0BglfRFDghFmMPBZM8DI5II7
+        1VmJ6Lw8HBn/7eZ94UtUuKdSkNOVFWWoatTOu/yoQdknRrDgAMarKa+RO+x/sJPTWthw60d
+        FOPdQ9jEm8q4jTAlrRtzy/dOgsqWUQkAXSGHiUxYPOh0i7mnXppFlh6qDQrVDFpSYG70mbs
+        HCEsMn0XqQDYpLsRzogrLqNBsOjF9Vx78SpiIXCEViHeVbcUwPuoB20V4Mq9sMAQiVDcul0
+        3A3z92ODahZBnR/e1BhsIBg5cub/ZAWqKvEcrF71WY0VAO9OHRUliKtrQKgw8FfmlatbISe
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3012571999382365335
+X-BIZMAIL-ID: 1071758241014777112
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     david.laight@aculab.com, arnd@arndb.de, falcon@tinylab.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de
-Subject: [PATCH v4 05/10] tools/nolibc: add missing my_syscall6() for mips
-Date:   Mon, 19 Jun 2023 23:47:12 +0800
-Message-Id: <44abf14c4fa920eadb98833356e517d414b1d66d.1687187451.git.falcon@tinylab.org>
+        linux-riscv@lists.infradead.org, thomas@t-8ch.de,
+        David Laight <David.Laight@ACULAB.COM>
+Subject: [PATCH v4 06/10] tools/nolibc: __sysret: support syscalls who return a pointer
+Date:   Mon, 19 Jun 2023 23:48:21 +0800
+Message-Id: <aae854b2de881f9bc1c82ab9dda53b51d7330c9a.1687187451.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1687187451.git.falcon@tinylab.org>
 References: <cover.1687187451.git.falcon@tinylab.org>
@@ -52,79 +53,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It is able to pass the 6th argument like the 5th argument via the stack
-for mips, let's add a new my_syscall6() now, see [1] for details:
+To support syscalls (e.g. mmap()) who return a pointer and to allow the
+pointer as big as possible, we should convert the negated errno value to
+unsigned long (uintptr_t), otherwise, in signed long, a potential big
+pointer (whose highest bit is 1) will be treated as a failure.
 
-  The mips/o32 system call convention passes arguments 5 through 8 on
-  the user stack.
+tools/include/nolibc/errno.h defines the MAX_ERRNO, let's use it
+directly. after converting to unsigned long, the negative errno value
+from -1 to -MAX_ERRNO becomes something like '~1 + 1' (every bit is 1)
+to '~MAX_ERRNO + 1', '~1 + 1' is the biggest, '~MAX_ERRNO + 1' is the
+smallest, so, the check becomes:
 
-Both mmap() and pselect6() require my_syscall6().
+    if (ret <= (unsigned long)-1 && ret >= (unsigned long)-MAX_ERRNO) {
+        ...
+    }
 
-[1]: https://man7.org/linux/man-pages/man2/syscall.2.html
+Since (unsigned long)-1 is the biggest unsigned long value, it is always
+true if bigger than (unsigned long)-MAX_ERRNO, so, just reserve the
+following check is enough:
 
+    if (ret >= (unsigned long)-MAX_ERRNO) {
+        ...
+    }
+
+Suggested-by: David Laight <David.Laight@ACULAB.COM>
+Link: https://lore.kernel.org/linux-riscv/94dd5170929f454fbc0a10a2eb3b108d@AcuMS.aculab.com/
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/arch-mips.h | 26 ++++++++++++++++++++++++++
- tools/include/nolibc/nolibc.h    |  9 ++++-----
- 2 files changed, 30 insertions(+), 5 deletions(-)
+ tools/include/nolibc/sys.h | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index db24e0837a39..48dd42b4abc3 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -178,6 +178,32 @@ struct sys_stat_struct {
- 	_arg4 ? -_num : _num;                                                 \
- })
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 4fbefe5adf93..8a6e16472d54 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -28,13 +28,16 @@
+ #include "errno.h"
+ #include "types.h"
  
-+#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                  \
-+({                                                                            \
-+	register long _num __asm__ ("v0") = (num);                            \
-+	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-+	register long _arg2 __asm__ ("a1") = (long)(arg2);                    \
-+	register long _arg3 __asm__ ("a2") = (long)(arg3);                    \
-+	register long _arg4 __asm__ ("a3") = (long)(arg4);                    \
-+	register long _arg5 = (long)(arg5);                                   \
-+	register long _arg6 = (long)(arg6);                                   \
-+	                                                                      \
-+	__asm__  volatile (                                                   \
-+		"addiu $sp, $sp, -32\n"                                       \
-+		"sw %7, 16($sp)\n"                                            \
-+		"sw %8, 20($sp)\n"                                            \
-+		"syscall\n  "                                                 \
-+		"addiu $sp, $sp, 32\n"                                        \
-+		: "=r" (_num), "=r"(_arg4)                                    \
-+		: "0"(_num),                                                  \
-+		  "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
-+		  "r"(_arg6)                                                  \
-+		: "memory", "cc", "at", "v1", "hi", "lo",                     \
-+	          "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"  \
-+	);                                                                    \
-+	_arg4 ? -_num : _num;                                                 \
-+})
+-/* Syscall return helper, set errno as -ret when ret < 0 */
 +
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
- 
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index 05a228a6ee78..1f8d821000ac 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -13,11 +13,10 @@
-  * Syscalls are split into 3 levels:
-  *   - The lower level is the arch-specific syscall() definition, consisting in
-  *     assembly code in compound expressions. These are called my_syscall0() to
-- *     my_syscall6() depending on the number of arguments. The MIPS
-- *     implementation is limited to 5 arguments. All input arguments are cast
-- *     to a long stored in a register. These expressions always return the
-- *     syscall's return value as a signed long value which is often either a
-- *     pointer or the negated errno value.
-+ *     my_syscall6() depending on the number of arguments. All input arguments
-+ *     are castto a long stored in a register. These expressions always return
-+ *     the syscall's return value as a signed long value which is often either
-+ *     a pointer or the negated errno value.
-  *
-  *   - The second level is mostly architecture-independent. It is made of
-  *     static functions called sys_<name>() which rely on my_syscallN()
++/* Syscall return helper for library routines
++ * set errno as -ret when ret in [-MAX_ERRNO, -1]
++ */
+ static __inline__ __attribute__((unused, always_inline))
+-long __sysret(long ret)
++long __sysret(unsigned long ret)
+ {
+-	if (ret < 0) {
+-		SET_ERRNO(-ret);
+-		ret = -1;
++	if (ret >= (unsigned long)-MAX_ERRNO) {
++		SET_ERRNO(-(long)ret);
++		return -1;
+ 	}
+ 	return ret;
+ }
 -- 
 2.25.1
 
