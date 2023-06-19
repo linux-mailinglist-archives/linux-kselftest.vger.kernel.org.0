@@ -2,141 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A4C734EA6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jun 2023 10:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2597B735080
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jun 2023 11:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjFSIx3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Jun 2023 04:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
+        id S230388AbjFSJjY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Jun 2023 05:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbjFSIxS (ORCPT
+        with ESMTP id S229513AbjFSJjX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:53:18 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D9D1987;
-        Mon, 19 Jun 2023 01:52:09 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id ffacd0b85a97d-30fcda210cfso2884983f8f.3;
-        Mon, 19 Jun 2023 01:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687164728; x=1689756728;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eBEZFKfyfFh7Lx6RyyuflCIxHFiXm98adeAgy3n5TSc=;
-        b=AaBhLhhg61OBKlARK2zycZbvlLMQhyhSwO/xGIjyxOC1cFkmc3rrVzTxwQKmvLOjGx
-         hEdzbdEbq19wPg4JYymfmbv0EReojIEiDubFP/Law9/MOZq3Z5aFsUMHf2P7Fvun3QmS
-         WeRpm7kZuSj0ljHOZX2LJVuZ9SGcoLo6QdKaVYriD3PT+bjfWf6EJ3Gab78BiVtlEbpH
-         3inNXolHZywUckCFMfKd9ztFpucG9shp2/XCpNHHkpvuqTI5fGyicC3Zp0WEFlltoOSN
-         MwUtW4OHM607kWzdw7VYCzyHx+Ic+4hmUvyS0f44oUtBYJ/V30k2xRc8YKWpaIcuvurE
-         MnfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687164728; x=1689756728;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eBEZFKfyfFh7Lx6RyyuflCIxHFiXm98adeAgy3n5TSc=;
-        b=DcQmp9zHaBwqZr8MAvdiNysWBDB0P0ULyBmwng38KrFhQf0rpADch7u8feXThJyp8Z
-         BpE/detFVw6b75ox1lpZMeHd5yqGD89HORUsRv6ve7EQDZqs5npgWZwNzLhZCV4K1G2H
-         v9fw+52J2F+G9oQP4YMJ1WmInmGvgmserncZ4KI6lTfY0bELzciV9yzuNH2MC+srvuqF
-         qNvmNfKrrYpXPAv55EzhLytfMBvLrOpbNwV3qzyqzeWD7o4D9SAZk1SalYlXQqiLumnb
-         7zozMYCXndgA3Xcgi98FJw1sYKCWSNGVLpwFbOrQIZggkhkPG2XHSCURF2EnaIItiUOu
-         4Aig==
-X-Gm-Message-State: AC+VfDywJZKkhtpYPsbiMbX2WxAe5+u0RkbjVrkD3cODm5zbyITpNjBo
-        LX07N/hef81yq47PJ7NQvzgSVXmu/FGfRZotAZHY6weSxpG8
-X-Google-Smtp-Source: ACHHUZ43WkXQAAGZFkQ4ZSL/gsUvjznIJocOX5L7/QQJoORw4wNJjZ94ATGxo1vuA9Inm4faX0YYZFyfGnfzZyaTzYw=
-X-Received: by 2002:adf:d0c8:0:b0:2ee:f77f:3d02 with SMTP id
- z8-20020adfd0c8000000b002eef77f3d02mr6453841wrh.0.1687164727869; Mon, 19 Jun
- 2023 01:52:07 -0700 (PDT)
+        Mon, 19 Jun 2023 05:39:23 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122B3AF;
+        Mon, 19 Jun 2023 02:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687167561; x=1718703561;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FIVpQIzsj4Ssu2XYiw1BeI1GG1jqR889PGXaA6nQNcg=;
+  b=D9E4xxsRnFp7Y9yaeeAWwx9c8vmA+eeiKFi8jgSeLJLvui3TsNPX48p7
+   HkWo+GfhnTWkY787+fpP1tOHOhzTclx03qr2an1JlxHOtK65Sbz6402uv
+   hHBWXg6n/+QjnJHC8VzDzl2qpbbC66OkDWJQ3fYG6+orqKj7EALMwUnHp
+   Kejju/18Dc/1tJBCfqY9HzluZqu2HajpiYxAOKlP3cj+l61kPqwgHcaOh
+   T9Ed2wEo6DtKm6hNNDPoi67PR9lnnJVNWJbj7xOKVGdrp0hX0CeHt6hlc
+   +QYiepxSw8x/aoAzvGsrqPLia48w56bZMq5mYhJ5uDbHY6pb5k2Br81PQ
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="230876711"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jun 2023 02:39:21 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 19 Jun 2023 02:39:16 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Mon, 19 Jun 2023 02:39:16 -0700
+Date:   Mon, 19 Jun 2023 11:39:16 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Alex Maftei <alex.maftei@amd.com>
+CC:     <richardcochran@gmail.com>, <shuah@kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+Subject: Re: [PATCH net 1/2] selftests/ptp: Add -x option for testing
+ PTP_SYS_OFFSET_EXTENDED
+Message-ID: <20230619093916.xxfkzj576hwz4tjq@soft-dev3-1>
+References: <cover.1686955631.git.alex.maftei@amd.com>
+ <e3e14166f0e92065d08a024159e29160b815d2bf.1686955631.git.alex.maftei@amd.com>
 MIME-Version: 1.0
-References: <20230609030302.1278716-1-sunliming@kylinos.cn>
- <20230609030302.1278716-2-sunliming@kylinos.cn> <20230616160845.GA88@W11-BEAU-MD.localdomain>
-In-Reply-To: <20230616160845.GA88@W11-BEAU-MD.localdomain>
-From:   sunliming <kelulanainsley@gmail.com>
-Date:   Mon, 19 Jun 2023 16:51:56 +0800
-Message-ID: <CAJncD7Sfasoe4-hKZP4c3bPZ892S2Kk5JaMo-aca6eBDwLjLNQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] tracing/user_events: Fix incorrect return value
- for writing operation when events are disabled
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <e3e14166f0e92065d08a024159e29160b815d2bf.1686955631.git.alex.maftei@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Beau Belgrave <beaub@linux.microsoft.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=881=
-7=E6=97=A5=E5=91=A8=E5=85=AD 00:08=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Fri, Jun 09, 2023 at 11:03:00AM +0800, sunliming wrote:
-> > The writing operation return the count of writes whether events are
-> > enabled or disabled. This is incorrect when events are disabled. Fix
-> > this by just return -ENOENT when events are disabled.
-> >
->
-> When testing this patch locally I found that we would occasionally get
-> -ENOENT when events were enabled, but then become disabled, since writes
-> do not have any locking around the tracepoint checks for performance
-> reasons.
->
-> I've asked a few peers of mine their thoughts on this, whether an error
-> should result when there are no enabled events. The consensus I've heard
-> back is that they would not consider this case an actual error, just as
-> writing to /dev/null does not actually return an error.
->
-> However, if you feel strongly we need this and have a good use case, it
-> seems better to enable this logic behind a flag instead of having it
-> default based on my conversations with others.
->
-> Thanks,
-> -Beau
+The 06/16/2023 23:48, Alex Maftei wrote:
+
+Hi Alex,
+
+As I can see you will need to send another patch, I have just a small
+comment bellow.
 
 
+> The -x option (where 'x' stands for eXtended) takes an argument which
+> represents the number of samples to request from the PTP device.
+> The help message will display the maximum number of samples allowed.
+> Providing an invalid argument will also display the maximum number of
+> samples allowed.
+> 
+> Signed-off-by: Alex Maftei <alex.maftei@amd.com>
+> ---
+>  tools/testing/selftests/ptp/testptp.c | 42 +++++++++++++++++++++++++--
+>  1 file changed, 40 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selftests/ptp/testptp.c
+> index cfa9562f3cd8..2a99973ffc1b 100644
+> --- a/tools/testing/selftests/ptp/testptp.c
+> +++ b/tools/testing/selftests/ptp/testptp.c
+> @@ -142,8 +142,9 @@ static void usage(char *progname)
+>                 " -S         set the system time from the ptp clock time\n"
+>                 " -t val     shift the ptp clock time by 'val' seconds\n"
+>                 " -T val     set the ptp clock time to 'val' seconds\n"
+> +               " -x val     get an extended ptp clock time with the desired number of samples (up to %d)\n"
+>                 " -z         test combinations of rising/falling external time stamp flags\n",
+> -               progname);
+> +               progname, PTP_MAX_SAMPLES);
+>  }
+> 
+>  int main(int argc, char *argv[])
+> @@ -157,6 +158,7 @@ int main(int argc, char *argv[])
+>         struct timex tx;
+>         struct ptp_clock_time *pct;
+>         struct ptp_sys_offset *sysoff;
+> +       struct ptp_sys_offset_extended *soe;
+> 
+>         char *progname;
+>         unsigned int i;
+> @@ -174,6 +176,7 @@ int main(int argc, char *argv[])
+>         int index = 0;
+>         int list_pins = 0;
+>         int pct_offset = 0;
+> +       int getextended = 0;
+>         int n_samples = 0;
+>         int pin_index = -1, pin_func;
+>         int pps = -1;
+> @@ -188,7 +191,7 @@ int main(int argc, char *argv[])
+> 
+>         progname = strrchr(argv[0], '/');
+>         progname = progname ? 1+progname : argv[0];
+> -       while (EOF != (c = getopt(argc, argv, "cd:e:f:ghH:i:k:lL:n:p:P:sSt:T:w:z"))) {
+> +       while (EOF != (c = getopt(argc, argv, "cd:e:f:ghH:i:k:lL:n:p:P:sSt:T:w:x:Xz"))) {
 
-There is indeed a problem. Once enabled, perform the write operation
-immediately.
+The 'X' needs to be part of the next patch, as you introduce here only 'x'.
 
-Now=EF=BC=8Cwhen the event is disabled, the trace record appears to be lost=
-.
-In some situations
-where data timing is sensitive, it may cause confusion. In this case,
-not returning an
-error (as mentioned in your reply, it is not considered this case an
-actual error) and
-returning 0 ( meaning that the number of data to be written is 0) may
-be a good way
-to handle it?
-Thanks,
--Sunliming
+>                 switch (c) {
+>                 case 'c':
+>                         capabilities = 1;
+> @@ -250,6 +253,13 @@ int main(int argc, char *argv[])
+>                 case 'w':
+>                         pulsewidth = atoi(optarg);
+>                         break;
+> +               case 'x':
+> +                       getextended = atoi(optarg);
+> +                       if (getextended < 1 || getextended > PTP_MAX_SAMPLES) {
+> +                               fprintf(stderr, "number of extended timestamp samples must be between 1 and %d; was asked for %d\n", PTP_MAX_SAMPLES, getextended);
+> +                               return -1;
+> +                       }
+> +                       break;
+>                 case 'z':
+>                         flagtest = 1;
+>                         break;
+> @@ -516,6 +526,34 @@ int main(int argc, char *argv[])
+>                 free(sysoff);
+>         }
+> 
+> +       if (getextended) {
+> +               soe = calloc(1, sizeof(*soe));
+> +               if (!soe) {
+> +                       perror("calloc");
+> +                       return -1;
+> +               }
+> +
+> +               soe->n_samples = getextended;
+> +
+> +               if (ioctl(fd, PTP_SYS_OFFSET_EXTENDED, soe))
+> +                       perror("PTP_SYS_OFFSET_EXTENDED");
+> +               else {
+> +                       printf("extended timestamp request returned %d samples\n",
+> +                               getextended);
+> +
+> +                       for (i = 0; i < getextended; i++) {
+> +                               printf("sample #%2d: system time before: %lld.%09u\n",
+> +                               i, soe->ts[i][0].sec, soe->ts[i][0].nsec);
+> +                               printf("            phc time: %lld.%09u\n",
+> +                               soe->ts[i][1].sec, soe->ts[i][1].nsec);
+> +                               printf("            system time after: %lld.%09u\n",
+> +                               soe->ts[i][2].sec, soe->ts[i][2].nsec);
+> +                       }
+> +               }
+> +
+> +               free(soe);
+> +       }
+> +
+>         close(fd);
+>         return 0;
+>  }
+> --
+> 2.28.0
+> 
+> 
 
->
-> > Signed-off-by: sunliming <sunliming@kylinos.cn>
-> > ---
-> >  kernel/trace/trace_events_user.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_even=
-ts_user.c
-> > index 1ac5ba5685ed..92204bbe79da 100644
-> > --- a/kernel/trace/trace_events_user.c
-> > +++ b/kernel/trace/trace_events_user.c
-> > @@ -1957,7 +1957,8 @@ static ssize_t user_events_write_core(struct file=
- *file, struct iov_iter *i)
-> >
-> >               if (unlikely(faulted))
-> >                       return -EFAULT;
-> > -     }
-> > +     } else
-> > +             return -ENOENT;
-> >
-> >       return ret;
-> >  }
-> > --
-> > 2.25.1
+-- 
+/Horatiu
