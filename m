@@ -2,296 +2,225 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10557376F0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 00:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20EE973772F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 00:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjFTWAI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Jun 2023 18:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S229791AbjFTWFV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Jun 2023 18:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjFTWAH (ORCPT
+        with ESMTP id S229516AbjFTWFU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Jun 2023 18:00:07 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FB0107;
-        Tue, 20 Jun 2023 15:00:06 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3112f5ab0b1so3191060f8f.0;
-        Tue, 20 Jun 2023 15:00:05 -0700 (PDT)
+        Tue, 20 Jun 2023 18:05:20 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB081729
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jun 2023 15:05:18 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so1979a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jun 2023 15:05:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687298404; x=1689890404;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zzT9JowwR4WrNgD4+M6vydnUzUQdWJgu/dR3PcW05zQ=;
-        b=Y/NP7+OR5ppHjZromXh4ABh23CjtUmmGZm0UF8X3bB93LEN07hvkvHjDemIdK7EWO9
-         PtvJQ4y+VvWoZIifE9BJ0VbH8kv3Y9wp47vQ0gn3orbpBzHrVbpIXKfkFwvn7sGTMv3Z
-         WG9/IZaGkr7F0TY00yxemdkqNWQD2acLpE82OuuRoti4Bg87NDA37Ws7FbXwwNZ00GRJ
-         ZpJTwK497uxRBeFzHL4CD7IWZS53tJ4BSY0OgMy50JWWi2v97hGV3MKYN20XcXU1VP9u
-         9+rbcxzPPi9vWv6+3sNfVHHl3igrMOthEDXBRl73PwG1OyXSavMNqKohMcQjQq7sYaI8
-         7Lzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687298404; x=1689890404;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1687298717; x=1689890717;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zzT9JowwR4WrNgD4+M6vydnUzUQdWJgu/dR3PcW05zQ=;
-        b=alQ0855OZbpbAuoMNPXEeRhcU4en5ZhD+7DtuUQ8eTzS3222wJUGDsrlI6XHoAro+e
-         bOjb6mCwAi5aA4x/I8oYdjKxAWBCP9C1SW0ZX4GhOmdyMR5Kns01QiUyJD1YbHZqGM2+
-         +uFnUpCP8NGdP/rPDEDzQjt4/jBYN/D+SE/uqzqGk7dgcyeC/cnKs7WijeT2zk/hR9kf
-         cXh91NVQmSesPoKdEwOujVv8+ZBcZeyYttEEBcFBC3MYV9lE15Bdo/5TffvuOR8RPo0K
-         CpUi8XXipHmaCUKT4pRh6yhCY42T9PqpjtZg2vFvACEHI49Hgny5wuWFOanvQCefqNru
-         o+1Q==
-X-Gm-Message-State: AC+VfDz44NAkfDZoLaQajCiHGomBX1Vu8Z92gBtWso8P/AC7gipD/+s/
-        rQ++9K99vr5fsFHIe8dK4cY=
-X-Google-Smtp-Source: ACHHUZ6IICTm9FTjV1sa6qUnPvWEPwisMhdtmi3Vz/I/iOyMjeVt36OvYAGMcFnUihK7yN/ctscF1Q==
-X-Received: by 2002:a5d:644d:0:b0:30e:3d3d:4329 with SMTP id d13-20020a5d644d000000b0030e3d3d4329mr9297009wrw.35.1687298404265;
-        Tue, 20 Jun 2023 15:00:04 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id j18-20020adff012000000b0030e56a9ff25sm2850780wro.31.2023.06.20.15.00.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 15:00:03 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 23:00:02 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-Subject: Re: [PATCH v4 1/7] mm/mremap: Optimize the start addresses in
- move_page_tables()
-Message-ID: <28e641d6-37ba-44a7-b7a8-76e797fab1f7@lucifer.local>
-References: <20230531220807.2048037-1-joel@joelfernandes.org>
- <20230531220807.2048037-2-joel@joelfernandes.org>
- <f2f751ca-217e-4177-bb7f-1c9cd71e103e@lucifer.local>
- <b87df265-7e58-5907-e215-953630a87155@joelfernandes.org>
- <f28eadbc-f40e-4286-bf7e-af0ac360617e@lucifer.local>
- <e81b4534-54ce-466f-0d07-dc530cf137c2@joelfernandes.org>
+        bh=6QnZ16+cR3SKz8OZyy5d1CsXcXjkIRyncSh8yNxkG1M=;
+        b=B8QESZcPS8IOqAQ9veug7dutrAkK9Ty1tsh2jQp6IbIscVsQ3171n8gu4ay4YA1jka
+         SkkY8idwFT4BOwqktrmuEbxD0Q/eYeyQGlApPqQBEFgsOCmzBHnvaRCdjry6zWAgVZ4G
+         yyFUmiO18E4j8x97g+1K1kjmm85SQxOEFP0ccV/TiJVtZ2muvDpMiypubUXTcZdN/Hk6
+         vQ570hXUuFVnwEmSHLwMjj9UoRrL3kKGlkVcqEUvhhOT2ok9Y2mDTVOnKKEQQvCbbpHD
+         b9luoM6mpvHQG2q9UDVJ10SdF0+qSH5L0gjwTYjn8fi3DenuPM9N1G70ZZFBE3/zqrBq
+         ZVaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687298717; x=1689890717;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6QnZ16+cR3SKz8OZyy5d1CsXcXjkIRyncSh8yNxkG1M=;
+        b=Rk+PgBaQ2DYfZdwzec3CGgIcML7dYywpFZT7iIVQ28PVVUqBhTf2eIlF6JQDwF9tZG
+         h2cAUYw4qTTulyv/qWctRGQCb+d5c0tFCGDxxWYQfRvpi3x4ZHsP3E4LBjbTql9YMugh
+         c+51cPDQMkofH2fbNmKlwbKyzEWJoJMag5Po1OtuXEbzl/X239M0qJhNWnUUrOvDB7LE
+         Sld0RcFkr/7Sfosds7Kvm0M+LN2rxB3whRE4VzOkL0ItqnxNSivsPhPpbja6x7Z8+Hq7
+         caC8WKQcR4bNBf2gNA0PWYIX+0RROrnSzfjET2WnlFdLZIIC+d5qbAc+L8iMClqKW2IT
+         VMZw==
+X-Gm-Message-State: AC+VfDxnrOYcprICfSw+kGysDgDnTDLjPPi7pHD+HHY6hLqBcc4CnnoF
+        yFryc9ZxRnFJVzXE/VzPUt/A688omyi460FWsHfCLg==
+X-Google-Smtp-Source: ACHHUZ59qq5aWENB/BjU7unJQ0/yUrpV9cMPMC3H9gw6cRwjKcqMmpGu7hrOaqCTn7aGXRAjC3awXkHyEymz3yE+18M=
+X-Received: by 2002:a50:9e07:0:b0:50b:f6ce:2f3d with SMTP id
+ z7-20020a509e07000000b0050bf6ce2f3dmr574426ede.0.1687298716727; Tue, 20 Jun
+ 2023 15:05:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e81b4534-54ce-466f-0d07-dc530cf137c2@joelfernandes.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230613102905.2808371-1-usama.anjum@collabora.com>
+ <20230613102905.2808371-3-usama.anjum@collabora.com> <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
+ <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com> <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
+ <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com> <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
+ <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com> <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
+ <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com> <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
+ <2e1b80f1-0385-0674-ae5f-9703a6ef975d@collabora.com> <CABb0KFGOx69Sz6w9JenYUwSTFmW-Cmcns3X-oDyWsC+H57vkvg@mail.gmail.com>
+ <444ed144-a2ee-cb16-880a-128383c83a08@collabora.com>
+In-Reply-To: <444ed144-a2ee-cb16-880a-128383c83a08@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Wed, 21 Jun 2023 00:05:05 +0200
+Message-ID: <CABb0KFEqJasf9nM3wL1oaK9ObcYzwzjtrRBcWRc3wGqdZRUpXg@mail.gmail.com>
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 05:16:57PM -0400, Joel Fernandes wrote:
-> Hi Lorenzo,
->
-> > As far as I can tell, find_vma_prev() already does a walk? I mean this is
-> > equivalent to find_vma() only retrieving the previous VMA right? I defer to
-> > Liam, but I'm not sure this would be that much more involved? Perhaps he
-> > can comment.
+On Tue, 20 Jun 2023 at 13:16, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 6/19/23 1:16=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Fri, 16 Jun 2023 at 08:57, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >>
+> >> On 6/16/23 1:07=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>> On Thu, 15 Jun 2023 at 17:11, Muhammad Usama Anjum
+> >>> <usama.anjum@collabora.com> wrote:
+> >>>> On 6/15/23 7:52=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>>> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
+> >>>>> <usama.anjum@collabora.com> wrote:
+> >>>>>> I'll send next revision now.
+> >>>>>> On 6/14/23 11:00=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>>>>> (A quick reply to answer open questions in case they help the nex=
+t version.)
+> > [...]
+> >>>>>>> I guess this will be reworked anyway, but I'd prefer this didn't =
+need
+> >>>>>>> custom errors etc. If we agree to decoupling the selection and GE=
+T
+> >>>>>>> output, it could be:
+> >>>>>>>
+> >>>>>>> bool is_interesting_page(p, flags); // this one does the
+> >>>>>>> required/anyof/excluded match
+> >>>>>>> size_t output_range(p, start, len, flags); // this one fills the
+> >>>>>>> output vector and returns how many pages were fit
+> >>>>>>>
+> >>>>>>> In this setup, `is_interesting_page() && (n_out =3D output_range(=
+)) <
+> >>>>>>> n_pages` means this is the final range, no more will fit. And if
+> >>>>>>> `n_out =3D=3D 0` then no pages fit and no WP is needed (no other =
+special
+> >>>>>>> cases).
+> >>>>>> Right now, pagemap_scan_output() performs the work of both of thes=
+e two
+> >>>>>> functions. The part can be broken into is_interesting_pages() and =
+we can
+> >>>>>> leave the remaining part as it is.
+> >>>>>>
+> >>>>>> Saying that n_out < n_pages tells us the buffer is full covers one=
+ case.
+> >>>>>> But there is case of maximum pages have been found and walk needs =
+to be
+> >>>>>> aborted.
+> >>>>>
+> >>>>> This case is exactly what `n_out < n_pages` will cover (if scan_out=
+put
+> >>>>> uses max_pages properly to limit n_out).
+> >>>>> Isn't it that when the buffer is full we want to abort the scan alw=
+ays
+> >>>>> (with WP if `n_out > 0`)?
+> >>>> Wouldn't it be duplication of condition if buffer is full inside
+> >>>> pagemap_scan_output() and just outside it. Inside pagemap_scan_outpu=
+t() we
+> >>>> check if we have space before putting data inside it. I'm using this=
+ same
+> >>>> condition to indicate that buffer is full.
+> >>>
+> >>> I'm not sure what do you mean? The buffer-full conditions would be
+> >>> checked in ..scan_output() and communicated to the caller by returnin=
+g
+> >>> N less than `n_pages` passed in. This is exactly how e.g. read()
+> >>> works: if you get less than requested you've hit the end of the file.
+> >>> If the file happens to have size that is equal to the provided buffer
+> >>> length, the next read() will return 0.
+> >> Right now we have:
+> >>
+> >> pagemap_scan_output():
+> >>         if (p->vec_buf_index >=3D p->vec_buf_len)
+> >>                 return PM_SCAN_BUFFER_FULL;
+> >>         if (p->found_pages =3D=3D p->max_pages)
+> >>                 return PM_SCAN_FOUND_MAX_PAGES;
 > >
-> > An alternative is to create an iterator and use vma_prev(). I find it
-> > extremely clunky that we search for a VMA we already possess (and it's
-> > previous one) while not needing the the former.
+> > Why do you need to differentiate between those cases?
 > >
-> > I'm not hugely familiar with the maple tree (perhaps Liam can comment) but
-> > I suspect that'd be more performant if that's the concern. Either way I
-> > would be surprised if this is the correct approach.
->
-> I see your point. I am not sure myself, the maple tree functions for both
-> APIs are indeed similar. We already have looked up the VMA being aligned
-> down. If there is a way to get the previous VMA quickly, given an existing
-> VMA, I can incorporate that change.
->
-> Ideally, if I had access to the ma_state used for lookup of the VMA being
-> aligned down, I could perhaps reuse that somehow. But when I checked, that
-> seemed a lot more invasive to pass that state down to these align functions.
->
-> But there is a merit to your suggestion itself in the sense it cuts down a
-> few more lines of code.
-
-Yeah it's thorny, the maple tree seems to add a separation between the vmi
-and vma that didn't exist previously, and you'd have to thread through the
-mas or vmi that was used in the first instance or end up having to rewalk
-the tree anyway.
-
-I have spesnt too much time staring at v6 code where it was trivial :)
-
-I think given we have to walk the tree either way, we may as well do the
-find_vma_intersection() [happy to stand corrected by Liam if this turns out
-not to be less efficient but I don't think it is].
-
->
-> > > Considering this, I would keep the code as-is and perhaps you/we could
-> > > consider the replacement with another API in a subsequent patch as it does
-> > > the job for this patch.
+> >> pagemap_scan_pmd_entry():
+> >>         ret =3D pagemap_scan_output(bitmap, p, start, n_pages);
+> >>         if (ret >=3D 0) // success
+> >>                 make_UFFD_WP and flush
+> >>         else
+> >>                 buffer_error
+> >>
+> >> You are asking me to do:
+> >>
+> >> pagemap_scan_output():
+> >>         if (p->vec_buf_index >=3D p->vec_buf_len)
+> >>                 return 0;
 > >
-> > See above. I don't think this kind of comment is helpful in code
-> > review. Your disagreement above suffices, I've responded to it and of
-> > course if there is no other way this is fine.
+> >>         if (p->found_pages =3D=3D p->max_pages)
+> >>                 return PM_SCAN_FOUND_MAX_PAGES;
 > >
-> > But I'd be surprised, and re-looking up a VMA we already have is just
-> > horrid. It's not really a nitpick, it's a code quality issue in my view.
+> > This should be instead:
 > >
-> > In any case, let's please try to avoid 'if you are bothered, write a follow
-> > up patch' style responses. If you disagree with something just say so, it's
-> > fine! :)
+> > n_pages =3D min(p->max_pags - p_found_pages, n_pages)
+> > ...
+> > return n_pages;
+> You are missing the optimization here that we check for full buffer every
+> time adding to user buffer. This was added to remove extra iteration of
+> page walk if buffer is full already. The way you are suggesting will remo=
+ve it.
 >
-> I wasn't disagreeing :) Just saying that the find_vma_prev() suggested in a
-> previous conversation with Liam fixes the issue (and has been tested a lot
-> in this series, on my side) so I was hoping to stick to that and we could
-> iterate more on that in the future.
->
-> However, after taking a deeper look at the maple tree, I'd like to give the
-> find_vma_intersection() option at least a try (with appropriate attribution
-> to you).
+> So you are returning remaining pages to be found now. This doesn't seem
+> right. If max_pages is 520, found_pages is 0 and n_pages is 512 before
+> calling pagemap_scan_output(). found_pages would become 512 after adding
+> 512 pages to output buffer. But n_pages would return 8 instead of 512. Yo=
+u
+> were saying we should return the number of pages added to the output buff=
+er.
 
-Cheers appreciate it, sorry to be a pain and nitpicky but I think if that
-works as well it could be quite a nice solution.
+Ok, if we want this optimization, then i'd rework it so that we have:
 
->
-> Apologies if the response style in my previous email came across badly. That
-> wasn't my intent and I will try to improve myself.
+bool pagemap_scan_output(..., int *n_pages)
+{
+   limit n_pages;
+  ...
+  return have_more_room_in_output;
+}
 
-No worries, text is a sucky medium and likely I misinterpreted you in any
-case. We're having a productive discussion which is what matters! :)
+The compiler should remove the pointer and memory storage for
+`n_pages` when inlining the function.
 
->
-> [..]
->
-> > > > > +		realign_addr(&old_addr, vma, &new_addr, new_vma, PMD_MASK);
-> > > > > +	}
-> > > > > +
-> > > > >    	if (is_vm_hugetlb_page(vma))
-> > > > >    		return move_hugetlb_page_tables(vma, new_vma, old_addr,
-> > > > >    						new_addr, len);
-> > > > > @@ -565,6 +619,13 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
-> > > > >
-> > > > >    	mmu_notifier_invalidate_range_end(&range);
-> > > > >
-> > > > > +	/*
-> > > > > +	 * Prevent negative return values when {old,new}_addr was realigned
-> > > > > +	 * but we broke out of the above loop for the first PMD itself.
-> > > > > +	 */
-> > > > > +	if (len + old_addr < old_end)
-> > > > > +		return 0;
-> > > > > +
-> > > >
-> > > > I find this a little iffy, I mean I see that if you align [old,new]_addr to
-> > > > PMD, then from then on in you're relying on the fact that the loop is just
-> > > > going from old_addr (now aligned) -> old_end and thus has the correct
-> > > > length.
-> > > >
-> > > > Can't we just fix this issue by correcting len? If you take my review above
-> > > > which checks len in [maybe_]realign_addr(), you could take that as a
-> > > > pointer and equally update that.
-> > > >
-> > > > Then you can drop this check.
-> > >
-> > > The drawback of adjusting len is it changes what move_page_tables() users
-> > > were previously expecting.
-> > >
-> > > I think we should look at the return value of move_page_tables() as well,
-> > > not just len independently.
-> > >
-> > > len is what the user requested.
-> > >
-> > > "len + old_addr - old_end" is how much was actually copied and is the return value.
-> > >
-> > > If everything was copied, old_addr == old_end and len is unchanged.
-> >
-> > Ah yeah I see, sorry I missed the fact we're returning a value, that does
-> > complicate things...
-> >
-> > If we retain the hugetlb logic, then we could work around the issue with
-> > that instance of len by storing the 'actual length' of the range in
-> > a new var actual_len and passing that.
-> >
-> > If we choose to instead just not do this for hugetlb (I wonder if the
-> > hugetlb handling code actually does the equivalent of this since surely
-> > these pages have to be handled a PMD at a time?) then we can drop the whole
-> > actual_len idea [see below on response to hugetlb thing].
->
-> Thanks. Yes, you are right. We should already b  good with hugetlb handling
-> as it does appear that hugetlb_move_page_tables() does copy by
-> huge_page_size(h), so the old_addr should already be PMD-aligned for it to
-> be able to do that.
-
-Cool, in which case we can drop the actual_len idea as this is really the
-only place we'd need it.
-
->
-> [..]
->
-> > > > >    	return len + old_addr - old_end;	/* how much done */
-> > > > >    }
-> > > > Also I am concerned in the hugetlb case -> len is passed to
-> > > > move_hugetlb_page_tables() which is now strictly incorrect, I wonder if
-> > > > this could cause an issue?
-> > > >
-> > > > Correcting len seems the neat way of addressing this.
-> > >
-> > > That's a good point. I am wondering if we can just change that from:
-> > >
-> > > 	if (is_vm_hugetlb_page(vma))
-> > > 		return move_hugetlb_page_tables(vma, new_vma, old_addr,
-> > > 				new_addr, len);
-> > >
-> > > to:
-> > > 	if (is_vm_hugetlb_page(vma))
-> > > 		return move_hugetlb_page_tables(vma, new_vma, old_addr,
-> > > 				new_addr, old_addr - new_addr);
-> > >
-> > > Or, another option is to turn it off for hugetlb by just moving:
-> > >
-> > > 	if (len >= PMD_SIZE - (old_addr & ~PMD_MASK))
-> > > 		realign_addr(...);
-> > >
-> > > to after:
-> > >
-> > > 	if (is_vm_hugetlb_page(vma))
-> > > 		return move_hugetlb_page_tables(...);
-> > >
-> > > thanks,
-> >
-> > I think the actual_len solution should sort this right? If not maybe better
-> > to be conservative and disable for the hugetlb case (I'm not sure if this
-> > would help given you'd need to be PMD aligned anyway right?), so not to
-> > hold up the series.
-> >
-> > If we do decide not to include hugetlb (the endless 'special case' for so
-> > much code...) in this then we can drop the actual_len idea altogether.
-> >
-> > (Yes I realise it's ironic I'm suggesting deferring to a later patch here
-> > but there you go ;)
->
-> ;-). Considering our discussion above that hugetlb mremap addresses should
-> always starts at a PMD boundary, maybe I can just add a warning to the if()
-> like so to detect any potential?
->
-> 	if (is_vm_hugetlb_page(vma)) {
-> 		WARN_ON_ONCE(old_addr - old_end != len);
-> 		return move_hugetlb_page_tables(vma, new_vma, old_addr,
-> 						new_addr, len);
->         }
->
-
-Yeah looks good [ack your follow up that it should be old_end - old_addr],
-maybe adding a comment explaining why this is a problem here too.
-
->
-> Thank you so much and I learnt a lot from you and others in -mm community.
-
-No worries, thanks very much for this patch series, this is a nice fixup
-for a quite stupid failure we were experiencing before with a neat
-solution. Your hard work is appreciated!
-
->
-> - Joel
->
+Best Regards
+Micha=C5=82 Miros=C5=82aw
