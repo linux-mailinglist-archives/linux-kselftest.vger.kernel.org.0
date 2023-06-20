@@ -2,250 +2,216 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC49A736A54
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jun 2023 13:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D41E736AB0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jun 2023 13:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbjFTLHL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Jun 2023 07:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
+        id S231955AbjFTLQL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Jun 2023 07:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbjFTLHG (ORCPT
+        with ESMTP id S232248AbjFTLQJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:07:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167A91991;
-        Tue, 20 Jun 2023 04:06:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Tue, 20 Jun 2023 07:16:09 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81130E41;
+        Tue, 20 Jun 2023 04:16:07 -0700 (PDT)
+Received: from [192.168.10.54] (unknown [119.155.63.248])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F9F2611EF;
-        Tue, 20 Jun 2023 11:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17477C433C0;
-        Tue, 20 Jun 2023 11:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687259190;
-        bh=hVUuY5x5g9EGPajdBvb661xphx1c0Xsm7QeY6bqtW3M=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=hjTWHpL23/rXyCUBKVzdoc0hyunbDzZN+1w5gkgtjtENJuoyeKk+cuX4PA2YuNlSM
-         pjLaSH9XI1M3bK35JiKUoLlUQFWBPDEMkYyGt5v/OfVM5RE/TFAfYRwDUa1rDG79O5
-         qfUSQHcQ6Pzz9BNsYHTxxJoHJH4m50cch9Nrhd46+JoE41H9iRMlrhNrpbWqoOguDV
-         yKZVT/Ype8eUSVlQ2SzB6IsZeK/GV5AGaFim/EJ1dG2T6CWUtGRcUs0dVqYQGznEQ3
-         gNJk0fmEXggDFxjjfMuTjLGJpnyEIDaUQ4hjx3SJT09/qnL5oNCWW7Pz65EKdhp6va
-         N7DRr3V1hLUNg==
-Message-ID: <4c110d97043aa70384da5ad2379b03c3d6e737ff.camel@kernel.org>
-Subject: Re: [PATCH 3/3] selftests: add OFD lock tests
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stas Sergeev <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Date:   Tue, 20 Jun 2023 07:06:28 -0400
-In-Reply-To: <20230620095507.2677463-4-stsp2@yandex.ru>
-References: <20230620095507.2677463-1-stsp2@yandex.ru>
-         <20230620095507.2677463-4-stsp2@yandex.ru>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 625B56606F8B;
+        Tue, 20 Jun 2023 12:15:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687259765;
+        bh=9GLoBafzRKep+sfRcHSOXwHpBcUQH7mDHyYgcZt+Ayo=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=nuRdlc/dlE4e+aZlxWLESNo2ASmaZ9pydw7shRqKbOuVl6ZV2pE7U+gUqVBjVjmqE
+         XKrx1Fi8LV5uvNBV7NzQcQA+FlyVHDifO4VuB50ITuTeqjQxbXyBF+T+kA+nu+9KnP
+         eEnfoUPlAlMkw5ELiNCnI+gCVnTPw4zl6uFzI8aKeqr/B4SpVDz1mZMiBxyG9qTo+p
+         cVubvh598HIQVoF0HMAEHsvvHqe8Wgu1ieFCf6y21KRvwIdVt8W3G262bFPOu7GX2/
+         u47jq44EqqR2k+MaUSV2BBDlx/7d5xwDa4380MFiMfITvxCXPD8RoC3DlTZQpThO+0
+         QiUUrZYoND6pg==
+Message-ID: <444ed144-a2ee-cb16-880a-128383c83a08@collabora.com>
+Date:   Tue, 20 Jun 2023 16:15:55 +0500
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230613102905.2808371-1-usama.anjum@collabora.com>
+ <20230613102905.2808371-3-usama.anjum@collabora.com>
+ <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
+ <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com>
+ <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
+ <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com>
+ <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
+ <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com>
+ <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
+ <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com>
+ <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
+ <2e1b80f1-0385-0674-ae5f-9703a6ef975d@collabora.com>
+ <CABb0KFGOx69Sz6w9JenYUwSTFmW-Cmcns3X-oDyWsC+H57vkvg@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFGOx69Sz6w9JenYUwSTFmW-Cmcns3X-oDyWsC+H57vkvg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 2023-06-20 at 14:55 +0500, Stas Sergeev wrote:
-> Test the basic locking stuff on 2 fds: multiple read locks,
-> conflicts between read and write locks, use of len=3D=3D0 for queries.
-> Also test for pid and F_UNLCK F_OFD_GETLK extensions.
->=20
-> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
->=20
-> CC: Shuah Khan <shuah@kernel.org>
-> CC: linux-kernel@vger.kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> CC: Jeff Layton <jlayton@kernel.org>
-> CC: Chuck Lever <chuck.lever@oracle.com>
-> CC: Alexander Viro <viro@zeniv.linux.org.uk>
-> CC: Christian Brauner <brauner@kernel.org>
-> CC: linux-fsdevel@vger.kernel.org
->=20
-> ---
->  tools/testing/selftests/locking/Makefile   |   2 +
->  tools/testing/selftests/locking/ofdlocks.c | 138 +++++++++++++++++++++
->  2 files changed, 140 insertions(+)
->  create mode 100644 tools/testing/selftests/locking/ofdlocks.c
->=20
-> diff --git a/tools/testing/selftests/locking/Makefile b/tools/testing/sel=
-ftests/locking/Makefile
-> index 6e7761ab3536..a83ced1626de 100644
-> --- a/tools/testing/selftests/locking/Makefile
-> +++ b/tools/testing/selftests/locking/Makefile
-> @@ -7,4 +7,6 @@ all:
-> =20
->  TEST_PROGS :=3D ww_mutex.sh
-> =20
-> +TEST_GEN_PROGS :=3D ofdlocks
-> +
->  include ../lib.mk
-> diff --git a/tools/testing/selftests/locking/ofdlocks.c b/tools/testing/s=
-elftests/locking/ofdlocks.c
-> new file mode 100644
-> index 000000000000..1cff350e2c81
-> --- /dev/null
-> +++ b/tools/testing/selftests/locking/ofdlocks.c
-> @@ -0,0 +1,138 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#define _GNU_SOURCE
-> +#include <fcntl.h>
-> +#include <assert.h>
-> +#include <stdio.h>
-> +#include <unistd.h>
-> +#include <string.h>
-> +#include "../kselftest.h"
-> +
-> +static int lock_set(int fd, struct flock *fl)
-> +{
-> +	int ret;
-> +
-> +	fl->l_pid =3D 0;		// needed for OFD locks
-> +	fl->l_whence =3D SEEK_SET;
-> +	ret =3D fcntl(fd, F_OFD_SETLK, fl);
-> +	if (ret)
-> +		perror("fcntl()");
-> +	return ret;
-> +}
-> +
-> +static int lock_get(int fd, struct flock *fl)
-> +{
-> +	int ret;
-> +
-> +	fl->l_pid =3D 0;		// needed for OFD locks
-> +	fl->l_whence =3D SEEK_SET;
-> +	ret =3D fcntl(fd, F_OFD_GETLK, fl);
-> +	if (ret)
-> +		perror("fcntl()");
-> +	return ret;
-> +}
-> +
-> +int main(void)
-> +{
-> +	int rc;
-> +	struct flock fl, fl2;
-> +	int fd =3D open("/tmp/aa", O_RDWR | O_CREAT | O_EXCL, 0600);
-> +	int fd2 =3D open("/tmp/aa", O_RDONLY);
-> +
-> +	unlink("aa");
-> +	assert(fd !=3D -1);
-> +	assert(fd2 !=3D -1);
-> +	ksft_print_msg("[INFO] opened fds %i %i\n", fd, fd2);
-> +
-> +	/* Set some read lock */
-> +	fl.l_type =3D F_RDLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 3;
-> +	rc =3D lock_set(fd, &fl);
-> +	if (rc =3D=3D 0) {
-> +		ksft_print_msg
-> +		    ("[SUCCESS] set OFD read lock on first fd\n");
-> +	} else {
-> +		ksft_print_msg("[FAIL] to set OFD read lock on first fd\n");
-> +		return -1;
-> +	}
-> +	/* Make sure read locks do not conflict on different fds. */
-> +	fl.l_type =3D F_RDLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 1;
-> +	rc =3D lock_get(fd2, &fl);
-> +	if (rc !=3D 0)
-> +		return -1;
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		ksft_print_msg("[FAIL] read locks conflicted\n");
-> +		return -1;
-> +	}
-> +	/* Make sure read/write locks do conflict on different fds. */
-> +	fl.l_type =3D F_WRLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 1;
-> +	rc =3D lock_get(fd2, &fl);
-> +	if (rc !=3D 0)
-> +		return -1;
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		ksft_print_msg
-> +		    ("[SUCCESS] read and write locks conflicted\n");
-> +	} else {
-> +		ksft_print_msg
-> +		    ("[SUCCESS] read and write locks not conflicted\n");
-> +		return -1;
-> +	}
-> +	/* Get info about the lock on first fd. */
-> +	fl.l_type =3D F_UNLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 1;
-> +	rc =3D lock_get(fd, &fl);
-> +	if (rc !=3D 0) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK not supported\n");
-> +		return -1;
-> +	}
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		if (fl.l_pid !=3D getpid()) {
-> +			ksft_print_msg
-> +			    ("[FAIL] F_OFD_GETLK does not return pid, %i\n",
-> +			    fl.l_pid);
-> +			return -1;
-> +		}
+On 6/19/23 1:16 PM, Michał Mirosław wrote:
+> On Fri, 16 Jun 2023 at 08:57, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> On 6/16/23 1:07 AM, Michał Mirosław wrote:
+>>> On Thu, 15 Jun 2023 at 17:11, Muhammad Usama Anjum
+>>> <usama.anjum@collabora.com> wrote:
+>>>> On 6/15/23 7:52 PM, Michał Mirosław wrote:
+>>>>> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
+>>>>> <usama.anjum@collabora.com> wrote:
+>>>>>> I'll send next revision now.
+>>>>>> On 6/14/23 11:00 PM, Michał Mirosław wrote:
+>>>>>>> (A quick reply to answer open questions in case they help the next version.)
+> [...]
+>>>>>>> I guess this will be reworked anyway, but I'd prefer this didn't need
+>>>>>>> custom errors etc. If we agree to decoupling the selection and GET
+>>>>>>> output, it could be:
+>>>>>>>
+>>>>>>> bool is_interesting_page(p, flags); // this one does the
+>>>>>>> required/anyof/excluded match
+>>>>>>> size_t output_range(p, start, len, flags); // this one fills the
+>>>>>>> output vector and returns how many pages were fit
+>>>>>>>
+>>>>>>> In this setup, `is_interesting_page() && (n_out = output_range()) <
+>>>>>>> n_pages` means this is the final range, no more will fit. And if
+>>>>>>> `n_out == 0` then no pages fit and no WP is needed (no other special
+>>>>>>> cases).
+>>>>>> Right now, pagemap_scan_output() performs the work of both of these two
+>>>>>> functions. The part can be broken into is_interesting_pages() and we can
+>>>>>> leave the remaining part as it is.
+>>>>>>
+>>>>>> Saying that n_out < n_pages tells us the buffer is full covers one case.
+>>>>>> But there is case of maximum pages have been found and walk needs to be
+>>>>>> aborted.
+>>>>>
+>>>>> This case is exactly what `n_out < n_pages` will cover (if scan_output
+>>>>> uses max_pages properly to limit n_out).
+>>>>> Isn't it that when the buffer is full we want to abort the scan always
+>>>>> (with WP if `n_out > 0`)?
+>>>> Wouldn't it be duplication of condition if buffer is full inside
+>>>> pagemap_scan_output() and just outside it. Inside pagemap_scan_output() we
+>>>> check if we have space before putting data inside it. I'm using this same
+>>>> condition to indicate that buffer is full.
+>>>
+>>> I'm not sure what do you mean? The buffer-full conditions would be
+>>> checked in ..scan_output() and communicated to the caller by returning
+>>> N less than `n_pages` passed in. This is exactly how e.g. read()
+>>> works: if you get less than requested you've hit the end of the file.
+>>> If the file happens to have size that is equal to the provided buffer
+>>> length, the next read() will return 0.
+>> Right now we have:
+>>
+>> pagemap_scan_output():
+>>         if (p->vec_buf_index >= p->vec_buf_len)
+>>                 return PM_SCAN_BUFFER_FULL;
+>>         if (p->found_pages == p->max_pages)
+>>                 return PM_SCAN_FOUND_MAX_PAGES;
+> 
+> Why do you need to differentiate between those cases?
+> 
+>> pagemap_scan_pmd_entry():
+>>         ret = pagemap_scan_output(bitmap, p, start, n_pages);
+>>         if (ret >= 0) // success
+>>                 make_UFFD_WP and flush
+>>         else
+>>                 buffer_error
+>>
+>> You are asking me to do:
+>>
+>> pagemap_scan_output():
+>>         if (p->vec_buf_index >= p->vec_buf_len)
+>>                 return 0;
+> 
+>>         if (p->found_pages == p->max_pages)
+>>                 return PM_SCAN_FOUND_MAX_PAGES;
+> 
+> This should be instead:
+> 
+> n_pages = min(p->max_pags - p_found_pages, n_pages)
+> ...
+> return n_pages;
+You are missing the optimization here that we check for full buffer every
+time adding to user buffer. This was added to remove extra iteration of
+page walk if buffer is full already. The way you are suggesting will remove it.
 
-A selftest seems like a reasonable thing to add. The above check will
-need to be fixed to not expect a real pid on a OFD lock, of course.
+So you are returning remaining pages to be found now. This doesn't seem
+right. If max_pages is 520, found_pages is 0 and n_pages is 512 before
+calling pagemap_scan_output(). found_pages would become 512 after adding
+512 pages to output buffer. But n_pages would return 8 instead of 512. You
+were saying we should return the number of pages added to the output buffer.
 
-> +		ksft_print_msg
-> +		    ("[SUCCESS] F_UNLCK test returns: locked, type %i pid %i len %zi\n=
-",
-> +		     fl.l_type, fl.l_pid, fl.l_len);
-> +	} else {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK did not return lock info\n");
-> +		return -1;
-> +	}
-> +	/* Try the same but by locking everything by len=3D=3D0. */
-> +	fl2.l_type =3D F_UNLCK;
-> +	fl2.l_start =3D 0;
-> +	fl2.l_len =3D 0;
-> +	rc =3D lock_get(fd, &fl2);
-> +	if (rc !=3D 0) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK not supported\n");
-> +		return -1;
-> +	}
-> +	if (memcmp(&fl, &fl2, sizeof(fl))) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_UNLCK test returns: locked, type %i pid %i len %zi\n",
-> +		     fl.l_type, fl.l_pid, fl.l_len);
-> +		return -1;
-> +	}
-> +	ksft_print_msg("[SUCCESS] F_UNLCK with len=3D=3D0 returned the same\n")=
-;
-> +	/* Get info about the lock on second fd - no locks on it. */
-> +	fl.l_type =3D F_UNLCK;
-> +	fl.l_start =3D 0;
-> +	fl.l_len =3D 0;
-> +	lock_get(fd2, &fl);
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK return lock info from another fd=
-\n");
-> +		return -1;
-> +	}
-> +	return 0;
-> +}
+> 
+>> pagemap_scan_pmd_entry():
+>>         ret = pagemap_scan_output(bitmap, p, start, n_pages);
+>>         if (ret > 0) // success
+>>                 make_UFFD_WP and flush
+>>         else if (ret == 0) // buffer full
+>>                 return PM_SCAN_BUFFER_FULL;
+>>         else //other errors
+>>                 buffer_error
+> 
+> And this would be:
+> 
+> if (ret > 0 && WP)
+>    WP + flush
+> 
+> if (ret < n_pages)
+>    return -ENOSPC;
+> 
+>> So you are asking me to go from consie code to write more lines of code. I
+>> would write more lines without any issue if it improves readability and
+>> logical sense. But I don't see here any benefit.
+> 
+> Please see the clarifications above.
+> 
+> Best Regards
+> Michał Mirosław
 
---=20
-Jeff Layton <jlayton@kernel.org>
+-- 
+BR,
+Muhammad Usama Anjum
