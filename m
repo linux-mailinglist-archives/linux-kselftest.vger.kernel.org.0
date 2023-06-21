@@ -2,102 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45FE73890F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 17:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63343738981
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 17:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbjFUP3E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 11:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        id S233475AbjFUPge (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 11:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbjFUP3E (ORCPT
+        with ESMTP id S233510AbjFUPgX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:29:04 -0400
-X-Greylist: delayed 386 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Jun 2023 08:29:02 PDT
-Received: from forward205a.mail.yandex.net (forward205a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB54B91;
-        Wed, 21 Jun 2023 08:29:02 -0700 (PDT)
-Received: from forward102a.mail.yandex.net (forward102a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d102])
-        by forward205a.mail.yandex.net (Yandex) with ESMTP id 2BC504727F;
-        Wed, 21 Jun 2023 18:22:58 +0300 (MSK)
-Received: from mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net [IPv6:2a02:6b8:c18:58f:0:640:3768:0])
-        by forward102a.mail.yandex.net (Yandex) with ESMTP id 32548463C0;
-        Wed, 21 Jun 2023 18:22:54 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id UMkSjYADYGk0-nDgmRaci;
-        Wed, 21 Jun 2023 18:22:53 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687360973;
-        bh=b93M/kd7RtP0LNT+znv3PSo9p5SOOzFeXYgHQxmwv9I=;
-        h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=MtTY+abfofItqx+ehR5syVfHqnMfG1FQeD12jGzYQ82kiujSkRSuCeFBB6O8nWzkc
-         hVWRs5aMnczR2pQ/T/8cWAlTFji3iAc8pMjYR/6uN48E+Fr1bQ7t+Eph2OTBExkpN7
-         rhVfefZq1Nc6+4kX45d6x2hZFyTVvCUY+/wm3XYc=
-Authentication-Results: mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-From:   Stas Sergeev <stsp2@yandex.ru>
-To:     linux-kernel@vger.kernel.org
-Cc:     Stas Sergeev <stsp2@yandex.ru>, Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-Subject: [PATCH] fcntl.2: document F_UNLCK F_OFD_GETLK extension
-Date:   Wed, 21 Jun 2023 20:22:14 +0500
-Message-Id: <20230621152214.2720319-4-stsp2@yandex.ru>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230621152214.2720319-1-stsp2@yandex.ru>
-References: <20230621152214.2720319-1-stsp2@yandex.ru>
+        Wed, 21 Jun 2023 11:36:23 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B541706;
+        Wed, 21 Jun 2023 08:35:59 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-988a5383fd4so662539466b.0;
+        Wed, 21 Jun 2023 08:35:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687361753; x=1689953753;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yLC3Qvm8n/w4CH5ToSb5DN8Odh2TdBdFkjR985bJsFU=;
+        b=XNNg4geRz6v9Rne19hZvE7dAvG7m5JVqo482JTQxpuo2aiaamcJHYjpGzn/hDYhn4R
+         34MbwzgM88Y7NgENR6uA17UWiK/FzRBMbt1DFnUdf/mnGNQNinfxbqTCgaBInMhCjq/6
+         iDIClLNEKaInpZedkWU6pP+zF1LqhgBnl4dg2ZXMBVZ/R6gsIStjaGRbimg/YBE0791l
+         65L7T1AnG/c1WBy3tN6kQkfY+SaHhzvlga+WLowV4xjOg8hXtcaUv89A8tFbU3d0h1Ny
+         BdRGtaLRnrf+kWj5Lxx6BX30XOo9xbnOVazlq7DRD/evPGoK0K+t6rOCUa7/slGjr6Z2
+         w+Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687361753; x=1689953753;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yLC3Qvm8n/w4CH5ToSb5DN8Odh2TdBdFkjR985bJsFU=;
+        b=C5cVaBSDOiMMYM4YrCJtPubyt8eJaZ4qnYTP2HRSdi8tCRCrEWq67uzvxF3ySsr4i0
+         jN5bJbZm+RmR3FCQw483ATfoT2CV5FtMUA3wywnZXsM6NN2PvPGTqMAqemkje38beQ0z
+         mJjMVswBxExYCZ0Axxc5OUGZ5dbgxLJ4ComNA1mm+6AfatFGmUxsbHTrqfFHWFLYTTzS
+         yCu6NJWhbiJoCT4cqGmMl82MUJun2BpIsHwQndF0e5AYhoyloL6Yru17dUWP/rvvK7ja
+         CWyymBp67dHqgume0pEtMls2c6/VRpnNTD5p4WbvwrWHsofejqtI7KEiV5QJ1g9pSHmc
+         Y/Ng==
+X-Gm-Message-State: AC+VfDyNhTBAHctK7grMBuE7RXUUR9vojoPSxCl8z3S3Ipag1dq6bN0z
+        ZohV/zsnbu/kccB5cyeLeII=
+X-Google-Smtp-Source: ACHHUZ7xMfjgNRfxub1WKJ+EPmb+d8kHugGo/ZZVh5n6Kd95fkq5o9VnmXX478QuZDnsXNW4XE425g==
+X-Received: by 2002:a17:906:58cd:b0:989:d9d:d90a with SMTP id e13-20020a17090658cd00b009890d9dd90amr6598582ejs.34.1687361753358;
+        Wed, 21 Jun 2023 08:35:53 -0700 (PDT)
+Received: from lelloman-5950.homenet.telecomitalia.it (host-87-21-158-222.retail.telecomitalia.it. [87.21.158.222])
+        by smtp.gmail.com with ESMTPSA id r3-20020a170906c28300b00988acf24f9csm3266123ejz.97.2023.06.21.08.35.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 08:35:52 -0700 (PDT)
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        shuah@kernel.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, muchun.song@linux.dev, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, riel@surriel.com,
+        nphamcs@gmail.com
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Subject: [PATCH 0/3] selftests: cgroup: add zswap test program
+Date:   Wed, 21 Jun 2023 17:35:45 +0200
+Message-Id: <20230621153548.428093-1-cerasuolodomenico@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-F_UNLCK has the special meaning when used as a lock type on input.
-It returns the information about any lock found in the specified
-region on that particular file descriptor. Locks on other file
-descriptors are ignored by F_UNLCK.
+This series adds 2 zswap related selftests that verify known and fixed
+issues. A new dedicated test program (test_zswap) is proposed since
+the test cases are specific to zswap and hosts specific helpers.
 
-Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
+The first patch adds the (empty) test program, while the other 2 add an
+actual test function each.
 
-CC: Jeff Layton <jlayton@kernel.org>
-CC: Chuck Lever <chuck.lever@oracle.com>
-CC: Alexander Viro <viro@zeniv.linux.org.uk>
-CC: Christian Brauner <brauner@kernel.org>
-CC: linux-fsdevel@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-CC: Shuah Khan <shuah@kernel.org>
-CC: linux-kselftest@vger.kernel.org
-CC: linux-api@vger.kernel.org
+Domenico Cerasuolo (3):
+  selftests: cgroup: add test_zswap program
+  selftests: cgroup: add test_zswap with no kmem bypass test
+  selftests: cgroup: add zswap-memcg unwanted writeback test
 
----
- man2/fcntl.2 | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/selftests/cgroup/.gitignore   |   1 +
+ tools/testing/selftests/cgroup/Makefile     |   2 +
+ tools/testing/selftests/cgroup/test_zswap.c | 286 ++++++++++++++++++++
+ 3 files changed, 289 insertions(+)
+ create mode 100644 tools/testing/selftests/cgroup/test_zswap.c
 
-diff --git a/man2/fcntl.2 b/man2/fcntl.2
-index 7b5604e3a..e3e3e7b8c 100644
---- a/man2/fcntl.2
-+++ b/man2/fcntl.2
-@@ -604,6 +604,13 @@ then details about one of these locks are returned via
- .IR lock ,
- as described above for
- .BR F_GETLK .
-+.B F_UNLCK
-+has the special meaning when put into
-+.I l_type
-+as an input. It returns the information about any lock in the specified
-+range on that particular file descriptor. The locks on other file
-+descriptors are ignored by
-+.BR F_UNLCK .
- .PP
- In the current implementation,
- .\" commit 57b65325fe34ec4c917bc4e555144b4a94d9e1f7
 -- 
-2.39.2
+2.34.1
 
