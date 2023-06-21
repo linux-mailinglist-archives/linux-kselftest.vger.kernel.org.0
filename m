@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F5073843C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 15:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99B373844D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 15:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbjFUNAx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 09:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
+        id S230262AbjFUNCP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 09:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjFUNAw (ORCPT
+        with ESMTP id S229675AbjFUNCO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:00:52 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD8D1AC;
-        Wed, 21 Jun 2023 06:00:50 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1687352442tow0k82a
+        Wed, 21 Jun 2023 09:02:14 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1F2E57;
+        Wed, 21 Jun 2023 06:02:12 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1687352523t66c15a0
 Received: from linux-lab-host.localdomain ( [116.30.126.60])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 21 Jun 2023 21:00:41 +0800 (CST)
+        id ; Wed, 21 Jun 2023 21:02:02 +0800 (CST)
 X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: ILHsT53NKPiClSNJokhMYDBCmPxungrT3Z+CWJDyQNX3zu4qzLWhjv7TO/3Hn
-        /N8B9E8eDY8EdrjCc7Jz6dJyueSDRep5azdaqdVyMFQYVxpSnf2LAKXuXjHzvidF8+mX6EB
-        e5Ue0qtvGuZjh5LBUoEPh7E2IgsmHEEuFmESuk8i9WjkzTOkHBqjqPI+YYdG1iXXX9J40L+
-        7DwACtW3ZjrR9UZ+Lf+GstYy7tDM9GvhRTboSxBRXLJ5mcOxhJbzSHpBT55cL9u+uGY82KR
-        S82+3tyMLY2Hso2Z7zujZN91pH8jGSe3J1BPNU2GhGS3LLvtIB4/8s7CgHaHN5y8JADXQ5X
-        EbMUU5cUoLYGmVPgqQEo6uoNF3USYfnsNQc05e0VbrrQQP2djYU8t5+QvZsOg==
+X-QQ-FEAT: ILHsT53NKPibvyQvvp6lgPNrBJ9TrIOguRRJiNb+93n428pRzDPRiPmUoEoJO
+        7uoOFMcJa7vObbtOaqeAGyxKEVn82tPKKZ57jA/Pst6qecfTBHjqcB0JPpMMniwjOt3n3QS
+        6U6D1JpbsppF7CtxvnyBIflJDkvUmwhVYVdqGKW68VZgpqS/c34cHZDH7PIYvP8Mgz9U/Hp
+        tvXxkP7BoJwW1HMiWZR83VblMBRfj9w/VPxPso5uaYlog4+EzMIcWk9hVYaLJIzmwkS3E28
+        t5EIJhPpKCcNP13QZYkYxgcbWLdavPdj93KRoXnUfKBxkVDeUoUDf3UwdG1x/bMjsGzUfYx
+        dWZeNNORIEpl5ywH4on67PcH2u3kEDNQdflOz++xGrR7hzgzgjkW38vWIOE5A==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 18188769316264056375
+X-BIZMAIL-ID: 14863239959184131679
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 06/17] tools/nolibc: add rmdir() support
-Date:   Wed, 21 Jun 2023 21:00:33 +0800
-Message-Id: <12a992919bea416bbc073d869c90d03c5ad1c7ac.1687344643.git.falcon@tinylab.org>
+Subject: [PATCH v1 07/17] selftests/nolibc: add a new rmdir() test case
+Date:   Wed, 21 Jun 2023 21:01:45 +0800
+Message-Id: <187bd4f7b4a611cedee3f2f8db04240a6aba3adb.1687344643.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1687344643.git.falcon@tinylab.org>
 References: <cover.1687344643.git.falcon@tinylab.org>
@@ -42,64 +42,35 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A reverse operation of mkdir is meaningful, add rmdir() here.
-
-This is required by nolibc-test to remove /proc if CONFIG_PROC_FS not
-enabled.
+A new rmdir_blah test case is added to remove a non-existing /blah,
+which expects failure with ENOENT errno.
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/sys.h | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 856249a11890..8ddfd9185da6 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -716,6 +716,34 @@ int mkdir(const char *path, mode_t mode)
- 	return ret;
- }
- 
-+/*
-+ * int rmdir(const char *path);
-+ */
-+
-+static __attribute__((unused))
-+int sys_rmdir(const char *path)
-+{
-+#ifdef __NR_rmdir
-+	return my_syscall1(__NR_rmdir, path);
-+#elif defined(__NR_unlinkat)
-+	return my_syscall3(__NR_unlinkat, AT_FDCWD, path, AT_REMOVEDIR);
-+#else
-+	return -ENOSYS;
-+#endif
-+}
-+
-+static __attribute__((unused))
-+int rmdir(const char *path)
-+{
-+	int ret = sys_rmdir(path);
-+
-+	if (ret < 0) {
-+		SET_ERRNO(-ret);
-+		ret = -1;
-+	}
-+	return ret;
-+}
-+
- 
- /*
-  * int mknod(const char *path, mode_t mode, dev_t dev);
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 2ef44176f7a9..9673c338d42e 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -612,6 +612,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
+ 		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
+ 		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
++		CASE_TEST(rmdir_blah);        EXPECT_SYSER(1, rmdir("/blah"), -1, ENOENT); break;
+ 		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
+ 		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
+ 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
 -- 
 2.25.1
 
