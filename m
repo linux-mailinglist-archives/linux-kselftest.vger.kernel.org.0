@@ -2,138 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2179F7386FB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 16:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D7873873D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 16:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbjFUO2a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 10:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S229956AbjFUOjV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 10:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232951AbjFUO2J (ORCPT
+        with ESMTP id S229514AbjFUOjU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:28:09 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552821FF0
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 07:27:47 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so3688a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 07:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687357666; x=1689949666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nx/8tkwi/QCBsZ8gmyeG8Rkuz2KMvUk7ydKIx+Um+wA=;
-        b=Zx7ZT6CDGiK06H867vY+sNm4wafZK+Kvmb8BqCHCD+RgK/A8TOsKrYm88ZeQ2SECqv
-         S7fVo2jMZAWlKlfibVSF4+NdJIuFTIa0/hV9eZbzpGNs8NdeOq6Gf/hK1j41+VqJkX7f
-         0MdtnvEDcTvQ1qlxcyubtHy52SpsQWtzGcgMHO/beMlI2JAgE/lBuWgZO2ZNHA+12UAk
-         6xkAO2o6lOr6d4DjCP484PkPelet7gw71VpFO6zM1RaeJUU4GliVx6GQS/0Q1anV9/b0
-         1vlDsaqBmqIlvqPZnEthL85A7DkyTOobm6olApyMhJG0hLtOI5m8PH9wari0gbV3oEGX
-         O3+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687357666; x=1689949666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nx/8tkwi/QCBsZ8gmyeG8Rkuz2KMvUk7ydKIx+Um+wA=;
-        b=V4TOBqI0r9e6J4M/aWoKQQ9zv3Xny7h4vhCeqJ6rTrvj5vUOZdyCrQvsCE4mkMSPlp
-         iUlbgsOqTrLDVrz+haRhGB3BlRmLXjsRRnN/4j4y66cbXQF1jNMrtAVduoCRlMR1JFJq
-         XQDvLiyic43W8Sw/E5c2NBGmYf6dLkd7K3TClBp5IqvI1Kax0iqXkUtprX0JYcmiJ8hY
-         e//NlMA7oWcR5iJFmXZsU8CoCegzx5gB6MIjvjkINy4j73Fp1gCuAMlVCXwBBNGHPBEA
-         D/Ejuzo9E9H5JryTtJMqzVhQolgiXTScmhEQ1yGE+JnuK4Gk0NxTlXC20g0A3nHXBsoJ
-         fmOQ==
-X-Gm-Message-State: AC+VfDyw6Nw9BPui/1BFfMrpbidHwXNFjI9zop52jdnKm9c233UUc9jc
-        IcPGiMPmBVO9mHJPbUtWr8Dv5TQfR6HNvkzfy4Ba/g==
-X-Google-Smtp-Source: ACHHUZ5b784EIfEpEvB4OmcZ87YYr3Ia27+LLB97tML2JkkHkDJzLWdV+C3hXWpgda3VhYBy/K3VCv+xK2nMSkOkpVY=
-X-Received: by 2002:a50:d79a:0:b0:506:b280:4993 with SMTP id
- w26-20020a50d79a000000b00506b2804993mr20647edi.2.1687357665556; Wed, 21 Jun
- 2023 07:27:45 -0700 (PDT)
+        Wed, 21 Jun 2023 10:39:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495891994;
+        Wed, 21 Jun 2023 07:39:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9399612B7;
+        Wed, 21 Jun 2023 14:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C34C433C8;
+        Wed, 21 Jun 2023 14:39:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687358358;
+        bh=VXBvW08YHCjFJUo8Y3I1beTInLzEQKnsdmhPOK4bYIM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tZl1k1F0ZcAed6cyywzNyeNFbJ7D6LC6xDLfFbVBm2LiVc0WmmIBNSjNUlr6y4Q6c
+         rJpTjq0rjslE8kERMZNeE2zcPY3jxdT9ITE+Pz7qR78CSkCef7gSlpSVKVJiPXtMtq
+         hmdokXAc3JVSVmgu5FhkQ1pzAjoIF1f7E6t42PDhxgPHYycyqhX2rcVAsZQNz24xKh
+         es6lnaa0+8Xq6joKOvOZr0nHG6PvKgVnojHtrULUOYyRhvTgmKPN8D56nB9aEa+bMi
+         5KqpBXJ4p19QxRnGye8BhGeFJRMBjIcxvq1/75EWokHyNOoRUhTPwcGb8cTK/e1z9i
+         PxmFblnHkgLcQ==
+Date:   Wed, 21 Jun 2023 15:39:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jaroslav Kysela <perex@perex.cz>
+Cc:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] kselftest/alsa: pcm-test: Decrease stream duration
+ from 4 to 2 seconds
+Message-ID: <9069ad0c-d166-4620-a3de-a36ab233cab0@sirena.org.uk>
+References: <20230620220839.2215057-1-nfraprado@collabora.com>
+ <20230620220839.2215057-3-nfraprado@collabora.com>
+ <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
+ <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
 MIME-Version: 1.0
-References: <20230621072404.2918101-1-usama.anjum@collabora.com>
- <20230621072404.2918101-3-usama.anjum@collabora.com> <CABb0KFGhSLAHAsa3nk-pyMe2j9MU4u3xkQR21HOoS65ZB2dKsw@mail.gmail.com>
- <de16602a-7ed9-9c03-30d9-5edccc48d2f0@collabora.com>
-In-Reply-To: <de16602a-7ed9-9c03-30d9-5edccc48d2f0@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 21 Jun 2023 16:27:34 +0200
-Message-ID: <CABb0KFFsHEX2cKzQj-t9vx=q4FjmObNu930ogQMBn0L6=3ph=w@mail.gmail.com>
-Subject: Re: [PATCH v20 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lN6DZShoSnw04Qtm"
+Content-Disposition: inline
+In-Reply-To: <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
+X-Cookie: When among apes, one must play the ape.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 16:16, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 6/21/23 6:42=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Wed, 21 Jun 2023 at 09:24, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> > [...]
-> >> +static int pagemap_scan_test_walk(unsigned long start, unsigned long =
-end,
-> >> +                                 struct mm_walk *walk)
-> >> +{
-> >> +       struct pagemap_scan_private *p =3D walk->private;
-> >> +       struct vm_area_struct *vma =3D walk->vma;
-> >> +
-> >> +       if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_asyn=
-c(vma) ||
-> >> +           !userfaultfd_wp_use_markers(vma)))
-> >> +               return -EPERM;
-> >> +
-> >> +       if (vma->vm_flags & VM_PFNMAP)
-> >> +               return 1;
-> >> +
-> >> +       return 0;
-> >> +}
-> >
-> > This could actually short-circuit all vma flags (e.g. IS_FILE): if
-> > (required_mask & IS_FILE && vma is not file-backed) return 0;
-> Sorry, unable to understand you. Should we do something here?
 
-It seems I had an earlier version of the patch in my mind, where
-PAGE_IS_FILE was based on vma type. Sorry for the noise.
+--lN6DZShoSnw04Qtm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+On Wed, Jun 21, 2023 at 04:08:47PM +0200, Jaroslav Kysela wrote:
 
->
-> >
-> > Best Regards
-> > Micha=C5=82 Miros=C5=82aw
->
-> --
-> BR,
-> Muhammad Usama Anjum
+> I think that the problem is somewhere else here. The overall test timeout
+> should be calculated dynamically. All tests may be queried for the maximal
+> expected interval based on the hardware/software capabilities. It's a bit
+> pitfall to have a fixed time limit where the realtime tests depend on the
+> number of devices.
+
+I tend to agree here, unfortunately Shuah hasn't responded to queries
+=66rom N=EDcolas about this which I imagine is what inspired this patch.  We
+also have problems with mixer-test on one of the Dialog CODECs with a
+couple of 64k value controls and no cache only mode.
+
+--lN6DZShoSnw04Qtm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSTC48ACgkQJNaLcl1U
+h9BGbwf/Tdjkixv5SETg00LJp+l4cOfv6sRpMFmm0MjvB7B8F7D8D4fFtu8vwLCk
+1pVCzZ2Z6WSbnPBMlVDSWV9ns+VBPoXD/W9R1OBx+IgQLyqr/FXUvQFed3MvQSrt
+uOHg5udSeoLyfhpGMgbHRUEy2yFjt+jJNvlPn5GPk0W9gDQ540afmJStnKzyOXrW
+8eL8q14TSSzn41yRaOZSN5K6Qx5vu/qDOxk2qKr9pUAkVABHVd1BBqzoysINKWEk
+++RHedjGxb4PrspUa5io2mzmDkd3VzoQu+ReCxSbLerIa45KG2oev+o9kSFK2Lbu
+juIvTAHQ21sYmy6eHgoLaxAshfYtyg==
+=GpWQ
+-----END PGP SIGNATURE-----
+
+--lN6DZShoSnw04Qtm--
