@@ -2,65 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0001738513
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 15:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF11738583
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 15:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbjFUN3n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 09:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
+        id S232643AbjFUNmg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 09:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231944AbjFUN3l (ORCPT
+        with ESMTP id S229567AbjFUNme (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:29:41 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D94199E
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 06:29:34 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f9b4b286aaso127495e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 06:29:34 -0700 (PDT)
+        Wed, 21 Jun 2023 09:42:34 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4EAD199A
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 06:42:32 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so3213a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 06:42:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687354172; x=1689946172;
+        d=google.com; s=20221208; t=1687354951; x=1689946951;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EdD6cJh6qu5svt4tCCc88YcqEs1pBBrW5+aY8WHVANw=;
-        b=FVWCzeaws/zcBjOjUu1n3j7WTelwG9JXw5CEnSXuVyoExnw46Vm7mXMycj7Ey0QchI
-         UVjgVZ4W3h5G5DyoOoZIhV8s+QLEGIuDiv7FHV5vIOU910wUI0T7BqJIL3hiUULNn3pB
-         VdLBj/gmBNQfPFQVDSrnzVcXK2S0UMtK8OtAgvQT4uoauo/jz+/SpPUkkiLkSsQxZd2z
-         AEO/hNolEPFpBTzv4Bg80pQfyL3BI9NXzGgzGhDMGTnQxEUxqfg/L5oCp96E0x9VwNVo
-         gpzHx1Oy1YyVpGtZNzIKXvRaHqC7XKKGAEWWjdzzHQPIo3iS6lSAwNv8U3KzzfxEcpnE
-         heFg==
+        bh=acPAMDZruYemX8TV6cTFFhShCBAic/MFb6BfUxW/eJ8=;
+        b=sIctj19+4iS+N71smDAtyzFiXlzPZiOW+G6z39xane6Zv//qrUMsCz6nAa7J6rV7AC
+         b9Jkx0V70uzOFA8gjwzskpQqkQ4Ukl3fYwTxBHAEaFMtCEOImHM7hEt+2d/UvfLorHs0
+         4E1pwirARjhBK//tyNLrThGOxKwhf8L7gVbhpGvtGoDCGkas9ROaw3nofqrra8OREG1m
+         aC+ioXYVUWJA9heR/2mhaSbQMckdie99gPv4K3MUVGFZVhmZLWUa4UscoMWhoa08jzae
+         PCAeOpYXF+j2zdZD0b/8Q/x7fn08yK7Tm3Q0H2oFC/DCBLrlrhJpxBsjUT9YlpgTarMt
+         d/DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687354172; x=1689946172;
+        d=1e100.net; s=20221208; t=1687354951; x=1689946951;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EdD6cJh6qu5svt4tCCc88YcqEs1pBBrW5+aY8WHVANw=;
-        b=Xg3CtBe74WW2wKxQ0B09VsCY6Id7gdHFinZgsnY/G5cv+QTCdLXakmu38OC9E1lK0z
-         V6vIkJnPwSuDFPwOrBj/1lebVYGSf+QXpvPuG5X1gvpUdZCHUS5312ScpwytQLArNAGm
-         iL4xfiJ5DmNsqip9sNwwbwZDPSEPQyiisou+vOM+TgyTocIzclXiJdhU6uai8c4m7AMK
-         gUD/Zmh07liY9jMbn3A3SRI2G2rKYHPPW7YIPWJKJ/7chExUaaIHul05uiTGQyxiWmMm
-         EV0vwppQ4sXpYNzx06rsl3tbEpLAIHEev+B7wIZ8KVlTkPybWQsEEcHTI47kjWNnq78B
-         ayQg==
-X-Gm-Message-State: AC+VfDz6aXdImCAbHjT40OR2T0ptm0eY+A1mUkUH35/IJOO5TosH5v52
-        94hTiFEkxME2G5jsEvLcwTzrkJcUQne4atV8s6X9lw==
-X-Google-Smtp-Source: ACHHUZ5oAZ9+8akmbC5AZy2U+cfa4H8NZ/OYc/GWPMsKsUpaTNBCrKI6BrBopugvdCFxO09eZzJcDuVKBMM6NPG7gzE=
-X-Received: by 2002:a05:600c:3ac9:b0:3f7:3e85:36a with SMTP id
- d9-20020a05600c3ac900b003f73e85036amr1128926wms.7.1687354172487; Wed, 21 Jun
- 2023 06:29:32 -0700 (PDT)
+        bh=acPAMDZruYemX8TV6cTFFhShCBAic/MFb6BfUxW/eJ8=;
+        b=eQtIQbhQ7nI6LTnbbtaNZ6FqPhOqKX+7+fJsqm7NZIbt2AH8B7Tfb5H17eSYag69Sl
+         /bCji3UtQf27MKjFkLDs4oD9JoVFrYvRfjM35gL+7BRXUjk2YtYpV4sWCah+xO902VLD
+         9LZYpLh+130nhOOFHR2oKSY8dYU0vy4jgz1pJRFnU8JzTNOo1AA8K1opTI1wy5hsbzw6
+         vQ4WQZ+ReOkrYw/2WpdosBcTNYEQAPbw06rVRyMNVSUg+p1g6P2VCKhOv53OPSW3/naJ
+         QAkNp5TwQRWVTuKuBPHs2oxt7a2e1WPnAfW6ONKV4kiJCQzAS1uWr44tVkjPWodE1BkF
+         /2HQ==
+X-Gm-Message-State: AC+VfDydZkG38hvTJpI4TBfj4LUWl6X5UKOmAoZAdH849a6KpGhGwf0D
+        o0+2YUD4bzi0nEIsqxgDnLfYOdA4mKkgIt2q0KYaFg==
+X-Google-Smtp-Source: ACHHUZ5UHF11eJAlQXvvGM7fzyvA2yQYbNg05LXVZvb+ql5FzKqus823wT1co33vViD1konnn7jxrblfw3QsQIOgWL8=
+X-Received: by 2002:a50:d59a:0:b0:51a:1fd1:952f with SMTP id
+ v26-20020a50d59a000000b0051a1fd1952fmr632263edi.1.1687354951319; Wed, 21 Jun
+ 2023 06:42:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230615141144.665148-1-usama.anjum@collabora.com>
- <20230615141144.665148-3-usama.anjum@collabora.com> <ZJHp6hSeS6lMo7qx@gmail.com>
- <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com>
-In-Reply-To: <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com>
+References: <20230621072404.2918101-1-usama.anjum@collabora.com> <20230621072404.2918101-3-usama.anjum@collabora.com>
+In-Reply-To: <20230621072404.2918101-3-usama.anjum@collabora.com>
 From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 21 Jun 2023 15:29:20 +0200
-Message-ID: <CABb0KFHpE+jJH0MmxZTFaQ9FNFNUnJcnnv7sSGDYqDqqB_FRqw@mail.gmail.com>
-Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+Date:   Wed, 21 Jun 2023 15:42:20 +0200
+Message-ID: <CABb0KFGhSLAHAsa3nk-pyMe2j9MU4u3xkQR21HOoS65ZB2dKsw@mail.gmail.com>
+Subject: Re: [PATCH v20 2/5] fs/proc/task_mmu: Implement IOCTL to get and
  optionally clear info about PTEs
 To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
         Danylo Mocherniuk <mdanylo@google.com>,
         Paul Gofman <pgofman@codeweavers.com>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
@@ -95,25 +93,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 08:35, Muhammad Usama Anjum
+On Wed, 21 Jun 2023 at 09:24, Muhammad Usama Anjum
 <usama.anjum@collabora.com> wrote:
-> On 6/20/23 11:03=E2=80=AFPM, Andrei Vagin wrote:
-> ...
-> >> +struct pagemap_scan_private {
-> >> +    struct page_region *vec_buf, cur_buf;
-> >> +    unsigned long long vec_buf_len, vec_buf_index, max_pages, found_p=
-ages, flags;
-> >
-> > should it be just unsigned long?
-> These internal values are storing data coming from user in struct
-> pm_scan_arg in which all variables are 64 bit(__u64) explicitly. This is
-> why we have unsigned long long here. It is absolutely necessary.
+[...]
+> +static int pagemap_scan_test_walk(unsigned long start, unsigned long end=
+,
+> +                                 struct mm_walk *walk)
+> +{
+> +       struct pagemap_scan_private *p =3D walk->private;
+> +       struct vm_area_struct *vma =3D walk->vma;
+> +
+> +       if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_async(v=
+ma) ||
+> +           !userfaultfd_wp_use_markers(vma)))
+> +               return -EPERM;
+> +
+> +       if (vma->vm_flags & VM_PFNMAP)
+> +               return 1;
+> +
+> +       return 0;
+> +}
 
-vec_buf_len and vec_buf_index can only have values in 0..512 range.
-flags has only a few lower bits defined (this is checked on ioctl
-entry) and max_pages can be limited to ULONG_MAX. Actually putting `if
-(!max_pages || max_pages > ULONG_MAX) max_pages =3D ULONG_MAX` would
-avoid having to check !max_pages during the walk.
+This could actually short-circuit all vma flags (e.g. IS_FILE): if
+(required_mask & IS_FILE && vma is not file-backed) return 0;
 
 Best Regards
 Micha=C5=82 Miros=C5=82aw
