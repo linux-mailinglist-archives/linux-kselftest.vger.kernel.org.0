@@ -2,120 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF11738583
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 15:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1753D7385A9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 15:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbjFUNmg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 09:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S231965AbjFUNta (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 09:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjFUNme (ORCPT
+        with ESMTP id S231660AbjFUNt3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:42:34 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4EAD199A
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 06:42:32 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so3213a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 06:42:32 -0700 (PDT)
+        Wed, 21 Jun 2023 09:49:29 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0943E1730
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 06:49:28 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-982a0232bdcso911452566b.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 06:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687354951; x=1689946951;
+        d=isovalent.com; s=google; t=1687355366; x=1689947366;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=acPAMDZruYemX8TV6cTFFhShCBAic/MFb6BfUxW/eJ8=;
-        b=sIctj19+4iS+N71smDAtyzFiXlzPZiOW+G6z39xane6Zv//qrUMsCz6nAa7J6rV7AC
-         b9Jkx0V70uzOFA8gjwzskpQqkQ4Ukl3fYwTxBHAEaFMtCEOImHM7hEt+2d/UvfLorHs0
-         4E1pwirARjhBK//tyNLrThGOxKwhf8L7gVbhpGvtGoDCGkas9ROaw3nofqrra8OREG1m
-         aC+ioXYVUWJA9heR/2mhaSbQMckdie99gPv4K3MUVGFZVhmZLWUa4UscoMWhoa08jzae
-         PCAeOpYXF+j2zdZD0b/8Q/x7fn08yK7Tm3Q0H2oFC/DCBLrlrhJpxBsjUT9YlpgTarMt
-         d/DQ==
+        bh=z46fWp/ZFzR66ZI77ViYtnd4W5sSAIMQYJ6XeMShdXc=;
+        b=RnQDgBUIZIeh/eH8flO6rDIOuAIaj69zWbov9wRKw42vZy56/UxN4oFhDpiwKwX2IM
+         KjV/cONpJS5cTtkDgOPCwW+thL6qz2ef7Ng1rKp11bIuaxSZKE9DNHiWw47McYeaOSnc
+         OWR6mytmFEM6u3cT7VVtD3og5mcMqeQvFY/l0zV9ZVK+Iowa1UPZMwiDl3oyvjF5oiRD
+         B2l54eSfbvlPVYrZSDs17W751IA8fH2CL9aAOEDPgM7ix9+O7oGCS3f36OgGsOh/7AGS
+         AWI8O1HYSvASt0jQ5Rc2yi67FXSsamlYCOrr1v0i6kxycvfcKwzE0X8Y0IxG7FmbgJqx
+         Ageg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687354951; x=1689946951;
+        d=1e100.net; s=20221208; t=1687355366; x=1689947366;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=acPAMDZruYemX8TV6cTFFhShCBAic/MFb6BfUxW/eJ8=;
-        b=eQtIQbhQ7nI6LTnbbtaNZ6FqPhOqKX+7+fJsqm7NZIbt2AH8B7Tfb5H17eSYag69Sl
-         /bCji3UtQf27MKjFkLDs4oD9JoVFrYvRfjM35gL+7BRXUjk2YtYpV4sWCah+xO902VLD
-         9LZYpLh+130nhOOFHR2oKSY8dYU0vy4jgz1pJRFnU8JzTNOo1AA8K1opTI1wy5hsbzw6
-         vQ4WQZ+ReOkrYw/2WpdosBcTNYEQAPbw06rVRyMNVSUg+p1g6P2VCKhOv53OPSW3/naJ
-         QAkNp5TwQRWVTuKuBPHs2oxt7a2e1WPnAfW6ONKV4kiJCQzAS1uWr44tVkjPWodE1BkF
-         /2HQ==
-X-Gm-Message-State: AC+VfDydZkG38hvTJpI4TBfj4LUWl6X5UKOmAoZAdH849a6KpGhGwf0D
-        o0+2YUD4bzi0nEIsqxgDnLfYOdA4mKkgIt2q0KYaFg==
-X-Google-Smtp-Source: ACHHUZ5UHF11eJAlQXvvGM7fzyvA2yQYbNg05LXVZvb+ql5FzKqus823wT1co33vViD1konnn7jxrblfw3QsQIOgWL8=
-X-Received: by 2002:a50:d59a:0:b0:51a:1fd1:952f with SMTP id
- v26-20020a50d59a000000b0051a1fd1952fmr632263edi.1.1687354951319; Wed, 21 Jun
- 2023 06:42:31 -0700 (PDT)
+        bh=z46fWp/ZFzR66ZI77ViYtnd4W5sSAIMQYJ6XeMShdXc=;
+        b=HChUbqvNpX3HJbYatHbNs1LJVGg54kS98rjeEx9NqQfxac5PYgbfgOcDsFclQuJAj2
+         X4WAuQNdHoB6EmMC4BZ/nenYMoIEVyzr59kfHUsd1I7KxRNee4aazqSYbFQThY+MF0es
+         DbmQUoqv5KR0DE/IjQlw45VUsmoJhYVuUKvLJMMCPVPThPmH4naHeEbfyuh6ho/8R5dU
+         i3Xt8VzLY3mEed4TpKswVWFPNGLluxgJEhh/etsVrBGDs7j3ro3MiWcGdWS5oKhzJv5J
+         pC1zc4JIZXaM2twTYbQBm9RhcNo9iUO3l4Q3gVULpXPbeDqnFviWfCXiwqE2XV5b9kvB
+         hTcA==
+X-Gm-Message-State: AC+VfDx9nfjyl0KJyYZWq7eHAcP5SgjN7W0hYKX8D8nTzY7KeCEiYjyJ
+        MCXCWKOHMR1ccvmyzVuxGwi1rYXXI7zBp4XWkgr9nQ==
+X-Google-Smtp-Source: ACHHUZ6AzbWc8T+/nD8hQVp/W0B+gPpyf1xElqvN9xTarmoytSSoSkjhswKGvFcecfAhLkjmMYuB/ajCxgDMJAR4eVI=
+X-Received: by 2002:a17:907:6088:b0:988:dc8e:2fec with SMTP id
+ ht8-20020a170907608800b00988dc8e2fecmr7310743ejc.36.1687355366467; Wed, 21
+ Jun 2023 06:49:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230621072404.2918101-1-usama.anjum@collabora.com> <20230621072404.2918101-3-usama.anjum@collabora.com>
-In-Reply-To: <20230621072404.2918101-3-usama.anjum@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 21 Jun 2023 15:42:20 +0200
-Message-ID: <CABb0KFGhSLAHAsa3nk-pyMe2j9MU4u3xkQR21HOoS65ZB2dKsw@mail.gmail.com>
-Subject: Re: [PATCH v20 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+References: <CAN+4W8ge-ZQjins-E1=GHDnsi9myFqt7pwNqMkUQHZOPHQhFvQ@mail.gmail.com>
+ <20230620183123.74585-1-kuniyu@amazon.com>
+In-Reply-To: <20230620183123.74585-1-kuniyu@amazon.com>
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Wed, 21 Jun 2023 14:49:15 +0100
+Message-ID: <CAN+4W8gYuW5P3t5881YdMq1pYnG9DsQJFiJWPoLFsKVsZiLLQQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/6] net: remove duplicate reuseport_lookup functions
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+        edumazet@google.com, haoluo@google.com, hemanthmalla@gmail.com,
+        joe@wand.net.nz, john.fastabend@gmail.com, jolsa@kernel.org,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, martin.lau@linux.dev,
+        mykolal@fb.com, netdev@vger.kernel.org, pabeni@redhat.com,
+        sdf@google.com, shuah@kernel.org, song@kernel.org,
+        willemdebruijn.kernel@gmail.com, yhs@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 09:24, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-[...]
-> +static int pagemap_scan_test_walk(unsigned long start, unsigned long end=
-,
-> +                                 struct mm_walk *walk)
-> +{
-> +       struct pagemap_scan_private *p =3D walk->private;
-> +       struct vm_area_struct *vma =3D walk->vma;
-> +
-> +       if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_async(v=
-ma) ||
-> +           !userfaultfd_wp_use_markers(vma)))
-> +               return -EPERM;
-> +
-> +       if (vma->vm_flags & VM_PFNMAP)
-> +               return 1;
-> +
-> +       return 0;
-> +}
+On Tue, Jun 20, 2023 at 7:31=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.co=
+m> wrote:
+>
+> Good point.  This is based on an assumption that all SO_REUSEPORT
+> sockets have the same score, which is wrong for two corner cases [...]
 
-This could actually short-circuit all vma flags (e.g. IS_FILE): if
-(required_mask & IS_FILE && vma is not file-backed) return 0;
+I did some more digging. I think this was introduced by commit
+efc6b6f6c311 ("udp: Improve load balancing for SO_REUSEPORT.") which
+unfortunately ran into a merge conflict. That resulted in Dave Miller
+moving the bug around in commit a57066b1a019 ("Merge
+git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net"). Can you
+take a look and let me know if you think that is correct?
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+Best
+Lorenz
