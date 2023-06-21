@@ -2,44 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE26738695
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 16:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2179F7386FB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 16:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjFUOQa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 10:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
+        id S232953AbjFUO2a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 10:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232760AbjFUOQU (ORCPT
+        with ESMTP id S232951AbjFUO2J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:16:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646A6199C;
-        Wed, 21 Jun 2023 07:16:19 -0700 (PDT)
-Received: from [192.168.10.54] (unknown [182.179.162.32])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2D60A6606F95;
-        Wed, 21 Jun 2023 15:16:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687356977;
-        bh=ZfrnBJpRDergXzvQfqh1+l1r+/MY/drS+UbPB4AW/uk=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=i57nuMmb+8vcTd9/9oF/rAl+e8nxceBaB7h55tYAuxyov6Kermz+DV/q/aSfpXnfw
-         fa8Wh1/O/jcyxUTiVaIDZsTJagLKkHdu3rAIkPCyLGIS7c/AUAAQ5cWjs6+wJ4YjFZ
-         28FYWQGCWE1W4Rg6Hv+ambt+3tBj+XtWDqtgLG3uUE6iz74JTwH00h6JkBcmciWkxY
-         1Rn4/ywv2h8ZMp4jhiilafjzHifzX+1iH3jW6WJm1DrfWIhhrqCyShcEIO3MfVWZ5Q
-         9Zxrt/Eheo7J3RVDJ9qCHBx6ebvjMNUq99xe6OyN5lGj2rWehMZ7VgF27366Y1QTbg
-         lfsg9sPmQ4uYw==
-Message-ID: <de16602a-7ed9-9c03-30d9-5edccc48d2f0@collabora.com>
-Date:   Wed, 21 Jun 2023 19:16:07 +0500
+        Wed, 21 Jun 2023 10:28:09 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552821FF0
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 07:27:47 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so3688a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 07:27:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687357666; x=1689949666;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nx/8tkwi/QCBsZ8gmyeG8Rkuz2KMvUk7ydKIx+Um+wA=;
+        b=Zx7ZT6CDGiK06H867vY+sNm4wafZK+Kvmb8BqCHCD+RgK/A8TOsKrYm88ZeQ2SECqv
+         S7fVo2jMZAWlKlfibVSF4+NdJIuFTIa0/hV9eZbzpGNs8NdeOq6Gf/hK1j41+VqJkX7f
+         0MdtnvEDcTvQ1qlxcyubtHy52SpsQWtzGcgMHO/beMlI2JAgE/lBuWgZO2ZNHA+12UAk
+         6xkAO2o6lOr6d4DjCP484PkPelet7gw71VpFO6zM1RaeJUU4GliVx6GQS/0Q1anV9/b0
+         1vlDsaqBmqIlvqPZnEthL85A7DkyTOobm6olApyMhJG0hLtOI5m8PH9wari0gbV3oEGX
+         O3+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687357666; x=1689949666;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nx/8tkwi/QCBsZ8gmyeG8Rkuz2KMvUk7ydKIx+Um+wA=;
+        b=V4TOBqI0r9e6J4M/aWoKQQ9zv3Xny7h4vhCeqJ6rTrvj5vUOZdyCrQvsCE4mkMSPlp
+         iUlbgsOqTrLDVrz+haRhGB3BlRmLXjsRRnN/4j4y66cbXQF1jNMrtAVduoCRlMR1JFJq
+         XQDvLiyic43W8Sw/E5c2NBGmYf6dLkd7K3TClBp5IqvI1Kax0iqXkUtprX0JYcmiJ8hY
+         e//NlMA7oWcR5iJFmXZsU8CoCegzx5gB6MIjvjkINy4j73Fp1gCuAMlVCXwBBNGHPBEA
+         D/Ejuzo9E9H5JryTtJMqzVhQolgiXTScmhEQ1yGE+JnuK4Gk0NxTlXC20g0A3nHXBsoJ
+         fmOQ==
+X-Gm-Message-State: AC+VfDyw6Nw9BPui/1BFfMrpbidHwXNFjI9zop52jdnKm9c233UUc9jc
+        IcPGiMPmBVO9mHJPbUtWr8Dv5TQfR6HNvkzfy4Ba/g==
+X-Google-Smtp-Source: ACHHUZ5b784EIfEpEvB4OmcZ87YYr3Ia27+LLB97tML2JkkHkDJzLWdV+C3hXWpgda3VhYBy/K3VCv+xK2nMSkOkpVY=
+X-Received: by 2002:a50:d79a:0:b0:506:b280:4993 with SMTP id
+ w26-20020a50d79a000000b00506b2804993mr20647edi.2.1687357665556; Wed, 21 Jun
+ 2023 07:27:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
+References: <20230621072404.2918101-1-usama.anjum@collabora.com>
+ <20230621072404.2918101-3-usama.anjum@collabora.com> <CABb0KFGhSLAHAsa3nk-pyMe2j9MU4u3xkQR21HOoS65ZB2dKsw@mail.gmail.com>
+ <de16602a-7ed9-9c03-30d9-5edccc48d2f0@collabora.com>
+In-Reply-To: <de16602a-7ed9-9c03-30d9-5edccc48d2f0@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Wed, 21 Jun 2023 16:27:34 +0200
+Message-ID: <CABb0KFFsHEX2cKzQj-t9vx=q4FjmObNu930ogQMBn0L6=3ph=w@mail.gmail.com>
+Subject: Re: [PATCH v20 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andrei Vagin <avagin@gmail.com>,
         Danylo Mocherniuk <mdanylo@google.com>,
@@ -63,55 +82,58 @@ Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v20 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230621072404.2918101-1-usama.anjum@collabora.com>
- <20230621072404.2918101-3-usama.anjum@collabora.com>
- <CABb0KFGhSLAHAsa3nk-pyMe2j9MU4u3xkQR21HOoS65ZB2dKsw@mail.gmail.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFGhSLAHAsa3nk-pyMe2j9MU4u3xkQR21HOoS65ZB2dKsw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/21/23 6:42 PM, Michał Mirosław wrote:
-> On Wed, 21 Jun 2023 at 09:24, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
-> [...]
->> +static int pagemap_scan_test_walk(unsigned long start, unsigned long end,
->> +                                 struct mm_walk *walk)
->> +{
->> +       struct pagemap_scan_private *p = walk->private;
->> +       struct vm_area_struct *vma = walk->vma;
->> +
->> +       if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_async(vma) ||
->> +           !userfaultfd_wp_use_markers(vma)))
->> +               return -EPERM;
->> +
->> +       if (vma->vm_flags & VM_PFNMAP)
->> +               return 1;
->> +
->> +       return 0;
->> +}
-> 
-> This could actually short-circuit all vma flags (e.g. IS_FILE): if
-> (required_mask & IS_FILE && vma is not file-backed) return 0;
-Sorry, unable to understand you. Should we do something here?
+On Wed, 21 Jun 2023 at 16:16, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 6/21/23 6:42=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Wed, 21 Jun 2023 at 09:24, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> > [...]
+> >> +static int pagemap_scan_test_walk(unsigned long start, unsigned long =
+end,
+> >> +                                 struct mm_walk *walk)
+> >> +{
+> >> +       struct pagemap_scan_private *p =3D walk->private;
+> >> +       struct vm_area_struct *vma =3D walk->vma;
+> >> +
+> >> +       if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_asyn=
+c(vma) ||
+> >> +           !userfaultfd_wp_use_markers(vma)))
+> >> +               return -EPERM;
+> >> +
+> >> +       if (vma->vm_flags & VM_PFNMAP)
+> >> +               return 1;
+> >> +
+> >> +       return 0;
+> >> +}
+> >
+> > This could actually short-circuit all vma flags (e.g. IS_FILE): if
+> > (required_mask & IS_FILE && vma is not file-backed) return 0;
+> Sorry, unable to understand you. Should we do something here?
 
-> 
-> Best Regards
-> Michał Mirosław
+It seems I had an earlier version of the patch in my mind, where
+PAGE_IS_FILE was based on vma type. Sorry for the noise.
 
--- 
-BR,
-Muhammad Usama Anjum
+Best Regards
+Micha=C5=82 Miros=C5=82aw
+
+>
+> >
+> > Best Regards
+> > Micha=C5=82 Miros=C5=82aw
+>
+> --
+> BR,
+> Muhammad Usama Anjum
