@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2052773898C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 17:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E5A73898A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 17:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbjFUPgm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 11:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        id S233470AbjFUPgr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 11:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjFUPg3 (ORCPT
+        with ESMTP id S233563AbjFUPgd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:36:29 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADF32682;
-        Wed, 21 Jun 2023 08:36:02 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9875c2d949eso762944966b.0;
-        Wed, 21 Jun 2023 08:36:02 -0700 (PDT)
+        Wed, 21 Jun 2023 11:36:33 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECC7170C;
+        Wed, 21 Jun 2023 08:36:03 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51a200fc3eeso7936593a12.3;
+        Wed, 21 Jun 2023 08:36:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687361755; x=1689953755;
+        d=gmail.com; s=20221208; t=1687361757; x=1689953757;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vLXTp0RUGgA+Jc/sbfJseOldAYLgzR9TekxbeG05s8o=;
-        b=RyrImiepPCrpOmy1ozaSxyvcEDzp9MhE3T2S32+bcXkS1ZJzt1kFvryEHapCuclisn
-         FsMnBcnAgFvVbz6oHOnhjon9AzlNuRq2CeT9VGoekE8V0UMz5c+VXoFvg4jFkTzdqk+l
-         zCxPPRFEFfvNeWQrQn5XGRP/ts+3BrdZOvhFYBqSf2BgPLY203kPTKllyM0/471/aFL6
-         OcKfCwkc99LlwRgxgbKjREL2XCJLiI2GiJPwbCb8Ov09ctVU+UVoYc1tsiL8jr9oJbck
-         eM4hcz2ZMDYQzQKIyt7/dhp1et0FiNe5SSxnxPrYJdLkUyWmVoqzfZgwgMyqsMdkeBUk
-         Evnw==
+        bh=DzChpS5/qP0KCHtoRtmdGCRzY7mcg9Tmt0tlVbK0cFM=;
+        b=a2EpY5FRgZg/ZJx9472PbHOAXhPjVRtL3gkOHiWZAInSGWmfd8S2waNUr8x/3fVqsn
+         YvkLgmXw++orjAi7+VylLJjJrxY3bPjAH2qQZiYhmyzMvg8KtGXNH8Sy8rKuOp8TL2LI
+         iFBNuY0fFlhVGLK5cj7U6GlTFtiiCDlMatudwoWI4DdGS96p0hhTnedP0JP0ewZ3O1A/
+         XuueBkpwrasA+tNp/PZOlPfYv3RVEuvyTlDXwV/kkfZ3nJVWkA1fPeSfDtCSYAjS9RVA
+         nGieIhGo9G/hfgT1jhvvwFTxwozp3MjDnp4fpvmTVkR3rqT86nVUJblmtQ7pjQgBFco6
+         +XyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687361755; x=1689953755;
+        d=1e100.net; s=20221208; t=1687361757; x=1689953757;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vLXTp0RUGgA+Jc/sbfJseOldAYLgzR9TekxbeG05s8o=;
-        b=NgIxnYh3jn3fqjFOCf3dk6fmAcmsq8qqnhyG8ofPw00cz1ovTjvqbLq0mtKaycZeyL
-         soILkTWTXOnkfZg/QPqJW/hwL8ItaDO07neun99EPNViSmbsSL2Rz4V+TBlA8JMb7MH7
-         GYusPIDEAH4MxIvo0TQgK8XMUUyjcp6gMeSS5fnCdLrX9Flkr+EouOVtYuFOJMwYTJwN
-         92IjIy+Vw/PckS7URNSMrckvbdEWDGs0mV201ejelhIjjIlYgsUb6V1Lz1vkJYhc/IyT
-         fR+FIZnkzH4kPkwpC7R95bvF8B3fgzcm1BB9bW1dS/dSVqsxyp42iRH+Oh3B9+WAI6zX
-         SfOQ==
-X-Gm-Message-State: AC+VfDxei1eYtnW6fh5Y9YvJMg95psxgPTnd2dtjoRG16RZQg+qX+mJk
-        39bwJbKyoCMlWdzrQmrzUIo=
-X-Google-Smtp-Source: ACHHUZ6LSkSHPtNkaElIDiUTVzr5C7JOcAg3hjTOWDFm9i+huA6Tb3z15NTdVZiCr2IHhaJwnVmi4A==
-X-Received: by 2002:a17:907:161e:b0:989:3f05:b391 with SMTP id hb30-20020a170907161e00b009893f05b391mr4661181ejc.17.1687361754973;
-        Wed, 21 Jun 2023 08:35:54 -0700 (PDT)
+        bh=DzChpS5/qP0KCHtoRtmdGCRzY7mcg9Tmt0tlVbK0cFM=;
+        b=IDRS+4FRaHtf0qijSqLgiHD904GUl+yWoDFfsC+ObdCBVoqUfZwgCfUoMrXL7yBAxk
+         GVFNh0rIPhrLM2OaNKX1+1Ez4CXrT2fmTSSCVlJX+lny5s3l3wN8aKhGTy1Vt/Yno39X
+         hB4KzGM0nGIpe+NNZK5Q3QCUz7dw1LVcXPPDnEKX60FVjdzb3C6qeqJ508Vh9UkHYkmi
+         OWvaFzzJ0M330Ge/gZBHI0lvzpzlAdSQ5hK2V1c1f121iQlnxGc9rEt7BMd66oCUoKQ7
+         w5CS1BleWQfJDk1Yi2NYeSDQCCu5JW5WN0TP4Auxl6LlBAGx45Qyv8LEKsmufeCtOGHg
+         rV3A==
+X-Gm-Message-State: AC+VfDzCMqIPB7gCqCaKcyHMZfbSMobOhCgNNNajEgctanqLAdxVOoTm
+        Vv/6qhHFVHbfBG1kn7DrGbU9JkOzxL/3sA==
+X-Google-Smtp-Source: ACHHUZ7in8F+oCZ/lngxAfcGcQTqzZqjot7W4CKlTfRSwJ45anBk7SuYEYuTD+jRr+yQvrrp/mBmag==
+X-Received: by 2002:a17:907:3e27:b0:978:ab4a:2154 with SMTP id hp39-20020a1709073e2700b00978ab4a2154mr16799688ejc.1.1687361756781;
+        Wed, 21 Jun 2023 08:35:56 -0700 (PDT)
 Received: from lelloman-5950.homenet.telecomitalia.it (host-87-21-158-222.retail.telecomitalia.it. [87.21.158.222])
-        by smtp.gmail.com with ESMTPSA id r3-20020a170906c28300b00988acf24f9csm3266123ejz.97.2023.06.21.08.35.53
+        by smtp.gmail.com with ESMTPSA id r3-20020a170906c28300b00988acf24f9csm3266123ejz.97.2023.06.21.08.35.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 08:35:54 -0700 (PDT)
+        Wed, 21 Jun 2023 08:35:56 -0700 (PDT)
 From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
         shuah@kernel.org, mhocko@kernel.org, roman.gushchin@linux.dev,
@@ -59,9 +59,9 @@ To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
 Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
         cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Subject: [PATCH 1/3] selftests: cgroup: add test_zswap program
-Date:   Wed, 21 Jun 2023 17:35:46 +0200
-Message-Id: <20230621153548.428093-2-cerasuolodomenico@gmail.com>
+Subject: [PATCH 2/3] selftests: cgroup: add test_zswap with no kmem bypass test
+Date:   Wed, 21 Jun 2023 17:35:47 +0200
+Message-Id: <20230621153548.428093-3-cerasuolodomenico@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230621153548.428093-1-cerasuolodomenico@gmail.com>
 References: <20230621153548.428093-1-cerasuolodomenico@gmail.com>
@@ -77,112 +77,200 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add empty cgroup-zswap self test scaffold program, test functions to be
-added in the next commits.
+Add a cgroup selftest that verifies memcg charging in zswap.
+The original issue was that kmem bypass was applied to pages swapped out
+to zswap by kswapd, resulting in zswapped memory not being charged.
+It was fixed by commit cd08d80ecdac("mm: correctly charge compressed
+memory to its memcg").
 
 Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 ---
- tools/testing/selftests/cgroup/.gitignore   |  1 +
- tools/testing/selftests/cgroup/Makefile     |  2 +
- tools/testing/selftests/cgroup/test_zswap.c | 62 +++++++++++++++++++++
- 3 files changed, 65 insertions(+)
- create mode 100644 tools/testing/selftests/cgroup/test_zswap.c
+ tools/testing/selftests/cgroup/test_zswap.c | 163 ++++++++++++++++++++
+ 1 file changed, 163 insertions(+)
 
-diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
-index c4a57e69f749..4d556df4f77b 100644
---- a/tools/testing/selftests/cgroup/.gitignore
-+++ b/tools/testing/selftests/cgroup/.gitignore
-@@ -5,4 +5,5 @@ test_freezer
- test_kmem
- test_kill
- test_cpu
-+test_zswap
- wait_inotify
-diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index 3d263747d2ad..27dbdd7bb4bb 100644
---- a/tools/testing/selftests/cgroup/Makefile
-+++ b/tools/testing/selftests/cgroup/Makefile
-@@ -12,6 +12,7 @@ TEST_GEN_PROGS += test_core
- TEST_GEN_PROGS += test_freezer
- TEST_GEN_PROGS += test_kill
- TEST_GEN_PROGS += test_cpu
-+TEST_GEN_PROGS += test_zswap
- 
- LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
- 
-@@ -23,3 +24,4 @@ $(OUTPUT)/test_core: cgroup_util.c
- $(OUTPUT)/test_freezer: cgroup_util.c
- $(OUTPUT)/test_kill: cgroup_util.c
- $(OUTPUT)/test_cpu: cgroup_util.c
-+$(OUTPUT)/test_zswap: cgroup_util.c
 diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-new file mode 100644
-index 000000000000..001533667322
---- /dev/null
+index 001533667322..e859fecd310b 100644
+--- a/tools/testing/selftests/cgroup/test_zswap.c
 +++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -0,0 +1,62 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+
-+#include <linux/limits.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+
-+#include "../kselftest.h"
-+#include "cgroup_util.h"
-+
-+#define T(x) { x, #x }
-+struct zswap_test {
-+	int (*fn)(const char *root);
-+	const char *name;
-+} tests[] = {
-+};
-+#undef T
-+
-+static bool zswap_configured(void)
+@@ -4,15 +4,178 @@
+ #include <linux/limits.h>
+ #include <unistd.h>
+ #include <stdio.h>
++#include <signal.h>
++#include <sys/sysinfo.h>
++#include <string.h>
++#include <sys/wait.h>
++#include <sys/mman.h>
+ 
+ #include "../kselftest.h"
+ #include "cgroup_util.h"
+ 
++static int read_int(const char *path, size_t *value)
 +{
-+	return access("/sys/module/zswap", F_OK) == 0;
++	FILE *file;
++	int ret = 0;
++
++	file = fopen(path, "r");
++	if (!file)
++		return -1;
++	if (fscanf(file, "%ld", value) != 1)
++		ret = -1;
++	fclose(file);
++	return ret;
 +}
 +
-+int main(int argc, char **argv)
++static int set_min_free_kb(size_t value)
 +{
-+	char root[PATH_MAX];
-+	int i, ret = EXIT_SUCCESS;
++	FILE *file;
++	int ret;
 +
-+	if (cg_find_unified_root(root, sizeof(root)))
-+		ksft_exit_skip("cgroup v2 isn't mounted\n");
++	file = fopen("/proc/sys/vm/min_free_kbytes", "w");
++	if (!file)
++		return -1;
++	ret = fprintf(file, "%ld\n", value);
++	fclose(file);
++	return ret;
++}
 +
-+	if (!zswap_configured())
-+		ksft_exit_skip("zswap isn't configured\n");
++static int read_min_free_kb(size_t *value)
++{
++	return read_int("/proc/sys/vm/min_free_kbytes", value);
++}
 +
-+	/*
-+	 * Check that memory controller is available:
-+	 * memory is listed in cgroup.controllers
-+	 */
-+	if (cg_read_strstr(root, "cgroup.controllers", "memory"))
-+		ksft_exit_skip("memory controller isn't available\n");
++static int get_zswap_stored_pages(size_t *value)
++{
++	return read_int("/sys/kernel/debug/zswap/stored_pages", value);
++}
 +
-+	if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
-+		if (cg_write(root, "cgroup.subtree_control", "+memory"))
-+			ksft_exit_skip("Failed to set memory controller\n");
++struct no_kmem_bypass_child_args {
++	size_t target_alloc_bytes;
++	size_t child_allocated;
++};
 +
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		switch (tests[i].fn(root)) {
-+		case KSFT_PASS:
-+			ksft_test_result_pass("%s\n", tests[i].name);
++static int no_kmem_bypass_child(const char *cgroup, void *arg)
++{
++	struct no_kmem_bypass_child_args *values = arg;
++	void *allocation;
++
++	allocation = malloc(values->target_alloc_bytes);
++	if (!allocation) {
++		values->child_allocated = true;
++		return -1;
++	}
++	for (long i = 0; i < values->target_alloc_bytes; i += 4095)
++		((char *)allocation)[i] = 'a';
++	values->child_allocated = true;
++	pause();
++	free(allocation);
++	return 0;
++}
++
++/*
++ * When pages owned by a memcg are pushed to zswap by kswapd, they should be
++ * charged to that cgroup. This wasn't the case before commit
++ * cd08d80ecdac("mm: correctly charge compressed memory to its memcg").
++ *
++ * The test first allocates memory in a memcg, then raises min_free_kbytes to
++ * a very high value so that the allocation falls below low wm, then makes
++ * another allocation to trigger kswapd that should push the memcg-owned pages
++ * to zswap and verifies that the zswap pages are correctly charged.
++ *
++ * To be run on a VM with at most 4G of memory.
++ */
++static int test_no_kmem_bypass(const char *root)
++{
++	size_t min_free_kb_high, min_free_kb_low, min_free_kb_original;
++	struct no_kmem_bypass_child_args *values;
++	size_t trigger_allocation_size;
++	int wait_child_iteration = 0;
++	long stored_pages_threshold;
++	struct sysinfo sys_info;
++	int ret = KSFT_FAIL;
++	int child_status;
++	char *test_group;
++	pid_t child_pid;
++
++	/* Read sys info and compute test values accordingly */
++	if (sysinfo(&sys_info) != 0)
++		return KSFT_FAIL;
++	if (sys_info.totalram > 5000000000)
++		return KSFT_SKIP;
++	values = mmap(0, sizeof(struct no_kmem_bypass_child_args), PROT_READ |
++			PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
++	if (values == MAP_FAILED)
++		return KSFT_FAIL;
++	if (read_min_free_kb(&min_free_kb_original))
++		return KSFT_FAIL;
++	min_free_kb_high = sys_info.totalram / 2000;
++	min_free_kb_low = sys_info.totalram / 500000;
++	values->target_alloc_bytes = (sys_info.totalram - min_free_kb_high * 1000) +
++		sys_info.totalram * 5 / 100;
++	stored_pages_threshold = sys_info.totalram / 5 / 4096;
++	trigger_allocation_size = sys_info.totalram / 20;
++
++	/* Set up test memcg */
++	if (cg_write(root, "cgroup.subtree_control", "+memory"))
++		goto out;
++	test_group = cg_name(root, "kmem_bypass_test");
++	if (!test_group)
++		goto out;
++
++	/* Spawn memcg child and wait for it to allocate */
++	set_min_free_kb(min_free_kb_low);
++	if (cg_create(test_group))
++		goto out;
++	values->child_allocated = false;
++	child_pid = cg_run_nowait(test_group, no_kmem_bypass_child, values);
++	if (child_pid < 0)
++		goto out;
++	while (!values->child_allocated && wait_child_iteration++ < 10000)
++		usleep(1000);
++
++	/* Try to wakeup kswapd and let it push child memory to zswap */
++	set_min_free_kb(min_free_kb_high);
++	for (int i = 0; i < 20; i++) {
++		size_t stored_pages;
++		char *trigger_allocation = malloc(trigger_allocation_size);
++
++		if (!trigger_allocation)
 +			break;
-+		case KSFT_SKIP:
-+			ksft_test_result_skip("%s\n", tests[i].name);
++		for (int i = 0; i < trigger_allocation_size; i += 4095)
++			trigger_allocation[i] = 'b';
++		usleep(100000);
++		free(trigger_allocation);
++		if (get_zswap_stored_pages(&stored_pages))
 +			break;
-+		default:
-+			ret = EXIT_FAILURE;
-+			ksft_test_result_fail("%s\n", tests[i].name);
++		if (stored_pages < 0)
++			break;
++		/* If memory was pushed to zswap, verify it belongs to memcg */
++		if (stored_pages > stored_pages_threshold) {
++			int zswapped = cg_read_key_long(test_group, "memory.stat", "zswapped ");
++			int delta = stored_pages * 4096 - zswapped;
++			int result_ok = delta < stored_pages * 4096 / 4;
++
++			ret = result_ok ? KSFT_PASS : KSFT_FAIL;
 +			break;
 +		}
 +	}
 +
++	kill(child_pid, SIGTERM);
++	waitpid(child_pid, &child_status, 0);
++out:
++	set_min_free_kb(min_free_kb_original);
++	cg_destroy(test_group);
++	free(test_group);
 +	return ret;
 +}
++
+ #define T(x) { x, #x }
+ struct zswap_test {
+ 	int (*fn)(const char *root);
+ 	const char *name;
+ } tests[] = {
++	T(test_no_kmem_bypass),
+ };
+ #undef T
+ 
 -- 
 2.34.1
 
