@@ -2,183 +2,239 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8AA7382D3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 14:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFCA73841C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 14:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbjFUMHd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 08:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
+        id S229602AbjFUMxC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 08:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjFUMHc (ORCPT
+        with ESMTP id S230404AbjFUMxA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:07:32 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EFA170A;
-        Wed, 21 Jun 2023 05:07:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WiyBIlovyyYbDCqBTT4Nea5GFFBXRwSlZ6hl1KiKj/GeyRV/1jdbGfy2IIBBYCzm0+rDhagH3xZWvy6uzED4UxIsG4iqfuREZVwbyWfU71vTQ90l/NknS32+eWPfIDPH6sxlDfm9SsMvf8qnK8S54VqPMgflq4G6FYdcmdenNu145aRG9VHshMbw3KuIPjaEUVKdgCj3zYPBYN2sKEucfIVOzj47hHUh/aXtSbhhgXPJKkl9xxHS6xYsY9cxtotp9r5ONUCfff5j6TAEkhfTN3nP8Ry/kbOw/gLh7nFi0tbfc0vDJbf684oVwr6/qjCWaSOTwzhcqkb/N/JwNxoFWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7CIJyHdknQiV2j/HwBUVj/YthK3XmQd2QxSjx6TZRiA=;
- b=exWC+534lvrnjY4TszrZMqrzzBXuR4y+B6OzJAd0cE/vhuRangt5UXGuZjg/vkwuV70zdkIxfKIOlnQ3nU0+pKpGpxEBcAutOoxZUGoefY8GjOOfzIiAwtIoBZFoiu6QOqPdILOcwzEwkQuQer0wysOyclsEw9146PNVlhe2MoeUuDpBr2yqiWgvYxPjkEL0KTKttGWbt5YI+3FBfaXsvJ4eYmqbmvCHp0aUjIZWu9nQEZkvH/y3FxAep7Bj2dMg0XstmPeJGlqxuMqAeVcgYWC5EavJZss4OtoVZGVyIBCoFlnEtL6JAuxS2rK3CAa+7rAfrqypfdMI9J3q6e86/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7CIJyHdknQiV2j/HwBUVj/YthK3XmQd2QxSjx6TZRiA=;
- b=t+1dYg+txaTd6dKTHoRgSR516uTTF7vxh/ajKUlsJ8RIs51q4DzdTWHpDu5zQrXJWm/LVcdDIhvWBXnAXlfBo06qZHabgnhnniSe2d6gJcxoDYAayesu3K5qVagNG8OMomUeAgaFYG8u1otEvZo93lDW/jZq7WsT4M5TOpmsgr/4mSEmd981gIYveVt0rTVErmhhhYwcN1lJom6+4f9PmjMGi6aymDDbRnmkbPzvuk1/17yYVGwS0j7pq0Ll8xgsyD19bnDyR280LTC5cVYsbUoCwPKPxQhNtyYoFY+4OA4LZBgjovHvbmKV8tSeV5uDIPqh9q+28gcVvumi/vglCA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SJ0PR12MB6877.namprd12.prod.outlook.com (2603:10b6:a03:47f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21; Wed, 21 Jun
- 2023 12:07:28 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6500.031; Wed, 21 Jun 2023
- 12:07:28 +0000
-Date:   Wed, 21 Jun 2023 09:07:25 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 00/11] iommufd: Add nesting infrastructure
-Message-ID: <ZJLn/d4UHAejDSgL@nvidia.com>
-References: <20230511143844.22693-1-yi.l.liu@intel.com>
- <BN9PR11MB5276DAF0A11809CF8433EE338C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZGdiS2m8jcd5OOt5@nvidia.com>
- <BN9PR11MB5276A74B2DA86C79908A420B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZH9AGWf1yRDu/86q@nvidia.com>
- <BN9PR11MB52763C7B838B04D3200322FD8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZJBL8QLLBiwRsUSI@nvidia.com>
- <BN9PR11MB527663567ECB8AD52D3170818C5CA@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZJGf3sgLKr9HLZuE@nvidia.com>
- <SJ0PR11MB67441A87771D9140D1A1F2DC925DA@SJ0PR11MB6744.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SJ0PR11MB67441A87771D9140D1A1F2DC925DA@SJ0PR11MB6744.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BYAPR05CA0056.namprd05.prod.outlook.com
- (2603:10b6:a03:74::33) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 21 Jun 2023 08:53:00 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB0C1995;
+        Wed, 21 Jun 2023 05:52:53 -0700 (PDT)
+X-QQ-mid: bizesmtp91t1687351961tumh2szc
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 21 Jun 2023 20:52:40 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: uGhnJwy6xZL950HgA6Ham07tGfpCj7XROiqwj9NcJbqlRHMGxdNztZ48+M4Ci
+        5rBXvOWTVLqFMmHSIaRV89+irDDcSri2MzO0RSB6Cvp9kHJS63lYvvpXqHW37/1jflkFjLw
+        BaAVo9BOjTCf1qzlFkkr+aXCBVxIQ2RIz/IEdLnV48jlwxqbR/zzM2ebEgp8HuJT9Oj7XD/
+        RT/ntGVI8Rx1Ko3ncYG+aFpczv6LvPI4lLHI/PYS0KNw4MDNBnirwckm8vU37XeBGoshVQh
+        s2/xoh1gRhyWgLspD5RxmHpL4Oz85yDedqJZ3PH8JjpBk32PBpd9WhVpCwG6QXHk9k7pAqL
+        xHJ9qG+FQh0+fiCYC5c7Kf8h8SrTQYPwFjdkMW8BPTWpS0lXJs=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 5853156832008230843
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v1 00/17] selftests/nolibc: allow run with minimal kernel config
+Date:   Wed, 21 Jun 2023 20:52:30 +0800
+Message-Id: <cover.1687344643.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ0PR12MB6877:EE_
-X-MS-Office365-Filtering-Correlation-Id: c77404e9-b93d-4d69-d111-08db72501529
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A8BrVtkxAj35v8xpuEp6W/Uty3oV9azRX6Ff6AeTLEmWYfZN9cN6Zl7mtqEL0ZaT3MASDoPRg7YnwMCLt78AAoJhsP3C4eSFwWj3Xqb5/c5oFEN7xJjmdTcBS9ryf4dkrQkij+tXOkF8IqdBNnl6bw/JZvYd3WILxPhhGw3zVqa/3JMyUQHRorDzC+UMy1WhPb1Z+jEUOETeZZdbb11h+1mBgjcZsKaG6cnK6+ac5MnhOPW/ySWjWtpOWMbN4LoZbTwY7QMyF+ZxFq3GJL1eBwnFwBOXs/X68DLsv1XuarRVQ8cgSM+CIKZ0SK1Vugy9/E7d4NNFBwlwgoqXxJZuHI83bNrDK+gET94E5pgQ0+LxwwFWwkAjzWxVkv0yKprZ93SkmeC7AQ70XR2CNSfS5FPf9sfuFjCOIFLzqr+dh+GLRxA9xxnTcO5L8O137oh4gFvR2jZzGnPzXbie48fazdGiBgMcbHaVkKuZFnMxmOYh0r2z2vC9x3eEJiUEsU9XeCMDjQx5wy0FeiHwkrN+E40teWWHVv0c26PQNhanQGi9vTGjmjdtntSDKwiMJVIPcg7KVVlM7MHIA1XwhBmfDw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(39860400002)(366004)(376002)(451199021)(83380400001)(6512007)(41300700001)(8936002)(8676002)(66946007)(4326008)(6916009)(5660300002)(66476007)(7416002)(316002)(66556008)(2616005)(36756003)(86362001)(26005)(186003)(6506007)(38100700002)(478600001)(6666004)(2906002)(966005)(6486002)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WLqO31fEmnN0sbX99c4PXGA2tWdAZGnkw74VYctzCnojkGvfsqtx/TT5f7MD?=
- =?us-ascii?Q?fxG424/x61xdZKBuF8DV9dPU83seSWYxxm7zGq6UHiI2FJ34RhhELoJYuPC3?=
- =?us-ascii?Q?HSv+ltBWdWkLzNSkz04Ho7IWYsbn1APB/GJJdhMaepAEOJlDMOqILU02s5cO?=
- =?us-ascii?Q?sqnZYlhMB9k01+O50wSicaylB/1aZ1jCZvr36CVysN5OyT0IMu+jOQLY3b9z?=
- =?us-ascii?Q?P0gpO1Xum2gfd1OQ5NEmfBAzdMev3BWFwQuBU2x6xzbHW7o7mps2mn2STGug?=
- =?us-ascii?Q?ENGg/CxGI7YLgPLJ6E4Yk0LxICkLOVH2TWvaY04le/XE6fQX5JKaPGGvfcZx?=
- =?us-ascii?Q?XR+q6KdhkABDLLdrFRYnoyNcKlTQn574hEZt5qBvLijIf9apgq5iGHIgJjX9?=
- =?us-ascii?Q?A1yUxGOPPQIOpE6Js9g7eLVdmtjagZ7KiG/Vx93spdqY4+Kza2YiT3PZ6ZCn?=
- =?us-ascii?Q?Jdd+AA/57gDt+VtpKy0wMXotpRkkaGuP60OfhY7u5a2Q+gbtPLEF9pfAot3M?=
- =?us-ascii?Q?l9l6f0V/fz/SjMu0ylR/r+AtqeG93otT/7mpBpWOamWSMpbgDc2D7eSUx95W?=
- =?us-ascii?Q?56EfEVnwBgXBfGbhiHXHyvtV+vCLN/zVMsU08bfChfbjHKQdj7Zd8CjQPUl2?=
- =?us-ascii?Q?PQ1iKCrGSWevtJV/Hqlbfuyvi6Lwu9lNqP0BBK2xH++lgzQUAvUTNMpd3Lpv?=
- =?us-ascii?Q?LaUsVbxJrRwHMcW0njwnuCkgF2yqsvdFwT3FWmOYJKbdd4NtFKsAqJBAkPMH?=
- =?us-ascii?Q?afHcVMBKUY7WgR0ba6i5Oz4OdpxVYxh53xLhV3MU/OZSf64Txd9mNeIY2c/n?=
- =?us-ascii?Q?+p7LGU+RwYG1jN/dCd4ylkoF6AI3a7IKNxUxrUn2nikI11qjUExGVxz+FtGm?=
- =?us-ascii?Q?kAekOBg36H3mrk8ZWzdm75xjDZ0qSeryIsNfNTIbA+jSh8PcHjpbBPKdQ6oD?=
- =?us-ascii?Q?oRgah0Mvdg5CeYCmnx42yX5GjiUvUhzhI6bgbMtn9cfG+qAkJMBrHGvJbP0+?=
- =?us-ascii?Q?y1S+67vzByGn77CtiJb5yX9l1FFyhaJ50n9jEEfivHhHcSFFKScA590hqZgL?=
- =?us-ascii?Q?TLcD9J5BW74ca3WsPnJAoxxDShRjt/S4Soq6yzXvjnlcI+4eRj16EFf0wgBF?=
- =?us-ascii?Q?YNDfdw1xGiWQwZQB2XY9FzszmoJevuY36UcS2pyVQ9EL7c85F/BV3tS7yBBD?=
- =?us-ascii?Q?3OITS61mogmfNgLd+dvdcu4JWe2DJAGH3hnjyqCw45Apuvz745gB39lhmilv?=
- =?us-ascii?Q?bA+xzcSk88XNPR9f29NSU9PtcvCjqExCBAOIK4BJfBaIqWF/GeLIHZyR/vuB?=
- =?us-ascii?Q?EZEF6oyAxZpwPlu7VCxg1nzzbZGGIu/6IGQ1SWfHRzs3rY6m8yRKQ90NH0E6?=
- =?us-ascii?Q?L/UspbUVFNLwR7qzp3o1yt0w7CqCtu5omRtStGsNgmUybfYkrN5lyHOoCAZ4?=
- =?us-ascii?Q?6V9Nupz2bpGQDCyNpkNa688/NUD+NVdW2yGSaFca3Fv+U6bj3eK7akTLM62h?=
- =?us-ascii?Q?ndwaZ4NTTXsAjQVQquZ/3rs40nk2jlU6k62MyAOY++K+IO6L/AbU3aL8Xs6v?=
- =?us-ascii?Q?wsNNjeRpje9C/Hdd9CzgFEFc9VcuSZcOZTf5KZgT?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c77404e9-b93d-4d69-d111-08db72501529
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 12:07:28.2546
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Anatfgk1tfkNOsqHSUjjSvBhQX0SR0txtaY2hIJ21+TFZl5tqlPtSfj4iHRltK3O
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6877
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 08:29:09AM +0000, Duan, Zhenzhong wrote:
-> >-----Original Message-----
-> >From: Jason Gunthorpe <jgg@nvidia.com>
-> >Sent: Tuesday, June 20, 2023 8:47 PM
-> >Subject: Re: [PATCH v2 00/11] iommufd: Add nesting infrastructure
-> >
-> >On Tue, Jun 20, 2023 at 01:43:42AM +0000, Tian, Kevin wrote:
-> >> I wonder whether we have argued passed each other.
-> >>
-> >> This series adds reserved regions to S2. I challenged the necessity as
-> >> S2 is not directly accessed by the device.
-> >>
-> >> Then you replied that doing so still made sense to support identity
-> >> S1.
-> >
-> >I think I said/ment if we attach the "s2" iommu domain as a direct attach for
-> >identity - eg at boot time, then the IOAS must gain the reserved regions. This is
-> >our normal protocol.
-> There is code to fail the attaching for device with RMRR in intel iommu driver,
-> do we plan to remove below check for IOMMUFD soon or later?
-> 
-> static int intel_iommu_attach_device(struct iommu_domain *domain,
->                                      struct device *dev)
-> {
->         struct device_domain_info *info = dev_iommu_priv_get(dev);
->         int ret;
-> 
->         if (domain->type == IOMMU_DOMAIN_UNMANAGED &&
->             device_is_rmrr_locked(dev)) {
->                 dev_warn(dev, "Device is ineligible for IOMMU domain attach due to platform RMRR requirement.  Contact your platform vendor.\n");
->                 return -EPERM;
->         }
+Hi, Willy
 
-Not really, systems with RMRR cannot support VFIO at all. Baolu sent a
-series lifting this restriction up higher in the stack:
+This patchset mainly allows speed up the nolibc test with a minimal
+kernel config.
 
-https://lore.kernel.org/all/20230607035145.343698-1-baolu.lu@linux.intel.com/
+As the nolibc supported architectures become more and more, the 'run'
+test with DEFCONFIG may cost several hours, which is not friendly to
+develop testing and even for release testing, so, smaller kernel configs
+may be required, and firstly, we should let nolibc-test work with less
+kernel config options, this patchset aims to this goal.
 
-Jason
+This patchset mainly remove the dependency from procfs, tmpfs, net and
+memfd_create, many failures have been fixed up.
+
+When CONFIG_TMPFS and CONFIG_SHMEM are disabled, kernel will provide a
+ramfs based tmpfs (mm/shmem.c), it will be used as a choice to fix up
+some failures and also allow skip less tests.
+
+Besides, it also adds musl support, improves glibc support and fixes up
+a kernel cmdline passing use case.
+
+This is based on the dev.2023.06.14a branch of linux-rcu [1], all of the
+supported architectures are tested (with local minimal configs, [5]
+pasted the one for i386) without failures:
+
+           arch/board | result
+          ------------|------------
+      arm/vexpress-a9 | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/arm-vexpress-a9-nolibc-test.log
+         aarch64/virt | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/aarch64-virt-nolibc-test.log
+          ppc/g3beige | not supported
+              i386/pc | 136 test(s) passed, 3 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/i386-pc-nolibc-test.log
+            x86_64/pc | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/x86_64-pc-nolibc-test.log
+         mipsel/malta | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/mipsel-malta-nolibc-test.log
+     loongarch64/virt | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/loongarch64-virt-nolibc-test.log
+         riscv64/virt | 136 test(s) passed, 3 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/riscv64-virt-nolibc-test.log
+         riscv32/virt | no test log found
+s390x/s390-ccw-virtio | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/s390x-s390-ccw-virtio-nolibc-test.log
+
+Notes:
+  * The skipped ones are -fstackprotector, chmod_self and chown_self
+
+    The -fstackprotector skip is due to gcc version.
+    chmod_self and chmod_self skips are due to procfs not enabled
+
+  * ppc/g3beige support is added locally, but not added in this patchset
+
+    will send ppc support as a new patchset, it depends on v2 test
+    report patchset [3] and the v5 rv32 support, require changes on
+    Makefile
+
+  * riscv32/virt support is still in review, see v5 rv32 support [4]
+
+This patchset doesn't depends on any of my other nolibc patch series,
+but the new rmdir() routine added in this patchset may be requird to
+apply the __sysret() from our v4 syscall helper series [2] after that
+series being merged, currently, we use the old method to let it compile
+without any dependency.
+
+Here explains all of the patches:
+
+* selftests/nolibc: stat_fault: silence NULL argument warning with glibc
+  selftests/nolibc: gettid: restore for glibc and musl
+  selftests/nolibc: add _LARGEFILE64_SOURCE for musl
+
+  The above 3 patches adds musl compile support and improve glibc support.
+
+  It is able to build and run nolibc-test with musl libc now, but there
+  are some failures/skips due to the musl its own issues/requirements:
+
+    $ sudo ./nolibc-test  | grep -E 'FAIL|SKIP'
+    8 sbrk = 1 ENOMEM                                               [FAIL]
+    9 brk = -1 ENOMEM                                               [FAIL]
+    46 limit_int_fast16_min = -2147483648                           [FAIL]
+    47 limit_int_fast16_max = 2147483647                            [FAIL]
+    49 limit_int_fast32_min = -2147483648                           [FAIL]
+    50 limit_int_fast32_max = 2147483647                            [FAIL]
+    0 -fstackprotector not supported                                [SKIPPED]
+
+  musl disabled sbrk and brk for some conflicts with its malloc and the
+  fast version of int types are defined in 32bit, which differs from nolibc
+  and glibc. musl reserved the sbrk(0) to allow get current brk, we
+  added a test for this in the v4 __sysret() helper series [2].
+
+* selftests/nolibc: fix up kernel parameters support
+
+  kernel cmdline allows pass two types of parameters, one is without
+  '=', another is with '=', the first one is passed as init arguments,
+  the sencond one is passed as init environment variables.
+
+  Our nolibc-test prefer arguments to environment variables, this not
+  work when users add such parameters in the kernel cmdline:
+
+    noapic NOLIBC_TEST=syscall
+
+  So, this patch will verify the setting from arguments at first, if it
+  is no valid, will try the environment variables instead.
+
+* selftests/nolibc: stat_timestamps: remove procfs dependency
+
+  Use '/' instead of /proc/self, or we can add a 'has_proc' condition
+  for this test case, but it is not that necessary to skip the whole
+  stat_timestamps tests for such a subtest binding to /proc/self.
+
+  Welcome suggestion from Thomas.
+
+* tools/nolibc: add rmdir() support
+  selftests/nolibc: add a new rmdir() test case
+
+  rmdir() routine and test case are added for the coming requirement.
+
+  Note, if the __sysret() patchset [2] is applied before us, this patch
+  should be rebased on it and apply the __sysret() helper.
+
+* selftests/nolibc: fix up failures when there is no procfs
+
+  call rmdir() to remove /proc completely to rework the checking of
+  /proc, before, the existing of /proc not means the procfs is really
+  mounted.
+
+* selftests/nolibc: rename proc variable to has_proc
+  selftests/nolibc: rename euid0 variable to is_root
+
+  align with the has_gettid, has_xxx variables.
+
+* selftests/nolibc: prepare tmpfs and hugetlbfs
+  selftests/nolibc: rename chmod_net to chmod_good
+  selftests/nolibc: link_cross: support tmpfs
+  selftests/nolibc: rename chroot_exe to chroot_file
+
+  use file from /tmp instead of file from /proc when there is no procfs
+  this avoid skipping the chmod_net, link_cross, chroot_exe tests
+
+* selftests/nolibc: vfprintf: silence memfd_create() warning
+  selftests/nolibc: vfprintf: skip if neither tmpfs nor hugetlbfs
+  selftests/nolibc: vfprintf: support tmpfs and hugetlbfs
+
+  memfd_create from kernel >= v6.2 forcely warn on missing
+  MFD_NOEXEC_SEAL flag, the first one silence it with such flag, for
+  older kernels, use 0 flag as before.
+
+  since memfd_create() depends on TMPFS or HUGETLBFS, the second one
+  skip the whole vfprintf instead of simply fail if memfd_create() not
+  work.
+
+  the 3rd one futher try the ramfs based tmpfs even when memfd_create()
+  not work.
+
+At last, let's simply discuss about the configs, I have prepared minimal
+configs for all of the nolibc supported architectures but not sure where
+should we put them, what about tools/testing/selftests/nolibc/configs ?
+
+Thanks!
+
+Best regards,
+Zhangjin
+---
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/
+[2]: https://lore.kernel.org/linux-riscv/cover.1687187451.git.falcon@tinylab.org/
+[3]: https://lore.kernel.org/lkml/cover.1687156559.git.falcon@tinylab.org/
+[4]: https://lore.kernel.org/linux-riscv/cover.1687176996.git.falcon@tinylab.org/
+[5]: https://pastebin.com/5jq0Vxbz 
+
+Zhangjin Wu (17):
+  selftests/nolibc: stat_fault: silence NULL argument warning with glibc
+  selftests/nolibc: gettid: restore for glibc and musl
+  selftests/nolibc: add _LARGEFILE64_SOURCE for musl
+  selftests/nolibc: fix up kernel parameters support
+  selftests/nolibc: stat_timestamps: remove procfs dependency
+  tools/nolibc: add rmdir() support
+  selftests/nolibc: add a new rmdir() test case
+  selftests/nolibc: fix up failures when there is no procfs
+  selftests/nolibc: rename proc variable to has_proc
+  selftests/nolibc: rename euid0 variable to is_root
+  selftests/nolibc: prepare tmpfs and hugetlbfs
+  selftests/nolibc: rename chmod_net to chmod_good
+  selftests/nolibc: link_cross: support tmpfs
+  selftests/nolibc: rename chroot_exe to chroot_file
+  selftests/nolibc: vfprintf: silence memfd_create() warning
+  selftests/nolibc: vfprintf: skip if neither tmpfs nor hugetlbfs
+  selftests/nolibc: vfprintf: support tmpfs and hugetlbfs
+
+ tools/include/nolibc/sys.h                   |  28 ++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 132 +++++++++++++++----
+ 2 files changed, 138 insertions(+), 22 deletions(-)
+
+-- 
+2.25.1
+
