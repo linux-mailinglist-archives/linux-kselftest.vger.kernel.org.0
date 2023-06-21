@@ -2,282 +2,817 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92715738FF3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 21:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9DB73905A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 21:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjFUTWD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 15:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
+        id S229522AbjFUTpg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 15:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjFUTWD (ORCPT
+        with ESMTP id S229437AbjFUTpf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 15:22:03 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCF7199E;
-        Wed, 21 Jun 2023 12:22:01 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 21:21:57 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1687375319; bh=q5JlFy6Ato9AkhnBC0gE+fyxIZckqNSTZwN+1O+DX+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TymseiNHN2tF41D11zxDlA7HCLy6rQxHXsKrzon2JJSMoJ2NYqYgE5En8aNfv/gnN
-         3XLb0Co/TxCykhi86N0v9A/qfSh6WWLr3jeKjrkA1uTdBzKgwIVDcGTjgs8xxGXpRa
-         bmcKiVs3gYUrsAnUOd/wc55ABRVvczcdzDUHNv7o=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 00/17] selftests/nolibc: allow run with minimal kernel
- config
-Message-ID: <bc635c4f-67fe-4e86-bfdf-bcb4879b928d@t-8ch.de>
-References: <cover.1687344643.git.falcon@tinylab.org>
+        Wed, 21 Jun 2023 15:45:35 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39011733;
+        Wed, 21 Jun 2023 12:45:32 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-553a1f13d9fso3643400a12.1;
+        Wed, 21 Jun 2023 12:45:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687376732; x=1689968732;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HUdxh/Qz7xLS5+5DunSJXn1dUp+IwyXnxa9FBoPuZPE=;
+        b=iYOI3bug8QkhcWWGXW7r5F+tSbR5kLbhYht1GL4LIIT+K1xU4IITZirbBERHDydm3L
+         7lSSHmxURFybImkLLYHj1miTxFiEks9aKPGLPxwcNGhuV06pSCnJp3liEhcwBWbu+evu
+         7MGMPG93/ZElAWgQPx+bj5xLBIEliOdEcCMH1NPyLAA6n6aFX8zdWSa26biYynjD5ve8
+         RGcEaV/Lljh01/1jyEVz6m3dAgUebPvYflisVRcRdao4DuC1X1mUHhYDKOlP/dyeVBMk
+         4A2Uwi0wtX2UJ3UMULq80FfWekZs3kmr6MCO//DI7Kdk16pR9R472yTynZLZHXS8HAoa
+         A68Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687376732; x=1689968732;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HUdxh/Qz7xLS5+5DunSJXn1dUp+IwyXnxa9FBoPuZPE=;
+        b=YuCf9zGD27Mqlk8MqUcuBdHDn7mF9Yb2JZfZnH/YKl+bgbuRkmgDeH0JFMZd++2hW/
+         65aKKeNeFTx3a6hrDIri3BFLSgsRPVNRKs1t9ThfGlgYcNb4VmaFRbqMJo67WlsR21xp
+         CHYcSCaU/1EeAhjSI8FPJCt6wQZjZgTNnAFEtXd2mIX+KvGIDjCgN6zd0sPzj9yn81W0
+         oKeIAq7P+8YL9K/QZCoPEY6VRXed+m8M2Pz/JF4l0es04XEHLwFoQ/1fCPbBthAVVC+D
+         SHADW3otY6tTG1OKTzbDMqsNwsPPEIQA8irK8/ReG37bWjC5MakUpmiE208qpcFd/7Sh
+         s1nQ==
+X-Gm-Message-State: AC+VfDyKhmotqeT0eF+vNADAId+O08N7yGRJhpPithzqPuKtIizLBhAO
+        H8Z+yiqvTkWysbT42/ZRaOg=
+X-Google-Smtp-Source: ACHHUZ7eCTls6IK/3LemP0hC6LfDXkX4MJeTOYNyvfA3evZ+hZVItNLy/fdRCnhcOlDkbpBwhwM1uQ==
+X-Received: by 2002:a17:90a:e398:b0:260:ff26:6dfa with SMTP id b24-20020a17090ae39800b00260ff266dfamr2295733pjz.38.1687376731923;
+        Wed, 21 Jun 2023 12:45:31 -0700 (PDT)
+Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
+        by smtp.gmail.com with ESMTPSA id h13-20020a17090a3d0d00b00246cc751c6bsm9897612pjc.46.2023.06.21.12.45.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 12:45:31 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 12:45:29 -0700
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <ZJNTWV+JZ+tTMdcp@gmail.com>
+References: <20230615141144.665148-1-usama.anjum@collabora.com>
+ <20230615141144.665148-3-usama.anjum@collabora.com>
+ <ZJHp6hSeS6lMo7qx@gmail.com>
+ <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1687344643.git.falcon@tinylab.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Zhangjin,
+On Wed, Jun 21, 2023 at 11:34:54AM +0500, Muhammad Usama Anjum wrote:
+> Hi,
+> 
+> Thank you for your review.
+> 
+> On 6/20/23 11:03 PM, Andrei Vagin wrote:
+> ...
+> >> +struct pagemap_scan_private {
+> >> +	struct page_region *vec_buf, cur_buf;
+> >> +	unsigned long long vec_buf_len, vec_buf_index, max_pages, found_pages, flags;
+> > 
+> > should it be just unsigned long?
+> These internal values are storing data coming from user in struct
+> pm_scan_arg in which all variables are 64 bit(__u64) explicitly. This is
+> why we have unsigned long long here. It is absolutely necessary.
 
-some general comments for the whole series.
+It isn't necessary, because "unsigned long" is enough for  all valid values
+> 
+> > 
+> >> +	unsigned long long required_mask, anyof_mask, excluded_mask, return_mask;
+> >> +};
+> >> +
+> >> +static inline bool is_pte_uffd_wp(pte_t pte)
+> >> +{
+> >> +	return (pte_present(pte) && pte_uffd_wp(pte)) ||
+> >> +	       pte_swp_uffd_wp_any(pte);
+> >> +}
+> >> +
+> >> +static inline void make_uffd_wp_pte(struct vm_area_struct *vma,
+> >> +				    unsigned long addr, pte_t *pte)
+> >> +{
+> >> +	pte_t ptent = ptep_get(pte);
+> >> +
+> >> +	if (pte_present(ptent)) {
+> >> +		pte_t old_pte;
+> >> +
+> >> +		old_pte = ptep_modify_prot_start(vma, addr, pte);
+> >> +		ptent = pte_mkuffd_wp(ptent);
+> >> +		ptep_modify_prot_commit(vma, addr, pte, old_pte, ptent);
+> >> +	} else if (is_swap_pte(ptent)) {
+> >> +		ptent = pte_swp_mkuffd_wp(ptent);
+> >> +		set_pte_at(vma->vm_mm, addr, pte, ptent);
+> >> +	} else {
+> >> +		set_pte_at(vma->vm_mm, addr, pte,
+> >> +			   make_pte_marker(PTE_MARKER_UFFD_WP));
+> >> +	}
+> >> +}
+> >> +
+> >> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> >> +static inline bool is_pmd_uffd_wp(pmd_t pmd)
+> >> +{
+> >> +	return (pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
+> >> +	       (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd));
+> >> +}
+> >> +
+> >> +static inline void make_uffd_wp_pmd(struct vm_area_struct *vma,
+> >> +				    unsigned long addr, pmd_t *pmdp)
+> >> +{
+> >> +	pmd_t old, pmd = *pmdp;
+> >> +
+> >> +	if (pmd_present(pmd)) {
+> >> +		old = pmdp_invalidate_ad(vma, addr, pmdp);
+> >> +		pmd = pmd_mkuffd_wp(old);
+> >> +		set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
+> >> +	} else if (is_migration_entry(pmd_to_swp_entry(pmd))) {
+> >> +		pmd = pmd_swp_mkuffd_wp(pmd);
+> >> +		set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
+> >> +	}
+> >> +}
+> >> +#endif
+> >> +
+> >> +#ifdef CONFIG_HUGETLB_PAGE
+> >> +static inline bool is_huge_pte_uffd_wp(pte_t pte)
+> >> +{
+> >> +	return (pte_present(pte) && huge_pte_uffd_wp(pte)) ||
+> >> +	       pte_swp_uffd_wp_any(pte);
+> >> +}
+> >> +
+> >> +static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+> >> +					 unsigned long addr, pte_t *ptep,
+> >> +					 pte_t ptent)
+> >> +{
+> >> +	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
+> >> +		return;
+> >> +
+> >> +	if (is_hugetlb_entry_migration(ptent))
+> >> +		set_huge_pte_at(vma->vm_mm, addr, ptep,
+> >> +				pte_swp_mkuffd_wp(ptent));
+> >> +	else if (!huge_pte_none(ptent))
+> >> +		huge_ptep_modify_prot_commit(vma, addr, ptep, ptent,
+> >> +					     huge_pte_mkuffd_wp(ptent));
+> >> +	else
+> >> +		set_huge_pte_at(vma->vm_mm, addr, ptep,
+> >> +				make_pte_marker(PTE_MARKER_UFFD_WP));
+> >> +}
+> >> +#endif
+> >> +
+> >> +static int pagemap_scan_test_walk(unsigned long start, unsigned long end,
+> >> +				  struct mm_walk *walk)
+> >> +{
+> >> +	struct pagemap_scan_private *p = walk->private;
+> >> +	struct vm_area_struct *vma = walk->vma;
+> >> +
+> >> +	if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_async(vma) ||
+> >> +	    !userfaultfd_wp_use_markers(vma)))
+> >> +		return -EPERM;
+> >> +
+> >> +	if (vma->vm_flags & VM_PFNMAP)
+> >> +		return 1;
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> >> +static int pagemap_scan_output(unsigned long bitmap,
+> >> +			       struct pagemap_scan_private *p,
+> >> +			       unsigned long addr, unsigned int n_pages)
+> >> +{
+> >> +	struct page_region *cur_buf = &p->cur_buf;
+> >> +
+> >> +	if (!n_pages)
+> >> +		return -EINVAL;
+> >> +
+> >> +	bitmap &= p->return_mask;
+> >> +
+> >> +	if (cur_buf->flags == bitmap &&
+> >> +	    cur_buf->start + cur_buf->len * PAGE_SIZE == addr) {
+> >> +		cur_buf->len += n_pages;
+> >> +		p->found_pages += n_pages;
+> >> +	} else {
+> >> +		if (cur_buf->len) {
+> > 
+> > I would add a comment that vec_buf_len has been decremented by one for
+> > cur_buf.
+> > 
+> >> +			if (p->vec_buf_index >= p->vec_buf_len)
+> >> +				return PM_SCAN_BUFFER_FULL;
+> >> +
+> >> +			memcpy(&p->vec_buf[p->vec_buf_index], cur_buf,
+> >> +			       sizeof(*p->vec_buf));
+> >> +			p->vec_buf_index++;
+> >> +		}
+> >> +
+> >> +		cur_buf->start = addr;
+> >> +		cur_buf->len = n_pages;
+> >> +		cur_buf->flags = bitmap;
+> >> +		p->found_pages += n_pages;
+> >> +	}
+> >> +
+> >> +	if (p->found_pages == p->max_pages)
+> >> +		return PM_SCAN_FOUND_MAX_PAGES;
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> >> +static bool pagemap_scan_is_interesting_page(unsigned long bitmap,
+> >> +					     struct pagemap_scan_private *p)
+> >> +{
+> >> +	if ((p->required_mask & bitmap) != p->required_mask)
+> >> +		return false;
+> >> +	if (p->anyof_mask && !(p->anyof_mask & bitmap))
+> >> +		return false;
+> >> +	if (p->excluded_mask & bitmap)
+> >> +		return false;
+> >> +
+> >> +	return true;
+> >> +}
+> >> +
+> >> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+> >> +				  unsigned long end, struct mm_walk *walk)
+> >> +{
+> >> +	bool is_written, flush = false, is_interesting = true;
+> >> +	struct pagemap_scan_private *p = walk->private;
+> >> +	struct vm_area_struct *vma = walk->vma;
+> >> +	unsigned long bitmap, addr = end;
+> >> +	pte_t *pte, *orig_pte, ptent;
+> >> +	spinlock_t *ptl;
+> >> +	int ret = 0;
+> >> +
+> >> +	arch_enter_lazy_mmu_mode();
+> >> +
+> >> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> >> +	ptl = pmd_trans_huge_lock(pmd, vma);
+> >> +	if (ptl) {
+> >> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
+> >> +
+> >> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+> >> +			n_pages = p->max_pages - p->found_pages;
+> >> +
+> >> +		is_written = !is_pmd_uffd_wp(*pmd);
+> >> +
+> >> +		/*
+> >> +		 * Break huge page into small pages if the WP operation need to
+> >> +		 * be performed is on a portion of the huge page.
+> >> +		 */
+> >> +		if (is_written && IS_PM_SCAN_WP(p->flags) &&
+> >> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> > 
+> > It might be worth stopping rather than splitting the huge page.
+> Sometimes normal pages can be grouped to become THP by the kernel depending
+> upon the configurations. We don't want to reject ioctl just because this
+> folding operation happened. We don't want to stop rather spliting is the
+> best option and it does work fine.
+> 
+> > 
+> >> +			spin_unlock(ptl);
+> >> +
+> >> +			split_huge_pmd(vma, pmd, start);
+> >> +			goto process_smaller_pages;
+> >> +		}
+> >> +
+> >> +		bitmap = PM_SCAN_FLAGS(is_written, (bool)vma->vm_file,
+> >> +				       pmd_present(*pmd), is_swap_pmd(*pmd));
+> >> +
+> >> +		if (IS_PM_SCAN_GET(p->flags)) {
+> >> +			is_interesting = pagemap_scan_is_interesting_page(bitmap, p);
+> >> +			if (is_interesting)
+> >> +				ret = pagemap_scan_output(bitmap, p, start, n_pages);
+> >> +		}
+> >> +
+> >> +		if (IS_PM_SCAN_WP(p->flags) && is_written && is_interesting &&
+> >> +		    ret >= 0) {
+> >> +			make_uffd_wp_pmd(vma, start, pmd);
+> >> +			flush_tlb_range(vma, start, end);
+> >> +		}
+> >> +
+> >> +		spin_unlock(ptl);
+> >> +
+> >> +		arch_leave_lazy_mmu_mode();
+> >> +		return ret;
+> >> +	}
+> >> +
+> >> +process_smaller_pages:
+> >> +#endif
+> >> +
+> >> +	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+> >> +	if (!pte) {
+> >> +		walk->action = ACTION_AGAIN;
+> >> +		return 0;
+> >> +	}
+> >> +
+> >> +	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
+> >> +		ptent = ptep_get(pte);
+> >> +		is_written = !is_pte_uffd_wp(ptent);
+> >> +
+> >> +		bitmap = PM_SCAN_FLAGS(is_written, (bool)vma->vm_file,
+> >> +				       pte_present(ptent), is_swap_pte(ptent));
+> >> +
+> >> +		if (IS_PM_SCAN_GET(p->flags)) {
+> >> +			is_interesting = pagemap_scan_is_interesting_page(bitmap, p);
+> >> +			if (is_interesting)
+> >> +				ret = pagemap_scan_output(bitmap, p, addr, 1);
+> >> +		}
+> >> +
+> >> +		if (IS_PM_SCAN_WP(p->flags) && is_written && is_interesting &&
+> >> +		    ret >= 0) {
+> >> +			make_uffd_wp_pte(vma, addr, pte);
+> >> +			flush = true;
+> >> +		}
+> >> +	}
+> >> +
+> >> +	if (flush)
+> >> +		flush_tlb_range(vma, start, addr);
+> >> +
+> >> +	pte_unmap_unlock(orig_pte, ptl);
+> >> +	arch_leave_lazy_mmu_mode();
+> >> +
+> >> +	cond_resched();
+> >> +	return ret;
+> >> +}
+> >> +
+> >> +#ifdef CONFIG_HUGETLB_PAGE
+> >> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
+> >> +				      unsigned long start, unsigned long end,
+> >> +				      struct mm_walk *walk)
+> >> +{
+> >> +	unsigned long n_pages = (end - start)/PAGE_SIZE;
+> >> +	struct pagemap_scan_private *p = walk->private;
+> >> +	struct vm_area_struct *vma = walk->vma;
+> >> +	bool is_written, is_interesting = true;
+> >> +	struct hstate *h = hstate_vma(vma);
+> >> +	unsigned long bitmap;
+> >> +	spinlock_t *ptl;
+> >> +	int ret = 0;
+> >> +	pte_t ptent;
+> >> +
+> >> +	if (IS_PM_SCAN_WP(p->flags) && n_pages < HPAGE_SIZE/PAGE_SIZE)
+> >> +		return -EINVAL;
+> >> +
+> >> +	if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+> >> +		n_pages = p->max_pages - p->found_pages;
+> >> +
+> >> +	if (IS_PM_SCAN_WP(p->flags)) {
+> >> +		i_mmap_lock_write(vma->vm_file->f_mapping);
+> >> +		ptl = huge_pte_lock(h, vma->vm_mm, ptep);
+> >> +	}
+> >> +
+> >> +	ptent = huge_ptep_get(ptep);
+> >> +	is_written = !is_huge_pte_uffd_wp(ptent);
+> >> +
+> >> +	/*
+> >> +	 * Partial hugetlb page clear isn't supported
+> >> +	 */
+> >> +	if (is_written && IS_PM_SCAN_WP(p->flags) &&
+> >> +	    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> > 
+> > n_pages depends on found_pages that is incremented in
+> > pagemap_scan_output. Should we do this check right before calling
+> > pagemap_scan_output?
+> This condition is acting like a check before pagemap_scan_output() already.
+> n_pages is telling us that how many empty pages are left to find out. But
+> if by making n_pages less, we cannot cover the whole hugetlb, we should
+> just return error as we don't split the hugetlb.
 
-On 2023-06-21 20:52:30+0800, Zhangjin Wu wrote:
-> Hi, Willy
-> 
-> This patchset mainly allows speed up the nolibc test with a minimal
-> kernel config.
-> 
-> As the nolibc supported architectures become more and more, the 'run'
-> test with DEFCONFIG may cost several hours, which is not friendly to
-> develop testing and even for release testing, so, smaller kernel configs
-> may be required, and firstly, we should let nolibc-test work with less
-> kernel config options, this patchset aims to this goal.
-> 
-> This patchset mainly remove the dependency from procfs, tmpfs, net and
-> memfd_create, many failures have been fixed up.
-> 
-> When CONFIG_TMPFS and CONFIG_SHMEM are disabled, kernel will provide a
-> ramfs based tmpfs (mm/shmem.c), it will be used as a choice to fix up
-> some failures and also allow skip less tests.
-
-Did you look into how much this duplicates from the kernels already
-existing "tinyconfig" and "kvm_guest.config" functionality?
-
-And it would be interesting how much impact the enablement of procfs,
-tmpfs, net and memfd_create has in constrast to the minimal
-configuration.
-It seems unfortunate to me to complicate the testsuite to handle such
-uncommon scenarios.
-
-> Besides, it also adds musl support, improves glibc support and fixes up
-> a kernel cmdline passing use case.
-> 
-> This is based on the dev.2023.06.14a branch of linux-rcu [1], all of the
-> supported architectures are tested (with local minimal configs, [5]
-> pasted the one for i386) without failures:
-> 
->            arch/board | result
->           ------------|------------
->       arm/vexpress-a9 | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/arm-vexpress-a9-nolibc-test.log
->          aarch64/virt | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/aarch64-virt-nolibc-test.log
->           ppc/g3beige | not supported
->               i386/pc | 136 test(s) passed, 3 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/i386-pc-nolibc-test.log
->             x86_64/pc | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/x86_64-pc-nolibc-test.log
->          mipsel/malta | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/mipsel-malta-nolibc-test.log
->      loongarch64/virt | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/loongarch64-virt-nolibc-test.log
->          riscv64/virt | 136 test(s) passed, 3 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/riscv64-virt-nolibc-test.log
->          riscv32/virt | no test log found
-> s390x/s390-ccw-virtio | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/s390x-s390-ccw-virtio-nolibc-test.log
-> 
-> Notes:
->   * The skipped ones are -fstackprotector, chmod_self and chown_self
-> 
->     The -fstackprotector skip is due to gcc version.
->     chmod_self and chmod_self skips are due to procfs not enabled
-> 
->   * ppc/g3beige support is added locally, but not added in this patchset
-> 
->     will send ppc support as a new patchset, it depends on v2 test
->     report patchset [3] and the v5 rv32 support, require changes on
->     Makefile
-> 
->   * riscv32/virt support is still in review, see v5 rv32 support [4]
-> 
-> This patchset doesn't depends on any of my other nolibc patch series,
-> but the new rmdir() routine added in this patchset may be requird to
-> apply the __sysret() from our v4 syscall helper series [2] after that
-> series being merged, currently, we use the old method to let it compile
-> without any dependency.
-> 
-> Here explains all of the patches:
-> 
-> * selftests/nolibc: stat_fault: silence NULL argument warning with glibc
->   selftests/nolibc: gettid: restore for glibc and musl
->   selftests/nolibc: add _LARGEFILE64_SOURCE for musl
-> 
->   The above 3 patches adds musl compile support and improve glibc support.
-> 
->   It is able to build and run nolibc-test with musl libc now, but there
->   are some failures/skips due to the musl its own issues/requirements:
-> 
->     $ sudo ./nolibc-test  | grep -E 'FAIL|SKIP'
->     8 sbrk = 1 ENOMEM                                               [FAIL]
->     9 brk = -1 ENOMEM                                               [FAIL]
->     46 limit_int_fast16_min = -2147483648                           [FAIL]
->     47 limit_int_fast16_max = 2147483647                            [FAIL]
->     49 limit_int_fast32_min = -2147483648                           [FAIL]
->     50 limit_int_fast32_max = 2147483647                            [FAIL]
->     0 -fstackprotector not supported                                [SKIPPED]
-> 
->   musl disabled sbrk and brk for some conflicts with its malloc and the
->   fast version of int types are defined in 32bit, which differs from nolibc
->   and glibc. musl reserved the sbrk(0) to allow get current brk, we
->   added a test for this in the v4 __sysret() helper series [2].
-
-We could add new macros
-
-#define UINT_MAX(t) (~(t)0)
-#define SINT_MAX(t) (((t)1 << (sizeof(t) * 8 - 2)) - (t)1 + ((t)1 << (sizeof(t) * 8 - 2)))
-
-to get whatever is appropriate for the respective type.
+I understand that, but here you don't know whether pagemap_scan_output
+will be called for this page or not. It means that an error can be
+reported due to unrelated page and this doesn't look right.
 
 > 
-> * selftests/nolibc: fix up kernel parameters support
-> 
->   kernel cmdline allows pass two types of parameters, one is without
->   '=', another is with '=', the first one is passed as init arguments,
->   the sencond one is passed as init environment variables.
-> 
->   Our nolibc-test prefer arguments to environment variables, this not
->   work when users add such parameters in the kernel cmdline:
-> 
->     noapic NOLIBC_TEST=syscall
-> 
->   So, this patch will verify the setting from arguments at first, if it
->   is no valid, will try the environment variables instead.
+> > 
+> >> +		ret = -ENOSPC;
+> > 
+> > should it be PM_SCAN_FOUND_MAX_PAGES? Otherwise, it fails the ioctl even
+> > if it has handled some pages already.
+> It is a double edge sword. If we don't return error, user will never know
+> that he needs to specify more max_pages or his output buffer is small and
+> not coverig the entire range. The real purpose here that user gets aware
+> that he needs to specify full hugetlb range and found pages should cover
+> the entire range as well.
 
-This would be much simpler as:
+but if PM_SCAN_OP_WP is set, this error will be fatal, because some
+pages can be marked write-protected, but they are not be reported to
+user-space. 
 
-test = getenv("NOLIBC_TEST");
-if (!test)
-        test = argv[1];
+I think the ioctl has to report back the end address of the handled
+region. It is like read and write syscalls that can return less data
+than requested.
 
-It changes the semantics a bit, but it doesn't seem to be an issue.
-(Maybe gated behind getpid() == 1).
+> 
+> > 
+> >> +		goto unlock_and_return;
+> >> +	}
+> >> +
+> >> +	bitmap = PM_SCAN_FLAGS(is_written, (bool)vma->vm_file,
+> >> +			       pte_present(ptent), is_swap_pte(ptent));
+> >> +
+> >> +	if (IS_PM_SCAN_GET(p->flags)) {
+> >> +		is_interesting = pagemap_scan_is_interesting_page(bitmap, p);
+> >> +		if (is_interesting)
+> >> +			ret = pagemap_scan_output(bitmap, p, start, n_pages);
+> >> +	}
+> >> +
+> >> +	if (IS_PM_SCAN_WP(p->flags) && is_written && is_interesting &&
+> >> +	    ret >= 0) {
+> >> +		make_uffd_wp_huge_pte(vma, start, ptep, ptent);
+> >> +		flush_hugetlb_tlb_range(vma, start, end);
+> >> +	}
+> >> +
+> >> +unlock_and_return:
+> >> +	if (IS_PM_SCAN_WP(p->flags)) {
+> >> +		spin_unlock(ptl);
+> >> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
+> >> +	}
+> >> +
+> >> +	return ret;
+> >> +}
+> >> +#else
+> >> +#define pagemap_scan_hugetlb_entry NULL
+> >> +#endif
+> >> +
+> >> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
+> >> +				 int depth, struct mm_walk *walk)
+> >> +{
+> >> +	unsigned long n_pages = (end - addr)/PAGE_SIZE;
+> >> +	struct pagemap_scan_private *p = walk->private;
+> >> +	struct vm_area_struct *vma = walk->vma;
+> >> +	int ret = 0;
+> >> +
+> >> +	if (!vma || !IS_PM_SCAN_GET(p->flags))
+> >> +		return 0;
+> >> +
+> >> +	if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+> >> +		n_pages = p->max_pages - p->found_pages;
+> >> +
+> >> +	ret = pagemap_scan_output(PM_SCAN_FLAGS(false, (bool)vma->vm_file,
+> >> +				  false, false), p, addr, n_pages);
+> >> +
+> >> +	return ret;
+> >> +}
+> >> +
+> >> +static const struct mm_walk_ops pagemap_scan_ops = {
+> >> +	.test_walk = pagemap_scan_test_walk,
+> >> +	.pmd_entry = pagemap_scan_pmd_entry,
+> >> +	.pte_hole = pagemap_scan_pte_hole,
+> >> +	.hugetlb_entry = pagemap_scan_hugetlb_entry,
+> >> +};
+> >> +
+> >> +static int pagemap_scan_args_valid(struct pm_scan_arg *arg, unsigned long start,
+> >> +				   struct page_region __user *vec)
+> >> +{
+> >> +	/* Detect illegal size, flags, len and masks */
+> >> +	if (arg->size != sizeof(struct pm_scan_arg))
+> >> +		return -EINVAL;
+> >> +	if (!arg->flags)
+> >> +		return -EINVAL;
+> >> +	if (arg->flags & ~PM_SCAN_OPS)
+> >> +		return -EINVAL;
+> >> +	if (!arg->len)
+> >> +		return -EINVAL;
+> >> +	if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask |
+> >> +	     arg->return_mask) & ~PM_SCAN_BITS_ALL)
+> >> +		return -EINVAL;
+> >> +	if (!arg->required_mask && !arg->anyof_mask &&
+> >> +	    !arg->excluded_mask)
+> >> +		return -EINVAL;
+> >> +	if (!arg->return_mask)
+> >> +		return -EINVAL;
+> >> +
+> >> +	/* Validate memory range */
+> >> +	if (!IS_ALIGNED(start, PAGE_SIZE))
+> >> +		return -EINVAL;
+> >> +	if (!access_ok((void __user *)start, arg->len))
+> >> +		return -EFAULT;
+> >> +
+> >> +	if (IS_PM_SCAN_GET(arg->flags)) {
+> >> +		if (!arg->vec)
+> >> +			return -EINVAL;
+> >> +		if (arg->vec_len == 0)
+> >> +			return -EINVAL;
+> >> +		if (!access_ok((void __user *)arg->vec,
+> >> +			       arg->vec_len * sizeof(struct page_region)))
+> >> +			return -EFAULT;
+> >> +	}
+> >> +
+> >> +	if (IS_PM_SCAN_WP(arg->flags) && !IS_PM_SCAN_GET(arg->flags) &&
+> >> +	    arg->max_pages)
+> >> +		return -EINVAL;
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> >> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long __arg)
+> >> +{
+> >> +	struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)__arg;
+> >> +	unsigned long long start, end, walk_start, walk_end;
+> >> +	unsigned long long empty_slots, vec_index = 0;
+> >> +	struct mmu_notifier_range range;
+> >> +	struct page_region __user *vec;
+> >> +	struct pagemap_scan_private p;
+> >> +	struct pm_scan_arg arg;
+> >> +	int ret = 0;
+> >> +
+> >> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
+> >> +		return -EFAULT;
+> >> +
+> >> +	start = untagged_addr((unsigned long)arg.start);
+> >> +	vec = (struct page_region *)untagged_addr((unsigned long)arg.vec);
+> >> +
+> >> +	ret = pagemap_scan_args_valid(&arg, start, vec);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	end = start + arg.len;
+> >> +	p.max_pages = arg.max_pages;
+> >> +	p.found_pages = 0;
+> >> +	p.required_mask = arg.required_mask;
+> >> +	p.anyof_mask = arg.anyof_mask;
+> >> +	p.excluded_mask = arg.excluded_mask;
+> >> +	p.return_mask = arg.return_mask;
+> >> +	p.flags = arg.flags;
+> >> +	p.flags |= ((p.required_mask | p.anyof_mask | p.excluded_mask) &
+> >> +		    PAGE_IS_WRITTEN) ? PM_SCAN_REQUIRE_UFFD : 0;
+> >> +	p.cur_buf.start = p.cur_buf.len = p.cur_buf.flags = 0;
+> >> +	p.vec_buf = NULL;
+> >> +	p.vec_buf_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+> >> +
+> >> +	/*
+> >> +	 * Allocate smaller buffer to get output from inside the page walk
+> >> +	 * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+> >> +	 * we want to return output to user in compact form where no two
+> >> +	 * consecutive regions should be continuous and have the same flags.
+> >> +	 * So store the latest element in p.cur_buf between different walks and
+> >> +	 * store the p.cur_buf at the end of the walk to the user buffer.
+> >> +	 */
+> >> +	if (IS_PM_SCAN_GET(p.flags)) {
+> >> +		p.vec_buf = kmalloc_array(p.vec_buf_len, sizeof(*p.vec_buf),
+> >> +					  GFP_KERNEL);
+> >> +		if (!p.vec_buf)
+> >> +			return -ENOMEM;
+> >> +	}
+> >> +
+> >> +	if (IS_PM_SCAN_WP(p.flags)) {
+> >> +		mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
+> >> +					mm, start, end);
+> >> +		mmu_notifier_invalidate_range_start(&range);
+> >> +	}
+> >> +
+> >> +	walk_start = walk_end = start;
+> >> +	while (walk_end < end && !ret) {
+> > 
+> > How long can it take to run this loop? Should we interrupt it if a
+> > signal has been queued?
+> I'm following mincore and pagemap_read here. There is no such thing there.
+> IOCTL is performing what user has requested.
 
-> * selftests/nolibc: stat_timestamps: remove procfs dependency
-> 
->   Use '/' instead of /proc/self, or we can add a 'has_proc' condition
->   for this test case, but it is not that necessary to skip the whole
->   stat_timestamps tests for such a subtest binding to /proc/self.
-> 
->   Welcome suggestion from Thomas.
+In case of pagemap, its buffer is limited by MAX_RW_COUNT (0x7ffff000),
+so it can handle maximum 0xffffe00 pages in one iteration.  Do you have any
+limits for input parameters?
 
-As above, I think the impact of depending on CONFIG_PROC_FS is
-justifiable.
+> If the execution time is a
+> concern, user should have called the IOCTL on shorter address range.
 
-The usage of /proc/self was actually intentional.
-This file has a timestamp of the start of the referenced process.
-So each invocation of nolibc-test tests a new timestamp.
+It doesn't work this way. There can be many users and signals has to be
+delivered in a reasonable time. One of the obvious examples when a signal
+has to be delivered asap is OOM.
 
-In contrast if nolibc-test is invocated from a prebaked filesystem the
-timestamp of "/" will always be fixed, reducing the chance to find
-errors.
+> 
+> > 
+> >> +		if (IS_PM_SCAN_GET(p.flags)) {
+> >> +			p.vec_buf_index = 0;
+> >> +
+> >> +			/*
+> >> +			 * All data is copied to cur_buf first. When more data
+> >> +			 * is found, we push cur_buf to vec_buf and copy new
+> >> +			 * data to cur_buf. Subtract 1 from length as the
+> >> +			 * index of cur_buf isn't counted in length.
+> >> +			 */
+> >> +			empty_slots = arg.vec_len - vec_index;
+> >> +			p.vec_buf_len = min(p.vec_buf_len, empty_slots - 1);
+> >> +		}
+> >> +
+> >> +		walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
+> >> +		if (walk_end > end)
+> >> +			walk_end = end;
+> >> +
+> >> +		ret = mmap_read_lock_killable(mm);
+> >> +		if (ret)
+> >> +			goto free_data;
+> > 
+> > This will fail the ioctl, but it isn't acceptable if any pages has been
+> > handled.
+> I'm following pagemap_read() here.
 
-> * tools/nolibc: add rmdir() support
->   selftests/nolibc: add a new rmdir() test case
-> 
->   rmdir() routine and test case are added for the coming requirement.
-> 
->   Note, if the __sysret() patchset [2] is applied before us, this patch
->   should be rebased on it and apply the __sysret() helper.
-> 
-> * selftests/nolibc: fix up failures when there is no procfs
-> 
->   call rmdir() to remove /proc completely to rework the checking of
->   /proc, before, the existing of /proc not means the procfs is really
->   mounted.
-> 
-> * selftests/nolibc: rename proc variable to has_proc
->   selftests/nolibc: rename euid0 variable to is_root
-> 
->   align with the has_gettid, has_xxx variables.
-> 
-> * selftests/nolibc: prepare tmpfs and hugetlbfs
->   selftests/nolibc: rename chmod_net to chmod_good
->   selftests/nolibc: link_cross: support tmpfs
->   selftests/nolibc: rename chroot_exe to chroot_file
-> 
->   use file from /tmp instead of file from /proc when there is no procfs
->   this avoid skipping the chmod_net, link_cross, chroot_exe tests
-> 
-> * selftests/nolibc: vfprintf: silence memfd_create() warning
->   selftests/nolibc: vfprintf: skip if neither tmpfs nor hugetlbfs
->   selftests/nolibc: vfprintf: support tmpfs and hugetlbfs
-> 
->   memfd_create from kernel >= v6.2 forcely warn on missing
->   MFD_NOEXEC_SEAL flag, the first one silence it with such flag, for
->   older kernels, use 0 flag as before.
 
-Given this is only a problem when nolibc-test is PID1 and printing to
-the system console, we could also just disable warnings on the system
-console through syscall() or /proc/sys/kernel/printk.
+pagemap_read() doesn't change states of pages, so it is safe to return
+errors from it. In this case, such errors will be fatal, because you
+mark some pages as write-protected but don't report them to the user.
 
-It would also avoid cluttering the tests for limited gain.
+> 
+> > 
+> > 
+> >> +		ret = walk_page_range(mm, walk_start, walk_end,
+> >> +				      &pagemap_scan_ops, &p);
+> >> +		mmap_read_unlock(mm);
+> >> +
+> > 
+> > ret can be ENOSPC returned from pagemap_scan_pmd_entry, but we should
+> > not return this error if any pages has been handled.
+> ENOSPC isn't being returned from pagemap_scan_pmd_entry now.
 
->   since memfd_create() depends on TMPFS or HUGETLBFS, the second one
->   skip the whole vfprintf instead of simply fail if memfd_create() not
->   work.
+I mean pagemap_scan_hugetlb_entry.
+
 > 
->   the 3rd one futher try the ramfs based tmpfs even when memfd_create()
->   not work.
-> 
-> At last, let's simply discuss about the configs, I have prepared minimal
-> configs for all of the nolibc supported architectures but not sure where
-> should we put them, what about tools/testing/selftests/nolibc/configs ?
-> 
-> Thanks!
-> 
-> Best regards,
-> Zhangjin
-> ---
-> 
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/
-> [2]: https://lore.kernel.org/linux-riscv/cover.1687187451.git.falcon@tinylab.org/
-> [3]: https://lore.kernel.org/lkml/cover.1687156559.git.falcon@tinylab.org/
-> [4]: https://lore.kernel.org/linux-riscv/cover.1687176996.git.falcon@tinylab.org/
-> [5]: https://pastebin.com/5jq0Vxbz 
-> 
-> Zhangjin Wu (17):
->   selftests/nolibc: stat_fault: silence NULL argument warning with glibc
->   selftests/nolibc: gettid: restore for glibc and musl
->   selftests/nolibc: add _LARGEFILE64_SOURCE for musl
->   selftests/nolibc: fix up kernel parameters support
->   selftests/nolibc: stat_timestamps: remove procfs dependency
->   tools/nolibc: add rmdir() support
->   selftests/nolibc: add a new rmdir() test case
->   selftests/nolibc: fix up failures when there is no procfs
->   selftests/nolibc: rename proc variable to has_proc
->   selftests/nolibc: rename euid0 variable to is_root
->   selftests/nolibc: prepare tmpfs and hugetlbfs
->   selftests/nolibc: rename chmod_net to chmod_good
->   selftests/nolibc: link_cross: support tmpfs
->   selftests/nolibc: rename chroot_exe to chroot_file
->   selftests/nolibc: vfprintf: silence memfd_create() warning
->   selftests/nolibc: vfprintf: skip if neither tmpfs nor hugetlbfs
->   selftests/nolibc: vfprintf: support tmpfs and hugetlbfs
-> 
->  tools/include/nolibc/sys.h                   |  28 ++++
->  tools/testing/selftests/nolibc/nolibc-test.c | 132 +++++++++++++++----
->  2 files changed, 138 insertions(+), 22 deletions(-)
+> > 
+> >> +		if (ret && ret != PM_SCAN_BUFFER_FULL &&
+> >> +		    ret != PM_SCAN_FOUND_MAX_PAGES)
+> >> +			goto free_data;
+> >> +
+> >> +		walk_start = walk_end;
+> >> +		if (IS_PM_SCAN_GET(p.flags) && p.vec_buf_index) {
+> >> +			if (copy_to_user(&vec[vec_index], p.vec_buf,
+> >> +					 p.vec_buf_index * sizeof(*p.vec_buf))) {
+> >> +				/*
+> >> +				 * Return error even though the OP succeeded
+> >> +				 */
+> >> +				ret = -EFAULT;
+> >> +				goto free_data;
+> >> +			}
+> >> +			vec_index += p.vec_buf_index;
+> >> +		}
+> >> +	}
+> >> +
+> >> +	if (p.cur_buf.len) {
+> >> +		if (copy_to_user(&vec[vec_index], &p.cur_buf, sizeof(p.cur_buf))) {
+> >> +			ret = -EFAULT;
+> >> +			goto free_data;
+> >> +		}
+> >> +		vec_index++;
+> >> +	}
+> >> +
+> >> +	ret = vec_index;
+> >> +
+> >> +free_data:
+> >> +	if (IS_PM_SCAN_WP(p.flags))
+> >> +		mmu_notifier_invalidate_range_end(&range);
+> >> +
+> >> +	kfree(p.vec_buf);
+> >> +	return ret;
+> >> +}
+> >> +
+> >> +static long do_pagemap_cmd(struct file *file, unsigned int cmd,
+> >> +			   unsigned long arg)
+> >> +{
+> >> +	struct mm_struct *mm = file->private_data;
+> >> +
+> >> +	switch (cmd) {
+> >> +	case PAGEMAP_SCAN:
+> >> +		return do_pagemap_scan(mm, arg);
+> >> +
+> >> +	default:
+> >> +		return -EINVAL;
+> >> +	}
+> >> +}
+> >> +
+> >>  const struct file_operations proc_pagemap_operations = {
+> >>  	.llseek		= mem_lseek, /* borrow this */
+> >>  	.read		= pagemap_read,
+> >>  	.open		= pagemap_open,
+> >>  	.release	= pagemap_release,
+> >> +	.unlocked_ioctl = do_pagemap_cmd,
+> >> +	.compat_ioctl	= do_pagemap_cmd,
+> >>  };
+> >>  #endif /* CONFIG_PROC_PAGE_MONITOR */
+> >>  
+> >> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> >> index beb7c63d2871..a6e773c3e2b4 100644
+> >> --- a/include/linux/hugetlb.h
+> >> +++ b/include/linux/hugetlb.h
+> >> @@ -261,6 +261,7 @@ long hugetlb_change_protection(struct vm_area_struct *vma,
+> >>  		unsigned long cp_flags);
+> >>  
+> >>  bool is_hugetlb_entry_migration(pte_t pte);
+> >> +bool is_hugetlb_entry_hwpoisoned(pte_t pte);
+> >>  void hugetlb_unshare_all_pmds(struct vm_area_struct *vma);
+> >>  
+> >>  #else /* !CONFIG_HUGETLB_PAGE */
+> >> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+> >> index b7b56871029c..a9fb44db84a3 100644
+> >> --- a/include/uapi/linux/fs.h
+> >> +++ b/include/uapi/linux/fs.h
+> >> @@ -305,4 +305,57 @@ typedef int __bitwise __kernel_rwf_t;
+> >>  #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
+> >>  			 RWF_APPEND)
+> >>  
+> >> +/* Pagemap ioctl */
+> >> +#define PAGEMAP_SCAN	_IOWR('f', 16, struct pm_scan_arg)
+> >> +
+> >> +/* Bits are set in flags of the page_region and masks in pm_scan_args */
+> >> +#define PAGE_IS_WRITTEN		(1 << 0)
+> >> +#define PAGE_IS_FILE		(1 << 1)
+> >> +#define PAGE_IS_PRESENT		(1 << 2)
+> >> +#define PAGE_IS_SWAPPED		(1 << 3)
+> >> +
+> >> +/*
+> >> + * struct page_region - Page region with flags
+> >> + * @start:	Start of the region
+> >> + * @len:	Length of the region in pages
+> >> + * @bitmap:	Bits sets for the region
+> >> + */
+> >> +struct page_region {
+> >> +	__u64 start;
+> >> +	__u64 len;
+> >> +	__u64 flags;
+> >> +};
+> >> +
+> >> +/*
+> >> + * struct pm_scan_arg - Pagemap ioctl argument
+> >> + * @size:		Size of the structure
+> >> + * @flags:		Flags for the IOCTL
+> >> + * @start:		Starting address of the region
+> >> + * @len:		Length of the region (All the pages in this length are included)
+> >> + * @vec:		Address of page_region struct array for output
+> >> + * @vec_len:		Length of the page_region struct array
+> >> + * @max_pages:		Optional max return pages
+> >> + * @required_mask:	Required mask - All of these bits have to be set in the PTE
+> >> + * @anyof_mask:		Any mask - Any of these bits are set in the PTE
+> >> + * @excluded_mask:	Exclude mask - None of these bits are set in the PTE
+> >> + * @return_mask:	Bits that are to be reported in page_region
+> >> + */
+> >> +struct pm_scan_arg {
+> >> +	__u64 size;
+> >> +	__u64 flags;
+> >> +	__u64 start;
+> >> +	__u64 len;
+> >> +	__u64 vec;
+> >> +	__u64 vec_len;
+> >> +	__u64 max_pages;
+> >> +	__u64 required_mask;
+> >> +	__u64 anyof_mask;
+> >> +	__u64 excluded_mask;
+> >> +	__u64 return_mask;
+> >> +};
+> >> +
+> >> +/* Supported flags */
+> >> +#define PM_SCAN_OP_GET	(1 << 0)
+> >> +#define PM_SCAN_OP_WP	(1 << 1)
+> >> +
+> >>  #endif /* _UAPI_LINUX_FS_H */
+> >> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> >> index 0db13167b1ee..7e60f0f3fd03 100644
+> >> --- a/mm/hugetlb.c
+> >> +++ b/mm/hugetlb.c
+> >> @@ -4980,7 +4980,7 @@ bool is_hugetlb_entry_migration(pte_t pte)
+> >>  		return false;
+> >>  }
+> >>  
+> >> -static bool is_hugetlb_entry_hwpoisoned(pte_t pte)
+> >> +bool is_hugetlb_entry_hwpoisoned(pte_t pte)
+> >>  {
+> >>  	swp_entry_t swp;
+> >>  
+> >> -- 
+> >> 2.39.2
+> >>
 > 
 > -- 
-> 2.25.1
-> 
+> BR,
+> Muhammad Usama Anjum
