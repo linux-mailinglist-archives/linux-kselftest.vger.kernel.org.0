@@ -2,215 +2,256 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054F4737A67
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 06:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AA6737AF5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 08:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjFUEoi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 00:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
+        id S229958AbjFUGCc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 02:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjFUEoe (ORCPT
+        with ESMTP id S229470AbjFUGCb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 00:44:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA5F1730;
-        Tue, 20 Jun 2023 21:44:32 -0700 (PDT)
-Received: from [192.168.10.54] (unknown [119.155.63.248])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CB8C8660296C;
-        Wed, 21 Jun 2023 05:44:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687322671;
-        bh=GMo8qOz67u7jFTir2W0Vb2JjW6eOFryP62A0pb2a4vg=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=mECV2qzaIw2HDiIJoHLohz28PMiMooPxorgX7oPAO79aAUmwROJXPamG+FHYH5riW
-         UHRd6Gn7UF9YnMklRpwuep3lbxIQgX4skqbCqWdNDQ4pW3fiXpY0aLznKuawlHzfIf
-         +xiOfoWxnQc4UTA6jsYu+JFdnKJiXgIAuBhibcgFMbOri7gI39ykB74+7ps7Hs2TMG
-         uTcaHz2QyQaqyDSLhTuljXEexQG0XpsOUy/TFv+bRNjwlglnjRhQSGBEXlFX6cgO2P
-         JloN4BReLPrD979jg0E8sEQ5USoRMTr2qKZXzkytNmNze5RSv7vRXBX2p6Av92j3dr
-         0Cd9WXqgyE/Xg==
-Message-ID: <9b6d55e3-1f5f-04e1-d68f-0591a0f4f60c@collabora.com>
-Date:   Wed, 21 Jun 2023 09:44:19 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-3-usama.anjum@collabora.com>
- <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
- <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com>
- <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
- <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com>
- <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
- <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com>
- <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
- <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com>
- <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
- <2e1b80f1-0385-0674-ae5f-9703a6ef975d@collabora.com>
- <CABb0KFGOx69Sz6w9JenYUwSTFmW-Cmcns3X-oDyWsC+H57vkvg@mail.gmail.com>
- <444ed144-a2ee-cb16-880a-128383c83a08@collabora.com>
- <CABb0KFEqJasf9nM3wL1oaK9ObcYzwzjtrRBcWRc3wGqdZRUpXg@mail.gmail.com>
+        Wed, 21 Jun 2023 02:02:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A869310DC;
+        Tue, 20 Jun 2023 23:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687327349; x=1718863349;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=7tNLAf7Q99Qa4kFL2rClhYUnLSprJtRWLCjD34U6D6A=;
+  b=XVulXM6WfsujqqRWHb/0bQUFRihcIBLAR8LXAL38gLhuXZV9ejuCCYC2
+   H4tdBjmPz1lyqh3lAlCxHIQEs0JzUOR1FLXLDTzfhMrLHSewHCT8K4U/M
+   vSxCXYgPj54592HGCM9Q/+rfaWOpynP/IGJIKCERoIa+IZs/k9qguNdWL
+   K0gd4mJBruF2btO9univ9K+seuqPnEyOW8NksB85BFt/+Zk3ag1Fldtjk
+   Q/F3HLlOVsAUTGKFkp4rHO7/1vs7mJvrT75FUzj5mFLM1UUbGsRqetRSk
+   h7NtKaD/2lGqHmFHRbHFOSf95a2F6YfcO2lYLO82vNzXH1t6LRXi5rqVz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="363497945"
+X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
+   d="scan'208";a="363497945"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 23:02:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="804233071"
+X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
+   d="scan'208";a="804233071"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Jun 2023 23:02:25 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 20 Jun 2023 23:02:24 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 20 Jun 2023 23:02:24 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 20 Jun 2023 23:02:24 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.45) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 20 Jun 2023 23:02:23 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=auydzovJ9jPePPVQjRc51ScRDg7g08YJeZ751a4qXV2c5YrMG4+CwIWTc1vFU6wnJujePieUDf4ha483beAkqz1Mfh6wKQlQPTOiPEhu4snlMSFDbsFqzKT7tRlDgqLmoGpi4AtE8/C3bb4Zx8UfZg9Z4+Byp+AKetibs4rpKwEZVSDfTDNSMT/hHVigxns/8OSd7/7hC/GC29csCw0S/BcRHpFRshlYJ+9lN1ayVC0Ed8yenm49P1eqQRgsT7douVN+TW2D/ORcS5RvoE0iiXBk2StxMuJpFdFpR7iipqGQTCY8vRlWbkbgWjiTbGBgyJIsUa7ZrX5F3EWL2uU7Cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FNBEr8/HdJR3oUwA9p9B9ce/rK0XXkVMNBx9zKtKzJs=;
+ b=EQFtHudAQdAqwD+DeibXCbzQxpvV8/2xUCfjmDKc5I35bBf5uvN3psttxfD/z4GaAgKgGgVSg8l9YPqH8U/jpv0T8nzT9Bzg0Pol9TRjdojYO8g3pTogbOGKdF/R2998PDEI5Ul71P5A+EDPuR0ATmWHpT+prnkIhKfnCBUXyIjlJjOI89vFe8G+4olBo31E5hbrSKqwn+IjiDRNHwWkmwKMHmsnXCBhVW+gMCrxvavtOSiKYlm/K9WgiHfVZYtCFlGb42kMApUWWW9JBswOax0xUh216Ne8KroVP+Uz1aCCzEthVN3eThWPvk2h8BZbdzx66ejAyahNeBmGEnBO+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by SJ0PR11MB5865.namprd11.prod.outlook.com (2603:10b6:a03:428::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Wed, 21 Jun
+ 2023 06:02:21 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::4f05:6b0b:dbc8:abbb]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::4f05:6b0b:dbc8:abbb%7]) with mapi id 15.20.6521.023; Wed, 21 Jun 2023
+ 06:02:21 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: RE: [PATCH v2 00/11] iommufd: Add nesting infrastructure
+Thread-Topic: [PATCH v2 00/11] iommufd: Add nesting infrastructure
+Thread-Index: AQHZhBZTNX7dDuLMFEel2CdlG13MGq9hZYMwgAAiQoCAB0Y6EIAVLTqAgA7xydCABWBTgIAA1LOwgADAhgCAARBZAA==
+Date:   Wed, 21 Jun 2023 06:02:21 +0000
+Message-ID: <BN9PR11MB5276B852A32F53BE8EAA1A7D8C5DA@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230511143844.22693-1-yi.l.liu@intel.com>
+ <BN9PR11MB5276DAF0A11809CF8433EE338C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZGdiS2m8jcd5OOt5@nvidia.com>
+ <BN9PR11MB5276A74B2DA86C79908A420B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZH9AGWf1yRDu/86q@nvidia.com>
+ <BN9PR11MB52763C7B838B04D3200322FD8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZJBL8QLLBiwRsUSI@nvidia.com>
+ <BN9PR11MB527663567ECB8AD52D3170818C5CA@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZJGf3sgLKr9HLZuE@nvidia.com>
+In-Reply-To: <ZJGf3sgLKr9HLZuE@nvidia.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFEqJasf9nM3wL1oaK9ObcYzwzjtrRBcWRc3wGqdZRUpXg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SJ0PR11MB5865:EE_
+x-ms-office365-filtering-correlation-id: 970d10f8-3bfa-4002-e10c-08db721d13fd
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: T3mmB+0Z8sO5H5w2nziOUu623MFEAAhIDSe7ndL/YCsByjjg6ohWiMwvL0pNaUKMVOFumeBROOvMMZ/ldNU1QwpeS589dvOMi9ENTmxX6ey/U1gRxWZJP1gOfKl8Wd8kftCWE8J3EhDK94+7xfC79bgw7r5YmIjaHhh18ZaZtZ+8KGEx1cNYMzPrXTzinmM3GpxnTuU5+26pjOe0UlAmNBKq0ETrFR12pgTQK+A/WJobxjdjSWqgHyoebvqQ2I/FJyirVEMXkc+ss+3MkKBspjI1hOS1QGQ7GsNF+dF7BWsmkI6DbLGv+c3Mkb8vcNFgwWQJeXRIAynI2e6dPwnu2K+9OznAk0oyZ5yo/8CJgHVh9G5H0FrjWcRADBoTTE0gwFA1JXRMAQ3UuicV6TedWre6BdBc4I13LtpwOt0qobPHS0cOWrl2NhPkuA/f3/tX/nzPRJlsGrHy5Y37a51HjOSyknR3f2a0qC8IhVgXxak2RkLYe/j3Ww8ld39msmdTO9uz0RD9y/M3n9lzcOdXKoMh/K3qAbWzL0QybMmudPdvpDDNZ7WSK0Cs/HcRvq3dOSebvmrCT611RSsKnuDVgej9ZoiMppUrJd2tTiAaFN/LfjY7h36Zw6PQXwpF7UuS
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(346002)(366004)(136003)(396003)(451199021)(7416002)(52536014)(82960400001)(83380400001)(86362001)(38070700005)(122000001)(2906002)(55016003)(5660300002)(54906003)(76116006)(66476007)(8676002)(8936002)(66446008)(64756008)(66556008)(66946007)(186003)(26005)(478600001)(41300700001)(4326008)(38100700002)(6916009)(9686003)(6506007)(7696005)(316002)(71200400001)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QrcfOR3CEbxcDQbsFJmf8mFve7Yo9UMIupjXH92MbJOTcfAGztYOdnhwIzYx?=
+ =?us-ascii?Q?57jxA4WD6CPExV099ihik4MWUKkC+ytcbWrHPCGX/KmPW0NxspNn64nn7MsK?=
+ =?us-ascii?Q?4PaewIJE/aie0g/DvTS2ebJkmWR/iMp6GVoVRNjsgwGoOS1rGvT+Wc3NJApm?=
+ =?us-ascii?Q?VuNdRb8BSNfUn3ZicZXFlc2kbOISdiig6ZwsIXaj2iKGTZcMyr78E4eLhUnL?=
+ =?us-ascii?Q?PNJpAXaUn1XgGL6PJybaGosACPAd6IVFZ+V4Vv1Xyv+Syb9iIL7yCmH+eWNW?=
+ =?us-ascii?Q?eazr09PSA89CC2xKV5gOmjUdTVWHPRnHNyXjpMCNSTIG46ZQDHjJOM5yo46/?=
+ =?us-ascii?Q?7yGPmGG9Pqx1N81Z27FBfHLq5U6wjZV72PxgF9crO4al4Jt6gYBY836Kd5Ly?=
+ =?us-ascii?Q?afx9zDzEcl/da7uTcN/F1/JaW/cUGmzrC8Z0bspiAMWUNM56fjPg4Rvf7bkg?=
+ =?us-ascii?Q?2gccdQdahuNSYS5A19bTdlRv31dPod+3cyWPogywPCcF8iVunCqi2HEpEzl/?=
+ =?us-ascii?Q?qQ1lYZgM9SNg0YJzBBEWwDEQAdpfZWJUDhOkgTL2LkEJ744fH/Lu1rzOB8N0?=
+ =?us-ascii?Q?LLnncGIDDz0Rg+qwI3Je/JCW4fwJr8BuQ84JauFiHX8vLXwzFn5xAHjiGpME?=
+ =?us-ascii?Q?qiyNVztn6f4iyixkoAyrCmcRFjaoUEH1rXFi8htpYQc59Gi1vKVAptG129hv?=
+ =?us-ascii?Q?y0CPYgcDBZ3GC74Uc0AETdRsLdLYgWjRPFRYPFxQ6igiTbyY1sv2OBL+YhNk?=
+ =?us-ascii?Q?E5DjpN+1pip1AcKSBPKNuk8ydRao80X6e2KLA482k01O2M7eNk3dvRx4M3IG?=
+ =?us-ascii?Q?ept9Djk2YfCtoQsTSG0r0e+T8tHOnLttfsPhDc3r8b/kzdB4I/MBBuzG05Mv?=
+ =?us-ascii?Q?HYpX8WlPnJEmYKjvkWr9GyI7u6ddzfn5ZVocSM2Z5GHqyHOl78/DswRPCJ8e?=
+ =?us-ascii?Q?yAUPzTMNRpBhA8HDMuD51aZAtUuAhBzlOdmRADq2tciHuqnjtHD/6mU7s84M?=
+ =?us-ascii?Q?QQNuZUdGzs/MICevFE1r38U2dwFSc5K7L7xQ/63PhSklJpsC/Mjrj1Opt14g?=
+ =?us-ascii?Q?SKx7x3wHbg95hGLyCSTyDb5Jy6j4ikuGYPsCBJlLNgg6WcZBN/jPWzkcD6O5?=
+ =?us-ascii?Q?msrD2/LSr1JQQgt9o3XV4jW3XNGl8u3f8mMiTvah3llFoBbtcGJvQGQVIdPn?=
+ =?us-ascii?Q?BObFRgY3T9q6TntkCaMzKDpGn48DPQRIspMQnuJ1MgAJdgLICNCvZ+ctOY8x?=
+ =?us-ascii?Q?owc798aGLlIRhUboPHWn9WvVJrlhvgLzFPlW0SsaJY9HqwFWKPCB8ruPADRB?=
+ =?us-ascii?Q?z1MCUqV9m+QjOioOODw0TVxrM2KIw0WpzYMLkdMhHFl7YDFnBqn8jVRS5OnQ?=
+ =?us-ascii?Q?fPjs1VhzzEfqG4yLMOWetP5MiTahghEnOsRpJsoMShuMozfKQ+S70pM83V+w?=
+ =?us-ascii?Q?hjpGeRaHo19cUOto4bNAM165KbGnsRyzDHdnot5zorUxm8KNPRmR27SrzEDX?=
+ =?us-ascii?Q?NZCcB8spCZRVfZ3Y5nr3BPPhkg5VhxfrVOcvgrm5LKuFi99CcG6eOvTiXzll?=
+ =?us-ascii?Q?FtqkoD2NqeM3mmZgT2rHyKYfZHGsDVPLnfG/71uJ?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 970d10f8-3bfa-4002-e10c-08db721d13fd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2023 06:02:21.7913
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NuulJxxEzCFRZUB8Q++0lwZL245ueO1pEzh3O4VLqoBJ+KOrB1qUzyvwYFYWobiqEqS6Td57HeUPieTq9ayAaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5865
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/21/23 3:05 AM, Michał Mirosław wrote:
-> On Tue, 20 Jun 2023 at 13:16, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->> On 6/19/23 1:16 PM, Michał Mirosław wrote:
->>> On Fri, 16 Jun 2023 at 08:57, Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:
->>>>
->>>> On 6/16/23 1:07 AM, Michał Mirosław wrote:
->>>>> On Thu, 15 Jun 2023 at 17:11, Muhammad Usama Anjum
->>>>> <usama.anjum@collabora.com> wrote:
->>>>>> On 6/15/23 7:52 PM, Michał Mirosław wrote:
->>>>>>> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
->>>>>>> <usama.anjum@collabora.com> wrote:
->>>>>>>> I'll send next revision now.
->>>>>>>> On 6/14/23 11:00 PM, Michał Mirosław wrote:
->>>>>>>>> (A quick reply to answer open questions in case they help the next version.)
->>> [...]
->>>>>>>>> I guess this will be reworked anyway, but I'd prefer this didn't need
->>>>>>>>> custom errors etc. If we agree to decoupling the selection and GET
->>>>>>>>> output, it could be:
->>>>>>>>>
->>>>>>>>> bool is_interesting_page(p, flags); // this one does the
->>>>>>>>> required/anyof/excluded match
->>>>>>>>> size_t output_range(p, start, len, flags); // this one fills the
->>>>>>>>> output vector and returns how many pages were fit
->>>>>>>>>
->>>>>>>>> In this setup, `is_interesting_page() && (n_out = output_range()) <
->>>>>>>>> n_pages` means this is the final range, no more will fit. And if
->>>>>>>>> `n_out == 0` then no pages fit and no WP is needed (no other special
->>>>>>>>> cases).
->>>>>>>> Right now, pagemap_scan_output() performs the work of both of these two
->>>>>>>> functions. The part can be broken into is_interesting_pages() and we can
->>>>>>>> leave the remaining part as it is.
->>>>>>>>
->>>>>>>> Saying that n_out < n_pages tells us the buffer is full covers one case.
->>>>>>>> But there is case of maximum pages have been found and walk needs to be
->>>>>>>> aborted.
->>>>>>>
->>>>>>> This case is exactly what `n_out < n_pages` will cover (if scan_output
->>>>>>> uses max_pages properly to limit n_out).
->>>>>>> Isn't it that when the buffer is full we want to abort the scan always
->>>>>>> (with WP if `n_out > 0`)?
->>>>>> Wouldn't it be duplication of condition if buffer is full inside
->>>>>> pagemap_scan_output() and just outside it. Inside pagemap_scan_output() we
->>>>>> check if we have space before putting data inside it. I'm using this same
->>>>>> condition to indicate that buffer is full.
->>>>>
->>>>> I'm not sure what do you mean? The buffer-full conditions would be
->>>>> checked in ..scan_output() and communicated to the caller by returning
->>>>> N less than `n_pages` passed in. This is exactly how e.g. read()
->>>>> works: if you get less than requested you've hit the end of the file.
->>>>> If the file happens to have size that is equal to the provided buffer
->>>>> length, the next read() will return 0.
->>>> Right now we have:
->>>>
->>>> pagemap_scan_output():
->>>>         if (p->vec_buf_index >= p->vec_buf_len)
->>>>                 return PM_SCAN_BUFFER_FULL;
->>>>         if (p->found_pages == p->max_pages)
->>>>                 return PM_SCAN_FOUND_MAX_PAGES;
->>>
->>> Why do you need to differentiate between those cases?
->>>
->>>> pagemap_scan_pmd_entry():
->>>>         ret = pagemap_scan_output(bitmap, p, start, n_pages);
->>>>         if (ret >= 0) // success
->>>>                 make_UFFD_WP and flush
->>>>         else
->>>>                 buffer_error
->>>>
->>>> You are asking me to do:
->>>>
->>>> pagemap_scan_output():
->>>>         if (p->vec_buf_index >= p->vec_buf_len)
->>>>                 return 0;
->>>
->>>>         if (p->found_pages == p->max_pages)
->>>>                 return PM_SCAN_FOUND_MAX_PAGES;
->>>
->>> This should be instead:
->>>
->>> n_pages = min(p->max_pags - p_found_pages, n_pages)
->>> ...
->>> return n_pages;
->> You are missing the optimization here that we check for full buffer every
->> time adding to user buffer. This was added to remove extra iteration of
->> page walk if buffer is full already. The way you are suggesting will remove it.
->>
->> So you are returning remaining pages to be found now. This doesn't seem
->> right. If max_pages is 520, found_pages is 0 and n_pages is 512 before
->> calling pagemap_scan_output(). found_pages would become 512 after adding
->> 512 pages to output buffer. But n_pages would return 8 instead of 512. You
->> were saying we should return the number of pages added to the output buffer.
-> 
-> Ok, if we want this optimization, then i'd rework it so that we have:
-> 
-> bool pagemap_scan_output(..., int *n_pages)
-> {
->    limit n_pages;
->   ...
->   return have_more_room_in_output;
-> }
-This is becoming more and more closer to what I have in the code. The only
-difference now is that you are asking me to not return the buffer full
-status from inside this function and instead there should be a input+output
-pointer to n_pages and the caller would return the buffer full status. As
-compared to the suggestion, the current form looks simpler. My earlier
-point (
-https://lore.kernel.org/all/2e1b80f1-0385-0674-ae5f-9703a6ef975d@collabora.com
-) is valid again. I don't want to bring logic out of pagemap_scan_output().
-This is internal function. There could be thousand ways how internal code
-can be written. I've really liked so many optimizations which you have
-advised. This isn't something worth doing. It would increase lines of code
-with no added readability benefit.
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Tuesday, June 20, 2023 8:47 PM
+>=20
+> On Tue, Jun 20, 2023 at 01:43:42AM +0000, Tian, Kevin wrote:
+> > I wonder whether we have argued passed each other.
+> >
+> > This series adds reserved regions to S2. I challenged the necessity as
+> > S2 is not directly accessed by the device.
+> >
+> > Then you replied that doing so still made sense to support identity
+> > S1.
+>=20
+> I think I said/ment if we attach the "s2" iommu domain as a direct
+> attach for identity - eg at boot time, then the IOAS must gain the
+> reserved regions. This is our normal protocol.
+>=20
+> But when we use the "s2" iommu domain as an actual nested S2 then we
+> don't gain reserved regions.
 
--- 
-BR,
-Muhammad Usama Anjum
+Then we're aligned.
+
+Yi/Nicolin, please update this series to not automatically add reserved
+regions to S2 in the nesting configuration.
+
+It also implies that the user cannot rely on IOAS_IOVA_RANGES to
+learn reserved regions for arranging addresses in S1.
+
+Then we also need a new ioctl to report reserved regions per dev_id.
+
+>=20
+> > Intel VT-d supports 4 configurations:
+> >   - passthrough (i.e. identity mapped)
+> >   - S1 only
+> >   - S2 only
+> >   - nested
+> >
+> > 'S2 only' is used when vIOMMU is configured in passthrough.
+>=20
+> S2 only is modeled as attaching an S2 format iommu domain to the RID,
+> and when this is done the IOAS should gain the reserved regions
+> because it is no different behavior than attaching any other iommu
+> domain to a RID.
+>=20
+> When the S2 is replaced with a S1 nest then the IOAS should loose
+> those reserved regions since it is no longer attached to a RID.
+
+yes
+
+>=20
+> > My understanding of ARM SMMU is that from host p.o.v. the CD is the
+> > S1 in the nested configuration. 'identity' is one configuration in the =
+CD
+> > then it's in the business of nesting.
+>=20
+> I think it is the same. A CD doesn't come into the picture until the
+> guest installs a CD pointing STE. Until that time the S2 is being used
+> as identity.
+>=20
+> It sounds like the same basic flow.
+
+After a CD table is installed in a STE I assume the SMMU still allows to
+configure an individual CD entry as identity? e.g. while vSVA is enabled
+on a device the guest can continue to keep CD#0 as identity when the
+default domain of the device is set as 'passthrough'. In this case the
+IOAS still needs to gain reserved regions even though S2 is not directly
+attached from host p.o.v.
+
+>=20
+> > My preference was that ALLOC_HWPT allows vIOMMU to opt whether
+> > reserved regions of dev_id should be added to the IOAS of the parent
+> > S2 hwpt.
+>=20
+> Having an API to explicitly load reserved regions of a specific device
+> to an IOAS makes some sense to me.
+>=20
+> Jason
