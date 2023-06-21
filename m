@@ -2,256 +2,765 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AA6737AF5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 08:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB74F737B80
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 08:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjFUGCc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 02:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
+        id S230422AbjFUGg1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 02:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFUGCb (ORCPT
+        with ESMTP id S230426AbjFUGf7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:02:31 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A869310DC;
-        Tue, 20 Jun 2023 23:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687327349; x=1718863349;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=7tNLAf7Q99Qa4kFL2rClhYUnLSprJtRWLCjD34U6D6A=;
-  b=XVulXM6WfsujqqRWHb/0bQUFRihcIBLAR8LXAL38gLhuXZV9ejuCCYC2
-   H4tdBjmPz1lyqh3lAlCxHIQEs0JzUOR1FLXLDTzfhMrLHSewHCT8K4U/M
-   vSxCXYgPj54592HGCM9Q/+rfaWOpynP/IGJIKCERoIa+IZs/k9qguNdWL
-   K0gd4mJBruF2btO9univ9K+seuqPnEyOW8NksB85BFt/+Zk3ag1Fldtjk
-   Q/F3HLlOVsAUTGKFkp4rHO7/1vs7mJvrT75FUzj5mFLM1UUbGsRqetRSk
-   h7NtKaD/2lGqHmFHRbHFOSf95a2F6YfcO2lYLO82vNzXH1t6LRXi5rqVz
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="363497945"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="363497945"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 23:02:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="804233071"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="804233071"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Jun 2023 23:02:25 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 20 Jun 2023 23:02:24 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 20 Jun 2023 23:02:24 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 20 Jun 2023 23:02:24 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.45) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 20 Jun 2023 23:02:23 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=auydzovJ9jPePPVQjRc51ScRDg7g08YJeZ751a4qXV2c5YrMG4+CwIWTc1vFU6wnJujePieUDf4ha483beAkqz1Mfh6wKQlQPTOiPEhu4snlMSFDbsFqzKT7tRlDgqLmoGpi4AtE8/C3bb4Zx8UfZg9Z4+Byp+AKetibs4rpKwEZVSDfTDNSMT/hHVigxns/8OSd7/7hC/GC29csCw0S/BcRHpFRshlYJ+9lN1ayVC0Ed8yenm49P1eqQRgsT7douVN+TW2D/ORcS5RvoE0iiXBk2StxMuJpFdFpR7iipqGQTCY8vRlWbkbgWjiTbGBgyJIsUa7ZrX5F3EWL2uU7Cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FNBEr8/HdJR3oUwA9p9B9ce/rK0XXkVMNBx9zKtKzJs=;
- b=EQFtHudAQdAqwD+DeibXCbzQxpvV8/2xUCfjmDKc5I35bBf5uvN3psttxfD/z4GaAgKgGgVSg8l9YPqH8U/jpv0T8nzT9Bzg0Pol9TRjdojYO8g3pTogbOGKdF/R2998PDEI5Ul71P5A+EDPuR0ATmWHpT+prnkIhKfnCBUXyIjlJjOI89vFe8G+4olBo31E5hbrSKqwn+IjiDRNHwWkmwKMHmsnXCBhVW+gMCrxvavtOSiKYlm/K9WgiHfVZYtCFlGb42kMApUWWW9JBswOax0xUh216Ne8KroVP+Uz1aCCzEthVN3eThWPvk2h8BZbdzx66ejAyahNeBmGEnBO+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SJ0PR11MB5865.namprd11.prod.outlook.com (2603:10b6:a03:428::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Wed, 21 Jun
- 2023 06:02:21 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4f05:6b0b:dbc8:abbb]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4f05:6b0b:dbc8:abbb%7]) with mapi id 15.20.6521.023; Wed, 21 Jun 2023
- 06:02:21 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: RE: [PATCH v2 00/11] iommufd: Add nesting infrastructure
-Thread-Topic: [PATCH v2 00/11] iommufd: Add nesting infrastructure
-Thread-Index: AQHZhBZTNX7dDuLMFEel2CdlG13MGq9hZYMwgAAiQoCAB0Y6EIAVLTqAgA7xydCABWBTgIAA1LOwgADAhgCAARBZAA==
-Date:   Wed, 21 Jun 2023 06:02:21 +0000
-Message-ID: <BN9PR11MB5276B852A32F53BE8EAA1A7D8C5DA@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230511143844.22693-1-yi.l.liu@intel.com>
- <BN9PR11MB5276DAF0A11809CF8433EE338C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZGdiS2m8jcd5OOt5@nvidia.com>
- <BN9PR11MB5276A74B2DA86C79908A420B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZH9AGWf1yRDu/86q@nvidia.com>
- <BN9PR11MB52763C7B838B04D3200322FD8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZJBL8QLLBiwRsUSI@nvidia.com>
- <BN9PR11MB527663567ECB8AD52D3170818C5CA@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZJGf3sgLKr9HLZuE@nvidia.com>
-In-Reply-To: <ZJGf3sgLKr9HLZuE@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SJ0PR11MB5865:EE_
-x-ms-office365-filtering-correlation-id: 970d10f8-3bfa-4002-e10c-08db721d13fd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: T3mmB+0Z8sO5H5w2nziOUu623MFEAAhIDSe7ndL/YCsByjjg6ohWiMwvL0pNaUKMVOFumeBROOvMMZ/ldNU1QwpeS589dvOMi9ENTmxX6ey/U1gRxWZJP1gOfKl8Wd8kftCWE8J3EhDK94+7xfC79bgw7r5YmIjaHhh18ZaZtZ+8KGEx1cNYMzPrXTzinmM3GpxnTuU5+26pjOe0UlAmNBKq0ETrFR12pgTQK+A/WJobxjdjSWqgHyoebvqQ2I/FJyirVEMXkc+ss+3MkKBspjI1hOS1QGQ7GsNF+dF7BWsmkI6DbLGv+c3Mkb8vcNFgwWQJeXRIAynI2e6dPwnu2K+9OznAk0oyZ5yo/8CJgHVh9G5H0FrjWcRADBoTTE0gwFA1JXRMAQ3UuicV6TedWre6BdBc4I13LtpwOt0qobPHS0cOWrl2NhPkuA/f3/tX/nzPRJlsGrHy5Y37a51HjOSyknR3f2a0qC8IhVgXxak2RkLYe/j3Ww8ld39msmdTO9uz0RD9y/M3n9lzcOdXKoMh/K3qAbWzL0QybMmudPdvpDDNZ7WSK0Cs/HcRvq3dOSebvmrCT611RSsKnuDVgej9ZoiMppUrJd2tTiAaFN/LfjY7h36Zw6PQXwpF7UuS
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(346002)(366004)(136003)(396003)(451199021)(7416002)(52536014)(82960400001)(83380400001)(86362001)(38070700005)(122000001)(2906002)(55016003)(5660300002)(54906003)(76116006)(66476007)(8676002)(8936002)(66446008)(64756008)(66556008)(66946007)(186003)(26005)(478600001)(41300700001)(4326008)(38100700002)(6916009)(9686003)(6506007)(7696005)(316002)(71200400001)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QrcfOR3CEbxcDQbsFJmf8mFve7Yo9UMIupjXH92MbJOTcfAGztYOdnhwIzYx?=
- =?us-ascii?Q?57jxA4WD6CPExV099ihik4MWUKkC+ytcbWrHPCGX/KmPW0NxspNn64nn7MsK?=
- =?us-ascii?Q?4PaewIJE/aie0g/DvTS2ebJkmWR/iMp6GVoVRNjsgwGoOS1rGvT+Wc3NJApm?=
- =?us-ascii?Q?VuNdRb8BSNfUn3ZicZXFlc2kbOISdiig6ZwsIXaj2iKGTZcMyr78E4eLhUnL?=
- =?us-ascii?Q?PNJpAXaUn1XgGL6PJybaGosACPAd6IVFZ+V4Vv1Xyv+Syb9iIL7yCmH+eWNW?=
- =?us-ascii?Q?eazr09PSA89CC2xKV5gOmjUdTVWHPRnHNyXjpMCNSTIG46ZQDHjJOM5yo46/?=
- =?us-ascii?Q?7yGPmGG9Pqx1N81Z27FBfHLq5U6wjZV72PxgF9crO4al4Jt6gYBY836Kd5Ly?=
- =?us-ascii?Q?afx9zDzEcl/da7uTcN/F1/JaW/cUGmzrC8Z0bspiAMWUNM56fjPg4Rvf7bkg?=
- =?us-ascii?Q?2gccdQdahuNSYS5A19bTdlRv31dPod+3cyWPogywPCcF8iVunCqi2HEpEzl/?=
- =?us-ascii?Q?qQ1lYZgM9SNg0YJzBBEWwDEQAdpfZWJUDhOkgTL2LkEJ744fH/Lu1rzOB8N0?=
- =?us-ascii?Q?LLnncGIDDz0Rg+qwI3Je/JCW4fwJr8BuQ84JauFiHX8vLXwzFn5xAHjiGpME?=
- =?us-ascii?Q?qiyNVztn6f4iyixkoAyrCmcRFjaoUEH1rXFi8htpYQc59Gi1vKVAptG129hv?=
- =?us-ascii?Q?y0CPYgcDBZ3GC74Uc0AETdRsLdLYgWjRPFRYPFxQ6igiTbyY1sv2OBL+YhNk?=
- =?us-ascii?Q?E5DjpN+1pip1AcKSBPKNuk8ydRao80X6e2KLA482k01O2M7eNk3dvRx4M3IG?=
- =?us-ascii?Q?ept9Djk2YfCtoQsTSG0r0e+T8tHOnLttfsPhDc3r8b/kzdB4I/MBBuzG05Mv?=
- =?us-ascii?Q?HYpX8WlPnJEmYKjvkWr9GyI7u6ddzfn5ZVocSM2Z5GHqyHOl78/DswRPCJ8e?=
- =?us-ascii?Q?yAUPzTMNRpBhA8HDMuD51aZAtUuAhBzlOdmRADq2tciHuqnjtHD/6mU7s84M?=
- =?us-ascii?Q?QQNuZUdGzs/MICevFE1r38U2dwFSc5K7L7xQ/63PhSklJpsC/Mjrj1Opt14g?=
- =?us-ascii?Q?SKx7x3wHbg95hGLyCSTyDb5Jy6j4ikuGYPsCBJlLNgg6WcZBN/jPWzkcD6O5?=
- =?us-ascii?Q?msrD2/LSr1JQQgt9o3XV4jW3XNGl8u3f8mMiTvah3llFoBbtcGJvQGQVIdPn?=
- =?us-ascii?Q?BObFRgY3T9q6TntkCaMzKDpGn48DPQRIspMQnuJ1MgAJdgLICNCvZ+ctOY8x?=
- =?us-ascii?Q?owc798aGLlIRhUboPHWn9WvVJrlhvgLzFPlW0SsaJY9HqwFWKPCB8ruPADRB?=
- =?us-ascii?Q?z1MCUqV9m+QjOioOODw0TVxrM2KIw0WpzYMLkdMhHFl7YDFnBqn8jVRS5OnQ?=
- =?us-ascii?Q?fPjs1VhzzEfqG4yLMOWetP5MiTahghEnOsRpJsoMShuMozfKQ+S70pM83V+w?=
- =?us-ascii?Q?hjpGeRaHo19cUOto4bNAM165KbGnsRyzDHdnot5zorUxm8KNPRmR27SrzEDX?=
- =?us-ascii?Q?NZCcB8spCZRVfZ3Y5nr3BPPhkg5VhxfrVOcvgrm5LKuFi99CcG6eOvTiXzll?=
- =?us-ascii?Q?FtqkoD2NqeM3mmZgT2rHyKYfZHGsDVPLnfG/71uJ?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 21 Jun 2023 02:35:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FEF1FDF;
+        Tue, 20 Jun 2023 23:35:13 -0700 (PDT)
+Received: from [192.168.10.54] (unknown [119.155.63.248])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 245326606F53;
+        Wed, 21 Jun 2023 07:34:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687329305;
+        bh=AKyfB9/vduPdB/DpupJOlpdlwnxUH6NDiUXGlXhNUl0=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=U/8Yn5SXoAnIaXTwmxFghO7ui1+pgpcevJNcaOI6geU7P90B6OHAadPbQQN2qFt/l
+         WKaeqQI62on8+oqUAK/d4ZezLz68NGAQA6ao9RwListEtu8AvJjokPiv1CEX3HuX9k
+         YGcMi3Z7O3oyn7X4n/KqBdYVFgAZGX1DZlXWspjn+Il9L0+iMLEDJCyYvWYExISxcz
+         jOYCguyayMBSSO7sUTd/+xsglCzjgj5ZUHa1c07GW+9wxrdKpg25AWpBKEkbzHrf+2
+         q0mCp3gmEoUfQRTLl3/XgQKZ+kDOQ9pJtpNMbPziYjj7Z8GEmKCHfXESxy+02N+Z64
+         RTX1EmMsOf01Q==
+Message-ID: <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com>
+Date:   Wed, 21 Jun 2023 11:34:54 +0500
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 970d10f8-3bfa-4002-e10c-08db721d13fd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2023 06:02:21.7913
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NuulJxxEzCFRZUB8Q++0lwZL245ueO1pEzh3O4VLqoBJ+KOrB1qUzyvwYFYWobiqEqS6Td57HeUPieTq9ayAaQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5865
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     Andrei Vagin <avagin@gmail.com>
+References: <20230615141144.665148-1-usama.anjum@collabora.com>
+ <20230615141144.665148-3-usama.anjum@collabora.com>
+ <ZJHp6hSeS6lMo7qx@gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZJHp6hSeS6lMo7qx@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Tuesday, June 20, 2023 8:47 PM
->=20
-> On Tue, Jun 20, 2023 at 01:43:42AM +0000, Tian, Kevin wrote:
-> > I wonder whether we have argued passed each other.
-> >
-> > This series adds reserved regions to S2. I challenged the necessity as
-> > S2 is not directly accessed by the device.
-> >
-> > Then you replied that doing so still made sense to support identity
-> > S1.
->=20
-> I think I said/ment if we attach the "s2" iommu domain as a direct
-> attach for identity - eg at boot time, then the IOAS must gain the
-> reserved regions. This is our normal protocol.
->=20
-> But when we use the "s2" iommu domain as an actual nested S2 then we
-> don't gain reserved regions.
+Hi,
 
-Then we're aligned.
+Thank you for your review.
 
-Yi/Nicolin, please update this series to not automatically add reserved
-regions to S2 in the nesting configuration.
+On 6/20/23 11:03 PM, Andrei Vagin wrote:
+...
+>> +struct pagemap_scan_private {
+>> +	struct page_region *vec_buf, cur_buf;
+>> +	unsigned long long vec_buf_len, vec_buf_index, max_pages, found_pages, flags;
+> 
+> should it be just unsigned long?
+These internal values are storing data coming from user in struct
+pm_scan_arg in which all variables are 64 bit(__u64) explicitly. This is
+why we have unsigned long long here. It is absolutely necessary.
 
-It also implies that the user cannot rely on IOAS_IOVA_RANGES to
-learn reserved regions for arranging addresses in S1.
+> 
+>> +	unsigned long long required_mask, anyof_mask, excluded_mask, return_mask;
+>> +};
+>> +
+>> +static inline bool is_pte_uffd_wp(pte_t pte)
+>> +{
+>> +	return (pte_present(pte) && pte_uffd_wp(pte)) ||
+>> +	       pte_swp_uffd_wp_any(pte);
+>> +}
+>> +
+>> +static inline void make_uffd_wp_pte(struct vm_area_struct *vma,
+>> +				    unsigned long addr, pte_t *pte)
+>> +{
+>> +	pte_t ptent = ptep_get(pte);
+>> +
+>> +	if (pte_present(ptent)) {
+>> +		pte_t old_pte;
+>> +
+>> +		old_pte = ptep_modify_prot_start(vma, addr, pte);
+>> +		ptent = pte_mkuffd_wp(ptent);
+>> +		ptep_modify_prot_commit(vma, addr, pte, old_pte, ptent);
+>> +	} else if (is_swap_pte(ptent)) {
+>> +		ptent = pte_swp_mkuffd_wp(ptent);
+>> +		set_pte_at(vma->vm_mm, addr, pte, ptent);
+>> +	} else {
+>> +		set_pte_at(vma->vm_mm, addr, pte,
+>> +			   make_pte_marker(PTE_MARKER_UFFD_WP));
+>> +	}
+>> +}
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +static inline bool is_pmd_uffd_wp(pmd_t pmd)
+>> +{
+>> +	return (pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
+>> +	       (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd));
+>> +}
+>> +
+>> +static inline void make_uffd_wp_pmd(struct vm_area_struct *vma,
+>> +				    unsigned long addr, pmd_t *pmdp)
+>> +{
+>> +	pmd_t old, pmd = *pmdp;
+>> +
+>> +	if (pmd_present(pmd)) {
+>> +		old = pmdp_invalidate_ad(vma, addr, pmdp);
+>> +		pmd = pmd_mkuffd_wp(old);
+>> +		set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
+>> +	} else if (is_migration_entry(pmd_to_swp_entry(pmd))) {
+>> +		pmd = pmd_swp_mkuffd_wp(pmd);
+>> +		set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
+>> +	}
+>> +}
+>> +#endif
+>> +
+>> +#ifdef CONFIG_HUGETLB_PAGE
+>> +static inline bool is_huge_pte_uffd_wp(pte_t pte)
+>> +{
+>> +	return (pte_present(pte) && huge_pte_uffd_wp(pte)) ||
+>> +	       pte_swp_uffd_wp_any(pte);
+>> +}
+>> +
+>> +static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+>> +					 unsigned long addr, pte_t *ptep,
+>> +					 pte_t ptent)
+>> +{
+>> +	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
+>> +		return;
+>> +
+>> +	if (is_hugetlb_entry_migration(ptent))
+>> +		set_huge_pte_at(vma->vm_mm, addr, ptep,
+>> +				pte_swp_mkuffd_wp(ptent));
+>> +	else if (!huge_pte_none(ptent))
+>> +		huge_ptep_modify_prot_commit(vma, addr, ptep, ptent,
+>> +					     huge_pte_mkuffd_wp(ptent));
+>> +	else
+>> +		set_huge_pte_at(vma->vm_mm, addr, ptep,
+>> +				make_pte_marker(PTE_MARKER_UFFD_WP));
+>> +}
+>> +#endif
+>> +
+>> +static int pagemap_scan_test_walk(unsigned long start, unsigned long end,
+>> +				  struct mm_walk *walk)
+>> +{
+>> +	struct pagemap_scan_private *p = walk->private;
+>> +	struct vm_area_struct *vma = walk->vma;
+>> +
+>> +	if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_async(vma) ||
+>> +	    !userfaultfd_wp_use_markers(vma)))
+>> +		return -EPERM;
+>> +
+>> +	if (vma->vm_flags & VM_PFNMAP)
+>> +		return 1;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int pagemap_scan_output(unsigned long bitmap,
+>> +			       struct pagemap_scan_private *p,
+>> +			       unsigned long addr, unsigned int n_pages)
+>> +{
+>> +	struct page_region *cur_buf = &p->cur_buf;
+>> +
+>> +	if (!n_pages)
+>> +		return -EINVAL;
+>> +
+>> +	bitmap &= p->return_mask;
+>> +
+>> +	if (cur_buf->flags == bitmap &&
+>> +	    cur_buf->start + cur_buf->len * PAGE_SIZE == addr) {
+>> +		cur_buf->len += n_pages;
+>> +		p->found_pages += n_pages;
+>> +	} else {
+>> +		if (cur_buf->len) {
+> 
+> I would add a comment that vec_buf_len has been decremented by one for
+> cur_buf.
+> 
+>> +			if (p->vec_buf_index >= p->vec_buf_len)
+>> +				return PM_SCAN_BUFFER_FULL;
+>> +
+>> +			memcpy(&p->vec_buf[p->vec_buf_index], cur_buf,
+>> +			       sizeof(*p->vec_buf));
+>> +			p->vec_buf_index++;
+>> +		}
+>> +
+>> +		cur_buf->start = addr;
+>> +		cur_buf->len = n_pages;
+>> +		cur_buf->flags = bitmap;
+>> +		p->found_pages += n_pages;
+>> +	}
+>> +
+>> +	if (p->found_pages == p->max_pages)
+>> +		return PM_SCAN_FOUND_MAX_PAGES;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static bool pagemap_scan_is_interesting_page(unsigned long bitmap,
+>> +					     struct pagemap_scan_private *p)
+>> +{
+>> +	if ((p->required_mask & bitmap) != p->required_mask)
+>> +		return false;
+>> +	if (p->anyof_mask && !(p->anyof_mask & bitmap))
+>> +		return false;
+>> +	if (p->excluded_mask & bitmap)
+>> +		return false;
+>> +
+>> +	return true;
+>> +}
+>> +
+>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>> +				  unsigned long end, struct mm_walk *walk)
+>> +{
+>> +	bool is_written, flush = false, is_interesting = true;
+>> +	struct pagemap_scan_private *p = walk->private;
+>> +	struct vm_area_struct *vma = walk->vma;
+>> +	unsigned long bitmap, addr = end;
+>> +	pte_t *pte, *orig_pte, ptent;
+>> +	spinlock_t *ptl;
+>> +	int ret = 0;
+>> +
+>> +	arch_enter_lazy_mmu_mode();
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +	ptl = pmd_trans_huge_lock(pmd, vma);
+>> +	if (ptl) {
+>> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +
+>> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +			n_pages = p->max_pages - p->found_pages;
+>> +
+>> +		is_written = !is_pmd_uffd_wp(*pmd);
+>> +
+>> +		/*
+>> +		 * Break huge page into small pages if the WP operation need to
+>> +		 * be performed is on a portion of the huge page.
+>> +		 */
+>> +		if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> 
+> It might be worth stopping rather than splitting the huge page.
+Sometimes normal pages can be grouped to become THP by the kernel depending
+upon the configurations. We don't want to reject ioctl just because this
+folding operation happened. We don't want to stop rather spliting is the
+best option and it does work fine.
 
-Then we also need a new ioctl to report reserved regions per dev_id.
+> 
+>> +			spin_unlock(ptl);
+>> +
+>> +			split_huge_pmd(vma, pmd, start);
+>> +			goto process_smaller_pages;
+>> +		}
+>> +
+>> +		bitmap = PM_SCAN_FLAGS(is_written, (bool)vma->vm_file,
+>> +				       pmd_present(*pmd), is_swap_pmd(*pmd));
+>> +
+>> +		if (IS_PM_SCAN_GET(p->flags)) {
+>> +			is_interesting = pagemap_scan_is_interesting_page(bitmap, p);
+>> +			if (is_interesting)
+>> +				ret = pagemap_scan_output(bitmap, p, start, n_pages);
+>> +		}
+>> +
+>> +		if (IS_PM_SCAN_WP(p->flags) && is_written && is_interesting &&
+>> +		    ret >= 0) {
+>> +			make_uffd_wp_pmd(vma, start, pmd);
+>> +			flush_tlb_range(vma, start, end);
+>> +		}
+>> +
+>> +		spin_unlock(ptl);
+>> +
+>> +		arch_leave_lazy_mmu_mode();
+>> +		return ret;
+>> +	}
+>> +
+>> +process_smaller_pages:
+>> +#endif
+>> +
+>> +	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+>> +	if (!pte) {
+>> +		walk->action = ACTION_AGAIN;
+>> +		return 0;
+>> +	}
+>> +
+>> +	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
+>> +		ptent = ptep_get(pte);
+>> +		is_written = !is_pte_uffd_wp(ptent);
+>> +
+>> +		bitmap = PM_SCAN_FLAGS(is_written, (bool)vma->vm_file,
+>> +				       pte_present(ptent), is_swap_pte(ptent));
+>> +
+>> +		if (IS_PM_SCAN_GET(p->flags)) {
+>> +			is_interesting = pagemap_scan_is_interesting_page(bitmap, p);
+>> +			if (is_interesting)
+>> +				ret = pagemap_scan_output(bitmap, p, addr, 1);
+>> +		}
+>> +
+>> +		if (IS_PM_SCAN_WP(p->flags) && is_written && is_interesting &&
+>> +		    ret >= 0) {
+>> +			make_uffd_wp_pte(vma, addr, pte);
+>> +			flush = true;
+>> +		}
+>> +	}
+>> +
+>> +	if (flush)
+>> +		flush_tlb_range(vma, start, addr);
+>> +
+>> +	pte_unmap_unlock(orig_pte, ptl);
+>> +	arch_leave_lazy_mmu_mode();
+>> +
+>> +	cond_resched();
+>> +	return ret;
+>> +}
+>> +
+>> +#ifdef CONFIG_HUGETLB_PAGE
+>> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
+>> +				      unsigned long start, unsigned long end,
+>> +				      struct mm_walk *walk)
+>> +{
+>> +	unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +	struct pagemap_scan_private *p = walk->private;
+>> +	struct vm_area_struct *vma = walk->vma;
+>> +	bool is_written, is_interesting = true;
+>> +	struct hstate *h = hstate_vma(vma);
+>> +	unsigned long bitmap;
+>> +	spinlock_t *ptl;
+>> +	int ret = 0;
+>> +	pte_t ptent;
+>> +
+>> +	if (IS_PM_SCAN_WP(p->flags) && n_pages < HPAGE_SIZE/PAGE_SIZE)
+>> +		return -EINVAL;
+>> +
+>> +	if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +		n_pages = p->max_pages - p->found_pages;
+>> +
+>> +	if (IS_PM_SCAN_WP(p->flags)) {
+>> +		i_mmap_lock_write(vma->vm_file->f_mapping);
+>> +		ptl = huge_pte_lock(h, vma->vm_mm, ptep);
+>> +	}
+>> +
+>> +	ptent = huge_ptep_get(ptep);
+>> +	is_written = !is_huge_pte_uffd_wp(ptent);
+>> +
+>> +	/*
+>> +	 * Partial hugetlb page clear isn't supported
+>> +	 */
+>> +	if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>> +	    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> 
+> n_pages depends on found_pages that is incremented in
+> pagemap_scan_output. Should we do this check right before calling
+> pagemap_scan_output?
+This condition is acting like a check before pagemap_scan_output() already.
+n_pages is telling us that how many empty pages are left to find out. But
+if by making n_pages less, we cannot cover the whole hugetlb, we should
+just return error as we don't split the hugetlb.
 
->=20
-> > Intel VT-d supports 4 configurations:
-> >   - passthrough (i.e. identity mapped)
-> >   - S1 only
-> >   - S2 only
-> >   - nested
-> >
-> > 'S2 only' is used when vIOMMU is configured in passthrough.
->=20
-> S2 only is modeled as attaching an S2 format iommu domain to the RID,
-> and when this is done the IOAS should gain the reserved regions
-> because it is no different behavior than attaching any other iommu
-> domain to a RID.
->=20
-> When the S2 is replaced with a S1 nest then the IOAS should loose
-> those reserved regions since it is no longer attached to a RID.
+> 
+>> +		ret = -ENOSPC;
+> 
+> should it be PM_SCAN_FOUND_MAX_PAGES? Otherwise, it fails the ioctl even
+> if it has handled some pages already.
+It is a double edge sword. If we don't return error, user will never know
+that he needs to specify more max_pages or his output buffer is small and
+not coverig the entire range. The real purpose here that user gets aware
+that he needs to specify full hugetlb range and found pages should cover
+the entire range as well.
 
-yes
+> 
+>> +		goto unlock_and_return;
+>> +	}
+>> +
+>> +	bitmap = PM_SCAN_FLAGS(is_written, (bool)vma->vm_file,
+>> +			       pte_present(ptent), is_swap_pte(ptent));
+>> +
+>> +	if (IS_PM_SCAN_GET(p->flags)) {
+>> +		is_interesting = pagemap_scan_is_interesting_page(bitmap, p);
+>> +		if (is_interesting)
+>> +			ret = pagemap_scan_output(bitmap, p, start, n_pages);
+>> +	}
+>> +
+>> +	if (IS_PM_SCAN_WP(p->flags) && is_written && is_interesting &&
+>> +	    ret >= 0) {
+>> +		make_uffd_wp_huge_pte(vma, start, ptep, ptent);
+>> +		flush_hugetlb_tlb_range(vma, start, end);
+>> +	}
+>> +
+>> +unlock_and_return:
+>> +	if (IS_PM_SCAN_WP(p->flags)) {
+>> +		spin_unlock(ptl);
+>> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +#else
+>> +#define pagemap_scan_hugetlb_entry NULL
+>> +#endif
+>> +
+>> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
+>> +				 int depth, struct mm_walk *walk)
+>> +{
+>> +	unsigned long n_pages = (end - addr)/PAGE_SIZE;
+>> +	struct pagemap_scan_private *p = walk->private;
+>> +	struct vm_area_struct *vma = walk->vma;
+>> +	int ret = 0;
+>> +
+>> +	if (!vma || !IS_PM_SCAN_GET(p->flags))
+>> +		return 0;
+>> +
+>> +	if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +		n_pages = p->max_pages - p->found_pages;
+>> +
+>> +	ret = pagemap_scan_output(PM_SCAN_FLAGS(false, (bool)vma->vm_file,
+>> +				  false, false), p, addr, n_pages);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static const struct mm_walk_ops pagemap_scan_ops = {
+>> +	.test_walk = pagemap_scan_test_walk,
+>> +	.pmd_entry = pagemap_scan_pmd_entry,
+>> +	.pte_hole = pagemap_scan_pte_hole,
+>> +	.hugetlb_entry = pagemap_scan_hugetlb_entry,
+>> +};
+>> +
+>> +static int pagemap_scan_args_valid(struct pm_scan_arg *arg, unsigned long start,
+>> +				   struct page_region __user *vec)
+>> +{
+>> +	/* Detect illegal size, flags, len and masks */
+>> +	if (arg->size != sizeof(struct pm_scan_arg))
+>> +		return -EINVAL;
+>> +	if (!arg->flags)
+>> +		return -EINVAL;
+>> +	if (arg->flags & ~PM_SCAN_OPS)
+>> +		return -EINVAL;
+>> +	if (!arg->len)
+>> +		return -EINVAL;
+>> +	if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask |
+>> +	     arg->return_mask) & ~PM_SCAN_BITS_ALL)
+>> +		return -EINVAL;
+>> +	if (!arg->required_mask && !arg->anyof_mask &&
+>> +	    !arg->excluded_mask)
+>> +		return -EINVAL;
+>> +	if (!arg->return_mask)
+>> +		return -EINVAL;
+>> +
+>> +	/* Validate memory range */
+>> +	if (!IS_ALIGNED(start, PAGE_SIZE))
+>> +		return -EINVAL;
+>> +	if (!access_ok((void __user *)start, arg->len))
+>> +		return -EFAULT;
+>> +
+>> +	if (IS_PM_SCAN_GET(arg->flags)) {
+>> +		if (!arg->vec)
+>> +			return -EINVAL;
+>> +		if (arg->vec_len == 0)
+>> +			return -EINVAL;
+>> +		if (!access_ok((void __user *)arg->vec,
+>> +			       arg->vec_len * sizeof(struct page_region)))
+>> +			return -EFAULT;
+>> +	}
+>> +
+>> +	if (IS_PM_SCAN_WP(arg->flags) && !IS_PM_SCAN_GET(arg->flags) &&
+>> +	    arg->max_pages)
+>> +		return -EINVAL;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long __arg)
+>> +{
+>> +	struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)__arg;
+>> +	unsigned long long start, end, walk_start, walk_end;
+>> +	unsigned long long empty_slots, vec_index = 0;
+>> +	struct mmu_notifier_range range;
+>> +	struct page_region __user *vec;
+>> +	struct pagemap_scan_private p;
+>> +	struct pm_scan_arg arg;
+>> +	int ret = 0;
+>> +
+>> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
+>> +		return -EFAULT;
+>> +
+>> +	start = untagged_addr((unsigned long)arg.start);
+>> +	vec = (struct page_region *)untagged_addr((unsigned long)arg.vec);
+>> +
+>> +	ret = pagemap_scan_args_valid(&arg, start, vec);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	end = start + arg.len;
+>> +	p.max_pages = arg.max_pages;
+>> +	p.found_pages = 0;
+>> +	p.required_mask = arg.required_mask;
+>> +	p.anyof_mask = arg.anyof_mask;
+>> +	p.excluded_mask = arg.excluded_mask;
+>> +	p.return_mask = arg.return_mask;
+>> +	p.flags = arg.flags;
+>> +	p.flags |= ((p.required_mask | p.anyof_mask | p.excluded_mask) &
+>> +		    PAGE_IS_WRITTEN) ? PM_SCAN_REQUIRE_UFFD : 0;
+>> +	p.cur_buf.start = p.cur_buf.len = p.cur_buf.flags = 0;
+>> +	p.vec_buf = NULL;
+>> +	p.vec_buf_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+>> +
+>> +	/*
+>> +	 * Allocate smaller buffer to get output from inside the page walk
+>> +	 * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+>> +	 * we want to return output to user in compact form where no two
+>> +	 * consecutive regions should be continuous and have the same flags.
+>> +	 * So store the latest element in p.cur_buf between different walks and
+>> +	 * store the p.cur_buf at the end of the walk to the user buffer.
+>> +	 */
+>> +	if (IS_PM_SCAN_GET(p.flags)) {
+>> +		p.vec_buf = kmalloc_array(p.vec_buf_len, sizeof(*p.vec_buf),
+>> +					  GFP_KERNEL);
+>> +		if (!p.vec_buf)
+>> +			return -ENOMEM;
+>> +	}
+>> +
+>> +	if (IS_PM_SCAN_WP(p.flags)) {
+>> +		mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
+>> +					mm, start, end);
+>> +		mmu_notifier_invalidate_range_start(&range);
+>> +	}
+>> +
+>> +	walk_start = walk_end = start;
+>> +	while (walk_end < end && !ret) {
+> 
+> How long can it take to run this loop? Should we interrupt it if a
+> signal has been queued?
+I'm following mincore and pagemap_read here. There is no such thing there.
+IOCTL is performing what user has requested. If the execution time is a
+concern, user should have called the IOCTL on shorter address range.
 
->=20
-> > My understanding of ARM SMMU is that from host p.o.v. the CD is the
-> > S1 in the nested configuration. 'identity' is one configuration in the =
-CD
-> > then it's in the business of nesting.
->=20
-> I think it is the same. A CD doesn't come into the picture until the
-> guest installs a CD pointing STE. Until that time the S2 is being used
-> as identity.
->=20
-> It sounds like the same basic flow.
+> 
+>> +		if (IS_PM_SCAN_GET(p.flags)) {
+>> +			p.vec_buf_index = 0;
+>> +
+>> +			/*
+>> +			 * All data is copied to cur_buf first. When more data
+>> +			 * is found, we push cur_buf to vec_buf and copy new
+>> +			 * data to cur_buf. Subtract 1 from length as the
+>> +			 * index of cur_buf isn't counted in length.
+>> +			 */
+>> +			empty_slots = arg.vec_len - vec_index;
+>> +			p.vec_buf_len = min(p.vec_buf_len, empty_slots - 1);
+>> +		}
+>> +
+>> +		walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
+>> +		if (walk_end > end)
+>> +			walk_end = end;
+>> +
+>> +		ret = mmap_read_lock_killable(mm);
+>> +		if (ret)
+>> +			goto free_data;
+> 
+> This will fail the ioctl, but it isn't acceptable if any pages has been
+> handled.
+I'm following pagemap_read() here.
 
-After a CD table is installed in a STE I assume the SMMU still allows to
-configure an individual CD entry as identity? e.g. while vSVA is enabled
-on a device the guest can continue to keep CD#0 as identity when the
-default domain of the device is set as 'passthrough'. In this case the
-IOAS still needs to gain reserved regions even though S2 is not directly
-attached from host p.o.v.
+> 
+> 
+>> +		ret = walk_page_range(mm, walk_start, walk_end,
+>> +				      &pagemap_scan_ops, &p);
+>> +		mmap_read_unlock(mm);
+>> +
+> 
+> ret can be ENOSPC returned from pagemap_scan_pmd_entry, but we should
+> not return this error if any pages has been handled.
+ENOSPC isn't being returned from pagemap_scan_pmd_entry now.
 
->=20
-> > My preference was that ALLOC_HWPT allows vIOMMU to opt whether
-> > reserved regions of dev_id should be added to the IOAS of the parent
-> > S2 hwpt.
->=20
-> Having an API to explicitly load reserved regions of a specific device
-> to an IOAS makes some sense to me.
->=20
-> Jason
+> 
+>> +		if (ret && ret != PM_SCAN_BUFFER_FULL &&
+>> +		    ret != PM_SCAN_FOUND_MAX_PAGES)
+>> +			goto free_data;
+>> +
+>> +		walk_start = walk_end;
+>> +		if (IS_PM_SCAN_GET(p.flags) && p.vec_buf_index) {
+>> +			if (copy_to_user(&vec[vec_index], p.vec_buf,
+>> +					 p.vec_buf_index * sizeof(*p.vec_buf))) {
+>> +				/*
+>> +				 * Return error even though the OP succeeded
+>> +				 */
+>> +				ret = -EFAULT;
+>> +				goto free_data;
+>> +			}
+>> +			vec_index += p.vec_buf_index;
+>> +		}
+>> +	}
+>> +
+>> +	if (p.cur_buf.len) {
+>> +		if (copy_to_user(&vec[vec_index], &p.cur_buf, sizeof(p.cur_buf))) {
+>> +			ret = -EFAULT;
+>> +			goto free_data;
+>> +		}
+>> +		vec_index++;
+>> +	}
+>> +
+>> +	ret = vec_index;
+>> +
+>> +free_data:
+>> +	if (IS_PM_SCAN_WP(p.flags))
+>> +		mmu_notifier_invalidate_range_end(&range);
+>> +
+>> +	kfree(p.vec_buf);
+>> +	return ret;
+>> +}
+>> +
+>> +static long do_pagemap_cmd(struct file *file, unsigned int cmd,
+>> +			   unsigned long arg)
+>> +{
+>> +	struct mm_struct *mm = file->private_data;
+>> +
+>> +	switch (cmd) {
+>> +	case PAGEMAP_SCAN:
+>> +		return do_pagemap_scan(mm, arg);
+>> +
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +}
+>> +
+>>  const struct file_operations proc_pagemap_operations = {
+>>  	.llseek		= mem_lseek, /* borrow this */
+>>  	.read		= pagemap_read,
+>>  	.open		= pagemap_open,
+>>  	.release	= pagemap_release,
+>> +	.unlocked_ioctl = do_pagemap_cmd,
+>> +	.compat_ioctl	= do_pagemap_cmd,
+>>  };
+>>  #endif /* CONFIG_PROC_PAGE_MONITOR */
+>>  
+>> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+>> index beb7c63d2871..a6e773c3e2b4 100644
+>> --- a/include/linux/hugetlb.h
+>> +++ b/include/linux/hugetlb.h
+>> @@ -261,6 +261,7 @@ long hugetlb_change_protection(struct vm_area_struct *vma,
+>>  		unsigned long cp_flags);
+>>  
+>>  bool is_hugetlb_entry_migration(pte_t pte);
+>> +bool is_hugetlb_entry_hwpoisoned(pte_t pte);
+>>  void hugetlb_unshare_all_pmds(struct vm_area_struct *vma);
+>>  
+>>  #else /* !CONFIG_HUGETLB_PAGE */
+>> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+>> index b7b56871029c..a9fb44db84a3 100644
+>> --- a/include/uapi/linux/fs.h
+>> +++ b/include/uapi/linux/fs.h
+>> @@ -305,4 +305,57 @@ typedef int __bitwise __kernel_rwf_t;
+>>  #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
+>>  			 RWF_APPEND)
+>>  
+>> +/* Pagemap ioctl */
+>> +#define PAGEMAP_SCAN	_IOWR('f', 16, struct pm_scan_arg)
+>> +
+>> +/* Bits are set in flags of the page_region and masks in pm_scan_args */
+>> +#define PAGE_IS_WRITTEN		(1 << 0)
+>> +#define PAGE_IS_FILE		(1 << 1)
+>> +#define PAGE_IS_PRESENT		(1 << 2)
+>> +#define PAGE_IS_SWAPPED		(1 << 3)
+>> +
+>> +/*
+>> + * struct page_region - Page region with flags
+>> + * @start:	Start of the region
+>> + * @len:	Length of the region in pages
+>> + * @bitmap:	Bits sets for the region
+>> + */
+>> +struct page_region {
+>> +	__u64 start;
+>> +	__u64 len;
+>> +	__u64 flags;
+>> +};
+>> +
+>> +/*
+>> + * struct pm_scan_arg - Pagemap ioctl argument
+>> + * @size:		Size of the structure
+>> + * @flags:		Flags for the IOCTL
+>> + * @start:		Starting address of the region
+>> + * @len:		Length of the region (All the pages in this length are included)
+>> + * @vec:		Address of page_region struct array for output
+>> + * @vec_len:		Length of the page_region struct array
+>> + * @max_pages:		Optional max return pages
+>> + * @required_mask:	Required mask - All of these bits have to be set in the PTE
+>> + * @anyof_mask:		Any mask - Any of these bits are set in the PTE
+>> + * @excluded_mask:	Exclude mask - None of these bits are set in the PTE
+>> + * @return_mask:	Bits that are to be reported in page_region
+>> + */
+>> +struct pm_scan_arg {
+>> +	__u64 size;
+>> +	__u64 flags;
+>> +	__u64 start;
+>> +	__u64 len;
+>> +	__u64 vec;
+>> +	__u64 vec_len;
+>> +	__u64 max_pages;
+>> +	__u64 required_mask;
+>> +	__u64 anyof_mask;
+>> +	__u64 excluded_mask;
+>> +	__u64 return_mask;
+>> +};
+>> +
+>> +/* Supported flags */
+>> +#define PM_SCAN_OP_GET	(1 << 0)
+>> +#define PM_SCAN_OP_WP	(1 << 1)
+>> +
+>>  #endif /* _UAPI_LINUX_FS_H */
+>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>> index 0db13167b1ee..7e60f0f3fd03 100644
+>> --- a/mm/hugetlb.c
+>> +++ b/mm/hugetlb.c
+>> @@ -4980,7 +4980,7 @@ bool is_hugetlb_entry_migration(pte_t pte)
+>>  		return false;
+>>  }
+>>  
+>> -static bool is_hugetlb_entry_hwpoisoned(pte_t pte)
+>> +bool is_hugetlb_entry_hwpoisoned(pte_t pte)
+>>  {
+>>  	swp_entry_t swp;
+>>  
+>> -- 
+>> 2.39.2
+>>
+
+-- 
+BR,
+Muhammad Usama Anjum
