@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E5A73898A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 17:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A1C73898F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 17:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233470AbjFUPgr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 11:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
+        id S233556AbjFUPg6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 11:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233563AbjFUPgd (ORCPT
+        with ESMTP id S233555AbjFUPgq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:36:33 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECC7170C;
-        Wed, 21 Jun 2023 08:36:03 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51a200fc3eeso7936593a12.3;
-        Wed, 21 Jun 2023 08:36:03 -0700 (PDT)
+        Wed, 21 Jun 2023 11:36:46 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D7EDC;
+        Wed, 21 Jun 2023 08:36:11 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-988a076a7d3so535675066b.3;
+        Wed, 21 Jun 2023 08:36:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687361757; x=1689953757;
+        d=gmail.com; s=20221208; t=1687361758; x=1689953758;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DzChpS5/qP0KCHtoRtmdGCRzY7mcg9Tmt0tlVbK0cFM=;
-        b=a2EpY5FRgZg/ZJx9472PbHOAXhPjVRtL3gkOHiWZAInSGWmfd8S2waNUr8x/3fVqsn
-         YvkLgmXw++orjAi7+VylLJjJrxY3bPjAH2qQZiYhmyzMvg8KtGXNH8Sy8rKuOp8TL2LI
-         iFBNuY0fFlhVGLK5cj7U6GlTFtiiCDlMatudwoWI4DdGS96p0hhTnedP0JP0ewZ3O1A/
-         XuueBkpwrasA+tNp/PZOlPfYv3RVEuvyTlDXwV/kkfZ3nJVWkA1fPeSfDtCSYAjS9RVA
-         nGieIhGo9G/hfgT1jhvvwFTxwozp3MjDnp4fpvmTVkR3rqT86nVUJblmtQ7pjQgBFco6
-         +XyQ==
+        bh=WEOIwynIIsT/3TCYBn4hnrnBW3FX88KHSnE+980PXNU=;
+        b=LeFLd/T5OM7aszQ1BHpFd0lDMx5q3DtKYmanSZjPYSO9vh9puF3ky8Fx90y7g5rbL/
+         ZQesZAiEn4lr2smBWWC3dAzUstEMURZ+QSShkPF6FjFpZf/FHZ6X5GDVlslXIdQUxLfl
+         KgT1BGP5eERxBDUn+DMzi4Tlv13Y8MqVVVbZC09Ve8oTJI9eLkqyqNPNCyWrHxApZj8y
+         kgAL6n5oXWw5LVHF0E2lo2tQn6ylvgXV1O/8dxzLIbQXAwYVD8MQIDmxcYIi3A8Ys9nb
+         PyPHQzQAr0tJmcixMtaFbr5pJDcFTYhJpajQz2ErIoQ/MpRwnd5ayZQRzSobig5ls2OW
+         usAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687361757; x=1689953757;
+        d=1e100.net; s=20221208; t=1687361758; x=1689953758;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DzChpS5/qP0KCHtoRtmdGCRzY7mcg9Tmt0tlVbK0cFM=;
-        b=IDRS+4FRaHtf0qijSqLgiHD904GUl+yWoDFfsC+ObdCBVoqUfZwgCfUoMrXL7yBAxk
-         GVFNh0rIPhrLM2OaNKX1+1Ez4CXrT2fmTSSCVlJX+lny5s3l3wN8aKhGTy1Vt/Yno39X
-         hB4KzGM0nGIpe+NNZK5Q3QCUz7dw1LVcXPPDnEKX60FVjdzb3C6qeqJ508Vh9UkHYkmi
-         OWvaFzzJ0M330Ge/gZBHI0lvzpzlAdSQ5hK2V1c1f121iQlnxGc9rEt7BMd66oCUoKQ7
-         w5CS1BleWQfJDk1Yi2NYeSDQCCu5JW5WN0TP4Auxl6LlBAGx45Qyv8LEKsmufeCtOGHg
-         rV3A==
-X-Gm-Message-State: AC+VfDzCMqIPB7gCqCaKcyHMZfbSMobOhCgNNNajEgctanqLAdxVOoTm
-        Vv/6qhHFVHbfBG1kn7DrGbU9JkOzxL/3sA==
-X-Google-Smtp-Source: ACHHUZ7in8F+oCZ/lngxAfcGcQTqzZqjot7W4CKlTfRSwJ45anBk7SuYEYuTD+jRr+yQvrrp/mBmag==
-X-Received: by 2002:a17:907:3e27:b0:978:ab4a:2154 with SMTP id hp39-20020a1709073e2700b00978ab4a2154mr16799688ejc.1.1687361756781;
-        Wed, 21 Jun 2023 08:35:56 -0700 (PDT)
+        bh=WEOIwynIIsT/3TCYBn4hnrnBW3FX88KHSnE+980PXNU=;
+        b=Nq6UvMSc2h9ZMgoCU/lyL1wQqTJXU1f8QmX68URwVe3i1Txi/6/fvRq/AeMyHj+wCk
+         j2DFSKJal8tCdYiV3NwaJB1yynaP3cVMEEG0ARdr01klWDB/O/hTYmfFr6LCOjvE9kZW
+         w+8djj5ADnAAPdZswWOjuEv0xbWXCoFOI/qar962zu6+IHkwOayKTlhCZvXf10o/aQ7x
+         V08kO/vXRED1+zQTxsC+MHmt6uHy/AnQM7OdppHShqJB9gKNSRBqMYd87KpARWirwX0w
+         8861mnJJmxPzFb0KKmpxthk7uTmlfAmzS+N3ZTRRuwER/HX0+/sI6QpsyTAfwdNgZfa3
+         DssQ==
+X-Gm-Message-State: AC+VfDxuRQ+QAcdbNJ+hlk+JHRCm6FRKprdC34JO0LTs0J4PHapspJAC
+        X1izMPGtyjv99POAioNKjMM=
+X-Google-Smtp-Source: ACHHUZ6LtQ54cpRJgPi63hwfFLmdfXyweGSwpI6QswRtM85cslXGPokHfEWfw78YVyg9TcydvP83tg==
+X-Received: by 2002:a17:907:2d28:b0:96a:3e39:f567 with SMTP id gs40-20020a1709072d2800b0096a3e39f567mr17431248ejc.47.1687361758375;
+        Wed, 21 Jun 2023 08:35:58 -0700 (PDT)
 Received: from lelloman-5950.homenet.telecomitalia.it (host-87-21-158-222.retail.telecomitalia.it. [87.21.158.222])
-        by smtp.gmail.com with ESMTPSA id r3-20020a170906c28300b00988acf24f9csm3266123ejz.97.2023.06.21.08.35.55
+        by smtp.gmail.com with ESMTPSA id r3-20020a170906c28300b00988acf24f9csm3266123ejz.97.2023.06.21.08.35.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 08:35:56 -0700 (PDT)
+        Wed, 21 Jun 2023 08:35:57 -0700 (PDT)
 From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
         shuah@kernel.org, mhocko@kernel.org, roman.gushchin@linux.dev,
@@ -59,9 +59,9 @@ To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
 Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
         cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Subject: [PATCH 2/3] selftests: cgroup: add test_zswap with no kmem bypass test
-Date:   Wed, 21 Jun 2023 17:35:47 +0200
-Message-Id: <20230621153548.428093-3-cerasuolodomenico@gmail.com>
+Subject: [PATCH 3/3] selftests: cgroup: add zswap-memcg unwanted writeback test
+Date:   Wed, 21 Jun 2023 17:35:48 +0200
+Message-Id: <20230621153548.428093-4-cerasuolodomenico@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230621153548.428093-1-cerasuolodomenico@gmail.com>
 References: <20230621153548.428093-1-cerasuolodomenico@gmail.com>
@@ -77,197 +77,93 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a cgroup selftest that verifies memcg charging in zswap.
-The original issue was that kmem bypass was applied to pages swapped out
-to zswap by kswapd, resulting in zswapped memory not being charged.
-It was fixed by commit cd08d80ecdac("mm: correctly charge compressed
-memory to its memcg").
+Add a test to verify that when a memcg hits its limit in zswap, it
+doesn't trigger an unwanted writeback that would result in pages not
+owned by that memcg to be sent to disk, even if zswap isn't full.
+This was fixed by commit 0bdf0efa180a("zswap: do not shrink if cgroup
+may not zswap").
 
 Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 ---
- tools/testing/selftests/cgroup/test_zswap.c | 163 ++++++++++++++++++++
- 1 file changed, 163 insertions(+)
+ tools/testing/selftests/cgroup/test_zswap.c | 61 +++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
 diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index 001533667322..e859fecd310b 100644
+index e859fecd310b..49def87a909b 100644
 --- a/tools/testing/selftests/cgroup/test_zswap.c
 +++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -4,15 +4,178 @@
- #include <linux/limits.h>
- #include <unistd.h>
- #include <stdio.h>
-+#include <signal.h>
-+#include <sys/sysinfo.h>
-+#include <string.h>
-+#include <sys/wait.h>
-+#include <sys/mman.h>
+@@ -50,6 +50,66 @@ static int get_zswap_stored_pages(size_t *value)
+ 	return read_int("/sys/kernel/debug/zswap/stored_pages", value);
+ }
  
- #include "../kselftest.h"
- #include "cgroup_util.h"
- 
-+static int read_int(const char *path, size_t *value)
++static int get_zswap_written_back_pages(size_t *value)
 +{
-+	FILE *file;
-+	int ret = 0;
++	return read_int("/sys/kernel/debug/zswap/written_back_pages", value);
++}
 +
-+	file = fopen(path, "r");
-+	if (!file)
++static int allocate_bytes(const char *cgroup, void *arg)
++{
++	size_t size = (size_t)arg;
++	char *mem = (char *)malloc(size);
++
++	if (!mem)
 +		return -1;
-+	if (fscanf(file, "%ld", value) != 1)
-+		ret = -1;
-+	fclose(file);
-+	return ret;
-+}
-+
-+static int set_min_free_kb(size_t value)
-+{
-+	FILE *file;
-+	int ret;
-+
-+	file = fopen("/proc/sys/vm/min_free_kbytes", "w");
-+	if (!file)
-+		return -1;
-+	ret = fprintf(file, "%ld\n", value);
-+	fclose(file);
-+	return ret;
-+}
-+
-+static int read_min_free_kb(size_t *value)
-+{
-+	return read_int("/proc/sys/vm/min_free_kbytes", value);
-+}
-+
-+static int get_zswap_stored_pages(size_t *value)
-+{
-+	return read_int("/sys/kernel/debug/zswap/stored_pages", value);
-+}
-+
-+struct no_kmem_bypass_child_args {
-+	size_t target_alloc_bytes;
-+	size_t child_allocated;
-+};
-+
-+static int no_kmem_bypass_child(const char *cgroup, void *arg)
-+{
-+	struct no_kmem_bypass_child_args *values = arg;
-+	void *allocation;
-+
-+	allocation = malloc(values->target_alloc_bytes);
-+	if (!allocation) {
-+		values->child_allocated = true;
-+		return -1;
-+	}
-+	for (long i = 0; i < values->target_alloc_bytes; i += 4095)
-+		((char *)allocation)[i] = 'a';
-+	values->child_allocated = true;
-+	pause();
-+	free(allocation);
++	for (int i = 0; i < size; i += 4095)
++		mem[i] = 'a';
++	free(mem);
 +	return 0;
 +}
 +
 +/*
-+ * When pages owned by a memcg are pushed to zswap by kswapd, they should be
-+ * charged to that cgroup. This wasn't the case before commit
-+ * cd08d80ecdac("mm: correctly charge compressed memory to its memcg").
++ * When trying to store a memcg page in zswap, if the memcg hits its memory
++ * limit in zswap, writeback should not be triggered.
 + *
-+ * The test first allocates memory in a memcg, then raises min_free_kbytes to
-+ * a very high value so that the allocation falls below low wm, then makes
-+ * another allocation to trigger kswapd that should push the memcg-owned pages
-+ * to zswap and verifies that the zswap pages are correctly charged.
-+ *
-+ * To be run on a VM with at most 4G of memory.
++ * This was fixed with commit 0bdf0efa180a("zswap: do not shrink if cgroup may
++ * not zswap"). Needs to be revised when a per memcg writeback mechanism is
++ * implemented.
 + */
-+static int test_no_kmem_bypass(const char *root)
++static int test_no_invasive_cgroup_shrink(const char *root)
 +{
-+	size_t min_free_kb_high, min_free_kb_low, min_free_kb_original;
-+	struct no_kmem_bypass_child_args *values;
-+	size_t trigger_allocation_size;
-+	int wait_child_iteration = 0;
-+	long stored_pages_threshold;
-+	struct sysinfo sys_info;
++	size_t written_back_before, written_back_after;
 +	int ret = KSFT_FAIL;
-+	int child_status;
 +	char *test_group;
-+	pid_t child_pid;
 +
-+	/* Read sys info and compute test values accordingly */
-+	if (sysinfo(&sys_info) != 0)
-+		return KSFT_FAIL;
-+	if (sys_info.totalram > 5000000000)
-+		return KSFT_SKIP;
-+	values = mmap(0, sizeof(struct no_kmem_bypass_child_args), PROT_READ |
-+			PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+	if (values == MAP_FAILED)
-+		return KSFT_FAIL;
-+	if (read_min_free_kb(&min_free_kb_original))
-+		return KSFT_FAIL;
-+	min_free_kb_high = sys_info.totalram / 2000;
-+	min_free_kb_low = sys_info.totalram / 500000;
-+	values->target_alloc_bytes = (sys_info.totalram - min_free_kb_high * 1000) +
-+		sys_info.totalram * 5 / 100;
-+	stored_pages_threshold = sys_info.totalram / 5 / 4096;
-+	trigger_allocation_size = sys_info.totalram / 20;
-+
-+	/* Set up test memcg */
-+	if (cg_write(root, "cgroup.subtree_control", "+memory"))
-+		goto out;
-+	test_group = cg_name(root, "kmem_bypass_test");
++	/* Set up */
++	test_group = cg_name(root, "no_shrink_test");
 +	if (!test_group)
 +		goto out;
-+
-+	/* Spawn memcg child and wait for it to allocate */
-+	set_min_free_kb(min_free_kb_low);
 +	if (cg_create(test_group))
 +		goto out;
-+	values->child_allocated = false;
-+	child_pid = cg_run_nowait(test_group, no_kmem_bypass_child, values);
-+	if (child_pid < 0)
++	if (cg_write(test_group, "memory.max", "1M"))
 +		goto out;
-+	while (!values->child_allocated && wait_child_iteration++ < 10000)
-+		usleep(1000);
++	if (cg_write(test_group, "memory.zswap.max", "10K"))
++		goto out;
++	if (get_zswap_written_back_pages(&written_back_before))
++		goto out;
 +
-+	/* Try to wakeup kswapd and let it push child memory to zswap */
-+	set_min_free_kb(min_free_kb_high);
-+	for (int i = 0; i < 20; i++) {
-+		size_t stored_pages;
-+		char *trigger_allocation = malloc(trigger_allocation_size);
++	/* Allocate 10x memory.max to push memory into zswap */
++	if (cg_run(test_group, allocate_bytes, (void *)MB(10)))
++		goto out;
 +
-+		if (!trigger_allocation)
-+			break;
-+		for (int i = 0; i < trigger_allocation_size; i += 4095)
-+			trigger_allocation[i] = 'b';
-+		usleep(100000);
-+		free(trigger_allocation);
-+		if (get_zswap_stored_pages(&stored_pages))
-+			break;
-+		if (stored_pages < 0)
-+			break;
-+		/* If memory was pushed to zswap, verify it belongs to memcg */
-+		if (stored_pages > stored_pages_threshold) {
-+			int zswapped = cg_read_key_long(test_group, "memory.stat", "zswapped ");
-+			int delta = stored_pages * 4096 - zswapped;
-+			int result_ok = delta < stored_pages * 4096 / 4;
-+
-+			ret = result_ok ? KSFT_PASS : KSFT_FAIL;
-+			break;
-+		}
-+	}
-+
-+	kill(child_pid, SIGTERM);
-+	waitpid(child_pid, &child_status, 0);
++	/* Verify that no writeback happened because of the memcg allocation */
++	if (get_zswap_written_back_pages(&written_back_after))
++		goto out;
++	if (written_back_after == written_back_before)
++		ret = KSFT_PASS;
 +out:
-+	set_min_free_kb(min_free_kb_original);
 +	cg_destroy(test_group);
 +	free(test_group);
 +	return ret;
 +}
 +
- #define T(x) { x, #x }
- struct zswap_test {
- 	int (*fn)(const char *root);
+ struct no_kmem_bypass_child_args {
+ 	size_t target_alloc_bytes;
+ 	size_t child_allocated;
+@@ -176,6 +236,7 @@ struct zswap_test {
  	const char *name;
  } tests[] = {
-+	T(test_no_kmem_bypass),
+ 	T(test_no_kmem_bypass),
++	T(test_no_invasive_cgroup_shrink),
  };
  #undef T
  
