@@ -2,102 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D7873873D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 16:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581AD738868
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Jun 2023 17:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjFUOjV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 10:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
+        id S232990AbjFUPHx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 11:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjFUOjU (ORCPT
+        with ESMTP id S232978AbjFUPHc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:39:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495891994;
-        Wed, 21 Jun 2023 07:39:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9399612B7;
-        Wed, 21 Jun 2023 14:39:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C34C433C8;
-        Wed, 21 Jun 2023 14:39:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358358;
-        bh=VXBvW08YHCjFJUo8Y3I1beTInLzEQKnsdmhPOK4bYIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tZl1k1F0ZcAed6cyywzNyeNFbJ7D6LC6xDLfFbVBm2LiVc0WmmIBNSjNUlr6y4Q6c
-         rJpTjq0rjslE8kERMZNeE2zcPY3jxdT9ITE+Pz7qR78CSkCef7gSlpSVKVJiPXtMtq
-         hmdokXAc3JVSVmgu5FhkQ1pzAjoIF1f7E6t42PDhxgPHYycyqhX2rcVAsZQNz24xKh
-         es6lnaa0+8Xq6joKOvOZr0nHG6PvKgVnojHtrULUOYyRhvTgmKPN8D56nB9aEa+bMi
-         5KqpBXJ4p19QxRnGye8BhGeFJRMBjIcxvq1/75EWokHyNOoRUhTPwcGb8cTK/e1z9i
-         PxmFblnHkgLcQ==
-Date:   Wed, 21 Jun 2023 15:39:12 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>
-Cc:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] kselftest/alsa: pcm-test: Decrease stream duration
- from 4 to 2 seconds
-Message-ID: <9069ad0c-d166-4620-a3de-a36ab233cab0@sirena.org.uk>
-References: <20230620220839.2215057-1-nfraprado@collabora.com>
- <20230620220839.2215057-3-nfraprado@collabora.com>
- <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
- <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
+        Wed, 21 Jun 2023 11:07:32 -0400
+Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673934239;
+        Wed, 21 Jun 2023 08:02:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1687359745; x=1718895745;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zbPAeOGrUEIOV+JujOL9INmhyma6JwFI+vqDZGWGqOk=;
+  b=fop1sEkk90qtxm8OZfTFpmBI5Q6kymfZtycgyCraGKaaWw9K/9hyrbgo
+   2dd2Zr5+kIjW+fiVrNDuF48N/eztk0PKMT8Ucj7qseujBHBP7jI5lFKWM
+   ulpXD9rnjwKELepcnj/AN1kzf451o37NV+N/YQXPVTtoWbAycsf6VlC/3
+   Y=;
+X-IronPort-AV: E=Sophos;i="6.00,260,1681171200"; 
+   d="scan'208";a="138321779"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 15:01:15 +0000
+Received: from EX19MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com (Postfix) with ESMTPS id EC7B840D4E;
+        Wed, 21 Jun 2023 15:01:12 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 21 Jun 2023 15:01:12 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.119.169.70) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 21 Jun 2023 15:01:07 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <lmb@isovalent.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
+        <hemanthmalla@gmail.com>, <joe@wand.net.nz>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
+        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
+Subject: Re: [PATCH bpf-next v2 3/6] net: remove duplicate reuseport_lookup functions
+Date:   Wed, 21 Jun 2023 08:00:58 -0700
+Message-ID: <20230621150058.59250-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <CAN+4W8gYuW5P3t5881YdMq1pYnG9DsQJFiJWPoLFsKVsZiLLQQ@mail.gmail.com>
+References: <CAN+4W8gYuW5P3t5881YdMq1pYnG9DsQJFiJWPoLFsKVsZiLLQQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lN6DZShoSnw04Qtm"
-Content-Disposition: inline
-In-Reply-To: <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
-X-Cookie: When among apes, one must play the ape.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.119.169.70]
+X-ClientProxiedBy: EX19D044UWB003.ant.amazon.com (10.13.139.168) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Wed, 21 Jun 2023 09:01:15 +0100
+> On Tue, Jun 20, 2023 at 7:31 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+> >
+> > Good point.  This is based on an assumption that all SO_REUSEPORT
+> > sockets have the same score, which is wrong for two corner cases
+> > if reuseport_has_conns() == true :
+> >
+> >   1) SO_INCOMING_CPU is set
+> >      -> selected sk might have +1 score
+> >
+> >   2) BPF prog returns ESTABLISHED and/or SO_INCOMING_CPU sk
+> >      -> selected sk will have more than 8
+> >
+> > Using the old score could trigger more lookups depending on the
+> > order that sockets are created.
+> 
+> So the result will still be correct, but it's less performant? Happy
+> to fix a perf regression, but if the result is incorrect this might
+> need a separate fix?
 
---lN6DZShoSnw04Qtm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Right, the result is always correct.
 
-On Wed, Jun 21, 2023 at 04:08:47PM +0200, Jaroslav Kysela wrote:
+If BPF prog selects a different socket per lookup, there is no
+consistency, but it _is_ corret.
 
-> I think that the problem is somewhere else here. The overall test timeout
-> should be calculated dynamically. All tests may be queried for the maximal
-> expected interval based on the hardware/software capabilities. It's a bit
-> pitfall to have a fixed time limit where the realtime tests depend on the
-> number of devices.
 
-I tend to agree here, unfortunately Shuah hasn't responded to queries
-=66rom N=EDcolas about this which I imagine is what inspired this patch.  We
-also have problems with mixer-test on one of the Dialog CODECs with a
-couple of 64k value controls and no cache only mode.
+> I did some more digging. I think this was introduced by commit
+> efc6b6f6c311 ("udp: Improve load balancing for SO_REUSEPORT.") which
+> unfortunately ran into a merge conflict. That resulted in Dave Miller
+> moving the bug around in commit a57066b1a019 ("Merge
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net"). Can you
+> take a look and let me know if you think that is correct?
 
---lN6DZShoSnw04Qtm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSTC48ACgkQJNaLcl1U
-h9BGbwf/Tdjkixv5SETg00LJp+l4cOfv6sRpMFmm0MjvB7B8F7D8D4fFtu8vwLCk
-1pVCzZ2Z6WSbnPBMlVDSWV9ns+VBPoXD/W9R1OBx+IgQLyqr/FXUvQFed3MvQSrt
-uOHg5udSeoLyfhpGMgbHRUEy2yFjt+jJNvlPn5GPk0W9gDQ540afmJStnKzyOXrW
-8eL8q14TSSzn41yRaOZSN5K6Qx5vu/qDOxk2qKr9pUAkVABHVd1BBqzoysINKWEk
-++RHedjGxb4PrspUa5io2mzmDkd3VzoQu+ReCxSbLerIa45KG2oev+o9kSFK2Lbu
-juIvTAHQ21sYmy6eHgoLaxAshfYtyg==
-=GpWQ
------END PGP SIGNATURE-----
-
---lN6DZShoSnw04Qtm--
+Yes, I should have updated the score too in efc6b6f6c311 to save
+unneeded lookups.  The conflict itself was resolved properly.
