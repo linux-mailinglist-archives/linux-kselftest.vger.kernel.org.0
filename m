@@ -2,93 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA4873A654
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 18:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11EF73A689
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 18:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbjFVQnO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 12:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
+        id S231436AbjFVQxA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 12:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbjFVQnL (ORCPT
+        with ESMTP id S231451AbjFVQwz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 12:43:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C431FEF;
-        Thu, 22 Jun 2023 09:42:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FBB6618C1;
-        Thu, 22 Jun 2023 16:42:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DA2C433C8;
-        Thu, 22 Jun 2023 16:42:56 +0000 (UTC)
-Date:   Thu, 22 Jun 2023 17:42:54 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] arm64/signal: Restore TPIDR2 register rather than
- memory state
-Message-ID: <ZJR6DvGofAvxSVYW@arm.com>
-References: <20230621-arm64-fix-tpidr2-signal-restore-v2-0-c8e8fcc10302@kernel.org>
- <20230621-arm64-fix-tpidr2-signal-restore-v2-1-c8e8fcc10302@kernel.org>
+        Thu, 22 Jun 2023 12:52:55 -0400
+Received: from forward102c.mail.yandex.net (forward102c.mail.yandex.net [178.154.239.213])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7698E9;
+        Thu, 22 Jun 2023 09:52:53 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-39.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-39.sas.yp-c.yandex.net [IPv6:2a02:6b8:c08:2087:0:640:7bf5:0])
+        by forward102c.mail.yandex.net (Yandex) with ESMTP id 2F57060023;
+        Thu, 22 Jun 2023 19:52:51 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-39.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id kqJAlpLDeKo0-N2dVJPkK;
+        Thu, 22 Jun 2023 19:52:50 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687452770;
+        bh=znFFoGeqiunqRxoTLfHb5wn7fiyH8JmmaStKnf7EpcE=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=RUPT2vQqOacHF13l2+2/3BK23Lz1No5k90tvR/b7tv7QWWzDN3tcsAJBf3wcPun9W
+         vf1tqi45OksDNikriXM8zpkaj2L35sXqc1+eI1ast7SC4lKlbWZcxlTPK6UPwNFLTD
+         XSscsDwz4zWcsmQJs7m7wfEzRc5yjhYrPhHXRL2Q=
+Authentication-Results: mail-nwsmtp-smtp-production-main-39.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From:   Stas Sergeev <stsp2@yandex.ru>
+To:     linux-kernel@vger.kernel.org
+Cc:     Stas Sergeev <stsp2@yandex.ru>, Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
+Subject: [PATCH 0/2] v3: F_OFD_GETLK extension to read lock info
+Date:   Thu, 22 Jun 2023 21:52:22 +0500
+Message-Id: <20230622165225.2772076-1-stsp2@yandex.ru>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621-arm64-fix-tpidr2-signal-restore-v2-1-c8e8fcc10302@kernel.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 02:39:45PM +0100, Mark Brown wrote:
-> Currently when restoring the TPIDR2 signal context we set the new value
-> from the signal frame in the thread data structure but not the register,
-> following the pattern for the rest of the data we are restoring. This does
-> not work in the case of TPIDR2, the register always has the value for the
-> current task. This means that either we return to userspace and ignore the
-> new value or we context switch and save the register value on top of the
-> newly restored value.
-> 
-> Load the value from the signal context into the register instead.
-> 
-> Fixes: 39e54499280f ("arm64/signal: Include TPIDR2 in the signal context")
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Cc: stable@vger.kernel.org
-> ---
->  arch/arm64/kernel/signal.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-> index 2cfc810d0a5b..10b407672c42 100644
-> --- a/arch/arm64/kernel/signal.c
-> +++ b/arch/arm64/kernel/signal.c
-> @@ -398,7 +398,7 @@ static int restore_tpidr2_context(struct user_ctxs *user)
->  
->  	__get_user_error(tpidr2_el0, &user->tpidr2->tpidr2, err);
->  	if (!err)
-> -		current->thread.tpidr2_el0 = tpidr2_el0;
-> +		write_sysreg_s(tpidr2_el0, SYS_TPIDR2_EL0);
+This extension allows to use F_UNLCK on query, which currently returns
+EINVAL. Instead it can be used to query the locks on a particular fd -
+something that is not currently possible. The basic idea is that on
+F_OFD_GETLK, F_UNLCK would "conflict" with (or query) any types of the
+lock on the same fd, and ignore any locks on other fds.
 
-I guess the other way around may also be true - the libc sets tpidr2_el0
-to something else and doesn't want the kernel to restore its original
-value from sigcontext.
+Use-cases:
 
-For tpidr_el0 we don't bother with sigcontext, not sure what the use for
-tpidr2_el0 in signals is. If we assume the context saved is only
-informative (like esr), we can simply ignore restoring it from the
-signal stack.
+1. CRIU-alike scenario when you want to read the locking info from an
+fd for the later reconstruction. This can now be done by setting
+l_start and l_len to 0 to cover entire file range, and do F_OFD_GETLK.
+In the loop you need to advance l_start past the returned lock ranges,
+to eventually collect all locked ranges.
 
-I guess we need to ask Szabolcs what his preference is. The current code
-is wrong either way since current->thread.tpidr2_el0 would be overridden
-at thread switch.
+2. Implementing the lock checking/enforcing policy.
+Say you want to implement an "auditor" module in your program,
+that checks that the I/O is done only after the proper locking is
+applied on a file region. In this case you need to know if the
+particular region is locked on that fd, and if so - with what type
+of the lock. If you would do that currently (without this extension)
+then you can only check for the write locks, and for that you need to
+probe the lock on your fd and then open the same file via another fd and
+probe there. That way you can identify the write lock on a particular
+fd, but such trick is non-atomic and complex. As for finding out the
+read lock on a particular fd - impossible.
+This extension allows to do such queries without any extra efforts.
+
+3. Implementing the mandatory locking policy.
+Suppose you want to make a policy where the write lock inhibits any
+unlocked readers and writers. Currently you need to check if the
+write lock is present on some other fd, and if it is not there - allow
+the I/O operation. But because the write lock can appear at any moment,
+you need to do that under some global lock, which can be released only
+when the I/O operation is finished.
+With the proposed extension you can instead just check the write lock
+on your own fd first, and if it is there - allow the I/O operation on
+that fd without using any global lock. Only if there is no write lock
+on this fd, then you need to take global lock and check for a write
+lock on other fds.
+
+
+The second patch adds a test-case for OFD locks.
+It tests both the generic things and the proposed extension.
+
+
+The third patch is a proposed man page update for fcntl(2)
+(not for the linux source tree)
+
+
+Changes in v3:
+- Move selftest to selftests/filelock
+
+Changes in v2:
+- Dropped the l_pid extension patch and updated test-case accordingly.
+
+Stas Sergeev (2):
+  fs/locks: F_UNLCK extension for F_OFD_GETLK
+  selftests: add OFD lock tests
+
+ fs/locks.c                                  |  23 +++-
+ tools/testing/selftests/filelock/Makefile   |   5 +
+ tools/testing/selftests/filelock/ofdlocks.c | 132 ++++++++++++++++++++
+ 3 files changed, 157 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/filelock/Makefile
+ create mode 100644 tools/testing/selftests/filelock/ofdlocks.c
+
+CC: Jeff Layton <jlayton@kernel.org>
+CC: Chuck Lever <chuck.lever@oracle.com>
+CC: Alexander Viro <viro@zeniv.linux.org.uk>
+CC: Christian Brauner <brauner@kernel.org>
+CC: linux-fsdevel@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: Shuah Khan <shuah@kernel.org>
+CC: linux-kselftest@vger.kernel.org
+CC: linux-api@vger.kernel.org
 
 -- 
-Catalin
+2.39.2
+
