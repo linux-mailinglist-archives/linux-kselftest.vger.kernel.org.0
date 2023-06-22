@@ -2,118 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623AA73A1C1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 15:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BBC73A201
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 15:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjFVNRL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 09:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
+        id S230509AbjFVNj6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 09:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjFVNRJ (ORCPT
+        with ESMTP id S230471AbjFVNj5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 09:17:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2146B26A2
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 06:15:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687439703;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=K2ZkiY3h1e+pdydS87wK/l+Se+zZo9jQmPSOziGg2h4=;
-        b=FnUT6QZd+pqVmt57Lz+Uh9jNYCg/5YmTFSRHNNShpf1jWaQgzKgiIILFpB3r7CdC8oIIq0
-        hmTVaCc9NZRTDRhkz+46Ifpi8Kdu7hI13ZBgc5gGMbHHal1XWfUqmZOGF5CjW/ZsWs3UUc
-        /BiIdukhEuIA7WtT+iqsjIRQbkKu9Es=
-Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
- [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-638-C0JtktmxNTu_LsnouDJsrA-1; Thu, 22 Jun 2023 09:15:02 -0400
-X-MC-Unique: C0JtktmxNTu_LsnouDJsrA-1
-Received: by mail-vk1-f199.google.com with SMTP id 71dfb90a1353d-471cce5f82fso1264061e0c.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 06:15:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687439702; x=1690031702;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K2ZkiY3h1e+pdydS87wK/l+Se+zZo9jQmPSOziGg2h4=;
-        b=KTMwHhnwypZhdAK1+8ygUxYNZNvQvoKRiFrvQpOvx74qfsIWhPPtRHSv3090uZ6zul
-         jCvxBkA9FK91llTZz5UuCpTj1yUmEgFg6atfLIxX83GTPnIVLAqPYsQbi9Gt3/o3sp20
-         VBBmE1N9Ju4QPjFUOVV5Rovx7rlDyFe5KdN1WJTPA3bIM6AEGVAFrBcg1WShG/GQTdrD
-         +w18AZZ+zD8SIBAaq+1+WmetaTJh8B8j8hvSUlV7IOQNj2leJPFCxMljpRegFeWx3mzh
-         QP033+ZeOe9LIh6aCu6+jcQxLlIFoA4qTl9KUJIQ0k97xy6Jdp6LYQW148D2XJ7utlOz
-         BrZg==
-X-Gm-Message-State: AC+VfDxugGK5ODCEHT0hyn2QtCSf50cCGDeXkCew+4+gguRt5MM3iIC8
-        JxXlE/E1TNVKtkCtndCzuI1k6RqHJ5d8RYhw+neNFi4FrEKE/Fepyx12egbM1QBlCVHRbsmzeDT
-        syXP/EZgngG74/9+AWgmo9yJL73mFUSOF0/Bu
-X-Received: by 2002:a1f:4395:0:b0:471:53e9:376d with SMTP id q143-20020a1f4395000000b0047153e9376dmr4970620vka.4.1687439701750;
-        Thu, 22 Jun 2023 06:15:01 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5W5DxiVuwRx7/IXq3nEY+fcjfbw1GPt92XZe/MPKnssDclCDV9biKYd4cQNHBzgiW8865QqA==
-X-Received: by 2002:a1f:4395:0:b0:471:53e9:376d with SMTP id q143-20020a1f4395000000b0047153e9376dmr4970605vka.4.1687439701380;
-        Thu, 22 Jun 2023 06:15:01 -0700 (PDT)
-Received: from fedora.redhat.com ([2a06:c701:476e:4300:fe29:2a5c:9188:df81])
-        by smtp.gmail.com with ESMTPSA id x22-20020a05620a01f600b00763b9b390b1sm2457874qkn.107.2023.06.22.06.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 06:15:00 -0700 (PDT)
-From:   Dana Elfassy <delfassy@redhat.com>
-X-Google-Original-From: Dana Elfassy <dangel101@gmail.com>
-To:     shuah@kernel.org, eballetbo@kernel.org, usama.anjum@collabora.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Dana Elfassy <dangel101@gmail.com>
-Subject: [PATCH] selftests/input: introduce a test for the EVIOCGLED ioctl
-Date:   Thu, 22 Jun 2023 16:14:40 +0300
-Message-ID: <20230622131440.59859-1-dangel101@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Thu, 22 Jun 2023 09:39:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5831A1996;
+        Thu, 22 Jun 2023 06:39:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D57F16182F;
+        Thu, 22 Jun 2023 13:39:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B29DC433C8;
+        Thu, 22 Jun 2023 13:39:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687441195;
+        bh=NTMTlo3MOrDhWRxtZY/AwiKASNnml0gvHavM/MI6Gtg=;
+        h=From:Subject:Date:To:Cc:From;
+        b=gTfu5hHDs0sX1LrUVWOKsOgISBUMtYVXFEjMfcW5kBJ9nyzDasJzUmuwFqp/h21pt
+         59qnnXd2+SvThrHXgM6laCc4DsaTcu2StNtxvJ8hnw30XL0AmGiGjGj9Y1tNNrSpyL
+         EBi806O81MIfUrJHlqubWB74v740ANkfo9vK25vB3cg1ncVeo5dc2SIrfkAlyaQKgh
+         ftgawF3fhQdodE9pTdlHRu+3k3ugtFuMkH8TTj1trtZpJ+DVuMZKRSfTpQGJ9r5JC7
+         FnOD3o6i8TYv9HJUf/FF5P5iMcyZ3rhOgO2RuSyvxzqruoVkKN1cqfMPYVJlJ4+bcb
+         SFHQzqTD+NdlQ==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/2] arm64/signal: Fix handling of TPIDR2
+Date:   Thu, 22 Jun 2023 14:39:44 +0100
+Message-Id: <20230621-arm64-fix-tpidr2-signal-restore-v2-0-c8e8fcc10302@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACBPlGQC/42OQQ6CMBBFr0K6dgwUBOrKexgWhQ4wAVsyJagh3
+ N2WE7h8P/nv/114ZEIv7skuGDfy5GwAeUlEN2o7IJAJLGQq87SUGWh+lQX09IF1IcMSPA1Wz8D
+ oV8cIVZYblVeq7pUSwdJqj9Cytt0YPW/HU4wXxuA4h59N4JFi/Xv+2LKY/j+5ZZBCWxqFt7owE
+ vExIVucr44H0RzH8QPqp5xu5gAAAA==
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.13-dev-c6835
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1147; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=NTMTlo3MOrDhWRxtZY/AwiKASNnml0gvHavM/MI6Gtg=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBklE8m9zIAmV2ipSkkPjReuNZtoff7N3ru3B4J+xCK
+ RyvYQFKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZJRPJgAKCRAk1otyXVSH0AgVB/
+ 0Zn7LV/jry2iAEbh4LRlzN/OfSNA+OsY6A+YgSWvrYlA6Pw/Fw/cphg0nwoLfNPzFTSG0BQErObxlH
+ vCOlsgQ3UGQdV2rSjOR/Yj3KPykzcWixRhaMqJXFLTPnYpmFNq3IyG99BTWT5xeL61pBuKwNBXVekB
+ Xq1KuXcCCqX3wus71SITXH9Hb2iX/jG5pOedoDWl5ncr9BXpKhrPdqfSSmDaCls11YlDBtbjPeQXV4
+ t+ifE2G6M1zHsyajvSmCuJbhKnlB0wWrW+4U95Afb86uvpIsUnAsgGGAbVhNHBf3Ch8BQAS4hQegGR
+ bb1b7PbLHQild8iBCHeZ1ZqLIQ6rQs
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch introduces a specific test case for the EVIOCGLED ioctl.
-The test covers the case where len > maxlen in the
-EVIOCGLED(sizeof(all_leds)), all_leds) ioctl.
+The restoring of TPIDR2 signal context has been broken since it was
+merged, fix this and add a test case covering it.  This is a result of
+TPIDR2 context management following a different flow to any of the other
+state that we provide and the fact that we don't expose TPIDR (which
+follows the same pattern) to signals.
 
-Signed-off-by: Dana Elfassy <dangel101@gmail.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
-[1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
+Changes in v2:
+- Added a feature check for SME to the new test.
+- Link to v1: https://lore.kernel.org/r/20230621-arm64-fix-tpidr2-signal-restore-v1-0-b6d9e584d2ee@kernel.org
 
- tools/testing/selftests/input/evioc-test.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+---
+Mark Brown (2):
+      arm64/signal: Restore TPIDR2 register rather than memory state
+      kselftest/arm64: Add a test case for TPIDR2 restore
 
-diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
-index ad7b93fe39cf..2bf1b32ae01a 100644
---- a/tools/testing/selftests/input/evioc-test.c
-+++ b/tools/testing/selftests/input/evioc-test.c
-@@ -234,4 +234,21 @@ TEST(eviocsrep_set_repeat_settings)
- 	selftest_uinput_destroy(uidev);
- }
- 
-+TEST(eviocgled_get_all_leds)
-+{
-+	struct selftest_uinput *uidev;
-+	int leds[2];
-+	int rc;
-+
-+	rc = selftest_uinput_create_device(&uidev, -1);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	/* ioctl to set the maxlen = 0 */
-+	rc = ioctl(uidev->evdev_fd, EVIOCGLED(0), leds);
-+	ASSERT_EQ(0, rc);
-+
-+	selftest_uinput_destroy(uidev);
-+}
-+
- TEST_HARNESS_MAIN
+ arch/arm64/kernel/signal.c                         |  2 +-
+ tools/testing/selftests/arm64/signal/.gitignore    |  2 +-
+ .../arm64/signal/testcases/tpidr2_restore.c        | 86 ++++++++++++++++++++++
+ 3 files changed, 88 insertions(+), 2 deletions(-)
+---
+base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+change-id: 20230621-arm64-fix-tpidr2-signal-restore-713d93798f99
+
+Best regards,
 -- 
-2.41.0
+Mark Brown <broonie@kernel.org>
 
