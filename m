@@ -2,85 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C5B739945
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 10:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205F5739A1F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 10:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjFVIT0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 04:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
+        id S231169AbjFVIkk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 04:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjFVITZ (ORCPT
+        with ESMTP id S231126AbjFVIk2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 04:19:25 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177FC1BF6
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 01:19:18 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-98746d7f35dso873635166b.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 01:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1687421957; x=1690013957;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jHOSAVpysPPk0w7f3FRoclTHTOeGMXkD/WXz6o43PNs=;
-        b=3Qv846galtOKu5j1ZWBEoKDHHvAGKed9GxYf8jtUaOyAmrvsfZjDSr11Mtds2ZkfsI
-         z8E8JaX+BZgWcwZ2px/vjwXcVXe/G2papWnvWRx6juFbdgri5wzM8KU/VFH3hTMSEY/0
-         VfuMGKTLX1S39ewKkuOV2SpC+iB2Qxt8EdDCl8XAOUYAhUTLDSJj03+VyN3vhCChcTCl
-         lrqf85TQV4hEAXb07GWK4bCN0TBaaVw/tm7VOhXosmsRqHnh6sbKdsnQJ3TgsnBbZGFI
-         ddqk0x6z9ItamUScnrwLYCUjQwH4H12zJ3Nk3UozHB53yrgaeMe70sas3bN2pKoz74Zq
-         Os1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687421957; x=1690013957;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jHOSAVpysPPk0w7f3FRoclTHTOeGMXkD/WXz6o43PNs=;
-        b=GhYeC6KLA8EsvhhCAlaiN5+McX878PS99yHIbCm9mmghJL5TYW1gh6ct2fb0C96Jqi
-         0pUw/FwwsdFoFgLZg8vytDXt0jbUnsHMO0+lBnkpuUz1BGYOU5KXaC8CKvfqVHKToxXJ
-         ojy9Qg+PJ98HTsFkb6AyQav1BRAaY6or3hfF/O1vu3NHzkDxDmL45dsxlBvjsOuFat0e
-         ZuSCm03qz3uvJVafh9VmqY0t7Xm2U3djVKL+aZlP5q/6hJ1Bk9yTpR3cnykcYhhpixo1
-         WJUk94OpFdoUWRRpSCbXgxl3Tc6Py1zDWLWToYWaQH5bYltzMJceC21XbcRG90nw+NPz
-         O1WQ==
-X-Gm-Message-State: AC+VfDy8U41uuoDQKAxLAJsoMEjpB/HhKLrpymWTVZbOJal3gzfcVSO8
-        x07WMCQnIXcYYW6hPB+hL23Kjw==
-X-Google-Smtp-Source: ACHHUZ5DAgOwgq4jsUtrZx0dccBdImVh49Nsq8bOifuGfOiRsZ8BsC2vF2kKv6FbxkokTfB+nxu/0g==
-X-Received: by 2002:a17:907:e93:b0:989:1a52:72b0 with SMTP id ho19-20020a1709070e9300b009891a5272b0mr7626807ejc.36.1687421957297;
-        Thu, 22 Jun 2023 01:19:17 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:c154:8b90:b6a7:cb1d? ([2a02:578:8593:1200:c154:8b90:b6a7:cb1d])
-        by smtp.gmail.com with ESMTPSA id q13-20020a170906360d00b009827b97c89csm4166097ejb.102.2023.06.22.01.19.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 01:19:17 -0700 (PDT)
-Message-ID: <88685bc2-8467-b999-4b2e-91c381c04d8e@tessares.net>
-Date:   Thu, 22 Jun 2023 10:19:11 +0200
+        Thu, 22 Jun 2023 04:40:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4081FF5
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 01:40:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C5146179C
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 08:40:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BDECCC433C0;
+        Thu, 22 Jun 2023 08:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687423220;
+        bh=mHsfH1YWMYkA8WbtKOS2o31G1h9+Y07sYPDLLUVEuUk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uvHDVWMZq9G7tCMWeTiehspYxEEAIUlqiwivVqsUVZxMUG58NefALXpHp7hh42KSB
+         a21VK7wMvnzbLzP7tRtjyRx++6dY5Fi5eqvwq/3huwVi7Zk+NMJgahQN4u5MB0nOuO
+         jFuPQqmAOPdwG1B6QjyZG8wWW7z+EARBIa5k33knzizmluzkHRzYxsfX8SBFjgZQJ0
+         xwqpIGcI4ApQdXfWhQghMGGT6HbJPcSpX87qjQHei+24weELRBvQpnr4Tc3qy/FlzL
+         LjyOAMYJyytQIma8iywAtOeW0bw8VmYzmyaw1+lloR42gXvidSsL0QideZ7hTx5EyG
+         rurfpOKXSRJ7Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9BA57C691EF;
+        Thu, 22 Jun 2023 08:40:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 7/8] selftests: mptcp: connect: fix comment typo
-To:     Yueh-Shun Li <shamrocklee@posteo.net>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>
-Cc:     linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230622012627.15050-1-shamrocklee@posteo.net>
- <20230622012627.15050-8-shamrocklee@posteo.net>
-Content-Language: en-GB
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20230622012627.15050-8-shamrocklee@posteo.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] selftests: forwarding: Fix race condition in mirror
+ installation
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168742322063.10780.9759813024046689173.git-patchwork-notify@kernel.org>
+Date:   Thu, 22 Jun 2023 08:40:20 +0000
+References: <268816ac729cb6028c7a34d4dda6f4ec7af55333.1687264607.git.petrm@nvidia.com>
+In-Reply-To: <268816ac729cb6028c7a34d4dda6f4ec7af55333.1687264607.git.petrm@nvidia.com>
+To:     Petr Machata <petrm@nvidia.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org, danieller@nvidia.com,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org, mlxsw@nvidia.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,19 +60,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Yueh-Shun,
+Hello:
 
-On 22/06/2023 03:26, Yueh-Shun Li wrote:
-> Spell "transmissions" properly.
+This patch was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Tue, 20 Jun 2023 14:45:15 +0200 you wrote:
+> From: Danielle Ratson <danieller@nvidia.com>
 > 
-> Found by searching for keyword "tranm".
+> When mirroring to a gretap in hardware the device expects to be
+> programmed with the egress port and all the encapsulating headers. This
+> requires the driver to resolve the path the packet will take in the
+> software data path and program the device accordingly.
 > 
-> Signed-off-by: Yueh-Shun Li <shamrocklee@posteo.net>
+> [...]
 
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Here is the summary with links:
+  - [net] selftests: forwarding: Fix race condition in mirror installation
+    https://git.kernel.org/netdev/net/c/c7c059fba6fb
 
-Thanks,
-Matt
+You are awesome, thank you!
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
