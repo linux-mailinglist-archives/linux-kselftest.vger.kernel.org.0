@@ -2,111 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68BD73A45B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 17:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8F073A485
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 17:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbjFVPKD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 11:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
+        id S232156AbjFVPNh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 11:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjFVPKB (ORCPT
+        with ESMTP id S232392AbjFVPNd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:10:01 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A280A2;
-        Thu, 22 Jun 2023 08:10:00 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 7B1773200258;
-        Thu, 22 Jun 2023 11:09:56 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 22 Jun 2023 11:09:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687446596; x=1687532996; bh=UF
-        Ik7GqKMTQQbMewPZ3JZd1cKUV2IvhZU7QLYY4nLQk=; b=VqXzuiAnU40BIyTBrS
-        9/SRN8hrv7scO6zI3Wgs3SMHosS7t3TIJr1SBen8U4HVEj75R1HMftaR11UagFuI
-        dQDwOO6WznyWPpjHfiZA/qhgUCvAGQy5BbZaxLT8/yzptS5v9ubV79kwpAGGxQuM
-        DE1SwgGx2/ZH4LHcTmR8+ATYG4+1ChyqonunUcwENZ8WIemWrIms+PVug0q2eEMY
-        TSR/0Lv+VsDmf75Ax2ZUYJHD9iEFh1NOs/D996wZlKS3iocCzmdyaCf0ugaZ8754
-        mkrP5Erd8AZHVvjwPj+SwlMzINCbTf+N7Ax13yVW7pywBRzZV7toq41p/Zg6HRml
-        8+aA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687446596; x=1687532996; bh=UFIk7GqKMTQQb
-        MewPZ3JZd1cKUV2IvhZU7QLYY4nLQk=; b=GDkxVJy0ljSrkyo6YnDKY4pFJLdfF
-        2IiwBq716JjjpA1//mgjXXP5rcXOZixDJgoknebyqw1EqT2D2QU8dP8YL2NcTi1O
-        IcPYk8faxiG7shlcm1dGUo/6sDJPCw3Xx0CSF1UrFWPh0CpWGKFhWKa1eSkHxUvZ
-        hQKxsPVNrue7m49ASD49SHR8b6Ycrxepba23aSdmT5JPYAnwwLCp85qf4tpFV9QC
-        s7uZrWeg6Rcr0aeiWooXqJ01AnWywTF72j+hj2YO3Lel+WKAuW51T7GBsJGC4tEX
-        zBWePkKQBus17YZIOFzKmp68jsxY9m/bGzWsIxe3JfxKnYUSnioOb56VA==
-X-ME-Sender: <xms:QmSUZLkPh6E0UqDs8VS6ZyRN4qZgBuUFafXc6Are0ycgDlrH6NDVqg>
-    <xme:QmSUZO0DJFPef8z4dg0gEklyqcQOteSgU8sjn_ihzdZQGYc5BSSDYBjdql0sceTKV
-    t-Mz_Lh8TLjXlZnyUY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgkeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:QmSUZBryuN3fCOL33LL87iiMJqMuPdQ374jsU4AyA3x_IUnaAeTNqw>
-    <xmx:QmSUZDndHZJxE8ISniqoZMrjyBRb3ilM9dINXYaxUJ00LFwhgi62PA>
-    <xmx:QmSUZJ0rSKbadaLwaeA2sIbRM2gI4zZSyduBaxYgvlWuucs5KccdXw>
-    <xmx:RGSUZGlj-v19qlVP4kskwEzbSFARUROY_1DQ0zqqUTkr7VMXuaT54Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7DFC4B60089; Thu, 22 Jun 2023 11:09:54 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <1412dbaf-56f4-418b-85ea-681b1c44cc26@app.fastmail.com>
-In-Reply-To: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
-Date:   Thu, 22 Jun 2023 17:09:34 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v3 0/2] Unify uapi bitsperlong.h
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 22 Jun 2023 11:13:33 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5121BD3;
+        Thu, 22 Jun 2023 08:13:27 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f866a3d8e4so8134011e87.0;
+        Thu, 22 Jun 2023 08:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687446806; x=1690038806;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EVcgORFq1QsYVDtcKeh3S9zqJ/zZpa9LGaHHHVgS64s=;
+        b=GQknYtc9USQ4J8zP4XfRRGzKYZycbIuzyO1q9WgnLODSOWCOprZ9IROyY2/YYgYpNF
+         9Ai0FiFGN1GSxMgF5jIs30PJP1r+EPGVYVvnQTKZA+YmKIWPTW3HHXYDfhOFJfNuaZ75
+         zxB0BXCQd6Jhc/C1zvDYE2sr4paLpyC/KMhCtnsuHPg2dCrM0Qf1cqUfPRA0WcaADqtm
+         9z/9oEHe+7QyXtYfvk7aYguju7tL1gKcMLGd+8lqPVD5zpjXm8uBY5U9dDp/Ud8zeDRu
+         BH0p/hwnC1v5nBBp1xpqrCvq3P3I4grAH4yFbl8Q+wXxX0VD5H/zBsbOaKm/U+sj7iR0
+         3ydg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687446806; x=1690038806;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EVcgORFq1QsYVDtcKeh3S9zqJ/zZpa9LGaHHHVgS64s=;
+        b=SgGDZ0/MvuJnhX4+C5uxEoP8Ij3Bvzo3tNlMP7889hyHI+SQPtx5TuEfCVgRvHbUIM
+         /wfgHCEcIcWVyUU2zbtBtfOZCwVDH68jz8k/psgjNHXLbHMvMikq+SUve16zWK2hk+BU
+         uJRcecJMOkXqRSZQlG5GyIdMYD44mE1/KbmsGJ5SYLD3XJnrTjmDwLjP00JKojrmQpQl
+         IjLd3qShLfbx+raiW6Uae4yDr0SFxaR3HEk2W/yc32KjuT37ysB72r2POrLsIgXJuy7v
+         eHa+g27s+Z909j4DQCwkYVqBgzyzXRvnSfFX0XHqzOy877erAxzXofqZdLOpMS/gYZiw
+         hsJQ==
+X-Gm-Message-State: AC+VfDxbeBMB3nUDONPYgSjRgRNElPUQ2dM6No50bfSbrWN1kj5nvdRG
+        XENF4IDgIE5YWfNHfVfLuBTXqWwlCRaLg/Hilq8=
+X-Google-Smtp-Source: ACHHUZ71BeOSDI9I74VkFtO/kSQZYun4tEvGZRfWeEHbIknVdM9+UNlIInMa8oB+oewRf9gIqkz63Hc2uNQeXDSV06M=
+X-Received: by 2002:a05:6512:3ba7:b0:4f9:6221:8fb7 with SMTP id
+ g39-20020a0565123ba700b004f962218fb7mr2500233lfv.11.1687446805721; Thu, 22
+ Jun 2023 08:13:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230622141802.135723-1-dangel101@gmail.com>
+In-Reply-To: <20230622141802.135723-1-dangel101@gmail.com>
+From:   Enric Balletbo Serra <eballetbo@gmail.com>
+Date:   Thu, 22 Jun 2023 17:13:13 +0200
+Message-ID: <CAFqH_51Ro3J1nwk7Os9VYV8_UpE86YRA8C0bfkSX17UikjHz_Q@mail.gmail.com>
+Subject: Re: [PATCH v3] selftests/input: introduce a test for the EVIOCGKEY ioctl
+To:     Dana Elfassy <delfassy@redhat.com>
+Cc:     shuah@kernel.org, eballetbo@kernel.org, usama.anjum@collabora.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dana Elfassy <dangel101@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 22, 2023, at 16:13, Tiezhu Yang wrote:
-> v3:
->   -- Check the definition of __BITS_PER_LONG first at
->      the beginning of uapi/asm-generic/bitsperlong.h
->
-> v2:
->   -- Check __CHAR_BIT__ and __SIZEOF_LONG__ rather than
->      __aarch64__, __riscv, __loongarch__, thanks Ruoyao
->   -- Update the code comment and commit message
->
-> v1:
->   -- Rebase on 6.4-rc6
->   -- Only unify uapi bitsperlong.h for arm64, riscv and loongarch
->   -- Remove uapi bitsperlong.h of hexagon and microblaze in a new patch
->
-> Here is the RFC patch:
-> https://lore.kernel.org/linux-arch/1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn/
+Hi Dana,
 
-I've applied these to the asm-generic tree now
+Thanks for applying the changes.
+
+Missatge de Dana Elfassy <delfassy@redhat.com> del dia dj., 22 de juny
+2023 a les 16:18:
+
+>
+> This patch introduces a specific test case for the EVIOCGKEY ioctl.
+> The test covers the case where len > maxlen in the
+> EVIOCGKEY(sizeof(keystate)), keystate) ioctl.
+>
+> Signed-off-by: Dana Elfassy <dangel101@gmail.com>
+> ---
+> Changes in v3:
+> - Edited commit's subject and description
+> - Renamed variable rep_values to keystate
+> - Added argument to selftest_uinput_create_device()
+> - Removed memset
+>
+> Changes in v2:
+> - Added following note about the patch's dependency
+>
+> This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
+> [1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
+>  tools/testing/selftests/input/evioc-test.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>
+> diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
+> index ad7b93fe39cf..e0f69459f504 100644
+> --- a/tools/testing/selftests/input/evioc-test.c
+> +++ b/tools/testing/selftests/input/evioc-test.c
+> @@ -234,4 +234,21 @@ TEST(eviocsrep_set_repeat_settings)
+>         selftest_uinput_destroy(uidev);
+>  }
+>
+> +TEST(eviocgkey_get_global_key_state)
+> +{
+> +       struct selftest_uinput *uidev;
+> +       int keystate = 0;
+> +       int rc;
+> +
+> +       rc = selftest_uinput_create_device(&uidev, -1);
+> +       ASSERT_EQ(0, rc);
+> +       ASSERT_NE(NULL, uidev);
+> +
+> +       /* ioctl to create the scenario where len > maxlen in bits_to_user() */
+> +       rc = ioctl(uidev->evdev_fd, EVIOCGKEY(0), keystate);
+> +       ASSERT_EQ(0, rc);
+
+So if I understand correctly this is only to trigger the following
+code path (line 709 and 710) which is not covered by other input
+tests.
+
+    1154           1 :         case EVIOCGKEY(0):
+    1155           1 :                 return
+evdev_handle_get_val(client, dev, EV_KEY, dev->key,
+    1156             :
+KEY_MAX, size, p, compat_mode);
+    1157             :
+
+     886           1 : static int evdev_handle_get_val(struct
+evdev_client *client,
+     ...
+     909             :
+     910           1 :         ret = bits_to_user(mem, maxbit, maxlen,
+p, compat);
+
+
+     702           1 : static int bits_to_user(unsigned long *bits,
+unsigned int maxbit,
+     ...
+     709           1 :         if (len > maxlen)
+     710           1 :                 len = maxlen;
+
+> +
+> +       selftest_uinput_destroy(uidev);
+> +}
+> +
+>  TEST_HARNESS_MAIN
+> --
+> 2.41.0
+>
+
+I ran the test with code coverage enabled and I can confirm the code
+path is triggered, running libevdev tests plus this test increases the
+code coverage for the EVIOCGKEY ioctl. so
+
+Reviewed-by: Enric Balletbo i Serra <eballetbo@kernel.org>
 
 Thanks,
-
-   Arnd
+  Enric
