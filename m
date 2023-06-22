@@ -2,104 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4184873A138
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 14:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623AA73A1C1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 15:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbjFVMu0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 08:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
+        id S230091AbjFVNRL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 09:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjFVMuZ (ORCPT
+        with ESMTP id S230185AbjFVNRJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:50:25 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ECD41BC5;
-        Thu, 22 Jun 2023 05:50:22 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxfceMQ5Rkv28AAA--.693S3;
-        Thu, 22 Jun 2023 20:50:20 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxWM2LQ5RkrxwCAA--.11455S3;
-        Thu, 22 Jun 2023 20:50:19 +0800 (CST)
-Subject: Re: [PATCH v2 1/2] asm-generic: Unify uapi bitsperlong.h for arm64,
- riscv and loongarch
-To:     kernel test robot <lkp@intel.com>, Arnd Bergmann <arnd@arndb.de>
-References: <1687336748-4898-2-git-send-email-yangtiezhu@loongson.cn>
- <202306220334.C80BpATp-lkp@intel.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <27295ba8-f57e-61c1-9cc4-f2207fd97ae0@loongson.cn>
-Date:   Thu, 22 Jun 2023 20:50:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Thu, 22 Jun 2023 09:17:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2146B26A2
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 06:15:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687439703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=K2ZkiY3h1e+pdydS87wK/l+Se+zZo9jQmPSOziGg2h4=;
+        b=FnUT6QZd+pqVmt57Lz+Uh9jNYCg/5YmTFSRHNNShpf1jWaQgzKgiIILFpB3r7CdC8oIIq0
+        hmTVaCc9NZRTDRhkz+46Ifpi8Kdu7hI13ZBgc5gGMbHHal1XWfUqmZOGF5CjW/ZsWs3UUc
+        /BiIdukhEuIA7WtT+iqsjIRQbkKu9Es=
+Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
+ [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-638-C0JtktmxNTu_LsnouDJsrA-1; Thu, 22 Jun 2023 09:15:02 -0400
+X-MC-Unique: C0JtktmxNTu_LsnouDJsrA-1
+Received: by mail-vk1-f199.google.com with SMTP id 71dfb90a1353d-471cce5f82fso1264061e0c.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 06:15:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687439702; x=1690031702;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K2ZkiY3h1e+pdydS87wK/l+Se+zZo9jQmPSOziGg2h4=;
+        b=KTMwHhnwypZhdAK1+8ygUxYNZNvQvoKRiFrvQpOvx74qfsIWhPPtRHSv3090uZ6zul
+         jCvxBkA9FK91llTZz5UuCpTj1yUmEgFg6atfLIxX83GTPnIVLAqPYsQbi9Gt3/o3sp20
+         VBBmE1N9Ju4QPjFUOVV5Rovx7rlDyFe5KdN1WJTPA3bIM6AEGVAFrBcg1WShG/GQTdrD
+         +w18AZZ+zD8SIBAaq+1+WmetaTJh8B8j8hvSUlV7IOQNj2leJPFCxMljpRegFeWx3mzh
+         QP033+ZeOe9LIh6aCu6+jcQxLlIFoA4qTl9KUJIQ0k97xy6Jdp6LYQW148D2XJ7utlOz
+         BrZg==
+X-Gm-Message-State: AC+VfDxugGK5ODCEHT0hyn2QtCSf50cCGDeXkCew+4+gguRt5MM3iIC8
+        JxXlE/E1TNVKtkCtndCzuI1k6RqHJ5d8RYhw+neNFi4FrEKE/Fepyx12egbM1QBlCVHRbsmzeDT
+        syXP/EZgngG74/9+AWgmo9yJL73mFUSOF0/Bu
+X-Received: by 2002:a1f:4395:0:b0:471:53e9:376d with SMTP id q143-20020a1f4395000000b0047153e9376dmr4970620vka.4.1687439701750;
+        Thu, 22 Jun 2023 06:15:01 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5W5DxiVuwRx7/IXq3nEY+fcjfbw1GPt92XZe/MPKnssDclCDV9biKYd4cQNHBzgiW8865QqA==
+X-Received: by 2002:a1f:4395:0:b0:471:53e9:376d with SMTP id q143-20020a1f4395000000b0047153e9376dmr4970605vka.4.1687439701380;
+        Thu, 22 Jun 2023 06:15:01 -0700 (PDT)
+Received: from fedora.redhat.com ([2a06:c701:476e:4300:fe29:2a5c:9188:df81])
+        by smtp.gmail.com with ESMTPSA id x22-20020a05620a01f600b00763b9b390b1sm2457874qkn.107.2023.06.22.06.14.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 06:15:00 -0700 (PDT)
+From:   Dana Elfassy <delfassy@redhat.com>
+X-Google-Original-From: Dana Elfassy <dangel101@gmail.com>
+To:     shuah@kernel.org, eballetbo@kernel.org, usama.anjum@collabora.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Dana Elfassy <dangel101@gmail.com>
+Subject: [PATCH] selftests/input: introduce a test for the EVIOCGLED ioctl
+Date:   Thu, 22 Jun 2023 16:14:40 +0300
+Message-ID: <20230622131440.59859-1-dangel101@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-In-Reply-To: <202306220334.C80BpATp-lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxWM2LQ5RkrxwCAA--.11455S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrtF1ktrWrtFWDtr1xCF13Jrc_yoW3Wrb_A3
-        4aywsrGr1S9Fyqqws8CwsaqFyDJayUC3sruwn5Jw4DGFWIkw48Jws3W3srJF4kKrZxtw13
-        ZasYqr9Yyw17KosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUbqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
-        6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-        1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxG
-        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU89iSPUUUU
-        U==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+This patch introduces a specific test case for the EVIOCGLED ioctl.
+The test covers the case where len > maxlen in the
+EVIOCGLED(sizeof(all_leds)), all_leds) ioctl.
 
+Signed-off-by: Dana Elfassy <dangel101@gmail.com>
+---
+This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
+[1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
 
-On 06/22/2023 04:04 AM, kernel test robot wrote:
-> Hi Tiezhu,
->
-> kernel test robot noticed the following build warnings:
->
+ tools/testing/selftests/input/evioc-test.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-...
-
->    In file included from include/asm-generic/bitsperlong.h:5:
->>> include/uapi/asm-generic/bitsperlong.h:13:9: warning: '__BITS_PER_LONG' macro redefined [-Wmacro-redefined]
-
-Oh, thanks for the report, I am sorry.
-
-In order to silence the build warning, it should check the definition
-of __BITS_PER_LONG first at the beginning of bitsperlong.h, like this:
-
-#ifndef __BITS_PER_LONG
-
-#if defined(__CHAR_BIT__) && defined(__SIZEOF_LONG__)
-#define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
-#else
-#define __BITS_PER_LONG 32
-#endif
-
-#endif
-
-I will test and then send v3 later.
-
-Thanks,
-Tiezhu
+diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
+index ad7b93fe39cf..2bf1b32ae01a 100644
+--- a/tools/testing/selftests/input/evioc-test.c
++++ b/tools/testing/selftests/input/evioc-test.c
+@@ -234,4 +234,21 @@ TEST(eviocsrep_set_repeat_settings)
+ 	selftest_uinput_destroy(uidev);
+ }
+ 
++TEST(eviocgled_get_all_leds)
++{
++	struct selftest_uinput *uidev;
++	int leds[2];
++	int rc;
++
++	rc = selftest_uinput_create_device(&uidev, -1);
++	ASSERT_EQ(0, rc);
++	ASSERT_NE(NULL, uidev);
++
++	/* ioctl to set the maxlen = 0 */
++	rc = ioctl(uidev->evdev_fd, EVIOCGLED(0), leds);
++	ASSERT_EQ(0, rc);
++
++	selftest_uinput_destroy(uidev);
++}
++
+ TEST_HARNESS_MAIN
+-- 
+2.41.0
 
