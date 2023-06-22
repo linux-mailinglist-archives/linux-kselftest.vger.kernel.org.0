@@ -2,59 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E4B73971E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 08:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C5B739945
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 10:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbjFVGA1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 02:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
+        id S230017AbjFVIT0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 04:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjFVGA0 (ORCPT
+        with ESMTP id S230009AbjFVITZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 02:00:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7314710F6;
-        Wed, 21 Jun 2023 23:00:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB25861772;
-        Thu, 22 Jun 2023 06:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4A435C433D9;
-        Thu, 22 Jun 2023 06:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687413623;
-        bh=SHn5tQe2jYazXUxFSxkxExMVYFmrrKKLAx5OU8zGQzM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pfBrxp6ZfSXM72a0vzcYyHLQx+uG67RMooZzUU8lg0FoPUBWlQDDNpeZRIQ+VCKEu
-         4Z/xjCooiNDoxumBumOr2a+JndmoPSRy4bfvxZ5yn+jSNqfAwH+4Wf3vS9q40faLS6
-         6LplXgqJU3bCeofuPfathMC3+wEC6yAah3SPiIQG0lHVwDECnY5CDOTlQTmhWbgEIH
-         IFpUT27swQuAmTxj4dmZE8603AOWFDSi8ILbTL7777keEMigTIApYVQfaRX37/Tg+n
-         ZcZuX1CVc/ljFhsUMAdJ2yjKhKrP7igN6rDtYTLv/WK+fQkZQ/jYbZ0UJlAT8psbmB
-         H8KLmgWb4DVxg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32D09E2A034;
-        Thu, 22 Jun 2023 06:00:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 22 Jun 2023 04:19:25 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177FC1BF6
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 01:19:18 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-98746d7f35dso873635166b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 01:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1687421957; x=1690013957;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jHOSAVpysPPk0w7f3FRoclTHTOeGMXkD/WXz6o43PNs=;
+        b=3Qv846galtOKu5j1ZWBEoKDHHvAGKed9GxYf8jtUaOyAmrvsfZjDSr11Mtds2ZkfsI
+         z8E8JaX+BZgWcwZ2px/vjwXcVXe/G2papWnvWRx6juFbdgri5wzM8KU/VFH3hTMSEY/0
+         VfuMGKTLX1S39ewKkuOV2SpC+iB2Qxt8EdDCl8XAOUYAhUTLDSJj03+VyN3vhCChcTCl
+         lrqf85TQV4hEAXb07GWK4bCN0TBaaVw/tm7VOhXosmsRqHnh6sbKdsnQJ3TgsnBbZGFI
+         ddqk0x6z9ItamUScnrwLYCUjQwH4H12zJ3Nk3UozHB53yrgaeMe70sas3bN2pKoz74Zq
+         Os1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687421957; x=1690013957;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jHOSAVpysPPk0w7f3FRoclTHTOeGMXkD/WXz6o43PNs=;
+        b=GhYeC6KLA8EsvhhCAlaiN5+McX878PS99yHIbCm9mmghJL5TYW1gh6ct2fb0C96Jqi
+         0pUw/FwwsdFoFgLZg8vytDXt0jbUnsHMO0+lBnkpuUz1BGYOU5KXaC8CKvfqVHKToxXJ
+         ojy9Qg+PJ98HTsFkb6AyQav1BRAaY6or3hfF/O1vu3NHzkDxDmL45dsxlBvjsOuFat0e
+         ZuSCm03qz3uvJVafh9VmqY0t7Xm2U3djVKL+aZlP5q/6hJ1Bk9yTpR3cnykcYhhpixo1
+         WJUk94OpFdoUWRRpSCbXgxl3Tc6Py1zDWLWToYWaQH5bYltzMJceC21XbcRG90nw+NPz
+         O1WQ==
+X-Gm-Message-State: AC+VfDy8U41uuoDQKAxLAJsoMEjpB/HhKLrpymWTVZbOJal3gzfcVSO8
+        x07WMCQnIXcYYW6hPB+hL23Kjw==
+X-Google-Smtp-Source: ACHHUZ5DAgOwgq4jsUtrZx0dccBdImVh49Nsq8bOifuGfOiRsZ8BsC2vF2kKv6FbxkokTfB+nxu/0g==
+X-Received: by 2002:a17:907:e93:b0:989:1a52:72b0 with SMTP id ho19-20020a1709070e9300b009891a5272b0mr7626807ejc.36.1687421957297;
+        Thu, 22 Jun 2023 01:19:17 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:c154:8b90:b6a7:cb1d? ([2a02:578:8593:1200:c154:8b90:b6a7:cb1d])
+        by smtp.gmail.com with ESMTPSA id q13-20020a170906360d00b009827b97c89csm4166097ejb.102.2023.06.22.01.19.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jun 2023 01:19:17 -0700 (PDT)
+Message-ID: <88685bc2-8467-b999-4b2e-91c381c04d8e@tessares.net>
+Date:   Thu, 22 Jun 2023 10:19:11 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/9] mptcp: expose more info and small
- improvements
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168741362320.8755.12586500995813300263.git-patchwork-notify@kernel.org>
-Date:   Thu, 22 Jun 2023 06:00:23 +0000
-References: <20230620-upstream-net-next-20230620-mptcp-expose-more-info-and-misc-v1-0-62b9444bfd48@tessares.net>
-In-Reply-To: <20230620-upstream-net-next-20230620-mptcp-expose-more-info-and-misc-v1-0-62b9444bfd48@tessares.net>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     mptcp@lists.linux.dev, martineau@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        geliang.tang@suse.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 7/8] selftests: mptcp: connect: fix comment typo
+To:     Yueh-Shun Li <shamrocklee@posteo.net>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Kalle Valo <kvalo@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>
+Cc:     linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230622012627.15050-1-shamrocklee@posteo.net>
+ <20230622012627.15050-8-shamrocklee@posteo.net>
+Content-Language: en-GB
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20230622012627.15050-8-shamrocklee@posteo.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,52 +88,19 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+Hi Yueh-Shun,
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 20 Jun 2023 18:30:13 +0200 you wrote:
-> Patch 1-3/9 track and expose some aggregated data counters at the MPTCP
-> level: the number of retransmissions and the bytes that have been
-> transferred. The first patch prepares the work by moving where snd_una
-> is updated for fallback sockets while the last patch adds some tests to
-> cover the new code.
+On 22/06/2023 03:26, Yueh-Shun Li wrote:
+> Spell "transmissions" properly.
 > 
-> Patch 4-6/9 introduce a new getsockopt for SOL_MPTCP: MPTCP_FULL_INFO.
-> This new socket option allows to combine info from MPTCP_INFO,
-> MPTCP_TCPINFO and MPTCP_SUBFLOW_ADDRS socket options into one. It can be
-> needed to have all info in one because the path-manager can close and
-> re-create subflows between getsockopt() and fooling the accounting. The
-> first patch introduces a unique subflow ID to easily detect when
-> subflows are being re-created with the same 5-tuple while the last patch
-> adds some tests to cover the new code.
+> Found by searching for keyword "tranm".
 > 
-> [...]
+> Signed-off-by: Yueh-Shun Li <shamrocklee@posteo.net>
 
-Here is the summary with links:
-  - [net-next,1/9] mptcp: move snd_una update earlier for fallback socket
-    https://git.kernel.org/netdev/net-next/c/c026d33b8f50
-  - [net-next,2/9] mptcp: track some aggregate data counters
-    https://git.kernel.org/netdev/net-next/c/38967f424b5b
-  - [net-next,3/9] selftests: mptcp: explicitly tests aggregate counters
-    https://git.kernel.org/netdev/net-next/c/5dcff89e1455
-  - [net-next,4/9] mptcp: add subflow unique id
-    https://git.kernel.org/netdev/net-next/c/6f06b4d4d1cc
-  - [net-next,5/9] mptcp: introduce MPTCP_FULL_INFO getsockopt
-    https://git.kernel.org/netdev/net-next/c/492432074e4f
-  - [net-next,6/9] selftests: mptcp: add MPTCP_FULL_INFO testcase
-    https://git.kernel.org/netdev/net-next/c/aa723d5b3541
-  - [net-next,7/9] selftests: mptcp: join: skip check if MIB counter not supported (part 2)
-    https://git.kernel.org/netdev/net-next/c/00079f18c24f
-  - [net-next,8/9] mptcp: consolidate transition to TCP_CLOSE in mptcp_do_fastclose()
-    https://git.kernel.org/netdev/net-next/c/bbd49d114d57
-  - [net-next,9/9] mptcp: pass addr to mptcp_pm_alloc_anno_list
-    https://git.kernel.org/netdev/net-next/c/528cb5f2a1e8
+Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 
-You are awesome, thank you!
+Thanks,
+Matt
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
