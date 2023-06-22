@@ -2,192 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5A073A205
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 15:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD5B73A2BE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 16:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjFVNkH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 09:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
+        id S230395AbjFVONt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 10:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjFVNkG (ORCPT
+        with ESMTP id S230314AbjFVONs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 09:40:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A75C1997
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 06:40:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35D3361831
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 13:40:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E12FC433C0;
-        Thu, 22 Jun 2023 13:40:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687441204;
-        bh=I4NWuVbplK94yptwpSk7z+1nz1dxISccSIH9QFqpMIc=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=Jlg6cuqOpeQ72dq2z3kl6mrX5yOFq7owxNRCUa2c/INC4MKicRqW//hAPFQlZE/yl
-         K4C0Y5aN0wU6UB8SAzcujpJ1WQdLQjjwxcoy51+tYHHQJ1dJEJQKKkUjfnP9jx9m/B
-         s6D61/rnyezlgaX3nPLCXB6bCtY1nqYn7YRu0nwOzbmPnG3Ww/Ix+WU3M5VmUDU/8x
-         QfZv3o+CtwyDuHJ4zi47v2WKIeD+xQc0vsjq2IqXJ2u48RYIylw6OP0OYlgo4dudco
-         UPOAoAqWNYqTZ6Qg2CDyyccNVFuIKthWTVSOEV00vAytSSGVV4WzjpAc6XxR8ocTD9
-         LLsXGbysZS1Bw==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Thu, 22 Jun 2023 14:39:46 +0100
-Subject: [PATCH v2 2/2] kselftest/arm64: Add a test case for TPIDR2 restore
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230621-arm64-fix-tpidr2-signal-restore-v2-2-c8e8fcc10302@kernel.org>
-References: <20230621-arm64-fix-tpidr2-signal-restore-v2-0-c8e8fcc10302@kernel.org>
-In-Reply-To: <20230621-arm64-fix-tpidr2-signal-restore-v2-0-c8e8fcc10302@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>
+        Thu, 22 Jun 2023 10:13:48 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D13D9E2;
+        Thu, 22 Jun 2023 07:13:43 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Bx28YVV5Rk8XMAAA--.773S3;
+        Thu, 22 Jun 2023 22:13:41 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxJ80TV5RkZSsCAA--.10045S2;
+        Thu, 22 Jun 2023 22:13:40 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-c6835
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3094; i=broonie@kernel.org;
- h=from:subject:message-id; bh=I4NWuVbplK94yptwpSk7z+1nz1dxISccSIH9QFqpMIc=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBklE8oAzJLhyfqqFXIZ6KSC5CDDs//cJNa/u71raaB
- GcEjEVCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZJRPKAAKCRAk1otyXVSH0PZkB/
- 9DJ0hlTEAW0a9O7uSlCy0E+iH7b41edp7KAkTbTWJ2lxc5XlBOrAD2gVWVMDsjDC6kWNOq1ClqKawt
- GZd4ZbPEKBmsxvf2BUSQLqVYDhcznqvFnI7JDmIAPEgN+EqC/60Vc9QcxZKIzWqZZ+/wWk9kAmhhqO
- +VW+jEy6PN6mJ4rUV+tqd9PU/WmfBsKWMtDA8grIH350qt7FW1fA/wo94bSXwDl2U4+oXB85j3T/ZS
- S25BFB/M5+jsjemNMnbKuUlkNWzad8uXWnTwVkXt3P0Ts5QgKAEWEv6UH92LyCCogaVpQ9h1mZYGVJ
- PfNTnmniWi7TlrTYt/gUIrF9VyYZ9R
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v3 0/2] Unify uapi bitsperlong.h
+Date:   Thu, 22 Jun 2023 22:13:37 +0800
+Message-Id: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8DxJ80TV5RkZSsCAA--.10045S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7ZF4rXFy3Kr4UKF17tr45CFX_yoW8tr15pF
+        93ArnxWF45CrWay3yrJa40qryUA397Gr4jgay2qry8XrWIvF1UGrsY9rs3Ca47GayUXFn5
+        uF9xGry5Ga1DK3XCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+        kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU7XTmDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Due to the fact that TPIDR2 is intended to be managed by libc we don't
-currently test modifying it via the signal context since that might
-disrupt libc's usage of it and cause instability. We can however test the
-opposite case with less risk, modifying TPIDR2 in a signal handler and
-making sure that the original value is restored after returning from the
-signal handler. Add a test which does this.
+v3:
+  -- Check the definition of __BITS_PER_LONG first at
+     the beginning of uapi/asm-generic/bitsperlong.h
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/signal/.gitignore    |  2 +-
- .../arm64/signal/testcases/tpidr2_restore.c        | 86 ++++++++++++++++++++++
- 2 files changed, 87 insertions(+), 1 deletion(-)
+v2:
+  -- Check __CHAR_BIT__ and __SIZEOF_LONG__ rather than
+     __aarch64__, __riscv, __loongarch__, thanks Ruoyao
+  -- Update the code comment and commit message
 
-diff --git a/tools/testing/selftests/arm64/signal/.gitignore b/tools/testing/selftests/arm64/signal/.gitignore
-index 8ab4c86837fd..839e3a252629 100644
---- a/tools/testing/selftests/arm64/signal/.gitignore
-+++ b/tools/testing/selftests/arm64/signal/.gitignore
-@@ -4,7 +4,7 @@ fake_sigreturn_*
- sme_*
- ssve_*
- sve_*
--tpidr2_siginfo
-+tpidr2_*
- za_*
- zt_*
- !*.[ch]
-diff --git a/tools/testing/selftests/arm64/signal/testcases/tpidr2_restore.c b/tools/testing/selftests/arm64/signal/testcases/tpidr2_restore.c
-new file mode 100644
-index 000000000000..f9a86c00c28c
---- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/tpidr2_restore.c
-@@ -0,0 +1,86 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023 ARM Limited
-+ *
-+ * Verify that the TPIDR2 register context in signal frames is restored.
-+ */
-+
-+#include <signal.h>
-+#include <ucontext.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <unistd.h>
-+#include <asm/sigcontext.h>
-+
-+#include "test_signals_utils.h"
-+#include "testcases.h"
-+
-+#define SYS_TPIDR2 "S3_3_C13_C0_5"
-+
-+static uint64_t get_tpidr2(void)
-+{
-+	uint64_t val;
-+
-+	asm volatile (
-+		"mrs	%0, " SYS_TPIDR2 "\n"
-+		: "=r"(val)
-+		:
-+		: "cc");
-+
-+	return val;
-+}
-+
-+static void set_tpidr2(uint64_t val)
-+{
-+	asm volatile (
-+		"msr	" SYS_TPIDR2 ", %0\n"
-+		:
-+		: "r"(val)
-+		: "cc");
-+}
-+
-+
-+static uint64_t initial_tpidr2;
-+
-+static bool save_tpidr2(struct tdescr *td)
-+{
-+	initial_tpidr2 = get_tpidr2();
-+	fprintf(stderr, "Initial TPIDR2: %lx\n", initial_tpidr2);
-+
-+	return true;
-+}
-+
-+static int modify_tpidr2(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
-+{
-+	uint64_t my_tpidr2 = get_tpidr2();
-+
-+	my_tpidr2++;
-+	fprintf(stderr, "Setting TPIDR2 to %lx\n", my_tpidr2);
-+	set_tpidr2(my_tpidr2);
-+
-+	return 0;
-+}
-+
-+static void check_tpidr2(struct tdescr *td)
-+{
-+	uint64_t tpidr2 = get_tpidr2();
-+
-+	td->pass = tpidr2 == initial_tpidr2;
-+
-+	if (td->pass)
-+		fprintf(stderr, "TPIDR2 restored\n");
-+	else
-+		fprintf(stderr, "TPIDR2 was %lx but is now %lx\n",
-+			initial_tpidr2, tpidr2);
-+}
-+
-+struct tdescr tde = {
-+	.name = "TPIDR2 restore",
-+	.descr = "Validate that TPIDR2 is restored from the sigframe",
-+	.feats_required = FEAT_SME,
-+	.timeout = 3,
-+	.sig_trig = SIGUSR1,
-+	.init = save_tpidr2,
-+	.run = modify_tpidr2,
-+	.check_result = check_tpidr2,
-+};
+v1:
+  -- Rebase on 6.4-rc6
+  -- Only unify uapi bitsperlong.h for arm64, riscv and loongarch
+  -- Remove uapi bitsperlong.h of hexagon and microblaze in a new patch
+
+Here is the RFC patch:
+https://lore.kernel.org/linux-arch/1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn/
+
+Tiezhu Yang (2):
+  asm-generic: Unify uapi bitsperlong.h for arm64, riscv and loongarch
+  tools arch: Remove uapi bitsperlong.h of hexagon and microblaze
+
+ arch/arm64/include/uapi/asm/bitsperlong.h          | 24 -------------------
+ arch/loongarch/include/uapi/asm/bitsperlong.h      |  9 --------
+ arch/riscv/include/uapi/asm/bitsperlong.h          | 14 -----------
+ include/uapi/asm-generic/bitsperlong.h             | 13 ++++++++++-
+ tools/arch/arm64/include/uapi/asm/bitsperlong.h    | 24 -------------------
+ tools/arch/hexagon/include/uapi/asm/bitsperlong.h  | 27 ----------------------
+ .../arch/loongarch/include/uapi/asm/bitsperlong.h  |  9 --------
+ .../arch/microblaze/include/uapi/asm/bitsperlong.h |  2 --
+ tools/arch/riscv/include/uapi/asm/bitsperlong.h    | 14 -----------
+ tools/include/uapi/asm-generic/bitsperlong.h       | 14 ++++++++++-
+ tools/include/uapi/asm/bitsperlong.h               |  6 -----
+ 11 files changed, 25 insertions(+), 131 deletions(-)
+ delete mode 100644 arch/arm64/include/uapi/asm/bitsperlong.h
+ delete mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
+ delete mode 100644 arch/riscv/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/arm64/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/hexagon/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/microblaze/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/riscv/include/uapi/asm/bitsperlong.h
 
 -- 
-2.30.2
+2.1.0
 
