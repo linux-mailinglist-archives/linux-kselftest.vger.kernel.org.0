@@ -2,191 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6692739DCE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 11:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678C3739DEC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 12:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjFVJzO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 05:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
+        id S229985AbjFVKAH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 06:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjFVJye (ORCPT
+        with ESMTP id S230125AbjFVKAG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:54:34 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03E346A5;
-        Thu, 22 Jun 2023 02:50:32 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-988e6fc41ccso474464366b.3;
-        Thu, 22 Jun 2023 02:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687427431; x=1690019431;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ey/Vv80nE8uwWSfVUbghuywv9z3ddX7tceISdZ9mqHQ=;
-        b=ZuhJosSDsY60LXl7JXyeiDnvD/VEIpS8YfFW3xBvbs4IDk00SXPsap3eXc5LzTD35d
-         rxBWcmgyf5m+UNAhBencyEfX0HkFE27AT+imGLcxrrEY2dRM3gBrgAOm3oawv+hjh/63
-         pMYbJlaJvSvzoMN2q5bpR6dpGtxv1eB/JYdaOjF+09Ab9kkAUTFf19LasKBUp0w5lCoe
-         Gvkk60v7g2vG35PNDTcHvn90MggKTeMCyDHftHjpMUTHSSOrwSbHjg2t0JuF3kkH44JF
-         6KQPldWFgG3FYxca+lJr3sSeA/w8R4b14KDknQMmFtO5r7bL1oBMpXkEHpyHeRRtxnl/
-         9GrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687427431; x=1690019431;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ey/Vv80nE8uwWSfVUbghuywv9z3ddX7tceISdZ9mqHQ=;
-        b=daMiFjP/s3Srikjy4QgQ+8aYSSfKlmc5H+9l38BTnnDiss8eg/Wq2XdyoOcyJXABch
-         lcIImGki+lYmE6ZO8qHdIjbz56csBLEAnoBq30p3BhfAgE/ldgNNx8nEWfuVnVKel+Jk
-         XFlSKPChSH+zdIk7zCBEdiSKtgUXH9xjh7uzOiUiI9D0Wn1aDBrAlw/PDHEtZxC6YzLw
-         wR0H2Ug7PxBY+kS2+TrrGKJVeMRbcFULv6PZ28NsQ7m9FoPiWv84pgLgektpAQCiFouE
-         Wsx3mLzNBQe+H6cYjnf3PcO+8IMK1YFdyVtcTqH5BjDrxkhgvvJzbLe78rkxIpIiAEAt
-         sB9w==
-X-Gm-Message-State: AC+VfDzm+mzUuX+GAkBdaHvK+FtLC3qHsU/B30tFGMv5nF4ExvGgNNyL
-        W45AkOidVULMCzxBWDra+s7GFqbSFap4WQ7BLeI=
-X-Google-Smtp-Source: ACHHUZ6527t+J8MMkWFeOmQO7Za2SHvP3Mayb7ha8qPlC32cYy71sJCZIQaHbONVtaFEtSMKQ07vrrVykWvuFihlMWs=
-X-Received: by 2002:a17:907:9303:b0:973:d06d:545f with SMTP id
- bu3-20020a170907930300b00973d06d545fmr13381565ejc.24.1687427431062; Thu, 22
- Jun 2023 02:50:31 -0700 (PDT)
+        Thu, 22 Jun 2023 06:00:06 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D27B1A4;
+        Thu, 22 Jun 2023 03:00:04 -0700 (PDT)
+Received: from [192.168.10.55] (unknown [182.179.162.32])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id ACB56660700E;
+        Thu, 22 Jun 2023 10:59:52 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687428003;
+        bh=j6EIKy4cSoieiiC75xDAROKxOVZOc1C1Q3ERjaD2rrg=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=kRefeMfElCB0LrRwAPYztcZVCqNLKlAY97v3Q/+gSbt8FQGxVOiOkBAPJfhVBGx6v
+         mmAZmocJdVTX/rjNz+1F8eGoJUORk1IdrLsGp3Z+dcEEKCCY/1POO+SLkGxgtPyYea
+         iClcyMr22ugS09ZVw0JKZ6pJdESY0iN07Ru7l6Qh33JovoYECG8HFySgIz9RZ5dsJu
+         m9TQvgRJTypc6GSUtvLPgvhCEmkeWHTN2YsuBmkHOGCG5voJ/WyscBGvjpKtQx2QQX
+         5Af7LXdLzf2Ldq09coY0AWmqPVxnnPRgYHszu5hdJrN502Q6JPV8YwM4auwxYskvqc
+         pr/YXHD+luiDA==
+Message-ID: <76725a75-b17d-8a88-8d41-15c8daafe7e4@collabora.com>
+Date:   Thu, 22 Jun 2023 14:59:48 +0500
 MIME-Version: 1.0
-References: <20230621083026.591323-1-dangel101@gmail.com>
-In-Reply-To: <20230621083026.591323-1-dangel101@gmail.com>
-From:   Enric Balletbo Serra <eballetbo@gmail.com>
-Date:   Thu, 22 Jun 2023 11:50:19 +0200
-Message-ID: <CAFqH_50Td8iigXOJark5Exoa7bD7azg3E4wKWc=ySXTZ7bch9A@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/input: add test to cover len > maxlen in bits_to_user()
-To:     Dana Elfassy <delfassy@redhat.com>
-Cc:     shuah@kernel.org, usama.anjum@collabora.com, eballetbo@kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dana Elfassy <dangel101@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrei Vagin <avagin@gmail.com>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230615141144.665148-1-usama.anjum@collabora.com>
+ <20230615141144.665148-3-usama.anjum@collabora.com>
+ <ZJHp6hSeS6lMo7qx@gmail.com>
+ <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com>
+ <CABb0KFHpE+jJH0MmxZTFaQ9FNFNUnJcnnv7sSGDYqDqqB_FRqw@mail.gmail.com>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFHpE+jJH0MmxZTFaQ9FNFNUnJcnnv7sSGDYqDqqB_FRqw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dana,
-
-Thank you for the patch.
-
-Missatge de Dana Elfassy <delfassy@redhat.com> del dia dc., 21 de juny
-2023 a les 10:30:
->
-> In order to cover this case, setting 'maxlen =3D 0', with the following
-> explanation:
-> EVIOCGKEY is executed from evdev_do_ioctl(), which is called from
-> evdev_ioctl_handler().
-> evdev_ioctl_handler() is called from 2 functions, where by code coverage,
-> only the first one is in use.
-> =E2=80=98compat=E2=80=99 is given the value =E2=80=980=E2=80=99 [1].
-> Thus, the condition [2] is always false.
-> This means =E2=80=98len=E2=80=99 always equals a positive number [3]
-> =E2=80=98maxlen=E2=80=99 in evdev_handle_get_val [4] is defined locally i=
-n
-> evdev_do_ioctl() [5], and is sent in the variable 'size' [6]
->
-
-Like the comment in my previous patch I think this is understandable
-for someone that has some context, but I am not sure it is understood
-for people that don't have such context. So I'd try to rephrase and
-explain in a more plain way. I.e.
-
-selftests/input: introduce a test for the EVIOCGKEY ioctl
-
-This patch introduces a specific test case for the EVIOCGKEY ioctl.
-The test covers the case where len > maxlen in the
-EVIOCGKEY(sizeof(keystate)), keystate) ioctl.
 
 
-> [1] https://elixir.bootlin.com/linux/v6.2/source/drivers/input/evdev.c#L1=
-281
-> [2] https://elixir.bootlin.com/linux/v6.2/source/drivers/input/evdev.c#L7=
-05
-> [3] https://elixir.bootlin.com/linux/v6.2/source/drivers/input/evdev.c#L7=
-07
-> [4] https://elixir.bootlin.com/linux/v6.2/source/drivers/input/evdev.c#L8=
-86
-> [5] https://elixir.bootlin.com/linux/v6.2/source/drivers/input/evdev.c#L1=
-155
-> [6] https://elixir.bootlin.com/linux/v6.2/source/drivers/input/evdev.c#L1=
-141
->
+On 6/21/23 6:29 PM, Michał Mirosław wrote:
+> On Wed, 21 Jun 2023 at 08:35, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>> On 6/20/23 11:03 PM, Andrei Vagin wrote:
+>> ...
+>>>> +struct pagemap_scan_private {
+>>>> +    struct page_region *vec_buf, cur_buf;
+>>>> +    unsigned long long vec_buf_len, vec_buf_index, max_pages, found_pages, flags;
+>>>
+>>> should it be just unsigned long?
+>> These internal values are storing data coming from user in struct
+>> pm_scan_arg in which all variables are 64 bit(__u64) explicitly. This is
+>> why we have unsigned long long here. It is absolutely necessary.
+> 
+> vec_buf_len and vec_buf_index can only have values in 0..512 range.
+> flags has only a few lower bits defined (this is checked on ioctl
+> entry) and max_pages can be limited to ULONG_MAX. Actually putting `if
+> (!max_pages || max_pages > ULONG_MAX) max_pages = ULONG_MAX` would
+> avoid having to check !max_pages during the walk.
+I'll update.
 
-Also, usually is not a good idea to add links in commit messages
-reference to links that can easily end as dead links.
+> 
+> Best Regards
+> Michał Mirosław
 
-> Signed-off-by: Dana Elfassy <dangel101@gmail.com>
-> ---
-> Changes in v2:
-> - Added following note about the patch's dependency
->
-> This patch depends on '[v3] selftests/input: Introduce basic tests for ev=
-dev ioctls' [1] sent to the ML.
-> [1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214=
-.15933-1-eballetbo@kernel.org/
->
->  tools/testing/selftests/input/evioc-test.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->
-> diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/s=
-elftests/input/evioc-test.c
-> index ad7b93fe39cf..b94de2ee5596 100644
-> --- a/tools/testing/selftests/input/evioc-test.c
-> +++ b/tools/testing/selftests/input/evioc-test.c
-> @@ -234,4 +234,23 @@ TEST(eviocsrep_set_repeat_settings)
->         selftest_uinput_destroy(uidev);
->  }
->
-> +TEST(eviocgkey_get_global_key_state)
-> +{
-> +       struct selftest_uinput *uidev;
-> +       int rep_values[2];
-
-nit: rep_values sounds like repeat values, I'd use a variable name
-more similar to what we really need to pass to the ioctl, like
-keystate. Also I think this can be simply
-
-int keystate;
-
-> +       int rc;
-> +
-> +       memset(rep_values, 0, sizeof(rep_values));
-> +
-
-and then, this memset is not really needed.
-
-> +       rc =3D selftest_uinput_create_device(&uidev);
-
-This one without extra arguments need to be:
-
-        rc =3D selftest_uinput_create_device(&uidev, -1);
-
-otherwise the vararg loop is going to keep the room warm for no reason.
-
-> +       ASSERT_EQ(0, rc);
-> +       ASSERT_NE(NULL, uidev);
-> +
-> +       /* ioctl to create the scenario where len > maxlen in bits_to_use=
-r() */
-> +       rc =3D ioctl(uidev->evdev_fd, EVIOCGKEY(0), rep_values);
-> +       ASSERT_EQ(0, rc);
-> +
-
-while we are here, and as it should be easy, maybe we can also extend
-this to cover the normal workflow to get the global key status?
-
-> +       selftest_uinput_destroy(uidev);
-> +}
-> +
->  TEST_HARNESS_MAIN
-> --
-> 2.41.0
->
-
-Thanks,
-  Enric
+-- 
+BR,
+Muhammad Usama Anjum
