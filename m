@@ -2,56 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F0B73A00A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 13:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4184873A138
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 14:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjFVLsn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 07:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S231318AbjFVMu0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 08:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbjFVLsk (ORCPT
+        with ESMTP id S229437AbjFVMuZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 07:48:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5576210DB;
-        Thu, 22 Jun 2023 04:48:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0B7C61852;
-        Thu, 22 Jun 2023 11:48:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C231C433C0;
-        Thu, 22 Jun 2023 11:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687434517;
-        bh=hDxDCv7zSgyITMTVqgTLgVj3+A5rrzl8kUtCWmH4PP4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=pDZaUE2fLRTTmSGrgzeudLthHAhtDlMgPHpp5i7iKO2+rkTJWcdbb5mcqMwn5ST/w
-         qj6qozBW4LuzXQhhcRF0ti/ctkSXuM4RBjvWLlFpi7bbov9/HkmGQ9tuPzSk43x91K
-         hWGIw1AYfJxy8am10REIgpnmM/ZblyqT3FI4TR4PEm+2ShrKPnG1MTOUCvQ6yyrBY4
-         oLi4TaYIvWWvkNfC5XDP70IKYNCAbADNyTZBq+dmDgTxWUnw/7X15RKfm7TwfxEzvv
-         BkAAl+HolbSXRuZbwQXRWnkO38i6t01tX82ApM9p0v8yoQKNpKvKxHm8Tomzp/mMNq
-         hcU8oLxcmvifA==
-Message-ID: <4db7c65bee0739fe7983059296cfc95f20647fa3.camel@kernel.org>
-Subject: Re: [PATCH 2/2] selftests: add OFD lock tests
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stas Sergeev <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-Date:   Thu, 22 Jun 2023 07:48:34 -0400
-In-Reply-To: <20230621152214.2720319-3-stsp2@yandex.ru>
-References: <20230621152214.2720319-1-stsp2@yandex.ru>
-         <20230621152214.2720319-3-stsp2@yandex.ru>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Thu, 22 Jun 2023 08:50:25 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ECD41BC5;
+        Thu, 22 Jun 2023 05:50:22 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8DxfceMQ5Rkv28AAA--.693S3;
+        Thu, 22 Jun 2023 20:50:20 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxWM2LQ5RkrxwCAA--.11455S3;
+        Thu, 22 Jun 2023 20:50:19 +0800 (CST)
+Subject: Re: [PATCH v2 1/2] asm-generic: Unify uapi bitsperlong.h for arm64,
+ riscv and loongarch
+To:     kernel test robot <lkp@intel.com>, Arnd Bergmann <arnd@arndb.de>
+References: <1687336748-4898-2-git-send-email-yangtiezhu@loongson.cn>
+ <202306220334.C80BpATp-lkp@intel.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <27295ba8-f57e-61c1-9cc4-f2207fd97ae0@loongson.cn>
+Date:   Thu, 22 Jun 2023 20:50:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <202306220334.C80BpATp-lkp@intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8CxWM2LQ5RkrxwCAA--.11455S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtF1ktrWrtFWDtr1xCF13Jrc_yoW3Wrb_A3
+        4aywsrGr1S9Fyqqws8CwsaqFyDJayUC3sruwn5Jw4DGFWIkw48Jws3W3srJF4kKrZxtw13
+        ZasYqr9Yyw17KosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
+        6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+        1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU89iSPUUUU
+        U==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,202 +70,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2023-06-21 at 20:22 +0500, Stas Sergeev wrote:
-> Test the basic locking stuff on 2 fds: multiple read locks,
-> conflicts between read and write locks, use of len=3D=3D0 for queries.
-> Also tests for F_UNLCK F_OFD_GETLK extension.
->=20
-> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
->=20
-> CC: Jeff Layton <jlayton@kernel.org>
-> CC: Chuck Lever <chuck.lever@oracle.com>
-> CC: Alexander Viro <viro@zeniv.linux.org.uk>
-> CC: Christian Brauner <brauner@kernel.org>
-> CC: linux-fsdevel@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> CC: Shuah Khan <shuah@kernel.org>
-> CC: linux-kselftest@vger.kernel.org
-> CC: linux-api@vger.kernel.org
->=20
-> ---
->  tools/testing/selftests/locking/Makefile   |   2 +
->  tools/testing/selftests/locking/ofdlocks.c | 132 +++++++++++++++++++++
->  2 files changed, 134 insertions(+)
->  create mode 100644 tools/testing/selftests/locking/ofdlocks.c
->=20
-> diff --git a/tools/testing/selftests/locking/Makefile b/tools/testing/sel=
-ftests/locking/Makefile
-> index 6e7761ab3536..a83ced1626de 100644
-> --- a/tools/testing/selftests/locking/Makefile
-> +++ b/tools/testing/selftests/locking/Makefile
-> @@ -7,4 +7,6 @@ all:
-> =20
->  TEST_PROGS :=3D ww_mutex.sh
-> =20
-> +TEST_GEN_PROGS :=3D ofdlocks
-> +
->  include ../lib.mk
-
-I'm not sure this really belongs in the "locking" directory. Given that
-there is only the ww_mutex test in there, that's more for internal
-synchronization mechanisms, I think.
-
-Can you create a new "filelock" directory and drop this into there
-instead?
 
 
-> diff --git a/tools/testing/selftests/locking/ofdlocks.c b/tools/testing/s=
-elftests/locking/ofdlocks.c
-> new file mode 100644
-> index 000000000000..1ccb2b9b5ead
-> --- /dev/null
-> +++ b/tools/testing/selftests/locking/ofdlocks.c
-> @@ -0,0 +1,132 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#define _GNU_SOURCE
-> +#include <fcntl.h>
-> +#include <assert.h>
-> +#include <stdio.h>
-> +#include <unistd.h>
-> +#include <string.h>
-> +#include "../kselftest.h"
-> +
-> +static int lock_set(int fd, struct flock *fl)
-> +{
-> +	int ret;
-> +
-> +	fl->l_pid =3D 0;		// needed for OFD locks
-> +	fl->l_whence =3D SEEK_SET;
-> +	ret =3D fcntl(fd, F_OFD_SETLK, fl);
-> +	if (ret)
-> +		perror("fcntl()");
-> +	return ret;
-> +}
-> +
-> +static int lock_get(int fd, struct flock *fl)
-> +{
-> +	int ret;
-> +
-> +	fl->l_pid =3D 0;		// needed for OFD locks
-> +	fl->l_whence =3D SEEK_SET;
-> +	ret =3D fcntl(fd, F_OFD_GETLK, fl);
-> +	if (ret)
-> +		perror("fcntl()");
-> +	return ret;
-> +}
-> +
-> +int main(void)
-> +{
-> +	int rc;
-> +	struct flock fl, fl2;
-> +	int fd =3D open("/tmp/aa", O_RDWR | O_CREAT | O_EXCL, 0600);
-> +	int fd2 =3D open("/tmp/aa", O_RDONLY);
-> +
-> +	unlink("aa");
-> +	assert(fd !=3D -1);
-> +	assert(fd2 !=3D -1);
-> +	ksft_print_msg("[INFO] opened fds %i %i\n", fd, fd2);
-> +
-> +	/* Set some read lock */
-> +	fl.l_type =3D F_RDLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 3;
-> +	rc =3D lock_set(fd, &fl);
-> +	if (rc =3D=3D 0) {
-> +		ksft_print_msg
-> +		    ("[SUCCESS] set OFD read lock on first fd\n");
-> +	} else {
-> +		ksft_print_msg("[FAIL] to set OFD read lock on first fd\n");
-> +		return -1;
-> +	}
-> +	/* Make sure read locks do not conflict on different fds. */
-> +	fl.l_type =3D F_RDLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 1;
-> +	rc =3D lock_get(fd2, &fl);
-> +	if (rc !=3D 0)
-> +		return -1;
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		ksft_print_msg("[FAIL] read locks conflicted\n");
-> +		return -1;
-> +	}
-> +	/* Make sure read/write locks do conflict on different fds. */
-> +	fl.l_type =3D F_WRLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 1;
-> +	rc =3D lock_get(fd2, &fl);
-> +	if (rc !=3D 0)
-> +		return -1;
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		ksft_print_msg
-> +		    ("[SUCCESS] read and write locks conflicted\n");
-> +	} else {
-> +		ksft_print_msg
-> +		    ("[SUCCESS] read and write locks not conflicted\n");
-> +		return -1;
-> +	}
-> +	/* Get info about the lock on first fd. */
-> +	fl.l_type =3D F_UNLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 1;
-> +	rc =3D lock_get(fd, &fl);
-> +	if (rc !=3D 0) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK not supported\n");
-> +		return -1;
-> +	}
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		ksft_print_msg
-> +		    ("[SUCCESS] F_UNLCK test returns: locked, type %i pid %i len %zi\n=
-",
-> +		     fl.l_type, fl.l_pid, fl.l_len);
-> +	} else {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK did not return lock info\n");
-> +		return -1;
-> +	}
-> +	/* Try the same but by locking everything by len=3D=3D0. */
-> +	fl2.l_type =3D F_UNLCK;
-> +	fl2.l_start =3D 0;
-> +	fl2.l_len =3D 0;
-> +	rc =3D lock_get(fd, &fl2);
-> +	if (rc !=3D 0) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK not supported\n");
-> +		return -1;
-> +	}
-> +	if (memcmp(&fl, &fl2, sizeof(fl))) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_UNLCK test returns: locked, type %i pid %i len %zi\n",
-> +		     fl.l_type, fl.l_pid, fl.l_len);
-> +		return -1;
-> +	}
-> +	ksft_print_msg("[SUCCESS] F_UNLCK with len=3D=3D0 returned the same\n")=
-;
-> +	/* Get info about the lock on second fd - no locks on it. */
-> +	fl.l_type =3D F_UNLCK;
-> +	fl.l_start =3D 0;
-> +	fl.l_len =3D 0;
-> +	lock_get(fd2, &fl);
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK return lock info from another fd=
-\n");
-> +		return -1;
-> +	}
-> +	return 0;
-> +}
+On 06/22/2023 04:04 AM, kernel test robot wrote:
+> Hi Tiezhu,
+>
+> kernel test robot noticed the following build warnings:
+>
 
-I'm not opposed to adding a selftest here, but most filesystem testing
-is done via xfstests:
+...
 
-    https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/
+>    In file included from include/asm-generic/bitsperlong.h:5:
+>>> include/uapi/asm-generic/bitsperlong.h:13:9: warning: '__BITS_PER_LONG' macro redefined [-Wmacro-redefined]
 
-It would be better to add this test to the existing generic/478 test
-that tests OFD locks. Can you patch that to add a test for the new
-functionality?
+Oh, thanks for the report, I am sorry.
+
+In order to silence the build warning, it should check the definition
+of __BITS_PER_LONG first at the beginning of bitsperlong.h, like this:
+
+#ifndef __BITS_PER_LONG
+
+#if defined(__CHAR_BIT__) && defined(__SIZEOF_LONG__)
+#define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
+#else
+#define __BITS_PER_LONG 32
+#endif
+
+#endif
+
+I will test and then send v3 later.
 
 Thanks,
---=20
-Jeff Layton <jlayton@kernel.org>
+Tiezhu
+
