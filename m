@@ -2,118 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD4873AC67
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 00:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB17073AD33
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 01:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjFVWPv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 18:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        id S231234AbjFVXcA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 19:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjFVWPu (ORCPT
+        with ESMTP id S231147AbjFVXb6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 18:15:50 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076592116
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 15:15:49 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-3a1a0e5c0ddso323644b6e.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 15:15:48 -0700 (PDT)
+        Thu, 22 Jun 2023 19:31:58 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323A3210E
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 16:31:57 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id 71dfb90a1353d-4718ddce780so31347e0c.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 16:31:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687472148; x=1690064148;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RWTgYq2UUxEsCsczZywS54H3UJIh7PEQ08XF3T1QNQI=;
-        b=erEg5tOQrXPIIkPMrTVT0g485cXgkF/mSZwczNIMFvys3/3M8s5touTnozJgkJnrv8
-         MFgmH40Daa20QkYuk/ODWSbN3LRXmOTp58f7zONk5K1txgIR2E8530LaoJ51BKnZY5aO
-         q2mU71Au/pRMDG+NvsVvPFmQc6ZfVXk4ZJnNrQHF6MhxbN3POquh8W6sbg6BpsfU+l9Z
-         TkwUKpPMpEYhD1uL94U3aeq6C4rVRimj2eXjJmERe1oophqJqKOGbPxQE61zl4rUBY/F
-         iOzC66FM7hcAoKz+QXRHotEMNHJjsYwHuYiVdOFUNE5F6uu2fIgvAz22mSWoEyV6S/OC
-         H5vw==
+        d=google.com; s=20221208; t=1687476716; x=1690068716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=67piO5m5kwhgkGZRSCs+P2mt8JZPTPY6ZNmz3uFEERw=;
+        b=Go9OPZrCjyYQrsGYmeyjij/CYhyZz00UzA7dWA9yE65QecRbdBxLjHb3CHXsjMLhgE
+         cHOBEJyeVN5chDlUh00cwig04AbPvMnUmLiS7c9iR1pFC2dRjvhIpHnbmq112EW1f9th
+         WR2cmAM8Al8Q/WbPfSwc0vJl4NkTl7vLJYvpqHo7KYa3tyErj29HOJ4HsFNergrI31U2
+         MJVW/Czc3AdfmGXsRk2YmM+QXV9rh5kaUf0eNvt6cqbat9Y92TT4V6CKZQLD3s6s5B4n
+         Le0KRFp7o6I6fiA26eSskq/Vr+AvyD7atFVXYPMv1bm+lDSdRpl0sVOnNORrJSb1C1um
+         QB4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687472148; x=1690064148;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RWTgYq2UUxEsCsczZywS54H3UJIh7PEQ08XF3T1QNQI=;
-        b=kWmirbOuwue2PrfAZRnxs/Qsxm45UtXsDDnIFSKLde0TSwT8vzAMJDcEhz373Oj0n2
-         Mnziepu1SS9A9FVlMNXZ8oz9vE/4efovlaXfd2t8KMp8kTXtH2secpaDgHFQkO1vjTUk
-         YspJ7gpuK8cN4kzPv6uQLXkR5K1wpNpmde6Gq9OStwyC0mANxMmVkSeLhrr9FLmUcGxJ
-         pjmCohyuvVX2RVq9PCVeDbQDjvBstwzMPzxCBUFbqOpBw+yWc+ZlU5A3Pz/gxXLNe7IL
-         aIf3usp/LWbNk7lpUdA9Zz+bqEdRTb4IdqN1Lk0Ys9YqU0/rwtUbV91PDaMw45zOkjPW
-         dfAg==
-X-Gm-Message-State: AC+VfDylnLTg5En9Ozeg0lJYQG4gY25gPnKc5QxVWgK5KIp8EunqHpaa
-        WSr5e5/PGgtoHkbCVHmnqzKj4g==
-X-Google-Smtp-Source: ACHHUZ5xFMVs4yYQ56AKSUP4WsX6unDFAVwqpLuAsR4Evt1ihNZo7GTkH/lU8pygoBB2omszfgADtw==
-X-Received: by 2002:a05:6808:1b0f:b0:39a:aafd:dda7 with SMTP id bx15-20020a0568081b0f00b0039aaafddda7mr22999807oib.35.1687472148243;
-        Thu, 22 Jun 2023 15:15:48 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
-        by smtp.gmail.com with ESMTPSA id d24-20020a17090ac25800b0025b83c6227asm217949pjx.3.2023.06.22.15.15.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 15:15:47 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1qCSaf-00F0Us-05;
-        Fri, 23 Jun 2023 08:15:45 +1000
-Date:   Fri, 23 Jun 2023 08:15:45 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     stsp <stsp2@yandex.ru>
-Cc:     Chuck Lever III <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
-Subject: Re: [PATCH 2/2] selftests: add OFD lock tests
-Message-ID: <ZJTIEaqwkc1U050E@dread.disaster.area>
-References: <20230621152214.2720319-1-stsp2@yandex.ru>
- <20230621152214.2720319-3-stsp2@yandex.ru>
- <4db7c65bee0739fe7983059296cfc95f20647fa3.camel@kernel.org>
- <7bbb29d2-4cae-48bd-1b97-9f4dbf6ffb19@yandex.ru>
- <8F45F47C-86C0-472E-B701-001A4FF90DBC@oracle.com>
- <26a798ae-b93b-2f68-71ed-35950240927d@yandex.ru>
- <187C3E49-A977-492E-99CB-97F032B24E5F@oracle.com>
- <4582a51d-2b29-f430-2f8f-ed1239d70f70@yandex.ru>
+        d=1e100.net; s=20221208; t=1687476716; x=1690068716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=67piO5m5kwhgkGZRSCs+P2mt8JZPTPY6ZNmz3uFEERw=;
+        b=D5ps7s/BgqL/irQfgYtPxoI+Rp7M2q635NWW3X4BJdd1OZ1qngBqOP8RdxCaL5B3CV
+         Jv2fZEzKF7MYo+M6xJrTu9ITyppZz0oJjQDJct8N2gK2c9lNqW5Qu7Nl3O8Lv6oOlsmx
+         zlYm/83X5ymSVevVowbZfR+3TnGfZogS31yUeddPy4tbGeeqso80qIzT9iDo5lHYOkXq
+         Ik/lFwq4AKchBBtU4yCdAlL7eZmgB+cVDQN3kqhYZdYIa1CZGJBt2VMiapJ0LG68joq5
+         wq4yvW5U8EacXKbQ7ZaXmpKbxiXtjsIjlJ0F60WTZr3ruZk5IzraqtIqhS37Adb0VCKV
+         xUfg==
+X-Gm-Message-State: AC+VfDx5rkKDuXQC1cPX0mLk/b3KwNk2OInZ+8r6CO72MKAEG44vOIsY
+        xxKcMw/th8z4+rMY5QPaqwCnzKs2KC48xc/dMqgYHQ==
+X-Google-Smtp-Source: ACHHUZ4yBGctwXzyOZ7e9UbJK1NZq9tQ5XS38jtR9N8MJn8TxhDelZEf+HQlQgnvEqQ9UsmFPsgR3BRng60Q7TltBmI=
+X-Received: by 2002:a1f:5744:0:b0:471:5110:49e8 with SMTP id
+ l65-20020a1f5744000000b00471511049e8mr9920922vkb.4.1687476714680; Thu, 22 Jun
+ 2023 16:31:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4582a51d-2b29-f430-2f8f-ed1239d70f70@yandex.ru>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
+In-Reply-To: <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
+From:   Erdem Aktas <erdemaktas@google.com>
+Date:   Thu, 22 Jun 2023 16:31:43 -0700
+Message-ID: <CAAYXXYzOUQC0G7yoh1i2+SW-FodCABwhD6TgArLf28iG=i65zw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation feature
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        dhowells@redhat.com, brijesh.singh@amd.com, atishp@rivosinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 10:31:06PM +0500, stsp wrote:
-> 
-> 22.06.2023 22:12, Chuck Lever III пишет:
-> > I don't have a strong preference. A good choice is to
-> > push the test before the kernel changes are merged.
-> It will fail though w/o kernel changes.
-> So what exactly is the policy?
+On Mon, Jun 12, 2023 at 12:03=E2=80=AFPM Dan Williams <dan.j.williams@intel=
+.com> wrote:
+>
+> [ add David, Brijesh, and Atish]
+>
+> Kuppuswamy Sathyanarayanan wrote:
+> > In TDX guest, the second stage of the attestation process is Quote
+> > generation. This process is required to convert the locally generated
+> > TDREPORT into a remotely verifiable Quote. It involves sending the
+> > TDREPORT data to a Quoting Enclave (QE) which will verify the
+> > integrity of the TDREPORT and sign it with an attestation key.
+> >
+> > Intel's TDX attestation driver exposes TDX_CMD_GET_QUOTE IOCTL to
+> > allow the user agent to get the TD Quote.
+> >
+> > Add a kernel selftest module to verify the Quote generation feature.
+> >
+> > TD Quote generation involves following steps:
+> >
+> > * Get the TDREPORT data using TDX_CMD_GET_REPORT IOCTL.
+> > * Embed the TDREPORT data in quote buffer and request for quote
+> >   generation via TDX_CMD_GET_QUOTE IOCTL request.
+> > * Upon completion of the GetQuote request, check for non zero value
+> >   in the status field of Quote header to make sure the generated
+> >   quote is valid.
+>
+> What this cover letter does not say is that this is adding another
+> instance of the similar pattern as SNP_GET_REPORT.
+>
+> Linux is best served when multiple vendors trying to do similar
+> operations are brought together behind a common ABI. We see this in the
+> history of wrangling SCSI vendors behind common interfaces. Now multiple
 
-filesystem unit test functionality needs to be pushed into fstests
-and/or ltp. The preference is the former, because just about every
-filesystem developer and distro QA team is running this as part of
-their every-day testing workflow.
+Compared to the number of SCSI vendors, I think the number of CPU
+vendors for confidential computing seems manageable to me. Is this
+really a good comparison?
 
-fstests is written to probe whether the kernel supports a given
-feature or not before testing it. It will _not_run() a test that
-doesn't have the required kernel/fs/device support, and this is not
-considered a test failure.
+> confidential computing vendors trying to develop similar flows with
+> differentiated formats where that differentiation need not leak over the
+> ABI boundary.
 
-Yes, it means you have to also write the userspace feature probing
-code, but that should be trivial to do because userspace already has
-to be able to safely discover that this extension exists, right?
+<Just my personal opinion below>
+I agree with this statement in the high level but it is also somehow
+surprising for me after all the discussion happened around this topic.
+Honestly, I feel like there are multiple versions of "Intel"  working
+in different directions.
 
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+If we want multiple vendors trying to do the similar things behind a
+common ABI, it should start with the spec. Since this comment is
+coming from Intel, I wonder if there is any plan to combine the GHCB
+and GHCI interfaces under common ABI in the future or why it did not
+even happen in the first place.
+
+What I see is that Intel has GETQUOTE TDVMCALL interface in its spec
+and again Intel does not really want to provide support for it in
+linux. It feels really frustrating.
+
+>
+> My observation of SNP_GET_REPORT and TDX_CMD_GET_REPORT is that they are
+> both passing blobs across the user/kernel and platform/kernel boundary
+> for the purposes of unlocking other resources. To me that is a flow that
+> the Keys subsystem has infrastructure to handle. It has the concept of
+> upcalls and asynchronous population of blobs by handles and mechanisms
+> to protect and cache those communications. Linux / the Keys subsystem
+> could benefit from the enhancements it would need to cover these 2
+> cases. Specifically, the benefit that when ARM and RISC-V arrive with
+> similar communications with platform TSMs (Trusted Security Module) they
+> can build upon the same infrastructure.
+>
+> David, am I reaching with that association? My strawman mapping of
+> TDX_CMD_GET_QUOTE to request_key() is something like:
+>
+> request_key(coco_quote, "description", "<uuencoded tdreport>")
+>
+> Where this is a common key_type for all vendors, but the description and
+> arguments have room for vendor differentiation when doing the upcall to
+> the platform TSM, but userspace never needs to contend with the
+> different vendor formats, that is all handled internally to the kernel.
+
+I think the problem definition here is not accurate. With AMD SNP,
+guests need to do a hypercall to KVM and KVM needs to issue a
+SNP_GUEST_REQUEST(MSG_REPORT_REQ) to the SP firmware. In TDX, guests
+need to do a TDCALL to TDXMODULE to get the TDREPORT and then it needs
+to get that report delivered to the host userspace to get the TDQUOTE
+generated by the SGX quoting enclave. Also TDQUOTE is designed to work
+async while the SNP_GUEST_REQUESTS are blocking vmcalls.
+
+Those are completely different flows. Are you suggesting that intel
+should also come down to a single call to get the TDQUOTE like AMD
+SNP?
+
+The TDCALL interface asking for the TDREPORT is already there. AMD
+does not need to ask the report and the quote separately.
+
+Here, the problem was that Intel (or "upstream community") did not
+want to implement/accept hypercall for TDQUOTE which would be handled
+by the user space VMM. The alternative implementation (using vsock)
+does not work for many use cases including ours. I do not see how your
+suggestion addresses the problem that this patch was trying to solve.
+
+So while I like the suggested direction, I am not sure how much it is
+possible to come up with a common ABI even with just only for 2
+vendors (AMD and Intel) without doing spec changes which is a multi
+year effort imho.
+
+>
+> At this point I am just looking for confirmation that the "every vendor
+> invent a new character device + ioctl" does not scale and a deeper
+> conversation is needed. Keys is a plausible solution to that ABI
+> proliferation problem.
