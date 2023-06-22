@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1A273A8CF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 21:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B22B73A900
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 21:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjFVTJF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 15:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
+        id S229934AbjFVTdN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 15:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFVTJE (ORCPT
+        with ESMTP id S229522AbjFVTdM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 15:09:04 -0400
+        Thu, 22 Jun 2023 15:33:12 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A848FA2;
-        Thu, 22 Jun 2023 12:09:01 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1687460925t3449k82
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D98199B;
+        Thu, 22 Jun 2023 12:33:06 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1687462371tfakqj4c
 Received: from linux-lab-host.localdomain ( [116.30.126.60])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 23 Jun 2023 03:08:43 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: zT6n3Y95oi0+GF2rz41IpqKmQQtPn9dIE2aj0KkXMIaCuzLAVuWvOc3JP5oeO
-        PKznVlOojlNN6dUd5Tr33s/TsUPIxkR/zyEGfmHjEhnYEGfmqpPLcHD6P44A3G0OtsIngvF
-        zg8X/8uKlWtzEIjFJNh9Ehw81v8ZGwOSu2nEKWXvPcLYUKpP8OLaOTK3yX9FWRe+wlt/wW1
-        Cjjg9MamTX7Ydembt+uVrXDW/myWX152jB9blHmVoU9/TqU1kj0d2hRbhF3XtI77FI3slHf
-        jxB8z+eCNy+gZVBtxzvpTJPhcVlMwsRZYsAcVsA5bJooVK3U2mqFfztB79sbX+oFQFDynek
-        Gv1xDLxCtuiH78WOuPu9VSZCYQEaH9Pl3OOyZ/ZhJgSBZCh/EqUlpzwqhhbhQ==
+        id ; Fri, 23 Jun 2023 03:32:50 +0800 (CST)
+X-QQ-SSF: 01200000002000D0V000B00A0000000
+X-QQ-FEAT: zW5H9jc4KG5qk2INlrOP0oS9aFEXIUGWb1JwxtxbbF7iDK84gQmYLdPeVVZPn
+        UvasRXhCpwWJbIxwFY9KHzOHNQu8BsDVeK3i4ofJpmf6dnH+uUe1FVlFbEIb0r4baDoUW2W
+        YanngRC4rPxrBFpafMd/y0dAlHsQE291QGGPnULqyKsSZX7g4t7JAiorA9fUJ/x1b0XDJ4u
+        UwJ7ojKQdhByAAWoTb1X4/dyQ8ucSc7kX4bopfhI51vptYKUBSM/P2zCp7yVibcOePQglAj
+        zCCq77kf/8V0783pvUNeDavvPtquL8P4KF2bY0HZrxLjJ6gZgyhjNiesB1ezyYWi+dFKX7a
+        EmzvyxkEmDYcwfKIzGkqENi4Sf8b+OxupCFvMBmVUh2NVIdBfgwSAUyD/4KAQ==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11068915257765438877
+X-BIZMAIL-ID: 12040008740416056767
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de
 Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-riscv@lists.infradead.org, w@1wt.eu
-Subject: Re: [PATCH v4 07/10] tools/nolibc: clean up mmap() support
-Date:   Fri, 23 Jun 2023 03:08:43 +0800
-Message-Id: <20230622190843.1189684-1-falcon@tinylab.org>
+Subject: Re: [PATCH v4 10/10] selftests/nolibc: add mmap and munmap test cases
+Date:   Fri, 23 Jun 2023 03:32:49 +0800
+Message-Id: <20230622193249.1190336-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <31d85464-5731-4df6-8fcd-2b0be11eac90@t-8ch.de>
-References: <31d85464-5731-4df6-8fcd-2b0be11eac90@t-8ch.de>
+In-Reply-To: <bff82ea6-610b-4471-a28b-6c76c28604a6@t-8ch.de>
+References: <bff82ea6-610b-4471-a28b-6c76c28604a6@t-8ch.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,115 +54,112 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi, Thomas
 
-> On 2023-06-19 23:51:20+0800, Zhangjin Wu wrote:
-> > Do several cleanups together:
+> On 2023-06-19 23:55:41+0800, Zhangjin Wu wrote:
+> > Three mmap/munmap related test cases are added:
 > > 
-> > - Since all supported architectures have my_syscall6() now, remove the
-> >   #ifdef check.
+> > - mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL)
 > > 
-> > - Move the mmap() related macros to tools/include/nolibc/types.h
+> >   The length argument must be greater than 0, otherwise, fail with -EINVAL.
 > > 
-> > - Apply the new __sysret() to convert the calling of sys_map() to
-> >   oneline code
+> > - munmap((void *)-1, 4*1024), -1, EINVAL)
+> > 
+> >   Invalid (void *)-1 address fail with -EINVAL.
+> > 
+> > - test_mmap_munmap(4*1024)
+> > 
+> >   It finds a init file, mmap() it and then munmap().
 > > 
 > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 > > ---
-> >  tools/include/nolibc/sys.h   | 24 +-----------------------
-> >  tools/include/nolibc/types.h | 11 +++++++++++
-> >  2 files changed, 12 insertions(+), 23 deletions(-)
+> >  tools/testing/selftests/nolibc/nolibc-test.c | 31 ++++++++++++++++++++
+> >  1 file changed, 31 insertions(+)
 > > 
-> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > index 8a6e16472d54..1c02cec3bcd9 100644
-> > --- a/tools/include/nolibc/sys.h
-> > +++ b/tools/include/nolibc/sys.h
-> > @@ -624,26 +624,11 @@ int mknod(const char *path, mode_t mode, dev_t dev)
-> >  	return __sysret(sys_mknod(path, mode, dev));
+> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> > index 80ab29e2887c..f7c0ca72cb28 100644
+> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > @@ -592,6 +592,34 @@ static int test_stat_timestamps(void)
+> >  	return 0;
 > >  }
 > >  
-> > -#ifndef MAP_SHARED
-> > -#define MAP_SHARED		0x01	/* Share changes */
-> > -#define MAP_PRIVATE		0x02	/* Changes are private */
-> > -#define MAP_SHARED_VALIDATE	0x03	/* share + validate extension flags */
-> > -#endif
-> > -
-> > -#ifndef MAP_FAILED
-> > -#define MAP_FAILED ((void *)-1)
-> > -#endif
-> > -
-> >  #ifndef sys_mmap
-> >  static __attribute__((unused))
-> >  void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
-> >  	       off_t offset)
+> > +int test_mmap_munmap(int size)
+> > +{
+> > +	char init_files[5][20] = {"/init", "/sbin/init", "/etc/init", "/bin/init", "/bin/sh"};
 > 
-> This could return a plain integer type instead to save some casts.
-> Not sure if API compatibility is guaranteed for the raw sys_ functions.
->
+> Why not /proc/1/exe or even /proc/self/exe?
+> 
+> I know your other series tries to remove the procfs dependency, but
+> we're not there yet :-).
+> 
 
-Seems musl simply not provide the sys_xxx() functions, but let the library
-routines call __syscall() directly. If we can treat these sys_xxx() as internal
-functions, perhaps we can simply let the return type of sys_xxx() as 'long' to.
+Yeah, '/proc/self/exe' is a choice, if so, the 'has_proc' should be added ;-)
 
-    $ grep "^void \*sys_" -ur tools/include/nolibc/sys.h 
-    void *sys_brk(void *addr)
-    void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
+> Also does it make sense to pass a size parameter?
+> Why not use either PAGE_SIZE or the real size of the binary from
+> fstat().
+> 
+
+Ok, as the manpage of mmap shows:
+
+       For mmap(), offset must be a multiple of the underlying huge page
+       size.  The system automatically aligns length to be a multiple of
+       the underlying huge page size.
+
+       For munmap(), addr, and length must both be a multiple of the
+       underlying huge page size.
+
+perhaps we should do further tests:
+
+* the real size/length
+* even > the real size
+* the PAGE_SIZE
+* not aligned with PAGE_SIZE
+
+If such tests are required, the 'size' and even 'offset' arguments could be
+provided to cover different combination or we do such tests internally, then,
+the arguments are not required.
 
 Thanks,
 Zhangjin
 
-
-> >  {
-> > -#ifndef my_syscall6
-> > -	/* Function not implemented. */
-> > -	return (void *)-ENOSYS;
-> > -#else
-> > -
-> >  	int n;
-> >  
-> >  #if defined(__NR_mmap2)
-> > @@ -654,20 +639,13 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
-> >  #endif
-> >  
-> >  	return (void *)my_syscall6(n, addr, length, prot, flags, fd, offset);
-> > -#endif
-> >  }
-> >  #endif
-> >  
-> >  static __attribute__((unused))
-> >  void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
-> >  {
-> > -	void *ret = sys_mmap(addr, length, prot, flags, fd, offset);
-> > -
-> > -	if ((unsigned long)ret >= -4095UL) {
-> > -		SET_ERRNO(-(long)ret);
-> > -		ret = MAP_FAILED;
-> > -	}
-> > -	return ret;
-> > +	return (void *)__sysret((unsigned long)sys_mmap(addr, length, prot, flags, fd, offset));
-> >  }
-> >  
-> >  static __attribute__((unused))
-> > diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-> > index f96e28bff4ba..f889d4e0ac7e 100644
-> > --- a/tools/include/nolibc/types.h
-> > +++ b/tools/include/nolibc/types.h
-> > @@ -81,6 +81,17 @@
-> >  #define MAXPATHLEN     (PATH_MAX)
-> >  #endif
-> >  
-> > +/* flags for mmap */
-> > +#ifndef MAP_SHARED
-> > +#define MAP_SHARED		0x01	/* Share changes */
-> > +#define MAP_PRIVATE		0x02	/* Changes are private */
-> > +#define MAP_SHARED_VALIDATE	0x03	/* share + validate extension flags */
-> > +#endif
+> > +	int ret, fd, i;
+> > +	void *mem;
 > > +
-> > +#ifndef MAP_FAILED
-> > +#define MAP_FAILED ((void *)-1)
-> > +#endif
+> > +	for (i = 0; i < 5; i++) {
+> > +		ret = fd = open(init_files[i], O_RDONLY);
+> > +		if (ret < 0)
+> > +			continue;
+> > +		else
+> > +			break;
+> > +	}
+> > +	if (ret < 0)
+> > +		return ret;
 > > +
-> >  /* whence values for lseek() */
-> >  #define SEEK_SET       0
-> >  #define SEEK_CUR       1
+> > +	mem = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+> > +	if (mem == MAP_FAILED)
+> > +		return -1;
+> > +
+> > +	ret = munmap(mem, size);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	return close(fd);
+> > +}
+> > +
+> > +
+> >  /* Run syscall tests between IDs <min> and <max>.
+> >   * Return 0 on success, non-zero on failure.
+> >   */
+> > @@ -666,6 +694,9 @@ int run_syscall(int min, int max)
+> >  		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
+> >  		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
+> >  		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
+> > +		CASE_TEST(mmap_bad);          EXPECT_PTRER(1, mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL); break;
+> > +		CASE_TEST(munmap_bad);        EXPECT_SYSER(1, munmap((void *)-1, 0), -1, EINVAL); break;
+> > +		CASE_TEST(mmap_good);         EXPECT_SYSZR(1, test_mmap_munmap(4*1024)); break;
+> >  		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
+> >  		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
+> >  		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
 > > -- 
 > > 2.25.1
 > > 
