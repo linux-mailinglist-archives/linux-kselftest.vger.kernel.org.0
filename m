@@ -2,35 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDD07394AD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 03:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014467394B7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Jun 2023 03:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjFVBeK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Jun 2023 21:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
+        id S229530AbjFVBgG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Jun 2023 21:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjFVBeJ (ORCPT
+        with ESMTP id S229673AbjFVBgF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 21:34:09 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3D91FC6
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 18:34:03 -0700 (PDT)
+        Wed, 21 Jun 2023 21:36:05 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AEB185
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jun 2023 18:36:03 -0700 (PDT)
 Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id E594A24002D
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 03:34:01 +0200 (CEST)
+        by mout02.posteo.de (Postfix) with ESMTPS id A48CB240107
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jun 2023 03:36:01 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1687397641; bh=Qo7/utFY+AUkkN8SfWpvXJ8a9KR8TVuJ4Y5tbnHu3+4=;
+        t=1687397761; bh=vn5lWO9L26Hc+cT/azimR/ufDacqIFsyS9y1ITX9c+Y=;
         h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
          Content-Transfer-Encoding:From;
-        b=nDlet/DGQtB076LH/Ikm3SyWNrgEvqu1HAGDpHrcTdRcJuBKduw6R59CfsoD0lWJ7
-         KRpMnwyfbEQkswUZtBgbjjP0ZwTxZ7io6D0gHeTb/EGiMFNXLvNkgpV2zVILzoUJ8X
-         cLZoTz4dua/vyfp7cs5k3tbYNXGY+CZkVx17/jrIPlAJ+7tm4czTWZrPJ1aHdMU91/
-         s20jeQKR/r+IEaezGpcZhA7XCz5e81OkAlsJacDh3hs3P4FIz3fZR9xlZFvsMp36x6
-         f90UzZ6qvD1d/nxgKPmsTG0dOkzZPhoRBSrAXuCDwcJFTUHH2NaMpUAdytA+V+xHu7
-         pKBx/d3UIkFnA==
+        b=EylOBdjc7dp88u898CPNSrTu/ltrxjDY0bDTIW3B9ZkgQVwDnWo8gwTU25mdpY7HG
+         nQ9d2vuTXWne4OWH/VNRsqjDJ7ri+vh7Ib5C1glP84wPZb/d2wpPbk3IRGalCUzlHv
+         sP2OAcbXccVUUpgECJC6FvK2IAR1zUNgahtkTu2zqi01L17dmK5JYejsiM/2FVQ3sH
+         4Rv9FtZiuak6UqnhnQAXATWxs4nWbqxEsYdj+YyoQx0SpjsP7TVUtH+LVYt910xIfc
+         oMHH3FI9zZvwaXbeoh7t4yskIuCUW9RWUE7bkWV/p45QqPT1Bp8Gn3Jl+zLSs/jl+p
+         mXl52eYvBbkQw==
 Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4QmjZV4L7Sz6twX;
-        Thu, 22 Jun 2023 03:33:54 +0200 (CEST)
+        by submission (posteo.de) with ESMTPSA id 4Qmjcp1kcSz6twX;
+        Thu, 22 Jun 2023 03:35:53 +0200 (CEST)
 From:   Yueh-Shun Li <shamrocklee@posteo.net>
 To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
         Tony Nguyen <anthony.l.nguyen@intel.com>,
@@ -45,9 +45,9 @@ Cc:     linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
         linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
         mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, Yueh-Shun Li <shamrocklee@posteo.net>
-Subject: [PATCH 7/8] selftests: mptcp: connect: fix comment typo
-Date:   Thu, 22 Jun 2023 01:26:35 +0000
-Message-Id: <20230622012627.15050-8-shamrocklee@posteo.net>
+Subject: [PATCH 8/8] scripts/spelling.txt: Add "transmit" patterns
+Date:   Thu, 22 Jun 2023 01:26:37 +0000
+Message-Id: <20230622012627.15050-9-shamrocklee@posteo.net>
 In-Reply-To: <20230622012627.15050-1-shamrocklee@posteo.net>
 References: <20230622012627.15050-1-shamrocklee@posteo.net>
 MIME-Version: 1.0
@@ -63,28 +63,42 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Spell "transmissions" properly.
-
-Found by searching for keyword "tranm".
+Add "transmit"-related patterns misspelled with the first "s" missing.
 
 Signed-off-by: Yueh-Shun Li <shamrocklee@posteo.net>
 ---
- tools/testing/selftests/net/mptcp/mptcp_connect.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/spelling.txt | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.sh b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-index 773dd770a567..13561e5bc0cd 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-@@ -809,7 +809,7 @@ run_tests_disconnect()
- 
- 	cat $cin $cin $cin > "$cin".disconnect
- 
--	# force do_transfer to cope with the multiple tranmissions
-+	# force do_transfer to cope with the multiple transmissions
- 	sin="$cin.disconnect"
- 	cin="$cin.disconnect"
- 	cin_disconnect="$old_cin"
+diff --git a/scripts/spelling.txt b/scripts/spelling.txt
+index f8bd6178d17b..c81e489ba4cf 100644
+--- a/scripts/spelling.txt
++++ b/scripts/spelling.txt
+@@ -1319,6 +1319,12 @@ ressource||resource
+ ressources||resources
+ restesting||retesting
+ resumbmitting||resubmitting
++retranmission||retransmission
++retranmissions||retransmissions
++retranmit||retransmit
++retranmits||retransmits
++retranmitted||retransmitted
++retranmitting||retransmitting
+ retransmited||retransmitted
+ retreived||retrieved
+ retreive||retrieve
+@@ -1553,6 +1559,11 @@ tranasction||transaction
+ tranceiver||transceiver
+ tranfer||transfer
+ tranmission||transmission
++tranmissions||transmissions
++tranmit||transmit
++tranmits||transmits
++tranmitted||transmitted
++tranmitting||transmitting
+ transcevier||transceiver
+ transciever||transceiver
+ transferd||transferred
 -- 
 2.38.1
 
