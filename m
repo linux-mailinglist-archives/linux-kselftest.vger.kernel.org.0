@@ -2,118 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C6F73B445
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 11:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C6973B2E8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 10:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbjFWJ7e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Jun 2023 05:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
+        id S231702AbjFWIu6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Jun 2023 04:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjFWJ7d (ORCPT
+        with ESMTP id S231572AbjFWIu6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:59:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D287E75;
-        Fri, 23 Jun 2023 02:59:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4A82619E6;
-        Fri, 23 Jun 2023 09:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59253C433C0;
-        Fri, 23 Jun 2023 09:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687514371;
-        bh=4Sre3Xe85q5AdiCISxJI7jZ0ap6BzfWgIsXsmS9GAeg=;
-        h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
-        b=qF0FqNbgti2kUjCNRZktFY/T7IkOS0lKFWJ9d35XUkpV//Dbgvb/A+EveLG/fgnVo
-         UBdskociHfOd35HYD5d9Ejx+hHn5FlaaMy1ZxRFsCZxAIRQMdjXNjn/LhxbPPpS4be
-         BwZ1+tg5L/ix1eyqDu0EpvEBHyMUsxCZMm5YLzXAE4Rg/2NbYGcaow+8cYsmm97kTk
-         AAWHCTCDYVo4rlXoCnoAy2LoQo9yGxuh3RbXT04+6Yc6HrBRpFZVUJ5Tq0X8HQNY8L
-         CVrz3xO+Qv32lcWcKkaFiQ3SLSVKXTK1PTXOcgc1jqkceav+NXiglVIbSD3TFJl6zl
-         chQQUgcz8Krmw==
-Message-ID: <3719669bc40890e3a8221593ff8a178411ad749b.camel@kernel.org>
-Subject: Re: [PATCH] fcntl.2: document F_UNLCK F_OFD_GETLK extension
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stas Sergeev <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-In-Reply-To: <20230621152214.2720319-4-stsp2@yandex.ru>
-References: <20230621152214.2720319-1-stsp2@yandex.ru>
-         <20230621152214.2720319-4-stsp2@yandex.ru>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 23 Jun 2023 04:50:58 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6C31706;
+        Fri, 23 Jun 2023 01:50:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=TK9RukHDlDjrby2IyF7+J31ZsckbWp6T46JLpvbSxlc=; b=H0lw14iivXlqc3vMBLxKIMpWdT
+        typiAsoDN7KmImH7Oi2XvfY5lKgMmUz+nD/jimGt7mS2jdfoCbXxlVOhyyduIFnQ38j8h5DaWT2pN
+        zUZoepuuXx7/N5C/BTYwBcN/TO30bkdWw8Ga1r2iYkQ/Cpyr3fzW0+A/ImYy3I88C7JfYeulCg82e
+        EZ8qHOS8qOhGmRfjcrg37Xsg4rsrBcqtK7C9R1RIXuAKGWlMtLb7mz0581U12E25YG7MZAUz0lCAV
+        ni7ioufDkt4TY/9v8MT3uKCWrITVO+lnrnpEDVIPEOAABp60i1/JM7d1VnF5lx9QO4QRUaWYsML81
+        mQhPw9NQ==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qCcVF-0009Zf-Qu; Fri, 23 Jun 2023 10:50:49 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qCcVF-0007SR-6L; Fri, 23 Jun 2023 10:50:49 +0200
+Subject: Re: [PATCH bpf-next v3 1/2] net: bpf: Always call BPF cgroup filters
+ for egress.
+To:     Kui-Feng Lee <sinquersw@gmail.com>, Yonghong Song <yhs@meta.com>,
+        Kui-Feng Lee <thinker.li@gmail.com>, bpf@vger.kernel.org,
+        ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        kernel-team@meta.com, andrii@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, shuah@kernel.org, john.fastabend@gmail.com,
+        sdf@google.com, mykolal@fb.com, linux-kselftest@vger.kernel.org,
+        jolsa@kernel.org, haoluo@google.com
+Cc:     Kui-Feng Lee <kuifeng@meta.com>
+References: <20230620171409.166001-1-kuifeng@meta.com>
+ <20230620171409.166001-2-kuifeng@meta.com>
+ <4d46ba3a-61e9-2482-a359-7a8805f1dbc8@meta.com>
+ <2693aaa4-eb33-553c-291c-3eb555452ea6@gmail.com>
+ <94226479-8d79-cc83-9ecf-6db0b376a7fd@meta.com>
+ <461e9be3-d533-d727-8ef9-0e20972ae0b4@iogearbox.net>
+ <e22923d0-3241-2b2e-6c9e-c41cd6c10997@gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <674a12a9-3776-1637-f132-9c0bf692b18a@iogearbox.net>
+Date:   Fri, 23 Jun 2023 10:50:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Date:   Thu, 22 Jun 2023 08:03:53 -0400
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e22923d0-3241-2b2e-6c9e-c41cd6c10997@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26948/Fri Jun 23 09:28:15 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2023-06-21 at 20:22 +0500, Stas Sergeev wrote:
-> F_UNLCK has the special meaning when used as a lock type on input.
-> It returns the information about any lock found in the specified
-> region on that particular file descriptor. Locks on other file
-> descriptors are ignored by F_UNLCK.
->=20
-> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
->=20
-> CC: Jeff Layton <jlayton@kernel.org>
-> CC: Chuck Lever <chuck.lever@oracle.com>
-> CC: Alexander Viro <viro@zeniv.linux.org.uk>
-> CC: Christian Brauner <brauner@kernel.org>
-> CC: linux-fsdevel@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> CC: Shuah Khan <shuah@kernel.org>
-> CC: linux-kselftest@vger.kernel.org
-> CC: linux-api@vger.kernel.org
->=20
-> ---
->  man2/fcntl.2 | 7 +++++++
->  1 file changed, 7 insertions(+)
->=20
-> diff --git a/man2/fcntl.2 b/man2/fcntl.2
-> index 7b5604e3a..e3e3e7b8c 100644
-> --- a/man2/fcntl.2
-> +++ b/man2/fcntl.2
-> @@ -604,6 +604,13 @@ then details about one of these locks are returned v=
-ia
->  .IR lock ,
->  as described above for
->  .BR F_GETLK .
-> +.B F_UNLCK
-> +has the special meaning when put into
-> +.I l_type
-> +as an input. It returns the information about any lock in the specified
-> +range on that particular file descriptor. The locks on other file
-> +descriptors are ignored by
-> +.BR F_UNLCK .
->  .PP
->  In the current implementation,
->  .\" commit 57b65325fe34ec4c917bc4e555144b4a94d9e1f7
+On 6/23/23 1:55 AM, Kui-Feng Lee wrote:
+> On 6/22/23 13:06, Daniel Borkmann wrote:
+>> On 6/22/23 8:28 PM, Yonghong Song wrote:
+>>> On 6/22/23 10:15 AM, Kui-Feng Lee wrote:
+>>>> On 6/21/23 20:37, Yonghong Song wrote:
+>>>>> On 6/20/23 10:14 AM, Kui-Feng Lee wrote:
+>>>>>> Always call BPF filters if CGROUP BPF is enabled for EGRESS without
+>>>>>> checking skb->sk against sk.
+>>>>>>
+>>>>>> The filters were called only if skb is owned by the sock that the
+>>>>>> skb is sent out through.  In another words, skb->sk should point to
+>>>>>> the sock that it is sending through its egress.  However, the filters would
+>>>>>> miss SYNACK skbs that they are owned by a request_sock but sent through
+>>>>>> the listening sock, that is the socket listening incoming connections.
+>>>>>> This is an unnecessary restrict.
+>>>>>
+>>>>> The original patch which introduced 'sk == skb->sk' is
+>>>>>    3007098494be  cgroup: add support for eBPF programs
+>>>>> There are no mentioning in commit message why 'sk == skb->sk'
+>>>>> is needed. So it is possible that this is just restricted
+>>>>> for use cases at that moment. Now there are use cases
+>>>>> where 'sk != skb->sk' so removing this check can enable
+>>>>> the new use case. Maybe you can add this into your commit
+>>>>> message so people can understand the history of 'sk == skb->sk'.
+>>>>
+>>>> After checking the code and the Alexei's comment[1] again, this check
+>>>> may be different from what I thought. In another post[2],
+>>>> Daniel Borkmann mentioned
+>>>>
+>>>>      Wouldn't that mean however, when you go through stacked devices that
+>>>>      you'd run the same eBPF cgroup program for skb->sk multiple times?
+>>>>
+>>>> I read this paragraph several times.
+>>>> This check ensures the filters are only called for the device on
+>>>> the top of a stack.  So, I probably should change the check to
+>>>>
+>>>>      sk == skb_to_full_sk(skb)
+>>>
+>>> I think this should work. It exactly covers your use case:
+>>>    they are owned by a request_sock but sent through
+>>>    the listening sock, that is the socket listening incoming connections
+>>> and sk == skb->sk for non request_sock/listening_sock case.
+>>
+>> Just a thought, should the test look like the below?
+>>
+>>          int __ret = 0;                                                         \
+>>          if (cgroup_bpf_enabled(CGROUP_INET_EGRESS) && sk) {                    \
+>>                  typeof(sk) __sk = sk_to_full_sk(sk);                           \
+>>                  if (sk_fullsock(__sk) && __sk == skb_to_full_sk(skb) &&        \
+>>                      cgroup_bpf_sock_enabled(__sk, CGROUP_INET_EGRESS))         \
+>>                          __ret = __cgroup_bpf_run_filter_skb(__sk, skb,         \
+>> CGROUP_INET_EGRESS); \
+>> }                                                                      \
+>>
+>> Iow, we do already convert __sk to full sk, so we should then also use that
+>> for the test with skb_to_full_sk(skb).
+> 
+> Agree!
 
+It would also be useful to do an in-depth analysis for the commit msg in which
+cases the sk == skb->sk matches and sk was not a full sock (but __sk is) given
+the __sk = sk_to_full_sk(sk) exists in the code to document which situation this
+is covering in the existing code (... perhaps it used to work back then for
+synack just that later changes altered it without anyone noticing until now).
 
-We need to be pedantic for manpages. A "file description" is the
-representation of the open file in the kernel (basically, the "struct
-file" in the kernel). A file _descriptor_ is the numeric identifier
-returned by open() and similar functions.
-
-The locks are owned by the file description, so that would be the better
-term to use here. I think you want something like:
-
-"When the l_type is set to F_UNLCK, returned locks are limited to ones
-set on the given file description. Locks set on other file descriptions
-are ignored on F_GETLK requests with the l_type set to F_UNLCK."
-
---=20
-Jeff Layton <jlayton@kernel.org>
+Thanks,
+Daniel
