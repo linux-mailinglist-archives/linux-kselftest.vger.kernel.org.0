@@ -2,166 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C025E73B3E6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 11:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E16173B4A7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 12:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjFWJod (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Jun 2023 05:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
+        id S231458AbjFWKJa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Jun 2023 06:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjFWJoc (ORCPT
+        with ESMTP id S231424AbjFWKJO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:44:32 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD241FF9
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jun 2023 02:44:27 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so8952a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jun 2023 02:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687513466; x=1690105466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uECgceGWceBpnEwgVEt1AFSmdXNTa/+8ZyNWq8IpWMk=;
-        b=Kbr+ZwwHYHvA0TCLJ0MdIwK/ccEwxx5KSPma0dmAvQIY6kj9M5JLiT59I+c/izkmv2
-         n9pmwQxDJQNjmwworyPbaKeC3Ld8nQ4YzJQUl81n0uzJKWW+y1YBMTq+bAxjaNy+2Uk1
-         2+c6VxKT2l9oN0UJs9rmXFiz2wziDEW+FMecIVeRpyPC+3p6h7YtB2bWAnfvkjFG019s
-         SvcL3SBhcYvAVeuiLFX4CwomKL1yZfd3JUWKnS/0/hgwcAMoHAZfCNAKfXwtIiCjg6jh
-         Ae993CrxqBpmSq0aTmVtiKkCd/JgjSefymLwf4R5lFK8ec0c85cp6c0CFc3gblvcnhWa
-         1m6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687513466; x=1690105466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uECgceGWceBpnEwgVEt1AFSmdXNTa/+8ZyNWq8IpWMk=;
-        b=TsQ0siqJeZ4/HJTgZ7x9z9F60zQOZc3O9ntCjEwI4gK9a28TJy7Qmq7afwQUG5CsrE
-         HtY07WiSi5vKKE1mevPJnBSS6Apw2URdRe2ks0/NV3QMvx8NTXOkGunOTgQNs2wYe007
-         vo87e6OKJ51yYCpS0oa1me5sINc34oZJvD4e3DSyPQk7LtArRTU7R68NfmZoPp5EZXWj
-         cF93ZUiHgInR4UxN8wk3ytGd2iiIvPihC3p5ZEljnmT9S2jn883ven9etheI5TPW9S2C
-         7kfEnmkOMdGW4yGeXbzJn9gnC5iG6PybLUIdU6bAWRgX9+n1gYQ4Tnh/JShxr4Eo9J0h
-         gpVA==
-X-Gm-Message-State: AC+VfDx5pZ21e36bsF/ef1+NooiqBzFkGgl/k80zOroZGzHjScSTbKyK
-        HvH/oajrxeCtgP2TSIlOrzTxWhnO80pXZYsvPwSX/Q==
-X-Google-Smtp-Source: ACHHUZ6rqOZ455iJdXd6CS4M6p+mA/ZNKARrMmKzGjtlcQiR2QyldrbL8+MKATVwRLr7V20zWPJywlF1j6AsPkZ9OkM=
-X-Received: by 2002:a50:d08c:0:b0:516:6453:1b76 with SMTP id
- v12-20020a50d08c000000b0051664531b76mr51906edd.5.1687513465752; Fri, 23 Jun
- 2023 02:44:25 -0700 (PDT)
+        Fri, 23 Jun 2023 06:09:14 -0400
+X-Greylist: delayed 62093 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Jun 2023 03:07:49 PDT
+Received: from forward502b.mail.yandex.net (forward502b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d502])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3791D10F1;
+        Fri, 23 Jun 2023 03:07:49 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net [IPv6:2a02:6b8:c08:a497:0:640:fcbf:0])
+        by forward502b.mail.yandex.net (Yandex) with ESMTP id 6CAAA5E6F7;
+        Fri, 23 Jun 2023 13:07:46 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id h7EVnbTDUqM0-ElAawmfA;
+        Fri, 23 Jun 2023 13:07:45 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687514865;
+        bh=ypufzCakK8SokYucAEE7VSUnBPAaMt3NHttyycgl8oQ=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=BcbxT0a4yghZPCJpFPVDIzZh0rtc6FX4SgQteBgtMRRa+lSqA8E6v9++RJqVCpiO0
+         2KcAUYG9ijvExnhW1VTNx6S3kgFoE29MJF0SI3xzJ1IuxoPgCuft9Tk1Jqzwa93PAb
+         Wa4uosc0RQhGqDoyGO0SvkQwDYg6RV4wZojPdhnI=
+Authentication-Results: mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <12ea42ec-95f3-6213-95e8-77c5ad64da25@yandex.ru>
+Date:   Fri, 23 Jun 2023 15:07:43 +0500
 MIME-Version: 1.0
-References: <20230615141144.665148-1-usama.anjum@collabora.com>
- <20230615141144.665148-3-usama.anjum@collabora.com> <ZJHp6hSeS6lMo7qx@gmail.com>
- <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com> <ZJNTWV+JZ+tTMdcp@gmail.com>
- <c8c3f983-8189-e602-157a-84ca1d8984dd@collabora.com>
-In-Reply-To: <c8c3f983-8189-e602-157a-84ca1d8984dd@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Fri, 23 Jun 2023 11:44:14 +0200
-Message-ID: <CABb0KFFEiTr4TfYnAOOd8tODEaY_KBE2EjNBEJqX6RjxZpCjZA@mail.gmail.com>
-Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] fcntl.2: document F_UNLCK F_OFD_GETLK extension
+Content-Language: en-US
+To:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
         Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
+References: <20230621152214.2720319-1-stsp2@yandex.ru>
+ <20230621152214.2720319-4-stsp2@yandex.ru>
+ <3719669bc40890e3a8221593ff8a178411ad749b.camel@kernel.org>
+From:   stsp <stsp2@yandex.ru>
+In-Reply-To: <3719669bc40890e3a8221593ff8a178411ad749b.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 22 Jun 2023 at 12:21, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 6/22/23 12:45=E2=80=AFAM, Andrei Vagin wrote:
-> > On Wed, Jun 21, 2023 at 11:34:54AM +0500, Muhammad Usama Anjum wrote:
-> >> On 6/20/23 11:03=E2=80=AFPM, Andrei Vagin wrote:
-[...]
-> >>> should it be PM_SCAN_FOUND_MAX_PAGES? Otherwise, it fails the ioctl e=
-ven
-> >>> if it has handled some pages already.
-> >> It is a double edge sword. If we don't return error, user will never k=
-now
-> >> that he needs to specify more max_pages or his output buffer is small =
-and
-> >> not coverig the entire range. The real purpose here that user gets awa=
-re
-> >> that he needs to specify full hugetlb range and found pages should cov=
-er
-> >> the entire range as well.
-> >
-> > but if PM_SCAN_OP_WP is set, this error will be fatal, because some
-> > pages can be marked write-protected, but they are not be reported to
-> > user-space.
-> >
-> > I think the ioctl has to report back the end address of the handled
-> > region. It is like read and write syscalls that can return less data
-> > than requested.
-> This is good point. I'll abort the walk here instead of retuning the erro=
-r
-> to user.
 
-It would be great if the ioctl returned the address the walk finished
-at. This would remove the special case for "buffer full after full
-page was added" and if it happens that despite `max_pages` limit was
-reached but no more pages would need to be added the caller would not
-have to call the ioctl again on the remaining range.
+22.06.2023 17:03, Jeff Layton пишет:
+> We need to be pedantic for manpages. A "file description" is the
+> representation of the open file in the kernel (basically, the "struct
+> file" in the kernel). A file _descriptor_ is the numeric identifier
+> returned by open() and similar functions.
 
-[...]
-> >>> How long can it take to run this loop? Should we interrupt it if a
-> >>> signal has been queued?
-> >> I'm following mincore and pagemap_read here. There is no such thing th=
-ere.
-> >> IOCTL is performing what user has requested.
-> >
-> > In case of pagemap, its buffer is limited by MAX_RW_COUNT (0x7ffff000),
-> > so it can handle maximum 0xffffe00 pages in one iteration.  Do you have=
- any
-> > limits for input parameters?
-> >
-> >> If the execution time is a
-> >> concern, user should have called the IOCTL on shorter address range.
-> >
-> > It doesn't work this way. There can be many users and signals has to be
-> > delivered in a reasonable time. One of the obvious examples when a sign=
-al
-> > has to be delivered asap is OOM.
-> This IOCTL is just like mincore, but with other flags and functionalities=
-.
-> Mincore doesn't put any limit like this. I don't think we should put any
-> limit here as well.
+OK.
 
-I don't think we should treat mincore() as a good API example. Its
-interface has similar performance problems to what select() or poll()
-does. In this ioctl's case, we can limit the output at this end (large
-anyway) as it won't affect the performance if for x TiB of memory the
-call is made twice instead of once. (Returning the end of the walk
-reached would be much help here.)
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+> The locks are owned by the file description, so that would be the better
+> term to use here. I think you want something like:
+>
+> "When the l_type is set to F_UNLCK, returned locks are limited to ones
+> set on the given file description.
+This is also inaccurate, because "limited"
+implies other operations act widely.
+But actually other operations do not
+consider the "same fd" at all. So the
+reported sets by F_UNLCK and other
+ops do not overlap. Which is why I
+decided to describe it as a "special
+meaning".
