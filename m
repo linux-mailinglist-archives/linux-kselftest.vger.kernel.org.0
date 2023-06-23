@@ -2,56 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E16173B4A7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 12:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C34673B586
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 12:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjFWKJa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Jun 2023 06:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S231768AbjFWKhs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Jun 2023 06:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbjFWKJO (ORCPT
+        with ESMTP id S230516AbjFWKhp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:09:14 -0400
-X-Greylist: delayed 62093 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Jun 2023 03:07:49 PDT
-Received: from forward502b.mail.yandex.net (forward502b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d502])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3791D10F1;
-        Fri, 23 Jun 2023 03:07:49 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net [IPv6:2a02:6b8:c08:a497:0:640:fcbf:0])
-        by forward502b.mail.yandex.net (Yandex) with ESMTP id 6CAAA5E6F7;
-        Fri, 23 Jun 2023 13:07:46 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id h7EVnbTDUqM0-ElAawmfA;
-        Fri, 23 Jun 2023 13:07:45 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687514865;
-        bh=ypufzCakK8SokYucAEE7VSUnBPAaMt3NHttyycgl8oQ=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=BcbxT0a4yghZPCJpFPVDIzZh0rtc6FX4SgQteBgtMRRa+lSqA8E6v9++RJqVCpiO0
-         2KcAUYG9ijvExnhW1VTNx6S3kgFoE29MJF0SI3xzJ1IuxoPgCuft9Tk1Jqzwa93PAb
-         Wa4uosc0RQhGqDoyGO0SvkQwDYg6RV4wZojPdhnI=
-Authentication-Results: mail-nwsmtp-smtp-production-main-36.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <12ea42ec-95f3-6213-95e8-77c5ad64da25@yandex.ru>
-Date:   Fri, 23 Jun 2023 15:07:43 +0500
+        Fri, 23 Jun 2023 06:37:45 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E75273B;
+        Fri, 23 Jun 2023 03:37:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=Lk442Og9qeSuSAMtnFnHXSps46eB9vX+oT9sJwzVZUI=;
+        t=1687516628; x=1688726228; b=rq5bX+DOoTX2QnoAPE1GARiXl9V3H5DCitMRncFeT4zT8+f
+        3VhnaJWnATEKIo4071AgtZ1OOWRrjXBVOXchZufuPAZ/HwbXq07yUYOuInhTc8Ax4nnIq8r/HKqMc
+        nIw+lMkNqbsIsw2f4Iebh/fIZ1/YAOHemBM4Wf0mWrvSJ05zAFWu1HzBTsv0cvX8ssc1nW6fEqyo/
+        l8/SkCW8KuKeBQX9ovadC+v0wKw/vXsH2o0oq/Mfx6wforJlchNlwJTPsKsfW3pyNpmMYYJKhuatx
+        ySNNYDa6eCD+2WK2AjUQnOhXV4kRYrZI/sO87WfjQ7DSgYVABHgqZeVM5g+X9JXw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1qCe9m-00FgPV-1a;
+        Fri, 23 Jun 2023 12:36:46 +0200
+Message-ID: <19d17ee302892f48f9b6110ec6c2ccccf0c1b9ef.camel@sipsolutions.net>
+Subject: Re: [PATCH 0/8] Fix comment typos about "transmit"
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Yueh-Shun Li <shamrocklee@posteo.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     jgg@ziepe.ca, leon@kernel.org, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kvalo@kernel.org, jejb@linux.ibm.com,
+        pabeni@redhat.com, apw@canonical.com, joe@perches.com,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 23 Jun 2023 12:36:44 +0200
+In-Reply-To: <50a88781b9e2a80588438c315167bbec@posteo.net>
+References: <20230622012627.15050-1-shamrocklee@posteo.net>
+         <168748862634.32034.1394302200661050543.git-patchwork-notify@kernel.org>
+         <50a88781b9e2a80588438c315167bbec@posteo.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] fcntl.2: document F_UNLCK F_OFD_GETLK extension
-Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-References: <20230621152214.2720319-1-stsp2@yandex.ru>
- <20230621152214.2720319-4-stsp2@yandex.ru>
- <3719669bc40890e3a8221593ff8a178411ad749b.camel@kernel.org>
-From:   stsp <stsp2@yandex.ru>
-In-Reply-To: <3719669bc40890e3a8221593ff8a178411ad749b.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,26 +62,17 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Fri, 2023-06-23 at 08:51 +0000, Yueh-Shun Li wrote:
+>=20
+> >   - [3/8] zd1211rw: fix comment typo
+> >     (no matching commit)
+>=20
+> Should I rebase the local branch onto netdev/net-next/main
+> and send the "no matching commit" patches again?
+>=20
 
-22.06.2023 17:03, Jeff Layton пишет:
-> We need to be pedantic for manpages. A "file description" is the
-> representation of the open file in the kernel (basically, the "struct
-> file" in the kernel). A file _descriptor_ is the numeric identifier
-> returned by open() and similar functions.
+The wireless one is on our radar, no need to resend.
 
-OK.
+But: https://lore.kernel.org/r/87y1kncuh4.fsf@kernel.org
 
-
-> The locks are owned by the file description, so that would be the better
-> term to use here. I think you want something like:
->
-> "When the l_type is set to F_UNLCK, returned locks are limited to ones
-> set on the given file description.
-This is also inaccurate, because "limited"
-implies other operations act widely.
-But actually other operations do not
-consider the "same fd" at all. So the
-reported sets by F_UNLCK and other
-ops do not overlap. Which is why I
-decided to describe it as a "special
-meaning".
+johannes
