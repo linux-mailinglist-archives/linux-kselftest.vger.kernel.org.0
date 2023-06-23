@@ -2,162 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED82E73AD7E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 01:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8F573AEC0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 04:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjFVXz6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Jun 2023 19:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
+        id S231441AbjFWCuc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Jun 2023 22:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjFVXz5 (ORCPT
+        with ESMTP id S231421AbjFWCu3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jun 2023 19:55:57 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2418AE2;
-        Thu, 22 Jun 2023 16:55:56 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-573491c4deeso53602247b3.0;
-        Thu, 22 Jun 2023 16:55:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687478155; x=1690070155;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mJzEGwP9r/c1ipPx2kdGU8sYecR5Hh2FoT9ASw78Mr8=;
-        b=J4iDIgvPbFQQPXU+NmppUoz2GQupEYaVYiebV6iGOwft/gFXBcdfcOiuZo0MQpC6tF
-         TuL/tgMIWRwbzfqmFd1VVYoDWWKnTQfUIqscPnoYBR8cYkGTQt8JvSfmje0SG2Adaf6I
-         u7AqDeTeYxFc76NHOXROs/4wfLoUHG9OvlZs3wolu1reCoTJLkXRx1bpQlm3XsJFuT0V
-         1dZzHsIbkdzc4wmjgN1Lf/geConCB75dsI5mfVm3mFzN3dVDVC76bGJQbMWFuEWgLRzE
-         VULcrPAARm1OOWBPk7rcg8pMaINdHBeSCAr40srz8vL4UzEy56Xq3zQUEyTzgdAWfU6m
-         at8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687478155; x=1690070155;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mJzEGwP9r/c1ipPx2kdGU8sYecR5Hh2FoT9ASw78Mr8=;
-        b=YnnPS8R0lcEYxYy/G8TyH/mQsbl3H0GlOUjF6uh2zGbhhfC160W85HiK6DcXSPo8B1
-         Kb0YVFJ4ZKyS/AU1MhZmCWqFEP0yKbTx3LNPDSDF1D+Qf9iikkYB63jRZSkhJTtm1rZX
-         kuA53lfW1m370aSQygntfVupXY9ZqxzvVV1eOjbUNGkY1lDrUa8i142N29tViSonbnUV
-         nlrwXtPgDHWrlEmDjsS3qhIKXwcqObTf3e+43gocecY8IU1XOGRKCprBBO5kjW7eFoiI
-         cCmQ/aIdm+tt1X7GlH+vHdSLGP8e87LYCm60XF3AdxGqocPrM1efi35JDLkO/4PLjKgl
-         cLRw==
-X-Gm-Message-State: AC+VfDx0EoBDSs63da3mYyrFUabMEKix2v3I5lGOyI4xxF79KT4yNbTJ
-        3TsfXS46wqH3+462BPs6aj4=
-X-Google-Smtp-Source: ACHHUZ6Wq0AJZDNFzxNsO6eKScFweN7fjTYpYoigtpmElFu+zXa16bXm7GCEwpcUr9EJ6QXUyrJSBQ==
-X-Received: by 2002:a0d:db90:0:b0:56d:2d67:8f78 with SMTP id d138-20020a0ddb90000000b0056d2d678f78mr18764459ywe.26.1687478155165;
-        Thu, 22 Jun 2023 16:55:55 -0700 (PDT)
-Received: from ?IPV6:2600:1700:6cf8:1240:bc01:6003:eb6b:c194? ([2600:1700:6cf8:1240:bc01:6003:eb6b:c194])
-        by smtp.gmail.com with ESMTPSA id j127-20020a0df985000000b005612fc707bfsm2127772ywf.120.2023.06.22.16.55.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 16:55:54 -0700 (PDT)
-Message-ID: <e22923d0-3241-2b2e-6c9e-c41cd6c10997@gmail.com>
-Date:   Thu, 22 Jun 2023 16:55:52 -0700
+        Thu, 22 Jun 2023 22:50:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D132112;
+        Thu, 22 Jun 2023 19:50:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AAC761957;
+        Fri, 23 Jun 2023 02:50:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FCC6C433C9;
+        Fri, 23 Jun 2023 02:50:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687488626;
+        bh=9EiFCNHJdUpB+XW1zu/aSkMUksAqJahEysCGpYwwpD4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mOVmqgTDkzxHjY/uKaDRNHHy7gKk4xXwchepy/RBKuwnGRuz8kKXVdUGZvFxDmzPz
+         8e28RgQQzGfDmaHmJ5CZIUCEHWy8MOIs+IGJq54kKbkqCmo8kcZfnlWHfCG/cpQ7t/
+         MQl6UoXAIgGTFsYgoL5gyRtlpZiGoohwjv+gRsfU/oCd7QyvEIMzl+kpunI8vRDcou
+         RExwmgEqUX0YrOnw+RosZ3PVJDdq13xLqhoxRRTw/6SK+Sa1GgONnFaEuv/177fnz4
+         7vybmUpQMpWQ80Qg4SZ4AcFQB/b9h8coL/lrQOZgmgniG12C6Si1Ql29RqDwSeNqzH
+         l+5pDpsclDNKw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 54D53C395F1;
+        Fri, 23 Jun 2023 02:50:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH bpf-next v3 1/2] net: bpf: Always call BPF cgroup filters
- for egress.
-Content-Language: en-US
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@meta.com>,
-        Kui-Feng Lee <thinker.li@gmail.com>, bpf@vger.kernel.org,
-        ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        kernel-team@meta.com, andrii@kernel.org, yhs@fb.com,
-        kpsingh@kernel.org, shuah@kernel.org, john.fastabend@gmail.com,
-        sdf@google.com, mykolal@fb.com, linux-kselftest@vger.kernel.org,
-        jolsa@kernel.org, haoluo@google.com
-Cc:     Kui-Feng Lee <kuifeng@meta.com>
-References: <20230620171409.166001-1-kuifeng@meta.com>
- <20230620171409.166001-2-kuifeng@meta.com>
- <4d46ba3a-61e9-2482-a359-7a8805f1dbc8@meta.com>
- <2693aaa4-eb33-553c-291c-3eb555452ea6@gmail.com>
- <94226479-8d79-cc83-9ecf-6db0b376a7fd@meta.com>
- <461e9be3-d533-d727-8ef9-0e20972ae0b4@iogearbox.net>
-From:   Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <461e9be3-d533-d727-8ef9-0e20972ae0b4@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 0/8] Fix comment typos about "transmit"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168748862634.32034.1394302200661050543.git-patchwork-notify@kernel.org>
+Date:   Fri, 23 Jun 2023 02:50:26 +0000
+References: <20230622012627.15050-1-shamrocklee@posteo.net>
+In-Reply-To: <20230622012627.15050-1-shamrocklee@posteo.net>
+To:     Yueh-Shun Li <shamrocklee@posteo.net>
+Cc:     jgg@ziepe.ca, leon@kernel.org, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kvalo@kernel.org, jejb@linux.ibm.com,
+        kuba@kernel.org, pabeni@redhat.com, apw@canonical.com,
+        joe@perches.com, linux-rdma@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-scsi@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 22 Jun 2023 01:26:21 +0000 you wrote:
+> Fix typos about "transmit" missing the first "s"
+> found by searching with keyword "tram" in the first 7
+> patches.
+> 
+> Add related patterns to "scripts/spelling.txt" in the
+> last patch.
+> 
+> [...]
+
+Here is the summary with links:
+  - [1/8] RDMA/rxe: fix comment typo
+    (no matching commit)
+  - [2/8] i40e, xsk: fix comment typo
+    https://git.kernel.org/netdev/net-next/c/b028813ac973
+  - [3/8] zd1211rw: fix comment typo
+    (no matching commit)
+  - [4/8] scsi: fix comment typo
+    (no matching commit)
+  - [5/8] tcp: fix comment typo
+    https://git.kernel.org/netdev/net-next/c/304b1875ba02
+  - [6/8] net/tls: fix comment typo
+    https://git.kernel.org/netdev/net-next/c/a0e128ef88e4
+  - [7/8] selftests: mptcp: connect: fix comment typo
+    (no matching commit)
+  - [8/8] scripts/spelling.txt: Add "transmit" patterns
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On 6/22/23 13:06, Daniel Borkmann wrote:
-> On 6/22/23 8:28 PM, Yonghong Song wrote:
->> On 6/22/23 10:15 AM, Kui-Feng Lee wrote:
->>> On 6/21/23 20:37, Yonghong Song wrote:
->>>> On 6/20/23 10:14 AM, Kui-Feng Lee wrote:
->>>>> Always call BPF filters if CGROUP BPF is enabled for EGRESS without
->>>>> checking skb->sk against sk.
->>>>>
->>>>> The filters were called only if skb is owned by the sock that the
->>>>> skb is sent out through.  In another words, skb->sk should point to
->>>>> the sock that it is sending through its egress.  However, the 
->>>>> filters would
->>>>> miss SYNACK skbs that they are owned by a request_sock but sent 
->>>>> through
->>>>> the listening sock, that is the socket listening incoming connections.
->>>>> This is an unnecessary restrict.
->>>>
->>>> The original patch which introduced 'sk == skb->sk' is
->>>>    3007098494be  cgroup: add support for eBPF programs
->>>> There are no mentioning in commit message why 'sk == skb->sk'
->>>> is needed. So it is possible that this is just restricted
->>>> for use cases at that moment. Now there are use cases
->>>> where 'sk != skb->sk' so removing this check can enable
->>>> the new use case. Maybe you can add this into your commit
->>>> message so people can understand the history of 'sk == skb->sk'.
->>>
->>> After checking the code and the Alexei's comment[1] again, this check
->>> may be different from what I thought. In another post[2],
->>> Daniel Borkmann mentioned
->>>
->>>      Wouldn't that mean however, when you go through stacked devices 
->>> that
->>>      you'd run the same eBPF cgroup program for skb->sk multiple times?
->>>
->>> I read this paragraph several times.
->>> This check ensures the filters are only called for the device on
->>> the top of a stack.  So, I probably should change the check to
->>>
->>>      sk == skb_to_full_sk(skb)
->>
->> I think this should work. It exactly covers your use case:
->>    they are owned by a request_sock but sent through
->>    the listening sock, that is the socket listening incoming connections
->> and sk == skb->sk for non request_sock/listening_sock case.
-> 
-> Just a thought, should the test look like the below?
-> 
->          int __ret = 
-> 0;                                                         \
->          if (cgroup_bpf_enabled(CGROUP_INET_EGRESS) && sk) 
-> {                    \
->                  typeof(sk) __sk = 
-> sk_to_full_sk(sk);                           \
->                  if (sk_fullsock(__sk) && __sk == skb_to_full_sk(skb) 
-> &&        \
->                      cgroup_bpf_sock_enabled(__sk, 
-> CGROUP_INET_EGRESS))         \
->                          __ret = __cgroup_bpf_run_filter_skb(__sk, 
-> skb,         \
->                                                        
-> CGROUP_INET_EGRESS); \
->          
-> }                                                                      \
-> 
-> Iow, we do already convert __sk to full sk, so we should then also use that
-> for the test with skb_to_full_sk(skb).
-
-Agree!
-
-> 
-> Thanks,
-> Daniel
