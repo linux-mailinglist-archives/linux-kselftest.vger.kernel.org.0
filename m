@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475CC73B57A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 12:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9692F73B57D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 12:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbjFWKgv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Jun 2023 06:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S229673AbjFWKhT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Jun 2023 06:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232344AbjFWKgf (ORCPT
+        with ESMTP id S229451AbjFWKg5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:36:35 -0400
+        Fri, 23 Jun 2023 06:36:57 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCBC2979;
-        Fri, 23 Jun 2023 03:36:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA342968;
+        Fri, 23 Jun 2023 03:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687516572; x=1719052572;
+  t=1687516589; x=1719052589;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EXZQIePHrnC+4oyrdo52RNlpn5u8QhJ9eHGJ6BBZ17s=;
-  b=HLd5/BS+VbXTlxtvwlI0s+LnW1doeukLCio8yOlqHfaXr6JxDsnSUbjv
-   yEFf3P7dFGlPrQwih6qz/Cy/TRZSk+YYGoHI3L8uE5Fu3pykymQIy/TW5
-   GfpC4iQrNkwa4x+5EEKxnDd8qO9oAYG+f4EbdCFwNz+ZwjeWXNmbs1MGN
-   GFERhl4UQ+yHSNy/w1OhhYjDQYtzV772FwDsx7EMshQF6SkcIsVbWMaVn
-   nStigDtJA5kFDiSFTo6aplNHIf0WxXy49qtJT1tiWwhw9uu/Otcfj5XC0
-   JQybXoSxIBotxp8q4xPHIVc9raPC496rucPWNbIsKqh2bnmltfMA5zBrl
+  bh=d9hxFxP3+aBRBc+Ceyr9PCiVTSv/k2Q6TXUwS8frSIo=;
+  b=FNDW5Uv7uS0EQ5tXmYgO3+KVGdkpqj9xD9tEu9jPiIQ4gq01pX9GoQZG
+   5lKfooi9MNp1JoHwcSQueutFhanLu6Yut6QZwsiezfTD5A+8wYcWjTYGj
+   A1Aq0vXyUV3T3jwGXA4kSrTu2Y1U7A3p4082bUnjupFMZWYo/m1qhfqEK
+   iZw7xoVzjyPsd3ZXRbcXMVyVqEEIv9/4/b86iJiQnBR4UZefWmlgquJDL
+   MRaGAIdoKPc1yvWRc6EoDsUgAWSnNtzJb3dj+Qi7sDBtIi9V9/vI1UK2p
+   IaDy0k8+48QJlNX4b6ygFz3tN4iya2Dt7XV96V/5CB8AgwiT0LN+GQ5ln
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="447112583"
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="447112630"
 X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="447112583"
+   d="scan'208";a="447112630"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 03:36:12 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 03:36:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="715276101"
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="715276142"
 X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="715276101"
+   d="scan'208";a="715276142"
 Received: from haibo-optiplex-7090.sh.intel.com ([10.239.159.132])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 03:36:04 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 03:36:20 -0700
 From:   Haibo Xu <haibo1.xu@intel.com>
 Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         maz@kernel.org, oliver.upton@linux.dev, seanjc@google.com,
@@ -53,8 +53,8 @@ Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         James Morse <james.morse@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Zenghui Yu <yuzenghui@huawei.com>,
-        Ben Gardon <bgardon@google.com>,
         David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
         Ricardo Koller <ricarkol@google.com>,
         Vishal Annapurve <vannapurve@google.com>,
         Vipin Sharma <vipinsh@google.com>,
@@ -63,9 +63,9 @@ Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: [PATCH v4 07/12] KVM: arm64: selftests: Finish generalizing get-reg-list
-Date:   Fri, 23 Jun 2023 18:40:09 +0800
-Message-Id: <0d81728cf8b4fd931b495ac4c86d6a74e55a5230.1687515463.git.haibo1.xu@intel.com>
+Subject: [PATCH v4 08/12] KVM: arm64: selftests: Move reject_set check logic to a function
+Date:   Fri, 23 Jun 2023 18:40:10 +0800
+Message-Id: <341feff384c9f8a20ed4aac6e2dda0440d6b84f2.1687515463.git.haibo1.xu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1687515463.git.haibo1.xu@intel.com>
 References: <cover.1687515463.git.haibo1.xu@intel.com>
@@ -82,78 +82,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrew Jones <ajones@ventanamicro.com>
+No functional changes. Just move the reject_set check logic to a
+function so we can check for specific errno for specific register.
+This is a preparation for support reject_set in riscv.
 
-Add some unfortunate #ifdeffery to ensure the common get-reg-list.c
-can be compiled and run with other architectures. The next
-architecture to support get-reg-list should now only need to provide
-$(ARCH_DIR)/get-reg-list.c where arch-specific print_reg() and
-vcpu_configs[] get defined.
-
-Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+Suggested-by: Andrew Jones <ajones@ventanamicro.com>
 Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
 ---
- tools/testing/selftests/kvm/get-reg-list.c | 26 +++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+ tools/testing/selftests/kvm/aarch64/get-reg-list.c | 8 ++++++++
+ tools/testing/selftests/kvm/get-reg-list.c         | 7 ++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+index aaf035c969ec..4e2e1fe833eb 100644
+--- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
++++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+@@ -27,6 +27,14 @@ bool filter_reg(__u64 reg)
+ 	return false;
+ }
+ 
++bool reject_set_fail(__u64 reg)
++{
++	if (reg == KVM_REG_ARM64_SVE_VLS)
++		return (errno != EPERM);
++
++	return false;
++}
++
+ #define REG_MASK (KVM_REG_ARCH_MASK | KVM_REG_SIZE_MASK | KVM_REG_ARM_COPROC_MASK)
+ 
+ #define CORE_REGS_XX_NR_WORDS	2
 diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/selftests/kvm/get-reg-list.c
-index 69bb91087081..f6ad7991a812 100644
+index f6ad7991a812..b956ee410996 100644
 --- a/tools/testing/selftests/kvm/get-reg-list.c
 +++ b/tools/testing/selftests/kvm/get-reg-list.c
-@@ -98,6 +98,7 @@ void __weak print_reg(const char *prefix, __u64 id)
+@@ -98,6 +98,11 @@ void __weak print_reg(const char *prefix, __u64 id)
  	printf("\t0x%llx,\n", id);
  }
  
-+#ifdef __aarch64__
++bool __weak reject_set_fail(__u64 reg)
++{
++	return false;
++}
++
+ #ifdef __aarch64__
  static void prepare_vcpu_init(struct vcpu_reg_list *c, struct kvm_vcpu_init *init)
  {
- 	struct vcpu_reg_sublist *s;
-@@ -120,6 +121,25 @@ static void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
- 	}
- }
- 
-+static struct kvm_vcpu *vcpu_config_get_vcpu(struct vcpu_reg_list *c, struct kvm_vm *vm)
-+{
-+	struct kvm_vcpu_init init = { .target = -1, };
-+	struct kvm_vcpu *vcpu;
-+
-+	prepare_vcpu_init(c, &init);
-+	vcpu = __vm_vcpu_add(vm, 0);
-+	aarch64_vcpu_setup(vcpu, &init);
-+	finalize_vcpu(vcpu, c);
-+
-+	return vcpu;
-+}
-+#else
-+static struct kvm_vcpu *vcpu_config_get_vcpu(struct vcpu_reg_list *c, struct kvm_vm *vm)
-+{
-+	return __vm_vcpu_add(vm, 0);
-+}
-+#endif
-+
- static void check_supported(struct vcpu_reg_list *c)
- {
- 	struct vcpu_reg_sublist *s;
-@@ -139,7 +159,6 @@ static bool print_filtered;
- 
- static void run_test(struct vcpu_reg_list *c)
- {
--	struct kvm_vcpu_init init = { .target = -1, };
- 	int new_regs = 0, missing_regs = 0, i, n;
- 	int failed_get = 0, failed_set = 0, failed_reject = 0;
- 	struct kvm_vcpu *vcpu;
-@@ -149,10 +168,7 @@ static void run_test(struct vcpu_reg_list *c)
- 	check_supported(c);
- 
- 	vm = vm_create_barebones();
--	prepare_vcpu_init(c, &init);
--	vcpu = __vm_vcpu_add(vm, 0);
--	aarch64_vcpu_setup(vcpu, &init);
--	finalize_vcpu(vcpu, c);
-+	vcpu = vcpu_config_get_vcpu(c, vm);
- 
- 	reg_list = vcpu_get_reg_list(vcpu);
- 
+@@ -216,7 +221,7 @@ static void run_test(struct vcpu_reg_list *c)
+ 			if (s->rejects_set && find_reg(s->rejects_set, s->rejects_set_n, reg.id)) {
+ 				reject_reg = true;
+ 				ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
+-				if (ret != -1 || errno != EPERM) {
++				if (ret != -1 || reject_set_fail(reg.id)) {
+ 					printf("%s: Failed to reject (ret=%d, errno=%d) ", config_name(c), ret, errno);
+ 					print_reg(config_name(c), reg.id);
+ 					putchar('\n');
 -- 
 2.34.1
 
