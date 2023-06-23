@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7632973B569
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 12:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066A173B56E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 12:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbjFWKfU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Jun 2023 06:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S232268AbjFWKfi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Jun 2023 06:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232236AbjFWKfR (ORCPT
+        with ESMTP id S232209AbjFWKf3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Jun 2023 06:35:17 -0400
+        Fri, 23 Jun 2023 06:35:29 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FAD1724;
-        Fri, 23 Jun 2023 03:35:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7982114;
+        Fri, 23 Jun 2023 03:35:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687516512; x=1719052512;
+  t=1687516527; x=1719052527;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=quNRDcUJypPIG/seUf6i3WDOA80CN8cLhVMRoyeshgI=;
-  b=R9sEPK6zJUwL55gSW05hBV7RzDEIdOtHjVjhbDdn0SyLiIQWByOWbCC4
-   HozIf2PeOArmYeIv4b8eqla2W27cg4HWALNNtOwE2r5HDr5q4nK9+MK+E
-   Js0QQ40Xd9rNby5VkpCRtqQq9swp7pSuC63J3r1du4J07ftJlP2kxKCZt
-   LDz4UJJhq01FopZ6OVzmwUSPHexx2E3Cuyvb+y3F4VgnznDeQc/0SOYuz
-   7MddoCjjFCQTLJMkoavKMkIemyZ0SYXDoEe17l5Nvogsn/+E6f1EtclKd
-   aIhI0mGo45SZWK30adtO+PiRMSAvqfJ7kGOzwmv5RTZLgyDViHEvCqXwa
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="447112390"
+  bh=6K9gSvU7bcUbXrx95jbbHrZ95LKmm3Z9olehgFYx8q4=;
+  b=TfyIJfZy5mp56Ki4RJkQ6Ia+joOV0GUz9+HpVgLHLM+oZ6bvCyTostMA
+   Mr5oJEyO4xUZ/ptDdEFFHOgIJxi1lsDneeR1Ltr86cqDxmOKetWgSPxX6
+   Ie7HqxUkGW5SZoSYExWso/aXpigRz+nq+1KoJvKtOWl6PCnTtQEF2yRGa
+   IuMB/DUTxWVY2qGH1hWjbyrvKcKXUtRrMAALrCGAr+Sk8psorKz5Lm7xR
+   tBek2ueWwh/VMBFmNdx3cKyCpZ3UB0+Fk73e6pfCoSQzIJW4bnwkmPt9i
+   krMeMSuqv24ihcVzoOPnweWEG3qxECD9DIKCEcTDwRm30mYR7HH4bMxT/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="447112432"
 X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="447112390"
+   d="scan'208";a="447112432"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 03:35:11 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 03:35:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="715275904"
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="715275951"
 X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="715275904"
+   d="scan'208";a="715275951"
 Received: from haibo-optiplex-7090.sh.intel.com ([10.239.159.132])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 03:35:04 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 03:35:19 -0700
 From:   Haibo Xu <haibo1.xu@intel.com>
 Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         maz@kernel.org, oliver.upton@linux.dev, seanjc@google.com,
@@ -63,9 +63,9 @@ Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: [PATCH v4 03/12] KVM: arm64: selftests: Remove print_reg's dependency on vcpu_config
-Date:   Fri, 23 Jun 2023 18:40:05 +0800
-Message-Id: <e32ee0bdcc2bd385d0e40e112b5f1ecef49c4f37.1687515463.git.haibo1.xu@intel.com>
+Subject: [PATCH v4 04/12] KVM: arm64: selftests: Rename vcpu_config and add to kvm_util.h
+Date:   Fri, 23 Jun 2023 18:40:06 +0800
+Message-Id: <b3965189cf09d4d476e83e2388cb92c28903a36d.1687515463.git.haibo1.xu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1687515463.git.haibo1.xu@intel.com>
 References: <cover.1687515463.git.haibo1.xu@intel.com>
@@ -84,217 +84,237 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Andrew Jones <ajones@ventanamicro.com>
 
-print_reg() and its helpers only use the vcpu_config pointer for
-config_name(). So just pass the config name in instead, which is used
-as a prefix in asserts. print_reg() can now be compiled independently
-of config_name().
+Rename vcpu_config to vcpu_reg_list to be more specific and add
+it to kvm_util.h. While it may not get used outside get-reg-list
+tests, exporting it doesn't hurt, as long as it has a unique enough
+name. This is a step in the direction of sharing most of the get-
+reg-list test code between architectures.
 
 Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
 Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
 ---
- .../selftests/kvm/aarch64/get-reg-list.c      | 52 +++++++++----------
- 1 file changed, 26 insertions(+), 26 deletions(-)
+ .../selftests/kvm/aarch64/get-reg-list.c      | 60 +++++++------------
+ .../selftests/kvm/include/kvm_util_base.h     | 16 +++++
+ 2 files changed, 38 insertions(+), 38 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-index 915272c342f9..424285d39965 100644
+index 424285d39965..aae2056379f7 100644
 --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
 +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-@@ -128,7 +128,7 @@ static bool find_reg(__u64 regs[], __u64 nr_regs, __u64 reg)
- #define CORE_SPSR_XX_NR_WORDS	2
- #define CORE_FPREGS_XX_NR_WORDS	4
+@@ -37,23 +37,7 @@
+ static struct kvm_reg_list *reg_list;
+ static __u64 *blessed_reg, blessed_n;
  
--static const char *core_id_to_str(struct vcpu_config *c, __u64 id)
-+static const char *core_id_to_str(const char *prefix, __u64 id)
+-struct reg_sublist {
+-	const char *name;
+-	long capability;
+-	int feature;
+-	bool finalize;
+-	__u64 *regs;
+-	__u64 regs_n;
+-	__u64 *rejects_set;
+-	__u64 rejects_set_n;
+-};
+-
+-struct vcpu_config {
+-	char *name;
+-	struct reg_sublist sublists[];
+-};
+-
+-static struct vcpu_config *vcpu_configs[];
++static struct vcpu_reg_list *vcpu_configs[];
+ static int vcpu_configs_n;
+ 
+ #define for_each_sublist(c, s)							\
+@@ -74,9 +58,9 @@ static int vcpu_configs_n;
+ 	for_each_reg_filtered(i)						\
+ 		if (!find_reg(blessed_reg, blessed_n, reg_list->reg[i]))
+ 
+-static const char *config_name(struct vcpu_config *c)
++static const char *config_name(struct vcpu_reg_list *c)
  {
- 	__u64 core_off = id & ~REG_MASK, idx;
+-	struct reg_sublist *s;
++	struct vcpu_reg_sublist *s;
+ 	int len = 0;
  
-@@ -139,7 +139,7 @@ static const char *core_id_to_str(struct vcpu_config *c, __u64 id)
- 	case KVM_REG_ARM_CORE_REG(regs.regs[0]) ...
- 	     KVM_REG_ARM_CORE_REG(regs.regs[30]):
- 		idx = (core_off - KVM_REG_ARM_CORE_REG(regs.regs[0])) / CORE_REGS_XX_NR_WORDS;
--		TEST_ASSERT(idx < 31, "%s: Unexpected regs.regs index: %lld", config_name(c), idx);
-+		TEST_ASSERT(idx < 31, "%s: Unexpected regs.regs index: %lld", prefix, idx);
- 		return strdup_printf("KVM_REG_ARM_CORE_REG(regs.regs[%lld])", idx);
- 	case KVM_REG_ARM_CORE_REG(regs.sp):
- 		return "KVM_REG_ARM_CORE_REG(regs.sp)";
-@@ -154,12 +154,12 @@ static const char *core_id_to_str(struct vcpu_config *c, __u64 id)
- 	case KVM_REG_ARM_CORE_REG(spsr[0]) ...
- 	     KVM_REG_ARM_CORE_REG(spsr[KVM_NR_SPSR - 1]):
- 		idx = (core_off - KVM_REG_ARM_CORE_REG(spsr[0])) / CORE_SPSR_XX_NR_WORDS;
--		TEST_ASSERT(idx < KVM_NR_SPSR, "%s: Unexpected spsr index: %lld", config_name(c), idx);
-+		TEST_ASSERT(idx < KVM_NR_SPSR, "%s: Unexpected spsr index: %lld", prefix, idx);
- 		return strdup_printf("KVM_REG_ARM_CORE_REG(spsr[%lld])", idx);
- 	case KVM_REG_ARM_CORE_REG(fp_regs.vregs[0]) ...
- 	     KVM_REG_ARM_CORE_REG(fp_regs.vregs[31]):
- 		idx = (core_off - KVM_REG_ARM_CORE_REG(fp_regs.vregs[0])) / CORE_FPREGS_XX_NR_WORDS;
--		TEST_ASSERT(idx < 32, "%s: Unexpected fp_regs.vregs index: %lld", config_name(c), idx);
-+		TEST_ASSERT(idx < 32, "%s: Unexpected fp_regs.vregs index: %lld", prefix, idx);
- 		return strdup_printf("KVM_REG_ARM_CORE_REG(fp_regs.vregs[%lld])", idx);
- 	case KVM_REG_ARM_CORE_REG(fp_regs.fpsr):
- 		return "KVM_REG_ARM_CORE_REG(fp_regs.fpsr)";
-@@ -167,11 +167,11 @@ static const char *core_id_to_str(struct vcpu_config *c, __u64 id)
- 		return "KVM_REG_ARM_CORE_REG(fp_regs.fpcr)";
- 	}
- 
--	TEST_FAIL("%s: Unknown core reg id: 0x%llx", config_name(c), id);
-+	TEST_FAIL("%s: Unknown core reg id: 0x%llx", prefix, id);
- 	return NULL;
+ 	if (c->name)
+@@ -342,18 +326,18 @@ static void core_reg_fixup(void)
+ 	reg_list = tmp;
  }
  
--static const char *sve_id_to_str(struct vcpu_config *c, __u64 id)
-+static const char *sve_id_to_str(const char *prefix, __u64 id)
+-static void prepare_vcpu_init(struct vcpu_config *c, struct kvm_vcpu_init *init)
++static void prepare_vcpu_init(struct vcpu_reg_list *c, struct kvm_vcpu_init *init)
  {
- 	__u64 sve_off, n, i;
+-	struct reg_sublist *s;
++	struct vcpu_reg_sublist *s;
  
-@@ -181,37 +181,37 @@ static const char *sve_id_to_str(struct vcpu_config *c, __u64 id)
- 	sve_off = id & ~(REG_MASK | ((1ULL << 5) - 1));
- 	i = id & (KVM_ARM64_SVE_MAX_SLICES - 1);
- 
--	TEST_ASSERT(i == 0, "%s: Currently we don't expect slice > 0, reg id 0x%llx", config_name(c), id);
-+	TEST_ASSERT(i == 0, "%s: Currently we don't expect slice > 0, reg id 0x%llx", prefix, id);
- 
- 	switch (sve_off) {
- 	case KVM_REG_ARM64_SVE_ZREG_BASE ...
- 	     KVM_REG_ARM64_SVE_ZREG_BASE + (1ULL << 5) * KVM_ARM64_SVE_NUM_ZREGS - 1:
- 		n = (id >> 5) & (KVM_ARM64_SVE_NUM_ZREGS - 1);
- 		TEST_ASSERT(id == KVM_REG_ARM64_SVE_ZREG(n, 0),
--			    "%s: Unexpected bits set in SVE ZREG id: 0x%llx", config_name(c), id);
-+			    "%s: Unexpected bits set in SVE ZREG id: 0x%llx", prefix, id);
- 		return strdup_printf("KVM_REG_ARM64_SVE_ZREG(%lld, 0)", n);
- 	case KVM_REG_ARM64_SVE_PREG_BASE ...
- 	     KVM_REG_ARM64_SVE_PREG_BASE + (1ULL << 5) * KVM_ARM64_SVE_NUM_PREGS - 1:
- 		n = (id >> 5) & (KVM_ARM64_SVE_NUM_PREGS - 1);
- 		TEST_ASSERT(id == KVM_REG_ARM64_SVE_PREG(n, 0),
--			    "%s: Unexpected bits set in SVE PREG id: 0x%llx", config_name(c), id);
-+			    "%s: Unexpected bits set in SVE PREG id: 0x%llx", prefix, id);
- 		return strdup_printf("KVM_REG_ARM64_SVE_PREG(%lld, 0)", n);
- 	case KVM_REG_ARM64_SVE_FFR_BASE:
- 		TEST_ASSERT(id == KVM_REG_ARM64_SVE_FFR(0),
--			    "%s: Unexpected bits set in SVE FFR id: 0x%llx", config_name(c), id);
-+			    "%s: Unexpected bits set in SVE FFR id: 0x%llx", prefix, id);
- 		return "KVM_REG_ARM64_SVE_FFR(0)";
- 	}
- 
- 	return NULL;
+ 	for_each_sublist(c, s)
+ 		if (s->capability)
+ 			init->features[s->feature / 32] |= 1 << (s->feature % 32);
  }
  
--static void print_reg(struct vcpu_config *c, __u64 id)
-+static void print_reg(const char *prefix, __u64 id)
+-static void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_config *c)
++static void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
  {
- 	unsigned op0, op1, crn, crm, op2;
- 	const char *reg_size = NULL;
+-	struct reg_sublist *s;
++	struct vcpu_reg_sublist *s;
+ 	int feature;
  
- 	TEST_ASSERT((id & KVM_REG_ARCH_MASK) == KVM_REG_ARM64,
--		    "%s: KVM_REG_ARM64 missing in reg id: 0x%llx", config_name(c), id);
-+		    "%s: KVM_REG_ARM64 missing in reg id: 0x%llx", prefix, id);
- 
- 	switch (id & KVM_REG_SIZE_MASK) {
- 	case KVM_REG_SIZE_U8:
-@@ -243,16 +243,16 @@ static void print_reg(struct vcpu_config *c, __u64 id)
- 		break;
- 	default:
- 		TEST_FAIL("%s: Unexpected reg size: 0x%llx in reg id: 0x%llx",
--			  config_name(c), (id & KVM_REG_SIZE_MASK) >> KVM_REG_SIZE_SHIFT, id);
-+			  prefix, (id & KVM_REG_SIZE_MASK) >> KVM_REG_SIZE_SHIFT, id);
- 	}
- 
- 	switch (id & KVM_REG_ARM_COPROC_MASK) {
- 	case KVM_REG_ARM_CORE:
--		printf("\tKVM_REG_ARM64 | %s | KVM_REG_ARM_CORE | %s,\n", reg_size, core_id_to_str(c, id));
-+		printf("\tKVM_REG_ARM64 | %s | KVM_REG_ARM_CORE | %s,\n", reg_size, core_id_to_str(prefix, id));
- 		break;
- 	case KVM_REG_ARM_DEMUX:
- 		TEST_ASSERT(!(id & ~(REG_MASK | KVM_REG_ARM_DEMUX_ID_MASK | KVM_REG_ARM_DEMUX_VAL_MASK)),
--			    "%s: Unexpected bits set in DEMUX reg id: 0x%llx", config_name(c), id);
-+			    "%s: Unexpected bits set in DEMUX reg id: 0x%llx", prefix, id);
- 		printf("\tKVM_REG_ARM64 | %s | KVM_REG_ARM_DEMUX | KVM_REG_ARM_DEMUX_ID_CCSIDR | %lld,\n",
- 		       reg_size, id & KVM_REG_ARM_DEMUX_VAL_MASK);
- 		break;
-@@ -263,25 +263,25 @@ static void print_reg(struct vcpu_config *c, __u64 id)
- 		crm = (id & KVM_REG_ARM64_SYSREG_CRM_MASK) >> KVM_REG_ARM64_SYSREG_CRM_SHIFT;
- 		op2 = (id & KVM_REG_ARM64_SYSREG_OP2_MASK) >> KVM_REG_ARM64_SYSREG_OP2_SHIFT;
- 		TEST_ASSERT(id == ARM64_SYS_REG(op0, op1, crn, crm, op2),
--			    "%s: Unexpected bits set in SYSREG reg id: 0x%llx", config_name(c), id);
-+			    "%s: Unexpected bits set in SYSREG reg id: 0x%llx", prefix, id);
- 		printf("\tARM64_SYS_REG(%d, %d, %d, %d, %d),\n", op0, op1, crn, crm, op2);
- 		break;
- 	case KVM_REG_ARM_FW:
- 		TEST_ASSERT(id == KVM_REG_ARM_FW_REG(id & 0xffff),
--			    "%s: Unexpected bits set in FW reg id: 0x%llx", config_name(c), id);
-+			    "%s: Unexpected bits set in FW reg id: 0x%llx", prefix, id);
- 		printf("\tKVM_REG_ARM_FW_REG(%lld),\n", id & 0xffff);
- 		break;
- 	case KVM_REG_ARM_FW_FEAT_BMAP:
- 		TEST_ASSERT(id == KVM_REG_ARM_FW_FEAT_BMAP_REG(id & 0xffff),
--			    "%s: Unexpected bits set in the bitmap feature FW reg id: 0x%llx", config_name(c), id);
-+			    "%s: Unexpected bits set in the bitmap feature FW reg id: 0x%llx", prefix, id);
- 		printf("\tKVM_REG_ARM_FW_FEAT_BMAP_REG(%lld),\n", id & 0xffff);
- 		break;
- 	case KVM_REG_ARM64_SVE:
--		printf("\t%s,\n", sve_id_to_str(c, id));
-+		printf("\t%s,\n", sve_id_to_str(prefix, id));
- 		break;
- 	default:
- 		TEST_FAIL("%s: Unexpected coproc type: 0x%llx in reg id: 0x%llx",
--			  config_name(c), (id & KVM_REG_ARM_COPROC_MASK) >> KVM_REG_ARM_COPROC_SHIFT, id);
-+			  prefix, (id & KVM_REG_ARM_COPROC_MASK) >> KVM_REG_ARM_COPROC_SHIFT, id);
+ 	for_each_sublist(c, s) {
+@@ -364,9 +348,9 @@ static void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_config *c)
  	}
  }
  
-@@ -410,7 +410,7 @@ static void run_test(struct vcpu_config *c)
- 			__u64 id = reg_list->reg[i];
- 			if ((print_list && !filter_reg(id)) ||
- 			    (print_filtered && filter_reg(id)))
--				print_reg(c, id);
-+				print_reg(config_name(c), id);
- 		}
- 		putchar('\n');
- 		return;
-@@ -438,7 +438,7 @@ static void run_test(struct vcpu_config *c)
- 		ret = __vcpu_get_reg(vcpu, reg_list->reg[i], &addr);
- 		if (ret) {
- 			printf("%s: Failed to get ", config_name(c));
--			print_reg(c, reg.id);
-+			print_reg(config_name(c), reg.id);
- 			putchar('\n');
- 			++failed_get;
- 		}
-@@ -450,7 +450,7 @@ static void run_test(struct vcpu_config *c)
- 				ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
- 				if (ret != -1 || errno != EPERM) {
- 					printf("%s: Failed to reject (ret=%d, errno=%d) ", config_name(c), ret, errno);
--					print_reg(c, reg.id);
-+					print_reg(config_name(c), reg.id);
- 					putchar('\n');
- 					++failed_reject;
- 				}
-@@ -462,7 +462,7 @@ static void run_test(struct vcpu_config *c)
- 			ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
- 			if (ret) {
- 				printf("%s: Failed to set ", config_name(c));
--				print_reg(c, reg.id);
-+				print_reg(config_name(c), reg.id);
- 				putchar('\n');
- 				++failed_set;
- 			}
-@@ -500,7 +500,7 @@ static void run_test(struct vcpu_config *c)
- 		       "Consider adding them to the blessed reg "
- 		       "list with the following lines:\n\n", config_name(c), new_regs);
- 		for_each_new_reg(i)
--			print_reg(c, reg_list->reg[i]);
-+			print_reg(config_name(c), reg_list->reg[i]);
- 		putchar('\n');
+-static void check_supported(struct vcpu_config *c)
++static void check_supported(struct vcpu_reg_list *c)
+ {
+-	struct reg_sublist *s;
++	struct vcpu_reg_sublist *s;
+ 
+ 	for_each_sublist(c, s) {
+ 		if (!s->capability)
+@@ -382,14 +366,14 @@ static bool print_list;
+ static bool print_filtered;
+ static bool fixup_core_regs;
+ 
+-static void run_test(struct vcpu_config *c)
++static void run_test(struct vcpu_reg_list *c)
+ {
+ 	struct kvm_vcpu_init init = { .target = -1, };
+ 	int new_regs = 0, missing_regs = 0, i, n;
+ 	int failed_get = 0, failed_set = 0, failed_reject = 0;
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+-	struct reg_sublist *s;
++	struct vcpu_reg_sublist *s;
+ 
+ 	check_supported(c);
+ 
+@@ -526,7 +510,7 @@ static void run_test(struct vcpu_config *c)
+ 
+ static void help(void)
+ {
+-	struct vcpu_config *c;
++	struct vcpu_reg_list *c;
+ 	int i;
+ 
+ 	printf(
+@@ -550,9 +534,9 @@ static void help(void)
+ 	);
+ }
+ 
+-static struct vcpu_config *parse_config(const char *config)
++static struct vcpu_reg_list *parse_config(const char *config)
+ {
+-	struct vcpu_config *c;
++	struct vcpu_reg_list *c;
+ 	int i;
+ 
+ 	if (config[8] != '=')
+@@ -572,7 +556,7 @@ static struct vcpu_config *parse_config(const char *config)
+ 
+ int main(int ac, char **av)
+ {
+-	struct vcpu_config *c, *sel = NULL;
++	struct vcpu_reg_list *c, *sel = NULL;
+ 	int i, ret = 0;
+ 	pid_t pid;
+ 
+@@ -1053,14 +1037,14 @@ static __u64 pauth_generic_regs[] = {
+ 		.regs_n		= ARRAY_SIZE(pauth_generic_regs),	\
  	}
  
-@@ -508,7 +508,7 @@ static void run_test(struct vcpu_config *c)
- 		printf("\n%s: There are %d missing registers.\n"
- 		       "The following lines are missing registers:\n\n", config_name(c), missing_regs);
- 		for_each_missing_reg(i)
--			print_reg(c, blessed_reg[i]);
-+			print_reg(config_name(c), blessed_reg[i]);
- 		putchar('\n');
- 	}
+-static struct vcpu_config vregs_config = {
++static struct vcpu_reg_list vregs_config = {
+ 	.sublists = {
+ 	BASE_SUBLIST,
+ 	VREGS_SUBLIST,
+ 	{0},
+ 	},
+ };
+-static struct vcpu_config vregs_pmu_config = {
++static struct vcpu_reg_list vregs_pmu_config = {
+ 	.sublists = {
+ 	BASE_SUBLIST,
+ 	VREGS_SUBLIST,
+@@ -1068,14 +1052,14 @@ static struct vcpu_config vregs_pmu_config = {
+ 	{0},
+ 	},
+ };
+-static struct vcpu_config sve_config = {
++static struct vcpu_reg_list sve_config = {
+ 	.sublists = {
+ 	BASE_SUBLIST,
+ 	SVE_SUBLIST,
+ 	{0},
+ 	},
+ };
+-static struct vcpu_config sve_pmu_config = {
++static struct vcpu_reg_list sve_pmu_config = {
+ 	.sublists = {
+ 	BASE_SUBLIST,
+ 	SVE_SUBLIST,
+@@ -1083,7 +1067,7 @@ static struct vcpu_config sve_pmu_config = {
+ 	{0},
+ 	},
+ };
+-static struct vcpu_config pauth_config = {
++static struct vcpu_reg_list pauth_config = {
+ 	.sublists = {
+ 	BASE_SUBLIST,
+ 	VREGS_SUBLIST,
+@@ -1091,7 +1075,7 @@ static struct vcpu_config pauth_config = {
+ 	{0},
+ 	},
+ };
+-static struct vcpu_config pauth_pmu_config = {
++static struct vcpu_reg_list pauth_pmu_config = {
+ 	.sublists = {
+ 	BASE_SUBLIST,
+ 	VREGS_SUBLIST,
+@@ -1101,7 +1085,7 @@ static struct vcpu_config pauth_pmu_config = {
+ 	},
+ };
  
+-static struct vcpu_config *vcpu_configs[] = {
++static struct vcpu_reg_list *vcpu_configs[] = {
+ 	&vregs_config,
+ 	&vregs_pmu_config,
+ 	&sve_config,
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index a089c356f354..ac4aaa21deee 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -15,6 +15,7 @@
+ #include <linux/kernel.h>
+ #include <linux/kvm.h>
+ #include "linux/rbtree.h"
++#include <linux/types.h>
+ 
+ #include <asm/atomic.h>
+ 
+@@ -124,6 +125,21 @@ struct kvm_vm {
+ 	uint32_t memslots[NR_MEM_REGIONS];
+ };
+ 
++struct vcpu_reg_sublist {
++	const char *name;
++	long capability;
++	int feature;
++	bool finalize;
++	__u64 *regs;
++	__u64 regs_n;
++	__u64 *rejects_set;
++	__u64 rejects_set_n;
++};
++
++struct vcpu_reg_list {
++	char *name;
++	struct vcpu_reg_sublist sublists[];
++};
+ 
+ #define kvm_for_each_vcpu(vm, i, vcpu)			\
+ 	for ((i) = 0; (i) <= (vm)->last_vcpu_id; (i)++)	\
 -- 
 2.34.1
 
