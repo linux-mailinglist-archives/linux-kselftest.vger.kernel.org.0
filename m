@@ -2,132 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD6173B35A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 11:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C025E73B3E6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Jun 2023 11:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjFWJTu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Jun 2023 05:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
+        id S231138AbjFWJod (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Jun 2023 05:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbjFWJTt (ORCPT
+        with ESMTP id S229657AbjFWJoc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:19:49 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0DF1BE7
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jun 2023 02:19:46 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9881b9d8cbdso283745066b.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jun 2023 02:19:46 -0700 (PDT)
+        Fri, 23 Jun 2023 05:44:32 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD241FF9
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jun 2023 02:44:27 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so8952a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jun 2023 02:44:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1687511985; x=1690103985;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pQ6QabPlq4SG93YlN4F2ainKra0lJ4TZXEDEZJ3pyxA=;
-        b=0axuMEg5f03qoxYkBU39Y6B7dmYmm4FMYEjsO8GOkZG74Jr2yt8GLFBXoWG3KVoOV1
-         BB49AvFjfeXy7pOh+ot0as7u3Hg2BNMDaK2Xv620QO06T4fTDhCFa4w8YezTRhKIrs51
-         mpAgBD5mkh6h014AHUFSASh2NIYisKH6JqgyuF9fUD/AgsdYYw3G+T8ql+ginJ2VJzf6
-         ge3We9/1tRYYE0+VUf6bH/G1YKEdWlz8CcSrTxHu4sfyKkgKfAjcfyn6urGlKS4FlHhk
-         JN2/j/omQBhqgCNZVjNCgqaPg4Tp6YpB7McC3ulIwA79Vz8Y5OrVwvbc5cmPTij8GJRu
-         5KdQ==
+        d=google.com; s=20221208; t=1687513466; x=1690105466;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uECgceGWceBpnEwgVEt1AFSmdXNTa/+8ZyNWq8IpWMk=;
+        b=Kbr+ZwwHYHvA0TCLJ0MdIwK/ccEwxx5KSPma0dmAvQIY6kj9M5JLiT59I+c/izkmv2
+         n9pmwQxDJQNjmwworyPbaKeC3Ld8nQ4YzJQUl81n0uzJKWW+y1YBMTq+bAxjaNy+2Uk1
+         2+c6VxKT2l9oN0UJs9rmXFiz2wziDEW+FMecIVeRpyPC+3p6h7YtB2bWAnfvkjFG019s
+         SvcL3SBhcYvAVeuiLFX4CwomKL1yZfd3JUWKnS/0/hgwcAMoHAZfCNAKfXwtIiCjg6jh
+         Ae993CrxqBpmSq0aTmVtiKkCd/JgjSefymLwf4R5lFK8ec0c85cp6c0CFc3gblvcnhWa
+         1m6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687511985; x=1690103985;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pQ6QabPlq4SG93YlN4F2ainKra0lJ4TZXEDEZJ3pyxA=;
-        b=EhPBRWXpGZp1BxqNVw1qFzyylSIGSPl3W8srlKg2NQxea7n+qHpGURqQUXbdxfT3a9
-         Xj9VN9faX/xGmowQo/jNODRFWVio6Fi3k1kDd1RYB20P1OUOhR2a2EXzYQqaFsldgmma
-         f0Zxs9k+WN85fYhUo+K9lKhDsIAXHAegjlaWCFQh/rHR3fbYQ7hNIZUQQhAiWFxl4sF/
-         +TqsA3FSFb5+oKexo2FqSHQs6mLDkMPMhHs32J2tUy3BnISek4gta3yyEM33782DzqWu
-         WRd6o3nqDa1Vc3ODrnlk54IM6n84KhQ2FZiWXz6ArsJQEWICVk9rJiNi8NfVPDLuuQqu
-         EOCw==
-X-Gm-Message-State: AC+VfDwg/nvx5rDygJEdDU/be+6ujxGY9G+XV5fiEOp2dMnUhbYoNpGh
-        UY1dkZUa5U50Wmz+akiZCVvgLALqK5eddk+09FSB/igy
-X-Google-Smtp-Source: ACHHUZ52Fo1SOMyS9PnfNxeqPNIhe3ZVZpvWYLfgZDAsHyINH0WiPBBtpaP7I3qzkw0JoKFz3v5MXg==
-X-Received: by 2002:a17:907:6d26:b0:988:2037:c687 with SMTP id sa38-20020a1709076d2600b009882037c687mr14620975ejc.37.1687511984570;
-        Fri, 23 Jun 2023 02:19:44 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:7733:4d95:422b:f164? ([2a02:578:8593:1200:7733:4d95:422b:f164])
-        by smtp.gmail.com with ESMTPSA id j24-20020a170906279800b00986d8722e46sm5879974ejc.17.2023.06.23.02.19.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 02:19:44 -0700 (PDT)
-Message-ID: <e228646e-bd41-d6fd-b43d-11d3f9d3c029@tessares.net>
-Date:   Fri, 23 Jun 2023 11:19:42 +0200
+        d=1e100.net; s=20221208; t=1687513466; x=1690105466;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uECgceGWceBpnEwgVEt1AFSmdXNTa/+8ZyNWq8IpWMk=;
+        b=TsQ0siqJeZ4/HJTgZ7x9z9F60zQOZc3O9ntCjEwI4gK9a28TJy7Qmq7afwQUG5CsrE
+         HtY07WiSi5vKKE1mevPJnBSS6Apw2URdRe2ks0/NV3QMvx8NTXOkGunOTgQNs2wYe007
+         vo87e6OKJ51yYCpS0oa1me5sINc34oZJvD4e3DSyPQk7LtArRTU7R68NfmZoPp5EZXWj
+         cF93ZUiHgInR4UxN8wk3ytGd2iiIvPihC3p5ZEljnmT9S2jn883ven9etheI5TPW9S2C
+         7kfEnmkOMdGW4yGeXbzJn9gnC5iG6PybLUIdU6bAWRgX9+n1gYQ4Tnh/JShxr4Eo9J0h
+         gpVA==
+X-Gm-Message-State: AC+VfDx5pZ21e36bsF/ef1+NooiqBzFkGgl/k80zOroZGzHjScSTbKyK
+        HvH/oajrxeCtgP2TSIlOrzTxWhnO80pXZYsvPwSX/Q==
+X-Google-Smtp-Source: ACHHUZ6rqOZ455iJdXd6CS4M6p+mA/ZNKARrMmKzGjtlcQiR2QyldrbL8+MKATVwRLr7V20zWPJywlF1j6AsPkZ9OkM=
+X-Received: by 2002:a50:d08c:0:b0:516:6453:1b76 with SMTP id
+ v12-20020a50d08c000000b0051664531b76mr51906edd.5.1687513465752; Fri, 23 Jun
+ 2023 02:44:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 0/8] Fix comment typos about "transmit"
-Content-Language: en-GB
-To:     Yueh-Shun Li <shamrocklee@posteo.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     jgg@ziepe.ca, leon@kernel.org, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, kvalo@kernel.org, jejb@linux.ibm.com,
-        pabeni@redhat.com, apw@canonical.com, joe@perches.com,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230622012627.15050-1-shamrocklee@posteo.net>
- <168748862634.32034.1394302200661050543.git-patchwork-notify@kernel.org>
- <50a88781b9e2a80588438c315167bbec@posteo.net>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <50a88781b9e2a80588438c315167bbec@posteo.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230615141144.665148-1-usama.anjum@collabora.com>
+ <20230615141144.665148-3-usama.anjum@collabora.com> <ZJHp6hSeS6lMo7qx@gmail.com>
+ <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com> <ZJNTWV+JZ+tTMdcp@gmail.com>
+ <c8c3f983-8189-e602-157a-84ca1d8984dd@collabora.com>
+In-Reply-To: <c8c3f983-8189-e602-157a-84ca1d8984dd@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Fri, 23 Jun 2023 11:44:14 +0200
+Message-ID: <CABb0KFFEiTr4TfYnAOOd8tODEaY_KBE2EjNBEJqX6RjxZpCjZA@mail.gmail.com>
+Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On Thu, 22 Jun 2023 at 12:21, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 6/22/23 12:45=E2=80=AFAM, Andrei Vagin wrote:
+> > On Wed, Jun 21, 2023 at 11:34:54AM +0500, Muhammad Usama Anjum wrote:
+> >> On 6/20/23 11:03=E2=80=AFPM, Andrei Vagin wrote:
+[...]
+> >>> should it be PM_SCAN_FOUND_MAX_PAGES? Otherwise, it fails the ioctl e=
+ven
+> >>> if it has handled some pages already.
+> >> It is a double edge sword. If we don't return error, user will never k=
+now
+> >> that he needs to specify more max_pages or his output buffer is small =
+and
+> >> not coverig the entire range. The real purpose here that user gets awa=
+re
+> >> that he needs to specify full hugetlb range and found pages should cov=
+er
+> >> the entire range as well.
+> >
+> > but if PM_SCAN_OP_WP is set, this error will be fatal, because some
+> > pages can be marked write-protected, but they are not be reported to
+> > user-space.
+> >
+> > I think the ioctl has to report back the end address of the handled
+> > region. It is like read and write syscalls that can return less data
+> > than requested.
+> This is good point. I'll abort the walk here instead of retuning the erro=
+r
+> to user.
 
-On 23/06/2023 10:51, Yueh-Shun Li wrote:
-> Dear Maintainer,
-> 
-> On 23.06.2023 04:50, patchwork-bot+netdevbpf@kernel.org wrote:
->> Hello:
->>
->> This series was applied to netdev/net-next.git (main)
->> by Jakub Kicinski <kuba@kernel.org>:
->>
->> On Thu, 22 Jun 2023 01:26:21 +0000 you wrote:
->>> Fix typos about "transmit" missing the first "s"
->>> found by searching with keyword "tram" in the first 7
->>> patches.
->>>
->>> Add related patterns to "scripts/spelling.txt" in the
->>> last patch.
+It would be great if the ioctl returned the address the walk finished
+at. This would remove the special case for "buffer full after full
+page was added" and if it happens that despite `max_pages` limit was
+reached but no more pages would need to be added the caller would not
+have to call the ioctl again on the remaining range.
 
-(...)
+[...]
+> >>> How long can it take to run this loop? Should we interrupt it if a
+> >>> signal has been queued?
+> >> I'm following mincore and pagemap_read here. There is no such thing th=
+ere.
+> >> IOCTL is performing what user has requested.
+> >
+> > In case of pagemap, its buffer is limited by MAX_RW_COUNT (0x7ffff000),
+> > so it can handle maximum 0xffffe00 pages in one iteration.  Do you have=
+ any
+> > limits for input parameters?
+> >
+> >> If the execution time is a
+> >> concern, user should have called the IOCTL on shorter address range.
+> >
+> > It doesn't work this way. There can be many users and signals has to be
+> > delivered in a reasonable time. One of the obvious examples when a sign=
+al
+> > has to be delivered asap is OOM.
+> This IOCTL is just like mincore, but with other flags and functionalities=
+.
+> Mincore doesn't put any limit like this. I don't think we should put any
+> limit here as well.
 
->>   - [7/8] selftests: mptcp: connect: fix comment typo
->>     (no matching commit)
+I don't think we should treat mincore() as a good API example. Its
+interface has similar performance problems to what select() or poll()
+does. In this ioctl's case, we can limit the output at this end (large
+anyway) as it won't affect the performance if for x TiB of memory the
+call is made twice instead of once. (Returning the end of the walk
+reached would be much help here.)
 
-I just applied this patch 7/8 in MPTCP tree (features for net-next), no
-need to send it again elsewhere.
-
-New patches for t/upstream:
-- ba8a625a062a: selftests: mptcp: connect: fix comment typo
-- Results: e16a005b0d79..f186e81ff99c (export)
-
->>   - [8/8] scripts/spelling.txt: Add "transmit" patterns
->>     (no matching commit)
->>
->> You are awesome, thank you!
-> 
-> Should I rebase the local branch onto netdev/net-next/main
-> and send the "no matching commit" patches again?
-
-For the other ones, you might have to send them separately to the
-appropriated maintainers according to the MAINTAINERS file, not all of
-them in the same series I guess.
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Best Regards
+Micha=C5=82 Miros=C5=82aw
