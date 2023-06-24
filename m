@@ -2,48 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBC773C9C3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Jun 2023 10:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C04B73CA72
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Jun 2023 12:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231466AbjFXIyT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 24 Jun 2023 04:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S232919AbjFXKbH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 24 Jun 2023 06:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbjFXIyS (ORCPT
+        with ESMTP id S232655AbjFXKbG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 24 Jun 2023 04:54:18 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC0818B;
-        Sat, 24 Jun 2023 01:54:15 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1687596845tar8umko
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 24 Jun 2023 16:54:04 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: QityeSR92A3DMBxJR9qE2xYZ5ave9QLjBojiQa4mwxhBHO55ur6tAsScc5GCz
-        /sYlo5cbbA2bvcRE2x29yNFvwxcojlQVdPsJUh7v9Ix+RFnoHHhKswfSw4X1w6aODESy98Q
-        E/FoWAyJxhDiOH4lD5Ths6g5UZ03+bsfa0IYebrpD+dLn9vkkA5ZX9GjKLJ18bkweKzyRj+
-        xuE8/IkVspvx94u0CLXPjPGUW13O7vbyEVjjveob6Djl8aARQXuU1EgAtQuVHpMD/s/rfZq
-        Bim1WGGvW9RTNlieqOGfojgH9vAZGZxHtyHAv2dPbUDSENwn2O/sDwRSpdekFg17+GNF/uP
-        Sjs6vzEURCGQTc/Opz+89wMrg3reyPiLXxaIjJOBSS1jO3QHbo=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 2644677313220337364
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, w@1wt.eu
-Subject: Re: [PATCH v1 00/17] selftests/nolibc: allow run with minimal kernel config
-Date:   Sat, 24 Jun 2023 16:54:03 +0800
-Message-Id: <20230624085403.603469-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230622184559.1188894-1-falcon@tinylab.org>
-References: <20230622184559.1188894-1-falcon@tinylab.org>
+        Sat, 24 Jun 2023 06:31:06 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C4D10F7;
+        Sat, 24 Jun 2023 03:31:05 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1687602663;
+        bh=WAQxIZy8y/wxN8eDcQ6zJJABtAxVwhMmcahqLn9v8OM=;
+        h=From:Subject:Date:To:Cc:From;
+        b=FKEt8muf/8qMIDO4vrjsWnxx2qqbDzBd6VMsGMYRJ9ESvOTKoOs5oS9kLva2GR1wq
+         bXCK014zVe8yVpqTRGpHj71Xs9wnCWCMNqIH3XNBIr4aSefRmwVG+Tzc8WJgrqzOvP
+         dFyAdHZjGDRZ0bQey0nXAzseBcjYIt65GqbWGU0w=
+Subject: [PATCH 0/2] proc: proc_setattr for /proc/$PID/net
+Date:   Sat, 24 Jun 2023 12:30:45 +0200
+Message-Id: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-B4-Tracking: v=1; b=H4sIANXFlmQC/x2N0QqDMAwAf0XyvEDXbSL7lbGHtKYzIFHSOgbiv
+ y/4eAfH7VDZhCs8ux2Mv1JlUYfrpYM8kX4YZXSGGOIt9PGOqy0ZlRtWbtSa4VAC9WngFMsDPEt
+ UGZOR5slD3ebZ5Wpc5Hd+Xu/j+APEn6XrdwAAAA==
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687602663; l=1198;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=WAQxIZy8y/wxN8eDcQ6zJJABtAxVwhMmcahqLn9v8OM=;
+ b=UbMcSrK5SnNWXGQAzqQMKF99lxxGYIZv3CqZ9Nf0TkWhbguoT1+BXcBrY4mcu2+RbBptDeM2a
+ ervAB0i4iHBBdMQmh9ujn6K87D+8dzgD1kgmdDWOs2lDLsenDBBBz41
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,80 +55,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Thomas
+/proc/$PID/net currently allows the setting of file attributes,
+in contrast to other /proc/$PID/ files and directories.
 
-> > Hi Zhangjin,
-> > 
-> > some general comments for the whole series.
-> > 
-> > On 2023-06-21 20:52:30+0800, Zhangjin Wu wrote:
-> > > Hi, Willy
-> > > 
-> > > This patchset mainly allows speed up the nolibc test with a minimal
-> > > kernel config.
-> > > 
-> (snip)
-> > > 
-> > > * selftests/nolibc: fix up kernel parameters support
-> > > 
-> > >   kernel cmdline allows pass two types of parameters, one is without
-> > >   '=', another is with '=', the first one is passed as init arguments,
-> > >   the sencond one is passed as init environment variables.
-> > > 
-> > >   Our nolibc-test prefer arguments to environment variables, this not
-> > >   work when users add such parameters in the kernel cmdline:
-> > > 
-> > >     noapic NOLIBC_TEST=syscall
-> > > 
-> > >   So, this patch will verify the setting from arguments at first, if it
-> > >   is no valid, will try the environment variables instead.
-> > 
-> > This would be much simpler as:
-> > 
-> > test = getenv("NOLIBC_TEST");
-> > if (!test)
-> >         test = argv[1];
-> >
-> > It changes the semantics a bit, but it doesn't seem to be an issue.
-> > (Maybe gated behind getpid() == 1).
-> 
-> Cool suggestion, it looks really better:
-> 
-> 	if (getpid() == 1) {
-> 		prepare();
-> 		
-> 		/* kernel cmdline may pass: "noapic NOLIBC_TEST=syscall",
->                  * to init program:
-> 		 *
-> 		 *   "noapic" as arguments,
-> 		 *   "NOLIBC_TEST=syscall" as environment variables,
->                  *
-> 		 * to avoid getting null test in this case, parsing
-> 		 * environment variables at first.
-> 		 */
-> 		test = getenv("NOLIBC_TEST");
-> 		if (!test)
-> 			test = argv[1];
-> 	} else {
-> 		/* for normal nolibc-test program, prefer arguments */
-> 		test = argv[1];
-> 		if (!test)
-> 			test = getenv("NOLIBC_TEST");
-> 	}
-> 
+This would break the nolibc testsuite so the first patch in the series
+removes the offending testcase.
+The "fix" for nolibc-test is intentionally kept trivial as the series
+will most likely go through the filesystem tree and if conflicts arise,
+it is obvious on how to resolve them.
 
-Test shows, when no NOLIBC_TEST environment variable passed to kernel cmdline,
-it will still branch to this code:
+Technically this can lead to breakage of nolibc-test if an old
+nolibc-test is used with a newer kernel containing the fix.
 
-    test = argv[1]; /* nopaic ... */
+Note:
 
-And therefore report the whole test is ignored and no test will be run:
+Except for /proc itself this is the only "struct inode_operations" in
+fs/proc/ that is missing an implementation of setattr().
 
-    Ignoring unknown test name 'noapic'
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (2):
+      selftests/nolibc: drop test chmod_net
+      proc: use generic setattr() for /proc/$PID/net
 
-So, we may still need to verify it like my originally proposed method, but
-let's further verify the one from NOLIBC_TEST=, we should tune the code a
-litle.
+ fs/proc/proc_net.c                           | 1 +
+ tools/testing/selftests/nolibc/nolibc-test.c | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+---
+base-commit: a92b7d26c743b9dc06d520f863d624e94978a1d9
+change-id: 20230624-proc-net-setattr-8f0a6b8eb2f5
 
-Thanks,
-Zhangjin
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
