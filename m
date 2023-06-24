@@ -2,86 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CA373CA78
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Jun 2023 12:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B1673CD3D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Jun 2023 00:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbjFXKbL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 24 Jun 2023 06:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        id S229545AbjFXWUW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 24 Jun 2023 18:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbjFXKbH (ORCPT
+        with ESMTP id S229481AbjFXWUV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 24 Jun 2023 06:31:07 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71F51BC1;
-        Sat, 24 Jun 2023 03:31:05 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1687602663;
-        bh=Hv07IQfpUi17QmNQC9s2OoEvXVUFS7E+TFWplvGmRyw=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=PLpwolsw7ZlHoPEmIDUplUBmlSCa8ZaqedGFxQZIe0KHkvGBuIEYCQ8fghPvWEHzT
-         SKEHwbl8Fn4kDf3E4tFrHvu9hHBDkBN4yeBxd0MteqcfvTu6IpSN0ofP8O6i0eeDPm
-         ILi84B1HpjuS8Gb3Jcx1a0ZocYvInkSZ5kH1WKmI=
-Date:   Sat, 24 Jun 2023 12:30:47 +0200
-Subject: [PATCH 2/2] proc: use generic setattr() for /proc/$PID/net
-MIME-Version: 1.0
+        Sat, 24 Jun 2023 18:20:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7F010D3
+        for <linux-kselftest@vger.kernel.org>; Sat, 24 Jun 2023 15:20:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B3F960AB3
+        for <linux-kselftest@vger.kernel.org>; Sat, 24 Jun 2023 22:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B6658C433CA;
+        Sat, 24 Jun 2023 22:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687645219;
+        bh=K57FsvDdDsQvc6eBxw1iMwtDiWoqnphia826r61uT3o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=LWwO3NiN57OSRe0PXPNoDLEGDLODcTDgVclO3tqyFra50+dzMYefFaWh3Rbud03c/
+         gOpfDQeJP12RdvWeDdirshZPJsjdytVxvYExw5459Y3P1WQYru2QYjt/ujKxzWrOIM
+         o+lA6MlPNO9qdb7wvNkfqNc4isEoWCP4XkN99bzO7kBqkAEIkYE4JjPHOBJJyDOJGG
+         yjG7igaqr/UXYWmtLlPDED+F+GxffcI/ox4Rpj3MLmR1EbNbadqg5tEDhCgnHreSnB
+         2R8BPvr0kR6ysI+B8eOE0HVdZftW6wHRO6UMSw5KYH7UbkxSPLnjFDOVBlu9bxc5+k
+         Ujs5R4IygvAXA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 88599C43157;
+        Sat, 24 Jun 2023 22:20:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230624-proc-net-setattr-v1-2-73176812adee@weissschuh.net>
-References: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
-In-Reply-To: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687602663; l=1087;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=Hv07IQfpUi17QmNQC9s2OoEvXVUFS7E+TFWplvGmRyw=;
- b=sydRcATQix4hEhnx962ZvNEbCLjg3XbDnJu/cS4rm0AFbOauHU1aZOpDDZuLyUmH8xsoEiR6s
- ZKxXc2ZQni9DLO1vq0PQMim7IYCgXab/zowgtqGT8vwCFxon9fdZPdW
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH net] selftests: rtnetlink: remove netdevsim device after ipsec
+ offload test
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168764521955.22804.7450435784531069720.git-patchwork-notify@kernel.org>
+Date:   Sat, 24 Jun 2023 22:20:19 +0000
+References: <e1cb94f4f82f4eca4a444feec4488a1323396357.1687466906.git.sd@queasysnail.net>
+In-Reply-To: <e1cb94f4f82f4eca4a444feec4488a1323396357.1687466906.git.sd@queasysnail.net>
+To:     Sabrina Dubroca <sd@queasysnail.net>
+Cc:     netdev@vger.kernel.org, jiri@resnulli.us, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-All other files in /proc/$PID/ use proc_setattr().
+Hello:
 
-Not using it allows the usage of chmod() on /proc/$PID/net, even on
-other processes owned by the same user.
-The same would probably also be true for other attributes to be changed.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-As this technically represents an ABI change it is not marked for
-stable so any unlikely regressions are caught during a full release cycle.
+On Thu, 22 Jun 2023 23:03:34 +0200 you wrote:
+> On systems where netdevsim is built-in or loaded before the test
+> starts, kci_test_ipsec_offload doesn't remove the netdevsim device it
+> created during the test.
+> 
+> Fixes: e05b2d141fef ("netdevsim: move netdev creation/destruction to dev probe")
+> Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
+> 
+> [...]
 
-Fixes: e9720acd728a ("[NET]: Make /proc/net a symlink on /proc/self/net (v3)")
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- fs/proc/proc_net.c | 1 +
- 1 file changed, 1 insertion(+)
+Here is the summary with links:
+  - [net] selftests: rtnetlink: remove netdevsim device after ipsec offload test
+    https://git.kernel.org/netdev/net/c/5f789f103671
 
-diff --git a/fs/proc/proc_net.c b/fs/proc/proc_net.c
-index a0c0419872e3..78f9e6b469c0 100644
---- a/fs/proc/proc_net.c
-+++ b/fs/proc/proc_net.c
-@@ -321,6 +321,7 @@ static int proc_tgid_net_getattr(struct mnt_idmap *idmap,
- const struct inode_operations proc_net_inode_operations = {
- 	.lookup		= proc_tgid_net_lookup,
- 	.getattr	= proc_tgid_net_getattr,
-+	.setattr        = proc_setattr,
- };
- 
- static int proc_tgid_net_readdir(struct file *file, struct dir_context *ctx)
-
+You are awesome, thank you!
 -- 
-2.41.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
