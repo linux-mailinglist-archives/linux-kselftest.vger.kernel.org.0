@@ -2,174 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E978F73D00F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Jun 2023 12:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174F273D0EF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Jun 2023 14:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjFYKOE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 25 Jun 2023 06:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        id S230058AbjFYMb7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 25 Jun 2023 08:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbjFYKOD (ORCPT
+        with ESMTP id S231747AbjFYMb5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 25 Jun 2023 06:14:03 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3231B9
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Jun 2023 03:13:58 -0700 (PDT)
-Date:   Sun, 25 Jun 2023 10:13:48 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1687688036; x=1687947236;
-        bh=k39oL5YOXLn4GMRTwjuG9qX93XSq1AYvlF1Zp8zdaRY=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=D5FjEe4xr7pKYA7BZBeOjWYeIlznYW4dAI8fpszRrITkSkiPQMQhb86TEFSaAUw/w
-         r1YWkTRg6DvGDikuWlcBUx36fTL3plzCPuYlmLJKYrn1eptMiAmyB0MbkNRJQS2XDb
-         AIz1UyOWHUarQ2vMLuSPvRlgQqcXRKtVVWbXfHAvytZ0z13K/zfTD+FSwKlIjvt2NO
-         hznwHDGto7i6u6oU3Mm+vkS2QmsKm7OJtxKjQtQS7Ag3FO0796Z2lcg2lb5C0XPWtQ
-         Q3PoBK9sveUIIO6HxwSd0mOVxGPEwoXEKPSbs9Y7xGo+Hui62BnGxbqvYQsQQpEWog
-         BYDOlK0Ug/krQ==
-To:     Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH 1/6] rust: init: make doctests compilable/testable
-Message-ID: <4bf1311c-6a13-736c-7de5-d5027e950977@proton.me>
-In-Reply-To: <20230614180837.630180-2-ojeda@kernel.org>
-References: <20230614180837.630180-1-ojeda@kernel.org> <20230614180837.630180-2-ojeda@kernel.org>
-Feedback-ID: 71780778:user:proton
+        Sun, 25 Jun 2023 08:31:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CE7E7
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Jun 2023 05:31:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687696268;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1Jw7D3cDIPezb5KyTrtfg6zC3lbK4rtQzoMzmA2DE1o=;
+        b=J0gDVYndlXJMUr0WVmaY8t/wbKPda/xEuqLS0+6M1NEdKe9HifaOhla8SHcHb8iejrAHMe
+        ZaGBol7deAk3EUB2gwYrOPvlpSWucXD5mCflAg1F/7kcSdcAApTKhjXv5aN1tSllDkLZXe
+        oY0eTpf30l1sMu2hdI5zmQ46jIeGzVY=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-575-Ess2Z6lXPzuUN57kr82e_Q-1; Sun, 25 Jun 2023 08:31:03 -0400
+X-MC-Unique: Ess2Z6lXPzuUN57kr82e_Q-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-31275e9fbdaso899242f8f.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Jun 2023 05:31:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687696262; x=1690288262;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Jw7D3cDIPezb5KyTrtfg6zC3lbK4rtQzoMzmA2DE1o=;
+        b=dxAMflb3L/XXUwnJV5cdb2PVC4GRvAZG56UX7diU0SorDLa0EF0t2OBIf3U3dBwTEQ
+         zgsr3SjaJKVBMBF8lQVKytevSAgjUEpkXT+lY96yogjrm8KkJHtnLChCarDtHFhkiTrQ
+         +xSkNSGMYeJ78j505dvNnTTgZuMDgo8BkqMpQsLJBK9KuLw64ZKv5+nnWGsATk0FUkMZ
+         Vcv9co/Dbu1Ir7pFyiNGkYQqbTRCPxgiieZiRxJ670sSBl7J+pIhx+begBb6eX+tHWdb
+         Eird+oS3ZCEDgHh842nDfQyyx4DtBDm9J6HC023SW8WvfMeWq1pi8RUoDqzjqMQq27Xt
+         HtTg==
+X-Gm-Message-State: AC+VfDzhRQv+yZR7CdphGoaZw8XbIe3dl575r7KnXm4002WM4DdsgfYs
+        foemHD+E/0m8r+N1BvUJIZHDOUuW26hy3Qoc9ZBcKb56rluVvhg712S4iwU8yl6OYJ79dDu9BhM
+        woNAJDYXvj3+vlpG8sHkdwK++fwyHp1448+Io
+X-Received: by 2002:a5d:4bc1:0:b0:30a:ae5b:9e93 with SMTP id l1-20020a5d4bc1000000b0030aae5b9e93mr16944156wrt.11.1687696262144;
+        Sun, 25 Jun 2023 05:31:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ42ubQM2wG9PKLJJNI76/IVi6hdgCnTu3rml1+kpgQQUDv1VSsAbmGkoJBZxLVQZKeLxlUjvA==
+X-Received: by 2002:a5d:4bc1:0:b0:30a:ae5b:9e93 with SMTP id l1-20020a5d4bc1000000b0030aae5b9e93mr16944147wrt.11.1687696261794;
+        Sun, 25 Jun 2023 05:31:01 -0700 (PDT)
+Received: from fedora.redhat.com ([2a06:c701:476e:4300:fe29:2a5c:9188:df81])
+        by smtp.gmail.com with ESMTPSA id hn31-20020a05600ca39f00b003fa745f3264sm4614881wmb.43.2023.06.25.05.31.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jun 2023 05:31:01 -0700 (PDT)
+From:   Dana Elfassy <delfassy@redhat.com>
+X-Google-Original-From: Dana Elfassy <dangel101@gmail.com>
+To:     shuah@kernel.org, eballetbo@kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Dana Elfassy <dangel101@gmail.com>
+Subject: [PATCH v2] selftests/input: add tests for the EVIOCSABS ioctl
+Date:   Sun, 25 Jun 2023 15:30:37 +0300
+Message-ID: <20230625123037.8384-1-dangel101@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/14/23 20:08, Miguel Ojeda wrote:
-> Rust documentation tests are going to be build/run-tested
-> with the KUnit integration added in a future patch, thus
-> update them to make them compilable/testable so that we
-> may start enforcing it.
->=20
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+This patch introduces two tests for the EVIOCSABS ioctl. The first one
+checks that the ioctl fails when the EV_ABS bit was not set, and the
+second one just checks that the normal workflow for this ioctl
+succeeds.
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+Signed-off-by: Dana Elfassy <dangel101@gmail.com>
+---
+This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
+[1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
 
---=20
-Cheers,
-Benno
+ tools/testing/selftests/input/evioc-test.c | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-> ---
->   rust/kernel/init.rs | 25 ++++++++++++++++---------
->   1 file changed, 16 insertions(+), 9 deletions(-)
->=20
-> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-> index b4332a4ec1f4..1073515ed40e 100644
-> --- a/rust/kernel/init.rs
-> +++ b/rust/kernel/init.rs
-> @@ -120,14 +120,23 @@
->   //!   `slot` gets called.
->   //!
->   //! ```rust
-> -//! use kernel::{prelude::*, init};
-> +//! # #![allow(unreachable_pub, clippy::disallowed_names)]
-> +//! use kernel::{prelude::*, init, types::Opaque};
->   //! use core::{ptr::addr_of_mut, marker::PhantomPinned, pin::Pin};
->   //! # mod bindings {
-> +//! #     #![allow(non_camel_case_types)]
->   //! #     pub struct foo;
->   //! #     pub unsafe fn init_foo(_ptr: *mut foo) {}
->   //! #     pub unsafe fn destroy_foo(_ptr: *mut foo) {}
->   //! #     pub unsafe fn enable_foo(_ptr: *mut foo, _flags: u32) -> i32 =
-{ 0 }
->   //! # }
-> +//! # trait FromErrno {
-> +//! #     fn from_errno(errno: core::ffi::c_int) -> Error {
-> +//! #         // Dummy error that can be constructed outside the `kernel=
-` crate.
-> +//! #         Error::from(core::fmt::Error)
-> +//! #     }
-> +//! # }
-> +//! # impl FromErrno for Error {}
->   //! /// # Invariants
->   //! ///
->   //! /// `foo` is always initialized
-> @@ -158,7 +167,7 @@
->   //!                 if err !=3D 0 {
->   //!                     // Enabling has failed, first clean up the foo =
-and then return the error.
->   //!                     bindings::destroy_foo(Opaque::raw_get(foo));
-> -//!                     return Err(Error::from_kernel_errno(err));
-> +//!                     return Err(Error::from_errno(err));
->   //!                 }
->   //!
->   //!                 // All fields of `RawFoo` have been initialized, si=
-nce `_p` is a ZST.
-> @@ -226,8 +235,7 @@
->   ///
->   /// ```rust
->   /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
-> -/// # use kernel::{init, pin_init, stack_pin_init, init::*, sync::Mutex,=
- new_mutex};
-> -/// # use macros::pin_data;
-> +/// # use kernel::{init, macros::pin_data, pin_init, stack_pin_init, ini=
-t::*, sync::Mutex, new_mutex};
->   /// # use core::pin::Pin;
->   /// #[pin_data]
->   /// struct Foo {
-> @@ -277,7 +285,7 @@ macro_rules! stack_pin_init {
->   ///
->   /// # Examples
->   ///
-> -/// ```rust
-> +/// ```rust,ignore
->   /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
->   /// # use kernel::{init, pin_init, stack_try_pin_init, init::*, sync::M=
-utex, new_mutex};
->   /// # use macros::pin_data;
-> @@ -303,7 +311,7 @@ macro_rules! stack_pin_init {
->   /// pr_info!("a: {}", &*foo.a.lock());
->   /// ```
->   ///
-> -/// ```rust
-> +/// ```rust,ignore
->   /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
->   /// # use kernel::{init, pin_init, stack_try_pin_init, init::*, sync::M=
-utex, new_mutex};
->   /// # use macros::pin_data;
-> @@ -513,8 +521,7 @@ macro_rules! stack_try_pin_init {
->   /// For instance:
->   ///
->   /// ```rust
-> -/// # use kernel::pin_init;
-> -/// # use macros::pin_data;
-> +/// # use kernel::{macros::pin_data, pin_init};
->   /// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
->   /// #[pin_data]
->   /// struct Buf {
-> @@ -841,7 +848,7 @@ macro_rules! init {
->   /// # Examples
->   ///
->   /// ```rust
-> -/// use kernel::{init::PinInit, error::Error, InPlaceInit};
-> +/// use kernel::{init::{PinInit, zeroed}, error::Error};
->   /// struct BigBuf {
->   ///     big: Box<[u8; 1024 * 1024 * 1024]>,
->   ///     small: [u8; 1024 * 1024],
-> --
-> 2.41.0
->=20
-
+diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
+index 4c0c8ebed378..7afd537f0b24 100644
+--- a/tools/testing/selftests/input/evioc-test.c
++++ b/tools/testing/selftests/input/evioc-test.c
+@@ -279,4 +279,27 @@ TEST(eviocgrep_get_repeat_settings)
+ 	selftest_uinput_destroy(uidev);
+ }
+ 
++TEST(eviocsabs_set_abs_value_limits)
++{
++	struct selftest_uinput *uidev;
++	struct input_absinfo absinfo;
++	int rc;
++
++	// fail test on dev->absinfo
++	rc = selftest_uinput_create_device(&uidev), -1;
++	ASSERT_EQ(0, rc);
++	ASSERT_NE(NULL, uidev);
++	rc = ioctl(uidev->evdev_fd, EVIOCSABS(0), &absinfo);
++	ASSERT_EQ(-1, rc);
++	selftest_uinput_destroy(uidev);
++
++	// ioctl normal flow
++	rc = selftest_uinput_create_device(&uidev, EV_ABS, -1);
++	ASSERT_EQ(0, rc);
++	ASSERT_NE(NULL, uidev);
++	rc = ioctl(uidev->evdev_fd, EVIOCSABS(0), &absinfo);
++	ASSERT_EQ(0, rc);
++	selftest_uinput_destroy(uidev);
++}
++
+ TEST_HARNESS_MAIN
+-- 
+2.41.0
 
