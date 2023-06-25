@@ -2,145 +2,174 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEAA973CEB2
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Jun 2023 08:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E978F73D00F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Jun 2023 12:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjFYGa4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 25 Jun 2023 02:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
+        id S231836AbjFYKOE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 25 Jun 2023 06:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjFYGaz (ORCPT
+        with ESMTP id S231219AbjFYKOD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 25 Jun 2023 02:30:55 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EF9E46;
-        Sat, 24 Jun 2023 23:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687674654; x=1719210654;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=R7Yhr42fK7gKhO8erEf7BeGzaAEEpOtaMIIdcwtYeU4=;
-  b=ZQDJuTZGtlvftcSznqEa5dfamtLWgc8aQwMsg5sL+qlzCl8oES7Z+vjT
-   YK0gSfB75r4y3V4+HqzPnq0a0M+sMVkBxLblo3T7WRzXVVhIQRQc9ytPU
-   xMEihkwGPkAdHsb6mhZNhFfHlaFc31KIYmdA7aDriGxRatKcW1k2KXavk
-   IcaIemXCAFDD/MOC1FsPtD7XznHOwBnnq1qBekufND2KqfaRSjw13jQlS
-   vSmSPbYeZpO1zGm6uM46Fr9XTrk0O7kvQgoUWIIIh0LCq0vfqEjPyChDF
-   5c3AsoUGmqw8uY0Xmm3VGRySF4T2dJXum/09IFOaGerGQeT2y98t6JRA9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="424708490"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="424708490"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 23:30:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="889912917"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="889912917"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.208.26]) ([10.254.208.26])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 23:30:48 -0700
-Message-ID: <a8ccbac8-c456-d116-24a2-7503ccbb720c@linux.intel.com>
-Date:   Sun, 25 Jun 2023 14:30:46 +0800
+        Sun, 25 Jun 2023 06:14:03 -0400
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3231B9
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Jun 2023 03:13:58 -0700 (PDT)
+Date:   Sun, 25 Jun 2023 10:13:48 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1687688036; x=1687947236;
+        bh=k39oL5YOXLn4GMRTwjuG9qX93XSq1AYvlF1Zp8zdaRY=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=D5FjEe4xr7pKYA7BZBeOjWYeIlznYW4dAI8fpszRrITkSkiPQMQhb86TEFSaAUw/w
+         r1YWkTRg6DvGDikuWlcBUx36fTL3plzCPuYlmLJKYrn1eptMiAmyB0MbkNRJQS2XDb
+         AIz1UyOWHUarQ2vMLuSPvRlgQqcXRKtVVWbXfHAvytZ0z13K/zfTD+FSwKlIjvt2NO
+         hznwHDGto7i6u6oU3Mm+vkS2QmsKm7OJtxKjQtQS7Ag3FO0796Z2lcg2lb5C0XPWtQ
+         Q3PoBK9sveUIIO6HxwSd0mOVxGPEwoXEKPSbs9Y7xGo+Hui62BnGxbqvYQsQQpEWog
+         BYDOlK0Ug/krQ==
+To:     Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH 1/6] rust: init: make doctests compilable/testable
+Message-ID: <4bf1311c-6a13-736c-7de5-d5027e950977@proton.me>
+In-Reply-To: <20230614180837.630180-2-ojeda@kernel.org>
+References: <20230614180837.630180-1-ojeda@kernel.org> <20230614180837.630180-2-ojeda@kernel.org>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     baolu.lu@linux.intel.com, Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Yi Liu <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
-To:     Nicolin Chen <nicolinc@nvidia.com>
-References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
- <ZHZFi28jRxeZMKK3@Asurada-Nvidia>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <ZHZFi28jRxeZMKK3@Asurada-Nvidia>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/5/31 2:50, Nicolin Chen wrote:
-> Hi Baolu,
-> 
-> On Tue, May 30, 2023 at 01:37:07PM +0800, Lu Baolu wrote:
->   
->> This series implements the functionality of delivering IO page faults to
->> user space through the IOMMUFD framework. The use case is nested
->> translation, where modern IOMMU hardware supports two-stage translation
->> tables. The second-stage translation table is managed by the host VMM
->> while the first-stage translation table is owned by the user space.
->> Hence, any IO page fault that occurs on the first-stage page table
->> should be delivered to the user space and handled there. The user space
->> should respond the page fault handling result to the device top-down
->> through the IOMMUFD response uAPI.
->>
->> User space indicates its capablity of handling IO page faults by setting
->> a user HWPT allocation flag IOMMU_HWPT_ALLOC_FLAGS_IOPF_CAPABLE. IOMMUFD
->> will then setup its infrastructure for page fault delivery. Together
->> with the iopf-capable flag, user space should also provide an eventfd
->> where it will listen on any down-top page fault messages.
->>
->> On a successful return of the allocation of iopf-capable HWPT, a fault
->> fd will be returned. User space can open and read fault messages from it
->> once the eventfd is signaled.
-> 
-> I think that, whether the guest has an IOPF capability or not,
-> the host should always forward any stage-1 fault/error back to
-> the guest. Yet, the implementation of this series builds with
-> the IOPF framework that doesn't report IOMMU_FAULT_DMA_UNRECOV.
-> 
-> And I have my doubt at the using the IOPF framework with that
-> IOMMU_PAGE_RESP_ASYNC flag: using the IOPF framework is for
-> its bottom half workqueue, because a page response could take
-> a long cycle. But adding that flag feels like we don't really
-> need the bottom half workqueue, i.e. losing the point of using
-> the IOPF framework, IMHO.
-> 
-> Combining the two facts above, I wonder if we really need to
-> go through the IOPF framework; can't we just register a user
-> fault handler in the iommufd directly upon a valid event_fd?
+On 6/14/23 20:08, Miguel Ojeda wrote:
+> Rust documentation tests are going to be build/run-tested
+> with the KUnit integration added in a future patch, thus
+> update them to make them compilable/testable so that we
+> may start enforcing it.
+>=20
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Agreed. We should avoid workqueue in sva iopf framework. Perhaps we
-could go ahead with below code? It will be registered to device with
-iommu_register_device_fault_handler() in IOMMU_DEV_FEAT_IOPF enabling
-path. Un-registering in the disable path of cause.
+Reviewed-by: Benno Lossin <benno.lossin@proton.me>
 
-static int io_pgfault_handler(struct iommu_fault *fault, void *cookie)
-{
-         ioasid_t pasid = fault->prm.pasid;
-         struct device *dev = cookie;
-         struct iommu_domain *domain;
+--=20
+Cheers,
+Benno
 
-         if (fault->type != IOMMU_FAULT_PAGE_REQ)
-                 return -EOPNOTSUPP;
+> ---
+>   rust/kernel/init.rs | 25 ++++++++++++++++---------
+>   1 file changed, 16 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
+> index b4332a4ec1f4..1073515ed40e 100644
+> --- a/rust/kernel/init.rs
+> +++ b/rust/kernel/init.rs
+> @@ -120,14 +120,23 @@
+>   //!   `slot` gets called.
+>   //!
+>   //! ```rust
+> -//! use kernel::{prelude::*, init};
+> +//! # #![allow(unreachable_pub, clippy::disallowed_names)]
+> +//! use kernel::{prelude::*, init, types::Opaque};
+>   //! use core::{ptr::addr_of_mut, marker::PhantomPinned, pin::Pin};
+>   //! # mod bindings {
+> +//! #     #![allow(non_camel_case_types)]
+>   //! #     pub struct foo;
+>   //! #     pub unsafe fn init_foo(_ptr: *mut foo) {}
+>   //! #     pub unsafe fn destroy_foo(_ptr: *mut foo) {}
+>   //! #     pub unsafe fn enable_foo(_ptr: *mut foo, _flags: u32) -> i32 =
+{ 0 }
+>   //! # }
+> +//! # trait FromErrno {
+> +//! #     fn from_errno(errno: core::ffi::c_int) -> Error {
+> +//! #         // Dummy error that can be constructed outside the `kernel=
+` crate.
+> +//! #         Error::from(core::fmt::Error)
+> +//! #     }
+> +//! # }
+> +//! # impl FromErrno for Error {}
+>   //! /// # Invariants
+>   //! ///
+>   //! /// `foo` is always initialized
+> @@ -158,7 +167,7 @@
+>   //!                 if err !=3D 0 {
+>   //!                     // Enabling has failed, first clean up the foo =
+and then return the error.
+>   //!                     bindings::destroy_foo(Opaque::raw_get(foo));
+> -//!                     return Err(Error::from_kernel_errno(err));
+> +//!                     return Err(Error::from_errno(err));
+>   //!                 }
+>   //!
+>   //!                 // All fields of `RawFoo` have been initialized, si=
+nce `_p` is a ZST.
+> @@ -226,8 +235,7 @@
+>   ///
+>   /// ```rust
+>   /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
+> -/// # use kernel::{init, pin_init, stack_pin_init, init::*, sync::Mutex,=
+ new_mutex};
+> -/// # use macros::pin_data;
+> +/// # use kernel::{init, macros::pin_data, pin_init, stack_pin_init, ini=
+t::*, sync::Mutex, new_mutex};
+>   /// # use core::pin::Pin;
+>   /// #[pin_data]
+>   /// struct Foo {
+> @@ -277,7 +285,7 @@ macro_rules! stack_pin_init {
+>   ///
+>   /// # Examples
+>   ///
+> -/// ```rust
+> +/// ```rust,ignore
+>   /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
+>   /// # use kernel::{init, pin_init, stack_try_pin_init, init::*, sync::M=
+utex, new_mutex};
+>   /// # use macros::pin_data;
+> @@ -303,7 +311,7 @@ macro_rules! stack_pin_init {
+>   /// pr_info!("a: {}", &*foo.a.lock());
+>   /// ```
+>   ///
+> -/// ```rust
+> +/// ```rust,ignore
+>   /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
+>   /// # use kernel::{init, pin_init, stack_try_pin_init, init::*, sync::M=
+utex, new_mutex};
+>   /// # use macros::pin_data;
+> @@ -513,8 +521,7 @@ macro_rules! stack_try_pin_init {
+>   /// For instance:
+>   ///
+>   /// ```rust
+> -/// # use kernel::pin_init;
+> -/// # use macros::pin_data;
+> +/// # use kernel::{macros::pin_data, pin_init};
+>   /// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
+>   /// #[pin_data]
+>   /// struct Buf {
+> @@ -841,7 +848,7 @@ macro_rules! init {
+>   /// # Examples
+>   ///
+>   /// ```rust
+> -/// use kernel::{init::PinInit, error::Error, InPlaceInit};
+> +/// use kernel::{init::{PinInit, zeroed}, error::Error};
+>   /// struct BigBuf {
+>   ///     big: Box<[u8; 1024 * 1024 * 1024]>,
+>   ///     small: [u8; 1024 * 1024],
+> --
+> 2.41.0
+>=20
 
-         if (fault->prm.flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID)
-                 domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
-         else
-                 domain = iommu_get_domain_for_dev(dev);
 
-         if (!domain || !domain->iopf_handler)
-                 return -ENODEV;
-
-         if (domain->type == IOMMU_DOMAIN_SVA)
-                 return iommu_queue_iopf(fault, cookie);
-
-         return domain->iopf_handler(fault, dev, domain->fault_data);
-}
-
-Best regards,
-baolu
