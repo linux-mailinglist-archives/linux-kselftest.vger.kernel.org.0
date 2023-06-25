@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008D773D1F8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Jun 2023 18:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E4673D1FA
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Jun 2023 18:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjFYQMX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 25 Jun 2023 12:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S230242AbjFYQNt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 25 Jun 2023 12:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjFYQMW (ORCPT
+        with ESMTP id S229526AbjFYQNs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 25 Jun 2023 12:12:22 -0400
+        Sun, 25 Jun 2023 12:13:48 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2791D18D;
-        Sun, 25 Jun 2023 09:12:20 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1687709530tsvfo8pm
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BF418D;
+        Sun, 25 Jun 2023 09:13:45 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1687709616tzy4rqig
 Received: from linux-lab-host.localdomain ( [116.30.129.193])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 26 Jun 2023 00:12:09 +0800 (CST)
+        id ; Mon, 26 Jun 2023 00:13:34 +0800 (CST)
 X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: XBN7tc9DADJ/OcMdENJaOzWBkZLGnIpxol5HU5eHhMJPihloFMK4nV8tycOqP
-        HcFbWitRT8ddnSgIxB4OEtcz18ioeAnXfZ/MrBw4IpHZfmtCgWRpTgqxkPqh0g72G187XBG
-        FBxsQ2+M1egZBKQKwY+g8lqoc/5WHoHP2t7aZUQuOLiB643WygQ27rWCZ6T/8cgN29l5DaG
-        EcF9AjMPzwmnUmCEc0CulnMK1nfUeR+Bp7UMx8LCV5GJcYxQ/P5TzVexQWbEERiTWMbyDm5
-        P9yDZVUU3EoY3HD1BSRnFTFnBLHyPyunUd3s1RkxhHMPz/U5jCHY27tlTa9cA5pNbdN4z9U
-        +iX6V2Hsgg+we5SNg2ilRyctvtMS61cx8HrbAIJ+kGfYUsx4cg=
+X-QQ-FEAT: IV30oiqrgAbOfnJiGwL0dLz5UNsInBixLxruPzcz1JdYKW91p3ui4yAH+JKDY
+        HQKHcMsMzV7Nrt2LT0lOsKzUTJ0H9bt/KtrowcD3Pfllvf6wEiJnFhxCUg9KKvLIKIyFTpZ
+        Qc7xqQfgMj13ozkOMYLJkvEmyX8wmvWwF48GzR2LQHHHVpjLN3vSx+h1LcsT5iWoGFVPXoJ
+        RvNpGhcDVu0px1OGCdiLeqj6wUYSomUpNfUkyCIqAisVI0JthFgsE4ylvqwrwVCDLndbNYR
+        o3JXtkq+Lp+rbXJ4NW0V0ORgwNEh/lv2+GFWOJMzmqPNUW/A4kN5ir6l6Edo/IVLSFqaWlD
+        p6W0vN+6xNVMrW/NhLD/dL57AyXiA9bIMyEfb9iLvINukdCZso=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15070065792118708961
+X-BIZMAIL-ID: 15177638908459309453
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 01/22] selftests/nolibc: add test for -include /path/to/nolibc.h
-Date:   Mon, 26 Jun 2023 00:12:00 +0800
-Message-Id: <149d51ee77cdd4936de4a02ee8b2cff239fd8253.1687706332.git.falcon@tinylab.org>
+Subject: [PATCH v1 02/22] selftests/nolibc: print result to the screen too
+Date:   Mon, 26 Jun 2023 00:13:14 +0800
+Message-Id: <b7f022af937fe359d8fb8e1667dd6481933509e9.1687706332.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1687706332.git.falcon@tinylab.org>
 References: <cover.1687706332.git.falcon@tinylab.org>
@@ -51,63 +51,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As the head comment of nolibc-test.c shows, it can be built in 3 ways:
+printing the running log to the screen helps users to learn what
+happens, especially to find potential issues immediately.
 
-  The program may be built in 3 ways:
-    $(CC) -nostdlib -include /path/to/nolibc.h => NOLIBC already defined
-    $(CC) -nostdlib -I/path/to/nolibc/sysroot  => _NOLIBC_* guards are present
-    $(CC) with default libc                    => NOLIBC* never defined
-
-Only last two of them are tested currently, let's allow test the first one too.
-
-This may help to find issues about using nolibc.h to build programs. it
-derives from this change:
-
-    commit 3a8039e289a3 ("tools/nolibc: Fix build of stdio.h due to header ordering")
-
-Usage:
-
-    // test with sysroot
-    $ make run-user SYSROOT=1
-
-    // test without sysroot, using nolibc.h directly
-    $ make run-user SYSROOT=0
+If want to silence a lot, simply pass a QUIET_RUN=1 is enough.
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/Makefile | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ tools/testing/selftests/nolibc/Makefile | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 848884204a84..0b66b7a79cea 100644
+index 0b66b7a79cea..3300b5ab7de3 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -102,6 +102,9 @@ REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++;print} /\[SKIPPED\][\
+@@ -98,6 +98,14 @@ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+ 		$(CFLAGS_$(ARCH)) $(CFLAGS_STACKPROTECTOR)
+ LDFLAGS := -s
+ 
++# allow silence the running test log
++QUIET_RUN ?= 0
++ifeq ($(QUIET_RUN),0)
++LOG_OUTPUT = | tee "$(CURDIR)/run.out"
++else
++LOG_OUTPUT = > "$(CURDIR)/run.out"
++endif
++
+ REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++;print} /\[SKIPPED\][\r]*$$/{s++} \
  		END{ printf("%d test(s) passed, %d skipped, %d failed.\n", p, s, f); \
  		printf("See all results in %s\n", ARGV[1]); }'
+@@ -157,7 +165,7 @@ libc-test: nolibc-test.c
  
-+# allow switch nolibc headers include method: 1 for sysroot, 0 for nolibc.h
-+SYSROOT ?= 1
-+
- help:
- 	@echo "Supported targets under selftests/nolibc:"
- 	@echo "  all          call the \"run\" target below"
-@@ -139,9 +142,15 @@ sysroot/$(ARCH)/include:
- 	$(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
- 	$(Q)mv sysroot/sysroot sysroot/$(ARCH)
+ # qemu user-land test
+ run-user: nolibc-test
+-	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
++	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test $(LOG_OUTPUT) || :
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
  
-+ifeq ($(SYSROOT), 1)
- nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
- 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ \
- 	  -nostdlib -static -Isysroot/$(ARCH)/include $< -lgcc
-+else
-+nolibc-test: nolibc-test.c
-+	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ \
-+	  -nostdlib -static -include ../../../include/nolibc/nolibc.h $< -lgcc
-+endif
+ initramfs: nolibc-test
+@@ -173,12 +181,12 @@ kernel: initramfs
  
- libc-test: nolibc-test.c
- 	$(QUIET_CC)$(CC) -o $@ $<
+ # run the tests after building the kernel
+ run: kernel
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
++	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) $(LOG_OUTPUT)
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ # re-run the tests from an existing kernel
+ rerun:
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
++	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) $(LOG_OUTPUT)
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ clean:
 -- 
 2.25.1
 
