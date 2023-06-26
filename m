@@ -2,143 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0DFD73E6F2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Jun 2023 19:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2CC73E710
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Jun 2023 19:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjFZRx3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Jun 2023 13:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
+        id S229727AbjFZR5v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Jun 2023 13:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFZRx1 (ORCPT
+        with ESMTP id S229690AbjFZR5t (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jun 2023 13:53:27 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91519130
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jun 2023 10:53:26 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id 006d021491bc7-5633d6e22d3so1001685eaf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jun 2023 10:53:26 -0700 (PDT)
+        Mon, 26 Jun 2023 13:57:49 -0400
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9112C130;
+        Mon, 26 Jun 2023 10:57:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687802006; x=1690394006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pn6vnK3NKWIIx8bWW3pUBU0wxmRL6bY7AP5Q2VzG4LU=;
-        b=C7Kb4vfjPX0Yqwu9LdbOWEb2TQ/YoHmc5yYHKefUju3KJadAt2GJIBR7CBNt9Vsjwr
-         KUqC+qrLF1vkYWRYLNvfdZfabF2e5SJtZXKCLw5bfF0pJ0vixNj5TWFF1qx7ZQRs0Gum
-         RvwG4GtHz35leA1egsFL3GFBfgpqbrQRzKQ4UWS/e6iMsKoQeDHuCmxqZS+6iELmIfsZ
-         V5ZpYIx133t2xbY1ROfE8hGF7DlcV3BJEPOACYPGQMYNBO76TR7Nc0kjp8x+lYrZdbJX
-         /aGqCNxVslcqydAUcW+vaCXiETR9obcdnX/24M3m0Q8fvZ+rT8/Qqk8HFMRMDJIsks5e
-         gEMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687802006; x=1690394006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pn6vnK3NKWIIx8bWW3pUBU0wxmRL6bY7AP5Q2VzG4LU=;
-        b=KJsYH3eNmsC3QRL/OYsHYpQoGxW96FhKlXb2pEfiS+4JLBtOhRGwFOXqzOoxEql7SL
-         lmjD4PIiDnBpGB07QdnS6aH5yDcZi0T/XPcu2jxDyfFwKbCSO4R5t9g8G1lgQGaKm8NR
-         6RuuhRnHpCzArBvKvSg04zuqd2hOLWIf8bcBz3FSb8FDpw4Xoa3toC6WmcCur2DhpuEw
-         KX9SnCrO60RMG4tCQJcCDqhlwxDkHrGL/dyPCxpUfP7sqJ7xGtBJkUy8yrqBo757Ek2f
-         Zue5YAg1NLL+vhu4Mq8UhCGUvLfaxlHlJFutCAo18btCUoYr11f/m5mjHJtMiGWUB4X6
-         kLSw==
-X-Gm-Message-State: AC+VfDxtlvtZ75dW2aC4G/Vi5fDXaioNmleUdBFpkQQGaCPQFG0Q2WAF
-        FWWvMVtyv+1qV5wrvZKmTh/nK+YldBEkeis5BJlh7aQr9i7EkQBEyeJjrw==
-X-Google-Smtp-Source: ACHHUZ7Swgs9121z+kuoRfiHB3OkW67hJZsKCgXapg8zVPdGaeR6+YSYh0xtyyAMKUOGr7rzXOWctORp5U5yyFztpH4=
-X-Received: by 2002:a05:6808:1992:b0:3a0:ff3a:72f3 with SMTP id
- bj18-20020a056808199200b003a0ff3a72f3mr15244189oib.2.1687802005866; Mon, 26
- Jun 2023 10:53:25 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1687802269; x=1719338269;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=CjHChph3jHdZoR8racjXNtVY5fiZpsb8Si0LuL7/rhg=;
+  b=Wb0/SNLIl8Cbffi3+SrCCeDu8jeqiO6U3/ak9mEV/yBhnnr2Vecq3MTl
+   g5EMYSor7c1cCL1x6Wz4aPY6D9nHeSE0tfqiXowgGneeM4hfsbQ0KUciJ
+   TnmZS+D2lJ+Tfvkw3Hyowf/KpvN4g6AVDqcun0kivwtcEXJZxOvWzH/2z
+   A=;
+X-IronPort-AV: E=Sophos;i="6.01,160,1684800000"; 
+   d="scan'208";a="341074945"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-153b24bc.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 17:57:46 +0000
+Received: from EX19MTAUWA002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-m6i4x-153b24bc.us-east-1.amazon.com (Postfix) with ESMTPS id 073FFC15FB;
+        Mon, 26 Jun 2023 17:57:39 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 26 Jun 2023 17:57:39 +0000
+Received: from 88665a182662.ant.amazon.com (10.187.170.15) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.30;
+ Mon, 26 Jun 2023 17:57:34 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <lmb@isovalent.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
+        <hemanthmalla@gmail.com>, <joe@wand.net.nz>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
+        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
+Subject: Re: [PATCH bpf-next v3 3/7] net: document inet[6]_lookup_reuseport sk_state requirements
+Date:   Mon, 26 Jun 2023 10:57:26 -0700
+Message-ID: <20230626175726.61467-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230613-so-reuseport-v3-3-907b4cbb7b99@isovalent.com>
+References: <20230613-so-reuseport-v3-3-907b4cbb7b99@isovalent.com>
 MIME-Version: 1.0
-References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
- <b4bfd69f-2092-4d15-b7ce-b814f5f10ff2@sirena.org.uk> <CA+G9fYv=uyQaJs0JLMmZWLeLH0G5FF7WGcTa7y0bi0nCDfoi+A@mail.gmail.com>
- <20230626144157.GA20162@willie-the-truck>
-In-Reply-To: <20230626144157.GA20162@willie-the-truck>
-From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Date:   Mon, 26 Jun 2023 11:53:14 -0600
-Message-ID: <CAEUSe79CRNw1jFopDvQ+f_FOSwQb-VJ6oWw-rJQXr0Yr3_P=YQ@mail.gmail.com>
-Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in fpsimd_release_task
-To:     Will Deacon <will@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.187.170.15]
+X-ClientProxiedBy: EX19D037UWB003.ant.amazon.com (10.13.138.115) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello!
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Mon, 26 Jun 2023 16:09:00 +0100
+> The current implementation was extracted from inet[6]_lhash2_lookup
+> in commit 80b373f74f9e ("inet: Extract helper for selecting socket
+> from reuseport group") and commit 5df6531292b5 ("inet6: Extract helper
+> for selecting socket from reuseport group"). In the original context,
+> sk is always in TCP_LISTEN state and so did not have a separate check.
+> 
+> Add documentation that specifies which sk_state are valid to pass to
+> the function.
+> 
+> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+> ---
+>  net/ipv4/inet_hashtables.c  | 14 ++++++++++++++
+>  net/ipv6/inet6_hashtables.c | 14 ++++++++++++++
+>  2 files changed, 28 insertions(+)
+> 
+> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> index 920131e4a65d..91f9210d4e83 100644
+> --- a/net/ipv4/inet_hashtables.c
+> +++ b/net/ipv4/inet_hashtables.c
+> @@ -332,6 +332,20 @@ static inline int compute_score(struct sock *sk, struct net *net,
+>  	return score;
+>  }
+>  
+> +/**
+> + * inet_lookup_reuseport() - execute reuseport logic on AF_INET socket if necessary.
+> + * @net: network namespace.
+> + * @sk: AF_INET socket, must be in TCP_LISTEN state for TCP or TCP_CLOSE for UDP.
 
-On Mon, 26 Jun 2023 at 08:42, Will Deacon <will@kernel.org> wrote:
->
-> On Thu, May 25, 2023 at 07:21:24PM +0530, Naresh Kamboju wrote:
-> > On Tue, 23 May 2023 at 03:42, Mark Brown <broonie@kernel.org> wrote:
-> > > On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
-> > > > Test log links:
-> > > > =3D=3D=3D=3D=3D=3D=3D=3D
-> > > >
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/b=
-uild/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/test/=
-check-kernel-kfence/log
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/b=
-uild/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/tests=
-/
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/b=
-uild/v6.1.28-240-gb82733c0ff99/testrun/17007268/suite/kselftest-arm64/tests=
-/
-> > > >
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/b=
-uild/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/test/c=
-heck-kernel-bug/log
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/b=
-uild/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/tests/
-> > > >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/b=
-uild/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/kselftest-arm64/tests/
-> > >
-> > > None of these seem to provide me with information like what kernel
-> > > config was used but I did manage to find
-> > >
-> > >   https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLiBcWR=
-Muy6lXftDVQMvca/config
-> > >
-> > > which might be it?  Or one of them?  However even trying to use that =
-I'm
-> > > unable to reproduce issues with either the FVP or qemu.
-> >
-> > You got the right config file which we are using for testing
-> > FVP selftests.
->
-> Sadly, the config link above no longer works (404 file not found).
->
-> However, I notice that the failure still seems to occur with 6.4:
->
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.4/testr=
-un/17767612/suite/log-parser-test/tests/
->
-> Please can you point me at the config file for that run? I can't figure
-> out which one I need from the web interface.
+nit: " or TCP_CLOSE for UDP"
 
-Kernel artifacts for that test run can be found here:
-  https://storage.tuxsuite.com/public/linaro/lkft/builds/2Ricfkwzy9jwZnHXNO=
-etymU5t44/
+This part should be added in the next patch,
+or this patch should be 4th patch.
 
-(The labyrinth can be traversed this way: I went from that testrun
-link, then test details [clicking on "check-kernel-kfence =E2=80=94 FAIL"],
-then "job_url", then "build", then "tuxbuild directory".)
 
-Greetings!
-
-Daniel D=C3=ADaz
-daniel.diaz@linaro.org
+> + * @skb: context for a potential SK_REUSEPORT program.
+> + * @doff: header offset.
+> + * @saddr: source address.
+> + * @sport: source port.
+> + * @daddr: destination address.
+> + * @hnum: destination port in host byte order.
+> + *
+> + * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
+> + *         the selected sock or an error.
+> + */
+>  struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
+>  				   struct sk_buff *skb, int doff,
+>  				   __be32 saddr, __be16 sport,
+> diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+> index b7c56867314e..208998694ae3 100644
+> --- a/net/ipv6/inet6_hashtables.c
+> +++ b/net/ipv6/inet6_hashtables.c
+> @@ -111,6 +111,20 @@ static inline int compute_score(struct sock *sk, struct net *net,
+>  	return score;
+>  }
+>  
+> +/**
+> + * inet6_lookup_reuseport() - execute reuseport logic on AF_INET6 socket if necessary.
+> + * @net: network namespace.
+> + * @sk: AF_INET6 socket, must be in TCP_LISTEN state for TCP or TCP_CLOSE for UDP.
+> + * @skb: context for a potential SK_REUSEPORT program.
+> + * @doff: header offset.
+> + * @saddr: source address.
+> + * @sport: source port.
+> + * @daddr: destination address.
+> + * @hnum: destination port in host byte order.
+> + *
+> + * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
+> + *         the selected sock or an error.
+> + */
+>  struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
+>  				    struct sk_buff *skb, int doff,
+>  				    const struct in6_addr *saddr,
+> 
+> -- 
+> 2.40.1
