@@ -2,178 +2,481 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E2B73E726
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Jun 2023 20:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E68A73E744
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Jun 2023 20:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjFZSCZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Jun 2023 14:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
+        id S229766AbjFZSNR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Jun 2023 14:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjFZSCY (ORCPT
+        with ESMTP id S231624AbjFZSMv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jun 2023 14:02:24 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2069.outbound.protection.outlook.com [40.107.243.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD0710C9;
-        Mon, 26 Jun 2023 11:02:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jDFIOhBIM8yPc/HgwU/lzqW88WJkMXtaJ8l34n8tDCWhAFhnlF2lWLnTXYIP9wOZ8LbK2qERWCTmfZ+mdm44AHpRBIptmAfHIR01Ol71kAXK8ySVy2cjL8o01n+gRFTCLrNmEiPJsl8q7YrQ/oUa6cgeU7FKwh1Bg095m1gi6SV7Z5XXz30SdwFheLOxZwl5gujGML9Py9yBUt/2Ka2fQALXic6YDlVqhXhcabcQG4aZ/DfDhbFKWht/eBgsmpnDT/YvJXWWelB76XpSVLSsDsUOpksT+gZKiprO6QcFsmRJnaPgUe32uacoPDc4FmvoXNbJ6iQTR+ytqFAd8eqYQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CR2wxA1Y9ehxpAAWVAhcQphkpweUdhK/cRO1HmtEDvw=;
- b=kYRxc5ew2WADNBoBlLlqjRMuLUlNm7TITl1h6Enac+2MC6JY4lrgEYkp6nX7n/Wy6oieVF41gOf6G00b6RRSGUw9bhe4xKPel6itkw0TONKJz4zDi6bIbKEFaa4okGMfplyFdjf/hgREZatGkzD3MElBIvFtR8bTLFU1jLJZWhEDfUI0eOLdfddW6Mt/Qb/RWC+VQ95N/B5isrzYR4Cz5FbETlGs70lPhy0Rh+Oye51T+FmdCM67/M/veNJGFzav0505amxw1umsmp8c1ZBzt9YETTLPLT8u1kg17FSBljZX+faMUW64QUXyZzlp97VNyBp8OWQewxLYkZJLx/q7Vw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CR2wxA1Y9ehxpAAWVAhcQphkpweUdhK/cRO1HmtEDvw=;
- b=qOy8LOrGdm6Kwo2Cx9sjwgqYyKZWH5uMYcAk6NFJ3/fOCm8LHRqbqLvLA6nUxSVn/fDRgP2hrf6LJptF/875+ySEQ+gwkk9MPfxC+2gv8Gg1iscLdWtADfKZT60itmO6KmBzMBKQN9YglXTQO0CfOSIqJrFtU6JAAaiB5mtrE/QV+/pwX4Y5asKxMv2rc8zGrRqMyJL2p27Jcve0oHe7RoKlim6Gs6wtfjevjTmabmJTrmjQ2ywTEgVv3C2pqxDLoITf+e0N3aIGym47+ZbpD9Ety8VUydFIrk3usSd/Ue2F+7TVbMbjbIBvM8QVfWBYDvNS30M6RkawEzlofZ4S3g==
-Received: from DS7PR03CA0107.namprd03.prod.outlook.com (2603:10b6:5:3b7::22)
- by DM4PR12MB6565.namprd12.prod.outlook.com (2603:10b6:8:8c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Mon, 26 Jun
- 2023 18:02:18 +0000
-Received: from DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b7:cafe::5b) by DS7PR03CA0107.outlook.office365.com
- (2603:10b6:5:3b7::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.33 via Frontend
- Transport; Mon, 26 Jun 2023 18:02:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT010.mail.protection.outlook.com (10.13.172.222) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.47 via Frontend Transport; Mon, 26 Jun 2023 18:02:17 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 26 Jun 2023
- 11:02:08 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 26 Jun
- 2023 11:02:08 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Mon, 26 Jun 2023 11:02:07 -0700
-Date:   Mon, 26 Jun 2023 11:02:06 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-CC:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
-        "Joerg Roedel" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "Yi Liu" <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        <iommu@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
-Message-ID: <ZJnSnuUkkwBVNT80@Asurada-Nvidia>
-References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
- <ZHZFi28jRxeZMKK3@Asurada-Nvidia>
- <a8ccbac8-c456-d116-24a2-7503ccbb720c@linux.intel.com>
- <ZJiTuO/9Bs4hMAiC@Asurada-Nvidia>
- <e374e0be-3e29-3128-b3df-6183a7a0e98e@linux.intel.com>
+        Mon, 26 Jun 2023 14:12:51 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156392942;
+        Mon, 26 Jun 2023 11:12:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1687803136; x=1719339136;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=eSK17/Nu3oaFQ2VpG4P41G6xg6u1+jOi/ite1ltKpmI=;
+  b=oxZgnOUmBSzcsiRRfrledeQclCoQnt2h0f5sycQikg3q334OjFbrI7wa
+   KJ/me9HrJYSFsI+Axa3RIAhnXEBdjzclc1U3k5xdemj3xMyJ90WH0dI+j
+   LYQpvVtCkGMJL/VcViY+4wl/4O0oy2QCCFzRrRUVqaQ5puq1uzHWz461v
+   U=;
+X-IronPort-AV: E=Sophos;i="6.01,160,1684800000"; 
+   d="scan'208";a="347902966"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-8a14c045.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 18:12:10 +0000
+Received: from EX19MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-m6i4x-8a14c045.us-west-2.amazon.com (Postfix) with ESMTPS id 3F03D805EB;
+        Mon, 26 Jun 2023 18:12:09 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 26 Jun 2023 18:12:08 +0000
+Received: from 88665a182662.ant.amazon.com (10.187.170.15) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.30;
+ Mon, 26 Jun 2023 18:12:04 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <lmb@isovalent.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
+        <hemanthmalla@gmail.com>, <joe@wand.net.nz>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
+        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
+Subject: Re: [PATCH bpf-next v3 4/7] net: remove duplicate reuseport_lookup functions
+Date:   Mon, 26 Jun 2023 11:11:56 -0700
+Message-ID: <20230626181156.62006-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230613-so-reuseport-v3-4-907b4cbb7b99@isovalent.com>
+References: <20230613-so-reuseport-v3-4-907b4cbb7b99@isovalent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <e374e0be-3e29-3128-b3df-6183a7a0e98e@linux.intel.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT010:EE_|DM4PR12MB6565:EE_
-X-MS-Office365-Filtering-Correlation-Id: 53b20981-70c7-4eb0-af24-08db766f7afb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: e/Fw3U4jRcI+NKSg1aiXMxRF2lkrNp8kvetqY6QFWhavfM5ibDufyhnTJFXt5mnKeUupGumBRIPL1KlT2wQ7xZ5JvF9K4X2aI+YaQ+a0cc/I9qxFfAn0qHjYfwDWESTvSjDcPgrt5xqSqnFOvo84gThe0nu4RAlIWsg91ec3nXhB2B3qebLVEA+ON/6hCzB4tUuLB1bg6+UxAqjoOXVPSNyvnScl/7JbFBQr7iJiCb8p3ynOMl5JaeHzGwc3HCXfH614/8TMsJfPfoJawHZ1+8H2Meq8m4pMsq2rDH4L219SOduuxfOJcbfwEfvE4dAYCHgOd1HWJBIGEEd8y9N0ILPyHMO3Ys1ZN7QBaTO3KkPAODt/q9ZG/RWkm1ABvAIxCMbzuWfvijkX7xEg4Ewl+CVTh6CjxcXGw4Ftnnd5ssYncvjcND0xwGlDAO8F+xGw0Z/ET1IRbFSoOgc5kMeff+tYgsNGJhAozTBy2jtY2FbJN7wfEHir+/AY814PFUhPEw6ZrSWyjOW6jhNLc6sRaZORoKTUYlkJ+S2NUQV3krppMk5vAiY1OXANwxYLyzgm9HnYZZnpkmavBGKjlrDEgdTpVhm7AaKTHvplcx0FXcXC94gMW8wlUyR7tdhoP7KgTkH879eECgfIFS/bCU7+qHaPyHYXNWywYVo2forhQSiVm5fBNE5QDAit2/OIhhRIsTq+Eu9eft51MwSW4A67KMeOod8S2Vg/pOG4Ggc8efeCYfYJ7Wel2LZFjQzz2nDd
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(39860400002)(346002)(451199021)(40470700004)(36840700001)(46966006)(82310400005)(36860700001)(47076005)(54906003)(478600001)(336012)(83380400001)(426003)(186003)(26005)(2906002)(9686003)(5660300002)(7416002)(33716001)(70206006)(40460700003)(356005)(316002)(70586007)(7636003)(82740400003)(40480700001)(55016003)(8936002)(8676002)(41300700001)(6916009)(86362001)(4326008);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 18:02:17.8256
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53b20981-70c7-4eb0-af24-08db766f7afb
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6565
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.187.170.15]
+X-ClientProxiedBy: EX19D045UWA001.ant.amazon.com (10.13.139.83) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 11:10:22AM +0800, Baolu Lu wrote:
-
-> > > > I think that, whether the guest has an IOPF capability or not,
-> > > > the host should always forward any stage-1 fault/error back to
-> > > > the guest. Yet, the implementation of this series builds with
-> > > > the IOPF framework that doesn't report IOMMU_FAULT_DMA_UNRECOV.
-> > > > 
-> > > > And I have my doubt at the using the IOPF framework with that
-> > > > IOMMU_PAGE_RESP_ASYNC flag: using the IOPF framework is for
-> > > > its bottom half workqueue, because a page response could take
-> > > > a long cycle. But adding that flag feels like we don't really
-> > > > need the bottom half workqueue, i.e. losing the point of using
-> > > > the IOPF framework, IMHO.
-> > > > 
-> > > > Combining the two facts above, I wonder if we really need to
-> > > > go through the IOPF framework; can't we just register a user
-> > > > fault handler in the iommufd directly upon a valid event_fd?
-> > > Agreed. We should avoid workqueue in sva iopf framework. Perhaps we
-> > > could go ahead with below code? It will be registered to device with
-> > > iommu_register_device_fault_handler() in IOMMU_DEV_FEAT_IOPF enabling
-> > > path. Un-registering in the disable path of cause.
-> > Well, for a virtualization use case, I still think it's should
-> > be registered in iommufd.
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Mon, 26 Jun 2023 16:09:01 +0100
+> There are currently four copies of reuseport_lookup: one each for
+> (TCP, UDP)x(IPv4, IPv6). This forces us to duplicate all callers of
+> those functions as well. This is already the case for sk_lookup
+> helpers (inet,inet6,udp4,udp6)_lookup_run_bpf.
 > 
-> Emm.. you suggest iommufd calls iommu_register_device_fault_handler() to
-> register its own page fault handler, right?
+> There are two differences between the reuseport_lookup helpers:
 > 
-> I have a different opinion, iommu_register_device_fault_handler() is
-> called to register a fault handler for a device. It should be called
-> or initiated by a device driver. The iommufd only needs to install a
-> per-domain io page fault handler.
+> 1. They call different hash functions depending on protocol
+> 2. UDP reuseport_lookup checks that sk_state != TCP_ESTABLISHED
 > 
-> I am considering a use case on Intel platform. Perhaps it's similar
-> on other platforms. An SIOV-capable device can support host SVA and
-> assigning mediated devices to user space at the same time. Both host
-> SVA and mediated devices require IOPF. So there will be multiple places
-> where a page fault handler needs to be registered.
-
-Okay, the narrative makes sense to me. I was more thinking of
-the nesting case. The iommu_register_device_fault_handler() is
-registered per device, as its name implies, while the handler
-probably should be slightly different by the attaching domain.
-
-It seems that your io_pgfault_handler() in the previous email
-can potentially handle this, i.e. a IOMMU_DOMAIN_NESTED could
-set domain->iopf_handler to forward DMA faults to user space.
-We just need to make sure this pathway would be unconditional
-at the handler registration and fault->type.
-
-> > Having a device without an IOPF/PRI
-> > capability, a guest OS should receive some faults too, if that
-> > device causes a translation failure.
+> Move the check for sk_state into the caller and use the INDIRECT_CALL
+> infrastructure to cut down the helpers to one per IP version.
 > 
-> Yes. DMA faults are also a consideration. But I would like to have it
-> supported in a separated series. As I explained in the previous reply,
-> we also need to consider the software nested translation case.
+> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+> ---
+>  include/net/inet6_hashtables.h | 11 ++++++++++-
+>  include/net/inet_hashtables.h  | 15 ++++++++++-----
+>  include/net/udp.h              |  8 ++++++++
+>  net/ipv4/inet_hashtables.c     | 23 ++++++++++++++++-------
+>  net/ipv4/udp.c                 | 34 +++++++++++++---------------------
+>  net/ipv6/inet6_hashtables.c    | 17 +++++++++++++----
+>  net/ipv6/udp.c                 | 41 ++++++++++++++++-------------------------
+>  7 files changed, 86 insertions(+), 63 deletions(-)
+> 
+> diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+> index 032ddab48f8f..49d586454287 100644
+> --- a/include/net/inet6_hashtables.h
+> +++ b/include/net/inet6_hashtables.h
+> @@ -48,12 +48,21 @@ struct sock *__inet6_lookup_established(struct net *net,
+>  					const u16 hnum, const int dif,
+>  					const int sdif);
+>  
+> +typedef u32 (*inet6_ehashfn_t)(const struct net *net,
+> +			       const struct in6_addr *laddr, const u16 lport,
+> +			       const struct in6_addr *faddr, const __be16 fport);
+> +
+> +u32 inet6_ehashfn(const struct net *net,
+> +		  const struct in6_addr *laddr, const u16 lport,
+> +		  const struct in6_addr *faddr, const __be16 fport);
 
-I see.
+Can we use inet6_ehashfn_t here ?
 
-Thanks
-Nic
+Same for .c file, IPv4, and UDP.
+
+
+> +
+>  struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
+>  				    struct sk_buff *skb, int doff,
+>  				    const struct in6_addr *saddr,
+>  				    __be16 sport,
+>  				    const struct in6_addr *daddr,
+> -				    unsigned short hnum);
+> +				    unsigned short hnum,
+> +				    inet6_ehashfn_t ehashfn);
+>  
+>  struct sock *inet6_lookup_listener(struct net *net,
+>  				   struct inet_hashinfo *hashinfo,
+> diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+> index 8734f3488f5d..51ab6a1a3601 100644
+> --- a/include/net/inet_hashtables.h
+> +++ b/include/net/inet_hashtables.h
+> @@ -379,10 +379,19 @@ struct sock *__inet_lookup_established(struct net *net,
+>  				       const __be32 daddr, const u16 hnum,
+>  				       const int dif, const int sdif);
+>  
+> +typedef u32 (*inet_ehashfn_t)(const struct net *net,
+> +			      const __be32 laddr, const __u16 lport,
+> +			      const __be32 faddr, const __be16 fport);
+> +
+> +u32 inet_ehashfn(const struct net *net,
+> +		 const __be32 laddr, const __u16 lport,
+> +		 const __be32 faddr, const __be16 fport);
+> +
+>  struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
+>  				   struct sk_buff *skb, int doff,
+>  				   __be32 saddr, __be16 sport,
+> -				   __be32 daddr, unsigned short hnum);
+> +				   __be32 daddr, unsigned short hnum,
+> +				   inet_ehashfn_t ehashfn);
+>  
+>  static inline struct sock *
+>  	inet_lookup_established(struct net *net, struct inet_hashinfo *hashinfo,
+> @@ -453,10 +462,6 @@ static inline struct sock *__inet_lookup_skb(struct inet_hashinfo *hashinfo,
+>  			     refcounted);
+>  }
+>  
+> -u32 inet6_ehashfn(const struct net *net,
+> -		  const struct in6_addr *laddr, const u16 lport,
+> -		  const struct in6_addr *faddr, const __be16 fport);
+> -
+>  static inline void sk_daddr_set(struct sock *sk, __be32 addr)
+>  {
+>  	sk->sk_daddr = addr; /* alias of inet_daddr */
+> diff --git a/include/net/udp.h b/include/net/udp.h
+> index 5cad44318d71..3b404b429f88 100644
+> --- a/include/net/udp.h
+> +++ b/include/net/udp.h
+> @@ -317,6 +317,14 @@ struct sock *udp6_lib_lookup_skb(const struct sk_buff *skb,
+>  				 __be16 sport, __be16 dport);
+>  int udp_read_skb(struct sock *sk, skb_read_actor_t recv_actor);
+>  
+> +INDIRECT_CALLABLE_DECLARE(u32 udp_ehashfn(const struct net *,
+> +					  const __be32, const __u16,
+> +					  const __be32, const __be16));
+> +
+> +INDIRECT_CALLABLE_DECLARE(u32 udp6_ehashfn(const struct net *,
+> +					   const struct in6_addr *, const u16,
+> +					   const struct in6_addr *, const __be16));
+> +
+>  /* UDP uses skb->dev_scratch to cache as much information as possible and avoid
+>   * possibly multiple cache miss on dequeue()
+>   */
+> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> index 91f9210d4e83..0dd768ab22d9 100644
+> --- a/net/ipv4/inet_hashtables.c
+> +++ b/net/ipv4/inet_hashtables.c
+> @@ -28,9 +28,9 @@
+>  #include <net/tcp.h>
+>  #include <net/sock_reuseport.h>
+>  
+> -static u32 inet_ehashfn(const struct net *net, const __be32 laddr,
+> -			const __u16 lport, const __be32 faddr,
+> -			const __be16 fport)
+> +u32 inet_ehashfn(const struct net *net, const __be32 laddr,
+> +		 const __u16 lport, const __be32 faddr,
+> +		 const __be16 fport)
+>  {
+>  	static u32 inet_ehash_secret __read_mostly;
+>  
+> @@ -39,6 +39,7 @@ static u32 inet_ehashfn(const struct net *net, const __be32 laddr,
+>  	return __inet_ehashfn(laddr, lport, faddr, fport,
+>  			      inet_ehash_secret + net_hash_mix(net));
+>  }
+> +EXPORT_SYMBOL_GPL(inet_ehashfn);
+>  
+>  /* This function handles inet_sock, but also timewait and request sockets
+>   * for IPv4/IPv6.
+> @@ -332,6 +333,10 @@ static inline int compute_score(struct sock *sk, struct net *net,
+>  	return score;
+>  }
+>  
+> +INDIRECT_CALLABLE_DECLARE(u32 udp_ehashfn(const struct net *,
+> +					  const __be32, const __u16,
+> +					  const __be32, const __be16));
+> +
+>  /**
+>   * inet_lookup_reuseport() - execute reuseport logic on AF_INET socket if necessary.
+>   * @net: network namespace.
+> @@ -342,6 +347,7 @@ static inline int compute_score(struct sock *sk, struct net *net,
+>   * @sport: source port.
+>   * @daddr: destination address.
+>   * @hnum: destination port in host byte order.
+> + * @ehashfn: hash function used to generate the fallback hash.
+>   *
+>   * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
+>   *         the selected sock or an error.
+> @@ -349,13 +355,15 @@ static inline int compute_score(struct sock *sk, struct net *net,
+>  struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
+>  				   struct sk_buff *skb, int doff,
+>  				   __be32 saddr, __be16 sport,
+> -				   __be32 daddr, unsigned short hnum)
+> +				   __be32 daddr, unsigned short hnum,
+> +				   inet_ehashfn_t ehashfn)
+>  {
+>  	struct sock *reuse_sk = NULL;
+>  	u32 phash;
+>  
+>  	if (sk->sk_reuseport) {
+> -		phash = inet_ehashfn(net, daddr, hnum, saddr, sport);
+> +		phash = INDIRECT_CALL_2(ehashfn, udp_ehashfn, inet_ehashfn,
+> +					net, daddr, hnum, saddr, sport);
+>  		reuse_sk = reuseport_select_sock(sk, phash, skb, doff);
+>  	}
+>  	return reuse_sk;
+> @@ -385,7 +393,7 @@ static struct sock *inet_lhash2_lookup(struct net *net,
+>  		score = compute_score(sk, net, hnum, daddr, dif, sdif);
+>  		if (score > hiscore) {
+>  			result = inet_lookup_reuseport(net, sk, skb, doff,
+> -						       saddr, sport, daddr, hnum);
+> +						       saddr, sport, daddr, hnum, inet_ehashfn);
+>  			if (result)
+>  				return result;
+>  
+> @@ -414,7 +422,8 @@ static inline struct sock *inet_lookup_run_bpf(struct net *net,
+>  	if (no_reuseport || IS_ERR_OR_NULL(sk))
+>  		return sk;
+>  
+> -	reuse_sk = inet_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
+> +	reuse_sk = inet_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum,
+> +					 inet_ehashfn);
+>  	if (reuse_sk)
+>  		sk = reuse_sk;
+>  	return sk;
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> index 5ef478d2c408..7258edece691 100644
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+> @@ -405,9 +405,9 @@ static int compute_score(struct sock *sk, struct net *net,
+>  	return score;
+>  }
+>  
+> -static u32 udp_ehashfn(const struct net *net, const __be32 laddr,
+> -		       const __u16 lport, const __be32 faddr,
+> -		       const __be16 fport)
+> +INDIRECT_CALLABLE_SCOPE
+> +u32 udp_ehashfn(const struct net *net, const __be32 laddr, const __u16 lport,
+> +		const __be32 faddr, const __be16 fport)
+>  {
+>  	static u32 udp_ehash_secret __read_mostly;
+>  
+> @@ -417,22 +417,6 @@ static u32 udp_ehashfn(const struct net *net, const __be32 laddr,
+>  			      udp_ehash_secret + net_hash_mix(net));
+>  }
+>  
+> -static struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+> -				     struct sk_buff *skb,
+> -				     __be32 saddr, __be16 sport,
+> -				     __be32 daddr, unsigned short hnum)
+> -{
+> -	struct sock *reuse_sk = NULL;
+> -	u32 hash;
+> -
+> -	if (sk->sk_reuseport && sk->sk_state != TCP_ESTABLISHED) {
+> -		hash = udp_ehashfn(net, daddr, hnum, saddr, sport);
+> -		reuse_sk = reuseport_select_sock(sk, hash, skb,
+> -						 sizeof(struct udphdr));
+> -	}
+> -	return reuse_sk;
+> -}
+> -
+>  /* called with rcu_read_lock() */
+>  static struct sock *udp4_lib_lookup2(struct net *net,
+>  				     __be32 saddr, __be16 sport,
+> @@ -451,7 +435,14 @@ static struct sock *udp4_lib_lookup2(struct net *net,
+>  				      daddr, hnum, dif, sdif);
+>  		if (score > badness) {
+>  			badness = score;
+> -			result = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
+> +
+> +			if (sk->sk_state == TCP_ESTABLISHED) {
+> +				result = sk;
+> +				continue;
+> +			}
+> +
+> +			result = inet_lookup_reuseport(net, sk, skb, sizeof(struct udphdr),
+> +						       saddr, sport, daddr, hnum, udp_ehashfn);
+>  			if (!result) {
+>  				result = sk;
+>  				continue;
+> @@ -490,7 +481,8 @@ static struct sock *udp4_lookup_run_bpf(struct net *net,
+>  	if (no_reuseport || IS_ERR_OR_NULL(sk))
+>  		return sk;
+>  
+> -	reuse_sk = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
+> +	reuse_sk = inet_lookup_reuseport(net, sk, skb, sizeof(struct udphdr),
+> +					 saddr, sport, daddr, hnum, udp_ehashfn);
+>  	if (reuse_sk)
+>  		sk = reuse_sk;
+>  	return sk;
+> diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+> index 208998694ae3..b5de1642bc51 100644
+> --- a/net/ipv6/inet6_hashtables.c
+> +++ b/net/ipv6/inet6_hashtables.c
+> @@ -39,6 +39,7 @@ u32 inet6_ehashfn(const struct net *net,
+>  	return __inet6_ehashfn(lhash, lport, fhash, fport,
+>  			       inet6_ehash_secret + net_hash_mix(net));
+>  }
+> +EXPORT_SYMBOL_GPL(inet6_ehashfn);
+>  
+>  /*
+>   * Sockets in TCP_CLOSE state are _always_ taken out of the hash, so
+> @@ -111,6 +112,10 @@ static inline int compute_score(struct sock *sk, struct net *net,
+>  	return score;
+>  }
+>  
+> +INDIRECT_CALLABLE_DECLARE(u32 udp6_ehashfn(const struct net *,
+> +					   const struct in6_addr *, const u16,
+> +					   const struct in6_addr *, const __be16));
+> +
+>  /**
+>   * inet6_lookup_reuseport() - execute reuseport logic on AF_INET6 socket if necessary.
+>   * @net: network namespace.
+> @@ -121,6 +126,7 @@ static inline int compute_score(struct sock *sk, struct net *net,
+>   * @sport: source port.
+>   * @daddr: destination address.
+>   * @hnum: destination port in host byte order.
+> + * @ehashfn: hash function used to generate the fallback hash.
+>   *
+>   * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
+>   *         the selected sock or an error.
+> @@ -130,13 +136,15 @@ struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
+>  				    const struct in6_addr *saddr,
+>  				    __be16 sport,
+>  				    const struct in6_addr *daddr,
+> -				    unsigned short hnum)
+> +				    unsigned short hnum,
+> +				    inet6_ehashfn_t ehashfn)
+>  {
+>  	struct sock *reuse_sk = NULL;
+>  	u32 phash;
+>  
+>  	if (sk->sk_reuseport) {
+> -		phash = inet6_ehashfn(net, daddr, hnum, saddr, sport);
+> +		phash = INDIRECT_CALL_INET(ehashfn, udp6_ehashfn, inet6_ehashfn,
+> +					   net, daddr, hnum, saddr, sport);
+>  		reuse_sk = reuseport_select_sock(sk, phash, skb, doff);
+>  	}
+>  	return reuse_sk;
+> @@ -159,7 +167,7 @@ static struct sock *inet6_lhash2_lookup(struct net *net,
+>  		score = compute_score(sk, net, hnum, daddr, dif, sdif);
+>  		if (score > hiscore) {
+>  			result = inet6_lookup_reuseport(net, sk, skb, doff,
+> -							saddr, sport, daddr, hnum);
+> +							saddr, sport, daddr, hnum, inet6_ehashfn);
+>  			if (result)
+>  				return result;
+>  
+> @@ -190,7 +198,8 @@ static inline struct sock *inet6_lookup_run_bpf(struct net *net,
+>  	if (no_reuseport || IS_ERR_OR_NULL(sk))
+>  		return sk;
+>  
+> -	reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
+> +	reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
+> +					  saddr, sport, daddr, hnum, inet6_ehashfn);
+>  	if (reuse_sk)
+>  		sk = reuse_sk;
+>  	return sk;
+> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+> index 8b3cb1d7da7c..ebac9200b15c 100644
+> --- a/net/ipv6/udp.c
+> +++ b/net/ipv6/udp.c
+> @@ -70,11 +70,12 @@ int udpv6_init_sock(struct sock *sk)
+>  	return 0;
+>  }
+>  
+> -static u32 udp6_ehashfn(const struct net *net,
+> -			const struct in6_addr *laddr,
+> -			const u16 lport,
+> -			const struct in6_addr *faddr,
+> -			const __be16 fport)
+> +INDIRECT_CALLABLE_SCOPE
+> +u32 udp6_ehashfn(const struct net *net,
+> +		 const struct in6_addr *laddr,
+> +		 const u16 lport,
+> +		 const struct in6_addr *faddr,
+> +		 const __be16 fport)
+>  {
+>  	static u32 udp6_ehash_secret __read_mostly;
+>  	static u32 udp_ipv6_hash_secret __read_mostly;
+> @@ -159,24 +160,6 @@ static int compute_score(struct sock *sk, struct net *net,
+>  	return score;
+>  }
+>  
+> -static struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+> -				     struct sk_buff *skb,
+> -				     const struct in6_addr *saddr,
+> -				     __be16 sport,
+> -				     const struct in6_addr *daddr,
+> -				     unsigned int hnum)
+> -{
+> -	struct sock *reuse_sk = NULL;
+> -	u32 hash;
+> -
+> -	if (sk->sk_reuseport && sk->sk_state != TCP_ESTABLISHED) {
+> -		hash = udp6_ehashfn(net, daddr, hnum, saddr, sport);
+> -		reuse_sk = reuseport_select_sock(sk, hash, skb,
+> -						 sizeof(struct udphdr));
+> -	}
+> -	return reuse_sk;
+> -}
+> -
+>  /* called with rcu_read_lock() */
+>  static struct sock *udp6_lib_lookup2(struct net *net,
+>  		const struct in6_addr *saddr, __be16 sport,
+> @@ -194,7 +177,14 @@ static struct sock *udp6_lib_lookup2(struct net *net,
+>  				      daddr, hnum, dif, sdif);
+>  		if (score > badness) {
+>  			badness = score;
+> -			result = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
+> +
+> +			if (sk->sk_state == TCP_ESTABLISHED) {
+> +				result = sk;
+> +				continue;
+> +			}
+> +
+> +			result = inet6_lookup_reuseport(net, sk, skb, sizeof(struct udphdr),
+> +							saddr, sport, daddr, hnum, udp6_ehashfn);
+>  			if (!result) {
+>  				result = sk;
+>  				continue;
+> @@ -234,7 +224,8 @@ static inline struct sock *udp6_lookup_run_bpf(struct net *net,
+>  	if (no_reuseport || IS_ERR_OR_NULL(sk))
+>  		return sk;
+>  
+> -	reuse_sk = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
+> +	reuse_sk = inet6_lookup_reuseport(net, sk, skb, sizeof(struct udphdr),
+> +					  saddr, sport, daddr, hnum, udp6_ehashfn);
+>  	if (reuse_sk)
+>  		sk = reuse_sk;
+>  	return sk;
+> 
+> -- 
+> 2.40.1
