@@ -2,173 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE3473D7DF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Jun 2023 08:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BD173DBC7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Jun 2023 11:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjFZGna (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Jun 2023 02:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
+        id S229541AbjFZJv7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Jun 2023 05:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFZGn3 (ORCPT
+        with ESMTP id S230174AbjFZJv6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jun 2023 02:43:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E82BE53;
-        Sun, 25 Jun 2023 23:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687761806; x=1719297806;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=llVZvcSu3tqguw5Yxc1rqOJytFA34U+GWnY++NIFpvg=;
-  b=nX10yf+DzSbb9F2I3AcSEDlenCpGyiJpKS2oVzMMsiPkgRT/XjzJcl4k
-   nNxHOAUpy1fIOXVvN1rLCyQ2r+MkijJuoBQUMamYgU9bJKJxFQE86RuBt
-   rjasq2nVFepamgStqrBzOT5mPgyUSS4rQeAknHee9Gue34/sCF6U6aSTL
-   BHsr5UkxxSPLyQvA1m4CWPxALl0E1+hk7rBEnCVdTOv3tCAsfLtwTBjKC
-   a8VbZnFMnZwPYSVAecf+4q6p6A9hDcqARJ/52dNfRAKEG7/DD1zNTWGF8
-   WpmkKLm+/bJU/NzXFx6bSu30xdGGH2Uo22Wk5ld0wtzQQZaJLibtkKGre
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="361230887"
-X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
-   d="scan'208";a="361230887"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 23:43:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="666183198"
-X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
-   d="scan'208";a="666183198"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 25 Jun 2023 23:43:02 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Sun, 25 Jun 2023 23:43:02 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Sun, 25 Jun 2023 23:43:02 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.171)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Sun, 25 Jun 2023 23:43:00 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VfFAzUUIhugbEOCMtK6mY9Dq148AN7lhDwm2wyKdqO9zxhAwwDvwv39Z2N2fhRJy7H60GxZ+87hHuTJNcEW+y5lrnq3rlKndkUwvYjel2TzG0untLyQTwxGZm+SokZL8toewqNadAAqfDS6WdqvnYzQ8w2irHyQaaeptfMFHLdJxb9Qfg97u+O5gcHyR0R3O4BCMcAVpcO1ZJkTSjcc6CVlMislbqXab5bz/xPLaLZB4EQoAg3dcjrw8VqtbTTFbCBBwiYlQ+m3SaRFDTBL/j8AXpiSZY7xN2dy79wRsaMHUIRLGKWlKY5RPNd7N775E4CwsPHzu0xVkk70UR/BkLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=llVZvcSu3tqguw5Yxc1rqOJytFA34U+GWnY++NIFpvg=;
- b=ExLXJvaLrynZXZuQXEqmuMS0w1zEhVQcJuOpJM9Tb3lFreujeBaDsA2jwgNOwluMYruLbVk/RiKIS9qo0oxC2O50H2iL4KWeVNMCKr3B2Lq3lSXwWWxzcWwb1eHuxzszv8xZ+xViY+MlDQ2GbFTy1wu6RSWznrgqHKWNQdOYTMRSru9fNf5hnY+mVz01YSGf9bt7A4O3leADivYB5ahqO+l9PBVf1IyTnQCuUZaX746hbIS1MWnS4TjiVSy1UwZqxhOPnHbK8Qujp2AlzX8bokLA17d3fLws4TieIZ/csiqu0cMHYKe4rSMmkCV0irBJBSbi7g3p/8RKYdCs6echMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BN9PR11MB5385.namprd11.prod.outlook.com (2603:10b6:408:11a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Mon, 26 Jun
- 2023 06:42:58 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4f05:6b0b:dbc8:abbb]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4f05:6b0b:dbc8:abbb%7]) with mapi id 15.20.6521.026; Mon, 26 Jun 2023
- 06:42:58 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-CC:     Jason Gunthorpe <jgg@nvidia.com>, "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: RE: [PATCH v2 00/11] iommufd: Add nesting infrastructure
-Thread-Topic: [PATCH v2 00/11] iommufd: Add nesting infrastructure
-Thread-Index: AQHZhBZTNX7dDuLMFEel2CdlG13MGq9hZYMwgAAiQoCAB0Y6EIAVLTqAgA7xydCABWBTgIAA1LOwgADAhgCAARBZAIAAzEsAgAcosiA=
-Date:   Mon, 26 Jun 2023 06:42:58 +0000
-Message-ID: <BN9PR11MB5276D6040E41595B929843168C26A@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230511143844.22693-1-yi.l.liu@intel.com>
- <BN9PR11MB5276DAF0A11809CF8433EE338C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZGdiS2m8jcd5OOt5@nvidia.com>
- <BN9PR11MB5276A74B2DA86C79908A420B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZH9AGWf1yRDu/86q@nvidia.com>
- <BN9PR11MB52763C7B838B04D3200322FD8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZJBL8QLLBiwRsUSI@nvidia.com>
- <BN9PR11MB527663567ECB8AD52D3170818C5CA@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZJGf3sgLKr9HLZuE@nvidia.com>
- <BN9PR11MB5276B852A32F53BE8EAA1A7D8C5DA@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZJMvtMe5QHPM0OEJ@Asurada-Nvidia>
-In-Reply-To: <ZJMvtMe5QHPM0OEJ@Asurada-Nvidia>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|BN9PR11MB5385:EE_
-x-ms-office365-filtering-correlation-id: a3362790-0987-458d-f254-08db76109476
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7Z5ZOTp9pOpdnKV9cJaRiua25HQfoJqta/lRk/PQnUDOb/gk6Vv40xMrzeaT2qYTwTS4YnErqBnyhT5Xrxb4mHQnZd+U/37y51dzdCdrUcGFYnf8Rt092FVjQ5WijixoKSUnb85kjkaUm7jbiUz2wZkCiiVlMgMxpINIIgpPHjH7i3Nd1rAcnPw39evhcnioGAGMh+bi4GeeSVjSiyRjRZpBFCMiAZhslOJzus+UC7UpgU6X7cj38NKpc6o3ff5U8gfAZFS6hW2E0GSu9W0glGOnabZqVKtVB2SYd4ttM7DTKn0XkC7ifqJ6vqK0j65uj6v4bEjfrUMgEsPHzZEVIKcNcRwNQ6x2iSOhslPXafICGRavaaPmYAiYe6OjYt/ao6YyJ1rNkeyFfl/nVjO/znzEYqyQIxegmRj1hjcyneMtsQrqubkpAsh0xms4E9kIGoeiT7GKOwkm1RtnnmERdgibPOaS4Mrh77Q44Z0ejhNWurLWeLE568kR6XIWJKwKEiJ0EYw0DCTdjiTmxrlN30cbryBq4/7R63goeRPdaTOs0L1KIgp7gULPZTDiSwuXaen0CxZGfliR4VTf+92/LUWzRPROhUB9BaojaS+sNBk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(396003)(39860400002)(376002)(346002)(451199021)(33656002)(5660300002)(52536014)(7416002)(6916009)(86362001)(8936002)(8676002)(41300700001)(66556008)(64756008)(66476007)(38070700005)(76116006)(4326008)(38100700002)(122000001)(316002)(66946007)(55016003)(82960400001)(9686003)(6506007)(26005)(186003)(66446008)(2906002)(7696005)(71200400001)(54906003)(478600001)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kC0lKjSV7xrWtLHQ7486I3jxSecWfqT99v48kUbggW+acKMLYvOD8fpQTWFF?=
- =?us-ascii?Q?EwcVbZ6hce6UDconuxqjkw0kZHkLwVHUMquNdVQNhvqBkg+MlZEWRyRLiKk1?=
- =?us-ascii?Q?UukHo7I6eP/pup8JAXztQkeobQFr7L/Ab2ru+lojz0Il2K4GbWzsfJTfXffN?=
- =?us-ascii?Q?9AS+1ZIgyXJwaFLtvSEffqKLL/aqpqxcGTfKjHbW6y13rmjZ2qm2yjuhUbl4?=
- =?us-ascii?Q?AMxHGdeXYaVcAzNUV7xiCcWffLVP95b09Za21QSQGlXEkEPvmnYsUq0cRfJM?=
- =?us-ascii?Q?NwLU4ytPuL9E9chWmepNfPJS9K9Y6d8g9XezZW1LoMscPXnhdag0an29erGO?=
- =?us-ascii?Q?Srgl8r03K/F4oNeRJ49IsCJBbbAH8IEWCPgJK8aNdw3bZ09DGu1GI8Q5AR9V?=
- =?us-ascii?Q?SMM5pQCOnf4p8SlaXMKD1f3VIvrMy4j1iXkTxgb5xikiHmcGGuqb3X2OiqR/?=
- =?us-ascii?Q?ZqMi442Xg4zNzc/uWxit/VqwqAKlrkKNIjJfSsF1WJ77Ws3TBH7TE1bz0ukH?=
- =?us-ascii?Q?Sfrqk5A4gFQv9gz+hAqqDJRfZR6yDU1aFRWjs3iWWCe0AojNGImT7gfwEU4c?=
- =?us-ascii?Q?Jbh+QARKfTSagcQ8dXyFDBdBe7HdGH03PKoPAyYIH0cBLxxYP92dVOzZaeq5?=
- =?us-ascii?Q?qH1LHOWsENdHKWjbpbdW+6jep5wAMyi7iHU28jPKfnkCKGd9AcEHgx4gbDRb?=
- =?us-ascii?Q?0yg9xRFXVzxdWavox909kTI78Ji9YCPGE3uFghh6rEtFbVyLDcixaedEzQ6g?=
- =?us-ascii?Q?aYnZwn4se6oH+y6A+LgNybbtMdxwlG/2f11IDhWb4VI3Q+54YqBhXNZVRvav?=
- =?us-ascii?Q?jPiHLNCdoxSS8UmdGIpKeWjeFYm/iapan9I+Cj9Pqy25KPB8DB/l0RJVqkxl?=
- =?us-ascii?Q?ttbOaPvxxS9v82FCuW73cKbok04lUuRJJLEE2Qcp7wHCAxlEpa0DZso6zIfi?=
- =?us-ascii?Q?MVfiX/MvwHB0bcBCrNtaLoJkrO1nZJcOkVLtFKJkhz6bPygHz27wcsiYzVEi?=
- =?us-ascii?Q?eig+e4aYT1bk004A6iIEwc0hjOaAt3gzZ/iZiYsDsYsweY++126zile0uHtE?=
- =?us-ascii?Q?VcVhLdeGhtjPzGodJh0SxWVVfAuULva3tfFj1HhrqncN8fREH6Dfwemqcm/O?=
- =?us-ascii?Q?ZzGwEW3V/PqNYEXJG6ePdUmCnZXFR60UNMNbsvOt8WJAh8P2P2/Iu/nrMIST?=
- =?us-ascii?Q?jj7dYAJilhn/bktIM5cenkvLvh9b23o97H18E6BVL8J+go9dSrQuorIv03Qd?=
- =?us-ascii?Q?CP1a0pSPftW39r3BsucpuEfZpp55gUL8NYbgO3Q6lvbOz2mMadPZQt1YGaZ4?=
- =?us-ascii?Q?wqq2FQFiWEwGbc44tt8021PSFqWIMOa9YdTIaSfOC0ty/a9RwEU40ghxcrXF?=
- =?us-ascii?Q?YF0dqPH9Tz0FUnGh1U8yH00KGoIDjz9VRRFAI2we8iQcz5eOaFblGz6xL+J7?=
- =?us-ascii?Q?JHV6NbLKlu7lyDPKqnJJ52VHG34Y6IChos5+peZAJqzln8RtdZKe9g5P+aLv?=
- =?us-ascii?Q?U/s8zIIp16NLunjrIwKaWTmLPDdVzZx08uArzTUTK5c1UrEzLFgfZktUeToL?=
- =?us-ascii?Q?QSaaRfgRzAk4aH4NXQvkSqFiMKJNPSzG/ecJ4QUf?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 26 Jun 2023 05:51:58 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B99D9
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jun 2023 02:51:52 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b69a48368fso18562321fa.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jun 2023 02:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687773110; x=1690365110;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5ggM1N3+w7ImiNtAZHXArGd84Z6U6HJ8t/slQ492qkA=;
+        b=FqHsMQ5vsBUDTg8Qu45FvgnX3xqTLM97k8uX6dT/yu2Eb3hdcwpsoETC22q1iX2xjI
+         fdRw4/PINKAYt0ptvLnXp8jq3UXTYTqk2hePWziqEWMDUpQ9ZL94UKNH5uYuleyzC/E0
+         WQ4YJVsU1d9unRENNAHKCjlXBr24hGZ1ZgGFMvJcHD0JDn0611kKx0hHNFhKOXALI+go
+         iEdWMF5DbOsUA476EvEUvA6sEu+NtNHD+XLeq4+UAwclbBkkMCW2fX8wi5gShPXUTayH
+         iShaJjMDyqVrAsSbcbwWrtHlvR3MkGOf7N5/MZguV3gX8fs9AFBigPXxMjNo8xmmIux4
+         pfVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687773110; x=1690365110;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5ggM1N3+w7ImiNtAZHXArGd84Z6U6HJ8t/slQ492qkA=;
+        b=aRpqLtN0DE7Jif83Dr0yrKG7jYBrofHFpFinb0t2XjVT4s4VEE/hjx0w+cuTSFa1fW
+         2wnIgbkinRnjh41PgT8oXTQZIauPw+caHIjVA/GjWDyqdE3k9IkOnOsmCTQcotf0o9NX
+         /3Sg+l/s1dhIAWv1uuaDFueihzKpufBZbylZoHSwpTZsuIiqv58rEh4dc2G8pccOv2vZ
+         jGCNgYazHSHIQ+lO8TJD5v9cWGfDYXExTlpxkXW4FKA/8M7169ik5PMtBcb5ivBA9iDk
+         7U9wqaNwjpfhNd0tBrf7hfFN15vyTk4OECB8q3oCdHUqkIsW/c5F7+0ZOcpatq3Gk88X
+         E4KQ==
+X-Gm-Message-State: AC+VfDxzWAhmsMHvyVaFmi8tkZoFcAvrRUxjxikAW6VG0r0jC7dkPQeV
+        JN8SB1nyZ5HKD0itFJSezCsccA==
+X-Google-Smtp-Source: ACHHUZ6z1CFWIkB585T4AsGvxgWrYm0aA3bqu065Ypw3q/WfLWUkxYhOjK8FkfMVQVPSogtwBbHaIQ==
+X-Received: by 2002:a2e:948b:0:b0:2b4:491d:8d53 with SMTP id c11-20020a2e948b000000b002b4491d8d53mr17150106ljh.45.1687773110465;
+        Mon, 26 Jun 2023 02:51:50 -0700 (PDT)
+Received: from larix ([2a02:8428:1671:f801:5eff:2156:7b9f:50c2])
+        by smtp.gmail.com with ESMTPSA id f4-20020a0560001b0400b00307a86a4bcesm6879642wrz.35.2023.06.26.02.51.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 02:51:50 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 11:51:48 +0200
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
+Message-ID: <ZJlftJF9ufnBMjHi@larix>
+References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+ <20230616113232.GA84678@myrica>
+ <bc963573-f4d3-1467-daaf-2d85f6befe3f@linux.intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3362790-0987-458d-f254-08db76109476
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2023 06:42:58.4825
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jpgOrJtKbUHExwoOxY7jo3aGA2niqrqXeX55PJ3PxTLDIwq0Gx1um1ADdwQdFvQ+G+qP+U4Cy/lHnLIzCfZr1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5385
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc963573-f4d3-1467-daaf-2d85f6befe3f@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -176,55 +80,96 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Thursday, June 22, 2023 1:13 AM
->=20
-> On Wed, Jun 21, 2023 at 06:02:21AM +0000, Tian, Kevin wrote:
->=20
-> > > On Tue, Jun 20, 2023 at 01:43:42AM +0000, Tian, Kevin wrote:
-> > > > I wonder whether we have argued passed each other.
-> > > >
-> > > > This series adds reserved regions to S2. I challenged the necessity=
- as
-> > > > S2 is not directly accessed by the device.
-> > > >
-> > > > Then you replied that doing so still made sense to support identity
-> > > > S1.
-> > >
-> > > I think I said/ment if we attach the "s2" iommu domain as a direct
-> > > attach for identity - eg at boot time, then the IOAS must gain the
-> > > reserved regions. This is our normal protocol.
-> > >
-> > > But when we use the "s2" iommu domain as an actual nested S2 then we
-> > > don't gain reserved regions.
-> >
-> > Then we're aligned.
-> >
-> > Yi/Nicolin, please update this series to not automatically add reserved
-> > regions to S2 in the nesting configuration.
->=20
-> I'm a bit late for the conversation here. Yet, how about the
-> IOMMU_RESV_SW_MSI on ARM in the nesting configuration? We'd
-> still call iommufd_group_setup_msi() on the S2 HWPT, despite
-> attaching the device to a nested S1 HWPT right?
+On Mon, Jun 19, 2023 at 11:35:50AM +0800, Baolu Lu wrote:
+> > Another outstanding issue was what to do for PASID stop. When the guest
+> > device driver stops using a PASID it issues a PASID stop request to the
+> > device (a device-specific mechanism). If the device is not using PRI stop
+> > markers it waits for pending PRs to complete and we're fine. Otherwise it
+> > sends a stop marker which is flushed to the PRI queue, but does not wait
+> > for pending PRs.
+> > 
+> > Handling stop markers is annoying. If the device issues one, then the PRI
+> > queue contains stale faults, a stop marker, followed by valid faults for
+> > the next address space bound to this PASID. The next address space will
+> > get all the spurious faults because the fault handler doesn't know that
+> > there is a stop marker coming. Linux is probably alright with spurious
+> > faults, though maybe not in all cases, and other guests may not support
+> > them at all.
+> > 
+> > We might need to revisit supporting stop markers: request that each device
+> > driver declares whether their device uses stop markers on unbind() ("This
+> > mechanism must indicate that a Stop Marker Message will be generated."
+> > says the spec, but doesn't say if the function always uses one or the
+> > other mechanism so it's per-unbind). Then we still have to synchronize
+> > unbind() with the fault handler to deal with the pending stop marker,
+> > which might have already gone through or be generated later.
+> 
+> I don't quite follow here. Once a PASID is unbound from the device, the
+> device driver should be free to release the PASID. The PASID could then
+> be used for any other purpose. The device driver has no idea when the
+> pending page requests are flushed after unbind(), so it cannot decide
+> how long should the PASID be delayed for reuse. Therefore, I understand
+> that a successful return from the unbind() function denotes that all
+> pending page requests have been flushed and the PASID is viable for
+> other use.
 
-Yes, based on current design of ARM nesting.
+Yes that's the contract for unbind() at the moment
 
-But please special case it instead of pretending that all reserved regions
-are added to IOAS which is wrong in concept based on the discussion.
+> 
+> > 
+> > Currently we ignore all that and just flush the PRI queue, followed by the
+> > IOPF queue, to get rid of any stale fault before reassigning the PASID. A
+> > guest however would also need to first flush the HW PRI queue, but doesn't
+> > have a direct way to do that. If we want to support guests that don't deal
+> > with stop markers, the host needs to flush the PRI queue when a PASID is
+> > detached. I guess on Intel detaching the PASID goes through the host which
+> > can flush the host queue. On Arm we'll probably need to flush the queue
+> > when receiving a PASID cache invalidation, which the guest issues after
+> > clearing a PASID table entry.
+> 
+> The Intel VT-d driver follows below steps to drain pending page requests
+> when a PASID is unbound from a device.
+> 
+> - Tear down the device's pasid table entry for the stopped pasid.
+>   This ensures that ATS/PRI will stop putting more page requests for the
+>   pasid in VT-d PRQ.
 
->=20
-> > It also implies that the user cannot rely on IOAS_IOVA_RANGES to
-> > learn reserved regions for arranging addresses in S1.
-> >
-> > Then we also need a new ioctl to report reserved regions per dev_id.
->=20
-> So, in a nesting configuration, QEMU would poll a device's S2
-> MSI region (i.e. IOMMU_RESV_SW_MSI) to prevent conflict?
->=20
+Oh that's interesting, I didn't know about the implicit TLB invalidations
+on page requests for VT-d.
 
-Qemu needs to know all the reserved regions of the device and skip
-them when arranging S1 layout.
+For Arm SMMU, clearing the PASID table entry does cause ATS Translation
+Requests to return with Completer Abort, but does not affect PRI. The SMMU
+pushes page requests directly into the PRI queue without reading any table
+(unless the queue overflows).
 
-I'm not sure whether the MSI region needs a special MSI type or
-just a general RESV_DIRECT type for 1:1 mapping, though.
+We're counting on the device driver to perform the PASID stop request
+before calling unbind(), described in PCIe 6.20.1 (Managing PASID Usage)
+and 10.4.1.2 (Managing PASID Usage on PRG Requests). This ensures that
+when unbind() is called, no more page request for the PASID is pushed into
+the PRI queue. But some may still be in the queue if the device uses stop
+markers.
+
+> - Sync with the PRQ handling thread until all related page requests in
+>   PRQ have been delivered.
+
+This is what I'm concerned about. For VT-d this happens in the host which
+is in charge of modifying the PASID table. For SMMU, the guest writes the
+PASID table. It flushes its virtual PRI queue, but not the physical queue
+that is managed by the host.
+
+One synchronization point where the host could flush the physical PRI
+queue is the PASID config invalidation (CMD_CFGI_CD). As Jason pointed out
+the host may not be able to observe those if a command queue is assigned
+directly to the guest (a theoretical SMMU extension), though in that case
+the guest may also have direct access to a PRI queue (like the AMD vIOMMU
+extension) and be able to flush the queue directly.
+
+But we can just wait for PRI implementations and see what the drivers
+need. Maybe no device will implement stop markers.
+
+Thanks,
+Jean
+
+> - Flush the iopf queue with iopf_queue_flush_dev().
+> - Follow the steps defined in VT-d spec section 7.10 to drain all page
+>   requests and responses between VT-d and the endpoint device.
