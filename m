@@ -2,184 +2,214 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378F473EEE4
+	by mail.lfdr.de (Postfix) with ESMTP id DD51D73EEE6
 	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 01:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjFZXC1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S229775AbjFZXC1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Mon, 26 Jun 2023 19:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjFZXCZ (ORCPT
+        with ESMTP id S229653AbjFZXCZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 26 Jun 2023 19:02:25 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB21010E2;
-        Mon, 26 Jun 2023 16:02:23 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id CCD135C0120;
-        Mon, 26 Jun 2023 19:02:19 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EBE10EC;
+        Mon, 26 Jun 2023 16:02:24 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1354E5C0164;
+        Mon, 26 Jun 2023 19:02:24 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 26 Jun 2023 19:02:19 -0400
+  by compute6.internal (MEProxy); Mon, 26 Jun 2023 19:02:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1687820539; x=1687906939; bh=i+8OuBfbOb
-        CWELCv1iVIGo3uNjpR3WlawSQL1LNzwes=; b=VYB854Kusx3ppHI4Z4B3ZcDzis
-        LRnU0J6seQeLryAj39+NkNO7UK2sVheAurLHbXp/HlMbM5TjwJmgnPIrRX4UQZ6N
-        bMEJZKSQAMphpWHYYCXuDtaCZF8n1CzyCafqbuzcFAksQfzOZRJtlEfB1NvuKgx7
-        zjWikoxx/DkV+poPwUYYF0p6XojcbTiTnCOwSSG9osczaNH1w2oTs0erP4kYlmGG
-        /Z/x8viT6R/uWYGK65m9RRsc2+fY9K0f/Hr0pADrrnklQc5lGZhnNIDTGZys9Z4h
-        l2nTbmcCUppXDotFevaI2qLKI2ZpoVCGAqKNwrSei+uKbn48Jik6fdTNZWeQ==
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1687820544; x=
+        1687906944; bh=zvVh1fx8mJsJ0llz/fWqNzEDpjhcK5ZKaZSEnotm8Qs=; b=E
+        1LWtVo45Hh+d3qwE5X1bscpQFeb/tW56uDPpDf0QptYqJDs82siTLhgUUW6qFKJK
+        LmpoEhPHhJ2HQZvbv83S+LItjnWoBMPyfqbhrsiDNl9HS413XSr/TGQClEJhwlPc
+        O0xxaQFwNoakv1VnWlVjTulrOdTI/JpVt8lIKMEsk0kh4SK+512yFcyGykvVZdqR
+        PJknvlrm5mGMM3dW1V1ETTYyPTnX4zjKXzjwTCOtfAMhMKZsoPmfdr1+RQRvNME/
+        40ZpF1IXYQ+QICdVC2Qs67mEKUM+h8M8e/26IeWpTDam9FVSEkSTF2HE1Uj0/N98
+        UgXegVEkKVLgClHl0pP0w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687820539; x=1687906939; bh=i+8OuBfbObCWE
-        LCv1iVIGo3uNjpR3WlawSQL1LNzwes=; b=o8GnYwts5WqsJGN8GMjOQMXmYalqu
-        +3EOIGdNJ1haFTpwvAu9HAu2gip+u8LrYCq4/SmUw2vMncaOIPE3AeyTk5NR3Ei7
-        dQMJIt0wDaFEuirrIJSm+el3uJ8YfSBITTvLgrvhl57bbOh+z97JHLtIfHLVNLdk
-        s3t1YbQ8GiIypFBL7RS0YvaTZDI573j1Tdx696IKKY6yLUCDnFAqQlVEMp2W4uW1
-        xP/wfxoz6ftKPOC3hZxDsm3oYfbD2NEEgkFzzZr8ujRd5cemc+7pccVw5nH8BRaq
-        kayukgEeZT7/xAoPfi8ff8LwRH6PKYqF1EnpAsdEQ8GwOKfyA3ZzVWYaw==
-X-ME-Sender: <xms:-xiaZEhOAvBFyJ7gletXvWP7WgarqYHMxSjB403qMpvhtRaSf4lvFA>
-    <xme:-xiaZNAgpiUl3rtwwO5HRL12SZAtUWgSb0arrTXX6cTkpOxKR63IAKQAsiug4eMjY
-    ICDQq_bVeJZrhNBZA>
-X-ME-Received: <xmr:-xiaZMEwV-BAg-rxRVh5tPwwGoWVs-16fG9JX6Fe7E_2l8kAHrF9AEEoPH1wrxeghPaMlbm0s1Jp3MnYh6Pt1y9tSRFYdZ-kqDnJeAvt4lQ>
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1687820544; x=
+        1687906944; bh=zvVh1fx8mJsJ0llz/fWqNzEDpjhcK5ZKaZSEnotm8Qs=; b=c
+        C6W5nK61tARnvjVDjbqtQivkIarPHJPPcEuw0ev9T/d4YzDkHHVlp1aX4iLaCEq0
+        3/3VZuqEOoUGMqceSewGMaWhm9AESiNxfImxO+QHvwXuozEmYV83vJG8PRgP+hVG
+        y8gwHCgZwWxSaW9Acp1nEw+clFcsvokPkW5O6OupiCXRJb+5Kd0So0r3Xcq7OJdM
+        1DW/tAO/LEMCMm/c+jnMWQh4eI+AK06cW/q1WB4p4UPoHAwB6HaDthkjj072JUP4
+        6CZxnlMAWH2H2E6LPdZmJ5kf7mtkkj3k98XvXg5RVE3mieAxOwCk26TXLyrKNOlS
+        ihrADuo7eZCtEbuUYrlDA==
+X-ME-Sender: <xms:_xiaZFa_WgeqhtFgVM8pVZLi6K2pnDAnizzWqeppfDDOXhlZRzHWcA>
+    <xme:_xiaZMbXyOgDRJ-zOuVHAgCX3Ag6zrh4g_E3K7BCO8i7ais7cdRLkj_7Z0xa0rBxG
+    WrGpMjybW5wseL5oQ>
+X-ME-Received: <xmr:_xiaZH8bSCVum9UYEgCqvCjTShLlEE7_oXBtoATHS5CHzsE1siay9uwTCfhIbIejgAN18H0Rix9XjDCwaOw3QQgrp1KxlC6o_Hyy4E1NDnY>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehgedgudejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefhvf
-    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougig
-    uhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepueekjeeviefghfethedtgf
-    duheevheelfffgueekffetheelieetgfdvfffghfffnecuffhomhgrihhnpehivghtfhdr
-    ohhrghdpkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:-xiaZFSUvG_G0tfySAKsXAV1NqaufI3PaWz2CJmOzTJ7DzxPOg_8Nw>
-    <xmx:-xiaZBxkQtJUsE-Zju4j-GQUZMT-toXCOBXm3Osoty6dxou1YTct7Q>
-    <xmx:-xiaZD5k7D4shybHrbzCZHig8DAABy2bF2jA6G0w3dK1xVhoGQzdlg>
-    <xmx:-xiaZAx_Gax5MBN_hgx9JgewsUVrc04bPEYv-_RL-bNYKBaVd3j3ig>
+    evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
+    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
+    dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:_xiaZDo7X2ihV3f1sbbgx3Bt0SK5OhE5qYAzhUXhDmpAor-quo2zKw>
+    <xmx:_xiaZAoYfiGeiQLqPAVpA34yxnCiVWsHRt1xq07b3_YcGMJScGs2rQ>
+    <xmx:_xiaZJTUZ-IbsK6eSCpQIl2TLtiKXCRkOzSQxDK6KWTy8itDX4tXlw>
+    <xmx:ABmaZL9syNqXIqztlqx1Y8R4ME4ewkPoUDI50xXtvnR20VwlGcxqLA>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 26 Jun 2023 19:02:18 -0400 (EDT)
+ 26 Jun 2023 19:02:21 -0400 (EDT)
 From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        coreteam@netfilter.org, netfilter-devel@vger.kernel.org,
-        fw@strlen.de, daniel@iogearbox.net
-Cc:     dsahern@kernel.org
-Subject: [PATCH bpf-next 0/7] Support defragmenting IPv(4|6) packets in BPF
-Date:   Mon, 26 Jun 2023 17:02:07 -0600
-Message-Id: <cover.1687819413.git.dxu@dxuuu.xyz>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        shuah@kernel.org, fw@strlen.de
+Cc:     mykolal@fb.com, martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, dsahern@kernel.org
+Subject: [PATCH bpf-next 2/7] selftests/bpf: Add bpf_program__attach_netfilter helper test
+Date:   Mon, 26 Jun 2023 17:02:09 -0600
+Message-Id: <96bb65cbdf760b6a593ab85104a95b373d1d822b.1687819413.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <cover.1687819413.git.dxu@dxuuu.xyz>
+References: <cover.1687819413.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=ANY_BOUNCE_MESSAGE,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,VBOUNCE_MESSAGE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-=== Context ===
+Call bpf_program__attach_netfilter() with different
+protocol/hook/priority combinations.
 
-In the context of a middlebox, fragmented packets are tricky to handle.
-The full 5-tuple of a packet is often only available in the first
-fragment which makes enforcing consistent policy difficult. There are
-really only two stateless options, neither of which are very nice:
+Test fails if supposedly-illegal attachments work
+(e.g., bogus protocol family, illegal priority and so on)
+or if a should-work attachment fails.
 
-1. Enforce policy on first fragment and accept all subsequent fragments.
-   This works but may let in certain attacks or allow data exfiltration.
-
-2. Enforce policy on first fragment and drop all subsequent fragments.
-   This does not really work b/c some protocols may rely on
-   fragmentation. For example, DNS may rely on oversized UDP packets for
-   large responses.
-
-So stateful tracking is the only sane option. RFC 8900 [0] calls this
-out as well in section 6.3:
-
-    Middleboxes [...] should process IP fragments in a manner that is
-    consistent with [RFC0791] and [RFC8200]. In many cases, middleboxes
-    must maintain state in order to achieve this goal.
-
-=== BPF related bits ===
-
-Policy has traditionally been enforced from XDP/TC hooks. Both hooks
-run before kernel reassembly facilities. However, with the new
-BPF_PROG_TYPE_NETFILTER, we can rather easily hook into existing
-netfilter reassembly infra.
-
-The basic idea is we bump a refcnt on the netfilter defrag module and
-then run the bpf prog after the defrag module runs. This allows bpf
-progs to transparently see full, reassembled packets. The nice thing
-about this is that progs don't have to carry around logic to detect
-fragments.
-
-=== Patchset details ===
-
-There was an earlier attempt at providing defrag via kfuncs [1]. The
-feedback was that we could end up doing too much stuff in prog execution
-context (like sending ICMP error replies). However, I think there are
-still some outstanding discussion w.r.t. performance when it comes to
-netfilter vs the previous approach. I'll schedule some time during
-office hours for this.
-
-Patches 1 & 2 are stolenfrom Florian. Hopefully he doesn't mind. There
-were some outstanding comments on the v2 [2] but it doesn't look like a
-v3 was ever submitted.  I've addressed the comments and put them in this
-patchset cuz I needed them.
-
-Finally, the new selftest seems to be a little flaky. I'm not quite
-sure why the server will fail to `recvfrom()` occassionaly. I'm fairly
-sure it's a timing related issue with creating veths. I'll keep
-debugging but I didn't want that to hold up discussion on this patchset.
-
-
-[0]: https://datatracker.ietf.org/doc/html/rfc8900
-[1]: https://lore.kernel.org/bpf/cover.1677526810.git.dxu@dxuuu.xyz/
-[2]: https://lore.kernel.org/bpf/20230525110100.8212-1-fw@strlen.de/
-
-Daniel Xu (7):
-  tools: libbpf: add netfilter link attach helper
-  selftests/bpf: Add bpf_program__attach_netfilter helper test
-  netfilter: defrag: Add glue hooks for enabling/disabling defrag
-  netfilter: bpf: Support BPF_F_NETFILTER_IP_DEFRAG in netfilter link
-  bpf: selftests: Support not connecting client socket
-  bpf: selftests: Support custom type and proto for client sockets
-  bpf: selftests: Add defrag selftests
-
- include/linux/netfilter.h                     |  12 +
- include/uapi/linux/bpf.h                      |   5 +
- net/ipv4/netfilter/nf_defrag_ipv4.c           |   8 +
- net/ipv6/netfilter/nf_defrag_ipv6_hooks.c     |  10 +
- net/netfilter/core.c                          |   6 +
- net/netfilter/nf_bpf_link.c                   | 108 ++++++-
- tools/include/uapi/linux/bpf.h                |   5 +
- tools/lib/bpf/bpf.c                           |   8 +
- tools/lib/bpf/bpf.h                           |   6 +
- tools/lib/bpf/libbpf.c                        |  47 +++
- tools/lib/bpf/libbpf.h                        |  15 +
- tools/lib/bpf/libbpf.map                      |   1 +
- tools/testing/selftests/bpf/Makefile          |   4 +-
- .../selftests/bpf/generate_udp_fragments.py   |  90 ++++++
- .../selftests/bpf/ip_check_defrag_frags.h     |  57 ++++
- tools/testing/selftests/bpf/network_helpers.c |  26 +-
- tools/testing/selftests/bpf/network_helpers.h |   3 +
- .../bpf/prog_tests/ip_check_defrag.c          | 282 ++++++++++++++++++
- .../bpf/prog_tests/netfilter_basic.c          |  78 +++++
- .../selftests/bpf/progs/ip_check_defrag.c     | 104 +++++++
- .../bpf/progs/test_netfilter_link_attach.c    |  14 +
- 21 files changed, 868 insertions(+), 21 deletions(-)
- create mode 100755 tools/testing/selftests/bpf/generate_udp_fragments.py
- create mode 100644 tools/testing/selftests/bpf/ip_check_defrag_frags.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c
+Co-developed-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ .../bpf/prog_tests/netfilter_basic.c          | 78 +++++++++++++++++++
+ .../bpf/progs/test_netfilter_link_attach.c    | 14 ++++
+ 2 files changed, 92 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/netfilter_basic.c
- create mode 100644 tools/testing/selftests/bpf/progs/ip_check_defrag.c
  create mode 100644 tools/testing/selftests/bpf/progs/test_netfilter_link_attach.c
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/netfilter_basic.c b/tools/testing/selftests/bpf/prog_tests/netfilter_basic.c
+new file mode 100644
+index 000000000000..357353fee19d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/netfilter_basic.c
+@@ -0,0 +1,78 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include <netinet/in.h>
++#include <linux/netfilter.h>
++
++#include "test_progs.h"
++#include "test_netfilter_link_attach.skel.h"
++
++struct nf_hook_options {
++	__u32 pf;
++	__u32 hooknum;
++	__s32 priority;
++	__u32 flags;
++
++	bool expect_success;
++};
++
++struct nf_hook_options nf_hook_attach_tests[] = {
++	{  },
++	{ .pf = NFPROTO_NUMPROTO, },
++	{ .pf = NFPROTO_IPV4, .hooknum = 42, },
++	{ .pf = NFPROTO_IPV4, .priority = INT_MIN },
++	{ .pf = NFPROTO_IPV4, .priority = INT_MAX },
++	{ .pf = NFPROTO_IPV4, .flags = UINT_MAX },
++
++	{ .pf = NFPROTO_INET, .priority = 1, },
++
++	{ .pf = NFPROTO_IPV4, .priority = -10000, .expect_success = true },
++	{ .pf = NFPROTO_IPV6, .priority = 10001, .expect_success = true },
++};
++
++void test_netfilter_basic(void)
++{
++	struct test_netfilter_link_attach *skel;
++	LIBBPF_OPTS(bpf_netfilter_opts, opts);
++	struct bpf_program *prog;
++	int i;
++
++	skel = test_netfilter_link_attach__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_netfilter_link_attach__open_and_load"))
++		goto out;
++
++	prog = skel->progs.nf_link_attach_test;
++
++	for (i = 0; i < ARRAY_SIZE(nf_hook_attach_tests); i++) {
++		struct bpf_link *link;
++
++#define X(opts, m, i)	opts.m = nf_hook_attach_tests[(i)].m
++		X(opts, pf, i);
++		X(opts, hooknum, i);
++		X(opts, priority, i);
++		X(opts, flags, i);
++#undef X
++		link = bpf_program__attach_netfilter(prog, &opts);
++		if (nf_hook_attach_tests[i].expect_success) {
++			struct bpf_link *link2;
++
++			if (!ASSERT_OK_PTR(link, "program attach successful"))
++				continue;
++
++			link2 = bpf_program__attach_netfilter(prog, &opts);
++			ASSERT_ERR_PTR(link2, "attach program with same pf/hook/priority");
++
++			if (!ASSERT_OK(bpf_link__destroy(link), "link destroy"))
++				break;
++
++			link2 = bpf_program__attach_netfilter(prog, &opts);
++			if (!ASSERT_OK_PTR(link2, "program reattach successful"))
++				continue;
++			if (!ASSERT_OK(bpf_link__destroy(link2), "link destroy"))
++				break;
++		} else {
++			ASSERT_ERR_PTR(link, "program load failure");
++		}
++	}
++out:
++	test_netfilter_link_attach__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_netfilter_link_attach.c b/tools/testing/selftests/bpf/progs/test_netfilter_link_attach.c
+new file mode 100644
+index 000000000000..03a475160abe
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_netfilter_link_attach.c
+@@ -0,0 +1,14 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++#define NF_ACCEPT 1
++
++SEC("netfilter")
++int nf_link_attach_test(struct bpf_nf_ctx *ctx)
++{
++	return NF_ACCEPT;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.40.1
 
