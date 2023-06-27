@@ -2,744 +2,348 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0238F73FE17
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 16:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EDF73FE03
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 16:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjF0Oh4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jun 2023 10:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S231514AbjF0OhX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jun 2023 10:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbjF0Oh2 (ORCPT
+        with ESMTP id S231621AbjF0OhP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:37:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D37359B
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 07:36:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687876576;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E6YHVyNv9jllDW5EgfHaZ/VxsLpfT00bCuAF1yM8w0Q=;
-        b=fyOZxavP7mQrOIIYQsZ5sgIYNI/72P94zpLfmDic21xvXuX418XVwF+J7bsC5zUMyhP923
-        TpcyURzqwsY/eEMZhW2vYlyqTUbkdbQuKeZB1H9xbz1wcHzFzvYGIs3/un+yZpOjHiwp77
-        ohotveuRA3ykI/7oPQJKWKEijBb3kgI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-303-DkbVTISrMwWEICP6AkL1oQ-1; Tue, 27 Jun 2023 10:36:13 -0400
-X-MC-Unique: DkbVTISrMwWEICP6AkL1oQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E8BF3819AE1;
-        Tue, 27 Jun 2023 14:35:39 +0000 (UTC)
-Received: from llong.com (unknown [10.22.10.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C234A40C2063;
-        Tue, 27 Jun 2023 14:35:38 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v4 9/9] cgroup/cpuset: Extend test_cpuset_prs.sh to test remote partition
-Date:   Tue, 27 Jun 2023 10:35:08 -0400
-Message-Id: <20230627143508.1576882-10-longman@redhat.com>
-In-Reply-To: <20230627143508.1576882-1-longman@redhat.com>
-References: <20230627143508.1576882-1-longman@redhat.com>
+        Tue, 27 Jun 2023 10:37:15 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743602D6D;
+        Tue, 27 Jun 2023 07:37:02 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b7fb1a82c4so15341895ad.1;
+        Tue, 27 Jun 2023 07:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687876622; x=1690468622;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=g3qBBoPBinM9uTXU87TH/vR1WOzaJAFG3FM+rFMLF54=;
+        b=IPz+v5nf/T0u4wRLY/4MeaZaX+az7xLRtL+fVxrR7eQHSlL/AoasbcdyD7duyR4DAy
+         ELMramw4ZuqUad5pWWnAJRtcKsmKZSvUrA2FKNsMTWwkhEu7K/q23a3FEth9kroV3HsO
+         JbtaGw2KVh1tvB+KIFpngujrKG6/gqXnL4F+4BHJsZCSHgUApJl68+a9rTr5NqO5MDER
+         vqQMfRslhY7j8vXulhrNMpvxHaxN5xi6EbNVEHZ/DM1hcBxrSbr02iCR6GNsY7Fq2INW
+         wcnre2+r49YClpEFBl0lP3fKSnWkIFxgy2lU3hOdGMYr+kqWRAqWVOHl0fSXH2jMiSXd
+         5VSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687876622; x=1690468622;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g3qBBoPBinM9uTXU87TH/vR1WOzaJAFG3FM+rFMLF54=;
+        b=aj6JDTJkcT0OhJ5/f5IT2crsj7cfk/sn5yVMbWuqolnT58r+LUMmYlxmOrgclKvw71
+         IxUlTjktNl4exi/6kj6x/2JlIKFXnJZBN9givse0bDDim72qC6Imuq+cPQKLJrezGvlY
+         iWNLS8oF+3yib73+0Ga4+Nd8yLOgIWlF7Z+sse7pAEvApMgW9CIXB6hliUugx8m6xux5
+         Ndp5V9NjUrjo3MCS9gXkafsHFhCvYi/2i1FrKx0i0F9qPxbkNGbWHicsYhVrkx8xtX6I
+         oxz531SQij9FG7A37YfW4U0AcPLm0zS1DBm+AAw5I8V1+Ek01q8kM/SzamV98+XpcYuL
+         t3hg==
+X-Gm-Message-State: AC+VfDy7LRinm0ihd7m/gZFJtAVl0MTtf9mL9XHyQDo01ZZcWLwgjeBl
+        XzlsjSQTdZH3qXndIM9FAAdQoHUakuSL5Q==
+X-Google-Smtp-Source: ACHHUZ6I1MW+JxOBt1ZDqPrCHSMiiDYCa5Ns+cE/SUfVDqyGdhPXGCk9PfsOR1PrbQ4bQAnb1XyA1A==
+X-Received: by 2002:a17:902:e74c:b0:1b7:d051:89c1 with SMTP id p12-20020a170902e74c00b001b7d05189c1mr8603529plf.53.1687876608872;
+        Tue, 27 Jun 2023 07:36:48 -0700 (PDT)
+Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b001ac2be26340sm6115627plp.222.2023.06.27.07.36.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 07:36:48 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 07:36:45 -0700
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v21 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <ZJrz/cu/UtfBKQ01@gmail.com>
+References: <20230626113156.1274521-1-usama.anjum@collabora.com>
+ <20230626113156.1274521-3-usama.anjum@collabora.com>
+ <ZJo/gOnTmwEQPLF8@gmail.com>
+ <13ea54c0-25a3-285c-f47e-d6da11c91795@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <13ea54c0-25a3-285c-f47e-d6da11c91795@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch extends the test_cpuset_prs.sh test script to support testing
-the new remote partition and use the new "cpuset.cpus.exclusive" file
-by adding new tests for them. In addition, the following changes are
-also made:
+On Tue, Jun 27, 2023 at 02:00:31PM +0500, Muhammad Usama Anjum wrote:
+> Hi Andrei and Michal,
+> 
+> Lets resolve last two points. Please reply below.
+> 
+> On 6/27/23 6:46 AM, Andrei Vagin wrote:
+> ...
+> >> +#ifdef CONFIG_HUGETLB_PAGE
+> >> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
+> >> +				      unsigned long start, unsigned long end,
+> >> +				      struct mm_walk *walk)
+> >> +{
+> >> +	unsigned long n_pages = (end - start)/PAGE_SIZE;
+> >> +	struct pagemap_scan_private *p = walk->private;
+> >> +	struct vm_area_struct *vma = walk->vma;
+> >> +	bool is_written, is_interesting = true;
+> >> +	struct hstate *h = hstate_vma(vma);
+> >> +	unsigned long bitmap;
+> >> +	spinlock_t *ptl;
+> >> +	int ret = 0;
+> >> +	pte_t ptent;
+> >> +
+> >> +	if (IS_PM_SCAN_WP(p->flags) && n_pages < HPAGE_SIZE/PAGE_SIZE)
+> >> +		return -EINVAL;
+> >> +
+> >> +	if (n_pages > p->max_pages - p->found_pages)
+> >> +		n_pages = p->max_pages - p->found_pages;
+> >> +
+> >> +	if (IS_PM_SCAN_WP(p->flags)) {
+> >> +		i_mmap_lock_write(vma->vm_file->f_mapping);
+> >> +		ptl = huge_pte_lock(h, vma->vm_mm, ptep);
+> >> +	}
+> >> +
+> >> +	ptent = huge_ptep_get(ptep);
+> >> +	is_written = !is_huge_pte_uffd_wp(ptent);
+> >> +
+> >> +	/*
+> >> +	 * Partial hugetlb page clear isn't supported
+> >> +	 */
+> >> +	if (is_written && IS_PM_SCAN_WP(p->flags) &&
+> >> +	    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> > 
+> > should it be done only if is_interesting is set?
+> This can be good optimization. We shouldn't return error before finding if
+> page is interesting. I'll update.
+> 
+> > 
+> >> +		ret = PM_SCAN_END_WALK;
+> >> +		goto unlock_and_return;
+> >> +	}
+> >> +
+> >> +	bitmap = PM_SCAN_FLAGS(is_written, pagemap_scan_is_huge_file(ptent),
+> >> +			       pte_present(ptent), is_swap_pte(ptent),
+> >> +			       pte_present(ptent) && is_zero_pfn(pte_pfn(ptent)));
+> >> +
+> >> +	if (IS_PM_SCAN_GET(p->flags)) {
+> >> +		is_interesting = pagemap_scan_is_interesting_page(bitmap, p);
+> >> +		if (is_interesting)
+> >> +			ret = pagemap_scan_output(bitmap, p, start, n_pages);
+> >> +	}
+> >> +
+> >> +	if (IS_PM_SCAN_WP(p->flags) && is_written && is_interesting &&
+> >> +	    ret >= 0) {
+> >> +		make_uffd_wp_huge_pte(vma, start, ptep, ptent);
+> >> +		flush_hugetlb_tlb_range(vma, start, end);
+> >> +	}
+> >> +
+> >> +unlock_and_return:
+> >> +	if (IS_PM_SCAN_WP(p->flags)) {
+> >> +		spin_unlock(ptl);
+> >> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
+> >> +	}
+> >> +
+> >> +	return ret;
+> >> +}
+> ...
+> >> +
+> >> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long __arg)
+> >> +{
+> >> +	struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)__arg;
+> >> +	unsigned long long start, end, walk_start, walk_end;
+> >> +	unsigned long empty_slots, vec_index = 0;
+> >> +	struct mmu_notifier_range range;
+> >> +	struct page_region __user *vec;
+> >> +	struct pagemap_scan_private p;
+> >> +	struct pm_scan_arg arg;
+> >> +	int ret = 0;
+> >> +
+> >> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
+> >> +		return -EFAULT;
+> >> +
+> >> +	start = untagged_addr((unsigned long)arg.start);
+> >> +	vec = (struct page_region *)untagged_addr((unsigned long)arg.vec);
+> >> +
+> >> +	ret = pagemap_scan_args_valid(&arg, start, vec);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	end = start + arg.len;
+> >> +	p.max_pages = (arg.max_pages) ? arg.max_pages : ULONG_MAX;
+> >> +	p.found_pages = 0;
+> >> +	p.required_mask = arg.required_mask;
+> >> +	p.anyof_mask = arg.anyof_mask;
+> >> +	p.excluded_mask = arg.excluded_mask;
+> >> +	p.return_mask = arg.return_mask;
+> >> +	p.flags = arg.flags;
+> >> +	p.flags |= ((p.required_mask | p.anyof_mask | p.excluded_mask) &
+> >> +		    PAGE_IS_WRITTEN) ? PM_SCAN_REQUIRE_UFFD : 0;
+> >> +	p.cur_buf.start = p.cur_buf.len = p.cur_buf.flags = 0;
+> >> +	p.vec_buf = NULL;
+> >> +	p.vec_buf_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+> >> +
+> >> +	/*
+> >> +	 * Allocate smaller buffer to get output from inside the page walk
+> >> +	 * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+> >> +	 * we want to return output to user in compact form where no two
+> >> +	 * consecutive regions should be continuous and have the same flags.
+> >> +	 * So store the latest element in p.cur_buf between different walks and
+> >> +	 * store the p.cur_buf at the end of the walk to the user buffer.
+> >> +	 */
+> >> +	if (IS_PM_SCAN_GET(p.flags)) {
+> >> +		p.vec_buf = kmalloc_array(p.vec_buf_len, sizeof(*p.vec_buf),
+> >> +					  GFP_KERNEL);
+> >> +		if (!p.vec_buf)
+> >> +			return -ENOMEM;
+> >> +	}
+> >> +
+> >> +	if (IS_PM_SCAN_WP(p.flags)) {
+> >> +		mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
+> >> +					mm, start, end);
+> >> +		mmu_notifier_invalidate_range_start(&range);
+> >> +	}
+> >> +
+> >> +	walk_start = walk_end = start;
+> >> +	while (walk_end < end && !ret) {
+> >> +		if (IS_PM_SCAN_GET(p.flags)) {
+> >> +			p.vec_buf_index = 0;
+> >> +
+> >> +			/*
+> >> +			 * All data is copied to cur_buf first. When more data
+> >> +			 * is found, we push cur_buf to vec_buf and copy new
+> >> +			 * data to cur_buf. Subtract 1 from length as the
+> >> +			 * index of cur_buf isn't counted in length.
+> >> +			 */
+> >> +			empty_slots = arg.vec_len - vec_index;
+> >> +			p.vec_buf_len = min(p.vec_buf_len, empty_slots - 1);
+> >> +		}
+> >> +
+> >> +		walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
+> >> +		if (walk_end > end)
+> >> +			walk_end = end;
+> >> +
+> > 
+> > If this loop can run for a long time, we need to interrupt it in case of
+> > pending signals.
+> > 
+> > If you think we don't need to do that, pls explain in the commit
+> > message, so that maintainers don't miss this part and double check that
+> > everything is alright here.
+> This can be done. I'll add to the commit message that we are walking over
+> entire range passed.
+> 
+> > 
+> >> +		ret = mmap_read_lock_killable(mm);
+> >> +		if (ret)
+> > 
+> > If any pages have been handled, we need to report them to user-space. It
+> > isn't acceptable to return a error in such cases.
+> This will return error only when task has gotten some serios signal and it
+> is giong to be killed. In this scenerio, we shouldn't care about returning
+> gracefully. Why do you think we should return gracefully in this case?
 
- 1) Run the state transition tests directly under root to ease testing
-    of remote partition and remove the unneeded test column.
- 2) Add a column to for the list of expected isolated CPUs and compare
-    it with the actual value by looking at the state of
-    /sys/kernel/debug/sched/domains which will be available if the
-    verbose flag is set.
+You are right, it can be interrupted only by a fatal signal. You can
+ignore this comment.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- .../selftests/cgroup/test_cpuset_prs.sh       | 398 ++++++++++++------
- 1 file changed, 259 insertions(+), 139 deletions(-)
+> 
+> > 
+> > And we need to report an address where it stopped scanning.
+> > We can do that by adding zero length vector.
+> I don't want to do multiplexing the ending address in vec. Can we add
+> end_addr variable in struct pm_scan_arg to always return the ending address?
+> 
+> struct pm_scan_arg {
+> 	...
+> 	_u64 end_addr;
+> };
+> 
+> 
+> > 
+> > 
+> >> +			goto free_data;
+> >> +		ret = walk_page_range(mm, walk_start, walk_end,
+> >> +				      &pagemap_scan_ops, &p);
+> >> +		mmap_read_unlock(mm);
+> >> +
+> >> +		if (ret && ret != PM_SCAN_FOUND_MAX_PAGES &&
+> >> +		    ret != PM_SCAN_END_WALK)
+> >> +			goto free_data;
+> >> +
+> >> +		walk_start = walk_end;
+> >> +		if (IS_PM_SCAN_GET(p.flags) && p.vec_buf_index) {
+> >> +			if (copy_to_user(&vec[vec_index], p.vec_buf,
+> >> +					 p.vec_buf_index * sizeof(*p.vec_buf))) {
+> >> +				/*
+> >> +				 * Return error even though the OP succeeded
+> >> +				 */
+> >> +				ret = -EFAULT;
+> >> +				goto free_data;
+> >> +			}
+> >> +			vec_index += p.vec_buf_index;
+> > 
+> > Should we set ret to zero here if it is equal PM_SCAN_END_WALK.
+> No, PM_SCAN_END_WALK is just internal code to stop the page walk and return
+> immedtitely. When we get this return value, we stop this loop and return to
+> user with whatever data we have in user buffer.
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 2b5215cc599f..ace992d1ed9e 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -3,7 +3,7 @@
- #
- # Test for cpuset v2 partition root state (PRS)
- #
--# The sched verbose flag is set, if available, so that the console log
-+# The sched verbose flag can be optionally set so that the console log
- # can be examined for the correct setting of scheduling domain.
- #
- 
-@@ -22,27 +22,27 @@ WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
- # Find cgroup v2 mount point
- CGROUP2=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
- [[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
-+SUBPARTS_CPUS=$CGROUP2/.__DEBUG__.cpuset.cpus.subpartitions
-+CPULIST=$(cat $CGROUP2/cpuset.cpus.effective)
- 
--CPUS=$(lscpu | grep "^CPU(s):" | sed -e "s/.*:[[:space:]]*//")
--[[ $CPUS -lt 8 ]] && skip_test "Test needs at least 8 cpus available!"
-+NR_CPUS=$(lscpu | grep "^CPU(s):" | sed -e "s/.*:[[:space:]]*//")
-+[[ $NR_CPUS -lt 8 ]] && skip_test "Test needs at least 8 cpus available!"
- 
- # Set verbose flag and delay factor
- PROG=$1
--VERBOSE=
-+VERBOSE=0
- DELAY_FACTOR=1
- SCHED_DEBUG=
- while [[ "$1" = -* ]]
- do
- 	case "$1" in
--		-v) VERBOSE=1
-+		-v) ((VERBOSE++))
- 		    # Enable sched/verbose can slow thing down
- 		    [[ $DELAY_FACTOR -eq 1 ]] &&
- 			DELAY_FACTOR=2
--		    break
- 		    ;;
- 		-d) DELAY_FACTOR=$2
- 		    shift
--		    break
- 		    ;;
- 		*)  echo "Usage: $PROG [-v] [-d <delay-factor>"
- 		    exit
-@@ -52,7 +52,7 @@ do
- done
- 
- # Set sched verbose flag if available when "-v" option is specified
--if [[ -n "$VERBOSE" && -d /sys/kernel/debug/sched ]]
-+if [[ $VERBOSE -gt 0 && -d /sys/kernel/debug/sched ]]
- then
- 	# Used to restore the original setting during cleanup
- 	SCHED_DEBUG=$(cat /sys/kernel/debug/sched/verbose)
-@@ -61,14 +61,26 @@ fi
- 
- cd $CGROUP2
- echo +cpuset > cgroup.subtree_control
-+
-+#
-+# If cpuset has been set up and used in child cgroups, we may not be able to
-+# create partition under root cgroup because of the CPU exclusivity rule.
-+# So we are going to skip the test if this is the case.
-+#
- [[ -d test ]] || mkdir test
--cd test
-+echo 0-6 > test/cpuset.cpus
-+echo root > test/cpuset.cpus.partition
-+cat test/cpuset.cpus.partition | grep -q invalid
-+RESULT=$?
-+echo member > test/cpuset.cpus.partition
-+echo "" > test/cpuset.cpus
-+[[ $RESULT -eq 0 ]] && skip_test "Child cgroups are using cpuset!"
- 
- cleanup()
- {
- 	online_cpus
-+	cd $CGROUP2
- 	rmdir A1/A2/A3 A1/A2 A1 B1 > /dev/null 2>&1
--	cd ..
- 	rmdir test > /dev/null 2>&1
- 	[[ -n "$SCHED_DEBUG" ]] &&
- 		echo "$SCHED_DEBUG" > /sys/kernel/debug/sched/verbose
-@@ -103,7 +115,7 @@ test_partition()
- 	[[ $? -eq 0 ]] || exit 1
- 	ACTUAL_VAL=$(cat cpuset.cpus.partition)
- 	[[ $ACTUAL_VAL != $EXPECTED_VAL ]] && {
--		echo "cpuset.cpus.partition: expect $EXPECTED_VAL, found $EXPECTED_VAL"
-+		echo "cpuset.cpus.partition: expect $EXPECTED_VAL, found $ACTUAL_VAL"
- 		echo "Test FAILED"
- 		exit 1
- 	}
-@@ -114,7 +126,7 @@ test_effective_cpus()
- 	EXPECTED_VAL=$1
- 	ACTUAL_VAL=$(cat cpuset.cpus.effective)
- 	[[ "$ACTUAL_VAL" != "$EXPECTED_VAL" ]] && {
--		echo "cpuset.cpus.effective: expect '$EXPECTED_VAL', found '$EXPECTED_VAL'"
-+		echo "cpuset.cpus.effective: expect '$EXPECTED_VAL', found '$ACTUAL_VAL'"
- 		echo "Test FAILED"
- 		exit 1
- 	}
-@@ -139,6 +151,7 @@ test_add_proc()
- #
- test_isolated()
- {
-+	cd $CGROUP2/test
- 	echo 2-3 > cpuset.cpus
- 	TYPE=$(cat cpuset.cpus.partition)
- 	[[ $TYPE = member ]] || echo member > cpuset.cpus.partition
-@@ -203,125 +216,163 @@ test_isolated()
- #
- # Cgroup test hierarchy
- #
--# test -- A1 -- A2 -- A3
--#      \- B1
-+# root -- A1 -- A2 -- A3
-+#      +- B1
- #
--#  P<v> = set cpus.partition (0:member, 1:root, 2:isolated, -1:root invalid)
-+#  P<v> = set cpus.partition (0:member, 1:root, 2:isolated)
- #  C<l> = add cpu-list
- #  S<p> = use prefix in subtree_control
- #  T    = put a task into cgroup
--#  O<c>-<v> = Write <v> to CPU online file of <c>
-+#  O<c>=<v> = Write <v> to CPU online file of <c>
- #
- SETUP_A123_PARTITIONS="C1-3:P1:S+ C2-3:P1:S+ C3:P1"
- TEST_MATRIX=(
--	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
--	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
--	"  S+    C0-1     .      .    C2-3    S+    C4-5     .      .     0 A2:0-1"
--	"  S+    C0-1     .      .    C2-3    P1      .      .      .     0 "
--	"  S+    C0-1     .      .    C2-3   P1:S+ C0-1:P1   .      .     0 "
--	"  S+    C0-1     .      .    C2-3   P1:S+  C1:P1    .      .     0 "
--	"  S+   C0-1:S+   .      .    C2-3     .      .      .     P1     0 "
--	"  S+   C0-1:P1   .      .    C2-3    S+     C1      .      .     0 "
--	"  S+   C0-1:P1   .      .    C2-3    S+    C1:P1    .      .     0 "
--	"  S+   C0-1:P1   .      .    C2-3    S+    C1:P1    .     P1     0 "
--	"  S+   C0-1:P1   .      .    C2-3   C4-5     .      .      .     0 A1:4-5"
--	"  S+   C0-1:P1   .      .    C2-3  S+:C4-5   .      .      .     0 A1:4-5"
--	"  S+    C0-1     .      .   C2-3:P1   .      .      .     C2     0 "
--	"  S+    C0-1     .      .   C2-3:P1   .      .      .    C4-5    0 B1:4-5"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .      .      .      .      .     0 A1:0-1,A2:2-3"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .     C1-3    .      .      .     0 A1:1,A2:2-3"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      P0     .      .     0 A1:3,A2:3 A1:P1,A2:P0"
--	"  S+ C2-3:P1:S+  C2:P1  .      .     C2-4    .      .      .     0 A1:3-4,A2:2"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      .      .     C0-2   0 A1:,B1:0-2 A1:P1,A2:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .     C2-3    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
-+	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
-+	"   C0-1     .      .    C2-3    S+    C4-5     .      .     0 A2:0-1"
-+	"   C0-1     .      .    C2-3    P1      .      .      .     0 "
-+	"   C0-1     .      .    C2-3   P1:S+ C0-1:P1   .      .     0 "
-+	"   C0-1     .      .    C2-3   P1:S+  C1:P1    .      .     0 "
-+	"  C0-1:S+   .      .    C2-3     .      .      .     P1     0 "
-+	"  C0-1:P1   .      .    C2-3    S+     C1      .      .     0 "
-+	"  C0-1:P1   .      .    C2-3    S+    C1:P1    .      .     0 "
-+	"  C0-1:P1   .      .    C2-3    S+    C1:P1    .     P1     0 "
-+	"  C0-1:P1   .      .    C2-3   C4-5     .      .      .     0 A1:4-5"
-+	"  C0-1:P1   .      .    C2-3  S+:C4-5   .      .      .     0 A1:4-5"
-+	"   C0-1     .      .   C2-3:P1   .      .      .     C2     0 "
-+	"   C0-1     .      .   C2-3:P1   .      .      .    C4-5    0 B1:4-5"
-+	"C0-3:P1:S+ C2-3:P1 .      .      .      .      .      .     0 A1:0-1,A2:2-3"
-+	"C0-3:P1:S+ C2-3:P1 .      .     C1-3    .      .      .     0 A1:1,A2:2-3"
-+	"C2-3:P1:S+  C3:P1  .      .     C3      .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P1  .      .     C3      P0     .      .     0 A1:3,A2:3 A1:P1,A2:P0"
-+	"C2-3:P1:S+  C2:P1  .      .     C2-4    .      .      .     0 A1:3-4,A2:2"
-+	"C2-3:P1:S+  C3:P1  .      .     C3      .      .     C0-2   0 A1:,B1:0-2 A1:P1,A2:P1"
-+	"$SETUP_A123_PARTITIONS    .     C2-3    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
- 
- 	# CPU offlining cases:
--	"  S+    C0-1     .      .    C2-3    S+    C4-5     .     O2-0   0 A1:0-1,B1:3"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O2-0    .      .      .     0 A1:0-1,A2:3"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O2-0   O2-1    .      .     0 A1:0-1,A2:2-3"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O1-0    .      .      .     0 A1:0,A2:2-3"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O1-0   O1-1    .      .     0 A1:0-1,A2:2-3"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     O3-0   O3-1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
--	"  S+ C2-3:P1:S+  C3:P2  .      .     O3-0   O3-1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     O2-0   O2-1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
--	"  S+ C2-3:P1:S+  C3:P2  .      .     O2-0   O2-1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     O2-0    .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     O3-0    .      .      .     0 A1:2,A2: A1:P1,A2:P1"
--	"  S+ C2-3:P1:S+  C3:P1  .      .    T:O2-0   .      .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
--	"  S+ C2-3:P1:S+  C3:P1  .      .      .    T:O3-0   .      .     0 A1:2,A2:2 A1:P1,A2:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .     O1-0    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .     O2-0    .      .      .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .     O3-0    .      .      .     0 A1:1,A2:2,A3: A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .      .    T:O2-0   .      .     0 A1:1,A2:3,A3:3 A1:P1,A2:P1,A3:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .      .      .    T:O3-0   .     0 A1:1,A2:2,A3:2 A1:P1,A2:P1,A3:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O1-1    .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .      .    T:O2-0  O2-1    .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .      .      .    T:O3-0  O3-1   0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O2-0   O1-1    .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O2-0   O2-1    .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
--
--	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
--	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
-+	"   C0-1     .      .    C2-3    S+    C4-5     .     O2=0   0 A1:0-1,B1:3"
-+	"C0-3:P1:S+ C2-3:P1 .      .     O2=0    .      .      .     0 A1:0-1,A2:3"
-+	"C0-3:P1:S+ C2-3:P1 .      .     O2=0   O2=1    .      .     0 A1:0-1,A2:2-3"
-+	"C0-3:P1:S+ C2-3:P1 .      .     O1=0    .      .      .     0 A1:0,A2:2-3"
-+	"C0-3:P1:S+ C2-3:P1 .      .     O1=0   O1=1    .      .     0 A1:0-1,A2:2-3"
-+	"C2-3:P1:S+  C3:P1  .      .     O3=0   O3=1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P2  .      .     O3=0   O3=1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
-+	"C2-3:P1:S+  C3:P1  .      .     O2=0   O2=1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P2  .      .     O2=0   O2=1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
-+	"C2-3:P1:S+  C3:P1  .      .     O2=0    .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P1  .      .     O3=0    .      .      .     0 A1:2,A2: A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P1  .      .    T:O2=0   .      .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
-+	"C2-3:P1:S+  C3:P1  .      .      .    T:O3=0   .      .     0 A1:2,A2:2 A1:P1,A2:P-1"
-+	"$SETUP_A123_PARTITIONS    .     O1=0    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .     O2=0    .      .      .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .     O3=0    .      .      .     0 A1:1,A2:2,A3: A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .    T:O1=0   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
-+	"$SETUP_A123_PARTITIONS    .      .    T:O2=0   .      .     0 A1:1,A2:3,A3:3 A1:P1,A2:P1,A3:P-1"
-+	"$SETUP_A123_PARTITIONS    .      .      .    T:O3=0   .     0 A1:1,A2:2,A3:2 A1:P1,A2:P1,A3:P-1"
-+	"$SETUP_A123_PARTITIONS    .    T:O1=0  O1=1    .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .      .    T:O2=0  O2=1    .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .      .      .    T:O3=0  O3=1   0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .    T:O1=0  O2=0   O1=1    .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .    T:O1=0  O2=0   O2=1    .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
-+
-+	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
-+	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
-+	#
-+	# Remote partition and cpuset.cpus.exclusive tests
-+	#
-+	" C0-3:S+ C1-3:S+ C2-3     .    X2-3     .      .      .     0 A1:0-3,A2:1-3,A3:2-3,XA1:2-3"
-+	" C0-3:S+ C1-3:S+ C2-3     .    X2-3  X2-3:P2   .      .     0 A1:0-1,A2:2-3,A3:2-3 A1:P0,A2:P2 2-3"
-+	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X3:P2    .      .     0 A1:0-2,A2:3,A3:3 A1:P0,A2:P2 3"
-+	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3  X2-3:P2   .     0 A1:0-1,A2:1,A3:2-3 A1:P0,A3:P2 2-3"
-+	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3 X2-3:P2:C3 .     0 A1:0-2,A2:1-2,A3:3 A1:P0,A3:P2 3"
-+	" C0-3:S+ C1-3:S+ C2-3   C2-3     .      .      .      P2    0 A1:0-3,A2:1-3,A3:2-3,B1:2-3 A1:P0,A3:P0,B1:P-2"
-+	" C0-3:S+ C1-3:S+ C2-3   C4-5     .      .      .      P2    0 B1:4-5 B1:P2 4-5"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3  X2-3:P2   P2    0 A3:2-3,B1:4 A3:P2,B1:P2 2-4"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3 X2-3:P2:C1-3 P2  0 A3:2-3,B1:4 A3:P2,B1:P2 2-4"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    X1-3  X1-3:P2   P2     .     0 A2:1,A3:2-3 A2:P2,A3:P2 1-3"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3  X2-3:P2 P2:C4-5 0 A3:2-3,B1:4-5 A3:P2,B1:P2 2-5"
-+
-+	# Nested remote/local partition tests
-+	" C0-3:S+ C1-3:S+ C2-3   C4-5   X2-3  X2-3:P1   P2     P1    0 A1:0-1,A2:,A3:2-3,B1:4-5 \
-+								       A1:P0,A2:P1,A3:P2,B1:P1 2-3"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3  X2-3:P1   P2     P1    0 A1:0-1,A2:,A3:2-3,B1:4 \
-+								       A1:P0,A2:P1,A3:P2,B1:P1 2-4"
-+	" C0-3:S+ C1-3:S+  C3     C4    X2-3  X2-3:P1   P2     P1    0 A1:0-1,A2:2,A3:3,B1:4 \
-+								       A1:P0,A2:P1,A3:P2,B1:P1 2-4"
-+
-+	# Remote partition offline tests
-+	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3 X2-3:P2:O2=0 .   0 A1:0-1,A2:1,A3:3 A1:P0,A3:P2 2-3"
-+	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3 X2-3:P2:O2=0 O2=1 0 A1:0-1,A2:1,A3:2-3 A1:P0,A3:P2 2-3"
-+	" C0-3:S+ C1-3:S+  C3      .    X2-3   X2-3    P2:O3=0   .   0 A1:0-2,A2:1-2,A3: A1:P0,A3:P2 3"
-+	" C0-3:S+ C1-3:S+  C3      .    X2-3   X2-3   T:P2:O3=0  .   0 A1:0-2,A2:1-2,A3:1-2 A1:P0,A3:P-2 3"
-+
-+	# An invalidated remote partition cannot self-recover from hotplug
-+	" C0-3:S+ C1-3:S+  C2      .    X2-3   X2-3   T:P2:O2=0 O2=1 0 A1:0-3,A2:1-3,A3:2 A1:P0,A3:P-2"
-+
-+	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
-+	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
- 	#
- 	# Incorrect change to cpuset.cpus invalidates partition root
- 	#
- 	# Adding CPUs to partition root that are not in parent's
- 	# cpuset.cpus is allowed, but those extra CPUs are ignored.
--	"  S+ C2-3:P1:S+ C3:P1   .      .      .     C2-4    .      .     0 A1:,A2:2-3 A1:P1,A2:P1"
-+	"C2-3:P1:S+ C3:P1   .      .      .     C2-4    .      .     0 A1:,A2:2-3 A1:P1,A2:P1"
- 
- 	# Taking away all CPUs from parent or itself if there are tasks
- 	# will make the partition invalid.
--	"  S+ C2-3:P1:S+  C3:P1  .      .      T     C2-3    .      .     0 A1:2-3,A2:2-3 A1:P1,A2:P-1"
--	"  S+  C3:P1:S+    C3    .      .      T      P1     .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .    T:C2-3   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    . T:C2-3:C1-3 .      .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"C2-3:P1:S+  C3:P1  .      .      T     C2-3    .      .     0 A1:2-3,A2:2-3 A1:P1,A2:P-1"
-+	" C3:P1:S+    C3    .      .      T      P1     .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
-+	"$SETUP_A123_PARTITIONS    .    T:C2-3   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
-+	"$SETUP_A123_PARTITIONS    . T:C2-3:C1-3 .      .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
- 
- 	# Changing a partition root to member makes child partitions invalid
--	"  S+ C2-3:P1:S+  C3:P1  .      .      P0     .      .      .     0 A1:2-3,A2:3 A1:P0,A2:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .     C2-3    P0     .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P0,A3:P-1"
-+	"C2-3:P1:S+  C3:P1  .      .      P0     .      .      .     0 A1:2-3,A2:3 A1:P0,A2:P-1"
-+	"$SETUP_A123_PARTITIONS    .     C2-3    P0     .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P0,A3:P-1"
- 
- 	# cpuset.cpus can contains cpus not in parent's cpuset.cpus as long
- 	# as they overlap.
--	"  S+ C2-3:P1:S+  .      .      .      .   C3-4:P1   .      .     0 A1:2,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  .      .      .      .   C3-4:P1   .      .     0 A1:2,A2:3 A1:P1,A2:P1"
- 
- 	# Deletion of CPUs distributed to child cgroup is allowed.
--	"  S+ C0-1:P1:S+ C1      .    C2-3   C4-5     .      .      .     0 A1:4-5,A2:4-5"
-+	"C0-1:P1:S+ C1      .    C2-3   C4-5     .      .      .     0 A1:4-5,A2:4-5"
- 
- 	# To become a valid partition root, cpuset.cpus must overlap parent's
- 	# cpuset.cpus.
--	"  S+   C0-1:P1   .      .    C2-3    S+   C4-5:P1   .      .     0 A1:0-1,A2:0-1 A1:P1,A2:P-1"
-+	"  C0-1:P1   .      .    C2-3    S+   C4-5:P1   .      .     0 A1:0-1,A2:0-1 A1:P1,A2:P-1"
- 
- 	# Enabling partition with child cpusets is allowed
--	"  S+   C0-1:S+  C1      .    C2-3    P1      .      .      .     0 A1:0-1,A2:1 A1:P1"
-+	"  C0-1:S+  C1      .    C2-3    P1      .      .      .     0 A1:0-1,A2:1 A1:P1"
- 
- 	# A partition root with non-partition root parent is invalid, but it
- 	# can be made valid if its parent becomes a partition root too.
--	"  S+   C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1,A2:1 A1:P0,A2:P-2"
--	"  S+   C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0,A2:1 A1:P1,A2:P2"
-+	"  C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1,A2:1 A1:P0,A2:P-2"
-+	"  C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0,A2:1 A1:P1,A2:P2"
- 
- 	# A non-exclusive cpuset.cpus change will invalidate partition and its siblings
--	"  S+   C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2,B1:2-3 A1:P-1,B1:P0"
--	"  S+   C0-1:P1   .      .  P1:C2-3  C0-2   .      .      .     0 A1:0-2,B1:2-3 A1:P-1,B1:P-1"
--	"  S+    C0-1     .      .  P1:C2-3  C0-2   .      .      .     0 A1:0-2,B1:2-3 A1:P0,B1:P-1"
-+	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2,B1:2-3 A1:P-1,B1:P0"
-+	"  C0-1:P1   .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2,B1:2-3 A1:P-1,B1:P-1"
-+	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2,B1:2-3 A1:P0,B1:P-1"
- 
--	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
--	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
-+	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
-+	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
- 	# Failure cases:
- 
- 	# A task cannot be added to a partition with no cpu
--	"  S+ C2-3:P1:S+  C3:P1  .      .    O2-0:T   .      .      .     1 A1:,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P1  .      .    O2=0:T   .      .      .     1 A1:,A2:3 A1:P1,A2:P1"
-+
-+	# cpuset.cpus.exclusive must be a subset of cpuset.cpus & parent's cpuset.cpus.exclusive
-+	" C0-3:S+ C1-3:S+ C2-3     .    X2-4     .      .      .     1"
-+	" C0-3:S+ C1-3:S+ C2-3     .    X1-2   X2-3     .      .     1"
- )
- 
- #
- # Write to the cpu online file
--#  $1 - <c>-<v> where <c> = cpu number, <v> value to be written
-+#  $1 - <c>=<v> where <c> = cpu number, <v> value to be written
- #
- write_cpu_online()
- {
--	CPU=${1%-*}
--	VAL=${1#*-}
-+	CPU=${1%=*}
-+	VAL=${1#*=}
- 	CPUFILE=//sys/devices/system/cpu/cpu${CPU}/online
- 	if [[ $VAL -eq 0 ]]
- 	then
-@@ -349,11 +400,12 @@ set_ctrl_state()
- 	TMPMSG=/tmp/.msg_$$
- 	CGRP=$1
- 	STATE=$2
--	SHOWERR=${3}${VERBOSE}
-+	SHOWERR=${3}
- 	CTRL=${CTRL:=$CONTROLLER}
- 	HASERR=0
- 	REDIRECT="2> $TMPMSG"
- 	[[ -z "$STATE" || "$STATE" = '.' ]] && return 0
-+	[[ $VERBOSE -gt 0 ]] && SHOWERR=1
- 
- 	rm -f $TMPMSG
- 	for CMD in $(echo $STATE | sed -e "s/:/ /g")
-@@ -362,12 +414,18 @@ set_ctrl_state()
- 		SFILE=$CGRP/cgroup.subtree_control
- 		PFILE=$CGRP/cpuset.cpus.partition
- 		CFILE=$CGRP/cpuset.cpus
-+		XFILE=$CGRP/cpuset.cpus.exclusive
- 		S=$(expr substr $CMD 1 1)
- 		if [[ $S = S ]]
- 		then
- 			PREFIX=${CMD#?}
- 			COMM="echo ${PREFIX}${CTRL} > $SFILE"
- 			eval $COMM $REDIRECT
-+		elif [[ $S = X ]]
-+		then
-+			CPUS=${CMD#?}
-+			COMM="echo $CPUS > $XFILE"
-+			eval $COMM $REDIRECT
- 		elif [[ $S = C ]]
- 		then
- 			CPUS=${CMD#?}
-@@ -430,7 +488,7 @@ online_cpus()
- 	[[ -n "OFFLINE_CPUS" ]] && {
- 		for C in $OFFLINE_CPUS
- 		do
--			write_cpu_online ${C}-1
-+			write_cpu_online ${C}=1
- 		done
- 	}
- }
-@@ -443,18 +501,25 @@ reset_cgroup_states()
- 	echo 0 > $CGROUP2/cgroup.procs
- 	online_cpus
- 	rmdir A1/A2/A3 A1/A2 A1 B1 > /dev/null 2>&1
--	set_ctrl_state . S-
-+	pause 0.02
-+	set_ctrl_state . R-
- 	pause 0.01
- }
- 
- dump_states()
- {
--	for DIR in A1 A1/A2 A1/A2/A3 B1
-+	for DIR in . A1 A1/A2 A1/A2/A3 B1
- 	do
-+		CPUS=$DIR/cpuset.cpus
- 		ECPUS=$DIR/cpuset.cpus.effective
-+		XCPUS=$DIR/cpuset.cpus.exclusive
- 		PRS=$DIR/cpuset.cpus.partition
-+		PCPUS=$DIR/.__DEBUG__.cpuset.cpus.subpartitions
-+		[[ -e $CPUS  ]] && echo "$CPUS: $(cat $CPUS)"
-+		[[ -e $XCPUS ]] && echo "$XCPUS: $(cat $XCPUS)"
- 		[[ -e $ECPUS ]] && echo "$ECPUS: $(cat $ECPUS)"
- 		[[ -e $PRS   ]] && echo "$PRS: $(cat $PRS)"
-+		[[ -e $PCPUS ]] && echo "$PCPUS: $(cat $PCPUS)"
- 	done
- }
- 
-@@ -470,11 +535,17 @@ check_effective_cpus()
- 		set -- $(echo $CHK | sed -e "s/:/ /g")
- 		CGRP=$1
- 		CPUS=$2
-+		if [[ $CGRP = X* ]]
-+		then
-+			CGRP=${CGRP#X}
-+			FILE=cpuset.cpus.exclusive
-+		else
-+			FILE=cpuset.cpus.effective
-+		fi
- 		[[ $CGRP = A2 ]] && CGRP=A1/A2
- 		[[ $CGRP = A3 ]] && CGRP=A1/A2/A3
--		FILE=$CGRP/cpuset.cpus.effective
--		[[ -e $FILE ]] || return 1
--		[[ $CPUS = $(cat $FILE) ]] || return 1
-+		[[ -e $CGRP/$FILE ]] || return 1
-+		[[ $CPUS = $(cat $CGRP/$FILE) ]] || return 1
- 	done
- }
- 
-@@ -524,6 +595,64 @@ check_cgroup_states()
- 	return 0
- }
- 
-+#
-+# Get isolated (including offline) CPUs by looking at
-+# /sys/kernel/debug/sched/domains and compare that with the expected value.
-+#
-+# Note that a sched domain of just 1 CPU will be considered isolated.
-+#
-+# $1 - expected isolated cpu list
-+#
-+check_isolcpus()
-+{
-+	EXPECT_VAL=$1
-+	ISOLCPUS=
-+	LASTISOLCPU=
-+	SCHED_DOMAINS=/sys/kernel/debug/sched/domains
-+	[[ -d $SCHED_DOMAINS ]] || return
-+
-+	for ((CPU=0; CPU < $NR_CPUS; CPU++))
-+	do
-+		[[ -n "$(ls ${SCHED_DOMAINS}/cpu$CPU)" ]] && continue
-+
-+		if [[ -z "$LASTISOLCPU" ]]
-+		then
-+			ISOLCPUS=$CPU
-+			LASTISOLCPU=$CPU
-+		elif [[ "$LASTISOLCPU" -eq $((CPU - 1)) ]]
-+		then
-+			echo $ISOLCPUS | grep -q "\<$LASTISOLCPU\$"
-+			if [[ $? -eq 0 ]]
-+			then
-+				ISOLCPUS=${ISOLCPUS}-
-+			fi
-+			LASTISOLCPU=$CPU
-+		else
-+			if [[ $ISOLCPUS = *- ]]
-+			then
-+				ISOLCPUS=${ISOLCPUS}$LASTISOLCPU
-+			fi
-+			ISOLCPUS=${ISOLCPUS},$CPU
-+			LASTISOLCPU=$CPU
-+		fi
-+	done
-+	[[ "$ISOLCPUS" = *- ]] && ISOLCPUS=${ISOLCPUS}$LASTISOLCPU
-+	[[ $EXPECT_VAL = $ISOLCPUS ]]
-+}
-+
-+test_fail()
-+{
-+	TESTNUM=$1
-+	TESTTYPE=$2
-+	ADDINFO=$3
-+	echo "Test $TEST[$TESTNUM] failed $TESTTYPE check!"
-+	[[ -n "$ADDINFO" ]] && echo "*** $ADDINFO ***"
-+	eval echo \"\${$TEST[$I]}\"
-+	echo
-+	dump_states
-+	exit 1
-+}
-+
- #
- # Run cpuset state transition test
- #  $1 - test matrix name
-@@ -536,88 +665,80 @@ run_state_test()
- {
- 	TEST=$1
- 	CONTROLLER=cpuset
--	CPULIST=0-6
- 	I=0
- 	eval CNT="\${#$TEST[@]}"
- 
- 	reset_cgroup_states
--	echo $CPULIST > cpuset.cpus
--	echo root > cpuset.cpus.partition
- 	console_msg "Running state transition test ..."
- 
- 	while [[ $I -lt $CNT ]]
- 	do
- 		echo "Running test $I ..." > /dev/console
-+		[[ $VERBOSE -gt 1 ]] && {
-+			echo ""
-+			eval echo \"\${$TEST[$I]}\"
-+		}
- 		eval set -- "\${$TEST[$I]}"
--		ROOT=$1
--		OLD_A1=$2
--		OLD_A2=$3
--		OLD_A3=$4
--		OLD_B1=$5
--		NEW_A1=$6
--		NEW_A2=$7
--		NEW_A3=$8
--		NEW_B1=$9
--		RESULT=${10}
--		ECPUS=${11}
--		STATES=${12}
--
--		set_ctrl_state_noerr .        $ROOT
-+		OLD_A1=$1
-+		OLD_A2=$2
-+		OLD_A3=$3
-+		OLD_B1=$4
-+		NEW_A1=$5
-+		NEW_A2=$6
-+		NEW_A3=$7
-+		NEW_B1=$8
-+		RESULT=$9
-+		ECPUS=${10}
-+		STATES=${11}
-+		ICPUS=${12}
-+
-+		set_ctrl_state_noerr B1       $OLD_B1
- 		set_ctrl_state_noerr A1       $OLD_A1
- 		set_ctrl_state_noerr A1/A2    $OLD_A2
- 		set_ctrl_state_noerr A1/A2/A3 $OLD_A3
--		set_ctrl_state_noerr B1       $OLD_B1
- 		RETVAL=0
- 		set_ctrl_state A1       $NEW_A1; ((RETVAL += $?))
- 		set_ctrl_state A1/A2    $NEW_A2; ((RETVAL += $?))
- 		set_ctrl_state A1/A2/A3 $NEW_A3; ((RETVAL += $?))
- 		set_ctrl_state B1       $NEW_B1; ((RETVAL += $?))
- 
--		[[ $RETVAL -ne $RESULT ]] && {
--			echo "Test $TEST[$I] failed result check!"
--			eval echo \"\${$TEST[$I]}\"
--			dump_states
--			exit 1
--		}
-+		[[ $RETVAL -ne $RESULT ]] && test_fail $I result
- 
- 		[[ -n "$ECPUS" && "$ECPUS" != . ]] && {
- 			check_effective_cpus $ECPUS
--			[[ $? -ne 0 ]] && {
--				echo "Test $TEST[$I] failed effective CPU check!"
--				eval echo \"\${$TEST[$I]}\"
--				echo
--				dump_states
--				exit 1
--			}
-+			[[ $? -ne 0 ]] && test_fail $I "effective CPU"
- 		}
- 
--		[[ -n "$STATES" ]] && {
-+		[[ -n "$STATES" && "$STATES" != . ]] && {
- 			check_cgroup_states $STATES
--			[[ $? -ne 0 ]] && {
--				echo "FAILED: Test $TEST[$I] failed states check!"
--				eval echo \"\${$TEST[$I]}\"
--				echo
--				dump_states
--				exit 1
--			}
-+			[[ $? -ne 0 ]] && test_fail $I states
- 		}
- 
-+		# Compare the expected isolated CPUs with the actual ones,
-+		# if available
-+		[[ -n "$ICPUS" ]] && {
-+			check_isolcpus $ICPUS
-+			[[ $? -ne 0 ]] && test_fail $I "isolated CPU" \
-+				"Expect $ICPUS, get $ISOLCPUS instead"
-+		}
- 		reset_cgroup_states
- 		#
- 		# Check to see if effective cpu list changes
- 		#
--		pause 0.05
- 		NEWLIST=$(cat cpuset.cpus.effective)
-+		[[ $NEWLIST != $CPULIST ]] && {
-+			# Wait a bit longer & recheck
-+			pause 0.05
-+			NEWLIST=$(cat cpuset.cpus.effective)
-+		}
- 		[[ $NEWLIST != $CPULIST ]] && {
- 			echo "Effective cpus changed to $NEWLIST after test $I!"
- 			exit 1
- 		}
--		[[ -n "$VERBOSE" ]] && echo "Test $I done."
-+		[[ $VERBOSE -gt 0 ]] && echo "Test $I done."
- 		((I++))
- 	done
- 	echo "All $I tests of $TEST PASSED."
--
--	echo member > cpuset.cpus.partition
- }
- 
- #
-@@ -642,6 +763,7 @@ test_inotify()
- {
- 	ERR=0
- 	PRS=/tmp/.prs_$$
-+	cd $CGROUP2/test
- 	[[ -f $WAIT_INOTIFY ]] || {
- 		echo "wait_inotify not found, inotify test SKIPPED."
- 		return
-@@ -655,7 +777,7 @@ test_inotify()
- 	rm -f $PRS
- 	wait_inotify $PWD/cpuset.cpus.partition $PRS &
- 	pause 0.01
--	set_ctrl_state . "O1-0"
-+	set_ctrl_state . "O1=0"
- 	pause 0.01
- 	check_cgroup_states ".:P-1"
- 	if [[ $? -ne 0 ]]
-@@ -689,5 +811,3 @@ run_state_test TEST_MATRIX
- test_isolated
- test_inotify
- echo "All tests PASSED."
--cd ..
--rmdir test
--- 
-2.31.1
+but PM_SCAN_END_WALK is returned when p.vec_buf is full, so we can
+restart the loop after coping vec_buf to the user buffer, can't we?
 
+> 
+> > 
+> >> +		}
+> >> +	}
+> >> +
+> >> +	if (p.cur_buf.len) {
+> >> +		if (copy_to_user(&vec[vec_index], &p.cur_buf, sizeof(p.cur_buf))) {
+> >> +			ret = -EFAULT;
+> >> +			goto free_data;
+> >> +		}
+> >> +		vec_index++;
+> >> +	}
+> >> +
+> >> +	ret = vec_index;
+> >> +
+> >> +free_data:
+> >> +	if (IS_PM_SCAN_WP(p.flags))
+> >> +		mmu_notifier_invalidate_range_end(&range);
+> >> +
+> >> +	kfree(p.vec_buf);
+> >> +	return ret;
+> >> +}
+> >> +
+> ...
+> 
+> -- 
+> BR,
+> Muhammad Usama Anjum
