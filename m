@@ -2,343 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37BA7402C8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 20:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3C27402CF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 20:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjF0SAy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jun 2023 14:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S231867AbjF0SCg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jun 2023 14:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjF0SAx (ORCPT
+        with ESMTP id S231163AbjF0SCe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:00:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D50E5B;
-        Tue, 27 Jun 2023 11:00:51 -0700 (PDT)
-Received: from [192.168.10.54] (unknown [182.179.162.32])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4EA2A6607116;
-        Tue, 27 Jun 2023 19:00:43 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687888850;
-        bh=6ANmRGCz3lNyrGcZkbqxi6PCm0I3pVpl35MMbyHLf4k=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=F3c3d61dBArehry5bIHbtwpIr5IXKI9yMLGiaVHGctFRTvYeKwftbdiWOMzRzVKx6
-         68w9Sxm2U1FV5ymzKMxVzRrCTQq/4gnHtyhJzgA9NzUXHFb7D9Pd9Pcz09A208ZScx
-         xExrlUl7kIb7+JhLGcZ8WGr2gNivF6t94SmYZPXZqim9Ca3CJcOU52WbLDL4dnywlT
-         QhDzQvLPqJxkqqyf5jJc91Uo+2NRlfox7+ivPX88SVniEzCvOwJaVroHWIHa7Wvyng
-         ICsYA7k7w475lT8K9z1tcM2CTddj/yfIx95wjItQbqfZZcgiSFbEw3wJzvuxuuCVze
-         JD+l0yFggtSfA==
-Message-ID: <dcbb318e-fbb5-2d20-8193-e0197cfa3267@collabora.com>
-Date:   Tue, 27 Jun 2023 23:00:39 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Tue, 27 Jun 2023 14:02:34 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88F2296B;
+        Tue, 27 Jun 2023 11:02:32 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3113dabc549so6562277f8f.1;
+        Tue, 27 Jun 2023 11:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687888951; x=1690480951;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=goa42M9DzRb9h/mnWpooF3Ny8vytrBBwoFO9ZHZqKto=;
+        b=Fxc/Hj8LImN3leqe0w2ISJ37IyQdRyDIpDFaEUTQTlxQhSLTXhlYwUSjxy2dAt84qy
+         v/vp/T2L9mwLR0s+mY2EHrKTnx29gii53ZVbysrO2hnjayS+8gHpNYiPi9E7kZo2zADO
+         W2HKo6FAP+HDWNHlZLYwW1e9Ilzy8smxf5nQLDGOiVpWUakqWbV8Z9few9bxtCryRKaM
+         /5rlOJMa5SMj6PUJgnKaIkjzbf9MTXnE6bu1zcLm33NZJGBkrR13N1UHR6f/UO5GP96g
+         DEIomQYkXdo5Ar6cM3cJHd1FoHG/klNgp9aRDFMTxks/frlzfVIKOxM3Q/8Cok+ELTYD
+         QRcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687888951; x=1690480951;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=goa42M9DzRb9h/mnWpooF3Ny8vytrBBwoFO9ZHZqKto=;
+        b=bh6D9HRFkWoUkx0nzX70bukpV5PFpVtFVdUuOi4wxSfWgHoak0eY41XrKljTd0+AYP
+         TRoV8N/7Fhizwu6NWUXJJyMFrN7HVmmaxht8LmnE1gbQ1D7l+93oRzzbCGg08aayoNI0
+         FK/DziYq2Ah6mjHTnAKvfYus22sO1X6WKxqJ71RjtJgpHnDKJVCxOC+n9BgKs8ln47mN
+         m8kpRKNS68wDQA4wA9o6fgO5iXVVqF1B/jONyps8VNZycihsoU1E2PQEiYiLEIwIm/5d
+         +JLza3qz26w7kcy5dYixBMk5x1NyRMlld85gADzAS8aCvyTKb1fIcoSjPdd3j8a15If8
+         Im+w==
+X-Gm-Message-State: AC+VfDxpRGpz0VT4ifR4xP1AIJNCJsleAb3pJpBk9es9SX3oVoB0JjMx
+        GRwoJl/7Pxs62dSgvvkRa9g=
+X-Google-Smtp-Source: ACHHUZ4iMbz92ay0FqWK+4uSCi4J4aWB19HFktwq7p/WeH4WHqfgQZ006Vr1pCcCxn/m8FW1hYPJPg==
+X-Received: by 2002:a5d:590c:0:b0:30f:ba85:52b9 with SMTP id v12-20020a5d590c000000b0030fba8552b9mr33941057wrd.37.1687888950771;
+        Tue, 27 Jun 2023 11:02:30 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id f4-20020a1c6a04000000b003fba2734f1esm2781378wmc.1.2023.06.27.11.02.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 11:02:29 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 19:02:29 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Subject: Re: [PATCH v21 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Andrei Vagin <avagin@gmail.com>
-References: <20230626113156.1274521-1-usama.anjum@collabora.com>
- <20230626113156.1274521-3-usama.anjum@collabora.com>
- <ZJo/gOnTmwEQPLF8@gmail.com>
- <13ea54c0-25a3-285c-f47e-d6da11c91795@collabora.com>
- <ZJrz/cu/UtfBKQ01@gmail.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZJrz/cu/UtfBKQ01@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Kalesh Singh <kaleshsingh@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Vineeth Pillai <vineeth@bitbyteword.org>
+Subject: Re: [PATCH v4 1/7] mm/mremap: Optimize the start addresses in
+ move_page_tables()
+Message-ID: <e6da79b4-e48d-4b09-86b8-96bc66604694@lucifer.local>
+References: <20230531220807.2048037-1-joel@joelfernandes.org>
+ <20230531220807.2048037-2-joel@joelfernandes.org>
+ <f2f751ca-217e-4177-bb7f-1c9cd71e103e@lucifer.local>
+ <b87df265-7e58-5907-e215-953630a87155@joelfernandes.org>
+ <20230627175609.xrn4mle6hpi6exh7@revolver>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627175609.xrn4mle6hpi6exh7@revolver>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/27/23 7:36 PM, Andrei Vagin wrote:
-> On Tue, Jun 27, 2023 at 02:00:31PM +0500, Muhammad Usama Anjum wrote:
->> Hi Andrei and Michal,
->>
->> Lets resolve last two points. Please reply below.
->>
->> On 6/27/23 6:46 AM, Andrei Vagin wrote:
->> ...
->>>> +#ifdef CONFIG_HUGETLB_PAGE
->>>> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
->>>> +				      unsigned long start, unsigned long end,
->>>> +				      struct mm_walk *walk)
->>>> +{
->>>> +	unsigned long n_pages = (end - start)/PAGE_SIZE;
->>>> +	struct pagemap_scan_private *p = walk->private;
->>>> +	struct vm_area_struct *vma = walk->vma;
->>>> +	bool is_written, is_interesting = true;
->>>> +	struct hstate *h = hstate_vma(vma);
->>>> +	unsigned long bitmap;
->>>> +	spinlock_t *ptl;
->>>> +	int ret = 0;
->>>> +	pte_t ptent;
->>>> +
->>>> +	if (IS_PM_SCAN_WP(p->flags) && n_pages < HPAGE_SIZE/PAGE_SIZE)
->>>> +		return -EINVAL;
->>>> +
->>>> +	if (n_pages > p->max_pages - p->found_pages)
->>>> +		n_pages = p->max_pages - p->found_pages;
->>>> +
->>>> +	if (IS_PM_SCAN_WP(p->flags)) {
->>>> +		i_mmap_lock_write(vma->vm_file->f_mapping);
->>>> +		ptl = huge_pte_lock(h, vma->vm_mm, ptep);
->>>> +	}
->>>> +
->>>> +	ptent = huge_ptep_get(ptep);
->>>> +	is_written = !is_huge_pte_uffd_wp(ptent);
->>>> +
->>>> +	/*
->>>> +	 * Partial hugetlb page clear isn't supported
->>>> +	 */
->>>> +	if (is_written && IS_PM_SCAN_WP(p->flags) &&
->>>> +	    n_pages < HPAGE_SIZE/PAGE_SIZE) {
->>>
->>> should it be done only if is_interesting is set?
->> This can be good optimization. We shouldn't return error before finding if
->> page is interesting. I'll update.
->>
->>>
->>>> +		ret = PM_SCAN_END_WALK;
->>>> +		goto unlock_and_return;
->>>> +	}
->>>> +
->>>> +	bitmap = PM_SCAN_FLAGS(is_written, pagemap_scan_is_huge_file(ptent),
->>>> +			       pte_present(ptent), is_swap_pte(ptent),
->>>> +			       pte_present(ptent) && is_zero_pfn(pte_pfn(ptent)));
->>>> +
->>>> +	if (IS_PM_SCAN_GET(p->flags)) {
->>>> +		is_interesting = pagemap_scan_is_interesting_page(bitmap, p);
->>>> +		if (is_interesting)
->>>> +			ret = pagemap_scan_output(bitmap, p, start, n_pages);
->>>> +	}
->>>> +
->>>> +	if (IS_PM_SCAN_WP(p->flags) && is_written && is_interesting &&
->>>> +	    ret >= 0) {
->>>> +		make_uffd_wp_huge_pte(vma, start, ptep, ptent);
->>>> +		flush_hugetlb_tlb_range(vma, start, end);
->>>> +	}
->>>> +
->>>> +unlock_and_return:
->>>> +	if (IS_PM_SCAN_WP(p->flags)) {
->>>> +		spin_unlock(ptl);
->>>> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
->>>> +	}
->>>> +
->>>> +	return ret;
->>>> +}
->> ...
->>>> +
->>>> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long __arg)
->>>> +{
->>>> +	struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)__arg;
->>>> +	unsigned long long start, end, walk_start, walk_end;
->>>> +	unsigned long empty_slots, vec_index = 0;
->>>> +	struct mmu_notifier_range range;
->>>> +	struct page_region __user *vec;
->>>> +	struct pagemap_scan_private p;
->>>> +	struct pm_scan_arg arg;
->>>> +	int ret = 0;
->>>> +
->>>> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
->>>> +		return -EFAULT;
->>>> +
->>>> +	start = untagged_addr((unsigned long)arg.start);
->>>> +	vec = (struct page_region *)untagged_addr((unsigned long)arg.vec);
->>>> +
->>>> +	ret = pagemap_scan_args_valid(&arg, start, vec);
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>> +	end = start + arg.len;
->>>> +	p.max_pages = (arg.max_pages) ? arg.max_pages : ULONG_MAX;
->>>> +	p.found_pages = 0;
->>>> +	p.required_mask = arg.required_mask;
->>>> +	p.anyof_mask = arg.anyof_mask;
->>>> +	p.excluded_mask = arg.excluded_mask;
->>>> +	p.return_mask = arg.return_mask;
->>>> +	p.flags = arg.flags;
->>>> +	p.flags |= ((p.required_mask | p.anyof_mask | p.excluded_mask) &
->>>> +		    PAGE_IS_WRITTEN) ? PM_SCAN_REQUIRE_UFFD : 0;
->>>> +	p.cur_buf.start = p.cur_buf.len = p.cur_buf.flags = 0;
->>>> +	p.vec_buf = NULL;
->>>> +	p.vec_buf_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
->>>> +
->>>> +	/*
->>>> +	 * Allocate smaller buffer to get output from inside the page walk
->>>> +	 * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
->>>> +	 * we want to return output to user in compact form where no two
->>>> +	 * consecutive regions should be continuous and have the same flags.
->>>> +	 * So store the latest element in p.cur_buf between different walks and
->>>> +	 * store the p.cur_buf at the end of the walk to the user buffer.
->>>> +	 */
->>>> +	if (IS_PM_SCAN_GET(p.flags)) {
->>>> +		p.vec_buf = kmalloc_array(p.vec_buf_len, sizeof(*p.vec_buf),
->>>> +					  GFP_KERNEL);
->>>> +		if (!p.vec_buf)
->>>> +			return -ENOMEM;
->>>> +	}
->>>> +
->>>> +	if (IS_PM_SCAN_WP(p.flags)) {
->>>> +		mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
->>>> +					mm, start, end);
->>>> +		mmu_notifier_invalidate_range_start(&range);
->>>> +	}
->>>> +
->>>> +	walk_start = walk_end = start;
->>>> +	while (walk_end < end && !ret) {
->>>> +		if (IS_PM_SCAN_GET(p.flags)) {
->>>> +			p.vec_buf_index = 0;
->>>> +
->>>> +			/*
->>>> +			 * All data is copied to cur_buf first. When more data
->>>> +			 * is found, we push cur_buf to vec_buf and copy new
->>>> +			 * data to cur_buf. Subtract 1 from length as the
->>>> +			 * index of cur_buf isn't counted in length.
->>>> +			 */
->>>> +			empty_slots = arg.vec_len - vec_index;
->>>> +			p.vec_buf_len = min(p.vec_buf_len, empty_slots - 1);
->>>> +		}
->>>> +
->>>> +		walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
->>>> +		if (walk_end > end)
->>>> +			walk_end = end;
->>>> +
->>>
->>> If this loop can run for a long time, we need to interrupt it in case of
->>> pending signals.
->>>
->>> If you think we don't need to do that, pls explain in the commit
->>> message, so that maintainers don't miss this part and double check that
->>> everything is alright here.
->> This can be done. I'll add to the commit message that we are walking over
->> entire range passed.
->>
->>>
->>>> +		ret = mmap_read_lock_killable(mm);
->>>> +		if (ret)
->>>
->>> If any pages have been handled, we need to report them to user-space. It
->>> isn't acceptable to return a error in such cases.
->> This will return error only when task has gotten some serios signal and it
->> is giong to be killed. In this scenerio, we shouldn't care about returning
->> gracefully. Why do you think we should return gracefully in this case?
-> 
-> You are right, it can be interrupted only by a fatal signal. You can
-> ignore this comment.
-> 
->>
->>>
->>> And we need to report an address where it stopped scanning.
->>> We can do that by adding zero length vector.
->> I don't want to do multiplexing the ending address in vec. Can we add
->> end_addr variable in struct pm_scan_arg to always return the ending address?
->>
->> struct pm_scan_arg {
->> 	...
->> 	_u64 end_addr;
->> };
->>
->>
->>>
->>>
->>>> +			goto free_data;
->>>> +		ret = walk_page_range(mm, walk_start, walk_end,
->>>> +				      &pagemap_scan_ops, &p);
->>>> +		mmap_read_unlock(mm);
->>>> +
->>>> +		if (ret && ret != PM_SCAN_FOUND_MAX_PAGES &&
->>>> +		    ret != PM_SCAN_END_WALK)
->>>> +			goto free_data;
->>>> +
->>>> +		walk_start = walk_end;
->>>> +		if (IS_PM_SCAN_GET(p.flags) && p.vec_buf_index) {
->>>> +			if (copy_to_user(&vec[vec_index], p.vec_buf,
->>>> +					 p.vec_buf_index * sizeof(*p.vec_buf))) {
->>>> +				/*
->>>> +				 * Return error even though the OP succeeded
->>>> +				 */
->>>> +				ret = -EFAULT;
->>>> +				goto free_data;
->>>> +			}
->>>> +			vec_index += p.vec_buf_index;
->>>
->>> Should we set ret to zero here if it is equal PM_SCAN_END_WALK.
->> No, PM_SCAN_END_WALK is just internal code to stop the page walk and return
->> immedtitely. When we get this return value, we stop this loop and return to
->> user with whatever data we have in user buffer.
-> 
-> but PM_SCAN_END_WALK is returned when p.vec_buf is full, so we can
-> restart the loop after coping vec_buf to the user buffer, can't we?
-No, we set the capacity of p.vec_buf based on how many empty slots are
-remaining in user buffer. So when p.vec_buf is marked as full, it means
-user buffer is full. S
+On Tue, Jun 27, 2023 at 01:56:09PM -0400, Liam R. Howlett wrote:
+[snip]
+> > > How about something like:-
+> > >
+> > > return find_vma_intersection(vma->mm, addr_masked, vma->vm_start) == NULL;
+> > >
+> > > Which explicitly asserts that the range in [addr_masked, vma->vm_start) is
+> > > empty.
+> > >
+> > > But actually, we should be able to go further and replace the previous
+> > > check with:-
+> > >
+> > > return find_vma_intersection(vma->mm, addr_masked, addr_to_align) == NULL;
+> > >
+> > > Which will fail if addr_to_align is offset within the VMA.
+> >
+> > Your suggestion would mean that we do a full VMA search starting from the
+> > root. That would not be a nice thing if say we've 1000s of VMAs?
+> >
+> > Actually Liam told me to use find_vma_prev() because given a VMA, the maple
+> > tree would not have to work that hard for the common case to find the
+> > previous VMA. Per conversing with him, there is a chance we may have to go
+> > one step above in the tree if we hit the edge of a node, but that's not
+> > supposed to be the common case. In previous code, the previous VMA could
+> > just be obtained using the "previous VMA" pointer, however that pointer has
+> > been remove since the maple tree changes and given a VMA, going to the
+> > previous one using the maple tree is just as fast (as I'm told).
+>
+> I think there's been a bit of a miscommunication on that..
+>
+> If you have already found the VMA and are using the maple state, then
+> it's very little effort to get the next/prev.  Leaf nodes can hold 16
+> entries/NULL ranges, so the chances to go to the next/prev is usually in
+> the cpu cache already.. if you go up a level in the tree, then you will
+> have 10 nodes each with 16 entries each, etc, etc..  So the chances of
+> being on an edge node and having to walk up multiple levels to get to
+> the prev/next becomes rather rare.. and if you've just walked down, the
+> nodes on the way up will still be cached.
+>
+> Here, you're not using the maple state but searching for an address
+> using find_vma_prev(), but internally, that function does use a maple
+> state to get you the previous.  So you are looking up the VMA from the
+> root, but the prev will very likely be in the CPU cache.
+>
+> Assuming the worst case tree (each VMA has a gap next to it, not really
+> going to happen as they tend to be grouped together), then we are
+> looking at a 4 level tree to get to 8,000 VMAs.  5 levels gets you a
+> minimum 80,000.  I've never seen a tree of height 6 in the wild, but you
+> can fit 1.6M to 800K in one.
+>
+> I think the code is fine, but I wanted to clarify what we discussed.
 
-> 
->>
->>>
->>>> +		}
->>>> +	}
->>>> +
->>>> +	if (p.cur_buf.len) {
->>>> +		if (copy_to_user(&vec[vec_index], &p.cur_buf, sizeof(p.cur_buf))) {
->>>> +			ret = -EFAULT;
->>>> +			goto free_data;
->>>> +		}
->>>> +		vec_index++;
->>>> +	}
->>>> +
->>>> +	ret = vec_index;
->>>> +
->>>> +free_data:
->>>> +	if (IS_PM_SCAN_WP(p.flags))
->>>> +		mmu_notifier_invalidate_range_end(&range);
->>>> +
->>>> +	kfree(p.vec_buf);
->>>> +	return ret;
->>>> +}
->>>> +
->> ...
->>
->> -- 
->> BR,
->> Muhammad Usama Anjum
+Would the same apply to find_vma_intersection(), as they equally searches
+from the root and allows the code to be made fairly succinct?
 
--- 
-BR,
-Muhammad Usama Anjum
+I really am not a huge fan of find_vma_prev() searching for a VMA you
+already have just to get the previous one... would at lesat like to use
+vma_prev() on a newly defined vmi, but if find_vma_intersection() is fine
+then can reduce code to this.
+
+[snip]
