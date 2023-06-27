@@ -2,689 +2,585 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066E073EEFB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 01:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D7773EFCB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 02:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjFZXDF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Jun 2023 19:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
+        id S229867AbjF0AjT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Jun 2023 20:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjFZXCq (ORCPT
+        with ESMTP id S229841AbjF0AjS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jun 2023 19:02:46 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5D31734;
-        Mon, 26 Jun 2023 16:02:35 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id C22B15C00D1;
-        Mon, 26 Jun 2023 19:02:34 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 26 Jun 2023 19:02:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1687820554; x=
-        1687906954; bh=vEy7BCncCrDo0zMmxH8ZwmdBs9Bdxfo/kNUuhdT+M3c=; b=g
-        kYhNlmZg4GuZncG2oH6lVIycjcvF8+va9ZiAqb9EuR4k8TxO3sVl6ZeRD+9nAYfk
-        NMakorbW3GLFlL9VQ57zw+GXf1Xjs83t7UTsJAIJr1p1EPIXQNFyrW6ByQNGT7O2
-        NMHKvr5bEJ30qZvuuWin5h0Ywf5AcoBbeob216avI/ZyoAbxuUxW5VWV7sSP8bL4
-        OFkMTiS7oK2jn0lhq/AOg5yTch5AZt3munMu9wJyHW+lQXM3qyiVyXg80scZD3+g
-        n+KVTBvDizXCSFuYbmPr/8KtVxxmuDF17x0Pj9sD/dNeMwyUXuw+44FzJS/Rshhs
-        6DpcexbPtGuRtyj7yly2Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1687820554; x=
-        1687906954; bh=vEy7BCncCrDo0zMmxH8ZwmdBs9Bdxfo/kNUuhdT+M3c=; b=L
-        hV/4TGpt31AA7vpdVxEq5yiyz2ObOWsgkuqVFNLSp9t3+r9/G8YEXVVE6gS4/xsO
-        vRsrrafXO796XlrMbVx0BXBX+U0cZzGg5GHSQPYoF7NuCDGBimgOFFR3o9Hdh3ca
-        uHl5i3v4C3klZH5DNJHpYpZlPGi1RzNkQfHLIWtyH6EsV1T1dGYutPVHetqzg9jx
-        tjogYENkqUWMhYoIRK5hW9UwmoDkKIujeMh1w+haO0dKJtxob6Agpr8NHu+ieUOL
-        PbOkgeEmgy2p8qEi4kmy5Sp9ErJCcnP6zfiS03iHkkMt5Mp6UjuoWCOEiIMrVNjZ
-        chn9kY4A16fxDa2n9SM7A==
-X-ME-Sender: <xms:ChmaZLsz_zdNJbGWxMf4p8gYOLWRHX5C--juyP9PlkW4hoVvSOZpnQ>
-    <xme:ChmaZMckfUKwT5QO9tbeHc5sZsMLa2IY6JSYfcijHEbEGRLTylh4yzu7EwZzPbgtU
-    qfKaMexUYo6WtE_fA>
-X-ME-Received: <xmr:ChmaZOzKJy9YrXP0AFj_TlovIeynloUCNToAVNbFjJlP1MGiH1ZF10pXZwXYG3B_qM5Afea2VNOdGHwt30FXOJMJw4S39xVfWmzgh9oRbe4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehgedgudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
-    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
-    dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:ChmaZKPatNK_vxxc-9iOklcOB_H5XplCDiynWifAU3AnJmm0s9w3og>
-    <xmx:ChmaZL9N91f2FEmIfe3v8hhWb_ZMbD3IHrI3ZNmMqAM_AJJ-DLELgQ>
-    <xmx:ChmaZKVQIHM7CfETaUTIf-MxyGdKqBLi-vIpabk5Iz4yX5aTmGhb0A>
-    <xmx:ChmaZIgkzXjmN3ygl1pQCScwnRCEerkl3uuiZtSlaj2Thfm2QEncqg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 26 Jun 2023 19:02:32 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        shuah@kernel.org, fw@strlen.de
-Cc:     martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        dsahern@kernel.org
-Subject: [PATCH bpf-next 7/7] bpf: selftests: Add defrag selftests
-Date:   Mon, 26 Jun 2023 17:02:14 -0600
-Message-Id: <16bc6545404f87cb852b4498fdbda4d6073d828d.1687819413.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1687819413.git.dxu@dxuuu.xyz>
-References: <cover.1687819413.git.dxu@dxuuu.xyz>
+        Mon, 26 Jun 2023 20:39:18 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4161173E;
+        Mon, 26 Jun 2023 17:39:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687826355; x=1719362355;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=elpSqyEUuzY8eUsMBZVkZx16wIcyGPq2qNwtAWHRx0g=;
+  b=e2zryF2ktd4nT7t11mNHU+hJp3W6rvHWnOEKd/N1R3do8Crc9RVGlHIF
+   vEymsbNGVMf3RJtltULtY7r/nw9ehphF2pyj7F9GZmEFcwfH4bGgvqKKL
+   M7d4D8PkRaUty3lxq2QoLf36IRhjE0l0Jqg81iilOY788vvDPfVjtATA8
+   bospG8/krsaHHtvwCBBJ2Azl0xuNqcU5MI2FOApMB6HERk4z98Ok2VpuN
+   dbwaTut3o9eaeBU3IS3zN2IsyztpqNlaYMt1rD+qDEzrljUTvkSVv+3WA
+   7erSw5WDutsJz7nrZkVQWVNm8He0Rdyorl0hJAKcPUzP6xve04WsmFa1H
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="427432797"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="427432797"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 17:39:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="693662972"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="693662972"
+Received: from bbogsx-mobl.amr.corp.intel.com (HELO [10.212.255.77]) ([10.212.255.77])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 17:39:13 -0700
+Message-ID: <4fb431eb-85ca-77f0-3e3c-352b61f143a3@linux.intel.com>
+Date:   Mon, 26 Jun 2023 17:39:12 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation
+ feature
+To:     Dionna Amalie Glaze <dionnaglaze@google.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        dhowells@redhat.com, brijesh.singh@amd.com, atishp@rivosinc.com,
+        gregkh@linuxfoundation.org, linux-coco@lists.linux.dev,
+        joey.gouly@arm.com, Atish Kumar Patra <atishp@rivosinc.com>
+References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
+ <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
+ <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com>
+ <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
+Content-Language: en-US
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-These selftests tests 2 major scenarios: the BPF based defragmentation
-can successfully be done and that packet pointers are invalidated after
-calls to the kfunc. The logic is similar for both ipv4 and ipv6.
++Atish
 
-In the first scenario, we create a UDP client and UDP echo server. The
-the server side is fairly straightforward: we attach the prog and simply
-echo back the message.
+Atish, any comments on this topic from RISC-v?
 
-The on the client side, we send fragmented packets to and expect the
-reassembled message back from the server.
+On 6/26/23 11:57 AM, Dionna Amalie Glaze wrote:
+> On Sun, Jun 25, 2023 at 8:06 PM Sathyanarayanan Kuppuswamy
+> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+>>
+>> Hi Dan,
+>>
+>> On 6/23/23 3:27 PM, Dan Williams wrote:
+>>> Dan Williams wrote:
+>>>> [ add David, Brijesh, and Atish]
+>>>>
+>>>> Kuppuswamy Sathyanarayanan wrote:
+>>>>> In TDX guest, the second stage of the attestation process is Quote
+>>>>> generation. This process is required to convert the locally generated
+>>>>> TDREPORT into a remotely verifiable Quote. It involves sending the
+>>>>> TDREPORT data to a Quoting Enclave (QE) which will verify the
+>>>>> integrity of the TDREPORT and sign it with an attestation key.
+>>>>>
+>>>>> Intel's TDX attestation driver exposes TDX_CMD_GET_QUOTE IOCTL to
+>>>>> allow the user agent to get the TD Quote.
+>>>>>
+>>>>> Add a kernel selftest module to verify the Quote generation feature.
+>>>>>
+>>>>> TD Quote generation involves following steps:
+>>>>>
+>>>>> * Get the TDREPORT data using TDX_CMD_GET_REPORT IOCTL.
+>>>>> * Embed the TDREPORT data in quote buffer and request for quote
+>>>>>   generation via TDX_CMD_GET_QUOTE IOCTL request.
+>>>>> * Upon completion of the GetQuote request, check for non zero value
+>>>>>   in the status field of Quote header to make sure the generated
+>>>>>   quote is valid.
+>>>>
+>>>> What this cover letter does not say is that this is adding another
+>>>> instance of the similar pattern as SNP_GET_REPORT.
+>>>>
+>>>> Linux is best served when multiple vendors trying to do similar
+>>>> operations are brought together behind a common ABI. We see this in the
+>>>> history of wrangling SCSI vendors behind common interfaces. Now multiple
+>>>> confidential computing vendors trying to develop similar flows with
+>>>> differentiated formats where that differentiation need not leak over the
+>>>> ABI boundary.
+>>> [..]
+>>>
+>>> Below is a rough mock up of this approach to demonstrate the direction.
+>>> Again, the goal is to define an ABI that can support any vendor's
+>>> arch-specific attestation method and key provisioning flows without
+>>> leaking vendor-specific details, or confidential material over the
+>>> user/kernel ABI.
+>>
+>> Thanks for working on this mock code and helping out. It gives me the
+>> general idea about your proposal.
+>>
+>>>
+>>> The observation is that there are a sufficient number of attestation
+>>> flows available to review where Linux can define a superset ABI to
+>>> contain them all. The other observation is that the implementations have
+>>> features that may cross-polinate over time. For example the SEV
+>>> privelege level consideration ("vmpl"), and the TDX RTMR (think TPM
+>>> PCRs) mechanisms address generic Confidential Computing use cases.
+>>
+>>
+>> I agree with your point about VMPL and RTMR feature cases. This observation
+>> is valid for AMD SEV and TDX attestation flows. But I am not sure whether
+>> it will hold true for other vendor implementations. Our sample set is not
+>> good enough to make this conclusion. The reason for my concern is, if you
+>> check the ABI interface used in the S390 arch attestation driver
+>> (drivers/s390/char/uvdevice.c), you would notice that there is a significant
+>> difference between the ABI used in that driver and SEV/TDX drivers. The S390
+>> driver attestation request appears to accept two data blobs as input, as well
+>> as a variety of vendor-specific header configurations.
+>>
+>> Maybe the s390 attestation model is a special case, but, I think we consider
+>> this issue. Since we don't have a common spec, there is chance that any
+>> superset ABI we define now may not meet future vendor requirements. One way to
+>> handle it to leave enough space in the generic ABI to handle future vendor
+>> requirements.
+>>
+>> I think it would be better if other vendors (like ARM or RISC) can comment and
+>> confirm whether this proposal meets their demands.
+>>
+> 
+> The VMPL-based separation that will house the supervisor module known
+> as SVSM can have protocols that implement a TPM command interface, or
+> an RTMR-extension interface, and will also need to have an
+> SVSM-specific protocol attestation report format to keep the secure
+> chain of custody apparent. We'd have different formats and protocols
+> in the kernel, at least, to speak to each technology. I'm not sure
+> it's worth the trouble of papering over all the... 3-4 technologies
+> with similar but still weirdly different formats and ways of doing
+> things with an abstracted attestation ABI, especially since the output
+> all has to be interpreted in an architecture-specific way anyway.
+> 
+> ARM's Confidential Computing Realm Management Extensions (RME) seems
+> to be going along the lines of a runtime measurement register model
+> with their hardware enforced security. The number of registers isn't
+> prescribed in the spec.
+> 
+> +Joey Gouly +linux-coco@lists.linux.dev as far as RME is concerned, do
+> you know who would be best to weigh in on this discussion of a unified
+> attestation model?
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/testing/selftests/bpf/Makefile          |   4 +-
- .../selftests/bpf/generate_udp_fragments.py   |  90 ++++++
- .../selftests/bpf/ip_check_defrag_frags.h     |  57 ++++
- .../bpf/prog_tests/ip_check_defrag.c          | 282 ++++++++++++++++++
- .../selftests/bpf/progs/ip_check_defrag.c     | 104 +++++++
- 5 files changed, 535 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/bpf/generate_udp_fragments.py
- create mode 100644 tools/testing/selftests/bpf/ip_check_defrag_frags.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c
- create mode 100644 tools/testing/selftests/bpf/progs/ip_check_defrag.c
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 538df8fb8c42..b47f20381d56 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -561,8 +561,8 @@ TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
- 			 network_helpers.c testing_helpers.c		\
- 			 btf_helpers.c flow_dissector_load.h		\
- 			 cap_helpers.c test_loader.c xsk.c disasm.c	\
--			 json_writer.c unpriv_helpers.c
--
-+			 json_writer.c unpriv_helpers.c 		\
-+			 ip_check_defrag_frags.h
- TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
- 		       $(OUTPUT)/liburandom_read.so			\
- 		       $(OUTPUT)/xdp_synproxy				\
-diff --git a/tools/testing/selftests/bpf/generate_udp_fragments.py b/tools/testing/selftests/bpf/generate_udp_fragments.py
-new file mode 100755
-index 000000000000..2b8a1187991c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/generate_udp_fragments.py
-@@ -0,0 +1,90 @@
-+#!/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""
-+This script helps generate fragmented UDP packets.
-+
-+While it is technically possible to dynamically generate
-+fragmented packets in C, it is much harder to read and write
-+said code. `scapy` is relatively industry standard and really
-+easy to read / write.
-+
-+So we choose to write this script that generates a valid C
-+header. Rerun script and commit generated file after any
-+modifications.
-+"""
-+
-+import argparse
-+import os
-+
-+from scapy.all import *
-+
-+
-+# These constants must stay in sync with `ip_check_defrag.c`
-+VETH1_ADDR = "172.16.1.200"
-+VETH0_ADDR6 = "fc00::100"
-+VETH1_ADDR6 = "fc00::200"
-+CLIENT_PORT = 48878
-+SERVER_PORT = 48879
-+MAGIC_MESSAGE = "THIS IS THE ORIGINAL MESSAGE, PLEASE REASSEMBLE ME"
-+
-+
-+def print_header(f):
-+    f.write("// SPDX-License-Identifier: GPL-2.0\n")
-+    f.write("/* DO NOT EDIT -- this file is generated */\n")
-+    f.write("\n")
-+    f.write("#ifndef _IP_CHECK_DEFRAG_FRAGS_H\n")
-+    f.write("#define _IP_CHECK_DEFRAG_FRAGS_H\n")
-+    f.write("\n")
-+    f.write("#include <stdint.h>\n")
-+    f.write("\n")
-+
-+
-+def print_frags(f, frags, v6):
-+    for idx, frag in enumerate(frags):
-+        # 10 bytes per line to keep width in check
-+        chunks = [frag[i : i + 10] for i in range(0, len(frag), 10)]
-+        chunks_fmted = [", ".join([str(hex(b)) for b in chunk]) for chunk in chunks]
-+        suffix = "6" if v6 else ""
-+
-+        f.write(f"static uint8_t frag{suffix}_{idx}[] = {{\n")
-+        for chunk in chunks_fmted:
-+            f.write(f"\t{chunk},\n")
-+        f.write(f"}};\n")
-+
-+
-+def print_trailer(f):
-+    f.write("\n")
-+    f.write("#endif /* _IP_CHECK_DEFRAG_FRAGS_H */\n")
-+
-+
-+def main(f):
-+    # srcip of 0 is filled in by IP_HDRINCL
-+    sip = "0.0.0.0"
-+    sip6 = VETH0_ADDR6
-+    dip = VETH1_ADDR
-+    dip6 = VETH1_ADDR6
-+    sport = CLIENT_PORT
-+    dport = SERVER_PORT
-+    payload = MAGIC_MESSAGE.encode()
-+
-+    # Disable UDPv4 checksums to keep code simpler
-+    pkt = IP(src=sip,dst=dip) / UDP(sport=sport,dport=dport,chksum=0) / Raw(load=payload)
-+    # UDPv6 requires a checksum
-+    # Also pin the ipv6 fragment header ID, otherwise it's a random value
-+    pkt6 = IPv6(src=sip6,dst=dip6) / IPv6ExtHdrFragment(id=0xBEEF) / UDP(sport=sport,dport=dport) / Raw(load=payload)
-+
-+    frags = [f.build() for f in pkt.fragment(24)]
-+    frags6 = [f.build() for f in fragment6(pkt6, 72)]
-+
-+    print_header(f)
-+    print_frags(f, frags, False)
-+    print_frags(f, frags6, True)
-+    print_trailer(f)
-+
-+
-+if __name__ == "__main__":
-+    dir = os.path.dirname(os.path.realpath(__file__))
-+    header = f"{dir}/ip_check_defrag_frags.h"
-+    with open(header, "w") as f:
-+        main(f)
-diff --git a/tools/testing/selftests/bpf/ip_check_defrag_frags.h b/tools/testing/selftests/bpf/ip_check_defrag_frags.h
-new file mode 100644
-index 000000000000..70ab7e9fa22b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/ip_check_defrag_frags.h
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* DO NOT EDIT -- this file is generated */
-+
-+#ifndef _IP_CHECK_DEFRAG_FRAGS_H
-+#define _IP_CHECK_DEFRAG_FRAGS_H
-+
-+#include <stdint.h>
-+
-+static uint8_t frag_0[] = {
-+	0x45, 0x0, 0x0, 0x2c, 0x0, 0x1, 0x20, 0x0, 0x40, 0x11,
-+	0xac, 0xe8, 0x0, 0x0, 0x0, 0x0, 0xac, 0x10, 0x1, 0xc8,
-+	0xbe, 0xee, 0xbe, 0xef, 0x0, 0x3a, 0x0, 0x0, 0x54, 0x48,
-+	0x49, 0x53, 0x20, 0x49, 0x53, 0x20, 0x54, 0x48, 0x45, 0x20,
-+	0x4f, 0x52, 0x49, 0x47,
-+};
-+static uint8_t frag_1[] = {
-+	0x45, 0x0, 0x0, 0x2c, 0x0, 0x1, 0x20, 0x3, 0x40, 0x11,
-+	0xac, 0xe5, 0x0, 0x0, 0x0, 0x0, 0xac, 0x10, 0x1, 0xc8,
-+	0x49, 0x4e, 0x41, 0x4c, 0x20, 0x4d, 0x45, 0x53, 0x53, 0x41,
-+	0x47, 0x45, 0x2c, 0x20, 0x50, 0x4c, 0x45, 0x41, 0x53, 0x45,
-+	0x20, 0x52, 0x45, 0x41,
-+};
-+static uint8_t frag_2[] = {
-+	0x45, 0x0, 0x0, 0x1e, 0x0, 0x1, 0x0, 0x6, 0x40, 0x11,
-+	0xcc, 0xf0, 0x0, 0x0, 0x0, 0x0, 0xac, 0x10, 0x1, 0xc8,
-+	0x53, 0x53, 0x45, 0x4d, 0x42, 0x4c, 0x45, 0x20, 0x4d, 0x45,
-+};
-+static uint8_t frag6_0[] = {
-+	0x60, 0x0, 0x0, 0x0, 0x0, 0x20, 0x2c, 0x40, 0xfc, 0x0,
-+	0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-+	0x0, 0x0, 0x1, 0x0, 0xfc, 0x0, 0x0, 0x0, 0x0, 0x0,
-+	0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2, 0x0,
-+	0x11, 0x0, 0x0, 0x1, 0x0, 0x0, 0xbe, 0xef, 0xbe, 0xee,
-+	0xbe, 0xef, 0x0, 0x3a, 0xd0, 0xf8, 0x54, 0x48, 0x49, 0x53,
-+	0x20, 0x49, 0x53, 0x20, 0x54, 0x48, 0x45, 0x20, 0x4f, 0x52,
-+	0x49, 0x47,
-+};
-+static uint8_t frag6_1[] = {
-+	0x60, 0x0, 0x0, 0x0, 0x0, 0x20, 0x2c, 0x40, 0xfc, 0x0,
-+	0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-+	0x0, 0x0, 0x1, 0x0, 0xfc, 0x0, 0x0, 0x0, 0x0, 0x0,
-+	0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2, 0x0,
-+	0x11, 0x0, 0x0, 0x19, 0x0, 0x0, 0xbe, 0xef, 0x49, 0x4e,
-+	0x41, 0x4c, 0x20, 0x4d, 0x45, 0x53, 0x53, 0x41, 0x47, 0x45,
-+	0x2c, 0x20, 0x50, 0x4c, 0x45, 0x41, 0x53, 0x45, 0x20, 0x52,
-+	0x45, 0x41,
-+};
-+static uint8_t frag6_2[] = {
-+	0x60, 0x0, 0x0, 0x0, 0x0, 0x12, 0x2c, 0x40, 0xfc, 0x0,
-+	0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-+	0x0, 0x0, 0x1, 0x0, 0xfc, 0x0, 0x0, 0x0, 0x0, 0x0,
-+	0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2, 0x0,
-+	0x11, 0x0, 0x0, 0x30, 0x0, 0x0, 0xbe, 0xef, 0x53, 0x53,
-+	0x45, 0x4d, 0x42, 0x4c, 0x45, 0x20, 0x4d, 0x45,
-+};
-+
-+#endif /* _IP_CHECK_DEFRAG_FRAGS_H */
-diff --git a/tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c b/tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c
-new file mode 100644
-index 000000000000..5cd08d6e0ebc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c
-@@ -0,0 +1,282 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <net/if.h>
-+#include <linux/netfilter.h>
-+#include <network_helpers.h>
-+#include "ip_check_defrag.skel.h"
-+#include "ip_check_defrag_frags.h"
-+
-+/*
-+ * This selftest spins up a client and an echo server, each in their own
-+ * network namespace. The client will send a fragmented message to the server.
-+ * The prog attached to the server will shoot down any fragments. Thus, if
-+ * the server is able to correctly echo back the message to the client, we will
-+ * have verified that netfilter is reassembling packets for us.
-+ *
-+ * Topology:
-+ * =========
-+ *           NS0         |         NS1
-+ *                       |
-+ *         client        |       server
-+ *       ----------      |     ----------
-+ *       |  veth0  | --------- |  veth1  |
-+ *       ----------    peer    ----------
-+ *                       |
-+ *                       |       with bpf
-+ */
-+
-+#define NS0		"defrag_ns0"
-+#define NS1		"defrag_ns1"
-+#define VETH0		"veth0"
-+#define VETH1		"veth1"
-+#define VETH0_ADDR	"172.16.1.100"
-+#define VETH0_ADDR6	"fc00::100"
-+/* The following constants must stay in sync with `generate_udp_fragments.py` */
-+#define VETH1_ADDR	"172.16.1.200"
-+#define VETH1_ADDR6	"fc00::200"
-+#define CLIENT_PORT	48878
-+#define SERVER_PORT	48879
-+#define MAGIC_MESSAGE	"THIS IS THE ORIGINAL MESSAGE, PLEASE REASSEMBLE ME"
-+
-+static int setup_topology(bool ipv6)
-+{
-+	bool up;
-+	int i;
-+
-+	SYS(fail, "ip netns add " NS0);
-+	SYS(fail, "ip netns add " NS1);
-+	SYS(fail, "ip link add " VETH0 " netns " NS0 " type veth peer name " VETH1 " netns " NS1);
-+	if (ipv6) {
-+		SYS(fail, "ip -6 -net " NS0 " addr add " VETH0_ADDR6 "/64 dev " VETH0 " nodad");
-+		SYS(fail, "ip -6 -net " NS1 " addr add " VETH1_ADDR6 "/64 dev " VETH1 " nodad");
-+	} else {
-+		SYS(fail, "ip -net " NS0 " addr add " VETH0_ADDR "/24 dev " VETH0);
-+		SYS(fail, "ip -net " NS1 " addr add " VETH1_ADDR "/24 dev " VETH1);
-+	}
-+	SYS(fail, "ip -net " NS0 " link set dev " VETH0 " up");
-+	SYS(fail, "ip -net " NS1 " link set dev " VETH1 " up");
-+
-+	/* Wait for up to 5s for links to come up */
-+	for (i = 0; i < 5; ++i) {
-+		if (ipv6)
-+			up = !system("ip netns exec " NS0 " ping -6 -c 1 -W 1 " VETH1_ADDR6 " &>/dev/null");
-+		else
-+			up = !system("ip netns exec " NS0 " ping -c 1 -W 1 " VETH1_ADDR " &>/dev/null");
-+
-+		if (up)
-+			break;
-+	}
-+
-+	return 0;
-+fail:
-+	return -1;
-+}
-+
-+static void cleanup_topology(void)
-+{
-+	SYS_NOFAIL("test -f /var/run/netns/" NS0 " && ip netns delete " NS0);
-+	SYS_NOFAIL("test -f /var/run/netns/" NS1 " && ip netns delete " NS1);
-+}
-+
-+static int attach(struct ip_check_defrag *skel, bool ipv6)
-+{
-+	LIBBPF_OPTS(bpf_netfilter_opts, opts,
-+		    .pf = ipv6 ? NFPROTO_IPV6 : NFPROTO_IPV4,
-+		    .priority = 42,
-+		    .flags = BPF_F_NETFILTER_IP_DEFRAG);
-+	struct nstoken *nstoken;
-+	int err = -1;
-+
-+	nstoken = open_netns(NS1);
-+
-+	skel->links.defrag = bpf_program__attach_netfilter(skel->progs.defrag, &opts);
-+	if (!ASSERT_OK_PTR(skel->links.defrag, "program attach"))
-+		goto out;
-+
-+	err = 0;
-+out:
-+	close_netns(nstoken);
-+	return err;
-+}
-+
-+static int send_frags(int client)
-+{
-+	struct sockaddr_storage saddr;
-+	struct sockaddr *saddr_p;
-+	socklen_t saddr_len;
-+	int err;
-+
-+	saddr_p = (struct sockaddr *)&saddr;
-+	err = make_sockaddr(AF_INET, VETH1_ADDR, SERVER_PORT, &saddr, &saddr_len);
-+	if (!ASSERT_OK(err, "make_sockaddr"))
-+		return -1;
-+
-+	err = sendto(client, frag_0, sizeof(frag_0), 0, saddr_p, saddr_len);
-+	if (!ASSERT_GE(err, 0, "sendto frag_0"))
-+		return -1;
-+
-+	err = sendto(client, frag_1, sizeof(frag_1), 0, saddr_p, saddr_len);
-+	if (!ASSERT_GE(err, 0, "sendto frag_1"))
-+		return -1;
-+
-+	err = sendto(client, frag_2, sizeof(frag_2), 0, saddr_p, saddr_len);
-+	if (!ASSERT_GE(err, 0, "sendto frag_2"))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static int send_frags6(int client)
-+{
-+	struct sockaddr_storage saddr;
-+	struct sockaddr *saddr_p;
-+	socklen_t saddr_len;
-+	int err;
-+
-+	saddr_p = (struct sockaddr *)&saddr;
-+	/* Port needs to be set to 0 for raw ipv6 socket for some reason */
-+	err = make_sockaddr(AF_INET6, VETH1_ADDR6, 0, &saddr, &saddr_len);
-+	if (!ASSERT_OK(err, "make_sockaddr"))
-+		return -1;
-+
-+	err = sendto(client, frag6_0, sizeof(frag6_0), 0, saddr_p, saddr_len);
-+	if (!ASSERT_GE(err, 0, "sendto frag6_0"))
-+		return -1;
-+
-+	err = sendto(client, frag6_1, sizeof(frag6_1), 0, saddr_p, saddr_len);
-+	if (!ASSERT_GE(err, 0, "sendto frag6_1"))
-+		return -1;
-+
-+	err = sendto(client, frag6_2, sizeof(frag6_2), 0, saddr_p, saddr_len);
-+	if (!ASSERT_GE(err, 0, "sendto frag6_2"))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+void test_bpf_ip_check_defrag_ok(bool ipv6)
-+{
-+	struct network_helper_opts rx_opts = {
-+		.timeout_ms = 1000,
-+		.noconnect = true,
-+	};
-+	struct network_helper_opts tx_ops = {
-+		.timeout_ms = 1000,
-+		.type = SOCK_RAW,
-+		.proto = IPPROTO_RAW,
-+		.noconnect = true,
-+	};
-+	struct sockaddr_storage caddr;
-+	struct ip_check_defrag *skel;
-+	struct nstoken *nstoken;
-+	int client_tx_fd = -1;
-+	int client_rx_fd = -1;
-+	socklen_t caddr_len;
-+	int srv_fd = -1;
-+	char buf[1024];
-+	int len, err;
-+
-+	skel = ip_check_defrag__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	if (!ASSERT_OK(setup_topology(ipv6), "setup_topology"))
-+		goto out;
-+
-+	if (!ASSERT_OK(attach(skel, ipv6), "attach"))
-+		goto out;
-+
-+	/* Start server in ns1 */
-+	nstoken = open_netns(NS1);
-+	if (!ASSERT_OK_PTR(nstoken, "setns ns1"))
-+		goto out;
-+	srv_fd = start_server(ipv6 ? AF_INET6 : AF_INET, SOCK_DGRAM, NULL, SERVER_PORT, 0);
-+	close_netns(nstoken);
-+	if (!ASSERT_GE(srv_fd, 0, "start_server"))
-+		goto out;
-+
-+	/* Open tx raw socket in ns0 */
-+	nstoken = open_netns(NS0);
-+	if (!ASSERT_OK_PTR(nstoken, "setns ns0"))
-+		goto out;
-+	client_tx_fd = connect_to_fd_opts(srv_fd, &tx_ops);
-+	close_netns(nstoken);
-+	if (!ASSERT_GE(client_tx_fd, 0, "connect_to_fd_opts"))
-+		goto out;
-+
-+	/* Open rx socket in ns0 */
-+	nstoken = open_netns(NS0);
-+	if (!ASSERT_OK_PTR(nstoken, "setns ns0"))
-+		goto out;
-+	client_rx_fd = connect_to_fd_opts(srv_fd, &rx_opts);
-+	close_netns(nstoken);
-+	if (!ASSERT_GE(client_rx_fd, 0, "connect_to_fd_opts"))
-+		goto out;
-+
-+	/* Bind rx socket to a premeditated port */
-+	memset(&caddr, 0, sizeof(caddr));
-+	nstoken = open_netns(NS0);
-+	if (!ASSERT_OK_PTR(nstoken, "setns ns0"))
-+		goto out;
-+	if (ipv6) {
-+		struct sockaddr_in6 *c = (struct sockaddr_in6 *)&caddr;
-+
-+		c->sin6_family = AF_INET6;
-+		inet_pton(AF_INET6, VETH0_ADDR6, &c->sin6_addr);
-+		c->sin6_port = htons(CLIENT_PORT);
-+		err = bind(client_rx_fd, (struct sockaddr *)c, sizeof(*c));
-+	} else {
-+		struct sockaddr_in *c = (struct sockaddr_in *)&caddr;
-+
-+		c->sin_family = AF_INET;
-+		inet_pton(AF_INET, VETH0_ADDR, &c->sin_addr);
-+		c->sin_port = htons(CLIENT_PORT);
-+		err = bind(client_rx_fd, (struct sockaddr *)c, sizeof(*c));
-+	}
-+	close_netns(nstoken);
-+	if (!ASSERT_OK(err, "bind"))
-+		goto out;
-+
-+	/* Send message in fragments */
-+	if (ipv6) {
-+		if (!ASSERT_OK(send_frags6(client_tx_fd), "send_frags6"))
-+			goto out;
-+	} else {
-+		if (!ASSERT_OK(send_frags(client_tx_fd), "send_frags"))
-+			goto out;
-+	}
-+
-+	if (!ASSERT_EQ(skel->bss->shootdowns, 0, "shootdowns"))
-+		goto out;
-+
-+	/* Receive reassembled msg on server and echo back to client */
-+	len = recvfrom(srv_fd, buf, sizeof(buf), 0, (struct sockaddr *)&caddr, &caddr_len);
-+	if (!ASSERT_GE(len, 0, "server recvfrom"))
-+		goto out;
-+	len = sendto(srv_fd, buf, len, 0, (struct sockaddr *)&caddr, caddr_len);
-+	if (!ASSERT_GE(len, 0, "server sendto"))
-+		goto out;
-+
-+	/* Expect reassembed message to be echoed back */
-+	len = recvfrom(client_rx_fd, buf, sizeof(buf), 0, NULL, NULL);
-+	if (!ASSERT_EQ(len, sizeof(MAGIC_MESSAGE) - 1, "client short read"))
-+		goto out;
-+
-+out:
-+	if (client_rx_fd != -1)
-+		close(client_rx_fd);
-+	if (client_tx_fd != -1)
-+		close(client_tx_fd);
-+	if (srv_fd != -1)
-+		close(srv_fd);
-+	cleanup_topology();
-+	ip_check_defrag__destroy(skel);
-+}
-+
-+void test_bpf_ip_check_defrag(void)
-+{
-+	if (test__start_subtest("v4"))
-+		test_bpf_ip_check_defrag_ok(false);
-+	if (test__start_subtest("v6"))
-+		test_bpf_ip_check_defrag_ok(true);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/ip_check_defrag.c b/tools/testing/selftests/bpf/progs/ip_check_defrag.c
-new file mode 100644
-index 000000000000..4259c6d59968
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/ip_check_defrag.c
-@@ -0,0 +1,104 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+#include "bpf_tracing_net.h"
-+
-+#define NF_DROP			0
-+#define NF_ACCEPT		1
-+#define ETH_P_IP		0x0800
-+#define ETH_P_IPV6		0x86DD
-+#define IP_MF			0x2000
-+#define IP_OFFSET		0x1FFF
-+#define NEXTHDR_FRAGMENT	44
-+
-+extern int bpf_dynptr_from_skb(struct sk_buff *skb, __u64 flags,
-+                               struct bpf_dynptr *ptr__uninit) __ksym;
-+extern void *bpf_dynptr_slice(const struct bpf_dynptr *ptr, uint32_t offset,
-+			      void *buffer, uint32_t buffer__sz) __ksym;
-+
-+volatile int shootdowns = 0;
-+
-+static bool is_frag_v4(struct iphdr *iph)
-+{
-+	int offset;
-+	int flags;
-+
-+	offset = bpf_ntohs(iph->frag_off);
-+	flags = offset & ~IP_OFFSET;
-+	offset &= IP_OFFSET;
-+	offset <<= 3;
-+
-+	return (flags & IP_MF) || offset;
-+}
-+
-+static bool is_frag_v6(struct ipv6hdr *ip6h)
-+{
-+	/* Simplifying assumption that there are no extension headers
-+	 * between fixed header and fragmentation header. This assumption
-+	 * is only valid in this test case. It saves us the hassle of
-+	 * searching all potential extension headers.
-+	 */
-+	return ip6h->nexthdr == NEXTHDR_FRAGMENT;
-+}
-+
-+static int handle_v4(struct sk_buff *skb)
-+{
-+	struct bpf_dynptr ptr;
-+	u8 iph_buf[20] = {};
-+	struct iphdr *iph;
-+
-+	if (bpf_dynptr_from_skb(skb, 0, &ptr))
-+		return NF_DROP;
-+
-+	iph = bpf_dynptr_slice(&ptr, 0, iph_buf, sizeof(iph_buf));
-+	if (!iph)
-+		return NF_DROP;
-+
-+	/* Shootdown any frags */
-+	if (is_frag_v4(iph)) {
-+		shootdowns++;
-+		return NF_DROP;
-+	}
-+
-+	return NF_ACCEPT;
-+}
-+
-+static int handle_v6(struct sk_buff *skb)
-+{
-+	struct bpf_dynptr ptr;
-+	struct ipv6hdr *ip6h;
-+	u8 ip6h_buf[40] = {};
-+
-+	if (bpf_dynptr_from_skb(skb, 0, &ptr))
-+		return NF_DROP;
-+
-+	ip6h = bpf_dynptr_slice(&ptr, 0, ip6h_buf, sizeof(ip6h_buf));
-+	if (!ip6h)
-+		return NF_DROP;
-+
-+	/* Shootdown any frags */
-+	if (is_frag_v6(ip6h)) {
-+		shootdowns++;
-+		return NF_DROP;
-+	}
-+
-+	return NF_ACCEPT;
-+}
-+
-+SEC("netfilter")
-+int defrag(struct bpf_nf_ctx *ctx)
-+{
-+	struct sk_buff *skb = ctx->skb;
-+
-+	switch (bpf_ntohs(skb->protocol)) {
-+	case ETH_P_IP:
-+		return handle_v4(skb);
-+	case ETH_P_IPV6:
-+		return handle_v6(skb);
-+	default:
-+		return NF_ACCEPT;
-+	}
-+}
-+
-+char _license[] SEC("license") = "GPL";
+> 
+>>>
+>>> Vendor specific ioctls for all of this feels like surrender when Linux
+>>> already has the keys subsystem which has plenty of degrees of freedom
+>>> for tracking blobs with signatures and using those blobs to instantiate
+>>> other blobs. It already serves as the ABI wrapping various TPM
+>>> implementations and marshaling keys for storage encryption and other use
+>>> cases that intersect Confidential Computing.
+>>>
+>>> The benefit of deprecating vendor-specific abstraction layers in
+>>> userspace is secondary. The primary benefit is collaboration. It enables
+>>> kernel developers from various architectures to collaborate on common
+>>> infrastructure. If, referring back to my previous example, SEV adopts an
+>>> RTMR-like mechanism and TDX adopts a vmpl-like mechanism it would be
+>>> unfortunate if those efforts were siloed, duplicated, and needlessly
+>>> differentiated to userspace. So while there are arguably a manageable
+>>> number of basic arch attestation methods the planned expansion of those
+>>> to build incremental functionality is where I believe we, as a
+>>> community, will be glad that we invested in a "Linux format" for all of
+>>> this.
+>>>
+>>> An example, to show what the strawman patch below enables: (req_key is
+>>> the sample program from "man 2 request_key")
+>>>
+>>> # ./req_key guest_attest guest_attest:0:0-$desc $(cat user_data | base64)
+>>> Key ID is 10e2f3a7
+>>> # keyctl pipe 0x10e2f3a7 | hexdump -C
+>>> 00000000  54 44 58 20 47 65 6e 65  72 61 74 65 64 20 51 75  |TDX Generated Qu|
+>>> 00000010  6f 74 65 00 00 00 00 00  00 00 00 00 00 00 00 00  |ote.............|
+>>> 00000020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+>>> *
+>>> 00004000
+>>>
+>>> This is the kernel instantiating a TDX Quote without the TDREPORT
+>>> implementation detail ever leaving the kernel. Now, this is only the
+>>
+>> IIUC, the idea here is to cache the quote data and return it to the user whenever
+>> possible, right? If yes, I think such optimization may not be very useful for our
+>> case. AFAIK, the quote data will change whenever there is a change in the guest
+>> measurement data. Since the validity of the generated quote will not be long,
+>> and the frequency of quote generation requests is expected to be less, we may not
+>> get much benefit from caching the quote data. I think we can keep this logic simple
+>> by directly retrieving the quote data from the quoting enclave whenever there is a
+>> request from the user.
+>>
+>>> top-half of what is needed. The missing bottom half takes that material
+>>> and uses it to instantiate derived key material like the storage
+>>> decryption key internal to the kernel. See "The Process" in
+>>> Documentation/security/keys/request-key.rst for how the Keys subsystem
+>>> handles the "keys for keys" use case.
+>>
+>> This is only useful for key-server use case, right? Attestation can also be
+>> used for use cases like pattern matching or uploading some secure data, etc.
+>> Since key-server is not the only use case, does it make sense to suppport
+>> this derived key feature?
+>>
+>>>
+>>> ---
+>>> diff --git a/drivers/virt/Kconfig b/drivers/virt/Kconfig
+>>> index f79ab13a5c28..0f775847028e 100644
+>>> --- a/drivers/virt/Kconfig
+>>> +++ b/drivers/virt/Kconfig
+>>> @@ -54,4 +54,8 @@ source "drivers/virt/coco/sev-guest/Kconfig"
+>>>
+>>>  source "drivers/virt/coco/tdx-guest/Kconfig"
+>>>
+>>> +config GUEST_ATTEST
+>>> +     tristate
+>>> +     select KEYS
+>>> +
+>>>  endif
+>>> diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
+>>> index e9aa6fc96fab..66f6b838f8f4 100644
+>>> --- a/drivers/virt/Makefile
+>>> +++ b/drivers/virt/Makefile
+>>> @@ -12,3 +12,4 @@ obj-$(CONFIG_ACRN_HSM)              += acrn/
+>>>  obj-$(CONFIG_EFI_SECRET)     += coco/efi_secret/
+>>>  obj-$(CONFIG_SEV_GUEST)              += coco/sev-guest/
+>>>  obj-$(CONFIG_INTEL_TDX_GUEST)        += coco/tdx-guest/
+>>> +obj-$(CONFIG_GUEST_ATTEST)   += coco/guest-attest/
+>>> diff --git a/drivers/virt/coco/guest-attest/Makefile b/drivers/virt/coco/guest-attest/Makefile
+>>> new file mode 100644
+>>> index 000000000000..5581c5a27588
+>>> --- /dev/null
+>>> +++ b/drivers/virt/coco/guest-attest/Makefile
+>>> @@ -0,0 +1,2 @@
+>>> +obj-$(CONFIG_GUEST_ATTEST) += guest_attest.o
+>>> +guest_attest-y := key.o
+>>> diff --git a/drivers/virt/coco/guest-attest/key.c b/drivers/virt/coco/guest-attest/key.c
+>>> new file mode 100644
+>>> index 000000000000..2a494b6dd7a7
+>>> --- /dev/null
+>>> +++ b/drivers/virt/coco/guest-attest/key.c
+>>> @@ -0,0 +1,159 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +/* Copyright(c) 2023 Intel Corporation. All rights reserved. */
+>>> +
+>>> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>>> +#include <linux/seq_file.h>
+>>> +#include <linux/key-type.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/base64.h>
+>>> +
+>>> +#include <keys/request_key_auth-type.h>
+>>> +#include <keys/user-type.h>
+>>> +
+>>> +#include "guest-attest.h"
+>>
+>> Can you share you guest-attest.h?
+>>
+>>> +
+>>> +static LIST_HEAD(guest_attest_list);
+>>> +static DECLARE_RWSEM(guest_attest_rwsem);
+>>> +
+>>> +static struct guest_attest_ops *fetch_ops(void)
+>>> +{
+>>> +     return list_first_entry_or_null(&guest_attest_list,
+>>> +                                     struct guest_attest_ops, list);
+>>> +}
+>>> +
+>>> +static struct guest_attest_ops *get_ops(void)
+>>> +{
+>>> +     down_read(&guest_attest_rwsem);
+>>> +     return fetch_ops();
+>>> +}
+>>> +
+>>> +static void put_ops(void)
+>>> +{
+>>> +     up_read(&guest_attest_rwsem);
+>>> +}
+>>> +
+>>> +int register_guest_attest_ops(struct guest_attest_ops *ops)
+>>> +{
+>>> +     struct guest_attest_ops *conflict;
+>>> +     int rc;
+>>> +
+>>> +     down_write(&guest_attest_rwsem);
+>>> +     conflict = fetch_ops();
+>>> +     if (conflict) {
+>>> +             pr_err("\"%s\" ops already registered\n", conflict->name);
+>>> +             rc = -EEXIST;
+>>> +             goto out;
+>>> +     }
+>>> +     list_add(&ops->list, &guest_attest_list);
+>>> +     try_module_get(ops->module);
+>>> +     rc = 0;
+>>> +out:
+>>> +     up_write(&guest_attest_rwsem);
+>>> +     return rc;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(register_guest_attest_ops);
+>>> +
+>>> +void unregister_guest_attest_ops(struct guest_attest_ops *ops)
+>>> +{
+>>> +     down_write(&guest_attest_rwsem);
+>>> +     list_del(&ops->list);
+>>> +     up_write(&guest_attest_rwsem);
+>>> +     module_put(ops->module);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(unregister_guest_attest_ops);
+>>> +
+>>> +static int __guest_attest_request_key(struct key *key, int level,
+>>> +                                   struct key *dest_keyring,
+>>> +                                   const char *callout_info, int callout_len,
+>>> +                                   struct key *authkey)
+>>> +{
+>>> +     struct guest_attest_ops *ops;
+>>> +     void *payload = NULL;
+>>> +     int rc, payload_len;
+>>> +
+>>> +     ops = get_ops();
+>>> +     if (!ops)
+>>> +             return -ENOKEY;
+>>> +
+>>> +     payload = kzalloc(max(GUEST_ATTEST_DATALEN, callout_len), GFP_KERNEL);
+>>> +     if (!payload) {
+>>> +             rc = -ENOMEM;
+>>> +             goto out;
+>>> +     }
+>>
+>> Is the idea to get the values like vmpl part of the payload?
+>>
+>>> +
+>>> +     payload_len = base64_decode(callout_info, callout_len, payload);
+>>> +     if (payload_len < 0 || payload_len > GUEST_ATTEST_DATALEN) {
+>>> +             rc = -EINVAL;
+>>> +             goto out;
+>>> +     }
+>>> +
+>>> +     rc = ops->request_attest(key, level, dest_keyring, payload, payload_len,
+>>> +                              authkey);
+>>> +out:
+>>> +     kfree(payload);
+>>> +     put_ops();
+>>> +     return rc;
+>>> +}
+>>> +
+>>> +static int guest_attest_request_key(struct key *authkey, void *data)
+>>> +{
+>>> +     struct request_key_auth *rka = get_request_key_auth(authkey);
+>>> +     struct key *key = rka->target_key;
+>>> +     unsigned long long id;
+>>> +     int rc, level;
+>>> +
+>>> +     pr_debug("desc: %s op: %s callout: %s\n", key->description, rka->op,
+>>> +              rka->callout_info ? (char *)rka->callout_info : "\"none\"");
+>>> +
+>>> +     if (sscanf(key->description, "guest_attest:%d:%llu", &level, &id) != 2)
+>>> +             return -EINVAL;
+>>> +
+>>
+>> Can you explain some details about the id and level? It is not very clear why
+>> we need it.
+>>
+>>> +     if (!rka->callout_info) {
+>>> +             rc = -EINVAL;
+>>> +             goto out;
+>>> +     }
+>>> +
+>>> +     rc = __guest_attest_request_key(key, level, rka->dest_keyring,
+>>> +                                     rka->callout_info, rka->callout_len,
+>>> +                                     authkey);
+>>> +out:
+>>> +     complete_request_key(authkey, rc);
+>>> +     return rc;
+>>> +}
+>>> +
+>>> +static int guest_attest_vet_description(const char *desc)
+>>> +{
+>>> +     unsigned long long id;
+>>> +     int level;
+>>> +
+>>> +     if (sscanf(desc, "guest_attest:%d:%llu", &level, &id) != 2)
+>>> +             return -EINVAL;
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static struct key_type key_type_guest_attest = {
+>>> +     .name = "guest_attest",
+>>> +     .preparse = user_preparse,
+>>> +     .free_preparse = user_free_preparse,
+>>> +     .instantiate = generic_key_instantiate,
+>>> +     .revoke = user_revoke,
+>>> +     .destroy = user_destroy,
+>>> +     .describe = user_describe,
+>>> +     .read = user_read,
+>>> +     .vet_description = guest_attest_vet_description,
+>>> +     .request_key = guest_attest_request_key,
+>>> +};
+>>> +
+>>> +static int __init guest_attest_init(void)
+>>> +{
+>>> +     return register_key_type(&key_type_guest_attest);
+>>> +}
+>>> +
+>>> +static void __exit guest_attest_exit(void)
+>>> +{
+>>> +     unregister_key_type(&key_type_guest_attest);
+>>> +}
+>>> +
+>>> +module_init(guest_attest_init);
+>>> +module_exit(guest_attest_exit);
+>>> +MODULE_LICENSE("GPL v2");
+>>> diff --git a/drivers/virt/coco/tdx-guest/Kconfig b/drivers/virt/coco/tdx-guest/Kconfig
+>>> index 14246fc2fb02..9a1ec85369fe 100644
+>>> --- a/drivers/virt/coco/tdx-guest/Kconfig
+>>> +++ b/drivers/virt/coco/tdx-guest/Kconfig
+>>> @@ -1,6 +1,7 @@
+>>>  config TDX_GUEST_DRIVER
+>>>       tristate "TDX Guest driver"
+>>>       depends on INTEL_TDX_GUEST
+>>> +     select GUEST_ATTEST
+>>>       help
+>>>         The driver provides userspace interface to communicate with
+>>>         the TDX module to request the TDX guest details like attestation
+>>> diff --git a/drivers/virt/coco/tdx-guest/tdx-guest.c b/drivers/virt/coco/tdx-guest/tdx-guest.c
+>>> index 388491fa63a1..65b5aab284d9 100644
+>>> --- a/drivers/virt/coco/tdx-guest/tdx-guest.c
+>>> +++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
+>>> @@ -13,11 +13,13 @@
+>>>  #include <linux/string.h>
+>>>  #include <linux/uaccess.h>
+>>>  #include <linux/set_memory.h>
+>>> +#include <linux/key-type.h>
+>>>
+>>>  #include <uapi/linux/tdx-guest.h>
+>>>
+>>>  #include <asm/cpu_device_id.h>
+>>>  #include <asm/tdx.h>
+>>> +#include "../guest-attest/guest-attest.h"
+>>>
+>>>  /*
+>>>   * Intel's SGX QE implementation generally uses Quote size less
+>>> @@ -229,6 +231,62 @@ static const struct x86_cpu_id tdx_guest_ids[] = {
+>>>  };
+>>>  MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
+>>>
+>>> +static int tdx_request_attest(struct key *key, int level,
+>>> +                           struct key *dest_keyring, void *payload,
+>>> +                           int payload_len, struct key *authkey)
+>>> +{
+>>> +     u8 *tdreport;
+>>> +     long ret;
+>>> +
+>>> +     tdreport = kzalloc(TDX_REPORT_LEN, GFP_KERNEL);
+>>> +     if (!tdreport)
+>>> +             return -ENOMEM;
+>>> +
+>>> +     /* Generate TDREPORT0 using "TDG.MR.REPORT" TDCALL */
+>>> +     ret = tdx_mcall_get_report0(payload, tdreport);
+>>> +     if (ret)
+>>> +             goto out;
+>>> +
+>>> +     mutex_lock(&quote_lock);
+>>> +
+>>> +     memset(qentry->buf, 0, qentry->buf_len);
+>>> +     reinit_completion(&qentry->compl);
+>>> +     qentry->valid = true;
+>>> +
+>>> +     /* Submit GetQuote Request using GetQuote hyperetall */
+>>> +     ret = tdx_hcall_get_quote(qentry->buf, qentry->buf_len);
+>>> +     if (ret) {
+>>> +             pr_err("GetQuote hyperetall failed, status:%lx\n", ret);
+>>> +             ret = -EIO;
+>>> +             goto quote_failed;
+>>> +     }
+>>> +
+>>> +     /*
+>>> +      * Although the GHCI specification does not state explicitly that
+>>> +      * the VMM must not wait indefinitely for the Quote request to be
+>>> +      * completed, a sane VMM should always notify the guest after a
+>>> +      * certain time, regardless of whether the Quote generation is
+>>> +      * successful or not.  For now just assume the VMM will do so.
+>>> +      */
+>>> +     wait_for_completion(&qentry->compl);
+>>> +
+>>> +     ret = key_instantiate_and_link(key, qentry->buf, qentry->buf_len,
+>>> +                                    dest_keyring, authkey);
+>>> +
+>>> +quote_failed:
+>>> +     qentry->valid = false;
+>>> +     mutex_unlock(&quote_lock);
+>>> +out:
+>>> +     kfree(tdreport);
+>>> +     return ret;
+>>> +}
+>>> +
+>>> +static struct guest_attest_ops tdx_attest_ops = {
+>>> +     .name = KBUILD_MODNAME,
+>>> +     .module = THIS_MODULE,
+>>> +     .request_attest = tdx_request_attest,
+>>> +};
+>>> +
+>>>  static int __init tdx_guest_init(void)
+>>>  {
+>>>       int ret;
+>>> @@ -251,8 +309,14 @@ static int __init tdx_guest_init(void)
+>>>       if (ret)
+>>>               goto free_quote;
+>>>
+>>> +     ret = register_guest_attest_ops(&tdx_attest_ops);
+>>> +     if (ret)
+>>> +             goto free_irq;
+>>> +
+>>>       return 0;
+>>>
+>>> +free_irq:
+>>> +     tdx_unregister_event_irq_cb(quote_cb_handler, qentry);
+>>>  free_quote:
+>>>       free_quote_entry(qentry);
+>>>  free_misc:
+>>> @@ -264,6 +328,7 @@ module_init(tdx_guest_init);
+>>>
+>>>  static void __exit tdx_guest_exit(void)
+>>>  {
+>>> +     unregister_guest_attest_ops(&tdx_attest_ops);
+>>>       tdx_unregister_event_irq_cb(quote_cb_handler, qentry);
+>>>       free_quote_entry(qentry);
+>>>       misc_deregister(&tdx_misc_dev);
+>>
+>> --
+>> Sathyanarayanan Kuppuswamy
+>> Linux Kernel Developer
+> 
+> 
+> 
+> --
+> -Dionna Glaze, PhD (she/her)
+
 -- 
-2.40.1
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
