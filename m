@@ -2,88 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DCD74030C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 20:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B899B740326
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 20:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjF0SR0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jun 2023 14:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S231207AbjF0SYz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jun 2023 14:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjF0SRY (ORCPT
+        with ESMTP id S231131AbjF0SYu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:17:24 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F37E8
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 11:17:17 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b69ff54321so41611101fa.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 11:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687889835; x=1690481835;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6WtgfYTHi6I8JZ4MvciwexJ1Z4h0XfBA5L2+WUJORGE=;
-        b=WLYlYkskDVo32palZZF8+iJHKdhcCy43cTuhbh5IR4Zz01SFb6rBNpDiYWLCvU2098
-         UMgTl1S4gOzzWkkiexmk0Np/gETb8MPEBgq1zKxW0T+otAhsSacAySaekeOdmbhEqDpB
-         RIfklIL36ktyVzB+JWSU5s/O2Sni8diRnHEmY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687889835; x=1690481835;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6WtgfYTHi6I8JZ4MvciwexJ1Z4h0XfBA5L2+WUJORGE=;
-        b=LZFpmX4AIla/6ZZS2HccshGXg3BFkGbz/qpCwEP6HAYHMnOAWtR3CLbZ6HoBo9qdQL
-         umJ/JkROa23BO3mdtldHUg2/xfSdSsg60iDXg6PAs5X1GtNJDbguBLdC0U0H4gHGukRE
-         B1+t5FbDIKA9rDvWdyqhe6QG1aU31mf9HVwBUJKO39IouwSShoUtyfVEQAzSMhrK3aRv
-         C95EwWPvTJHR5zGo60m3q0Ar+ul6DfaZXq7KeYsSazvsKUddoJWkHif9clCxe9k8tIXW
-         ej1yJ6FJvT5M1OUy6Tfnkwo5C52i6ls2y1ZlT3yrWuoH0lhu4fxtB7LUhHtvYRiRoLyS
-         pSRw==
-X-Gm-Message-State: AC+VfDzzZ0fO3P97UbTSNzSQKy/1/y+9OUoOGXm6LxW5G5IRMfGctdWJ
-        tm5RTrjVopEfeblw02QfjTrjFmngQWzAoxwfMskofXS7
-X-Google-Smtp-Source: ACHHUZ6YO5GuglLfpOWpfwkoT/mfS3a2PV6Zw91sJqepnDEHvjeW573if0bS5mAMG5//bpCSfWd+hQ==
-X-Received: by 2002:a19:9106:0:b0:4f9:54f0:b6db with SMTP id t6-20020a199106000000b004f954f0b6dbmr12763283lfd.13.1687889835209;
-        Tue, 27 Jun 2023 11:17:15 -0700 (PDT)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id h4-20020a197004000000b004fae1d35098sm1291622lfc.81.2023.06.27.11.17.14
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 11:17:14 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2b69ea3b29fso43174261fa.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 11:17:14 -0700 (PDT)
-X-Received: by 2002:a2e:a314:0:b0:2b6:b2bf:ab4d with SMTP id
- l20-20020a2ea314000000b002b6b2bfab4dmr1933019lje.14.1687889834287; Tue, 27
- Jun 2023 11:17:14 -0700 (PDT)
+        Tue, 27 Jun 2023 14:24:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDECB8;
+        Tue, 27 Jun 2023 11:24:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF1E7611F1;
+        Tue, 27 Jun 2023 18:24:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59CB0C433C0;
+        Tue, 27 Jun 2023 18:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687890288;
+        bh=U0Ae3RQ4h+5yMS5yiPM4dAg4Cs5OyI4YsmDbSn9P54M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iBWhHyi7OhQxiwwl1PoY0idtgffmlQUHdUCFfMJgHk+cdg8J3eNys3Slb4cxWnCof
+         X/6NljQ13ZORuOfC5mtqQF6jL5eECEGZWYoycQr3WgWNv4WKTY8mD2Lm/vj5hB2H3U
+         SH3tZN3MLf7ggPvxZ3/YEqEn+B4jcwq4n8Aav6fw81+NT39/M4dfBgxAqymEN+EYaE
+         jqCtAr/PSn/OrT6HJSKM9PK8lixaCmT8U1O3zPdtth3oe3DQRC++0U9f92PFAFLpuV
+         vfR4QLL1J5OWOYZkPMCc1oK33pI/kTdwJEhdoK4B7AseSVcECzgV7/0UJ9rtaRsiat
+         Mk3Z0hx1E77QA==
+Date:   Tue, 27 Jun 2023 19:24:39 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Charlie Jenkins <charlie@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Evan Green <evan@rivosinc.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:EXEC & BINFMT API" <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 0/2] Restrict address space for sv39,sv48,sv57
+Message-ID: <20230627-eternity-mulberry-e1f4babf06a1@spud>
+References: <20230626183611.40479-1-charlie@rivosinc.com>
 MIME-Version: 1.0
-References: <b0bb8387-9216-0fe7-61e9-7e2daceeef20@linuxfoundation.org> <CAHk-=whvD6pq-7vp-cCMEnS+EOp2TmLxFKPS3Nw+Ncqt0XZVGw@mail.gmail.com>
-In-Reply-To: <CAHk-=whvD6pq-7vp-cCMEnS+EOp2TmLxFKPS3Nw+Ncqt0XZVGw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 27 Jun 2023 11:16:57 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgB8AOsrje6-bLOt2xHS4MMxnkL=k-Danx17hL=jb3pyQ@mail.gmail.com>
-Message-ID: <CAHk-=wgB8AOsrje6-bLOt2xHS4MMxnkL=k-Danx17hL=jb3pyQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Kselftest update for Linux 6.5-rc1
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZFVJLaa7EzBd/kk7"
+Content-Disposition: inline
+In-Reply-To: <20230626183611.40479-1-charlie@rivosinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 27 Jun 2023 at 11:15, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Sun, 25 Jun 2023 at 08:42, Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >
-> > Please pull the following Kselftest update for Linux 6.5-rc1.
->
-> Hmm. I pulled this, but it causes multiple objtool warnings.
 
-Sorry, repliedt op the wrong email. It's the KUnit pull that causes
-problems, not the Kselftest one (which is next in my queue)
+--ZFVJLaa7EzBd/kk7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-             Linus
+Hey Charlie,
+
+On Mon, Jun 26, 2023 at 11:36:02AM -0700, Charlie Jenkins wrote:
+> Make sv39 the default address space for mmap as some applications
+> currently depend on this assumption. The RISC-V specification enforces
+> that bits outside of the virtual address range are not used, so
+> restricting the size of the default address space as such should be
+> temporary. A hint address passed to mmap will cause the largest address
+> space that fits entirely into the hint to be used. If the hint is less
+> than or equal to 1<<38, a 39-bit address will be used. After an address
+> space is completely full, the next smallest address space will be used.
+>=20
+> Documentation is also added to the RISC-V virtual memory section to expla=
+in
+> these changes.
+
+I don't know what went wrong here, but this never ended up in patchwork
+for some reason, although it has appeared on lore. That seems to be via
+the docs mailing list, rather than linux-riscv. Could you speak to Atish
+and see if he knows what went wrong?
+
+Cheers,
+Conor.
+
+>=20
+> Charlie Jenkins (2):
+>   RISC-V: mm: Restrict address space for sv39,sv48,sv57
+>   RISC-V: mm: Update documentation and include test
+>=20
+>  Documentation/riscv/vm-layout.rst             | 20 ++++++++
+>  arch/riscv/include/asm/elf.h                  |  2 +-
+>  arch/riscv/include/asm/pgtable.h              | 21 ++++++--
+>  arch/riscv/include/asm/processor.h            | 41 +++++++++++++---
+>  tools/testing/selftests/riscv/Makefile        |  2 +-
+>  tools/testing/selftests/riscv/mm/Makefile     | 22 +++++++++
+>  .../selftests/riscv/mm/testcases/mmap.c       | 49 +++++++++++++++++++
+>  7 files changed, 144 insertions(+), 13 deletions(-)
+>  create mode 100644 tools/testing/selftests/riscv/mm/Makefile
+>  create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
+>=20
+>=20
+> base-commit: eef509789cecdce895020682192d32e8bac790e8
+> --=20
+> 2.34.1
+>=20
+
+--ZFVJLaa7EzBd/kk7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJspZgAKCRB4tDGHoIJi
+0ilsAQC1hx/GF+DR3SpYjaRTOUhL/owNo2aM6O7rh8R9fc3o4QD7Bln7maXQOnuM
+AlYliIy/ysDkNeLNH5z4t4XUqM/PLgI=
+=za3L
+-----END PGP SIGNATURE-----
+
+--ZFVJLaa7EzBd/kk7--
