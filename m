@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D98A73EFEE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 02:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2C273EFF8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 02:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjF0A5p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Jun 2023 20:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
+        id S230004AbjF0A61 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Jun 2023 20:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjF0A5o (ORCPT
+        with ESMTP id S229868AbjF0A6X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jun 2023 20:57:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F21198A
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jun 2023 17:56:05 -0700 (PDT)
+        Mon, 26 Jun 2023 20:58:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C2F19AC
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jun 2023 17:56:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687827364;
+        s=mimecast20190719; t=1687827367;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WPhp6M85RYtJ1OdHBAv4hPr3cT4UKKt6nbqDvx5A+ks=;
-        b=VWXCFbT3hDpA9GhvKqm3EgBLSysSVcEMQmPWI0md6mGBjYel1p4L/FuBbZCblIXWA+4qzF
-        lncmz+4DjpmstINcXmv6hDf/yWqBKbAV/HOMN+rWTSF0t+OOhzs00aZI72c//KOFlQBXDm
-        Vp7RtXZUQWIIC/fMTIGspbNQ/niTd7U=
+        bh=T1/GI0DN/l36YNRdQUEP56Qh0Q1HrifFn5e4yBEgTec=;
+        b=WwMeQAZvc2y7D8tcVJL9bDBczT2CBJO6nvlqHYdVr+/qJ5mNuqvpYcqVhdk5z76brdlhme
+        ImdKe5c9yKpUdHhQlIZQvJEiLIUGH+8ahtdMflK/6O+X3N6QWpv7+R38xGoT3egh6Ik60n
+        PBrx3/fwJsL+jKfCMD0e6OVowP7+/ug=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-i91Pt8LQOZOKdL82Xp8TEw-1; Mon, 26 Jun 2023 20:56:01 -0400
-X-MC-Unique: i91Pt8LQOZOKdL82Xp8TEw-1
+ us-mta-142-L9BJBW7RPeW1GlCj-AuIIg-1; Mon, 26 Jun 2023 20:56:02 -0400
+X-MC-Unique: L9BJBW7RPeW1GlCj-AuIIg-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0E5118C7C23;
-        Tue, 27 Jun 2023 00:56:01 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 077EE1044589;
+        Tue, 27 Jun 2023 00:56:02 +0000 (UTC)
 Received: from llong.com (unknown [10.22.33.159])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 292162166B25;
-        Tue, 27 Jun 2023 00:56:00 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1D87A2166B25;
+        Tue, 27 Jun 2023 00:56:01 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -52,9 +52,9 @@ Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         Brent Rowsell <browsell@redhat.com>,
         Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v3 3/9] cgroup/cpuset: Improve temporary cpumasks handling
-Date:   Mon, 26 Jun 2023 20:55:23 -0400
-Message-Id: <20230627005529.1564984-4-longman@redhat.com>
+Subject: [PATCH v3 4/9] cgroup/cpuset: Allow suppression of sched domain rebuild in update_cpumasks_hier()
+Date:   Mon, 26 Jun 2023 20:55:24 -0400
+Message-Id: <20230627005529.1564984-5-longman@redhat.com>
 In-Reply-To: <20230627005529.1564984-1-longman@redhat.com>
 References: <20230627005529.1564984-1-longman@redhat.com>
 MIME-Version: 1.0
@@ -63,143 +63,116 @@ X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The limitation that update_parent_subparts_cpumask() can only use
-addmask & delmask in the given tmp cpumasks is fragile and may lead to
-unexpected error.
+A single partition setup and tear-down operation can lead to
+multiple rebuild_sched_domains_locked() calls which is a waste of
+effort. This can partly be mitigated by adding a flag to suppress the
+rebuild_sched_domains_locked() call in update_cpumasks_hier(). Since
+a Boolean flag has already been passed as the 3rd argument to
+update_cpumasks_hier(), we can extend that to a full flag word.
 
-Fix this problem by allocating/freeing a struct tmpmasks in
-update_cpumask() to avoid reusing the cpumasks in trial_cs.
-
-With this change, we can move the update_tasks_cpumask() for the
-parent and update_sibling_cpumasks() for the sibling to inside
-update_parent_subparts_cpumask().
+The sched domain rebuild suppression is now enabled in
+update_sibling_cpumasks() as all it callers will do the sched domain
+rebuild after its return later on anyway.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c | 42 +++++++++++++-----------------------------
- 1 file changed, 13 insertions(+), 29 deletions(-)
+ kernel/cgroup/cpuset.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index ade33e50ffe2..b8ccc1be7bde 100644
+index b8ccc1be7bde..64f9e305b3ab 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -1277,6 +1277,8 @@ enum subparts_cmd {
- 
- static int update_flag(cpuset_flagbits_t bit, struct cpuset *cs,
- 		       int turning_on);
-+static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
-+				    struct tmpmasks *tmp);
- 
- /*
-  * Update partition exclusive flag
-@@ -1447,7 +1449,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
- 		adding = cpumask_andnot(tmp->addmask, tmp->addmask,
- 					parent->subparts_cpus);
- 		/*
--		 * Empty cpumask is not allewed
-+		 * Empty cpumask is not allowed
- 		 */
- 		if (cpumask_empty(newmask)) {
- 			part_error = PERR_CPUSEMPTY;
-@@ -1567,8 +1569,11 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
- 
- 	spin_unlock_irq(&callback_lock);
- 
--	if (adding || deleting)
-+	if (adding || deleting) {
- 		update_tasks_cpumask(parent, tmp->addmask);
-+		if (parent->child_ecpus_count)
-+			update_sibling_cpumasks(parent, cs, tmp);
-+	}
- 
- 	/*
- 	 * For partcmd_update without newmask, it is being called from
-@@ -1842,18 +1847,8 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 	if (cpumask_equal(cs->cpus_allowed, trialcs->cpus_allowed))
- 		return 0;
- 
--#ifdef CONFIG_CPUMASK_OFFSTACK
--	/*
--	 * Use the cpumasks in trialcs for tmpmasks when they are pointers
--	 * to allocated cpumasks.
--	 *
--	 * Note that update_parent_subparts_cpumask() uses only addmask &
--	 * delmask, but not new_cpus.
--	 */
--	tmp.addmask  = trialcs->subparts_cpus;
--	tmp.delmask  = trialcs->effective_cpus;
--	tmp.new_cpus = NULL;
--#endif
-+	if (alloc_cpumasks(NULL, &tmp))
-+		return -ENOMEM;
- 
- 	retval = validate_change(cs, trialcs);
- 
-@@ -1882,7 +1877,7 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 		retval = 0;
- 	}
- 	if (retval < 0)
--		return retval;
-+		goto out_free;
- 
- 	if (cs->partition_root_state) {
- 		if (invalidate)
-@@ -1917,11 +1912,6 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 	}
- 	spin_unlock_irq(&callback_lock);
- 
--#ifdef CONFIG_CPUMASK_OFFSTACK
--	/* Now trialcs->cpus_allowed is available */
--	tmp.new_cpus = trialcs->cpus_allowed;
--#endif
--
- 	/* effective_cpus will be updated here */
- 	update_cpumasks_hier(cs, &tmp, false);
- 
-@@ -1938,6 +1928,8 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 		/* Update CS_SCHED_LOAD_BALANCE and/or sched_domains */
- 		update_partition_sd_lb(cs, old_prs);
- 	}
-+out_free:
-+	free_cpumasks(NULL, &tmp);
+@@ -1590,6 +1590,12 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
  	return 0;
  }
  
-@@ -2346,13 +2338,11 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 
- 		err = update_parent_subparts_cpumask(cs, partcmd_enable,
- 						     NULL, &tmpmask);
--		if (err)
--			goto out;
- 	} else if (old_prs && new_prs) {
- 		/*
- 		 * A change in load balance state only, no change in cpumasks.
++/*
++ * update_cpumasks_hier() flags
++ */
++#define HIER_CHECKALL		0x01	/* Check all cpusets with no skipping */
++#define HIER_NO_SD_REBUILD	0x02	/* Don't rebuild sched domains */
++
+ /*
+  * update_cpumasks_hier - Update effective cpumasks and tasks in the subtree
+  * @cs:  the cpuset to consider
+@@ -1604,7 +1610,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+  * Called with cpuset_mutex held
+  */
+ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+-				 bool force)
++				 int flags)
+ {
+ 	struct cpuset *cp;
+ 	struct cgroup_subsys_state *pos_css;
+@@ -1644,10 +1650,10 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+ 		 * Skip the whole subtree if
+ 		 * 1) the cpumask remains the same,
+ 		 * 2) has no partition root state,
+-		 * 3) force flag not set, and
++		 * 3) HIER_CHECKALL flag not set, and
+ 		 * 4) for v2 load balance state same as its parent.
  		 */
--		goto out;
-+		;
- 	} else {
- 		/*
- 		 * Switching back to member is always allowed even if it
-@@ -2372,12 +2362,6 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 			spin_unlock_irq(&callback_lock);
- 		}
+-		if (!cp->partition_root_state && !force &&
++		if (!cp->partition_root_state && !(flags & HIER_CHECKALL) &&
+ 		    cpumask_equal(tmp->new_cpus, cp->effective_cpus) &&
+ 		    (!cgroup_subsys_on_dfl(cpuset_cgrp_subsys) ||
+ 		    (is_sched_load_balance(parent) == is_sched_load_balance(cp)))) {
+@@ -1764,7 +1770,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
  	}
--
--	update_tasks_cpumask(parent, tmpmask.new_cpus);
--
--	if (parent->child_ecpus_count)
--		update_sibling_cpumasks(parent, cs, &tmpmask);
--
- out:
- 	/*
- 	 * Make partition invalid & disable CS_CPU_EXCLUSIVE if an error
+ 	rcu_read_unlock();
+ 
+-	if (need_rebuild_sched_domains)
++	if (need_rebuild_sched_domains && !(flags & HIER_NO_SD_REBUILD))
+ 		rebuild_sched_domains_locked();
+ }
+ 
+@@ -1788,7 +1794,9 @@ static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
+ 	 * to use the right effective_cpus value.
+ 	 *
+ 	 * The update_cpumasks_hier() function may sleep. So we have to
+-	 * release the RCU read lock before calling it.
++	 * release the RCU read lock before calling it. HIER_NO_SD_REBUILD
++	 * flag is used to suppress rebuild of sched domains as the callers
++	 * will take care of that.
+ 	 */
+ 	rcu_read_lock();
+ 	cpuset_for_each_child(sibling, pos_css, parent) {
+@@ -1800,7 +1808,7 @@ static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
+ 			continue;
+ 
+ 		rcu_read_unlock();
+-		update_cpumasks_hier(sibling, tmp, false);
++		update_cpumasks_hier(sibling, tmp, HIER_NO_SD_REBUILD);
+ 		rcu_read_lock();
+ 		css_put(&sibling->css);
+ 	}
+@@ -1913,7 +1921,7 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 	spin_unlock_irq(&callback_lock);
+ 
+ 	/* effective_cpus will be updated here */
+-	update_cpumasks_hier(cs, &tmp, false);
++	update_cpumasks_hier(cs, &tmp, 0);
+ 
+ 	if (cs->partition_root_state) {
+ 		struct cpuset *parent = parent_cs(cs);
+@@ -2382,7 +2390,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 	 * Force update if switching back to member.
+ 	 */
+ 	if (!list_empty(&cs->css.children))
+-		update_cpumasks_hier(cs, &tmpmask, !new_prs);
++		update_cpumasks_hier(cs, &tmpmask, !new_prs ? HIER_CHECKALL : 0);
+ 
+ 	/* Update sched domains and load balance flag */
+ 	update_partition_sd_lb(cs, old_prs);
 -- 
 2.31.1
 
