@@ -2,151 +2,290 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9629F740425
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 21:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335EB7404E7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 22:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjF0Tyl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jun 2023 15:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57022 "EHLO
+        id S230420AbjF0UZW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jun 2023 16:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjF0Tyk (ORCPT
+        with ESMTP id S229618AbjF0UZV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jun 2023 15:54:40 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FF3211B
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 12:54:38 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51bcf75c4acso2303a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 12:54:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687895677; x=1690487677;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oyMtR3cHIPCcrX9Qmw6TUS4exz//e0byqhk5V1sO8fk=;
-        b=2GlDcJSRb8Sf7QlZ29iJIG113UXKJ0k1Wa9naaey4i1af+jilqW5+4dt7o2PUwztP8
-         qSwhqP/3oTAgRj0AcQRNlWBPWJ/huQLNNufJFTIVfvw/jV8xfn/zaSooX2E8S9liVWrD
-         /Km2uLvQvF7E79fOyLLEs8VnIJayGbSyUZEXnMTNp3qB5UVTWVLOzDATNPiM2cwsGr98
-         oNYmb/B4B4hF556uRQ5jbj3dR3wtEHyyqVJ3tMNLCNxGc/qRbLE4qlrv/z5nLj04TwRm
-         DyH9PJxxM0BA/Iz2E2HgJuGE5E7bvTC1ptTtc5lwuC7OHDm7ZeK51zGvoD4Hvwe0iaSd
-         KljQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687895677; x=1690487677;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oyMtR3cHIPCcrX9Qmw6TUS4exz//e0byqhk5V1sO8fk=;
-        b=R6gK4OcY7LOia8krfa4++0miORU0HmpeoyOnO5b033rLNtd+V4RoYAGr51m3SPm+wz
-         wDo8Jm2T7CSjAoTE30pVJZlD0V0S3GoJH6Qu0HyeRl/nDDPi0JIIYOO399TFvYKVubPT
-         k3u+ix2r/CUSdkLJrnEBAoHe75zOpMeaxXO4TQR+SH/+XXUBnjgm77l0OjnVtKXZ7Arz
-         f4xPgZ3voWIZiNmy6jLnCTdydbRrLnDqA82rpQwxJ+0dq0uc77tkqlu0sgwypJqQm07p
-         PyQouK5vmyL/BcZwhU+E/j92FisNZ1L0nxFh3aatIFVedHMo5Z9YCHcXWh6Qi0KN5WCR
-         BfXA==
-X-Gm-Message-State: AC+VfDymwLEf6X3p0P0oblZSIM8Cx+QZT0SdwxO1Bzu/jia7ZKETNsPI
-        +qOLrhMR3x3hxJIXmsjHkXlbnsJhEF237BBU8I9BEA==
-X-Google-Smtp-Source: ACHHUZ7raH1oUkiTxXalrd3pGeyqiAo4JUItij8HXQEL4Vw/n53rYAlsyi7qb4LsO/833WErhLsHUeBIQPoP/qWP1aU=
-X-Received: by 2002:a50:99d0:0:b0:519:7d2:e256 with SMTP id
- n16-20020a5099d0000000b0051907d2e256mr14597edb.0.1687895677218; Tue, 27 Jun
- 2023 12:54:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230626113156.1274521-1-usama.anjum@collabora.com>
- <20230626113156.1274521-3-usama.anjum@collabora.com> <ZJo/gOnTmwEQPLF8@gmail.com>
- <13ea54c0-25a3-285c-f47e-d6da11c91795@collabora.com> <CABb0KFGn=3oAYa+wsf=iWr1Ss=en9+m11JOijEibXJLFDAkvjQ@mail.gmail.com>
- <6ac9c60e-0a6b-110a-cace-97afbd9708a0@collabora.com>
-In-Reply-To: <6ac9c60e-0a6b-110a-cace-97afbd9708a0@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Tue, 27 Jun 2023 21:54:25 +0200
-Message-ID: <CABb0KFH60U5RE9dLfCOEGp5=wLwwxpKaMdzQL8drYEmL3T_itw@mail.gmail.com>
-Subject: Re: [PATCH v21 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 16:25:21 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674CD212D;
+        Tue, 27 Jun 2023 13:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687897520; x=1719433520;
+  h=date:from:to:cc:subject:message-id;
+  bh=CZtQQkjwBTjIsN2Lz5HDJSCfMhdSSF8YauQRpgSzeq0=;
+  b=faBD1Te1bDoAjdR0cnZb6Xy4D+w+BP2aaX1FwVqOqSuf33R9JvzW5Pqv
+   JmpolW7wdnF2GdFiPUMKcx6fpc0MWktOPaEJQp9OTiZY6coGCa5daehWD
+   n2iyjYzqWncaUfqzjTvVQquXxPIffTdorl2MXQbmT9R/RmdDNa0ObMCy/
+   bC7fNxmVrd/PgClOsODLurqIGyjFtQEUdofJ4kzu4ab8apFV0OP+T7w93
+   x8q7GiEFZ7O1raDPS+2ZoHbcHkJb6Is8qw+fuXq2QtoMKOewBTjZY9XYv
+   y/kI5Z0I+cAXMLeI/mS+a17R6y7r4bkM4Kd4FHjSvfJZ4fQywVOEYZ9NL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="365129100"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="365129100"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 13:25:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="716669046"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="716669046"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 27 Jun 2023 13:25:17 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qEFFU-000CBp-2F;
+        Tue, 27 Jun 2023 20:25:16 +0000
+Date:   Wed, 28 Jun 2023 04:24:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        intel-gfx@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org
+Subject: [linux-next:master] BUILD REGRESSION
+ 53cdf865f90ba922a854c65ed05b519f9d728424
+Message-ID: <202306280406.l3OXp90D-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 27 Jun 2023 at 21:20, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> Thanks Micha=C5=82 for replying.
->
-> On 6/27/23 11:52=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Tue, 27 Jun 2023 at 11:00, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >>
-> >> Hi Andrei and Michal,
-> >>
-> >> Lets resolve last two points. Please reply below.
-> >>
-> >> On 6/27/23 6:46=E2=80=AFAM, Andrei Vagin wrote:
-> > [...]
-> >>> And we need to report an address where it stopped scanning.
-> >>> We can do that by adding zero length vector.
-> >> I don't want to do multiplexing the ending address in vec. Can we add
-> >> end_addr variable in struct pm_scan_arg to always return the ending ad=
-dress?
-> >>
-> >> struct pm_scan_arg {
-> >>         ...
-> >>         _u64 end_addr;
-> >> };
-> >
-> > The idea to emit a zero-length entry for the end looks nice. This has
-> > the disadvantage that we'd need to either reserve one entry for the
-> > ending marker or stop the walk after the last entry is no longer
-> > matching.
-> This is ambiguous.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 53cdf865f90ba922a854c65ed05b519f9d728424  Add linux-next specific files for 20230627
 
-Can you explain? Both solutions would allow to return the restart
-point back to the caller (the second one would need to stop the walk
-as soon as the matching page range finishes -- that creates
-discontinuity).
+Error/Warning reports:
 
-> > Another solution would be to rewrite 'start' and 'len'. The caller
-> > would be forced to use non-const `pm_scan_arg`, but I expect the `vec`
-> > pointer would normally be written anyway (unless using only a
-> > statically-allocated buffer).
-> > Also, if the 'len' is replaced with 'end' that would make the ioctl
-> > easily restartable (just call again if start !=3D end).
-> Nice idea. But returning ending address in len seems a bit strange.
+https://lore.kernel.org/oe-kbuild-all/202306122223.HHER4zOo-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202306212119.fBNByIyn-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202306260401.qZlYQpV2-lkp@intel.com
 
-I mean that it would update `start` =3D start value for next call' and
-`len` =3D `len` - (new `start` - original `start`).
+Error/Warning: (recently discovered and may have been fixed)
 
-By replacing `len` I meant to remove the field and add `end` instead
-to make the requested range use begin .. end (iterator range) style
-instead of start + len (buffer and length). In this version you only
-need to update `start` (or `begin` if you prefer).
+arch/parisc/kernel/pdt.c:66:6: warning: no previous prototype for 'arch_report_meminfo' [-Wmissing-prototypes]
+drivers/char/mem.c:164:25: error: implicit declaration of function 'unxlate_dev_mem_ptr'; did you mean 'xlate_dev_mem_ptr'? [-Werror=implicit-function-declaration]
+drivers/gpu/drm/i915/soc/intel_gmch.c:41:13: warning: variable 'mchbar_addr' set but not used [-Wunused-but-set-variable]
+drivers/mfd/max77541.c:176:18: warning: cast to smaller integer type 'enum max7754x_ids' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+lib/kunit/executor_test.c:138:4: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+lib/kunit/test.c:775:38: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+Unverified Error/Warning (likely false positive, please contact us if interested):
+
+drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype was for USB_STRAP_HOST() instead
+net/wireless/scan.c:373 cfg80211_gen_new_ie() warn: potential spectre issue 'sub->data' [r]
+net/wireless/scan.c:397 cfg80211_gen_new_ie() warn: possible spectre second half.  'ext_id'
+{standard input}: Error: local label `"2" (instance number 9 of a fb label)' is not defined
+{standard input}:1097: Error: pcrel too far
+{standard input}:13: Error: symbol `__export_symbol_alpha_mv' is already defined
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-randconfig-r024-20230627
+|   `-- standard-input:Error:symbol-__export_symbol_alpha_mv-is-already-defined
+|-- i386-randconfig-m021-20230627
+|   |-- net-wireless-scan.c-cfg80211_gen_new_ie()-warn:possible-spectre-second-half.-ext_id
+|   `-- net-wireless-scan.c-cfg80211_gen_new_ie()-warn:potential-spectre-issue-sub-data-r
+|-- parisc-allnoconfig
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-allyesconfig
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-defconfig
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-randconfig-r012-20230627
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-randconfig-r013-20230627
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-randconfig-r052-20230627
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc64-defconfig
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- riscv-allmodconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- riscv-allyesconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- sh-allmodconfig
+|   |-- drivers-char-mem.c:error:implicit-declaration-of-function-unxlate_dev_mem_ptr
+|   |-- standard-input:Error:local-label-(instance-number-of-a-fb-label)-is-not-defined
+|   `-- standard-input:Error:pcrel-too-far
+|-- sh-j2_defconfig
+|   `-- drivers-char-mem.c:error:implicit-declaration-of-function-unxlate_dev_mem_ptr
+|-- sh-randconfig-r015-20230627
+|   `-- drivers-char-mem.c:error:implicit-declaration-of-function-unxlate_dev_mem_ptr
+|-- sh-rsk7203_defconfig
+|   `-- drivers-char-mem.c:error:implicit-declaration-of-function-unxlate_dev_mem_ptr
+`-- x86_64-buildonly-randconfig-r001-20230627
+    `-- drivers-gpu-drm-i915-soc-intel_gmch.c:warning:variable-mchbar_addr-set-but-not-used
+clang_recent_errors
+|-- arm-randconfig-r031-20230627
+|   `-- lib-kunit-test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|-- hexagon-randconfig-r041-20230627
+|   |-- lib-kunit-executor_test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|   `-- lib-kunit-test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|-- powerpc-randconfig-r023-20230627
+|   |-- lib-kunit-executor_test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|   `-- lib-kunit-test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|-- riscv-randconfig-r042-20230627
+|   `-- lib-kunit-test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+`-- x86_64-randconfig-r011-20230627
+    `-- drivers-mfd-max77541.c:warning:cast-to-smaller-integer-type-enum-max7754x_ids-from-const-void
+
+elapsed time: 725m
+
+configs tested: 137
+configs skipped: 7
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r004-20230627   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230627   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         assabet_defconfig   gcc  
+arm                         bcm2835_defconfig   clang
+arm                                 defconfig   gcc  
+arm                         lpc32xx_defconfig   clang
+arm                        multi_v7_defconfig   gcc  
+arm                          pxa910_defconfig   gcc  
+arm                  randconfig-r031-20230627   clang
+arm                  randconfig-r035-20230627   clang
+arm                  randconfig-r046-20230627   gcc  
+arm                       spear13xx_defconfig   clang
+arm                       versatile_defconfig   clang
+arm64                            alldefconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r003-20230627   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r041-20230627   clang
+hexagon              randconfig-r045-20230627   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230627   gcc  
+i386         buildonly-randconfig-r005-20230627   gcc  
+i386         buildonly-randconfig-r006-20230627   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230627   gcc  
+i386                 randconfig-i002-20230627   gcc  
+i386                 randconfig-i003-20230627   gcc  
+i386                 randconfig-i004-20230627   gcc  
+i386                 randconfig-i005-20230627   gcc  
+i386                 randconfig-i006-20230627   gcc  
+i386                 randconfig-i011-20230627   clang
+i386                 randconfig-i012-20230627   clang
+i386                 randconfig-i013-20230627   clang
+i386                 randconfig-i014-20230627   clang
+i386                 randconfig-i015-20230627   clang
+i386                 randconfig-i016-20230627   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r024-20230627   gcc  
+loongarch            randconfig-r032-20230627   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        stmark2_defconfig   gcc  
+m68k                          sun3x_defconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           mtx1_defconfig   clang
+mips                 randconfig-r022-20230627   gcc  
+mips                           xway_defconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r014-20230627   gcc  
+nios2                randconfig-r026-20230627   gcc  
+openrisc             randconfig-r005-20230627   gcc  
+openrisc             randconfig-r016-20230627   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r012-20230627   gcc  
+parisc               randconfig-r013-20230627   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                    klondike_defconfig   gcc  
+powerpc                      makalu_defconfig   gcc  
+powerpc                 mpc8315_rdb_defconfig   clang
+powerpc               mpc834x_itxgp_defconfig   clang
+powerpc                 mpc836x_rdk_defconfig   clang
+powerpc                    mvme5100_defconfig   clang
+powerpc                      pasemi_defconfig   gcc  
+powerpc              randconfig-r023-20230627   clang
+powerpc                     tqm8540_defconfig   clang
+powerpc                     tqm8548_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230627   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r021-20230627   clang
+s390                 randconfig-r044-20230627   clang
+sh                               allmodconfig   gcc  
+sh                        dreamcast_defconfig   gcc  
+sh                               j2_defconfig   gcc  
+sh                          r7780mp_defconfig   gcc  
+sh                   randconfig-r015-20230627   gcc  
+sh                          rsk7203_defconfig   gcc  
+sh                   rts7751r2dplus_defconfig   gcc  
+sh                          sdk7780_defconfig   gcc  
+sh                           se7751_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r001-20230627   gcc  
+sparc64              randconfig-r025-20230627   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230627   gcc  
+x86_64       buildonly-randconfig-r002-20230627   gcc  
+x86_64       buildonly-randconfig-r003-20230627   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r011-20230627   clang
+x86_64               randconfig-x001-20230627   clang
+x86_64               randconfig-x002-20230627   clang
+x86_64               randconfig-x003-20230627   clang
+x86_64               randconfig-x004-20230627   clang
+x86_64               randconfig-x005-20230627   clang
+x86_64               randconfig-x006-20230627   clang
+x86_64               randconfig-x011-20230627   gcc  
+x86_64               randconfig-x012-20230627   gcc  
+x86_64               randconfig-x013-20230627   gcc  
+x86_64               randconfig-x014-20230627   gcc  
+x86_64               randconfig-x015-20230627   gcc  
+x86_64               randconfig-x016-20230627   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                           alldefconfig   gcc  
+xtensa                       common_defconfig   gcc  
+xtensa               randconfig-r002-20230627   gcc  
+xtensa               randconfig-r006-20230627   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
