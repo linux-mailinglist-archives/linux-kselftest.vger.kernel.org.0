@@ -2,41 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD9073FE06
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 16:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E9673FE8F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Jun 2023 16:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbjF0OhY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jun 2023 10:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
+        id S231918AbjF0Ond (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jun 2023 10:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbjF0OhP (ORCPT
+        with ESMTP id S231848AbjF0OnS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:37:15 -0400
+        Tue, 27 Jun 2023 10:43:18 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6349E35A4
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 07:36:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1723AAC
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 07:42:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687876571;
+        s=mimecast20190719; t=1687876855;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Vt7eR5Warck2Ap0bmlsSY+DSBbefbEPsBcMz8g8y+lE=;
-        b=TePE6k0GtFW9aPQSNkaDciZn+rHKCEffrc1BdNri1yCULOQYwTHL8PCTAXdUsW0xa+r2wG
-        BfElZUXEHzt2AZ7W8b+2NQlrxm6nYy5+3K5GcITAq2ldWm5gLBFfjFDpPVT5lNclyZNuNj
-        zd9/iU+Zu5/SlDIvMAA/cDhn5SvrmkY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HxXXRG19n9JIA9MH1iFO6LWghYV5obKh5ig/aXiH0Xo=;
+        b=M0sIQLfwrWbtHzV0qUWLeOGwSx+mbBeICu5GFz2/4/npZwq528Lkll2hcUoMHEb44WYutK
+        5z7yg6neUsAUyr9gzP6xUvLNvG34vHf2UY3nhtsLuu+NCKFBO2tT00DzsDUFXRhrxfgZZq
+        siBDrAZOE/FMDZ+YOrPRTUp5yFYjjQw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-80VyoFvJNiu59IAEKwFGwA-1; Tue, 27 Jun 2023 10:36:08 -0400
-X-MC-Unique: 80VyoFvJNiu59IAEKwFGwA-1
+ us-mta-433-LmQfQh6XPPu43T56nk_XGA-1; Tue, 27 Jun 2023 10:40:51 -0400
+X-MC-Unique: LmQfQh6XPPu43T56nk_XGA-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF69E280AA50;
-        Tue, 27 Jun 2023 14:35:31 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B1A458C810A;
+        Tue, 27 Jun 2023 14:35:32 +0000 (UTC)
 Received: from llong.com (unknown [10.22.10.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CBED140C2063;
-        Tue, 27 Jun 2023 14:35:30 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DDBCE40C2063;
+        Tue, 27 Jun 2023 14:35:31 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -51,9 +52,11 @@ Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         Brent Rowsell <browsell@redhat.com>,
         Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v4 0/9] cgroup/cpuset: Support remote partitions
-Date:   Tue, 27 Jun 2023 10:34:59 -0400
-Message-Id: <20230627143508.1576882-1-longman@redhat.com>
+Subject: [PATCH v4 1/9] cgroup/cpuset: Inherit parent's load balance state in v2
+Date:   Tue, 27 Jun 2023 10:35:00 -0400
+Message-Id: <20230627143508.1576882-2-longman@redhat.com>
+In-Reply-To: <20230627143508.1576882-1-longman@redhat.com>
+References: <20230627143508.1576882-1-longman@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
@@ -68,81 +71,80 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
- v4:
-  - [v3] https://lore.kernel.org/lkml/20230627005529.1564984-1-longman@redhat.com/
-  - Fix compilation problem reported by kernel test robot.
+Since commit f28e22441f35 ("cgroup/cpuset: Add a new isolated
+cpus.partition type"), the CS_SCHED_LOAD_BALANCE bit of a v2 cpuset
+can be on or off. The child cpusets of a partition root must have the
+same setting as its parent or it may screw up the rebuilding of sched
+domains. Fix this problem by making sure the a child v2 cpuset will
+follows its parent cpuset load balance state unless the child cpuset
+is a new partition root itself.
 
- v3:
-  - [v2] https://lore.kernel.org/lkml/20230531163405.2200292-1-longman@redhat.com/
-  - Change the new control file from root-only "cpuset.cpus.reserve" to
-    non-root "cpuset.cpus.exclusive" which lists the set of exclusive
-    CPUs distributed down the hierarchy.
-  - Add a patch to restrict boot-time isolated CPUs to isolated
-    partitions only.
-  - Update the test_cpuset_prs.sh test script and documentation
-    accordingly.
+Fixes: f28e22441f35 ("cgroup/cpuset: Add a new isolated cpus.partition type")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/cgroup/cpuset.c | 33 ++++++++++++++++++++++++++++++---
+ 1 file changed, 30 insertions(+), 3 deletions(-)
 
-This patch series introduces a new cpuset control file
-"cpuset.cpus.exclusive" which must be a subset of "cpuset.cpus"
-and the parent's "cpuset.cpus.exclusive". This control file lists
-the exclusive CPUs to be distributed down the hierarchy. Any one
-of the exclusive CPUs can only be distributed to at most one child
-cpuset. Unlike "cpuset.cpus", invalid input to "cpuset.cpus.exclusive"
-will be rejected with an error. This new control file has no effect on
-the behavior of the cpuset until it turns into a partition root. At that
-point, its effective CPUs will be set to its exclusive CPUs unless some
-of them are offline.
-
-This patch series also introduces a new category of cpuset partition
-called remote partitions. The existing partition category where the
-partition roots have to be clustered around the root cgroup in a
-hierarchical way is now referred to as local partitions.
-
-A remote partition can be formed far from the root cgroup
-with no partition root parent. While local partitions can be
-created without touching "cpuset.cpus.exclusive" as it can be set
-automatically if a cpuset becomes a local partition root. Properly set
-"cpuset.cpus.exclusive" values down the hierarchy are required to create
-a remote partition.
-
-Both scheduling and isolated partitions can be formed in a remote
-partition. A local partition can be created under a remote partition.
-A remote partition, however, cannot be formed under a local partition
-for now.
-
-Modern container orchestration tools like Kubernetes use the cgroup
-hierarchy to manage different containers. And it is relying on other
-middleware like systemd to help managing it. If a container needs to
-use isolated CPUs, it is hard to get those with the local partitions
-as it will require the administrative parent cgroup to be a partition
-root too which tool like systemd may not be ready to manage.
-
-With this patch series, we allow the creation of remote partition
-far from the root. The container management tool can manage the
-"cpuset.cpus.exclusive" file without impacting the other cpuset
-files that are managed by other middlewares. Of course, invalid
-"cpuset.cpus.exclusive" values will be rejected and changes to
-"cpuset.cpus" can affect the value of "cpuset.cpus.exclusive" due to
-the requirement that it has to be a subset of the former control file.
-
-Waiman Long (9):
-  cgroup/cpuset: Inherit parent's load balance state in v2
-  cgroup/cpuset: Extract out CS_CPU_EXCLUSIVE & CS_SCHED_LOAD_BALANCE
-    handling
-  cgroup/cpuset: Improve temporary cpumasks handling
-  cgroup/cpuset: Allow suppression of sched domain rebuild in
-    update_cpumasks_hier()
-  cgroup/cpuset: Add cpuset.cpus.exclusive for v2
-  cgroup/cpuset: Introduce remote partition
-  cgroup/cpuset: Check partition conflict with housekeeping setup
-  cgroup/cpuset: Documentation update for partition
-  cgroup/cpuset: Extend test_cpuset_prs.sh to test remote partition
-
- Documentation/admin-guide/cgroup-v2.rst       |  100 +-
- kernel/cgroup/cpuset.c                        | 1347 ++++++++++++-----
- .../selftests/cgroup/test_cpuset_prs.sh       |  398 +++--
- 3 files changed, 1291 insertions(+), 554 deletions(-)
-
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 58e6f18f01c1..170e342b07e3 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1588,11 +1588,16 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+ 		}
+ 
+ 		/*
+-		 * Skip the whole subtree if the cpumask remains the same
+-		 * and has no partition root state and force flag not set.
++		 * Skip the whole subtree if
++		 * 1) the cpumask remains the same,
++		 * 2) has no partition root state,
++		 * 3) force flag not set, and
++		 * 4) for v2 load balance state same as its parent.
+ 		 */
+ 		if (!cp->partition_root_state && !force &&
+-		    cpumask_equal(tmp->new_cpus, cp->effective_cpus)) {
++		    cpumask_equal(tmp->new_cpus, cp->effective_cpus) &&
++		    (!cgroup_subsys_on_dfl(cpuset_cgrp_subsys) ||
++		    (is_sched_load_balance(parent) == is_sched_load_balance(cp)))) {
+ 			pos_css = css_rightmost_descendant(pos_css);
+ 			continue;
+ 		}
+@@ -1675,6 +1680,20 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+ 
+ 		update_tasks_cpumask(cp, tmp->new_cpus);
+ 
++		/*
++		 * On default hierarchy, inherit the CS_SCHED_LOAD_BALANCE
++		 * from parent if current cpuset isn't a valid partition root
++		 * and their load balance states differ.
++		 */
++		if (cgroup_subsys_on_dfl(cpuset_cgrp_subsys) &&
++		    !is_partition_valid(cp) &&
++		    (is_sched_load_balance(parent) != is_sched_load_balance(cp))) {
++			if (is_sched_load_balance(parent))
++				set_bit(CS_SCHED_LOAD_BALANCE, &cp->flags);
++			else
++				clear_bit(CS_SCHED_LOAD_BALANCE, &cp->flags);
++		}
++
+ 		/*
+ 		 * On legacy hierarchy, if the effective cpumask of any non-
+ 		 * empty cpuset is changed, we need to rebuild sched domains.
+@@ -3222,6 +3241,14 @@ static int cpuset_css_online(struct cgroup_subsys_state *css)
+ 		cs->use_parent_ecpus = true;
+ 		parent->child_ecpus_count++;
+ 	}
++
++	/*
++	 * For v2, clear CS_SCHED_LOAD_BALANCE if parent is isolated
++	 */
++	if (cgroup_subsys_on_dfl(cpuset_cgrp_subsys) &&
++	    !is_sched_load_balance(parent))
++		clear_bit(CS_SCHED_LOAD_BALANCE, &cs->flags);
++
+ 	spin_unlock_irq(&callback_lock);
+ 
+ 	if (!test_bit(CGRP_CPUSET_CLONE_CHILDREN, &css->cgroup->flags))
 -- 
 2.31.1
 
