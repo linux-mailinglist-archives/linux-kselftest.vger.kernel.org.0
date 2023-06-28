@@ -2,536 +2,301 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D887406EE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 01:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFCA740710
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 02:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjF0XpL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jun 2023 19:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
+        id S229593AbjF1ANR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jun 2023 20:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjF0XpK (ORCPT
+        with ESMTP id S229482AbjF1ANO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jun 2023 19:45:10 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEB71FEB;
-        Tue, 27 Jun 2023 16:45:08 -0700 (PDT)
+        Tue, 27 Jun 2023 20:13:14 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C14E8;
+        Tue, 27 Jun 2023 17:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687909508; x=1719445508;
+  t=1687911193; x=1719447193;
   h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=Jr3RvPfScT+lUoT8dexj7Eaw0nVNg8YfRia3Cr00ioM=;
-  b=bcLkSfJ5WjY8yAHl199atL829TJhwCDX1ofxOooe3WPZKfeTNIF3OPwf
-   fjz0P3LQaQruvfhbMjz4pfWG2T07F1Mqo33h+Zfk5nH1XFCqbhNZqCf4g
-   slG4hdeDJCXg9vxwl4/zi+O1Ba1vt3ZyHgH60Mf65XhVVyWri+kq5QaJV
-   DzE0YPRhaz6ziSgsR+5nYmQpxwYfst/OmnB9MDeQt2Qd23Q+d8wRotSVP
-   JXUd9czBTqsPXPa5t4aMcrfBaHhWmk+Ram4ruRJKRpFf6Lr/ipS+KINVN
-   rmvY87L4xe7gYN3gFn55FlkwEfLTu/vY7g20zwVGU9C0+uXU5ormecaIl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="346469682"
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=8CzNOU/BiDOEWQwzvKn9MkuKCLmhbDN9RAQPEeP+H5w=;
+  b=hhvXyxDvuBJHoABSGXlUDFWhMvIzT8J4mNTWZSSeDGUzpR4J9QMVT3zd
+   vze+lWeBdTCSpntkhMWJ8ruazugaCgKNc6Np0l7sm0boC4ht7VHsFG+y7
+   4LjuAiRNLE+Z9+NHZKtJdbvympUq2iWsb8yScIFa12KlFyB6lF1uu3v06
+   LyfDIVCzIQLgH94CwJhFaf37o9sTc2P4O213z0nGPN6Np1+TVUXz9Qjt+
+   SyTMgAVroGTVnrTKzHMq1UjWWxj0IUldUZJ0a3hLzSevKiWD3rHUEzBsa
+   QEbfeRhSixFvEHVCAomPHTw70XBYbazb48olv4UKE8p4wQM7udja7uXwX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="365167062"
 X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="346469682"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 16:45:00 -0700
+   d="scan'208";a="365167062"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 17:11:17 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="861286792"
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="666896043"
 X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="861286792"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Jun 2023 16:44:59 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+   d="scan'208";a="666896043"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga003.jf.intel.com with ESMTP; 27 Jun 2023 17:11:16 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 27 Jun 2023 16:44:59 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ 15.1.2507.27; Tue, 27 Jun 2023 17:11:16 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 27 Jun 2023 16:44:58 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Tue, 27 Jun 2023 16:44:58 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.1.2507.27 via Frontend Transport; Tue, 27 Jun 2023 17:11:16 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.45) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 27 Jun 2023 16:44:58 -0700
+ 15.1.2507.27; Tue, 27 Jun 2023 17:11:16 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fEFCZjYe/W0mNW0bY2IPm+EgadIEvxDMHTS/TDisOLU0g3G2Q1Ivtxwyo6iPrZuM6Qhf8tCAJ+pIFbdr+ku+0ozGlusgHTHm+gweafjuwfn1+qCdlcmMaP5Otnsiw7cxVTy4fxguVOTJ47VAws9SaGjRuJ+iBCXMDM+FvOXA2e+9kUd/tbwRgrpSjBFqZiF2NxzrhL0JZ2ZID24xGmJb3lrqPf6CS1XfRG5OCqWLzWlGvtD1YRRlmNge3tq9+vCnI/JIEdVcQjixz+lNeB0PcFAIj8JB1MR3/4z6dYMj9aOYs/q9sfN/orhCrOFYrPSMERXJ/Gx+qXyzsg/Sy9SumQ==
+ b=j7O+vhz4X1E8n86ucuUj7P+il1PSjUXWawmWazjOzLm5EZjmTt7fri+XyYf/EcpUA1DjUSY4Q0AhGY/U89KHXxRYpB0Z1GRFez/nhZVb5mzU1kvpz/GepMOGQxa7o4WyU4UCws2rEkf1Qm8Pz1NdolcBhIuokI/xHP7dkMpRXafOtljAWDkaHdwkfVnq28QriH8Mj9vvQFwpjrBRWAiQYNTOBZviQ97suw0F6ACRqgwMwiVrBnhGaL9aoZL9Aw97CQytbNXlBuAq/+IvNOCpM3YWMJ8g45wX2ws1eRDhLks2nxq9ehvWX+yR5Ii8OZtc71RR8yjIMoAXaD00snRUsw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XqRZCKb//heZpjgsBlrFCDBo5KWGOexU885mEHIvvAk=;
- b=hxaIpVvJk4GxigiNZaAgAOJtQ1eMhji9jSh6u8goNJVUDOPRfrRgB66e3XorhqVrDTFfCO2g43ZtosAyAU11LThRejkJYUnlSLUNMpYYRFBF7reo1KNnighGhHQExQIr7Z/vjOsH90FVOkElQ65F91nOuon/nvX+TQ3xtR0xw1FBYAlvBnz+3EZBXcv3CtJcFf2m1HWdG7eVUP5fFFNTlMHB5jkymuSCs1bExCRpC9vK3NabV3cnuR9P6CAaFQ3MxZVtLt/vZ6ll8N2bscl2itXH9eSNjelF6vHOcpPPxXUq9XRWgjoPpNAuAc7D8SoeNwwy+ujWbJNW3FqMzqjW+w==
+ bh=Fa+ExTECRz196bk7FE5imQx/BdkbJW8JXLcY4AoJpKE=;
+ b=di30sVNNh9AmsrgQ2R/Uom94ocaSLjqPkskp6DNF80YvWvVucdKYsD0vHWs18J2FMyVv8vkq4zztl85E8nf6LW+0164osx6TqGL4Jvulw3XbtKC/Wa/h39VVejJR+cz5TwsH/7MmJJFiSprQY4hiSBui6rvt39HU31x0zQgHJQmTh16OWwlPkyNjtVlvTkUQl1cQ/Hux97ejzJywklQlrRSQDAQr21fgAXDoY1NTqakzTdyEFiq41iagL9PxxG/Jrny+PoLVjN8xC0zjAPQpdqbBnenybWtNOi6orOKC/NL/MaGjCysyWpPPw+JK8nw4YEZQrbqGdK05wqCXO+/Rzw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by PH8PR11MB6854.namprd11.prod.outlook.com (2603:10b6:510:22d::18) with
+ by CY8PR11MB7241.namprd11.prod.outlook.com (2603:10b6:930:94::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21; Tue, 27 Jun
- 2023 23:44:55 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Wed, 28 Jun
+ 2023 00:11:12 +0000
 Received: from PH8PR11MB8107.namprd11.prod.outlook.com
  ([fe80::aeb:12b5:6ac9:fab0]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::aeb:12b5:6ac9:fab0%7]) with mapi id 15.20.6500.029; Tue, 27 Jun 2023
- 23:44:55 +0000
-Date:   Tue, 27 Jun 2023 16:44:50 -0700
+ ([fe80::aeb:12b5:6ac9:fab0%7]) with mapi id 15.20.6500.029; Wed, 28 Jun 2023
+ 00:11:12 +0000
+Date:   Tue, 27 Jun 2023 17:11:07 -0700
 From:   Dan Williams <dan.j.williams@intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
+To:     Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-CC:     "H . Peter Anvin" <hpa@zytor.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Tony Luck <tony.luck@intel.com>,
         "Wander Lairson Costa" <wander@redhat.com>,
         Erdem Aktas <erdemaktas@google.com>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>,
-        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        "Chong Cai" <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
         Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        "Du Fan" <fan.du@intel.com>, <linux-kernel@vger.kernel.org>,
+        Du Fan <fan.du@intel.com>, <linux-kernel@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <dhowells@redhat.com>, <brijesh.singh@amd.com>,
-        <atishp@rivosinc.com>, <gregkh@linuxfoundation.org>
+        <atishp@rivosinc.com>, <gregkh@linuxfoundation.org>,
+        <linux-coco@lists.linux.dev>, <joey.gouly@arm.com>
 Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation
  feature
-Message-ID: <649b74724043c_11e6852945a@dwillia2-xfh.jf.intel.com.notmuch>
+Message-ID: <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
 References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
  <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
  <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
  <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
  <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
+ <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com>
-X-ClientProxiedBy: MW4PR03CA0229.namprd03.prod.outlook.com
- (2603:10b6:303:b9::24) To PH8PR11MB8107.namprd11.prod.outlook.com
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
+X-ClientProxiedBy: MW4PR04CA0144.namprd04.prod.outlook.com
+ (2603:10b6:303:84::29) To PH8PR11MB8107.namprd11.prod.outlook.com
  (2603:10b6:510:256::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH8PR11MB6854:EE_
-X-MS-Office365-Filtering-Correlation-Id: 09e57984-7ede-4cbc-d198-08db776881f0
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|CY8PR11MB7241:EE_
+X-MS-Office365-Filtering-Correlation-Id: d0ec5c63-328b-4556-e1e7-08db776c2e27
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dY3W1uJ/2T0dBU8e+Cqk4hQ8fZEiif/v2nhCvwVy9B+GHgR52LdarblL/2EiYcOXvAghNC2rNwakJwlnAFLWtjW5gZSNSpkq7BcMPDKPVKvlWBBlOvmwGNgVbK17HfSlFOG0qL4Y2zSpepicn5RgDHAe/EuF/mloQl4grF/t6xx4hNm5rplER+eRXOwjWBSkfeDnTnQzw2ph3NF61FwQQzfhvh4gLs6pL8Oqf3e1P9PTO6XbqlzwW1gQ6+bbQ1wkcPov90W0mov45ileXHQKUOgQ2yz20PDu317lDKWM3HfiYgCUDcexDSwoOPTV+bUxJm7egxa/jb0YKllOm/cPsBe66rWz//0Y9CG0sA2QBtK7aefJOfj8Sse5sJrSnY9Krha702GY7gGf6PXoZVpc1LrL3RBJcYF6o4QJoZx6/XbdXT/xO5JGjWpjfVNV8syXKTjLP9qxLqzTK1/HbI0Wv01xihK9YK0wMu/OYuPPKxHle0K5oOBALn0ErUBSjERdOnDAIfF3HjTEUC0kABKVaR8kwlG3o4tJLzB9vqNptxT2rF6BNBHj8Kt5NgBVozOYNKhn33WJt8e96pcvwKbRU0D0e6lmBO3+BjhYydCooRfSKvA0KQela8CSJgs7CkNT
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(39860400002)(396003)(346002)(366004)(451199021)(83380400001)(110136005)(54906003)(478600001)(6486002)(6666004)(9686003)(53546011)(6512007)(66556008)(2906002)(66946007)(26005)(186003)(30864003)(66476007)(6506007)(316002)(7416002)(38100700002)(41300700001)(5660300002)(8676002)(4326008)(8936002)(86362001)(82960400001)(505234007);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: ljJJ1lQXAN1425wfHQRkt/AnN9pXKNLMoZwMPFK2kyu10sKc7rr81MWCiEmzJRZvZCNZHNpsWb6MErRC4Vdl2r3V7n8qvaiZLxAkRop7+CORaoZjWtIGFsVNe3htTnIqo/UdmZ+INf21931+VlIki8fq+j9eQGkxbX87i2zp0JJWnVH0D876VI8xEbnRil1xZkpf8fmJCCb+G1LBLUFTCWbhLVJiAnHGgxMegeiOuIvFDZ16v1ErGnQi4m7lHbfD9Ho2NL+KmNRZ7oaCXExyAZc65FkA0ehM+puKTYvi2vTklJiORg1v0cVlp0EwvgsNuB/iu7Oyh7mSK9kYJ44PyQxi0PjnV5Erp3vJRAiOsvEG+AYk4QUFIbgYv9/HMZfIS6BH9+o6N8PpOmkY4pjsdbkfgGRrDVXl8qVvGMS258RSjL7nbFqXzKNKqNer6TdKXbFjZWETVIUocK2JOkap9QixMT37+4RVxbyHJIG3BVD5orzo/pAX/OOycrxcKuvuFRfDXyfpr9m0zzJOvmcdwA6BaUzJjVnmY5hgHa34a+776nDL4kdp/jvMDm7u8rdZ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(39860400002)(396003)(346002)(366004)(451199021)(83380400001)(110136005)(54906003)(478600001)(6486002)(6666004)(9686003)(53546011)(6512007)(66556008)(2906002)(66946007)(26005)(186003)(66476007)(6506007)(316002)(7416002)(38100700002)(41300700001)(5660300002)(8676002)(4326008)(8936002)(86362001)(82960400001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4ZNp+Eje93zC33Nw9xuN5SS0Sne8WpPZqLKfvSuW3ujhqMzgnqWjdjj130m9?=
- =?us-ascii?Q?O1X2nxlvXNww/obdbKyz5Iw4d7Nqqw7kE7zX1mu6QThXxxJ05COY/I5ijsqS?=
- =?us-ascii?Q?hAFtD+rdaC1d3Ki6Tq4rrSz9q+Z/7pOPRrlQbapMrABKsuQWikoHV8kyXnRW?=
- =?us-ascii?Q?9P6CZCk+fOqLwX3FSeBIaLWNm8/df9KEpKG72drNyLRmg0jJERClJbKvorgp?=
- =?us-ascii?Q?d6ENqxIhOeyGYWy1td1QuZQOcIC5fgNBKmvPEt1hAcQuVWa/FDGMIerU43pO?=
- =?us-ascii?Q?2dPesiCTrhwDdc7UuEtRvfnDFQNpadGItgBgiLyxojSUPSyTBHB9qh72bc2h?=
- =?us-ascii?Q?frfMkn1mC3hJTJ6Q9vnP1SzqL8qkPQd/R/bgHNJqlXicL0qlzSQWMAqDzUbR?=
- =?us-ascii?Q?MGYzE9Mg5XZH8JEvN2mo9AQKP01OSIcYffx33xnDql/7V0YEJ2rZP/7t7hNm?=
- =?us-ascii?Q?ZHDrq4LmFG0SfTKcckfZR2UjnCZOrCjN+R/fzgkEbDf0jvjB9rcYRDUUhvrJ?=
- =?us-ascii?Q?Tx0AZQiqbOBmKzI6V4bkbRw81rz2a1rbeAc5j7imHWdD0HztyivFJddy6HOT?=
- =?us-ascii?Q?uB/TQFmYjEMyPiMMd0lo25C5rUbS5catBQolRb8Bk3pmzywnSDZ286SQVY54?=
- =?us-ascii?Q?fyHxaV8wn1SoXREXaQMoqSItgX/yVNu7Q6IGNtDZnIEBWcl5DRR4x6hmu6Sq?=
- =?us-ascii?Q?8vATU3Xj9TFjqax0m4cm0W0USt69smJhueQMbDsluvju9rVLFyCZiyYze5ec?=
- =?us-ascii?Q?Y6GD9QZua9nWZGMfKxd84EItDfOK3ysXL8tHx+4izhVHMxZfA2AuJkk7ROTE?=
- =?us-ascii?Q?vtUhc/agQHsEvdg1r4LsNM4qsWbY+9avKn3h5nu+JUtBSscVAqbLbgkKBcT6?=
- =?us-ascii?Q?qup7NXxFei2SSWQLuftXRId9MQu2emapqf0qHWc+TnRhgFa9cPXec2hGi+ia?=
- =?us-ascii?Q?JTqWbyQgIMg9Wk+TvFLwwMHC9nVHtQ/74cZgTbD9uktCNRMFB8F1legpX9U8?=
- =?us-ascii?Q?/k25a2rqfIAd8ZDTLu9xvT2W7/5Unb8TtFsMB3G8r9ZR229Gu+yl8hZCMEQj?=
- =?us-ascii?Q?7g3Mbsbha28GxU0DcgGtzKVHxInfhCtDHUUtIQi2ACuzgvB5cyUnGPu/EA1X?=
- =?us-ascii?Q?MKPFq+5qTLrcoHbGwtAbvp7IwWhr7TYAO78J1DQkra8en/hRM76eaDW88QGx?=
- =?us-ascii?Q?jSMU3jofvlXVsNx+SGZCGVeAA6GiKNBi4VUEa//6iPOu5F5jo7E++r4lb3kL?=
- =?us-ascii?Q?HO8wiEjUGG7oM66uKMNmbZBH62bZ04WFHEjNRi1tz8/VBpVV3CPsZooo9+X5?=
- =?us-ascii?Q?lO3Fl7ktVE+BazuEd3U8oG7FmFqSu2ZUw4s6g0F1Qjzm8nG0zdXm/JBC/S+E?=
- =?us-ascii?Q?BhUpOawkZhRtep/JXTw6iFKFJxucSctYpZg0PtrWS+i2TlfR53Av1wRdLHlW?=
- =?us-ascii?Q?7POrYqp/7MImIvDGuy5AepNUFAx54gjK3jHqUPKOGfI7qjg7VXB/1MPC9rAp?=
- =?us-ascii?Q?rhUF7nKB7N17jxpoQXLxMCWHtNMPoxMP5kQ9w+Ehl8CS5azCCURln5g7zbUs?=
- =?us-ascii?Q?V5CE+Iz6e44CywjzFCX5i/lqoCKF6fkztMp+uRzDMWb+BnHeXqDSVdCTvZ4Z?=
- =?us-ascii?Q?Ew=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09e57984-7ede-4cbc-d198-08db776881f0
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RUd5Rkw4ZWE4NHpWbGJvVlNhZWFoeFNCMmx3MC8vZHV2Q0pTVGRaRWE3bkN1?=
+ =?utf-8?B?aUYrRE5GU2x6aWRWZXNlSHBueUs3YW1pTUg3YThTalQ4cW83TEZ1enVCU1Vq?=
+ =?utf-8?B?Vyt3ZU9VR0NyNzlMMWl6dDNuLzB6cjgzVFVhUlo2UkNBdHZXaUptRWFYckZ1?=
+ =?utf-8?B?ZmE0dUY3U2xFTjN2ZGlJWTJrMytQcUlBbUNpbzNKdGsrTVFYc0EvTEhhdFY2?=
+ =?utf-8?B?N2EwRDNLd0h1bDdYL0xpdzZMWXZsanVQendqVUZXanZYZG11MXcrbHRpcUpt?=
+ =?utf-8?B?dXdlNzBHOE5mVXRxTjVtcGR5QnBROEFnVVpxQlRMVC95YnVHdkxEK3FTYVcx?=
+ =?utf-8?B?M3JOaXFIRXV1QlVybC9aTUdjK1RaWE1nZVBMMElUU1QvUm0vYUFqSk5kb2E0?=
+ =?utf-8?B?SmJGVEV4aE8zYWgvMEF2N3ZFc3dBUTRzT0ZKdUFPMEJydGJBWjU0MGZ3UEx4?=
+ =?utf-8?B?ditwTG5nN3pudkNmQVNWNDZOKzRtdm5wUWlubDJ1QytuQm1wenlWT0l1QXhL?=
+ =?utf-8?B?K25CRXhrWHF5ZU9jaU1GaDAzZW5xMG5ZSlpmL0NlV1ZsclZEdkJRNkNsNkZa?=
+ =?utf-8?B?UUdISXJpMjRTSGlwU25lNXZlWHYzZGIwQ1FFMVRlV2JyWFNQWTVGVWJxa0ty?=
+ =?utf-8?B?b0xZS29YdmtBUEFwS3o1bjhuQ1Azay9nUytnM09RaWpZc3NCWUdWZ0lXb085?=
+ =?utf-8?B?c0tyZlRTemtiYTBGMlpoQlpNbjR4N1JoMEtkVkFpelpIa0FqNG0wUmIzMW5i?=
+ =?utf-8?B?aGRiL29xZTlKRzlnVzI0N1RJY3JIcXkzYXk0dlBFdTRCWlA2OFlnYWI3cHpx?=
+ =?utf-8?B?aUJzNndZRFdmb05yZ1piRTlkdnRsaGZBdWxKSHVSa2M0SEh6NkZ6MlN6OURG?=
+ =?utf-8?B?S0pXY1NOc2dMcTZIc0pBNnYyeXFLbnlnMVo3eU1JZkYvdkxzcTh6Zmp3SkZa?=
+ =?utf-8?B?NVdYcG4vdmhBcEpSRHd6Q0ZkRFltdHdBQy91bGlrUlllNHYwejU3RmlsenJp?=
+ =?utf-8?B?Y1pwUTZ3MXRYeXRKSFFNS3YvdkxzOGgxWU9uUlFvZDQ4YnIvb3Q0Y0ZVSm9m?=
+ =?utf-8?B?ekJzUWo4VUhoOVpwQXlEb2RKOCsyTG92YnBDM3E3RVVUamYyZ096WUEraTZm?=
+ =?utf-8?B?RjhNK0lQQ0xHaVgzZkQ1ZkVzMlJxQzlZanBzOHJDNFdXUTFSRno4K0M3NHhV?=
+ =?utf-8?B?YnlxUnBVcXpFcnZGWllYSkIrQUxQVzNJQnoyOWRZT1JJSnBsbHBTaG5IVkVI?=
+ =?utf-8?B?cTRTVURqS3JneWRBbWRCYWI0cTFqVEp3Q1cvMHdSTzNvTTRZS0xVYXZaTTlp?=
+ =?utf-8?B?YytJMjVNK0hjTU50cWxHNG1LV2k0ZHJFNklSVEJCUUhmWlQ3bXJiK3Q4cmd0?=
+ =?utf-8?B?NjRCQnI3Um50eU9jZ1V4TjNqNUo0STdtZFhTMWNqRzJEL1RKVzM5dmNsMXI3?=
+ =?utf-8?B?eVFsMTZoRTg0S2FHenRKTXh3bTUrTDVmOHpNVFZ2a1pTd1c4V3lJVjFHSWRH?=
+ =?utf-8?B?cXQzRCt6OTRFMTRVa1Faa25iNUNOMlEzR2NlYzVRUkcyWXN0N21tODBiamt1?=
+ =?utf-8?B?QVoySUlPUlgzdGR6UUQ5a0J4RHdDK1BKejZTaW5aSmVpV1RPM1hxODZNeUxY?=
+ =?utf-8?B?VWVCU2tWU3JHVVNWeFlLVjFFRDlLN2tWNUJzaXFnZFhmMjZRREtuMG11OGpR?=
+ =?utf-8?B?UFQ5Mk1qUzBZSC94ZmxCaXgxdG9XQ2RaR1d4bzVtSm4xZ3BsNm5EUGlIQmsv?=
+ =?utf-8?B?TUhqMW8rdmhweVB2M25oTkFJTHNxSUNHN01iMzk3aElNZ2tTL1RvRXJBNUZW?=
+ =?utf-8?B?WlVWVkZKMkhBQ3dscGlYMWNLTGw3YnpiNCtaV2h5Q1VSQkNzeFU4R21Tbk1Z?=
+ =?utf-8?B?MlF4UG5NZG4wY2JCQzV5dkF5NWZDVWxZRDlHV0w4eU5tbXRVMW9vZDR3V0dm?=
+ =?utf-8?B?YnJhcUprbWE0aFljaXZpK0ZleWlZY1pTaHp3cU5lUVJkZC9DaDg1SVBrSS9C?=
+ =?utf-8?B?U2pXTWRxNXA3a0RsOFhEZHgzQ2s2ek9aUzlDODVQQ0YvcEFCc0prak5zak5k?=
+ =?utf-8?B?cUhLNUYwRzVnWnh2T3Vod01KMjBtOGpsdG1vMzQ3T20vZVRycVNLR3V6N3RI?=
+ =?utf-8?B?akZZaUF2NFM1SlBYZmU1eEZJNS83cWxjMmlMbDUyajUxZFEybGNQMzM5cjE4?=
+ =?utf-8?B?UVE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0ec5c63-328b-4556-e1e7-08db776c2e27
 X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 23:44:54.7263
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 00:11:11.9492
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nDOmsjps4XA5nI+SkTHQL5p+bM6TkSXW1Ye2Vs9iQt3ccSQr8JTCXpuK7P2c1say0oQu7EDp6E55KnBOPmuUIfdQPt+zFx0TCBjPrMD93jI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6854
+X-MS-Exchange-CrossTenant-UserPrincipalName: zuiAp7VFaDWTqrVjCaWWaL37xQbXbZ1pTMRsTSyRO+dxfCdV9kQM8UtfJFo1u8QBhdDE336BH0HxqzcwkKytiSxqltO8dX5ke7FLuNttqfc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7241
 X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sathyanarayanan Kuppuswamy wrote:
-> Hi Dan,
+Dionna Amalie Glaze wrote:
+> On Sun, Jun 25, 2023 at 8:06 PM Sathyanarayanan Kuppuswamy
+> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+[..]
+> > Hi Dan,
+> >
+> > On 6/23/23 3:27 PM, Dan Williams wrote:
+> > > Dan Williams wrote:
+> > >> [ add David, Brijesh, and Atish]
+> > >>
+> > >> Kuppuswamy Sathyanarayanan wrote:
+> > >>> In TDX guest, the second stage of the attestation process is Quote
+> > >>> generation. This process is required to convert the locally generated
+> > >>> TDREPORT into a remotely verifiable Quote. It involves sending the
+> > >>> TDREPORT data to a Quoting Enclave (QE) which will verify the
+> > >>> integrity of the TDREPORT and sign it with an attestation key.
+> > >>>
+> > >>> Intel's TDX attestation driver exposes TDX_CMD_GET_QUOTE IOCTL to
+> > >>> allow the user agent to get the TD Quote.
+> > >>>
+> > >>> Add a kernel selftest module to verify the Quote generation feature.
+> > >>>
+> > >>> TD Quote generation involves following steps:
+> > >>>
+> > >>> * Get the TDREPORT data using TDX_CMD_GET_REPORT IOCTL.
+> > >>> * Embed the TDREPORT data in quote buffer and request for quote
+> > >>>   generation via TDX_CMD_GET_QUOTE IOCTL request.
+> > >>> * Upon completion of the GetQuote request, check for non zero value
+> > >>>   in the status field of Quote header to make sure the generated
+> > >>>   quote is valid.
+> > >>
+> > >> What this cover letter does not say is that this is adding another
+> > >> instance of the similar pattern as SNP_GET_REPORT.
+> > >>
+> > >> Linux is best served when multiple vendors trying to do similar
+> > >> operations are brought together behind a common ABI. We see this in the
+> > >> history of wrangling SCSI vendors behind common interfaces. Now multiple
+> > >> confidential computing vendors trying to develop similar flows with
+> > >> differentiated formats where that differentiation need not leak over the
+> > >> ABI boundary.
+> > > [..]
+> > >
+> > > Below is a rough mock up of this approach to demonstrate the direction.
+> > > Again, the goal is to define an ABI that can support any vendor's
+> > > arch-specific attestation method and key provisioning flows without
+> > > leaking vendor-specific details, or confidential material over the
+> > > user/kernel ABI.
+> >
+> > Thanks for working on this mock code and helping out. It gives me the
+> > general idea about your proposal.
+> >
+> > >
+> > > The observation is that there are a sufficient number of attestation
+> > > flows available to review where Linux can define a superset ABI to
+> > > contain them all. The other observation is that the implementations have
+> > > features that may cross-polinate over time. For example the SEV
+> > > privelege level consideration ("vmpl"), and the TDX RTMR (think TPM
+> > > PCRs) mechanisms address generic Confidential Computing use cases.
+> >
+> >
+> > I agree with your point about VMPL and RTMR feature cases. This observation
+> > is valid for AMD SEV and TDX attestation flows. But I am not sure whether
+> > it will hold true for other vendor implementations. Our sample set is not
+> > good enough to make this conclusion. The reason for my concern is, if you
+> > check the ABI interface used in the S390 arch attestation driver
+> > (drivers/s390/char/uvdevice.c), you would notice that there is a significant
+> > difference between the ABI used in that driver and SEV/TDX drivers. The S390
+> > driver attestation request appears to accept two data blobs as input, as well
+> > as a variety of vendor-specific header configurations.
+> >
+> > Maybe the s390 attestation model is a special case, but, I think we consider
+> > this issue. Since we don't have a common spec, there is chance that any
+> > superset ABI we define now may not meet future vendor requirements. One way to
+> > handle it to leave enough space in the generic ABI to handle future vendor
+> > requirements.
+> >
+> > I think it would be better if other vendors (like ARM or RISC) can comment and
+> > confirm whether this proposal meets their demands.
+> >
 > 
-> On 6/23/23 3:27 PM, Dan Williams wrote:
-> > Dan Williams wrote:
-> >> [ add David, Brijesh, and Atish]
-> >>
-> >> Kuppuswamy Sathyanarayanan wrote:
-> >>> In TDX guest, the second stage of the attestation process is Quote
-> >>> generation. This process is required to convert the locally generated
-> >>> TDREPORT into a remotely verifiable Quote. It involves sending the
-> >>> TDREPORT data to a Quoting Enclave (QE) which will verify the
-> >>> integrity of the TDREPORT and sign it with an attestation key.
-> >>>
-> >>> Intel's TDX attestation driver exposes TDX_CMD_GET_QUOTE IOCTL to
-> >>> allow the user agent to get the TD Quote.
-> >>>
-> >>> Add a kernel selftest module to verify the Quote generation feature.
-> >>>
-> >>> TD Quote generation involves following steps:
-> >>>
-> >>> * Get the TDREPORT data using TDX_CMD_GET_REPORT IOCTL.
-> >>> * Embed the TDREPORT data in quote buffer and request for quote
-> >>>   generation via TDX_CMD_GET_QUOTE IOCTL request.
-> >>> * Upon completion of the GetQuote request, check for non zero value
-> >>>   in the status field of Quote header to make sure the generated
-> >>>   quote is valid.
-> >>
-> >> What this cover letter does not say is that this is adding another
-> >> instance of the similar pattern as SNP_GET_REPORT.
-> >>
-> >> Linux is best served when multiple vendors trying to do similar
-> >> operations are brought together behind a common ABI. We see this in the
-> >> history of wrangling SCSI vendors behind common interfaces. Now multiple
-> >> confidential computing vendors trying to develop similar flows with
-> >> differentiated formats where that differentiation need not leak over the
-> >> ABI boundary.
-> > [..]
-> > 
-> > Below is a rough mock up of this approach to demonstrate the direction.
-> > Again, the goal is to define an ABI that can support any vendor's
-> > arch-specific attestation method and key provisioning flows without
-> > leaking vendor-specific details, or confidential material over the
-> > user/kernel ABI.
+> The VMPL-based separation that will house the supervisor module known
+> as SVSM can have protocols that implement a TPM command interface, or
+> an RTMR-extension interface, and will also need to have an
+> SVSM-specific protocol attestation report format to keep the secure
+> chain of custody apparent. We'd have different formats and protocols
+> in the kernel, at least, to speak to each technology. 
+
+That's where I hope the line can be drawn, i.e. that all of this vendor
+differentiation really only matters inside the kernel in the end.
+
+> I'm not sure it's worth the trouble of papering over all the... 3-4
+> technologies with similar but still weirdly different formats and ways
+> of doing things with an abstracted attestation ABI, especially since
+> the output all has to be interpreted in an architecture-specific way
+> anyway.
+
+This is where I need help. Can you identify where the following
+assertion falls over:
+
+"The minimum viable key-server is one that can generically validate a
+blob with an ECDSA signature".
+
+I.e. the fact that SEV and TDX send different length blobs is less
+important than validating that signature.
+
+If it is always the case that specific fields in the blob need to be
+decoded then yes, that weakens the assertion. However, maybe that means
+that kernel code parses the blob and conveys that parsed info along with
+vendor attestation payload all signed by a Linux key. I.e. still allow
+for a unified output format + signed vendor blob and provide a path to
+keep all the vendor specific handling internal to the kernel.
+
+> ARM's Confidential Computing Realm Management Extensions (RME) seems
+> to be going along the lines of a runtime measurement register model
+> with their hardware enforced security. The number of registers isn't
+> prescribed in the spec.
 > 
-> Thanks for working on this mock code and helping out. It gives me the
-> general idea about your proposal.
-> 
-> > 
-> > The observation is that there are a sufficient number of attestation
-> > flows available to review where Linux can define a superset ABI to
-> > contain them all. The other observation is that the implementations have
-> > features that may cross-polinate over time. For example the SEV
-> > privelege level consideration ("vmpl"), and the TDX RTMR (think TPM
-> > PCRs) mechanisms address generic Confidential Computing use cases.
-> 
-> 
-> I agree with your point about VMPL and RTMR feature cases. This observation
-> is valid for AMD SEV and TDX attestation flows. But I am not sure whether
-> it will hold true for other vendor implementations. Our sample set is not
-> good enough to make this conclusion. The reason for my concern is, if you
-> check the ABI interface used in the S390 arch attestation driver
-> (drivers/s390/char/uvdevice.c), you would notice that there is a significant
-> difference between the ABI used in that driver and SEV/TDX drivers. The S390
-> driver attestation request appears to accept two data blobs as input, as well
-> as a variety of vendor-specific header configurations.
-
-I would need more time to investigate. It's also the case that if both
-major x86 vendors plus ARM and/or RISC-V can all get behind the same
-frontend then that is already success in my mind.
-
-> Maybe the s390 attestation model is a special case, but, I think we consider
-> this issue. Since we don't have a common spec, there is chance that any
-> superset ABI we define now may not meet future vendor requirements. One way to
-> handle it to leave enough space in the generic ABI to handle future vendor
-> requirements.
-
-Perhaps, but the goal here is to clearly indicate "this is how Linux
-conveys confidential computing attestation concepts". If there is future
-vendor innovation in this space it needs to consider how it meets the
-established needs of Linux, not the other way round.
-
-> I think it would be better if other vendors (like ARM or RISC) can comment and
-> confirm whether this proposal meets their demands.
-
-The more participation the better. Open source definitely involves a
-component speaking up when the definition of things are still malleable,
-or catching issues before they go upstream.
-
-> > Vendor specific ioctls for all of this feels like surrender when Linux
-> > already has the keys subsystem which has plenty of degrees of freedom
-> > for tracking blobs with signatures and using those blobs to instantiate
-> > other blobs. It already serves as the ABI wrapping various TPM
-> > implementations and marshaling keys for storage encryption and other use
-> > cases that intersect Confidential Computing.
-> > 
-> > The benefit of deprecating vendor-specific abstraction layers in
-> > userspace is secondary. The primary benefit is collaboration. It enables
-> > kernel developers from various architectures to collaborate on common
-> > infrastructure. If, referring back to my previous example, SEV adopts an
-> > RTMR-like mechanism and TDX adopts a vmpl-like mechanism it would be
-> > unfortunate if those efforts were siloed, duplicated, and needlessly
-> > differentiated to userspace. So while there are arguably a manageable
-> > number of basic arch attestation methods the planned expansion of those
-> > to build incremental functionality is where I believe we, as a
-> > community, will be glad that we invested in a "Linux format" for all of
-> > this.
-> > 
-> > An example, to show what the strawman patch below enables: (req_key is
-> > the sample program from "man 2 request_key")
-> > 
-> > # ./req_key guest_attest guest_attest:0:0-$desc $(cat user_data | base64)
-> > Key ID is 10e2f3a7
-> > # keyctl pipe 0x10e2f3a7 | hexdump -C
-> > 00000000  54 44 58 20 47 65 6e 65  72 61 74 65 64 20 51 75  |TDX Generated Qu|
-> > 00000010  6f 74 65 00 00 00 00 00  00 00 00 00 00 00 00 00  |ote.............|
-> > 00000020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
-> > *
-> > 00004000
-> > 
-> > This is the kernel instantiating a TDX Quote without the TDREPORT
-> > implementation detail ever leaving the kernel. Now, this is only the
-> 
-> IIUC, the idea here is to cache the quote data and return it to the user whenever
-> possible, right? If yes, I think such optimization may not be very useful for our
-> case. AFAIK, the quote data will change whenever there is a change in the guest
-> measurement data. Since the validity of the generated quote will not be long,
-> and the frequency of quote generation requests is expected to be less, we may not
-> get much benefit from caching the quote data. I think we can keep this logic simple
-> by directly retrieving the quote data from the quoting enclave whenever there is a
-> request from the user.
-
-The Keys subsystem already supports the concept of keys that expire
-immediately, so no need for special consideration here that I can see.
-
-> > top-half of what is needed. The missing bottom half takes that material
-> > and uses it to instantiate derived key material like the storage
-> > decryption key internal to the kernel. See "The Process" in
-> > Documentation/security/keys/request-key.rst for how the Keys subsystem
-> > handles the "keys for keys" use case.
-> 
-> This is only useful for key-server use case, right? Attestation can also be
-> used for use cases like pattern matching or uploading some secure data, etc.
-> Since key-server is not the only use case, does it make sense to suppport
-> this derived key feature?
-
-The Keys subsystem is just a way for both userspace and kernel space to
-request the instantiation of blobs that mediate access to another
-resource be it another key or something else. So key-server is only one
-example client.
-
-The other reason for defining a common frontend is so the kernel can
-understand and mediate resource access as a kernel is wont to do. The
-ioctl() approach blinds the kernel and requires userspace to repeatedly
-solve problems in vendor specific ways. They Keys proposal also has the
-property of not requiring userspace round trips for things like
-unlocking storage. The driver can just do request_keys() and kick off
-the process on its own.
-
-> 
-> > 
-> > ---
-> > diff --git a/drivers/virt/Kconfig b/drivers/virt/Kconfig
-> > index f79ab13a5c28..0f775847028e 100644
-> > --- a/drivers/virt/Kconfig
-> > +++ b/drivers/virt/Kconfig
-> > @@ -54,4 +54,8 @@ source "drivers/virt/coco/sev-guest/Kconfig"
-> >  
-> >  source "drivers/virt/coco/tdx-guest/Kconfig"
-> >  
-> > +config GUEST_ATTEST
-> > +	tristate
-> > +	select KEYS
-> > +
-> >  endif
-> > diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
-> > index e9aa6fc96fab..66f6b838f8f4 100644
-> > --- a/drivers/virt/Makefile
-> > +++ b/drivers/virt/Makefile
-> > @@ -12,3 +12,4 @@ obj-$(CONFIG_ACRN_HSM)		+= acrn/
-> >  obj-$(CONFIG_EFI_SECRET)	+= coco/efi_secret/
-> >  obj-$(CONFIG_SEV_GUEST)		+= coco/sev-guest/
-> >  obj-$(CONFIG_INTEL_TDX_GUEST)	+= coco/tdx-guest/
-> > +obj-$(CONFIG_GUEST_ATTEST)	+= coco/guest-attest/
-> > diff --git a/drivers/virt/coco/guest-attest/Makefile b/drivers/virt/coco/guest-attest/Makefile
-> > new file mode 100644
-> > index 000000000000..5581c5a27588
-> > --- /dev/null
-> > +++ b/drivers/virt/coco/guest-attest/Makefile
-> > @@ -0,0 +1,2 @@
-> > +obj-$(CONFIG_GUEST_ATTEST) += guest_attest.o
-> > +guest_attest-y := key.o
-> > diff --git a/drivers/virt/coco/guest-attest/key.c b/drivers/virt/coco/guest-attest/key.c
-> > new file mode 100644
-> > index 000000000000..2a494b6dd7a7
-> > --- /dev/null
-> > +++ b/drivers/virt/coco/guest-attest/key.c
-> > @@ -0,0 +1,159 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/* Copyright(c) 2023 Intel Corporation. All rights reserved. */
-> > +
-> > +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> > +#include <linux/seq_file.h>
-> > +#include <linux/key-type.h>
-> > +#include <linux/module.h>
-> > +#include <linux/base64.h>
-> > +
-> > +#include <keys/request_key_auth-type.h>
-> > +#include <keys/user-type.h>
-> > +
-> > +#include "guest-attest.h"
-> 
-> Can you share you guest-attest.h?
-
-Apologies, missed a 'git add':
-
-/* SPDX-License-Identifier: GPL-2.0-only */
-/* Copyright(c) 2023 Intel Corporation. */
-
-#ifndef __GUEST_ATTEST_H__
-#define __GUEST_ATTEST_H__
-#include <linux/list.h>
-
-/*
- * arch specific ops, only one is expected to be registered at a time
- * i.e. either SEV or TDX, but not both
- */
-struct guest_attest_ops {
-        const char *name;
-        struct module *module;
-        struct list_head list;
-        int (*request_attest)(struct key *key, int level,
-                              struct key *dest_keyring, void *payload,
-                              int payload_len, struct key *authkey);
-};
-
-#define GUEST_ATTEST_DATALEN 64
-
-int register_guest_attest_ops(struct guest_attest_ops *ops);
-void unregister_guest_attest_ops(struct guest_attest_ops *ops);
-
-#endif /*__GUEST_ATTEST_H__ */
-
-
-> 
-> > +
-> > +static LIST_HEAD(guest_attest_list);
-> > +static DECLARE_RWSEM(guest_attest_rwsem);
-> > +
-> > +static struct guest_attest_ops *fetch_ops(void)
-> > +{
-> > +	return list_first_entry_or_null(&guest_attest_list,
-> > +					struct guest_attest_ops, list);
-> > +}
-> > +
-> > +static struct guest_attest_ops *get_ops(void)
-> > +{
-> > +	down_read(&guest_attest_rwsem);
-> > +	return fetch_ops();
-> > +}
-> > +
-> > +static void put_ops(void)
-> > +{
-> > +	up_read(&guest_attest_rwsem);
-> > +}
-> > +
-> > +int register_guest_attest_ops(struct guest_attest_ops *ops)
-> > +{
-> > +	struct guest_attest_ops *conflict;
-> > +	int rc;
-> > +
-> > +	down_write(&guest_attest_rwsem);
-> > +	conflict = fetch_ops();
-> > +	if (conflict) {
-> > +		pr_err("\"%s\" ops already registered\n", conflict->name);
-> > +		rc = -EEXIST;
-> > +		goto out;
-> > +	}
-> > +	list_add(&ops->list, &guest_attest_list);
-> > +	try_module_get(ops->module);
-> > +	rc = 0;
-> > +out:
-> > +	up_write(&guest_attest_rwsem);
-> > +	return rc;
-> > +}
-> > +EXPORT_SYMBOL_GPL(register_guest_attest_ops);
-> > +
-> > +void unregister_guest_attest_ops(struct guest_attest_ops *ops)
-> > +{
-> > +	down_write(&guest_attest_rwsem);
-> > +	list_del(&ops->list);
-> > +	up_write(&guest_attest_rwsem);
-> > +	module_put(ops->module);
-> > +}
-> > +EXPORT_SYMBOL_GPL(unregister_guest_attest_ops);
-> > +
-> > +static int __guest_attest_request_key(struct key *key, int level,
-> > +				      struct key *dest_keyring,
-> > +				      const char *callout_info, int callout_len,
-> > +				      struct key *authkey)
-> > +{
-> > +	struct guest_attest_ops *ops;
-> > +	void *payload = NULL;
-> > +	int rc, payload_len;
-> > +
-> > +	ops = get_ops();
-> > +	if (!ops)
-> > +		return -ENOKEY;
-> > +
-> > +	payload = kzalloc(max(GUEST_ATTEST_DATALEN, callout_len), GFP_KERNEL);
-> > +	if (!payload) {
-> > +		rc = -ENOMEM;
-> > +		goto out;
-> > +	}
-> 
-> Is the idea to get the values like vmpl part of the payload?
-
-No, to me vmpl likely needs to be conveyed in the key-description.
-Payload is simply the 64-bytes that both SEV and TDX take as input for
-the attestation request. The AMD specification seems to imply that
-payload is itself a public key? If that is the expectation then it may
-be more appropriate to make that a separate retrieval vs something
-passed in directly from userspace.
-
-> 
-> > +
-> > +	payload_len = base64_decode(callout_info, callout_len, payload);
-> > +	if (payload_len < 0 || payload_len > GUEST_ATTEST_DATALEN) {
-> > +		rc = -EINVAL;
-> > +		goto out;
-> > +	}
-> > +
-> > +	rc = ops->request_attest(key, level, dest_keyring, payload, payload_len,
-> > +				 authkey);
-> > +out:
-> > +	kfree(payload);
-> > +	put_ops();
-> > +	return rc;
-> > +}
-> > +
-> > +static int guest_attest_request_key(struct key *authkey, void *data)
-> > +{
-> > +	struct request_key_auth *rka = get_request_key_auth(authkey);
-> > +	struct key *key = rka->target_key;
-> > +	unsigned long long id;
-> > +	int rc, level;
-> > +
-> > +	pr_debug("desc: %s op: %s callout: %s\n", key->description, rka->op,
-> > +		 rka->callout_info ? (char *)rka->callout_info : "\"none\"");
-> > +
-> > +	if (sscanf(key->description, "guest_attest:%d:%llu", &level, &id) != 2)
-> > +		return -EINVAL;
-> > +
-> 
-> Can you explain some details about the id and level? It is not very clear why
-> we need it.
-
-@level is my mockup of the vmpl concept, and @id is something free-form
-for now that the requester of the attestation knows what it means. This
-id-scheme would follow a Linux-defined format. More discussion is needed
-here about what attestation data is used for and opportunities to define
-a common naming scheme. For example, what is the common name of the
-guest_attest-key that supports retrieving the storage decryption key
-from the key-server.
+> +Joey Gouly +linux-coco@lists.linux.dev as far as RME is concerned, do
+> you know who would be best to weigh in on this discussion of a unified
+> attestation model?
