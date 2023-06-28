@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314DC74186E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 20:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 384B1741871
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 20:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjF1S51 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jun 2023 14:57:27 -0400
-Received: from bg4.exmail.qq.com ([43.155.65.254]:17826 "EHLO
+        id S231452AbjF1S6V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jun 2023 14:58:21 -0400
+Received: from bg4.exmail.qq.com ([43.155.65.254]:22828 "EHLO
         bg4.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbjF1Syx (ORCPT
+        with ESMTP id S232414AbjF1S4a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:54:53 -0400
-X-QQ-mid: bizesmtp90t1687978484tji35iud
+        Wed, 28 Jun 2023 14:56:30 -0400
+X-QQ-mid: bizesmtp66t1687978579tbslkfmx
 Received: from linux-lab-host.localdomain ( [116.30.129.193])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 29 Jun 2023 02:54:42 +0800 (CST)
+        id ; Thu, 29 Jun 2023 02:56:18 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: Lc4bMlOoZUGkpC/7Ifsyooy6DUcO5i0KRvgdG3YbtX646PzLWnBy6Qxr2/y+U
-        ozNqeIN24oj33/Fotsv6FXjKjhpcf5dts1f4iXPVGjLEOyao8iLruCcBq410/Itbx/yQ82D
-        4a/DbSH5mlYrgjNVPOh+05Z7F8YWqIAq1qjLT4KMXlyNwrpo7QCsU1QCoKz7cIBCFcrr/Ty
-        IDCMxPgLOJFrecb2pQfzxgO73wk3O0vG3Jcs9W5Sk1Bx2FAaefhT0X35wITWlcT1vqd/uvw
-        bUFlzoPMtnjOpFjHio6NpWI5h0Xj5DFbj2dO5JQCyMdvzC+NNyc+s2q5cad0Yuidf0no2SX
-        kpAAdeYqkgMSQGSZPfd5ki6h4+yttF3ULm1K+4MDPrKxb1Fr2gGOQLmqydKkQ==
+X-QQ-FEAT: CR3LFp2JE4myL95Bwy4YA+PlVj9c4rCxTO0cf3tpSnq4AppLl9rYNCM+pxYWU
+        85WwvNW4tuBtdM9saYd8fKHWyVNTzgqBFOQ7Tj573N32L3L1hma3fsXS3oAm9gSuKH5AlVo
+        1u5B3rl7TURqs7ZPJv1OvrdgdefC0C2rpabwBjDRYuzh3a9DpjzBIpMdzyxF0JI3wfddcDj
+        uUXMsItEirc4c2MVlSNMaqgOIKlKB0UQdoQOlBSNOkT7vrAHYpAloMkgLUBN4kDzl2fJ0FX
+        /DCeTcsJQUsNseXiYNiJ1Hf0b47baGzRqIoVb5tN/PKl0Cj8RCn4vMkP7eQHzi7Eu/LXNOU
+        PHrAGTFqRGq3xyDEU4qlJPzKdstMgA8zU1cFTjbSr9TWNOl0jg=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5556601059308245209
+X-BIZMAIL-ID: 15633203404087285430
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v1 03/11] tools/nolibc: include crt.h before arch.h
-Date:   Thu, 29 Jun 2023 02:54:35 +0800
-Message-Id: <c61b5bc53895e8c6b2f30d59f86067973e6bbce0.1687976753.git.falcon@tinylab.org>
+Subject: [PATCH v1 04/11] tools/nolibc: arm: shrink _start with _start_c
+Date:   Thu, 29 Jun 2023 02:55:48 +0800
+Message-Id: <30376b12e786f10ac8735431c35bc629f92a7d32.1687976753.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1687976753.git.falcon@tinylab.org>
 References: <cover.1687976753.git.falcon@tinylab.org>
@@ -43,123 +43,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The crt.h provides a new _start_c() function, which is required by the
-new assembly _start entry of arch-<ARCH>.h (included by arch.h), let's
-include crt.h before arch.h.
-
-This '#include "crt.h"' doesn't let the new _start_c() work immediately,
-but it is a base of the coming patches to move most of the assembly
-_start operations to the _start_c() function for every supported
-architecture.
+Let's move most of the _start operations to _start_c().
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/Makefile | 1 +
- tools/include/nolibc/nolibc.h | 1 +
- tools/include/nolibc/signal.h | 1 +
- tools/include/nolibc/stdio.h  | 1 +
- tools/include/nolibc/stdlib.h | 1 +
- tools/include/nolibc/sys.h    | 1 +
- tools/include/nolibc/time.h   | 1 +
- tools/include/nolibc/unistd.h | 1 +
- 8 files changed, 8 insertions(+)
+ tools/include/nolibc/arch-arm.h | 42 ++++-----------------------------
+ 1 file changed, 5 insertions(+), 37 deletions(-)
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index 875e13e3c851..00471e59b11e 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -37,6 +37,7 @@ NARCH            = $(or $(NARCH_$(ARCH)),$(ARCH))
- arch_file := arch-$(NARCH).h
- all_files := \
- 		compiler.h \
-+		crt.h \
- 		ctype.h \
- 		errno.h \
- 		nolibc.h \
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index 1f8d821000ac..2cc9ccd90d56 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -93,6 +93,7 @@
- #define _NOLIBC_H
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index a2ea5756cef2..573f8fe31cee 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -183,49 +183,17 @@
+ 	_arg1;									\
+ })
  
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
-diff --git a/tools/include/nolibc/signal.h b/tools/include/nolibc/signal.h
-index 137552216e46..f0a1418c1cb2 100644
---- a/tools/include/nolibc/signal.h
-+++ b/tools/include/nolibc/signal.h
-@@ -8,6 +8,7 @@
- #define _NOLIBC_SIGNAL_H
- 
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
-diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-index 0eef91daf289..89d3749b3620 100644
---- a/tools/include/nolibc/stdio.h
-+++ b/tools/include/nolibc/stdio.h
-@@ -10,6 +10,7 @@
- #include <stdarg.h>
- 
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "errno.h"
- #include "types.h"
-diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-index 902162f80337..0ff7fac40bd4 100644
---- a/tools/include/nolibc/stdlib.h
-+++ b/tools/include/nolibc/stdlib.h
-@@ -8,6 +8,7 @@
- #define _NOLIBC_STDLIB_H
- 
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 2c302f3feb71..b6c33c40c037 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -24,6 +24,7 @@
- #include <linux/reboot.h> /* for LINUX_REBOOT_* */
- #include <linux/prctl.h>
- 
-+#include "crt.h"
- #include "arch.h"
- #include "errno.h"
- #include "types.h"
-diff --git a/tools/include/nolibc/time.h b/tools/include/nolibc/time.h
-index 84655361b9ad..bbe8f9aa3e9b 100644
---- a/tools/include/nolibc/time.h
-+++ b/tools/include/nolibc/time.h
-@@ -8,6 +8,7 @@
- #define _NOLIBC_TIME_H
- 
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
-diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
-index e38f3660c051..f1677224bb5a 100644
---- a/tools/include/nolibc/unistd.h
-+++ b/tools/include/nolibc/unistd.h
-@@ -8,6 +8,7 @@
- #define _NOLIBC_UNISTD_H
- 
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
+-
+-char **environ __attribute__((weak));
+-const unsigned long *_auxv __attribute__((weak));
+-
+ /* startup code */
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+-		"bl __stack_chk_init\n"       /* initialize stack protector                          */
++		"bl __stack_chk_init\n"	/* initialize stack protector			*/
+ #endif
+-		"pop {%r0}\n"                 /* argc was in the stack                               */
+-		"mov %r1, %sp\n"              /* argv = sp                                           */
+-
+-		"add %r2, %r0, $1\n"          /* envp = (argc + 1) ...                               */
+-		"lsl %r2, %r2, $2\n"          /*        * 4        ...                               */
+-		"add %r2, %r2, %r1\n"         /*        + argv                                       */
+-		"ldr %r3, 1f\n"               /* r3 = &environ (see below)                           */
+-		"str %r2, [r3]\n"             /* store envp into environ                             */
+-
+-		"mov r4, r2\n"                /* search for auxv (follows NULL after last env)       */
+-		"0:\n"
+-		"mov r5, r4\n"                /* r5 = r4                                             */
+-		"add r4, r4, #4\n"            /* r4 += 4                                             */
+-		"ldr r5,[r5]\n"               /* r5 = *r5 = *(r4-4)                                  */
+-		"cmp r5, #0\n"                /* and stop at NULL after last env                     */
+-		"bne 0b\n"
+-		"ldr %r3, 2f\n"               /* r3 = &_auxv (low bits)                              */
+-		"str r4, [r3]\n"              /* store r4 into _auxv                                 */
+-
+-		"mov %r3, $8\n"               /* AAPCS : sp must be 8-byte aligned in the            */
+-		"neg %r3, %r3\n"              /*         callee, and bl doesn't push (lr=pc)         */
+-		"and %r3, %r3, %r1\n"         /* so we do sp = r1(=sp) & r3(=-8);                    */
+-		"mov %sp, %r3\n"
+-
+-		"bl main\n"                   /* main() returns the status code, we'll exit with it. */
+-		"movs r7, $1\n"               /* NR_exit == 1                                        */
+-		"svc $0x00\n"
+-		".align 2\n"                  /* below are the pointers to a few variables           */
+-		"1:\n"
+-		".word environ\n"
+-		"2:\n"
+-		".word _auxv\n"
++		"mov %r0, sp\n"		/* save stack pointer to r0, as arg1 of _start_c*/
++		"and ip, %r0, #-8\n"	/* sp must be 8-byte aligned in the callee	*/
++		"mov sp, ip\n"
++		"bl  _start_c\n"	/* transfer to c runtime			*/
+ 	);
+ 	__builtin_unreachable();
+ }
 -- 
 2.25.1
+
 
