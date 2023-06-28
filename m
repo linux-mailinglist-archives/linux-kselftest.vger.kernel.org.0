@@ -2,92 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68FE7415D9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 17:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F5C74165F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 18:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbjF1P4l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jun 2023 11:56:41 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:36384 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjF1P4k (ORCPT
+        id S232067AbjF1Q2u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jun 2023 12:28:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54522 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231876AbjF1Q2Z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:56:40 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Wed, 28 Jun 2023 12:28:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687969663;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=p4aTkijo2VWCdZMtA0JJ02vptyXjYA3s/Z8Gy0bvVn8=;
+        b=XbYxVrMBKEIjeN2VAS9s5VpAlnOlDb24qo4SI53QDC3TyUPuMPdSe0zNvS7Pq3AyHfsitw
+        VwSGTCuqdHsK+KVKcfo4epkUfFts+FZbwTLDx3/6p6gglvPPyavV3B4h5wYVE8tzD4/RSZ
+        kPC/ohDJmPltJ2gV+oA88CWxmlCc36I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-356-X7Ch1nZpM4O91x4npQ86Bg-1; Wed, 28 Jun 2023 12:27:40 -0400
+X-MC-Unique: X7Ch1nZpM4O91x4npQ86Bg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8FD96129B
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 15:56:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 492A7C433C8;
-        Wed, 28 Jun 2023 15:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687967799;
-        bh=G//ijS5G5PZHTk01cf4pUdRuLZqF8Qw9qSwmJRa3N0I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ONqcLawx86QMgSRremu7C4N5VPBWKb+JVqd8SDMcqB+5I2dX3u5F5dF8OMXb3GGFY
-         ad73V24/5CSg+38eXicci5A//5sVorqsY35G55jAcROQ8+LaQE9uek7pORl+l8Lwp2
-         QF5wBbszaIfX1EHsI0Kb+6Q5tV4oElB/XTPmTl8dn9nEzVkgeUJMAHPk4/5cqWNUId
-         VCXLEBGaXXUexKXGuJ0S8pKFHJP84z+nVvoEZOuXRRzwNWt7MtBpBGwRmtpoDVPJ0i
-         lnP4eRxM1VkWWS7EGsiivH+HUePKfI4g0ilnVVjl7Nq3lRGCjLdXmA/4fYvGKR53BA
-         RyTI3/NJ43alA==
-Date:   Wed, 28 Jun 2023 16:56:35 +0100
-From:   Will Deacon <will@kernel.org>
-To:     broonie@kernel.org
-Cc:     catalin.marinas@arm.com, shuah@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E3FA63814958;
+        Wed, 28 Jun 2023 16:27:15 +0000 (UTC)
+Received: from RHTPC1VM0NT.lan (unknown [10.22.32.232])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 63A0B40BB4D;
+        Wed, 28 Jun 2023 16:27:15 +0000 (UTC)
+From:   Aaron Conole <aconole@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     dev@openvswitch.org, Pravin Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Ilya Maximets <i.maximets@ovn.org>, shuah@kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: SSVE selftests failing unexpectedly
-Message-ID: <20230628155633.GA22275@willie-the-truck>
+Subject: [PATCH net-next 0/4] selftests: openvswitch: add flow programming cases
+Date:   Wed, 28 Jun 2023 12:27:10 -0400
+Message-Id: <20230628162714.392047-1-aconole@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Mark,
+The openvswitch selftests currently contain a few cases for managing the
+datapath, which includes creating datapath instances, adding interfaces,
+and doing some basic feature / upcall tests.  This is useful to validate
+the control path.
 
-While debugging the SME issue reported in CI, I noticed that the
-streaming SVE tests are failing on the fastmodel because of an
-unexpected SIGILL. For example:
+Add the ability to program some of the more common flows with actions. This
+can be improved overtime to include regression testing, etc.
 
-will:arm64/signal$ ./ssve_za_regs
-# Streaming SVE registers :: Check that we get the right Streaming SVE registers reported
-Registered handlers for all signals.
-Detected MINSTKSIGSZ:4720
-Required Features: [ SME ] supported
-Incompatible Features: [] absent
-Testcase initialized.
-Testing VL 64
--- RX UNEXPECTED SIGNAL: 4
-==>> completed. FAIL(0)
+Aaron Conole (4):
+  selftests: openvswitch: add an initial flow programming case
+  selftests: openvswitch: add a test for ipv4 forwarding
+  selftests: openvswitch: add basic ct test case parsing
+  selftests: openvswitch: add ct-nat test case with ipv4
 
-The signal is injected because we get an SME trap due to an fpsimd, sve
-or sve2 instruction being used in streaming mode (ESR is 0x76000001).
+ .../selftests/net/openvswitch/openvswitch.sh  | 223 ++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 507 ++++++++++++++++++
+ 2 files changed, 730 insertions(+)
 
-I did a bit of digging and it looks like this is my libc using a vector
-DUP instruction in memset:
+-- 
+2.40.1
 
-#0  __memset_generic () at ../sysdeps/aarch64/memset.S:37
-#1  0x0000aaaaaaaa1170 in get_current_context (dest_sz=131072,
-    dest_uc=0xaaaaaeab6ba0 <context>, td=0xaaaaaaab50f0 <tde>)
-    at ./test_signals_utils.h:69
-#2  do_one_sme_vl (si=<optimized out>, uc=<optimized out>, vl=64,
-    td=0xaaaaaaab50f0 <tde>) at testcases/ssve_za_regs.c:90
-#3  sme_regs (td=0xaaaaaaab50f0 <tde>, si=<optimized out>, uc=<optimized out>)
-    at testcases/ssve_za_regs.c:145
-#4  0x0000aaaaaaaa0ed0 in main (argc=<optimized out>, argv=<optimized out>)
-    at test_signals.c:21
-
-Dump of assembler code for function __memset_generic:
-=> 0x0000fffff7edfb00 <+0>:	dup	v0.16b, w1
-
-The easy option would be to require FA64 for these tests, but I guess it
-would be better to exit streaming mode.
-
-Please can you have a look?
-
-Thanks,
-
-Will
