@@ -2,175 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644367407AB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 03:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0CB740805
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 04:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjF1BgX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Jun 2023 21:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
+        id S229763AbjF1CBP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Jun 2023 22:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjF1BgW (ORCPT
+        with ESMTP id S230353AbjF1CBO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jun 2023 21:36:22 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67034198A
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 18:36:20 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-4007b5bafceso83061cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 18:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687916179; x=1690508179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=76q3czNHBGF97J8zUfgBzI1kFFF4VkjgowoEBA/iOwY=;
-        b=y26X29gqmEGqKXrFtZryTyXDzQ9ewY6D9loFvzylkwQasUaA3rhMju6tAIXM45FOCP
-         EiMe0MCGmWBUFKrsCbSYBusOLFWu0jf2ch1nvHU2ezj0YlibSSfCAj3pkfhCVHzE1K7H
-         Z7NtUDgJupEmpBLcz2JwUP0Ew4wYs1sF5cUDLma1QWvlN3N/adRlgN+tfnFyRaGsxpnh
-         SbXxUiJzn2QLtTTP3iL+pFTRkz2lk8L1MKva4dy/j5S7MgRwhh1nEATI68dFDXZfdONG
-         FhiCx9DGJTIiGbbLlNXJi17Unkk3M74ZWytzQwiWvh1eVm0Sq9lBTa4tZoll5SdOHuaw
-         8eCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687916179; x=1690508179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=76q3czNHBGF97J8zUfgBzI1kFFF4VkjgowoEBA/iOwY=;
-        b=koCn3Ae9Wd9oqXJJm2B9JCreZzYCPL9ZblSbfZaL818zXXWjWel4WPbecTxDaD7rg1
-         0av2APvSOfTLHOkKS5SOX2YTklJSeA7LydbgwRWUG3NkHfW90srTJdyL1FtZceEChri/
-         v9pcMrGN+GgGDOIPczKcBynR4jSa4GSfoo6cKEgLap1OV/Vhz3PBvNGDb9HHmZQ+oKNq
-         3jh9ROY0lAiDfcOyQHPsbxmrIsBy/nlB9kTU83ECKLjvQmPCiXjIUZi67CuWllEFkgGD
-         eGTRnN1Cj9uZeVapY2/iMvPY+n9JfPPNmKts3qQiIT3o4Y+dLyyKHc3Qd2dZXDG8nTid
-         lquw==
-X-Gm-Message-State: AC+VfDxBeKM0+fwH8hOCqgRYUC0bIODhf9a5Atxih2Y68ivc+EuZtT3f
-        5yd7kpLy1hkItnefnhVuSGZn2J9NO0zh4CHU1seTKQ==
-X-Google-Smtp-Source: ACHHUZ7sVzuwnmV3HryX+9qLq3qI6jRIEjo2b86t4SeBiyuoth4UHt8vts7j6aJsIac12Y3Yp0QqGwhzwhLl3ASLDT8=
-X-Received: by 2002:ac8:5710:0:b0:3ef:343b:fe7e with SMTP id
- 16-20020ac85710000000b003ef343bfe7emr130387qtw.2.1687916179378; Tue, 27 Jun
- 2023 18:36:19 -0700 (PDT)
+        Tue, 27 Jun 2023 22:01:14 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7092D72;
+        Tue, 27 Jun 2023 19:01:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687917663; x=1719453663;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Afn3yy/9SE/0j1yHY5f7D7/VKnZeVp+lwaI9bNljNsk=;
+  b=RYLjV4HkjMp08v+YdskhqCzAt9/GDRZVhO15PGAaJ8fsc+WDGuFOpIIC
+   6UGcSj94RSHHD3t/hZG1P4stGFi3Zzda6nQEaEA+6Y3U3S2104Fhi/ioH
+   2lkaRjTI8MXVc3umxEIzPcZ3B+UyRca/HewrZ1NI6FPMQ18IhmQ+hL9O7
+   mh/gI+hRQgXVsrvD+P5B0du/tvvtPKZC4a3xfDD1GiZkppff0QADYGEXf
+   5HVAscWtsSH2R1ATzv/8n7VDDRgTJ1t78mQgj5QnOlaIPQM9WE5e3TBm7
+   r5tBhxU/uGXTH2lYwhxeiNtYzYVxyvNIOjDpia/FhhQFMmfjuvQKS3JRO
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="365182908"
+X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
+   d="scan'208";a="365182908"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 19:01:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="710860419"
+X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
+   d="scan'208";a="710860419"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.175.150]) ([10.249.175.150])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 19:00:58 -0700
+Message-ID: <26b97776-7ce5-51f6-77b7-0ce837aa7cca@linux.intel.com>
+Date:   Wed, 28 Jun 2023 10:00:56 +0800
 MIME-Version: 1.0
-References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
- <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
- <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
- <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
- <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com> <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
- <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Tue, 27 Jun 2023 18:36:07 -0700
-Message-ID: <CAAH4kHY1-N+HOxPON6SuXE3QPowAGnwTjc5H=ZnNZwh7a+msnQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation feature
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        dhowells@redhat.com, brijesh.singh@amd.com, atishp@rivosinc.com,
-        gregkh@linuxfoundation.org, linux-coco@lists.linux.dev,
-        joey.gouly@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     baolu.lu@linux.intel.com, Nicolin Chen <nicolinc@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+ <ZHZFi28jRxeZMKK3@Asurada-Nvidia>
+ <a8ccbac8-c456-d116-24a2-7503ccbb720c@linux.intel.com>
+ <ZJnZ7bEIZHsqmyAG@ziepe.ca>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZJnZ7bEIZHsqmyAG@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 5:13=E2=80=AFPM Dan Williams <dan.j.williams@intel.=
-com> wrote:
-> [..]
-> >
-> > The VMPL-based separation that will house the supervisor module known
-> > as SVSM can have protocols that implement a TPM command interface, or
-> > an RTMR-extension interface, and will also need to have an
-> > SVSM-specific protocol attestation report format to keep the secure
-> > chain of custody apparent. We'd have different formats and protocols
-> > in the kernel, at least, to speak to each technology.
->
-> That's where I hope the line can be drawn, i.e. that all of this vendor
-> differentiation really only matters inside the kernel in the end.
->
-> > I'm not sure it's worth the trouble of papering over all the... 3-4
-> > technologies with similar but still weirdly different formats and ways
-> > of doing things with an abstracted attestation ABI, especially since
-> > the output all has to be interpreted in an architecture-specific way
-> > anyway.
->
-> This is where I need help. Can you identify where the following
-> assertion falls over:
->
-> "The minimum viable key-server is one that can generically validate a
-> blob with an ECDSA signature".
->
-> I.e. the fact that SEV and TDX send different length blobs is less
-> important than validating that signature.
->
-> If it is always the case that specific fields in the blob need to be
-> decoded then yes, that weakens the assertion. However, maybe that means
-> that kernel code parses the blob and conveys that parsed info along with
-> vendor attestation payload all signed by a Linux key. I.e. still allow
-> for a unified output format + signed vendor blob and provide a path to
-> keep all the vendor specific handling internal to the kernel.
->
+On 2023/6/27 2:33, Jason Gunthorpe wrote:
+> On Sun, Jun 25, 2023 at 02:30:46PM +0800, Baolu Lu wrote:
+> 
+>> Agreed. We should avoid workqueue in sva iopf framework. Perhaps we
+>> could go ahead with below code? It will be registered to device with
+>> iommu_register_device_fault_handler() in IOMMU_DEV_FEAT_IOPF enabling
+>> path. Un-registering in the disable path of cause.
+> 
+> This maze needs to be undone as well.
+> 
+> It makes no sense that all the drivers are calling
+> 
+>   iommu_register_device_fault_handler(dev, iommu_queue_iopf, dev);
+> 
+> The driver should RX a PRI fault and deliver it to some core code
+> function, this looks like a good start:
+> 
+>> static int io_pgfault_handler(struct iommu_fault *fault, void *cookie)
+>> {
+>>          ioasid_t pasid = fault->prm.pasid;
+>>          struct device *dev = cookie;
+>>          struct iommu_domain *domain;
+>>
+>>          if (fault->type != IOMMU_FAULT_PAGE_REQ)
+>>                  return -EOPNOTSUPP;
+>>
+>>          if (fault->prm.flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID)
+>>                  domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
+>>          else
+>>                  domain = iommu_get_domain_for_dev(dev);
+>>
+>>          if (!domain || !domain->iopf_handler)
+>>                  return -ENODEV;
+>>
+>>          if (domain->type == IOMMU_DOMAIN_SVA)
+>>                  return iommu_queue_iopf(fault, cookie);
+>>
+>>          return domain->iopf_handler(fault, dev, domain->fault_data);
+> 
+> Then we find the domain that owns the translation and invoke its
+> domain->ops->iopf_handler()
 
-All the specific fields of the blob have to be decoded and subjected
-to an acceptance policy. That policy will most always be different
-across different platforms and VM owners. I wrote all of
-github.com/google/go-sev-guest, including the verification and
-validation logic, and it's going to get more complicated, and the
-sources of the data that provide validators with notions of what
-values can be trusted will be varied. The formats are not
-standardized. The Confidential Computing Consortium should be working
-toward that, but it's a slow process. There's IETF RATS. There's
-in-toto.io attestations. There's Azure's JWT thing. There's a signed
-serialized protocol buffer that I've decided is what Google is going
-to produce while we figure out all the "right" formats to use. There
-will be factions and absolute gridlock for multiple years if we
-require solidifying an abstraction for the kernel to manage all this
-logic before passing a report on to user space.
+Agreed. The iommu_register_device_fault_handler() could only be called
+by the device drivers who want to handle the DMA faults and IO page
+faults by themselves in any special ways.
 
-Now, not only are the field contents important, the certificates of
-the keys that signed the report are important. Each platform has its
-own special x509v3 extensions and key hierarchy to express what parts
-of the report should be what value if signed by this key, and in TDX's
-case there are extra endpoints that you need to query to determine if
-there's an active CVE on the associated TCB version. This is how they
-avoid adding every cpu's key to the leaf certificate's CRL.
+By default, the faults should be dispatched to domain->iopf_handler in a
+generic core code.
 
-You really shouldn't be putting attestation validation logic in the
-kernel. It belongs outside of the VM entirely with the party that will
-only release access keys to the VM if it can prove it's running the
-software it claims, on the platform it claims. I think Windows puts a
-remote procedure call in their guest attestation driver to the Azure
-attestation service, and that is an anti-pattern in my mind.
+> 
+> If the driver created a SVA domain then the op should point to some
+> generic 'handle sva fault' function. There shouldn't be weird SVA
+> stuff in the core code.
+> 
+> The weird SVA stuff is really just a generic per-device workqueue
+> dispatcher, so if we think that is valuable then it should be
+> integrated into the iommu_domain (domain->ops->use_iopf_workqueue =
+> true for instance). Then it could route the fault through the
+> workqueue and still invoke domain->ops->iopf_handler.
+> 
+> The word "SVA" should not appear in any of this.
 
-> > ARM's Confidential Computing Realm Management Extensions (RME) seems
-> > to be going along the lines of a runtime measurement register model
-> > with their hardware enforced security. The number of registers isn't
-> > prescribed in the spec.
-> >
-> > +Joey Gouly +linux-coco@lists.linux.dev as far as RME is concerned, do
-> > you know who would be best to weigh in on this discussion of a unified
-> > attestation model?
+Yes. We should make it generic. The domain->use_iopf_workqueue flag
+denotes that the page faults of a fault group should be put together and
+then be handled and responded in a workqueue. Otherwise, the page fault
+is dispatched to domain->iopf_handler directly.
 
+> 
+> Not sure what iommu_register_device_fault_handler() has to do with all
+> of this.. Setting up the dev_iommu stuff to allow for the workqueue
+> should happen dynamically during domain attach, ideally in the core
+> code before calling to the driver.
 
+There are two pointers under struct dev_iommu for fault handling.
 
---=20
--Dionna Glaze, PhD (she/her)
+/**
+  * struct dev_iommu - Collection of per-device IOMMU data
+  *
+  * @fault_param: IOMMU detected device fault reporting data
+  * @iopf_param:  I/O Page Fault queue and data
+
+[...]
+
+struct dev_iommu {
+         struct mutex lock;
+         struct iommu_fault_param        *fault_param;
+         struct iopf_device_param        *iopf_param;
+
+My understanding is that @fault_param is a place holder for generic
+things, while @iopf_param is workqueue specific. Perhaps we could make
+@fault_param static and initialize it during iommu device_probe, as
+IOMMU fault is generic on every device managed by an IOMMU.
+
+@iopf_param could be allocated on demand. (perhaps renaming it to a more
+meaningful one?) It happens before a domain with use_iopf_workqueue flag
+set attaches to a device. iopf_param keeps alive until device_release.
+
+> 
+> Also, I can understand there is a need to turn on PRI support really
+> early, and it can make sense to have some IOMMU_DEV_FEAT_IOPF/SVA to
+> ask to turn it on.. But that should really only be needed if the HW
+> cannot turn it on dynamically during domain attach of a PRI enabled
+> domain.
+> 
+> It needs cleaning up..
+
+Yes. I can put this and other cleanup things that we've discussed in a
+preparation series and send it out for review after the next rc1 is
+released.
+
+> 
+> Jason
+
+Best regards,
+baolu
