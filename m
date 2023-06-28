@@ -2,183 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B46740C6D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 11:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC9F740B9E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 10:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234888AbjF1JI5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jun 2023 05:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233582AbjF1Itw (ORCPT
+        id S234875AbjF1IeG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jun 2023 04:34:06 -0400
+Received: from madras.collabora.co.uk ([46.235.227.172]:32772 "EHLO
+        madras.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235465AbjF1Ibj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:49:52 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8BD3A9B;
-        Wed, 28 Jun 2023 01:42:34 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fb863edcb6so2505011e87.0;
-        Wed, 28 Jun 2023 01:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687941753; x=1690533753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g54qKoeGjWz5wLaqSLQFYfEyGEtCRjTvx7zRiV5BneY=;
-        b=E5/fD6H+BE8e9eM4PW7j8lCTlWH1PJ6wKXBMhLgltNdLZtqhif+dAU6ErCt6xjnO2n
-         blrxZo+o+h9is0Kh3DBqUvRvELDuNGekKV5hEsI3Tm/WeNqOKlEs20l7VWWqw+0nAAnL
-         grS2UbVE9shuMYKdnuHK/3brcfz1oL9AeIqadZ5dFzddSUGtW2zKVrtvqJPyxJtokQVk
-         Hye0cd/ZwA+C20D7/S90adg5AzJhKMqaea+Ra7TKT48x1UhuQVFyTCzUcrS681LR40Aw
-         KG9+s5ZS+kRGfIZsdryvSB1COUaadyrYFTciLbGp3kZYPwYR+cxE6knYrMqPlheuRkYv
-         WQRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687941753; x=1690533753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g54qKoeGjWz5wLaqSLQFYfEyGEtCRjTvx7zRiV5BneY=;
-        b=LDH6PIcZARUi+vznjMPioFXwrkBuJLmb5e9sQry8G3BCWJhqheaDa51CcQOpfZwMq+
-         onSfvUSJt5DO+2JpzdQpa6ORrqy2jm5vsA7FUGkOtYqiQ9AA0ecj9J20w7Qfav2qLg67
-         4Xo1HGN3e0buKr6+KRzCURColgqiUe+Mxs15Hbdli0L0VQ2rcHXbJDgo+u8mKj9t9+NB
-         7OBgflMGhKJV2w7awuHDYKI8aL4DuzFgUQ2IRSjtVYzDGMbH01tEDBC1X4jNtBjasY0w
-         fpCey9IHFYHVuQgzalLoFr3/hV1Wa+l0eoxkLiAKyO/IjUeLFuAhS3TiAzNdhHyAI7K0
-         TXlQ==
-X-Gm-Message-State: AC+VfDzuemng+0yn6bTQXoowj4hkZrXPjX0WVzfWXLLADe4kVJq0zaBD
-        uGLH/oYT9EwONjoWZ69K15iAafr1wXb7hZrQhb2C+g+V
-X-Google-Smtp-Source: ACHHUZ7VQCn+YpLvmFmYlf+FOQl2niELacwE4Dcgqiq8I8RkRNKRsyCtVuMehnHMGr1vYCdhl+c2sAGOLh6Bb/4fwYA=
-X-Received: by 2002:a05:651c:8f:b0:2b6:a17b:a120 with SMTP id
- 15-20020a05651c008f00b002b6a17ba120mr5672641ljq.22.1687932068929; Tue, 27 Jun
- 2023 23:01:08 -0700 (PDT)
+        Wed, 28 Jun 2023 04:31:39 -0400
+Received: from [192.168.10.54] (unknown [182.179.162.32])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 52947660716D;
+        Wed, 28 Jun 2023 07:03:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687932238;
+        bh=Mnlsggp9LUoS8ve7lv1HuoaS0bmkESWlf5OUJi5Yvkg=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=mtwgShxLJXCcwEam7M0PfR4SvBpDh8abUYPjYTamu74SIzmR2joyzzavKdoArvNuB
+         nRSob2PXk934h4fvu2vLMtqfmEH257l2n5sSuLNTcht9AjHnEBIEA4X9b2iD7s6Kdp
+         oyLtdDgOsFk1pwIGepOZCkT0WiuzwivKJVDQ1pZ9WzWzytIRWyhufS6hgn6UVTSys+
+         iwH9DPNXEw6t5FZ1bKlSPXEBxg3jTg4miZptd7d63NVeFHuLTYhcpLhpS84vbUnX0w
+         IlsCZCstDQQ+LinINZe5gE5lY2Il64nYqc4HtIPtZludnhDTh9+qzMIbtaBDMR836V
+         y2vShbeIgCJvQ==
+Message-ID: <bbba2568-2b40-d2ef-0622-47cd21c95fec@collabora.com>
+Date:   Wed, 28 Jun 2023 11:03:46 +0500
 MIME-Version: 1.0
-References: <cover.1687515463.git.haibo1.xu@intel.com> <47f0502d076c071260a87953cbabadfc85d278cf.1687515463.git.haibo1.xu@intel.com>
- <20230627-adcb173b3ee813e2e16353bd@orel>
-In-Reply-To: <20230627-adcb173b3ee813e2e16353bd@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Wed, 28 Jun 2023 14:00:57 +0800
-Message-ID: <CAJve8onuBoOOOL4yp3wTTsBMqxf4MZL6uUjgMBjUmWsTO61A2g@mail.gmail.com>
-Subject: Re: [PATCH v4 09/12] KVM: selftests: Only do get/set tests on present
- blessed list
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v21 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>
+References: <20230626113156.1274521-1-usama.anjum@collabora.com>
+ <20230626113156.1274521-3-usama.anjum@collabora.com>
+ <ZJo/gOnTmwEQPLF8@gmail.com>
+ <13ea54c0-25a3-285c-f47e-d6da11c91795@collabora.com>
+ <CABb0KFGn=3oAYa+wsf=iWr1Ss=en9+m11JOijEibXJLFDAkvjQ@mail.gmail.com>
+ <6ac9c60e-0a6b-110a-cace-97afbd9708a0@collabora.com>
+ <CABb0KFH60U5RE9dLfCOEGp5=wLwwxpKaMdzQL8drYEmL3T_itw@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFH60U5RE9dLfCOEGp5=wLwwxpKaMdzQL8drYEmL3T_itw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 5:11=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
-om> wrote:
->
-> On Fri, Jun 23, 2023 at 06:40:11PM +0800, Haibo Xu wrote:
-> > Only do the get/set tests on present and blessed registers
-> > since we don't know the capabilities of any new ones.
-> >
-> > Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > ---
-> >  tools/testing/selftests/kvm/get-reg-list.c | 29 ++++++++++++++--------
-> >  1 file changed, 18 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing=
-/selftests/kvm/get-reg-list.c
-> > index b956ee410996..3beb6b62de0a 100644
-> > --- a/tools/testing/selftests/kvm/get-reg-list.c
-> > +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> > @@ -52,6 +52,10 @@ extern int vcpu_configs_n;
-> >       for_each_reg_filtered(i)                                         =
-       \
-> >               if (!find_reg(blessed_reg, blessed_n, reg_list->reg[i]))
-> >
-> > +#define for_each_present_blessed_reg(i)                      \
-> > +     for ((i) =3D 0; (i) < blessed_n; ++(i))           \
-> > +             if (find_reg(reg_list->reg, reg_list->n, blessed_reg[i]))
-> > +
-> >  static const char *config_name(struct vcpu_reg_list *c)
-> >  {
-> >       struct vcpu_reg_sublist *s;
-> > @@ -189,6 +193,16 @@ static void run_test(struct vcpu_reg_list *c)
-> >               return;
-> >       }
-> >
-> > +     for_each_sublist(c, s)
-> > +             blessed_n +=3D s->regs_n;
-> > +     blessed_reg =3D calloc(blessed_n, sizeof(__u64));
-> > +
-> > +     n =3D 0;
-> > +     for_each_sublist(c, s) {
-> > +             for (i =3D 0; i < s->regs_n; ++i)
-> > +                     blessed_reg[n++] =3D s->regs[i];
-> > +     }
-> > +
-> >       /*
-> >        * We only test that we can get the register and then write back =
-the
-> >        * same value. Some registers may allow other values to be writte=
-n
-> > @@ -198,8 +212,11 @@ static void run_test(struct vcpu_reg_list *c)
-> >        * be written need to have the other values tested, then we shoul=
-d
-> >        * create a new set of tests for those in a new independent test
-> >        * executable.
-> > +      *
-> > +      * Only do the get/set tests on present, blessed list registers,
-> > +      * since we don't know the capabilities of any new registers.
-> >        */
-> > -     for_each_reg(i) {
-> > +     for_each_present_blessed_reg(i) {
-> >               uint8_t addr[2048 / 8];
-> >               struct kvm_one_reg reg =3D {
-> >                       .id =3D reg_list->reg[i],
-> > @@ -242,16 +259,6 @@ static void run_test(struct vcpu_reg_list *c)
-> >               }
-> >       }
-> >
-> > -     for_each_sublist(c, s)
-> > -             blessed_n +=3D s->regs_n;
-> > -     blessed_reg =3D calloc(blessed_n, sizeof(__u64));
-> > -
-> > -     n =3D 0;
-> > -     for_each_sublist(c, s) {
-> > -             for (i =3D 0; i < s->regs_n; ++i)
-> > -                     blessed_reg[n++] =3D s->regs[i];
-> > -     }
-> > -
-> >       for_each_new_reg(i)
-> >               ++new_regs;
-> >
-> > --
-> > 2.34.1
-> >
->
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
->
-> Thanks,
-> drew
+On 6/28/23 12:54 AM, Michał Mirosław wrote:
+> On Tue, 27 Jun 2023 at 21:20, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>> Thanks Michał for replying.
+>>
+>> On 6/27/23 11:52 PM, Michał Mirosław wrote:
+>>> On Tue, 27 Jun 2023 at 11:00, Muhammad Usama Anjum
+>>> <usama.anjum@collabora.com> wrote:
+>>>>
+>>>> Hi Andrei and Michal,
+>>>>
+>>>> Lets resolve last two points. Please reply below.
+>>>>
+>>>> On 6/27/23 6:46 AM, Andrei Vagin wrote:
+>>> [...]
+>>>>> And we need to report an address where it stopped scanning.
+>>>>> We can do that by adding zero length vector.
+>>>> I don't want to do multiplexing the ending address in vec. Can we add
+>>>> end_addr variable in struct pm_scan_arg to always return the ending address?
+>>>>
+>>>> struct pm_scan_arg {
+>>>>         ...
+>>>>         _u64 end_addr;
+>>>> };
+>>>
+>>> The idea to emit a zero-length entry for the end looks nice. This has
+>>> the disadvantage that we'd need to either reserve one entry for the
+>>> ending marker or stop the walk after the last entry is no longer
+>>> matching.
+>> This is ambiguous.
+> 
+> Can you explain? Both solutions would allow to return the restart
+> point back to the caller (the second one would need to stop the walk
+> as soon as the matching page range finishes -- that creates
+> discontinuity).
+> 
+>>> Another solution would be to rewrite 'start' and 'len'. The caller
+>>> would be forced to use non-const `pm_scan_arg`, but I expect the `vec`
+>>> pointer would normally be written anyway (unless using only a
+>>> statically-allocated buffer).
+>>> Also, if the 'len' is replaced with 'end' that would make the ioctl
+>>> easily restartable (just call again if start != end).
+>> Nice idea. But returning ending address in len seems a bit strange.
+> 
+> I mean that it would update `start` = start value for next call' and
+> `len` = `len` - (new `start` - original `start`).
+> 
+> By replacing `len` I meant to remove the field and add `end` instead
+> to make the requested range use begin .. end (iterator range) style
+> instead of start + len (buffer and length). In this version you only
+> need to update `start` (or `begin` if you prefer).
+The `start` and `end` with updating the `start` with ending address seems
+most appropriate. I'll make updates.
 
-Thanks for the review!
+> 
+> Best Regards
+> Michał Mirosław
+
+-- 
+BR,
+Muhammad Usama Anjum
