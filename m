@@ -2,206 +2,645 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA6E74103F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 13:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1120E7410C4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 14:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjF1LnM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jun 2023 07:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
+        id S229953AbjF1MLf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jun 2023 08:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjF1LnL (ORCPT
+        with ESMTP id S231163AbjF1MLe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:43:11 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AC51FE0;
-        Wed, 28 Jun 2023 04:43:08 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 14827C020; Wed, 28 Jun 2023 13:43:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1687952587; bh=0WN8XsDGTRKDo6/ITLTj6m/cxiiek/G6u+FK4mhH5tw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gx4AJQyPcZtb7aI/TykWXoADzXo4bdOvVJjyQ+Cb7zPtfJwZrSDLZM/q7usRdrtog
-         FGQX2XjDpmyFls+QpV1tjeFplk/f8Mv2PypH+kgQmluS++wWM1Jk4xsG910vpF0ZHb
-         xfyxxB9Z51Yf4vzbEc5VpkGfigeF4+jr6nxREoQHxJJZFxpjkqAsLaHlkgm6Taefk3
-         05a9qf1lIsr0F9cQ+whwGIEyGAArCfDuQ2P2wRagOTsl2P2GEVE+7mLi78tGHI45XZ
-         kyhynML2tCWVqI7OKmGe+VDvEJlBRMR1LKHmoJXqT+9CZtBGCmtFHeAmY7YZlf3LW/
-         sBrJCnU4VSiGg==
+        Wed, 28 Jun 2023 08:11:34 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53DD198A
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 05:11:31 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51d9372f027so7938a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 05:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687954290; x=1690546290;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UNXTPDJB5CpnMgt6rGIwJeKZjT4x0Rxov8xUzzmlTws=;
+        b=WFy6axvcBv3bCNA0VcoOJEBekL0sUM3N2Y2egppYSbC1B+mmIh7LES7ZaNE1gMltfs
+         9xtYcQOJ9TyKasoA6t5TEP3C4GZjBauun4+eIIa871OpoZBv1D/h4Z673oQHEYGP5bxx
+         5Dnu8lPfRD/Uwc9YAPeB1gQEL7JEmetJKZvnfK5WBSKcC+aFCU6a4nogVffyZOkKEuYP
+         fLi40hXOK+bz8OUGuxjUyG3n0lRhhRZ4AsjPN0Pz2LBoXdtvCffQhOH3n3Fsml1PKMZ/
+         eFXtY4ONRam95hp8mtrYMRT6WLIGZ9vh2x5I6tN9yuvN67kS1d6m2AWzlxT0rRqdzeIA
+         2Uvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687954290; x=1690546290;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UNXTPDJB5CpnMgt6rGIwJeKZjT4x0Rxov8xUzzmlTws=;
+        b=enaTVB5pXgOagC0t+suexueM5LxD/PILWcjpqeb6EcfbK/E9cj6iQdfoChG2sicyHq
+         zKtLFSIpUs2vqyMyVm0n2nKr9jOCkoV/47tA/6isiIiA37PXWFHp/gWaj9rZrVM07Bjt
+         THLboPX5aahn5KYzomvei2BI994Ro+9a+JqoyrDI0fc203VTVAamIqBiA8ErO1AMDYyR
+         fGaHazBYzIytfq+mdY9ZDTYJglqiQXIXR/e9ImfsbwWQY2AN7ibeIacabCKwRVfSPUWL
+         t2lo3ZM1uHYRNns8f1jsrA1lvsOMcDBTMuTRa93mpqO0S/wypd/w1rH7N0/oZMXJtcby
+         l89g==
+X-Gm-Message-State: AC+VfDwng7EssWLv1R0iVfXQoJ4eiB+Q09s7nKObE58T2t4RZ60Ajq4Z
+        bH+onXneJ/8/Zj7QvrDcaizAOUNg6ESvl9/ThMOyOQ==
+X-Google-Smtp-Source: ACHHUZ6gVMTgjtIoabwzoE1KE+hoRrErAg0blSPeruJW2jzhVVbS1x40psPJxeg4RmOQg7av9OAXNhYR1uSpwHt4pgY=
+X-Received: by 2002:a50:c014:0:b0:51a:1ffd:10e with SMTP id
+ r20-20020a50c014000000b0051a1ffd010emr45571edb.3.1687954289961; Wed, 28 Jun
+ 2023 05:11:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230628095426.1886064-1-usama.anjum@collabora.com> <20230628095426.1886064-3-usama.anjum@collabora.com>
+In-Reply-To: <20230628095426.1886064-3-usama.anjum@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Wed, 28 Jun 2023 14:11:18 +0200
+Message-ID: <CABb0KFFDCZ9E3sTukmdk3jViOJmP33xOoVNg37ACoynD97ZpwA@mail.gmail.com>
+Subject: Re: [PATCH v22 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 28BC5C009;
-        Wed, 28 Jun 2023 13:43:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1687952585; bh=0WN8XsDGTRKDo6/ITLTj6m/cxiiek/G6u+FK4mhH5tw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jvZ0TWI1KCV5Hc+MvIv/ZKAp0wL4fpBdccuM0cFUe0TFf+X6gYr9CDJd7QsRqmqG4
-         4YgnIfYF0sW7oFSn/jDjP6Uxo6MeXPqmEfiA1NPx2a4J4w2yM8x7NuuoZflv9h/9Y4
-         7p7dxCWhVcETdtOmMvlK7vbu32Umo3+ITlWpJzuvDeOmVrp+gAI/H2+RyVb8DbqCvN
-         e2BI3hh2HsD88feDgPMaHDYDcp+8hf6rETpXY9DD5JU77lb88PlAYN9u9cSjhLD0xb
-         RpjCi4BTEZ8N3Hkf8CmGuIOm7SEN6m26emULCkRXfrotBmD9pC5dBc1IYAax/a0P6V
-         aGEE7u5dhH38Q==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id f3a75d01;
-        Wed, 28 Jun 2023 11:42:56 +0000 (UTC)
-Date:   Wed, 28 Jun 2023 20:42:41 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     jeffxu@chromium.org
-Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
-        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v8 3/5] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-Message-ID: <ZJwcsU0vI-nzgOB_@codewreck.org>
-References: <20221215001205.51969-1-jeffxu@google.com>
- <20221215001205.51969-4-jeffxu@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221215001205.51969-4-jeffxu@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-jeffxu@chromium.org wrote on Thu, Dec 15, 2022 at 12:12:03AM +0000:
-> From: Jeff Xu <jeffxu@google.com>
-> 
-> The new MFD_NOEXEC_SEAL and MFD_EXEC flags allows application to
-> set executable bit at creation time (memfd_create).
-> 
-> When MFD_NOEXEC_SEAL is set, memfd is created without executable bit
-> (mode:0666), and sealed with F_SEAL_EXEC, so it can't be chmod to
-> be executable (mode: 0777) after creation.
-> 
-> when MFD_EXEC flag is set, memfd is created with executable bit
-> (mode:0777), this is the same as the old behavior of memfd_create.
-> 
-> The new pid namespaced sysctl vm.memfd_noexec has 3 values:
-> 0: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
->         MFD_EXEC was set.
-> 1: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
->         MFD_NOEXEC_SEAL was set.
-> 2: memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+Hi Muhammad,
 
-So, erm, I'm a bit late to the party but I was just looking at a way of
-blocking memfd_create+exec in a container and this sounded perfect: my
-reading is that this is a security feature meant to be set for
-container's namespaces that'd totally disable something like
-memfd_create followed by fexecve (because we don't want weird binaries
-coming from who knows where to be executed on a shiny secure system),
-but. . . is this actually supposed to work?
-(see below)
+I'd really like to reduce the number of conditionals in this code by a
+third. I believe it is possible if we agree to rework the API a bit
+(making it always a GET operation with optional WP) and relax some of
+the restrictions on the input values.
 
-> [...]
-> --- a/mm/memfd.c
-> +++ b/mm/memfd.c
-> @@ -263,12 +264,14 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg)
->  #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
->  #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
->  
-> -#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
-> +#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB | MFD_NOEXEC_SEAL | MFD_EXEC)
->  
->  SYSCALL_DEFINE2(memfd_create,
->  		const char __user *, uname,
->  		unsigned int, flags)
->  {
-> +	char comm[TASK_COMM_LEN];
-> +	struct pid_namespace *ns;
->  	unsigned int *file_seals;
->  	struct file *file;
->  	int fd, error;
-> @@ -285,6 +288,39 @@ SYSCALL_DEFINE2(memfd_create,
->  			return -EINVAL;
->  	}
->  
-> +	/* Invalid if both EXEC and NOEXEC_SEAL are set.*/
-> +	if ((flags & MFD_EXEC) && (flags & MFD_NOEXEC_SEAL))
-> +		return -EINVAL;
+Also please include *all* changes you make in a patch in the changelog
+- I just noticed e.g. a `mmu_notifier` code that I haven't seen before
+in the review.
+
+A general request from me would be to move all the page classification
+code to one place. That would mean replacing:
+
+> +               bitmap =3D PM_SCAN_FLAGS(is_written, false,
+> +                                      pmd_present(*pmd), is_swap_pmd(*pm=
+d),
+> +                                      pmd_present(*pmd) && is_zero_pfn(p=
+md_pfn(*pmd)));
+
+With:
+
+       category_flags =3D pmd_page_category_flags(*pmd);
+
+... and adding a pmd_page_category_flags() and pte/hugepage versions
+together at the top. The idea here is to separate concerns: split
+classification of pages from the code acting on the classification
+results and be able to easily understand (and review for correctness)
+how corresponding classes are derived from PTE and PMD values.
+
+I'd prefer the naming of the functions and variables to follow that it
+is a classification result, not a generic "bitmap" or "flags", so that
+it's harder to confuse them with page flags as used elsewhere in the
+kernel.
+
+(inline review follows)
+
+BTW, thanks for doing this!
+
+On Wed, 28 Jun 2023 at 12:00, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+[...]
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 507cd4e59d07..be747fb89827 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+[...]
+> +#define PM_SCAN_REQUIRE_UFFD   (1ULL << 63)
 > +
-> +	if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
-> +		[code that checks the sysctl]
+> +#define PM_SCAN_FOUND_MAX_PAGES        (1)
+> +#define PM_SCAN_END_WALK       (-256)
+[...]
+> +static int pagemap_scan_test_walk(unsigned long start, unsigned long end=
+,
+> +                                 struct mm_walk *walk)
+> +{
+> +       struct pagemap_scan_private *p =3D walk->private;
+> +       struct vm_area_struct *vma =3D walk->vma;
+> +
+> +       if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_async(v=
+ma) ||
+> +           !userfaultfd_wp_use_markers(vma)))
+> +               return -EPERM;
 
-If flags already has either MFD_EXEC or MFD_NOEXEC_SEAL, you don't check
-the sysctl at all.
+p->vma_can_wp =3D userfaultfd_wp_async(vma) && userfaultfd_wp_use_markers(v=
+ma);
 
-This can be verified easily:
------
-$ cat > memfd_exec.c <<'EOF'
-#define _GNU_SOURCE
+And then use that in classification functions and for skipping WP for
+pages not prepared for that. The PM_SCAN_REQUIRE_UFFD won't be needed
+then.
 
-#include <errno.h>
-#include <stdio.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+> +
+> +       if (vma->vm_flags & VM_PFNMAP)
+> +               return 1;
 
-#ifndef MFD_EXEC
-#define MFD_EXEC                0x0010U
-#endif
+Why do we skip VM_PFNMAP vmas? This will skip over at least VDSO and
+VVAR pages. Those two are not that big a problem, but it should be at
+least documented what ranges are skipped and why.
 
-int main() { 
-    int fd = memfd_create("script", MFD_EXEC);
-    if (fd == -1)l
-        perror("memfd");
-    
-    char prog[] = "#!/bin/sh\necho Ran script\n";
-    if (write(fd, prog, sizeof(prog)-1) != sizeof(prog)-1)
-            perror("write");
-    
-    char *const argv[] = { "script", NULL };
-    char *const envp[] = { NULL };
-    fexecve(fd, argv, envp);
-    perror("fexecve");
-}   
-EOF
-$ gcc -o memfd_exec memfd_exec.c
-$ ./memfd_exec
-Ran script
-$ sysctl vm.memfd_noexec
-vm.memfd_noexec = 2
------
-(as opposed to failing hard on memfd_create if flag unset on sysctl=2,
-and failing on fexecve with flag unset and sysctl=1)
+> +
+> +       return 0;
+> +}
+> +
+> +static int pagemap_scan_output(unsigned long bitmap,
+> +                              struct pagemap_scan_private *p,
+> +                              unsigned long addr, unsigned int n_pages)
+> +{
+> +       struct page_region *cur_buf =3D &p->cur_buf;
+> +
+> +       if (!n_pages)
+> +               return -EINVAL;
 
-What am I missing?
+How can this happen?
 
+> +       bitmap &=3D p->return_mask;
+> +
+> +       if (cur_buf->flags =3D=3D bitmap &&
+> +           cur_buf->start + cur_buf->len * PAGE_SIZE =3D=3D addr) {
 
+BTW, maybe the ranges returned to the user could also use start .. end
+form, and then this would be simplified to `cur->flags =3D=3D
+categories_to_report && cur->end =3D=3D addr`.
 
-BTW I find the current behaviour rather hard to use: setting this to 2
-should still set NOEXEC by default in my opinion, just refuse anything
-that explicitly requested EXEC.
+> +               cur_buf->len +=3D n_pages;
+> +               p->found_pages +=3D n_pages;
+> +       } else {
+> +               if (cur_buf->len) {
+> +                       if (p->vec_buf_index >=3D p->vec_buf_len)
+> +                               return PM_SCAN_END_WALK;
+> +
+> +                       memcpy(&p->vec_buf[p->vec_buf_index], cur_buf,
+> +                              sizeof(*p->vec_buf));
+> +                       p->vec_buf_index++;
+> +               }
+> +
+> +               cur_buf->start =3D addr;
+> +               cur_buf->len =3D n_pages;
+> +               cur_buf->flags =3D bitmap;
+> +               p->found_pages +=3D n_pages;
+> +       }
+> +
+> +       if (p->found_pages =3D=3D p->max_pages)
+> +               return PM_SCAN_FOUND_MAX_PAGES;
 
-Sure there's a warn_once that memfd_create was used without seal, but
-right now on my system it's "used up" 5 seconds after boot by systemd:
-[    5.854378] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=1 'systemd'
+Since we now return the address the walk ended at, what is the
+difference for PM_SCAN_END_WALK and PM_SCAN_FOUND_MAX_PAGES, and do we
+still need any of those instead of -ENOSPC or `n_pages !=3D
+scan_output(...)` check?
 
-And anyway, older kernels will barf up EINVAL when calling memfd_create
-with MFD_NOEXEC_SEAL, so even if userspace will want to adapt they'll
-need to try calling memfd_create with the flag once and retry on EINVAL,
-which let's face it is going to take a while to happen.
-(Also, the flag has been added to glibc, but not in any release yet)
+> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+> +                                 unsigned long end, struct mm_walk *walk=
+)
+> +{
+> +       bool is_written, flush =3D false, interesting =3D true;
+> +       struct pagemap_scan_private *p =3D walk->private;
+> +       struct vm_area_struct *vma =3D walk->vma;
+> +       unsigned long bitmap, addr =3D end;
+> +       pte_t *pte, *orig_pte, ptent;
+> +       spinlock_t *ptl;
+> +       int ret =3D 0;
+> +
+> +       arch_enter_lazy_mmu_mode();
+> +
+> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> +       ptl =3D pmd_trans_huge_lock(pmd, vma);
+> +       if (ptl) {
+> +               unsigned long n_pages =3D (end - start)/PAGE_SIZE;
+> +
+> +               if (n_pages > p->max_pages - p->found_pages)
+> +                       n_pages =3D p->max_pages - p->found_pages;
+> +
+> +               is_written =3D !is_pmd_uffd_wp(*pmd);
+> +
+> +               bitmap =3D PM_SCAN_FLAGS(is_written, false,
+> +                                      pmd_present(*pmd), is_swap_pmd(*pm=
+d),
+> +                                      pmd_present(*pmd) && is_zero_pfn(p=
+md_pfn(*pmd)));
+> +
+> +               if (IS_PM_SCAN_GET(p->flags))
+> +                       interesting =3D pagemap_scan_is_interesting_page(=
+bitmap, p);
+> +
+> +               if (interesting) {
+> +                       /*
+> +                        * Break huge page into small pages if the WP ope=
+ration
+> +                        * need to be performed is on a portion of the hu=
+ge page.
+> +                        */
+> +                       if (is_written && IS_PM_SCAN_WP(p->flags) &&
+> +                           n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> +                               spin_unlock(ptl);
+> +
+> +                               split_huge_pmd(vma, pmd, start);
+> +                               goto process_smaller_pages;
+> +                       }
+> +
+> +                       if (IS_PM_SCAN_GET(p->flags))
+> +                               ret =3D pagemap_scan_output(bitmap, p, st=
+art, n_pages);
+> +
+> +                       if (IS_PM_SCAN_WP(p->flags) && is_written && ret =
+>=3D 0) {
+> +                               make_uffd_wp_pmd(vma, start, pmd);
+> +                               flush_tlb_range(vma, start, end);
+> +                       }
+> +               }
+> +
+> +               spin_unlock(ptl);
+> +               arch_leave_lazy_mmu_mode();
+> +
+> +               return ret;
+> +       }
 
-Making calls default to noexec AND refuse exec does what you want
-(forbid use of exec in an app that wasn't in a namespace that allows
-exec) while allowing apps that require it to work; that sounds better
-than making all applications that haven't taken the pain of adding the
-new flag to me.
-Well, I guess an app that did require exec without setting the flag will
-fail in a weird place instead of failing at memfd_create and having a
-chance to fallback, so it's not like it doesn't make any sense;
-I don't have such strong feelings about this if the sysctl works, but
-for my use case I'm more likely to want to take a chance at memfd_create
-not needing exec than having the flag set. Perhaps a third value if I
-cared enough...
+Could you split the THP code and use it here like:
 
--- 
-Dominique Martinet | Asmadeus
+enter_lazy_mmu();
+
+ret =3D scan_thp(...);
+if (ret !=3D -ENOTTY) {
+  leave_lazy_mmu();
+  return ret;
+}
+
+To avoid having #ifdef here, it can be moved to the scan_thp() only
+(either in the body or having a dummy `return -ENOTTY;` version in an
+#else block).
+
+BTW, there's no `cond_resched()` in the THP case - is that intentional?
+
+> +
+> +process_smaller_pages:
+> +#endif
+> +
+> +       orig_pte =3D pte =3D pte_offset_map_lock(vma->vm_mm, pmd, start, =
+&ptl);
+> +       if (!pte) {
+> +               walk->action =3D ACTION_AGAIN;
+> +               return 0;
+> +       }
+> +
+> +       for (addr =3D start; addr < end && !ret; pte++, addr +=3D PAGE_SI=
+ZE) {
+> +               ptent =3D ptep_get(pte);
+> +               is_written =3D !is_pte_uffd_wp(ptent);
+> +
+> +               bitmap =3D PM_SCAN_FLAGS(is_written, pagemap_scan_is_file=
+(vma, ptent, addr),
+> +                                      pte_present(ptent), is_swap_pte(pt=
+ent),
+> +                                      pte_present(ptent) && is_zero_pfn(=
+pte_pfn(ptent)));
+> +
+> +               if (IS_PM_SCAN_GET(p->flags)) {
+> +                       interesting =3D pagemap_scan_is_interesting_page(=
+bitmap, p);
+
+If we consider GET as always done, this can be:
+
+if (!is_interesting) continue;
+
+And that would simplify the code greatly.
+
+> +                       if (interesting)
+> +                               ret =3D pagemap_scan_output(bitmap, p, ad=
+dr, 1);
+> +               }
+> +
+> +               if (IS_PM_SCAN_WP(p->flags) && is_written && interesting =
+&&
+> +                   ret >=3D 0) {
+> +                       make_uffd_wp_pte(vma, addr, pte);
+> +                       flush =3D true;
+> +               }
+> +       }
+> +
+> +       if (flush)
+> +               flush_tlb_range(vma, start, addr);
+
+Would optimizing the TLB flush range be beneficial here? If yes, the
+loop above could do:
+
+flush_start =3D end;
+flush_end =3D end;
+...
+for (...) {
+  if (mark_wp) {
+    make_wp();
+    if (flush_start > addr)
+      flush_start =3D addr;
+    flush_end =3D addr;
+  }
+}
+
+to reduce the flushed range.
+
+> +
+> +       pte_unmap_unlock(orig_pte, ptl);
+> +       arch_leave_lazy_mmu_mode();
+> +
+> +       cond_resched();
+> +       return ret;
+> +}
+> +
+> +#ifdef CONFIG_HUGETLB_PAGE
+> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
+> +                                     unsigned long start, unsigned long =
+end,
+> +                                     struct mm_walk *walk)
+> +{
+> +       unsigned long n_pages =3D (end - start)/PAGE_SIZE;
+> +       struct pagemap_scan_private *p =3D walk->private;
+> +       struct vm_area_struct *vma =3D walk->vma;
+> +       bool is_written, interesting =3D true;
+> +       struct hstate *h =3D hstate_vma(vma);
+> +       unsigned long bitmap;
+> +       spinlock_t *ptl;
+> +       int ret =3D 0;
+> +       pte_t ptent;
+> +
+> +       if (IS_PM_SCAN_WP(p->flags) && n_pages < HPAGE_SIZE/PAGE_SIZE)
+> +               return -EINVAL;
+
+Shouldn't this be checked after the `n_pages` is reduced? BTW, maybe
+check it only if the page `is_written` to avoid the conditional for
+all walks where WP is not used?
+
+> +
+> +       if (n_pages > p->max_pages - p->found_pages)
+> +               n_pages =3D p->max_pages - p->found_pages;
+[...]
+
+Proposing the relaxed API (and, while at it, less generic constant and
+field names) below.
+
+> +static int pagemap_scan_args_valid(struct pm_scan_arg *arg, unsigned lon=
+g start,
+> +                                  unsigned long end, struct page_region =
+__user *vec)
+> +{
+> +       /* Detect illegal size, flags, len and masks */
+> +       if (arg->size !=3D sizeof(struct pm_scan_arg))
+> +               return -EINVAL;
+
+> +       if (!arg->flags)
+> +               return -EINVAL;
+> +       if (arg->flags & ~PM_SCAN_OPS)
+> +               return -EINVAL;
+
+if (arg->flags & ~PM_SCAN_FLAGS)
+  return -EINVAL;
+
+> +       if (!(end - start))
+> +               return -EINVAL;
+
+Remove. Nothing bad will happen when trying to scan an empty range.
+
+> +       if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask |
+> +            arg->return_mask) & ~PM_SCAN_BITS_ALL)
+> +               return -EINVAL;
+
+if ((...) & ~PM_SCAN_PAGE_CATEGORIES)
+  return -EINVAL;
+
+> +       if (!arg->required_mask && !arg->anyof_mask &&
+> +           !arg->excluded_mask)
+> +               return -EINVAL;
+
+Remove. Will inspect all pages then.
+
+> +       if (!arg->return_mask)
+> +               return -EINVAL;
+
+Remove. Will not return any ranges then. (But will WP, if requested.)
+
+> +       /* Validate memory range */
+> +       if (!IS_ALIGNED(start, PAGE_SIZE))
+> +               return -EINVAL;
+> +       if (!access_ok((void __user *)start, end - start))
+> +               return -EFAULT;
+
+> +       if (IS_PM_SCAN_GET(arg->flags)) {
+
+Remove. Do GET always.
+
+> +               if (arg->vec_len =3D=3D 0)
+> +                       return -EINVAL;
+
+Remove. Will end the walk at the first matching page (and return its
+address in `start`).
+
+> +               if (!vec)
+> +                       return -EINVAL;
+> +               if (!access_ok((void __user *)vec,
+> +                              arg->vec_len * sizeof(struct page_region))=
+)
+> +                       return -EFAULT;
+
+Check only if vec_len !=3D 0. BTW, return EFAULT for `!vec`.
+
+> +       }
+> +
+> +       if (IS_PM_SCAN_WP(arg->flags) && !IS_PM_SCAN_GET(arg->flags) &&
+> +           arg->max_pages)
+> +               return -EINVAL;
+
+With return_mask =3D=3D 0, arg->max_pages will be ignored anyway. We can
+just document that this limits the pages reported in the output
+vector. (And from that follows that if not returning anything, the
+value doesn't make a difference.)
+
+[...]
+> +       p.max_pages =3D (arg.max_pages) ? arg.max_pages : ULONG_MAX;
+> +       p.found_pages =3D 0;
+> +       p.required_mask =3D arg.required_mask;
+> +       p.anyof_mask =3D arg.anyof_mask;
+> +       p.excluded_mask =3D arg.excluded_mask;
+> +       p.return_mask =3D arg.return_mask;
+> +       p.flags =3D arg.flags;
+> +       p.flags |=3D ((p.required_mask | p.anyof_mask | p.excluded_mask) =
+&
+> +                   PAGE_IS_WRITTEN) ? PM_SCAN_REQUIRE_UFFD : 0;
+> +       p.cur_buf.start =3D p.cur_buf.len =3D p.cur_buf.flags =3D 0;
+> +       p.vec_buf =3D NULL;
+> +       p.vec_buf_len =3D PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+
+This needs to be less by 1 to account for the entry in p.cur_buf.
+
+> +       /*
+> +        * Allocate smaller buffer to get output from inside the page wal=
+k
+> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks=
+. As
+> +        * we want to return output to user in compact form where no two
+> +        * consecutive regions should be continuous and have the same fla=
+gs.
+> +        * So store the latest element in p.cur_buf between different wal=
+ks and
+> +        * store the p.cur_buf at the end of the walk to the user buffer.
+> +        */
+> +       if (IS_PM_SCAN_GET(p.flags)) {
+
+if (p.vec_len !=3D 0)
+
+> +               p.vec_buf =3D kmalloc_array(p.vec_buf_len, sizeof(*p.vec_=
+buf),
+> +                                         GFP_KERNEL);
+> +               if (!p.vec_buf)
+> +                       return -ENOMEM;
+> +       }
+> +
+> +       if (IS_PM_SCAN_WP(p.flags)) {
+> +               mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA=
+, 0,
+> +                                       mm, start, end);
+> +               mmu_notifier_invalidate_range_start(&range);
+> +       }
+
+Please add a comment why this is needed.
+
+> +       walk_start =3D walk_end =3D start;
+> +       while (walk_end < end && !ret) {
+> +               if (IS_PM_SCAN_GET(p.flags)) {
+
+if (p.vec_len)
+
+> +                       p.vec_buf_index =3D 0;
+> +
+> +                       /*
+> +                        * All data is copied to cur_buf first. When more=
+ data
+> +                        * is found, we push cur_buf to vec_buf and copy =
+new
+> +                        * data to cur_buf. Subtract 1 from length as the
+> +                        * index of cur_buf isn't counted in length.
+> +                        */
+> +                       empty_slots =3D arg.vec_len - vec_index;
+> +                       p.vec_buf_len =3D min(p.vec_buf_len, empty_slots =
+- 1);
+> +               }
+> +
+> +               ret =3D mmap_read_lock_killable(mm);
+> +               if (ret)
+> +                       goto return_status;
+
+This could be _interruptible() now as we can return early overwriting
+`start` so that userspace can detect that the walk was interrupted by
+a signal (start !=3D end).
+
+> +               walk_end =3D min((walk_start + PAGEMAP_WALK_SIZE) & PAGEM=
+AP_WALK_MASK, end);
+> +
+> +               ret =3D walk_page_range(mm, walk_start, walk_end,
+> +                                     &pagemap_scan_ops, &p);
+> +               mmap_read_unlock(mm);
+> +
+> +               if (ret && ret !=3D PM_SCAN_FOUND_MAX_PAGES &&
+> +                   ret !=3D PM_SCAN_END_WALK)
+> +                       goto return_status;
+
+So now there is no difference in the two special error values.
+
+> +               walk_start =3D walk_end;
+> +               if (IS_PM_SCAN_GET(p.flags) && p.vec_buf_index) {
+
+`if (p.vec_buf_index)` should be enough, as if not reporting the
+ranges, the index will never increase.
+
+> +                       if (copy_to_user(&vec[vec_index], p.vec_buf,
+> +                                        p.vec_buf_index * sizeof(*p.vec_=
+buf))) {
+> +                               /*
+> +                                * Return error even though the OP succee=
+ded
+> +                                */
+> +                               ret =3D -EFAULT;
+> +                               goto return_status;
+> +                       }
+> +                       vec_index +=3D p.vec_buf_index;
+
+p.vec_buf_index =3D 0;
+
+... so that there is no need to do that at every start of the loop iteratio=
+n.
+
+> +               }
+> +       }
+> +
+> +       if (p.cur_buf.len) {
+> +               if (copy_to_user(&vec[vec_index], &p.cur_buf, sizeof(p.cu=
+r_buf))) {
+> +                       ret =3D -EFAULT;
+> +                       goto return_status;
+> +               }
+> +               vec_index++;
+> +       }
+> +
+> +       ret =3D vec_index;
+> +
+> +return_status:
+
+The label name looks too narrowing, considering what is being done
+here now. Maybe just 'out', as there is no other non-trivial exit path
+from the function?
+
+> +       arg.start =3D (unsigned long)walk_end;
+> +       if (copy_to_user(&uarg->start, &arg.start, sizeof(arg.start)))
+> +               ret =3D -EFAULT;
+> +
+> +       if (IS_PM_SCAN_WP(p.flags))
+> +               mmu_notifier_invalidate_range_end(&range);
+
+With removal of the OP_GET, there is only a single flag left. I don't
+think it is useful then to hide it behind a macro. It should be
+readable as `p.flags & PM_SCAN_DO_WP`.
+
+[...]
+> +/* Bits are set in flags of the page_region and masks in pm_scan_args */
+> +#define PAGE_IS_WRITTEN                (1 << 0)
+> +#define PAGE_IS_FILE           (1 << 1)
+> +#define PAGE_IS_PRESENT                (1 << 2)
+> +#define PAGE_IS_SWAPPED                (1 << 3)
+> +#define PAGE_IS_PFNZERO                (1 << 4)
+
+Please add PAGE_IS_UFFD_WP_ENABLED (or a shorter name) - this would be
+populated from `p->vma_can_wp` in the `test_walk` implementation
+above.
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
