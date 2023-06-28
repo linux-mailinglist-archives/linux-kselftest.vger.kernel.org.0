@@ -2,132 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFE1741864
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 20:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC60741867
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Jun 2023 20:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbjF1SzJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jun 2023 14:55:09 -0400
-Received: from bg4.exmail.qq.com ([43.155.65.254]:32295 "EHLO
-        bg4.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbjF1Sxk (ORCPT
+        id S231454AbjF1S4O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jun 2023 14:56:14 -0400
+Received: from smtp-fw-9105.amazon.com ([207.171.188.204]:55113 "EHLO
+        smtp-fw-9105.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232708AbjF1SyN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:53:40 -0400
-X-QQ-mid: bizesmtp68t1687978411t0a7h12q
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 29 Jun 2023 02:53:30 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: mhgCCnGOC3zHQx6jmcB1kz2NwHDP18v38JyGZQAiWr5o2Az3hiwOxWqJkj3sr
-        al8QuuOwy8FjxN1au85JUw6DW1Wb/vHX+2GC8XTjfP+O1t3S8qORnqLdPM4Cf3pGlaNlChX
-        IHySjIMY6PzNPzCMg+XhHGFJZdwOJjXNsPKyYq9th7KpBU9mTcFUUeq4Sd4P+9ywNxuj/kp
-        QXH2k7KkcaMDqTnkd4C35V2UHyfP7DbRQBaqLYhMy0H3EM5JlWAOt5xoIudinQAR0jwiSBJ
-        40AtcWRh83++0lXsOvsW4Jkmh6pGtR+4nBRcL1IOSR0yfiq5l+cw6ZOed+Sl5CuENCqT1a2
-        z8R4BsBETw1oB5lmDLIPriksbujqTB7Rf8E6RzmmPTuI8MlY10=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10897143188466502564
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v1 02/11] tools/nolibc: add new crt.h with _start_c
-Date:   Thu, 29 Jun 2023 02:53:18 +0800
-Message-Id: <0976471a36cd4facf712bc02e733f669f1697083.1687976753.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687976753.git.falcon@tinylab.org>
-References: <cover.1687976753.git.falcon@tinylab.org>
+        Wed, 28 Jun 2023 14:54:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1687978454; x=1719514454;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Sj4D9/YhFa5gm+2Xbpetvt8RuR2FgzUgdFX5Vd7PyHk=;
+  b=H+bRP7RkcTc9SPLVmZV4zgn12WQ4P9+hzkw5GJF2Yp2VzVfoHdgs7eFf
+   5qWaxRGKJY9OpU5gzj8kdBpZQYNkXedh85MfdM8hgcJT5x8KTVT5B+Nxk
+   3HPK3h4hKYLPgwyS0R57ygybpgfV6z5ZDgE8UtKr7Dlne/e1KxLVGpIYO
+   8=;
+X-IronPort-AV: E=Sophos;i="6.01,166,1684800000"; 
+   d="scan'208";a="657569115"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9105.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 18:54:09 +0000
+Received: from EX19MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com (Postfix) with ESMTPS id 07C7DA0A9B;
+        Wed, 28 Jun 2023 18:54:06 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 28 Jun 2023 18:54:06 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.187.170.50) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.30;
+ Wed, 28 Jun 2023 18:54:00 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <lmb@isovalent.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
+        <hemanthmalla@gmail.com>, <joe@cilium.io>, <joe@wand.net.nz>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
+        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
+Subject: Re: [PATCH bpf-next v4 6/7] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
+Date:   Wed, 28 Jun 2023 11:53:52 -0700
+Message-ID: <20230628185352.76923-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230613-so-reuseport-v4-6-4ece76708bba@isovalent.com>
+References: <20230613-so-reuseport-v4-6-4ece76708bba@isovalent.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+Content-Type: text/plain
+X-Originating-IP: [10.187.170.50]
+X-ClientProxiedBy: EX19D035UWA001.ant.amazon.com (10.13.139.101) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As the environ and _auxv support added for nolibc, the assembly _start
-function becomes more and more complex and therefore makes the porting
-of nolibc to new architectures harder and harder.
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Wed, 28 Jun 2023 10:48:21 +0100
+> diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+> index a6722d6ef80f..7d677b89f269 100644
+> --- a/include/net/inet6_hashtables.h
+> +++ b/include/net/inet6_hashtables.h
+> @@ -103,6 +103,46 @@ static inline struct sock *__inet6_lookup(struct net *net,
+>  				     daddr, hnum, dif, sdif);
+>  }
+>  
+> +static inline
+> +struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+> +			      const struct in6_addr *saddr, const __be16 sport,
+> +			      const struct in6_addr *daddr, const __be16 dport,
+> +			      bool *refcounted, inet6_ehashfn_t *ehashfn)
+> +{
+> +	struct sock *sk, *reuse_sk;
+> +	bool prefetched;
+> +
+> +	sk = skb_steal_sock(skb, refcounted, &prefetched);
+> +	if (!sk)
+> +		return NULL;
+> +
+> +	if (!prefetched)
+> +		return sk;
+> +
+> +	if (sk->sk_protocol == IPPROTO_TCP) {
+> +		if (sk->sk_state != TCP_LISTEN)
+> +			return sk;
+> +	} else if (sk->sk_protocol == IPPROTO_UDP) {
+> +		if (sk->sk_state != TCP_CLOSE)
+> +			return sk;
+> +	} else {
+> +		return sk;
+> +	}
+> +
+> +	reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
+> +					  saddr, sport, daddr, ntohs(dport),
+> +					  ehashfn);
+> +	if (!reuse_sk || reuse_sk == sk)
+> +		return sk;
+> +
+> +	/* We've chosen a new reuseport sock which is never refcounted. This
+> +	 * implies that sk also isn't refcounted.
+> +	 */
+> +	WARN_ON_ONCE(*refcounted);
 
-To simplify portability, this crt.h is added to do most of the assembly
-start operations in C function: _start_c(), which reduces the complexity
-a lot and will eventually simplify the porting of nolibc to the new
-architectures.
+One more nit.
 
-The new _start_c() only requires a stack pointer argument, it will find
-argv, envp and _auxv for us, and then call main(), finally, it exit()
-with main's return status. With this new _start_c(), the future new
-architectures only require to add very few assembly instructions.
+WARN_ON_ONCE() should be tested before inet6?_lookup_reuseport() not to
+miss the !reuse_sk case.
 
-It may also easier the future init/fini support.
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/crt.h | 57 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 tools/include/nolibc/crt.h
-
-diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
-new file mode 100644
-index 000000000000..698fe1084d26
---- /dev/null
-+++ b/tools/include/nolibc/crt.h
-@@ -0,0 +1,57 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * C Run Time support for NOLIBC
-+ * Copyright (C) 2023 Zhangjin Wu <falcon@tinylab.org>
-+ */
-+
-+#ifndef _NOLIBC_CRT_H
-+#define _NOLIBC_CRT_H
-+
-+char **environ __attribute__((weak));
-+const unsigned long *_auxv __attribute__((weak));
-+
-+int main(int argc, char *argv[], char **envp);
-+static void exit(int);
-+
-+void _start_c(long *sp)
-+{
-+	int argc, i;
-+	char **argv;
-+	char **envp;
-+
-+	/*
-+	 * sp  :  argc          <-- argument count, required by main()
-+	 * argv:  argv[0]       <-- argument vector, required by main()
-+	 *        argv[1]
-+	 *        ...
-+	 *        argv[argc-1]
-+	 *        null
-+	 * envp:  envp[0]       <-- environment variables, required by main() and getenv()
-+	 *        envp[1]
-+	 *        ...
-+	 *        null
-+	 * _auxv: auxv[0]       <-- auxiliary vector, required by getauxval()
-+	 *        auxv[1]
-+	 *        ...
-+	 *        null
-+	 */
-+
-+	/* assign argc and argv */
-+	argc = sp[0];
-+	argv = (void *)(sp + 1);
-+
-+	/* find envp */
-+	envp = argv + argc + 1;
-+	environ = envp;
-+
-+	/* find auxv */
-+	i = 0;
-+	while (envp[i])
-+		i++;
-+	_auxv = (void *)(envp + i + 1);
-+
-+	/* go to application */
-+	exit(main(argc, argv, envp));
-+}
-+
-+#endif /* _NOLIBC_CRT_H */
--- 
-2.25.1
-
+> +
+> +	return reuse_sk;
+> +}
