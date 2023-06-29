@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B422742CA9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 21:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D90A742CD8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 21:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbjF2TBd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 15:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
+        id S233488AbjF2TDY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 15:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232820AbjF2TBP (ORCPT
+        with ESMTP id S233057AbjF2TBu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:01:15 -0400
+        Thu, 29 Jun 2023 15:01:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5AB170E;
-        Thu, 29 Jun 2023 12:01:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD3C3585;
+        Thu, 29 Jun 2023 12:01:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 780A8615D8;
-        Thu, 29 Jun 2023 19:01:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B59BCC433C8;
-        Thu, 29 Jun 2023 19:01:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C4C061602;
+        Thu, 29 Jun 2023 19:01:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6366AC433CA;
+        Thu, 29 Jun 2023 19:01:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688065270;
+        s=k20201202; t=1688065298;
         bh=ZY1idp9ydYLvERHUwYmAgHRcPhBlYiTuA7Tc90jpkUU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OH23cGuOIwX5A+Tds2Z0VV8crRb1bKBYKOcQXmF+iaI5+ROJ4mh0j/4CLFM5kFutz
-         rvToqlx4mJLRwNywXfu/MAzmqR3+cQJjQaYz1zePA0DYdLVcqhEhnI3C4dKvZ7rmj2
-         doK5jvMe3W+j2c18xNfQdRjAxaq/WK+DLAUiQmbV01ILZ/2n1mpsZdSEXGLtTxk0K1
-         E/VtzppQtI6ZTXFf7IQeTfZjcHyxK8qRCg5qmhHfQ+Zpan5RQQ8+K6oblER15Px48H
-         niq83XT6uKBBozMXT5wGTlJ2hcKoGyhJ5ujITQFQ0Ddw1Cb1pdh58gBjOlQuipLZzh
-         yqn9kpcoZWIdQ==
+        b=ZH6i9gGmxCt49EgfJTcYwmxvqvG1H+hcOwHhjzLPrDuJfroSy3/YKWjE6W+Ju/K23
+         CIWSNJuVZEFsF2nuENccS81lI3grU/GTx7fLunuF+AjS8k4PcwBvj1MnUbqpmNIDtu
+         1Wsa8xWBgCDW2zJpPg68VEeQhuRhIZ+hdZuTgtk7/0hbMqUqWSXRe0d0jN6ICeU107
+         j3I/gP+6Jg80SP7+cp3rRSxzUJWeOjl4xgWCVu2tCUAHvx50vGuJfB8kfTqBe7HIK2
+         UgSjhPAsEQaw0IcAej9o+1M+R2XslXfomT9Ajm3Ud1sF2Rut6pM/jLRY5xeSHukfgh
+         uyODETDybB/RQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     sunliming <sunliming@kylinos.cn>,
@@ -42,16 +42,16 @@ Cc:     sunliming <sunliming@kylinos.cn>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         quic_mojha@quicinc.com, zwisler@google.com,
         linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 03/17] tracing/user_events: Prevent same name but different args event
-Date:   Thu, 29 Jun 2023 15:00:32 -0400
-Message-Id: <20230629190049.907558-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 02/12] tracing/user_events: Prevent same name but different args event
+Date:   Thu, 29 Jun 2023 15:01:22 -0400
+Message-Id: <20230629190134.907949-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230629190049.907558-1-sashal@kernel.org>
-References: <20230629190049.907558-1-sashal@kernel.org>
+In-Reply-To: <20230629190134.907949-1-sashal@kernel.org>
+References: <20230629190134.907949-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.3.9
+X-stable-base: Linux 6.1.35
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
