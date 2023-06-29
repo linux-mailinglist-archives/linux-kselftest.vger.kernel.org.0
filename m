@@ -2,50 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5517743118
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 01:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3979743121
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 01:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjF2X2r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 19:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
+        id S231446AbjF2Xan (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 19:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjF2X2q (ORCPT
+        with ESMTP id S230036AbjF2Xam (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:28:46 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6667B1BC6;
-        Thu, 29 Jun 2023 16:28:44 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1688081315tjycq55u
+        Thu, 29 Jun 2023 19:30:42 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694EC1FE7;
+        Thu, 29 Jun 2023 16:30:40 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1688081430tg4lkoyb
 Received: from linux-lab-host.localdomain ( [119.123.131.49])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 07:28:34 +0800 (CST)
+        id ; Fri, 30 Jun 2023 07:30:29 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: RdkzUaxjIrfJY7jV7wFs1hXtoA3+Vv/lYMh4H2WNVuZBKAbd/xdTOxNXXKRtf
-        jfuQ9QcCSu7QafjYL4xSTkK7jMt6OMdjr6isvrN3T2xAnU55eSqrebklnG681L/OmxI9bh/
-        VyTSb+V4G+WjUArncjMNhBb/stR9LJchLeOBeyLSC0JEbc40UBzcXTLFX7Fr0ZWMNyn5SK3
-        NeZXrnuqo7LLuDye+A7DzfLLeJbA37uc6Z7epdjB6GXts2/MgXM6eBl64d6n255EmoJoh+z
-        Kv7dwv1d/SXpMqzqoxjuM+Oi7eY1LhE7373eSEKL9vh9IrCkyig/aa5RtSxLBDDHRGH/ril
-        WlXDy6MFmIcm5IB0udI8ohjTkENOgGhI8PnpiL6OVYE5k10j5zom3w4LooGb3GtR/WSrbZi
+X-QQ-FEAT: CR3LFp2JE4k2yCeR62ZuAGYUgkT1yq1gp7tSCx6PjhF/mNkyHruYzL79SeB7z
+        CxTzPB7K2xFoUA/Ttaf/5FeV6L2uZdCkhc6XFd+y19TuqfuZXiEi8MxdsIwOmgQRqo4pRJU
+        K9nE+AfOZFt1gnTXokRNuOjIyGH60R8MmM8qcVuceDH066+FiI3ebXS5ucV6i39M2LmgDgX
+        jrMaXXzbKZXF1L/CX6tToO/a7QqbP3ZC94AEgLSNMjGkx1IUrGdvDHYo0t+4/y0ZadUrf9Q
+        vKbj105VV3iJAVITKR8OC3793oJJQd58PXOK0m5ZJPs8AqexcipJTcZV9r6PDKW2fFm5tY3
+        UAyjZgTMxfiyqXCHysiWctOPNpjl1iIdiX5pdzoth3fQjGgjLzGMXhonNol+Q==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15633995598629543478
+X-BIZMAIL-ID: 8005163360113825460
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 04/15] selftests/nolibc: fix up int_fast16/32_t test cases for musl
-Date:   Fri, 30 Jun 2023 07:28:15 +0800
-Message-Id: <a2947207cf6504e27704c080edc5ae3ba9b29930.1688078605.git.falcon@tinylab.org>
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 05/15] selftests/nolibc: fix up kernel parameters support
+Date:   Fri, 30 Jun 2023 07:29:38 +0800
+Message-Id: <582776208a75df19d09b8eaafcb6fdad7219abc8.1688078605.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1688078604.git.falcon@tinylab.org>
 References: <cover.1688078604.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,48 +51,93 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-musl limits the fast signed int in 32bit, but glibc and nolibc don't, to
-let such test cases work on musl, let's provide the type based
-SINT_MAX_OF_TYPE(type) and SINT_MIN_OF_TYPE(type).
+kernel parameters allow pass two types of strings, one type is like
+'noapic', another type is like 'panic=5', the first type is passed as
+arguments of the init program, the second type is passed as environment
+variables of the init program.
 
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/lkml/bc635c4f-67fe-4e86-bfdf-bcb4879b928d@t-8ch.de/
+when users pass kernel parameters like this:
+
+    noapic NOLIBC_TEST=syscall
+
+our nolibc-test program will use the test setting from argv[1] and
+ignore the one from NOLIBC_TEST environment variable, and at last, it
+will print the following line and ignore the whole test setting.
+
+    Ignoring unknown test name 'noapic'
+
+reversing the parsing order does solve the above issue:
+
+    test = getenv("NOLIBC_TEST");
+    if (test)
+        test = argv[1];
+
+but it still doesn't work with such kernel parameters (without
+NOLIBC_TEST environment variable):
+
+    noapic FOO=bar
+
+To support all of the potential kernel parameters, let's verify the test
+setting from both of argv[1] and NOLIBC_TEST environment variable.
+
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 33 ++++++++++++++++++--
+ 1 file changed, 31 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 29c21880a198..96d170cc9b47 100644
+index 96d170cc9b47..223c00e83abf 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -41,6 +41,10 @@
- #endif
- #endif
+@@ -1063,6 +1063,35 @@ static const struct test test_names[] = {
+ 	{ 0 }
+ };
  
-+/* for the type of int_fast16_t and int_fast32_t, musl differs from glibc and nolibc */
-+#define SINT_MAX_OF_TYPE(type) (((type)1 << (sizeof(type) * 8 - 2)) - (type)1 + ((type)1 << (sizeof(type) * 8 - 2)))
-+#define SINT_MIN_OF_TYPE(type) (-SINT_MAX_OF_TYPE(type) - 1)
++int is_setting_valid(char *test)
++{
++	int idx, len, test_len, valid = 0;
++	char delimiter;
 +
- /* will be used by nolibc by getenv() */
- char **environ;
++	if (!test)
++		return valid;
++
++	test_len = strlen(test);
++
++	for (idx = 0; test_names[idx].name; idx++) {
++		len = strlen(test_names[idx].name);
++		if (test_len < len)
++			continue;
++
++		if (strncmp(test, test_names[idx].name, len) != 0)
++			continue;
++
++		delimiter = test[len];
++		if (delimiter != ':' && delimiter != ',' && delimiter != '\0')
++			continue;
++
++		valid = 1;
++		break;
++	}
++
++	return valid;
++}
++
+ int main(int argc, char **argv, char **envp)
+ {
+ 	int min = 0;
+@@ -1088,10 +1117,10 @@ int main(int argc, char **argv, char **envp)
+ 	 *    syscall:5-15[:.*],stdlib:8-10
+ 	 */
+ 	test = argv[1];
+-	if (!test)
++	if (!is_setting_valid(test))
+ 		test = getenv("NOLIBC_TEST");
  
-@@ -819,11 +823,11 @@ int run_stdlib(int min, int max)
- 		CASE_TEST(limit_int_fast8_max);     EXPECT_EQ(1, INT_FAST8_MAX,    (int_fast8_t)     0x7f); break;
- 		CASE_TEST(limit_int_fast8_min);     EXPECT_EQ(1, INT_FAST8_MIN,    (int_fast8_t)     0x80); break;
- 		CASE_TEST(limit_uint_fast8_max);    EXPECT_EQ(1, UINT_FAST8_MAX,   (uint_fast8_t)    0xff); break;
--		CASE_TEST(limit_int_fast16_min);    EXPECT_EQ(1, INT_FAST16_MIN,   (int_fast16_t)    INTPTR_MIN); break;
--		CASE_TEST(limit_int_fast16_max);    EXPECT_EQ(1, INT_FAST16_MAX,   (int_fast16_t)    INTPTR_MAX); break;
-+		CASE_TEST(limit_int_fast16_min);    EXPECT_EQ(1, INT_FAST16_MIN,   (int_fast16_t)    SINT_MIN_OF_TYPE(int_fast16_t)); break;
-+		CASE_TEST(limit_int_fast16_max);    EXPECT_EQ(1, INT_FAST16_MAX,   (int_fast16_t)    SINT_MAX_OF_TYPE(int_fast16_t)); break;
- 		CASE_TEST(limit_uint_fast16_max);   EXPECT_EQ(1, UINT_FAST16_MAX,  (uint_fast16_t)   UINTPTR_MAX); break;
--		CASE_TEST(limit_int_fast32_min);    EXPECT_EQ(1, INT_FAST32_MIN,   (int_fast32_t)    INTPTR_MIN); break;
--		CASE_TEST(limit_int_fast32_max);    EXPECT_EQ(1, INT_FAST32_MAX,   (int_fast32_t)    INTPTR_MAX); break;
-+		CASE_TEST(limit_int_fast32_min);    EXPECT_EQ(1, INT_FAST32_MIN,   (int_fast32_t)    SINT_MIN_OF_TYPE(int_fast32_t)); break;
-+		CASE_TEST(limit_int_fast32_max);    EXPECT_EQ(1, INT_FAST32_MAX,   (int_fast32_t)    SINT_MAX_OF_TYPE(int_fast32_t)); break;
- 		CASE_TEST(limit_uint_fast32_max);   EXPECT_EQ(1, UINT_FAST32_MAX,  (uint_fast32_t)   UINTPTR_MAX); break;
- 		CASE_TEST(limit_int_fast64_min);    EXPECT_EQ(1, INT_FAST64_MIN,   (int_fast64_t)    INT64_MIN); break;
- 		CASE_TEST(limit_int_fast64_max);    EXPECT_EQ(1, INT_FAST64_MAX,   (int_fast64_t)    INT64_MAX); break;
+-	if (test) {
++	if (is_setting_valid(test)) {
+ 		char *comma, *colon, *dash, *value;
+ 
+ 		do {
 -- 
 2.25.1
 
