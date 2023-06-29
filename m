@@ -2,86 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101B574225E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 10:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D7D7422F2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 11:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbjF2Ilw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 04:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
+        id S232100AbjF2JL4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 05:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbjF2Iky (ORCPT
+        with ESMTP id S232023AbjF2JLz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 04:40:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210CA3C04;
-        Thu, 29 Jun 2023 01:36:16 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPv6:2a0c:5a83:9106:d00:e867:262b:7a75:ba57])
+        Thu, 29 Jun 2023 05:11:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DEB1FD8;
+        Thu, 29 Jun 2023 02:11:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: rcn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A716B660712C;
-        Thu, 29 Jun 2023 09:36:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688027774;
-        bh=FSB3vdthTDE8QsPbEoftdqOjP9tW5sPqQjMaqelHFQ8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MUrmPvAgIuG6PPwwOcNoSthD0vmMKW4iQZeANxzg5ongiPmat12mOfD08OUxgD2px
-         MoTWfucH3nD7ZjOrjVDiRdzjpR7lVlabsLTQBf74+Sy5eV31bW3ml3gk7x/0PiiXTP
-         ikBCEHC4BQiinXa1XjUBn75ZoCSABOSkHm0E9BhdtcKKY2aWW4DFRyR45czA9uLajT
-         AAy2pg1jTIf3pr6/FgWJ05HqPxTspbExgm9hIYwW0TlGyW4mTFGaxIJPahFl1UT0+b
-         2sgvv5PVqNVIfrKo8XyyI01lyBgJ5nc0Vx9c0bMvG/3gm4W85kX+igs6npSG43v062
-         PIl9ouL72DD9A==
-From:   =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-To:     shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, naresh.kamboju@linaro.org,
-        dan.carpenter@linaro.org, skhan@linuxfoundation.org
-Subject: [RESEND PATCH] selftests/mincore: fix skip condition for check_huge_pages test
-Date:   Thu, 29 Jun 2023 10:35:46 +0200
-Message-Id: <20230629083546.3031488-1-ricardo.canuelo@collabora.com>
-X-Mailer: git-send-email 2.25.1
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 000B31F8C3;
+        Thu, 29 Jun 2023 09:11:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1688029913; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eakZ9Lwqp66DOPYDD7y7VLeLOLV3zqoUBYGx3Z4WOnY=;
+        b=eLEATQF/QD87CNPxQL0qRd1yPM+gwm4aUtlPjCwxI47+fW7Z9tuLJHE7ks451dK4laL3pI
+        8zEvCnCS3XrXPZVxZw5oQgqEbXxyuLUXAi4fXxLJX5nTejhVbG5jLbIqoquhY5LWEHNgTk
+        id7Hkm0ccym9GKAtLhyiRko4959cZdY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BAC26139FF;
+        Thu, 29 Jun 2023 09:11:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RVCrK9hKnWSMdQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 29 Jun 2023 09:11:52 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH 0/3] cpuset: Allow setscheduler regardless of manipulated task
+Date:   Thu, 29 Jun 2023 11:11:43 +0200
+Message-ID: <20230629091146.28801-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The check_huge_pages test was failing instead of skipping on qemu-armv7
-because the skip condition wasn't handled properly. Add an additional
-check to fix it.
+Changes in v1:
+- added selftests
+- comments rewording
 
-Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Tested-by: Anders Roxell <anders.roxell@linaro.org>
-Closes: https://lore.kernel.org/all/CA+G9fYuoB8Ug8PcTU-YGmemL7_eeEksXFihvxWF6OikD7sK7pA@mail.gmail.com
----
- tools/testing/selftests/mincore/mincore_selftest.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+RFC in https://lore.kernel.org/r/20220623124944.2753-1-mkoutny@suse.com
 
-diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
-index 4c88238fc8f0..6fb3eea5b6ee 100644
---- a/tools/testing/selftests/mincore/mincore_selftest.c
-+++ b/tools/testing/selftests/mincore/mincore_selftest.c
-@@ -150,8 +149,8 @@ TEST(check_huge_pages)
- 		MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
- 		-1, 0);
- 	if (addr == MAP_FAILED) {
--		if (errno == ENOMEM)
--			SKIP(return, "No huge pages available.");
-+		if (errno == ENOMEM || errno == EINVAL)
-+			SKIP(return, "No huge pages available or CONFIG_HUGETLB_PAGE disabled.");
- 		else
- 			TH_LOG("mmap error: %s", strerror(errno));
- 	}
+Michal Koutný (3):
+  cpuset: Allow setscheduler regardless of manipulated task
+  selftests: cgroup: Minor code reorganizations
+  selftests: cgroup: Add cpuset migrations testcase
+
+ MAINTAINERS                                   |   2 +
+ kernel/cgroup/cpuset.c                        |   7 +
+ tools/testing/selftests/cgroup/.gitignore     |   1 +
+ tools/testing/selftests/cgroup/Makefile       |   2 +
+ tools/testing/selftests/cgroup/cgroup_util.c  |   2 +
+ tools/testing/selftests/cgroup/cgroup_util.h  |   2 +
+ tools/testing/selftests/cgroup/test_core.c    |   2 +-
+ tools/testing/selftests/cgroup/test_cpuset.c  | 272 ++++++++++++++++++
+ .../selftests/cgroup/test_cpuset_prs.sh       |   2 +-
+ 9 files changed, 290 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/cgroup/test_cpuset.c
+
+
+base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
 -- 
-2.25.1
+2.41.0
 
