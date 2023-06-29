@@ -2,67 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C23741BFA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 00:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55378741D84
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 03:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjF1WxW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Jun 2023 18:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
+        id S230113AbjF2BHh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Jun 2023 21:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjF1WxJ (ORCPT
+        with ESMTP id S230099AbjF2BHb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:53:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115231FDC
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 15:53:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A35DE6147F
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 22:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8840C433C0;
-        Wed, 28 Jun 2023 22:53:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687992787;
-        bh=68dGS9oL40E7cxdas87mbb7uykwmjXBlTk6CNaE/6js=;
-        h=From:Date:Subject:To:Cc:From;
-        b=Of9FpDUs+wLlMVvLx52h778prjGxFklP/8n68rg7D+R1QeV4iklucVkkZQCBHZ+zN
-         XsCESndZOsBMEFLSoOvaVx+X1OdJi2sjGrBHRdUXVlVo+Bf76CAiOhNr4mlcBRzlsW
-         qKg5N8lz44lz5m0Tg9pqUx4Wz9273hNggF2iR8UIuvo1s3nG8/FOJy9MCBUZTIGL8h
-         B3XUcjVVcp8gC6QdRVTFr8qCGU4Rap9fVkpau0O845frZLbn+rPFvv0SPSDqiycU6p
-         mQqVasj0FE/frbToHS+oNU/jEQdtJDakv/m5qJxpLkjmxoQ53qaBxcFIUptK522pS1
-         2OQmFbVOq2IuA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Wed, 28 Jun 2023 23:52:58 +0100
-Subject: [PATCH] kselftest/arm64: Exit streaming mode after collecting
- signal context
+        Wed, 28 Jun 2023 21:07:31 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBC426A1;
+        Wed, 28 Jun 2023 18:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688000848; x=1719536848;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=b9GdT6r2b9r4HGFh4jKr0wne/bp8GHgArZMHuUjrA0Y=;
+  b=dC1jsAjkmUmCduFhM8pPJrnCsNmh1av67BkpRhyR7hbhcluZKcQ7p/za
+   Kj1gbOFcEj+VhK53RXCer0k0W3981ZpuQYFLEPYN2l1BIhk92ImvSc8iJ
+   Kx+6YwmhgaZKd0S3A56oDwm9Lm2+ZENvHQmov/Qwurx/liFsmplfJDvmR
+   QzIC9eq7zjFzbuaSz7yEmTcq7wQXOTgM+qFjZBiDTr5HSKrHmxLQRxDG+
+   KILVDpURkeqfq/N6ZF7EXysiCo1c6/wFMrgPNtLZZ7T3aQE+s7e+aWTFg
+   zTm/6k9zYWq8kE96JxojtdHrK0brl7eL5qHCYsIllepUNBoMrScz1tstL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="341581967"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="341581967"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 18:07:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="717179669"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="717179669"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.186.48]) ([10.252.186.48])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 18:07:09 -0700
+Message-ID: <7669371f-c529-78ec-1303-9b3a6e23cdce@linux.intel.com>
+Date:   Thu, 29 Jun 2023 09:07:04 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     baolu.lu@linux.intel.com, Nicolin Chen <nicolinc@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+ <ZHZFi28jRxeZMKK3@Asurada-Nvidia>
+ <a8ccbac8-c456-d116-24a2-7503ccbb720c@linux.intel.com>
+ <ZJnZ7bEIZHsqmyAG@ziepe.ca>
+ <26b97776-7ce5-51f6-77b7-0ce837aa7cca@linux.intel.com>
+ <ZJwsW3eFy0bMhkOt@ziepe.ca>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZJwsW3eFy0bMhkOt@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230628-arm64-signal-memcpy-fix-v1-1-db3e0300829e@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMm5nGQC/x2N3QqDMAxGX0VyvUBth5O9ythFWqOGrVUS2A/iu
- 6/u8hy+w7eBsQobXJsNlF9ispQK7amBNFOZGGWoDN754DrfI2nuzmgyFXpi5pzWL47ywcvAIYb
- Uj9Q6qHUkY4xKJc1H/170cehVua7/h7f7vv8A1FwFhoAAAAA=
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-c6835
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3232; i=broonie@kernel.org;
- h=from:subject:message-id; bh=68dGS9oL40E7cxdas87mbb7uykwmjXBlTk6CNaE/6js=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBknLnQSHo0ow++6DWpt9+O4FILzu3JfJuC9rm1CN0o
- 5wrrYemJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZJy50AAKCRAk1otyXVSH0H2DB/
- 4/bkq3fpGQY5GtAM+B7ksIgMK9vV9/3HHOlJ2tYT9YRs3O3L+Pqz4H2C6yjFeRnhnzjG4H9v58f546
- rGwA0zwRO61DHwRZVaHfouvKT+gMU+LUTpmJCdb2GJyR+/Ot5fhMWbQYprJdOUy/fc/ZMxEM4gGVn0
- WUbSj2iBeLSf6+escBUZ47BX+YNHvqztsxknLT4vVJcY7naNKkOE6UokJFEXK117nU0+cHbHk8cshm
- WwvvpnVAmRFu1xaauWhqUt+ce/5j6XIxP7/jHN0Mw9sFkFHPegoue9MdE/vbtGxtNccE5X5VdJD7mJ
- ljDeFpliQ7KOfi+1BKZUbPoAJn7oOx
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,89 +77,86 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When we collect a signal context with one of the SME modes enabled we will
-have enabled that mode behind the compiler and libc's back so they may
-issue some instructions not valid in streaming mode, causing spurious
-failures.
+On 2023/6/28 20:49, Jason Gunthorpe wrote:
+> On Wed, Jun 28, 2023 at 10:00:56AM +0800, Baolu Lu wrote:
+>>> If the driver created a SVA domain then the op should point to some
+>>> generic 'handle sva fault' function. There shouldn't be weird SVA
+>>> stuff in the core code.
+>>>
+>>> The weird SVA stuff is really just a generic per-device workqueue
+>>> dispatcher, so if we think that is valuable then it should be
+>>> integrated into the iommu_domain (domain->ops->use_iopf_workqueue =
+>>> true for instance). Then it could route the fault through the
+>>> workqueue and still invoke domain->ops->iopf_handler.
+>>>
+>>> The word "SVA" should not appear in any of this.
+>>
+>> Yes. We should make it generic. The domain->use_iopf_workqueue flag
+>> denotes that the page faults of a fault group should be put together and
+>> then be handled and responded in a workqueue. Otherwise, the page fault
+>> is dispatched to domain->iopf_handler directly.
+> 
+> It might be better to have iopf_handler and
+> iopf_handler_work function pointers to distinguish to two cases.
 
-For the code prior to issuing the BRK to trigger signal handling we need to
-stay in streaming mode if we were already there since that's a part of the
-signal context the caller is trying to collect. Unfortunately this code
-includes a memset() which is likely to be heavily optimised and is likely
-to use FP instructions incompatible with streaming mode. We can avoid this
-happening by open coding the memset(), inserting a volatile assembly
-statement to avoid the compiler recognising what's being done and doing
-something in optimisation. This code is not performance critical so the
-inefficiency should not be an issue.
+Both are okay. Let's choose one when we have the code.
 
-After collecting the context we can simply exit streaming mode, avoiding
-these issues. Use a full SMSTOP for safety to prevent any issues appearing
-with ZA.
+> 
+>>> Not sure what iommu_register_device_fault_handler() has to do with all
+>>> of this.. Setting up the dev_iommu stuff to allow for the workqueue
+>>> should happen dynamically during domain attach, ideally in the core
+>>> code before calling to the driver.
+>>
+>> There are two pointers under struct dev_iommu for fault handling.
+>>
+>> /**
+>>   * struct dev_iommu - Collection of per-device IOMMU data
+>>   *
+>>   * @fault_param: IOMMU detected device fault reporting data
+>>   * @iopf_param:  I/O Page Fault queue and data
+>>
+>> [...]
+>>
+>> struct dev_iommu {
+>>          struct mutex lock;
+>>          struct iommu_fault_param        *fault_param;
+>>          struct iopf_device_param        *iopf_param;
+>>
+>> My understanding is that @fault_param is a place holder for generic
+>> things, while @iopf_param is workqueue specific.
+> 
+> Well, lets look
+> 
+> struct iommu_fault_param {
+> 	iommu_dev_fault_handler_t handler;
+> 	void *data;
+> 
+> These two make no sense now. handler is always iommu_queue_iopf. Given
+> our domain centric design we want the function pointer in the domain,
+> not in the device. So delete it.
 
-Reported-by: Will Deacon <will@kernel.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- .../selftests/arm64/signal/test_signals_utils.h    | 28 +++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
+Agreed.
 
-diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-index 222093f51b67..db28409fd44b 100644
---- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
-+++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-@@ -60,13 +60,28 @@ static __always_inline bool get_current_context(struct tdescr *td,
- 						size_t dest_sz)
- {
- 	static volatile bool seen_already;
-+	int i;
-+	char *uc = (char *)dest_uc;
- 
- 	assert(td && dest_uc);
- 	/* it's a genuine invocation..reinit */
- 	seen_already = 0;
- 	td->live_uc_valid = 0;
- 	td->live_sz = dest_sz;
--	memset(dest_uc, 0x00, td->live_sz);
-+
-+	/*
-+	 * This is a memset() but we don't want the compiler to
-+	 * optimise it into either instructions or a library call
-+	 * which might be incompatible with streaming mode.
-+	 */
-+	for (i = 0; i < td->live_sz; i++) {
-+		asm volatile("nop"
-+			     : "+m" (*dest_uc)
-+			     :
-+			     : "memory");
-+		uc[i] = 0;
-+	}
-+
- 	td->live_uc = dest_uc;
- 	/*
- 	 * Grab ucontext_t triggering a SIGTRAP.
-@@ -103,6 +118,17 @@ static __always_inline bool get_current_context(struct tdescr *td,
- 		      :
- 		      : "memory");
- 
-+	/*
-+	 * If we were grabbing a streaming mode context then we may
-+	 * have entered streaming mode behind the system's back and
-+	 * libc or compiler generated code might decide to do
-+	 * something invalid in streaming mode, or potentially even
-+	 * the state of ZA.  Issue a SMSTOP to exit both now we have
-+	 * grabbed the state.
-+	 */
-+	if (td->feats_supported & FEAT_SME)
-+		asm volatile("msr S0_3_C4_C6_3, xzr");
-+
- 	/*
- 	 * If we get here with seen_already==1 it implies the td->live_uc
- 	 * context has been used to get back here....this probably means
+> 
+> 	struct list_head faults;
+> 	struct mutex lock;
+> 
+> Queue of unhandled/unacked faults? Seems sort of reasonable
 
----
-base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
-change-id: 20230628-arm64-signal-memcpy-fix-7de3b3c8fa10
+It's the list of faults pending for response.
+
+>> @iopf_param could be allocated on demand. (perhaps renaming it to a more
+>> meaningful one?) It happens before a domain with use_iopf_workqueue flag
+>> set attaches to a device. iopf_param keeps alive until device_release.
+> 
+> Yes
+> 
+> Do this for the iommu_fault_param as well, in fact, probably just put
+> the two things together in one allocation and allocate if we attach a
+> PRI using domain. I don't think we need to micro optimze further..
+
+Yeah, let me try this.
 
 Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+baolu
 
