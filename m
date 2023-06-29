@@ -2,112 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FC174265E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 14:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2768742730
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 15:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjF2M1V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 08:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S230190AbjF2NVu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 09:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232315AbjF2M06 (ORCPT
+        with ESMTP id S229494AbjF2NVt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:26:58 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BAE3C07;
-        Thu, 29 Jun 2023 05:26:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CDDA121854;
-        Thu, 29 Jun 2023 12:26:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1688041592; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wC2m3Yx3psKkEPLlun+ONLgR44D7q3seUbrUL2S3T30=;
-        b=ZyZqr+cHIpkjvoD03dDSgbCDBElpsaWtwxFW05ulVIk2gwfLFWUUD/kMkVJ+Z2klCfYTol
-        awCaBz7pOLURmVdQCBleNV4SQ2MLu1YT635FsDtY54RcGs8Z6WWBpSSqAeC5qiHL+Bt+PT
-        m2fXD2pRIfLjACuOVSVmECXejka9U5A=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA76713905;
-        Thu, 29 Jun 2023 12:26:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZE/9KHh4nWTXVwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 29 Jun 2023 12:26:32 +0000
-Date:   Thu, 29 Jun 2023 14:26:31 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 1/3] cpuset: Allow setscheduler regardless of manipulated
- task
-Message-ID: <4fowzgkh7yo5ku2fsrptyi7jzikynjtq4zpfcx7k26vk4k6zj3@ubnupp5jqgle>
-References: <20230629091146.28801-1-mkoutny@suse.com>
- <20230629091146.28801-2-mkoutny@suse.com>
- <15c607d9-c1fa-ca11-d675-8f2b3a6fd15b@redhat.com>
+        Thu, 29 Jun 2023 09:21:49 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4258F2707;
+        Thu, 29 Jun 2023 06:21:47 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1qEraf-0006iS-KY; Thu, 29 Jun 2023 15:21:41 +0200
+Date:   Thu, 29 Jun 2023 15:21:41 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Toke =?iso-8859-15?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc:     Florian Westphal <fw@strlen.de>, Daniel Xu <dxu@dxuuu.xyz>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        coreteam@netfilter.org, netfilter-devel@vger.kernel.org,
+        daniel@iogearbox.net, dsahern@kernel.org
+Subject: Re: [PATCH bpf-next 0/7] Support defragmenting IPv(4|6) packets in
+ BPF
+Message-ID: <20230629132141.GA10165@breakpoint.cc>
+References: <cover.1687819413.git.dxu@dxuuu.xyz>
+ <874jmthtiu.fsf@toke.dk>
+ <20230627154439.GA18285@breakpoint.cc>
+ <87o7kyfoqf.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rblx2idammiw6ntz"
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <15c607d9-c1fa-ca11-d675-8f2b3a6fd15b@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87o7kyfoqf.fsf@toke.dk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Toke Høiland-Jørgensen <toke@redhat.com> wrote:
+> Florian Westphal <fw@strlen.de> writes:
+> > For bpf a flag during link attachment seemed like the best way
+> > to go.
+> 
+> Right, I wasn't disputing that having a flag to load a module was a good
+> idea. On the contrary, I was thinking we'd need many more of these
+> if/when BPF wants to take advantage of more netfilter code. Say, if a
+> BPF module wants to call into TPROXY, that module would also need go be
+> loaded and kept around, no?
 
---rblx2idammiw6ntz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That seems to be a different topic that has nothing to do with
+either bpf_link or netfilter?
 
-On Thu, Jun 29, 2023 at 08:11:33AM -0400, Waiman Long <longman@redhat.com> =
-wrote:
-> So I think you should just use
-> cgroup_subsys_on_dfl(cpuset_cgrp_subsys) as the v2 check if your focus
-> is just to prevent problem when enabling cpuset controller.
+If the program calls into say, TPROXY, then I'd expect that this needs
+to be handled via kfuncs, no? Or if I misunderstand, what do you mean
+by "call into TPROXY"?
 
-I thought the bare cgroup_subsys_on_dfl(cpuset_cgrp_subsys) is not used
-in cpuset.c but I was wrong -- yes, I'll change this.
+And if so, thats already handled at bpf_prog load time, not
+at link creation time, or do I miss something here?
 
-> This change will likely conflict with the latest cpuset change on trackin=
-g #
-> of dl tasks in a cpuset. You will have to, at least, move the dl task che=
-ck
-> before the security_task_setscheduler() check.
->=20
-> Another fact about cpuset controller enabling is that both cpus_allowed a=
-nd
-> mems_allowed are empty at that point. You may also add these checks as a
-> preconditions for disabling the security_task_setscheduler check.
+AFAIU, if prog uses such kfuncs, verifier will grab needed module ref
+and if module isn't loaded the kfuncs won't be found and program load
+fails.
 
-Ah, I will rebase on fresh mainline (or do you mean another reference?).
+> I was thinking something along the lines of just having a field
+> 'netfilter_modules[]' where userspace could put an arbitrary number of
+> module names into, and we'd load all of them and put a ref into the
+> bpf_link.
 
-Thanks for the hints,
-Michal
+Why?  I fail to understand the connection between bpf_link, netfilter
+and modules.  What makes netfilter so special that we need such a
+module array, and what does that have to do with bpf_link interface?
 
---rblx2idammiw6ntz
-Content-Type: application/pgp-signature; name="signature.asc"
+> In principle, we could just have that be a string array f
+> module names, but that's probably a bit cumbersome (and, well, building
+> a generic module loader interface into the bpf_like API is not
+> desirable either). But maybe with an explicit ENUM?
 
------BEGIN PGP SIGNATURE-----
+What functionality does that provide? I can't think of a single module
+where this functionality is needed.
 
-iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZJ14dQAKCRAGvrMr/1gc
-jgWhAQCg5qoiDOfhNkRuhbqMER6ksJi/9R3UMnsTyDByQxNHcgD9Hxgyt1VPPcbL
-NtdTozyc/W59t7siU73cfznURZII+Qk=
-=E0Xs
------END PGP SIGNATURE-----
+Either we're talking about future kfuncs, then, as far as i understand
+how kfuncs work, this is handled at bpf_prog load time, not when the
+bpf_link is created.
 
---rblx2idammiw6ntz--
+Or we are talking about implicit dependencies, where program doesn't
+call function X but needs functionality handled earlier in the pipeline?
+
+The only two instances I know where this is the case for netfilter
+is defrag + conntrack.
+
+> > For conntrack, we MIGHT be able to not need a flag but
+> > maybe verifier could "guess" based on kfuncs used.
+> 
+> If the verifier can just identify the modules from the kfuncs and do the
+> whole thing automatically, that would of course be even better from an
+> ease-of-use PoV. Not sure what that would take, though? I seem to recall
+> having discussions around these lines before that fell down on various
+> points.
+
+AFAICS the conntrack kfuncs are wired to nf_conntrack already, so I
+would expect that the module has to be loaded already for the verifier
+to accept the program.
+
+Those kfuncs are not yet exposed to NETFILTER program types.
+Once they are, all that would be needed is for the netfilter bpf_link
+to be able tp detect that the prog is calling into those kfuncs, and
+then make the needed register/unregister calls to enable the conntrack
+hooks.
+
+Wheter thats better than using an explicit "please turn on conntrack for
+me", I don't know.  Perhaps future bpf programs could access skb->_nfct
+directly without kfuncs so I'd say the flag is a better approach
+from an uapi point of view.
