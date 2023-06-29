@@ -2,405 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7AC97422F9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 11:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00B5742403
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 12:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbjF2JL7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 05:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
+        id S231637AbjF2Kao (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 06:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbjF2JL5 (ORCPT
+        with ESMTP id S231835AbjF2Kaa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 05:11:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD652122;
-        Thu, 29 Jun 2023 02:11:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7651A21867;
-        Thu, 29 Jun 2023 09:11:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1688029913; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XzH1MaaHBG7iINHeBosnRktquhjO5Balbd3OzF+YzWM=;
-        b=qCPqhPNIOQIp087JLjr6YsSGfL+Mu8T4lYYPyNm71S1Sq8FsOKyK1pr/RcMVau8YsgNx/4
-        GI4v1qqjDWXtyfYAvVGmur3YOr1Z4OkF48oTiURPQl12da+z5X6xXDTkXj8icnTvbOip8u
-        nf+2UCHICSXOYOTlurjq9tmg1bwOdHE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 440F813A43;
-        Thu, 29 Jun 2023 09:11:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wAfYD9lKnWSMdQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 29 Jun 2023 09:11:53 +0000
-From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH 3/3] selftests: cgroup: Add cpuset migrations testcase
-Date:   Thu, 29 Jun 2023 11:11:46 +0200
-Message-ID: <20230629091146.28801-4-mkoutny@suse.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230629091146.28801-1-mkoutny@suse.com>
-References: <20230629091146.28801-1-mkoutny@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 29 Jun 2023 06:30:30 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433F82D5B;
+        Thu, 29 Jun 2023 03:30:12 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id A808FC020; Thu, 29 Jun 2023 12:30:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1688034610; bh=if9qbAJfyLZr3BzQNxYrgUhfEv4hP+9JnW2xBmEgwCY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KEfVaX0t2OTlde6Nd3qey+ECr1O+nYrxhyKKZOCmXh/2Kgcop7vRZZGfXcxSCkW9O
+         vWBrQHO6EdSwboCUulup2O1xup6vfcwAA2DqiKe4OyYvd6TS6wbKjx41Lx5ZQxmYFv
+         zxl6hIZ+F/OljOeiV/hZ0rKO9KXNX19gdAieVTBhnlRlqRIKPe4znCamk91RyWjpgd
+         Zo4wwqIiqmylUaGksQz3sONpgxlJcMR0v+5kLVORcCl+zKCict7j3FOqPvvQYM5ZGL
+         SeG9xnU8RQs8NhqFGuZ8Ohh+FQRrWzJa8NGmufRUwA7LHNGGXMMOSq8i7/cS3aUDfk
+         62Jh4ql10yc5A==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 3F9D1C009;
+        Thu, 29 Jun 2023 12:30:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1688034609; bh=if9qbAJfyLZr3BzQNxYrgUhfEv4hP+9JnW2xBmEgwCY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tCJfaWg5ag2BGOgbHK7s89C2ekhrviQD8tcS4Twse5JOBeKNyoTJCAq6SGCTf3SSf
+         X1jwKdSvMnpNmpynUzepZLjmFnIxPK19pPmpvR+qjvvhZ2fvVcq/pmCh2GawrhqyeQ
+         b3QDV4VSIrSfZZ9w4doi9uyaaNanBZZZr+x/38T/xBOZaW9oDALteGq0rBLMZse75m
+         9Y++q6QRmQUnN8ijUoIV+bhbSd2BmwuIs4tjSf6bVKI0ogoVMNhVoYuu2VuWHmpuba
+         xjGs0VygsedMgSD2vLPool/GcdCoTQXjq0M3iwsj7gCkkDAMpgfqC87vJrtjrgn7mn
+         s5NXJ8uUYen7A==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 9e8fd47c;
+        Thu, 29 Jun 2023 10:30:01 +0000 (UTC)
+Date:   Thu, 29 Jun 2023 19:29:46 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Jeff Xu <jeffxu@chromium.org>
+Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v8 3/5] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+Message-ID: <ZJ1dGvWkJVAbBPn7@codewreck.org>
+References: <20221215001205.51969-1-jeffxu@google.com>
+ <20221215001205.51969-4-jeffxu@google.com>
+ <ZJwcsU0vI-nzgOB_@codewreck.org>
+ <ZJyKeeqRJxzwlMhk@codewreck.org>
+ <CABi2SkWnAgHK1i6iqSqPMYuNEhtHBkO8jUuCvmG3RmUB5TKHJw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CABi2SkWnAgHK1i6iqSqPMYuNEhtHBkO8jUuCvmG3RmUB5TKHJw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a separate testfile to verify treating permissions when tasks are
-migrated on cgroup v2 hierarchy between cpuset cgroups.
+Jeff Xu wrote on Wed, Jun 28, 2023 at 09:33:27PM -0700:
+> > > BTW I find the current behaviour rather hard to use: setting this to 2
+> > > should still set NOEXEC by default in my opinion, just refuse anything
+> > > that explicitly requested EXEC.
+> >
+> > And I just noticed it's not possible to lower the value despite having
+> > CAP_SYS_ADMIN: what the heck?! I have never seen such a sysctl and it
+> > just forced me to reboot because I willy-nilly tested in the init pid
+> > namespace, and quite a few applications that don't require exec broke
+> > exactly as I described below.
+> >
+> > If the user has CAP_SYS_ADMIN there are more container escape methods
+> > than I can count, this is basically free pass to root on main namespace
+> > anyway, you're not protecting anything. Please let people set the sysctl
+> > to what they want.
+>
+> Yama has a similar setting,  for example, 3 (YAMA_SCOPE_NO_ATTACH)
+> will not allow downgrading at runtime.
+> 
+> Since this is a security feature, not allowing downgrading at run time
+> is part of the security consideration. I hope you understand.
 
-In accordance with v2 design, migration should be allowed based on
-delegation boundaries (i.e. cgroup.procs permissions) and does not
-depend on the migrated object (i.e. unprivileged process can migrate
-another process (even privileged) as long as it remains in the original
-dedicated scope).
+I didn't remember yama had this stuck bit; that still strikes me as
+unusual, and if you require a custom LSM rule for memfd anyway I don't
+see why it couldn't enforce that the sysctl is unchanged, but sure.
 
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
- MAINTAINERS                                  |   1 +
- tools/testing/selftests/cgroup/.gitignore    |   1 +
- tools/testing/selftests/cgroup/Makefile      |   2 +
- tools/testing/selftests/cgroup/test_cpuset.c | 272 +++++++++++++++++++
- 4 files changed, 276 insertions(+)
- create mode 100644 tools/testing/selftests/cgroup/test_cpuset.c
+Please, though:
+ - I have a hard time thinking of 1 as a security flag in general (even
+if I do agree a sloppy LSM rule could require it); I would only lock 2
+ - please make it clear, I don't see any entry in the sysctl
+documentation[1] about memfd_noexec, there should be one and you can
+copy the wording from yama's doc[2]: "Once set, this sysctl value cannot
+be changed"
+[1] Documentation/admin-guide/sysctl/vm.rst
+[2] Documentation/admin-guide/LSM/Yama.rst
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 50e7056b4383..51a31aab077f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5259,6 +5259,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git
- F:	Documentation/admin-guide/cgroup-v1/cpusets.rst
- F:	include/linux/cpuset.h
- F:	kernel/cgroup/cpuset.c
-+F:	tools/testing/selftests/cgroup/test_cpuset.c
- F:	tools/testing/selftests/cgroup/test_cpuset_prs.sh
- 
- CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)
-diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
-index c4a57e69f749..8443a8d46a1c 100644
---- a/tools/testing/selftests/cgroup/.gitignore
-+++ b/tools/testing/selftests/cgroup/.gitignore
-@@ -5,4 +5,5 @@ test_freezer
- test_kmem
- test_kill
- test_cpu
-+test_cpuset
- wait_inotify
-diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index 3d263747d2ad..dee0f013c7f4 100644
---- a/tools/testing/selftests/cgroup/Makefile
-+++ b/tools/testing/selftests/cgroup/Makefile
-@@ -12,6 +12,7 @@ TEST_GEN_PROGS += test_core
- TEST_GEN_PROGS += test_freezer
- TEST_GEN_PROGS += test_kill
- TEST_GEN_PROGS += test_cpu
-+TEST_GEN_PROGS += test_cpuset
- 
- LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
- 
-@@ -23,3 +24,4 @@ $(OUTPUT)/test_core: cgroup_util.c
- $(OUTPUT)/test_freezer: cgroup_util.c
- $(OUTPUT)/test_kill: cgroup_util.c
- $(OUTPUT)/test_cpu: cgroup_util.c
-+$(OUTPUT)/test_cpuset: cgroup_util.c
-diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
-new file mode 100644
-index 000000000000..976ec6f014d8
---- /dev/null
-+++ b/tools/testing/selftests/cgroup/test_cpuset.c
-@@ -0,0 +1,272 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/limits.h>
-+#include <signal.h>
-+
-+#include "../kselftest.h"
-+#include "cgroup_util.h"
-+
-+static int idle_process_fn(const char *cgroup, void *arg)
-+{
-+	(void)pause();
-+	return 0;
-+}
-+
-+static int do_migration_fn(const char *cgroup, void *arg)
-+{
-+	int object_pid = (int)(size_t)arg;
-+
-+	if (setuid(TEST_UID))
-+		return EXIT_FAILURE;
-+
-+	// XXX checking /proc/$pid/cgroup would be quicker than wait
-+	if (cg_enter(cgroup, object_pid) ||
-+	    cg_wait_for_proc_count(cgroup, 1))
-+		return EXIT_FAILURE;
-+
-+	return EXIT_SUCCESS;
-+}
-+
-+static int do_controller_fn(const char *cgroup, void *arg)
-+{
-+	const char *child = cgroup;
-+	const char *parent = arg;
-+
-+	if (setuid(TEST_UID))
-+		return EXIT_FAILURE;
-+
-+	if (!cg_read_strstr(child, "cgroup.controllers", "cpuset"))
-+		return EXIT_FAILURE;
-+
-+	if (cg_write(parent, "cgroup.subtree_control", "+cpuset"))
-+		return EXIT_FAILURE;
-+
-+	if (cg_read_strstr(child, "cgroup.controllers", "cpuset"))
-+		return EXIT_FAILURE;
-+
-+	if (cg_write(parent, "cgroup.subtree_control", "-cpuset"))
-+		return EXIT_FAILURE;
-+
-+	if (!cg_read_strstr(child, "cgroup.controllers", "cpuset"))
-+		return EXIT_FAILURE;
-+
-+	return EXIT_SUCCESS;
-+}
-+
-+/*
-+ * Migrate a process between two sibling cgroups.
-+ * The success should only depend on the parent cgroup permissions and not the
-+ * migrated process itself (cpuset controller is in place because it uses
-+ * security_task_setscheduler() in cgroup v1).
-+ */
-+static int test_cpuset_perms_object(const char *root, bool allow)
-+{
-+	char *parent = NULL, *child_src = NULL, *child_dst = NULL;
-+	char *parent_procs = NULL, *child_src_procs = NULL, *child_dst_procs = NULL;
-+	const uid_t test_euid = TEST_UID;
-+	int object_pid = 0;
-+	int ret = KSFT_FAIL;
-+
-+	parent = cg_name(root, "cpuset_test_0");
-+	if (!parent)
-+		goto cleanup;
-+	parent_procs = cg_name(parent, "cgroup.procs");
-+	if (!parent_procs)
-+		goto cleanup;
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	child_src = cg_name(parent, "cpuset_test_1");
-+	if (!child_src)
-+		goto cleanup;
-+	child_src_procs = cg_name(child_src, "cgroup.procs");
-+	if (!child_src_procs)
-+		goto cleanup;
-+	if (cg_create(child_src))
-+		goto cleanup;
-+
-+	child_dst = cg_name(parent, "cpuset_test_2");
-+	if (!child_dst)
-+		goto cleanup;
-+	child_dst_procs = cg_name(child_dst, "cgroup.procs");
-+	if (!child_dst_procs)
-+		goto cleanup;
-+	if (cg_create(child_dst))
-+		goto cleanup;
-+
-+	if (cg_write(parent, "cgroup.subtree_control", "+cpuset"))
-+		goto cleanup;
-+
-+	if (cg_read_strstr(child_src, "cgroup.controllers", "cpuset") ||
-+	    cg_read_strstr(child_dst, "cgroup.controllers", "cpuset"))
-+		goto cleanup;
-+
-+	/* Enable permissions along src->dst tree path */
-+	if (chown(child_src_procs, test_euid, -1) ||
-+	    chown(child_dst_procs, test_euid, -1))
-+		goto cleanup;
-+
-+	if (allow && chown(parent_procs, test_euid, -1))
-+		goto cleanup;
-+
-+	/* Fork a privileged child as a test object */
-+	object_pid = cg_run_nowait(child_src, idle_process_fn, NULL);
-+	if (object_pid < 0)
-+		goto cleanup;
-+
-+	/* Carry out migration in a child process that can drop all privileges
-+	 * (including capabilities), the main process must remain privileged for
-+	 * cleanup.
-+	 * Child process's cgroup is irrelevant but we place it into child_dst
-+	 * as hacky way to pass information about migration target to the child.
-+	 */
-+	if (allow ^ (cg_run(child_dst, do_migration_fn, (void *)(size_t)object_pid) == EXIT_SUCCESS))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (object_pid > 0) {
-+		(void)kill(object_pid, SIGTERM);
-+		(void)clone_reap(object_pid, WEXITED);
-+	}
-+
-+	cg_destroy(child_dst);
-+	free(child_dst_procs);
-+	free(child_dst);
-+
-+	cg_destroy(child_src);
-+	free(child_src_procs);
-+	free(child_src);
-+
-+	cg_destroy(parent);
-+	free(parent_procs);
-+	free(parent);
-+
-+	return ret;
-+}
-+
-+static int test_cpuset_perms_object_allow(const char *root)
-+{
-+	return test_cpuset_perms_object(root, true);
-+}
-+
-+static int test_cpuset_perms_object_deny(const char *root)
-+{
-+	return test_cpuset_perms_object(root, false);
-+}
-+
-+/*
-+ * Migrate a process between parent and child implicitely
-+ * Implicit migration happens when a controller is enabled/disabled.
-+ *
-+ */
-+static int test_cpuset_perms_subtree(const char *root)
-+{
-+	char *parent = NULL, *child = NULL;
-+	char *parent_procs = NULL, *parent_subctl = NULL, *child_procs = NULL;
-+	const uid_t test_euid = TEST_UID;
-+	int object_pid = 0;
-+	int ret = KSFT_FAIL;
-+
-+	parent = cg_name(root, "cpuset_test_0");
-+	if (!parent)
-+		goto cleanup;
-+	parent_procs = cg_name(parent, "cgroup.procs");
-+	if (!parent_procs)
-+		goto cleanup;
-+	parent_subctl = cg_name(parent, "cgroup.subtree_control");
-+	if (!parent_subctl)
-+		goto cleanup;
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	child = cg_name(parent, "cpuset_test_1");
-+	if (!child)
-+		goto cleanup;
-+	child_procs = cg_name(child, "cgroup.procs");
-+	if (!child_procs)
-+		goto cleanup;
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	/* Enable permissions as in a delegated subtree */
-+	if (chown(parent_procs, test_euid, -1) ||
-+	    chown(parent_subctl, test_euid, -1) ||
-+	    chown(child_procs, test_euid, -1))
-+		goto cleanup;
-+
-+	/* Put a privileged child in the subtree and modify controller state
-+	 * from an unprivileged process, the main process remains privileged
-+	 * for cleanup.
-+	 * The unprivileged child runs in subtree too to avoid parent and
-+	 * internal-node constraing violation.
-+	 */
-+	object_pid = cg_run_nowait(child, idle_process_fn, NULL);
-+	if (object_pid < 0)
-+		goto cleanup;
-+
-+	if (cg_run(child, do_controller_fn, parent) != EXIT_SUCCESS)
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (object_pid > 0) {
-+		(void)kill(object_pid, SIGTERM);
-+		(void)clone_reap(object_pid, WEXITED);
-+	}
-+
-+	cg_destroy(child);
-+	free(child_procs);
-+	free(child);
-+
-+	cg_destroy(parent);
-+	free(parent_subctl);
-+	free(parent_procs);
-+	free(parent);
-+
-+	return ret;
-+}
-+
-+
-+#define T(x) { x, #x }
-+struct cpuset_test {
-+	int (*fn)(const char *root);
-+	const char *name;
-+} tests[] = {
-+	T(test_cpuset_perms_object_allow),
-+	T(test_cpuset_perms_object_deny),
-+	T(test_cpuset_perms_subtree),
-+};
-+#undef T
-+
-+int main(int argc, char *argv[])
-+{
-+	char root[PATH_MAX];
-+	int i, ret = EXIT_SUCCESS;
-+
-+	if (cg_find_unified_root(root, sizeof(root)))
-+		ksft_exit_skip("cgroup v2 isn't mounted\n");
-+
-+	if (cg_read_strstr(root, "cgroup.subtree_control", "cpuset"))
-+		if (cg_write(root, "cgroup.subtree_control", "+cpuset"))
-+			ksft_exit_skip("Failed to set cpuset controller\n");
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		switch (tests[i].fn(root)) {
-+		case KSFT_PASS:
-+			ksft_test_result_pass("%s\n", tests[i].name);
-+			break;
-+		case KSFT_SKIP:
-+			ksft_test_result_skip("%s\n", tests[i].name);
-+			break;
-+		default:
-+			ret = EXIT_FAILURE;
-+			ksft_test_result_fail("%s\n", tests[i].name);
-+			break;
-+		}
-+	}
-+
-+	return ret;
-+}
+
+Either way as it stands I still don't think one can expect most
+userspace applications to be converted until some libc wrapper takes
+care of the retry logic and a couple of years, so I'll go look for
+another way of filtering this (and eventually setting this to 1) as you
+suggested.
+I'll leave the follow-up up to you and won't bother you more.
+
+Thanks,
 -- 
-2.41.0
-
+Dominique Martinet | Asmadeus
