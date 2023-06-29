@@ -2,127 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F5A742AE1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 18:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6729F742B9F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 19:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbjF2Q4v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 12:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
+        id S231482AbjF2R7K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 13:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjF2Q4t (ORCPT
+        with ESMTP id S229794AbjF2R7J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:56:49 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F852134;
-        Thu, 29 Jun 2023 09:56:48 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 18:56:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1688057805; bh=4elotnmXGpe3V3SJ//1GuCSRqBeSHWMIR5YI5hTtzS0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K1MvRxqnvqIUKvTQoMgfm5QYAlTAXP1HyZqpNC4Q4Ic9UcorZnRD0KS7A+fo6cfbG
-         T0yCsDOGaILA4iyiuGDxnJsOEm9dRnUhUgDKixMRSxRvJ2HH9c2be1cFTSFPHZBeXP
-         Vulmrd3isXtcEA94fE7C2egvupwB1Ox5QsToVUkg=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, w@1wt.eu
-Subject: Re: [PATCH v1 05/17] selftests/nolibc: stat_timestamps: remove
- procfs dependency
-Message-ID: <df1f8ba1-3040-465c-804e-495f046dba7a@t-8ch.de>
-References: <5f80f3dae60f77c6b746578113e56c8fa6454143.1687344643.git.falcon@tinylab.org>
- <20230628135922.97298-1-falcon@tinylab.org>
+        Thu, 29 Jun 2023 13:59:09 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4694EE49;
+        Thu, 29 Jun 2023 10:59:08 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 99BFF5C030F;
+        Thu, 29 Jun 2023 13:59:07 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 29 Jun 2023 13:59:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1688061547; x=1688147947; bh=zcTZxE9rpOoRkiMqNrWJKVYoGMOyFfMOjEX
+        rxqdBCO0=; b=QOcUfjyvHJ6D2L3Dlwp0WTQ344bF9/0nbhpJze8piFkWG8+MkX+
+        UOCg6rcslYY1EqcOC9he1B8AmiuhRwPu0c2DeD7QPI0hWv/1sYtWjycs1MDaWBfY
+        mY+9LtflSl5HTTi2SXulWzPe+sOwJQGOzk7LLeObAaWQOjlLOx1Y0CImH1dXkCYa
+        +p/ajyTPybxU/CG5mpPwuZ5D2CO7rrhj1mxhl9sG48oG6LGHk40C1J7Uo/WE8/zo
+        y/P1NFDLv3zKD9xTfd8TYmlMsUe0+56nnDxgyNm7rksmrEnE2MqOv3KFYr9o6mb/
+        6HimsdiRxljAD0epXrfU2FI5ifeO98xrRgQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1688061547; x=1688147947; bh=zcTZxE9rpOoRkiMqNrWJKVYoGMOyFfMOjEX
+        rxqdBCO0=; b=KvDjFlOX3It/jB2DidOzLexu8tyDdbcVc97bseorb+kgeE6Cp+t
+        xGOuDCM0m5yGblZCDv8LYKshsajzIOIC8/TmFYxCcQeo/LwnR6uN2cb1t85vLXM8
+        w8KWP9sQqPmxhc0iZXCacKSbIRDZUdlTzzMAWXpR18Hau423nXMoGGllJOmdsJq4
+        IahcQpjXUnAKpCxqQ4CIcsk6fs+Qoyqwj6dRfDI8z1+2Wzcxqa1itwWI48h3v6Mu
+        7GKFr5iEe0+FvG3kXsrrxnAJLVbgREk1y+TmVJtGh2JES8ZaDKKYTVdoU8szn/m0
+        H3cBGwJOcsa3wYE24ChLDIpLLVaRKygqdsA==
+X-ME-Sender: <xms:asadZDjkKMaWuDTze6cFuJbqwcwnWbMh16BQlZdyNeTgGDdC3P9hIg>
+    <xme:asadZACYCVgLwjQtSadOrI9bn_iBQmGEFgioAGdIDwu78UbZ2eHW8piFHKvOnmDxC
+    lzZ_eb7jn4zaeTISw>
+X-ME-Received: <xmr:asadZDEQBjLJcoOU0ux7N7J5jGQEa_C4EYqpuOP4j7RmLSicnzRv7_bZd90I6ttiIqCtB3PythTSGUeEhICiJED0CWun6AZxXU-_>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeggdduudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtugfgjgestheksfdt
+    tddtudenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
+    enucggtffrrghtthgvrhhnpedufeeitdeiheffueffleffgeehgeejkeetkefgtdekfeej
+    heffjedtgfekieetleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:asadZARXMG_Xg5rfhd2yeyDHqx1XwQBXhhaBr0DDozekyiC_-39tvw>
+    <xmx:asadZAxptrHuJMR4cUkl-YO_rGhERLHkICobjSNACkhSoTozdLe1iw>
+    <xmx:asadZG4eAk216siHH6UQI0kuyExIcLUmG4Ty_24wADoCLFTcg360rQ>
+    <xmx:a8adZPlmja08QxHviOqdJjap12poRut-N_BKnVIyu1k6y7RXWpoQ5Q>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 29 Jun 2023 13:59:06 -0400 (EDT)
+Date:   Thu, 29 Jun 2023 11:59:04 -0600
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Florian Westphal <fw@strlen.de>
+Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        coreteam@netfilter.org, netfilter-devel@vger.kernel.org,
+        daniel@iogearbox.net, dsahern@kernel.org
+Subject: Re: [PATCH bpf-next 0/7] Support defragmenting IPv(4|6) packets in
+ BPF
+Message-ID: <nk6jl4hqougwim4sfgnm6rleh64dqad6qbqghbmjcfi6o7qrae@q3jtw34azrml>
+References: <cover.1687819413.git.dxu@dxuuu.xyz>
+ <874jmthtiu.fsf@toke.dk>
+ <20230627154439.GA18285@breakpoint.cc>
+ <87o7kyfoqf.fsf@toke.dk>
+ <20230629132141.GA10165@breakpoint.cc>
+ <87leg2fia0.fsf@toke.dk>
+ <20230629145315.GB10165@breakpoint.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230628135922.97298-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230629145315.GB10165@breakpoint.cc>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Zhangjin,
-
-On 2023-06-28 21:59:22+0800, Zhangjin Wu wrote:
-> I'm preparing a revision for this series, in the past days, when I was
-> working on testing our new 'minimal' kernel config support for all of
-> the architectures, the time cost (and wait) is really appreciable and the
-> repeated develop and test is really a big pain, I can also image when you
-> was working on stack-protector and Willy was working on lots of old
-> features ;-)
-
-To be honest I almost never built a kernel.
-Most of the time I tested my stuff with qemu-user.
-This made the dev-cycle really fast, especially with a binfmt setup that
-launches foreign binaries automatically with qemu-user.
-
-> As you explained before, I knew the idea of using '/proc/self' here is
-> important to not using a fixed-time file, besides our proposed method (make
-> sure it at least not fail, just skip for !procfs):
+On Thu, Jun 29, 2023 at 04:53:15PM +0200, Florian Westphal wrote:
+> Toke Høiland-Jørgensen <toke@redhat.com> wrote:
+> > Florian Westphal <fw@strlen.de> writes:
+> > As for the original question, that's answered by your point above: If
+> > those two modules are the only ones that are likely to need this, then a
+> > flag for each is fine by me - that was the key piece I was missing (I'm
+> > not a netfilter expert, as you well know).
 > 
->     - CASE_TEST(stat_timestamps);   EXPECT_SYSZR(1, test_stat_timestamps()); break;
->     + CASE_TEST(stat_timestamps);   EXPECT_SYSZR(proc, test_stat_timestamps()); break;
+> No problem, I was worried I was missing an important piece of kfunc
+> plumbing :-)
 > 
-> To further avoid skip it for !procfs (I don't mean relaly disable it for the
-> default tinyconfig support, which need more discuss, at least provide the
-> possibility to pass without procfs), do you like this change? it doesn't depend
-> on 'proc' now.
+> You do raise a good point though.  With kfuncs, module is pinned.
+> So, should a "please turn on defrag for this bpf_link" pin
+> the defrag modules too?
 > 
->     -	if (stat("/proc/self/", &st))
->     +	if (stat("/proc/self/", &st) && stat("/init", &st) && stat("/", &st))
-> 
-> The "/init" is compiled for 'run' target every time, so, the time stamp should
-> be dynamic enough, for libc-test, the /proc/self should be always there (if
-> still not enough, we can reuse the init file list here), the "/" here is only
-> for the worst-case scene ;-)
+> For plain netfilter we don't do that, i.e. you can just do
+> "rmmod nf_defrag_ipv4".  But I suspect that for the new bpf-link
+> defrag we probably should grab a reference to prevent unwanted
+> functionality breakage of the bpf prog.
 
-Both aproaches seem fine. Just skipping on !proc seems good enough.
+Ack. Will add to v3.
 
-As for enabling proc in the test configs I just tested a plain
-tinyconfig vs one with CONFIG_PROC_FS enabled:
-
-tinyconfig:                  375.06user 53.21system 2:05.80elapsed
-tinyconfig + CONFIG_PROC_FS: 397.77user 56.84system 2:09.24elapsed
-
-The overhead seems acceptable.
-
-
-Note as for disabling memfd:
-
-It seems currently MEMFD_CREATE is hardwired to only be enabled when
-either TMPFS or HUGETLBFS is enabled.
-
-But the memfd code and syscalls seem to work perfectly fine with those
-options disabled. I'll send a patch to fix up the Kconfigs to enable
-that usecase.
-
-> Thanks,
-> Zhangjin
-> 
-> > Since it is not really necessary to use /proc/self here, instead of
-> > adding a condition check, we use the always existing '/' path instead of
-> > /proc/self, this eventually let it work without procfs.
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index ebec948ec808..2ef44176f7a9 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -520,7 +520,7 @@ static int test_stat_timestamps(void)
-> >  	if (sizeof(st.st_atim.tv_sec) != sizeof(st.st_atime))
-> >  		return 1;
-> >  
-> > -	if (stat("/proc/self/", &st))
-> > +	if (stat("/", &st))
-> >  		return 1;
-> >  
-> >  	if (st.st_atim.tv_sec != st.st_atime || st.st_atim.tv_nsec > 1000000000)
-> > -- 
-> > 2.25.1
+Thanks,
+Daniel
