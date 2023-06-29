@@ -2,126 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47E974310D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 01:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DDE743111
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 01:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbjF2XZI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 19:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
+        id S229483AbjF2X0K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 19:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbjF2XZH (ORCPT
+        with ESMTP id S231953AbjF2X0F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:25:07 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714611FC2
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 16:25:06 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6b5d7e60015so1048553a34.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 16:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688081106; x=1690673106;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8XkUN0EizrcPJdxYDyml9MD9K5nwnJEgupZt44caww4=;
-        b=DIOrkzvu8itXrRDVqrYwNUO8RR/O0uEKATtMBGoLT7ZDMAULfOV2+XLpRMwb4lSo1H
-         o8f4vm7uBwP6nRhUwyvViY15Yn73fB6S5rSl+En04NKl9NuKOjDAks0aqXtGB6itZkTx
-         hFE5wR4rTEM4DrLYzlMegMS5O2+oAyJQsqHkE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688081106; x=1690673106;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8XkUN0EizrcPJdxYDyml9MD9K5nwnJEgupZt44caww4=;
-        b=ECvz/wl0OVODWZJzkNT8rCrFTEGxJtrT7j5FPoeSWIoVvKDuUNnf6eBCwRm3UeyoxO
-         x+XRoJG1Zn4Ix5WLufhbLMx2fdeh8QVkJyQICbAOjdjGUd8yA3d0OR7LtrG9JoO6VFWi
-         GLSUG74hzary+um68BedM/eZGzeDq/+b7miKT6AYyvtJyqbG+5Xz93hyNKFscPMTS3b6
-         T7jwnPLTOyJFK90g2vNUKVc3mDuf7NQpgrH1zLXmrQ1fH3Ve5O0GBNpzteaaysXE4OzO
-         mdjhdrMPVh2PO092sRimGZmOWWPeohFzUrBOX6RspqK6Aewe963D7iJ2ZaaED5eS4t9t
-         NvjQ==
-X-Gm-Message-State: AC+VfDxDpQ+UJipYEUBi1Gl7auTFrWYT+HVJ/MYKUcuyEUl1jJiyKfI+
-        nW5wbhE1PLhtcy2f4+JUuS0pOw==
-X-Google-Smtp-Source: APBJJlGFQhB9pXlX/BZEhpArHhanMF0PsxvAgS8Ray5hkbYflejU/wjfaf/Ywe+hLWqeUIiTbaazMw==
-X-Received: by 2002:a05:6870:3c8c:b0:1aa:9eb6:974d with SMTP id gl12-20020a0568703c8c00b001aa9eb6974dmr1593876oab.41.1688081105835;
-        Thu, 29 Jun 2023 16:25:05 -0700 (PDT)
-Received: from localhost (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
-        by smtp.gmail.com with UTF8SMTPSA id g15-20020a17090ace8f00b002636e5c224asm573038pju.56.2023.06.29.16.25.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 16:25:05 -0700 (PDT)
-From:   jeffxu@chromium.org
-To:     skhan@linuxfoundation.org, keescook@chromium.org
-Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Dominique Martinet <asmadeus@codewreck.org>
-Subject: [PATCH] Documentation: mm/memfd: vm.memfd_noexec
-Date:   Thu, 29 Jun 2023 23:25:01 +0000
-Message-ID: <20230629232501.4157671-1-jeffxu@google.com>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+        Thu, 29 Jun 2023 19:26:05 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66FD1FE4;
+        Thu, 29 Jun 2023 16:26:03 -0700 (PDT)
+X-QQ-mid: bizesmtp91t1688081154tyi55hnf
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 30 Jun 2023 07:25:52 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: 6aXALTFZqPuZikFTnD0XtTrqnijJVdsBQ+fxB4J0aSCn27CFnCwO6LrrmluGc
+        rpV/PikWplX1NtR6o5wbyCcv6WlYJCsSsHhUrWWybJrEciGHc9kgBfM70mFeFNYeglnMGaR
+        8kBS1WA6Q4/vvjTcUxQL//bO5Mn1EJTJzocmcqmGvmgq8MovuFny2kYrND2di0t/ae2si6k
+        109qlRNSTq5XbQJp2wTmaL7ZX5Rjgx+UyLcnaw17iJFrYU343Cyv7rqi6hV2Y2LZVOQSE7e
+        eCT6Z5+JLR3XMhW7o4gCnAQAkgPr6qWY9aNtjTcvynXUgcu82JGWCvCw6lg1FETscw+rksp
+        6s6sRAan4j8fts6W6DRZYa0tWkZ42qJoAMsqUqJ/6sX6qmg4pm+krnciMniTQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 12284148764811659706
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 02/15] selftests/nolibc: gettid: restore for glibc and musl
+Date:   Fri, 30 Jun 2023 07:25:14 +0800
+Message-Id: <e9cc14be8114661c32f0d3e361fbe30cb8a5184c.1688078605.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1688078604.git.falcon@tinylab.org>
+References: <cover.1688078604.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jeff Xu <jeffxu@google.com>
+As the gettid manpage [1] shows, glibc 2.30 has gettid support, so,
+let's enable the test for glibc >= 2.30.
 
-Add documentation for sysctl vm.memfd_noexec
+gettid works on musl too.
 
-Link:https://lore.kernel.org/linux-mm/CABi2SkXUX_QqTQ10Yx9bBUGpN1wByOi_=gZU6WEy5a8MaQY3Jw@mail.gmail.com/T/
-Reported-by: Dominique Martinet <asmadeus@codewreck.org>
-Signed-off-by: Jeff Xu <jeffxu@google.com>
+[1]: https://man7.org/linux/man-pages/man2/gettid.2.html
+
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- Documentation/admin-guide/sysctl/vm.rst | 29 +++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index 45ba1f4dc004..71923c3d7044 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -424,6 +424,35 @@ e.g., up to one or two maps per allocation.
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index a2eacd6436d0..785b1f4cbdc5 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -659,6 +659,7 @@ int run_syscall(int min, int max)
+ 	int tmp;
+ 	int ret = 0;
+ 	void *p1, *p2;
++	int has_gettid = 1;
  
- The default value is 65530.
+ 	/* <proc> indicates whether or not /proc is mounted */
+ 	proc = stat("/proc", &stat_buf) == 0;
+@@ -666,6 +667,11 @@ int run_syscall(int min, int max)
+ 	/* this will be used to skip certain tests that can't be run unprivileged */
+ 	euid0 = geteuid() == 0;
  
-+memfd_noexec:
-+=============
-+This pid namespaced sysctl controls memfd_create().
++	/* from 2.30, glibc provides gettid() */
++#if defined(__GLIBC_MINOR__) && defined(__GLIBC__)
++	has_gettid = __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 30);
++#endif
 +
-+The new MFD_NOEXEC_SEAL and MFD_EXEC flags of memfd_create() allows
-+application to set executable bit at creation time.
-+
-+When MFD_NOEXEC_SEAL is set, memfd is created without executable bit
-+(mode:0666), and sealed with F_SEAL_EXEC, so it can't be chmod to
-+be executable (mode: 0777) after creation.
-+
-+when MFD_EXEC flag is set, memfd is created with executable bit
-+(mode:0777), this is the same as the old behavior of memfd_create.
-+
-+The new pid namespaced sysctl vm.memfd_noexec has 3 values:
-+0: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
-+        MFD_EXEC was set.
-+1: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
-+        MFD_NOEXEC_SEAL was set.
-+2: memfd_create() without MFD_NOEXEC_SEAL will be rejected.
-+
-+The default value is 0.
-+
-+Once set, it can't be downgraded at runtime, i.e. 2=>1, 1=>0
-+are denied.
-+
-+This is pid namespaced sysctl, child processes inherit the parent
-+process's pid at the time of fork. Changes to the parent process
-+after fork are not automatically propagated to the child process.
+ 	for (test = min; test >= 0 && test <= max; test++) {
+ 		int llen = 0; /* line length */
  
- memory_failure_early_kill:
- ==========================
+@@ -675,9 +681,7 @@ int run_syscall(int min, int max)
+ 		switch (test + __LINE__ + 1) {
+ 		CASE_TEST(getpid);            EXPECT_SYSNE(1, getpid(), -1); break;
+ 		CASE_TEST(getppid);           EXPECT_SYSNE(1, getppid(), -1); break;
+-#ifdef NOLIBC
+-		CASE_TEST(gettid);            EXPECT_SYSNE(1, gettid(), -1); break;
+-#endif
++		CASE_TEST(gettid);            EXPECT_SYSNE(has_gettid, gettid(), -1); break;
+ 		CASE_TEST(getpgid_self);      EXPECT_SYSNE(1, getpgid(0), -1); break;
+ 		CASE_TEST(getpgid_bad);       EXPECT_SYSER(1, getpgid(-1), -1, ESRCH); break;
+ 		CASE_TEST(kill_0);            EXPECT_SYSZR(1, kill(getpid(), 0)); break;
 -- 
-2.41.0.255.g8b1d071c50-goog
+2.25.1
 
