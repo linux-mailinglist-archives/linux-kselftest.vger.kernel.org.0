@@ -2,121 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00B5742403
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 12:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A84474256F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 14:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjF2Kao (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 06:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
+        id S229978AbjF2MMe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 08:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbjF2Kaa (ORCPT
+        with ESMTP id S231655AbjF2MMa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:30:30 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433F82D5B;
-        Thu, 29 Jun 2023 03:30:12 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id A808FC020; Thu, 29 Jun 2023 12:30:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1688034610; bh=if9qbAJfyLZr3BzQNxYrgUhfEv4hP+9JnW2xBmEgwCY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KEfVaX0t2OTlde6Nd3qey+ECr1O+nYrxhyKKZOCmXh/2Kgcop7vRZZGfXcxSCkW9O
-         vWBrQHO6EdSwboCUulup2O1xup6vfcwAA2DqiKe4OyYvd6TS6wbKjx41Lx5ZQxmYFv
-         zxl6hIZ+F/OljOeiV/hZ0rKO9KXNX19gdAieVTBhnlRlqRIKPe4znCamk91RyWjpgd
-         Zo4wwqIiqmylUaGksQz3sONpgxlJcMR0v+5kLVORcCl+zKCict7j3FOqPvvQYM5ZGL
-         SeG9xnU8RQs8NhqFGuZ8Ohh+FQRrWzJa8NGmufRUwA7LHNGGXMMOSq8i7/cS3aUDfk
-         62Jh4ql10yc5A==
+        Thu, 29 Jun 2023 08:12:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430CEBC
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 05:11:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688040698;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iUMXrX97pfVEXgUti557n3bGMAKPy8ETXJCsvtuqbtI=;
+        b=SBp6twnSHIe2Q7ZX0f0i458vecsA7Mvcsur3mU/FFzBaSvfDX4YBmBcrV7uqThK5R311IT
+        +d2DwIk/EpC/BnknOuyoZtO3RYstllSmKL/BHor6pXk8v7Qb5F6/XcEZoGLv69SafgIN/M
+        vB4296Z4zL1JSULIfl5/lw+I0Zs4zzY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-549-52FwC_WsONapQf4jsyqsrw-1; Thu, 29 Jun 2023 08:11:35 -0400
+X-MC-Unique: 52FwC_WsONapQf4jsyqsrw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71F2D3C00120;
+        Thu, 29 Jun 2023 12:11:34 +0000 (UTC)
+Received: from [10.22.16.224] (unknown [10.22.16.224])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D6726C00049;
+        Thu, 29 Jun 2023 12:11:33 +0000 (UTC)
+Message-ID: <15c607d9-c1fa-ca11-d675-8f2b3a6fd15b@redhat.com>
+Date:   Thu, 29 Jun 2023 08:11:33 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/3] cpuset: Allow setscheduler regardless of manipulated
+ task
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <20230629091146.28801-1-mkoutny@suse.com>
+ <20230629091146.28801-2-mkoutny@suse.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230629091146.28801-2-mkoutny@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 3F9D1C009;
-        Thu, 29 Jun 2023 12:30:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1688034609; bh=if9qbAJfyLZr3BzQNxYrgUhfEv4hP+9JnW2xBmEgwCY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tCJfaWg5ag2BGOgbHK7s89C2ekhrviQD8tcS4Twse5JOBeKNyoTJCAq6SGCTf3SSf
-         X1jwKdSvMnpNmpynUzepZLjmFnIxPK19pPmpvR+qjvvhZ2fvVcq/pmCh2GawrhqyeQ
-         b3QDV4VSIrSfZZ9w4doi9uyaaNanBZZZr+x/38T/xBOZaW9oDALteGq0rBLMZse75m
-         9Y++q6QRmQUnN8ijUoIV+bhbSd2BmwuIs4tjSf6bVKI0ogoVMNhVoYuu2VuWHmpuba
-         xjGs0VygsedMgSD2vLPool/GcdCoTQXjq0M3iwsj7gCkkDAMpgfqC87vJrtjrgn7mn
-         s5NXJ8uUYen7A==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 9e8fd47c;
-        Thu, 29 Jun 2023 10:30:01 +0000 (UTC)
-Date:   Thu, 29 Jun 2023 19:29:46 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Jeff Xu <jeffxu@chromium.org>
-Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
-        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v8 3/5] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-Message-ID: <ZJ1dGvWkJVAbBPn7@codewreck.org>
-References: <20221215001205.51969-1-jeffxu@google.com>
- <20221215001205.51969-4-jeffxu@google.com>
- <ZJwcsU0vI-nzgOB_@codewreck.org>
- <ZJyKeeqRJxzwlMhk@codewreck.org>
- <CABi2SkWnAgHK1i6iqSqPMYuNEhtHBkO8jUuCvmG3RmUB5TKHJw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CABi2SkWnAgHK1i6iqSqPMYuNEhtHBkO8jUuCvmG3RmUB5TKHJw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Jeff Xu wrote on Wed, Jun 28, 2023 at 09:33:27PM -0700:
-> > > BTW I find the current behaviour rather hard to use: setting this to 2
-> > > should still set NOEXEC by default in my opinion, just refuse anything
-> > > that explicitly requested EXEC.
-> >
-> > And I just noticed it's not possible to lower the value despite having
-> > CAP_SYS_ADMIN: what the heck?! I have never seen such a sysctl and it
-> > just forced me to reboot because I willy-nilly tested in the init pid
-> > namespace, and quite a few applications that don't require exec broke
-> > exactly as I described below.
-> >
-> > If the user has CAP_SYS_ADMIN there are more container escape methods
-> > than I can count, this is basically free pass to root on main namespace
-> > anyway, you're not protecting anything. Please let people set the sysctl
-> > to what they want.
+
+On 6/29/23 05:11, Michal Koutný wrote:
+> When we migrate a task between two cgroups, one of the checks is a
+> verification whether we can modify task's scheduler settings
+> (cap_task_setscheduler()).
 >
-> Yama has a similar setting,  for example, 3 (YAMA_SCOPE_NO_ATTACH)
-> will not allow downgrading at runtime.
-> 
-> Since this is a security feature, not allowing downgrading at run time
-> is part of the security consideration. I hope you understand.
+> An implicit migration occurs also when enabling a controller on the
+> unified hierarchy (think of parent to child migration). The
+> aforementioned check may be problematic if the caller of the migration
+> (enabling a controller) has no permissions over migrated tasks.
+> For instance, a user's cgroup that ends up running a process of a
+> different user. Although cgroup permissions are configured favorably,
+> the enablement fails due to the foreign process [1].
+>
+> Change the behavior by relaxing the permissions check on the unified
+> hierarchy (or in v2 mode). This is in accordance with unified hierarchy
+> attachment behavior when permissions of the source to target cgroups are
+> decisive whereas the migrated task is opaque (as opposed to more
+> restrictive check in __cgroup1_procs_write()).
 
-I didn't remember yama had this stuck bit; that still strikes me as
-unusual, and if you require a custom LSM rule for memfd anyway I don't
-see why it couldn't enforce that the sysctl is unchanged, but sure.
-
-Please, though:
- - I have a hard time thinking of 1 as a security flag in general (even
-if I do agree a sloppy LSM rule could require it); I would only lock 2
- - please make it clear, I don't see any entry in the sysctl
-documentation[1] about memfd_noexec, there should be one and you can
-copy the wording from yama's doc[2]: "Once set, this sysctl value cannot
-be changed"
-[1] Documentation/admin-guide/sysctl/vm.rst
-[2] Documentation/admin-guide/LSM/Yama.rst
+The is_in_v2_mode() check is for supporting the v2 mode in cgroup v1. 
+However, there is no controller enabling in v1. So I think you should 
+just use cgroup_subsys_on_dfl(cpuset_cgrp_subsys) as the v2 check if 
+your focus is just to prevent problem when enabling cpuset controller.
 
 
-Either way as it stands I still don't think one can expect most
-userspace applications to be converted until some libc wrapper takes
-care of the retry logic and a couple of years, so I'll go look for
-another way of filtering this (and eventually setting this to 1) as you
-suggested.
-I'll leave the follow-up up to you and won't bother you more.
+>
+> [1] https://github.com/systemd/systemd/issues/18293#issuecomment-831205649
+>
+> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+> ---
+>   kernel/cgroup/cpuset.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index e4ca2dd2b764..3b5f87a9a150 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2495,6 +2495,13 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
+>   		ret = task_can_attach(task, cs->effective_cpus);
+>   		if (ret)
+>   			goto out_unlock;
+> +
+> +		/*
+> +		 * Skip rights over task check in v2, migration permission derives
+> +		 * from hierarchy ownership in cgroup_procs_write_permission()).
+> +		 */
+> +		if (is_in_v2_mode())
+> +			continue;
+>   		ret = security_task_setscheduler(task);
+>   		if (ret)
+>   			goto out_unlock;
 
-Thanks,
--- 
-Dominique Martinet | Asmadeus
+This change will likely conflict with the latest cpuset change on 
+tracking # of dl tasks in a cpuset. You will have to, at least, move the 
+dl task check before the security_task_setscheduler() check.
+
+Another fact about cpuset controller enabling is that both cpus_allowed 
+and mems_allowed are empty at that point. You may also add these checks 
+as a preconditions for disabling the security_task_setscheduler check.
+
+Cheers,
+Longman
+
