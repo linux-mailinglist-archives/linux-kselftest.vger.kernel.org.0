@@ -2,42 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D7D7422F2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 11:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506A07422F6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Jun 2023 11:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbjF2JL4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 05:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        id S232289AbjF2JL7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 05:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbjF2JLz (ORCPT
+        with ESMTP id S232086AbjF2JL4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 05:11:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DEB1FD8;
+        Thu, 29 Jun 2023 05:11:56 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D1F1FE8;
         Thu, 29 Jun 2023 02:11:54 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 000B31F8C3;
-        Thu, 29 Jun 2023 09:11:52 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 196521F8CD;
+        Thu, 29 Jun 2023 09:11:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
         t=1688029913; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=eakZ9Lwqp66DOPYDD7y7VLeLOLV3zqoUBYGx3Z4WOnY=;
-        b=eLEATQF/QD87CNPxQL0qRd1yPM+gwm4aUtlPjCwxI47+fW7Z9tuLJHE7ks451dK4laL3pI
-        8zEvCnCS3XrXPZVxZw5oQgqEbXxyuLUXAi4fXxLJX5nTejhVbG5jLbIqoquhY5LWEHNgTk
-        id7Hkm0ccym9GKAtLhyiRko4959cZdY=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rVojEtuYagGizr3yOGYD8YaQfsrGlsFwyzHuPXma3hE=;
+        b=ugtZ80eyRtri7lltfb1GdP7NUGyS3mL8m4KGwhqsepHiDIi40YmHj8mOuYrb6/FAleP5ZI
+        aEAvafObNr5a+n0pR/lOObP+oOJmWQ3vDOvPF4AP+GjNY7/+tgN7kC+hMZU1CUSTFuskgT
+        fx7lnKLSExwrqgZQ1CH5/wG3R0QC/xg=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BAC26139FF;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E68F913A43;
         Thu, 29 Jun 2023 09:11:52 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id RVCrK9hKnWSMdQAAMHmgww
+        id AHRtN9hKnWSMdQAAMHmgww
         (envelope-from <mkoutny@suse.com>); Thu, 29 Jun 2023 09:11:52 +0000
 From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
 To:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
@@ -46,10 +47,12 @@ Cc:     Waiman Long <longman@redhat.com>,
         Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Shuah Khan <shuah@kernel.org>
-Subject: [PATCH 0/3] cpuset: Allow setscheduler regardless of manipulated task
-Date:   Thu, 29 Jun 2023 11:11:43 +0200
-Message-ID: <20230629091146.28801-1-mkoutny@suse.com>
+Subject: [PATCH 1/3] cpuset: Allow setscheduler regardless of manipulated task
+Date:   Thu, 29 Jun 2023 11:11:44 +0200
+Message-ID: <20230629091146.28801-2-mkoutny@suse.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230629091146.28801-1-mkoutny@suse.com>
+References: <20230629091146.28801-1-mkoutny@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -63,31 +66,49 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Changes in v1:
-- added selftests
-- comments rewording
+When we migrate a task between two cgroups, one of the checks is a
+verification whether we can modify task's scheduler settings
+(cap_task_setscheduler()).
 
-RFC in https://lore.kernel.org/r/20220623124944.2753-1-mkoutny@suse.com
+An implicit migration occurs also when enabling a controller on the
+unified hierarchy (think of parent to child migration). The
+aforementioned check may be problematic if the caller of the migration
+(enabling a controller) has no permissions over migrated tasks.
+For instance, a user's cgroup that ends up running a process of a
+different user. Although cgroup permissions are configured favorably,
+the enablement fails due to the foreign process [1].
 
-Michal Koutný (3):
-  cpuset: Allow setscheduler regardless of manipulated task
-  selftests: cgroup: Minor code reorganizations
-  selftests: cgroup: Add cpuset migrations testcase
+Change the behavior by relaxing the permissions check on the unified
+hierarchy (or in v2 mode). This is in accordance with unified hierarchy
+attachment behavior when permissions of the source to target cgroups are
+decisive whereas the migrated task is opaque (as opposed to more
+restrictive check in __cgroup1_procs_write()).
 
- MAINTAINERS                                   |   2 +
- kernel/cgroup/cpuset.c                        |   7 +
- tools/testing/selftests/cgroup/.gitignore     |   1 +
- tools/testing/selftests/cgroup/Makefile       |   2 +
- tools/testing/selftests/cgroup/cgroup_util.c  |   2 +
- tools/testing/selftests/cgroup/cgroup_util.h  |   2 +
- tools/testing/selftests/cgroup/test_core.c    |   2 +-
- tools/testing/selftests/cgroup/test_cpuset.c  | 272 ++++++++++++++++++
- .../selftests/cgroup/test_cpuset_prs.sh       |   2 +-
- 9 files changed, 290 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/cgroup/test_cpuset.c
+[1] https://github.com/systemd/systemd/issues/18293#issuecomment-831205649
 
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
+ kernel/cgroup/cpuset.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index e4ca2dd2b764..3b5f87a9a150 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -2495,6 +2495,13 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
+ 		ret = task_can_attach(task, cs->effective_cpus);
+ 		if (ret)
+ 			goto out_unlock;
++
++		/*
++		 * Skip rights over task check in v2, migration permission derives
++		 * from hierarchy ownership in cgroup_procs_write_permission()).
++		 */
++		if (is_in_v2_mode())
++			continue;
+ 		ret = security_task_setscheduler(task);
+ 		if (ret)
+ 			goto out_unlock;
 -- 
 2.41.0
 
