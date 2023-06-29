@@ -2,89 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3565743109
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 01:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B47E974310D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 01:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjF2XYX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 19:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
+        id S231548AbjF2XZI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 19:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbjF2XYW (ORCPT
+        with ESMTP id S230525AbjF2XZH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:24:22 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4784A1FC2;
-        Thu, 29 Jun 2023 16:24:21 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1688081051teyogk65
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 07:24:10 +0800 (CST)
-X-QQ-SSF: 00200000000000D0W000000A0000000
-X-QQ-FEAT: rZJGTgY0+YOVTQ2kNXjsPZ3MGX+TVmKJcovJh/8yjg+hV2a7oyT97pXC4kLUt
-        mj9kJr6hG0y/CgiAEGGVEQ4x8Y9AeFZstxg5XaUwLeMy80LNWwim6uWDIJUnX6Ztr7ukka1
-        amq3OMPGiPSMhwkSmJDwXL23FHx8t+SuFEbAuNwNV/of0y9mJKUzwS4DwkqsQUzuEoEjk1f
-        uXXZVY5h8yw/DOBh76j+UqmQ25T3BY41/ByGpxOCochUrt0fUUqYmZJdMXliAYePfLoBrZj
-        JOzjvwk+WeruPWku6rWBrYp8v5IEsP3ixD6wEetyP/yUR1iezjb2ttPlzHVx1ai6IHfodGv
-        21qh12wA/PRoTW43Af1PqTnR3fswnj8HWQdDzi5ThJF3q0lgJYnhgkuDaVYYQ==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12172486614225476365
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 01/15] selftests/nolibc: stat_fault: silence NULL argument warning with glibc
-Date:   Fri, 30 Jun 2023 07:23:58 +0800
-Message-Id: <64938ffca05019a13e2cbcdc5beaa12625947572.1688078604.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688078604.git.falcon@tinylab.org>
-References: <cover.1688078604.git.falcon@tinylab.org>
+        Thu, 29 Jun 2023 19:25:07 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714611FC2
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 16:25:06 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6b5d7e60015so1048553a34.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 16:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688081106; x=1690673106;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8XkUN0EizrcPJdxYDyml9MD9K5nwnJEgupZt44caww4=;
+        b=DIOrkzvu8itXrRDVqrYwNUO8RR/O0uEKATtMBGoLT7ZDMAULfOV2+XLpRMwb4lSo1H
+         o8f4vm7uBwP6nRhUwyvViY15Yn73fB6S5rSl+En04NKl9NuKOjDAks0aqXtGB6itZkTx
+         hFE5wR4rTEM4DrLYzlMegMS5O2+oAyJQsqHkE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688081106; x=1690673106;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8XkUN0EizrcPJdxYDyml9MD9K5nwnJEgupZt44caww4=;
+        b=ECvz/wl0OVODWZJzkNT8rCrFTEGxJtrT7j5FPoeSWIoVvKDuUNnf6eBCwRm3UeyoxO
+         x+XRoJG1Zn4Ix5WLufhbLMx2fdeh8QVkJyQICbAOjdjGUd8yA3d0OR7LtrG9JoO6VFWi
+         GLSUG74hzary+um68BedM/eZGzeDq/+b7miKT6AYyvtJyqbG+5Xz93hyNKFscPMTS3b6
+         T7jwnPLTOyJFK90g2vNUKVc3mDuf7NQpgrH1zLXmrQ1fH3Ve5O0GBNpzteaaysXE4OzO
+         mdjhdrMPVh2PO092sRimGZmOWWPeohFzUrBOX6RspqK6Aewe963D7iJ2ZaaED5eS4t9t
+         NvjQ==
+X-Gm-Message-State: AC+VfDxDpQ+UJipYEUBi1Gl7auTFrWYT+HVJ/MYKUcuyEUl1jJiyKfI+
+        nW5wbhE1PLhtcy2f4+JUuS0pOw==
+X-Google-Smtp-Source: APBJJlGFQhB9pXlX/BZEhpArHhanMF0PsxvAgS8Ray5hkbYflejU/wjfaf/Ywe+hLWqeUIiTbaazMw==
+X-Received: by 2002:a05:6870:3c8c:b0:1aa:9eb6:974d with SMTP id gl12-20020a0568703c8c00b001aa9eb6974dmr1593876oab.41.1688081105835;
+        Thu, 29 Jun 2023 16:25:05 -0700 (PDT)
+Received: from localhost (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
+        by smtp.gmail.com with UTF8SMTPSA id g15-20020a17090ace8f00b002636e5c224asm573038pju.56.2023.06.29.16.25.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 16:25:05 -0700 (PDT)
+From:   jeffxu@chromium.org
+To:     skhan@linuxfoundation.org, keescook@chromium.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH] Documentation: mm/memfd: vm.memfd_noexec
+Date:   Thu, 29 Jun 2023 23:25:01 +0000
+Message-ID: <20230629232501.4157671-1-jeffxu@google.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use another invalid address (void *)1 instead of NULL to silence this
-compile warning with glibc:
+From: Jeff Xu <jeffxu@google.com>
 
-    $ make libc-test
-      CC      libc-test
-    nolibc-test.c: In function ‘run_syscall’:
-    nolibc-test.c:622:49: warning: null argument where non-null required (argument 1) [-Wnonnull]
-      622 |   CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
-          |                                                 ^~~~
-    nolibc-test.c:304:79: note: in definition of macro ‘EXPECT_SYSER2’
-      304 |  do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_syserr2(expr, expret, experr1, experr2, llen); } while (0)
-          |                                                                               ^~~~
-    nolibc-test.c:622:33: note: in expansion of macro ‘EXPECT_SYSER’
-      622 |   CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
+Add documentation for sysctl vm.memfd_noexec
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Link:https://lore.kernel.org/linux-mm/CABi2SkXUX_QqTQ10Yx9bBUGpN1wByOi_=gZU6WEy5a8MaQY3Jw@mail.gmail.com/T/
+Reported-by: Dominique Martinet <asmadeus@codewreck.org>
+Signed-off-by: Jeff Xu <jeffxu@google.com>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/admin-guide/sysctl/vm.rst | 29 +++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index b178bfa29ad9..a2eacd6436d0 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -734,7 +734,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(select_stdout);     EXPECT_SYSNE(1, ({ fd_set fds; FD_ZERO(&fds); FD_SET(1, &fds); select(2, NULL, &fds, NULL, NULL); }), -1); break;
- 		CASE_TEST(select_fault);      EXPECT_SYSER(1, select(1, (void *)1, NULL, NULL, 0), -1, EFAULT); break;
- 		CASE_TEST(stat_blah);         EXPECT_SYSER(1, stat("/proc/self/blah", &stat_buf), -1, ENOENT); break;
--		CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
-+		CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat((void *)1, &stat_buf), -1, EFAULT); break;
- 		CASE_TEST(stat_timestamps);   EXPECT_SYSZR(1, test_stat_timestamps()); break;
- 		CASE_TEST(symlink_root);      EXPECT_SYSER(1, symlink("/", "/"), -1, EEXIST); break;
- 		CASE_TEST(unlink_root);       EXPECT_SYSER(1, unlink("/"), -1, EISDIR); break;
+diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+index 45ba1f4dc004..71923c3d7044 100644
+--- a/Documentation/admin-guide/sysctl/vm.rst
++++ b/Documentation/admin-guide/sysctl/vm.rst
+@@ -424,6 +424,35 @@ e.g., up to one or two maps per allocation.
+ 
+ The default value is 65530.
+ 
++memfd_noexec:
++=============
++This pid namespaced sysctl controls memfd_create().
++
++The new MFD_NOEXEC_SEAL and MFD_EXEC flags of memfd_create() allows
++application to set executable bit at creation time.
++
++When MFD_NOEXEC_SEAL is set, memfd is created without executable bit
++(mode:0666), and sealed with F_SEAL_EXEC, so it can't be chmod to
++be executable (mode: 0777) after creation.
++
++when MFD_EXEC flag is set, memfd is created with executable bit
++(mode:0777), this is the same as the old behavior of memfd_create.
++
++The new pid namespaced sysctl vm.memfd_noexec has 3 values:
++0: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
++        MFD_EXEC was set.
++1: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
++        MFD_NOEXEC_SEAL was set.
++2: memfd_create() without MFD_NOEXEC_SEAL will be rejected.
++
++The default value is 0.
++
++Once set, it can't be downgraded at runtime, i.e. 2=>1, 1=>0
++are denied.
++
++This is pid namespaced sysctl, child processes inherit the parent
++process's pid at the time of fork. Changes to the parent process
++after fork are not automatically propagated to the child process.
+ 
+ memory_failure_early_kill:
+ ==========================
 -- 
-2.25.1
+2.41.0.255.g8b1d071c50-goog
 
