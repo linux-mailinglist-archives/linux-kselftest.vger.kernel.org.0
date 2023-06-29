@@ -2,39 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCCA743114
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 01:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5517743118
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 01:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjF2X1Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 19:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S230037AbjF2X2r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 19:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjF2X1Y (ORCPT
+        with ESMTP id S229720AbjF2X2q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:27:24 -0400
+        Thu, 29 Jun 2023 19:28:46 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD0A1FE7;
-        Thu, 29 Jun 2023 16:27:22 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1688081232ti5nzs9c
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6667B1BC6;
+        Thu, 29 Jun 2023 16:28:44 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1688081315tjycq55u
 Received: from linux-lab-host.localdomain ( [119.123.131.49])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 07:27:11 +0800 (CST)
-X-QQ-SSF: 00200000000000D0W000000A0000000
-X-QQ-FEAT: q+EIYT+FhZp1QK6qVIW9/zys5/KvQqS+TKOloNFVdqbJx/9/bvxODLmCOphZz
-        y9+f4YPiil1IcYvKMFJp05kBj1sxwVhflNVeqk1yCTzpfMR2Yv2gqiHtlQJDxWUsrO/9Pj3
-        WXlKB+g3MsWThlTe5KAmbSDgenTw/b7cG8nJ+q4xC1D7JWNs7FW2Bl/TNcPFS0m1hlrfbQs
-        YRptoCHdUObycOZ8PikqrUOT5VZLLcJgcYLQetbfB5hdwO2pZs3Z4t/TZ0PAmpBgcx0PM70
-        CFWvfM9isuV0+nkhLbZkdZPk7Y0SYJ7KD+1eSNEfk2iWxGlcD5/62jPSRN4o0KYqgSFGLlz
-        4UcPV1x4z8UiIaqIO5kSsHF6Ut5+cYfLev2/gdn3UYcY3avkpnUgt7FUxGott8CbjdolC5t
+        id ; Fri, 30 Jun 2023 07:28:34 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: RdkzUaxjIrfJY7jV7wFs1hXtoA3+Vv/lYMh4H2WNVuZBKAbd/xdTOxNXXKRtf
+        jfuQ9QcCSu7QafjYL4xSTkK7jMt6OMdjr6isvrN3T2xAnU55eSqrebklnG681L/OmxI9bh/
+        VyTSb+V4G+WjUArncjMNhBb/stR9LJchLeOBeyLSC0JEbc40UBzcXTLFX7Fr0ZWMNyn5SK3
+        NeZXrnuqo7LLuDye+A7DzfLLeJbA37uc6Z7epdjB6GXts2/MgXM6eBl64d6n255EmoJoh+z
+        Kv7dwv1d/SXpMqzqoxjuM+Oi7eY1LhE7373eSEKL9vh9IrCkyig/aa5RtSxLBDDHRGH/ril
+        WlXDy6MFmIcm5IB0udI8ohjTkENOgGhI8PnpiL6OVYE5k10j5zom3w4LooGb3GtR/WSrbZi
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1369624537871017279
+X-BIZMAIL-ID: 15633995598629543478
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 03/15] selftests/nolibc: add _LARGEFILE64_SOURCE for musl
-Date:   Fri, 30 Jun 2023 07:26:57 +0800
-Message-Id: <7486b55751e388b7c532246f068a77a187f0abc0.1688078605.git.falcon@tinylab.org>
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v2 04/15] selftests/nolibc: fix up int_fast16/32_t test cases for musl
+Date:   Fri, 30 Jun 2023 07:28:15 +0800
+Message-Id: <a2947207cf6504e27704c080edc5ae3ba9b29930.1688078605.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1688078604.git.falcon@tinylab.org>
 References: <cover.1688078604.git.falcon@tinylab.org>
@@ -52,45 +53,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-_GNU_SOURCE Implies _LARGEFILE64_SOURCE in glibc, but in musl, the
-default configuration doesn't enable _LARGEFILE64_SOURCE.
+musl limits the fast signed int in 32bit, but glibc and nolibc don't, to
+let such test cases work on musl, let's provide the type based
+SINT_MAX_OF_TYPE(type) and SINT_MIN_OF_TYPE(type).
 
-From include/dirent.h of musl, getdents64 is provided as getdents when
-_LARGEFILE64_SOURCE is defined.
-
-    #if defined(_LARGEFILE64_SOURCE)
-    ...
-    #define getdents64 getdents
-    #endif
-
-Let's define _LARGEFILE64_SOURCE to fix up this compile error:
-
-    tools/testing/selftests/nolibc/nolibc-test.c: In function ‘test_getdents64’:
-    tools/testing/selftests/nolibc/nolibc-test.c:453:8: warning: implicit declaration of function ‘getdents64’; did you mean ‘getdents’? [-Wimplicit-function-declaration]
-      453 |  ret = getdents64(fd, (void *)buffer, sizeof(buffer));
-          |        ^~~~~~~~~~
-          |        getdents
-    /usr/bin/ld: /tmp/ccKILm5u.o: in function `test_getdents64':
-    nolibc-test.c:(.text+0xe3e): undefined reference to `getdents64'
-    collect2: error: ld returned 1 exit status
-
+Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
+Link: https://lore.kernel.org/lkml/bc635c4f-67fe-4e86-bfdf-bcb4879b928d@t-8ch.de/
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 785b1f4cbdc5..29c21880a198 100644
+index 29c21880a198..96d170cc9b47 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1,6 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
+@@ -41,6 +41,10 @@
+ #endif
+ #endif
  
- #define _GNU_SOURCE
-+#define _LARGEFILE64_SOURCE
++/* for the type of int_fast16_t and int_fast32_t, musl differs from glibc and nolibc */
++#define SINT_MAX_OF_TYPE(type) (((type)1 << (sizeof(type) * 8 - 2)) - (type)1 + ((type)1 << (sizeof(type) * 8 - 2)))
++#define SINT_MIN_OF_TYPE(type) (-SINT_MAX_OF_TYPE(type) - 1)
++
+ /* will be used by nolibc by getenv() */
+ char **environ;
  
- /* libc-specific include files
-  * The program may be built in 3 ways:
+@@ -819,11 +823,11 @@ int run_stdlib(int min, int max)
+ 		CASE_TEST(limit_int_fast8_max);     EXPECT_EQ(1, INT_FAST8_MAX,    (int_fast8_t)     0x7f); break;
+ 		CASE_TEST(limit_int_fast8_min);     EXPECT_EQ(1, INT_FAST8_MIN,    (int_fast8_t)     0x80); break;
+ 		CASE_TEST(limit_uint_fast8_max);    EXPECT_EQ(1, UINT_FAST8_MAX,   (uint_fast8_t)    0xff); break;
+-		CASE_TEST(limit_int_fast16_min);    EXPECT_EQ(1, INT_FAST16_MIN,   (int_fast16_t)    INTPTR_MIN); break;
+-		CASE_TEST(limit_int_fast16_max);    EXPECT_EQ(1, INT_FAST16_MAX,   (int_fast16_t)    INTPTR_MAX); break;
++		CASE_TEST(limit_int_fast16_min);    EXPECT_EQ(1, INT_FAST16_MIN,   (int_fast16_t)    SINT_MIN_OF_TYPE(int_fast16_t)); break;
++		CASE_TEST(limit_int_fast16_max);    EXPECT_EQ(1, INT_FAST16_MAX,   (int_fast16_t)    SINT_MAX_OF_TYPE(int_fast16_t)); break;
+ 		CASE_TEST(limit_uint_fast16_max);   EXPECT_EQ(1, UINT_FAST16_MAX,  (uint_fast16_t)   UINTPTR_MAX); break;
+-		CASE_TEST(limit_int_fast32_min);    EXPECT_EQ(1, INT_FAST32_MIN,   (int_fast32_t)    INTPTR_MIN); break;
+-		CASE_TEST(limit_int_fast32_max);    EXPECT_EQ(1, INT_FAST32_MAX,   (int_fast32_t)    INTPTR_MAX); break;
++		CASE_TEST(limit_int_fast32_min);    EXPECT_EQ(1, INT_FAST32_MIN,   (int_fast32_t)    SINT_MIN_OF_TYPE(int_fast32_t)); break;
++		CASE_TEST(limit_int_fast32_max);    EXPECT_EQ(1, INT_FAST32_MAX,   (int_fast32_t)    SINT_MAX_OF_TYPE(int_fast32_t)); break;
+ 		CASE_TEST(limit_uint_fast32_max);   EXPECT_EQ(1, UINT_FAST32_MAX,  (uint_fast32_t)   UINTPTR_MAX); break;
+ 		CASE_TEST(limit_int_fast64_min);    EXPECT_EQ(1, INT_FAST64_MIN,   (int_fast64_t)    INT64_MIN); break;
+ 		CASE_TEST(limit_int_fast64_max);    EXPECT_EQ(1, INT_FAST64_MAX,   (int_fast64_t)    INT64_MAX); break;
 -- 
 2.25.1
 
