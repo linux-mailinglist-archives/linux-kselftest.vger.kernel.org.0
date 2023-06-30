@@ -2,136 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0C074427E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 20:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF297442AF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 21:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233286AbjF3Spr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Jun 2023 14:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S232387AbjF3TUj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Jun 2023 15:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbjF3Spq (ORCPT
+        with ESMTP id S232394AbjF3TUg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Jun 2023 14:45:46 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90BF4217;
-        Fri, 30 Jun 2023 11:45:42 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 3197132009B8;
-        Fri, 30 Jun 2023 14:45:38 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 30 Jun 2023 14:45:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688150737; x=1688237137; bh=OD
-        7NEWZMjnc3AbjUhqszEH5f8FSq8A02z7HM+Zk5VTQ=; b=nZqga/m9GefFoRkgjW
-        wCScpF4TnDnGPeuUasUAy0Tsutz2ksKQc0YunXEFrcBfPE1RDulZktzaFWLnV5ig
-        WABir1b5wSPpM3Off4SL8xcJ8Qc8KLoXqvytAqKlsJvQggbeKYGTCpEFooDczmnH
-        R1BFVwrtV2ThDKmsLeOPs8NFJXW8SkfHKVNeAd4Ovh64XOSWtlcaUKdRGJmjPx9N
-        muDzkqaqkIFOdRv4FUdtFmChaiEpsQrpAq3BocX5+EMSbIRVFG7HsJUjZJtldQiA
-        4JdCzPce1O/RWqkQaFBKHbA9J/kRxGs7S0uyppxsgXuvj2BvbnrBlfWMe+Ni22Ni
-        Lovg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688150737; x=1688237137; bh=OD7NEWZMjnc3A
-        bjUhqszEH5f8FSq8A02z7HM+Zk5VTQ=; b=FYCMuqxz/bkccAwK5NS/IJZ1ViBqp
-        BEaW+z7djcsHzcEIuvYEn5rCD36aqPfmJeU7NX201iQfj1Wz6BO97KGNF3Wk8vyy
-        MNKx3nKrWZUUJE+j6XXEWq4HAPn/OD/3Db18XYUGyXIf8mvPbBbgJwwp0NbeLRaF
-        ymaUIygjD3H9h0nCb0B9VZTKb3LQgu7e1uWVvNg5R26SUHSYoEpPxs4PAq279qm6
-        OKXxb6P3gCMkcxludO0XpzlgpZWEKtdNK5FdyeqW8rX4CmCYP+DfL8zA99m7vExq
-        o/WTGB8T8RudCVRyoXrNHxvaJVrQOrt2U5Jyai6Y2iQINlKshvI8BvT6g==
-X-ME-Sender: <xms:0CKfZIxwRzPTUcYaML1VsJb665JNARXTd1nAPENK_uUR1XEzwdmXoQ>
-    <xme:0CKfZMTPjnVb4EYOyIf6JF7pg5h8qF7Qr9-Cq09JZdeLC4jIZ5f96HsN1tHUlkm6Z
-    VQIWOB8NbKCsc-z4Go>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeigdduvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:0CKfZKXmiNSLkZ4ueENKRKQAG6kHMQ6fsydFp3bp5kKmowxaKQnDCQ>
-    <xmx:0CKfZGjegXjsThipzMoMMNtNS_BFskCX9a0AnzfQGhI-l64YJhOvvA>
-    <xmx:0CKfZKDmQHGB-_ejbm0Qp3U929NvGSeSl2qv4azreS3wpRdKVXu4Pg>
-    <xmx:0SKfZFOQadL6j0CCbRB-TlMDEffqCZJIA16KF2kiQviHEQQIduXprA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7BD88B60092; Fri, 30 Jun 2023 14:45:36 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <d096e463-b135-49b1-884b-a3038723ccdd@app.fastmail.com>
-In-Reply-To: <20230630180126.283419-1-falcon@tinylab.org>
-References: <dc7b8b17-4338-424f-a1f1-c12fb7ea08bd@app.fastmail.com>
- <20230630180126.283419-1-falcon@tinylab.org>
-Date:   Fri, 30 Jun 2023 20:45:15 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Zhangjin Wu" <falcon@tinylab.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
-        "Willy Tarreau" <w@1wt.eu>
-Subject: Re: [PATCH v3 03/14] selftests/nolibc: add _LARGEFILE64_SOURCE for musl
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 30 Jun 2023 15:20:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C023E3C39
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Jun 2023 12:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688152785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gQeupD5Hvtw3+gqmqjD4kEWekm8is74wkIjoamnYm2Y=;
+        b=Maifri/iYq1aKIKgDjOciFee9K0VCkKq85yPzuDvQ6TrT1Xa9F/fpgIy/hEGxnTsU20sjx
+        KeFvXVQ7vh39fWCeZUkL040Mu+OlvMNz45hVqk69xp/TJD869P8Q0YZNcelgeOIlm6iwaU
+        5sRwsHuEs+QMRuwUIlpePPVYgkgovUo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-402-jbEUAcsePYaj9T_UJrn6kw-1; Fri, 30 Jun 2023 15:19:38 -0400
+X-MC-Unique: jbEUAcsePYaj9T_UJrn6kw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 378A98030AC;
+        Fri, 30 Jun 2023 19:19:38 +0000 (UTC)
+Received: from [10.22.18.163] (unknown [10.22.18.163])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B38302166B2D;
+        Fri, 30 Jun 2023 19:19:37 +0000 (UTC)
+Message-ID: <34ca9855-b38e-74e8-8c82-e0dc3fc5b485@redhat.com>
+Date:   Fri, 30 Jun 2023 15:19:37 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/3] cpuset: Allow setscheduler regardless of
+ manipulated task
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <20230630183908.32148-1-mkoutny@suse.com>
+ <20230630183908.32148-2-mkoutny@suse.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230630183908.32148-2-mkoutny@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 30, 2023, at 20:01, Zhangjin Wu wrote:
-> Hi, Arnd
->
->> On Fri, Jun 30, 2023, at 16:44, Zhangjin Wu wrote:
->> > _GNU_SOURCE Implies _LARGEFILE64_SOURCE in glibc, but in musl, the
->> > default configuration doesn't enable _LARGEFILE64_SOURCE.
->> >
->> > From include/dirent.h of musl, getdents64 is provided as getdents when
->> > _LARGEFILE64_SOURCE is defined.
->> >
->> >     #if defined(_LARGEFILE64_SOURCE)
->> >     ...
->> >     #define getdents64 getdents
->> >     #endif
->> >
->> > Let's define _LARGEFILE64_SOURCE to fix up this compile error:
->> 
->> I think a better solution would be to use the normal getdents() instead
->> of glibc getdents64(), but then define _FILE_OFFSET_BITS=64 to tell
->> glibc to use the modern version of all filesystem syscalls.
->> 
->
-> Just checked the getdents manpage[1] and the nolibc code, both of glibc and
-> nolibc don't provide the getdents() library routine but both of them provide
-> the getdents64(), only musl provide getdents() by default.
->
-> And as the manpage shows, it is not easy to call getdents() with glibc, we
-> need manually call syscall() and define the 'dirent' struct ourselves:
->
->     glibc does not provide a wrapper for getdents(); call getdents()
->     using syscall(2).  In that case you will need to define the
->     linux_dirent or linux_dirent64 structure yourself.
->
-> And for nolibc, a getdents64() with linux_dirent64 struct (with int64_t offset)
-> is provided, there is either no getdents() currently.
->
-> This patch aims to let nolibc-test at least compile for musl and therefore we
-> can easily check the new tests for musl, glibc and nolibc together.
 
-Ok, I see. Your current approach should be fine then.
+On 6/30/23 14:39, Michal Koutný wrote:
+> When we migrate a task between two cgroups, one of the checks is a
+> verification whether we can modify task's scheduler settings
+> (cap_task_setscheduler()).
+>
+> An implicit migration occurs also when enabling a controller on the
+> unified hierarchy (think of parent to child migration). The
+> aforementioned check may be problematic if the caller of the migration
+> (enabling a controller) has no permissions over migrated tasks.
+> For instance, a user's cgroup that ends up running a process of a
+> different user. Although cgroup permissions are configured favorably,
+> the enablement fails due to the foreign process [1].
+>
+> Change the behavior by relaxing the permissions check on the unified
+> hierarchy (or in v2 mode). This is in accordance with unified hierarchy
+> attachment behavior when permissions of the source to target cgroups are
+> decisive whereas the migrated task is opaque (as opposed to more
+> restrictive check in __cgroup1_procs_write()).
+>
+> [1] https://github.com/systemd/systemd/issues/18293#issuecomment-831205649
+>
+> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+> ---
+>   kernel/cgroup/cpuset.c | 13 ++++++++++---
+>   1 file changed, 10 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 58e6f18f01c1..41d3ed14b0f4 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2505,9 +2505,16 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
+>   		ret = task_can_attach(task);
+>   		if (ret)
+>   			goto out_unlock;
+> -		ret = security_task_setscheduler(task);
+> -		if (ret)
+> -			goto out_unlock;
+> +
+> +		/*
+> +		 * Skip rights over task check in v2, migration permission derives
+> +		 * from hierarchy ownership in cgroup_procs_write_permission()).
+> +		 */
+> +		if (!cgroup_subsys_on_dfl(cpuset_cgrp_subsys)) {
+> +			ret = security_task_setscheduler(task);
+> +			if (ret)
+> +				goto out_unlock;
+> +		}
 
-> For the 64bit offset related stuff, we'd better delay it in another patchset
-> (part of full rv32 support), which will convert the off_t to 64bit by default.
+I am somewhat hesitant to skip the security_task_setscheduler() check 
+for all cgroup v2 task migrations. The check is controlled by SElinux 
+which is a different subsystem. I believe the scheduler property here 
+refer's to the task cpu affinity and node mask. If you look at 
+cpuset_attach(), we have actually skipped the task iteration process to 
+change them if cpu affinity and node mask aren't changed at all.
 
-Right, makes sense.
+I don't want to introduce a possible security vulnerability because of 
+this relaxation. I would suggest you skip it under the same condition of 
+no change to cpu affinity and node mask for cgroup v2.
 
+Thanks,
+Longman
 
-    ARnd
