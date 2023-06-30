@@ -2,64 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A135D744279
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 20:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0C074427E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 20:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbjF3Sm7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Jun 2023 14:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
+        id S233286AbjF3Spr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Jun 2023 14:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233121AbjF3Sm6 (ORCPT
+        with ESMTP id S232840AbjF3Spq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Jun 2023 14:42:58 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0FD3C00;
-        Fri, 30 Jun 2023 11:42:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C601D2185A;
-        Fri, 30 Jun 2023 18:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1688150572; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hzP6++sspeiMJGly5/GKvnU83DNQrkePv6Ujpx4JBFo=;
-        b=WzwMOUZ7URL2pshBLAbrR5Eb1snRRrtSTCfPeViixI6CoyWR3brJj+Opy8GY3af3RexoqS
-        QBRbdHfDEjAv47pVfxR/ZLVfOcteQydj6yXqtbF8EHg4iVioohn/g7MPxHxp/GqDb9Bwz/
-        4ZK6Zr+Q+n15blaSHPLRsoHSPyG0mY4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 98B59138F8;
-        Fri, 30 Jun 2023 18:42:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Vw50JCwin2SUbgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Fri, 30 Jun 2023 18:42:52 +0000
-Date:   Fri, 30 Jun 2023 20:42:51 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 1/3] cpuset: Allow setscheduler regardless of manipulated
- task
-Message-ID: <qmxqf4cnt4ajt7y43vmy7xjf7mgljnq4gxqkiqdmaadrcq4lfx@f4kxwy5wygvm>
-References: <20230629091146.28801-1-mkoutny@suse.com>
- <20230629091146.28801-2-mkoutny@suse.com>
- <15c607d9-c1fa-ca11-d675-8f2b3a6fd15b@redhat.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v3oci5sln533st5v"
-Content-Disposition: inline
-In-Reply-To: <15c607d9-c1fa-ca11-d675-8f2b3a6fd15b@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        Fri, 30 Jun 2023 14:45:46 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90BF4217;
+        Fri, 30 Jun 2023 11:45:42 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 3197132009B8;
+        Fri, 30 Jun 2023 14:45:38 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 30 Jun 2023 14:45:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1688150737; x=1688237137; bh=OD
+        7NEWZMjnc3AbjUhqszEH5f8FSq8A02z7HM+Zk5VTQ=; b=nZqga/m9GefFoRkgjW
+        wCScpF4TnDnGPeuUasUAy0Tsutz2ksKQc0YunXEFrcBfPE1RDulZktzaFWLnV5ig
+        WABir1b5wSPpM3Off4SL8xcJ8Qc8KLoXqvytAqKlsJvQggbeKYGTCpEFooDczmnH
+        R1BFVwrtV2ThDKmsLeOPs8NFJXW8SkfHKVNeAd4Ovh64XOSWtlcaUKdRGJmjPx9N
+        muDzkqaqkIFOdRv4FUdtFmChaiEpsQrpAq3BocX5+EMSbIRVFG7HsJUjZJtldQiA
+        4JdCzPce1O/RWqkQaFBKHbA9J/kRxGs7S0uyppxsgXuvj2BvbnrBlfWMe+Ni22Ni
+        Lovg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688150737; x=1688237137; bh=OD7NEWZMjnc3A
+        bjUhqszEH5f8FSq8A02z7HM+Zk5VTQ=; b=FYCMuqxz/bkccAwK5NS/IJZ1ViBqp
+        BEaW+z7djcsHzcEIuvYEn5rCD36aqPfmJeU7NX201iQfj1Wz6BO97KGNF3Wk8vyy
+        MNKx3nKrWZUUJE+j6XXEWq4HAPn/OD/3Db18XYUGyXIf8mvPbBbgJwwp0NbeLRaF
+        ymaUIygjD3H9h0nCb0B9VZTKb3LQgu7e1uWVvNg5R26SUHSYoEpPxs4PAq279qm6
+        OKXxb6P3gCMkcxludO0XpzlgpZWEKtdNK5FdyeqW8rX4CmCYP+DfL8zA99m7vExq
+        o/WTGB8T8RudCVRyoXrNHxvaJVrQOrt2U5Jyai6Y2iQINlKshvI8BvT6g==
+X-ME-Sender: <xms:0CKfZIxwRzPTUcYaML1VsJb665JNARXTd1nAPENK_uUR1XEzwdmXoQ>
+    <xme:0CKfZMTPjnVb4EYOyIf6JF7pg5h8qF7Qr9-Cq09JZdeLC4jIZ5f96HsN1tHUlkm6Z
+    VQIWOB8NbKCsc-z4Go>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeigdduvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:0CKfZKXmiNSLkZ4ueENKRKQAG6kHMQ6fsydFp3bp5kKmowxaKQnDCQ>
+    <xmx:0CKfZGjegXjsThipzMoMMNtNS_BFskCX9a0AnzfQGhI-l64YJhOvvA>
+    <xmx:0CKfZKDmQHGB-_ejbm0Qp3U929NvGSeSl2qv4azreS3wpRdKVXu4Pg>
+    <xmx:0SKfZFOQadL6j0CCbRB-TlMDEffqCZJIA16KF2kiQviHEQQIduXprA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7BD88B60092; Fri, 30 Jun 2023 14:45:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <d096e463-b135-49b1-884b-a3038723ccdd@app.fastmail.com>
+In-Reply-To: <20230630180126.283419-1-falcon@tinylab.org>
+References: <dc7b8b17-4338-424f-a1f1-c12fb7ea08bd@app.fastmail.com>
+ <20230630180126.283419-1-falcon@tinylab.org>
+Date:   Fri, 30 Jun 2023 20:45:15 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Zhangjin Wu" <falcon@tinylab.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+        "Willy Tarreau" <w@1wt.eu>
+Subject: Re: [PATCH v3 03/14] selftests/nolibc: add _LARGEFILE64_SOURCE for musl
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,35 +87,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Fri, Jun 30, 2023, at 20:01, Zhangjin Wu wrote:
+> Hi, Arnd
+>
+>> On Fri, Jun 30, 2023, at 16:44, Zhangjin Wu wrote:
+>> > _GNU_SOURCE Implies _LARGEFILE64_SOURCE in glibc, but in musl, the
+>> > default configuration doesn't enable _LARGEFILE64_SOURCE.
+>> >
+>> > From include/dirent.h of musl, getdents64 is provided as getdents when
+>> > _LARGEFILE64_SOURCE is defined.
+>> >
+>> >     #if defined(_LARGEFILE64_SOURCE)
+>> >     ...
+>> >     #define getdents64 getdents
+>> >     #endif
+>> >
+>> > Let's define _LARGEFILE64_SOURCE to fix up this compile error:
+>> 
+>> I think a better solution would be to use the normal getdents() instead
+>> of glibc getdents64(), but then define _FILE_OFFSET_BITS=64 to tell
+>> glibc to use the modern version of all filesystem syscalls.
+>> 
+>
+> Just checked the getdents manpage[1] and the nolibc code, both of glibc and
+> nolibc don't provide the getdents() library routine but both of them provide
+> the getdents64(), only musl provide getdents() by default.
+>
+> And as the manpage shows, it is not easy to call getdents() with glibc, we
+> need manually call syscall() and define the 'dirent' struct ourselves:
+>
+>     glibc does not provide a wrapper for getdents(); call getdents()
+>     using syscall(2).  In that case you will need to define the
+>     linux_dirent or linux_dirent64 structure yourself.
+>
+> And for nolibc, a getdents64() with linux_dirent64 struct (with int64_t offset)
+> is provided, there is either no getdents() currently.
+>
+> This patch aims to let nolibc-test at least compile for musl and therefore we
+> can easily check the new tests for musl, glibc and nolibc together.
 
---v3oci5sln533st5v
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ok, I see. Your current approach should be fine then.
 
-On Thu, Jun 29, 2023 at 08:11:33AM -0400, Waiman Long <longman@redhat.com> wrote:
-> Another fact about cpuset controller enabling is that both cpus_allowed and
-> mems_allowed are empty at that point. You may also add these checks as a
-> preconditions for disabling the security_task_setscheduler check.
+> For the 64bit offset related stuff, we'd better delay it in another patchset
+> (part of full rv32 support), which will convert the off_t to 64bit by default.
 
-I considered relying on that, however, there is more generic case when
-migrating between two sibling that should be allowed in v2 too.
-See the added test_cpuset_perms_object(). (Admittedly, it doesn't stress
-the case when the two siblings had different CPUs but it could.)
+Right, makes sense.
 
-Anyway, let's move on to v2 (where I addressed remaining comments).
 
-Thanks,
-Michal
-
---v3oci5sln533st5v
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZJ8iKAAKCRAGvrMr/1gc
-jsKlAP9Aq4WN+NlTiUnIUf8PeXwyJiCKLc3wgk3m+bILYfDpZgD7B4/zkWylYWB9
-ySZ09DxxEk78SmXA9ZCPzwHdr/SkQAU=
-=b3pu
------END PGP SIGNATURE-----
-
---v3oci5sln533st5v--
+    ARnd
