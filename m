@@ -2,49 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642B0743B70
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 14:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C94D743D28
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 16:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbjF3MFp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Jun 2023 08:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
+        id S231528AbjF3OGa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Jun 2023 10:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233048AbjF3MF2 (ORCPT
+        with ESMTP id S230525AbjF3OG3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Jun 2023 08:05:28 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA1444AA;
-        Fri, 30 Jun 2023 05:04:43 -0700 (PDT)
-X-QQ-mid: bizesmtp72t1688126672t652b9nc
+        Fri, 30 Jun 2023 10:06:29 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BD8297C;
+        Fri, 30 Jun 2023 07:06:24 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1688133972tps58rre
 Received: from linux-lab-host.localdomain ( [119.123.131.49])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 20:04:31 +0800 (CST)
+        id ; Fri, 30 Jun 2023 22:06:10 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: vLOCICHxEeAb0GlQ301aqzxbxGSaxjPZA1q5/3l0Tcb41pLyqUjcKxPWfkW19
-        E4I+TjreMVr4hI7doeKYjPAR7LpyM3asEdCjbHQCJweaPeHwqoVcT47+jo3yw4WMF1kwsnT
-        R7/hb6EddEkpJRd5m9xC6aFvRr8D/SK98pn9x99sqE47336VeAMCgUFfeBeQYGtKaQZGsBH
-        rON48fOrsdpg0xRDthyiTKrkCPaSwuloIzTRlu+SDg2oxVQZkLlioblskVAr9HT2vcvWmjf
-        +/9q/8gJgOC2lDln8H0jNpkAvKEKBwC2pxRADLwDXEC69JWsVB+Rm3eRGVod+BtWCTOYQgR
-        igWxuMSS6hmXxOYqYq+x23uQQCRj8k0LwfGv79UJswCeuliIxIXUJXUahlIiKKi0wByQm3R
+X-QQ-FEAT: V4JOsym0FHqCqJmQlnD2l8SkfrQEZVY9NptJ2TcjxV7sRXyUtJ9Enl2xfdhz+
+        0hGa/4YyEZzoY3duK31fYRejq1j4LZFvWf1DqoISA69EGDQRVdblDk3TohwH3ZoohdSnJMe
+        VMX3dmbDHRx9+XqnvHioN26Y50xRgoaBwNYb329ofovzfRhsJ3Cp12RSGLAPaxOdrnZGcHr
+        6xE21FP5G/B8jKIHQ3rT4FMD1TFpQW8E8JLvyCBBtrFwVt+J9U2LCvzMGbed+ds9hEjMXqu
+        /uyIperG1ls4ZPuNc/JUG7A6zZ9GU1Agyr+gg1+1BapqyvccpN3Nn3cjdAmRT/BpnbQcmp2
+        jVPIEQK1GqxPOk/AxWzghg52cCIg0BKxbn2M8isj8sRMU2eSWbQYYyzn4RORAw6oAEx8Clh
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5300123220790220409
+X-BIZMAIL-ID: 15545205547833323079
 From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, w@1wt.eu
-Subject: Re: [PATCH v2 00/15] allow run with minimal kernel config
-Date:   Fri, 30 Jun 2023 20:04:30 +0800
-Message-Id: <20230630120430.220395-1-falcon@tinylab.org>
+To:     linux@weissschuh.net
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, w@1wt.eu
+Subject: [PATCH 0/2] proc: proc_setattr for /proc/$PID/net
+Date:   Fri, 30 Jun 2023 22:06:09 +0800
+Message-Id: <20230630140609.263790-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <9b941cd7-1fb7-404d-a329-b831d20ce3de@t-8ch.de>
-References: <9b941cd7-1fb7-404d-a329-b831d20ce3de@t-8ch.de>
+In-Reply-To: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
+References: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,74 +55,60 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi, Thomas
 
-> On 2023-06-30 07:22:39+0800, Zhangjin Wu wrote:
-> > Willy, Thomas
-> > 
-> > This is v2 to allow run with minimal kernel config, see v1 [1].
-> > 
-> > It mainly applied the suggestions from Thomas. It is based on our
-> > previous v5 sysret helper series [2] and Thomas' chmod_net removal
-> > patchset [3].
-> > 
-> > Now, a test report on arm/vexpress-a9 without procfs, shmem, tmpfs, net
-> > and memfd_create looks like:
-> > 
-> >     LOG: testing report for arm/vexpress-a9:
-> > 
-> >     14 chmod_net                                                    [SKIPPED]
-> 
-> Shouldn't this be gone?
->
+Just applied your patchset on v6.4, and then:
 
-Yes, if apply your chmod_net removal patches before this series:
+  - revert the 1st patch: 'selftests/nolibc: drop test chmod_net' manually
 
-    LOG: testing report for arm/vexpress-a9:
+  - do the 'run' test of nolibc on arm/vexpress-a9
 
-    14 chmod_self                                                   [SKIPPED]
-    16 chown_self                                                   [SKIPPED]
-    40 link_cross                                                   [SKIPPED]
-    0 -fstackprotector not supported                                [SKIPPED]
+The 'chmod_net' test of tools/testing/selftests/nolibc/nolibc-test.c
+really failed as expected (and therefore, should be removed):
 
-    139 test(s) passed, 4 skipped, 0 failed.
-    See all results in /labs/linux-lab/logging/nolibc/arm-vexpress-a9-nolibc-test.log
+    11 chdir_root = 0                                                [OK]
+    12 chdir_dot = 0                                                 [OK]
+    13 chdir_blah = -1 ENOENT                                        [OK]
+    14 chmod_net = -1 EPERM                                         [FAIL]
+    15 chmod_self = -1 EPERM                                         [OK]
+    16 chmod_tmpdir = 0                                              [OK]
+    17 chown_self = -1 EPERM                                         [OK]
 
-    LOG: testing summary:
+So, If this test result is enough for this patch, here is my:
 
-         arch/board | result
-        ------------|------------
-    arm/vexpress-a9 | 139 test(s) passed, 4 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/arm-vexpress-a9-nolibc-test.log
-
-This test also applied the new proposed chroot_exe and chmod_tmpfile
-from https://lore.kernel.org/lkml/20230630111433.211130-1-falcon@tinylab.org/
-
-> >     15 chmod_self                                                   [SKIPPED]
-> >     17 chown_self                                                   [SKIPPED]
-> >     41 link_cross                                                   [SKIPPED]
-> >     0 -fstackprotector not supported                                [SKIPPED]
-> > 
-> >     139 test(s) passed, 5 skipped, 0 failed.
-> >     See all results in /labs/linux-lab/logging/nolibc/arm-vexpress-a9-nolibc-test.log
-> > 
-> >     LOG: testing summary:
-> > 
-> >          arch/board | result
-> >         ------------|------------
-> >     arm/vexpress-a9 | 139 test(s) passed, 5 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/arm-vexpress-a9-nolibc-test.log
-> 
-> > [..]
-> 
-> >  tools/include/nolibc/sys.h                   |  22 ++++
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 102 +++++++++++++++----
-> >  2 files changed, 106 insertions(+), 18 deletions(-)
-> 
-> A few nitpicks left, mentioned on the patches themselves.
-> 
-> In general: for the full series.
-> 
-> Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-> 
-
-Thanks Thomas, will send v3 later.
+Tested-by: Zhangjin Wu <falcon@tinylab.org>
 
 Best regards,
 Zhangjin
+
+> /proc/$PID/net currently allows the setting of file attributes,
+> in contrast to other /proc/$PID/ files and directories.
+> 
+> This would break the nolibc testsuite so the first patch in the series
+> removes the offending testcase.
+> The "fix" for nolibc-test is intentionally kept trivial as the series
+> will most likely go through the filesystem tree and if conflicts arise,
+> it is obvious on how to resolve them.
+> 
+> Technically this can lead to breakage of nolibc-test if an old
+> nolibc-test is used with a newer kernel containing the fix.
+> 
+> Note:
+> 
+> Except for /proc itself this is the only "struct inode_operations" in
+> fs/proc/ that is missing an implementation of setattr().
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> ---
+> Thomas Weißschuh (2):
+>       selftests/nolibc: drop test chmod_net
+>       proc: use generic setattr() for /proc/$PID/net
+> 
+>  fs/proc/proc_net.c                           | 1 +
+>  tools/testing/selftests/nolibc/nolibc-test.c | 1 -
+>  2 files changed, 1 insertion(+), 1 deletion(-)
+> ---
+> base-commit: a92b7d26c743b9dc06d520f863d624e94978a1d9
+> change-id: 20230624-proc-net-setattr-8f0a6b8eb2f5
+> 
+> Best regards,
+> -- 
+> Thomas Weißschuh <linux@weissschuh.net>
