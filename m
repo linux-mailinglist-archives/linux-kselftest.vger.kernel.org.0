@@ -2,101 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C521C7441B5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 20:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B421674420E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 20:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjF3SBm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Jun 2023 14:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S232381AbjF3SSF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Jun 2023 14:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjF3SBl (ORCPT
+        with ESMTP id S232361AbjF3SSE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Jun 2023 14:01:41 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E34735AA;
-        Fri, 30 Jun 2023 11:01:38 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1688148087t9jegpmu
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 01 Jul 2023 02:01:26 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000B00A0000000
-X-QQ-FEAT: QHkcO4X2U8huFrHo8l1YK+jN0cAN0mWcsFrfhBkNFui2ooTsOzApWJKLYaQfv
-        DewwEYMQS98eLS0mEe5UW1f1j3adkztnHPKP0dp6DUCg8w+0Ml9OO9zRU3K2IOKwIHZb+/T
-        qGcfS6AyofwJwhZlPv+B7syeNUTQ6jkRNHQ3ssBrQuxJ6Vm0SKntrGHJRgABuakUrYpw7Qa
-        bcemkVGjDtoPntNLRlYHBUkJD5H7GrOQUrp/9Vb1zrtvMTOJGmN6ZAYZfof0aovYvVOgwcg
-        IXGIX0Cce3cQgzN3uXwiEwFcvOuw+3bxPW44iI0Lu4GwpUMs/Rkv5XbCnUCJldhSeu17U8B
-        uTInhUZGn2AXfze0xrR/aAk6bDHCWy7rxlUxnNZ
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17191169669005312733
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     arnd@arndb.de
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux@weissschuh.net,
-        thomas@t-8ch.de, w@1wt.eu
-Subject: Re: [PATCH v3 03/14] selftests/nolibc: add _LARGEFILE64_SOURCE for musl
-Date:   Sat,  1 Jul 2023 02:01:26 +0800
-Message-Id: <20230630180126.283419-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <dc7b8b17-4338-424f-a1f1-c12fb7ea08bd@app.fastmail.com>
-References: <dc7b8b17-4338-424f-a1f1-c12fb7ea08bd@app.fastmail.com>
+        Fri, 30 Jun 2023 14:18:04 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0AE3AA7;
+        Fri, 30 Jun 2023 11:18:02 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9926623e367so253298466b.0;
+        Fri, 30 Jun 2023 11:18:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688149081; x=1690741081;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UqvAUyb2tsPBhVSd0pIEgVQNyRCdhhmwRegA/E/fvz0=;
+        b=duN6wGf0bxxTJFbCNwVHPjr7piWFkTJPQZgv1afCEzKQwDw2lMrEF4OAbr2HfhaUYO
+         jh1l0QSgxaxHS98eIs1HPD6HdKQIHWxS+07MIZxUX/1iFNd9QHrzRh2dAeD6EGhY48/a
+         lDu1N5z37d2hHaPoFA9FAzXklnk7gw/2jVeZKpiHZ/UsT8NYih5egxqa1LM46oK2CRn2
+         0yquiQaU1DnmIP6JZXLb1G6mjm7s/1amNXQGGLuWXC+75LdLsQFlwtUbJfV2X3Qnoo1d
+         fogyq6pGmOxyC3U8EdekDn4KS7hP0zlhLulQVu1kqHoExtNaH+fbsskVmMt+BExs4div
+         KoLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688149081; x=1690741081;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UqvAUyb2tsPBhVSd0pIEgVQNyRCdhhmwRegA/E/fvz0=;
+        b=fdkjAAs4J6U3yq9k/8nv67NlOpMY7rTDK+qgvyNupqgNl1KcJCL/Oybk0my5DfCO3g
+         8/Pvm72guToAcdqVSa80UIGYaeW6WFHCSNNiQUAR5gs8mRhLqFWmmpfbxxu20lppEsux
+         xHTSR2+4P8GM2bkEKxL48LxECupDpqrJRVBpNRz1+aHjtqFRLrYCedXvOXQqV39ERFz0
+         b7D42V7bLzCg0oE70s7oISWF7PpuicE/sIkGUM+BT1hII2NozsRsBPB9Gy2mDN+zyYm+
+         q2zWYVOV8au0Ep2gEYA7ICo7a59/PFrj+GxYHBbAXPJvUhofGUeEUSqCRYehfsFa6oVk
+         x+Jg==
+X-Gm-Message-State: ABy/qLZdTuT+F7hHcai98N52+5ArHDgfTIBthAV9teEXTlMGhz4rjyLi
+        FWgq6K0Le4JxeKvJS4h6pn4=
+X-Google-Smtp-Source: APBJJlGtB9G3yRkfYsVLgiguvw7i3+UIzHgYg4xyjSXgx8V5csjh4PZAF8vuBRPuGUQixHBPlWhhBw==
+X-Received: by 2002:a17:906:4e52:b0:992:9a5e:3172 with SMTP id g18-20020a1709064e5200b009929a5e3172mr2089125ejw.59.1688149080879;
+        Fri, 30 Jun 2023 11:18:00 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id qp7-20020a170907206700b0098d0c01d9aasm8319773ejb.87.2023.06.30.11.17.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 11:18:00 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 86A5827C0071;
+        Fri, 30 Jun 2023 14:17:57 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 30 Jun 2023 14:17:57 -0400
+X-ME-Sender: <xms:UhyfZPpQEaPpLULou0AlaB4w_kc4Q7a46gTT5jxcRJL35CRGbSfX8g>
+    <xme:UhyfZJoyjreAsALv6A2JpNpR_k8e-9_TTRzs-VxgVK6vKLq47Mcygqlp6yITzf4cQ
+    S1nuiAR__7Tsg9wPw>
+X-ME-Received: <xmr:UhyfZMM_WhLpbSVNgrmF8VPFBle0Ke85DhZgCeB4hOzXVUSMXKrCYp95unU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeigdduvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:UhyfZC7EXQzf2J3GAyTRcHrj79MN_2U5H9y4l00GrjaFJYmWjmdgkw>
+    <xmx:UhyfZO6f2XwVe1s6RCy-O24q5gpuG9Rr7dpuyl8ocrgN3OmSC5sI2w>
+    <xmx:UhyfZKiIpwLmYeD3v-UymYYio3cXox6chlW8RfnExEa2jCzS8blciw>
+    <xmx:VRyfZBr4Luyc2-jW86YWefXHSznNUKPv1jnDUt6VTJq0d02fDbD1Ug>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 30 Jun 2023 14:17:53 -0400 (EDT)
+Date:   Fri, 30 Jun 2023 11:17:25 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH 5/6] rust: support running Rust documentation tests as
+ KUnit ones
+Message-ID: <ZJ8cNUW3oR2p+gL1@boqun-archlinux>
+References: <20230614180837.630180-1-ojeda@kernel.org>
+ <20230614180837.630180-6-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614180837.630180-6-ojeda@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Arnd
+On Wed, Jun 14, 2023 at 08:08:29PM +0200, Miguel Ojeda wrote:
+> diff --git a/rust/helpers.c b/rust/helpers.c
+> index bb594da56137..49a5e1a4f0ae 100644
+> --- a/rust/helpers.c
+> +++ b/rust/helpers.c
+> @@ -18,6 +18,7 @@
+>   * accidentally exposed.
+>   */
+>  
+> +#include <kunit/test-bug.h>
 
-> On Fri, Jun 30, 2023, at 16:44, Zhangjin Wu wrote:
-> > _GNU_SOURCE Implies _LARGEFILE64_SOURCE in glibc, but in musl, the
-> > default configuration doesn't enable _LARGEFILE64_SOURCE.
-> >
-> > From include/dirent.h of musl, getdents64 is provided as getdents when
-> > _LARGEFILE64_SOURCE is defined.
-> >
-> >     #if defined(_LARGEFILE64_SOURCE)
-> >     ...
-> >     #define getdents64 getdents
-> >     #endif
-> >
-> > Let's define _LARGEFILE64_SOURCE to fix up this compile error:
-> 
-> I think a better solution would be to use the normal getdents() instead
-> of glibc getdents64(), but then define _FILE_OFFSET_BITS=64 to tell
-> glibc to use the modern version of all filesystem syscalls.
-> 
+When CONFIG_KUNIT=n, the above file is mostly just a function that
+returns "NULL", however, since "NULL" is not defined: kunit/test-bug.h
+includes nothing if CONFIG_KUNIT=n, bindgen is not happy about it:
 
-Just checked the getdents manpage[1] and the nolibc code, both of glibc and
-nolibc don't provide the getdents() library routine but both of them provide
-the getdents64(), only musl provide getdents() by default.
+  ./include/kunit/test-bug.h:63:67: error: use of undeclared identifier 'NULL'
 
-And as the manpage shows, it is not easy to call getdents() with glibc, we
-need manually call syscall() and define the 'dirent' struct ourselves:
+, we can fix this in Rust side by adding linux/stddef.h before
+kunit/test-bug.h as below, but maybe it's better fixed inside
+kunit/test-bug.h?
 
-    glibc does not provide a wrapper for getdents(); call getdents()
-    using syscall(2).  In that case you will need to define the
-    linux_dirent or linux_dirent64 structure yourself.
+Regards,
+Boqun
 
-And for nolibc, a getdents64() with linux_dirent64 struct (with int64_t offset)
-is provided, there is either no getdents() currently.
+-------------------------------->8
+diff --git a/rust/helpers.c b/rust/helpers.c
+index 49a5e1a4f0ae..048d11c7d796 100644
+--- a/rust/helpers.c
++++ b/rust/helpers.c
+@@ -18,6 +18,7 @@
+  * accidentally exposed.
+  */
+ 
++#include <linux/stddef.h>
+ #include <kunit/test-bug.h>
+ #include <linux/bug.h>
+ #include <linux/build_bug.h>
 
-This patch aims to let nolibc-test at least compile for musl and therefore we
-can easily check the new tests for musl, glibc and nolibc together.
-
-For the 64bit offset related stuff, we'd better delay it in another patchset
-(part of full rv32 support), which will convert the off_t to 64bit by default.
-
-Thanks,
-Zhangjin
-
-[1]: https://man7.org/linux/man-pages/man2/getdents.2.html
-
->      Arnd
+>  #include <linux/bug.h>
+>  #include <linux/build_bug.h>
+>  #include <linux/err.h>
+> @@ -135,6 +136,12 @@ void rust_helper_put_task_struct(struct task_struct *t)
+>  }
+>  EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
+>  
+> +struct kunit *rust_helper_kunit_get_current_test(void)
+> +{
+> +	return kunit_get_current_test();
+> +}
+> +EXPORT_SYMBOL_GPL(rust_helper_kunit_get_current_test);
+> +
+>  /*
+>   * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
+>   * as the Rust `usize` type, so we can use it in contexts where Rust
