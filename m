@@ -2,134 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600F9743E43
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 17:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE599743DF3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 16:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232728AbjF3PGc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Jun 2023 11:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
+        id S231546AbjF3Oyx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Jun 2023 10:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232931AbjF3PG3 (ORCPT
+        with ESMTP id S231490AbjF3Oyn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:06:29 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (unknown [81.169.146.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C04E3C14;
-        Fri, 30 Jun 2023 08:06:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1688136804; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=ktQWRloAJVcbtfzrwy7QVJMfZYy4BWWVjmUnPf5NL47XUIoo2h2XF5m496FyVmK59f
-    Jure2X4x2FXITqAPDvytbcGH/plEu0Ir1NS59iS6xm4CYzAFLvY0YXxXdAXgEMD5juCK
-    PLrfx5/wpjEajxzFuEbmd4FnaVdyI4OXDrDqgSQtV1VHeJrqpvhPEvjHvwegTlcG+674
-    cZCcEQJwWuqowQPaiatkm1mIpkqkt67MQGuKt8XDSNOebpyK2CokqgzJ+47LAGskQlZl
-    Ap3eT1iZ/63HV+Kd/I0ZgMMiDRSuU5eLUlLzn5XlUp44nvseCfYudELwf60T6YMFJFR3
-    hlag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1688136804;
-    s=strato-dkim-0002; d=strato.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=3v9FwKwabXm3VhIGPqHolyELPsxinvnAmxZlzv2LbiI=;
-    b=sMGy9vkeo4NgzYHgfB0DQFmQqVMbUEs7H2EoBi9KokQIPmhvbogESQxzHlzvV7Yyat
-    z4LNi/ZuvybenLmXsXId/aow0xq4QPXIm8ctX9/ClEOjy0568svuJVZ6uAtHMpZuft+J
-    oHWTfEMG5TyvNd5Qg5X8UG8agVi7PJpphXhdR0N/2g2jeQHn3HhItS6UruFB3zGQeV5a
-    FqNgBj9bVl5GMxWovb3iBcteo9LHcJv890aeg/ZCie0IjJxgO6W9oUH2iW2yDNIW0dbM
-    lh7s6ECZCvhJVSf2p4qRJXk2vKH0+jII4LXuKDffzq1fGmf3Dy70waa93ljo9z3VfNzJ
-    K0/A==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1688136804;
-    s=strato-dkim-0002; d=aepfle.de;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=3v9FwKwabXm3VhIGPqHolyELPsxinvnAmxZlzv2LbiI=;
-    b=XSuY7hhtLS79JwyA0oJpta5/cIWvSuU1nviL381DYHGxEyGJ4WIsKEm6wF14LU0aIW
-    o33SoVm5T19ssaE+7fXvXsY2ZgSW+HyNN/yEl01exvzsD4myOYzaY7mwJQzMctROmuUz
-    VJrD7vZCJdgR8gN+9Jutem9t1zM/LqqNX6sFQykL+qmVDbxW898b8dx1j82xBxScZr+7
-    IqV0sbEJt2q3ponqcHiknFIk8Fk99xvfkDldewrTB1ahTWDhJNy0yLK0qNEWiymny60M
-    BzeR0FJNCWhtmqcWeaXb8WgLZ63zxXWZztfG9vqCKTxKKRzpUAbmucPeOQdgPdxjzd98
-    EJ4w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1688136804;
-    s=strato-dkim-0003; d=aepfle.de;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=3v9FwKwabXm3VhIGPqHolyELPsxinvnAmxZlzv2LbiI=;
-    b=F7Gp3a1EBO67LR5zgQEvd/wQ/xgdvjrUUG7VhAM/OOv6ZMCH6AdEZs9KlNJ3YQvGVi
-    6eCAwGpbjiBJbIExRaCA==
-X-RZG-AUTH: ":P2EQZWCpfu+qG7CngxMFH1J+3q8wa/QXkBR9MXjAuzpIG0mv9coXAg4x+1/7Qcst+v+6egNSCv2nSejLpXdlt4RWwKmQOQ=="
-Received: from sender
-    by smtp.strato.de (RZmta 49.6.0 AUTH)
-    with ESMTPSA id y5401az5UErNzMj
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 30 Jun 2023 16:53:23 +0200 (CEST)
-From:   Olaf Hering <olaf@aepfle.de>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Yasuaki Ishimatsu <isimatu.yasuaki@jp.fujitsu.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v1] Fix documentation of panic_on_warn
-Date:   Fri, 30 Jun 2023 16:53:02 +0200
-Message-Id: <20230630145307.25865-1-olaf@aepfle.de>
-X-Mailer: git-send-email 2.35.3
+        Fri, 30 Jun 2023 10:54:43 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD8B199C;
+        Fri, 30 Jun 2023 07:54:41 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1688136872tw3c6ubu
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 30 Jun 2023 22:54:31 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: znfcQSa1hKbueF+mXAgBy3rJOgj1RLfbDdVxw5G9LZsIKSHSDWEo0cPthZn5y
+        2507pXERHbMQlfcGVi/fPoErK4Q+RhkejsHI7PKAIoYK61wlHUruw2XEBjLind0HIk+RQsP
+        ESu4yDckaqB4Zu8BTqm1n04LvedF4U3iF/SkLxvf8Z3oiOG4m5c6Tny1Igo5PX+/R3qpMRg
+        yZlvGKhBNasKGPiAwMJAAnNO6oxAVrdVDl5DurO9CQzy7f5YuLC2zPOtWfLEI4giP7v/88H
+        pEkPmmeDcjaBK1YbDkRmiJtiPyNN1F+M0m0458Hq55J5tjaRE3Nh39h0bIF/4HvmGeHBytE
+        ZZFY9FD/68V5g2Iz7zu+8a1Dpt9Yl3c8ZwVxpOYETRHTjKCFTyKaT8dwFeFzg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 657531427943538185
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v3 09/14] tools/nolibc: add rmdir() support
+Date:   Fri, 30 Jun 2023 22:54:24 +0800
+Message-Id: <630ad07b61503e1970f93c6f24b3c6e2fc3a1650.1688134400.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1688134399.git.falcon@tinylab.org>
+References: <cover.1688134399.git.falcon@tinylab.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kernel cmdline option panic_on_warn expects an integer, it is not a
-plain option as documented. A number of uses in the tree figured this
-already, and use panic_on_warn=1 for their purpose.
+a reverse operation of mkdir() is meaningful, add rmdir() here.
 
-Adjust a comment which otherwise may mislead people in the future.
+required by nolibc-test to remove /proc while CONFIG_PROC_FS is not
+enabled.
 
-Fixes: 9e3961a097 ("kernel: add panic_on_warn")
-
-Signed-off-by: Olaf Hering <olaf@aepfle.de>
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- Documentation/admin-guide/kernel-parameters.txt | 2 +-
- tools/testing/selftests/rcutorture/bin/kvm.sh   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/include/nolibc/sys.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9e5bab29685f..15196f84df49 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4049,7 +4049,7 @@
- 			extra details on the taint flags that users can pick
- 			to compose the bitmask to assign to panic_on_taint.
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index b6c33c40c037..7b052958e2ae 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -610,6 +610,28 @@ int mkdir(const char *path, mode_t mode)
+ 	return __sysret(sys_mkdir(path, mode));
+ }
  
--	panic_on_warn	panic() instead of WARN().  Useful to cause kdump
-+	panic_on_warn=1	panic() instead of WARN().  Useful to cause kdump
- 			on a WARN().
++/*
++ * int rmdir(const char *path);
++ */
++
++static __attribute__((unused))
++int sys_rmdir(const char *path)
++{
++#ifdef __NR_rmdir
++	return my_syscall1(__NR_rmdir, path);
++#elif defined(__NR_unlinkat)
++	return my_syscall3(__NR_unlinkat, AT_FDCWD, path, AT_REMOVEDIR);
++#else
++	return -ENOSYS;
++#endif
++}
++
++static __attribute__((unused))
++int rmdir(const char *path)
++{
++	return __sysret(sys_rmdir(path));
++}
++
  
- 	parkbd.port=	[HW] Parallel port number the keyboard adapter is
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
-index 62f3b0f56e4d..d3cdc2d33d4b 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
-@@ -655,4 +655,4 @@ fi
- # Control buffer size: --bootargs trace_buf_size=3k
- # Get trace-buffer dumps on all oopses: --bootargs ftrace_dump_on_oops
- # Ditto, but dump only the oopsing CPU: --bootargs ftrace_dump_on_oops=orig_cpu
--# Heavy-handed way to also dump on warnings: --bootargs panic_on_warn
-+# Heavy-handed way to also dump on warnings: --bootargs panic_on_warn=1
+ /*
+  * int mknod(const char *path, mode_t mode, dev_t dev);
+-- 
+2.25.1
+
