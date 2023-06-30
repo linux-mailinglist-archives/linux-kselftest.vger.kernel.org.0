@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A93743161
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 02:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5B9743167
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 02:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjF2X7h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 19:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
+        id S230284AbjF3AA4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 20:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjF2X7h (ORCPT
+        with ESMTP id S229727AbjF3AAz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:59:37 -0400
+        Thu, 29 Jun 2023 20:00:55 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9482972;
-        Thu, 29 Jun 2023 16:59:34 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1688083165t6ieamo4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0252972;
+        Thu, 29 Jun 2023 17:00:53 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1688083243tc6q58s1
 Received: from linux-lab-host.localdomain ( [119.123.131.49])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 07:59:24 +0800 (CST)
+        id ; Fri, 30 Jun 2023 08:00:43 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: i75H2eCteEhF1p4iQc3BY/8OPWOM3oRV+m1q8nMuW55lIXGl3BcbML5es10ms
-        jUJ47FoEB9w1RrMiQT5qOoUDc73bYdvwB9sPxtmeszNifC+0YMKarlKsKsVlF09ESf6D0pE
-        j0CkAw8/zC9q/WERC2PIYa2YBnc+l9ualw7CIwHzQ6BqgC1ol46rzAJamJJAUOCL+u6ksZr
-        SxkovQ7MYlGasGHmhyCHvCw9O0rfuDylF/FehTVIFRHmU5HgP2pvT1XxfNuktS9M4bOGj48
-        qK/4a/evfIeN8GrXBPtYXm1HYuPUS+ZUrpNmjbMAdxXF7T8GX1E2J7N1Umee4jfYVUUla6a
-        FgYc2Ny0mVYD33BQNKsS0am2tDuk58hX+iozREosjyq6NS97Mw=
+X-QQ-FEAT: CR3LFp2JE4kswbijyT8FSHr/m5Ro1TRCzo0a8RfheEUvcf/BVZGX2KLlH6E/+
+        ShX8DywmRJ9ILMpomwp/MCmci/hDinkPesyIEF8m1z95RH4xr+UNw7Yg9ulHwl3Jt/BEuwK
+        wY3rSTi9866Fog1s2TtL6YySRzzpuWzkghoVs58pDr48HYz2G6BLHsnKSvBnuCK3bNxBdn5
+        ljA/Au8aGriHhAlDjLeRl6iTzcX0CoK1GI0ozDFMjE4Q9SztOGzJOUw96JOZtXYGlaITQxc
+        bkb+eW2apV54E40wx7aRPpITa7SqGh7wpSvibt119O/MtmCGbqN99YMlET+fYnYEA1R1AQI
+        cSxavE7nLz/r3EOrqvur7xG9QFph5o5xFoNwERFkEopWHVlaymMKulc5hiamQ==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10255374307051264272
+X-BIZMAIL-ID: 14245471600300813277
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 12/15] selftests/nolibc: add common get_tmpfile()
-Date:   Fri, 30 Jun 2023 07:54:35 +0800
-Message-Id: <ce614760ad99dfd4817ce52c90d17d2ea4174f36.1688078605.git.falcon@tinylab.org>
+Subject: [PATCH v2 13/15] selftests/nolibc: rename chroot_exe to chroot_tmpfile
+Date:   Fri, 30 Jun 2023 08:00:28 +0800
+Message-Id: <a38a6057866b597e5f931de550f2a6f24404ecdf.1688078605.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1688078604.git.falcon@tinylab.org>
 References: <cover.1688078604.git.falcon@tinylab.org>
@@ -51,41 +51,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-allow create and get a temporary file from tmpfs.
+For CONFIG_PROC_FS=n, let's use tmpfs and create a tmp file for
+chroot_exe test.
+
+Since chroot_exe is mainly testing the not directory case (ENOTDIR), so,
+rename it to chroot_tmpfile may be better.
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 8e3e2792f5e3..1002e0267515 100644
+index 1002e0267515..2e9eaa7efa6e 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -54,6 +54,23 @@ struct test {
- 	int (*func)(int min, int max); /* handler */
- };
+@@ -682,6 +682,8 @@ int run_syscall(int min, int max)
+ 	int ret = 0;
+ 	void *p1, *p2;
+ 	int has_gettid = 1;
++	const char *tmpfile = get_tmpfile("/tmp/dummy");
++	int has_tmpfile = tmpfile != NULL;
  
-+static const char *get_tmpfile(const char *tmpfile)
-+{
-+	struct stat stat_buf;
-+	int fd;
-+
-+	if (stat(tmpfile, &stat_buf) == 0)
-+		return tmpfile;
-+
-+	fd = open(tmpfile, O_CREAT, 0600);
-+	if (fd != -1) {
-+		close(fd);
-+		return tmpfile;
-+	}
-+
-+	return NULL;
-+}
-+
- #ifndef _NOLIBC_STDLIB_H
- char *itoa(int i)
- {
+ 	/* <proc> indicates whether or not /proc is mounted */
+ 	proc = stat("/proc", &stat_buf) == 0;
+@@ -720,7 +722,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(chown_self);        EXPECT_SYSER(proc, chown("/proc/self", 0, 0), -1, EPERM); break;
+ 		CASE_TEST(chroot_root);       EXPECT_SYSZR(euid0, chroot("/")); break;
+ 		CASE_TEST(chroot_blah);       EXPECT_SYSER(1, chroot("/proc/self/blah"), -1, ENOENT); break;
+-		CASE_TEST(chroot_exe);        EXPECT_SYSER(proc, chroot("/proc/self/exe"), -1, ENOTDIR); break;
++		CASE_TEST(chroot_tmpfile);    EXPECT_SYSER(has_tmpfile, chroot(tmpfile), -1, ENOTDIR); break;
+ 		CASE_TEST(close_m1);          EXPECT_SYSER(1, close(-1), -1, EBADF); break;
+ 		CASE_TEST(close_dup);         EXPECT_SYSZR(1, close(dup(0))); break;
+ 		CASE_TEST(dup_0);             tmp = dup(0);  EXPECT_SYSNE(1, tmp, -1); close(tmp); break;
 -- 
 2.25.1
 
