@@ -2,50 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F4F743173
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 02:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0435D7432DB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Jun 2023 04:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjF3AGS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Jun 2023 20:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
+        id S230034AbjF3Cr4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Jun 2023 22:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjF3AGR (ORCPT
+        with ESMTP id S230013AbjF3Crz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 20:06:17 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724C3199B;
-        Thu, 29 Jun 2023 17:06:15 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1688083565twklsj26
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 08:06:04 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: RFp2QSjOiS7beTcSYXt1iawYE5VBFE+qfrFikOGIrZGU78FGQ//+XBNHlkTeb
-        TF9bjq4tqANTGj/eXrmZuqrAjBtKHg7Qp+Y5VIjCUePqDup95utpa2bac+We01QQ5iHPhta
-        /zN6i6ZKv9IPOPTajq6hPE+XEVU+Lc/QRz7szyfrDSQ+kksByTKk20N1o8F2uxrCJJgmE8O
-        5hVrAJvv3KqNUx9SLoQ8ngwmbNGFK5DTN0cZ+Pps0q5ox1rTJREprqRx/RBPItazmUbDH6I
-        DiikY/83T+T6cmW/kAnmW8Lt1Q+wE8q+79BlUAdoStWwD1jLD+RDCQ49SpArKwT3WIn1hz4
-        1yCFJtTzqJcQzfMvymdKAYqjfJxUixP6hjv/1KgL7SqVmysltewh2BBbP4TtbvBUY+HKAA3
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 527216731131771503
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 15/15] selftests/nolibc: vfprintf: remove MEMFD_CREATE dependency
-Date:   Fri, 30 Jun 2023 08:03:14 +0800
-Message-Id: <2438cf7e4ecb2444a79f838437c149dd7d5bdde6.1688078605.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688078604.git.falcon@tinylab.org>
-References: <cover.1688078604.git.falcon@tinylab.org>
+        Thu, 29 Jun 2023 22:47:55 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316F230D1;
+        Thu, 29 Jun 2023 19:47:54 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id ffacd0b85a97d-311099fac92so1649499f8f.0;
+        Thu, 29 Jun 2023 19:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688093272; x=1690685272;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PN5yxbuJ2nnYnl/4YBa8slTNyYfmpUDhYSEL5xstQsU=;
+        b=IUaTt8TcLWNzXn8Ey8PCwkSOyValaLJHNsJBzfJ8c8VFkXDXWZ07DZAYAyY8ZpyG+D
+         ViyKdbolLZuN3acuoZPui7va0jpo92CmUUIR/E7PR4LuPuZ/dAWAmpRWYosYBlh7+UXN
+         SbsW85y6oTB4jNWi3r6NOH6/5NH8WmCp+PHbpfVjulKWtWdG30+EdGEfcyAzSfV0zRVP
+         BTcIyC28klTeW45HEmkwSpo9CSqIcb1O9J4m64qHMGD47BrK1KM43qXMEAlbWKWW/g/d
+         dLFlS0reoxJD2v1Q0NAKPAhoCVlf93BZoE/wJRWSISQssl9GtJnZi4AwMUJS8dA7GITJ
+         i1dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688093272; x=1690685272;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PN5yxbuJ2nnYnl/4YBa8slTNyYfmpUDhYSEL5xstQsU=;
+        b=VQw18THOx28CsTP5o/yyu2WuJzMh6j1EWXH60pOUu6SQ2BAwkRFMMVjbrL7BA2V/Kx
+         PmfOGDt309dI1tE0ivl6Rieivvp/qgJ1PA1pBAeFLVL+JwWhs2ME6gxDMuIqc+HdmKY4
+         gMyY26bX19oZEZVUKrMCyi9ORREnRtmSFKSKtwa3OnxI57TGKGF5pYDpXT6UuwgJVVtL
+         3vzZWzYlyU03gfGLUm3EnUohNmOZrWj0RK0eLLE2PR3oZwT1AEpAAMgDT7IFTe3N+gwM
+         U2R/aqXz3rZtERQ/gpGG8EESABtLFlNaKKu2Ytto+asq+MZ7fTTMGsSMpsCaoP8GOwk+
+         OZHw==
+X-Gm-Message-State: ABy/qLa3kZ5xV4GJTz1Ou8Cu6J4FXhGWODDZ+M6zq4AsILw6oSCTi2zn
+        hT9/nufL/tbu2htBuF23Ua4I+ODGqRR0U0OyPp8=
+X-Google-Smtp-Source: APBJJlG2XSLJk7WgprfL+OPvH4/Ws0gRTftzgVG3a1nA2jukp+WyKKCCC6yZ9QwKgrCuixwdMY5UR+sy3rDqqsFm9rU=
+X-Received: by 2002:a5d:514d:0:b0:313:e20c:b8e0 with SMTP id
+ u13-20020a5d514d000000b00313e20cb8e0mr921811wrt.23.1688093272424; Thu, 29 Jun
+ 2023 19:47:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230607123700.40229-1-cloudliang@tencent.com>
+ <20230607123700.40229-2-cloudliang@tencent.com> <ZJyj3QDu9eAtJ+eq@google.com>
+In-Reply-To: <ZJyj3QDu9eAtJ+eq@google.com>
+From:   Jinrong Liang <ljr.kernel@gmail.com>
+Date:   Fri, 30 Jun 2023 10:47:40 +0800
+Message-ID: <CAFg_LQVtcBaO-=dvrqe7OjMqift__x-F6FeJ8EEUh+Ei-tgyhg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] KVM: selftests: Introduce __kvm_pmu_event_filter
+ to improved event filter settings
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,55 +80,81 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The vfprintf test case require to open a temporary file to write, the
-old memfd_create() method is perfect but has strong dependency on
-MEMFD_CREATE and also TMPFS or HUGETLBFS (see fs/Kconfig):
+Sean Christopherson <seanjc@google.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=8829=
+=E6=97=A5=E5=91=A8=E5=9B=9B 05:19=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Wed, Jun 07, 2023, Jinrong Liang wrote:
+> > -static struct kvm_pmu_event_filter *remove_event(struct kvm_pmu_event_=
+filter *f,
+> > +static struct kvm_pmu_event_filter *remove_event(struct __kvm_pmu_even=
+t_filter *__f,
+> >                                                uint64_t event)
+>
+> Can you tack on a patch to drop the return?  None of the callers consume =
+it, and
+> it incorrectly implies that the incoming filter isn't modified.
 
-    config MEMFD_CREATE
-	def_bool TMPFS || HUGETLBFS
+Thank you very much for your suggestion! I'm more than happy to follow
+your advice and modify the code accordingly.
 
-And from v6.2, MFD_NOEXEC_SEAL must be passed for the non-executable
-memfd, otherwise, The kernel warning will be output to the test result
-like this:
+>
+> >  {
+> >       bool found =3D false;
+> >       int i;
+> > +     struct kvm_pmu_event_filter *f =3D (void *)__f;
+>
+> Nit, reverse xmas tree is preferred:
+>
+>         struct kvm_pmu_event_filter *f =3D (void *)__f;
+>         bool found =3D false;
+>         int i;
+>
+> Hoever, I don't think this one needs to cast, the cast is only necessary =
+when
+> invoking a KVM ioctl(), e.g. I believe this should work:
+>
+> static void remove_event(struct __kvm_pmu_event_filter *f, uint64_t event=
+)
+> {
+>         bool found =3D false;
+>         int i;
+>
+>         for (i =3D 0; i < f->nevents; i++) {
+>                 if (found)
+>                         f->events[i - 1] =3D f->events[i];
+>                 else
+>                         found =3D f->events[i] =3D=3D event;
+>         }
+>         if (found)
+>                 f->nevents--;
+> }
+> > @@ -569,19 +554,16 @@ static void run_masked_events_test(struct kvm_vcp=
+u *vcpu,
+> >                                  const uint64_t masked_events[],
+> >                                  const int nmasked_events)
+> >  {
+> > -     struct kvm_pmu_event_filter *f;
+> > +     struct __kvm_pmu_event_filter f =3D {
+> > +         .nevents =3D nmasked_events,
+> > +         .action =3D KVM_PMU_EVENT_ALLOW,
+> > +         .flags =3D KVM_PMU_EVENT_FLAG_MASKED_EVENTS,
+>
+> Tabs, not spaces please.
+>
+> > +static int set_pmu_single_event_filter(struct kvm_vcpu *vcpu, uint64_t=
+ event,
+> > +                                    uint32_t flags, uint32_t action)
+> > +{
+> > +     struct __kvm_pmu_event_filter f =3D {
+> > +         .nevents =3D 1,
+> > +         .flags =3D flags,
+> > +         .action =3D action,
+> > +         .events =3D {
+> > +             event,
+>
+> Tabs.
 
-        Running test 'vfprintf'
-        0 emptymemfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=1 'init'
-         "" = ""                                                  [OK]
+I will include these change in the new patch version and ensure that
+any related code is adjusted accordingly.
 
-To avoid such warning and also to remove the MEMFD_CREATE dependency,
-let's open a file from tmpfs directly.
-
-The /tmp directory is used to detect the existing of tmpfs, if not
-there, skip instead of fail.
-
-And further, for pid == 1, the initramfs is loaded as ramfs, which can
-be used as tmpfs, so, it is able to further remove TMPFS dependency too.
-
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/lkml/9ad51430-b7c0-47dc-80af-20c86539498d@t-8ch.de
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 0ca7d011765a..0847813d756c 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -888,10 +888,10 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- 	FILE *memfile;
- 	va_list args;
- 
--	fd = memfd_create("vfprintf", 0);
-+	fd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR, 0600);
- 	if (fd == -1) {
--		pad_spc(llen, 64, "[FAIL]\n");
--		return 1;
-+		pad_spc(llen, 64, "[SKIPPED]\n");
-+		return 0;
- 	}
- 
- 	memfile = fdopen(fd, "w+");
--- 
-2.25.1
-
+Once again, I truly appreciate your guidance!
