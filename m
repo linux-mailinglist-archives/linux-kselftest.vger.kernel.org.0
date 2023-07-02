@@ -2,36 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F362744E9B
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Jul 2023 18:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15543744EA7
+	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Jul 2023 18:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjGBQ2n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 2 Jul 2023 12:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60096 "EHLO
+        id S229604AbjGBQoL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 2 Jul 2023 12:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjGBQ2m (ORCPT
+        with ESMTP id S229516AbjGBQoK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 2 Jul 2023 12:28:42 -0400
+        Sun, 2 Jul 2023 12:44:10 -0400
 Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A246FE61;
-        Sun,  2 Jul 2023 09:28:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2635812A;
+        Sun,  2 Jul 2023 09:44:08 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 362GS2oc016328;
-        Sun, 2 Jul 2023 18:28:02 +0200
-Date:   Sun, 2 Jul 2023 18:28:02 +0200
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 362Ghw98016406;
+        Sun, 2 Jul 2023 18:43:58 +0200
+Date:   Sun, 2 Jul 2023 18:43:58 +0200
 From:   Willy Tarreau <w@1wt.eu>
 To:     Zhangjin Wu <falcon@tinylab.org>
 Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v2 07/13] tools/nolibc: sys_lseek: add pure 64bit lseek
-Message-ID: <20230702162802.GA16233@1wt.eu>
-References: <5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com>
- <20230530135433.405051-1-falcon@tinylab.org>
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: Re: [PATCH v2 0/3] selftests/nolibc: improve test report support
+Message-ID: <20230702164358.GB16233@1wt.eu>
+References: <cover.1687156559.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230530135433.405051-1-falcon@tinylab.org>
+In-Reply-To: <cover.1687156559.git.falcon@tinylab.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -42,60 +40,49 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Zhangjin, Arnd,
+Hi Zhangjin,
 
-On Tue, May 30, 2023 at 09:54:33PM +0800, Zhangjin Wu wrote:
-> > And then do the selection inside of the actual lseek,
-> > something like
-> > 
-> > static __attribute__((unused))
-> > off_t lseek(int fd, off_t offset, int whence)
-> > {
-> >         off_t ret = -ENOSYS;
-> > 
-> >         if (BITS_PER_LONG == 32)
-> >                ret = sys_llseek(fd, offset, whence);
-> > 
-> >         if (ret == -ENOSYS)
-> >                ret = sys_lseek(fd, offset, whence);
-> > 
-> >         if (ret < 0) {
-> >                 SET_ERRNO(-ret);
-> >                 ret = -1;
-> >         }
-> >         return ret;
-> >        
-> > }
+On Mon, Jun 19, 2023 at 02:52:31PM +0800, Zhangjin Wu wrote:
+> Hi, Willy
 > 
-> Yes, It is clearer, thanks. will learn carefully about the kernel types.
-
-I, too, like Arnd's proposal here. I tend to use a similar approach in
-other projects when possible. Often the limit is the types definition,
-which is necessary to define even empty static inline functions. The
-only thing is that due to the reliance on -ENOSYS above, the compiler
-cannot fully optimize the code away, particularly when both syscalls
-are defined, which may result in the compiler emitting the code for
-both calls on 32-bit platforms. But the idea is there anyway, and it
-may possibly just need a few adjustments based on BITS_PER_LONG after
-checking the emitted code.
-
-> > For the loff_t selection, there is no real need to handle the
-> > fallback, so this could just be an if()/else to select 32-bit
-> > or 64-bit, but for the time_t ones the fallback is required
-> > for pre-5.6 kernels.
-> >
+> Here is the v2 of our old patchset about test report [1].
 > 
-> Ok, will test it on the pre-5.6 versions too.
+> The trailing '\r' fixup has been merged, so, here only resend the left
+> parts with an additional patch to restore the failed tests print.
 > 
-> Hi, Willy, what's your suggestion about the oldest kernel versions we plan to
-> support? ;-)
+> This patchset is rebased on the dev.2023.06.14a	branch of linux-rcu [2].
+> 
+> Tests have passed for 'x86 run':
+> 
+>     138 test(s) passed, 0 skipped, 0 failed.
+>     See all results in /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/run.out
+(...)
+> 2. selftests/nolibc: always print the path to test log file
+> 
+>   Always print the path to test log file, but move it to a new line to
+>   avoid annoying people when the test pass without any failures.
 
-Like I said last time, since the code is included in the kernel, we
-expect userland developers to use this one to build their code, even
-if it's meant to work on older kernels. At the very least I want that
-supported kernels continue to work, and then as long as it does not
-require particular efforts, it's nice to continue to work on older
-ones (think LTS distros, late upgraders of legacy systems etc).
+I'm still really missing the (s+f > 0) test I added which was a time saver
+for me, because I could trivially check in the output reports which ones
+were totally OK and which ones required attention. Sure I could also start
+to grep for "passed," | grep -v " 0 skipped, 0 failed" but that's quite a
+pain, really.
 
-Thanks,
+I'm going to merge your series anyway otherwise we'll continue to bikeshed
+for many weeks and I know how annoying it is to keep unmerged series. But
+I would like that we find a solution that satisfies everyone.
+
+Maybe one possibility would be to add a "status" at the end of the line
+that emits "success", "warning", "failure" depending on the highest level
+reached like this:
+
+      138 test(s) passed, 0 skipped, 0 failed => status: success
+      136 test(s) passed, 2 skipped, 0 failed => status: warning
+      136 test(s) passed, 1 skipped, 1 failed => status: failure
+
+This way it's easy to grep -v "status: success" or grep "status: failure"
+to instantly get the corresponding details and also grep for them from
+multiple files.
+
+Thanks!
 Willy
