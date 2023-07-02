@@ -2,36 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D787745058
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Jul 2023 21:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896DF745060
+	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Jul 2023 21:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjGBTYA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 2 Jul 2023 15:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
+        id S229701AbjGBTdW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 2 Jul 2023 15:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjGBTYA (ORCPT
+        with ESMTP id S229513AbjGBTdV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:24:00 -0400
+        Sun, 2 Jul 2023 15:33:21 -0400
 Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EFF3A6;
-        Sun,  2 Jul 2023 12:23:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F3D8A6;
+        Sun,  2 Jul 2023 12:33:19 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 362JNlu1017530;
-        Sun, 2 Jul 2023 21:23:47 +0200
-Date:   Sun, 2 Jul 2023 21:23:47 +0200
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 362JX6cW017544;
+        Sun, 2 Jul 2023 21:33:06 +0200
+Date:   Sun, 2 Jul 2023 21:33:06 +0200
 From:   Willy Tarreau <w@1wt.eu>
 To:     Zhangjin Wu <falcon@tinylab.org>
 Cc:     thomas@t-8ch.de, arnd@arndb.de, david.laight@aculab.com,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 11/14] tools/nolibc: clean up mmap() support
-Message-ID: <20230702192347.GJ16233@1wt.eu>
+        linux-riscv@lists.infradead.org,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH v5 14/14] selftests/nolibc: add mmap and munmap test cases
+Message-ID: <20230702193306.GK16233@1wt.eu>
 References: <cover.1687957589.git.falcon@tinylab.org>
- <f054cd45de26bccb330ad842bc2b3b708b2a429d.1687957589.git.falcon@tinylab.org>
+ <90179484b62c0bafb0fad9b03680136bd6fedee3.1687957589.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f054cd45de26bccb330ad842bc2b3b708b2a429d.1687957589.git.falcon@tinylab.org>
+In-Reply-To: <90179484b62c0bafb0fad9b03680136bd6fedee3.1687957589.git.falcon@tinylab.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -42,34 +43,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 09:41:13PM +0800, Zhangjin Wu wrote:
->  static __attribute__((unused))
->  void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
->  {
-> -	void *ret = sys_mmap(addr, length, prot, flags, fd, offset);
-> -
-> -	if ((unsigned long)ret >= -4095UL) {
-> -		SET_ERRNO(-(long)ret);
-> -		ret = MAP_FAILED;
-> -	}
-> -	return ret;
-> +	return (void *)__sysret((unsigned long)sys_mmap(addr, length, prot, flags, fd, offset));
->  }
+Hi Zhangjin,
 
-One point regarding this one. By doing so, we're hard-coding the fact
-that we consider that MAP_FAILED is always -1. I'm not necessarily
-against it, but this implication can be confusing for those searching
-where it's being set. I would suggest putting a comment before the
-mmap() function saying:
+On Wed, Jun 28, 2023 at 09:51:57PM +0800, Zhangjin Wu wrote:
+> Three mmap/munmap related test cases are added:
+> 
+> - mmap_bad: the length argument must be greater than 0, otherwise, fail
+>   with -EINVAL.
+> 
+> - munmap_bad: invalid (void *)-1 address fail with -EINVAL.
+> 
+> - mmap_munmap_good: mmap() a file with good offset and then munmap().
+> 
+> Note, it is not easy to find a unique file for mmap() in different
+> scenes, so, a file list is used to search the right one:
+> 
+> - /proc/1/exe, for 'run' and 'run-user' target
+>   'run-user' can not find '/proc/self/exe'
+> 
+> - /proc/self/exe, for 'libc-test' target
+>   normal program 'libc-test' has no permission to access '/proc/1/exe'
 
- /* Note that on Linux MAP_FAILED is -1 so we can use the generic __sysret()
-  * which returns -1 upon error and still satisfy user land that checks for
-  * MAP_FAILED.
-  */
+Strictly speaking, if your executable is not readable (e.g. chmod 111
+due to a restrictive umask) it will also fail that one.
 
-Since it's an assumed choice that theoretically could affect portability,
-it should be reflected in the commit message as well (and we all know it
-does not have any impact).
+> - the others, for kernel without procfs
+>   let it pass even with 'worst case' kernel configs
 
-Thanks!
+You should include /dev/zero, which is commonly used to allocate anonymous
+memory and is more likely present and readable than any of the other files.
+And another file of choice is obviously argv[0] ;-)  In this case you don't
+need any of the other extra ones. Thus I could suggest that you try in this
+order:
+
+    /dev/zero, /proc/self/exe, /proc/1/exe, argv[0]
+
+and be done with it. That doesn't prevent one from extending the list if
+really needed later, but I doubt it would be needed. Also, it's already
+arranged in a read-write, then read-only fallbacks mode, so if we later
+need to add more complex tests involving writes, the writable /dev/zero
+will have precedence.
+
 Willy
