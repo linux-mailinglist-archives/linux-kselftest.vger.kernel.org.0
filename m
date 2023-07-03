@@ -2,89 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57704745700
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 10:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83220745721
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 10:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbjGCILT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Jul 2023 04:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
+        id S231364AbjGCITK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Jul 2023 04:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbjGCILQ (ORCPT
+        with ESMTP id S231370AbjGCITJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:11:16 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87B6E56;
-        Mon,  3 Jul 2023 01:11:13 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1688371871;
-        bh=kJhOWrHT19lxlXbxpDms6ePeadAyakSraqg81a3AWM4=;
-        h=From:Date:Subject:To:Cc:From;
-        b=haqhEw2cv08hpnQ0MnDu82+CPHCatTfbpexHrd8fjyzYBsGbIR8lCZV2FMIA4bLDZ
-         6DA+/oBKuuhyWd/yQCo0lzMwipNP3gREr9zXeWH1I2QVgfjTA5gpjszfaqAZbwOpPC
-         UOmlFF8lpiWTDVjJXkDML9eRseRuY3n24br3bNsw=
-Date:   Mon, 03 Jul 2023 10:11:08 +0200
-Subject: [PATCH] selftests/nolibc: simplify call to ioperm
+        Mon, 3 Jul 2023 04:19:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28438B2
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Jul 2023 01:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688372302;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/pmTH7QHH1n+Sr1Aseof4xJ1nlp+d2SsSN19KkPk+1k=;
+        b=KXZUkkrgNENM1pnEAKgHQtWEUwxtZ+pBvlQuEO2DUyrJsCz0qgYMrivDssLkvrLKsRXNns
+        +zz/C1rDXELrkGhEbl90wTTYMxWh6a66tCfmYlCi/EH17EdGjgcJtbRe+06k2WO96ZMnrY
+        EEUN4PuXU4GeZZLiZNASW7b2ERAjlxA=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-459-KYG_4Y6MMlmFqFy5Rd3hEg-1; Mon, 03 Jul 2023 04:18:21 -0400
+X-MC-Unique: KYG_4Y6MMlmFqFy5Rd3hEg-1
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4033e4d51ecso31907891cf.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Jul 2023 01:18:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688372300; x=1690964300;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/pmTH7QHH1n+Sr1Aseof4xJ1nlp+d2SsSN19KkPk+1k=;
+        b=GH1AlodsmqjaJPRZ1l0DT6e2/BCe1/wweXPmh+rlJZKqq+V38zC9rkH10ULJJbRFF8
+         ttcjqNOa5qXSNk7QgBuREzQ98LCae1H5QHSY8LJUljm5awGNXr/XliD63Uhl4oJT0cUk
+         u+O9c4t5LlnMF1yOBLmksCyLyAPHbnbCjLR8KIM1rBTmPZF+4IGBXysUHXUe9YHHrSaQ
+         cpoRNZtW4HajtQuVCKvagwg6wnm4HM+PQ8HvfakF22gWx7e1M0Vcwl7Mhj+Q2KQrup5d
+         ME1iwDqH1mrGpafJvPwRgBAJrhBaWRl3jnGTRUmuhxpvAP/p4oxhhTSCqC1ZJ3yJjzsP
+         CGSw==
+X-Gm-Message-State: AC+VfDw9qVXMy5++g6WK0LtulAHlBSflSTl/ZTDctqf2bLb4ZUyireL6
+        pUkgx5dylopTPkOZyUYuIHlDnG4u5lzJ4jZJ9A1ocy+cXgFVyoF0y4SJAOJO+yBy9Snxhs1CKEb
+        q5Po67l/xDwyrVdZzKs3ZTEfjrj69
+X-Received: by 2002:ac8:5b0f:0:b0:3ff:2fa1:e725 with SMTP id m15-20020ac85b0f000000b003ff2fa1e725mr11276822qtw.0.1688372300547;
+        Mon, 03 Jul 2023 01:18:20 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7RTSEK4+Ecg/Cn1QgPkNUHsMhLiMif8GJbqZHZHROrpi4mF85x3CsfC5hkvyJdPFBYNSfKqA==
+X-Received: by 2002:ac8:5b0f:0:b0:3ff:2fa1:e725 with SMTP id m15-20020ac85b0f000000b003ff2fa1e725mr11276812qtw.0.1688372300262;
+        Mon, 03 Jul 2023 01:18:20 -0700 (PDT)
+Received: from fedora.redhat.com ([2a06:c701:4b84:700:e5a3:9a79:b307:264a])
+        by smtp.gmail.com with ESMTPSA id v9-20020ac83d89000000b004035cf1cc1asm1024966qtf.41.2023.07.03.01.18.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 01:18:19 -0700 (PDT)
+From:   Dana Elfassy <delfassy@redhat.com>
+X-Google-Original-From: Dana Elfassy <dangel101@gmail.com>
+To:     shuah@kernel.org, usama.anjum@collabora.com, eballetbo@kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Dana Elfassy <dangel101@gmail.com>
+Subject: [PATCH] selftests/input: add tests for the EVIOCSCLOCKID ioctl
+Date:   Mon,  3 Jul 2023 11:18:01 +0300
+Message-ID: <20230703081801.900093-1-dangel101@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230703-nolibc-ioperm-v1-1-abf9ebe98a80@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAJuComQC/x3MQQqAIBBA0avIrBNMKa2rRIvKqQZKRSEC8e5Jy
- 7f4P0PCSJhgZBkiPpTIu4q2YbCdizuQk60GKaQSWiju/EXrxskHjDc3xhq9YG87HKA2IeJO7/+
- b5lI+8GhPCl8AAAA=
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhangjin Wu <falcon@tinylab.org>,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688371870; l=1268;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=kJhOWrHT19lxlXbxpDms6ePeadAyakSraqg81a3AWM4=;
- b=S+s/IO9qf076DYNW/+GGq2bcAJOviujQOot28YeutmosgS+tbApKaXBDWI9HiY9BruZ+Mv32f
- QFTEPNUXlUWCqHxl651aZoxNEnGa5HRMhWCCBJ/L+G8PXxAel5dgiWF
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since commit 53fcfafa8c5c ("tools/nolibc/unistd: add syscall()") nolibc
-has support for syscall(2).
-Use it to get rid of some ifdef-ery.
+This patch introduces tests for the EVIOCSCLOCKID ioctl, for full
+coverage of the different clkids
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Dana Elfassy <dangel101@gmail.com>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
+[1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 486334981e60..c02d89953679 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1051,11 +1051,7 @@ int main(int argc, char **argv, char **envp)
- 		 * exit with status code 2N+1 when N is written to 0x501. We
- 		 * hard-code the syscall here as it's arch-dependent.
- 		 */
--#if defined(_NOLIBC_SYS_H)
--		else if (my_syscall3(__NR_ioperm, 0x501, 1, 1) == 0)
--#else
--		else if (ioperm(0x501, 1, 1) == 0)
--#endif
-+		else if (syscall(__NR_ioperm, 0x501, 1, 1) == 0)
- 			__asm__ volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
- 		/* if it does nothing, fall back to the regular panic */
- #endif
+ tools/testing/selftests/input/evioc-test.c | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
----
-base-commit: a901a3568fd26ca9c4a82d8bc5ed5b3ed844d451
-change-id: 20230703-nolibc-ioperm-88d87ae6d5e9
-
-Best regards,
+diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
+index ad7b93fe39cf..81d5336d93ac 100644
+--- a/tools/testing/selftests/input/evioc-test.c
++++ b/tools/testing/selftests/input/evioc-test.c
+@@ -234,4 +234,36 @@ TEST(eviocsrep_set_repeat_settings)
+ 	selftest_uinput_destroy(uidev);
+ }
+ 
++TEST(eviocsclockid_set_clockid)
++{
++	struct selftest_uinput *uidev;
++	int clkid = 0;
++	int rc;
++
++	rc = selftest_uinput_create_device(&uidev, -1);
++	ASSERT_EQ(0, rc);
++	ASSERT_NE(NULL, uidev);
++
++	// case CLOCK_REALTIME
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(0, rc);
++
++	// case CLOCK_MONOTONIC
++	clkid = 1;
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(0, rc);
++
++	// case CLOCK_BOOTTIME
++	clkid = 7;
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(0, rc);
++
++	// case default
++	clkid = -1;
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(-1, rc);
++
++	selftest_uinput_destroy(uidev);
++}
++
+ TEST_HARNESS_MAIN
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.41.0
 
