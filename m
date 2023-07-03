@@ -2,120 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CD47458B1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 11:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2636B7458BE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 11:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjGCJqQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Jul 2023 05:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
+        id S229727AbjGCJs3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Jul 2023 05:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjGCJqO (ORCPT
+        with ESMTP id S230083AbjGCJs1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:46:14 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD0DE5B
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Jul 2023 02:46:11 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-992b66e5affso485175766b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Jul 2023 02:46:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1688377570; x=1690969570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RAVcfp0GiSAt76fo4gLjijfKkWn98YypFzYe/HtvOKU=;
-        b=HD95sOKgKpvDJjMobg5G+wIZgo1K7nnWBpuhskATho6HC5AoGzaZi8rRmPIxXemMq2
-         o900X+GzpDo2XZJD199KKY9MrfZHJFr1QtuwRd07VlpmXVZUTLfY0LLTq3xJYVCf/a4/
-         /0Le0hGJ5S4GMofEHiKUfaE6g50i0psznpRYu0R6MrOjBoTFVXnIkMsSkcUuBrWx8DBw
-         oBHpe79OG2ppm+LVFsp/ULOh1mU+SX9eS6o2rIB95lTdmDBUNaDrUUfwMUNKiKzd7Zv3
-         Tk8Lbpw0bJDK7E0+tJ9vUBc6XdoMDUaVABlzzlWA1H71sDEgy4C5RdTlA38Ni0SAY8p1
-         A+Vg==
+        Mon, 3 Jul 2023 05:48:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC594BE
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Jul 2023 02:47:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688377662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HjDG9EDRPV/EgTnmORU7tSN/WwduSfYwcySr89RNbmQ=;
+        b=Y58+mLfEcS4X9pQZjl084aVhkwgxCRjDvl75N9WabXqGkxWKEw3c+0yXqbS3oPRHX3+xlP
+        9AIX3Ds+yNcRj08V8g2Nw+NMlO6xqFJoOhQURkyk5xivypjnr91ttm3ZWM9jIcNP4vq01V
+        V5JhuniIe/TKSHLONj0wyhab6WSGV6M=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-616-kq4h6AAJN9msU9tvLKa8Vw-1; Mon, 03 Jul 2023 05:47:41 -0400
+X-MC-Unique: kq4h6AAJN9msU9tvLKa8Vw-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-765a44ce88aso247632885a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Jul 2023 02:47:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688377570; x=1690969570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RAVcfp0GiSAt76fo4gLjijfKkWn98YypFzYe/HtvOKU=;
-        b=Yrc0147b5FX175Zke5SpI6Vm2NRwAE4NAf2xA4Lwey3v7pzpGwqgjcwGWEGAvD5duw
-         JbZRpJUUo4NHcrNwpiBwGeo9VC6g+S6YCDQD7NaaKywWMF5uDqsctOjT1n2UWYbJMAM5
-         ABiytoyqT6gZi6ppZ+wKUjKf+jiPZVgvDVfqmNakx5Qwi5GWPX2pwtl3RpLtOqqyMNwV
-         Hgt4ncigd59cI4OqapMtIsNaRk5U4D8UX5+s5H/o5/2tbSBkIKSGlVDkBf9tqJAbl2Y7
-         U7goFeuiuC8/YQRPnem8tR20Qs3uX952KwedhHaUUtqo4CaAEDgR/8IzU52w5QvYkdGx
-         9YtA==
-X-Gm-Message-State: ABy/qLblbh3NBlsALzODhdtaMOsu75xZ14n65exdjN6+Bl35Wu4uA0Tw
-        2wr1/T83DHjNJegKO3aHw0FWAIjvKxjXFZIMF/7v6Q==
-X-Google-Smtp-Source: APBJJlH9SIlxp9gcpjrHbH85ZHsZVFnc5U9Yd+D/8BddOA5vnCK0mJ3tEWyu6sryEtQD1gdVrrGDxUNjQ+uJXH990sw=
-X-Received: by 2002:a17:906:37cc:b0:94f:449e:75db with SMTP id
- o12-20020a17090637cc00b0094f449e75dbmr7501039ejc.52.1688377570306; Mon, 03
- Jul 2023 02:46:10 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688377660; x=1690969660;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HjDG9EDRPV/EgTnmORU7tSN/WwduSfYwcySr89RNbmQ=;
+        b=E1ntp8DauccY7xvpFGe7nh+ldfz0gHqvz0wbGKEX13dX1IHLaf/TVntPpiGA7usQpm
+         cgpG7djUQMVlq6vxjXre3JK9Bp9c5ATEQJg41qsHziZpkq6hIyh1gmwxnpUwLDlliGyg
+         YUKQhtROfer8VtrJzgtipDjk1m3GtVU/rf7t/wBQHRGeihglT8KZW7K5de7W8/pLtZks
+         esddmt0A+3I+0vA4SLNp/Do4pbTfTQ9r3nAHQ72FmqQjEl7TQhBaqC3Sxisr8C6rqzfT
+         lq6LgDscPt+KPAenx077Ibv8OCOifCR2uSBRqx4xhnOH40MurrkhcqDoQHI4pzViB9OO
+         yFDQ==
+X-Gm-Message-State: AC+VfDzV2xQikKescl9sDat2xJ+Ut2J1JWNOdKQLB682S3Uutbbq25md
+        kJHClTFvZqjDtFIsWkbp7lrqBEH1BU0D3Ax9dPtZA/47fXCV8B+5IC6G/0kFnHqa6n6sbCMRrzH
+        HYvw7u0shvTgJQhlAX+mLErRHeKO9Bow3GBcu
+X-Received: by 2002:a05:620a:4512:b0:760:6fcb:77db with SMTP id t18-20020a05620a451200b007606fcb77dbmr12149705qkp.36.1688377660643;
+        Mon, 03 Jul 2023 02:47:40 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6oc0M0BEGnNlJlDoPddT1lpfCp+vKZ5LRV7f3/EvDr6CxKSrEtsmk9NDvnPCRDOAI1JRyhyw==
+X-Received: by 2002:a05:620a:4512:b0:760:6fcb:77db with SMTP id t18-20020a05620a451200b007606fcb77dbmr12149691qkp.36.1688377660331;
+        Mon, 03 Jul 2023 02:47:40 -0700 (PDT)
+Received: from fedora.redhat.com ([2a06:c701:4b84:700:e5a3:9a79:b307:264a])
+        by smtp.gmail.com with ESMTPSA id da34-20020a05620a362200b0075b2af4a076sm405815qkb.16.2023.07.03.02.47.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 02:47:39 -0700 (PDT)
+From:   Dana Elfassy <delfassy@redhat.com>
+X-Google-Original-From: Dana Elfassy <dangel101@gmail.com>
+To:     shuah@kernel.org, eballetbo@kernel.org, usama.anjum@collabora.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Dana Elfassy <dangel101@gmail.com>
+Subject: [PATCHv2] selftests/input: add tests for the EVIOCSCLOCKID ioctl
+Date:   Mon,  3 Jul 2023 12:47:22 +0300
+Message-ID: <20230703094722.909348-1-dangel101@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230613-so-reuseport-v4-3-4ece76708bba@isovalent.com> <20230628183258.74704-1-kuniyu@amazon.com>
-In-Reply-To: <20230628183258.74704-1-kuniyu@amazon.com>
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Mon, 3 Jul 2023 10:45:59 +0100
-Message-ID: <CAN+4W8ihqdQnZW5oWxhgmNaEDisdG9UDQYozVw_HpR41HkWL_g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 3/7] net: remove duplicate reuseport_lookup functions
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
-        edumazet@google.com, haoluo@google.com, hemanthmalla@gmail.com,
-        joe@wand.net.nz, john.fastabend@gmail.com, jolsa@kernel.org,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, martin.lau@linux.dev,
-        mykolal@fb.com, netdev@vger.kernel.org, pabeni@redhat.com,
-        sdf@google.com, shuah@kernel.org, song@kernel.org,
-        willemdebruijn.kernel@gmail.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 7:33=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.co=
-m> wrote:
+This patch introduces tests for the EVIOCSCLOCKID ioctl, for full
+coverage of the different clkids
 
-> > +
-> > +inet6_ehashfn_t inet6_ehashfn;
-> > +
-> > +INDIRECT_CALLABLE_DECLARE(inet6_ehashfn_t udp6_ehashfn);
->
-> We need not define udp6_ehashfn() here as inet6_hashtables.c has
-> the definition.
->
-> Only inet6_ehashfn() is needed because sk_ehashfn() uses it.
+Signed-off-by: Dana Elfassy <dangel101@gmail.com>
+---
+Changes in v2:
+- Replaced clkids numerical values with their equivalent definition
 
-Without udp6_ehashfn we get the following error, as reported by Simon
-against v1:
+This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
+[1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
 
-net/ipv4/udp.c:410:5: error: no previous prototype for =E2=80=98udp_ehashfn=
-=E2=80=99
-[-Werror=3Dmissing-prototypes]
-  410 | u32 udp_ehashfn(const struct net *net, const __be32 laddr,
-const __u16 lport,
-      |     ^~~~~~~~~~~
+ tools/testing/selftests/input/evioc-test.c | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-> > +inet_ehashfn_t inet_ehashfn;
-> > +
-> > +INDIRECT_CALLABLE_DECLARE(inet_ehashfn_t udp_ehashfn);
-> > +
->
-> We don't need inet_ehashfn() and udp_ehashfn() declarations here.
+diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
+index ad7b93fe39cf..83ce1a3c9b84 100644
+--- a/tools/testing/selftests/input/evioc-test.c
++++ b/tools/testing/selftests/input/evioc-test.c
+@@ -17,6 +17,7 @@
+ #include <sys/stat.h>
+ #include <time.h>
+ #include <unistd.h>
++#include <linux/time.h>
+ 
+ #include "../kselftest_harness.h"
+ 
+@@ -234,4 +235,33 @@ TEST(eviocsrep_set_repeat_settings)
+ 	selftest_uinput_destroy(uidev);
+ }
+ 
++TEST(eviocsclockid_set_clockid)
++{
++	struct selftest_uinput *uidev;
++	int clkid = CLOCK_REALTIME;
++	int rc;
++
++	rc = selftest_uinput_create_device(&uidev, -1);
++	ASSERT_EQ(0, rc);
++	ASSERT_NE(NULL, uidev);
++
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(0, rc);
++
++	clkid = CLOCK_MONOTONIC;
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(0, rc);
++
++	clkid = CLOCK_BOOTTIME;
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(0, rc);
++
++	// case default
++	clkid = -1;
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(-1, rc);
++
++	selftest_uinput_destroy(uidev);
++}
++
+ TEST_HARNESS_MAIN
+-- 
+2.41.0
 
-Without inet_ehashfn I get:
-
-./include/net/inet_hashtables.h: In function =E2=80=98__inet_lookup_skb=E2=
-=80=99:
-./include/net/inet_hashtables.h:501:42: error: =E2=80=98inet_ehashfn=E2=80=
-=99
-undeclared (first use in this function); did you mean =E2=80=98inet_bhashfn=
-=E2=80=99?
-  501 |                              refcounted, inet_ehashfn);
-
-Same problem with the warning as above.
-
-I think this needs to stay the way it is.
