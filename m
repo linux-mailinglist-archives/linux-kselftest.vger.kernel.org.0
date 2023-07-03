@@ -2,134 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019E67453FD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 04:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F944745543
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 08:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjGCCxa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 2 Jul 2023 22:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S229816AbjGCGDr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Jul 2023 02:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjGCCx3 (ORCPT
+        with ESMTP id S229943AbjGCGDp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 2 Jul 2023 22:53:29 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9235218F;
-        Sun,  2 Jul 2023 19:53:28 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b6c3921c8bso61859691fa.3;
-        Sun, 02 Jul 2023 19:53:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688352807; x=1690944807;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fhyBGVQ1gaH5Dq33+rfxBQOlHqFL4drvkmIj6aJ3EDI=;
-        b=O1hWsfHy6op+iJK7RchZka3HezdQVlH4vq5oZ4Ax4HtYBJHdp7SiTUlOd/0MeGRlXW
-         qD/ZIYJ7S7K1mp3qOnr6kToxa76JlnRwNUBFg8F1baXgmRqJNnWHdQllc+zNQ/KDquxA
-         7ErHevq/QuYL5AcR4Ql1h5QzNaJ9QIQcafCqt4dGXfaEkOM3HL++icZX1GE7OHuqT4Je
-         cvxgKsI/a5C0cZWpASXrd1T8JMo5yoIoj74Zs2ka04Rmp+6QnFbys2scKj3azEQXgQ2p
-         1SDy5h+KL7Ty3XPYq179EooH/TEpDroawrvKxJ2iJS0i2N+UJhV225NmXPpDfy0Ly7ur
-         MwBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688352807; x=1690944807;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fhyBGVQ1gaH5Dq33+rfxBQOlHqFL4drvkmIj6aJ3EDI=;
-        b=IM3Gs7DaIM4xwZMU9A1O9itQhG30KTZobBn0AR+a+u8sllFva9Ed/rN8dlYq5UUUJe
-         mqwOfWPDos11UnFLWa7Nn5mfXckUMRh1QV3XTswGu63bNyalMTzxX1KHo3aPSsw3oOua
-         XIL3+R/C4WpqzAv8C4DOZv8v1+3zsrZJYx+R0G/gCseFgOwU/h9Cn9TSYaBZ7He9BAq+
-         zJ9rk4ksxSPbBgduEwbWjMrSeWsAQjp7BHt/Qg5UkEi0A3XzkwMrOloiGasgMQQY8IJY
-         8FxwnxaMAT3b14LIzC15p/cokJysVJkS/jm+Fc1v8mYZx9jdZcclue8109N0gVAI9zhk
-         5TDw==
-X-Gm-Message-State: ABy/qLYEjZYszfkDLSeNnhovWb8bYYM7Qay0+YwH315a4nouOHDmol2N
-        qs4FV/4EWddpejUYov3plOZl1DZKhVzaDHnTKhg=
-X-Google-Smtp-Source: APBJJlFfL2px5Y6Cyr17rNDrNo5fJ8sdzYko47a6W75rx7foKvBUjbZJAB2cC/NyOavCuc3SoyWVNmryeUVMgdKDyso=
-X-Received: by 2002:a2e:9205:0:b0:2b6:e128:e7a3 with SMTP id
- k5-20020a2e9205000000b002b6e128e7a3mr2116081ljg.33.1688352806560; Sun, 02 Jul
- 2023 19:53:26 -0700 (PDT)
+        Mon, 3 Jul 2023 02:03:45 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E88BB;
+        Sun,  2 Jul 2023 23:03:41 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1688364205t17ezhh7
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 03 Jul 2023 14:03:24 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: ZgHZPTZ8fzM2scasbR4KDNmzDJ57tOJaycJ/uri88ZY5e961v5sezP2d2eDKd
+        3MdVLM6sDzieW/jVdp4RNJ3nRvnXbXxXbGuQPhrYGOS3e/iPaCcunS/dl8B8d0KuCs7Rsmd
+        JI8jk7TEjFMrn0lSPIoSvYGnrMwVR9p1BoIABpJsWbowe1RNCD+wpl1I4PSJ4nRE/Oa3FQY
+        HRG0QxFy7CrQlfKOlUOphW+aVbdrXa4K869Z8zz5tGD5nPCJrcaT8fWKqXoYo/lohCk/+tA
+        D0NTEWTwXJpfmls1KsrvfSeqtvAfzFPbkZhkNBlzorNCEacgiiPis39vsCRU442licX8Ol2
+        hGnzTZOUkila+j5Mho=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11292108538094942741
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux@weissschuh.net,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v5 14/14] selftests/nolibc: add mmap and munmap test cases
+Date:   Mon,  3 Jul 2023 14:03:23 +0800
+Message-Id: <20230703060323.487347-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230702193306.GK16233@1wt.eu>
+References: <20230702193306.GK16233@1wt.eu>
 MIME-Version: 1.0
-References: <cover.1688010022.git.haibo1.xu@intel.com> <20230701-e1bff47a0ed38ec3ab6ca252@orel>
-In-Reply-To: <20230701-e1bff47a0ed38ec3ab6ca252@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Mon, 3 Jul 2023 10:53:15 +0800
-Message-ID: <CAJve8on_SRbPmQ4U16imMUjrqs_abLsW64xJotBxRSv65WJa-w@mail.gmail.com>
-Subject: Re: [PATCH v5 00/13] RISCV: Add KVM_GET_REG_LIST API
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 1, 2023 at 10:53=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
-om> wrote:
->
-> On Sat, Jul 01, 2023 at 09:42:48PM +0800, Haibo Xu wrote:
-> > KVM_GET_REG_LIST will dump all register IDs that are available to
-> > KVM_GET/SET_ONE_REG and It's very useful to identify some platform
-> > regression issue during VM migration.
-> >
-> > Patch 1-7 re-structured the get-reg-list test in aarch64 to make some
-> > of the code as common test framework that can be shared by riscv.
-> >
-> > Patch 8 move reject_set check logic to a function so as to check for
-> > different errno for different registers.
-> > Patch 9 move finalize_vcpu back to run_test so that riscv can implement
-> > its specific operation.
-> > Patch 10 change to do the get/set operation only on present-blessed lis=
-t.
-> > Patch 11 add the skip_set facilities so that riscv can skip set operati=
-on
-> > on some registers.
-> > Patch 12 enabled the KVM_GET_REG_LIST API in riscv.
-> > patch 13 added the corresponding kselftest for checking possible
-> > register regressions.
-> >
-> > The get-reg-list kvm selftest was ported from aarch64 and tested with
-> > Linux v6.4 on a Qemu riscv64 virt machine.
->
-> Hi Haibo,
->
-> This series needs a rebase on top of these recent patches
->
->  commit ee053e03b08e ("KVM: selftests: get-reg-list: support ID register =
-features")
->  commit 5f0419a0083b ("KVM: selftests: get-reg-list: add Permission Indir=
-ection registers")
->
-> The conflicts will be in my patches, which do the splitting of the test.
-> I'll do the rebase and push it to a branch for you to pick up.
+> Hi Zhangjin,
+> 
+> On Wed, Jun 28, 2023 at 09:51:57PM +0800, Zhangjin Wu wrote:
+> > Three mmap/munmap related test cases are added:
+> > 
+> > - mmap_bad: the length argument must be greater than 0, otherwise, fail
+> >   with -EINVAL.
+> > 
+> > - munmap_bad: invalid (void *)-1 address fail with -EINVAL.
+> > 
+> > - mmap_munmap_good: mmap() a file with good offset and then munmap().
+> > 
+> > Note, it is not easy to find a unique file for mmap() in different
+> > scenes, so, a file list is used to search the right one:
+> > 
+> > - /proc/1/exe, for 'run' and 'run-user' target
+> >   'run-user' can not find '/proc/self/exe'
+> > 
+> > - /proc/self/exe, for 'libc-test' target
+> >   normal program 'libc-test' has no permission to access '/proc/1/exe'
+> 
+> Strictly speaking, if your executable is not readable (e.g. chmod 111
+> due to a restrictive umask) it will also fail that one.
 >
 
-Thanks for the heads up. I will include your changes in v6.
+ok.
 
-> Thanks,
-> drew
+> > - the others, for kernel without procfs
+> >   let it pass even with 'worst case' kernel configs
+> 
+> You should include /dev/zero, which is commonly used to allocate anonymous
+> memory and is more likely present and readable than any of the other files.
+> And another file of choice is obviously argv[0] ;-)  In this case you don't
+> need any of the other extra ones. Thus I could suggest that you try in this
+> order:
+> 
+>     /dev/zero, /proc/self/exe, /proc/1/exe, argv[0]
+> 
+> and be done with it. That doesn't prevent one from extending the list if
+> really needed later, but I doubt it would be needed. Also, it's already
+> arranged in a read-write, then read-only fallbacks mode, so if we later
+> need to add more complex tests involving writes, the writable /dev/zero
+> will have precedence.
+>
+
+Cool, both /dev/zero and argv[0] are very good candidates ;-)
+
+Just verified both of them, works perfectly.
+
+- /dev/zero
+
+  we need to mknod it in prepare() and also, in test_mmap_munmap(),
+  stat() return a zero size of /dev/zero, in this case, we should assign
+  a non-zero file_size ourselves.
+
+    -       file_size = stat_buf.st_size;
+    +       /* file size of the special /dev/zero is 0, let's assign one manually */
+    +       if (i == 0)
+    +               file_size = 3*page_size - 1;
+    +       else
+    +               file_size = stat_buf.st_size;
+
+
+- argv[0]
+
+  since nolibc has no realpath() currently, we can simply
+  support the current path and the absolute path like this:
+
+    nolibc-test.c:
+
+    /* assigned as argv[0] in main(), will be used by some tests */
+    static char exe[PATH_MAX + 1];
+
+    main():
+
+    /* get absolute path of myself, nolibc has no realpath() currently */
+    #ifndef NOLIBC
+            realpath(argv[0], exe);
+    #else
+            /* assume absolute path has no "./" */
+            if (strncmp(argv[0], "./", 2) != 0)
+                    strncat(exe, argv[0], strlen(argv[0]) + 1);
+            else {
+                    pwd = getenv("PWD");
+                    /* skip the ending '\0' */
+                    strncat(exe, getenv("PWD"), strlen(pwd));
+                    /* skip the first '.' */
+                    strncat(exe, argv[0] + 1, strlen(argv[0]));
+            }
+    #endif
+
+A full functional realpath() is a little complex, such as '../' support and
+even symlink support, let's delay its requirement at current stage ;-)
+
+one or both of them may also help the other test cases:
+
+- chroot_exe (used '/init' before)
+
+    CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(proc ? "/proc/self/exe" : exe), -1, ENOTDIR); break;
+
+- chmod_exe (replace the one: chmod_tmpdir in another patchset)
+
+    CASE_TEST(chmod_exe);       EXPECT_SYSZR(1, chmod(proc ? "/proc/self/exe" : exe, 0555)); break;
+
+    It should be safe enough to only remove the writable attribute for the test
+    program.
+
+- stat_timestamps (used '/init' before)
+
+    if (stat("/proc/self/", &st) && stat(exe, &st) && stat("/dev/zero", &st) && stat("/", &st))
+
+Will update the related patches with them.
+
+Thanks,
+Zhangjin
+
+> Willy
