@@ -2,181 +2,208 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5896745AAE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 12:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2357A745ACE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 13:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbjGCK6o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Jul 2023 06:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
+        id S229599AbjGCLQC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Jul 2023 07:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjGCK6n (ORCPT
+        with ESMTP id S229450AbjGCLQB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:58:43 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBB6D2;
-        Mon,  3 Jul 2023 03:58:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688381922; x=1719917922;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GZZoC3iTyzrkENAoUyx8fll+6b0qjLWSGcIt+67G8aY=;
-  b=fW1iZcWuyOmDiB/8SOMcQDjgOnV/B6ct4zUBiILa6IASr0RVj7lJ0qml
-   qGOv/J3bpW7AbGYA7hzSKszzPQftRhnmcsANkcqD9I2urtghP7ovYIA7u
-   wpArnjG0y5xWLbXQ92AWrHOTlQvCIZzCgg7Ve1IzW/UdJEj8oV6KIttLG
-   4vJ0OAJpNMuN+vH2BZLQlGwYclBbt7AokCw0pkmIvxntQIaazEjxYVIsk
-   R5h09GKPy4r/6xyjiTPqj3Bukg85zAyA+VCXpj9qaAzq/R3ct6PGdsRJg
-   F5ERYdM0clAnbDbUE67gOSIqb/s4BOvKrl9Q9TsxloaSo/guv2eQ2huDx
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="360329731"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="360329731"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 03:58:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="748108266"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="748108266"
-Received: from agrabezh-mobl1.ccr.corp.intel.com (HELO tkristo-desk.intel.com) ([10.252.48.27])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 03:58:30 -0700
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-To:     shuah@kernel.org, tglx@linutronix.de, x86@kernel.org, bp@alien8.de,
-        dave.hansen@linux.intel.com, mingo@redhat.com
-Cc:     ast@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, bpf@vger.kernel.org
-Subject: [PATCH 2/2] selftests/bpf: Add test for bpf_rdtsc
-Date:   Mon,  3 Jul 2023 13:57:45 +0300
-Message-Id: <20230703105745.1314475-3-tero.kristo@linux.intel.com>
+        Mon, 3 Jul 2023 07:16:01 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2466C4;
+        Mon,  3 Jul 2023 04:15:58 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1688382943tgl4kp36
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 03 Jul 2023 19:15:41 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: XBN7tc9DADJGmS+8V9nxPXH6WKrKZMAjM79vwg2x0KdxjTaUIu67ndj6OinDO
+        p6MlWsFc27/KsIPxxFcQOruUnvI1u4LL2ewAANwXpNtLTLuLWMDJvR4KMvMGtmnKUZlrVFu
+        FSfPJg+HQsPT0f3A02ZLk1P27cvupcIh3bOBiiNntHL/0UHrC4bCslREf/BO41pwwg/i9Ty
+        TR7U9+xZ7iarF6GSKdLsUO6WhP1lzKFQ3Rbfmi2T2SZSr82U7e8x67Xgolmyx8pDitACNQt
+        1aCQosEw3xPxoDEuIBBhBaxVCnUCchampVjHPcxYAOQdmXlCP5X3Wo3Uoo3OPlx21iC5z+K
+        T1utUbbyMKU6B53zxe2lHSlmb5rOWlYS5+PJiMzYvEhJlJZm53cpUg2I+Uemp02VQEYK7b6
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 16507692690246045464
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, thomas@t-8ch.de
+Subject: Re: [PATCH v5 10/14] tools/nolibc: __sysret: support syscalls who return a pointer
+Date:   Mon,  3 Jul 2023 19:15:41 +0800
+Message-Id: <20230703111541.496900-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230703105745.1314475-1-tero.kristo@linux.intel.com>
-References: <20230703105745.1314475-1-tero.kristo@linux.intel.com>
+In-Reply-To: <ZKKdD/p4UkEavru6@1wt.eu>
+References: <ZKKdD/p4UkEavru6@1wt.eu>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add selftest for bpf_rdtsc() which reads the TSC (Time Stamp Counter) on
-x86_64 architectures. The test reads the TSC from both userspace and the
-BPF program, and verifies the TSC values are in incremental order as
-expected. The test is automatically skipped on architectures that do not
-support the feature.
+Hi, Willy
 
-Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
----
- .../selftests/bpf/prog_tests/test_rdtsc.c     | 67 +++++++++++++++++++
- .../testing/selftests/bpf/progs/test_rdtsc.c  | 21 ++++++
- 2 files changed, 88 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_rdtsc.c
+> On Mon, Jul 03, 2023 at 04:36:51PM +0800, Zhangjin Wu wrote:
+> > > Syscalls that return pointer use that -MAX_ERRNO range to encode errors
+> > > (such as mmap()). I just do not know if there is a convention saying that
+> > > other ones also restrict themselves to that range or not. If you find
+> > > some info which guarantees that it's the case for all of them, then by
+> > > all means let's proceed like this, but in this case it should be mentioned
+> > > in the comment why we think it's valid to do this. For now it's presented
+> > > as an opportunity only.
+> > 
+> > Currently, I only found a prove-in-use case in musl:
+> > 
+> >     https://elixir.bootlin.com/musl/latest/source/src/internal/syscall_ret.c:
+> > 
+> >     #include <errno.h>
+> >     #include "syscall.h"
+> > 
+> >     long __syscall_ret(unsigned long r)
+> >     {
+> >     	if (r > -4096UL) {
+> >     		errno = -r;
+> >     		return -1;
+> >     	}
+> >     	return r;
+> >     }
+> > 
+> > Our new implementation (based on the one used by mmap()) is almostly the same
+> > as musl. Not sure if this is enough. I have tried to 'git blame' on
+> > __syscall_ret() of musl to find some clue, but failed, because the function has
+> > been added before importing into its git repo.
+> 
+> OK, we already used the glibc-saved registers in the past to determine
+> the official list of clobbered registers (and the ABI spec was even
+> updated based on this). Here, musl is sufficiently deployed to consider
+> this as valid. You can simply go that route and mention in the commit
+> message that while you found no official reference stating that this is
+> valid for int/long returns, you found at least one other implementation
+> relying on this (i.e. if the kernel ever changes it will cause breakage).
+>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c b/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
-new file mode 100644
-index 000000000000..2b26deb5b35a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
-@@ -0,0 +1,67 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright(c) 2023 Intel Corporation */
-+
-+#include "test_progs.h"
-+#include "test_rdtsc.skel.h"
-+
-+#ifdef __x86_64__
-+
-+static inline u64 _rdtsc(void)
-+{
-+	u32 low, high;
-+
-+	__asm__ __volatile__("rdtscp" : "=a" (low), "=d" (high));
-+	return ((u64)high << 32) | low;
-+}
-+
-+static int rdtsc(struct test_rdtsc *skel)
-+{
-+	int err, prog_fd;
-+	u64 user_c1, user_c2;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	err = test_rdtsc__attach(skel);
-+	if (!ASSERT_OK(err, "test_rdtsc_attach"))
-+		return err;
-+
-+	user_c1 = _rdtsc();
-+
-+	prog_fd = bpf_program__fd(skel->progs.test1);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+
-+	user_c2 = _rdtsc();
-+
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, 0, "test_run");
-+
-+	test_rdtsc__detach(skel);
-+
-+	ASSERT_GE(skel->bss->c1, user_c1, "bpf c1 > user c1");
-+	ASSERT_GE(user_c2, skel->bss->c2, "user c2 > bpf c2");
-+	ASSERT_GE(skel->bss->c2, user_c1, "bpf c2 > bpf c1");
-+	ASSERT_GE(user_c2, user_c1, "user c2 > user c1");
-+
-+	return 0;
-+}
-+#endif
-+
-+void test_rdtsc(void)
-+{
-+#ifdef __x86_64__
-+	struct test_rdtsc *skel;
-+	int err;
-+
-+	skel = test_rdtsc__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_rdtsc_skel_load"))
-+		goto cleanup;
-+	err = rdtsc(skel);
-+	ASSERT_OK(err, "rdtsc");
-+
-+cleanup:
-+	test_rdtsc__destroy(skel);
-+#else
-+	printf("%s:SKIP:bpf_rdtsc() kfunc not supported\n", __func__);
-+	test__skip();
-+#endif
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_rdtsc.c b/tools/testing/selftests/bpf/progs/test_rdtsc.c
-new file mode 100644
-index 000000000000..14776b83bd3e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_rdtsc.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright(c) 2023 Intel Corporation */
-+#include <linux/bpf.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__u64 c1;
-+__u64 c2;
-+
-+extern __u64 bpf_rdtsc(void) __ksym;
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG2(test1, int, a)
-+{
-+	c1 = bpf_rdtsc();
-+	c2 = bpf_rdtsc();
-+
-+	return 0;
-+}
--- 
-2.25.1
+ok.
 
+> > > Also, the rest of the commit message regarding uintptr_t (which we don't
+> > > use), bit values and modular arithmetics is extremely confusing and not
+> > > needed at all. What matters is only to know if we need to consider only
+> > > values -MAX_ERRNO..-1 as error or all negative ones. If so, then it's
+> > > obvious that ret >= (unsigned long)-MAX_ERRNO catches them all, as the
+> > > current mmap() function already does with -4095UL.
+> > >
+> > 
+> > Yes, will clean up the commit message, but at first, let's continue get
+> > more information about which one is ok:
+> > 
+> > - -MAX_ERRNO..-1 as error, for sys_mmap (we know in nolibc) currently
+> > 
+> > - all negative ones, for others currently
+> 
+> You can double-check in glibc for example, but I'm starting to guess
+> you'll find the same test as above, i.e. errors are exclusively >-4096,
+> regardless of the expected return type.
+>
+
+Your guest is definitely true ;-)
+
+Glibc has the same logic in its INLINE_SYSCALL() macro:
+
+    https://elixir.bootlin.com/glibc/latest/source/sysdeps/unix/sysv/linux/sysdep.h
+
+    #undef INTERNAL_SYSCALL_ERROR_P
+    #define INTERNAL_SYSCALL_ERROR_P(val) \
+      ((unsigned long int) (val) > -4096UL)
+    
+    #ifndef SYSCALL_ERROR_LABEL
+    # define SYSCALL_ERROR_LABEL(sc_err)					\
+      ({									\
+        __set_errno (sc_err);						\
+        -1L;								\
+      })
+    #endif
+    
+    /* Define a macro which expands into the inline wrapper code for a system
+       call.  It sets the errno and returns -1 on a failure, or the syscall
+       return value otherwise.  */
+    #undef INLINE_SYSCALL
+    #define INLINE_SYSCALL(name, nr, args...)				\
+      ({									\
+        long int sc_ret = INTERNAL_SYSCALL (name, nr, args);		\
+        __glibc_unlikely (INTERNAL_SYSCALL_ERROR_P (sc_ret))		\
+        ? SYSCALL_ERROR_LABEL (INTERNAL_SYSCALL_ERRNO (sc_ret))		\
+        : sc_ret;								\
+      })
+
+Nothing differs.
+
+But 'git blame' has no clue to any 'spec' or 'standard' either.
+
+- fcb78a55058fd, linux: Consolidate INLINE_SYSCALL
+
+  Moved all of the arch specific INTERNAL_SYSCALL_ERROR_P() to common
+  header
+
+- 369b849f1a382, sysdeps/unix/sysv/linux/s390/s390-32/sysdep.h (INTERNAL_SYSCALL,...
+
+  Firstly defined this macro: INTERNAL_SYSCALL_ERROR_P()
+
+    $ git show 369b849f1a3 | grep "define.*INTERNAL_SYSCALL_ERROR_P"
+    +#define INTERNAL_SYSCALL_ERROR_P(val)	((unsigned int) (val) >= 0xfffff001u)
+    +#define INTERNAL_SYSCALL_ERROR_P(val)	((unsigned int) (val) >= 0xfffff001u)
+    +#define INTERNAL_SYSCALL_ERROR_P(val)	((unsigned long) (val) >= -515L)
+    +#define INTERNAL_SYSCALL_ERROR_P(val)	((unsigned long) (val) >= -4095L)
+
+Willy, I plan to further use something like, is it ok for you?
+
+    tools/include/nolibc/errno.h:
+
+    -#define MAX_ERRNO 4095
+    +#define MAX_ERRNO 4095UL
+
+    tools/include/nolibc/sys.h:
+
+    /* Syscall return helper for library routines
+     * set errno as -ret when ret in [-MAX_ERRNO, -1]
+     *
+     * Note, No official reference states the errno range
+     * here aligns with musl (src/internal/syscall_ret.c)
+     * and glibc (sysdeps/unix/sysv/linux/sysdep.h)
+     */
+    static __inline__ __attribute__((unused, always_inline))
+    long __sysret(unsigned long ret)
+    {
+            if (ret >= -MAX_ERRNO) {
+                    SET_ERRNO(-(long)ret);
+                    return -1;
+            }
+            return ret;
+    }
+
+Or we also directly use 4096UL here.
+
+    static __inline__ __attribute__((unused, always_inline))
+    long __sysret(unsigned long ret)
+    {
+            if (ret > -4096UL) {
+                    SET_ERRNO(-(long)ret);
+                    return -1;
+            }
+            return ret;
+    }
+
+Best regards,
+Zhangjin
+
+> Thanks!
+> Willy
