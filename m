@@ -2,127 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFFB7460AB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 18:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972E7746162
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 19:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjGCQY0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Jul 2023 12:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
+        id S230032AbjGCR1r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Jul 2023 13:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjGCQYZ (ORCPT
+        with ESMTP id S229653AbjGCR1q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Jul 2023 12:24:25 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652FDAD;
-        Mon,  3 Jul 2023 09:24:23 -0700 (PDT)
-X-QQ-mid: bizesmtp67t1688401452tgj7f4a7
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 04 Jul 2023 00:24:11 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: D2GZf6M6C/hH0l4kCU7hMc924/RcPhXPmkWT1yB3BBWKtKAO0pLuY5DdbvH8x
-        Pv6apJoufyBtte0bfkRP9t12DoJyQY9PCs+ZHTw5Rd3de6p8fo95noBbHdaNC+rxtjil1js
-        XJo7NOnn8bYy4BBHXfOEJM780LruGVWDSVaULv3Ir99bPmPYqFkozTmi7/e9wcvwjSZA9qu
-        ogt2VX5hNGs5aKP+A0RqmKfZWPevp/Gdda3PecuhZ2WYupuFH8ZhZqJuol0vZcxt7BlvRva
-        s7X5h72shMJuatJATryiItOnMgCsz0WKm4h+VlrH1yvNt9I9pLTUfAJ637d5IQPZyZ7hwaE
-        hszDOjMisWMRDwV1Tk=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6504902335280427982
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: Re: [PATCH v2 0/3] selftests/nolibc: improve test report support
-Date:   Tue,  4 Jul 2023 00:24:10 +0800
-Message-Id: <20230703162410.502173-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230702164358.GB16233@1wt.eu>
-References: <20230702164358.GB16233@1wt.eu>
+        Mon, 3 Jul 2023 13:27:46 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E86E59;
+        Mon,  3 Jul 2023 10:27:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9061C1FF9A;
+        Mon,  3 Jul 2023 17:27:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1688405263; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3aZiNrh37kog6hGn75GFfiY6ypdAuVwYLPGQChJfecA=;
+        b=W+iPbXFm3UbXst4AU3cmDUb+AN9TGIlKpii2iWOl4asU0t5GhngfpIo3jJfk/dbwEWRQBx
+        ZYsG96/C+2AH3xGG4fwQledsKa0MlY8Nmr0hUTCx+QgMPPt1oN7lsPlGmv1oH1xedK+6t3
+        YOaTxUrXE4kC1dYvEbiTYBx2WpRbpnE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 64E731358E;
+        Mon,  3 Jul 2023 17:27:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BXa3Fw8Fo2QqHgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 03 Jul 2023 17:27:43 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v3 0/3] cpuset: Allow setscheduler regardless of manipulated task
+Date:   Mon,  3 Jul 2023 19:27:38 +0200
+Message-ID: <20230703172741.25392-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> Hi Zhangjin,
-> 
-> On Mon, Jun 19, 2023 at 02:52:31PM +0800, Zhangjin Wu wrote:
-> > Hi, Willy
-> > 
-> > Here is the v2 of our old patchset about test report [1].
-> > 
-> > The trailing '\r' fixup has been merged, so, here only resend the left
-> > parts with an additional patch to restore the failed tests print.
-> > 
-> > This patchset is rebased on the dev.2023.06.14a	branch of linux-rcu [2].
-> > 
-> > Tests have passed for 'x86 run':
-> > 
-> >     138 test(s) passed, 0 skipped, 0 failed.
-> >     See all results in /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/run.out
-> (...)
-> > 2. selftests/nolibc: always print the path to test log file
-> > 
-> >   Always print the path to test log file, but move it to a new line to
-> >   avoid annoying people when the test pass without any failures.
-> 
-> I'm still really missing the (s+f > 0) test I added which was a time saver
-> for me, because I could trivially check in the output reports which ones
-> were totally OK and which ones required attention. Sure I could also start
-> to grep for "passed," | grep -v " 0 skipped, 0 failed" but that's quite a
-> pain, really.
-> 
-> I'm going to merge your series anyway otherwise we'll continue to bikeshed
-> for many weeks and I know how annoying it is to keep unmerged series. But
-> I would like that we find a solution that satisfies everyone.
-> 
-> Maybe one possibility would be to add a "status" at the end of the line
-> that emits "success", "warning", "failure" depending on the highest level
-> reached like this:
-> 
->       138 test(s) passed, 0 skipped, 0 failed => status: success
->       136 test(s) passed, 2 skipped, 0 failed => status: warning
->       136 test(s) passed, 1 skipped, 1 failed => status: failure
-> 
-> This way it's easy to grep -v "status: success" or grep "status: failure"
-> to instantly get the corresponding details and also grep for them from
-> multiple files.
+Changes in v3:
+- only skip permissions check when effective affinity doesn't change
+- update commit message accordingly
 
-Ok, it will be a further step, based on your new awk script, it is not
-that hard.
+Changes in v2 (https://lore.kernel.org/r/20230630183908.32148-1-mkoutny@suse.com):
+- rebased on mainline
+- drop is_in_v2_mode()
 
-This should work:
+Changes in v1 (https://lore.kernel.org/r/20230629091146.28801-1-mkoutny@suse.com):
+- added selftests
+- comments rewording
 
-    REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++;print} /\[SKIPPED\][\r]*$$/{s++} \
-                END{ printf("\n%d test(s): %d passed, %d skipped, %d failed => status: ", p+s+f, p, s, f); \
-                if (f) printf("failure\n"); else if (s) printf("warning\n"); else printf("success\n");; \
-                printf("\nSee all results in %s\n", ARGV[1]); }'
+RFC in https://lore.kernel.org/r/20220623124944.2753-1-mkoutny@suse.com
 
-It reports something like this:
+Michal Koutný (3):
+  cpuset: Allow setscheduler regardless of manipulated task
+  selftests: cgroup: Minor code reorganizations
+  selftests: cgroup: Add cpuset migrations testcase
 
-    ...
-    Total number of errors: 0
-    Exiting with status 0
+ MAINTAINERS                                   |   2 +
+ kernel/cgroup/cpuset.c                        |  19 +-
+ tools/testing/selftests/cgroup/.gitignore     |   1 +
+ tools/testing/selftests/cgroup/Makefile       |   2 +
+ tools/testing/selftests/cgroup/cgroup_util.c  |   2 +
+ tools/testing/selftests/cgroup/cgroup_util.h  |   2 +
+ tools/testing/selftests/cgroup/test_core.c    |   2 +-
+ tools/testing/selftests/cgroup/test_cpuset.c  | 275 ++++++++++++++++++
+ .../selftests/cgroup/test_cpuset_prs.sh       |   2 +-
+ 9 files changed, 302 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/cgroup/test_cpuset.c
 
-    143 test(s): 140 passed, 3 skipped, 0 failed => status: warning
 
-    See all results in /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/build/x86/run.out
+base-commit: e55e5df193d247a38a5e1ac65a5316a0adcc22fa
+-- 
+2.41.0
 
-Two newlines are added around the summary line, so, it is not crowded as
-before. If this is ok, will send a new patch on your new branch.
-
-Thanks very much.
-
-Best regards,
-Zhangjin
-
-> 
-> Thanks!
-> Willy
