@@ -2,42 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5631745772
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 10:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE25745826
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jul 2023 11:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjGCIhT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Jul 2023 04:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
+        id S229653AbjGCJPm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Jul 2023 05:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjGCIhS (ORCPT
+        with ESMTP id S229593AbjGCJPk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:37:18 -0400
+        Mon, 3 Jul 2023 05:15:40 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AFEE50;
-        Mon,  3 Jul 2023 01:37:09 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1688373413t8yeuy3h
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA15012C;
+        Mon,  3 Jul 2023 02:15:36 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1688375722th1fa91f
 Received: from linux-lab-host.localdomain ( [119.123.131.49])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 03 Jul 2023 16:36:52 +0800 (CST)
+        id ; Mon, 03 Jul 2023 17:15:21 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: cbck7jzG4waxmtAyZOM8J8Vsk/O4lRHB8gEo7BxRdBy9c92QqQQ4tlBc7MY9E
-        KAm4AlasFZ94a+Plz1Tc4zhbDw9VdqGMVSwXdRq/LGR8CslVesPAIiuK4/+Dx7yUlHm1/Ww
-        EcxZWW+2L23J96t2HzAb9wggbf5SowHJS7L+9UAB/GgxFr0Rcs19VRsre7fQnONONJAR+iP
-        TAYvAdoIO+/6bF4ESE0/4wL3WDYOcsQK/pDbeAbjCeN3sVKVJHxWbuyQvfwuWZZuVi/xfyw
-        aMIS3mh6uT1bt5WWWu/pOljmrTjkKPCEaP5oeYr55WwvX71brL+RO3OPGlUTuQpgFqIuhKk
-        XOZE3hrfN9A5LZ0kBFZl1WW06EImp3GJDu0x8RMUdkMnoWMRpddF4O1WxdDSN9bD35RpZP2
+X-QQ-FEAT: znfcQSa1hKYmGKLly0cpa018jyPZvn3QolrVhbDV/s3KpSQEDu1YDAdsEzZ/o
+        LkRnAFX7Lxz9jbfIysjrjg4aO/OZQBdgDXx4M3O34Rl3DEXpZddlJqsoD9nrIsSSYVnrwPb
+        Cn5XtmE9rRgU9C6xHuNm7TEDMo4V2tGOAjWMCbjehq6tECvb5Il4fmeZZ5EYWkVlfpvVdZ+
+        NwnFit1uYxWe9BM+Tus0ea5+bDAe29hWH2QkhE/3mE1hEdOzTSBecFC9Bifxp89kPRC5aSi
+        aAmf+vrVoqcs3wGryg9+GZ61egO03PyFP8k3jy2N3jPs4IemQCe5KavPtDNr2DbnbqT6R5a
+        0J2Cr5kh5MVov5C96VkBPaJRLophe+aMRdmU8nomYs/eH7uqfg=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12812962611774565405
+X-BIZMAIL-ID: 16105542733624423556
 From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu, arnd@arndb.de, david.laight@aculab.com, thomas@t-8ch.de
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 10/14] tools/nolibc: __sysret: support syscalls who return a pointer
-Date:   Mon,  3 Jul 2023 16:36:51 +0800
-Message-Id: <20230703083651.491785-1-falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, w@1wt.eu
+Subject: Re: [PATCH v5 14/14] selftests/nolibc: add mmap and munmap test cases
+Date:   Mon,  3 Jul 2023 17:15:21 +0800
+Message-Id: <20230703091521.492045-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230702191733.GI16233@1wt.eu>
-References: <20230702191733.GI16233@1wt.eu>
+In-Reply-To: <f74a85a5-ea9a-4819-a95e-aa9525bf84f9@t-8ch.de>
+References: <f74a85a5-ea9a-4819-a95e-aa9525bf84f9@t-8ch.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
@@ -51,87 +52,176 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
+Hi, Thomas
 
-> On Wed, Jun 28, 2023 at 09:39:56PM +0800, Zhangjin Wu wrote:
-> > To support syscalls (e.g. mmap()) who return a pointer and to allow the
-> > pointer as big as possible, we should convert the negated errno value to
-> > unsigned long (uintptr_t), otherwise, in signed long, a potential big
-> > pointer (whose highest bit is 1) will be treated as a failure.
+> On 2023-07-03 16:06:47+0800, Zhangjin Wu wrote:
+> > Hi, Willy
+> 
+> > [..]
+> 
+> > > > - argv[0]
+> > > > 
+> > > >   since nolibc has no realpath() currently, we can simply
+> > > >   support the current path and the absolute path like this:
+> > > > 
+> > > >     nolibc-test.c:
+> > > > 
+> > > >     /* assigned as argv[0] in main(), will be used by some tests */
+> > > >     static char exe[PATH_MAX + 1];
+> > > > 
+> > > >     main():
+> > > > 
+> > > >     /* get absolute path of myself, nolibc has no realpath() currently */
+> > > >     #ifndef NOLIBC
+> > > >             realpath(argv[0], exe);
+> > > >     #else
+> > > >             /* assume absolute path has no "./" */
+> > > >             if (strncmp(argv[0], "./", 2) != 0)
+> > > >                     strncat(exe, argv[0], strlen(argv[0]) + 1);
+> > > >             else {
+> > > >                     pwd = getenv("PWD");
+> > > >                     /* skip the ending '\0' */
+> > > >                     strncat(exe, getenv("PWD"), strlen(pwd));
+> > > >                     /* skip the first '.' */
+> > > >                     strncat(exe, argv[0] + 1, strlen(argv[0]));
+> > > >             }
+> > > >     #endif
+> > > 
+> > > No, please, not like this. Just copy argv[0] (the pointer not the
+> > > contents) and you're fine:
+> > >
+> > >     static const char *argv0;
+> > > 
+> > >     int main(int argc, char **argv, char **envp)
+> > >     {
+> > >             argv0 = argv[0];
+> > >             ...
+> > >     }
+> > > 
+> > > Nothing more, nothing less. Your program will always have its correct
+> > > path when being called unless someone purposely forces it to something
+> > > different, which is not our concern at all since this is a test program.
+> > > And I'd rather call it "argv0" which exactly tells us what it contains
+> > > than "exe" which can be misleading for that precise reason.
+> > >
 > > 
-> > tools/include/nolibc/errno.h defines the MAX_ERRNO, let's use it
-> > directly.
+> > Yeah, locally, I just used a global argv0 pointer directly, but
+> > chroot_exe("./nolibc-test") not work when run 'libc-test' in host
+> > system, that is why I tried to get an absolute path ;-)
+> > 
+> >     CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(exe), -1, ENOTDIR); break;
+> > 
+> >     -->
+> > 
+> >     19 chroot_exe = -1 ENOENT  != (-1 ENOTDIR)                      [FAIL]
+> > 
+> > I removed the "proc ?" check manually to test if it also work with
+> > CONFIG_PROC_FS=n. it doesn't work, without absolute path, we need to add
+> > the ENOENT errno back to the errno check list.
+> > 
+> > I'm not sure if the other syscalls require an absolute path, so, the
+> > realpath() is called in this proposed method.
+> > 
+> > > > A full functional realpath() is a little complex, such as '../' support and
+> > > > even symlink support, let's delay its requirement at current stage ;-)
+> > > 
+> > > Please do not even engage into this, and keep in mind that the sole
+> > > purpose of this test program is to help developers simply add tests to
+> > > the set of existing ones. If the program becomes complex for doing stuff
+> > > that is out of its scope, it will become much harder to extend and users
+> > > will lose interest and motivation for updating it.
+> > > 
+> > > > one or both of them may also help the other test cases:
+> > > > 
+> > > > - chroot_exe (used '/init' before)
+> > > > 
+> > > >     CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(proc ? "/proc/self/exe" : exe), -1, ENOTDIR); break;
+> > > > 
+> > > > - chmod_exe (replace the one: chmod_tmpdir in another patchset)
+> > > > 
+> > > >     CASE_TEST(chmod_exe);       EXPECT_SYSZR(1, chmod(proc ? "/proc/self/exe" : exe, 0555)); break;
+> > > > 
+> > > >     It should be safe enough to only remove the writable attribute for the test
+> > > >     program.
+> > > > 
+> > > > - stat_timestamps (used '/init' before)
+> > > > 
+> > > >     if (stat("/proc/self/", &st) && stat(exe, &st) && stat("/dev/zero", &st) && stat("/", &st))
+> > > 
+> > > Indeed, why not!
+> > >
+> > 
+> > Ok, without absolute path, the chroot_exe() will be changed back to
+> > something like this:
+> > 
+> >     CASE_TEST(chroot_exe);        EXPECT_SYSER2(1, chroot(proc ? "/proc/self/exe" : argv0), -1, ENOTDIR, ENOENT); break;
 > 
-> It might or might not work, it's an ABI change that, if validated, at
-> least needs a much more detailed explanation. What matters is not what
-> errno values we're willing to consider as an error, but what the
-> *syscalls* themselves return as an error. If a syscall says "< 0 is an
-> error equal to -errno", it means that we must treat it as an error,
-> and extract its value to get errno. If that errno is larger than
-> MAX_ERRNO it just means we don't know what the error is.
+> Are you sure the ENOENT is really correct?
+> I played with this before and got ENOENT because before the chroot test
+> we have a testcase that does chdir("/").
+
+Yes, there are some chdir tests before chroot, it does answer why
+relative path not work and return ENOENT: no such file in the relative
+path changed by chdir(), it differs from the one in PWD environment
+variable.
+
+> And therefore the relative name in argv[0] was not resolving correctly
+> anymore against the changed working directory.
+>
+> (You can also test this by executing *only* the chroot test and it
+> should work)
 >
 
-Yes, we do need to find a 'spec' or 'standard' to follow.
+Yeah, If chdir() back to current path, it does work:
 
-welcome suggestions from Arnd, Thomas and also David.
+    CASE_TEST(chroot_exe);        chdir(getenv("PWD")); EXPECT_SYSER(1, chroot(exe), -1, ENOTDIR); break;
 
-> Syscalls that return pointer use that -MAX_ERRNO range to encode errors
-> (such as mmap()). I just do not know if there is a convention saying that
-> other ones also restrict themselves to that range or not. If you find
-> some info which guarantees that it's the case for all of them, then by
-> all means let's proceed like this, but in this case it should be mentioned
-> in the comment why we think it's valid to do this. For now it's presented
-> as an opportunity only.
+    -->
 
-Currently, I only found a prove-in-use case in musl:
+    11 chdir_root = 0                                                [OK]
+    12 chdir_dot = 0                                                 [OK]
+    13 chdir_blah = -1 ENOENT                                        [OK]
+    14 chmod_self = -1 EPERM                                         [OK]
+    15 chmod_exe = 0                                                 [OK]
+    16 chown_self = -1 EPERM                                         [OK]
+    17 chroot_root                                                  [SKIPPED]
+    18 chroot_blah = -1 ENOENT                                       [OK]
+    19 chroot_exe
+    pwd: /home/ubuntu/Develop/src/examples/musl
+    exe: ./nolibc-test
+     = -1 ENOTDIR                                       [OK]
 
-    https://elixir.bootlin.com/musl/latest/source/src/internal/syscall_ret.c:
 
-    #include <errno.h>
-    #include "syscall.h"
-
-    long __syscall_ret(unsigned long r)
-    {
-    	if (r > -4096UL) {
-    		errno = -r;
-    		return -1;
-    	}
-    	return r;
-    }
-
-Our new implementation (based on the one used by mmap()) is almostly the same
-as musl. Not sure if this is enough. I have tried to 'git blame' on
-__syscall_ret() of musl to find some clue, but failed, because the function has
-been added before importing into its git repo.
-
-> 
-> Also, the rest of the commit message regarding uintptr_t (which we don't
-> use), bit values and modular arithmetics is extremely confusing and not
-> needed at all. What matters is only to know if we need to consider only
-> values -MAX_ERRNO..-1 as error or all negative ones. If so, then it's
-> obvious that ret >= (unsigned long)-MAX_ERRNO catches them all, as the
-> current mmap() function already does with -4095UL.
+> In general chroot() should work just fine with relative paths.
 >
 
-Yes, will clean up the commit message, but at first, let's continue get
-more information about which one is ok:
+it does work with relative path, to make sure argv0 always work as
+expected, an extra 'chdir()' may really required, or let's clean up the
+previous chdir() test cases to call chdir(getenv("PWD")) after every
+test.
 
-- -MAX_ERRNO..-1 as error, for sys_mmap (we know in nolibc) currently
+    CASE_TEST(chdir_root);        EXPECT_SYSZR(1, chdir("/")); break;
+    CASE_TEST(chdir_dot);         EXPECT_SYSZR(1, chdir(".")); break;
+    CASE_TEST(chdir_blah);        EXPECT_SYSER(1, chdir("/blah"), -1, ENOENT); break;
 
-- all negative ones, for others currently
+perhaps only call 'chdir(getenv("PWD"))' after chdir_root() is enough,
+because the chdir(".") doesn't really change the directory:
 
-> I just don't know where to check if we can generalize that test. In the
-> worst case we could have two __sys_ret(), the current one and a second
-> one for pointers. But I would suspect we could generalize due to ptrace,
-> as there it makes sense to be able to detect failures, even unknown ones.
-> I just need something more convincing than an intuition for a commit
-> message and to take such a change :-/
+    CASE_TEST(chdir_root);        EXPECT_SYSZR(1, chdir("/")); chdir(getenv("PWD")); break;
+    CASE_TEST(chdir_dot);         EXPECT_SYSZR(1, chdir(".")); break;
+    CASE_TEST(chdir_blah);        EXPECT_SYSER(1, chdir("/blah"), -1, ENOENT); break;
+
+Which one do you prefer?
+
+> This is really a lot of complexity and discussion only to avoid
+> depending on procfs for the tests.
 >
 
-Of course, must be clear enough.
+Yes, one step further to find more interesting info, thanks a lot ;-)
+
+Mixing chdir and relative path really need to be more careful.
 
 Best regards,
 Zhangjin
 
-> Thanks!
-> Willy
+> Thomas
