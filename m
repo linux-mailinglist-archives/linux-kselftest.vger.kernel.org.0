@@ -2,130 +2,353 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9866C746EAB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jul 2023 12:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA229746FE9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jul 2023 13:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjGDKbJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Jul 2023 06:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
+        id S231168AbjGDL2V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Jul 2023 07:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjGDKbI (ORCPT
+        with ESMTP id S231174AbjGDL2V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Jul 2023 06:31:08 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2049.outbound.protection.outlook.com [40.107.96.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD5B135;
-        Tue,  4 Jul 2023 03:31:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Owv4yTsdDdXVUkGLtPEYCg48QKy3eQ62+Dfm4f1/+LdLbtIS0YjQTiDMODhyQIyJhpaqupvahtCWvGa7Y0GZO9kbWh6cbSBF6fLLo2LZjziO41K7r13pINfDKjKDD4d+ACzweNKt15QSUnPcmijM3i1jVGdTS9rjFvqikC15mpwtZAuhdff7oVnDY+zurk2N6HUKiWPBJ5c6/Ri7KR1/xqcuPhE5endYFLOLWeh2LM8cK+m7nE6uyiGGL1wgyF1N9vq996/oCJVbGO07+Hd+WeS703zcjexKZiMqAqbVtcgThsVvVUW29uellD0S2zwuxm+D2gCR5dG6YLwmTRjIvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j6Ki/oDE73OM2g24kGgjiV8glv9v3VhsD3MghY96r4M=;
- b=INegiR0LQ8IdzHvw3dcLM1XHmQwiQjgsgvkPd6ik9ihEyZsPXKK03jB+Cp129PXhHqAZs25jBWL1a+fIudiYXpqGwMHce0dwWX3Yde82jaL2+HY6K4KtN9uqJHOgtQu5yxrVL92J5oEdPclWUef5rJtmlua6++OgxQkoLOU+/hddCnhqMwGRDWuo2VHgQQZ/Sc7ur+0/1DLykVCLzhl4/QE4WoXmwjH7D7uxhtdWyPvtkBsRt1xojYtmRz8Wfmbg5mv0qB61ZWY/NeMSoP/vTxWydcxKWZZOPucddYYiRu4nZ3H9ZE7xZkBLYAlFAGYm9BVCM/Ci7pNRBy4Ki09XIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j6Ki/oDE73OM2g24kGgjiV8glv9v3VhsD3MghY96r4M=;
- b=HS4CN+3utxELqT81Gc0WRXIc6jITo6UP4avHd3xPYFQQEpXcSC8uHjBUU4lQbDhNbg0Ujo8QLY/k4aOWL2DArUq2tiaAa5EtB2i0HjGepRqFfGeysSztmHUnTDiPk76kCrMpbz4HzspC7frZs1t1rEP3L5jULR6Cf9keWDY6X2C6XSVcnjrf9RgqsIraZYs0489IKePThsLK43Tbfmn886ZR9xLhdN7TpRjXmPisPrC7pHEztt11ws0ihUK/ePhZzuCkkBBcRjFEdw9FWYkirQsH4mz6lzSKp0nXKfjReQRZtHOk1aR+pFegtQJ39PoELVQ1pNeY2G1jjelXK7C+qA==
-Received: from MW4P221CA0020.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::25)
- by PH7PR12MB8106.namprd12.prod.outlook.com (2603:10b6:510:2ba::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 10:31:04 +0000
-Received: from CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8b:cafe::d4) by MW4P221CA0020.outlook.office365.com
- (2603:10b6:303:8b::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.18 via Frontend
- Transport; Tue, 4 Jul 2023 10:31:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT022.mail.protection.outlook.com (10.13.175.199) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.44 via Frontend Transport; Tue, 4 Jul 2023 10:31:03 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 4 Jul 2023
- 03:30:53 -0700
-Received: from [172.27.1.49] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 4 Jul 2023
- 03:30:47 -0700
-Message-ID: <5621fe4a-5c21-b407-91a1-4cc299f5abb0@nvidia.com>
-Date:   Tue, 4 Jul 2023 13:30:43 +0300
+        Tue, 4 Jul 2023 07:28:21 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149429D;
+        Tue,  4 Jul 2023 04:28:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688470099; x=1720006099;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SLH9BsfOqltAc7sUdtQbt5H7vdYrLnD89rq6FQ8+RPE=;
+  b=HLAhSjDKfBogcyolvtc3siPy49HhgYhSeJ48kJnZ79UMoqnbPs1SZvWz
+   JUK5BBX30PW0+GG4aVOiYgV20pEbZ4QtrGz0F/jvFiEzttYf0uDskce3T
+   A6K6p5VBxAL9kSEKgASDYZyoapae2rV7rGFK0zOVIuKZP1igwVuyF5tEM
+   kKa7p9eElPavne8eu5z7xvgAjB2vZKsY90ZPnNDAkS96YuyIXpEnRfjCy
+   5fs0Ob5/cFH/eoY3iQcDE9/oyS0UOGulvVc3sW3H+xPOahAcPsArMEbLW
+   FvHx0IseTmVGpurQAsjEt7L5iBkhxKPkAOCAppktopO8MxFw3f8x74PJK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="426784535"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="426784535"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 04:28:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="669069624"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="669069624"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga003.jf.intel.com with ESMTP; 04 Jul 2023 04:28:18 -0700
+Received: from maurocar-mobl2 (maurocar-mobl2.ger.corp.intel.com [10.252.26.17])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 7169C580BB8;
+        Tue,  4 Jul 2023 04:28:15 -0700 (PDT)
+Date:   Tue, 4 Jul 2023 13:28:12 +0200
+From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+To:     David Gow <davidgow@google.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Nikolai Kondrashov <spbnick@gmail.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        mauro.chehab@intel.com, linux-doc@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Rae Moar <rmoar@google.com>
+Subject: Re: Tests documentation
+Message-ID: <20230704132812.02ba97ba@maurocar-mobl2>
+In-Reply-To: <CABVgOSk2uW6DN8682om3Mxn9O3oF4mDYY1vdG-R9z6YC0B+Ndw@mail.gmail.com>
+References: <20230702092308.4a022336@sal.lan>
+        <CABVgOSk2uW6DN8682om3Mxn9O3oF4mDYY1vdG-R9z6YC0B+Ndw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 296d53d8f84ce50ffaee7d575487058c8d437335
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Linux Memory Management List <linux-mm@kvack.org>,
-        <kunit-dev@googlegroups.com>, <kvmarm@lists.linux.dev>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>
-References: <202307032309.v4K1IBoR-lkp@intel.com>
-From:   Shay Drory <shayd@nvidia.com>
-In-Reply-To: <202307032309.v4K1IBoR-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT022:EE_|PH7PR12MB8106:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1e39ff4d-e360-4728-e8d7-08db7c79c4c3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9Dg1qCc2ry6ECA1DeFK0AJNkukvr5SGvJUuu2Rc/EXg/nkPf1U6wqU8GA3nNoha245s/tZ4H9sB+ynensGCbCTW7vQQRrmpovDizSt8fig3pTU3prn2qxQnv1NxY2LvPwSFPWs7tqJvFqFlOmPejF7sn3jX3GpzFPxXaNZeaZN5oFuDa6KAF3xD6Wzk61XVgjICVN3Fk74W4SWQTFyB+DycJTK79YGKjHxZZQZ313TOSeI9WGkIyCkKcGmqaFgo7SO1kKJTBwXCDKWONm6+rz/DNvKIaG0tASDCj4+Ia01ZpyyB1DTboQJnLuBPMvlDElWeFeQPJ9gpC5B1QgAN5UFSig0HCPKWKXmR1uPGroeyKn+sHTL/qzT21zY46prAfPemcmyJZoDpnMZMulhsPJtErnW5ofKTkQSrMRlkeZbYQV3AXLz/4R8BdLMmLqBtiC16h7WuDajf98C+go4ExFMa6dVGbAjJ/yw7RXa/n+sCw26z3N9p8T2/wf7lxIQFvoDrF1hodAaA2GVz6UTHYMew4SbKRbXX/VkRYToUO5q6DhKhF2tkyiHtBTvSn4R+7JWDQ9aimDD/xsnBuPiaAh9vh6jDKgTReBm4phdBMaJ02xiG5qnIsV5JJJt0giv2HblD0ocQ+UBJeit/JKmDXPn37M6qICNo4K4/H5D41w9qsULAerbp1WAkfqTadJSvPUNlGrtmbXdOEMawhAHam/xplHW2taeQoO+aXSCgWFV+TNlSgXRWfMP0oj6j9DUuCfJhPicOwkKBiqOC5zu31Oyv5JYVmJhJDQqB8mvJXYMAe/HIJoTIgCky7SAcoVu+0
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(376002)(346002)(451199021)(36840700001)(46966006)(40470700004)(6666004)(16526019)(186003)(966005)(31686004)(478600001)(4744005)(7416002)(26005)(5660300002)(47076005)(36756003)(2906002)(2616005)(86362001)(83380400001)(336012)(82310400005)(31696002)(426003)(82740400003)(36860700001)(70586007)(4326008)(7636003)(70206006)(316002)(8936002)(16576012)(110136005)(54906003)(41300700001)(356005)(8676002)(40480700001)(53546011)(40460700003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 10:31:03.6023
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e39ff4d-e360-4728-e8d7-08db7c79c4c3
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8106
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, 4 Jul 2023 17:45:54 +0800
+David Gow <davidgow@google.com> wrote:
 
-On 03/07/2023 18:11, kernel test robot wrote:
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> branch HEAD: 296d53d8f84ce50ffaee7d575487058c8d437335  Add linux-next specific files for 20230703
+> (+CC Rae, for attributes/fields)
+> 
+> On Sun, 2 Jul 2023 at 15:23, Mauro Carvalho Chehab <mchehab@kernel.org> wrote:
+> >
+> > Hi Jon, Shuah & others,
+> >
+> > I'd like to discuss with you with regards to test documentation.
+> >
+> > I had some preliminary discussions with people interested on improving
+> > tests during EOSS last week in Prague, as we're working to improve media
+> > test coverage as well. During such discussions, I talked with developers
+> > from several companies that have been collaboration and/or using Kernel
+> > CI. I also talked with Nikolai from Red Hat, who gave a presentation about
+> > Kernel CI, which points that one of the areas to be improved there is
+> > documentation.
+> >
+> > So, it seems it is worth having some discussions about how to improve
+> > Kernel test documentation.
+> >  
+> 
+> Awesome: it'd definitely be nice to have some better documentation for
+> specific tests. While the documentation for test systems as a whole
+> seems okay (though could always do with improvement), I agree that
+> documentation for individual test suites seems to mostly be either
+> nonexistent, or exists only as unstructured text somewhere in the
+> subsystem docs (or worse, a random wiki).
 
+Yeah, we had the same problem on IGT. There are even internal
+spreadsheets with documentation. That's why I ended writing scripts
+to import from/to xls files.
 
-[...]
+> I've left a few first impressions / notes below:
+> 
+> > While kernel_doc does a pretty decent job documenting functions and data
+> > structures, for tests, the most important things to be documented are:
+> >
+> >         a. what the tests do;
+> >         b. what functionalities they are testing.
+> >
+> > This is a lot more important than documenting functions - and the used
+> > data structures on tests are typically the ones that are part of the
+> > driver's kAPI or uAPI, so they should be documented somewhere else.
+> >
+> > Usually, (b) is not so simple, as, at least for complex hardware,
+> > the tested features are grouped on an hierarchical way, like:
+> >
+> >         1. hardware
+> >         1.1 DMA engine
+> >         1.2 output ports
+> >         ...
+> >         2. firmware
+> >         2.1 firmware load
+> >         2.2 firmware DMA actions
+> >         ...
+> >         3. kernel features
+> >         3.1 memory allocation
+> >         3.2 mmap
+> >         3.3 bind/unbind
+> >         ...
+> >
+> > CI engines running the test sets usually want to produce a report that will
+> > be providing pass rates for the tested features and functionalites that
+> > are available at the driver's and their respective hardware and firmware.
+> >
+> > I've doing some work at the tool we use to test DRM code [1] in order to
+> > have a decent documentation of the tests we have hosted there, focusing
+> > mostly on tests for i915 and Xe Intel drivers, also covering documentation
+> > for DRM core tests - while providing support for other vendors to also
+> > improve their test documentation for IGT - IGT GPU tools and tests.
+> >
+> > The documentation tool I developed is generic enough to be used for other
+> > test sets and I believe it could be useful as well to document Kselftest
+> > and KUnit.
+> >
+> > The core of the tool (at test_list.py) is a Python class, with some callers
+> > (igt_doc.py, xls_to_doc.py, doc_to_xls.py), being extensible enough to
+> > also have other callers to integrate with external tools. We are
+> > developing internally one to integrate with our internal Grafana reports
+> > to report the pass rate per documented feature, in an hierarchical way.  
+> 
+> A lot of tests/test frameworks already have some sort of hierarchy: I
+> suspect there'll be some cases where it makes sense to either
+> duplicate that, or deviate from it, but it'd be nice to reuse it where
+> it makes sense.
 
-> Unverified Error/Warning (likely false positive, please contact us if interested):
->
-> drivers/net/ethernet/mellanox/mlx5/core/lib/devcom.c:98 mlx5_devcom_register_device() error: uninitialized symbol 'tmp_dev'.
+Agreed. 
 
+> I imagine this gets more interesting as we have tests which span
+> different frameworks, or if we have tests which need to show up
+> multiple times.
 
-This *is* a false positive. there is a comment explaining it.
+Heh, true. I guess we'll need to play with it for a while to identify
+the actual issues when this happens, if any.
 
+> > Something similar to:
+> >
+> >         1. hardware        pass rate:  98% (98 tests passed of 100)
+> >         1.1 DMA engine     pass rate:  80% (8  tests passed of  10)
+> >         1.2 output ports   pass rate: 100% (10 tests passed of  10)
+> >         ...
+> >
+> > It is based on the concept that test documentation should be placed as
+> > close as possible to the actual code implementing the test sets. It was
+> > also be developed in a way that the documentation grouping is flexible.
+> > The code was written from the scratch in Python and was implemented
+> > inside a class that can also be re-used to do do other nice things,
+> > like importing/exporting test documentation to spreadsheets and
+> > integration with other tools (like Grafana).
+> >
+> > The actual documentation tags look like this:
+> >
+> >         /**
+> >          * TEST: Check if new IGT test documentation logic functionality is working
+> >          * Category: Software build block
+> >          * Sub-category: documentation
+> >          * Functionality: test documentation
+> >          * Issue: none
+> >          * Description: Complete description of this test
+> >          *
+> >          * SUBTEST: foo
+> >          * Description: do foo things
+> >          *      description continuing on another line
+> >          *
+> >          * SUBTEST: bar
+> >          * Description: do bar things
+> >          *      description continuing on another line
+> >          * Functionality: bar test doc
+> >          */  
+> 
+> How would these test/subtest names fit with, e.g., KUnit test/suite
+> names? Would we want to require them to be the same, in which case can
+> we parse them from the actual test declarations? Or would tests end up
+> with multiple names?
+
+It probably makes sense to rename the above tags to match KUnit 
+test/suite. 
+
+On IGT, we actually have a third level. There, we're using "@" to
+go down to the third level, so we have things like:
+
+	SUBTEST: perf@blt
+	SUBTEST: perf@engine_cs
+
+For the extra level. From my side, I'm not a big fan of using "@",
+as it can be problematic with some GUIs (like git??b), as this
+can be used as "@someone".
+
+Perhaps we could use "/" or some other separator when upstreaming it.
+> 
+> >
+> > And it has support for wildcards.
+> >
+> > There, "TEST" is associated to the contents of the file, while "SUBTEST"
+> > refers to each specific subtest inside it. The valid fields are imported
+> > from JSON config files, and can be placed into an hierarchical way, in
+> > order to produce an hierarchical documentation. Fields defined at the
+> > "TEST" level are imported on "SUBTEST", but can be overriden.  
+> 
+> If we assume that for KUnit, TEST == suite and SUBTEST == test, we hit
+> the small issue that there can be multiple test suites per file.
+> Ideally, we'd support a more arbitrary hierarchy here.
+
+The tool actually allows multiple TEST tags at the same file. On
+IGT, the convention was to use just one per file to make things
+simpler.
+
+For KUnit, we should probably name the tags as "SUITE" and "TEST".
+
+> >
+> > The JSON config file looks like this:
+> >         https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/158feaa20fa2b9424ee544efd2e0e0892562f8f0/tests/xe/xe_test_config.json  
+> 
+> We're looking into having support for some level of test metadata in
+> both KTAPv2[1] and KUnit[2], which might be an interesting point of
+> comparison. (Things like inheritence work similarly.)
+
+Interesting. IMO, IGT's past experiences of having test metadata placed
+at the code was not great, as people often forgets about it when
+writing, modifying or reviewing the code.
+
+For IGT, the code has some logic to validate that everything is
+documented. This is specific to IGT, but we could come up with
+something similar for KUnit.
+
+> The advantages of having some of these fields being stored as a part
+> of the test itself include having more self-descriptive results (being
+> more readable without the source code / docs open) and the ability to
+> filter test runs based on these fields.
+
+Yes. The tool already has some logic to filter tests based at the
+fields and/or to order them based on one field.
+
+> I'd be really interested in working out what sorts of
+> fields/attributes would be useful, too. I'm sure there'd be a lot of
+> "general" ones, which it'd be nice to keep consistent across different
+> subsystems. Though per-subsystem attributes are also really
+> interesting: it'd be great if we could easily have tooling filter
+> tests by "needs this GPU" or similar.
+
+Heh, we do have a field on IGT for such purpose :-)
+
+On our TODO list is to have a way to check for consistency. It shouldn't
+be hard to add, but maintaining a list of acceptable values is a different
+history.
+
+> >
+> > The output is in ReST, which can be generated in hierarchical or per-file
+> > way. The hierarchical output looks like this:
+> >
+> >         $ ./scripts/igt_doc.py --config tests/xe/xe_test_config.json --file fubar_tests.c
+> >
+> >         ===============================
+> >         Implemented Tests for Xe Driver
+> >         ===============================
+> >
+> >         Category: Software build block
+> >         ==============================
+> >
+> >         Sub-category: documentation
+> >         ---------------------------
+> >
+> >         Functionality: bar test doc
+> >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> >
+> >
+> >         ``igt@fubar_tests@bar``
+> >
+> >         :Description: do bar things description continuing on another line
+> >         :Issue: none
+> >
+> >         Functionality: test documentation
+> >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> >
+> >
+> >         ``igt@fubar_tests@foo``
+> >
+> >         :Description: do foo things description continuing on another line
+> >         :Issue: none
+> >
+> > (if --file is not used, it will use all C files specified at the
+> > configuration)
+> >
+> > The tool already skips tags like the ones used by kernel-doc[1], so one
+> > could have both function documentation and per-test documentation on
+> > the same file, if needed.
+> >
+> > While such tool was conceived to be part of IGT, it doesn't have anything
+> > specific for it [2], and I do believe it would be a great contribution to
+> > the Kernel to have such tool upstreamed, and integrated as a Sphinx
+> > extension.
+> >
+> > If we decide to go ahead adding it, I can work on a patchset to apply
+> > it to the Kernel, modifying the scripts to better fit at the Kernel
+> > needs and start with some documentation examples for i915,
+> > DRM core and upcoming Xe KUnit tests.
+> >
+> > Comments?  
+> 
+> I like the idea overall, but do feel it'd be nice to integrate enough
+> with the various test systems to avoid any rough edges where things
+> like test layout crash, or we end up with too much duplication of
+> features.
+
+Agreed.
+
+> That being said, I'd rather have a bit of redundancy and a few
+> mismatches if it keeps this simple and more easily used with arbitrary
+> test systems.
+
+Yeah, I'd like to keep the tool generic enough to be used with different
+test tools. Perhaps we could have a "basic" class with common features,
+and then move things that are specific to integration with test suites 
+(so, inherited classes for IGT, Kernel, Kernel CI, ...).
+
+Regards,
+Mauro
