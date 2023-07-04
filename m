@@ -2,179 +2,218 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89937747930
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jul 2023 22:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E1B747950
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jul 2023 22:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbjGDUpK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Jul 2023 16:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
+        id S230432AbjGDU6r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Jul 2023 16:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbjGDUpF (ORCPT
+        with ESMTP id S230129AbjGDU6q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Jul 2023 16:45:05 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB81310FA
-        for <linux-kselftest@vger.kernel.org>; Tue,  4 Jul 2023 13:45:02 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbc0981756so59398135e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jul 2023 13:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1688503501; x=1691095501;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0GDNvib6QZmeEngLmbfD0MP/CFixjMyasw17pjt5GlM=;
-        b=abBErgxiaAQ7MZQ7fucza85sp/xYBG/N4N4qMdPT99RoNZvF5uU7rEPBMsh2vpyCuw
-         PqFgSer9YY/68iY5TRNnXstmo6KfO8O2kXzDYVl9WpffbhTnsQoqMsrM1q9djg1FnFL8
-         NpmBDbGh97C0J8m1QiyLnu0AJrSMrJ7WLBF+oheIoStrTf7eaz4uSvTxhBoAG67UzHGN
-         ljo+O7fT5WIYd6xYFqV9lONzooAGdjsLtSsqBFVLSUG+5wX+P/9RBx/h5bz8S0+SXEiP
-         u2xfBzmwhXZdH/CZ0n2y0u0Sw4FNLDZVIabcDPMe4Ee9lzfLyGvIbya/IhW3hSKayyvH
-         fmug==
+        Tue, 4 Jul 2023 16:58:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC4710C8
+        for <linux-kselftest@vger.kernel.org>; Tue,  4 Jul 2023 13:57:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688504278;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1xoQAy1k59UO+UqvJlN8ZZmc0nx2ezBp5tE6xHVc6K0=;
+        b=iV0DQRDEKDPBv/p0zk6qlr0fByaf8SI6loNCI52i/SzdLXp0FRuASHiuEcV/1kXukdS4Im
+        NAOVJN+4EdN59LvPr9wweSG6427YSQ74NVNPtWq0alVl0v8fOFC0iGmH0TwiDQez3cyjth
+        V2X+dwaO6Fu/TYJI1eyJn+f9X74W9Fw=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-172-uDTTno6UN3iuRg_82LfkeQ-1; Tue, 04 Jul 2023 16:57:57 -0400
+X-MC-Unique: uDTTno6UN3iuRg_82LfkeQ-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7672918d8a4so172485185a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jul 2023 13:57:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688503501; x=1691095501;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0GDNvib6QZmeEngLmbfD0MP/CFixjMyasw17pjt5GlM=;
-        b=bkvnTPuN14tP9JRxEi6v57jDdCRSysxDdL68VVLYGrjoFNrJWZN1KGboYbaxc1k+Nm
-         gHmUh9y6xbsmIM08bWK/X5rmvA9UYwxQ4cdvMFX6jQcJQEjflsQZhBbu1HJoPtBa3BCO
-         kMh/a5R94CSj5gon4MXuNfQKzhdW2i8Ba3BkYhfRaS7UkG29gdFUg79p5cnTq/dlbYy6
-         SxqCZ9+Qla045xAaNHVX489heI5YIWRL+nNLO1mwRsGR3PjfOMCpzo4ARp5zyxnC9BA0
-         K8Jcr7nzEmcfD7uPwDmwHER6ZZ86I8ntZ+dTxdsV/eeivGwVmXDx6Ha2VW2GUV5rp9nm
-         gPiw==
-X-Gm-Message-State: AC+VfDzXmRomLcIDyBy8WRG44RhPjL0raS0LcElFtG2aPgLlv7ZbloX5
-        T1ZgbwF4UNO/xrbY2I5h0p0ugg==
-X-Google-Smtp-Source: ACHHUZ48m5TTryjiHP5lseidA3LmSb86zf/V7P9rskuqKQ9nenuKa4+AWi9l8zb3PsBvodIiXgOp7g==
-X-Received: by 2002:a05:600c:2185:b0:3fb:c384:89ef with SMTP id e5-20020a05600c218500b003fbc38489efmr10189045wme.17.1688503501104;
-        Tue, 04 Jul 2023 13:45:01 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id y4-20020a05600c364400b003fa74bff02asm115332wmq.26.2023.07.04.13.45.00
+        d=1e100.net; s=20221208; t=1688504277; x=1691096277;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1xoQAy1k59UO+UqvJlN8ZZmc0nx2ezBp5tE6xHVc6K0=;
+        b=PhYcg/XMip2y4tNksWDDF1Do859CbYrUaWAcCc3q6DRGlDLvK3zselyfjs4qIuQ9Gx
+         Pq4McQCjuE2j+ebYQxlKR56P4fII4fNeq3bNkmECfOHMwv9kfTHv/6eq1DQK7boukhh7
+         HVqEZqktxzXKGrDb226zrzNV9bAPTpo8bFZ2X9G+koyXkFErKVixkxDoTust+WjX2oiZ
+         Ei4K78usZgNXxNZEFB8vsEJdKa0lLR/zMwEsruQVTJ9/hKFwUa66HYZBDxUdClsNVvTK
+         GXQLqSiFUjcl2m6LqIwpZZjeAMctC+nVpy0jx3Sr+tIVwY9672T628ZLueYv+zIpjqJi
+         AZFw==
+X-Gm-Message-State: AC+VfDwuswy864payVYubqbwzy9Cr3kqmfC29WCFyL7YrK4C3fDT7DSN
+        eR3ofoNznSyoPjNJrj/WXEXym4tP7kDTL2ImRKrNuhyuZcnofSGX4YVr21dmWRJOhBm0w//ioZG
+        tmuKd1eA3u1nvkJ+pZ+mXt/+yOyPg
+X-Received: by 2002:a05:620a:4010:b0:766:3190:8052 with SMTP id h16-20020a05620a401000b0076631908052mr19696464qko.0.1688504277092;
+        Tue, 04 Jul 2023 13:57:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7xb/vKX4Rf7OqmF2BqOllmu9tYbp/Y6WuIpnjmyfb54972lZs3nKCcbwYgzWdfzXNLzOF8cQ==
+X-Received: by 2002:a05:620a:4010:b0:766:3190:8052 with SMTP id h16-20020a05620a401000b0076631908052mr19696444qko.0.1688504276815;
+        Tue, 04 Jul 2023 13:57:56 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id 19-20020a05620a06d300b007621bdc9d98sm91846qky.87.2023.07.04.13.57.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 13:45:00 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Tue, 04 Jul 2023 22:44:41 +0200
-Subject: [PATCH net 9/9] selftests: mptcp: pm_nl_ctl: fix 32-bit support
+        Tue, 04 Jul 2023 13:57:56 -0700 (PDT)
+Date:   Tue, 4 Jul 2023 16:57:54 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] mm: userfaultfd: refactor hugetlb folio
+ allocation / lookup code
+Message-ID: <ZKSH0pb+asKZ4+s/@x1n>
+References: <20230629205040.665834-1-axelrasmussen@google.com>
+ <20230629205040.665834-2-axelrasmussen@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230704-upstream-net-20230704-misc-fixes-6-5-rc1-v1-9-d7e67c274ca5@tessares.net>
-References: <20230704-upstream-net-20230704-misc-fixes-6-5-rc1-v1-0-d7e67c274ca5@tessares.net>
-In-Reply-To: <20230704-upstream-net-20230704-misc-fixes-6-5-rc1-v1-0-d7e67c274ca5@tessares.net>
-To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Florian Westphal <fw@strlen.de>,
-        Kishen Maloor <kishen.maloor@intel.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        stable@vger.kernel.org
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3010;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=u1k8iIN6l4SZJWpyeVyx7kGYVtesJznCZArOL3Lw7TQ=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkpITDCL61mEtunnDwk6Rf0ldwTLYb6HJX73Tgx
- 7uQFLbFrNOJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZKSEwwAKCRD2t4JPQmmg
- c5uFD/9jO/kwOJQsQZ5OUb5E0p6aN3+wVxvFP3tEM0GikY0krZwGsHqiVy5A2r4PZSGL3X3RNSQ
- sDuR604XK4njHy1QQS7t2v13YFte66oha+/rOHxPpWwg6GQ7eHjFQP8wA6O2oYCkxI+lXwW9XqY
- /5cXrv08fmiTBPjMEVQ0FQklwYCIWPT4FOVsk7kC+01gs8uhdPoECeXMvtJFAX8FZg2M71xcwSo
- fP3NhyWEj8EM4tAS7vTSC21Tm7DT5+++k2R5tDKQHjoH6rbov7Fnqttb41oDGGcGQyFVtQQL/NH
- TadguNjqtD46bbCCJk1Gt4npIySxQ3cxw6HOI1I0UMbjUujoXMAOCutgD2qnCBi5EqOcd1sKQz7
- 8lBkc2fYAKyC4m1n0eUatT6hktbQ/8CmNXg/sd1K3+u9s6QBUJ6e7zWTjqAYVoZqvkr1KVR4k5E
- onIqX5UIzRtSyrFqTzu5MbJ5HP9e/YvACev94zBJoR2Aax3BpaFjTH5FyzaNiqvNvLDjq4gHt/C
- EkmC+5O60hcky2lN96dliv7Wdb6WY4VaV3vUdsoWtaIQvvOZV2j7JrhHciqEGpJqchecXBEMF/f
- lyTu8Mkc2+kaRIBdirF0U49a6B9+mka30qMk4EDze9TpydMoQlT+rkEU5CjCxr6HJXuMVVz+c+h
- 9k6/Knvzg1m6EZg==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230629205040.665834-2-axelrasmussen@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When using pm_nl_ctl to validate userspace path-manager's behaviours, it
-was failing on 32-bit architectures ~half of the time.
+On Thu, Jun 29, 2023 at 01:50:36PM -0700, Axel Rasmussen wrote:
+> At the top of `hugetlb_mfill_atomic_pte`, we need to get the folio we're
+> going to be mapping. There are three basic cases we're dealing with
+> here:
+> 
+> 1. We're doing a UFFDIO_CONTINUE, in which case we lookup an existing
+>    folio in the pagecache, instead of allocating a new one.
+> 2. We need to allocate a new folio.
+> 3. We previously failed while populating our new folio, so we "returned"
+>    a temporary folio using `foliop` and had our caller retry.
+> 
+> In a future commit I'm going to add a fourth case for UFFDIO_POISON,
+> where we aren't going to map a folio at all (newly allocated or
+> otherwise). This end state will be simpler, and we can re-use a bit more
+> code, if we stop using `if (...)` to distinguish the cases.
+> 
+> So, refactor the cases so they share most of the same code, and instead
+> switch to `goto` to skip some parts depending on the case at hand.
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
-pm_nl_ctl was not reporting any error but the command was not doing what
-it was expected to do. As a result, the expected linked event was not
-triggered after and the test failed.
+I didn't get why this patch is needed..
 
-This is due to the fact the token given in argument to the application
-was parsed as an integer with atoi(): in a 32-bit arch, if the number
-was bigger than INT_MAX, 2147483647 was used instead.
+IIUC you added MFILL_ATOMIC_POISON handling at the entry of
+hugetlb_mfill_atomic_pte() anyway.  Maybe it can even have its own
+hugetlb_mfill_atomic_poison()?  Did I miss something?
 
-This can simply be fixed by using strtoul() instead of atoi().
-
-The errors have been seen "by chance" when manually looking at the
-results from LKFT.
-
-Fixes: 9a0b36509df0 ("selftests: mptcp: support MPTCP_PM_CMD_ANNOUNCE")
-Cc: stable@vger.kernel.org
-Fixes: ecd2a77d672f ("selftests: mptcp: support MPTCP_PM_CMD_REMOVE")
-Fixes: cf8d0a6dfd64 ("selftests: mptcp: support MPTCP_PM_CMD_SUBFLOW_CREATE")
-Fixes: 57cc361b8d38 ("selftests: mptcp: support MPTCP_PM_CMD_SUBFLOW_DESTROY")
-Fixes: ca188a25d43f ("selftests: mptcp: userspace PM support for MP_PRIO signals")
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- tools/testing/selftests/net/mptcp/pm_nl_ctl.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
-index abddf4c63e79..1887bd61bd9a 100644
---- a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
-+++ b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
-@@ -425,7 +425,7 @@ int dsf(int fd, int pm_family, int argc, char *argv[])
- 	}
- 
- 	/* token */
--	token = atoi(params[4]);
-+	token = strtoul(params[4], NULL, 10);
- 	rta = (void *)(data + off);
- 	rta->rta_type = MPTCP_PM_ATTR_TOKEN;
- 	rta->rta_len = RTA_LENGTH(4);
-@@ -551,7 +551,7 @@ int csf(int fd, int pm_family, int argc, char *argv[])
- 	}
- 
- 	/* token */
--	token = atoi(params[4]);
-+	token = strtoul(params[4], NULL, 10);
- 	rta = (void *)(data + off);
- 	rta->rta_type = MPTCP_PM_ATTR_TOKEN;
- 	rta->rta_len = RTA_LENGTH(4);
-@@ -598,7 +598,7 @@ int remove_addr(int fd, int pm_family, int argc, char *argv[])
- 			if (++arg >= argc)
- 				error(1, 0, " missing token value");
- 
--			token = atoi(argv[arg]);
-+			token = strtoul(argv[arg], NULL, 10);
- 			rta = (void *)(data + off);
- 			rta->rta_type = MPTCP_PM_ATTR_TOKEN;
- 			rta->rta_len = RTA_LENGTH(4);
-@@ -710,7 +710,7 @@ int announce_addr(int fd, int pm_family, int argc, char *argv[])
- 			if (++arg >= argc)
- 				error(1, 0, " missing token value");
- 
--			token = atoi(argv[arg]);
-+			token = strtoul(argv[arg], NULL, 10);
- 		} else
- 			error(1, 0, "unknown keyword %s", argv[arg]);
- 	}
-@@ -1347,7 +1347,7 @@ int set_flags(int fd, int pm_family, int argc, char *argv[])
- 				error(1, 0, " missing token value");
- 
- 			/* token */
--			token = atoi(argv[arg]);
-+			token = strtoul(argv[arg], NULL, 10);
- 		} else if (!strcmp(argv[arg], "flags")) {
- 			char *tok, *str;
- 
+> ---
+>  mm/hugetlb.c | 53 +++++++++++++++++++++++++---------------------------
+>  1 file changed, 25 insertions(+), 28 deletions(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index bce28cca73a1..38711d49e4db 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6259,22 +6259,32 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
+>  		if (IS_ERR(folio))
+>  			goto out;
+>  		folio_in_pagecache = true;
+> -	} else if (!*foliop) {
+> -		/* If a folio already exists, then it's UFFDIO_COPY for
+> -		 * a non-missing case. Return -EEXIST.
+> -		 */
+> -		if (vm_shared &&
+> -		    hugetlbfs_pagecache_present(h, dst_vma, dst_addr)) {
+> -			ret = -EEXIST;
+> -			goto out;
+> +		goto ready;
+> +	}
+> +
+> +	/* If a folio already exists, then it's UFFDIO_COPY for
+> +	 * a non-missing case. Return -EEXIST.
+> +	 */
+> +	if (vm_shared && hugetlbfs_pagecache_present(h, dst_vma, dst_addr)) {
+> +		ret = -EEXIST;
+> +		if (*foliop) {
+> +			folio_put(*foliop);
+> +			*foliop = NULL;
+>  		}
+> +		goto out;
+> +	}
+>  
+> -		folio = alloc_hugetlb_folio(dst_vma, dst_addr, 0);
+> -		if (IS_ERR(folio)) {
+> -			ret = -ENOMEM;
+> -			goto out;
+> +	folio = alloc_hugetlb_folio(dst_vma, dst_addr, 0);
+> +	if (IS_ERR(folio)) {
+> +		ret = -ENOMEM;
+> +		if (*foliop) {
+> +			folio_put(*foliop);
+> +			*foliop = NULL;
+>  		}
+> +		goto out;
+> +	}
+>  
+> +	if (!*foliop) {
+>  		ret = copy_folio_from_user(folio, (const void __user *) src_addr,
+>  					   false);
+>  
+> @@ -6302,22 +6312,7 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
+>  			 */
+>  			goto out;
+>  		}
+> -	} else {
+> -		if (vm_shared &&
+> -		    hugetlbfs_pagecache_present(h, dst_vma, dst_addr)) {
+> -			folio_put(*foliop);
+> -			ret = -EEXIST;
+> -			*foliop = NULL;
+> -			goto out;
+> -		}
+> -
+> -		folio = alloc_hugetlb_folio(dst_vma, dst_addr, 0);
+> -		if (IS_ERR(folio)) {
+> -			folio_put(*foliop);
+> -			ret = -ENOMEM;
+> -			*foliop = NULL;
+> -			goto out;
+> -		}
+> +	} else { /* Caller retried because we set *foliop previously */
+>  		ret = copy_user_large_folio(folio, *foliop, dst_addr, dst_vma);
+>  		folio_put(*foliop);
+>  		*foliop = NULL;
+> @@ -6327,6 +6322,8 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
+>  		}
+>  	}
+>  
+> +ready: /* `folio` ready to map (non-NULL, populated) */
+> +
+>  	/*
+>  	 * The memory barrier inside __folio_mark_uptodate makes sure that
+>  	 * preceding stores to the page contents become visible before
+> -- 
+> 2.41.0.255.g8b1d071c50-goog
+> 
 
 -- 
-2.40.1
+Peter Xu
 
