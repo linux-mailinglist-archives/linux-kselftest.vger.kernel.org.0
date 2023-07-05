@@ -2,69 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8554748B17
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jul 2023 19:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A76748B85
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jul 2023 20:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbjGER5H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Jul 2023 13:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S233486AbjGESSh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Jul 2023 14:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbjGER5G (ORCPT
+        with ESMTP id S232425AbjGESSW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:57:06 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7322519B6
-        for <linux-kselftest@vger.kernel.org>; Wed,  5 Jul 2023 10:57:01 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9939fbb7191so192849566b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Jul 2023 10:57:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688579820; x=1691171820;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j1wTgUxJXx3tp0kUBGY4xdI7MU5ro+vhiugocM4n1ss=;
-        b=qzpbmri+UAarope3gQY8JCaH976L2B+n68ws9721gs3jJNB+eNzjn0eF9ZfrEJNMmv
-         8+WaC+vezGnY6DZqbBVhreJI15TtRVagcdiZqkWT+ln6ShhA3zqC3zFFt+N1Y2UASrAy
-         mkn7DAU2ZiscOT4R9jHsDoHNIs2sqmtiptgyZbEg07lqi7M4nbMzRv6PkOSGkx1vZ14W
-         5BF6Aeyx2PjsYG5xUCvhhiSQnc/umzUHMm2GUPnWLyhGNdflfghzdmGXv6yquBA9uf59
-         rNgaUPJjDb4BldD4ttWdUyQVVED83+ru/yq4dlnsF2LWTFXkkpg+UcbCQisk+j4kdPQZ
-         wXnA==
+        Wed, 5 Jul 2023 14:18:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3081BD8
+        for <linux-kselftest@vger.kernel.org>; Wed,  5 Jul 2023 11:17:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688581026;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PzsylmtcmFNsmgGBg8Pm9OUDSeIGp5f091Q7tc9LleI=;
+        b=FQCcfGMSwfio0DEKrK2F+p3v9hGkECf+KERidfWR6h8qMpBtS3eefq4QvLw6AQkRJOfcJE
+        B9b7bCOH0dnoetwxsYFpHVRMw3XrjQ4yaVD/C2/3Mw3cRZfAWTAIk/5jwVOvslC7eHdsyi
+        0q3O3bkFI4lM34J+Lhj/lK7JQqGfeio=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-562-5kp-uGjNNECqLuMOZ-_caw-1; Wed, 05 Jul 2023 14:17:05 -0400
+X-MC-Unique: 5kp-uGjNNECqLuMOZ-_caw-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-635eb5b04e1so15370856d6.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Jul 2023 11:17:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688579820; x=1691171820;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j1wTgUxJXx3tp0kUBGY4xdI7MU5ro+vhiugocM4n1ss=;
-        b=ca7NJvY5A3eGOCLJgEc9BAGC/mmX6nEOa0rY9s3+7OO2sMDFtJlW9dcsyVGssKv16H
-         /SavT5biTC+7PRTzYkjE2C9Sma3Ubk3Uf2OEtDVhABKr4FV7F5/DMv1NU9qDYpre7wQY
-         tBUVFBwaMlo/ezRFX2HPmjPOkIdwWZVrVoH1umqGSENbL5RvCR+TYkq8k4kODJOKupds
-         sWihIGNBszR7jjPcehaBqql2NvH9X+3YKE6FdCvJEgv9SgCbONUSatlw0q+z/Jy3e2z2
-         XI5YCuSTW0K2fE1C/8BLXqU0l+06/WsxkWmhlxZjMs1I/8/4/s9hWlXimQymVU6m7GYX
-         SEdg==
-X-Gm-Message-State: ABy/qLb9P5xvWetEnjkZnI525P3HNJms46LH/KXQuaj/pNKwEwLM0pAy
-        qdNzRHzgQ2/d+kwBFRIb49bPhDvb5prgfGXsqhxPdw==
-X-Google-Smtp-Source: APBJJlGhNDfk+A5cRCar/5QRGBPxgKX45i6W5UnrxH4GqLaWcyJzVDKBTBgap4g7/sAKGatltVc8+OINzu7yY35sZ1o=
-X-Received: by 2002:a17:906:648e:b0:992:6d73:5696 with SMTP id
- e14-20020a170906648e00b009926d735696mr2934926ejm.5.1688579819676; Wed, 05 Jul
- 2023 10:56:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230629205040.665834-1-axelrasmussen@google.com>
- <ZKSDLogLASaZgKCP@x1n> <CADrL8HXp-P44VxTXdJMkzSgPC8r_b0T21_cuPCTNy6Ub2PFBKA@mail.gmail.com>
- <ZKWXGnSKcOdnaeJw@x1n> <CADrL8HWO8g2-YdUtyLM6e+f1VJq6YV-b1_rj-beEh2C84kAgEw@mail.gmail.com>
- <ZKWcgD1hFFUxeQHg@x1n>
-In-Reply-To: <ZKWcgD1hFFUxeQHg@x1n>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Wed, 5 Jul 2023 10:56:23 -0700
-Message-ID: <CAJHvVcjNDazqnopjcqx2LLcmQf_4QUeGBSvSJxwGh40e78uhCg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] mm: userfaultfd: add new UFFDIO_POISON ioctl
-To:     Peter Xu <peterx@redhat.com>
-Cc:     James Houghton <jthoughton@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+        d=1e100.net; s=20221208; t=1688581024; x=1689185824;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PzsylmtcmFNsmgGBg8Pm9OUDSeIGp5f091Q7tc9LleI=;
+        b=boPwne7I5dwAritklrRx3efjSp1l3xq5Uu03fBDPklctZXBC05QwrsnnjXFCTWb1Bj
+         4hyJFfwjfvnWp2O+hAcgJmBzqq2PAlyfAeGDgSuCQKc9XZq77B6rVYaKhbwyaWvCIlaH
+         vUv9D4WVeYsoLlqx6xhjolngbpQGTbJXpvLp+BumkYNKaFAnzWEMmQSpOvnud3YwIALG
+         mDg3P/43rhUTHT8hvLiGtNDVlrGNrFhj1NtTseKskf5j8buJ8B91u0+f6+tD6+eDA663
+         tMYzwM4I+JcUz2i+KmCq/RO7k3rOruNchaO6jiAO6r9vlcHc3IpXmmp+NrBAsOUU/NKZ
+         pV/A==
+X-Gm-Message-State: ABy/qLYleuX5HNxqeYGIbb5Av86T8Pz68qW4nAs85jLRPpK+oyeIzS1I
+        nsSD08AP/a/EtpxASankdL/pRi/U87aqj69+kUwXrCIt9ZkzW7YiNCghb/7pZGGLl1X+Smh4fJ4
+        WKOUcNt0fZxlxPmkV+hXxlVwvL52q
+X-Received: by 2002:a0c:ea2b:0:b0:635:dfe1:c1f2 with SMTP id t11-20020a0cea2b000000b00635dfe1c1f2mr17717932qvp.0.1688581024474;
+        Wed, 05 Jul 2023 11:17:04 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEl96/J1yNKCHluvfZQOMJkmNFqvRJ5M9uxuly3x1gZ1FBowCv3rY84RzXq6qWZEIAdEnHPdg==
+X-Received: by 2002:a0c:ea2b:0:b0:635:dfe1:c1f2 with SMTP id t11-20020a0cea2b000000b00635dfe1c1f2mr17717904qvp.0.1688581024161;
+        Wed, 05 Jul 2023 11:17:04 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id l15-20020ad4444f000000b0062439f05b87sm13920874qvt.45.2023.07.05.11.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 11:17:03 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 14:17:02 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Christian Brauner <brauner@kernel.org>,
         David Hildenbrand <david@redhat.com>,
         Huang Ying <ying.huang@intel.com>,
         Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
         Jiaqi Yan <jiaqiyan@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
         "Liam R. Howlett" <Liam.Howlett@oracle.com>,
@@ -78,89 +79,147 @@ Cc:     James Houghton <jthoughton@google.com>,
         ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 4/6] selftests/mm: refactor uffd_poll_thread to allow
+ custom fault handlers
+Message-ID: <ZKWznk3+Ry96kZ1w@x1n>
+References: <20230629205040.665834-1-axelrasmussen@google.com>
+ <20230629205040.665834-4-axelrasmussen@google.com>
+ <ZKSJNB3BbCiPxcdD@x1n>
+ <CAJHvVcjfrOU5PoSoh4n1O0tmr-2bsPzinHDW5OwhCh=egk=-uQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJHvVcjfrOU5PoSoh4n1O0tmr-2bsPzinHDW5OwhCh=egk=-uQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 9:38=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
->
-> On Wed, Jul 05, 2023 at 09:27:15AM -0700, James Houghton wrote:
-> > On Wed, Jul 5, 2023 at 9:15=E2=80=AFAM Peter Xu <peterx@redhat.com> wro=
-te:
-> > >
-> > > On Wed, Jul 05, 2023 at 09:09:19AM -0700, James Houghton wrote:
-> > > > > > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-> > > > > > index 4c932cb45e0b..8259fee32421 100644
-> > > > > > --- a/include/linux/swapops.h
-> > > > > > +++ b/include/linux/swapops.h
-> > > > > > @@ -394,7 +394,8 @@ typedef unsigned long pte_marker;
-> > > > > >
-> > > > > >  #define  PTE_MARKER_UFFD_WP                  BIT(0)
-> > > > > >  #define  PTE_MARKER_SWAPIN_ERROR             BIT(1)
-> > > > > > -#define  PTE_MARKER_MASK                     (BIT(2) - 1)
-> > > > > > +#define  PTE_MARKER_UFFD_POISON                      BIT(2)
-> > > > >
-> > > > > One more tab.
-> > > > >
-> > > > > Though I remembered the last time we discussed IIRC we plan to re=
-name
-> > > > > SWAPIN_ERROR and reuse it, could you explain why a new bit is sti=
-ll needed?
-> > > > >
-> > > > > I think I commented this but I'll do it again: IIUC any existing =
-host
-> > > > > swapin errors for guest pages should be reported as MCE too, afai=
-ct,
-> > > > > happened in kvm context.
-> > > >
-> > > > I think swapin errors are treated differently than poison. Swapin
-> > > > errors get VM_FAULT_SIGBUS, and poison gets VM_FAULT_HWPOISON, so
-> > > > UFFDIO_POISON should also get VM_FAULT_HWPOISON (so that's what Axe=
-l
-> > > > has implemented). And I think that needs a separate PTE marker.
-> > >
-> > > My question was, should we also make SWAPIN_ERROR return VM_FAULT_HWP=
-OISON
-> > > always?
-> > >
-> > > Just to recap from what I already commented above - if a guest page g=
-ot
-> > > error in swapin due to block sector failures, it should be treated as
-> > > VM_FAULT_HWPOISON too, IMHO.  IOW, I think current SWAPIN_ERROR is wr=
-ong
-> > > when in kvm context and we should fix it first.
+On Wed, Jul 05, 2023 at 10:50:34AM -0700, Axel Rasmussen wrote:
+> On Tue, Jul 4, 2023 at 2:03 PM Peter Xu <peterx@redhat.com> wrote:
 > >
-> > Oh! Yes, I agree, though I'm not familiar enough with the users of
-> > SWAPIN_ERROR to know if we can actually make this change.
+> > On Thu, Jun 29, 2023 at 01:50:38PM -0700, Axel Rasmussen wrote:
+> > > Previously, we had "one fault handler to rule them all", which used
+> > > several branches to deal with all of the scenarios required by all of
+> > > the various tests.
+> > >
+> > > In upcoming patches, I plan to add a new test, which has its own
+> > > slightly different fault handling logic. Instead of continuing to add
+> > > cruft to the existing fault handler, let's allow tests to define custom
+> > > ones, separate from other tests.
+> > >
+> > > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > > ---
+> > >  tools/testing/selftests/mm/uffd-common.c |  5 ++++-
+> > >  tools/testing/selftests/mm/uffd-common.h |  3 +++
+> > >  tools/testing/selftests/mm/uffd-stress.c | 12 +++++++-----
+> > >  3 files changed, 14 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+> > > index ba20d7504022..02b89860e193 100644
+> > > --- a/tools/testing/selftests/mm/uffd-common.c
+> > > +++ b/tools/testing/selftests/mm/uffd-common.c
+> > > @@ -499,6 +499,9 @@ void *uffd_poll_thread(void *arg)
+> > >       int ret;
+> > >       char tmp_chr;
+> > >
+> > > +     if (!args->handle_fault)
+> > > +             args->handle_fault = uffd_handle_page_fault;
+> > > +
+> > >       pollfd[0].fd = uffd;
+> > >       pollfd[0].events = POLLIN;
+> > >       pollfd[1].fd = pipefd[cpu*2];
+> > > @@ -527,7 +530,7 @@ void *uffd_poll_thread(void *arg)
+> > >                       err("unexpected msg event %u\n", msg.event);
+> > >                       break;
+> > >               case UFFD_EVENT_PAGEFAULT:
+> > > -                     uffd_handle_page_fault(&msg, args);
+> > > +                     args->handle_fault(&msg, args);
+> > >                       break;
+> > >               case UFFD_EVENT_FORK:
+> > >                       close(uffd);
+> > > diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+> > > index 197f5262fe0d..7c4fa964c3b0 100644
+> > > --- a/tools/testing/selftests/mm/uffd-common.h
+> > > +++ b/tools/testing/selftests/mm/uffd-common.h
+> > > @@ -77,6 +77,9 @@ struct uffd_args {
+> > >       unsigned long missing_faults;
+> > >       unsigned long wp_faults;
+> > >       unsigned long minor_faults;
+> > > +
+> > > +     /* A custom fault handler; defaults to uffd_handle_page_fault. */
+> > > +     void (*handle_fault)(struct uffd_msg *msg, struct uffd_args *args);
+> > >  };
+> > >
+> > >  struct uffd_test_ops {
+> > > diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+> > > index 995ff13e74c7..50b1224d72c7 100644
+> > > --- a/tools/testing/selftests/mm/uffd-stress.c
+> > > +++ b/tools/testing/selftests/mm/uffd-stress.c
+> > > @@ -189,10 +189,8 @@ static int stress(struct uffd_args *args)
+> > >                                  locking_thread, (void *)cpu))
+> > >                       return 1;
+> > >               if (bounces & BOUNCE_POLL) {
+> > > -                     if (pthread_create(&uffd_threads[cpu], &attr,
+> > > -                                        uffd_poll_thread,
+> > > -                                        (void *)&args[cpu]))
+> > > -                             return 1;
+> > > +                     if (pthread_create(&uffd_threads[cpu], &attr, uffd_poll_thread, &args[cpu]))
+> > > +                             err("uffd_poll_thread create");
+> >
+> > irrelevant change?
+> 
+> Right, I'll revert this. In an earlier version I had a more
+> substantial change here, and just didn't fully revert it.
+> 
+> >
+> > >               } else {
+> > >                       if (pthread_create(&uffd_threads[cpu], &attr,
+> > >                                          uffd_read_thread,
+> > > @@ -247,9 +245,13 @@ static int userfaultfd_stress(void)
+> > >  {
+> > >       void *area;
+> > >       unsigned long nr;
+> > > -     struct uffd_args args[nr_cpus];
+> > > +     struct uffd_args *args;
+> > >       uint64_t mem_size = nr_pages * page_size;
+> > >
+> > > +     args = calloc(nr_cpus, sizeof(struct uffd_args));
+> > > +     if (!args)
+> > > +             err("allocating args array failed");
+> > > +
+> >
+> > It's leaked?
+> >
+> > Isn't "args[] = { 0 }" already working?
+> 
+> That works, but GCC can warn in this case (-Wmissing-braces) depending
+> on the definition of struct uffd_args. I liked switching to calloc
+> because it avoids any possibility of that even as we add/remove things
+> to struct uffd_args in the future.
 
-Sorry I missed this, I'll take another pass looking at existing
-SWAPIN_ERROR uses, and see if this can be done.
+But afaict we also have other places using the static way, I hope we can
+still keep them the same.
 
-Thanks for the thorough review Peter, I'll address this comment and
-the others in a v3. :)
+> 
+> Since it's a selftest and this function is only called exactly once,
+> it didn't seem worth the code making certain we free it, instead just
+> leaving it to be cleaned up when the process exits.
 
->
-> Miaohe initially proposed this swapin error facility, let's see whether h=
-e
-> can comment; he's already in the cc list.
->
-> AFAICT that's the right thing to do, and it shouldn't affect any existing
-> user of swapin error if there is.
->
-> Or say, VM_FAULT_HWPOISON should be the same as VM_FAULT_SIGBUS when not =
-in
-> kvm context, so shouldn't change a thing in !kvm, while changing that
-> should fix kvm from crashing a guest where we shouldn't need to.
->
-> --
-> Peter Xu
->
+I'm also fine if you like to allocate it, but in that case please free it
+even if used only once - we're already at it, no good reason to explicitly
+leak it.  Let's just assume if userfaultfd_stress() can succeed it can be
+called 100000.. times without leaking anything.
+
+Thanks,
+
+-- 
+Peter Xu
+
