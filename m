@@ -2,104 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C82748196
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jul 2023 12:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7221C7481CA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jul 2023 12:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232085AbjGEKA1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Jul 2023 06:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
+        id S231785AbjGEKOm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Jul 2023 06:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232105AbjGEKA0 (ORCPT
+        with ESMTP id S230094AbjGEKOl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Jul 2023 06:00:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2021723;
-        Wed,  5 Jul 2023 03:00:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15155614EC;
-        Wed,  5 Jul 2023 10:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7181EC433CA;
-        Wed,  5 Jul 2023 10:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688551223;
-        bh=rfKwXHw/MObGrKQHHxQ3kXk+3dEtPedetkvV200qdBA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=i7DLBNU9u74goYVpIpur4MOnr3DPPgafPqv3zyjUTrOLo7DxhosmRCu1pbSZ7PvSL
-         3Kdc6u+SuLg6v45+2FkhX37ZL0sRcMtxEuJWFVDrncyYySTIR07gr6wC67EaNlKaPp
-         voua6jvdKjCC7vLHuyP6p45Re2YdZQ4O53jfYTzham6f1Rh+4VbPMWs3Iw5RjBBPEh
-         nKmUBWhxKP9nCiUK/ksgfvIBWlN/+b6RMRa44F4cOhMsS7vJP8R7WoA/zg150hmlGN
-         70LtwZSQShBCSkwxtgHIS/a+54rAzVyfoB4OGO9DGIcpdWyqM2AMYi83blCE0P1OKL
-         OqLKfBnuiz05A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4E528C0C40E;
-        Wed,  5 Jul 2023 10:00:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 5 Jul 2023 06:14:41 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1328FE57;
+        Wed,  5 Jul 2023 03:14:39 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbd33a57dcso46211685e9.0;
+        Wed, 05 Jul 2023 03:14:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688552077; x=1691144077;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dlDTGxKAa9u+MMfrqxFnjprJCty9LTNk5K6Uo9s9JGE=;
+        b=FMqifX2a0syOcCH/4H/HWrk26qkao7Gk6vgpVmIKL9hFDe6xc/jtngBFhuXHVaXQRD
+         q2xMVdrHmZe+W54XWO8cNQ3oqjreEPSNFlAoM372QI5DNvShq1arjPSmF0XxSzhTw6Lg
+         uc5/iDik2rXx7xs9oB9jfA2tRHNU6/+ane5lw6nwIvfvmOb0I6ZR1RW5QhBcGRkOWCik
+         2zxB5DEVfkNdcl+Pt/hlcKSS3257cvANVWdJONC06ylqTx5yKLTpLR9mbVpWB68YIhA+
+         BoE17WuaJIaHYpy6QVvk++zohLl5stBmZPcFX97v6uPbBA42ogccTDc1PKSvtLNnlkW4
+         hCIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688552077; x=1691144077;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dlDTGxKAa9u+MMfrqxFnjprJCty9LTNk5K6Uo9s9JGE=;
+        b=VkOfdmvCSaP7KAIw8m1sK5A/zv/s3nLxkQiI6o+nHQlIpL8wAu9CAw20uCAp142ffV
+         2aVXnFhnhiWM7eF4oLvC5rBQA9OoJIlp1tGZ/v+as+yyDup2l+sm+V84Rs81fXNvC70A
+         c8Kwwm6DlL3iIlLEAC+LPjcbVObg0jxFtfcHaoO0k3B6Qg8Md3GrErkcSIUkfLRVOKLE
+         H7tUooNHGAwF0BCGQwksUd1S68zRz7rEGVVseg5ng3TJNAg+8gh4AphG2AX1VEWtVmIU
+         wVmEoEeoJG6/83rKbwPVQxwEUG5ffIg7yjw7XluGVd1ExenfmH2raHkcydqcJVRiVdZm
+         rNpA==
+X-Gm-Message-State: AC+VfDxXhuF5NHiNL+G/jigLFWvn9AL9/xJDeXW3ijfjBige8nkfVwpc
+        ySxH+4ELJ45TEtz3GGql9Lo=
+X-Google-Smtp-Source: ACHHUZ7K5EfFMNSC4PLTQGysSNBsmGFHkS+8k8ibS7sZA5Nzf+ZclnTrpg63X8YXOsKfj2XY0LGojA==
+X-Received: by 2002:a05:600c:2201:b0:3fa:91d2:55b6 with SMTP id z1-20020a05600c220100b003fa91d255b6mr13704823wml.9.1688552077291;
+        Wed, 05 Jul 2023 03:14:37 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id i5-20020a05600c290500b003fbab76165asm1672277wmd.48.2023.07.05.03.14.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 03:14:36 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andy Chiu <andy.chiu@sifive.com>,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests: Fix spelling mistake "regesters" -> "registers"
+Date:   Wed,  5 Jul 2023 11:14:35 +0100
+Message-Id: <20230705101435.1995171-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/9] mptcp: fixes for v6.5
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168855122331.15504.15239551564077359539.git-patchwork-notify@kernel.org>
-Date:   Wed, 05 Jul 2023 10:00:23 +0000
-References: <20230704-upstream-net-20230704-misc-fixes-6-5-rc1-v1-0-d7e67c274ca5@tessares.net>
-In-Reply-To: <20230704-upstream-net-20230704-misc-fixes-6-5-rc1-v1-0-d7e67c274ca5@tessares.net>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     mptcp@lists.linux.dev, martineau@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, fw@strlen.de, kishen.maloor@intel.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        cpaasch@apple.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+There are spelling mistakes in ksft_test_result_fail messages. Fix them.
 
-This series was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/riscv/vector/v_initval_nolibc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 04 Jul 2023 22:44:32 +0200 you wrote:
-> Here is a first batch of fixes for v6.5 and older.
-> 
-> The fixes are not linked to each others.
-> 
-> Patch 1 ensures subflows are unhashed before cleaning the backlog to
-> avoid races. This fixes another recent fix from v6.4.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,1/9] mptcp: ensure subflow is unhashed before cleaning the backlog
-    https://git.kernel.org/netdev/net/c/3fffa15bfef4
-  - [net,2/9] mptcp: do not rely on implicit state check in mptcp_listen()
-    https://git.kernel.org/netdev/net/c/0226436acf24
-  - [net,3/9] selftests: mptcp: connect: fail if nft supposed to work
-    https://git.kernel.org/netdev/net/c/221e4550454a
-  - [net,4/9] selftests: mptcp: sockopt: use 'iptables-legacy' if available
-    https://git.kernel.org/netdev/net/c/a5a5990c099d
-  - [net,5/9] selftests: mptcp: sockopt: return error if wrong mark
-    https://git.kernel.org/netdev/net/c/9ac4c28eb70c
-  - [net,6/9] selftests: mptcp: userspace_pm: use correct server port
-    https://git.kernel.org/netdev/net/c/d8566d0e0392
-  - [net,7/9] selftests: mptcp: userspace_pm: report errors with 'remove' tests
-    https://git.kernel.org/netdev/net/c/966c6c3adfb1
-  - [net,8/9] selftests: mptcp: depend on SYN_COOKIES
-    https://git.kernel.org/netdev/net/c/6c8880fcaa5c
-  - [net,9/9] selftests: mptcp: pm_nl_ctl: fix 32-bit support
-    https://git.kernel.org/netdev/net/c/61d965805026
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/riscv/vector/v_initval_nolibc.c b/tools/testing/selftests/riscv/vector/v_initval_nolibc.c
+index 66764edb0d52..62d8884a1a0d 100644
+--- a/tools/testing/selftests/riscv/vector/v_initval_nolibc.c
++++ b/tools/testing/selftests/riscv/vector/v_initval_nolibc.c
+@@ -49,14 +49,14 @@ int main(void)
+ 	ksft_print_msg("vl = %lu\n", vl);
+ 
+ 	if (datap[0] != 0x00 && datap[0] != 0xff) {
+-		ksft_test_result_fail("v-regesters are not properly initialized\n");
++		ksft_test_result_fail("v-registers are not properly initialized\n");
+ 		dump(datap, vl * 4);
+ 		exit(-1);
+ 	}
+ 
+ 	for (i = 1; i < vl * 4; i++) {
+ 		if (datap[i] != datap[0]) {
+-			ksft_test_result_fail("detect stale values on v-regesters\n");
++			ksft_test_result_fail("detect stale values on v-registers\n");
+ 			dump(datap, vl * 4);
+ 			exit(-2);
+ 		}
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.2
 
