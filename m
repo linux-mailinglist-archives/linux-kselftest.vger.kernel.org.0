@@ -2,204 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECB2748910
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jul 2023 18:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B59748920
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jul 2023 18:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbjGEQQS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Jul 2023 12:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
+        id S231865AbjGEQXG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Jul 2023 12:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232618AbjGEQQM (ORCPT
+        with ESMTP id S229645AbjGEQXF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:16:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E961700
-        for <linux-kselftest@vger.kernel.org>; Wed,  5 Jul 2023 09:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688573726;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=41PfzToKq/ZuIyZbmkk75ijXjF0S6iwGioZqQv3YYas=;
-        b=WvPEzUC3lj1tQOlUj9N/wJLicQhC5OzYowVlGfmvsnNbqIXFsF3WjhHi49t9lJkx822mxc
-        QMoC4cYOM0aGYjQJEdO7X6FlywRjNuBQ5c/SnCzNp0TAGqr97T6zU+n6z7A/eD/6g9tU0r
-        eRwJHE22oO0qTwQsQbPEoVehlC/RXP8=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-591-aq0SszxJMsW8n1KYTl04pA-1; Wed, 05 Jul 2023 12:15:25 -0400
-X-MC-Unique: aq0SszxJMsW8n1KYTl04pA-1
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-402fa256023so10130671cf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Jul 2023 09:15:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688573725; x=1691165725;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=41PfzToKq/ZuIyZbmkk75ijXjF0S6iwGioZqQv3YYas=;
-        b=IRZ7NNOFQBs7TdfxLOUYwEB+gVFqn8xQcZr4GHGvsSBJDqOWuZYmt6YN5CfTTsRjXR
-         chuFvD+dmMaRJUAfHyCSWIMGOjYnd+EiB3NAoPCBthFw2fTTM2iMav3dM79GXZsx7PNf
-         iblNOpg9EJBV7rD+Sgktzpd8YIx+YXJoJmw4wfzvLpv4qlYbfbkGA0ivNl21MZWhoOC1
-         iNiH/B0Gl8+agfVMla+cMu/jzeUbDccpY5G8ybj5xwFZZXMOc79FpHHh1JFrTdCZQ+GR
-         NcvUNR8hI+FMPXHCCPsXB+SBsB/3i8qPo4oB94uioCYkgstW0YB7/0R8ohj0gtvX+XnR
-         aE7w==
-X-Gm-Message-State: AC+VfDw0E0UJqnb9ikqUctj+xSu9Z+boSk8M/V0pIaQd8GhEW8odrE8l
-        fU60DuY/Yd6bzShIVj8qocLg0zkYyrb/RPHXCHFvh0lEQechsuumQ33J/W1iR18mspqG2BKwuep
-        pQquGfsw8XxqScdMd2AK+CttS9cyR
-X-Received: by 2002:a05:622a:1308:b0:403:28e3:8ab7 with SMTP id v8-20020a05622a130800b0040328e38ab7mr22343568qtk.5.1688573724892;
-        Wed, 05 Jul 2023 09:15:24 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4yBoNCHR9da42kEmUepXtWH/uy0qhFWUMq3XZYbfp+4KgDzX7xEj2WTC/YgjKg5UtSOPzSvA==
-X-Received: by 2002:a05:622a:1308:b0:403:28e3:8ab7 with SMTP id v8-20020a05622a130800b0040328e38ab7mr22343534qtk.5.1688573724597;
-        Wed, 05 Jul 2023 09:15:24 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id e16-20020ac80110000000b0040346ce43a5sm6442576qtg.44.2023.07.05.09.15.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 09:15:24 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 12:15:22 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] mm: userfaultfd: add new UFFDIO_POISON ioctl
-Message-ID: <ZKWXGnSKcOdnaeJw@x1n>
-References: <20230629205040.665834-1-axelrasmussen@google.com>
- <ZKSDLogLASaZgKCP@x1n>
- <CADrL8HXp-P44VxTXdJMkzSgPC8r_b0T21_cuPCTNy6Ub2PFBKA@mail.gmail.com>
+        Wed, 5 Jul 2023 12:23:05 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FECA9;
+        Wed,  5 Jul 2023 09:23:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1688574164; x=1689178964; i=deller@gmx.de;
+ bh=Hlber4Z7Cd3qr0L2Uhoc2fvca7T/yNNA9ie9vqfcvcg=;
+ h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=HHpiJod8lIUM1nYnFzSr85XxN/f+IBdaxNXE7JfrN1JmwyQ6bV7eRAGjwk7Hn0jwrXbv69f
+ /91fGDVcBJPk3s6A7fvG1ByfgCaSF0t8DoWbosXUtDs5X0U8e/45rqFiAyKj/o1ntTPVYMDIb
+ j2Ri0CT0wHlesq5KtOAMgaoz++ki35qI6WLe8/32L6QLFBUapiBj+HOt1/aQTULW67kd/7Gir
+ zwpRLRPoco7Ll6YyNMfYA9Hewaz2efHwpXslPkU8HWWvlb7wv2mSAhmG4kaq5zMpmaRdSwkfa
+ SijXWpiuLiCfXMJWQ0sHt6dWzzZlqmTj9cjk8gsQmidsGBe21f0A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.149.108]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MK3Rm-1qaOoU0OWk-00LSx0; Wed, 05
+ Jul 2023 18:22:44 +0200
+Message-ID: <17b4e65f-a140-8e4d-505b-f2f6f7d1a8c5@gmx.de>
+Date:   Wed, 5 Jul 2023 18:22:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CADrL8HXp-P44VxTXdJMkzSgPC8r_b0T21_cuPCTNy6Ub2PFBKA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [linux-next:master] BUILD REGRESSION
+ e1f6a8eaf1c271a0158114a03e3605f4fba059ad
+To:     kernel test robot <lkp@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        intel-gfx@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-bluetooth@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+References: <202307060015.uSSLonkv-lkp@intel.com>
+Content-Language: en-US
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <202307060015.uSSLonkv-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:JWzwb8Bva/UEgbtilJvt13AQt9pzz5xRYErsh3WY62+4pR/JSr7
+ E/ZCgIGCfWrdxsdAhFANBDjvFgoalIGY6w7xXDDvVbo6bukUPeo3H0kPOGuGfEuEPW+hpci
+ 5yURWZq12WjOMTG4sxOTFyDeY6nqEQEW+JLLHm6PvKGEeuQtUcX+IqGGbdSuMFfQaX3tZ/X
+ GoEZ2H3cKEEDXrgvGuj3g==
+UI-OutboundReport: notjunk:1;M01:P0:S8CTIvuZ93Q=;Yy5kGFHKOIF64l/dJf6L9tVy8J1
+ F9W0Dixe2+IK8eY7U+fy5r+gr5Z7DsLdmqZD9wUVe80JXUrFIjGe8+cpSdO5uqMn1jdSKQqT1
+ duQOsmIvSS9J1BF5x7eK7c7f7YzTXH7R9Ca9x0l5U3h0/cl9qz3iIJM6u5IqSb68CUweB8D5t
+ xQspgNRbIzAH3pm7gSyTMTVlw75mE358cIp+jQ5FFt4Og4NiejEzNxSww8Q3ONC3mAAvycbZU
+ YVpyFtVW2bkh0FFPgKbVS64+ARCtNJ5ro3XzK4YnevLWgNcvpHQe8219vzx5nlWq0XyogFDEo
+ 9vPQF5UaGWPfv7Wsj226k2bTtCKlKtpSboIoyjizpulceSkWD9JCipY4RgPs+e+wJozuFqypQ
+ Wz5uFxNK4TQ5l5zDSbpG6oEQlJtFwVPRjSyM3Z+/mTedJGd2820lI7IfMaRCMpcP6ubx2Uv2Y
+ qtiYcTr6tQKiJz5NkE1AqJ03oTm5LcjvOt2IdiFrN1rEnrq++kG0t+ysXUfZHrHRMTFVZm1Sa
+ qCJ0dRaRO9JccFTBTK1Gd3PFFyMSRRW4RS1hdu1QKieuqkRKqTlY/FOAQ2d4jROlTl0GlbbKi
+ o2ps10rlSfUJJOtUVxCEfmJIE+SnsBgMxr0YbFGJKYds9ABZHri17Mr8eSAyAH61a2cb1D+HV
+ YcZwSIeQVsnycKrL3o7nA+Lte5BshDpdg91Q5SiA3geQQA4rL5DVKiJ8zjbk1+6QWHr6YNNiS
+ PQDFUy9enCi0YnwOVWO0kwztKDESTsmi9yLXT5PsgvmNykmAj0DKuRRxJ54XAk9XLzIeLEjq4
+ cXKbOveLChOhfQsyMw2xVG1SW4221+M4AwacU90YTahWCAz+NPQKTf8JjLDnuadxFmaVXL2ga
+ xM7TtHxhRd+SNNqUGhS1sEPgxbLC1iGmAPn79H9YZmKUBx+a65O2nsAs19qrUoCNRy9wViDu0
+ FilYK2I9u34XYp7IBPL+4eEQKPU=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 09:09:19AM -0700, James Houghton wrote:
-> > > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-> > > index 4c932cb45e0b..8259fee32421 100644
-> > > --- a/include/linux/swapops.h
-> > > +++ b/include/linux/swapops.h
-> > > @@ -394,7 +394,8 @@ typedef unsigned long pte_marker;
-> > >
-> > >  #define  PTE_MARKER_UFFD_WP                  BIT(0)
-> > >  #define  PTE_MARKER_SWAPIN_ERROR             BIT(1)
-> > > -#define  PTE_MARKER_MASK                     (BIT(2) - 1)
-> > > +#define  PTE_MARKER_UFFD_POISON                      BIT(2)
-> >
-> > One more tab.
-> >
-> > Though I remembered the last time we discussed IIRC we plan to rename
-> > SWAPIN_ERROR and reuse it, could you explain why a new bit is still needed?
-> >
-> > I think I commented this but I'll do it again: IIUC any existing host
-> > swapin errors for guest pages should be reported as MCE too, afaict,
-> > happened in kvm context.
-> 
-> I think swapin errors are treated differently than poison. Swapin
-> errors get VM_FAULT_SIGBUS, and poison gets VM_FAULT_HWPOISON, so
-> UFFDIO_POISON should also get VM_FAULT_HWPOISON (so that's what Axel
-> has implemented). And I think that needs a separate PTE marker.
+On 7/5/23 18:07, kernel test robot wrote:
+> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-=
+next.git master
+> branch HEAD: e1f6a8eaf1c271a0158114a03e3605f4fba059ad  Add linux-next sp=
+ecific files for 20230705
+>
+> Error/Warning reports:
+>
+> https://lore.kernel.org/oe-kbuild-all/202306122223.HHER4zOo-lkp@intel.co=
+m
+> https://lore.kernel.org/oe-kbuild-all/202306260401.qZlYQpV2-lkp@intel.co=
+m
+> https://lore.kernel.org/oe-kbuild-all/202306291857.nyJjYwqk-lkp@intel.co=
+m
+> https://lore.kernel.org/oe-kbuild-all/202306301756.x8dgyYnL-lkp@intel.co=
+m
+>
+> Error/Warning: (recently discovered and may have been fixed)
+>
+> arch/parisc/kernel/pdt.c:67:6: warning: no previous prototype for 'arch_=
+report_meminfo' [-Wmissing-prototypes]
 
-My question was, should we also make SWAPIN_ERROR return VM_FAULT_HWPOISON
-always?
+The arch/parisc/* warnings have been fixed a few days ago in for-next, and
+the patches will most likely be merged upstream today...
 
-Just to recap from what I already commented above - if a guest page got
-error in swapin due to block sector failures, it should be treated as
-VM_FAULT_HWPOISON too, IMHO.  IOW, I think current SWAPIN_ERROR is wrong
-when in kvm context and we should fix it first.
-
-> 
-> >
-> > > +#define  PTE_MARKER_MASK                     (BIT(3) - 1)
-> > >
-> > >  static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
-> > >  {
-> > > diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-> > > index ac7b0c96d351..ac8c6854097c 100644
-> > > --- a/include/linux/userfaultfd_k.h
-> > > +++ b/include/linux/userfaultfd_k.h
-> > > @@ -46,6 +46,7 @@ enum mfill_atomic_mode {
-> > >       MFILL_ATOMIC_COPY,
-> > >       MFILL_ATOMIC_ZEROPAGE,
-> > >       MFILL_ATOMIC_CONTINUE,
-> > > +     MFILL_ATOMIC_POISON,
-> > >       NR_MFILL_ATOMIC_MODES,
-> > >  };
-> > >
-> > > @@ -83,6 +84,9 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
-> > >  extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
-> > >                                    unsigned long len, atomic_t *mmap_changing,
-> > >                                    uffd_flags_t flags);
-> > > +extern ssize_t mfill_atomic_poison(struct mm_struct *dst_mm, unsigned long start,
-> > > +                                unsigned long len, atomic_t *mmap_changing,
-> > > +                                uffd_flags_t flags);
-> > >  extern int mwriteprotect_range(struct mm_struct *dst_mm,
-> > >                              unsigned long start, unsigned long len,
-> > >                              bool enable_wp, atomic_t *mmap_changing);
-> > > diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-> > > index 66dd4cd277bd..62151706c5a3 100644
-> > > --- a/include/uapi/linux/userfaultfd.h
-> > > +++ b/include/uapi/linux/userfaultfd.h
-> > > @@ -39,7 +39,8 @@
-> > >                          UFFD_FEATURE_MINOR_SHMEM |           \
-> > >                          UFFD_FEATURE_EXACT_ADDRESS |         \
-> > >                          UFFD_FEATURE_WP_HUGETLBFS_SHMEM |    \
-> > > -                        UFFD_FEATURE_WP_UNPOPULATED)
-> > > +                        UFFD_FEATURE_WP_UNPOPULATED |        \
-> > > +                        UFFD_FEATURE_POISON)
-> > >  #define UFFD_API_IOCTLS                              \
-> > >       ((__u64)1 << _UFFDIO_REGISTER |         \
-> > >        (__u64)1 << _UFFDIO_UNREGISTER |       \
-> > > @@ -49,12 +50,14 @@
-> > >        (__u64)1 << _UFFDIO_COPY |             \
-> > >        (__u64)1 << _UFFDIO_ZEROPAGE |         \
-> > >        (__u64)1 << _UFFDIO_WRITEPROTECT |     \
-> > > -      (__u64)1 << _UFFDIO_CONTINUE)
-> > > +      (__u64)1 << _UFFDIO_CONTINUE |         \
-> > > +      (__u64)1 << _UFFDIO_POISON)
-> > >  #define UFFD_API_RANGE_IOCTLS_BASIC          \
-> > >       ((__u64)1 << _UFFDIO_WAKE |             \
-> > >        (__u64)1 << _UFFDIO_COPY |             \
-> > > +      (__u64)1 << _UFFDIO_WRITEPROTECT |     \
-> > >        (__u64)1 << _UFFDIO_CONTINUE |         \
-> > > -      (__u64)1 << _UFFDIO_WRITEPROTECT)
-> > > +      (__u64)1 << _UFFDIO_POISON)
-> >
-> > May not be a large deal, but it's still better to declare the feature &
-> > ioctls after all things implemented.  Maybe make these few lines
-> > (UFFD_API*, and the new feature bit) as the last patch to enable the
-> > feature?
-> 
-> I agree. Another option would be to have a separate feature for
-> UFFDIO_POISON for hugetlb, but I don't think we should do that. :)
-
-Yeah let's make the features "memory-type-free" if possible. :)
-
-Thanks,
-
--- 
-Peter Xu
-
+Helge
