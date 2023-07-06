@@ -2,118 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF2F7492AD
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 02:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A977493F7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 05:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjGFAlG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Jul 2023 20:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
+        id S232552AbjGFDCd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Jul 2023 23:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjGFAlF (ORCPT
+        with ESMTP id S230383AbjGFDCc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Jul 2023 20:41:05 -0400
-Received: from smtp-fw-52005.amazon.com (smtp-fw-52005.amazon.com [52.119.213.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE92219A9;
-        Wed,  5 Jul 2023 17:41:04 -0700 (PDT)
+        Wed, 5 Jul 2023 23:02:32 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C58E1BCE;
+        Wed,  5 Jul 2023 20:02:29 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b703cbfaf5so2159621fa.1;
+        Wed, 05 Jul 2023 20:02:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1688604065; x=1720140065;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=v+tsYcKm5P9WlsDhSBE+NcvZuf+VkDCTV0XouTKcUlk=;
-  b=S2l9TwrnnFEUAbIaUDOkTvSDkcp+K2B7GoftUG3YRHsUqQxVrggjjWLg
-   ZzAGz1iz7W6JmlcezonMbT77Jcx/nsqyusjGQn0zDulM7MqaOJVwi7kS0
-   ekx5K20hGZcWijspOt+qBEx8FEO8X6FWCXegDj9yIBXRKCFC3952XqpN3
-   Y=;
-X-IronPort-AV: E=Sophos;i="6.01,184,1684800000"; 
-   d="scan'208";a="591314401"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-52005.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 00:41:01 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com (Postfix) with ESMTPS id 0977F40D9F;
-        Thu,  6 Jul 2023 00:40:58 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 00:40:58 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.187.170.47) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 00:40:53 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <lmb@isovalent.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
-        <hemanthmalla@gmail.com>, <joe@cilium.io>, <joe@wand.net.nz>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
-        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
-Subject: Re: [PATCH bpf-next v4 6/7] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
-Date:   Wed, 5 Jul 2023 17:40:44 -0700
-Message-ID: <20230706004044.79850-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <CAN+4W8hLXYZuNFG+=J-FWLXWhbwT5TrHjMg5VzjQhv2NBo5VaA@mail.gmail.com>
-References: <CAN+4W8hLXYZuNFG+=J-FWLXWhbwT5TrHjMg5VzjQhv2NBo5VaA@mail.gmail.com>
+        d=gmail.com; s=20221208; t=1688612547; x=1691204547;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tTKKIJCHTCVFOUWI8yzjuH8jTs7YZY25eKcjmR6z40c=;
+        b=WpSlm28dW2EP+fXT1NWDEEGuPxj6Lg1rau7KoRhKFcCbmGfKsLXr9+Iu8Tv4xQGhvE
+         Gbow9Crh1C/i/MVAo1uoQLnlMS5GbCz6a7hoPgYYO5Pa5URJjJuJYolO1veiZLKo7YM5
+         GqQoEYFaePDqqBYE/I/f+/U3HKsChgVCdsNCbEdkaS7GLhH0vIctk1Mn5WDE0/gzcVVO
+         kO6qzOWTux0GOQLtHTq1cQHB0qdY0xpfeBzIGjNIFuJlVAyt8rA6lUWSAvqMyJhmdJhQ
+         IZ1MesyS6RtFVeHQ5l+XthklYFZFs99rIMWSbzMkLG37OwD8JH0Rs/NjpLPk5Ubqoly6
+         DIKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688612547; x=1691204547;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tTKKIJCHTCVFOUWI8yzjuH8jTs7YZY25eKcjmR6z40c=;
+        b=PzeGrDU6yYn8Ohw8uDqx9mYwYd5upTG2TEdKgfjvWZnrpuVq4xXy2L39BVwmBL4/tf
+         Vzpji7ESg7OSC9RRrXYAn5VGBj4Clt8HK0yYoB98FNaAUvPNUsUdTZptDYn3PLziXy/F
+         2pjgt/NaAio+DXlwoB6BcWMg4cEHim4RzE3Kej6xQD4Ub9Mh5uJ51cxFVpiTloycX4sd
+         0fQ9zOW9xv30LDNwQ69u3UonjDaPIZ0z53lHd+yq6g6CtUxquO/AXKSQua9XPqQ+lnoD
+         WsPMwRsfiJxe68PiaVOgqLDYULSMlRIhJ1XRbAWH4AMqWDhdZ0V48vyEBuKYl0ClBqwD
+         F0sQ==
+X-Gm-Message-State: ABy/qLZ8tp4JVqDqedI0tH1LNOqVYBOQCUWFERwLOs+SBZH1RbdYtYXA
+        F6ZwScytzaBTucQs9YW2jHbR2VfiRe6junsQeU0=
+X-Google-Smtp-Source: APBJJlE/n7LATDpB0GrHw/lFuQ3+lX4DrPgLSokVCx2bDHiganLZureDsLNHp3F9TQSoIyVj782cIBtmePWUC8VcXWk=
+X-Received: by 2002:a2e:a40f:0:b0:2b6:efcf:1463 with SMTP id
+ p15-20020a2ea40f000000b002b6efcf1463mr345677ljn.6.1688612547169; Wed, 05 Jul
+ 2023 20:02:27 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230703105745.1314475-1-tero.kristo@linux.intel.com> <20230703105745.1314475-2-tero.kristo@linux.intel.com>
+In-Reply-To: <20230703105745.1314475-2-tero.kristo@linux.intel.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 5 Jul 2023 20:02:16 -0700
+Message-ID: <CAADnVQL2Tn+2rP0hVB3kdB0At12qVu+vJ_WbJzrkxqOJ5va2vQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86/tsc: Add new BPF helper call bpf_rdtsc
+To:     Tero Kristo <tero.kristo@linux.intel.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.187.170.47]
-X-ClientProxiedBy: EX19D038UWC004.ant.amazon.com (10.13.139.229) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Mon, 3 Jul 2023 10:57:23 +0100
-> On Wed, Jun 28, 2023 at 7:54 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-> 
-> > > +     reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
-> > > +                                       saddr, sport, daddr, ntohs(dport),
-> > > +                                       ehashfn);
-> > > +     if (!reuse_sk || reuse_sk == sk)
-> > > +             return sk;
-> > > +
-> > > +     /* We've chosen a new reuseport sock which is never refcounted. This
-> > > +      * implies that sk also isn't refcounted.
-> > > +      */
-> > > +     WARN_ON_ONCE(*refcounted);
-> >
-> > One more nit.
-> >
-> > WARN_ON_ONCE() should be tested before inet6?_lookup_reuseport() not to
-> > miss the !reuse_sk case.
-> 
-> I was just pondering that as well, but I came to the opposite
-> conclusion. In the !reuse_sk case we don't really know anything about
-> sk, except that it isn't part of a reuseport group. How can we be sure
-> that it's not refcounted?
+On Mon, Jul 3, 2023 at 3:58=E2=80=AFAM Tero Kristo <tero.kristo@linux.intel=
+.com> wrote:
+>
+> Currently the raw TSC counter can be read within kernel via rdtsc_ordered=
+()
+> and friends, and additionally even userspace has access to it via the
+> RDTSC assembly instruction. BPF programs on the other hand don't have
+> direct access to the TSC counter, but alternatively must go through the
+> performance subsystem (bpf_perf_event_read), which only provides relative
+> value compared to the start point of the program, and is also much slower
+> than the direct read. Add a new BPF helper definition for bpf_rdtsc() whi=
+ch
+> can be used for any accurate profiling needs.
+>
+> A use-case for the new API is for example wakeup latency tracing via
+> eBPF on Intel architecture, where it is extremely beneficial to be able
+> to get raw TSC timestamps and compare these directly to the value
+> programmed to the MSR_IA32_TSC_DEADLINE register. This way a direct
+> latency value from the hardware interrupt to the execution of the
+> interrupt handler can be calculated. Having the functionality within
+> eBPF also has added benefits of allowing to filter any other relevant
+> data like C-state residency values, and also to drop any irrelevant
+> data points directly in the kernel context, without passing all the
+> data to userspace for post-processing.
+>
+> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
+> ---
+>  arch/x86/include/asm/msr.h |  1 +
+>  arch/x86/kernel/tsc.c      | 23 +++++++++++++++++++++++
+>  2 files changed, 24 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
+> index 65ec1965cd28..3dde673cb563 100644
+> --- a/arch/x86/include/asm/msr.h
+> +++ b/arch/x86/include/asm/msr.h
+> @@ -309,6 +309,7 @@ struct msr *msrs_alloc(void);
+>  void msrs_free(struct msr *msrs);
+>  int msr_set_bit(u32 msr, u8 bit);
+>  int msr_clear_bit(u32 msr, u8 bit);
+> +u64 bpf_rdtsc(void);
+>
+>  #ifdef CONFIG_SMP
+>  int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h);
+> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+> index 344698852146..ded857abef81 100644
+> --- a/arch/x86/kernel/tsc.c
+> +++ b/arch/x86/kernel/tsc.c
+> @@ -15,6 +15,8 @@
+>  #include <linux/timex.h>
+>  #include <linux/static_key.h>
+>  #include <linux/static_call.h>
+> +#include <linux/btf.h>
+> +#include <linux/btf_ids.h>
+>
+>  #include <asm/hpet.h>
+>  #include <asm/timer.h>
+> @@ -29,6 +31,7 @@
+>  #include <asm/intel-family.h>
+>  #include <asm/i8259.h>
+>  #include <asm/uv/uv.h>
+> +#include <asm/tlbflush.h>
+>
+>  unsigned int __read_mostly cpu_khz;    /* TSC clocks / usec, not used he=
+re */
+>  EXPORT_SYMBOL(cpu_khz);
+> @@ -1551,6 +1554,24 @@ void __init tsc_early_init(void)
+>         tsc_enable_sched_clock();
+>  }
+>
+> +u64 bpf_rdtsc(void)
+> +{
+> +       /* Check if Time Stamp is enabled only in ring 0 */
+> +       if (cr4_read_shadow() & X86_CR4_TSD)
+> +               return 0;
 
-Sorry for late reply.
+Why check this? It's always enabled in the kernel, no?
 
-What we know about sk before inet6?_lookup_reuseport() are
+> +
+> +       return rdtsc_ordered();
 
-  (1) sk was full socket in bpf_sk_assign()
-  (2) sk had SOCK_RCU_FREE in bpf_sk_assign()
-  (3) sk was TCP_LISTEN here if TCP
-
-After bpf_sk_assign(), reqsk is never converted to fullsock, and UDP
-never clears SOCK_RCU_FREE.  If sk is TCP, now we are in the RCU grace
-period and confirmed sk->sk_state was TCP_LISTEN.  Then, TCP_LISTEN sk
-cannot be reused and SOCK_RCU_FREE is never cleared.
-
-So, before/after inet6?_lookup_reuseport(), the fact that sk is not
-refcounted here should not change in spite of that reuse_sk is NULL.
-
-What do you think ?
+Why _ordered? Why not just rdtsc ?
+Especially since you want to trace latency. Extra lfence will ruin
+the measurements.
