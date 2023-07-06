@@ -2,55 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA7074A72D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 00:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F6174A730
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 00:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjGFWuw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jul 2023 18:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
+        id S231460AbjGFWu4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jul 2023 18:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjGFWuv (ORCPT
+        with ESMTP id S229650AbjGFWuy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jul 2023 18:50:51 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0246D1992
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Jul 2023 15:50:50 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5704970148dso13015867b3.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jul 2023 15:50:49 -0700 (PDT)
+        Thu, 6 Jul 2023 18:50:54 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E2CFF
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Jul 2023 15:50:52 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c5a17bfb38bso1256925276.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jul 2023 15:50:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688683849; x=1691275849;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=n8zmkhTUTSLpfAyl7/UNU2Do+ozC8p34im9h+iKQJzc=;
-        b=XNNbwIV//0t27QtIOlhCug+a1paGkIprej7/5tHl5NNn5KUEQh78vpB8hSgjpHgtml
-         SHVQw3iJV4o2JiJrhBDuJIcmXz3dhskaIu5jpZoYHvMoFHMN6dOyuK+gts/4KV47wAdF
-         AVwnH9YNrhfFTLUcC8hUifJ+Wg9tetdDYhfm0QOYMEa6yqrvPsN54eNgMW652Y9t7dsn
-         4bBAzinND5wZDeIb6WWSVMvGD/yFFBONlGlbJzg6Yw5yde8xFCyvT/xKxlAA9Dw84boG
-         X9157aATBdSKF3LfFE3ppzGxi+pKdgj65AAT3C9RqpCsGlIodHhiOdCG2Uk9JuBh9llq
-         LOxA==
+        d=google.com; s=20221208; t=1688683851; x=1691275851;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=axERsIn3EwMGffTL4fWJaIzLcp6XXXIYiFKDUzVzBqY=;
+        b=yiBN+5aT9dRdKtxMwsd3u/C1Xvh33zuWSJWtyc3b2oqUAezQBMDYehbTlZSQ43q9rc
+         GjxiS4tCHuYh72lUDHDWnhv1RNBmlVhS7uMGqqF6xgkO8xPXMZwt06lYIEgO4HT0GePH
+         vDCilEspj/9gvKK6E/Xlu0bf+76WPjOT9jJ/vO5uQtiepbi44/uGZ+K0VB7otdT5xt0v
+         Qw3dpYo216D1CFQLlt2k1rfsnwsPsRhpOt1hZF/IcAy4lMynJc8FNYjbTCbEFXlclhiW
+         saVTIojFJ1zVagbeXVsgf0uniofnqL9UTOGwJEomvRE02Enf5Gry/gezLCRdZ5MsxGyZ
+         mU/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688683849; x=1691275849;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n8zmkhTUTSLpfAyl7/UNU2Do+ozC8p34im9h+iKQJzc=;
-        b=dBWs/FI6fsUFyNiLagplTRurfqAtWAodWoL5OHu49L9vOS2VGSNQP+rPLXIk31gS3N
-         RInr0GUwqoQLetGk8cebaNBz1vfwttCqASI6i4JrBE5ncdNRtausiQDi1uHe2xGOCsao
-         2RyXIh2JPIP5XSeod6h+31lWrch6CjXleCshNN3iJVzl+OV545i4/jFBMV39P7yoFmlN
-         ku5DX3hJL9Q664s6AOmzRr1NBgnOtTzVnvbN4eE2vme2++/FfBAmwkJ8GKBtNwOvIWRU
-         L8FkoVRGqxOhH7TFQchVyvgi58Z2NdDL7+dwwugqs9zlWtCa3dsOAGoBLVYSXqJ0scQY
-         Rp6Q==
-X-Gm-Message-State: ABy/qLZCS3RDpJPGRUH8+RfN9bivLIDFU5mo65gqWoDoBuq4YqPgWvzP
-        4f3oOEMSc/qY3vBRzkzKDgcbo4zXxosBZMovJ/Q3
-X-Google-Smtp-Source: APBJJlFbLqWUavEdkD+jz9r/bjiqpKIWeClwQb49Ydc52jFFjwqSAI72wtmf2+hUlHqaQBcSWvtJMNcnMXeulK/4C2EZ
+        d=1e100.net; s=20221208; t=1688683851; x=1691275851;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=axERsIn3EwMGffTL4fWJaIzLcp6XXXIYiFKDUzVzBqY=;
+        b=BTZ9lFYg/AfJTmSUQUzc26xHGpWQq1MK4fmTLe3+74EENssVAr/vTfMlISz0Fc9gpr
+         gC8hCPDkdXKP8TgUbQz3wOltohMeqBzG1GTwqeh21OHbrlsHoIian/KDj1K4wPvsTN7e
+         IUWakDv9yvEXKVqKOf6Gh6PYVhEC2ijT5cgzUAwblOlD7ky2Xc3nA8vTE/szkZVcOO4n
+         E9CZ5Atw55vkkZOpLvOIpp4uMKoJESBJZip4/+TvIICT0iSwpZyF67BvFcTnRq70w9ak
+         nafXBuQJt4+DbbhVrVFtacl5vjCsL/DichsM3rCqhVAevonJPGK0Dgr6nvBXjeWFLXYR
+         oHwQ==
+X-Gm-Message-State: ABy/qLZIL4F1H5jWa+iJkiqBLHa9IBAMJfmvtAHhl7Rp4cAmFsuDV6wi
+        6t+8gvFinp/lhDwa8jAAlVSSw/Aw2KAvvjr13hze
+X-Google-Smtp-Source: APBJJlEW6RQNFcBDV4u0eUIIqgKV8wvUZrxJlNc8y+4BgE1qPhkLJw0lh7sQLrM0PWWyfIF59ugMgar+7EWrCClJ8tE/
 X-Received: from axel.svl.corp.google.com ([2620:15c:2a3:200:bec3:2b1c:87a:fca2])
- (user=axelrasmussen job=sendgmr) by 2002:a25:3189:0:b0:c4f:43d7:7dbd with
- SMTP id x131-20020a253189000000b00c4f43d77dbdmr18242ybx.12.1688683849213;
- Thu, 06 Jul 2023 15:50:49 -0700 (PDT)
-Date:   Thu,  6 Jul 2023 15:50:28 -0700
+ (user=axelrasmussen job=sendgmr) by 2002:a05:6902:30b:b0:c67:ebc5:de5d with
+ SMTP id b11-20020a056902030b00b00c67ebc5de5dmr18087ybs.4.1688683851353; Thu,
+ 06 Jul 2023 15:50:51 -0700 (PDT)
+Date:   Thu,  6 Jul 2023 15:50:29 -0700
+In-Reply-To: <20230706225037.1164380-1-axelrasmussen@google.com>
 Mime-Version: 1.0
+References: <20230706225037.1164380-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230706225037.1164380-1-axelrasmussen@google.com>
-Subject: [PATCH v3 0/8] add UFFDIO_POISON to simulate memory poisoning with UFFD
+Message-ID: <20230706225037.1164380-2-axelrasmussen@google.com>
+Subject: [PATCH v3 1/8] mm: make PTE_MARKER_SWAPIN_ERROR more general
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -88,80 +90,293 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series adds a new userfaultfd feature, UFFDIO_POISON. See commit 4
-for a detailed description of the feature.
+Future patches will re-use PTE_MARKER_SWAPIN_ERROR to implement
+UFFDIO_POISON, so make some various preparations for that:
 
-The series is based on Linus master (partial 6.5 merge window), and
-structured like this:
+First, rename it to just PTE_MARKER_ERROR. The "SWAPIN" can be confusing
+since we're going to re-use it for something not really related to swap.
+This can be particularly confusing for things like hugetlbfs, which
+doesn't support swap whatsoever. Also rename some various helper
+functions.
 
-- Patches 1-3 are preparation / refactoring
-- Patches 4-6 implement and advertise the new feature
-- Patches 7-8 implement a unit test for the new feature
+Next, fix pte marker copying for hugetlbfs. Previously, it would WARN on
+seeing a PTE_MARKER_SWAPIN_ERROR, since hugetlbfs doesn't support swap.
+But, since we're going to re-use it, we want it to go ahead and copy it
+just like non-hugetlbfs memory does today. Since the code to do this is
+more complicated now, pull it out into a helper which can be re-used in
+both places. While we're at it, also make it slightly more explicit in
+its handling of e.g. uffd wp markers.
 
-Changelog:
+For non-hugetlbfs page faults, instead of returning VM_FAULT_SIGBUS for
+an error entry, return VM_FAULT_HWPOISON. For most cases this change
+doesn't matter, e.g. a userspace program would receive a SIGBUS either
+way. But for UFFDIO_POISON, this change will let KVM guests get an MCE
+out of the box, instead of giving a SIGBUS to the hypervisor and
+requiring it to somehow inject an MCE.
 
-v2 -> v3:
- - Rebase onto current Linus master.
- - Don't overwrite existing PTE markers for non-hugetlb UFFDIO_POISON.
-   Before, non-hugetlb would override them, but hugetlb would not. I don't
-   think there's a use case where we *want* to override a UFFD_WP marker
-   for example, so take the more conservative behavior for all kinds of
-   memory.
- - [Peter] Drop hugetlb mfill atomic refactoring, since it isn't needed
-   for this series (we don't touch that code directly anyway).
- - [Peter] Switch to re-using PTE_MARKER_SWAPIN_ERROR instead of defining
-   new PTE_MARKER_UFFD_POISON.
- - [Peter] Extract start / len range overflow check into existing
-   validate_range helper; this fixes the style issue of unnecessary braces
-   in the UFFDIO_POISON implementation, because this code is just deleted.
- - [Peter] Extract file size check out into a new helper.
- - [Peter] Defer actually "enabling" the new feature until the last commit
-   in the series; combine this with adding the documentation. As a
-   consequence, move the selftest commits after this one.
- - [Randy] Fix typo in documentation.
+Finally, for hugetlbfs faults, handle PTE_MARKER_ERROR, and return
+VM_FAULT_HWPOISON_LARGE in such cases. Note that this can't happen today
+because the lack of swap support means we'll never end up with such a
+PTE anyway, but this behavior will be needed once such entries *can*
+show up via UFFDIO_POISON.
 
-v1 -> v2:
- - [Peter] Return VM_FAULT_HWPOISON not VM_FAULT_SIGBUS, to yield the
-   correct behavior for KVM (guest MCE).
- - [Peter] Rename UFFDIO_SIGBUS to UFFDIO_POISON.
- - [Peter] Implement hugetlbfs support for UFFDIO_POISON.
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ include/linux/mm_inline.h | 19 +++++++++++++++++++
+ include/linux/swapops.h   | 10 +++++-----
+ mm/hugetlb.c              | 32 +++++++++++++++++++++-----------
+ mm/madvise.c              |  2 +-
+ mm/memory.c               | 15 +++++++++------
+ mm/mprotect.c             |  4 ++--
+ mm/shmem.c                |  4 ++--
+ mm/swapfile.c             |  2 +-
+ 8 files changed, 60 insertions(+), 28 deletions(-)
 
-Axel Rasmussen (8):
-  mm: make PTE_MARKER_SWAPIN_ERROR more general
-  mm: userfaultfd: check for start + len overflow in validate_range
-  mm: userfaultfd: extract file size check out into a helper
-  mm: userfaultfd: add new UFFDIO_POISON ioctl
-  mm: userfaultfd: support UFFDIO_POISON for hugetlbfs
-  mm: userfaultfd: document and enable new UFFDIO_POISON feature
-  selftests/mm: refactor uffd_poll_thread to allow custom fault handlers
-  selftests/mm: add uffd unit test for UFFDIO_POISON
-
- Documentation/admin-guide/mm/userfaultfd.rst |  15 +++
- fs/userfaultfd.c                             |  73 ++++++++++--
- include/linux/mm_inline.h                    |  19 +++
- include/linux/swapops.h                      |  10 +-
- include/linux/userfaultfd_k.h                |   4 +
- include/uapi/linux/userfaultfd.h             |  25 +++-
- mm/hugetlb.c                                 |  51 ++++++--
- mm/madvise.c                                 |   2 +-
- mm/memory.c                                  |  15 ++-
- mm/mprotect.c                                |   4 +-
- mm/shmem.c                                   |   4 +-
- mm/swapfile.c                                |   2 +-
- mm/userfaultfd.c                             |  83 ++++++++++---
- tools/testing/selftests/mm/uffd-common.c     |   5 +-
- tools/testing/selftests/mm/uffd-common.h     |   3 +
- tools/testing/selftests/mm/uffd-stress.c     |  12 +-
- tools/testing/selftests/mm/uffd-unit-tests.c | 117 +++++++++++++++++++
- 17 files changed, 377 insertions(+), 67 deletions(-)
-
---
+diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
+index 21d6c72bcc71..329bd9370b49 100644
+--- a/include/linux/mm_inline.h
++++ b/include/linux/mm_inline.h
+@@ -523,6 +523,25 @@ static inline bool mm_tlb_flush_nested(struct mm_struct *mm)
+ 	return atomic_read(&mm->tlb_flush_pending) > 1;
+ }
+ 
++/*
++ * Computes the pte marker to copy from the given source entry into dst_vma.
++ * If no marker should be copied, returns 0.
++ * The caller should insert a new pte created with make_pte_marker().
++ */
++static inline pte_marker copy_pte_marker(
++		swp_entry_t entry, struct vm_area_struct *dst_vma)
++{
++	pte_marker srcm = pte_marker_get(entry);
++	/* Always copy error entries. */
++	pte_marker dstm = srcm & PTE_MARKER_ERROR;
++
++	/* Only copy PTE markers if UFFD register matches. */
++	if ((srcm & PTE_MARKER_UFFD_WP) && userfaultfd_wp(dst_vma))
++		dstm |= PTE_MARKER_UFFD_WP;
++
++	return dstm;
++}
++
+ /*
+  * If this pte is wr-protected by uffd-wp in any form, arm the special pte to
+  * replace a none pte.  NOTE!  This should only be called when *pte is already
+diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+index 4c932cb45e0b..5f1818d48dd6 100644
+--- a/include/linux/swapops.h
++++ b/include/linux/swapops.h
+@@ -393,7 +393,7 @@ static inline bool is_migration_entry_dirty(swp_entry_t entry)
+ typedef unsigned long pte_marker;
+ 
+ #define  PTE_MARKER_UFFD_WP			BIT(0)
+-#define  PTE_MARKER_SWAPIN_ERROR		BIT(1)
++#define  PTE_MARKER_ERROR			BIT(1)
+ #define  PTE_MARKER_MASK			(BIT(2) - 1)
+ 
+ static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
+@@ -421,15 +421,15 @@ static inline pte_t make_pte_marker(pte_marker marker)
+ 	return swp_entry_to_pte(make_pte_marker_entry(marker));
+ }
+ 
+-static inline swp_entry_t make_swapin_error_entry(void)
++static inline swp_entry_t make_error_swp_entry(void)
+ {
+-	return make_pte_marker_entry(PTE_MARKER_SWAPIN_ERROR);
++	return make_pte_marker_entry(PTE_MARKER_ERROR);
+ }
+ 
+-static inline int is_swapin_error_entry(swp_entry_t entry)
++static inline int is_error_swp_entry(swp_entry_t entry)
+ {
+ 	return is_pte_marker_entry(entry) &&
+-	    (pte_marker_get(entry) & PTE_MARKER_SWAPIN_ERROR);
++	    (pte_marker_get(entry) & PTE_MARKER_ERROR);
+ }
+ 
+ /*
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index bce28cca73a1..934e129d9939 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -34,6 +34,7 @@
+ #include <linux/nospec.h>
+ #include <linux/delayacct.h>
+ #include <linux/memory.h>
++#include <linux/mm_inline.h>
+ 
+ #include <asm/page.h>
+ #include <asm/pgalloc.h>
+@@ -5101,15 +5102,12 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 				entry = huge_pte_clear_uffd_wp(entry);
+ 			set_huge_pte_at(dst, addr, dst_pte, entry);
+ 		} else if (unlikely(is_pte_marker(entry))) {
+-			/* No swap on hugetlb */
+-			WARN_ON_ONCE(
+-			    is_swapin_error_entry(pte_to_swp_entry(entry)));
+-			/*
+-			 * We copy the pte marker only if the dst vma has
+-			 * uffd-wp enabled.
+-			 */
+-			if (userfaultfd_wp(dst_vma))
+-				set_huge_pte_at(dst, addr, dst_pte, entry);
++			pte_marker marker = copy_pte_marker(
++				pte_to_swp_entry(entry), dst_vma);
++
++			if (marker)
++				set_huge_pte_at(dst, addr, dst_pte,
++						make_pte_marker(marker));
+ 		} else {
+ 			entry = huge_ptep_get(src_pte);
+ 			pte_folio = page_folio(pte_page(entry));
+@@ -6090,14 +6088,26 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	}
+ 
+ 	entry = huge_ptep_get(ptep);
+-	/* PTE markers should be handled the same way as none pte */
+-	if (huge_pte_none_mostly(entry))
++	if (huge_pte_none_mostly(entry)) {
++		if (is_pte_marker(entry)) {
++			pte_marker marker =
++				pte_marker_get(pte_to_swp_entry(entry));
++
++			if (marker & PTE_MARKER_ERROR) {
++				ret = VM_FAULT_HWPOISON_LARGE;
++				goto out_mutex;
++			}
++		}
++
+ 		/*
++		 * Other PTE markers should be handled the same way as none PTE.
++		 *
+ 		 * hugetlb_no_page will drop vma lock and hugetlb fault
+ 		 * mutex internally, which make us return immediately.
+ 		 */
+ 		return hugetlb_no_page(mm, vma, mapping, idx, address, ptep,
+ 				      entry, flags);
++	}
+ 
+ 	ret = 0;
+ 
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 886f06066622..59e954586e2a 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -660,7 +660,7 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+ 				free_swap_and_cache(entry);
+ 				pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+ 			} else if (is_hwpoison_entry(entry) ||
+-				   is_swapin_error_entry(entry)) {
++				   is_error_swp_entry(entry)) {
+ 				pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+ 			}
+ 			continue;
+diff --git a/mm/memory.c b/mm/memory.c
+index 0ae594703021..c8b6de99d14c 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -860,8 +860,11 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+ 			return -EBUSY;
+ 		return -ENOENT;
+ 	} else if (is_pte_marker_entry(entry)) {
+-		if (is_swapin_error_entry(entry) || userfaultfd_wp(dst_vma))
+-			set_pte_at(dst_mm, addr, dst_pte, pte);
++		pte_marker marker = copy_pte_marker(entry, dst_vma);
++
++		if (marker)
++			set_pte_at(dst_mm, addr, dst_pte,
++				   make_pte_marker(marker));
+ 		return 0;
+ 	}
+ 	if (!userfaultfd_wp(dst_vma))
+@@ -1500,7 +1503,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 			    !zap_drop_file_uffd_wp(details))
+ 				continue;
+ 		} else if (is_hwpoison_entry(entry) ||
+-			   is_swapin_error_entry(entry)) {
++			   is_error_swp_entry(entry)) {
+ 			if (!should_zap_cows(details))
+ 				continue;
+ 		} else {
+@@ -3647,7 +3650,7 @@ static vm_fault_t pte_marker_clear(struct vm_fault *vmf)
+ 	 * none pte.  Otherwise it means the pte could have changed, so retry.
+ 	 *
+ 	 * This should also cover the case where e.g. the pte changed
+-	 * quickly from a PTE_MARKER_UFFD_WP into PTE_MARKER_SWAPIN_ERROR.
++	 * quickly from a PTE_MARKER_UFFD_WP into PTE_MARKER_ERROR.
+ 	 * So is_pte_marker() check is not enough to safely drop the pte.
+ 	 */
+ 	if (pte_same(vmf->orig_pte, ptep_get(vmf->pte)))
+@@ -3693,8 +3696,8 @@ static vm_fault_t handle_pte_marker(struct vm_fault *vmf)
+ 		return VM_FAULT_SIGBUS;
+ 
+ 	/* Higher priority than uffd-wp when data corrupted */
+-	if (marker & PTE_MARKER_SWAPIN_ERROR)
+-		return VM_FAULT_SIGBUS;
++	if (marker & PTE_MARKER_ERROR)
++		return VM_FAULT_HWPOISON;
+ 
+ 	if (pte_marker_entry_uffd_wp(entry))
+ 		return pte_marker_handle_uffd_wp(vmf);
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 6f658d483704..47d255c8c2f2 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -230,10 +230,10 @@ static long change_pte_range(struct mmu_gather *tlb,
+ 					newpte = pte_swp_mkuffd_wp(newpte);
+ 			} else if (is_pte_marker_entry(entry)) {
+ 				/*
+-				 * Ignore swapin errors unconditionally,
++				 * Ignore error swap entries unconditionally,
+ 				 * because any access should sigbus anyway.
+ 				 */
+-				if (is_swapin_error_entry(entry))
++				if (is_error_swp_entry(entry))
+ 					continue;
+ 				/*
+ 				 * If this is uffd-wp pte marker and we'd like
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 2f2e0e618072..c0f408c2c020 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -1707,7 +1707,7 @@ static void shmem_set_folio_swapin_error(struct inode *inode, pgoff_t index,
+ 	swp_entry_t swapin_error;
+ 	void *old;
+ 
+-	swapin_error = make_swapin_error_entry();
++	swapin_error = make_error_swp_entry();
+ 	old = xa_cmpxchg_irq(&mapping->i_pages, index,
+ 			     swp_to_radix_entry(swap),
+ 			     swp_to_radix_entry(swapin_error), 0);
+@@ -1752,7 +1752,7 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+ 	swap = radix_to_swp_entry(*foliop);
+ 	*foliop = NULL;
+ 
+-	if (is_swapin_error_entry(swap))
++	if (is_error_swp_entry(swap))
+ 		return -EIO;
+ 
+ 	si = get_swap_device(swap);
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 8e6dde68b389..72e110387e67 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1773,7 +1773,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+ 			swp_entry = make_hwpoison_entry(swapcache);
+ 			page = swapcache;
+ 		} else {
+-			swp_entry = make_swapin_error_entry();
++			swp_entry = make_error_swp_entry();
+ 		}
+ 		new_pte = swp_entry_to_pte(swp_entry);
+ 		ret = 0;
+-- 
 2.41.0.255.g8b1d071c50-goog
 
