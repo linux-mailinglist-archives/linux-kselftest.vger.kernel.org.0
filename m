@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D732A749F98
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 16:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5509D749F9F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 16:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233327AbjGFOsI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jul 2023 10:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
+        id S233451AbjGFOsh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jul 2023 10:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbjGFOrq (ORCPT
+        with ESMTP id S233501AbjGFOsS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:47:46 -0400
+        Thu, 6 Jul 2023 10:48:18 -0400
 Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAB92132;
-        Thu,  6 Jul 2023 07:47:34 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QxfH727bTz9xFGg;
-        Thu,  6 Jul 2023 22:36:35 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841F026AA;
+        Thu,  6 Jul 2023 07:47:53 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QxfHT2m3Cz9xFGF;
+        Thu,  6 Jul 2023 22:36:53 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwAHQg0y06ZkPxkwBA--.58122S10;
-        Thu, 06 Jul 2023 15:46:50 +0100 (CET)
+        by APP1 (Coremail) with SMTP id LxC2BwAHQg0y06ZkPxkwBA--.58122S11;
+        Thu, 06 Jul 2023 15:47:08 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     dhowells@redhat.com, dwmw2@infradead.org,
         herbert@gondor.apana.org.au, davem@davemloft.net,
@@ -42,18 +42,18 @@ Cc:     linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
         antony@vennard.ch, konstantin@linuxfoundation.org,
         James.Bottomley@HansenPartnership.com,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 08/10] KEYS: Introduce load_uasym_keyring()
-Date:   Thu,  6 Jul 2023 16:42:21 +0200
-Message-Id: <20230706144225.1046544-9-roberto.sassu@huaweicloud.com>
+Subject: [RFC][PATCH 09/10] bpf: Introduce bpf_verify_uasym_signature() kfunc
+Date:   Thu,  6 Jul 2023 16:42:22 +0200
+Message-Id: <20230706144225.1046544-10-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
 References: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwAHQg0y06ZkPxkwBA--.58122S10
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF1DtrW5Ww17KFyUGF48JFb_yoWruw1fp3
-        y0kryrKr4vywn3G3yfCFyjgr43Cr1vkw4Yg3W3Cw15AF1DXrn8ZrsrKF1UKry5Wry5AryF
-        qryIvr4Skw1UtaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: LxC2BwAHQg0y06ZkPxkwBA--.58122S11
+X-Coremail-Antispam: 1UD129KBjvJXoWxCw47Cry5XFyxurWrXr45GFg_yoWrWr4UpF
+        W8Kr4Svry8Jrs7Ja48Ja1fZF1rCr4vqw17G3sFy34kAFn5Xr13Z34kKF45G3s0k348trWD
+        ZrWIqw43u3ZrGw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
         Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -68,7 +68,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxJF1DtrW5Ww17KFyUGF48JFb_yoWruw1fp3
         6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2js
         IE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdYxBIdaVFxhVjvjDU0xZF
         pf9x07jIPfQUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4-V5wABsC
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4-V5wACsB
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
         MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
@@ -81,145 +81,122 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Preload user asymmetric keys from 'uasym_keys.bin', placed in certs/ of the
-kernel source directory.
+Introduce the bpf_verify_uasym_signature() kfunc, to verify user asymmetric
+key signatures. The parameters and usage are the same as for
+bpf_verify_pkcs7_signature().
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- certs/Kconfig               | 11 ++++++++++
- certs/Makefile              |  7 +++++++
- certs/system_certificates.S | 18 ++++++++++++++++
- certs/system_keyring.c      | 41 +++++++++++++++++++++++++++++++++++--
- 4 files changed, 75 insertions(+), 2 deletions(-)
+ kernel/trace/bpf_trace.c | 68 +++++++++++++++++++++++++++++++---------
+ 1 file changed, 54 insertions(+), 14 deletions(-)
 
-diff --git a/certs/Kconfig b/certs/Kconfig
-index 1f109b07087..16bbf0f4bb6 100644
---- a/certs/Kconfig
-+++ b/certs/Kconfig
-@@ -138,4 +138,15 @@ config SYSTEM_BLACKLIST_AUTH_UPDATE
- 	  keyring.  The PKCS#7 signature of the description is set in the key
- 	  payload.  Blacklist keys cannot be removed.
- 
-+config UASYM_PRELOAD_PUBLIC_KEYS
-+	bool "Preload user asymmetric keys"
-+	depends on SYSTEM_TRUSTED_KEYRING
-+	select UASYM_KEYS_SIGS
-+	default n
-+	help
-+	  Load at boot time the user asymmetric keys from a reserved area
-+	  (populated with the content of 'certs/uasym_keys.bin' provided at
-+	  kernel build time), and add them to the built-in keyring. Invalid
-+	  keys are ignored and the loading continues.
-+
- endmenu
-diff --git a/certs/Makefile b/certs/Makefile
-index 799ad7b9e68..2e5be6668a6 100644
---- a/certs/Makefile
-+++ b/certs/Makefile
-@@ -22,6 +22,13 @@ $(obj)/blacklist_hash_list: $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) FORCE
- 
- targets += blacklist_hash_list
- 
-+ifdef CONFIG_UASYM_PRELOAD_PUBLIC_KEYS
-+ifeq ($(shell ls $(srctree)/certs/uasym_keys.bin 2> /dev/null), $(srctree)/certs/uasym_keys.bin)
-+AFLAGS_system_certificates.o += -DHAVE_UASYM_KEYRING_BLOB
-+$(obj)/system_certificates.o: $(srctree)/certs/uasym_keys.bin
-+endif
-+endif
-+
- quiet_cmd_extract_certs  = CERT    $@
-       cmd_extract_certs  = $(obj)/extract-cert "$(extract-cert-in)" $@
- extract-cert-in = $(filter-out $(obj)/extract-cert, $(real-prereqs))
-diff --git a/certs/system_certificates.S b/certs/system_certificates.S
-index 003e25d4a17..67b7c5effb6 100644
---- a/certs/system_certificates.S
-+++ b/certs/system_certificates.S
-@@ -44,3 +44,21 @@ module_cert_size:
- #else
- 	.long __module_cert_end - __module_cert_start
- #endif
-+
-+	.align 8
-+	.globl uasym_keys
-+uasym_keys:
-+__uasym_key_list_start:
-+#ifdef HAVE_UASYM_KEYRING_BLOB
-+	.incbin "certs/uasym_keys.bin"
-+#endif
-+__uasym_key_list_end:
-+
-+	.align 8
-+	.globl uasym_keys_size
-+uasym_keys_size:
-+#ifdef CONFIG_64BIT
-+	.quad __uasym_key_list_end - __uasym_key_list_start
-+#else
-+	.long __uasym_key_list_end - __uasym_key_list_start
-+#endif
-diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-index dbee2e5b732..6035bd2f795 100644
---- a/certs/system_keyring.c
-+++ b/certs/system_keyring.c
-@@ -179,6 +179,31 @@ static __init int system_trusted_keyring_init(void)
- 	return 0;
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 5f2dcabad20..476b6d526de 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1281,7 +1281,7 @@ __bpf_kfunc struct bpf_key *bpf_lookup_user_key(u32 serial, u64 flags)
+  * The key pointer is marked as invalid, to prevent bpf_key_put() from
+  * attempting to decrement the key reference count on that pointer. The key
+  * pointer set in such way is currently understood only by
+- * verify_pkcs7_signature().
++ * verify_pkcs7_signature() and verify_uasym_signature().
+  *
+  * Set *id* to one of the values defined in include/linux/verification.h:
+  * 0 for the primary keyring (immutable keyring of system keys);
+@@ -1327,6 +1327,25 @@ __bpf_kfunc void bpf_key_put(struct bpf_key *bkey)
  }
  
-+#ifdef CONFIG_UASYM_PRELOAD_PUBLIC_KEYS
-+extern __initconst const u8 uasym_keys[];
-+extern __initconst const unsigned long uasym_keys_size;
+ #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
++static int validate_key(struct bpf_key *trusted_keyring)
++{
++	int ret = 0;
++
++	if (trusted_keyring->has_ref) {
++		/*
++		 * Do the permission check deferred in bpf_lookup_user_key().
++		 * See bpf_lookup_user_key() for more details.
++		 *
++		 * A call to key_task_permission() here would be redundant, as
++		 * it is already done by keyring_search() called by
++		 * find_asymmetric_key().
++		 */
++		ret = key_validate(trusted_keyring->key);
++	}
++
++	return ret;
++}
++
+ /**
+  * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
+  * @data_ptr: data to verify
+@@ -1344,19 +1363,9 @@ __bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
+ {
+ 	int ret;
+ 
+-	if (trusted_keyring->has_ref) {
+-		/*
+-		 * Do the permission check deferred in bpf_lookup_user_key().
+-		 * See bpf_lookup_user_key() for more details.
+-		 *
+-		 * A call to key_task_permission() here would be redundant, as
+-		 * it is already done by keyring_search() called by
+-		 * find_asymmetric_key().
+-		 */
+-		ret = key_validate(trusted_keyring->key);
+-		if (ret < 0)
+-			return ret;
+-	}
++	ret = validate_key(trusted_keyring);
++	if (ret < 0)
++		return ret;
+ 
+ 	return verify_pkcs7_signature(data_ptr->data,
+ 				      __bpf_dynptr_size(data_ptr),
+@@ -1366,6 +1375,36 @@ __bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
+ 				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
+ 				      NULL);
+ }
 +
 +/**
-+ * load_uasym_keyring - Load user asymmetric keys from a keyring blob
++ * bpf_verify_uasym_signature - Verify a user asymmetric key signature
++ * @data_ptr: Data to verify
++ * @sig_ptr: Signature of the data
++ * @trusted_keyring: Keyring with keys trusted for signature verification
 + *
-+ * Load user asymmetric keys from a keyring blob. Halt the parsing if
-+ * a parsing error is encountered. If parsing succeed, ignore invalid keys.
++ * Verify the user asymmetric key signature *sig_ptr* against the supplied
++ * *data_ptr* with keys in a keyring referenced by *trusted_keyring*.
 + *
-+ * Return: Zero on success or on failure (ignored).
++ * Return: 0 on success, a negative value on error.
 + */
-+static __init int load_uasym_keyring(void)
++__bpf_kfunc int bpf_verify_uasym_signature(struct bpf_dynptr_kern *data_ptr,
++					   struct bpf_dynptr_kern *sig_ptr,
++					   struct bpf_key *trusted_keyring)
 +{
-+	pr_notice("Loading compiled-in user asymmetric keys\n");
-+
-+	if (preload_uasym_keys(uasym_keys, uasym_keys_size,
-+			       builtin_trusted_keys) < 0)
-+		pr_err("Can't load user asymmetric keys\n");
-+
-+	return 0;
-+}
-+late_initcall(load_uasym_keyring);
-+#endif /* CONFIG_UASYM_PRELOAD_PUBLIC_KEYS */
-+
- /*
-  * Must be initialised before we try and load the keys into the keyring.
-  */
-@@ -186,13 +211,25 @@ device_initcall(system_trusted_keyring_init);
- 
- __init int load_module_cert(struct key *keyring)
- {
 +	int ret;
 +
- 	if (!IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG))
- 		return 0;
- 
- 	pr_notice("Loading compiled-in module X.509 certificates\n");
- 
--	return x509_load_certificate_list(system_certificate_list,
--					  module_cert_size, keyring);
-+	ret = x509_load_certificate_list(system_certificate_list,
-+					 module_cert_size, keyring);
-+#ifdef CONFIG_UASYM_PRELOAD_PUBLIC_KEYS
-+	if (!ret) {
-+		pr_notice("Loading compiled-in user asymmetric keys\n");
++	ret = validate_key(trusted_keyring);
++	if (ret < 0)
++		return ret;
 +
-+		ret = preload_uasym_keys(uasym_keys, uasym_keys_size, keyring);
-+		if (ret < 0)
-+			pr_err("Can't load user asymmetric keys\n");
-+	}
-+#endif
-+	return ret;
- }
++	return verify_uasym_signature(data_ptr->data,
++				      __bpf_dynptr_size(data_ptr),
++				      sig_ptr->data,
++				      __bpf_dynptr_size(sig_ptr),
++				      trusted_keyring->key,
++				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
++				      NULL);
++}
+ #endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
  
- /*
+ __diag_pop();
+@@ -1376,6 +1415,7 @@ BTF_ID_FLAGS(func, bpf_lookup_system_key, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_key_put, KF_RELEASE)
+ #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+ BTF_ID_FLAGS(func, bpf_verify_pkcs7_signature, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_verify_uasym_signature, KF_SLEEPABLE)
+ #endif
+ BTF_SET8_END(key_sig_kfunc_set)
+ 
 -- 
 2.34.1
 
