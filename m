@@ -2,74 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFA67494CB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 06:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721A77494EC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 07:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjGFE5v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jul 2023 00:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S229589AbjGFFQ7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jul 2023 01:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjGFE5u (ORCPT
+        with ESMTP id S229476AbjGFFQ7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jul 2023 00:57:50 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F54E70;
-        Wed,  5 Jul 2023 21:57:49 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b89e10d356so777415ad.3;
-        Wed, 05 Jul 2023 21:57:49 -0700 (PDT)
+        Thu, 6 Jul 2023 01:16:59 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA05D131;
+        Wed,  5 Jul 2023 22:16:57 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-666ed230c81so358681b3a.0;
+        Wed, 05 Jul 2023 22:16:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688619468; x=1691211468;
+        d=gmail.com; s=20221208; t=1688620617; x=1691212617;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PffpYhO66g6RXIDBBiQYXYb6x5BedqVmxNHpoGpWUD8=;
-        b=ioDkucAEMlYCMC8dIMAEqAAkt4Td9vNex+vULu0/6v1jyIuvlkw0e4oMdoUyjRmIRN
-         y86Q6bG8KrLKnyVPG4KJ0t6ay6+y8j98BkAyvJewPQBTU94lmJ7D3HnNNc26K1ZYTXoa
-         pyF+VVFiMfQjsQXccssAYQ/Hi+IMSNHLcOjo5DoKU/DFZw62gVK8yzCeLGz3WUBwCJCK
-         pgSHSBRn80iKQcKSS+3C0ChA32wmFndxHU7WYFZga4xLsKJyKq2bQ26w3KxbwvLWNkgo
-         sipSpE2P37xoPzm5QPY34id/48KE5KGwLk6yyAAqzV/FKu2VAHlSn/9P498nxaVti40y
-         Qj1A==
+        bh=mx7w2Kkc75R0iLRtqLk6J1lR9xFeYMxQMIJBRyYkH78=;
+        b=seCUmcP4lI6wdy0X4XOKpUvypqAO6BqDAiDkndg1lM9nIdWIeidGgqdzoq+cO/sGOL
+         iW+bUDaoevC6dICM5bryXfOJh7QQ0F+GcwjIJWNaAOBwajqOALS4H4qmYKNX6jURSo2H
+         wsIZ7mkjO1DQNyQB3uCP/CIWyNFQmBkm+64G79jKePEPPRH9wvjottZF5aRy/c8VyssW
+         CaiR/VzphbKL7wym3o1uXQJYAynKUItVDnhzOhvs/jpWb58oi/qMrOZRjQVmYMISjqi6
+         hwwqsHFw82ulyDEpQk+/bIaWpzLEIPQm5ICi1IPwJqt0cx4ohtT0e7VKEZaxtxgV4Lj9
+         l8cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688619468; x=1691211468;
+        d=1e100.net; s=20221208; t=1688620617; x=1691212617;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=PffpYhO66g6RXIDBBiQYXYb6x5BedqVmxNHpoGpWUD8=;
-        b=M2plWDOZTf/1azOq50CuugwX4OGTKSTqy04fEV19VNL3ozjMYG5AP8Gh/NhJDAq2c6
-         3xqjSQof2dhJKZ4d/Sh8dYT+9QdR2yrGj5C1dCAK8+W28yWCM4/LoKOeQ2s3YmpP8ywZ
-         Ag1PZzaeT8BJhei5bUG0YE6ODUCN8Vca7XAVmDr9w0O+mp0kSqdZwPDYiuPXz1xspf0O
-         AJ8QcYKA814uOvAKCicDnU63ayiLZySVlRMhMAFIbgYX0w+5RNodKn62GpbtITiTCoB7
-         h3Xci6GezTnvCb2cZDrz3WizNxGDNVDZB+645g6qPvrM7UkY9OYWiUIagDHEcM9gdlgH
-         i3Pw==
-X-Gm-Message-State: ABy/qLbbUSpI5VB5IzTB0gkK3eBdweIryngxx/sVdbgFRKN+UsmCdQQ/
-        WEFjmceKeU/hGLsdnqfmE+c=
-X-Google-Smtp-Source: APBJJlE9CW5i8KWVJEOk2KFdPpIpsBbe1W0CQHb3nw38eJrECxe4aWhUBjBjdh5KBteUsmV5Ry3iPg==
-X-Received: by 2002:a17:903:428d:b0:1b7:c166:f197 with SMTP id ju13-20020a170903428d00b001b7c166f197mr715773plb.29.1688619468557;
-        Wed, 05 Jul 2023 21:57:48 -0700 (PDT)
+        bh=mx7w2Kkc75R0iLRtqLk6J1lR9xFeYMxQMIJBRyYkH78=;
+        b=N2wvlFa8UnVJDmQENVpvgTNQOviHw1AeSq5kAUGdGwGNwp5IvERqEXR8kLzPtEXCfu
+         +5GbPeDzs1zNm4TPCnqe0IGCqfle3wUmjelHwDhgSoGXFlOL7/rZ+RzmaoHCCKQhbmxm
+         pMXxbIXSUnRwSZEgEE9cqbTUb/GPSbrUcr+tMffSTxcC8N674lq70ayk0sciWGpol4tI
+         jnPwI5Vo1CoAMYlWSX8NTPGyni8kcaScf3aHer1c4GXEQ4K1elOeOhike8LoZgdJxpA4
+         TSfnmQYiTD+jW4a1h0ESuzeOss1Xu5inw0G9cNWlcAaGwlOM+YPwkhQlDb7J2aFaZhn9
+         F3xw==
+X-Gm-Message-State: ABy/qLZe332+u+u10DvnRkRYZ26SL/+KCsZGH6m09K9aI1oS2xnU9GXG
+        yfiO/uuySTd/JBQgDttdlNU=
+X-Google-Smtp-Source: APBJJlEMMgVkMBr2cG8PfgQ9ELM03LrpG8fUZq7Uv4DlAHcRjZmgHr6VAuqLcEHtNIpfg1xW5HBO/g==
+X-Received: by 2002:a05:6a00:1709:b0:67c:5c21:b430 with SMTP id h9-20020a056a00170900b0067c5c21b430mr1163971pfc.33.1688620616758;
+        Wed, 05 Jul 2023 22:16:56 -0700 (PDT)
 Received: from localhost ([2605:59c8:148:ba10::41f])
-        by smtp.gmail.com with ESMTPSA id u1-20020a170902b28100b001b8903d6773sm350879plr.85.2023.07.05.21.57.47
+        by smtp.gmail.com with ESMTPSA id 4-20020aa79204000000b00679a4b56e41sm392371pfo.43.2023.07.05.22.16.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 21:57:47 -0700 (PDT)
-Date:   Wed, 05 Jul 2023 21:57:46 -0700
+        Wed, 05 Jul 2023 22:16:56 -0700 (PDT)
+Date:   Wed, 05 Jul 2023 22:16:54 -0700
 From:   John Fastabend <john.fastabend@gmail.com>
-To:     Tero Kristo <tero.kristo@linux.intel.com>,
-        John Fastabend <john.fastabend@gmail.com>, shuah@kernel.org,
-        tglx@linutronix.de, x86@kernel.org, bp@alien8.de,
-        dave.hansen@linux.intel.com, mingo@redhat.com
-Cc:     ast@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, bpf@vger.kernel.org
-Message-ID: <64a649cab3dba_b20ce2081c@john.notmuch>
-In-Reply-To: <2901d37a-6b5a-9076-1423-0db95b4c12d3@linux.intel.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Tero Kristo <tero.kristo@linux.intel.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>
+Message-ID: <64a64e46b7d5b_b20ce208de@john.notmuch>
+In-Reply-To: <CAADnVQL2Tn+2rP0hVB3kdB0At12qVu+vJ_WbJzrkxqOJ5va2vQ@mail.gmail.com>
 References: <20230703105745.1314475-1-tero.kristo@linux.intel.com>
- <20230703105745.1314475-3-tero.kristo@linux.intel.com>
- <64a3450a2a062_65205208a9@john.notmuch>
- <2901d37a-6b5a-9076-1423-0db95b4c12d3@linux.intel.com>
-Subject: Re: [PATCH 2/2] selftests/bpf: Add test for bpf_rdtsc
+ <20230703105745.1314475-2-tero.kristo@linux.intel.com>
+ <CAADnVQL2Tn+2rP0hVB3kdB0At12qVu+vJ_WbJzrkxqOJ5va2vQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86/tsc: Add new BPF helper call bpf_rdtsc
 Mime-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -80,62 +86,105 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Tero Kristo wrote:
-> 
-> On 04/07/2023 01:00, John Fastabend wrote:
-> > Tero Kristo wrote:
-> >> Add selftest for bpf_rdtsc() which reads the TSC (Time Stamp Counter) on
-> >> x86_64 architectures. The test reads the TSC from both userspace and the
-> >> BPF program, and verifies the TSC values are in incremental order as
-> >> expected. The test is automatically skipped on architectures that do not
-> >> support the feature.
-> >>
-> >> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
-> >> ---
-> >>   .../selftests/bpf/prog_tests/test_rdtsc.c     | 67 +++++++++++++++++++
-> >>   .../testing/selftests/bpf/progs/test_rdtsc.c  | 21 ++++++
-> >>   2 files changed, 88 insertions(+)
-> >>   create mode 100644 tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
-> >>   create mode 100644 tools/testing/selftests/bpf/progs/test_rdtsc.c
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c b/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
-> >> new file mode 100644
-> >> index 000000000000..2b26deb5b35a
-> >> --- /dev/null
-> >> +++ b/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
-> >> @@ -0,0 +1,67 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/* Copyright(c) 2023 Intel Corporation */
-> >> +
-> >> +#include "test_progs.h"
-> >> +#include "test_rdtsc.skel.h"
-> >> +
-> >> +#ifdef __x86_64__
-> >> +
-> >> +static inline u64 _rdtsc(void)
-> >> +{
-> >> +	u32 low, high;
-> >> +
-> >> +	__asm__ __volatile__("rdtscp" : "=a" (low), "=d" (high));
-> > I think its ok but note this could fail if user doesn't have
-> > access to rdtscp and iirc that can be restricted?
-> 
-> It is possible to restrict RDTSC access from userspace by enabling the 
-> TSD bit in CR4 register, and it will cause the userspace process to trap 
-> with general protection fault.
-> 
-> However, the usage of RDTSC appears to be built-in to C standard 
-> libraries (probably some timer routines) and enabling the CR4 TSD makes 
-> the system near unusable. Things like sshd + systemd also start 
-> generating the same general protection faults if RDTSC is blocked. Also, 
-> attempting to run anything at all with the BPF selftest suite causes the 
-> same general protection fault; not only the rdtsc test.
-> 
-> I tried this with couple of setups, one system running a minimalistic 
-> buildroot and another one running a fedora37 installation and the 
-> results were similar.
+Alexei Starovoitov wrote:
+> On Mon, Jul 3, 2023 at 3:58=E2=80=AFAM Tero Kristo <tero.kristo@linux.i=
+ntel.com> wrote:
+> >
+> > Currently the raw TSC counter can be read within kernel via rdtsc_ord=
+ered()
+> > and friends, and additionally even userspace has access to it via the=
 
-Thanks. Good enough for me.
+> > RDTSC assembly instruction. BPF programs on the other hand don't have=
 
-> 
-> -Tero
+> > direct access to the TSC counter, but alternatively must go through t=
+he
+> > performance subsystem (bpf_perf_event_read), which only provides rela=
+tive
+> > value compared to the start point of the program, and is also much sl=
+ower
+> > than the direct read. Add a new BPF helper definition for bpf_rdtsc()=
+ which
+> > can be used for any accurate profiling needs.
+> >
+> > A use-case for the new API is for example wakeup latency tracing via
+> > eBPF on Intel architecture, where it is extremely beneficial to be ab=
+le
+> > to get raw TSC timestamps and compare these directly to the value
+> > programmed to the MSR_IA32_TSC_DEADLINE register. This way a direct
+> > latency value from the hardware interrupt to the execution of the
+> > interrupt handler can be calculated. Having the functionality within
+> > eBPF also has added benefits of allowing to filter any other relevant=
+
+> > data like C-state residency values, and also to drop any irrelevant
+> > data points directly in the kernel context, without passing all the
+> > data to userspace for post-processing.
+> >
+> > Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
+> > ---
+> >  arch/x86/include/asm/msr.h |  1 +
+> >  arch/x86/kernel/tsc.c      | 23 +++++++++++++++++++++++
+> >  2 files changed, 24 insertions(+)
+> >
+> > diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
+> > index 65ec1965cd28..3dde673cb563 100644
+> > --- a/arch/x86/include/asm/msr.h
+> > +++ b/arch/x86/include/asm/msr.h
+> > @@ -309,6 +309,7 @@ struct msr *msrs_alloc(void);
+> >  void msrs_free(struct msr *msrs);
+> >  int msr_set_bit(u32 msr, u8 bit);
+> >  int msr_clear_bit(u32 msr, u8 bit);
+> > +u64 bpf_rdtsc(void);
+> >
+> >  #ifdef CONFIG_SMP
+> >  int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h);
+> > diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+> > index 344698852146..ded857abef81 100644
+> > --- a/arch/x86/kernel/tsc.c
+> > +++ b/arch/x86/kernel/tsc.c
+> > @@ -15,6 +15,8 @@
+> >  #include <linux/timex.h>
+> >  #include <linux/static_key.h>
+> >  #include <linux/static_call.h>
+> > +#include <linux/btf.h>
+> > +#include <linux/btf_ids.h>
+> >
+> >  #include <asm/hpet.h>
+> >  #include <asm/timer.h>
+> > @@ -29,6 +31,7 @@
+> >  #include <asm/intel-family.h>
+> >  #include <asm/i8259.h>
+> >  #include <asm/uv/uv.h>
+> > +#include <asm/tlbflush.h>
+> >
+> >  unsigned int __read_mostly cpu_khz;    /* TSC clocks / usec, not use=
+d here */
+> >  EXPORT_SYMBOL(cpu_khz);
+> > @@ -1551,6 +1554,24 @@ void __init tsc_early_init(void)
+> >         tsc_enable_sched_clock();
+> >  }
+> >
+> > +u64 bpf_rdtsc(void)
+> > +{
+> > +       /* Check if Time Stamp is enabled only in ring 0 */
+> > +       if (cr4_read_shadow() & X86_CR4_TSD)
+> > +               return 0;
+> =
+
+> Why check this? It's always enabled in the kernel, no?
+> =
+
+> > +
+> > +       return rdtsc_ordered();
+> =
+
+> Why _ordered? Why not just rdtsc ?
+> Especially since you want to trace latency. Extra lfence will ruin
+> the measurements.
+> =
+
+
+If we used it as a fast way to order events on multiple CPUs I
+guess we need the lfence? We use ktime_get_ns() now for things
+like this when we just need an order counter. We have also
+observed time going backwards with this and have heuristics
+to correct it but its rare.=
