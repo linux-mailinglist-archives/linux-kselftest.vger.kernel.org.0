@@ -2,76 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A977493F7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 05:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150C6749420
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 05:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbjGFDCd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Jul 2023 23:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
+        id S232647AbjGFDXT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Jul 2023 23:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjGFDCc (ORCPT
+        with ESMTP id S229527AbjGFDXR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Jul 2023 23:02:32 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C58E1BCE;
-        Wed,  5 Jul 2023 20:02:29 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b703cbfaf5so2159621fa.1;
-        Wed, 05 Jul 2023 20:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688612547; x=1691204547;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tTKKIJCHTCVFOUWI8yzjuH8jTs7YZY25eKcjmR6z40c=;
-        b=WpSlm28dW2EP+fXT1NWDEEGuPxj6Lg1rau7KoRhKFcCbmGfKsLXr9+Iu8Tv4xQGhvE
-         Gbow9Crh1C/i/MVAo1uoQLnlMS5GbCz6a7hoPgYYO5Pa5URJjJuJYolO1veiZLKo7YM5
-         GqQoEYFaePDqqBYE/I/f+/U3HKsChgVCdsNCbEdkaS7GLhH0vIctk1Mn5WDE0/gzcVVO
-         kO6qzOWTux0GOQLtHTq1cQHB0qdY0xpfeBzIGjNIFuJlVAyt8rA6lUWSAvqMyJhmdJhQ
-         IZ1MesyS6RtFVeHQ5l+XthklYFZFs99rIMWSbzMkLG37OwD8JH0Rs/NjpLPk5Ubqoly6
-         DIKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688612547; x=1691204547;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tTKKIJCHTCVFOUWI8yzjuH8jTs7YZY25eKcjmR6z40c=;
-        b=PzeGrDU6yYn8Ohw8uDqx9mYwYd5upTG2TEdKgfjvWZnrpuVq4xXy2L39BVwmBL4/tf
-         Vzpji7ESg7OSC9RRrXYAn5VGBj4Clt8HK0yYoB98FNaAUvPNUsUdTZptDYn3PLziXy/F
-         2pjgt/NaAio+DXlwoB6BcWMg4cEHim4RzE3Kej6xQD4Ub9Mh5uJ51cxFVpiTloycX4sd
-         0fQ9zOW9xv30LDNwQ69u3UonjDaPIZ0z53lHd+yq6g6CtUxquO/AXKSQua9XPqQ+lnoD
-         WsPMwRsfiJxe68PiaVOgqLDYULSMlRIhJ1XRbAWH4AMqWDhdZ0V48vyEBuKYl0ClBqwD
-         F0sQ==
-X-Gm-Message-State: ABy/qLZ8tp4JVqDqedI0tH1LNOqVYBOQCUWFERwLOs+SBZH1RbdYtYXA
-        F6ZwScytzaBTucQs9YW2jHbR2VfiRe6junsQeU0=
-X-Google-Smtp-Source: APBJJlE/n7LATDpB0GrHw/lFuQ3+lX4DrPgLSokVCx2bDHiganLZureDsLNHp3F9TQSoIyVj782cIBtmePWUC8VcXWk=
-X-Received: by 2002:a2e:a40f:0:b0:2b6:efcf:1463 with SMTP id
- p15-20020a2ea40f000000b002b6efcf1463mr345677ljn.6.1688612547169; Wed, 05 Jul
- 2023 20:02:27 -0700 (PDT)
+        Wed, 5 Jul 2023 23:23:17 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2097.outbound.protection.outlook.com [40.107.117.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CEC1BC3;
+        Wed,  5 Jul 2023 20:23:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LZeeqz2PUf2wXo5MdcMz1TUIzG38Nry1oEZSjMRe3CIgfzaOl3gQNfkp3/ep4zjn1O2SAg4dkqw34a+Q4T/wvRzOvxQXDcbpq3sPKAqLK+oTi+7D/76PfgOxHmd2OyPG64J1bGARglH+UlQMxr/7IJqu4HhiXyvCdsEmiH1Fv2KR2eoXGDmjr7GrClKHaa1AJdM78Wpjx+FdlyQqBua7XkYN2xjLX6pk4qG+GrZvrR6Zy5vvUja22fwvFUkL5S5+XZ2JHbGL0FAwSlei/nPbcvVd41whfbn0ezDe0AhhPjRUEo3r1NYl9a0hPZEl0/nq88bW3gz7TQ++79vb+G7f0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5fXqMAuGgWsWpMHc6eR6GFeNoMEn5c4MVLl7rQGKEes=;
+ b=BZ13Ytok6qeeoUmmSBhvdnGFpFudN/gf4pfVWjmao/ft7zcTRW9YIWjRy3OsEJD27XoqFl7SwkE714HodNFY9gqw1NY210xIEYR0eX5nd+ztbkH97AH/PllIlmjX22oT9vCJ2DGurLFlSKd6tp6+X42Gvg81LOOxBzk6mQYVXySie+E37zWWX+B4sarfXnUpHXzj/vQKO+g5JKI5NdQwDpek2si84yPEPXEEEWNwwtikiRhawuQ1sEh1nuWkcQQx1Z96emaCoJAQxiPa3DZprsExtbVC73fhsJUeGP3jG82ZdVGqACxxWe7Z//IoUndUv6SGdct6T4BLAKgtebJOzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5fXqMAuGgWsWpMHc6eR6GFeNoMEn5c4MVLl7rQGKEes=;
+ b=fEwtc8GRpXYRFVLVFv1vD5oH4czlOM4Te7fVZHodKfSzjSWc1cekyjiKiZIg3diRNQuN8n00SGV2JV44ezaIKBFm5tw8PtmBRe/tKfC1FWKlvWF9K/n8Y4X6MZG5KuGATx/731egHtsYvnZ2grPltIgWtQH8pc4SN1RqTNOP1k4dfI0cu8nlOJxThowelnQpq1hSHCp6jNxzVHb6G9UM6cyBxZxZCoKRBcTfUhecwm5cUy5vWlEiRX7b/ZySfjJWfMCRyLOfw0xENGjWQ1rlcv/llD3mOlWcvwExhiLmGmxkpxymfSfUqo2RzjhXsOK15E3+gf+brDTURlAuwPhhYw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
+ KL1PR0601MB4483.apcprd06.prod.outlook.com (2603:1096:820:7a::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
+ 2023 03:23:09 +0000
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::c2b:41ab:3b14:f920]) by SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::c2b:41ab:3b14:f920%7]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
+ 03:23:09 +0000
+From:   Minjie Du <duminjie@vivo.com>
+To:     John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org (open list:TIMEKEEPING, CLOCKSOURCE CORE,
+        NTP, ALARMTIMER),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
+Subject: [PATCH v1] tools: timers: fix freq average calculation
+Date:   Thu,  6 Jul 2023 11:22:57 +0800
+Message-Id: <20230706032257.1662-1-duminjie@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TY2PR0101CA0034.apcprd01.prod.exchangelabs.com
+ (2603:1096:404:8000::20) To SG2PR06MB5288.apcprd06.prod.outlook.com
+ (2603:1096:4:1dc::9)
 MIME-Version: 1.0
-References: <20230703105745.1314475-1-tero.kristo@linux.intel.com> <20230703105745.1314475-2-tero.kristo@linux.intel.com>
-In-Reply-To: <20230703105745.1314475-2-tero.kristo@linux.intel.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 5 Jul 2023 20:02:16 -0700
-Message-ID: <CAADnVQL2Tn+2rP0hVB3kdB0At12qVu+vJ_WbJzrkxqOJ5va2vQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86/tsc: Add new BPF helper call bpf_rdtsc
-To:     Tero Kristo <tero.kristo@linux.intel.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|KL1PR0601MB4483:EE_
+X-MS-Office365-Filtering-Correlation-Id: b0254a2b-32fa-4f8b-ab20-08db7dd05270
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pkRtRsETtO7wG++sO4xgryMc7bPHZgJYB2VDOtAIJ2A32G8qrZloYFFxQUOSS/pYwCN9bhEre67NFdIwCy+xEk3Ldto36BtEeAISXdv6pfZjSPmrqKgoF6w3Y5kvpSgxSEyTbB27WB9Nt2QGFK2fVHmJ7yO4/tZT6QZR3YYQz4femQXEZZlsz74JjmrH0Nj5889IiBCxLZoIbJEvDYURiIdUbaY7Z/ZTID1YKcmeW3RZyWesn9M7t/+Z472CdDru+HBEcTFwbnYet8EGyErfM6DoVfjeqxe8Rodb2uG+NoYEF17RDAcn9Lo1PgpwBr02xkhOLN43qQItgVAEa+dX3MGh4sDnQrf5Q32QDbCB1AUFtddt88Fmox+sHi0Akp2awoObluMDrpyDToEDh15Bp3FJxU0WSFDe1TT6iGMR1J1tfzRf0hL5tBpoPAKS812guU6Q4OFFIJP2mWJxlaWPWBzb4QJiotvTlp+E3SaQrHrAoqmekipdtZntFWoUFVNlabeQJkfMZvf8Z/jM1wtbbD5bOrEksJphofax92N+zKa5heDFnJL0QU+5EgofBYNRKq53asOFaXb3SGiZv5LI/9ABdgAUyH0aMykKhSRtjM1RUxdNeJ6vjEFcjFOFw27k
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(346002)(39860400002)(136003)(396003)(451199021)(66476007)(4326008)(66556008)(2616005)(38350700002)(107886003)(86362001)(186003)(1076003)(6506007)(26005)(83380400001)(38100700002)(66946007)(52116002)(6666004)(6512007)(478600001)(6486002)(110136005)(36756003)(41300700001)(4744005)(8936002)(8676002)(5660300002)(2906002)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+c33Wy5dlXaWooo77HIjZXyqSkHzGTqjTtl/esI0wxBSVtCVhcX9eK67BWi1?=
+ =?us-ascii?Q?d15j7Sr6yWHCzYzLoPpu6y9E40xOYA/JqMm3XMInMTG/RqKi75PY9zxXAJjC?=
+ =?us-ascii?Q?7Txb3s7C8hGJQJFpxvUgOkMUZgYhb2HofJEk6UTIbwXZrMDpteJqUbQ/1ied?=
+ =?us-ascii?Q?XdzsKNLsVtNlUjA6OmKNd3VUWRMDN+MNYeDhOYVOxvOtHtNtKIeS1DndHGop?=
+ =?us-ascii?Q?LfPS0DZVmQduwP2rXMxUIGHeFNK30VmAgi8jvHbm5QfmYFV4d/AL7pXGbFiA?=
+ =?us-ascii?Q?eGlXTvSUucRSJ+GS+v6o1Wx5DDOJv+yTPVVE3RtUFrgMTLJLJYPJTw7bYttU?=
+ =?us-ascii?Q?svf0UerEexIlrpLl7Bh14EfT33cKCGy/V9N3y4VEhT2eXP0DDw0eMbZS8Il2?=
+ =?us-ascii?Q?ZapjBif6h1e6yTZs08ymqSHE9f//U/frJq0yRJv6KWqhb13cLFTkzSOhd3Dl?=
+ =?us-ascii?Q?0WlUa+A9IiBK1mBhddPRBlu1k8d444Z8ta5N4T5iXmMWYa7+IB/euu8H0uOV?=
+ =?us-ascii?Q?HrZ4QaPkdTW9N3GHHucqLN6qAJ8QMV46JU7KmPqgKwoD4vXttgatQFeM+FIQ?=
+ =?us-ascii?Q?mSieC1L8jax2cGryq9/MeD9qcvsXLw64Sjl+uvVz4ZqD4kk80pD7DKtTWAHo?=
+ =?us-ascii?Q?wr69z4Sdu7qKe29/VCuBpH1ihWZ/c8KvukPGHn/MTrwYfaLqjL04F3cOsS1p?=
+ =?us-ascii?Q?lQLdng25Wcwq4voFBkR5NvnC2Ev+BA/DyeRyeqI/0oE5hK7adTQGhXgkpha6?=
+ =?us-ascii?Q?7kAlDm9TwvM0z5Zy5a1Fi0qEwMEStRCoBYMpwhrIy0AN2HxWnqCzkVUiqXgP?=
+ =?us-ascii?Q?RCJcMxG4v/MJtpJ/gGPje/DnZHfnYCDzXxuYuK0v5TwO9vpSzHTC2k9WBW19?=
+ =?us-ascii?Q?HPcuqDy+cuwwyJ2LyIXk9aCY7t+pAISOxLwEuRKe9CxeyzLIFSpQHxGdhHJD?=
+ =?us-ascii?Q?QwhJMRYR1oXPy2BbCHB2KleVPbHrsB5L/fT2DMkjfpqXJLS9RTfJz0ZJTlk+?=
+ =?us-ascii?Q?fzykEb/YW37Jd0HwmXjUUs59JL9J+IHQGntV3W38k3u6FFcPBrU2agn9GVh7?=
+ =?us-ascii?Q?95PPiKy71pE3TvJumiL7LoiKLCT1OhR6YwFKeXWXHMJ5/BrAQ1gCMH+zD9Qb?=
+ =?us-ascii?Q?0TyOdkT+kNEppcKdGS0fDgVQG0QEzxjT0EdOhMZ/ew+uun3vuFwSiNCmL1Ve?=
+ =?us-ascii?Q?NXA7gZ+f/7ldqP9yNzou3afiCFoP8Uviadi5GM+Q7mO8MxP5h/vg2Jvuv0X9?=
+ =?us-ascii?Q?iB4FxIcaF1jOJmELTycUDdYHhXVWVT4Dwrx+2pU5B+5kJ7mYyMJH6tVcNMzk?=
+ =?us-ascii?Q?WUkzRkSXasdFej9yLb0KIjir823e4asyCHY94Zmd/AIyZsTezGEKNGWjHr9w?=
+ =?us-ascii?Q?0xGVMdYfJM3oMAYN2TmmsobuiEPnfS9a553WpiiNNM8y+zQB64CJ1XKlXF8N?=
+ =?us-ascii?Q?LRSgYgNpSXf9H6QlD8tiaIVxUEF9e+uFG5QoB0lrULwbSHfuCqlTFQHwHca3?=
+ =?us-ascii?Q?zmUyksvR63PdxBO65Zfz6TKxfTQJCgTGgoEJxeH1CbgBSutVz+Vv609SDNDT?=
+ =?us-ascii?Q?mKZ8gxQ64G03EiNLc0vfJEZZVySDslHtv2aVHXu7?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0254a2b-32fa-4f8b-ab20-08db7dd05270
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 03:23:09.5113
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1Micx05XX1kn3VBFt5Zm5+pKQ/wiG0JZfgpOrrQXW4QOgEvP2ZtEOQa4oVuzFqVO6CWgqUdGpFdB185MqFgmjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4483
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,86 +115,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 3:58=E2=80=AFAM Tero Kristo <tero.kristo@linux.intel=
-.com> wrote:
->
-> Currently the raw TSC counter can be read within kernel via rdtsc_ordered=
-()
-> and friends, and additionally even userspace has access to it via the
-> RDTSC assembly instruction. BPF programs on the other hand don't have
-> direct access to the TSC counter, but alternatively must go through the
-> performance subsystem (bpf_perf_event_read), which only provides relative
-> value compared to the start point of the program, and is also much slower
-> than the direct read. Add a new BPF helper definition for bpf_rdtsc() whi=
-ch
-> can be used for any accurate profiling needs.
->
-> A use-case for the new API is for example wakeup latency tracing via
-> eBPF on Intel architecture, where it is extremely beneficial to be able
-> to get raw TSC timestamps and compare these directly to the value
-> programmed to the MSR_IA32_TSC_DEADLINE register. This way a direct
-> latency value from the hardware interrupt to the execution of the
-> interrupt handler can be calculated. Having the functionality within
-> eBPF also has added benefits of allowing to filter any other relevant
-> data like C-state residency values, and also to drop any irrelevant
-> data points directly in the kernel context, without passing all the
-> data to userspace for post-processing.
->
-> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
-> ---
->  arch/x86/include/asm/msr.h |  1 +
->  arch/x86/kernel/tsc.c      | 23 +++++++++++++++++++++++
->  2 files changed, 24 insertions(+)
->
-> diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
-> index 65ec1965cd28..3dde673cb563 100644
-> --- a/arch/x86/include/asm/msr.h
-> +++ b/arch/x86/include/asm/msr.h
-> @@ -309,6 +309,7 @@ struct msr *msrs_alloc(void);
->  void msrs_free(struct msr *msrs);
->  int msr_set_bit(u32 msr, u8 bit);
->  int msr_clear_bit(u32 msr, u8 bit);
-> +u64 bpf_rdtsc(void);
->
->  #ifdef CONFIG_SMP
->  int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h);
-> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-> index 344698852146..ded857abef81 100644
-> --- a/arch/x86/kernel/tsc.c
-> +++ b/arch/x86/kernel/tsc.c
-> @@ -15,6 +15,8 @@
->  #include <linux/timex.h>
->  #include <linux/static_key.h>
->  #include <linux/static_call.h>
-> +#include <linux/btf.h>
-> +#include <linux/btf_ids.h>
->
->  #include <asm/hpet.h>
->  #include <asm/timer.h>
-> @@ -29,6 +31,7 @@
->  #include <asm/intel-family.h>
->  #include <asm/i8259.h>
->  #include <asm/uv/uv.h>
-> +#include <asm/tlbflush.h>
->
->  unsigned int __read_mostly cpu_khz;    /* TSC clocks / usec, not used he=
-re */
->  EXPORT_SYMBOL(cpu_khz);
-> @@ -1551,6 +1554,24 @@ void __init tsc_early_init(void)
->         tsc_enable_sched_clock();
->  }
->
-> +u64 bpf_rdtsc(void)
-> +{
-> +       /* Check if Time Stamp is enabled only in ring 0 */
-> +       if (cr4_read_shadow() & X86_CR4_TSD)
-> +               return 0;
+Delete a duplicate assignment from this function implementation.
+The note means ppm is average of the two actual freq samples.
+But ppm have a duplicate assignment.
 
-Why check this? It's always enabled in the kernel, no?
+Signed-off-by: Minjie Du <duminjie@vivo.com>
+---
+ tools/testing/selftests/timers/raw_skew.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> +
-> +       return rdtsc_ordered();
+diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
+index 5beceeed0..6eba203f9 100644
+--- a/tools/testing/selftests/timers/raw_skew.c
++++ b/tools/testing/selftests/timers/raw_skew.c
+@@ -129,8 +129,7 @@ int main(int argc, char **argv)
+ 	printf("%lld.%i(est)", eppm/1000, abs((int)(eppm%1000)));
+ 
+ 	/* Avg the two actual freq samples adjtimex gave us */
+-	ppm = (tx1.freq + tx2.freq) * 1000 / 2;
+-	ppm = (long long)tx1.freq * 1000;
++	ppm = (long long)(tx1.freq + tx2.freq) * 1000 / 2;
+ 	ppm = shift_right(ppm, 16);
+ 	printf(" %lld.%i(act)", ppm/1000, abs((int)(ppm%1000)));
+ 
+-- 
+2.39.0
 
-Why _ordered? Why not just rdtsc ?
-Especially since you want to trace latency. Extra lfence will ruin
-the measurements.
