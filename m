@@ -2,254 +2,168 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73B274A74C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 00:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F097E74A78D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 01:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbjGFWvz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jul 2023 18:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
+        id S231421AbjGFX0W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jul 2023 19:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231674AbjGFWvZ (ORCPT
+        with ESMTP id S230045AbjGFX0V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jul 2023 18:51:25 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE532125
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Jul 2023 15:51:07 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c4cbd5e878eso1944443276.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jul 2023 15:51:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688683866; x=1691275866;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vNyM+7c0est1wcVkLGeYyWS2zFzaKr32nANrKlDiGpI=;
-        b=EK01mLypW26xwbB17tl+WVi77pgJ0OApJdOy0ZdOVv84/lYvfVuW7WowZ4rEK8f7WX
-         g4rTBFdn/gfopVFptl2AY7oR1MbOxcuKJ5NLlgJS4KZnwJQ/O9DYar58Cp6+LJtem2dz
-         7aV6c0xPB8rtx/DVLBBYyqqPk4Y5aP7bx24BzHZVQh7fjXNIuWh3WsjiPncdyuOWOy0f
-         szlc4nj/Zd3/Khbkib9ISdsge3HmKG+4el8u83yJEUvEUWR2sl14PZi/zm9NTrqicFDS
-         XKFqXwSRFH+ICd8i9r7ldw2FSna2YUHpUhgptiJGArRniVNPuiWl7n0jMNBuoRiJ6+di
-         6/Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688683866; x=1691275866;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vNyM+7c0est1wcVkLGeYyWS2zFzaKr32nANrKlDiGpI=;
-        b=kZkyFE76sZxLNbOU6BXGgrdhnMXwOZN4ZvCmAxZc/U61VsaEHoEdjiga2USSKeqqBh
-         fM7kKEpOB0E5Yq+hHy5BGbbXsT90AHXhJ8FpCzxRdyIm9MXCz04bb4oogcgQQ1QYharG
-         WuMPM6sBM7VXj6CYtE+5uRWLSADAr2416eciNXHFWRioebCRN6JH10xbCtcAX2rSmjAM
-         ZfYdaMKQONW386fUVrU2LaROUxxVXH/j7yg+1RgNt2R1mPAxqlfuF7f7dxfkQ6UlecBH
-         Uj9zAJrw4bfH267nFZIBVREwunv2+NAiG0KAbwQIA54BP1njgq/kKjm3bKwBTmavpoY0
-         mabg==
-X-Gm-Message-State: ABy/qLZipFH/9/1pcZ7wSHXUgArCEkzkHvQ4WgxSsApE52skqTF9HnLv
-        R1hPn0BE7XbUH9Q22VN743SSmGdi4fVRDbljiGjH
-X-Google-Smtp-Source: APBJJlHgoq6fX5m1+Roj1PD+nUlgNcdctSDPa98kXCzajWjYbfEt4nefdrt/24V9AOah7Hkvx+a3A+kIbPjrz61F6Iqg
-X-Received: from axel.svl.corp.google.com ([2620:15c:2a3:200:bec3:2b1c:87a:fca2])
- (user=axelrasmussen job=sendgmr) by 2002:a25:ab90:0:b0:bc4:a660:528f with
- SMTP id v16-20020a25ab90000000b00bc4a660528fmr39975ybi.5.1688683866544; Thu,
- 06 Jul 2023 15:51:06 -0700 (PDT)
-Date:   Thu,  6 Jul 2023 15:50:36 -0700
-In-Reply-To: <20230706225037.1164380-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20230706225037.1164380-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230706225037.1164380-9-axelrasmussen@google.com>
-Subject: [PATCH v3 8/8] selftests/mm: add uffd unit test for UFFDIO_POISON
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Peter Xu <peterx@redhat.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Alumbaugh" <talumbau@google.com>,
-        Yu Zhao <yuzhao@google.com>,
-        ZhangPeng <zhangpeng362@huawei.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 6 Jul 2023 19:26:21 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F351BC9;
+        Thu,  6 Jul 2023 16:26:20 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2FB8A5C00C2;
+        Thu,  6 Jul 2023 19:26:17 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 06 Jul 2023 19:26:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1688685977; x=1688772377; bh=ILwmPPxacB
+        L9zHkUCRnVdWlL4Glqz4GoyWt1wwCPYNE=; b=oX2Lbacu5ZaiB4hPXiUf3PTxaa
+        Z+2UiyVyluT96v6omjhkLL5pzeKuECXV2JAUrCOkn6gD+UTlznPXzrUrr8KlQIRa
+        M0u0DGIKKW67iE/Qs5EyiEY15DqI5raRd6z3BsBI5R5Ftywgycm4o0Hh8ft06UY9
+        jA7m48wenNlkcSHxSJTYYmGxGEJF6auz75ExNEGa/Oncn6JEV0BDR7IPrQkip3cZ
+        ptioHTXIxx4PRCartqeV81ekU0uPa8ZkS5s6Fr4FRqX/hJe+lboN+oi/4MWsGNHt
+        9oc4CZ8WDA8Cu8LMTp/49Mn8L4Ay0WtF3Jfrf9I+IKwUwBVG8zWfU5v3/hXA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688685977; x=1688772377; bh=ILwmPPxacBL9z
+        HkUCRnVdWlL4Glqz4GoyWt1wwCPYNE=; b=a7U9Y5pXlK/McK3TuGOYrQCbp1qlZ
+        Gc2bY5/kUSE7PhsCRqJoetcE8jaO2QKkwztLsr/QQHNcQpJ/QufTI47DX6XurzzA
+        V/arE28UuMHIkYVXhkePMzDgd0obl4/Vn8fciCOFw+XqPzd8BlWRGr+D0iWFqWWR
+        iaGz85OUKhDYIqHraDxuqm9gRrlu0mRR5hL+1bl5fhcHC7h5wb4CRm+Gc+iZjRuV
+        nrg+s0x93s+0OOJm+F+HfhoHGJnkOWLSqGSHn1J+eblu9iIpiUXncXp81rknJfzF
+        9kD1DJ8hT77oAVstRVYFhUJj8MfApkySOslL2SbUX3FcuteuctjabBpXQ==
+X-ME-Sender: <xms:mE2nZFPpRtm2CfCwEr9q2ivFyFM0yQJDe4m8wsP0OVRd_WatoXwMnA>
+    <xme:mE2nZH8GTJNJBqzCdxlbEbHhtfEm9QA-fKUjf7mey3I68siJvKFB4f-UZ2OfcMmx1
+    Iuy7BlvzKlmrXAtTg>
+X-ME-Received: <xmr:mE2nZEQ2qRtXvsFI0S0hQRZx133cGIWSyK7HdpFu3aRbLgXiV0FNRfraHKe0RyT3XZQkRjuQCZsCpfyHVZoBTL1eUpumBdGKMVdbXxrv4UI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvddtgddvudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhephffvve
+    fufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihu
+    segugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeetgefhhfeigfejtddvteefff
+    fgteekteduiedtkeevleduvdejueeggfdtfeegfeenucffohhmrghinhepihgvthhfrdho
+    rhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepug
+    iguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:mE2nZBufYBER5ZlEgGn6xzP7cuO7fFX8KbT-l07JLeYk7vMu3bT_Kg>
+    <xmx:mE2nZNfEPYiNN-E3BtGw3noSA2F4jNgb9o7zjum8nwPheIvKqyACqg>
+    <xmx:mE2nZN2VQOoRQFZkF1arEtp3-mPJMf3JC-swxlu98P9Qn_UkQddZ1g>
+    <xmx:mU2nZHsuUIIq88dUqvxaPLQN80XYNnh3kaqmvIRzfL7536n0J0fVhg>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 6 Jul 2023 19:26:15 -0400 (EDT)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        bpf@vger.kernel.org, coreteam@netfilter.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fw@strlen.de, daniel@iogearbox.net
+Cc:     dsahern@kernel.org
+Subject: [PATCH bpf-next v2 0/6] Support defragmenting IPv(4|6) packets in BPF
+Date:   Thu,  6 Jul 2023 17:25:47 -0600
+Message-ID: <cover.1688685338.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test is pretty basic, and exercises UFFDIO_POISON straightforwardly.
-We register a region with userfaultfd, in missing fault mode. For each
-fault, we either UFFDIO_COPY a zeroed page (odd pages) or UFFDIO_POISON
-(even pages). We do this mix to test "something like a real use case",
-where guest memory would be some mix of poisoned and non-poisoned pages.
+=== Context ===
 
-We read each page in the region, and assert that the odd pages are
-zeroed as expected, and the even pages yield a SIGBUS as expected.
+In the context of a middlebox, fragmented packets are tricky to handle.
+The full 5-tuple of a packet is often only available in the first
+fragment which makes enforcing consistent policy difficult. There are
+really only two stateless options, neither of which are very nice:
 
-Why UFFDIO_COPY instead of UFFDIO_ZEROPAGE? Because hugetlb doesn't
-support UFFDIO_ZEROPAGE, and we don't want to have special case code.
+1. Enforce policy on first fragment and accept all subsequent fragments.
+   This works but may let in certain attacks or allow data exfiltration.
 
-Acked-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/mm/uffd-unit-tests.c | 117 +++++++++++++++++++
- 1 file changed, 117 insertions(+)
+2. Enforce policy on first fragment and drop all subsequent fragments.
+   This does not really work b/c some protocols may rely on
+   fragmentation. For example, DNS may rely on oversized UDP packets for
+   large responses.
 
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 04d91f144d1c..2709a34a39c5 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -951,6 +951,117 @@ static void uffd_zeropage_test(uffd_test_args_t *args)
- 	uffd_test_pass();
- }
- 
-+static void uffd_register_poison(int uffd, void *addr, uint64_t len)
-+{
-+	uint64_t ioctls = 0;
-+	uint64_t expected = (1 << _UFFDIO_COPY) | (1 << _UFFDIO_POISON);
-+
-+	if (uffd_register_with_ioctls(uffd, addr, len, true,
-+				      false, false, &ioctls))
-+		err("poison register fail");
-+
-+	if ((ioctls & expected) != expected)
-+		err("registered area doesn't support COPY and POISON ioctls");
-+}
-+
-+static void do_uffdio_poison(int uffd, unsigned long offset)
-+{
-+	struct uffdio_poison uffdio_poison = { 0 };
-+	int ret;
-+	__s64 res;
-+
-+	uffdio_poison.range.start = (unsigned long) area_dst + offset;
-+	uffdio_poison.range.len = page_size;
-+	uffdio_poison.mode = 0;
-+	ret = ioctl(uffd, UFFDIO_POISON, &uffdio_poison);
-+	res = uffdio_poison.updated;
-+
-+	if (ret)
-+		err("UFFDIO_POISON error: %"PRId64, (int64_t)res);
-+	else if (res != page_size)
-+		err("UFFDIO_POISON unexpected size: %"PRId64, (int64_t)res);
-+}
-+
-+static void uffd_poison_handle_fault(
-+	struct uffd_msg *msg, struct uffd_args *args)
-+{
-+	unsigned long offset;
-+
-+	if (msg->event != UFFD_EVENT_PAGEFAULT)
-+		err("unexpected msg event %u", msg->event);
-+
-+	if (msg->arg.pagefault.flags &
-+	    (UFFD_PAGEFAULT_FLAG_WP | UFFD_PAGEFAULT_FLAG_MINOR))
-+		err("unexpected fault type %llu", msg->arg.pagefault.flags);
-+
-+	offset = (char *)(unsigned long)msg->arg.pagefault.address - area_dst;
-+	offset &= ~(page_size-1);
-+
-+	/* Odd pages -> copy zeroed page; even pages -> poison. */
-+	if (offset & page_size)
-+		copy_page(uffd, offset, false);
-+	else
-+		do_uffdio_poison(uffd, offset);
-+}
-+
-+static void uffd_poison_test(uffd_test_args_t *targs)
-+{
-+	pthread_t uffd_mon;
-+	char c;
-+	struct uffd_args args = { 0 };
-+	struct sigaction act = { 0 };
-+	unsigned long nr_sigbus = 0;
-+	unsigned long nr;
-+
-+	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
-+
-+	uffd_register_poison(uffd, area_dst, nr_pages * page_size);
-+	memset(area_src, 0, nr_pages * page_size);
-+
-+	args.handle_fault = uffd_poison_handle_fault;
-+	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
-+		err("uffd_poll_thread create");
-+
-+	sigbuf = &jbuf;
-+	act.sa_sigaction = sighndl;
-+	act.sa_flags = SA_SIGINFO;
-+	if (sigaction(SIGBUS, &act, 0))
-+		err("sigaction");
-+
-+	for (nr = 0; nr < nr_pages; ++nr) {
-+		unsigned long offset = nr * page_size;
-+		const char *bytes = (const char *) area_dst + offset;
-+		const char *i;
-+
-+		if (sigsetjmp(*sigbuf, 1)) {
-+			/*
-+			 * Access below triggered a SIGBUS, which was caught by
-+			 * sighndl, which then jumped here. Count this SIGBUS,
-+			 * and move on to next page.
-+			 */
-+			++nr_sigbus;
-+			continue;
-+		}
-+
-+		for (i = bytes; i < bytes + page_size; ++i) {
-+			if (*i)
-+				err("nonzero byte in area_dst (%p) at %p: %u",
-+				    area_dst, i, *i);
-+		}
-+	}
-+
-+	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
-+		err("pipe write");
-+	if (pthread_join(uffd_mon, NULL))
-+		err("pthread_join()");
-+
-+	if (nr_sigbus != nr_pages / 2)
-+		err("expected to receive %lu SIGBUS, actually received %lu",
-+		    nr_pages / 2, nr_sigbus);
-+
-+	uffd_test_pass();
-+}
-+
- /*
-  * Test the returned uffdio_register.ioctls with different register modes.
-  * Note that _UFFDIO_ZEROPAGE is tested separately in the zeropage test.
-@@ -1126,6 +1237,12 @@ uffd_test_case_t uffd_tests[] = {
- 		UFFD_FEATURE_PAGEFAULT_FLAG_WP |
- 		UFFD_FEATURE_WP_HUGETLBFS_SHMEM,
- 	},
-+	{
-+		.name = "poison",
-+		.uffd_fn = uffd_poison_test,
-+		.mem_targets = MEM_ALL,
-+		.uffd_feature_required = UFFD_FEATURE_POISON,
-+	},
- };
- 
- static void usage(const char *prog)
+So stateful tracking is the only sane option. RFC 8900 [0] calls this
+out as well in section 6.3:
+
+    Middleboxes [...] should process IP fragments in a manner that is
+    consistent with [RFC0791] and [RFC8200]. In many cases, middleboxes
+    must maintain state in order to achieve this goal.
+
+=== BPF related bits ===
+
+Policy has traditionally been enforced from XDP/TC hooks. Both hooks
+run before kernel reassembly facilities. However, with the new
+BPF_PROG_TYPE_NETFILTER, we can rather easily hook into existing
+netfilter reassembly infra.
+
+The basic idea is we bump a refcnt on the netfilter defrag module and
+then run the bpf prog after the defrag module runs. This allows bpf
+progs to transparently see full, reassembled packets. The nice thing
+about this is that progs don't have to carry around logic to detect
+fragments.
+
+=== Changelog ===
+
+Changes from v1:
+
+* Drop bpf_program__attach_netfilter() patches
+* static -> static const where appropriate
+* Fix callback assignment order during registration
+* Only request_module() if callbacks are missing
+* Fix retval when modprobe fails in userspace
+* Fix v6 defrag module name (nf_defrag_ipv6_hooks -> nf_defrag_ipv6)
+* Simplify priority checking code
+* Add warning if module doesn't assign callbacks in the future
+* Take refcnt on module while defrag link is active
+
+
+[0]: https://datatracker.ietf.org/doc/html/rfc8900
+
+
+Daniel Xu (6):
+  netfilter: defrag: Add glue hooks for enabling/disabling defrag
+  netfilter: bpf: Support BPF_F_NETFILTER_IP_DEFRAG in netfilter link
+  netfilter: bpf: Prevent defrag module unload while link active
+  bpf: selftests: Support not connecting client socket
+  bpf: selftests: Support custom type and proto for client sockets
+  bpf: selftests: Add defrag selftests
+
+ include/linux/netfilter.h                     |  15 +
+ include/uapi/linux/bpf.h                      |   5 +
+ net/ipv4/netfilter/nf_defrag_ipv4.c           |  17 +-
+ net/ipv6/netfilter/nf_defrag_ipv6_hooks.c     |  11 +
+ net/netfilter/core.c                          |   6 +
+ net/netfilter/nf_bpf_link.c                   | 149 ++++++++-
+ tools/include/uapi/linux/bpf.h                |   5 +
+ tools/testing/selftests/bpf/Makefile          |   4 +-
+ .../selftests/bpf/generate_udp_fragments.py   |  90 ++++++
+ .../selftests/bpf/ip_check_defrag_frags.h     |  57 ++++
+ tools/testing/selftests/bpf/network_helpers.c |  26 +-
+ tools/testing/selftests/bpf/network_helpers.h |   3 +
+ .../bpf/prog_tests/ip_check_defrag.c          | 282 ++++++++++++++++++
+ .../selftests/bpf/progs/ip_check_defrag.c     | 104 +++++++
+ 14 files changed, 752 insertions(+), 22 deletions(-)
+ create mode 100755 tools/testing/selftests/bpf/generate_udp_fragments.py
+ create mode 100644 tools/testing/selftests/bpf/ip_check_defrag_frags.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c
+ create mode 100644 tools/testing/selftests/bpf/progs/ip_check_defrag.c
+
 -- 
-2.41.0.255.g8b1d071c50-goog
+2.41.0
 
