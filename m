@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1663749FA6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 16:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57563749FAF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 16:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbjGFOtH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jul 2023 10:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S233559AbjGFOtm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jul 2023 10:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbjGFOsj (ORCPT
+        with ESMTP id S232562AbjGFOt1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:48:39 -0400
+        Thu, 6 Jul 2023 10:49:27 -0400
 Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A0C2125;
-        Thu,  6 Jul 2023 07:48:13 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QxfHq32sWz9xFGP;
-        Thu,  6 Jul 2023 22:37:11 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F25E26A9;
+        Thu,  6 Jul 2023 07:48:50 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QxfJG0Rkpz9xFGh;
+        Thu,  6 Jul 2023 22:37:34 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwAHQg0y06ZkPxkwBA--.58122S12;
-        Thu, 06 Jul 2023 15:47:26 +0100 (CET)
+        by APP1 (Coremail) with SMTP id LxC2BwAHQg0y06ZkPxkwBA--.58122S13;
+        Thu, 06 Jul 2023 15:47:47 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     dhowells@redhat.com, dwmw2@infradead.org,
         herbert@gondor.apana.org.au, davem@davemloft.net,
@@ -42,33 +42,33 @@ Cc:     linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
         antony@vennard.ch, konstantin@linuxfoundation.org,
         James.Bottomley@HansenPartnership.com,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 10/10] selftests/bpf: Prepare a test for user asymmetric key signatures
-Date:   Thu,  6 Jul 2023 16:42:23 +0200
-Message-Id: <20230706144225.1046544-11-roberto.sassu@huaweicloud.com>
+Subject: [RFC][GNUPG][PATCH 1/2] Convert PGP keys to the user asymmetric keys format
+Date:   Thu,  6 Jul 2023 16:42:24 +0200
+Message-Id: <20230706144225.1046544-12-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
 References: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwAHQg0y06ZkPxkwBA--.58122S12
-X-Coremail-Antispam: 1UD129KBjvAXoWfGF4furWUCw1xZw4UurW8Crg_yoW8GF4rCo
-        Z3K3y7K3W5Kr1UCw17XFyUCFWfury8K3s8Zws0v3ZFq3W7KryUAr4kGw1fX34agw4F9rWr
-        WFn3A3WkZ397trn8n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUOo7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+X-CM-TRANSID: LxC2BwAHQg0y06ZkPxkwBA--.58122S13
+X-Coremail-Antispam: 1UD129KBjvAXoWfJFyrJF4kCrW8Kr4rJF1fJFb_yoW8GF4fCo
+        WfWa1rJw15GF47Zws09r17Xa47XrnagrZrJw4fArWDZa1vyry5ta47Aa4fJ3y5Cr4F9r13
+        XFyftrWSkrs7tFn3n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUOY7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
         8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF
         0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
         j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxV
-        AFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7Cj
-        xVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F4
-        0Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxV
-        Aaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2Iq
-        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
-        WY6r4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8I
-        cVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-        Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26F4UJVW0obIYCTnIWIevJa73UjIF
-        yTuYvjxUI-eODUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4-V5wAHsE
+        AFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x02
+        67AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
+        kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
+        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wr
+        v_Gr1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY
+        6xkF7I0E14v26F4UJVW0owCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
+        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVWxJr0_GcJvcSsGvfC2KfnxnUUI43ZE
+        Xa7IU0sqXPUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj4vZ8QAAse
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
         MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
@@ -81,468 +81,540 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Reuse the existing test for PKCS#7 signatures, to test also user asymmetric
-key signatures.
+Introduce the new gpg command --conv-kernel, to convert PGP keys to the
+user asymmetric keys format.
 
-Run the new test only if gpg supports the new command --conv-kernel.
+The --export command cannot be used, as it would not allow to convert
+signatures from a file.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- ...y_pkcs7_sig.c => verify_pkcs7_uasym_sig.c} | 159 +++++++++++++++---
- ...s7_sig.c => test_verify_pkcs7_uasym_sig.c} |  18 +-
- .../testing/selftests/bpf/verify_sig_setup.sh |  82 ++++++++-
- 3 files changed, 226 insertions(+), 33 deletions(-)
- rename tools/testing/selftests/bpf/prog_tests/{verify_pkcs7_sig.c => verify_pkcs7_uasym_sig.c} (69%)
- rename tools/testing/selftests/bpf/progs/{test_verify_pkcs7_sig.c => test_verify_pkcs7_uasym_sig.c} (82%)
+ configure.ac      |   7 ++
+ doc/gpg.texi      |   4 +
+ g10/Makefile.am   |   4 +
+ g10/conv-packet.c | 287 ++++++++++++++++++++++++++++++++++++++++++++++
+ g10/conv-packet.h |  37 ++++++
+ g10/gpg.c         |  15 ++-
+ g10/mainproc.c    |  17 ++-
+ g10/options.h     |   2 +
+ 8 files changed, 371 insertions(+), 2 deletions(-)
+ create mode 100644 g10/conv-packet.c
+ create mode 100644 g10/conv-packet.h
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_uasym_sig.c
-similarity index 69%
-rename from tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-rename to tools/testing/selftests/bpf/prog_tests/verify_pkcs7_uasym_sig.c
-index dd7f2bc7004..89664351d98 100644
---- a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_uasym_sig.c
-@@ -18,7 +18,7 @@
- #include <linux/keyctl.h>
- #include <test_progs.h>
+diff --git a/configure.ac b/configure.ac
+index fe7e821089b..6c867e6409e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -105,6 +105,7 @@ have_libusb=no
+ have_libtss=no
+ have_system_resolver=no
+ gnupg_have_ldap="n/a"
++have_uasym_support=no
  
--#include "test_verify_pkcs7_sig.skel.h"
-+#include "test_verify_pkcs7_uasym_sig.skel.h"
+ use_zip=yes
+ use_bzip2=yes
+@@ -1817,6 +1818,11 @@ if test x"$use_run_gnupg_user_socket" = x"yes"; then
+             [If defined try /run/gnupg/user before /run/user])
+ fi
  
- #define MAX_DATA_SIZE (1024 * 1024)
- #define MAX_SIG_SIZE 1024
-@@ -29,6 +29,24 @@
- /* In stripped ARM and x86-64 modules, ~ is surprisingly rare. */
- #define MODULE_SIG_STRING "~Module signature appended~\n"
++AC_CHECK_HEADERS([linux/uasym_parser.h], [have_uasym_support=yes], [])
++AM_CONDITIONAL([UASYM_KEYS_SIGS], [test "$have_uasym_support" = yes])
++if test "$have_uasym_support" = yes; then
++  CFLAGS="$CFLAGS -DUASYM_KEYS_SIGS"
++fi
  
-+#define PKEY_ID_PGP 0
-+#define PKEY_ID_X509 1
-+#define PKEY_ID_PKCS7 2
-+
-+static char *key_types_str[PKEY_ID_PKCS7 + 1] = {
-+	[PKEY_ID_PGP] = "pgp",
-+	[PKEY_ID_X509] = "x509",
-+	[PKEY_ID_PKCS7] = "pkcs7",
-+};
-+
-+enum algos { ALGO_RSA, ALGO_ECDSA_P256, ALGO_ECDSA_P384, ALGO__LAST };
-+
-+static char *algos_str[ALGO_ECDSA_P384 + 1] = {
-+	[ALGO_RSA] = "rsa",
-+	[ALGO_ECDSA_P256] = "ecdsa_p256",
-+	[ALGO_ECDSA_P384] = "ecdsa_p384",
-+};
-+
- /*
-  * Module signature information block.
-  *
-@@ -74,13 +92,15 @@ static int libbpf_print_cb(enum libbpf_print_level level, const char *fmt,
- 	return 0;
- }
- 
--static int _run_setup_process(const char *setup_dir, const char *cmd)
-+static int _run_setup_process(const char *setup_dir, const char *cmd,
-+			      __u8 key_type, __u8 pkey_algo)
- {
- 	int child_pid, child_status;
- 
- 	child_pid = fork();
- 	if (child_pid == 0) {
--		execlp("./verify_sig_setup.sh", "./verify_sig_setup.sh", cmd,
-+		execlp("./verify_sig_setup.sh", "./verify_sig_setup.sh",
-+		       cmd, key_types_str[key_type], algos_str[pkey_algo] ?: "",
- 		       setup_dir, NULL);
- 		exit(errno);
- 
-@@ -92,11 +112,13 @@ static int _run_setup_process(const char *setup_dir, const char *cmd)
- 	return -EINVAL;
- }
- 
--static int populate_data_item_str(const char *tmp_dir, struct data *data_item)
-+static int populate_data_item_str(const char *tmp_dir, __u8 key_type,
-+				  struct data *data_item)
- {
- 	struct stat st;
- 	char data_template[] = "/tmp/dataXXXXXX";
- 	char path[PATH_MAX];
-+	char path_out[PATH_MAX];
- 	int ret, fd, child_status, child_pid;
- 
- 	data_item->data_len = 4;
-@@ -123,10 +145,26 @@ static int populate_data_item_str(const char *tmp_dir, struct data *data_item)
- 	}
- 
- 	if (child_pid == 0) {
--		snprintf(path, sizeof(path), "%s/signing_key.pem", tmp_dir);
--
--		return execlp("./sign-file", "./sign-file", "-d", "sha256",
--			      path, path, data_template, NULL);
-+		if (key_type == PKEY_ID_PKCS7) {
-+			snprintf(path, sizeof(path), "%s/signing_key.pem",
-+				 tmp_dir);
-+
-+			return execlp("./sign-file", "./sign-file", "-d",
-+				      "sha256", path, path, data_template,
-+				      NULL);
-+		} else {
-+			snprintf(path, sizeof(path), "%s.gpg", data_template);
-+
-+			return execlp("gpg", "gpg", "--no-options",
-+				      "--no-auto-check-trustdb",
-+				      "--no-permission-warning",
-+				      "--default-key", "eBPF_UASYM_Test",
-+				      "--sign", "-o", path, "--batch", "--yes",
-+				      "--compress-algo=none", "-b",
-+				      "--passphrase", "abc",
-+				      "--pinentry-mode", "loopback", "-q",
-+				      data_template, NULL);
-+		}
- 	}
- 
- 	waitpid(child_pid, &child_status, 0);
-@@ -135,7 +173,35 @@ static int populate_data_item_str(const char *tmp_dir, struct data *data_item)
- 	if (ret)
- 		goto out;
- 
--	snprintf(path, sizeof(path), "%s.p7s", data_template);
-+	if (key_type != PKEY_ID_PKCS7) {
-+		child_pid = fork();
-+
-+		if (child_pid == -1) {
-+			ret = -errno;
-+			goto out;
-+		}
-+
-+		if (child_pid == 0) {
-+			snprintf(path, sizeof(path), "%s.gpg", data_template);
-+			snprintf(path_out, sizeof(path), "%s.kernel",
-+				 data_template);
-+
-+			return execlp("gpg", "gpg", "--no-keyring",
-+				      "--conv-kernel", "-o", path_out, path,
-+				      NULL);
-+		}
-+
-+		waitpid(child_pid, &child_status, 0);
-+
-+		ret = WEXITSTATUS(child_status);
-+		if (ret)
-+			goto out;
-+	}
-+
-+	if (key_type == PKEY_ID_PKCS7)
-+		snprintf(path, sizeof(path), "%s.p7s", data_template);
-+	else
-+		snprintf(path, sizeof(path), "%s.kernel", data_template);
- 
- 	ret = stat(path, &st);
- 	if (ret == -1) {
-@@ -254,12 +320,12 @@ static int populate_data_item_mod(struct data *data_item)
- 	return ret;
- }
- 
--void test_verify_pkcs7_sig(void)
-+static void test_verify_pkcs7_uasym_sig(__u8 key_type, __u8 pkey_algo)
- {
- 	libbpf_print_fn_t old_print_cb;
- 	char tmp_dir_template[] = "/tmp/verify_sigXXXXXX";
- 	char *tmp_dir;
--	struct test_verify_pkcs7_sig *skel = NULL;
-+	struct test_verify_pkcs7_uasym_sig *skel = NULL;
- 	struct bpf_map *map;
- 	struct data data;
- 	int ret, zero = 0;
-@@ -272,37 +338,38 @@ void test_verify_pkcs7_sig(void)
- 	if (!ASSERT_OK_PTR(tmp_dir, "mkdtemp"))
- 		return;
- 
--	ret = _run_setup_process(tmp_dir, "setup");
-+	ret = _run_setup_process(tmp_dir, "setup", key_type, pkey_algo);
- 	if (!ASSERT_OK(ret, "_run_setup_process"))
- 		goto close_prog;
- 
--	skel = test_verify_pkcs7_sig__open();
--	if (!ASSERT_OK_PTR(skel, "test_verify_pkcs7_sig__open"))
-+	skel = test_verify_pkcs7_uasym_sig__open();
-+	if (!ASSERT_OK_PTR(skel, "test_verify_pkcs7_uasym_sig__open"))
- 		goto close_prog;
- 
- 	old_print_cb = libbpf_set_print(libbpf_print_cb);
--	ret = test_verify_pkcs7_sig__load(skel);
-+	ret = test_verify_pkcs7_uasym_sig__load(skel);
- 	libbpf_set_print(old_print_cb);
- 
- 	if (ret < 0 && kfunc_not_supported) {
- 		printf(
--		  "%s:SKIP:bpf_verify_pkcs7_signature() kfunc not supported\n",
-+		  "%s:SKIP:bpf_verify_*_signature() kfunc not supported\n",
- 		  __func__);
- 		test__skip();
- 		goto close_prog;
- 	}
- 
--	if (!ASSERT_OK(ret, "test_verify_pkcs7_sig__load"))
-+	if (!ASSERT_OK(ret, "test_verify_pkcs7_uasym_sig__load"))
- 		goto close_prog;
- 
--	ret = test_verify_pkcs7_sig__attach(skel);
--	if (!ASSERT_OK(ret, "test_verify_pkcs7_sig__attach"))
-+	ret = test_verify_pkcs7_uasym_sig__attach(skel);
-+	if (!ASSERT_OK(ret, "test_verify_pkcs7_uasym_sig__attach"))
- 		goto close_prog;
- 
- 	map = bpf_object__find_map_by_name(skel->obj, "data_input");
- 	if (!ASSERT_OK_PTR(map, "data_input not found"))
- 		goto close_prog;
- 
-+	skel->bss->key_type = key_type;
- 	skel->bss->monitored_pid = getpid();
- 
- 	/* Test without data and signature. */
-@@ -313,7 +380,7 @@ void test_verify_pkcs7_sig(void)
- 		goto close_prog;
- 
- 	/* Test successful signature verification with session keyring. */
--	ret = populate_data_item_str(tmp_dir, &data);
-+	ret = populate_data_item_str(tmp_dir, key_type, &data);
- 	if (!ASSERT_OK(ret, "populate_data_item_str"))
- 		goto close_prog;
- 
-@@ -363,9 +430,13 @@ void test_verify_pkcs7_sig(void)
- 	if (!ASSERT_LT(ret, 0, "bpf_map_update_elem data_input"))
- 		goto close_prog;
- 
--	ret = populate_data_item_mod(&data);
--	if (!ASSERT_OK(ret, "populate_data_item_mod"))
--		goto close_prog;
-+	data.data_len = 0;
-+
-+	if (key_type == PKEY_ID_PKCS7) {
-+		ret = populate_data_item_mod(&data);
-+		if (!ASSERT_OK(ret, "populate_data_item_mod"))
-+			goto close_prog;
-+	}
- 
- 	/* Test signature verification with system keyrings. */
- 	if (data.data_len) {
-@@ -392,11 +463,49 @@ void test_verify_pkcs7_sig(void)
- 	}
- 
- close_prog:
--	_run_setup_process(tmp_dir, "cleanup");
-+	_run_setup_process(tmp_dir, "cleanup", key_type, pkey_algo);
- 
- 	if (!skel)
- 		return;
- 
- 	skel->bss->monitored_pid = 0;
--	test_verify_pkcs7_sig__destroy(skel);
-+	test_verify_pkcs7_uasym_sig__destroy(skel);
-+}
-+
-+static bool gpg_conv_kernel_supported(void)
-+{
-+	bool supported = false;
-+	char line[1024];
-+	FILE *fp;
-+
-+	fp = popen("gpg --conv-kernel /dev/null 2>&1", "r");
-+	if (!fp)
-+		return false;
-+
-+	while (fgets(line, sizeof(line), fp)) {
-+		if (strstr(line, "gpg: processing message failed: Unknown system error")) {
-+			supported = true;
-+			break;
-+		}
-+	}
-+
-+	pclose(fp);
-+	return supported;
-+}
-+
-+void test_verify_pkcs7_sig(void)
-+{
-+	test_verify_pkcs7_uasym_sig(PKEY_ID_PKCS7, ALGO__LAST);
-+}
-+
-+void test_verify_uasym_sig(void)
-+{
-+	int i;
-+
-+	/* This test requires support for the new gpg command --conv-kernel. */
-+	if (!gpg_conv_kernel_supported())
-+		return;
-+
-+	for (i = 0; i < ALGO__LAST; i++)
-+		test_verify_pkcs7_uasym_sig(PKEY_ID_PGP, i);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_uasym_sig.c
-similarity index 82%
-rename from tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
-rename to tools/testing/selftests/bpf/progs/test_verify_pkcs7_uasym_sig.c
-index 7748cc23de8..f25a023b5bb 100644
---- a/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
-+++ b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_uasym_sig.c
-@@ -20,10 +20,14 @@ extern void bpf_key_put(struct bpf_key *key) __ksym;
- extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
- 				      struct bpf_dynptr *sig_ptr,
- 				      struct bpf_key *trusted_keyring) __ksym;
-+extern int bpf_verify_uasym_signature(struct bpf_dynptr *data_ptr,
-+				      struct bpf_dynptr *sig_ptr,
-+				      struct bpf_key *trusted_keyring) __ksym;
- 
- __u32 monitored_pid;
- __u32 user_keyring_serial;
- __u64 system_keyring_id;
-+__u8 key_type;
- 
- struct data {
- 	__u8 data[MAX_DATA_SIZE];
-@@ -86,7 +90,19 @@ int BPF_PROG(bpf, int cmd, union bpf_attr *attr, unsigned int size)
- 	if (!trusted_keyring)
- 		return -ENOENT;
- 
--	ret = bpf_verify_pkcs7_signature(&data_ptr, &sig_ptr, trusted_keyring);
-+	switch (key_type) {
-+	case PKEY_ID_PKCS7:
-+		ret = bpf_verify_pkcs7_signature(&data_ptr, &sig_ptr,
-+						 trusted_keyring);
-+		break;
-+	case PKEY_ID_PGP:
-+		ret = bpf_verify_uasym_signature(&data_ptr, &sig_ptr,
-+						 trusted_keyring);
-+		break;
-+	default:
-+		ret = -EOPNOTSUPP;
-+		break;
-+	}
- 
- 	bpf_key_put(trusted_keyring);
- 
-diff --git a/tools/testing/selftests/bpf/verify_sig_setup.sh b/tools/testing/selftests/bpf/verify_sig_setup.sh
-index ba08922b4a2..90770ae9e12 100755
---- a/tools/testing/selftests/bpf/verify_sig_setup.sh
-+++ b/tools/testing/selftests/bpf/verify_sig_setup.sh
-@@ -26,13 +26,39 @@ subjectKeyIdentifier=hash
- authorityKeyIdentifier=keyid
+ #
+ # Decide what to build
+@@ -2158,6 +2164,7 @@ echo "
+         TLS support:         $use_tls_library
+         TOFU support:        $use_tofu
+         Tor support:         $show_tor_support
++        Uasym support:       $have_uasym_support
  "
+ if test "$have_libtss" != no -a -z "$TPMSERVER" -a -z "$SWTPM"; then
+ cat <<G10EOF
+diff --git a/doc/gpg.texi b/doc/gpg.texi
+index 6b584a91306..e4d6f0adc59 100644
+--- a/doc/gpg.texi
++++ b/doc/gpg.texi
+@@ -652,6 +652,10 @@ Set the TOFU policy for all the bindings associated with the specified
+ @pxref{trust-model-tofu}.  The @var{keys} may be specified either by their
+ fingerprint (preferred) or their keyid.
  
-+gpg_genkey_content_common="\
-+     Name-Real: eBPF_UASYM_Test
-+     Name-Comment: eBPF_UASYM_Test
-+     Name-Email: ebpf_uasym_test@localhost
-+     Expire-Date: 0
-+     Passphrase: abc
-+     %commit
-+"
-+gpg_genkey_content_rsa="\
-+     Key-Type: RSA
-+     Key-Length: 4096
-+     $gpg_genkey_content_common
-+"
++@item --conv-kernel
++@opindex conv-kernel
++Convert PGP keys into a format understood by the Linux kernel.
 +
-+gpg_genkey_content_ecdsa_p256="\
-+     Key-Type: ECDSA
-+     Key-Curve: NIST P-256
-+     $gpg_genkey_content_common
-+"
+ @c @item --server
+ @c @opindex server
+ @c Run gpg in server mode.  This feature is not yet ready for use and
+diff --git a/g10/Makefile.am b/g10/Makefile.am
+index c5691f551b1..7e6f30dc0b5 100644
+--- a/g10/Makefile.am
++++ b/g10/Makefile.am
+@@ -130,6 +130,10 @@ common_source =  \
+ 	      objcache.c objcache.h \
+ 	      ecdh.c
+ 
++if UASYM_KEYS_SIGS
++common_source += conv-packet.c
++endif
 +
-+gpg_genkey_content_ecdsa_p384="\
-+     Key-Type: ECDSA
-+     Key-Curve: NIST P-384
-+     $gpg_genkey_content_common
-+"
+ gpg_sources = server.c          \
+ 	      $(common_source)	\
+ 	      pkclist.c 	\
+diff --git a/g10/conv-packet.c b/g10/conv-packet.c
+new file mode 100644
+index 00000000000..360db30eb8d
+--- /dev/null
++++ b/g10/conv-packet.c
+@@ -0,0 +1,287 @@
++/* conv-packet.c - convert packets
++ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ *
++ * This file is part of GnuPG.
++ *
++ * GnuPG is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 3 of the License, or
++ * (at your option) any later version.
++ *
++ * GnuPG is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see <https://www.gnu.org/licenses/>.
++ */
 +
- usage()
- {
--	echo "Usage: $0 <setup|cleanup <existing_tmp_dir>"
-+	echo "Usage: $0 <setup|cleanup> <key type> <existing_tmp_dir>"
- 	exit 1
- }
- 
--setup()
-+setup_pkcs7()
- {
- 	local tmp_dir="$1"
- 
-@@ -52,11 +78,37 @@ setup()
- 	keyctl link $key_id $keyring_id
- }
- 
--cleanup() {
-+setup_pgp()
++#include <config.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <linux/types.h>
++#include <linux/uasym_parser.h>
++#ifdef __BIG_ENDIAN__
++#include <linux/byteorder/big_endian.h>
++#else
++#include <linux/byteorder/little_endian.h>
++#endif
++#include <linux/pub_key_info.h>
++
++#include "gpg.h"
++#include "../common/util.h"
++#include "packet.h"
++#include "conv-packet.h"
++#include "options.h"
++#include "../common/i18n.h"
++
++static estream_t listfp;
++
++static void init_output(void)
 +{
-+	local tmp_dir="$1"
-+	local varname="gpg_genkey_content_$2"
++  if (!listfp)
++    {
++      listfp = es_stdout;
 +
-+	modprobe ecdsa_generic
-+
-+	echo "${!varname}" > ${tmp_dir}/gpg.genkey
-+	gpg --batch --generate-key ${tmp_dir}/gpg.genkey
-+
-+	key_id=$(gpg --export eBPF_UASYM_Test | gpg --conv-kernel | keyctl padd asymmetric ebpf_testing_key @s)
-+	keyring_id=$(keyctl newring ebpf_testing_keyring @s)
-+	keyctl link $key_id $keyring_id
++      if (opt.outfile) {
++        listfp = es_fopen (opt.outfile, "wb");
++        if (!listfp) {
++          log_error(_("cannot open %s for writing\n"), opt.outfile);
++          exit(1);
++        }
++      }
++    }
 +}
 +
-+cleanup_pkcs7() {
-+	local tmp_dir="$1"
++/*
++ * Simple encoder primitives for ASN.1 BER/DER/CER
++ *
++ * Copyright (C) 2019 James.Bottomley@HansenPartnership.com
++ */
++static int asn1_encode_length(unsigned char *data, __u32 *data_len, __u32 len)
++{
++  if (len <= 0x7f) {
++    data[0] = len;
++    *data_len = 1;
++    return 0;
++  }
 +
-+	keyctl unlink $(keyctl search @s asymmetric ebpf_testing_key) @s
-+	keyctl unlink $(keyctl search @s keyring ebpf_testing_keyring) @s
-+	rm -rf ${tmp_dir}
++  if (len <= 0xff) {
++    data[0] = 0x81;
++    data[1] = len & 0xff;
++    *data_len = 2;
++    return 0;
++  }
++
++  if (len <= 0xffff) {
++    data[0] = 0x82;
++    data[1] = (len >> 8) & 0xff;
++    data[2] = len & 0xff;
++    *data_len = 3;
++    return 0;
++  }
++
++  if (len > 0xffffff)
++    return -EINVAL;
++
++  data[0] = 0x83;
++  data[1] = (len >> 16) & 0xff;
++  data[2] = (len >> 8) & 0xff;
++  data[3] = len & 0xff;
++  *data_len = 4;
++
++  return 0;
 +}
 +
-+cleanup_pgp() {
- 	local tmp_dir="$1"
++static int mpis_to_asn1_sequence(gcry_mpi_t *pkey, int num_keys,
++                                 unsigned char **buffer, size_t *buffer_len)
++{
++  unsigned char asn1_key_len[PUBKEY_MAX_NSKEY][4];
++  unsigned char asn1_seq_len[4];
++  unsigned char *buffer_ptr;
++  __u32 asn1_key_len_len[PUBKEY_MAX_NSKEY];
++  __u32 asn1_seq_len_len;
++  __u32 asn1_seq_payload_len = 0;
++  size_t nbytes;
++  gpg_error_t err;
++  int ret, i;
++
++  for (i = 0, nbytes = 0; i < num_keys; i++) {
++    err = gcry_mpi_print (GCRYMPI_FMT_USG, NULL, 0, &nbytes, pkey[i]);
++    if (err)
++      return -EINVAL;
++
++    ret = asn1_encode_length(asn1_key_len[i], &asn1_key_len_len[i], nbytes);
++    if (ret < 0)
++      return ret;
++
++    asn1_seq_payload_len += 1 + asn1_key_len_len[i] + nbytes;
++  }
++
++  ret = asn1_encode_length(asn1_seq_len, &asn1_seq_len_len,
++                           asn1_seq_payload_len);
++  if (ret < 0)
++    return ret;
++
++  *buffer_len = 1 + asn1_seq_len_len + asn1_seq_payload_len;
++  *buffer = xmalloc_clear(*buffer_len);
++  if (!*buffer)
++    return -ENOMEM;
++
++  buffer_ptr = *buffer;
++
++  /* ASN1_SEQUENCE */
++  *buffer_ptr++ = 0x30;
++  memcpy(buffer_ptr, &asn1_seq_len, asn1_seq_len_len);
++  buffer_ptr += asn1_seq_len_len;
++
++  for (i = 0; i < num_keys; i++) {
++    /* ASN1_INTEGER */
++    *buffer_ptr++ = 0x02;
++    memcpy(buffer_ptr, &asn1_key_len[i], asn1_key_len_len[i]);
++    buffer_ptr += asn1_key_len_len[i];
++
++    err = gcry_mpi_print(GCRYMPI_FMT_USG, buffer_ptr,
++                         *buffer_len - (buffer_ptr - *buffer), &nbytes, pkey[i]);
++    if (err) {
++      xfree(*buffer);
++      return -EINVAL;
++    }
++
++    buffer_ptr += nbytes;
++  }
++
++  *buffer_len = buffer_ptr - *buffer;
++
++  return 0;
++}
++
++static int pgp_to_kernel_algo(int pgp_algorithm, gcry_mpi_t pkey, __u8 *algo)
++{
++  char *curve = NULL;
++  const char *name;
++  int ret = 0;
++
++  switch (pgp_algorithm) {
++  case PUBKEY_ALGO_RSA:
++  case PUBKEY_ALGO_RSA_S:
++    *algo = PKEY_ALGO_RSA;
++    break;
++  case PUBKEY_ALGO_ECDSA:
++    *algo = PKEY_ALGO_ECDSA;
++    if (!pkey)
++      break;
++
++    curve = openpgp_oid_to_str (pkey);
++    name = openpgp_oid_to_curve (curve, 0);
++    if (!strcmp(name, "nistp192"))
++      *algo = PKEY_ALGO_ECDSA_P192;
++    else if (!strcmp(name, "nistp256"))
++      *algo = PKEY_ALGO_ECDSA_P256;
++    else if (!strcmp(name, "nistp384"))
++      *algo = PKEY_ALGO_ECDSA_P384;
++    else
++      ret = -EOPNOTSUPP;
++    break;
++  default:
++    ret = -EOPNOTSUPP;
++    break;
++  }
++
++  xfree(curve);
++  return ret;
++}
++
++int write_kernel_key(PKT_public_key *pk)
++{
++  unsigned char *buffer = NULL;
++  size_t buffer_len = 0;
++  struct uasym_hdr hdr = { 0 };
++  struct uasym_entry e_algo = { 0 };
++  struct uasym_entry e_keyid = { 0 };
++  struct uasym_entry e_key_pub = { 0 };
++  struct uasym_entry e_key_desc = { 0 };
++  __u8 algo;
++  __u32 keyid[2], _keyid;
++  __u64 total_len = 0;
++  /* PGP: <keyid> */
++  char key_desc[4 + 1 + 8 + 1];
++  gpg_error_t err;
++  int ret = 0;
++
++  init_output();
++  keyid_from_pk (pk, keyid);
++
++  ret = pgp_to_kernel_algo(pk->pubkey_algo, pk->pkey[0], &algo);
++  if (ret < 0)
++    return ret;
++
++  /* algo */
++  e_algo.field = __cpu_to_be16(KEY_ALGO);
++  e_algo.length = __cpu_to_be32(sizeof(algo));
++  total_len += sizeof(e_algo) + sizeof(algo);
++
++  /* key id */
++  e_keyid.field = __cpu_to_be16(KEY_KID0);
++  e_keyid.length = __cpu_to_be32(sizeof(*pk->keyid) * 2);
++  total_len += sizeof(e_keyid) + sizeof(*pk->keyid) * 2;
++
++  /* key desc */
++  e_key_desc.field = __cpu_to_be16(KEY_DESC);
++  e_key_desc.length = __cpu_to_be32(sizeof(key_desc));
++  total_len += sizeof(e_key_desc) + sizeof(key_desc);
++
++  snprintf(key_desc, sizeof(key_desc), "PGP: %08x", pk->keyid[1]);
++
++  switch (pk->pubkey_algo) {
++  case PUBKEY_ALGO_RSA:
++  case PUBKEY_ALGO_RSA_S:
++    ret = mpis_to_asn1_sequence(pk->pkey, pubkey_get_npkey(pk->pubkey_algo),
++                                &buffer, &buffer_len);
++    break;
++  case PUBKEY_ALGO_ECDSA:
++    err = gcry_mpi_aprint(GCRYMPI_FMT_USG, &buffer, &buffer_len, pk->pkey[1]);
++    if (err)
++      ret = -EINVAL;
++    break;
++  default:
++    ret = -EOPNOTSUPP;
++    break;
++  }
++
++  if (ret < 0)
++    goto out;
++
++  /* key blob */
++  e_key_pub.field = __cpu_to_be16(KEY_PUB);
++  e_key_pub.length = __cpu_to_be32(buffer_len);
++  total_len += sizeof(e_key_pub) + buffer_len;
++
++  hdr.data_type = TYPE_KEY;
++  hdr.num_fields = __cpu_to_be16(4);
++  hdr.total_len = __cpu_to_be64(total_len);
++
++  es_write(listfp, &hdr, sizeof(hdr), NULL);
++
++  es_write(listfp, &e_algo, sizeof(e_algo), NULL);
++  es_write(listfp, &algo, sizeof(algo), NULL);
++
++  es_write(listfp, &e_keyid, sizeof(e_keyid), NULL);
++  _keyid = __cpu_to_be32(pk->keyid[0]);
++  es_write(listfp, &_keyid, sizeof(_keyid), NULL);
++  _keyid = __cpu_to_be32(pk->keyid[1]);
++  es_write(listfp, &_keyid, sizeof(_keyid), NULL);
++
++  es_write(listfp, &e_key_pub, sizeof(e_key_pub), NULL);
++  es_write(listfp, buffer, buffer_len, NULL);
++
++  es_write(listfp, &e_key_desc, sizeof(e_key_desc), NULL);
++  es_write(listfp, key_desc, sizeof(key_desc), NULL);
++out:
++  xfree(buffer);
++  return 0;
++}
+diff --git a/g10/conv-packet.h b/g10/conv-packet.h
+new file mode 100644
+index 00000000000..d35acb985fc
+--- /dev/null
++++ b/g10/conv-packet.h
+@@ -0,0 +1,37 @@
++/* conv-packet.h - header of conv-packet.c
++ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ *
++ * This file is part of GnuPG.
++ *
++ * GnuPG is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 3 of the License, or
++ * (at your option) any later version.
++ *
++ * GnuPG is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see <https://www.gnu.org/licenses/>.
++ */
++
++#ifndef G10_CONV_PACKET_H
++#define G10_CONV_PACKET_H
++
++#include "../common/openpgpdefs.h"
++
++#ifdef UASYM_KEYS_SIGS
++int write_kernel_key(PKT_public_key *pk);
++#else
++static inline int write_kernel_key(PKT_public_key *pk)
++{
++   (void)pk;
++   return 0;
++}
++
++#endif /* UASYM_KEYS_SIGS */
++#endif /*G10_CONV_PACKET_H*/
+diff --git a/g10/gpg.c b/g10/gpg.c
+index 6e54aa7636c..410be8ab2ad 100644
+--- a/g10/gpg.c
++++ b/g10/gpg.c
+@@ -186,6 +186,7 @@ enum cmd_and_opt_values
+     aPasswd,
+     aServer,
+     aTOFUPolicy,
++    aConvKernel,
  
- 	keyctl unlink $(keyctl search @s asymmetric ebpf_testing_key) @s
- 	keyctl unlink $(keyctl search @s keyring ebpf_testing_keyring) @s
-+	key_fingerprint=$(gpg --fingerprint --with-colons eBPF_UASYM_Test | awk -F ":" '$1 == "fpr" {print $(NF-1)}')
-+	gpg --delete-secret-key --batch --yes $key_fingerprint
-+	gpg --delete-key --batch --yes $key_fingerprint
- 	rm -rf ${tmp_dir}
+     oMimemode,
+     oTextmode,
+@@ -583,6 +584,8 @@ static gpgrt_opt_t opts[] = {
+   ARGPARSE_c (aListSigs, "list-sig", "@"),   /* alias */
+   ARGPARSE_c (aCheckKeys, "check-sig", "@"), /* alias */
+   ARGPARSE_c (aShowKeys,  "show-key", "@"), /* alias */
++  ARGPARSE_c (aConvKernel, "conv-kernel",
++              N_("convert to Linux kernel uasym format")),
+ 
+ 
+ 
+@@ -2657,6 +2660,7 @@ main (int argc, char **argv)
+ 
+ 	  case aCheckKeys:
+ 	  case aListPackets:
++	  case aConvKernel:
+ 	  case aImport:
+ 	  case aFastImport:
+ 	  case aSendKeys:
+@@ -5381,6 +5385,12 @@ main (int argc, char **argv)
+           log_info (_("WARNING: no command supplied."
+                       "  Trying to guess what you mean ...\n"));
+         /*FALLTHRU*/
++      case aConvKernel:
++#ifndef UASYM_KEYS_SIGS
++        log_error(_("No support for user asymmetric keys and signatures\n"));
++        exit(1);
++#endif
++        /*FALLTHRU*/
+       case aListPackets:
+ 	if( argc > 1 )
+ 	    wrong_args("[filename]");
+@@ -5411,7 +5421,10 @@ main (int argc, char **argv)
+ 	    if( cmd == aListPackets ) {
+ 		opt.list_packets=1;
+ 		set_packet_list_mode(1);
+-	    }
++	    } else if( cmd == aConvKernel ) {
++		opt.list_packets=1;
++		opt.conv_kernel=1;
++            }
+ 	    rc = proc_packets (ctrl, NULL, a );
+ 	    if( rc )
+               {
+diff --git a/g10/mainproc.c b/g10/mainproc.c
+index 7dea4972894..edef9907127 100644
+--- a/g10/mainproc.c
++++ b/g10/mainproc.c
+@@ -496,6 +496,16 @@ proc_symkey_enc (CTX c, PACKET *pkt)
+   free_packet (pkt, NULL);
  }
  
-@@ -75,17 +127,33 @@ catch()
++static void
++proc_conv (PACKET *pkt)
++{
++  switch (pkt->pkttype)
++    {
++    case PKT_PUBLIC_KEY: write_kernel_key(pkt->pkt.public_key); break;
++    default: break;
++    }
++  free_packet(pkt, NULL);
++}
  
- main()
- {
--	[[ $# -ne 2 ]] && usage
-+	[[ $# -ne 4 ]] && usage
- 
- 	local action="$1"
--	local tmp_dir="$2"
-+	local key_type="$2"
-+	local key_algo="$3"
-+	local tmp_dir="$4"
- 
- 	[[ ! -d "${tmp_dir}" ]] && echo "Directory ${tmp_dir} doesn't exist" && exit 1
- 
- 	if [[ "${action}" == "setup" ]]; then
--		setup "${tmp_dir}"
-+		if [[ "${key_type}" == "pkcs7" ]]; then
-+			setup_pkcs7 "${tmp_dir}"
-+		elif [[ "${key_type}" == "pgp" ]]; then
-+			setup_pgp "${tmp_dir}" "${key_algo}"
-+		else
-+			echo "Unknown key type: ${key_type}"
-+			exit 1
-+		fi
- 	elif [[ "${action}" == "cleanup" ]]; then
--		cleanup "${tmp_dir}"
-+		if [[ "${key_type}" == "pkcs7" ]]; then
-+			cleanup_pkcs7 "${tmp_dir}"
-+		elif [[ "${key_type}" == "pgp" ]]; then
-+			cleanup_pgp "${tmp_dir}"
-+		else
-+			echo "Unknown key type: ${key_type}"
-+			exit 1
-+		fi
- 	else
- 		echo "Unknown action: ${action}"
- 		exit 1
+ static void
+ proc_pubkey_enc (CTX c, PACKET *pkt)
+@@ -1652,7 +1662,7 @@ do_proc_packets (CTX c, iobuf_t a)
+           continue;
+ 	}
+       newpkt = -1;
+-      if (opt.list_packets)
++      if (opt.list_packets && !opt.conv_kernel)
+         {
+           switch (pkt->pkttype)
+             {
+@@ -1665,6 +1675,11 @@ do_proc_packets (CTX c, iobuf_t a)
+             default: newpkt = 0; break;
+ 	    }
+ 	}
++      else if (opt.conv_kernel)
++        {
++            proc_conv(pkt);
++            newpkt = 0;
++        }
+       else if (c->sigs_only)
+         {
+           switch (pkt->pkttype)
+diff --git a/g10/options.h b/g10/options.h
+index 914c24849f2..08125481511 100644
+--- a/g10/options.h
++++ b/g10/options.h
+@@ -26,6 +26,7 @@
+ #include <stdint.h>
+ #include "main.h"
+ #include "packet.h"
++#include "conv-packet.h"
+ #include "tofu.h"
+ #include "../common/session-env.h"
+ #include "../common/compliance.h"
+@@ -91,6 +92,7 @@ struct
+   int list_sigs;   /* list signatures */
+   int no_armor;
+   int list_packets; /* Option --list-packets active.  */
++  int conv_kernel; /* Option --conv-kernel active.  */
+   int def_cipher_algo;
+   int force_mdc;
+   int disable_mdc;
 -- 
 2.34.1
 
