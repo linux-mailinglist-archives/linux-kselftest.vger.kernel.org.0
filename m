@@ -2,88 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C84874A58E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 23:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA7074A72D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 00:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjGFVKe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jul 2023 17:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+        id S230017AbjGFWuw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jul 2023 18:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbjGFVKb (ORCPT
+        with ESMTP id S229829AbjGFWuv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jul 2023 17:10:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D071BC9;
-        Thu,  6 Jul 2023 14:10:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EA3A6119F;
-        Thu,  6 Jul 2023 21:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 62168C433CA;
-        Thu,  6 Jul 2023 21:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688677829;
-        bh=r0kK6Q/5EIs8ECrWV3m193nP6zDw8DILs2c7Ih39kOA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lpoM5kp+XBh8FPwCD+3OLJgCWtExHyKo2Ezck5g/mkCSFGxOLt5ZjdCPrB9TL8vBG
-         8lBilZvmjnpnPJoNmOaO7rmOosKvee5fAGW6GDPIQte++EB0ejwPkfXE0+jHus5peO
-         5rLfa7FQJdu/BvJWtjJopfwKgkPoNX4+Esc47r/svBVAcMQmexQ8N/xPg3Swb7nMZ/
-         fZEmRZcK5F5I2k+1UYe8USSzEwmPpaeNCSXCM+KqV1bwePy4eYa9ThLlxgETPGNJXT
-         /lLB39c4c37h02GWle2ak3mSbFFmn/fqwYLVR0h/A/R/fq26I3jRlH2vkON2HgPBCZ
-         stgnEMr+YfSww==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3EBCEE5381B;
-        Thu,  6 Jul 2023 21:10:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Bump and validate MAX_SYMS
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168867782925.19494.7717001810373235391.git-patchwork-notify@kernel.org>
-Date:   Thu, 06 Jul 2023 21:10:29 +0000
-References: <20230706142228.1128452-1-bjorn@kernel.org>
-In-Reply-To: <20230706142228.1128452-1-bjorn@kernel.org>
-To:     =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@ci.codeaurora.org
-Cc:     andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, bjorn@rivosinc.com, ast@kernel.org,
-        daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 6 Jul 2023 18:50:51 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0246D1992
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Jul 2023 15:50:50 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5704970148dso13015867b3.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jul 2023 15:50:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688683849; x=1691275849;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=n8zmkhTUTSLpfAyl7/UNU2Do+ozC8p34im9h+iKQJzc=;
+        b=XNNbwIV//0t27QtIOlhCug+a1paGkIprej7/5tHl5NNn5KUEQh78vpB8hSgjpHgtml
+         SHVQw3iJV4o2JiJrhBDuJIcmXz3dhskaIu5jpZoYHvMoFHMN6dOyuK+gts/4KV47wAdF
+         AVwnH9YNrhfFTLUcC8hUifJ+Wg9tetdDYhfm0QOYMEa6yqrvPsN54eNgMW652Y9t7dsn
+         4bBAzinND5wZDeIb6WWSVMvGD/yFFBONlGlbJzg6Yw5yde8xFCyvT/xKxlAA9Dw84boG
+         X9157aATBdSKF3LfFE3ppzGxi+pKdgj65AAT3C9RqpCsGlIodHhiOdCG2Uk9JuBh9llq
+         LOxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688683849; x=1691275849;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n8zmkhTUTSLpfAyl7/UNU2Do+ozC8p34im9h+iKQJzc=;
+        b=dBWs/FI6fsUFyNiLagplTRurfqAtWAodWoL5OHu49L9vOS2VGSNQP+rPLXIk31gS3N
+         RInr0GUwqoQLetGk8cebaNBz1vfwttCqASI6i4JrBE5ncdNRtausiQDi1uHe2xGOCsao
+         2RyXIh2JPIP5XSeod6h+31lWrch6CjXleCshNN3iJVzl+OV545i4/jFBMV39P7yoFmlN
+         ku5DX3hJL9Q664s6AOmzRr1NBgnOtTzVnvbN4eE2vme2++/FfBAmwkJ8GKBtNwOvIWRU
+         L8FkoVRGqxOhH7TFQchVyvgi58Z2NdDL7+dwwugqs9zlWtCa3dsOAGoBLVYSXqJ0scQY
+         Rp6Q==
+X-Gm-Message-State: ABy/qLZCS3RDpJPGRUH8+RfN9bivLIDFU5mo65gqWoDoBuq4YqPgWvzP
+        4f3oOEMSc/qY3vBRzkzKDgcbo4zXxosBZMovJ/Q3
+X-Google-Smtp-Source: APBJJlFbLqWUavEdkD+jz9r/bjiqpKIWeClwQb49Ydc52jFFjwqSAI72wtmf2+hUlHqaQBcSWvtJMNcnMXeulK/4C2EZ
+X-Received: from axel.svl.corp.google.com ([2620:15c:2a3:200:bec3:2b1c:87a:fca2])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:3189:0:b0:c4f:43d7:7dbd with
+ SMTP id x131-20020a253189000000b00c4f43d77dbdmr18242ybx.12.1688683849213;
+ Thu, 06 Jul 2023 15:50:49 -0700 (PDT)
+Date:   Thu,  6 Jul 2023 15:50:28 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230706225037.1164380-1-axelrasmussen@google.com>
+Subject: [PATCH v3 0/8] add UFFDIO_POISON to simulate memory poisoning with UFFD
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Yu Zhao <yuzhao@google.com>,
+        ZhangPeng <zhangpeng362@huawei.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+This series adds a new userfaultfd feature, UFFDIO_POISON. See commit 4
+for a detailed description of the feature.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+The series is based on Linus master (partial 6.5 merge window), and
+structured like this:
 
-On Thu,  6 Jul 2023 16:22:28 +0200 you wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
-> 
-> BPF tests that load /proc/kallsyms, e.g. bpf_cookie, will perform a
-> buffer overrun if the number of syms on the system is larger than
-> MAX_SYMS.
-> 
-> Bump the MAX_SYMS to 400000, and add a runtime check that bails out if
-> the maximum is reached.
-> 
-> [...]
+- Patches 1-3 are preparation / refactoring
+- Patches 4-6 implement and advertise the new feature
+- Patches 7-8 implement a unit test for the new feature
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Bump and validate MAX_SYMS
-    https://git.kernel.org/bpf/bpf-next/c/e76a014334a6
+Changelog:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+v2 -> v3:
+ - Rebase onto current Linus master.
+ - Don't overwrite existing PTE markers for non-hugetlb UFFDIO_POISON.
+   Before, non-hugetlb would override them, but hugetlb would not. I don't
+   think there's a use case where we *want* to override a UFFD_WP marker
+   for example, so take the more conservative behavior for all kinds of
+   memory.
+ - [Peter] Drop hugetlb mfill atomic refactoring, since it isn't needed
+   for this series (we don't touch that code directly anyway).
+ - [Peter] Switch to re-using PTE_MARKER_SWAPIN_ERROR instead of defining
+   new PTE_MARKER_UFFD_POISON.
+ - [Peter] Extract start / len range overflow check into existing
+   validate_range helper; this fixes the style issue of unnecessary braces
+   in the UFFDIO_POISON implementation, because this code is just deleted.
+ - [Peter] Extract file size check out into a new helper.
+ - [Peter] Defer actually "enabling" the new feature until the last commit
+   in the series; combine this with adding the documentation. As a
+   consequence, move the selftest commits after this one.
+ - [Randy] Fix typo in documentation.
 
+v1 -> v2:
+ - [Peter] Return VM_FAULT_HWPOISON not VM_FAULT_SIGBUS, to yield the
+   correct behavior for KVM (guest MCE).
+ - [Peter] Rename UFFDIO_SIGBUS to UFFDIO_POISON.
+ - [Peter] Implement hugetlbfs support for UFFDIO_POISON.
+
+Axel Rasmussen (8):
+  mm: make PTE_MARKER_SWAPIN_ERROR more general
+  mm: userfaultfd: check for start + len overflow in validate_range
+  mm: userfaultfd: extract file size check out into a helper
+  mm: userfaultfd: add new UFFDIO_POISON ioctl
+  mm: userfaultfd: support UFFDIO_POISON for hugetlbfs
+  mm: userfaultfd: document and enable new UFFDIO_POISON feature
+  selftests/mm: refactor uffd_poll_thread to allow custom fault handlers
+  selftests/mm: add uffd unit test for UFFDIO_POISON
+
+ Documentation/admin-guide/mm/userfaultfd.rst |  15 +++
+ fs/userfaultfd.c                             |  73 ++++++++++--
+ include/linux/mm_inline.h                    |  19 +++
+ include/linux/swapops.h                      |  10 +-
+ include/linux/userfaultfd_k.h                |   4 +
+ include/uapi/linux/userfaultfd.h             |  25 +++-
+ mm/hugetlb.c                                 |  51 ++++++--
+ mm/madvise.c                                 |   2 +-
+ mm/memory.c                                  |  15 ++-
+ mm/mprotect.c                                |   4 +-
+ mm/shmem.c                                   |   4 +-
+ mm/swapfile.c                                |   2 +-
+ mm/userfaultfd.c                             |  83 ++++++++++---
+ tools/testing/selftests/mm/uffd-common.c     |   5 +-
+ tools/testing/selftests/mm/uffd-common.h     |   3 +
+ tools/testing/selftests/mm/uffd-stress.c     |  12 +-
+ tools/testing/selftests/mm/uffd-unit-tests.c | 117 +++++++++++++++++++
+ 17 files changed, 377 insertions(+), 67 deletions(-)
+
+--
+2.41.0.255.g8b1d071c50-goog
 
