@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0167497EE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 11:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669107497F3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 11:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjGFJH3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jul 2023 05:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        id S229793AbjGFJJR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jul 2023 05:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjGFJH1 (ORCPT
+        with ESMTP id S231802AbjGFJJP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jul 2023 05:07:27 -0400
+        Thu, 6 Jul 2023 05:09:15 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352AFDB;
-        Thu,  6 Jul 2023 02:07:23 -0700 (PDT)
-X-QQ-mid: bizesmtp81t1688634431tedi2oin
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651921BD6;
+        Thu,  6 Jul 2023 02:09:13 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1688634544tzw1dfgq
 Received: from linux-lab-host.localdomain ( [116.30.131.119])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 06 Jul 2023 17:07:10 +0800 (CST)
+        id ; Thu, 06 Jul 2023 17:09:02 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: PKnEab4175v+t9CqYTAo/O5JuaceUrnTpb45AqS6cHrDzyHh9WlVMKU4Hg/mI
-        Ekyw94GRP2P4lGGTZULGJJ5Hg2zzd3bANHqDruHw4zV9IA+8YXPwa4tOy1QDVZOwDerWXrm
-        1SiNE6YUekjIgrAcXNvftkWhk4GDBnYMp+8ajIhiRvyQeOIr9+uFcGm+OT7t0skyo91zKKP
-        lAsFkE5jgxOrJ82UGI3iBP6LS8WcBjX2EpHCgeu7MlFoh22YIYIJSnE6JVmMBQvmREop4/4
-        1DVoeDad4eGPJ97ZfibuQuwDzdeYB/pWXkQ/4t2fpkK+pI0bzBDYYxjhBROice3i0v4XRtg
-        od9CDlJRmD8FXf3+MPZRMG8oECmPlcnfUiCzOC2kErvw1Mcj4w5CvxFUZKyGAGHHkwg+O66
+X-QQ-FEAT: z3fUwT6ITpvQJtKJFntzr+v2DtfIaW5KgRkd/rkN5GZYpqpEsPysfSUogpnFG
+        UONU+yid/rMV1/tzEJqTV0VAEIyNNoCAFM1TQJR/xQhxcGMQ9XT/kDy+tGEyaTm9JxIKdC+
+        31ZSDLlFs6bTJfkakq9xg6wKYtdbqqkRtyL/vgt6YKgsCkR1m0l7WwMGXtS1zANiWEMn/H+
+        GH8OIkSE6dwEAqYTE/koCzlZmfUPCLK78WQO5SJorwletzGNpgpYIKIIDcTTKv4iHO/Y6UZ
+        RTOJsQi7zwle/SSPN+t5W1v8oDsCwPTSpOph6VIgFBRJ/0CmOdzK64Md6RrktFzIyIYDEt1
+        K3FyBFczgiPdJR5bKYvAoBwrV0xTfDVstN+pCVT5mCdmGPyCWZhzWExSisB2w==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8347753171439475927
+X-BIZMAIL-ID: 12299753033176172041
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v1 1/5] selftests/nolibc: report: print a summarized test status
-Date:   Thu,  6 Jul 2023 17:03:34 +0800
-Message-Id: <3ed850006b76a2ca9a07d30cd82bc881690a7098.1688633188.git.falcon@tinylab.org>
+Subject: [PATCH v1 2/5] selftests/nolibc: report: print total tests
+Date:   Thu,  6 Jul 2023 17:08:16 +0800
+Message-Id: <6397c1e3ff7ad95ddf9d12fb429310e57aed8d79.1688633188.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1688633188.git.falcon@tinylab.org>
 References: <cover.1688633188.git.falcon@tinylab.org>
@@ -51,34 +51,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-one of the test status: success, warning and failure is printed to
-summarize the passed, skipped and failed values.
+Let's count and print the total number of tests, now, the data of
+passed, skipped and failed have the same format.
 
-- "success" means no skipped and no failed.
-- "warning" means has at least one skipped and no failed.
-- "failure" means all tests are failed.
-
-Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/lkml/20230702164358.GB16233@1wt.eu/
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/nolibc/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index d408b688b291..84b9a46ad678 100644
+index 84b9a46ad678..a02be8b0a569 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -85,7 +85,8 @@ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+@@ -85,7 +85,7 @@ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
  LDFLAGS := -s
  
  REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++;print} /\[SKIPPED\][\r]*$$/{s++} \
--		END{ printf("%d test(s) passed, %d skipped, %d failed.\n", p, s, f); \
-+		END{ printf("%d test(s) passed, %d skipped, %d failed => status: ", p, s, f); \
-+		if (f) printf("failure\n"); else if (s) printf("warning\n"); else printf("success\n");; \
+-		END{ printf("%d test(s) passed, %d skipped, %d failed => status: ", p, s, f); \
++		END{ printf("%d test(s): %d passed, %d skipped, %d failed => status: ", p+s+f, p, s, f); \
+ 		if (f) printf("failure\n"); else if (s) printf("warning\n"); else printf("success\n");; \
  		printf("See all results in %s\n", ARGV[1]); }'
  
- help:
 -- 
 2.25.1
 
