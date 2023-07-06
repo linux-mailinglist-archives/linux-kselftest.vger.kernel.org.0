@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFEA749F63
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 16:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37133749F6E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 16:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbjGFOqU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jul 2023 10:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
+        id S233394AbjGFOqm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jul 2023 10:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbjGFOqN (ORCPT
+        with ESMTP id S230309AbjGFOq1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:46:13 -0400
-Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EF2173F;
-        Thu,  6 Jul 2023 07:46:04 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QxfFN70tgz9xFGd;
-        Thu,  6 Jul 2023 22:35:04 +0800 (CST)
+        Thu, 6 Jul 2023 10:46:27 -0400
+Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1F01BEF;
+        Thu,  6 Jul 2023 07:46:22 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QxfCj66dhz9xFbn;
+        Thu,  6 Jul 2023 22:33:37 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwAHQg0y06ZkPxkwBA--.58122S5;
-        Thu, 06 Jul 2023 15:45:20 +0100 (CET)
+        by APP1 (Coremail) with SMTP id LxC2BwAHQg0y06ZkPxkwBA--.58122S6;
+        Thu, 06 Jul 2023 15:45:38 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     dhowells@redhat.com, dwmw2@infradead.org,
         herbert@gondor.apana.org.au, davem@davemloft.net,
@@ -42,33 +42,33 @@ Cc:     linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
         antony@vennard.ch, konstantin@linuxfoundation.org,
         James.Bottomley@HansenPartnership.com,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 03/10] KEYS: asymmetric: Introduce a parser for user asymmetric keys and sigs
-Date:   Thu,  6 Jul 2023 16:42:16 +0200
-Message-Id: <20230706144225.1046544-4-roberto.sassu@huaweicloud.com>
+Subject: [RFC][PATCH 04/10] KEYS: asymmetric: Introduce the user asymmetric key parser
+Date:   Thu,  6 Jul 2023 16:42:17 +0200
+Message-Id: <20230706144225.1046544-5-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
 References: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwAHQg0y06ZkPxkwBA--.58122S5
-X-Coremail-Antispam: 1UD129KBjvJXoW3tryfGr17ZrWUXw1rGF13XFb_yoWkKrW8pa
-        4fWry3trZ8twn7CrWfAr47Gr47ur4ruFWagF95CF1SvFs0vr1kCrW8KFy0gFy8Ka48Gry8
-        J3yYqFyDGw1kJw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPmb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-        AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-        x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r
-        4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY
-        1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-        AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZE
-        Xa7IU04xRDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4-V4wABsG
+X-CM-TRANSID: LxC2BwAHQg0y06ZkPxkwBA--.58122S6
+X-Coremail-Antispam: 1UD129KBjvJXoWfJrWDXr4UtF1rZr4rtFy7KFg_yoWDWr18pa
+        yrWryUKFW5Kwn2k3y3Ar17Kw12qry8ZFWagFyrAr1ak3sxXr4kGrWI9F4xuFyUtr1kt393
+        tr4UZFyUKr1DtrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPGb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x02
+        67AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
+        kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
+        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wr
+        v_Gr1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY
+        6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2js
+        IE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIF
+        yTuYvjxUI-eODUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4-V4wACsF
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
         MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
@@ -81,405 +81,347 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Introduce the common parser for user asymmetric keys and signatures. The
-data format is TLV-based, and consists of a header and the data.
-
-Key and signature blobs can be parsed with the new function uasym_parse().
-Each caller of that function should provide a callback function,
-responsible to parse their fields, and an opaque data pointer to be used by
-the callback function to store the parsed data.
-
-The same data format will be used to store both keys and signatures, albeit
-with different fields.
+Introduce a new parser for user asymmetric keys, in TLV format. User space
+tools are expected to convert keys from their original format to the TLV
+format.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- crypto/asymmetric_keys/Kconfig        |  12 ++
- crypto/asymmetric_keys/Makefile       |   7 +
- crypto/asymmetric_keys/uasym_parser.c | 201 ++++++++++++++++++++++++++
- crypto/asymmetric_keys/uasym_parser.h |  30 ++++
- include/uapi/linux/uasym_parser.h     |  91 ++++++++++++
- 5 files changed, 341 insertions(+)
- create mode 100644 crypto/asymmetric_keys/uasym_parser.c
- create mode 100644 crypto/asymmetric_keys/uasym_parser.h
- create mode 100644 include/uapi/linux/uasym_parser.h
+ crypto/asymmetric_keys/Kconfig            |   1 +
+ crypto/asymmetric_keys/Makefile           |   3 +-
+ crypto/asymmetric_keys/asymmetric_type.c  |   3 +-
+ crypto/asymmetric_keys/uasym_key_parser.c | 229 ++++++++++++++++++++++
+ crypto/asymmetric_keys/uasym_parser.h     |   5 +
+ include/keys/asymmetric-type.h            |   1 +
+ include/uapi/linux/uasym_parser.h         |   7 +
+ 7 files changed, 247 insertions(+), 2 deletions(-)
+ create mode 100644 crypto/asymmetric_keys/uasym_key_parser.c
 
 diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
-index 1ef3b46d6f6..4f86fe78efd 100644
+index 4f86fe78efd..d4b8f52a126 100644
 --- a/crypto/asymmetric_keys/Kconfig
 +++ b/crypto/asymmetric_keys/Kconfig
-@@ -85,4 +85,16 @@ config FIPS_SIGNATURE_SELFTEST
- 	depends on ASYMMETRIC_KEY_TYPE
- 	depends on PKCS7_MESSAGE_PARSER=X509_CERTIFICATE_PARSER
- 
-+config UASYM_KEYS_SIGS
-+	tristate "User asymmetric keys and signatures"
-+	depends on ASYMMETRIC_PUBLIC_KEY_SUBTYPE
-+	help
-+	  This option enables user asymmetric keys and signatures. They are
-+	  keys and signatures converted in user space from their native
-+	  format (e.g. PGP), to the TLV format (Type-Length-Value) understood
-+	  by the kernel.
-+
-+	  Key and signature-specific fields are defined in the UAPI interface,
-+	  so that user space converters can reference them.
-+
- endif # ASYMMETRIC_KEY_TYPE
+@@ -88,6 +88,7 @@ config FIPS_SIGNATURE_SELFTEST
+ config UASYM_KEYS_SIGS
+ 	tristate "User asymmetric keys and signatures"
+ 	depends on ASYMMETRIC_PUBLIC_KEY_SUBTYPE
++	select CRYPTO_PUB_KEY_INFO
+ 	help
+ 	  This option enables user asymmetric keys and signatures. They are
+ 	  keys and signatures converted in user space from their native
 diff --git a/crypto/asymmetric_keys/Makefile b/crypto/asymmetric_keys/Makefile
-index 0d1fa1b692c..ac3955d834f 100644
+index ac3955d834f..6708a9e81ed 100644
 --- a/crypto/asymmetric_keys/Makefile
 +++ b/crypto/asymmetric_keys/Makefile
-@@ -76,3 +76,10 @@ verify_signed_pefile-y := \
+@@ -82,4 +82,5 @@ $(obj)/mscode.asn1.o: $(obj)/mscode.asn1.c $(obj)/mscode.asn1.h
+ #
+ obj-$(CONFIG_UASYM_KEYS_SIGS) += uasym_keys_sigs.o
+ uasym_keys_sigs-y := \
+-	uasym_parser.o
++	uasym_parser.o \
++	uasym_key_parser.o
+diff --git a/crypto/asymmetric_keys/asymmetric_type.c b/crypto/asymmetric_keys/asymmetric_type.c
+index a5da8ccd353..53d0fc26eac 100644
+--- a/crypto/asymmetric_keys/asymmetric_type.c
++++ b/crypto/asymmetric_keys/asymmetric_type.c
+@@ -430,7 +430,7 @@ static int asymmetric_key_preparse(struct key_preparsed_payload *prep)
+ /*
+  * Clean up the key ID list
+  */
+-static void asymmetric_key_free_kids(struct asymmetric_key_ids *kids)
++void asymmetric_key_free_kids(struct asymmetric_key_ids *kids)
+ {
+ 	int i;
  
- $(obj)/mscode_parser.o: $(obj)/mscode.asn1.h $(obj)/mscode.asn1.h
- $(obj)/mscode.asn1.o: $(obj)/mscode.asn1.c $(obj)/mscode.asn1.h
-+
-+#
-+# User asymmetric keys and signatures
-+#
-+obj-$(CONFIG_UASYM_KEYS_SIGS) += uasym_keys_sigs.o
-+uasym_keys_sigs-y := \
-+	uasym_parser.o
-diff --git a/crypto/asymmetric_keys/uasym_parser.c b/crypto/asymmetric_keys/uasym_parser.c
+@@ -440,6 +440,7 @@ static void asymmetric_key_free_kids(struct asymmetric_key_ids *kids)
+ 		kfree(kids);
+ 	}
+ }
++EXPORT_SYMBOL_GPL(asymmetric_key_free_kids);
+ 
+ /*
+  * Clean up the preparse data
+diff --git a/crypto/asymmetric_keys/uasym_key_parser.c b/crypto/asymmetric_keys/uasym_key_parser.c
 new file mode 100644
-index 00000000000..e207f350c40
+index 00000000000..2de3f9afa64
 --- /dev/null
-+++ b/crypto/asymmetric_keys/uasym_parser.c
-@@ -0,0 +1,201 @@
++++ b/crypto/asymmetric_keys/uasym_key_parser.c
+@@ -0,0 +1,229 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Implement the user asymmetric keys and signature parser.
++ * Implement the user asymmetric key parser.
 + */
 +
-+#define pr_fmt(fmt) "UASYM PARSER: "fmt
++#define pr_fmt(fmt) "UASYM KEY: "fmt
++#include <linux/module.h>
++#include <crypto/public_key.h>
++#include <crypto/pub_key_info.h>
 +
 +#include "uasym_parser.h"
 +
-+const char *data_types_str[] = {
-+	FOR_EACH_DATA_TYPE(GENERATE_STRING)
-+};
-+
-+const char *fields_str[] = {
-+	FOR_EACH_FIELD(GENERATE_STRING)
-+};
-+
-+/**
-+ * uasym_parse_hdr - Parse a user asymmetric key or signature header
-+ * @data: Data to parse (updated)
-+ * @data_len: Length of @data (updated)
-+ * @data_type: Data type (updated)
-+ * @num_fields: Data fields (updated)
-+ * @total_len: Length of key or signature, excluding the header (updated)
-+ *
-+ * Parse the header of a user asymmetric key or signature, update the data
-+ * pointer and length, and provide the data type, number of fields and the
-+ * length of that element.
-+ *
-+ * Return: Zero on success, a negative value on error.
-+ */
-+int uasym_parse_hdr(const u8 **data, size_t *data_len, u8 *data_type,
-+		    u16 *num_fields, u64 *total_len)
++static int parse_key_pub(struct public_key *pub, enum fields field,
++			 const u8 *field_data, u32 field_data_len)
 +{
-+	struct uasym_hdr *hdr;
-+
-+	if (*data_len < sizeof(*hdr)) {
-+		pr_debug("Data blob too short, %lu bytes, expected %lu\n",
-+			 *data_len, sizeof(*hdr));
-+		return -EBADMSG;
-+	}
-+
-+	hdr = (struct uasym_hdr *)*data;
-+
-+	*data += sizeof(*hdr);
-+	*data_len -= sizeof(*hdr);
-+
-+	*data_type = hdr->data_type;
-+	if (*data_type >= TYPE__LAST) {
-+		pr_debug("Invalid data type %u\n", *data_type);
-+		return -EBADMSG;
-+	}
-+
-+	if (hdr->_reserved0 != 0) {
-+		pr_debug("_reserved0 must be zero\n");
-+		return -EBADMSG;
-+	}
-+
-+	*num_fields = be16_to_cpu(hdr->num_fields);
-+	if (*num_fields >= FIELD__LAST) {
-+		pr_debug("Too many fields %u, max: %u\n", *num_fields,
-+			 FIELD__LAST);
-+		return -EBADMSG;
-+	}
-+
-+	if (hdr->_reserved1 != 0) {
-+		pr_debug("_reserved1 must be zero\n");
-+		return -EBADMSG;
-+	}
-+
-+	*total_len = be64_to_cpu(hdr->total_len);
-+	if (*total_len > *data_len) {
-+		pr_debug("Invalid total length %llu, expected: %lu\n",
-+			 *total_len, *data_len);
-+		return -EBADMSG;
-+	}
-+
-+	pr_debug("Header: type: %s, num fields: %d, total len: %lld\n",
-+		 data_types_str[hdr->data_type], *num_fields, *total_len);
-+
-+	return 0;
-+}
-+
-+/**
-+ * uasym_parse_data - Parse a user asymmetric key or signature data
-+ * @callback: Callback function to call to parse the fields
-+ * @callback_data: Opaque data to supply to the callback function
-+ * @num_fields: Data fields
-+ * @data: Data to parse
-+ * @data_len: Length of @data
-+ *
-+ * Parse the data part of a user asymmetric key or signature and call the
-+ * supplied callback function for each data field, passing also the opaque
-+ * data pointer.
-+ *
-+ * Return: Zero on success, a negative value on error.
-+ */
-+int uasym_parse_data(parse_callback callback, void *callback_data,
-+		     u16 num_fields, const u8 *data, size_t data_len)
-+{
-+	const u8 *data_ptr = data;
-+	struct uasym_entry *entry;
-+	u16 field;
-+	u32 len;
-+	int ret, i;
-+
-+	for (i = 0; i < num_fields; i++) {
-+		if (data_len < sizeof(*entry))
-+			return -EBADMSG;
-+
-+		entry = (struct uasym_entry *)data_ptr;
-+		data_ptr += sizeof(*entry);
-+		data_len -= sizeof(*entry);
-+
-+		field = be16_to_cpu(entry->field);
-+		len = be32_to_cpu(entry->length);
-+
-+		if (data_len < len)
-+			return -EBADMSG;
-+
-+		pr_debug("Data: field: %s, len: %d\n", fields_str[field], len);
-+
-+		if (!len)
-+			continue;
-+
-+		ret = callback(callback_data, field, data_ptr, len);
-+		if (ret < 0) {
-+			pr_debug("Parsing of field %s failed, ret: %d\n",
-+				 fields_str[field], ret);
-+			return -EBADMSG;
-+		}
-+
-+		data_ptr += len;
-+		data_len -= len;
-+	}
-+
-+	if (data_len) {
-+		pr_debug("Excess data: %ld bytes\n", data_len);
-+		return -EBADMSG;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * uasym_parse - Parse a user asymmetric key or signature
-+ * @expected_data_type: Desired data type
-+ * @callback: Callback function to call to parse the fields
-+ * @callback_data: Opaque data to supply to the callback function
-+ * @data: Data to parse
-+ * @data_len: Length of @data
-+ *
-+ * Parse a user asymmetric key or signature and call the supplied callback
-+ * function for each data field, passing also the opaque data pointer.
-+ *
-+ * Return: Zero on success, a negative value on error.
-+ */
-+int uasym_parse(enum data_types expected_data_type, parse_callback callback,
-+		void *callback_data, const u8 *data, size_t data_len)
-+{
-+	u8 data_type;
-+	u16 num_fields;
-+	u64 total_len;
 +	int ret = 0;
 +
-+	pr_debug("Start parsing data blob, size: %ld, expected data type: %s\n",
-+		 data_len, data_types_str[expected_data_type]);
++	kenter(",%u,%u", field, field_data_len);
 +
-+	while (data_len) {
-+		ret = uasym_parse_hdr(&data, &data_len, &data_type, &num_fields,
-+				      &total_len);
-+		if (ret < 0)
-+			goto out;
-+
-+		if (data_type == expected_data_type)
-+			break;
-+
-+		/*
-+		 * uasym_parse_hdr() already checked that total_len <= data_len.
-+		 */
-+		data += total_len;
-+		data_len -= total_len;
++	pub->key = kmemdup(field_data, field_data_len, GFP_KERNEL);
++	if (!pub->key) {
++		ret = -ENOMEM;
++		goto out;
 +	}
 +
-+	if (!data_len) {
-+		pr_debug("Data type %s not found\n",
-+			 data_types_str[expected_data_type]);
++	pub->keylen = field_data_len;
++	pr_debug("Key length in bytes: %d\n", pub->keylen);
++out:
++	kleave(" = %d", ret);
++	return ret;
++}
++
++int parse_key_algo(const char **pkey_algo, enum fields field,
++		   const u8 *field_data, u32 field_data_len)
++{
++	u8 algo;
++	int ret = 0;
++
++	kenter(",%u,%u", field, field_data_len);
++
++	if (field_data_len != sizeof(u8)) {
++		pr_debug("Unexpected data length %u, expected %lu\n",
++			 field_data_len, sizeof(u8));
++		ret = -EBADMSG;
++		goto out;
++	}
++
++	algo = *field_data;
++
++	if (algo >= PKEY_ALGO__LAST) {
++		pr_debug("Unexpected public key algo %u\n", algo);
++		ret = -EBADMSG;
++		goto out;
++	}
++
++	*pkey_algo = pub_key_algo_name[algo];
++	pr_debug("Public key algo: %s\n", *pkey_algo);
++out:
++	kleave(" = %d", ret);
++	return ret;
++}
++
++int parse_key_kid(struct asymmetric_key_id **id, enum fields field,
++		  const u8 *field_data, u32 field_data_len)
++{
++	int ret = 0;
++
++	kenter(",%u,%u", field, field_data_len);
++
++	*id = asymmetric_key_generate_id(field_data, field_data_len, NULL, 0);
++	if (!*id) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	pr_debug("Key/auth identifier: %*phN\n", (*id)->len, (*id)->data);
++out:
++	kleave(" = %d", ret);
++	return ret;
++}
++
++static int parse_key_desc(struct key_preparsed_payload *prep, enum fields field,
++			  const u8 *field_data, u32 field_data_len)
++{
++	int ret = 0;
++
++	kenter(",%u,%u", field, field_data_len);
++
++	if (field_data[field_data_len - 1] != '\0') {
++		pr_err("Non-terminated string\n");
++		ret = -EBADMSG;
++		goto out;
++	}
++
++	prep->description = kstrndup(field_data, field_data_len, GFP_KERNEL);
++	if (!prep->description) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	pr_debug("Key description: %s\n", prep->description);
++out:
++	kleave(" = %d", ret);
++	return ret;
++}
++
++struct callback_struct {
++	struct public_key *pub;
++	struct asymmetric_key_ids *kids;
++	struct key_preparsed_payload *prep;
++};
++
++static int key_callback(void *callback_data, enum fields field,
++			const u8 *field_data, u32 field_data_len)
++{
++	struct callback_struct *cb_s = (struct callback_struct *)callback_data;
++	struct asymmetric_key_id **id;
++	int ret;
++
++	switch (field) {
++	case KEY_PUB:
++		ret = parse_key_pub(cb_s->pub, field, field_data,
++				    field_data_len);
++		break;
++	case KEY_ALGO:
++		ret = parse_key_algo(&cb_s->pub->pkey_algo, field, field_data,
++				     field_data_len);
++		break;
++	case KEY_KID0:
++		id = (struct asymmetric_key_id **)&cb_s->kids->id[0];
++		ret = parse_key_kid(id, field, field_data, field_data_len);
++		break;
++	case KEY_KID1:
++		id = (struct asymmetric_key_id **)&cb_s->kids->id[1];
++		ret = parse_key_kid(id, field, field_data, field_data_len);
++		break;
++	case KEY_KID2:
++		id = (struct asymmetric_key_id **)&cb_s->kids->id[2];
++		ret = parse_key_kid(id, field, field_data, field_data_len);
++		break;
++	case KEY_DESC:
++		ret = parse_key_desc(cb_s->prep, field, field_data,
++				     field_data_len);
++		break;
++	default:
++		/* Just ignore non-relevant fields. */
++		ret = 0;
++		break;
++	}
++
++	return ret;
++}
++
++static int uasym_key_parse(struct key_preparsed_payload *prep)
++{
++	struct callback_struct cb_s;
++	int ret;
++
++	kenter("");
++
++	cb_s.pub = kzalloc(sizeof(*cb_s.pub), GFP_KERNEL);
++	if (!cb_s.pub) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	cb_s.pub->id_type = "UASYM_KEY";
++
++	cb_s.kids = kzalloc(sizeof(*cb_s.kids), GFP_KERNEL);
++	if (!cb_s.kids) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	cb_s.prep = prep;
++
++	ret = uasym_parse(TYPE_KEY, key_callback, &cb_s, prep->data,
++			  prep->datalen);
++	if (ret < 0)
++		goto out;
++
++	if (!cb_s.pub->key || !cb_s.pub->pkey_algo ||
++	    (!cb_s.kids->id[0] && !cb_s.kids->id[1] && !cb_s.kids->id[2])) {
++		pr_debug("Incomplete data\n");
 +		ret = -ENOENT;
 +		goto out;
 +	}
 +
-+	ret = uasym_parse_data(callback, callback_data, num_fields, data,
-+			       total_len);
++	/* We're pinning the module by being linked against it */
++	__module_get(public_key_subtype.owner);
++	prep->payload.data[asym_subtype] = &public_key_subtype;
++	prep->payload.data[asym_key_ids] = cb_s.kids;
++	prep->payload.data[asym_crypto] = cb_s.pub;
++	prep->quotalen = 100;
 +out:
-+	pr_debug("End of parsing data blob, ret: %d\n", ret);
-+	return ret;
++	kleave(" = %d", ret);
++
++	if (ret < 0) {
++		public_key_free(cb_s.pub);
++		asymmetric_key_free_kids(cb_s.kids);
++		return ret;
++	}
++
++	return 0;
 +}
++
++static struct asymmetric_key_parser uasym_key_parser = {
++	.owner = THIS_MODULE,
++	.name = "uasym_key",
++	.parse = uasym_key_parse
++};
++
++static int __init uasym_key_init(void)
++{
++	return register_asymmetric_key_parser(&uasym_key_parser);
++}
++
++static void __exit uasym_key_exit(void)
++{
++	unregister_asymmetric_key_parser(&uasym_key_parser);
++}
++
++module_init(uasym_key_init);
++module_exit(uasym_key_exit);
++MODULE_LICENSE("GPL");
 diff --git a/crypto/asymmetric_keys/uasym_parser.h b/crypto/asymmetric_keys/uasym_parser.h
-new file mode 100644
-index 00000000000..985dda6aad3
---- /dev/null
+index 985dda6aad3..0f629fb7a9b 100644
+--- a/crypto/asymmetric_keys/uasym_parser.h
 +++ b/crypto/asymmetric_keys/uasym_parser.h
-@@ -0,0 +1,30 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Header file of user asymmetric keys and signatures.
-+ */
+@@ -28,3 +28,8 @@ int uasym_parse_data(parse_callback callback, void *callback_data,
+ 		     u16 num_fields, const u8 *data, size_t data_len);
+ int uasym_parse(enum data_types expected_data_type, parse_callback callback,
+ 		void *callback_data, const u8 *data, size_t data_len);
 +
-+#include <keys/asymmetric-subtype.h>
-+#include <keys/asymmetric-parser.h>
-+
-+#include <uapi/linux/uasym_parser.h>
-+
-+#define kenter(FMT, ...) \
-+	pr_debug("==> %s("FMT")\n", __func__, ##__VA_ARGS__)
-+#define kleave(FMT, ...) \
-+	pr_debug("<== %s()"FMT"\n", __func__, ##__VA_ARGS__)
-+
-+typedef int (*parse_callback)(void *, enum fields, const u8 *, u32);
-+
-+extern const char *data_types_str[];
-+extern const char *fields_str[];
-+
-+int uasym_parse_hdr(const u8 **data, size_t *data_len, u8 *data_type,
-+		    u16 *num_fields, u64 *total_len);
-+int uasym_parse_data(parse_callback callback, void *callback_data,
-+		     u16 num_fields, const u8 *data, size_t data_len);
-+int uasym_parse(enum data_types expected_data_type, parse_callback callback,
-+		void *callback_data, const u8 *data, size_t data_len);
++int parse_key_algo(const char **pkey_algo, enum fields field,
++		   const u8 *field_data, u32 field_data_len);
++int parse_key_kid(struct asymmetric_key_id **id, enum fields field,
++		  const u8 *data, u32 data_len);
+diff --git a/include/keys/asymmetric-type.h b/include/keys/asymmetric-type.h
+index 69a13e1e5b2..acbb8c805f6 100644
+--- a/include/keys/asymmetric-type.h
++++ b/include/keys/asymmetric-type.h
+@@ -66,6 +66,7 @@ extern struct asymmetric_key_id *asymmetric_key_generate_id(const void *val_1,
+ 							    size_t len_1,
+ 							    const void *val_2,
+ 							    size_t len_2);
++void asymmetric_key_free_kids(struct asymmetric_key_ids *kids);
+ static inline
+ const struct asymmetric_key_ids *asymmetric_key_ids(const struct key *key)
+ {
 diff --git a/include/uapi/linux/uasym_parser.h b/include/uapi/linux/uasym_parser.h
-new file mode 100644
-index 00000000000..8f0bc235492
---- /dev/null
+index 8f0bc235492..42e0087ac2b 100644
+--- a/include/uapi/linux/uasym_parser.h
 +++ b/include/uapi/linux/uasym_parser.h
-@@ -0,0 +1,91 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement the user space interface for user asymmetric keys and signatures.
-+ */
-+
-+#ifndef _UAPI_LINUX_UASYM_PARSER_H
-+#define _UAPI_LINUX_UASYM_PARSER_H
-+
-+#include <linux/types.h>
-+#include <linux/pub_key_info.h>
-+
-+/*
-+ * User asymmmetric key and signature format:
-+ *
-+ * +----------------+-----------------+-----------------+
-+ * | data type (u8) | num fields (u16)| total len (u64) |
-+ * +--------------+-+----------+------+-----------+-----+
-+ * | field1 (u16) | len1 (u32) | value1 (u8 len1) |
-+ * +--------------+------------+------------------+
-+ * |     ...      |    ...     |        ...       |
-+ * +--------------+------------+------------------+
-+ * | fieldN (u16) | lenN (u32) | valueN (u8 lenN) |
-+ * +--------------+------------+------------------+
-+ */
-+
-+/**
-+ * struct uasym_hdr - Header of user asymmetric keys and signatures
-+ * @data_type: Type of data to parse
-+ * @_reserved0: Reserved for future use
-+ * @num_fields: Number of fields provided
-+ * @_reserved1: Reserved for future use
-+ * @total_len: Total length of the data blob, excluding the header
-+ *
-+ * This structure represents the header of the user asymmetric keys and
-+ * signatures format.
-+ */
-+struct uasym_hdr {
-+	__u8 data_type;
-+	__u8 _reserved0;
-+	__u16 num_fields;
-+	__u32 _reserved1;
-+	__u64 total_len;
-+} __packed;
-+
-+/**
-+ * struct uasym_entry - Data entry of user asymmetric keys and signatures
-+ * @field: Data field identifier
-+ * @length: Data length
-+ * @data: Data
-+ *
-+ * This structure represents a TLV entry of the data part of the user
-+ * asymmetric keys and signatures format.
-+ */
-+struct uasym_entry {
-+	__u16 field;
-+	__u32 length;
-+	__u8 data[];
-+} __packed;
-+
-+#define FOR_EACH_DATA_TYPE(DATA_TYPE) \
-+	DATA_TYPE(TYPE__LAST)
-+
-+#define FOR_EACH_FIELD(FIELD) \
-+	FIELD(FIELD__LAST)
-+
-+#define GENERATE_ENUM(ENUM) ENUM,
-+#define GENERATE_STRING(STRING) #STRING,
-+
-+/**
-+ * enum data_types - Type of data to parse
-+ *
-+ * Enumerates the type of data to parse.
-+ */
-+enum data_types {
-+	FOR_EACH_DATA_TYPE(GENERATE_ENUM)
-+};
-+
-+/**
-+ * enum fields - Data fields
-+ *
-+ * Enumerates the data fields. Some belongs to keys, some to signatures.
-+ */
-+enum fields {
-+	FOR_EACH_FIELD(GENERATE_ENUM)
-+};
-+
-+#endif /* _UAPI_LINUX_UASYM_PARSER_H */
+@@ -62,9 +62,16 @@ struct uasym_entry {
+ } __packed;
+ 
+ #define FOR_EACH_DATA_TYPE(DATA_TYPE) \
++	DATA_TYPE(TYPE_KEY) \
+ 	DATA_TYPE(TYPE__LAST)
+ 
+ #define FOR_EACH_FIELD(FIELD) \
++	FIELD(KEY_PUB) \
++	FIELD(KEY_ALGO) \
++	FIELD(KEY_KID0) \
++	FIELD(KEY_KID1) \
++	FIELD(KEY_KID2) \
++	FIELD(KEY_DESC) \
+ 	FIELD(FIELD__LAST)
+ 
+ #define GENERATE_ENUM(ENUM) ENUM,
 -- 
 2.34.1
 
