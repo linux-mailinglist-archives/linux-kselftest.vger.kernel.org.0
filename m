@@ -2,124 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E69C74A111
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 17:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA2A74A362
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jul 2023 19:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbjGFPd4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jul 2023 11:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S232470AbjGFRqb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jul 2023 13:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232960AbjGFPdz (ORCPT
+        with ESMTP id S231616AbjGFRqb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:33:55 -0400
-Received: from smtp-fw-9106.amazon.com (smtp-fw-9106.amazon.com [207.171.188.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F346BFF;
-        Thu,  6 Jul 2023 08:33:53 -0700 (PDT)
+        Thu, 6 Jul 2023 13:46:31 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A259610F5
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Jul 2023 10:46:29 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b890ca6718so10535685ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jul 2023 10:46:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1688657635; x=1720193635;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=trA35bhtZS7sC65wm9GfBeAVYdZXIA5psrybUjewGIQ=;
-  b=A0UumUCQtccE+sL4EQW3IA6Wg1hcfLSmRSmI/JZD/sedyT5VYzAKy+fS
-   qjJCBdlLKda+gxGC1/nglq1eFqaJmASSIL1vTr72VH8gF+r8AifyGvAa4
-   QqOoXm+zYDyY8Tu1M2r39/T7cT4zFNhrTsSoccqGOyygiR2iLn3AaIYYA
-   8=;
-X-IronPort-AV: E=Sophos;i="6.01,185,1684800000"; 
-   d="scan'208";a="658357472"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-21d8d9f4.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9106.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 15:33:49 +0000
-Received: from EX19MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-m6i4x-21d8d9f4.us-west-2.amazon.com (Postfix) with ESMTPS id 7CCA88103C;
-        Thu,  6 Jul 2023 15:33:42 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 15:33:40 +0000
-Received: from 88665a182662.ant.amazon.com (10.187.171.32) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 15:33:35 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <lmb@isovalent.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
-        <hemanthmalla@gmail.com>, <joe@cilium.io>, <joe@wand.net.nz>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
-        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
-Subject: Re: [PATCH bpf-next v4 6/7] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
-Date:   Thu, 6 Jul 2023 08:33:27 -0700
-Message-ID: <20230706153327.99298-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <CAN+4W8iRH6kpDmmY8i5r1nKbckaYghmOCqRXe+4bDHE7vzVMMA@mail.gmail.com>
-References: <CAN+4W8iRH6kpDmmY8i5r1nKbckaYghmOCqRXe+4bDHE7vzVMMA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.187.171.32]
-X-ClientProxiedBy: EX19D043UWA004.ant.amazon.com (10.13.139.41) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+        d=google.com; s=20221208; t=1688665589; x=1691257589;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iYwswXlV1/1qc1QMb8XdbUm0VHdqMuEGHLDmXeCI7tw=;
+        b=JADhELCXVgoD7i7cWTwhQRh73F5YhFYDBv94oM/8VxQQoeG0PhxyPIPeAt5smzYLDQ
+         2VFXs6FDTv58B0PombJgnTJb6SyHVgNKljVNLKJw3EBZa3IM+rDpks3+Z8C/xYtcpoxb
+         LbU/vFpSAvnQ+5Dl4V1lvy11cPRh6gO9C/KaYNRuo5YkMRA5ChZ+B6QR3eNwDAJNHhEv
+         28/VzsSQuyF3hQ7p9xa/+eE3S/Swa0foXq4eOKi4DtfGVPSsoyFlkW+OKOkQEV9Hjwha
+         r2lQN4ScFg+aAQmNbKsoXLuiVXMfbKyZj9wiemASlejBWpa5SFm0+xS1wTFJAhLizRvw
+         VrwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688665589; x=1691257589;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iYwswXlV1/1qc1QMb8XdbUm0VHdqMuEGHLDmXeCI7tw=;
+        b=LvuFuYxHchpM3NzEblPzC5vfy3YLUxUBbYwC6XxLzMRfo1oalJoMfoFmqrCK601Rka
+         ANwACQFyoMPeH7ycsYg/FXtyi1vDvaFDEibqpNmnjAN4iZsV0NqzhsAaRGC9Nnv7lAbD
+         CO1gD6ZUIKV9TzgVJXC+NAPEzzbdJD/TLEQvSqi/SCbzsil+rQh3cdUBIrqlW/oQOsRM
+         WbKuctQm2W04C2+FABOWW/7/kxgEEzfVWID9Yc2/vwcepiZ2Ix1ttF3f5WFqAK0x8aFf
+         4lvgME0nm0GHWdyfu1c+lzN9VRtaq7WFYnzKkoUXP39qJlpsv4fSKxlTL/Jg4eD0B+Os
+         S5xQ==
+X-Gm-Message-State: ABy/qLaobflD831oVs+fcE35mM88FpG3hdmIZSiNrzxCKyzhqpqS1vnq
+        jVJI3Jo9hS24EQW/SxcI7/bYXGU=
+X-Google-Smtp-Source: APBJJlFpjvWRD+oH7cEr3v6mp6VT3nmUJ2yl68awyDOvDt3JNKrMgENCDlaLreMNh3hWPwDXBQWJuWE=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:902:7085:b0:1b7:eecd:9dae with SMTP id
+ z5-20020a170902708500b001b7eecd9daemr1936538plk.9.1688665589079; Thu, 06 Jul
+ 2023 10:46:29 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 10:46:27 -0700
+In-Reply-To: <20230706142228.1128452-1-bjorn@kernel.org>
+Mime-Version: 1.0
+References: <20230706142228.1128452-1-bjorn@kernel.org>
+Message-ID: <ZKb986L59CTFITjP@google.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Bump and validate MAX_SYMS
+From:   Stanislav Fomichev <sdf@google.com>
+To:     "=?utf-8?B?QmrDtnJuIFTDtnBlbA==?=" <bjorn@kernel.org>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org,
+        "=?utf-8?B?QmrDtnJuIFTDtnBlbA==?=" <bjorn@rivosinc.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Thu, 6 Jul 2023 09:11:15 +0100
-> On Thu, Jul 6, 2023 at 1:41 AM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-> >
-> > Sorry for late reply.
-> >
-> > What we know about sk before inet6?_lookup_reuseport() are
-> >
-> >   (1) sk was full socket in bpf_sk_assign()
-> >   (2) sk had SOCK_RCU_FREE in bpf_sk_assign()
-> >   (3) sk was TCP_LISTEN here if TCP
-> 
-> Are we looking at the same bpf_sk_assign? Confusingly there are two
-> very similarly named functions. The one we care about is:
-> 
-> BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
-> {
->     if (!sk || flags != 0)
->         return -EINVAL;
->     if (!skb_at_tc_ingress(skb))
->         return -EOPNOTSUPP;
->     if (unlikely(dev_net(skb->dev) != sock_net(sk)))
->         return -ENETUNREACH;
->     if (sk_is_refcounted(sk) &&
->         unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
->         return -ENOENT;
-> 
->     skb_orphan(skb);
->     skb->sk = sk;
->     skb->destructor = sock_pfree;
-> 
->     return 0;
-> }
-> 
-> From this we can't tell what state the socket is in or whether it is
-> RCU freed or not.
+On 07/06, Bj=C3=B6rn T=C3=B6pel wrote:
+> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>=20
+> BPF tests that load /proc/kallsyms, e.g. bpf_cookie, will perform a
+> buffer overrun if the number of syms on the system is larger than
+> MAX_SYMS.
+>=20
+> Bump the MAX_SYMS to 400000, and add a runtime check that bails out if
+> the maximum is reached.
+>=20
+> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
 
-But we can in inet6?_steal_sock() by calling sk_is_refcounted() again
-via skb_steal_sock().
+Acked-by: Stanislav Fomichev <sdf@google.com>
 
-In inet6?_steal_sock(), we call inet6?_lookup_reuseport() only for
-sk that was a TCP listener or UDP non-connected socket until just before
-the sk_state checks.  Then, we know *refcounted should be false for such
-sockets even before inet6?_lookup_reuseport().
+OTOH, should be easy to convert this to malloc/realloc? That should fix
+it once and for all and avoid future need to bump the limit?
 
-After the checks, sk might be poped out of the reuseport group before
-inet6?_lookup_reuseport() and reuse_sk might be NULL, but it's not
-related because *refcounted is a value for sk, not for reuse_sk.
+> ---
+>  tools/testing/selftests/bpf/trace_helpers.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
+selftests/bpf/trace_helpers.c
+> index 9b070cdf44ac..f83d9f65c65b 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> @@ -18,7 +18,7 @@
+>  #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
+>  #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
+> =20
+> -#define MAX_SYMS 300000
+> +#define MAX_SYMS 400000
+>  static struct ksym syms[MAX_SYMS];
+>  static int sym_cnt;
+> =20
+> @@ -46,6 +46,9 @@ int load_kallsyms_refresh(void)
+>  			break;
+>  		if (!addr)
+>  			continue;
+> +		if (i >=3D MAX_SYMS)
+> +			return -EFBIG;
+> +
+>  		syms[i].addr =3D (long) addr;
+>  		syms[i].name =3D strdup(func);
+>  		i++;
+>=20
+> base-commit: fd283ab196a867f8f65f36913e0fadd031fcb823
+> --=20
+> 2.39.2
+>=20
