@@ -2,139 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F1E74B866
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 23:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC5474B882
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 23:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjGGVBy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jul 2023 17:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
+        id S229573AbjGGVJy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jul 2023 17:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjGGVBx (ORCPT
+        with ESMTP id S229458AbjGGVJy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jul 2023 17:01:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC5E212D
-        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 14:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688763666;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dan6bESP0QByFGbOI4lpud/XpYRSbdBr9ACkzPME/Us=;
-        b=cb/+TNLXO8+hFn7AlblGX3rttUE/QV7GmsI4hStTOEEjdWnTre9XMO1z4lTcZk9W1BCkEi
-        krHxp31VQBTGZEKW2iSjFs5AxrySZI3fpU+DBnGNQO2034YxVd9fOGxV5GLquyixzqHTe7
-        5EYLTPZhrgr1Al02W5oAGNdGU5MzO+Q=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-440-Zlp59XTFMcO30tPnEWttWg-1; Fri, 07 Jul 2023 17:01:04 -0400
-X-MC-Unique: Zlp59XTFMcO30tPnEWttWg-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-635eb5b04e1so5943326d6.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 14:01:04 -0700 (PDT)
+        Fri, 7 Jul 2023 17:09:54 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BD61BEE
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 14:09:52 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c6db61f7f64so1178062276.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 14:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688764192; x=1691356192;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZTrWAIUayaBHwDRCQHgGm0qH9ucv7JkIRMB8GVQtyc8=;
+        b=pmsOikxbpPPKi6SHT/ZT9CcQCmKqH1TPbAL1YPRN+/EvfSYqZWCf7863xGKzcQw3sc
+         nGY1ZvpN6V73iMT5yLIJSRHdqLgxPw7aJYWkMGrfhzlOyvibq/HcsR9w/z4z/VyaZgfp
+         n91L4Uj89hsFLFnir4XCaN/Z43f4e72guBYeLJrmAbIU1n4ebxgu/frUIpm4/JM2GMSR
+         ac/7WzQi4sFjz0Kq6KC8XUhUlg+jcGnjcx5QuqG/cGR+5WgczLyULdXlRnx//5JSW+Hl
+         ZEmlEvSZcKJg4Loxr8JjWRoh0Iz1sAtEdqzc6s3cCGH4jMGc1xAdc2VL8/SEYbnBCp8K
+         Rppw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688763664; x=1689368464;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dan6bESP0QByFGbOI4lpud/XpYRSbdBr9ACkzPME/Us=;
-        b=gQ4VZHKFOvLr+J2IiekkSjVPRJPt91vvzSg/L3vKc1QVDAgf5c9C86Xfpt1JANBavY
-         a4zJIsgzGH5hM+5RQGFwv8eZY/NSAD6S97HDYhBkgehyYQaRWPSi4ttz+gX5yhygojtm
-         j8h+wVL3DgqRav3Z7OQc61P60UJfNP8HDkOj/vtcJOtOhWFapk/JztNKcwarkDmtDEhS
-         /VY1FUboryGVul98axm9t3B22/XioBsfddplvPf99C6Dl/VxepMmHJKBMC0sXryOE9+S
-         udl3bMps4oFa4YX4cOAhyTx1DkPXeduZua4k5p+RFrnyFtuwlj9Ewg7RnKHBaicLQP0V
-         ltIA==
-X-Gm-Message-State: ABy/qLYpdE2MLxfzdKu9R+XGqT7I9+OxCBxf3E+QkSqjW+6BP3M8X9zx
-        HntMP/Rw2CMJbOtkRFONzcS986wTuTebkGdl4JUrib6Qf1p5S7JX9LWNjvcz+kdygXYGTNb96Ik
-        3xgCz7NhXzBYLDfuxfLqdH//3RThZ
-X-Received: by 2002:a05:6214:411c:b0:62b:5410:322d with SMTP id kc28-20020a056214411c00b0062b5410322dmr6797779qvb.6.1688763663952;
-        Fri, 07 Jul 2023 14:01:03 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFi3ocgTXjlN1S3jnNJ0aY+HPfd5soOuCrai0nkztgKDiV5HmKoftoqMO6HM1sv+8OME69FPA==
-X-Received: by 2002:a05:6214:411c:b0:62b:5410:322d with SMTP id kc28-20020a056214411c00b0062b5410322dmr6797738qvb.6.1688763663680;
-        Fri, 07 Jul 2023 14:01:03 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id b22-20020a05620a127600b0074d60b697a6sm2203149qkl.12.2023.07.07.14.01.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 14:01:03 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 17:00:49 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Alumbaugh" <talumbau@google.com>,
-        Yu Zhao <yuzhao@google.com>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 7/8] selftests/mm: refactor uffd_poll_thread to allow
- custom fault handlers
-Message-ID: <ZKh9AT96XiZ+6nCC@x1n>
-References: <20230706225037.1164380-1-axelrasmussen@google.com>
- <20230706225037.1164380-8-axelrasmussen@google.com>
- <ZKgWOYuIdqa25Qcs@x1n>
- <CAJHvVcj-3gUC3dx4LAVnNr-zgo8+cwjGNafQ480EhDifojrcRA@mail.gmail.com>
- <CAJHvVci6qCv+d7Hz0QkqeuEZze0OFJt0P9qnWgA_cgDeaLmptQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJHvVci6qCv+d7Hz0QkqeuEZze0OFJt0P9qnWgA_cgDeaLmptQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1688764192; x=1691356192;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZTrWAIUayaBHwDRCQHgGm0qH9ucv7JkIRMB8GVQtyc8=;
+        b=Ar3edHj48W/8YFkbaiwEV/i7uuw3YKPxKqDWnAla5oJ1gv4KSCd4wFxfMsa22kyJJA
+         fkn71bkDogEyuz/m6O+m3SR8aUQZhNJ2xJMYt+F9GHeqbjcf5avxMcJ9q6rYvtVZVA32
+         G0K6iGINHyHRb4/aabFHUDU/aK48ti9hnp+Vx9uyKHXB3nMOIjdd7bVVNllrpSlkRn6O
+         MB+LZakWsZ4SQTN3X/wRvNLgosa2zeSPS2WLQ6nqrm781IuLdmf4BbD6ziEG+lxuQSb7
+         5EnmkdtUIuEfVfFaEgXiet3DsIzhrJngVo5+84Km8UYI4KWFKdzqSwGJo9eq2K2IbQeF
+         cPuQ==
+X-Gm-Message-State: ABy/qLYHHkLCGsIv2nkpgjXTBne3ZY7nQjfdabH284GwUhYddzyErxIA
+        1ZT7nDmrPR1njXiCjuRBDRFFlpc9hg==
+X-Google-Smtp-Source: APBJJlEPnJyZGvM2uGKYUD1nOk5qT6VODaXbHCvI2N2eVZ52/OvsSLtf0T7C4cYLKR9etuF/AgRHl9cpLA==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a25:ae8a:0:b0:c5f:85f5:a0e5 with SMTP id
+ b10-20020a25ae8a000000b00c5f85f5a0e5mr56453ybj.5.1688764192066; Fri, 07 Jul
+ 2023 14:09:52 -0700 (PDT)
+Date:   Fri,  7 Jul 2023 21:09:38 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230707210947.1208717-1-rmoar@google.com>
+Subject: [RFC v2 0/9] kunit: Add test attributes API
+From:   Rae Moar <rmoar@google.com>
+To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
+        brendan.higgins@linux.dev
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, jstultz@google.com,
+        tglx@linutronix.de, sboyd@kernel.org, Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 01:38:16PM -0700, Axel Rasmussen wrote:
-> Ah, so I tried switching back to the {0} initializer, and was reminded
-> why I didn't do that in v1. :) Ignoring the missing braces warning I
-> talked about before, using {0} here is actually an error
-> ("variable-sized object may not be initialized") because this is a
-> variable sized array (nr_cpus isn't constant). So, that option is out.
-> 
-> I'm not a huge fan of adding the free() cleanup and dealing with all
-> of the err() calls this function has.
+Hello everyone,
 
-Oh, that's definitely not needed - as long as we know we're going to quit,
-we let kernel clean everything is fine.
+This is an RFC patch series to propose the addition of a test attributes
+framework to KUnit.
 
-I just worry in the future there can be a loop of userfaultfd_stress() so
-it can OOM a host even if no err() hit but by looping.  I hope I explained
-what I meant.. so it's still good we make sure things freed properly when
-in success paths and when we're at it.
+There has been interest in filtering out "slow" KUnit tests. Most notably,
+a new config, CONFIG_MEMCPY_SLOW_KUNIT_TEST, has been added to exclude a
+particularly slow memcpy test
+(https://lore.kernel.org/all/20230118200653.give.574-kees@kernel.org/).
 
-> 
-> Originally I switched to calloc() because I'm not a big fan of VLAs
-> anyway. But, as a compromise in v4 I'll leave it a VLA, and switch to
-> memset() for initializing it.
+This proposed attributes framework would be used to save and access test
+associated data, including whether a test is slow. These attributes would
+be reportable (via KTAP and command line output) and some will be
+filterable.
 
-That'll be good enough to me.  Thanks a lot,
+This framework is designed to allow for the addition of other attributes in
+the future. These attributes could include whether the test is flaky,
+associated test files, etc.
 
+This is the second version of the RFC I have added a few big changes:
+- Change method for inputting filters to allow for spaces in filtering
+  values
+- Add option to skip filtered tests instead of not run or show them with
+  the --filter_skip flag
+- Separate the new feature to list tests and their attributes into both
+  --list_tests (lists just tests) and --list_tests_attr (lists all)
+- Add new attribute to store module name associated with test
+- Add Tests to executor_test.c
+- Add Documentation
+- A few small changes to code commented on previously
+
+I would love to hear about the new features. If the series seems overall
+good I will send out the next version as an official patch series.
+
+Thanks!
+Rae
+
+Rae Moar (9):
+  kunit: Add test attributes API structure
+  kunit: Add speed attribute
+  kunit: Add module attribute
+  kunit: Add ability to filter attributes
+  kunit: tool: Add command line interface to filter and report
+    attributes
+  kunit: memcpy: Mark tests as slow using test attributes
+  kunit: time: Mark test as slow using test attributes
+  kunit: add tests for filtering attributes
+  kunit: Add documentation of KUnit test attributes
+
+ .../dev-tools/kunit/running_tips.rst          | 163 +++++++
+ include/kunit/attributes.h                    |  50 +++
+ include/kunit/test.h                          |  68 ++-
+ kernel/time/time_test.c                       |   2 +-
+ lib/Kconfig.debug                             |   3 +
+ lib/kunit/Makefile                            |   3 +-
+ lib/kunit/attributes.c                        | 406 ++++++++++++++++++
+ lib/kunit/executor.c                          | 115 ++++-
+ lib/kunit/executor_test.c                     | 119 ++++-
+ lib/kunit/kunit-example-test.c                |   9 +
+ lib/kunit/test.c                              |  27 +-
+ lib/memcpy_kunit.c                            |   8 +-
+ tools/testing/kunit/kunit.py                  |  80 +++-
+ tools/testing/kunit/kunit_kernel.py           |   6 +-
+ tools/testing/kunit/kunit_tool_test.py        |  39 +-
+ 15 files changed, 1022 insertions(+), 76 deletions(-)
+ create mode 100644 include/kunit/attributes.h
+ create mode 100644 lib/kunit/attributes.c
+
+
+base-commit: 2e66833579ed759d7b7da1a8f07eb727ec6e80db
 -- 
-Peter Xu
+2.41.0.255.g8b1d071c50-goog
 
