@@ -2,46 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29D474B67E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 20:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AD074B68A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 20:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjGGSlK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jul 2023 14:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
+        id S229643AbjGGSnA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jul 2023 14:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjGGSlJ (ORCPT
+        with ESMTP id S232712AbjGGSmy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jul 2023 14:41:09 -0400
+        Fri, 7 Jul 2023 14:42:54 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2292686;
-        Fri,  7 Jul 2023 11:41:06 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1688755258tl15jmsd
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5B12684;
+        Fri,  7 Jul 2023 11:42:51 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1688755361teq9xbkx
 Received: from linux-lab-host.localdomain ( [116.30.131.119])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 08 Jul 2023 02:40:56 +0800 (CST)
+        id ; Sat, 08 Jul 2023 02:42:40 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: pMHwdq3i9JMdscoC4rTMu/NiAUoIRiiFj3qeqqHtFAEulmGT9cGyKGZzstgvB
-        EuvAHvEWur986HyyMuCngFP7Y9/35QpomwUGhdan4ddVmrh4/z3FyI1kAT+wbbhQqj1wNmY
-        lyFDJoSZrwQdG+YhAVAC/1IhLwK2D7jlHutttbAKCXDDU2q6TUCFm3U2bppd+h5FKYR9H0w
-        Zm0ga1G4kQSD8wwF57ei8KmUCLA1jiQTrPCoaQMzWqbKo5CtGWWmUYV3RQCPEvixPWIpfks
-        VvW3wrSGK6TShyAzvTg2GVs0EowUSjJxDeYvxeN+801tpi3D3QCQ29gHA3DMHlC1tfeOkXG
-        fR0VzH8ZEJaQpOBCcABNTa4fjjUvaZ/U54BV4N16uvPkMMTcrQ2XZH4HmN02JVUA9LCDb2p
-        VcOV2RIPInI=
+X-QQ-FEAT: CR3LFp2JE4nH57ZbWfbpkynHmLRqBni2IKe5Hryw+3skA19dDY1bF6R4kIxbq
+        oqTWzkbWrAXmYcKLOEF7Nysxicv3HEL8I8SurRZeGfKZx8CUXH39S2TX++/GRDf3kTfasZm
+        EZNdcgFqqy2mhE4rIszH+lLV+kvqdWqrm7zA4c63RpdsxBPepWxHorukBNQrtdoYXbA37Rm
+        RQNe0IY+Y+AS/o+Qmo/YhfA497Ns+5w+RT+c8QgSElqosOf6dUO073FHy4tpVByEWNOPC1Z
+        VgGikTFw3EgAxouDFC/cCOyhjGjWg0okvA0i9Nmp40vPReOUvzRJazH+4adv7svGonENGHC
+        gmvh9BlWpozE4xCUe9RnGikPEBfK82MxxnbWI+NIPXmc2H2pK9m7bTaB2vkCEfRoqO1H8VX
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6393069016375536476
+X-BIZMAIL-ID: 4020998193701605089
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v4 14/18] selftests/nolibc: vfprintf: remove MEMFD_CREATE dependency
-Date:   Sat,  8 Jul 2023 02:40:08 +0800
-Message-Id: <94bdca8d8610e85bb1683bf10a5005ca92c3cb57.1688750763.git.falcon@tinylab.org>
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: [PATCH v4 15/18] selftests/nolibc: chdir_root: restore current path after test
+Date:   Sat,  8 Jul 2023 02:42:01 +0800
+Message-Id: <94cc3448a992e38a0ed22d5089b8a42235db24cb.1688750763.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1688750763.git.falcon@tinylab.org>
 References: <cover.1688750763.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
@@ -54,56 +51,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The vfprintf test case require to open a temporary file to write, the
-old memfd_create() method is perfect but has strong dependency on
-MEMFD_CREATE and also TMPFS or HUGETLBFS (see fs/Kconfig):
+The PWD environment variable has the path of the nolibc-test program,
+the current path must be the same as it, otherwise, the test cases will
+fail with relative path (e.g. ./nolibc-test).
 
-    config MEMFD_CREATE
-	def_bool TMPFS || HUGETLBFS
+Since only chdir_root really changes the current path, let's restore it
+with the PWD environment variable.
 
-And from v6.2, MFD_NOEXEC_SEAL must be passed for the non-executable
-memfd, otherwise, The kernel warning will be output to the test result
-like this:
-
-        Running test 'vfprintf'
-        0 emptymemfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=1 'init'
-         "" = ""                                                  [OK]
-
-To avoid such warning and also to remove the MEMFD_CREATE dependency,
-let's open a file from tmpfs directly.
-
-The /tmp directory is used to detect the existing of tmpfs, if not
-there, skip instead of fail.
-
-And further, for pid == 1, the initramfs is loaded as ramfs, which can
-be used as tmpfs, so, it is able to further remove TMPFS dependency too.
-
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/lkml/9ad51430-b7c0-47dc-80af-20c86539498d@t-8ch.de
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 6b863f7b677c..494195890e4b 100644
+index 494195890e4b..0ed207495ea6 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -875,10 +875,10 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- 	FILE *memfile;
- 	va_list args;
- 
--	fd = memfd_create("vfprintf", 0);
-+	fd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR, 0600);
- 	if (fd == -1) {
--		pad_spc(llen, 64, "[FAIL]\n");
--		return 1;
-+		pad_spc(llen, 64, "[SKIPPED]\n");
-+		return 0;
- 	}
- 
- 	memfile = fdopen(fd, "w+");
+@@ -703,7 +703,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(sbrk_0);            EXPECT_PTRNE(1, sbrk(0), (void *)-1); break;
+ 		CASE_TEST(sbrk);              if ((p1 = p2 = sbrk(4096)) != (void *)-1) p2 = sbrk(-4096); EXPECT_SYSZR(1, (p2 == (void *)-1) || p2 == p1); break;
+ 		CASE_TEST(brk);               EXPECT_SYSZR(1, brk(sbrk(0))); break;
+-		CASE_TEST(chdir_root);        EXPECT_SYSZR(1, chdir("/")); break;
++		CASE_TEST(chdir_root);        EXPECT_SYSZR(1, chdir("/")); chdir(getenv("PWD")); break;
+ 		CASE_TEST(chdir_dot);         EXPECT_SYSZR(1, chdir(".")); break;
+ 		CASE_TEST(chdir_blah);        EXPECT_SYSER(1, chdir("/blah"), -1, ENOENT); break;
+ 		CASE_TEST(chmod_self);        EXPECT_SYSER(proc, chmod("/proc/self", 0555), -1, EPERM); break;
 -- 
 2.25.1
 
