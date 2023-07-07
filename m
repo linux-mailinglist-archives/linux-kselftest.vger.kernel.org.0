@@ -2,42 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69AB74B62E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 20:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6DE74B62F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 20:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjGGSVv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jul 2023 14:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S230206AbjGGSWy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jul 2023 14:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjGGSVu (ORCPT
+        with ESMTP id S229675AbjGGSWy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jul 2023 14:21:50 -0400
+        Fri, 7 Jul 2023 14:22:54 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED19D2125;
-        Fri,  7 Jul 2023 11:21:47 -0700 (PDT)
-X-QQ-mid: bizesmtp80t1688754095t0aq6h5r
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8391FEF;
+        Fri,  7 Jul 2023 11:22:52 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1688754163tbz6971n
 Received: from linux-lab-host.localdomain ( [116.30.131.119])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 08 Jul 2023 02:21:34 +0800 (CST)
+        id ; Sat, 08 Jul 2023 02:22:42 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: TXoNPSSaW4kv/p7caHiEYxLanebgZwhG2XfKboEcnrrRVllAyJuoDpRhSIlNW
-        p+ec62UWjOYu7hyn444lJo2VGEkEzPPwCEoOt0txY/1z2iWbZBgbkyaCsC1fR2k+XoHAjFl
-        ZvQ+imAm1VsfxifYsux+YPA7w3iuzhUHFrztW2+8JhUGNgafQUUwixdNQoncP23mEOFkTG2
-        2/DiFkPeOSOgAxkU8HoSE48wJnQlu8Qtg9OUxfUHV/cLcDfspdyC7FIddCFruozGeoCdqXs
-        rWepzHSfaXGIbIwPGUO6zs3J74rV32Dm4Jzf4HDtvJhTRecwnQVfRr5VL7HkQsYClSpZDJv
-        nC+8qlLZgFYrR2QbsmY1iwByR2Mp97ieLcIz23e
+X-QQ-FEAT: QNtCjCnA38/H8JL0FER4UCqbooVsJKjujOZR7fq9q4G4ESPFiFBGxztBtSgfP
+        PZsdw5sU119JWuA2HNJG/m4x0mXNF/z/OS8dmW0Cg2+xJ8gVBgpMI6Zav7XN7up1qM2y2oA
+        oZ1+HgVmMp3HRpuxUYTC0LVUkxCvY0bhOeeCZakge+0az92sUVw28BTtt0ncnttqGRFn849
+        pC/01mK0+HW4HqJTG2aWVWd9zs1QB4H6sZThngmPEvtEbJcYPUJcAuRMnOKiTqaLIqIXGau
+        z41S45Tp5E3YncOK+NJzAH3C+8Tiv8RkSZad1GD68651407qqv47L/zz7YClpFUYGD5T3UI
+        3gebTUjnabwoCh364SLMcwiPnmmT9acCpgX6HtDkkTyitn5TR4=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 13328391123435046420
+X-BIZMAIL-ID: 3309041285388814565
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v4 00/18] selftests/nolibc: allow run with minimal kernel config
-Date:   Sat,  8 Jul 2023 02:21:20 +0800
-Message-Id: <cover.1688750763.git.falcon@tinylab.org>
+Subject: [PATCH v4 01/18] selftests/nolibc: add run-libc-test target
+Date:   Sat,  8 Jul 2023 02:22:39 +0800
+Message-Id: <d4f1a611ee7f37c31cfdd6a26511f50b71f962ff.1688750763.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1688750763.git.falcon@tinylab.org>
+References: <cover.1688750763.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
@@ -50,142 +51,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
+allow run and report glibc or musl based libc-test.
 
-This v4 mainly uses the argv0 suggested by you, at the same time, a new
-run-libc-test target is added for glibc and musl, and the RB_ flags are
-added for nolibc to allow compile nolibc-test.c without <linux/reboot.h>
-for glibc, musl and nolibc (mainly for musl-gcc, without -I
-/path/to/sysroot). 
-
-This patchset is based on the 20230705-nolibc-series2 branch of nolibc
-repo [2], it must be applied after our v6 __sysret series [3] (argv0
-exported there) and Thomas' chmod_net removal patchset [4] (the new
-chmod_argv0 is added at the same line of chmod_net, will conflict).
-
-This patchset assumes the chmod_net removal patchset will be applied at
-first, if not, the chmod_argv0 added alphabetically will not be applied.
-Since our new chmod_argv0 is exactly added to replace chmod_net, so,
-Willy, is it ok for you to at least apply the chmod_net removal patch
-[5] before this patchset?
-
-    selftests/nolibc: drop test chmod_net
-
-This patchset is tested together with the v6 __sysret series [3]:
-
-               arch/board | result
-              ------------|------------
-          arm/vexpress-a9 | 142 test(s) passed, 1 skipped, 0 failed.
-                 arm/virt | 142 test(s) passed, 1 skipped, 0 failed.
-             aarch64/virt | 142 test(s) passed, 1 skipped, 0 failed.
-              ppc/g3beige | not supported
-              ppc/ppce500 | not supported
-                  i386/pc | 142 test(s) passed, 1 skipped, 0 failed.
-                x86_64/pc | 142 test(s) passed, 1 skipped, 0 failed.
-             mipsel/malta | 142 test(s) passed, 1 skipped, 0 failed.
-         loongarch64/virt | 142 test(s) passed, 1 skipped, 0 failed.
-             riscv64/virt | 142 test(s) passed, 1 skipped, 0 failed.
-             riscv32/virt | 0 test(s) passed, 0 skipped, 0 failed.
-    s390x/s390-ccw-virtio | 142 test(s) passed, 1 skipped, 0 failed.
-
-If use tinyconfig + basic console options (means disable all of the
-other options, include procfs, shmem, tmpfs, net and memfd_create, to
-save test time, only randomly choose 4 archs):
-
-
-    ...
-
-    LOG: testing report for loongarch64/virt:
-
-    15 chmod_self                                                   [SKIPPED]
-    16 chown_self                                                   [SKIPPED]
-    40 link_cross                                                   [SKIPPED]
-    0 -fstackprotector not supported                                [SKIPPED]
-
-    139 test(s) passed, 4 skipped, 0 failed.
-    See all results in /labs/linux-lab/logging/nolibc/loongarch64-virt-nolibc-test.log
-
-    LOG: testing summary:
-
-          arch/board | result
-         ------------|------------
-     arm/vexpress-a9 | 139 test(s) passed, 4 skipped, 0 failed.
-           x86_64/pc | 139 test(s) passed, 4 skipped, 0 failed.
-        mipsel/malta | 139 test(s) passed, 4 skipped, 0 failed.
-    loongarch64/virt | 139 test(s) passed, 4 skipped, 0 failed.
-
-Changes from v3 --> v4:
-
-* selftests/nolibc: stat_fault: silence NULL argument warning with glibc
-  selftests/nolibc: gettid: restore for glibc and musl
-  selftests/nolibc: add _LARGEFILE64_SOURCE for musl
-  selftests/nolibc: fix up int_fast16/32_t test cases for musl
-  selftests/nolibc: fix up kernel parameters support
-  selftests/nolibc: link_cross: use /proc/self/cmdline
-  tools/nolibc: add rmdir() support
-  selftests/nolibc: add a new rmdir() test case
-  selftests/nolibc: fix up failures when CONFIG_PROC_FS=n
-  selftests/nolibc: prepare /tmp for tmpfs or ramfs
-  selftests/nolibc: vfprintf: remove MEMFD_CREATE dependency
-
-    No change.
-
-* selftests/nolibc: add run-libc-test target
-
-    New run and report for glibc or musl. for musl, we can simply issue:
-
-    $ make run-libc-test CC=/path/to/musl-install/bin/musl-gcc
-
-* tools/nolibc: types.h: add RB_ flags for reboot()
-  selftests/nolibc: prefer <sys/reboot.h> to <linux/reboot.h>
-
-    Required by musl to compile nolibc-test.c without -I/path/to/sysroot
-
-* selftests/nolibc: chdir_root: restore current path after test
-
-    restore current path to prevent breakage of using relative path
-
-* selftests/nolibc: stat_timestamps: remove procfs dependency
-  selftests/nolibc: chroot_exe: remove procfs dependency
-  selftests/nolibc: add chmod_argv0 test
-
-    use argv0 instead of '/init' as before.
-
-Best regards,
-Zhangjin
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
-[1]: https://lore.kernel.org/lkml/cover.1688134399.git.falcon@tinylab.org/
-[2]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-[3]: https://lore.kernel.org/lkml/cover.1688739492.git.falcon@tinylab.org/
-[4]: https://lore.kernel.org/lkml/20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net/
-[5]: https://lore.kernel.org/lkml/20230624-proc-net-setattr-v1-1-73176812adee@weissschuh.net/
+ tools/testing/selftests/nolibc/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Zhangjin Wu (18):
-  selftests/nolibc: add run-libc-test target
-  selftests/nolibc: stat_fault: silence NULL argument warning with glibc
-  selftests/nolibc: gettid: restore for glibc and musl
-  selftests/nolibc: add _LARGEFILE64_SOURCE for musl
-  selftests/nolibc: fix up int_fast16/32_t test cases for musl
-  tools/nolibc: types.h: add RB_ flags for reboot()
-  selftests/nolibc: prefer <sys/reboot.h> to <linux/reboot.h>
-  selftests/nolibc: fix up kernel parameters support
-  selftests/nolibc: link_cross: use /proc/self/cmdline
-  tools/nolibc: add rmdir() support
-  selftests/nolibc: add a new rmdir() test case
-  selftests/nolibc: fix up failures when CONFIG_PROC_FS=n
-  selftests/nolibc: prepare /tmp for tmpfs or ramfs
-  selftests/nolibc: vfprintf: remove MEMFD_CREATE dependency
-  selftests/nolibc: chdir_root: restore current path after test
-  selftests/nolibc: stat_timestamps: remove procfs dependency
-  selftests/nolibc: chroot_exe: remove procfs dependency
-  selftests/nolibc: add chmod_argv0 test
-
- tools/include/nolibc/sys.h                   | 23 ++++-
- tools/include/nolibc/types.h                 | 12 ++-
- tools/testing/selftests/nolibc/Makefile      |  4 +
- tools/testing/selftests/nolibc/nolibc-test.c | 88 +++++++++++++++-----
- 4 files changed, 104 insertions(+), 23 deletions(-)
-
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 000621f21adc..d408b688b291 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -132,6 +132,10 @@ nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
+ libc-test: nolibc-test.c
+ 	$(QUIET_CC)$(CC) -o $@ $<
+ 
++run-libc-test: libc-test
++	$(Q)./libc-test > "$(CURDIR)/run.out" || :
++	$(Q)$(REPORT) $(CURDIR)/run.out
++
+ # qemu user-land test
+ run-user: nolibc-test
+ 	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
 -- 
 2.25.1
 
