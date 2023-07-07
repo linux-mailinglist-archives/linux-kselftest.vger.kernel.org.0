@@ -2,93 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0996E74A81D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 02:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3B274A841
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 02:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbjGGAbc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jul 2023 20:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
+        id S230170AbjGGAxD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jul 2023 20:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbjGGAbb (ORCPT
+        with ESMTP id S230196AbjGGAxC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jul 2023 20:31:31 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3656B1992;
-        Thu,  6 Jul 2023 17:31:30 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-262c42d3fafso920951a91.0;
-        Thu, 06 Jul 2023 17:31:30 -0700 (PDT)
+        Thu, 6 Jul 2023 20:53:02 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7F81BD3
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Jul 2023 17:53:00 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-314560a0f13so614896f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jul 2023 17:53:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688689889; x=1691281889;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wsL+nUW+0v3XUtpK8KNcb9gGGFha081JmYpkCXmvvAE=;
-        b=GXpjwIAvLMq+kyUKw50MZNRwCy+1QvDyjCIT9Vj8bKNYT+3xxDCf34QJQJ4R6cLDap
-         I2xZXGYFmyvjSHNE6TFqHbs0KRe9aaFRKNkRXIUUJZ5zzZ12hFb4Vp1gB+DEjcu1qi9i
-         j/y7Bjq2SZJTlV6HQFeg78uDrEa2n//VYQTAeeES7sOMoZ0/ECG6Jv3ealK2BAp026/7
-         ua5ptOsk1KNNCmKd6zxlFNd4pGVt3TgVf/ANIKMtyPt4cHK9mQqfGBztgHwIFymoq3xV
-         wo3jQjh3xphu0RhSBGxDF508bajnYQtaie1/Y4N5PCz9l2Yw10xYS8Kb6W4df4iefmnT
-         q+6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688689889; x=1691281889;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=jrtc27.com; s=gmail.jrtc27.user; t=1688691179; x=1691283179;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wsL+nUW+0v3XUtpK8KNcb9gGGFha081JmYpkCXmvvAE=;
-        b=WNpxQlTH9+HDLuEVEojCelgz8quZ/Vqr1xyFxYAVwC+4uCya9LKnWq/ffVEVPQvt5o
-         ZomuhySUwvP29z08WoR/klP8ADmj4NI+DbTWz13CPZ2L9GZ4AfqZTvK7P4qrW684L99C
-         Le5Ff0sEP6dh44TTP+yp8/aV/mz4F7nd6luASvBcwRaHYncMytPtMM5R+OhYXegexT89
-         blnX2BsDwf9Vrh+M3Qd9f9vm/OMRIlbc0LGYCc4ZwpU0dW0Z3IpByM/3v1qTvqswqtbk
-         JvKeKSB3UrmBwWY6gYrAn1huO/Un2JdwV9mQ+p6NuFgzYt499xHjK9Hajcrvb3m8BnuM
-         ONTg==
-X-Gm-Message-State: ABy/qLaUUVtTepzTVoa74l9LKf+Qr/h4FZVr455aTLncgqMyeg1yAR0Q
-        Sy+VElVLhX3bVQz97kDT9Zs=
-X-Google-Smtp-Source: APBJJlHmGmp/kMMoWIXZOfL5JEIX/ee7sbk/t6Qa4o1H88DgMkVuUNPnFWkk+WVjC8P3Fl0BcPXt9w==
-X-Received: by 2002:a17:90a:fe07:b0:262:ca9c:edcb with SMTP id ck7-20020a17090afe0700b00262ca9cedcbmr5574821pjb.9.1688689889483;
-        Thu, 06 Jul 2023 17:31:29 -0700 (PDT)
-Received: from macbook-pro-8.dhcp.thefacebook.com ([2620:10d:c090:400::5:9b44])
-        by smtp.gmail.com with ESMTPSA id gm13-20020a17090b100d00b00259e553f59bsm329275pjb.20.2023.07.06.17.31.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 17:31:28 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 17:31:25 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     andrii@kernel.org, ast@kernel.org, shuah@kernel.org,
-        daniel@iogearbox.net, fw@strlen.de, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, dsahern@kernel.org
-Subject: Re: [PATCH bpf-next v2 6/6] bpf: selftests: Add defrag selftests
-Message-ID: <20230707003125.6cxwqev7f5ybjcom@macbook-pro-8.dhcp.thefacebook.com>
-References: <cover.1688685338.git.dxu@dxuuu.xyz>
- <deb1c4c5003892997dfb6f628e185b124e590472.1688685338.git.dxu@dxuuu.xyz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <deb1c4c5003892997dfb6f628e185b124e590472.1688685338.git.dxu@dxuuu.xyz>
+        bh=r67n9FyRXMn2NIxHWlUhbk55uKQk9X6Dzb3qD8qYPqE=;
+        b=esjLyRw9yG+IBiqgDC3zXqfCcnN/DbqAvEF78hFJzU3GMueXP0gDEe8GTEqkIWVxa3
+         v5zA190KEwcagvtZcljHSX5zruOtY+4A2hJCW3xQ3kYhJ90qFeRfxiol/gEciWHjfH+V
+         mSyV5wfea0jWsz4PHhQxxB5Beo4CjL8wQp1MdL2w0G7UKtRX2oxrtnD39TtmFgkTupMk
+         WrOKCQbvpbAoBBwRglsxfn/NNxtlufKtOCK89XiZrAuUWobpoJwWEkM6LzWixFkAJGVS
+         MnU63/tx7DAHW6EBB/ZRB4iDp07GMPxP25YJdWEYTFFIVGB2D/It7bRcDQ1rxLN1efdG
+         V0eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688691179; x=1691283179;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r67n9FyRXMn2NIxHWlUhbk55uKQk9X6Dzb3qD8qYPqE=;
+        b=T65LfMaIQ7+Y+wr6mS9LXZbdIYM7qxLmg3R52FT0pW5aQjLW7yspyz4Zs9S/h1G/A/
+         /W6sKdH5DHZhPGLGfQIHDw7KA7AC1GxdSuMEuE4Yp9BT0RmYB8HkZc/kg8qoWmxsNRaw
+         ODfkzV3ADnpv5uSXd2SkJnYgeKNs/T7c8HUBnkPJ01GTJ/Jm5cECsjPGDQtb7VYKmQ0S
+         Kd37bVSNQUmTNAei6GXlHgDJYUBPRVXVTJm8XLqrzF/y+tdk4uCsEZfjYea0L9IO0udZ
+         g5P5Q0xJQSuzadvMiMgig3nnkMqpJI+JPXPpPStJrGpp/6ZT8MohKhtatYu25yWxh2U7
+         xyew==
+X-Gm-Message-State: ABy/qLZr3Lgx4/h6XNQQwWJ/fyzf5SXzgqG85PCciDkOpLEsFgh32CXf
+        7Mh3oamKQ0Jl8RqK+VA8vFUsdQ==
+X-Google-Smtp-Source: APBJJlG7B59PVAJXs+YJAtg1NQZvtbN9/7wzF9BiD0+Kq6eoLvFO+eLgMC5CjxyPq9DIG3O6/bYyWQ==
+X-Received: by 2002:a5d:54d2:0:b0:313:f5f8:a331 with SMTP id x18-20020a5d54d2000000b00313f5f8a331mr2449781wrv.34.1688691178654;
+        Thu, 06 Jul 2023 17:52:58 -0700 (PDT)
+Received: from smtpclient.apple ([131.111.5.246])
+        by smtp.gmail.com with ESMTPSA id u15-20020a5d6acf000000b003143b7449ffsm3086566wrw.25.2023.07.06.17.52.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 06 Jul 2023 17:52:57 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
+Subject: Re: [RESEND PATCH v3 1/2] RISC-V: mm: Restrict address space for
+ sv39,sv48,sv57
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <ZKdUpzvyfy9f48MI@ghost>
+Date:   Fri, 7 Jul 2023 01:52:47 +0100
+Cc:     Alexandre Ghiti <alex@ghiti.fr>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        mick@ics.forth.gr
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <34483C0C-FA31-41E6-9263-1F9A08CEBE2C@jrtc27.com>
+References: <20230705190002.384799-1-charlie@rivosinc.com>
+ <20230705190002.384799-2-charlie@rivosinc.com>
+ <2084462d-b11d-7a48-3049-6bafbe81e7b4@ghiti.fr> <ZKdUpzvyfy9f48MI@ghost>
+To:     Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: Apple Mail (2.3731.600.7)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 05:25:53PM -0600, Daniel Xu wrote:
-> +static int attach(struct ip_check_defrag *skel, bool ipv6)
-> +{
-> +	LIBBPF_OPTS(bpf_netfilter_opts, opts,
-> +		    .pf = ipv6 ? NFPROTO_IPV6 : NFPROTO_IPV4,
-> +		    .priority = 42,
-> +		    .flags = BPF_F_NETFILTER_IP_DEFRAG);
+On 7 Jul 2023, at 00:56, Charlie Jenkins <charlie@rivosinc.com> wrote:
+>=20
+> On Thu, Jul 06, 2023 at 11:11:37AM +0200, Alexandre Ghiti wrote:
+>> Hi Charlie,
+>>=20
+>>=20
+>> On 05/07/2023 20:59, Charlie Jenkins wrote:
+>>> Make sv48 the default address space for mmap as some applications
+>>> currently depend on this assumption. The RISC-V specification =
+enforces
+>>> that bits outside of the virtual address range are not used, so
+>>> restricting the size of the default address space as such should be
+>>> temporary.
+>>=20
+>>=20
+>> What do you mean in the last sentence above?
+>>=20
+> Applications like Java and Go broke when sv57 was implemented because
+> they shove bits into the upper space of pointers. However riscv =
+enforces
+> that all of the upper bits in the virtual address are equal to the =
+most=20
+> significant bit. "Temporary" may not have been the best word, but this =
+change=20
+> would be irrelevant if application developers were following this =
+rule, if I
+> am understanding this requirement correctly. What this means to me is
+> that riscv hardware is not guaranteed to not discard the bits in the =
+virtual=20
+> address that are not used in paging.
 
-imo the end results is pretty neat. The users would just add this flag and
-netfilter bpf prog will see reassembled packets.
+RISC-V guarantees that it will not discard the bits*. Java and Go =
+aren=E2=80=99t
+actually dereferencing the pointers with their own metadata in the top
+bits (doing so would require a pointer masking extension, like how Arm
+has TBI), they=E2=80=99re just temporarily storing it there, assuming =
+they=E2=80=99re
+not significant bits, then masking out and re-canonicalising the
+address prior to dereferencing. Which breaks, not because the hardware
+is looking at the higher bits (otherwise you could never use Sv57 for
+such applications even if you kept your addresses < 2^47), but because
+the chosen addresses have those high bits as significant.
 
-The patches look good to me.
+* A page fault is guaranteed if the address isn=E2=80=99t sign-extended
 
-Florian,
-could you please review/ack, so we can pull them in?
+Jess
+
