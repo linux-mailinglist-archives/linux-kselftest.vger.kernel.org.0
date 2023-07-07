@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DC074B1EC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 15:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA9E74B203
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 15:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbjGGNkN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jul 2023 09:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S229631AbjGGNnZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jul 2023 09:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjGGNkG (ORCPT
+        with ESMTP id S231833AbjGGNnX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jul 2023 09:40:06 -0400
+        Fri, 7 Jul 2023 09:43:23 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F58D2688
-        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 06:39:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3B026A1
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 06:42:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688737154;
+        s=mimecast20190719; t=1688737343;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=VkzChLY9HdEu6d357XN/H6AgzScXOhRLRhZBoNRXs5Q=;
-        b=iK4qhFAThVY/Lj7ifZevuRswFV+XqzT/Hv9P1X67/e8DKgogHuQQ195bko7pxjj240Btzt
-        3tsZbg8x9sAi38aFFO83B2VOeLyDWzyzp7fCig1VDN/qA/VHHhakFC4hQ23byjZOrenOLl
-        8sUm4PeOj4ac4lygtA9YRs7aI5dZcnw=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=vvyaqhuLF/j1Og8h3rNFyZh2EidT6aQSYdLt9GNhDDY=;
+        b=NnBpsBLq2GI2WuuQ9M0K6x5GT4xZuP5ED9YJMla5o4N/YW5iqN02x6rwooOTJgDEkOffdW
+        Hip+OOY1Qg3Z2eeSrDo+EDeMvAn+Kz91b0NcabdGgHPFy4rVnogJH8Zim+9RHJKf0URwHN
+        UvwMHZxHxD1T9tGwrEJuS6LnvXAdtvs=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-283--ZEawfTtPkmgvwT1PtfCjg-1; Fri, 07 Jul 2023 09:39:13 -0400
-X-MC-Unique: -ZEawfTtPkmgvwT1PtfCjg-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-767b80384a3so5502885a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 06:39:13 -0700 (PDT)
+ us-mta-253-VocmF3buM2KIlvGgjvbWyQ-1; Fri, 07 Jul 2023 09:42:22 -0400
+X-MC-Unique: VocmF3buM2KIlvGgjvbWyQ-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-62ffa1214edso3770746d6.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 06:42:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688737153; x=1691329153;
+        d=1e100.net; s=20221208; t=1688737341; x=1689342141;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VkzChLY9HdEu6d357XN/H6AgzScXOhRLRhZBoNRXs5Q=;
-        b=dXZ26r3hk+RDbGC5/QOzU/kI2Tx6lAg0+/aDCzewmAukzhXS81WApPnFQ/9CWm6GRj
-         +Z2iVVDVflDC5XIcZxGwBVnX0OknV4QcGyHvChvfSW9ooJn/NIleqsBrJ7ONUHRg8wMj
-         tPKez61+hulHehoDX8uvEQQPpnxaEYV8u95/mH6Ki/hKPi8EUheiwcU+N8NueNfOiJ4g
-         kWPqhcZbOcKO0pFQtBUSQWL9j6N0jeqn+zid84iMshsRarGgwzrK6OLWE/yFEc4VzBtK
-         2lnSOFVjr6/vzGor+YKC8CuVJZEj8Kp6YMKmpvwuKSVEslaoevZPGOmDw0Hri8Qk2mLr
-         JbqQ==
-X-Gm-Message-State: ABy/qLYkb3dRKWKIKaVDXmf3o/uVPrcjAo4jf8LKAfCe1kNsMbDQaqSr
-        UYL80vRDXwZX76a4dGc4JJ8Ni3qMHt6V9gBzVKi5u4kf69KjC+V4WQwZY+UiGwbpqEH4nhuO53z
-        a7+woAlAjMpAnbXUI144ELcAIQFYH
-X-Received: by 2002:a05:620a:46ac:b0:75b:23a1:69ee with SMTP id bq44-20020a05620a46ac00b0075b23a169eemr5751046qkb.5.1688737152790;
-        Fri, 07 Jul 2023 06:39:12 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHisqRU4zty/LgSeJhrGlLL7Qi/Onw5W451/3DenbEb2/djgvkWY3dMDPa+N5YkDQdPGuIvlA==
-X-Received: by 2002:a05:620a:46ac:b0:75b:23a1:69ee with SMTP id bq44-20020a05620a46ac00b0075b23a169eemr5751018qkb.5.1688737152545;
-        Fri, 07 Jul 2023 06:39:12 -0700 (PDT)
+        bh=vvyaqhuLF/j1Og8h3rNFyZh2EidT6aQSYdLt9GNhDDY=;
+        b=NUU8R/uHfglgPqjxPGiaK7SVUNHd6H2hCP+jt0yshAlD0aD0/YN9aRcBuVDDbTPELI
+         OlEfRby17kVU9pHodA2zKq9BpVADRGbXx/zSJMEoMQ1v0EnR9fpzWijyf5KobwGybxvU
+         Di4C5WeOa2FloWPbhZPcyqwMacP6A3L/m8OW6p2MK+oBVngGyt8A+B4b99V3Gv0WGtzM
+         3TnT5zD4NwmGCkULWMWQtQPRllJvzPYN4oUxu+ePVO67hCcumC9zjBrdEWk5rGHPH0ZA
+         aR/fshoBQdMB2eEEM5Iqr7RLNI8RtLBEE78LqhEtv70C3jBCkwn+Sno9irkXooXLjBFA
+         nxIA==
+X-Gm-Message-State: ABy/qLamLQcXcb209hT97zaMyV/m03vFUtsTm3eHV4sK/ULhuwxOgpfO
+        Uri8gNbPRMo1OWOf2whD8aXnWYGNpNHtOV6AMKrYFolN+2xf73a/AGwLM7BaveEKqLLxt+4M04Y
+        Zs5VKlv/R6r8ViSieV+nbDFwAvxw5
+X-Received: by 2002:a05:6214:20cc:b0:61b:2111:c2e2 with SMTP id 12-20020a05621420cc00b0061b2111c2e2mr5425173qve.2.1688737341657;
+        Fri, 07 Jul 2023 06:42:21 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHFH2MLUjHuHlJ0o0C1Yq4RbSkSJbn/7QaojqKFFhq0TCDBNojgWoYsFCzsCzTX8XCvxMu0gw==
+X-Received: by 2002:a05:6214:20cc:b0:61b:2111:c2e2 with SMTP id 12-20020a05621420cc00b0061b2111c2e2mr5425138qve.2.1688737341415;
+        Fri, 07 Jul 2023 06:42:21 -0700 (PDT)
 Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id g25-20020ae9e119000000b0075b168fcde9sm1808290qkm.77.2023.07.07.06.39.10
+        by smtp.gmail.com with ESMTPSA id p8-20020a0c9a08000000b0062ffbf23c22sm2090348qvd.131.2023.07.07.06.42.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 06:39:12 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 09:39:07 -0400
+        Fri, 07 Jul 2023 06:42:21 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 09:42:17 -0400
 From:   Peter Xu <peterx@redhat.com>
 To:     Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -87,15 +87,15 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 5/8] mm: userfaultfd: support UFFDIO_POISON for
- hugetlbfs
-Message-ID: <ZKgVe/tYlQ2w67RO@x1n>
+Subject: Re: [PATCH v3 7/8] selftests/mm: refactor uffd_poll_thread to allow
+ custom fault handlers
+Message-ID: <ZKgWOYuIdqa25Qcs@x1n>
 References: <20230706225037.1164380-1-axelrasmussen@google.com>
- <20230706225037.1164380-6-axelrasmussen@google.com>
+ <20230706225037.1164380-8-axelrasmussen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230706225037.1164380-6-axelrasmussen@google.com>
+In-Reply-To: <20230706225037.1164380-8-axelrasmussen@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -107,13 +107,22 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 03:50:33PM -0700, Axel Rasmussen wrote:
-> The behavior here is the same as it is for anon/shmem. This is done
-> separately because hugetlb pte marker handling is a bit different.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+On Thu, Jul 06, 2023 at 03:50:35PM -0700, Axel Rasmussen wrote:
+> @@ -247,9 +245,13 @@ static int userfaultfd_stress(void)
+>  {
+>  	void *area;
+>  	unsigned long nr;
+> -	struct uffd_args args[nr_cpus];
+> +	struct uffd_args *args;
+>  	uint64_t mem_size = nr_pages * page_size;
+>  
+> +	args = calloc(nr_cpus, sizeof(struct uffd_args));
+> +	if (!args)
+> +		err("allocating args array failed");
 
-Acked-by: Peter Xu <peterx@redhat.com>
+This is trivial, but I think I requested a "free" (or keep it allocate on
+stack) in previous version but it didn't get a response on why we cannot
+and it kept going..  could you help explain?
 
 -- 
 Peter Xu
