@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AB374B38C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 17:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2064F74B394
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 17:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbjGGPCt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jul 2023 11:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S233116AbjGGPDw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jul 2023 11:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbjGGPCs (ORCPT
+        with ESMTP id S233238AbjGGPDv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:02:48 -0400
+        Fri, 7 Jul 2023 11:03:51 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F5F210A;
-        Fri,  7 Jul 2023 08:02:37 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1688742143tn8jl0ih
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1022B1FE2;
+        Fri,  7 Jul 2023 08:03:49 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1688742215t9bcbq7j
 Received: from linux-lab-host.localdomain ( [116.30.131.119])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 07 Jul 2023 23:02:22 +0800 (CST)
+        id ; Fri, 07 Jul 2023 23:03:34 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: hoArX50alxFmsJ0atZjqbzHeVuse8MtD4x3pgHfFnxe1hIjs3zsPJJljILwPP
-        cZOCtJq2GFFmaWMlBnT7xIijoHajHOWxCVCyUgsrmQJI4aJwBx1j1G0/nT9v816H4crLevD
-        b2wqhPOTx2jJXGPA0XEf1e4cXnpNe+Ho6HRdAYwOKiwGrv3+FsrXaYQXFnirspceOYnrj5d
-        2gD2Mwc5hrF7Tk82JzkwT9vRE8qLrIbfJAFlgLQxBAVjmuqj1HFPF+meU0LnlvFzYUHVQsU
-        ALHr5zeDk8O8oofQT+qDeXFlCZuVx8tWjuBG0NsEHzSMmIGDxTHm1aGJR5nGRksKAQw62x2
-        856wxltVV+JT2VWIZNTh1T+Ecuwb/jyN6hRoodt577DibVw0p0ypooL8P7v34K9lg6uY0Ni
+X-QQ-FEAT: ttAhR/+4RmnN6nx3iljloJFFxC//J57L6V9h3PxADUXe0+b7w1eDps9vJaZOn
+        mn9JnbeD3nNYt2VsoSba+gB6pGj899tAN6ryR8zpRDrkOTDVEHXgh0of9Yyv8BcQAfM97D2
+        g2fMfc3LDxLKjw9FJwWuCuMyMOe5AINO51aaVWYKTTeWgAXzNiyUr8HQJ+HRdU/kDuceTuW
+        trYrBgn1FORbXZufjh6X3yYFmOZszVuJxwEYbpmV/DohrTADWUBJLFrfubtSoJ+YBzzvAum
+        e5mSH8c0ZQi8JQKddt3LY5y3rSBJP0O7HRqRNpa2ATMPhfavAtpjt5bZCnHolzcLXkDKr2/
+        7zcOjZezqMfR30WpbgqtGxf2RdnL963KDMLTEjNRrPPWoUWpLWENiWDlDdimm2JozmewsN2
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 7535638931028319636
+X-BIZMAIL-ID: 7898572542868346834
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-riscv@lists.infradead.org, thomas@t-8ch.de
-Subject: [PATCH v6 10/15] selftests/nolibc: prepare: create /dev/zero
-Date:   Fri,  7 Jul 2023 23:02:16 +0800
-Message-Id: <589b6a374e604b6289eb00890cd63e2b7d2ce86f.1688739492.git.falcon@tinylab.org>
+Subject: [PATCH v6 11/15] selftests/nolibc: add EXPECT_PTREQ, EXPECT_PTRNE and EXPECT_PTRER
+Date:   Fri,  7 Jul 2023 23:03:26 +0800
+Message-Id: <c8731f470b344d3fc8db30f6112c4e0c7d7d5765.1688739492.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1688739492.git.falcon@tinylab.org>
 References: <cover.1688739492.git.falcon@tinylab.org>
@@ -52,35 +52,88 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-/dev/zero is commonly used to allocate anonymous memory, it is a very
-good file for tests, let's prepare it.
+The syscalls like sbrk() and mmap() return pointers, to test them, more
+pointer compare test macros are required, add them:
 
-Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/lkml/20230702193306.GK16233@1wt.eu/
+- EXPECT_PTREQ() expects two equal pointers.
+- EXPECT_PTRNE() expects two non-equal pointers.
+- EXPECT_PTRER() expects failure with a specified errno.
+- EXPECT_PTRER2() expects failure with one of two specified errnos.
+
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 58 ++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 88b840f86f52..b759fb25d375 100644
+index b759fb25d375..8be675debf28 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -894,11 +894,13 @@ int prepare(void)
- 	 */
- 	if (stat("/dev/.", &stat_buf) == 0 || mkdir("/dev", 0755) == 0) {
- 		if (stat("/dev/console", &stat_buf) != 0 ||
--		    stat("/dev/null", &stat_buf) != 0) {
-+		    stat("/dev/null", &stat_buf) != 0 ||
-+		    stat("/dev/zero", &stat_buf) != 0) {
- 			/* try devtmpfs first, otherwise fall back to manual creation */
- 			if (mount("/dev", "/dev", "devtmpfs", 0, 0) != 0) {
- 				mknod("/dev/console", 0600 | S_IFCHR, makedev(5, 1));
- 				mknod("/dev/null",    0666 | S_IFCHR, makedev(1, 3));
-+				mknod("/dev/zero",    0666 | S_IFCHR, makedev(1, 5));
- 			}
- 		}
- 	}
+@@ -364,6 +364,64 @@ static int expect_ptrnz(const void *expr, int llen)
+ 	return ret;
+ }
+ 
++#define EXPECT_PTREQ(cond, expr, cmp)				\
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_ptreq(expr, llen, cmp); } while (0)
++
++static int expect_ptreq(const void *expr, int llen, const void *cmp)
++{
++	int ret = 0;
++
++	llen += printf(" = <%p> ", expr);
++	if (expr != cmp) {
++		ret = 1;
++		llen += pad_spc(llen, 64, "[FAIL]\n");
++	} else {
++		llen += pad_spc(llen, 64, " [OK]\n");
++	}
++	return ret;
++}
++
++#define EXPECT_PTRNE(cond, expr, cmp)				\
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_ptrne(expr, llen, cmp); } while (0)
++
++static int expect_ptrne(const void *expr, int llen, const void *cmp)
++{
++	int ret = 0;
++
++	llen += printf(" = <%p> ", expr);
++	if (expr == cmp) {
++		ret = 1;
++		llen += pad_spc(llen, 64, "[FAIL]\n");
++	} else {
++		llen += pad_spc(llen, 64, " [OK]\n");
++	}
++	return ret;
++}
++
++#define EXPECT_PTRER2(cond, expr, expret, experr1, experr2)		\
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_ptrerr2(expr, expret, experr1, experr2, llen); } while (0)
++
++#define EXPECT_PTRER(cond, expr, expret, experr)			\
++	EXPECT_PTRER2(cond, expr, expret, experr, 0)
++
++static int expect_ptrerr2(const void *expr, const void *expret, int experr1, int experr2, int llen)
++{
++	int ret = 0;
++	int _errno = errno;
++
++	llen += printf(" = <%p> %s ", expr, errorname(_errno));
++	if (expr != expret || (_errno != experr1 && _errno != experr2)) {
++		ret = 1;
++		if (experr2 == 0)
++			llen += printf(" != (<%p> %s) ", expret, errorname(experr1));
++		else
++			llen += printf(" != (<%p> %s %s) ", expret, errorname(experr1), errorname(experr2));
++		llen += pad_spc(llen, 64, "[FAIL]\n");
++	} else {
++		llen += pad_spc(llen, 64, " [OK]\n");
++	}
++	return ret;
++}
+ 
+ #define EXPECT_STRZR(cond, expr)				\
+ 	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_strzr(expr, llen); } while (0)
 -- 
 2.25.1
 
