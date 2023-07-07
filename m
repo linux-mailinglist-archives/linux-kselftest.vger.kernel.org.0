@@ -2,168 +2,241 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC15D74AC92
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 10:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B3874ACE2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 10:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbjGGINK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jul 2023 04:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
+        id S232838AbjGGI2Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jul 2023 04:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjGGINJ (ORCPT
+        with ESMTP id S232708AbjGGI2K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:13:09 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2111.outbound.protection.outlook.com [40.107.215.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDADD1FC9;
-        Fri,  7 Jul 2023 01:13:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=knjYqbC3ML6B118hRYVBLBHrmGDvUip5vGQmgVClCS2j9SwO/QxidLmDgObrVxU9pfXI51yZt41DhaYxuTdBNzYPBYeonhZGxVPu/Q8CgvTZgCQySlud/BDog/wqveqouIUMFvTggsZ3LtOiaDIzrZG6PeC1qKXuc4TpHpGLeYX4/B2K86KLLNnTa9eQUbRi9UrFV8BQcf2mAuV5dlGbDdIAfqlHGLumHWCu/2f5s/Z7zGPKTvhxVhxLDuUuxKMP6AvtmEL4Om2YEc8Lz20NO7zFzKYApsjjyLO5oGDR4o/HPoPsRg2d3IUXJXOlgAmgpTHi2wLtorxerjDcS06lDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LWAfA4UvfFYgPmht3eaKnqhHUz6P8Go547MJGG2sGT0=;
- b=eKXGqB2xX7+lPGVO1rRSfk60j3r0yNBFIbIr+TlQgEsqMi4lQdXDuxLJfDWd/uOQp5ls/ad5zaNVpjPw8P2CXuC7iTpsxDThWN8pPLloWPnNs4+Nt+UCgjHW0XUlwLwwih4prWaVnmpLDDSzWGJRf+4PefLP+DZwL0yUN6qpKII2+r1bzmXd/vANh+r5W0wENkb++5/NL2VhXg17ZQWH/ITe67qpMySouL7uuKFoCnozsHgVqLgr3S06BlOhFxiSk1EHJmRHlHBZofESY4XqBqWJKbY9XloMXW+zt5bc+rKPVCbQsoSdNwwAgT3ZqS3Z+XdVubGswvRnYxStq6V8kA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LWAfA4UvfFYgPmht3eaKnqhHUz6P8Go547MJGG2sGT0=;
- b=Y8NP0QEeZUx11LCDi1hs+3II/Jslj9f5gCDzMrNE6eRUERaXSfFFPBXOEMuKJZ2arBL/QOMOK1vqX1LyLjjVo1oBPu9BeGRfMZta71E+x9e8UCEg4kOA+hNKjucqvVSOnpIhVNDki5EJjOcPuKLw3v6eq1aM0AmDnCSEIS3/BbZNVWKC7K6FNXSGAbt6v8WT6BN/D9ik303ki9ShTIuwoRaV1yzs/8eTAogy2f7JN4PIj4+XH/nTrGQ3zcLEF9iSUlLeH48etBUvkVOt1OqA9076fbDsvyqXtcLxN78pYsHOLvy7ZPv+wq6tBjbKH+5KRluIzg/64qjZdVmJrfpOqg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
- by TYZPR06MB4480.apcprd06.prod.outlook.com (2603:1096:400:72::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Fri, 7 Jul
- 2023 08:13:03 +0000
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::8586:be41:eaad:7c03]) by TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::8586:be41:eaad:7c03%7]) with mapi id 15.20.6565.019; Fri, 7 Jul 2023
- 08:13:03 +0000
-From:   Lu Hongfei <luhongfei@vivo.com>
-To:     Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Hou Tao <houtao1@huawei.com>,
-        Lu Hongfei <luhongfei@vivo.com>,
-        Anton Protopopov <aspsk@isovalent.com>,
-        Wang Yufen <wangyufen@huawei.com>,
-        YiFei Zhu <zhuyifei@google.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com
-Subject: [PATCH v2 bpf-next] selftests/bpf: Corrected two typos
-Date:   Fri,  7 Jul 2023 16:12:50 +0800
-Message-Id: <20230707081253.34638-1-luhongfei@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0126.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:2b6::10) To TYZPR06MB6697.apcprd06.prod.outlook.com
- (2603:1096:400:451::6)
+        Fri, 7 Jul 2023 04:28:10 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2AF1FC6;
+        Fri,  7 Jul 2023 01:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688718489; x=1720254489;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GzxiFui6WFto9YwFpGhkmwPFzsKVDuUSVc9CcihpbgE=;
+  b=MIWubbu8n0IMdGK+UNE9OB8V4Ftc2xbPDjZkQeC5j5vuMgBkcrVdprWZ
+   yIFSp6A+1HLjHplZikzdlvgc1o+p4SX/DpFDCge4egAd8yxFPKBnVpG7Z
+   XcVnfa7e7kQFMptqoVlPhc1+w7N68DLX+4aI/GnHSkET4a7cG0AQWEL2T
+   EjnZBuhQZSKPq0pvLvAaHTgAlxyldk/eP2LETGDZTPh4kM+6ZYJXfyj8l
+   mtJ6rN4xfZxfTEloGbHVw83PlmBIhKJAujPggJjLFFYFBMPG9hFslz/CK
+   i+tGhyJkjMH5Pty1QHzPzh3pTnLilmid3ohsc+tPYWTE7/8lXlpeKCKt4
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="363874282"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="363874282"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 01:28:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="723127389"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="723127389"
+Received: from slisovsk-mobl2.ger.corp.intel.com (HELO [10.249.33.67]) ([10.249.33.67])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 01:28:05 -0700
+Message-ID: <6b0c67e9-e806-200c-3af4-cfdd2e5c47d3@linux.intel.com>
+Date:   Fri, 7 Jul 2023 11:27:50 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|TYZPR06MB4480:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6da0761a-ee5b-455b-36ad-08db7ec1fc76
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fBrYmNiIfiJkdaIj/hI1JKQOl+EUMWx5t17hV/rd7UIv6MUYxk+TVRu4EBPyn3TKCTwnUxg5+D0Kx2nbzXkUw3wDi+M3o2NWmJLMJ3m+p2IiU5r8FT3puYRVU75Ki02mAniz4QtPOcf3GK3nZYHlv14k0BeBipvRT6eJwA33g1TeZUzLyPlVwt6hXu3Iq2IArbZeLEEqpByHgRjNQCsp9rdP4gZw1Lv5XHVCYa5B7d6C24W+NybOozbXTWRKnsRPT3QVxoYvzzIPRHdFtY4TXu5pB50HBSPTZ+BZWSPUJtgmZq0EVXEKeg03I8Wi2Px04sZQYrjbOWkoNShD/3VnuEdQCAgLrJ+oNzcGLYe+vrcaLlv5660lum0W3UG9z8nJ1TXN2HRgGtOjh5N3TqS0TSd3G36nMnp5/tuNy1wKm3tsu9TMO41qXcsQCddB2Ak1TVYFogdWp/tXhQoTm2bwPWnpun47nBZjDXgm4joQF5YafBJNq661BajxilMd/uOm+2vqfBGO8gpmLGEQF4YWjqFURLne1TTphYDSkbO/y37QrmIcXjoKKp7wxg3JyOgPcauMOa/Ma/Vd0suHqBxyhMNpRt2W78R7K34IAkqzMHlqj+b+pwKBS4iwKH88YMxztTWbWI6JHuGvx1JNLicveg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(39860400002)(376002)(346002)(136003)(451199021)(52116002)(478600001)(6666004)(110136005)(6486002)(83380400001)(26005)(36756003)(66946007)(86362001)(2616005)(2906002)(186003)(1076003)(6506007)(6512007)(41300700001)(38350700002)(38100700002)(107886003)(921005)(66556008)(316002)(4326008)(7416002)(66476007)(8676002)(8936002)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nFT+FI5eSy7e70Vwhe1oZFzULNaEgJerTspy0Y8ir6czezdI2S1nAVKLrRkK?=
- =?us-ascii?Q?8b2FQcQKnENptI/OOEjW4j/1waA13c03iGJ0zDkz2GcnnfrTdj8Qk1mAefZp?=
- =?us-ascii?Q?FSd1jksq65jrds2HqxliRGxcgiQD0mhqjBXyqMjrTOgtchoDa0LnhPADKqtD?=
- =?us-ascii?Q?r6Mjyljjx5S0a7CGrIsF8y1jAmSKJP2UBaVSUjD7E4oXViOX7dNlAiXn5U4F?=
- =?us-ascii?Q?QoLwAVX6uWfKlndpmd3Zbu6QxSga89k/yFom518cbih8dc8CBYJM6DCd1Wjg?=
- =?us-ascii?Q?D4OpLI+5v71tG01tWvVAAFmt0KAZjuCEWUT3uJ/3so+f5MPeQeRo6wR3wv7G?=
- =?us-ascii?Q?XWcnW4rsKtt+0lXM9B1u+CrqiGRXHJHAiJx7E8NKFC1ZkdahTznGuqedBvkG?=
- =?us-ascii?Q?O4eBnmk6P4Mh65qtZX2B3jWP66KZKzIQ6x0Sp3ingxbnIRUuhz1zsJncA761?=
- =?us-ascii?Q?ZaAmprqgweCi2NtP9QbdqFYF0S3HkNl4B3Oc3rnC6/5jG9W9heilH2V6Tm7+?=
- =?us-ascii?Q?gz7MOhDhv2vYYUwbkP/La/eAwtEnZArtsft6NVIQjlRPiLu+TBdIRPquFdLG?=
- =?us-ascii?Q?2KaSxJ14GFiWgSvWPXKRjUq/j7TpRxsk4MvxZQshCW7f3wFkJ/qdH7y1j0zm?=
- =?us-ascii?Q?dKJXiAxvaAEq+Gjuaa95rhR+ga+kpDgOx8W/8f4E/ziTSxolF+zA/Wuu8ZFm?=
- =?us-ascii?Q?7xTMbzx3lgik8ILgITqz3ngC345q2PVHYv3x4a4DIZGp1hqzS+K3poSLoM6M?=
- =?us-ascii?Q?Saxkc/RVSdEX8qtnjDs+IJjKpUqi3LCzDA7x+TBw+GK8AAvPWBW70n3fd2t2?=
- =?us-ascii?Q?cm+xdbFWqzhLMQlgWmmzYn43jiO2md/8psY9fzzT/RpvSHPxFX8RJYQrAy0R?=
- =?us-ascii?Q?o/8Z15gzLY8kjeDR/KWdFDAmmigB/XTnZH6IzhMBTYGCifzX9YymMdl0JFGj?=
- =?us-ascii?Q?yP3G6QXlIPRPLXO5N5WQRDTEsGNTxhuQH0uYBd+r7P6RLCJ9w3OD8uzgj7vQ?=
- =?us-ascii?Q?Ma62qmSuf7AGjRTCcEAsxiIYioDxY+/rhgfGaLm5owzY9mFQp1wbUaPZ74NR?=
- =?us-ascii?Q?+a5e+RD4pvY0mBxmKv6fwGdC8szkoj+YRkHxkJV2KgDRjy+5o0e6dl6Csw+d?=
- =?us-ascii?Q?9ex9sgNfZuxPgZDMbrsAU5zWVL44M1Na7IXbWLyVlK6DMQwbGdj1tFDmeVOm?=
- =?us-ascii?Q?Dig/nQy6IuT4K1xD0gRLds+fDwxMtPqIzxpaZeGZ+0t9JmM15cFJRoCg3qYL?=
- =?us-ascii?Q?snGA0qdjL/unnL8k8G0D3iBcaZ3hvfzha4TCwL3+hIy92RfadL6ONPr0WVg8?=
- =?us-ascii?Q?HIX/Ybp3w+pC7q+W0erGmttv/50UhtHR50CiR90ZqIionJf+BUid0A8CB92e?=
- =?us-ascii?Q?3v4SKpN4A25/mUzU9ne5Hs+XYQzS+Sqab9anqlUe0ezUbGS6Nn5rQW9k/wvO?=
- =?us-ascii?Q?SVW1+xpi8Nzpot3kTOPiIGwEE72Ef9PsKEh0S3lE5mH99SQ2CIntbzMu6UYb?=
- =?us-ascii?Q?/OPqjqb+4TtAXqg4YU5HBJFcIMIqHZ6pUvDpGz1o7sK/O/Hz85i4biyj4w4A?=
- =?us-ascii?Q?DtyCxbHGoULM2MgFiLz532eUnGUzrJg/PX+wCkkO?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6da0761a-ee5b-455b-36ad-08db7ec1fc76
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2023 08:13:03.4045
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0jtaPce+TtJgZLuftwuHI0F3Bvmlgka7HRkzMVcqBhjeIARFd9kgxRwFDzIfmEjQ9GiHrkFC+482wRUzvIJL5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4480
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] x86/tsc: Add new BPF helper call bpf_rdtsc
+Content-Language: en-US
+To:     John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>
+References: <20230703105745.1314475-1-tero.kristo@linux.intel.com>
+ <20230703105745.1314475-2-tero.kristo@linux.intel.com>
+ <CAADnVQL2Tn+2rP0hVB3kdB0At12qVu+vJ_WbJzrkxqOJ5va2vQ@mail.gmail.com>
+ <64a64e46b7d5b_b20ce208de@john.notmuch>
+ <4b874e4c-4ad3-590d-3885-b4a3b894524e@linux.intel.com>
+ <CAADnVQK0rzHWxxx7LMFSTuBx18A+6H6AEkKFHNDkPwbPUbsk4Q@mail.gmail.com>
+ <64a7a597b1e9e_dddea208db@john.notmuch>
+From:   Tero Kristo <tero.kristo@linux.intel.com>
+In-Reply-To: <64a7a597b1e9e_dddea208db@john.notmuch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When wrapping code, use ';' better than using ',' which is more
-in line with the coding habits of most engineers.
 
-Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
----
-Compared to the previous version, the modifications made are:
-1. Modified the subject to make it clearer and more accurate
-2. Newly optimized typo in tcp_hdr_options.c
+On 07/07/2023 08:41, John Fastabend wrote:
+> Alexei Starovoitov wrote:
+>> On Thu, Jul 6, 2023 at 4:59 AM Tero Kristo <tero.kristo@linux.intel.com> wrote:
+>>>
+>>> On 06/07/2023 08:16, John Fastabend wrote:
+>>>> Alexei Starovoitov wrote:
+>>>>> On Mon, Jul 3, 2023 at 3:58 AM Tero Kristo <tero.kristo@linux.intel.com> wrote:
+>>>>>> Currently the raw TSC counter can be read within kernel via rdtsc_ordered()
+>>>>>> and friends, and additionally even userspace has access to it via the
+>>>>>> RDTSC assembly instruction. BPF programs on the other hand don't have
+>>>>>> direct access to the TSC counter, but alternatively must go through the
+>>>>>> performance subsystem (bpf_perf_event_read), which only provides relative
+>>>>>> value compared to the start point of the program, and is also much slower
+>>>>>> than the direct read. Add a new BPF helper definition for bpf_rdtsc() which
+>>>>>> can be used for any accurate profiling needs.
+>>>>>>
+>>>>>> A use-case for the new API is for example wakeup latency tracing via
+>>>>>> eBPF on Intel architecture, where it is extremely beneficial to be able
+>>>>>> to get raw TSC timestamps and compare these directly to the value
+>>>>>> programmed to the MSR_IA32_TSC_DEADLINE register. This way a direct
+>>>>>> latency value from the hardware interrupt to the execution of the
+>>>>>> interrupt handler can be calculated. Having the functionality within
+>>>>>> eBPF also has added benefits of allowing to filter any other relevant
+>>>>>> data like C-state residency values, and also to drop any irrelevant
+>>>>>> data points directly in the kernel context, without passing all the
+>>>>>> data to userspace for post-processing.
+>>>>>>
+>>>>>> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
+>>>>>> ---
+>>>>>>    arch/x86/include/asm/msr.h |  1 +
+>>>>>>    arch/x86/kernel/tsc.c      | 23 +++++++++++++++++++++++
+>>>>>>    2 files changed, 24 insertions(+)
+>>>>>>
+>>>>>> diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
+>>>>>> index 65ec1965cd28..3dde673cb563 100644
+>>>>>> --- a/arch/x86/include/asm/msr.h
+>>>>>> +++ b/arch/x86/include/asm/msr.h
+>>>>>> @@ -309,6 +309,7 @@ struct msr *msrs_alloc(void);
+>>>>>>    void msrs_free(struct msr *msrs);
+>>>>>>    int msr_set_bit(u32 msr, u8 bit);
+>>>>>>    int msr_clear_bit(u32 msr, u8 bit);
+>>>>>> +u64 bpf_rdtsc(void);
+>>>>>>
+>>>>>>    #ifdef CONFIG_SMP
+>>>>>>    int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h);
+>>>>>> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+>>>>>> index 344698852146..ded857abef81 100644
+>>>>>> --- a/arch/x86/kernel/tsc.c
+>>>>>> +++ b/arch/x86/kernel/tsc.c
+>>>>>> @@ -15,6 +15,8 @@
+>>>>>>    #include <linux/timex.h>
+>>>>>>    #include <linux/static_key.h>
+>>>>>>    #include <linux/static_call.h>
+>>>>>> +#include <linux/btf.h>
+>>>>>> +#include <linux/btf_ids.h>
+>>>>>>
+>>>>>>    #include <asm/hpet.h>
+>>>>>>    #include <asm/timer.h>
+>>>>>> @@ -29,6 +31,7 @@
+>>>>>>    #include <asm/intel-family.h>
+>>>>>>    #include <asm/i8259.h>
+>>>>>>    #include <asm/uv/uv.h>
+>>>>>> +#include <asm/tlbflush.h>
+>>>>>>
+>>>>>>    unsigned int __read_mostly cpu_khz;    /* TSC clocks / usec, not used here */
+>>>>>>    EXPORT_SYMBOL(cpu_khz);
+>>>>>> @@ -1551,6 +1554,24 @@ void __init tsc_early_init(void)
+>>>>>>           tsc_enable_sched_clock();
+>>>>>>    }
+>>>>>>
+>>>>>> +u64 bpf_rdtsc(void)
+>>>>>> +{
+>>>>>> +       /* Check if Time Stamp is enabled only in ring 0 */
+>>>>>> +       if (cr4_read_shadow() & X86_CR4_TSD)
+>>>>>> +               return 0;
+>>>>> Why check this? It's always enabled in the kernel, no?
+>>> It is always enabled, but there are certain syscalls that can be used to
+>>> disable the TSC access for oneself. prctl(PR_SET_TSC, ...) and
+>>> seccomp(SET_MODE_STRICT,...). Not having the check in place would in
+>>> theory allow a restricted BPF program to circumvent this (if there ever
+>>> was such a thing.) But yes, I do agree this part is a bit debatable
+>>> whether it should be there at all.
+>> What do you mean 'circumvent' ?
+>> It's a tracing bpf prog running in the kernel loaded by root
+>> and reading tsc for the purpose of the kernel.
+>> There is no unprivileged access to tsc here.
+This was based on some discussions with the security team at Intel, I 
+don't pretend to know anything about security myself. But I can drop the 
+check. It is probably not needed because of the fact that it is already 
+possible to read the TSC counter with the approach I mention in the 
+cover letter; via perf and bpf_core_read().
+>>
+>>>>>> +
+>>>>>> +       return rdtsc_ordered();
+>>>>> Why _ordered? Why not just rdtsc ?
+>>>>> Especially since you want to trace latency. Extra lfence will ruin
+>>>>> the measurements.
+>>>>>
+>>>> If we used it as a fast way to order events on multiple CPUs I
+>>>> guess we need the lfence? We use ktime_get_ns() now for things
+>>>> like this when we just need an order counter. We have also
+>>>> observed time going backwards with this and have heuristics
+>>>> to correct it but its rare.
+>>> Yeah, I think it is better to induce some extra latency instead of
+>>> having some weird ordering issues with the timestamps.
+>> lfence is not 'some extra latency'.
+>> I suspect rdtsc_ordered() will be slower than bpf_ktime_get_ns().
+>> What's the point of using it then?
+> I would only use it if its faster then bpf_ktime_get_ns() and
+> have already figured out how to handle rare unordered events
+> so I think its OK to relax somewhat strict ordering.
 
- tools/testing/selftests/bpf/benchs/bench_ringbufs.c      | 2 +-
- tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I believe that on x86-arch using bpf_ktime_get_ns() also ends up calling 
+rdtsc_odered() under the hood.
 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-index 3ca14ad36607..e1ee979e6acc 100644
---- a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-@@ -399,7 +399,7 @@ static void perfbuf_libbpf_setup(void)
- 	ctx->skel = perfbuf_setup_skeleton();
- 
- 	memset(&attr, 0, sizeof(attr));
--	attr.config = PERF_COUNT_SW_BPF_OUTPUT,
-+	attr.config = PERF_COUNT_SW_BPF_OUTPUT;
- 	attr.type = PERF_TYPE_SOFTWARE;
- 	attr.sample_type = PERF_SAMPLE_RAW;
- 	/* notify only every Nth sample */
-diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
-index 13bcaeb028b8..56685fc03c7e 100644
---- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
-@@ -347,7 +347,7 @@ static void syncookie_estab(void)
- 	exp_active_estab_in.max_delack_ms = 22;
- 
- 	exp_passive_hdr_stg.syncookie = true;
--	exp_active_hdr_stg.resend_syn = true,
-+	exp_active_hdr_stg.resend_syn = true;
- 
- 	prepare_out();
- 
--- 
-2.39.0
+I just did some measurements on an Intel(R) Xeon(R) Platinum 8360Y CPU @ 
+2.40GHz, with a simple BPF code:
 
+         t1 = bpf_ktime_get_ns();
+
+         for (i = 0; i < NUM_CYC; i++) {
+                 bpf_rdtsc(); // or bpf_ktime_get_ns() here
+         }
+
+         t2 = bpf_ktime_get_ns();
+
+The results I got with the CPU locked at 2.4GHz (average execution times 
+per a call within the loop, this with some 10M executions):
+
+bpf_rdtsc() ordered : 45ns
+
+bpf_rdtsc() un-ordered : 23ns
+
+bpf_ktime_get_ns() : 49ns
+
+Locking the CPU at 800MHz the results are:
+
+bpf_rdtsc() ordered : 55ns
+
+bpf_rdtsc() un-ordered : 33ns
+
+bpf_ktime_get_ns() : 71ns
+
+The bpf_rdtsc() in these results contains some extra latency caused by 
+conditional execution, I added a flag to the call to select whether it 
+should use _ordered() or not, and it also still contains the CR4_TSD 
+check in place.
+
+-Tero
+
+>
+>>> Also, things like the ftrace also use rdtsc_ordered() as its underlying
+>>> clock, if you use x86-tsc as the trace clock (see
+>>> arch/x86/kernel/trace_clock.c.)
+>>>
+>>> -Tero
+>>>
+>
