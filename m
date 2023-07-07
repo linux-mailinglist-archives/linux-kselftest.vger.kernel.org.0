@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DFC574B195
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 15:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBE774B1E0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 15:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjGGNQm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jul 2023 09:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
+        id S229571AbjGGNih (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jul 2023 09:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjGGNQj (ORCPT
+        with ESMTP id S229472AbjGGNig (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jul 2023 09:16:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC9B1FEA
-        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 06:15:51 -0700 (PDT)
+        Fri, 7 Jul 2023 09:38:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2392102
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 06:37:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688735750;
+        s=mimecast20190719; t=1688737074;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=/scmW41nRLEVCcvmVFRaHD3MznC8NV7fH9vmMT3xxpU=;
-        b=XKz+z5z+XaIBEKxFucvEi7DBUwmuvpqt4f3Bd/5X/j5dqZc23qSfkFJX9hDeC6wk67KOlQ
-        EaELiesjnetegZnBmi7O7GOGJpMVkggoK46SBEWk9oXXpCOD5RtFOWal5DNRh1mn7v7PIi
-        N5oJxzHfj4YA2JHNYOPvr5RoIkxrhCY=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=KhFL+CdFjQoImTlMil1bTnD3T/a7M0oGc4+Qhg9o8tE=;
+        b=AygS4/TjjM1UAY2SrXBtIKi+rXqWyMnJnO4QC7dXi4j263G+rNEdE/Ac3V4b/sS91yw+1g
+        9NA74dZEE4ebEDKQpW3kUtqqvEAmhR8flhbvz3744ZgWv7r3JJ+UEsKxBwJtduN0w2J8Ye
+        Q0wrVw2gVQQIt/SaUYYoqOFFoT4DCrY=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-52-dwJyDaMYNRizRLjpwobulw-1; Fri, 07 Jul 2023 09:15:49 -0400
-X-MC-Unique: dwJyDaMYNRizRLjpwobulw-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-765ad67e600so39015485a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 06:15:49 -0700 (PDT)
+ us-mta-657-C3g5VJzAPmy93iyQLp1cdg-1; Fri, 07 Jul 2023 09:37:52 -0400
+X-MC-Unique: C3g5VJzAPmy93iyQLp1cdg-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7672918d8a4so48901185a.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 06:37:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688735749; x=1689340549;
+        d=1e100.net; s=20221208; t=1688737071; x=1691329071;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/scmW41nRLEVCcvmVFRaHD3MznC8NV7fH9vmMT3xxpU=;
-        b=dMksYY7+gkwtlY5bGL+uvo21sGwROo4ln/BuGRbvl1YiiIKQdeeoCDY1GxHZCUnSd3
-         FdOdoqAYgUxqa2X7zq6QpGdS3rCs9h+PV5sMoiGsZJIuVpG5IZdITN+rjqzas+90I3Jd
-         XxKnh0NE7GH9IvbRke3JEhEtxr+b9sYkieKz2oZJohC+lEUKK71u4uaDqd604gkbMWDE
-         MYwsmL138Tzd+uI3bqRo8U69qQJWipfAdB8EBJmGT00tPOIKUFp7sqe3miQiS0WXBbv9
-         ixtUZ9vdpqpZu1POre6NF4Rp21Y9PySogRcd1u3p4Mw/JhIjCYO2mMzFNukCq2t98zIP
-         dMjQ==
-X-Gm-Message-State: ABy/qLbU2LT7HAEhBROg3XsxjHZv2I24vYwTFcU4b6HBv0GcHNP+y5T6
-        sEy9yIP1LsZLuq/I5hoaedoAT5hZ8nhkUWt0B9TMwNPG6ANJR8H46V/6UrwC7qU0/71qTR4yJ8g
-        V98tJhc01leKME4QYZsoVeYzc7esq
-X-Received: by 2002:a05:620a:1908:b0:765:a957:f526 with SMTP id bj8-20020a05620a190800b00765a957f526mr5626643qkb.3.1688735748795;
-        Fri, 07 Jul 2023 06:15:48 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHGcT7o9U4nGwCRjHqy1oj78ajsK+fO3PKeth2RE5DnD0ZtdR5yHIs+kzadtUDYBH9DWM2VOg==
-X-Received: by 2002:a05:620a:1908:b0:765:a957:f526 with SMTP id bj8-20020a05620a190800b00765a957f526mr5626622qkb.3.1688735748545;
-        Fri, 07 Jul 2023 06:15:48 -0700 (PDT)
+        bh=KhFL+CdFjQoImTlMil1bTnD3T/a7M0oGc4+Qhg9o8tE=;
+        b=H2/lsWOGOEpUpDZCrUWM8LUdkfkwXEU08BczDIGtH0J7C6sWQ/E+IBmfjhPqg87zAr
+         q2jflk3gGk1TmAKNTJsT9gaANdU6eGT6Qsv9KCRKFBU0hSiyl2log1GwBU3pAkyXTTd/
+         9Y8FWXS45rKdGLDU51lLdHZOJlTXaQx+ouVv6sJW6/e/jPYIF9kc84jo/F49fNhvvleE
+         UqjiTcEh/6yI0reiM4QJf1n8tflH5Js6tOBm878mYr7JvHUKRlE2jMRzFMz56l5adAsk
+         70DjBBqF5QNA+SXFp1mWADHSCZ+lh+ShmbxLcIhMGhmcn4xZakZChaivMhE4I+XiTI4h
+         oMqA==
+X-Gm-Message-State: ABy/qLakklAH+r8Egh3ILLv/925RgtsUK+6F52cuKRt66lQDBGFjUh9C
+        KcWy51C/qy8CrjQk3qRMZNX16T3DIKNmaZBgzdEH9HKsh31VXqfz+/Dw1u5Im1fcdPs5jzVg0MB
+        seyUHWCJz9+nRo8UJqUYcar2bZlvZ
+X-Received: by 2002:a05:6214:2aa3:b0:62d:fdc4:1e8b with SMTP id js3-20020a0562142aa300b0062dfdc41e8bmr5339522qvb.2.1688737071617;
+        Fri, 07 Jul 2023 06:37:51 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFC170q8lMmSxujK34gxQ2iJ+dYHuBZDi6VgSNqYx5ivEJMdyfwY72N3ewBcYtgbwSE4Hi/HQ==
+X-Received: by 2002:a05:6214:2aa3:b0:62d:fdc4:1e8b with SMTP id js3-20020a0562142aa300b0062dfdc41e8bmr5339498qvb.2.1688737071306;
+        Fri, 07 Jul 2023 06:37:51 -0700 (PDT)
 Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id c11-20020ae9e20b000000b0075cebaa1540sm1797911qkc.58.2023.07.07.06.15.46
+        by smtp.gmail.com with ESMTPSA id o28-20020a05620a15dc00b00767b37256ecsm589724qkm.107.2023.07.07.06.37.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 06:15:48 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 09:15:44 -0400
+        Fri, 07 Jul 2023 06:37:51 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 09:37:37 -0400
 From:   Peter Xu <peterx@redhat.com>
 To:     Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -87,33 +87,77 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 3/8] mm: userfaultfd: extract file size check out into
- a helper
-Message-ID: <ZKgQAKIst4DH3lgw@x1n>
+Subject: Re: [PATCH v3 4/8] mm: userfaultfd: add new UFFDIO_POISON ioctl
+Message-ID: <ZKgVISe0vkRKVZuG@x1n>
 References: <20230706225037.1164380-1-axelrasmussen@google.com>
- <20230706225037.1164380-4-axelrasmussen@google.com>
+ <20230706225037.1164380-5-axelrasmussen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230706225037.1164380-4-axelrasmussen@google.com>
+In-Reply-To: <20230706225037.1164380-5-axelrasmussen@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 03:50:31PM -0700, Axel Rasmussen wrote:
-> This code is already duplicated twice, and UFFDIO_POISON will do the
-> same check a third time. So, it's worth extracting into a helper to save
-> repetitive lines of code.
+On Thu, Jul 06, 2023 at 03:50:32PM -0700, Axel Rasmussen wrote:
+> The basic idea here is to "simulate" memory poisoning for VMs. A VM
+> running on some host might encounter a memory error, after which some
+> page(s) are poisoned (i.e., future accesses SIGBUS). They expect that
+> once poisoned, pages can never become "un-poisoned". So, when we live
+> migrate the VM, we need to preserve the poisoned status of these pages.
+> 
+> When live migrating, we try to get the guest running on its new host as
+> quickly as possible. So, we start it running before all memory has been
+> copied, and before we're certain which pages should be poisoned or not.
+> 
+> So the basic way to use this new feature is:
+> 
+> - On the new host, the guest's memory is registered with userfaultfd, in
+>   either MISSING or MINOR mode (doesn't really matter for this purpose).
+> - On any first access, we get a userfaultfd event. At this point we can
+>   communicate with the old host to find out if the page was poisoned.
+> - If so, we can respond with a UFFDIO_POISON - this places a swap marker
+>   so any future accesses will SIGBUS. Because the pte is now "present",
+>   future accesses won't generate more userfaultfd events, they'll just
+>   SIGBUS directly.
+> 
+> UFFDIO_POISON does not handle unmapping previously-present PTEs. This
+> isn't needed, because during live migration we want to intercept
+> all accesses with userfaultfd (not just writes, so WP mode isn't useful
+> for this). So whether minor or missing mode is being used (or both), the
+> PTE won't be present in any case, so handling that case isn't needed.
+> 
+> Similarly, UFFDIO_POISON won't replace existing PTE markers. This might
+> be okay to do, but it seems to be safer to just refuse to overwrite any
+> existing entry (like a UFFD_WP PTE marker).
 > 
 > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
+I agree the current behavior is not as clear, especially after hwpoison
+introduced.
+
+uffdio-copy is special right now that it can overwrite a marker, so a buggy
+userapp can also overwrite a poisoned entry, but it also means the userapp
+is broken already, so may not really matter much.
+
+While zeropage wasn't doing that. I think that was just overlooked - i
+assume it has the same reasoning as uffdio-copy otherwise.. and no one just
+used zeropage over a wp marker yet, or just got it work-arounded by
+unprotect+zeropage.
+
+Not yet sure whether it'll make sense to unify this a bit, but making the
+new poison api to be strict look fine.  If you have any thoughts after
+reading feel free to keep the discussion going, I can ack this one I think
+(besides my rename request in 1st patch):
+
+Acked-by: Peter Xu <peterx@redhat.com>
 
 -- 
 Peter Xu
