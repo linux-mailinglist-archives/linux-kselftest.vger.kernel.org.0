@@ -2,68 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C993874B7CF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 22:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BDD74B820
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 22:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjGGUXU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jul 2023 16:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
+        id S232526AbjGGUj2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jul 2023 16:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjGGUXT (ORCPT
+        with ESMTP id S231899AbjGGUj1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jul 2023 16:23:19 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78B3170F
-        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 13:23:18 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-40371070eb7so16331cf.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 13:23:18 -0700 (PDT)
+        Fri, 7 Jul 2023 16:39:27 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EF01986
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 13:38:54 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9741caaf9d4so269860966b.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 13:38:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688761398; x=1691353398;
+        d=google.com; s=20221208; t=1688762333; x=1691354333;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LUimeKJYxhpgKclI6L5R79wAVOIgG6dRaplv0HPA/iE=;
-        b=AZQAXmXwMSlnzJ/3zxxvnmRe0zCnV0bn0b99w40paOUFk8ypRivPK3cwbOWf+4zH2Q
-         xXn0qnfryq6PzPBAwB9zH4sPMh6kungbMooMxgvoM48EnlnvuN6n8b6LspT84L8732Ky
-         dOS3x+Cq2D4BeaVzi+di1yPdE9vX9sKPtZJwOqoRTOuVQXERevi0y9CCmYRbUw5YTibI
-         aDKyMpSsOb7BQ7WWc//E9ShhaP9rY1GrHfIv7M7eDa4Ec87IGHVmiK2LINWcdMNoVVvw
-         q8gYDuuRLZZjM6S8Y7vESAOJ6orrcfLaHf+seMNrb2qXkdkJkXTEN/JwpsdRs56YxnEA
-         ZV0g==
+        bh=j5GzoeG98fEPpoz1Cl1g4Qg71twRkm1tM+omwnJ1Pnk=;
+        b=WH7E9lv9EnTxKkw+kdIYBI9TKdORaKmjvGgb3pPV847969g1QlrNpJzaggCcNI2bbg
+         h+aTRRezJFDZNa2ZALyMVsdt2NvoXYZGyWbcku/1E36NYHjSECN46W7AD+0oz1803eA4
+         lzdBpVev9ZPerFAPGyWWO/aHlqgZl1OgHopnYcusk3HaKmwHFdBjqlJcsIoNJzycsTn1
+         kfnhJVTTNJRQ2wO1kfChdtz/wWwRdt88CkvoYcHmynwgWZRDLPCqtSlJvsAVO5fi2LMu
+         NHRdL3HXNn9cKscccOT7hsBazJ5f0Fua/tERjXEy/liWWxehP1UtUX7sQbJENxFBTTsl
+         H3dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688761398; x=1691353398;
+        d=1e100.net; s=20221208; t=1688762333; x=1691354333;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LUimeKJYxhpgKclI6L5R79wAVOIgG6dRaplv0HPA/iE=;
-        b=BijNXq0fG7P4TbIcj/Qng/VQig2ejd0ah8I1NXZ8XZtOz9DVYEua81Taq5UZmwb42P
-         /+oAp6yejNCn7iFnLTn741IJTI+KpSLp89mz9pOpknvEpDUAIgufmyMRQJpCeQU8+x4B
-         rMrZeyDokHbwGpsVPE7u/3xgo0eaoTE7EtyC4m2+KLCoo8D6WBqK5eLr68rRrZ/PIHiY
-         ZtorYNlGb6TxsbB8G2jPwJxvMAIJW23ku1OQxiNGi9GAuFfInBKXRcnvCjCIQ39UsaRC
-         b1jQmPE4/A1/hhRcMmuQsScSEXjodqYBqyIaUAjMfIzzDphKjELz+O5KCt2V4wsGHyCC
-         nXTw==
-X-Gm-Message-State: ABy/qLbJ8N0TY9qeH6MpOY2cJxH16BWGi4gKL6o9iHYpCkocHcNm7jH/
-        OP6VCnlPfgxDiXVvrBJ8ncevOGP5oGUfhBE2pEZo
-X-Google-Smtp-Source: APBJJlFtWfEyzGX60X2EmuVZBGt6AzH3MjMlRnlUsg60DTKrDdudj5Qu7JxL2L0fJY1qqaRpULB9HKHWEAkwpXK4BVs=
-X-Received: by 2002:ac8:5906:0:b0:403:a090:41c5 with SMTP id
- 6-20020ac85906000000b00403a09041c5mr46367qty.16.1688761397763; Fri, 07 Jul
- 2023 13:23:17 -0700 (PDT)
+        bh=j5GzoeG98fEPpoz1Cl1g4Qg71twRkm1tM+omwnJ1Pnk=;
+        b=d3pVIv9YQ85Kp7hozIMifl5gVfq+gG8wEIgnDCV9XbgtOaoTY7krz35auLzvdnGjrD
+         Ig8+UHIV/Vqed92xogRZ1WkSxW0VtstwmTQD+cDz66MzWb74Z38qL63a4jpH9DaqPAUW
+         xK/88sGF0sQ/Z3laKtFfmSDGFX0fTUnCjdEHxPqai9+D9QcvUq9dUsCd3MLIJvinrKD7
+         uHGBunfr7aK7mIQQLXaR2FaR4Hlqe2oZXDChtti8nIXXVlE83tL4Ldr45iW3DkRnvF6W
+         icz8Wt4Fl6KKzuC44mJZ3R2nGOJAn290SXGrF+TS9aP5vqf+BdKpE1lXJPLs619T6OHj
+         d9Mg==
+X-Gm-Message-State: ABy/qLZ0kPd3OIXmLeC0Pm2VdRHOucZGMq0q4zr8rNH2BZ3xblbADSgR
+        nYaaRyurTyRZOuwyuERUY0LQu57a4oeQgvJb60OyjQ==
+X-Google-Smtp-Source: APBJJlGvHGSDao1yQTFp/8AttfmOyAketz902pkJlwD7mID8tlI+W7elLQoXUGZjItFKxk9cWhaH/7FWxQqXJBHz7a0=
+X-Received: by 2002:a17:906:1001:b0:962:46d7:c8fc with SMTP id
+ 1-20020a170906100100b0096246d7c8fcmr5864601ejm.21.1688762333216; Fri, 07 Jul
+ 2023 13:38:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <895ef450-4fb3-5d29-a6ad-790657106a5a@intel.com>
-In-Reply-To: <895ef450-4fb3-5d29-a6ad-790657106a5a@intel.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Fri, 7 Jul 2023 13:23:07 -0700
-Message-ID: <CANDhNCpiLFP-YKhNFWeZ8TJbygFfGczVfRFJo6xMzVT2NrKKPA@mail.gmail.com>
-Subject: Re: ww_mutex.sh hangs since v5.16-rc1
-To:     Li Zhijian <zhijianx.li@intel.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        longman@redhat.com, boqun.feng@gmail.com,
-        open list <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "lkp@lists.01.org" <lkp@lists.01.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+References: <20230706225037.1164380-1-axelrasmussen@google.com>
+ <20230706225037.1164380-8-axelrasmussen@google.com> <ZKgWOYuIdqa25Qcs@x1n> <CAJHvVcj-3gUC3dx4LAVnNr-zgo8+cwjGNafQ480EhDifojrcRA@mail.gmail.com>
+In-Reply-To: <CAJHvVcj-3gUC3dx4LAVnNr-zgo8+cwjGNafQ480EhDifojrcRA@mail.gmail.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Fri, 7 Jul 2023 13:38:16 -0700
+Message-ID: <CAJHvVci6qCv+d7Hz0QkqeuEZze0OFJt0P9qnWgA_cgDeaLmptQ@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] selftests/mm: refactor uffd_poll_thread to allow
+ custom fault handlers
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Yu Zhao <yuzhao@google.com>,
+        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -77,60 +99,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 5:26=E2=80=AFPM Li Zhijian <zhijianx.li@intel.com> =
-wrote:
+On Fri, Jul 7, 2023 at 10:03=E2=80=AFAM Axel Rasmussen <axelrasmussen@googl=
+e.com> wrote:
 >
-> LKP/0Day found that ww_mutex.sh cannot complete since v5.16-rc1, but
-> I'm pretty sorry that we failed to bisect the FBC, instead, the bisection=
- pointed
-> to a/below merge commit(91e1c99e17) finally.
+> On Fri, Jul 7, 2023 at 6:42=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote=
+:
+> >
+> > On Thu, Jul 06, 2023 at 03:50:35PM -0700, Axel Rasmussen wrote:
+> > > @@ -247,9 +245,13 @@ static int userfaultfd_stress(void)
+> > >  {
+> > >       void *area;
+> > >       unsigned long nr;
+> > > -     struct uffd_args args[nr_cpus];
+> > > +     struct uffd_args *args;
+> > >       uint64_t mem_size =3D nr_pages * page_size;
+> > >
+> > > +     args =3D calloc(nr_cpus, sizeof(struct uffd_args));
+> > > +     if (!args)
+> > > +             err("allocating args array failed");
+> >
+> > This is trivial, but I think I requested a "free" (or keep it allocate =
+on
+> > stack) in previous version but it didn't get a response on why we canno=
+t
+> > and it kept going..  could you help explain?
 >
-> Due to this hang, other tests in the same group are also blocked in 0Day,=
- we
-> hope we can fix this hang ASAP.
+> Oh, sorry! I had meant to change this after our discussion, and simply
+> overlooked it while reworking the patches.
 >
-> So if you have any idea about this, or need more debug information, feel =
-free to let me know :)
+> I'll include this change in a v4 which also addresses e.g. the
+> comments on commit 1.
+
+Ah, so I tried switching back to the {0} initializer, and was reminded
+why I didn't do that in v1. :) Ignoring the missing braces warning I
+talked about before, using {0} here is actually an error
+("variable-sized object may not be initialized") because this is a
+variable sized array (nr_cpus isn't constant). So, that option is out.
+
+I'm not a huge fan of adding the free() cleanup and dealing with all
+of the err() calls this function has.
+
+Originally I switched to calloc() because I'm not a big fan of VLAs
+anyway. But, as a compromise in v4 I'll leave it a VLA, and switch to
+memset() for initializing it.
+
 >
-> BTW, ww_mutex.sh was failed in v5.15 without hang, and looks it cannot re=
-produce on a vm.
->
-
-So, as part of the proxy-execution work, I've been recently trying to
-understand why the patch series was causing apparent hangs in the
-ww_mutex test with large(64) cpu counts.
-I was assuming my changes were causing a lost wakeup somehow, but as I
-dug in I found it looked like the stress_inorder_work() function was
-live-locking.
-
-I noticed that adding printks to the logic would change the behavior,
-and finally realized I could reproduce a livelock against mainline by
-adding a printk before the "return -EDEADLK;" in __ww_mutex_kill(),
-making it clear the logic was timing sensitive.  Then searching around
-I found this old and unresolved thread.
-
-Part of the issue is that we may not hit the timeout check at the end
-of the loop, as the EDEADLK case short-cuts back to retry, allowing
-the test to effectively get stuck.
-
-But I know with ww_mutexes there's supposed to be a guarantee of
-forward progress as the older context wins, but it's not clear to me
-that works here. The EDEADLK case results in a releasing and
-reacquiring of the locks (only with the contended lock being taken
-first), and if a second EDEADLK occurs, it starts over again from
-scratch (though with the new contended lock being chosen first instead
-- which seems to lose any progress).
-
-So maybe the test has broken that guarentee in how it restarts, or
-with 128 threads trying to acquire a random order of 16 locks without
-contention (and the order shifting slightly each time it does see
-contention) it might just be a very big space to resolve if we don't
-luck into good timing.
-
-Anyway, I wanted to get some feedback from folks who have a better
-theoretical understanding of the ww_mutexes. With large cpu counts are
-we just asking for trouble here? Is the test doing something wrong? Or
-is there possibly a ww_mutex bug under this?
-
-thanks
--john
+> >
+> > --
+> > Peter Xu
+> >
