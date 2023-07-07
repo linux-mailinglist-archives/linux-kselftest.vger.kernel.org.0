@@ -2,262 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C503874B893
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 23:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9C874B8DD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 23:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjGGVKa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jul 2023 17:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
+        id S232277AbjGGVzr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jul 2023 17:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232818AbjGGVKU (ORCPT
+        with ESMTP id S231335AbjGGVzq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jul 2023 17:10:20 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99712709
-        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 14:10:10 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5704970148dso24443997b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 14:10:10 -0700 (PDT)
+        Fri, 7 Jul 2023 17:55:46 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DAA1FF9
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 14:55:44 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-573cacf4804so24961147b3.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 14:55:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688764209; x=1691356209;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0vdCYMeJDFc0tJZJeG4SrOCjUh3NZwz/CMs94R9KHI=;
-        b=aNkEmqlJkObqcMsU36aa2vJb47OZb+709zchT3pXIkQtUH0X8K6r6WfMr6b4SShBKZ
-         OJdv+M3Dtiph/CL/f4a0OKWRB1x+A8z3S93LYDlXTAqtK1f5SOlPbu/W0FqSZa5dXLlQ
-         GfQ8tPp+6u8UzVILbznww18QNDIwB59tZ/C3E1krhE5UBgCrSbHw59mzRdvfYtqpgdPp
-         pnrKKPyQQE60SE5SZlQBZpbf23px4Qa/em0os2EyngzJca4CohLTPQh93AxpWOdotcFZ
-         3VoUJrW/VOj7sf/cxtBaRUWhPGYgKJtv8OVW/ahfTEpYKmkwNzlUN7mI5PcwXk3HTfcp
-         vs7A==
+        d=google.com; s=20221208; t=1688766943; x=1691358943;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dxkJHri43fmKt8R5z8YjbywDBegP4t1apGGC2ZsbmRA=;
+        b=blOAXi+wOuXHyUw01h+hWReeZCVMretOsTcALUUIwdsRWTO5RZumuf0OIL3/2UIoS5
+         /KB9UPDpk5EKnvnsrFNLSZcVSDMGG/N2/L+3YmSDMteudF7B+lVa4lvI0xEgnEzRU7AG
+         UoT1qT5gyo11rYW0M3GTWa4gv6Fl7mczc7rJu9iIc7DUQ/Dlgi315G22kKqEzwYd3kRN
+         vDnVlQpo4V+cUd1aT+ZuiMzo2Te2dRviYwAkiPiQw5TQRmpX3gDOmdLHmX7XCSPv/KAg
+         anijJmgmZqXASMSpxIDxEJHEhFt2cm1S8KTqrc3Gp9IOiRP8C6gfsQ2jHBtNGX2veILY
+         jt/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688764209; x=1691356209;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0vdCYMeJDFc0tJZJeG4SrOCjUh3NZwz/CMs94R9KHI=;
-        b=AXq91gGOtfskd5/FtnnV0R16LJqt3H0V40iR4/srOTXOJhplwU5yzqAGrN/zYGFxqu
-         yrmKB85sNY4C6tDf5V6Bvqu7PYZS6BoTVjBUwfOnEfLSHPHpOMifRYdfPUZ6aBkt4SCM
-         InTRHY91qjQXt73ffAm4kxVMJmvZDpBdBUih6ZIy0oOpwNBUYCy6EtZcYMQ0fQsk23sy
-         Ha3Own51kIqJ7jCQ2F2AIfcFH0QJJY8pqOULkzH8H8xos0kLyMy7cBNVPdwPqg06NCJh
-         M+w2WRyBd8CFuc6IRSIDCl3XuNXwc81ZsK0zHwm43+ztGzB3yji5BOYs/Js9+zf5ICKv
-         NtKw==
-X-Gm-Message-State: ABy/qLbrpY9N1fk2iCuagei5N4mI19VVNZOkZ4W8yLIbZpV+y4dgXQbb
-        9tQExr2fAOPp2d3FoA9b4Gut1ThvMg==
-X-Google-Smtp-Source: APBJJlFlKKNSjVmNDQSbIuIyk93/Iz8gteRI/xLuLo6T966GvIruEFsCNxx5RQRG10QcjVYtL2BxL7klrg==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a81:bc01:0:b0:562:837:122f with SMTP id
- a1-20020a81bc01000000b005620837122fmr48027ywi.9.1688764209443; Fri, 07 Jul
- 2023 14:10:09 -0700 (PDT)
-Date:   Fri,  7 Jul 2023 21:09:47 +0000
-In-Reply-To: <20230707210947.1208717-1-rmoar@google.com>
+        d=1e100.net; s=20221208; t=1688766943; x=1691358943;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dxkJHri43fmKt8R5z8YjbywDBegP4t1apGGC2ZsbmRA=;
+        b=E6+tIZofFwXJ/Jf8iBHjJR2iK/yGO3ptEbc5MvNHUm8QDDL3W9Nas81wmw83ZYcfKG
+         Ilq7W9oudESkmWwCaeK/YwgG6icWK281Uw6JK5wD37hJIM5fdlYir+P/59AYmVTqIBic
+         jwDHJBzGTUaQIINe/n4Miz7H+1VNvGAT2cexWUilNBsEAVVm+ppq5SRuYqyx46PTT12g
+         KIIlcXJP8J1dy0ecVa2iWyQlmnix+We9v4jcb07biShvrNMnWoY+K4wRYIDvccINR7RX
+         xUdsaK+pLbSYVZ7P2DRIKWBMW0cP/iKDUEo5wOo+qn+eVf09boYJ4bxBmHqACiKlU1yB
+         91gw==
+X-Gm-Message-State: ABy/qLZ0vEMwPDDPxrYj0AwOb8SMyflrQ+lezfZTDB32B+g6RnwjQYN0
+        a1jQcZdFNi07Q3wN2A2zTMG3QCQsjjoqyYTDwcJy
+X-Google-Smtp-Source: APBJJlFel5F91WF38N/Ma9BXBqSumdIUfaXPm38xcZEmd46V3Sw+DRUSf//YD6ttv9zQvAnO8kSEtklzmiH0ms9z3sUS
+X-Received: from axel.svl.corp.google.com ([2620:15c:2a3:200:c201:5125:39d1:ef3f])
+ (user=axelrasmussen job=sendgmr) by 2002:a81:a941:0:b0:579:e07c:2798 with
+ SMTP id g62-20020a81a941000000b00579e07c2798mr45025ywh.2.1688766943660; Fri,
+ 07 Jul 2023 14:55:43 -0700 (PDT)
+Date:   Fri,  7 Jul 2023 14:55:32 -0700
 Mime-Version: 1.0
-References: <20230707210947.1208717-1-rmoar@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230707210947.1208717-10-rmoar@google.com>
-Subject: [RFC v2 9/9] kunit: Add documentation of KUnit test attributes
-From:   Rae Moar <rmoar@google.com>
-To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
-        brendan.higgins@linux.dev
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org, Rae Moar <rmoar@google.com>
+Message-ID: <20230707215540.2324998-1-axelrasmussen@google.com>
+Subject: [PATCH v4 0/8] add UFFDIO_POISON to simulate memory poisoning with UFFD
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Yu Zhao <yuzhao@google.com>,
+        ZhangPeng <zhangpeng362@huawei.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add documentation on the use of test attributes under the section "Tips for
-Running KUnit Tests" in the KUnit docs.
+This series adds a new userfaultfd feature, UFFDIO_POISON. See commit 4
+for a detailed description of the feature.
 
-Documentation includes three sections on how to mark tests with attributes,
-how attributes are reported, and how the user can filter tests using test
-attributes.
+The series is based on Linus master (partial 6.5 merge window), and
+structured like this:
 
-Signed-off-by: Rae Moar <rmoar@google.com>
----
+- Patches 1-3 are preparation / refactoring
+- Patches 4-6 implement and advertise the new feature
+- Patches 7-8 implement a unit test for the new feature
 
-Changes since v1:
-- This is a new patch
+Changelog:
 
- .../dev-tools/kunit/running_tips.rst          | 163 ++++++++++++++++++
- 1 file changed, 163 insertions(+)
+v3 -> v4:
+ - [Peter] Rename PTE_MARKER_ERROR and helpers to PTE_MARKER_POISONED.
+ - [Peter] Switch from calloc to memset for initializing some state in the
+   selftest.
 
-diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
-index 8e8c493f17d1..c9bc5a6595d3 100644
---- a/Documentation/dev-tools/kunit/running_tips.rst
-+++ b/Documentation/dev-tools/kunit/running_tips.rst
-@@ -262,3 +262,166 @@ other code executed during boot, e.g.
- 	# Reset coverage counters before running the test.
- 	$ echo 0 > /sys/kernel/debug/gcov/reset
- 	$ modprobe kunit-example-test
-+
-+
-+Test Attributes and Filtering
-+=============================
-+
-+Test suites and cases can be marked with test attributes, such as speed of
-+test. These attributes will later be printed in test output and can be used to
-+filter test execution.
-+
-+Marking Test Attributes
-+-----------------------
-+
-+Tests are marked with an attribute by including a ``kunit_attributes`` object
-+in the test definition.
-+
-+Test cases can be marked using the ``KUNIT_CASE_ATTR(test_name, attributes)``
-+macro to define the test case instead of ``KUNIT_CASE(test_name)``.
-+
-+.. code-block:: c
-+
-+	static const struct kunit_attributes example_attr = {
-+		.speed = KUNIT_VERY_SLOW,
-+	};
-+
-+	static struct kunit_case example_test_cases[] = {
-+		KUNIT_CASE_ATTR(example_test, example_attr),
-+	};
-+
-+.. note::
-+	To mark a test case as slow, you can also use ``KUNIT_CASE_SLOW(test_name)``.
-+	This is a helpful macro as the slow attribute is the most commonly used.
-+
-+Test suites can be marked with an attribute by setting the "attr" field in the
-+suite definition.
-+
-+.. code-block:: c
-+
-+	static const struct kunit_attributes example_attr = {
-+		.speed = KUNIT_VERY_SLOW,
-+	};
-+
-+	static struct kunit_suite example_test_suite = {
-+		...,
-+		.attr = example_attr,
-+	};
-+
-+.. note::
-+	Not all attributes need to be set in a ``kunit_attributes`` object. Unset
-+	attributes will remain uninitialized and act as though the attribute is set
-+	to 0 or NULL. Thus, if an attribute is set to 0, it is treated as unset.
-+	These unset attributes will not be reported and may act as a default value
-+	for filtering purposes.
-+
-+Reporting Attributes
-+--------------------
-+
-+When a user runs tests, attributes will be present in kernel output (in KTAP
-+format). This is an example of how test attributes for test cases will be formatted
-+in Kernel output:
-+
-+.. code-block:: none
-+
-+	# example_test.speed: slow
-+	ok 1 example_test
-+
-+This is an example of how test attributes for test suites will be formatted in
-+Kernel output:
-+
-+.. code-block:: none
-+
-+	  KTAP version 2
-+	  # Subtest: example_suite
-+	  # module: kunit_example_test
-+	  1..3
-+	  ...
-+	ok 1 example_suite
-+
-+Additionally, users can output a full attribute report of tests with their
-+attributes, using the command line flag ``--list_tests_attr``:
-+
-+.. code-block:: bash
-+
-+	kunit.py run "example" --list_tests_attr
-+
-+.. note::
-+	This report can be accessed when running KUnit manually by passing in the
-+	module_param ``kunit.action=list_attr``.
-+
-+Filtering
-+---------
-+
-+Users can filter tests using the ``--filter`` command line flag when running
-+tests. As an example:
-+
-+.. code-block:: bash
-+
-+	kunit.py run --filter speed=slow
-+
-+
-+You can also use the following operations on filters: "<", ">", "<=", ">=",
-+"!=", and "=". Example:
-+
-+.. code-block:: bash
-+
-+	kunit.py run --filter "speed>slow"
-+
-+This example will run all tests with speeds faster than slow. Note that the
-+characters < and > are often interpreted by the shell, so they may need to be
-+quoted or escaped, as above.
-+
-+Additionally, you can use multiple filters at once. Simply separate filters
-+using commas. Example:
-+
-+.. code-block:: bash
-+
-+	kunit.py run --filter "speed>slow, module=kunit_example_test"
-+
-+.. note::
-+	You can use this filtering feature when running KUnit manually by passing
-+	the filter as a module param: ``kunit.filter="speed>slow, speed<=normal"``.
-+
-+Filtered tests will not run or show up in the test output. You can use the
-+``--filter_skip`` flag to skip filtered tests instead. These tests will be
-+shown in the test output in the test but will not run. To use this feature when
-+running KUnit manually, use the ``kunit.filter`` module param with
-+``kunit.filter_action=skip``.
-+
-+Rules of Filtering Procedure
-+----------------------------
-+
-+Since both suites and test cases can have attributes, there may be conflicts
-+between attributes during filtering. The process of filtering follows these
-+rules:
-+
-+- Filtering always operates at a per-test level.
-+
-+- If a test has an attribute set, then the test's value is filtered on.
-+
-+- Otherwise, the value falls back to the suite's value.
-+
-+- If neither are set, the attribute has a global "default" value, which is used.
-+
-+List of Current Attributes
-+--------------------------
-+
-+``speed``
-+
-+This attribute indicates the speed of a test's execution (how slow or fast the
-+test is).
-+
-+This attribute is saved as an enum with the following categories: "normal",
-+"slow", or "very_slow". The assumed default speed for tests is "normal". This
-+indicates that the test takes a relatively trivial amount of time (less than
-+1 second), regardless of the machine it is running on. Any test slower than
-+this could be marked as "slow" or "very_slow".
-+
-+``module``
-+
-+This attribute indicates the name of the module associated with the test.
-+
-+This attribute is automatically saved as a string and is printed for each suite.
-+Tests can also be filtered using this attribute.
-+
--- 
+v2 -> v3:
+ - Rebase onto current Linus master.
+ - Don't overwrite existing PTE markers for non-hugetlb UFFDIO_POISON.
+   Before, non-hugetlb would override them, but hugetlb would not. I don't
+   think there's a use case where we *want* to override a UFFD_WP marker
+   for example, so take the more conservative behavior for all kinds of
+   memory.
+ - [Peter] Drop hugetlb mfill atomic refactoring, since it isn't needed
+   for this series (we don't touch that code directly anyway).
+ - [Peter] Switch to re-using PTE_MARKER_SWAPIN_ERROR instead of defining
+   new PTE_MARKER_UFFD_POISON.
+ - [Peter] Extract start / len range overflow check into existing
+   validate_range helper; this fixes the style issue of unnecessary braces
+   in the UFFDIO_POISON implementation, because this code is just deleted.
+ - [Peter] Extract file size check out into a new helper.
+ - [Peter] Defer actually "enabling" the new feature until the last commit
+   in the series; combine this with adding the documentation. As a
+   consequence, move the selftest commits after this one.
+ - [Randy] Fix typo in documentation.
+
+v1 -> v2:
+ - [Peter] Return VM_FAULT_HWPOISON not VM_FAULT_SIGBUS, to yield the
+   correct behavior for KVM (guest MCE).
+ - [Peter] Rename UFFDIO_SIGBUS to UFFDIO_POISON.
+ - [Peter] Implement hugetlbfs support for UFFDIO_POISON.
+
+Axel Rasmussen (8):
+  mm: make PTE_MARKER_SWAPIN_ERROR more general
+  mm: userfaultfd: check for start + len overflow in validate_range
+  mm: userfaultfd: extract file size check out into a helper
+  mm: userfaultfd: add new UFFDIO_POISON ioctl
+  mm: userfaultfd: support UFFDIO_POISON for hugetlbfs
+  mm: userfaultfd: document and enable new UFFDIO_POISON feature
+  selftests/mm: refactor uffd_poll_thread to allow custom fault handlers
+  selftests/mm: add uffd unit test for UFFDIO_POISON
+
+ Documentation/admin-guide/mm/userfaultfd.rst |  15 +++
+ fs/userfaultfd.c                             |  73 ++++++++++--
+ include/linux/mm_inline.h                    |  19 +++
+ include/linux/swapops.h                      |  15 ++-
+ include/linux/userfaultfd_k.h                |   4 +
+ include/uapi/linux/userfaultfd.h             |  25 +++-
+ mm/hugetlb.c                                 |  51 ++++++--
+ mm/madvise.c                                 |   2 +-
+ mm/memory.c                                  |  15 ++-
+ mm/mprotect.c                                |   4 +-
+ mm/shmem.c                                   |   4 +-
+ mm/swapfile.c                                |   2 +-
+ mm/userfaultfd.c                             |  83 ++++++++++---
+ tools/testing/selftests/mm/uffd-common.c     |   5 +-
+ tools/testing/selftests/mm/uffd-common.h     |   3 +
+ tools/testing/selftests/mm/uffd-stress.c     |   8 +-
+ tools/testing/selftests/mm/uffd-unit-tests.c | 117 +++++++++++++++++++
+ 17 files changed, 379 insertions(+), 66 deletions(-)
+
+--
 2.41.0.255.g8b1d071c50-goog
 
