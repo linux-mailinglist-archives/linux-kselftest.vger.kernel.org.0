@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7802B74BE31
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jul 2023 17:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E43D74BE34
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jul 2023 17:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjGHPaM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 8 Jul 2023 11:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S229726AbjGHPbR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 8 Jul 2023 11:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjGHPaL (ORCPT
+        with ESMTP id S229552AbjGHPbQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 8 Jul 2023 11:30:11 -0400
+        Sat, 8 Jul 2023 11:31:16 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DFF90;
-        Sat,  8 Jul 2023 08:30:09 -0700 (PDT)
-X-QQ-mid: bizesmtp90t1688830199tddli4lm
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361E890;
+        Sat,  8 Jul 2023 08:31:15 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1688830265t9d8l2g9
 Received: from linux-lab-host.localdomain ( [116.30.131.119])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 08 Jul 2023 23:29:58 +0800 (CST)
+        id ; Sat, 08 Jul 2023 23:31:03 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: eSZ1CZgv+JDNSYVWcvAqpj0rMV65FuCWvkiqEsX0QCaJ3cmGvGHwqt4FW1NPz
-        xtLYKx4fWntTwjgdLuKBjSAmdBqltgnFcnpV0Gg+dSUFOBuhWgGtMIVtlDJuRSOakTaDPyf
-        DteElzUduQbDJaKPkaiv65kbJIwnbKHkk9XhbF7riP1SVSVYoxY855+ZD2A+7Kyh5RALGtG
-        zeeesVIfP5H0OAey6/2Pp+ARRSKgkAwVv0n0wkl3AZDqzEyuojwi0WP8cSU2snSHpbwpFMf
-        C/QtfST4aIERx7pL/R9uECvdoTwV9p5F2Zo/LtJSLRMdjKmijl9YEoGocgpClxQWlw6II3G
-        0TZNWf1ltkWlZULHAwSeTkDHf2JIuhfDfKj0rx2TIG3R52KWmXc2oQ7zS748Q==
+X-QQ-FEAT: eEaWPhs2DhvhZjsqAkJMMlzDeo2Sh5soRzY51O43vfpZnHRFckDc/KC+Whroj
+        xugcXLSy7ICVFoiqSeTqCxTxDobCGlqVytmjm0QCDA4tguduQfJzEfDRcxmIlotOOEJXxoc
+        Szs+owZ8ZdluFmUsrVqHiJdJRNXczXWNaeeYPWWWTKlBKPSwP4H3fmn6kDuV7Jgf7IhvcyF
+        Y8jIw9/qDAPT3SPiuBrsnURgvLq+VWA9y/xT93260LoCPfi+IHVypNKboYor7z24/ElvVLv
+        p5L1kmZJ/ainACsUtabnDfg1JQfM14itwmu6i6doAuz2mSNSJfH/hiigypC77vcvFbn4tFc
+        DiYkkoHr/ovqEbIBaEx5pATYUoVOXFT9LNZQ7ULn54b9FrgnXEpUdehQ8s64qqtJLxkPGgf
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10107616674853176489
+X-BIZMAIL-ID: 5492700503261273189
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v2 04/12] tools/nolibc: crt.h: add _start_c
-Date:   Sat,  8 Jul 2023 23:29:58 +0800
-Message-Id: <ccc8c9b850c03ef236ab05e919fea2bf9af2556a.1688828139.git.falcon@tinylab.org>
+Subject: [PATCH v2 05/12] tools/nolibc: arm/crt.h: shrink _start with _start_c
+Date:   Sat,  8 Jul 2023 23:31:03 +0800
+Message-Id: <3b38249bfc9d36db3f33e44b42d34740b9de100a.1688828139.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1688828139.git.falcon@tinylab.org>
 References: <cover.1688828139.git.falcon@tinylab.org>
@@ -51,78 +51,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As the environ and _auxv support added for nolibc, the assembly _start
-function becomes more and more complex and therefore makes the porting
-of nolibc to new architectures harder and harder.
-
-To simplify portability, this c version of _start_c() is added to do
-most of the assembly start operations in C, which reduces the complexity
-a lot and will eventually simplify the porting of nolibc to the new
-architectures.
-
-The new _start_c() only requires a stack pointer argument, it will find
-argv, envp and _auxv for us, and then call main(), finally, it exit()
-with main's return status. With this new _start_c(), the future new
-architectures only require to add very few assembly instructions.
+move most of the _start operations to _start_c().
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/crt.h | 44 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ tools/include/nolibc/arm/crt.h | 38 +++++-----------------------------
+ 1 file changed, 5 insertions(+), 33 deletions(-)
 
-diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
-index 221b7c5346ca..b269294e9664 100644
---- a/tools/include/nolibc/crt.h
-+++ b/tools/include/nolibc/crt.h
-@@ -13,4 +13,48 @@
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
- 
-+int main(int argc, char *argv[], char **envp);
-+static void exit(int);
-+
-+void _start_c(long *sp)
-+{
-+	int argc, i;
-+	char **argv;
-+	char **envp;
-+
-+	/*
-+	 * sp  :  argc          <-- argument count, required by main()
-+	 * argv:  argv[0]       <-- argument vector, required by main()
-+	 *        argv[1]
-+	 *        ...
-+	 *        argv[argc-1]
-+	 *        null
-+	 * envp:  envp[0]       <-- environment variables, required by main() and getenv()
-+	 *        envp[1]
-+	 *        ...
-+	 *        null
-+	 * _auxv: auxv[0]       <-- auxiliary vector, required by getauxval()
-+	 *        auxv[1]
-+	 *        ...
-+	 *        null
-+	 */
-+
-+	/* assign argc and argv */
-+	argc = sp[0];
-+	argv = (void *)(sp + 1);
-+
-+	/* find envp */
-+	envp = argv + argc + 1;
-+	environ = envp;
-+
-+	/* find auxv */
-+	i = 0;
-+	while (envp[i])
-+		i++;
-+	_auxv = (void *)(envp + i + 1);
-+
-+	/* go to application */
-+	exit(main(argc, argv, envp));
-+}
-+
- #endif /* _NOLIBC_CRT_H */
+diff --git a/tools/include/nolibc/arm/crt.h b/tools/include/nolibc/arm/crt.h
+index 7b3b9e21e5c4..75c097027a80 100644
+--- a/tools/include/nolibc/arm/crt.h
++++ b/tools/include/nolibc/arm/crt.h
+@@ -12,40 +12,12 @@ void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+-		"bl __stack_chk_init\n"       /* initialize stack protector                          */
++		"bl __stack_chk_init\n" /* initialize stack protector                     */
+ #endif
+-		"pop {%r0}\n"                 /* argc was in the stack                               */
+-		"mov %r1, %sp\n"              /* argv = sp                                           */
+-
+-		"add %r2, %r0, $1\n"          /* envp = (argc + 1) ...                               */
+-		"lsl %r2, %r2, $2\n"          /*        * 4        ...                               */
+-		"add %r2, %r2, %r1\n"         /*        + argv                                       */
+-		"ldr %r3, 1f\n"               /* r3 = &environ (see below)                           */
+-		"str %r2, [r3]\n"             /* store envp into environ                             */
+-
+-		"mov r4, r2\n"                /* search for auxv (follows NULL after last env)       */
+-		"0:\n"
+-		"mov r5, r4\n"                /* r5 = r4                                             */
+-		"add r4, r4, #4\n"            /* r4 += 4                                             */
+-		"ldr r5,[r5]\n"               /* r5 = *r5 = *(r4-4)                                  */
+-		"cmp r5, #0\n"                /* and stop at NULL after last env                     */
+-		"bne 0b\n"
+-		"ldr %r3, 2f\n"               /* r3 = &_auxv (low bits)                              */
+-		"str r4, [r3]\n"              /* store r4 into _auxv                                 */
+-
+-		"mov %r3, $8\n"               /* AAPCS : sp must be 8-byte aligned in the            */
+-		"neg %r3, %r3\n"              /*         callee, and bl doesn't push (lr=pc)         */
+-		"and %r3, %r3, %r1\n"         /* so we do sp = r1(=sp) & r3(=-8);                    */
+-		"mov %sp, %r3\n"
+-
+-		"bl main\n"                   /* main() returns the status code, we'll exit with it. */
+-		"movs r7, $1\n"               /* NR_exit == 1                                        */
+-		"svc $0x00\n"
+-		".align 2\n"                  /* below are the pointers to a few variables           */
+-		"1:\n"
+-		".word environ\n"
+-		"2:\n"
+-		".word _auxv\n"
++		"mov %r0, sp\n"         /* save stack pointer to %r0, as arg1 of _start_c */
++		"and ip, %r0, #-8\n"    /* sp must be 8-byte aligned in the callee        */
++		"mov sp, ip\n"
++		"bl  _start_c\n"        /* transfer to c runtime                          */
+ 	);
+ 	__builtin_unreachable();
+ }
 -- 
 2.25.1
 
