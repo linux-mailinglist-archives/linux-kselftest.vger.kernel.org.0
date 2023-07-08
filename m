@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B9B74BE3C
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jul 2023 17:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C982274BE3E
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jul 2023 17:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjGHPfm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 8 Jul 2023 11:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
+        id S229496AbjGHPgy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 8 Jul 2023 11:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjGHPfl (ORCPT
+        with ESMTP id S229436AbjGHPgx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 8 Jul 2023 11:35:41 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33595B9;
-        Sat,  8 Jul 2023 08:35:39 -0700 (PDT)
-X-QQ-mid: bizesmtp64t1688830529tddkhgwo
+        Sat, 8 Jul 2023 11:36:53 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25CFB8;
+        Sat,  8 Jul 2023 08:36:50 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1688830599tw66g3er
 Received: from linux-lab-host.localdomain ( [116.30.131.119])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 08 Jul 2023 23:35:28 +0800 (CST)
+        id ; Sat, 08 Jul 2023 23:36:37 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: SFhf6fKhx/8MNvygIFrN5Ea7ntRZXkmkNIkR/K+V5n83hDBFmZTb/GNM4JKdB
-        3pLoKQYJFayAbbQVDEHt1sPPe2SJsrbCY36y7lRh4Z8SAlqSFwoOozouaXGMHwqB0/5sYoT
-        09Y2nTr9XT1/GBc2Cp4f/PpRj1/e/QvzYIQBV5RIOvJezSaF7WwEAk+eztGDPlgGS2grtyH
-        luGNPXiPr320kjyzVQTrbFhoU5YyYIRduR6fp+OpJ42jTMYk8VCZKH5Ik3tO6hEwyf7E+p4
-        oU/J2BPZG3Oc6wclKBPLwKHg3a4Qd5RtL7fGspx1G+d5jv8vyoStsfBE00wE+yoUku4pTX0
-        k9lPSI+Np5AaTo31XGYcowaGH///UZRzFCJbSBUwyJv83YVawQzy/0NNwlxqw==
+X-QQ-FEAT: W+onFc5Tw4Pe9rZqENKFEXMbSRh7Eb3+Jr9OU9bz39iaWL+qI45aWo7EyeNr5
+        vz/B5cB4JSaGvK2qJUl6k2KQNV3MGBN6Uj84RTUkDwdW2jEEp3Hz9lm5A7br7JwDjuZASLD
+        wRsVyB6VsMDvRVOGmaOgXLxG1OkaU1/AlC56GNg5PI5O7M45DLBXrPNKO9+Ten5f6DiC6m3
+        ivOeaBse7tvOVGGif1d1+qQsGTYRZk93BsQBDX8PoIsojSAXqWy//4mKs0yLQbQ4akgIokO
+        ilS870OH4IeIpSYz9UfkjAID068mm54T0k+ga4VCzPvwdu+OHNmA/ISEYEhpnrRJUE65MrI
+        VnGwkdNzlRmZ3A2fwhM/CKPln7zQFLwE4SYbElvYflo2nofzwdZEvNnX1s8gMEQdAPH/SGu
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5730267673946759822
+X-BIZMAIL-ID: 3025394520600983061
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v2 09/12] tools/nolibc: mips/crt.h: shrink _start with _start_c
-Date:   Sat,  8 Jul 2023 23:35:28 +0800
-Message-Id: <26b030bd7e0d48e60350c1b325dd0668f0caf803.1688828139.git.falcon@tinylab.org>
+Subject: [PATCH v2 10/12] tools/nolibc: loongarch/crt.h: shrink _start with _start_c
+Date:   Sat,  8 Jul 2023 23:36:33 +0800
+Message-Id: <47893d501e6d4ededa233e2596ac32f219480270.1688828139.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1688828139.git.falcon@tinylab.org>
 References: <cover.1688828139.git.falcon@tinylab.org>
@@ -42,9 +42,9 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,70 +53,72 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 move most of the _start operations to _start_c().
 
-Also clean up the instructions in delay slots.
-
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/mips/crt.h | 42 +++++++--------------------------
- 1 file changed, 9 insertions(+), 33 deletions(-)
+ tools/include/nolibc/loongarch/crt.h | 39 +++-------------------------
+ 1 file changed, 4 insertions(+), 35 deletions(-)
 
-diff --git a/tools/include/nolibc/mips/crt.h b/tools/include/nolibc/mips/crt.h
-index 38df52d8ec16..a49632b64fdd 100644
---- a/tools/include/nolibc/mips/crt.h
-+++ b/tools/include/nolibc/mips/crt.h
-@@ -11,43 +11,19 @@
- void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector __start(void)
+diff --git a/tools/include/nolibc/loongarch/crt.h b/tools/include/nolibc/loongarch/crt.h
+index 253d2fccea1e..00bfc36b0747 100644
+--- a/tools/include/nolibc/loongarch/crt.h
++++ b/tools/include/nolibc/loongarch/crt.h
+@@ -8,22 +8,8 @@
+ #define _NOLIBC_LOONGARCH_CRT_H
+ 
+ #if __loongarch_grlen == 32
+-#define LONGLOG      "2"
+-#define SZREG        "4"
+-#define REG_L        "ld.w"
+-#define LONG_S       "st.w"
+-#define LONG_ADD     "add.w"
+-#define LONG_ADDI    "addi.w"
+-#define LONG_SLL     "slli.w"
+ #define LONG_BSTRINS "bstrins.w"
+ #else /* __loongarch_grlen == 64 */
+-#define LONGLOG      "3"
+-#define SZREG        "8"
+-#define REG_L        "ld.d"
+-#define LONG_S       "st.d"
+-#define LONG_ADD     "add.d"
+-#define LONG_ADDI    "addi.d"
+-#define LONG_SLL     "slli.d"
+ #define LONG_BSTRINS "bstrins.d"
+ #endif
+ 
+@@ -32,28 +18,11 @@ void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_
  {
  	__asm__ volatile (
--		/*".set nomips16\n"*/
- 		".set push\n"
--		".set    noreorder\n"
-+		".set noreorder\n"
- 		".option pic0\n"
  #ifdef _NOLIBC_STACKPROTECTOR
--		"jal __stack_chk_init\n" /* initialize stack protector                         */
--		"nop\n"                  /* delayed slot                                       */
-+		"jal __stack_chk_init\n" /* initialize stack protector                     */
-+		" nop\n"                 /* delayed slot                                   */
+-		"bl __stack_chk_init\n"               /* initialize stack protector                          */
++		"bl __stack_chk_init\n"            /* initialize stack protector                     */
  #endif
--		/*".ent __start\n"*/
--		/*"__start:\n"*/
--		"lw $a0,($sp)\n"        /* argc was in the stack                               */
--		"addiu  $a1, $sp, 4\n"  /* argv = sp + 4                                       */
--		"sll $a2, $a0, 2\n"     /* a2 = argc * 4                                       */
--		"add   $a2, $a2, $a1\n" /* envp = argv + 4*argc ...                            */
--		"addiu $a2, $a2, 4\n"   /*        ... + 4                                      */
--		"lui $a3, %hi(environ)\n"     /* load environ into a3 (hi)                     */
--		"addiu $a3, %lo(environ)\n"   /* load environ into a3 (lo)                     */
--		"sw $a2,($a3)\n"              /* store envp(a2) into environ                   */
+-		REG_L        " $a0, $sp, 0\n"         /* argc (a0) was in the stack                          */
+-		LONG_ADDI    " $a1, $sp, "SZREG"\n"   /* argv (a1) = sp + SZREG                              */
+-		LONG_SLL     " $a2, $a0, "LONGLOG"\n" /* envp (a2) = SZREG*argc ...                          */
+-		LONG_ADDI    " $a2, $a2, "SZREG"\n"   /*             + SZREG (skip null)                     */
+-		LONG_ADD     " $a2, $a2, $a1\n"       /*             + argv                                  */
 -
--		"move $t0, $a2\n"             /* iterate t0 over envp, look for NULL           */
--		"0:"                          /* do {                                          */
--		"lw $a3, ($t0)\n"             /*   a3=*(t0);                                   */
--		"bne $a3, $0, 0b\n"           /* } while (a3);                                 */
--		"addiu $t0, $t0, 4\n"         /* delayed slot: t0+=4;                          */
--		"lui $a3, %hi(_auxv)\n"       /* load _auxv into a3 (hi)                       */
--		"addiu $a3, %lo(_auxv)\n"     /* load _auxv into a3 (lo)                       */
--		"sw $t0, ($a3)\n"             /* store t0 into _auxv                           */
+-		"move          $a3, $a2\n"            /* iterate a3 over envp to find auxv (after NULL)      */
+-		"0:\n"                                /* do {                                                */
+-		REG_L        " $a4, $a3, 0\n"         /*   a4 = *a3;                                         */
+-		LONG_ADDI    " $a3, $a3, "SZREG"\n"   /*   a3 += sizeof(void*);                              */
+-		"bne           $a4, $zero, 0b\n"      /* } while (a4);                                       */
+-		"la.pcrel      $a4, _auxv\n"          /* a4 = &_auxv                                         */
+-		LONG_S       " $a3, $a4, 0\n"         /* store a3 into _auxv                                 */
 -
--		"li $t0, -8\n"
--		"and $sp, $sp, $t0\n"   /* sp must be 8-byte aligned                           */
--		"addiu $sp,$sp,-16\n"   /* the callee expects to save a0..a3 there!            */
--		"jal main\n"            /* main() returns the status code, we'll exit with it. */
--		"nop\n"                 /* delayed slot                                        */
--		"move $a0, $v0\n"       /* retrieve 32-bit exit code from v0                   */
--		"li $v0, 4001\n"        /* NR_exit == 4001                                     */
--		"syscall\n"
--		/*".end __start\n"*/
-+		"move  $a0, $sp\n"       /* save stack pointer to $a0, as arg1 of _start_c */
-+		"li    $t0, -8\n"
-+		"and   $sp, $sp, $t0\n"  /* $sp must be 8-byte aligned                     */
-+		"addiu $sp, $sp, -16\n"  /* the callee expects to save a0..a3 there        */
-+		"jal   _start_c\n"       /* transfer to c runtime                          */
-+		" nop\n"                 /* delayed slot                                   */
- 		".set pop\n"
+-		"la.pcrel      $a3, environ\n"        /* a3 = &environ                                       */
+-		LONG_S       " $a2, $a3, 0\n"         /* store envp(a2) into environ                         */
+-		LONG_BSTRINS " $sp, $zero, 3, 0\n"    /* sp must be 16-byte aligned                          */
+-		"bl            main\n"                /* main() returns the status code, we'll exit with it. */
+-		"li.w          $a7, 93\n"             /* NR_exit == 93                                       */
+-		"syscall       0\n"
++		"move          $a0, $sp\n"         /* save stack pointer to $a0, as arg1 of _start_c */
++		LONG_BSTRINS " $sp, $zero, 3, 0\n" /* $sp must be 16-byte aligned                    */
++		"bl            _start_c\n"         /* transfer to c runtime                          */
  	);
  	__builtin_unreachable();
+ }
 -- 
 2.25.1
+
 
