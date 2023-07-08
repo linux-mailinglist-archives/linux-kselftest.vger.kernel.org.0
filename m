@@ -2,254 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B28B74B8FD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jul 2023 23:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC4F74BAE6
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jul 2023 03:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232910AbjGGV4g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jul 2023 17:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
+        id S230098AbjGHBMQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jul 2023 21:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232698AbjGGV4Y (ORCPT
+        with ESMTP id S229571AbjGHBMP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jul 2023 17:56:24 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6B926BD
-        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 14:55:59 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-579dd7e77f5so26870827b3.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 14:55:59 -0700 (PDT)
+        Fri, 7 Jul 2023 21:12:15 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A6C2114
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 Jul 2023 18:12:12 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-55b1238a013so1731517a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jul 2023 18:12:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688766958; x=1691358958;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vNyM+7c0est1wcVkLGeYyWS2zFzaKr32nANrKlDiGpI=;
-        b=OMdpoDHVwHWGjrcqQJPsCz18MHB25H0LJo2nJDpMTFaEBMMVUhi44V1ldpofEQheC0
-         m4JfYqAGr/gmOByQh659ri0DTCXPUN3wq0q9Y61OTOaapOrMdiNoHQh6afOT6Th9pdol
-         6+Ht5/zRVaIIhULOylK6yhUyyPHER4k+z45bkpq2bwwXlhD5GQG21YfPfmVH3RloLN6w
-         wtstq9y90K39zITeLzb/scB5M7A5pCo8nSgwdCQYNkCCv8K/hLgyaE+soykDU5ln1WLL
-         7xsIGId5npFZRXxs0JphIddyCoDPMBn40haDcCt74ON/WBh0oWvk/3GCiN3vTTt9Y71N
-         aqMQ==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688778731; x=1691370731;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hG/AQXuxFAN1krhx66y6oqNvLxTmXg3B48rFR/wju6k=;
+        b=kSdi/rNNNHfMSpMFIlfOp/mOBJADnhFaAkk66ucVjag4lVze23mZCljnN+xyusXAE6
+         uwi+Cq9yHV8Xj1AjwIfBaestAxuDhlSvML5JIt51GA0wKM7W21y+lYcRF4pZHqSVfbHX
+         kmLPAFzBPN3Le+mo2dUUh4iy5dqdffKDbShbJ6jD6thbA18ssPldJ1ftLXv0aVtbzLQH
+         TKFlwOixvLICPJGYOuUyJ3onYj6xf+6ObnIn6JGO3uDdE2/T4PAkD57OnrAqIEoeFH1+
+         uUaTIeoPDPz1mdI5fua3omzz/1t0033c4GVajNsi4GqNXKBlUYF+Hc7pLj5490GIGTga
+         shYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688766958; x=1691358958;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vNyM+7c0est1wcVkLGeYyWS2zFzaKr32nANrKlDiGpI=;
-        b=ji7e6VQG7sd4nmgd+RTrPTXg5bNuN6xjJkccw4+/7MSPaJyD/wZ5IX/Ek2/r4yrhqu
-         KnEKogZOgGVpCDdsJIEhde98Y05+2nUXqEPhAx94t5u2omUtqxr7aMNSr1INXxfbirDC
-         A/Jm7qEx/2pXLd0UE7VgtwoXJvu0bpwt9542vDMjvwRR2MrdR9f38N72OTNKkbeMCRfv
-         kCyJbQvJmaq5OvKaktDyIPQ0xfocGvJHG3ywxcxRh5i54peUSb1tEUa4OHehGgdgbpxu
-         FQp1le/nMZU9GyXx6tvpYOmzs4rKD3IvOu1FkFLPimrHCZ68gq9dafqb0eIQLOIRdi2x
-         CxKQ==
-X-Gm-Message-State: ABy/qLZ79bTJ9LHdZ+/RatjUrv5gQnexT6jEbTq98koekhMoY0Wdew5e
-        8SQ1B/7IG5/OCGDXuummgvcE+abe/2wdYonJQ9I0
-X-Google-Smtp-Source: APBJJlEkVp64R6YyNIYgkWWJLixkffDfIZz5S4mpdabnKl15q3RW7laRRo2Y50RlxbwI2hpdw7ztg2lX8JH5LcyqTH+L
-X-Received: from axel.svl.corp.google.com ([2620:15c:2a3:200:c201:5125:39d1:ef3f])
- (user=axelrasmussen job=sendgmr) by 2002:a81:b3c3:0:b0:569:e04a:239d with
- SMTP id r186-20020a81b3c3000000b00569e04a239dmr45939ywh.0.1688766958488; Fri,
- 07 Jul 2023 14:55:58 -0700 (PDT)
-Date:   Fri,  7 Jul 2023 14:55:40 -0700
-In-Reply-To: <20230707215540.2324998-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20230707215540.2324998-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230707215540.2324998-9-axelrasmussen@google.com>
-Subject: [PATCH v4 8/8] selftests/mm: add uffd unit test for UFFDIO_POISON
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Peter Xu <peterx@redhat.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Alumbaugh" <talumbau@google.com>,
-        Yu Zhao <yuzhao@google.com>,
-        ZhangPeng <zhangpeng362@huawei.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1688778731; x=1691370731;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hG/AQXuxFAN1krhx66y6oqNvLxTmXg3B48rFR/wju6k=;
+        b=X2w76n2vJ5tN/NrpyN9olsjx5AAEyIWvexamH0bJWDw8voy5R3racORKIr0Z8v/jLa
+         UfaPiyo+FL6dty6kEVenRxHzstY/BswLOGZ4p2jNiRdmiANwISVFCggpkUIJ+YoLmB/W
+         LOQsZJf56VZqR45dgt2e4Tw6ZA+RRRQ+nL9/TqpgaEXppYRBXDNQnOqnJ/71fTh8emGL
+         DzjoIBhFvmHTzl/EHZoTTTxg23XkYXBkJ2AnCaLtDLWKvKofksYbpHGQgkkaKC1O7mNG
+         p8uzQxswAyImOcmhCrL4OD9apz0VyVrvA//DMUU2MqSD+s6VIP8NiME3LUuqRtMyeNcQ
+         QClw==
+X-Gm-Message-State: ABy/qLY/WZAT6gGvov4o1qnBQB4eacdLgWLu/yK09ftjK9j4bEU1jU+f
+        jVXSla8xJEP3GeeTOge2M54pFQ==
+X-Google-Smtp-Source: APBJJlEfIeSIG6gg4bQuj7jzvSYRUPZTMB4e5Z3mxa32edquCBC5onRLyiJegqwpT1yjoKYrnzvs8g==
+X-Received: by 2002:a17:902:eacc:b0:1b8:ae12:5610 with SMTP id p12-20020a170902eacc00b001b8ae125610mr6450652pld.7.1688778731557;
+        Fri, 07 Jul 2023 18:12:11 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id x24-20020a170902b41800b001b87d3e845bsm3830654plr.149.2023.07.07.18.12.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 18:12:10 -0700 (PDT)
+From:   Charlie Jenkins <charlie@rivosinc.com>
+To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     charlie@rivosinc.com, conor@kernel.org, paul.walmsley@sifive.com,
+        palmer@rivosinc.com, aou@eecs.berkeley.edu, anup@brainfault.org,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org
+Subject: [PATCH v4 0/4] RISC-V: mm: Make SV48 the default address space
+Date:   Fri,  7 Jul 2023 18:11:31 -0700
+Message-ID: <20230708011156.2697409-1-charlie@rivosinc.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test is pretty basic, and exercises UFFDIO_POISON straightforwardly.
-We register a region with userfaultfd, in missing fault mode. For each
-fault, we either UFFDIO_COPY a zeroed page (odd pages) or UFFDIO_POISON
-(even pages). We do this mix to test "something like a real use case",
-where guest memory would be some mix of poisoned and non-poisoned pages.
+Make sv48 the default address space for mmap as some applications
+currently depend on this assumption. Also enable users to select
+desired address space using a non-zero hint address to mmap. Previous
+kernel changes caused Java and other applications to be broken on sv57
+which this patch fixes.
 
-We read each page in the region, and assert that the odd pages are
-zeroed as expected, and the even pages yield a SIGBUS as expected.
+Documentation is also added to the RISC-V virtual memory section to explain
+these changes.
 
-Why UFFDIO_COPY instead of UFFDIO_ZEROPAGE? Because hugetlb doesn't
-support UFFDIO_ZEROPAGE, and we don't want to have special case code.
+-Charlie
 
-Acked-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- tools/testing/selftests/mm/uffd-unit-tests.c | 117 +++++++++++++++++++
- 1 file changed, 117 insertions(+)
+v4:
+- Split testcases/document patch into test cases, in-code documentation, and
+  formal documentation patches
+- Modified the mmap_base macro to be more legible and better represent memory
+  layout
+- Fixed documentation to better reflect the implmentation
+- Renamed DEFAULT_VA_BITS to MMAP_VA_BITS
+- Added additional test case for rlimit changes
+---
 
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 04d91f144d1c..2709a34a39c5 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -951,6 +951,117 @@ static void uffd_zeropage_test(uffd_test_args_t *args)
- 	uffd_test_pass();
- }
- 
-+static void uffd_register_poison(int uffd, void *addr, uint64_t len)
-+{
-+	uint64_t ioctls = 0;
-+	uint64_t expected = (1 << _UFFDIO_COPY) | (1 << _UFFDIO_POISON);
-+
-+	if (uffd_register_with_ioctls(uffd, addr, len, true,
-+				      false, false, &ioctls))
-+		err("poison register fail");
-+
-+	if ((ioctls & expected) != expected)
-+		err("registered area doesn't support COPY and POISON ioctls");
-+}
-+
-+static void do_uffdio_poison(int uffd, unsigned long offset)
-+{
-+	struct uffdio_poison uffdio_poison = { 0 };
-+	int ret;
-+	__s64 res;
-+
-+	uffdio_poison.range.start = (unsigned long) area_dst + offset;
-+	uffdio_poison.range.len = page_size;
-+	uffdio_poison.mode = 0;
-+	ret = ioctl(uffd, UFFDIO_POISON, &uffdio_poison);
-+	res = uffdio_poison.updated;
-+
-+	if (ret)
-+		err("UFFDIO_POISON error: %"PRId64, (int64_t)res);
-+	else if (res != page_size)
-+		err("UFFDIO_POISON unexpected size: %"PRId64, (int64_t)res);
-+}
-+
-+static void uffd_poison_handle_fault(
-+	struct uffd_msg *msg, struct uffd_args *args)
-+{
-+	unsigned long offset;
-+
-+	if (msg->event != UFFD_EVENT_PAGEFAULT)
-+		err("unexpected msg event %u", msg->event);
-+
-+	if (msg->arg.pagefault.flags &
-+	    (UFFD_PAGEFAULT_FLAG_WP | UFFD_PAGEFAULT_FLAG_MINOR))
-+		err("unexpected fault type %llu", msg->arg.pagefault.flags);
-+
-+	offset = (char *)(unsigned long)msg->arg.pagefault.address - area_dst;
-+	offset &= ~(page_size-1);
-+
-+	/* Odd pages -> copy zeroed page; even pages -> poison. */
-+	if (offset & page_size)
-+		copy_page(uffd, offset, false);
-+	else
-+		do_uffdio_poison(uffd, offset);
-+}
-+
-+static void uffd_poison_test(uffd_test_args_t *targs)
-+{
-+	pthread_t uffd_mon;
-+	char c;
-+	struct uffd_args args = { 0 };
-+	struct sigaction act = { 0 };
-+	unsigned long nr_sigbus = 0;
-+	unsigned long nr;
-+
-+	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
-+
-+	uffd_register_poison(uffd, area_dst, nr_pages * page_size);
-+	memset(area_src, 0, nr_pages * page_size);
-+
-+	args.handle_fault = uffd_poison_handle_fault;
-+	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
-+		err("uffd_poll_thread create");
-+
-+	sigbuf = &jbuf;
-+	act.sa_sigaction = sighndl;
-+	act.sa_flags = SA_SIGINFO;
-+	if (sigaction(SIGBUS, &act, 0))
-+		err("sigaction");
-+
-+	for (nr = 0; nr < nr_pages; ++nr) {
-+		unsigned long offset = nr * page_size;
-+		const char *bytes = (const char *) area_dst + offset;
-+		const char *i;
-+
-+		if (sigsetjmp(*sigbuf, 1)) {
-+			/*
-+			 * Access below triggered a SIGBUS, which was caught by
-+			 * sighndl, which then jumped here. Count this SIGBUS,
-+			 * and move on to next page.
-+			 */
-+			++nr_sigbus;
-+			continue;
-+		}
-+
-+		for (i = bytes; i < bytes + page_size; ++i) {
-+			if (*i)
-+				err("nonzero byte in area_dst (%p) at %p: %u",
-+				    area_dst, i, *i);
-+		}
-+	}
-+
-+	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
-+		err("pipe write");
-+	if (pthread_join(uffd_mon, NULL))
-+		err("pthread_join()");
-+
-+	if (nr_sigbus != nr_pages / 2)
-+		err("expected to receive %lu SIGBUS, actually received %lu",
-+		    nr_pages / 2, nr_sigbus);
-+
-+	uffd_test_pass();
-+}
-+
- /*
-  * Test the returned uffdio_register.ioctls with different register modes.
-  * Note that _UFFDIO_ZEROPAGE is tested separately in the zeropage test.
-@@ -1126,6 +1237,12 @@ uffd_test_case_t uffd_tests[] = {
- 		UFFD_FEATURE_PAGEFAULT_FLAG_WP |
- 		UFFD_FEATURE_WP_HUGETLBFS_SHMEM,
- 	},
-+	{
-+		.name = "poison",
-+		.uffd_fn = uffd_poison_test,
-+		.mem_targets = MEM_ALL,
-+		.uffd_feature_required = UFFD_FEATURE_POISON,
-+	},
- };
- 
- static void usage(const char *prog)
+Charlie Jenkins (4):
+  RISC-V: mm: Restrict address space for sv39,sv48,sv57
+  RISC-V: mm: Add tests for RISC-V mm
+  RISC-V: mm: Update pgtable comment documentation
+  RISC-V: mm: Document mmap changes
+
+ Documentation/riscv/vm-layout.rst             |  22 +++
+ arch/riscv/include/asm/elf.h                  |   2 +-
+ arch/riscv/include/asm/pgtable.h              |  21 ++-
+ arch/riscv/include/asm/processor.h            |  43 +++++-
+ tools/testing/selftests/riscv/Makefile        |   2 +-
+ tools/testing/selftests/riscv/mm/.gitignore   |   1 +
+ tools/testing/selftests/riscv/mm/Makefile     |  21 +++
+ .../selftests/riscv/mm/testcases/mmap.c       | 133 ++++++++++++++++++
+ 8 files changed, 232 insertions(+), 13 deletions(-)
+ create mode 100644 tools/testing/selftests/riscv/mm/.gitignore
+ create mode 100644 tools/testing/selftests/riscv/mm/Makefile
+ create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
+
 -- 
-2.41.0.255.g8b1d071c50-goog
+2.41.0
 
