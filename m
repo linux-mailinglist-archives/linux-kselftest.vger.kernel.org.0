@@ -2,196 +2,353 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FEB74BE24
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jul 2023 17:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFAA74BE2A
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jul 2023 17:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjGHPZy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 8 Jul 2023 11:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
+        id S230154AbjGHP05 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 8 Jul 2023 11:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjGHPZy (ORCPT
+        with ESMTP id S229783AbjGHP05 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 8 Jul 2023 11:25:54 -0400
+        Sat, 8 Jul 2023 11:26:57 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3D3E43;
-        Sat,  8 Jul 2023 08:25:50 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1688829938t4ghg9b6
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046D990;
+        Sat,  8 Jul 2023 08:26:54 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1688830004tyw675ms
 Received: from linux-lab-host.localdomain ( [116.30.131.119])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 08 Jul 2023 23:25:37 +0800 (CST)
+        id ; Sat, 08 Jul 2023 23:26:42 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: KvvwR/hcPA1tsLyJ+hoWQ0ptsJnLEnbBCeHAmZywwvMuVpm5dmCLEcyrLby2V
-        /SMDdieOQ+TkEilwDH/KSaYLuThGTyZfZfUrK2uYIVfKKu57s6bwwJQss4vHA/my5/f0xoq
-        tXSjg065Di6QCn16HBkG0lDE108NQAOI0bu3gxaIuInCDUnCWGNwxhTF8nIlQnjVG/QC9wB
-        gO8s8EeLwZxh/gzfz58YjH3r3Nb35vtm4PU1XMCvdSM6y2bP2Fy+JBtiCUPYn2q8RgCnZAa
-        /k3f7Gl/6Y9RTbNTSGU5eUlxXnObhgZ8IEFvvU2R5+BDRhcpJ9ynODAXabkYwF42BOFKCAr
-        LUDnGJ8js/PWirtkDXoU4PlKgz1Ca6MM6JJ0Njwr7ktGQCeG0UWEUOErGZUTD9gJmiDETv7
+X-QQ-FEAT: +ynUkgUhZJmVRUXV+L2xeVyf6+vqmM7j9a2ASDPK312opbgF4bOwDsoGStEyF
+        OXQxMtEdNxFS7Ym41TWHTCmiKwVLZyWlxLECcbgdfVdGQPGC7pqNGVKtK/L+64tubQblPP7
+        oczPdTp8NDntGYKd/lgVkGmpshZVJ4DKHKsE9NofnaAC48iM6oo1wfJd6mq88fmii3W1kbs
+        dRxpVsWe5Hoqs/YKlCXHrfRmP6kqBWSpGi6UVkiJ7tiYEt15r9BgLZW0KkHOFpmDp5irziD
+        KRKgA4lBunL75GYf4Fr1fv4MirIxsqdRnfbUdcemPNoLl4ctqsZ7ujufvavhYLxXXY7F2sD
+        QWAIFaAj76zc+ISdWwRE/bNlf6udwxpzKsPqHbJ0fZfQMYF5S7cnMq+3op7U8F0grLoRRVX
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11312659977501803491
+X-BIZMAIL-ID: 16386265970965724467
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v2 00/12] tools/nolibc: shrink arch support
-Date:   Sat,  8 Jul 2023 23:25:37 +0800
-Message-Id: <cover.1688828139.git.falcon@tinylab.org>
+Subject: [PATCH v2 01/12] tools/nolibc: rename arch-<ARCH>.h to <ARCH>/arch.h
+Date:   Sat,  8 Jul 2023 23:26:42 +0800
+Message-Id: <ef34ee3cc8cb0e4f8ce7c7c9975a0e8d14473a84.1688828139.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1688828139.git.falcon@tinylab.org>
+References: <cover.1688828139.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
+Currently, the architecture specific arch.h has two parts, one is the
+syscall declarations for sys.h, another is the _start code definition
+for startup support.
 
-This is v2 of the "tools/nolibc: shrink arch support" [1].
+The coming crt.h will provide the startup support with a new common
+_start_c(), it will replace most of the assembly _start code and shrink
+the original _start code to be minimal, as a result, _start_c() and the
+left minimal _start code will work together to provide the startup
+support, therefore, the left _start code will be only required by crt.h.
 
-This v2 has no core code logic change, but applies some suggestions from
-Willy and Thomas, one is using post-whitespaces instead of post-tab,
-another is restructuring the arch support directory and files [2].
+So, the syscall declarations part of arch.h can be split to sys_arch.h
+and the _start code part of arch.h can be split to crt_arch.h and then,
+they should only be included in sys.h and crt.h respectively.
 
-Like musl, this v2 creates <ARCH> directory for every arch and splits
-the old arch-<ARCH>.h to <ARCH>/{crt.h, sys.h} and at the same time,
-splits the old arch.h to crt_arch.h and sys_arch.h. at last, only need
-to include crt_arch.h in crt.h and sys_arch.h in sys.h respectively, and
-no longer need to include arch.h in the other common headers:
+At the same time, the architecture specific arch-<ARCH>.h should be
+split to <ARCH>/crt.h and <ARCH>/sys.h.
 
-    crt.h <-- crt_arch.h <-- <ARCH>/crt.h
-    sys.h <-- sys_arch.h <-- <ARCH>/sys.h
+As a preparation, this creates the architecture specific directory and
+moves tools/include/nolibc/arch-<ARCH>.h to
+tools/include/nolibc/<ARCH>/arch.h.
 
-It is based on the 20230705-nolibc-series2 branch of nolibc repo [3]. It
-should be applied after the v6 __sysret helper series [4] and the v4
-min config support series [5].
-
-Here is the test report for all of the supported architectures:
-
-               arch/board | result
-              ------------|------------
-          arm/vexpress-a9 | 142 test(s) passed, 1 skipped, 0 failed.
-                 arm/virt | 142 test(s) passed, 1 skipped, 0 failed.
-             aarch64/virt | 142 test(s) passed, 1 skipped, 0 failed.
-              ppc/g3beige | not supported
-              ppc/ppce500 | not supported
-                  i386/pc | 142 test(s) passed, 1 skipped, 0 failed.
-                x86_64/pc | 142 test(s) passed, 1 skipped, 0 failed.
-             mipsel/malta | 142 test(s) passed, 1 skipped, 0 failed.
-         loongarch64/virt | 142 test(s) passed, 1 skipped, 0 failed.
-             riscv64/virt | 142 test(s) passed, 1 skipped, 0 failed.
-             riscv32/virt | 0 test(s) passed, 0 skipped, 0 failed.
-    s390x/s390-ccw-virtio | 142 test(s) passed, 1 skipped, 0 failed.
-
-Changes from v1 --> v2:
-
-* tools/nolibc: rename arch-<ARCH>.h to <ARCH>/arch.h
-  tools/nolibc: split arch.h to crt.h and sys.h
-
-    Restruct the arch support directory and files.
-
-    Fix up the errors reported by scripts/checkpatch.pl.
-
-* tools/nolibc: sys.h: remove the old sys_stat support
-
-    Rebase on the new arch support directory and files.
-
-* tools/nolibc: crt.h: add _start_c
-
-    Move #include "compiler.h" in the common crt.h too.
-
-* tools/nolibc: arm/crt.h: shrink _start with _start_c
-  tools/nolibc: aarch64/crt.h: shrink _start with _start_c
-  tools/nolibc: i386/crt.h: shrink _start with _start_c
-  tools/nolibc: x86_64/crt.h: shrink _start with _start_c
-  tools/nolibc: mips/crt.h: shrink _start with _start_c
-  tools/nolibc: loongarch/crt.h: shrink _start with _start_c
-  tools/nolibc: riscv/crt.h: shrink _start with _start_c
-  tools/nolibc: s390/crt.h: shrink _start with _start_c
-
-    Rebase on the new arch support directory and files.
-
-    Use post-whitespaces instead of post-tab.    
-
-Best regards,
-Zhangjin
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
-[1]: https://lore.kernel.org/lkml/cover.1687976753.git.falcon@tinylab.org/
-[2]: https://lore.kernel.org/lkml/20230703145500.500460-1-falcon@tinylab.org/
-[3]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-[4]: https://lore.kernel.org/lkml/cover.1688739492.git.falcon@tinylab.org/
-[5]: https://lore.kernel.org/lkml/cover.1688750763.git.falcon@tinylab.org/
+ tools/include/nolibc/Makefile                    | 10 +++++-----
+ .../nolibc/{arch-aarch64.h => aarch64/arch.h}    |  6 +++---
+ tools/include/nolibc/arch.h                      | 16 ++++++++--------
+ tools/include/nolibc/{arch-arm.h => arm/arch.h}  |  6 +++---
+ .../include/nolibc/{arch-i386.h => i386/arch.h}  |  6 +++---
+ .../{arch-loongarch.h => loongarch/arch.h}       |  6 +++---
+ .../include/nolibc/{arch-mips.h => mips/arch.h}  |  6 +++---
+ .../nolibc/{arch-riscv.h => riscv/arch.h}        |  6 +++---
+ .../include/nolibc/{arch-s390.h => s390/arch.h}  |  6 +++---
+ .../nolibc/{arch-x86_64.h => x86_64/arch.h}      |  6 +++---
+ 10 files changed, 37 insertions(+), 37 deletions(-)
+ rename tools/include/nolibc/{arch-aarch64.h => aarch64/arch.h} (99%)
+ rename tools/include/nolibc/{arch-arm.h => arm/arch.h} (99%)
+ rename tools/include/nolibc/{arch-i386.h => i386/arch.h} (99%)
+ rename tools/include/nolibc/{arch-loongarch.h => loongarch/arch.h} (99%)
+ rename tools/include/nolibc/{arch-mips.h => mips/arch.h} (99%)
+ rename tools/include/nolibc/{arch-riscv.h => riscv/arch.h} (99%)
+ rename tools/include/nolibc/{arch-s390.h => s390/arch.h} (98%)
+ rename tools/include/nolibc/{arch-x86_64.h => x86_64/arch.h} (99%)
 
-Zhangjin Wu (12):
-  tools/nolibc: rename arch-<ARCH>.h to <ARCH>/arch.h
-  tools/nolibc: split arch.h to crt.h and sys.h
-  tools/nolibc: sys.h: remove the old sys_stat support
-  tools/nolibc: crt.h: add _start_c
-  tools/nolibc: arm/crt.h: shrink _start with _start_c
-  tools/nolibc: aarch64/crt.h: shrink _start with _start_c
-  tools/nolibc: i386/crt.h: shrink _start with _start_c
-  tools/nolibc: x86_64/crt.h: shrink _start with _start_c
-  tools/nolibc: mips/crt.h: shrink _start with _start_c
-  tools/nolibc: loongarch/crt.h: shrink _start with _start_c
-  tools/nolibc: riscv/crt.h: shrink _start with _start_c
-  tools/nolibc: s390/crt.h: shrink _start with _start_c
-
- tools/include/nolibc/Makefile                 | 36 ++++---
- tools/include/nolibc/aarch64/crt.h            | 24 +++++
- .../nolibc/{arch-aarch64.h => aarch64/sys.h}  | 68 +------------
- tools/include/nolibc/arch.h                   | 36 -------
- tools/include/nolibc/arm/crt.h                | 25 +++++
- .../include/nolibc/{arch-arm.h => arm/sys.h}  | 96 +------------------
- tools/include/nolibc/crt.h                    | 60 ++++++++++++
- tools/include/nolibc/crt_arch.h               | 32 +++++++
- tools/include/nolibc/i386/crt.h               | 33 +++++++
- .../nolibc/{arch-i386.h => i386/sys.h}        | 77 +--------------
- tools/include/nolibc/loongarch/crt.h          | 30 ++++++
- .../{arch-loongarch.h => loongarch/sys.h}     | 64 +------------
- tools/include/nolibc/mips/crt.h               | 32 +++++++
- .../nolibc/{arch-mips.h => mips/sys.h}        | 87 +----------------
- tools/include/nolibc/nolibc.h                 |  2 +-
- tools/include/nolibc/riscv/crt.h              | 28 ++++++
- .../nolibc/{arch-riscv.h => riscv/sys.h}      | 83 +---------------
- tools/include/nolibc/s390/crt.h               | 21 ++++
- .../nolibc/{arch-s390.h => s390/sys.h}        | 74 +-------------
- tools/include/nolibc/signal.h                 |  1 -
- tools/include/nolibc/stdio.h                  |  1 -
- tools/include/nolibc/stdlib.h                 |  2 +-
- tools/include/nolibc/sys.h                    | 65 +++----------
- tools/include/nolibc/sys_arch.h               | 32 +++++++
- tools/include/nolibc/time.h                   |  1 -
- tools/include/nolibc/types.h                  |  4 +-
- tools/include/nolibc/unistd.h                 |  1 -
- tools/include/nolibc/x86_64/crt.h             | 33 +++++++
- .../nolibc/{arch-x86_64.h => x86_64/sys.h}    | 74 +-------------
- 29 files changed, 421 insertions(+), 701 deletions(-)
- create mode 100644 tools/include/nolibc/aarch64/crt.h
- rename tools/include/nolibc/{arch-aarch64.h => aarch64/sys.h} (76%)
- delete mode 100644 tools/include/nolibc/arch.h
- create mode 100644 tools/include/nolibc/arm/crt.h
- rename tools/include/nolibc/{arch-arm.h => arm/sys.h} (74%)
- create mode 100644 tools/include/nolibc/crt.h
- create mode 100644 tools/include/nolibc/crt_arch.h
- create mode 100644 tools/include/nolibc/i386/crt.h
- rename tools/include/nolibc/{arch-i386.h => i386/sys.h} (73%)
- create mode 100644 tools/include/nolibc/loongarch/crt.h
- rename tools/include/nolibc/{arch-loongarch.h => loongarch/sys.h} (73%)
- create mode 100644 tools/include/nolibc/mips/crt.h
- rename tools/include/nolibc/{arch-mips.h => mips/sys.h} (74%)
- create mode 100644 tools/include/nolibc/riscv/crt.h
- rename tools/include/nolibc/{arch-riscv.h => riscv/sys.h} (70%)
- create mode 100644 tools/include/nolibc/s390/crt.h
- rename tools/include/nolibc/{arch-s390.h => s390/sys.h} (68%)
- create mode 100644 tools/include/nolibc/sys_arch.h
- create mode 100644 tools/include/nolibc/x86_64/crt.h
- rename tools/include/nolibc/{arch-x86_64.h => x86_64/sys.h} (76%)
-
+diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
+index 64d67b080744..ce21ace8210e 100644
+--- a/tools/include/nolibc/Makefile
++++ b/tools/include/nolibc/Makefile
+@@ -24,7 +24,7 @@ Q=@
+ endif
+ 
+ nolibc_arch := $(patsubst arm64,aarch64,$(ARCH))
+-arch_file := arch-$(nolibc_arch).h
++arch_file := $(nolibc_arch)/arch.h
+ all_files := \
+ 		compiler.h \
+ 		ctype.h \
+@@ -70,11 +70,11 @@ headers:
+ 	$(Q)cp $(all_files) $(OUTPUT)sysroot/include/
+ 	$(Q)if [ "$(ARCH)" = "x86" ]; then      \
+ 		sed -e                          \
+-		  's,^#ifndef _NOLIBC_ARCH_X86_64_H,#if !defined(_NOLIBC_ARCH_X86_64_H) \&\& defined(__x86_64__),' \
+-		  arch-x86_64.h;                \
++		  's,^#ifndef _NOLIBC_X86_64_ARCH_H,#if !defined(_NOLIBC_X86_64_ARCH_H) \&\& defined(__x86_64__),' \
++		  x86_64/arch.h;                \
+ 		sed -e                          \
+-		  's,^#ifndef _NOLIBC_ARCH_I386_H,#if !defined(_NOLIBC_ARCH_I386_H) \&\& !defined(__x86_64__),' \
+-		  arch-i386.h;                  \
++		  's,^#ifndef _NOLIBC_I386_ARCH_H,#if !defined(_NOLIBC_I386_ARCH_H) \&\& !defined(__x86_64__),' \
++		  i386/arch.h;                  \
+ 	elif [ -e "$(arch_file)" ]; then        \
+ 		cat $(arch_file);               \
+ 	else                                    \
+diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/aarch64/arch.h
+similarity index 99%
+rename from tools/include/nolibc/arch-aarch64.h
+rename to tools/include/nolibc/aarch64/arch.h
+index 6227b77a4a09..7d38da13c72b 100644
+--- a/tools/include/nolibc/arch-aarch64.h
++++ b/tools/include/nolibc/aarch64/arch.h
+@@ -4,8 +4,8 @@
+  * Copyright (C) 2017-2022 Willy Tarreau <w@1wt.eu>
+  */
+ 
+-#ifndef _NOLIBC_ARCH_AARCH64_H
+-#define _NOLIBC_ARCH_AARCH64_H
++#ifndef _NOLIBC_AARCH64_ARCH_H
++#define _NOLIBC_AARCH64_ARCH_H
+ 
+ #include "compiler.h"
+ 
+@@ -201,4 +201,4 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
+ 	);
+ 	__builtin_unreachable();
+ }
+-#endif /* _NOLIBC_ARCH_AARCH64_H */
++#endif /* _NOLIBC_AARCH64_ARCH_H */
+diff --git a/tools/include/nolibc/arch.h b/tools/include/nolibc/arch.h
+index 82b43935650f..f98616f5b219 100644
+--- a/tools/include/nolibc/arch.h
++++ b/tools/include/nolibc/arch.h
+@@ -16,21 +16,21 @@
+ #define _NOLIBC_ARCH_H
+ 
+ #if defined(__x86_64__)
+-#include "arch-x86_64.h"
++#include "x86_64/arch.h"
+ #elif defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__)
+-#include "arch-i386.h"
++#include "i386/arch.h"
+ #elif defined(__ARM_EABI__)
+-#include "arch-arm.h"
++#include "arm/arch.h"
+ #elif defined(__aarch64__)
+-#include "arch-aarch64.h"
++#include "aarch64/arch.h"
+ #elif defined(__mips__) && defined(_ABIO32)
+-#include "arch-mips.h"
++#include "mips/arch.h"
+ #elif defined(__riscv)
+-#include "arch-riscv.h"
++#include "riscv/arch.h"
+ #elif defined(__s390x__)
+-#include "arch-s390.h"
++#include "s390/arch.h"
+ #elif defined(__loongarch__)
+-#include "arch-loongarch.h"
++#include "loongarch/arch.h"
+ #endif
+ 
+ #endif /* _NOLIBC_ARCH_H */
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arm/arch.h
+similarity index 99%
+rename from tools/include/nolibc/arch-arm.h
+rename to tools/include/nolibc/arm/arch.h
+index 4d4887a5f04b..473d2c000740 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arm/arch.h
+@@ -4,8 +4,8 @@
+  * Copyright (C) 2017-2022 Willy Tarreau <w@1wt.eu>
+  */
+ 
+-#ifndef _NOLIBC_ARCH_ARM_H
+-#define _NOLIBC_ARCH_ARM_H
++#ifndef _NOLIBC_ARM_ARCH_H
++#define _NOLIBC_ARM_ARCH_H
+ 
+ #include "compiler.h"
+ 
+@@ -267,4 +267,4 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
+ 	__builtin_unreachable();
+ }
+ 
+-#endif /* _NOLIBC_ARCH_ARM_H */
++#endif /* _NOLIBC_ARM_ARCH_H */
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/i386/arch.h
+similarity index 99%
+rename from tools/include/nolibc/arch-i386.h
+rename to tools/include/nolibc/i386/arch.h
+index 4c6b7c04e2e7..66052742763e 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/i386/arch.h
+@@ -4,8 +4,8 @@
+  * Copyright (C) 2017-2022 Willy Tarreau <w@1wt.eu>
+  */
+ 
+-#ifndef _NOLIBC_ARCH_I386_H
+-#define _NOLIBC_ARCH_I386_H
++#ifndef _NOLIBC_I386_ARCH_H
++#define _NOLIBC_I386_ARCH_H
+ 
+ #include "compiler.h"
+ 
+@@ -221,4 +221,4 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
+ 	__builtin_unreachable();
+ }
+ 
+-#endif /* _NOLIBC_ARCH_I386_H */
++#endif /* _NOLIBC_I386_ARCH_H */
+diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/loongarch/arch.h
+similarity index 99%
+rename from tools/include/nolibc/arch-loongarch.h
+rename to tools/include/nolibc/loongarch/arch.h
+index 8aa7724fe38e..63fee1e8f4d9 100644
+--- a/tools/include/nolibc/arch-loongarch.h
++++ b/tools/include/nolibc/loongarch/arch.h
+@@ -4,8 +4,8 @@
+  * Copyright (C) 2023 Loongson Technology Corporation Limited
+  */
+ 
+-#ifndef _NOLIBC_ARCH_LOONGARCH_H
+-#define _NOLIBC_ARCH_LOONGARCH_H
++#ifndef _NOLIBC_LOONGARCH_ARCH_H
++#define _NOLIBC_LOONGARCH_ARCH_H
+ 
+ #include "compiler.h"
+ 
+@@ -197,4 +197,4 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
+ 	__builtin_unreachable();
+ }
+ 
+-#endif /* _NOLIBC_ARCH_LOONGARCH_H */
++#endif /* _NOLIBC_LOONGARCH_ARCH_H */
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/mips/arch.h
+similarity index 99%
+rename from tools/include/nolibc/arch-mips.h
+rename to tools/include/nolibc/mips/arch.h
+index a2bfdf57b957..1581b721b714 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/mips/arch.h
+@@ -4,8 +4,8 @@
+  * Copyright (C) 2017-2022 Willy Tarreau <w@1wt.eu>
+  */
+ 
+-#ifndef _NOLIBC_ARCH_MIPS_H
+-#define _NOLIBC_ARCH_MIPS_H
++#ifndef _NOLIBC_MIPS_ARCH_H
++#define _NOLIBC_MIPS_ARCH_H
+ 
+ #include "compiler.h"
+ 
+@@ -250,4 +250,4 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
+ 	__builtin_unreachable();
+ }
+ 
+-#endif /* _NOLIBC_ARCH_MIPS_H */
++#endif /* _NOLIBC_MIPS_ARCH_H */
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/riscv/arch.h
+similarity index 99%
+rename from tools/include/nolibc/arch-riscv.h
+rename to tools/include/nolibc/riscv/arch.h
+index cd958b2f4b1b..de68759f5959 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/riscv/arch.h
+@@ -4,8 +4,8 @@
+  * Copyright (C) 2017-2022 Willy Tarreau <w@1wt.eu>
+  */
+ 
+-#ifndef _NOLIBC_ARCH_RISCV_H
+-#define _NOLIBC_ARCH_RISCV_H
++#ifndef _NOLIBC_RISCV_ARCH_H
++#define _NOLIBC_RISCV_ARCH_H
+ 
+ #include "compiler.h"
+ 
+@@ -214,4 +214,4 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
+ 	__builtin_unreachable();
+ }
+ 
+-#endif /* _NOLIBC_ARCH_RISCV_H */
++#endif /* _NOLIBC_RISCV_ARCH_H */
+diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/s390/arch.h
+similarity index 98%
+rename from tools/include/nolibc/arch-s390.h
+rename to tools/include/nolibc/s390/arch.h
+index a644ecd361c0..a7b512e81234 100644
+--- a/tools/include/nolibc/arch-s390.h
++++ b/tools/include/nolibc/s390/arch.h
+@@ -3,8 +3,8 @@
+  * s390 specific definitions for NOLIBC
+  */
+ 
+-#ifndef _NOLIBC_ARCH_S390_H
+-#define _NOLIBC_ARCH_S390_H
++#ifndef _NOLIBC_S390_ARCH_H
++#define _NOLIBC_S390_ARCH_H
+ #include <asm/signal.h>
+ #include <asm/unistd.h>
+ 
+@@ -234,4 +234,4 @@ pid_t sys_fork(void)
+ }
+ #define sys_fork sys_fork
+ 
+-#endif /* _NOLIBC_ARCH_S390_H */
++#endif /* _NOLIBC_S390_ARCH_H */
+diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/x86_64/arch.h
+similarity index 99%
+rename from tools/include/nolibc/arch-x86_64.h
+rename to tools/include/nolibc/x86_64/arch.h
+index e69113742a99..602791c3461a 100644
+--- a/tools/include/nolibc/arch-x86_64.h
++++ b/tools/include/nolibc/x86_64/arch.h
+@@ -4,8 +4,8 @@
+  * Copyright (C) 2017-2022 Willy Tarreau <w@1wt.eu>
+  */
+ 
+-#ifndef _NOLIBC_ARCH_X86_64_H
+-#define _NOLIBC_ARCH_X86_64_H
++#ifndef _NOLIBC_X86_64_ARCH_H
++#define _NOLIBC_X86_64_ARCH_H
+ 
+ #include "compiler.h"
+ 
+@@ -217,4 +217,4 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
+ 	__builtin_unreachable();
+ }
+ 
+-#endif /* _NOLIBC_ARCH_X86_64_H */
++#endif /* _NOLIBC_X86_64_ARCH_H */
 -- 
 2.25.1
 
