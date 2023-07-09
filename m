@@ -2,145 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE7174C775
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Jul 2023 20:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 706FA74C77A
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Jul 2023 20:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjGIStO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 9 Jul 2023 14:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
+        id S229760AbjGISv3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 9 Jul 2023 14:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGIStO (ORCPT
+        with ESMTP id S229534AbjGISv2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 9 Jul 2023 14:49:14 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098F2D7;
-        Sun,  9 Jul 2023 11:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1688928551; bh=FoY/caXNRdYDmaJ1xfS/LuWYYdu7mCfD+WNi2/Kt04Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ljATuSj1ccUDXLhjWnl9zkI4bOyIOV3PgRjyyInsu0Mclr0CtBamEXVVHEcylLWVV
-         KIu3Id3f6q1f20Cx8c31H5S/y2sxzC5P/MqY49zVJNauV/NsIonRpMlbq+RH9BJeRN
-         C0filRcInhNEjGDFaIuSk59snA3QDs2S9685rNKg=
-Date:   Sun, 9 Jul 2023 20:49:10 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 04/12] tools/nolibc: crt.h: add _start_c
-Message-ID: <4e23cc1c-2fe0-413e-9fe1-a9428c0861b9@t-8ch.de>
-References: <cover.1688828139.git.falcon@tinylab.org>
- <ccc8c9b850c03ef236ab05e919fea2bf9af2556a.1688828139.git.falcon@tinylab.org>
+        Sun, 9 Jul 2023 14:51:28 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2411D124;
+        Sun,  9 Jul 2023 11:51:25 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1688928674tmi9y1sy
+Received: from linux-lab-host.localdomain ( [116.30.131.119])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 10 Jul 2023 02:51:13 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: 9fp+MOMfZT3vMvXL/7nS8WAM+rfQnLtIlSdyQh4j1AXnMXF8C7akErn2stni0
+        I37oIAaMR/5e3I/spWnZFFuvBgveHmlhFUkgE7vOEwyNXizDen8kahxHWEJhYWV3rDGFX0L
+        45G7xUEkn5Wh98FPuNDO9oP66Zkmvg7RSmhYLg3c87pipc7MsgaHb4X4f+pgJEJp9CcW4rG
+        YnSyoj4AEWg0lLf8WwKznC2r6hBN/LE/0D/vS5iLH6M3ChRnD5I1VmmUOC/hTEvb3LlrhK9
+        6rMXjEZGFSqzVB3jEJbpI5vLTK0/HQcF2iNCybaTkSLAbE1XEA3PRlDGgPT0UdxBMvLft+4
+        gha7XhfQyahSw6h9QYAM79NC6AMrxRj8w+w0VSDwyI5CtgPmYE=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 4140743672692907490
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: Re: [PATCH v1 3/5] selftests/nolibc: report: align passed, skipped and failed
+Date:   Mon, 10 Jul 2023 02:51:12 +0800
+Message-Id: <20230709185112.97236-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230709085153.GA9321@1wt.eu>
+References: <20230709085153.GA9321@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ccc8c9b850c03ef236ab05e919fea2bf9af2556a.1688828139.git.falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-07-08 23:29:58+0800, Zhangjin Wu wrote:
-> As the environ and _auxv support added for nolibc, the assembly _start
-> function becomes more and more complex and therefore makes the porting
-> of nolibc to new architectures harder and harder.
+Hi, Willy
+
+> On Thu, Jul 06, 2023 at 05:10:08PM +0800, Zhangjin Wu wrote:
+> > align the test values for different runs and different architectures.
+> > 
+> > Since the total number of tests is not bigger than 1000 currently, let's
+> > align them with "%03d".
 > 
-> To simplify portability, this c version of _start_c() is added to do
-> most of the assembly start operations in C, which reduces the complexity
-> a lot and will eventually simplify the porting of nolibc to the new
-> architectures.
+> %03d is not great for those who want to use them in scripts because it will
+> prepend zeroes. Better use %3d. Look for example:
 > 
-> The new _start_c() only requires a stack pointer argument, it will find
-> argv, envp and _auxv for us, and then call main(), finally, it exit()
-> with main's return status. With this new _start_c(), the future new
-> architectures only require to add very few assembly instructions.
+>   $ x=$(printf "%03d\n" 19)
+>   $ echo $x
+>   019
+>   $ echo $((x+1))
+>   -bash: 019: value too great for base (error token is "019")
+>
 
-I like it!
+I have tried both '%03d' and '%3d' locally, but used '%03d' at last.
 
-A quick test indicates that the initialization of the stackprotectors
-could also be moved into the C function.
+    190 passed, 021 skipped, 001 failed
+    190 passed,  21 skipped,   1 failed
 
-It also seems like a good opportunity to add some tests for
-argv/environment variable passing.
+Beside the calculate issue you pointed out, the 0 prefix although align
+all of them with 'numbers' but also bring us some noises, filling the
+left parts as whitespaces really looks better.
 
-And as general note to the full series I think that splitting the arch
-files is not necessary and confusing.
-
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/include/nolibc/crt.h | 44 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
+> Instead:
 > 
-> diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
-> index 221b7c5346ca..b269294e9664 100644
-> --- a/tools/include/nolibc/crt.h
-> +++ b/tools/include/nolibc/crt.h
-> @@ -13,4 +13,48 @@
->  char **environ __attribute__((weak));
-
-The old code seems to avoid putting "environ" into the global symbol
-namespace. Could this declaration be moved into the function like in
-getenv()?
-
->  const unsigned long *_auxv __attribute__((weak));
->  
-> +int main(int argc, char *argv[], char **envp);
-
-This will lead to conflicting declarations if the users use a different
-signature. I'm not (yet?) sure how to work around this.
-
-Also how is the case handled where main() returns "void"?
-I'm not sure how this is currently handled or if the compiler takes core
-of returning 0 in this case.
-
-> +static void exit(int);
-> +
-> +void _start_c(long *sp)
-> +{
-> +	int argc, i;
-> +	char **argv;
-> +	char **envp;
-> +
-> +	/*
-> +	 * sp  :  argc          <-- argument count, required by main()
-> +	 * argv:  argv[0]       <-- argument vector, required by main()
-> +	 *        argv[1]
-> +	 *        ...
-> +	 *        argv[argc-1]
-> +	 *        null
-> +	 * envp:  envp[0]       <-- environment variables, required by main() and getenv()
-> +	 *        envp[1]
-> +	 *        ...
-> +	 *        null
-> +	 * _auxv: auxv[0]       <-- auxiliary vector, required by getauxval()
-> +	 *        auxv[1]
-> +	 *        ...
-> +	 *        null
-> +	 */
-> +
-> +	/* assign argc and argv */
-> +	argc = sp[0];
-> +	argv = (void *)(sp + 1);
-> +
-> +	/* find envp */
-> +	envp = argv + argc + 1;
-> +	environ = envp;
-> +
-> +	/* find auxv */
-> +	i = 0;
-> +	while (envp[i])
-> +		i++;
-> +	_auxv = (void *)(envp + i + 1);
-> +
-> +	/* go to application */
-> +	exit(main(argc, argv, envp));
-> +}
-> +
->  #endif /* _NOLIBC_CRT_H */
-> -- 
-> 2.25.1
+>   $ printf "%3d\n" 19
+>    19
+>   $ x=$(printf "%3d\n" 19)
+>   $ echo $x
+>   19
+>   $ echo $((x+1))
+>   20
 > 
+> If you're fine with it I'll change your patch and commit message
+> accordingly.
+
+Ok, let's use '%3d' instead of '%03d'.
+
+Thanks,
+Zhangjin
+
+> 
+> Willy
