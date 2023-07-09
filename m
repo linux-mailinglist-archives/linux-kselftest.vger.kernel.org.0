@@ -2,124 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C123674C71B
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Jul 2023 20:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE7174C775
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Jul 2023 20:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjGISdq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 9 Jul 2023 14:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
+        id S229876AbjGIStO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 9 Jul 2023 14:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjGISdp (ORCPT
+        with ESMTP id S229534AbjGIStO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 9 Jul 2023 14:33:45 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7012123;
-        Sun,  9 Jul 2023 11:33:42 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1688927603tclsk3kn
-Received: from linux-lab-host.localdomain ( [116.30.131.119])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 10 Jul 2023 02:33:22 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: FCwU1VixZy9c9Sh7mKzbIInPmpaFf5dRU/cduiTKcBYHZo6BQDkVsomfwpohQ
-        O5XocE0E67aRtZ7OORO3AAgJRZohbgOhUFxCytVpRHWs7OgO6PEWZDxSyGmNm6x7Y3Xb++t
-        ZRjLpCQVB90bHS5bbETtpkuTCrBYz7T9SvRx+CM9oEOLwZV5m3GIl98Y10Y7iDmG7c+0w+u
-        utJRuK3L9dmaSIOLug5AQpGH+ZJPtsEaVg6clKnaXGRThvZa958rx8RSOy/I5gF+n5pFhvd
-        qYKgOwABgrH62IPVmzpOivvjbfZst1Cb/qvXexpMl2eUkQVKR68CFSQFP6oeOqCOIWmlekV
-        o/WjJaVnEZoJ1LIXwo=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11853465242003201255
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de
-Subject: Re: [PATCH v6 13/15] selftests/nolibc: add mmap_bad test case
-Date:   Mon, 10 Jul 2023 02:33:22 +0800
-Message-Id: <20230709183322.96859-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230709091547.GD9321@1wt.eu>
-References: <20230709091547.GD9321@1wt.eu>
+        Sun, 9 Jul 2023 14:49:14 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098F2D7;
+        Sun,  9 Jul 2023 11:49:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1688928551; bh=FoY/caXNRdYDmaJ1xfS/LuWYYdu7mCfD+WNi2/Kt04Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ljATuSj1ccUDXLhjWnl9zkI4bOyIOV3PgRjyyInsu0Mclr0CtBamEXVVHEcylLWVV
+         KIu3Id3f6q1f20Cx8c31H5S/y2sxzC5P/MqY49zVJNauV/NsIonRpMlbq+RH9BJeRN
+         C0filRcInhNEjGDFaIuSk59snA3QDs2S9685rNKg=
+Date:   Sun, 9 Jul 2023 20:49:10 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 04/12] tools/nolibc: crt.h: add _start_c
+Message-ID: <4e23cc1c-2fe0-413e-9fe1-a9428c0861b9@t-8ch.de>
+References: <cover.1688828139.git.falcon@tinylab.org>
+ <ccc8c9b850c03ef236ab05e919fea2bf9af2556a.1688828139.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ccc8c9b850c03ef236ab05e919fea2bf9af2556a.1688828139.git.falcon@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
-
-> On Fri, Jul 07, 2023 at 11:05:49PM +0800, Zhangjin Wu wrote:
-> > The length argument of mmap() must be greater than 0, passing a zero
-> > length argument expects failure with -EINVAL.
+On 2023-07-08 23:29:58+0800, Zhangjin Wu wrote:
+> As the environ and _auxv support added for nolibc, the assembly _start
+> function becomes more and more complex and therefore makes the porting
+> of nolibc to new architectures harder and harder.
 > 
-> This one doesn't work for me on x86_64 kernel 5.15.112, qemu userland:
+> To simplify portability, this c version of _start_c() is added to do
+> most of the assembly start operations in C, which reduces the complexity
+> a lot and will eventually simplify the porting of nolibc to the new
+> architectures.
 > 
->   46 mmap_bad = <0x0> EEXIST  != (<0xffffffffffffffff> EINVAL)    [FAIL]
->
+> The new _start_c() only requires a stack pointer argument, it will find
+> argv, envp and _auxv for us, and then call main(), finally, it exit()
+> with main's return status. With this new _start_c(), the future new
+> architectures only require to add very few assembly instructions.
 
-Just rerun 'run-user' on x86_64 with kernel 5.11.0-41-generic, it is ok.
+I like it!
 
-The failure is very interesting, and also rechecked the kernel mmap code:
+A quick test indicates that the initialization of the stackprotectors
+could also be moved into the C function.
 
-    unsigned long do_mmap(struct file *file, unsigned long addr,
-                        unsigned long len, unsigned long prot,
-                        unsigned long flags, unsigned long pgoff,
-                        unsigned long *populate, struct list_head *uf)
-    {
-        ...
-        if (!len)
-                return -EINVAL; 
-        ...
-    }
+It also seems like a good opportunity to add some tests for
+argv/environment variable passing.
 
-    $ git blame -L 1202,1202 mm/mmap.c
-    e37609bb36f70 (Piotr Kwapulinski 2015-06-24 16:58:39 -0700 1202)        if (!len)
+And as general note to the full series I think that splitting the arch
+files is not necessary and confusing.
 
-    $ git show e37609bb36f706c954e82e580e2e790e9d5caef8:Makefile 
-    VERSION = 4
-    PATCHLEVEL = 1
-    SUBLEVEL = 0
-    EXTRAVERSION =
-
-So, the kernel side should be ok from v4.1?
-
-For qemu-user, I have rechecked the following version:
-
-    $ qemu-x86_64 --version
-    qemu-x86_64 version 4.2.1 (Debian 1:4.2-3ubuntu6.18)
-
-    $ qemu-x86_64 --version
-    qemu-x86_64 version 7.0.0 (Debian 1:7.0+dfsg-7ubuntu2.6~backport20.04.202306190332~ubuntu20.04.1)
-
-    $ build/x86_64/pc/qemu/v8.0.2/qemu-x86_64 --version
-    qemu-x86_64 version 8.0.2 (v8.0.2-dirty)
-
-all of them work well, as a comparison, what's your qemu-user version?
-
-> This EEXIST actually is the errno from the previous test. If I run
-> the test natively it's OK:
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> ---
+>  tools/include/nolibc/crt.h | 44 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
 > 
->   $ ./nolibc-test syscall:46
->   Running test 'syscall'
->   46 mmap_bad = <0xffffffffffffffff> EINVAL                        [OK]
->   Errors during this test: 0
+> diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+> index 221b7c5346ca..b269294e9664 100644
+> --- a/tools/include/nolibc/crt.h
+> +++ b/tools/include/nolibc/crt.h
+> @@ -13,4 +13,48 @@
+>  char **environ __attribute__((weak));
+
+The old code seems to avoid putting "environ" into the global symbol
+namespace. Could this declaration be moved into the function like in
+getenv()?
+
+>  const unsigned long *_auxv __attribute__((weak));
+>  
+> +int main(int argc, char *argv[], char **envp);
+
+This will lead to conflicting declarations if the users use a different
+signature. I'm not (yet?) sure how to work around this.
+
+Also how is the case handled where main() returns "void"?
+I'm not sure how this is currently handled or if the compiler takes core
+of returning 0 in this case.
+
+> +static void exit(int);
+> +
+> +void _start_c(long *sp)
+> +{
+> +	int argc, i;
+> +	char **argv;
+> +	char **envp;
+> +
+> +	/*
+> +	 * sp  :  argc          <-- argument count, required by main()
+> +	 * argv:  argv[0]       <-- argument vector, required by main()
+> +	 *        argv[1]
+> +	 *        ...
+> +	 *        argv[argc-1]
+> +	 *        null
+> +	 * envp:  envp[0]       <-- environment variables, required by main() and getenv()
+> +	 *        envp[1]
+> +	 *        ...
+> +	 *        null
+> +	 * _auxv: auxv[0]       <-- auxiliary vector, required by getauxval()
+> +	 *        auxv[1]
+> +	 *        ...
+> +	 *        null
+> +	 */
+> +
+> +	/* assign argc and argv */
+> +	argc = sp[0];
+> +	argv = (void *)(sp + 1);
+> +
+> +	/* find envp */
+> +	envp = argv + argc + 1;
+> +	environ = envp;
+> +
+> +	/* find auxv */
+> +	i = 0;
+> +	while (envp[i])
+> +		i++;
+> +	_auxv = (void *)(envp + i + 1);
+> +
+> +	/* go to application */
+> +	exit(main(argc, argv, envp));
+> +}
+> +
+>  #endif /* _NOLIBC_CRT_H */
+> -- 
+> 2.25.1
 > 
-> I'll queue it anyway for now but it would be nice that we figure what's
-> happening (even if we need to adjust or drop the test if it's a false
-> positive) so that we don't get used to "ah this is a normal error".
->
-
-Yes, if there is a failure, we should figure out why. It is ok for me to remove
-this one or let's find another errno condition before we find the root cause of
-the reported failure. 
-
-Thanks,
-Zhangjin
- 
-> Willy
