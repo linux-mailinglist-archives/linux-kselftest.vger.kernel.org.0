@@ -2,36 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC1174DDF6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jul 2023 21:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDB674DEF8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jul 2023 22:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjGJTLZ convert rfc822-to-8bit (ORCPT
+        id S231144AbjGJUPo convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Jul 2023 15:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        Mon, 10 Jul 2023 16:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbjGJTLL (ORCPT
+        with ESMTP id S229469AbjGJUPn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jul 2023 15:11:11 -0400
+        Mon, 10 Jul 2023 16:15:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5905AE78;
-        Mon, 10 Jul 2023 12:10:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D38133;
+        Mon, 10 Jul 2023 13:15:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3858611B6;
-        Mon, 10 Jul 2023 19:10:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C5AEC433C8;
-        Mon, 10 Jul 2023 19:10:38 +0000 (UTC)
-Date:   Mon, 10 Jul 2023 15:10:37 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A29B611C6;
+        Mon, 10 Jul 2023 20:15:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83509C433C7;
+        Mon, 10 Jul 2023 20:15:40 +0000 (UTC)
+Date:   Mon, 10 Jul 2023 16:15:38 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Ajay Kaher <akaher@vmware.com>
 Cc:     "mhiramat@kernel.org" <mhiramat@kernel.org>,
         "shuah@kernel.org" <shuah@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         Ching-lin Yu <chinglinyu@google.com>,
         Nadav Amit <namit@vmware.com>,
         "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
@@ -40,8 +41,8 @@ Cc:     "mhiramat@kernel.org" <mhiramat@kernel.org>,
         Tapas Kundu <tkundu@vmware.com>,
         "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
 Subject: Re: [PATCH v3 03/10] eventfs: adding eventfs dir add functions
-Message-ID: <20230710151037.14560969@gandalf.local.home>
-In-Reply-To: <20230710150731.4ec2b9f8@gandalf.local.home>
+Message-ID: <20230710161538.7a280369@gandalf.local.home>
+In-Reply-To: <20230710150606.2c8d2236@gandalf.local.home>
 References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
         <1685610013-33478-4-git-send-email-akaher@vmware.com>
         <20230701095417.3de5baab@rorschach.local.home>
@@ -52,8 +53,7 @@ References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
         <20230709215447.536defa6@rorschach.local.home>
         <285B9992-4DFB-4343-BD64-DAE9CCEFEE6B@vmware.com>
         <20230710150606.2c8d2236@gandalf.local.home>
-        <20230710150731.4ec2b9f8@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
@@ -67,34 +67,21 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 10 Jul 2023 15:07:30 -0400
+On Mon, 10 Jul 2023 15:06:06 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On Mon, 10 Jul 2023 15:06:06 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > > Something was broken in your mail (I guess cc list) and couldn’t reach to lkml or
-> > > ignored by lkml. I just wanted to track the auto test results from linux-kselftest.    
 > > 
-> > Yeah, claws-mail has an issue with some emails with quotes in it (sometimes
-> > drops the second quote). Sad part is, it happens after I hit send, and it
-> > is not part of the email. I'll send this reply now, but I bet it's going to happen again.
-> > 
-> > Let's see :-/  I checked the To and Cc's and they all have the proper
-> > quotes. Let's see what ends up in my "Sent" folder.  
+> > Something was broken in your mail (I guess cc list) and couldn’t reach to lkml or
+> > ignored by lkml. I just wanted to track the auto test results from linux-kselftest.  
 > 
-> This time it worked!
+> Yeah, claws-mail has an issue with some emails with quotes in it (sometimes
+> drops the second quote). Sad part is, it happens after I hit send, and it
+> is not part of the email. I'll send this reply now, but I bet it's going to happen again.
 > 
+> Let's see :-/  I checked the To and Cc's and they all have the proper
+> quotes. Let's see what ends up in my "Sent" folder.
 
-But this reply did not :-p
-
-It was fine before I sent, but the email in my Sent folder shows:
-
-Cc: "mhiramat@kernel.org" <mhiramat@kernel.org>, "shuah@kernel.org"  <shuah@kernel.org>, "linux-kernel@vger.kernel.org"  <linux-kernel@vger.kernel.org>, "linux-trace-kernel@vger.kernel.org\"          <linux-trace-kernel@vger.kernel.org>, "linux-kselftest@vger.kernel.org"  <linux-kselftest@vger.kernel.org>, Ching-lin Yu <chinglinyu@google.com>,  Nadav Amit <namit@vmware.com>, "srivatsa@csail.mit.edu"  <srivatsa@csail.mit.edu>, Alexey Makhalov <amakhalov@vmware.com>, Vasavi  Sirnapalli <vsirnapalli@vmware.com>, Tapas Kundu <tkundu@vmware.com>,  "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
-
-Claw's injected a backslash into:  "linux-trace-kernel@vger.kernel.org\"          <linux-trace-kernel@vger.kernel.org>
-
-I have my own build of claws-mail, let me update it and perhaps this will
-go away.
+Sorry for the spam, but I just upgraded my claws-mail from 3.19.0 to 3.19.1
+and I just want to see if it fails again.
 
 -- Steve
