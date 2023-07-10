@@ -2,114 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989B074C846
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Jul 2023 23:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD18474CA16
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jul 2023 04:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjGIVAq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 9 Jul 2023 17:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        id S230219AbjGJCxd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 9 Jul 2023 22:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjGIVAq (ORCPT
+        with ESMTP id S229918AbjGJCxd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 9 Jul 2023 17:00:46 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21B811C;
-        Sun,  9 Jul 2023 14:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1688936443; bh=i/i0SbwFNl82wivugo29PcbwTwUwrR/WslbHxkZwClc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BBUa/fdWIVhuEbJc5lYvH7nntb+LPgf/20rNY6UZ5Ua8pCZvcbl83VnBTUn3XQp6f
-         02s8ILkEQfo+lz0BBHEB/O2ZcsV+UcQ92zMXsVV2h8u4kzuwIZwJKsCbHGSjfLJTYC
-         E/3t5QYDNeW9CszN8j8A0BIixIfGEWgPdMWAT/kY=
-Date:   Sun, 9 Jul 2023 23:00:40 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 04/12] tools/nolibc: crt.h: add _start_c
-Message-ID: <90fdd255-32f4-4caf-90ff-06456b53dac3@t-8ch.de>
-References: <cover.1688828139.git.falcon@tinylab.org>
- <ccc8c9b850c03ef236ab05e919fea2bf9af2556a.1688828139.git.falcon@tinylab.org>
- <4e23cc1c-2fe0-413e-9fe1-a9428c0861b9@t-8ch.de>
+        Sun, 9 Jul 2023 22:53:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A492FB;
+        Sun,  9 Jul 2023 19:53:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD45A60DBC;
+        Mon, 10 Jul 2023 02:53:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C7DC433C7;
+        Mon, 10 Jul 2023 02:53:29 +0000 (UTC)
+Date:   Sun, 9 Jul 2023 22:53:27 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Nadav Amit <namit@vmware.com>
+Cc:     Ajay Kaher <akaher@vmware.com>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Ching-lin Yu <chinglinyu@google.com>,
+        Nadav Amit <namit@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        Tapas Kundu <tkundu@vmware.com>,
+        "er.ajay.kaher@gmail.com" <linux-trace-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Ching-lin Yu <chinglinyu@google.com>,
+        Nadav Amit <namit@vmware.com>,
+        "sri\"" <er.ajay.kaher@gmail.com>
+Subject: Re: [PATCH v3 03/10] eventfs: adding eventfs dir add functions
+Message-ID: <20230709225327.777ea466@rorschach.local.home>
+In-Reply-To: <1C0CB205-B56F-44AE-B9B4-3668E06C840E@vmware.com>
+References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
+        <1685610013-33478-4-git-send-email-akaher@vmware.com>
+        <20230701095417.3de5baab@rorschach.local.home>
+        <ECB0097D-A323-4CFC-9C9E-D4DA2AA6E662@vmware.com>
+        <20230703110857.2d051af5@rorschach.local.home>
+        <84CA259A-8A99-471C-B44C-08D289972F43@vmware.com>
+        <20230703155226.1ab27bc1@gandalf.local.home>
+        <20230709215447.536defa6@rorschach.local.home>
+        <1C0CB205-B56F-44AE-B9B4-3668E06C840E@vmware.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4e23cc1c-2fe0-413e-9fe1-a9428c0861b9@t-8ch.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-07-09 20:49:10+0200, Thomas Weißschuh wrote:
-> On 2023-07-08 23:29:58+0800, Zhangjin Wu wrote:
+On Mon, 10 Jul 2023 02:17:01 +0000
+Nadav Amit <namit@vmware.com> wrote:
 
-> [..]
-
-> > ---
-> >  tools/include/nolibc/crt.h | 44 ++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 44 insertions(+)
+> > On Jul 9, 2023, at 6:54 PM, Steven Rostedt <rostedt@goodmis.org> wrote:
 > > 
-> > diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
-> > index 221b7c5346ca..b269294e9664 100644
-> > --- a/tools/include/nolibc/crt.h
-> > +++ b/tools/include/nolibc/crt.h
-> > @@ -13,4 +13,48 @@
-
-> [..]
-
-> >  const unsigned long *_auxv __attribute__((weak));
-> >  
-> > +int main(int argc, char *argv[], char **envp);
+> > +       union {
+> > +               struct rcu_head         rcu;
+> > +               struct llist_node       llist;  /* For freeing after RCU */
+> > +       };  
 > 
-> This will lead to conflicting declarations if the users use a different
-> signature. I'm not (yet?) sure how to work around this.
-> 
-> Also how is the case handled where main() returns "void"?
-> I'm not sure how this is currently handled or if the compiler takes core
-> of returning 0 in this case.
+> The memory savings from using a union might not be worth the potential impact
+> of type confusion and bugs.
 
-I looked into this some more.
+It's also documentation. The two are related, as one is the hand off to
+the other. It's not a random union, and I'd like to leave it that way.
 
-The diff below allows it to accept different signatures for main().
-(Maybe you can improve the naming)
-
-Implicit return values seem to be handled by the compiler automatically.
-In C89 mode we get garbage values, in C2X/C23 we get zero.
-As per the respective C specs.
-
-
-diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
-index b269294e9664..dba40bc9413f 100644
---- a/tools/include/nolibc/crt.h
-+++ b/tools/include/nolibc/crt.h
-@@ -13,7 +13,6 @@
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
- 
--int main(int argc, char *argv[], char **envp);
- static void exit(int);
- 
- void _start_c(long *sp)
-@@ -21,6 +20,7 @@ void _start_c(long *sp)
- 	int argc, i;
- 	char **argv;
- 	char **envp;
-+	int _nolibc_main_alias(int, char**, char**) __asm__("main");
- 
- 	/*
- 	 * sp  :  argc          <-- argument count, required by main()
-@@ -54,7 +54,7 @@ void _start_c(long *sp)
- 	_auxv = (void *)(envp + i + 1);
- 
- 	/* go to application */
--	exit(main(argc, argv, envp));
-+	exit(_nolibc_main_alias(argc, argv, envp));
- }
- 
- #endif /* _NOLIBC_CRT_H */
+-- Steve
