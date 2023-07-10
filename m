@@ -2,142 +2,290 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D54274E117
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 00:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE81C74E136
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 00:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjGJWah (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Jul 2023 18:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
+        id S230295AbjGJWdk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Jul 2023 18:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjGJWah (ORCPT
+        with ESMTP id S229890AbjGJWdj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jul 2023 18:30:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289941B7;
-        Mon, 10 Jul 2023 15:30:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94FF661234;
-        Mon, 10 Jul 2023 22:30:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B1F7C433C8;
-        Mon, 10 Jul 2023 22:30:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689028235;
-        bh=3aYDbMLS8gbBAT0pTmBXom0DR9pequUWpETs0BPTXQU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qhd6Qrbc3gLTYfWDfurVXAEwESS0gghpr06Fs+LfCNQZjtvAxYSrBSx+akaMS/tLa
-         jBkYR5f9zdYQ+6mEBn0xx+ZL6Y5h1/jeFMUG07IsChPrxNv2tV/mdDw7EZ7KeuFbqv
-         Y2X2wzP/rpTu9btpt3P2vcAf4L+L+K2a8QZZscxrxBStCjp6pyLqAvvI9AtOXq/M7a
-         FNcyXxxoDWkPPoKeZ1M3MlYcML7ughf3RbhJWYMS4VbCgvgAyfOePQl+3I0k6dI23M
-         8hnY+fmk88JUHpKixSXUgnRrYBKiXROimMaL1w6WkmL+XD2M+vpU+jT4/qgR+1MUA9
-         68JDxr9cjSuRA==
-Date:   Mon, 10 Jul 2023 23:30:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] selftests: Fix arm64 test installation
-Message-ID: <ZKyGh8AKRLobQKlX@finisterre.sirena.org.uk>
-References: <20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org>
- <04a35122-5020-5ad9-7bdc-c17f9a27bf50@nvidia.com>
- <ZKx17G7ULaQox7Xo@finisterre.sirena.org.uk>
- <ec86c0eb-5c6d-48a2-c216-ec4f40710ca1@nvidia.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="A2HdvkGmzCb8nKVk"
-Content-Disposition: inline
-In-Reply-To: <ec86c0eb-5c6d-48a2-c216-ec4f40710ca1@nvidia.com>
-X-Cookie: Slow day.  Practice crawling.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 10 Jul 2023 18:33:39 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76AA1B2
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jul 2023 15:33:36 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5706641dda9so55039147b3.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jul 2023 15:33:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689028416; x=1691620416;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vww/pYdC1DJeva2AfnXbGu4C5u6TgbMhBMBTAdXoxfg=;
+        b=tYuqkf1i1ML5V4o25T0vWw2AWYvTHmOdYjkPseY2zygasjrULUgRP0lpwslZq4BlNn
+         r1p4R05iJaCaBeDKpj43UQs0ywurMXa8xm/jLGob/nvAh3tjpHM1PVLFapsJwR/ka1YV
+         OCsLUyi/uoR6UBz4oCwsZPYuOl7NB6tSRitea5cmk6T+xQOOyfhtosCAuCmmHP3pASl3
+         FTJcJXa6DUCUieE5FhnpIjd11iJE7Eyy6HtGjsye3wuVkng9TA1g9wlYGDtVF3B0KaVO
+         3HzZZK95D11PQUMva7mNWvWl66mMUrB5ooxHO0g24qTp1JovuF4cWpSDU4WzfBUUTKLM
+         wSig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689028416; x=1691620416;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vww/pYdC1DJeva2AfnXbGu4C5u6TgbMhBMBTAdXoxfg=;
+        b=c6wMZkkfBXK/MfCWRN9zPi7iYsSoreZnDNODoK1q7KeeaM3fSxfkJDNZcSUWZzqfcf
+         88d/2VnuJYfvARqfMSbt4r6jZD1YZ2dUQL75/mSLHXvGZ8OZaYodbdYoBVsUiZ5KPFZ8
+         ttv3i9yRD+44d5Fm7ov4dw7Gt05d+uNrSGle+kKAKbmOtbziU9h7MK4BtGkZaBOlYFMY
+         Rqy3EBcqrBNLRyyZSkcyw1DmE4ZTw2INNnUrh349HcH9Xu24e0KY+DXN4/LNHXbYSeS6
+         zixZP1uL3P5330BLGCwTJ87pcMuQXmp7IXTifvRtm8crIqAH13hekYK2zXmhm3HTCmjm
+         m5yw==
+X-Gm-Message-State: ABy/qLbYvV5m7rp9JSLphSLVse19nzXj+cC4HGDo1JY/AganL1B3Elxn
+        3k0/11JoDr8a+CIDc8IC1+cAWzhL17eZ5CjTQw==
+X-Google-Smtp-Source: APBJJlEO8eLcuFuH8wVnMQWAHkbzZWQHuwFwsGmDwYpzfNPSGiEWAwrAUfjiTOVp1l1HiHVrM6vyb9Q+AKeZ71Ccyg==
+X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:4c0f:bfb6:9942:8c53])
+ (user=almasrymina job=sendgmr) by 2002:a81:ad44:0:b0:565:9e73:f937 with SMTP
+ id l4-20020a81ad44000000b005659e73f937mr67586ywk.4.1689028416099; Mon, 10 Jul
+ 2023 15:33:36 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 15:32:51 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.390.g38632f3daf-goog
+Message-ID: <20230710223304.1174642-1-almasrymina@google.com>
+Subject: [RFC PATCH 00/10] Device Memory TCP
+From:   Mina Almasry <almasrymina@google.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Mina Almasry <almasrymina@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, jgg@ziepe.ca
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+* TL;DR:
 
---A2HdvkGmzCb8nKVk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Device memory TCP (devmem TCP) is a proposal for transferring data to and/o=
+r
+from device memory efficiently, without bouncing the data to a host memory
+buffer.
 
-On Mon, Jul 10, 2023 at 02:31:56PM -0700, John Hubbard wrote:
-> On 7/10/23 14:20, Mark Brown wrote:
+* Problem:
 
-> > There are no such thing as far as I am aware - the arm64 selftests are
-> > *very* actively used by a range of people and CI systems, I certainly
-> > build them pretty consistently and am aware of no build failures with
-> > either GCC or clang.  You do need to install the headers to get the
-> > current APIs but until your commit everything was building cleanly.
+A large amount of data transfers have device memory as the source and/or
+destination. Accelerators drastically increased the volume of such transfer=
+s.
+Some examples include:
+- ML accelerators transferring large amounts of training data from storage =
+into
+  GPU/TPU memory. In some cases ML training setup time can be as long as 50=
+% of
+  TPU compute time, improving data transfer throughput & efficiency can hel=
+p
+  improving GPU/TPU utilization.
 
-> > If you are seeing any problems please report them.
+- Distributed training, where ML accelerators, such as GPUs on different ho=
+sts,
+  exchange data among them.
 
-> oh wow, yes, I am! It's on a slightly older installation (gcc version
-> 8.5.0 20210514 (Red Hat 8.5.0-18)), but there are a lot of basic build
-> failures, I'll get them together and send out a note.
+- Distributed raw block storage applications transfer large amounts of data=
+ with
+  remote SSDs, much of this data does not require host processing.
 
-There is a floor on binutils version for the kselftests that's more
-aggressive than that for the kernel itself, though that looks like RHEL
-8 which has binutils 2.30 which *should* be fine for most things - the
-MTE tests won't build but they do have version detection so should skip,
-I guess you might have trouble with PAC support which doesn't have
-detection in the tests?  It's certainly old enough that I'm surprised to
-hear someone doing development for anything current with it.
+Today, the majority of the Device-to-Device data transfers the network are
+implemented as the following low level operations: Device-to-Host copy,
+Host-to-Host network transfer, and Host-to-Device copy.
 
-I just tried a Debian based GCC 8 container which seems pretty happy
-for arm64, the command was:
+The implementation is suboptimal, especially for bulk data transfers, and c=
+an
+put significant strains on system resources, such as host memory bandwidth,
+PCIe bandwidth, etc. One important reason behind the current state is the
+kernel=E2=80=99s lack of semantics to express device to network transfers.=
+=C2=A0
 
-make -j16 O=3D/tmp/out INSTALL_PATH=3D/tmp/kselftest \
-	ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- \
-	CROSS_COMPILE_COMPAT=3Darm-linux-gnueabihf- kselftest-install
+* Proposal:
 
-(the compat toolchain isn't used here IIRC).  It does skip the MTE tests
-but otherwise isn't showing any obvious issues in the arm64 tests.
+In this patch series we attempt to optimize this use case by implementing
+socket APIs that enable the user to:
 
-> Meanwhile, if you would like to try a quick fix, I have one that fixes
-> the problem on my system. I'm inclined to dress it up with a comment
-> that explains it (with a "TODO: stop using recursive Make here"), and
-> send it out as an actual fix:
->=20
-> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selft=
-ests/arm64/Makefile
-> index 9460cbe81bcc..ace8b67fb22d 100644
-> --- a/tools/testing/selftests/arm64/Makefile
-> +++ b/tools/testing/selftests/arm64/Makefile
-> @@ -42,7 +42,7 @@ run_tests: all
->         done
->  # Avoid any output on non arm64 on emit_tests
-> -emit_tests: all
-> +emit_tests:
->         @for DIR in $(ARM64_SUBTARGETS); do                             \
->                 BUILD_TARGET=3D$(OUTPUT)/$$DIR;                   \
->                 make OUTPUT=3D$$BUILD_TARGET -C $$DIR $@;         \
+1. send device memory across the network directly, and
+2. receive incoming network packets directly into device memory.
 
-That does seem to work around the issue at least with a quick out of
-tree build, including with GCC 8.
+Packet _payloads_ go directly from the NIC to device memory for receive and=
+ from
+device memory to NIC for transmit.
+Packet _headers_ go to/from host memory and are processed by the TCP/IP sta=
+ck
+normally. The NIC _must_ support header split to achieve this.
 
---A2HdvkGmzCb8nKVk
-Content-Type: application/pgp-signature; name="signature.asc"
+Advantages:
 
------BEGIN PGP SIGNATURE-----
+- Alleviate host memory bandwidth pressure, compared to existing
+ network-transfer + device-copy semantics.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSshoQACgkQJNaLcl1U
-h9B72gf/bG4zsdgvPAfpCrtQZigPZ1y8k9YCk4NwudygQJgD5kAsKBt6MPToz9pF
-QBoHXzZNbLqsxjsV5dSNXDHFwWBEQYoiivipyWkUmsXgfkXYTi8epoXtgygF4Zfc
-9XDlPRaa98CiSTu187MbSxAjaJvLSwHOfs8m0VW80jir0nwaVyOqD2geYbXF7swZ
-FBEgemXwQm0u3UqBuXfGKN1uGnX6/XfProIbs9JW/tEF+eMfFEnog7oKPHvFj6XN
-LBeAUboWXQy/8kZcSwYEo2xuKZY3wW46a1wGdmOJg0CWzarznI9zjr5g5RRZ5r3d
-mAz8dgvlRbrT/OATjy+BKUkVEmkJ4Q==
-=RcK3
------END PGP SIGNATURE-----
+- Alleviate PCIe BW pressure, by limiting data transfer to the lowest level
+  of the PCIe tree, compared to traditional path which sends data through t=
+he
+  root complex.
 
---A2HdvkGmzCb8nKVk--
+With this proposal we're able to reach ~96.6% line rate speeds with data se=
+nt
+and received directly from/to device memory.
+
+* Patch overview:
+
+** Part 1: struct paged device memory
+
+Currently the standard for device memory sharing is DMABUF, which doesn't
+generate struct pages. On the other hand, networking stack (skbs, drivers, =
+and
+page pool) operate on pages. We have 2 options:
+
+1. Generate struct pages for dmabuf device memory, or,
+2. Modify the networking stack to understand a new memory type.
+
+This proposal implements option #1. We implement a small framework to gener=
+ate
+struct pages for an sg_table returned from dma_buf_map_attachment(). The su=
+pport
+added here should be generic and easily extended to other use cases interes=
+ted
+in struct paged device memory. We use this framework to generate pages that=
+ can
+be used in the networking stack.
+
+** Part 2: recvmsg() & sendmsg() APIs
+
+We define user APIs for the user to send and receive these dmabuf pages.
+
+** part 3: support for unreadable skb frags
+
+Dmabuf pages are not accessible by the host; we implement changes throughpu=
+t the
+networking stack to correctly handle skbs with unreadable frags.
+
+** part 4: page pool support
+
+We piggy back on Jakub's page pool memory providers idea:
+https://github.com/kuba-moo/linux/tree/pp-providers
+
+It allows the page pool to define a memory provider that provides the
+page allocation and freeing. It helps abstract most of the device memory TC=
+P
+changes from the driver.
+
+This is not strictly necessary, the driver can choose to allocate dmabuf pa=
+ges
+and use them directly without going through the page pool (if acceptable to
+their maintainers).
+
+Not included with this RFC is the GVE devmem TCP support, just to
+simplify the review. Code available here if desired:
+https://github.com/mina/linux/tree/tcpdevmem
+
+This RFC is built on top of v6.4-rc7 with Jakub's pp-providers changes
+cherry-picked.
+
+* NIC dependencies:
+
+1. (strict) Devmem TCP require the NIC to support header split, i.e. the
+   capability to split incoming packets into a header + payload and to put
+   each into a separate buffer. Devmem TCP works by using dmabuf pages
+   for the packet payload, and host memory for the packet headers.
+
+2. (optional) Devmem TCP works better with flow steering support & RSS supp=
+ort,
+   i.e. the NIC's ability to steer flows into certain rx queues. This allow=
+s the
+   sysadmin to enable devmem TCP on a subset of the rx queues, and steer
+   devmem TCP traffic onto these queues and non devmem TCP elsewhere.
+
+The NIC I have access to with these properties is the GVE with DQO support
+running in Google Cloud, but any NIC that supports these features would suf=
+fice.
+I may be able to help reviewers bring up devmem TCP on their NICs.
+
+* Testing:
+
+The series includes a udmabuf kselftest that show a simple use case of
+devmem TCP and validates the entire data path end to end without
+a dependency on a specific dmabuf provider.
+
+Not included in this series is our devmem TCP benchmark, which
+transfers data to/from GPU dmabufs directly.
+
+With this implementation & benchmark we're able to reach ~96.6% line rate
+speeds with 4 GPU/NIC pairs running bi-direction traffic, with all the
+packet payloads going straight to the GPU memory (no host buffer bounce).
+
+** Test Setup
+
+Kernel: v6.4-rc7, with this RFC and Jakub's memory provider API
+cherry-picked locally.
+
+Hardware: Google Cloud A3 VMs.
+
+NIC: GVE with header split & RSS & flow steering support.
+
+Benchmark: custom devmem TCP benchmark not yet open sourced.
+
+Mina Almasry (10):
+  dma-buf: add support for paged attachment mappings
+  dma-buf: add support for NET_RX pages
+  dma-buf: add support for NET_TX pages
+  net: add support for skbs with unreadable frags
+  tcp: implement recvmsg() RX path for devmem TCP
+  net: add SO_DEVMEM_DONTNEED setsockopt to release RX pages
+  tcp: implement sendmsg() TX path for for devmem tcp
+  selftests: add ncdevmem, netcat for devmem TCP
+  memory-provider: updates core provider API for devmem TCP
+  memory-provider: add dmabuf devmem provider
+
+ drivers/dma-buf/dma-buf.c              | 444 ++++++++++++++++
+ include/linux/dma-buf.h                | 142 +++++
+ include/linux/netdevice.h              |   1 +
+ include/linux/skbuff.h                 |  34 +-
+ include/linux/socket.h                 |   1 +
+ include/net/page_pool.h                |  21 +
+ include/net/sock.h                     |   4 +
+ include/net/tcp.h                      |   6 +-
+ include/uapi/asm-generic/socket.h      |   6 +
+ include/uapi/linux/dma-buf.h           |  12 +
+ include/uapi/linux/uio.h               |  10 +
+ net/core/datagram.c                    |   3 +
+ net/core/page_pool.c                   | 111 +++-
+ net/core/skbuff.c                      |  81 ++-
+ net/core/sock.c                        |  47 ++
+ net/ipv4/tcp.c                         | 262 +++++++++-
+ net/ipv4/tcp_input.c                   |  13 +-
+ net/ipv4/tcp_ipv4.c                    |   8 +
+ net/ipv4/tcp_output.c                  |   5 +-
+ net/packet/af_packet.c                 |   4 +-
+ tools/testing/selftests/net/.gitignore |   1 +
+ tools/testing/selftests/net/Makefile   |   1 +
+ tools/testing/selftests/net/ncdevmem.c | 693 +++++++++++++++++++++++++
+ 23 files changed, 1868 insertions(+), 42 deletions(-)
+ create mode 100644 tools/testing/selftests/net/ncdevmem.c
+
+--=20
+2.41.0.390.g38632f3daf-goog
+
