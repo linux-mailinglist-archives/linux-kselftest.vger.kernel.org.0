@@ -2,111 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9747674E07A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jul 2023 23:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF5674E0CF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 00:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjGJVyl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Jul 2023 17:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S230018AbjGJWAg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Jul 2023 18:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjGJVyl (ORCPT
+        with ESMTP id S230021AbjGJWAf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jul 2023 17:54:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F9412F;
-        Mon, 10 Jul 2023 14:54:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3702C6121C;
-        Mon, 10 Jul 2023 21:54:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7294C433C8;
-        Mon, 10 Jul 2023 21:54:37 +0000 (UTC)
-Date:   Mon, 10 Jul 2023 17:54:36 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Zheng Yejian <zhengyejian1@huawei.com>
-Cc:     <mhiramat@kernel.org>, <shuah@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH] selftests/ftrace: Test toplevel-enable for instance
-Message-ID: <20230710175415.2ec0061f@gandalf.local.home>
-In-Reply-To: <20230609174626.66659892@gandalf.local.home>
-References: <20230509203659.1173917-1-zhengyejian1@huawei.com>
-        <20230609174626.66659892@gandalf.local.home>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 10 Jul 2023 18:00:35 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EAB11B
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jul 2023 15:00:33 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9939fbb7191so995847266b.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jul 2023 15:00:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689026432; x=1691618432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QfZzCSrgvGz9BGtS4wsvtCeE34B7/lj4xCbe4JnIP2Q=;
+        b=IELdvlh9d5ofdqTbS2z8RhDc+X1hOJTuBZf0ZbiY48jlt9lPfkJVZe/Wb+ANJ63yBp
+         3tbyTl8zoOZLeyBV+rFCAm3x940PyUDWPt8floL10TItqyH+FrB/lAGZJtOMKZtZt+LE
+         AXebzx74RigJZLsDEDj+71KrNZ7AIkM3jSIZhPTcrbtV9iT+zovNNmAfibmyJQAcAG3s
+         gar9gMyoH8kJeZoRZEbQRzmJOZpL3w6TvRyJ05iXZGAzAKumLDVIkbWrwobqCp/EnIhf
+         WQ1hrqXvH6LHXODojzsxf3hq+oeedejJX94Hat/Qve2IHSIsFzVJsuq7ZMf2QnUCPaxw
+         LZVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689026432; x=1691618432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QfZzCSrgvGz9BGtS4wsvtCeE34B7/lj4xCbe4JnIP2Q=;
+        b=Z/iz89bIM3O8tmOC9pRAgWd9QTQVua70pEqp8DAe9/MBNjCjXkMob4/w51SkRV3iuq
+         Tos5Nd+drtxxMkbET5vvvGO+t55QM3PZmCusAtMhzakLHqtUJdD7s78pb3cZ4wixwpF1
+         egLCJidYZKRie8FxY7kccoaW4raJlmYTiYtX0AGWfpd59PPwMIYN91z7xXXfoKSya5OY
+         U78hxD0kjhwZY26pAO8Isl2YeqobeH9P5SziDV5ZFNzsIl7JtzM0JZLC1FWz1nDF2Lbk
+         Z40mK+tbfYbWUsiMyjwsGQqqCKIFNI9omOLKL45ZESYYL7jAuFa2jkcGmQ86E+sY3pEf
+         70lg==
+X-Gm-Message-State: ABy/qLa3rLKeiBbQ0D57a194RImKp1qEeG69DeMZGBAPL/4+fg0rAq81
+        D8Pw5rb/0h3pAvCBoODQqbLLRtwdAmQ31qwiuG16yQ==
+X-Google-Smtp-Source: APBJJlF6PnMVGMOTSmSf3fdPKR5ba1hPx/zIlHrvaJ4KBennSkMIDBj6INtn7vwYR7M3C9Di2GejevZRUk2uTbDHu9g=
+X-Received: by 2002:a17:907:c29:b0:993:e85c:4ad6 with SMTP id
+ ga41-20020a1709070c2900b00993e85c4ad6mr13335087ejc.7.1689026431632; Mon, 10
+ Jul 2023 15:00:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230707215540.2324998-1-axelrasmussen@google.com>
+ <20230707215540.2324998-2-axelrasmussen@google.com> <20230708180850.bc938ab49fbfb38b83c367c8@linux-foundation.org>
+ <CAJHvVcgfN5RVXJ_f3tN2UinV_kWCMyCY_g5oKm=BtgQJz-e7gA@mail.gmail.com>
+In-Reply-To: <CAJHvVcgfN5RVXJ_f3tN2UinV_kWCMyCY_g5oKm=BtgQJz-e7gA@mail.gmail.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Mon, 10 Jul 2023 14:59:55 -0700
+Message-ID: <CAJHvVch5j=J=d-TqC1bgN6bKLrr0N3W7cwSOAqHf8O3axqapwA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/8] mm: make PTE_MARKER_SWAPIN_ERROR more general
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Brian Geffon <bgeffon@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Yu Zhao <yuzhao@google.com>,
+        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, Jul 10, 2023 at 10:19=E2=80=AFAM Axel Rasmussen
+<axelrasmussen@google.com> wrote:
+>
+> On Sat, Jul 8, 2023 at 6:08=E2=80=AFPM Andrew Morton <akpm@linux-foundati=
+on.org> wrote:
+> >
+> > On Fri,  7 Jul 2023 14:55:33 -0700 Axel Rasmussen <axelrasmussen@google=
+.com> wrote:
+> >
+> > > Future patches will re-use PTE_MARKER_SWAPIN_ERROR to implement
+> > > UFFDIO_POISON, so make some various preparations for that:
+> > >
+> > > First, rename it to just PTE_MARKER_POISONED. The "SWAPIN" can be
+> > > confusing since we're going to re-use it for something not really
+> > > related to swap. This can be particularly confusing for things like
+> > > hugetlbfs, which doesn't support swap whatsoever. Also rename some
+> > > various helper functions.
+> > >
+> > > Next, fix pte marker copying for hugetlbfs. Previously, it would WARN=
+ on
+> > > seeing a PTE_MARKER_SWAPIN_ERROR, since hugetlbfs doesn't support swa=
+p.
+> > > But, since we're going to re-use it, we want it to go ahead and copy =
+it
+> > > just like non-hugetlbfs memory does today. Since the code to do this =
+is
+> > > more complicated now, pull it out into a helper which can be re-used =
+in
+> > > both places. While we're at it, also make it slightly more explicit i=
+n
+> > > its handling of e.g. uffd wp markers.
+> > >
+> > > For non-hugetlbfs page faults, instead of returning VM_FAULT_SIGBUS f=
+or
+> > > an error entry, return VM_FAULT_HWPOISON. For most cases this change
+> > > doesn't matter, e.g. a userspace program would receive a SIGBUS eithe=
+r
+> > > way. But for UFFDIO_POISON, this change will let KVM guests get an MC=
+E
+> > > out of the box, instead of giving a SIGBUS to the hypervisor and
+> > > requiring it to somehow inject an MCE.
+> > >
+> > > Finally, for hugetlbfs faults, handle PTE_MARKER_POISONED, and return
+> > > VM_FAULT_HWPOISON_LARGE in such cases. Note that this can't happen to=
+day
+> > > because the lack of swap support means we'll never end up with such a
+> > > PTE anyway, but this behavior will be needed once such entries *can*
+> > > show up via UFFDIO_POISON.
+> > >
+> > > --- a/include/linux/mm_inline.h
+> > > +++ b/include/linux/mm_inline.h
+> > > @@ -523,6 +523,25 @@ static inline bool mm_tlb_flush_nested(struct mm=
+_struct *mm)
+> > >       return atomic_read(&mm->tlb_flush_pending) > 1;
+> > >  }
+> > >
+> > > +/*
+> > > + * Computes the pte marker to copy from the given source entry into =
+dst_vma.
+> > > + * If no marker should be copied, returns 0.
+> > > + * The caller should insert a new pte created with make_pte_marker()=
+.
+> > > + */
+> > > +static inline pte_marker copy_pte_marker(
+> > > +             swp_entry_t entry, struct vm_area_struct *dst_vma)
+> > > +{
+> > > +     pte_marker srcm =3D pte_marker_get(entry);
+> > > +     /* Always copy error entries. */
+> > > +     pte_marker dstm =3D srcm & PTE_MARKER_POISONED;
+> > > +
+> > > +     /* Only copy PTE markers if UFFD register matches. */
+> > > +     if ((srcm & PTE_MARKER_UFFD_WP) && userfaultfd_wp(dst_vma))
+> > > +             dstm |=3D PTE_MARKER_UFFD_WP;
+> > > +
+> > > +     return dstm;
+> > > +}
+> >
+> > Breaks the build with CONFIG_MMU=3Dn (arm allnoconfig).  pte_marker isn=
+'t
+> > defined.
+> >
+> > I'll slap #ifdef CONFIG_MMU around this function, but probably somethng=
+ more
+> > fine-grained could be used, like CONFIG_PTE_MARKER_UFFD_WP.  Please
+> > consider.
+>
+> Whoops, sorry about this. This function "ought" to be in
+> include/linux/swapops.h where it would be inside a #ifdef CONFIG_MMU
+> anyway, but it can't be because it uses userfaultfd_wp() so there'd be
+> a circular include. I think just wrapping it in CONFIG_MMU is the
+> right way.
+>
+> But, this has also made me realize we need to not advertise
+> UFFDIO_POISON as supported unless we have CONFIG_MMU. I don't want
+> HAVE_ARCH_USERFAULTFD_WP for that, because it's only enabled on
+> x86_64, whereas I want to support at least arm64 as well. I don't see
+> a strong reason not to just use CONFIG_MMU for this too; this feature
+> depends on the API in swapops.h, which uses that ifdef, so I don't see
+> a lot of value out of creating a new but equivalent config option.
 
-Hi Shuah,
+Actually, I'm being silly. CONFIG_USERFAULTFD depends on CONFIG_MMU,
+so we don't need to worry about most of this.
 
-I think this dropped through the cracks. Can you take this through your
-tree?
+Andrew's fix to just wrap the helper in CONFIG_MMU is enough.
 
--- Steve
+>
+> I'll make the needed changes (and also address Peter's comment above)
+> and send out a v5.
+>
+> >
+> > btw, both copy_pte_marker() and pte_install_uffd_wp_if_needed() look
+> > far too large to justify inlining.  Please review the desirability of
+> > this.
 
-On Fri, 9 Jun 2023 17:46:26 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+As far as inlining goes, I'm not opposed to un-inlining this, I was
+mainly copying that pattern from existing helpers in swapops.h.
 
-> On Wed, 10 May 2023 04:36:59 +0800
-> Zheng Yejian <zhengyejian1@huawei.com> wrote:
-> 
-> > 'available_events' is actually not required by
-> > 'test.d/event/toplevel-enable.tc' and its Existence has been tested in
-> > 'test.d/00basic/basic4.tc'.
-> > 
-> > So the require of 'available_events' can be dropped and then we can add
-> > 'instance' flag to test 'test.d/event/toplevel-enable.tc' for instance.
-> > 
-> > Test result show as below:
-> >  # ./ftracetest test.d/event/toplevel-enable.tc
-> >  === Ftrace unit tests ===
-> >  [1] event tracing - enable/disable with top level files [PASS]
-> >  [2] (instance)  event tracing - enable/disable with top level files [PASS]
-> > 
-> >  # of passed:  2
-> >  # of failed:  0
-> >  # of unresolved:  0
-> >  # of untested:  0
-> >  # of unsupported:  0
-> >  # of xfailed:  0
-> >  # of undefined(test bug):  0
-> > 
-> > Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>  
-> 
-> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> 
-> -- Steve
-> 
-> > ---
-> >  tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc b/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
-> > index 93c10ea42a68..8b8e1aea985b 100644
-> > --- a/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
-> > +++ b/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
-> > @@ -1,7 +1,8 @@
-> >  #!/bin/sh
-> >  # SPDX-License-Identifier: GPL-2.0
-> >  # description: event tracing - enable/disable with top level files
-> > -# requires: available_events set_event events/enable
-> > +# requires: set_event events/enable
-> > +# flags: instance
-> >  
-> >  do_reset() {
-> >      echo > set_event  
+One question is, if it weren't inline, where should it go? There is no
+mm/swapops.c which I would say is otherwise the proper place for it. I
+don't see any other good place for the functions to go. The one I'm
+introducing isn't userfaultfd-specific so userfaultfd.c seems wrong.
 
+> >
+> >
