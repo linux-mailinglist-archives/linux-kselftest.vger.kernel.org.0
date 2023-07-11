@@ -2,39 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E91C74F871
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 21:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3AD74F87E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 21:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjGKTgT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jul 2023 15:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
+        id S230266AbjGKTnA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jul 2023 15:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjGKTgS (ORCPT
+        with ESMTP id S229512AbjGKTm7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jul 2023 15:36:18 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1B3410C2;
-        Tue, 11 Jul 2023 12:36:16 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 36BJa8De006394;
-        Tue, 11 Jul 2023 21:36:08 +0200
-Date:   Tue, 11 Jul 2023 21:36:08 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: Re: [PATCH v1 00/22] selftests/nolibc: add minimal kernel config
- support
-Message-ID: <20230711193608.GD31402@1wt.eu>
-References: <ZK0AB1OXH1s2xYsh@1wt.eu>
- <20230711171826.10480-1-falcon@tinylab.org>
+        Tue, 11 Jul 2023 15:42:59 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546CE19B;
+        Tue, 11 Jul 2023 12:42:56 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-47e4521e5baso2333340e0c.1;
+        Tue, 11 Jul 2023 12:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689104575; x=1691696575;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dqxaqXmw1tu3QWdtuOVOPVnF0rhjoVkY2FJ4msGP/FE=;
+        b=WCXxjiX35VIFpR0nhf5xN1cKqwvEe0aVJDmIXwy5y293z47OG3Hx8HJlUrAFw/hjFN
+         pOr8FVTMdX0qwE6i7UKoJ1bVn+fqYysno/V/wnLgh3aFLVP7TKFvo/5IyX+FG3nEX16+
+         OBFdpHvbfxXtTQjgmUngDLNjEL3u4KZnbVOntpXvaVf3OpH19Zex/xseSnpZAwbay+yL
+         thSo1fZ6zUGGJ4TDftaPNHW5df4OCCTf/o+J5S5lRPYdBfJeRceJdqr0mU4KAD4eO7rr
+         GmwZbjcRsrAqUpmh5C2uVP4CA74PUA/Silw7HAREHHV7vWJTbneD0/BHcOgkaYlVISEv
+         STvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689104575; x=1691696575;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dqxaqXmw1tu3QWdtuOVOPVnF0rhjoVkY2FJ4msGP/FE=;
+        b=U6pxITtXDdxn+yXvK3d09+hhk2qRqEnkGs7apWYfFHNhCrkBdqACk+jMEr3FQa/1a6
+         leSMFcrPT/5lr2IQXaAO7ppto69wi6c3pfn6lvZc04R8grfxHWlWdInZttKernkiCw/h
+         IsysD3ZxIw5iquwHfVeerUJRUhGcvykJgX5ZpYFC4PfqKlV2xavCCx1trqQjQT/ZyLDX
+         McRrolmkHbechzDIHnlAsU69k2hejGGn4+56vgt+2fzNW6iHOxfP/nz83RGOx+Y/3E5m
+         4UVj7b9ZKUAMOyppd6AuTDAMLFj8GObAheoLOk1Czg9pT5rSt05ySKjekwKobOUzZl1J
+         npmQ==
+X-Gm-Message-State: ABy/qLaQLiisTAb2t/uBgGjK+2b8PVTy5KD7LqbWBW9nKsYvJLovFayF
+        5S83nNnhskKSaWq38wY2t8PjeO9QKFyp56SmmQo=
+X-Google-Smtp-Source: APBJJlFESZwse+XBzfdEG7gPgKtm+dr9PqBvDRHkx0QyDpPtucriutBokoi6nHj9mpK7MC+ZT1zx1fvPJQ5h6dotD6o=
+X-Received: by 2002:a1f:5842:0:b0:476:3544:773 with SMTP id
+ m63-20020a1f5842000000b0047635440773mr8354569vkb.11.1689104575315; Tue, 11
+ Jul 2023 12:42:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711171826.10480-1-falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230711125241.1587820-1-usama.anjum@collabora.com> <20230711125241.1587820-3-usama.anjum@collabora.com>
+In-Reply-To: <20230711125241.1587820-3-usama.anjum@collabora.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Tue, 11 Jul 2023 12:42:44 -0700
+Message-ID: <CANaxB-zvYpKw-aeF8nd_spARdkV29H7ZJDDhusnmqOPZX1xXtw@mail.gmail.com>
+Subject: Re: [PATCH v24 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,77 +92,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 01:18:26AM +0800, Zhangjin Wu wrote:
-> > > With the new patchset, it is able to rebuild and rerun everything in several
-> > > minutes, it may make people very happy to develop nolibc itself and also make
-> > > people to work on linux with nolibc, especially for developing and testing a
-> > > new kernel feature ;-)
-> > 
-> > I doubt it. Rebuilding everything is not what most developers need. What
-> > they need is to just fix a missing parenthesis that broke the build and
-> > rebuild the strict minimum, restarting from where they left. And they
-> > need to be able to figure what caused that "FAILED" output, disassemble
-> > the output, re-run it manually under qemu-user, rebuild the .c manually
-> > after copy-pasting the whole command line via "V=1", etc.
-> >
-> 
-> It is mainly for a cross arch change, like the _start_c() patchset we
-> just discuss. This may also happen for every release (not that helpful,
-> for a new release, a mrproper or distclean may be required).
+On Tue, Jul 11, 2023 at 5:53=E2=80=AFAM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
 
-Maybe, but let's focus on fixing what's really annoying before trying
-to improve things that work. If you find yourself failing to do certain
-things, annoyed with some flags that are forced on you etc, not finding
-a way to work with multiple output dirs, these are good reasons for
-applying changes. But thinking that it will likely be better organized
-this or that way tends to make us forget what we're relying on and that
-we might lose by accident.
+<snip>
 
-> > Keep in mind that the purpose of a selftest is not to optimize the case
-> > where it works fine, but to optimize the developer's work when it fails.
-> > This is something that a lot of people tend to get wrong. They're proud
-> > of a "make world" that does everything including delivering them pizzas
-> > to wait for the builds to complete, and they say "hey, impressed?". But
-> > when someone else reports "I'm getting this strange error I don't
-> > understand", they can hardly suggest more than "hmmm run make clean, try
-> > again, or use the same distro as me because it works for me".
-> >
-> 
-> Parts of them do want to meet the 'optimize the developer's work when it
-> fails', for example, new developers may be hard to find a loongarch or
-> riscv bios, or find a toolchain for the not frequently used
-> architecture, to avoid introduce many bug reports about "strange errors"
-> outside of our core functions, perhaps we'd better do these in a nolibc
-> doc under Documentation/, tell people how to prepare the develop and
-> test environment of nolibc and how to use nolibc there.
+> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
+> +                                int depth, struct mm_walk *walk)
+> +{
+> +       unsigned long n_pages =3D (end - addr)/PAGE_SIZE;
+> +       struct pagemap_scan_private *p =3D walk->private;
+> +       struct vm_area_struct *vma =3D walk->vma;
+> +       int ret =3D 0;
+> +
+> +       if (!vma)
+> +               return 0;
+> +
+> +       if (IS_PM_SCAN_GET(p->flags)) {
+> +               if (n_pages > p->max_pages - p->found_pages)
+> +                       n_pages =3D p->max_pages - p->found_pages;
+> +
+> +               ret =3D pagemap_scan_output(PM_SCAN_FLAGS(false, false, f=
+alse,
+> +                                         false, false), p, addr, n_pages=
+);
 
-Reading the beginning of the sentence made me immediately think that it's
-what doc is for. You know, if you give a fish to a hungry man he eats one
-day, if you teach him to fish he eats every day. Knowing what to download
-from where is much more instructive than running "make download" or even
-worse, "make" and having the downloads secretly succeed (or fail). If you
-think the doc is hard to find I'm also fine with a patch for makefile
-and/or nolibc-test passing a pointer to its location as a reminding
-comment for example.
+Why do we report holes unconditionally?
 
-> > And I think that helping the user
-> > prepare certain steps or iterate over architectures *is* useful. When
-> > you do it in two layers (the script replacing the user, the makefile
-> > doing the build job), it remains easy and convenient to use, and you
-> > can pick only what you need (e.g. "please build musl for me"). And if
-> > something goes wrong, it's simple for the user to takeover and complete
-> > that failed task by changing an arch name, a directory or anything, and
-> > have their tools ready. Let's just never make that automatic for the
-> > sake of everyone's health!
-> 
-> Ok, the revision will align with the original Makefile and remove the automatic
-> parts and no change about the OUTPUT.
-
-Just check that you can force it from your script on the make command
-line. If you see that it's not possible, we should do something because
-I don't want to force you to make distclean all the time if not needed.
-But if you find that passing certain options (O=, OUTPUT= or anything
-else) does the job, it only needs to be documented.
+> +       }
+> +
+> +       if (IS_PM_SCAN_WP(p->flags) &&
+> +           uffd_wp_range(vma, addr, end - addr, true) < 0)
+> +               ret =3D -EINVAL;
+> +
+> +       return ret;
+> +}
 
 Thanks,
-Willy
+Andrei
