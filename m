@@ -2,123 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9524774F0ED
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 16:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0009B74F22B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 16:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbjGKOAq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jul 2023 10:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
+        id S233643AbjGKOZa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jul 2023 10:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbjGKOAp (ORCPT
+        with ESMTP id S233718AbjGKOY5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:00:45 -0400
+        Tue, 11 Jul 2023 10:24:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9B710F0;
-        Tue, 11 Jul 2023 07:00:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E208A1713;
+        Tue, 11 Jul 2023 07:24:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D536C614F8;
-        Tue, 11 Jul 2023 14:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77FF0C433C7;
-        Tue, 11 Jul 2023 14:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689084037;
-        bh=C5aimvSy1uuXB59oV7jyehu8pLiCWszQXE0xcUViaqk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QtVBEA6ncdi5oyxhNKcYOHmcsGB3XPs+V8afZa97TsEUGXTCt8NFnwD22DJcr+VCa
-         9nKW3qz8v61jMFzXGDHvfglojqkLlLcrT4yHlnTGVdfUoknB/iju0dQ7u7cWa7Cuf0
-         1oYYM6qHeKJ7X4P33jakory1uyE0i8D3igVpGsxpTHr+i9ODFx06aQPcftUtS/7nfd
-         gw4rhECo5cMZ9UruP7ZPwbKdnO+ool4LaPC1OF0WwmzrZohGp3sQFWwMGhKDOlGsyj
-         PSKH9Y90QlcxIA4Z9XNl1mVsnL1dzkJblLCn1eaj4A4XBwCq2RezsushQMsB12MjoD
-         6plqbGghUmWkA==
-Date:   Tue, 11 Jul 2023 15:00:32 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] selftests: Fix arm64 test installation
-Message-ID: <8768fa96-004f-4e81-a380-a1a7784ad59c@sirena.org.uk>
-References: <20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org>
- <04a35122-5020-5ad9-7bdc-c17f9a27bf50@nvidia.com>
- <ZKx17G7ULaQox7Xo@finisterre.sirena.org.uk>
- <ec86c0eb-5c6d-48a2-c216-ec4f40710ca1@nvidia.com>
- <ZKyGh8AKRLobQKlX@finisterre.sirena.org.uk>
- <04724b21-6c7c-8584-fd17-9222051dc99d@nvidia.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2461C614E2;
+        Tue, 11 Jul 2023 14:24:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21EC0C433C7;
+        Tue, 11 Jul 2023 14:24:05 +0000 (UTC)
+Date:   Tue, 11 Jul 2023 10:24:03 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ajay Kaher <akaher@vmware.com>
+Cc:     "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Ching-lin Yu <chinglinyu@google.com>,
+        Nadav Amit <namit@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        Tapas Kundu <tkundu@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
+Subject: Re: [PATCH v3 03/10] eventfs: adding eventfs dir add functions
+Message-ID: <20230711102403.3e65d1ec@gandalf.local.home>
+In-Reply-To: <285B9992-4DFB-4343-BD64-DAE9CCEFEE6B@vmware.com>
+References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
+        <1685610013-33478-4-git-send-email-akaher@vmware.com>
+        <20230701095417.3de5baab@rorschach.local.home>
+        <ECB0097D-A323-4CFC-9C9E-D4DA2AA6E662@vmware.com>
+        <20230703110857.2d051af5@rorschach.local.home>
+        <84CA259A-8A99-471C-B44C-08D289972F43@vmware.com>
+        <20230703155226.1ab27bc1@gandalf.local.home>
+        <20230709215447.536defa6@rorschach.local.home>
+        <285B9992-4DFB-4343-BD64-DAE9CCEFEE6B@vmware.com>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QaTq0OHcvbKpu6fR"
-Content-Disposition: inline
-In-Reply-To: <04724b21-6c7c-8584-fd17-9222051dc99d@nvidia.com>
-X-Cookie: marriage, n.:
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, 10 Jul 2023 18:53:53 +0000
+Ajay Kaher <akaher@vmware.com> wrote:
 
---QaTq0OHcvbKpu6fR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Something was broken in your mail (I guess cc list) and couldn’t reach to lkml or
+> ignored by lkml. I just wanted to track the auto test results from linux-kselftest.
 
-On Mon, Jul 10, 2023 at 04:10:14PM -0700, John Hubbard wrote:
-> On 7/10/23 15:30, Mark Brown wrote:
+Below is the report from the tree I pushed. I guess I forgot to remove an
+"idx" variable, and it also caught the unused functions you mentioned.
 
-> > There is a floor on binutils version for the kselftests that's more
-> > aggressive than that for the kernel itself, though that looks like RHEL
-> > 8 which has binutils 2.30 which *should* be fine for most things - the
-> > MTE tests won't build but they do have version detection so should skip,
-> > I guess you might have trouble with PAC support which doesn't have
-> > detection in the tests?  It's certainly old enough that I'm surprised to
-> > hear someone doing development for anything current with it.
-
-> This used to be a development machine, but now it is sufficiently old
-> that it is lightly used--that would explain how I could reserve it on
-> short notice for this. Maybe I'll adopt it and upgrade to a modern
-> distro, now that I seem to need an arm64 box.
+-- Steve
 
 
-> > That does seem to work around the issue at least with a quick out of
-> > tree build, including with GCC 8.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace trace/rfc/eventfs
+head:   1dc48374bb8ad8aec6d7244267f9b36e0512d3bb
+commit: 1dc48374bb8ad8aec6d7244267f9b36e0512d3bb [28/28] tracefs: Add RCU and global mutex for eventfs
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20230711/202307111415.tc8g7M63-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230711/202307111415.tc8g7M63-lkp@intel.com/reproduce)
 
-> Great news! That's really helpful. And in fact, I have discovered two
-> more things:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307111415.tc8g7M63-lkp@intel.com/
 
-> 1) The "emit_tests" target is there apparently because commit
-> 313a4db7f3387 ("kselftest: arm64: extend toplevel skeleton Makefile")
-> believed that it was necessary to skip emitting tests if not on the
-> right native platform. I'm tempted to delete the entire emit_tests
-> target in both arm64 and riscv selftests (and that also seems to work
-> just fine) in order to simplify things, perhaps as a follow up step.
+All warnings (new ones prefixed by >>):
 
-> For now I'll just post the simpler fix, though.
+   fs/tracefs/event_inode.c: In function 'eventfs_post_create_dir':
+>> fs/tracefs/event_inode.c:236:13: warning: unused variable 'idx' [-Wunused-variable]  
+     236 |         int idx;
+         |             ^~~
+   fs/tracefs/event_inode.c: At top level:
+   fs/tracefs/event_inode.c:184:23: warning: 'eventfs_create_dir' defined but not used [-Wunused-function]
+     184 | static struct dentry *eventfs_create_dir(const char *name, umode_t mode,
+         |                       ^~~~~~~~~~~~~~~~~~
+   fs/tracefs/event_inode.c:108:23: warning: 'eventfs_create_file' defined but not used [-Wunused-function]
+     108 | static struct dentry *eventfs_create_file(const char *name, umode_t mode,
+         |                       ^~~~~~~~~~~~~~~~~~~
 
-I suspect it might've been needed at the time the patch was written but
-subsequent changes in the kselftest Makefile stuff have obsoleted it.
 
---QaTq0OHcvbKpu6fR
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/idx +236 fs/tracefs/event_inode.c
 
------BEGIN PGP SIGNATURE-----
+   225	
+   226	/**
+   227	 * eventfs_post_create_dir - post create dir routine
+   228	 * @ef: eventfs_file of recently created dir
+   229	 *
+   230	 * Files with-in eventfs dir should know dentry of parent dir
+   231	 */
+   232	static void eventfs_post_create_dir(struct eventfs_file *ef)
+   233	{
+   234		struct eventfs_file *ef_child;
+   235		struct tracefs_inode *ti;
+ > 236		int idx;  
+   237	
+   238		/* srcu lock already held */
+   239		/* fill parent-child relation */
+   240		list_for_each_entry_srcu(ef_child, &ef->ei->e_top_files, list,
+   241					 srcu_read_lock_held(&eventfs_srcu)) {
+   242			ef_child->d_parent = ef->dentry;
+   243		}
+   244	
+   245		ti = get_tracefs(ef->dentry->d_inode);
+   246		ti->private = ef->ei;
+   247	}
+   248	
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmStYH8ACgkQJNaLcl1U
-h9DQ0gf/WmpkiCf81vIuuCr9MlgdFCA5U0BFgpJTlxI+4NO5IV1/zFkBdKGavFGG
-CEb+PVbj0x+3n5oCeNL5qaCPT90OC2IoVryVdWEnY3UwKIly8pFOGwB7I0GdMXQE
-BWU7MPnJNe3RsISgvMb1Bt43LybmzLAw6vZcz6EKUxYD0eGcYrY3Hu1rr6KlwiYT
-3oKRA8GIeaDT6ONTBBcPaHS78NuUB2SxX8ipp+K8pg20KVokzGxwljnaO86Gj/7m
-kA2zDz16Ujwhd/3VjJXfFdqlvGWll9asKv5phsLnWzkOqBIMJ1wqd7QvdMDcHS4M
-KT4Vl+btdE6q7uQDyZ111/4UDH2nxg==
-=nRFw
------END PGP SIGNATURE-----
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
---QaTq0OHcvbKpu6fR--
+-- Steve
