@@ -2,77 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59ADA74E2D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 02:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF0B74E2D9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 02:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjGKAyN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Jul 2023 20:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
+        id S229785AbjGKA45 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Jul 2023 20:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbjGKAyL (ORCPT
+        with ESMTP id S229569AbjGKA45 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jul 2023 20:54:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5529F197
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jul 2023 17:53:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689036803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yXHDaaTzSJPadcWtu/mPoLh+iNZCEntncKhGlBrnF84=;
-        b=bKm9z/w03rNDRAQyuLBohISaGro1skCqxi+JrxbyUnY+CpiyHd+0MhqYF5VqfNgzm9jDCS
-        VVAnaKARSnf5cuykTpMEzGIXJgHLzrXJZuaM9uPdy8D01vc4Xm52NZflCIEdIOdpUgxY2q
-        vffEChkmJ4Zpbe0ErgJ6yJTuMtOBDpI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-68-DGbuhrNnNe6H7hBfy_gx5A-1; Mon, 10 Jul 2023 20:53:20 -0400
-X-MC-Unique: DGbuhrNnNe6H7hBfy_gx5A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E094B384CC49;
-        Tue, 11 Jul 2023 00:53:19 +0000 (UTC)
-Received: from [10.22.18.171] (unknown [10.22.18.171])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E8F09200A7CA;
-        Tue, 11 Jul 2023 00:53:18 +0000 (UTC)
-Message-ID: <a429e60a-fc4f-60b0-3978-71596fed9542@redhat.com>
-Date:   Mon, 10 Jul 2023 20:53:18 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 8/9] cgroup/cpuset: Documentation update for partition
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
+        Mon, 10 Jul 2023 20:56:57 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2063.outbound.protection.outlook.com [40.107.95.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6F6C0;
+        Mon, 10 Jul 2023 17:56:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b3xwdSFSQC0wsETkthOZMW4p/Y2601BmKvZDCTTBCdSV1uWHnXaGYBU3UBDwuZ05kCAjN55aLhWjf7QO23LlDY98uiJr4STPtLNwNorbMveLqBmsI0I3TWw1HzBTO3AZ2aVykMUdniQC2TcyG7v61mjB8Fwiu11KbPN4N/PH99lPOs/gkX8s9fa6fmKNNLlzjF7BH5/KEmXcqpLd287tBe+jzz3kfo8GR5MdLTCczrUmVSu4D8bzlfocsgyhKyIitRgZeAn9sFc0ocblvMmr2ih5QT2OoAm1JE3Ty/qX7ymUULYFDgH1rKZDDOiVg7SP4cGJuEPXZfLfm6Yd05jvUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gmZ1jVrqOjRqClyarmEwyKWdtrRhqDcQqZ2Y7V65UA0=;
+ b=Bvbb4NlyHcHAsaTMArMiUBEjlo8uLIksbvp8qg8lgC3NyMwwJgWbSsUnjGcryKuQCsi/q/U/oRinW8UC8rB2t576L8PHS0DeQ4UogvTAqAqkimbBSmMIU5kFKhXl1/1OcvX70AxhxQUEiIGxtq4AjhmTG2REj+41owqA9xKnGaXvug7rh5RbP7GMCF3SBoDOf9yTfmNpWN+aHrg8WWxF4BgXf03ahJfsu6uZKFY5pCj+TT+xQsI01PtC4Kh8Ya8+Y9eT+1Xhki0Pq5OW/f/Oni3Q9UydrB7ojdXIPUDO5i5wAS+vdVBiDd62fDKZn8geJiRuAt2DSSRr29SqNHCouQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gmZ1jVrqOjRqClyarmEwyKWdtrRhqDcQqZ2Y7V65UA0=;
+ b=DBxMkCZAtfQ17kdEVj1dLa4Yql4ApXzFwLdbo4gA4xSzEiptViT25CwRqlkQFrjWPM9VmhK3h9tRlWr+fa19MmXkt6dOZX4yBVdPExv3Tiw/ao43BShdPxriAQGKCgl1uNIignhZt3YXNFEklhT7Yrq3CeoAuRUAlyINR+jXeVFfafsfNTAmPv11XhG4Qe0DDeydGzoLHTI2qH/rU3ezvfpfM3k3jctiSO+Z334Ag8yi2mstjmXzfRfVGntEPdRcW5ejlrCl86LGBgwd7DaH+E8RSco+e477+Vw81TZY7BTFIssohaL0aocTONNouNXJBpZ5622IDw3NGLUu/3qCQw==
+Received: from SJ0PR13CA0065.namprd13.prod.outlook.com (2603:10b6:a03:2c4::10)
+ by DM6PR12MB4297.namprd12.prod.outlook.com (2603:10b6:5:211::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Tue, 11 Jul
+ 2023 00:56:50 +0000
+Received: from DM6NAM11FT030.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:a03:2c4:cafe::80) by SJ0PR13CA0065.outlook.office365.com
+ (2603:10b6:a03:2c4::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.19 via Frontend
+ Transport; Tue, 11 Jul 2023 00:56:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT030.mail.protection.outlook.com (10.13.172.146) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6588.19 via Frontend Transport; Tue, 11 Jul 2023 00:56:49 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 10 Jul 2023
+ 17:56:31 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 10 Jul
+ 2023 17:56:31 -0700
+Received: from blueforge.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Mon, 10 Jul 2023 17:56:30 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Anders Roxell <anders.roxell@linaro.org>,
+        David Hildenbrand <david@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-References: <20230627143508.1576882-1-longman@redhat.com>
- <20230627143508.1576882-9-longman@redhat.com>
- <ZKx4ZJowRhRtjZxB@slm.duckdns.org>
- <6d5aee58-f558-868c-76e0-0b58f8332110@redhat.com>
- <ZKyljsbJgLNpsBLI@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZKyljsbJgLNpsBLI@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "John Hubbard" <jhubbard@nvidia.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH] selftests/arm64: fix build failure during the "emit_tests" step
+Date:   Mon, 10 Jul 2023 17:56:29 -0700
+Message-ID: <20230711005629.2547838-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT030:EE_|DM6PR12MB4297:EE_
+X-MS-Office365-Filtering-Correlation-Id: f123c314-302b-48d7-737d-08db81a9b593
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /qcuckRVWXjVrWb4XDzlgE+K8OknJTuIjzvwSWKMYbIRTVGQLbUx/+gzN5wpTGxVbuURfS2to72ZWBiVSDFWmDRUC+PvddPABQJxBefoRl6DM7mo3xo5Hxyw3Jgsw69NGwnFPOMgFtw2Vkz8NawNq+rwml3Cv+icGV26bI7on4mKQuNeXkjsC+ylvfx4kyvxVQg7/dkseqMJy13su5bz98fMK+j2K+BYcpwpu2nPt1Z8IJNhmxOLpEFHJjVeAZBBf4UIb4uEtyLD1Q/J02kcyLSv7OIXZcMYO9MNtIvPOXBW1RFCWfFditkJY3rOyITdJ1Dw51mFjiVrsNzXlyYAVy9ZHMXhVpiXyhcT1Er9HYXK6AJs4XgEKBSFzIPnQXIzYCBSWQTTPmxxGWWbUE8nuU5aHkudIKER3sGdeNdksMfKmgPsMzlFf7Wk7QzHXEVNFxJVIQm0e7HFJtxX23xMQet9ilU4v6iJlvjtQhoVb4+VqW5g2jvFNgeroW6jm3BZ8brbdKgf6vGa4x4KXAOSeABxd3eT0QMtHxikQ3zx9kVjZ+CRimSKvQnC4uYAp2JqX+H7Zxv4p0rg0l72Zig+WZX49dItNeCLRXxWclptkOjAKwA+/7Yr55bIICihldZJLqrLnoKknoa2nTCo2MM4+Tn4Xm6zrvZ2mTT/eO1jzxH/aUkMe+FaVAtDTL0miR2sRfiiX8Hi2tQjtNkubbQoY6HBd0CjmzP8U8L36HoipWnRLMokbTY0mi4s12GN1+7cAwetVKDV145M2NU+2e/ZppHvc7gv7vgvZgYrWIG1yc4=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(54906003)(7696005)(478600001)(1076003)(26005)(186003)(70586007)(966005)(336012)(2906002)(70206006)(82310400005)(41300700001)(6916009)(7636003)(5660300002)(4326008)(316002)(7416002)(8936002)(356005)(82740400003)(8676002)(40460700003)(86362001)(36756003)(47076005)(36860700001)(83380400001)(426003)(40480700001)(2616005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 00:56:49.7290
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f123c314-302b-48d7-737d-08db81a9b593
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT030.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4297
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,27 +114,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/10/23 20:42, Tejun Heo wrote:
-> Hello,
->
-> On Mon, Jul 10, 2023 at 08:21:43PM -0400, Waiman Long wrote:
->>> Wouldn't a partition root's cpus.exclusive always contain all of the CPUs in
->>> its cpus? Would it make sense for cpus.exclusive to be different from .cpus?
->> In auto-filled case, it should be the same as cpuset.cpus. I will clarify
->> that in the documentation. Thanks for catching that.
-> When the user writes something to the file, what would it mena if the
-> content differs from the cgroup's cpuset.cpus?
+The build failure reported in [1] occurred because commit 9fc96c7c19df
+("selftests: error out if kernel header files are not yet built") added
+a new "kernel_header_files" dependency to "all", and that triggered
+another, pre-existing problem. Specifically, the arm64 selftests
+override the emit_tests target, and that override improperly declares
+itself to depend upon the "all" target.
 
-For local partition, it doesn't make sense to have a 
-cpust.cpus.exclusive that is not the same as cpuset.cpus as it 
-artificially reduce the set of CPUs that can be used in a partition. In 
-the case of a remote partition, the ancestor cgroups of a remote 
-partition should have cpuset.cpus.exclusive smaller than cpuset.cpus so 
-that when the remote partition is enabled, there are still CPUs left to 
-be used by those cgroups. In essence, the cpuset.cpus.exclusive 
-represents the CPUs that may not be usable anymore if they are taken by 
-a remote partition downstream.
+This is a problem because the "emit_tests" target in lib.mk was not
+intended to be overridden. emit_tests is a very simple, sequential build
+target that was originally invoked from the "install" target, which in
+turn, depends upon "all".
 
-Cheers,
-Longman
+That approach worked for years. But with 9fc96c7c19df in place,
+emit_tests failed, because it does not set up all of the elaborate
+things that "install" does. And that caused the new
+"kernel_header_files" target (which depends upon $(KBUILD_OUTPUT) being
+correct) to fail.
+
+Some detail: The "all" target is .PHONY. Therefore, each target that
+depends on "all" will cause it to be invoked again, and because
+dependencies are managed quite loosely in the selftests Makefiles, many
+things will run, even "all" is invoked several times in immediate
+succession. So this is not a "real" failure, as far as build steps go:
+everything gets built, but "all" reports a problem when invoked a second
+time from a bad environment.
+
+To fix this, simply remove the unnecessary "all" dependency from the
+overridden emit_tests target. The dependency is still effectively
+honored, because again, invocation is via "install", which also depends
+upon "all".
+
+An alternative approach would be to harden the emit_tests target so that
+it can depend upon "all", but that's a lot more complicated and hard to
+get right, and doesn't seem worth it, especially given that emit_tests
+should probably not be overridden at all.
+
+[1] https://lore.kernel.org/20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org
+
+Fixes: 9fc96c7c19df ("selftests: error out if kernel header files are not yet built")
+Reported-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ tools/testing/selftests/arm64/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+index 9460cbe81bcc..ace8b67fb22d 100644
+--- a/tools/testing/selftests/arm64/Makefile
++++ b/tools/testing/selftests/arm64/Makefile
+@@ -42,7 +42,7 @@ run_tests: all
+ 	done
+ 
+ # Avoid any output on non arm64 on emit_tests
+-emit_tests: all
++emit_tests:
+ 	@for DIR in $(ARM64_SUBTARGETS); do				\
+ 		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+ 		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+
+base-commit: d5fe758c21f4770763ae4c05580be239be18947d
+-- 
+2.41.0
 
