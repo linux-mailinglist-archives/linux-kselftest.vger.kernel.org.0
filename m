@@ -2,118 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9BA74E294
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 02:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301FB74E299
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 02:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjGKAeF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Jul 2023 20:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
+        id S229655AbjGKAhR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Jul 2023 20:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjGKAeE (ORCPT
+        with ESMTP id S229538AbjGKAhQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jul 2023 20:34:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61FB1AC
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jul 2023 17:33:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689035597;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2jCZmfZzjejGxfBXjkcFRYAyVQ6S1vH30csYuUaEOJU=;
-        b=Q0+0xpVF4bxcmkNJk0fLm28lXt34jPN1Pjbl0gbvqbEIkGFz/Vv5IDFB5KZztFuI0qpuR0
-        iufOvcIjb3ChTR6Zo+gydqwmc2R+xcEm3gwO3oqca0D6hni4uYm2mrx7TmOalB0AXkwIPr
-        YzdwkYMJlhSi+P2SwkHGxXGIE7Y5wCE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-Xg-6SuwfOz-NT9k5sHsGaQ-1; Mon, 10 Jul 2023 20:33:13 -0400
-X-MC-Unique: Xg-6SuwfOz-NT9k5sHsGaQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 25E7E1C06904;
-        Tue, 11 Jul 2023 00:33:13 +0000 (UTC)
-Received: from [10.22.18.171] (unknown [10.22.18.171])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3DF5F40C206F;
-        Tue, 11 Jul 2023 00:33:12 +0000 (UTC)
-Message-ID: <305038a0-1db8-3d0d-3447-48be1f03d41c@redhat.com>
-Date:   Mon, 10 Jul 2023 20:33:11 -0400
+        Mon, 10 Jul 2023 20:37:16 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFDF1AC;
+        Mon, 10 Jul 2023 17:37:15 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b6a6f224a1so83371081fa.1;
+        Mon, 10 Jul 2023 17:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689035833; x=1691627833;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7KzZR+3uBAAfoyD64XhpmvukCNRgSrEvKBzVHoKvA4I=;
+        b=QePSPYmXWBGIDNUBrGBf5dNhcMIgQXxeSLRtxqxBcsVcRzTIUh7r+RU+SJgk/tmHGt
+         8ZoLhHoWtRH2tgqNmUgQy9A9InN93Do8kb5ER210aYcrZTmWOPm1pr37GIYVQbHF3lYv
+         1teYgsn0Cnt2EHvRiPl/ffYISmv8S38q1G11FpdRLRiAGt/z7PZvttauDbVQ89la54m2
+         BeVbhy/8N+QbNSyslcBmQkJq8cVVmQErH/APZuyYtuoXn1RKtKaZeYSV1eMo4RMTNbwL
+         LjsuLhXCSyfJkcf9PU9AO/cNxgPkvnsuRMwjmZm7oqPnj1d+OrAPeHX3fvKFc7FoMYUg
+         P7qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689035833; x=1691627833;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7KzZR+3uBAAfoyD64XhpmvukCNRgSrEvKBzVHoKvA4I=;
+        b=JMAwWM0idH6i0ZzOIhcnZ4rbp0xXR03rqDiApdpo4q9/MV11w3pGX2QaZdhxdys/du
+         B9Z0Rf9kNe+uVWXIAjT53dXi4GxtIEI7I5PjgWlIj++072BFbDdwljxMzQk15Th40I0F
+         EIoB8CkQqUWzLbBCF8Mk4a3HPM6l+kD5kp22v4PaiDnI+p8x9aRYPZwlMFCGUMvPgzwJ
+         tI8Q9Sp85UD1pkD0u9PHtYVWPac/AulrzcLmEHy6Ft/WS1xQq1N7L5isJZ2aPZVS/ljf
+         h2aym/zG6bt7sxMajnXmqq+zfeHE1vq8fPxPNWS4SETj/VnktrvUlacLtfbhsuUau0kd
+         LReQ==
+X-Gm-Message-State: ABy/qLYEODthPWn62gmZxSXKOpa6DXzNT6mmxlsIl6GWBSFKF7MrvK6d
+        GHjhAp01UkfGwZ1hqBxOr20mPry3+aPmh+s6iRY=
+X-Google-Smtp-Source: APBJJlEnq2pY54DPq3uUhu9mvqZQeE6rwDrv5wtxw4z6ZOom5E9R2u1iJKyFPEgekhQxSbs17e6NVE2XcwInUAgpuG0=
+X-Received: by 2002:a2e:964e:0:b0:2b6:fa3f:9233 with SMTP id
+ z14-20020a2e964e000000b002b6fa3f9233mr7975582ljh.46.1689035833423; Mon, 10
+ Jul 2023 17:37:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 0/9] cgroup/cpuset: Support remote partitions
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-References: <20230627143508.1576882-1-longman@redhat.com>
- <ZKxzTrN2yiKfXndI@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZKxzTrN2yiKfXndI@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <cover.1688748455.git.dxu@dxuuu.xyz> <13720a4b7a18b2409357a82eebe57ef388ab9cf1.1688748455.git.dxu@dxuuu.xyz>
+In-Reply-To: <13720a4b7a18b2409357a82eebe57ef388ab9cf1.1688748455.git.dxu@dxuuu.xyz>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 10 Jul 2023 17:37:01 -0700
+Message-ID: <CAADnVQLaepgpoH4qjbhAmq-+JLiAXyJ=4nXgbu6NSkZmpF9ghg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 6/6] bpf: selftests: Add defrag selftests
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Florian Westphal <fw@strlen.de>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        netfilter-devel <netfilter-devel@vger.kernel.org>,
+        David Ahern <dsahern@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/10/23 17:08, Tejun Heo wrote:
-> Hello, Waiman.
+On Fri, Jul 7, 2023 at 9:51=E2=80=AFAM Daniel Xu <dxu@dxuuu.xyz> wrote:
 >
-> I applied the prep patches. They look good on their own.
+> These selftests tests 2 major scenarios: the BPF based defragmentation
+> can successfully be done and that packet pointers are invalidated after
+> calls to the kfunc. The logic is similar for both ipv4 and ipv6.
 >
-> On Tue, Jun 27, 2023 at 10:34:59AM -0400, Waiman Long wrote:
-> ...
->> cpuset. Unlike "cpuset.cpus", invalid input to "cpuset.cpus.exclusive"
->> will be rejected with an error. This new control file has no effect on
-> We cannot maintain this as an invariant tho, right? For example, what
-> happens when a parent cgroup later wants to withdraw a CPU from its
-> cpuset.cpus which should always be allowed regardless of what its
-> descendants are doing? Even with cpus.exclusive itself, I think it'd be
-> important to always allow ancestors to be able to withdraw from the
-> commitment as with other resources. I suppose one can argue that giving
-> exclusive access to CPUs is a special case which doesn't follow this rule
-> but cpus.exclusive having to be nested inside cpus which is subject to that
-> rule makes that combination too contorted.
+> In the first scenario, we create a UDP client and UDP echo server. The
+> the server side is fairly straightforward: we attach the prog and simply
+> echo back the message.
 >
-> Would it be difficult to follow how isolation modes behave when the target
-> configuration can't be achieved?
+> The on the client side, we send fragmented packets to and expect the
+> reassembled message back from the server.
+>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 
-I would like to clarify that withdrawal of CPUs from 
-cpuset.cpus.exclusive is always allowed. It is the addition of CPUs not 
-presents in cpuset.cpus that will be rejected. The invariant is that 
-cpuset.cpus.exclusive must always be a subset of cpuset.cpus. Any change 
-that violates this rule is not allowed. Alternately I can silently 
-dropped the offending CPUs without returning an error, but that may 
-surprise users.
+The patches look good, but new tests are failing on arm64.
 
-BTW, withdrawal of CPUs from cpuset.cpus will also withdraw them from 
-cpuset.cpus.exclusive, if present. This allows the partition code to use 
-cpuset.cpus.exclusive directly to determine the allowable exclusive CPUs 
-without doing an intersection with cpuset.cpus each time it is used.
+test_bpf_ip_check_defrag_ok:FAIL:server recvfrom unexpected server
+recvfrom: actual -1 < expected 0
 
-Please let me know if you want a different behavior.
-
-Cheers,
-Longman
-
+see BPF CI.
+Feels like a timing issue, but pls take a look.
