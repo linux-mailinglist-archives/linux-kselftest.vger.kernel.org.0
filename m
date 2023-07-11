@@ -2,131 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3AD74F87E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 21:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8BF074FBCC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 01:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjGKTnA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jul 2023 15:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S229551AbjGKXWC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jul 2023 19:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjGKTm7 (ORCPT
+        with ESMTP id S229489AbjGKXWB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jul 2023 15:42:59 -0400
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546CE19B;
-        Tue, 11 Jul 2023 12:42:56 -0700 (PDT)
-Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-47e4521e5baso2333340e0c.1;
-        Tue, 11 Jul 2023 12:42:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689104575; x=1691696575;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dqxaqXmw1tu3QWdtuOVOPVnF0rhjoVkY2FJ4msGP/FE=;
-        b=WCXxjiX35VIFpR0nhf5xN1cKqwvEe0aVJDmIXwy5y293z47OG3Hx8HJlUrAFw/hjFN
-         pOr8FVTMdX0qwE6i7UKoJ1bVn+fqYysno/V/wnLgh3aFLVP7TKFvo/5IyX+FG3nEX16+
-         OBFdpHvbfxXtTQjgmUngDLNjEL3u4KZnbVOntpXvaVf3OpH19Zex/xseSnpZAwbay+yL
-         thSo1fZ6zUGGJ4TDftaPNHW5df4OCCTf/o+J5S5lRPYdBfJeRceJdqr0mU4KAD4eO7rr
-         GmwZbjcRsrAqUpmh5C2uVP4CA74PUA/Silw7HAREHHV7vWJTbneD0/BHcOgkaYlVISEv
-         STvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689104575; x=1691696575;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dqxaqXmw1tu3QWdtuOVOPVnF0rhjoVkY2FJ4msGP/FE=;
-        b=U6pxITtXDdxn+yXvK3d09+hhk2qRqEnkGs7apWYfFHNhCrkBdqACk+jMEr3FQa/1a6
-         leSMFcrPT/5lr2IQXaAO7ppto69wi6c3pfn6lvZc04R8grfxHWlWdInZttKernkiCw/h
-         IsysD3ZxIw5iquwHfVeerUJRUhGcvykJgX5ZpYFC4PfqKlV2xavCCx1trqQjQT/ZyLDX
-         McRrolmkHbechzDIHnlAsU69k2hejGGn4+56vgt+2fzNW6iHOxfP/nz83RGOx+Y/3E5m
-         4UVj7b9ZKUAMOyppd6AuTDAMLFj8GObAheoLOk1Czg9pT5rSt05ySKjekwKobOUzZl1J
-         npmQ==
-X-Gm-Message-State: ABy/qLaQLiisTAb2t/uBgGjK+2b8PVTy5KD7LqbWBW9nKsYvJLovFayF
-        5S83nNnhskKSaWq38wY2t8PjeO9QKFyp56SmmQo=
-X-Google-Smtp-Source: APBJJlFESZwse+XBzfdEG7gPgKtm+dr9PqBvDRHkx0QyDpPtucriutBokoi6nHj9mpK7MC+ZT1zx1fvPJQ5h6dotD6o=
-X-Received: by 2002:a1f:5842:0:b0:476:3544:773 with SMTP id
- m63-20020a1f5842000000b0047635440773mr8354569vkb.11.1689104575315; Tue, 11
- Jul 2023 12:42:55 -0700 (PDT)
+        Tue, 11 Jul 2023 19:22:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D84EE7A;
+        Tue, 11 Jul 2023 16:22:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19E126163E;
+        Tue, 11 Jul 2023 23:22:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2CDFC433C7;
+        Tue, 11 Jul 2023 23:21:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689117719;
+        bh=vQ/4FdUHpBmumWCKBTUpKBXwITOJ+uIM73ZXp1cmBn8=;
+        h=From:Date:Subject:To:Cc:From;
+        b=dOM1gzieroZhHlRsVkSok1ytXauiUv+UAJU/RiccbGv5XoFilqAYUK2tM3FkMJCuD
+         5qdzm7t6SsDkjpn4hhWerb5+QP5FguYTfOtUk38EgIJ7R0FPqg7kS66oMRDSBOI/5C
+         9N8CjAoey0YDYGCLLrqHGJpteXZmW92VmAfxE3D3Xw/HuZd/2v06ICwzF/bzfG9yzH
+         93RrDrzvb42dIVIVntgGakx6/EMEqsfEA242uKdTVw0L887nlVQrui/BQW6aCegexF
+         FtHUOR3Fm/bRZSNY1R/5xLeuonM3btKEeCESO2/spNWnP26mdpLO8CLWWse5vbC0LV
+         BAV8O+AOM6aeA==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Wed, 12 Jul 2023 00:21:52 +0100
+Subject: [PATCH] regmap: Provide user selectable option to enable regmap
 MIME-Version: 1.0
-References: <20230711125241.1587820-1-usama.anjum@collabora.com> <20230711125241.1587820-3-usama.anjum@collabora.com>
-In-Reply-To: <20230711125241.1587820-3-usama.anjum@collabora.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Tue, 11 Jul 2023 12:42:44 -0700
-Message-ID: <CANaxB-zvYpKw-aeF8nd_spARdkV29H7ZJDDhusnmqOPZX1xXtw@mail.gmail.com>
-Subject: Re: [PATCH v24 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230712-regmap-kunit-enable-v1-1-13e296bd0204@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAA/krWQC/x3MQQqEMBAF0atIr6chUSEyV5FZRPPVRidKoiJI7
+ m5w+RZVN0UEQaRvcVPAKVFWn6E/BfWT9SNYXDaVqqyUUZoDxr/deD687AxvuwVsVWN0A2Ocqym
+ XW8Ag13ttfyk9W3Xd32UAAAA=
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2171; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=vQ/4FdUHpBmumWCKBTUpKBXwITOJ+uIM73ZXp1cmBn8=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkreQTBvI4v3u5njYjQ9DpJsBF9tFfTI4IadbuR
+ bCPGkQE7WyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZK3kEwAKCRAk1otyXVSH
+ 0EMNB/wMOcU4nHjg1HsZAwVtRWvb6xLgfL8JnIvFaet+hHaaCWX+qBMqW0HdDdO5EsFlVNQFXWQ
+ myqH25zoWQAej64c59fa+kxajJsbtioWW2svwaN+mRhhQxX5c0s+lNsIhLUX41zzSZobl9sxAE+
+ hgsr5JNwQCegWAAENiPq7Jev+r9DYWlMd9bTGxGzmG7fYLMjyR+6VDvqGm3pUR7T7PJir3uuQsd
+ HUW/BvSpWrq1JSUPsG1QtWG1G6duAWbxy/Nq5VTOBkJecZ4OSJw6eCSYROD0368qZEjpEDkd7HW
+ XtblmFSCaz2CymyVPkzguPov5+XjOnVhXH/k1pxSquT49aIz
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 5:53=E2=80=AFAM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
+Since apparently enabling all the KUnit tests shouldn't enable any new
+subsystems it is hard to enable the regmap KUnit tests in normal KUnit
+testing scenarios that don't enable any drivers.  Add a Kconfig option
+to help with this and include it in the KUnit all tests config.
 
-<snip>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/base/regmap/Kconfig                  | 12 +++++++++++-
+ tools/testing/kunit/configs/all_tests.config |  2 ++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
-> +                                int depth, struct mm_walk *walk)
-> +{
-> +       unsigned long n_pages =3D (end - addr)/PAGE_SIZE;
-> +       struct pagemap_scan_private *p =3D walk->private;
-> +       struct vm_area_struct *vma =3D walk->vma;
-> +       int ret =3D 0;
-> +
-> +       if (!vma)
-> +               return 0;
-> +
-> +       if (IS_PM_SCAN_GET(p->flags)) {
-> +               if (n_pages > p->max_pages - p->found_pages)
-> +                       n_pages =3D p->max_pages - p->found_pages;
-> +
-> +               ret =3D pagemap_scan_output(PM_SCAN_FLAGS(false, false, f=
-alse,
-> +                                         false, false), p, addr, n_pages=
-);
+diff --git a/drivers/base/regmap/Kconfig b/drivers/base/regmap/Kconfig
+index 0db2021f7477..b1affac70d5d 100644
+--- a/drivers/base/regmap/Kconfig
++++ b/drivers/base/regmap/Kconfig
+@@ -4,7 +4,7 @@
+ # subsystems should select the appropriate symbols.
+ 
+ config REGMAP
+-	bool "Register Map support" if KUNIT_ALL_TESTS
++	bool
+ 	default y if (REGMAP_I2C || REGMAP_SPI || REGMAP_SPMI || REGMAP_W1 || REGMAP_AC97 || REGMAP_MMIO || REGMAP_IRQ || REGMAP_SOUNDWIRE || REGMAP_SOUNDWIRE_MBQ || REGMAP_SCCB || REGMAP_I3C || REGMAP_SPI_AVMM || REGMAP_MDIO || REGMAP_FSI)
+ 	select IRQ_DOMAIN if REGMAP_IRQ
+ 	select MDIO_BUS if REGMAP_MDIO
+@@ -23,6 +23,16 @@ config REGMAP_KUNIT
+ 	default KUNIT_ALL_TESTS
+ 	select REGMAP_RAM
+ 
++config REGMAP_BUILD
++	bool "Enable regmap build"
++	depends on KUNIT
++	select REGMAP
++	help
++	  This option exists purely to allow the regmap KUnit tests to
++	  be enabled without having to enable some driver that uses
++	  regmap due to unfortunate issues with how KUnit tests are
++	  normally enabled.
++
+ config REGMAP_AC97
+ 	tristate
+ 
+diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
+index 0393940c706a..873f3e06ccad 100644
+--- a/tools/testing/kunit/configs/all_tests.config
++++ b/tools/testing/kunit/configs/all_tests.config
+@@ -33,5 +33,7 @@ CONFIG_DAMON_PADDR=y
+ CONFIG_DEBUG_FS=y
+ CONFIG_DAMON_DBGFS=y
+ 
++CONFIG_REGMAP_BUILD=y
++
+ CONFIG_SECURITY=y
+ CONFIG_SECURITY_APPARMOR=y
 
-Why do we report holes unconditionally?
+---
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+change-id: 20230701-regmap-kunit-enable-a08718e77dd4
 
-> +       }
-> +
-> +       if (IS_PM_SCAN_WP(p->flags) &&
-> +           uffd_wp_range(vma, addr, end - addr, true) < 0)
-> +               ret =3D -EINVAL;
-> +
-> +       return ret;
-> +}
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-Thanks,
-Andrei
