@@ -2,336 +2,243 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CAB74E5A9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 06:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E9E74E7AF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 09:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjGKEDH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jul 2023 00:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
+        id S230258AbjGKHJO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jul 2023 03:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbjGKEDG (ORCPT
+        with ESMTP id S229558AbjGKHJO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jul 2023 00:03:06 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3EA12A;
-        Mon, 10 Jul 2023 21:03:03 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1689047765t5k8nm7u
-Received: from localhost.localdomain ( [116.30.126.249])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 11 Jul 2023 11:56:03 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 2KxaQ4e4DJSXxVMIxm62BmR5CWYTSe93SBnDRQVYkAlWUBSaFPutv7mx8ZzZ2
-        Hzk/NredcNyAJ7A09rVV3lTjtSlmMTRLhsF+VgtcLtkwB+DMW6K3iTD+nOybmDsw98GXOXv
-        BR90S3FYEK9pkqFrsMhTnw1oYBq49WqwQYWdfOgO5dQjn1b9+yqBWFXl1BCqmjmuNxmpnG/
-        tVq3d28llynZ+UUp7AkDdi2/l9bFtAlVd9M7Vd0NRqSBAyQtHglOZbvFTGcPqiYo1BLlN2F
-        /IqclF+jq2rrhbIR3cFUwyJy2bkYoTgKedueY/o3+NWt0bvVNMMaYKxaSfUITqmAJOIAM+h
-        AYkO+5biuJbSBn8uW9kWEN6+62Amnz0gqm9CTZ1ietLviGOF762qiyxzvl91Q==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8635562446704093046
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        Tue, 11 Jul 2023 03:09:14 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B60B4A9;
+        Tue, 11 Jul 2023 00:09:11 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 36B78tJ4030639;
+        Tue, 11 Jul 2023 09:08:55 +0200
+Date:   Tue, 11 Jul 2023 09:08:55 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     thomas@t-8ch.de, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 00/22] selftests/nolibc: add minimal kernel config support
-Date:   Tue, 11 Jul 2023 11:55:08 +0800
-Message-Id: <20230711035508.7273-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687706332.git.falcon@tinylab.org>
+Subject: Re: [PATCH v1 00/22] selftests/nolibc: add minimal kernel config
+ support
+Message-ID: <ZK0AB1OXH1s2xYsh@1wt.eu>
 References: <cover.1687706332.git.falcon@tinylab.org>
+ <20230711035508.7273-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711035508.7273-1-falcon@tinylab.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy and Thomas
+Hi Zhangjin,
 
-I'm planning to renew this patchset, so, require more discuss.
+On Tue, Jul 11, 2023 at 11:55:08AM +0800, Zhangjin Wu wrote:
+> Hi, Willy and Thomas
+> 
+> I'm planning to renew this patchset, so, require more discuss.
+> 
+> The main goal of this minimal kernel config support here is faster build
+> and therefore faster test for the run target, but this old patchset is
+> not enough, especially for the 'mrproper' operation during every config:
+> 
+>     defconfig:
+>      	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+>      
+>     +tinyconfig:
+>     +	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper tinyconfig prepare
+>     +
 
-The main goal of this minimal kernel config support here is faster build
-and therefore faster test for the run target, but this old patchset is
-not enough, especially for the 'mrproper' operation during every config:
+It will depend on the number of runs, because the mrproper will
+only be run before recreating a config. Logically once you have
+your kernel you're not going to reconfigure it.
 
-    defconfig:
-     	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-     
-    +tinyconfig:
-    +	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper tinyconfig prepare
-    +
+> In order to avoid this 'mrproper', one solution is create an arch
+> specicifc output directory for all of the kernel targets to avoid they
+> share the same build output (by default, it is the same as the source
+> code directory and therefore pollute the source code tree), it is
+> required for both tools/nolibc and selftests/nolibc:
 
-In order to avoid this 'mrproper', one solution is create an arch
-specicifc output directory for all of the kernel targets to avoid they
-share the same build output (by default, it is the same as the source
-code directory and therefore pollute the source code tree), it is
-required for both tools/nolibc and selftests/nolibc:
+This could provide an improvement when building for multiple archs
+in a row, indeed. But keep in mind that an important aspect is also
+to be able to test the kernel you're currently working on, and not
+to have to rebuild it again for nolibc into a subdir.
 
-    // tools/nolibc
+And given that the makefile doesn't know how to iterate over multiple
+archs, it would make sense to permit to pass the build output as an
+argument to the makefile so that the external script calling make for
+each arch would just pass the build directory (as is sometimes done
+for the normal kernel).
 
-    headers_standalone: headers
-    	$(Q)$(MAKE) -C $(srctree) headers
-    	$(Q)$(MAKE) -C $(srctree) headers_install INSTALL_HDR_PATH=$(OUTPUT)sysroot
-    
+> The "O" variable could be used to pass an arch specific output for every
+> arch:
+> 
+>     # OUTPUT is only set when run from the main makefile, otherwise
+>     # it defaults to this nolibc directory.
+>     OUTPUT ?= $(CURDIR)/
+> 
+>     # Architecture specific directory
+>     ARCH_OUTPUT ?= $(CURDIR)/build/$(ARCH)/
+> 
+> 
+> With "O":
+> 
+>     // tools/nolibc
+> 
+>     KERNEL_BUILD   ?= $(ARCH_OUTPUT)linux/
+>     MAKE_KERNEL     = $(MAKE) -C "$(srctree)" O="$(KERNEL_BUILD)" ARCH=$(ARCH)
+> 
+>     headers_standalone: headers
+>     	$(Q)$(MAKE_KERNEL) headers
+>     	$(Q)$(MAKE_KERNEL) headers_install INSTALL_HDR_PATH=$(ARCH_OUTPUT)sysroot
+>     
+> 
+>     // selftests/nolibc
+>     RUN_OUT         = $(ARCH_OUTPUT)run.out
+>     ...
+>     NOLIBC_INITRAMFS  = $(ARCH_OUTPUT)initramfs/
+>     ...
+>     KERNEL_BUILD   ?= $(ARCH_OUTPUT)linux/
+>     MAKE_KERNEL     = $(MAKE) -C "$(srctree)" O="$(KERNEL_BUILD)" ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE)
 
-    // selftests/nolibc
+Yes but this one will break reuse of the already built kernel. Also
+for those trying all archs for a single test it will eat a lot of
+disk space (when enabling certain debugging symbols you can end up
+with extremely large build dirs, I already ran out of space a few
+times).
 
-    defconfig:
-    	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-    
-    kernel: initramfs
-    	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
-    
-    # run the tests after building the kernel
-    run: kernel
-    	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-    	$(Q)$(REPORT) $(CURDIR)/run.out
+I think that instead we should just let the user pass this "O=" to the
+make command and let the lower ones inherit it. That makes it closer
+to what it usually done. I'm also fine with using another variable if
+there's a good reason for this, but given that it's already called "O"
+it's not something unexpected to the user. Thus we could imagine just
+running:
 
+    for arch in "${ARCHS[@]}"; do
+        make -j$(nproc) O=$PWD/kernel-$arch ARCH=$arch \
+             CROSS_COMPILE=/path/to/cc/$arch/bin/$arch- \
+             run
+    done
+             
+Which is simple enough without requiring a user to have to figure what
+build option to hack on for just a regular build.
 
-The "O" variable could be used to pass an arch specific output for every
-arch:
+> And further, the output of the other targets should be put in the
+> $(ARCH_OUTPUT) directory too, include the sysroot, nolibc-test, initramfs,
+> run.out and even libc-test, the whole Makefile of selftests/nolibc will be
+> touched.
 
-    # OUTPUT is only set when run from the main makefile, otherwise
-    # it defaults to this nolibc directory.
-    OUTPUT ?= $(CURDIR)/
+It's a matter of taste but there are pros and cons. I personally spend
+my time using grep -r on the sysroots, having gigabytes of .o there would
+quickly made me regret that approach. I would also argue that when you
+pass "O=" to the kernel build, it serves as a prefix and the directory
+hierarchy is preserved, so if you would want to put the sysroots etc
+under $O then it would be more logical that it appears in
+$O/tools/testing/selftests/nolibc/sysroot/$arch, which would then remain
+compatible with today when O corresponds to the kernel's CURDIR. Then
+maybe that would be the solution to making O per-arch for those who want
+to re-run over many kernels, while keeping it easy for those who want to
+test their own kernel or want to grep in sysroot.
 
-    # Architecture specific directory
-    ARCH_OUTPUT ?= $(CURDIR)/build/$(ARCH)/
+> I have prepared and verified such a solution locally, before send the patches,
+> welcome your suggestions.
+> 
+> My local patchset now provides such features:
+> 
+>   - Allow build everything for a target arch in the arch specific directory
+>   
+>   - Allow clean everything of a target arch
+>   
+>   - Allow trigger a config target automatically for the run target, use the new
+>     tinyconfig by default, be able to choose defconfig as before
+>   
+>   - Allow configure additional config options for both defconfig and tinyconfig
+>   
+>   - Allow configure the default CROSS_COMPILE by default, only the ARCH variable is required
+>   
+>   - Allow download the missing cross toolchains automatically (from mirrrors.edge.kernel.org)
+>   
+>   - Allow download the missing bios automatically
+>   
+>   - Allow download and build musl automatically
+>   
+>   - Allow run tests for all of the supported architectures automatically with one command
+>     with minimal preparation, may be only the installation of qemu-user and qemu-system
 
+There can be good things there, but I'm seeing a lot of "by default" and
+"automatically" which worry me, because when you're debugging something,
+there's nothing more annoying than all the stuff happening in your back
+and fooling your analysis. On the opposite I do value the ability to
+proceed through steps that I don't need to revalidate, and these ones
+can be done automatically just by chaining a few commands from a script.
 
-With "O":
+And no download should ever be done automatically. Any download must
+always be deliberately and consciously initiated by the user. How many
+times we've seen some scripts stall with no information, just to discover
+a SYN_SENT socket in netstat! You can have a "download-toolchain",
+"download-bios", "download-musl" etc if you want, but quite frankly, I'm
+seriously doubting it will be *that* useful to anyone working on the
+kernel since by definition they already have these toolchains, and
+sometimes different ones (e.g. linaro, bootlin etc) and in different
+versions. In fact if some expresses the need for having a simplified
+command to download a toolchain, then it wouldn't be specific to
+nolibc-test but would be used as a general tool for the kernel since
+it would be shared with all the rest of the code. You could also imagine
+downloading and building qemu, but it also takes a while and we're very
+far from the simple build script whose purpose was to validate that a
+few syscalls appeared to work fine.
 
-    // tools/nolibc
+> With the new patchset, it is able to rebuild and rerun everything in several
+> minutes, it may make people very happy to develop nolibc itself and also make
+> people to work on linux with nolibc, especially for developing and testing a
+> new kernel feature ;-)
 
-    KERNEL_BUILD   ?= $(ARCH_OUTPUT)linux/
-    MAKE_KERNEL     = $(MAKE) -C "$(srctree)" O="$(KERNEL_BUILD)" ARCH=$(ARCH)
+I doubt it. Rebuilding everything is not what most developers need. What
+they need is to just fix a missing parenthesis that broke the build and
+rebuild the strict minimum, restarting from where they left. And they
+need to be able to figure what caused that "FAILED" output, disassemble
+the output, re-run it manually under qemu-user, rebuild the .c manually
+after copy-pasting the whole command line via "V=1", etc.
 
-    headers_standalone: headers
-    	$(Q)$(MAKE_KERNEL) headers
-    	$(Q)$(MAKE_KERNEL) headers_install INSTALL_HDR_PATH=$(ARCH_OUTPUT)sysroot
-    
+Keep in mind that the purpose of a selftest is not to optimize the case
+where it works fine, but to optimize the developer's work when it fails.
+This is something that a lot of people tend to get wrong. They're proud
+of a "make world" that does everything including delivering them pizzas
+to wait for the builds to complete, and they say "hey, impressed?". But
+when someone else reports "I'm getting this strange error I don't
+understand", they can hardly suggest more than "hmmm run make clean, try
+again, or use the same distro as me because it works for me".
 
-    // selftests/nolibc
-    RUN_OUT         = $(ARCH_OUTPUT)run.out
-    ...
-    NOLIBC_INITRAMFS  = $(ARCH_OUTPUT)initramfs/
-    ...
-    KERNEL_BUILD   ?= $(ARCH_OUTPUT)linux/
-    MAKE_KERNEL     = $(MAKE) -C "$(srctree)" O="$(KERNEL_BUILD)" ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE)
-    KERNEL_IMAGE    = $(KERNEL_BUILD)$(IMAGE)
-    KERNEL_CONFIG   = $(KERNEL_BUILD).config
+What I've tried to focus on from the beginning with this tiny test suite
+precisely is debugging. That's why I wanted to support alternate libcs,
+to help compare, making it easy to use a different toolchain and other
+cflags, running in userland, building just the binary so that I can scp
+it to a remote native machine etc. All of these are important, and your
+approach above makes me feel like I would lose most of it, or still be
+able to do that but in a very complicated way (i.e. constantly have to
+reverse-engineer a complicated makefile to figure where I can inject an
+option).
 
-    defconfig:
-    	$(Q)$(MAKE_KERNEL) $(DEFCONFIG) prepare
-    
-    kernel: initramfs
-    	$(Q)$(MAKE_KERNEL) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(NOLIBC_INITRAMFS)
-    
-    # run the tests after building the kernel
-    run: kernel
-    	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(KERNEL_IMAGE)" -serial stdio $(QEMU_ARGS) > "$(RUN_OUT)"
-    	$(Q)$(REPORT) $(RUN_OUT)
-
-And further, the output of the other targets should be put in the
-$(ARCH_OUTPUT) directory too, include the sysroot, nolibc-test, initramfs,
-run.out and even libc-test, the whole Makefile of selftests/nolibc will be
-touched.
-
-I have prepared and verified such a solution locally, before send the patches,
-welcome your suggestions.
-
-My local patchset now provides such features:
-
-  - Allow build everything for a target arch in the arch specific directory
-  
-  - Allow clean everything of a target arch
-  
-  - Allow trigger a config target automatically for the run target, use the new
-    tinyconfig by default, be able to choose defconfig as before
-  
-  - Allow configure additional config options for both defconfig and tinyconfig
-  
-  - Allow configure the default CROSS_COMPILE by default, only the ARCH variable is required
-  
-  - Allow download the missing cross toolchains automatically (from mirrrors.edge.kernel.org)
-  
-  - Allow download the missing bios automatically
-  
-  - Allow download and build musl automatically
-  
-  - Allow run tests for all of the supported architectures automatically with one command
-    with minimal preparation, may be only the installation of qemu-user and qemu-system
-
-With the new patchset, it is able to rebuild and rerun everything in several
-minutes, it may make people very happy to develop nolibc itself and also make
-people to work on linux with nolibc, especially for developing and testing a
-new kernel feature ;-)
-
-Without this reorg of the output directory, it is very hard to verify this
-tinyconfig support patchset itself, it always require 'mrproper' to clean the
-whole build while config and test another ARCH (because the source code tree is
-polluted). for one ARCH, it is not that time-costed, but for all, it waste too
-much time. That means, without the arch specific output support, our minimal
-config support is really not that helpful, it also breaks the possibility to
-share the already built binaries for rebuild after a reconfig.
-
-If it is hard to make decision on this description, I'm ok to send the whole
-new patchset for more discussion.
-
-The change is 'huge' and the review work may be 'huge' too ;-)
+However one thing I mentioned in the past is the usefulness of some
+batching scripts (I even shared one). And I think that helping the user
+prepare certain steps or iterate over architectures *is* useful. When
+you do it in two layers (the script replacing the user, the makefile
+doing the build job), it remains easy and convenient to use, and you
+can pick only what you need (e.g. "please build musl for me"). And if
+something goes wrong, it's simple for the user to takeover and complete
+that failed task by changing an arch name, a directory or anything, and
+have their tools ready. Let's just never make that automatic for the
+sake of everyone's health!
 
 Thanks,
-Zhangjin
-
-> Willy, Thomas
-> 
-> We just sent the 'selftests/nolibc: allow run with minimal kernel
-> config' series [1], Here is the 'minimal' kernel config support, with
-> both of them, it is possible to run nolibc-test for all architectures
-> with oneline command and in less than ~30 minutes - 1 hour (not fullly
-> measured yet):
-> 
->     // run with tiny config + qemu-system
->     // Note: rv32 and loongarch require to download the bios at first
->     $ time make run-tiny-all QUIET_RUN=1
-> 
->     // run with default config + qemu-system
->     $ time make run-default-all QUIET_RUN=1
-> 
->     // run with qemu-user
->     $ time make run-user-all QUIET_RUN=1
-> 
-> Besides the 'tinyconfig' suggestion from Thomas, this patch also merge
-> the generic part of my local powerpc porting (the extconfig to add
-> additional console support).
-> 
-> This is applied after the test report patchset [2] and the rv32 compile
-> patchset [3], because all of them touched the same Makefile.
-> 
-> Even without the 'selftests/nolibc: allow run with minimal kernel
-> config' series [1], all of the tests can pass except the /proc/self/net
-> related ones (We haven't enable CONFIG_NET in this patchset), the
-> chmod_net one will be removed by Thomas from this patchset [4] for the
-> wrong chmodable attribute issue of /proc/self/net, the link_cross one
-> can be simply fixed up by using another /proc/self interface (like
-> /proc/self/cmdline), which will be covered in our revision of the [1]
-> series.
-> 
-> Beside the core 'minimal' config support, some generic patch are added
-> together to avoid patch conflicts.
-> 
-> * selftests/nolibc: add test for -include /path/to/nolibc.h
-> 
->   Add a test switch to allow run nolibc-test with nolibc.h
-> 
-> * selftests/nolibc: print result to the screen too
-> 
->   Let the run targets print results by default, allow disable by
->   QUIET_RUN=1
-> 
-> * selftests/nolibc: allow use x86_64 toolchain for i386
-> 
->   Allow use x86_64 toolchains for i386
-> 
-> * selftests/nolibc: add menuconfig target for manual config
-> 
->   a new 'menuconfig' target added for development and debugging
-> 
-> * selftests/nolibc: add tinyconfig target
-> 
->   a new 'tinyconfig' compare to 'defconfig', smaller and faster, but not
->   enough for boot and print, require following 'extconfig' target
-> 
-> * selftests/nolibc: allow customize extra kernel config options
-> 
->   a new 'extconfig' allows to add extra config options for 'defconfig'
->   and 'tinyconfig'
-> 
-> * selftests/nolibc: add common extra config options
->   selftests/nolibc: add power reset control support
->   selftests/nolibc: add procfs, shmem and tmpfs
-> 
->   Add common extra configs, the 3rd one (procfs, shmem and tmpfs) can be
->   completely reverted after [1] series, but as discuss with Thomas,
->   procfs may be still a hard requirement.
-> 
-> * selftests/nolibc: add extra configs for i386
->   selftests/nolibc: add extra configs for x86_64
->   selftests/nolibc: add extra configs for arm64
->   selftests/nolibc: add extra configs for arm
->   selftests/nolibc: add extra configs for mips
->   selftests/nolibc: add extra configs for riscv32
->   selftests/nolibc: add extra configs for riscv64
->   selftests/nolibc: add extra configs for s390x
->   selftests/nolibc: add extra configs for loongarch
-> 
->   Add architecture specific extra configs to let kernel boot and
->   nolibc-test print. The rv32 added here is only for test, it should not
->   be merged before the missing 64bit syscalls are added (still wait for
->   the merging of the __sysret and -ENOSYS patches).
-> 
-> * selftests/nolibc: config default CROSS_COMPILE
->   selftests/nolibc: add run-tiny and run-default
-> 
->   both run-tiny and run-default are added to do config and run together,
->   this easier test a log.
-> 
-> * selftests/nolibc: allow run tests on all targets
->   selftests/nolibc: detect bios existing to avoid hang
-> 
->   Further allow do run-user, run-tiny and run-default for all
->   architectures at once, the -all suffix is added to do so.
-> 
-> Since some generic patches are still in review, before sending the left
-> rv32 patches, I'm will send more generic patches later, the coming one
-> is arch-xxx.h cleanup, and then, the 32bit powerpc porting support.
-> 
-> For the compile speedup, the next step may be add architecture specific
-> 'O' support, which may allow us rerun across architectures without
-> mrproper, for a single architecture development, this 'minimal' config
-> should be enough ;-)
-> 
-> Thanks.
-> 
-> Best regards,
-> Zhangjin
-> ---
-> [1]: https://lore.kernel.org/lkml/cover.1687344643.git.falcon@tinylab.org/
-> [2]: https://lore.kernel.org/lkml/cover.1687156559.git.falcon@tinylab.org/
-> [3]: https://lore.kernel.org/linux-riscv/cover.1687176996.git.falcon@tinylab.org/
-> [4]: https://lore.kernel.org/lkml/20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net/
-> 
-> Zhangjin Wu (22):
->   selftests/nolibc: add test for -include /path/to/nolibc.h
->   selftests/nolibc: print result to the screen too
->   selftests/nolibc: allow use x86_64 toolchain for i386
->   selftests/nolibc: add menuconfig target for manual config
->   selftests/nolibc: add tinyconfig target
->   selftests/nolibc: allow customize extra kernel config options
->   selftests/nolibc: add common extra config options
->   selftests/nolibc: add power reset control support
->   selftests/nolibc: add procfs, shmem and tmpfs
->   selftests/nolibc: add extra configs for i386
->   selftests/nolibc: add extra configs for x86_64
->   selftests/nolibc: add extra configs for arm64
->   selftests/nolibc: add extra configs for arm
->   selftests/nolibc: add extra configs for mips
->   selftests/nolibc: add extra configs for riscv32
->   selftests/nolibc: add extra configs for riscv64
->   selftests/nolibc: add extra configs for s390x
->   selftests/nolibc: add extra configs for loongarch
->   selftests/nolibc: config default CROSS_COMPILE
->   selftests/nolibc: add run-tiny and run-default
->   selftests/nolibc: allow run tests on all targets
->   selftests/nolibc: detect bios existing to avoid hang
-> 
->  tools/testing/selftests/nolibc/Makefile | 125 ++++++++++++++++++++++--
->  1 file changed, 119 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.25.1
+Willy
