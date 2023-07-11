@@ -2,50 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1D774F5B1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 18:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A35174F6ED
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 19:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjGKQjq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jul 2023 12:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
+        id S231241AbjGKRUm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jul 2023 13:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjGKQjp (ORCPT
+        with ESMTP id S229537AbjGKRUl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:39:45 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A308CA;
-        Tue, 11 Jul 2023 09:39:39 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1689093568tma672az
+        Tue, 11 Jul 2023 13:20:41 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DD02113;
+        Tue, 11 Jul 2023 10:20:06 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1689095962tllkhx2q
 Received: from localhost.localdomain ( [116.30.126.249])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 12 Jul 2023 00:39:27 +0800 (CST)
+        id ; Wed, 12 Jul 2023 01:19:21 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 7jw2iSiCazpo/LBoTHiWUTFOO0T2xxVuLXpc0XNSJCcOdmxfxczJzCGNWvpSP
-        O3MTKSEmLAA6Oqt1rjKurirN48Op1YM6jvIoybGvWrueLI9SKopBDAs6DHcRPYNw/H3suyr
-        9PtlYkSHMpqq8yULFzMckX2Tp9TfhrttXvFss7CQ+d/vrmNuPzsglqUj9mrKHE1ke/jDNx2
-        K2UbqeCat0L1ekFXYGehneLAVYF4OrSkdlZz0JIibJ1x2qGQ3bCZaOesfIshEBccxZQaPN4
-        PL7fDw+etfIy6XdslbucE2luDDFoNYsNnWPwRPxpyTOJbXMsnF4io3p2fKn3HtfpSRFYVUi
-        LhNpfm86HcGpHnbY8sB7heyZUdvFZ55klm1gj2ErEEFV/8NFeI=
+X-QQ-FEAT: lO87fmWkX3HFfuU2k+SJSNYPRTYpwYNsOjz876H+ka5+SI/H3p4rnSg+KBUzW
+        vBR9oICStINky65j3rkq6JBg9G7Dd3GCPDmY12HhTQZH7tGfDbhcybLDSD40Pwif+LMuX2w
+        ZLtporerBOuXY/PB3o3IGWkp7s9lR76dHmvtVtMz+oI4bf8pFyPEb79ymSczfRQgKDmkMmc
+        fmeh318T+kZ5hcjC2jj2RRCsGmZVXGHlir0bMvsJrrb3d/0ZqTFbfQ0ChioHGguIYoTKd+H
+        nl+HFxiM9IFn4ylo2HEvDIXsSkDzXW7jj2qg8MIrJBzX5S5q46JdiXw7EgE5gLWdTBuDVzs
+        RCxGWpVOjmcG+MFszpPwgj3FKwwPK4G/LG2pLQ969wEuF2YZbC7HC9xyDX9zQ==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 4955814651562134539
+X-BIZMAIL-ID: 1251398886092548686
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: Re: [PATCH v2 01/12] tools/nolibc: rename arch-<ARCH>.h to <ARCH>/arch.h
-Date:   Wed, 12 Jul 2023 00:38:30 +0800
-Message-Id: <20230711163830.10271-1-falcon@tinylab.org>
+Subject: Re: [PATCH v1 00/22] selftests/nolibc: add minimal kernel config support
+Date:   Wed, 12 Jul 2023 01:18:26 +0800
+Message-Id: <20230711171826.10480-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZK0HouRo8g6jqkTi@1wt.eu>
-References: <ZK0HouRo8g6jqkTi@1wt.eu>
+In-Reply-To: <ZK0AB1OXH1s2xYsh@1wt.eu>
+References: <ZK0AB1OXH1s2xYsh@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,238 +53,253 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi, Willy
 
-> Hi Thomas, Zhangjin,
 > 
-> On Mon, Jul 10, 2023 at 05:51:39PM +0200, Thomas Weißschuh wrote:
-> > On 2023-07-10 15:23:40+0800, Zhangjin Wu wrote:
-> > > > On Sat, Jul 08, 2023 at 11:26:42PM +0800, Zhangjin Wu wrote:
+> Hi Zhangjin,
+> 
+> On Tue, Jul 11, 2023 at 11:55:08AM +0800, Zhangjin Wu wrote:
+> > Hi, Willy and Thomas
 > > 
-> > > [..]
+> > I'm planning to renew this patchset, so, require more discuss.
 > > 
-> > > > > As a preparation, this creates the architecture specific directory and
-> > > > > moves tools/include/nolibc/arch-<ARCH>.h to
-> > > > > tools/include/nolibc/<ARCH>/arch.h.
-> > > > 
-> > > > I'm sorry but I still don't understand what it *provides*. I'm reading
-> > > > it as "we *can* do this so let's do it". But what is the specific
-> > > > purpose of adding this extra directory structure ? It's really unclear
-> > > > to me and worries me that it'll only result in complicating maintenance
-> > > > by adding even more files, thus even more "include" lines and cross
-> > > > dependencies.
-> > > 
-> > > Willy, I was assuming you had a look at the discussion between Thomas
-> > > and me, so, I didn't add the link to our discussion, it is more about
-> > > the 'clarity' of code "include" [1].
-> > > 
-> > > I have proposed the idea in the discussion but got no response yet, so,
-> > > sent this revision for more discussion, obviously, it is better to
-> > > discuss more there and get more feedback from Thomas and you.
+> > The main goal of this minimal kernel config support here is faster build
+> > and therefore faster test for the run target, but this old patchset is
+> > not enough, especially for the 'mrproper' operation during every config:
 > > 
-> > To be honest I got overwhelmed at some point and instead of figuring out
-> > to which series' I already responded and which not I only responded to
-> > those where I had time to do so immediately.
-> > 
-> > Keeping the amount of in-flight serieses lower would help this.
+> >     defconfig:
+> >      	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+> >      
+> >     +tinyconfig:
+> >     +	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper tinyconfig prepare
+> >     +
 > 
-> +1 on this. First it's difficult for me to assign contiguous time on
-> the subject so I can't grasp all series at once, and I'm terribly bad
-> at context-switching, which takes even more time and induces confusion.
-> Less topics at once, more focused with less reviews of reorganizations
-> will definitely help.
-
-me too, let's go back to the original rv32 support asap ;-)
-
-> 
-> > > The v0 included "crt.h" before "arch.h", Thomas suggested me include
-> > > "crt.h" in arch_<ARCH>.h, just like the "compiler.h" did. His suggestion
-> > > did inspire me to think about how to treat the relationship among crt.h,
-> > > sys.h and arch.h.
-> > > 
-> > > The idea behind is we have many directions to divide nolibc to different
-> > > parts/modules:
-> 
-> Again above I'm seeing an opportunity but no explanation of why this
-> is needed. Thomas already mentioned that you're speaking about just
-> trying to factor out a few tens of lines. I'm not seeing *why* we
-> need to re-split everything yet again.
->
-> > > - one is arch specific (arch.h) and non-arch specific (the others)
-> > > 
-> > >   This method is used by us currently, It is very good to put all of the
-> > >   arch specific parts together to simplify (in the files to be
-> > >   added/maintained) the porting of a new architecture.
-> > > 
-> > >   But to be honest, It also confuse the modularity a little, for
-> > >   example, like sys.h, crt.h should be a core function/feature of
-> > >   nolibc, arch.h is not so. arch.h only provides the necessary minimal
-> > >   assembly "pieces".
-> 
-> But that's precisely the principle: keep arch-specific stuff as minimal
-> as possible, keep most of the rest generic but easily overloadable if
-> needed as we know that archs are not all 1:1 equivalent.
+> It will depend on the number of runs, because the mrproper will
+> only be run before recreating a config. Logically once you have
+> your kernel you're not going to reconfigure it.
 >
 
-This patchset applies the same principle but mixes some other
-requirements ;-)
+Yes, for one arch it is once.
 
-Agree with "archs are not all 1:1 equivalent".
-
-> > >   both sys.h and crt.h are not a sub modules of arch.h (although they
-> > >   have minimal arch specific code), so, like sys.h, crt.h should be
-> > >   included in the top-level headers, not in arch.h,
+> > In order to avoid this 'mrproper', one solution is create an arch
+> > specicifc output directory for all of the kernel targets to avoid they
+> > share the same build output (by default, it is the same as the source
+> > code directory and therefore pollute the source code tree), it is
+> > required for both tools/nolibc and selftests/nolibc:
 > 
-> Why ? Keep in mind that these are only include files, to in the end,
-> *all* of them are included. The ordering is the only thing that really
-> matters.
+> This could provide an improvement when building for multiple archs
+> in a row, indeed. But keep in mind that an important aspect is also
+> to be able to test the kernel you're currently working on, and not
+> to have to rebuild it again for nolibc into a subdir.
+> 
+> And given that the makefile doesn't know how to iterate over multiple
+> archs, it would make sense to permit to pass the build output as an
+> argument to the makefile so that the external script calling make for
+> each arch would just pass the build directory (as is sometimes done
+> for the normal kernel).
+> 
+> > The "O" variable could be used to pass an arch specific output for every
+> > arch:
+> > 
+> >     # OUTPUT is only set when run from the main makefile, otherwise
+> >     # it defaults to this nolibc directory.
+> >     OUTPUT ?= $(CURDIR)/
+> > 
+> >     # Architecture specific directory
+> >     ARCH_OUTPUT ?= $(CURDIR)/build/$(ARCH)/
+> > 
+> > 
+> > With "O":
+> > 
+> >     // tools/nolibc
+> > 
+> >     KERNEL_BUILD   ?= $(ARCH_OUTPUT)linux/
+> >     MAKE_KERNEL     = $(MAKE) -C "$(srctree)" O="$(KERNEL_BUILD)" ARCH=$(ARCH)
+> > 
+> >     headers_standalone: headers
+> >     	$(Q)$(MAKE_KERNEL) headers
+> >     	$(Q)$(MAKE_KERNEL) headers_install INSTALL_HDR_PATH=$(ARCH_OUTPUT)sysroot
+> >     
+> > 
+> >     // selftests/nolibc
+> >     RUN_OUT         = $(ARCH_OUTPUT)run.out
+> >     ...
+> >     NOLIBC_INITRAMFS  = $(ARCH_OUTPUT)initramfs/
+> >     ...
+> >     KERNEL_BUILD   ?= $(ARCH_OUTPUT)linux/
+> >     MAKE_KERNEL     = $(MAKE) -C "$(srctree)" O="$(KERNEL_BUILD)" ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE)
+> 
+> Yes but this one will break reuse of the already built kernel. Also
+> for those trying all archs for a single test it will eat a lot of
+> disk space (when enabling certain debugging symbols you can end up
+> with extremely large build dirs, I already ran out of space a few
+> times).
+
+For defconfig, it is, but for tinyconfig, it is smaller ;-)
+
+Of course, with debugging symbols, it is bigger.
+
+> 
+> I think that instead we should just let the user pass this "O=" to the
+> make command and let the lower ones inherit it. That makes it closer
+> to what it usually done. I'm also fine with using another variable if
+> there's a good reason for this, but given that it's already called "O"
+> it's not something unexpected to the user. Thus we could imagine just
+> running:
+> 
+>     for arch in "${ARCHS[@]}"; do
+>         make -j$(nproc) O=$PWD/kernel-$arch ARCH=$arch \
+>              CROSS_COMPILE=/path/to/cc/$arch/bin/$arch- \
+>              run
+>     done
+>              
+> Which is simple enough without requiring a user to have to figure what
+> build option to hack on for just a regular build.
 >
 
-Yeah, I know this. The only thing confused me is the relationship among
-crt.h, sys.h and arch.h, the include position should better reflects
-their relationship, currently, we have mixed two "divide" methods
-together, one is arch and non-arch, another is the parallel
-functions/features.
+Yeah, passing it from a script is a substitute.
 
-so, the only left question is where should we include crt.h in? Firstly,
-I put it like sys.h (In my mind, it should be), If you two both agree to
-put it in arch-<ARCH.h>, I will renew this series with it, this is
-definitely a lighter way than the reorg method, I don't persist ;-)
-
-> > >   reversely, the
-> > >   minimal arch specific should be included in crt.h. To do so and to
-> > >   avoid include the non-crt part, the split of arch.h is required, and
-> > >   therefore, the <ARCH>/ is created to put the divided <ARCH>/sys.h and
-> > >   <ARCH>/crt.h, otherwise, there will be many sys-<ARCH>.h and
-> > >   crt-<ARCH>.h in the top-level directory of nolibc.
+> > And further, the output of the other targets should be put in the
+> > $(ARCH_OUTPUT) directory too, include the sysroot, nolibc-test, initramfs,
+> > run.out and even libc-test, the whole Makefile of selftests/nolibc will be
+> > touched.
 > 
-> Then doesn't it prove that you don't need that crt-<ARCH>.h and that
-> instead it should just be in arch-<ARCH> like the rest of the same arch ?
-> 
-> > > - another is the parallel functions/features (like crt.h, sys.h, stack protector ...)
-> > > 
-> > >   This is used by musl and glibc, before sending this proposal, I have
-> > >   taken a look at both of them, musl is simpler and clearer, we apply
-> > >   the similar method:
-> > > 
-> > >   musl:
-> > >       crt/crt1.c
-> > >                  #include "crt_arch.h"  /* arch/<ARCH>/crt_arch.h */
-> > 
-> > In musl crt_arch.h seems to be used in different ways. So it makes sense
-> > to split it from syscall_arch.h. In nolibc there is no such distinction.
-> > And everything will end up in a global namespace anyways.
-> 
-> Exactly. Musl is musl and nolibc is nolibc. Musl is a regular libc in that
-> it provides a .so that is built from many .c files. As such it's desirable
-> to split along certain edges. nolibc contains no single C file. It's only
-> meant to be included as-is in the user's C file. This changes a lot of
-> things, even in terms of splitting. Also keep in mind that musl is a
-> general-purpose libc, and that some distros are entirely built on it.
-> nolibc doesn't have such goal nor expectation, the first user was a
-> preinit code I wrote long ago, and the second one is rcutorture which
-> contains a while() loop around gettimeofday() IIRC. We must not just
-> blindly imitate other components' choices because they work, when we're
-> dealing with different constraints. If ours are acceptable, no need to
-> complicate everything.
+> It's a matter of taste but there are pros and cons. I personally spend
+> my time using grep -r on the sysroots, having gigabytes of .o there would
+> quickly made me regret that approach. I would also argue that when you
+> pass "O=" to the kernel build, it serves as a prefix and the directory
+> hierarchy is preserved, so if you would want to put the sysroots etc
+> under $O then it would be more logical that it appears in
+> $O/tools/testing/selftests/nolibc/sysroot/$arch, which would then remain
+> compatible with today when O corresponds to the kernel's CURDIR. Then
+> maybe that would be the solution to making O per-arch for those who want
+> to re-run over many kernels, while keeping it easy for those who want to
+> test their own kernel or want to grep in sysroot.
 >
 
-Willy, I know the difference between musl and nolibc, the musl code
-referenced here is only used to clear my confusion about "the
-relationship among crt.h, sys.h and arch.h" I mentiond above.
+Agree, using a $(ARCH_OUTPUT) does changes directory hierarchy.
 
-BTW, I do think nolibc have more using scenes, I like it very much and
-have used it in my own "Linux Lab" open source project [1] to let it
-work as the minimal rootfs to speed up kernel features learning and
-development, I do like the 'kernel-only deployments' feature behind
-nolibc [2], although there is something like "Unikernel Linux" [3], but
-that differs from a normal Linux system and is more complicated ;-)
-
-I'm even imaging using it with a pure-header shell and a pure-header gui
-to let them further work together as a tiny rtos ;-)
-
-[1]: https://github.com/tinyclub/linux-lab
-[2]: https://lwn.net/Articles/920158/
-[3]: https://github.com/unikernelLinux/ukl
-
-> > >   With this method, the "crt_arch.h + crt.h" together provide the C
-> > >   RunTime (startup code, stack protector, environ and _auxv currently)
-> > >   function, the "sys_arch.h + sys.h" together provide the syscall
-> > >   definitions. The arch specific parts are hidden behind, and only
-> > >   require to include the crt_arch.h in crt.h and sys_arch.h in sys.h, no
-> > >   need to include the whole arch.h for all.
+> > I have prepared and verified such a solution locally, before send the patches,
+> > welcome your suggestions.
+> > 
+> > My local patchset now provides such features:
+> > 
+> >   - Allow build everything for a target arch in the arch specific directory
+> >   
+> >   - Allow clean everything of a target arch
+> >   
+> >   - Allow trigger a config target automatically for the run target, use the new
+> >     tinyconfig by default, be able to choose defconfig as before
+> >   
+> >   - Allow configure additional config options for both defconfig and tinyconfig
+> >   
+> >   - Allow configure the default CROSS_COMPILE by default, only the ARCH variable is required
+> >   
+> >   - Allow download the missing cross toolchains automatically (from mirrrors.edge.kernel.org)
+> >   
+> >   - Allow download the missing bios automatically
+> >   
+> >   - Allow download and build musl automatically
+> >   
+> >   - Allow run tests for all of the supported architectures automatically with one command
+> >     with minimal preparation, may be only the installation of qemu-user and qemu-system
 > 
-> Everything is included all the time. *everything*. The more files we
-> create, the more "#ifdef FOO_H" gets evaluated, and the more maintenance
-> burden it adds.
+> There can be good things there, but I'm seeing a lot of "by default" and
+> "automatically" which worry me, because when you're debugging something,
+> there's nothing more annoying than all the stuff happening in your back
+> and fooling your analysis. On the opposite I do value the ability to
+> proceed through steps that I don't need to revalidate, and these ones
+> can be done automatically just by chaining a few commands from a script.
 >
 
-Agree with less "#ifdef"s.
+Ok, let these work in a standalone script.
 
-> > > As a summary, the core obvious reason here is, to this crt.h itself, it
-> > > is ok for us to include crt.h in arch.h in code side, but reversely, I
-> > > do prefer to include arch.h (and therefore the crt_arch.h) in crt.h,
-> > > crt.h is the core function should be exported, arch.h is not, it only
-> > > provide some low-level helpers for crt.h. If we treat sys.h as a core
-> > > function and crt.h as a arch specific thing, it does confuse a little.
-> > > This reorg may also help the similar future functions who require arch
-> > > specific support, but of course, it does require to add/maintain more
-> > > files for a new architecture, but it also allow to develop/debug at a
-> > > smaller fineness.
-> > > 
-> > > In current stage, include crt.h in arch.h is not that unacceptable, but
-> > 
-> > Why would it be more unacceptable in the future?
-> > 
-> > > if reorg is a better direction, why not do it currently, because we do
-> > > have two functions (crt.h and sys.h) in <ARCH>/, if only one, it is not
-> > > urgent ;-)
-> > 
-> > > Is this explanation better than before? welcome to discuss more ;-)
-> > 
-> > Personally I'm not convinced :-)
-> 
-> Neither am I.
-> 
-> > The arch-specific code in nolibc in mainline is currentl ~200 lines per
-> > arch. With this series in general it will be even less.
-> > If at some point there are many more architectures it may make sense to
-> > introduce an arch/ directory then.
-> 
-> And even then I'm not convinced because the number of archs will remain
-> low anyway.
+> And no download should ever be done automatically. Any download must
+> always be deliberately and consciously initiated by the user. How many
+> times we've seen some scripts stall with no information, just to discover
+> a SYN_SENT socket in netstat! You can have a "download-toolchain",
+> "download-bios", "download-musl" etc if you want, but quite frankly, I'm
+> seriously doubting it will be *that* useful to anyone working on the
+> kernel since by definition they already have these toolchains, and
+> sometimes different ones (e.g. linaro, bootlin etc) and in different
+> versions. In fact if some expresses the need for having a simplified
+> command to download a toolchain, then it wouldn't be specific to
+> nolibc-test but would be used as a general tool for the kernel since
+> it would be shared with all the rest of the code. You could also imagine
+> downloading and building qemu, but it also takes a while and we're very
+> far from the simple build script whose purpose was to validate that a
+> few syscalls appeared to work fine.
 >
 
-We have 8 now, the maximum may be 'ls -d arch/*/ | wc -l', it is 22
-currently ;-)
+More work may in reality add extra unexpected work outside of our core
+target.
 
-> > > Like musl, if required, another top-level arch/ may be required to put
-> > > all of the <ARCH>/ directories together to clean up the top-level nolibc
-> > > directory.
-> > 
-> > At the moment in mainline there are 26 files in nolibc.
-> > That does not seem excessive, in fact it looks to be less than most
-> > other kernel directories.
+> > With the new patchset, it is able to rebuild and rerun everything in several
+> > minutes, it may make people very happy to develop nolibc itself and also make
+> > people to work on linux with nolibc, especially for developing and testing a
+> > new kernel feature ;-)
 > 
-> Indeed :-)  Note that it started with a single one!
+> I doubt it. Rebuilding everything is not what most developers need. What
+> they need is to just fix a missing parenthesis that broke the build and
+> rebuild the strict minimum, restarting from where they left. And they
+> need to be able to figure what caused that "FAILED" output, disassemble
+> the output, re-run it manually under qemu-user, rebuild the .c manually
+> after copy-pasting the whole command line via "V=1", etc.
+>
 
-Yeah, I learned the history, but I do think we will have more, as the
-requirements become more and more ;-)
+It is mainly for a cross arch change, like the _start_c() patchset we
+just discuss. This may also happen for every release (not that helpful,
+for a new release, a mrproper or distclean may be required).
 
-> 
-> > > As explained in another reply, it is really hard to write a just ok
-> > > commit message for every change, sometimes, the justification is
-> > > 'obvious' to some develoers who have the background information or who
-> > > have dicussed together, sometimes,
-> 
-> Sometimes yes, but most of the series come with propositions to improve
-> something. The commits making the major changes (and the cover letter)
-> should justify why this is a desirable change, what it implies not to
-> have it and what it may imply to have it, what possible alternatives
-> were considered and dropped sometimes (e.g. when hesitating between two
-> approaches), etc.
+> Keep in mind that the purpose of a selftest is not to optimize the case
+> where it works fine, but to optimize the developer's work when it fails.
+> This is something that a lot of people tend to get wrong. They're proud
+> of a "make world" that does everything including delivering them pizzas
+> to wait for the builds to complete, and they say "hey, impressed?". But
+> when someone else reports "I'm getting this strange error I don't
+> understand", they can hardly suggest more than "hmmm run make clean, try
+> again, or use the same distro as me because it works for me".
+>
 
-Ok. 
+Parts of them do want to meet the 'optimize the developer's work when it
+fails', for example, new developers may be hard to find a loongarch or
+riscv bios, or find a toolchain for the not frequently used
+architecture, to avoid introduce many bug reports about "strange errors"
+outside of our core functions, perhaps we'd better do these in a nolibc
+doc under Documentation/, tell people how to prepare the develop and
+test environment of nolibc and how to use nolibc there.
 
-Thanks,
+> What I've tried to focus on from the beginning with this tiny test suite
+> precisely is debugging. That's why I wanted to support alternate libcs,
+> to help compare, making it easy to use a different toolchain and other
+> cflags, running in userland, building just the binary so that I can scp
+> it to a remote native machine etc. All of these are important, and your
+> approach above makes me feel like I would lose most of it, or still be
+> able to do that but in a very complicated way (i.e. constantly have to
+> reverse-engineer a complicated makefile to figure where I can inject an
+> option).
+>
+
+Let's move most of them to a nolibc doc.
+
+> However one thing I mentioned in the past is the usefulness of some
+> batching scripts (I even shared one).
+
+Yeah, I remember, Thanks. I have used something similar in my Linux Lab
+project.
+
+> And I think that helping the user
+> prepare certain steps or iterate over architectures *is* useful. When
+> you do it in two layers (the script replacing the user, the makefile
+> doing the build job), it remains easy and convenient to use, and you
+> can pick only what you need (e.g. "please build musl for me"). And if
+> something goes wrong, it's simple for the user to takeover and complete
+> that failed task by changing an arch name, a directory or anything, and
+> have their tools ready. Let's just never make that automatic for the
+> sake of everyone's health!
+
+Ok, the revision will align with the original Makefile and remove the automatic
+parts and no change about the OUTPUT.
+
+Best regards,
 Zhangjin
 
 > 
