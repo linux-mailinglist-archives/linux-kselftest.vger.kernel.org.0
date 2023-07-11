@@ -2,190 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD3474E2DE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 02:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC3B74E2E1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 03:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjGKA6v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Jul 2023 20:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
+        id S230410AbjGKBAM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Jul 2023 21:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjGKA6s (ORCPT
+        with ESMTP id S230387AbjGKBAL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jul 2023 20:58:48 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2059.outbound.protection.outlook.com [40.107.96.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6389712A;
-        Mon, 10 Jul 2023 17:58:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B+4+jyXxlIEcGaA2tr8ANrY5pxyNwadn13/5eGa8a703KrS89E3xLaXvszxGramco+/MOg5F6lfSqaDfLwqT5xg3hUFeXUZJdYtTEGxBcbqxuboQEwSk1YfeNXAu/r6ypfyTTqtoj/eVKxqo8IazILPK4cUOQ08kmRgtwdT2widwgF4eMuoJ+mYW667DJade5nln3pchjqKOpYWkghy5Pw/ISKfO8AuoIXZ1NhZ2HxqLoJt8UeLj2sTYnz7Yu0fo1i0JzjWtXwC475aMCDYf10gGG0JaGU2uAU38M/EyYfcSsLPODhQ8VPgcHc4gxJCmAT0vH+wDxSGZLsJtmREgYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VUDwL0zqhWGOHFaKc5MiLdKQad2/05T8RLmNdvFxkHQ=;
- b=K6RZsn4BZSE3UsGr6wDszl+83GWSmzLZi1xqR4eH/AeEmS6QPO+p+syCKteJY21ndr+rdFYvLwRK0CdEZQFxIEk2JQHkLGztsMLUd59cApdUDehZ0+O8jOw5sBxludLDkunONvE4JOpZwg0lnfx+Pi4wqfhVTUsnANecBeaRGS/OZV5gIFMwtwWBcv/jaRyC4Xym8Z3VpldNKlabl8F/mauLm4w+HNsAb9jqv04vOvdm3YGtlO0BvKnAlTOxANqb6mKcdQdHO9ruY7mRU0jpeACTEf8URlLtZyfRbRxOcpJa6xJGuH1TWJpG4ThN7BjHkIFGVvpfyMoLCTgmSHes2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linux-foundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VUDwL0zqhWGOHFaKc5MiLdKQad2/05T8RLmNdvFxkHQ=;
- b=q9srowv+ud68RNDTT7O9b8+4sdhGp+scpjK1a6sDrPz+TdFipcUDWeEPgAsAu4kPs9eiU5NiejRp73xSzSofickLCxIdR3Xgv2fEKPZA995r3WO61TxJgg4Li0H3APehDZOUrXhAVcrYt3q/utU7DJ6Wfw12wCyFIs1Bmq0/pTrEDA+8Vc595OBj/EBXpX0Har5p7sExReD0926WAniFB4kXYYLauBTN28W9r82TwLez6GVqAsg59gOWdlDs0LA2N26n4Um+kT36HM0ONyRnk/0fZeEFXGx2YNR3pUDbELt74eds9iwtWMWrtzCljL99033zh00L8vfwCYN9/R8Mcw==
-Received: from BN9PR03CA0766.namprd03.prod.outlook.com (2603:10b6:408:13a::21)
- by DM6PR12MB4516.namprd12.prod.outlook.com (2603:10b6:5:2ac::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.26; Tue, 11 Jul
- 2023 00:58:43 +0000
-Received: from BN8NAM11FT075.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13a:cafe::2b) by BN9PR03CA0766.outlook.office365.com
- (2603:10b6:408:13a::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31 via Frontend
- Transport; Tue, 11 Jul 2023 00:58:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT075.mail.protection.outlook.com (10.13.176.208) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.20 via Frontend Transport; Tue, 11 Jul 2023 00:58:42 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 10 Jul 2023
- 17:58:31 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 10 Jul
- 2023 17:58:30 -0700
-Message-ID: <c30ff285-176f-4d76-38a0-4917a1c55c2b@nvidia.com>
-Date:   Mon, 10 Jul 2023 17:58:30 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] selftests/arm64: fix build failure during the
- "emit_tests" step
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Anders Roxell <anders.roxell@linaro.org>,
-        David Hildenbrand <david@redhat.com>,
+        Mon, 10 Jul 2023 21:00:11 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F23C0;
+        Mon, 10 Jul 2023 18:00:10 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b8bbce9980so33173465ad.2;
+        Mon, 10 Jul 2023 18:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689037210; x=1691629210;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iOeAkeIhbm63YH/6Gh4MSzxEDTnuHBi8ou4wGcdJFeM=;
+        b=QCUFSSTuYfpZ4zZwxQRpvBHWwVt6JX2r4IaQWToH7ZnW53vdjoDh7gN1os71joy4CM
+         WCD33PWj9Qn9jM4ckCcNXsxJ1CPVRzuOTB7VAabbKy3CGCk6p42MNquaIwRFww9tP8ax
+         dn2jG4J5piZFk/emDQSQXbHAptZU0jKpXztCYa3P0qBfDSxsP3w+lP/kWJKSqY9THOUt
+         W8pdf4e7FFt9H3itZ3WqcjwYEevNXyoCqCwspcLeDZqAH6AabUSFw1LNx6R+SpiwMhga
+         o6nfXDNIU/o3RuD4GS2JH4AYYH9Hv+uUMJeCCMvJrPVRrPtI/Rj7HSH51WjI4OxP1czG
+         ve7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689037210; x=1691629210;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iOeAkeIhbm63YH/6Gh4MSzxEDTnuHBi8ou4wGcdJFeM=;
+        b=PmGZb5/bFJfwBhr1mxLGOPQbLy1xGygcxCGYXDX/g3Z/Sfvu8OqxRfaBQxNdqxlXIG
+         LphPWAA4yNIY1NgsT2We1FqTe7ruYbK+bBZI7yAN99M/DLAMI8rMTdyweOU/fOTHlihs
+         jxkX79QKQDjSTjdOxqeYp5FeTNrfYC8nJgMU8yt33LCHyRZbhIgMD3UrMiGkPK1iMqd3
+         93vCxdBpM+C6GnoFjirwNJxXqISAMfWoZv/Q3/xQ2C7MgFrfwV7SC3k7rIrp05LHRkWZ
+         SKwiDsnygGn+5VXQ8I+jm4Fj8/G29M/sF58YJwm5pMFuL/HSW946lEshIHeCz3UP3/Xk
+         JY7g==
+X-Gm-Message-State: ABy/qLbguVrPQa4+r2YpIZ5SQW6F3nIYXUGV0BebX3UuMeOFrSV8RG5K
+        Uu37sRn/mq83h5w99g/YWmk=
+X-Google-Smtp-Source: APBJJlF4tqyKaxe6FUTxBOKdQXS/veWIutnyD6e4IB24oquduS6Evm4yVFhziXaM6ohvz/uEaHf4YA==
+X-Received: by 2002:a17:902:b110:b0:1b8:9cf2:35b0 with SMTP id q16-20020a170902b11000b001b89cf235b0mr9467584plr.41.1689037209850;
+        Mon, 10 Jul 2023 18:00:09 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id bg4-20020a1709028e8400b001b53be3d942sm482388plb.232.2023.07.10.18.00.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 18:00:09 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Jul 2023 15:00:07 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Mark Brown" <broonie@kernel.org>
-References: <20230711005629.2547838-1-jhubbard@nvidia.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20230711005629.2547838-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT075:EE_|DM6PR12MB4516:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7f3af72f-5c36-484e-b305-08db81a9f8fd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LtR20+7QfcOazvBQW4AAyhAs8GpVpQNC9jsfayNfg2REeRiojIXmAQl/52f4bM62xVNuphQt+ajsjZC1g2SQDAAQzConUIV4m5nNKutdTv7jhRbAypeqMcv0sh9pnLps4kPiac8H/Y8uzxVDN1TW3audiTlw+wdTxDIIYZmsgHTjho+qYiwlPhzCKVko1JGHb550XK3xVn99cyWLmcVVoJwbdq0zdt9zlz5hhPE4KTRL0ZR6tQTFtvn6rygv+gJMyytHlNdGXQxZb6qBscoaj+SqMCMhqf67wOhxMbnxOooNhuPQgzhjX2QjgSWjjkK65l9nTc/XkmetoWG6O2ZiuaAUfP92lOiJieJDTlqGSkmPcMdhfLrrJKBQLePl/wi55KB5LlK61S9OTTxpumSiBZJL7uI41f2cu9hEA7VzLXUQVLcNpflJQBvtqP72sRJA3uweQ10YWRONxe+mBqqhNXXH3/FKgHNfV2zgW6NaVPhPMSYdTcbcSEWFhN1Ds7y47wMcJ0rktvtrLu80QcdIL6cN7UtHJDkaSPSAsLO1gWLIcPvFtI5iEdzBTimClaWihzekp5fdeWpiLWOaJ4OCSCkV4dDGKe5UGy+B/BEz1T9Y7RR/ZLiv0UfMUVdg+i1YXhVt+fHfSFNu7m70jJxZtC3jJTkf8/CC+NTVphtpWD+ErHA4eSHKcLgddxDsBwrviCIpZ2D/J27PF43Q3obwNb4HRWGrHnD5keUjjYMjitAys4yPx53BVqmz/ZfyCon4A8MedlnPHeDVR6ecLW44ehnDdclSOHfXuynCGVFob5n9OPMmqd9PphTizfnIIljT
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(396003)(136003)(451199021)(46966006)(40470700004)(36840700001)(478600001)(54906003)(16576012)(26005)(16526019)(2616005)(53546011)(966005)(82740400003)(2906002)(70586007)(82310400005)(186003)(316002)(4326008)(5660300002)(41300700001)(8676002)(6916009)(8936002)(7416002)(7636003)(356005)(70206006)(40460700003)(86362001)(31696002)(36756003)(47076005)(426003)(36860700001)(336012)(83380400001)(40480700001)(31686004)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 00:58:42.7701
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f3af72f-5c36-484e-b305-08db81a9f8fd
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT075.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4516
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+Subject: Re: [PATCH v4 0/9] cgroup/cpuset: Support remote partitions
+Message-ID: <ZKypl8cr3jxiZ6bo@slm.duckdns.org>
+References: <20230627143508.1576882-1-longman@redhat.com>
+ <ZKxzTrN2yiKfXndI@slm.duckdns.org>
+ <305038a0-1db8-3d0d-3447-48be1f03d41c@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <305038a0-1db8-3d0d-3447-48be1f03d41c@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/10/23 17:56, John Hubbard wrote:
-> The build failure reported in [1] occurred because commit 9fc96c7c19df
-> ("selftests: error out if kernel header files are not yet built") added
-> a new "kernel_header_files" dependency to "all", and that triggered
-> another, pre-existing problem. Specifically, the arm64 selftests
-> override the emit_tests target, and that override improperly declares
-> itself to depend upon the "all" target.
+Hello,
 
-I also have a corresponding fix for selftests/riscv, which has copied the
-arm64 selftest approach. But I'll wait to see how reviews go here,
-before sending that out.
+On Mon, Jul 10, 2023 at 08:33:11PM -0400, Waiman Long wrote:
+> I would like to clarify that withdrawal of CPUs from cpuset.cpus.exclusive
+> is always allowed. It is the addition of CPUs not presents in cpuset.cpus
+> that will be rejected. The invariant is that cpuset.cpus.exclusive must
+> always be a subset of cpuset.cpus. Any change that violates this rule is not
+> allowed. Alternately I can silently dropped the offending CPUs without
+> returning an error, but that may surprise users.
 
-thanks,
+Right, that'd be confusing.
+
+> BTW, withdrawal of CPUs from cpuset.cpus will also withdraw them from
+> cpuset.cpus.exclusive, if present. This allows the partition code to use
+> cpuset.cpus.exclusive directly to determine the allowable exclusive CPUs
+> without doing an intersection with cpuset.cpus each time it is used.
+
+This is kinda confusing too, I think. Changing cpuset.cpus in an ancestor
+doesn't affect the contents of the descendants' cpuset.cpus files but would
+directly modify the contents of their cpuset.cpus.exclusive files.
+
+There's some inherent friction because cpuset.cpus separates configuration
+(cpuset.cpus) and the current state (cpuset.cpus.effective) while
+cpuset.cpus.exclusive is trying to do both in the same interface file. When
+the two behavior modes collide, it becomes rather confusing. Do you think
+it'd make sense to make cpus.exclusive follow the same pattern as
+cpuset.cpus?
+
+Thanks.
+
 -- 
-John Hubbard
-NVIDIA
-
-> 
-> This is a problem because the "emit_tests" target in lib.mk was not
-> intended to be overridden. emit_tests is a very simple, sequential build
-> target that was originally invoked from the "install" target, which in
-> turn, depends upon "all".
-> 
-> That approach worked for years. But with 9fc96c7c19df in place,
-> emit_tests failed, because it does not set up all of the elaborate
-> things that "install" does. And that caused the new
-> "kernel_header_files" target (which depends upon $(KBUILD_OUTPUT) being
-> correct) to fail.
-> 
-> Some detail: The "all" target is .PHONY. Therefore, each target that
-> depends on "all" will cause it to be invoked again, and because
-> dependencies are managed quite loosely in the selftests Makefiles, many
-> things will run, even "all" is invoked several times in immediate
-> succession. So this is not a "real" failure, as far as build steps go:
-> everything gets built, but "all" reports a problem when invoked a second
-> time from a bad environment.
-> 
-> To fix this, simply remove the unnecessary "all" dependency from the
-> overridden emit_tests target. The dependency is still effectively
-> honored, because again, invocation is via "install", which also depends
-> upon "all".
-> 
-> An alternative approach would be to harden the emit_tests target so that
-> it can depend upon "all", but that's a lot more complicated and hard to
-> get right, and doesn't seem worth it, especially given that emit_tests
-> should probably not be overridden at all.
-> 
-> [1] https://lore.kernel.org/20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org
-> 
-> Fixes: 9fc96c7c19df ("selftests: error out if kernel header files are not yet built")
-> Reported-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->   tools/testing/selftests/arm64/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
-> index 9460cbe81bcc..ace8b67fb22d 100644
-> --- a/tools/testing/selftests/arm64/Makefile
-> +++ b/tools/testing/selftests/arm64/Makefile
-> @@ -42,7 +42,7 @@ run_tests: all
->   	done
->   
->   # Avoid any output on non arm64 on emit_tests
-> -emit_tests: all
-> +emit_tests:
->   	@for DIR in $(ARM64_SUBTARGETS); do				\
->   		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
->   		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-> 
-> base-commit: d5fe758c21f4770763ae4c05580be239be18947d
-
-
+tejun
