@@ -2,58 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3060074E2EE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 03:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D4274E38F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 03:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjGKBHT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Jul 2023 21:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
+        id S230311AbjGKBjH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Jul 2023 21:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjGKBHS (ORCPT
+        with ESMTP id S229635AbjGKBjG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jul 2023 21:07:18 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D362DE9;
-        Mon, 10 Jul 2023 18:07:13 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b8ad356f03so33054425ad.1;
-        Mon, 10 Jul 2023 18:07:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689037633; x=1691629633;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IxBIJVCy8BSte3A+R6dkOVqHWVmw7XdfvWAKQ51rWXE=;
-        b=iUPgdvmc76GAhsSeiyKt1afxZwczuvHmWhxciN5pTKOMxs8Y6qHZv4aZJbyiAzs3MD
-         RpkVN7uTX+lmBkUSEyYUbdaVf1vk0iM3HfaqNO4w/1mNhQKjaqiwLi/4PyhJwpHBJIuw
-         T0wCBhqgpCS3FVuvNRx1TMtnTitnxGOe6tsgtvkwFNxWh4qdRlW98ezZ3UUnz2VRikUG
-         2Y0UIlrr3dF5gX8jbIozxxXvoqmlZj6F0X0FFA7yipiYTTgK78q7cTJmoXfWGkQ8DAZg
-         shoKh0pYE4emU7FwZD909nkygrIJ/F72a3z6F+k3Nds1p0lLqUs25ELUCUVpRxdPUk2D
-         sEGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689037633; x=1691629633;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IxBIJVCy8BSte3A+R6dkOVqHWVmw7XdfvWAKQ51rWXE=;
-        b=cC1A86PxIEtTL77tjnZPDVxikcMcJpOy4o0dStIOjA7IeNrKxjOKaYz0TTApwjHkqh
-         htNpSpYL9UyZF3cATOtYfnJQBJg0qqrJMkJozVGaZGv/CeuX9BOGPa3nZbpc9t/6okI4
-         fQWgRw1ckjXe6a6IW0SBnjcsnh4Y2xE1VRUYG5IKB+HtyoUuXqiEAGo141h4GRuMB2uw
-         FNeh0Lc6uQ/vOwK7LpAJJgTMsZYLrei8mn4Iesk0fs+bs3EFpHaVX0Dk+fuuplFfJB2C
-         W7kgsXUQOyCJDcF88wrQKlV3T5PBElwXpS2cD+VcGzGWGtUcQEmgU9ZI9sosAgSJ5bZB
-         7z1g==
-X-Gm-Message-State: ABy/qLZmh4mvNVXhNnSVYAeM+IfpCRMfJA/eGeRVQG7bzKSrFur+ToSH
-        BrU6Gsmyqj8Qn22zlCDE8MVfsiIbxcYDRA==
-X-Google-Smtp-Source: APBJJlH2W63t5F+9E31N010LmiQJn2T65kJKJjz90m9QZ2Wv9mVwJZoaJBnqB1WyJi0fRqrCnjwhkw==
-X-Received: by 2002:a17:902:8308:b0:1b8:9044:9ede with SMTP id bd8-20020a170902830800b001b890449edemr12013743plb.62.1689037633174;
-        Mon, 10 Jul 2023 18:07:13 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:e2fe])
-        by smtp.gmail.com with ESMTPSA id iy14-20020a170903130e00b001b895a17429sm489274plb.280.2023.07.10.18.07.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 18:07:12 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 10 Jul 2023 15:07:11 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
+        Mon, 10 Jul 2023 21:39:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098C4F9
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jul 2023 18:38:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689039498;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CgrK8riab39mc/l4RMQ9kP4UiPJ/E6e+0z17cQMh7m8=;
+        b=Z2hQxymUoOClm5r/gfGad4RAjxEA6pNK07R/d3tqSZ6O3i+dYrBTp/tGW4cjsc+bOhl5x7
+        0L3w8fu/F8cJG67h3m/11xFhPo7Cx2/K6apouMkMURkVUWHMTJBRON0dPWMbjXEXi3qZsw
+        aHJXhxPZkoKPTHvmxVWszBcgDLU81lM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-632-Nc2M2H8GO4WdFDGoVYDBIg-1; Mon, 10 Jul 2023 21:38:14 -0400
+X-MC-Unique: Nc2M2H8GO4WdFDGoVYDBIg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4390680269A;
+        Tue, 11 Jul 2023 01:38:14 +0000 (UTC)
+Received: from [10.22.18.171] (unknown [10.22.18.171])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1DAF92166B26;
+        Tue, 11 Jul 2023 01:38:13 +0000 (UTC)
+Message-ID: <c0fb6438-8d19-9d75-d717-68f047465332@redhat.com>
+Date:   Mon, 10 Jul 2023 21:38:12 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 0/9] cgroup/cpuset: Support remote partitions
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
 Cc:     Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -67,22 +59,19 @@ Cc:     Zefan Li <lizefan.x@bytedance.com>,
         Ryan Phillips <rphillips@redhat.com>,
         Brent Rowsell <browsell@redhat.com>,
         Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-Subject: Re: [PATCH v4 8/9] cgroup/cpuset: Documentation update for partition
-Message-ID: <ZKyrP74UzVb4Ltwi@slm.duckdns.org>
 References: <20230627143508.1576882-1-longman@redhat.com>
- <20230627143508.1576882-9-longman@redhat.com>
- <ZKx4ZJowRhRtjZxB@slm.duckdns.org>
- <6d5aee58-f558-868c-76e0-0b58f8332110@redhat.com>
- <ZKyljsbJgLNpsBLI@slm.duckdns.org>
- <a429e60a-fc4f-60b0-3978-71596fed9542@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a429e60a-fc4f-60b0-3978-71596fed9542@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+ <ZKxzTrN2yiKfXndI@slm.duckdns.org>
+ <305038a0-1db8-3d0d-3447-48be1f03d41c@redhat.com>
+ <ZKypl8cr3jxiZ6bo@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ZKypl8cr3jxiZ6bo@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,23 +79,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On 7/10/23 21:00, Tejun Heo wrote:
+> Hello,
+>
+> On Mon, Jul 10, 2023 at 08:33:11PM -0400, Waiman Long wrote:
+>> I would like to clarify that withdrawal of CPUs from cpuset.cpus.exclusive
+>> is always allowed. It is the addition of CPUs not presents in cpuset.cpus
+>> that will be rejected. The invariant is that cpuset.cpus.exclusive must
+>> always be a subset of cpuset.cpus. Any change that violates this rule is not
+>> allowed. Alternately I can silently dropped the offending CPUs without
+>> returning an error, but that may surprise users.
+> Right, that'd be confusing.
+>
+>> BTW, withdrawal of CPUs from cpuset.cpus will also withdraw them from
+>> cpuset.cpus.exclusive, if present. This allows the partition code to use
+>> cpuset.cpus.exclusive directly to determine the allowable exclusive CPUs
+>> without doing an intersection with cpuset.cpus each time it is used.
+> This is kinda confusing too, I think. Changing cpuset.cpus in an ancestor
+> doesn't affect the contents of the descendants' cpuset.cpus files but would
+> directly modify the contents of their cpuset.cpus.exclusive files.
+>
+> There's some inherent friction because cpuset.cpus separates configuration
+> (cpuset.cpus) and the current state (cpuset.cpus.effective) while
+> cpuset.cpus.exclusive is trying to do both in the same interface file. When
+> the two behavior modes collide, it becomes rather confusing. Do you think
+> it'd make sense to make cpus.exclusive follow the same pattern as
+> cpuset.cpus?
 
-On Mon, Jul 10, 2023 at 08:53:18PM -0400, Waiman Long wrote:
-> For local partition, it doesn't make sense to have a cpust.cpus.exclusive
-> that is not the same as cpuset.cpus as it artificially reduce the set of
-> CPUs that can be used in a partition. In the case of a remote partition, the
+I don't want to add another cpuset.cpus.exclusive.effective control 
+file. One possibility is to keep another effective masks in the struct 
+cpuset and list both exclusive cpus set by the user and the effective 
+ones side by side, like "<cpus> (<effective_cpus>)" if they differ or 
+some other format. What do you think?
 
-Yeah, I was wondering about local partitions. "Automatic but can be
-overridden" behavior becomes confusing if it's difficult for the user to
-easily tell which part is automatic when. I wonder whether it'd be better to
-make the condition static - e.g. for a partition cgroup, cpus.exclusive
-always contains all bits in cpus no matter what value is written to it. Or,
-if we separate out cpus.exclusive and cpus.exclusive.effective, no matter
-what cpus.exclusive is set, a partition root's cpus.exclusive.effective
-always includes all bits in cpus.effective.
+Regards,
+Longman
 
-Thanks.
-
--- 
-tejun
