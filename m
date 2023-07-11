@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B9474EB19
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 11:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4DE74EB1B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jul 2023 11:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbjGKJtt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jul 2023 05:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
+        id S231588AbjGKJtu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jul 2023 05:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbjGKJti (ORCPT
+        with ESMTP id S231754AbjGKJtk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:49:38 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72294A8;
-        Tue, 11 Jul 2023 02:49:36 -0700 (PDT)
+        Tue, 11 Jul 2023 05:49:40 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6944FBE;
+        Tue, 11 Jul 2023 02:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1689068974;
-        bh=03IWGhZ8QhtZRHbntN3H9nx1jWn0im7jMDrqpZcDC9E=;
+        bh=83SeGYY069UVxi94jP42yD5YlEmP07oKsxDCaS0DfLI=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=enZLzOOfdJZURIRYExyX4nKPwq7ZrcP6Uu30k8Z8FBnN5DX90an+CEoQpTtgBZ59C
-         Iep6Ze5HZeB6caPqlPsg3BMNkMgxLiIqkF9u0h5BKomFfMvd91AUwIv0EjoSrvJWme
-         SwemeWFdHQs/HFFbzwJHtGxZIypoDgJlcYSexLZo=
+        b=TNM11yR3/EprBB8Zbx+0ReDPGkWTXEKW/tR6mFLRKWeS0yDsvVYAvKCvNEj22jmXr
+         QiruHvFuP7v+Ul65XonvTuwOJZUx2xPR5HXMQba2CRi1TDBarqS/7JYXYhXhiHjTia
+         Yw9+hHwo52a1ZdtdUwY6lPhwCKBGcvweP2NSDX7g=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Tue, 11 Jul 2023 11:48:41 +0200
-Subject: [PATCH 3/4] selftests/nolibc: simplify status argument
+Date:   Tue, 11 Jul 2023 11:48:42 +0200
+Subject: [PATCH 4/4] selftests/nolibc: avoid gaps in test numbers
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230711-nolibc-sizeof-long-gaps-v1-3-dc78c3b85fc3@weissschuh.net>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230711-nolibc-sizeof-long-gaps-v1-4-dc78c3b85fc3@weissschuh.net>
 References: <20230711-nolibc-sizeof-long-gaps-v1-0-dc78c3b85fc3@weissschuh.net>
 In-Reply-To: <20230711-nolibc-sizeof-long-gaps-v1-0-dc78c3b85fc3@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
@@ -36,11 +36,11 @@ Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Zhangjin Wu <falcon@tinylab.org>,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689068953; l=8351;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689068953; l=4197;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=03IWGhZ8QhtZRHbntN3H9nx1jWn0im7jMDrqpZcDC9E=;
- b=GDj2A6NCENuF5duP+jAGRG273sGNnZpRTvbg/ryTcxFqm04Xf1W6x1W3XHtf6GRUuicM5bhWG
- a9hhDUb2lShA0D4j1P1LaZGu6iLgm3Gp4f/B6EF7zDxSoDNUi0UX71I
+ bh=83SeGYY069UVxi94jP42yD5YlEmP07oKsxDCaS0DfLI=;
+ b=8p8gHUPx37Id6K1WBhsyn1nlAsIFAof0sMQzd2/vZgcKJXeXQWUEwdPYT6QawzH40qigiipqz
+ odYARoIC+dNAl6l63qU37l8GCLYsuDye8XNvqOWxRTy12Iuf6/MZ7pB
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -53,360 +53,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I'm not sure if this is an improvement over the previous patch.
-If so it should be squashed into it.
+As the test numbers are based on line numbers gaps without testcases are
+to be avoided.
+Instead use the already existing test condition logic to implement
+conditional execution.
 
-Not-Signed-off-by
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 115 ++++++++++-----------------
- 1 file changed, 40 insertions(+), 75 deletions(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 30 ++++++++++++----------------
+ 1 file changed, 13 insertions(+), 17 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index b7ed10512d67..754815c142f6 100644
+index 754815c142f6..09660b362645 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -127,17 +127,13 @@ static void putcharn(char c, size_t n)
- 	fputs(buf, stdout);
- }
- 
--enum RESULT {
--	OK,
--	FAIL,
--	SKIPPED,
--};
-+#define SKIPPED INT_MIN
- 
--static void result(int llen, enum RESULT r)
-+static void result(int llen, int r)
- {
- 	const char *msg;
- 
--	if (r == OK)
-+	if (r == 0)
- 		msg = " [OK]";
- 	else if (r == SKIPPED)
- 		msg = "[SKIPPED]";
-@@ -162,7 +158,7 @@ static int expect_zr(int expr, int llen)
- 	int ret = !(expr == 0);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -175,7 +171,7 @@ static int expect_nz(int expr, int llen)
- 	int ret = !(expr != 0);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -188,7 +184,7 @@ static int expect_eq(uint64_t expr, int llen, uint64_t val)
- 	int ret = !(expr == val);
- 
- 	llen += printf(" = %lld ", (long long)expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -201,7 +197,7 @@ static int expect_ne(int expr, int llen, int val)
- 	int ret = !(expr != val);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -214,7 +210,7 @@ static int expect_ge(int expr, int llen, int val)
- 	int ret = !(expr >= val);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -227,7 +223,7 @@ static int expect_gt(int expr, int llen, int val)
- 	int ret = !(expr > val);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -240,7 +236,7 @@ static int expect_le(int expr, int llen, int val)
- 	int ret = !(expr <= val);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -253,7 +249,7 @@ static int expect_lt(int expr, int llen, int val)
- 	int ret = !(expr < val);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -268,11 +264,10 @@ static int expect_syszr(int expr, int llen)
- 	if (expr) {
- 		ret = 1;
- 		llen += printf(" = %d %s ", expr, errorname(errno));
--		result(llen, FAIL);
- 	} else {
- 		llen += printf(" = %d ", expr);
--		result(llen, OK);
- 	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -287,11 +282,10 @@ static int expect_syseq(int expr, int llen, int val)
- 	if (expr != val) {
- 		ret = 1;
- 		llen += printf(" = %d %s ", expr, errorname(errno));
--		result(llen, FAIL);
- 	} else {
- 		llen += printf(" = %d ", expr);
--		result(llen, OK);
- 	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -306,11 +300,10 @@ static int expect_sysne(int expr, int llen, int val)
- 	if (expr == val) {
- 		ret = 1;
- 		llen += printf(" = %d %s ", expr, errorname(errno));
--		result(llen, FAIL);
- 	} else {
- 		llen += printf(" = %d ", expr);
--		result(llen, OK);
- 	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -333,10 +326,8 @@ static int expect_syserr2(int expr, int expret, int experr1, int experr2, int ll
- 			llen += printf(" != (%d %s) ", expret, errorname(experr1));
- 		else
- 			llen += printf(" != (%d %s %s) ", expret, errorname(experr1), errorname(experr2));
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
- 	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -349,12 +340,9 @@ static int expect_ptrzr(const void *expr, int llen)
- 	int ret = 0;
- 
- 	llen += printf(" = <%p> ", expr);
--	if (expr) {
-+	if (expr)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -367,12 +355,9 @@ static int expect_ptrnz(const void *expr, int llen)
- 	int ret = 0;
- 
- 	llen += printf(" = <%p> ", expr);
--	if (!expr) {
-+	if (!expr)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -384,12 +369,9 @@ static int expect_ptreq(const void *expr, int llen, const void *cmp)
- 	int ret = 0;
- 
- 	llen += printf(" = <%p> ", expr);
--	if (expr != cmp) {
-+	if (expr != cmp)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -401,12 +383,9 @@ static int expect_ptrne(const void *expr, int llen, const void *cmp)
- 	int ret = 0;
- 
- 	llen += printf(" = <%p> ", expr);
--	if (expr == cmp) {
-+	if (expr == cmp)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -428,10 +407,8 @@ static int expect_ptrerr2(const void *expr, const void *expret, int experr1, int
- 			llen += printf(" != (<%p> %s) ", expret, errorname(experr1));
- 		else
- 			llen += printf(" != (<%p> %s %s) ", expret, errorname(experr1), errorname(experr2));
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
- 	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -443,12 +420,9 @@ static int expect_strzr(const char *expr, int llen)
- 	int ret = 0;
- 
- 	llen += printf(" = <%s> ", expr);
--	if (expr) {
-+	if (expr)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -461,12 +435,9 @@ static int expect_strnz(const char *expr, int llen)
- 	int ret = 0;
- 
- 	llen += printf(" = <%s> ", expr);
--	if (!expr) {
-+	if (!expr)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -479,12 +450,9 @@ static int expect_streq(const char *expr, int llen, const char *cmp)
- 	int ret = 0;
- 
- 	llen += printf(" = <%s> ", expr);
--	if (strcmp(expr, cmp) != 0) {
-+	if (strcmp(expr, cmp) != 0)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -497,12 +465,9 @@ static int expect_strne(const char *expr, int llen, const char *cmp)
- 	int ret = 0;
- 
- 	llen += printf(" = <%s> ", expr);
--	if (strcmp(expr, cmp) == 0) {
-+	if (strcmp(expr, cmp) == 0)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -893,7 +858,7 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- 
- 	memfile = fdopen(fd, "w+");
- 	if (!memfile) {
--		result(llen, FAIL);
-+		result(llen, 1);
- 		return 1;
- 	}
- 
-@@ -903,7 +868,7 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- 
- 	if (w != c) {
- 		llen += printf(" written(%d) != %d", w, (int) c);
--		result(llen, FAIL);
-+		result(llen, 1);
- 		return 1;
- 	}
- 
-@@ -917,14 +882,14 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- 
- 	if (r != w) {
- 		llen += printf(" written(%d) != read(%d)", w, r);
--		result(llen, FAIL);
-+		result(llen, 1);
- 		return 1;
- 	}
- 
- 	llen += printf(" \"%s\" = \"%s\"", expected, buf);
- 	ret = strncmp(expected, buf, c);
- 
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -987,7 +952,7 @@ static int run_protection(int min, int max)
- #if defined(_NOLIBC_STACKPROTECTOR)
- 	if (!__stack_chk_guard) {
- 		llen += printf("__stack_chk_guard not initialized");
--		result(llen, FAIL);
-+		result(llen, 1);
- 		return 1;
- 	}
- #endif
-@@ -998,7 +963,7 @@ static int run_protection(int min, int max)
- 	switch (pid) {
- 	case -1:
- 		llen += printf("fork()");
--		result(llen, FAIL);
-+		result(llen, 1);
- 		return 1;
- 
- 	case 0:
-@@ -1014,10 +979,10 @@ static int run_protection(int min, int max)
- 
- 		if (pid == -1 || !WIFSIGNALED(status) || WTERMSIG(status) != SIGABRT) {
- 			llen += printf("waitpid()");
--			result(llen, FAIL);
-+			result(llen, 1);
- 			return 1;
- 		}
--		result(llen, OK);
-+		result(llen, 0);
- 		return 0;
- 	}
- }
+@@ -815,23 +815,19 @@ int run_stdlib(int min, int max)
+ 		CASE_TEST(limit_int_fast64_min);    EXPECT_EQ(1, INT_FAST64_MIN,   (int_fast64_t)    INT64_MIN); break;
+ 		CASE_TEST(limit_int_fast64_max);    EXPECT_EQ(1, INT_FAST64_MAX,   (int_fast64_t)    INT64_MAX); break;
+ 		CASE_TEST(limit_uint_fast64_max);   EXPECT_EQ(1, UINT_FAST64_MAX,  (uint_fast64_t)   UINT64_MAX); break;
+-#if __SIZEOF_LONG__ == 8
+-		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,       (intptr_t)        0x8000000000000000LL); break;
+-		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,       (intptr_t)        0x7fffffffffffffffLL); break;
+-		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX,      (uintptr_t)       0xffffffffffffffffULL); break;
+-		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN,      (ptrdiff_t)       0x8000000000000000LL); break;
+-		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX,      (ptrdiff_t)       0x7fffffffffffffffLL); break;
+-		CASE_TEST(limit_size_max);          EXPECT_EQ(1, SIZE_MAX,         (size_t)          0xffffffffffffffffULL); break;
+-#elif __SIZEOF_LONG__ == 4
+-		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,       (intptr_t)        0x80000000); break;
+-		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,       (intptr_t)        0x7fffffff); break;
+-		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX,      (uintptr_t)       0xffffffffU); break;
+-		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN,      (ptrdiff_t)       0x80000000); break;
+-		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX,      (ptrdiff_t)       0x7fffffff); break;
+-		CASE_TEST(limit_size_max);          EXPECT_EQ(1, SIZE_MAX,         (size_t)          0xffffffffU); break;
+-#else
+-# warning "__SIZEOF_LONG__ is undefined"
+-#endif /* __SIZEOF_LONG__ */
++		CASE_TEST(sizeof_long_sane);        EXPECT_EQ(1, sizeof(long) == 8 || sizeof(long) == 4, 1); break;
++		CASE_TEST(limit_intptr_min_64);     EXPECT_EQ(sizeof(long) == 8, INTPTR_MIN,  (intptr_t)  0x8000000000000000LL); break;
++		CASE_TEST(limit_intptr_max_64);     EXPECT_EQ(sizeof(long) == 8, INTPTR_MAX,  (intptr_t)  0x7fffffffffffffffLL); break;
++		CASE_TEST(limit_uintptr_max_64);    EXPECT_EQ(sizeof(long) == 8, UINTPTR_MAX, (uintptr_t) 0xffffffffffffffffULL); break;
++		CASE_TEST(limit_ptrdiff_min_64);    EXPECT_EQ(sizeof(long) == 8, PTRDIFF_MIN, (ptrdiff_t) 0x8000000000000000LL); break;
++		CASE_TEST(limit_ptrdiff_max_64);    EXPECT_EQ(sizeof(long) == 8, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffffffffffffLL); break;
++		CASE_TEST(limit_size_max_64);       EXPECT_EQ(sizeof(long) == 8, SIZE_MAX,    (size_t)    0xffffffffffffffffULL); break;
++		CASE_TEST(limit_intptr_min_32);     EXPECT_EQ(sizeof(long) == 4, INTPTR_MIN,  (intptr_t)  0x80000000); break;
++		CASE_TEST(limit_intptr_max_32);     EXPECT_EQ(sizeof(long) == 4, INTPTR_MAX,  (intptr_t)  0x7fffffff); break;
++		CASE_TEST(limit_uintptr_max_32);    EXPECT_EQ(sizeof(long) == 4, UINTPTR_MAX, (uintptr_t) 0xffffffffU); break;
++		CASE_TEST(limit_ptrdiff_min_32);    EXPECT_EQ(sizeof(long) == 4, PTRDIFF_MIN, (ptrdiff_t) 0x80000000); break;
++		CASE_TEST(limit_ptrdiff_max_32);    EXPECT_EQ(sizeof(long) == 4, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffff); break;
++		CASE_TEST(limit_size_max_32);       EXPECT_EQ(sizeof(long) == 4, SIZE_MAX,    (size_t)    0xffffffffU); break;
+ 		case __LINE__:
+ 			return ret; /* must be last */
+ 		/* note: do not set any defaults so as to permit holes above */
 
 -- 
 2.41.0
