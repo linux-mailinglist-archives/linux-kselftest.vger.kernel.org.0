@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64AAF7502FF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 11:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3F7750306
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 11:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbjGLJZd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Jul 2023 05:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S232375AbjGLJ0g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jul 2023 05:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbjGLJZ2 (ORCPT
+        with ESMTP id S231472AbjGLJ0f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:25:28 -0400
+        Wed, 12 Jul 2023 05:26:35 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6199E11D;
-        Wed, 12 Jul 2023 02:25:27 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1689153918teu0uwlk
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2CE139;
+        Wed, 12 Jul 2023 02:26:33 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1689153983tfw3ppgx
 Received: from linux-lab-host.localdomain ( [116.30.126.249])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 12 Jul 2023 17:25:16 +0800 (CST)
+        id ; Wed, 12 Jul 2023 17:26:22 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 239gR2IZrltKqPhg8ID3o5Pz4jyanvYhDcSzbwRy7HgWu927QkXaP4ef5OeRN
-        qtA9Ik35h1ELNf5DWNXSj7UaPkRlJGClZXDclFLxWUvN7KYVyo83R+DOFY7E3AdM+TNayuy
-        SaxbUW6yO0YCJcRelPEYJCsdW/6qQAEJCIgLIaG6+H7toJ8VV2DoHLkZKcG9NduG5oRIISv
-        KcHn7LkesJ/IKzGbXcvQx3e2SJCFID2ajOR9LQOrwlLP3+LFuGka6gfsl8fE/wSaNB3kQuW
-        6F8sNOemZ2blYajmIvx7sSPXS8XShYwFwvHJbF14LQKNzJqisl7xnvJTpihGc/VfsVCkDxi
-        kQQHgX4gJ/qH+IxomMFe677EKQIx7GjPvFkKvIF1HyBv1/q3lXej7b6FudZP7TvpdOVejS9
+X-QQ-FEAT: J5JfekO1WsgRU4ygyCVjfG7z8UE8RA1iZUoq0kLH35rSYGgxoEMOUOGjZ5p1S
+        EdO21pohjNWgfdEETq7vfqSMT1owM1Rdi71J+ZJmkdlGW/Zz7Jt3AGGIB+RqUQf4j5RjjKu
+        eLb1toMwR1qyBM+Esohypdl02V/1Px26IX0V46DbxxPteDN9pkG7DD4HD1uMibcVipDMiZD
+        KuVDwTCTzF5hoSD3L4JYMfAz2qMwXk3Gw/wA9yV4Dn3zLL/BtMg6s7QMqfS+Blz46X9Tzha
+        G2XBXoqtkHyTf/2s5ehE+oBn/4VSqRAaangw7FZjoa7u+NswjcyWmHj12xiCIG5bfjlXokA
+        ZJa70BSv2jwFF8eIFar5bHpaFvFdCRgsJjZWI24y7kwnZCpKwKCAPPobMppDeQoi+xoecy1
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 86389509092924257
+X-BIZMAIL-ID: 17537015007484594219
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v3 09/11] tools/nolibc: riscv: shrink _start with _start_c
-Date:   Wed, 12 Jul 2023 17:25:15 +0800
-Message-Id: <29559df55935d61e7ca774bb36fa3c73e2011090.1689150149.git.falcon@tinylab.org>
+Subject: [PATCH v3 10/11] tools/nolibc: s390: shrink _start with _start_c
+Date:   Wed, 12 Jul 2023 17:26:21 +0800
+Message-Id: <fae6e54154d67e1dbec5f0ebc7958476a4ca1129.1689150149.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
 References: <cover.1689150149.git.falcon@tinylab.org>
@@ -55,35 +55,23 @@ move most of the _start operations to _start_c().
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/arch-riscv.h | 43 +++++--------------------------
- 1 file changed, 6 insertions(+), 37 deletions(-)
+ tools/include/nolibc/arch-s390.h | 36 +++++---------------------------
+ 1 file changed, 5 insertions(+), 31 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index 2b89ea59c5e4..2e3fcf925ae9 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -8,18 +8,7 @@
- #define _NOLIBC_ARCH_RISCV_H
+diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
+index a40424ba043e..051f3f4ed19b 100644
+--- a/tools/include/nolibc/arch-s390.h
++++ b/tools/include/nolibc/arch-s390.h
+@@ -9,6 +9,7 @@
+ #include <asm/unistd.h>
  
  #include "compiler.h"
--
--#if   __riscv_xlen == 64
--#define PTRLOG "3"
--#define SZREG  "8"
--#define REG_L  "ld"
--#define REG_S  "sd"
--#elif __riscv_xlen == 32
--#define PTRLOG "2"
--#define SZREG  "4"
--#define REG_L  "lw"
--#define REG_S  "sw"
--#endif
 +#include "crt.h"
  
- /* Syscalls for RISCV :
-  *   - stack is 16-byte aligned
-@@ -153,40 +142,20 @@
- 	_arg1;                                                                \
+ /* Syscalls for s390:
+  *   - registers are 64-bit
+@@ -137,41 +138,14 @@
+ 	_arg1;								\
  })
  
 -char **environ __attribute__((weak));
@@ -93,38 +81,38 @@ index 2b89ea59c5e4..2e3fcf925ae9 100644
  void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
  {
  	__asm__ volatile (
- 		".option push\n"
- 		".option norelax\n"
--		"lla   gp, __global_pointer$\n"
-+		"lla  gp, __global_pointer$\n"
- 		".option pop\n"
- #ifdef _NOLIBC_STACKPROTECTOR
--		"call __stack_chk_init\n"    /* initialize stack protector                          */
-+		"call __stack_chk_init\n" /* initialize stack protector                    */
- #endif
--		REG_L" a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
--		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
--		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
--		"add   a2, a2, "SZREG"\n"    /*             + SZREG (skip null)                     */
--		"add   a2,a2,a1\n"           /*             + argv                                  */
+-		"lg	%r2,0(%r15)\n"		/* argument count */
+-		"la	%r3,8(%r15)\n"		/* argument pointers */
 -
--		"add   a3, a2, zero\n"       /* iterate a3 over envp to find auxv (after NULL)      */
--		"0:\n"                       /* do {                                                */
--		REG_L" a4, 0(a3)\n"          /*   a4 = *a3;                                         */
--		"add   a3, a3, "SZREG"\n"    /*   a3 += sizeof(void*);                              */
--		"bne   a4, zero, 0b\n"       /* } while (a4);                                       */
--		"lui   a4, %hi(_auxv)\n"     /* a4 = &_auxv (high bits)                             */
--		REG_S" a3, %lo(_auxv)(a4)\n" /* store a3 into _auxv                                 */
+-		"xgr	%r0,%r0\n"		/* r0 will be our NULL value */
+-		/* search for envp */
+-		"lgr	%r4,%r3\n"		/* start at argv */
+-		"0:\n"
+-		"clg	%r0,0(%r4)\n"		/* entry zero? */
+-		"la	%r4,8(%r4)\n"		/* advance pointer */
+-		"jnz	0b\n"			/* no -> test next pointer */
+-						/* yes -> r4 now contains start of envp */
+-		"larl	%r1,environ\n"
+-		"stg	%r4,0(%r1)\n"
 -
--		"lui   a3, %hi(environ)\n"   /* a3 = &environ (high bits)                           */
--		REG_S" a2,%lo(environ)(a3)\n"/* store envp(a2) into environ                         */
--		"andi  sp,a1,-16\n"          /* sp must be 16-byte aligned                          */
--		"call  main\n"               /* main() returns the status code, we'll exit with it. */
--		"li a7, 93\n"                /* NR_exit == 93                                       */
--		"ecall\n"
-+		"mv   a0, sp\n"           /* save stack pointer to a0, as arg1 of _start_c */
-+		"andi sp, a0, -16\n"      /* sp must be 16-byte aligned                    */
-+		"call _start_c\n"         /* transfer to c runtime                         */
+-		/* search for auxv */
+-		"lgr	%r5,%r4\n"		/* start at envp */
+-		"1:\n"
+-		"clg	%r0,0(%r5)\n"		/* entry zero? */
+-		"la	%r5,8(%r5)\n"		/* advance pointer */
+-		"jnz	1b\n"			/* no -> test next pointer */
+-		"larl	%r1,_auxv\n"		/* yes -> store value in _auxv */
+-		"stg	%r5,0(%r1)\n"
+-
+-		"aghi	%r15,-160\n"		/* allocate new stackframe */
+-		"xc	0(8,%r15),0(%r15)\n"	/* clear backchain */
+-		"brasl	%r14,main\n"		/* ret value of main is arg to exit */
+-		"lghi	%r1,1\n"		/* __NR_exit */
+-		"svc	0\n"
++		"lgr	%r2, %r15\n"          /* save stack pointer to %r2, as arg1 of _start_c */
++		"aghi	%r15, -160\n"         /* allocate new stackframe                        */
++		"xc	0(8,%r15), 0(%r15)\n" /* clear backchain                                */
++		"brasl	%r14, _start_c\n"     /* transfer to c runtime                          */
  	);
  	__builtin_unreachable();
  }
