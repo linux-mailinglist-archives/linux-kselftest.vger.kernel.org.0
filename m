@@ -2,121 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E59A750BB8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 17:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A5D750CC4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 17:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbjGLPE4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Jul 2023 11:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S233745AbjGLPkq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jul 2023 11:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233076AbjGLPEv (ORCPT
+        with ESMTP id S232314AbjGLPkp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:04:51 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A971BD1;
-        Wed, 12 Jul 2023 08:04:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689174290; x=1720710290;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=aiwddmkP4PvW8dS8z+RC6OFpPF11mDhvLdw3CU4YY8s=;
-  b=TRDcCIW65v7KGOz+n0IyDjkdzhvWLvTb4IvwEulvGffD4zdBWd3oVSlb
-   bWl6dqlDy2TrGijXpX6gJFOzJmMwvl6fx9Hw2gvLoEjc7dXHc42rSsQyA
-   uQnlmFhsvxLj2/rObfBz9sbYMdtH7TOlk8fmCQfI9lF1lhZLmWbW6+PJa
-   /xtmlYTdQp3po/TXA4/X9vWwIo4okGMbJQ+4SbsOuMAmhg2soIFgyu3JO
-   V9+FIrKRDg/aUzxE2nslbH20SpobYFBwayZVU7+ekQpAgEHooPeKN41M1
-   kbL4YmhWuJMQpjhefayhlN9lrILMzrORDVm2Gyj4EXeRXWB43UAkHfIlc
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="354824299"
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="scan'208";a="354824299"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 08:03:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="751192661"
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="scan'208";a="751192661"
-Received: from pmessina-mobl.ger.corp.intel.com (HELO localhost) ([10.252.42.186])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 08:03:02 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        David Gow <davidgow@google.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?utf-8?Q?Ma=C3=ADra?= Canal <mairacanal@riseup.net>,
-        Nikolai Kondrashov <spbnick@gmail.com>,
-        Rae Moar <rmoar@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arthur Grillo <arthurgrillo@riseup.net>,
-        Kees Cook <keescook@chromium.org>,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, mauro.chehab@intel.com
-Subject: Re: [PATCH RFC 2/2] drm: add documentation for drm_buddy_test kUnit
- test
-In-Reply-To: <0e5f68ab045965292fee1748254bf9b91db9039a.1689171160.git.mchehab@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <cover.1689171160.git.mchehab@kernel.org>
- <0e5f68ab045965292fee1748254bf9b91db9039a.1689171160.git.mchehab@kernel.org>
-Date:   Wed, 12 Jul 2023 18:03:00 +0300
-Message-ID: <87cz0xgokb.fsf@intel.com>
+        Wed, 12 Jul 2023 11:40:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5411DC
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 08:40:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 538E96187E
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 15:40:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43149C433AB;
+        Wed, 12 Jul 2023 15:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689176443;
+        bh=wIDy4Ldxd4+i9OmlzEvt7V0TFFLprPKh/f/oN7VNRpA=;
+        h=From:Subject:Date:To:Cc:From;
+        b=Zmi6T9PuOAkXcMaj4y/q7ZMYB0TPRDi3yeMJVZkIZgdSBCd7XDP5ZaRahyyX36/+r
+         HzjOJpcHIS6MktVILdDt1Z55yKPD81cgTTP+Wfej/mCkoEweV5iJ1lb4L8RatbNTpw
+         UbTpMz6BzEtly1/sax2glsyT660UC4ZLjpXwNapyZOs7gxtY0c0A253QNPseWufCUJ
+         DhSvrbZ5TmjD6nfc9cE9dgoQrSsvpWJ4ZMOf+fp97VRlsss75TkCLKulzFTGJa06cT
+         7vipq557FslwVZlcLbSTVRSvj6EL4nx64r/qvksBzC6rCOUvrFw4G2jMNgkCWf061h
+         9kbObCQlubwZQ==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH 0/2] ASoC: Improve coverage in default KUnit runs
+Date:   Wed, 12 Jul 2023 16:40:33 +0100
+Message-Id: <20230712-asoc-topology-kunit-enable-v1-0-b9f2da9dca23@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHHJrmQC/x3MQQqDQAwF0KtI1g1Eiyi9Sulian5tUCYyY0uLe
+ HcHl2/zNspIhky3aqOEr2XzWFBfKhreIY5g02JqpLlKJzWH7AOvvvjs45+nT7SVEcNzBrfoVVt
+ RgXZUgiXhZb8zvz/2/QDV6jRMbAAAAA==
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=790; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=wIDy4Ldxd4+i9OmlzEvt7V0TFFLprPKh/f/oN7VNRpA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkrsl1QS1pmVldcxYi+H70yyCvbUuiQCynvzCI8
+ WRRcADsZ7iJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZK7JdQAKCRAk1otyXVSH
+ 0DYeB/4+v15wF2X9u3d7Re1k35aXLJXk1/VwrntcT3z+BcRpxWaKL5wlKgis7csg/CARvByVGiL
+ x26Fh+UhDFcjxzaibYBZD0WTxNzJFPBsfVif3T5MaIzKUduMwVrF69M1DtVHCBXEO8hW1sHknJ2
+ KQqNce7oyPjjsjo5VXFWQzbNZM+jkHJt2OEIKTZ7IEPqgtAoS994IilDSt59rnC5tU7jm0lQpre
+ OTYerq9VhEViQXvDga0zVxrL+3S50Zp4P1boYWfg8nHKe+B5GqAenKBiboIpwWwRy3i5Qqgc/w/
+ zQGRe8TJcTrpFpq+fDd4Yzvicp3E1qLBbCuo8cSiBCNPqa6d
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 12 Jul 2023, Mauro Carvalho Chehab <mchehab@kernel.org> wrote:
-> diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
-> index 09ee6f6af896..dd6c5afd6cd6 100644
-> --- a/drivers/gpu/drm/tests/drm_buddy_test.c
-> +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-> @@ -737,6 +737,18 @@ static int drm_buddy_suite_init(struct kunit_suite *suite)
->  	return 0;
->  }
->  
-> +/**
-> + * KTEST_SUITE: set of tests for drm buddy alloc
-> + * Scope: drm subsystem
-> + * Mega feature: drm
-> + * Feature: buddy_alloc
-> + *
-> + * KTEST_TEST: drm_test_buddy_alloc_%s
-> + * Description: Run DRM buddy allocation %arg[1] test
-> + *
-> + * arg[1].values: limit, range, optimistic, smoke, pathological
-> + */
-> +
+We have some KUnit tests for ASoC but they're not being run as much as
+they should be since ASoC isn't enabled in the configs used by default
+with KUnit and in the case of the topolofy tests there is no way to
+enable them without enabling drivers that use them.  Let's improve that.
 
-"/**" indicates a kernel-doc comment, and this is not a kernel-doc
-comment.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (2):
+      kunit: Enable ASoC in all_tests.config
+      ASoC: topology: Add explicit build option
 
-$ scripts/kernel-doc -none drivers/gpu/drm/tests/drm_buddy_test.c 
-drivers/gpu/drm/tests/drm_buddy_test.c:752: warning: cannot understand
-function prototype: 'struct kunit_case drm_buddy_tests[] = '
+ sound/soc/Kconfig                            | 11 +++++++++++
+ tools/testing/kunit/configs/all_tests.config |  5 +++++
+ 2 files changed, 16 insertions(+)
+---
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+change-id: 20230701-asoc-topology-kunit-enable-5e8dd50d0ed7
 
-Nowadays kernel-doc is part of W=1 builds.
-
-
-BR,
-Jani.
-
-
->  static struct kunit_case drm_buddy_tests[] = {
->  	KUNIT_CASE(drm_test_buddy_alloc_limit),
->  	KUNIT_CASE(drm_test_buddy_alloc_range),
-
+Best regards,
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Mark Brown <broonie@kernel.org>
+
