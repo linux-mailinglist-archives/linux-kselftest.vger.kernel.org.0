@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920777502C1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 11:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB3E7502EE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 11:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjGLJUG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Jul 2023 05:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        id S231407AbjGLJWm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jul 2023 05:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbjGLJUC (ORCPT
+        with ESMTP id S232190AbjGLJW2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:20:02 -0400
+        Wed, 12 Jul 2023 05:22:28 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C89139;
-        Wed, 12 Jul 2023 02:20:00 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1689153591t4m7hhbh
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D43E5F;
+        Wed, 12 Jul 2023 02:21:44 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1689153656te3bxl5e
 Received: from linux-lab-host.localdomain ( [116.30.126.249])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 12 Jul 2023 17:19:50 +0800 (CST)
+        id ; Wed, 12 Jul 2023 17:20:55 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: uGhnJwy6xZIttFNE7Y1G6BS+94JXqZJfIlXFCaabP2xXLECfQZ3BaGBSMm/IR
-        NGCzIYlWnLkXTYKMoCzHgVtI1SBTHE9zAuWjLHH9wKFzqJuFZHLCr4fL45h4/YMd5ju4dIZ
-        5ABy2E/ms4YpCXYwtpJ+Ri6OwV0W0JZNuRO0p78K1tySDRnhvVYkIerPi5oJ+ZrTErnqtZD
-        ldIr8vumsmcR2TGV09ciofi67DbgZjSLpaOSJqhqwD91vpoDD8AQcnJb91AK6VTO/8oOP4v
-        a1cXAFizdBzZHVJJASYpRXPQslKbYvozXKwNbq20vudoZncGqCqkdlEVf0EkQmbUbyzYODd
-        ECJDStT5M2CNQFnqbjA0OLuScaUJhgbCQPcjyTbZh0MH3OJ7iQFb0giFTpN3w==
+X-QQ-FEAT: f0e3nd0UjDMWyqMb2OvZ3nICQJEiN23es6rzV5wC4cahNSci93zk5avdkN9io
+        q6BYdGJoZRmuMT5rlrQMLsTfYs1JDiRGxLhXm10fh6zUHduZJaJzzdEtPFbZO2sRNnVY/Uf
+        8Skorwq/S+JEevTOwGrg/t8gy1kUoX5xgEbi/iZ+uiG1SnDVRlw5OroSC880NrikfhbX63H
+        w4zF2E/cFDLmhtmGtHgNB6jMVLFmBbcIZL/11fBfv0u3A3oWwXw+n6Xv6ZP87Z0k4MjQdUV
+        qHnx5Qzfeg5RQdshjphvVgMsmNaMXJ6oh04J6bswf9QBTwjTrkRx8j2hcVC8HUQt2ZNFPHr
+        UkhFXblDdj8PllkZNal2brCfOMD9kbgKoDfE18K77we3a08FPPu8rZmNG75hdxty3rf8GWg
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5769694176344349855
+X-BIZMAIL-ID: 2211699565622657830
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v3 04/11] tools/nolibc: aarch64: shrink _start with _start_c
-Date:   Wed, 12 Jul 2023 17:19:50 +0800
-Message-Id: <cf75d6c666fc7110807516e6fa70f706857ab7b4.1689150149.git.falcon@tinylab.org>
+Subject: [PATCH v3 05/11] tools/nolibc: i386: shrink _start with _start_c
+Date:   Wed, 12 Jul 2023 17:20:55 +0800
+Message-Id: <29e5222e81983e46c0dd8c043db66820ed80638b.1689150149.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
 References: <cover.1689150149.git.falcon@tinylab.org>
@@ -55,56 +55,65 @@ move most of the _start operations to _start_c().
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/arch-aarch64.h | 26 +++++---------------------
- 1 file changed, 5 insertions(+), 21 deletions(-)
+ tools/include/nolibc/arch-i386.h | 33 ++++++++------------------------
+ 1 file changed, 8 insertions(+), 25 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
-index 1bf122cd5966..e52fa5a20d71 100644
---- a/tools/include/nolibc/arch-aarch64.h
-+++ b/tools/include/nolibc/arch-aarch64.h
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+index 1d4b683bc2cd..f0d0f5c364b8 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/arch-i386.h
 @@ -8,6 +8,7 @@
- #define _NOLIBC_ARCH_AARCH64_H
+ #define _NOLIBC_ARCH_I386_H
  
  #include "compiler.h"
 +#include "crt.h"
  
- /* Syscalls for AARCH64 :
-  *   - registers are 64-bit
-@@ -143,33 +144,16 @@
- 	_arg1;                                                                \
+ /* Syscalls for i386 :
+  *   - mostly similar to x86_64
+@@ -154,9 +155,6 @@
+ 	_eax;							\
  })
  
 -char **environ __attribute__((weak));
 -const unsigned long *_auxv __attribute__((weak));
 -
  /* startup code */
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ /*
+  * i386 System V ABI mandates:
+@@ -168,29 +166,14 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
  {
  	__asm__ volatile (
  #ifdef _NOLIBC_STACKPROTECTOR
--		"bl __stack_chk_init\n"   /* initialize stack protector                     */
-+		"bl __stack_chk_init\n" /* initialize stack protector                    */
+-		"call __stack_chk_init\n"   /* initialize stack protector                    */
++		"call __stack_chk_init\n" /* initialize stack protector                          */
  #endif
--		"ldr x0, [sp]\n"     /* argc (x0) was in the stack                          */
--		"add x1, sp, 8\n"    /* argv (x1) = sp                                      */
--		"lsl x2, x0, 3\n"    /* envp (x2) = 8*argc ...                              */
--		"add x2, x2, 8\n"    /*           + 8 (skip null)                           */
--		"add x2, x2, x1\n"   /*           + argv                                    */
--		"adrp x3, environ\n"          /* x3 = &environ (high bits)                  */
--		"str x2, [x3, #:lo12:environ]\n" /* store envp into environ                 */
--		"mov x4, x2\n"       /* search for auxv (follows NULL after last env)       */
+-		"pop %eax\n"                /* argc   (first arg, %eax)                      */
+-		"mov %esp, %ebx\n"          /* argv[] (second arg, %ebx)                     */
+-		"lea 4(%ebx,%eax,4),%ecx\n" /* then a NULL then envp (third arg, %ecx)       */
+-		"mov %ecx, environ\n"       /* save environ                                  */
+-		"xor %ebp, %ebp\n"          /* zero the stack frame                          */
+-		"mov %ecx, %edx\n"          /* search for auxv (follows NULL after last env) */
 -		"0:\n"
--		"ldr x5, [x4], 8\n"  /* x5 = *x4; x4 += 8                                   */
--		"cbnz x5, 0b\n"      /* and stop at NULL after last env                     */
--		"adrp x3, _auxv\n"   /* x3 = &_auxv (high bits)                             */
--		"str x4, [x3, #:lo12:_auxv]\n" /* store x4 into _auxv                       */
--		"and sp, x1, -16\n"  /* sp must be 16-byte aligned in the callee            */
--		"bl main\n"          /* main() returns the status code, we'll exit with it. */
--		"mov x8, 93\n"       /* NR_exit == 93                                       */
--		"svc #0\n"
-+		"mov x0, sp\n"          /* save stack pointer to x0, as arg1 of _start_c */
-+		"and sp, x0, -16\n"     /* sp must be 16-byte aligned in the callee      */
-+		"bl  _start_c\n"        /* transfer to c runtime                         */
+-		"add $4, %edx\n"            /* search for auxv using edx, it follows the     */
+-		"cmp -4(%edx), %ebp\n"      /* ... NULL after last env (ebp is zero here)    */
+-		"jnz 0b\n"
+-		"mov %edx, _auxv\n"         /* save it into _auxv                            */
+-		"and $-16, %esp\n"          /* x86 ABI : esp must be 16-byte aligned before  */
+-		"sub $4, %esp\n"            /* the call instruction (args are aligned)       */
+-		"push %ecx\n"               /* push all registers on the stack so that we    */
+-		"push %ebx\n"               /* support both regparm and plain stack modes    */
+-		"push %eax\n"
+-		"call main\n"               /* main() returns the status code in %eax        */
+-		"mov %eax, %ebx\n"          /* retrieve exit code (32-bit int)               */
+-		"movl $1, %eax\n"           /* NR_exit == 1                                  */
+-		"int $0x80\n"               /* exit now                                      */
+-		"hlt\n"                     /* ensure it does not                            */
++		"xor  %ebp, %ebp\n"       /* zero the stack frame                                */
++		"mov  %esp, %eax\n"       /* save stack pointer to %eax, as arg1 of _start_c     */
++		"and  $-16, %esp\n"       /* last pushed argument must be 16-byte aligned        */
++		"push %eax\n"             /* push arg1 on stack to support plain stack modes too */
++		"call _start_c\n"         /* transfer to c runtime                               */
++		"hlt\n"                   /* ensure it does not return                           */
  	);
  	__builtin_unreachable();
  }
