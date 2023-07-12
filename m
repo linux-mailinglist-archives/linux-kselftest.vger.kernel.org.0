@@ -2,123 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042F4750948
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 15:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACC67509EB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 15:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233270AbjGLNMC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Jul 2023 09:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
+        id S233173AbjGLNqy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jul 2023 09:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbjGLNMB (ORCPT
+        with ESMTP id S233130AbjGLNqw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:12:01 -0400
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC1B12F
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 06:11:59 -0700 (PDT)
-Received: by mail-vk1-xa29.google.com with SMTP id 71dfb90a1353d-47e85cffca9so2499131e0c.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 06:11:59 -0700 (PDT)
+        Wed, 12 Jul 2023 09:46:52 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DC219BC;
+        Wed, 12 Jul 2023 06:46:51 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3141c3a7547so7217345f8f.2;
+        Wed, 12 Jul 2023 06:46:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689167518; x=1691759518;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mMTX55rsuAtxs8eoTMF0zmRGfyj0Pb2SnfXciWnbDRk=;
-        b=oODGvdD932AIbLChg31AWvPktzZ4m7FTZ6aQ1gLyUuWlnI3wXkOvvrIbbIi8uCqd6K
-         2DqwWEDw/fQbtPRvLRedVPOOzTHHsf/4HRHxNFxP2Pk6AD3zGU495vP9iEFnx3zwtWlR
-         2U9wGjnFkQAVowaGRwGExOWZmczAT6UqND7v5XIqWbDiLIB4+pd1kEjNyEUPRXB2t+cd
-         KSbQccVpwUXW9MgFExadDhAfNc6PtxFhlmkd9Qf3Xr8zxwO/yEbyTLdJSY2y1F+sI6hw
-         OZ0Z6hSly9/ApfbBL7ai06kUQFpp3+K3Qd325h0IqPNZ3Q4h3cKxEYPBZU3Hr9g2pzfX
-         0XEA==
+        d=gmail.com; s=20221208; t=1689169610; x=1691761610;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GrULn3erFwU+XaUY+RvPSd25FEdfChxFqzk38hJNgVA=;
+        b=cRRpQ8cUsltI+oRXJ2bAVSmeDXGxx/qCxmtsM0YPOqLSbJeeVsyHmq0fMP/AIg0358
+         HYxONQolujXyBBMUMPwlXQbZ07TxJJiHDmO5H89Z3urLiI3YnToMGd+BEOMvgGhoE9gk
+         3im4y2XLqKIpdAmvDgfqOnfg6fuZ/MQev3d/w8Q81xm+lHaUOzGShTo+4NA8CJACnc8N
+         x7EfRc6ahzTyX9YLXXrWf2wACaTv/N1mb2mBPzv3hhoabGe6J7318kYkNc3qDo678Kbt
+         fOon06R2RGR9QyqoHk+yOu7w+MqFMqMhSx1asAeBbU9wsmlXzFuyIwOGFXe4blEu8Zh4
+         TVnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689167518; x=1691759518;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1689169610; x=1691761610;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mMTX55rsuAtxs8eoTMF0zmRGfyj0Pb2SnfXciWnbDRk=;
-        b=QIVprm32zOA9+2cRXbu4WFBHslXZ6co7ARiRWLHBz1CxZNqbom7QPF/yxiHIManD/n
-         XEGEg4mKc+9xl0IZ0pNZU4alsvr+/SZc+SfzmfPl0jiz1AjsBbRbh6CKzUwGha3UujIX
-         LCu0P2O0XAhLeyUEYr3zNUs6m8br7UjLivFvEX3Q5Km3PrnHlm7CMNfikKaYR/pkJ2Lr
-         m3MFwKIIcCY3nTFqL/ou6mQMX50OnK6w4HmGhsd+nr+dxymZCqw5oTAklfF3hQxAs9yh
-         T/1ST/FvLa8/BmbhXJNWCJBKBkuFuA1Q93svxMmQ3rRdvLxHFIuQhlKyJM8ryHAQ8ePt
-         +Z2Q==
-X-Gm-Message-State: ABy/qLa+bZoU3qyoQXvAKrbEjz0qybVJWQnt8pihv5UWeYRquebcvnWK
-        a9BBUr8GEGVMpkSUHO1MD0WMOA+yZynaxEf4B0xarA==
-X-Google-Smtp-Source: APBJJlHszP/BzjPgRktgE9ZmebvyBVKr6pfvWwTZjRe8dSb5sh4qROzT6nYqpk/0QxLKUnz2CT1ElQ7dwOmGZ7kEQMc=
-X-Received: by 2002:a1f:3fd0:0:b0:481:2ff5:c9a9 with SMTP id
- m199-20020a1f3fd0000000b004812ff5c9a9mr938260vka.13.1689167518233; Wed, 12
- Jul 2023 06:11:58 -0700 (PDT)
+        bh=GrULn3erFwU+XaUY+RvPSd25FEdfChxFqzk38hJNgVA=;
+        b=CSXUxj7oagQ4EkijBuehXWIa3Q64H/Txpxkl4VA3ZdA3uwjcJSd8+mlmwVKUxR5lWT
+         AtcvLp+xIheTOGmxDm/2yCvnRvNuHcQ1jTqyoFpsCOvfndoGBp3Jy94XBoPNjcJp0F/D
+         uc25ip/MeYRpEVHFcYpt2i+RPLWNjxBJYc/ZT3g5BUq8o3drnQgxYwxKKkdrslymrYzt
+         jGLKxEX/QVyYNuwfHOCKfv5ev1saAMtHuTyhdjOvJOHCbNx5PuQJpKktdY+RHmu6TrJj
+         85uEU/9pO2mWDY/q65bh5sMKeDatar6yFDInqWRTzT6PvbYinVFZSm6n5QFcOP0odo/w
+         ls6Q==
+X-Gm-Message-State: ABy/qLYChgCgHFPgfT5TQkj6XvRe64y+iZF1geg7G6bMFRpa4BbYbx9v
+        jbHQQg6LuLBxXllCWr35QNM=
+X-Google-Smtp-Source: APBJJlFZICy2vhMZpUxSaUh1uacPscbsSMw0Z2O/QOnBWI+UPLZ2HtVR5p0wQLU9wYLiQlW4YtiJPQ==
+X-Received: by 2002:adf:e0c7:0:b0:313:f862:6e3e with SMTP id m7-20020adfe0c7000000b00313f8626e3emr18227576wri.40.1689169609614;
+        Wed, 12 Jul 2023 06:46:49 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id y18-20020adffa52000000b00313f031876esm5161583wrr.43.2023.07.12.06.46.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 06:46:49 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests/mm: mkdirty: Fix incorrect position of #endif
+Date:   Wed, 12 Jul 2023 14:46:48 +0100
+Message-Id: <20230712134648.456349-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230709203826.141774942@linuxfoundation.org> <CA+G9fYtEr-=GbcXNDYo3XOkwR+uYgehVoDjsP0pFLUpZ_AZcyg@mail.gmail.com>
- <20230711201506.25cc464d@kernel.org> <ZK5k7YnVA39sSXOv@duo.ucw.cz>
-In-Reply-To: <ZK5k7YnVA39sSXOv@duo.ucw.cz>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 12 Jul 2023 18:41:46 +0530
-Message-ID: <CA+G9fYvEJgcNhvJk6pvdQOkaS_+x105ZgSM1BVvYy0RRW+1TvA@mail.gmail.com>
-Subject: Re: [PATCH 6.4 0/6] 6.4.3-rc2 review
-To:     Jakub Kicinski <kuba@kernel.org>, Netdev <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        conor@kernel.org, Qingfang DENG <qingfang.deng@siflower.com.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>,
-        Masahide NAKAMURA <nakam@linux-ipv6.org>,
-        Ville Nuorvala <vnuorval@tcs.hut.fi>,
-        Arnd Bergmann <arnd@arndb.de>, Pavel Machek <pavel@denx.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 12 Jul 2023 at 14:01, Pavel Machek <pavel@denx.de> wrote:
->
-> Hi!
->
-> > >   git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-> > >   git_sha: 3e37df3ffd9a648c9f88f6bbca158e43d5077bef
-> >
-> > I can't find this sha :( Please report back if you can still repro this
-> > and how we get get the relevant code
->
-> That sha seems to be:
->
-> commit 3e37df3ffd9a648c9f88f6bbca158e43d5077bef
-> Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Date:   Sun Jul 9 22:38:22 2023 +0200
->
->     Linux 6.4.3-rc2
+The #endif is the wrong side of a } causing a build failure when
+__NR_userfaultfd is not defined. Fix this by moving the #end to
+enclose the }
 
-That is the commit id from stable-rc tree.
+Fixes: 9eac40fc0cc7 ("selftests/mm: mkdirty: test behavior of (pte|pmd)_mkdirty on VMAs without write permissions")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/mm/mkdirty.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I have re-tested the reported issues multiple times and
-it seems that it is intermittently reproducible.
-Following list of links shows kernel crashes while testing
-selftest net pmtu.sh
+diff --git a/tools/testing/selftests/mm/mkdirty.c b/tools/testing/selftests/mm/mkdirty.c
+index 6d71d972997b..301abb99e027 100644
+--- a/tools/testing/selftests/mm/mkdirty.c
++++ b/tools/testing/selftests/mm/mkdirty.c
+@@ -321,8 +321,8 @@ static void test_uffdio_copy(void)
+ munmap:
+ 	munmap(dst, pagesize);
+ 	free(src);
+-#endif /* __NR_userfaultfd */
+ }
++#endif /* __NR_userfaultfd */
+ 
+ int main(void)
+ {
+-- 
+2.39.2
 
-1)
-Unable to handle kernel paging request at virtual address
-https://lkft.validation.linaro.org/scheduler/job/6579624#L4648
-
-
-2)
-include/net/neighbour.h:302 suspicious rcu_dereference_check() usage!
-
-https://lkft.validation.linaro.org/scheduler/job/6579625#L7500
-https://lkft.validation.linaro.org/scheduler/job/6579626#L7509
-https://lkft.validation.linaro.org/scheduler/job/6579622#L7537
-https://lkft.validation.linaro.org/scheduler/job/6579623#L7469
-
-- Naresh
