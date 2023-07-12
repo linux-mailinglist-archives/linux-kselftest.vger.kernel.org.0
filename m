@@ -2,63 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1837500CF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 10:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC16C7501AB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 10:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbjGLIJv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Jul 2023 04:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
+        id S232697AbjGLIfR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jul 2023 04:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjGLIJt (ORCPT
+        with ESMTP id S232748AbjGLIe6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:09:49 -0400
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC16D1989
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 01:09:47 -0700 (PDT)
-Received: by mail.lokoho.com (Postfix, from userid 1002)
-        id 8DA6288819; Wed, 12 Jul 2023 10:06:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1689149215; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=WzT2SlLglzxXuUx6I1OjxCV4sf8l0w3vSIIX1iaoPznzBk782XKKzxOJRjSPhraYn
-         ZfH7bmbrGdEOXT8HicIyp8NSMKwizJLyQFemxH2k5dh444tYPFKnvfKs3Z1oc7HE8B
-         Hu47h2SQVmK1o0Ksh/TyJwD7Z0wbOlHlXEjOi1N5u2dqMqd75C742Jo1niTeO85kIV
-         0yqppoKT7YxRTibtnKsdIt8I0a9A6dSrB3W/jPPEiduVdF5bpgMCOScS4uzqHfDOH3
-         LSjchwLIgq1A2BXLPuT8J/616Tmt53yj0hkwxbk/8KBa8qdSXnBw3y/is4QsvYQ5W1
-         EQUv5OOrUOoNQ==
-Received: by mail.lokoho.com for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 08:05:10 GMT
-Message-ID: <20230712084501-0.1.9.2jsp.0.3v5742of7a@lokoho.com>
-Date:   Wed, 12 Jul 2023 08:05:10 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-kselftest@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        Wed, 12 Jul 2023 04:34:58 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139A649DF;
+        Wed, 12 Jul 2023 01:31:43 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id E2B8D1C0D20; Wed, 12 Jul 2023 10:31:41 +0200 (CEST)
+Date:   Wed, 12 Jul 2023 10:31:41 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org, Qingfang DENG <qingfang.deng@siflower.com.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>,
+        Masahide NAKAMURA <nakam@linux-ipv6.org>,
+        Ville Nuorvala <vnuorval@tcs.hut.fi>,
+        Netdev <netdev@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 6.4 0/6] 6.4.3-rc2 review
+Message-ID: <ZK5k7YnVA39sSXOv@duo.ucw.cz>
+References: <20230709203826.141774942@linuxfoundation.org>
+ <CA+G9fYtEr-=GbcXNDYo3XOkwR+uYgehVoDjsP0pFLUpZ_AZcyg@mail.gmail.com>
+ <20230711201506.25cc464d@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="qQR1/1cW9OcS5FMZ"
+Content-Disposition: inline
+In-Reply-To: <20230711201506.25cc464d@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dzie=C5=84 dobry,
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+--qQR1/1cW9OcS5FMZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+Hi!
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+> >   git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-=
+rc
+> >   git_sha: 3e37df3ffd9a648c9f88f6bbca158e43d5077bef
+>=20
+> I can't find this sha :( Please report back if you can still repro this
+> and how we get get the relevant code
 
+That sha seems to be:
 
-Pozdrawiam
-Adam Charachuta
+commit 3e37df3ffd9a648c9f88f6bbca158e43d5077bef
+Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Sun Jul 9 22:38:22 2023 +0200
+
+    Linux 6.4.3-rc2
+
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,        Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--qQR1/1cW9OcS5FMZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZK5k7QAKCRAw5/Bqldv6
+8gxrAKC0sRGnPwvEXzxK6ANn6c7JfCq4iwCfQSl6TCDucoiD+CImzIBUPHQlBw8=
+=jygc
+-----END PGP SIGNATURE-----
+
+--qQR1/1cW9OcS5FMZ--
