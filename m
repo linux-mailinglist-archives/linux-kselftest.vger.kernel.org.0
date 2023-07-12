@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE817502F9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 11:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5CF7502FB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jul 2023 11:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbjGLJYM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Jul 2023 05:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S231887AbjGLJYq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jul 2023 05:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbjGLJX6 (ORCPT
+        with ESMTP id S232475AbjGLJYm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:23:58 -0400
+        Wed, 12 Jul 2023 05:24:42 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C5519A7;
-        Wed, 12 Jul 2023 02:23:36 -0700 (PDT)
-X-QQ-mid: bizesmtp81t1689153787ta408fla
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508741995;
+        Wed, 12 Jul 2023 02:24:21 -0700 (PDT)
+X-QQ-mid: bizesmtp74t1689153852t7x4q3lf
 Received: from linux-lab-host.localdomain ( [116.30.126.249])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 12 Jul 2023 17:23:05 +0800 (CST)
+        id ; Wed, 12 Jul 2023 17:24:11 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 239gR2IZrlvYgW4Z4Y00+uFld0r6zVlb6HKvXNeighaOY+7tVJQt96XqmH/mk
-        sYLWUoLD6gE+zFqzo7zSHQh6qE6Pg6q/MZliaTZ3tN0ZBAQv+Sd25QUu9CkLQqjlzjO4iBL
-        AwWjEf4FgSGRtVRSarzqA9PqIsKjX5M2H7TX7DKbz5gVxJ4fqq45DqQWiV/WEOPxODqf2hP
-        B+ssXhUMVmgfP64JPBLhYN0L33/lQoM7WRuCpdxOAWUjKue+gDeoNB2XytT/4KPt/JNHbxY
-        x9ultFO9qk848rTdoYdz2Ykhx1IywSNwk7mH/Q1vWUQgHtFmoQaZy6v+S7Bd5TdrLiWQVT8
-        g9DtCugDJoXSAYyYX+6wTLa3c1zreP5gOxVsqi8Uits20diOA61dS6O2ESgsA==
+X-QQ-FEAT: 7jw2iSiCazrYV30tqA3rE/xk9YB446MUEUfOtIQC4wAExzPRDbLzHgqE9b1Zm
+        I2p1W+qGWca7sApfHy5SvhFkO0VunsETK7Kh6N1KjRgGEML/roQB+/F3p2X5KQi+yZ6I6pn
+        VDhAESpTzlhYjfrbcCTKuk4qQFv7NakQVLs4DfRuKxJh94TpZ7f/Kfze+ix2Xvs3jwywbGh
+        f86pV5ZP07NUwLipz5WQ1YsOO/PAZ0TTVe3dRXV30dTX+lpkzmsAHxwlV9K+XTzy7sTPCSm
+        wqpSMKNNifEA6EKAOzW318c5AIxixFcA2fUwQcFlp16BhrNTYFL+oUyy85nhbLZ/4ptyTw9
+        hPYb/Sy2GUraSshYqx8VlvVnSuSoesUATEcQTFy1SUGVO/JwtkBoFZJkkUM5A==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9583563646986004817
+X-BIZMAIL-ID: 17383144857410459709
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v3 07/11] tools/nolibc: mips: shrink _start with _start_c
-Date:   Wed, 12 Jul 2023 17:23:05 +0800
-Message-Id: <d769c0a075b9e13b283ee682213f9a7dd8462f41.1689150149.git.falcon@tinylab.org>
+Subject: [PATCH v3 08/11] tools/nolibc: loongarch: shrink _start with _start_c
+Date:   Wed, 12 Jul 2023 17:24:10 +0800
+Message-Id: <d2d15e849bbbd554746a2fcd2af4174d20ec2d63.1689150149.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
 References: <cover.1689150149.git.falcon@tinylab.org>
@@ -53,85 +53,84 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 move most of the _start operations to _start_c().
 
-Also clean up the instructions in delayed slots.
-
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/arch-mips.h | 46 +++++++-------------------------
- 1 file changed, 10 insertions(+), 36 deletions(-)
+ tools/include/nolibc/arch-loongarch.h | 43 ++++-----------------------
+ 1 file changed, 5 insertions(+), 38 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index ae40d5268793..b1c070c5b24a 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
+diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
+index 8aa7724fe38e..9db70d6f2c31 100644
+--- a/tools/include/nolibc/arch-loongarch.h
++++ b/tools/include/nolibc/arch-loongarch.h
 @@ -8,6 +8,7 @@
- #define _NOLIBC_ARCH_MIPS_H
+ #define _NOLIBC_ARCH_LOONGARCH_H
  
  #include "compiler.h"
 +#include "crt.h"
  
- /* Syscalls for MIPS ABI O32 :
-  *   - WARNING! there's always a delayed slot!
-@@ -173,50 +174,23 @@
- 	_arg4 ? -_num : _num;                                                 \
+ /* Syscalls for LoongArch :
+  *   - stack is 16-byte aligned
+@@ -143,26 +144,9 @@
+ 	_arg1;                                                                \
  })
  
 -char **environ __attribute__((weak));
 -const unsigned long *_auxv __attribute__((weak));
 -
- /* startup code, note that it's called __start on MIPS */
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector __start(void)
+ #if __loongarch_grlen == 32
+-#define LONGLOG      "2"
+-#define SZREG        "4"
+-#define REG_L        "ld.w"
+-#define LONG_S       "st.w"
+-#define LONG_ADD     "add.w"
+-#define LONG_ADDI    "addi.w"
+-#define LONG_SLL     "slli.w"
+ #define LONG_BSTRINS "bstrins.w"
+ #else /* __loongarch_grlen == 64 */
+-#define LONGLOG      "3"
+-#define SZREG        "8"
+-#define REG_L        "ld.d"
+-#define LONG_S       "st.d"
+-#define LONG_ADD     "add.d"
+-#define LONG_ADDI    "addi.d"
+-#define LONG_SLL     "slli.d"
+ #define LONG_BSTRINS "bstrins.d"
+ #endif
+ 
+@@ -171,28 +155,11 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
  {
  	__asm__ volatile (
--		/*".set nomips16\n"*/
- 		".set push\n"
--		".set    noreorder\n"
-+		".set noreorder\n"
- 		".option pic0\n"
  #ifdef _NOLIBC_STACKPROTECTOR
--		"jal __stack_chk_init\n" /* initialize stack protector                         */
--		"nop\n"                  /* delayed slot                                       */
-+		"jal __stack_chk_init\n" /* initialize stack protector                     */
-+		" nop\n"                 /* delayed slot                                   */
+-		"bl __stack_chk_init\n"               /* initialize stack protector                          */
++		"bl __stack_chk_init\n"            /* initialize stack protector                     */
  #endif
--		/*".ent __start\n"*/
--		/*"__start:\n"*/
--		"lw $a0,($sp)\n"        /* argc was in the stack                               */
--		"addiu  $a1, $sp, 4\n"  /* argv = sp + 4                                       */
--		"sll $a2, $a0, 2\n"     /* a2 = argc * 4                                       */
--		"add   $a2, $a2, $a1\n" /* envp = argv + 4*argc ...                            */
--		"addiu $a2, $a2, 4\n"   /*        ... + 4                                      */
--		"lui $a3, %hi(environ)\n"     /* load environ into a3 (hi)                     */
--		"addiu $a3, %lo(environ)\n"   /* load environ into a3 (lo)                     */
--		"sw $a2,($a3)\n"              /* store envp(a2) into environ                   */
+-		REG_L        " $a0, $sp, 0\n"         /* argc (a0) was in the stack                          */
+-		LONG_ADDI    " $a1, $sp, "SZREG"\n"   /* argv (a1) = sp + SZREG                              */
+-		LONG_SLL     " $a2, $a0, "LONGLOG"\n" /* envp (a2) = SZREG*argc ...                          */
+-		LONG_ADDI    " $a2, $a2, "SZREG"\n"   /*             + SZREG (skip null)                     */
+-		LONG_ADD     " $a2, $a2, $a1\n"       /*             + argv                                  */
 -
--		"move $t0, $a2\n"             /* iterate t0 over envp, look for NULL           */
--		"0:"                          /* do {                                          */
--		"lw $a3, ($t0)\n"             /*   a3=*(t0);                                   */
--		"bne $a3, $0, 0b\n"           /* } while (a3);                                 */
--		"addiu $t0, $t0, 4\n"         /* delayed slot: t0+=4;                          */
--		"lui $a3, %hi(_auxv)\n"       /* load _auxv into a3 (hi)                       */
--		"addiu $a3, %lo(_auxv)\n"     /* load _auxv into a3 (lo)                       */
--		"sw $t0, ($a3)\n"             /* store t0 into _auxv                           */
+-		"move          $a3, $a2\n"            /* iterate a3 over envp to find auxv (after NULL)      */
+-		"0:\n"                                /* do {                                                */
+-		REG_L        " $a4, $a3, 0\n"         /*   a4 = *a3;                                         */
+-		LONG_ADDI    " $a3, $a3, "SZREG"\n"   /*   a3 += sizeof(void*);                              */
+-		"bne           $a4, $zero, 0b\n"      /* } while (a4);                                       */
+-		"la.pcrel      $a4, _auxv\n"          /* a4 = &_auxv                                         */
+-		LONG_S       " $a3, $a4, 0\n"         /* store a3 into _auxv                                 */
 -
--		"li $t0, -8\n"
--		"and $sp, $sp, $t0\n"   /* sp must be 8-byte aligned                           */
--		"addiu $sp,$sp,-16\n"   /* the callee expects to save a0..a3 there!            */
--		"jal main\n"            /* main() returns the status code, we'll exit with it. */
--		"nop\n"                 /* delayed slot                                        */
--		"move $a0, $v0\n"       /* retrieve 32-bit exit code from v0                   */
--		"li $v0, 4001\n"        /* NR_exit == 4001                                     */
--		"syscall\n"
--		/*".end __start\n"*/
-+		"move  $a0, $sp\n"       /* save stack pointer to $a0, as arg1 of _start_c */
-+		"li    $t0, -8\n"
-+		"and   $sp, $sp, $t0\n"  /* $sp must be 8-byte aligned                     */
-+		"addiu $sp, $sp, -16\n"  /* the callee expects to save a0..a3 there        */
-+		"jal   _start_c\n"       /* transfer to c runtime                          */
-+		" nop\n"                 /* delayed slot                                   */
- 		".set pop\n"
+-		"la.pcrel      $a3, environ\n"        /* a3 = &environ                                       */
+-		LONG_S       " $a2, $a3, 0\n"         /* store envp(a2) into environ                         */
+-		LONG_BSTRINS " $sp, $zero, 3, 0\n"    /* sp must be 16-byte aligned                          */
+-		"bl            main\n"                /* main() returns the status code, we'll exit with it. */
+-		"li.w          $a7, 93\n"             /* NR_exit == 93                                       */
+-		"syscall       0\n"
++		"move          $a0, $sp\n"         /* save stack pointer to $a0, as arg1 of _start_c */
++		LONG_BSTRINS " $sp, $zero, 3, 0\n" /* $sp must be 16-byte aligned                    */
++		"bl            _start_c\n"         /* transfer to c runtime                          */
  	);
  	__builtin_unreachable();
+ }
 -- 
 2.25.1
+
 
