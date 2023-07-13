@@ -2,66 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A21751741
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 06:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE665751745
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 06:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232553AbjGMESH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 00:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S233096AbjGMET3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 00:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbjGMESG (ORCPT
+        with ESMTP id S233500AbjGMET2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 00:18:06 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEAF19BE
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:18:05 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51e24210395so7919a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:18:05 -0700 (PDT)
+        Thu, 13 Jul 2023 00:19:28 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8EF210A
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:19:26 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fbd200d354so25055e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689221883; x=1691813883;
+        d=google.com; s=20221208; t=1689221964; x=1691813964;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UxHyBln4ogxOOlFEwoM2ylcGD+jdPv+WdcKTjorv1HE=;
-        b=WAsawoTmEjaQKCKLIfCptJkRrwfgbXqkKmeiCUK19N4ZIWcK6bC3g21E7bd+9h3Y2y
-         55SK4fOWt+EnYezucanyHNmtfQdwMxF+ywpyWhpaJKRpcm8iCVSpPp788DTpO1OTJ2Qe
-         1CJip3NeTb68mF6djxM7Cx9hEAi47EoV3A18eIEgzZDjaYtAJ95PxG+/JGwGXeXhx7zW
-         WGLAQtDppUNasPuTAiKMes373VqSLD0xpOBQXsSUcvLv/7KMpEqIu3yi4H901jdFKGf+
-         3mem7S10+vMuncFZef3IwxW9UeXtZ6B1zKtSMYnUkICGA/ccPpVADZwKzHjVvzjFjWY4
-         pboA==
+        bh=NpFmmZXnUkrV6Tw60Xv/tIlw5peNjjKq4tce/3bIq0A=;
+        b=ivdJOxRiIpqSC0QjFHIH/fyDLwmWpmfIr73VTBr5B96oZZbZuoBkSNneu6KWSBtbte
+         svTMGqqKIuEeiGHM25mpBedt0FcjM5/8jqjJLY9sspn+ISdAzbbIeZUMAo8kHIw5PGD/
+         NUngdvVoQJG4ubB7xx3mqVHaAi0Mf4sKSbRASQITjIixRBGv+G10BSMh6DtQtqOgbQUx
+         OTJFLe8+xLFs53I+j4i170iDpJbfrRCJqHq2KTKhvRaOfoV5V7R/9dCMT2trfj6OE0AC
+         y9wqf8wFcRucENq7h+L3rv37XmURHOcuIsZO5Pnq/9BQb21rKINhgtWeqDmCUriDlOJy
+         nGcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689221883; x=1691813883;
+        d=1e100.net; s=20221208; t=1689221964; x=1691813964;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UxHyBln4ogxOOlFEwoM2ylcGD+jdPv+WdcKTjorv1HE=;
-        b=aI0IhgF0wB8eQW0xnizsokKsDb459YEmYg2S5GtW2SVyjeK6gkx5tiYaXi7m3IeTGq
-         5t8m7ZP3lR7XQF3RlIgQmPwR5yOlCtD9f0J08/9bARJt+o+pbjr/1pL4nO7xacSZnxsq
-         UXQ6ecmXNHeGiijv0HK/aM9bG9ACrzAbKQmlJhIm5WIlxJGCIjsxLv6MLMHZ0jh2VOR/
-         u1n81p6cTIj0YQ9SYlucLvS6Gax4SuvvqkMQl1J5gKzWPGcqkeYhCaFY847g2XkhKC4S
-         MO6LFToC6m/exAnqUT0E+G0KLwuNu2gy6O9FUuLfsqB9RSrViAsYs2erjBtn5Vty9ju0
-         GHKQ==
-X-Gm-Message-State: ABy/qLa8jKy1Y5MM9oQbX/AZhQlMPmmlNcv9STx3x2OmTsdb4JgXQNKg
-        fq3BMLFFI9lX03u3ii9Y5fzGMlchhAycHE8AF1C+Yw==
-X-Google-Smtp-Source: APBJJlFfExe8G13ZlB8gnjM3mSBkA7p1atxW5Jhf4upMxlHzNOtlQPwz8FkvYpMRiMmiJ5oUOpQJTw6tfNSLHK28hFY=
-X-Received: by 2002:a50:8a9c:0:b0:51a:1ffd:10e with SMTP id
- j28-20020a508a9c000000b0051a1ffd010emr190568edj.3.1689221883430; Wed, 12 Jul
- 2023 21:18:03 -0700 (PDT)
+        bh=NpFmmZXnUkrV6Tw60Xv/tIlw5peNjjKq4tce/3bIq0A=;
+        b=P9kkyb2a3uVmxLO2gDXa3wNwJvlNjqSHm+DPt9CacQPVeVGD3AZO606FJgvSCoFGuS
+         YOcG7fcOHOOMO4Mg5c6c/RLO93pHM0lfRMLw0sSbuHN6Birkao0qPUEeY9s/iqB4m75y
+         QYkRcgJwSI32Oyv3J5Ha4vWD9Bp7RWksYU4GLBLb/uIFzorRKuQocEYlB5jW1WyVBvJD
+         zSoZKXtkb71nQx5Bw3wWfHl7UDM9nO6lrBTTqlPu5iYNoUbiem6EjLHG5zZuewbSR2hw
+         IXpLL2bedskC/BZc1B/jf7IJ1Bxh+MwJdSdebE9tgfHrVNC8UuL+WxrfBfyhfETZKMo7
+         vSvQ==
+X-Gm-Message-State: ABy/qLZUX8kV24aKVp9vpNhXWPjkehzBD68Xc3YVzmbJFC/sm1D/3qtW
+        d2aMX5B8pXe9tu9V837pVJRCbr+vj8b7KmY8gR5d7w==
+X-Google-Smtp-Source: APBJJlG8UukMR1HkImzXbcEkRF7OfPIrYFOYQlJZXXefzpFZNG4EQocQtX1CydXvUgWsLZXDV2M1SWp7NCNGZPSngBA=
+X-Received: by 2002:a05:600c:1d02:b0:3f1:70d1:21a6 with SMTP id
+ l2-20020a05600c1d0200b003f170d121a6mr191188wms.0.1689221964642; Wed, 12 Jul
+ 2023 21:19:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230712-regmap-kunit-enable-v1-1-13e296bd0204@kernel.org>
-In-Reply-To: <20230712-regmap-kunit-enable-v1-1-13e296bd0204@kernel.org>
+References: <20230712-asoc-topology-kunit-enable-v1-0-b9f2da9dca23@kernel.org> <20230712-asoc-topology-kunit-enable-v1-1-b9f2da9dca23@kernel.org>
+In-Reply-To: <20230712-asoc-topology-kunit-enable-v1-1-b9f2da9dca23@kernel.org>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 13 Jul 2023 12:17:50 +0800
-Message-ID: <CABVgOSkzui0e_1LhrMAeJG1RMFqyq472XNHod0tS452mUg2m+g@mail.gmail.com>
-Subject: Re: [PATCH] regmap: Provide user selectable option to enable regmap
+Date:   Thu, 13 Jul 2023 12:19:13 +0800
+Message-ID: <CABVgOSku9p34jgHk6-L4KD1dVAKuX06tFqTM2QL0zA8t+Rdotg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: Enable ASoC in all_tests.config
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000005701b90600569eea"
+        boundary="0000000000002b6e65060056a344"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,86 +72,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000005701b90600569eea
+--0000000000002b6e65060056a344
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 12 Jul 2023 at 07:22, Mark Brown <broonie@kernel.org> wrote:
+On Wed, 12 Jul 2023 at 23:40, Mark Brown <broonie@kernel.org> wrote:
 >
-> Since apparently enabling all the KUnit tests shouldn't enable any new
-> subsystems it is hard to enable the regmap KUnit tests in normal KUnit
-> testing scenarios that don't enable any drivers.  Add a Kconfig option
-> to help with this and include it in the KUnit all tests config.
+> There are KUnit tests for some of the ASoC utility functions which are
+> not enabled in the KUnit all_tests.config, do so.
 >
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
 
-Thanks: I wasn't totally convinced of the extra CONFIG_REGMAP_BUILD
-option at first, but having thought about it some more (and seen the
-ASoC topology one, which has always annoyed me for being a pain to
-enable), I've come around.
+While I love the idea of this, it breaks the default UML --alltests
+build, as all of ALSA is behind an "if !UML".
 
-Reviewed-by: David Gow <davidgow@google.com>
+I think that's a dealbreaker for this change as-is, which leaves us
+with a few options:
+1. Don't include this in --alltests, but provide a separate
+kunitconfig to run it. Not ideal, but simplest.
+2. Make ALSA build with UML. Just removing the "if !UML" makes this
+work, but I imagine would uncover a lot of other issues.
+3. Change the way --alltests works to allow for UML-only / non-UML /
+architecture-specific options.
+
+I suspect the ultimately ideal option would be a bit of all three, but
+I'd be happy with any of them in the meantime.
+
+ALSA folks, how horrifying a prospect is removing the "if !UML"
+everywhere? If it's not trivial, how do we feel about adding
+"sound/soc/.kunitconfig" containing these tests?
+
+On the KUnit side, we can look into adding 'all_tests_nonuml.config"
+or something as a workaround.
 
 Cheers,
 -- David
 
->  drivers/base/regmap/Kconfig                  | 12 +++++++++++-
->  tools/testing/kunit/configs/all_tests.config |  2 ++
->  2 files changed, 13 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/regmap/Kconfig b/drivers/base/regmap/Kconfig
-> index 0db2021f7477..b1affac70d5d 100644
-> --- a/drivers/base/regmap/Kconfig
-> +++ b/drivers/base/regmap/Kconfig
-> @@ -4,7 +4,7 @@
->  # subsystems should select the appropriate symbols.
->
->  config REGMAP
-> -       bool "Register Map support" if KUNIT_ALL_TESTS
-> +       bool
->         default y if (REGMAP_I2C || REGMAP_SPI || REGMAP_SPMI || REGMAP_W1 || REGMAP_AC97 || REGMAP_MMIO || REGMAP_IRQ || REGMAP_SOUNDWIRE || REGMAP_SOUNDWIRE_MBQ || REGMAP_SCCB || REGMAP_I3C || REGMAP_SPI_AVMM || REGMAP_MDIO || REGMAP_FSI)
->         select IRQ_DOMAIN if REGMAP_IRQ
->         select MDIO_BUS if REGMAP_MDIO
-> @@ -23,6 +23,16 @@ config REGMAP_KUNIT
->         default KUNIT_ALL_TESTS
->         select REGMAP_RAM
->
-> +config REGMAP_BUILD
-> +       bool "Enable regmap build"
-> +       depends on KUNIT
-> +       select REGMAP
-> +       help
-> +         This option exists purely to allow the regmap KUnit tests to
-> +         be enabled without having to enable some driver that uses
-> +         regmap due to unfortunate issues with how KUnit tests are
-> +         normally enabled.
-> +
->  config REGMAP_AC97
->         tristate
+
+>  tools/testing/kunit/configs/all_tests.config | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
 > diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
-> index 0393940c706a..873f3e06ccad 100644
+> index 0393940c706a..13d15bc693fb 100644
 > --- a/tools/testing/kunit/configs/all_tests.config
 > +++ b/tools/testing/kunit/configs/all_tests.config
-> @@ -33,5 +33,7 @@ CONFIG_DAMON_PADDR=y
->  CONFIG_DEBUG_FS=y
->  CONFIG_DAMON_DBGFS=y
+> @@ -35,3 +35,7 @@ CONFIG_DAMON_DBGFS=y
 >
-> +CONFIG_REGMAP_BUILD=y
-> +
 >  CONFIG_SECURITY=y
 >  CONFIG_SECURITY_APPARMOR=y
+> +
+> +CONFIG_SOUND=y
+> +CONFIG_SND=y
+> +CONFIG_SND_SOC=y
 >
-> ---
-> base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-> change-id: 20230701-regmap-kunit-enable-a08718e77dd4
->
-> Best regards,
 > --
-> Mark Brown <broonie@kernel.org>
+> 2.39.2
 >
 
---0000000000005701b90600569eea
+--0000000000002b6e65060056a344
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -216,14 +196,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD9
-wrwVthY0C9S0YJ3hYy9opnPigKNPhNBlaORts7fapzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTMwNDE4MDNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAu
+tx8aDPN8+YBXmqT2vQyl72DLEGC1CusXm85sTsLYOzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTMwNDE5MjRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAC7kb++0HobZNLkNwM1pZ
-1zI4kk4LLEaxv73pRDkVMZojMtZjvsRphm1M8p3DirKe1w9pf1UpHkG/H5pZMWAnkDO3j5uuVAmI
-t7AU+6Rgcvtop06PdbPMS7OPJEqXOGwrtrd35ZI7HMP6nezJY2KU2foFtWrbUh2DKPDyvTR3WhXq
-XvJ3J/gSvoNH6Qz0nXKujv0F2/y5hwbWph8LLwQuvJ/YcB38PSRC6EopX278M1boDDQIZnlG765l
-hSAcBUj0zkA0jrGnUMN7hJ0I+ZTkJAvxSsMwiVNX62XVtpiGTZWogptKNdnvS++0HMIufoIjl7Cb
-/HfV+y5tWEq18RYhLA==
---0000000000005701b90600569eea--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAdhvigSvfu/P+yEhgzWBB
+mjaQDnMhrclpzpYV10/+knralrKLqQX9xCzxKmVaVMjB83HzEV876+vuXenaK/wdkC0+2MBj5wfn
+4fbbzqGCCHwyVcs5u5p4gRYiPl/myYlXeHV3GvHqzCdqIWdurEFaiXZdX4V/GYtWlhPTpV/mswK/
+a5fQOqoUJhFvsKXLXZHHAijukpRUqRfeWt0P2uDisHHD5DcG1anggq7VnuWEEgySlK52b1XxyuJa
+V3XhccTrszu8AvaR+9SZccSxhc8bRE/3Iz/w15z4TiMtoVbAQ8VkU/3GGKWlmmzypul9VG4YO3QA
+P+oHkMOrh6RavX5R2w==
+--0000000000002b6e65060056a344--
