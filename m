@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE665751745
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 06:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30336751746
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 06:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbjGMET3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 00:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S233653AbjGMETd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 00:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbjGMET2 (ORCPT
+        with ESMTP id S233500AbjGMETc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 00:19:28 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8EF210A
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:19:26 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fbd200d354so25055e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:19:26 -0700 (PDT)
+        Thu, 13 Jul 2023 00:19:32 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ADD19BE
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:19:31 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb0336ed4fso1345e87.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:19:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689221964; x=1691813964;
+        d=google.com; s=20221208; t=1689221970; x=1691813970;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NpFmmZXnUkrV6Tw60Xv/tIlw5peNjjKq4tce/3bIq0A=;
-        b=ivdJOxRiIpqSC0QjFHIH/fyDLwmWpmfIr73VTBr5B96oZZbZuoBkSNneu6KWSBtbte
-         svTMGqqKIuEeiGHM25mpBedt0FcjM5/8jqjJLY9sspn+ISdAzbbIeZUMAo8kHIw5PGD/
-         NUngdvVoQJG4ubB7xx3mqVHaAi0Mf4sKSbRASQITjIixRBGv+G10BSMh6DtQtqOgbQUx
-         OTJFLe8+xLFs53I+j4i170iDpJbfrRCJqHq2KTKhvRaOfoV5V7R/9dCMT2trfj6OE0AC
-         y9wqf8wFcRucENq7h+L3rv37XmURHOcuIsZO5Pnq/9BQb21rKINhgtWeqDmCUriDlOJy
-         nGcg==
+        bh=QAVqoAkgKdWrHrTSa+iyGqgU6SR6hEY6dTzQdYzP60s=;
+        b=UlLwlw/X2kIaItgTezIeTQ93pUtYTZKZ8YcSmf0N77AMg/V6ITwgatghcXE6eqhaXU
+         hKruD4TXx8K7OPtpJT7eLeMg4iBifydTOmk/r1Wtw8h0H4pY2jfjRg18eCq7ZElI8TMR
+         3tDzv/H5oAxp9MQ+3mw8mnRnId2E/GZLFIMG88n0xHt3NvkULg4KbQLcz+5Uqqz1AJrO
+         j2Vh4QhhuPtOcyhgpzFpZgehqVSwy+6W+LdIVngs+aB9Mq9gGAtzOrEGwRblDp37Zd8+
+         8UV6mOKW/1p3ILWb1b9uGSI6FcMaaDl4NvkbwDhQlqvtCVxA9WFHg145K4bSLvoRDzX9
+         CgIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689221964; x=1691813964;
+        d=1e100.net; s=20221208; t=1689221970; x=1691813970;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NpFmmZXnUkrV6Tw60Xv/tIlw5peNjjKq4tce/3bIq0A=;
-        b=P9kkyb2a3uVmxLO2gDXa3wNwJvlNjqSHm+DPt9CacQPVeVGD3AZO606FJgvSCoFGuS
-         YOcG7fcOHOOMO4Mg5c6c/RLO93pHM0lfRMLw0sSbuHN6Birkao0qPUEeY9s/iqB4m75y
-         QYkRcgJwSI32Oyv3J5Ha4vWD9Bp7RWksYU4GLBLb/uIFzorRKuQocEYlB5jW1WyVBvJD
-         zSoZKXtkb71nQx5Bw3wWfHl7UDM9nO6lrBTTqlPu5iYNoUbiem6EjLHG5zZuewbSR2hw
-         IXpLL2bedskC/BZc1B/jf7IJ1Bxh+MwJdSdebE9tgfHrVNC8UuL+WxrfBfyhfETZKMo7
-         vSvQ==
-X-Gm-Message-State: ABy/qLZUX8kV24aKVp9vpNhXWPjkehzBD68Xc3YVzmbJFC/sm1D/3qtW
-        d2aMX5B8pXe9tu9V837pVJRCbr+vj8b7KmY8gR5d7w==
-X-Google-Smtp-Source: APBJJlG8UukMR1HkImzXbcEkRF7OfPIrYFOYQlJZXXefzpFZNG4EQocQtX1CydXvUgWsLZXDV2M1SWp7NCNGZPSngBA=
-X-Received: by 2002:a05:600c:1d02:b0:3f1:70d1:21a6 with SMTP id
- l2-20020a05600c1d0200b003f170d121a6mr191188wms.0.1689221964642; Wed, 12 Jul
- 2023 21:19:24 -0700 (PDT)
+        bh=QAVqoAkgKdWrHrTSa+iyGqgU6SR6hEY6dTzQdYzP60s=;
+        b=gPDd2y1bZiZ7ShtH0kjHjYMjcpLkQdTSuoawtEtjCc6Ys6N19PpfyAusS0cGhjNdnY
+         6PJXpNUOVzC3WHzBiJjiFa36Oxn48SFXSJdpqxlzXwZI+Y+MR3xCWhHeanqQ3bEpxvKx
+         Vh51cqbJ4AQdsM72kbHEBpoAPj5iome0X1fvv17EnpoQEkb0ZuZZp2tPXYjDKogOqlMg
+         T3kMkEbcG40vEAngGtoKy4cUDLovD7ZV66u+rKpMNNB/AoZrgObmI9/Ol69Uk+zKtPwh
+         ZJJ/3zTbZA1ONNihswC+Hg96COd5BKeceHcSYS3yueLAaVw+FzfX8p7fBZfqLddc0lUJ
+         50wA==
+X-Gm-Message-State: ABy/qLaiDkcHA05dfFPXRS1mhnr7tpt/tqOndPRx50IUKLHwntReIzVw
+        aFF1fzutdey1hZ+YvTyZ2LQas7/IX82b+YBCT/HFVg==
+X-Google-Smtp-Source: APBJJlGdAvuZx8z9RY9fvcFFO+gWtJz9o0OJLT8tnUU9EmJLzzrXKn0QYq/L/DL4YVlQoULBLwZLBtlhWyPj+km/MCQ=
+X-Received: by 2002:ac2:5fe6:0:b0:4f2:7840:e534 with SMTP id
+ s6-20020ac25fe6000000b004f27840e534mr117806lfg.0.1689221969815; Wed, 12 Jul
+ 2023 21:19:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230712-asoc-topology-kunit-enable-v1-0-b9f2da9dca23@kernel.org> <20230712-asoc-topology-kunit-enable-v1-1-b9f2da9dca23@kernel.org>
-In-Reply-To: <20230712-asoc-topology-kunit-enable-v1-1-b9f2da9dca23@kernel.org>
+References: <20230712-asoc-topology-kunit-enable-v1-0-b9f2da9dca23@kernel.org> <20230712-asoc-topology-kunit-enable-v1-2-b9f2da9dca23@kernel.org>
+In-Reply-To: <20230712-asoc-topology-kunit-enable-v1-2-b9f2da9dca23@kernel.org>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 13 Jul 2023 12:19:13 +0800
-Message-ID: <CABVgOSku9p34jgHk6-L4KD1dVAKuX06tFqTM2QL0zA8t+Rdotg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: Enable ASoC in all_tests.config
+Date:   Thu, 13 Jul 2023 12:19:18 +0800
+Message-ID: <CABVgOSnit7wXsMUvpXUhrHtyegm0KOuvtMrtp47PLTRJr+aFag@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ASoC: topology: Add explicit build option
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -60,7 +60,7 @@ Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002b6e65060056a344"
+        boundary="0000000000007bac48060056a324"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,64 +72,79 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000002b6e65060056a344
+--0000000000007bac48060056a324
 Content-Type: text/plain; charset="UTF-8"
 
 On Wed, 12 Jul 2023 at 23:40, Mark Brown <broonie@kernel.org> wrote:
 >
-> There are KUnit tests for some of the ASoC utility functions which are
-> not enabled in the KUnit all_tests.config, do so.
+> The default KUnit build options are not supposed to enable any
+> subsystems that were not already enabled but the topology code is a
+> library which is generally selected by drivers that want to use it.
+> Since KUnit is frequently run in virtual environments with minimal
+> driver support this makes it difficult to enable the toplogy tests so
+> provide an explicit Kconfig option which can be directly enabled when
+> using KUnit, and also include this in the KUnit all_tests.config.
 >
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
 
-While I love the idea of this, it breaks the default UML --alltests
-build, as all of ALSA is behind an "if !UML".
+Thanks a bunch for this: the topology tests have always been some of
+the most annoying to run, and this makes it so much easier.
 
-I think that's a dealbreaker for this change as-is, which leaves us
-with a few options:
-1. Don't include this in --alltests, but provide a separate
-kunitconfig to run it. Not ideal, but simplest.
-2. Make ALSA build with UML. Just removing the "if !UML" makes this
-work, but I imagine would uncover a lot of other issues.
-3. Change the way --alltests works to allow for UML-only / non-UML /
-architecture-specific options.
+That being said, it does still break when run with ARCH=um (see the
+response to patch 1/2), so we might need to remove it from
+all_tests.config or make some other changes.
 
-I suspect the ultimately ideal option would be a bit of all three, but
-I'd be happy with any of them in the meantime.
+Having the CONFIG_SND_SOC_TOPOLOGY_BUILD option is definitely much
+better, regardless of whether it's default or not.
 
-ALSA folks, how horrifying a prospect is removing the "if !UML"
-everywhere? If it's not trivial, how do we feel about adding
-"sound/soc/.kunitconfig" containing these tests?
-
-On the KUnit side, we can look into adding 'all_tests_nonuml.config"
-or something as a workaround.
+Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
 
->  tools/testing/kunit/configs/all_tests.config | 4 ++++
->  1 file changed, 4 insertions(+)
+>  sound/soc/Kconfig                            | 11 +++++++++++
+>  tools/testing/kunit/configs/all_tests.config |  1 +
+>  2 files changed, 12 insertions(+)
 >
+> diff --git a/sound/soc/Kconfig b/sound/soc/Kconfig
+> index bfa9622e1ab1..439fa631c342 100644
+> --- a/sound/soc/Kconfig
+> +++ b/sound/soc/Kconfig
+> @@ -38,6 +38,17 @@ config SND_SOC_TOPOLOGY
+>         bool
+>         select SND_DYNAMIC_MINORS
+>
+> +config SND_SOC_TOPOLOGY_BUILD
+> +       bool "Build topology core"
+> +       select SND_SOC_TOPOLOGY
+> +       depends on KUNIT
+> +       help
+> +         This option exists to facilitate running the KUnit tests for
+> +         the topology core, KUnit is frequently tested in virtual
+> +         environments with minimal drivers enabled but the topology
+> +         core is usually selected by drivers.  There is little reason
+> +         to enable it if not doing a KUnit build.
+> +
+>  config SND_SOC_TOPOLOGY_KUNIT_TEST
+>         tristate "KUnit tests for SoC topology"
+>         depends on KUNIT
 > diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
-> index 0393940c706a..13d15bc693fb 100644
+> index 13d15bc693fb..b8adb59455ef 100644
 > --- a/tools/testing/kunit/configs/all_tests.config
 > +++ b/tools/testing/kunit/configs/all_tests.config
-> @@ -35,3 +35,7 @@ CONFIG_DAMON_DBGFS=y
->
->  CONFIG_SECURITY=y
->  CONFIG_SECURITY_APPARMOR=y
-> +
-> +CONFIG_SOUND=y
-> +CONFIG_SND=y
-> +CONFIG_SND_SOC=y
+> @@ -39,3 +39,4 @@ CONFIG_SECURITY_APPARMOR=y
+>  CONFIG_SOUND=y
+>  CONFIG_SND=y
+>  CONFIG_SND_SOC=y
+> +CONFIG_SND_SOC_TOPOLOGY_BUILD=y
 >
 > --
 > 2.39.2
 >
 
---0000000000002b6e65060056a344
+--0000000000007bac48060056a324
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -196,14 +211,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAu
-tx8aDPN8+YBXmqT2vQyl72DLEGC1CusXm85sTsLYOzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTMwNDE5MjRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD6
+1qUKUli7cUNqI1whY3PFPcDuZIfpmUQw1X0e8EtvvzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTMwNDE5MzBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAdhvigSvfu/P+yEhgzWBB
-mjaQDnMhrclpzpYV10/+knralrKLqQX9xCzxKmVaVMjB83HzEV876+vuXenaK/wdkC0+2MBj5wfn
-4fbbzqGCCHwyVcs5u5p4gRYiPl/myYlXeHV3GvHqzCdqIWdurEFaiXZdX4V/GYtWlhPTpV/mswK/
-a5fQOqoUJhFvsKXLXZHHAijukpRUqRfeWt0P2uDisHHD5DcG1anggq7VnuWEEgySlK52b1XxyuJa
-V3XhccTrszu8AvaR+9SZccSxhc8bRE/3Iz/w15z4TiMtoVbAQ8VkU/3GGKWlmmzypul9VG4YO3QA
-P+oHkMOrh6RavX5R2w==
---0000000000002b6e65060056a344--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAO18mtowm6y47BaRQPvJr
+CslusZYPXaRv20aNq5gAYrHymp3AXR+I8pnEwrDz1MMMu0NfR0L2Y8tgUE9Q00if8RfGq/omf6T2
+lOlNQfAK0FBLQqRj4tLvvIphBp0fBC/n7SWUGcXxqCQ+5CnIr5GvdTD3WaeagHzNLAlkpt00l/he
+TXRJaYx+cV/owX6/wCz+UiqRvIVyQUf9sh4SxeAlUSguxRTaZS54TMWgJxtSlUrma5ckb218DGBh
+SGDxBjHUktRkgSimk2F5+pzFRNoMofrfiz//4Ih/iMvFXApuI7v7gxGwI3F23Vywbz4I+GM0CB6C
+Q8lfBdJ3L+tyW1shxg==
+--0000000000007bac48060056a324--
