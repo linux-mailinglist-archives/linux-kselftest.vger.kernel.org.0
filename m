@@ -2,129 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E392752064
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 13:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2A4752066
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 13:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234376AbjGMLvN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 07:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S229455AbjGMLvq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 07:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233799AbjGMLvM (ORCPT
+        with ESMTP id S229452AbjGMLvp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 07:51:12 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466551734;
-        Thu, 13 Jul 2023 04:51:10 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A5DC2FF80D;
-        Thu, 13 Jul 2023 11:51:02 +0000 (UTC)
-Message-ID: <f903634d-851f-af64-8d9a-6b13d813587c@ghiti.fr>
-Date:   Thu, 13 Jul 2023 13:51:01 +0200
+        Thu, 13 Jul 2023 07:51:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC500B4;
+        Thu, 13 Jul 2023 04:51:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E89260E88;
+        Thu, 13 Jul 2023 11:51:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2441AC433C7;
+        Thu, 13 Jul 2023 11:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689249103;
+        bh=7eNiqnL5o04b/srPhTHOLbn3kMJYAa19AC9efoHty4E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jAqnYKzyKyNcbNDT5tq4ZHXEuSzk0n3PH8JX8Mi/wnxuH4mJ8TV/uH2p9hw4aqX2u
+         eO5b+dUnLY3aDV8fPfZFGtwoqlnAAct5VV4z/aknvixceVz1KPLDk0KTj0w2pcl4iP
+         UeP7ZHWfF4l97JPmg9eCzYLPAZ/2167CnESNKrVqY7IZkcHZ2arl002uqEZjVzwJPo
+         VWig2DRWfLeRjSadqpHnSgYLzoOwJg2mkYKKwBfmNfBtED5sS7tIow/kur/DoxHKMY
+         n4/ew5bLr2iFp4AJnBMrQ6q1j2jJcgQ/0PtsDbL36h5vzlCPadE0Z8hoXFG/gZE1SZ
+         m/44XUMqGersw==
+Date:   Thu, 13 Jul 2023 13:51:39 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Cc:     Willy Tarreau <w@1wt.eu>, Zhangjin Wu <falcon@tinylab.org>,
+        arnd@arndb.de, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: Re: [PATCH 0/2] proc: proc_setattr for /proc/$PID/net
+Message-ID: <20230713-walzwerk-flugaufnahme-680653f18f88@brauner>
+References: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
+ <20230630140609.263790-1-falcon@tinylab.org>
+ <20230709092947.GF9321@1wt.eu>
+ <3261fa5b-b239-48a2-b1a8-34f80567cde1@t-8ch.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] selftests/riscv: fix potential build failure during the
- "emit_tests" step
-Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andy Chiu <andy.chiu@sifive.com>,
-        Evan Green <evan@rivosinc.com>,
-        Hugh Dickins <hughd@google.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230712193514.740033-1-jhubbard@nvidia.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20230712193514.740033-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: alex@ghiti.fr
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3261fa5b-b239-48a2-b1a8-34f80567cde1@t-8ch.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi John,
+On Sun, Jul 09, 2023 at 07:10:58PM +0200, Thomas Weißschuh wrote:
+> Hi Willy,
+> 
+> On 2023-07-09 11:29:47+0200, Willy Tarreau wrote:
+> > On Fri, Jun 30, 2023 at 10:06:09PM +0800, Zhangjin Wu wrote:
+> >> [..]
+> > 
+> > Now queued, thanks!
+> > Willy
+> 
+> Don't we need an Ack from the fs maintainers for the patch to
+> fs/proc/proc_net.c ?
+> 
+> Personally I expected this series to go in via the fs tree because of
+> that patch.
 
-
-On 12/07/2023 21:35, John Hubbard wrote:
-> The riscv selftests (which were modeled after the arm64 selftests) are
-> improperly declaring the "emit_tests" target to depend upon the "all"
-> target. This approach, when combined with commit 9fc96c7c19df
-> ("selftests: error out if kernel header files are not yet built"), has
-> caused build failures [1] on arm64, and is likely to cause similar
-> failures for riscv.
->
-> To fix this, simply remove the unnecessary "all" dependency from the
-> emit_tests target. The dependency is still effectively honored, because
-> again, invocation is via "install", which also depends upon "all".
->
-> An alternative approach would be to harden the emit_tests target so that
-> it can depend upon "all", but that's a lot more complicated and hard to
-> get right, and doesn't seem worth it, especially given that emit_tests
-> should probably not be overridden at all.
->
-> [1] https://lore.kernel.org/20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org
->
-> Fixes: 9fc96c7c19df ("selftests: error out if kernel header files are not yet built")
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->
-> Andrew,
->
-> With this, and with my arm64 fix [2] that you've already put into
-> mm-unstable, you should be able to safely drop commit 819187ab8741
-> ("selftests: fix arm64 test installation").
->
-> [2] https://lore.kernel.org/20230711005629.2547838-1-jhubbard@nvidia.com
->
-> thanks,
-> John Hubbard
->
->
->   tools/testing/selftests/riscv/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-> index 9dd629cc86aa..f4b3d5c9af5b 100644
-> --- a/tools/testing/selftests/riscv/Makefile
-> +++ b/tools/testing/selftests/riscv/Makefile
-> @@ -43,7 +43,7 @@ run_tests: all
->   	done
->   
->   # Avoid any output on non riscv on emit_tests
-> -emit_tests: all
-> +emit_tests:
->   	@for DIR in $(RISCV_SUBTARGETS); do				\
->   		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
->   		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
->
-> base-commit: 3f01e9fed8454dcd89727016c3e5b2fbb8f8e50c
-> prerequisite-patch-id: 37c92f7425689ff069fb83996a25cd98e78d7242
-
-
-Perfect timing, I have just encountered this failure this morning:
-
-make[5]: *** [../../lib.mk:81: kernel_header_files] Error 1
-
-that your patch fixed :) So you can add:
-
-Tested-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-
-Thank you!
-
-Alex
-
+I don't necessarily see patches I'm not Cced on.
