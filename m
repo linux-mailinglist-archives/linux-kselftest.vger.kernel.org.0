@@ -2,113 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FE375209C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 13:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463487520AB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 14:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234397AbjGML6r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 07:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S234046AbjGMMAH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 08:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234182AbjGML6o (ORCPT
+        with ESMTP id S233218AbjGMMAH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 07:58:44 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208B82709
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 04:58:33 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-314417861b9so744533f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 04:58:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689249511; x=1691841511;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nBLkkw1G6WSJr1HvvBebHePyOgAnthAqxl0kKfFGkRY=;
-        b=YprnJVutMhoiweGKBDkkZSmbZayXXBuZ0/GI8RFNmiLty3opDI4z1QzMtCVecjtgw/
-         TVZ9QWZaDwUoB/JKREJ7H/HZ7fMsu9HxP96g/gXK8bcS6kUj/+hn0BBvtiq3HanIRfRP
-         g/1v98zt5DDuKQpr7Rsqsx7XrqWF6/9V5h4EQ/BNCN7CbBYYUuqwkq+Pjo6KkHGCpFly
-         5RCssvuBkdbwHDkq562tto5dnLMnnTpSFhMca9Xxtwjd3okewrzOUejXH2jjfTTdAYHQ
-         R7M4GP/m/IxWTsHAJ5tpSdZ0yYXTDMsYBIHA87/mLAWszrG3xVVzWbULrJhVjGgwca22
-         fmGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689249511; x=1691841511;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nBLkkw1G6WSJr1HvvBebHePyOgAnthAqxl0kKfFGkRY=;
-        b=WCvTfC7d00YmprL3vFAJfaSN6fWZHhgYqRefs6XRUM6DN067YPHfGSeUMW/xigg3EO
-         ckoj4htGTJ3CJ1W8ONpMbV7g2XvIi85LRCfFhk4r9oxNXtd7Xh7hMFI4wrrOYDnchtxz
-         zAz8xf/7JXo2tDJ33UY8t5d5+goJSFbO168BsPbbwa4qRA14PqouDDuvYsSlTpcQWbEA
-         d4P0sVmWUaWpS0Q9Z0wklFExg8036eg7/RIo1y69S+cgPcefTEwCDrCemoqtpL6KuS6N
-         OI7UUHosYRRQLYT71JME86sjqUsanzEeFi1feZS9EWsFJJFw17bicVkmlCTnJIhCK/G+
-         +sBg==
-X-Gm-Message-State: ABy/qLagMSbqJbAg5I02luNbp65lPOsyaywHNlsqbbAhxP8rdDis1PFw
-        kzpam5EQ9bGyUhDd5shqgAW2FA==
-X-Google-Smtp-Source: APBJJlFfpzpAdIOQcPc6dpdK4fawVhchxwxSJ5mWwgcfyvbo9h+OdkX+A2HfhE1WN+ZtCs33kZQVtw==
-X-Received: by 2002:adf:e98f:0:b0:314:220d:7 with SMTP id h15-20020adfe98f000000b00314220d0007mr1219828wrm.45.1689249511576;
-        Thu, 13 Jul 2023 04:58:31 -0700 (PDT)
-Received: from alex-rivos.ba.rivosinc.com (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id r8-20020a056000014800b0030fa3567541sm7767115wrx.48.2023.07.13.04.58.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jul 2023 04:58:31 -0700 (PDT)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Chiu <andy.chiu@sifive.com>,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH] selftests: riscv: Fix compilation error with vstate_exec_nolibc.c
-Date:   Thu, 13 Jul 2023 13:58:29 +0200
-Message-Id: <20230713115829.110421-1-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.39.2
+        Thu, 13 Jul 2023 08:00:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB8F2D45;
+        Thu, 13 Jul 2023 04:59:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89C2A61077;
+        Thu, 13 Jul 2023 11:59:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E91B6C433C7;
+        Thu, 13 Jul 2023 11:59:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689249587;
+        bh=ouScaK8v7+X9Png+HkEOnDttdXAuG7e8+D2RZ23vdxk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VlxwbmsSqPSxSwUe++eeDGP9hFq5f2E8zTJ+qFSvisVKxkiXmlj4KW3RgEpk5iN9i
+         rdoToqFf/V5NCxxB5O4LfAfFvS8tpt5M3R02/QCJoMZAaB4vw7A6RAzWOw5aiPMzQI
+         sCAlMB39uJmvgN5ipitFPGRgL8eSkNm0KtWkA/yaKoJTGlXKS71Go4dyZkvL0Gm8/h
+         4z+BuN5aueoLX3MMyuL3Kdb9bvHMe0KTfcDLeXbf/EefL/SIVehkwTZgjNHISDYVZU
+         o4tlYMvEV1TZoxPCQ+lheJdNwKPdUTSgStleI+JlWLayrrDqrregTPJ2E5sCB6ZAM7
+         8UkrmV3vlosDw==
+From:   Christian Brauner <brauner@kernel.org>
+To:     =?utf-8?q?Willy_Tarreau_=3Cw=401wt=2Eeu=3E=2C_Thomas_Wei=C3=9Fschuh_=3Cl?=@vger.kernel.org,
+        =?utf-8?q?inux=40weissschuh=2Enet=3E?=@vger.kernel.org
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 0/2] proc: proc_setattr for /proc/$PID/net
+Date:   Thu, 13 Jul 2023 13:58:48 +0200
+Message-Id: <20230713-schwalben-anproben-6af2eac149fd@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
+References: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1510; i=brauner@kernel.org; h=from:subject:message-id; bh=ouScaK8v7+X9Png+HkEOnDttdXAuG7e8+D2RZ23vdxk=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSsf/bxdUWs/+pZqS9ef/4U9WBnyL1td247iAvzdSTI2vLG HJye2FHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCREj9GhuWu3buCRfKVtQ7fXcNkX/ n2T9WySfqt/0uzVXV8DqQ8P8Xwz3hHX8v637wyETwHcvg3xhsbizAt63AsmBl8t3nNtFXCHAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The following error happens:
+On Sat, 24 Jun 2023 12:30:45 +0200, Thomas Weißschuh wrote:
+> /proc/$PID/net currently allows the setting of file attributes,
+> in contrast to other /proc/$PID/ files and directories.
+> 
+> This would break the nolibc testsuite so the first patch in the series
+> removes the offending testcase.
+> The "fix" for nolibc-test is intentionally kept trivial as the series
+> will most likely go through the filesystem tree and if conflicts arise,
+> it is obvious on how to resolve them.
+> 
+> [...]
 
-In file included from vstate_exec_nolibc.c:2:
-/usr/include/riscv64-linux-gnu/sys/prctl.h:42:12: error: conflicting types for ‘prctl’; h
-ave ‘int(int, ...)’
-   42 | extern int prctl (int __option, ...) __THROW;
-      |            ^~~~~
-In file included from ./../../../../include/nolibc/nolibc.h:99,
-                 from <command-line>:
-./../../../../include/nolibc/sys.h:892:5: note: previous definition of ‘prctl’ with type
-‘int(int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)
-’
-  892 | int prctl(int option, unsigned long arg2, unsigned long arg3,
-      |     ^~~~~
+I've picked both for now. Let me know if I should do something else.
+In any case, this needs long soaking in -next.
 
-Fix this by not including <sys/prctl.h>, which is not needed here since
-prctl syscall is directly called using its number.
-
-Fixes: 7cf6198ce22d ("selftests: Test RISC-V Vector prctl interface")
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 ---
- tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c | 2 --
- 1 file changed, 2 deletions(-)
 
-diff --git a/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c b/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
-index 5cbc392944a6..2c0d2b1126c1 100644
---- a/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
-+++ b/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
-@@ -1,6 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0-only
--#include <sys/prctl.h>
--
- #define THIS_PROGRAM "./vstate_exec_nolibc"
- 
- int main(int argc, char **argv)
--- 
-2.39.2
+Applied to the fs.proc.net.uapi branch of the vfs/vfs.git tree.
+Patches in the fs.proc.net.uapi branch should appear in linux-next soon.
 
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
+
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: fs.proc.net.uapi
+
+[1/2] selftests/nolibc: drop test chmod_net
+      https://git.kernel.org/vfs/vfs/c/49319832de90
+[2/2] proc: use generic setattr() for /proc/$PID/net
+      https://git.kernel.org/vfs/vfs/c/18e66ae67673
