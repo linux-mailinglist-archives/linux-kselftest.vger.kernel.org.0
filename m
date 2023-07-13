@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F77D752457
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 15:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA512752459
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 15:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232227AbjGMNzJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 09:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S231951AbjGMNzL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 09:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbjGMNzF (ORCPT
+        with ESMTP id S231730AbjGMNzG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:55:05 -0400
+        Thu, 13 Jul 2023 09:55:06 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C3541FF7;
-        Thu, 13 Jul 2023 06:55:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00205211E;
+        Thu, 13 Jul 2023 06:55:02 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7AA1C1576;
-        Thu, 13 Jul 2023 06:55:43 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E61C1595;
+        Thu, 13 Jul 2023 06:55:45 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70A523F73F;
-        Thu, 13 Jul 2023 06:54:59 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 341AA3F73F;
+        Thu, 13 Jul 2023 06:55:01 -0700 (PDT)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
@@ -32,9 +32,9 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
         "Liam R. Howlett" <Liam.Howlett@oracle.com>
 Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 6/9] selftests/mm: va_high_addr_switch should skip unsupported arm64 configs
-Date:   Thu, 13 Jul 2023 14:54:37 +0100
-Message-Id: <20230713135440.3651409-7-ryan.roberts@arm.com>
+Subject: [PATCH v1 7/9] selftests/mm: Make migration test robust to failure
+Date:   Thu, 13 Jul 2023 14:54:38 +0100
+Message-Id: <20230713135440.3651409-8-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230713135440.3651409-1-ryan.roberts@arm.com>
 References: <20230713135440.3651409-1-ryan.roberts@arm.com>
@@ -49,35 +49,113 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-va_high_addr_switch has a mechanism to determine if the tests should be
-run or skipped (supported_arch()). This currently returns
-unconditionally true for arm64. However, va_high_addr_switch also
-requires a large virtual address space for the tests to run, otherwise
-they spuriously fail.
+The `migration` test currently has a number of robustness problems that
+cause it to hang and leak resources.
 
-Since arm64 can only support VA > 48 bits when the page size is 64K,
-let's decide whether we should skip the test suite based on the page
-size. This reduces noise when running on 4K and 16K kernels.
+Timeout: There are 3 tests, which each previously ran for 60 seconds.
+However, the timeout in mm/settings for a single test binary was set to
+45 seconds. So when run using run_kselftest.sh, the top level timeout
+would trigger before the test binary was finished. Solve this by meeting
+in the middle; each of the 3 tests now runs for 20 seconds (for a total
+of 60), and the top level timeout is set to 90 seconds.
+
+Leaking child processes: the `shared_anon` test fork()s some children
+but then an ASSERT() fires before the test kills those children. The
+assert causes immediate exit of the parent and leaking of the children.
+Furthermore, if run using the run_kselftest.sh wrapper, the wrapper
+would get stuck waiting for those children to exit, which never happens.
+Solve this by deferring any asserts until after the children are killed.
+The same pattern is used for the threaded tests for uniformity.
+
+With these changes, the test binary now runs to completion on arm64,
+with 2 tests passing and the `shared_anon` test failing.
 
 Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 ---
- tools/testing/selftests/mm/va_high_addr_switch.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/mm/migration.c | 14 ++++++++++----
+ tools/testing/selftests/mm/settings    |  2 +-
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/va_high_addr_switch.c b/tools/testing/selftests/mm/va_high_addr_switch.c
-index 7cfaf4a74c57..4b6f62c69a9d 100644
---- a/tools/testing/selftests/mm/va_high_addr_switch.c
-+++ b/tools/testing/selftests/mm/va_high_addr_switch.c
-@@ -292,7 +292,8 @@ static int supported_arch(void)
- #elif defined(__x86_64__)
- 	return 1;
- #elif defined(__aarch64__)
--	return 1;
-+	size_t page_size = getpagesize();
-+	return page_size == PAGE_SIZE;
- #else
- 	return 0;
- #endif
+diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+index 379581567f27..189d7d9070e8 100644
+--- a/tools/testing/selftests/mm/migration.c
++++ b/tools/testing/selftests/mm/migration.c
+@@ -15,7 +15,7 @@
+ #include <time.h>
+ 
+ #define TWOMEG (2<<20)
+-#define RUNTIME (60)
++#define RUNTIME (20)
+ 
+ #define ALIGN(x, a) (((x) + (a - 1)) & (~((a) - 1)))
+ 
+@@ -118,6 +118,7 @@ TEST_F_TIMEOUT(migration, private_anon, 2*RUNTIME)
+ {
+ 	uint64_t *ptr;
+ 	int i;
++	int ret;
+ 
+ 	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
+ 		SKIP(return, "Not enough threads or NUMA nodes available");
+@@ -131,9 +132,10 @@ TEST_F_TIMEOUT(migration, private_anon, 2*RUNTIME)
+ 		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
+ 			perror("Couldn't create thread");
+ 
+-	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
++	ret = migrate(ptr, self->n1, self->n2);
+ 	for (i = 0; i < self->nthreads - 1; i++)
+ 		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
++	ASSERT_EQ(ret, 0);
+ }
+ 
+ /*
+@@ -144,6 +146,7 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+ 	pid_t pid;
+ 	uint64_t *ptr;
+ 	int i;
++	int ret;
+ 
+ 	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
+ 		SKIP(return, "Not enough threads or NUMA nodes available");
+@@ -161,9 +164,10 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+ 			self->pids[i] = pid;
+ 	}
+ 
+-	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
++	ret = migrate(ptr, self->n1, self->n2);
+ 	for (i = 0; i < self->nthreads - 1; i++)
+ 		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
++	ASSERT_EQ(ret, 0);
+ }
+ 
+ /*
+@@ -173,6 +177,7 @@ TEST_F_TIMEOUT(migration, private_anon_thp, 2*RUNTIME)
+ {
+ 	uint64_t *ptr;
+ 	int i;
++	int ret;
+ 
+ 	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
+ 		SKIP(return, "Not enough threads or NUMA nodes available");
+@@ -188,9 +193,10 @@ TEST_F_TIMEOUT(migration, private_anon_thp, 2*RUNTIME)
+ 		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
+ 			perror("Couldn't create thread");
+ 
+-	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
++	ret = migrate(ptr, self->n1, self->n2);
+ 	for (i = 0; i < self->nthreads - 1; i++)
+ 		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
++	ASSERT_EQ(ret, 0);
+ }
+ 
+ TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/mm/settings b/tools/testing/selftests/mm/settings
+index 9abfc60e9e6f..ba4d85f74cd6 100644
+--- a/tools/testing/selftests/mm/settings
++++ b/tools/testing/selftests/mm/settings
+@@ -1 +1 @@
+-timeout=45
++timeout=90
 -- 
 2.25.1
 
