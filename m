@@ -2,116 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF0F7524E4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 16:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6804475251F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 16:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbjGMOQy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 10:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
+        id S230032AbjGMOaK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 10:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235224AbjGMOQe (ORCPT
+        with ESMTP id S229523AbjGMOaJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 10:16:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C721A273F;
-        Thu, 13 Jul 2023 07:16:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5581461544;
-        Thu, 13 Jul 2023 14:16:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DCFCC433C7;
-        Thu, 13 Jul 2023 14:16:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689257789;
-        bh=yZj473BZjtFSxSSsUfNJOsl16FRhfrBduETWUEIiqRA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y6kQQaL5l5mVf9mwXlHAIk/+VY6NLdr4m2fJ0+HN6mUufSihhFaagXQLvrhA3DXuN
-         7hMCp77mjxX25DiPIrLzOuIkbCeWzUxcvEtBz3zNU5RBb9e1KBe37xwre9ZVKe5sL9
-         OMHt5vui6ay1Yo9nojBcJbHtvUJO+xIIDnDBvBsncLNgEe85tGpN4Q2Xh7v5ESpcsj
-         ZJL4l7CpxcjdoFDhDxeR+FWHJ0FsWF/JoZjXcyIHlMCz+qLUjCrspFwbU7f2Yo9wos
-         DJsD2I0KhOQkY4lGz1txyViogH3hhmU9w170l6m5WcvMlTLr/KtFgZPXFKuCrd5FWf
-         JJPMZdi+gBBJw==
-Date:   Thu, 13 Jul 2023 15:16:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thu, 13 Jul 2023 10:30:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B522680
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 07:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689258560;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kWheRexL9/dCgbw7jig9WF+1nd9uSSsREdM3sWtNnIk=;
+        b=FO71NzlPsjfYJSx2BgbvmeuLJWJIefkh9o2JqBD9tXH0awWS1YGoKQifU0OYo+bI2g8PBQ
+        7i34+Jn+7ySJxoKAqB22aZ+5qihgGqC2FasJw5XPpDNIqUKxtcQzLWz+/YL5qlNuQsvUaW
+        qKWbweTE1YWeRD+WFkQsaElSMERJ2XE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-599-SLwnFzgFNsiB3UZTb0U7gA-1; Thu, 13 Jul 2023 10:29:18 -0400
+X-MC-Unique: SLwnFzgFNsiB3UZTb0U7gA-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3fbcae05906so3365785e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 07:29:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689258556; x=1691850556;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kWheRexL9/dCgbw7jig9WF+1nd9uSSsREdM3sWtNnIk=;
+        b=Fq3jz8vhlAeIWH0wTxkY8NnSB2BjxOtAJZzLnbAwg+WXBy+BaQPKcUc3qqf6gkdLOO
+         zVuuyr17rC+ZvuTsv3H5GJjx4kQqucY0z1QnxgKnCQJx8evjhpGMxNEeuHCgBnpqnFGp
+         3o2azOqxXv+kScJbmAxnNIOCI41zECrqQztVaTxYBvriA89FqDt1zoVRYOlWupu1RRaF
+         QONIQSROD2t5itvNpQ2gSvXoELmZKMFeC7A9lDQEjDre1ocooFQU/0G6Y9qHmrqGjVaL
+         /N/XhZ4jtEvkJa8T3yrTwSpvDk/IqOhnbXTWKVKZVnMxcpsAubQd9ogfq0v2dMNOFRVq
+         IIqw==
+X-Gm-Message-State: ABy/qLbVfL9KXrV6MCNTH+MXeWTtUhJbzKm0V0NvcX7v0l768WcoX2kv
+        AmQHPVzVKEEWxcoBNdb2DP/KpVio++Qpg7zRXwQknhSOipQ9XbRFOrEHnkgRyeHqEKMgoKDjIyq
+        mg0Pwl9uY9dj8+kZ0qdASPxMc/vgc
+X-Received: by 2002:a5d:5185:0:b0:30f:d1e3:22b7 with SMTP id k5-20020a5d5185000000b0030fd1e322b7mr2068831wrv.6.1689258556556;
+        Thu, 13 Jul 2023 07:29:16 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFCo+2nmgVTcBRc9JOJoYST2pj1+6ivlrd1rEq1VKgGw7EbnCrodlPYzOGiJn5LwTkY0iPvLw==
+X-Received: by 2002:a5d:5185:0:b0:30f:d1e3:22b7 with SMTP id k5-20020a5d5185000000b0030fd1e322b7mr2068802wrv.6.1689258556128;
+        Thu, 13 Jul 2023 07:29:16 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c717:6100:2da7:427e:49a5:e07? (p200300cbc71761002da7427e49a50e07.dip0.t-ipconnect.de. [2003:cb:c717:6100:2da7:427e:49a5:e07])
+        by smtp.gmail.com with ESMTPSA id q10-20020adff50a000000b003144bfbd0b3sm8156598wro.37.2023.07.13.07.29.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jul 2023 07:29:15 -0700 (PDT)
+Message-ID: <aacd934b-9249-cb84-5efa-bf331e78688f@redhat.com>
+Date:   Thu, 13 Jul 2023 16:29:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1 3/9] selftests/mm: Skip soft-dirty tests on arm64
+Content-Language: en-US
+To:     Ryan Roberts <ryan.roberts@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
         John Hubbard <jhubbard@nvidia.com>,
         Florent Revest <revest@chromium.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 1/9] selftests: Line buffer test program's stdout
-Message-ID: <8a8d077c-55bd-4710-9dfd-1cbb1a9170a8@sirena.org.uk>
 References: <20230713135440.3651409-1-ryan.roberts@arm.com>
- <20230713135440.3651409-2-ryan.roberts@arm.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1+oRuEmNeKIqQtgT"
-Content-Disposition: inline
-In-Reply-To: <20230713135440.3651409-2-ryan.roberts@arm.com>
-X-Cookie: MOUNT TAPE U1439 ON B3, NO RING
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230713135440.3651409-4-ryan.roberts@arm.com>
+ <cf3c237e-69c8-dd6e-26fc-fe19de910813@redhat.com>
+ <773cc0a8-24b8-7fcb-2980-7676fc772014@arm.com>
+ <3c566e28-c7ad-7ba8-4583-619266282387@redhat.com>
+ <556d05f0-7103-1079-fce1-1fb6bd40b17c@arm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <556d05f0-7103-1079-fce1-1fb6bd40b17c@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 13.07.23 16:14, Ryan Roberts wrote:
+> On 13/07/2023 15:09, David Hildenbrand wrote:
+>> On 13.07.23 16:03, Ryan Roberts wrote:
+>>> On 13/07/2023 14:56, David Hildenbrand wrote:
+>>>> On 13.07.23 15:54, Ryan Roberts wrote:
+>>>>> arm64 does not support the soft-dirty PTE bit. However there are tests
+>>>>> in `madv_populate` and `soft-dirty` which assume it is supported and
+>>>>> cause spurious failures to be reported when preferred behaviour would be
+>>>>> to mark the tests as skipped.
+>>>>>
+>>>>> Unfortunately, the only way to determine if the soft-dirty dirty bit is
+>>>>> supported is to write to a page, then see if the bit is set in
+>>>>> /proc/self/pagemap. But the tests that we want to conditionally execute
+>>>>> are testing precicesly this. So if we introduced this feature check, we
+>>>>> could accedentally turn a real failure (on a system that claims to
+>>>>> support soft-dirty) into a skip.
+>>>>>
+>>>>> So instead, do the check based on architecture; for arm64, we report
+>>>>> that soft-dirty is not supported. This is wrapped up into a utility
+>>>>> function `system_has_softdirty()`, which is used to skip the whole
+>>>>> `soft-dirty` suite, and mark the soft-dirty tests in the `madv_populate`
+>>>>> suite as skipped.
+>>>>>
+>>>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+>>>>> ---
+>>>>>     tools/testing/selftests/mm/madv_populate.c | 18 +++++++++++++-----
+>>>>>     tools/testing/selftests/mm/soft-dirty.c    |  3 +++
+>>>>>     tools/testing/selftests/mm/vm_util.c       | 17 +++++++++++++++++
+>>>>>     tools/testing/selftests/mm/vm_util.h       |  1 +
+>>>>>     4 files changed, 34 insertions(+), 5 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/mm/madv_populate.c
+>>>>> b/tools/testing/selftests/mm/madv_populate.c
+>>>>> index 60547245e479..5a8c176d7fec 100644
+>>>>> --- a/tools/testing/selftests/mm/madv_populate.c
+>>>>> +++ b/tools/testing/selftests/mm/madv_populate.c
+>>>>> @@ -232,6 +232,14 @@ static bool range_is_not_softdirty(char *start, ssize_t
+>>>>> size)
+>>>>>         return ret;
+>>>>>     }
+>>>>>
+>>>>> +#define ksft_test_result_if_softdirty(cond, ...)    \
+>>>>> +do {                            \
+>>>>> +    if (system_has_softdirty())            \
+>>>>> +        ksft_test_result(cond, __VA_ARGS__);    \
+>>>>> +    else                        \
+>>>>> +        ksft_test_result_skip(__VA_ARGS__);    \
+>>>>> +} while (0)
+>>>>> +
+>>>>>     static void test_softdirty(void)
+>>>>>     {
+>>>>>         char *addr;
+>>>>> @@ -246,19 +254,19 @@ static void test_softdirty(void)
+>>>>>
+>>>>>         /* Clear any softdirty bits. */
+>>>>>         clear_softdirty();
+>>>>> -    ksft_test_result(range_is_not_softdirty(addr, SIZE),
+>>>>> +    ksft_test_result_if_softdirty(range_is_not_softdirty(addr, SIZE),
+>>>>>                  "range is not softdirty\n");
+>>>>>
+>>>>>         /* Populating READ should set softdirty. */
+>>>>>         ret = madvise(addr, SIZE, MADV_POPULATE_READ);
+>>>>> -    ksft_test_result(!ret, "MADV_POPULATE_READ\n");
+>>>>> -    ksft_test_result(range_is_not_softdirty(addr, SIZE),
+>>>>> +    ksft_test_result_if_softdirty(!ret, "MADV_POPULATE_READ\n");
+>>>>> +    ksft_test_result_if_softdirty(range_is_not_softdirty(addr, SIZE),
+>>>>>                  "range is not softdirty\n");
+>>>>>
+>>>>>         /* Populating WRITE should set softdirty. */
+>>>>>         ret = madvise(addr, SIZE, MADV_POPULATE_WRITE);
+>>>>> -    ksft_test_result(!ret, "MADV_POPULATE_WRITE\n");
+>>>>> -    ksft_test_result(range_is_softdirty(addr, SIZE),
+>>>>> +    ksft_test_result_if_softdirty(!ret, "MADV_POPULATE_WRITE\n");
+>>>>> +    ksft_test_result_if_softdirty(range_is_softdirty(addr, SIZE),
+>>>>>                  "range is softdirty\n");
+>>>>
+>>>> We probably want to skip the whole test_*softdirty* test instead of adding this
+>>>> (IMHO suboptimal) ksft_test_result_if_softdirty.
+>>>
+>>> Yeah I thought about doing it that way, but then the output just looks like
+>>> there were fewer tests and they all passed. But thinking about it now, I guess
+>>> the TAP header outputs the number of planned tests and the number of tests
+>>> executed are fewer, so a machine parser would still notice. I just don't like
+>>> that it outputs skipped:0.
+>>>
+>>> But it a lightly held view. Happy to just do:
+>>>
+>>>      if (system_has_softdirty())
+>>>          test_softdirty()
+>>>
+>>> If you insist. ;-)
+>>
+>> diff --git a/tools/testing/selftests/mm/madv_populate.c
+>> b/tools/testing/selftests/mm/madv_populate.c
+>> index 60547245e479..33fda0337b32 100644
+>> --- a/tools/testing/selftests/mm/madv_populate.c
+>> +++ b/tools/testing/selftests/mm/madv_populate.c
+>> @@ -266,12 +266,16 @@ static void test_softdirty(void)
+>>   
+>>   int main(int argc, char **argv)
+>>   {
+>> +       int nr_tests = 16;
+>>          int err;
+>>   
+>>          pagesize = getpagesize();
+>>   
+>> +       if (system_has_softdirty())
+>> +               nr_tests += 5;
+> 
+> This is the opposite of the point I was trying to make; If there are 21 tests in
+> a suite, I'd like to know that there are 21 tests, 16 of which passed and 5 of
+> which were skipped. This will hide the 5 from the test report.
 
---1+oRuEmNeKIqQtgT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Well, these test are impossible on that architecture, which is IMHO 
+different to some kind of "impossible in the configuration" like "no 
+swap", "no hugetlb", "no THP available".
 
-On Thu, Jul 13, 2023 at 02:54:32PM +0100, Ryan Roberts wrote:
-> The selftests runner pipes the test program's stdout to tap_prefix. The
-> presence of the pipe means that the test program sets its stdout to be
-> fully buffered (as aposed to line buffered when directly connected to
-> the terminal). The block buffering means that there is often content in
-> the buffer at fork() time, which causes the output to end up duplicated.
-> This was causing problems for mm:cow where test results were duplicated
-> 20-30x.
->=20
-> Solve this by using `stdbuf`, when available to force the test program
-> to use line buffered mode. This means previously printf'ed results are
-> flushed out of the program before any fork().
+-- 
+Cheers,
 
-This is going to be useful in general since not all selftests use the
-kselftest helpers but it'd probably also be good to make
-ksft_print_header() also make the output unbuffered so that if setbuf
-isn't installed on the target system or the tests are run standalone we
-don't run into issues there.  Even if the test isn't corrupting data
-having things unbuffered is going to be good for making sure we don't
-drop any output if the test dies.
+David / dhildenb
 
-> +		if [ -x /usr/bin/stdbuf ]; then
-> +			stdbuf=3D"/usr/bin/stdbuf --output=3DL "
-> +		fi
-
-Might be more robust to use type -p to find stdbuf in case it's in /bin
-or something?
-
---1+oRuEmNeKIqQtgT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSwBzcACgkQJNaLcl1U
-h9AB3Qf+LhTlPox4ghR+y8/9Tm4CFlMNRleBzmfEDcafaj6y1aFYXP9Lla5vs6HT
-DziBkUJB3jmvW7gNDYMT0xrVxHampqA52kjYLlg6Z/dRFHttU+pxZ5cHIRvZDEfn
-vfsHkr0nUGx94gRLvJTdAUR2Q31EraO7h7jwL1Q3TJuE19VhzQcc4SVif8D8I+Ul
-JNUu9UusPMcfJVUX5NTWFQsxovITYR2RFlY4PpPMn7zmtiRTzaJrybA6reF0JYSs
-HDXcmwF7t2DZWpJIyYoNYmAxDOdODMynYs0NBKPftSti5Bnxb1MH9qkN1BEj82rO
-sveDxDVGKTNkb4HhNhzYzf8bb3tunQ==
-=hm+s
------END PGP SIGNATURE-----
-
---1+oRuEmNeKIqQtgT--
