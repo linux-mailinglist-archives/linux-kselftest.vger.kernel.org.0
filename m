@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E26752390
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 15:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD2B752391
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 15:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235254AbjGMNXg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S234861AbjGMNXg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Thu, 13 Jul 2023 09:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbjGMNWk (ORCPT
+        with ESMTP id S235269AbjGMNWr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:22:40 -0400
+        Thu, 13 Jul 2023 09:22:47 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5159135B3;
-        Thu, 13 Jul 2023 06:21:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF1C3ABF;
+        Thu, 13 Jul 2023 06:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689254495; x=1720790495;
+  t=1689254500; x=1720790500;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WIWnJB3NculwQZQw1FR80Zi4TS+CrST66ZBC+3Ji4ag=;
-  b=RjQx52d8MBtNjwsm2rVPb1ZzLvuPXKh5sU5MYo6Joa/IMN9T5fySe+vS
-   cxeB3KNHRy/FQaF7Oah2CZCoIhhaTGCZgeJ8pGlmS/CDKmn211Ys7j0aZ
-   F+5usqwe5fGitR4BNfGdMKg3W++9Kc3BPUxG7irHqTstQ04SLSdPS4uRh
-   B+c7YJ0xs3zovwVO6PVDWc0aFdQEiVRgaFJLvWKLaILFtF1OM1CRJMLCL
-   Vlehfgp7QU50Guk1rtzrcI6SyydZxIH2qXdm2rcjy3Y0hE8PSN5fnpR51
-   ytS5neMIlLj7hx5Sju2iRYRlLfkRMFf3LvBtHIiwblYSI9wr/amlieY5N
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="345497087"
+  bh=tlqcBuGsxOSKA74bKjbrp+jQUh7f0hcz1UsL+nprPCM=;
+  b=AgXVSRmU6wLzAsdt0IuhWfXR0zwIKmyYZUVnrRVrIcC9a9YrF1RoBYWU
+   buP4ki8u0M3zBgEEt9Za3U4h7z3EJejkHTt97jXyy76X/a6uk35d3R+qa
+   ar5qyzX87cMiugj0H/aEVezjgNLOsYRSCOBMh/qU1Ugvs5gtrX5QuZsAF
+   1bdODwE5QswBscO+ox+g3zXJlcjbFs8XXmey/bsfafXB7m/YnK79nEsdV
+   K54XCLw/KiVCUbZLExqNEqhiU9u2v9EWbaAKhO6LrZPAHCWkSRKMzrzAE
+   7DAVnGzzWoK+ugpJKWjhIv8SWUpL9xR/zpJdDnxgPnoWp4fTavCfSjzMG
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="345497119"
 X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="345497087"
+   d="scan'208";a="345497119"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:21:14 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:21:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="968616051"
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="968616058"
 X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="968616051"
+   d="scan'208";a="968616058"
 Received: from ijarvine-mobl2.ger.corp.intel.com ([10.251.222.39])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:21:12 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:21:15 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -46,9 +46,9 @@ To:     linux-kselftest@vger.kernel.org,
         Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 17/19] selftests/resctrl: Move CAT/CMT test global vars to function they are used in
-Date:   Thu, 13 Jul 2023 16:19:30 +0300
-Message-Id: <20230713131932.133258-18-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 18/19] selftests/resctrl: Pass the real number of tests to show_cache_info()
+Date:   Thu, 13 Jul 2023 16:19:31 +0300
+Message-Id: <20230713131932.133258-19-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
 References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
@@ -65,82 +65,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-CAT and CMT tests have count_of_bits, long_mask, cbm_mask, and
-cache_size global variables that can be moved into the sole using
-function.
+Results include warm-up test which is discarded before passing the sum
+to show_cache_info(). show_cache_info() handles this by subtracting one
+from the number of tests in divisor. It is a trappy construct to have
+sum and number of tests parameters to disagree like this.
 
-Make the global variables local variables of the relevant function to
-scope them better.
-
-While at it, move cache_size initialization into the declaration line.
+A more logical place for subtracting the skipped tests is where the sum
+is calculated so move it there. Pass the correct number of tests to
+show_cache_info() so it can be used directly as the divisor for
+calculating the average.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/cat_test.c | 11 ++++-------
- tools/testing/selftests/resctrl/cmt_test.c | 11 ++++-------
- 2 files changed, 8 insertions(+), 14 deletions(-)
+ tools/testing/selftests/resctrl/cache.c    | 2 +-
+ tools/testing/selftests/resctrl/cat_test.c | 2 +-
+ tools/testing/selftests/resctrl/cmt_test.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 42e35269d8b6..ed6c8e64ad11 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -17,11 +17,6 @@
- #define MAX_DIFF_PERCENT	4
- #define MAX_DIFF		1000000
- 
--static int count_of_bits;
--static char cbm_mask[256];
--static unsigned long long_mask;
--static unsigned long cache_size;
--
- /*
-  * Change schemata. Write schemata to specified
-  * con_mon grp, mon_grp in resctrl FS.
-@@ -96,10 +91,12 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- {
- 	unsigned long l_mask, l_mask_1;
- 	int ret, pipefd[2], sibling_cpu_no;
-+	unsigned long cache_size = 0;
-+	unsigned long long_mask;
-+	char cbm_mask[256];
-+	int count_of_bits;
- 	char pipe_message;
- 
--	cache_size = 0;
--
- 	/* Get default cbm mask for L3/L2 cache */
- 	ret = get_cbm_mask(cache_type, cbm_mask);
- 	if (ret)
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 7214aefb55ed..0ac9d6bbd13d 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -16,11 +16,6 @@
- #define MAX_DIFF		2000000
- #define MAX_DIFF_PERCENT	15
- 
--static int count_of_bits;
--static char cbm_mask[256];
--static unsigned long long_mask;
--static unsigned long cache_size;
--
- static int cmt_setup(struct resctrl_val_param *p)
- {
- 	/* Run NUM_OF_RUNS times */
-@@ -75,10 +70,12 @@ void cmt_test_cleanup(void)
- 
- int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
- {
-+	unsigned long cache_size = 0;
-+	unsigned long long_mask;
-+	char cbm_mask[256];
-+	int count_of_bits;
+diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+index 385c01dd3ec6..5aa112e5fdd3 100644
+--- a/tools/testing/selftests/resctrl/cache.c
++++ b/tools/testing/selftests/resctrl/cache.c
+@@ -290,7 +290,7 @@ int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
+ 	long avg_diff = 0;
  	int ret;
  
--	cache_size = 0;
--
- 	if (!validate_resctrl_feature_request(CMT_STR))
- 		return -1;
+-	avg_llc_val = sum_llc_val / (num_of_runs - 1);
++	avg_llc_val = sum_llc_val / num_of_runs;
+ 	avg_diff = (long)abs(cache_span - avg_llc_val);
+ 	diff_percent = ((float)cache_span - avg_llc_val) / cache_span * 100;
+ 
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index ed6c8e64ad11..3848dfb46aba 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -77,7 +77,7 @@ static int check_results(struct resctrl_val_param *param)
+ 	no_of_bits = count_bits(param->mask);
+ 
+ 	return show_cache_info(sum_llc_perf_miss, no_of_bits, param->span / 64,
+-			       MAX_DIFF, MAX_DIFF_PERCENT, NUM_OF_RUNS,
++			       MAX_DIFF, MAX_DIFF_PERCENT, runs - 1,
+ 			       get_vendor() == ARCH_INTEL, false);
+ }
+ 
+diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+index 0ac9d6bbd13d..cb2197647c6c 100644
+--- a/tools/testing/selftests/resctrl/cmt_test.c
++++ b/tools/testing/selftests/resctrl/cmt_test.c
+@@ -59,7 +59,7 @@ static int check_results(struct resctrl_val_param *param, int no_of_bits)
+ 	fclose(fp);
+ 
+ 	return show_cache_info(sum_llc_occu_resc, no_of_bits, param->span,
+-			       MAX_DIFF, MAX_DIFF_PERCENT, NUM_OF_RUNS,
++			       MAX_DIFF, MAX_DIFF_PERCENT, runs - 1,
+ 			       true, true);
+ }
  
 -- 
 2.30.2
