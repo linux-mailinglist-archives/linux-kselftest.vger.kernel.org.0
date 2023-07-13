@@ -2,298 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540E375245F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 15:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEFD575246B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 15:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbjGMNzV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 09:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S231261AbjGMN5w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 09:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232331AbjGMNzL (ORCPT
+        with ESMTP id S231279AbjGMN5v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:55:11 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B2F22721;
-        Thu, 13 Jul 2023 06:55:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA4191596;
-        Thu, 13 Jul 2023 06:55:48 -0700 (PDT)
-Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AFCEC3F73F;
-        Thu, 13 Jul 2023 06:55:04 -0700 (PDT)
-From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
+        Thu, 13 Jul 2023 09:57:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A365D1FFC
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 06:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689256616;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u7slRFqXzj+fIwUfWpHgJOEMlp6jejIeFSooLIetSLk=;
+        b=VWGGG9G9iRr6CXdSdy9z9qXNkl9E+HRcKv0QM+fOiO9brbVr0K3f159mthYHswVqIsYcop
+        2AUGH46gRUSGUeCQASF0owWBOokNV2u2vEZK84vlm2/S0bPKaL/UvHI5Hh52KZSNiHjC/C
+        /cbOE64aVEVlT0dheLMSV8+zhaV0MBM=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-440-VOhQH7vyOh6xGBrbZvNbfA-1; Thu, 13 Jul 2023 09:56:55 -0400
+X-MC-Unique: VOhQH7vyOh6xGBrbZvNbfA-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3fc08035926so8238585e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 06:56:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689256614; x=1691848614;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u7slRFqXzj+fIwUfWpHgJOEMlp6jejIeFSooLIetSLk=;
+        b=d1QJkwcLMbZ0okXGOA+KiBWdD647ReBLYb7Gw2iDGNF4IdtioL+qXb5kOXSjtlop//
+         IEoKwgHjHig+5w76Cm0StLDoqKh4w6BciFbedbmC5dRVGXECf+Mwop4DFj4z7mIkw1L8
+         aZfob+iAJ1DbJiMXZGlqipHUBWhCN0iq2sljvL61CoKb3Mwx9LYTc7yf4qyEKTrdZMjf
+         3PlsW1mw2FraUVkUalq2p1sC9O+VSeuZHQPvFUaULAi5crPmDriyjlX4yfar4ZFhEbYs
+         c2lRvw10qB/Bf1q9s08sAeylcVqP5ynMbA+ESNUmzWhmC8Stnrdzys3Bn52TKdQs1snD
+         s4Tg==
+X-Gm-Message-State: ABy/qLZJFo9H0sIF+BMmAkXlp+j2odxkxLmfBDMCWVilbGVyXckw4rl5
+        5Qyg1hNZ0Vl6qYzZltPF43XB4Jp+x72R5Eaa5NX2iR3MBvf9miijTC2rx4dL9Ry4ag8meZ6HldV
+        Vr0J8kjlCK7JX7o47RqrPqur5omK5
+X-Received: by 2002:a05:600c:5187:b0:3fb:b18a:f32d with SMTP id fa7-20020a05600c518700b003fbb18af32dmr4313867wmb.17.1689256614495;
+        Thu, 13 Jul 2023 06:56:54 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlE118GN9dvVisQic4LNU75RVuVsDjt1KGEsf35PRM3rckhrWuEAXEBr4f3RPD+JkiJS5nwlWA==
+X-Received: by 2002:a05:600c:5187:b0:3fb:b18a:f32d with SMTP id fa7-20020a05600c518700b003fbb18af32dmr4313854wmb.17.1689256614159;
+        Thu, 13 Jul 2023 06:56:54 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c717:6100:2da7:427e:49a5:e07? (p200300cbc71761002da7427e49a50e07.dip0.t-ipconnect.de. [2003:cb:c717:6100:2da7:427e:49a5:e07])
+        by smtp.gmail.com with ESMTPSA id q5-20020a1ce905000000b003fbc9d178a8sm18501864wmc.4.2023.07.13.06.56.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jul 2023 06:56:53 -0700 (PDT)
+Message-ID: <cf3c237e-69c8-dd6e-26fc-fe19de910813@redhat.com>
+Date:   Thu, 13 Jul 2023 15:56:52 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1 3/9] selftests/mm: Skip soft-dirty tests on arm64
+Content-Language: en-US
+To:     Ryan Roberts <ryan.roberts@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
         Mark Brown <broonie@kernel.org>,
         John Hubbard <jhubbard@nvidia.com>,
         Florent Revest <revest@chromium.org>,
         "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 9/9] selftests/mm: Run all tests from run_vmtests.sh
-Date:   Thu, 13 Jul 2023 14:54:40 +0100
-Message-Id: <20230713135440.3651409-10-ryan.roberts@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230713135440.3651409-1-ryan.roberts@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
 References: <20230713135440.3651409-1-ryan.roberts@arm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20230713135440.3651409-4-ryan.roberts@arm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230713135440.3651409-4-ryan.roberts@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It is very unclear to me how one is supposed to run all the mm selftests
-consistently and get clear results.
+On 13.07.23 15:54, Ryan Roberts wrote:
+> arm64 does not support the soft-dirty PTE bit. However there are tests
+> in `madv_populate` and `soft-dirty` which assume it is supported and
+> cause spurious failures to be reported when preferred behaviour would be
+> to mark the tests as skipped.
+> 
+> Unfortunately, the only way to determine if the soft-dirty dirty bit is
+> supported is to write to a page, then see if the bit is set in
+> /proc/self/pagemap. But the tests that we want to conditionally execute
+> are testing precicesly this. So if we introduced this feature check, we
+> could accedentally turn a real failure (on a system that claims to
+> support soft-dirty) into a skip.
+> 
+> So instead, do the check based on architecture; for arm64, we report
+> that soft-dirty is not supported. This is wrapped up into a utility
+> function `system_has_softdirty()`, which is used to skip the whole
+> `soft-dirty` suite, and mark the soft-dirty tests in the `madv_populate`
+> suite as skipped.
+> 
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> ---
+>   tools/testing/selftests/mm/madv_populate.c | 18 +++++++++++++-----
+>   tools/testing/selftests/mm/soft-dirty.c    |  3 +++
+>   tools/testing/selftests/mm/vm_util.c       | 17 +++++++++++++++++
+>   tools/testing/selftests/mm/vm_util.h       |  1 +
+>   4 files changed, 34 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/madv_populate.c b/tools/testing/selftests/mm/madv_populate.c
+> index 60547245e479..5a8c176d7fec 100644
+> --- a/tools/testing/selftests/mm/madv_populate.c
+> +++ b/tools/testing/selftests/mm/madv_populate.c
+> @@ -232,6 +232,14 @@ static bool range_is_not_softdirty(char *start, ssize_t size)
+>   	return ret;
+>   }
+> 
+> +#define ksft_test_result_if_softdirty(cond, ...)	\
+> +do {							\
+> +	if (system_has_softdirty())			\
+> +		ksft_test_result(cond, __VA_ARGS__);	\
+> +	else						\
+> +		ksft_test_result_skip(__VA_ARGS__);	\
+> +} while (0)
+> +
+>   static void test_softdirty(void)
+>   {
+>   	char *addr;
+> @@ -246,19 +254,19 @@ static void test_softdirty(void)
+> 
+>   	/* Clear any softdirty bits. */
+>   	clear_softdirty();
+> -	ksft_test_result(range_is_not_softdirty(addr, SIZE),
+> +	ksft_test_result_if_softdirty(range_is_not_softdirty(addr, SIZE),
+>   			 "range is not softdirty\n");
+> 
+>   	/* Populating READ should set softdirty. */
+>   	ret = madvise(addr, SIZE, MADV_POPULATE_READ);
+> -	ksft_test_result(!ret, "MADV_POPULATE_READ\n");
+> -	ksft_test_result(range_is_not_softdirty(addr, SIZE),
+> +	ksft_test_result_if_softdirty(!ret, "MADV_POPULATE_READ\n");
+> +	ksft_test_result_if_softdirty(range_is_not_softdirty(addr, SIZE),
+>   			 "range is not softdirty\n");
+> 
+>   	/* Populating WRITE should set softdirty. */
+>   	ret = madvise(addr, SIZE, MADV_POPULATE_WRITE);
+> -	ksft_test_result(!ret, "MADV_POPULATE_WRITE\n");
+> -	ksft_test_result(range_is_softdirty(addr, SIZE),
+> +	ksft_test_result_if_softdirty(!ret, "MADV_POPULATE_WRITE\n");
+> +	ksft_test_result_if_softdirty(range_is_softdirty(addr, SIZE),
+>   			 "range is softdirty\n");
 
-Most of the test programs are launched by both run_vmtests.sh and
-run_kselftest.sh:
+We probably want to skip the whole test_*softdirty* test instead of 
+adding this (IMHO suboptimal) ksft_test_result_if_softdirty.
 
-  hugepage-mmap
-  hugepage-shm
-  map_hugetlb
-  hugepage-mremap
-  hugepage-vmemmap
-  hugetlb-madvise
-  map_fixed_noreplace
-  gup_test
-  gup_longterm
-  uffd-unit-tests
-  uffd-stress
-  compaction_test
-  on-fault-limit
-  map_populate
-  mlock-random-test
-  mlock2-tests
-  mrelease_test
-  mremap_test
-  thuge-gen
-  virtual_address_range
-  va_high_addr_switch
-  mremap_dontunmap
-  hmm-tests
-  madv_populate
-  memfd_secret
-  ksm_tests
-  ksm_functional_tests
-  soft-dirty
-  cow
-
-However, of this set, when launched by run_vmtests.sh, some of the
-programs are invoked multiple times with different arguments. When
-invoked by run_kselftest.sh, they are invoked without arguments (and as
-a consequence, some fail immediately).
-
-Some test programs are only launched by run_vmtests.sh:
-
-  test_vmalloc.sh
-
-And some test programs and only launched by run_kselftest.sh:
-
-  khugepaged
-  migration
-  mkdirty
-  transhuge-stress
-  split_huge_page_test
-  mdwe_test
-  write_to_hugetlbfs
-
-Furthermore, run_vmtests.sh is invoked by run_kselftest.sh, so in this
-case all the test programs invoked by both scripts are run twice!
-
-Needless to say, this is a bit of a mess. In the absence of fully
-understanding the history here, it looks to me like the best solution is
-to launch ALL test programs from run_vmtests.sh, and ONLY invoke
-run_vmtests.sh from run_kselftest.sh. This way, we get full control over
-the parameters, each program is only invoked the intended number of
-times, and regardless of which script is used, the same tests get run in
-the same way.
-
-The only drawback is that if using run_kselftest.sh, it's top-level tap
-result reporting reports only a single test and it fails if any of the
-contained tests fail. I don't see this as a big deal though since we
-still see all the nested reporting from multiple layers. The other issue
-with this is that all of run_vmtests.sh must execute within a single
-kselftest timeout period, so let's increase that to something more
-suitable.
-
-Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
----
- tools/testing/selftests/mm/Makefile       | 79 ++++++++++++-----------
- tools/testing/selftests/mm/run_vmtests.sh | 23 +++++++
- tools/testing/selftests/mm/settings       |  2 +-
- 3 files changed, 64 insertions(+), 40 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 66d7c07dc177..881ed96d96fd 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -35,39 +35,39 @@ MAKEFLAGS += --no-builtin-rules
- CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
- LDLIBS = -lrt -lpthread
- 
--TEST_GEN_PROGS = cow
--TEST_GEN_PROGS += compaction_test
--TEST_GEN_PROGS += gup_longterm
--TEST_GEN_PROGS += gup_test
--TEST_GEN_PROGS += hmm-tests
--TEST_GEN_PROGS += hugetlb-madvise
--TEST_GEN_PROGS += hugepage-mmap
--TEST_GEN_PROGS += hugepage-mremap
--TEST_GEN_PROGS += hugepage-shm
--TEST_GEN_PROGS += hugepage-vmemmap
--TEST_GEN_PROGS += khugepaged
--TEST_GEN_PROGS += madv_populate
--TEST_GEN_PROGS += map_fixed_noreplace
--TEST_GEN_PROGS += map_hugetlb
--TEST_GEN_PROGS += map_populate
--TEST_GEN_PROGS += memfd_secret
--TEST_GEN_PROGS += migration
--TEST_GEN_PROGS += mkdirty
--TEST_GEN_PROGS += mlock-random-test
--TEST_GEN_PROGS += mlock2-tests
--TEST_GEN_PROGS += mrelease_test
--TEST_GEN_PROGS += mremap_dontunmap
--TEST_GEN_PROGS += mremap_test
--TEST_GEN_PROGS += on-fault-limit
--TEST_GEN_PROGS += thuge-gen
--TEST_GEN_PROGS += transhuge-stress
--TEST_GEN_PROGS += uffd-stress
--TEST_GEN_PROGS += uffd-unit-tests
--TEST_GEN_PROGS += soft-dirty
--TEST_GEN_PROGS += split_huge_page_test
--TEST_GEN_PROGS += ksm_tests
--TEST_GEN_PROGS += ksm_functional_tests
--TEST_GEN_PROGS += mdwe_test
-+TEST_GEN_FILES = cow
-+TEST_GEN_FILES += compaction_test
-+TEST_GEN_FILES += gup_longterm
-+TEST_GEN_FILES += gup_test
-+TEST_GEN_FILES += hmm-tests
-+TEST_GEN_FILES += hugetlb-madvise
-+TEST_GEN_FILES += hugepage-mmap
-+TEST_GEN_FILES += hugepage-mremap
-+TEST_GEN_FILES += hugepage-shm
-+TEST_GEN_FILES += hugepage-vmemmap
-+TEST_GEN_FILES += khugepaged
-+TEST_GEN_FILES += madv_populate
-+TEST_GEN_FILES += map_fixed_noreplace
-+TEST_GEN_FILES += map_hugetlb
-+TEST_GEN_FILES += map_populate
-+TEST_GEN_FILES += memfd_secret
-+TEST_GEN_FILES += migration
-+TEST_GEN_FILES += mkdirty
-+TEST_GEN_FILES += mlock-random-test
-+TEST_GEN_FILES += mlock2-tests
-+TEST_GEN_FILES += mrelease_test
-+TEST_GEN_FILES += mremap_dontunmap
-+TEST_GEN_FILES += mremap_test
-+TEST_GEN_FILES += on-fault-limit
-+TEST_GEN_FILES += thuge-gen
-+TEST_GEN_FILES += transhuge-stress
-+TEST_GEN_FILES += uffd-stress
-+TEST_GEN_FILES += uffd-unit-tests
-+TEST_GEN_FILES += soft-dirty
-+TEST_GEN_FILES += split_huge_page_test
-+TEST_GEN_FILES += ksm_tests
-+TEST_GEN_FILES += ksm_functional_tests
-+TEST_GEN_FILES += mdwe_test
- 
- ifeq ($(ARCH),x86_64)
- CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
-@@ -83,24 +83,24 @@ CFLAGS += -no-pie
- endif
- 
- ifeq ($(CAN_BUILD_I386),1)
--TEST_GEN_PROGS += $(BINARIES_32)
-+TEST_GEN_FILES += $(BINARIES_32)
- endif
- 
- ifeq ($(CAN_BUILD_X86_64),1)
--TEST_GEN_PROGS += $(BINARIES_64)
-+TEST_GEN_FILES += $(BINARIES_64)
- endif
- else
- 
- ifneq (,$(findstring $(ARCH),ppc64))
--TEST_GEN_PROGS += protection_keys
-+TEST_GEN_FILES += protection_keys
- endif
- 
- endif
- 
- ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sparc64 x86_64))
--TEST_GEN_PROGS += va_high_addr_switch
--TEST_GEN_PROGS += virtual_address_range
--TEST_GEN_PROGS += write_to_hugetlbfs
-+TEST_GEN_FILES += va_high_addr_switch
-+TEST_GEN_FILES += virtual_address_range
-+TEST_GEN_FILES += write_to_hugetlbfs
- endif
- 
- TEST_PROGS := run_vmtests.sh
-@@ -112,6 +112,7 @@ TEST_FILES += va_high_addr_switch.sh
- include ../lib.mk
- 
- $(TEST_GEN_PROGS): vm_util.c
-+$(TEST_GEN_FILES): vm_util.c
- 
- $(OUTPUT)/uffd-stress: uffd-common.c
- $(OUTPUT)/uffd-unit-tests: uffd-common.c
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 3f26f6e15b2a..55fe1d309355 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -55,6 +55,17 @@ separated by spaces:
- 	test soft dirty page bit semantics
- - cow
- 	test copy-on-write semantics
-+- thp
-+	test transparent huge pages
-+- migration
-+	invoke move_pages(2) to exercise the migration entry code
-+	paths in the kernel
-+- mkdirty
-+	test handling of code that might set PTE/PMD dirty in
-+	read-only VMAs
-+- mdwe
-+	test prctl(PR_SET_MDWE, ...)
-+
- example: ./run_vmtests.sh -t "hmm mmap ksm"
- EOF
- 	exit 0
-@@ -295,6 +306,18 @@ CATEGORY="soft_dirty" run_test ./soft-dirty
- # COW tests
- CATEGORY="cow" run_test ./cow
- 
-+CATEGORY="thp" run_test ./khugepaged
-+
-+CATEGORY="thp" run_test ./transhuge-stress -d 20
-+
-+CATEGORY="thp" run_test ./split_huge_page_test
-+
-+CATEGORY="migration" run_test ./migration
-+
-+CATEGORY="mkdirty" run_test ./mkdirty
-+
-+CATEGORY="mdwe" run_test ./mdwe_test
-+
- echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}"
- 
- exit $exitcode
-diff --git a/tools/testing/selftests/mm/settings b/tools/testing/selftests/mm/settings
-index ba4d85f74cd6..a953c96aa16e 100644
---- a/tools/testing/selftests/mm/settings
-+++ b/tools/testing/selftests/mm/settings
-@@ -1 +1 @@
--timeout=90
-+timeout=180
 -- 
-2.25.1
+Cheers,
+
+David / dhildenb
 
