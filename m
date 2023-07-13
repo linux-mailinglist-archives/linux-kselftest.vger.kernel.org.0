@@ -2,218 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB22C752719
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 17:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F26375271D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 17:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbjGMPau (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 11:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
+        id S234805AbjGMPcJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 11:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbjGMPa0 (ORCPT
+        with ESMTP id S235091AbjGMPbt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 11:30:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 781D31FDB;
-        Thu, 13 Jul 2023 08:30:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A104C1570;
-        Thu, 13 Jul 2023 08:31:03 -0700 (PDT)
-Received: from [10.1.30.48] (C02Z41KALVDN.cambridge.arm.com [10.1.30.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A37C33F73F;
-        Thu, 13 Jul 2023 08:30:19 -0700 (PDT)
-Message-ID: <a8084196-38fc-7bbe-174c-3db4c174e3c8@arm.com>
-Date:   Thu, 13 Jul 2023 16:30:18 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH v1 9/9] selftests/mm: Run all tests from run_vmtests.sh
-To:     David Hildenbrand <david@redhat.com>,
+        Thu, 13 Jul 2023 11:31:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4E030E7;
+        Thu, 13 Jul 2023 08:31:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 930E761A2A;
+        Thu, 13 Jul 2023 15:31:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23AEFC433C9;
+        Thu, 13 Jul 2023 15:31:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689262266;
+        bh=+bl7pGAIjOwAWrnLWJZrbTUju1m6vSqMi+vbA9qDarc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HdkGpCT4OKVPWpXMzoWAdJXWeDmQQTIlz5UuWbQdX+FvsVaIiM0RIaHNjXyYw4Dpq
+         0E+TrM+ZTNpDNJwspFrtMpNOhFrdpOsPWUDaBfc3ky4V48UpYQ+tRCAUzyqBCzSQrx
+         +Qr+/D+SHrVrK/rap00ix0c99qWp3/nuBANKs42UsY9eosobXOCNW6lytER9gvJuWD
+         QLfPBtH8KTKz/u5FNixfjCu+d5lKQ6JLNPtXt7Gc3hRzU97eK9WMdkaeCb791Xhzos
+         vbeyoTTpbX7ZOi8+yvSPBb2NXH8uKDWEYN5F6MnSlarQWxtFPwzB5a5byrsMhsYJAO
+         5ziK9vk1ax0dA==
+Date:   Thu, 13 Jul 2023 16:30:59 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
         John Hubbard <jhubbard@nvidia.com>,
         Florent Revest <revest@chromium.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, Peter Xu <peterx@redhat.com>
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 9/9] selftests/mm: Run all tests from run_vmtests.sh
+Message-ID: <97742685-e026-417b-8c8f-938330027636@sirena.org.uk>
 References: <20230713135440.3651409-1-ryan.roberts@arm.com>
  <20230713135440.3651409-10-ryan.roberts@arm.com>
  <d77c6592-09f4-036d-ad00-a7a28de1da3f@redhat.com>
  <2b586ba2-7522-a823-afd6-7b4d978f18c2@arm.com>
- <57f4cfe0-2f20-c50a-439f-ee914dde1693@redhat.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <57f4cfe0-2f20-c50a-439f-ee914dde1693@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="onJhUM6E6puuqySH"
+Content-Disposition: inline
+In-Reply-To: <2b586ba2-7522-a823-afd6-7b4d978f18c2@arm.com>
+X-Cookie: MOUNT TAPE U1439 ON B3, NO RING
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 13/07/2023 16:25, David Hildenbrand wrote:
->>>
->>> Which run_kselftest.sh are you referring to, the one in the parent directory?
->>
->> run_kselftest.sh is the uniform way of executing all the kselftests. mm seems to
->> be trying to be special as far as I can see. Certainly if you run the `install`
->> make target, kselftests will create a list of all the tests (including non-mm
->> tests if you have included them in the TARGETS variable) and copy that test list
->> and run_kselftest.sh to the install path along with all the test binaries. Then
->> the user can invoke any of the collections or specific tests in the collections
->> using that tool. It also wraps everything with tap output, runs tests with a
->> timeout, etc.
->>
->> See Documentation/dev-tools/kselftest.rst
->>
-> 
-> Got it, thanks!
-> 
->>>
->>> How to invoke it to run these mm tests?
->>>
->>> (I never dared invoking something different than
->>> run_vmtests.sh ;) )
->>
->> # single test:
->> $ sudo ./run_kselftest.sh -t mm:<test_name>
->>
->> or
->>
->> # all tests in collection:
->> $ sudo ./run_kselftest.sh -c mm
->>
-> 
-> Ah, that makes sense. So I guess mm is then one "collection".
 
-yep, the collections are the directories under tools/testing/selftests with a
-few special exceptions.
+--onJhUM6E6puuqySH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
->>>
->>> [...]
->>>
->>>>
->>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->>>> ---
->>>>    tools/testing/selftests/mm/Makefile       | 79 ++++++++++++-----------
->>>>    tools/testing/selftests/mm/run_vmtests.sh | 23 +++++++
->>>>    tools/testing/selftests/mm/settings       |  2 +-
->>>>    3 files changed, 64 insertions(+), 40 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/mm/Makefile
->>>> b/tools/testing/selftests/mm/Makefile
->>>> index 66d7c07dc177..881ed96d96fd 100644
->>>> --- a/tools/testing/selftests/mm/Makefile
->>>> +++ b/tools/testing/selftests/mm/Makefile
->>>> @@ -35,39 +35,39 @@ MAKEFLAGS += --no-builtin-rules
->>>>    CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
->>>>    LDLIBS = -lrt -lpthread
->>>>    -TEST_GEN_PROGS = cow
->>>> -TEST_GEN_PROGS += compaction_test
->>>> -TEST_GEN_PROGS += gup_longterm
->>>> -TEST_GEN_PROGS += gup_test
->>>> -TEST_GEN_PROGS += hmm-tests
->>>> -TEST_GEN_PROGS += hugetlb-madvise
->>>> -TEST_GEN_PROGS += hugepage-mmap
->>>> -TEST_GEN_PROGS += hugepage-mremap
->>>> -TEST_GEN_PROGS += hugepage-shm
->>>> -TEST_GEN_PROGS += hugepage-vmemmap
->>>> -TEST_GEN_PROGS += khugepaged
->>>> -TEST_GEN_PROGS += madv_populate
->>>> -TEST_GEN_PROGS += map_fixed_noreplace
->>>> -TEST_GEN_PROGS += map_hugetlb
->>>> -TEST_GEN_PROGS += map_populate
->>>> -TEST_GEN_PROGS += memfd_secret
->>>> -TEST_GEN_PROGS += migration
->>>> -TEST_GEN_PROGS += mkdirty
->>>> -TEST_GEN_PROGS += mlock-random-test
->>>> -TEST_GEN_PROGS += mlock2-tests
->>>> -TEST_GEN_PROGS += mrelease_test
->>>> -TEST_GEN_PROGS += mremap_dontunmap
->>>> -TEST_GEN_PROGS += mremap_test
->>>> -TEST_GEN_PROGS += on-fault-limit
->>>> -TEST_GEN_PROGS += thuge-gen
->>>> -TEST_GEN_PROGS += transhuge-stress
->>>> -TEST_GEN_PROGS += uffd-stress
->>>> -TEST_GEN_PROGS += uffd-unit-tests
->>>> -TEST_GEN_PROGS += soft-dirty
->>>> -TEST_GEN_PROGS += split_huge_page_test
->>>> -TEST_GEN_PROGS += ksm_tests
->>>> -TEST_GEN_PROGS += ksm_functional_tests
->>>> -TEST_GEN_PROGS += mdwe_test
->>>> +TEST_GEN_FILES = cow
->>>> +TEST_GEN_FILES += compaction_test
->>>> +TEST_GEN_FILES += gup_longterm
->>>> +TEST_GEN_FILES += gup_test
->>>> +TEST_GEN_FILES += hmm-tests
->>>> +TEST_GEN_FILES += hugetlb-madvise
->>>> +TEST_GEN_FILES += hugepage-mmap
->>>> +TEST_GEN_FILES += hugepage-mremap
->>>> +TEST_GEN_FILES += hugepage-shm
->>>> +TEST_GEN_FILES += hugepage-vmemmap
->>>> +TEST_GEN_FILES += khugepaged
->>>> +TEST_GEN_FILES += madv_populate
->>>> +TEST_GEN_FILES += map_fixed_noreplace
->>>> +TEST_GEN_FILES += map_hugetlb
->>>> +TEST_GEN_FILES += map_populate
->>>> +TEST_GEN_FILES += memfd_secret
->>>> +TEST_GEN_FILES += migration
->>>> +TEST_GEN_FILES += mkdirty
->>>> +TEST_GEN_FILES += mlock-random-test
->>>> +TEST_GEN_FILES += mlock2-tests
->>>> +TEST_GEN_FILES += mrelease_test
->>>> +TEST_GEN_FILES += mremap_dontunmap
->>>> +TEST_GEN_FILES += mremap_test
->>>> +TEST_GEN_FILES += on-fault-limit
->>>> +TEST_GEN_FILES += thuge-gen
->>>> +TEST_GEN_FILES += transhuge-stress
->>>> +TEST_GEN_FILES += uffd-stress
->>>> +TEST_GEN_FILES += uffd-unit-tests
->>>> +TEST_GEN_FILES += soft-dirty
->>>> +TEST_GEN_FILES += split_huge_page_test
->>>> +TEST_GEN_FILES += ksm_tests
->>>> +TEST_GEN_FILES += ksm_functional_tests
->>>> +TEST_GEN_FILES += mdwe_test
->>>
->>> IIRC, we recently converted all to TEST_GEN_PROGS. See
->>>
->>> commit aef6fde75d8c6c1cad4a0e017a8d4cbee2143723
->>> Author: Peter Xu <peterx@redhat.com>
->>> Date:   Wed Apr 12 12:42:18 2023 -0400
->>>
->>>      selftests/mm: use TEST_GEN_PROGS where proper
->>>          TEST_GEN_PROGS and TEST_GEN_FILES are used randomly in the
->>> mm/Makefile to
->>>      specify programs that need to build.  Logically all these binaries should
->>>      all fall into TEST_GEN_PROGS.
->>>          Replace those TEST_GEN_FILES with TEST_GEN_PROGS, so that we can
->>> reference
->>>      all the tests easily later.
->>>
->>>
->>> Why is that change required, and how does it interact with
->>> run_kselftest.sh? (Not clear from you patch description.)
->>
->> TEST_GEN_PROGS will compile and install the tests and will add them to the list
->> of tests that run_kselftest.sh will run. TEST_GEN_FILES will compile and install
->> the tests but will not add them to the test list.
->>
->> Note that run_vmtests.sh is added to TEST_PROGS, which means it ends up in the
->> test list. (the lack of "_GEN" means it won't be compiled, but simply copied).
->>
->> So with this change at the kselftest level, there is a single test in its list;
->> run_vmtests.sh. And all the other tests that were previously in that list are
->> moved into run_vmtests.sh (if they weren't there already).
-> 
-> That sound good to me. (worth adding to the patch description)
-> 
-> Let me CC Peter, so he's aware.
+On Thu, Jul 13, 2023 at 04:04:44PM +0100, Ryan Roberts wrote:
 
-Thanks - would be good to hear his opinion!
+> So with this change at the kselftest level, there is a single test in its list;
+> run_vmtests.sh. And all the other tests that were previously in that list are
+> moved into run_vmtests.sh (if they weren't there already).
 
+The results parsers I'm aware of like the LAVA one will DTRT with nested
+kselftests since that's required to pull see individual test cases run
+by a single binary so it's the common case to see at least one level of
+nesting.
 
+--onJhUM6E6puuqySH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSwGLMACgkQJNaLcl1U
+h9BznQf/R74hHYm7LdjI06OmEd0RI0mxw6+/XWm6KKDxZ28fK3TAx/HdCd5QL+i/
+53Cdoyeoc4fCAPKY9in1xVo492p8qYdCetruuUUjHm5FVQFFH29Jb25Crjk0NxqT
+8iFlNAv42sg0wvOVKfdHShqFu8LakabasfEulvz4Mp4WQdCTOiuq34MidDS1TZxE
+GXO/Q+6BGTDr0BAK0gyhZWY+ENIyGrmdwYh4G630kEbYxV8tO9CNzrUpjH4XXO+4
+inh3KdiiJuXJTHLV7iwVkVeVRsvuc0LDXr8IwlPzTkk5twaFtTjMs1W0Zs38jtib
+2BY8jadzeUk/WzvXnnCzbAjmL2g+Dg==
+=JjuZ
+-----END PGP SIGNATURE-----
+
+--onJhUM6E6puuqySH--
