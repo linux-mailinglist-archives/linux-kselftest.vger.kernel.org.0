@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871CD752386
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 15:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FA9752389
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 15:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235170AbjGMNW1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 09:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
+        id S234120AbjGMNWk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 09:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235230AbjGMNVs (ORCPT
+        with ESMTP id S234601AbjGMNVx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:21:48 -0400
+        Thu, 13 Jul 2023 09:21:53 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C360A3A86;
-        Thu, 13 Jul 2023 06:21:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1715D3A9E;
+        Thu, 13 Jul 2023 06:21:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689254468; x=1720790468;
+  t=1689254473; x=1720790473;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ReRBurQsGT7Fx6kcQMK28MT5AqfN9HI/hJmNwwtabwY=;
-  b=BnRdYpen7PLkJ50BgpCdFPcY41nVfSdp014hYo7XYw/FB5hjSqCcq5k5
-   R393md294KEDhZ/w4sJJrODGYeth7RNBq8da2bIhr1LIv4msRFhz0Ogdj
-   wYoWm9Yvv/lz1PS9XUg/Njn7UYSjQ+gwHgP6SrmexRx123lWF0FtXn4MK
-   siq9TkiIJBfOjJp6EAucLcdNqc6FDU6/4EOSVX7EJJka8//I31OYVmL9i
-   8ZUE1Kzw5OPoWomn2UC3RVb6dEA1RZGMDYysHsIKAqNGouq1H/9C53FmW
-   H1Jw0LlDCIiF8G2vNpLVul5U2UVF00kXzSs1ZwgiSRYrOgP1S9H+srt+W
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="345496870"
+  bh=Vd7tzwpfv1b8Vdm5xf009cWmFKxKtbsLKfgak3lNYlg=;
+  b=lu4H+LI3fFyCfJzuuLZeE7LYvo8hDBOxV7xl1I1VyK4PFyTk0f1BTuNt
+   ULOgrINoms2KH9g6jKTkaybwGmdWMb+rLZwtdQIWiXP6J9fdlAduMAHOU
+   qhHTVVnvyQEQGZgW8sm+obFlx7MXtxy80pekV593P2XQxXkM4GRm+Eij6
+   +jK1W029R7f9YXTl1Ub5i0/D4SNGMKLmUYGG+JHH1bF84ZNIvgqUGmB9T
+   95nfvYirwW8lQU82Nd4gQPXdQUDKrTHFm5tMoWAGh/8hbRW6quimyuFqG
+   /NjZX8/soyIdZ8PN4G2LaT63Xv2B2LFfeiLYWZVL/V3anx2Jj6YF+0Tqf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="345496912"
 X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="345496870"
+   d="scan'208";a="345496912"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:21:01 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:21:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="968615904"
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="968615921"
 X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="968615904"
+   d="scan'208";a="968615921"
 Received: from ijarvine-mobl2.ger.corp.intel.com ([10.251.222.39])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:20:58 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:21:01 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -46,9 +46,9 @@ To:     linux-kselftest@vger.kernel.org,
         Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 13/19] selftests/resctrl: Remove unnecessary startptr global from fill_buf
-Date:   Thu, 13 Jul 2023 16:19:26 +0300
-Message-Id: <20230713131932.133258-14-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 14/19] selftests/resctrl: Improve parameter consistency in fill_buf
+Date:   Thu, 13 Jul 2023 16:19:27 +0300
+Message-Id: <20230713131932.133258-15-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
 References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
@@ -65,44 +65,174 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-fill_buf stores buffer pointer into global variable startptr that is
-only used in fill_cache().
+fill_buf's arguments can be improved in multiple ways:
 
-Remove startptr as global variable, the local variable in fill_cache()
-is enough to keep the pointer.
+  - Multiple functions in fill_buf have start_ptr as one of their
+    argument which is a bit long and the extra "start" is pretty
+    obvious when it comes to pointers.
+
+  - Some of the functions take end_ptr and others size_t to indicate
+    the end of the buffer.
+
+  - Some arguments meaning buffer size are called just 's'
+
+  - mem_flush() takes void * but immediately converts it to char *
+
+Cleanup the parameters to make things simpler and more consistent:
+
+  - Rename start_ptr to simply buf as it's shorter.
+
+  - Replace end_ptr and s parameters with buf_size and only calculate
+    end_ptr in the functions that truly use it.
+
+  - Make mem_flush() parameters to follow the same convention as the
+    other functions in fill_buf.
+
+  - convert mem_flush() char * to unsigned char *.
+
+While at it, fix also a typo in a comment.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/fill_buf.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ tools/testing/selftests/resctrl/fill_buf.c | 49 +++++++++++-----------
+ 1 file changed, 24 insertions(+), 25 deletions(-)
 
 diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-index d8f5505eb9e6..a5ec9c82a960 100644
+index a5ec9c82a960..5f16c4f5dfbf 100644
 --- a/tools/testing/selftests/resctrl/fill_buf.c
 +++ b/tools/testing/selftests/resctrl/fill_buf.c
-@@ -22,8 +22,6 @@
- #define PAGE_SIZE		(4 * 1024)
- #define MB			(1024 * 1024)
+@@ -38,32 +38,32 @@ static void cl_flush(void *p)
+ #endif
+ }
  
--static unsigned char *startptr;
--
- static void sb(void)
+-static void mem_flush(void *p, size_t s)
++static void mem_flush(unsigned char *buf, size_t buf_size)
  {
- #if defined(__i386) || defined(__x86_64)
-@@ -147,7 +145,6 @@ static int fill_cache(size_t buf_size, int memflush, int op, char *resctrl_val)
- 	if (!start_ptr)
+-	char *cp = (char *)p;
++	unsigned char *cp = buf;
+ 	size_t i = 0;
+ 
+-	s = s / CL_SIZE; /* mem size in cache llines */
++	buf_size = buf_size / CL_SIZE; /* mem size in cache lines */
+ 
+-	for (i = 0; i < s; i++)
++	for (i = 0; i < buf_size; i++)
+ 		cl_flush(&cp[i * CL_SIZE]);
+ 
+ 	sb();
+ }
+ 
+-static void *malloc_and_init_memory(size_t s)
++static void *malloc_and_init_memory(size_t buf_size)
+ {
+ 	void *p = NULL;
+ 	uint64_t *p64;
+ 	size_t s64;
+ 	int ret;
+ 
+-	ret = posix_memalign(&p, PAGE_SIZE, s);
++	ret = posix_memalign(&p, PAGE_SIZE, buf_size);
+ 	if (ret < 0)
+ 		return NULL;
+ 
+ 	p64 = (uint64_t *)p;
+-	s64 = s / sizeof(uint64_t);
++	s64 = buf_size / sizeof(uint64_t);
+ 
+ 	while (s64 > 0) {
+ 		*p64 = (uint64_t)rand();
+@@ -74,12 +74,13 @@ static void *malloc_and_init_memory(size_t s)
+ 	return p;
+ }
+ 
+-static int fill_one_span_read(unsigned char *start_ptr, unsigned char *end_ptr)
++static int fill_one_span_read(unsigned char *buf, size_t buf_size)
+ {
++	unsigned char *end_ptr = buf + buf_size;
+ 	unsigned char sum, *p;
+ 
+ 	sum = 0;
+-	p = start_ptr;
++	p = buf;
+ 	while (p < end_ptr) {
+ 		sum += *p;
+ 		p += (CL_SIZE / 2);
+@@ -88,26 +89,26 @@ static int fill_one_span_read(unsigned char *start_ptr, unsigned char *end_ptr)
+ 	return sum;
+ }
+ 
+-static
+-void fill_one_span_write(unsigned char *start_ptr, unsigned char *end_ptr)
++static void fill_one_span_write(unsigned char *buf, size_t buf_size)
+ {
++	unsigned char *end_ptr = buf + buf_size;
+ 	unsigned char *p;
+ 
+-	p = start_ptr;
++	p = buf;
+ 	while (p < end_ptr) {
+ 		*p = '1';
+ 		p += (CL_SIZE / 2);
+ 	}
+ }
+ 
+-static int fill_cache_read(unsigned char *start_ptr, unsigned char *end_ptr,
++static int fill_cache_read(unsigned char *buf, size_t buf_size,
+ 			   char *resctrl_val)
+ {
+ 	int ret = 0;
+ 	FILE *fp;
+ 
+ 	while (1) {
+-		ret = fill_one_span_read(start_ptr, end_ptr);
++		ret = fill_one_span_read(buf, buf_size);
+ 		if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)))
+ 			break;
+ 	}
+@@ -124,11 +125,11 @@ static int fill_cache_read(unsigned char *start_ptr, unsigned char *end_ptr,
+ 	return 0;
+ }
+ 
+-static int fill_cache_write(unsigned char *start_ptr, unsigned char *end_ptr,
++static int fill_cache_write(unsigned char *buf, size_t buf_size,
+ 			    char *resctrl_val)
+ {
+ 	while (1) {
+-		fill_one_span_write(start_ptr, end_ptr);
++		fill_one_span_write(buf, buf_size);
+ 		if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)))
+ 			break;
+ 	}
+@@ -138,25 +139,23 @@ static int fill_cache_write(unsigned char *start_ptr, unsigned char *end_ptr,
+ 
+ static int fill_cache(size_t buf_size, int memflush, int op, char *resctrl_val)
+ {
+-	unsigned char *start_ptr, *end_ptr;
++	unsigned char *buf;
+ 	int ret;
+ 
+-	start_ptr = malloc_and_init_memory(buf_size);
+-	if (!start_ptr)
++	buf = malloc_and_init_memory(buf_size);
++	if (!buf)
  		return -1;
  
--	startptr = start_ptr;
- 	end_ptr = start_ptr + buf_size;
- 
+-	end_ptr = start_ptr + buf_size;
+-
  	/* Flush the memory before using to avoid "cache hot pages" effect */
-@@ -159,7 +156,7 @@ static int fill_cache(size_t buf_size, int memflush, int op, char *resctrl_val)
- 	else
- 		ret = fill_cache_write(start_ptr, end_ptr, resctrl_val);
+ 	if (memflush)
+-		mem_flush(start_ptr, buf_size);
++		mem_flush(buf, buf_size);
  
--	free(startptr);
-+	free(start_ptr);
+ 	if (op == 0)
+-		ret = fill_cache_read(start_ptr, end_ptr, resctrl_val);
++		ret = fill_cache_read(buf, buf_size, resctrl_val);
+ 	else
+-		ret = fill_cache_write(start_ptr, end_ptr, resctrl_val);
++		ret = fill_cache_write(buf, buf_size, resctrl_val);
+ 
+-	free(start_ptr);
++	free(buf);
  
  	if (ret) {
  		printf("\n Error in fill cache read/write...\n");
