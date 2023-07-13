@@ -2,48 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946EE752B6B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 22:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5860752B6F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 22:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbjGMULq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 16:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
+        id S231962AbjGMULs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 16:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbjGMULo (ORCPT
+        with ESMTP id S230183AbjGMULq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 16:11:44 -0400
+        Thu, 13 Jul 2023 16:11:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8347830C5;
-        Thu, 13 Jul 2023 13:11:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFE330CA;
+        Thu, 13 Jul 2023 13:11:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50FD561B24;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D81861B0F;
+        Thu, 13 Jul 2023 20:11:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33903C433C9;
         Thu, 13 Jul 2023 20:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A9AC433C8;
-        Thu, 13 Jul 2023 20:10:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689279057;
-        bh=b+mXPu6hNz1J3rv9s18G7fKwLpeHT94qeHP9x8G2zPo=;
-        h=From:Subject:Date:To:Cc:From;
-        b=R4Ebcd75+4TN8r4xX5AjQ0htMud9ZRjaNpBbh8127EbiyvvDj95qjKwznaS2XNnFJ
-         2I0o0y4B+1tTJs9Cz1AvOmrv6UbZp7u4nQK2xsTUZXkGP9bAE/AxOVm8hnvxlGk7s3
-         Fp7+2CUUAJOLtibvDdUXMsdaXbwz+gfj/u6ULp7IV8T3Ui/scdMSfF9D7Y5NjBWXDT
-         rbi3czlvzMFWn6VTu+HFCtP3fxDToZLjLdSC2jgAbu2YpflpWL9YT9Z1zrDToBv9hG
-         D+qX1QAzaa1uaX7A8tnZXZLOBgpYIXx8VN0o3kKge0Xhvq8BDjPP971GZFbdo7CYiv
-         HNwBogtp7gznQ==
+        s=k20201202; t=1689279060;
+        bh=o0ANSAw56sA/lMUOCihuB62S6J6BNaztJzZehhETvE0=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=ApDZj1uNZf71FBvouOCrf0wVUKZBSLI6OueVam0HtYW3CKzVHw7ccPspsR6GadW/t
+         6JKMYvbZIHWgHo+mC5GhpKoZnUrI4yHJ3rChkhiqrI9iAa1A85AO+40S/t0Nc0hw23
+         lbMkupHw15GIDRin0Ad11BWdAMmbEk+9E7FGUh+t4GaFXUpk4EMsxiVn40T8OEgrdk
+         4/YA+H/sXL/qhb8A4tY6dqOrfukCEm8vW587MmvQlmg9KeDPmMNnkEXjZ2j5BkwzCn
+         UtqR6LgpSKUpJzDhElGqbr2t3hBPdN4LJ8Rct+OsKdkYdxJ+F8zBeGmaAQJvALZ075
+         J7TYA1T2d/psQ==
 From:   Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/3] arm64/fpsimd: Fix use after free in SME when changing
- SVE VL
-Date:   Thu, 13 Jul 2023 21:06:03 +0100
-Message-Id: <20230713-arm64-fix-sve-sme-vl-change-v1-0-129dd8611413@kernel.org>
+Date:   Thu, 13 Jul 2023 21:06:04 +0100
+Subject: [PATCH 1/3] arm64/fpsimd: Ensure SME storage is allocated after
+ SVE VL changes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACtZsGQC/y3MQQqAIBBA0avErBvQCoWuEi2sphpICwckkO6eR
- MsPj59BKDIJ9FWGSImFz1BC1xXMuwsbIS+loVFNq6xu0UVvOlz5RkmE4gnTgT81iia9OuOsslA
- OV6QCv/swPs8LuM/wkW0AAAA=
+Message-Id: <20230713-arm64-fix-sve-sme-vl-change-v1-1-129dd8611413@kernel.org>
+References: <20230713-arm64-fix-sve-sme-vl-change-v1-0-129dd8611413@kernel.org>
+In-Reply-To: <20230713-arm64-fix-sve-sme-vl-change-v1-0-129dd8611413@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc:     David Spickett <David.Spickett@arm.com>,
@@ -51,15 +50,15 @@ Cc:     David Spickett <David.Spickett@arm.com>,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         stable@vger.kernel.org
 X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=946; i=broonie@kernel.org;
- h=from:subject:message-id; bh=b+mXPu6hNz1J3rv9s18G7fKwLpeHT94qeHP9x8G2zPo=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBksFpM4XanCkYYveJuZ7ekHPux6xvnYhM82hbe788V
- jXNeyzOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZLBaTAAKCRAk1otyXVSH0BlOB/
- wIRvb6SdQQY9DllL88SkYw2v3TxsK5ZM/5AvbPiaHMBIys0TBmboBl7ux54eBHUENQJCDbU5AbT2zV
- Lh0XUlpmKGAff7NqCKKOB0OiBCDlDDay+CWBsgbuW9HlGA6LI22Ir6mCkb/y9ib9DIpCt+UmtrBgFW
- 35jYRzqncVW9mxS1w4k3D4nOOKbtNWv+eoYFfFPZ4m45pIRXMw3hHlahz0xJT9leotTKSUMRCCI9Ai
- ypRU7jk1Ir//2PVrqLzUIud9b8l7SrZyE1LpFIbvbNL8NTgXpimJjP84OFH/fZmUDG6xrYl5OFv9Cj
- 2K6K/qxJPirdWp6JeGGd6FdWrCBSJO
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3179; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=o0ANSAw56sA/lMUOCihuB62S6J6BNaztJzZehhETvE0=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBksFpNzlGIjJ25VfURcqNr5OdlZ9uZz5Sciz6zF2v/
+ AgnJnvOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZLBaTQAKCRAk1otyXVSH0GjsB/
+ 0adS+55bGJsIYkt/TYHWkX71CLRv8+BFzENgFSc3PJTu/3/Z3R2CWVLT9snutH2r4EFffoYq1QdNvb
+ QMUFXoBW1ih7dlCVaxTuZSifF0MNJ+U5Eq+AVO0xIIuKKChEsveQ8mAGCK9D/f+9nuOrnFnEHAkOrh
+ OueZcuR/I8DNofEsSFRU4F7Vv/rEAUi5iYnbvPN32qo5z6CT0QMa1j+5vuMIBoeo47MYa7DnVoOp1A
+ d2LSvG3K+LJ1qOaRCBVISQotHoM5zZS3aaZrqQxZ82+Cg8FiTO8BEek0TlBp+OcGJOBn6Qcclew/2T
+ viSAjxBXH9Y7+48OYQTK8PKfKPh372
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -72,26 +71,91 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series fixes an issue which David Spickett found where if we change
-the SVE VL while SME is in use we can end up attempting to save state to
-an unallocated buffer and adds testing coverage for that plus a bit more
-coverage of VL changes, just for paranioa.
+When we reconfigure the SVE vector length we discard the backing storage
+for the SVE vectors and then reallocate on next SVE use, leaving the SME
+specific state alone. This means that we do not enable SME traps if they
+were already disabled. That means that userspace code can enter streaming
+mode without trapping, putting the task in a state where if we try to save
+the state of the task we will fault.
 
+Since the ABI does not specify that changing the SVE vector length disturbs
+SME state, and since SVE code may not be aware of SME code in the process,
+we shouldn't simply discard any ZA state. Instead immediately reallocate
+the storage for SVE if SME is active, and disable SME if we change the SVE
+vector length while there is no SME state active.
+
+Disabling SME traps on SVE vector length changes would make the overall
+code more complex since we would have a state where we have valid SME state
+stored but might get a SME trap.
+
+Fixes: 9e4ab6c89109 ("arm64/sme: Implement vector length configuration prctl()s")
+Reported-by: David Spickett <David.Spickett@arm.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
 ---
-Mark Brown (3):
-      arm64/fpsimd: Ensure SME storage is allocated after SVE VL changes
-      kselftest/arm64: Add a test case for SVE VL changes with SME active
-      kselftest/arm64: Validate that changing one VL type does not affect another
+ arch/arm64/kernel/fpsimd.c | 32 +++++++++++++++++++++++++-------
+ 1 file changed, 25 insertions(+), 7 deletions(-)
 
- arch/arm64/kernel/fpsimd.c                    |  32 +++++--
- tools/testing/selftests/arm64/fp/vec-syscfg.c | 127 +++++++++++++++++++++++++-
- 2 files changed, 148 insertions(+), 11 deletions(-)
----
-base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-change-id: 20230713-arm64-fix-sve-sme-vl-change-60eb1fa6a707
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 7a1aeb95d7c3..a527b95c06e7 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -847,6 +847,9 @@ void sve_sync_from_fpsimd_zeropad(struct task_struct *task)
+ int vec_set_vector_length(struct task_struct *task, enum vec_type type,
+ 			  unsigned long vl, unsigned long flags)
+ {
++	bool free_sme = false;
++	bool alloc_sve = true;
++
+ 	if (flags & ~(unsigned long)(PR_SVE_VL_INHERIT |
+ 				     PR_SVE_SET_VL_ONEXEC))
+ 		return -EINVAL;
+@@ -897,22 +900,37 @@ int vec_set_vector_length(struct task_struct *task, enum vec_type type,
+ 		task->thread.fp_type = FP_STATE_FPSIMD;
+ 	}
+ 
+-	if (system_supports_sme() && type == ARM64_VEC_SME) {
+-		task->thread.svcr &= ~(SVCR_SM_MASK |
+-				       SVCR_ZA_MASK);
+-		clear_thread_flag(TIF_SME);
++	if (system_supports_sme()) {
++		if (type == ARM64_VEC_SME ||
++		    !(task->thread.svcr & (SVCR_SM_MASK | SVCR_ZA_MASK))) {
++			/*
++			 * We are changing the SME VL or weren't using
++			 * SME anyway, discard the state and force a
++			 * reallocation.
++			 */
++			task->thread.svcr &= ~(SVCR_SM_MASK |
++					       SVCR_ZA_MASK);
++			clear_thread_flag(TIF_SME);
++			free_sme = true;
++		} else  {
++			alloc_sve = true;
++		}
+ 	}
+ 
+ 	if (task == current)
+ 		put_cpu_fpsimd_context();
+ 
+ 	/*
+-	 * Force reallocation of task SVE and SME state to the correct
+-	 * size on next use:
++	 * Free the changed states if they are not in use, they will
++	 * be reallocated to the correct size on next use.  If we need
++	 * SVE state due to having untouched SME state then reallocate
++	 * it immediately.
+ 	 */
+ 	sve_free(task);
+-	if (system_supports_sme() && type == ARM64_VEC_SME)
++	if (free_sme)
+ 		sme_free(task);
++	if (alloc_sve)
++		sve_alloc(task, true);
+ 
+ 	task_set_vl(task, type, vl);
+ 
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
 
