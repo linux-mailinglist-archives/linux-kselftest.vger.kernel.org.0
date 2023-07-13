@@ -2,134 +2,207 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91113752A63
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 20:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89D2752A9A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 20:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjGMSjp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 14:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        id S230508AbjGMS46 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 14:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjGMSjo (ORCPT
+        with ESMTP id S230456AbjGMS45 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 14:39:44 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9E11992
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 11:39:43 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id 006d021491bc7-5634d8d1db0so769229eaf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 11:39:43 -0700 (PDT)
+        Thu, 13 Jul 2023 14:56:57 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957FD106
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 11:56:56 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fbd33a57b6so10401415e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 11:56:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689273582; x=1691865582;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=VCjekyRY0mF1zPEFz9+TgaqlomUlPOv7ZcelMgfNhgA=;
-        b=dIPhe/QKq8Y/Y548Yu3B9t8v/wX4kwNU3ziN8d0GJy7Ue3ouoaUIx0/KZp3MczNC9+
-         NuW+lQnGOSoB95+5BLG/PWrrglQHqqpi946rLp5E0f+cTMKD1VwKfRz4PO4t709Sos1K
-         T6ZtFQ8DO4nFL3D6FM37ZZMN6oJJxM2GLUodTYpuvqMCyGP9i9aD064kjwU5BC49sHrP
-         KSq9SlPvhPK79ZAP85zO4PzY4tcO+eF1ICgQxp4C278FQ1MgFiiIh31hkTk2rBbtfC8s
-         7RdhIrYUUXuEmRZFYdSbLnicpIhrMdOjjJdMQIa9W6Nhe5JxhOdJ5ZDNbvsOwJYBad9W
-         //aQ==
+        d=gmail.com; s=20221208; t=1689274615; x=1691866615;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u4/bIWsye08CVfitEtquZgW3u9vyoK7UTHEBm6IUm74=;
+        b=NaUfFufg2wboQQirLgEou9URcoLte0ALFAEjP9//G3UQwHlL4Yg+DUbwS8cFwMv8LM
+         4grsVdNmG0hypwJSf5O1/z3zBUg9kzX6bS7obiYtyKsumYjDMG4KHgMCRgakxiGo+AyN
+         Ynjf0CN+RZ8Qv0WqNg3CR2s2Vv7opiuh1W6GPV0G46YCGpANuMGdg+0L4Iw5B+hyLIxO
+         PK/+ER8W3ReqTGRN6QGIOSUAAlhwg1l61u9LmcpsPqfDl3+7QtxMTajStxMdXb72FNyS
+         YoKfMoPlcti4MXfUzljFtrAcHAbFimxOXSQDOPQ4g76gQNW5s2YXLsRXneUUe8jEEKfN
+         IFNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689273582; x=1691865582;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1689274615; x=1691866615;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VCjekyRY0mF1zPEFz9+TgaqlomUlPOv7ZcelMgfNhgA=;
-        b=SG7maUrUiRtfk7QGeHiw0R91RavcwO7Cnj5nOut/78xrnju+s8C1rabdeMedKF7qyJ
-         1oI8+zmB0unFsKW9oAczQCPE12xjrESEka9VHkrS1/7k7c2FT0UDlqWwqghzwVkurEdH
-         YTkc4arcjiEQw4N7s53m6Jw2Ifixv6j8s2B1mysb58elk3wyXMP9m8gYXS2K4cDLkWeg
-         9o46rwCK9I/8TeSqKbdG0Stqh08gikEWLu2kxEYxrhzfSgBb/ueU7hEis7iZPvNm6XXe
-         uoJIFTo0DOpmDFUZ3DAEZVYDylHEiHR9p/GwZObIJhOqaianwUG1qR4uJaUyVwgmBy2P
-         sCvQ==
-X-Gm-Message-State: ABy/qLZHnqjRohwEuryA92KIYOegKEAHZbiNc3V3JZH5ebwYpHSW7BP+
-        rvhMV/oIhaspJulcgJRXyKZ23Q==
-X-Google-Smtp-Source: APBJJlFn5o2TvZNL8GfUUdVYBeA5r7iVg2l44yNMjl8MmD38/fHfQ2ofC5M8eXz/S+BM3AXheVZZhw==
-X-Received: by 2002:a05:6808:138c:b0:3a3:ed41:5ab with SMTP id c12-20020a056808138c00b003a3ed4105abmr3481663oiw.9.1689273582572;
-        Thu, 13 Jul 2023 11:39:42 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id f7-20020aa78b07000000b00640ddad2e0dsm5743254pfd.47.2023.07.13.11.39.41
+        bh=u4/bIWsye08CVfitEtquZgW3u9vyoK7UTHEBm6IUm74=;
+        b=EoyvSIRazLN9wqbBEiF9ElpKwLi44cyJsxqSbn/JgWEeMxyBvYG+WDix2VoywcuL45
+         Vu+j7faI1WHQaS32e7QQ4cycoenFd5I6J/jjj+NxjgtgVepkx0rtK9HMRrnwEpW2lV3T
+         BrDqUPkfAPnWiSnld81T6RittA71zwlOgy0u/Np3EiR8uA3Ub88oxiLI721KqjoByRBn
+         zG8nvEaDNDSXG1/wmwtLU6ECJLzwKCQO+JXky81FKWdfNSB8Ms8VpPt40orkJEdoZ4n0
+         zbDSPvg0YlPKHBOFEtR6CoqsuoWIamssDNDhzRbDPaEO/O8YYiaznv9pKLylEEZ916Kh
+         A3IA==
+X-Gm-Message-State: ABy/qLYacQf7c06YQfjk3Qg+YYVfU7+VgWW3wEU1qRMxYmjyMnniYD9t
+        GWaXwhB1VV8qUCdmfE2oYPI=
+X-Google-Smtp-Source: APBJJlHcgHsMCMuQqFLp4qbdIZM1XeDfby13QINX0aLJFmm7uGWKQwZL+9++QnvCVmnl8B56TVkk1g==
+X-Received: by 2002:a7b:c41a:0:b0:3fb:fef1:68b7 with SMTP id k26-20020a7bc41a000000b003fbfef168b7mr2607613wmi.27.1689274614654;
+        Thu, 13 Jul 2023 11:56:54 -0700 (PDT)
+Received: from mmaatuq-HP-Laptop-15-dy2xxx.. ([2001:8f8:1163:535c:952:d673:8e4a:6288])
+        by smtp.gmail.com with ESMTPSA id p11-20020a1c740b000000b003fbe36a4ce6sm18971601wmc.10.2023.07.13.11.56.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jul 2023 11:39:41 -0700 (PDT)
-Message-ID: <64b044ed.a70a0220.67c2c.c890@mx.google.com>
-Date:   Thu, 13 Jul 2023 11:39:41 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 13 Jul 2023 11:56:54 -0700 (PDT)
+From:   Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+To:     shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+Subject: [PATCH v0] selftests/net: replace manual array size calc with ARRAYSIZE macro.
+Date:   Thu, 13 Jul 2023 22:56:44 +0400
+Message-Id: <20230713185644.1728127-1-mahmoudmatook.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v6.5-rc1
-X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-seccomp: 2 runs, 1 regressions (v6.5-rc1)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 2 runs, 1 regressions (v6.5-rc1)
+fixes coccinelle WARNING: Use ARRAY_SIZE
+Signed-off-by: Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+---
+ tools/testing/selftests/net/csum.c            |  8 ++++++--
+ tools/testing/selftests/net/hwtstamp_config.c | 18 ++++++++++--------
+ tools/testing/selftests/net/psock_lib.h       |  6 +++++-
+ 3 files changed, 21 insertions(+), 11 deletions(-)
 
-Regressions Summary
--------------------
+diff --git a/tools/testing/selftests/net/csum.c b/tools/testing/selftests/net/csum.c
+index 82a1c1839da6..702f34a9d506 100644
+--- a/tools/testing/selftests/net/csum.c
++++ b/tools/testing/selftests/net/csum.c
+@@ -123,6 +123,10 @@ static struct sockaddr_in6 cfg_saddr6 = {.sin6_family = AF_INET6};
+ #define MAX_HEADER_LEN	(sizeof(struct ipv6hdr) + ENC_HEADER_LEN + sizeof(struct tcphdr))
+ #define MAX_PAYLOAD_LEN 1024
+ 
++#ifndef ARRAY_SIZE
++#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
++#endif
++
+ /* Trivial demo encap. Stand-in for transport layer protocols like ESP or PSP */
+ struct udp_encap_hdr {
+ 	uint8_t nexthdr;
+@@ -450,7 +454,7 @@ static void send_packet(int fd, const char *buf, int len)
+ 	iov[2].iov_len = len;
+ 
+ 	msg.msg_iov = iov;
+-	msg.msg_iovlen = sizeof(iov) / sizeof(iov[0]);
++	msg.msg_iovlen = ARRAY_SIZE(iov);
+ 
+ 	msg.msg_name = &addr;
+ 	msg.msg_namelen = sizeof(addr);
+@@ -505,7 +509,7 @@ static void __recv_prepare_packet_filter(int fd, int off_nexthdr, int off_dport)
+ 	struct sock_fprog prog = {};
+ 
+ 	prog.filter = filter;
+-	prog.len = sizeof(filter) / sizeof(struct sock_filter);
++	prog.len = ARRAY_SIZE(filter);
+ 	if (setsockopt(fd, SOL_SOCKET, SO_ATTACH_FILTER, &prog, sizeof(prog)))
+ 		error(1, errno, "setsockopt filter");
+ }
+diff --git a/tools/testing/selftests/net/hwtstamp_config.c b/tools/testing/selftests/net/hwtstamp_config.c
+index e1fdee841021..263cc1c34165 100644
+--- a/tools/testing/selftests/net/hwtstamp_config.c
++++ b/tools/testing/selftests/net/hwtstamp_config.c
+@@ -16,6 +16,10 @@
+ #include <linux/net_tstamp.h>
+ #include <linux/sockios.h>
+ 
++#ifndef ARRAY_SIZE
++#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
++#endif
++
+ static int
+ lookup_value(const char **names, int size, const char *name)
+ {
+@@ -50,7 +54,6 @@ static const char *tx_types[] = {
+ 	TX_TYPE(ONESTEP_SYNC)
+ #undef TX_TYPE
+ };
+-#define N_TX_TYPES ((int)(sizeof(tx_types) / sizeof(tx_types[0])))
+ 
+ static const char *rx_filters[] = {
+ #define RX_FILTER(name) [HWTSTAMP_FILTER_ ## name] = #name
+@@ -71,16 +74,15 @@ static const char *rx_filters[] = {
+ 	RX_FILTER(PTP_V2_DELAY_REQ),
+ #undef RX_FILTER
+ };
+-#define N_RX_FILTERS ((int)(sizeof(rx_filters) / sizeof(rx_filters[0])))
+ 
+ static void usage(void)
+ {
+ 	fputs("Usage: hwtstamp_config if_name [tx_type rx_filter]\n"
+ 	      "tx_type is any of (case-insensitive):\n",
+ 	      stderr);
+-	list_names(stderr, tx_types, N_TX_TYPES);
++	list_names(stderr, tx_types, ARRAY_SIZE(tx_types));
+ 	fputs("rx_filter is any of (case-insensitive):\n", stderr);
+-	list_names(stderr, rx_filters, N_RX_FILTERS);
++	list_names(stderr, rx_filters, ARRAY_SIZE(rx_filters));
+ }
+ 
+ int main(int argc, char **argv)
+@@ -97,8 +99,8 @@ int main(int argc, char **argv)
+ 
+ 	if (argc == 4) {
+ 		config.flags = 0;
+-		config.tx_type = lookup_value(tx_types, N_TX_TYPES, argv[2]);
+-		config.rx_filter = lookup_value(rx_filters, N_RX_FILTERS, argv[3]);
++		config.tx_type = lookup_value(tx_types, ARRAY_SIZE(tx_types), argv[2]);
++		config.rx_filter = lookup_value(rx_filters, ARRAY_SIZE(rx_filters), argv[3]);
+ 		if (config.tx_type < 0 || config.rx_filter < 0) {
+ 			usage();
+ 			return 2;
+@@ -120,12 +122,12 @@ int main(int argc, char **argv)
+ 	}
+ 
+ 	printf("flags = %#x\n", config.flags);
+-	name = lookup_name(tx_types, N_TX_TYPES, config.tx_type);
++	name = lookup_name(tx_types, ARRAY_SIZE(tx_types), config.tx_type);
+ 	if (name)
+ 		printf("tx_type = %s\n", name);
+ 	else
+ 		printf("tx_type = %d\n", config.tx_type);
+-	name = lookup_name(rx_filters, N_RX_FILTERS, config.rx_filter);
++	name = lookup_name(rx_filters, ARRAY_SIZE(rx_filters), config.rx_filter);
+ 	if (name)
+ 		printf("rx_filter = %s\n", name);
+ 	else
+diff --git a/tools/testing/selftests/net/psock_lib.h b/tools/testing/selftests/net/psock_lib.h
+index faa884385c45..72078d46864d 100644
+--- a/tools/testing/selftests/net/psock_lib.h
++++ b/tools/testing/selftests/net/psock_lib.h
+@@ -24,6 +24,10 @@
+ # define __maybe_unused		__attribute__ ((__unused__))
+ #endif
+ 
++#ifndef ARRAY_SIZE
++#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
++#endif
++
+ static __maybe_unused void pair_udp_setfilter(int fd)
+ {
+ 	/* the filter below checks for all of the following conditions that
+@@ -63,7 +67,7 @@ static __maybe_unused void pair_udp_setfilter(int fd)
+ 	struct sock_fprog bpf_prog;
+ 
+ 	bpf_prog.filter = bpf_filter;
+-	bpf_prog.len = sizeof(bpf_filter) / sizeof(struct sock_filter);
++	bpf_prog.len = ARRAY_SIZE(bpf_filter);
+ 
+ 	if (setsockopt(fd, SOL_SOCKET, SO_ATTACH_FILTER, &bpf_prog,
+ 		       sizeof(bpf_prog))) {
+-- 
+2.34.1
 
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 1          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.5=
--rc1/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.5-rc1
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64b03862aeeaed1add8ace3a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.5-rc1/arm64/=
-defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/kselftest-seccomp=
--mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.5-rc1/arm64/=
-defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/kselftest-seccomp=
--mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230623.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/64b03862aeea=
-ed1add8ace3b
-        failing since 268 days (last pass: linux-kselftest-next-6.0-rc2-11-=
-g144eeb2fc761, first fail: v6.1-rc1) =
-
- =20
