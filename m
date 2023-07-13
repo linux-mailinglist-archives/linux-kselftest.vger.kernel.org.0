@@ -2,48 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B067524D3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 16:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525D57524C4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 16:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235134AbjGMOOw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 10:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S231261AbjGMOOV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 10:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235070AbjGMOOb (ORCPT
+        with ESMTP id S229797AbjGMOOV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 10:14:31 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCD902722;
-        Thu, 13 Jul 2023 07:14:27 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 36DEDqmj028510;
-        Thu, 13 Jul 2023 16:13:52 +0200
-Date:   Thu, 13 Jul 2023 16:13:52 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        xu xin <cgel.zte@gmail.com>, Al Viro <viro@zeniv.linux.org.uk>,
-        Stefan Roesch <shr@devkernel.io>,
-        Zhihao Cheng <chengzhihao1@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Janis Danisevskis <jdanis@google.com>,
-        Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] procfs: block chmod on /proc/thread-self/comm
-Message-ID: <ZLAGoNkVyYHOtJSA@1wt.eu>
-References: <20230713-unerschrocken-kutschieren-9be3c8958b5d@brauner>
- <nbzkbbahgsds4s4ujmkvno7w42xxy7gkpsrtw7lay3253uabzu@iqgtepoo4fgo>
+        Thu, 13 Jul 2023 10:14:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61FA226B2;
+        Thu, 13 Jul 2023 07:14:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 893AF1570;
+        Thu, 13 Jul 2023 07:14:52 -0700 (PDT)
+Received: from [10.1.30.48] (C02Z41KALVDN.cambridge.arm.com [10.1.30.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A485A3F73F;
+        Thu, 13 Jul 2023 07:14:08 -0700 (PDT)
+Message-ID: <556d05f0-7103-1079-fce1-1fb6bd40b17c@arm.com>
+Date:   Thu, 13 Jul 2023 15:14:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <nbzkbbahgsds4s4ujmkvno7w42xxy7gkpsrtw7lay3253uabzu@iqgtepoo4fgo>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH v1 3/9] selftests/mm: Skip soft-dirty tests on arm64
+To:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Florent Revest <revest@chromium.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+References: <20230713135440.3651409-1-ryan.roberts@arm.com>
+ <20230713135440.3651409-4-ryan.roberts@arm.com>
+ <cf3c237e-69c8-dd6e-26fc-fe19de910813@redhat.com>
+ <773cc0a8-24b8-7fcb-2980-7676fc772014@arm.com>
+ <3c566e28-c7ad-7ba8-4583-619266282387@redhat.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <3c566e28-c7ad-7ba8-4583-619266282387@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,51 +55,135 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 12:00:51AM +1000, Aleksa Sarai wrote:
-> On 2023-07-13, Christian Brauner <brauner@kernel.org> wrote:
-> > > > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > > > index 486334981e60..08f0969208eb 100644
-> > > > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > > > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > > > @@ -580,6 +580,10 @@ int run_syscall(int min, int max)
-> > > >  		CASE_TEST(chmod_net);         EXPECT_SYSZR(proc, chmod("/proc/self/net", 0555)); break;
-> > > >  		CASE_TEST(chmod_self);        EXPECT_SYSER(proc, chmod("/proc/self", 0555), -1, EPERM); break;
-> > > >  		CASE_TEST(chown_self);        EXPECT_SYSER(proc, chown("/proc/self", 0, 0), -1, EPERM); break;
-> > > > +		CASE_TEST(chmod_self_comm);   EXPECT_SYSER(proc, chmod("/proc/self/comm", 0777), -1, EPERM); break;
-> > > > +		CASE_TEST(chmod_tid_comm);    EXPECT_SYSER(proc, chmod("/proc/thread-self/comm", 0777), -1, EPERM); break;
-> > > > +		CASE_TEST(chmod_self_environ);EXPECT_SYSER(proc, chmod("/proc/self/environ", 0777), -1, EPERM); break;
-> > > > +		CASE_TEST(chmod_tid_environ); EXPECT_SYSER(proc, chmod("/proc/thread-self/environ", 0777), -1, EPERM); break;
-> > 
-> > > 
-> > > I'm not a big fan of this, it abuses the nolibc testsuite to test core
-> > > kernel functionality.
-> > 
-> > Yes, this should be dropped.
-> > We need a minimal patch to fix this. This just makes backporting harder
-> > and any test doesn't need to be backported.
+On 13/07/2023 15:09, David Hildenbrand wrote:
+> On 13.07.23 16:03, Ryan Roberts wrote:
+>> On 13/07/2023 14:56, David Hildenbrand wrote:
+>>> On 13.07.23 15:54, Ryan Roberts wrote:
+>>>> arm64 does not support the soft-dirty PTE bit. However there are tests
+>>>> in `madv_populate` and `soft-dirty` which assume it is supported and
+>>>> cause spurious failures to be reported when preferred behaviour would be
+>>>> to mark the tests as skipped.
+>>>>
+>>>> Unfortunately, the only way to determine if the soft-dirty dirty bit is
+>>>> supported is to write to a page, then see if the bit is set in
+>>>> /proc/self/pagemap. But the tests that we want to conditionally execute
+>>>> are testing precicesly this. So if we introduced this feature check, we
+>>>> could accedentally turn a real failure (on a system that claims to
+>>>> support soft-dirty) into a skip.
+>>>>
+>>>> So instead, do the check based on architecture; for arm64, we report
+>>>> that soft-dirty is not supported. This is wrapped up into a utility
+>>>> function `system_has_softdirty()`, which is used to skip the whole
+>>>> `soft-dirty` suite, and mark the soft-dirty tests in the `madv_populate`
+>>>> suite as skipped.
+>>>>
+>>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+>>>> ---
+>>>>    tools/testing/selftests/mm/madv_populate.c | 18 +++++++++++++-----
+>>>>    tools/testing/selftests/mm/soft-dirty.c    |  3 +++
+>>>>    tools/testing/selftests/mm/vm_util.c       | 17 +++++++++++++++++
+>>>>    tools/testing/selftests/mm/vm_util.h       |  1 +
+>>>>    4 files changed, 34 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/tools/testing/selftests/mm/madv_populate.c
+>>>> b/tools/testing/selftests/mm/madv_populate.c
+>>>> index 60547245e479..5a8c176d7fec 100644
+>>>> --- a/tools/testing/selftests/mm/madv_populate.c
+>>>> +++ b/tools/testing/selftests/mm/madv_populate.c
+>>>> @@ -232,6 +232,14 @@ static bool range_is_not_softdirty(char *start, ssize_t
+>>>> size)
+>>>>        return ret;
+>>>>    }
+>>>>
+>>>> +#define ksft_test_result_if_softdirty(cond, ...)    \
+>>>> +do {                            \
+>>>> +    if (system_has_softdirty())            \
+>>>> +        ksft_test_result(cond, __VA_ARGS__);    \
+>>>> +    else                        \
+>>>> +        ksft_test_result_skip(__VA_ARGS__);    \
+>>>> +} while (0)
+>>>> +
+>>>>    static void test_softdirty(void)
+>>>>    {
+>>>>        char *addr;
+>>>> @@ -246,19 +254,19 @@ static void test_softdirty(void)
+>>>>
+>>>>        /* Clear any softdirty bits. */
+>>>>        clear_softdirty();
+>>>> -    ksft_test_result(range_is_not_softdirty(addr, SIZE),
+>>>> +    ksft_test_result_if_softdirty(range_is_not_softdirty(addr, SIZE),
+>>>>                 "range is not softdirty\n");
+>>>>
+>>>>        /* Populating READ should set softdirty. */
+>>>>        ret = madvise(addr, SIZE, MADV_POPULATE_READ);
+>>>> -    ksft_test_result(!ret, "MADV_POPULATE_READ\n");
+>>>> -    ksft_test_result(range_is_not_softdirty(addr, SIZE),
+>>>> +    ksft_test_result_if_softdirty(!ret, "MADV_POPULATE_READ\n");
+>>>> +    ksft_test_result_if_softdirty(range_is_not_softdirty(addr, SIZE),
+>>>>                 "range is not softdirty\n");
+>>>>
+>>>>        /* Populating WRITE should set softdirty. */
+>>>>        ret = madvise(addr, SIZE, MADV_POPULATE_WRITE);
+>>>> -    ksft_test_result(!ret, "MADV_POPULATE_WRITE\n");
+>>>> -    ksft_test_result(range_is_softdirty(addr, SIZE),
+>>>> +    ksft_test_result_if_softdirty(!ret, "MADV_POPULATE_WRITE\n");
+>>>> +    ksft_test_result_if_softdirty(range_is_softdirty(addr, SIZE),
+>>>>                 "range is softdirty\n");
+>>>
+>>> We probably want to skip the whole test_*softdirty* test instead of adding this
+>>> (IMHO suboptimal) ksft_test_result_if_softdirty.
+>>
+>> Yeah I thought about doing it that way, but then the output just looks like
+>> there were fewer tests and they all passed. But thinking about it now, I guess
+>> the TAP header outputs the number of planned tests and the number of tests
+>> executed are fewer, so a machine parser would still notice. I just don't like
+>> that it outputs skipped:0.
+>>
+>> But it a lightly held view. Happy to just do:
+>>
+>>     if (system_has_softdirty())
+>>         test_softdirty()
+>>
+>> If you insist. ;-)
 > 
-> Alright, I'll drop it in v2 (though I'm not sure why there are tests for
-> /proc/self and /proc/self/net then).
+> diff --git a/tools/testing/selftests/mm/madv_populate.c
+> b/tools/testing/selftests/mm/madv_populate.c
+> index 60547245e479..33fda0337b32 100644
+> --- a/tools/testing/selftests/mm/madv_populate.c
+> +++ b/tools/testing/selftests/mm/madv_populate.c
+> @@ -266,12 +266,16 @@ static void test_softdirty(void)
+>  
+>  int main(int argc, char **argv)
+>  {
+> +       int nr_tests = 16;
+>         int err;
+>  
+>         pagesize = getpagesize();
+>  
+> +       if (system_has_softdirty())
+> +               nr_tests += 5;
 
-In fact the goal was to rely on existing entries that were certain to
-return certain errors, as we are testing nolibc syscalls in limited
-environments, such as not being able to create a new file due to another
-syscall not being available yet. /proc is convenient to make a number
-of syscalls fail. That's how the problem was detected by the way :-)
+This is the opposite of the point I was trying to make; If there are 21 tests in
+a suite, I'd like to know that there are 21 tests, 16 of which passed and 5 of
+which were skipped. This will hide the 5 from the test report.
 
-I personally don't mind that much that tests would be added, provided
-they really test a new syscall+error combination each. As Thomas said,
-here we already have other tests for chmod+EPERM so these ones do not
-bring value here for the purpose of this specific test.
+> +
+>         ksft_print_header();
+> -       ksft_set_plan(21);
+> +       ksft_set_plan(nr_tests);
+>  
+>         sense_support();
+>         test_prot_read();
+> @@ -279,7 +283,8 @@ int main(int argc, char **argv)
+>         test_holes();
+>         test_populate_read();
+>         test_populate_write();
+> -       test_softdirty();
+> +       if (system_has_softdirty())
+> +               test_softdirty();
+>  
+>         err = ksft_get_fail_cnt();
+>         if (err)
+> 
+> 
 
-With that in mind, if there is some perceived value in adding such
-tests, that's something we could discuss, either in this file as another
-category or (preferably) in a separate one, because the framework makes
-this easy. We could for example have a "proc-test" sub-project forked
-from this one to run various tests on /proc file permissions. This would
-respect a clean split, with nolibc-test assuming a valid kernel to test
-a libc, and proc-test assuming a valid libc to test the kernel. Just an
-idea.
-
-Regards,
-willy
