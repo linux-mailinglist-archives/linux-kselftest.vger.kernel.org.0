@@ -2,68 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30336751746
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 06:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02577751747
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 06:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233653AbjGMETd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 00:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S233573AbjGMETk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 00:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbjGMETc (ORCPT
+        with ESMTP id S233500AbjGMETi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 00:19:32 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ADD19BE
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:19:31 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb0336ed4fso1345e87.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:19:31 -0700 (PDT)
+        Thu, 13 Jul 2023 00:19:38 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB2719BE
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:19:37 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fc075d9994so26365e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 21:19:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689221970; x=1691813970;
+        d=google.com; s=20221208; t=1689221976; x=1691813976;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAVqoAkgKdWrHrTSa+iyGqgU6SR6hEY6dTzQdYzP60s=;
-        b=UlLwlw/X2kIaItgTezIeTQ93pUtYTZKZ8YcSmf0N77AMg/V6ITwgatghcXE6eqhaXU
-         hKruD4TXx8K7OPtpJT7eLeMg4iBifydTOmk/r1Wtw8h0H4pY2jfjRg18eCq7ZElI8TMR
-         3tDzv/H5oAxp9MQ+3mw8mnRnId2E/GZLFIMG88n0xHt3NvkULg4KbQLcz+5Uqqz1AJrO
-         j2Vh4QhhuPtOcyhgpzFpZgehqVSwy+6W+LdIVngs+aB9Mq9gGAtzOrEGwRblDp37Zd8+
-         8UV6mOKW/1p3ILWb1b9uGSI6FcMaaDl4NvkbwDhQlqvtCVxA9WFHg145K4bSLvoRDzX9
-         CgIA==
+        bh=tR9p7kkwnwgpzsMGxK2udMFI3tb9qwtnRuaBy2p82tE=;
+        b=KYLaZYy6YPurAar6LzoYxGu7vQHo0zjAr1Jp7b0oLaHPGXfy1ynfCcGLKbDaWhajIh
+         eN7SLeleHGN5+4JaMW4hLCGPo2VyBzi1invCFEw5ocxPYC6VQ6CTIoWhaOUp43BvsBdv
+         Q2+C9GQ1XcsRGjdYQZAP7GyPnz+HNz1HChwBQCe4mBY8+y1dQUiI9FD64+zkrtAsIS+a
+         V3cxLNLGIib9XVUygyuOA868SpGGhk7hV1s26OFVZgbjqnqPd5ynmWh22Dnr3/wxLPjN
+         nMCp8z90Rlv8forHzTKi1uEESGRkTv6v8Ps1WUTrhT4rm/9bcXkbVdDKSbHM+wg+OMsm
+         z+GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689221970; x=1691813970;
+        d=1e100.net; s=20221208; t=1689221976; x=1691813976;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QAVqoAkgKdWrHrTSa+iyGqgU6SR6hEY6dTzQdYzP60s=;
-        b=gPDd2y1bZiZ7ShtH0kjHjYMjcpLkQdTSuoawtEtjCc6Ys6N19PpfyAusS0cGhjNdnY
-         6PJXpNUOVzC3WHzBiJjiFa36Oxn48SFXSJdpqxlzXwZI+Y+MR3xCWhHeanqQ3bEpxvKx
-         Vh51cqbJ4AQdsM72kbHEBpoAPj5iome0X1fvv17EnpoQEkb0ZuZZp2tPXYjDKogOqlMg
-         T3kMkEbcG40vEAngGtoKy4cUDLovD7ZV66u+rKpMNNB/AoZrgObmI9/Ol69Uk+zKtPwh
-         ZJJ/3zTbZA1ONNihswC+Hg96COd5BKeceHcSYS3yueLAaVw+FzfX8p7fBZfqLddc0lUJ
-         50wA==
-X-Gm-Message-State: ABy/qLaiDkcHA05dfFPXRS1mhnr7tpt/tqOndPRx50IUKLHwntReIzVw
-        aFF1fzutdey1hZ+YvTyZ2LQas7/IX82b+YBCT/HFVg==
-X-Google-Smtp-Source: APBJJlGdAvuZx8z9RY9fvcFFO+gWtJz9o0OJLT8tnUU9EmJLzzrXKn0QYq/L/DL4YVlQoULBLwZLBtlhWyPj+km/MCQ=
-X-Received: by 2002:ac2:5fe6:0:b0:4f2:7840:e534 with SMTP id
- s6-20020ac25fe6000000b004f27840e534mr117806lfg.0.1689221969815; Wed, 12 Jul
- 2023 21:19:29 -0700 (PDT)
+        bh=tR9p7kkwnwgpzsMGxK2udMFI3tb9qwtnRuaBy2p82tE=;
+        b=kIL6s1dIYJkQfWfW0JHZA4jL/L/Rat66wQezM/7QSpPjdDUemKLWe5sdeLiABfSg5v
+         94/+kBn6xz2YmTXBT11xhFqKODic5e2VvBq4L2em8mnIbCbqpxRvGdXTTZ+DEp/3EQtb
+         kvSOfNQF5d7CdEnL/tI0BcCowkz2wwT5HiBtcOL9WTd+V1esVTPpGMMz40nNvEx6igkO
+         OS6AGrUDRnNzJ2Yp7lV2udb8iNhqfyQYaH3XdJypZAHcaQ8gULH23AaGqQMh5X16iP4C
+         IevNDgoNmNWfxFPWsThEUriIEw3zvgEld2dvWDbYNPIGTRy/DD7n0tDNLUwdychB2iv9
+         LqLw==
+X-Gm-Message-State: ABy/qLbKJvuvu9Kta6ochXre1T0zhd9GQBITrFbhMNBnWfeTi7DYh/D0
+        lNFGvvxl+apUjV7HCA3OmU8fgXO4GsHBDlvsJz7ijuKvpNnqWDiI920=
+X-Google-Smtp-Source: APBJJlFPcLoTdOhFMxoCrsDcdWYGRoGP4+fqF49TLaC7B5vTBqsa5E8B+H1HYEg37VwQwgpt5EVcxi2zwfxblPz7SIE=
+X-Received: by 2002:a05:600c:1d02:b0:3f1:70d1:21a6 with SMTP id
+ l2-20020a05600c1d0200b003f170d121a6mr191204wms.0.1689221976086; Wed, 12 Jul
+ 2023 21:19:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230712-asoc-topology-kunit-enable-v1-0-b9f2da9dca23@kernel.org> <20230712-asoc-topology-kunit-enable-v1-2-b9f2da9dca23@kernel.org>
-In-Reply-To: <20230712-asoc-topology-kunit-enable-v1-2-b9f2da9dca23@kernel.org>
+References: <20230712-kunit-arm64-cpu-max-v1-1-4892fe50f40e@kernel.org>
+In-Reply-To: <20230712-kunit-arm64-cpu-max-v1-1-4892fe50f40e@kernel.org>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 13 Jul 2023 12:19:18 +0800
-Message-ID: <CABVgOSnit7wXsMUvpXUhrHtyegm0KOuvtMrtp47PLTRJr+aFag@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ASoC: topology: Add explicit build option
+Date:   Thu, 13 Jul 2023 12:19:24 +0800
+Message-ID: <CABVgOS=gphTip+2PXm0SfLvuYf1u2ojDe2dOzBqGtg4MCZOrUg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: qemu_configs: Enable all architectural features
+ for arm64
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000007bac48060056a324"
+        boundary="000000000000d8fb47060056a3fd"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,31 +71,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000007bac48060056a324
+--000000000000d8fb47060056a3fd
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 12 Jul 2023 at 23:40, Mark Brown <broonie@kernel.org> wrote:
+On Thu, 13 Jul 2023 at 04:23, Mark Brown <broonie@kernel.org> wrote:
 >
-> The default KUnit build options are not supposed to enable any
-> subsystems that were not already enabled but the topology code is a
-> library which is generally selected by drivers that want to use it.
-> Since KUnit is frequently run in virtual environments with minimal
-> driver support this makes it difficult to enable the toplogy tests so
-> provide an explicit Kconfig option which can be directly enabled when
-> using KUnit, and also include this in the KUnit all_tests.config.
+> While it probably doesn't make a huge difference given the current KUnit
+> coverage we will get the best coverage of arm64 architecture features if
+> we specify -cpu=max rather than picking a specific CPU, this will include
+> all architecture features that qemu supports including many which have not
+> yet made it into physical implementations.
+>
+> Due to performance issues emulating the architected pointer authentication
+> algorithm it is recommended to use the implementation defined algorithm
+> that qemu has instead, this should make no meaningful difference to the
+> coverage and will run the tests faster.
 >
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
 
-Thanks a bunch for this: the topology tests have always been some of
-the most annoying to run, and this makes it so much easier.
-
-That being said, it does still break when run with ARCH=um (see the
-response to patch 1/2), so we might need to remove it from
-all_tests.config or make some other changes.
-
-Having the CONFIG_SND_SOC_TOPOLOGY_BUILD option is definitely much
-better, regardless of whether it's default or not.
+Looks good and works for me here, thanks.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
@@ -104,47 +98,30 @@ Cheers,
 -- David
 
 
->  sound/soc/Kconfig                            | 11 +++++++++++
->  tools/testing/kunit/configs/all_tests.config |  1 +
->  2 files changed, 12 insertions(+)
+>  tools/testing/kunit/qemu_configs/arm64.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/sound/soc/Kconfig b/sound/soc/Kconfig
-> index bfa9622e1ab1..439fa631c342 100644
-> --- a/sound/soc/Kconfig
-> +++ b/sound/soc/Kconfig
-> @@ -38,6 +38,17 @@ config SND_SOC_TOPOLOGY
->         bool
->         select SND_DYNAMIC_MINORS
+> diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
+> index 67d04064f785..d3ff27024755 100644
+> --- a/tools/testing/kunit/qemu_configs/arm64.py
+> +++ b/tools/testing/kunit/qemu_configs/arm64.py
+> @@ -9,4 +9,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+>                            qemu_arch='aarch64',
+>                            kernel_path='arch/arm64/boot/Image.gz',
+>                            kernel_command_line='console=ttyAMA0',
+> -                          extra_qemu_params=['-machine', 'virt', '-cpu', 'cortex-a57'])
+> +                          extra_qemu_params=['-machine', 'virt', '-cpu', 'max,pauth-impdef=on'])
 >
-> +config SND_SOC_TOPOLOGY_BUILD
-> +       bool "Build topology core"
-> +       select SND_SOC_TOPOLOGY
-> +       depends on KUNIT
-> +       help
-> +         This option exists to facilitate running the KUnit tests for
-> +         the topology core, KUnit is frequently tested in virtual
-> +         environments with minimal drivers enabled but the topology
-> +         core is usually selected by drivers.  There is little reason
-> +         to enable it if not doing a KUnit build.
-> +
->  config SND_SOC_TOPOLOGY_KUNIT_TEST
->         tristate "KUnit tests for SoC topology"
->         depends on KUNIT
-> diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
-> index 13d15bc693fb..b8adb59455ef 100644
-> --- a/tools/testing/kunit/configs/all_tests.config
-> +++ b/tools/testing/kunit/configs/all_tests.config
-> @@ -39,3 +39,4 @@ CONFIG_SECURITY_APPARMOR=y
->  CONFIG_SOUND=y
->  CONFIG_SND=y
->  CONFIG_SND_SOC=y
-> +CONFIG_SND_SOC_TOPOLOGY_BUILD=y
+> ---
+> base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+> change-id: 20230702-kunit-arm64-cpu-max-7e3aa5f02fb2
 >
+> Best regards,
 > --
-> 2.39.2
+> Mark Brown <broonie@kernel.org>
 >
 
---0000000000007bac48060056a324
+--000000000000d8fb47060056a3fd
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -211,14 +188,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD6
-1qUKUli7cUNqI1whY3PFPcDuZIfpmUQw1X0e8EtvvzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTMwNDE5MzBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD+
+wI9KtdMd5jB4DEJCD5DRECvqQhEVw22/72OLawz3MDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTMwNDE5MzZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAO18mtowm6y47BaRQPvJr
-CslusZYPXaRv20aNq5gAYrHymp3AXR+I8pnEwrDz1MMMu0NfR0L2Y8tgUE9Q00if8RfGq/omf6T2
-lOlNQfAK0FBLQqRj4tLvvIphBp0fBC/n7SWUGcXxqCQ+5CnIr5GvdTD3WaeagHzNLAlkpt00l/he
-TXRJaYx+cV/owX6/wCz+UiqRvIVyQUf9sh4SxeAlUSguxRTaZS54TMWgJxtSlUrma5ckb218DGBh
-SGDxBjHUktRkgSimk2F5+pzFRNoMofrfiz//4Ih/iMvFXApuI7v7gxGwI3F23Vywbz4I+GM0CB6C
-Q8lfBdJ3L+tyW1shxg==
---0000000000007bac48060056a324--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEALre4TRXoxYOKwU+8BLQi
+s4WTSYFZYSCEubY3idBJTqKUinkAQOk/9HDJ6/HFJFsve5L4a6x02UnKeMu2ZoRITfXyxwgqTiqq
+q94aj/h5q4o0rk0juZmjIX2OZeQ4deQkgEQjSiomp1/Kmdc3bqO86U7a8BjubZ7O5aLaRekT6BD9
+ruEuQRrWarqwzUjVv+BUFqhi2w6HnZQ80s+5HbNZDfnGpD0yRCIsKPi68MX3mH9h7i0wQuY6wo1V
+lS9q1TCn5EKEWRZlezTy238pMYBap2QLvF+Jzoiw4FsAr8ORdoVlN8DnEwX2D++3dBTK4nSeBnUP
+/gAQacJOEc5qeusAcw==
+--000000000000d8fb47060056a3fd--
