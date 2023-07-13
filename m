@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4EE752BF9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 23:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C8C752BF7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 23:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233808AbjGMVRy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 17:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
+        id S231235AbjGMVRx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 17:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232799AbjGMVRu (ORCPT
+        with ESMTP id S233242AbjGMVRv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 17:17:50 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0E02D64
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 14:17:46 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbdfda88f4so11173075e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 14:17:46 -0700 (PDT)
+        Thu, 13 Jul 2023 17:17:51 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31002D6A
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 14:17:47 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbef8ad9bbso10047295e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 14:17:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1689283065; x=1691875065;
+        d=tessares.net; s=google; t=1689283066; x=1691875066;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2VAWVwpGDXDMLo65Ubj9cQ9CL/GZFLpXbrG0guU8ZAk=;
-        b=R1OO/MLDlYuqf3n93Xf3dZ0JRKHT83rtvi6Aw9xfoACQknf2haLiKf3g1XekYARe+s
-         zK0OwTVC9nFl5dK3x6irNe1Q/HtqnB8wAFyTNfMavMSP+wp7E3FZirFjt0SNTNKMkiTW
-         9CerwuZBtoCpbXVb2Kttpe+0YOmkatXWXMBfpEvu0ouB4Alxdw+NglTInaXbs7aIesQv
-         J+n5pnG3Wt0JoO0/1LsrTCx5HpvEi2bXw+8itAL3hsLnH7tzLASdWDMdYetDS3lilaBX
-         OOC9awSd1siy1lSSnOw4suFFY0jxhe4Aou2N2BNs5K7mGy5vUMgk0vdp5ueNMrIQRy2b
-         0aIg==
+        bh=TsJALsxCC7W/CAsd1l447Gkg4QP+b67KVu4aEHXx1H8=;
+        b=bt3cywbmI2xlzlVR6vRTSp+EcwPMU/Po0YAkZsTxYd4qeBDWmBtWWW1L7ZLZu7/Rp0
+         /rorCNOUTXNVUWcLrGeCXbk9yTbznrWpdKIZ7g9alJTVVuqw2gcb2COuguuFWoQ4WVon
+         8Np8h5Mwx8NsaQNfcxYyX911xkWytdrDTsxbw4eODsgaFgUIe4+SqpMumx7RaLTQ5+8X
+         MIOFF8AO8Bz0TWAlXVTJYgThE16Hn01Y+16mpzsUXW83Vbix9Z+QtRQAytDsiOD3+9vj
+         z9e71xvYt+xLgB2ItMz8f8lLgv4n2Y8YAhJ+U0f4CoRe+c31H6HDYo85nab2G+EVApeg
+         4c9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689283065; x=1691875065;
+        d=1e100.net; s=20221208; t=1689283066; x=1691875066;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2VAWVwpGDXDMLo65Ubj9cQ9CL/GZFLpXbrG0guU8ZAk=;
-        b=cEZb3HA8YiokPV+UF7K4q7MLMvgbdr7ZTc7kGO5EOWifnJ3Y+8+sQgXBq7XW4Yqwsq
-         5kVpLBoRRr30dnLVWKDiYGS9BBecgLP1VQzMj+Iii0aD/QGJBLgCHPZhAkOVaQCLpOUF
-         Hg7maNRRFnD3CK/rwXuorBM8vtpt7/I5maQHoSr1JyIr2TeREVowPASFL2FJCSDEEDI7
-         6M9YrPNvjvJdGWQDroIs834U8XYSvBfuyr757vilf+MkfRAg+UAKtnT7BCU01e28SCTJ
-         6bJnXuvIq/Wag/bGGgPETA+YH94nF0kJgEkR1pKjqDWg6hhisW+wq0IYh8VL2UlUK0Et
-         3wdg==
-X-Gm-Message-State: ABy/qLZe/z7NQTjyO5funuHTMrmZXUoPX7MWuQgtFrVKhTpUL88B7W3k
-        1VF/4JPyJE/16CQ1yG6yHOvkXA==
-X-Google-Smtp-Source: APBJJlGJfccKQX1JLE1xnHoeFIbj6RN1IT7Jy3v/iRsIf+J6yYbAAbYGO1wdvFHWqPoQ4vDsKW2zQg==
-X-Received: by 2002:a05:600c:2141:b0:3fb:dd5d:76b with SMTP id v1-20020a05600c214100b003fbdd5d076bmr2479666wml.7.1689283065118;
-        Thu, 13 Jul 2023 14:17:45 -0700 (PDT)
+        bh=TsJALsxCC7W/CAsd1l447Gkg4QP+b67KVu4aEHXx1H8=;
+        b=WhBeDuYseTNLkk3cVPxBdRYavRJQvQsmXOxWuhTQYWBDFmtrLpHufIRYGmG/Z1JL1K
+         94xTB9XSFrVoY0JWa33F6rKRyott1AS5cubRVg/JZ36ucdCsFwmyJfSRwo3girzFK0TD
+         1/JywgS+gf952oN8CLTdy/KZpzNslC7dMJkQYjNMna4rLFyLNgZX6JdJxW/KiXS23+l1
+         /17rF0PILfLgq0k2Ujt3Qp6IJiyOa3adAcg6xuY46aZj0nFKmheCSsXeQwgQsi1zSEoM
+         n8rjTX6Gw9ZZeDZmabFBuWzZ8xGuYBiBLtIc5531Lmlh8cj1yYVfTUkbSk8fBwP1wDp0
+         89Yg==
+X-Gm-Message-State: ABy/qLZZbTJKas8bhChXyobpfgoE0YU4A0+GiRdhu0r170f6AddkDQv0
+        9IM9mfd4iX4yYQSaqPR+F+3fJg==
+X-Google-Smtp-Source: APBJJlEqHDqd/DaR1zZg8FeNIPs0jDRzB47sGZJXntmh5xucKXav31Pxi0b1G9aQg7Zs3wM4F2CWHg==
+X-Received: by 2002:a7b:cbc9:0:b0:3fb:e1ed:7f83 with SMTP id n9-20020a7bcbc9000000b003fbe1ed7f83mr2882825wmi.33.1689283066347;
+        Thu, 13 Jul 2023 14:17:46 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id m20-20020a7bcb94000000b003fbfea1afffsm8734136wmi.27.2023.07.13.14.17.44
+        by smtp.gmail.com with ESMTPSA id m20-20020a7bcb94000000b003fbfea1afffsm8734136wmi.27.2023.07.13.14.17.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jul 2023 14:17:44 -0700 (PDT)
+        Thu, 13 Jul 2023 14:17:45 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 13 Jul 2023 23:16:45 +0200
-Subject: [PATCH net 2/3] selftests: tc: add 'ct' action kconfig dep
+Date:   Thu, 13 Jul 2023 23:16:46 +0200
+Subject: [PATCH net 3/3] selftests: tc: add ConnTrack procfs kconfig
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230713-tc-selftests-lkft-v1-2-1eb4fd3a96e7@tessares.net>
+Message-Id: <20230713-tc-selftests-lkft-v1-3-1eb4fd3a96e7@tessares.net>
 References: <20230713-tc-selftests-lkft-v1-0-1eb4fd3a96e7@tessares.net>
 In-Reply-To: <20230713-tc-selftests-lkft-v1-0-1eb4fd3a96e7@tessares.net>
 To:     Jamal Hadi Salim <jhs@mojatatu.com>,
@@ -74,26 +74,26 @@ Cc:     Pedro Tammela <pctammela@mojatatu.com>,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
         stable@vger.kernel.org
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1409;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1295;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=5L5yVXJPUIN5mPcgi9qNT31nW3zr8gj1H+S+tv1zJXU=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBksGn1Tfm4gXr9yYcL0NutlcfJMBFjlfmCxUnB6
- n3hJPa5tJKJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZLBp9QAKCRD2t4JPQmmg
- c1L4EACFKJywHSS8y1HqKPLTPlIicSUIMYCQxyOjN6qcNyMopaA+qlnrbtgOAj42KDFZu3MthgT
- mLS8Z1bhO8ogUW+ylNbMvJ7wOGQtJ0ktZG1fpw0rTBXzGxwo6ZC+D5mqg0txCZic4wzLrWdKLJv
- tFbqRXmbHZUbx+D84kk1vvRoZH7T8NNC1lhMs+HT7YnvAAM8rtuBhXS/qzi4Fg0LQNsonm89cs+
- 0LuGqspqLGYmmYNgIVnjHat5a4PvhiigGFZUIKoxuvKYpqpomA1ABKuzW0sX83aaX1Y78HsB2kA
- Cgjz+uaWswRZLbbq4ZU4W2imaqYsIviuxUXXgoiN/I+NI0Wtea4EJU7U0VKosQwRVwdCId2xF23
- 1vZrhXoR7fh53jJ3xx5U9iOWD0u+tERIbKh642LijNnsPs/JA038YlnZGhabYTnX2PJrUDyVBKA
- fCRne9isCIMOkF6sTYeMkcyz8npORDs4aF35/TU7Tme/gU3alsPs0wshz/re4zOOdVVJ//soNRp
- fKVgMbKkvNrOKV6xIJQgQbK6EsPkTYBZHkQ3g+0n4TXpYMnRotatXkVvCmeDpHY5Mt/2FkjUWQI
- KsLLDiy3rxjp83IzCGzN6CwPCg3gmJ2y0e+yg2dc7U9Yw8uymMP2z+rUs3285uYSzL/gnTxVbmg
- 480Z9i9gDVEZiuQ==
+ bh=YxZMkeKTSYd/i12Y6hiS0Va0uPxVYaw6onSJrdJZ2xk=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBksGn1bBYwvMN9ZJOmDSJeapOx7V3gAfyEaaHiq
+ u4fgEkD5s+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZLBp9QAKCRD2t4JPQmmg
+ c/79EADA/xNSe+OXe+fAkOmIazz02wIFBl+djuhBXh/Wq7uTJ/wXX2LVXz7haAPg0yi452RyvW6
+ Y3umutQuwMqvWzIStUfkZHrvVTBjBp2u7zvgkknGe2hDS7tDLYXmbQ667Qs340s8OUMGqvptQk7
+ y25FKL03KNuLSokg0OhB1Dp1u9hAYsuDmp18420NV6kDA3jPi1WMMzd9FV0iajheLOgk3TM1/JM
+ CmY1+0inJwGExfLshAmG5soMIwQwZql8d1Lq4lD4hn2tkfUPO5tsrcoOaj3y2rDxE6vECvC9sWI
+ 3syinI2F9TgnuGw/+OXCL7GkqLbD/1ok/fTu0M2AQV1e6dOEbi4xTxMlqhAOYlqC48rsNVrwiIC
+ 5xxByReFo7qwwKI9y8JVMf98hF04OY8vwow1gw/Cbwf15/GZpWnIWqFRfA9PrYpyxFs0iq4ASeL
+ 6opLFLVqXBXpeOsySZvp6gl3GqxMk0oNCpDRg29Q9E8EkzzMlIjqJKZUsQnFvrwJOOKNPzi00cZ
+ +AWTZiSk7qawGmeIBg1KKMdLx0xcG1puAieB1bzmmSB4ZXlR4aogcXkAE+ku92dZ6PYvTxdt8nt
+ 2UUXOHdQmUX2S4etArxuBVMbnXQ7cHk7oHy9Fat5T/EwBWQK3QQiWZEmdI/qPOxJotVjg3ZIiaG
+ r69EzqvS4gPH/QQ==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,37 +101,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When looking for something else in LKFT reports [1], I noticed most of
-the tests were skipped because the "teardown stage" did not complete
-successfully.
+When looking at the TC selftest reports, I noticed one test was failing
+because /proc/net/nf_conntrack was not available.
 
-Pedro found out this is due to the fact CONFIG_NF_FLOW_TABLE is required
-but not listed in the 'config' file. Adding it to the list fixes the
-issues on LKFT side. CONFIG_NET_ACT_CT is now set to 'm' in the final
-kconfig.
+  not ok 373 3992 - Add ct action triggering DNAT tuple conflict
+  	Could not match regex pattern. Verify command output:
+  cat: /proc/net/nf_conntrack: No such file or directory
 
-Fixes: c34b961a2492 ("net/sched: act_ct: Create nf flow table per zone")
+It is only available if NF_CONNTRACK_PROCFS kconfig is set. So the issue
+can be fixed simply by adding it to the list of required kconfig.
+
+Fixes: e46905641316 ("tc-testing: add test for ct DNAT tuple collision")
 Cc: stable@vger.kernel.org
-Link: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230711/testrun/18267241/suite/kselftest-tc-testing/test/tc-testing_tdc_sh/log [1]
-Link: https://lore.kernel.org/netdev/0e061d4a-9a23-9f58-3b35-d8919de332d7@tessares.net/T/ [2]
-Suggested-by: Pedro Tammela <pctammela@mojatatu.com>
+Link: https://lore.kernel.org/netdev/0e061d4a-9a23-9f58-3b35-d8919de332d7@tessares.net/T/ [1]
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
  tools/testing/selftests/tc-testing/config | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/tools/testing/selftests/tc-testing/config b/tools/testing/selftests/tc-testing/config
-index 6e73b09c20c8..d1ad29040c02 100644
+index d1ad29040c02..71706197ba0f 100644
 --- a/tools/testing/selftests/tc-testing/config
 +++ b/tools/testing/selftests/tc-testing/config
 @@ -5,6 +5,7 @@ CONFIG_NF_CONNTRACK=m
  CONFIG_NF_CONNTRACK_MARK=y
  CONFIG_NF_CONNTRACK_ZONES=y
  CONFIG_NF_CONNTRACK_LABELS=y
-+CONFIG_NF_FLOW_TABLE=m
++CONFIG_NF_CONNTRACK_PROCFS=y
+ CONFIG_NF_FLOW_TABLE=m
  CONFIG_NF_NAT=m
  CONFIG_NETFILTER_XT_TARGET_LOG=m
- 
 
 -- 
 2.40.1
