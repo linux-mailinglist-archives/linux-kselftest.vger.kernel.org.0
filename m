@@ -2,100 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA430752767
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 17:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92FA752790
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 17:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234845AbjGMPje (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 11:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S229549AbjGMPnq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 11:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjGMPjd (ORCPT
+        with ESMTP id S234641AbjGMPnp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 11:39:33 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDF32117
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 08:39:32 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id ca18e2360f4ac-78706966220so5745239f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 08:39:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1689262772; x=1691854772;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Edz8S9/DYDu/Er6Wbo87AVay2HssoKiTC5UZFfGh+BM=;
-        b=BgEmFI4pgRVRFPcWdSBdvexlbchTLIUxW+mARHWI1QZKPCYcySxKTuX6R+8L0jCYIr
-         IV/FTs4+ChFfscqQbKkB59+fbjo1a+E0a4HNKl+R8sVjahiFy8U3RhQD84Jbyqbt+F4/
-         5yr94rr+YlMfJ3qNQlhiKzDXq4sRAEf3VpOUE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689262772; x=1691854772;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Edz8S9/DYDu/Er6Wbo87AVay2HssoKiTC5UZFfGh+BM=;
-        b=VWbxQxRAJCnlE6wxs4wMz8xB8cyi/UbiJONTP/qo5+RSS3nTi1ymcM3GNDDsdCgADJ
-         UavAWZyPqb1r+FIgbYU+GOWnqcSFXx156Sb8pqZXylrwuj/danR2cylCbyr2zT5yudHD
-         6iz4oZmb1ohPfeMIRw0ixdzAlH0kEesHmFELJ6XzHlio2vYxEYnp3TinFNpLgsPFyDwQ
-         oWKkkXdVgXPD4TKhAsSQv22KrkJRPKdlv4U2LU2Y+vPm9Dnp0rh5UTVJBDHOqUzyfJLs
-         Aj1pbmNvzV3Mbu69WuF82P6bpeLe+DeVH+8Asqd69HMgL8PYhnv2V0InpYK3SPmyA3Zj
-         UeKQ==
-X-Gm-Message-State: ABy/qLZrN95WK0E4zF+NOc2dKGKHEM1QTUFYpg0OImIiuEsF1jhjESKi
-        dxasmDamFXBKATFk8YpeIDJohA==
-X-Google-Smtp-Source: APBJJlHXCW1r6HGRFe1uL46adGj5+gGhTWF7xgaES+0aANFvwXNPy7BA0J7LwrFPf5OwZWyWj3Hkmg==
-X-Received: by 2002:a6b:8d10:0:b0:780:cde6:3e22 with SMTP id p16-20020a6b8d10000000b00780cde63e22mr2010448iod.0.1689262771932;
-        Thu, 13 Jul 2023 08:39:31 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id cz8-20020a0566384a0800b0042bb09e9345sm1938458jab.90.2023.07.13.08.39.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jul 2023 08:39:31 -0700 (PDT)
-Message-ID: <e4aed85b-8543-cede-6257-5807b07f2de9@linuxfoundation.org>
-Date:   Thu, 13 Jul 2023 09:39:31 -0600
+        Thu, 13 Jul 2023 11:43:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532C62710;
+        Thu, 13 Jul 2023 08:43:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D830761A05;
+        Thu, 13 Jul 2023 15:43:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B77C433C9;
+        Thu, 13 Jul 2023 15:43:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689263014;
+        bh=a02n8F7I0BC9O3H7WAzCyYW5N9p3gBn7c9lJd2JE190=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PfOVpNnct00JOEZz8f6ofK8Np5RrswDO/LANYthjXblaP6MJvrz/J75iIInrPrR8A
+         mLZJndIqh6jREZtgoEYRRL1NkydUTupj7PaEPuWAilZzfh0tiM4LQt1FIJBXvafRo7
+         7HWqi9v6tJ4auKKUhxdpUe++/9+npal1bkM+BhSgftDd9IEyQhP860s680yuMEEmhW
+         ssHEjcOVyjgycdZ10Q+egHwFklDxSg+pVJ6LUlKSPGqCH1o5cr6otrGzP62eYdsY3s
+         mZVjUyXSC3sXkhHIOZX9+fu/FvZreIO0c0RVnhfWa0zrHS6vHLrICM1lDoPo+efxLT
+         u2eAaq9J6wNyQ==
+Date:   Thu, 13 Jul 2023 16:43:29 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Florent Revest <revest@chromium.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 9/9] selftests/mm: Run all tests from run_vmtests.sh
+Message-ID: <5b4fcf62-98c3-458e-a0e7-8e86ec354cb9@sirena.org.uk>
+References: <20230713135440.3651409-1-ryan.roberts@arm.com>
+ <20230713135440.3651409-10-ryan.roberts@arm.com>
+ <d77c6592-09f4-036d-ad00-a7a28de1da3f@redhat.com>
+ <2b586ba2-7522-a823-afd6-7b4d978f18c2@arm.com>
+ <97742685-e026-417b-8c8f-938330027636@sirena.org.uk>
+ <8d2e75e7-0d38-6e6c-a02a-b66a18515dfb@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [RESEND PATCH] selftests/mincore: fix skip condition for
- check_huge_pages test
-Content-Language: en-US
-To:     =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
-        shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, naresh.kamboju@linaro.org,
-        dan.carpenter@linaro.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20230629083546.3031488-1-ricardo.canuelo@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230629083546.3031488-1-ricardo.canuelo@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y9sB0v2MUUQiI5hI"
+Content-Disposition: inline
+In-Reply-To: <8d2e75e7-0d38-6e6c-a02a-b66a18515dfb@arm.com>
+X-Cookie: MOUNT TAPE U1439 ON B3, NO RING
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/29/23 02:35, Ricardo Cañuelo wrote:
-> The check_huge_pages test was failing instead of skipping on qemu-armv7
-> because the skip condition wasn't handled properly. Add an additional
-> check to fix it.
-> 
-> Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Tested-by: Anders Roxell <anders.roxell@linaro.org>
-> Closes: https://lore.kernel.org/all/CA+G9fYuoB8Ug8PcTU-YGmemL7_eeEksXFihvxWF6OikD7sK7pA@mail.gmail.com
-> ---
->   tools/testing/selftests/mincore/mincore_selftest.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
 
-Thank you for the patch and sorry for the delay due to conference
-travel and vacation.
+--y9sB0v2MUUQiI5hI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Will be queued for the next rc.
+On Thu, Jul 13, 2023 at 04:36:18PM +0100, Ryan Roberts wrote:
+> On 13/07/2023 16:30, Mark Brown wrote:
 
-thanks,
--- Shuah
+> > The results parsers I'm aware of like the LAVA one will DTRT with nested
+> > kselftests since that's required to pull see individual test cases run
+> > by a single binary so it's the common case to see at least one level of
+> > nesting.
 
+> That's good to hear. But bear in mind that run_vmtests.sh does not use TAP. So
+> you end up with a single top-level test who's result is reported with
+> run_kselftest.sh's TAP output. Then you have a second level (run_vmtests.sh)
+> using custom reporting, then _some_ of the tests invoked use TAP so you
+> sometimes have TAP at level 3. But those tests at level 2 that don't do their
+> own TAP output probably won't be parsed by LAVA?
+
+I think that should mostly mean that all the tests that don't
+individually produce KTAP output get ignored by parsers and those which
+do produce KTAP output will be seen as nesting one level up from where
+they are (ie, the individual cases will run directly from vmtest),
+though there's likely to be confusion about expected run numbers for
+things that actually pay attention to that.
+
+> Since you agreed to put this into the CI, I was going to call this part "your
+> problem" ;-)
+
+It'll run, the results are a different story. :P
+
+--y9sB0v2MUUQiI5hI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSwG6AACgkQJNaLcl1U
+h9ATFQf8CDkX97XcCz4UtVfkVlN9UXmTmpyuRQjNSh2CHkbvSzihJqhlE/J1YTOe
+vBavd1wDJTa2HkgTgFKVrbZe5+oME3wGPSR9Hu+uhm1zQfCkkHhR0rsJjJqGZ9hN
+l2YMM7cqSl9UC0QzX8lcTUTAOb14pAC5ikmnWd4LlMFVtR6sZHoqZk60xsxvZymb
+evGt7ytkwQxliaEKv4kVsA2NDeiQ/awIcIeg26VNABqHa/T8MoGteDxdx2ZkeFAI
+2Lp8OV6YGhDmBn0lnuY+qoTUWdgceIuau7ISav3S6udB8Useinu7ab19HPw48nDL
+oq5PM+NJhvqYKm9ZsLM7JNhMbQi4bQ==
+=HNhe
+-----END PGP SIGNATURE-----
+
+--y9sB0v2MUUQiI5hI--
