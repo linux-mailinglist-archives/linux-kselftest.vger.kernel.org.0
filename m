@@ -2,77 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B445C75275A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 17:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA430752767
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 17:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjGMPg0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 11:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
+        id S234845AbjGMPje (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 11:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjGMPgZ (ORCPT
+        with ESMTP id S229966AbjGMPjd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 11:36:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D377526AE;
-        Thu, 13 Jul 2023 08:36:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FA231570;
-        Thu, 13 Jul 2023 08:37:03 -0700 (PDT)
-Received: from [10.1.30.48] (C02Z41KALVDN.cambridge.arm.com [10.1.30.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F0553F73F;
-        Thu, 13 Jul 2023 08:36:19 -0700 (PDT)
-Message-ID: <8d2e75e7-0d38-6e6c-a02a-b66a18515dfb@arm.com>
-Date:   Thu, 13 Jul 2023 16:36:18 +0100
+        Thu, 13 Jul 2023 11:39:33 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDF32117
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 08:39:32 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id ca18e2360f4ac-78706966220so5745239f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 08:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1689262772; x=1691854772;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Edz8S9/DYDu/Er6Wbo87AVay2HssoKiTC5UZFfGh+BM=;
+        b=BgEmFI4pgRVRFPcWdSBdvexlbchTLIUxW+mARHWI1QZKPCYcySxKTuX6R+8L0jCYIr
+         IV/FTs4+ChFfscqQbKkB59+fbjo1a+E0a4HNKl+R8sVjahiFy8U3RhQD84Jbyqbt+F4/
+         5yr94rr+YlMfJ3qNQlhiKzDXq4sRAEf3VpOUE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689262772; x=1691854772;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Edz8S9/DYDu/Er6Wbo87AVay2HssoKiTC5UZFfGh+BM=;
+        b=VWbxQxRAJCnlE6wxs4wMz8xB8cyi/UbiJONTP/qo5+RSS3nTi1ymcM3GNDDsdCgADJ
+         UavAWZyPqb1r+FIgbYU+GOWnqcSFXx156Sb8pqZXylrwuj/danR2cylCbyr2zT5yudHD
+         6iz4oZmb1ohPfeMIRw0ixdzAlH0kEesHmFELJ6XzHlio2vYxEYnp3TinFNpLgsPFyDwQ
+         oWKkkXdVgXPD4TKhAsSQv22KrkJRPKdlv4U2LU2Y+vPm9Dnp0rh5UTVJBDHOqUzyfJLs
+         Aj1pbmNvzV3Mbu69WuF82P6bpeLe+DeVH+8Asqd69HMgL8PYhnv2V0InpYK3SPmyA3Zj
+         UeKQ==
+X-Gm-Message-State: ABy/qLZrN95WK0E4zF+NOc2dKGKHEM1QTUFYpg0OImIiuEsF1jhjESKi
+        dxasmDamFXBKATFk8YpeIDJohA==
+X-Google-Smtp-Source: APBJJlHXCW1r6HGRFe1uL46adGj5+gGhTWF7xgaES+0aANFvwXNPy7BA0J7LwrFPf5OwZWyWj3Hkmg==
+X-Received: by 2002:a6b:8d10:0:b0:780:cde6:3e22 with SMTP id p16-20020a6b8d10000000b00780cde63e22mr2010448iod.0.1689262771932;
+        Thu, 13 Jul 2023 08:39:31 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id cz8-20020a0566384a0800b0042bb09e9345sm1938458jab.90.2023.07.13.08.39.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jul 2023 08:39:31 -0700 (PDT)
+Message-ID: <e4aed85b-8543-cede-6257-5807b07f2de9@linuxfoundation.org>
+Date:   Thu, 13 Jul 2023 09:39:31 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH v1 9/9] selftests/mm: Run all tests from run_vmtests.sh
-To:     Mark Brown <broonie@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Florent Revest <revest@chromium.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-References: <20230713135440.3651409-1-ryan.roberts@arm.com>
- <20230713135440.3651409-10-ryan.roberts@arm.com>
- <d77c6592-09f4-036d-ad00-a7a28de1da3f@redhat.com>
- <2b586ba2-7522-a823-afd6-7b4d978f18c2@arm.com>
- <97742685-e026-417b-8c8f-938330027636@sirena.org.uk>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <97742685-e026-417b-8c8f-938330027636@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [RESEND PATCH] selftests/mincore: fix skip condition for
+ check_huge_pages test
+Content-Language: en-US
+To:     =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
+        shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, naresh.kamboju@linaro.org,
+        dan.carpenter@linaro.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20230629083546.3031488-1-ricardo.canuelo@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230629083546.3031488-1-ricardo.canuelo@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 13/07/2023 16:30, Mark Brown wrote:
-> On Thu, Jul 13, 2023 at 04:04:44PM +0100, Ryan Roberts wrote:
+On 6/29/23 02:35, Ricardo Cañuelo wrote:
+> The check_huge_pages test was failing instead of skipping on qemu-armv7
+> because the skip condition wasn't handled properly. Add an additional
+> check to fix it.
 > 
->> So with this change at the kselftest level, there is a single test in its list;
->> run_vmtests.sh. And all the other tests that were previously in that list are
->> moved into run_vmtests.sh (if they weren't there already).
+> Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Tested-by: Anders Roxell <anders.roxell@linaro.org>
+> Closes: https://lore.kernel.org/all/CA+G9fYuoB8Ug8PcTU-YGmemL7_eeEksXFihvxWF6OikD7sK7pA@mail.gmail.com
+> ---
+>   tools/testing/selftests/mincore/mincore_selftest.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> The results parsers I'm aware of like the LAVA one will DTRT with nested
-> kselftests since that's required to pull see individual test cases run
-> by a single binary so it's the common case to see at least one level of
-> nesting.
 
-That's good to hear. But bear in mind that run_vmtests.sh does not use TAP. So
-you end up with a single top-level test who's result is reported with
-run_kselftest.sh's TAP output. Then you have a second level (run_vmtests.sh)
-using custom reporting, then _some_ of the tests invoked use TAP so you
-sometimes have TAP at level 3. But those tests at level 2 that don't do their
-own TAP output probably won't be parsed by LAVA?
+Thank you for the patch and sorry for the delay due to conference
+travel and vacation.
 
-Since you agreed to put this into the CI, I was going to call this part "your
-problem" ;-)
+Will be queued for the next rc.
+
+thanks,
+-- Shuah
+
