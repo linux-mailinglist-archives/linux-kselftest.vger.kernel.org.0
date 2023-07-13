@@ -2,129 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E971752364
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 15:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5164A75236A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jul 2023 15:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbjGMNVG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 09:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
+        id S234671AbjGMNVM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 09:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbjGMNUl (ORCPT
+        with ESMTP id S234866AbjGMNUp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:20:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61830270A;
-        Thu, 13 Jul 2023 06:20:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Thu, 13 Jul 2023 09:20:45 -0400
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E445F272A
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 06:20:35 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-d28lCVOnM46F5xmYMZv0lA-1; Thu, 13 Jul 2023 09:20:29 -0400
+X-MC-Unique: d28lCVOnM46F5xmYMZv0lA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2C7461077;
-        Thu, 13 Jul 2023 13:20:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA113C433C8;
-        Thu, 13 Jul 2023 13:20:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689254431;
-        bh=/HyMH976r1TkXdXXLMFe5egKFttnbGRT4cnSU1IDGSE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IyX8o5M49S3zdzIxtruMjTRp3CoLKS1Rhzh8MHa3gYd3oaysfgiI9455gtBEoX6/h
-         VbqM0gkLxd4eQvSWW7TISIVbalZNozQIlll8xozP/Mpus0rGu4PKXHlVyyOaDlD8Nm
-         MLz+0GsLu/xdnFlvqHh5WF5qicq294o0Dn9/hQp3R3SN5d/FjQLuMIOEbYVwPvBGkV
-         3pZL3qgJ3VM0f7sHcfQmUY8ueP8p88W4jCtOqXictAbtRiKpiIxS6sBpv5C7XYkSe3
-         I03sippl4hiN2aJerdZ/8LQgvMnUA8TpzL9Fg6A61oDg35Njc6Ts11QAdJ1MBAVhhm
-         G+bK9ll/f7X2A==
-Date:   Thu, 13 Jul 2023 15:20:20 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>, Willy Tarreau <w@1wt.eu>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        xu xin <cgel.zte@gmail.com>, Al Viro <viro@zeniv.linux.org.uk>,
-        Stefan Roesch <shr@devkernel.io>,
-        Zhihao Cheng <chengzhihao1@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Janis Danisevskis <jdanis@google.com>,
-        Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 391B0185A792;
+        Thu, 13 Jul 2023 13:20:29 +0000 (UTC)
+Received: from hog.localdomain (unknown [10.45.224.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 402D02166B27;
+        Thu, 13 Jul 2023 13:20:28 +0000 (UTC)
+From:   Sabrina Dubroca <sd@queasysnail.net>
+To:     netdev@vger.kernel.org
+Cc:     Sabrina Dubroca <sd@queasysnail.net>, kuba@kernel.org,
+        simon.horman@corigine.com, Shuah Khan <shuah@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] procfs: block chmod on /proc/thread-self/comm
-Message-ID: <20230713-shrimps-sachkenntnis-0343cc776cc2@brauner>
-References: <20230713121907.9693-1-cyphar@cyphar.com>
- <e26a9bab-6443-4a0a-809a-ca1c1b4d28c3@t-8ch.de>
+Subject: [PATCH net-next v3 0/2] add MACsec offload selftests
+Date:   Thu, 13 Jul 2023 15:20:22 +0200
+Message-Id: <cover.1689173906.git.sd@queasysnail.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e26a9bab-6443-4a0a-809a-ca1c1b4d28c3@t-8ch.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: queasysnail.net
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252; x-default=true
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 03:01:24PM +0200, Thomas Weißschuh wrote:
-> On 2023-07-13 22:19:04+1000, Aleksa Sarai wrote:
-> > Due to an oversight in commit 1b3044e39a89 ("procfs: fix pthread
-> > cross-thread naming if !PR_DUMPABLE") in switching from REG to NOD,
-> > chmod operations on /proc/thread-self/comm were no longer blocked as
-> > they are on almost all other procfs files.
-> > 
-> > A very similar situation with /proc/self/environ was used to as a root
-> > exploit a long time ago, but procfs has SB_I_NOEXEC so this is simply a
-> > correctness issue.
-> > 
-> > Ref: https://lwn.net/Articles/191954/
-> > Ref: 6d76fa58b050 ("Don't allow chmod() on the /proc/<pid>/ files")
-> > Fixes: 1b3044e39a89 ("procfs: fix pthread cross-thread naming if !PR_DUMPABLE")
-> > Cc: stable@vger.kernel.org # v4.7+
-> > Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
-> > ---
-> >  fs/proc/base.c                               | 3 ++-
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 4 ++++
-> >  2 files changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/fs/proc/base.c b/fs/proc/base.c
-> > index 05452c3b9872..7394229816f3 100644
-> > --- a/fs/proc/base.c
-> > +++ b/fs/proc/base.c
-> > @@ -3583,7 +3583,8 @@ static int proc_tid_comm_permission(struct mnt_idmap *idmap,
-> >  }
-> >  
-> >  static const struct inode_operations proc_tid_comm_inode_operations = {
-> > -		.permission = proc_tid_comm_permission,
-> > +		.setattr	= proc_setattr,
-> > +		.permission	= proc_tid_comm_permission,
-> >  };
-> 
-> Given that this seems to be a recurring theme a more systematic
-> aproach would help.
-> 
-> Something like the following (untested) patch:
-> 
-> diff --git a/fs/proc/base.c b/fs/proc/base.c
-> index 05452c3b9872..b90f2e9cda66 100644
-> --- a/fs/proc/base.c
-> +++ b/fs/proc/base.c
-> @@ -2649,6 +2649,7 @@ static struct dentry *proc_pident_instantiate(struct dentry *dentry,
->  		set_nlink(inode, 2);	/* Use getattr to fix if necessary */
->  	if (p->iop)
->  		inode->i_op = p->iop;
-> +	WARN_ON(!inode->i_op->setattr);
+Patch 1 adds MACsec offload to netdevsim (unchanged from v2).
 
-Hm, no. This is hacky.
+Patch 2 adds a corresponding selftest to the rtnetlink testsuite.
 
-To fix this properly we will need to wean off notify_change() from
-falling back to simple_setattr() when no i_op->setattr() method is
-defined. To do that we will have to go through every filesystem and port
-all that rely on this fallback to set simple_setattr() explicitly as
-their i_op->setattr() method.
+Sabrina Dubroca (2):
+  netdevsim: add dummy macsec offload
+  selftests: rtnetlink: add MACsec offload tests
 
-Christoph and I just discussed this in relation to another patch.
+ drivers/net/netdevsim/Makefile           |   4 +
+ drivers/net/netdevsim/macsec.c           | 356 +++++++++++++++++++++++
+ drivers/net/netdevsim/netdev.c           |   3 +
+ drivers/net/netdevsim/netdevsim.h        |  34 +++
+ tools/testing/selftests/net/rtnetlink.sh |  83 ++++++
+ 5 files changed, 480 insertions(+)
+ create mode 100644 drivers/net/netdevsim/macsec.c
 
-This is a bugfix so it should be as minimal as possible for easy
-backport.
+-- 
+2.40.1
+
