@@ -2,99 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BB77542EC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 20:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4225775430D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 21:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236108AbjGNSzq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 14:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S235811AbjGNTLO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 15:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235999AbjGNSzq (ORCPT
+        with ESMTP id S231912AbjGNTLN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 14:55:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1EB3586;
-        Fri, 14 Jul 2023 11:55:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6670561DD7;
-        Fri, 14 Jul 2023 18:55:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB384C433C7;
-        Fri, 14 Jul 2023 18:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1689360943;
-        bh=KgsFiG5i/f94+WDrQrUG1IaMGJEiJyBBRwspPPnTsJA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pTWKUsw4htC64FOKSPZK+JYYig6e8a53zQ/zQgd9R027K38gj1I2EwFtJQJhHegKz
-         Y2DXrkon40FKOy8HJw9TYsjLnoDhE7bAZnmz3qeRL1eUWFk45ryJ5j634jcESIBg2Q
-         YCK4C9RgGp4v4lvYYVmiycgxXL/lSRdD6SwaScvM=
-Date:   Fri, 14 Jul 2023 11:55:42 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v2 1/1] kernel.h: Split out COUNT_ARGS() and
- CONCATENATE() to args.h
-Message-Id: <20230714115542.b5373a8dc80ba996338ee753@linux-foundation.org>
-In-Reply-To: <20230714142237.21836-1-andriy.shevchenko@linux.intel.com>
-References: <20230714142237.21836-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 14 Jul 2023 15:11:13 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C1835A5
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 12:11:12 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id ca18e2360f4ac-785d3a53ed6so28677339f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 12:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1689361871; x=1689966671;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yialeae0FRLuDudxSzZrlpT7q/KFyoBq2qabN1GxdSg=;
+        b=QK/rNnW4rKlVH3RzTVnjvHBZWPvtsk7qv20KXHpwLSVyIZGRkss4cmSPx+B2V3iSmn
+         9sQAq13gWpJjMmxqQ8oMNIq/UNzOHjgL7Qa9/AG7V0XVV6ljowq3yUMT29AtzHar1CLK
+         0cQYNqadBx3NR0mP8qq8xcfi55Beg+i0ndd7U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689361871; x=1689966671;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yialeae0FRLuDudxSzZrlpT7q/KFyoBq2qabN1GxdSg=;
+        b=YAWlVXgaG7Tl6QBDS5lxP7AgQf+KpNvCkPRqDuh0mX4Q2Ye6Uwn3JA0K71E6YIEobJ
+         n4iejviqzEjNqdSzjDtYal9u/yEVF82cN/5Lq5gwBhL2CclygvlE307Ms/x5uBfXXEgt
+         YoHfYkuxLa/3XeKvZ7Tcq9z7T/NijeQ3UKzdtBnc3j9k4ZOrQxPqQg9Ek5yq88Gimizp
+         m80BsvvFAxDp+qkvo1kG0uGeMNX8irkmJcjF+sp7W9ZWnSZRz5Eh2r5N3yhJa+UkPRlZ
+         DXwogRbLdS+4VtEa56DVGDpPY6m+ke3Kagw+5OJDru8KDQwn33JtcHglpcTaMuRMQxsB
+         SVrQ==
+X-Gm-Message-State: ABy/qLZJzE/B1e6ULZWYT89quGLL8V+Z/HGuxbMtX6yLdXUE/VaCwun+
+        Juzou77Qa5OJ05b+7F29kM+152xDWdF4t3VLqE1/++6J
+X-Google-Smtp-Source: APBJJlEGvhkV/7gcZlvu7+7GdcAFWsR1iUKZmtKDA3M+FCTMNBsij+zysGny0FEHrl0Q4Ss3OriJfQ==
+X-Received: by 2002:a6b:8d17:0:b0:783:743c:fd01 with SMTP id p23-20020a6b8d17000000b00783743cfd01mr5294597iod.0.1689361871232;
+        Fri, 14 Jul 2023 12:11:11 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id d6-20020a02a486000000b0042b0ce92dddsm2674379jam.161.2023.07.14.12.11.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jul 2023 12:11:10 -0700 (PDT)
+Message-ID: <d03af9cc-c72e-d23f-73ad-ca0e079c3187@linuxfoundation.org>
+Date:   Fri, 14 Jul 2023 13:11:10 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] selftests: Fix arm64 test installation
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org>
+ <8d944238-1a9a-e93e-fdab-54e74fa12e11@linuxfoundation.org>
+ <785e1c1c-84d8-e87d-f22f-9a53d27f30f6@nvidia.com>
+ <620a5b91-9715-ee28-423c-851506b10832@linuxfoundation.org>
+ <421bebb3-19e9-47a7-8b2b-f69f125df22f@sirena.org.uk>
+ <f479b731-7782-0417-2d4c-31a7c3c9491c@nvidia.com>
+ <20230714112653.0b42d3c9818b038d219b5e41@linux-foundation.org>
+ <68ccfd77-ce2f-857a-37a7-e9b3edcd495d@linuxfoundation.org>
+ <5e5bf5c0-bcda-ec2a-ba4c-5f35dcfbc373@nvidia.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <5e5bf5c0-bcda-ec2a-ba4c-5f35dcfbc373@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 14 Jul 2023 17:22:37 +0300 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-
-> kernel.h is being used as a dump for all kinds of stuff for a long time.
-> The COUNT_ARGS() and CONCATENATE() macros may be used in some places
-> without need of the full kernel.h dependency train with it.
+On 7/14/23 12:36, John Hubbard wrote:
+> On 7/14/23 11:32, Shuah Khan wrote:
+>> On 7/14/23 12:26, Andrew Morton wrote:
+>>> On Fri, 14 Jul 2023 11:19:11 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
+>>>
+>>>> On 7/14/23 11:09, Mark Brown wrote:
+>>>>> On Fri, Jul 14, 2023 at 11:48:51AM -0600, Shuah Khan wrote:
+>>>>>> On 7/13/23 14:16, John Hubbard wrote:
+>>>>>
+>>>>>>> Actually, I was hoping that my two fixes [1], [2] could be used, instead
+>>>>>>> of reverting the feature.
+>>>>>
+>>>>>> Mark! Are you good with taking these two - do these fix the
+>>>>>> problems you are seeing?
+>>>>>
+>>>>> I reviewed the one that's relevant to me already, the arm64 one, I'd not
+>>>>> seen or tested the RISC-V one but that looks fine too.  I'm pretty sure
+>>>>
+>>>> That riscv patch already has a Tested-by from Alexandre Ghiti:
+>>>>
+>>>> https://lore.kernel.org/f903634d-851f-af64-8d9a-6b13d813587c@ghiti.fr
+>>>>
+>>>>
+>>>>> Andrew queued it already though ICBW.  Either way it'd be good to get
+>>>>> this into -rc2, this is seriously disrupting arm64 CI and I'm guessing
+>>>>> the RISC-V CI too.
+>>>>
+>>>
+>>> I just dropped
+>>> selftests-arm64-fix-build-failure-during-the-emit_tests-step.patch and
+>>> selftests-fix-arm64-test-installation.patch, as Shuah is merging them.
+>>>
+>>> This is all rather confusing.  Perhaps a full resend of everything will
+>>> help.  I'll assume that Shuah will be handling them.
+>>
+>> Yes. Andrew - I am applying both as we speak. I found the right versions
+>> with Tested-by tags.
 > 
-> Here is the attempt on cleaning it up by splitting out these macros().
+> Thanks, Shuah.
 > 
-> While at it, include new header where it's being used and drop custom
-> implementation of these macros and document how it works.
+> Just to be clear, when you say you're applying "both", I'm hoping you mean
+> both of these:
+> 
+> 
+> [1] https://lore.kernel.org/all/20230711005629.2547838-1-jhubbard@nvidia.com/
+> [2] https://lore.kernel.org/all/20230712193514.740033-1-jhubbard@nvidia.com/
+> 
 
-This blows up my x86_64 allmodconfig build, starting with
+Right. The ones you have links to:
 
-In file included from drivers/block/drbd/drbd_nl.c:78:
-./include/linux/genl_magic_func.h:26:26: error: 'CONCAT_' declared as function returning an array
-   26 | static struct nla_policy CONCAT_(GENL_MAGIC_FAMILY, _tla_nl_policy)[] = {
-      |                          ^~~~~~~
-./include/linux/genl_magic_func.h:26:15: error: parameter names (without types) in function declaration [-Werror]
-   26 | static struct nla_policy CONCAT_(GENL_MAGIC_FAMILY, _tla_nl_policy)[] = {
-      |               ^~~~~~~~~~
-./include/linux/genl_magic_func.h:26:15: error: function 'CONCAT_' is initialized like a variable
-./include/linux/drbd_genl.h:88:13: error: array index in non-array initializer
-   88 | GENL_struct(DRBD_NLA_CFG_REPLY, 1, drbd_cfg_reply,
-      |             ^~~~~~~~~~~~~~~~~~
-./include/linux/genl_magic_func.h:24:10: note: in definition of macro 'GENL_struct'
-   24 |         [tag_name] = { .type = NLA_NESTED },
-      |          ^~~~~~~~
-...
+Please check the latest fixes to see if we are all squared away:
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=fixes
+
+thanks,
+-- Shuah
