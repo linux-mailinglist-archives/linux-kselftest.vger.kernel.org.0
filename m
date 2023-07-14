@@ -2,48 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254B2753FDD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 18:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75980753FE0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 18:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjGNQfn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 12:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
+        id S235636AbjGNQgv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 12:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjGNQfm (ORCPT
+        with ESMTP id S229557AbjGNQgt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 12:35:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66917273F;
-        Fri, 14 Jul 2023 09:35:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F27FD61D60;
-        Fri, 14 Jul 2023 16:35:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B6EC433C7;
-        Fri, 14 Jul 2023 16:35:38 +0000 (UTC)
-Date:   Fri, 14 Jul 2023 12:35:37 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ajay Kaher <akaher@vmware.com>
-Cc:     shuah@kernel.org, mhiramat@kernel.org, chinglinyu@google.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, lkp@intel.com,
-        namit@vmware.com, oe-lkp@lists.linux.dev, amakhalov@vmware.com,
-        er.ajay.kaher@gmail.com, srivatsa@csail.mit.edu, tkundu@vmware.com,
-        vsirnapalli@vmware.com
-Subject: Re: [PATCH v4 05/10] eventfs: Implement eventfs file, directory
- remove function
-Message-ID: <20230714123537.3c397d83@gandalf.local.home>
-In-Reply-To: <1689248004-8158-6-git-send-email-akaher@vmware.com>
-References: <1689248004-8158-1-git-send-email-akaher@vmware.com>
-        <1689248004-8158-6-git-send-email-akaher@vmware.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 14 Jul 2023 12:36:49 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3845E273F
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 09:36:48 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-668704a5b5bso2055953b3a.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 09:36:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689352608; x=1689957408;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QQ1uI9q9sU2ZQAZveePTsLb5K8q5kCpO4NQiP7h7UI4=;
+        b=okKHAWGl0HU/dDrm6Nylyw0ZW/1JCHS/YMnhiAbqBiwVuC7bV22VAGkf0/nuqrB3uU
+         Yf1l+ZCIuKAn94NDuPC1XHoJvcrFPq0jcjOED2EfZtC7m1tuPSxaeoEqhIfjyQqtZNfu
+         ++h6EsvmIkc82XsLvzI+3JciPpWTaYKHDf0tbTGqzGIr1ho8NYiRaYeZHRRWhWtJmczL
+         wTBb+W3qmkk9UThIjLWQUorLv3HScFA/HrAJGclQDgwHpRU/o3FzuyfIK4JrdszVHwNs
+         Z3y+v4PsYLeiInACqeCeScTBn2paFWDP5917TuipB4tZxbxDQW2Gt4DG9rUa37w2czQB
+         m9Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689352608; x=1689957408;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QQ1uI9q9sU2ZQAZveePTsLb5K8q5kCpO4NQiP7h7UI4=;
+        b=BIlg4gBRp6VYpwld3NaIuWl8Nc/mtJNEurZGEB5H+0wCZOUl3ljzxbqX7N1xoONpyh
+         ifvXxfStL3Xvhb4z8rIkaKm/mMf1kVVSDAleCpRtqfwJ5HA+i4MofcAgjFmt7CPtVqQh
+         z/czn06nHNUObEFsHudFv9a4Gwaah2IxpVVAR98ICgMp5Prm/1m6cmZUdX0Z0PzIAiMb
+         xpX5z18rMyDcalbtmuIr75fYz7ev5bIqElZ/M1WYICv0jtsDd9TsG5QQHp3aw6D2D/cg
+         qknJIJEEPwgu2PP8XbRt4qGgs1NaYZndZIfnfilOh/yH1aaDbQ/XYn1P5vKWxKRYsVa/
+         3EFg==
+X-Gm-Message-State: ABy/qLbudCI8r0VskhfGnB/xLglpISULsNEE9nG1a0d6ALiz4K07FSzG
+        TkumcASA8cBfHh+aEOmmWl8Atw==
+X-Google-Smtp-Source: APBJJlHRd1gLk7JPxHUtTov1qnh114x9KwaDQ/5sltZxt9EHRLviBFeaGdLonEvrSgYBN3Wzgzxgfg==
+X-Received: by 2002:a05:6a00:16c4:b0:676:399f:346b with SMTP id l4-20020a056a0016c400b00676399f346bmr6889692pfc.1.1689352607578;
+        Fri, 14 Jul 2023 09:36:47 -0700 (PDT)
+Received: from ghost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id fm10-20020a056a002f8a00b00640f51801e6sm7373618pfb.159.2023.07.14.09.36.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jul 2023 09:36:47 -0700 (PDT)
+Date:   Fri, 14 Jul 2023 09:36:45 -0700
+From:   Charlie Jenkins <charlie@rivosinc.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        paul.walmsley@sifive.com, palmer@rivosinc.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org,
+        alexghiti@rivosinc.com
+Subject: Re: [PATCH v5 0/4] RISC-V: mm: Make SV48 the default address space
+Message-ID: <ZLF5nS12R37loA9I@ghost>
+References: <20230714001430.75798-1-charlie@rivosinc.com>
+ <20230714-hangnail-stinking-60f9725ac0d5@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230714-hangnail-stinking-60f9725ac0d5@spud>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,219 +76,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Some more nits:
+On Fri, Jul 14, 2023 at 12:17:00PM +0100, Conor Dooley wrote:
+> On Thu, Jul 13, 2023 at 05:13:59PM -0700, Charlie Jenkins wrote:
+> > Make sv48 the default address space for mmap as some applications
+> > currently depend on this assumption. Users can now select a
+> > desired address space using a non-zero hint address to mmap. Previously,
+> > requesting the default address space from mmap by passing zero as the hint
+> > address would result in using the largest address space possible. Some
+> > applications depend on empty bits in the virtual address space, like Go and
+> > Java, so this patch provides more flexibility for application developers.
+> 
+> The patchwork automation failed to apply this, what is the base for the
+> series?
 
-Subject:
-
- eventfs: Implement removal of meta data from eventfs
-
-
-On Thu, 13 Jul 2023 17:03:19 +0530
-Ajay Kaher <akaher@vmware.com> wrote:
-
-> Adding eventfs_remove(), this function will recursively remove
-> dir or file info from eventfs.
-
- When events are removed from tracefs, the eventfs must be aware of this.
- The eventfs_remove() removes the meta data from eventfs so that it will no
- longer create the files associated with that event.
-
- When an instance is removed from tracefs, eventfs_remove_events_dir() will
- remove and clean up the entire "events" directory.
-
+I forgot to pull in the changes to the riscv selftests so the conflict
+is in that Makefile. I will send out a v6 with the correct base.
 
 > 
-> added a recursion check to eventfs_remove_rec() as it is really
-> dangerous to have unchecked recursion in the kernel (we do have
-> a fixed size stack).
+> > 
+> > -Charlie
+> > 
+> > ---
+> > v5:
+> > - Minor wording change in documentation
+> > - Change some parenthesis in arch_get_mmap_ macros
+> > - Added case for addr==0 in arch_get_mmap_ because without this, programs would
+> >   crash if RLIMIT_STACK was modified before executing the program. This was
+> >   tested using the libhugetlbfs tests. 
+> > 
+> > v4:
+> > - Split testcases/document patch into test cases, in-code documentation, and
+> >   formal documentation patches
+> > - Modified the mmap_base macro to be more legible and better represent memory
+> >   layout
+> > - Fixed documentation to better reflect the implmentation
+> > - Renamed DEFAULT_VA_BITS to MMAP_VA_BITS
+> > - Added additional test case for rlimit changes
+> > ---
+> > 
+> > Charlie Jenkins (4):
+> >   RISC-V: mm: Restrict address space for sv39,sv48,sv57
+> >   RISC-V: mm: Add tests for RISC-V mm
+> >   RISC-V: mm: Update pgtable comment documentation
+> >   RISC-V: mm: Document mmap changes
+> > 
+> >  Documentation/riscv/vm-layout.rst             |  22 +++
+> >  arch/riscv/include/asm/elf.h                  |   2 +-
+> >  arch/riscv/include/asm/pgtable.h              |  20 ++-
+> >  arch/riscv/include/asm/processor.h            |  46 +++++-
+> >  tools/testing/selftests/riscv/Makefile        |   2 +-
+> >  tools/testing/selftests/riscv/mm/.gitignore   |   1 +
+> >  tools/testing/selftests/riscv/mm/Makefile     |  21 +++
+> >  .../selftests/riscv/mm/testcases/mmap.c       | 133 ++++++++++++++++++
+> >  8 files changed, 234 insertions(+), 13 deletions(-)
+> >  create mode 100644 tools/testing/selftests/riscv/mm/.gitignore
+> >  create mode 100644 tools/testing/selftests/riscv/mm/Makefile
+> >  create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
+> > 
+> > -- 
+> > 2.41.0
+> > 
 
-The above doesn't need to be in the change log. It's an update from the
-previous version. The eventfs_remove_rec() is added here, so the recursion
-check was not.
-
-> 
-> have the free use srcu callbacks. After the srcu grace periods
-> are done, it adds the eventfs_file onto a llist (lockless link
-> list) and wakes up a work queue. Then the work queue does the
-> freeing (this needs to be done in task/workqueue context, as
-> srcu callbacks are done in softirq context).
-
-If you want to document the above, we can say:
-
- The helper function eventfs_remove_rec() is used to clean up and free the
- associated data from eventfs for both of the added functions. SRCU is used
- to protect the lists of meta data stored in the eventfs. The eventfs_mutex
- is used to protect the content of the items in the list.
-
- As lookups may be happening as deletions of events are made, the freeing
- of of dentry/inodes and relative information is done after the SRCU grace
- period has passed. As the callback of SRCU is in a softirq context, a work
- queue is added to perform the cleanups in a task context.
-
- The struct evenfs_file is given a union of an rcu_head and a llist_node.
- The SRCU callback uses the rcu_head from this structure to insert it into
- the SRCU queue. When the SRCU grace periods are complete, the callback
- will then insert the eventfs_file struct onto a lockless llist using the
- llist_node of the structure. A union is used as this process is just a
- hand off from SRCU to workqueue, and only one field is necessary for this
- to work.
-
-You can also add the above as a comment in the code (and keep it in the
-change log as well).
-
--- Steve
-
-
-> 
-> Signed-off-by: Ajay Kaher <akaher@vmware.com>
-> Co-developed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> Tested-by: Ching-lin Yu <chinglinyu@google.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202305030611.Kas747Ev-lkp@intel.com/
-> ---
->  fs/tracefs/event_inode.c | 110 +++++++++++++++++++++++++++++++++++++++
->  include/linux/tracefs.h  |   4 ++
->  2 files changed, 114 insertions(+)
-> 
-> diff --git a/fs/tracefs/event_inode.c b/fs/tracefs/event_inode.c
-> index 75dc8953d813..322a77be5a56 100644
-> --- a/fs/tracefs/event_inode.c
-> +++ b/fs/tracefs/event_inode.c
-> @@ -45,6 +45,7 @@ struct eventfs_file {
->  };
->  
->  static DEFINE_MUTEX(eventfs_mutex);
-> +DEFINE_STATIC_SRCU(eventfs_srcu);
->  
->  static const struct file_operations eventfs_file_operations = {
->  };
-> @@ -299,3 +300,112 @@ int eventfs_add_file(const char *name, umode_t mode,
->  	mutex_unlock(&eventfs_mutex);
->  	return 0;
->  }
-> +
-> +static LLIST_HEAD(free_list);
-> +
-> +static void eventfs_workfn(struct work_struct *work)
-> +{
-> +	struct eventfs_file *ef, *tmp;
-> +	struct llist_node *llnode;
-> +
-> +	llnode = llist_del_all(&free_list);
-> +	llist_for_each_entry_safe(ef, tmp, llnode, llist) {
-> +		if (ef->created && ef->dentry)
-> +			dput(ef->dentry);
-> +		kfree(ef->name);
-> +		kfree(ef->ei);
-> +		kfree(ef);
-> +	}
-> +}
-> +
-> +DECLARE_WORK(eventfs_work, eventfs_workfn);
-> +
-> +static void free_ef(struct rcu_head *head)
-> +{
-> +	struct eventfs_file *ef = container_of(head, struct eventfs_file, rcu);
-> +
-> +	if (!llist_add(&ef->llist, &free_list))
-> +		return;
-> +
-> +	queue_work(system_unbound_wq, &eventfs_work);
-> +}
-> +
-> +
-> +
-> +/**
-> + * eventfs_remove_rec - remove eventfs dir or file from list
-> + * @ef: eventfs_file to be removed.
-> + *
-> + * This function recursively remove eventfs_file which
-> + * contains info of file or dir.
-> + */
-> +static void eventfs_remove_rec(struct eventfs_file *ef, int level)
-> +{
-> +	struct eventfs_file *ef_child;
-> +
-> +	if (!ef)
-> +		return;
-> +	/*
-> +	 * Check recursion depth. It should never be greater than 3:
-> +	 * 0 - events/
-> +	 * 1 - events/group/
-> +	 * 2 - events/group/event/
-> +	 * 3 - events/group/event/file
-> +	 */
-> +	if (WARN_ON_ONCE(level > 3))
-> +		return;
-> +
-> +	if (ef->ei) {
-> +		/* search for nested folders or files */
-> +		list_for_each_entry_srcu(ef_child, &ef->ei->e_top_files, list,
-> +					 lockdep_is_held(&eventfs_mutex)) {
-> +			eventfs_remove_rec(ef_child, level + 1);
-> +		}
-> +	}
-> +
-> +	if (ef->created && ef->dentry)
-> +		d_invalidate(ef->dentry);
-> +
-> +	list_del_rcu(&ef->list);
-> +	call_srcu(&eventfs_srcu, &ef->rcu, free_ef);
-> +}
-> +
-> +/**
-> + * eventfs_remove - remove eventfs dir or file from list
-> + * @ef: eventfs_file to be removed.
-> + *
-> + * This function acquire the eventfs_mutex lock and call eventfs_remove_rec()
-> + */
-> +void eventfs_remove(struct eventfs_file *ef)
-> +{
-> +	if (!ef)
-> +		return;
-> +
-> +	mutex_lock(&eventfs_mutex);
-> +	eventfs_remove_rec(ef, 0);
-> +	mutex_unlock(&eventfs_mutex);
-> +}
-> +
-> +/**
-> + * eventfs_remove_events_dir - remove eventfs dir or file from list
-> + * @dentry: events's dentry to be removed.
-> + *
-> + * This function remove events main directory
-> + */
-> +void eventfs_remove_events_dir(struct dentry *dentry)
-> +{
-> +	struct tracefs_inode *ti;
-> +	struct eventfs_inode *ei;
-> +
-> +	if (!dentry || !dentry->d_inode)
-> +		return;
-> +
-> +	ti = get_tracefs(dentry->d_inode);
-> +	if (!ti || !(ti->flags & TRACEFS_EVENT_INODE))
-> +		return;
-> +
-> +	ei = ti->private;
-> +	d_invalidate(dentry);
-> +	dput(dentry);
-> +	kfree(ei);
-> +}
-> diff --git a/include/linux/tracefs.h b/include/linux/tracefs.h
-> index a51312ff803c..2c08edd4a739 100644
-> --- a/include/linux/tracefs.h
-> +++ b/include/linux/tracefs.h
-> @@ -40,6 +40,10 @@ int eventfs_add_top_file(const char *name, umode_t mode,
->  			 struct dentry *parent, void *data,
->  			 const struct file_operations *fops);
->  
-> +void eventfs_remove(struct eventfs_file *ef);
-> +
-> +void eventfs_remove_events_dir(struct dentry *dentry);
-> +
->  struct dentry *tracefs_create_file(const char *name, umode_t mode,
->  				   struct dentry *parent, void *data,
->  				   const struct file_operations *fops);
 
