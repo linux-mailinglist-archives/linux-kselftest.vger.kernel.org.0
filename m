@@ -2,73 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75980753FE0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 18:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46F1753FF5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 18:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235636AbjGNQgv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 12:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
+        id S233912AbjGNQri (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 12:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjGNQgt (ORCPT
+        with ESMTP id S230470AbjGNQri (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 12:36:49 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3845E273F
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 09:36:48 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-668704a5b5bso2055953b3a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 09:36:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689352608; x=1689957408;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QQ1uI9q9sU2ZQAZveePTsLb5K8q5kCpO4NQiP7h7UI4=;
-        b=okKHAWGl0HU/dDrm6Nylyw0ZW/1JCHS/YMnhiAbqBiwVuC7bV22VAGkf0/nuqrB3uU
-         Yf1l+ZCIuKAn94NDuPC1XHoJvcrFPq0jcjOED2EfZtC7m1tuPSxaeoEqhIfjyQqtZNfu
-         ++h6EsvmIkc82XsLvzI+3JciPpWTaYKHDf0tbTGqzGIr1ho8NYiRaYeZHRRWhWtJmczL
-         wTBb+W3qmkk9UThIjLWQUorLv3HScFA/HrAJGclQDgwHpRU/o3FzuyfIK4JrdszVHwNs
-         Z3y+v4PsYLeiInACqeCeScTBn2paFWDP5917TuipB4tZxbxDQW2Gt4DG9rUa37w2czQB
-         m9Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689352608; x=1689957408;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QQ1uI9q9sU2ZQAZveePTsLb5K8q5kCpO4NQiP7h7UI4=;
-        b=BIlg4gBRp6VYpwld3NaIuWl8Nc/mtJNEurZGEB5H+0wCZOUl3ljzxbqX7N1xoONpyh
-         ifvXxfStL3Xvhb4z8rIkaKm/mMf1kVVSDAleCpRtqfwJ5HA+i4MofcAgjFmt7CPtVqQh
-         z/czn06nHNUObEFsHudFv9a4Gwaah2IxpVVAR98ICgMp5Prm/1m6cmZUdX0Z0PzIAiMb
-         xpX5z18rMyDcalbtmuIr75fYz7ev5bIqElZ/M1WYICv0jtsDd9TsG5QQHp3aw6D2D/cg
-         qknJIJEEPwgu2PP8XbRt4qGgs1NaYZndZIfnfilOh/yH1aaDbQ/XYn1P5vKWxKRYsVa/
-         3EFg==
-X-Gm-Message-State: ABy/qLbudCI8r0VskhfGnB/xLglpISULsNEE9nG1a0d6ALiz4K07FSzG
-        TkumcASA8cBfHh+aEOmmWl8Atw==
-X-Google-Smtp-Source: APBJJlHRd1gLk7JPxHUtTov1qnh114x9KwaDQ/5sltZxt9EHRLviBFeaGdLonEvrSgYBN3Wzgzxgfg==
-X-Received: by 2002:a05:6a00:16c4:b0:676:399f:346b with SMTP id l4-20020a056a0016c400b00676399f346bmr6889692pfc.1.1689352607578;
-        Fri, 14 Jul 2023 09:36:47 -0700 (PDT)
-Received: from ghost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id fm10-20020a056a002f8a00b00640f51801e6sm7373618pfb.159.2023.07.14.09.36.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jul 2023 09:36:47 -0700 (PDT)
-Date:   Fri, 14 Jul 2023 09:36:45 -0700
-From:   Charlie Jenkins <charlie@rivosinc.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        paul.walmsley@sifive.com, palmer@rivosinc.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org,
-        alexghiti@rivosinc.com
-Subject: Re: [PATCH v5 0/4] RISC-V: mm: Make SV48 the default address space
-Message-ID: <ZLF5nS12R37loA9I@ghost>
-References: <20230714001430.75798-1-charlie@rivosinc.com>
- <20230714-hangnail-stinking-60f9725ac0d5@spud>
+        Fri, 14 Jul 2023 12:47:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5236358C;
+        Fri, 14 Jul 2023 09:47:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F15661D64;
+        Fri, 14 Jul 2023 16:47:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B39AC433C8;
+        Fri, 14 Jul 2023 16:47:34 +0000 (UTC)
+Date:   Fri, 14 Jul 2023 12:47:32 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ajay Kaher <akaher@vmware.com>
+Cc:     shuah@kernel.org, mhiramat@kernel.org, chinglinyu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, lkp@intel.com,
+        namit@vmware.com, oe-lkp@lists.linux.dev, amakhalov@vmware.com,
+        er.ajay.kaher@gmail.com, srivatsa@csail.mit.edu, tkundu@vmware.com,
+        vsirnapalli@vmware.com
+Subject: Re: [PATCH v4 06/10] eventfs: Implement functions to create eventfs
+ files and directories
+Message-ID: <20230714124732.63452948@gandalf.local.home>
+In-Reply-To: <1689248004-8158-7-git-send-email-akaher@vmware.com>
+References: <1689248004-8158-1-git-send-email-akaher@vmware.com>
+        <1689248004-8158-7-git-send-email-akaher@vmware.com>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230714-hangnail-stinking-60f9725ac0d5@spud>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,65 +51,273 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 12:17:00PM +0100, Conor Dooley wrote:
-> On Thu, Jul 13, 2023 at 05:13:59PM -0700, Charlie Jenkins wrote:
-> > Make sv48 the default address space for mmap as some applications
-> > currently depend on this assumption. Users can now select a
-> > desired address space using a non-zero hint address to mmap. Previously,
-> > requesting the default address space from mmap by passing zero as the hint
-> > address would result in using the largest address space possible. Some
-> > applications depend on empty bits in the virtual address space, like Go and
-> > Java, so this patch provides more flexibility for application developers.
+
+Some more nits.
+
+Subject: eventfs: Implement functions to create files and dirs when accessed
+
+On Thu, 13 Jul 2023 17:03:20 +0530
+Ajay Kaher <akaher@vmware.com> wrote:
+
+> Adding create_file(), create_dir() to create file, dir
+> at runtime when they are accessed.
 > 
-> The patchwork automation failed to apply this, what is the base for the
-> series?
+> These function will be called either from lookup
+> of inode_operations or open of file_operations.
 
-I forgot to pull in the changes to the riscv selftests so the conflict
-is in that Makefile. I will send out a v6 with the correct base.
+Add create_file() and create_dir() functions to create the files and
+directories respectively when they are accessed. The functions will be
+called from the lookup operation of the inode_operations or from the open
+function of file_operations.
+
 
 > 
-> > 
-> > -Charlie
-> > 
-> > ---
-> > v5:
-> > - Minor wording change in documentation
-> > - Change some parenthesis in arch_get_mmap_ macros
-> > - Added case for addr==0 in arch_get_mmap_ because without this, programs would
-> >   crash if RLIMIT_STACK was modified before executing the program. This was
-> >   tested using the libhugetlbfs tests. 
-> > 
-> > v4:
-> > - Split testcases/document patch into test cases, in-code documentation, and
-> >   formal documentation patches
-> > - Modified the mmap_base macro to be more legible and better represent memory
-> >   layout
-> > - Fixed documentation to better reflect the implmentation
-> > - Renamed DEFAULT_VA_BITS to MMAP_VA_BITS
-> > - Added additional test case for rlimit changes
-> > ---
-> > 
-> > Charlie Jenkins (4):
-> >   RISC-V: mm: Restrict address space for sv39,sv48,sv57
-> >   RISC-V: mm: Add tests for RISC-V mm
-> >   RISC-V: mm: Update pgtable comment documentation
-> >   RISC-V: mm: Document mmap changes
-> > 
-> >  Documentation/riscv/vm-layout.rst             |  22 +++
-> >  arch/riscv/include/asm/elf.h                  |   2 +-
-> >  arch/riscv/include/asm/pgtable.h              |  20 ++-
-> >  arch/riscv/include/asm/processor.h            |  46 +++++-
-> >  tools/testing/selftests/riscv/Makefile        |   2 +-
-> >  tools/testing/selftests/riscv/mm/.gitignore   |   1 +
-> >  tools/testing/selftests/riscv/mm/Makefile     |  21 +++
-> >  .../selftests/riscv/mm/testcases/mmap.c       | 133 ++++++++++++++++++
-> >  8 files changed, 234 insertions(+), 13 deletions(-)
-> >  create mode 100644 tools/testing/selftests/riscv/mm/.gitignore
-> >  create mode 100644 tools/testing/selftests/riscv/mm/Makefile
-> >  create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
-> > 
-> > -- 
-> > 2.41.0
-> > 
+> Signed-off-by: Ajay Kaher <akaher@vmware.com>
+> Co-developed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Tested-by: Ching-lin Yu <chinglinyu@google.com>
+> ---
+>  fs/tracefs/event_inode.c | 110 +++++++++++++++++++++++++++++++++++++++
+>  fs/tracefs/inode.c       |  47 +++++++++++++++++
+>  include/linux/tracefs.h  |   7 +++
+>  3 files changed, 164 insertions(+)
+> 
+> diff --git a/fs/tracefs/event_inode.c b/fs/tracefs/event_inode.c
+> index 322a77be5a56..34b5d3d8005b 100644
+> --- a/fs/tracefs/event_inode.c
+> +++ b/fs/tracefs/event_inode.c
+> @@ -46,6 +46,116 @@ struct eventfs_file {
+>  
+>  static DEFINE_MUTEX(eventfs_mutex);
+>  DEFINE_STATIC_SRCU(eventfs_srcu);
+> +/**
+> + * create_file - create a file in the tracefs filesystem
+> + * @name: the name of the file to create.
+> + * @mode: the permission that the file should have.
+> + * @parent: parent dentry for this file.
+> + * @data: something that the caller will want to get to later on.
+> + *        The inode.i_private pointer will point to this value on
+> + *        the open() call.
 
+Again, should move the extra lines into the description.
+
+> + * @fop: struct file_operations that should be used for this file.
+> + *
+> + * This is the basic "create a file" function for tracefs.  It allows for a
+> + * wide range of flexibility in creating a file.
+> + *
+> + * This function will return a pointer to a dentry if it succeeds.  This
+> + * pointer must be passed to the tracefs_remove() function when the file is
+> + * to be removed (no automatic cleanup happens if your module is unloaded,
+> + * you are responsible here.)  If an error occurs, %NULL will be returned.
+> + *
+> + * If tracefs is not enabled in the kernel, the value -%ENODEV will be
+> + * returned.
+> + */
+> +struct dentry *create_file(const char *name, umode_t mode,
+> +				  struct dentry *parent, void *data,
+> +				  const struct file_operations *fop)
+> +{
+> +	struct tracefs_inode *ti;
+> +	struct dentry *dentry;
+> +	struct inode *inode;
+> +
+> +	if (!(mode & S_IFMT))
+> +		mode |= S_IFREG;
+> +
+> +	if (WARN_ON_ONCE(!S_ISREG(mode)))
+> +		return NULL;
+> +
+> +	dentry = eventfs_start_creating(name, parent);
+> +
+> +	if (IS_ERR(dentry))
+> +		return dentry;
+> +
+> +	inode = tracefs_get_inode(dentry->d_sb);
+> +	if (unlikely(!inode))
+> +		return eventfs_failed_creating(dentry);
+> +
+> +	inode->i_mode = mode;
+> +	inode->i_fop = fop;
+> +	inode->i_private = data;
+> +
+> +	ti = get_tracefs(inode);
+> +	ti->flags |= TRACEFS_EVENT_INODE;
+> +	d_instantiate(dentry, inode);
+> +	fsnotify_create(dentry->d_parent->d_inode, dentry);
+> +	return eventfs_end_creating(dentry);
+> +}
+> +
+> +/**
+> + * create_dir - create a dir in the tracefs filesystem
+> + * @name: the name of the file to create.
+> + * @mode: the permission that the file should have.
+> + * @parent: parent dentry for this file.
+> + * @data: something that the caller will want to get to later on.
+> + *        The inode.i_private pointer will point to this value on
+> + *        the open() call.
+
+Move the extra lines down into the description here too.
+
+> + * @fop: struct file_operations that should be used for this dir.
+> + * @iop: struct inode_operations that should be used for this dir.
+> + *
+> + * This is the basic "create a dir" function for eventfs.  It allows for a
+> + * wide range of flexibility in creating a dir.
+> + *
+> + * This function will return a pointer to a dentry if it succeeds.  This
+> + * pointer must be passed to the tracefs_remove() function when the file is
+> + * to be removed (no automatic cleanup happens if your module is unloaded,
+> + * you are responsible here.)  If an error occurs, %NULL will be returned.
+> + *
+> + * If tracefs is not enabled in the kernel, the value -%ENODEV will be
+> + * returned.
+> + */
+> +struct dentry *create_dir(const char *name, umode_t mode,
+> +				 struct dentry *parent, void *data,
+> +				 const struct file_operations *fop,
+> +				 const struct inode_operations *iop)
+> +{
+> +	struct tracefs_inode *ti;
+> +	struct dentry *dentry;
+> +	struct inode *inode;
+> +
+> +	WARN_ON(!S_ISDIR(mode));
+> +
+> +	dentry = eventfs_start_creating(name, parent);
+> +	if (IS_ERR(dentry))
+> +		return dentry;
+> +
+> +	inode = tracefs_get_inode(dentry->d_sb);
+> +	if (unlikely(!inode))
+> +		return eventfs_failed_creating(dentry);
+> +
+> +	inode->i_mode = mode;
+> +	inode->i_op = iop;
+> +	inode->i_fop = fop;
+> +	inode->i_private = data;
+> +
+> +	ti = get_tracefs(inode);
+> +	ti->flags |= TRACEFS_EVENT_INODE;
+> +
+> +	inc_nlink(inode);
+> +	d_instantiate(dentry, inode);
+> +	inc_nlink(dentry->d_parent->d_inode);
+> +	fsnotify_mkdir(dentry->d_parent->d_inode, dentry);
+> +	return eventfs_end_creating(dentry);
+> +}
+>  
+>  static const struct file_operations eventfs_file_operations = {
+>  };
+> diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+> index 7ef3a02766f5..7dc692a5fee1 100644
+> --- a/fs/tracefs/inode.c
+> +++ b/fs/tracefs/inode.c
+> @@ -451,6 +451,53 @@ struct dentry *tracefs_end_creating(struct dentry *dentry)
+>  	return dentry;
+>  }
+>  
+
+This needs to be documented. What about:
+
+/**
+ * eventfs_start_creating - start the process of creating a dentry
+ * @name: Name of the file created for the dentry
+ * @parent: The parent dentry where this dentry will be created
+ *
+ * This is a simple helper function for the dynamically created eventfs
+ * files. When the directory of the eventfs files are accessed, their
+ * dentries are created on the fly. This function is used to start that
+ * process.
+ */
+> +struct dentry *eventfs_start_creating(const char *name, struct dentry
+>    *parent) +{
+> +	struct dentry *dentry;
+> +	int error;
+> +
+> +	error = simple_pin_fs(&trace_fs_type, &tracefs_mount,
+> +			      &tracefs_mount_count);
+> +	if (error)
+> +		return ERR_PTR(error);
+> +
+> +	/*
+> +	 * If the parent is not specified, we create it in the root.
+> +	 * We need the root dentry to do this, which is in the super
+> +	 * block. A pointer to that is in the struct vfsmount that we
+> +	 * have around.
+> +	 */
+> +	if (!parent)
+> +		parent = tracefs_mount->mnt_root;
+> +
+> +	if (unlikely(IS_DEADDIR(parent->d_inode)))
+> +		dentry = ERR_PTR(-ENOENT);
+> +	else
+> +		dentry = lookup_one_len(name, parent, strlen(name));
+> +
+> +	if (!IS_ERR(dentry) && dentry->d_inode) {
+> +		dput(dentry);
+> +		dentry = ERR_PTR(-EEXIST);
+> +	}
+> +
+> +	if (IS_ERR(dentry))
+> +		simple_release_fs(&tracefs_mount, &tracefs_mount_count);
+> +
+> +	return dentry;
+> +}
+> +
+
+/**
+ * eventfs_failed_creating - clean up a failed eventfs dentry creation
+ * @dentry: The dentry to clean up
+ *
+ * If after calling eventfs_start_creating(), a failure is detected, the
+ * resources created by eventfs_start_creating() needs to be cleaned up. In
+ * that case, this function should be called to perform that clean up.
+ */
+> +struct dentry *eventfs_failed_creating(struct dentry *dentry)
+> +{
+> +	dput(dentry);
+> +	simple_release_fs(&tracefs_mount, &tracefs_mount_count);
+> +	return NULL;
+> +}
+> +
+
+/**
+ * eventfs_end_creating - Finish the process of creating a eventfs dentry
+ * @dentry: The dentry that has successfully been created.
+ *
+ * This function is currently just a place holder to match
+ * eventfs_start_creating(). In case any synchronization needs to be added,
+ * this function will be used to implement that without having to modify
+ * the callers of eventfs_start_creating().
+ */
+> +struct dentry *eventfs_end_creating(struct dentry *dentry)
+> +{
+> +	return dentry;
+> +}
+
+-- Steve
+
+> +
+>  /**
+>   * tracefs_create_file - create a file in the tracefs filesystem
+>   * @name: a pointer to a string containing the name of the file to
+>    create. diff --git a/include/linux/tracefs.h b/include/linux/tracefs.h
+> index 2c08edd4a739..47c1b4d21735 100644
+> --- a/include/linux/tracefs.h
+> +++ b/include/linux/tracefs.h
+> @@ -23,6 +23,13 @@ struct file_operations;
+>  
+>  struct eventfs_file;
+>  
+> +struct dentry *eventfs_start_creating(const char *name,
+> +				      struct dentry *parent);
+> +
+> +struct dentry *eventfs_failed_creating(struct dentry *dentry);
+> +
+> +struct dentry *eventfs_end_creating(struct dentry *dentry);
+> +
+>  struct dentry *eventfs_create_events_dir(const char *name,
+>  					 struct dentry *parent);
+>  
 
