@@ -2,97 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3C9754287
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 20:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9925375428F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 20:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235931AbjGNS05 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 14:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
+        id S236854AbjGNS3o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 14:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235666AbjGNS04 (ORCPT
+        with ESMTP id S236774AbjGNS3n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 14:26:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D295526BB;
-        Fri, 14 Jul 2023 11:26:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A09761D96;
-        Fri, 14 Jul 2023 18:26:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC83C433C7;
-        Fri, 14 Jul 2023 18:26:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1689359214;
-        bh=Uqw01r9Q4nZaSGzSWhg/cFs1K2/ha6NQPIvt32ce+Kk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MX55XQyE/P6pepwgUDQ/NMw+IrIagoENtcz2vTHQOrFVh7sSbxbT6IOUrcvo+3/LV
-         CuR9sSTdByUL1ulAhAXa/UiU5xuy8+29hj0rhSutkYXDUzK6Yz+btcLVjxG8iHmoh4
-         61RSmgVQw6cYBpXu2Rb64eTbz6FC98nJTgvM2iOo=
-Date:   Fri, 14 Jul 2023 11:26:53 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Alexandre Ghiti <alex@ghiti.fr>
-Subject: Re: [PATCH] selftests: Fix arm64 test installation
-Message-Id: <20230714112653.0b42d3c9818b038d219b5e41@linux-foundation.org>
-In-Reply-To: <f479b731-7782-0417-2d4c-31a7c3c9491c@nvidia.com>
-References: <20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org>
-        <8d944238-1a9a-e93e-fdab-54e74fa12e11@linuxfoundation.org>
-        <785e1c1c-84d8-e87d-f22f-9a53d27f30f6@nvidia.com>
-        <620a5b91-9715-ee28-423c-851506b10832@linuxfoundation.org>
-        <421bebb3-19e9-47a7-8b2b-f69f125df22f@sirena.org.uk>
-        <f479b731-7782-0417-2d4c-31a7c3c9491c@nvidia.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 14 Jul 2023 14:29:43 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456C61BEB
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 11:29:42 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-cacd29a972fso1838431276.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 11:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689359381; x=1691951381;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yxAUfh9tXsKn2HpY20y1qdPrUCx+3NBgZb4IkMtE0Gs=;
+        b=mRXoMTCmgDEUqGGQOSIsn5uuIWxzrKXnwuch52uQZkXJzVeF5h7KiOw042B2VG4MjP
+         Ud668hnCaHqrAsJelWng9Y2s3bZEVDGgCwmtA+RKaeDYCfKMRATcF36o9bwXZSjLJXmD
+         xGwtxtYrORJWP/GtvcdJ6DB3nWNbNp1NNsvwoy5dkJJkXV1mjG4ZyIAPBxa0ZeJy47wC
+         lRAwtwRfLuaZHPN6fZIxopQbbbLZSH+r7pelwbYbHYvr6TN2ykZ5n8m7RT6Rx1PDAv41
+         itfOO1Y5wnapfiZ17WHQSzoXlIaDEkigdLEJ+n13E7rjAc5bMhn9nmE0OvXONw09Gqtv
+         LCkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689359381; x=1691951381;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yxAUfh9tXsKn2HpY20y1qdPrUCx+3NBgZb4IkMtE0Gs=;
+        b=amMH85iY1EhOxlKMXiuSl4Kgm+epnV6a/YfQOrd3Dpi+BqV/oUK8196TCpxdqtfVT9
+         feb2zw6d4fIZZs7cWxFQ3o0PD7+xj3M8ktIa5JDuk7uH5tlI1MedPgm02tUAzqwsZqrf
+         SzAre9h4qGuvTLsJQxMjs/1nm2l6UNu80M9FW6C9C/jx2OIBbDJhLDllRm0wneqbRRCu
+         7PbX4FJ8ifqrv0IBcPRkhidsQIikOIDFZ4UfMSX3reds+hKPDmKIuIoYT76gvnjiT8tZ
+         ps81MvLPa0lg49Opb6YGUxMqeuWTRFgYptEXrbi7CEXz+raet3yhJOeuZf9sqazl6RvZ
+         wH2w==
+X-Gm-Message-State: ABy/qLbyKr6Ntw+RAR3/B8bubLuLeJT9xqXugrGFX2piVMacXIRaNp9r
+        oNdFF7CRvKk2JqWFW9S5DwXbp1CtnR6KijKYDhfR
+X-Google-Smtp-Source: APBJJlHJ/kyB4gtYJRA2tBe4+IdzDMyqED2Fs1IG5ccfZHYtkPxqRy1tdgRGDnnyoyPph5LKlnKkyWQ84gNPe3dqgbnb
+X-Received: from axel.svl.corp.google.com ([2620:15c:2a3:200:eeac:4e26:b121:5ef2])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:4157:0:b0:c10:8d28:d3ae with
+ SMTP id o84-20020a254157000000b00c108d28d3aemr26174yba.8.1689359381331; Fri,
+ 14 Jul 2023 11:29:41 -0700 (PDT)
+Date:   Fri, 14 Jul 2023 11:29:32 -0700
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230714182932.2608735-1-axelrasmussen@google.com>
+Subject: [PATCH mm-unstable fix] mm: userfaultfd: check for start + len
+ overflow in validate_range: fix
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Yu Zhao <yuzhao@google.com>,
+        ZhangPeng <zhangpeng362@huawei.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        syzbot+42309678e0bc7b32f8e9@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 14 Jul 2023 11:19:11 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
+This commit removed an extra check for zero-length ranges, and folded it
+into the common validate_range() helper used by all UFFD ioctls.
 
-> On 7/14/23 11:09, Mark Brown wrote:
-> > On Fri, Jul 14, 2023 at 11:48:51AM -0600, Shuah Khan wrote:
-> >> On 7/13/23 14:16, John Hubbard wrote:
-> > 
-> >>> Actually, I was hoping that my two fixes [1], [2] could be used, instead
-> >>> of reverting the feature.
-> > 
-> >> Mark! Are you good with taking these two - do these fix the
-> >> problems you are seeing?
-> > 
-> > I reviewed the one that's relevant to me already, the arm64 one, I'd not
-> > seen or tested the RISC-V one but that looks fine too.  I'm pretty sure
-> 
-> That riscv patch already has a Tested-by from Alexandre Ghiti:
-> 
-> https://lore.kernel.org/f903634d-851f-af64-8d9a-6b13d813587c@ghiti.fr
-> 
-> 
-> > Andrew queued it already though ICBW.  Either way it'd be good to get
-> > this into -rc2, this is seriously disrupting arm64 CI and I'm guessing
-> > the RISC-V CI too.
-> 
+It failed to notice though that UFFDIO_COPY *only* called validate_range
+on the dst range, not the src range. So removing this check actually let
+us proceed with zero-length source ranges, eventually hitting a BUG
+further down in the call stack.
 
-I just dropped
-selftests-arm64-fix-build-failure-during-the-emit_tests-step.patch and
-selftests-fix-arm64-test-installation.patch, as Shuah is merging them.
+The correct fix seems clear: call validate_range() on the src range too.
 
-This is all rather confusing.  Perhaps a full resend of everything will
-help.  I'll assume that Shuah will be handling them.
+Other ioctls are not affected by this, as they only have one range, not
+two (src + dst).
+
+Reported-by: syzbot+42309678e0bc7b32f8e9@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=42309678e0bc7b32f8e9
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ fs/userfaultfd.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index 53a7220c4679..36d233759233 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -1759,6 +1759,9 @@ static int userfaultfd_copy(struct userfaultfd_ctx *ctx,
+ 			   sizeof(uffdio_copy)-sizeof(__s64)))
+ 		goto out;
+ 
++	ret = validate_range(ctx->mm, uffdio_copy.src, uffdio_copy.len);
++	if (ret)
++		goto out;
+ 	ret = validate_range(ctx->mm, uffdio_copy.dst, uffdio_copy.len);
+ 	if (ret)
+ 		goto out;
+-- 
+2.41.0.255.g8b1d071c50-goog
+
