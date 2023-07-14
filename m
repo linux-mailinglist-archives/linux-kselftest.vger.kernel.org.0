@@ -2,58 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BCC7537E1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 12:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5299F75383F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 12:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbjGNKWj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 06:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S235475AbjGNKdg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 06:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236148AbjGNKWi (ORCPT
+        with ESMTP id S235140AbjGNKdg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 06:22:38 -0400
+        Fri, 14 Jul 2023 06:33:36 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB932728;
-        Fri, 14 Jul 2023 03:22:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3118430C6;
+        Fri, 14 Jul 2023 03:33:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689330156; x=1720866156;
+  t=1689330812; x=1720866812;
   h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=I5+hRM1CZd6U68X0rZ2pfLztEvlR5kgkNIj373lYSsc=;
-  b=j14hoofv0UNyzkzNnArSl114voO2+RCnT1guIgOdKGYTEbb0Qz6zMHTa
-   dNAK05fXqYD71i9PuUjKPBe0iXwj3ChSMkWG9dxj+ECWQXv4rngFq44dJ
-   x8l9ESC8gsdFqODEV0ePLGELme2NtebmwyPupD6+MfoE2Z2cxtz+qDc77
-   yCjM7NsWO/ZEgrej9roM8Q+P53+BniSI4WOkeEFB0aVE9mz57Kiy3kl8W
-   V378Tai9J4KUCFDEdS8mxaFw88l6ocQ0TZCYdClQZ9BzGcEVy3SIsVSMX
-   HSX3mXdAz07e4mnQrlk4beL7N2RlFYOi7Z7sUq18otLHsEt7TOuTMDqAn
+   references:mime-version:content-id;
+  bh=thbBZkxQUOn7Q+OWCjpYAJ4zB0wuhOmBAj2580NuCJQ=;
+  b=WmTsU0Um50rvHaYgIhPH0tLDQ39n8eeaIIZsoK6/huPoKM0ZoSxpoF4L
+   fX6QWbTKnzO0WXZOVLPt9T/9R7r7VSw1bVLY+XAutkZiu5wldTeJi9zzn
+   ZqyJ1rN/ZUxcO7d90VfNp/5MT807woObd9T0O4QrudcXCMSbYVQH9z99k
+   QIGOwpBU0iu+o0DNGnheW24/1p8fUoWNzjBl36M0kcffE+zFiNJ+HA3IW
+   ou4nxODNwEjlm5H2Z1LwwbWUPDXlZcVpT67kee9qSFQys0UjLevOCP61T
+   UT/QtflxA3xTob4hS5/DfRJpDatmj041gd5cZl3c4pKEvAVG4YENUl5NS
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="429204920"
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="429206795"
 X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
-   d="scan'208";a="429204920"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 03:22:35 -0700
+   d="scan'208";a="429206795"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 03:33:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="716293017"
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="835987464"
 X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
-   d="scan'208";a="716293017"
+   d="scan'208";a="835987464"
 Received: from rchauhax-mobl1.gar.corp.intel.com ([10.249.35.123])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 03:22:33 -0700
-Date:   Fri, 14 Jul 2023 13:22:27 +0300 (EEST)
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 03:33:28 -0700
+Date:   Fri, 14 Jul 2023 13:33:25 +0300 (EEST)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
-cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 10/19] selftests/resctrl: Express span internally in
- bytes
-In-Reply-To: <0c94daef-3642-9e8e-0e8a-3f8eaa2953e3@intel.com>
-Message-ID: <fce81fed-592e-16ad-b833-735a7b3a186@linux.intel.com>
-References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com> <20230713131932.133258-11-ilpo.jarvinen@linux.intel.com> <1dd10447-b03d-937a-fe55-ff324864c358@intel.com> <0c94daef-3642-9e8e-0e8a-3f8eaa2953e3@intel.com>
+Subject: Re: [PATCH v4 09/19] selftests/resctrl: Convert span to size_t
+In-Reply-To: <92b3ef73-6347-b52a-69ed-c1b489b11d55@intel.com>
+Message-ID: <4969cf83-f070-f29-5489-1cc6a248c6a7@linux.intel.com>
+References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com> <20230713131932.133258-10-ilpo.jarvinen@linux.intel.com> <92b3ef73-6347-b52a-69ed-c1b489b11d55@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-2079984484-1689330155=:1695"
+Content-Type: multipart/mixed; BOUNDARY="8323329-1953778464-1689329730=:1695"
+Content-ID: <bd9e6e9-6dd-9a8d-602c-837010c9891@linux.intel.com>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -67,55 +66,63 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-2079984484-1689330155=:1695
-Content-Type: text/plain; charset=UTF-8
+--8323329-1953778464-1689329730=:1695
+Content-Type: text/plain; CHARSET=ISO-8859-15
 Content-Transfer-Encoding: 8BIT
+Content-ID: <92a9314-13ff-8d2b-8649-b666807b483d@linux.intel.com>
 
-On Fri, 14 Jul 2023, Wieczor-Retman, Maciej wrote:
+On Thu, 13 Jul 2023, Reinette Chatre wrote:
 
-> Hi Reinette!
+> Hi Ilpo,
 > 
-> On 14.07.2023 01:00, Reinette Chatre wrote:
-> > Hi Ilpo,
-> > 
-> > On 7/13/2023 6:19 AM, Ilpo Järvinen wrote:
-> >> MBA and MBM tests to use megabytes to represent span. CMT test uses
-> >> bytes. The difference requires run_benchmark() to size the buffer
-> >> differently based on the test name, which in turn requires passing the
-> >> test name into run_benchmark().
-> >>
-> >> Convert MBA and MBM tests to use internally bytes like CMT test to
-> >> remove the internal inconsistency between the tests. Remove the test
-> >> dependent buffer sizing from run_benchmark().
-> > 
-> > If I understand correctly the intention is to always use bytes internally
-> > and only convert to megabytes when displayed to user space. The above
-> > implies that this takes care of the conversion but there still seems
-> > to be places that that do not follow my understanding. For example,
-> > resctrl_val.c:measure_vals() converts to megabytes before proceeding.
+> On 7/13/2023 6:19 AM, Ilpo J�rvinen wrote:
 > 
-> Doesn't the use case inside resctrl_val.c:measure_vals() satisfy
-> the idea of only displaying data to the user space? From my
-> understanding it reads the number of bytes and only converts to
-> MB when printing the value. Or did I miss some detail there?
+> ...
+> 
+> > @@ -188,10 +188,10 @@ fill_cache(unsigned long long buf_size, int malloc_and_init, int memflush,
+> >  	return 0;
+> >  }
+> >  
+> > -int run_fill_buf(unsigned long span, int malloc_and_init_memory,
+> > -		 int memflush, int op, char *resctrl_val)
+> > +int run_fill_buf(size_t span, int malloc_and_init_memory, int memflush, int op,
+> > +		 char *resctrl_val)
+> >  {
+> > -	unsigned long long cache_size = span;
+> > +	size_t cache_size = span;
+> >  	int ret;
+> >  
+> >  	ret = fill_cache(cache_size, malloc_and_init_memory, memflush, op,
+> 
+> Any idea what the purpose being run_fill_buf() is? From what I can tell it is
+> an unnecessary level of indirection.
 
-It's for printing there yes.
+You already mentioned it, fill_cache() could be included into 
+run_fill_buf() but it's not part of this series.
 
-But it's not about span in the first place so I'm not sure why it is 
-related.
+> > diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+> > index f622245adafe..8be5b745226d 100644
+> > --- a/tools/testing/selftests/resctrl/resctrlfs.c
+> > +++ b/tools/testing/selftests/resctrl/resctrlfs.c
+> > @@ -298,7 +298,7 @@ int taskset_benchmark(pid_t bm_pid, int cpu_no)
+> >  void run_benchmark(int signum, siginfo_t *info, void *ucontext)
+> >  {
+> >  	int operation, ret, malloc_and_init_memory, memflush;
+> > -	unsigned long span, buffer_span;
+> > +	size_t span, buffer_span;
+> >  	char **benchmark_cmd;
+> >  	char resctrl_val[64];
+> >  	FILE *fp;
+> 
+> Do we now need a cast in the initialization of span?
+
+I don't see any warning w/o cast, unsigned long -> size_t seems pretty 
+safe anyway. For internally provided values, overflow does not seem 
+possible even if the type sizes would disagree.
+
+There's no existing error checking for the command in the case where 
+"fill_buf" is used with -b (an orthogonal issue).
 
 -- 
  i.
-
-> > While MBA, MBM, and CMT tests use resctrl_val() for testing it seems
-> > as though the function still exits with the MBA/MBM data recorded in
-> > megabytes with the CMT data recorded in bytes. That seems to be why
-> > show_mba_info() needs no conversion when displaying the data.
-> > 
-> > Reinette
-> 
-> Kind regards
-> Maciej Wieczór-Retman
-> 
-
---8323329-2079984484-1689330155=:1695--
+--8323329-1953778464-1689329730=:1695--
