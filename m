@@ -2,127 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA60754294
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 20:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5491575429F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 20:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236528AbjGNScP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 14:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
+        id S236251AbjGNSe4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 14:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233193AbjGNScP (ORCPT
+        with ESMTP id S235586AbjGNSey (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 14:32:15 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F161BEB
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 11:32:14 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id ca18e2360f4ac-780c89d1998so15686839f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 11:32:14 -0700 (PDT)
+        Fri, 14 Jul 2023 14:34:54 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49778213F
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 11:34:51 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-3460770afe2so14465ab.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 11:34:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1689359533; x=1689964333;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GF9dxYmTKLCibQL0gaUTB656F1NwxzcFLCOBufgxglA=;
-        b=gKl4JVnWhTJ76Q/j3ve9vyymrgvI6He02kkUFiTmnCkjGxfDD1Mu8NYvTioELhpRiy
-         p/VUthXd305fLUNeZHbli6+2mtM+LBMGc6Jd0D1d7qG6YMBAucSD/HjkbIy9dwMEL1lk
-         mgM69k8AmICvqQsRi40mtUl3fS5K/mnY4hC0k=
+        d=google.com; s=20221208; t=1689359690; x=1691951690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MoxXHdLDuf7uBFW6SzS0r7koKHamZIMQJhfLSozBhPo=;
+        b=CoJVUT8LU2AtfsX0295LW0wALbl6vjYJVVvw4PYNsoOUACUrTE5e7vF2/JNBuTVytu
+         1YN5mfJ5LmOjGrkFWCjokami+/m/20rMXkXJE+kyg8lWJV1fM/eT2A5BSdTJVC10fUVP
+         m/jcur+F1HfXOrnBNG3g4Z19YMly7vmf9OEGqCUncUEzhxkpRosdoOP4mfNJoabA4aFt
+         bFSjNtQ8UDmaME5akhRaiUq6QjCF6ow/oqaG67xGj8OmK0bkihegJlrVL02S3uaHb+gx
+         KJOLY1eELEHcsQjQJkzgzu2IlUsCPPJn84DLtUo2c4kVvsCgeYxQ7CLrtnN9yNYVzjuO
+         7vsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689359533; x=1689964333;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GF9dxYmTKLCibQL0gaUTB656F1NwxzcFLCOBufgxglA=;
-        b=g1hfvb7a0uP8DYdtri2uisg0Dk93Ni3zqVpCRVVQIvKCI5+pR9mToA2ksIdaAb8bbU
-         SeRONKYYVq+b4o7kVDO4zopF9dX5oo73IYuvGcCT+HuwS/XUcigwspM798+uYl9lWjbk
-         Xq4FxIYtQyJQK5yIen/N6YmPEJBYIRfzHusUDBTBSsBWUp22NTm+jNAs2R3D1Dk0bek+
-         Bc5NS93aI2EfSnWVDLdjd8OXjVNAwhOm27v6SYAPBUYmCkuCLkN64knfOtwXqL7RUrve
-         bjJLLmPV/ZZfbB25iNGu81sOg3QaTCCkwRIzfEK8B2SXch0vzutRiO4hIN3GFzI114Fe
-         w7eQ==
-X-Gm-Message-State: ABy/qLZU3Gob8oM+yeT9ZvzJvXHICNNangJiH0h8LLTaJR1pa/rw5wg5
-        qT0wzHoDewHgTPUzN723mPoAmA==
-X-Google-Smtp-Source: APBJJlF6Nt2Zm02mG5/V6CzylthrPYMi1fA0HXqn3sK9D+yzHDeVT+7dzqeCqiZptWWY4LNHXGub2g==
-X-Received: by 2002:a05:6602:4887:b0:780:c6bb:ad8d with SMTP id ee7-20020a056602488700b00780c6bbad8dmr26373iob.0.1689359533671;
-        Fri, 14 Jul 2023 11:32:13 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c21-20020a056602335500b0078702f4894asm2863647ioz.9.2023.07.14.11.32.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jul 2023 11:32:12 -0700 (PDT)
-Message-ID: <68ccfd77-ce2f-857a-37a7-e9b3edcd495d@linuxfoundation.org>
-Date:   Fri, 14 Jul 2023 12:32:11 -0600
+        d=1e100.net; s=20221208; t=1689359690; x=1691951690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MoxXHdLDuf7uBFW6SzS0r7koKHamZIMQJhfLSozBhPo=;
+        b=atSAaCfVxtyAmxPaDyN54zsDP5g20qXsgLT0HkMjZOrrrtlIFNo5yK7l9nSQB6LnOH
+         3+umbaTYcknuEu1E9PNdpauORLSWmnt39bgWMAQv7sn1jazV6eu6q48C6dBRwKU/qMbZ
+         2U1knP9sW8BUy7VKIFvWMLLUVtZ03/m0WVqjPeQyb5rY6p5poGfopVPNI0BF7oxw9d+c
+         qmX9SXXNFTleXYO+k5Jx6XMzjhFF8fpUm6iBVkdrqGmmH+xtYJJBEIWvi/TQkbqDrLSc
+         sCBoan7BJdks+lOJJ3WCKVkfXwnVSD8m7GZ4UemfUXEVFyd/HzxAqdR2xtlP0786U99k
+         47YA==
+X-Gm-Message-State: ABy/qLb/yl84bfjJGZpv3eynxFj7MId9xTi41anyRvzjQBHCVQ5NqP1t
+        KgrF444MDFYFR2T9UuKJhC9shDepHLGzAXzKGhnm4A==
+X-Google-Smtp-Source: APBJJlFBXB7QiI9ztuQ6QNS2GQgouY4NGeveevYonN6Nbqt7+SK1nGopO9WtPJnQWR/2BpnoHFgPXaVz7Pqdzg6CKF4=
+X-Received: by 2002:a05:6e02:1a61:b0:33d:8f9f:9461 with SMTP id
+ w1-20020a056e021a6100b0033d8f9f9461mr972322ilv.18.1689359690226; Fri, 14 Jul
+ 2023 11:34:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] selftests: Fix arm64 test installation
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Cc:     Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org>
- <8d944238-1a9a-e93e-fdab-54e74fa12e11@linuxfoundation.org>
- <785e1c1c-84d8-e87d-f22f-9a53d27f30f6@nvidia.com>
- <620a5b91-9715-ee28-423c-851506b10832@linuxfoundation.org>
- <421bebb3-19e9-47a7-8b2b-f69f125df22f@sirena.org.uk>
- <f479b731-7782-0417-2d4c-31a7c3c9491c@nvidia.com>
- <20230714112653.0b42d3c9818b038d219b5e41@linux-foundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230714112653.0b42d3c9818b038d219b5e41@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn> <1412dbaf-56f4-418b-85ea-681b1c44cc26@app.fastmail.com>
+In-Reply-To: <1412dbaf-56f4-418b-85ea-681b1c44cc26@app.fastmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 14 Jul 2023 11:34:38 -0700
+Message-ID: <CAP-5=fWmPQ9vtH1t9pSPCPBiOFxQQe43C7Bk4amLS08ASAnwGg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] Unify uapi bitsperlong.h
+To:     Arnd Bergmann <arnd@arndb.de>, Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/14/23 12:26, Andrew Morton wrote:
-> On Fri, 14 Jul 2023 11:19:11 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
-> 
->> On 7/14/23 11:09, Mark Brown wrote:
->>> On Fri, Jul 14, 2023 at 11:48:51AM -0600, Shuah Khan wrote:
->>>> On 7/13/23 14:16, John Hubbard wrote:
->>>
->>>>> Actually, I was hoping that my two fixes [1], [2] could be used, instead
->>>>> of reverting the feature.
->>>
->>>> Mark! Are you good with taking these two - do these fix the
->>>> problems you are seeing?
->>>
->>> I reviewed the one that's relevant to me already, the arm64 one, I'd not
->>> seen or tested the RISC-V one but that looks fine too.  I'm pretty sure
->>
->> That riscv patch already has a Tested-by from Alexandre Ghiti:
->>
->> https://lore.kernel.org/f903634d-851f-af64-8d9a-6b13d813587c@ghiti.fr
->>
->>
->>> Andrew queued it already though ICBW.  Either way it'd be good to get
->>> this into -rc2, this is seriously disrupting arm64 CI and I'm guessing
->>> the RISC-V CI too.
->>
-> 
-> I just dropped
-> selftests-arm64-fix-build-failure-during-the-emit_tests-step.patch and
-> selftests-fix-arm64-test-installation.patch, as Shuah is merging them.
-> 
-> This is all rather confusing.  Perhaps a full resend of everything will
-> help.  I'll assume that Shuah will be handling them.
+On Thu, Jun 22, 2023 at 8:10=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Thu, Jun 22, 2023, at 16:13, Tiezhu Yang wrote:
+> > v3:
+> >   -- Check the definition of __BITS_PER_LONG first at
+> >      the beginning of uapi/asm-generic/bitsperlong.h
+> >
 
-Yes. Andrew - I am applying both as we speak. I found the right versions
-with Tested-by tags.
+Thanks for doing this cleanup! I just wanted to report an issue I ran
+into with building the Linux perf tool. The header guard in:
+tools/include/asm-generic/bitsperlong.h
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
+ls/include/asm-generic/bitsperlong.h
 
-These will appear very soon in linux-kselftest fixes and I will send
-pull request for rc2.
+Caused an issue with building:
+tools/perf/util/cs-etm.c
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
+ls/perf/util/cs-etm.c
 
-thanks,
--- Shuah
+The issue was that cs-etm.c would #include a system header, which
+would transitively include a header with the same header guard. This
+led to the tools/include/asm-generic/bitsperlong.h being ignored and
+the compilation of tools/perf/util/cs-etm.c failing due to a missing
+define. My local workaround is:
+
+```
+diff --git a/tools/include/asm-generic/bitsperlong.h
+b/tools/include/asm-generic/bitsperlong.h
+index 2093d56ddd11..88508a35cb45 100644
+--- a/tools/include/asm-generic/bitsperlong.h
++++ b/tools/include/asm-generic/bitsperlong.h
+@@ -1,6 +1,6 @@
+/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __ASM_GENERIC_BITS_PER_LONG
+-#define __ASM_GENERIC_BITS_PER_LONG
++#ifndef __LINUX_TOOLS_ASM_GENERIC_BITS_PER_LONG
++#define __LINUX_TOOLS_ASM_GENERIC_BITS_PER_LONG
+#include <uapi/asm-generic/bitsperlong.h>
+@@ -21,4 +21,4 @@
+#define small_const_nbits(nbits) \
+(__builtin_constant_p(nbits) && (nbits) <=3D BITS_PER_LONG && (nbits) > 0)
+-#endif /* __ASM_GENERIC_BITS_PER_LONG */
++#endif /* __LINUX_TOOLS_ASM_GENERIC_BITS_PER_LONG */
+```
+
+I'm not sure if a wider fix is necessary for this, but I thought it
+worthwhile to report that there are potential issues. I don't think we
+can use #pragma once, as an alternative to header guards, to avoid
+this kind of name collision.
+
+Thanks,
+Ian
+
+
+> > v2:
+> >   -- Check __CHAR_BIT__ and __SIZEOF_LONG__ rather than
+> >      __aarch64__, __riscv, __loongarch__, thanks Ruoyao
+> >   -- Update the code comment and commit message
+> >
+> > v1:
+> >   -- Rebase on 6.4-rc6
+> >   -- Only unify uapi bitsperlong.h for arm64, riscv and loongarch
+> >   -- Remove uapi bitsperlong.h of hexagon and microblaze in a new patch
+> >
+> > Here is the RFC patch:
+> > https://lore.kernel.org/linux-arch/1683615903-10862-1-git-send-email-ya=
+ngtiezhu@loongson.cn/
+>
+> I've applied these to the asm-generic tree now
+>
+> Thanks,
+>
+>    Arnd
