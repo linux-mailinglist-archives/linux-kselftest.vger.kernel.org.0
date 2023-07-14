@@ -2,117 +2,248 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B3D753FC4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 18:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB27753FCA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 18:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236050AbjGNQVY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 12:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
+        id S236310AbjGNQXU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 12:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235803AbjGNQVX (ORCPT
+        with ESMTP id S235894AbjGNQXT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 12:21:23 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E89D211F
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 09:21:22 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id ca18e2360f4ac-780c89d1998so15212839f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 09:21:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1689351682; x=1689956482;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A/cGtvz8XeWSeI/2ga1OjJQj7bUnENfy64USXIaMRls=;
-        b=RTwPA+NsI6EAvbf0dITS+kJ/8I1AiDxT76aDhGrwVCcUXQHiHHE4v6UFSNUq+aSCGz
-         ToMxIEC7pWGZ+ZkD9fJRjfauM1HZR7/7FeFewmmlGFuMG/RV7V2idZaUWL/l5TVTJhye
-         aU3ntOHO9Kgu0L7KelkSP4IN/giRFc4qwLS5M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689351682; x=1689956482;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A/cGtvz8XeWSeI/2ga1OjJQj7bUnENfy64USXIaMRls=;
-        b=aguOK13iiG5tXghwQntKmue2X5ncy4qEqNrnWhiSQYcj5y/IONO1Qen8ZDJzJjXm/e
-         5LHaGztIpqowVertD5e6OBevx9k11VIT+HZ9x2q057CLn5rhZqhml5Bx1iaIrPUpYXFv
-         Z1yL+cBiVX1JgU3KCb21TIzCeqOnrqbLVZYdlS2koQYqBZCn8CA7fI3tbvZvCgZVfgBm
-         TD68PAwbRDxMyVrlgErPpqnaFUraFh2vznHe5K3Gmr1R2FCANAp563hfyxGwd55hV2jQ
-         tdwB9ffszOoldq93MCA7TvFxyRr0fIwg40n2DH+OMUkOTGatJEbQlll/vklUgR9c6q1e
-         9zww==
-X-Gm-Message-State: ABy/qLafQBUK1QzPniNbl6DE2iVzsOmkG7cZ3n8apuug8HFAF4zeUGlb
-        6dWUa5GlKHD7n9c7mZCK8GIwjg==
-X-Google-Smtp-Source: APBJJlErVRJu0xQzt35AjSZhJIyGKrlyeOor51Wp+cBkXt8k2AEbxMVRN9RtunAybX6H+lLgyy/vbQ==
-X-Received: by 2002:a05:6602:3ce:b0:780:c6bb:ad8d with SMTP id g14-20020a05660203ce00b00780c6bbad8dmr5651673iov.0.1689351681771;
-        Fri, 14 Jul 2023 09:21:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id f9-20020a056602038900b007862a536f21sm2745024iov.14.2023.07.14.09.21.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jul 2023 09:21:21 -0700 (PDT)
-Message-ID: <ecf66ba7-6e63-5ee3-acce-b2da9327b76f@linuxfoundation.org>
-Date:   Fri, 14 Jul 2023 10:21:20 -0600
+        Fri, 14 Jul 2023 12:23:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169532724;
+        Fri, 14 Jul 2023 09:23:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97B6261D66;
+        Fri, 14 Jul 2023 16:23:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F259C433C9;
+        Fri, 14 Jul 2023 16:23:15 +0000 (UTC)
+Date:   Fri, 14 Jul 2023 12:23:13 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ajay Kaher <akaher@vmware.com>
+Cc:     shuah@kernel.org, mhiramat@kernel.org, chinglinyu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, lkp@intel.com,
+        namit@vmware.com, oe-lkp@lists.linux.dev, amakhalov@vmware.com,
+        er.ajay.kaher@gmail.com, srivatsa@csail.mit.edu, tkundu@vmware.com,
+        vsirnapalli@vmware.com
+Subject: Re: [PATCH v4 04/10] eventfs: Implement eventfs file add functions
+Message-ID: <20230714122313.486990ea@gandalf.local.home>
+In-Reply-To: <1689248004-8158-5-git-send-email-akaher@vmware.com>
+References: <1689248004-8158-1-git-send-email-akaher@vmware.com>
+        <1689248004-8158-5-git-send-email-akaher@vmware.com>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_NAME
-To:     Osama Muhammad <osmtendev@gmail.com>
-Cc:     shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230607153600.15816-1-osmtendev@gmail.com>
- <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
- <CAK6rUAMODPLQeUawXMW_RNiJFdukOqdhS5GA5XRAq4U9bnQdNg@mail.gmail.com>
- <3c03e28b-8006-a4ac-30bc-6aaf83ccb5d5@linuxfoundation.org>
- <CAK6rUAObT-kQVGddhvxxtaKPcuaDddM6ipEDXuECCFtpR-GV6w@mail.gmail.com>
- <CAK6rUAMuYTUhqcGmDrmeEWnigy3X4OxNb4zmHc0TmcVJ79MyHg@mail.gmail.com>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAK6rUAMuYTUhqcGmDrmeEWnigy3X4OxNb4zmHc0TmcVJ79MyHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/26/23 12:36, Osama Muhammad wrote:
-> Hi Shuah,
+
+More nits.
+
+On Thu, 13 Jul 2023 17:03:18 +0530
+Ajay Kaher <akaher@vmware.com> wrote:
+
+> Adding following function to eventfs to add files:
+
+Add the following functions to add files to evenfs:
+
 > 
-> Any feedback on this patch?.
+> eventfs_add_top_file() adds the info of top file to
+> eventfs and dynamically create these files when they
+> are accessed.
+
+I wonder if we should rename this, because I didn't really know what "top"
+meant. Perhaps:
+
+ eventfs_add_events_file() to add the data needed to create a specific file
+ located at the top level events directory. The dentry/inode will be
+ created when the events directory is scanned.
+
 > 
-> Thanks,
-> Osama
+> eventfs_add_file() adds the info of nested files
+> to eventfs and dynamically create these files when
+> they are accessed.
+
+ eventfs_add_file() to add the data needed for files within the directories
+ below the top level events directory. The dentry/inode of the file will be
+ created when the directory that the file is in is scanned.
+
 > 
+> Signed-off-by: Ajay Kaher <akaher@vmware.com>
+> Co-developed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Tested-by: Ching-lin Yu <chinglinyu@google.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202305051619.9a469a9a-yujie.liu@intel.com
+> ---
+>  fs/tracefs/event_inode.c | 84 ++++++++++++++++++++++++++++++++++++++++
+>  include/linux/tracefs.h  |  8 ++++
+>  2 files changed, 92 insertions(+)
 > 
+> diff --git a/fs/tracefs/event_inode.c b/fs/tracefs/event_inode.c
+> index 4e7a8eccaa0b..75dc8953d813 100644
+> --- a/fs/tracefs/event_inode.c
+> +++ b/fs/tracefs/event_inode.c
+> @@ -215,3 +215,87 @@ struct eventfs_file *eventfs_add_dir(const char *name,
+>  	mutex_unlock(&eventfs_mutex);
+>  	return ef;
+>  }
+> +
+> +/**
+> + * eventfs_add_top_file - add event top file to list to create later
 
-Please don't top post when you are responding on kernel
-mailing lists. It gets very difficult to follow the
-comments in the email thread.
+I'm still thinking we should rename this to eventfs_add_events_file() to
+match the "eventfs_create_events_dir()".
 
-> On Sat, 17 Jun 2023 at 18:01, Osama Muhammad <osmtendev@gmail.com> wrote:
->>
->> Hi,
->>
->> Yes, I did install the latest kernel headers and TASK_COMM_LEN is not
->> accessible in userspace.
->>
->> I looked into the test which uses TASK_COMM_LEN but the test defines
->> it in its own header file.
->>
->> Example:  https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/bpf/progs/pyperf.h#L13
+ eventfs_add_events_file - add the data needed to create file in events dir
 
-bfp test does things differently because its dependencies
-on run-time environment.
 
->>
->> TASK_COMM_LEN is defined in include/linux/sched.h, but this header
->> file is not exposed to userspace.
+> + * @name: the name of the file to create.
+> + * @mode: the permission that the file should have.
+> + * @parent: parent dentry for this file.
+> + * @data: something that the caller will want to get to later on. The
+> + *        inode.i_private pointer will point to this value on the open() call.
 
-Correct. you can include linux/sched.h like other tests do
-Take a look at tools/testing/selftests/clone3
+Note, for kerneldoc, it's best to have the above be one line, and then add
+anything else below it.
+ * @data: something that the caller will want to get to later on.
 
-thanks,
--- Shuah
+> + * @fop: struct file_operations that should be used for this file.
+> + *
+> + * This function adds top files of event dir to list.
+> + * And all these files are created on the fly when they are looked up,
+> + * and the dentry and inodes will be removed when they are done.
+
+ * This function is used to add the information needed to create a
+ * dentry/inode within the top level events directory. The file created
+ * will have the @mode permissions. The @data will be used to fill the
+ * inode.i_private when the open() call is done. The dentry and inodes are
+ * all created when they are referenced, and removed when they are no
+ * longer referenced.
+
+
+> + */
+> +int eventfs_add_top_file(const char *name, umode_t mode,
+> +			 struct dentry *parent, void *data,
+> +			 const struct file_operations *fop)
+> +{
+> +	struct tracefs_inode *ti;
+> +	struct eventfs_inode *ei;
+> +	struct eventfs_file *ef;
+> +
+> +	if (!parent)
+> +		return -EINVAL;
+> +
+> +	if (!(mode & S_IFMT))
+> +		mode |= S_IFREG;
+> +
+> +	if (!parent->d_inode)
+> +		return -EINVAL;
+> +
+> +	ti = get_tracefs(parent->d_inode);
+> +	if (!(ti->flags & TRACEFS_EVENT_INODE))
+> +		return -EINVAL;
+> +
+> +	ei = ti->private;
+> +	ef = eventfs_prepare_ef(name, mode, fop, NULL, data);
+> +
+> +	if (IS_ERR(ef))
+> +		return -ENOMEM;
+> +
+> +	mutex_lock(&eventfs_mutex);
+> +	list_add_tail(&ef->list, &ei->e_top_files);
+> +	ef->d_parent = parent;
+> +	mutex_unlock(&eventfs_mutex);
+> +	return 0;
+> +}
+> +
+> +/**
+> + * eventfs_add_file - add eventfs file to list to create later
+
+Same idea here.
+
+ eventfs_add_file - add the data needed to create a file for later reference
+
+> + * @name: the name of the file to create.
+> + * @mode: the permission that the file should have.
+> + * @ef_parent: parent eventfs_file for this file.
+> + * @data: something that the caller will want to get to later on. The
+> + *        inode.i_private pointer will point to this value on the open() call.
+
+And same note about the line.
+
+> + * @fop: struct file_operations that should be used for this file.
+> + *
+> + * This function adds top files of event dir to list.
+
+Seems you have a cut and paste error here.
+
+> + * And all these files are created on the fly when they are looked up,
+> + * and the dentry and inodes will be removed when they are done.
+
+ * This function is used to add the information needed to create a
+ * file within a subdirectory of the events directory. The file created
+ * will have the @mode permissions. The @data will be used to fill the
+ * inode.i_private when the open() call is done. The dentry and inodes are
+ * all created when they are referenced, and removed when they are no
+ * longer referenced.
+
+-- Steve
+
+> + */
+> +int eventfs_add_file(const char *name, umode_t mode,
+> +		     struct eventfs_file *ef_parent,
+> +		     void *data,
+> +		     const struct file_operations *fop)
+> +{
+> +	struct eventfs_file *ef;
+> +
+> +	if (!ef_parent)
+> +		return -EINVAL;
+> +
+> +	if (!(mode & S_IFMT))
+> +		mode |= S_IFREG;
+> +
+> +	ef = eventfs_prepare_ef(name, mode, fop, NULL, data);
+> +	if (IS_ERR(ef))
+> +		return -ENOMEM;
+> +
+> +	mutex_lock(&eventfs_mutex);
+> +	list_add_tail(&ef->list, &ef_parent->ei->e_top_files);
+> +	ef->d_parent = ef_parent->dentry;
+> +	mutex_unlock(&eventfs_mutex);
+> +	return 0;
+> +}
+> diff --git a/include/linux/tracefs.h b/include/linux/tracefs.h
+> index 432e5e6f7901..a51312ff803c 100644
+> --- a/include/linux/tracefs.h
+> +++ b/include/linux/tracefs.h
+> @@ -32,6 +32,14 @@ struct eventfs_file *eventfs_add_subsystem_dir(const char *name,
+>  struct eventfs_file *eventfs_add_dir(const char *name,
+>  				     struct eventfs_file *ef_parent);
+>  
+> +int eventfs_add_file(const char *name, umode_t mode,
+> +		     struct eventfs_file *ef_parent, void *data,
+> +		     const struct file_operations *fops);
+> +
+> +int eventfs_add_top_file(const char *name, umode_t mode,
+> +			 struct dentry *parent, void *data,
+> +			 const struct file_operations *fops);
+> +
+>  struct dentry *tracefs_create_file(const char *name, umode_t mode,
+>  				   struct dentry *parent, void *data,
+>  				   const struct file_operations *fops);
+
