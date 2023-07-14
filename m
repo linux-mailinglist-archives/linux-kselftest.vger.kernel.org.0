@@ -2,134 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9925375428F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 20:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA60754294
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 20:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236854AbjGNS3o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 14:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
+        id S236528AbjGNScP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 14:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236774AbjGNS3n (ORCPT
+        with ESMTP id S233193AbjGNScP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 14:29:43 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456C61BEB
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 11:29:42 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-cacd29a972fso1838431276.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 11:29:42 -0700 (PDT)
+        Fri, 14 Jul 2023 14:32:15 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F161BEB
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 11:32:14 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id ca18e2360f4ac-780c89d1998so15686839f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 11:32:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689359381; x=1691951381;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yxAUfh9tXsKn2HpY20y1qdPrUCx+3NBgZb4IkMtE0Gs=;
-        b=mRXoMTCmgDEUqGGQOSIsn5uuIWxzrKXnwuch52uQZkXJzVeF5h7KiOw042B2VG4MjP
-         Ud668hnCaHqrAsJelWng9Y2s3bZEVDGgCwmtA+RKaeDYCfKMRATcF36o9bwXZSjLJXmD
-         xGwtxtYrORJWP/GtvcdJ6DB3nWNbNp1NNsvwoy5dkJJkXV1mjG4ZyIAPBxa0ZeJy47wC
-         lRAwtwRfLuaZHPN6fZIxopQbbbLZSH+r7pelwbYbHYvr6TN2ykZ5n8m7RT6Rx1PDAv41
-         itfOO1Y5wnapfiZ17WHQSzoXlIaDEkigdLEJ+n13E7rjAc5bMhn9nmE0OvXONw09Gqtv
-         LCkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689359381; x=1691951381;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=linuxfoundation.org; s=google; t=1689359533; x=1689964333;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yxAUfh9tXsKn2HpY20y1qdPrUCx+3NBgZb4IkMtE0Gs=;
-        b=amMH85iY1EhOxlKMXiuSl4Kgm+epnV6a/YfQOrd3Dpi+BqV/oUK8196TCpxdqtfVT9
-         feb2zw6d4fIZZs7cWxFQ3o0PD7+xj3M8ktIa5JDuk7uH5tlI1MedPgm02tUAzqwsZqrf
-         SzAre9h4qGuvTLsJQxMjs/1nm2l6UNu80M9FW6C9C/jx2OIBbDJhLDllRm0wneqbRRCu
-         7PbX4FJ8ifqrv0IBcPRkhidsQIikOIDFZ4UfMSX3reds+hKPDmKIuIoYT76gvnjiT8tZ
-         ps81MvLPa0lg49Opb6YGUxMqeuWTRFgYptEXrbi7CEXz+raet3yhJOeuZf9sqazl6RvZ
-         wH2w==
-X-Gm-Message-State: ABy/qLbyKr6Ntw+RAR3/B8bubLuLeJT9xqXugrGFX2piVMacXIRaNp9r
-        oNdFF7CRvKk2JqWFW9S5DwXbp1CtnR6KijKYDhfR
-X-Google-Smtp-Source: APBJJlHJ/kyB4gtYJRA2tBe4+IdzDMyqED2Fs1IG5ccfZHYtkPxqRy1tdgRGDnnyoyPph5LKlnKkyWQ84gNPe3dqgbnb
-X-Received: from axel.svl.corp.google.com ([2620:15c:2a3:200:eeac:4e26:b121:5ef2])
- (user=axelrasmussen job=sendgmr) by 2002:a25:4157:0:b0:c10:8d28:d3ae with
- SMTP id o84-20020a254157000000b00c108d28d3aemr26174yba.8.1689359381331; Fri,
- 14 Jul 2023 11:29:41 -0700 (PDT)
-Date:   Fri, 14 Jul 2023 11:29:32 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230714182932.2608735-1-axelrasmussen@google.com>
-Subject: [PATCH mm-unstable fix] mm: userfaultfd: check for start + len
- overflow in validate_range: fix
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Alumbaugh" <talumbau@google.com>,
-        Yu Zhao <yuzhao@google.com>,
-        ZhangPeng <zhangpeng362@huawei.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        syzbot+42309678e0bc7b32f8e9@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        bh=GF9dxYmTKLCibQL0gaUTB656F1NwxzcFLCOBufgxglA=;
+        b=gKl4JVnWhTJ76Q/j3ve9vyymrgvI6He02kkUFiTmnCkjGxfDD1Mu8NYvTioELhpRiy
+         p/VUthXd305fLUNeZHbli6+2mtM+LBMGc6Jd0D1d7qG6YMBAucSD/HjkbIy9dwMEL1lk
+         mgM69k8AmICvqQsRi40mtUl3fS5K/mnY4hC0k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689359533; x=1689964333;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GF9dxYmTKLCibQL0gaUTB656F1NwxzcFLCOBufgxglA=;
+        b=g1hfvb7a0uP8DYdtri2uisg0Dk93Ni3zqVpCRVVQIvKCI5+pR9mToA2ksIdaAb8bbU
+         SeRONKYYVq+b4o7kVDO4zopF9dX5oo73IYuvGcCT+HuwS/XUcigwspM798+uYl9lWjbk
+         Xq4FxIYtQyJQK5yIen/N6YmPEJBYIRfzHusUDBTBSsBWUp22NTm+jNAs2R3D1Dk0bek+
+         Bc5NS93aI2EfSnWVDLdjd8OXjVNAwhOm27v6SYAPBUYmCkuCLkN64knfOtwXqL7RUrve
+         bjJLLmPV/ZZfbB25iNGu81sOg3QaTCCkwRIzfEK8B2SXch0vzutRiO4hIN3GFzI114Fe
+         w7eQ==
+X-Gm-Message-State: ABy/qLZU3Gob8oM+yeT9ZvzJvXHICNNangJiH0h8LLTaJR1pa/rw5wg5
+        qT0wzHoDewHgTPUzN723mPoAmA==
+X-Google-Smtp-Source: APBJJlF6Nt2Zm02mG5/V6CzylthrPYMi1fA0HXqn3sK9D+yzHDeVT+7dzqeCqiZptWWY4LNHXGub2g==
+X-Received: by 2002:a05:6602:4887:b0:780:c6bb:ad8d with SMTP id ee7-20020a056602488700b00780c6bbad8dmr26373iob.0.1689359533671;
+        Fri, 14 Jul 2023 11:32:13 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c21-20020a056602335500b0078702f4894asm2863647ioz.9.2023.07.14.11.32.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jul 2023 11:32:12 -0700 (PDT)
+Message-ID: <68ccfd77-ce2f-857a-37a7-e9b3edcd495d@linuxfoundation.org>
+Date:   Fri, 14 Jul 2023 12:32:11 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] selftests: Fix arm64 test installation
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Cc:     Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org>
+ <8d944238-1a9a-e93e-fdab-54e74fa12e11@linuxfoundation.org>
+ <785e1c1c-84d8-e87d-f22f-9a53d27f30f6@nvidia.com>
+ <620a5b91-9715-ee28-423c-851506b10832@linuxfoundation.org>
+ <421bebb3-19e9-47a7-8b2b-f69f125df22f@sirena.org.uk>
+ <f479b731-7782-0417-2d4c-31a7c3c9491c@nvidia.com>
+ <20230714112653.0b42d3c9818b038d219b5e41@linux-foundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230714112653.0b42d3c9818b038d219b5e41@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This commit removed an extra check for zero-length ranges, and folded it
-into the common validate_range() helper used by all UFFD ioctls.
+On 7/14/23 12:26, Andrew Morton wrote:
+> On Fri, 14 Jul 2023 11:19:11 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
+> 
+>> On 7/14/23 11:09, Mark Brown wrote:
+>>> On Fri, Jul 14, 2023 at 11:48:51AM -0600, Shuah Khan wrote:
+>>>> On 7/13/23 14:16, John Hubbard wrote:
+>>>
+>>>>> Actually, I was hoping that my two fixes [1], [2] could be used, instead
+>>>>> of reverting the feature.
+>>>
+>>>> Mark! Are you good with taking these two - do these fix the
+>>>> problems you are seeing?
+>>>
+>>> I reviewed the one that's relevant to me already, the arm64 one, I'd not
+>>> seen or tested the RISC-V one but that looks fine too.  I'm pretty sure
+>>
+>> That riscv patch already has a Tested-by from Alexandre Ghiti:
+>>
+>> https://lore.kernel.org/f903634d-851f-af64-8d9a-6b13d813587c@ghiti.fr
+>>
+>>
+>>> Andrew queued it already though ICBW.  Either way it'd be good to get
+>>> this into -rc2, this is seriously disrupting arm64 CI and I'm guessing
+>>> the RISC-V CI too.
+>>
+> 
+> I just dropped
+> selftests-arm64-fix-build-failure-during-the-emit_tests-step.patch and
+> selftests-fix-arm64-test-installation.patch, as Shuah is merging them.
+> 
+> This is all rather confusing.  Perhaps a full resend of everything will
+> help.  I'll assume that Shuah will be handling them.
 
-It failed to notice though that UFFDIO_COPY *only* called validate_range
-on the dst range, not the src range. So removing this check actually let
-us proceed with zero-length source ranges, eventually hitting a BUG
-further down in the call stack.
+Yes. Andrew - I am applying both as we speak. I found the right versions
+with Tested-by tags.
 
-The correct fix seems clear: call validate_range() on the src range too.
+These will appear very soon in linux-kselftest fixes and I will send
+pull request for rc2.
 
-Other ioctls are not affected by this, as they only have one range, not
-two (src + dst).
-
-Reported-by: syzbot+42309678e0bc7b32f8e9@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=42309678e0bc7b32f8e9
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- fs/userfaultfd.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 53a7220c4679..36d233759233 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1759,6 +1759,9 @@ static int userfaultfd_copy(struct userfaultfd_ctx *ctx,
- 			   sizeof(uffdio_copy)-sizeof(__s64)))
- 		goto out;
- 
-+	ret = validate_range(ctx->mm, uffdio_copy.src, uffdio_copy.len);
-+	if (ret)
-+		goto out;
- 	ret = validate_range(ctx->mm, uffdio_copy.dst, uffdio_copy.len);
- 	if (ret)
- 		goto out;
--- 
-2.41.0.255.g8b1d071c50-goog
-
+thanks,
+-- Shuah
