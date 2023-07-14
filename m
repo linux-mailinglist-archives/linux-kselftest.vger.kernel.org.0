@@ -2,116 +2,197 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F031753981
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 13:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E64D753BC6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 15:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235411AbjGNLbJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 07:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S235249AbjGNN1N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 09:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233700AbjGNLbJ (ORCPT
+        with ESMTP id S229604AbjGNN1M (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 07:31:09 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7572D79;
-        Fri, 14 Jul 2023 04:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689334268; x=1720870268;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=l/yPvUfnmINX3xY/ZzG9EdykIUEiq+kKl0SYFBw42DA=;
-  b=YGydPW+rKFW6FbrcEpkSEmV0I1RfePl8cEexJLbI+PINU9azhediT4El
-   kzocxbQiqCU1mHgKn0lrI3ZYCGzTXLiSokj0wFCIsiXujAKByGyZoOmEM
-   X+tkKjUQDcR3qv0IdHs+VeUsbZBWkbFt8sKk1W+wrWIyueriFJB6gXRRl
-   Luvp9VEdKbKYyqKksrvHkupbzicOQl4wNZd53vxy+bd5B3JBp2k89+3bg
-   3GrYphaDkKUhvaeNDqmWyLIdyXBXZlTVTuRHOifx7k40e0c/uRqnc7qtk
-   VFLA0cWaZaGiE/Z9AOLXOFe9XOLo1ZDWiOqS1IQnr76zkNwiCmN5vWO2q
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="365490751"
-X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
-   d="scan'208";a="365490751"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 04:31:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="787823746"
-X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
-   d="scan'208";a="787823746"
-Received: from rchauhax-mobl1.gar.corp.intel.com ([10.249.35.123])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 04:31:05 -0700
-Date:   Fri, 14 Jul 2023 14:31:03 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 06/19] selftests/resctrl: Move resctrl FS mount/umount
- to higher level
-In-Reply-To: <59fd7956-caf8-03de-10a5-f37036219134@intel.com>
-Message-ID: <07faf1f-cde-9d3c-1f15-bbe494466abf@linux.intel.com>
-References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com> <20230713131932.133258-7-ilpo.jarvinen@linux.intel.com> <59fd7956-caf8-03de-10a5-f37036219134@intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-584909292-1689334267=:1695"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 14 Jul 2023 09:27:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8772690;
+        Fri, 14 Jul 2023 06:27:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C93F61CEC;
+        Fri, 14 Jul 2023 13:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832D2C433C8;
+        Fri, 14 Jul 2023 13:27:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689341230;
+        bh=4NJD+91XYnIC9eS48LutSS635hRd73LAz4J5eDqTKzQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=E5fCb06bUeBcojk/JYNpdYnJGsi2c38Q8IUEs0adtduuUzuRELCw6c01vhdyw66Xp
+         48tFJGNhGPoD4j+sxNewQhOzVknAnRISFlNdOwTbkr4ibQ05IcGTSacb2j6iHfUseO
+         lNYkISeiamCRJS6Llcc7gBOof86A5KAi6iqrYf6byCrHbj5W2+PzHOx1p87Hsf6dsn
+         XaXWJHGjJ9XbFHS0XJH9/bjxPFuYinG7fIkeSx15fDNMvxuZXFRTlRojb7SSnToO5m
+         n8pIX3U1FjysHUr1OUdaaJBZCMSWFMYnbRSXAHXUxFwidOCabefrVYaTxaA00r52Uy
+         PfkuRoAJ3iIDw==
+Date:   Fri, 14 Jul 2023 22:27:05 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Ajay Kaher <akaher@vmware.com>, shuah@kernel.org,
+        mhiramat@kernel.org, chinglinyu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, lkp@intel.com,
+        namit@vmware.com, oe-lkp@lists.linux.dev, amakhalov@vmware.com,
+        er.ajay.kaher@gmail.com, srivatsa@csail.mit.edu, tkundu@vmware.com,
+        vsirnapalli@vmware.com
+Subject: Re: [PATCH v4 10/10] test: ftrace: Fix kprobe test for eventfs
+Message-Id: <20230714222705.bc38f83d857473656a45d441@kernel.org>
+In-Reply-To: <20230713223758.31a1e391@rorschach.local.home>
+References: <1689248004-8158-1-git-send-email-akaher@vmware.com>
+        <1689248004-8158-11-git-send-email-akaher@vmware.com>
+        <20230713223758.31a1e391@rorschach.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Thu, 13 Jul 2023 22:37:58 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
---8323329-584909292-1689334267=:1695
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 13 Jul 2023, Reinette Chatre wrote:
-
-> Hi Ilpo,
+> On Thu, 13 Jul 2023 17:03:24 +0530
+> Ajay Kaher <akaher@vmware.com> wrote:
 > 
-> On 7/13/2023 6:19 AM, Ilpo Järvinen wrote:
-> > A few places currently lack umounting resctrl FS on error paths:
-> >   - cmt_resctrl_val() has multiple error paths with direct return.
-> >   - cat_perf_miss_val() has multiple error paths with direct return.
-> > In addition, validate_resctrl_feature_request() is called by
-> > run_mbm_test() and run_mba_test(). Neither MBA nor MBM test tries to
-> > umount resctrl FS.
+> > kprobe_args_char.tc, kprobe_args_string.tc has validation check
+> > for tracefs_create_dir, for eventfs it should be eventfs_create_dir.
 > > 
-> > Each and every test does require resctrl FS to be present already for
-> > feature check. Thus, it makes sense to just mount it on higher level in
-> > resctrl_tests.c and properly pair it with umount.
-> > 
-> > Move resctrl FS (re)mount/unmount into each test function in
-> > resctrl_tests.c. Make feature validation to simply check that resctrl
-> > FS is mounted.
-> > 
-> > Fixes: 91db4fd9019a ("selftests/resctrl: Remove duplicate codes that clear each test result file")
+> > Signed-off-by: Ajay Kaher <akaher@vmware.com>
+> > Co-developed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> > Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> > Tested-by: Ching-lin Yu <chinglinyu@google.com>
+> > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
-> Could you please elaborate how this commit is the culprit?
+> As this patch as is will break when running on older kernels, I was
+> wondering if we should do this instead?
 
-Of course it isn't. I'm pretty sure I had some idea when that was added 
-but it was before the patches were rearranged/modified, maybe I 
-incorrectly thought that the cleanup functions do umount (but they don't).
++1 since the latest kselftest is used also for checking the older
+stable kernels, the test case has to check the environment and
+change the parameter (or make it unsupported for new feature)
+So below looks good to me.
 
-I'll changed it to these:
-Fixes: f1dd71982d19 ("selftests/resctrl: Skip the test if requested resctrl feature is not supported")
-Fixes: 01fee6b4d1f9 ("selftests/resctrl: Add MBA test")
-Fixes: ecdbb911f22d ("selftests/resctrl: Add MBM test")
-Fixes: 790bf585b0ee ("selftests/resctrl: Add Cache Allocation Technology (CAT) selftest")
-Fixes: 78941183d1b1 ("selftests/resctrl: Add Cache QoS Monitoring (CQM) selftest")
+Thanks,
 
-...however, I was also considering dropping Fixes completely because 
-main() has the final umount() at the end so no lingering resctrl FS after 
-tests, and inter-test issues are hard to track due to how complicated the 
-code is so I'm not entirely sure if there are real issues under any 
-combination of tests and all the mounting/unmounting going on).
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
+> index 285b4770efad..ff7499eb98d6 100644
+> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
+> @@ -34,14 +34,19 @@ mips*)
+>  esac
+>  
+>  : "Test get argument (1)"
+> -echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char" > kprobe_events
+> +if grep -q eventfs_add_dir available_filter_functions; then
+> +  DIR_NAME="eventfs_add_dir"
+> +else
+> +  DIR_NAME="tracefs_create_dir"
+> +fi
+> +echo "p:testprobe ${DIR_NAME} arg1=+0(${ARG1}):char" > kprobe_events
+>  echo 1 > events/kprobes/testprobe/enable
+>  echo "p:test $FUNCTION_FORK" >> kprobe_events
+>  grep -qe "testprobe.* arg1='t'" trace
+>  
+>  echo 0 > events/kprobes/testprobe/enable
+>  : "Test get argument (2)"
+> -echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char arg2=+0(${ARG1}):char[4]" > kprobe_events
+> +echo "p:testprobe ${DIR_NAME} arg1=+0(${ARG1}):char arg2=+0(${ARG1}):char[4]" > kprobe_events
+>  echo 1 > events/kprobes/testprobe/enable
+>  echo "p:test $FUNCTION_FORK" >> kprobe_events
+>  grep -qe "testprobe.* arg1='t' arg2={'t','e','s','t'}" trace
+> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+> index a4f8e7c53c1f..a202b2ea4baf 100644
+> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+> @@ -37,14 +37,19 @@ loongarch*)
+>  esac
+>  
+>  : "Test get argument (1)"
+> -echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):string" > kprobe_events
+> +if grep -q eventfs_add_dir available_filter_functions; then
+> +  DIR_NAME="eventfs_add_dir"
+> +else
+> +  DIR_NAME="tracefs_create_dir"
+> +fi
+> +echo "p:testprobe ${DIR_NAME} arg1=+0(${ARG1}):string" > kprobe_events
+>  echo 1 > events/kprobes/testprobe/enable
+>  echo "p:test $FUNCTION_FORK" >> kprobe_events
+>  grep -qe "testprobe.* arg1=\"test\"" trace
+>  
+>  echo 0 > events/kprobes/testprobe/enable
+>  : "Test get argument (2)"
+> -echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):string arg2=+0(${ARG1}):string" > kprobe_events
+> +echo "p:testprobe ${DIR_NAME} arg1=+0(${ARG1}):string arg2=+0(${ARG1}):string" > kprobe_events
+>  echo 1 > events/kprobes/testprobe/enable
+>  echo "p:test $FUNCTION_FORK" >> kprobe_events
+>  grep -qe "testprobe.* arg1=\"test\" arg2=\"test\"" trace
+> 
+> -- Steve
+> 
+> > ---
+> >  .../selftests/ftrace/test.d/kprobe/kprobe_args_char.tc        | 4 ++--
+> >  .../selftests/ftrace/test.d/kprobe/kprobe_args_string.tc      | 4 ++--
+> >  2 files changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
+> > index 285b4770efad..523cfb64539f 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
+> > @@ -34,14 +34,14 @@ mips*)
+> >  esac
+> >  
+> >  : "Test get argument (1)"
+> > -echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char" > kprobe_events
+> > +echo "p:testprobe eventfs_add_dir arg1=+0(${ARG1}):char" > kprobe_events
+> >  echo 1 > events/kprobes/testprobe/enable
+> >  echo "p:test $FUNCTION_FORK" >> kprobe_events
+> >  grep -qe "testprobe.* arg1='t'" trace
+> >  
+> >  echo 0 > events/kprobes/testprobe/enable
+> >  : "Test get argument (2)"
+> > -echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char arg2=+0(${ARG1}):char[4]" > kprobe_events
+> > +echo "p:testprobe eventfs_add_dir arg1=+0(${ARG1}):char arg2=+0(${ARG1}):char[4]" > kprobe_events
+> >  echo 1 > events/kprobes/testprobe/enable
+> >  echo "p:test $FUNCTION_FORK" >> kprobe_events
+> >  grep -qe "testprobe.* arg1='t' arg2={'t','e','s','t'}" trace
+> > diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+> > index a4f8e7c53c1f..b9f8c3f8bae8 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+> > @@ -37,14 +37,14 @@ loongarch*)
+> >  esac
+> >  
+> >  : "Test get argument (1)"
+> > -echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):string" > kprobe_events
+> > +echo "p:testprobe eventfs_add_dir arg1=+0(${ARG1}):string" > kprobe_events
+> >  echo 1 > events/kprobes/testprobe/enable
+> >  echo "p:test $FUNCTION_FORK" >> kprobe_events
+> >  grep -qe "testprobe.* arg1=\"test\"" trace
+> >  
+> >  echo 0 > events/kprobes/testprobe/enable
+> >  : "Test get argument (2)"
+> > -echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):string arg2=+0(${ARG1}):string" > kprobe_events
+> > +echo "p:testprobe eventfs_add_dir arg1=+0(${ARG1}):string arg2=+0(${ARG1}):string" > kprobe_events
+> >  echo 1 > events/kprobes/testprobe/enable
+> >  echo "p:test $FUNCTION_FORK" >> kprobe_events
+> >  grep -qe "testprobe.* arg1=\"test\" arg2=\"test\"" trace
+> 
+
 
 -- 
- i.
-
---8323329-584909292-1689334267=:1695--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
