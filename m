@@ -2,117 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BA2752E38
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 02:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C59752F55
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 04:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233797AbjGNAPX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jul 2023 20:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        id S231234AbjGNCZa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jul 2023 22:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234556AbjGNAPU (ORCPT
+        with ESMTP id S229622AbjGNCZ3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 20:15:20 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A42D30D7
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 17:15:09 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6687096c6ddso946708b3a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 17:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689293709; x=1689898509;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iY0BqE22+vH8ihdQ5F+U3lQTo4OY0Ve5Zo6wbRWfHfc=;
-        b=xExIMHzLTtkjN2LFQngS3OX4jDs1xLdIX7r/tiDx0kppQfQRkPMYGwyfuGwrBTa86a
-         XoaNrcUcmG5pmtq3t+bqbkNwiHPqfObctew9lUGCvXVSRZ5ZMzwxuDl5bh0kXZqCOeN/
-         2KOkMuhJYkV6QfPobPU9mX56qewrBddlJ17DJjsRmikAwwn6WVy6MHjfUpM665kqgqnx
-         8Vd77tSJfClsrB+dbBunC3han9WPucnmhgEbe2AxB1x5RWqedcL/TQmo7JAbJuXl1Q+J
-         +JuGlcjr4IzBotD3ZK9zOhKx+93UelIHVMWCiiWjS83cS6p52MDULRTAs1+X2jnehbH9
-         5cQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689293709; x=1689898509;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iY0BqE22+vH8ihdQ5F+U3lQTo4OY0Ve5Zo6wbRWfHfc=;
-        b=QA/Fa35s5SuXFafS+S84bmcLN8gee+Qcq/IgR4WhpOc79vPDsumGQPPU+K5w4Yv9Ah
-         x8N3zQ22Nrdo4IOkV2DBagHMQX6fVnM3hqianWZOlP1b3/mzl+vuRj0TSVTYaGX6VjwH
-         oUYWpwFZ20k0/g0EsgeHFoHv1l4Y77k9rdFjrPpkXSxbAt0ljTDlfdLswOZckrTVND6Q
-         mpaAvHnQgQnZqIyI/wfskW44jCAiUrkka/DGqijYVcqv7GLz80t8TR+aZVsLBkFmHHSm
-         F6UtkW4vYe5XXHKE/MrXU3AosMG5txuKj22r/HOVbM0sb5FQ7VuxqVkn8JlyPSVZJ6JD
-         LJTg==
-X-Gm-Message-State: ABy/qLaGB2ivPr7WWRp57syGXwp/nYAPc12Ve/mTlFaOGmMByappx7vQ
-        lKA1HuI2uYQzkNf/hxC1VfHldw==
-X-Google-Smtp-Source: APBJJlE/NehJK/yZ31QQ51ruFcoOUZ8Dr5gN8omHKM50vUTZXpJ3oVnR2nhUcvBJtDwEUljTcHiqAg==
-X-Received: by 2002:a05:6a00:2d84:b0:666:8cbb:6e0f with SMTP id fb4-20020a056a002d8400b006668cbb6e0fmr3042793pfb.3.1689293708687;
-        Thu, 13 Jul 2023 17:15:08 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id x25-20020aa793b9000000b00673e652985esm5938107pff.44.2023.07.13.17.15.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jul 2023 17:15:08 -0700 (PDT)
-From:   Charlie Jenkins <charlie@rivosinc.com>
-To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     charlie@rivosinc.com, conor@kernel.org, paul.walmsley@sifive.com,
-        palmer@rivosinc.com, aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org,
-        alexghiti@rivosinc.com
-Subject: [PATCH v5 4/4] RISC-V: mm: Document mmap changes
-Date:   Thu, 13 Jul 2023 17:14:03 -0700
-Message-ID: <20230714001430.75798-5-charlie@rivosinc.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230714001430.75798-1-charlie@rivosinc.com>
-References: <20230714001430.75798-1-charlie@rivosinc.com>
+        Thu, 13 Jul 2023 22:25:29 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5E7270B;
+        Thu, 13 Jul 2023 19:25:27 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4R2Fd30YvZzLnhR;
+        Fri, 14 Jul 2023 10:23:03 +0800 (CST)
+Received: from [10.174.178.66] (10.174.178.66) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 14 Jul 2023 10:25:24 +0800
+Message-ID: <bf7f8867-6b14-dd53-a6e4-2addee4a5ad8@huawei.com>
+Date:   Fri, 14 Jul 2023 10:25:23 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH net 1/3] selftests: tc: set timeout to 15 minutes
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>, Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paul Blakey <paulb@mellanox.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        <mptcp@lists.linux.dev>
+CC:     Pedro Tammela <pctammela@mojatatu.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <stable@vger.kernel.org>
+References: <20230713-tc-selftests-lkft-v1-0-1eb4fd3a96e7@tessares.net>
+ <20230713-tc-selftests-lkft-v1-1-1eb4fd3a96e7@tessares.net>
+From:   shaozhengchao <shaozhengchao@huawei.com>
+In-Reply-To: <20230713-tc-selftests-lkft-v1-1-1eb4fd3a96e7@tessares.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.66]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The behavior of mmap is modified with this patch series, so explain the
-changes to the mmap hint address behavior.
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- Documentation/riscv/vm-layout.rst | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
 
-diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
-index 5462c84f4723..892412b91300 100644
---- a/Documentation/riscv/vm-layout.rst
-+++ b/Documentation/riscv/vm-layout.rst
-@@ -133,3 +133,25 @@ RISC-V Linux Kernel SV57
-    ffffffff00000000 |  -4     GB | ffffffff7fffffff |    2 GB | modules, BPF
-    ffffffff80000000 |  -2     GB | ffffffffffffffff |    2 GB | kernel
-   __________________|____________|__________________|_________|____________________________________________________________
-+
-+
-+Userspace VAs
-+--------------------
-+To maintain compatibility with software that relies on the VA space with a
-+maximum of 48 bits the kernel will, by default, return virtual addresses to
-+userspace from a 48-bit range (sv48). This default behavior is achieved by
-+passing 0 into the hint address parameter of mmap. On CPUs with an address space
-+smaller than sv48, the CPU maximum supported address space will be the default.
-+
-+Software can "opt-in" to receiving VAs from another VA space by providing
-+a hint address to mmap. A call to mmap is guaranteed to return an address
-+that will not override the unset left-aligned bits in the hint address,
-+unless there is no space left in the address space. If there is no space
-+available in the requested address space, an address in the next smallest
-+available address space will be returned.
-+
-+For example, in order to obtain 48-bit VA space, a hint address greater than
-+:code:`1 << 38` must be provided. Note that this is 38 due to sv39 userspace
-+ending at :code:`1 << 38` and the addresses beyond this are reserved for the
-+kernel. Similarly, to obtain 57-bit VA space addresses, a hint address greater
-+than or equal to :code:`1 << 47` must be provided.
--- 
-2.41.0
+On 2023/7/14 5:16, Matthieu Baerts wrote:
+> When looking for something else in LKFT reports [1], I noticed that the
+> TC selftest ended with a timeout error:
+> 
+>    not ok 1 selftests: tc-testing: tdc.sh # TIMEOUT 45 seconds
+> 
+> The timeout had been introduced 3 years ago, see the Fixes commit below.
+> 
+> This timeout is only in place when executing the selftests via the
+> kselftests runner scripts. I guess this is not what most TC devs are
+> using and nobody noticed the issue before.
+> 
+> The new timeout is set to 15 minutes as suggested by Pedro [2]. It looks
+> like it is plenty more time than what it takes in "normal" conditions.
+> 
+> Fixes: 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second timeout per test")
+> Cc: stable@vger.kernel.org
+> Link: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230711/testrun/18267241/suite/kselftest-tc-testing/test/tc-testing_tdc_sh/log [1]
+> Link: https://lore.kernel.org/netdev/0e061d4a-9a23-9f58-3b35-d8919de332d7@tessares.net/T/ [2]
+> Suggested-by: Pedro Tammela <pctammela@mojatatu.com>
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> ---
+>   tools/testing/selftests/tc-testing/settings | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/tc-testing/settings b/tools/testing/selftests/tc-testing/settings
+> new file mode 100644
+> index 000000000000..e2206265f67c
+> --- /dev/null
+> +++ b/tools/testing/selftests/tc-testing/settings
+> @@ -0,0 +1 @@
+> +timeout=900
+> 
+I remember last year when I tested all the tdc cases（qdisc + filter +
+action + infra） in my vm machine, it took me nearly 20 minutes.
+So I think it should be more than 1200 seconds if all cases need to be
+tested.
 
+Maybe we should really optimize the parallel execution process of tdc.
+
+Zhengchao Shao
