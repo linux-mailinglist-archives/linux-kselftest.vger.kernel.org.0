@@ -2,58 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CBF753957
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 13:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F031753981
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 13:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235250AbjGNLRI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 07:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S235411AbjGNLbJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 07:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjGNLRH (ORCPT
+        with ESMTP id S233700AbjGNLbJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 07:17:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09072D78;
-        Fri, 14 Jul 2023 04:17:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64EEC61CDA;
-        Fri, 14 Jul 2023 11:17:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E61C433C7;
-        Fri, 14 Jul 2023 11:17:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689333425;
-        bh=Yf59rtKFicaadtmI6Nu2BYl9fHiZoEYJ3kP0RAok4to=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lv5p4XEJQEMYWbfF3sNwRz+QmN/bOZIdS4qb75dRXPFKTzZr72kGVX0h5YjfVYWdF
-         PhUgBU5l1GxxzHUCa0AYbY86VyEPh2lt5CQI/D1w2jl5eZFVlh9Zb0VIG95kKqkBON
-         0LQSgEEjpRwOHP4U8NL+kMLyDXECXLt7xgZVosEniQOAmc/Ac5G6MBnvVwz+/4JIhM
-         mHgYukXGY/eNVWv9vjAuxG4ig1/K/yzGnZpnoz05MCqOQZhfi5rkD6zU+9tP8uEp44
-         1VtjmtpAbcdPRbBt1Krv2ccvfEtR39qs02rULLJoWltPcziP8WwTLIu3jduXY5imNh
-         Z8jQYbEpf2UTw==
-Date:   Fri, 14 Jul 2023 12:17:00 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Charlie Jenkins <charlie@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        paul.walmsley@sifive.com, palmer@rivosinc.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org,
-        alexghiti@rivosinc.com
-Subject: Re: [PATCH v5 0/4] RISC-V: mm: Make SV48 the default address space
-Message-ID: <20230714-hangnail-stinking-60f9725ac0d5@spud>
-References: <20230714001430.75798-1-charlie@rivosinc.com>
+        Fri, 14 Jul 2023 07:31:09 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7572D79;
+        Fri, 14 Jul 2023 04:31:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689334268; x=1720870268;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=l/yPvUfnmINX3xY/ZzG9EdykIUEiq+kKl0SYFBw42DA=;
+  b=YGydPW+rKFW6FbrcEpkSEmV0I1RfePl8cEexJLbI+PINU9azhediT4El
+   kzocxbQiqCU1mHgKn0lrI3ZYCGzTXLiSokj0wFCIsiXujAKByGyZoOmEM
+   X+tkKjUQDcR3qv0IdHs+VeUsbZBWkbFt8sKk1W+wrWIyueriFJB6gXRRl
+   Luvp9VEdKbKYyqKksrvHkupbzicOQl4wNZd53vxy+bd5B3JBp2k89+3bg
+   3GrYphaDkKUhvaeNDqmWyLIdyXBXZlTVTuRHOifx7k40e0c/uRqnc7qtk
+   VFLA0cWaZaGiE/Z9AOLXOFe9XOLo1ZDWiOqS1IQnr76zkNwiCmN5vWO2q
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="365490751"
+X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
+   d="scan'208";a="365490751"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 04:31:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="787823746"
+X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
+   d="scan'208";a="787823746"
+Received: from rchauhax-mobl1.gar.corp.intel.com ([10.249.35.123])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 04:31:05 -0700
+Date:   Fri, 14 Jul 2023 14:31:03 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 06/19] selftests/resctrl: Move resctrl FS mount/umount
+ to higher level
+In-Reply-To: <59fd7956-caf8-03de-10a5-f37036219134@intel.com>
+Message-ID: <07faf1f-cde-9d3c-1f15-bbe494466abf@linux.intel.com>
+References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com> <20230713131932.133258-7-ilpo.jarvinen@linux.intel.com> <59fd7956-caf8-03de-10a5-f37036219134@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jMLB4CN0CiHBLUdn"
-Content-Disposition: inline
-In-Reply-To: <20230714001430.75798-1-charlie@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/mixed; boundary="8323329-584909292-1689334267=:1695"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,82 +63,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
---jMLB4CN0CiHBLUdn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--8323329-584909292-1689334267=:1695
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-On Thu, Jul 13, 2023 at 05:13:59PM -0700, Charlie Jenkins wrote:
-> Make sv48 the default address space for mmap as some applications
-> currently depend on this assumption. Users can now select a
-> desired address space using a non-zero hint address to mmap. Previously,
-> requesting the default address space from mmap by passing zero as the hint
-> address would result in using the largest address space possible. Some
-> applications depend on empty bits in the virtual address space, like Go a=
-nd
-> Java, so this patch provides more flexibility for application developers.
+On Thu, 13 Jul 2023, Reinette Chatre wrote:
 
-The patchwork automation failed to apply this, what is the base for the
-series?
+> Hi Ilpo,
+> 
+> On 7/13/2023 6:19 AM, Ilpo Järvinen wrote:
+> > A few places currently lack umounting resctrl FS on error paths:
+> >   - cmt_resctrl_val() has multiple error paths with direct return.
+> >   - cat_perf_miss_val() has multiple error paths with direct return.
+> > In addition, validate_resctrl_feature_request() is called by
+> > run_mbm_test() and run_mba_test(). Neither MBA nor MBM test tries to
+> > umount resctrl FS.
+> > 
+> > Each and every test does require resctrl FS to be present already for
+> > feature check. Thus, it makes sense to just mount it on higher level in
+> > resctrl_tests.c and properly pair it with umount.
+> > 
+> > Move resctrl FS (re)mount/unmount into each test function in
+> > resctrl_tests.c. Make feature validation to simply check that resctrl
+> > FS is mounted.
+> > 
+> > Fixes: 91db4fd9019a ("selftests/resctrl: Remove duplicate codes that clear each test result file")
+> 
+> Could you please elaborate how this commit is the culprit?
 
->=20
-> -Charlie
->=20
-> ---
-> v5:
-> - Minor wording change in documentation
-> - Change some parenthesis in arch_get_mmap_ macros
-> - Added case for addr=3D=3D0 in arch_get_mmap_ because without this, prog=
-rams would
->   crash if RLIMIT_STACK was modified before executing the program. This w=
-as
->   tested using the libhugetlbfs tests.=20
->=20
-> v4:
-> - Split testcases/document patch into test cases, in-code documentation, =
-and
->   formal documentation patches
-> - Modified the mmap_base macro to be more legible and better represent me=
-mory
->   layout
-> - Fixed documentation to better reflect the implmentation
-> - Renamed DEFAULT_VA_BITS to MMAP_VA_BITS
-> - Added additional test case for rlimit changes
-> ---
->=20
-> Charlie Jenkins (4):
->   RISC-V: mm: Restrict address space for sv39,sv48,sv57
->   RISC-V: mm: Add tests for RISC-V mm
->   RISC-V: mm: Update pgtable comment documentation
->   RISC-V: mm: Document mmap changes
->=20
->  Documentation/riscv/vm-layout.rst             |  22 +++
->  arch/riscv/include/asm/elf.h                  |   2 +-
->  arch/riscv/include/asm/pgtable.h              |  20 ++-
->  arch/riscv/include/asm/processor.h            |  46 +++++-
->  tools/testing/selftests/riscv/Makefile        |   2 +-
->  tools/testing/selftests/riscv/mm/.gitignore   |   1 +
->  tools/testing/selftests/riscv/mm/Makefile     |  21 +++
->  .../selftests/riscv/mm/testcases/mmap.c       | 133 ++++++++++++++++++
->  8 files changed, 234 insertions(+), 13 deletions(-)
->  create mode 100644 tools/testing/selftests/riscv/mm/.gitignore
->  create mode 100644 tools/testing/selftests/riscv/mm/Makefile
->  create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
->=20
-> --=20
-> 2.41.0
->=20
+Of course it isn't. I'm pretty sure I had some idea when that was added 
+but it was before the patches were rearranged/modified, maybe I 
+incorrectly thought that the cleanup functions do umount (but they don't).
 
---jMLB4CN0CiHBLUdn
-Content-Type: application/pgp-signature; name="signature.asc"
+I'll changed it to these:
+Fixes: f1dd71982d19 ("selftests/resctrl: Skip the test if requested resctrl feature is not supported")
+Fixes: 01fee6b4d1f9 ("selftests/resctrl: Add MBA test")
+Fixes: ecdbb911f22d ("selftests/resctrl: Add MBM test")
+Fixes: 790bf585b0ee ("selftests/resctrl: Add Cache Allocation Technology (CAT) selftest")
+Fixes: 78941183d1b1 ("selftests/resctrl: Add Cache QoS Monitoring (CQM) selftest")
 
------BEGIN PGP SIGNATURE-----
+...however, I was also considering dropping Fixes completely because 
+main() has the final umount() at the end so no lingering resctrl FS after 
+tests, and inter-test issues are hard to track due to how complicated the 
+code is so I'm not entirely sure if there are real issues under any 
+combination of tests and all the mounting/unmounting going on).
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZLEurAAKCRB4tDGHoIJi
-0vWmAQC/EywXok82Hrth9kz9y/zRYvLkySW1jR8buVPiN1zfigEAnSaGF2UkAjYa
-6VCcjkwS7uQI4c/XFRtzztmmptbfaQo=
-=V+TD
------END PGP SIGNATURE-----
+-- 
+ i.
 
---jMLB4CN0CiHBLUdn--
+--8323329-584909292-1689334267=:1695--
