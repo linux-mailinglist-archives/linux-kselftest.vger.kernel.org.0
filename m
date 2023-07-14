@@ -2,101 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6FA753FA4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 18:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B3D753FC4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 18:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236354AbjGNQMU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 12:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
+        id S236050AbjGNQVY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 12:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236252AbjGNQMF (ORCPT
+        with ESMTP id S235803AbjGNQVX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 12:12:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396463A9C;
-        Fri, 14 Jul 2023 09:12:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3A9361D66;
-        Fri, 14 Jul 2023 16:12:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62961C433C8;
-        Fri, 14 Jul 2023 16:11:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689351121;
-        bh=ws5Wodwv96nMd2sAmsG4FBrWyNfSQxLW/+oHC8se9xQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gbf9Kvxf+9f1LiBGtbFLik1w+K4GfJ9GLNUTx7x9SZWPZMA4EuWv0FHPcw8Npn/+T
-         hXpVb/pZo2VSv4CIm8IC1KZRNAafDU8BX3D48j0BhyHAAUkZfjow3nw4D3AEn1M0s5
-         FC5CwA4yWIiX/JJSUN7M6WwhqjiBODSgOg+u5Iz62KBh7rjGXKpLTd2vEOtbFHvaMw
-         hlZUYic1FkISN85ykkXrbH4uhfK0iD7gq61SCWpItld99x3UyV7hdf1TYJ99ULt9tZ
-         5Lrela2l/vufSmfYbsNDe10QSvUJr6VLN33I0bELwzW9T7du2zBEf/SvT7M/QvVDkB
-         Rr6xoD+deGcBw==
-Date:   Fri, 14 Jul 2023 17:11:55 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Ryan Roberts <ryan.roberts@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Florent Revest <revest@chromium.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 2/9] selftests/mm: Give scripts execute permission
-Message-ID: <479a1704-a383-4385-a6d5-773cbfe1d4c8@sirena.org.uk>
-References: <7935c31a-6c47-95c8-d6bd-176b81046699@arm.com>
- <20230714160058.45215-1-sj@kernel.org>
+        Fri, 14 Jul 2023 12:21:23 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E89D211F
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 09:21:22 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id ca18e2360f4ac-780c89d1998so15212839f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 09:21:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1689351682; x=1689956482;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A/cGtvz8XeWSeI/2ga1OjJQj7bUnENfy64USXIaMRls=;
+        b=RTwPA+NsI6EAvbf0dITS+kJ/8I1AiDxT76aDhGrwVCcUXQHiHHE4v6UFSNUq+aSCGz
+         ToMxIEC7pWGZ+ZkD9fJRjfauM1HZR7/7FeFewmmlGFuMG/RV7V2idZaUWL/l5TVTJhye
+         aU3ntOHO9Kgu0L7KelkSP4IN/giRFc4qwLS5M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689351682; x=1689956482;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A/cGtvz8XeWSeI/2ga1OjJQj7bUnENfy64USXIaMRls=;
+        b=aguOK13iiG5tXghwQntKmue2X5ncy4qEqNrnWhiSQYcj5y/IONO1Qen8ZDJzJjXm/e
+         5LHaGztIpqowVertD5e6OBevx9k11VIT+HZ9x2q057CLn5rhZqhml5Bx1iaIrPUpYXFv
+         Z1yL+cBiVX1JgU3KCb21TIzCeqOnrqbLVZYdlS2koQYqBZCn8CA7fI3tbvZvCgZVfgBm
+         TD68PAwbRDxMyVrlgErPpqnaFUraFh2vznHe5K3Gmr1R2FCANAp563hfyxGwd55hV2jQ
+         tdwB9ffszOoldq93MCA7TvFxyRr0fIwg40n2DH+OMUkOTGatJEbQlll/vklUgR9c6q1e
+         9zww==
+X-Gm-Message-State: ABy/qLafQBUK1QzPniNbl6DE2iVzsOmkG7cZ3n8apuug8HFAF4zeUGlb
+        6dWUa5GlKHD7n9c7mZCK8GIwjg==
+X-Google-Smtp-Source: APBJJlErVRJu0xQzt35AjSZhJIyGKrlyeOor51Wp+cBkXt8k2AEbxMVRN9RtunAybX6H+lLgyy/vbQ==
+X-Received: by 2002:a05:6602:3ce:b0:780:c6bb:ad8d with SMTP id g14-20020a05660203ce00b00780c6bbad8dmr5651673iov.0.1689351681771;
+        Fri, 14 Jul 2023 09:21:21 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id f9-20020a056602038900b007862a536f21sm2745024iov.14.2023.07.14.09.21.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jul 2023 09:21:21 -0700 (PDT)
+Message-ID: <ecf66ba7-6e63-5ee3-acce-b2da9327b76f@linuxfoundation.org>
+Date:   Fri, 14 Jul 2023 10:21:20 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CZYy7fd3hsXdUxsO"
-Content-Disposition: inline
-In-Reply-To: <20230714160058.45215-1-sj@kernel.org>
-X-Cookie: Preserve the old, but know the new.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_NAME
+To:     Osama Muhammad <osmtendev@gmail.com>
+Cc:     shuah@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230607153600.15816-1-osmtendev@gmail.com>
+ <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
+ <CAK6rUAMODPLQeUawXMW_RNiJFdukOqdhS5GA5XRAq4U9bnQdNg@mail.gmail.com>
+ <3c03e28b-8006-a4ac-30bc-6aaf83ccb5d5@linuxfoundation.org>
+ <CAK6rUAObT-kQVGddhvxxtaKPcuaDddM6ipEDXuECCFtpR-GV6w@mail.gmail.com>
+ <CAK6rUAMuYTUhqcGmDrmeEWnigy3X4OxNb4zmHc0TmcVJ79MyHg@mail.gmail.com>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CAK6rUAMuYTUhqcGmDrmeEWnigy3X4OxNb4zmHc0TmcVJ79MyHg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 6/26/23 12:36, Osama Muhammad wrote:
+> Hi Shuah,
+> 
+> Any feedback on this patch?.
+> 
+> Thanks,
+> Osama
+> 
+> 
 
---CZYy7fd3hsXdUxsO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Please don't top post when you are responding on kernel
+mailing lists. It gets very difficult to follow the
+comments in the email thread.
 
-On Fri, Jul 14, 2023 at 04:00:58PM +0000, SeongJae Park wrote:
-> On Fri, 14 Jul 2023 10:44:14 +0100 Ryan Roberts <ryan.roberts@arm.com> wrote:
+> On Sat, 17 Jun 2023 at 18:01, Osama Muhammad <osmtendev@gmail.com> wrote:
+>>
+>> Hi,
+>>
+>> Yes, I did install the latest kernel headers and TASK_COMM_LEN is not
+>> accessible in userspace.
+>>
+>> I looked into the test which uses TASK_COMM_LEN but the test defines
+>> it in its own header file.
+>>
+>> Example:  https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/bpf/progs/pyperf.h#L13
 
-> > Personally I'd rather keep this patch and try rather than proactively do a work
-> > around.
+bfp test does things differently because its dependencies
+on run-time environment.
 
-> I don't have a strong opinion here, as mentioned before.  That said, I feel it
-> would be good to have a clear agreement or explanation about that, since I got
-> similar situation before[1].
+>>
+>> TASK_COMM_LEN is defined in include/linux/sched.h, but this header
+>> file is not exposed to userspace.
 
-I think just from a usability point of view we want to end up with
-things people are expected to execute actually executable.
+Correct. you can include linux/sched.h like other tests do
+Take a look at tools/testing/selftests/clone3
 
---CZYy7fd3hsXdUxsO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSxc8oACgkQJNaLcl1U
-h9BGigf9HIUnaZgscQpeiZWmNiMcL8H2JzwsKQMgiceeanLwURwT6CMHdbgzxIui
-rdnseQuisjw9FB4Ki6eCEAXnkAMyASEB8HW7YRiAhd7J8pSl6AFWWnVPhsQLO1OW
-Nc04umuZscVO87FEH0YR+ebxvIAZiEswbUbEZ7FOrQU/uURzWCAPUFa7/H2MbVv5
-oA2Ft60C3kp5aoA6uIAA5lwYpWVivKjNKzM0jwyiFOOQTm+zo/4Y54+WGexDYQyc
-uhj446zIHYk2RTCpfbnzBlMxXuapvwWFr64c3gzYgo8+CAmoIOpMl8bpp9Cn47cj
-CcYIi39PZWn6z3aBY/OtkccD30jpnA==
-=5MMo
------END PGP SIGNATURE-----
-
---CZYy7fd3hsXdUxsO--
+thanks,
+-- Shuah
