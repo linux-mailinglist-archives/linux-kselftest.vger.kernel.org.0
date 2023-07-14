@@ -2,66 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E83F754085
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 19:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57272754087
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jul 2023 19:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbjGNRgZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jul 2023 13:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S234916AbjGNRg4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jul 2023 13:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235747AbjGNRgX (ORCPT
+        with ESMTP id S233301AbjGNRg4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jul 2023 13:36:23 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1698113;
-        Fri, 14 Jul 2023 10:36:22 -0700 (PDT)
+        Fri, 14 Jul 2023 13:36:56 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFE1113;
+        Fri, 14 Jul 2023 10:36:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689356182; x=1720892182;
+  t=1689356213; x=1720892213;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=kae38rPxrj7ZzsC8cLY9x2hnuuVXZYN5+bxmEXTO2qk=;
-  b=aXOPzwXgCkB+7iKnkWwvikwuG1FSIs2uSqumVd1rRqB/ih9b2c2C1zj3
-   M2TAOZ6NfLS7Y0PRgx0xEbsHg5FE37LzaWhts14oKVfAEsrs1RUqPcHWv
-   Ca3yf1vF0ZWpWHWbm0imSVpPnysIhrTV0nBLA1BXLRZFtpiIlixgG7C9v
-   j9w0ZX7TYbxER8vt/7s2LSRcDXUBEvcnhzJz2evH5p4eQRpJbE7+lUYx1
-   9JOxs9e93tqx+rbOrgedKFOGq25AMdLddgRXkxJuoL+kNwHHs5+FzlJfi
-   RFVeNaFXH646fqCvdsxf+fGP+ASn+ufLV7sRcEHNNDNlkxYVLRHwqUg1+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10771"; a="355471031"
+  bh=N3GIVmXVmvIriVtEgYDor+CSARM+RBOdwDMfFMeA18g=;
+  b=AVUy+jDjVVdYPJJbd9CnlG5GbfZWyDY/ef6FI2CtnTYu6X8WDCxsOvXV
+   Eo4ibFaL8tz98eZnh6LHAnuqbH0OrSfjwdKcT3aVFpWiXq0XXYQeypsI+
+   44+Js+odPlW7jPWSlAg+jWyn8zKfhW37XAQ3Xag3KKQwhZP0LP7i+T9o7
+   yhTFRH21XYfCpLrVqDx+Bizu4hZ4Nnf3JBxfsDvevg5rKMiGCfkYyR5gJ
+   v2KjMvOeGs0MRw8oNL6q3PAtkEvIL1rvDTbt4XVZDojmVsrDTCqYBAqJE
+   ZFuiUFoOWIRHwPuLOa2qKL4FMrP43rt4zWfBvkMerRdZCU9n+mrmI0sOP
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10771"; a="429297571"
 X-IronPort-AV: E=Sophos;i="6.01,206,1684825200"; 
-   d="scan'208";a="355471031"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 10:36:22 -0700
+   d="scan'208";a="429297571"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 10:36:53 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10771"; a="699753964"
+X-IronPort-AV: E=McAfee;i="6600,9927,10771"; a="812533570"
 X-IronPort-AV: E=Sophos;i="6.01,206,1684825200"; 
-   d="scan'208";a="699753964"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga006.jf.intel.com with ESMTP; 14 Jul 2023 10:36:22 -0700
+   d="scan'208";a="812533570"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Jul 2023 10:36:52 -0700
 Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 14 Jul 2023 10:36:21 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 14 Jul 2023 10:36:21 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ 15.1.2507.27; Fri, 14 Jul 2023 10:36:52 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
  orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Fri, 14 Jul 2023 10:36:21 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ 15.1.2507.27 via Frontend Transport; Fri, 14 Jul 2023 10:36:52 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.109)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Fri, 14 Jul 2023 10:36:21 -0700
+ 15.1.2507.27; Fri, 14 Jul 2023 10:36:52 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MMPjR1JSC3TO/ufGNs8gbK0puBg/BnCVutcAgM9RroIkQSiuXLKqlJTrM4JEf3kxjHT3i/NrLEMxxYu4qeRgVOVUkS4wMq1JKrNxAOLIijTbSDgPCO5Vwlo9UPrPLuQq+r2mJaLbp9YOhBYriSLwiRnaRb2S4U2ZqUSedXE3+t5ESNRX8VmOxyNKE/AOBQP+OBqixF5jkKwhT7C5ncvfqxbR1iQiV+fQWEvBzjuCi07vb1BTBhfLWN208oizZODssJxl2U77jO8EPVuAOBxrz1nIiKfPxdY6o2F/IBN8eYSzQRg2Gq1pKB3vQ77/uVQUvYaf/Ac7elyA+F1liHVSyA==
+ b=amB1ltwTm+n587Juqfp/OFWS/9QAeFv+PeI/IazJhzPwR81ys5OX/Uf6nSHhXC0QwYyAwmdF547xcJO391glvc+p4VcAmzRVbTnCGPuJgDZn+PhL9bVyFHJOGiX4WCCkKdNyoBOBSqvHjBpne1Vjy5niekt+yxWtl1QYY+DzNs9O6zhe3LQsbmAFcNn0qbYgEbG2BCWyTJ0+x2Bx4/pDrta0UaYMCBlRt8oehR9aLqqJlonTuM7s2/uNZL9R1xHY3ks+KFhqsXSXVxYnxt0HxU5uBvM2EdrGlfjJusd7Kaus+BS03VSLjgnlDzzsvELiH15nEvFVvOlkzstyOuUe5g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZDbqtJr3kYFtrO5uE712zahkrpLiecAUXtRqPXrZGKs=;
- b=DqQPS32ITBWAhHcm+m6Vsve3pfY12NJlZ9EOyDh/cjru8Zx1Tg+CUVvjas3MsQbJYjW2yizDvXe0CuJOyVx/2I6xsJJhWJmVf9ZIkqpw+TJ5/h3fydWfJN7nsmC03ZmtW44mEjRq9uf3jwa0tqXexCD93acee8AXF1aZIxxVM5a4RmJk5D/KWsRp6JsYpTnpzyHjWyaBbAXDfLtH86hKsc5ZpsMYt5T9ivMIpijCq+kiA5Szhwsl0uM6FNXwB1g31tzIavdA+U4IK5nbIcXQ/4GLkPUZa49bG0SH1Fmow1YxlamctOuHyMnWKJ0qd/oUsBw4OutGNNtdmwORmN9ayA==
+ bh=B0Q9xSAIeKsP+lMR2l+H0Dgkqt1a1JRkT2ceje9TiKM=;
+ b=Vj6tegefhtoFYXlHYT7D+AgxgC2wQnYJbBXtEisXF+r5tOFfRbc3Ggxr1ttJEbLrBKfN7YezrCstS41SVfmgjU91PuwqsU8L3LgoBc1hJqXpib9dDsYqvnt0nZe47tcCcMyffojcmB4E4l+sd1nLaKChVVX/PFDyYo+aZGZVHox6czAyr61Mg/+CuJJIiKeXJAgxK8Khd9c0EESquvLjaeSf5CfngD4+Hn6eGqmYRqXs0p9gtvw6EZnb5vd5hFj7hFPSS2uG2NdG7mE5V8JNXB+PN/al8abQepd+/RF6BxueLjyJwyBsPRmqKL/6O0V+oqPHYflQl5upj7I3L7PJaw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -71,98 +67,96 @@ Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
  by DS0PR11MB7191.namprd11.prod.outlook.com (2603:10b6:8:139::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.27; Fri, 14 Jul
- 2023 17:36:18 +0000
+ 2023 17:36:45 +0000
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::3b1a:8ccf:e7e4:e9fa]) by SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::3b1a:8ccf:e7e4:e9fa%4]) with mapi id 15.20.6588.027; Fri, 14 Jul 2023
- 17:36:17 +0000
-Message-ID: <4531fca1-2f3b-0c08-351b-f8e06c5f9f5c@intel.com>
-Date:   Fri, 14 Jul 2023 10:36:14 -0700
+ 17:36:43 +0000
+Message-ID: <83d7536a-fadd-7c73-9d0e-5fe80e162759@intel.com>
+Date:   Fri, 14 Jul 2023 10:36:41 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH v4 04/19] selftests/resctrl: Close perf value read fd on
- errors
+Subject: Re: [PATCH v4 06/19] selftests/resctrl: Move resctrl FS mount/umount
+ to higher level
 Content-Language: en-US
 To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
 CC:     <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        "Shaopeng Tan" <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
-        Babu Moger <babu.moger@amd.com>,
         LKML <linux-kernel@vger.kernel.org>
 References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
- <20230713131932.133258-5-ilpo.jarvinen@linux.intel.com>
- <a4fa6303-4637-815a-e0fa-57f33babfb10@intel.com>
- <c14286ec-807c-8613-a4cc-d8ac733a87a1@linux.intel.com>
+ <20230713131932.133258-7-ilpo.jarvinen@linux.intel.com>
+ <59fd7956-caf8-03de-10a5-f37036219134@intel.com>
+ <07faf1f-cde-9d3c-1f15-bbe494466abf@linux.intel.com>
 From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <c14286ec-807c-8613-a4cc-d8ac733a87a1@linux.intel.com>
+In-Reply-To: <07faf1f-cde-9d3c-1f15-bbe494466abf@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW3PR05CA0023.namprd05.prod.outlook.com
- (2603:10b6:303:2b::28) To SJ2PR11MB7573.namprd11.prod.outlook.com
+X-ClientProxiedBy: MW3PR05CA0004.namprd05.prod.outlook.com
+ (2603:10b6:303:2b::9) To SJ2PR11MB7573.namprd11.prod.outlook.com
  (2603:10b6:a03:4d2::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|DS0PR11MB7191:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a963cd1-d96c-4c91-e018-08db8490d40d
+X-MS-Office365-Filtering-Correlation-Id: df74340a-2c6b-4370-2087-08db8490e3ee
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VygLLSCr7tCra1guDo+27JTx8tv4sQIP/PCxVnP1+wO1J9VFnW0grjLmdvr/Hbq5GItmJ8h406MFuG+E2XXY8WgkKKkRDbfGhPuN+3FgdZ8/Qef+LHkkAYVfJuLyW9yylQKiz7BM+YqRgsaUKcdZnVs2nZjNm+wIW8jKpzdTRRNMshIkyjRUPv6MMhD5RAcsR6QWUMWSFjXj3lZbzp3jXsFMJcS69lhpxnQLODCt7a1GgoT9To49YJYkv9OJ33fzXZYvRyvl4iKhaQyRW5TcgW8cckrbUxge+Y3GMrnqnEH3lqeKyIAVGyvY1vUSib6UGOndq4nEQOmyCp8RFZb8cUjKIvyI7/ViZY3teFowhgqbGwH/FlsKb+Z9sHkOCUgikoH6eq2zS/GKksiKsSCA01wHd7HfL4hW8sQBjo0JSyTgpAP/4kLX5+ZSTPEbz/OEwQGXlhcE2rRPNiskIKUi+waCeBdrz1y9a5rh5dy7x6PZAhuiDJjgLYTQJPIoX0g72z1X3hs48QqLDZJd9wWi9m1Jit8rQNoGmVMtAE+vt5ueJoxfjdY5zq+11ZXvNa/zLQm2yQgc8Oz2n2jw/axB31+VeGvfumjHhqsWEc2bfd0EytR0GVN8uebCVKbozGIJ19AZrgSk0U0TjcSLbDXHRQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(376002)(346002)(39860400002)(366004)(451199021)(86362001)(31696002)(2906002)(31686004)(66574015)(44832011)(83380400001)(8676002)(8936002)(316002)(2616005)(41300700001)(5660300002)(38100700002)(54906003)(66476007)(36756003)(66556008)(4326008)(66946007)(6916009)(186003)(53546011)(66899021)(26005)(6512007)(6506007)(82960400001)(478600001)(6486002)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: HgXAq+S9roW9f5m/NsU7z72V6nY3W6pslZw2Rg+/YDbJntlqBuyX/49mq6Sa9ltLoqWvfX/WGPA2ZM+9+DOUab2t8D4Viarj3fsweai6GylowJp1oVU1FnnHRiIAW+5TwdNiQhiQ4at3L28Qfm6CLnFKeuBinHhCMiUwWQH/UVlvNFLkyjyBZvljGODdf9GWdzRCXUxnB83hbxbm894Hdgw4L4ePOk6Zc1xSJj2C4IHAtStJIhdbkbG12G6TfLxkuU/hHWj579t/0hxzakeOEDvbL5Jm3xOOWPtCh9eGWpiDrRL3NPzImgNaEZ/dFP8YN5OqVBGCHTs6tsm9m/Z6oMk4m0VdwTH8RTFmAFe10yvD/rLOght0kxgIhmMe47cuN5LQkW0VWHtGnrpLxwWSq73n4MmOvyDwX/lSQb1Krqflq6efaC0/h+a1gBpdpdHueIYgh/VQIySxKVj3C2y8nJchRSgisLIIDs29A5+q9p55XyeRxYsCj7CzFnzNqp+pGjGKWz5w2382x0YihFMOA6tU/tt3397E5PsuAv/3r8q4rJGnKb2vAiuwxw6VUGe+Q/+F5wJuPia35OoYSNVCmAuBjdqqRmPKUqtQVwFGtQvXaK5jHD2MMCY4mixs4MvvdoQ77uEmflM5Bhyoo7cAVA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(376002)(346002)(39860400002)(366004)(451199021)(86362001)(31696002)(2906002)(31686004)(66574015)(44832011)(83380400001)(8676002)(8936002)(316002)(2616005)(41300700001)(5660300002)(38100700002)(54906003)(66476007)(36756003)(66556008)(4326008)(66946007)(6916009)(186003)(53546011)(26005)(6512007)(6506007)(82960400001)(478600001)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SXJuVzBCUDl2emtmckRFMWlhRldFcTFOVE5Fc29tK1pEMTJCZFMvY2k0K21C?=
- =?utf-8?B?VzBjWTZWZ091Z2FUZVo4MUZkNEVQUk9oVWN4bnh0cFNvL0xsSmsrMlZWQkhD?=
- =?utf-8?B?WnJuVXRRaFFKN3p4S3Rwb2hOLzgyM1gyTndPdWNtZ09tMzJXNkxpMEZwREZ6?=
- =?utf-8?B?NC9oUFpxc1Z6OXZyaHFMMHZjTHpTdktvSVkzV3RkUk15TVgvQThBOFF0RlN4?=
- =?utf-8?B?Z0ZoMWVvT1hGTkg3WTM5cDVLUmJKTUpYeDlVUXZHNmMxVGtsU3VMbHFacTBW?=
- =?utf-8?B?eXA3ekVTU0Z4RTFkZm5PN0hudVpGUWdyMzdoU05YSGZodGhJTXRETHBia1lt?=
- =?utf-8?B?YWpDWHRZZlVSci9aYno4RGp5bjZiSFhZUTJBR2MrQmkzRDkvRVVHaUM0ZldH?=
- =?utf-8?B?MG40V3p6YlJ5bHp5L0tNcy9kVjg0U24ySDcwcFNsN1BpWWJyV2lGUzNFSUd2?=
- =?utf-8?B?akVYbXRyK1RRY25WQlR3Ly9iTW9YclhLanl3YWxRMWJHRXFvUHVhbHBIaHBa?=
- =?utf-8?B?aHJBL3lQU3RNUlFCa2cwRkpEd1VDNkxVWllJaG1vM3lDS0k5b2x4VklOeXBj?=
- =?utf-8?B?WWE4RmZ4UWlmV0toc3Y4WmhCb0JtL05vQ0VxZXV0WjN3bDdvSVlrSjhoc0Q2?=
- =?utf-8?B?UHUyRlFZY1hxRHViaHJ3bStnemU2YkErY1hSQ0Njc251a05wYldWYkNpRm9X?=
- =?utf-8?B?aW1OMWs5ZUFOblJQTEpsYXRKTzVub1plS1BRZ2IxeU9veFJ6UG4wUmVPaU8x?=
- =?utf-8?B?SGdSckx0TW1kZXdsUkxHOHVXb0tqRlBLaDlCbzBOTWNpb2xLSnFwV1g5bDJK?=
- =?utf-8?B?VnE4SDFVUS9sZno0azdwaTdaU25OdXdzWVVVSkQ3d3I1bGNPVDd6bDFGRDRU?=
- =?utf-8?B?WFNBcFhkejdDeTRMSXVidjNGdEdtdlNtOW5Rd3RKajl0Mmk3cC9KcUpRcXAz?=
- =?utf-8?B?b0krK3RmQllvandtRzdVUE5qK0FyanFWWndZUzM1L0pRYWo0N3ZEOWc0V1Qr?=
- =?utf-8?B?RUxTV2dNQThmTzUyWENTUGhHcXFEd2w5RW54blk3bTR2QnpKL0Y1SDF1SHB2?=
- =?utf-8?B?d01tQk5pNFMxUDNKRzM2TW0wUVZ1TlFTcld1R1I0dzN2YTNCSUVWU2x5M1Jm?=
- =?utf-8?B?THBWdWIyemJDaEtyaFM2eVdtY2hHMldCRFNhcGRxKzRxbDdJSFRGV1hDR2R4?=
- =?utf-8?B?RUNGb280MnJUejhJYTVFSnkrU3F6aThQSWV1dTI5ZFRrU1pYNUY2UEFpMEk2?=
- =?utf-8?B?eG5GdTFZYVJSOWVVR1lBY25acjRUL2hBVXBxcFB6ZS94eFJXclFFeE91MGhw?=
- =?utf-8?B?QURyUzdVZTFLUFdMOHhOUjc1TmFXdkpRWnN4YXVrWHNVQzdoMzdrMnRyTGlN?=
- =?utf-8?B?MFNhckgzSXBjUGxRNVFLckx1VXpwdVB2cUJTZkFTREhEQTdVYWZhdSsvMHZu?=
- =?utf-8?B?VGpobUZMVW9WUEJPVVI3T0dOSUdld0xtWGp6M2VDcTJ3K2NUS2c5TnBJeFJD?=
- =?utf-8?B?eEs1dXRHdFpXVUYyWkZOT25lTU9Gek4zSHRKaUdoVmJCbHZyTVR4VmRYY25W?=
- =?utf-8?B?dW01VmpVR1A4aS9uT3lWQ1k4d3R6a0I3QnBmdEVPalR2T1dhbnNPUXNtNUFO?=
- =?utf-8?B?NkE5MmtHNmhaQTlKNnk2VGJBeFFTcGtXS2tTR3hUOGhlZkVOVzA0blRRczlp?=
- =?utf-8?B?UEdzWGorRGhVdjE4K1RrNlZ6MmhCV2ovTmRSN1FNb0RlM1ZyVHF2Q0tJMmUx?=
- =?utf-8?B?cTlVb3E4Yk1GY0hnNUd5SEJycGwvZkNzS2E3MDFOamdLZis3blZCcmtqYXNJ?=
- =?utf-8?B?QW52S1NzZ1cwWVdTMk16MEhxcHR4UnB1cVhlWFdmejkxTFpqZllXNGJCaUov?=
- =?utf-8?B?MDZsQ3V1WklneVNjNElFL2Rld2FFODRsRm9Rc0V1VGZ6cEZrYWthbjRpdVB2?=
- =?utf-8?B?NHBwaU5lRGRIQ1pBaHpLd3k0Wmh4dTBmaE9pVkRQVzFNQzJIbEpXbnRnSlNO?=
- =?utf-8?B?K2o2OEh5RHI5SVR0WjhoOXNaQmlMTmxzU2pabzR2YzRYTWV4V3BhT0s4d2ph?=
- =?utf-8?B?QWw1QnQwckJ4L2V2VkI4dXAvSjh6STRBYUkrcEVSa2ptTHNQOHpOUXdzTS9r?=
- =?utf-8?B?cTlNYWo0bnRwcGVWcTJNZE0rck5pVkU2aENhbFlYTGwzUEZzbkZQQ1ZCWkpM?=
- =?utf-8?B?WlE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a963cd1-d96c-4c91-e018-08db8490d40d
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MkJoNUtTQnlNOStQcUhlRTkzeDVpNlhtcGZnbWdEWmF0bU0xSmtsUXh5STAr?=
+ =?utf-8?B?bXl2bld2clFSSitaUTlyOXh3WlI3QytEeHZ6dVRKbDMwL2xURTdFSzRwanZk?=
+ =?utf-8?B?Z0s1amloWWZhRjBHUEJsK2ZESUdxNXZ6STc3aVJzM2lMZFFuTzVyT3FqTFhY?=
+ =?utf-8?B?UjBsVDZ1WUhZZUhPWHd4Q2hxeDdmN1FCYjNIR0tvMzZlWkRpdDZaK2E5aHV4?=
+ =?utf-8?B?ZWlQWDh1QzNralJNWW5DQ2YzV0tHdDVPUjNmWW1ma0R6cXFtWUdFVUU4bWYy?=
+ =?utf-8?B?cER3cU9uVnc2TkpiN1doTGdhTzE2QUtYNkpPdGxGekJWTDdoY3U5QmhmbjI3?=
+ =?utf-8?B?NEtlcWwvL01TdTdzcEViYVliMlJaN20zZHNEZWdoOFh6ZjI1K2QyK3Z6UUlB?=
+ =?utf-8?B?UytESGJsVzBHYXhzZVhWaEZkTGpQRGJpNFkxN3VUdThNT203RjUwZlA2YlEy?=
+ =?utf-8?B?K2dyZjVHR0hwQzRtU2Z3RzlPdkl4OUpzS0l6QUVpZHNTVlVUTm1LSm1qWWVp?=
+ =?utf-8?B?bGxucm5GNUdCcDVuTUZDRFBEMnpleXpKaHVBbVhUdWN3amVWRE9iVTFmdUV2?=
+ =?utf-8?B?bGdKZ3JkQkUzTTBWUTZOaTZGM3hOTjFNVlR2V2xIRW1JUDJPWmc1RFlrL2hD?=
+ =?utf-8?B?ZmJUNmVNcGlBaWNuWGRqV011ZTRWc1cxcnVKVEtNcjBIQTB2VXZlOXgyaVg5?=
+ =?utf-8?B?WVhFUmNzVVRTQ3o4cDl6bkJNaUt1dkltVi9Xem5nM2MrcnF3cythdEkwWDNZ?=
+ =?utf-8?B?MFV6cXdkQVNsQ1hHUUZIdTlSem5Fcy9HVGFERjFoaDlMZ1ZEaWIvY0tVZG9I?=
+ =?utf-8?B?a0dYTWVVb2xsbkxqNWVCck9DRUxVaW1BZmtzbTBLNWpERU9UMFViem5xdFV4?=
+ =?utf-8?B?WnFOdHlCcnJsSmplZFg2dlBqUC91cXY3RHBKcUJIbDJmQmtEUFI1aW1PM1p3?=
+ =?utf-8?B?dDR6K1VlYXBwbmY3TFV3bFkreWRrWVZnVVM5MUVuMm9DeUk5Y2Qvd3d5QW83?=
+ =?utf-8?B?ais4Mk9LMEhpUG8xc2hOOCtYWGdhNlRqbi9iczNDbEZzNWlmYng4T1lESXJz?=
+ =?utf-8?B?MzR6bXQ3OCtmdlBRWmExNVZGYS9TcStqZW9nSVB1elhpZW92MzZQWnR1ZUpZ?=
+ =?utf-8?B?cWR1cFNabzVETXRNUDZ6aDQxUmZSMkJ6alhBczFJQXFkZCtvbXFVYWVDSGxL?=
+ =?utf-8?B?a3k0N05UYVAxY3F1VTJhaTlDS3NSYWw1Ujl0SW5jMEYwZytvZWNZRmFqZUJy?=
+ =?utf-8?B?VTlWNTU0NEM2UHZNeHZvY3NsbU1TNGR5SjVveXhtNklJNjhLOUNkOUwzQnFC?=
+ =?utf-8?B?ZTR5T05YNmxFZm5lWE1jNm9JeksxSU9hSTVlUEJ1YTQ3MGpiVHpUd0VBNGNn?=
+ =?utf-8?B?OHBDZDQrVVgxcWpyb29BL3hPVVlOMytMclFIRm1kb0FaL2Q0ZmQ2Y1MvVW8v?=
+ =?utf-8?B?YU9SSSt2d2F2cmsxbzc2SlFrd3hoRW5HMkY3Q3AzcWxVYnB2WktueE1zNmZN?=
+ =?utf-8?B?SG1XK1dXcTdkeTdnTjV0Q0kvckNxNWE2c3NicGpvTGhQSmU3T2p1ZW9QUFBp?=
+ =?utf-8?B?YWo4czU5MTVGclBib0U0MDJ6TGQyRnljaUZCb0k5Z0pmeVRyNXVIeTI3a2Mr?=
+ =?utf-8?B?SmY3T0tuWER1SnFCaHpxU0RhZlVHdUZ0aG1aczdFTjhLNjVCeGFUWWxhVk5w?=
+ =?utf-8?B?MWl1UlJ1VWhpYkNyYU50SVozZ3Q4RWVzdE5FTXFTU0hsSW5UVVJHdUZEOEhp?=
+ =?utf-8?B?UHZyeE05RFNHdG1FdzFjTlZwNEtDRFBLdGxyZkV2ZEJFT01FOTg3bk5RbG0y?=
+ =?utf-8?B?OFVwN3BBemxsZzZhVEtCNjF3WjdWbXpJaEJxN2VaaHJkd2RZZGdHamQ5d2pQ?=
+ =?utf-8?B?M0NiSXRzRDBYQlBDVDBMdURRSXc3Y084cXJQeHRrMVZ3Uk1weU9rUmhONXkz?=
+ =?utf-8?B?UjNJSVI3c3VXZFR1K3gvVlEyL2ZnVGlYK00zSVBWU3pzT0F0cFpaNk5WaElL?=
+ =?utf-8?B?WHk1elVRNE44UnhKVm5IZHFmcG0reEJLcGMwdERUUE1OTDJvdTV1R3gxZFBG?=
+ =?utf-8?B?L3UwU3ptNCtMbXJyUDVIZ3IzWmo2KzBtTHAxNmZwR1pud012cE5uclp5VnZr?=
+ =?utf-8?B?UjdCOGV0ZU9jYk45K1cyd2ZDcERiUEMrNWFLcDduZDlrcXhscXhuL3JuNGNs?=
+ =?utf-8?B?Z3c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: df74340a-2c6b-4370-2087-08db8490e3ee
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2023 17:36:17.3623
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2023 17:36:43.8496
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EVDnmv9MHWl3MszGr/huI0D6g2EgwNpKf/EAqbmEdzbywsGbh7EPH7TT6BwJ/zS8V+KF7ys2LBT5hwx42Y7K2eXSpzhWwyS4C7Mkwul4IC0=
+X-MS-Exchange-CrossTenant-UserPrincipalName: ka6XyYvXEM+PfjMmgmqik1XSB1iIARGGQeRwf/mbJUrqIoZNo33ODDMEKOKgQT8ORA/mIZL2Kxe4lvglxi4uNTzL2BzeaJ+LbCOrlUbMwc8=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7191
 X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -171,110 +165,53 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi Ilpo,
 
-On 7/14/2023 3:35 AM, Ilpo Järvinen wrote:
+On 7/14/2023 4:31 AM, Ilpo Järvinen wrote:
 > On Thu, 13 Jul 2023, Reinette Chatre wrote:
+> 
+>> Hi Ilpo,
+>>
 >> On 7/13/2023 6:19 AM, Ilpo Järvinen wrote:
->>> Perf event fd (fd_lm) is not closed on some error paths.
+>>> A few places currently lack umounting resctrl FS on error paths:
+>>>   - cmt_resctrl_val() has multiple error paths with direct return.
+>>>   - cat_perf_miss_val() has multiple error paths with direct return.
+>>> In addition, validate_resctrl_feature_request() is called by
+>>> run_mbm_test() and run_mba_test(). Neither MBA nor MBM test tries to
+>>> umount resctrl FS.
 >>>
->>> Always close fd_lm in get_llc_perf() and add close into an error
->>> handling block in cat_val().
+>>> Each and every test does require resctrl FS to be present already for
+>>> feature check. Thus, it makes sense to just mount it on higher level in
+>>> resctrl_tests.c and properly pair it with umount.
 >>>
->>> Fixes: 790bf585b0ee ("selftests/resctrl: Add Cache Allocation Technology (CAT) selftest")
->>> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->>> ---
->>>  tools/testing/selftests/resctrl/cache.c | 10 +++++-----
->>>  1 file changed, 5 insertions(+), 5 deletions(-)
+>>> Move resctrl FS (re)mount/unmount into each test function in
+>>> resctrl_tests.c. Make feature validation to simply check that resctrl
+>>> FS is mounted.
 >>>
->>> diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
->>> index 8a4fe8693be6..ced47b445d1e 100644
->>> --- a/tools/testing/selftests/resctrl/cache.c
->>> +++ b/tools/testing/selftests/resctrl/cache.c
->>> @@ -87,21 +87,20 @@ static int reset_enable_llc_perf(pid_t pid, int cpu_no)
->>>  static int get_llc_perf(unsigned long *llc_perf_miss)
->>>  {
->>>  	__u64 total_misses;
->>> +	int ret;
->>>  
->>>  	/* Stop counters after one span to get miss rate */
->>>  
->>>  	ioctl(fd_lm, PERF_EVENT_IOC_DISABLE, 0);
->>>  
->>> -	if (read(fd_lm, &rf_cqm, sizeof(struct read_format)) == -1) {
->>> +	ret = read(fd_lm, &rf_cqm, sizeof(struct read_format));
->>> +	close(fd_lm);
->>> +	if (ret == -1) {
->>>  		perror("Could not get llc misses through perf");
->>> -
->>>  		return -1;
->>>  	}
->>>  
->>>  	total_misses = rf_cqm.values[0].value;
->>> -
->>> -	close(fd_lm);
->>> -
->>>  	*llc_perf_miss = total_misses;
->>>  
->>>  	return 0;
->>> @@ -253,6 +252,7 @@ int cat_val(struct resctrl_val_param *param)
->>>  					 memflush, operation, resctrl_val)) {
->>>  				fprintf(stderr, "Error-running fill buffer\n");
->>>  				ret = -1;
->>> +				close(fd_lm);
->>>  				break;
->>>  			}
->>>  
+>>> Fixes: 91db4fd9019a ("selftests/resctrl: Remove duplicate codes that clear each test result file")
 >>
->> Instead of fixing these existing patterns I think it would make the code
->> easier to understand and maintain if it is made symmetrical.
->> Having the perf event fd opened in one place but its close()
->> scattered elsewhere has the potential for confusion and making later
->> mistakes easy to miss.
->>
->> What if perf event fd is closed in a new "disable_llc_perf()" that
->> is matched with "reset_enable_llc_perf()" and called
->> from cat_val()?
->>
->> I think this raises another issue with the test trickery where
->> measure_cache_vals() has some assumptions about state based on the
->> test name.
+>> Could you please elaborate how this commit is the culprit?
 > 
-> I very much agree on the principle here, and thus I already have created 
-> patches which will do a major cleanup on this area. The cleaned-up code 
-> has pe_fd local var to cat_val() and handles closing it in cat_val() with 
-> the usual patterns.
+> Of course it isn't. I'm pretty sure I had some idea when that was added 
+> but it was before the patches were rearranged/modified, maybe I 
+> incorrectly thought that the cleanup functions do umount (but they don't).
 > 
-> However, the patch is currently resides post L3 CAT test rewrite. 
-> Backporting the cleanups/refactors into this series would require 
-> considerable effort due to how convoluted all those n-step cleanup patches 
-> and L3 CAT test rewrite are in this area. There's just very much to 
-> cleanup here and L3 rewrite will touch the same areas so its a net 
-> full of conflicts.
+> I'll changed it to these:
+> Fixes: f1dd71982d19 ("selftests/resctrl: Skip the test if requested resctrl feature is not supported")
+> Fixes: 01fee6b4d1f9 ("selftests/resctrl: Add MBA test")
+> Fixes: ecdbb911f22d ("selftests/resctrl: Add MBM test")
+> Fixes: 790bf585b0ee ("selftests/resctrl: Add Cache Allocation Technology (CAT) selftest")
+> Fixes: 78941183d1b1 ("selftests/resctrl: Add Cache QoS Monitoring (CQM) selftest")
 > 
-> Do you want me to spend the effort to backport them into this series 
-> (I expect will take some time)?
+> ...however, I was also considering dropping Fixes completely because 
+> main() has the final umount() at the end so no lingering resctrl FS after 
+> tests, and inter-test issues are hard to track due to how complicated the 
+> code is so I'm not entirely sure if there are real issues under any 
+> combination of tests and all the mounting/unmounting going on).
+> 
 
-Considering the "Fixes" tag, having a smaller fix that can easily
-be backported would be ideal so I am ok with deferring a bigger
-rework.
-
-I do think this fix can be made more robust with a couple of small
-changes that should not introduce significant conflicts:
-* initialize fd_lm to -1 
-* do not close() fd_lm in get_llc_perf() but instead move its
-  close() to at exit of cat_val().
-* add check in get_llc_perf() that it does not attempt ioctl()
-  on "fd_lm == -1" (later addition would be error checking of
-  the ioctl())
-
-> I currently have these items pending besides this series (in order):
-> - L3 CAT test rewrite and its preparatory patches
-> - More cleanups (including the pe_fd cleanup)
-> - New generalized test framework
-> - L2 CAT test
-
-Thank you very much for taking this on.
+Indeed. The problem statement is that some places lack
+unmounting resctrl FS on error paths. This may create impression
+that there are scenarios where resctrl is left mounted on failure.
+As you indicate this is not the case. I agree that the "Fixes" tag
+can be dropped with this categorized as code refactor instead.
 
 Reinette
- 
-
-
