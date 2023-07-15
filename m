@@ -2,163 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1CD8754722
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jul 2023 08:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D382D75473C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jul 2023 09:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjGOGzk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 15 Jul 2023 02:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        id S229780AbjGOHYz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 15 Jul 2023 03:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjGOGzj (ORCPT
+        with ESMTP id S229482AbjGOHYy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 15 Jul 2023 02:55:39 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E068711C
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 23:55:38 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8bbcfd89aso15658685ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jul 2023 23:55:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689404138; x=1691996138;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7uVj/lhBUF/5nh6ODvW462JBzyxJtGfh6hqwDyPjGE=;
-        b=KDRsK/mF0Aodj6lnHsAH04P9rIoL6L7qGXs/slTk4WB21p5XCSgcIQMPzIhh9ibPi4
-         Cfv8TVmaBK9PLaX+FCLlIQrBNXChQizRwGZ2WNdKojnTxgtJfzwqMg2s6AKN50u6FJJe
-         A8bKe/4CqDpBoHj9gUp3sBmm25VlcdGGdECtKQzQt+4IpPfEMwYkxKAB5Bpr+MzaL8Sc
-         rkotyERcp8E8DBy3h43w/J1Lt2jlrXf2XgI23nZ2ox0nCqJzl5LMenu9/N/BJlx8JskU
-         0ghIMZ62nLPZnMYR3ageo4cYxFhJ1/c7y66whib5GrYvWh8SL7OwvsmZDHXUYPMsgdDk
-         owsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689404138; x=1691996138;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/7uVj/lhBUF/5nh6ODvW462JBzyxJtGfh6hqwDyPjGE=;
-        b=dFFQxCZ1MLx01p7/3w7ZdIXWciNUNDBUdUSotUaPyaaPxAPZ5XoqrLKRM+udnyUnb8
-         cG4iA+mH1CnyQ8thugbTHvHQO/uGm2/aQNXEZE8rbNcS0N/bO9q2utzeC7Pb1RufMkoq
-         0WZxWY8+eNyssvdeQYiHgVIG66F/h6Owy4wnUtL98ngaGN86CyM8mj6Fb3XXaguaLIJc
-         n0Jv6GQiNo80pw3zIR8JRP6bo5MJI5p7YsosmtPc+Ax1OjYXo7WDdixKqxpwgbujGjIf
-         kHV16sBgIUBAbiEpzxd9n2Wte8oLrrt8GX9WATIlfHQaxtrlv8HCoJ3kLiThyv0iYHP5
-         O6qw==
-X-Gm-Message-State: ABy/qLZLP+Nmfgq8XjIeUEzvngTCeeBa0DjD+7EDkLDhuQSoN3hlW8x9
-        vXw2wQ29xBGPwb3RFmMe/MB8CVGY1aNICpkSW+uqTw==
-X-Google-Smtp-Source: APBJJlEQDvXYMSnG7+iYecUN1OdFpvzNAbqOVpaftYBvW4kPjqZRss4fvwPBtJX0TYGN4G2Lq2jseg==
-X-Received: by 2002:a05:6a20:3c93:b0:131:371e:74 with SMTP id b19-20020a056a203c9300b00131371e0074mr5809919pzj.8.1689404138294;
-        Fri, 14 Jul 2023 23:55:38 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id f24-20020a170902ab9800b001b5247cac3dsm8821823plr.110.2023.07.14.23.55.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jul 2023 23:55:37 -0700 (PDT)
-Message-ID: <64b242e9.170a0220.92292.36d1@mx.google.com>
-Date:   Fri, 14 Jul 2023 23:55:37 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 15 Jul 2023 03:24:54 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8882235B3;
+        Sat, 15 Jul 2023 00:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1689405891; bh=+x+OBsCkEs63wx4/L6coA3g29HgWPJzDjcoTmoesRQg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WYacgvwA2hjXbvY0r8To3ttma0vgqHDk8I+HK/tsqeyrvUVICy9K2y33UTlKLi5yH
+         UitXHcVQwTD4rUuYwxD18WVZ6E6Xv3EWWvRycsSE8XSAQCNzKHWb4eDUfGi8Mxhivk
+         F/7i1SIXXhoLVEX7qMSoyiTmeo6c6PLRBsYfsD8U=
+Date:   Sat, 15 Jul 2023 09:24:50 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, w@1wt.eu
+Subject: Re: [PATCH v3 02/11] tools/nolibc: add new crt.h with _start_c
+Message-ID: <34b21ba5-7b59-4b3b-9ed6-ef9a3a5e06f7@t-8ch.de>
+References: <63476acf-9e65-4ab0-8e9b-bc35b12710d5@t-8ch.de>
+ <20230714094723.140603-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v6.5-rc1-1-gfeac01aaf677
-X-Kernelci-Report-Type: build
-Subject: kselftest/next build: 6 builds: 0 failed, 6 passed,
- 4 warnings (v6.5-rc1-1-gfeac01aaf677)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230714094723.140603-1-falcon@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next build: 6 builds: 0 failed, 6 passed, 4 warnings (v6.5-rc1-1-=
-gfeac01aaf677)
+On 2023-07-14 17:47:23+0800, Zhangjin Wu wrote:
+> > On 2023-07-14 13:58:13+0800, Zhangjin Wu wrote:
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.5-rc1-1-gfeac01aaf677/
+> [..]
 
-Tree: kselftest
-Branch: next
-Git Describe: v6.5-rc1-1-gfeac01aaf677
-Git Commit: feac01aaf677827a0b77115554e504ee444c9b7c
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+> > I was also not able to reproduce the issue.
+> >
+> 
+> Thanks very much for your 'reproduce' result, It is so weird, just
+> rechecked the toolchain, 13.1.0 from https://mirrors.edge.kernel.org/ is
+> ok, gcc 9, gcc 10.3 not work.
+> 
+> But even in the page of 13.1.0 [1], we still see this line:
+> 
+>     Most optimizations are completely disabled at -O0 or if an -O level is not set on the command line, even if individual optimization flags are specified.
+> 
+> Not sure if "individual optimization flags" also means the optimize()
+> flags in gcc attributes. or the doc is not updated yet?
+> 
+> And further found gcc 11.1.0 is ok, gcc 10.4 still not work, so, gcc
+> 11.1.0 may changed something to let the "individual optimization flags"
+> work with -O0.
+> 
+> We may need to at least document this issue in some files, -O0 is not such a
+> frequently-used option, not sure if we still need -O0 work with the older gcc <
+> 11.1.0 ;-)
 
-Warnings Detected:
+It seems we can avoid the issue by enforcing optimizations for _start:
 
-arm64:
+diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+index f5614a67f05a..b9d8b8861dc4 100644
+--- a/tools/include/nolibc/arch-x86_64.h
++++ b/tools/include/nolibc/arch-x86_64.h
+@@ -161,12 +161,9 @@
+  * 2) The deepest stack frame should be zero (the %rbp).
+  *
+  */
+-void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
++void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_stack_protector _start(void)
 
-arm:
+> 
+> Willy, I'm not sure if the issues solved by the commit 7f8548589661
+> ("tools/nolibc: make compiler and assembler agree on the section around
+> _start") still exist after we using _start_c()?
+> 
+> Thomas, because we plan to move the stackprotector init to _start_c(), If using
+> pure assembly _start, we may also not need the __no_stack_protector macro too?
 
-i386:
+It would probably not needed anymore in this case.
 
-x86_64:
-    x86_64_defconfig+kselftest (gcc-10): 3 warnings
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-
-Warnings summary:
-
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
- !ENDBR: relocate_range+0xbb
-    1    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    1    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x1d1e: redunda=
-nt UACCESS disable
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 war=
-nings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1d1e: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
-BR: relocate_range+0xbb
-
----
-For more info write to <info@kernelci.org>
+Thomas
