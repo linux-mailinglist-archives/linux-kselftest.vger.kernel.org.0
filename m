@@ -2,71 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F54754793
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jul 2023 10:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DD67547E1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jul 2023 11:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjGOI74 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 15 Jul 2023 04:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
+        id S231135AbjGOJXp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 15 Jul 2023 05:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjGOI7z (ORCPT
+        with ESMTP id S229881AbjGOJXh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 15 Jul 2023 04:59:55 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A849B2D66;
-        Sat, 15 Jul 2023 01:59:53 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 36F8xgCt024263;
-        Sat, 15 Jul 2023 10:59:42 +0200
-Date:   Sat, 15 Jul 2023 10:59:42 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: Re: [PATCH v3 01/11] tools/nolibc: remove the old sys_stat support
-Message-ID: <20230715085942.GB24086@1wt.eu>
-References: <cover.1689150149.git.falcon@tinylab.org>
- <5319451b7e01f1d101b94dcecf195c734eb74ebc.1689150149.git.falcon@tinylab.org>
+        Sat, 15 Jul 2023 05:23:37 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC103AB1;
+        Sat, 15 Jul 2023 02:23:15 -0700 (PDT)
+X-QQ-mid: bizesmtp89t1689412983tno1gxiu
+Received: from linux-lab-host.localdomain ( [119.123.131.162])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 15 Jul 2023 17:23:01 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: q+EIYT+FhZrAovjZxRoSnSnHnPax2IuslwuJRGRN5fECtY6fP4y4nhEUwUr/c
+        0bUAu3pmDk1aSDl4lKKLg/ti7sgCj9P1l9zM7AlbSwJ9g1kmLPDAv7iBZaL7RVeJg2OAGsd
+        Q3g+9mb1+8fYLInhCmAesMAPF0dyndoVARHSEkyG5j75YuiVCHIa9ljZXUB60Kves7wTdtK
+        +g9HISe8gYOHfbGwfbnntiU5x79dPmmm7PI6lMjuYKcxEXkS25r7nNeCk8rbHRUO478mvRG
+        wjVA7qrK1isT0gBDvlf/mfn8sPPDY2DT1UBycINpobsCb8RB2Y6zCCwoTlA7/Wla4DEo35o
+        x50tunzZrYf50+kTeFX2f8Q7jx9zg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 5920392168960088624
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, w@1wt.eu
+Subject: Re: [PATCH v3 02/11] tools/nolibc: add new crt.h with _start_c
+Date:   Sat, 15 Jul 2023 17:23:01 +0800
+Message-Id: <20230715092301.339180-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <34b21ba5-7b59-4b3b-9ed6-ef9a3a5e06f7@t-8ch.de>
+References: <34b21ba5-7b59-4b3b-9ed6-ef9a3a5e06f7@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5319451b7e01f1d101b94dcecf195c734eb74ebc.1689150149.git.falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Zhangjin,
-
-On Wed, Jul 12, 2023 at 05:16:34PM +0800, Zhangjin Wu wrote:
-> __NR_statx has been added from v4.10:
+> On 2023-07-14 17:47:23+0800, Zhangjin Wu wrote:
+> > > On 2023-07-14 13:58:13+0800, Zhangjin Wu wrote:
 > 
->     commit a528d35e8bfc ("statx: Add a system call to make enhanced file info available")
+> > [..]
 > 
-> It has been supported by all of the platforms since at least from v4.20
-> and glibc 2.28.
+> > > I was also not able to reproduce the issue.
+> > >
+> > 
+> > Thanks very much for your 'reproduce' result, It is so weird, just
+> > rechecked the toolchain, 13.1.0 from https://mirrors.edge.kernel.org/ is
+> > ok, gcc 9, gcc 10.3 not work.
+> > 
+> > But even in the page of 13.1.0 [1], we still see this line:
+> > 
+> >     Most optimizations are completely disabled at -O0 or if an -O level is not set on the command line, even if individual optimization flags are specified.
+> > 
+> > Not sure if "individual optimization flags" also means the optimize()
+> > flags in gcc attributes. or the doc is not updated yet?
+> > 
+> > And further found gcc 11.1.0 is ok, gcc 10.4 still not work, so, gcc
+> > 11.1.0 may changed something to let the "individual optimization flags"
+> > work with -O0.
+> > 
+> > We may need to at least document this issue in some files, -O0 is not such a
+> > frequently-used option, not sure if we still need -O0 work with the older gcc <
+> > 11.1.0 ;-)
 > 
-> Let's remove the old arch related and dependent sys_stat support
-> completely.
+> It seems we can avoid the issue by enforcing optimizations for _start:
 > 
-> This is friendly to the future new architecture porting.
+> diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+> index f5614a67f05a..b9d8b8861dc4 100644
+> --- a/tools/include/nolibc/arch-x86_64.h
+> +++ b/tools/include/nolibc/arch-x86_64.h
+> @@ -161,12 +161,9 @@
+>   * 2) The deepest stack frame should be zero (the %rbp).
+>   *
+>   */
+> -void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+> +void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_stack_protector _start(void)
+>
 
-As I previously said, I'd like that we at least preserve compatibility
-with supported stable branches. 4.14 and 4.19 are still supported, so
-does this mean that if I rebuild my preinit against the updated nolibc
-it will fail to boot on such older systems for the archs that we support?
+Great, it works and it is minimal enough ;-)
 
-Because if it means that in order to support all currently active
-kernels, one must only build from an older copy of the lib, that becomes
-a disservice to its development and usage. Thus if you checked that aarch64,
-arm, i386, mips, riscv, s390 and x86_64 had already adopted statx by 4.14,
-then I'm fine and we can drop stat(), but then it must be mentioned in
-the commit message, because here it's not explicit.
+Thanks very much.
 
-Thanks!
-Willy
+> > 
+> > Willy, I'm not sure if the issues solved by the commit 7f8548589661
+> > ("tools/nolibc: make compiler and assembler agree on the section around
+> > _start") still exist after we using _start_c()?
+> > 
+> > Thomas, because we plan to move the stackprotector init to _start_c(), If using
+> > pure assembly _start, we may also not need the __no_stack_protector macro too?
+> 
+> It would probably not needed anymore in this case.
+>
+
+Yeah, but let's reserve it as-is for we have the working
+omit-frame-pointer now.
+
+Best regards,
+Zhangjin
+
+> Thomas
