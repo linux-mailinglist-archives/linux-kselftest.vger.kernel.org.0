@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2374E755040
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Jul 2023 20:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9555A755092
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Jul 2023 20:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjGPSSi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 16 Jul 2023 14:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
+        id S230078AbjGPSoN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 16 Jul 2023 14:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjGPSSh (ORCPT
+        with ESMTP id S229503AbjGPSoM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 16 Jul 2023 14:18:37 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E091B0;
-        Sun, 16 Jul 2023 11:18:36 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b9e9765f2cso21858475ad.3;
-        Sun, 16 Jul 2023 11:18:36 -0700 (PDT)
+        Sun, 16 Jul 2023 14:44:12 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EF71B5;
+        Sun, 16 Jul 2023 11:44:11 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fb4146e8deso38690245e9.0;
+        Sun, 16 Jul 2023 11:44:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689531516; x=1692123516;
+        d=gmail.com; s=20221208; t=1689533050; x=1692125050;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uRr4t72OqG7bbsdSQp36s5QmJpiGmQDwT7OtOfgVJAs=;
-        b=GaaYjzKLGGS1UieotsqzLzc8zg49fL2l6LbQTq3nbfRE+3kPmSrdRXeC5u7qg1VvXB
-         ruuwP3vXsuw7i7PcoixYO4rTMutHMuhoAoT3wQ5lO0TZi5uBCYh/B1j8b1Tkuh+p1Jw5
-         GMyOpBuH6+TcBxZYOBO7/F0bG+EraHMrDfGydgkurseGk/ofa92an7A/FhERLpHr4pte
-         OwQINR0kLvSSLFs9k4ApiPmnIGKO79f9d38yBzjXvL6Cj1FNF3U3Trp8ZGs/fSG1hzdK
-         A8pZkBlstHyHiWzs/QntkFLl6bp9ddzq4TpFicx12n3wumpjmvzZaC1DUudpjgA9OeVg
-         EzoA==
+        bh=Iw9rxMmy489xUbQwxOXNVFRR34rAPTUVmC3dh4HsQWw=;
+        b=HeTYsvujwYrQwwXDp0WMfX5PfsFlIaj6iOyQIXfhYDOXQFOXAymdjg45DuXKHpZVdJ
+         T0aeNJd7Ukr89zC6YK00llwOXwwMwhYEvmhru6R/6shzkJ+Ukd7y+DIIZvnwnJX/J3I3
+         lzlwAHp1rxIOasiaWGaNKZtkhzOFqAEO4USZ5UpVmpIrBKJ++StYna4dQjao6RT3DY3z
+         jZ030yFpCTFSV/R5E2TwYhm4lrnd2utaZEcbhOPlI0c0I6IGQyGLT7QllT2zMfiqmACc
+         W8IWNxCpZmfjezbzCziIQLwUl1CWTwNc0IUxRR7LEYPdb+MZJkH+B+Unu+t4e3s6mEOc
+         FsAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689531516; x=1692123516;
+        d=1e100.net; s=20221208; t=1689533050; x=1692125050;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uRr4t72OqG7bbsdSQp36s5QmJpiGmQDwT7OtOfgVJAs=;
-        b=OMe7v2235ncjIfyuUvOVSeUa96RHL2FxtZ8CXieSDEjDLHt/jzJ8F0/I4RJxWeZrQK
-         50PexF7fqmf1UfCk+R+gdHau/Axda/c0tIOOLfZlQuvX0bt4BLpULY4OPheLrVOBUa1X
-         fkNUe6IHU4Trq0GzZe6Ljrb0C7FQ6bKHbe1MAYDvO2H2VaHFMAzPO1E3Igl72PaXfqHi
-         bRBjwXBzD7dWg5rhWb6BSIYwF2U4jmeAMTBr7XY2llSdQFaA48MKvA4iUALFTIj9NPIP
-         IGJnDU6txtdzmheoSGjOKlgxHem8X0fCmiEgB0Ep2yS8XY1LDc+hITcUt+A1uf4pWUxo
-         Vflg==
-X-Gm-Message-State: ABy/qLbcMxhO7pZHW6wWGihLQavI51Jiuz/wMkW56WV6K+3FaSux7l59
-        BGFXvh9sRqHk8j+ItALY+4n/Oq6alT4=
-X-Google-Smtp-Source: APBJJlGeSVnKgr9IYi96OpeUoLCDTdox4GFlFamj0ylUDg3pvZD2cublCV/5BfUn/SiWjyUynohRiw==
-X-Received: by 2002:a17:903:182:b0:1b8:944a:a932 with SMTP id z2-20020a170903018200b001b8944aa932mr10984982plg.2.1689531516055;
-        Sun, 16 Jul 2023 11:18:36 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:c009:58ea:65e4:f662:2536:5ba8])
-        by smtp.gmail.com with ESMTPSA id e15-20020a17090301cf00b001b87d3e845bsm11242422plh.149.2023.07.16.11.18.31
+        bh=Iw9rxMmy489xUbQwxOXNVFRR34rAPTUVmC3dh4HsQWw=;
+        b=dYx3bkzh0He/Nt1xlb851vDcjmjD+2ibHbUYKtTTjT+OgDneBuyRS7b2oUvWqDSmuv
+         X1t/8JvR6FwECphjfMwpdtnXlqfUcmBAULGD9MVvnLt8YR0RLAn8O9NilbFWUAj8A7fL
+         BoKf8rAHdO0ioh/gg6k/PQInHcYCJqO+jWXz7HfLfohr5vgwo3pDs8qw6hDsaUDoM9P/
+         tuKPyUvjm63kr/Qohf4zQ3nWnDNsBzBbFRjkHAXIoHbl9sby9JJuYHpx4bRgEkh/uQ/x
+         h8yYyx9oOS6Key8BFLA+oVa4RtTw8Sje4AIQtSL/Ad/948ANRK2emKM7jfGMowu9Jq3v
+         cCYQ==
+X-Gm-Message-State: ABy/qLavzldO1bpCq1NIZa9Qm8K67pfU9NQzMox7pLNe8QbawMhZpfLN
+        oN8Ay/wH9h6SAgQezPM6iy3oKoVGUJaJedrD
+X-Google-Smtp-Source: APBJJlGqrk4/ImODOjlE2fM0n8aEqgTPPtq8oeBjobvCf+cVue7GW3rAT7MupfI6Rwb2vIto6QFSbw==
+X-Received: by 2002:adf:ffd2:0:b0:313:eb81:d2f6 with SMTP id x18-20020adfffd2000000b00313eb81d2f6mr11309115wrs.4.1689533049498;
+        Sun, 16 Jul 2023 11:44:09 -0700 (PDT)
+Received: from mmaatuq-HP-Laptop-15-dy2xxx.. ([2001:8f8:1163:535c:e1af:2d96:1960:a57d])
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c214700b003fbc681c8d1sm6212956wml.36.2023.07.16.11.44.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jul 2023 11:18:35 -0700 (PDT)
-From:   Atul Kumar Pant <atulpant.linux@gmail.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     Atul Kumar Pant <atulpant.linux@gmail.com>, shuah@kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] selftests: rtc: Improves rtctest error handling.
-Date:   Sun, 16 Jul 2023 23:48:25 +0530
-Message-Id: <20230716181825.44337-1-atulpant.linux@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 16 Jul 2023 11:44:08 -0700 (PDT)
+From:   Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+Subject: [PATCH v4] selftests/net: replace manual array size calc with ARRAYSIZE macro.
+Date:   Sun, 16 Jul 2023 22:43:49 +0400
+Message-Id: <20230716184349.2124858-1-mahmoudmatook.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,61 +71,127 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When running the rtctest if we pass wrong rtc device file as an argument
-the test fails expectedly, but prints the logs that are not useful
-to point out the issue.
-To handle this, the patch adds a checks to verify if the rtc_file is valid.
+fixes coccinelle WARNING: Use ARRAY_SIZE
 
-Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+Signed-off-by: Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
 ---
+changelog since v3:
+ - move changelog outside commit message.
 
-changes since v3:
-    Added Linux-kselftest and Linux-kernel mailing lists.
+changelog since v2:
+ - integrat a commit that contains actual replacement for ARRAY_SIZE.
+ - use ARRAY_SIZE for net/psock_lib.h
 
-changes since v2:
-    Changed error message when rtc file does not exist.
+changelog since v1:
+ - remove unnecessary extra new line
 
-changes since v1:
-    Removed check for uid=0
-    If rtc file is invalid, then exit the test.
+changelog since v0:
+ - update net/Makefile to include kselftest.h
+ - remove redefinition of ARRAYSIZE.
+---
+ tools/testing/selftests/net/Makefile          | 2 ++
+ tools/testing/selftests/net/csum.c            | 6 ++++--
+ tools/testing/selftests/net/hwtstamp_config.c | 6 ++++--
+ tools/testing/selftests/net/psock_lib.h       | 4 +++-
+ 4 files changed, 13 insertions(+), 5 deletions(-)
 
- tools/testing/selftests/rtc/rtctest.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index 63ce02d1d5cc..630fef735c7e 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -17,6 +17,7 @@
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 7f3ab2a93ed6..a06cc25489f9 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -3,6 +3,8 @@
+ 
+ CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
+ CFLAGS += -I../../../../usr/include/ $(KHDR_INCLUDES)
++# Additional include paths needed by kselftest.h
++CFLAGS += -I../
+ 
+ TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh \
+ 	      rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
+diff --git a/tools/testing/selftests/net/csum.c b/tools/testing/selftests/net/csum.c
+index 82a1c1839da6..90eb06fefa59 100644
+--- a/tools/testing/selftests/net/csum.c
++++ b/tools/testing/selftests/net/csum.c
+@@ -91,6 +91,8 @@
+ #include <sys/types.h>
  #include <unistd.h>
  
- #include "../kselftest_harness.h"
-+#include "../kselftest.h"
- 
- #define NUM_UIE 3
- #define ALARM_DELTA 3
-@@ -419,6 +420,8 @@ __constructor_order_last(void)
- 
- int main(int argc, char **argv)
- {
-+	int ret = -1;
++#include "kselftest.h"
 +
- 	switch (argc) {
- 	case 2:
- 		rtc_file = argv[1];
-@@ -430,5 +433,11 @@ int main(int argc, char **argv)
- 		return 1;
- 	}
+ static bool cfg_bad_csum;
+ static int cfg_family = PF_INET6;
+ static int cfg_num_pkt = 4;
+@@ -450,7 +452,7 @@ static void send_packet(int fd, const char *buf, int len)
+ 	iov[2].iov_len = len;
  
--	return test_harness_run(argc, argv);
-+	// Run the test if rtc_file is valid
-+	if (access(rtc_file, F_OK) == 0)
-+		ret = test_harness_run(argc, argv);
-+	else
-+		ksft_exit_fail_msg("[ERROR]: Cannot access rtc file %s - Exiting\n", rtc_file);
-+
-+	return ret;
+ 	msg.msg_iov = iov;
+-	msg.msg_iovlen = sizeof(iov) / sizeof(iov[0]);
++	msg.msg_iovlen = ARRAY_SIZE(iov);
+ 
+ 	msg.msg_name = &addr;
+ 	msg.msg_namelen = sizeof(addr);
+@@ -505,7 +507,7 @@ static void __recv_prepare_packet_filter(int fd, int off_nexthdr, int off_dport)
+ 	struct sock_fprog prog = {};
+ 
+ 	prog.filter = filter;
+-	prog.len = sizeof(filter) / sizeof(struct sock_filter);
++	prog.len = ARRAY_SIZE(filter);
+ 	if (setsockopt(fd, SOL_SOCKET, SO_ATTACH_FILTER, &prog, sizeof(prog)))
+ 		error(1, errno, "setsockopt filter");
  }
+diff --git a/tools/testing/selftests/net/hwtstamp_config.c b/tools/testing/selftests/net/hwtstamp_config.c
+index e1fdee841021..170728c96c46 100644
+--- a/tools/testing/selftests/net/hwtstamp_config.c
++++ b/tools/testing/selftests/net/hwtstamp_config.c
+@@ -16,6 +16,8 @@
+ #include <linux/net_tstamp.h>
+ #include <linux/sockios.h>
+ 
++#include "kselftest.h"
++
+ static int
+ lookup_value(const char **names, int size, const char *name)
+ {
+@@ -50,7 +52,7 @@ static const char *tx_types[] = {
+ 	TX_TYPE(ONESTEP_SYNC)
+ #undef TX_TYPE
+ };
+-#define N_TX_TYPES ((int)(sizeof(tx_types) / sizeof(tx_types[0])))
++#define N_TX_TYPES ((int)(ARRAY_SIZE(tx_types)))
+ 
+ static const char *rx_filters[] = {
+ #define RX_FILTER(name) [HWTSTAMP_FILTER_ ## name] = #name
+@@ -71,7 +73,7 @@ static const char *rx_filters[] = {
+ 	RX_FILTER(PTP_V2_DELAY_REQ),
+ #undef RX_FILTER
+ };
+-#define N_RX_FILTERS ((int)(sizeof(rx_filters) / sizeof(rx_filters[0])))
++#define N_RX_FILTERS ((int)(ARRAY_SIZE(rx_filters)))
+ 
+ static void usage(void)
+ {
+diff --git a/tools/testing/selftests/net/psock_lib.h b/tools/testing/selftests/net/psock_lib.h
+index faa884385c45..6e4fef560873 100644
+--- a/tools/testing/selftests/net/psock_lib.h
++++ b/tools/testing/selftests/net/psock_lib.h
+@@ -14,6 +14,8 @@
+ #include <arpa/inet.h>
+ #include <unistd.h>
+ 
++#include "kselftest.h"
++
+ #define DATA_LEN			100
+ #define DATA_CHAR			'a'
+ #define DATA_CHAR_1			'b'
+@@ -63,7 +65,7 @@ static __maybe_unused void pair_udp_setfilter(int fd)
+ 	struct sock_fprog bpf_prog;
+ 
+ 	bpf_prog.filter = bpf_filter;
+-	bpf_prog.len = sizeof(bpf_filter) / sizeof(struct sock_filter);
++	bpf_prog.len = ARRAY_SIZE(bpf_filter);
+ 
+ 	if (setsockopt(fd, SOL_SOCKET, SO_ATTACH_FILTER, &bpf_prog,
+ 		       sizeof(bpf_prog))) {
 -- 
-2.25.1
+2.34.1
 
