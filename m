@@ -2,72 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8FE7562CB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 14:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF27A75635D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 14:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjGQMcf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jul 2023 08:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
+        id S230040AbjGQMz1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jul 2023 08:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbjGQMcc (ORCPT
+        with ESMTP id S229379AbjGQMz0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jul 2023 08:32:32 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04A610CA;
-        Mon, 17 Jul 2023 05:32:29 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4R4Lxz5Rfsz6J6nS;
-        Mon, 17 Jul 2023 20:29:59 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 17 Jul
- 2023 13:32:26 +0100
-Date:   Mon, 17 Jul 2023 13:32:25 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Oleg Nesterov" <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        "Kees Cook" <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <kvmarm@lists.linux.dev>,
-        <linux-fsdevel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 26/35] arm64: Add Kconfig for Guarded Control Stack
- (GCS)
-Message-ID: <20230717133225.00000ce7@Huawei.com>
-In-Reply-To: <20230716-arm64-gcs-v1-26-bf567f93bba6@kernel.org>
-References: <20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org>
-        <20230716-arm64-gcs-v1-26-bf567f93bba6@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 17 Jul 2023 08:55:26 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DC8E49;
+        Mon, 17 Jul 2023 05:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689598525; x=1721134525;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=b2YtQTOB52EtISwGmNJvxnB+CChgEJ2fe0RvWIVjTAk=;
+  b=NN6T9T4YlDdLb5zvFn5B0l4umAz+elj/wXOvmmHxhBZkuHxWDhYAphIP
+   kJO/S4x5T7yZ/c+gGBzkzqP77gi7yrehM708stTbbmwQmTOBJn3vqK6aH
+   dpDOIbFltpCigFE6SugYuynTdvcGu5v9+rMlqlGKQg8bRhO5kmZCOhteb
+   8a3sCQOab8ZpzZfFI79vNXIy6trEsMjiJoqZ2/OSKvpsNkqpAHdTRwfmI
+   TfWvcMQLmygbmZD7MSVIddEnvK0Ra7IXemxW6xODqTO9WJ9ITwiEPnSWD
+   LcZg2a43AL+2hIZ1TgDloaAkYPWcYv9kRIU5YKA+70YIWfp9SHcNtWKdJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="429680653"
+X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
+   d="scan'208";a="429680653"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 05:55:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="793234536"
+X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
+   d="scan'208";a="793234536"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Jul 2023 05:55:17 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C6EB4256; Mon, 17 Jul 2023 15:55:23 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v3 0/4] kernel.h: Split out a couple of macros to args.h
+Date:   Mon, 17 Jul 2023 15:55:17 +0300
+Message-Id: <20230717125521.43176-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,49 +77,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 16 Jul 2023 22:51:22 +0100
-Mark Brown <broonie@kernel.org> wrote:
+There are macros in kernel.h that can be used outside of that header.
+Split them to args.h and replace open coded variants.
 
-> Provide a Kconfig option allowing the user to select if GCS support is
-> built into the kernel.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/Kconfig | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 7856c3a3e35a..e1aeeda13c52 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -2091,6 +2091,25 @@ config ARM64_EPAN
->  	  if the cpu does not implement the feature.
->  endmenu # "ARMv8.7 architectural features"
->  
-> +menu "v9.4 architectural features"
-> +
-> +config ARM64_GCS
-> +	bool "Enable support for Guarded Control Stack (GCS)"
-> +	default y
-> +	select ARCH_USES_HIGH_VMA_FLAGS
-> +	help
-> +	  Guarded Control Stack (GCS) provides support for a separate
-> +	  stack with restricted access which contains only return
-> +	  addresses.  This can be used to harden against some attacks
-> +	  by comparing return address used by the program with what is
-> +	  stored in the GCS, and may also be used to efficiently obtain
-> +	  the call stack for applications such as profiling.
-> +
-> +	  The feature is detected at runtime, and will remain disabled
-> +	  if the system does not implement the feature.
-> +
-> +endmenu # "2022 archiectural features"
+Test compiled with `make allmodconfig` for x86_64.
 
-Inconsistent naming and spelling mistake.
+(Note that positive diff statistics is due to documentation being
+updated.)
 
-> +
->  config ARM64_SVE
->  	bool "ARM Scalable Vector Extension support"
->  	default y
-> 
+In v3:
+- split to a series of patches
+- fixed build issue on `make allmodconfig` for x86_64 (Andrew)
+
+In v2:
+- converted existing users at the same time (Andrew, Rasmus)
+- documented how it does work (Andrew, Rasmus)
+
+Andy Shevchenko (4):
+  kernel.h: Split out COUNT_ARGS() and CONCATENATE() to args.h
+  x86/asm: Replace custom COUNT_ARGS() & CONCATENATE() implementations
+  arm64: smccc: Replace custom COUNT_ARGS() & CONCATENATE()
+    implementations
+  genetlink: Replace custom CONCATENATE() implementation
+
+ arch/x86/include/asm/rmwcc.h      | 11 +++--------
+ include/kunit/test.h              |  1 +
+ include/linux/args.h              | 28 ++++++++++++++++++++++++++++
+ include/linux/arm-smccc.h         | 27 ++++++++++-----------------
+ include/linux/genl_magic_func.h   | 27 ++++++++++++++-------------
+ include/linux/genl_magic_struct.h |  8 +++-----
+ include/linux/kernel.h            |  7 -------
+ include/linux/pci.h               |  2 +-
+ include/trace/bpf_probe.h         |  2 ++
+ 9 files changed, 62 insertions(+), 51 deletions(-)
+ create mode 100644 include/linux/args.h
+
+-- 
+2.40.0.1.gaa8946217a0b
 
