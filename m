@@ -2,63 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0357562BF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 14:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8FE7562CB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 14:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjGQMbC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jul 2023 08:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
+        id S230311AbjGQMcf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jul 2023 08:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjGQMbB (ORCPT
+        with ESMTP id S230336AbjGQMcc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jul 2023 08:31:01 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECAFE4F;
-        Mon, 17 Jul 2023 05:31:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689597060; x=1721133060;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=IALTvRizVydvE6kCecPGFlOXq43R/hzRHUtn5JcSzoA=;
-  b=XKhQ1Kx8mh1NpIchXVoRUS/baSzxn9RgynnBRuoptJMv41q2Woyn/aCJ
-   plrUYXNJTPkKCxYYlf4z+5V/VrSDz/DZ7WN+rIaKbE+YIELDQ+09R2seo
-   A86Sw5/s63/Lzwbs426fXa9VyRyPooOS/tPuPmh781fwG/PGLjwYi+R7j
-   f82K7thkEdhUeupb7wUno4QuYEMRBOdIWebYwBhNt3TYJzcp/awBDi/J3
-   32IjuOaNCB59p9Hc80DloWy8H4OQDYHaXAMXbdOkz42Uyh3oAfTSWQPYh
-   OPCFDH81Vaa2wOgSEDuFE47LYZ3fb2Sx3AF9rCa6oCzkA83vDsa5RgSDI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10773"; a="350780158"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="350780158"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 05:31:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="969869426"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="969869426"
-Received: from dkravtso-mobl1.ccr.corp.intel.com ([10.252.45.233])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 05:30:57 -0700
-Date:   Mon, 17 Jul 2023 15:30:52 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-cc:     =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 10/19] selftests/resctrl: Express span internally in
- bytes
-In-Reply-To: <f1233835-8c94-e110-531f-13712569b7c0@intel.com>
-Message-ID: <7eef29f6-297b-bb2b-e0d-ccef1aa2f14@linux.intel.com>
-References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com> <20230713131932.133258-11-ilpo.jarvinen@linux.intel.com> <1dd10447-b03d-937a-fe55-ff324864c358@intel.com> <0c94daef-3642-9e8e-0e8a-3f8eaa2953e3@intel.com> <fce81fed-592e-16ad-b833-735a7b3a186@linux.intel.com>
- <f1233835-8c94-e110-531f-13712569b7c0@intel.com>
+        Mon, 17 Jul 2023 08:32:32 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04A610CA;
+        Mon, 17 Jul 2023 05:32:29 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4R4Lxz5Rfsz6J6nS;
+        Mon, 17 Jul 2023 20:29:59 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 17 Jul
+ 2023 13:32:26 +0100
+Date:   Mon, 17 Jul 2023 13:32:25 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Oleg Nesterov" <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        "Kees Cook" <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <kvmarm@lists.linux.dev>,
+        <linux-fsdevel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH 26/35] arm64: Add Kconfig for Guarded Control Stack
+ (GCS)
+Message-ID: <20230717133225.00000ce7@Huawei.com>
+In-Reply-To: <20230716-arm64-gcs-v1-26-bf567f93bba6@kernel.org>
+References: <20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org>
+        <20230716-arm64-gcs-v1-26-bf567f93bba6@kernel.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-906854338-1689597059=:1907"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,61 +75,49 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Sun, 16 Jul 2023 22:51:22 +0100
+Mark Brown <broonie@kernel.org> wrote:
 
---8323329-906854338-1689597059=:1907
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Fri, 14 Jul 2023, Reinette Chatre wrote:
-> On 7/14/2023 3:22 AM, Ilpo Järvinen wrote:
-> > On Fri, 14 Jul 2023, Wieczor-Retman, Maciej wrote:
-> >> On 14.07.2023 01:00, Reinette Chatre wrote:
-> >>> Hi Ilpo,
-> >>>
-> >>> On 7/13/2023 6:19 AM, Ilpo Järvinen wrote:
-> >>>> MBA and MBM tests to use megabytes to represent span. CMT test uses
-> >>>> bytes. The difference requires run_benchmark() to size the buffer
-> >>>> differently based on the test name, which in turn requires passing the
-> >>>> test name into run_benchmark().
-> >>>>
-> >>>> Convert MBA and MBM tests to use internally bytes like CMT test to
-> >>>> remove the internal inconsistency between the tests. Remove the test
-> >>>> dependent buffer sizing from run_benchmark().
-> >>>
-> >>> If I understand correctly the intention is to always use bytes internally
-> >>> and only convert to megabytes when displayed to user space. The above
-> >>> implies that this takes care of the conversion but there still seems
-> >>> to be places that that do not follow my understanding. For example,
-> >>> resctrl_val.c:measure_vals() converts to megabytes before proceeding.
-> >>
-> >> Doesn't the use case inside resctrl_val.c:measure_vals() satisfy
-> >> the idea of only displaying data to the user space? From my
-> >> understanding it reads the number of bytes and only converts to
-> >> MB when printing the value. Or did I miss some detail there?
-> > 
-> > It's for printing there yes.
-> > 
-> > But it's not about span in the first place so I'm not sure why it is 
-> > related.
-> > 
+> Provide a Kconfig option allowing the user to select if GCS support is
+> built into the kernel.
 > 
-> If this change is just about how "span" is interpreted by the different
-> tests then the changelog could be more specific to not create expectation
-> that with this change there are no longer "bytes vs megabytes" internal
-> inconsistency between MBA, MBM, and CMT tests.
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/Kconfig | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 7856c3a3e35a..e1aeeda13c52 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -2091,6 +2091,25 @@ config ARM64_EPAN
+>  	  if the cpu does not implement the feature.
+>  endmenu # "ARMv8.7 architectural features"
+>  
+> +menu "v9.4 architectural features"
+> +
+> +config ARM64_GCS
+> +	bool "Enable support for Guarded Control Stack (GCS)"
+> +	default y
+> +	select ARCH_USES_HIGH_VMA_FLAGS
+> +	help
+> +	  Guarded Control Stack (GCS) provides support for a separate
+> +	  stack with restricted access which contains only return
+> +	  addresses.  This can be used to harden against some attacks
+> +	  by comparing return address used by the program with what is
+> +	  stored in the GCS, and may also be used to efficiently obtain
+> +	  the call stack for applications such as profiling.
+> +
+> +	  The feature is detected at runtime, and will remain disabled
+> +	  if the system does not implement the feature.
+> +
+> +endmenu # "2022 archiectural features"
 
-The shortlog and changelog are already pretty specific in mentioning 
-"span" a few times :-). I added yet another "span" into the changelog's 
-2nd paragraph.
+Inconsistent naming and spelling mistake.
 
-Your general observation about the other MB/bytes inconsistency is still
-a good one so I added it also to my todo list, it just doesn't belong to 
-this patch (IMHO).
+> +
+>  config ARM64_SVE
+>  	bool "ARM Scalable Vector Extension support"
+>  	default y
+> 
 
-
--- 
- i.
-
---8323329-906854338-1689597059=:1907--
