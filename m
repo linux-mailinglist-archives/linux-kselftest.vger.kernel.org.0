@@ -2,114 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2A1755D97
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 09:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E950B755E5F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 10:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjGQH4y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jul 2023 03:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
+        id S231193AbjGQIXe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jul 2023 04:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjGQH4x (ORCPT
+        with ESMTP id S229449AbjGQIXd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jul 2023 03:56:53 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4076911C
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jul 2023 00:56:51 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R4Dtl4bMTzBQt1h
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jul 2023 15:56:47 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689580607; x=1692172608; bh=mVoTickR5fGpVpXegoqwlUNIHFM
-        +DiJrOa8mmExth/4=; b=OHB0mQ2zc22xUd6JyriOsKvGKxDJlemy5WtPHkx/5t/
-        K25Jz36ruhhZQftzHIIuokaleGQAh4N4Y+mtWkN4jcG/Wdae98q9bhnjaG5FJrxD
-        Q7WSEyzOXKL1Cz/ISG8mZ+LVsWLKsbcDXeHsAg9UQM7Y/+4D98mIfu6MR/+Z2RUu
-        3YityKMp+e/6RpNPYxkpxdVVd1J1+qgZBlBm7sjBUFukvW/mPQ8z7n16FT3cazcT
-        MunXyhFRxegAB9hj7fI1ZEvEFaevAHELnXzKg6rvScJLuDb7JYmqcgDgWKsa8riy
-        HBFyKKRXrGiMOEXUz8pc7hM5zqOMpNByQmBRSlwlqCw==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id omfqBLsXbL8p for <linux-kselftest@vger.kernel.org>;
-        Mon, 17 Jul 2023 15:56:47 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R4Dtl1n0fzBHXgm;
-        Mon, 17 Jul 2023 15:56:47 +0800 (CST)
+        Mon, 17 Jul 2023 04:23:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A915E3;
+        Mon, 17 Jul 2023 01:23:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 18BA913D5;
+        Mon, 17 Jul 2023 01:24:15 -0700 (PDT)
+Received: from [10.57.76.30] (unknown [10.57.76.30])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 414D13F73F;
+        Mon, 17 Jul 2023 01:23:30 -0700 (PDT)
+Message-ID: <473af190-5c1f-557c-f670-5b045d35dc49@arm.com>
+Date:   Mon, 17 Jul 2023 09:23:28 +0100
 MIME-Version: 1.0
-Date:   Mon, 17 Jul 2023 15:56:47 +0800
-From:   shijie001@208suo.com
-To:     andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: Fix errors in log_fixup.c
-In-Reply-To: <tencent_E184AD3DB9CAB3F8C7DCDE620D5C2218F90A@qq.com>
-References: <tencent_E184AD3DB9CAB3F8C7DCDE620D5C2218F90A@qq.com>
-User-Agent: Roundcube Webmail
-Message-ID: <2dc1d837343d3880057aee05dd047a57@208suo.com>
-X-Sender: shijie001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH v1 3/9] selftests/mm: Skip soft-dirty tests on arm64
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+References: <20230713135440.3651409-1-ryan.roberts@arm.com>
+ <20230713135440.3651409-4-ryan.roberts@arm.com>
+ <57995c19-36c5-d868-293a-f03ad507da98@nvidia.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <57995c19-36c5-d868-293a-f03ad507da98@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The following checkpatch errors are removed:
-ERROR: "foo* bar" should be "foo *bar"
+On 15/07/2023 01:04, John Hubbard wrote:
+> On 7/13/23 06:54, Ryan Roberts wrote:
+>> arm64 does not support the soft-dirty PTE bit. However there are tests
+>> in `madv_populate` and `soft-dirty` which assume it is supported and
+>> cause spurious failures to be reported when preferred behaviour would be
+>> to mark the tests as skipped.
+>>
+>> Unfortunately, the only way to determine if the soft-dirty dirty bit is
+>> supported is to write to a page, then see if the bit is set in
+>> /proc/self/pagemap. But the tests that we want to conditionally execute
+>> are testing precicesly this. So if we introduced this feature check, we
+>> could accedentally turn a real failure (on a system that claims to
+>> support soft-dirty) into a skip.
+> 
+> ...
+> 
+>> diff --git a/tools/testing/selftests/mm/soft-dirty.c
+>> b/tools/testing/selftests/mm/soft-dirty.c
+>> index cc5f144430d4..8a2cd161ec4d 100644
+>> --- a/tools/testing/selftests/mm/soft-dirty.c
+>> +++ b/tools/testing/selftests/mm/soft-dirty.c
+> 
+> Hi Ryan,
+> 
+> Probably very similar to what David is requesting: given that arm64
+> definitively does not support soft dirty, I'd suggest that we not even
+> *build* the soft dirty tests on arm64!
+> 
+> There is no need to worry about counting, skipping or waiving such
+> tests, either. Because it's just a non-issue: one does not care about
+> test status for something that is documented as "this feature is simply
+> unavailable here".
 
-Signed-off-by: Jie Shi <shijie001@208suo.com>
----
-  tools/testing/selftests/bpf/prog_tests/log_fixup.c | 8 ++++----
-  1 file changed, 4 insertions(+), 4 deletions(-)
+OK fair enough. I'll follow this approach for v2.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/log_fixup.c 
-b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-index dba71d98a227..69959748d466 100644
---- a/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-@@ -14,7 +14,7 @@ enum trunc_type {
-  static void bad_core_relo(size_t log_buf_size, enum trunc_type 
-trunc_type)
-  {
-      char log_buf[8 * 1024];
--    struct test_log_fixup* skel;
-+    struct test_log_fixup *skel;
-      int err;
+Thanks for the review!
 
-      skel = test_log_fixup__open();
-@@ -72,7 +72,7 @@ static void bad_core_relo(size_t log_buf_size, enum 
-trunc_type trunc_type)
-  static void bad_core_relo_subprog(void)
-  {
-      char log_buf[8 * 1024];
--    struct test_log_fixup* skel;
-+    struct test_log_fixup *skel;
-      int err;
+> 
+> 
+> thanks,
 
-      skel = test_log_fixup__open();
-@@ -104,7 +104,7 @@ static void bad_core_relo_subprog(void)
-  static void missing_map(void)
-  {
-      char log_buf[8 * 1024];
--    struct test_log_fixup* skel;
-+    struct test_log_fixup *skel;
-      int err;
-
-      skel = test_log_fixup__open();
-@@ -138,7 +138,7 @@ static void missing_map(void)
-  static void missing_kfunc(void)
-  {
-      char log_buf[8 * 1024];
--    struct test_log_fixup* skel;
-+    struct test_log_fixup *skel;
-      int err;
-
-      skel = test_log_fixup__open();
