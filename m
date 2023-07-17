@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DE9756411
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 15:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22A9756416
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 15:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjGQNP3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jul 2023 09:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
+        id S231411AbjGQNPg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jul 2023 09:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjGQNPY (ORCPT
+        with ESMTP id S230324AbjGQNP2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jul 2023 09:15:24 -0400
+        Mon, 17 Jul 2023 09:15:28 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7682194;
-        Mon, 17 Jul 2023 06:15:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF0910D;
+        Mon, 17 Jul 2023 06:15:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689599722; x=1721135722;
+  t=1689599726; x=1721135726;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lK+fNz+KVwzS2wg2GQh+MHm6HXuFlGgYU4nvO5M9knQ=;
-  b=QaaVK/M+R0GHK8xCAJhedWnuyYYykQE90iQnF/ufmxjJsjk8ZceNx9cL
-   ZhwVrVC7fKcaPYSCk5qXb8n7SuQWbq1W2gux+xjIrbjYMAJ6YLQDQPr9z
-   sDuN8aAgxU1e5qiQSr3f0M7gas3sXiAXrs/jUPuT9yZUY3JcE1Icj46Hd
-   sqLdRNV23H6j/fXJbzsqdNQKuo6CmLpaZyvpk/Ae8c/sNt86orJtJt7si
-   UfHAkB/QFoAueLtXtpkPRXb/FPshgCWjkPnz0i28zWlWtzQF+u9IGokue
-   EGQQTENlT4hl3FqnosPpK45WKwGGZ5DoC4MKr1ya0znORHnevCsdnczP+
+  bh=c6wy5EseuZzIYCIuEismdoJnu3cQnBT/NnF9R1DU9nA=;
+  b=eicNJvCpHk+tmwz/h8RJ1fnFlnQO4HqAUsM60lLpNNHFR8R72qhAWvit
+   6ljNWtPqmyp5bxEBEpSUFSDqZfKQm2L3aJ9wYTMTeZAkxgG+soTos2IPa
+   F+rdOM//nQXhnDKflmyQ9C7kHHXm3qlRuEpsvVIMrlaLA9cgj8QcbNaqK
+   yqOOVzdV0AOzZkepLsEf8z1fJQwS2ngq+aYNk9j3q0rtTI3NqFBQ94rC9
+   PfzgHrQc5gVLDQOlef4kU/4muqQZknHDJ8PTqKJfVAQV83pEcmGphYUAs
+   85CKLvCKsXV7r1VQ+9SXp5q0WvUgFOResKvXHefPwrNZdhsw70cwuAAC0
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="368568812"
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="368568830"
 X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="368568812"
+   d="scan'208";a="368568830"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:15:22 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:15:26 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="793246686"
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="793246707"
 X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="793246686"
+   d="scan'208";a="793246707"
 Received: from dkravtso-mobl1.ccr.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.45.233])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:15:19 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:15:23 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -46,13 +46,12 @@ To:     linux-kselftest@vger.kernel.org,
         Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-        Babu Moger <babu.moger@amd.com>,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
         linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v5 01/19] selftests/resctrl: Add resctrl.h into build deps
-Date:   Mon, 17 Jul 2023 16:14:49 +0300
-Message-Id: <20230717131507.32420-2-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v5 02/19] selftests/resctrl: Don't leak buffer in fill_cache()
+Date:   Mon, 17 Jul 2023 16:14:50 +0300
+Message-Id: <20230717131507.32420-3-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230717131507.32420-1-ilpo.jarvinen@linux.intel.com>
 References: <20230717131507.32420-1-ilpo.jarvinen@linux.intel.com>
@@ -69,28 +68,42 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Makefile only lists *.c as build dependencies for the resctrl_tests
-executable which excludes resctrl.h.
+The error path in fill_cache() does return before the allocated buffer
+is freed leaking the buffer.
 
-Add *.h to wildcard() to include resctrl.h.
+The leak was introduced when fill_cache_read() started to return errors
+in commit c7b607fa9325 ("selftests/resctrl: Fix null pointer
+dereference on open failed"), before that both fill functions always
+returned 0.
 
-Fixes: 591a6e8588fc ("selftests/resctrl: Add basic resctrl file system operations and data")
+Move free() earlier to prevent the mem leak.
+
+Fixes: c7b607fa9325 ("selftests/resctrl: Fix null pointer dereference on open failed")
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- tools/testing/selftests/resctrl/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/resctrl/fill_buf.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
-index 73d53257df42..5073dbc96125 100644
---- a/tools/testing/selftests/resctrl/Makefile
-+++ b/tools/testing/selftests/resctrl/Makefile
-@@ -7,4 +7,4 @@ TEST_GEN_PROGS := resctrl_tests
+diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+index 341cc93ca84c..3b328c844896 100644
+--- a/tools/testing/selftests/resctrl/fill_buf.c
++++ b/tools/testing/selftests/resctrl/fill_buf.c
+@@ -177,12 +177,13 @@ fill_cache(unsigned long long buf_size, int malloc_and_init, int memflush,
+ 	else
+ 		ret = fill_cache_write(start_ptr, end_ptr, resctrl_val);
  
- include ../lib.mk
++	free(startptr);
++
+ 	if (ret) {
+ 		printf("\n Error in fill cache read/write...\n");
+ 		return -1;
+ 	}
  
--$(OUTPUT)/resctrl_tests: $(wildcard *.c)
-+$(OUTPUT)/resctrl_tests: $(wildcard *.[ch])
+-	free(startptr);
+ 
+ 	return 0;
+ }
 -- 
 2.30.2
 
