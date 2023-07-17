@@ -2,59 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CAE7563CF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 15:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE72975640F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 15:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbjGQNHR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jul 2023 09:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S229739AbjGQNPU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jul 2023 09:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbjGQNHR (ORCPT
+        with ESMTP id S230219AbjGQNPT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jul 2023 09:07:17 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8C3C7;
-        Mon, 17 Jul 2023 06:07:16 -0700 (PDT)
+        Mon, 17 Jul 2023 09:15:19 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5963CC;
+        Mon, 17 Jul 2023 06:15:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689599236; x=1721135236;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=gG4+L6/n9BpXjqaZ8By7jM8Mfd9yDo/AWXxOxB0yb9o=;
-  b=LOeO3c23gDuc76HVmLC1X49R+JklEE8ml9yoYbqrXLsnM9UZwI5T6O3I
-   qSqrO9p1OyvwXv2YNwvNuQ4YMv7IfswzxtO/tiAvuR19Mq/+sKVtM4Kr6
-   Lp2UanefEbXQIXLoyfdW92M9QXO9WiiTq7IZXfjGXt+u7+BjcCm1pTNPt
-   Oh30P0CWHFPBoCVVSj7BAq+vpfNHdrnVqUSmh7ZYAQd08xKQcL5j9YL2j
-   15D0NPDkcIOj4OeUNCc2iw/ehyTgr0a0abmE9txcmKD6+ZbXdqmLttK8l
-   VtMg3AkZGgurUln+I+hIoRLJ6S8Nll2484nFQnd7s349qMw6xcqEfDZW0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="396751639"
+  t=1689599718; x=1721135718;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fvOB1l0Uuqn/59FEBEmvMzBLXuxXxZafzX0y/y5Zb/Y=;
+  b=Mki8LNmuar8aGFdU+KDzkCoBy875pCP9LkiUgt1wIvK8TYPMi+eo5UQb
+   fxl/VDX/ownGXOSyP7Uxn7Uu2qJ7J/ipItXFqmM7hzk00UoSZsyY298a7
+   VSy3L011ANweSy/DG5CQIyemFkYuLvmCWrMTLiA4w30sF9162+vMD1pay
+   H902YqARyJv6n9ndiOoBMb4UBXJdQxRlRexzC/K1FEgNbmYne1umyZpqD
+   V95ZECsSDMEbkblCpO+YYS1ddkzMzJdyGmsWKY1m7BtzwMHkPTYRoeWpo
+   1Qj4NbvA84/V70JJO6KYm94FJh6kvYGP7hm/3qLCCddk0NhazkelQCjvv
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="368568794"
 X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="396751639"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:05:52 -0700
+   d="scan'208";a="368568794"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:15:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="847280436"
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="793246671"
 X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="847280436"
-Received: from dkravtso-mobl1.ccr.corp.intel.com ([10.252.45.233])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:05:50 -0700
-Date:   Mon, 17 Jul 2023 16:05:43 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+   d="scan'208";a="793246671"
+Received: from dkravtso-mobl1.ccr.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.45.233])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:15:15 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
         Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
-        Babu Moger <babu.moger@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 04/19] selftests/resctrl: Close perf value read fd on
- errors
-In-Reply-To: <4531fca1-2f3b-0c08-351b-f8e06c5f9f5c@intel.com>
-Message-ID: <8b904781-c5d-8164-b8dc-903d412330fd@linux.intel.com>
-References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com> <20230713131932.133258-5-ilpo.jarvinen@linux.intel.com> <a4fa6303-4637-815a-e0fa-57f33babfb10@intel.com> <c14286ec-807c-8613-a4cc-d8ac733a87a1@linux.intel.com>
- <4531fca1-2f3b-0c08-351b-f8e06c5f9f5c@intel.com>
+        Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v5 00/19] selftests/resctrl: Fixes and cleanups
+Date:   Mon, 17 Jul 2023 16:14:48 +0300
+Message-Id: <20230717131507.32420-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1678409849-1689599152=:20605"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -65,120 +65,76 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Here is a series with some fixes and cleanups to resctrl selftests.
 
---8323329-1678409849-1689599152=:20605
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+v5:
+- Improve changelogs
+- Close fd_lm only in cat_val()
+- Improve unmount error handling
 
-On Fri, 14 Jul 2023, Reinette Chatre wrote:
-> On 7/14/2023 3:35 AM, Ilpo Järvinen wrote:
-> > On Thu, 13 Jul 2023, Reinette Chatre wrote:
-> >> On 7/13/2023 6:19 AM, Ilpo Järvinen wrote:
-> >>> Perf event fd (fd_lm) is not closed on some error paths.
-> >>>
-> >>> Always close fd_lm in get_llc_perf() and add close into an error
-> >>> handling block in cat_val().
-> >>>
-> >>> Fixes: 790bf585b0ee ("selftests/resctrl: Add Cache Allocation Technology (CAT) selftest")
-> >>> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> >>> ---
-> >>>  tools/testing/selftests/resctrl/cache.c | 10 +++++-----
-> >>>  1 file changed, 5 insertions(+), 5 deletions(-)
-> >>>
-> >>> diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-> >>> index 8a4fe8693be6..ced47b445d1e 100644
-> >>> --- a/tools/testing/selftests/resctrl/cache.c
-> >>> +++ b/tools/testing/selftests/resctrl/cache.c
-> >>> @@ -87,21 +87,20 @@ static int reset_enable_llc_perf(pid_t pid, int cpu_no)
-> >>>  static int get_llc_perf(unsigned long *llc_perf_miss)
-> >>>  {
-> >>>  	__u64 total_misses;
-> >>> +	int ret;
-> >>>  
-> >>>  	/* Stop counters after one span to get miss rate */
-> >>>  
-> >>>  	ioctl(fd_lm, PERF_EVENT_IOC_DISABLE, 0);
-> >>>  
-> >>> -	if (read(fd_lm, &rf_cqm, sizeof(struct read_format)) == -1) {
-> >>> +	ret = read(fd_lm, &rf_cqm, sizeof(struct read_format));
-> >>> +	close(fd_lm);
-> >>> +	if (ret == -1) {
-> >>>  		perror("Could not get llc misses through perf");
-> >>> -
-> >>>  		return -1;
-> >>>  	}
-> >>>  
-> >>>  	total_misses = rf_cqm.values[0].value;
-> >>> -
-> >>> -	close(fd_lm);
-> >>> -
-> >>>  	*llc_perf_miss = total_misses;
-> >>>  
-> >>>  	return 0;
-> >>> @@ -253,6 +252,7 @@ int cat_val(struct resctrl_val_param *param)
-> >>>  					 memflush, operation, resctrl_val)) {
-> >>>  				fprintf(stderr, "Error-running fill buffer\n");
-> >>>  				ret = -1;
-> >>> +				close(fd_lm);
-> >>>  				break;
-> >>>  			}
-> >>>  
-> >>
-> >> Instead of fixing these existing patterns I think it would make the code
-> >> easier to understand and maintain if it is made symmetrical.
-> >> Having the perf event fd opened in one place but its close()
-> >> scattered elsewhere has the potential for confusion and making later
-> >> mistakes easy to miss.
-> >>
-> >> What if perf event fd is closed in a new "disable_llc_perf()" that
-> >> is matched with "reset_enable_llc_perf()" and called
-> >> from cat_val()?
-> >>
-> >> I think this raises another issue with the test trickery where
-> >> measure_cache_vals() has some assumptions about state based on the
-> >> test name.
-> > 
-> > I very much agree on the principle here, and thus I already have created 
-> > patches which will do a major cleanup on this area. The cleaned-up code 
-> > has pe_fd local var to cat_val() and handles closing it in cat_val() with 
-> > the usual patterns.
-> > 
-> > However, the patch is currently resides post L3 CAT test rewrite. 
-> > Backporting the cleanups/refactors into this series would require 
-> > considerable effort due to how convoluted all those n-step cleanup patches 
-> > and L3 CAT test rewrite are in this area. There's just very much to 
-> > cleanup here and L3 rewrite will touch the same areas so its a net 
-> > full of conflicts.
-> > 
-> > Do you want me to spend the effort to backport them into this series 
-> > (I expect will take some time)?
-> 
-> Considering the "Fixes" tag, having a smaller fix that can easily
-> be backported would be ideal so I am ok with deferring a bigger
-> rework.
-> 
-> I do think this fix can be made more robust with a couple of small
-> changes that should not introduce significant conflicts:
-> * initialize fd_lm to -1 
+v4:
+- Move resctrlfs (unconditional) umount after resctrl fs support check
 
-> * do not close() fd_lm in get_llc_perf() but instead move its
->   close() to at exit of cat_val().
+v3:
+- Don't include rewritten CAT test into this series!
+- Tweak wildcard style in Makefile
+- Fix many changelog typos, remove some wrong claims, and generally
+  improve them.
+- Add fix to PARENT_EXIT() to unmount resctrl FS
+- Add unmounting resctrl FS before starting any tests
+- Add fix for buf leak
+- Add fix for perf fd closing
+- Split mount/remount/umount patches differently
+- Use size_t and %zu for span
+- Keep MBM print as MB, only internally use span in bytes
+- Drop start_buf global from fill_buf
 
-I changed the test to only close the fd in cat_val() which is the 
-direction the later refactor/cleanup changes (not in this series) was 
-moving anyway.
 
-> * add check in get_llc_perf() that it does not attempt ioctl()
->   on "fd_lm == -1" (later addition would be error checking of
->   the ioctl())
+v2 (was sent with CAT test rewrite which is no longer included in v3):
+- Rebased on top of next to solve the conflicts
+- Added 2 patches related to resctrl FS mount/umount (fix + cleanup)
+- Consistently use "alloc" in cache_alloc_size()
+- CAT test error handling tweaked
+- Remove a spurious newline change from the CAT patch
+- Small improvements to changelogs
 
-The other two things suggested seem unnecessary and I've not implemented 
-them, I don't thinkg fd_lm can be -1 at ioctl(). Given this code is going 
-to be replaced soonish, putting any extra "safety" effort into it now 
-seems waste of time.
+Ilpo Järvinen (19):
+  selftests/resctrl: Add resctrl.h into build deps
+  selftests/resctrl: Don't leak buffer in fill_cache()
+  selftests/resctrl: Unmount resctrl FS if child fails to run benchmark
+  selftests/resctrl: Close perf value read fd on errors
+  selftests/resctrl: Unmount resctrl FS before starting the first test
+  selftests/resctrl: Move resctrl FS mount/umount to higher level
+  selftests/resctrl: Refactor remount_resctrl(bool mum_resctrlfs) to
+    mount_resctrl()
+  selftests/resctrl: Remove mum_resctrlfs from struct resctrl_val_param
+  selftests/resctrl: Convert span to size_t
+  selftests/resctrl: Express span internally in bytes
+  selftests/resctrl: Remove duplicated preparation for span arg
+  selftests/resctrl: Remove "malloc_and_init_memory" param from
+    run_fill_buf()
+  selftests/resctrl: Remove unnecessary startptr global from fill_buf
+  selftests/resctrl: Improve parameter consistency in fill_buf
+  selftests/resctrl: Don't pass test name to fill_buf
+  selftests/resctrl: Don't use variable argument list for ->setup()
+  selftests/resctrl: Move CAT/CMT test global vars to function they are
+    used in
+  selftests/resctrl: Pass the real number of tests to show_cache_info()
+  selftests/resctrl: Remove test type checks from cat_val()
+
+ tools/testing/selftests/resctrl/Makefile      |  2 +-
+ tools/testing/selftests/resctrl/cache.c       | 66 +++++++-------
+ tools/testing/selftests/resctrl/cat_test.c    | 28 ++----
+ tools/testing/selftests/resctrl/cmt_test.c    | 29 ++-----
+ tools/testing/selftests/resctrl/fill_buf.c    | 87 +++++++------------
+ tools/testing/selftests/resctrl/mba_test.c    |  9 +-
+ tools/testing/selftests/resctrl/mbm_test.c    | 17 ++--
+ tools/testing/selftests/resctrl/resctrl.h     | 17 ++--
+ .../testing/selftests/resctrl/resctrl_tests.c | 83 ++++++++++++------
+ tools/testing/selftests/resctrl/resctrl_val.c |  7 +-
+ tools/testing/selftests/resctrl/resctrlfs.c   | 64 +++++++-------
+ 11 files changed, 178 insertions(+), 231 deletions(-)
 
 -- 
- i.
---8323329-1678409849-1689599152=:20605--
+2.30.2
+
