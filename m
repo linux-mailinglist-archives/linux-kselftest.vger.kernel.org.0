@@ -2,142 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9030756289
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 14:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BB07562A7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 14:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbjGQMMk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jul 2023 08:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S230252AbjGQMYR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jul 2023 08:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjGQMMj (ORCPT
+        with ESMTP id S229872AbjGQMYQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jul 2023 08:12:39 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7E7D8;
-        Mon, 17 Jul 2023 05:12:34 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4R4LV44VTRz6823d;
-        Mon, 17 Jul 2023 20:09:16 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 17 Jul
- 2023 13:12:30 +0100
-Date:   Mon, 17 Jul 2023 13:12:30 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Oleg Nesterov" <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        "Kees Cook" <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <kvmarm@lists.linux.dev>,
-        <linux-fsdevel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 17/35] arm64/traps: Handle GCS exceptions
-Message-ID: <20230717131230.00003569@Huawei.com>
-In-Reply-To: <20230716-arm64-gcs-v1-17-bf567f93bba6@kernel.org>
-References: <20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org>
-        <20230716-arm64-gcs-v1-17-bf567f93bba6@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 17 Jul 2023 08:24:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1F5B9;
+        Mon, 17 Jul 2023 05:24:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7F5161042;
+        Mon, 17 Jul 2023 12:24:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2198C433C8;
+        Mon, 17 Jul 2023 12:24:12 +0000 (UTC)
+Date:   Mon, 17 Jul 2023 08:24:10 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ajay Kaher <akaher@vmware.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        Ching-lin Yu <chinglinyu@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Tapas Kundu <tkundu@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>
+Subject: Re: [PATCH v4 10/10] test: ftrace: Fix kprobe test for eventfs
+Message-ID: <20230717082411.147abfa6@gandalf.local.home>
+In-Reply-To: <54F18849-4C39-4F30-A3D7-969F14EA3810@vmware.com>
+References: <1689248004-8158-1-git-send-email-akaher@vmware.com>
+        <1689248004-8158-11-git-send-email-akaher@vmware.com>
+        <20230713223758.31a1e391@rorschach.local.home>
+        <20230714222705.bc38f83d857473656a45d441@kernel.org>
+        <54F18849-4C39-4F30-A3D7-969F14EA3810@vmware.com>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 16 Jul 2023 22:51:13 +0100
-Mark Brown <broonie@kernel.org> wrote:
+On Mon, 17 Jul 2023 05:24:43 +0000
+Ajay Kaher <akaher@vmware.com> wrote:
 
-> A new exception code is defined for GCS specific faults other than
-> standard load/store faults, for example GCS token validation failures,
-> add handling for this. These faults are reported to userspace as
-> segfaults with code SEGV_CPERR (protection error), mirroring the
-> reporting for x86 shadow stack errors.
+> >> As this patch as is will break when running on older kernels, I was
+> >> wondering if we should do this instead?  
+> > 
+> > +1 since the latest kselftest is used also for checking the older
+> > stable kernels, the test case has to check the environment and
+> > change the parameter (or make it unsupported for new feature)
+> > So below looks good to me.  
 > 
-> GCS faults due to memory load/store operations generate data aborts with
-> a flag set, these will be handled separately as part of the data abort
-> handling.
-> 
-> Since we do not currently enable GCS for EL1 we should not get any faults
-> there but while we're at it we wire things up there, treating any GCS
-> fault as fatal.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> +1, many ftrace tests are unsupported in my setup and may few require
+> changes, not sure. Does any auto job takes care of this?
 
-See below.
+You mean like some kernel CI? Not that I know of.
 
-> ---
->  arch/arm64/include/asm/esr.h       | 26 +++++++++++++++++++++++++-
->  arch/arm64/include/asm/exception.h |  2 ++
->  arch/arm64/kernel/entry-common.c   | 23 +++++++++++++++++++++++
->  arch/arm64/kernel/traps.c          | 11 +++++++++++
->  4 files changed, 61 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
-> index ae35939f395b..c5a72172fcf1 100644
-> --- a/arch/arm64/include/asm/esr.h
-> +++ b/arch/arm64/include/asm/esr.h
-...
+Shuah, do you run these selftests on older kernels to make sure they don't
+fail just because the test is unsupported?
 
-> @@ -382,6 +383,29 @@
->  #define ESR_ELx_MOPS_ISS_SRCREG(esr)	(((esr) & (UL(0x1f) << 5)) >> 5)
->  #define ESR_ELx_MOPS_ISS_SIZEREG(esr)	(((esr) & (UL(0x1f) << 0)) >> 0)
->  
-> +/* ISS field definitions for GCS */
-> +#define ESR_ELx_ExType_SHIFT	(20)
-> +#define ESR_ELx_ExType_MASK	GENMASK(23, 20)
-> +#define ESR_ELx_Raddr_SHIFT	(14)
-
-(10) ?
-
-> +#define ESR_ELx_Raddr_MASK	GENMASK(14, 10)
-> +#define ESR_ELx_Rn_SHIFT	(5)
-> +#define ESR_ELx_Rn_MASK		GENMASK(9, 5)
-
-I think this can also be ESR_ELx_RVALUE_MASK for some ExType
-Worth adding that as well?
-
-> +#define ESR_ELx_IT_SHIFT	(0)
-> +#define ESR_ELx_IT_MASK		GENMASK(4, 0)
-> +
-> +#define ESR_ELx_ExType_DATA_CHECK	0
-> +#define ESR_ELx_ExType_EXLOCK		1
-> +#define ESR_ELx_ExType_STR		2
-> +
-> +#define ESR_ELx_IT_RET			0
-> +#define ESR_ELx_IT_GCSPOPM		1
-> +#define ESR_ELx_IT_RET_KEYA		2
-> +#define ESR_ELx_IT_RET_KEYB		3
-> +#define ESR_ELx_IT_GCSSS1		4
-> +#define ESR_ELx_IT_GCSSS2		5
-> +#define ESR_ELx_IT_GCSPOPCX		6
-> +#define ESR_ELx_IT_GCSPOPX		7
+-- Steve
