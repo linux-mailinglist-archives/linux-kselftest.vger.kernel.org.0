@@ -2,251 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE65758401
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 20:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DE675841C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 20:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbjGRSAu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 14:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        id S231154AbjGRSGd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 14:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjGRSAt (ORCPT
+        with ESMTP id S230005AbjGRSGd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 14:00:49 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9A8A1;
-        Tue, 18 Jul 2023 11:00:47 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9926623e367so845538766b.0;
-        Tue, 18 Jul 2023 11:00:47 -0700 (PDT)
+        Tue, 18 Jul 2023 14:06:33 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DAAA1
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 11:06:32 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b8bbce9980so35745545ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 11:06:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689703246; x=1692295246;
+        d=ziepe.ca; s=google; t=1689703591; x=1692295591;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PyN7LRdxuJ3+3m6qyMY/Pn72VV1r0UZI32fa8KhLFbY=;
-        b=qG0/1wSnOmHRcShWCFotbPYMGXIVlK+nE2fNftS6Hnjs7APhWfde2eLblRn58gqJcg
-         Xg5JiJ3QRA4VSUc1FA2MAJ1Q6VZ+e9GAohGP9+aMiHpmrXArIrsJxQJdVoJQF+omjfqo
-         YckPrfZ3z1idGNOr08WkkrgXwb4wqnM4AV6pvpQ+1D18wEpP0aFIOlRyCrIAI97jqs1C
-         xKyHZVmmFzHFg/g4GoNsY1kKqQ5a8/OA5FSyR4roa5i8W8MhkkPlI8J3tIUMRBmeqFh6
-         D0S7JNHXSEySo1uDJcJVhLa3GcXM6uNtu/N4ta6TLf7IFV8Tbcls23zqgiSwA4ZUQ9a7
-         MgRQ==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nXz9xDxwT7BaavIhnCmafXwp3/aDUnwPYqui5jTbzSQ=;
+        b=groKThLKhcGdvS7VGO7C4SDS0MFs8h/VRyqV+OQecO/1MgBAs/ZfpPKMHdEDFc18U6
+         lL6E01mKA8UE5kLtpd7OED7gt7ztbJ5zG6ZR10SH2TRXOQQY1VxzoLfjSQ8X+8hvr7zc
+         87zzsMTMDmeVha3PmXm/KENBZCBJR0whtZvmDjcbID28N6ghyDcrk5tXGBvdZgk2kE89
+         c/ehnZ5oymDKSDagYvboYUn0sxTqAeqXz24JaL1wf81rDQDv/hEv3XN80y+jSOV2M/0E
+         6T7xuWgJpH1NmtIjdE8p3/Mzy7HrBdkuTncvzIqpvybXisn6eFXd5MAeGA3KsBbF/NVQ
+         x6YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689703246; x=1692295246;
+        d=1e100.net; s=20221208; t=1689703591; x=1692295591;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PyN7LRdxuJ3+3m6qyMY/Pn72VV1r0UZI32fa8KhLFbY=;
-        b=P9lFvzTokCjWRHtKH6tlMmcg74v1rhigwO8hJwEZLJZR7VgB4omHHR3wtWM5NxM69w
-         8pFxF/nWfeq44t1h/MjtQabesK7QkJBBFMKstBzJunLjxUzAj8ZWd5YELo8Vy7SidLZg
-         IFwj1HauyJNY7yj0giT6b9P0WyNQt9qVpjrfRycbW3x/MS+YR2dc4HWLoeUSKMf0Gu8F
-         SVYgCRwV7/LpPzdjRO3fM7jsGDcixrKc/wS4wjZUHMFgLBSr/Sv6k6KsmVzYRZVlOILJ
-         35IUOLkKha6RnBJ26px2EOpkhMwkSNqeH+Mylph/jvOdjjM2Go+mNefv1VscfsmEmxjs
-         Xrtw==
-X-Gm-Message-State: ABy/qLaahy7da3TQTK/Ud4LQ4lI8FfgfZ0pViK2T2X66MQVp9G3cmCkd
-        AFrwzHN7gBIr+6polFVfNfY=
-X-Google-Smtp-Source: APBJJlHuALfP05nJMTIaDtdhR6Sc7rP0zzWHX5XYkV6ZoFC0W1Om+XGykCwePD8QM5XRktKYvRjLYA==
-X-Received: by 2002:a17:907:720b:b0:98e:3cef:68ff with SMTP id dr11-20020a170907720b00b0098e3cef68ffmr362435ejc.43.1689703245941;
-        Tue, 18 Jul 2023 11:00:45 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id ko1-20020a170907986100b00992e14af9c3sm1282331ejc.143.2023.07.18.11.00.43
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nXz9xDxwT7BaavIhnCmafXwp3/aDUnwPYqui5jTbzSQ=;
+        b=ZIeFgnPLDtE3neTsDJ0MZoYLdZf+Ea7sg2x/H0y+yM2ZtFvOHo0VnRWPuKoBAiQ4Iy
+         Zh1EXP+MyewU/xS5Bs4YqUrYKWGpddqHjKYxCPRYVR4v6qujmHhnem3OORF0yt38uOwD
+         XyZLcVTIivrY6t6XCQfOYRf3lzwYCvrh7blpI6Q/Mn1JBbNOca909NzahAF0iaGCOJhE
+         ty+nRoJlxbG1QzsAtn0YwPhP6Kg0WACYVZaCeJIMghOgSuH5tPPVId6MIhL5++RkZ8K6
+         m/VrgTCtE7bBt/JqjZFi0Pmoq113/zzrFh93OGqRFoV8uZRQGSRoIh3xeEL0ns+TaOm3
+         yEgw==
+X-Gm-Message-State: ABy/qLbdGaa9+TlMAMvt6rsdP4lWUx4olZdKOFhDumd0XFoXivbW+3oJ
+        GD9bRrN8MvlNJOaBbvltoiOp6w==
+X-Google-Smtp-Source: APBJJlF7FlQJHF3FMLrPPssG4qg4BrXeUhwWshlLKfnw7NuTDc181VYHZRzG6vsaH9PJ4JGKGoGO3g==
+X-Received: by 2002:a17:902:c406:b0:1b9:e9b2:1288 with SMTP id k6-20020a170902c40600b001b9e9b21288mr530425plk.38.1689703591309;
+        Tue, 18 Jul 2023 11:06:31 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id z10-20020a1709028f8a00b001b89c313185sm2171634plo.205.2023.07.18.11.06.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jul 2023 11:00:45 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 448F827C0054;
-        Tue, 18 Jul 2023 14:00:42 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 18 Jul 2023 14:00:43 -0400
-X-ME-Sender: <xms:SdO2ZGHiNe30w3XA54gEUIwNq-L_kZRh0N6BjvHRBHS3CEbGvaW4LA>
-    <xme:SdO2ZHWltoCr-Lopue2uDNfUCy8KD52QKyBdPUQlXW7uqOzlXkUNjnjtS9SJlWKLv
-    j8nvAIGJXjo1Ivk-A>
-X-ME-Received: <xmr:SdO2ZALpp9spxMmbbfX4ni-yEcN8rEp85jtQBPktBNn3AhIa-CXy5Q-Q1BGOVw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrgeeggdduudeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeejffegieejvddtgfekkefhjeegjeevuedugfehfedtkeffjedtleeiuefh
-    vdefgeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhh
-    phgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunh
-    drfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:SdO2ZAFukTBpGc-J96GoU5Tvd0BJkqMTTNoydMwUjv6bEElqmKt3GA>
-    <xmx:SdO2ZMWA8Nma3GAn0pTWOH1jy9CGnlB8YCJrIC4uhJ9E-16ltWDk0g>
-    <xmx:SdO2ZDNumuv-FMPowJk8KBjIAgT-MI7KWKeg9njwOuFopXmQge8iSg>
-    <xmx:StO2ZNsjkQKXwZiy-l0E2qp7sgCNgE_y93HBwchpLgvIHey-h29EaQ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 18 Jul 2023 14:00:40 -0400 (EDT)
-Date:   Tue, 18 Jul 2023 11:00:37 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH v2 0/7] KUnit integration for Rust doctests
-Message-ID: <ZLbTRZMjcFNAamit@boqun-archlinux>
-References: <20230718052752.1045248-1-ojeda@kernel.org>
+        Tue, 18 Jul 2023 11:06:30 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qLp5h-002aj7-9n;
+        Tue, 18 Jul 2023 15:06:29 -0300
+Date:   Tue, 18 Jul 2023 15:06:29 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [RFC PATCH 00/10] Device Memory TCP
+Message-ID: <ZLbUpdNYvyvkD27P@ziepe.ca>
+References: <20230710223304.1174642-1-almasrymina@google.com>
+ <12393cd2-4b09-4956-fff0-93ef3929ee37@kernel.org>
+ <CAHS8izNPTwtk+zN7XYt-+ycpT+47LMcRrYXYh=suTXCZQ6-rVQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230718052752.1045248-1-ojeda@kernel.org>
+In-Reply-To: <CAHS8izNPTwtk+zN7XYt-+ycpT+47LMcRrYXYh=suTXCZQ6-rVQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 07:27:45AM +0200, Miguel Ojeda wrote:
-[...]
-> 
->   - Collected `Reviewed-by`s and `Tested-by`s, except for the main
->     commit due to the substantial changes.
+On Tue, Jul 18, 2023 at 10:36:52AM -0700, Mina Almasry wrote:
 
-I've applied the series and run the following command:
+> That is specific to this proposal, and will likely be very different
+> in future ones. I thought the dma-buf pages approach was extensible
+> and the uapi belonged somewhere in dma-buf. Clearly not. The next
+> proposal, I think, will program the rxq via some net uapi and will
+> take the dma-buf as input. Probably some netlink api (not sure if
+> ethtool family or otherwise). I'm working out details of this
+> non-paged networking first.
 
-	./tools/testing/kunit/kunit.py run --make_options LLVM=1 --arch x86_64 --kconfig_add CONFIG_RUST=y	
+In practice you want the application to startup, get itself some 3/5
+tuples and then request the kernel to setup the flow steering and
+provision the NIC queues.
 
-everything works as expected, and I also tried modifying one of the
-`assert!` to trigger it, all looks good to me. Feel free to add:
+This is the right moment for the application to provide the backing
+for the rx queue memory via a DMABUF handle.
 
-Tested-by: Boqun Feng <boqun.feng@gmail.com>
+Ideally this would all be accessible to non-priv applications as well,
+so I think you'd want some kind of system call that sets all this up
+and takes in a FD for the 3/5-tuple socket (to prove ownership over
+the steering) and the DMABUF FD.
 
-Regards,
-Boqun
+The queues and steering should exist only as long as the application
+is still running (whatever that means). Otherwise you have a big mess
+to clean up whenever anything crashes.
 
-> 
-> Miguel Ojeda (7):
->   kunit: test-bug.h: include `stddef.h` for `NULL`
->   rust: init: make doctests compilable/testable
->   rust: str: make doctests compilable/testable
->   rust: sync: make doctests compilable/testable
->   rust: types: make doctests compilable/testable
->   rust: support running Rust documentation tests as KUnit ones
->   MAINTAINERS: add Rust KUnit files to the KUnit entry
-> 
->  MAINTAINERS                       |   2 +
->  include/kunit/test-bug.h          |   2 +
->  lib/Kconfig.debug                 |  13 ++
->  rust/.gitignore                   |   2 +
->  rust/Makefile                     |  29 ++++
->  rust/bindings/bindings_helper.h   |   1 +
->  rust/helpers.c                    |   7 +
->  rust/kernel/init.rs               |  26 +--
->  rust/kernel/kunit.rs              | 163 +++++++++++++++++++
->  rust/kernel/lib.rs                |   2 +
->  rust/kernel/str.rs                |   4 +-
->  rust/kernel/sync/arc.rs           |   9 +-
->  rust/kernel/sync/lock/mutex.rs    |   1 +
-> v1: https://lore.kernel.org/rust-for-linux/20230614180837.630180-1-ojeda@kernel.org/
-> v2:
-> 
->   - Rebased on top of v6.5-rc1, which requires a change from
->     `kunit_do_failed_assertion` to `__kunit_do_failed_assertion` (since
->     the former became a macro) and the addition of a call to
->     `__kunit_abort` (since previously the call was done by the old
->     function which we cannot use anymore since it is a macro). (David)
-> 
->   - Added prerequisite patch to KUnit header to include `stddef.h` to
->     support the `KUNIT=y` case. (Reported by Boqun)
-> 
->   - Added comment on the purpose of `trait FromErrno`. (Martin asked
->     about it)
-> 
->   - Simplify code to use `std::fs::write` instead of `write!`, which
->     improves code size too. (Suggested by Alice)
-> 
->   - Fix copy-paste type in docs from "error" to "info" and, to make it
->     proper English, copy the `printk` docs style, i.e. from "info"
->     to "info-level message" -- and same for the "error" one. (Miguel)
-> 
->   - Swap `FILE` and `LINE` `static`s to keep the same order as done
->     elsewhere. (Miguel)
-> 
->   - Rename config option from `RUST_KERNEL_KUNIT_TEST` to
->     `RUST_KERNEL_DOCTESTS` (and update its title), so that we can use
->     the former for the "normal" (i.e. non-doctests, e.g. `#[test]` ones)
->     tests in the future. (David)
-> 
->   - Follow the syntax proposed for declaring test metadata in the KTAP
->     v2 spec, which may also get used for the KUnit test attributes API.
-> 
->     Thus, instead of "# Doctest from line {line}", use
->     "# {test_name}.location: {file}.{line}", which ideally will allow to
->     migrate to a KUnit attribute later.
-> 
->     This is done in all cases, i.e. when the tests succeeds, because
->     it may be useful for users running KUnit manually, or when passing
->     `--raw_output` to `kunit.py`. (David)
-> 
->     David: I used "location" instead of your suggested "line" alone, in
->     order to have both in a single line, which looked nice and closer to
->     the "ASSERTION FAILURE" case/line, since now we do have the original
->     file (please see below).
-> 
->   - Figure out the original line. This is done by deploying an anchor
->     so that the difference in lines between the beginning of the test
->     and the assert, in the generated file, can be computed. Then, we
->     offset the line number of the original test, which is given by
->     `rustdoc`. (developed by Boqun)
-> 
->   - Figure out the original file. This is done by walking the
->     filesystem, checking directory prefixes to reduce the amount of
->     combinations to check, and it is only done once per file (rather
->     than per test).
-> 
->     Ambiguities are detected and reported. It does limit the filenames
->     (module names) we can use, but it is unlikely we will hit it soon
->     and this should be temporary anyway until `rustdoc` provides us
->     with the real path. (Miguel)
-> 
->     Tested with both in-tree and `O=` builds, but I would appreciate
->     extra testing on this one, including via the `kunit.py` script.
-> 
->   - The three last items combined means that we now see this output even
->     for successful cases:
-> 
->         # rust_doctest_kernel_sync_locked_by_rs_0.location: rust/kernel/sync/locked_by.rs:28
->         ok 53 rust_doctest_kernel_sync_locked_by_rs_0
-> 
->     Which basically gives the user all the information they need to go
->     back to the source code of the doctest, while keeping them fairly
->     stable for bisection, and while avoiding to require users to write
->     test names manually. (David + Boqun + Miguel)
-> 
->     David: from what I saw in v2 of the RFC for the test attributes API,
->     the syntax still contains the test name when it is not a suite, so
->     I followed that, but if you prefer to omit it, please feel free to
->     do so (for me either way it is fine, and if this is the expected
->     attribute syntax, I guess it is worth to follow it to make migration
->     easier later on):
-> 
->         # location: rust/kernel/sync/locked_by.rs:28
->         ok 53 rust_doctest_kernel_sync_locked_by_rs_0
->  rust/kernel/sync/lock/spinlock.rs |   1 +
->  rust/kernel/types.rs              |   6 +-
->  scripts/.gitignore                |   2 +
->  scripts/Makefile                  |   4 +
->  scripts/rustdoc_test_builder.rs   |  72 +++++++++
->  scripts/rustdoc_test_gen.rs       | 260 ++++++++++++++++++++++++++++++
->  19 files changed, 591 insertions(+), 15 deletions(-)
->  create mode 100644 rust/kernel/kunit.rs
->  create mode 100644 scripts/rustdoc_test_builder.rs
->  create mode 100644 scripts/rustdoc_test_gen.rs
-> 
-> 
-> base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-> -- 
-> 2.41.0
-> 
+netlink feels like a weird API choice for that, in particular it would
+be really wrong to somehow bind the lifecycle of a netlink object to a
+process.
+
+Further, if you are going to all the trouble of doing this, it seems
+to me you should make it work with any kind of memory, including CPU
+memory. Get a consistent approach to zero-copy TCP RX. So also allow a
+memfd or similar to be passed in as the backing storage.
+
+Jason
