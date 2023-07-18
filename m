@@ -2,69 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF300758357
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 19:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CB0758385
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 19:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjGRRSq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 13:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
+        id S233136AbjGRRci (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 13:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233422AbjGRRSo (ORCPT
+        with ESMTP id S231719AbjGRRch (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 13:18:44 -0400
+        Tue, 18 Jul 2023 13:32:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0923BE;
-        Tue, 18 Jul 2023 10:18:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C40E4C;
+        Tue, 18 Jul 2023 10:32:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64AA361653;
-        Tue, 18 Jul 2023 17:18:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10AB6C433C8;
-        Tue, 18 Jul 2023 17:18:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CB196169B;
+        Tue, 18 Jul 2023 17:32:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B41EC433C8;
+        Tue, 18 Jul 2023 17:32:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689700722;
-        bh=3J1XrJtUddxZZBCBXSTeSVmF8QEEQ49tXFRBxGTlRR0=;
+        s=k20201202; t=1689701556;
+        bh=5sr+yjwLVU6f+lqMOfWoGq5NUJvs6qsaMrWv5HRb0zE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iU8JJyTlpM/+p0xzK01RYiNUU19e1Bg3rOY9W6pVC/mycN3DKgUu07dJBo3NYPvYa
-         QSxb8ebchHJZdMDYyrpUeZTNOGcrXVV/peVY+z0OYBG4dwL7RSJPFH9+byIvsHsGft
-         R4RC2R01EFE0icUtUL+fqq4VmxWb1v0i2KhjZULU7i2vddi5VyghBmjICHXmsmDJyo
-         vLe6X+M396x9moA2E54uk7I7wXZ0ofIR55gMT5QZF6AK5TOp20w91ijM8PZ6I4J8U/
-         U4ZnhEwVaYBnlTFl2NJNlwCtFwbOsPcf/1aJH1O+wGAboPLHOZ8ZTQHVMazCCSR+O8
-         ek/5yWQtDzRzg==
-Date:   Tue, 18 Jul 2023 10:18:41 -0700
+        b=idOxW7Wfi/M22qWhbX0ZuMGzGLMpVBG26F9PGqW02cBDx+a8kPduaXPCNyv2gJLAO
+         YIOzIg2DhjzuNdLVitTUITjJC45H8l1WtTyq8YlyoDV2wLe9w+3JKxi6+JhB5+ZsKZ
+         9wq43VR+kOlkL3WhN7OM8HWIv3hpicw2TuPpxSe7Nbwo9qllmCwRpgp+ILSXD1jsQ3
+         LuBZYWJJMChc1JlbmkOyU1EVCZhj+II1qEFbMJMMf/l+EmZIulzA5dxUNwwo+q+91y
+         93fOXY6mg7tjd6adh1mHOcqT/q72z1++d3bJbyeWA/p6lEm9COrpwzKTq+VKWBFhOg
+         DU4JRoJhnIYPQ==
+Date:   Tue, 18 Jul 2023 10:32:34 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Daniel Rosenberg <drosen@google.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>
-Subject: Re: [PATCH v2 1/3] bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
-Message-ID: <20230718101841.146efae0@kernel.org>
-In-Reply-To: <CAADnVQ+4aehGYPJ2qT_HWWXmOSo4WXf69N=N9-dpzERKfzuSzQ@mail.gmail.com>
-References: <20230502005218.3627530-1-drosen@google.com>
-        <20230718082615.08448806@kernel.org>
-        <CAADnVQJEEF=nqxo6jHKK=Tn3M_NVXHQjhY=_sry=tE8X4ss25A@mail.gmail.com>
-        <20230718090632.4590bae3@kernel.org>
-        <CAADnVQ+4aehGYPJ2qT_HWWXmOSo4WXf69N=N9-dpzERKfzuSzQ@mail.gmail.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, jgg@ziepe.ca
+Subject: Re: [RFC PATCH 00/10] Device Memory TCP
+Message-ID: <20230718103234.711d7e4f@kernel.org>
+In-Reply-To: <12393cd2-4b09-4956-fff0-93ef3929ee37@kernel.org>
+References: <20230710223304.1174642-1-almasrymina@google.com>
+        <12393cd2-4b09-4956-fff0-93ef3929ee37@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,53 +70,23 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 18 Jul 2023 09:52:24 -0700 Alexei Starovoitov wrote:
-> On Tue, Jul 18, 2023 at 9:06=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> =
-wrote:
-> > > This is NOT for safety. You misread the code. =20
-> >
-> > Doesn't matter, safety or optionality. skb_header_pointer() is used
-> > on the fast paths of the networking stack, adding heavy handed input
-> > validation to it is not okay. No sane code should be passing NULL
-> > buffer to skb_header_pointer(). Please move the NULL check to the BPF
-> > code so the rest of the networking stack does not have to pay the cost.
-> >
-> > This should be common sense. If one caller is doing something..
-> > "special" the extra code should live in the caller, not the callee.
-> > That's basic code hygiene. =20
->=20
-> you're still missing the point. Pls read the whole patch series.
+On Sun, 16 Jul 2023 19:41:28 -0700 Andy Lutomirski wrote:
+> I'm wondering if a more capable if somewhat higher latency model could 
+> work where the NIC stores received packets in its own device memory. 
+> Then userspace (or the kernel or a driver or whatever) could initiate a 
+> separate DMA from the NIC to the final target *after* reading the 
+> headers.  Can the hardware support this?
 
-Could you just tell me what the point is then? The "series" is one
-patch plus some tiny selftests. I don't see any documentation for
-how dynptrs are supposed to work either.
+No, no, that's impossible. SW response times are in 100s of usec (at
+best) which at 200Gbps already means megabytes of data _per-queue_. 
+Way more than the amount of buffer NICs will have.
 
-As far as I can grasp this makes the "copy buffer" optional from
-the kfunc-API perspective (of bpf_dynptr_slice()).
+The Rx application can bind to a IP addr + Port and then install
+a one-sided-3-tuple (dst IP+proto+port) rule in the HW. Worst case
+a full 5-tuple per flow.
 
-> It is _not_ input validation.
-> skb_copy_bits is a slow path. One extra check doesn't affect
-> performance at all. So 'fast paths' isn't a valid argument here.
-> The code is reusing
->         if (likely(hlen - offset >=3D len))
->                 return (void *)data + offset;
-> which _is_ the fast path.
->=20
-> What you're requesting is to copy paste
-> the whole __skb_header_pointer into __skb_header_pointer2.
-> Makes no sense.
+Most NICs support OvS offloads with 100s of thousands of flows.
+The steering should be bread and butter.
 
-No, Alexei, the whole point of skb_header_pointer() is to pass=20
-the secondary buffer, to make header parsing dependable.
-
-Passing NULL buffer to skb_header_pointer() is absolutely nonsensical.
-It should *not* be supported. We had enough prod problems with people
-thinking that the entire header will be in the linear portion.
-Then either the NIC can't parse the header, someone enables jumbo,
-disables GRO, adds new HW, adds encap, etc etc and things implode.
-
-If you want to support it in BPF that's up to you, but I think it's
-entirely reasonable for me to request that you don't do such things
-in general networking code. The function is 5 LoC, so a local BPF
-copy seems fine. Although I'd suggest skb_header_pointer_misguided()
-rather than __skb_header_pointer2() as the name :)
+It does require splitting flows into separate data and control channels,
+but it's the right trade-off - complexity should be on the SW side.
