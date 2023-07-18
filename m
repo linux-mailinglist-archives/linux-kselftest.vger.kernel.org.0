@@ -2,218 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32857758694
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 23:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29027586A3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 23:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjGRVLv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 17:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
+        id S231231AbjGRVMY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 17:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjGRVLu (ORCPT
+        with ESMTP id S230419AbjGRVMT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 17:11:50 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59BCEC;
-        Tue, 18 Jul 2023 14:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689714709; x=1721250709;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MK2n2OSkVqVYu9YHHQNwvJQ+yMJ1cHclPzK02uREhtk=;
-  b=FJ2g2VrI38Je68Zl75TQvwGbm9EXHzbG+yIG/J2RB5FxFqjkTEjlCeM6
-   7RhAKTPU+6nY9t7Wx2XQmvLwH65dFiFQKwKaIVQYrJx7efCfbBv7pS6vp
-   yZ+rkHjHt7+SdFRcTyB/Bp0ZaoK2AI5B8LvMma8ddmhIcsmJYBE1NHb1q
-   sJMOcZTHj6bgx3j8PTis8f09OkS2nia4i3wrPpsAioHjYxdr5LlDCWcEW
-   CyF8dBB74P2o10xMkHxO5JNkMoJ//XOUBm3YpGbfn7rocQdVQW9mFU9Ei
-   7jDm3MbAZyM0oCwSa0Ev340qBZkZtknG6EnwsybuywbXkCMGgZ5BblQTC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="397161854"
-X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="397161854"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 14:11:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="789206000"
-X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="789206000"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Jul 2023 14:11:42 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E0266516; Wed, 19 Jul 2023 00:11:49 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v4 4/4] genetlink: Replace custom CONCATENATE() implementation
-Date:   Wed, 19 Jul 2023 00:11:47 +0300
-Message-Id: <20230718211147.18647-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230718211147.18647-1-andriy.shevchenko@linux.intel.com>
-References: <20230718211147.18647-1-andriy.shevchenko@linux.intel.com>
+        Tue, 18 Jul 2023 17:12:19 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7821FEE;
+        Tue, 18 Jul 2023 14:12:05 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1689714716ty3d409i
+Received: from linux-lab-host.localdomain ( [119.123.130.39])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 19 Jul 2023 05:11:55 +0800 (CST)
+X-QQ-SSF: 01200000000000D0X000000A0000000
+X-QQ-FEAT: znfcQSa1hKbIWy9/nudIS6dweUsnw6YVkjkrjXVuU+TODYlb+AgCL6pXkl2Fl
+        tSsRaDf72WXJcU3KEzH9E4XSY2yEuk3T/diWm8Ne5HqGX0DrjpE477mcQpG4G5DFd9ODAOv
+        uaikbHrw6qk530JkQ8AXJcHgiIds6d+3aJefPFODPpZsURPJhdgFwh0jQjZ/vmKkYggOmvg
+        aszaovcQXFBHNKeguR9bBylNG6atlyI7bfvZaKxSTY+3RBNZwLkFtoz5htQh0d6mbj20RuF
+        K+5rrb2HGie6OTmRGi4ibC/KnE/f91NZCFgxKvguB/uEmc1BehQ7DhvhA7zqSZvkzSXxWHD
+        9PT7i9S5yx9Zpsyo+xynEYrc3KrTZZkfVU5bd7OV511CmwkmBLBB7D8q7X6YQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11373982133652074623
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v1 2/8] tools/nolibc: add support for powerpc64
+Date:   Wed, 19 Jul 2023 05:11:54 +0800
+Message-Id: <a32fc49e089ca6f8c7a0adc5995253ed30e89179.1689713175.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1689713175.git.falcon@tinylab.org>
+References: <cover.1689713175.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace custom implementation of the macros from args.h.
+This follows the 64-bit PowerPC ABI [1], refers to the slides: "A new
+ABI for little-endian PowerPC64 Design & Implementation" [2] and the
+musl code in arch/powerpc64/crt_arch.h.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Firstly, stdu and clrrdi are used instead of stwu and clrrwi for
+powerpc64.
+
+Second, the stack frame size is increased to 32 bytes for powerpc64, 32
+bytes is the minimal stack frame size supported described in [2].
+
+Besides, the TOC pointer (GOT pointer) must be saved to r2.
+
+This works on both little endian and big endian 64-bit PowerPC.
+
+[1]: https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi.pdf
+[2]: https://www.llvm.org/devmtg/2014-04/PDFs/Talks/Euro-LLVM-2014-Weigand.pdf
+
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- include/linux/genl_magic_func.h   | 27 ++++++++++++++-------------
- include/linux/genl_magic_struct.h |  8 +++-----
- 2 files changed, 17 insertions(+), 18 deletions(-)
+ tools/include/nolibc/arch-powerpc.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/include/linux/genl_magic_func.h b/include/linux/genl_magic_func.h
-index 2984b0cb24b1..d4da060b7532 100644
---- a/include/linux/genl_magic_func.h
-+++ b/include/linux/genl_magic_func.h
-@@ -2,6 +2,7 @@
- #ifndef GENL_MAGIC_FUNC_H
- #define GENL_MAGIC_FUNC_H
- 
-+#include <linux/args.h>
- #include <linux/build_bug.h>
- #include <linux/genl_magic_struct.h>
- 
-@@ -23,7 +24,7 @@
- #define GENL_struct(tag_name, tag_number, s_name, s_fields)		\
- 	[tag_name] = { .type = NLA_NESTED },
- 
--static struct nla_policy CONCAT_(GENL_MAGIC_FAMILY, _tla_nl_policy)[] = {
-+static struct nla_policy CONCATENATE(GENL_MAGIC_FAMILY, _tla_nl_policy)[] = {
- #include GENL_MAGIC_INCLUDE_FILE
- };
- 
-@@ -209,7 +210,7 @@ static int s_name ## _from_attrs_for_change(struct s_name *s,		\
-  * Magic: define op number to op name mapping				{{{1
-  *									{{{2
-  */
--static const char *CONCAT_(GENL_MAGIC_FAMILY, _genl_cmd_to_str)(__u8 cmd)
-+static const char *CONCATENATE(GENL_MAGIC_FAMILY, _genl_cmd_to_str)(__u8 cmd)
+diff --git a/tools/include/nolibc/arch-powerpc.h b/tools/include/nolibc/arch-powerpc.h
+index 100ec0f412dc..7b28ebcfcc23 100644
+--- a/tools/include/nolibc/arch-powerpc.h
++++ b/tools/include/nolibc/arch-powerpc.h
+@@ -143,6 +143,19 @@
+ /* startup code */
+ void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_stack_protector _start(void)
  {
- 	switch (cmd) {
- #undef GENL_op
-@@ -235,7 +236,7 @@ static const char *CONCAT_(GENL_MAGIC_FAMILY, _genl_cmd_to_str)(__u8 cmd)
- 	.cmd = op_name,						\
- },
- 
--#define ZZZ_genl_ops		CONCAT_(GENL_MAGIC_FAMILY, _genl_ops)
-+#define ZZZ_genl_ops		CONCATENATE(GENL_MAGIC_FAMILY, _genl_ops)
- static struct genl_ops ZZZ_genl_ops[] __read_mostly = {
- #include GENL_MAGIC_INCLUDE_FILE
- };
-@@ -248,32 +249,32 @@ static struct genl_ops ZZZ_genl_ops[] __read_mostly = {
-  * and provide register/unregister functions.
-  *									{{{2
-  */
--#define ZZZ_genl_family		CONCAT_(GENL_MAGIC_FAMILY, _genl_family)
-+#define ZZZ_genl_family		CONCATENATE(GENL_MAGIC_FAMILY, _genl_family)
- static struct genl_family ZZZ_genl_family;
- /*
-  * Magic: define multicast groups
-  * Magic: define multicast group registration helper
-  */
--#define ZZZ_genl_mcgrps		CONCAT_(GENL_MAGIC_FAMILY, _genl_mcgrps)
-+#define ZZZ_genl_mcgrps		CONCATENATE(GENL_MAGIC_FAMILY, _genl_mcgrps)
- static const struct genl_multicast_group ZZZ_genl_mcgrps[] = {
- #undef GENL_mc_group
- #define GENL_mc_group(group) { .name = #group, },
- #include GENL_MAGIC_INCLUDE_FILE
- };
- 
--enum CONCAT_(GENL_MAGIC_FAMILY, group_ids) {
-+enum CONCATENATE(GENL_MAGIC_FAMILY, group_ids) {
- #undef GENL_mc_group
--#define GENL_mc_group(group) CONCAT_(GENL_MAGIC_FAMILY, _group_ ## group),
-+#define GENL_mc_group(group) CONCATENATE(GENL_MAGIC_FAMILY, _group_ ## group),
- #include GENL_MAGIC_INCLUDE_FILE
- };
- 
- #undef GENL_mc_group
- #define GENL_mc_group(group)						\
--static int CONCAT_(GENL_MAGIC_FAMILY, _genl_multicast_ ## group)(	\
-+static int CONCATENATE(GENL_MAGIC_FAMILY, _genl_multicast_ ## group)(	\
- 	struct sk_buff *skb, gfp_t flags)				\
- {									\
- 	unsigned int group_id =						\
--		CONCAT_(GENL_MAGIC_FAMILY, _group_ ## group);		\
-+		CONCATENATE(GENL_MAGIC_FAMILY, _group_ ## group);		\
- 	return genlmsg_multicast(&ZZZ_genl_family, skb, 0,		\
- 				 group_id, flags);			\
- }
-@@ -289,8 +290,8 @@ static struct genl_family ZZZ_genl_family __ro_after_init = {
- #ifdef GENL_MAGIC_FAMILY_HDRSZ
- 	.hdrsize = NLA_ALIGN(GENL_MAGIC_FAMILY_HDRSZ),
- #endif
--	.maxattr = ARRAY_SIZE(CONCAT_(GENL_MAGIC_FAMILY, _tla_nl_policy))-1,
--	.policy	= CONCAT_(GENL_MAGIC_FAMILY, _tla_nl_policy),
-+	.maxattr = ARRAY_SIZE(CONCATENATE(GENL_MAGIC_FAMILY, _tla_nl_policy))-1,
-+	.policy	= CONCATENATE(GENL_MAGIC_FAMILY, _tla_nl_policy),
- 	.ops = ZZZ_genl_ops,
- 	.n_ops = ARRAY_SIZE(ZZZ_genl_ops),
- 	.mcgrps = ZZZ_genl_mcgrps,
-@@ -299,12 +300,12 @@ static struct genl_family ZZZ_genl_family __ro_after_init = {
- 	.module = THIS_MODULE,
- };
- 
--int CONCAT_(GENL_MAGIC_FAMILY, _genl_register)(void)
-+int CONCATENATE(GENL_MAGIC_FAMILY, _genl_register)(void)
- {
- 	return genl_register_family(&ZZZ_genl_family);
++#ifdef __powerpc64__
++	/* On 64-bit PowerPC, save TOC/GOT pointer to r2 */
++	extern char TOC __asm__ (".TOC.");
++	register volatile long r2 __asm__ ("r2") = (void *)&TOC - (void *)_start;
++
++	__asm__ volatile (
++		"mr     3, 1\n"         /* save stack pointer to r3, as arg1 of _start_c */
++		"clrrdi 1, 1, 4\n"      /* align the stack to 16 bytes                   */
++		"li     0, 0\n"         /* zero the frame pointer                        */
++		"stdu   1, -32(1)\n"    /* the initial stack frame                       */
++		"bl     _start_c\n"     /* transfer to c runtime                         */
++	);
++#else
+ 	__asm__ volatile (
+ 		"mr     3, 1\n"         /* save stack pointer to r3, as arg1 of _start_c */
+ 		"clrrwi 1, 1, 4\n"      /* align the stack to 16 bytes                   */
+@@ -150,6 +163,7 @@ void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_
+ 		"stwu   1, -16(1)\n"    /* the initial stack frame                       */
+ 		"bl     _start_c\n"     /* transfer to c runtime                         */
+ 	);
++#endif
+ 	__builtin_unreachable();
  }
  
--void CONCAT_(GENL_MAGIC_FAMILY, _genl_unregister)(void)
-+void CONCATENATE(GENL_MAGIC_FAMILY, _genl_unregister)(void)
- {
- 	genl_unregister_family(&ZZZ_genl_family);
- }
-diff --git a/include/linux/genl_magic_struct.h b/include/linux/genl_magic_struct.h
-index f81d48987528..a419d93789ff 100644
---- a/include/linux/genl_magic_struct.h
-+++ b/include/linux/genl_magic_struct.h
-@@ -14,14 +14,12 @@
- # error "you need to define GENL_MAGIC_INCLUDE_FILE before inclusion"
- #endif
- 
-+#include <linux/args.h>
- #include <linux/genetlink.h>
- #include <linux/types.h>
- 
--#define CONCAT__(a,b)	a ## b
--#define CONCAT_(a,b)	CONCAT__(a,b)
--
--extern int CONCAT_(GENL_MAGIC_FAMILY, _genl_register)(void);
--extern void CONCAT_(GENL_MAGIC_FAMILY, _genl_unregister)(void);
-+extern int CONCATENATE(GENL_MAGIC_FAMILY, _genl_register)(void);
-+extern void CONCATENATE(GENL_MAGIC_FAMILY, _genl_unregister)(void);
- 
- /*
-  * Extension of genl attribute validation policies			{{{2
 -- 
-2.40.0.1.gaa8946217a0b
+2.25.1
 
