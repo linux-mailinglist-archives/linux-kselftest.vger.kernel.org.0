@@ -2,60 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C7675798E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 12:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6EE757991
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 12:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjGRKul (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 06:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
+        id S230306AbjGRKux (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 06:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjGRKuk (ORCPT
+        with ESMTP id S230470AbjGRKuw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 06:50:40 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B36294;
-        Tue, 18 Jul 2023 03:50:39 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-bff89873d34so4219213276.2;
-        Tue, 18 Jul 2023 03:50:39 -0700 (PDT)
+        Tue, 18 Jul 2023 06:50:52 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76023E69;
+        Tue, 18 Jul 2023 03:50:51 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-579efc32377so51128097b3.1;
+        Tue, 18 Jul 2023 03:50:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689677438; x=1692269438;
+        d=gmail.com; s=20221208; t=1689677450; x=1692269450;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sTu0pAKim/A7bk9vOOQJzSwY4RU25mujed63Z040/Wc=;
-        b=M5N/eMDG1/kcW3eSG03fAOT6edP/BE9g4cI4JE49bCv1y57yRaoC68wX4AyPNN7x5h
-         Ys1FUc72GHCNLVGQgsM0T75veXDpw8SFoi2C9z+BhOLD0+whFqCWE7/D/IN446FyuNRf
-         sV6+rhj+XJ+cf8bkYuSqvTC8o09vR/llHnqUTGCJE+JMYxmkVwBYTGBcli9aL6pZukzk
-         wt1VnsRfDzBXVvIgccrUNLasqjlOjwknb3C+3UzBRm43Z5LGnrWY2l/LUSEYVUDn/iBx
-         NbXNZimTB7Ng71gyXAzE8SVGSAjraxBtDkKhTlxhk6frz5QHC+kRPnt3l8XOUa8xMm6t
-         5GhA==
+        bh=k1QDt0Sf7l7pQV8orH0tWzg0eiS7P4OmFAqlO08Oj7A=;
+        b=OwEuP7K0L6BBLEOoRWNgc13+QZSqASstXZdoqrCVLhfxwQx+f8AtBu0wLOadrkZwWF
+         dSbXadM46AKh+Jkifu77ufI5Ul+C6u0Db1lGML54C4Pow0W0QSX/upPygTmQhJXMolRH
+         7bp9XlsKFhbpUPK5TgMaFIcx3tdBF8j0YyYxHnpCHAAxI2KQjZNCQreecd2OFYzJuR3T
+         KyDdKON0f0Dn8v4vCo47CXbYE8h2MmWcprU8kBn1Y7Ivd3zGOfXNIOif2eMeG5gkU9dj
+         fdHxozKZFkl+0huY8jaG5V4pSJ7iO3C/gttf0ydiApMaLiWb1LO41KfA7sC846XgDfpZ
+         opLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689677438; x=1692269438;
+        d=1e100.net; s=20221208; t=1689677450; x=1692269450;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sTu0pAKim/A7bk9vOOQJzSwY4RU25mujed63Z040/Wc=;
-        b=YNuB49feZqXfdBdVVhVbGSm+H1toyP/IbG7XoD1M95MVpRaT4LRMQUJG0zX0BojuLr
-         uhve7MhA2n+OHtYQvCBDdAt7OOO1gFohrpdE8G8eNLuNLkm1r8fKd24+YqAd1R+/wLsc
-         DJ1ODZv2x5Vks1dzPfMKduHvb+vmhuwFeiJCLudC5kTUy3ad4R4ta0ZlXe+bxfDbmcjt
-         4tznaBqPiB2wgy3o3ZEmE/4t+9/chWrChcEdrzzDg2h83vjQXlpngyIAm//AJi9vn15P
-         UJduiSws/FbNAGa6VwuVD1D39bHbNSi2R1nxExiYRw1F64L49mrZ2WEVpL+XnTQg+yQk
-         rBDQ==
-X-Gm-Message-State: ABy/qLbLuGpiii1mGGsIifyt2IFplIqHxMdQrwobZB6iu8icybURFDM1
-        UQSM1HfjYqpVJJeBCjABRWa8fBmbD1WPXR3mNdg=
-X-Google-Smtp-Source: APBJJlGNcgDopzSyU763xeq2Rqhv/iipQR9HeEhrKycYfBFUkhb9gOIE0XtXjI2boC04P9ttrOhZdAw7klVYgvj9JGY=
-X-Received: by 2002:a25:a4c4:0:b0:ce4:5f48:a24d with SMTP id
- g62-20020a25a4c4000000b00ce45f48a24dmr2543364ybi.5.1689677438709; Tue, 18 Jul
- 2023 03:50:38 -0700 (PDT)
+        bh=k1QDt0Sf7l7pQV8orH0tWzg0eiS7P4OmFAqlO08Oj7A=;
+        b=eLeFiLrG+XyOvB9iXZWP5gFr7hbbqCDhr0cA547RAaWdsHICCk8JMqOTJHQqAG9aeb
+         EaszY7GHb/MtMJWsx6x+xnBB2K1xu8o0QoWtBfIwLwkxBYaxun6QTqMICYD6E39bqyBb
+         EgTUa+5BAZOiNfX/bLCsdN23lmmB1xzsxktEBhDfW1DCchoNwBctp/k46hZ/dXqW2Qq7
+         hxNqIIOvptuCrQT4xoJgJogeihLh6ZwR/AJ0YtMhzzhPENo3N6FAappsTbsdEuK/7mi0
+         xtlfhFVTTsISjZwyw9PnSfhY6Am1mNIy2bVz6C5FVDlWLwiIM5+XK4V99f+zAZZO1Prb
+         G/sQ==
+X-Gm-Message-State: ABy/qLYkLHd6FKJ7knozMo7ULN6He+wObV7yI17tb5o1bH2/pAYcX2i8
+        pDomZrcVmyk+K1W3K5VmbFcQPBgDjVr2SaCGSv4=
+X-Google-Smtp-Source: APBJJlEEHZSBU905UJoBlQ0tbX9EIC+PNtKEcVq973I/wi35dpixqOtiOfiXL+/VGe6/40ITgyhg8C5o3fny82zoAC4=
+X-Received: by 2002:a0d:ce07:0:b0:577:cd0:681f with SMTP id
+ q7-20020a0dce07000000b005770cd0681fmr12915048ywd.26.1689677450701; Tue, 18
+ Jul 2023 03:50:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230718052752.1045248-1-ojeda@kernel.org> <20230718052752.1045248-7-ojeda@kernel.org>
- <CABVgOSnCY66C5wza-ZXb8c8UHg8ydbFv4U_7A14UU_gXeESKZg@mail.gmail.com>
-In-Reply-To: <CABVgOSnCY66C5wza-ZXb8c8UHg8ydbFv4U_7A14UU_gXeESKZg@mail.gmail.com>
+References: <20230718052752.1045248-1-ojeda@kernel.org> <CABVgOSk+YOdmpnBpLcx2sC3NN7amdpLf-C35EpvYmzq3SWHAqA@mail.gmail.com>
+In-Reply-To: <CABVgOSk+YOdmpnBpLcx2sC3NN7amdpLf-C35EpvYmzq3SWHAqA@mail.gmail.com>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 18 Jul 2023 12:50:27 +0200
-Message-ID: <CANiq72m08qGAa7k37A0rQNf7vvBc1o8JjSY8jNd+m2XzVOT9rw@mail.gmail.com>
-Subject: Re: [PATCH v2 6/7] rust: support running Rust documentation tests as
- KUnit ones
+Date:   Tue, 18 Jul 2023 12:50:39 +0200
+Message-ID: <CANiq72=7X7nooVnoS6JxXBwwFGGGJU5eNVNUu=g33-YQjR9vnQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] KUnit integration for Rust doctests
 To:     David Gow <davidgow@google.com>
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -68,31 +66,54 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Andreas Hindborg <nmi@metaspace.dk>,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
+        patches@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 10:17=E2=80=AFAM David Gow <davidgow@google.com> wr=
+On Tue, Jul 18, 2023 at 10:38=E2=80=AFAM David Gow <davidgow@google.com> wr=
 ote:
 >
-> This is looking good and working well here.
->
-> One super-minor thought below (the generated C file seems to be using
-> 4-space indentation, not tabs), but it's not something that worries me
-> enough to hold the patch up if there are no other issues.
+> I like "location" better, personally. The attributes work is still
+> ongoing, and while there's some benefit to having "file" and "line"
+> separate (it could potentially simplify some implementation on the C
+> side), we'll cross that bridge when we come to it.
 
-Good eye! Of course, please feel free to change it when applying
-(though from a quick grep I don't see "[ ... ]" comments in commits in
-the KUnit tree). I am also happy to send a v3.
+Yeah, I felt it looked a bit better, but if later on it ends up making
+things too hard, then yeah, we can definitely simplify it.
+
+> This seems to be working well on the existing cases under kunit.py
+> here. I'll continue to play with it, but no worries on my end thus
+> far.
+
+Thanks for trying it out!
+
+> Thanks: while we're still arguing a bit about exactly what the format
+> of these will look like in the KUnit/KTAP attributes spec/patches,
+> what you've used matches what we've been proposing so far.
+>
+> Let's stick with <test name>.location for now, and change it if needed
+> when the attributes spec is finalised.
+
+Sounds good.
+
+> These are all (still) looking pretty good to me. If there are no
+> objections, I'd like to take these into kselftest/kunit as-is and if
+> we need to change anything (e.g. for consistency with attributes when
+> they land), do that as a follow-up.
+>
+> Thanks again, Miguel, for all the work getting this going!
+
+My pleasure -- and thanks for reviewing it so quickly and all your feedback=
+!
 
 Cheers,
 Miguel
