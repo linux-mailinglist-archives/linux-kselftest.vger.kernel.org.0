@@ -2,122 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4178C756ED2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jul 2023 23:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D677570E9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 02:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbjGQVP0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jul 2023 17:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S230233AbjGRA3y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jul 2023 20:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjGQVP0 (ORCPT
+        with ESMTP id S229972AbjGRA3x (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jul 2023 17:15:26 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896EBF3;
-        Mon, 17 Jul 2023 14:15:24 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BDD0B1BF207;
-        Mon, 17 Jul 2023 21:15:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1689628523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e3xD3OEdrYlaL+qPG6Bi+cSbmCBZ9vMuc95bgvy+HZI=;
-        b=WfFAT6PbJmDrUoOEyEH3fruRNy5nAe0fHBucJBtMcJDoDaHhs1bGyhhwhht41o5FEixahv
-        U+HR7la6PNs19yMM6Dw9XJpZQKhVnvlA/QK1YgbZbG7yZM8/fYoua1NDSmEjf1hIrhbTdR
-        pen4Bj2apaouo3tfs56uK+1INzeEy92gH8ZFwYDIPDHb4Z+GxUVTVMH8dfeAPnhyB/daw6
-        37gIqZchqK2oCDU9POaIMducRPI1n7pTIzLCABF+2GlWdeZGGMlSVAiDEE3zPu6Ci89p2Z
-        LUkg12cvNG4Elgc3UfgFR0Wbl45c1i0IncpQuMHyOKmcH/qQXCaOf0lf5TgSkQ==
-Date:   Mon, 17 Jul 2023 23:15:22 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Atul Kumar Pant <atulpant.linux@gmail.com>
-Cc:     a.zummo@towertech.it, shuah@kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] selftests: rtc: Fixes rtctest error handling.
-Message-ID: <202307172115223bd0669f@mail.local>
-References: <20230717175251.54390-1-atulpant.linux@gmail.com>
+        Mon, 17 Jul 2023 20:29:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0071D1A8
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jul 2023 17:29:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 712AF6136C
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 00:29:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43351C433C8;
+        Tue, 18 Jul 2023 00:29:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689640191;
+        bh=v0OtEKj0jdSOyjDt7MKHxHRE0+A2wPxrR5yddi7afsg=;
+        h=From:Subject:Date:To:Cc:From;
+        b=YzuBYfAqx6T/yjwE/2ouEPWSAnlFZ8v+ShzPtpuf7AU6pzAxiEf4K4YXl4yH0+PM1
+         rnKBUi3dk+xP/R8Odpv7e8HJocq5TvzRL0nKXV65U9YU0xP7dokuPXLERTxSNSeGo8
+         XwarNQTb7NTBtq/MJ4bV11IY+FsLD/xIRbUzzzbo4BPZU8VyupRm2yBHo0kBuWJqLV
+         qkio9T0O98+rBM5Mxm1Ir87r1hPz8nmZwgMpL/pameZGjzJo8xXMy7p+Nu/rN+A9G7
+         trN/lFrtfm/VDNpHn/AFJdVh6Q2s6MnlkUdDlQUX0IoSOjiVIZIIpH5rzaDoxPw7UR
+         JbiTGEt3i4abw==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/5] ASoC: Improve coverage in default KUnit runs
+Date:   Tue, 18 Jul 2023 01:28:41 +0100
+Message-Id: <20230718-asoc-topology-kunit-enable-v2-0-0ee11e662b92@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230717175251.54390-1-atulpant.linux@gmail.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALnctWQC/33NQQ6CMBCF4auQWTumLSGIK+9hWBRmgAbSIS0SC
+ eHuVuLa5f8W39shcnAc4Z7tEHh10YlPYS4ZtIP1PaOj1GCUyVWpNNooLS4yyyT9huPLuwXZ22Z
+ iLPhGVChSTCUkYA7cufeJP+vUg4uLhO38WvV3/bHa/GNXjQqbqjNkK2qtyR8jB8/TVUIP9XEcH
+ 0wdsrLFAAAA
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2176; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=v0OtEKj0jdSOyjDt7MKHxHRE0+A2wPxrR5yddi7afsg=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBktdz4Ol24MwxgtTKpMJ5NbGqCjunXQD/bHfNyE
+ n7YFFftkzCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZLXc+AAKCRAk1otyXVSH
+ 0AANB/98j9OYuOpEIyK0NrKZjuCl4lPMFyV4nkv4lHmNNHUjWs4zeyBoC1v/xeAL1Wx2j2abvcE
+ QMMX9Z+G6W13TBzG2ZU8c3sAUxBzK3aRmpY6tbWUIgRlnyKhwTHDg0oPdw1zUFYdvDyh+e18dVZ
+ BoQw+NUA+b3ZZb+27pOcV8op3yLk6R0E7oIoDGIPojuxx5HWfbDcDKZwTWm63WFnUTX6nM/i73o
+ Xk7NNX92ogdqEayaWrZrHKXKhjmgD4iI7OX3SUu+kOwUAD3kI9kqZ/owKo8Cg3dx1IXKnSqsz3D
+ +5Lr87WHgJuW5SOUvnWWaWbxxgc3zEyRneY0gzzVtFv3NdRT
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 17/07/2023 23:22:51+0530, Atul Kumar Pant wrote:
-> Adds a check to verify if the rtc device file is valid or not
-> and prints a useful error message if the file is not accessible.
-> 
-> Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+We have some KUnit tests for ASoC but they're not being run as much as
+they should be since ASoC isn't enabled in the configs used by default
+with KUnit and in the case of the topology tests there is no way to
+enable them without enabling drivers that use them.  This series
+provides a Kconfig option which KUnit can use directly rather than worry
+about drivers.
 
-Please collect and keep the tags you got on previous versions
+Further, since KUnit is typically run in UML but ALSA prevents build
+with UML we need to remove that Kconfig conflict.  As far as I can tell
+the motiviation for this is that many ALSA drivers use iomem APIs which
+are not available under UML and it's more trouble than it's worth to go
+through and add per driver dependencies.  In order to avoid these issues
+we also provide stubs for these APIs so there are no build time issues
+if a driver relies on iomem but does not depend on it.  With these stubs
+I am able to build all the sound drivers available in a UML defconfig
+(UML allmodconfig appears to have substantial other issues in a quick
+test).
 
-> ---
-> 
-> changes since v4:
->     Updated the commit message.
-> 
-> changes since v3:
->     Added Linux-kselftest and Linux-kernel mailing lists.
-> 
-> changes since v2:
->     Changed error message when rtc file does not exist.
-> 
-> changes since v1:
->     Removed check for uid=0
->     If rtc file is invalid, then exit the test.
-> 
->  tools/testing/selftests/rtc/rtctest.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-> index 63ce02d1d5cc..630fef735c7e 100644
-> --- a/tools/testing/selftests/rtc/rtctest.c
-> +++ b/tools/testing/selftests/rtc/rtctest.c
-> @@ -17,6 +17,7 @@
->  #include <unistd.h>
->  
->  #include "../kselftest_harness.h"
-> +#include "../kselftest.h"
->  
->  #define NUM_UIE 3
->  #define ALARM_DELTA 3
-> @@ -419,6 +420,8 @@ __constructor_order_last(void)
->  
->  int main(int argc, char **argv)
->  {
-> +	int ret = -1;
-> +
->  	switch (argc) {
->  	case 2:
->  		rtc_file = argv[1];
-> @@ -430,5 +433,11 @@ int main(int argc, char **argv)
->  		return 1;
->  	}
->  
-> -	return test_harness_run(argc, argv);
-> +	// Run the test if rtc_file is valid
-> +	if (access(rtc_file, F_OK) == 0)
-> +		ret = test_harness_run(argc, argv);
-> +	else
-> +		ksft_exit_fail_msg("[ERROR]: Cannot access rtc file %s - Exiting\n", rtc_file);
-> +
-> +	return ret;
->  }
-> -- 
-> 2.25.1
-> 
+With this series I am able to run the topology KUnit tests as part of a
+kunit --alltests run.
 
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v2:
+- Add support for building ALSA with UML.
+- Link to v1: https://lore.kernel.org/r/20230712-asoc-topology-kunit-enable-v1-0-b9f2da9dca23@kernel.org
+
+---
+Mark Brown (5):
+      driver core: Provide stubs for !IOMEM builds
+      platform: Provide stubs for !HAS_IOMEM builds
+      ALSA: Enable build with UML
+      kunit: Enable ASoC in all_tests.config
+      ASoC: topology: Add explicit build option
+
+ include/linux/device.h                       | 26 ++++++++++++++++++++++++++
+ include/linux/platform_device.h              | 28 ++++++++++++++++++++++++++++
+ sound/Kconfig                                |  4 ----
+ sound/soc/Kconfig                            | 11 +++++++++++
+ tools/testing/kunit/configs/all_tests.config |  5 +++++
+ 5 files changed, 70 insertions(+), 4 deletions(-)
+---
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+change-id: 20230701-asoc-topology-kunit-enable-5e8dd50d0ed7
+
+Best regards,
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Mark Brown <broonie@kernel.org>
+
