@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EC375855F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 21:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2AC7585A1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 21:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjGRTKt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 15:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S230173AbjGRTh0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 15:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbjGRTKr (ORCPT
+        with ESMTP id S229452AbjGRThZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 15:10:47 -0400
+        Tue, 18 Jul 2023 15:37:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61ED2113;
-        Tue, 18 Jul 2023 12:10:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D895A198D;
+        Tue, 18 Jul 2023 12:37:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7D96616CE;
-        Tue, 18 Jul 2023 19:10:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AE09C433C8;
-        Tue, 18 Jul 2023 19:10:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73F2060B59;
+        Tue, 18 Jul 2023 19:37:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06F4AC433C7;
+        Tue, 18 Jul 2023 19:37:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689707445;
-        bh=YYl/EUj6DCRSCQey6kEPZ2T5dVhRW3N46kZgt3rw2LU=;
+        s=k20201202; t=1689709043;
+        bh=ZxtPv1D0nptmBko9s7OKhZDvD31woHBZFfU7oYY10b8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CPOMIHmHcysn6e7Ezp7G9Lvt5eZGNIxiZV8UrLxoyk03fhbOjyFIFDPEDxQVjGxYr
-         0IJDGgSBCcj1y3UJKnXlohYlZo2TZR55ziCWM+86tX1h476ymSNvomBxYATFGDiKD3
-         kM4DP+Uy+Rbt/rr9VbChoK4eYmVmmf/OH1LeGVL0gPDFxxcExeeUqUIKfTbdHwmWwj
-         66xboAw32/YLlqeRbYTLZJqR8hZxQYweZH3uYGuQVY/W6gV1++qmVkfgSNyFT5rPDJ
-         e0ivgfAmet3+KXZ29mn3Tuj5p6aWr2wpx7JISQCOXZJ4RmRChoWXmtAXKlBm/sdulP
-         kTlli0NniP8Eg==
-Date:   Tue, 18 Jul 2023 20:10:35 +0100
+        b=HMLY8kCEqG0wMS07BdWto8m0clJr2/78xvRh1w9dZf9yG8l29QftXXKHFF55EFsz3
+         rMx0ONDAp3wXEMIlVWX54Q8iMQycKnWpkwPHNUgvAd6rMgpv3P0Yoj8MIFKE/aOJ6F
+         LRmzXHn9sUf5TWmvjnegDi3yttbTb0Zz6AagJoP4t5CylB1YdgUOjZPrtgkqdRnacp
+         g4lHW0S/qAk6zPJYXKsgsuJglyVgIy3O5bIBW60emia1334fKYVwDNILv497vXIGse
+         MTMybqf0Swz27NUZmnrkgdv5Kv9IGHQvU3SGj3GplW2cBlx4sxBs/AzGXS1s65Y7jR
+         vKNy338gfsWYg==
+Date:   Tue, 18 Jul 2023 20:37:14 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
 Cc:     "corbet@lwn.net" <corbet@lwn.net>,
@@ -66,17 +66,16 @@ Cc:     "corbet@lwn.net" <corbet@lwn.net>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH 02/35] prctl: Add flag for shadow stack writeability and
- push/pop
-Message-ID: <19911588-f74d-4a7a-858c-2994c8614463@sirena.org.uk>
+Subject: Re: [PATCH 21/35] arm64/gcs: Implement shadow stack prctl() interface
+Message-ID: <22a53782-7c8b-409e-92b5-ce89e2a86e2d@sirena.org.uk>
 References: <20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org>
- <20230716-arm64-gcs-v1-2-bf567f93bba6@kernel.org>
- <a236d8bb1593035252f7094b6461e4d2c5b432a1.camel@intel.com>
+ <20230716-arm64-gcs-v1-21-bf567f93bba6@kernel.org>
+ <2e1c24e343fb920e1f8616e083bba625717c384d.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iAfYGwbU4kDAge8S"
+        protocol="application/pgp-signature"; boundary="+LcC9ieUsmFeoYzA"
 Content-Disposition: inline
-In-Reply-To: <a236d8bb1593035252f7094b6461e4d2c5b432a1.camel@intel.com>
+In-Reply-To: <2e1c24e343fb920e1f8616e083bba625717c384d.camel@intel.com>
 X-Cookie: Nothing happens.
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -89,43 +88,59 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---iAfYGwbU4kDAge8S
+--+LcC9ieUsmFeoYzA
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 18, 2023 at 05:47:32PM +0000, Edgecombe, Rick P wrote:
-> On Sun, 2023-07-16 at 22:50 +0100, Mark Brown wrote:
+On Tue, Jul 18, 2023 at 05:51:54PM +0000, Edgecombe, Rick P wrote:
+> On Sun, 2023-07-16 at 22:51 +0100, Mark Brown wrote:
 
-> > On arm64 the kernel can separately control if userspace is able to
-> > pop
-> > and push values directly onto the shadow stack via GCS push and pop
-> > instructions, supporting many scenarios where userspace needs to
-> > write
-> > to the stack with less security exposure than full write access.=A0 Add
-> > a
-> > flag to allow this to be selected when changing the shadow stack
-> > status.
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0g=
+cs =3D alloc_gcs(task->thread.gcspr_el0, size,
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A00, 0);
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0i=
+f (!gcs)
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0return -ENOMEM;
 
-> Is this correct? I thought Szabolcs was saying pop was always
-> supported, but push was optional.
+> > +=A0=A0=A0=A0=A0=A0=A0task->thread.gcs_el0_mode =3D arg;
+> > +=A0=A0=A0=A0=A0=A0=A0if (task =3D=3D current)
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0gcs_set_el0_mode(task);
+> > +
 
-It's not, I wrote this right after looking at hypervisor controls which
-do control push and pop.
+> Ah! So does this task =3D=3D current part mean this can be called from
+> another task via ptrace?
 
---iAfYGwbU4kDAge8S
+Ugh, right.  So I had been worried about preemption rather than invoking
+prctl() via ptrace, though since ptrace can change the syscall invoked
+by a task it could cause prctl() to be invoked that way (but that should
+look like being run in the target process).
+
+I'm not aware of an interface specifically intended to remotely invoke
+prctls via ptrace but that doesn't mean there isn't one that I didn't
+find yet.  I can't remember why I'm aware of the task !=3D current case as
+a concern which is worrying me.
+
+> If so, then is the alloc_gcs() part on the wrong mm?
+
+Yes, it will be.  I'll add a check in there to reject attempts to enable
+GCS when task !=3D current.
+
+--+LcC9ieUsmFeoYzA
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS246sACgkQJNaLcl1U
-h9CH3Af9Gc0ROtEwiO2hraLxRf8RP7E57Zl493uWzd9vEx2utPcr5meeChS7qWAk
-zNoD8IB/4WfafwXv6xjwP5d1PnERWQMij8YDHh3/HPUskRQQJoqb2i0rdSrne/n7
-PEhrLVeF69IYVhVhpnSrOQqdGD0P8iSmaC9Z23grrFoUC/l0uRGqX5DaafWRwhMt
-2dDXduZC/3AmH6m+s05fouTSJCmAgTgBWrSyKpIvL6/Gle5/GHZMwOBoNEIFwnxD
-DhOyjAeycXa5+EfcJY4tSlXiZmvs9SEz1NdYRQnBDxs7s1WBf0XMjO+IRJIj2HlC
-vE24/LaeVmr9BnVOuylmqCUJInN5Jw==
-=UfKG
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS26eoACgkQJNaLcl1U
+h9CYygf+IDDkv7ACSKD5nM6hnqcKIlhFl4zq3viBlcIX0vXYzPVupOCAbCarTXX9
+8ONJZvPpTQjznNjMcmvWut8WU+hWOW/UvsbtftxjLJRyoioHPqwZHy7KVVYYWUwv
+FIGO+d+5I7UpABBVNJsdHFSGthvOxBPGzFMNqyi/0wO8rtRAlfdg+cmMkGgpxoel
+HEC4D5W7U+X5BEs1wnPKZZuvTvt5hbqeLbY4VSyKqfqjryTxnqebHLo5RzW3PKdH
+ZDcn47+rFqdw4kMF7gsLWp++R3fZXCO5PRO6B+Ok6A12Hh3ICV+MbVPdeDrzhfiw
+s1AEnkG+S/KEme6d6O1scSv5RQymhg==
+=hLC+
 -----END PGP SIGNATURE-----
 
---iAfYGwbU4kDAge8S--
+--+LcC9ieUsmFeoYzA--
