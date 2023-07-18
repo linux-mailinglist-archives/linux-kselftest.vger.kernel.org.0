@@ -2,159 +2,317 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A417581D0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 18:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53956758213
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 18:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjGRQOw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 12:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
+        id S232841AbjGRQ2B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 12:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjGRQOv (ORCPT
+        with ESMTP id S232850AbjGRQ2A (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 12:14:51 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E23E13E
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 09:14:50 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-57764a6bf8cso60790177b3.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 09:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1689696889; x=1692288889;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aIxbqWruk3tde8GVe4doC/LqINU6BWOqPPtRnKi722g=;
-        b=WcRQ65n2jffvRfWCd/0smTGdkn4JwU1AcKC64qNQdLnF+Zl2LddiiFmy/exjJpDO2Q
-         kYnOcXQ6NyJ0CamdYVCkvtRg5AdC0+AHUysEq4EqUaP6fvIeIGDWgA++zhM+A1TlH3Ww
-         YZSugrPeUDvfPsEBOyxSbOoqoMz8vxjPGJYeBVSSQZZ1Pv57fAsOYMi2g7NLD1qfYcoI
-         KunMLrJOhVQSatmpdU9b5b7PcE6Vv8isJ/ceXgrIR9SNbUHuMSVEGzYE9ir1wS2wscVm
-         N0pvai/AjXhy70uf1ykJpI3E0j//MKVD5AJLcMS3iO1XJtPWOhc1z0qpHcSizch8FFz6
-         g50g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689696889; x=1692288889;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aIxbqWruk3tde8GVe4doC/LqINU6BWOqPPtRnKi722g=;
-        b=lMThks/pLcN1YZ17FTgbVe9WSAcaVMYfAGvXI3gc7elDS45Ng/p3uyKqsgF/SSm6ec
-         EvO9t6iyCWu95+qfHlWU61RbdIyYnmv2vMa5hotktkdHXjXt+LctRq7uzBvyR9rdYPUs
-         J8RT2j/zx0bjWAwO8pmYROPB+7F4KQ6AzXJrJiq7zfE+upSXKLhL20cpjytqeEeLYYnJ
-         nXdCP0WSLKcR50AsIXh/j3jTubF4FGHU8a0KAy5HvcKiGZFYSNYxKtPE7MuBRjNYmZ/C
-         YCymwzOJ4sFxfuyzSw1gMCSbKW3BIeiaMlOcMpuqd/f6zyL0NLnr63DsBWT1SgFnfrkz
-         Z0VQ==
-X-Gm-Message-State: ABy/qLakmLdgGbeH0fUUrIRM5M/cbnn48eC5dHSSzsSJh6qHGTapdo9V
-        AJlli3C2NhZABwmL0ntJc7ousF5nUHXLxLOjNERX
-X-Google-Smtp-Source: APBJJlFiIjBtpQQejWvrjQReyY+tBIxRJDFWVT5w7U/heJfhvIbpO+/96V065lnbgvZpVmD5IVL95oW37LKVsskcjTI=
-X-Received: by 2002:a0d:d754:0:b0:582:98f9:a1e3 with SMTP id
- z81-20020a0dd754000000b0058298f9a1e3mr215180ywd.18.1689696889222; Tue, 18 Jul
- 2023 09:14:49 -0700 (PDT)
+        Tue, 18 Jul 2023 12:28:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DABE77;
+        Tue, 18 Jul 2023 09:27:59 -0700 (PDT)
+Received: from [192.168.100.7] (unknown [39.34.184.252])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 44CA06607069;
+        Tue, 18 Jul 2023 17:27:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689697677;
+        bh=xri/7NiFFtC1ErMdL5z9Id14lXfscVhH+yKOPXCwmo8=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=ledU0TTHS7bQL/nKzSLDHqlzhDyNweNtbOdtRBsYCWAiql5AL0SXQGSL5qFcHkwvX
+         MpGxk1LPkN1AeL2mQMgGwV4E48Da2WTV5R+RTafXVUTe6k+pFSLesxA2R1EH/GWV3f
+         nHxRJSa1RkA7xpzlVXNJDyyaAj/5OsAkRwc9HmbcSg4YjQO9ue/goKFbQpcnpKZH9l
+         YR80MyJnc2XAT8fHGhOpjRhDmmdac0MkBjzlhcW4Psv4zy6N5IvNwpQb/XDaD15WHy
+         kZyyveSc5zOwqFBwI55NHQLZmZvgx3iDxbdrjNR5Is5kDbhi+KZxc0Yi9kZsPeyOrz
+         Sgj8nfRU4mQLQ==
+Message-ID: <ff953d3f-2a55-44dd-c69c-b82b7944448a@collabora.com>
+Date:   Tue, 18 Jul 2023 21:27:46 +0500
 MIME-Version: 1.0
-References: <3076188eb88cca9151a2d12b50ba1e870b11ce09.1689693294.git.geliang.tang@suse.com>
-In-Reply-To: <3076188eb88cca9151a2d12b50ba1e870b11ce09.1689693294.git.geliang.tang@suse.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 18 Jul 2023 12:14:38 -0400
-Message-ID: <CAHC9VhS_LKdkEmm5_J5y34RpaRcTbg8==fpz8pMThDCjF6nYtQ@mail.gmail.com>
-Subject: Re: [RFC bpf-next v5] bpf: Force to MPTCP
-To:     Geliang Tang <geliang.tang@suse.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v25 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     Andrei Vagin <avagin@gmail.com>
+References: <20230713101415.108875-1-usama.anjum@collabora.com>
+ <20230713101415.108875-3-usama.anjum@collabora.com>
+ <CANaxB-zMhhi+kHZ+3w9yzogo6fKjR=swBkuA-s88Qs5oeLRAYQ@mail.gmail.com>
+ <c379c99f-2466-6056-4dd6-90d0a202c13c@collabora.com>
+ <CANaxB-y2C+gu9Z5MyKQEZATU6dscd04+PeJNNgvhYLp+31_Nrw@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CANaxB-y2C+gu9Z5MyKQEZATU6dscd04+PeJNNgvhYLp+31_Nrw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 11:21=E2=80=AFAM Geliang Tang <geliang.tang@suse.co=
-m> wrote:
->
-> As is described in the "How to use MPTCP?" section in MPTCP wiki [1]:
->
-> "Your app can create sockets with IPPROTO_MPTCP as the proto:
-> ( socket(AF_INET, SOCK_STREAM, IPPROTO_MPTCP); ). Legacy apps can be
-> forced to create and use MPTCP sockets instead of TCP ones via the
-> mptcpize command bundled with the mptcpd daemon."
->
-> But the mptcpize (LD_PRELOAD technique) command has some limitations
-> [2]:
->
->  - it doesn't work if the application is not using libc (e.g. GoLang
-> apps)
->  - in some envs, it might not be easy to set env vars / change the way
-> apps are launched, e.g. on Android
->  - mptcpize needs to be launched with all apps that want MPTCP: we could
-> have more control from BPF to enable MPTCP only for some apps or all the
-> ones of a netns or a cgroup, etc.
->  - it is not in BPF, we cannot talk about it at netdev conf.
->
-> So this patchset attempts to use BPF to implement functions similer to
-> mptcpize.
->
-> The main idea is add a hook in sys_socket() to change the protocol id
-> from IPPROTO_TCP (or 0) to IPPROTO_MPTCP.
->
-> [1]
-> https://github.com/multipath-tcp/mptcp_net-next/wiki
-> [2]
-> https://github.com/multipath-tcp/mptcp_net-next/issues/79
->
-> v5:
->  - add bpf_mptcpify helper.
->
-> v4:
->  - use lsm_cgroup/socket_create
->
-> v3:
->  - patch 8: char cmd[128]; -> char cmd[256];
->
-> v2:
->  - Fix build selftests errors reported by CI
->
-> Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/79
-> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-> ---
->  include/linux/bpf.h                           |   1 +
->  include/linux/lsm_hook_defs.h                 |   2 +-
->  include/linux/security.h                      |   6 +-
->  include/uapi/linux/bpf.h                      |   7 +
->  kernel/bpf/bpf_lsm.c                          |   2 +
->  net/mptcp/bpf.c                               |  20 +++
->  net/socket.c                                  |   4 +-
->  security/apparmor/lsm.c                       |   8 +-
->  security/security.c                           |   2 +-
->  security/selinux/hooks.c                      |   6 +-
->  tools/include/uapi/linux/bpf.h                |   7 +
->  .../testing/selftests/bpf/prog_tests/mptcp.c  | 128 ++++++++++++++++--
->  tools/testing/selftests/bpf/progs/mptcpify.c  |  17 +++
->  13 files changed, 187 insertions(+), 23 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/progs/mptcpify.c
-
+On 7/18/23 9:08 PM, Andrei Vagin wrote:
 ...
+>>>> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
+>>>> +                                int depth, struct mm_walk *walk)
+>>>> +{
+>>>> +       unsigned long n_pages = (end - addr)/PAGE_SIZE;
+>>>> +       struct pagemap_scan_private *p = walk->private;
+>>>> +       struct vm_area_struct *vma = walk->vma;
+>>>> +       bool interesting = true;
+>>>> +       unsigned long bitmap;
+>>>> +       int ret = 0;
+>>>> +
+>>>> +       if (!vma)
+>>>> +               return 0;
+>>>> +
+>>>> +       bitmap = PM_SCAN_FLAGS(false, false, false, false, false);
+>>>> +
+>>>> +       if (IS_PM_SCAN_GET(p->flags))
+>>>> +               interesting = pagemap_scan_is_interesting_page(bitmap, p);
+>>>> +
+>>>> +       if (interesting) {
+>>>> +               if (IS_PM_SCAN_GET(p->flags)) {
+>>>> +                       if (n_pages > p->max_pages - p->found_pages)
+>>>> +                               n_pages = p->max_pages - p->found_pages;
+>>>> +
+>>>> +                       ret = pagemap_scan_output(bitmap, p, addr, n_pages);
+>>>> +               }
+>>>> +
+>>>> +               if (IS_PM_SCAN_WP(p->flags) && !ret &&
+>>>> +                   uffd_wp_range(vma, addr, end - addr, true) < 0)
+>>>
+>>> Why do we need to call uffd_wp_range for holes? Should we call
+>>> flush_tlb_range after it?
+> 
+> Did you skip this question?
+Sorry, missed it the first time. In case of holes, there isn't any pmd or
+pte. But we need to place the PTE markers indicating that this memory is
+WPed. So we can parse the address range from PGD ourselves and place the
+markers. Or we can use the uffd_wp_range(). Using uffd_wp_range() for this
+case seems optimal. We don't need to do flush as uffd_wp_range() flushes
+the range by itself.
 
-> diff --git a/security/security.c b/security/security.c
-> index b720424ca37d..bbebcddce420 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -4078,7 +4078,7 @@ EXPORT_SYMBOL(security_unix_may_send);
->   *
->   * Return: Returns 0 if permission is granted.
->   */
-> -int security_socket_create(int family, int type, int protocol, int kern)
-> +int security_socket_create(int *family, int *type, int *protocol, int ke=
-rn)
->  {
->         return call_int_hook(socket_create, 0, family, type, protocol, ke=
-rn);
->  }
+> 
+>>>
+>>>> +                       ret = -EINVAL;
+>>>> +       }
+>>>> +
+>>>> +       return ret;
+>>>> +}
+>>>> +
+>>>> +static const struct mm_walk_ops pagemap_scan_ops = {
+>>>> +       .test_walk = pagemap_scan_test_walk,
+>>>> +       .pmd_entry = pagemap_scan_pmd_entry,
+>>>> +       .pte_hole = pagemap_scan_pte_hole,
+>>>> +       .hugetlb_entry = pagemap_scan_hugetlb_entry,
+>>>> +};
+>>>> +
+>>>> +static int pagemap_scan_args_valid(struct pm_scan_arg *arg, unsigned long start,
+>>>> +                                  unsigned long end, struct page_region __user *vec)
+>>>> +{
+>>>> +       /* Detect illegal size, flags, len and masks */
+>>>> +       if (arg->size != sizeof(struct pm_scan_arg))
+>>>> +               return -EINVAL;
+>>>> +       if (!arg->flags)
+>>>> +               return -EINVAL;
+>>>> +       if (arg->flags & ~PM_SCAN_OPS)
+>>>> +               return -EINVAL;
+>>>> +       if (!(end - start))
+>>>> +               return -EINVAL;
+>>>> +       if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask |
+>>>> +            arg->return_mask) & ~PM_SCAN_BITS_ALL)
+>>>> +               return -EINVAL;
+>>>> +       if (!arg->required_mask && !arg->anyof_mask &&
+>>>> +           !arg->excluded_mask)
+>>>> +               return -EINVAL;
+>>>> +       if (!arg->return_mask)
+>>>> +               return -EINVAL;
+>>>> +
+>>>> +       /* Validate memory range */
+>>>> +       if (!IS_ALIGNED(start, PAGE_SIZE))
+>>>> +               return -EINVAL;
+>>>> +       if (!access_ok((void __user *)start, end - start))
+>>>> +               return -EFAULT;
+>>>> +
+>>>> +       if (IS_PM_SCAN_GET(arg->flags)) {
+>>>> +               if (arg->vec_len == 0)
+>>>> +                       return -EINVAL;
+>>>> +               if (!vec)
+>>>> +                       return -EFAULT;
+>>>> +               if (!access_ok((void __user *)vec,
+>>>> +                              arg->vec_len * sizeof(struct page_region)))
+>>>> +                       return -EFAULT;
+>>>> +       }
+>>>> +
+>>>> +       if (IS_PM_SCAN_WP(arg->flags) && !IS_PM_SCAN_GET(arg->flags) &&
+>>>> +           arg->max_pages)
+>>>> +               return -EINVAL;
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long __arg)
+>>>> +{
+>>>> +       struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)__arg;
+>>>> +       unsigned long long start, end, walk_start, walk_end;
+>>>> +       unsigned long empty_slots, vec_index = 0;
+>>>> +       struct mmu_notifier_range range;
+>>>> +       struct page_region __user *vec;
+>>>> +       struct pagemap_scan_private p;
+>>>> +       struct pm_scan_arg arg;
+>>>> +       int ret = 0;
+>>>> +
+>>>> +       if (copy_from_user(&arg, uarg, sizeof(arg)))
+>>>> +               return -EFAULT;
+>>>> +
+>>>> +       start = untagged_addr((unsigned long)arg.start);
+>>>> +       end = untagged_addr((unsigned long)arg.end);
+>>>> +       vec = (struct page_region __user *)untagged_addr((unsigned long)arg.vec);
+>>>> +
+>>>> +       ret = pagemap_scan_args_valid(&arg, start, end, vec);
+>>>> +       if (ret)
+>>>> +               return ret;
+>>>> +
+>>>> +       p.max_pages = (arg.max_pages) ? arg.max_pages : ULONG_MAX;
+>>>> +       p.found_pages = 0;
+>>>> +       p.required_mask = arg.required_mask;
+>>>> +       p.anyof_mask = arg.anyof_mask;
+>>>> +       p.excluded_mask = arg.excluded_mask;
+>>>> +       p.return_mask = arg.return_mask;
+>>>> +       p.flags = arg.flags;
+>>>> +       p.flags |= ((p.required_mask | p.anyof_mask | p.excluded_mask) &
+>>>> +                   PAGE_IS_WRITTEN) ? PM_SCAN_REQUIRE_UFFD : 0;
+>>>> +       p.cur_buf.start = p.cur_buf.len = p.cur_buf.flags = 0;
+>>>> +       p.vec_buf = NULL;
+>>>> +       p.vec_buf_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+>>>> +       p.vec_buf_index = 0;
+>>>> +       p.end_addr = 0;
+>>>> +
+>>>> +       /*
+>>>> +        * Allocate smaller buffer to get output from inside the page walk
+>>>> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+>>>> +        * we want to return output to user in compact form where no two
+>>>> +        * consecutive regions should be continuous and have the same flags.
+>>>> +        * So store the latest element in p.cur_buf between different walks and
+>>>> +        * store the p.cur_buf at the end of the walk to the user buffer.
+>>>> +        */
+>>>> +       if (IS_PM_SCAN_GET(p.flags)) {
+>>>> +               p.vec_buf = kmalloc_array(p.vec_buf_len, sizeof(*p.vec_buf),
+>>>> +                                         GFP_KERNEL);
+>>>> +               if (!p.vec_buf)
+>>>> +                       return -ENOMEM;
+>>>> +       }
+>>>> +
+>>>> +       /*
+>>>> +        * Protection change for the range is going to happen.
+>>>> +        */
+>>>> +       if (IS_PM_SCAN_WP(p.flags)) {
+>>>> +               mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
+>>>> +                                       mm, start, end);
+>>>> +               mmu_notifier_invalidate_range_start(&range);
+>>>> +       }
+>>>> +
+>>>> +       walk_start = walk_end = start;
+>>>> +       while (walk_end < end && !ret) {
+>>>> +               if (IS_PM_SCAN_GET(p.flags)) {
+>>>> +                       /*
+>>>> +                        * All data is copied to cur_buf first. When more data
+>>>> +                        * is found, we push cur_buf to vec_buf and copy new
+>>>> +                        * data to cur_buf. Subtract 1 from length as the
+>>>> +                        * index of cur_buf isn't counted in length.
+>>>> +                        */
+>>>> +                       empty_slots = arg.vec_len - vec_index;
+>>>> +                       p.vec_buf_len = min(p.vec_buf_len, empty_slots - 1);
+>>>> +               }
+>>>> +
+>>>
+>>> I still don't understand why we don't want/need to check for pending signals.
+>> We haven't added it as other existing code such as mincore() and
+> 
+> It doesn't convince me. There should be reasons to do or not to do
+> certain things.
+> We can't say how long this loop can be running, so it is the reason
+> why we can want
+> to check pending signals.
+> 
+>> pagemap_read() don't have it either.
+> 
+> I already explained that this case is different, because the size of
+> the output buffer is
+> limited for pagemap_read.
+> 
+>> Also mmap_read_lock_killable would return error if there is some critical single pending.\
+> 
+> It isn't completely true. It doesn't return errors in the fast path
+> when it takes the lock right
+> away. It checks signals only when it needs to wait for the lock.
+> 
+Okay. It seems reasonable. I'll add the following at the start of the loop:
 
-Using the LSM to change the protocol family is not something we want
-to allow.  I'm sorry, but you will need to take a different approach.
+	if (fatal_signal_pending(current))
+		return -EINTR;
 
---=20
-paul-moore.com
+
+>>
+>>>
+>>>> +               ret = mmap_read_lock_killable(mm);
+>>>> +               if (ret)
+>>>> +                       goto out;
+>>>> +
+>>>> +               walk_end = min((walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK, end);
+>>>> +
+>>>> +               ret = walk_page_range(mm, walk_start, walk_end,
+>>>> +                                     &pagemap_scan_ops, &p);
+>>>> +               mmap_read_unlock(mm);
+>>>> +
+>>>> +               if (ret == PM_SCAN_FOUND_MAX_PAGES || ret == PM_SCAN_END_WALK)
+>>>> +                       arg.start = p.end_addr;
+>>>
+>>> nit: this check can be moved out of the loop.
+>> No, ret could get replaced by error if copy_to_user() fails. So we have to
+>> do this before that.
+> 
+> If we fail to copy a vector, it is a fatal error and it probably doesn't matter
+> what end address has been there. It is up to you to leave it here or not.
+Sure.
+
+
+-- 
+BR,
+Muhammad Usama Anjum
