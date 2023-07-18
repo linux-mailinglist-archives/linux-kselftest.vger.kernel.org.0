@@ -2,71 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082DE7584DA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 20:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3367584F5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 20:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjGRSbv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 14:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
+        id S230365AbjGRSjz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 14:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjGRSbu (ORCPT
+        with ESMTP id S230322AbjGRSju (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 14:31:50 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BD19D
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 11:31:49 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51e55517de3so14918a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 11:31:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689705108; x=1692297108;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OJRfS2iQxUWH+byKp3jNigM7HLEQCRK1+MsC766nIxg=;
-        b=VK3F1CCmO1RTo+Kf7Jb50AL8WhJi1OWC3MufV3fw9hjO+tfsdxy7hGFHK0FaRcx+n6
-         MaRDv6DguXyvDuAlndnTBKoMnltFmqHIq+H7yexvaKRvhxr8esLudAhH9eqQV+0VW0Zx
-         L6BOB85oJyZibh+iSelSeniCE38iT1wZZWyw/dZD2c+W+HTwH7e+9uoH2z1oFyz0oU6T
-         tUbfY9l8iDUy2Ofw1s7u11N/2Og3cg34JxQV1FbFy0uyWRq8o7bqNgB8XbP9v9/Dp4v6
-         e8JxXFzZfR1VdPcc7QdYEZkkzZsftK4a6ljNnMU7qpJXLW1dqucxdG7iFKmo9u9CcbwD
-         pSAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689705108; x=1692297108;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OJRfS2iQxUWH+byKp3jNigM7HLEQCRK1+MsC766nIxg=;
-        b=hf99HlGgWwAwJsXNzkI1xsRlKC7u03mxP/iuGz6S8L7o8IUMX62WrF/QcWqemUexSV
-         XW+BjDphzGLepYmWR48GLds0Ov2m0DHKlGxICdtqRqib9dmLv2xc+E2lCgpo6qZJ/NXP
-         DmwdIWyceAcueyuZaWTDm9vHMS0XrZ73uRsinC3s/atZcRQrhyZBozYo9RV6vC9ORnFw
-         IH1vN7aTFzYwkpA4ClWM+tYDwttfl8O50YE5PO1mNxAQlYlzwEUudMZijp/4OMVqghdR
-         xEDqzqHDhpi6mzaUQyYBg066r9hzCzI4So5HcVx5vgWYHP2YP7YxiVsHCUTprtpJuLzP
-         rwcg==
-X-Gm-Message-State: ABy/qLYMl9JszxPYA031J52ksL5mp6sHelceK0UkS8rnqaSzVYPAAcBo
-        DFCSEHY35rxryCayKzFwd3L8fVeXxcGVnLrEAOS0nWaBlLg2qLGEsbY=
-X-Google-Smtp-Source: APBJJlHVNVX4lMT4yqXasU4j9zkQHNPFeqEDpi2W7xK5jJyVyePMS9TC3zw0WklS4fCsBfR/dDebogwQVATMujTXuRY=
-X-Received: by 2002:a50:bae1:0:b0:51e:5e41:a0b2 with SMTP id
- x88-20020a50bae1000000b0051e5e41a0b2mr181591ede.2.1689705107580; Tue, 18 Jul
- 2023 11:31:47 -0700 (PDT)
+        Tue, 18 Jul 2023 14:39:50 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAF1F9;
+        Tue, 18 Jul 2023 11:39:48 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id AAAD660173;
+        Tue, 18 Jul 2023 20:39:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1689705586; bh=y8LKM/0CokKO2vVzIn2LDXeZ5ru9UAbuIkefHGPIjm4=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=0r83uC3SXNE1V7UD/Y2I2f/LbJkRGPCF9dyh+rMv8N192XY4z7NyuyFhCMnlT9PDI
+         I23jHs3Q3FN0o6MPsUwh1Xva+cPSDOwoUABiZ508xYz6mzgEMBi8/y23WNm2MUIOSq
+         nqEo/Ew/FHhHG+0KOt4NxtGIU7a5A0T0dnozud89jsy0a1PE9+MCgUJLkJiLdEsaJo
+         VFUdwjvdiW6pkPBLEODeEbBT9wkaQQuu/z1N+8HIcr7qCrE7WpjfuVXxqInQ7hqA7J
+         NsD3lHXKRzOciTNlEC48afYYO4qYM3AkvIdR+h3z/LUn7T0WjyOtprwSHtAu/xDhi/
+         aUpe7vlVBe4Xg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zhmTaWmv8Cp7; Tue, 18 Jul 2023 20:39:44 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id 1E93F60171;
+        Tue, 18 Jul 2023 20:39:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1689705583; bh=y8LKM/0CokKO2vVzIn2LDXeZ5ru9UAbuIkefHGPIjm4=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=diwIpzLCpPKaQey0gkERET0dKbleabhoImIHjU+FNwr5NnbDA/ezscEjrg6TseVlQ
+         HuNvVTp0Da5fEALfq/AQZxdglu6VAfJrOTNEfAeBASiVKJnTWL2Pp9I+QaiJ+xc37+
+         mf4NkuJDJFplHqnmEtJMdTXJhKaaSfNjKNibu+M+DlWg0A2d3CSR3dToa7OpKJgq+E
+         hKEL77KvqkiNggtxDpPY5Lh/pgT3K1IfCB/wgXN7un49XexgmH9Cccp5l1qTZNxyEm
+         OjTVkvaRlSj0Cjblo6PFnLUsyNSjE1UeF3bcjjRdDndyAw5e2GNm9ugSmTfNXMsT7O
+         RHP5DtUcUFEUw==
+Message-ID: <1c2a2d56-95a0-72f8-23a0-1e186e6443a2@alu.unizg.hr>
+Date:   Tue, 18 Jul 2023 20:39:33 +0200
 MIME-Version: 1.0
-References: <20230707210947.1208717-1-rmoar@google.com> <20230707210947.1208717-3-rmoar@google.com>
- <CABVgOS=ttFomNVdsKAY1FZCuzi46vii=ESdGU3VeYs-pRfoPNA@mail.gmail.com>
-In-Reply-To: <CABVgOS=ttFomNVdsKAY1FZCuzi46vii=ESdGU3VeYs-pRfoPNA@mail.gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 18 Jul 2023 14:31:31 -0400
-Message-ID: <CA+GJov7qG9VVp7EhnVKKBe-X1rh4QZ2u3w8WOFVdsaFp=vYpLA@mail.gmail.com>
-Subject: Re: [RFC v2 2/9] kunit: Add speed attribute
-To:     David Gow <davidgow@google.com>
-Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PROBLEM] selftests: net/forwarding/*.sh: 'Command line is not
+ complete. Try option "help"'
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        petrm@nvidia.com
+References: <856d454e-f83c-20cf-e166-6dc06cbc1543@alu.unizg.hr>
+ <ZLY9yiaVwCGy5H3R@shredder>
+ <8d149f8c-818e-d141-a0ce-a6bae606bc22@alu.unizg.hr>
+Content-Language: en-US
+In-Reply-To: <8d149f8c-818e-d141-a0ce-a6bae606bc22@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,219 +78,170 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 3:39=E2=80=AFAM David Gow <davidgow@google.com> wro=
-te:
->
-> On Sat, 8 Jul 2023 at 05:09, Rae Moar <rmoar@google.com> wrote:
-> >
-> > Add speed attribute to the test attribute API. This attribute will allo=
-w
-> > users to mark tests with a category of speed.
-> >
-> > Currently the categories of speed proposed are: normal, slow, and very_=
-slow
-> > (outlined in enum kunit_speed). These are outlined in the enum kunit_sp=
-eed.
-> >
-> > The assumed default speed for tests is "normal". This indicates that th=
-e
-> > test takes a relatively trivial amount of time (less than 1 second),
-> > regardless of the machine it is running on. Any test slower than this c=
-ould
-> > be marked as "slow" or "very_slow".
-> >
-> > Add the macro KUNIT_CASE_SLOW to set a test as slow, as this is likely =
-a
-> > common use of the attributes API.
-> >
-> > Add an example of marking a slow test to kunit-example-test.c.
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
-> > ---
->
-> Looks good.
->
-> Reviewed-by: David Gow <davidgow@google.com>
->
+On 7/18/23 20:19, Mirsad Todorovac wrote:
+> On 7/18/23 09:22, Ido Schimmel wrote:
+>> On Mon, Jul 17, 2023 at 10:51:04PM +0200, Mirsad Todorovac wrote:
+>>> Tests fail with error message:
+>>>
+>>> Command line is not complete. Try option "help"
+>>> Failed to create netif
+>>>
+>>> The script
+>>>
+>>> # tools/testing/seltests/net/forwarding/bridge_igmp.sh
+>>>
+>>> bash `set -x` ends with an error:
+>>>
+>>> ++ create_netif_veth
+>>> ++ local i
+>>> ++ (( i = 1 ))
+>>> ++ (( i <= NUM_NETIFS ))
+>>> ++ local j=2
+>>> ++ ip link show dev
+>>> ++ [[ 255 -ne 0 ]]
+>>> ++ ip link add type veth peer name
+>>> Command line is not complete. Try option "help"
+>>> ++ [[ 255 -ne 0 ]]
+>>> ++ echo 'Failed to create netif'
+>>> Failed to create netif
+>>> ++ exit 1
+>>>
+>>> The problem seems to be linked with this piece of code of "lib.sh":
+>>>
+>>> create_netif_veth()
+>>> {
+>>>          local i
+>>>
+>>>          for ((i = 1; i <= NUM_NETIFS; ++i)); do
+>>>                  local j=$((i+1))
+>>>
+>>>                  ip link show dev ${NETIFS[p$i]} &> /dev/null
+>>>                  if [[ $? -ne 0 ]]; then
+>>>                          ip link add ${NETIFS[p$i]} type veth \
+>>>                                  peer name ${NETIFS[p$j]}
+>>>                          if [[ $? -ne 0 ]]; then
+>>>                                  echo "Failed to create netif"
+>>>                                  exit 1
+>>>                          fi
+>>>                  fi
+>>>                  i=$j
+>>>          done
+>>> }
+>>>
+>>> Somehow, ${NETIFS[p$i]} is evaluated to an empty string?
+>>
+>> You need to provide a configuration file in
+>> tools/testing/selftests/net/forwarding/forwarding.config. See
+>> tools/testing/selftests/net/forwarding/forwarding.config.sample for
+>> example.
+>>
+>> Another option is to provide the interfaces on the command line.
+>>
+>> ./bridge_igmp.sh veth0 veth1 veth2 veth3
+>>
+>> If no configuration file is present, we can try to assume that the
+>> tests are meant to be run with veth pairs and not with physical
+>> loopbacks. Something like:
+>>
+>> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+>> index 71f7c0c49677..5b0183013017 100755
+>> --- a/tools/testing/selftests/net/forwarding/lib.sh
+>> +++ b/tools/testing/selftests/net/forwarding/lib.sh
+>> @@ -16,8 +16,6 @@ TEAMD=${TEAMD:=teamd}
+>>   WAIT_TIME=${WAIT_TIME:=5}
+>>   PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
+>>   PAUSE_ON_CLEANUP=${PAUSE_ON_CLEANUP:=no}
+>> -NETIF_TYPE=${NETIF_TYPE:=veth}
+>> -NETIF_CREATE=${NETIF_CREATE:=yes}
+>>   MCD=${MCD:=smcrouted}
+>>   MC_CLI=${MC_CLI:=smcroutectl}
+>>   PING_COUNT=${PING_COUNT:=10}
+>> @@ -30,6 +28,20 @@ REQUIRE_MZ=${REQUIRE_MZ:=yes}
+>>   REQUIRE_MTOOLS=${REQUIRE_MTOOLS:=no}
+>>   STABLE_MAC_ADDRS=${STABLE_MAC_ADDRS:=no}
+>>   TCPDUMP_EXTRA_FLAGS=${TCPDUMP_EXTRA_FLAGS:=}
+>> +NETIF_TYPE=${NETIF_TYPE:=veth}
+>> +NETIF_CREATE=${NETIF_CREATE:=yes}
+>> +declare -A NETIFS=(
+>> +       [p1]=veth0
+>> +       [p2]=veth1
+>> +       [p3]=veth2
+>> +       [p4]=veth3
+>> +       [p5]=veth4
+>> +       [p6]=veth5
+>> +       [p7]=veth6
+>> +       [p8]=veth7
+>> +       [p9]=veth8
+>> +       [p10]=veth9
+>> +)
+>>   relative_path="${BASH_SOURCE%/*}"
+>>   if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
+> 
+> This patch appears to work for the first testing script
+> 
+> root@defiant:# ./bridge_igmp.sh
+> TEST: IGMPv2 report 239.10.10.10                                    [ OK ]
+> TEST: IGMPv2 leave 239.10.10.10                                     [ OK ]
+> TEST: IGMPv3 report 239.10.10.10 is_include                         [ OK ]
+> TEST: IGMPv3 report 239.10.10.10 include -> allow                   [ OK ]
+> TEST: IGMPv3 report 239.10.10.10 include -> is_include              [ OK ]
+> TEST: IGMPv3 report 239.10.10.10 include -> is_exclude              [ OK ]
+> TEST: IGMPv3 report 239.10.10.10 include -> to_exclude              [ OK ]
+> TEST: IGMPv3 report 239.10.10.10 exclude -> allow                   [ OK ]
+> TEST: IGMPv3 report 239.10.10.10 exclude -> is_include              [ OK ]
+> TEST: IGMPv3 report 239.10.10.10 exclude -> is_exclude              [ OK ]
+> TEST: IGMPv3 report 239.10.10.10 exclude -> to_exclude              [ OK ]
+> TEST: IGMPv3 report 239.10.10.10 include -> block                   [ OK ]
+> TEST: IGMPv3 report 239.10.10.10 exclude -> block                   [ OK ]
+> TEST: IGMPv3 group 239.10.10.10 exclude timeout                     [ OK ]
+> TEST: IGMPv3 S,G port entry automatic add to a *,G port             [ OK ]
+> root@defiant:#
+> 
+> However, I suggest setting tools/testing/selftest/net/forwarding/settings:timeout=150 at least,
+> because default 45 is premature on my box and it leaves the networking system in an undefined
+> state upon exit.
 
-Thanks!
+There is also a gotcha here: you do not delete all veths:
 
-> >
-> > Changes since v1:
-> > - Remove the "fast" category of speed.
-> >
-> >  include/kunit/test.h           | 30 +++++++++++++++++++++-
-> >  lib/kunit/attributes.c         | 46 +++++++++++++++++++++++++++++++++-
-> >  lib/kunit/kunit-example-test.c |  9 +++++++
-> >  3 files changed, 83 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index 1fc9155988e9..c255c98a58f7 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -63,8 +63,25 @@ enum kunit_status {
-> >         KUNIT_SKIPPED,
-> >  };
-> >
-> > +/* Attribute struct/enum definitions */
-> > +
-> > +/*
-> > + * Speed Attribute is stored as an enum and separated into categories =
-of
-> > + * speed: very_slowm, slow, normal, and fast. These speeds are relativ=
-e
->
-> Nit: we only have very_slow, slow & normal now.
->
+root@defiant:# ip link show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp16s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+     link/ether 9c:6b:00:01:fb:80 brd ff:ff:ff:ff:ff:ff
+root@defiant:# ./bridge_igmp.sh
+TEST: IGMPv2 report 239.10.10.10                                    [ OK ]
+TEST: IGMPv2 leave 239.10.10.10                                     [ OK ]
+TEST: IGMPv3 report 239.10.10.10 is_include                         [ OK ]
+TEST: IGMPv3 report 239.10.10.10 include -> allow                   [ OK ]
+TEST: IGMPv3 report 239.10.10.10 include -> is_include              [ OK ]
+TEST: IGMPv3 report 239.10.10.10 include -> is_exclude              [ OK ]
+TEST: IGMPv3 report 239.10.10.10 include -> to_exclude              [ OK ]
+TEST: IGMPv3 report 239.10.10.10 exclude -> allow                   [ OK ]
+TEST: IGMPv3 report 239.10.10.10 exclude -> is_include              [ OK ]
+TEST: IGMPv3 report 239.10.10.10 exclude -> is_exclude              [ OK ]
+TEST: IGMPv3 report 239.10.10.10 exclude -> to_exclude              [ OK ]
+TEST: IGMPv3 report 239.10.10.10 include -> block                   [ OK ]
+TEST: IGMPv3 report 239.10.10.10 exclude -> block                   [ OK ]
+TEST: IGMPv3 group 239.10.10.10 exclude timeout                     [ OK ]
+TEST: IGMPv3 S,G port entry automatic add to a *,G port             [ OK ]
+root@defiant:# ip link show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp16s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+     link/ether 9c:6b:00:01:fb:80 brd ff:ff:ff:ff:ff:ff
+3: veth1@veth0: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+     link/ether b6:46:e6:4c:e4:00 brd ff:ff:ff:ff:ff:ff
+4: veth0@veth1: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+     link/ether 2e:ff:7f:8a:6b:d4 brd ff:ff:ff:ff:ff:ff
+5: veth3@veth2: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+     link/ether ba:33:37:81:dc:5b brd ff:ff:ff:ff:ff:ff
+6: veth2@veth3: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+     link/ether f2:fd:0a:9b:94:17 brd ff:ff:ff:ff:ff:ff
+root@defiant:#
 
-Oops thanks for catching this. Will fix this before I send out the
-official patch set.
+Also, I ran into problems with some other tests, but for documentation sake
+I will address the issue in a separate thread.
 
-> > + * to other KUnit tests.
-> > + */
-> > +enum kunit_speed {
-> > +       KUNIT_SPEED_UNSET,
-> > +       KUNIT_SPEED_VERY_SLOW,
-> > +       KUNIT_SPEED_SLOW,
-> > +       KUNIT_SPEED_NORMAL,
-> > +       KUNIT_SPEED_MAX =3D KUNIT_SPEED_NORMAL,
-> > +};
->
-> A part of me feels that we could get away with reversing the order of
-> this and having KUNIT_SPEED_NORMAL =3D=3D 0. (Possibly reversing the
-> comparisons in the filtering, too.)
->
-> That's probably not worth the added complexity though. Either way,
-> maybe add a note that "UNSET" =3D=3D "NORMAL".
->
->
+Best regards,
+Mirsad Todorovac
 
-Yes, I definitely have been debating this order myself as well. This
-order makes slightly more sense to me so I will likely keep this for
-the next version but I will add that note. If there are more comments
-on this, I am definitely open to reversing the order.
-
-> > +
-> >  /* Holds attributes for each test case and suite */
-> > -struct kunit_attributes {};
-> > +struct kunit_attributes {
-> > +       enum kunit_speed speed;
-> > +};
-> >
-> >  /**
-> >   * struct kunit_case - represents an individual test case.
-> > @@ -150,6 +167,17 @@ static inline char *kunit_status_to_ok_not_ok(enum=
- kunit_status status)
-> >                 { .run_case =3D test_name, .name =3D #test_name,    \
-> >                   .attr =3D attributes }
-> >
-> > +/**
-> > + * KUNIT_CASE_SLOW - A helper for creating a &struct kunit_case
-> > + * with the slow attribute
-> > + *
-> > + * @test_name: a reference to a test case function.
-> > + */
-> > +
-> > +#define KUNIT_CASE_SLOW(test_name)                     \
-> > +               { .run_case =3D test_name, .name =3D #test_name,    \
-> > +                 .attr.speed =3D KUNIT_SPEED_SLOW }
-> > +
-> >  /**
-> >   * KUNIT_CASE_PARAM - A helper for creation a parameterized &struct ku=
-nit_case
-> >   *
-> > diff --git a/lib/kunit/attributes.c b/lib/kunit/attributes.c
-> > index 9bda5a5f4030..e97096dbb3b1 100644
-> > --- a/lib/kunit/attributes.c
-> > +++ b/lib/kunit/attributes.c
-> > @@ -40,9 +40,53 @@ struct kunit_attr {
-> >         enum print_ops print;
-> >  };
-> >
-> > +/* String Lists for enum Attributes */
-> > +
-> > +static const char * const speed_str_list[] =3D {"unset", "very_slow", =
-"slow", "normal"};
-> > +
-> > +/* To String Methods */
-> > +
-> > +static const char *attr_enum_to_string(void *attr, const char * const =
-str_list[], bool *to_free)
-> > +{
-> > +       long val =3D (long)attr;
-> > +
-> > +       *to_free =3D false;
-> > +       if (!val)
-> > +               return NULL;
-> > +       return str_list[val];
-> > +}
-> > +
-> > +static const char *attr_speed_to_string(void *attr, bool *to_free)
-> > +{
-> > +       return attr_enum_to_string(attr, speed_str_list, to_free);
-> > +}
-> > +
-> > +/* Get Attribute Methods */
-> > +
-> > +static void *attr_speed_get(void *test_or_suite, bool is_test)
-> > +{
-> > +       struct kunit_suite *suite =3D is_test ? NULL : test_or_suite;
-> > +       struct kunit_case *test =3D is_test ? test_or_suite : NULL;
-> > +
-> > +       if (test)
-> > +               return ((void *) test->attr.speed);
-> > +       else
-> > +               return ((void *) suite->attr.speed);
-> > +}
-> > +
-> > +/* Attribute Struct Definitions */
-> > +
-> > +static const struct kunit_attr speed_attr =3D {
-> > +       .name =3D "speed",
-> > +       .get_attr =3D attr_speed_get,
-> > +       .to_string =3D attr_speed_to_string,
-> > +       .attr_default =3D (void *)KUNIT_SPEED_NORMAL,
-> > +       .print =3D PRINT_ALWAYS,
-> > +};
-> > +
-> >  /* List of all Test Attributes */
-> >
-> > -static struct kunit_attr kunit_attr_list[] =3D {};
-> > +static struct kunit_attr kunit_attr_list[] =3D {speed_attr};
-> >
-> >  /* Helper Functions to Access Attributes */
-> >
-> > diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-t=
-est.c
-> > index b69b689ea850..01a769f35e1d 100644
-> > --- a/lib/kunit/kunit-example-test.c
-> > +++ b/lib/kunit/kunit-example-test.c
-> > @@ -220,6 +220,14 @@ static void example_params_test(struct kunit *test=
-)
-> >         KUNIT_EXPECT_EQ(test, param->value % param->value, 0);
-> >  }
-> >
-> > +/*
-> > + * This test should always pass. Can be used to practice filtering att=
-ributes.
-> > + */
-> > +static void example_slow_test(struct kunit *test)
-> > +{
-> > +       KUNIT_EXPECT_EQ(test, 1 + 1, 2);
-> > +}
-> > +
-> >  /*
-> >   * Here we make a list of all the test cases we want to add to the tes=
-t suite
-> >   * below.
-> > @@ -237,6 +245,7 @@ static struct kunit_case example_test_cases[] =3D {
-> >         KUNIT_CASE(example_all_expect_macros_test),
-> >         KUNIT_CASE(example_static_stub_test),
-> >         KUNIT_CASE_PARAM(example_params_test, example_gen_params),
-> > +       KUNIT_CASE_SLOW(example_slow_test),
-> >         {}
-> >  };
-> >
-> > --
-> > 2.41.0.255.g8b1d071c50-goog
-> >
