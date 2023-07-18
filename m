@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBB575775A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 11:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5538C75775B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 11:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbjGRJEA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 05:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
+        id S232161AbjGRJEB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 05:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbjGRJDy (ORCPT
+        with ESMTP id S232168AbjGRJD6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 05:03:54 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB7EFA
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:49 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fc075d9994so66905e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:49 -0700 (PDT)
+        Tue, 18 Jul 2023 05:03:58 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FD610EF
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:53 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbb07e7155so69975e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689671028; x=1692263028;
+        d=google.com; s=20221208; t=1689671032; x=1692263032;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=awUZ3DCWpHGOZknPl8ZR+LvfOISe0J/umeb7XV3l75Q=;
-        b=u2koyAHdkEJvijki7VdqPvkSdYaW+Xy4RbGfgLB+/u83RZBr1I7GFWRIo7GZlbKQLQ
-         z7m3+KMFPiqaJRbzvb4s/Ovm79ZA1ehpZfp1/jxn5jgymQp5NgKbkZHawyxmvx/x0Wk6
-         ij/d07mUpQDfbKPP5S+ZkrxxR/cZtgMUOreV5M6qF82NcHLhGAF0U8yQ5VJZKpoqvf3k
-         MnJcsG+Vw15uUqIocIYfcRttfatxD3pqh7G1gY5GjnD9rkLEg/hmXiUbnk+Rnb03wHTd
-         T7LhHAGrDZ7D2maPryFSu8ZMI6HSFcYS7WSrt3YWjcSOt4bRsOQal+BImm9B6CqflwF2
-         ZVIA==
+        bh=ZqM14CIuzwGpcGIYxRgFKt02PLcjClZQZKc9WyW+QUo=;
+        b=Na7NLrMGnok2MHH5pxIblxq51b/F3tuqm1Jft2AJQhMho8vwuCP+5qya+wf58V55DT
+         bvjkr27KfY+WaE3DgC4M5ttKlbC0U6JqfITY2ggGdb7+W/ewaXz/+r+64xXy5T7yxuIE
+         pmUSRPPa0JdB31UyS7ZjqcviL+qlHQ8eKk8VHZVkPjw0CNnKBCZms5MqfrSQS8TpO6Qg
+         ddh7pDGy+G0jqecP22E6x/dz5204VQY5AdPggEctwMAsd2zZkvLulxY81MbEZnSdxxah
+         VP/eevAK1KXSJyhMCENO1cUa3nRP3huj4Ar0XQwZtoLj69oTD+LJ7RUQpibHxKhXCP5s
+         o+Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689671028; x=1692263028;
+        d=1e100.net; s=20221208; t=1689671032; x=1692263032;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=awUZ3DCWpHGOZknPl8ZR+LvfOISe0J/umeb7XV3l75Q=;
-        b=ZnF6Pld4eIHXO5LWzNq9wuX3OdEbTKMS+Mrvyqnz803eBKXVnT8B51pvY5BBK1jySx
-         iad5g474xaT+6DgUJGNKslcgOE0+SdMV3/HbpD/k+2Db1lSLoQmME/y9xCBIpEDlYh0J
-         BYl1CC15HtZRjimkUet6i1VcoGGIXqcNd1KaA8D5wBeB5MVZsVrQUTWgRYVIHg2L/WZo
-         3Z6aSEMI9txisL50lek5mparsDBKQA7NmTM2LPV2i/Q5ic7ap+B3p0++MaMck/5fVpGv
-         tdCZznAbw2QsQUHLdnMghVLlLWxxJ+mhl6HiZJHwakADMypyhKWFl1uGuCncVpxhbYLX
-         nu9Q==
-X-Gm-Message-State: ABy/qLZdGuTZjKqauK3DLW1Jz+Qtc6DE4ei1XpooSCSgrNhb62cJR6YP
-        ffg3939e+yW7uQzqtV0zYOvqDbNjFlD7O/kBxUmclA==
-X-Google-Smtp-Source: APBJJlGosrwaYRnxxumaPEki54Xk1ftUTjhUOX5RuvDKnY/mKfUFiDpEwVbFjqcH2h40f0EaaXJpvYotzJA3IVBbUG4=
-X-Received: by 2002:a05:600c:3c92:b0:3fc:75d:8f85 with SMTP id
- bg18-20020a05600c3c9200b003fc075d8f85mr84492wmb.6.1689671028113; Tue, 18 Jul
- 2023 02:03:48 -0700 (PDT)
+        bh=ZqM14CIuzwGpcGIYxRgFKt02PLcjClZQZKc9WyW+QUo=;
+        b=cc+vu/Q8rMwCTzuZuzUyVFwsnDeW+dJuGdvvx5acp6avO6N1dJAlBjAYvjghn/1Yy6
+         YoMoEWNt5bVSM23j0JGsMDaIpWcLyw71myGrFpCWRSXLFUAIbPIs0Q0CfLOLr/XwaYzG
+         JRVLBHTvlsndYsOEFFZC6KvcPeJbvRGOZclocZbisqhcDyScXVpTZ6an2JAXK/z9hOQA
+         WesL5BEf6YNagRLDNBUDeT7pbWIoHBCPoaT+VFSttYvp5X2er64v+pH0fj9cJ8bgW6gf
+         zHGMsq2A2rfY3yBlUYiFbDpBSq56DrdCykhBpQjPBgcnI3jY7nSp19Az6MJIO0UEkA9y
+         Txhg==
+X-Gm-Message-State: ABy/qLZiAzYMDv625a1BeC/98FlaqlLldg2k01fs9kRsUCga2owpnTYv
+        Fi8+IuCzqR1nUCC4nSPGd0fWfWGuB7D2MYjNZno9Sw==
+X-Google-Smtp-Source: APBJJlHzArV2QXKYgA0t/tMpHektEc9XvleJFYO5Jycq9SutDVZ7cVY0PIL4w5F/KfUe0rAC0x+iTEAq8f0TIrcvl10=
+X-Received: by 2002:a05:600c:a39e:b0:3fb:ccae:cd4b with SMTP id
+ hn30-20020a05600ca39e00b003fbccaecd4bmr80956wmb.2.1689671032449; Tue, 18 Jul
+ 2023 02:03:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230718-asoc-topology-kunit-enable-v2-0-0ee11e662b92@kernel.org> <20230718-asoc-topology-kunit-enable-v2-3-0ee11e662b92@kernel.org>
-In-Reply-To: <20230718-asoc-topology-kunit-enable-v2-3-0ee11e662b92@kernel.org>
+References: <20230718-asoc-topology-kunit-enable-v2-0-0ee11e662b92@kernel.org> <20230718-asoc-topology-kunit-enable-v2-4-0ee11e662b92@kernel.org>
+In-Reply-To: <20230718-asoc-topology-kunit-enable-v2-4-0ee11e662b92@kernel.org>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 18 Jul 2023 17:03:36 +0800
-Message-ID: <CABVgOS=W81BCVWFg7OPiu4i5pJ9_4jSu+rKG7eY6TDMB2KQ3nw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] ALSA: Enable build with UML
+Date:   Tue, 18 Jul 2023 17:03:41 +0800
+Message-ID: <CABVgOSkJ9KASn9zxWMr23xh0U61er0WUPwQprjq1ADY67oxX8g@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] kunit: Enable ASoC in all_tests.config
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -63,7 +63,7 @@ Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000006f78e70600bf3123"
+        boundary="000000000000b1b0e70600bf3153"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
@@ -75,63 +75,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000006f78e70600bf3123
+--000000000000b1b0e70600bf3153
 Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 18 Jul 2023 at 08:30, Mark Brown <broonie@kernel.org> wrote:
 >
-> In order to facilitate testing using KUnit allow ALSA to build with UML,
-> it's not super useful at runtime but that's a user problem rather than
-> an actual dependency.  The apparent reason for the dependency was the
-> widespread use of iomem APIs in ALSA drivers, earlier patches in this
-> series have provided stubs for these APIs so that there are no build
-> time issues even without individual drivers having IOMEM dependencies
-> added.
+> There are KUnit tests for some of the ASoC utility functions which are
+> not enabled in the KUnit all_tests.config, do so.
 >
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
 
-This works well here, and I'd love to see it go through. I'll leave it
-to the ALSA folks in case there are other issues with UML they're
-worried about, though.
+If the other patches go through, this is great for me. (I've already
+used it to test some in-progress changes with the struct device
+handling.)
 
-Tested-by: David Gow <davidgow@google.com>
+I'm happy to take this via the KUnit tree, but if it's easier to take
+all of these via ALSA or another tree, let me know.
+
+Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
 
->  sound/Kconfig | 4 ----
->  1 file changed, 4 deletions(-)
+>  tools/testing/kunit/configs/all_tests.config | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> diff --git a/sound/Kconfig b/sound/Kconfig
-> index 0ddfb717b81d..f0e15822e858 100644
-> --- a/sound/Kconfig
-> +++ b/sound/Kconfig
-> @@ -39,8 +39,6 @@ config SOUND_OSS_CORE_PRECLAIM
+> diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
+> index 0393940c706a..13d15bc693fb 100644
+> --- a/tools/testing/kunit/configs/all_tests.config
+> +++ b/tools/testing/kunit/configs/all_tests.config
+> @@ -35,3 +35,7 @@ CONFIG_DAMON_DBGFS=y
 >
->  source "sound/oss/dmasound/Kconfig"
->
-> -if !UML
-> -
->  menuconfig SND
->         tristate "Advanced Linux Sound Architecture"
->         help
-> @@ -103,8 +101,6 @@ source "sound/virtio/Kconfig"
->
->  endif # SND
->
-> -endif # !UML
-> -
->  endif # SOUND
->
->  config AC97_BUS
+>  CONFIG_SECURITY=y
+>  CONFIG_SECURITY_APPARMOR=y
+> +
+> +CONFIG_SOUND=y
+> +CONFIG_SND=y
+> +CONFIG_SND_SOC=y
 >
 > --
 > 2.39.2
 >
 
---0000000000006f78e70600bf3123
+--000000000000b1b0e70600bf3153
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -198,14 +186,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAT
-YfhAoJw9f0lI+iJkcuGhd1aveq7AEBmqZayrBjdU1DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTgwOTAzNDhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCF
+sYO2UYX/gHmix0YPXh2VEw4AHvbkwusegwfPsgnKmjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTgwOTAzNTJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAQcunZtkOLIfnWXsLHViO
-6oe/HoLmms6VW1vlD8CIEiv4FMvaJFMLPpiUrnGNYIlRX2zkoB0UtXr6rlOpETZWvG1Qt3js4LPq
-VUL74p5ZqgQ6kx96+MrjNg8rmL4XIQ/DkpEFO2agp2m2Mc0ywKyZj87Oyj4wsGEbwF5D7EaAdy8a
-8KNrkdpkm64KrUaHt901kDS7djh8BzNZbk9Cwx1mhR09XixRgBsb9Ul4Tf8o+G6UOxUjko8EmKWx
-K6HdqB/mXek7EZZBo4vl//ztm8KIAShnL9RvUX/uquf0GbqA215GLw5tb7H5mZXuyE/uO7rfbZ8E
-bkrgMgUdUy1OSabeVQ==
---0000000000006f78e70600bf3123--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEALG6ZrOhvkpDokYbc2aaz
+YqAZZIWcv+jZTYOhpKrQREFA1XDaRxDFsN+HKaycw+KrXpHU4z1uWym7CoE5sT67oStrV/xQdoOK
+pMialboDhCoxibS80ei0IwQZZyIC+lzHINy4P3aQtIpZ+k/m+C4AgFOk8dHw8r8MGOSwu8Q5lcZS
+qL7aAAebTmWd8XVD+ExJ64ZD16ew1pW5iQBqH645S+Q3VDvkg1n6noYBmRn8nQFZ282Zx22GzYOu
+J7Vp1Apzuy1hOaof9KGdoBU/g5/G5pRkJmqF3MrrhQusEShSWUg4Q3l2gky5HJMPdkQMwBX+k5vi
+eN+3Mx43UvxSlZeW3g==
+--000000000000b1b0e70600bf3153--
