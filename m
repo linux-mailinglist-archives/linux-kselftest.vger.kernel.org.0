@@ -2,211 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58339757773
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 11:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD47E757900
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 12:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbjGRJK6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 05:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
+        id S230486AbjGRKKk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 06:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbjGRJKz (ORCPT
+        with ESMTP id S229521AbjGRKKj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 05:10:55 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2043.outbound.protection.outlook.com [40.107.8.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3FDE5F;
-        Tue, 18 Jul 2023 02:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cbR284YFKWqqp/H3njFY2FaXUqfJsbXnUaTpKzvcYfg=;
- b=mg6FGotE+bzzST0D36aFgGxT54jtHLzVH1IQuOOd3mcWAjvYXugq+VrfvAs6EJ4bDaDskuujWgPgU8o06XlcJm5WoLbwGpfhiNWku+IJ6/8w4HE5QvYuRt6IQFlV44IuNgKzLpxhxrle9xe4ogYhfMsFbGhg11DqENklR3ZEQiA=
-Received: from DBBPR09CA0007.eurprd09.prod.outlook.com (2603:10a6:10:c0::19)
- by DB9PR08MB9803.eurprd08.prod.outlook.com (2603:10a6:10:460::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.31; Tue, 18 Jul
- 2023 09:10:33 +0000
-Received: from DBAEUR03FT039.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:c0:cafe::e7) by DBBPR09CA0007.outlook.office365.com
- (2603:10a6:10:c0::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.33 via Frontend
- Transport; Tue, 18 Jul 2023 09:10:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DBAEUR03FT039.mail.protection.outlook.com (100.127.142.225) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.33 via Frontend Transport; Tue, 18 Jul 2023 09:10:33 +0000
-Received: ("Tessian outbound e1fdbe8a48d3:v145"); Tue, 18 Jul 2023 09:10:32 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: e51d28f378240e8d
-X-CR-MTA-TID: 64aa7808
-Received: from 1518e62880fc.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id D1158AE4-ECEA-4C7E-A403-ECDB7C1FE219.1;
-        Tue, 18 Jul 2023 09:10:22 +0000
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 1518e62880fc.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Tue, 18 Jul 2023 09:10:22 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BewX935bHjIuBCmpHZmS+inb94ZgCyVJmD8LEokrAOwgDorRz3DeNTp6O0PTVAZmM3oioAm3X27mp5UzmFBmYP5gWJygda6gl7XMwDIEPPOF++vgQhLEitw6n/XlcbuM9bS4cBhntH1UnWkkmBpQE1XfVruRu4xKyFJkUaoXOzlJehPbRl0dBZ3D04yOykocRSzE19+nLTZ42tXt3oUAQiNm7ZSznVxDlGAj+ainZrVXMzpcWi0lfh95OxYpnypfg01e18oFiOk79GCFz1pVxnmp49U9V2bZCU2HbK9E67CEVRQvPDuiWoEyk5cx3jBuH++bjYITpw1X27e2AQnjHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cbR284YFKWqqp/H3njFY2FaXUqfJsbXnUaTpKzvcYfg=;
- b=GHQRpe1/KZrupIPs0UyJmly7biiMzW3ug/tGzLt/oQP9TOTjhAk5uJv9QsB+V0MhG1ux3aI8uzRYMxoDAEETtsUmnxRX8oPI+82SXGkZbuGMfeS/Tm2i1gB67eqD/+7ghTV6IqJu6fnlZxl6tHQg6lQPe8u7DFHnT2v9Si2yLuS0W0yNfH/L3bUE6WST4h8SnC4dn2cYH/ErJofbU/MAhSBwf7KVewjk5YulmPfvTdjBahxPLK3w6+IxB/SLyeZBvS07hJ2pIHYGgezsOjtoiX0ATfHgH0hSTdzJlbm6/KVq/qOivZOvOvCeFFJLCi/QUed28vmtAmSPfrhvkKZ3tA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cbR284YFKWqqp/H3njFY2FaXUqfJsbXnUaTpKzvcYfg=;
- b=mg6FGotE+bzzST0D36aFgGxT54jtHLzVH1IQuOOd3mcWAjvYXugq+VrfvAs6EJ4bDaDskuujWgPgU8o06XlcJm5WoLbwGpfhiNWku+IJ6/8w4HE5QvYuRt6IQFlV44IuNgKzLpxhxrle9xe4ogYhfMsFbGhg11DqENklR3ZEQiA=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by DB9PR08MB9612.eurprd08.prod.outlook.com (2603:10a6:10:45e::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.31; Tue, 18 Jul
- 2023 09:10:19 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::adb0:61cb:8733:6db2]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::adb0:61cb:8733:6db2%7]) with mapi id 15.20.6588.031; Tue, 18 Jul 2023
- 09:10:19 +0000
-Date:   Tue, 18 Jul 2023 10:10:04 +0100
-From:   Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 22/35] arm64/mm: Implement map_shadow_stack()
-Message-ID: <ZLZW7Kvg2Rep8ySO@arm.com>
-References: <20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org>
- <20230716-arm64-gcs-v1-22-bf567f93bba6@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230716-arm64-gcs-v1-22-bf567f93bba6@kernel.org>
-X-ClientProxiedBy: LO4P123CA0363.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18e::8) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+        Tue, 18 Jul 2023 06:10:39 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9467AC;
+        Tue, 18 Jul 2023 03:10:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689675038; x=1721211038;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=X/RRuyAetnm+uR/pDnhkNQZeMBAEYZMSaoXG2VCqaP4=;
+  b=DU/gcDIXTt1nbAiSwdnE0ajTy+QRmdh2hs2NaT000ZmyxfB1FfLRRwse
+   JM/yQ/LWPfR2Ctmq8tcHQ53l9EvW10YNIRXd6WMoypSTXdD5CVB8t+ooN
+   pTzFIi6wCSAtUUp3Og4FFvqy4I22ncJkyeLUBEMKK8WFvbwF8mRCz5Mlg
+   8BKqyJDEewnE9YpWySDx1lMFM3wreKLXIc/RlMhkatVURjG3TTRU1VBOF
+   7pTxtFeQr+iwxoe8MojV65LHd8X3aAJdt+DvZFWYujzDanZsXVIwON8Zf
+   OvXkJoqV6d2fcg7Qhq+eKwqQITzUOxy67EvLqaPr4awmd3//UfvTZKrhB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="356109417"
+X-IronPort-AV: E=Sophos;i="6.01,213,1684825200"; 
+   d="scan'208";a="356109417"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 03:10:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="726891956"
+X-IronPort-AV: E=Sophos;i="6.01,213,1684825200"; 
+   d="scan'208";a="726891956"
+Received: from ijarvine-mobl2.ger.corp.intel.com ([10.252.47.53])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 03:10:35 -0700
+Date:   Tue, 18 Jul 2023 13:10:34 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 10/19] selftests/resctrl: Express span internally in
+ bytes
+In-Reply-To: <b6bb651a-aa2a-0179-4976-5656fa446a8e@intel.com>
+Message-ID: <ac83ece-bfc3-74c9-721f-e377a581bd6a@linux.intel.com>
+References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com> <20230713131932.133258-11-ilpo.jarvinen@linux.intel.com> <1dd10447-b03d-937a-fe55-ff324864c358@intel.com> <0c94daef-3642-9e8e-0e8a-3f8eaa2953e3@intel.com> <fce81fed-592e-16ad-b833-735a7b3a186@linux.intel.com>
+ <f1233835-8c94-e110-531f-13712569b7c0@intel.com> <7eef29f6-297b-bb2b-e0d-ccef1aa2f14@linux.intel.com> <b6bb651a-aa2a-0179-4976-5656fa446a8e@intel.com>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|DB9PR08MB9612:EE_|DBAEUR03FT039:EE_|DB9PR08MB9803:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8da0e0eb-abc6-43e5-29d0-08db876ed742
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: PxUwwgtHGL7gREDYcK9VjFQP3zehF4F17x0IZmGn2/yz/Pxqim/BcuRfwx0BEjsieoReHjCAbOWDl5Z1zUqBBz5naW7gzISdS3ofd6M0VNZYPmiyDMmhlYP+Z6maYR5R+2H8DwNC8jrCVvcgmOWFJ0i26WZeRkV+O+MjBu8bdZIws0s9NtkLY0SUs/g/aB71g7YW7FJce+TBVRP7pDJCptBkUMwPlPwdwvvDSiODU7R6XTAdXeXJLc1gs0mUoFYK8EaVZiaTgxdL1wXklWvK5XdjXC8RltAVIIO4C24GTmaZJ/tjiOPADTsrCv2SmtN5dh3tSZ3aTgXrzJU7N2wrM34aebIcmcI0ckePZxKdAYpmfQAF1+YQXlP9jXfp6yni4ltJqjbTddf9TPkR7qOyyNEg8tX5R4mzCGNjSETyfvNsBlG/Qj273NwPEUO1VyQwYG6B+vmrP9rB2KJw05ewzhJZVKIxJBwZcRn6FPaF4JJnYVUrPGJX9OfVbvQ47tZ/dPGxBkU61eoQEtjYVq/b9w49UGujkqUvroYHwkjacUbmvhH/nQm8dK6CpRiFyRHkjW/hRhICkKsR/nG6HJpKCppncIrZyEWWhPsquBN4scs=
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(39860400002)(376002)(346002)(451199021)(110136005)(478600001)(6486002)(6666004)(54906003)(6506007)(186003)(6512007)(26005)(2906002)(4326008)(316002)(66946007)(66556008)(41300700001)(7416002)(36756003)(8676002)(5660300002)(8936002)(38100700002)(921005)(66476007)(86362001)(2616005)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB9612
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT039.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: fde0465f-6270-423d-7d57-08db876ecec7
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hwpOfVOrYFRhLYq3dOHxX9kpz7JD1AWEIqH8nTdriXgiwOAmEDrszR2QYk/ZhEm1clc9Kt13jNH0mtpERmLrS1cbVeh5r5m6h+rEmnQlqe2jPmEJisPW70k/EXB/ru7dgLFcWMOj2hW7F+WHSwn2Uosko5WeENcxM4dgRxnAdy2mRnc+jiY1jiv3H57S3VAAIlnji2CDJyLCRusNHqFu5DCdKJlok1GKKaVw1sX8wljiCpk9zy0GGaPQG/Af3o4P/nOaEW4kVq0kQea1ETUXkCVpTUxvkEzK5Bic/VyyXssOOnGBjSNkTVr8JGkRKG4bmo/AusZn7MVXYKV6gVat6pioCPj7LGDI3bNHF1a1aXjj2UE8xTi2cq66oCdqguV+JrIlkJZ/Qv4dLLgOXdhESMyXfNaxPBgXcosN4zwje3lAUmwgK6aRDRPMDfy8b3VGLKMamWDcbKRS2GK1eK4cke/9M9X0G3zUFzscn0gVuAIhYZOzGafAZfWsqg7XkDrtzBzDUCWOJ1Wwekcuj+nyXjIyNBdIPKjnb6ee6Ta8uIc480bJAcDFn1zu7hRBTTOYfMcJ/uWA5r2Sv/D8CfoEtEeXzVyLRivOVhwsiOnEBz4udp8fQqhpD5DJ3JHZexBzLUcFso8fZdkaFGeMeZtNtsZtY3QlFvplNl/R0IkibZN3MBPUb+70i4VOQjjOAbuI83UF5B5pxAX7ZbOHbo2qgLQ7Gpi+5ZRfg2a2oO2xzYsdwi5AvoTKNO4tqZngLWS+OE5yx5TrvBq8fDRi2J1h2A==
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(39860400002)(136003)(376002)(451199021)(82310400008)(46966006)(36840700001)(40470700004)(40480700001)(40460700003)(54906003)(82740400003)(6666004)(110136005)(81166007)(356005)(921005)(6486002)(450100002)(5660300002)(8676002)(41300700001)(8936002)(316002)(478600001)(70206006)(70586007)(4326008)(336012)(36860700001)(83380400001)(186003)(47076005)(2616005)(6512007)(6506007)(26005)(107886003)(86362001)(36756003)(2906002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2023 09:10:33.0490
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8da0e0eb-abc6-43e5-29d0-08db876ed742
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT039.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB9803
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-1402979010-1689674760=:1611"
+Content-ID: <3f602b41-ec78-4198-fb50-67ba13db8385@linux.intel.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The 07/16/2023 22:51, Mark Brown wrote:
-> +SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsigned int, flags)
-> +{
-> +	unsigned long aligned_size;
-> +	unsigned long __user *cap_ptr;
-> +	unsigned long cap_val;
-> +	int ret;
-> +
-> +	if (!system_supports_gcs())
-> +		return -EOPNOTSUPP;
-> +
-> +	if (flags)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * An overflow would result in attempting to write the restore token
-> +	 * to the wrong location. Not catastrophic, but just return the right
-> +	 * error code and block it.
-> +	 */
-> +	aligned_size = PAGE_ALIGN(size);
-> +	if (aligned_size < size)
-> +		return -EOVERFLOW;
-> +
-> +	addr = alloc_gcs(addr, aligned_size, 0, false);
-> +	if (IS_ERR_VALUE(addr))
-> +		return addr;
-> +
-> +	/*
-> +	 * Put a cap token at the end of the allocated region so it
-> +	 * can be switched to.
-> +	 */
-> +	cap_ptr = (unsigned long __user *)(addr + aligned_size -
-> +					   (2 * sizeof(unsigned long)));
-> +	cap_val = GCS_CAP(cap_ptr);
-> +
-> +	ret = copy_to_user_gcs(cap_ptr, &cap_val, 1);
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-with
+--8323329-1402979010-1689674760=:1611
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <fa67fc9f-e8b9-ac0-e3f4-8213e5ebd124@linux.intel.com>
 
-  uint64_t *p = map_shadow_stack(0, N*8, 0);
+On Mon, 17 Jul 2023, Reinette Chatre wrote:
+> On 7/17/2023 5:30 AM, Ilpo Järvinen wrote:
+> > On Fri, 14 Jul 2023, Reinette Chatre wrote:
+> >> On 7/14/2023 3:22 AM, Ilpo Järvinen wrote:
+> >>> On Fri, 14 Jul 2023, Wieczor-Retman, Maciej wrote:
+> >>>> On 14.07.2023 01:00, Reinette Chatre wrote:
+> >>>>> Hi Ilpo,
+> >>>>>
+> >>>>> On 7/13/2023 6:19 AM, Ilpo Järvinen wrote:
+> >>>>>> MBA and MBM tests to use megabytes to represent span. CMT test uses
+> >>>>>> bytes. The difference requires run_benchmark() to size the buffer
+> >>>>>> differently based on the test name, which in turn requires passing the
+> >>>>>> test name into run_benchmark().
+> >>>>>>
+> >>>>>> Convert MBA and MBM tests to use internally bytes like CMT test to
+> >>>>>> remove the internal inconsistency between the tests. Remove the test
+> >>>>>> dependent buffer sizing from run_benchmark().
+> >>>>>
+> >>>>> If I understand correctly the intention is to always use bytes internally
+> >>>>> and only convert to megabytes when displayed to user space. The above
+> >>>>> implies that this takes care of the conversion but there still seems
+> >>>>> to be places that that do not follow my understanding. For example,
+> >>>>> resctrl_val.c:measure_vals() converts to megabytes before proceeding.
+> >>>>
+> >>>> Doesn't the use case inside resctrl_val.c:measure_vals() satisfy
+> >>>> the idea of only displaying data to the user space? From my
+> >>>> understanding it reads the number of bytes and only converts to
+> >>>> MB when printing the value. Or did I miss some detail there?
+> >>>
+> >>> It's for printing there yes.
+> >>>
+> >>> But it's not about span in the first place so I'm not sure why it is 
+> >>> related.
+> >>>
+> >>
+> >> If this change is just about how "span" is interpreted by the different
+> >> tests then the changelog could be more specific to not create expectation
+> >> that with this change there are no longer "bytes vs megabytes" internal
+> >> inconsistency between MBA, MBM, and CMT tests.
+> > 
+> > The shortlog and changelog are already pretty specific in mentioning 
+> > "span" a few times :-). I added yet another "span" into the changelog's 
+> > 2nd paragraph.
+> 
+> There are many things to consider when reviewing a patch. There is the code
+> changes in the patch itself that can be reviewed for correctness but there is
+> also the review of the changelog's solution statement to review if the code
+> changes in the patch accomplishes the stated solution. In one sense the review
+> considers the code in the patch and in another the review considers what
+> code may be missing from the patch.
 
-i'd expect p[N-1] to be the end token and p[N-2] to be the cap token,
-not p[PAGE_ALIGN(N*8)/8-2].
+Sure review can enlarge the scope, however, if I add some other things 
+unrelated to span into this patch, it no longer is in the minimal form.
 
-if we allow misalligned size here (and in munmap) then i think it's
-better to not page align.  size%8!=0 || size<16 can be an error.
+> I looked at the v5 changelog and I am still left with the same impression:
+> The changelog claims that this change removes internal consistency between
+> the tests, which it does not. Since you posted the next version before this
+> discussion completed (which is not ideal) I'll respond further to that patch.
+> In the end it may just be better to drop the "remove the internal inconsistency
+> between the tests" claim.
+
+I'm sorry, it was unintentional to send it like that. ...I honestly 
+thought I had addressed all the concerns you had by adding yet another 
+"span" (even if the scope was already pretty clear even w/o it, IMHO).
+
+I see nowhere in the changelog mentioned that this change removes all 
+internal inconsistencies between the test types. But I'm not attached to 
+any particular wording, if the text is good enough for you w/o the 
+internal inconsistency wording, I can cut that out.
 
 
-> +	if (ret != 0) {
-> +		vm_munmap(addr, size);
-> +		return -EFAULT;
-> +	}
-> +
-> +	return addr;
-> +}
+-- 
+ i.
+--8323329-1402979010-1689674760=:1611--
