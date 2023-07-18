@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14969757759
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 11:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBB575775A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 11:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbjGRJDy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 05:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
+        id S232204AbjGRJEA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 05:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjGRJDx (ORCPT
+        with ESMTP id S232169AbjGRJDy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 05:03:53 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E299AE56
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:45 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fbb07e7155so69875e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:45 -0700 (PDT)
+        Tue, 18 Jul 2023 05:03:54 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB7EFA
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:49 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fc075d9994so66905e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689671024; x=1692263024;
+        d=google.com; s=20221208; t=1689671028; x=1692263028;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=02qEvwlAp4lw+HqJtAe0UV05yFkTlesfNmZwk8mWMUg=;
-        b=bwtr/1zNoyLdn4ohTzPz/Itd0+v0uEz9QwTzd7PIJ8CTU4hO78a/zIt5H5LZ3NdPU4
-         H8xoVuCGJ18SymiWIkSjj6xnz4BcqCqgJYWdnt+4tBh3kMgzsF2qviSN9mOdaKxyhB20
-         L0EmLgEhtNCXk7htf8gg8d9gHEUbIJ+3dDhOLc8tN9kqliI8niNGyvGZXAOOh7voGHgw
-         bBK3A4rkxbsiX3CQ1d9dINo1v2UOLuOYjUGd8lSE4sG7bD0OcWVEIO75cnVb3QxDcPBM
-         3nljphfOPU8bsNvsXBHHEhILBfQ4fAzp4YabvQieNRRFQKTou4RcdWEN9m3eMNUP6Ivt
-         BrOg==
+        bh=awUZ3DCWpHGOZknPl8ZR+LvfOISe0J/umeb7XV3l75Q=;
+        b=u2koyAHdkEJvijki7VdqPvkSdYaW+Xy4RbGfgLB+/u83RZBr1I7GFWRIo7GZlbKQLQ
+         z7m3+KMFPiqaJRbzvb4s/Ovm79ZA1ehpZfp1/jxn5jgymQp5NgKbkZHawyxmvx/x0Wk6
+         ij/d07mUpQDfbKPP5S+ZkrxxR/cZtgMUOreV5M6qF82NcHLhGAF0U8yQ5VJZKpoqvf3k
+         MnJcsG+Vw15uUqIocIYfcRttfatxD3pqh7G1gY5GjnD9rkLEg/hmXiUbnk+Rnb03wHTd
+         T7LhHAGrDZ7D2maPryFSu8ZMI6HSFcYS7WSrt3YWjcSOt4bRsOQal+BImm9B6CqflwF2
+         ZVIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689671024; x=1692263024;
+        d=1e100.net; s=20221208; t=1689671028; x=1692263028;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=02qEvwlAp4lw+HqJtAe0UV05yFkTlesfNmZwk8mWMUg=;
-        b=ief2vRQXARSP8N6Uuo9aNggZ6khH6YEVT0hGhq8cilmB6oFvOiiCVhhZLbdyoDJ/Kj
-         4amWUDG5CFvMShBCQ6gk5xShB1klHGKlRm8U4Kwf0InSvlW9Vftc3S5iSB7JQnA1WK+9
-         GM0At25a4tevTfQF75zkZheqgbj+jYgVMiDNIllVKkHAhJYcxE3dhiFUhly0BJHeEoga
-         vnjDCULSDa5Pa2KtvTGQGJEQAraio5KfX/sQgW2BNtRSQ3RM9jP/9uYjWGLkzL+x8t35
-         PgdJtbPvRPjslFPumxQ9RZhY/PTqcFBtekEzN7Gn6rX0pZh4FLntJOp04CIJ712ghAXh
-         kJyQ==
-X-Gm-Message-State: ABy/qLbJkPUAKPog5y1m/UAnwGFoLPoNgK0TJJCIrwrqpPWKIkOQeW7e
-        +/JvliImsecWuHiPqhGpL9TuQyF2qyTDRmCrm4ge8VYRcpKHwgzsGOCmYQ==
-X-Google-Smtp-Source: APBJJlFwA4Qq1OA920SlL9F6tV87OJ6V11uYnPfKqCDWS5TF/aY8HmJaJScUFCm7V4x76DNnJSTEmZYpzziWwMiMdiU=
-X-Received: by 2002:a05:600c:3ac5:b0:3f7:e463:a0d6 with SMTP id
- d5-20020a05600c3ac500b003f7e463a0d6mr83943wms.0.1689671024232; Tue, 18 Jul
- 2023 02:03:44 -0700 (PDT)
+        bh=awUZ3DCWpHGOZknPl8ZR+LvfOISe0J/umeb7XV3l75Q=;
+        b=ZnF6Pld4eIHXO5LWzNq9wuX3OdEbTKMS+Mrvyqnz803eBKXVnT8B51pvY5BBK1jySx
+         iad5g474xaT+6DgUJGNKslcgOE0+SdMV3/HbpD/k+2Db1lSLoQmME/y9xCBIpEDlYh0J
+         BYl1CC15HtZRjimkUet6i1VcoGGIXqcNd1KaA8D5wBeB5MVZsVrQUTWgRYVIHg2L/WZo
+         3Z6aSEMI9txisL50lek5mparsDBKQA7NmTM2LPV2i/Q5ic7ap+B3p0++MaMck/5fVpGv
+         tdCZznAbw2QsQUHLdnMghVLlLWxxJ+mhl6HiZJHwakADMypyhKWFl1uGuCncVpxhbYLX
+         nu9Q==
+X-Gm-Message-State: ABy/qLZdGuTZjKqauK3DLW1Jz+Qtc6DE4ei1XpooSCSgrNhb62cJR6YP
+        ffg3939e+yW7uQzqtV0zYOvqDbNjFlD7O/kBxUmclA==
+X-Google-Smtp-Source: APBJJlGosrwaYRnxxumaPEki54Xk1ftUTjhUOX5RuvDKnY/mKfUFiDpEwVbFjqcH2h40f0EaaXJpvYotzJA3IVBbUG4=
+X-Received: by 2002:a05:600c:3c92:b0:3fc:75d:8f85 with SMTP id
+ bg18-20020a05600c3c9200b003fc075d8f85mr84492wmb.6.1689671028113; Tue, 18 Jul
+ 2023 02:03:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230718-asoc-topology-kunit-enable-v2-0-0ee11e662b92@kernel.org> <20230718-asoc-topology-kunit-enable-v2-2-0ee11e662b92@kernel.org>
-In-Reply-To: <20230718-asoc-topology-kunit-enable-v2-2-0ee11e662b92@kernel.org>
+References: <20230718-asoc-topology-kunit-enable-v2-0-0ee11e662b92@kernel.org> <20230718-asoc-topology-kunit-enable-v2-3-0ee11e662b92@kernel.org>
+In-Reply-To: <20230718-asoc-topology-kunit-enable-v2-3-0ee11e662b92@kernel.org>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 18 Jul 2023 17:03:32 +0800
-Message-ID: <CABVgOSnWkjr8HfHCwf+qCe0gu1SA2pZHXbwpPd76sh=_ebd5Rg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] platform: Provide stubs for !HAS_IOMEM builds
+Date:   Tue, 18 Jul 2023 17:03:36 +0800
+Message-ID: <CABVgOS=W81BCVWFg7OPiu4i5pJ9_4jSu+rKG7eY6TDMB2KQ3nw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] ALSA: Enable build with UML
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -63,10 +63,10 @@ Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000035172e0600bf3119"
+        boundary="0000000000006f78e70600bf3123"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,85 +75,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000035172e0600bf3119
+--0000000000006f78e70600bf3123
 Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 18 Jul 2023 at 08:30, Mark Brown <broonie@kernel.org> wrote:
 >
-> The various _ioremap_resource functions are not built when
-> CONFIG_HAS_IOMEM is disabled but no stubs are provided. Given how
-> widespread IOMEM usage is in drivers and how rare !IOMEM configurations
-> are in practical use let's just provide some stubs so users will build
-> without having to add explicit dependencies on IOMEM.
->
-> The most likely use case is builds with UML for KUnit testing.
+> In order to facilitate testing using KUnit allow ALSA to build with UML,
+> it's not super useful at runtime but that's a user problem rather than
+> an actual dependency.  The apparent reason for the dependency was the
+> widespread use of iomem APIs in ALSA drivers, earlier patches in this
+> series have provided stubs for these APIs so that there are no build
+> time issues even without individual drivers having IOMEM dependencies
+> added.
 >
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
 
-As with the previous patch, I'm all for this.
+This works well here, and I'd love to see it go through. I'll leave it
+to the ALSA folks in case there are other issues with UML they're
+worried about, though.
 
-Reviewed-by: David Gow <davidgow@google.com>
+Tested-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
 
->  include/linux/platform_device.h | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
+>  sound/Kconfig | 4 ----
+>  1 file changed, 4 deletions(-)
 >
-> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
-> index b845fd83f429..7a41c72c1959 100644
-> --- a/include/linux/platform_device.h
-> +++ b/include/linux/platform_device.h
-> @@ -63,6 +63,8 @@ extern struct resource *platform_get_mem_or_io(struct platform_device *,
->  extern struct device *
->  platform_find_device_by_driver(struct device *start,
->                                const struct device_driver *drv);
-> +
-> +#ifdef CONFIG_HAS_IOMEM
->  extern void __iomem *
->  devm_platform_get_and_ioremap_resource(struct platform_device *pdev,
->                                 unsigned int index, struct resource **res);
-> @@ -72,6 +74,32 @@ devm_platform_ioremap_resource(struct platform_device *pdev,
->  extern void __iomem *
->  devm_platform_ioremap_resource_byname(struct platform_device *pdev,
->                                       const char *name);
-> +#else
-> +
-> +static inline void __iomem *
-> +devm_platform_get_and_ioremap_resource(struct platform_device *pdev,
-> +                               unsigned int index, struct resource **res)
-> +{
-> +       return ERR_PTR(-EINVAL);
-> +}
-> +
-> +
-> +static inline void __iomem *
-> +devm_platform_ioremap_resource(struct platform_device *pdev,
-> +                              unsigned int index)
-> +{
-> +       return ERR_PTR(-EINVAL);
-> +}
-> +
-> +static inline void __iomem *
-> +devm_platform_ioremap_resource_byname(struct platform_device *pdev,
-> +                                     const char *name)
-> +{
-> +       return ERR_PTR(-EINVAL);
-> +}
-> +
-> +#endif
-> +
->  extern int platform_get_irq(struct platform_device *, unsigned int);
->  extern int platform_get_irq_optional(struct platform_device *, unsigned int);
->  extern int platform_irq_count(struct platform_device *);
+> diff --git a/sound/Kconfig b/sound/Kconfig
+> index 0ddfb717b81d..f0e15822e858 100644
+> --- a/sound/Kconfig
+> +++ b/sound/Kconfig
+> @@ -39,8 +39,6 @@ config SOUND_OSS_CORE_PRECLAIM
+>
+>  source "sound/oss/dmasound/Kconfig"
+>
+> -if !UML
+> -
+>  menuconfig SND
+>         tristate "Advanced Linux Sound Architecture"
+>         help
+> @@ -103,8 +101,6 @@ source "sound/virtio/Kconfig"
+>
+>  endif # SND
+>
+> -endif # !UML
+> -
+>  endif # SOUND
+>
+>  config AC97_BUS
 >
 > --
 > 2.39.2
 >
 
---00000000000035172e0600bf3119
+--0000000000006f78e70600bf3123
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -220,14 +198,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAm
-7a8ArzfNH1yZUp5jfhdSe5s+mh/8cntVE8bqbNAVEzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTgwOTAzNDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAT
+YfhAoJw9f0lI+iJkcuGhd1aveq7AEBmqZayrBjdU1DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTgwOTAzNDhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAGE7reL51zx706cJGn5Af
-2SMgHXcE+A48pY/8PBmyvAqoVBh6kklIvq9+NZhOacgdVvledgrnmFxHEQKCf/pHyJ8sOgTyr0oI
-/j258ZKH+mdY7ZOFBK/RVS5cPJuGer4rVpJCQvxw1x1ZCSjF2KmQ/pSQEQ3a1DWklHZCZUasNIMT
-reIDRlxeI57pt08q+RHGfsH4tihFNrfU6Gf1+/uHfszmDj7GJYrcvfSpf+QmkKNb8B+q6176P9dE
-LemavtHJZS8vyLYpfCmLPjM6ZA0s8yhkPh0ZME0CEKT6WQAG2OKd8OAM5/ZGtvY7g+UMLPIpV3Z4
-mGN97Z7sW2YT+QgFaw==
---00000000000035172e0600bf3119--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAQcunZtkOLIfnWXsLHViO
+6oe/HoLmms6VW1vlD8CIEiv4FMvaJFMLPpiUrnGNYIlRX2zkoB0UtXr6rlOpETZWvG1Qt3js4LPq
+VUL74p5ZqgQ6kx96+MrjNg8rmL4XIQ/DkpEFO2agp2m2Mc0ywKyZj87Oyj4wsGEbwF5D7EaAdy8a
+8KNrkdpkm64KrUaHt901kDS7djh8BzNZbk9Cwx1mhR09XixRgBsb9Ul4Tf8o+G6UOxUjko8EmKWx
+K6HdqB/mXek7EZZBo4vl//ztm8KIAShnL9RvUX/uquf0GbqA215GLw5tb7H5mZXuyE/uO7rfbZ8E
+bkrgMgUdUy1OSabeVQ==
+--0000000000006f78e70600bf3123--
