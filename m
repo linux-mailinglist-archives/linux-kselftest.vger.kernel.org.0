@@ -2,77 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F84757E46
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 15:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDD1757EF4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 16:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbjGRNzX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 09:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
+        id S230192AbjGROEy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 10:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232516AbjGRNzV (ORCPT
+        with ESMTP id S233256AbjGROEi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 09:55:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1586BF3;
-        Tue, 18 Jul 2023 06:55:18 -0700 (PDT)
+        Tue, 18 Jul 2023 10:04:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EE82132
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 07:03:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 940D7615AE;
-        Tue, 18 Jul 2023 13:55:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02EA5C433C9;
-        Tue, 18 Jul 2023 13:55:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 273B8615C2
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 14:03:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E4D0C433C9;
+        Tue, 18 Jul 2023 14:03:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689688516;
-        bh=5cdUcj3owivIzjkoYFboWBgivdYgnl4YnwjpKC2t3BI=;
+        s=k20201202; t=1689688998;
+        bh=WlS7Z5EdRNH+yPYQSYk18jt7Nv1ToMJ5zBRNQDTYJeU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PtR8XdBBq0j87nz3sJHETW4D6X3f2Tw6KWKHbxPNms4FvpYGnrt2l58e/Z8WBzFx8
-         DNt7RnrhN9stbBvq7544R7uMV9bNARXYL2LzHWsxyUCXhSUls0hei52w+8lpyVYXEF
-         oE0/i31Y4939oPjN9aTDQI4FKyPOk1ZD076TUNRcFyUcYM5C9vJhxI9IAU62Cp3ajx
-         ceAvvBb1KCSF6tMCgvYVDzGSXRKqUbLK/GHALFOskbqze63JjCHM7k7ISPAUBuKDL1
-         ubHorZl4nwKmhBbpynhLbHAcK7JRTB3Y8SwVpcNBgRMSrK1qobreFnLxfW/4nbbMkZ
-         yEL/pX8hpPQOw==
-Date:   Tue, 18 Jul 2023 14:55:07 +0100
+        b=MKii+jlVNd0dulA7+WThl1ud97SJdjCvawymEJlMTJ93S0ucT6GPL4e67TafRnVXZ
+         x6x7+zwAlEZFDkPMGwiSXRR2ZCdgc6LgOil2vumuc+Rt/0QvPO9il21f3pgwbLst1K
+         un0lL2cFg/pnqxgZrOFdwO7KCe599F1QZReS0CSgjLFuFH3YTiVzBnH4uDz4ckFn81
+         RlhMqNbnOTLxqDPwSgGRLkXHyiVM+YIOG61+wwl90qJlhER0mSmpdsDzzBJlddz7Y8
+         TlSJpxpJxmStF6W4geMrx6jUdtPK4QYipj6Cy0X3JGMu9k3kq4X/Zt5cI+E4HEO7rl
+         ZyAdin4mDrYRA==
+Date:   Tue, 18 Jul 2023 15:03:13 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 22/35] arm64/mm: Implement map_shadow_stack()
-Message-ID: <8ea03eda-e630-40c5-acc1-a63f5c5b3102@sirena.org.uk>
-References: <20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org>
- <20230716-arm64-gcs-v1-22-bf567f93bba6@kernel.org>
- <ZLZW7Kvg2Rep8ySO@arm.com>
+To:     David Gow <davidgow@google.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Subject: Re: [PATCH v2 4/5] kunit: Enable ASoC in all_tests.config
+Message-ID: <a2cf54c1-6351-43a7-a18e-368a9b1de5d3@sirena.org.uk>
+References: <20230718-asoc-topology-kunit-enable-v2-0-0ee11e662b92@kernel.org>
+ <20230718-asoc-topology-kunit-enable-v2-4-0ee11e662b92@kernel.org>
+ <CABVgOSkJ9KASn9zxWMr23xh0U61er0WUPwQprjq1ADY67oxX8g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Y5hKtc1qLwv4bVDN"
+        protocol="application/pgp-signature"; boundary="+BFQ1mUGDxse7BxO"
 Content-Disposition: inline
-In-Reply-To: <ZLZW7Kvg2Rep8ySO@arm.com>
+In-Reply-To: <CABVgOSkJ9KASn9zxWMr23xh0U61er0WUPwQprjq1ADY67oxX8g@mail.gmail.com>
 X-Cookie: Nothing happens.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,41 +66,34 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---Y5hKtc1qLwv4bVDN
+--+BFQ1mUGDxse7BxO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Jul 18, 2023 at 10:10:04AM +0100, Szabolcs Nagy wrote:
+On Tue, Jul 18, 2023 at 05:03:41PM +0800, David Gow wrote:
 
->   uint64_t *p = map_shadow_stack(0, N*8, 0);
+> I'm happy to take this via the KUnit tree, but if it's easier to take
+> all of these via ALSA or another tree, let me know.
 
-> i'd expect p[N-1] to be the end token and p[N-2] to be the cap token,
-> not p[PAGE_ALIGN(N*8)/8-2].
+I was hoping to do a bit more KUnit coverage for ASoC so it'd be kind of
+handy to have them in the ASoC tree to make life easier there, though
+it's an open question if I actually get round to doing that before the
+next merge window.  It looks like everyone is OK with me applying them
+so I'll queue them for my CI, please shout if that's an issue.
 
-Yes, that probably would be more helpful.
-
-> if we allow misalligned size here (and in munmap) then i think it's
-> better to not page align.  size%8!=0 || size<16 can be an error.
-
-Honestly I'd be a lot happier to just not allow misalignment but that
-raises the issue with binaries randomly not working when moved to a
-kernel with a different page size.  I'll have a think but possibly the
-safest thing would be requiring a multiple of 4K then rounding up to our
-actual page size.
-
---Y5hKtc1qLwv4bVDN
+--+BFQ1mUGDxse7BxO
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS2mbsACgkQJNaLcl1U
-h9AzZAf6AmpARgwgG4zNQzt85k9TDh62vFVaeaSCfpyqUZ4UEHeRf0DJ2hib8MGt
-aDz/k1E7ReyhGJhez+M19TlHMBHDoj2Fkh4bdOwzcTERDFTgMTGw8FFyyDjAP3fz
-TkDlo1EwKyXZnGnkqYbSFozVhOEZm6WVu6kpN62D5Q2jSEkL96f7C3WjXU0UbR3K
-X4Ey8EzUPGBf7SmYnOnGaG9+1bnKutkKj7unAMb6rJVFaAP/FTMpof5WI2kW4ngD
-nu5z6uyG6x2pFBgA3wTKmlDUEkhLsvfbDMtSwZTyHfDf6ayYVdMkeVkpxqvc+Nag
-BDtHeJXm98VwgwHiGPA6ln6uOvDbOQ==
-=EMfO
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS2m6AACgkQJNaLcl1U
+h9ARJgf+IlI/tNdcIlmHj79oLO42O5wETWdMcwDWx5/igc+7PWwcYzDunMKk5nH6
+8M/nxF3n9z+Q05tEoo+Tn1Sut5r9fDR3fa5VLufq+WFca6ZFvCdZQtBN0R+oG/ve
+42AgNjKTCgYr2V9iX4nQWPH9TtSTWgGORCnRcApGmeBcaassNSvXdmLOQDr1acNs
+ZVYiS4msd6TkjZvwKxLld/FC2l6F52BicN3pP22e2rjWX6k6sJf5nkKmBtvJSW1Z
+iE7nrtsSQLNERGuusYP1WbDNQx6vFHhYUI6WJ0vwUG5XZFYdaBluCGDqM+BkLSdc
+A5QkySi3eBfjaAtyQak/HJl/bHLwaQ==
+=BBJO
 -----END PGP SIGNATURE-----
 
---Y5hKtc1qLwv4bVDN--
+--+BFQ1mUGDxse7BxO--
