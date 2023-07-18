@@ -2,111 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AC7757BC0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 14:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9E5757C06
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 14:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjGRM1E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 08:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
+        id S232213AbjGRMnC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 08:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjGRM1D (ORCPT
+        with ESMTP id S229953AbjGRMnB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 08:27:03 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7B710FE
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 05:27:00 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbd33a57ddso51782395e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 05:27:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689683219; x=1692275219;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q79BXzZcL1/WaOlmXCuMLYQAEHu/pqHCehrBeb7Pl/4=;
-        b=zaEY7Jg2ljy7bLYJJpcG/cafWQjMPcRxcgsSEBoIVee9TbL8hWHzeAZgwfT31J19Oa
-         p9Uv2hLsu0ugi5qbOCS1TDH+3ZKQjAjkt4M05uiORnA3Vor1eRwzbZ6W4t8buZR7MGBO
-         f1FPxisJxS7u1UP6YcikIe0ve4ss999LTAmwz5RrhAyinBBtcE5AtJANcdb+2pLsj9EA
-         LCNDffpydRfucJtZR0KX9PYtPVNAoPCtbJMLVEoJ6Y6yVR9wqtY6xWZ1+cPd/0xNKGpu
-         qEX3Fjot02sQjxRLIkuCWBw2tZLOSoH5xWQEpkJo5k8DPTQPNnvtHu/bfxJcIbQtMkf1
-         ILYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689683219; x=1692275219;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q79BXzZcL1/WaOlmXCuMLYQAEHu/pqHCehrBeb7Pl/4=;
-        b=fk9bPHNZ4AbQtSn401EBGAb7Vgvq/Cy9IuVQZNIA/6xiV0/AkKbOH9dca9BfOy/5OY
-         py2SiUFt7wCOZo5qzNepeJOI1PfgAmEjAxrmCfD9quY8KHHbkUBZRpu64ejKLWNYn/OP
-         NqTBNuCPykOni4cDUy0cJP9JwSkJ84wzpH/n9+D8T6WtH4u8iJed7uV1EFFyesXRToEg
-         pXHvThMkAbDfnMZM3nPMZb1jAPCV8kMGoDBORBY3kz0SjrKCsheQWST4g2ewuRobgsMP
-         Pi6Zjk+3v20lG+9GwLQk3qbmUh3l1R9vW7zbcIrAepr+N1uIJvIUl5v5mlvF5oDg7nsM
-         MCaA==
-X-Gm-Message-State: ABy/qLYs9DJKEzhuAaBUENk/J6XGQbood17YZdNnoAvXFxUHD48vo330
-        3vhOPXJlM5eaM1BdyIxIj9gxRg==
-X-Google-Smtp-Source: APBJJlEN1HGaGjTSuncB/F+MBGsgjE96RqnQ9IFU0x+JE8AqkQvaJ3Z+IN0ogPis9xXdMGDdHRCe6A==
-X-Received: by 2002:a1c:f710:0:b0:3f9:c0f2:e1a4 with SMTP id v16-20020a1cf710000000b003f9c0f2e1a4mr1743885wmh.34.1689683218907;
-        Tue, 18 Jul 2023 05:26:58 -0700 (PDT)
-Received: from [192.168.94.175] (140.red-95-127-46.staticip.rima-tde.net. [95.127.46.140])
-        by smtp.gmail.com with ESMTPSA id 12-20020a05600c230c00b003f90b9b2c31sm10180325wmo.28.2023.07.18.05.26.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jul 2023 05:26:58 -0700 (PDT)
-Message-ID: <e324e61f-5fbf-4055-f570-63cb120c1bdc@linaro.org>
-Date:   Tue, 18 Jul 2023 14:26:57 +0200
+        Tue, 18 Jul 2023 08:43:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D597170C;
+        Tue, 18 Jul 2023 05:42:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4B5412F4;
+        Tue, 18 Jul 2023 05:43:41 -0700 (PDT)
+Received: from [10.1.34.52] (C02Z41KALVDN.cambridge.arm.com [10.1.34.52])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4C7613F6C4;
+        Tue, 18 Jul 2023 05:42:56 -0700 (PDT)
+Message-ID: <cb2f093e-8312-0147-272d-e6f148f383da@arm.com>
+Date:   Tue, 18 Jul 2023 13:42:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH 1/4] KVM: selftests: Rename the ASSERT_EQ macro
-Content-Language: en-US
-To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     linux-kselftest@vger.kernel.org,
-        David Matlack <dmatlack@google.com>
-References: <20230712075910.22480-1-thuth@redhat.com>
- <20230712075910.22480-2-thuth@redhat.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230712075910.22480-2-thuth@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v2 6/8] selftests/mm: Make migration test robust to
+ failure
+To:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Florent Revest <revest@chromium.org>,
+        Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+References: <20230717103152.202078-1-ryan.roberts@arm.com>
+ <20230717103152.202078-7-ryan.roberts@arm.com>
+ <20501a7c-19f6-4154-aebc-49df04c9b043@redhat.com>
+ <2e5baba4-c8ef-9da4-a2d6-3cf383ed05bd@arm.com>
+ <1314fe0e-dd32-bf10-0a33-2b571dad70bd@redhat.com>
+ <90a8b224-4566-5051-4903-f9ab83b26150@redhat.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <90a8b224-4566-5051-4903-f9ab83b26150@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/7/23 09:59, Thomas Huth wrote:
-> There is already an ASSERT_EQ macro in the file
-> tools/testing/selftests/kselftest_harness.h, so we currently
-> can't include test_util.h from the KVM selftests together with
-> that file. Rename the macro in the KVM selftests to TEST_ASSERT_EQ
-> to avoid the problem - it is also more similar to the other macros
-> in test_util.h that way.
+On 18/07/2023 12:24, David Hildenbrand wrote:
+> On 18.07.23 13:23, David Hildenbrand wrote:
+>> On 18.07.23 12:49, Ryan Roberts wrote:
+>>> On 17/07/2023 18:40, David Hildenbrand wrote:
+>>>> On 17.07.23 12:31, Ryan Roberts wrote:
+>>>>> The `migration` test currently has a number of robustness problems that
+>>>>> cause it to hang and leak resources.
+>>>>>
+>>>>> Timeout: There are 3 tests, which each previously ran for 60 seconds.
+>>>>> However, the timeout in mm/settings for a single test binary was set to
+>>>>> 45 seconds. So when run using run_kselftest.sh, the top level timeout
+>>>>> would trigger before the test binary was finished. Solve this by meeting
+>>>>> in the middle; each of the 3 tests now runs for 20 seconds (for a total
+>>>>> of 60), and the top level timeout is set to 90 seconds.
+>>>>>
+>>>>> Leaking child processes: the `shared_anon` test fork()s some children
+>>>>> but then an ASSERT() fires before the test kills those children. The
+>>>>> assert causes immediate exit of the parent and leaking of the children.
+>>>>> Furthermore, if run using the run_kselftest.sh wrapper, the wrapper
+>>>>> would get stuck waiting for those children to exit, which never happens.
+>>>>> Solve this by deferring any asserts until after the children are killed.
+>>>>> The same pattern is used for the threaded tests for uniformity.
+>>>>>
+>>>>> With these changes, the test binary now runs to completion on arm64,
+>>>>> with 2 tests passing and the `shared_anon` test failing.
+>>>>>
+>>>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+>>>>> ---
+>>>>>     tools/testing/selftests/mm/migration.c | 14 ++++++++++----
+>>>>>     tools/testing/selftests/mm/settings    |  2 +-
+>>>>>     2 files changed, 11 insertions(+), 5 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/mm/migration.c
+>>>>> b/tools/testing/selftests/mm/migration.c
+>>>>> index 379581567f27..189d7d9070e8 100644
+>>>>> --- a/tools/testing/selftests/mm/migration.c
+>>>>> +++ b/tools/testing/selftests/mm/migration.c
+>>>>> @@ -15,7 +15,7 @@
+>>>>>     #include <time.h>
+>>>>>       #define TWOMEG (2<<20)
+>>>>> -#define RUNTIME (60)
+>>>>> +#define RUNTIME (20)
+>>>>>       #define ALIGN(x, a) (((x) + (a - 1)) & (~((a) - 1)))
+>>>>>     @@ -118,6 +118,7 @@ TEST_F_TIMEOUT(migration, private_anon, 2*RUNTIME)
+>>>>>     {
+>>>>>         uint64_t *ptr;
+>>>>>         int i;
+>>>>> +    int ret;
+>>>>>           if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
+>>>>>             SKIP(return, "Not enough threads or NUMA nodes available");
+>>>>> @@ -131,9 +132,10 @@ TEST_F_TIMEOUT(migration, private_anon, 2*RUNTIME)
+>>>>>             if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
+>>>>>                 perror("Couldn't create thread");
+>>>>>     -    ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
+>>>>> +    ret = migrate(ptr, self->n1, self->n2);
+>>>>>         for (i = 0; i < self->nthreads - 1; i++)
+>>>>>             ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
+>>>>> +    ASSERT_EQ(ret, 0);
+>>>>
+>>>> Why is that required? This does not involve fork.
+>>>
+>>> It's not required. I was just trying to keep everything aligned to the same
+>>> pattern.
+>>>
+>>>>
+>>>>>     }
+>>>>>       /*
+>>>>> @@ -144,6 +146,7 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+>>>>>         pid_t pid;
+>>>>>         uint64_t *ptr;
+>>>>>         int i;
+>>>>> +    int ret;
+>>>>>           if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
+>>>>>             SKIP(return, "Not enough threads or NUMA nodes available");
+>>>>> @@ -161,9 +164,10 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+>>>>>                 self->pids[i] = pid;
+>>>>>         }
+>>>>>     -    ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
+>>>>> +    ret = migrate(ptr, self->n1, self->n2);
+>>>>>         for (i = 0; i < self->nthreads - 1; i++)
+>>>>>             ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
+>>>>> +    ASSERT_EQ(ret, 0);
+>>>>
+>>>>
+>>>> Might be cleaner to also:
+>>>
+>>> Or instead of? I agree this is neater, so will undo the moving of the ASSERT()
+>>> and rely on this prctl.
+>>
+>> I was thinking about possible races when our parent process already
+>> quits before our child managed to set the prctl. prctl() won't do
+>> anything in that case, hmmmm.
+>>
+>> But similarly, existing code might already trigger the migrate() + kill
+>> before the child processes even started to access_mem().
+>>
+>> Racy :)
+>>
 > 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->   .../selftests/kvm/aarch64/aarch32_id_regs.c   |  8 +--
->   .../selftests/kvm/aarch64/page_fault_test.c   | 10 +--
->   .../testing/selftests/kvm/include/test_util.h |  4 +-
->   tools/testing/selftests/kvm/lib/kvm_util.c    |  2 +-
->   .../selftests/kvm/max_guest_memory_test.c     |  2 +-
->   tools/testing/selftests/kvm/s390x/cmma_test.c | 62 +++++++++----------
->   tools/testing/selftests/kvm/s390x/memop.c     |  6 +-
->   tools/testing/selftests/kvm/s390x/tprot.c     |  4 +-
->   .../x86_64/dirty_log_page_splitting_test.c    | 18 +++---
->   .../x86_64/exit_on_emulation_failure_test.c   |  2 +-
->   .../kvm/x86_64/nested_exceptions_test.c       | 12 ++--
->   .../kvm/x86_64/recalc_apic_map_test.c         |  6 +-
->   .../selftests/kvm/x86_64/tsc_msrs_test.c      | 32 +++++-----
->   .../vmx_exception_with_invalid_guest_state.c  |  2 +-
->   .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  |  3 +-
->   .../selftests/kvm/x86_64/xapic_state_test.c   |  8 +--
->   .../selftests/kvm/x86_64/xen_vmcall_test.c    | 20 +++---
->   17 files changed, 101 insertions(+), 100 deletions(-)
+> Maybe what would work, is checking after the prctl() in the child if the parent
+> is already gone.
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+
+Like this?
+
+	if (!pid) {
+		prctl(PR_SET_PDEATHSIG, SIGHUP);
+		/* Parent may have died before prctl so check now. */
+		if (getppid() == 1)
+			kill(getpid(), SIGHUP);
+		access_mem(ptr);
+	}
+
+> 
 
