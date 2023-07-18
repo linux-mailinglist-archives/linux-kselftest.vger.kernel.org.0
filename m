@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB27757756
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 11:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14969757759
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 11:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbjGRJDs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 05:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
+        id S232166AbjGRJDy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 05:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbjGRJDr (ORCPT
+        with ESMTP id S232161AbjGRJDx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 05:03:47 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4670810E2
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:42 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbd33a1819so48425e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:42 -0700 (PDT)
+        Tue, 18 Jul 2023 05:03:53 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E299AE56
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:45 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fbb07e7155so69875e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 02:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689671020; x=1692263020;
+        d=google.com; s=20221208; t=1689671024; x=1692263024;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RUwjY3iWWr45qqu5hLPI//mmH6nVemLSx5OexUNW3fg=;
-        b=gV2ECSFKPQ3TdPxBRMRpUJclYnveAvkJ3gI4aYyxCBF/qg8juRaZ7wGOl1po/xoHVv
-         T+x68rwqPM8TLg62l8+L6Xq5Bm7ByUggQk28jaho0mUOxG6hl+TzUDLYhj3RSqmtdzWA
-         BmPcrBnOpRZJqfx8TyaNpqSm9KqNPiAQUs1BxDgsRMybYEA+TpIJNwo35VCqLffbPoAS
-         EuxvNFYxUayM3NQ8/NVDJTJibBFcIdwNqQ9CRTc+aJxsFquXuCFpVRionjcr3oF75R+2
-         l25Jz2VK7S+K0hzuRa9Z+0znBk83Dqfv2+rogShL73tpF1lMx2TKCUH5O/MXdjAMF9VJ
-         giTA==
+        bh=02qEvwlAp4lw+HqJtAe0UV05yFkTlesfNmZwk8mWMUg=;
+        b=bwtr/1zNoyLdn4ohTzPz/Itd0+v0uEz9QwTzd7PIJ8CTU4hO78a/zIt5H5LZ3NdPU4
+         H8xoVuCGJ18SymiWIkSjj6xnz4BcqCqgJYWdnt+4tBh3kMgzsF2qviSN9mOdaKxyhB20
+         L0EmLgEhtNCXk7htf8gg8d9gHEUbIJ+3dDhOLc8tN9kqliI8niNGyvGZXAOOh7voGHgw
+         bBK3A4rkxbsiX3CQ1d9dINo1v2UOLuOYjUGd8lSE4sG7bD0OcWVEIO75cnVb3QxDcPBM
+         3nljphfOPU8bsNvsXBHHEhILBfQ4fAzp4YabvQieNRRFQKTou4RcdWEN9m3eMNUP6Ivt
+         BrOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689671020; x=1692263020;
+        d=1e100.net; s=20221208; t=1689671024; x=1692263024;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RUwjY3iWWr45qqu5hLPI//mmH6nVemLSx5OexUNW3fg=;
-        b=HVGiHPCD0Jeq6llUBlCoUdK4qMG/6L/ULniKsiKAJFOk+X3FEE6I2FiD+y7a0Lp7y6
-         nHSsVUHl35uS2FiwYPMm47NhZrkaRj3MUSGJtfRaev4zqNBZChz4d2xPNiH71Yq5gFGi
-         LFCHwlDk1h+mSHrI3cEOgoXfdYwZd3zZzXRih6pK7OjTpyTV0zDrxOMnIBx8yoFtmgi0
-         5KXRWWhI5wqglDIpXlJ/KFIbRCd+X97PqmhDcrGjHI1lGBvkfzOt07oK6fIGrTveU0Ca
-         TnFNiu9Vtt94mqWkP9oqGKjBmuCebUe7Od2iEgJ8kOr7yGqGr1U/dltBsfLM0sZTXgRS
-         D0hQ==
-X-Gm-Message-State: ABy/qLYy/RTKyCMPjJ/5QP6FSj2dK8DQ4uvFhRqh5PqEi15Hpp7X/ysW
-        Yii0ldiqaZDXfBJbZdnEFIy1txg/7ZJMJ26dfGzB8g==
-X-Google-Smtp-Source: APBJJlEhIN82ETjhMNVU+3kG/yISm0CnrlIrrSeNDSYNi9ZIblw2P1wBfFAI7v4HuaNP1DrIaioPeWtFsqgKXdej4Qc=
-X-Received: by 2002:a05:600c:358d:b0:3f1:73b8:b5fe with SMTP id
- p13-20020a05600c358d00b003f173b8b5femr56294wmq.3.1689671020609; Tue, 18 Jul
- 2023 02:03:40 -0700 (PDT)
+        bh=02qEvwlAp4lw+HqJtAe0UV05yFkTlesfNmZwk8mWMUg=;
+        b=ief2vRQXARSP8N6Uuo9aNggZ6khH6YEVT0hGhq8cilmB6oFvOiiCVhhZLbdyoDJ/Kj
+         4amWUDG5CFvMShBCQ6gk5xShB1klHGKlRm8U4Kwf0InSvlW9Vftc3S5iSB7JQnA1WK+9
+         GM0At25a4tevTfQF75zkZheqgbj+jYgVMiDNIllVKkHAhJYcxE3dhiFUhly0BJHeEoga
+         vnjDCULSDa5Pa2KtvTGQGJEQAraio5KfX/sQgW2BNtRSQ3RM9jP/9uYjWGLkzL+x8t35
+         PgdJtbPvRPjslFPumxQ9RZhY/PTqcFBtekEzN7Gn6rX0pZh4FLntJOp04CIJ712ghAXh
+         kJyQ==
+X-Gm-Message-State: ABy/qLbJkPUAKPog5y1m/UAnwGFoLPoNgK0TJJCIrwrqpPWKIkOQeW7e
+        +/JvliImsecWuHiPqhGpL9TuQyF2qyTDRmCrm4ge8VYRcpKHwgzsGOCmYQ==
+X-Google-Smtp-Source: APBJJlFwA4Qq1OA920SlL9F6tV87OJ6V11uYnPfKqCDWS5TF/aY8HmJaJScUFCm7V4x76DNnJSTEmZYpzziWwMiMdiU=
+X-Received: by 2002:a05:600c:3ac5:b0:3f7:e463:a0d6 with SMTP id
+ d5-20020a05600c3ac500b003f7e463a0d6mr83943wms.0.1689671024232; Tue, 18 Jul
+ 2023 02:03:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230718-asoc-topology-kunit-enable-v2-0-0ee11e662b92@kernel.org> <20230718-asoc-topology-kunit-enable-v2-1-0ee11e662b92@kernel.org>
-In-Reply-To: <20230718-asoc-topology-kunit-enable-v2-1-0ee11e662b92@kernel.org>
+References: <20230718-asoc-topology-kunit-enable-v2-0-0ee11e662b92@kernel.org> <20230718-asoc-topology-kunit-enable-v2-2-0ee11e662b92@kernel.org>
+In-Reply-To: <20230718-asoc-topology-kunit-enable-v2-2-0ee11e662b92@kernel.org>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 18 Jul 2023 17:03:27 +0800
-Message-ID: <CABVgOS=pfVkNFT5E0ERgEpCeCoaYi4dmCBjG2H3=w1Eddgh7_g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] driver core: Provide stubs for !IOMEM builds
+Date:   Tue, 18 Jul 2023 17:03:32 +0800
+Message-ID: <CABVgOSnWkjr8HfHCwf+qCe0gu1SA2pZHXbwpPd76sh=_ebd5Rg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] platform: Provide stubs for !HAS_IOMEM builds
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -63,7 +63,7 @@ Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000fe246f0600bf30a8"
+        boundary="00000000000035172e0600bf3119"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -75,33 +75,23 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000fe246f0600bf30a8
+--00000000000035172e0600bf3119
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 18 Jul 2023 at 08:29, Mark Brown <broonie@kernel.org> wrote:
+On Tue, 18 Jul 2023 at 08:30, Mark Brown <broonie@kernel.org> wrote:
 >
 > The various _ioremap_resource functions are not built when
 > CONFIG_HAS_IOMEM is disabled but no stubs are provided. Given how
 > widespread IOMEM usage is in drivers and how rare !IOMEM configurations
 > are in practical use let's just provide some stubs so users will build
-> without having to add explicit dependencies on HAS_IOMEM.
+> without having to add explicit dependencies on IOMEM.
 >
 > The most likely use case is builds with UML for KUnit testing.
 >
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
 
-This is really nice, thanks: we've definitely wasted^W spent a lot of
-time adding the appropriate IOMEM dependencies when trying to setup
-KUnit configs, so I'm looking forward to not worrying about that
-again.
-
-We have considered implementing fake versions of these specifically
-aimed at testing, and are looking into the PCI-over-virtio
-implementation in UML's LOGIC_IOMEM feature, which allows redirecting
-IOMEM accesses to something more test-friendly.
-
-Neither of those conflict with this as a fallback, though, and I'm all for it.
+As with the previous patch, I'm all for this.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
@@ -109,59 +99,61 @@ Cheers,
 -- David
 
 
->  include/linux/device.h | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
+>  include/linux/platform_device.h | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
 >
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index bbaeabd04b0d..6731d7dc1a2a 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -349,6 +349,7 @@ unsigned long devm_get_free_pages(struct device *dev,
->                                   gfp_t gfp_mask, unsigned int order);
->  void devm_free_pages(struct device *dev, unsigned long addr);
->
+> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
+> index b845fd83f429..7a41c72c1959 100644
+> --- a/include/linux/platform_device.h
+> +++ b/include/linux/platform_device.h
+> @@ -63,6 +63,8 @@ extern struct resource *platform_get_mem_or_io(struct platform_device *,
+>  extern struct device *
+>  platform_find_device_by_driver(struct device *start,
+>                                const struct device_driver *drv);
+> +
 > +#ifdef CONFIG_HAS_IOMEM
->  void __iomem *devm_ioremap_resource(struct device *dev,
->                                     const struct resource *res);
->  void __iomem *devm_ioremap_resource_wc(struct device *dev,
-> @@ -357,6 +358,31 @@ void __iomem *devm_ioremap_resource_wc(struct device *dev,
->  void __iomem *devm_of_iomap(struct device *dev,
->                             struct device_node *node, int index,
->                             resource_size_t *size);
+>  extern void __iomem *
+>  devm_platform_get_and_ioremap_resource(struct platform_device *pdev,
+>                                 unsigned int index, struct resource **res);
+> @@ -72,6 +74,32 @@ devm_platform_ioremap_resource(struct platform_device *pdev,
+>  extern void __iomem *
+>  devm_platform_ioremap_resource_byname(struct platform_device *pdev,
+>                                       const char *name);
 > +#else
 > +
-> +static inline
-> +void __iomem *devm_ioremap_resource(struct device *dev,
-> +                                   const struct resource *res)
+> +static inline void __iomem *
+> +devm_platform_get_and_ioremap_resource(struct platform_device *pdev,
+> +                               unsigned int index, struct resource **res)
 > +{
 > +       return ERR_PTR(-EINVAL);
 > +}
 > +
-> +static inline
-> +void __iomem *devm_ioremap_resource_wc(struct device *dev,
-> +                                      const struct resource *res)
+> +
+> +static inline void __iomem *
+> +devm_platform_ioremap_resource(struct platform_device *pdev,
+> +                              unsigned int index)
 > +{
 > +       return ERR_PTR(-EINVAL);
 > +}
 > +
-> +static inline
-> +void __iomem *devm_of_iomap(struct device *dev,
-> +                           struct device_node *node, int index,
-> +                           resource_size_t *size)
+> +static inline void __iomem *
+> +devm_platform_ioremap_resource_byname(struct platform_device *pdev,
+> +                                     const char *name)
 > +{
 > +       return ERR_PTR(-EINVAL);
 > +}
 > +
 > +#endif
->
->  /* allows to add/remove a custom action to devres stack */
->  void devm_remove_action(struct device *dev, void (*action)(void *), void *data);
+> +
+>  extern int platform_get_irq(struct platform_device *, unsigned int);
+>  extern int platform_get_irq_optional(struct platform_device *, unsigned int);
+>  extern int platform_irq_count(struct platform_device *);
 >
 > --
 > 2.39.2
 >
 
---000000000000fe246f0600bf30a8
+--00000000000035172e0600bf3119
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -228,14 +220,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBu
-vqDJUxTytrhJE2bob91KhgkIv/9swMczMBWhkF+rdzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTgwOTAzNDBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAm
+7a8ArzfNH1yZUp5jfhdSe5s+mh/8cntVE8bqbNAVEzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA3MTgwOTAzNDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAekEp47TivOGaMtuI6rfL
-P5wj5Xf0f6E5iAM/I7TkUsZyeWTXZTpHz9Z9F9mJ2VZi+iyS4ornFx8dXd0jigYMpmnafeH3vVNz
-UNZfsbiZQXjAVySm2Ptz/kUQElI3eup8TOQorg3q4PKgM7TThToAncyiL58nWP5E7gAKsJ6zN6Rp
-i7/fgsHmNqOfYZZ/f/tkUQHsF/DoVYwITbzmEO1dOne/kpKrAndLlbMCiQbtz+v5usZGU6CNrxl4
-eraVauB4RrInENubyHnAi+VsFq93RM4ro6ROuP+32J/kFFvvKfjgvhxYasL2LwcpCTJ+dIhIjtoQ
-pPzWphHaFgpH2/t2KA==
---000000000000fe246f0600bf30a8--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAGE7reL51zx706cJGn5Af
+2SMgHXcE+A48pY/8PBmyvAqoVBh6kklIvq9+NZhOacgdVvledgrnmFxHEQKCf/pHyJ8sOgTyr0oI
+/j258ZKH+mdY7ZOFBK/RVS5cPJuGer4rVpJCQvxw1x1ZCSjF2KmQ/pSQEQ3a1DWklHZCZUasNIMT
+reIDRlxeI57pt08q+RHGfsH4tihFNrfU6Gf1+/uHfszmDj7GJYrcvfSpf+QmkKNb8B+q6176P9dE
+LemavtHJZS8vyLYpfCmLPjM6ZA0s8yhkPh0ZME0CEKT6WQAG2OKd8OAM5/ZGtvY7g+UMLPIpV3Z4
+mGN97Z7sW2YT+QgFaw==
+--00000000000035172e0600bf3119--
