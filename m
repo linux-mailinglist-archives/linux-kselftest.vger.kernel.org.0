@@ -2,40 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2073E75802F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 16:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716FC758038
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 16:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbjGROyy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 10:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        id S233113AbjGRO4J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 10:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233433AbjGROyv (ORCPT
+        with ESMTP id S231636AbjGRO4F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 10:54:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A95196;
-        Tue, 18 Jul 2023 07:54:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E0676160E;
-        Tue, 18 Jul 2023 14:54:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0821EC433C7;
-        Tue, 18 Jul 2023 14:54:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689692088;
-        bh=rgmBgjIDYkzzmlgWFHvXALNdWd95/pbvuzMWirSR12U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=roVjxYhCoL3n+h0sZWq1nlWqUgCLd0Q0TvVYRcrO5/u73XAp+BGt/EcXc77jrduR6
-         ukSZI/Gbwy3oyGxv7EPy2EYqiC81gpLdYFEjuOBkdjNzF7qHqlOstKunFqiuarCfVI
-         XN0BAT1KXbw/Wtbtcj+IjvYO210sb6ZTvsbDPfHj/YoM4db+mDTsDYHCg/cV+9AkLg
-         DbyCTgbFmPXYHkZrAYCxtLWwsXa6n7cITeWJ9ZM6koSLeGDll0OSxjFqrv0qnbsbsa
-         +KCtbPQIF0v2HGmzAJHISVStxv76/tKyP8bIC+WVvPhWNRnCAaxDs2ehtR08MCYSXw
-         TOwyyJ5kSpeww==
-Date:   Tue, 18 Jul 2023 15:54:42 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
+        Tue, 18 Jul 2023 10:56:05 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADE6E0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 07:56:04 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id ca18e2360f4ac-785d3a53ed6so64212539f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jul 2023 07:56:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1689692163; x=1690296963;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MeHT0zydz+0w5I8HKlizsWfWr7LYvvd7fgi2ymHMZI8=;
+        b=J70rq8D+w1tLfc+0W5pJfo3meh52rl5Rs0QFgKESlAc47YUZYVWAgf1I4+HKcsRtJB
+         FLnS2AptqfDQhI4DupNlLoETiR1d5yyKkAFfr3gfV8O7lmmUoAiuzYFlAQYTg98Ju+qf
+         Y5qO/1KdeLhwD6h8lCb8KRvE1lxbvOG4xlE/E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689692163; x=1690296963;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MeHT0zydz+0w5I8HKlizsWfWr7LYvvd7fgi2ymHMZI8=;
+        b=Gg5Mx8MrAtZWYZN6Jvc6zv8/aQ9HbH4Ayr19zGY9HcfuF80s6PK+u+NNIchxBKKxf6
+         6eCzsJn45wRBUdOt8oZRFhdg1uRBuXOZe/TLt5gy6D93iUFDqpaZTXvP24zQNEPkWlPA
+         uCZgbnHT1QfAD7iL6BBww3ugOfqiHuoRH6q8Gv+Rtihf+RLX2rU1EAUe97hp8QOFlCbX
+         FnK8hjzEPZ4i+tlAtcYPhhSzNS89nNVEHXZqM2653VWf2iIh7CX5fKlVIiarLt7jukHu
+         NhDEA1qP/NrRh8v9JQMbmw4YnY4kw9CWvHRACvpmVrnH8aCo9CGuEUKTZI7YpKwZ4JMO
+         aiWA==
+X-Gm-Message-State: ABy/qLaI7Od7ZPM20UFuYc+9a+d+C9uHLiqSnMNEcTwg5wBdui9rGMAe
+        lvBV8Csovcdo36s2qaAWdHNoAg==
+X-Google-Smtp-Source: APBJJlE6M96ra9gMUGegHCOM8kskOLL5xWPIi3X5Rc4jOWW3jiblfvSJopoPWcaI6n8RvCQjduj+mg==
+X-Received: by 2002:a05:6e02:219b:b0:345:a3d0:f0d4 with SMTP id j27-20020a056e02219b00b00345a3d0f0d4mr3059419ila.3.1689692163683;
+        Tue, 18 Jul 2023 07:56:03 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id t6-20020a92c906000000b00345d3f2bb6asm728099ilp.56.2023.07.18.07.56.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jul 2023 07:56:03 -0700 (PDT)
+Message-ID: <d8c8d82d-059c-fa98-09de-9eda61370f7e@linuxfoundation.org>
+Date:   Tue, 18 Jul 2023 08:56:02 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] selftests: Fix arm64 test installation
+To:     Mark Brown <broonie@kernel.org>
 Cc:     John Hubbard <jhubbard@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
@@ -44,9 +62,8 @@ Cc:     John Hubbard <jhubbard@nvidia.com>,
         Ryan Roberts <ryan.roberts@arm.com>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Alexandre Ghiti <alex@ghiti.fr>
-Subject: Re: [PATCH] selftests: Fix arm64 test installation
-Message-ID: <85526b4e-c2ba-4b19-9c2f-ba39a248a713@sirena.org.uk>
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>
 References: <20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org>
  <8d944238-1a9a-e93e-fdab-54e74fa12e11@linuxfoundation.org>
  <785e1c1c-84d8-e87d-f22f-9a53d27f30f6@nvidia.com>
@@ -57,58 +74,42 @@ References: <20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org>
  <68ccfd77-ce2f-857a-37a7-e9b3edcd495d@linuxfoundation.org>
  <5e5bf5c0-bcda-ec2a-ba4c-5f35dcfbc373@nvidia.com>
  <d03af9cc-c72e-d23f-73ad-ca0e079c3187@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u7HQOWZHHEWX8a1V"
-Content-Disposition: inline
-In-Reply-To: <d03af9cc-c72e-d23f-73ad-ca0e079c3187@linuxfoundation.org>
-X-Cookie: Nothing happens.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <85526b4e-c2ba-4b19-9c2f-ba39a248a713@sirena.org.uk>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <85526b4e-c2ba-4b19-9c2f-ba39a248a713@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 7/18/23 08:54, Mark Brown wrote:
+> On Fri, Jul 14, 2023 at 01:11:10PM -0600, Shuah Khan wrote:
+>> On 7/14/23 12:36, John Hubbard wrote:
+> 
+>>> Just to be clear, when you say you're applying "both", I'm hoping you mean
+>>> both of these:
+> 
+>>> [1] https://lore.kernel.org/all/20230711005629.2547838-1-jhubbard@nvidia.com/
+>>> [2] https://lore.kernel.org/all/20230712193514.740033-1-jhubbard@nvidia.com/
+> 
+>> Right. The ones you have links to:
+> 
+>> Please check the latest fixes to see if we are all squared away:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=fixes
+> 
+> These didn't seem to make it to -rc2 - it'd be *really* good to get them
+> for -rc3, not having the selftests there would be very disruptive to the
+> standard arm64 workflow.
 
---u7HQOWZHHEWX8a1V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Just about to send the pull request for rc3
 
-On Fri, Jul 14, 2023 at 01:11:10PM -0600, Shuah Khan wrote:
-> On 7/14/23 12:36, John Hubbard wrote:
-
-> > Just to be clear, when you say you're applying "both", I'm hoping you mean
-> > both of these:
-
-> > [1] https://lore.kernel.org/all/20230711005629.2547838-1-jhubbard@nvidia.com/
-> > [2] https://lore.kernel.org/all/20230712193514.740033-1-jhubbard@nvidia.com/
-
-> Right. The ones you have links to:
-
-> Please check the latest fixes to see if we are all squared away:
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=fixes
-
-These didn't seem to make it to -rc2 - it'd be *really* good to get them
-for -rc3, not having the selftests there would be very disruptive to the
-standard arm64 workflow.
-
---u7HQOWZHHEWX8a1V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS2p7IACgkQJNaLcl1U
-h9DWSAf+IqfMO1FPLdG3/gWN3HkhIbv+uwXVNBfYuJnTbcH3ndSGl+JRmvPw0nMm
-skZCr0MAJHyDK7TOtEU+oR66J3Zyd9oPBHakol1Ryf+0O2NzmzRYG5vAN7VAivRO
-MZxcsiABHBA+dSJgOpsjxzK+jzdCkC0zT4mxW2gfpubGZ9Nr/bQnVaKI0Z9FAiPh
-7iRNz9eSA3/BlbPZrJYL64EdCxVSRKgNXayngEYWC9nymLi3A2YKzcyIuPM3gUaW
-b+y8JpjYtng0jtOiFLVHXsgjiGp5+1rRC7ctugW9XCVovU+tZbHG5ou/7kOby1uS
-c3B/9I3agaLQyZsDjyDhNmiQVK/wvA==
-=wRzC
------END PGP SIGNATURE-----
-
---u7HQOWZHHEWX8a1V--
+thanks,
+-- Shuah
