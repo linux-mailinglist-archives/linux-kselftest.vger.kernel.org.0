@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6690075869A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 23:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32857758694
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jul 2023 23:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbjGRVL4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jul 2023 17:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
+        id S230052AbjGRVLv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jul 2023 17:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjGRVLx (ORCPT
+        with ESMTP id S229513AbjGRVLu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 17:11:53 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7122C0;
-        Tue, 18 Jul 2023 14:11:51 -0700 (PDT)
+        Tue, 18 Jul 2023 17:11:50 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59BCEC;
+        Tue, 18 Jul 2023 14:11:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689714712; x=1721250712;
+  t=1689714709; x=1721250709;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=A6YP9TxD6vGbHE6fwGQXgx3yzQNMpeHCGRM/JjRREbQ=;
-  b=UdkMCd7y3tNZhLv7jh27jr52I/CGQM+ldsNmlu/q79i/9sv0TMyZAsqB
-   o/PNpaoujr+ifwsMbo8AQWPwTq6netWF89YEJ1MpEB7FQlCsMPu8S1Em5
-   BkPvh9+eLn2cFiTyzDb2O8ghnBTmeYhR5dcP2JFqWABM12ProPkf74j4m
-   +Zghajdwv57+o8JFoz5gKroYdy9Xeq33l31sEla6kJgSP3I0T/etAAn/1
-   NaNscLJ7vwmlP29iyOx3bFG73YkOwh0u2QDLSHWJKkHsTnZgLtfWWmWOP
-   uD/7nn+A+Knae6BQ1C0eOF4YZu0fZElxOg5CYpKLLG9tDsqQSvF6AEbl9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="432495824"
+  bh=MK2n2OSkVqVYu9YHHQNwvJQ+yMJ1cHclPzK02uREhtk=;
+  b=FJ2g2VrI38Je68Zl75TQvwGbm9EXHzbG+yIG/J2RB5FxFqjkTEjlCeM6
+   7RhAKTPU+6nY9t7Wx2XQmvLwH65dFiFQKwKaIVQYrJx7efCfbBv7pS6vp
+   yZ+rkHjHt7+SdFRcTyB/Bp0ZaoK2AI5B8LvMma8ddmhIcsmJYBE1NHb1q
+   sJMOcZTHj6bgx3j8PTis8f09OkS2nia4i3wrPpsAioHjYxdr5LlDCWcEW
+   CyF8dBB74P2o10xMkHxO5JNkMoJ//XOUBm3YpGbfn7rocQdVQW9mFU9Ei
+   7jDm3MbAZyM0oCwSa0Ev340qBZkZtknG6EnwsybuywbXkCMGgZ5BblQTC
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="397161854"
 X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="432495824"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 14:11:50 -0700
+   d="scan'208";a="397161854"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 14:11:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="753469038"
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="789206000"
 X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="753469038"
+   d="scan'208";a="789206000"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 18 Jul 2023 14:11:42 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 18 Jul 2023 14:11:42 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id CEA58370; Wed, 19 Jul 2023 00:11:49 +0300 (EEST)
+        id E0266516; Wed, 19 Jul 2023 00:11:49 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -61,18 +61,19 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Sudeep Holla <sudeep.holla@arm.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v4 3/4] arm64: smccc: Replace custom COUNT_ARGS() & CONCATENATE() implementations
-Date:   Wed, 19 Jul 2023 00:11:46 +0300
-Message-Id: <20230718211147.18647-4-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 4/4] genetlink: Replace custom CONCATENATE() implementation
+Date:   Wed, 19 Jul 2023 00:11:47 +0300
+Message-Id: <20230718211147.18647-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 In-Reply-To: <20230718211147.18647-1-andriy.shevchenko@linux.intel.com>
 References: <20230718211147.18647-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,148 +84,136 @@ Replace custom implementation of the macros from args.h.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- include/linux/arm-smccc.h | 69 ++++++++++++++++++---------------------
- 1 file changed, 32 insertions(+), 37 deletions(-)
+ include/linux/genl_magic_func.h   | 27 ++++++++++++++-------------
+ include/linux/genl_magic_struct.h |  8 +++-----
+ 2 files changed, 17 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
-index f196c19f8e55..7c67c17321d4 100644
---- a/include/linux/arm-smccc.h
-+++ b/include/linux/arm-smccc.h
-@@ -5,6 +5,7 @@
- #ifndef __LINUX_ARM_SMCCC_H
- #define __LINUX_ARM_SMCCC_H
+diff --git a/include/linux/genl_magic_func.h b/include/linux/genl_magic_func.h
+index 2984b0cb24b1..d4da060b7532 100644
+--- a/include/linux/genl_magic_func.h
++++ b/include/linux/genl_magic_func.h
+@@ -2,6 +2,7 @@
+ #ifndef GENL_MAGIC_FUNC_H
+ #define GENL_MAGIC_FUNC_H
  
 +#include <linux/args.h>
- #include <linux/init.h>
- #include <uapi/linux/const.h>
+ #include <linux/build_bug.h>
+ #include <linux/genl_magic_struct.h>
  
-@@ -413,31 +414,26 @@ asmlinkage void __arm_smccc_hvc(unsigned long a0, unsigned long a1,
+@@ -23,7 +24,7 @@
+ #define GENL_struct(tag_name, tag_number, s_name, s_fields)		\
+ 	[tag_name] = { .type = NLA_NESTED },
  
+-static struct nla_policy CONCAT_(GENL_MAGIC_FAMILY, _tla_nl_policy)[] = {
++static struct nla_policy CONCATENATE(GENL_MAGIC_FAMILY, _tla_nl_policy)[] = {
+ #include GENL_MAGIC_INCLUDE_FILE
+ };
+ 
+@@ -209,7 +210,7 @@ static int s_name ## _from_attrs_for_change(struct s_name *s,		\
+  * Magic: define op number to op name mapping				{{{1
+  *									{{{2
+  */
+-static const char *CONCAT_(GENL_MAGIC_FAMILY, _genl_cmd_to_str)(__u8 cmd)
++static const char *CONCATENATE(GENL_MAGIC_FAMILY, _genl_cmd_to_str)(__u8 cmd)
+ {
+ 	switch (cmd) {
+ #undef GENL_op
+@@ -235,7 +236,7 @@ static const char *CONCAT_(GENL_MAGIC_FAMILY, _genl_cmd_to_str)(__u8 cmd)
+ 	.cmd = op_name,						\
+ },
+ 
+-#define ZZZ_genl_ops		CONCAT_(GENL_MAGIC_FAMILY, _genl_ops)
++#define ZZZ_genl_ops		CONCATENATE(GENL_MAGIC_FAMILY, _genl_ops)
+ static struct genl_ops ZZZ_genl_ops[] __read_mostly = {
+ #include GENL_MAGIC_INCLUDE_FILE
+ };
+@@ -248,32 +249,32 @@ static struct genl_ops ZZZ_genl_ops[] __read_mostly = {
+  * and provide register/unregister functions.
+  *									{{{2
+  */
+-#define ZZZ_genl_family		CONCAT_(GENL_MAGIC_FAMILY, _genl_family)
++#define ZZZ_genl_family		CONCATENATE(GENL_MAGIC_FAMILY, _genl_family)
+ static struct genl_family ZZZ_genl_family;
+ /*
+  * Magic: define multicast groups
+  * Magic: define multicast group registration helper
+  */
+-#define ZZZ_genl_mcgrps		CONCAT_(GENL_MAGIC_FAMILY, _genl_mcgrps)
++#define ZZZ_genl_mcgrps		CONCATENATE(GENL_MAGIC_FAMILY, _genl_mcgrps)
+ static const struct genl_multicast_group ZZZ_genl_mcgrps[] = {
+ #undef GENL_mc_group
+ #define GENL_mc_group(group) { .name = #group, },
+ #include GENL_MAGIC_INCLUDE_FILE
+ };
+ 
+-enum CONCAT_(GENL_MAGIC_FAMILY, group_ids) {
++enum CONCATENATE(GENL_MAGIC_FAMILY, group_ids) {
+ #undef GENL_mc_group
+-#define GENL_mc_group(group) CONCAT_(GENL_MAGIC_FAMILY, _group_ ## group),
++#define GENL_mc_group(group) CONCATENATE(GENL_MAGIC_FAMILY, _group_ ## group),
+ #include GENL_MAGIC_INCLUDE_FILE
+ };
+ 
+ #undef GENL_mc_group
+ #define GENL_mc_group(group)						\
+-static int CONCAT_(GENL_MAGIC_FAMILY, _genl_multicast_ ## group)(	\
++static int CONCATENATE(GENL_MAGIC_FAMILY, _genl_multicast_ ## group)(	\
+ 	struct sk_buff *skb, gfp_t flags)				\
+ {									\
+ 	unsigned int group_id =						\
+-		CONCAT_(GENL_MAGIC_FAMILY, _group_ ## group);		\
++		CONCATENATE(GENL_MAGIC_FAMILY, _group_ ## group);		\
+ 	return genlmsg_multicast(&ZZZ_genl_family, skb, 0,		\
+ 				 group_id, flags);			\
+ }
+@@ -289,8 +290,8 @@ static struct genl_family ZZZ_genl_family __ro_after_init = {
+ #ifdef GENL_MAGIC_FAMILY_HDRSZ
+ 	.hdrsize = NLA_ALIGN(GENL_MAGIC_FAMILY_HDRSZ),
+ #endif
+-	.maxattr = ARRAY_SIZE(CONCAT_(GENL_MAGIC_FAMILY, _tla_nl_policy))-1,
+-	.policy	= CONCAT_(GENL_MAGIC_FAMILY, _tla_nl_policy),
++	.maxattr = ARRAY_SIZE(CONCATENATE(GENL_MAGIC_FAMILY, _tla_nl_policy))-1,
++	.policy	= CONCATENATE(GENL_MAGIC_FAMILY, _tla_nl_policy),
+ 	.ops = ZZZ_genl_ops,
+ 	.n_ops = ARRAY_SIZE(ZZZ_genl_ops),
+ 	.mcgrps = ZZZ_genl_mcgrps,
+@@ -299,12 +300,12 @@ static struct genl_family ZZZ_genl_family __ro_after_init = {
+ 	.module = THIS_MODULE,
+ };
+ 
+-int CONCAT_(GENL_MAGIC_FAMILY, _genl_register)(void)
++int CONCATENATE(GENL_MAGIC_FAMILY, _genl_register)(void)
+ {
+ 	return genl_register_family(&ZZZ_genl_family);
+ }
+ 
+-void CONCAT_(GENL_MAGIC_FAMILY, _genl_unregister)(void)
++void CONCATENATE(GENL_MAGIC_FAMILY, _genl_unregister)(void)
+ {
+ 	genl_unregister_family(&ZZZ_genl_family);
+ }
+diff --git a/include/linux/genl_magic_struct.h b/include/linux/genl_magic_struct.h
+index f81d48987528..a419d93789ff 100644
+--- a/include/linux/genl_magic_struct.h
++++ b/include/linux/genl_magic_struct.h
+@@ -14,14 +14,12 @@
+ # error "you need to define GENL_MAGIC_INCLUDE_FILE before inclusion"
  #endif
  
--#define ___count_args(_0, _1, _2, _3, _4, _5, _6, _7, _8, x, ...) x
-+#define __constraint_read_2	"r" (arg0)
-+#define __constraint_read_3	__constraint_read_2, "r" (arg1)
-+#define __constraint_read_4	__constraint_read_3, "r" (arg2)
-+#define __constraint_read_5	__constraint_read_4, "r" (arg3)
-+#define __constraint_read_6	__constraint_read_5, "r" (arg4)
-+#define __constraint_read_7	__constraint_read_6, "r" (arg5)
-+#define __constraint_read_8	__constraint_read_7, "r" (arg6)
-+#define __constraint_read_9	__constraint_read_8, "r" (arg7)
++#include <linux/args.h>
+ #include <linux/genetlink.h>
+ #include <linux/types.h>
  
--#define __count_args(...)						\
--	___count_args(__VA_ARGS__, 7, 6, 5, 4, 3, 2, 1, 0)
+-#define CONCAT__(a,b)	a ## b
+-#define CONCAT_(a,b)	CONCAT__(a,b)
 -
--#define __constraint_read_0	"r" (arg0)
--#define __constraint_read_1	__constraint_read_0, "r" (arg1)
--#define __constraint_read_2	__constraint_read_1, "r" (arg2)
--#define __constraint_read_3	__constraint_read_2, "r" (arg3)
--#define __constraint_read_4	__constraint_read_3, "r" (arg4)
--#define __constraint_read_5	__constraint_read_4, "r" (arg5)
--#define __constraint_read_6	__constraint_read_5, "r" (arg6)
--#define __constraint_read_7	__constraint_read_6, "r" (arg7)
--
--#define __declare_arg_0(a0, res)					\
-+#define __declare_arg_2(a0, res)					\
- 	struct arm_smccc_res   *___res = res;				\
- 	register unsigned long arg0 asm("r0") = (u32)a0
+-extern int CONCAT_(GENL_MAGIC_FAMILY, _genl_register)(void);
+-extern void CONCAT_(GENL_MAGIC_FAMILY, _genl_unregister)(void);
++extern int CONCATENATE(GENL_MAGIC_FAMILY, _genl_register)(void);
++extern void CONCATENATE(GENL_MAGIC_FAMILY, _genl_unregister)(void);
  
--#define __declare_arg_1(a0, a1, res)					\
-+#define __declare_arg_3(a0, a1, res)					\
- 	typeof(a1) __a1 = a1;						\
- 	struct arm_smccc_res   *___res = res;				\
- 	register unsigned long arg0 asm("r0") = (u32)a0;			\
- 	register typeof(a1) arg1 asm("r1") = __a1
- 
--#define __declare_arg_2(a0, a1, a2, res)				\
-+#define __declare_arg_4(a0, a1, a2, res)				\
- 	typeof(a1) __a1 = a1;						\
- 	typeof(a2) __a2 = a2;						\
- 	struct arm_smccc_res   *___res = res;				\
-@@ -445,7 +441,7 @@ asmlinkage void __arm_smccc_hvc(unsigned long a0, unsigned long a1,
- 	register typeof(a1) arg1 asm("r1") = __a1;			\
- 	register typeof(a2) arg2 asm("r2") = __a2
- 
--#define __declare_arg_3(a0, a1, a2, a3, res)				\
-+#define __declare_arg_5(a0, a1, a2, a3, res)				\
- 	typeof(a1) __a1 = a1;						\
- 	typeof(a2) __a2 = a2;						\
- 	typeof(a3) __a3 = a3;						\
-@@ -455,34 +451,26 @@ asmlinkage void __arm_smccc_hvc(unsigned long a0, unsigned long a1,
- 	register typeof(a2) arg2 asm("r2") = __a2;			\
- 	register typeof(a3) arg3 asm("r3") = __a3
- 
--#define __declare_arg_4(a0, a1, a2, a3, a4, res)			\
-+#define __declare_arg_6(a0, a1, a2, a3, a4, res)			\
- 	typeof(a4) __a4 = a4;						\
--	__declare_arg_3(a0, a1, a2, a3, res);				\
-+	__declare_arg_5(a0, a1, a2, a3, res);				\
- 	register typeof(a4) arg4 asm("r4") = __a4
- 
--#define __declare_arg_5(a0, a1, a2, a3, a4, a5, res)			\
-+#define __declare_arg_7(a0, a1, a2, a3, a4, a5, res)			\
- 	typeof(a5) __a5 = a5;						\
--	__declare_arg_4(a0, a1, a2, a3, a4, res);			\
-+	__declare_arg_6(a0, a1, a2, a3, a4, res);			\
- 	register typeof(a5) arg5 asm("r5") = __a5
- 
--#define __declare_arg_6(a0, a1, a2, a3, a4, a5, a6, res)		\
-+#define __declare_arg_8(a0, a1, a2, a3, a4, a5, a6, res)		\
- 	typeof(a6) __a6 = a6;						\
--	__declare_arg_5(a0, a1, a2, a3, a4, a5, res);			\
-+	__declare_arg_7(a0, a1, a2, a3, a4, a5, res);			\
- 	register typeof(a6) arg6 asm("r6") = __a6
- 
--#define __declare_arg_7(a0, a1, a2, a3, a4, a5, a6, a7, res)		\
-+#define __declare_arg_9(a0, a1, a2, a3, a4, a5, a6, a7, res)		\
- 	typeof(a7) __a7 = a7;						\
--	__declare_arg_6(a0, a1, a2, a3, a4, a5, a6, res);		\
-+	__declare_arg_8(a0, a1, a2, a3, a4, a5, a6, res);		\
- 	register typeof(a7) arg7 asm("r7") = __a7
- 
--#define ___declare_args(count, ...) __declare_arg_ ## count(__VA_ARGS__)
--#define __declare_args(count, ...)  ___declare_args(count, __VA_ARGS__)
--
--#define ___constraints(count)						\
--	: __constraint_read_ ## count					\
--	: smccc_sve_clobbers "memory"
--#define __constraints(count)	___constraints(count)
--
  /*
-  * We have an output list that is not necessarily used, and GCC feels
-  * entitled to optimise the whole sequence away. "volatile" is what
-@@ -494,11 +482,14 @@ asmlinkage void __arm_smccc_hvc(unsigned long a0, unsigned long a1,
- 		register unsigned long r1 asm("r1");			\
- 		register unsigned long r2 asm("r2");			\
- 		register unsigned long r3 asm("r3"); 			\
--		__declare_args(__count_args(__VA_ARGS__), __VA_ARGS__);	\
-+		CONCATENATE(__declare_arg_,				\
-+			    COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__);	\
- 		asm volatile(SMCCC_SVE_CHECK				\
- 			     inst "\n" :				\
- 			     "=r" (r0), "=r" (r1), "=r" (r2), "=r" (r3)	\
--			     __constraints(__count_args(__VA_ARGS__)));	\
-+			     : CONCATENATE(__constraint_read_,		\
-+					   COUNT_ARGS(__VA_ARGS__))	\
-+			     : smccc_sve_clobbers "memory");		\
- 		if (___res)						\
- 			*___res = (typeof(*___res)){r0, r1, r2, r3};	\
- 	} while (0)
-@@ -542,8 +533,12 @@ asmlinkage void __arm_smccc_hvc(unsigned long a0, unsigned long a1,
-  */
- #define __fail_smccc_1_1(...)						\
- 	do {								\
--		__declare_args(__count_args(__VA_ARGS__), __VA_ARGS__);	\
--		asm ("" : __constraints(__count_args(__VA_ARGS__)));	\
-+		CONCATENATE(__declare_arg_,				\
-+			    COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__);	\
-+		asm ("" :						\
-+		     : CONCATENATE(__constraint_read_,			\
-+				   COUNT_ARGS(__VA_ARGS__))		\
-+		     : smccc_sve_clobbers "memory");			\
- 		if (___res)						\
- 			___res->a0 = SMCCC_RET_NOT_SUPPORTED;		\
- 	} while (0)
+  * Extension of genl attribute validation policies			{{{2
 -- 
 2.40.0.1.gaa8946217a0b
 
