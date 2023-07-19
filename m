@@ -2,77 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B63759629
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 15:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB03759661
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 15:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbjGSNFY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 09:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S231146AbjGSNRY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 09:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjGSNFX (ORCPT
+        with ESMTP id S230076AbjGSNRK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 09:05:23 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16D21986;
-        Wed, 19 Jul 2023 06:05:20 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1DBE45C0145;
-        Wed, 19 Jul 2023 09:05:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 19 Jul 2023 09:05:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1689771920; x=1689858320; bh=siYFJLdfTwI4H
-        sjetwx60OIcBExO9uyJZ22N85nYicM=; b=EyhLIFk3QZGbzPk9a/2CsQl+bWSkx
-        +rf5EUc8oHC0kqo0iPXtwSKCKWvopRnD27quu1ojrRkVJv1XSyKruCCxu3TSv+ht
-        7Z3ndflYqWdO44tQ980vujHnyzGeWRPUdpuf0t9ObDGPw6hFLCcggxfHD9RetcN4
-        f2WQXNEzdp271oELA8NQiRmaZwZoY++Uz+rx5Rgsd0mwG5A7UZSNFNgnYZIRHTQ5
-        Sz35NUnbdyD/RvEbWGVceo48O18exJU8GVBX1l6f7mtRA37P1cG13Ci/mn6KheRJ
-        051ysczjv8Ys4qqn1zXplhEqwXdcF0Wu9iVSOWeul1LeNkSHCn8sX1sYg==
-X-ME-Sender: <xms:j9-3ZNol6LZ1AYQFwnmQr-_3o5RzhuXTA1m3NG2JHEsFpvRyvlML_w>
-    <xme:j9-3ZPoVyKtWmj9PnPftQFg3T2WxqnqjJQNNVQiUnQYlF4BYeZiMwC2gSTnw_fKVN
-    C9KGd8WCVT2meU>
-X-ME-Received: <xmr:j9-3ZKNPyO1HwPVDGQ6fXhe6sbWu0Wsq04i0JwStWFfSOWKqCgcqMG8b9Gb-_UjIienSVo3Djq0CmxhVAuhx_5i4jUI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrgeekgdeggecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdortddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpeffueevhffhuddvjeetfeeuudfgheegledvveehheeuueduvdehgedtteefheeg
-    feenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:j9-3ZI7G_T6zgOtN5gnwqWiNxm7BR64f7vD-vRtmxQ-96PIFABP9yQ>
-    <xmx:j9-3ZM7inD1TaP-hmWsrEe4mopWmlTLXuiDgzTswPWe9q5HblZf0fA>
-    <xmx:j9-3ZAhCYGqYDtQejFEUaftUnw7Ncx8MJGredtEjSe92CATxeffnRw>
-    <xmx:kN-3ZNGmaU8pcdpgjOlvZB83Baf1W4j3hZTcSPXdZfifgfmhtbSdfQ>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 19 Jul 2023 09:05:18 -0400 (EDT)
-Date:   Wed, 19 Jul 2023 16:05:16 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PROBLEM] selftests: net/forwarding/bridge_mdb.sh: 'Command
- "replace" is unknown, try "bridge mdb help"'
-Message-ID: <ZLffjNMaJZiGJytj@shredder>
-References: <6b04b2ba-2372-6f6b-3ac8-b7cba1cfae83@alu.unizg.hr>
+        Wed, 19 Jul 2023 09:17:10 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3801A6;
+        Wed, 19 Jul 2023 06:17:06 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1689772614tyh1wr0y
+Received: from linux-lab-host.localdomain ( [119.123.130.39])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 19 Jul 2023 21:16:52 +0800 (CST)
+X-QQ-SSF: 01200000000000D0X000000A0000000
+X-QQ-FEAT: k0mQ4ihyJQPTmw+A9oK+u2PtB5uAvc7wlhDPNeQTJWoGMiWrU95CEy2hIh8i9
+        59kcct7KyWxHVho8yTeYOvtKr6yH4TCgcfpJQks7Nudk2azuUuIVcH8lO+XYjwZw0JSgFih
+        ASyyZUksydOG+jiwFuRS1y6q9QWrbnYUSz0rrpHXaaEZiU7lXczJxw0Eq5c2XxC4FYtnR1W
+        T8i2Rmrf58wvp551SMc0wu82S/gkCYChDRAVoHVSSiuJFKJvZG3q28ZJlpfVhgex7t2TYEV
+        HOuzV1ElP37VvDOO/mFedZymoHz41nO6o4P+wwq3YC/6Fh71pGGG+JK6Mqwv7FzLz8838Ui
+        CU2fDFgi6CcKsnrvYBmBND3XhUto739JL8Xx9OL08HEBIuPlXg=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 8223366213678110786
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 00/14] selftests/nolibc: add minimal kernel config support - part1
+Date:   Wed, 19 Jul 2023 21:16:52 +0800
+Message-Id: <cover.1689759351.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b04b2ba-2372-6f6b-3ac8-b7cba1cfae83@alu.unizg.hr>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,50 +49,176 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 09:02:31PM +0200, Mirsad Todorovac wrote:
-> Command "replace" is unknown, try "bridge mdb help".
+Hi, Willy, Thomas
 
-You are running the test with an old iproute2 that doesn't support the
-replace command. The following patches [1][2] skip the tests in this
-case. However, you will get better test coverage with iproute2-next [3]
-compared to the version shipped with your distribution.
+Here is the first part of v2 of our tinyconfig support for nolibc-test
+[1], the patchset subject is reserved as before.
 
-[1]
-diff --git a/tools/testing/selftests/net/forwarding/bridge_mdb.sh b/tools/testing/selftests/net/forwarding/bridge_mdb.sh
-index ae3f9462a2b6..a1bd4900acb6 100755
---- a/tools/testing/selftests/net/forwarding/bridge_mdb.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_mdb.sh
-@@ -1206,6 +1206,12 @@ ctrl_test()
-        ctrl_mldv2_is_in_test
- }
- 
-+bridge mdb help 2>&1 | grep -q "replace"
-+if [ $? -ne 0 ]; then
-+       echo "SKIP: iproute2 too old, missing bridge mdb replace support"
-+       exit $ksft_skip
-+fi
-+
- trap cleanup EXIT
- 
- setup_prepare
+As discussed in v1 thread [1], to easier the review progress, the whole
+tinyconfig support is divided into several parts, mainly by
+architecture, here is the first part, include basic preparation and
+powerpc example.
 
-[2]
-diff --git a/tools/testing/selftests/net/forwarding/bridge_mdb_max.sh b/tools/testing/selftests/net/forwarding/bridge_mdb_max.sh
-index ae255b662ba3..a1c4aec4cbb1 100755
---- a/tools/testing/selftests/net/forwarding/bridge_mdb_max.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_mdb_max.sh
-@@ -1328,6 +1328,12 @@ test_8021qvs()
-        switch_destroy
- }
- 
-+bridge link help 2>&1 | grep -q "mcast_max_groups"
-+if [ $? -ne 0 ]; then
-+       echo "SKIP: iproute2 too old, missing bridge \"mcast_max_groups\" support"
-+       exit $ksft_skip
-+fi
-+
- trap cleanup EXIT
- 
- setup_prepare
+This patchset should be applied after the 32/64-bit powerpc support [2],
+exactly these two are required by us:
 
-[3] https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git
+    * selftests/nolibc: add extra config file customize support
+    * selftests/nolibc: add XARCH and ARCH mapping support
+
+In this patchset, we firstly add some misc preparations and at last add
+the tinyconfig target and use powerpc as the first example. 
+
+Tests:
+
+    // powerpc run-user
+    $ for arch in powerpc powerpc64 powerpc64le; do \
+        rm -rf $PWD/kernel-$arch; \
+        mkdir -p $PWD/kernel-$arch; \
+        make run-user XARCH=$arch O=$PWD/kernel-$arch RUN_OUT=$PWD/run.$arch.out | grep "status: "; \
+      done
+    165 test(s): 157 passed,   8 skipped,   0 failed => status: warning
+    165 test(s): 157 passed,   8 skipped,   0 failed => status: warning
+    165 test(s): 157 passed,   8 skipped,   0 failed => status: warning
+
+    // powerpc run
+    $ for arch in powerpc powerpc64 powerpc64le; do \
+        rm -rf $PWD/kernel-$arch; \
+        mkdir -p $PWD/kernel-$arch; \
+        make tinyconfig run XARCH=$arch O=$PWD/kernel-$arch RUN_OUT=$PWD/run.$arch.out; \
+      done
+
+    $ for arch in powerpc powerpc64 powerpc64le; do \
+        make report XARCH=$arch O=$PWD/kernel-$arch RUN_OUT=$PWD/run.$arch.out | grep "status: "; \
+      done
+    165 test(s): 156 passed,   9 skipped,   0 failed => status: warning
+    165 test(s): 156 passed,   9 skipped,   0 failed => status: warning
+    165 test(s): 156 passed,   9 skipped,   0 failed => status: warning
+
+    // the others, randomly choose some
+    $ make run-user XARCH=arm O=$PWD/kernel-arm RUN_OUT=$PWD/run.arm.out CROSS_COMPILE=arm-linux-gnueabi- | grep status:
+    165 test(s): 156 passed,   9 skipped,   0 failed => status: warning
+    $ make run-user XARCH=x86_64 O=$PWD/kernel-arm RUN_OUT=$PWD/run.x86_64.out CROSS_COMPILE=x86_64-linux-gnu- | grep status:
+    165 test(s): 157 passed,   8 skipped,   0 failed => status: warning
+    $ make run-libc-test | grep status:
+    165 test(s): 153 passed,  12 skipped,   0 failed => status: warning 
+
+    // x86_64, require noapic kernel command line option for old qemu-system-x86_64 (v4.2.1)
+    $ make run XARCH=x86_64 O=$PWD/kernel-x86_64 RUN_OUT=$PWD/run.x86_64.out CROSS_COMPILE=x86_64-linux-gnu- | grep status
+    $ make rerun XARCH=x86_64 O=$PWD/kernel-x86_64 RUN_OUT=$PWD/run.x86_64.out CROSS_COMPILE=x86_64-linux-gnu- | grep status
+    165 test(s): 159 passed,   6 skipped,   0 failed => status: warning
+
+tinyconfig mainly targets as a time-saver, the misc preparations service
+for the same goal, let's take a look:
+
+* selftests/nolibc: allow report with existing test log
+
+    Like rerun without rebuild, Add report (without rerun) to summarize
+    the existing test log, this may work perfectly with the 'grep status'
+
+* selftests/nolibc: add macros to enhance maintainability
+
+    Several macros are added to dedup the shared code to shrink lines
+    and easier the maintainability
+
+    The macros are added just before the using area to avoid code change
+    conflicts in the future.
+
+* selftests/nolibc: print running log to screen
+
+    Enable logging to let developers learn what is happening at the
+    first glance, without the need to edit the Makefile and rerun it.
+
+    These helps a lot when there is a long-time running, a failed
+    poweroff or even a forever hang.
+
+    For test summmary, the 'grep status' can be used together with the
+    standalone report target.
+
+* selftests/nolibc: fix up O= option support
+
+    With objtree instead srctree for .config and IMAGE, now, O= works.
+
+    Using O=$PWD/kernel-$arch avoid the mrproer for every build.
+
+* selftests/nolibc: add menuconfig for development
+
+    Allow manually tuning some options, mainly for a new architecture
+    porting.
+
+* selftests/nolibc: add mrproper for development
+  selftests/nolibc: defconfig: remove mrproper target
+
+    Split the mrproper target out of defconfig, when with O=, mrproper is not
+    required by defconfig, but reserve it for the other use scenes.
+
+* selftests/nolibc: string the core targets
+
+    Allow simply 'make run' instead of 'make defconfig; make extconfig;
+    make kernel; make run'.
+
+* selftests/nolibc: allow quit qemu-system when poweroff fails
+
+    When poweroff fails, allow exit while detects the power off string
+    from output or the wait time is too long (specified by QEMU_TIMEOUT).
+
+    This helps the boards who have no poweroff support or the kernel not
+    enable the poweroff options (mainly for tinyconfig).
+
+* selftests/nolibc: allow customize CROSS_COMPILE by architecture
+* selftests/nolibc: customize CROSS_COMPILE for 32/64-bit powerpc
+
+    This further saves a CROSS_COMPILE option for 'make run', it is very
+    important when iterates all of the supported architectures and the
+    compilers are not just prefixed with the XARCH variable.
+
+    For example, binary of big endian powerpc64 can be compiled with
+    powerpc64le-linux-gnu-, but the prefix is powerpc64le.
+
+    Even if the pre-customized compiler not exist, we can configure
+    CROSS_COMPILE_<ARCH> before the test loop to use the code.
+
+* selftests/nolibc: add tinyconfig target
+  selftests/nolibc: tinyconfig: add extra common options
+  selftests/nolibc: tinyconfig: add support for 32/64-bit powerpc
+
+    Here is the first architecture(and its variants) support tinyconfig.
+
+    powerpc is actually a very good architecture, for it has 'various'
+    variants for test.
+
+Best regards,
+Zhangjin
+---
+[1]: https://lore.kernel.org/lkml/cover.1687706332.git.falcon@tinylab.org/
+[2]: https://lore.kernel.org/lkml/cover.1689713175.git.falcon@tinylab.org/
+
+
+Zhangjin Wu (14):
+  selftests/nolibc: allow report with existing test log
+  selftests/nolibc: add macros to enhance maintainability
+  selftests/nolibc: print running log to screen
+  selftests/nolibc: fix up O= option support
+  selftests/nolibc: add menuconfig for development
+  selftests/nolibc: add mrproper for development
+  selftests/nolibc: defconfig: remove mrproper target
+  selftests/nolibc: string the core targets
+  selftests/nolibc: allow quit qemu-system when poweroff fails
+  selftests/nolibc: allow customize CROSS_COMPILE by architecture
+  selftests/nolibc: customize CROSS_COMPILE for 32/64-bit powerpc
+  selftests/nolibc: add tinyconfig target
+  selftests/nolibc: tinyconfig: add extra common options
+  selftests/nolibc: tinyconfig: add support for 32/64-bit powerpc
+
+ tools/testing/selftests/nolibc/Makefile       | 102 ++++++++++++++----
+ .../selftests/nolibc/configs/common.config    |   4 +
+ .../selftests/nolibc/configs/powerpc.config   |   3 +
+ .../selftests/nolibc/configs/powerpc64.config |   3 +
+ .../nolibc/configs/powerpc64le.config         |   4 +
+ 5 files changed, 98 insertions(+), 18 deletions(-)
+ create mode 100644 tools/testing/selftests/nolibc/configs/common.config
+ create mode 100644 tools/testing/selftests/nolibc/configs/powerpc64.config
+ create mode 100644 tools/testing/selftests/nolibc/configs/powerpc64le.config
+
+-- 
+2.25.1
+
