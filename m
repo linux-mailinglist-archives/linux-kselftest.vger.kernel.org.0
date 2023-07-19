@@ -2,107 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A2A75A0A2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 23:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26ACF75A1B9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 00:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjGSVen (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 17:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S230041AbjGSWXu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 18:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjGSVem (ORCPT
+        with ESMTP id S229694AbjGSWXt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 17:34:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5699813E;
-        Wed, 19 Jul 2023 14:34:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D57BF6184B;
-        Wed, 19 Jul 2023 21:34:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA13C433C7;
-        Wed, 19 Jul 2023 21:34:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689802479;
-        bh=xs32mHA4nF+9n7KP46/BKyGjjAqCtVdA4jVux5mh1s0=;
-        h=Date:From:Subject:To:Cc:From;
-        b=KArmPznPDrFTMp1keqVit+9mFc7Y4Ez8RPx5k0emvObaFNEkmeJpAhm1Qd10RDQTJ
-         Bm1e3Xq0VJQntzNgwB8Gr8zEDZV5Slz3A6nRMd/2Ejh1CN/J+2dfVccKisoO0LvhCY
-         AlfNrIOBaA8difCvi4XSv5VBHxh0ferpdiGm7eg946Dse7Kc88IMqZ8Id8DWyGHY7Y
-         WXLVzaRLXIRK+ZYZSse0iYI/92DtF7Wu/Kvt3HGefN8rAid7tU68DunS0bV152J+p0
-         30z6yluU1iyLGrpLZZIL4P9o4r4RwPtV33z4faNEAuFgAiuNqakpV9jVIHChu5n2st
-         yP/IpJ+uw/qmw==
-Message-ID: <e04d1d5b-518b-bebd-aa7a-70b87bc4e867@kernel.org>
-Date:   Wed, 19 Jul 2023 15:34:38 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-From:   shuah <shuah@kernel.org>
-Subject: [ANNOUNCE/CFP] Kernel Testing & Dependability Micro-conference at LPC
- 2023
-To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 19 Jul 2023 18:23:49 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF011FE2
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 15:23:48 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-cbcffb18afeso114099276.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 15:23:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689805428; x=1692397428;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wQ30uDB639VGNW+T7EeVAUkSIhG2Jevrm/2Jy436reA=;
+        b=jGBW4v5uLMfOolbkZxtwRaLLhDb+BMh1OFRzrhGuOBXni+46bSXTF9cgl+VZEDO8Zi
+         TrLvdFk/cyvWRxefzpSNGAOjgf6RjvfmnAO/RNmU2XbF19LVe4549pnH4RDAy4354SDL
+         9gr3n8hzyoRQqFH0nUeXAmfAl3J0bzU9aVdfrmQrYG6FjniIUtREGJUpiN+akhOB2Yfs
+         8V8GW9tAbO8kT0Xitj+p3G9GwiWPi4wxSsvL1f9o2OLllrYDR/o3RxkAJTNZKOIYoLhv
+         7/LJk9tRrF9kMjmXactWkHW9l1NDolQBeLzictRKTBB/5LojaVtXTRImzGTMfPsV1e7d
+         htxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689805428; x=1692397428;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wQ30uDB639VGNW+T7EeVAUkSIhG2Jevrm/2Jy436reA=;
+        b=eEQCkuB+qUSnl68QfohZWY43CGcBpNKemU9cqWGDlhitPMUylYNvrlpKIA1F2NzuKJ
+         5RxslOHpujHQBZPUTw7vUn873O6DQ+K1YcrVp/JGtplfgg/zJ/JTXvKebgyA5WIcErP8
+         2pEbfeUSfdPaLAfFvmiVjfxKIexKzAvu9uKt/rYMNKWGpPF7vyVsGCGKVHCSEQS7I1vg
+         FK9QKJVtTapMjAW4SPBsQ7Syb73LyUxKIzuD73KLZ+fjUJyQ+sMFuo/TU1yZvhq93zoh
+         jI6zk41f4bc9QQZCttETZWQXH3glop+UV0CKHpDIwUT9ARoUIdhuczl7U9qpeFwxz2lV
+         yX/Q==
+X-Gm-Message-State: ABy/qLavJ1DkVpRD7S5QtPS4gi7lhf5Nr9dORQPd7cpM80zmTEyLLkD1
+        tproDRMIg042qyqM/Enhs95bbyP9MA==
+X-Google-Smtp-Source: APBJJlFrNajcvUKs2zJQGw2iGbgoAs6cobJeNjOkOO+vtQ7UQaL9jkZXJPWY6CCIfr6/5UEwBDIrwYfWSA==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a05:6902:1709:b0:cab:e42c:876b with SMTP id
+ by9-20020a056902170900b00cabe42c876bmr34333ybb.3.1689805427820; Wed, 19 Jul
+ 2023 15:23:47 -0700 (PDT)
+Date:   Wed, 19 Jul 2023 22:23:27 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230719222338.259684-1-rmoar@google.com>
+Subject: [PATCH v1 0/9] kunit: Add test attributes API
+From:   Rae Moar <rmoar@google.com>
+To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
+        brendan.higgins@linux.dev
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, jstultz@google.com,
+        tglx@linutronix.de, sboyd@kernel.org, Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+Hello everyone,
 
-I am reaching out to announce that we are once again planning to
-gather to discuss testing and dependability related topics at the
-Kernel Testing & Dependability Micro-conference at LPC 2023.
+This patch series adds a test attributes framework to KUnit.
 
-We invite you to submit proposals for discussion:
-- https://lpc.events/event/17/abstracts/1430/
+There has been interest in filtering out "slow" KUnit tests. Most notably,
+a new config, CONFIG_MEMCPY_SLOW_KUNIT_TEST, has been added to exclude a
+particularly slow memcpy test
+(https://lore.kernel.org/all/20230118200653.give.574-kees@kernel.org/).
 
-The Linux Plumbers 2023 Kernel Testing & Dependability track focuses on
-advancing the current state of testing of the Linux Kernel and its related
-infrastructure. The main purpose is to improve software quality and
-dependability for applications that require predictability and trust.
+This attributes framework can be used to save and access test associated
+data, including whether a test is slow. These attributes are reportable
+(via KTAP and command line output) and are also filterable.
 
-We aim to create connections between folks working on similar projects,
-and help individual projects make progress.
+This framework is designed to allow for the addition of other attributes in
+the future. These attributes could include whether the test can be run
+concurrently, test file path, etc.
 
-This track is intended to promote collaboration between all the communities
-and people interested in the Kernel testing & dependability. This will help
-move the conversation forward from where we left off at the LPC 2022 Kernel
-Testing & Dependability MC.
+To try out the framework I suggest running:
+"./tools/testing/kunit/kunit.py run --filter speed!=slow"
 
-We ask that any topic discussions focus on issues/problems they are facing
-and possible alternatives to resolving them. The Micro-conference is open to
-all topics related to testing on Linux, not necessarily in the kernel space.
+This patch series was originally sent out as an RFC. Here is a link to the
+RFC v2:
+https://lore.kernel.org/all/20230707210947.1208717-1-rmoar@google.com/
 
-Suggested topics:
+Thanks!
+Rae
 
-- KernelCI: Topics on improvements and enhancements for test coverage
-- Growing KCIDB, integrating more sources (https://kernelci.org/docs/kcidb/)
-- Sanitizers
-- Using Clang for better testing coverage
-- How to spread KUnit throughout the kernel?
-- Building and testing in-kernel Rust code.
-- Explore ways to improve testing framework and tests in the kernel
-   with a specific goal to increase traceability and code coverage.
-- Explore how do SBOMs figure into dependability?
+Rae Moar (9):
+  kunit: Add test attributes API structure
+  kunit: Add speed attribute
+  kunit: Add module attribute
+  kunit: Add ability to filter attributes
+  kunit: tool: Add command line interface to filter and report
+    attributes
+  kunit: memcpy: Mark tests as slow using test attributes
+  kunit: time: Mark test as slow using test attributes
+  kunit: add tests for filtering attributes
+  kunit: Add documentation of KUnit test attributes
 
-Proposals can be submitted here, by August 20th:
-- https://lpc.events/event/17/abstracts/
+ .../dev-tools/kunit/running_tips.rst          | 166 +++++++
+ include/kunit/attributes.h                    |  50 +++
+ include/kunit/test.h                          |  70 ++-
+ kernel/time/time_test.c                       |   2 +-
+ lib/Kconfig.debug                             |   3 +
+ lib/kunit/Makefile                            |   3 +-
+ lib/kunit/attributes.c                        | 421 ++++++++++++++++++
+ lib/kunit/executor.c                          | 115 ++++-
+ lib/kunit/executor_test.c                     | 128 +++++-
+ lib/kunit/kunit-example-test.c                |   9 +
+ lib/kunit/test.c                              |  27 +-
+ lib/memcpy_kunit.c                            |   8 +-
+ tools/testing/kunit/kunit.py                  |  70 ++-
+ tools/testing/kunit/kunit_kernel.py           |   8 +-
+ tools/testing/kunit/kunit_parser.py           |  11 +-
+ tools/testing/kunit/kunit_tool_test.py        |  39 +-
+ 16 files changed, 1054 insertions(+), 76 deletions(-)
+ create mode 100644 include/kunit/attributes.h
+ create mode 100644 lib/kunit/attributes.c
 
-Please reach out to MC leads:
-      Shuah Khan (shuah@kernel.org)
-      Sasha Levin <sashal@kernel.org>
-      Guillaume Tucker <guillaume.tucker@collabora.com>
 
-thank you,
--- Shuah
+base-commit: 64bd4641310c41a1ecf07c13c67bc0ed61045dfd
+-- 
+2.41.0.255.g8b1d071c50-goog
+
