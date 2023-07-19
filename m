@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3383675A1C9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 00:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B853975A1CB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 00:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbjGSWYc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 18:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
+        id S230269AbjGSWYh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 18:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbjGSWYV (ORCPT
+        with ESMTP id S230006AbjGSWYa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 18:24:21 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E292269E
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 15:24:04 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c4f27858e4eso116494276.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 15:24:04 -0700 (PDT)
+        Wed, 19 Jul 2023 18:24:30 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB59F26B3
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 15:24:06 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-570553a18deso1900807b3.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 15:24:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689805443; x=1692397443;
+        d=google.com; s=20221208; t=1689805445; x=1692397445;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sIpA2pCI31/vstZBCLZcYLfoiRSlzDk26WYykbpKRs0=;
-        b=aExkNcdCiwSKCRFZQRazAUw+POtV1ZY1oY9KqCPuUxyVDSTb4m7ZAUwBMuxPLeoQ+E
-         DhWO8r0jkU27P0phJTEl3A8y68Whl8jlHqJ1E+Rx0jpAgawkmZAJ/x1Mx0BmYLFGdHVz
-         eo20uVmy3pITzg5bS2045EFmAZwykYS14y1/Qg4NekGJRL7Bc7WwSYMfLr5at3TNAxJM
-         jf6Y83WMI3JiuA/PuMczSd6rk8iLz2RLaiY09ZDjFbtGXVJphJ/lSohb7khozR5skgCP
-         cceUTwiITld3gT+F4qjy1dNl1t39Ji0Z4QyZdZ1SCY3b7NeGFUJUE25UexBP6Sx+AbQb
-         kBJQ==
+        bh=2SH8AkTFG73ufenUbtwahXNeJY1AgRA8n8Wy9Xr37zw=;
+        b=cyNzOp15K8h6pZ+knMLm87QR3n3kAiJvbpZlQJC6RNtA8e57Us52J2RSql7c5obBHG
+         7Vw74UB7FcA4ZIQ6xanNmf0Rv3jdomJ/QycxcPDkCjXJxLd41WY85/19/avSnGOeGNqv
+         3bkYYDqbdsbczctPRXLm34M0fhB9EbTNLn7eHEYFHM1l1JGiK8tz3cRE6+g7kjTFOuFv
+         UihO70tkubpccqZTjFYU6O9zdHRAM7lHu6fU/fEYlXfkzPmTwmeQ0X9jQHs5fk8stAie
+         3/pjUKq1xSXDLa3sTk8Oak78Zk6eKkeHN4k/9A2VfSOTD0ZYDUimY1JB+1cGMZ2wRG6H
+         nzwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689805443; x=1692397443;
+        d=1e100.net; s=20221208; t=1689805445; x=1692397445;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sIpA2pCI31/vstZBCLZcYLfoiRSlzDk26WYykbpKRs0=;
-        b=Hl87ybakJIQZzc7ET+9ILFlUf5mZWgcct/KfYgVI1ylVvMg2MdqR4dmST2B+a+C0aJ
-         PAG4/P+EIMUDPDwdaOccgwaPXqxtDmUIQhO+emJ0ByCdEa1jbuqbQOd28g8P1LRZ0ylT
-         WM35ebd3pD+yBNx+rhK9Bd2/oU7LBeJkrJ4CazY7Lb5ZydN5ZPGc8+IqeT4Q2g/oB8pI
-         bGhNK1uI+SaHAUyMJWrcciKsDGyy0FWZzfy49Zm1TWqolTQspT03XD9Z9lyzKXlLAnJa
-         u+aaC1KkhniAYfjqbTizSJELlcum8hiAVKqOwjriFR9agfZinV0BYe/xyf2iJ8B7yeGy
-         9zzA==
-X-Gm-Message-State: ABy/qLau8h8syd9o0zoUkyl47RkMTAJIchqyh6EV6h8mwVORS06e+ADS
-        OIojwIEaXcMvZecMmF28s7M0HHWP6g==
-X-Google-Smtp-Source: APBJJlGeGls/YLAeNAIERgqeWPE5erbYuzQ303eiV8XxFbMU4b4hvDE8HhmtlZjiF7NRQ61XmgEJ53g1zA==
+        bh=2SH8AkTFG73ufenUbtwahXNeJY1AgRA8n8Wy9Xr37zw=;
+        b=QB9nR5c+dJ/JCdgv6VLSxnHttTvLrqJVtDMTWlB4OZvlBuf3VxUfLhWLdUedMaxP2O
+         aFRg0hL6MuIgvW7hIeaDe0k1i9RvzzlbU1QHYOV3vH4kEy6z7o8oXx3lTojDlNgk4fVW
+         u5WmNfvFrqiqgreFNDPJIz8tBmxmpoEb7fodvK4j9/pff4IlSgeSbJsRPp0PfF/ZxSAa
+         XB44zWZBrOXYJIlBh3rlATrvsaml/UEjlFQcnFbxlFCXGJ/F3LX7UubWMyUq/IcTLXtF
+         r6dBAPVFU1/N4aTb8N/9rsuNF0D0GBieryS0miZgi5QY81DpOZOnZ6dUsnUeP69P0L08
+         9+1w==
+X-Gm-Message-State: ABy/qLZEyRb3XfvraNCndaz7qERmWTKtG8iVKYIjk0uXi1+ODC9B2UOG
+        P8qVlcILorAncl2Mqd89hBHBmjsDvQ==
+X-Google-Smtp-Source: APBJJlGSpivLuIVEbNWEM5SIqiZ8+Uauh2zz2TGgLPCMi1zsdRxCY/kefSVldz4Z6a8C9rVoIwsEQGJfvQ==
 X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a25:26cb:0:b0:c22:c2e0:93bf with SMTP id
- m194-20020a2526cb000000b00c22c2e093bfmr29785ybm.6.1689805443549; Wed, 19 Jul
- 2023 15:24:03 -0700 (PDT)
-Date:   Wed, 19 Jul 2023 22:23:33 +0000
+ (user=rmoar job=sendgmr) by 2002:a81:ca48:0:b0:57a:e0b:f63 with SMTP id
+ y8-20020a81ca48000000b0057a0e0b0f63mr3982ywk.7.1689805445487; Wed, 19 Jul
+ 2023 15:24:05 -0700 (PDT)
+Date:   Wed, 19 Jul 2023 22:23:34 +0000
 In-Reply-To: <20230719222338.259684-1-rmoar@google.com>
 Mime-Version: 1.0
 References: <20230719222338.259684-1-rmoar@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230719222338.259684-7-rmoar@google.com>
-Subject: [PATCH v1 6/9] kunit: memcpy: Mark tests as slow using test attributes
+Message-ID: <20230719222338.259684-8-rmoar@google.com>
+Subject: [PATCH v1 7/9] kunit: time: Mark test as slow using test attributes
 From:   Rae Moar <rmoar@google.com>
 To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
         brendan.higgins@linux.dev
@@ -71,70 +71,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Mark slow memcpy KUnit tests using test attributes.
+Mark the time KUnit test, time64_to_tm_test_date_range, as slow using test
+attributes.
 
-Tests marked as slow are as follows: memcpy_large_test, memmove_test,
-memmove_large_test, and memmove_overlap_test. These tests were the slowest
-of the memcpy tests and relatively slower to most other KUnit tests. Most
-of these tests are already skipped when CONFIG_MEMCPY_SLOW_KUNIT_TEST is
-not enabled.
+This test ran relatively much slower than most other KUnit tests.
 
-These tests can now be filtered using the KUnit test attribute filtering
-feature. Example: --filter "speed>slow". This will run only the tests that
-have speeds faster than slow. The slow attribute will also be outputted in
-KTAP.
+By marking this test as slow, the test can now be filtered using the KUnit
+test attribute filtering feature. Example: --filter "speed>slow". This will
+run only the tests that have speeds faster than slow. The slow attribute
+will also be outputted in KTAP.
 
-Note: This patch is intended to replace the use of
-CONFIG_MEMCPY_SLOW_KUNIT_TEST and to potentially deprecate this feature.
-This patch does not remove the config option but does add a note to the
-config definition commenting on this future shift.
-
-Acked-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: David Gow <davidgow@google.com>
 Signed-off-by: Rae Moar <rmoar@google.com>
 ---
 
 Changes since RFC v2:
 - No changes.
 Changes since RFC v1:
-- Added note under CONFIG_MEMCPY_SLOW_KUNIT_TEST.
+- No changes.
 
- lib/Kconfig.debug  | 3 +++
- lib/memcpy_kunit.c | 8 ++++----
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ kernel/time/time_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 550cb967b668..1b3894e861f2 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2701,6 +2701,9 @@ config MEMCPY_SLOW_KUNIT_TEST
- 	  and bit ranges. These can be very slow, so they are split out
- 	  as a separate config, in case they need to be disabled.
+diff --git a/kernel/time/time_test.c b/kernel/time/time_test.c
+index 831e8e779ace..ca058c8af6ba 100644
+--- a/kernel/time/time_test.c
++++ b/kernel/time/time_test.c
+@@ -86,7 +86,7 @@ static void time64_to_tm_test_date_range(struct kunit *test)
+ }
  
-+	  Note this config option will be replaced by the use of KUnit test
-+	  attributes.
-+
- config IS_SIGNED_TYPE_KUNIT_TEST
- 	tristate "Test is_signed_type() macro" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
-diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
-index 887926f04731..440aee705ccc 100644
---- a/lib/memcpy_kunit.c
-+++ b/lib/memcpy_kunit.c
-@@ -551,10 +551,10 @@ static void strtomem_test(struct kunit *test)
- static struct kunit_case memcpy_test_cases[] = {
- 	KUNIT_CASE(memset_test),
- 	KUNIT_CASE(memcpy_test),
--	KUNIT_CASE(memcpy_large_test),
--	KUNIT_CASE(memmove_test),
--	KUNIT_CASE(memmove_large_test),
--	KUNIT_CASE(memmove_overlap_test),
-+	KUNIT_CASE_SLOW(memcpy_large_test),
-+	KUNIT_CASE_SLOW(memmove_test),
-+	KUNIT_CASE_SLOW(memmove_large_test),
-+	KUNIT_CASE_SLOW(memmove_overlap_test),
- 	KUNIT_CASE(strtomem_test),
+ static struct kunit_case time_test_cases[] = {
+-	KUNIT_CASE(time64_to_tm_test_date_range),
++	KUNIT_CASE_SLOW(time64_to_tm_test_date_range),
  	{}
  };
+ 
 -- 
 2.41.0.255.g8b1d071c50-goog
 
