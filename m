@@ -2,107 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6447598D5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 16:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5645B759933
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 17:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjGSOwz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 10:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44342 "EHLO
+        id S229777AbjGSPLO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 11:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjGSOwZ (ORCPT
+        with ESMTP id S230218AbjGSPLN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 10:52:25 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8BD10A;
-        Wed, 19 Jul 2023 07:52:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=Kqsb0fKqXuddaGLRwkdYnwQAM8mRnY5GWRE0NyPAsTA=; b=nhHbNdt/DyZ/I6ng+OyngPze8D
-        Vdv/VkVPTd2pV16U0xpAGakdfaIsi3jZviBeJPdnrKBgEMJFTE1AKrHW+U6pYBxAFfB7QESgSb2/D
-        qLFaHVonxam59UdGHvY1No8cpGir1LoNscJj4TJ24fcHyAUbydy6cH6zX6j0sLk+yJQuoJrOg3GVl
-        SVFzTW/YW55trd/4DvTNoMFofZJEylKruG85JoCFu7JLyWAElm6W4kafJzGn1l/4ti4sYR1yzvLx4
-        CQ1j5rpLoWzDGyvp9+Ozj5rYlsvs8ULGdTBHWmjgbgSF68yCmEt19j3gTOvHLam+8L811m43UlGrC
-        bqmfsHPw==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qM8XL-000FxS-G6; Wed, 19 Jul 2023 16:52:19 +0200
-Received: from [124.148.184.141] (helo=192-168-1-114.tpgi.com.au)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qM8XK-000RUH-5H; Wed, 19 Jul 2023 16:52:18 +0200
-Subject: Re: [PATCH v2 1/3] bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Daniel Rosenberg <drosen@google.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>
-References: <20230502005218.3627530-1-drosen@google.com>
- <20230718082615.08448806@kernel.org>
- <CAADnVQJEEF=nqxo6jHKK=Tn3M_NVXHQjhY=_sry=tE8X4ss25A@mail.gmail.com>
- <20230718090632.4590bae3@kernel.org>
- <CAADnVQ+4aehGYPJ2qT_HWWXmOSo4WXf69N=N9-dpzERKfzuSzQ@mail.gmail.com>
- <20230718101841.146efae0@kernel.org>
- <CAADnVQ+jAo4V-Pa9_LhJEwG0QquL-Ld5S99v3LNUtgkiiYwfzw@mail.gmail.com>
- <20230718111101.57b1d411@kernel.org>
- <CAADnVQLJBiB7pWDTDNgQW_an+YoB61xkNEsa5g8p6zTy-mAG7Q@mail.gmail.com>
- <20230718160612.71f09752@kernel.org>
- <CAADnVQ+3Bmm0DgGBgh_zkA1JeK7uApo_nnJ+=Sgf4ojGX2KrHQ@mail.gmail.com>
- <20230718162138.24329391@kernel.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <bcc5fbaf-83f3-cc05-67b3-512b44818321@iogearbox.net>
-Date:   Wed, 19 Jul 2023 16:51:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Wed, 19 Jul 2023 11:11:13 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4543612F
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 08:11:11 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-440afc96271so2490345137.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 08:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689779470; x=1690384270;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=13/AwMP/8TITI/rLzUID1fTbfxpoHhwYclFZUG18RHI=;
+        b=W9ugJhbZzcOHBcK1ryGKNlMvfaR4eWFGClQmFa2DEuQjWBhQ6kKehpd1BqB++U5hgw
+         3TWXC4fD7TCBkoX1R5UZTE2yJt6ER7ceOa34DwcVaieTCFsfXsMO7ebD1kKBgUVll/il
+         T5l+Tk+DvcinG+V75/JSeoIsCFQ8k6ObjIad/1StTlViDKPCllGsT3b32oMukAxIX4KN
+         BOqJKyr8il3GkecRMqZu5HqHgWgyu4a5TW8UHq9CwM7tE1s4Y8N0BkYwnbOJf9wDlic2
+         T4I8G+BDJNbgq81Uhd6KHKUJLUl1eRoasPEOq2yCOXKm9K6XKz8GISCzVknnORxoJzmR
+         xWFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689779470; x=1690384270;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=13/AwMP/8TITI/rLzUID1fTbfxpoHhwYclFZUG18RHI=;
+        b=in2PzSHY0SsggI8lrjbywFlYRpJF0dl/0fHpBE+AumZ4u0k6+Sg/OtaL+RypMIiLZo
+         kB69ubjp+1i+J86T8y+vffsUZlbH20Es6ckCynqYruhem/S6+Epq9RG0bhVsPVCuHg42
+         D99ylVZI47941bneB/Bvd2lxXB8H/YLSCO/ms+HQeboThhDqw14DRdmSg5YFp/o/sYX2
+         8SYlxBDhavOkajMlbdQA2kSW+biq+sfDnNjTs/zXz1utJbt+gKkE2gxAxwhl6R3CO/s/
+         HAVuy0AIhSFgJKP1KNT9kEV2sdS+YwK04bvfxcTQiQLjYEtn9VejWauHZPvVHFxiJhG4
+         Glwg==
+X-Gm-Message-State: ABy/qLZT9sg2dyVyFqentaHCetlbjrgZEAHmZv8YYzlaXhI3LPOCPXwS
+        Al0gmwP4c5jBCKbsLJKC1QWK14mv37wnhvJWkHgmJg==
+X-Google-Smtp-Source: APBJJlGxQbcOy4ic7AA7A/45OA6HThArnJbsgb00HIZBBJVKBGnUSyKbwhuM+G0qPaAvZZrzdRo6tS+WQiuUsv4/hcs=
+X-Received: by 2002:a67:f60d:0:b0:443:5d85:99f3 with SMTP id
+ k13-20020a67f60d000000b004435d8599f3mr10644906vso.7.1689779470214; Wed, 19
+ Jul 2023 08:11:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230718162138.24329391@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26974/Wed Jul 19 09:28:18 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230710223304.1174642-1-almasrymina@google.com>
+ <12393cd2-4b09-4956-fff0-93ef3929ee37@kernel.org> <CAHS8izNPTwtk+zN7XYt-+ycpT+47LMcRrYXYh=suTXCZQ6-rVQ@mail.gmail.com>
+ <ZLbUpdNYvyvkD27P@ziepe.ca> <20230718111508.6f0b9a83@kernel.org>
+ <35f3ec37-11fe-19c8-9d6f-ae5a789843cb@kernel.org> <20230718112940.2c126677@kernel.org>
+ <eb34f812-a866-a1a3-9f9b-7d5054d17609@kernel.org> <20230718154503.0421b4cd@kernel.org>
+In-Reply-To: <20230718154503.0421b4cd@kernel.org>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Wed, 19 Jul 2023 08:10:58 -0700
+Message-ID: <CAHS8izPORN=r2-hzYSgN4s_Aoo2dnwoJXrU5Hu=43sb8zsWyhQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/10] Device Memory TCP
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Ahern <dsahern@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/19/23 1:21 AM, Jakub Kicinski wrote:
-> On Tue, 18 Jul 2023 16:17:24 -0700 Alexei Starovoitov wrote:
->> Which would encourage bnxt-like hacks.
->> I don't like it tbh.
->> At least skb_pointer_if_linear() has a clear meaning.
->> It's more run-time overhead, since buffer__opt is checked early,
->> but that's ok.
-> 
-> Alright, your version fine by me, too. Thanks!
+On Tue, Jul 18, 2023 at 3:45=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Tue, 18 Jul 2023 16:35:17 -0600 David Ahern wrote:
+> > I do not see how 1 RSS context (or more specifically a h/w Rx queue) ca=
+n
+> > be used properly with memory from different processes (or dma-buf
+> > references).
 
-Looks good to me too. Agree that the !buffer check should not live in
-__skb_header_pointer() and is better handled in the bpf_dynptr_slice()
-internals.
+Right, my experience with dma-bufs from GPUs are that they're
+allocated from the userspace and owned by the process that allocated
+the backing GPU memory and generated the dma-buf from it. I.e., we're
+limited to 1 dma-buf per RX queue. If we enable binding multiple
+dma-bufs to the same RX queue, we have a problem, because AFAIU the
+NIC can't decide which dma-buf to put the packet into (it hasn't
+parsed the packet's destination yet).
 
+> > When the process dies, that memory needs to be flushed from
+> > the H/W queues. Queues with interlaced submissions make that more
+> > complicated.
+>
+
+When the process dies, do we really want to flush the memory from the
+hardware queues? The drivers I looked at don't seem to have a function
+to flush the rx queues alone, they usually do an entire driver reset
+to achieve that. Not sure if that's just convenience or there is some
+technical limitation there. Do we really want  to trigger a driver
+reset at the event a userspace process crashes?
+
+> Agreed, one process, one control path socket.
+>
+> FWIW the rtnetlink use of netlink is very basic. genetlink already has
+> some infra which allows associate state with a user socket and cleaning
+> it up when the socket gets closed. This needs some improvements. A bit
+> of a chicken and egg problem, I can't make the improvements until there
+> are families making use of it, and nobody will make use of it until
+> it's in tree... But the basics are already in place and I can help with
+> building it out.
+>
+
+I had this approach in mind (which doesn't need netlink improvements)
+for the next POC. It's mostly inspired by the comments from the cover
+letter of Jakub's memory-provider RFC, if I understood it correctly.
+I'm sure there's going to be some iteration, but roughly:
+
+1. A netlink CAP_NET_ADMIN API which binds the dma-buf to any number
+of rx queues on 1 NIC. It will do the dma_buf_attach() and
+dma_buf_map_attachment() and leave some indicator in the struct
+net_device to tell the NIC that it's bound to a dma-buf. The actual
+binding doesn't actuate until the next driver reset. The API, I guess,
+can cause a driver reset (or just a refill of the rx queues, if you
+think that's feasible) as well to streamline things a bit. The API
+returns a file handle to the user representing that binding.
+
+2. On the driver reset, the driver notices that its struct net_device
+is bound to a dma-buf, and sets up the dma-buf memory-provider instead
+of the basic one which provides host memory.
+
+3. The user can close the file handle received in #1 to unbind the
+dma-buf from the rx queues. Or if the user crashes, the kernel closes
+the handle for us. The unbind doesn't take effect until the next
+flushing or rx queues, or the next driver reset (not sure the former
+is feasible).
+
+4. The dma-buf memory provider keeps the dma buf mapping alive until
+the next driver reset, where all the dma-buf slices are freed, and the
+dma buf attachment mapping can be unmapped.
+
+I'm thinking the user sets up RSS and flow steering outside this API
+using existing ethtool APIs, but things can be streamlined a bit by
+doing some of these RSS/flow steering steps in cohesion with the
+dma-buf binding/unbinding. The complication with setting up flow
+steering in cohesion with dma-buf bind unbind is that the application
+may start more connections after the bind, and it will need to install
+flow steering rules for those too, and use the ethtool api for that.
+May as well use the ethtool apis for all of it...?
+
+From Jakub and David's comments it sounds (if I understood correctly),
+you'd like to tie the dma-buf bind/unbind functions to the lifetime of
+a netlink socket, rather than a struct file like I was thinking. That
+does sound cleaner, but I'm not sure how. Can you link me to any
+existing code examples? Or rough pointers to any existing code?
+
+> > I guess the devil is in the details; I look forward to the evolution of
+> > the patches.
+>
+> +1
+
+
+
+--=20
 Thanks,
-Daniel
+Mina
