@@ -2,192 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CCB759D94
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 20:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD163759FA2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 22:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjGSSkx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 14:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S230003AbjGSUZW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 16:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjGSSkv (ORCPT
+        with ESMTP id S229974AbjGSUZV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 14:40:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935C0B6;
-        Wed, 19 Jul 2023 11:40:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27D8D617E0;
-        Wed, 19 Jul 2023 18:40:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA141C433C7;
-        Wed, 19 Jul 2023 18:40:47 +0000 (UTC)
-Date:   Wed, 19 Jul 2023 14:40:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ajay Kaher <akaher@vmware.com>
-Cc:     "shuah@kernel.org" <shuah@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        Ching-lin Yu <chinglinyu@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "lkp@intel.com" <lkp@intel.com>, Nadav Amit <namit@vmware.com>,
-        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Tapas Kundu <tkundu@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>
-Subject: Re: [PATCH v4 00/10] tracing: introducing eventfs
-Message-ID: <20230719144046.746af82e@gandalf.local.home>
-In-Reply-To: <899D0823-A1B2-4A6F-A5BA-0D707F41C3D4@vmware.com>
-References: <1689248004-8158-1-git-send-email-akaher@vmware.com>
-        <20230714185824.62556254@gandalf.local.home>
-        <883F9774-3E76-4346-9988-2788FAF0D55E@vmware.com>
-        <20230718094005.32516161@gandalf.local.home>
-        <2CD72098-08E2-4CAA-B74D-D8C44D318117@vmware.com>
-        <20230719102310.552d3356@gandalf.local.home>
-        <899D0823-A1B2-4A6F-A5BA-0D707F41C3D4@vmware.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 19 Jul 2023 16:25:21 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65D80171E;
+        Wed, 19 Jul 2023 13:25:19 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 36JKP5UU006864;
+        Wed, 19 Jul 2023 22:25:05 +0200
+Date:   Wed, 19 Jul 2023 22:25:05 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: Re: [PATCH v1 3/8] selftests/nolibc: select_null: fix up for big
+ endian powerpc64
+Message-ID: <20230719202505.GA6842@1wt.eu>
+References: <20230719043353.GC5331@1wt.eu>
+ <20230719064912.59792-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230719064912.59792-1-falcon@tinylab.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 19 Jul 2023 18:37:12 +0000
-Ajay Kaher <akaher@vmware.com> wrote:
+Hi Zhangjin,
 
-> > Here's the reproducer (of both v3 splat and the bug I'm hitting now).
-> > 
-> > ~# echo 'p:sock_getattr 0xffffffff9b55cef0 sk=%di' > /sys/kernel/tracing/kprobe_events
-> > ~# ls /sys/kernel/debug/tracing/events/kprobes/sock_getattr/
-> > ~# echo '-:sock_getattr 0xffffffff9b55cef0 sk=%di' > /sys/kernel/tracing/kprobe_events  
+On Wed, Jul 19, 2023 at 02:49:12PM +0800, Zhangjin Wu wrote:
+> Hi, Willy
 > 
-> I tried above steps on v4 but couldn’t reproduce:
+> > Hi Zhangjin,
+> > 
+> > On Wed, Jul 19, 2023 at 07:56:37AM +0800, Zhangjin Wu wrote:
+> > > It made me recalled I have at last disabled (not enabled for tinyconfig) the following options:
+> > > 
+> > >     CONFIG_ALTIVEC
+> > >     CONFIG_VSX --> This option enables kernel support for the Vector Scaler extensions
+> > > 
+> > > Or we can disable the vsx instructions explicitly:
+> > > 
+> > >     -mno-vsx
+> > > 
+> > > Both of them work well, but I prefer -mno-vsx for to get a faster build, what about you?
+> > > 
+> > >     +CFLAGS_powerpc64 = -m64 -mbig-endian -Wl,-EB,-melf64ppc -mno-vsx
+> > >     +CFLAGS_powerpc64le = -m64 -mlittle-endian -Wl,-EL,-melf64ppc -mno-vsx
+> > > 
+> > > So, this patch itself is wrong, let's drop it from the next revision.
+> > 
+> > Better explicitly disable it in the CFLAGS (2nd option) if we want to
+> > make sure we don't want to rely on this, at least for portability
+> > purposes.
 > 
-> root@photon-6 [ ~/sdb/linux ]# echo 'p:sock_getattr 0xffffffff9b55cef0 sk=%di' > /sys/kernel/tracing/kprobe_events
-> root@photon-6 [ ~/sdb/linux ]# ls /sys/kernel/debug/tracing/events/kprobes/sock_getattr/
-> enable  filter  format  id  trigger
-> root@photon-6 [ ~/sdb/linux ]# echo '-:sock_getattr 0xffffffff9b55cef0 sk=%di' > /sys/kernel/tracing/kprobe_events
-> -bash: echo: write error: No such file or directory
+> Ok, thanks, have updated CFLAGS in these two patches locally:
 > 
-> I have doubt on call_srcu(), it may first end the grace period for parent then for child. If this is true then free_list
-> will have unordered list and could cause problem.
-
-I modified the srcu portion a bit. Will post soon. I think I got something
-working.
-
-I'm having doubt that the dput()s were needed in the eventfs_remove_rec(),
-as the d_invalidate() appears to be enough. I'm still testing.
-
->  
+>     [PATCH v1 7/8] selftests/nolibc: add test support for powerpc64le
+>     [PATCH v1 8/8] selftests/nolibc: add test support for powerpc64
 > 
-> > 
-> > v3 gives me (and my updates too)
-> > 
-> > ======================================================
-> > WARNING: possible circular locking dependency detected
-> > 6.5.0-rc1-test+ #576 Not tainted
-> > ------------------------------------------------------
-> > trace-cmd/840 is trying to acquire lock:
-> > ffff8881007e5de0 (&sb->s_type->i_mutex_key#5){++++}-{3:3}, at: dcache_dir_open_wrapper+0xc1/0x1b0
-> > 
-> > but task is already holding lock:
-> > ffff888103ad7e70 (eventfs_rwsem/1){.+.+}-{3:3}, at: dcache_dir_open_wrapper+0x6f/0x1b0
-> > 
-> > which lock already depends on the new lock.
-> > 
-> > 
-> > the existing dependency chain (in reverse order) is:
-> >   
-> > -> #1 (eventfs_rwsem/1){.+.+}-{3:3}:  
-> >        down_read_nested+0x41/0x180
-> >        eventfs_root_lookup+0x42/0x120
-> >        __lookup_slow+0xff/0x1b0
-> >        walk_component+0xdb/0x150
-> >        path_lookupat+0x67/0x1a0
-> >        filename_lookup+0xe4/0x1f0
-> >        vfs_statx+0x9e/0x180
-> >        vfs_fstatat+0x51/0x70
-> >        __do_sys_newfstatat+0x3f/0x80
-> >        do_syscall_64+0x3a/0xc0
-> >        entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-> >   
-> > -> #0 (&sb->s_type->i_mutex_key#5){++++}-{3:3}:  
-> >        __lock_acquire+0x165d/0x2390
-> >        lock_acquire+0xd4/0x2d0
-> >        down_write+0x3b/0xd0
-> >        dcache_dir_open_wrapper+0xc1/0x1b0
-> >        do_dentry_open+0x20c/0x510
-> >        path_openat+0x7ad/0xc60
-> >        do_filp_open+0xaf/0x160
-> >        do_sys_openat2+0xab/0xe0
-> >        __x64_sys_openat+0x6a/0xa0
-> >        do_syscall_64+0x3a/0xc0
-> >        entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-> > 
-> > other info that might help us debug this:
-> > 
-> >  Possible unsafe locking scenario:
-> > 
-> >        CPU0                    CPU1
-> >        ----                    ----
-> >   rlock(eventfs_rwsem/1);
-> >                                lock(&sb->s_type->i_mutex_key#5);
-> >                                lock(eventfs_rwsem/1);
-> >   lock(&sb->s_type->i_mutex_key#5);
-> > 
-> >  *** DEADLOCK ***
-> > 
-> > 1 lock held by trace-cmd/840:
-> >  #0: ffff888103ad7e70 (eventfs_rwsem/1){.+.+}-{3:3}, at: dcache_dir_open_wrapper+0x6f/0x1b0
-> > 
-> > stack backtrace:
-> > CPU: 7 PID: 840 Comm: trace-cmd Not tainted 6.5.0-rc1-test+ #576
-> > Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x57/0x90
-> >  check_noncircular+0x14b/0x160
-> >  __lock_acquire+0x165d/0x2390
-> >  lock_acquire+0xd4/0x2d0
-> >  ? dcache_dir_open_wrapper+0xc1/0x1b0
-> >  down_write+0x3b/0xd0
-> >  ? dcache_dir_open_wrapper+0xc1/0x1b0
-> >  dcache_dir_open_wrapper+0xc1/0x1b0
-> >  ? __pfx_dcache_dir_open_wrapper+0x10/0x10
-> >  do_dentry_open+0x20c/0x510
-> >  path_openat+0x7ad/0xc60
-> >  do_filp_open+0xaf/0x160
-> >  do_sys_openat2+0xab/0xe0
-> >  __x64_sys_openat+0x6a/0xa0
-> >  do_syscall_64+0x3a/0xc0
-> >  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-> > RIP: 0033:0x7f1743267e41
-> > Code: 44 24 18 31 c0 41 83 e2 40 75 3e 89 f0 25 00 00 41 00 3d 00 00 41 00 74 30 89 f2 b8 01 01 00 00 48 89 fe bf 9c ff ff ff 0f 05 <48> 3d 00 f0 ff ff 77 3f 48 8b 54 24 18 64 48 2b 14 25 28 00 00 00
-> > RSP: 002b:00007ffec10ff5d0 EFLAGS: 00000287 ORIG_RAX: 0000000000000101
-> > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1743267e41
-> > RDX: 0000000000090800 RSI: 00007ffec10ffdb0 RDI: 00000000ffffff9c
-> > RBP: 00007ffec10ffda0 R08: 00007ffec11003e0 R09: 0000000000000040
-> > R10: 0000000000000000 R11: 0000000000000287 R12: 00007ffec11003e0
-> > R13: 0000000000000040 R14: 0000000000000000 R15: 00007ffec110034b
-> >  </TASK>
-> >   
-> 
-> This is expected from v3 (just ignore as of now), if eventfs_set_ef_status_free crash not
-> reproduced on v3 then it’s v4 issue.
+> what about the other ones? I'm ready to send v2 ;-)
 
-The issue comes from fixing the above ;-)
+I have not had the time to review them yet. Please just don't send
+another series yet, that just adds more noise and makes it hard to
+distinguish all of them. I hope to be able to check these and hopefully
+the tinyconfig series by the week-end.
 
--- Steve
+Thanks,
+Willy
