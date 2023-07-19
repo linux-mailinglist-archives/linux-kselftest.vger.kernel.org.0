@@ -2,271 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00D775A1D1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 00:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7880975A2C9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 01:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjGSWYx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 18:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
+        id S229701AbjGSXZA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 19:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbjGSWYq (ORCPT
+        with ESMTP id S229632AbjGSXY7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 18:24:46 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3822113
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 15:24:14 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-56942667393so1657827b3.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 15:24:14 -0700 (PDT)
+        Wed, 19 Jul 2023 19:24:59 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964902113
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 16:24:54 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-668704a5b5bso144567b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 16:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689805449; x=1692397449;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NHegRKijxtllrUHzL1SgBpkoHu+y+n5qaq++K8WyWmA=;
-        b=fdqBQx83SLumVnseBEBGY8wv1JHLRmHCegfbTKpsqZwmsnq3Dm9xmh64SvghtVFTxA
-         wHDeybiDWo9RRB9Btl/nyr8aI0jF8V56ADHIVUGP4UOVNQE9HEwaH62CkVlLzWsWdEY7
-         /ipNN+nLRrWA38Ov0mBVaaORiD0LU/oRw+o2FOjrIvwYfaqhXiiv35+isDfRE0vqyxJg
-         xyLpa4ck/n4pl9RupD+kPhZ8ot8uhEK30tTJALzry75zdcVvQiiEIgtm3DvteNF/roGS
-         ZnV9KjTtZFooTBiwo8z8fEbjtp9qYRnkT6YWvzto1xA/uyuQzoedsmwY2VUORG84r/ya
-         XX6Q==
+        d=ziepe.ca; s=google; t=1689809094; x=1690413894;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QMBXWfDTfMeBEXpKpdrCux7UOxDUWWDJl0r9KLthi7I=;
+        b=RitoPG5vg2KH92ckG+V7d8L8L9W7M1MBD8JemTd7YYR3fTJrTOVFYtqqXzUnBKMuir
+         5mWALTL5KmWaQJU0sCdTf1pDvm6hLmYvUeYrkwPsO1SZCFet8sGivcjzWo2/jJSQ+69r
+         tWFF5/07XRl/q/8uN+rCYjwQhkZBkDDkJmR7gbwa/MDL9f0w0sZGSvooJmm5Ax+0ioy1
+         H/sOq8DkuI4B9Gm5OL3DqroseeCwVW7yCWj9quaQcgXz/+7NKt05sQF+GJ9/12jWPXZ6
+         8j+EKQKrYcWo0PuWQibJD8tsH5yifa7BtFwNC8Ufe7awQAN0xt48aMlwNrlWN/lcUSoO
+         93QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689805449; x=1692397449;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NHegRKijxtllrUHzL1SgBpkoHu+y+n5qaq++K8WyWmA=;
-        b=kvBdZ5UPHOUWllZMAyf0ekvG/KIt6nJ3A5zMF+ruBGC1l+3IDAmanOOi/HbRBdpGQv
-         iynLmQc+xqpTe2HomTwJQGh8SyviIzLwTKa9O38bJIokP5edKQ6zaYn5y+n6mJ1Ty3+N
-         w6i8HgX6zCShH6kjtTSVfD9JHcVEhQcn45J45YqdpyH1nP+mUcH1trcVLkOh+Y9ABxIw
-         GZUUxxSLDmlito6E5ZFJawRVftxBTtrySkcuI7mrnYNhcKF7uyBtqE4jaXrDnJpQdAi4
-         2k+EZNsvvQpPItuHglXjF6H8laehx5iJKpOBTXmHsSK3VxnemOdTcqCEJvD10F9vGYwr
-         T6Gg==
-X-Gm-Message-State: ABy/qLZ646o81K8D7x2tHgay8Malpltv7EE8b+A/Btw9QSyyfdItTTI7
-        CecKHpON4oZGXY2pjiatefJYEhIWSA==
-X-Google-Smtp-Source: APBJJlE8YL/XYJLuvTEOkCulIsrvD7y2CHXTDLudsi1AezvQ7W5NJYo+J0HPPSfJWCFexPio++2FX+ebfg==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a25:ab0e:0:b0:cc5:c7d6:ae13 with SMTP id
- u14-20020a25ab0e000000b00cc5c7d6ae13mr31839ybi.5.1689805449595; Wed, 19 Jul
- 2023 15:24:09 -0700 (PDT)
-Date:   Wed, 19 Jul 2023 22:23:36 +0000
-In-Reply-To: <20230719222338.259684-1-rmoar@google.com>
-Mime-Version: 1.0
-References: <20230719222338.259684-1-rmoar@google.com>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230719222338.259684-10-rmoar@google.com>
-Subject: [PATCH v1 9/9] kunit: Add documentation of KUnit test attributes
-From:   Rae Moar <rmoar@google.com>
-To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
-        brendan.higgins@linux.dev
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org, Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1689809094; x=1690413894;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QMBXWfDTfMeBEXpKpdrCux7UOxDUWWDJl0r9KLthi7I=;
+        b=YEmuIkyFp03xdFeTImnfTq53ibpPm0snUoKslDFzGAxzLMCBnlUVXwkUSVdTJWuOuc
+         BopenZ+oCIk7/eD8fj+D0Wb3wO3WbfqPprlosisBWxhNDp+r2TTsh5dNXlt2JeQTcsrA
+         fOi8+RGfQuVAe5i0cyJnlEI16JjVSSoBsI9CjKSZpaXdak/gm6ihuwGHCmjz1VzELh3E
+         t/9wBZD/DjG5y0mq08GRbvAnbNo0iVPI+DnCHv90VeYkO/T184Hu1h1E7wG8qZ9Oo+OH
+         8od2z6Pt4DU5pDXJ3o9fmNGt7dNGTCbw/9AFGW8IdbeSS0rGQhmzMsLvY0ikSeoMo7FB
+         1mAg==
+X-Gm-Message-State: ABy/qLYHGm3tveJUhAHj+zyVXZCBkslDOlF/WLJVITmRI2jlkU3DIUfs
+        duAjJeFTpo1c8OCLhU1ZQ7I2fw==
+X-Google-Smtp-Source: APBJJlF1RVY7gVrV+x6J0pGqg/vEpRGAJ3WpkIaplw7rwOALVicAHlHdlSUsDv1w5+4aog7vtr7zhQ==
+X-Received: by 2002:a05:6a20:840b:b0:126:a80d:4960 with SMTP id c11-20020a056a20840b00b00126a80d4960mr28216893pzd.30.1689809094040;
+        Wed, 19 Jul 2023 16:24:54 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id g23-20020aa78757000000b0067a1f4f4f7dsm3780558pfo.169.2023.07.19.16.24.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jul 2023 16:24:53 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qMGXL-002tBd-Tt;
+        Wed, 19 Jul 2023 20:24:51 -0300
+Date:   Wed, 19 Jul 2023 20:24:51 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Stephen Hemminger <stephen@networkplumber.org>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [RFC PATCH 00/10] Device Memory TCP
+Message-ID: <ZLhww+P+7zhTTUk7@ziepe.ca>
+References: <12393cd2-4b09-4956-fff0-93ef3929ee37@kernel.org>
+ <CAHS8izNPTwtk+zN7XYt-+ycpT+47LMcRrYXYh=suTXCZQ6-rVQ@mail.gmail.com>
+ <ZLbUpdNYvyvkD27P@ziepe.ca>
+ <20230718111508.6f0b9a83@kernel.org>
+ <35f3ec37-11fe-19c8-9d6f-ae5a789843cb@kernel.org>
+ <20230718112940.2c126677@kernel.org>
+ <eb34f812-a866-a1a3-9f9b-7d5054d17609@kernel.org>
+ <20230718154503.0421b4cd@kernel.org>
+ <CAHS8izPORN=r2-hzYSgN4s_Aoo2dnwoJXrU5Hu=43sb8zsWyhQ@mail.gmail.com>
+ <20230719105711.448f8cad@hermes.local>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230719105711.448f8cad@hermes.local>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add documentation on the use of test attributes under the section "Tips for
-Running KUnit Tests" in the KUnit docs.
+On Wed, Jul 19, 2023 at 10:57:11AM -0700, Stephen Hemminger wrote:
 
-Documentation includes three sections on how to mark tests with attributes,
-how attributes are reported, and how the user can filter tests using test
-attributes.
+> Naive idea.
+> Would it be possible for process to use mmap() on the GPU memory and then
+> do zero copy TCP receive some how? Or is this what is being proposed.
 
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Rae Moar <rmoar@google.com>
----
+It could be possible, but currently there is no API to recover the
+underlying dmabuf from the VMA backing the mmap.
 
-Changes since RFC v2:
-- Add comment on KUNIT_CASE_SLOW() to documentation.
-- Add comment on how to expose raw kernel output.
-- Remove an extra line at the end of file.
+Also you can't just take arbitary struct pages from any old VMA and
+make them "netmem"
 
-Changes since RFC v1:
-- This is a new patch
-
- .../dev-tools/kunit/running_tips.rst          | 166 ++++++++++++++++++
- 1 file changed, 166 insertions(+)
-
-diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
-index 8e8c493f17d1..766f9cdea0fa 100644
---- a/Documentation/dev-tools/kunit/running_tips.rst
-+++ b/Documentation/dev-tools/kunit/running_tips.rst
-@@ -262,3 +262,169 @@ other code executed during boot, e.g.
- 	# Reset coverage counters before running the test.
- 	$ echo 0 > /sys/kernel/debug/gcov/reset
- 	$ modprobe kunit-example-test
-+
-+
-+Test Attributes and Filtering
-+=============================
-+
-+Test suites and cases can be marked with test attributes, such as speed of
-+test. These attributes will later be printed in test output and can be used to
-+filter test execution.
-+
-+Marking Test Attributes
-+-----------------------
-+
-+Tests are marked with an attribute by including a ``kunit_attributes`` object
-+in the test definition.
-+
-+Test cases can be marked using the ``KUNIT_CASE_ATTR(test_name, attributes)``
-+macro to define the test case instead of ``KUNIT_CASE(test_name)``.
-+
-+.. code-block:: c
-+
-+	static const struct kunit_attributes example_attr = {
-+		.speed = KUNIT_VERY_SLOW,
-+	};
-+
-+	static struct kunit_case example_test_cases[] = {
-+		KUNIT_CASE_ATTR(example_test, example_attr),
-+	};
-+
-+.. note::
-+	To mark a test case as slow, you can also use ``KUNIT_CASE_SLOW(test_name)``.
-+	This is a helpful macro as the slow attribute is the most commonly used.
-+
-+Test suites can be marked with an attribute by setting the "attr" field in the
-+suite definition.
-+
-+.. code-block:: c
-+
-+	static const struct kunit_attributes example_attr = {
-+		.speed = KUNIT_VERY_SLOW,
-+	};
-+
-+	static struct kunit_suite example_test_suite = {
-+		...,
-+		.attr = example_attr,
-+	};
-+
-+.. note::
-+	Not all attributes need to be set in a ``kunit_attributes`` object. Unset
-+	attributes will remain uninitialized and act as though the attribute is set
-+	to 0 or NULL. Thus, if an attribute is set to 0, it is treated as unset.
-+	These unset attributes will not be reported and may act as a default value
-+	for filtering purposes.
-+
-+Reporting Attributes
-+--------------------
-+
-+When a user runs tests, attributes will be present in the raw kernel output (in
-+KTAP format). Note that attributes will be hidden by default in kunit.py output
-+for all passing tests but the raw kernel output can be accessed using the
-+``--raw_output`` flag. This is an example of how test attributes for test cases
-+will be formatted in kernel output:
-+
-+.. code-block:: none
-+
-+	# example_test.speed: slow
-+	ok 1 example_test
-+
-+This is an example of how test attributes for test suites will be formatted in
-+kernel output:
-+
-+.. code-block:: none
-+
-+	  KTAP version 2
-+	  # Subtest: example_suite
-+	  # module: kunit_example_test
-+	  1..3
-+	  ...
-+	ok 1 example_suite
-+
-+Additionally, users can output a full attribute report of tests with their
-+attributes, using the command line flag ``--list_tests_attr``:
-+
-+.. code-block:: bash
-+
-+	kunit.py run "example" --list_tests_attr
-+
-+.. note::
-+	This report can be accessed when running KUnit manually by passing in the
-+	module_param ``kunit.action=list_attr``.
-+
-+Filtering
-+---------
-+
-+Users can filter tests using the ``--filter`` command line flag when running
-+tests. As an example:
-+
-+.. code-block:: bash
-+
-+	kunit.py run --filter speed=slow
-+
-+
-+You can also use the following operations on filters: "<", ">", "<=", ">=",
-+"!=", and "=". Example:
-+
-+.. code-block:: bash
-+
-+	kunit.py run --filter "speed>slow"
-+
-+This example will run all tests with speeds faster than slow. Note that the
-+characters < and > are often interpreted by the shell, so they may need to be
-+quoted or escaped, as above.
-+
-+Additionally, you can use multiple filters at once. Simply separate filters
-+using commas. Example:
-+
-+.. code-block:: bash
-+
-+	kunit.py run --filter "speed>slow, module=kunit_example_test"
-+
-+.. note::
-+	You can use this filtering feature when running KUnit manually by passing
-+	the filter as a module param: ``kunit.filter="speed>slow, speed<=normal"``.
-+
-+Filtered tests will not run or show up in the test output. You can use the
-+``--filter_action=skip`` flag to skip filtered tests instead. These tests will be
-+shown in the test output in the test but will not run. To use this feature when
-+running KUnit manually, use the module param ``kunit.filter_action=skip``.
-+
-+Rules of Filtering Procedure
-+----------------------------
-+
-+Since both suites and test cases can have attributes, there may be conflicts
-+between attributes during filtering. The process of filtering follows these
-+rules:
-+
-+- Filtering always operates at a per-test level.
-+
-+- If a test has an attribute set, then the test's value is filtered on.
-+
-+- Otherwise, the value falls back to the suite's value.
-+
-+- If neither are set, the attribute has a global "default" value, which is used.
-+
-+List of Current Attributes
-+--------------------------
-+
-+``speed``
-+
-+This attribute indicates the speed of a test's execution (how slow or fast the
-+test is).
-+
-+This attribute is saved as an enum with the following categories: "normal",
-+"slow", or "very_slow". The assumed default speed for tests is "normal". This
-+indicates that the test takes a relatively trivial amount of time (less than
-+1 second), regardless of the machine it is running on. Any test slower than
-+this could be marked as "slow" or "very_slow".
-+
-+The macro ``KUNIT_CASE_SLOW(test_name)`` can be easily used to set the speed
-+of a test case to "slow".
-+
-+``module``
-+
-+This attribute indicates the name of the module associated with the test.
-+
-+This attribute is automatically saved as a string and is printed for each suite.
-+Tests can also be filtered using this attribute.
--- 
-2.41.0.255.g8b1d071c50-goog
-
+Jason
