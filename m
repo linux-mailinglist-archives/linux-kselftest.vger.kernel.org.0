@@ -2,184 +2,314 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25696758E5E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 09:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAFA758E9D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 09:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbjGSHJS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 03:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S229802AbjGSHRq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 03:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjGSHJR (ORCPT
+        with ESMTP id S229716AbjGSHRp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 03:09:17 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49D3E47
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 00:09:15 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbea14706eso60352065e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 00:09:15 -0700 (PDT)
+        Wed, 19 Jul 2023 03:17:45 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA6CA4
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 00:17:43 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-40371070eb7so514011cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 00:17:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1689750554; x=1692342554;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AnRQdh3EEqJvpxETy5ODliVLYVhTAipKqSwZ1tgyM7s=;
-        b=aTwmtP37x0bkdUYFbjUqUYnJC/Hnr+D9La8jEgyiierVL4utIhqhD1JTy+P+f+y/mq
-         UXKokW7pEV5meRgolDZSxJ7N19/4DmWjiMeVcvYTPDLdjlidkQUIu6fATD7bXgYsUi5+
-         QDsDb68YKoRkNiyCH5mzvEE+uIsQvdaHoFtI5FrxdLVyaP/VsEGlxadzIdv39txlqr8M
-         ZmOPhQxhoDjonu4G4cLR6BjLvY5eh7gwcdHL91j5C314qlUhimptswBFolJ9CVmGacBk
-         Ml8ckDptZTszCTHgyoEHGqJ2lzHA0ZRe9xh4tuA8rIrFHESi3UpHfTen3XB+x58nc/YG
-         JJOg==
+        d=google.com; s=20221208; t=1689751063; x=1692343063;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KJz9sA4DGP6CgYLkAjY0lAz1lGElKDaYsD0QJhJ6STM=;
+        b=C3xFynKwxg1DRU1+DuE5DhOV3wV/h9i3th7GM3Hn84DsD3AQDvuahPMaPfjZB92a1q
+         6cIdh8+OnPrq4dvRj+K/sq62IkYMUpNuHyqjtxJa/x3zG8o5bg7Qao2szql97Y0NpCQa
+         /97J2LFKn0RnI73D9Cr12stBt9oevdC/try31WjZwCXLrgWP4DFzzGX3lnkfpogOn5iG
+         bg0ps36g+1B4WpO9/V8EvUDmammOUTf1nISCcj9rU0r7LYuh7l7EublxkySIWZG8u7bx
+         nSMqoCSyCX89BpM3rGcrI7i52hLLUrxMNyS0PPdUZtp9nru/EPjOGPcH/2hfjHIAXimE
+         lDfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689750554; x=1692342554;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AnRQdh3EEqJvpxETy5ODliVLYVhTAipKqSwZ1tgyM7s=;
-        b=PH5AY3P8h8pqDTVNoUHun72IBv24gUte9Up820YRyrMjjyXbJxdhgM1CrTEqmir8Ux
-         q/mtMt8OLkqiLWbWW8lbgKU4cSbmhyaTaOlSmfjeW4kdzPGPr4mBIDlhcKhaPEESA/du
-         NElyl2Z/Sx8dCyeJHBDgRHuPLP576HCoepibWwDeZZVqZRAg239UKR8x9mggz1h5cprD
-         9uIPOFxDcdDNmoi3LCiyV2BbOsglUoYPrerSADvyDTgWL1Jyc6zJqSBc2zKbVDW/FlYN
-         SlIqsWFrkZ8NJPZsPrkDIUzvnJtkhKXc5T5B+UJ+pkYswKJGkA3DyTiixv0yfVP7n+/D
-         CJYg==
-X-Gm-Message-State: ABy/qLa/TAwnz00LQrzm8lgw1jFZXDWOelq6cULWRHEZUFIknTMZalSG
-        /7JzwTm5+yunlGvQFFRDHml+Pg==
-X-Google-Smtp-Source: APBJJlEHxNQB8OI0gK1JkgrcA6qpKfCt1495gUus2SsESAJnzz3dh8IXIELLzNbEHSWbTsk9l2XGjg==
-X-Received: by 2002:adf:f48f:0:b0:315:adee:2e47 with SMTP id l15-20020adff48f000000b00315adee2e47mr14943637wro.30.1689750554376;
-        Wed, 19 Jul 2023 00:09:14 -0700 (PDT)
-Received: from zh-lab-node-5 ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id n4-20020a5d4204000000b00315a1c160casm4388505wrq.99.2023.07.19.00.09.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jul 2023 00:09:13 -0700 (PDT)
-Date:   Wed, 19 Jul 2023 07:10:23 +0000
-From:   Anton Protopopov <aspsk@isovalent.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Hou Tao <houtao1@huawei.com>, Joe Stringer <joe@isovalent.com>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 1/3] bpf: consider CONST_PTR_TO_MAP as trusted
- pointer to struct bpf_map
-Message-ID: <ZLeMX4cJnKeXJfqW@zh-lab-node-5>
-References: <20230714141747.41560-1-aspsk@isovalent.com>
- <20230714142100.42265-1-aspsk@isovalent.com>
- <20230714142100.42265-2-aspsk@isovalent.com>
- <CAADnVQJztACtOx8UEyWJqTXd95DBDWsNEAG284Ci4N7Ma8Fqgw@mail.gmail.com>
- <ZLOhMDZIjikWdWf5@zh-lab-node-5>
- <CAADnVQLt=k6T0s3cRZRB26D+7TXcvR5CRk-q4SbKK6FQKuyjhg@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1689751063; x=1692343063;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KJz9sA4DGP6CgYLkAjY0lAz1lGElKDaYsD0QJhJ6STM=;
+        b=JCkU2vu9NJ6F0aNs4dtRCG8vJ+gTinBUNuBVJQKoWXQcoh7Y6VA0vXWzptYI3k4rqq
+         eYjeJcw5vTDeJSSKkTBAGrQv3iRQD0MR3OkFKZrncX/vuYStiAG8Kzq1/r1ypOuXCfpL
+         rcombEjdt4iB8iSKXbXtXM0yAJDZAXX3sZ0zx7RSLavRgnXBPj5OqTiQF0BRvgVk/Syo
+         EwkpV7lcnUheF56wpRTahqT4XVob98vt1UoBelksxso20/0yJhBjxLqoT/kwg3cXGAax
+         3sfXpzAs9LlDik74DvcwjOnmpsUc8bQMO5wKYwNWrg4wHdYKe/57+hi2XmQngnlS+3pP
+         ijFA==
+X-Gm-Message-State: ABy/qLbCbLOWvtKyihDoa2liru0aFJ88vdGUe9LlK/vNpWTD/ov0DL2J
+        nIyjHoFbidDFY6ZYFb/xcc6NaYTGY0zySU2NIrg+cw==
+X-Google-Smtp-Source: APBJJlG5E2lpIv0SvgSx7L4QeWU+mDNg17bE+ImlToYqKL1M7i7rZzz+Kp7fxMaIuOYd3Pa9EnKRQ2/MS1NsTY3vl3s=
+X-Received: by 2002:ac8:7e8d:0:b0:3f5:2006:50f1 with SMTP id
+ w13-20020ac87e8d000000b003f5200650f1mr546839qtj.12.1689751062793; Wed, 19 Jul
+ 2023 00:17:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLt=k6T0s3cRZRB26D+7TXcvR5CRk-q4SbKK6FQKuyjhg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230713143406.14342-1-cyphar@cyphar.com> <CABi2SkVCp_MDh9MgD-UJ_hgJ58ynm22XJ53zE+ZCBSsWFBxiOw@mail.gmail.com>
+ <o2tz56m3y2pbbj2sezyqvtw3caqwcqtqqkkfrq632ofpyj4enp@znkxadzn5lmj>
+In-Reply-To: <o2tz56m3y2pbbj2sezyqvtw3caqwcqtqqkkfrq632ofpyj4enp@znkxadzn5lmj>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Wed, 19 Jul 2023 00:17:06 -0700
+Message-ID: <CALmYWFs_dNCzw_pW1yRAo4bGCPEtykroEQaowNULp7svwMLjOg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/3] memfd: cleanups for vm.memfd_noexec
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Jeff Xu <jeffxu@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 05:54:27PM -0700, Alexei Starovoitov wrote:
-> On Sun, Jul 16, 2023 at 12:49 AM Anton Protopopov <aspsk@isovalent.com> wrote:
+On Tue, Jul 18, 2023 at 8:10=E2=80=AFPM Aleksa Sarai <cyphar@cyphar.com> wr=
+ote:
+>
+> On 2023-07-17, Jeff Xu <jeffxu@chromium.org> wrote:
+> > Hello Aleksa,
 > >
-> > On Fri, Jul 14, 2023 at 10:56:00AM -0700, Alexei Starovoitov wrote:
-> > > On Fri, Jul 14, 2023 at 7:20 AM Anton Protopopov <aspsk@isovalent.com> wrote:
-> > > >
-> > > > Patch verifier to regard values of type CONST_PTR_TO_MAP as trusted
-> > > > pointers to struct bpf_map. This allows kfuncs to work with `struct
-> > > > bpf_map *` arguments.
-> > > >
-> > > > Save some bytes by defining btf_bpf_map_id as BTF_ID_LIST_GLOBAL_SINGLE
-> > > > (which is u32[1]), not as BTF_ID_LIST (which is u32[64]).
-> > > >
-> > > > Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
-> > > > ---
-> > > >  include/linux/btf_ids.h | 1 +
-> > > >  kernel/bpf/map_iter.c   | 3 +--
-> > > >  kernel/bpf/verifier.c   | 5 ++++-
-> > > >  3 files changed, 6 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-> > > > index 00950cc03bff..a3462a9b8e18 100644
-> > > > --- a/include/linux/btf_ids.h
-> > > > +++ b/include/linux/btf_ids.h
-> > > > @@ -267,5 +267,6 @@ MAX_BTF_TRACING_TYPE,
-> > > >  extern u32 btf_tracing_ids[];
-> > > >  extern u32 bpf_cgroup_btf_id[];
-> > > >  extern u32 bpf_local_storage_map_btf_id[];
-> > > > +extern u32 btf_bpf_map_id[];
-> > > >
-> > > >  #endif
-> > > > diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-> > > > index d06d3b7150e5..b67996147895 100644
-> > > > --- a/kernel/bpf/map_iter.c
-> > > > +++ b/kernel/bpf/map_iter.c
-> > > > @@ -78,8 +78,7 @@ static const struct seq_operations bpf_map_seq_ops = {
-> > > >         .show   = bpf_map_seq_show,
-> > > >  };
-> > > >
-> > > > -BTF_ID_LIST(btf_bpf_map_id)
-> > > > -BTF_ID(struct, bpf_map)
-> > > > +BTF_ID_LIST_GLOBAL_SINGLE(btf_bpf_map_id, struct, bpf_map)
-> > > >
-> > > >  static const struct bpf_iter_seq_info bpf_map_seq_info = {
-> > > >         .seq_ops                = &bpf_map_seq_ops,
-> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > > index 0b9da95331d7..5663f97ef292 100644
-> > > > --- a/kernel/bpf/verifier.c
-> > > > +++ b/kernel/bpf/verifier.c
-> > > > @@ -5419,6 +5419,9 @@ static bool is_trusted_reg(const struct bpf_reg_state *reg)
-> > > >         if (reg->ref_obj_id)
-> > > >                 return true;
-> > > >
-> > > > +       if (reg->type == CONST_PTR_TO_MAP)
-> > > > +               return true;
-> > > > +
-> > >
-> > > Overall it looks great.
-> > > Instead of above, how about the following instead:
-> > >
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index 0b9da95331d7..cd08167dc347 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -10775,7 +10775,7 @@ static int check_kfunc_args(struct
-> > > bpf_verifier_env *env, struct bpf_kfunc_call_
-> > >                         if (!is_kfunc_trusted_args(meta) && !is_kfunc_rcu(meta))
-> > >                                 break;
-> > >
-> > > -                       if (!is_trusted_reg(reg)) {
-> > > +                       if (!is_trusted_reg(reg) &&
-> > > !reg2btf_ids[base_type(reg->type)]) {
-> > >
-> > >
-> > > This way we won't need to list every convertible type in is_trusted_reg.
-> > >
-> > > I'm a bit hesitant to put reg2btf_ids[] check directly into is_trusted_reg().
-> > > Maybe it's ok, but it needs more analysis.
+> > Thanks for your email and patches for discussion.
 > >
-> > I am not sure I see a difference in adding a check you proposed above and
-> > adding the reg2btf_ids[] check directly into the is_trusted_reg() function.
-> > Basically, we say "if type is in reg2btf_ids[], then consider it trusted" in
-> > both cases. AFAIS, currently the reg2btf_ids[] contains only trusted types,
-> > however, could it happen that we add a non-trusted type there?
+> > On Thu, Jul 13, 2023 at 7:34=E2=80=AFAM Aleksa Sarai <cyphar@cyphar.com=
+> wrote:
+> > >
+> > > It seems that the most critical issue with vm.memfd_noexec=3D2 (the f=
+act
+> > > that passing MFD_EXEC would bypass it entirely[1]) has been fixed in
+> > > Andrew's tree[2], but there are still some outstanding issues that ne=
+ed
+> > > to be addressed:
+> > >
+> > >  * The dmesg warnings are pr_warn_once, which on most systems means t=
+hat
+> > >    they will be used up by systemd or some other boot process and
+> > >    userspace developers will never see it. The original patch posted =
+to
+> > >    the ML used pr_warn_ratelimited but the merged patch had it change=
+d
+> > >    (with a comment about it being "per review"), but given that the
+> > >    current warnings are useless, pr_warn_ratelimited makes far more
+> > >    sense.
+> > >
+> > Ya, This was discussed in [1]
+> > Replacing pr_warn_once with pr_warn_ratelimited won't address Peter
+> > Xu's observation that "ratelimited" will fill syslog [2],  I'm not
+> > sure it is acceptable to ones who is not interested in memfd, I will
+> > defer this to maintainers.
 > >
-> > So, I would leave the patch as is (which also makes sense because the
-> > const-ptr-to-map is a special case), or add the "reg2btf_ids[] check"
-> > directly into the is_trusted_reg() function.
-> 
-> Fair enough. Let's add reg2btf_ids[] to is_trusted_reg() directly.
+> > [1] https://lore.kernel.org/lkml/202212161233.85C9783FB@keescook/
+> > [2] https://lwn.net/ml/linux-kernel/Y5yS8wCnuYGLHMj4@x1n/
+>
+> I see Kees's point, but in that case the logging should be tied to the
+> sysctl being the non-default value (I can post this version next if you
+> prefer). The current logging setup doesn't make sense.
+>
+Is there a best practice in kernel for this problem: too much log  vs
+too little log
+In other products, usually the log level or compiler flag (ifdef) are
+for such a situation.
 
-Thanks, I will send v2.
+> > >  * vm.memfd_noexec=3D2 shouldn't reject old-style memfd_create(2) sys=
+calls
+> > >    because it will make it far to difficult to ever migrate. Instead =
+it
+> > >    should imply MFD_EXEC.
+> > >
+> > Though the purpose of memfd_noexec=3D2 is not to help with migration  -
+> > but to disable creation of executable memfd for the current system/pid
+> > namespace.
+> > During the migration,  vm.memfd_noexe =3D 1 helps overwriting for
+> > unmigrated user code as a temporary measure.
+>
+> My point is that the current behaviour for =3D2 means that nobody other
+> than *maybe* ChromeOS will ever be able to use it because it requires
+> auditing every program on the system. In fact, it's possible even
+> ChromeOS will run into issues given that one of the arguments made for
+> the nosymfollow mount option was that auditing all of ChromeOS to
+> replace every open with RESOLVE_NO_SYMLINKS would be too much effort[1]
+> (which I agreed with). Maybe this is less of an issue with
+> memfd_create(2) (which is much newer than open(2)) but it still seems
+> like a lot of busy work when the =3D1 behaviour is entirely sane even in
+> the strict threat model that =3D2 is trying to protect against.
+>
+It can also be a container (that have all memfd_create migrated to new API)
+
+One option I considered previously was "=3D2" would do overwrite+block ,
+and "=3D3" just block. But then I worry that applications won't have
+motivation to ever change their existing code, the setting will
+forever stay at "=3D2", making "=3D3" even more impossible to ever be used
+ system side.
+
+> To me, using =3D1 as a migration path (and in fact, calling =3D1 a migrat=
+ion
+> path further argues that the warning for not setting _EXEC or
+> _NOEXEC_SEAL should be tied to =3D1) would mean finding every program tha=
+t
+> uses executable memfds and changing it to stop doing that. Not that you
+> use =3D1 to go and rewrite every userspace program that uses
+> memfd_create(2) at all, without using executable memfds (rebooting each
+> time to test the behaviour because we use pr_warn_once).
+>
+I tend to think logging and sysctl are orthogonal, tie them together
+making it more complex than necessary. If we need more logging, we
+should find what is the best practice in the kernel for that.
+
+> If you want to block syscalls that don't explicitly pass NOEXEC_SEAL,
+> there are several tools for doing this (both seccomp and LSM hooks).
+>
+> [1]: https://lore.kernel.org/linux-fsdevel/20200131212021.GA108613@google=
+.com/
+>
+> > Additional functionality/features should be implemented through
+> > security hook and LSM, not sysctl, I think.
+>
+> This issue with =3D2 cannot be fixed in an LSM. (On the other hand, you
+> could implement either =3D2 behaviour with an LSM using =3D1, and the
+> current strict =3D2 behaviour could be implemented purely with seccomp.)
+>
+By migration, I mean  a system that is not fully migrated, such a
+system should just use "=3D0" or "=3D1". Additional features can be
+implemented in SELinux/Landlock/other LSM by a motivated dev.  e.g. if
+a system wants to limit executable memfd to specific programs or fully
+disable it.
+"=3D2" is for a system/container that is fully migrated, in that case,
+SELinux/Landlock/LSM can do the same, but sysctl provides a convenient
+ alternative.
+Yes, seccomp provides a similar mechanism. Indeed, combining "=3D1" and
+seccomp (block MFD_EXEC), it will overwrite + block X mfd, which is
+essentially what you want, iiuc.However, I do not wish to have this
+implemented in kernel, due to the thinking that I want kernel to get
+out of business of "overwriting" eventually.
+
+> > >  * The ratcheting mechanism for vm.memfd_noexec doesn't make sense as=
+ a
+> > >    security mechanism because a CAP_SYS_ADMIN capable user can create
+> > >    executable binaries in a hidden tmpfs very easily, not to mention =
+the
+> > >    many other things they can do.
+> > >
+> > By further limiting CAP_SYS_ADMIN, an attacker can't modify this
+> > sysctl even after compromising some system service with high
+> > privilege, YAMA has the same approach for ptrace_scope=3D3
+>
+> Personally, I also think this behaviour from YAMA is a little goofy too,
+> but given that it only locks the most extreme setting and there is no
+> way to get around the most extreme setting, I guess it makes some sense
+> (not to mention it's an LSM and so there is an argument that it should
+> be possible to lock out privileged users from modifying it).
+> There are many other security sysctls, and very few have this behaviour
+> because it doesn't make much sense in most cases.
+>
+> > In addition, this sysctl is pid_name spaced, this means child
+> > pid_namespace will alway have the same or stricter security setting
+> > than its parent, this allows admin to maintain a tree like view. If we
+> > allow the child pid namespace to elevate its setting, then the
+> > system-wide setting is no longer meaningful.
+>
+> "no longer meaningful" is too strong of a statement imho. It is still
+> useful for constraining non-root processes and presumably ChromeOS
+> disallows random processes to do CLONE_NEWUSER (otherwise the protection
+> of this sysctl is pointless) so in practice for ChromeOS there is no
+> change in the attack surface.
+>
+> (FWIW, I think tying this to the user namespace would've made more sense
+> since this is about privilege restrictions, but that ship has sailed.)
+>
+The reason that this sysctl is a PID namespace is that I hope a
+container and host can have different sysctl values, e.g. host will
+allow runc's use of X mfd, while a container  doesn't want X mfd. .
+To clarify what you meant, do you mean this: when a container is in
+its own pid_namespace, and has "=3D2", the programs inside the container
+can still use CLONE_NEWUSER to break out "=3D2" ?
+And what makes the user namespace a better choice than pid namespace
+for this sysctl ?
+
+> > The code sample shared in this patch set indicates that the attacker
+> > already has the ability of creating tmpfs and executing complex steps,
+> > at that point, it doesn't matter if the code execution is from memfd
+> > or not. For a safe by default system such as ChromeOS, attackers won't
+> > easily run arbitrary code, memfd is one of the open doors for that, so
+> > we are disabling executable memfd in ChromeOS. In other words:  if an
+> > attacker can already execute the arbitrary code as sample given in
+> > ChromeOS, without using executable memfd,  then memfd is no longer the
+> > thing we need to worry about, the arbitrary code execution is already
+> > achieved by the attacker. Even though I use ChromeOS as an example, I
+> > think the same type of threat model applies to any system that wants
+> > to disable executable memfd entirely.
+>
+> I understand the threat model this sysctl is blocking, my point is that
+> blocking CAP_SYS_ADMIN from modifying the setting doesn't make sense
+> from that threat model. An attacker that manages to trick some process
+> into creating a memfd with an executable payload is not going to be able
+> to change the sysctl setting (unless there's a confused deputy with
+> CAP_SYS_ADMIN, in which case you have much bigger issues).
+>
+It is the reverse.  An attacker that manages to trick some
+CAP_SYSADMIN processes into changing this sysctl value (i.e. lower the
+setting to 0 if no ratcheting), will be able to continue to use mfd as
+part of the attack chain.
+ In chromeOS, an attacker that can change sysctl might not necessarily
+gain full arbitrary code execution already. As I mentioned previously,
+the main threat model here is to prevent  arbitrary code execution
+through mfd.  If an attacker already gains arbitrary code execution,
+at that point, we no longer worry about mfd.
+
+> If a CAP_SYS_ADMIN-capable user wants to change the sysctl, blocking it
+> doesn't add any security because that process could create a memfd-like
+> fd to execute without issues.
+>What practical attack does this ratcheting
+> mechanism protect against? (This is a question you can answer with the
+> YAMA sysctl, but not this one AFAICS.)
+>
+> But even if you feel that allowing this in child user namespaces is
+> unsafe or undesirable, it's absolutely necessary that
+> capable(CAP_SYS_ADMIN) should be able to un-brick the running system by
+> changing the sysctl. The alternative is that you need to reboot your
+> server in order to un-set a sysctl that broke some application you run.
+>
+
+> Also, by the same token, this ratcheting mechanism doesn't make sense
+> with =3D1 *at all* because it could break programs in a way that would
+> require a reboot but it's not a "security setting" (and the YAMA sysctl
+> mentioned only locks the sysctl at the highest setting).
+>
+I think a system should use "=3D0" when it is unsure about its program's
+need or not need executable memfd. Technically, it is not that this
+sysctl breaks the user, but the admin  made the mistake to set the
+wrong sysctl value, and an admin should know what they are doing for a
+sysctl. Yes. rebooting increases the steps to undo the mistake, but
+that could be an incentive for the admin to fully test its programs
+before turning on this sysctl - and avoid unexpected runtime errors.
+
+Thanks!
+-Jeff
+
+> > >  * The memfd selftests would not exit with a non-zero error code when
+> > >    certain tests that ran in a forked process (specifically the ones
+> > >    related to MFD_EXEC and MFD_NOEXEC_SEAL) failed.
+> > >
+> > I will test this code and follow up.
+>
+> Thanks!
+>
+> --
+> Aleksa Sarai
+> Senior Software Engineer (Containers)
+> SUSE Linux GmbH
+> <https://www.cyphar.com/>
