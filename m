@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D68D759666
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 15:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A765F75966D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 15:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjGSNSU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 09:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
+        id S229471AbjGSNTX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 09:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjGSNSR (ORCPT
+        with ESMTP id S229777AbjGSNTW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 09:18:17 -0400
+        Wed, 19 Jul 2023 09:19:22 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC25FD;
-        Wed, 19 Jul 2023 06:18:15 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1689772685tf75yw6o
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30F9125;
+        Wed, 19 Jul 2023 06:19:20 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1689772752tdo5hf5m
 Received: from linux-lab-host.localdomain ( [119.123.130.39])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 19 Jul 2023 21:18:03 +0800 (CST)
+        id ; Wed, 19 Jul 2023 21:19:11 +0800 (CST)
 X-QQ-SSF: 01200000000000D0X000000A0000000
-X-QQ-FEAT: 3M0okmaRx3grmu9MUHFbrrVNG0WzcH6N1ULMpWmAsKbuISmAuO5FAvE/jYi3P
-        g7qSYNWjT9UXfSwx9OmnfYAddtleSX7TeZNg2ORN61CD9vys8r+n1tdunweA/xhXZVtMuvp
-        U9DxcXQRsoxsGxKnUWmgXrvFuivUcMIc0pGXuis/bMfH3XPgmAjDUI+ZfdbTdY5SgFDxxjw
-        ik3x7NFvu30HEZJepW78xk3Z2zb6o4f63p2olvK0VtT4/fUAHmnuYGq7YFJGiBpIt+my94X
-        m36EH+4uzoHfnkOufpeYEKqEyj55Yhi7F6k1SAhZdKwbbbCyWcwqR7dm9PrbgolksZDjNca
-        M0zp1eRc0qukXPHuAQCNJq2rz5CtJe0AgXa7GMrgb+wEPLZhQ0LXI0wBKnaiQ==
+X-QQ-FEAT: +ynUkgUhZJmS7aWA1MF5mWbEkqg6YFGMNEdccEOgkkP+0XR/32r431zhxHhIH
+        Hm6hMRh0/leap3zvRmOxuJJLlaB5qN5xUbcd9P1qvuDZye3nmnSjCYhUFFJxGkB5XTDBjY+
+        AR2fbkznlPJNook9BF72hihBqGCX+HRhcvewGCyV+WbkJXG3RlA1iK5Jzt7Y/WvDKeF6S98
+        ihfAB+A9ljPFt9SpJy4A4nCM9TFUkxMXV3EQ9gva1fz3FbIbyyB1GuuxsC6p59aZMHL1obO
+        KkMEwmqgmhCANuIvgmAj4HLglhTh5JggccgjebfxeVNscCSLLwKgTz5XIhnV2TChxjwab8G
+        oVTgn9VvMG3zZxxx4+EMFD/QNgAFGn+04JxudtBJaElu9wHVBs5sdwkt7EdYoHCv5cSjsaz
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5670957446620679484
+X-BIZMAIL-ID: 16744309574529494032
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 01/14] selftests/nolibc: allow report with existing test log
-Date:   Wed, 19 Jul 2023 21:17:59 +0800
-Message-Id: <f17b3621241f7321ecc1accbad86bc29ecc3912d.1689759351.git.falcon@tinylab.org>
+Subject: [PATCH v2 02/14] selftests/nolibc: add macros to enhance maintainability
+Date:   Wed, 19 Jul 2023 21:19:10 +0800
+Message-Id: <0415392c9c2b0a7249563abd79599a475019b508.1689759351.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1689759351.git.falcon@tinylab.org>
 References: <cover.1689759351.git.falcon@tinylab.org>
@@ -51,31 +51,98 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-After the tests finish, it is valuable to report and summarize with
-existing test log.
+The kernel targets share the same kernel make operations, the same
+.config file, the same kernel image, add MAKE_KERNEL, KERNEL_CONFIG and
+KERNEL_IMAGE for them.
 
-This avoid rerun or run the tests again when not necessary.
+Many targets share the same logging related settings, let's add common
+variables RUN_OUT, LOG_OUT and REPORT_RUN_OUT for them.
+
+The qemu run/rerun targets share the same qemu system run command, add
+QEMU_SYSTEM_RUN for them.
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/nolibc/Makefile | 41 ++++++++++++++++---------
+ 1 file changed, 27 insertions(+), 14 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index ab17e0d8b7e2..0cd17de2062c 100644
+index 0cd17de2062c..8c531518bb9f 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -206,6 +206,10 @@ rerun:
- 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
+@@ -166,45 +166,58 @@ endif
+ libc-test: nolibc-test.c
+ 	$(QUIET_CC)$(CC) -o $@ $<
  
-+# report with existing test log
-+report:
-+	$(Q)$(REPORT_RUN_OUT)
++# common macros for logging
++RUN_OUT = $(CURDIR)/run.out
++LOG_OUT = > "$(RUN_OUT)"
++REPORT_RUN_OUT = $(REPORT) "$(RUN_OUT)"
 +
- clean:
- 	$(call QUIET_CLEAN, sysroot)
- 	$(Q)rm -rf sysroot
+ # local libc-test
+ run-libc-test: libc-test
+-	$(Q)./libc-test > "$(CURDIR)/run.out" || :
+-	$(Q)$(REPORT) $(CURDIR)/run.out
++	$(Q)./libc-test $(LOG_OUT) || :
++	$(Q)$(REPORT_RUN_OUT)
+ 
+ # local nolibc-test
+ run-nolibc-test: nolibc-test
+-	$(Q)./nolibc-test > "$(CURDIR)/run.out" || :
+-	$(Q)$(REPORT) $(CURDIR)/run.out
++	$(Q)./nolibc-test $(LOG_OUT) || :
++	$(Q)$(REPORT_RUN_OUT)
+ 
+ # qemu user-land test
+ run-user: nolibc-test
+-	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+-	$(Q)$(REPORT) $(CURDIR)/run.out
++	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test $(LOG_OUT) || :
++	$(Q)$(REPORT_RUN_OUT)
+ 
+ initramfs: nolibc-test
+ 	$(QUIET_MKDIR)mkdir -p initramfs
+ 	$(call QUIET_INSTALL, initramfs/init)
+ 	$(Q)cp nolibc-test initramfs/init
+ 
++# common macros for kernel targets
++MAKE_KERNEL   = $(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE)
++KERNEL_CONFIG = $(srctree)/.config
++KERNEL_IMAGE  = $(srctree)/$(IMAGE)
++
+ defconfig:
+-	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
++	$(Q)$(MAKE_KERNEL) mrproper $(DEFCONFIG) prepare
+ 
+ extconfig:
+-	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -O "$(srctree)" -m "$(srctree)/.config" $(foreach c,$(EXTCONFIG),$(wildcard $(CURDIR)/configs/$c))
+-	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) KCONFIG_ALLCONFIG="$(srctree)/.config" allnoconfig
++	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -O "$(srctree)" -m "$(KERNEL_CONFIG)" $(foreach c,$(EXTCONFIG),$(wildcard $(CURDIR)/configs/$c))
++	$(Q)$(MAKE_KERNEL) KCONFIG_ALLCONFIG="$(KERNEL_CONFIG)" allnoconfig
+ 
+ kernel: initramfs
+-	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
++	$(Q)$(MAKE_KERNEL) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
++
++# common macros for qemu run/rerun targets
++QEMU_SYSTEM_RUN = qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(KERNEL_IMAGE)" -serial stdio $(QEMU_ARGS)
+ 
+ # run the tests after building the kernel
+ run: kernel
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+-	$(Q)$(REPORT) $(CURDIR)/run.out
++	$(Q)$(QEMU_SYSTEM_RUN) $(LOG_OUT)
++	$(Q)$(REPORT_RUN_OUT)
+ 
+ # re-run the tests from an existing kernel
+ rerun:
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+-	$(Q)$(REPORT) $(CURDIR)/run.out
++	$(Q)$(QEMU_SYSTEM_RUN) $(LOG_OUT)
++	$(Q)$(REPORT_RUN_OUT)
+ 
+ # report with existing test log
+ report:
 -- 
 2.25.1
 
