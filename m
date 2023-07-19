@@ -2,50 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996A275978D
+	by mail.lfdr.de (Postfix) with ESMTP id E037575978E
 	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 15:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjGSN63 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S230436AbjGSN63 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Wed, 19 Jul 2023 09:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbjGSN62 (ORCPT
+        with ESMTP id S230088AbjGSN62 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 19 Jul 2023 09:58:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1806110E5
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF4619B1
         for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 06:58:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36F856171C
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 13:57:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 406D5C433D9;
-        Wed, 19 Jul 2023 13:57:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1541616FF
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 13:57:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C198C433C7;
+        Wed, 19 Jul 2023 13:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689775068;
-        bh=8npZXLd2IRgCTmZxfiXFlG2B2pE9tuqQvGjSRbcdj60=;
+        s=k20201202; t=1689775073;
+        bh=6EqqPlvUm4w74hGx/td7RmKuKuRXkvgKw9pk67+i0Eo=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=TSixOYvpqdudxfNNWYntqJIv9QWoDxI+GvREThZlZLQ2tsif3QqmKEt4ZfUHKd2iL
-         U11UBGYJOsgcylv0boux2dvektMmH0ohvEv75MKPXJZl7DkJNneM+Li3t8ZP8oPTQt
-         5Mc1WbrpG6zWjsG4mHdCdkFmXMeozukSkfImLyeIZ5wXuIitkOHndxjl8d918zo6O/
-         +fnlhmO4WBugSW6n3ZyKS7s9e66rVRbLVEOarUbq03pU86Qiw9GOhSVct0XWhUFkza
-         eY3aysc5X6UKYlNcP3JPtpJVSVYlv2l75iu1PPmFPDl1dp6ND3fhCNhlFZJQNMfSs7
-         xIC0ndR0GOMlA==
+        b=mbVe8bEfqNVrj9LhIVOTgsQve++885iGHPISLraKQwjlDob2WWiSqt5hq/2DtoQdU
+         pQHwknuLrJ7Eecvt2hMei1P7Ypzme09DJrs/Y8oxuBQ06PWmFLgFw2m27+K2vs8cNG
+         wZ8XdvOQ02YF4sAXAQAngVCbuHqpDjQCSdzxBhywbBIHR6efRwfa5lqS20s8Xh84sR
+         UfRX5yb/9AIT92VQoxCVS8ixsf+0rRgg+0sLz7CemaADhpOCTu8p3afPx6Ahikrawg
+         O3KslBCF+fwbYSag0CI5EnW5UcVdpFfMTL+ItdRRUCF/5OKUX10T0pYWy+kjG/h5Xe
+         UcDam1P5cgM6A==
 From:   Mark Brown <broonie@kernel.org>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
         David Gow <davidgow@google.com>,
         Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>
+        Takashi Iwai <tiwai@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mark Brown <broonie@kernel.org>
 Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com
-In-Reply-To: <20230712-asoc-topology-kunit-enable-v1-0-b9f2da9dca23@kernel.org>
-References: <20230712-asoc-topology-kunit-enable-v1-0-b9f2da9dca23@kernel.org>
-Subject: Re: [PATCH 0/2] ASoC: Improve coverage in default KUnit runs
-Message-Id: <168977506472.48720.7264353211816565204.b4-ty@kernel.org>
-Date:   Wed, 19 Jul 2023 14:57:44 +0100
+In-Reply-To: <20230718-asoc-topology-kunit-enable-v2-0-0ee11e662b92@kernel.org>
+References: <20230718-asoc-topology-kunit-enable-v2-0-0ee11e662b92@kernel.org>
+Subject: Re: [PATCH v2 0/5] ASoC: Improve coverage in default KUnit runs
+Message-Id: <168977506884.48720.5534147934351936674.b4-ty@kernel.org>
+Date:   Wed, 19 Jul 2023 14:57:48 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -60,13 +63,15 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 12 Jul 2023 16:40:33 +0100, Mark Brown wrote:
+On Tue, 18 Jul 2023 01:28:41 +0100, Mark Brown wrote:
 > We have some KUnit tests for ASoC but they're not being run as much as
 > they should be since ASoC isn't enabled in the configs used by default
-> with KUnit and in the case of the topolofy tests there is no way to
-> enable them without enabling drivers that use them.  Let's improve that.
+> with KUnit and in the case of the topology tests there is no way to
+> enable them without enabling drivers that use them.  This series
+> provides a Kconfig option which KUnit can use directly rather than worry
+> about drivers.
 > 
-> 
+> [...]
 
 Applied to
 
@@ -74,9 +79,15 @@ Applied to
 
 Thanks!
 
-[1/2] kunit: Enable ASoC in all_tests.config
+[1/5] driver core: Provide stubs for !IOMEM builds
+      commit: da7c07b1083809888c82522e74370f962fb7685e
+[2/5] platform: Provide stubs for !HAS_IOMEM builds
+      commit: a0c74f6c9ea9cebd7a8f38142bf87e7c12c2905d
+[3/5] ALSA: Enable build with UML
+      commit: 512d092d78823f9813f4af38090b33c454137a4c
+[4/5] kunit: Enable ASoC in all_tests.config
       commit: 5aaa4024e14f8b878a348338a74b4c97bc2478b1
-[2/2] ASoC: topology: Add explicit build option
+[5/5] ASoC: topology: Add explicit build option
       commit: b7dc237ef8b0897f5750a738d2c57469909a6a15
 
 All being well this means that it will be integrated into the linux-next
