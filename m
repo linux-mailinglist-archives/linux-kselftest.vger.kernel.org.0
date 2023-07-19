@@ -2,47 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C71759696
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 15:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B767596A1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 15:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbjGSNZI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 09:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
+        id S231229AbjGSNZw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 09:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGSNZH (ORCPT
+        with ESMTP id S229531AbjGSNZv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 09:25:07 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD83BFD;
-        Wed, 19 Jul 2023 06:25:05 -0700 (PDT)
-X-QQ-mid: bizesmtp80t1689773096tvcme5mq
-Received: from linux-lab-host.localdomain ( [119.123.130.39])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 19 Jul 2023 21:24:55 +0800 (CST)
-X-QQ-SSF: 01200000000000D0X000000A0000000
-X-QQ-FEAT: HzdOSj0Bmys3/fOoqbEWdmxqkRROHEaQlEr+veWl6qr7J4qAL4t6mLHXQg1Ae
-        oJ1k9dIndDeyN6LIRorFFpXBgVRAoP/Ui+ew0uZZJnIffORC7NlmPt5jJTyXQThDo2gDs0E
-        o046oUM4s5eX2dJRXtSBVY62qAJYmoHZ5T9ySwt+qTYQHFyk7X4lJE6wwdvosb/orSpuTip
-        tBGneNnha00pwUhzibN40qIlMYGfOcwSO5THfqdn9dRkZaYUVIg2MqmfDJjH45RNFbNL1n4
-        5q3a4pg/WmGF8aqkdlpJNgBa0iTMEpcVgRmXsXCR2jIeIT8sGHS1o2glMnR9M20tQDwi8HY
-        n8vlR7Z1rYuxE97wp8KcHmo6Y2GEqegrELfozgtqD2YjCldim0=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 7211787249313186061
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 07/14] selftests/nolibc: defconfig: remove mrproper target
-Date:   Wed, 19 Jul 2023 21:24:54 +0800
-Message-Id: <ba8ce60152aa03c73f9b33960d3be8af0e377a49.1689759351.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1689759351.git.falcon@tinylab.org>
-References: <cover.1689759351.git.falcon@tinylab.org>
+        Wed, 19 Jul 2023 09:25:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1631172A;
+        Wed, 19 Jul 2023 06:25:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69F9F616FD;
+        Wed, 19 Jul 2023 13:25:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60714C433BA;
+        Wed, 19 Jul 2023 13:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689773147;
+        bh=EyVLtL0y3pMG2CuYY0w75B4btgW07dMcezlAZDsSdHQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gb9Diglh/i64PDngyNdt/GKb2Nk1ffhlx2iCYRVwYwJFFaIWeqdykk3XHsdIjxi+U
+         ySo7EE75m9kyEmpGqZr+PUnM1neiLXdgMRuMhDCLMjYIpKB5stI7SDZFdeCnV7pSuT
+         3rxlgGugHsMh6Yu2Y2ZMz7uzUyqXc5OaAdIZuONNkooR8IAwPmhrzZzWDT1N1DwHYx
+         RlTVeZoCs4CL7meIUWNo6SyAJaBckf8cXgHWQ1TpJoo/sQRvPGvbROxf9n80ltzbXE
+         5eGxexNIybAnY53SN4bcht+Z5iuvu040wYt+t4TGE0tkG8rPpOs8sUKiihTlsC+cQY
+         ajt3gtR/VCWvQ==
+Date:   Wed, 19 Jul 2023 14:25:38 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 04/35] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <01dd7853-953d-4715-8cf0-c2f500065b55@sirena.org.uk>
+References: <20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org>
+ <20230716-arm64-gcs-v1-4-bf567f93bba6@kernel.org>
+ <20230719114437.GJ1901145@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="I9qodeRa311/Bc25"
+Content-Disposition: inline
+In-Reply-To: <20230719114437.GJ1901145@kernel.org>
+X-Cookie: They just buzzed and buzzed...buzzed.
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,31 +83,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The O=/path/to/kernel-<ARCH> option allows to build kernel for different
-architectures in different output directories, in this scene, it doesn't
-need the mrproper operation for defconfig anymore.
 
-If really require to clean up the source code tree, let users run the
-standalone mrproper target on demand.
+--I9qodeRa311/Bc25
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Jul 19, 2023 at 02:44:37PM +0300, Mike Rapoport wrote:
+> On Sun, Jul 16, 2023 at 10:51:00PM +0100, Mark Brown wrote:
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 9d9902b54e5e..83cb4b017bef 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -203,7 +203,7 @@ mrproper:
- 	$(Q)$(MAKE_KERNEL) mrproper
- 
- defconfig:
--	$(Q)$(MAKE_KERNEL) mrproper $(DEFCONFIG) prepare
-+	$(Q)$(MAKE_KERNEL) $(DEFCONFIG) prepare
- 
- menuconfig:
- 	$(Q)$(MAKE_KERNEL) menuconfig
--- 
-2.25.1
+> > +* When set PR_SHADOW_STACK_ENABLE flag allocates a Guarded Control Sta=
+ck for
+>=20
+>                                                  'for' here looks excessi=
+ve ^
 
+> > +  and enables GCS for the thread, enabling the functionality controlle=
+d by
+> > +  GCSPRE0_EL1.{nTR, RVCHKEN, PCRSEL}.
+
+It does scan fine to me as a native speaker.
+
+> > +7.  ptrace extensions
+> > +---------------------
+> > +
+> > +* A new regset NT_ARM_GCS is defined for use with PTRACE_GETREGSET and
+> > +  PTRACE_SETREGSET.
+> > +
+> > +* Due to the complexity surrounding allocation and deallocation of sta=
+kcs and
+> > +  lack of practical application changes to the GCS configuration via p=
+trace
+> > +  are not supported.
+
+> On x86 CRIU needed to be able to temporarily unlock shadow stack features
+> to recreate the shadow stack of the thread being restored. I presume CRIU
+> will need something like that on arm64 as well.
+
+It would be good to understand why and what exactly is needed here.
+I'm guessing the main thing would be stores?  It's relatively easy to
+add features later, I think I'll just add support for everything except
+enable just now.
+
+--I9qodeRa311/Bc25
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS35FEACgkQJNaLcl1U
+h9ATlQf9HMvGT285Dxb1K98/IQO88I6xjkJKw25NyYtFdnj3sDQr/5mkdc17dstk
+89MZPCDWgwC0akok+8SB6yCnT8x6dYbpiCgo7RkJXlfEhqR+xhvrJ7N+VRcoW4Uz
+ZZuPeiCqQs9GwvjBL9y0oD00oCZeIh/tfYI0cti4uHuUDaIiOjy6E9x96TGWTxBu
+l85odWvjI7U0wOUXQQL9qoDQCBU3bO52EN0k30ch7ILF9YAwR/NgAISqgoHreQ7d
+LrmfFdQSTWQiqh9/zau9U7ZESH/kw3vLVBo/TZd+pzuMnc1g+rxyKEHVZoJi1DBh
+3Tt8WxOzSOFTarknQTMyOSKwRH7q9w==
+=EN0T
+-----END PGP SIGNATURE-----
+
+--I9qodeRa311/Bc25--
