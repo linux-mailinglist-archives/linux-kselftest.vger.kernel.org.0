@@ -2,79 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27757759199
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 11:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96037592A1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 12:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjGSJ27 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 05:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S229733AbjGSKUZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 06:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjGSJ2t (ORCPT
+        with ESMTP id S229576AbjGSKUY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 05:28:49 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2B31FCC
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 02:28:46 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fbbfaacfc1so11026413e87.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 02:28:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1689758924; x=1692350924;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TL4iPDnWm7LI7dooTGYVCYljPJYJzbf9kW0UMI/E3E8=;
-        b=RmR0tn2XLxoJOQVfhj6Z1y0iP4vl4SctrEUwL1kVlHU/vpEljcorwTzzRgX4ay8x6J
-         ZxCler5k1qYfD6FdRhctRHWJrBIPj38PG89ytDH1l+GK/juPRE8kbFKAaIJvYhEnX+81
-         30HIyfPQhmb4VSWcnrPkYKDmvk69GBJc5iD2tQCEvBqIpJOSQdaWDlwlQGrmkiLNazPC
-         2Bd5pSUZiJkEroDFWFD7oNPe2iJXfklJtZZAxJi52al2Sf6Kt+wJ4C53pbYDuTYFHwb6
-         ENKVUA0rzunIqRYXUKNUzwvzz8u/Zxja1M6bOI/9MJ46+Hm2LNiCV5O8vSnBxs2Ub3fI
-         jbug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689758924; x=1692350924;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TL4iPDnWm7LI7dooTGYVCYljPJYJzbf9kW0UMI/E3E8=;
-        b=GKFigHJepy//KJ8ZFqrmtBYYpz+Y/9hD06gLZ14v7wZHKCra2o1IW7E3KgIjWUILPd
-         ErQ0FxhqiHFR+9vpb9HANtv0SEceu2T1BtZrP+SbZAG2c1M1GX5mP0Hu/0XQJIr4wVwu
-         HUKc8wUxoq41Z52qqiuGm3gUacZO9ql+zon4uzSFx6kY5ZDmMAq4mSwB3wtQ3kQxyWDQ
-         wPF1OU7Jz69Okn3AWU8s6kJHK0pzupC3x0rY69wRks6ldl/az7jSlYq0ZhzXvo5ueEB2
-         QwJBNv6qEuURkfNAEgs/1y5cIwxsivumomujoFprnnXuMZ09bxEtK9uPZKPD4K0Ku/rl
-         uEdA==
-X-Gm-Message-State: ABy/qLbgPNpobWCJLQ5EeCttqfKYfqprCnwprLIn/C0eYuuu3YV8RndJ
-        WLd17IqVF2iuzbdqXHC/svoa1g==
-X-Google-Smtp-Source: APBJJlEvJxlIlo047VV+7wzcGwDG8LI2FzpITTuAkDeRT6GN74ABqTYEyn20L8ozGDwoQvHV0y9XxA==
-X-Received: by 2002:a05:6512:3d1b:b0:4fb:8a92:4fba with SMTP id d27-20020a0565123d1b00b004fb8a924fbamr15073243lfv.25.1689758924233;
-        Wed, 19 Jul 2023 02:28:44 -0700 (PDT)
-Received: from zh-lab-node-5.home ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id r18-20020adff112000000b0031435c2600esm4857213wro.79.2023.07.19.02.28.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jul 2023 02:28:43 -0700 (PDT)
-From:   Anton Protopopov <aspsk@isovalent.com>
-To:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Hou Tao <houtao1@huawei.com>, Joe Stringer <joe@isovalent.com>,
-        Anton Protopopov <aspsk@isovalent.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 bpf-next 4/4] bpf: allow any program to use the bpf_map_sum_elem_count kfunc
-Date:   Wed, 19 Jul 2023 09:29:52 +0000
-Message-Id: <20230719092952.41202-5-aspsk@isovalent.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230719092952.41202-1-aspsk@isovalent.com>
-References: <20230719092952.41202-1-aspsk@isovalent.com>
+        Wed, 19 Jul 2023 06:20:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C7B1BEF;
+        Wed, 19 Jul 2023 03:20:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3F0061373;
+        Wed, 19 Jul 2023 10:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 208FBC433C9;
+        Wed, 19 Jul 2023 10:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689762022;
+        bh=vf8HyJJMrc8y7a7IGPiDvWuMwVrymE8dAVACw2+VXLk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=dyPvgc7QPw92aTMqOMCFf0EVygxyojg/kI76uXPrVf0yXopJTOOw98lV/L4NSn+uM
+         aiHrCeLetjHDC6LImN7FStfe20PaCqqqoS5vEloINk9sRfZSte3N0XX1OYCNALUY3j
+         Gz0Iw9hAs5SHbKzfYEa6p5rwnh+Ouj1I5/ERYOFMuuN/FQDsIzZb/oB6VyV9spijCp
+         XW/3S7UgTEEU/RKI4atORf03n1N6zkbdHtttu7AAnaU3hxlZrji3382yGicDMzfeEa
+         CqRPbZPMRrkK65sdBeB6Xb47afXkp40enwisLphkCSfUCSv7hZrTFsDi03F2SF5o4v
+         dR6MxgixWCQtA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03177E21EFE;
+        Wed, 19 Jul 2023 10:20:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Subject: Re: [PATCH net-next 00/13] selftests: mptcp: format subtests results
+ in TAP
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168976202200.10961.989071815064643315.git-patchwork-notify@kernel.org>
+Date:   Wed, 19 Jul 2023 10:20:22 +0000
+References: <20230717-upstream-net-next-20230712-selftests-mptcp-subtests-v1-0-695127e0ad83@tessares.net>
+In-Reply-To: <20230717-upstream-net-next-20230712-selftests-mptcp-subtests-v1-0-695127e0ad83@tessares.net>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     mptcp@lists.linux.dev, martineau@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,78 +61,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Register the bpf_map_sum_elem_count func for all programs, and update the
-map_ptr subtest of the test_progs test to test the new functionality.
+Hello:
 
-The usage is allowed as long as the pointer to the map is trusted (when
-using tracing programs) or is a const pointer to map, as in the following
-example:
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-    struct {
-            __uint(type, BPF_MAP_TYPE_HASH);
-            ...
-    } hash SEC(".maps");
+On Mon, 17 Jul 2023 15:21:20 +0200 you wrote:
+> The current selftests infrastructure formats the results in TAP 13. This
+> version doesn't support subtests and only the end result of each
+> selftest is taken into account. It means that a single issue in a
+> subtest of a selftest containing multiple subtests forces the whole
+> selftest to be marked as failed. It also means that subtests results are
+> not tracked by CI executing selftests.
+> 
+> [...]
 
-    ...
+Here is the summary with links:
+  - [net-next,01/13] selftests: mptcp: connect: don't stop if error
+    https://git.kernel.org/netdev/net-next/c/edbc16c43b27
+  - [net-next,02/13] selftests: mptcp: userspace pm: don't stop if error
+    https://git.kernel.org/netdev/net-next/c/e141c1e8e4c1
+  - [net-next,03/13] selftests: mptcp: userspace_pm: fix shellcheck warnings
+    https://git.kernel.org/netdev/net-next/c/8320b1387a15
+  - [net-next,04/13] selftests: mptcp: userspace_pm: uniform results printing
+    https://git.kernel.org/netdev/net-next/c/e198ad759273
+  - [net-next,05/13] selftests: mptcp: userspace_pm: reduce dup code around printf
+    https://git.kernel.org/netdev/net-next/c/d8463d81652d
+  - [net-next,06/13] selftests: mptcp: lib: format subtests results in TAP
+    https://git.kernel.org/netdev/net-next/c/c4192967e62f
+  - [net-next,07/13] selftests: mptcp: connect: format subtests results in TAP
+    https://git.kernel.org/netdev/net-next/c/dd350f46e35e
+  - [net-next,08/13] selftests: mptcp: pm_netlink: format subtests results in TAP
+    https://git.kernel.org/netdev/net-next/c/d85555ac11f9
+  - [net-next,09/13] selftests: mptcp: join: format subtests results in TAP
+    https://git.kernel.org/netdev/net-next/c/7f117cd37c61
+  - [net-next,10/13] selftests: mptcp: diag: format subtests results in TAP
+    https://git.kernel.org/netdev/net-next/c/ce9902573652
+  - [net-next,11/13] selftests: mptcp: simult flows: format subtests results in TAP
+    https://git.kernel.org/netdev/net-next/c/675d99338e7a
+  - [net-next,12/13] selftests: mptcp: sockopt: format subtests results in TAP
+    https://git.kernel.org/netdev/net-next/c/9e86a297796b
+  - [net-next,13/13] selftests: mptcp: userspace_pm: format subtests results in TAP
+    https://git.kernel.org/netdev/net-next/c/f589234e1af0
 
-    static inline int some_bpf_prog(void)
-    {
-            struct bpf_map *map = (struct bpf_map *)&hash;
-            __s64 count;
-
-            count = bpf_map_sum_elem_count(map);
-
-            ...
-    }
-
-Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
----
- kernel/bpf/map_iter.c                            | 2 +-
- tools/testing/selftests/bpf/progs/map_ptr_kern.c | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-index 011adb41858e..6fc9dae9edc8 100644
---- a/kernel/bpf/map_iter.c
-+++ b/kernel/bpf/map_iter.c
-@@ -226,6 +226,6 @@ static const struct btf_kfunc_id_set bpf_map_iter_kfunc_set = {
- 
- static int init_subsystem(void)
- {
--	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_map_iter_kfunc_set);
-+	return register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &bpf_map_iter_kfunc_set);
- }
- late_initcall(init_subsystem);
-diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-index db388f593d0a..3325da17ec81 100644
---- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-+++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-@@ -103,6 +103,8 @@ struct {
- 	__type(value, __u32);
- } m_hash SEC(".maps");
- 
-+__s64 bpf_map_sum_elem_count(struct bpf_map *map) __ksym;
-+
- static inline int check_hash(void)
- {
- 	struct bpf_htab *hash = (struct bpf_htab *)&m_hash;
-@@ -115,6 +117,8 @@ static inline int check_hash(void)
- 	VERIFY(hash->elem_size == 64);
- 
- 	VERIFY(hash->count.counter == 0);
-+	VERIFY(bpf_map_sum_elem_count(map) == 0);
-+
- 	for (i = 0; i < HALF_ENTRIES; ++i) {
- 		const __u32 key = i;
- 		const __u32 val = 1;
-@@ -123,6 +127,7 @@ static inline int check_hash(void)
- 			return 0;
- 	}
- 	VERIFY(hash->count.counter == HALF_ENTRIES);
-+	VERIFY(bpf_map_sum_elem_count(map) == HALF_ENTRIES);
- 
- 	return 1;
- }
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
