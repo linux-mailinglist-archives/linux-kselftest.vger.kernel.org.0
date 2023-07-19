@@ -2,177 +2,341 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47597593EC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 13:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F0975948C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 13:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjGSLIj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 07:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        id S229765AbjGSLpL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 07:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjGSLIi (ORCPT
+        with ESMTP id S229530AbjGSLpK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 07:08:38 -0400
-Received: from MW2PR02CU002.outbound.protection.outlook.com (mail-westus2azon11013008.outbound.protection.outlook.com [52.101.49.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6A3189;
-        Wed, 19 Jul 2023 04:08:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LLUAOsUcqSDEltRDWGvbI/S2X9tHu9Uet6uaHBCVQZsEc+Tily6jW2K8COsrS0Iwa1oC7+D5KGQKs+r/Jmm3GnvcoxWiTEFJ/xk9YT0PgkQbblaP4jrg1C/PLf0yJe/XfG7I1WEzpf73RWqbV0eYHINsf+AA0M1Mk9Z+pQxL8h0+6AbHSyCdvczxsbky4O7tgPRHjJ2csUdO7jMh7g8ufzn0+8zkWKSVgPBsq+1YYRmI9IDCD34y4DBw6Qb2hFeTMD+DO1X5CaHPa/H9a6dscxuWD9CqdaAkGgzeWef4sdp7zOqBqa91rKMZPHIwCCDNr7uGZhG3dS+utKNj6b0Edg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vTXUsfINfUBP0+1ezcrKBRRVg/4g6hiUhZGWrUUdHrM=;
- b=c/bwImXmJ/BpBWcfKQUjwahCucxQGPmQLP1JiS7LpaWuQCeITAdfJmX7qE0fiG8MsNT7QQWaCEQb0y1jaWzneJeHW0o3n/Seal3fBV4KSbWrpwfOBaGM5xF+Y0rSUi0Gc2yAnF13WTd/J0EnNR80oi7mA6B5k35VAMyEYHqkmNudyLmOCC1X28cWIHANMtlRLN4ASUR0Sb5/ix6TJGvFZNbxSGybSDbZZ6hrRQJcYLc/3sH5FCk9k7SyKzJX/bWkuOU77lOKOCr4OLyRpBk0AR25aKhMv7U3UrQC+D6StYLf8VXJnUWaDrbC5zYVqMKnRTV/b8d9J2O0ZZFwpGj3EQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vTXUsfINfUBP0+1ezcrKBRRVg/4g6hiUhZGWrUUdHrM=;
- b=n6zyzhK7q+gyMoJ5GzZO6zDGOBuLlAr62LiSDXQshNIFYF110pdqkFUNftLUNA7tWsJQb4CjBDcne+rEJk0wsC1zAH/1cqQejDIC8kxQymbXg0UPeY29T8OmncO7U7xL0KoGMuUegmXA3iGWZIkCKa5jjPxv1fXbYEtodf6lHd8=
-Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
- by IA1PR05MB9455.namprd05.prod.outlook.com (2603:10b6:208:42d::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.32; Wed, 19 Jul
- 2023 11:08:34 +0000
-Received: from PH0PR05MB8703.namprd05.prod.outlook.com
- ([fe80::b5d8:98b9:6ca7:94f0]) by PH0PR05MB8703.namprd05.prod.outlook.com
- ([fe80::b5d8:98b9:6ca7:94f0%6]) with mapi id 15.20.6609.024; Wed, 19 Jul 2023
- 11:08:34 +0000
-From:   Ajay Kaher <akaher@vmware.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     "shuah@kernel.org" <shuah@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        Ching-lin Yu <chinglinyu@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "lkp@intel.com" <lkp@intel.com>, Nadav Amit <namit@vmware.com>,
-        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Tapas Kundu <tkundu@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>
-Subject: Re: [PATCH v4 09/10] eventfs: Move tracing/events to eventfs
-Thread-Topic: [PATCH v4 09/10] eventfs: Move tracing/events to eventfs
-Thread-Index: AQHZtX3u6uIzVMEMYUG+AXdVVQvfpK+5wywAgAc0gQA=
-Date:   Wed, 19 Jul 2023 11:08:34 +0000
-Message-ID: <7A28FE3A-BE2F-4981-A0B1-9222BBA31F59@vmware.com>
-References: <1689248004-8158-1-git-send-email-akaher@vmware.com>
- <1689248004-8158-10-git-send-email-akaher@vmware.com>
- <20230714170638.09ef0c76@gandalf.local.home>
-In-Reply-To: <20230714170638.09ef0c76@gandalf.local.home>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3731.600.7)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR05MB8703:EE_|IA1PR05MB9455:EE_
-x-ms-office365-filtering-correlation-id: 2cb07659-3bd9-4d1a-0d74-08db88487e5d
-x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ShrGqTCSuVVryWk2fdBGw2HoSFq3ywsGI4PulrvxuWGJRgy57mEtNj+HjshWx7+CKTWyJkyKaihuxorbxUBlFx3slqoMscqAq7bBR9YOMLZMrrlqmIKFQLTvylEvzeOjZ6CqYVPT5zD8X0VUKksRfbxIzgfMQkBTNBEC62okJOh2vUB5lzGn8mMSvbV4LYglvoIJNHNNge3X3+OdHwUsfI5XHlH1FRBEeRW7+UP1CuEQqKGUJNVJ35DqwiDeKP814hVIsyVPDfT6GYhvhrT2x3CWWtg0iRU35uKcbJiKSsGmEncmib0M8SjdVK1y+GcES+uIzpsyMQd706cGfOAkru6Jlmj36uuc1yijSCxnMqXKTvAUlAbC/GYjoYZOGdu/iqJrwXnl7JH8nA3+06zSrjLvZ8tD+R0Mlu+5l3Ek++BxR931nh1SDvQ8p0FmhZmVj5kjB/fOMKnWpC/X4epgwHclbhXi2pNc1a2PQL0DKHkZIvqqqi4b+hfgH2pfpQZxorVePsYoZxr7ILSdrPn8Gj/BPxLqvSwFCATNJoH4TkUvYqjal78Uinei6fth6fQitFqO8SjPLHz9QAI8IOMqQDUvfo380zX67njdSvq2yTYfBBobk37A07Ww5UVTcH6aT781tPJb0bBhdI5r/IBYUgvJoR5IocYd0Z2DTy/pb59bfs4oRC3RklGm01aMTKoWJ0iD/Ankcw1PLCxBbqnoxw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(376002)(346002)(366004)(396003)(451199021)(6512007)(41300700001)(7416002)(8676002)(66446008)(66476007)(66946007)(8936002)(66556008)(6916009)(2906002)(6486002)(54906003)(91956017)(76116006)(122000001)(86362001)(4326008)(316002)(64756008)(36756003)(5660300002)(2616005)(38100700002)(186003)(26005)(6506007)(71200400001)(53546011)(107886003)(33656002)(38070700005)(478600001)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QTMzeEJ5QzNDMTBzNWFCKzhVbyt3M1E4S1dzMFpoZXV0bVoxTkR6N0lmVE83?=
- =?utf-8?B?S1JuMVFaVnNjM3FwRGJRc1Z4VkdqNjV4K054dWw2ejJucWxzaUpGZHB5QWFT?=
- =?utf-8?B?WEhOTHcyb2hWOHlvQlVTdGFISk5uN2lIQ1JWWkdGV3IyUHRCRUlHQVNHckc2?=
- =?utf-8?B?dGwycjYxbGxYV2tQak1lVFdNVStiR2ZUUjRhdk5XV2lZa0UrbjVqcWJ1aldX?=
- =?utf-8?B?aE00ZWNJdnQrY0U2RGh0VGpUZi85THFBakoxdHhQc0ZCU29ndG1EVHdweWNu?=
- =?utf-8?B?RjFXbC93WDd1VmwvYnRreGE4Z1pKUFU5KzR5QzZlRjQyUnJmR0ZnUXA2QnIx?=
- =?utf-8?B?QmlSS2NzRmxzR0lWUDJpSkJvb085T0tHdlc0ZnBWbWhWWWFRSk1Kd25JYnBI?=
- =?utf-8?B?VmE5eTRuazJTdmxYNjdUZkRGNHd2RU9rKzhmR3RnVHpzbTErc0dNWkQwYnF0?=
- =?utf-8?B?NDN0TzlLSFVjbGhCSHV2RzVES3pSTVc0UzJPaXJCQVVQTkhoU0pDVWtHRXJH?=
- =?utf-8?B?ZTdjSW10RWNGY1VHbklEbjNuOERwTHFmK3g4ZFNEOEd1eUg4enhSSERFOUh1?=
- =?utf-8?B?NWpLamFmZ3NlNGZtK1pyVEY5VVhsMEMrSFpIeE42NE5aK3VVQW9HTlFvRGxL?=
- =?utf-8?B?N0dWMEFacDk3Ui9ENGY3ZjBWTkplcnZKd2tsTGtUZEJERnc3NG9WdGNyNSsx?=
- =?utf-8?B?QzRYK0Z6SnFwZ2hCcUZMc2twejQzOHRPcmlKUmpzQlNjUXhBZGtoVGllaWpa?=
- =?utf-8?B?OEhwTEZNejlCOCt4Rkc5VXY3M3FacnJWeWcxSGFRS1Y2VUVnK0N6WlVib282?=
- =?utf-8?B?VjJvSGNmSkkrQUtTS082LzBLTGlKbnlHWWNOTGxUQnduTTJGQUlMRHNXbkFH?=
- =?utf-8?B?U2RlSzEyeGpvaDIrUEpJUC9aUSs2YXA3T1lzcGN5UFdIQVRPSUtGenpxZXpX?=
- =?utf-8?B?Um01VzhZWG5HaHlBM0U3dlJLa2o0L1JDVGVTMlljK09DOHhGVW1NNjN4Y1Zz?=
- =?utf-8?B?YmF2MlNVcnRKRVlzblpldEoyMjY4WmhiSGhVNXFGdyt6clRzeTJZc0dNci8w?=
- =?utf-8?B?Zjdvbi9Tbkl2ckR5Z2dSMDkzZHhnM1Nta0lYNmEyeGlxNDJPb1d4QTZ0RElY?=
- =?utf-8?B?NkQ5NVFOZGZhR0h5OEd4NlpPcGluZ25Lc0R3d3RUem4wbHpkMk0xOG9KbWI1?=
- =?utf-8?B?ZnBGZzNUUjlKc3M1ZGhVRmxPdnF3MDJFaTVrditGZzEwNHI4Y3Q5eTM5NTc2?=
- =?utf-8?B?aHVoT1BmRnlBUjE4L3ZZaURuZUkzMnRwRWprTmNvdnRNNmJOb1FPUWc3MGNB?=
- =?utf-8?B?TWhzTjZjOW5ibG9ZbG1qUHpGckcydktNSmJPQjMxbk1pb1JvbXpuaHZueGYy?=
- =?utf-8?B?VTVyY0ErNDBoSVZET3h2R1duc0FFMUNhb1pqN282WnVXcjlLbnNQRGxJcFpn?=
- =?utf-8?B?R2w5WGVQWGkzWFpaWk9CSlRnSlVkVFdJWlFXK0J1aEpzMkdwSGVKdmoyZ1l4?=
- =?utf-8?B?WHFOUStGelRMMVBWYlVPWDFMN09LcDk4aE5wRmJHZmRxMFhCRHFoSmdGc3BC?=
- =?utf-8?B?dE1SUjc3b2laaFdzc3JtMFVkSmhicTBqaEJIWHlmWlJSVW9ybnNMSlhIa3ZD?=
- =?utf-8?B?N2RwRG9sQ3IyZ2tLNkRzWjhUM0JzVitka2xMakpNbjVENno0aGFyMlpUNmdo?=
- =?utf-8?B?U2xyNllEcDF2ZmhQT1JRQzYvNWIvdU1FTTlhTEdFcW9UdXA5VWo3bUFEQlVt?=
- =?utf-8?B?QXhoaGI2cDFNKzNNeFovVEtaU1JoS0tnOUdMQ21YZzVaZGtPc0RjRHBwOGdl?=
- =?utf-8?B?MUhhOFJSZ1BuU1Z2UjFYN0F6VW85ckRSTDVsNmsvREl5TUk3N1ArN3pEdmU2?=
- =?utf-8?B?MlZ4OVp0Z3h1aWRKeWFRNWdoYkVWOVZmcVNHOXNMRjJ3UkNkSlM5TGtza08r?=
- =?utf-8?B?V1lRRjY2QW5LSFFRRTVNYmk0Zk9nT3RqRG10N0lFYi9SSWozNmxFOWY2aytu?=
- =?utf-8?B?Y1JGNzNzUW5iejJRL2x3eTJLNEtnNWd6V1BCZnBlRTNkZXJOL1BWRVg0WWJl?=
- =?utf-8?B?K01NTGlLbSt2WTBnZzdtTjZiM1BMWU5FQkhmcGhEaG5kaE9ZWjlvcGl4dU1p?=
- =?utf-8?Q?jcdX2RD+d8S8tE8xGHviUyx+3?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E30C63D29793B24397A178CD61DE9511@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 19 Jul 2023 07:45:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FC1D3;
+        Wed, 19 Jul 2023 04:45:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC65361646;
+        Wed, 19 Jul 2023 11:45:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F206C433C8;
+        Wed, 19 Jul 2023 11:44:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689767108;
+        bh=X193VsTHxd/qDbY1iwu9zyDcvx+RDZWX3xtpuMtgrvk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CZgrXNM7PXs5djMhW97w3CedauBAIO7tJp4gD0qIPDeHSm5dCuZK/mfLTFNwLEbfA
+         u/Sds+3iynFpc+ngWUYxVnc+zFYD4DzN/L5LLVP+ghbUyAA59K78pPPozod4KVG8fP
+         A65lkT8yWYMBcq58Bc4M14IdRbh71Sq/FHB/SgH+5Y8jPFLgRm4YgYWHi/qxINYV5Y
+         ToDcL0Z/YLJa/T2Deryyl39XzhIjmHJvCPhvLpPjvTe+NTZneejIxNLFmZlSs3o54Y
+         T0vek5G+sRtvwgOfUrlpDVgvPmcjy2C8ccH9pVBAZP7wlMgP+WYBf3NTIL35kxcib0
+         V8zRn5/OT1vyQ==
+Date:   Wed, 19 Jul 2023 14:44:37 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 04/35] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <20230719114437.GJ1901145@kernel.org>
+References: <20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org>
+ <20230716-arm64-gcs-v1-4-bf567f93bba6@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2cb07659-3bd9-4d1a-0d74-08db88487e5d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2023 11:08:34.1636
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ArJSEO0tvSNifyGguAm7f8XSA2ylsH4Q+dK7WYdERk8J1yq4UgvKCJEBqLUN1kkfFBY6vOlIqzWZm2IETdXrTg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR05MB9455
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230716-arm64-gcs-v1-4-bf567f93bba6@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQo+IE9uIDE1LUp1bC0yMDIzLCBhdCAyOjM2IEFNLCBTdGV2ZW4gUm9zdGVkdCA8cm9zdGVkdEBn
-b29kbWlzLm9yZz4gd3JvdGU6DQo+IA0KPiAhISBFeHRlcm5hbCBFbWFpbA0KPiANCj4gT24gVGh1
-LCAxMyBKdWwgMjAyMyAxNzowMzoyMyArMDUzMA0KPiBBamF5IEthaGVyIDxha2FoZXJAdm13YXJl
-LmNvbT4gd3JvdGU6DQo+IA0KPj4gVGlsbCBub3cgL3N5cy9rZXJuZWwvZGVidWcvdHJhY2luZy9l
-dmVudHMgaXMgYSBwYXJ0IG9mIHRyYWNlZnMsDQo+PiB3aXRoLWluIHRoaXMgcGF0Y2ggY3JlYXRp
-bmcgJ2V2ZW50cycgYW5kIGl0J3Mgc3ViLWRpciBhcyBldmVudGZzLg0KPj4gQmFzaWNhbGx5IHJl
-cGxhY2luZyB0cmFjZWZzIGNhbGxzIHdpdGggZXZlbnRmcyBjYWxscyBmb3IgJ2V2ZW50cycuDQo+
-IA0KPiBbIG5vdGU6IC9zeXMva2VybmVsL2RlYnVnL3RyYWNpbmcgaXMgZGVwcmVjYXRlZC4gUGxl
-YXNlIGF2b2lkIHJlZmVyZW5jaW5nIGl0LiBdDQo+IA0KPiBVcCB1bnRpbCBub3csIC9zeXMva2Vy
-bmVsL3RyYWNpbmcvZXZlbnRzIHdhcyBubyBkaWZmZXJlbnQgdGhhbiBhbnkgb3RoZXINCj4gcGFy
-dCBvZiB0cmFjZWZzLiBUaGUgZmlsZXMgYW5kIGRpcmVjdG9yaWVzIHdpdGhpbiB0aGUgZXZlbnRz
-IGRpcmVjdG9yeSB3YXMNCj4gY3JlYXRlZCB3aGVuIHRoZSB0cmFjZWZzIHdhcyBtb3VudGVkLCBh
-bmQgYWxzbyBjcmVhdGVkIGZvciB0aGUgaW5zdGFuY2VzIGluDQo+IC9zeXMva2VybmVsL3RyYWNp
-bmcvaW5zdGFuY2VzLzxpbnN0YW5jZT4vZXZlbnRzLiBNb3N0IG9mIHRoZXNlIGZpbGVzIGFuZA0K
-PiBkaXJlY3RvcmllcyB3aWxsIG5ldmVyIGJlIHJlZmVyZW5jZWQuIFNpbmNlIHRoZXJlIGFyZSB0
-aG91c2FuZHMgb2YgdGhlc2UNCj4gZmlsZXMgYW5kIGRpcmVjdG9yaWVzIHRoZXkgc3BlbmQgdGhl
-aXIgdGltZSB3YXN0aW5nIHByZWNpb3VzIG1lbW9yeQ0KPiByZXNvdXJjZXMuDQo+IA0KPiBNb3Zl
-IHRoZSAiZXZlbnRzIiBkaXJlY3RvcnkgdG8gdGhlIG5ldyBldmVudGZzLiBUaGUgZXZlbnRmcyB3
-aWxsIHRha2UgdGhlDQo+IG1ldGEgZGF0YSBvZiB0aGUgZXZlbnRzIHRoYXQgdGhleSByZXByZXNl
-bnQgYW5kIHN0b3JlIHRoYXQuIFdoZW4gdGhlIGZpbGVzDQo+IGluIHRoZSBldmVudHMgZGlyZWN0
-b3J5IGFyZSByZWZlcmVuY2VkLCB0aGUgZGVudHJ5IGFuZCBpbm9kZXMgdG8gcmVwcmVzZW50DQo+
-IHRoZW0gYXJlIHRoZW4gY3JlYXRlZC4gV2hlbiB0aGUgZmlsZXMgYXJlIG5vIGxvbmdlciByZWZl
-cmVuY2VkLCB0aGV5IGFyZQ0KPiBmcmVlZC4gVGhpcyBzYXZlcyB0aGUgcHJlY2lvdXMgbWVtb3J5
-IHJlc291cmNlcyB0aGF0IHdlcmUgd2FzdGVkIG9uIHRoZXNlDQo+IHNlbGRvbSByZWZlcmVuY2Vk
-IGRlbnRyaWVzIGFuZCBpbm9kZXMuDQo+IA0KDQpTb21lIGNvcnJlY3Rpb24gaGVyZToNCg0KVGhl
-IGRlbnRyeSBhbmQgaW5vZGVzIHRvIHJlcHJlc2VudCBldmVudGZzIGZpbGVzIG9yIGRpcmVjdG9y
-aWVzIHdpbGwgYmUgZnJlZWQgb25seQ0KZHVyaW5nIGRyb3AgY2FjaGUgb3IgZXZlbnRmc19yZW1v
-dmUoKS4gVGhpcyBpcyBzYW1lIGFzIHdpdGggb3RoZXIgZHluYW1pYyBmcw0KZS5nLiBzeXNmcyBv
-ciBwcm9jZnMuDQoNCldlIGNhbiBhY2hpZXZlIOKAmGZyZWUgdGhlIGRlbnRyeSBhbmQgaW5vZGVz
-IGlmIG5vIGxvbmdlciByZXF1aXJlc+KAmSB1c2luZw0KY3JlYXRlX2ZpbGUoKS0+ZF9pbnN0YW50
-aWF0ZV9hbm9uKCkgaW5zdGVhZCBjcmVhdGVfZmlsZSgpLT5kX2luc3RhbnRpYXRlKCksIGJ1dCBJ
-IGZhY2VkIA0Kc29tZSBpc3N1ZXMuIFRoaXMgb3B0aW1pc2F0aW9uIHdlIG1heSBjb25zaWRlciBp
-biBmdXR1cmUgYWxvbmcgd2l0aCBzeXNmcywgcHJvY2ZzLg0KDQotQWpheQ0KDQo=
+On Sun, Jul 16, 2023 at 10:51:00PM +0100, Mark Brown wrote:
+> Add some documentation of the userspace ABI for Guarded Control Stacks.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  Documentation/arch/arm64/gcs.rst   | 216 +++++++++++++++++++++++++++++++++++++
+>  Documentation/arch/arm64/index.rst |   1 +
+>  2 files changed, 217 insertions(+)
+> 
+> diff --git a/Documentation/arch/arm64/gcs.rst b/Documentation/arch/arm64/gcs.rst
+> new file mode 100644
+> index 000000000000..27ba72d27952
+> --- /dev/null
+> +++ b/Documentation/arch/arm64/gcs.rst
+> @@ -0,0 +1,216 @@
+> +===============================================
+> +Guarded Control Stack support for AArch64 Linux
+> +===============================================
+> +
+> +This document outlines briefly the interface provided to userspace by Linux in
+> +order to support use of the ARM Guarded Control Stack (GCS) feature.
+> +
+> +This is an outline of the most important features and issues only and not
+> +intended to be exhaustive.
+> +
+> +
+> +
+> +1.  General
+> +-----------
+> +
+> +* GCS is an architecture feature intended to provide greater protection
+> +  against return oriented programming (ROP) attacks and to simplify the
+> +  implementation of features that need to collect stack traces such as
+> +  profiling.
+> +
+> +* When GCS is enabled a separate guarded control stack is maintained by the
+> +  PE which is writeable only through specific GCS operations.  This
+> +  stores the call stack only, when a procedure call instruction is
+> +  performed the current PC is pushed onto the GCS and on RET the
+> +  address in the LR is verified against that on the top of the GCS.
+> +
+> +* When active current GCS pointer is stored in the system register
+> +  GCSPR_EL0.  This is readable by userspace but can only be updated
+> +  via specific GCS instructions.
+> +
+> +* The architecture provides instructions for switching between guarded
+> +  control stacks with checks to ensure that the new stack is a valid
+> +  target for switching.
+> +
+> +* The functionality of GCS is similar to that provided by the x86 Shadow
+> +  Stack feature, due to sharing of userspace interfaces the ABI refers to
+> +  shadow stacks rather than GCS.
+> +
+> +* Support for GCS is reported to userspace via HWCAP2_GCS in the aux vector
+> +  AT_HWCAP2 entry.
+> +
+> +* GCS is enabled per thread.  While there is support for disabling GCS
+> +  at runtime this should be done with great care.
+> +
+> +* GCS memory access faults are reported as normal memory access faults.
+> +
+> +* GCS specific errors (those reported with EC 0x2d) will be reported as
+> +  SIGSEGV with a si_code of SEGV_CPERR (control protection error).
+> +
+> +* GCS is supported only for AArch64.
+> +
+> +* On systems where GCS is supported GCSPR_EL0 is always readable by EL0
+> +  regardless of the GCS configuration for the thread.
+> +
+> +* The architecture supports enabling GCS without verifying that return values
+> +  in LR match those in the GCS, the LR will be ignored.  This is not supported
+> +  by Linux.
+> +
+> +* EL0 GCS entries with bit 63 set are reserved for use, one such use is defined
+> +  below for signals and should be ignored when parsing the stack if not
+> +  understood.
+> +
+> +
+> +2.  Enabling and disabling Guarded Control Stacks
+> +-------------------------------------------------
+> +
+> +* GCS is enabled and disabled for a thread via the PR_SET_SHADOW_STACK_STATUS
+> +  prctl(), this takes a single flags argument specifying which GCS features
+> +  should be used.
+> +
+> +* When set PR_SHADOW_STACK_ENABLE flag allocates a Guarded Control Stack for
+
+                                                 'for' here looks excessive ^
+
+> +  and enables GCS for the thread, enabling the functionality controlled by
+> +  GCSPRE0_EL1.{nTR, RVCHKEN, PCRSEL}.
+> +
+> +* When set the PR_SHADOW_STACK_PUSH flag enables the functionality controlled
+> +  by GCSCRE0_EL1.PUSHMEn, allowing explicit GCS push and pops.
+> +
+> +* When set the PR_SHADOW_STACK_WRITE flag enables the functionality controlled
+> +  by GCSCRE0_EL1.STREn, allowing explicit stores to the Guarded Control Stack.
+> +
+> +* When set the PR_SHADOW_STACK_LOCK flag prevents any further configuration of
+> +  the GCS settings for the thread, further attempts to configure GCS will
+> +  return -EBUSY.
+> +
+> +* Any unknown flags will cause PR_SET_SHADOW_STACK_STATUS to return -EINVAL.
+> +
+> +* PR_SET_SHADOW_STACK_STATUS affects only the thread the called it, any
+> +  other running threads will be unaffected.
+> +
+> +* New threads inherit the GCS configuration of the thread that created them.
+> +
+> +* GCS is disabled on exec().
+> +
+> +* The current GCS configuration for a thread may be read with the
+> +  PR_GET_SHADOW_STACK_STATUS prctl(), this returns the same flags that
+> +  are passed to PR_SET_SHADOW_STACK_STATUS.
+> +
+> +* If GCS is disabled for a thread after having previously been enabled then
+> +  the stack will remain allocated for the lifetime of the thread.  At present
+> +  any attempt to reenable GCS for the thread will be rejected, this may be
+> +  revisited in future.
+> +
+> +* It should be noted that since enabling GCS will result in GCS becoming
+> +  active immediately it is not normally possible to return from the function
+> +  that invoked the prctl() that enabled GCS.  It is expected that the normal
+> +  usage will be that GCS is enabled very early in execution of a program.
+> +
+> +
+> +
+> +3.  Allocation of Guarded Control Stacks
+> +----------------------------------------
+> +
+> +* When GCS is enabled for a thread a new Guarded Control Stack will be
+> +  allocated for it of size RLIMIT_STACK / 2 or 2 gigabytes, whichever is
+> +  smaller.
+> +
+> +* When a new thread is created by a thread which has GCS enabled then a
+> +  new Guarded Control Stack will be allocated for the new thread with
+> +  half the size of the standard stack.
+> +
+> +* When a stack is allocated by enabling GCS or during thread creation then
+> +  the top 8 bytes of the stack will be initialised to 0 and GCSPR_EL0 will
+> +  be set to point to the address of this 0 value, this can be used to
+> +  detect the top of the stack.
+> +
+> +* Additional Guarded Control Stacks can be allocated using the
+> +  map_shadow_stack() system call.
+> +
+> +* Stacks allocated using map_shadow_stack() will have the top 8 bytes
+> +  set to 0 and the 8 bytes below that initialised with an architecturally
+> +  valid GCS cap value, this allows switching to these stacks using the
+> +  stack switch instructions provided by the architecture.
+> +
+> +* When GCS is disabled for a thread the Guarded Control Stack initially
+> +  allocated for that thread will be freed.  Note carefully that if the
+> +  stack has been switched this may not be the stack currently in use by
+> +  the thread.
+> +
+> +
+> +4.  Signal handling
+> +--------------------
+> +
+> +* A new signal frame record gcs_context encodes the current GCS mode and
+> +  pointer for the interrupted context on signal delivery.  This will always
+> +  be present on systems that support GCS.
+> +
+> +* The record contains a flag field which reports the current GCS configuration
+> +  for the interrupted context as PR_GET_SHADOW_STACK_STATUS would.
+> +
+> +* The signal handler is run with the same GCS configuration as the interrupted
+> +  context.
+> +
+> +* When GCS is enabled for the interrupted thread a signal handling specific
+> +  GCS cap token will be written to the GCS, this is an architectural GCS cap
+> +  token with bit 63 set.  The GCSPR_EL0 reported in the signal frame will
+> +  point to this cap token.
+> +
+> +* The signal handler will use the same GCS as the interrupted context.
+> +
+> +* When GCS is enabled on signal entry a frame with the address of the signal
+> +  return handler will be pushed onto the GCS, allowing return from the signal
+> +  handler via RET as normal.  This will not be reported in the gcs_context in
+> +  the signal frame.
+> +
+> +
+> +5.  Signal return
+> +-----------------
+> +
+> +When returning from a signal handler:
+> +
+> +* If there is a gcs_context record in the signal frame then the GCS flags
+> +  and GCSPR_EL0 will be restored from that context prior to further
+> +  validation.
+> +
+> +* If there is no gcs_context record in the signal frame then the GCS
+> +  configuration will be unchanged.
+> +
+> +* If GCS is enabled on return from a signal handler then GCSPR_EL0 must
+> +  point to a valid GCS signal cap record, this will be popped from the
+> +  GCS prior to signal return.
+> +
+> +* If the GCS configuration is locked when returning from a signal then any
+> +  attempt to change the GCS configuration will be treated as an error.  This
+> +  is true even if GCS was not enabled prior to signal entry.
+> +
+> +* GCS may be disabled via signal return but any attempt to enable GCS via
+> +  signal return will be rejected.
+> +
+> +
+> +7.  ptrace extensions
+> +---------------------
+> +
+> +* A new regset NT_ARM_GCS is defined for use with PTRACE_GETREGSET and
+> +  PTRACE_SETREGSET.
+> +
+> +* Due to the complexity surrounding allocation and deallocation of stakcs and
+> +  lack of practical application changes to the GCS configuration via ptrace
+> +  are not supported.
+
+On x86 CRIU needed to be able to temporarily unlock shadow stack features
+to recreate the shadow stack of the thread being restored. I presume CRIU
+will need something like that on arm64 as well.
+
+> +
+> +
+> +
+> +8.  ELF coredump extensions
+> +---------------------------
+> +
+> +* NT_ARM_GCS notes will be added to each coredump for each thread of the
+> +  dumped process.  The contents will be equivalent to the data that would
+> +  have been read if a PTRACE_GETREGSET of the corresponding type were
+> +  executed for each thread when the coredump was generated.
+> +
+> +
+> +
+> +9.  /proc extensions
+> +--------------------
+> +
+> +* Guarded Control Stack pages will include "ss" in their VmFlags in
+> +  /proc/<pid>/smaps.
+> diff --git a/Documentation/arch/arm64/index.rst b/Documentation/arch/arm64/index.rst
+> index d08e924204bf..dcf3ee3eb8c0 100644
+> --- a/Documentation/arch/arm64/index.rst
+> +++ b/Documentation/arch/arm64/index.rst
+> @@ -14,6 +14,7 @@ ARM64 Architecture
+>      booting
+>      cpu-feature-registers
+>      elf_hwcaps
+> +    gcs
+>      hugetlbpage
+>      kdump
+>      legacy_instructions
+> 
+> -- 
+> 2.30.2
+> 
+> 
+
+-- 
+Sincerely yours,
+Mike.
