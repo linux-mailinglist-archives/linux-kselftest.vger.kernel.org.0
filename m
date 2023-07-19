@@ -2,182 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5645B759933
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 17:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EA9759BB9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jul 2023 19:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjGSPLO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jul 2023 11:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S230440AbjGSRA0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jul 2023 13:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjGSPLN (ORCPT
+        with ESMTP id S230041AbjGSRAZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jul 2023 11:11:13 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4543612F
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 08:11:11 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-440afc96271so2490345137.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 08:11:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689779470; x=1690384270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=13/AwMP/8TITI/rLzUID1fTbfxpoHhwYclFZUG18RHI=;
-        b=W9ugJhbZzcOHBcK1ryGKNlMvfaR4eWFGClQmFa2DEuQjWBhQ6kKehpd1BqB++U5hgw
-         3TWXC4fD7TCBkoX1R5UZTE2yJt6ER7ceOa34DwcVaieTCFsfXsMO7ebD1kKBgUVll/il
-         T5l+Tk+DvcinG+V75/JSeoIsCFQ8k6ObjIad/1StTlViDKPCllGsT3b32oMukAxIX4KN
-         BOqJKyr8il3GkecRMqZu5HqHgWgyu4a5TW8UHq9CwM7tE1s4Y8N0BkYwnbOJf9wDlic2
-         T4I8G+BDJNbgq81Uhd6KHKUJLUl1eRoasPEOq2yCOXKm9K6XKz8GISCzVknnORxoJzmR
-         xWFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689779470; x=1690384270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=13/AwMP/8TITI/rLzUID1fTbfxpoHhwYclFZUG18RHI=;
-        b=in2PzSHY0SsggI8lrjbywFlYRpJF0dl/0fHpBE+AumZ4u0k6+Sg/OtaL+RypMIiLZo
-         kB69ubjp+1i+J86T8y+vffsUZlbH20Es6ckCynqYruhem/S6+Epq9RG0bhVsPVCuHg42
-         D99ylVZI47941bneB/Bvd2lxXB8H/YLSCO/ms+HQeboThhDqw14DRdmSg5YFp/o/sYX2
-         8SYlxBDhavOkajMlbdQA2kSW+biq+sfDnNjTs/zXz1utJbt+gKkE2gxAxwhl6R3CO/s/
-         HAVuy0AIhSFgJKP1KNT9kEV2sdS+YwK04bvfxcTQiQLjYEtn9VejWauHZPvVHFxiJhG4
-         Glwg==
-X-Gm-Message-State: ABy/qLZT9sg2dyVyFqentaHCetlbjrgZEAHmZv8YYzlaXhI3LPOCPXwS
-        Al0gmwP4c5jBCKbsLJKC1QWK14mv37wnhvJWkHgmJg==
-X-Google-Smtp-Source: APBJJlGxQbcOy4ic7AA7A/45OA6HThArnJbsgb00HIZBBJVKBGnUSyKbwhuM+G0qPaAvZZrzdRo6tS+WQiuUsv4/hcs=
-X-Received: by 2002:a67:f60d:0:b0:443:5d85:99f3 with SMTP id
- k13-20020a67f60d000000b004435d8599f3mr10644906vso.7.1689779470214; Wed, 19
- Jul 2023 08:11:10 -0700 (PDT)
+        Wed, 19 Jul 2023 13:00:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4831733;
+        Wed, 19 Jul 2023 10:00:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99298617AF;
+        Wed, 19 Jul 2023 17:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BDA02C433C9;
+        Wed, 19 Jul 2023 17:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689786022;
+        bh=jDn5IGHs7brrjKaFQgz63KV3eL86oT3xJ5oW4yJx5qg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=vOb4sVElmfjTaUnC9i43y3lWwIrGj82pz3mD3n2TmGJ9Pqp+DWvlwObmgTp0d23jr
+         nmoqi+c/4J9g50qgosDegUBmM59VXC7ye/mGQZ/hZ1leAmpkGSYqNpfpRJdH7b45jy
+         HCbtuSLJDhTsZKDQSXzbQ91Bx46xhzApX3WRt4cK5kkp1NVOr5HuXgiGtkAjuEnLzc
+         RYHsXY0K3/wq2hnvmytR1gam7UoUfFQ4sMGuIdE7Msd980MfEdZ2+GfLET4GGrmQmG
+         hYUY45pN5IC1YjFD289Aed2wOSZ/CkQlZ8zTTZuxtMZl+V0mrqRGeVaBMHZfqzW6Hf
+         eAQj/nme+e4yw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9787FE22AE1;
+        Wed, 19 Jul 2023 17:00:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230710223304.1174642-1-almasrymina@google.com>
- <12393cd2-4b09-4956-fff0-93ef3929ee37@kernel.org> <CAHS8izNPTwtk+zN7XYt-+ycpT+47LMcRrYXYh=suTXCZQ6-rVQ@mail.gmail.com>
- <ZLbUpdNYvyvkD27P@ziepe.ca> <20230718111508.6f0b9a83@kernel.org>
- <35f3ec37-11fe-19c8-9d6f-ae5a789843cb@kernel.org> <20230718112940.2c126677@kernel.org>
- <eb34f812-a866-a1a3-9f9b-7d5054d17609@kernel.org> <20230718154503.0421b4cd@kernel.org>
-In-Reply-To: <20230718154503.0421b4cd@kernel.org>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Wed, 19 Jul 2023 08:10:58 -0700
-Message-ID: <CAHS8izPORN=r2-hzYSgN4s_Aoo2dnwoJXrU5Hu=43sb8zsWyhQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/10] Device Memory TCP
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Ahern <dsahern@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Andy Lutomirski <luto@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 bpf-next 0/4] allow bpf_map_sum_elem_count for all program
+ types
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168978602261.22183.7368489912510631673.git-patchwork-notify@kernel.org>
+Date:   Wed, 19 Jul 2023 17:00:22 +0000
+References: <20230719092952.41202-1-aspsk@isovalent.com>
+In-Reply-To: <20230719092952.41202-1-aspsk@isovalent.com>
+To:     Anton Protopopov <aspsk@isovalent.com>
+Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        shuah@kernel.org, houtao1@huawei.com, joe@isovalent.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 3:45=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Tue, 18 Jul 2023 16:35:17 -0600 David Ahern wrote:
-> > I do not see how 1 RSS context (or more specifically a h/w Rx queue) ca=
-n
-> > be used properly with memory from different processes (or dma-buf
-> > references).
+Hello:
 
-Right, my experience with dma-bufs from GPUs are that they're
-allocated from the userspace and owned by the process that allocated
-the backing GPU memory and generated the dma-buf from it. I.e., we're
-limited to 1 dma-buf per RX queue. If we enable binding multiple
-dma-bufs to the same RX queue, we have a problem, because AFAIU the
-NIC can't decide which dma-buf to put the packet into (it hasn't
-parsed the packet's destination yet).
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> > When the process dies, that memory needs to be flushed from
-> > the H/W queues. Queues with interlaced submissions make that more
-> > complicated.
->
+On Wed, 19 Jul 2023 09:29:48 +0000 you wrote:
+> This series is a follow up to the recent change [1] which added
+> per-cpu insert/delete statistics for maps. The bpf_map_sum_elem_count
+> kfunc presented in the original series was only available to tracing
+> programs, so let's make it available to all.
+> 
+> The first patch makes types listed in the reg2btf_ids[] array to be
+> considered trusted by kfuncs.
+> 
+> [...]
 
-When the process dies, do we really want to flush the memory from the
-hardware queues? The drivers I looked at don't seem to have a function
-to flush the rx queues alone, they usually do an entire driver reset
-to achieve that. Not sure if that's just convenience or there is some
-technical limitation there. Do we really want  to trigger a driver
-reset at the event a userspace process crashes?
+Here is the summary with links:
+  - [v2,bpf-next,1/4] bpf: consider types listed in reg2btf_ids as trusted
+    https://git.kernel.org/bpf/bpf-next/c/831deb2976de
+  - [v2,bpf-next,2/4] bpf: consider CONST_PTR_TO_MAP as trusted pointer to struct bpf_map
+    https://git.kernel.org/bpf/bpf-next/c/5ba190c29cf9
+  - [v2,bpf-next,3/4] bpf: make an argument const in the bpf_map_sum_elem_count kfunc
+    https://git.kernel.org/bpf/bpf-next/c/9c29804961c1
+  - [v2,bpf-next,4/4] bpf: allow any program to use the bpf_map_sum_elem_count kfunc
+    https://git.kernel.org/bpf/bpf-next/c/72829b1c1f16
 
-> Agreed, one process, one control path socket.
->
-> FWIW the rtnetlink use of netlink is very basic. genetlink already has
-> some infra which allows associate state with a user socket and cleaning
-> it up when the socket gets closed. This needs some improvements. A bit
-> of a chicken and egg problem, I can't make the improvements until there
-> are families making use of it, and nobody will make use of it until
-> it's in tree... But the basics are already in place and I can help with
-> building it out.
->
-
-I had this approach in mind (which doesn't need netlink improvements)
-for the next POC. It's mostly inspired by the comments from the cover
-letter of Jakub's memory-provider RFC, if I understood it correctly.
-I'm sure there's going to be some iteration, but roughly:
-
-1. A netlink CAP_NET_ADMIN API which binds the dma-buf to any number
-of rx queues on 1 NIC. It will do the dma_buf_attach() and
-dma_buf_map_attachment() and leave some indicator in the struct
-net_device to tell the NIC that it's bound to a dma-buf. The actual
-binding doesn't actuate until the next driver reset. The API, I guess,
-can cause a driver reset (or just a refill of the rx queues, if you
-think that's feasible) as well to streamline things a bit. The API
-returns a file handle to the user representing that binding.
-
-2. On the driver reset, the driver notices that its struct net_device
-is bound to a dma-buf, and sets up the dma-buf memory-provider instead
-of the basic one which provides host memory.
-
-3. The user can close the file handle received in #1 to unbind the
-dma-buf from the rx queues. Or if the user crashes, the kernel closes
-the handle for us. The unbind doesn't take effect until the next
-flushing or rx queues, or the next driver reset (not sure the former
-is feasible).
-
-4. The dma-buf memory provider keeps the dma buf mapping alive until
-the next driver reset, where all the dma-buf slices are freed, and the
-dma buf attachment mapping can be unmapped.
-
-I'm thinking the user sets up RSS and flow steering outside this API
-using existing ethtool APIs, but things can be streamlined a bit by
-doing some of these RSS/flow steering steps in cohesion with the
-dma-buf binding/unbinding. The complication with setting up flow
-steering in cohesion with dma-buf bind unbind is that the application
-may start more connections after the bind, and it will need to install
-flow steering rules for those too, and use the ethtool api for that.
-May as well use the ethtool apis for all of it...?
-
-From Jakub and David's comments it sounds (if I understood correctly),
-you'd like to tie the dma-buf bind/unbind functions to the lifetime of
-a netlink socket, rather than a struct file like I was thinking. That
-does sound cleaner, but I'm not sure how. Can you link me to any
-existing code examples? Or rough pointers to any existing code?
-
-> > I guess the devil is in the details; I look forward to the evolution of
-> > the patches.
->
-> +1
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-
---=20
-Thanks,
-Mina
