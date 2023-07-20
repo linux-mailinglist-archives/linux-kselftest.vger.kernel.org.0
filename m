@@ -2,75 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5062D75B903
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 22:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CD975B90C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 22:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjGTU6N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 16:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S230094AbjGTU6i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 16:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjGTU6L (ORCPT
+        with ESMTP id S230097AbjGTU60 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 16:58:11 -0400
+        Thu, 20 Jul 2023 16:58:26 -0400
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E84719A6;
-        Thu, 20 Jul 2023 13:58:10 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 08E493202AC7;
-        Thu, 20 Jul 2023 16:58:08 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2512D56;
+        Thu, 20 Jul 2023 13:58:23 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id A73E632029D5;
+        Thu, 20 Jul 2023 16:58:20 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 20 Jul 2023 16:58:09 -0400
+  by compute6.internal (MEProxy); Thu, 20 Jul 2023 16:58:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1689886688; x=1689973088; bh=yUfxtH9RM9
-        dukICZlQ4Vtj2WahFi7TaKXxx1t/LzP8g=; b=jnbUWFqLonaYD0wJnjWR447TLX
-        6KZOS1lqBpHOkNRRBvyPNJwk4Du8ZOU7yn3R38vRetybkQyOhVVZHIZFX8cpcRW9
-        PLQRKICpzBBEk+V2G29bKvuCWpGQBCSgtsczm8IGf04pUkmyFRzj1supFvWB67/t
-        lr95C4+8+lCDc1KmpeJIK/ND9IMACKU2JJuQMIbqNK08QGyazz/utgXNJLYFT0LC
-        80iXLhFu4FyT+MqPc9AGVzbGDYEiV4SnLC9lu5Xhnhh1HwWE6ACGDlSdMziwtF0V
-        eWxG9q9JUbzbxLvNJJED+dTC951B5oVuj1Zdcpns4BstMUcXKrwNwASWbQbg==
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1689886700; x=
+        1689973100; bh=C5gTyD3ZK69kBeMGtv3ULDgMyW30wlIrQqdN4DdpOCA=; b=D
+        NXQDHLmLlq9V0w5xJg6vy6vC5CnXCwfCwMfj5xCgNKjVkTLraBkubKnhaHDAYnfc
+        8g4xyt2wyr+ZMSz4tOijKWmjSJB2x3KvHLcTs6x1MNL55Yp4XLui7+xtTyLnkN52
+        rccNMn0AyttAERQKL/zYI5RcUemxWlCSKX0K1eYXoSum85wk60012VnvN9HkYQsI
+        vdXUt9LvYWgixS3BREJdnL2DA5FlKT5X5ShBRf8iFOHXmBhcmVC7rULAI/Bi/H+r
+        4VsUWYWsgFJ2Yi4dWJz9C2D52hZ5/lCzOiH+I1Yrr1F0B75o3ljb6fEKvKDIOMxH
+        mFhwgfmq7JwBhViYPklQQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1689886688; x=1689973088; bh=yUfxtH9RM9duk
-        ICZlQ4Vtj2WahFi7TaKXxx1t/LzP8g=; b=utSeSJADxLz8NqE2H8w6aVSBOYOQc
-        7/jy1qmi9qivajSdOjM2XFMtOWg5v9yOluvbtyW32apr2y1Cyauq1wV/s1n1TrE7
-        qc4Z/wn3CtMz3NvPnnIixeYVIpVuA7cb5af0St1ncKp+zdobhQ2Aj6xShoQxFArX
-        T6MVDWO8DQvZhASuy2SkUd1MqA2PdgtzgKAfWXomOPuToe4XhUYTyGJy08IV+pRU
-        y4ied0xgoUvnh28sLl946YSzThM/SSYm4Iw5qGBLJF1qGN+74smha5H+Qz1sLsbe
-        y2l5yiLYjos8l7frUh+w2L7cwy0yvpJOmN9rn1Au7eo92128HiAZUpklA==
-X-ME-Sender: <xms:35-5ZL7_c3CmZkLaBVOEisa3FEYcfd5tqFSUs_O8OLkmfatBULR9Kw>
-    <xme:35-5ZA60RuhMDOA6ksQdA6Knb0i00ggcxpLiMhy7w0A2QT_iPONcVKNaHGjYrRuJe
-    jHEnEa2zRfxklPQCQ>
-X-ME-Received: <xmr:35-5ZCeWJ4SsJCz-I_Y9f8wId1Xv9Ao3JnD2ntCBomlN5uhltNldO3wOFdCgNc1AzAnqSVzcRRwr1o-PRIjHVuGb9nbVLvj0qCiTkVLT_0A>
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1689886700; x=
+        1689973100; bh=C5gTyD3ZK69kBeMGtv3ULDgMyW30wlIrQqdN4DdpOCA=; b=v
+        qUOwPN7J73WxH/UC7oywQ7efCGwkoqBIV0K5juSqWrhxE5LnUAlku46R0MyEtevF
+        gF9Fxp1+ry+AEITkVGGQRhpaT7kcnWmZoUnkNrYnJyUKzKVmmVEtSrZ/Han/PzSn
+        cpzBITqlc0G2Ub9xstckBYJ1jMTG3spWtU5vvfxLxInCozx+ELtGcBfNs/hMMiBT
+        CYMCZyg6S4w2KwCf4T+PQOQLt4JqE0Le1pJ/KazZnxcQMJ7Yu3UJRRvy7hDnqy5c
+        Qr3BhMWMxcPeXghmTn+zxO6CyOnDvM16HDXkaWZA/xBpe8uLRPNe2uvUB31b4coG
+        X7mngZofRvK7bgCnwy8FQ==
+X-ME-Sender: <xms:7J-5ZOjndd2GzW4KJC85iE-P7gHKV3mJO7kDz6HSb7slKReDePwoQw>
+    <xme:7J-5ZPBJZHtPdyb_2wRvhRIHvf9JvkahCFfaU9cOXq-xulJDrszsuh-NjRkzELeLI
+    _FlI5fBxjmXVfaM2g>
+X-ME-Received: <xmr:7J-5ZGFzweSthJriwYmJNUiBXoMSJ9TDJeL8QfXA_sUIIq-RX3E0RoQAtLB0EsO6KgUIexGqLl3Ag25IzgrOonF5LvxIQ8v8zEwPdULQ6rA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrhedtgdduheegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefhvf
-    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougig
-    uhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepteeghffhiefgjedtvdetfe
-    ffgfetkeetudeitdekveeluddvjeeugefgtdefgeefnecuffhomhgrihhnpehivghtfhdr
-    ohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:35-5ZMJkmVizijuFXxAfkorLfsVy6RQaO9OZaIr4QbvUCKgfAgDv0w>
-    <xmx:35-5ZPL28eShlmMQ578luou5CRnTZheuAmY5rWFRkb7QLFn5WNUdLA>
-    <xmx:35-5ZFwt4uLgn_nLaEnO1XKcknE0F7jiNkhs2zKRxlQxnpK2PVdMdA>
-    <xmx:4J-5ZG9WlL7jr04aRTSGf14rTCBvyDmyLJsP9-wYiW41pCncJnW5fQ>
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
+    evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
+    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
+    dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
+    vgepudenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:7J-5ZHSyVvT-87l_gdUKsojJj07MZnsP_JY-4Bin0hvSeQRt2_znhQ>
+    <xmx:7J-5ZLz3cURdD9yec2forpZk4glEszFbsVGG9erNV68Rq4EzMOl6cA>
+    <xmx:7J-5ZF7_T3Na5Ps0E88_D3C0fNzls3w_Ib9ZFOZGq4huZNgCp7hT_Q>
+    <xmx:7J-5ZMo5IBObMj0qvJdtM939sGw4lfI_B92GI_gf1A5Fff4RO-lwGA>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 20 Jul 2023 16:58:06 -0400 (EDT)
+ 20 Jul 2023 16:58:18 -0400 (EDT)
 From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     coreteam@netfilter.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        alexei.starovoitov@gmail.com, fw@strlen.de, daniel@iogearbox.net
-Cc:     dsahern@kernel.org
-Subject: [PATCH bpf-next v5 0/5] Support defragmenting IPv(4|6) packets in BPF
-Date:   Thu, 20 Jul 2023 14:57:34 -0600
-Message-ID: <cover.1689884827.git.dxu@dxuuu.xyz>
+To:     ast@kernel.org, andrii@kernel.org, shuah@kernel.org,
+        daniel@iogearbox.net, alexei.starovoitov@gmail.com, fw@strlen.de
+Cc:     martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        dsahern@kernel.org
+Subject: [PATCH bpf-next v5 3/5] bpf: selftests: Support not connecting client socket
+Date:   Thu, 20 Jul 2023 14:57:37 -0600
+Message-ID: <aaab1f2500976d0dd672628a94879ed33d08bcea.1689884827.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <cover.1689884827.git.dxu@dxuuu.xyz>
+References: <cover.1689884827.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,101 +89,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-=== Context ===
+For connectionless protocols or raw sockets we do not want to actually
+connect() to the server.
 
-In the context of a middlebox, fragmented packets are tricky to handle.
-The full 5-tuple of a packet is often only available in the first
-fragment which makes enforcing consistent policy difficult. There are
-really only two stateless options, neither of which are very nice:
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ tools/testing/selftests/bpf/network_helpers.c | 5 +++--
+ tools/testing/selftests/bpf/network_helpers.h | 1 +
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-1. Enforce policy on first fragment and accept all subsequent fragments.
-   This works but may let in certain attacks or allow data exfiltration.
-
-2. Enforce policy on first fragment and drop all subsequent fragments.
-   This does not really work b/c some protocols may rely on
-   fragmentation. For example, DNS may rely on oversized UDP packets for
-   large responses.
-
-So stateful tracking is the only sane option. RFC 8900 [0] calls this
-out as well in section 6.3:
-
-    Middleboxes [...] should process IP fragments in a manner that is
-    consistent with [RFC0791] and [RFC8200]. In many cases, middleboxes
-    must maintain state in order to achieve this goal.
-
-=== BPF related bits ===
-
-Policy has traditionally been enforced from XDP/TC hooks. Both hooks
-run before kernel reassembly facilities. However, with the new
-BPF_PROG_TYPE_NETFILTER, we can rather easily hook into existing
-netfilter reassembly infra.
-
-The basic idea is we bump a refcnt on the netfilter defrag module and
-then run the bpf prog after the defrag module runs. This allows bpf
-progs to transparently see full, reassembled packets. The nice thing
-about this is that progs don't have to carry around logic to detect
-fragments.
-
-=== Changelog ===
-
-Changes from v4:
-
-* Refactor module handling code to not sleep in rcu_read_lock()
-* Also unify the v4 and v6 hook structs so they can share codepaths
-* Fixed some checkpatch.pl formatting warnings
-
-Changes from v3:
-
-* Correctly initialize `addrlen` stack var for recvmsg()
-
-Changes from v2:
-
-* module_put() if ->enable() fails
-* Fix CI build errors
-
-Changes from v1:
-
-* Drop bpf_program__attach_netfilter() patches
-* static -> static const where appropriate
-* Fix callback assignment order during registration
-* Only request_module() if callbacks are missing
-* Fix retval when modprobe fails in userspace
-* Fix v6 defrag module name (nf_defrag_ipv6_hooks -> nf_defrag_ipv6)
-* Simplify priority checking code
-* Add warning if module doesn't assign callbacks in the future
-* Take refcnt on module while defrag link is active
-
-
-[0]: https://datatracker.ietf.org/doc/html/rfc8900
-
-
-Daniel Xu (5):
-  netfilter: defrag: Add glue hooks for enabling/disabling defrag
-  netfilter: bpf: Support BPF_F_NETFILTER_IP_DEFRAG in netfilter link
-  bpf: selftests: Support not connecting client socket
-  bpf: selftests: Support custom type and proto for client sockets
-  bpf: selftests: Add defrag selftests
-
- include/linux/netfilter.h                     |  10 +
- include/uapi/linux/bpf.h                      |   5 +
- net/ipv4/netfilter/nf_defrag_ipv4.c           |  17 +-
- net/ipv6/netfilter/nf_defrag_ipv6_hooks.c     |  11 +
- net/netfilter/core.c                          |   6 +
- net/netfilter/nf_bpf_link.c                   | 116 ++++++-
- tools/include/uapi/linux/bpf.h                |   5 +
- tools/testing/selftests/bpf/Makefile          |   4 +-
- .../selftests/bpf/generate_udp_fragments.py   |  90 ++++++
- .../selftests/bpf/ip_check_defrag_frags.h     |  57 ++++
- tools/testing/selftests/bpf/network_helpers.c |  26 +-
- tools/testing/selftests/bpf/network_helpers.h |   3 +
- .../bpf/prog_tests/ip_check_defrag.c          | 283 ++++++++++++++++++
- .../selftests/bpf/progs/ip_check_defrag.c     | 104 +++++++
- 14 files changed, 715 insertions(+), 22 deletions(-)
- create mode 100755 tools/testing/selftests/bpf/generate_udp_fragments.py
- create mode 100644 tools/testing/selftests/bpf/ip_check_defrag_frags.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c
- create mode 100644 tools/testing/selftests/bpf/progs/ip_check_defrag.c
-
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index a105c0cd008a..d5c78c08903b 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -301,8 +301,9 @@ int connect_to_fd_opts(int server_fd, const struct network_helper_opts *opts)
+ 		       strlen(opts->cc) + 1))
+ 		goto error_close;
+ 
+-	if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
+-		goto error_close;
++	if (!opts->noconnect)
++		if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
++			goto error_close;
+ 
+ 	return fd;
+ 
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 694185644da6..87894dc984dd 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -21,6 +21,7 @@ struct network_helper_opts {
+ 	const char *cc;
+ 	int timeout_ms;
+ 	bool must_fail;
++	bool noconnect;
+ };
+ 
+ /* ipv4 test vector */
 -- 
 2.41.0
 
