@@ -2,191 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECF675B297
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 17:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE0075B29F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 17:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjGTPag (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 11:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        id S232453AbjGTPbD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 11:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjGTPaf (ORCPT
+        with ESMTP id S232311AbjGTPa5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 11:30:35 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DE02706;
-        Thu, 20 Jul 2023 08:30:11 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1689866981t599l9r8
-Received: from linux-lab-host.localdomain ( [119.123.130.39])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 20 Jul 2023 23:29:40 +0800 (CST)
-X-QQ-SSF: 01200000000000D0X000000A0000000
-X-QQ-FEAT: LE7C6P2vL8QHe4mvvHH0q96A0G++pPLR/aSG1lKbkXa0Wii3Y2PgYRO2VIj+i
-        K95p9gZzvt9OcNxb5oKKOkxnjzObylDjH10meNR4fus7qhBQgGMQ9Q1XCQiweJPQa/plE51
-        IHyUv22YYyH1AmWZefc2rWcZcxwUKzGYt4BYiJ5GMWvLjjRALlU6552euLerECa23mM63DE
-        5fDTEqLrLJMgAOnBdu1rQdaIM+tsB8d3HQEMxBaNl7ictefnj9tBEW2ojNPxJ4G5AQY05A2
-        MMCl6LyIdi8uepkpbO/5rATnluIGrEfjInDyZKGT/NOx3nYjSm487MUznpqWlcJ7TOEoetQ
-        NWS6d5rO6IxXgYStQMxIj5v65bf3q1QYKXvyFXpD2910T/GKoA=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9125664167204295423
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     linux@weissschuh.net
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, w@1wt.eu
-Subject: [PATCH RFC 7/7] selftests/nolibc: proof of concept for TAP output
-Date:   Thu, 20 Jul 2023 23:29:40 +0800
-Message-Id: <20230720152940.7623-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230719-nolibc-ktap-tmp-v1-7-930bd0c52ff1@weissschuh.net>
-References: <20230719-nolibc-ktap-tmp-v1-7-930bd0c52ff1@weissschuh.net>
+        Thu, 20 Jul 2023 11:30:57 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71881273A
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 08:30:46 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-992af8b3b1bso163609166b.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 08:30:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1689867045; x=1690471845;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MLrofFXFKrbEUtT1d0pkNm+CngV/kgOBeV8t2d3zZXY=;
+        b=Dgehf2MBQmy2b6PIrBeu3Y/Iqew31GTxhkwE/zy2hcb2ruecyEJFzVrnGKhG+yaccQ
+         Yaly4VdpImLVw43BjqNy+gt5wU3r48dCnuAPkJVTiei+A/wWa1mwS3J9CDDfplZCBNkU
+         Er4dFbWuBUJDs8mLv/w9mCJIvUsAcXkeV63CEsCh/Yaso0IVsi9sDXxiSmy95ZO0Ax45
+         tE0dPVZ6fi2l4N+Sk8X1lxu24SXh3Wp1FES+1ykZ4D8Wxu1TN6C8y1vDxRgCIFEhH3xX
+         9XMZHz/ZmzgMUvtD1BiGqa9vybT6XU9AJB4FjP7rRmUWdqRSSzax/nL8PfRS+YQpvkL6
+         8I9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689867045; x=1690471845;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MLrofFXFKrbEUtT1d0pkNm+CngV/kgOBeV8t2d3zZXY=;
+        b=OvoH4H4bK57QDRsM7ADPmiHhDq/N3/Q3HY5Zl1mHrUAB9Dna4jebY6r66gs9wLm6u2
+         O1hVDzCYosaTQim1ucggxDO0GiGokHDQ2pyCxAdL0KE9hM0s3Y2ofGqYMbVj/5m5jflV
+         wmOiMTDBkSifgOLOTpSzUc2CyD88g0lZ7AkfWicWhwXeCCOqWdAH37DOzt32A9vtRJym
+         OowqPkq6TrMgKCGzjUy16z6xzN05AW9s6OdDGmciUbYh8x3qhBLFpbPn5iYWP5vzE1hC
+         pn3EwdSs8b3OvC1zHgmI9tADy+uacF7YReZC1LtLUx5ULZ4rOdddqvIIQqz+3wxfWfp0
+         askA==
+X-Gm-Message-State: ABy/qLaXWTIncdBCjLDRu2oTh9ZEjuNuXJ0ExRg4c2SApPvbaMa6wzvo
+        i4YO1L/65TTUrmS3YZcykJz9mg==
+X-Google-Smtp-Source: APBJJlHWH1U2EegISmcUbcT+YfPJwsNTtGymAlJvhuVaCOsFoBXwcdT9+t+q9lnbaE0jgbeXNaICaQ==
+X-Received: by 2002:a17:907:d0a:b0:993:22a2:8158 with SMTP id gn10-20020a1709070d0a00b0099322a28158mr7363662ejc.61.1689867044845;
+        Thu, 20 Jul 2023 08:30:44 -0700 (PDT)
+Received: from [192.168.188.151] (p200300c1c7176000b788d2ebe49c4b82.dip0.t-ipconnect.de. [2003:c1:c717:6000:b788:d2eb:e49c:4b82])
+        by smtp.gmail.com with ESMTPSA id x10-20020a170906804a00b009893b06e9e3sm851007ejw.225.2023.07.20.08.30.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jul 2023 08:30:44 -0700 (PDT)
+From:   Lorenz Bauer <lmb@isovalent.com>
+Subject: [PATCH bpf-next v6 0/8] Add SO_REUSEPORT support for TC
+ bpf_sk_assign
+Date:   Thu, 20 Jul 2023 17:30:04 +0200
+Message-Id: <20230720-so-reuseport-v6-0-7021b683cdae@isovalent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPxSuWQC/33OQQ7CIBAF0KsY1mIQKIgr72FcMDi1JAoNVFJje
+ nexK2OaLid/5v15k4zJYybHzZskLD77GOqgthviOhtuSP21zoQzLpjaC5ojTfjM2Mc0UDTcNVz
+ ttUAk9QRsRgrJBtd9j353v3GfsPXj3HYm0Lc04DiQS006n4eYXvMbhc/5cmPhlFHQThkrZG0WJ
+ 59jsXcMw87Fx4wVsQaIChimQToADcYsAXINkBWQ6FArzQ4Adglo1oCmAq1SB2XZFRyyf2Capg9
+ eqJYrmAEAAA==
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>,
+        Joe Stringer <joe@cilium.io>
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Thomas
+We want to replace iptables TPROXY with a BPF program at TC ingress.
+To make this work in all cases we need to assign a SO_REUSEPORT socket
+to an skb, which is currently prohibited. This series adds support for
+such sockets to bpf_sk_assing.
 
-The result looks very similar and the change seems not that big, thanks.
+I did some refactoring to cut down on the amount of duplicate code. The
+key to this is to use INDIRECT_CALL in the reuseport helpers. To show
+that this approach is not just beneficial to TC sk_assign I removed
+duplicate code for bpf_sk_lookup as well.
 
-I have a generic question: do we need to compile nolibc-test.c
-independently or at least let users easily compile nolibc-test.c in the
-other places no just in kernel source code, for example, the other libcs
-may want to download and compile it directly.
+Joint work with Daniel Borkmann.
 
-The functions used in this change seems not many, is it able to provide
-our clones for them or only provide the clones when we compile them
-out-of-kernel.
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+---
+Changes in v6:
+- Reject unhashed UDP sockets in bpf_sk_assign to avoid ref leak
+- Link to v5: https://lore.kernel.org/r/20230613-so-reuseport-v5-0-f6686a0dbce0@isovalent.com
 
-for example:
+Changes in v5:
+- Drop reuse_sk == sk check in inet[6]_steal_stock (Kuniyuki)
+- Link to v4: https://lore.kernel.org/r/20230613-so-reuseport-v4-0-4ece76708bba@isovalent.com
 
-    #ifdef NOLIBC_TEST_IN_KERNEL
-    /* -DNOLIBC_TEST_IN_KERNEL from Makefile, for future compatibility */
-    #include "../kselftest.h"
-    #else
-    // our clones of the used functions, for standalone usage
-    #endif
+Changes in v4:
+- WARN_ON_ONCE if reuseport socket is refcounted (Kuniyuki)
+- Use inet[6]_ehashfn_t to shorten function declarations (Kuniyuki)
+- Shuffle documentation patch around (Kuniyuki)
+- Update commit message to explain why IPv6 needs EXPORT_SYMBOL
+- Link to v3: https://lore.kernel.org/r/20230613-so-reuseport-v3-0-907b4cbb7b99@isovalent.com
+
+Changes in v3:
+- Fix warning re udp_ehashfn and udp6_ehashfn (Simon)
+- Return higher scoring connected UDP reuseport sockets (Kuniyuki)
+- Fix ipv6 module builds
+- Link to v2: https://lore.kernel.org/r/20230613-so-reuseport-v2-0-b7c69a342613@isovalent.com
+
+Changes in v2:
+- Correct commit abbrev length (Kuniyuki)
+- Reduce duplication (Kuniyuki)
+- Add checks on sk_state (Martin)
+- Split exporting inet[6]_lookup_reuseport into separate patch (Eric)
+
+---
+Daniel Borkmann (1):
+      selftests/bpf: Test that SO_REUSEPORT can be used with sk_assign helper
+
+Lorenz Bauer (7):
+      udp: re-score reuseport groups when connected sockets are present
+      bpf: reject unhashed sockets in bpf_sk_assign
+      net: export inet_lookup_reuseport and inet6_lookup_reuseport
+      net: remove duplicate reuseport_lookup functions
+      net: document inet[6]_lookup_reuseport sk_state requirements
+      net: remove duplicate sk_lookup helpers
+      bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
+
+ include/net/inet6_hashtables.h                     |  81 ++++++++-
+ include/net/inet_hashtables.h                      |  74 +++++++-
+ include/net/sock.h                                 |   7 +-
+ include/uapi/linux/bpf.h                           |   3 -
+ net/core/filter.c                                  |   4 +-
+ net/ipv4/inet_hashtables.c                         |  68 ++++---
+ net/ipv4/udp.c                                     |  88 ++++-----
+ net/ipv6/inet6_hashtables.c                        |  71 +++++---
+ net/ipv6/udp.c                                     |  98 ++++------
+ tools/include/uapi/linux/bpf.h                     |   3 -
+ tools/testing/selftests/bpf/network_helpers.c      |   3 +
+ .../selftests/bpf/prog_tests/assign_reuse.c        | 197 +++++++++++++++++++++
+ .../selftests/bpf/progs/test_assign_reuse.c        | 142 +++++++++++++++
+ 13 files changed, 660 insertions(+), 179 deletions(-)
+---
+base-commit: 6f5a630d7c57cd79b1f526a95e757311e32d41e5
+change-id: 20230613-so-reuseport-e92c526173ee
 
 Best regards,
-Zhangjin
+-- 
+Lorenz Bauer <lmb@isovalent.com>
 
-> Dirty proof of concept to show how (K)TAP output can look and how it can
-> be used.
-> 
-> Currently test selection is not supported and for simplicity only the
-> startup tests are enabled.
-> 
-> Example output:
-> 
-> $ ./nolibc-test
->  KTAP version 1
->  1..15
->  ok 1 argc = 1
->  ok 2 argv_addr = <0x7ffdc66173a8>
->  ok 3 argv_environ = <0x7ffdc66173a8>
->  ok 4 argv_total = 1
->  ok 5 argv0_addr = <0x7ffdc6618bca>
->  ok 6 argv0_str = <0x7ffdc6618bca>
->  ok 7 argv0_len = 13
->  ok 8 environ_addr = <0x7ffdc66173b8>
->  ok 9 environ_envp = <0x7ffdc66173b8>
->  ok 10 environ_auxv = <0x7ffdc66173b8>
->  ok 11 environ_total = 271
->  ok 12 environ_HOME = <0x7ffdc6618cc7>
->  ok 13 auxv_addr = <0x7ffdc66174c8>
->  ok 14 auxv_AT_UID = 1000
->  ok 15 auxv_AT_PAGESZ = 4096
->  # Exiting with status 0
->  # Totals: pass:15 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 
-> $ ./libc-test
->  KTAP version 1
->  1..15
->  ok 1 argc = 1
->  ok 2 argv_addr = <0x7ffd5f3d43e8>
->  ok 3 argv_environ = <0x7ffd5f3d43e8>
->  ok 4 argv_total = 1
->  ok 5 argv0_addr = <0x7ffd5f3d5bd0>
->  ok 6 argv0_str = <0x7ffd5f3d5bd0>
->  ok 7 argv0_len = 11
->  ok 8 environ_addr = <0x7ffd5f3d43f8>
->  ok 9 environ_envp = <0x7ffd5f3d43f8>
->  ok 10 environ_auxv # SKIP test_auxv != (void *)-1
->  ok 11 environ_total # SKIP test_auxv != (void *)-1
->  ok 12 environ_HOME = <0x7ffd5f3d5ccb>
->  ok 13 auxv_addr # SKIP test_auxv != (void *)-1
->  ok 14 auxv_AT_UID = 1000
->  ok 15 auxv_AT_PAGESZ = 4096
->  # Exiting with status 0
->  # Totals: pass:12 fail:0 xfail:0 xpass:0 skip:3 error:0
-> 
-> ./run-all-tests.sh | $SRC/tools/testing/kunit/kunit.py parse
->  [23:47:26] ============================================================
->  [23:47:26] ====================== (15 subtests) =======================
->  [23:47:26] [PASSED] argc = 1
->  [23:47:26] [PASSED] argv_addr = <0x7ffcac1b8bc8>
->  [23:47:26] [PASSED] argv_environ = <0x7ffcac1b8bc8>
->  [23:47:26] [PASSED] argv_total = 1
->  [23:47:26] [PASSED] argv0_addr = <0x7ffcac1b9bd0>
->  [23:47:26] [PASSED] argv0_str = <0x7ffcac1b9bd0>
->  [23:47:26] [PASSED] argv0_len = 11
->  [23:47:26] [PASSED] environ_addr = <0x7ffcac1b8bd8>
->  [23:47:26] [PASSED] environ_envp = <0x7ffcac1b8bd8>
->  [23:47:26] [SKIPPED] environ_auxv
->  [23:47:26] [SKIPPED] environ_total
->  [23:47:26] [PASSED] environ_HOME = <0x7ffcac1b9ccb>
->  [23:47:26] [SKIPPED] auxv_addr
->  [23:47:26] [PASSED] auxv_AT_UID = 1000
->  [23:47:26] [PASSED] auxv_AT_PAGESZ = 4096
->  [23:47:26] ====================== [PASSED] arm64 ======================
->  [23:47:26] ====================== (15 subtests) =======================
->  [23:47:26] [PASSED] argc = 1
->  [23:47:26] [PASSED] argv_addr = <0x7ffdee178188>
->  [23:47:26] [PASSED] argv_environ = <0x7ffdee178188>
->  [23:47:26] [PASSED] argv_total = 1
->  [23:47:26] [PASSED] argv0_addr = <0x7ffdee178bd0>
->  [23:47:26] [PASSED] argv0_str = <0x7ffdee178bd0>
->  [23:47:26] [PASSED] argv0_len = 11
->  [23:47:26] [PASSED] environ_addr = <0x7ffdee178198>
->  [23:47:26] [PASSED] environ_envp = <0x7ffdee178198>
->  [23:47:26] [SKIPPED] environ_auxv
->  [23:47:26] [SKIPPED] environ_total
->  [23:47:26] [PASSED] environ_HOME = <0x7ffdee178ccb>
->  [23:47:26] [SKIPPED] auxv_addr
->  [23:47:26] [PASSED] auxv_AT_UID = 1000
->  [23:47:26] [PASSED] auxv_AT_PAGESZ = 4096
->  [23:47:26] ===================== [PASSED] x86_64 ======================
->  [23:47:26] ====================== (15 subtests) =======================
->  [23:47:26] [PASSED] argc = 1
->  [23:47:26] [PASSED] argv_addr = <0x7ffc16bf3628>
->  [23:47:26] [PASSED] argv_environ = <0x7ffc16bf3628>
->  [23:47:26] [PASSED] argv_total = 1
->  [23:47:26] [PASSED] argv0_addr = <0x7ffc16bf4bd0>
->  [23:47:26] [PASSED] argv0_str = <0x7ffc16bf4bd0>
->  [23:47:26] [PASSED] argv0_len = 11
->  [23:47:26] [PASSED] environ_addr = <0x7ffc16bf3638>
->  [23:47:26] [PASSED] environ_envp = <0x7ffc16bf3638>
->  [23:47:26] [SKIPPED] environ_auxv
->  [23:47:26] [SKIPPED] environ_total
->  [23:47:26] [PASSED] environ_HOME = <0x7ffc16bf4ccb>
->  [23:47:26] [SKIPPED] auxv_addr
->  [23:47:26] [PASSED] auxv_AT_UID = 1000
->  [23:47:26] [PASSED] auxv_AT_PAGESZ = 4096
->  [23:47:26] ===================== [PASSED] riscv64 =====================
->  [23:47:26] ============================================================
->  [23:47:26] Testing complete. Ran 45 tests: passed: 36, skipped: 9
-> 
-> The output of kunit.py is colored after the test results.
-> 
-> Not-signed-off
-> ---
->  tools/testing/selftests/nolibc/nolibc-test.c    | 121 ++++++++----------------
->  tools/testing/selftests/nolibc/run-all-tests.sh |  22 +++++
->  2 files changed, 63 insertions(+), 80 deletions(-)
-> 
