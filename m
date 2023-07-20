@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A0175B45B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 18:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B94D75B45E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 18:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjGTQdx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 12:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S231316AbjGTQdz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 12:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjGTQda (ORCPT
+        with ESMTP id S231517AbjGTQdd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 12:33:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E72D171E
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 09:32:39 -0700 (PDT)
+        Thu, 20 Jul 2023 12:33:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F971986
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 09:32:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689870759;
+        s=mimecast20190719; t=1689870764;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ru1xpHoly8RVJpDGIBIPQWc2v6Ebq5LepRuPaIIUDyE=;
-        b=XBHVfK5P4B8SxU2qNjsgxERdRcr/YGunHigHs/+dmTqAs8u7cyYB7Y6uYNX/oR8ecMaSVa
-        wXGfg1QANZZQLuJVBHz0uvry7cPixHjlrdpTyJgCeTaWqZvhOV0AaO3baPb7Hz2hJJHc+8
-        hRZ4qA9ZtmcPJDhnZZHQ4F7zQ4VOnsg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-468-L0PDvKruOe6zKXZsgB5siQ-1; Thu, 20 Jul 2023 12:32:33 -0400
-X-MC-Unique: L0PDvKruOe6zKXZsgB5siQ-1
+        bh=07XsHvqnmvZKa7o2IK/zebs5uLAhltI+FwSlNCiWefo=;
+        b=MUVj4AYUDid32gET+rpvydatFetF05gPYAeTDXAjqP4pBzmlq+qhBq6qJVJo4dX9gUJ+60
+        POHRFa9YSwZutBTa3q8R9PR9mqYllh3oOiteiNrGKpfqSyY9hoT+MDcY68FeibuUx68CnE
+        KUydTPQrZiM5HqVsM1IZay5m9Qoic9Y=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-171-KQfh-86JMfWenLLKyFLDqQ-1; Thu, 20 Jul 2023 12:32:41 -0400
+X-MC-Unique: KQfh-86JMfWenLLKyFLDqQ-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B209B1044590;
-        Thu, 20 Jul 2023 16:32:30 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A9EAF2812951;
+        Thu, 20 Jul 2023 16:32:38 +0000 (UTC)
 Received: from vschneid.remote.csb (unknown [10.42.28.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B4F2E40C206F;
-        Thu, 20 Jul 2023 16:32:16 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E955440C2070;
+        Thu, 20 Jul 2023 16:32:30 +0000 (UTC)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
@@ -91,9 +91,9 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Yair Podemsky <ypodemsk@redhat.com>
-Subject: [RFC PATCH v2 04/20] tracing/filters: Enable filtering the CPU common field by a cpumask
-Date:   Thu, 20 Jul 2023 17:30:40 +0100
-Message-Id: <20230720163056.2564824-5-vschneid@redhat.com>
+Subject: [RFC PATCH v2 05/20] tracing/filters: Optimise cpumask vs cpumask filtering when user mask is a single CPU
+Date:   Thu, 20 Jul 2023 17:30:41 +0100
+Message-Id: <20230720163056.2564824-6-vschneid@redhat.com>
 In-Reply-To: <20230720163056.2564824-1-vschneid@redhat.com>
 References: <20230720163056.2564824-1-vschneid@redhat.com>
 MIME-Version: 1.0
@@ -110,76 +110,93 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The tracing_cpumask lets us specify which CPUs are traced in a buffer
-instance, but doesn't let us do this on a per-event basis (unless one
-creates an instance per event).
+Steven noted that when the user-provided cpumask contains a single CPU,
+then the filtering function can use a scalar as input instead of a
+full-fledged cpumask.
 
-A previous commit added filtering scalar fields by a user-given cpumask,
-make this work with the CPU common field as well.
+Reuse do_filter_scalar_cpumask() when the input mask has a weight of one.
 
-This enables doing things like
-
-$ trace-cmd record -e 'sched_switch' -f 'CPU & CPUS{12-52}' \
-		   -e 'sched_wakeup' -f 'target_cpu & CPUS{12-52}'
-
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- kernel/trace/trace_events_filter.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ kernel/trace/trace_events_filter.c | 35 +++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-index 1e14f801685a8..3009d0c61b532 100644
+index 3009d0c61b532..2fe65ddeb34ef 100644
 --- a/kernel/trace/trace_events_filter.c
 +++ b/kernel/trace/trace_events_filter.c
-@@ -68,6 +68,7 @@ enum filter_pred_fn {
- 	FILTER_PRED_FN_PCHAR_USER,
- 	FILTER_PRED_FN_PCHAR,
+@@ -70,6 +70,7 @@ enum filter_pred_fn {
  	FILTER_PRED_FN_CPU,
-+	FILTER_PRED_FN_CPU_CPUMASK,
+ 	FILTER_PRED_FN_CPU_CPUMASK,
  	FILTER_PRED_FN_CPUMASK,
++	FILTER_PRED_FN_CPUMASK_CPU,
  	FILTER_PRED_FN_FUNCTION,
  	FILTER_PRED_FN_,
-@@ -937,6 +938,14 @@ static int filter_pred_cpu(struct filter_pred *pred, void *event)
- 	}
+ 	FILTER_PRED_TEST_VISITED,
+@@ -957,6 +958,22 @@ static int filter_pred_cpumask(struct filter_pred *pred, void *event)
+ 	return do_filter_cpumask(pred->op, mask, cmp);
  }
  
-+/* Filter predicate for current CPU vs user-provided cpumask */
-+static int filter_pred_cpu_cpumask(struct filter_pred *pred, void *event)
++/* Filter predicate for cpumask field vs user-provided scalar  */
++static int filter_pred_cpumask_cpu(struct filter_pred *pred, void *event)
 +{
-+	int cpu = raw_smp_processor_id();
++	u32 item = *(u32 *)(event + pred->offset);
++	int loc = item & 0xffff;
++	const struct cpumask *mask = (event + loc);
++	unsigned int cpu = pred->val;
 +
-+	return do_filter_scalar_cpumask(pred->op, cpu, pred->mask);
++	/*
++	 * This inverts the usual usage of the function (field is first element,
++	 * user parameter is second), but that's fine because the (scalar, mask)
++	 * operations used are symmetric.
++	 */
++	return do_filter_scalar_cpumask(pred->op, cpu, mask);
 +}
 +
- /* Filter predicate for cpumask field vs user-provided cpumask */
- static int filter_pred_cpumask(struct filter_pred *pred, void *event)
+ /* Filter predicate for COMM. */
+ static int filter_pred_comm(struct filter_pred *pred, void *event)
  {
-@@ -1440,6 +1449,8 @@ static int filter_pred_fn_call(struct filter_pred *pred, void *event)
- 		return filter_pred_pchar(pred, event);
- 	case FILTER_PRED_FN_CPU:
- 		return filter_pred_cpu(pred, event);
-+	case FILTER_PRED_FN_CPU_CPUMASK:
-+		return filter_pred_cpu_cpumask(pred, event);
+@@ -1453,6 +1470,8 @@ static int filter_pred_fn_call(struct filter_pred *pred, void *event)
+ 		return filter_pred_cpu_cpumask(pred, event);
  	case FILTER_PRED_FN_CPUMASK:
  		return filter_pred_cpumask(pred, event);
++	case FILTER_PRED_FN_CPUMASK_CPU:
++		return filter_pred_cpumask_cpu(pred, event);
  	case FILTER_PRED_FN_FUNCTION:
-@@ -1659,6 +1670,7 @@ static int parse_pred(const char *str, void *data,
+ 		return filter_pred_function(pred, event);
+ 	case FILTER_PRED_TEST_VISITED:
+@@ -1666,6 +1685,7 @@ static int parse_pred(const char *str, void *data,
+ 
+ 	} else if (!strncmp(str + i, "CPUS", 4)) {
+ 		unsigned int maskstart;
++		bool single;
+ 		char *tmp;
  
  		switch (field->filter_type) {
- 		case FILTER_CPUMASK:
-+		case FILTER_CPU:
- 		case FILTER_OTHER:
- 			break;
- 		default:
-@@ -1714,6 +1726,8 @@ static int parse_pred(const char *str, void *data,
+@@ -1724,8 +1744,21 @@ static int parse_pred(const char *str, void *data,
+ 
+ 		/* Move along */
  		i++;
++
++		/*
++		 * Optimisation: if the user-provided mask has a weight of one
++		 * then we can treat it as a scalar input.
++		 */
++		single = cpumask_weight(pred->mask) == 1;
++		if (single && field->filter_type == FILTER_CPUMASK) {
++			pred->val = cpumask_first(pred->mask);
++			kfree(pred->mask);
++		}
++
  		if (field->filter_type == FILTER_CPUMASK) {
- 			pred->fn_num = FILTER_PRED_FN_CPUMASK;
-+		} else if (field->filter_type == FILTER_CPU) {
-+			pred->fn_num = FILTER_PRED_FN_CPU_CPUMASK;
+-			pred->fn_num = FILTER_PRED_FN_CPUMASK;
++			pred->fn_num = single ?
++				FILTER_PRED_FN_CPUMASK_CPU :
++				FILTER_PRED_FN_CPUMASK;
+ 		} else if (field->filter_type == FILTER_CPU) {
+ 			pred->fn_num = FILTER_PRED_FN_CPU_CPUMASK;
  		} else {
- 			switch (field->size) {
- 			case 8:
 -- 
 2.31.1
 
