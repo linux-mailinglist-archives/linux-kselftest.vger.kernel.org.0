@@ -2,164 +2,291 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F00C75A8DE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 10:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CE175A8E6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 10:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjGTIO0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 04:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
+        id S230105AbjGTIQ0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 04:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjGTIOX (ORCPT
+        with ESMTP id S230094AbjGTIQZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 04:14:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A90142686;
-        Thu, 20 Jul 2023 01:14:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 767472F4;
-        Thu, 20 Jul 2023 01:15:03 -0700 (PDT)
-Received: from [10.1.38.38] (C02Z41KALVDN.cambridge.arm.com [10.1.38.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A74923F67D;
-        Thu, 20 Jul 2023 01:14:18 -0700 (PDT)
-Message-ID: <0e512516-6453-f7cb-67ee-f32c17eceea2@arm.com>
-Date:   Thu, 20 Jul 2023 09:14:17 +0100
+        Thu, 20 Jul 2023 04:16:25 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A5B2684
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 01:16:23 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-314172bac25so384288f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 01:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689840981; x=1690445781;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DNGJaYEpeCAI7drQ8W8ZV+PTc4Zy8Ohv1zP8hIu3TR8=;
+        b=aZoe4sdItvYTIGvKmdBkwWvSm9XIortrvDEcFOv6U9T3bIJ8wJnc6+CdANOPnQrFGc
+         b0efaIB7KWoqmRTL3zp9zVjPLbqwS7QZ9OcJvAiEtHKiNyasiXXEHCx01wZ8w7V52ooO
+         VZOs8dgeSuhEJGHUnBfSMnTt2rJW17BNUCa9NOJL6VT5n8XjqhdAxgnCetbYFNQWPXHz
+         X7ja3ACB0l+HqW62c75Hq8g4y36DXolIpV9WqT1ww8yPETw0kowXqC4Jn7UiXdaKsC8B
+         140VXB7XUvRAbyNj5Wz6RlEpo38ImoCnfE2LhyY3zi5M+fexasEdd0sZlnkUE+60ARi4
+         ON0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689840981; x=1690445781;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DNGJaYEpeCAI7drQ8W8ZV+PTc4Zy8Ohv1zP8hIu3TR8=;
+        b=CLH2QeZG0rxHHZ1rkqyfApW+eQ9fMEQxnmp7EEf+eYCeSDMhU72aBuc9se1qMPZ/Gl
+         HxXX2F5Qqr64BP5dLcwkRKIrseUecBPSE2QnOTo0SjdkoYOe6Ts2q3be0Ke+qAs6zhMM
+         jJg2z/W5SrwujQQ1swlRYQiTUspX1GMlPMFHhWD7o1um8g91Ex+wN+MTMpzTqpIm+L0L
+         bzYP5aUe41cbwRgC7bpQPcHPXrovQznLNnfff37Asc2zz68eim5rMfJtjEX+0NAY47XT
+         qlfdicImiUtTDGsG5LrV0nu5OswxT4Z1oGZ0vDGOfUkGJwyR/Tyi2uUugiBIjFTrPp2k
+         /O+w==
+X-Gm-Message-State: ABy/qLaJ7jhplDIUl2FuWTJ4ZFfXFGWlOv04p0NeAVHUSF3fRj4woJH3
+        vg3UwVfMj9Jldahpw0WxxWqA82AQJEP1sSvy9e0HtQ==
+X-Google-Smtp-Source: APBJJlE4/ypBCkAS4fa3ft8sr4uiIljwWG9xBqWF4OQP1QHzs9vglehTimqhRn43tcQfSYUsfosvfe6DQAVs529DSZc=
+X-Received: by 2002:a5d:456c:0:b0:316:f1a5:269f with SMTP id
+ a12-20020a5d456c000000b00316f1a5269fmr1310004wrc.70.1689840981522; Thu, 20
+ Jul 2023 01:16:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH v2 8/8] selftests/mm: Run all tests from run_vmtests.sh
-To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Florent Revest <revest@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-References: <20230717103152.202078-1-ryan.roberts@arm.com>
- <20230717103152.202078-9-ryan.roberts@arm.com>
- <5a12536a-2e33-7a68-6cfd-fd991ddf875a@redhat.com> <ZLhLeSLgYgqSMSEA@x1n>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <ZLhLeSLgYgqSMSEA@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230714165508.94561-1-charlie@rivosinc.com> <20230714165508.94561-3-charlie@rivosinc.com>
+In-Reply-To: <20230714165508.94561-3-charlie@rivosinc.com>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Thu, 20 Jul 2023 10:16:10 +0200
+Message-ID: <CAHVXubhT1ixqw03r+6XtPO-0V5ff7a4r4xf2zOqTMDg8xtY0UA@mail.gmail.com>
+Subject: Re: [PATCH v6 2/4] RISC-V: mm: Add tests for RISC-V mm
+To:     Charlie Jenkins <charlie@rivosinc.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        conor@kernel.org, paul.walmsley@sifive.com, palmer@rivosinc.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 19/07/2023 21:45, Peter Xu wrote:
-> On Mon, Jul 17, 2023 at 07:27:13PM +0200, David Hildenbrand wrote:
->> On 17.07.23 12:31, Ryan Roberts wrote:
->>> It is very unclear to me how one is supposed to run all the mm selftests
->>> consistently and get clear results.
->>>
->>> Most of the test programs are launched by both run_vmtests.sh and
->>> run_kselftest.sh:
->>>
->>>    hugepage-mmap
->>>    hugepage-shm
->>>    map_hugetlb
->>>    hugepage-mremap
->>>    hugepage-vmemmap
->>>    hugetlb-madvise
->>>    map_fixed_noreplace
->>>    gup_test
->>>    gup_longterm
->>>    uffd-unit-tests
->>>    uffd-stress
->>>    compaction_test
->>>    on-fault-limit
->>>    map_populate
->>>    mlock-random-test
->>>    mlock2-tests
->>>    mrelease_test
->>>    mremap_test
->>>    thuge-gen
->>>    virtual_address_range
->>>    va_high_addr_switch
->>>    mremap_dontunmap
->>>    hmm-tests
->>>    madv_populate
->>>    memfd_secret
->>>    ksm_tests
->>>    ksm_functional_tests
->>>    soft-dirty
->>>    cow
->>>
->>> However, of this set, when launched by run_vmtests.sh, some of the
->>> programs are invoked multiple times with different arguments. When
->>> invoked by run_kselftest.sh, they are invoked without arguments (and as
->>> a consequence, some fail immediately).
->>>
->>> Some test programs are only launched by run_vmtests.sh:
->>>
->>>    test_vmalloc.sh
->>>
->>> And some test programs and only launched by run_kselftest.sh:
->>>
->>>    khugepaged
->>>    migration
->>>    mkdirty
->>>    transhuge-stress
->>>    split_huge_page_test
->>>    mdwe_test
->>>    write_to_hugetlbfs
->>>
->>> Furthermore, run_vmtests.sh is invoked by run_kselftest.sh, so in this
->>> case all the test programs invoked by both scripts are run twice!
->>>
->>> Needless to say, this is a bit of a mess. In the absence of fully
->>> understanding the history here, it looks to me like the best solution is
->>> to launch ALL test programs from run_vmtests.sh, and ONLY invoke
->>> run_vmtests.sh from run_kselftest.sh. This way, we get full control over
->>> the parameters, each program is only invoked the intended number of
->>> times, and regardless of which script is used, the same tests get run in
->>> the same way.
->>>
->>> The only drawback is that if using run_kselftest.sh, it's top-level tap
->>> result reporting reports only a single test and it fails if any of the
->>> contained tests fail. I don't see this as a big deal though since we
->>> still see all the nested reporting from multiple layers. The other issue
->>> with this is that all of run_vmtests.sh must execute within a single
->>> kselftest timeout period, so let's increase that to something more
->>> suitable.
->>>
->>> In the Makefile, TEST_GEN_PROGS will compile and install the tests and
->>> will add them to the list of tests that run_kselftest.sh will run.
->>> TEST_GEN_FILES will compile and install the tests but will not add them
->>> to the test list. So let's move all the programs from TEST_GEN_PROGS to
->>> TEST_GEN_FILES so that they are built but not executed by
->>> run_kselftest.sh. Note that run_vmtests.sh is added to TEST_PROGS, which
->>> means it ends up in the test list. (the lack of "_GEN" means it won't be
->>> compiled, but simply copied).
->>>
->>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->>> ---
->>
->> Acked-by: David Hildenbrand <david@redhat.com>
-> 
-> Thanks for letting me know, David.  Sorry for the late response, still
-> catching up things.
-> 
-> I used to justify that from mm/ itself that everything should be PROG, but
-> I see that from higher level where TEST_GEN_FILE|PROG is really used this
-> makes sense.  As long as vm_utils.o will be properly linked I'll be happy
-> enough..
+On Fri, Jul 14, 2023 at 6:55=E2=80=AFPM Charlie Jenkins <charlie@rivosinc.c=
+om> wrote:
+>
+> Add tests that enforce mmap hint address behavior. mmap should default
+> to sv48. mmap will provide an address at the highest address space that
+> can fit into the hint address, unless the hint address is less than sv39
+> and not 0, then it will return a sv39 address. In addition, ensure that
+> rlimit changes do not cause mmap to fail.
+>
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  tools/testing/selftests/riscv/Makefile        |   2 +-
+>  tools/testing/selftests/riscv/mm/.gitignore   |   1 +
+>  tools/testing/selftests/riscv/mm/Makefile     |  21 +++
+>  .../selftests/riscv/mm/testcases/mmap.c       | 133 ++++++++++++++++++
+>  4 files changed, 156 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/riscv/mm/.gitignore
+>  create mode 100644 tools/testing/selftests/riscv/mm/Makefile
+>  create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
+>
+> diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selft=
+ests/riscv/Makefile
+> index 9dd629cc86aa..1b79da90396e 100644
+> --- a/tools/testing/selftests/riscv/Makefile
+> +++ b/tools/testing/selftests/riscv/Makefile
+> @@ -5,7 +5,7 @@
+>  ARCH ?=3D $(shell uname -m 2>/dev/null || echo not)
+>
+>  ifneq (,$(filter $(ARCH),riscv))
+> -RISCV_SUBTARGETS ?=3D hwprobe vector
+> +RISCV_SUBTARGETS ?=3D hwprobe vector mm
+>  else
+>  RISCV_SUBTARGETS :=3D
+>  endif
+> diff --git a/tools/testing/selftests/riscv/mm/.gitignore b/tools/testing/=
+selftests/riscv/mm/.gitignore
+> new file mode 100644
+> index 000000000000..9a6f303edcd3
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/mm/.gitignore
+> @@ -0,0 +1 @@
+> +mmap
+> diff --git a/tools/testing/selftests/riscv/mm/Makefile b/tools/testing/se=
+lftests/riscv/mm/Makefile
+> new file mode 100644
+> index 000000000000..cf68e63e7495
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/mm/Makefile
+> @@ -0,0 +1,21 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Originally tools/testing/selftests/arm64/signal
+> +
+> +# Additional include paths needed by kselftest.h and local headers
+> +CFLAGS +=3D -D_GNU_SOURCE -std=3Dgnu99 -I.
+> +
+> +SRCS :=3D $(filter-out testcases/testcases.c,$(wildcard testcases/*.c))
+> +PROGS :=3D $(patsubst %.c,%,$(SRCS))
+> +
+> +# Generated binaries to be installed by top KSFT script
+> +TEST_GEN_PROGS :=3D $(notdir $(PROGS))
+> +
+> +# Get Kernel headers installed and use them.
+> +
+> +# Including KSFT lib.mk here will also mangle the TEST_GEN_PROGS list
+> +# to account for any OUTPUT target-dirs optionally provided by
+> +# the toplevel makefile
+> +include ../../lib.mk
+> +
+> +$(TEST_GEN_PROGS): $(PROGS)
+> +       cp $(PROGS) $(OUTPUT)/
+> diff --git a/tools/testing/selftests/riscv/mm/testcases/mmap.c b/tools/te=
+sting/selftests/riscv/mm/testcases/mmap.c
+> new file mode 100644
+> index 000000000000..d8e751f7b8c9
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/mm/testcases/mmap.c
+> @@ -0,0 +1,133 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <sys/mman.h>
+> +#include <sys/resource.h>
+> +#include <sys/time.h>
+> +
+> +#include "../../kselftest_harness.h"
+> +struct addresses {
+> +       int *no_hint;
+> +       int *on_37_addr;
+> +       int *on_38_addr;
+> +       int *on_46_addr;
+> +       int *on_47_addr;
+> +       int *on_55_addr;
+> +       int *on_56_addr;
+> +};
+> +
+> +void do_mmaps(struct addresses *mmap_addresses)
+> +{
+> +       // Place all of the hint addresses on the boundaries of mmap
+> +       // sv39, sv48, sv57
+> +       // User addresses end at 1<<38, 1<<47, 1<<56 respectively
 
-Yep that's the case; I've set it up so that vm_utils.o is linked in for both
-TEST_GEN_FILE and TEST_GEN_PROG binaries.
+Doesn't checkpatch complain about those comments? Shouldn't you use /*
+*/ instead?
 
-> 
-> Acked-by: Peter Xu <peterx@redhat.com>
-
-Thanks!
-
-> 
-> Thanks,
-> 
-
+> +       void *on_37_bits =3D (void *)(1UL << 37);
+> +       void *on_38_bits =3D (void *)(1UL << 38);
+> +       void *on_46_bits =3D (void *)(1UL << 46);
+> +       void *on_47_bits =3D (void *)(1UL << 47);
+> +       void *on_55_bits =3D (void *)(1UL << 55);
+> +       void *on_56_bits =3D (void *)(1UL << 56);
+> +
+> +       int prot =3D PROT_READ | PROT_WRITE;
+> +       int flags =3D MAP_PRIVATE | MAP_ANONYMOUS;
+> +
+> +       mmap_addresses->no_hint =3D
+> +               mmap(NULL, 5 * sizeof(int), prot, flags, 0, 0);
+> +       mmap_addresses->on_37_addr =3D
+> +               mmap(on_37_bits, 5 * sizeof(int), prot, flags, 0, 0);
+> +       mmap_addresses->on_38_addr =3D
+> +               mmap(on_38_bits, 5 * sizeof(int), prot, flags, 0, 0);
+> +       mmap_addresses->on_46_addr =3D
+> +               mmap(on_46_bits, 5 * sizeof(int), prot, flags, 0, 0);
+> +       mmap_addresses->on_47_addr =3D
+> +               mmap(on_47_bits, 5 * sizeof(int), prot, flags, 0, 0);
+> +       mmap_addresses->on_55_addr =3D
+> +               mmap(on_55_bits, 5 * sizeof(int), prot, flags, 0, 0);
+> +       mmap_addresses->on_56_addr =3D
+> +               mmap(on_56_bits, 5 * sizeof(int), prot, flags, 0, 0);
+> +}
+> +
+> +TEST(default_rlimit)
+> +{
+> +// Only works on 64 bit
+> +#if __riscv_xlen =3D=3D 64
+> +       struct addresses mmap_addresses;
+> +
+> +       do_mmaps(&mmap_addresses);
+> +
+> +       EXPECT_NE(mmap_addresses.no_hint, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_37_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_38_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_46_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_47_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_55_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_56_addr, MAP_FAILED);
+> +
+> +       EXPECT_LT((unsigned long)mmap_addresses.no_hint, 1UL << 47);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_37_addr, 1UL << 38);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_38_addr, 1UL << 38);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_46_addr, 1UL << 38);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_47_addr, 1UL << 47);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_55_addr, 1UL << 47);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_56_addr, 1UL << 56);
+> +#endif
+> +}
+> +
+> +TEST(zero_rlimit)
+> +{
+> +// Only works on 64 bit
+> +#if __riscv_xlen =3D=3D 64
+> +       struct addresses mmap_addresses;
+> +       struct rlimit rlim_new =3D { .rlim_cur =3D 0, .rlim_max =3D RLIM_=
+INFINITY };
+> +
+> +       setrlimit(RLIMIT_STACK, &rlim_new);
+> +
+> +       do_mmaps(&mmap_addresses);
+> +
+> +       EXPECT_NE(mmap_addresses.no_hint, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_37_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_38_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_46_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_47_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_55_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_56_addr, MAP_FAILED);
+> +
+> +       EXPECT_LT((unsigned long)mmap_addresses.no_hint, 1UL << 47);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_37_addr, 1UL << 38);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_38_addr, 1UL << 38);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_46_addr, 1UL << 38);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_47_addr, 1UL << 47);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_55_addr, 1UL << 47);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_56_addr, 1UL << 56);
+> +#endif
+> +}
+> +
+> +TEST(infinite_rlimit)
+> +{
+> +// Only works on 64 bit
+> +#if __riscv_xlen =3D=3D 64
+> +       struct addresses mmap_addresses;
+> +       struct rlimit rlim_new =3D { .rlim_cur =3D RLIM_INFINITY,
+> +                                  .rlim_max =3D RLIM_INFINITY };
+> +
+> +       setrlimit(RLIMIT_STACK, &rlim_new);
+> +
+> +       do_mmaps(&mmap_addresses);
+> +
+> +       EXPECT_NE(mmap_addresses.no_hint, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_37_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_38_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_46_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_47_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_55_addr, MAP_FAILED);
+> +       EXPECT_NE(mmap_addresses.on_56_addr, MAP_FAILED);
+> +
+> +       EXPECT_LT((unsigned long)mmap_addresses.no_hint, 1UL << 47);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_37_addr, 1UL << 38);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_38_addr, 1UL << 38);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_46_addr, 1UL << 38);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_47_addr, 1UL << 47);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_55_addr, 1UL << 47);
+> +       EXPECT_LT((unsigned long)mmap_addresses.on_56_addr, 1UL << 56);
+> +#endif
+> +}
+> +
+> +TEST_HARNESS_MAIN
+> --
+> 2.41.0
+>
