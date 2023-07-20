@@ -2,141 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1C275B15F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 16:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B6275B24A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 17:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjGTOim (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 10:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        id S232496AbjGTPS3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 11:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbjGTOil (ORCPT
+        with ESMTP id S232509AbjGTPSX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 10:38:41 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782A2C6;
-        Thu, 20 Jul 2023 07:38:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689863920; x=1721399920;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lgQXhZJEPJe56VQB2gV2H3KOeA7V4JX7thMnYcmwZOA=;
-  b=JLj1ES9D8dZ2OTEr6uuTQwvOJdV6rubqh210Hrh9q3gSbMSp0u7Zezoo
-   KwRw75O4tMCBNiMaVpaBYOzX2Jih4961SC5/KsjIq/t9eZC2moQ4crQus
-   mYW8yD4mIYphRpNBFpnjhiP2O1wq1J+87RrkBdd2qVAsL5r+l1qnbUTmG
-   m9oiwk9yRIMG9ajs+HbkhBCCY90wLYwm/jGqpElf1ZFLSypQwuL15QT1I
-   IAKThD8F7HC2EpKchek0ZCXVRqlR3NpSZoGJF6GMWHVJX7ouAiOeLc6TD
-   w/q2Uj4w4/fch0+umGDNHgxLzFw6vguf238viHOKSIof5I5xohulruAvw
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="430544126"
-X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
-   d="scan'208";a="430544126"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 07:38:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="838144924"
-X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
-   d="scan'208";a="838144924"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Jul 2023 07:38:17 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qMUnI-0006A1-2b;
-        Thu, 20 Jul 2023 14:38:16 +0000
-Date:   Thu, 20 Jul 2023 22:37:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emma Anholt <emma@anholt.net>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com
-Subject: Re: [PATCH v2 05/11] drm/tests: helpers: Create a helper to allocate
- a locking ctx
-Message-ID: <202307202244.26VyeZKj-lkp@intel.com>
-References: <20230720-kms-kunit-actions-rework-v2-5-175017bd56ab@kernel.org>
+        Thu, 20 Jul 2023 11:18:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F4A26B5;
+        Thu, 20 Jul 2023 08:18:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F182661B4C;
+        Thu, 20 Jul 2023 15:18:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE618C433CA;
+        Thu, 20 Jul 2023 15:18:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689866298;
+        bh=sa++SOpu0OOLby+nKZrbEuQPjr0iW/gaMnyzIgw8AIU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DXSLZmG9sH0SlU10hMwLPvpQ57q5vtc5mk3AOtculg3jPG/bzaG/46wihnNLqpBMY
+         yIxcbT7DTFFZDQOfrHs48EqyD+YFZbAGdxgkLCqj+8CMxTBt3HQ++0NhH7u0iTVTx9
+         x9NsVsjIEjoWKrgfh7HYIk/yjxAiADzoiff2n14ynez7axrZy1+OeL0bK/ZlHPv1in
+         SUeHNo0McwOMg4p70PH1whla7mm4AVI8Fnsor4TXJYlo4AK5+fbA0gSA5g5JNf7dzL
+         +98fyTCfeFq3OBJ+yj2bWcRfYyfQFTsn75Eu4WrGrp7Bh5nFmFeod55CvzgTXrmpWP
+         rlxluoJWrdcyA==
+Message-ID: <dae3fc04-5e59-dff5-db77-ea7d0a3d154e@kernel.org>
+Date:   Thu, 20 Jul 2023 09:18:17 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230720-kms-kunit-actions-rework-v2-5-175017bd56ab@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH net-next v2 3/4] nexthop: Do not return invalid nexthop
+ object during multipath selection
+Content-Language: en-US
+To:     Benjamin Poirier <bpoirier@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>
+References: <20230719-nh_select-v2-0-04383e89f868@nvidia.com>
+ <20230719-nh_select-v2-3-04383e89f868@nvidia.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20230719-nh_select-v2-3-04383e89f868@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Maxime,
+On 7/19/23 7:57 AM, Benjamin Poirier wrote:
+> With legacy nexthops, when net.ipv4.fib_multipath_use_neigh is set,
+> fib_select_multipath() will never set res->nhc to a nexthop that is not
+> good (as per fib_good_nh()). OTOH, with nexthop objects,
+> nexthop_select_path_hthr() may return a nexthop that failed the
+> nexthop_is_good_nh() test even if there was one that passed. Refactor
+> nexthop_select_path_hthr() to follow a selection logic more similar to
+> fib_select_multipath().
+> 
+> The issue can be demonstrated with the following sequence of commands. The
+> first block shows that things work as expected with legacy nexthops. The
+> last sequence of `ip rou get` in the second block shows the problem case -
+> some routes still use the .2 nexthop.
+> 
+> sysctl net.ipv4.fib_multipath_use_neigh=1
+> ip link add dummy1 up type dummy
+> ip rou add 198.51.100.0/24 nexthop via 192.0.2.1 dev dummy1 onlink nexthop via 192.0.2.2 dev dummy1 onlink
+> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
+> ip neigh add 192.0.2.1 dev dummy1 nud failed
+> echo ".1 failed:"  # results should not use .1
+> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
+> ip neigh del 192.0.2.1 dev dummy1
+> ip neigh add 192.0.2.2 dev dummy1 nud failed
+> echo ".2 failed:"  # results should not use .2
+> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
+> ip link del dummy1
+> 
+> ip link add dummy1 up type dummy
+> ip nexthop add id 1 via 192.0.2.1 dev dummy1 onlink
+> ip nexthop add id 2 via 192.0.2.2 dev dummy1 onlink
+> ip nexthop add id 1001 group 1/2
+> ip rou add 198.51.100.0/24 nhid 1001
+> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
+> ip neigh add 192.0.2.1 dev dummy1 nud failed
+> echo ".1 failed:"  # results should not use .1
+> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
+> ip neigh del 192.0.2.1 dev dummy1
+> ip neigh add 192.0.2.2 dev dummy1 nud failed
+> echo ".2 failed:"  # results should not use .2
+> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
+> ip link del dummy1
+> 
+> Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+> Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+> ---
+>  net/ipv4/nexthop.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on c58c49dd89324b18a812762a2bfa5a0458e4f252]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-tests-helpers-Switch-to-kunit-actions/20230720-191901
-base:   c58c49dd89324b18a812762a2bfa5a0458e4f252
-patch link:    https://lore.kernel.org/r/20230720-kms-kunit-actions-rework-v2-5-175017bd56ab%40kernel.org
-patch subject: [PATCH v2 05/11] drm/tests: helpers: Create a helper to allocate a locking ctx
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230720/202307202244.26VyeZKj-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230720/202307202244.26VyeZKj-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307202244.26VyeZKj-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/tests/drm_kunit_helpers.c:145: warning: expecting prototype for drm_kunit_helper_context_alloc(). Prototype was for drm_kunit_helper_acquire_ctx_alloc() instead
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
 
-vim +145 drivers/gpu/drm/tests/drm_kunit_helpers.c
-
-   130	
-   131	/**
-   132	 * drm_kunit_helper_context_alloc - Allocates an acquire context
-   133	 * @test: The test context object
-   134	 *
-   135	 * Allocates and initializes a modeset acquire context.
-   136	 *
-   137	 * The context is tied to the kunit test context, so we must not call
-   138	 * drm_modeset_acquire_fini() on it, it will be done so automatically.
-   139	 *
-   140	 * Returns:
-   141	 * An ERR_PTR on error, a pointer to the newly allocated context otherwise
-   142	 */
-   143	struct drm_modeset_acquire_ctx *
-   144	drm_kunit_helper_acquire_ctx_alloc(struct kunit *test)
- > 145	{
-   146		struct drm_modeset_acquire_ctx *ctx;
-   147		int ret;
-   148	
-   149		ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
-   150		KUNIT_ASSERT_NOT_NULL(test, ctx);
-   151	
-   152		drm_modeset_acquire_init(ctx, 0);
-   153	
-   154		ret = kunit_add_action_or_reset(test,
-   155						action_drm_release_context,
-   156						ctx);
-   157		if (ret)
-   158			return ERR_PTR(ret);
-   159	
-   160		return ctx;
-   161	}
-   162	EXPORT_SYMBOL_GPL(drm_kunit_helper_acquire_ctx_alloc);
-   163	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
