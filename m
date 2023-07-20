@@ -2,62 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B6275B24A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 17:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECF675B297
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 17:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbjGTPS3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 11:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
+        id S231464AbjGTPag (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 11:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbjGTPSX (ORCPT
+        with ESMTP id S230366AbjGTPaf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 11:18:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F4A26B5;
-        Thu, 20 Jul 2023 08:18:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F182661B4C;
-        Thu, 20 Jul 2023 15:18:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE618C433CA;
-        Thu, 20 Jul 2023 15:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689866298;
-        bh=sa++SOpu0OOLby+nKZrbEuQPjr0iW/gaMnyzIgw8AIU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DXSLZmG9sH0SlU10hMwLPvpQ57q5vtc5mk3AOtculg3jPG/bzaG/46wihnNLqpBMY
-         yIxcbT7DTFFZDQOfrHs48EqyD+YFZbAGdxgkLCqj+8CMxTBt3HQ++0NhH7u0iTVTx9
-         x9NsVsjIEjoWKrgfh7HYIk/yjxAiADzoiff2n14ynez7axrZy1+OeL0bK/ZlHPv1in
-         SUeHNo0McwOMg4p70PH1whla7mm4AVI8Fnsor4TXJYlo4AK5+fbA0gSA5g5JNf7dzL
-         +98fyTCfeFq3OBJ+yj2bWcRfYyfQFTsn75Eu4WrGrp7Bh5nFmFeod55CvzgTXrmpWP
-         rlxluoJWrdcyA==
-Message-ID: <dae3fc04-5e59-dff5-db77-ea7d0a3d154e@kernel.org>
-Date:   Thu, 20 Jul 2023 09:18:17 -0600
+        Thu, 20 Jul 2023 11:30:35 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DE02706;
+        Thu, 20 Jul 2023 08:30:11 -0700 (PDT)
+X-QQ-mid: bizesmtp63t1689866981t599l9r8
+Received: from linux-lab-host.localdomain ( [119.123.130.39])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 20 Jul 2023 23:29:40 +0800 (CST)
+X-QQ-SSF: 01200000000000D0X000000A0000000
+X-QQ-FEAT: LE7C6P2vL8QHe4mvvHH0q96A0G++pPLR/aSG1lKbkXa0Wii3Y2PgYRO2VIj+i
+        K95p9gZzvt9OcNxb5oKKOkxnjzObylDjH10meNR4fus7qhBQgGMQ9Q1XCQiweJPQa/plE51
+        IHyUv22YYyH1AmWZefc2rWcZcxwUKzGYt4BYiJ5GMWvLjjRALlU6552euLerECa23mM63DE
+        5fDTEqLrLJMgAOnBdu1rQdaIM+tsB8d3HQEMxBaNl7ictefnj9tBEW2ojNPxJ4G5AQY05A2
+        MMCl6LyIdi8uepkpbO/5rATnluIGrEfjInDyZKGT/NOx3nYjSm487MUznpqWlcJ7TOEoetQ
+        NWS6d5rO6IxXgYStQMxIj5v65bf3q1QYKXvyFXpD2910T/GKoA=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 9125664167204295423
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     linux@weissschuh.net
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, w@1wt.eu
+Subject: [PATCH RFC 7/7] selftests/nolibc: proof of concept for TAP output
+Date:   Thu, 20 Jul 2023 23:29:40 +0800
+Message-Id: <20230720152940.7623-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230719-nolibc-ktap-tmp-v1-7-930bd0c52ff1@weissschuh.net>
+References: <20230719-nolibc-ktap-tmp-v1-7-930bd0c52ff1@weissschuh.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH net-next v2 3/4] nexthop: Do not return invalid nexthop
- object during multipath selection
-Content-Language: en-US
-To:     Benjamin Poirier <bpoirier@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Ido Schimmel <idosch@nvidia.com>
-References: <20230719-nh_select-v2-0-04383e89f868@nvidia.com>
- <20230719-nh_select-v2-3-04383e89f868@nvidia.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20230719-nh_select-v2-3-04383e89f868@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,55 +51,142 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/19/23 7:57 AM, Benjamin Poirier wrote:
-> With legacy nexthops, when net.ipv4.fib_multipath_use_neigh is set,
-> fib_select_multipath() will never set res->nhc to a nexthop that is not
-> good (as per fib_good_nh()). OTOH, with nexthop objects,
-> nexthop_select_path_hthr() may return a nexthop that failed the
-> nexthop_is_good_nh() test even if there was one that passed. Refactor
-> nexthop_select_path_hthr() to follow a selection logic more similar to
-> fib_select_multipath().
+Hi, Thomas
+
+The result looks very similar and the change seems not that big, thanks.
+
+I have a generic question: do we need to compile nolibc-test.c
+independently or at least let users easily compile nolibc-test.c in the
+other places no just in kernel source code, for example, the other libcs
+may want to download and compile it directly.
+
+The functions used in this change seems not many, is it able to provide
+our clones for them or only provide the clones when we compile them
+out-of-kernel.
+
+for example:
+
+    #ifdef NOLIBC_TEST_IN_KERNEL
+    /* -DNOLIBC_TEST_IN_KERNEL from Makefile, for future compatibility */
+    #include "../kselftest.h"
+    #else
+    // our clones of the used functions, for standalone usage
+    #endif
+
+Best regards,
+Zhangjin
+
+> Dirty proof of concept to show how (K)TAP output can look and how it can
+> be used.
 > 
-> The issue can be demonstrated with the following sequence of commands. The
-> first block shows that things work as expected with legacy nexthops. The
-> last sequence of `ip rou get` in the second block shows the problem case -
-> some routes still use the .2 nexthop.
+> Currently test selection is not supported and for simplicity only the
+> startup tests are enabled.
 > 
-> sysctl net.ipv4.fib_multipath_use_neigh=1
-> ip link add dummy1 up type dummy
-> ip rou add 198.51.100.0/24 nexthop via 192.0.2.1 dev dummy1 onlink nexthop via 192.0.2.2 dev dummy1 onlink
-> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
-> ip neigh add 192.0.2.1 dev dummy1 nud failed
-> echo ".1 failed:"  # results should not use .1
-> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
-> ip neigh del 192.0.2.1 dev dummy1
-> ip neigh add 192.0.2.2 dev dummy1 nud failed
-> echo ".2 failed:"  # results should not use .2
-> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
-> ip link del dummy1
+> Example output:
 > 
-> ip link add dummy1 up type dummy
-> ip nexthop add id 1 via 192.0.2.1 dev dummy1 onlink
-> ip nexthop add id 2 via 192.0.2.2 dev dummy1 onlink
-> ip nexthop add id 1001 group 1/2
-> ip rou add 198.51.100.0/24 nhid 1001
-> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
-> ip neigh add 192.0.2.1 dev dummy1 nud failed
-> echo ".1 failed:"  # results should not use .1
-> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
-> ip neigh del 192.0.2.1 dev dummy1
-> ip neigh add 192.0.2.2 dev dummy1 nud failed
-> echo ".2 failed:"  # results should not use .2
-> for i in {10..19}; do ip -o rou get 198.51.100.$i; done
-> ip link del dummy1
+> $ ./nolibc-test
+>  KTAP version 1
+>  1..15
+>  ok 1 argc = 1
+>  ok 2 argv_addr = <0x7ffdc66173a8>
+>  ok 3 argv_environ = <0x7ffdc66173a8>
+>  ok 4 argv_total = 1
+>  ok 5 argv0_addr = <0x7ffdc6618bca>
+>  ok 6 argv0_str = <0x7ffdc6618bca>
+>  ok 7 argv0_len = 13
+>  ok 8 environ_addr = <0x7ffdc66173b8>
+>  ok 9 environ_envp = <0x7ffdc66173b8>
+>  ok 10 environ_auxv = <0x7ffdc66173b8>
+>  ok 11 environ_total = 271
+>  ok 12 environ_HOME = <0x7ffdc6618cc7>
+>  ok 13 auxv_addr = <0x7ffdc66174c8>
+>  ok 14 auxv_AT_UID = 1000
+>  ok 15 auxv_AT_PAGESZ = 4096
+>  # Exiting with status 0
+>  # Totals: pass:15 fail:0 xfail:0 xpass:0 skip:0 error:0
 > 
-> Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-> Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+> $ ./libc-test
+>  KTAP version 1
+>  1..15
+>  ok 1 argc = 1
+>  ok 2 argv_addr = <0x7ffd5f3d43e8>
+>  ok 3 argv_environ = <0x7ffd5f3d43e8>
+>  ok 4 argv_total = 1
+>  ok 5 argv0_addr = <0x7ffd5f3d5bd0>
+>  ok 6 argv0_str = <0x7ffd5f3d5bd0>
+>  ok 7 argv0_len = 11
+>  ok 8 environ_addr = <0x7ffd5f3d43f8>
+>  ok 9 environ_envp = <0x7ffd5f3d43f8>
+>  ok 10 environ_auxv # SKIP test_auxv != (void *)-1
+>  ok 11 environ_total # SKIP test_auxv != (void *)-1
+>  ok 12 environ_HOME = <0x7ffd5f3d5ccb>
+>  ok 13 auxv_addr # SKIP test_auxv != (void *)-1
+>  ok 14 auxv_AT_UID = 1000
+>  ok 15 auxv_AT_PAGESZ = 4096
+>  # Exiting with status 0
+>  # Totals: pass:12 fail:0 xfail:0 xpass:0 skip:3 error:0
+> 
+> ./run-all-tests.sh | $SRC/tools/testing/kunit/kunit.py parse
+>  [23:47:26] ============================================================
+>  [23:47:26] ====================== (15 subtests) =======================
+>  [23:47:26] [PASSED] argc = 1
+>  [23:47:26] [PASSED] argv_addr = <0x7ffcac1b8bc8>
+>  [23:47:26] [PASSED] argv_environ = <0x7ffcac1b8bc8>
+>  [23:47:26] [PASSED] argv_total = 1
+>  [23:47:26] [PASSED] argv0_addr = <0x7ffcac1b9bd0>
+>  [23:47:26] [PASSED] argv0_str = <0x7ffcac1b9bd0>
+>  [23:47:26] [PASSED] argv0_len = 11
+>  [23:47:26] [PASSED] environ_addr = <0x7ffcac1b8bd8>
+>  [23:47:26] [PASSED] environ_envp = <0x7ffcac1b8bd8>
+>  [23:47:26] [SKIPPED] environ_auxv
+>  [23:47:26] [SKIPPED] environ_total
+>  [23:47:26] [PASSED] environ_HOME = <0x7ffcac1b9ccb>
+>  [23:47:26] [SKIPPED] auxv_addr
+>  [23:47:26] [PASSED] auxv_AT_UID = 1000
+>  [23:47:26] [PASSED] auxv_AT_PAGESZ = 4096
+>  [23:47:26] ====================== [PASSED] arm64 ======================
+>  [23:47:26] ====================== (15 subtests) =======================
+>  [23:47:26] [PASSED] argc = 1
+>  [23:47:26] [PASSED] argv_addr = <0x7ffdee178188>
+>  [23:47:26] [PASSED] argv_environ = <0x7ffdee178188>
+>  [23:47:26] [PASSED] argv_total = 1
+>  [23:47:26] [PASSED] argv0_addr = <0x7ffdee178bd0>
+>  [23:47:26] [PASSED] argv0_str = <0x7ffdee178bd0>
+>  [23:47:26] [PASSED] argv0_len = 11
+>  [23:47:26] [PASSED] environ_addr = <0x7ffdee178198>
+>  [23:47:26] [PASSED] environ_envp = <0x7ffdee178198>
+>  [23:47:26] [SKIPPED] environ_auxv
+>  [23:47:26] [SKIPPED] environ_total
+>  [23:47:26] [PASSED] environ_HOME = <0x7ffdee178ccb>
+>  [23:47:26] [SKIPPED] auxv_addr
+>  [23:47:26] [PASSED] auxv_AT_UID = 1000
+>  [23:47:26] [PASSED] auxv_AT_PAGESZ = 4096
+>  [23:47:26] ===================== [PASSED] x86_64 ======================
+>  [23:47:26] ====================== (15 subtests) =======================
+>  [23:47:26] [PASSED] argc = 1
+>  [23:47:26] [PASSED] argv_addr = <0x7ffc16bf3628>
+>  [23:47:26] [PASSED] argv_environ = <0x7ffc16bf3628>
+>  [23:47:26] [PASSED] argv_total = 1
+>  [23:47:26] [PASSED] argv0_addr = <0x7ffc16bf4bd0>
+>  [23:47:26] [PASSED] argv0_str = <0x7ffc16bf4bd0>
+>  [23:47:26] [PASSED] argv0_len = 11
+>  [23:47:26] [PASSED] environ_addr = <0x7ffc16bf3638>
+>  [23:47:26] [PASSED] environ_envp = <0x7ffc16bf3638>
+>  [23:47:26] [SKIPPED] environ_auxv
+>  [23:47:26] [SKIPPED] environ_total
+>  [23:47:26] [PASSED] environ_HOME = <0x7ffc16bf4ccb>
+>  [23:47:26] [SKIPPED] auxv_addr
+>  [23:47:26] [PASSED] auxv_AT_UID = 1000
+>  [23:47:26] [PASSED] auxv_AT_PAGESZ = 4096
+>  [23:47:26] ===================== [PASSED] riscv64 =====================
+>  [23:47:26] ============================================================
+>  [23:47:26] Testing complete. Ran 45 tests: passed: 36, skipped: 9
+> 
+> The output of kunit.py is colored after the test results.
+> 
+> Not-signed-off
 > ---
->  net/ipv4/nexthop.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
+>  tools/testing/selftests/nolibc/nolibc-test.c    | 121 ++++++++----------------
+>  tools/testing/selftests/nolibc/run-all-tests.sh |  22 +++++
+>  2 files changed, 63 insertions(+), 80 deletions(-)
 > 
-
-Reviewed-by: David Ahern <dsahern@kernel.org>
-
-
