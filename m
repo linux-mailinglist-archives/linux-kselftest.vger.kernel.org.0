@@ -2,173 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D35875B972
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 23:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C99C75B993
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 23:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjGTVRI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 17:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S230036AbjGTVbc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 17:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjGTVRI (ORCPT
+        with ESMTP id S229561AbjGTVbc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 17:17:08 -0400
-Received: from smtp-fw-52002.amazon.com (smtp-fw-52002.amazon.com [52.119.213.150])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E081C10F3;
-        Thu, 20 Jul 2023 14:17:06 -0700 (PDT)
+        Thu, 20 Jul 2023 17:31:32 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517582711
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 14:31:29 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so1626a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 14:31:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1689887827; x=1721423827;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wDX3ZPeckpdvoDd+/BKwtAdHUyZVsWMkV40y0TdOiMo=;
-  b=D+3Vjc2n/4ceybnaE6qfy9WNItLonYt0+TME0ShHxGOVwXqIYUDXmQD1
-   FmhumbiLuXjvZkAFPLMPf/tLInPDvHRubiag9dLmbWS5QYH3AQHFHt82v
-   eytlyr7HPRS5EP+EhSSKsrDbizgdJ5BFemkay1BJ8XlHsZ0Rns/uohRtF
-   c=;
-X-IronPort-AV: E=Sophos;i="6.01,219,1684800000"; 
-   d="scan'208";a="573336688"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-b5bd57cf.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-52002.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 21:17:04 +0000
-Received: from EX19MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-m6i4x-b5bd57cf.us-east-1.amazon.com (Postfix) with ESMTPS id 70119442FB;
-        Thu, 20 Jul 2023 21:17:03 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 20 Jul 2023 21:17:02 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.106.101.12) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.30;
- Thu, 20 Jul 2023 21:16:56 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <lmb@isovalent.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
-        <hemanthmalla@gmail.com>, <joe@cilium.io>, <joe@wand.net.nz>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
-        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
-Subject: Re: [PATCH bpf-next v6 2/8] bpf: reject unhashed sockets in bpf_sk_assign
-Date:   Thu, 20 Jul 2023 14:16:46 -0700
-Message-ID: <20230720211646.34782-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230720-so-reuseport-v6-2-7021b683cdae@isovalent.com>
-References: <20230720-so-reuseport-v6-2-7021b683cdae@isovalent.com>
+        d=google.com; s=20221208; t=1689888688; x=1690493488;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o+TZv+9vK9meP7yrsiegPH7fftVme4KMzKQcTAi+dYg=;
+        b=J9e30X5mOAwxlKHrwP2CbSu1F/CG6CRF7CJdwE5hWdatry0QdC7GvE9sa2GAUHmqfx
+         BQnNh2u/B8EU2isZoPyJaY55LxZr8Wk7ijCpORBGrRQRtcI9DRSQa1JxA+IpFvev3qHQ
+         2NETPb6LKzoIq9u5qvcHNgD/tLM6DhBjaeNaA/47QL1sXQacbivg0MR8Mg4hi0l70+UI
+         z9aWO1z0PneeUD7Gx5YAfVdbYnZ5MQ4/NvrTPiy0rWggWHYTSo+esvZacmx3WmPFCilh
+         cFtM8RiYLG+6x9amz7i0XqnUCojw/43ZFwPD+JXlTBit32B5TjQlPciHIN99sayBH5Rx
+         tn+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689888688; x=1690493488;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o+TZv+9vK9meP7yrsiegPH7fftVme4KMzKQcTAi+dYg=;
+        b=cPyKpxAia1jWp91lPhEnRAJHLaPlHDhHknLkDkRb/aRfIHvhLeMsORTGbmxnwlm7um
+         Wr5UgUVLYrDyTd7KHHhC7VQS7mt5GH5XX4Weo7rhIeTiwPwX5R5JbDIw1gBh3MQLdKiO
+         Utos6sfycWWj7ZF+awFChfcDEgnZx9XVfanqQIAVWu9M4VFhDF3B9z7z3Sl8b14qF5xm
+         K4jZ9W3CcFYa5172lwDksR1LJ6d6EWgSz2stXcXKbufoWAUW+4sXXLeVBcWhF3ceWWHD
+         ZAVUJ7eQKk8R/TBoV0YyOEmNAhLGy6fwwz7jwbecyuTosP5pbUDNRriw2GiK4c7/NrNk
+         69ZA==
+X-Gm-Message-State: ABy/qLZeu5yXMzjYLeXwMUgMbS11l0C9Faje4HHf5rQyxY4Eklz4E6AL
+        YzypcVmPdHhRYDA9Y+9Bkjd3kVZ/hle5N0FYIfgDjg==
+X-Google-Smtp-Source: APBJJlHZmK/ZBI3PExS8dMAh0beNXqHS4PzqN8eSz+tcvORm0rEPyAk7MU4aQKmS9HkW2VbAurIC5Ay813GGueoI0q4=
+X-Received: by 2002:a50:cd16:0:b0:51e:27ac:8f9a with SMTP id
+ z22-20020a50cd16000000b0051e27ac8f9amr10339edi.1.1689888687673; Thu, 20 Jul
+ 2023 14:31:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.106.101.12]
-X-ClientProxiedBy: EX19D036UWB004.ant.amazon.com (10.13.139.170) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230420205734.1288498-1-rmoar@google.com>
+In-Reply-To: <20230420205734.1288498-1-rmoar@google.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Thu, 20 Jul 2023 17:31:07 -0400
+Message-ID: <CA+GJov6w2GvD8th0t9RW=K1ntHk4dQRuYa4hoDHcmzBDK5YriA@mail.gmail.com>
+Subject: Re: [KTAP V2 PATCH] ktap_v2: add test metadata
+To:     frowand.list@gmail.com, davidgow@google.com,
+        skhan@linuxfoundation.org, keescook@chromium.org,
+        Tim.Bird@sony.com, brendanhiggins@google.com
+Cc:     corbet@lwn.net, guillaume.tucker@collabora.com,
+        dlatypov@google.com, kernelci@lists.linux.dev,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Thu, 20 Jul 2023 17:30:06 +0200
-> The semantics for bpf_sk_assign are as follows:
-> 
->     sk = some_lookup_func()
->     bpf_sk_assign(skb, sk)
->     bpf_sk_release(sk)
-> 
-> That is, the sk is not consumed by bpf_sk_assign. The function
-> therefore needs to make sure that sk lives long enough to be
-> consumed from __inet_lookup_skb. The path through the stack for a
-> TCPv4 packet is roughly:
-> 
->   netif_receive_skb_core: takes RCU read lock
->     __netif_receive_skb_core:
->       sch_handle_ingress:
->         tcf_classify:
->           bpf_sk_assign()
->       deliver_ptype_list_skb:
->         deliver_skb:
->           ip_packet_type->func == ip_rcv:
->             ip_rcv_core:
->             ip_rcv_finish_core:
->               dst_input:
->                 ip_local_deliver:
->                   ip_local_deliver_finish:
->                     ip_protocol_deliver_rcu:
->                       tcp_v4_rcv:
->                         __inet_lookup_skb:
->                           skb_steal_sock
-> 
-> The existing helper takes advantage of the fact that everything
-> happens in the same RCU critical section: for sockets with
-> SOCK_RCU_FREE set bpf_sk_assign never takes a reference.
-> skb_steal_sock then checks SOCK_RCU_FREE again and does sock_put
-> if necessary.
-> 
-> This approach assumes that SOCK_RCU_FREE is never set on a sk
-> between bpf_sk_assign and skb_steal_sock, but this invariant is
-> violated by unhashed UDP sockets. A new UDP socket is created
-> in TCP_CLOSE state but without SOCK_RCU_FREE set. That flag is only
-> added in udp_lib_get_port() which happens when a socket is bound.
-> 
-> When bpf_sk_assign was added it wasn't possible to access unhashed
-> UDP sockets from BPF, so this wasn't a problem. This changed
-> in commit 0c48eefae712 ("sock_map: Lift socket state restriction
-> for datagram sockets"), but the helper wasn't adjusted accordingly.
-> The following sequence of events will therefore lead to a refcount
-> leak:
-> 
-> 1. Add socket(AF_INET, SOCK_DGRAM) to a sockmap.
-> 2. Pull socket out of sockmap and bpf_sk_assign it. Since
->    SOCK_RCU_FREE is not set we increment the refcount.
-> 3. bind() or connect() the socket, setting SOCK_RCU_FREE.
-> 4. skb_steal_sock will now set refcounted = false due to
->    SOCK_RCU_FREE.
-> 5. tcp_v4_rcv() skips sock_put().
-> 
-> Fix the problem by rejecting unhashed sockets in bpf_sk_assign().
-> This matches the behaviour of __inet_lookup_skb which is ultimately
-> the goal of bpf_sk_assign().
-> 
-> Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
+On Thu, Apr 20, 2023 at 4:57=E2=80=AFPM Rae Moar <rmoar@google.com> wrote:
+>
+> Add specification for declaring test metadata to the KTAP v2 spec.
+>
+> The purpose of test metadata is to allow for the declaration of essential
+> testing information in KTAP output. This information includes test
+> names, test configuration info, test attributes, and test files.
+>
+> There have been similar ideas around the idea of test metadata such as te=
+st
+> prefixes and test name lines. However, I propose this specification as an
+> overall fix for these issues.
+>
+> These test metadata lines are a form of diagnostic lines with the
+> format: "# <metadata_type>: <data>". As a type of diagnostic line, test
+> metadata lines are compliant with KTAP v1, which will help to not
+> interfere too much with current parsers.
+>
+> Specifically the "# Subtest:" line is derived from the TAP 14 spec:
+> https://testanything.org/tap-version-14-specification.html.
+>
+> The proposed location for test metadata is in the test header, between th=
+e
+> version line and the test plan line. Note including diagnostic lines in
+> the test header is a depature from KTAP v1.
+>
+> This location provides two main benefits:
+>
+> First, metadata will be printed prior to when subtests are run. Then if a
+> test fails, test metadata can help discern which test is causing the issu=
+e
+> and potentially why.
+>
+> Second, this location ensures that the lines will not be accidentally
+> parsed as a subtest's diagnostic lines because the lines are bordered by
+> the version line and plan line.
+>
+> Here is an example of test metadata:
+>
+>  KTAP version 2
+>  # Config: CONFIG_TEST=3Dy
+>  1..1
+>      KTAP version 2
+>      # Subtest: test_suite
+>      # File: /sys/kernel/...
+>      # Attributes: slow
+>      # Other: example_test
+>      1..2
+>      ok 1 test_1
+>      ok 2 test_2
+>  ok 1 test_suite
 
-Should this be 0c48eefae712 then ?
+Hi everyone!
 
+I have been doing some more thinking on KTAP Metadata as I have been
+working on the KUnit Test Attributes patch set
+(https://lore.kernel.org/all/20230719222338.259684-1-rmoar@google.com/).
+Two additional ideas have come up in the discussion:
 
-> Cc: Joe Stringer <joe@cilium.io>
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+1) I wonder if it would be easier to separate "ktap_attributes" into
+individual attributes.
 
-The change itself looks good.
+The two proposed KUnit attributes currently are speed and module name.
+I think it would be easier for parsing and reading if these attributes
+had corresponding "ktap_speed" and "ktap_module" categories. Then, in
+the future if there are too many attributes to print on separate lines
+they could be grouped into a "ktap_attributes" category later.
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+2) I wonder if we can shift the concept of KTAP metadata to all tests
+rather than just suites.
+
+I think it would be very valuable to have a KTAP metadata format that
+is flexible to work for both suites and test cases. To transition this
+to test cases, I propose we would use the same format we have been
+discussing but just printed just before the test result line (David
+Gow originally came up with this idea). This would look something like
+this:
+
+KTAP version 2
+# ktap_config: CONFIG_TEST=3Dy
+1..1
+    KTAP version 2
+    # ktap_test: test_suite
+    # ktap_module: example
+    1..2
+    ok 1 test_1
+    # ktap_test: test_2
+    # ktap_speed: slow
+    # test initializing   // diagnostic data
+    ok 2 test_2
+ok 1 test_suite
+
+I don't love using the "ktap_test: test_2" line since the test name is
+repeated. However, I like that this mirrors the same format used for a
+suite and I currently think it is the best way to define the start of
+the metadata header.
+
+The test name line could actually be useful by providing context for
+any test diagnostic data printed below or if the test crashes while
+running.
+
+What do people think of these ideas?
 
 Thanks!
+-Rae
 
-
+>
+> Here is a link to a version of the KUnit parser that is able to parse tes=
+t
+> metadata lines for KTAP version 2. Note this includes test metadata
+> lines for the main level of KTAP.
+>
+> Link: https://kunit-review.googlesource.com/c/linux/+/5809
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
 > ---
->  net/core/filter.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 797e8f039696..b5b51ef48c5f 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -7353,6 +7353,8 @@ BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
->  		return -ENETUNREACH;
->  	if (unlikely(sk_fullsock(sk) && sk->sk_reuseport))
->  		return -ESOCKTNOSUPPORT;
-> +	if (sk_unhashed(sk))
-> +		return -EOPNOTSUPP;
->  	if (sk_is_refcounted(sk) &&
->  	    unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
->  		return -ENOENT;
-> 
-> -- 
-> 2.41.0
+>
+> Hi everyone,
+>
+> I would like to use this proposal similar to an RFC to gather ideas on th=
+e
+> topic of test metadata. Let me know what you think.
+>
+> I am also interested in brainstorming a list of recognized metadata types=
+.
+> Providing recognized metadata types would be helpful in parsing and
+> displaying test metadata in a useful way.
+>
+> Current ideas:
+> - "# Subtest: <test_name>" to indicate test name (name must match
+>   corresponding result line)
+> - "# Attributes: <attributes list>" to indicate test attributes (list
+>   separated by commas)
+> - "# File: <file_path>" to indicate file used in testing
+>
+> Any other ideas?
+>
+> Note this proposal replaces two of my previous proposals: "ktap_v2: add
+> recognized test name line" and "ktap_v2: allow prefix to KTAP lines."
+>
+> Thanks!
+> -Rae
+>
+> Note: this patch is based on Frank's ktap_spec_version_2 branch.
