@@ -2,104 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8F675ACF7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 13:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7A975AD0F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 13:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjGTL30 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 07:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
+        id S230495AbjGTLfJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 07:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjGTL30 (ORCPT
+        with ESMTP id S230440AbjGTLfI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 07:29:26 -0400
+        Thu, 20 Jul 2023 07:35:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F464B7;
-        Thu, 20 Jul 2023 04:29:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CC2E43
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 04:35:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDA7561A32;
-        Thu, 20 Jul 2023 11:29:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C20ECC433C8;
-        Thu, 20 Jul 2023 11:29:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BC1661A44
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 11:35:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A46CC433C7;
+        Thu, 20 Jul 2023 11:35:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689852564;
-        bh=TTITfnpSbPlFq5r36NeY2UBi8pOPRA+E7+jXQ+8VJcI=;
+        s=k20201202; t=1689852906;
+        bh=nCa/1RnSN1PvAEqgZ6aBg7wOWjtKMWsXJd5ab65Fd4s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Me9KG+0l8LRP1GpZVtKDY8zmdy7IjaD7KQa5NIqsbriFqY/nhtMNbN0/65Wk3Hqgo
-         a/A7SN2erpOkurmCXH/kaumvn+pg0gaIqkkZ6EF5WeJ0g/ozRKyDPVROurJmHCUfwO
-         GUCCtrE1lt0igoLa+TqDZCKYMnICMzH6k2NKqEfowixLUhcetID96i0mSJ3+OU2/2u
-         ZOfkIUmRmMsDoQvzVFBU9WCA4y4ekWdvprJpGS3j+Mlv7/13k5NiaOXbmlbCCpspHL
-         zHTfDNjT9WV4okmLeTD0cPgUNCFNdzDpDkDBUpUbjth7t4smlrZ6TLoQR9iSyZ8jo5
-         1s/7PMhd7y37g==
-Date:   Thu, 20 Jul 2023 13:29:21 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] drivers: base: Add basic devm tests for root
- devices
-Message-ID: <vfllifvyada5q6agv2jouzqvlcisdqvkv54vs32x3b6jku4aw4@qqqfsgv57mvt>
-References: <20230329-kunit-devm-inconsistencies-test-v2-0-19feb71e864b@kernel.org>
- <20230329-kunit-devm-inconsistencies-test-v2-1-19feb71e864b@kernel.org>
- <CABVgOSmUZw3CpzpduAjDx+eZCU5tm=5Pq8dyVt+d7oXb6-_h=Q@mail.gmail.com>
+        b=CLPZcIE4fJNecqV+OQQNcp2ow6XvQ5cQlpBsSlRjZkeYbBvtgEwpC97S7QEGt18ev
+         PK9Du22sqZc9dKNubjxc1N3h6mSKTvpMAD2dLbmPhLuZd178fH+nYturxidi3gIddF
+         KYiGTB6z16jRf5/Fs4fLTWTemNsC9cfEbrO0GFfNfOAk8+/5jJUgp10CR4yIiGyG4o
+         NX4GJIA9+e4XDK261EUf8wIwsu3Wxx2xX4NaQhni1ePoNiTG4t4Y27vESsRO7SIxwM
+         TEDfffhxTXO7sL2ptOwI2pIF3x31y/z6BtG6cA02tM4WFVMbc/yGTbbxaDM3p3cL2e
+         J+ZjBZcI5yGYg==
+Date:   Thu, 20 Jul 2023 12:35:02 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] kselftest/arm64: Exit streaming mode after collecting
+ signal context
+Message-ID: <037425cc-bf17-4dfd-8bdc-c1c10b153ebb@sirena.org.uk>
+References: <20230712-arm64-signal-memcpy-fix-v2-1-494f7025caf6@kernel.org>
+ <20230720103113.GA11034@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aTvBd9Kod+7PIAg3"
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CABVgOSmUZw3CpzpduAjDx+eZCU5tm=5Pq8dyVt+d7oXb6-_h=Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230720103113.GA11034@willie-the-truck>
+X-Cookie: Ginger snap.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi David,
 
-On Wed, Jul 19, 2023 at 05:13:45PM +0800, David Gow wrote:
-> On Wed, 28 Jun 2023 at 17:49, Maxime Ripard <mripard@kernel.org> wrote:
-> >
-> > The root devices show some odd behaviours compared to regular "bus" dev=
-ices
-> > that have been probed through the usual mechanism, so let's create kunit
-> > tests to exercise those paths and odd cases.
-> >
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> > ---
->=20
-> Reviewed-by: David Gow <davidgow@google.com>
+--aTvBd9Kod+7PIAg3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks!
+On Thu, Jul 20, 2023 at 11:31:13AM +0100, Will Deacon wrote:
+> On Wed, Jul 12, 2023 at 12:02:30PM +0100, Mark Brown wrote:
 
-> There's definitely an argument that root devices are not supposed to
-> be like regular devices, and so devm_ managed resources aren't
-> supposed to work with them. Either way:
-> - It needs to be documented somewhere (and this test makes for good
-> documentation, IMO).
-> - It should be consistent: if devm_ isn't to be used with root
-> devices, it should fail everywhere, and if it is, it should work in
-> all the cases below.
->=20
-> So I'm all in favour of including this test and making root devices work.
+> > +	/*
+> > +	 * This is a memset() but we don't want the compiler to
+> > +	 * optimise it into either instructions or a library call
+> > +	 * which might be incompatible with streaming mode.
+> > +	 */
+> > +	for (i = 0; i < td->live_sz; i++) {
+> > +		asm volatile("nop"
+> > +			     : "+m" (*dest_uc)
+> > +			     :
+> > +			     : "memory");
 
-I agree 100%. I've reworded the commit log a bit to make it clearer
-that's what we should strive for, and that this is what this patch is
-doing.
+> I don't think it's save to use "+m" here, since the compiler can assume
+> that the address is used exactly once in the asm. If a post-indexed
+> addressing mode is generated, then you can end up with register corruption.
 
-> That being said, I am planning to send out a patchset adding a struct
-> kunit_device for use in tests, which will be attached to a "kunit"
-> bus. I think the combination of "fix devm_ with root devices" and
-> "don't recommend root devices as a 'fake' device for testing" is
-> probably the longer-term solution everyone can agree upon?
+> Stepping back, why not use either barrier() or OPTIMIZER_HIDE_VAR()
+> instead?
 
-Yeah, that sounds reasonable to me
+That should work.  I was mostly just open coding OPTIMIZER_HIDE_VAR()
+and noticed that memory constraints were a thing.
 
-Maxime
+> The most robust fix would be to write all of the streaming mode code in
+> asm, but I can appreciate that's a tonne of work for a testcase.
+
+It's probably more proportionate to add a dependency on toolchain
+support for SME, but that'd mean we hardly ever run the tests.
+
+--aTvBd9Kod+7PIAg3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS5G+UACgkQJNaLcl1U
+h9AozAf+OH5Eqn23Qm+63ObiLCOwb5H7h5wUqULh0kqX1taHNghmkpmsygGx4+At
+8pix9qb7n5Bsdf3L1AUVx7CQVC51tdK5wAvDHSp0SzHH6a0wZUQwVn+4dvoMEsHq
+Q9GcbWrnsiel90Qqm3Pm2YaLNFo8pTIaK5GIqxcgT9n7pOQzRAcc3ixUnJE5Xy25
+f5bwnT6MdzT5TXsT2nZ+wEx0TgfzS9Vg7qrTDhbOBlC+G3XJIwF2VPZkMO8JxBQ7
+UsLPZ2Uj91aIXkTAcWKt8ZXlX7fnFJJUR5ffUTTYOsUPDGGqCt4kcC1CF9o5iang
+R01HmQW1d3sWP7emrRY5/9DsVM2xuw==
+=ys6l
+-----END PGP SIGNATURE-----
+
+--aTvBd9Kod+7PIAg3--
