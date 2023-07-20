@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECAC875AD4F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 13:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289FE75AD55
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 13:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjGTLrk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 07:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
+        id S230479AbjGTLsI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 07:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjGTLrh (ORCPT
+        with ESMTP id S230456AbjGTLrp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 07:47:37 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783FAE4C;
-        Thu, 20 Jul 2023 04:47:36 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id d2e1a72fcca58-6862842a028so422414b3a.0;
-        Thu, 20 Jul 2023 04:47:36 -0700 (PDT)
+        Thu, 20 Jul 2023 07:47:45 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF21426B1;
+        Thu, 20 Jul 2023 04:47:40 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id d9443c01a7336-1b8a8154f9cso5194335ad.1;
+        Thu, 20 Jul 2023 04:47:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689853656; x=1690458456;
+        d=gmail.com; s=20221208; t=1689853660; x=1690458460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XSF6S+UOyj9oNfC0MJh489ttKCJmHxLthvR3b7uPlOk=;
-        b=aQmt55SMNkO7Bt5Ze+Zhr09RbdVTYlRZgISvQULiN8aQkyWghnSHznynuNoKz6gsn8
-         NFXsrzwUEXz8iNO6lTMVl+jVTsDosgM2irByooN1uSPKfEo1t4tXkUDGv6qQIgvzXGCo
-         9kTxXoT1+9wGu9GFzQEBcKPBYeZej0gCBI7d3a7z23jHMyvJ53v2OACETyRbYO+vIXkB
-         dCw4Z1/+63CHbYVr77K0QDX8e9hiDCk0GEvgWHHsIimMrvxis5rsau4OXdJCQoNXW+JJ
-         542sH6Df4CLUSbh/H+DRRr5xAFvIVeCHkRlgNEpznK9KDHYPiXgOIheyyeCN6W5atKm9
-         IoCA==
+        bh=zsZNEzswzG8LGSiGtSvGiHDvtnXPesXlahtUeg2sYj0=;
+        b=mTmee0o3B7ZyMTS4gt6pCHyLazCNqmiTaCdGL/Iag7wqw7agKdIFYjd0QT1ahfEqMa
+         4LyIhZM7o13kGeJ4m5Ayy5cMXqcKra/QWwnY1r7ZMDhr6gYNBCsrmCGihnSs1l/d4/Un
+         mn8faT1cozcZuKaLt5dm8BQPfffComvSzFmZ1DxWoxWpBwuQ6YL4JUvV8cOzOJdHzcRq
+         3sM/OHWXV+vMYFFGaUiwf77nRoVGsLHampn+qY0kfD8eTHcsUpukNXocTRq0OR7chBB8
+         pDhSSS407cLON2dbwS+sbIjVLjnnymuqpSriZLbkc8MVXGy6V8p/nQyRB7ttWkcM4jYw
+         l3Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689853656; x=1690458456;
+        d=1e100.net; s=20221208; t=1689853660; x=1690458460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XSF6S+UOyj9oNfC0MJh489ttKCJmHxLthvR3b7uPlOk=;
-        b=IWKwcEd77pWBlevyTSbxMOZZ04Lpy+AQ80Ez9BdX/Q1K4qx84mKSd/zFXjcd7zrWJD
-         vnQfor4ilNm4K7Owtbljb+4fnLVLiQdH80qbjB4ip6CcBbVzb2Nlf4OBnvA7yfmjWJE7
-         G0n6NmX6maxGMumkaCqv5cRnkMbmMYd5PSClJhWhvk7cBjpJ3H4yR5iHNxyPc0fZiStX
-         NnPd0ygGPOKgrFR/1lzsGOFNFSxMPtzkNbAzTOEw7nNxjTgPdncwZouCD6Fls86lmBoy
-         WEcs497fGInRT5SoZeUfnNlozYlaUPft3Dxvs8AN6zRWBIBEavlieBFGmx1LAc80R8cR
-         9DtQ==
-X-Gm-Message-State: ABy/qLY6BYno3qK7JhCCUoWwGfLqkP62QvUHNwYJ43vdzTnpLgwdBrVr
-        Gtk+gwzG2TCKXZX6Ki528TY=
-X-Google-Smtp-Source: APBJJlE1vwO7JvaQF1kaLXRw7jO2jBt4xswxJcRk0MoZuDLuYD0Hc/MpW0zKIT02aiix4OXl6jDtzQ==
-X-Received: by 2002:a05:6a20:4308:b0:122:ff52:7331 with SMTP id h8-20020a056a20430800b00122ff527331mr5455249pzk.52.1689853655870;
-        Thu, 20 Jul 2023 04:47:35 -0700 (PDT)
+        bh=zsZNEzswzG8LGSiGtSvGiHDvtnXPesXlahtUeg2sYj0=;
+        b=fdmRJ6NQ3GSFlGK8CnbsVxHxAu8Eu0fQmPnn7K7jE6W7drw5mecxVHueOm3WfxUuGn
+         WJJqrSdNr/tXrcC3Z3QnnHMekyMpGMiE160NjCtZd8OMuImgbDo5IknHj4zDWwbAeKH5
+         thFsM6dJCSAH/iRx38yt4T6fly1CzdxOJ2b4IYtsG7dKupKElCS/cqKQqOoXRZ/SBIaY
+         IDjIyPiNQvDDXAQI5BYEPrQzVyykUAlh4zZ2Xza2ykssYoKDpoy9l8PkBf+bzLIebYbK
+         yxr6eWElu4zIOaxzs8ekk7kcVbF0670uht/x0cCcgO276CKvvDzVu7Hjyynso9QBxkMx
+         RWMg==
+X-Gm-Message-State: ABy/qLbvGx/QztJx/YSECixsD4uQCvL6wCoVSBrZWGWaWxLPiPQBlxA4
+        tjcPW8yXoibXlDPH+V1KMCs=
+X-Google-Smtp-Source: APBJJlE5jvZauSRdBA5WjRqe88ogqgtwva+kvzTjOuK4V61Rro/7tnyjvvUZ5uyDwgv01kQ+ZmwGVQ==
+X-Received: by 2002:a17:903:294b:b0:1b6:b703:36f8 with SMTP id li11-20020a170903294b00b001b6b70336f8mr6147948plb.25.1689853659965;
+        Thu, 20 Jul 2023 04:47:39 -0700 (PDT)
 Received: from CLOUDLIANG-MB2.tencent.com ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id u22-20020a170902a61600b001b2069072ccsm1164007plq.18.2023.07.20.04.47.31
+        by smtp.gmail.com with ESMTPSA id u22-20020a170902a61600b001b2069072ccsm1164007plq.18.2023.07.20.04.47.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 04:47:35 -0700 (PDT)
+        Thu, 20 Jul 2023 04:47:39 -0700 (PDT)
 From:   Jinrong Liang <ljr.kernel@gmail.com>
 X-Google-Original-From: Jinrong Liang <cloudliang@tencent.com>
 To:     Sean Christopherson <seanjc@google.com>
@@ -65,9 +65,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Jinrong Liang <cloudliang@tencent.com>,
         linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 1/6] KVM: selftests: Add x86 properties for Intel PMU in processor.h
-Date:   Thu, 20 Jul 2023 19:47:09 +0800
-Message-Id: <20230720114714.34079-2-cloudliang@tencent.com>
+Subject: [PATCH v5 2/6] KVM: selftests: Drop the return of remove_event()
+Date:   Thu, 20 Jul 2023 19:47:10 +0800
+Message-Id: <20230720114714.34079-3-cloudliang@tencent.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230720114714.34079-1-cloudliang@tencent.com>
 References: <20230720114714.34079-1-cloudliang@tencent.com>
@@ -85,32 +85,36 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Jinrong Liang <cloudliang@tencent.com>
 
-Add x86 properties for Intel PMU so that tests don't have to manually
-retrieve the correct CPUID leaf+register, and so that the resulting code
-is self-documenting.
+None of the callers consume remove_event(), and it incorrectly implies
+that the incoming filter isn't modified. Drop the return.
 
 Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
 ---
- tools/testing/selftests/kvm/include/x86_64/processor.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index aa434c8f19c5..5cb7df74d0b1 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -239,7 +239,12 @@ struct kvm_x86_cpu_property {
- #define X86_PROPERTY_MAX_BASIC_LEAF		KVM_X86_CPU_PROPERTY(0, 0, EAX, 0, 31)
- #define X86_PROPERTY_PMU_VERSION		KVM_X86_CPU_PROPERTY(0xa, 0, EAX, 0, 7)
- #define X86_PROPERTY_PMU_NR_GP_COUNTERS		KVM_X86_CPU_PROPERTY(0xa, 0, EAX, 8, 15)
-+#define X86_PROPERTY_PMU_GP_COUNTERS_BIT_WIDTH	KVM_X86_CPU_PROPERTY(0xa, 0, EAX, 23, 16)
- #define X86_PROPERTY_PMU_EBX_BIT_VECTOR_LENGTH	KVM_X86_CPU_PROPERTY(0xa, 0, EAX, 24, 31)
-+#define X86_PROPERTY_PMU_EVENTS_MASK		KVM_X86_CPU_PROPERTY(0xa, 0, EBX, 0, 7)
-+#define X86_PROPERTY_PMU_FIXED_COUNTERS_BITMASK	KVM_X86_CPU_PROPERTY(0xa, 0, ECX, 0, 31)
-+#define X86_PROPERTY_PMU_NR_FIXED_COUNTERS	KVM_X86_CPU_PROPERTY(0xa, 0, EDX, 0, 4)
-+#define X86_PROPERTY_PMU_FIXED_COUNTERS_BIT_WIDTH	KVM_X86_CPU_PROPERTY(0xa, 0, EDX, 0, 4)
+diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+index 40507ed9fe8a..5ac05e64bec9 100644
+--- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
++++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+@@ -265,8 +265,7 @@ static struct kvm_pmu_event_filter *event_filter(uint32_t action)
+  * Remove the first occurrence of 'event' (if any) from the filter's
+  * event list.
+  */
+-static struct kvm_pmu_event_filter *remove_event(struct kvm_pmu_event_filter *f,
+-						 uint64_t event)
++static void remove_event(struct kvm_pmu_event_filter *f, uint64_t event)
+ {
+ 	bool found = false;
+ 	int i;
+@@ -279,7 +278,6 @@ static struct kvm_pmu_event_filter *remove_event(struct kvm_pmu_event_filter *f,
+ 	}
+ 	if (found)
+ 		f->nevents--;
+-	return f;
+ }
  
- #define X86_PROPERTY_SUPPORTED_XCR0_LO		KVM_X86_CPU_PROPERTY(0xd,  0, EAX,  0, 31)
- #define X86_PROPERTY_XSTATE_MAX_SIZE_XCR0	KVM_X86_CPU_PROPERTY(0xd,  0, EBX,  0, 31)
+ #define ASSERT_PMC_COUNTING_INSTRUCTIONS()						\
 -- 
 2.39.3
 
