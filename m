@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44F775B49F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 18:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870DD75B4A0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 18:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjGTQhm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 12:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
+        id S231439AbjGTQhr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 12:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbjGTQhS (ORCPT
+        with ESMTP id S231312AbjGTQhX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 12:37:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0493C30F7
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 09:35:42 -0700 (PDT)
+        Thu, 20 Jul 2023 12:37:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAF3210B
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 09:35:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689870880;
+        s=mimecast20190719; t=1689870888;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qlKugqrUieeoCK15s+XaSmSpmpWi+6cYdLHEecxMVFQ=;
-        b=Trf10nGyLqf9QYWmxP99v+vg8S0eS0e5sGyTHMpcvaHyrfzvszLvhPSnZ5L6IgNWbYOg0C
-        OnjUxcrkVdlEexP5SnkHZIwatWV1jio5ZHUBbevLTbZyluNY7s+9cEkagVmSN/hvcuBLG4
-        q+5MRJ0nxf4gNZ5NHhF5SDaOirzN1pc=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-240-myilGmoaNUKUY_DOur6_gg-1; Thu, 20 Jul 2023 12:34:35 -0400
-X-MC-Unique: myilGmoaNUKUY_DOur6_gg-1
+        bh=amrP88Jqmb7M02bSDE9mFh1MFKi+V3yBx6dizqUgPII=;
+        b=D6bP34pwyMiKPG4698h3gE7JYYWxFCOIqZR9NYJul4riCaRH7eVxI9tBtyiI153PaB8aZn
+        dw8Cr+9D8VARo/30vDsVZpkY7VLY+9nhAsQxyyBYiDmIdJ34KYNYdKp4LDIgqS06ZKTtF7
+        ILeJek8arwuDRfs3lYScLgKxTgAs+zY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-tiaKu1LnPgWKO7yNg3Rgug-1; Thu, 20 Jul 2023 12:34:43 -0400
+X-MC-Unique: tiaKu1LnPgWKO7yNg3Rgug-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 95D7E3815EEF;
-        Thu, 20 Jul 2023 16:34:32 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF946800B35;
+        Thu, 20 Jul 2023 16:34:40 +0000 (UTC)
 Received: from vschneid.remote.csb (unknown [10.42.28.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 28EAC40C2070;
-        Thu, 20 Jul 2023 16:34:24 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C55AF40C206F;
+        Thu, 20 Jul 2023 16:34:32 +0000 (UTC)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
@@ -91,9 +91,9 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Yair Podemsky <ypodemsk@redhat.com>
-Subject: [RFC PATCH v2 19/20] context_tracking,x86: Add infrastructure to defer kernel TLBI
-Date:   Thu, 20 Jul 2023 17:30:55 +0100
-Message-Id: <20230720163056.2564824-20-vschneid@redhat.com>
+Subject: [RFC PATCH v2 20/20] x86/mm, mm/vmalloc: Defer flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
+Date:   Thu, 20 Jul 2023 17:30:56 +0100
+Message-Id: <20230720163056.2564824-21-vschneid@redhat.com>
 In-Reply-To: <20230720163056.2564824-1-vschneid@redhat.com>
 References: <20230720163056.2564824-1-vschneid@redhat.com>
 MIME-Version: 1.0
@@ -110,121 +110,180 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kernel TLB invalidation IPIs are a common source of interference on
-NOHZ_FULL CPUs. Given NOHZ_FULL CPUs executing in userspace are not
-accessing any kernel addresses, these invalidations do not need to happen
-immediately, and can be deferred until the next user->kernel transition.
+vunmap()'s issued from housekeeping CPUs are a relatively common source of
+interference for isolated NOHZ_FULL CPUs, as they are hit by the
+flush_tlb_kernel_range() IPIs.
 
-Rather than make __flush_tlb_all() noinstr, add a minimal noinstr
-variant that doesn't try to leverage INVPCID.
+Given that CPUs executing in userspace do not access data in the vmalloc
+range, these IPIs could be deferred until their next kernel entry.
 
-FIXME: not fully noinstr compliant
-XXX: same issue as with ins patching, when do we access data that should be
-invalidated?
+This does require a guarantee that nothing in the vmalloc range can be
+accessed in early entry code. vmalloc'd kernel stacks (VMAP_STACK) are
+AFAICT a safe exception, as a task running in userspace needs to enter
+kernelspace to execute do_exit() before its stack can be vfree'd.
+
+XXX: Validation that nothing in the vmalloc range is accessed in .noinstr or
+  somesuch?
+
+Blindly deferring any and all flush of the kernel mappings is a risky move,
+so introduce a variant of flush_tlb_kernel_range() that explicitly allows
+deferral. Use it for vunmap flushes.
+
+Note that while flush_tlb_kernel_range() may end up issuing a full
+flush (including user mappings), this only happens when reaching a
+invalidation range threshold where it is cheaper to do a full flush than to
+individually invalidate each page in the range via INVLPG. IOW, it doesn't
+*require* invalidating user mappings, and thus remains safe to defer until
+a later kernel entry.
 
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- arch/x86/include/asm/context_tracking_work.h |  4 ++++
- arch/x86/include/asm/tlbflush.h              |  1 +
- arch/x86/mm/tlb.c                            | 17 +++++++++++++++++
- include/linux/context_tracking_state.h       |  4 ++++
- include/linux/context_tracking_work.h        |  2 ++
- 5 files changed, 28 insertions(+)
+ arch/x86/include/asm/tlbflush.h |  1 +
+ arch/x86/mm/tlb.c               | 23 ++++++++++++++++++++---
+ mm/vmalloc.c                    | 19 ++++++++++++++-----
+ 3 files changed, 35 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/include/asm/context_tracking_work.h b/arch/x86/include/asm/context_tracking_work.h
-index 2c66687ce00e2..9d4f021b5a45b 100644
---- a/arch/x86/include/asm/context_tracking_work.h
-+++ b/arch/x86/include/asm/context_tracking_work.h
-@@ -3,6 +3,7 @@
- #define _ASM_X86_CONTEXT_TRACKING_WORK_H
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+index 323b971987af7..0b9b1f040c476 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
+@@ -248,6 +248,7 @@ extern void flush_tlb_mm_range(struct mm_struct *mm, unsigned long start,
+ 				unsigned long end, unsigned int stride_shift,
+ 				bool freed_tables);
+ extern void flush_tlb_kernel_range(unsigned long start, unsigned long end);
++extern void flush_tlb_kernel_range_deferrable(unsigned long start, unsigned long end);
  
- #include <asm/sync_core.h>
-+#include <asm/tlbflush.h>
- 
- static __always_inline void arch_context_tracking_work(int work)
+ static inline void flush_tlb_page(struct vm_area_struct *vma, unsigned long a)
  {
-@@ -10,6 +11,9 @@ static __always_inline void arch_context_tracking_work(int work)
- 	case CONTEXT_WORK_SYNC:
- 		sync_core();
- 		break;
-+	case CONTEXT_WORK_TLBI:
-+		__flush_tlb_all_noinstr();
-+		break;
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index 631df9189ded4..bb18b35e61b4a 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -10,6 +10,7 @@
+ #include <linux/debugfs.h>
+ #include <linux/sched/smt.h>
+ #include <linux/task_work.h>
++#include <linux/context_tracking.h>
+ 
+ #include <asm/tlbflush.h>
+ #include <asm/mmu_context.h>
+@@ -1045,6 +1046,11 @@ static void do_flush_tlb_all(void *info)
+ 	__flush_tlb_all();
+ }
+ 
++static bool do_kernel_flush_defer_cond(int cpu, void *info)
++{
++	return !ct_set_cpu_work(cpu, CONTEXT_WORK_TLBI);
++}
++
+ void flush_tlb_all(void)
+ {
+ 	count_vm_tlb_event(NR_TLB_REMOTE_FLUSH);
+@@ -1061,12 +1067,13 @@ static void do_kernel_range_flush(void *info)
+ 		flush_tlb_one_kernel(addr);
+ }
+ 
+-void flush_tlb_kernel_range(unsigned long start, unsigned long end)
++static inline void
++__flush_tlb_kernel_range(smp_cond_func_t cond_func, unsigned long start, unsigned long end)
+ {
+ 	/* Balance as user space task's flush, a bit conservative */
+ 	if (end == TLB_FLUSH_ALL ||
+ 	    (end - start) > tlb_single_page_flush_ceiling << PAGE_SHIFT) {
+-		on_each_cpu(do_flush_tlb_all, NULL, 1);
++		on_each_cpu_cond(cond_func, do_flush_tlb_all, NULL, 1);
+ 	} else {
+ 		struct flush_tlb_info *info;
+ 
+@@ -1074,13 +1081,23 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
+ 		info = get_flush_tlb_info(NULL, start, end, 0, false,
+ 					  TLB_GENERATION_INVALID);
+ 
+-		on_each_cpu(do_kernel_range_flush, info, 1);
++		on_each_cpu_cond(cond_func, do_kernel_range_flush, info, 1);
+ 
+ 		put_flush_tlb_info();
+ 		preempt_enable();
  	}
  }
  
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 80450e1d5385a..323b971987af7 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -17,6 +17,7 @@
- DECLARE_PER_CPU(u64, tlbstate_untag_mask);
- 
- void __flush_tlb_all(void);
-+void noinstr __flush_tlb_all_noinstr(void);
- 
- #define TLB_FLUSH_ALL	-1UL
- #define TLB_GENERATION_INVALID	0
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index 267acf27480af..631df9189ded4 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -1237,6 +1237,23 @@ void __flush_tlb_all(void)
- }
- EXPORT_SYMBOL_GPL(__flush_tlb_all);
- 
-+void noinstr __flush_tlb_all_noinstr(void)
++void flush_tlb_kernel_range(unsigned long start, unsigned long end)
 +{
-+	/*
-+	 * This is for invocation in early entry code that cannot be
-+	 * instrumented. A RMW to CR4 works for most cases, but relies on
-+	 * being able to flip either of the PGE or PCIDE bits. Flipping CR4.PCID
-+	 * would require also resetting CR3.PCID, so just try with CR4.PGE, else
-+	 * do the CR3 write.
-+	 *
-+	 * TODO: paravirt
-+	 */
-+	if (cpu_feature_enabled(X86_FEATURE_PGE))
-+		__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
-+	else
-+		flush_tlb_local();
++	__flush_tlb_kernel_range(NULL, start, end);
 +}
 +
- void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
++void flush_tlb_kernel_range_deferrable(unsigned long start, unsigned long end)
++{
++	__flush_tlb_kernel_range(do_kernel_flush_defer_cond, start, end);
++}
++
+ /*
+  * This can be used from process context to figure out what the value of
+  * CR3 is without needing to do a (slow) __read_cr3().
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 93cf99aba335b..e08b6c7d22fb6 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -439,6 +439,15 @@ void vunmap_range_noflush(unsigned long start, unsigned long end)
+ 	__vunmap_range_noflush(start, end);
+ }
+ 
++#ifdef CONFIG_CONTEXT_TRACKING_WORK
++void __weak flush_tlb_kernel_range_deferrable(unsigned long start, unsigned long end)
++{
++	flush_tlb_kernel_range(start, end);
++}
++#else
++#define flush_tlb_kernel_range_deferrable(start, end) flush_tlb_kernel_range(start, end)
++#endif
++
+ /**
+  * vunmap_range - unmap kernel virtual addresses
+  * @addr: start of the VM area to unmap
+@@ -452,7 +461,7 @@ void vunmap_range(unsigned long addr, unsigned long end)
  {
- 	struct flush_tlb_info *info;
-diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
-index 292a0b7c06948..3571c62cbb9cd 100644
---- a/include/linux/context_tracking_state.h
-+++ b/include/linux/context_tracking_state.h
-@@ -62,6 +62,10 @@ enum ctx_state {
- #define RCU_DYNTICKS_END   (CT_STATE_SIZE - 1)
- #define RCU_DYNTICKS_IDX   BIT(RCU_DYNTICKS_START)
+ 	flush_cache_vunmap(addr, end);
+ 	vunmap_range_noflush(addr, end);
+-	flush_tlb_kernel_range(addr, end);
++	flush_tlb_kernel_range_deferrable(addr, end);
+ }
  
-+/*
-+ * When CONFIG_CONTEXT_TRACKING_WORK=n, _END is 1 behind _START, which makes
-+ * the CONTEXT_WORK size computation below 0, which is what we want!
-+ */
- #define	CONTEXT_WORK_START (CONTEXT_STATE_END + 1)
- #define CONTEXT_WORK_END   (RCU_DYNTICKS_START - 1)
+ static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
+@@ -1746,7 +1755,7 @@ static bool __purge_vmap_area_lazy(unsigned long start, unsigned long end)
+ 		list_last_entry(&local_purge_list,
+ 			struct vmap_area, list)->va_end);
  
-diff --git a/include/linux/context_tracking_work.h b/include/linux/context_tracking_work.h
-index 13fc97b395030..47d5ced39a43a 100644
---- a/include/linux/context_tracking_work.h
-+++ b/include/linux/context_tracking_work.h
-@@ -6,11 +6,13 @@
+-	flush_tlb_kernel_range(start, end);
++	flush_tlb_kernel_range_deferrable(start, end);
+ 	resched_threshold = lazy_max_pages() << 1;
  
- enum {
- 	CONTEXT_WORK_SYNC_OFFSET,
-+	CONTEXT_WORK_TLBI_OFFSET,
- 	CONTEXT_WORK_MAX_OFFSET
- };
+ 	spin_lock(&free_vmap_area_lock);
+@@ -1849,7 +1858,7 @@ static void free_unmap_vmap_area(struct vmap_area *va)
+ 	flush_cache_vunmap(va->va_start, va->va_end);
+ 	vunmap_range_noflush(va->va_start, va->va_end);
+ 	if (debug_pagealloc_enabled_static())
+-		flush_tlb_kernel_range(va->va_start, va->va_end);
++		flush_tlb_kernel_range_deferrable(va->va_start, va->va_end);
  
- enum ct_work {
- 	CONTEXT_WORK_SYNC     = BIT(CONTEXT_WORK_SYNC_OFFSET),
-+	CONTEXT_WORK_TLBI     = BIT(CONTEXT_WORK_TLBI_OFFSET),
- 	CONTEXT_WORK_MAX      = BIT(CONTEXT_WORK_MAX_OFFSET)
- };
+ 	free_vmap_area_noflush(va);
+ }
+@@ -2239,7 +2248,7 @@ static void vb_free(unsigned long addr, unsigned long size)
+ 	vunmap_range_noflush(addr, addr + size);
+ 
+ 	if (debug_pagealloc_enabled_static())
+-		flush_tlb_kernel_range(addr, addr + size);
++		flush_tlb_kernel_range_deferrable(addr, addr + size);
+ 
+ 	spin_lock(&vb->lock);
+ 
+@@ -2304,7 +2313,7 @@ static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
+ 	free_purged_blocks(&purge_list);
+ 
+ 	if (!__purge_vmap_area_lazy(start, end) && flush)
+-		flush_tlb_kernel_range(start, end);
++		flush_tlb_kernel_range_deferrable(start, end);
+ 	mutex_unlock(&vmap_purge_lock);
+ }
  
 -- 
 2.31.1
