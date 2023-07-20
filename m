@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E413575AEB0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 14:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DF975AEB2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 14:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjGTMpr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 08:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S231666AbjGTMpt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 08:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbjGTMpa (ORCPT
+        with ESMTP id S231138AbjGTMpf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 08:45:30 -0400
+        Thu, 20 Jul 2023 08:45:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1242690;
-        Thu, 20 Jul 2023 05:45:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6B726A5;
+        Thu, 20 Jul 2023 05:45:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96F0961A77;
-        Thu, 20 Jul 2023 12:45:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 803C7C433C7;
-        Thu, 20 Jul 2023 12:45:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46A8061A3D;
+        Thu, 20 Jul 2023 12:45:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E1BFC433C7;
+        Thu, 20 Jul 2023 12:45:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689857121;
-        bh=jh5HlgHr0tntYKi2YKW8GWjCSxPgRIdKfqKt13WVbd4=;
+        s=k20201202; t=1689857124;
+        bh=/t17Dw8Ji4dvYfH3v5c7ic+nA+UyzWEDYc0SP3u2a0E=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=rjNy7fkseKFpz7WLroBf2VO4giyz1i9dlNUN5sRveyRv2IrTI6VrR2VLzirvxbl0h
-         UTVjg3vw6k5vK5IELq5tUx3kr9yJoYIlCwoUHdnpFgd+pqmnof4teNtXDaEbAF1BVD
-         Os3bU+sVTBZVTDTMT0HWHy2brPJbcsogcXkNrRlXZ3818rxb78pG3VJNykqV5sVbCb
-         lfH/uPg+JRqLPRir5SyGHGJI2SrXnsG2IIFxPwIVS53ue8aa2MeLlqg3FF8mrkgWjU
-         5lg60kk2CHtO7R/VoHHX/D7r2pMYVhKNBjq+hzti+OuLPnc/XgwyY1DXmQREOGNDek
-         pM45waRGfhR5g==
+        b=Ati3GUNIpz+rGEpQ502H4eeDTtqI8lLdRbIv4/5aYKCZRupFSRUez0RG6V7W9MJaG
+         SILac4zUP+3cEN+9nqYlVrtMDg1xgRbYSfA5U6UvUnvTREfn9jawn1cC1m9lA4m30y
+         pE6Z2Cg6i7JoN4v5pLFN3Qcc/38UbX4856fsNjmoSm4BWBTPVHloBpO+r7rEks5HaP
+         cxrgwMi0gxIFc2is8wC0tVbMar3QEm0oP4M6+iBwg4LoR9jvCbVJOs6ZD8omTjYYIW
+         hTeXlTg9pw4ktrcsdwG0kx2PLM4j2nRlESsELL5e6kp4mn5tv2TaO71bfJkV4+g4vw
+         Flpdc3feFmcbA==
 From:   Maxime Ripard <mripard@kernel.org>
-Date:   Thu, 20 Jul 2023 14:45:08 +0200
-Subject: [PATCH v3 2/3] drivers: base: Add basic devm tests for platform
- devices
+Date:   Thu, 20 Jul 2023 14:45:09 +0200
+Subject: [PATCH v3 3/3] drivers: base: Free devm resources when
+ unregistering a device
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230720-kunit-devm-inconsistencies-test-v3-2-6aa7e074f373@kernel.org>
+Message-Id: <20230720-kunit-devm-inconsistencies-test-v3-3-6aa7e074f373@kernel.org>
 References: <20230720-kunit-devm-inconsistencies-test-v3-0-6aa7e074f373@kernel.org>
 In-Reply-To: <20230720-kunit-devm-inconsistencies-test-v3-0-6aa7e074f373@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -50,12 +50,12 @@ Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8336; i=mripard@kernel.org;
- h=from:subject:message-id; bh=jh5HlgHr0tntYKi2YKW8GWjCSxPgRIdKfqKt13WVbd4=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCk7dSI3BLfk+fxk/ypyR9PxRNux3k1cpr9tv+TcOFzXM
- 5dNaxdfRykLgxgXg6yYIkuMsPmSuFOzXney8c2DmcPKBDKEgYtTACZiGMvwVzK66IDd1dYfq/Nb
- Go99vJnqefhKaMyO0K8XrEpeXnux4gHDP6trv2ZKT5199dhnniV/K4W4P6zJbb8rlT27kb2ZzaH
- 8HC8A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3344; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=dK5NenGOGX4zkAO7TDHxkXUxqTtkK1TPL9bi3DSmzKI=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCk7dSK10souHee+q/LaRWFGoYlAl3evuuubNG63G+yyl
+ +4Yhyp0lLIwiHExyIopssQImy+JOzXrdScb3zyYOaxMIEMYuDgFYCIydxkZzky9WXDY9Oq8kFeH
+ TDOuP65/bx3Oe6rEPVE9anmxxpLIjYwM557FzFxhKhxkzbP8Mf99YauS2ttWnRzFrr8rNmv7HHj
+ MDgA=
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -68,275 +68,85 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Platform devices show some inconsistencies with how devm resources are
-released when the device has been probed and when it hasn't.
+From: David Gow <davidgow@google.com>
 
-In particular, we can register device-managed actions no matter if the
-device has be bound to a driver or not, but devres_release_all() will
-only be called if it was bound to a driver or if there's no reference
-held to it anymore.
+In the current code, devres_release_all() only gets called if the device
+has a bus and has been probed.
 
-If it wasn't bound to a driver and we still have a reference,
-devres_release_all() will never get called. This is surprising
-considering that if the driver isn't bound but doesn't have any
-reference to it anymore, that function will get called, and if it was
-bound to a driver but still has references, that function will get
-called as well.
+This leads to issues when using bus-less or driver-less devices where
+the device might never get freed if a managed resource holds a reference
+to the device. This is happening in the DRM framework for example.
 
-Even if that case is fairly unusual, it can easily lead to memory leaks.
+We should thus call devres_release_all() in the device_del() function to
+make sure that the device-managed actions are properly executed when the
+device is unregistered, even if it has neither a bus nor a driver.
 
-The plan is, with the next patch, to make it consistent and enforce that
-devres_release_all() is called no matter what situation we're in. For
-now, it just tests for the current behaviour and skips over the
-inconsistencies.
+This is effectively the same change than commit 2f8d16a996da ("devres:
+release resources on device_del()") that got reverted by commit
+a525a3ddeaca ("driver core: free devres in device_release") over
+memory leaks concerns.
 
-Reviewed-by: David Gow <davidgow@google.com>
+This patch effectively combines the two commits mentioned above to
+release the resources both on device_del() and device_release() and get
+the best of both worlds.
+
+Fixes: a525a3ddeaca ("driver core: free devres in device_release")
+Signed-off-by: David Gow <davidgow@google.com>
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/base/test/Makefile               |   1 +
- drivers/base/test/platform-device-test.c | 222 +++++++++++++++++++++++++++++++
- 2 files changed, 223 insertions(+)
+ drivers/base/core.c                      | 11 +++++++++++
+ drivers/base/test/platform-device-test.c |  2 --
+ drivers/base/test/root-device-test.c     |  2 --
+ 3 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
-index d589ca3fa8fc..e321dfc7e922 100644
---- a/drivers/base/test/Makefile
-+++ b/drivers/base/test/Makefile
-@@ -2,6 +2,7 @@
- obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+= test_async_driver_probe.o
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 3dff5037943e..6ceaf50f5a67 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3817,6 +3817,17 @@ void device_del(struct device *dev)
+ 	device_platform_notify_remove(dev);
+ 	device_links_purge(dev);
  
- obj-$(CONFIG_DM_KUNIT_TEST)	+= root-device-test.o
-+obj-$(CONFIG_DM_KUNIT_TEST)	+= platform-device-test.o
- 
- obj-$(CONFIG_DRIVER_PE_KUNIT_TEST) += property-entry-test.o
- CFLAGS_property-entry-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
++	/*
++	 * If a device does not have a driver attached, we need to clean
++	 * up any managed resources. We do this in device_release(), but
++	 * it's never called (and we leak the device) if a managed
++	 * resource holds a reference to the device. So release all
++	 * managed resources here, like we do in driver_detach(). We
++	 * still need to do so again in device_release() in case someone
++	 * adds a new resource after this point, though.
++	 */
++	devres_release_all(dev);
++
+ 	bus_notify(dev, BUS_NOTIFY_REMOVED_DEVICE);
+ 	kobject_uevent(&dev->kobj, KOBJ_REMOVE);
+ 	glue_dir = get_glue_dir(dev);
 diff --git a/drivers/base/test/platform-device-test.c b/drivers/base/test/platform-device-test.c
-new file mode 100644
-index 000000000000..b6ebf1dcdffb
---- /dev/null
+index b6ebf1dcdffb..1ae5ce8bd366 100644
+--- a/drivers/base/test/platform-device-test.c
 +++ b/drivers/base/test/platform-device-test.c
-@@ -0,0 +1,222 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <kunit/resource.h>
-+
-+#include <linux/device.h>
-+#include <linux/platform_device.h>
-+
-+#define DEVICE_NAME "test"
-+
-+struct test_priv {
-+	bool probe_done;
-+	bool release_done;
-+	wait_queue_head_t probe_wq;
-+	wait_queue_head_t release_wq;
-+	struct device *dev;
-+};
-+
-+static int platform_device_devm_init(struct kunit *test)
-+{
-+	struct test_priv *priv;
-+
-+	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
-+	init_waitqueue_head(&priv->probe_wq);
-+	init_waitqueue_head(&priv->release_wq);
-+
-+	test->priv = priv;
-+
-+	return 0;
-+}
-+
-+static void devm_device_action(void *ptr)
-+{
-+	struct test_priv *priv = ptr;
-+
-+	priv->release_done = true;
-+	wake_up_interruptible(&priv->release_wq);
-+}
-+
-+static void devm_put_device_action(void *ptr)
-+{
-+	struct test_priv *priv = ptr;
-+
-+	put_device(priv->dev);
-+	priv->release_done = true;
-+	wake_up_interruptible(&priv->release_wq);
-+}
-+
-+#define RELEASE_TIMEOUT_MS	100
-+
-+/*
-+ * Tests that a platform bus, non-probed device will run its
-+ * device-managed actions when unregistered.
-+ */
-+static void platform_device_devm_register_unregister_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct test_priv *priv = test->priv;
-+	int ret;
-+
-+	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	ret = platform_device_add(pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	priv->dev = &pdev->dev;
-+
-+	ret = devm_add_action_or_reset(priv->dev, devm_device_action, priv);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	platform_device_unregister(pdev);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_EXPECT_GT(test, ret, 0);
-+}
-+
-+/*
-+ * Tests that a platform bus, non-probed device will run its
-+ * device-managed actions when unregistered, even if someone still holds
-+ * a reference to it.
-+ */
-+static void platform_device_devm_register_get_unregister_with_devm_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct test_priv *priv = test->priv;
-+	int ret;
-+
-+	kunit_skip(test, "This needs to be fixed in the core.");
-+
-+	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	ret = platform_device_add(pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	priv->dev = &pdev->dev;
-+
-+	get_device(priv->dev);
-+
-+	ret = devm_add_action_or_reset(priv->dev, devm_put_device_action, priv);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	platform_device_unregister(pdev);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_EXPECT_GT(test, ret, 0);
-+}
-+
-+static int fake_probe(struct platform_device *pdev)
-+{
-+	struct test_priv *priv = platform_get_drvdata(pdev);
-+
-+	priv->probe_done = true;
-+	wake_up_interruptible(&priv->probe_wq);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver fake_driver = {
-+	.probe	= fake_probe,
-+	.driver = {
-+		.name = DEVICE_NAME,
-+	},
-+};
-+
-+/*
-+ * Tests that a platform bus, probed device will run its device-managed
-+ * actions when unregistered.
-+ */
-+static void probed_platform_device_devm_register_unregister_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct test_priv *priv = test->priv;
-+	int ret;
-+
-+	ret = platform_driver_register(&fake_driver);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	priv->dev = &pdev->dev;
-+	platform_set_drvdata(pdev, priv);
-+
-+	ret = platform_device_add(pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = wait_event_interruptible_timeout(priv->probe_wq, priv->probe_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_ASSERT_GT(test, ret, 0);
-+
-+	ret = devm_add_action_or_reset(priv->dev, devm_device_action, priv);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	platform_device_unregister(pdev);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_EXPECT_GT(test, ret, 0);
-+
-+	platform_driver_unregister(&fake_driver);
-+}
-+
-+/*
-+ * Tests that a platform bus, probed device will run its device-managed
-+ * actions when unregistered, even if someone still holds a reference to
-+ * it.
-+ */
-+static void probed_platform_device_devm_register_get_unregister_with_devm_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct test_priv *priv = test->priv;
-+	int ret;
-+
-+	ret = platform_driver_register(&fake_driver);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	priv->dev = &pdev->dev;
-+	platform_set_drvdata(pdev, priv);
-+
-+	ret = platform_device_add(pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = wait_event_interruptible_timeout(priv->probe_wq, priv->probe_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_ASSERT_GT(test, ret, 0);
-+
-+	get_device(priv->dev);
-+
-+	ret = devm_add_action_or_reset(priv->dev, devm_put_device_action, priv);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	platform_device_unregister(pdev);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_EXPECT_GT(test, ret, 0);
-+
-+	platform_driver_unregister(&fake_driver);
-+}
-+
-+static struct kunit_case platform_device_devm_tests[] = {
-+	KUNIT_CASE(platform_device_devm_register_unregister_test),
-+	KUNIT_CASE(platform_device_devm_register_get_unregister_with_devm_test),
-+	KUNIT_CASE(probed_platform_device_devm_register_unregister_test),
-+	KUNIT_CASE(probed_platform_device_devm_register_get_unregister_with_devm_test),
-+	{}
-+};
-+
-+static struct kunit_suite platform_device_devm_test_suite = {
-+	.name = "platform-device-devm",
-+	.init = platform_device_devm_init,
-+	.test_cases = platform_device_devm_tests,
-+};
-+
-+kunit_test_suite(platform_device_devm_test_suite);
+@@ -87,8 +87,6 @@ static void platform_device_devm_register_get_unregister_with_devm_test(struct k
+ 	struct test_priv *priv = test->priv;
+ 	int ret;
+ 
+-	kunit_skip(test, "This needs to be fixed in the core.");
+-
+ 	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
+ 
+diff --git a/drivers/base/test/root-device-test.c b/drivers/base/test/root-device-test.c
+index 9a3e6cccae13..780d07455f57 100644
+--- a/drivers/base/test/root-device-test.c
++++ b/drivers/base/test/root-device-test.c
+@@ -78,8 +78,6 @@ static void root_device_devm_register_get_unregister_with_devm_test(struct kunit
+ 	struct test_priv *priv = test->priv;
+ 	int ret;
+ 
+-	kunit_skip(test, "This needs to be fixed in the core.");
+-
+ 	priv->dev = root_device_register(DEVICE_NAME);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
+ 
 
 -- 
 2.41.0
