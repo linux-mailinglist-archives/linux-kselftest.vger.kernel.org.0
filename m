@@ -2,66 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CD975B90C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 22:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DED75B911
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 22:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjGTU6i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 16:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        id S229986AbjGTU6o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 16:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbjGTU60 (ORCPT
+        with ESMTP id S230214AbjGTU6g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 16:58:26 -0400
+        Thu, 20 Jul 2023 16:58:36 -0400
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2512D56;
-        Thu, 20 Jul 2023 13:58:23 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id A73E632029D5;
-        Thu, 20 Jul 2023 16:58:20 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054BD2D6B;
+        Thu, 20 Jul 2023 13:58:26 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id C734F3202AC7;
+        Thu, 20 Jul 2023 16:58:24 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 20 Jul 2023 16:58:22 -0400
+  by compute5.internal (MEProxy); Thu, 20 Jul 2023 16:58:26 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1689886700; x=
-        1689973100; bh=C5gTyD3ZK69kBeMGtv3ULDgMyW30wlIrQqdN4DdpOCA=; b=D
-        NXQDHLmLlq9V0w5xJg6vy6vC5CnXCwfCwMfj5xCgNKjVkTLraBkubKnhaHDAYnfc
-        8g4xyt2wyr+ZMSz4tOijKWmjSJB2x3KvHLcTs6x1MNL55Yp4XLui7+xtTyLnkN52
-        rccNMn0AyttAERQKL/zYI5RcUemxWlCSKX0K1eYXoSum85wk60012VnvN9HkYQsI
-        vdXUt9LvYWgixS3BREJdnL2DA5FlKT5X5ShBRf8iFOHXmBhcmVC7rULAI/Bi/H+r
-        4VsUWYWsgFJ2Yi4dWJz9C2D52hZ5/lCzOiH+I1Yrr1F0B75o3ljb6fEKvKDIOMxH
-        mFhwgfmq7JwBhViYPklQQ==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1689886704; x=
+        1689973104; bh=jCzr01pZ2u8uI49LnXSVMw7KSVSfUH7qENNmnpv8K+w=; b=P
+        XUPe3DJnTw8/vHue3otEdZkV0JB4X3VvVcqfqByGatn2bkUMqbloqOYcrrPmFh2L
+        Vs2x+MX72N98SQgEKS0n0GCVXGjKXo6c182e1dvJW6XalsnQqdJaYdMpJcwQ3Zs4
+        yQiZ4SRxCLdRCN+r6Zyevv13DwoP7vF44O1RJ3R9niprF6qae4lhj9ZhaUrHU/ya
+        ks/1ECwLYOCaPiPfr/H+YA44S3n3ZtA438MhokaKZJQxlGgySVTiiMBOpBFl7nxI
+        UtVjTbknJSAd7QvziMxdr+RXEzzRom725Uxz0gYKUUgb14W1YVDnGxSmyWAtfHkk
+        vnOW6OCqpWG+rVu0xPm6Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1689886700; x=
-        1689973100; bh=C5gTyD3ZK69kBeMGtv3ULDgMyW30wlIrQqdN4DdpOCA=; b=v
-        qUOwPN7J73WxH/UC7oywQ7efCGwkoqBIV0K5juSqWrhxE5LnUAlku46R0MyEtevF
-        gF9Fxp1+ry+AEITkVGGQRhpaT7kcnWmZoUnkNrYnJyUKzKVmmVEtSrZ/Han/PzSn
-        cpzBITqlc0G2Ub9xstckBYJ1jMTG3spWtU5vvfxLxInCozx+ELtGcBfNs/hMMiBT
-        CYMCZyg6S4w2KwCf4T+PQOQLt4JqE0Le1pJ/KazZnxcQMJ7Yu3UJRRvy7hDnqy5c
-        Qr3BhMWMxcPeXghmTn+zxO6CyOnDvM16HDXkaWZA/xBpe8uLRPNe2uvUB31b4coG
-        X7mngZofRvK7bgCnwy8FQ==
-X-ME-Sender: <xms:7J-5ZOjndd2GzW4KJC85iE-P7gHKV3mJO7kDz6HSb7slKReDePwoQw>
-    <xme:7J-5ZPBJZHtPdyb_2wRvhRIHvf9JvkahCFfaU9cOXq-xulJDrszsuh-NjRkzELeLI
-    _FlI5fBxjmXVfaM2g>
-X-ME-Received: <xmr:7J-5ZGFzweSthJriwYmJNUiBXoMSJ9TDJeL8QfXA_sUIIq-RX3E0RoQAtLB0EsO6KgUIexGqLl3Ag25IzgrOonF5LvxIQ8v8zEwPdULQ6rA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrhedtgdduheegucetufdoteggodetrfdotf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1689886704; x=
+        1689973104; bh=jCzr01pZ2u8uI49LnXSVMw7KSVSfUH7qENNmnpv8K+w=; b=D
+        1xhs+Ok8PBbEOzXfhe3dEP2vApkFiv0X8zWGgNSFWubJExCa4E1TcmquQSjaznsv
+        bAQAJYYt3A/KFiRtyx8Zziqx0wLU2JgGEVJ7ek74pmiW9K+rHu3in/Yf6+VnU/Dq
+        1iu03vrpMmhUmdzhXenBbS+tKBFqEBHtJSmKkXfnGM5W6mhGn9bkNaO4Q6PagBfg
+        QCWT7zO3hhzlcu7wlFzRjJLbJX3zNIBWXe+hosp1NjK3X5Ep1mkUYFnGpYMDC0Oi
+        QsbqZKcPx4FRnYvFEnJUQx8xAkBkLouVoeC1P2ucrc3l6c6vlJy2cRQHXbG2IMeb
+        56TpKnHrG3biPL2eh5kMQ==
+X-ME-Sender: <xms:75-5ZIrcakbwQNyiivLq_hyDEfPmw_r6d0FX4xauP__p1dSnb8ENSg>
+    <xme:75-5ZOr-0UBwnzKmqwoxdlcm8vT-AF5n-L2HK9ASIViJJDYydMDuUINs3Y1ZouqiN
+    jEgvDs6TWLw78aMxw>
+X-ME-Received: <xmr:75-5ZNMdiCfnNUUkxxFgPw2jfDzk2CKkXGha3tt-M9Eeb1JYemI8hGeg1FetB3AnXFihpM-xf084cqmG3jbVEV5BKnL0hEy7dXL0ndzDs5w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrhedtgdduheefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
     evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
     ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
     dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
-    vgepudenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:7J-5ZHSyVvT-87l_gdUKsojJj07MZnsP_JY-4Bin0hvSeQRt2_znhQ>
-    <xmx:7J-5ZLz3cURdD9yec2forpZk4glEszFbsVGG9erNV68Rq4EzMOl6cA>
-    <xmx:7J-5ZF7_T3Na5Ps0E88_D3C0fNzls3w_Ib9ZFOZGq4huZNgCp7hT_Q>
-    <xmx:7J-5ZMo5IBObMj0qvJdtM939sGw4lfI_B92GI_gf1A5Fff4RO-lwGA>
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:8J-5ZP6wJ90QXP0nU9CKyW7VEpfboR_W9WPD5-bUJ5XqD9yCrE3T_g>
+    <xmx:8J-5ZH5UVn3yq6h1o9Qxg_md_b9KUoM6N-WpYquQ5XLApscm9AaJ-g>
+    <xmx:8J-5ZPjJuZbsa-cUJTG1S3ZaLc4hOsMnJy-b9XUhXHAy30AkkDoXNw>
+    <xmx:8J-5ZExxoXM7Ry9u3McUrQzpV4MMb86a5WWcAgP9StXTs7za_qEW2A>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 20 Jul 2023 16:58:18 -0400 (EDT)
+ 20 Jul 2023 16:58:22 -0400 (EDT)
 From:   Daniel Xu <dxu@dxuuu.xyz>
 To:     ast@kernel.org, andrii@kernel.org, shuah@kernel.org,
         daniel@iogearbox.net, alexei.starovoitov@gmail.com, fw@strlen.de
@@ -71,9 +71,9 @@ Cc:     martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
         dsahern@kernel.org
-Subject: [PATCH bpf-next v5 3/5] bpf: selftests: Support not connecting client socket
-Date:   Thu, 20 Jul 2023 14:57:37 -0600
-Message-ID: <aaab1f2500976d0dd672628a94879ed33d08bcea.1689884827.git.dxu@dxuuu.xyz>
+Subject: [PATCH bpf-next v5 4/5] bpf: selftests: Support custom type and proto for client sockets
+Date:   Thu, 20 Jul 2023 14:57:38 -0600
+Message-ID: <0d73e2d2ca71f407fbb3dc1011481e2d6fc89d19.1689884827.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <cover.1689884827.git.dxu@dxuuu.xyz>
 References: <cover.1689884827.git.dxu@dxuuu.xyz>
@@ -89,40 +89,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For connectionless protocols or raw sockets we do not want to actually
-connect() to the server.
+Extend connect_to_fd_opts() to take optional type and protocol
+parameters for the client socket. These parameters are useful when
+opening a raw socket to send IP fragments.
 
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 5 +++--
- tools/testing/selftests/bpf/network_helpers.h | 1 +
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.c | 21 +++++++++++++------
+ tools/testing/selftests/bpf/network_helpers.h |  2 ++
+ 2 files changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index a105c0cd008a..d5c78c08903b 100644
+index d5c78c08903b..910d5d0470e6 100644
 --- a/tools/testing/selftests/bpf/network_helpers.c
 +++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -301,8 +301,9 @@ int connect_to_fd_opts(int server_fd, const struct network_helper_opts *opts)
- 		       strlen(opts->cc) + 1))
- 		goto error_close;
+@@ -270,14 +270,23 @@ int connect_to_fd_opts(int server_fd, const struct network_helper_opts *opts)
+ 		opts = &default_opts;
  
--	if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
--		goto error_close;
-+	if (!opts->noconnect)
-+		if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
-+			goto error_close;
+ 	optlen = sizeof(type);
+-	if (getsockopt(server_fd, SOL_SOCKET, SO_TYPE, &type, &optlen)) {
+-		log_err("getsockopt(SOL_TYPE)");
+-		return -1;
++
++	if (opts->type) {
++		type = opts->type;
++	} else {
++		if (getsockopt(server_fd, SOL_SOCKET, SO_TYPE, &type, &optlen)) {
++			log_err("getsockopt(SOL_TYPE)");
++			return -1;
++		}
+ 	}
  
- 	return fd;
+-	if (getsockopt(server_fd, SOL_SOCKET, SO_PROTOCOL, &protocol, &optlen)) {
+-		log_err("getsockopt(SOL_PROTOCOL)");
+-		return -1;
++	if (opts->proto) {
++		protocol = opts->proto;
++	} else {
++		if (getsockopt(server_fd, SOL_SOCKET, SO_PROTOCOL, &protocol, &optlen)) {
++			log_err("getsockopt(SOL_PROTOCOL)");
++			return -1;
++		}
+ 	}
  
+ 	addrlen = sizeof(addr);
 diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 694185644da6..87894dc984dd 100644
+index 87894dc984dd..5eccc67d1a99 100644
 --- a/tools/testing/selftests/bpf/network_helpers.h
 +++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -21,6 +21,7 @@ struct network_helper_opts {
- 	const char *cc;
+@@ -22,6 +22,8 @@ struct network_helper_opts {
  	int timeout_ms;
  	bool must_fail;
-+	bool noconnect;
+ 	bool noconnect;
++	int type;
++	int proto;
  };
  
  /* ipv4 test vector */
