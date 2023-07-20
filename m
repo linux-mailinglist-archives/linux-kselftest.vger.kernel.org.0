@@ -2,137 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B85675A574
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 07:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58E875A60D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 08:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjGTFZa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 01:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        id S229907AbjGTGLt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 02:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjGTFZ3 (ORCPT
+        with ESMTP id S229540AbjGTGLs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 01:25:29 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76872110;
-        Wed, 19 Jul 2023 22:25:28 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id E1FBB6015E;
-        Thu, 20 Jul 2023 07:25:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1689830726; bh=ZAqMkp/DBdBOVwAIRGxyUnAmmHO14ggEbQ2+58ks12M=;
-        h=Date:From:Subject:To:Cc:From;
-        b=ndEDIfTFmAXE3038XelV1l6726OsL9C7du/DHTl8UMre6qLqYIUjeZYJAG6xOL/YO
-         V5oCy6RtbFczI8g28yaujW2CTSX3FuDMiS7JFaiWE1NHLwF9H2UQRJyTGaJhjaocrU
-         yizqoiCp8ZE3rEDknvq2W6G6PuDKU7oTTXGTqrHMdhUPqFtiCuvgcYd35vpdQ/KDsZ
-         s0RcTJktsbS+jlOpEAw/s28KwD9qZLZJwJMY3ktnj9WAxTc0jPqKQbEDHWqhnJjR+2
-         hPnidbECAl18gpfq3d67D3LhlLJUhljG8gIof5SOfOl7WpoZmAwaeLUeAm7Rp19+KL
-         dK2wCAVewnTIg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WAdvw5bmmGMH; Thu, 20 Jul 2023 07:25:24 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id 0D65060157;
-        Thu, 20 Jul 2023 07:25:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1689830724; bh=ZAqMkp/DBdBOVwAIRGxyUnAmmHO14ggEbQ2+58ks12M=;
-        h=Date:From:Subject:To:Cc:From;
-        b=w07Z0lK/eFvU4p+LHAbjGiDrEQ034nxCqSeO5TSTzLA6kCSI2f4MwfoZA4CTdnTdZ
-         mWp/5/CO8SUl1Kf6hEEmyvFwpuMzLXKMK4AaicwU/Sh9wG+eDOkZjTaK0NbCc+HQCp
-         0j9GChGeejRNM/Xa4Pu8jkfNkVKwgH57nRvaFVjMTRDFnDIDsW2AQjho/kYFeeqopE
-         rpxSx3fZeo85de8FVk7CDlfK5mSpDzjKHhl86VsoFz8JzfOenjqDIW7PPC55YAaQHl
-         Y+/G8xVkqKhe9LinsNHR32+S6f7fVDwXfCgSZ2LP4ZhZW56UjbOnlo8vRyHwjqYIjj
-         g/0q7E4CgFuiA==
-Message-ID: <759fe934-2e43-e9ff-8946-4fd579c09b05@alu.unizg.hr>
-Date:   Thu, 20 Jul 2023 07:25:19 +0200
+        Thu, 20 Jul 2023 02:11:48 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04971985;
+        Wed, 19 Jul 2023 23:11:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1689833495; bh=O7SOTrjSXooLoE40Zt5wmlSeIeoQuEl79RrevjNNK74=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YUL8bCaEJhVPh2qxmdPsXjm0AHMhgbY7zBo7aKoHF69g4oLA/vx+8ySBS+t/iFRoG
+         ha5iWAQUkEyQ25a/8QnRy9774zR4ZB/OjFp9llcsQQhWu3+z41DmZgCIpjV+gujSGS
+         o/BQuI5NNeFClNRTx/dcMWBzr+XYRHR7WEz4lrB0=
+Date:   Thu, 20 Jul 2023 08:11:32 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 3/8] selftests/nolibc: select_null: fix up for big
+ endian powerpc64
+Message-ID: <c332c69e-d12a-4a7b-8f95-50515a43304e@t-8ch.de>
+References: <20230719043353.GC5331@1wt.eu>
+ <20230719064912.59792-1-falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: [PROBLEM] seltests: net/forwarding/sch_ets.sh [HANG]
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230719064912.59792-1-falcon@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Hi Zhangjin,
 
-Using the same config for 6.5-rc2 on Ubuntu 22.04 LTS and 22.10, the execution
-stop at the exact same line on both boxes (os I reckon it is more than an
-accident):
+On 2023-07-19 14:49:12+0800, Zhangjin Wu wrote:
+> > On Wed, Jul 19, 2023 at 07:56:37AM +0800, Zhangjin Wu wrote:
+> > > It made me recalled I have at last disabled (not enabled for tinyconfig) the following options:
+> > > 
+> > >     CONFIG_ALTIVEC
+> > >     CONFIG_VSX --> This option enables kernel support for the Vector Scaler extensions
+> > > 
+> > > Or we can disable the vsx instructions explicitly:
+> > > 
+> > >     -mno-vsx
+> > > 
+> > > Both of them work well, but I prefer -mno-vsx for to get a faster build, what about you?
+> > > 
+> > >     +CFLAGS_powerpc64 = -m64 -mbig-endian -Wl,-EB,-melf64ppc -mno-vsx
+> > >     +CFLAGS_powerpc64le = -m64 -mlittle-endian -Wl,-EL,-melf64ppc -mno-vsx
+> > > 
+> > > So, this patch itself is wrong, let's drop it from the next revision.
+> > 
+> > Better explicitly disable it in the CFLAGS (2nd option) if we want to
+> > make sure we don't want to rely on this, at least for portability
+> > purposes.
+> 
+> Ok, thanks, have updated CFLAGS in these two patches locally:
+> 
+>     [PATCH v1 7/8] selftests/nolibc: add test support for powerpc64le
+>     [PATCH v1 8/8] selftests/nolibc: add test support for powerpc64
+> 
+> what about the other ones? I'm ready to send v2 ;-)
 
-# selftests: net/forwarding: sch_ets.sh
-# TEST: ping vlan 10                                                  [ OK ]
-# TEST: ping vlan 11                                                  [ OK ]
-# TEST: ping vlan 12                                                  [ OK ]
-# Running in priomap mode
-# Testing ets bands 3 strict 3, streams 0 1
-# TEST: band 0                                                        [ OK ]
-# INFO: Expected ratio >95% Measured ratio 100.00
-# TEST: band 1                                                        [ OK ]
-# INFO: Expected ratio <5% Measured ratio 0
-# Testing ets bands 3 strict 3, streams 1 2
-# TEST: band 1                                                        [ OK ]
-# INFO: Expected ratio >95% Measured ratio 100.00
-# TEST: band 2                                                        [ OK ]
-# INFO: Expected ratio <5% Measured ratio 0
-# Testing ets bands 4 strict 1 quanta 5000 2500 1500, streams 0 1
-# TEST: band 0                                                        [ OK ]
-# INFO: Expected ratio >95% Measured ratio 100.00
-# TEST: band 1                                                        [ OK ]
-# INFO: Expected ratio <5% Measured ratio 0
-# Testing ets bands 4 strict 1 quanta 5000 2500 1500, streams 1 2
-# TEST: bands 1:2                                                     [ OK ]
-# INFO: Expected ratio 2.00 Measured ratio 1.99
-# Testing ets bands 3 quanta 3300 3300 3300, streams 0 1 2
-# TEST: bands 0:1                                                     [ OK ]
-# INFO: Expected ratio 1.00 Measured ratio .99
-# TEST: bands 0:2                                                     [ OK ]
-# INFO: Expected ratio 1.00 Measured ratio 1.00
-# Testing ets bands 3 quanta 5000 3500 1500, streams 0 1 2
-# TEST: bands 0:1                                                     [ OK ]
-# INFO: Expected ratio 1.42 Measured ratio 1.42
-# TEST: bands 0:2                                                     [ OK ]
-# INFO: Expected ratio 3.33 Measured ratio 3.33
-# Testing ets bands 3 quanta 5000 8000 1500, streams 0 1 2
-# TEST: bands 0:1                                                     [ OK ]
-# INFO: Expected ratio 1.60 Measured ratio 1.59
-# TEST: bands 0:2                                                     [ OK ]
-# INFO: Expected ratio 3.33 Measured ratio 3.33
-# Testing ets bands 2 quanta 5000 2500, streams 0 1
-# TEST: bands 0:1                                                     [ OK ]
-# INFO: Expected ratio 2.00 Measured ratio 1.99
-# Running in classifier mode
-# Testing ets bands 3 strict 3, streams 0 1
-# TEST: band 0                                                        [ OK ]
-# INFO: Expected ratio >95% Measured ratio 100.00
-# TEST: band 1                                                        [ OK ]
-# INFO: Expected ratio <5% Measured ratio 0
-# Testing ets bands 3 strict 3, streams 1 2
-# TEST: band 1                                                        [ OK ]
-# INFO: Expected ratio >95% Measured ratio 100.00
-# TEST: band 2                                                        [ OK ]
-# INFO: Expected ratio <5% Measured ratio 0
-# Testing ets bands 4 strict 1 quanta 5000 2500 1500, streams 0 1
+Unfortunately I won't have the time for a proper review this week.
 
-I tried to run 'set -x' enabled version standalone, but that one finished
-correctly (?).
-
-It could be something previous scripts left, but right now I don't have a clue.
-I can attempt to rerun all tests with sch_ets.sh bash 'set -x' enabled later today.
-
-Best regards,
-Mirsad Todorovac
+Thomas
