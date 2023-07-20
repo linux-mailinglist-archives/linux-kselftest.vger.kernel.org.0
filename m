@@ -2,105 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989D475B849
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 21:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50C375B84F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 21:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjGTTuf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 15:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
+        id S230085AbjGTTxI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 15:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjGTTuf (ORCPT
+        with ESMTP id S229644AbjGTTxI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 15:50:35 -0400
-Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B0A1733;
-        Thu, 20 Jul 2023 12:50:33 -0700 (PDT)
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4R6NZt1JgmzB1;
-        Thu, 20 Jul 2023 21:50:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1689882631; bh=a9pL0kNuMRIgcmjOND4LJd48iF3+VEg/CEzl3bltNR0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hRKxNIdHwobRsOgpUwGtj+PdQV6SIpFKL7mg/O157lrA1OdMbATu7NMdtJdaMFxHH
-         wYb2lzjgjAc1zwBOkuf1Y0YCoCa/3zkjF+oLjeIyGbnIekVSjv2pTGB3Lbs4TtUmD3
-         CDrONvId5YYm2VrtVW/O9+xteB94GdrKp1I5VNl9qFJERmhGiMmmkQrYEKIScjkFBO
-         33PVI8P5Y4bfRGiOr5nvIcC8qulynBJ4tKxHKswiPiNutMC3cmuOiM8/NTOdRebSR7
-         61Q6DeowDNmdlT15unjNT2E1xXOyW4lVB0A5PDXjykFs2NSoxKU5chGOowKNABgOOM
-         DOhpTS7bkz/jw==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.8 at mail
-Date:   Thu, 20 Jul 2023 21:50:28 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Alex Sierra <alex.sierra@amd.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrei Vagin <avagin@gmail.com>,
+        Thu, 20 Jul 2023 15:53:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202DA1BC1;
+        Thu, 20 Jul 2023 12:53:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6294061C4E;
+        Thu, 20 Jul 2023 19:53:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF8E0C433C8;
+        Thu, 20 Jul 2023 19:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689882785;
+        bh=f2zoX/f2BDWXdTqXLQTyx96joLx1NKF0n400nYI5mHs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=rt1oe06eBVoHzBMd47hKt4olPkaF18XXvn1lyClLZKV6+ZHxv6EpK+TUu9b07DlTT
+         Zca8fuPLdqwjPzJe9xU7W7nlQHTmn1+IuzoXDyJzDc5b4cAutVAPBvBZYKhocIx027
+         K+MjktTzgY4QiuRVnLdG79zzeH+/qZgtDlEcAW2Ovul+iOKkUleYhVAJxseB1x9mOR
+         SjgkUoHScZpkz2XmAtgze6BTT56VqgeixCI2mEGvozqv9lmgVYYbudDiT3orqzpwQ+
+         3LKVCGaSveRlC6eR8TB2o4O7GHx7/QAY3ehnWzXbu6UG1961PabOzPMK9xaksANQNa
+         gkrKkk2S4w12Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 48CD5CE03CF; Thu, 20 Jul 2023 12:53:05 -0700 (PDT)
+Date:   Thu, 20 Jul 2023 12:53:05 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <emmir@google.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yang Shi <shy828301@gmail.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: fs/proc/task_mmu: Implement IOCTL for efficient page table
- scanning
-Message-ID: <ZLmQBMympuVU2zLn@qmqm.qmqm.pl>
-References: <20230713101415.108875-6-usama.anjum@collabora.com>
- <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH v2 17/20] rcutorture: Add a test config to torture
+ test low RCU_DYNTICKS width
+Message-ID: <24b55289-1c35-41cc-9ad3-baa957f1c9cb@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230720163056.2564824-1-vschneid@redhat.com>
+ <20230720163056.2564824-18-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230720163056.2564824-18-vschneid@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 09:28:52PM +0200, Micha³ Miros³aw wrote:
-> This is a massaged version of patch by Muhammad Usama Anjum [1]
-> to illustrate my review comments and hopefully push the implementation
-> efforts closer to conclusion. The changes are:
-[...]
-> +static void pagemap_scan_backout_range(struct pagemap_scan_private *p,
-> +				       unsigned long addr, unsigned long end)
-> +{
-> +	struct page_region *cur_buf = &p->cur_buf;
-> +
-> +	if (cur_buf->start != addr) {
-> +		cur_buf->end = addr;
-> +	} else {
-> +		cur_buf->start = cur_buf->end = 0;
-> +	}
-> +
-> +	p->end_addr = 0;
+On Thu, Jul 20, 2023 at 05:30:53PM +0100, Valentin Schneider wrote:
+> We now have an RCU_EXPORT knob for configuring the size of the dynticks
+> counter: CONFIG_RCU_DYNTICKS_BITS.
+> 
+> Add a torture config for a ridiculously small counter (2 bits). This is ac
+> opy of TREE4 with the added counter size restriction.
+> 
+> Link: http://lore.kernel.org/r/4c2cb573-168f-4806-b1d9-164e8276e66a@paulmck-laptop
+> Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  .../selftests/rcutorture/configs/rcu/TREE11   | 19 +++++++++++++++++++
+>  .../rcutorture/configs/rcu/TREE11.boot        |  1 +
+>  2 files changed, 20 insertions(+)
+>  create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/TREE11
+>  create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
+> 
+> diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE11 b/tools/testing/selftests/rcutorture/configs/rcu/TREE11
+> new file mode 100644
+> index 0000000000000..aa7274efd9819
+> --- /dev/null
+> +++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE11
+> @@ -0,0 +1,19 @@
+> +CONFIG_SMP=y
+> +CONFIG_NR_CPUS=8
+> +CONFIG_PREEMPT_NONE=n
+> +CONFIG_PREEMPT_VOLUNTARY=y
+> +CONFIG_PREEMPT=n
+> +CONFIG_PREEMPT_DYNAMIC=n
+> +#CHECK#CONFIG_TREE_RCU=y
+> +CONFIG_HZ_PERIODIC=n
+> +CONFIG_NO_HZ_IDLE=n
+> +CONFIG_NO_HZ_FULL=y
+> +CONFIG_RCU_TRACE=y
+> +CONFIG_RCU_FANOUT=4
+> +CONFIG_RCU_FANOUT_LEAF=3
+> +CONFIG_DEBUG_LOCK_ALLOC=n
+> +CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+> +CONFIG_RCU_EXPERT=y
+> +CONFIG_RCU_EQS_DEBUG=y
+> +CONFIG_RCU_LAZY=y
+> +CONFIG_RCU_DYNTICKS_BITS=2
 
-Just noticed that this is missing:
+Why not just add this last line to the existing TREE04 scenario?
+That would ensure that it gets tested regularly without extending the
+time required to run a full set of rcutorture tests.
 
-	p->found_pages -= (end - addr) / PAGE_SIZE;
-
-> +}
-[...]
-
-Best Regards
-Micha³ Miros³aw
+> diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot b/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
+> new file mode 100644
+> index 0000000000000..a8d94caf7d2fd
+> --- /dev/null
+> +++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
+> @@ -0,0 +1 @@
+> +rcutree.rcu_fanout_leaf=4 nohz_full=1-N
+> -- 
+> 2.31.1
+> 
