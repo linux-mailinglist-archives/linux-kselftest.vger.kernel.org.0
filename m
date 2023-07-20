@@ -2,218 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A30775A6B7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 08:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F4475A710
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 08:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbjGTGlU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 02:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S229970AbjGTG71 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 02:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjGTGk6 (ORCPT
+        with ESMTP id S229560AbjGTG71 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 02:40:58 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD2B35A6
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 23:40:22 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c5cea5773e8so445963276.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 23:40:22 -0700 (PDT)
+        Thu, 20 Jul 2023 02:59:27 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC60132
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 23:59:25 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-31441bc0092so337374f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jul 2023 23:59:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689835209; x=1690440009;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i3Gim78LlW0ImU8Nf7KfkXlFKv0mM0hU/1p3btyr4nM=;
-        b=5f9C5eFXQp0hGJsDoxGCFRckc7Px3DcrknxoAjktifh5StDa+zVV6XWxRyWl4wpUPD
-         2biiL+iilf0AgDI5sxpf7W8VW2o0Ux3ZuggzoLmM7PLy8Z3I7GtxySWk8m0rZZelUNRE
-         b5/PlSp8f59mHceQUG85M8pnRcVcV4A8ywL9iY1GwLH8GJZ7rvmTDJSt7644yc1aLCaA
-         ZhyM3Rj69OEIFlI4947vSLvC36fFxWnjkMCqrdbw/aScWuf6p3TgnB15frSw0eE8uYlm
-         /9lOVmJGVLAqX/jHl5ozL85NB1xCDQNkvCsYR2J83zbZ+G9ODeeKJ8pYFrPrxCvliuaF
-         uocQ==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689836364; x=1690441164;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pT1DoIojr0lvslKOunqTR4YXj4PFl+5LQJAMXq3nC5E=;
+        b=ZDbx6qAcN8P+a9zusWZTkSl9rouTQF/iSqEtve1lkFjxsrKdWPD6dMC2Umr3gK0sIm
+         nkzMw50TbmJwgcQIx++d1ggHjzr6+sA6GAKvbxlNWECwqbhFRvboEMDbjSOMt6CFznjJ
+         O36ADGX1UaNkxZWfL7VJnxC+Cw3dNijMi+5cHTLgKK8SiFsVriuYykuE2k1SMWR22XY6
+         5WxT4DDw/UrHFcXUA/TDL5yUwwgAoniALRtBlkd8RbObdZKNO0W+L2Z2Ac61fVFTAtPL
+         YHLVKQefTrzGZrXQCVxFRHfphf2SXdfAdIWaHdz9BRl6fVTzOf00WkysK5x98InR9zeP
+         FHQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689835209; x=1690440009;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=i3Gim78LlW0ImU8Nf7KfkXlFKv0mM0hU/1p3btyr4nM=;
-        b=ZJoXcz+tV9A0LxCaTTmRUnzuOW6p+FBtKomrmxTWEMeY+8bvyf60/rPcOeJdttCYbe
-         ZDamR0zpq4NxUBJJpGC4fLjQot22gGj2LFZT1i8HdxfvZ1zIhc4MctQXnJjRMpDPwkFS
-         HNQ0vLB6ri5gRlX2XND+qv6XxaOqFkgLMqHCAyHjnNA4mTKtdVvb3xmoxeXGOddWaACk
-         8FZPyIUcrmn30dewLr0I/teyur0J6NNI+zL14RgMwGKixGnmnY9KCNypQumNe3F1t1Rm
-         Ymi7Fd2PEi8tnTMoEZi9Nrf5HUBRhIBeiaO85FmQenCsDS1mQikl40jKs0UQ8dJoZAn0
-         kQvA==
-X-Gm-Message-State: ABy/qLZVRnytmlFtHY+ja5jUOxidz6llvvIa3htclzIVeGxVygh/663i
-        J/AbWtInrdtFuYphFtIUALJjDaaT4El9Qw==
-X-Google-Smtp-Source: APBJJlHksrDL5l4lPhnUlz0GtDMHq3IdfMTmcbYys5NVadOWYhr90nEPMgb/oWaI2BQLgYCE4qQc7zXkQFJhtw==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:1709:b0:ccf:6bfa:2a03 with SMTP
- id by9-20020a056902170900b00ccf6bfa2a03mr37240ybb.7.1689835209388; Wed, 19
- Jul 2023 23:40:09 -0700 (PDT)
-Date:   Thu, 20 Jul 2023 14:38:54 +0800
-In-Reply-To: <20230720-rustbind-v1-0-c80db349e3b5@google.com>
-Mime-Version: 1.0
-References: <20230720-rustbind-v1-0-c80db349e3b5@google.com>
-X-Mailer: b4 0.13-dev-099c9
-Message-ID: <20230720-rustbind-v1-3-c80db349e3b5@google.com>
-Subject: [PATCH 3/3] rust: kunit: allow to know if we are in a test
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Benno Lossin <benno.lossin@proton.me>
-Cc:     David Gow <davidgow@google.com>,
-        "=?utf-8?q?Jos=C3=A9_Exp=C3=B3sito?=" <jose.exposito89@gmail.com>,
-        "=?utf-8?q?Bj=C3=B6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20221208; t=1689836364; x=1690441164;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pT1DoIojr0lvslKOunqTR4YXj4PFl+5LQJAMXq3nC5E=;
+        b=UmKlyZMdEzZ4sSo4uYcB0gbTHHckaIyi135MZkCf8+ZAq1Wj2yA+vqgUWwKe8Z0UeY
+         Xx9Y7ssynC0e/EKD1VPgxS5IEHnjtlig8COf1B8mISyvXG3YtUpBhuHnff96n7LQ9dVR
+         U4wldsHNVYqHfpEYmIPFsR55i9UuewUxtJFn2/vYp5fZB2lCPkY0CMfpYyjpuhB6m1Gt
+         1z0zQbl38WqxoCbctoWWsQaJ7gdmu9eYhIVxxLaJiOuCeUVfLUpJEnrHOFzXylsuQD+G
+         cc9wrKK+QVySoJYLzrlUVJ9Nqr8PvfhO9Y7U6NySQxpPg/MWy4huKSxbfnwZod3Rc/oB
+         Ixbg==
+X-Gm-Message-State: ABy/qLYAQSvWfRqEwHHjkLQ7HlvtnIImjVtPl1UMsqC97IiOtOHGowKE
+        VmbJSoDaj57No4lmSI7GM054b1+Tc+CIkOxU2qCQzg==
+X-Google-Smtp-Source: APBJJlG41skPij9fp8nZyKeEoH9myLamnBgBOCZf3SxF3pb6Xp13yIhuN0hjhRkJju4WSDs1jm0RLUedZXc7rvYty9A=
+X-Received: by 2002:a05:6000:1c2:b0:30f:b7b4:3e55 with SMTP id
+ t2-20020a05600001c200b0030fb7b43e55mr1436688wrx.19.1689836363671; Wed, 19 Jul
+ 2023 23:59:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230714165508.94561-1-charlie@rivosinc.com> <20230714165508.94561-5-charlie@rivosinc.com>
+In-Reply-To: <20230714165508.94561-5-charlie@rivosinc.com>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Thu, 20 Jul 2023 08:59:12 +0200
+Message-ID: <CAHVXubgSLhsMdS3aFbSuPNf2d_FXhztnFtRnbjsMstH5coCHWA@mail.gmail.com>
+Subject: Re: [PATCH v6 4/4] RISC-V: mm: Document mmap changes
+To:     Charlie Jenkins <charlie@rivosinc.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        conor@kernel.org, paul.walmsley@sifive.com, palmer@rivosinc.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+On Fri, Jul 14, 2023 at 6:56=E2=80=AFPM Charlie Jenkins <charlie@rivosinc.c=
+om> wrote:
+>
+> The behavior of mmap is modified with this patch series, so explain the
+> changes to the mmap hint address behavior.
+>
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  Documentation/riscv/vm-layout.rst | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>
+> diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-l=
+ayout.rst
+> index 5462c84f4723..892412b91300 100644
+> --- a/Documentation/riscv/vm-layout.rst
+> +++ b/Documentation/riscv/vm-layout.rst
+> @@ -133,3 +133,25 @@ RISC-V Linux Kernel SV57
+>     ffffffff00000000 |  -4     GB | ffffffff7fffffff |    2 GB | modules,=
+ BPF
+>     ffffffff80000000 |  -2     GB | ffffffffffffffff |    2 GB | kernel
+>    __________________|____________|__________________|_________|_________=
+___________________________________________________
+> +
+> +
+> +Userspace VAs
+> +--------------------
+> +To maintain compatibility with software that relies on the VA space with=
+ a
+> +maximum of 48 bits the kernel will, by default, return virtual addresses=
+ to
+> +userspace from a 48-bit range (sv48). This default behavior is achieved =
+by
+> +passing 0 into the hint address parameter of mmap. On CPUs with an addre=
+ss space
+> +smaller than sv48, the CPU maximum supported address space will be the d=
+efault.
+> +
+> +Software can "opt-in" to receiving VAs from another VA space by providin=
+g
+> +a hint address to mmap. A call to mmap is guaranteed to return an addres=
+s
+> +that will not override the unset left-aligned bits in the hint address,
+> +unless there is no space left in the address space. If there is no space
+> +available in the requested address space, an address in the next smalles=
+t
+> +available address space will be returned.
+> +
+> +For example, in order to obtain 48-bit VA space, a hint address greater =
+than
+> +:code:`1 << 38` must be provided.
 
-In some cases, you need to call test-only code from outside the test
-case, for example, to mock a function or a module.
+Is this correct? Shouldn't the hint be strictly greater than the
+address space it targets? In patch 1, you state that "A hint address
+passed to mmap will cause the largest address space that fits entirely
+into the hint to be used", it seems contradictory to me.
 
-In order to check whether we are in a test or not, we need to test if
-`CONFIG_KUNIT` is set.
-Unfortunately, we cannot rely only on this condition because some
-distros compile KUnit in production kernels, so checking at runtime
-that `current->kunit_test !=3D NULL` is required.
-
-Note that the C function `kunit_get_current_test()` can not be used
-because it is not present in the current Rust tree yet. Once it is
-available we might want to change our Rust wrapper to use it.
-
-This patch adds a function to know whether we are in a KUnit test or
-not and examples showing how to mock a function and a module.
-
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
----
- rust/kernel/kunit.rs | 78 ++++++++++++++++++++++++++++++++++++++++++++++++=
-++++
- 1 file changed, 78 insertions(+)
-
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index 44ea67028316..dcaac19bb108 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -40,6 +40,8 @@ pub fn info(args: fmt::Arguments<'_>) {
-     }
- }
-=20
-+use crate::task::Task;
-+use core::ops::Deref;
- use macros::kunit_tests;
-=20
- /// Asserts that a boolean expression is `true` at runtime.
-@@ -256,11 +258,87 @@ macro_rules! kunit_unsafe_test_suite {
-     };
- }
-=20
-+/// In some cases, you need to call test-only code from outside the test c=
-ase, for example, to
-+/// create a function mock. This function can be invoked to know whether w=
-e are currently running a
-+/// KUnit test or not.
-+///
-+/// # Examples
-+///
-+/// This example shows how a function can be mocked to return a well-known=
- value while testing:
-+///
-+/// ```
-+/// # use kernel::kunit::in_kunit_test;
-+/// #
-+/// fn fn_mock_example(n: i32) -> i32 {
-+///     if in_kunit_test() {
-+///         100
-+///     } else {
-+///         n + 1
-+///     }
-+/// }
-+///
-+/// let mock_res =3D fn_mock_example(5);
-+/// assert_eq!(mock_res, 100);
-+/// ```
-+///
-+/// Sometimes, you don't control the code that needs to be mocked. This ex=
-ample shows how the
-+/// `bindings` module can be mocked:
-+///
-+/// ```
-+/// // Import our mock naming it as the real module.
-+/// #[cfg(CONFIG_KUNIT)]
-+/// use bindings_mock_example as bindings;
-+///
-+/// // This module mocks `bindings`.
-+/// mod bindings_mock_example {
-+///     use kernel::kunit::in_kunit_test;
-+///     use kernel::bindings::u64_;
-+///
-+///     // Make the other binding functions available.
-+///     pub(crate) use kernel::bindings::*;
-+///
-+///     // Mock `ktime_get_boot_fast_ns` to return a well-known value when=
- running a KUnit test.
-+///     pub(crate) unsafe fn ktime_get_boot_fast_ns() -> u64_ {
-+///         if in_kunit_test() {
-+///             1234
-+///         } else {
-+///             unsafe { kernel::bindings::ktime_get_boot_fast_ns() }
-+///         }
-+///     }
-+/// }
-+///
-+/// // This is the function we want to test. Since `bindings` has been moc=
-ked, we can use its
-+/// // functions seamlessly.
-+/// fn get_boot_ns() -> u64 {
-+///     unsafe { bindings::ktime_get_boot_fast_ns() }
-+/// }
-+///
-+/// let time =3D get_boot_ns();
-+/// assert_eq!(time, 1234);
-+/// ```
-+pub fn in_kunit_test() -> bool {
-+    if cfg!(CONFIG_KUNIT) {
-+        // SAFETY: By the type invariant, we know that `*Task::current().d=
-eref().0` is valid.
-+        let test =3D unsafe { (*Task::current().deref().0.get()).kunit_tes=
-t };
-+        !test.is_null()
-+    } else {
-+        false
-+    }
-+}
-+
- #[kunit_tests(rust_kernel_kunit)]
- mod tests {
-+    use super::*;
-+
-     #[test]
-     fn rust_test_kunit_kunit_tests() {
-         let running =3D true;
-         assert_eq!(running, true);
-     }
-+
-+    #[test]
-+    fn rust_test_kunit_in_kunit_test() {
-+        let in_kunit =3D in_kunit_test();
-+        assert_eq!(in_kunit, true);
-+    }
- }
-
---=20
-2.41.0.255.g8b1d071c50-goog
-
+> Note that this is 38 due to sv39 userspace
+> +ending at :code:`1 << 38` and the addresses beyond this are reserved for=
+ the
+> +kernel. Similarly, to obtain 57-bit VA space addresses, a hint address g=
+reater
+> +than or equal to :code:`1 << 47` must be provided.
+> --
+> 2.41.0
+>
