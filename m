@@ -2,65 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DF975AEB2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 14:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1C275B15F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 16:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbjGTMpt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 08:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
+        id S231465AbjGTOim (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 10:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbjGTMpf (ORCPT
+        with ESMTP id S231357AbjGTOil (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 08:45:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6B726A5;
-        Thu, 20 Jul 2023 05:45:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46A8061A3D;
-        Thu, 20 Jul 2023 12:45:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E1BFC433C7;
-        Thu, 20 Jul 2023 12:45:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689857124;
-        bh=/t17Dw8Ji4dvYfH3v5c7ic+nA+UyzWEDYc0SP3u2a0E=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=Ati3GUNIpz+rGEpQ502H4eeDTtqI8lLdRbIv4/5aYKCZRupFSRUez0RG6V7W9MJaG
-         SILac4zUP+3cEN+9nqYlVrtMDg1xgRbYSfA5U6UvUnvTREfn9jawn1cC1m9lA4m30y
-         pE6Z2Cg6i7JoN4v5pLFN3Qcc/38UbX4856fsNjmoSm4BWBTPVHloBpO+r7rEks5HaP
-         cxrgwMi0gxIFc2is8wC0tVbMar3QEm0oP4M6+iBwg4LoR9jvCbVJOs6ZD8omTjYYIW
-         hTeXlTg9pw4ktrcsdwG0kx2PLM4j2nRlESsELL5e6kp4mn5tv2TaO71bfJkV4+g4vw
-         Flpdc3feFmcbA==
-From:   Maxime Ripard <mripard@kernel.org>
-Date:   Thu, 20 Jul 2023 14:45:09 +0200
-Subject: [PATCH v3 3/3] drivers: base: Free devm resources when
- unregistering a device
+        Thu, 20 Jul 2023 10:38:41 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782A2C6;
+        Thu, 20 Jul 2023 07:38:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689863920; x=1721399920;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lgQXhZJEPJe56VQB2gV2H3KOeA7V4JX7thMnYcmwZOA=;
+  b=JLj1ES9D8dZ2OTEr6uuTQwvOJdV6rubqh210Hrh9q3gSbMSp0u7Zezoo
+   KwRw75O4tMCBNiMaVpaBYOzX2Jih4961SC5/KsjIq/t9eZC2moQ4crQus
+   mYW8yD4mIYphRpNBFpnjhiP2O1wq1J+87RrkBdd2qVAsL5r+l1qnbUTmG
+   m9oiwk9yRIMG9ajs+HbkhBCCY90wLYwm/jGqpElf1ZFLSypQwuL15QT1I
+   IAKThD8F7HC2EpKchek0ZCXVRqlR3NpSZoGJF6GMWHVJX7ouAiOeLc6TD
+   w/q2Uj4w4/fch0+umGDNHgxLzFw6vguf238viHOKSIof5I5xohulruAvw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="430544126"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="430544126"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 07:38:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="838144924"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="838144924"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 20 Jul 2023 07:38:17 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qMUnI-0006A1-2b;
+        Thu, 20 Jul 2023 14:38:16 +0000
+Date:   Thu, 20 Jul 2023 22:37:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emma Anholt <emma@anholt.net>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com
+Subject: Re: [PATCH v2 05/11] drm/tests: helpers: Create a helper to allocate
+ a locking ctx
+Message-ID: <202307202244.26VyeZKj-lkp@intel.com>
+References: <20230720-kms-kunit-actions-rework-v2-5-175017bd56ab@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230720-kunit-devm-inconsistencies-test-v3-3-6aa7e074f373@kernel.org>
-References: <20230720-kunit-devm-inconsistencies-test-v3-0-6aa7e074f373@kernel.org>
-In-Reply-To: <20230720-kunit-devm-inconsistencies-test-v3-0-6aa7e074f373@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3344; i=mripard@kernel.org;
- h=from:subject:message-id; bh=dK5NenGOGX4zkAO7TDHxkXUxqTtkK1TPL9bi3DSmzKI=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCk7dSK10souHee+q/LaRWFGoYlAl3evuuubNG63G+yyl
- +4Yhyp0lLIwiHExyIopssQImy+JOzXrdScb3zyYOaxMIEMYuDgFYCIydxkZzky9WXDY9Oq8kFeH
- TDOuP65/bx3Oe6rEPVE9anmxxpLIjYwM557FzFxhKhxkzbP8Mf99YauS2ttWnRzFrr8rNmv7HHj
- MDgA=
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230720-kms-kunit-actions-rework-v2-5-175017bd56ab@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,86 +76,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
+Hi Maxime,
 
-In the current code, devres_release_all() only gets called if the device
-has a bus and has been probed.
+kernel test robot noticed the following build warnings:
 
-This leads to issues when using bus-less or driver-less devices where
-the device might never get freed if a managed resource holds a reference
-to the device. This is happening in the DRM framework for example.
+[auto build test WARNING on c58c49dd89324b18a812762a2bfa5a0458e4f252]
 
-We should thus call devres_release_all() in the device_del() function to
-make sure that the device-managed actions are properly executed when the
-device is unregistered, even if it has neither a bus nor a driver.
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-tests-helpers-Switch-to-kunit-actions/20230720-191901
+base:   c58c49dd89324b18a812762a2bfa5a0458e4f252
+patch link:    https://lore.kernel.org/r/20230720-kms-kunit-actions-rework-v2-5-175017bd56ab%40kernel.org
+patch subject: [PATCH v2 05/11] drm/tests: helpers: Create a helper to allocate a locking ctx
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230720/202307202244.26VyeZKj-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230720/202307202244.26VyeZKj-lkp@intel.com/reproduce)
 
-This is effectively the same change than commit 2f8d16a996da ("devres:
-release resources on device_del()") that got reverted by commit
-a525a3ddeaca ("driver core: free devres in device_release") over
-memory leaks concerns.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307202244.26VyeZKj-lkp@intel.com/
 
-This patch effectively combines the two commits mentioned above to
-release the resources both on device_del() and device_release() and get
-the best of both worlds.
+All warnings (new ones prefixed by >>):
 
-Fixes: a525a3ddeaca ("driver core: free devres in device_release")
-Signed-off-by: David Gow <davidgow@google.com>
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
- drivers/base/core.c                      | 11 +++++++++++
- drivers/base/test/platform-device-test.c |  2 --
- drivers/base/test/root-device-test.c     |  2 --
- 3 files changed, 11 insertions(+), 4 deletions(-)
+>> drivers/gpu/drm/tests/drm_kunit_helpers.c:145: warning: expecting prototype for drm_kunit_helper_context_alloc(). Prototype was for drm_kunit_helper_acquire_ctx_alloc() instead
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 3dff5037943e..6ceaf50f5a67 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -3817,6 +3817,17 @@ void device_del(struct device *dev)
- 	device_platform_notify_remove(dev);
- 	device_links_purge(dev);
- 
-+	/*
-+	 * If a device does not have a driver attached, we need to clean
-+	 * up any managed resources. We do this in device_release(), but
-+	 * it's never called (and we leak the device) if a managed
-+	 * resource holds a reference to the device. So release all
-+	 * managed resources here, like we do in driver_detach(). We
-+	 * still need to do so again in device_release() in case someone
-+	 * adds a new resource after this point, though.
-+	 */
-+	devres_release_all(dev);
-+
- 	bus_notify(dev, BUS_NOTIFY_REMOVED_DEVICE);
- 	kobject_uevent(&dev->kobj, KOBJ_REMOVE);
- 	glue_dir = get_glue_dir(dev);
-diff --git a/drivers/base/test/platform-device-test.c b/drivers/base/test/platform-device-test.c
-index b6ebf1dcdffb..1ae5ce8bd366 100644
---- a/drivers/base/test/platform-device-test.c
-+++ b/drivers/base/test/platform-device-test.c
-@@ -87,8 +87,6 @@ static void platform_device_devm_register_get_unregister_with_devm_test(struct k
- 	struct test_priv *priv = test->priv;
- 	int ret;
- 
--	kunit_skip(test, "This needs to be fixed in the core.");
--
- 	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
- 
-diff --git a/drivers/base/test/root-device-test.c b/drivers/base/test/root-device-test.c
-index 9a3e6cccae13..780d07455f57 100644
---- a/drivers/base/test/root-device-test.c
-+++ b/drivers/base/test/root-device-test.c
-@@ -78,8 +78,6 @@ static void root_device_devm_register_get_unregister_with_devm_test(struct kunit
- 	struct test_priv *priv = test->priv;
- 	int ret;
- 
--	kunit_skip(test, "This needs to be fixed in the core.");
--
- 	priv->dev = root_device_register(DEVICE_NAME);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
- 
+
+vim +145 drivers/gpu/drm/tests/drm_kunit_helpers.c
+
+   130	
+   131	/**
+   132	 * drm_kunit_helper_context_alloc - Allocates an acquire context
+   133	 * @test: The test context object
+   134	 *
+   135	 * Allocates and initializes a modeset acquire context.
+   136	 *
+   137	 * The context is tied to the kunit test context, so we must not call
+   138	 * drm_modeset_acquire_fini() on it, it will be done so automatically.
+   139	 *
+   140	 * Returns:
+   141	 * An ERR_PTR on error, a pointer to the newly allocated context otherwise
+   142	 */
+   143	struct drm_modeset_acquire_ctx *
+   144	drm_kunit_helper_acquire_ctx_alloc(struct kunit *test)
+ > 145	{
+   146		struct drm_modeset_acquire_ctx *ctx;
+   147		int ret;
+   148	
+   149		ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
+   150		KUNIT_ASSERT_NOT_NULL(test, ctx);
+   151	
+   152		drm_modeset_acquire_init(ctx, 0);
+   153	
+   154		ret = kunit_add_action_or_reset(test,
+   155						action_drm_release_context,
+   156						ctx);
+   157		if (ret)
+   158			return ERR_PTR(ret);
+   159	
+   160		return ctx;
+   161	}
+   162	EXPORT_SYMBOL_GPL(drm_kunit_helper_acquire_ctx_alloc);
+   163	
 
 -- 
-2.41.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
