@@ -2,291 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03CE175A8E6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 10:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AAD75AB93
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 12:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjGTIQ0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 04:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
+        id S231193AbjGTKAW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 06:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjGTIQZ (ORCPT
+        with ESMTP id S231231AbjGTKAV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 04:16:25 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A5B2684
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 01:16:23 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-314172bac25so384288f8f.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 01:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689840981; x=1690445781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DNGJaYEpeCAI7drQ8W8ZV+PTc4Zy8Ohv1zP8hIu3TR8=;
-        b=aZoe4sdItvYTIGvKmdBkwWvSm9XIortrvDEcFOv6U9T3bIJ8wJnc6+CdANOPnQrFGc
-         b0efaIB7KWoqmRTL3zp9zVjPLbqwS7QZ9OcJvAiEtHKiNyasiXXEHCx01wZ8w7V52ooO
-         VZOs8dgeSuhEJGHUnBfSMnTt2rJW17BNUCa9NOJL6VT5n8XjqhdAxgnCetbYFNQWPXHz
-         X7ja3ACB0l+HqW62c75Hq8g4y36DXolIpV9WqT1ww8yPETw0kowXqC4Jn7UiXdaKsC8B
-         140VXB7XUvRAbyNj5Wz6RlEpo38ImoCnfE2LhyY3zi5M+fexasEdd0sZlnkUE+60ARi4
-         ON0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689840981; x=1690445781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DNGJaYEpeCAI7drQ8W8ZV+PTc4Zy8Ohv1zP8hIu3TR8=;
-        b=CLH2QeZG0rxHHZ1rkqyfApW+eQ9fMEQxnmp7EEf+eYCeSDMhU72aBuc9se1qMPZ/Gl
-         HxXX2F5Qqr64BP5dLcwkRKIrseUecBPSE2QnOTo0SjdkoYOe6Ts2q3be0Ke+qAs6zhMM
-         jJg2z/W5SrwujQQ1swlRYQiTUspX1GMlPMFHhWD7o1um8g91Ex+wN+MTMpzTqpIm+L0L
-         bzYP5aUe41cbwRgC7bpQPcHPXrovQznLNnfff37Asc2zz68eim5rMfJtjEX+0NAY47XT
-         qlfdicImiUtTDGsG5LrV0nu5OswxT4Z1oGZ0vDGOfUkGJwyR/Tyi2uUugiBIjFTrPp2k
-         /O+w==
-X-Gm-Message-State: ABy/qLaJ7jhplDIUl2FuWTJ4ZFfXFGWlOv04p0NeAVHUSF3fRj4woJH3
-        vg3UwVfMj9Jldahpw0WxxWqA82AQJEP1sSvy9e0HtQ==
-X-Google-Smtp-Source: APBJJlE4/ypBCkAS4fa3ft8sr4uiIljwWG9xBqWF4OQP1QHzs9vglehTimqhRn43tcQfSYUsfosvfe6DQAVs529DSZc=
-X-Received: by 2002:a5d:456c:0:b0:316:f1a5:269f with SMTP id
- a12-20020a5d456c000000b00316f1a5269fmr1310004wrc.70.1689840981522; Thu, 20
- Jul 2023 01:16:21 -0700 (PDT)
+        Thu, 20 Jul 2023 06:00:21 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2062.outbound.protection.outlook.com [40.107.223.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A54ED;
+        Thu, 20 Jul 2023 03:00:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xv4d8S2hsGwUu91eD1a3AYXVYp2V+KbTyHT4YJGVHLu0jowOXg+eKSkMUJhyvQl5uB0syaYsmYQE8qn4v06GIBZYzvNEZZycOF3fgBs8jKSeupYJmlpjBfG3eyu36+lk3VreLIjI0UGQxMIcr7NcVSALKCaU6Dw+6Sj7wks17OpGt/CdfFdBqEVCjr4HKMrp52nX3xLnBTJD+1bFBTzFDBm+yq++TRoRPEiCQ8+/wSiDX9aenbxJEGK9C3jWUTz8xos2G9s40yu5tLSKMpSiITHMDVq6HaJKolFfr+ezEjOOPpLA3dHcnNnFStIxoDWDBrmZVq2WBTd6vf/VWJ/EoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FZVYTtLQzoVhZgX3JBXnNFLor5nC7WRuUJfDIjiZ7xw=;
+ b=kvQH+VUjt3kGUeGfB2ySjUMRnoFCAxvJXAIjfvDVEMbWoag5J8hoFLx5xijHJLRrYbJ5DN83v6fAFOVb7y4aBgkNneKvFGWSSt8Lueb3EyBhZqJS6qhGRUCUbkCihjmjSyyZuXt82JJpRxI5+YuzoHi+NXJRqMTLEZ1QX+YfN6towUI5EmlDKOBJL9b0dvZiZphkULfPV/SLhPkR0kpQoALoA5BFJZ86eGnoVXtVmu4UPe7TuWTdxWG+Ni4Gz56ELnusJPE3/HQm3F6I63HGmURO3KSSd4tm+8zhJGArCrWvc/W11HuQ1OOUdAb0lrXJA5/3cdBCfOhLb9cQHR36Nw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FZVYTtLQzoVhZgX3JBXnNFLor5nC7WRuUJfDIjiZ7xw=;
+ b=ErZm9FxAgrW37vEw4SbBU1XQRFG8mXoU0SF57VWvP7Q75+4eKbagTYz3lgQ00ltSGR1VrmTkttGbUh559wlPLQfm4JY/XDcBHtJDN5f8QFU3j17wO56yfNsfO0SZ4i77l3DWP9lxAYAHdKALnJwMTdv1174DqYw1dU4ctvQqxPobZL2aTL5ARw6Kr0OTTOs46vk1bkrmamOkMHuPxEWWokyXi3drioQQ6dGMf9Swn7iRMzveNvik0Cu6I14JppAT2ugB5usSJ/s8zM6gG8tvBfMzlr+4eX/vg1N3VO00JRiQEy0YblDT7O6CIyatEzUwJ5CJlrXANOPsmD37HJLe5A==
+Received: from BN9PR03CA0180.namprd03.prod.outlook.com (2603:10b6:408:f4::35)
+ by CH3PR12MB7665.namprd12.prod.outlook.com (2603:10b6:610:14a::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.33; Thu, 20 Jul
+ 2023 10:00:14 +0000
+Received: from BN8NAM11FT074.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f4:cafe::86) by BN9PR03CA0180.outlook.office365.com
+ (2603:10b6:408:f4::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.33 via Frontend
+ Transport; Thu, 20 Jul 2023 10:00:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT074.mail.protection.outlook.com (10.13.176.154) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6588.34 via Frontend Transport; Thu, 20 Jul 2023 10:00:14 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 20 Jul 2023
+ 03:00:01 -0700
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 20 Jul
+ 2023 02:59:58 -0700
+References: <759fe934-2e43-e9ff-8946-4fd579c09b05@alu.unizg.hr>
+User-agent: mu4e 1.8.11; emacs 28.2
+From:   Petr Machata <petrm@nvidia.com>
+To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        <linux-kselftest@vger.kernel.org>, Ido Schimmel <idosch@nvidia.com>
+Subject: Re: [PROBLEM] seltests: net/forwarding/sch_ets.sh [HANG]
+Date:   Thu, 20 Jul 2023 11:43:45 +0200
+In-Reply-To: <759fe934-2e43-e9ff-8946-4fd579c09b05@alu.unizg.hr>
+Message-ID: <87cz0m9a3n.fsf@nvidia.com>
 MIME-Version: 1.0
-References: <20230714165508.94561-1-charlie@rivosinc.com> <20230714165508.94561-3-charlie@rivosinc.com>
-In-Reply-To: <20230714165508.94561-3-charlie@rivosinc.com>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Thu, 20 Jul 2023 10:16:10 +0200
-Message-ID: <CAHVXubhT1ixqw03r+6XtPO-0V5ff7a4r4xf2zOqTMDg8xtY0UA@mail.gmail.com>
-Subject: Re: [PATCH v6 2/4] RISC-V: mm: Add tests for RISC-V mm
-To:     Charlie Jenkins <charlie@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        conor@kernel.org, paul.walmsley@sifive.com, palmer@rivosinc.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT074:EE_|CH3PR12MB7665:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8291cb39-7641-4ae3-03e7-08db89081d05
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HHkFj46amgQ6gw0lnIRqsC1mrd8FBCUJ69hssrAniAwC1ePf+LnLO/LiEC37rKwWiAbR0pz6aPR4c4KoNxTj104rPufCa1Ihax2YFn+9ACq/jLrdrmfqozoFQG31irZXyaB1sUMBPwfQC4/t5qu1jlFV/SVOAdPnIp/FAFERwNra6hFv3pwL2CGiTta0qRclSZczDNx7z+ggXsE9KhJxK5ERcLIcHMZT5HbRZEKteyAOe4a/eKU8IQ7iXqFyGYdyJEhc+z+aCgg2HV7EuaG/4iWgmoSRe4psnDgwpBbo35vNyCJoKQeXwExfaMPMGn2U1VjG0gvNt8fIssWDNvVv2c51MUlOeWqXae9/d8Wwv4ZBRtr3a50v20w0kbNesA5q28RY+efJW+/qirq1wgBOd9Pys1ywRhUnqcnqXieY48gikMrg70QTq9ahYdb+UW9UpBLkEHF37V/JoHoskpLOWtOIwSichQcQELWjHnyXBpr4R1bprtt9vYKiPkz33b2F0EHRkVnOVFKB0YIAoGc7YdLbKJlMUv6v0GmHF3+fVvnEzzxxgiIo9LIVV4f6CeDm7bMwD3ZfN8dv56r3Qi2LCAL3T3U9WKrEvXukVjIIlEU7ydL3hI12DnhOYMDR4sjvLA6p4C8STax0HSY385qKc3CPZ9fyBmMzqn/OFTzH6DdUHxrH0LqiY26XLUphfGAoSE3FgegDFj+0XOQFqxip9eNLe1T5Jnw8GdokZBq4lMduSb0Ocu6N5vtkcWL1BVFq
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(136003)(396003)(82310400008)(451199021)(46966006)(40470700004)(36840700001)(8676002)(8936002)(5660300002)(316002)(41300700001)(6916009)(70206006)(4326008)(70586007)(107886003)(54906003)(478600001)(2906002)(6666004)(40460700003)(7636003)(82740400003)(356005)(40480700001)(26005)(186003)(2616005)(426003)(36860700001)(336012)(47076005)(36756003)(16526019)(86362001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2023 10:00:14.0637
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8291cb39-7641-4ae3-03e7-08db89081d05
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT074.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7665
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 6:55=E2=80=AFPM Charlie Jenkins <charlie@rivosinc.c=
-om> wrote:
->
-> Add tests that enforce mmap hint address behavior. mmap should default
-> to sv48. mmap will provide an address at the highest address space that
-> can fit into the hint address, unless the hint address is less than sv39
-> and not 0, then it will return a sv39 address. In addition, ensure that
-> rlimit changes do not cause mmap to fail.
->
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->  tools/testing/selftests/riscv/Makefile        |   2 +-
->  tools/testing/selftests/riscv/mm/.gitignore   |   1 +
->  tools/testing/selftests/riscv/mm/Makefile     |  21 +++
->  .../selftests/riscv/mm/testcases/mmap.c       | 133 ++++++++++++++++++
->  4 files changed, 156 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/riscv/mm/.gitignore
->  create mode 100644 tools/testing/selftests/riscv/mm/Makefile
->  create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
->
-> diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selft=
-ests/riscv/Makefile
-> index 9dd629cc86aa..1b79da90396e 100644
-> --- a/tools/testing/selftests/riscv/Makefile
-> +++ b/tools/testing/selftests/riscv/Makefile
-> @@ -5,7 +5,7 @@
->  ARCH ?=3D $(shell uname -m 2>/dev/null || echo not)
->
->  ifneq (,$(filter $(ARCH),riscv))
-> -RISCV_SUBTARGETS ?=3D hwprobe vector
-> +RISCV_SUBTARGETS ?=3D hwprobe vector mm
->  else
->  RISCV_SUBTARGETS :=3D
->  endif
-> diff --git a/tools/testing/selftests/riscv/mm/.gitignore b/tools/testing/=
-selftests/riscv/mm/.gitignore
-> new file mode 100644
-> index 000000000000..9a6f303edcd3
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/mm/.gitignore
-> @@ -0,0 +1 @@
-> +mmap
-> diff --git a/tools/testing/selftests/riscv/mm/Makefile b/tools/testing/se=
-lftests/riscv/mm/Makefile
-> new file mode 100644
-> index 000000000000..cf68e63e7495
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/mm/Makefile
-> @@ -0,0 +1,21 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Originally tools/testing/selftests/arm64/signal
-> +
-> +# Additional include paths needed by kselftest.h and local headers
-> +CFLAGS +=3D -D_GNU_SOURCE -std=3Dgnu99 -I.
-> +
-> +SRCS :=3D $(filter-out testcases/testcases.c,$(wildcard testcases/*.c))
-> +PROGS :=3D $(patsubst %.c,%,$(SRCS))
-> +
-> +# Generated binaries to be installed by top KSFT script
-> +TEST_GEN_PROGS :=3D $(notdir $(PROGS))
-> +
-> +# Get Kernel headers installed and use them.
-> +
-> +# Including KSFT lib.mk here will also mangle the TEST_GEN_PROGS list
-> +# to account for any OUTPUT target-dirs optionally provided by
-> +# the toplevel makefile
-> +include ../../lib.mk
-> +
-> +$(TEST_GEN_PROGS): $(PROGS)
-> +       cp $(PROGS) $(OUTPUT)/
-> diff --git a/tools/testing/selftests/riscv/mm/testcases/mmap.c b/tools/te=
-sting/selftests/riscv/mm/testcases/mmap.c
-> new file mode 100644
-> index 000000000000..d8e751f7b8c9
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/mm/testcases/mmap.c
-> @@ -0,0 +1,133 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <sys/mman.h>
-> +#include <sys/resource.h>
-> +#include <sys/time.h>
-> +
-> +#include "../../kselftest_harness.h"
-> +struct addresses {
-> +       int *no_hint;
-> +       int *on_37_addr;
-> +       int *on_38_addr;
-> +       int *on_46_addr;
-> +       int *on_47_addr;
-> +       int *on_55_addr;
-> +       int *on_56_addr;
-> +};
-> +
-> +void do_mmaps(struct addresses *mmap_addresses)
-> +{
-> +       // Place all of the hint addresses on the boundaries of mmap
-> +       // sv39, sv48, sv57
-> +       // User addresses end at 1<<38, 1<<47, 1<<56 respectively
 
-Doesn't checkpatch complain about those comments? Shouldn't you use /*
-*/ instead?
+Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr> writes:
 
-> +       void *on_37_bits =3D (void *)(1UL << 37);
-> +       void *on_38_bits =3D (void *)(1UL << 38);
-> +       void *on_46_bits =3D (void *)(1UL << 46);
-> +       void *on_47_bits =3D (void *)(1UL << 47);
-> +       void *on_55_bits =3D (void *)(1UL << 55);
-> +       void *on_56_bits =3D (void *)(1UL << 56);
-> +
-> +       int prot =3D PROT_READ | PROT_WRITE;
-> +       int flags =3D MAP_PRIVATE | MAP_ANONYMOUS;
-> +
-> +       mmap_addresses->no_hint =3D
-> +               mmap(NULL, 5 * sizeof(int), prot, flags, 0, 0);
-> +       mmap_addresses->on_37_addr =3D
-> +               mmap(on_37_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> +       mmap_addresses->on_38_addr =3D
-> +               mmap(on_38_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> +       mmap_addresses->on_46_addr =3D
-> +               mmap(on_46_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> +       mmap_addresses->on_47_addr =3D
-> +               mmap(on_47_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> +       mmap_addresses->on_55_addr =3D
-> +               mmap(on_55_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> +       mmap_addresses->on_56_addr =3D
-> +               mmap(on_56_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> +}
-> +
-> +TEST(default_rlimit)
-> +{
-> +// Only works on 64 bit
-> +#if __riscv_xlen =3D=3D 64
-> +       struct addresses mmap_addresses;
-> +
-> +       do_mmaps(&mmap_addresses);
-> +
-> +       EXPECT_NE(mmap_addresses.no_hint, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_37_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_38_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_46_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_47_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_55_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_56_addr, MAP_FAILED);
-> +
-> +       EXPECT_LT((unsigned long)mmap_addresses.no_hint, 1UL << 47);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_37_addr, 1UL << 38);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_38_addr, 1UL << 38);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_46_addr, 1UL << 38);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_47_addr, 1UL << 47);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_55_addr, 1UL << 47);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_56_addr, 1UL << 56);
-> +#endif
-> +}
-> +
-> +TEST(zero_rlimit)
-> +{
-> +// Only works on 64 bit
-> +#if __riscv_xlen =3D=3D 64
-> +       struct addresses mmap_addresses;
-> +       struct rlimit rlim_new =3D { .rlim_cur =3D 0, .rlim_max =3D RLIM_=
-INFINITY };
-> +
-> +       setrlimit(RLIMIT_STACK, &rlim_new);
-> +
-> +       do_mmaps(&mmap_addresses);
-> +
-> +       EXPECT_NE(mmap_addresses.no_hint, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_37_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_38_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_46_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_47_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_55_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_56_addr, MAP_FAILED);
-> +
-> +       EXPECT_LT((unsigned long)mmap_addresses.no_hint, 1UL << 47);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_37_addr, 1UL << 38);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_38_addr, 1UL << 38);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_46_addr, 1UL << 38);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_47_addr, 1UL << 47);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_55_addr, 1UL << 47);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_56_addr, 1UL << 56);
-> +#endif
-> +}
-> +
-> +TEST(infinite_rlimit)
-> +{
-> +// Only works on 64 bit
-> +#if __riscv_xlen =3D=3D 64
-> +       struct addresses mmap_addresses;
-> +       struct rlimit rlim_new =3D { .rlim_cur =3D RLIM_INFINITY,
-> +                                  .rlim_max =3D RLIM_INFINITY };
-> +
-> +       setrlimit(RLIMIT_STACK, &rlim_new);
-> +
-> +       do_mmaps(&mmap_addresses);
-> +
-> +       EXPECT_NE(mmap_addresses.no_hint, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_37_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_38_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_46_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_47_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_55_addr, MAP_FAILED);
-> +       EXPECT_NE(mmap_addresses.on_56_addr, MAP_FAILED);
-> +
-> +       EXPECT_LT((unsigned long)mmap_addresses.no_hint, 1UL << 47);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_37_addr, 1UL << 38);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_38_addr, 1UL << 38);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_46_addr, 1UL << 38);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_47_addr, 1UL << 47);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_55_addr, 1UL << 47);
-> +       EXPECT_LT((unsigned long)mmap_addresses.on_56_addr, 1UL << 56);
-> +#endif
-> +}
-> +
-> +TEST_HARNESS_MAIN
-> --
-> 2.41.0
+> Using the same config for 6.5-rc2 on Ubuntu 22.04 LTS and 22.10, the execution
+> stop at the exact same line on both boxes (os I reckon it is more than an
+> accident):
 >
+> # selftests: net/forwarding: sch_ets.sh
+> # TEST: ping vlan 10                                                  [ OK ]
+> # TEST: ping vlan 11                                                  [ OK ]
+> # TEST: ping vlan 12                                                  [ OK ]
+> # Running in priomap mode
+> # Testing ets bands 3 strict 3, streams 0 1
+> # TEST: band 0                                                        [ OK ]
+> # INFO: Expected ratio >95% Measured ratio 100.00
+> # TEST: band 1                                                        [ OK ]
+> # INFO: Expected ratio <5% Measured ratio 0
+> # Testing ets bands 3 strict 3, streams 1 2
+> # TEST: band 1                                                        [ OK ]
+> # INFO: Expected ratio >95% Measured ratio 100.00
+> # TEST: band 2                                                        [ OK ]
+> # INFO: Expected ratio <5% Measured ratio 0
+> # Testing ets bands 4 strict 1 quanta 5000 2500 1500, streams 0 1
+> # TEST: band 0                                                        [ OK ]
+> # INFO: Expected ratio >95% Measured ratio 100.00
+> # TEST: band 1                                                        [ OK ]
+> # INFO: Expected ratio <5% Measured ratio 0
+> # Testing ets bands 4 strict 1 quanta 5000 2500 1500, streams 1 2
+> # TEST: bands 1:2                                                     [ OK ]
+> # INFO: Expected ratio 2.00 Measured ratio 1.99
+> # Testing ets bands 3 quanta 3300 3300 3300, streams 0 1 2
+> # TEST: bands 0:1                                                     [ OK ]
+> # INFO: Expected ratio 1.00 Measured ratio .99
+> # TEST: bands 0:2                                                     [ OK ]
+> # INFO: Expected ratio 1.00 Measured ratio 1.00
+> # Testing ets bands 3 quanta 5000 3500 1500, streams 0 1 2
+> # TEST: bands 0:1                                                     [ OK ]
+> # INFO: Expected ratio 1.42 Measured ratio 1.42
+> # TEST: bands 0:2                                                     [ OK ]
+> # INFO: Expected ratio 3.33 Measured ratio 3.33
+> # Testing ets bands 3 quanta 5000 8000 1500, streams 0 1 2
+> # TEST: bands 0:1                                                     [ OK ]
+> # INFO: Expected ratio 1.60 Measured ratio 1.59
+> # TEST: bands 0:2                                                     [ OK ]
+> # INFO: Expected ratio 3.33 Measured ratio 3.33
+> # Testing ets bands 2 quanta 5000 2500, streams 0 1
+> # TEST: bands 0:1                                                     [ OK ]
+> # INFO: Expected ratio 2.00 Measured ratio 1.99
+> # Running in classifier mode
+> # Testing ets bands 3 strict 3, streams 0 1
+> # TEST: band 0                                                        [ OK ]
+> # INFO: Expected ratio >95% Measured ratio 100.00
+> # TEST: band 1                                                        [ OK ]
+> # INFO: Expected ratio <5% Measured ratio 0
+> # Testing ets bands 3 strict 3, streams 1 2
+> # TEST: band 1                                                        [ OK ]
+> # INFO: Expected ratio >95% Measured ratio 100.00
+> # TEST: band 2                                                        [ OK ]
+> # INFO: Expected ratio <5% Measured ratio 0
+> # Testing ets bands 4 strict 1 quanta 5000 2500 1500, streams 0 1
+>
+> I tried to run 'set -x' enabled version standalone, but that one finished
+> correctly (?).
+>
+> It could be something previous scripts left, but right now I don't have a clue.
+> I can attempt to rerun all tests with sch_ets.sh bash 'set -x' enabled later today.
+
+If you run it standalone without set -x, does it finish as well? That
+would imply that the reproducer needs to include the previous tests as
+well.
+
+It looks like the test is stuck in ets_test_mixed in classifier_mode.
+A way to run just this test would be:
+
+    TESTS="classifier_mode ets_test_mixed" ./sch_ets.sh
+
+Looking at the code, the only place that I can see that waits on
+anything is the "{ kill %% && wait %%; } 2>/dev/null" line in
+stop_traffic() (in lib.sh). Maybe something like this would let
+us see if that's the case:
+
+modified   tools/testing/selftests/net/forwarding/lib.sh
+@@ -1468,8 +1470,10 @@ start_tcp_traffic()
+ 
+ stop_traffic()
+ {
++	echo killing MZ
+ 	# Suppress noise from killing mausezahn.
+ 	{ kill %% && wait %%; } 2>/dev/null
++	echo killed MZ
+ }
