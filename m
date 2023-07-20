@@ -2,143 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC7B75AD62
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 13:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8BF75AD9D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 13:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbjGTLsT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 07:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        id S230018AbjGTL5f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 07:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbjGTLsO (ORCPT
+        with ESMTP id S229687AbjGTL5d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 07:48:14 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4001711;
-        Thu, 20 Jul 2023 04:47:56 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id d9443c01a7336-1b8a462e0b0so4112575ad.3;
-        Thu, 20 Jul 2023 04:47:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689853675; x=1690458475;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E3msxjZdgetMbrGi/qXLG+gWb+dY8uVEsPP0nY7G4QQ=;
-        b=nO5tehWvaIgWtdqxq77tk0usuoipGQXYmcIJVLSVxabUWEFmKxlLhb1u+voA2UhAY8
-         tf5PD0Lz86rT2JT4HGJbjh04Xb2NjGCZQpU1FnEl5La+yBg05yzTBgLPOMFQO/nHpiYc
-         j7JGD3oNEpGPxax8El4mk0QXy4OFkovT7ongxxXZoAW4D4aTVTq7AJ3eXYc+okMDt15x
-         1gLFv1aYNv88VbErxUKhzgVXmppKMYRGMQPkWQTGG04ekeDu6FvDHrAtmrThBAPWVvBY
-         cM5rbakOv2+xMrodu3FXbosh1KmTulNwrdCzMVvNTYJJMzIvDc5r+n8licLkGmEPhate
-         OKHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689853675; x=1690458475;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E3msxjZdgetMbrGi/qXLG+gWb+dY8uVEsPP0nY7G4QQ=;
-        b=VDMBn5oWV1JK5trP9op+H7bukWXczrXDepjDyOQo88odvx1noBc8KSCV26uvTXcTmj
-         5eSzpeUkCw7pypc/PIAFbGdUyz17s7UI6QbY+tIUs+wIBffsy64HHPhRmtEDwgHCcRow
-         383aW4TziuI86PMO23J0j8do/o+M3NLz+U0TX2ogVQCLfd8guAu9xBBFCW0lVAwn7+O+
-         XSVB1aaD9lRnpBCKamCXMIpk5upREr8jB5GJJmtEVCUSvjMeH1kS5XUSC4+OaT4ts+Np
-         DJELk58R9xO1brWVcxaIWmA4kQs/duWaYFmsuHZnBW9ziFEjGFOIS+RJIXgOmKgnF5vs
-         JiiQ==
-X-Gm-Message-State: ABy/qLZEIIJ0vA0NRUw0hokPeY1MYKPF0rjxYYANZbJVUKzQVal0Jhnr
-        NAoYjxVclVKCGww7JW7bDdk=
-X-Google-Smtp-Source: APBJJlGhnr3budaAVAV3RnSZI66mWhW6dvpa/wc8siefx8aeHt5+M50r4WAe/hn2d3bUgjJ025iF/Q==
-X-Received: by 2002:a17:903:234c:b0:1b8:86a1:9cf with SMTP id c12-20020a170903234c00b001b886a109cfmr5893507plh.32.1689853675583;
-        Thu, 20 Jul 2023 04:47:55 -0700 (PDT)
-Received: from CLOUDLIANG-MB2.tencent.com ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id u22-20020a170902a61600b001b2069072ccsm1164007plq.18.2023.07.20.04.47.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 04:47:55 -0700 (PDT)
-From:   Jinrong Liang <ljr.kernel@gmail.com>
-X-Google-Original-From: Jinrong Liang <cloudliang@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Aaron Lewis <aaronlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        Thu, 20 Jul 2023 07:57:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEE6AC;
+        Thu, 20 Jul 2023 04:57:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0605561A0F;
+        Thu, 20 Jul 2023 11:57:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE185C433C7;
+        Thu, 20 Jul 2023 11:57:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689854251;
+        bh=HYzOZwBCPNFiT5kmjwwkWIQMMa++9Xa/tD7IznzAtKo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E3ivI/wuaeM27HfM8GmboxrvtMcFm0CpdZ+1ijS5A7XMiHT/Vi9KejOY3R0wYf0Lg
+         aXKR1Zu8Ask5XVQs0mSkDXU7l00KHN+UGt+rrOkKKycCZcJfqTfcociTe5nA95gfui
+         dFaBfE5AYNLYo04zuhJveheh5zTvh6QDbFELy+zdMrmRa6qLUqOBgu7E02wM6EJc3f
+         KSPjbjdb6z3UzTH/CUJhMSJ8eAZK3OKxtE6uY2fjgTE6s5FYBN/f/9J96wVq4sup3A
+         RHph1oSpfx9mqMuaSaGtqqSTwLUzUdQ1UEvtrW+tg8mA/v3D+9d2MvY01vKvlPSoYk
+         eg6vAweIuanVA==
+Date:   Thu, 20 Jul 2023 13:57:28 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     David Gow <davidgow@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 6/6] KVM: selftests: Test gp event filters don't affect fixed event filters
-Date:   Thu, 20 Jul 2023 19:47:14 +0800
-Message-Id: <20230720114714.34079-7-cloudliang@tencent.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230720114714.34079-1-cloudliang@tencent.com>
-References: <20230720114714.34079-1-cloudliang@tencent.com>
+Subject: Re: [PATCH v2 3/3] drivers: base: Free devm resources when
+ unregistering a device
+Message-ID: <ktpru2pormh4fgkwxjpidk3vrlg3qh47tmye5l4vk6slutd25p@fwtkiizh3fa4>
+References: <20230329-kunit-devm-inconsistencies-test-v2-0-19feb71e864b@kernel.org>
+ <20230329-kunit-devm-inconsistencies-test-v2-3-19feb71e864b@kernel.org>
+ <CABVgOSmBcSA69SXEOh8_A7=aSigv5vztkhPYt9TBSNnxhiRSYA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CABVgOSmBcSA69SXEOh8_A7=aSigv5vztkhPYt9TBSNnxhiRSYA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jinrong Liang <cloudliang@tencent.com>
+On Wed, Jul 19, 2023 at 05:13:58PM +0800, David Gow wrote:
+> On Wed, 28 Jun 2023 at 17:50, Maxime Ripard <mripard@kernel.org> wrote:
+> >
+> > From: David Gow <davidgow@google.com>
+> >
+> > In the current code, devres_release_all() only gets called if the device
+> > has a bus and has been probed.
+> >
+> > This leads to issues when using bus-less or driver-less devices where
+> > the device might never get freed if a managed resource holds a reference
+> > to the device. This is happening in the DRM framework for example.
+> >
+> > We should thus call devres_release_all() in the device_del() function to
+> > make sure that the device-managed actions are properly executed when the
+> > device is unregistered, even if it has neither a bus nor a driver.
+> >
+> > This is effectively the same change than commit 2f8d16a996da ("devres:
+> > release resources on device_del()") that got reverted by commit
+> > a525a3ddeaca ("driver core: free devres in device_release") over
+> > use-after-free concerns.
+> >
+> > It's not clear whether those concerns are legitimate though, but I would
+> > expect drivers not to register new resources in their device-managed
+> > actions.
+>=20
+> It might be clearer to notice that this patch effectively combines the
+> two patches above, freeing _both_ on device_del() and
+> device_release(). This should give us the best of both worlds.
 
-Add a test to ensure that setting both generic and fixed performance
-event filters does not affect the consistency of the fixed event filter
-behavior in KVM.
+You're right I'll add that part to the commit log.
 
-Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
----
- .../kvm/x86_64/pmu_event_filter_test.c        | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
+> I'm not aware of a use-after-free issue that could result here, though
+> it's possible there's a double free I'm missing now that we are
+> freeing things twice. My understanding is that commit a525a3ddeaca
+> ("driver core: free devres in device_release") was more to avoid a
+> leak than a use-after-free, but I could be wrong.
 
-diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-index a9d44ec210c4..08c7ccd81be2 100644
---- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-@@ -838,6 +838,19 @@ static uint64_t test_with_fixed_counter_filter(struct kvm_vcpu *vcpu,
- 	return run_vcpu_to_sync(vcpu);
- }
- 
-+static uint64_t test_set_gp_and_fixed_event_filter(struct kvm_vcpu *vcpu,
-+						   uint32_t action,
-+						   uint32_t bitmap)
-+{
-+	struct __kvm_pmu_event_filter f = base_event_filter;
-+
-+	f.action = action;
-+	f.fixed_counter_bitmap = bitmap;
-+	do_vcpu_set_pmu_event_filter(vcpu, &f);
-+
-+	return run_vcpu_to_sync(vcpu);
-+}
-+
- static void __test_fixed_counter_bitmap(struct kvm_vcpu *vcpu, uint8_t idx,
- 					uint8_t nr_fixed_counters)
- {
-@@ -864,6 +877,20 @@ static void __test_fixed_counter_bitmap(struct kvm_vcpu *vcpu, uint8_t idx,
- 		count = test_with_fixed_counter_filter(vcpu, KVM_PMU_EVENT_DENY,
- 						       bitmap);
- 		ASSERT_EQ(!!count, !(bitmap & BIT(idx)));
-+
-+		/*
-+		 * Check that fixed_counter_bitmap has higher priority than
-+		 * events[] when both are set.
-+		 */
-+		count = test_set_gp_and_fixed_event_filter(vcpu,
-+							   KVM_PMU_EVENT_ALLOW,
-+							   bitmap);
-+		ASSERT_EQ(!!count, !!(bitmap & BIT(idx)));
-+
-+		count = test_set_gp_and_fixed_event_filter(vcpu,
-+							   KVM_PMU_EVENT_DENY,
-+							   bitmap);
-+		ASSERT_EQ(!!count, !(bitmap & BIT(idx)));
- 	}
- }
- 
--- 
-2.39.3
+Yeah, I'm not sure where I got the UAF from. I probably
+misread/misremembered.
 
+Maxime
