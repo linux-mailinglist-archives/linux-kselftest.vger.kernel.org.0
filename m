@@ -2,74 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C4375B620
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 20:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20D175B6F6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jul 2023 20:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjGTSID (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jul 2023 14:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S232122AbjGTSjP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jul 2023 14:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjGTSIC (ORCPT
+        with ESMTP id S232144AbjGTSjN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 14:08:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9C913E;
-        Thu, 20 Jul 2023 11:08:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689876481; x=1721412481;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7dMx1vxlj/xh0eN5dm79YGMH5t91q+NabCzXn9iJnnM=;
-  b=aRdKn2nLOjgdxfoQCFiSrh61PKkWCzO+rixnxRKrk/QLtyFVIeEDJP1I
-   OkfAIhmbidC4DbjUtNQqADhTxb2mJsq0A4xIlZomyfQBIovyQxKVMYFfO
-   cd1naHHA2QLLnQ6k2cehbIMS+KtsXHahTUIZav8dlEqJNCJhoBtyHzFOe
-   3PPe7coVm4u+hPnXKmvfi2fxyG0h6iUM9SfPi7lizlSnhbxCYaDhGgU/Z
-   ULAohsEyZoNh0stHrQ5ai7oihymRyeoGPIsvOxXriBEx6Zud/HGWKFq+c
-   8N9en6yuOjygbm/qp8Ghjv/KsUpgnEumT7zK7o62OuD2cc2bwgoYQRUls
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="370419700"
-X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
-   d="scan'208";a="370419700"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 11:06:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="848532395"
-X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
-   d="scan'208";a="848532395"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 20 Jul 2023 11:06:21 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qMY2f-0006Ll-0K;
-        Thu, 20 Jul 2023 18:06:21 +0000
-Date:   Fri, 21 Jul 2023 02:06:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emma Anholt <emma@anholt.net>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com
-Subject: Re: [PATCH v2 06/11] drm/tests: helpers: Create a helper to allocate
- an atomic state
-Message-ID: <202307210124.Ur3UNuxZ-lkp@intel.com>
-References: <20230720-kms-kunit-actions-rework-v2-6-175017bd56ab@kernel.org>
+        Thu, 20 Jul 2023 14:39:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D28CE47;
+        Thu, 20 Jul 2023 11:39:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0150661BDC;
+        Thu, 20 Jul 2023 18:39:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DABCDC433C8;
+        Thu, 20 Jul 2023 18:39:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689878348;
+        bh=8e4Akz9WsSzK3omseih/f3BlHrS7YZVf/pCD/Nyk1eQ=;
+        h=From:Subject:Date:To:Cc:From;
+        b=Ewmy2d4CrOmRkGnbIlFIwR646fvj+Mc70TquhXJF7AezIplBXG+Cds6X39iY69S3x
+         k6+LNcLz1Pth3g8qDfKqAY92whF5WvvPT0pP+EjW2L/0vQ1ISHugJcGMypVfCwkd7G
+         A9fykN3xwBbWkcNyqLl6/fNZ1oY2VnoT+WVsvuPk4CAGBi9V2TR2+GmLFOIr8FAzBs
+         BRz291uQbbj2Ep4ooVtwr/plEdTmrh5Vl0mUr+HPYuP9rAP+IKQ1A4mRfh3YAw/uQi
+         jraTu5Y3xct0CZdLt5Jhqp7KA9bQ7sNahsY8bZx2tHHiLRdoG1yvQNTjQFVOZBjqNa
+         KS3oEQbsx7D5A==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/3] arm64/fpsimd: Fix use after free in SME when
+ changing SVE VL
+Date:   Thu, 20 Jul 2023 19:38:57 +0100
+Message-Id: <20230720-arm64-fix-sve-sme-vl-change-v2-0-8eea06b82d57@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230720-kms-kunit-actions-rework-v2-6-175017bd56ab@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEF/uWQC/42NQQ6CMBBFr0Jm7ZhOS4q68h6GRbUDNAI1U9NoC
+ He3Eg/g8v28vL9AYgmc4FQtIJxDCnEuoHcV3AY394zBFwattFENGXQy2Rq78MKUGdPEmEf8qVb
+ xlTpnXaMaKIWHcBG3+qUtPIT0jPLezjJ91/+6mVAh6aP3B0tUkznfWWYe91F6aNd1/QDz9Rv8x
+ wAAAA==
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     David Spickett <David.Spickett@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1137; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=8e4Akz9WsSzK3omseih/f3BlHrS7YZVf/pCD/Nyk1eQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkuX9GAwk8cEP4Cn+OXwPxHcGTGJ7cz3SxsouNWVRq
+ N3lFxD6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZLl/RgAKCRAk1otyXVSH0GV2B/
+ wJ+AgIoXIuJXZ/qt5peMxjTojQ6I7eEnXd+mopSLM46ZK2Mfhh04sfNMkwFFgMGWja4sN4Zl98st9Y
+ 1yt6eY2A+ScPHWnnKatZd/1k3s+mooNA9ic34Em0+KyLx62ZJA1Gwg25CyQN7Yh8zwfyNJwZV2FPTV
+ TT0ply8+G4pehCpqMGuSnQZ+YZgml1j5hsbxCRoagBEp5jwY4jnHTJBLTIkfmf4IkcpDESDRLwIF03
+ s0pBC5vfiUz7D1af1qPKgqoPki3UPZe3Vxw8gByxqU4Z4tNK0EvesulJlbHUuECM/ua95UJbFFv35W
+ LWznzerBRZXmcIGf6CKkwix/pFHAp1
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,90 +73,32 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Maxime,
+This series fixes an issue which David Spickett found where if we change
+the SVE VL while SME is in use we can end up attempting to save state to
+an unallocated buffer and adds testing coverage for that plus a bit more
+coverage of VL changes, just for paranioa.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v2:
+- Always reallocate the SVE state.
+- Rebase onto v6.5-rc2.
+- Link to v1: https://lore.kernel.org/r/20230713-arm64-fix-sve-sme-vl-change-v1-0-129dd8611413@kernel.org
 
-[auto build test WARNING on c58c49dd89324b18a812762a2bfa5a0458e4f252]
+---
+Mark Brown (3):
+      arm64/fpsimd: Ensure SME storage is allocated after SVE VL changes
+      kselftest/arm64: Add a test case for SVE VL changes with SME active
+      kselftest/arm64: Validate that changing one VL type does not affect another
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-tests-helpers-Switch-to-kunit-actions/20230720-191901
-base:   c58c49dd89324b18a812762a2bfa5a0458e4f252
-patch link:    https://lore.kernel.org/r/20230720-kms-kunit-actions-rework-v2-6-175017bd56ab%40kernel.org
-patch subject: [PATCH v2 06/11] drm/tests: helpers: Create a helper to allocate an atomic state
-config: arm64-randconfig-r022-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210124.Ur3UNuxZ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210124.Ur3UNuxZ-lkp@intel.com/reproduce)
+ arch/arm64/kernel/fpsimd.c                    |  33 +++++--
+ tools/testing/selftests/arm64/fp/vec-syscfg.c | 127 +++++++++++++++++++++++++-
+ 2 files changed, 148 insertions(+), 12 deletions(-)
+---
+base-commit: 06785562d1b99ff6dc1cd0af54be5e3ff999dc02
+change-id: 20230713-arm64-fix-sve-sme-vl-change-60eb1fa6a707
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307210124.Ur3UNuxZ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/gpu/drm/tests/drm_kunit_helpers.c:54:6: warning: cast from 'void (*)(struct platform_driver *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-      54 |                                         (kunit_action_t *)platform_driver_unregister,
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/tests/drm_kunit_helpers.c:62:6: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-      62 |                                         (kunit_action_t *)platform_device_put,
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/tests/drm_kunit_helpers.c:70:6: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-      70 |                                         (kunit_action_t *)platform_device_del,
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/tests/drm_kunit_helpers.c:90:9: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-      90 |                              (kunit_action_t *)platform_device_unregister,
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/tests/drm_kunit_helpers.c:94:9: warning: cast from 'void (*)(struct platform_driver *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-      94 |                              (kunit_action_t *)platform_driver_unregister,
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/tests/drm_kunit_helpers.c:192:6: warning: cast from 'void (*)(struct drm_atomic_state *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-     192 |                                         (kunit_action_t *)drm_atomic_state_put,
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 warnings generated.
-
-
-vim +192 drivers/gpu/drm/tests/drm_kunit_helpers.c
-
-   164	
-   165	/**
-   166	 * drm_kunit_helper_atomic_state_alloc - Allocates an atomic state
-   167	 * @test: The test context object
-   168	 * @drm: The device to alloc the state for
-   169	 * @ctx: Locking context for that atomic update
-   170	 *
-   171	 * Allocates a empty atomic state.
-   172	 *
-   173	 * The state is tied to the kunit test context, so we must not call
-   174	 * drm_atomic_state_put() on it, it will be done so automatically.
-   175	 *
-   176	 * Returns:
-   177	 * An ERR_PTR on error, a pointer to the newly allocated state otherwise
-   178	 */
-   179	struct drm_atomic_state *
-   180	drm_kunit_helper_atomic_state_alloc(struct kunit *test,
-   181					    struct drm_device *drm,
-   182					    struct drm_modeset_acquire_ctx *ctx)
-   183	{
-   184		struct drm_atomic_state *state;
-   185		int ret;
-   186	
-   187		state = drm_atomic_state_alloc(drm);
-   188		if (!state)
-   189			return ERR_PTR(-ENOMEM);
-   190	
-   191		ret = kunit_add_action_or_reset(test,
- > 192						(kunit_action_t *)drm_atomic_state_put,
-   193						state);
-   194		if (ret)
-   195			return ERR_PTR(ret);
-   196	
-   197		state->acquire_ctx = ctx;
-   198	
-   199		return state;
-   200	}
-   201	EXPORT_SYMBOL_GPL(drm_kunit_helper_atomic_state_alloc);
-   202	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Mark Brown <broonie@kernel.org>
+
