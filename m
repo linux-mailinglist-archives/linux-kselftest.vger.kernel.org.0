@@ -2,163 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14D875CD3B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jul 2023 18:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E994575CD6D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jul 2023 18:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbjGUQJS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Jul 2023 12:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
+        id S231806AbjGUQLE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Jul 2023 12:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232344AbjGUQJQ (ORCPT
+        with ESMTP id S232029AbjGUQKx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Jul 2023 12:09:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712E22D50;
-        Fri, 21 Jul 2023 09:09:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 018EF61D2F;
-        Fri, 21 Jul 2023 16:09:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 689E4C433CD;
-        Fri, 21 Jul 2023 16:09:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689955754;
-        bh=BlEi7p0BDMKhiEwXg1jOq/zD4Xedk5tjgloH9k5cDxI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OFTQ6DuOnqrG6CVGHgozLdOfqNJoDAb4DdM10deIzFIcuAksLBrn/okq4ws1Ur9lw
-         vnsF0PAylGPOwrvzqd8MD7OI6RQvWiDFcruohc1T27dsQlVcsq24OAk01Uc8ndiK4V
-         53gusbrsSeE7IS4F3aXX11DrNumr93rNPkzbgk6BqkWkpecmtxIc1RCSwyiRuReBW/
-         IcFeyllltS2xScVQstI79rpDOfa4H6ZPHQWUsAuDPJvk1Dq9LsQE2p69D0x+BcaX1W
-         VlHj29+EmuuFk1Q1AOo/Ojy8Ijv1Fva0Kmm6Sj3z4ngf26Cy0NypimaJ5plEn9OvV7
-         JbudTDJwiSXEQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 0571ACE092F; Fri, 21 Jul 2023 09:09:14 -0700 (PDT)
-Date:   Fri, 21 Jul 2023 09:09:13 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-        Julian Pidancet <julian.pidancet@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH v2 16/20] rcu: Make RCU dynticks counter size
- configurable
-Message-ID: <ac2ec330-191e-43e6-817d-ca4a22207d98@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230720163056.2564824-1-vschneid@redhat.com>
- <20230720163056.2564824-17-vschneid@redhat.com>
- <xhsmhjzutu18u.mognet@vschneid.remote.csb>
- <28d4abb7-8496-45ec-b270-ea2b6164537b@paulmck-laptop>
- <xhsmhbkg5ti91.mognet@vschneid.remote.csb>
+        Fri, 21 Jul 2023 12:10:53 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86F030F2;
+        Fri, 21 Jul 2023 09:10:47 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5703cb4bcb4so24898247b3.3;
+        Fri, 21 Jul 2023 09:10:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689955847; x=1690560647;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cw+Jy1w/Rjf6qsPkl6FP5i8cv3/KZj4rUJ/QrJgsoJ4=;
+        b=aArCFIgo+wz5cxrqIRSfqq0Vs+MH1lxuC0ozjckkyIGQXkDKLHv0DSAMDYeXQOIj/0
+         rhziUz+GHpJ0Hx8vfTKF3fGrIpsEdDUA5qpXb6OykqASGHvDyw9+I8XX+be8KPgT5zPl
+         mglSYzcWkW+epT3B9WR38hEBaVFK2RtgdLJNwPPfoifhXCV+cHukUSGr36XHJWQ82qJP
+         WMiHa+Hlj8NjhsBkCCNUQjycMgQ80C49nA6rrTSeG73bCVf6FneRmkLVPMKVGSZEUMbU
+         1aBTZBCKCU3fPiNev0Q44dTq7He/lsq8vyhr86sh/zBQ038GX0WnDCVLRVDXMgR2UyFQ
+         /tMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689955847; x=1690560647;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cw+Jy1w/Rjf6qsPkl6FP5i8cv3/KZj4rUJ/QrJgsoJ4=;
+        b=iXFgz6M9jiaOoL9etFoCS0SGfQzQtAPbQiM5DsGF7DeYRXcRQPJIDXYfX4IMl24F6f
+         Dll7wMv2KlsJeSy/4ET6jtboCUHtcrq8KqFUekwV+3kBsRI+ut+Z5whek3qXEXxlqMRG
+         8mixhMNx6ZXNhDQjPpQMtZi2MAZ06jD4GtSxZdjdhd1UKK5XtanuEIkfvd7oMO5PCrjJ
+         /n98GJVDvUTLJseDLwWvHUsxT8ppoJx7HrRAaI5XfwNlOQb3ARqRavwo6d6nyY7Lirmt
+         py7YsabQOSQVio2yirA6tGoYNAFgtzpcSYRPdlMFC59zNT4ejG0Ln7RoUjJPrYO3Ogl6
+         lmyw==
+X-Gm-Message-State: ABy/qLaCMqvOmJ1aRCBxbi58dHzLlBapUg87ypDN8lkQx46wsVqw9Hnd
+        Qkt8wYnS5Yovp1tXEMZwjZOIXoLGs/Wgd110WSk=
+X-Google-Smtp-Source: APBJJlEPoqqc9mWISEofrA+wSZKVD6nGVs2rA5lmOJxKWBjepzXM4MuTOb+OfihNTVxxL71cjm0dEGTT0e47RWZx898=
+X-Received: by 2002:a25:4dc4:0:b0:c4e:e8b9:1d1b with SMTP id
+ a187-20020a254dc4000000b00c4ee8b91d1bmr1842354ybb.29.1689955846797; Fri, 21
+ Jul 2023 09:10:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhbkg5ti91.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+References: <20230720062939.2411889-1-davidgow@google.com> <d3aa8c48-9f47-cead-aaa7-3ea796b91810@gmail.com>
+In-Reply-To: <d3aa8c48-9f47-cead-aaa7-3ea796b91810@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 21 Jul 2023 18:10:35 +0200
+Message-ID: <CANiq72m-nd6vgH9XROMTC_Xf8__e26uPceFALu-_fAhnPnDYBg@mail.gmail.com>
+Subject: Re: [PATCH] rust: doctests: Use tabs for indentation in generated C code
+To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 21, 2023 at 04:08:10PM +0100, Valentin Schneider wrote:
-> On 21/07/23 07:10, Paul E. McKenney wrote:
-> > On Fri, Jul 21, 2023 at 09:17:53AM +0100, Valentin Schneider wrote:
-> >> On 20/07/23 17:30, Valentin Schneider wrote:
-> >> > index bdd7eadb33d8f..1ff2aab24e964 100644
-> >> > --- a/kernel/rcu/Kconfig
-> >> > +++ b/kernel/rcu/Kconfig
-> >> > @@ -332,4 +332,37 @@ config RCU_DOUBLE_CHECK_CB_TIME
-> >> >         Say Y here if you need tighter callback-limit enforcement.
-> >> >         Say N here if you are unsure.
-> >> >
-> >> > +config RCU_DYNTICKS_RANGE_BEGIN
-> >> > +	int
-> >> > +	depends on !RCU_EXPERT
-> >> > +	default 31 if !CONTEXT_TRACKING_WORK
-> >>
-> >> You'll note that this should be 30 really, because the lower *2* bits are
-> >> taken by the context state (CONTEXT_GUEST has a value of 3).
-> >>
-> >> This highlights the fragile part of this: the Kconfig values are hardcoded,
-> >> but they depend on CT_STATE_SIZE, CONTEXT_MASK and CONTEXT_WORK_MAX. The
-> >> static_assert() will at least capture any misconfiguration, but having that
-> >> enforced by the actual Kconfig ranges would be less awkward.
-> >>
-> >> Do we currently have a way of e.g. making a Kconfig file depend on and use
-> >> values generated by a C header?
-> >
-> > Why not just have something like a boolean RCU_DYNTICKS_TORTURE Kconfig
-> > option and let the C code work out what the number of bits should be?
-> >
-> > I suppose that there might be a failure whose frequency depended on
-> > the number of bits, which might be an argument for keeping something
-> > like RCU_DYNTICKS_RANGE_BEGIN for fault isolation.  But still using
-> > RCU_DYNTICKS_TORTURE for normal testing.
-> >
-> > Thoughts?
-> >
-> 
-> AFAICT if we run tests with the minimum possible width, then intermediate
-> values shouldn't have much value.
-> 
-> Your RCU_DYNTICKS_TORTURE suggestion sounds like a saner option than what I
-> came up with, as we can let the context tracking code figure out the widths
-> itself and not expose any of that to Kconfig.
+On Fri, Jul 21, 2023 at 2:27=E2=80=AFAM Martin Rodriguez Reboredo
+<yakoyoku@gmail.com> wrote:
+>
+> I find it weird to mix indentations in one file, but if it leaves a
+> good result then I'll hold my tongue.
 
-Agreed.  If a need for variable numbers of bits ever does arise, we can
-worry about it at that time.  And then we would have more information
-on what a variable-bit facility should look like.
+In general I would agree, but I guess we can consider these as "data"
+since they are part of a literal, and thus we could consider it is not
+mixing indentations in that sense (for the Rust code).
 
-							Thanx, Paul
+It could potentially confuse a script or tool that does not know about
+the language and make it report an inconsistency. But there is always
+going to be a corner case or similar that you need to skip/ignore in a
+tool like that. And, in other cases, like the analysis that was done
+for the potential `.editorconfig` file, it would just be noise since
+we don't do this kind of generation often within `.rs` files.
+
+Either way is fine for me: I don't mind the status quo, because it is
+just a generated file, so I don't expect many readers; and I don't
+mind the file having the proper tabs for its file extension either,
+and I guess perhaps having those tabs helps avoid some other tool
+complaining about the file if it is run when the file exists.
+
+Cheers,
+Miguel
