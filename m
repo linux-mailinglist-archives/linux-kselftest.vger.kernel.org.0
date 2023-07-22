@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F0B75D847
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jul 2023 02:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA7F75D84D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jul 2023 02:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjGVAhi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Jul 2023 20:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
+        id S231304AbjGVAhp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Jul 2023 20:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjGVAhb (ORCPT
+        with ESMTP id S231316AbjGVAhg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Jul 2023 20:37:31 -0400
+        Fri, 21 Jul 2023 20:37:36 -0400
 Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F263C2B;
-        Fri, 21 Jul 2023 17:37:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3D93A84;
+        Fri, 21 Jul 2023 17:37:31 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 9C81C60171;
-        Sat, 22 Jul 2023 02:37:27 +0200 (CEST)
+        by domac.alu.hr (Postfix) with ESMTP id AA7CA6016E;
+        Sat, 22 Jul 2023 02:37:29 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1689986247; bh=0rIok0EQjGTKvrvF2VSOh1b7Lbci4BJ+WsapvWPqS0M=;
+        t=1689986249; bh=sWsZGt692J5HLzblOPdvGK1H4fS6uyGBmVHdVo25xyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AC2oJSH/7x1aPR0Ere43VQEq6IaMuX7vPYg/F1HX8dPzHq7swg73PqxAnW/j0EnRV
-         J8EJ1cGXYulr5N9otXP1xsSFE9z9pSpoeR92NDVzmoDRJlaU2trfR62v9ZWWacUzCP
-         1m2UVbJBbFpu2uHzCqUOsjSSmOvqiWWZg6NRjgFTvb2INXMGMjebpb+ImFxU4HAlx6
-         1KErleLgXm5SydI2SLwIST2/Kz0VSLd5J++RtaN/3hDyctJ5elic7dlCBTqIQzpcKd
-         KE+p6wJMhEjdj2oVai8ya4nW5x2kWYkWVonjzMgYT/unwsnl00Ra8Jg0BfsBUWAnja
-         TMnvA29AzEoUQ==
+        b=hdep9Oq/WlJCI2xzqQkNIZ0+u3/SEiLmfoKCDOS28kJgR5y8OU85NG+BbmnYIgFcF
+         MCC9ntPCe420CWIQkibZcDUqs/M9i2GtdZl9rgJnqJlPhfholm3FZPOKt88SvGoLLM
+         B68fD8b/q/SCUpII8uMu/1WK+i5UKu3W131LVI9nyY8eqGYF/ba1Jva0AmCYzH18es
+         kIdNvp2Dj/boLPKtcvFNilUfjeZ/9aAtUxJNeeXO7EfvYzv/onDUfcRucl1zLUzfzh
+         AsY8FiNd8W1wlYgVp+NvXyfhxFOPU2MRlB4WlM7OGeIpzM0NmmSQqXyuPAErKY+jS8
+         kbtJO+LvNI/mw==
 X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
 Received: from domac.alu.hr ([127.0.0.1])
         by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fNK3DkGWk327; Sat, 22 Jul 2023 02:37:25 +0200 (CEST)
+        with ESMTP id 79G8b3vzwaBk; Sat, 22 Jul 2023 02:37:27 +0200 (CEST)
 Received: from defiant.. (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id 8F2F360187;
+        by domac.alu.hr (Postfix) with ESMTPSA id 9E54760189;
         Sat, 22 Jul 2023 02:37:19 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1689986239; bh=0rIok0EQjGTKvrvF2VSOh1b7Lbci4BJ+WsapvWPqS0M=;
+        t=1689986239; bh=sWsZGt692J5HLzblOPdvGK1H4fS6uyGBmVHdVo25xyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ui6S7uvdNgWhgmba5K9OGGRa5oyfotQUulpVDWyVewiPvWs1Bo0usDI1euBMsMheh
-         HsouynCu6slqll51WV1iJZPKE7HogdWh5BqasQD4w3Deej4BbY+vdUYoCFzrDtb0qf
-         VfrVakBtXb5tCgcAkt7B/RLsVaZCvHbTH3/P00qVxWQ1YaHQI8LYdmYoAhbBL5CwrW
-         Z7wYrgaZBqZoWq8yhGZhvEuNDlqEhd+OggJuIJ2a7GIadDATRqUlFK6dBDs+iU67Qv
-         G9b20xWgk+I3c7byt4+b84YDfTgBYAsOtK/KAy5kIDD9CS41hdaU63LJ7EG60tiLfp
-         vxa8R1aHr6s+w==
+        b=UrfRg3QhteGDLZWiP859NVNSPoQl3xNBdNBJ8rgEZuost82DAK24QzpCOGEJgrSr9
+         DOxaiPsAv7JQQqKIEZmjXDhXaJT3/iT1/nH0l3Vf6fT94s+QzkzuI0JDk18DXJrGFo
+         QcaNf2S69CaaMWh6Wg1E4x1BQ9lbc9UUstoTiBN8whBDIeqPCagev2zmjuQe4mZLQd
+         Q8zYpECXNnS/s/XkzN8Gr2YX/CpOhBNmBMCJq2VCj3gKagRFF/idVOs77vn7NNEpMC
+         45VdBX1gD1f6QBrn/mHeZQm+PCkm0gN0h6NhAQXIokQmKxgJhAsWKQMus/Yw+PU7UM
+         lRZqR4Z8zep8w==
 From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
 To:     Ido Schimmel <idosch@nvidia.com>,
         "GitAuthor: Mirsad Todorovac" <mirsad.todorovac@alu.unizg.hr>,
@@ -51,11 +51,10 @@ To:     Ido Schimmel <idosch@nvidia.com>,
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        David Ahern <dsahern@gmail.com>
-Subject: [PATCH v1 10/11] selftests: forwarding: router_mpath_nh.sh: add cleanup for SIGTERM sent by timeout
-Date:   Sat, 22 Jul 2023 02:36:09 +0200
-Message-Id: <20230722003609.380549-10-mirsad.todorovac@alu.unizg.hr>
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v1 11/11] selftests: forwarding: router_multipath.sh: add cleanup for SIGTERM sent by timeout
+Date:   Sat, 22 Jul 2023 02:36:10 +0200
+Message-Id: <20230722003609.380549-11-mirsad.todorovac@alu.unizg.hr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
 References: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
@@ -74,21 +73,20 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 Add trap and cleanup for SIGTERM sent by timeout and SIGINT from
 keyboard, for the test times out and leaves incoherent network stack.
 
-Fixes: cab14d1087d9b ("selftests: Add version of router_multipath.sh using nexthop objects")
-Cc: David Ahern <dsahern@gmail.com>
+Fixes: 937eeb3482748 ("selftests: forwarding: Create test topology for multipath routing")
 Cc: Ido Schimmel <idosch@nvidia.com>
 Cc: netdev@vger.kernel.org
 ---
- tools/testing/selftests/net/forwarding/router_mpath_nh.sh | 2 +-
+ tools/testing/selftests/net/forwarding/router_multipath.sh | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/router_mpath_nh.sh b/tools/testing/selftests/net/forwarding/router_mpath_nh.sh
-index a0d612e04990..0580519ab6d1 100755
---- a/tools/testing/selftests/net/forwarding/router_mpath_nh.sh
-+++ b/tools/testing/selftests/net/forwarding/router_mpath_nh.sh
-@@ -414,7 +414,7 @@ if [ $? -ne 0 ]; then
- 	exit $ksft_skip
- fi
+diff --git a/tools/testing/selftests/net/forwarding/router_multipath.sh b/tools/testing/selftests/net/forwarding/router_multipath.sh
+index 464821c587a5..7b3cfe577e00 100755
+--- a/tools/testing/selftests/net/forwarding/router_multipath.sh
++++ b/tools/testing/selftests/net/forwarding/router_multipath.sh
+@@ -332,7 +332,7 @@ ping_ipv6()
+ 	ping6_test $h1 2001:db8:2::2
+ }
  
 -trap cleanup EXIT
 +trap cleanup INT TERM EXIT
