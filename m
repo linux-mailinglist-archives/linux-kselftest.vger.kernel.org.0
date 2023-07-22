@@ -2,36 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576A775DC76
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jul 2023 14:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D3A75DC87
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jul 2023 14:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjGVMUT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 22 Jul 2023 08:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S229750AbjGVM3i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 22 Jul 2023 08:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjGVMUT (ORCPT
+        with ESMTP id S229628AbjGVM3h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 22 Jul 2023 08:20:19 -0400
+        Sat, 22 Jul 2023 08:29:37 -0400
 Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3BE89B;
-        Sat, 22 Jul 2023 05:20:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3601E0;
+        Sat, 22 Jul 2023 05:29:34 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 36MCK93g017357;
-        Sat, 22 Jul 2023 14:20:09 +0200
-Date:   Sat, 22 Jul 2023 14:20:09 +0200
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 36MCTQA4017403;
+        Sat, 22 Jul 2023 14:29:26 +0200
+Date:   Sat, 22 Jul 2023 14:29:26 +0200
 From:   Willy Tarreau <w@1wt.eu>
 To:     Zhangjin Wu <falcon@tinylab.org>
 Cc:     thomas@t-8ch.de, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 02/14] selftests/nolibc: add macros to enhance
- maintainability
-Message-ID: <20230722122009.GE17311@1wt.eu>
+Subject: Re: [PATCH v2 03/14] selftests/nolibc: print running log to screen
+Message-ID: <20230722122926.GF17311@1wt.eu>
 References: <cover.1689759351.git.falcon@tinylab.org>
- <0415392c9c2b0a7249563abd79599a475019b508.1689759351.git.falcon@tinylab.org>
+ <1373113bdaf2d4812c3d712684bd0019f992a032.1689759351.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0415392c9c2b0a7249563abd79599a475019b508.1689759351.git.falcon@tinylab.org>
+In-Reply-To: <1373113bdaf2d4812c3d712684bd0019f992a032.1689759351.git.falcon@tinylab.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -42,57 +41,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 19, 2023 at 09:19:10PM +0800, Zhangjin Wu wrote:
-> The kernel targets share the same kernel make operations, the same
-> .config file, the same kernel image, add MAKE_KERNEL, KERNEL_CONFIG and
-> KERNEL_IMAGE for them.
+On Wed, Jul 19, 2023 at 09:20:17PM +0800, Zhangjin Wu wrote:
+> When poweroff fails, qemu-system will hang there without any output.
 > 
-> Many targets share the same logging related settings, let's add common
-> variables RUN_OUT, LOG_OUT and REPORT_RUN_OUT for them.
+> It is very hard to debug in such case, let's print the running log to
+> the screen to allow users to learn what is happening at the first
+> glance, without editing the Makefile manually every time.
 > 
-> The qemu run/rerun targets share the same qemu system run command, add
-> QEMU_SYSTEM_RUN for them.
-> 
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/testing/selftests/nolibc/Makefile | 41 ++++++++++++++++---------
->  1 file changed, 27 insertions(+), 14 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> index 0cd17de2062c..8c531518bb9f 100644
-> --- a/tools/testing/selftests/nolibc/Makefile
-> +++ b/tools/testing/selftests/nolibc/Makefile
-> @@ -166,45 +166,58 @@ endif
->  libc-test: nolibc-test.c
->  	$(QUIET_CC)$(CC) -o $@ $<
->  
-> +# common macros for logging
-> +RUN_OUT = $(CURDIR)/run.out
-> +LOG_OUT = > "$(RUN_OUT)"
-> +REPORT_RUN_OUT = $(REPORT) "$(RUN_OUT)"
-> +
->  # local libc-test
->  run-libc-test: libc-test
-> -	$(Q)./libc-test > "$(CURDIR)/run.out" || :
-> -	$(Q)$(REPORT) $(CURDIR)/run.out
-> +	$(Q)./libc-test $(LOG_OUT) || :
-> +	$(Q)$(REPORT_RUN_OUT)
+> To get a clean output, the 'grep status' command can be used.
 
-Sorry but I don't find that this improves maintainability, quite the
-opposite in fact. One reason is that you never visually expect that
-some shell indirection delimiters are hidden in a macro that seems
-to only convey a name. Sure there are valid use cases for this, but
-I think that here it's just adding too much abstraction and it makes
-it quite hard to unfold all of this mentally.
+The problem with doing this is that it rolls back to the initial
+version that breaks with qemu. When its stdout is sent to a pipe, we've
+found that the output got randomly mangled and/or missing contents.
+It's only when sent to a file that it's OK. I suspect it has something
+to do with non-blocking writes being used to avoid blocking the
+emulation but I could be totally wrong. That's the reason why we had
+to switch to a file.
 
-Please try to keep the number of macros to the minimum that needs to
-be replaced or forced by the user. Here I'm not seeing a compelling
-reason for a user to want to force LOG_OUT to something else. Also
-makefile macros are generally a pain to debug, which is another
-reason for not putting too many of them.
+And I'd rather avoid starting it in the background as well. Maybe
+you'd want to run the qemu command under the "timeout" one ? That
+could be better than nothing.
 
-I noticed that your next patch changes LOG_OUT to tee, it could have
-done it everywhere and wouldn't affect readability as much.
-
-Thanks,
 Willy
