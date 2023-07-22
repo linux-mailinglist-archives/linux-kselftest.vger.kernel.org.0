@@ -2,156 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DA675D921
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jul 2023 04:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B5075DA44
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jul 2023 08:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjGVCbZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Jul 2023 22:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
+        id S229610AbjGVGHU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 22 Jul 2023 02:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjGVCbZ (ORCPT
+        with ESMTP id S229457AbjGVGHT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Jul 2023 22:31:25 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52688119;
-        Fri, 21 Jul 2023 19:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689993084; x=1721529084;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rmZYm534mz67y/kh+IAlfXuKVDu6Z0GGNVGIAI3/ezg=;
-  b=ZXKF2hP/h3ksWLHNKJLA2O7k0K9k7qp1eWS7DJfDxkphcw4KEKD9nib7
-   2SzvMUnDQd+/FCtnDvbfubGgxiEBvX5SaiyeftNcNFZBGXEkskvad1+FO
-   CHXN01yLFx0jyDIkGsuVVWKCKNpFhlMnf9U8cfG/ePeC6+lO7AgceCOqp
-   A27zZuPw8I8Isi/TXMeQZDQQf3sjTnw6dtrDwJl9zLH3ToSUXuGLTckHQ
-   N1CYCZJXfI6beMY2lWeEIfF+SULNlIKwcVGtuTJeQGF6W1PSWK+oVxpz+
-   zF8uqpphRiH/+EClPNlN82tqM4eVSZ4jQeqGVXtjnkLyP9kNPGE93lXN+
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="370758573"
-X-IronPort-AV: E=Sophos;i="6.01,223,1684825200"; 
-   d="scan'208";a="370758573"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 19:31:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="849019437"
-X-IronPort-AV: E=Sophos;i="6.01,223,1684825200"; 
-   d="scan'208";a="849019437"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jul 2023 19:31:19 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qN2Ot-0007sX-0A;
-        Sat, 22 Jul 2023 02:31:19 +0000
-Date:   Sat, 22 Jul 2023 10:30:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rae Moar <rmoar@google.com>, shuah@kernel.org, davidgow@google.com,
-        dlatypov@google.com, brendan.higgins@linux.dev
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org, Rae Moar <rmoar@google.com>
-Subject: Re: [PATCH v1 4/9] kunit: Add ability to filter attributes
-Message-ID: <202307221053.0LbbjwLI-lkp@intel.com>
-References: <20230719222338.259684-5-rmoar@google.com>
+        Sat, 22 Jul 2023 02:07:19 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0E93A97;
+        Fri, 21 Jul 2023 23:07:18 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1b3c503af99so2074746fac.0;
+        Fri, 21 Jul 2023 23:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690006037; x=1690610837;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rW6GM0YOKgtl8KRMmye9ZDjg4JN8bbrjMVuMmk40jik=;
+        b=DoBw3Me1QOOkU/J1GVBk5SaEYGjZnik2o7BnISvlBySPxczy5lmYzvOCcxWqQYxb1N
+         NcgDMNi+jaKY6uI1eqHyRlE0ugCo1Gnhlw2RNAVeQswQ202G2D+OtrzWvU9IvH1nQjTC
+         Bbsms1KXORTHkB591U+nMfZIGXO7twpzOMR4YEeKk45fAyAG4vSpWppYDPNTNOCqy1E1
+         L2L8XC92xts5DmJySbJTIpxki27QNH8SFTt9dfBoR9ANQ1ZRWVGbM5EAQG94yzo53tQ/
+         ryPh2g3T98RbYr/JoNCPYZ7szaUIfMkibSE7AD76BOVKuAvSv8xxF+EUnJ+NvjmKC21j
+         Mc/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690006037; x=1690610837;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rW6GM0YOKgtl8KRMmye9ZDjg4JN8bbrjMVuMmk40jik=;
+        b=ehFUa17EdEXRUIVbPffnfsfgLEKOnOI9arMzrwiKKicrLeyyeOTS//lGpFC6pRzvPB
+         Llze4CppmskGMOCLpctf0xCcIAhp437yPf3fFQlINyw3pHfNA782f6rlfcCSirl+kkAZ
+         sKQJdbGhh62IGaii6WMn6eIDL6bXj9T7aty0GSdvUjETwaGtXM3NO2sSIofxv1j93trJ
+         yqVxL3V+WX1Nte5nfyyYWwtWzAM/UiC5bo3cfj0mq0kBBZ0zcpuOFKSYk9ciVpJ1BaMJ
+         v+1WlumalQkkFjktuiXzUVTtGTL2Zeqg7E1Hs5kQM6PZgTp9n4g2lsQzKZOLHRLO3fbo
+         v0gg==
+X-Gm-Message-State: ABy/qLaDOl1fjmFW/Nj6X37xZ/7wgqG4oaeIwRj/61a3aQAedZHncXF3
+        I5M7JPkzgXegAMoiqXJTkbA=
+X-Google-Smtp-Source: APBJJlHCe0dYIQRNUPOiWsNip1lqerBaA6M371j3mQZBtlg6icpfQ1ao2XrDcq24IliOaCsmOVeg6A==
+X-Received: by 2002:a05:6870:a40a:b0:1b4:4a2e:b698 with SMTP id m10-20020a056870a40a00b001b44a2eb698mr4386468oal.47.1690006036749;
+        Fri, 21 Jul 2023 23:07:16 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:c009:58e9:afd6:100a:624c:cf38])
+        by smtp.gmail.com with ESMTPSA id y12-20020aa7804c000000b0063b898b3502sm3886060pfm.153.2023.07.21.23.07.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jul 2023 23:07:16 -0700 (PDT)
+From:   Atul Kumar Pant <atulpant.linux@gmail.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     Atul Kumar Pant <atulpant.linux@gmail.com>, shuah@kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5] selftests: rtc: Fixes rtctest error handling.
+Date:   Sat, 22 Jul 2023 11:37:06 +0530
+Message-Id: <20230722060706.79759-1-atulpant.linux@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230719222338.259684-5-rmoar@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Rae,
+Adds a check to verify if the rtc device file is valid or not
+and prints a useful error message if the file is not accessible.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
 
-[auto build test WARNING on 64bd4641310c41a1ecf07c13c67bc0ed61045dfd]
+changes since v4:
+    Updated the commit message.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rae-Moar/kunit-Add-test-attributes-API-structure/20230720-062623
-base:   64bd4641310c41a1ecf07c13c67bc0ed61045dfd
-patch link:    https://lore.kernel.org/r/20230719222338.259684-5-rmoar%40google.com
-patch subject: [PATCH v1 4/9] kunit: Add ability to filter attributes
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230722/202307221053.0LbbjwLI-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230722/202307221053.0LbbjwLI-lkp@intel.com/reproduce)
+changes since v3:
+    Added Linux-kselftest and Linux-kernel mailing lists.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307221053.0LbbjwLI-lkp@intel.com/
+changes since v2:
+    Changed error message when rtc file does not exist.
 
-All warnings (new ones prefixed by >>):
+changes since v1:
+    Removed check for uid=0
+    If rtc file is invalid, then exit the test.
 
->> lib/kunit/attributes.c:109:14: warning: variable 'input_val' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-           for (i = 0; input[i]; i++) {
-                       ^~~~~~~~
-   lib/kunit/attributes.c:116:7: note: uninitialized use occurs here
-           if (!input_val) {
-                ^~~~~~~~~
-   lib/kunit/attributes.c:109:14: note: remove the condition if it is always true
-           for (i = 0; input[i]; i++) {
-                       ^~~~~~~~
-   lib/kunit/attributes.c:107:23: note: initialize the variable 'input_val' to silence this warning
-           const char *input_val;
-                                ^
-                                 = NULL
-   lib/kunit/attributes.c:215:47: error: initializer element is not a compile-time constant
-   static struct kunit_attr kunit_attr_list[] = {speed_attr, module_attr};
-                                                 ^~~~~~~~~~
-   1 warning and 1 error generated.
+ tools/testing/selftests/rtc/rtctest.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-
-vim +109 lib/kunit/attributes.c
-
-    96	
-    97	/*
-    98	 * Returns whether the inputted enum value "attr" matches the filter given
-    99	 * by the input string. Note: the str_list includes the corresponding string
-   100	 * list to the enum values.
-   101	 */
-   102	static int attr_enum_filter(void *attr, const char *input, int *err,
-   103			const char * const str_list[], int max)
-   104	{
-   105		int i, j, input_int;
-   106		long test_val = (long)attr;
-   107		const char *input_val;
-   108	
- > 109		for (i = 0; input[i]; i++) {
-   110			if (!strchr(op_list, input[i])) {
-   111				input_val = input + i;
-   112				break;
-   113			}
-   114		}
-   115	
-   116		if (!input_val) {
-   117			*err = -EINVAL;
-   118			pr_err("kunit executor: filter value not found: %s\n", input);
-   119			return false;
-   120		}
-   121	
-   122		for (j = 0; j <= max; j++) {
-   123			if (!strcmp(input_val, str_list[j]))
-   124				input_int = j;
-   125		}
-   126	
-   127		if (!input_int) {
-   128			*err = -EINVAL;
-   129			pr_err("kunit executor: invalid filter input: %s\n", input);
-   130			return false;
-   131		}
-   132	
-   133		return int_filter(test_val, input, input_int, err);
-   134	}
-   135	
-
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 63ce02d1d5cc..630fef735c7e 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -17,6 +17,7 @@
+ #include <unistd.h>
+ 
+ #include "../kselftest_harness.h"
++#include "../kselftest.h"
+ 
+ #define NUM_UIE 3
+ #define ALARM_DELTA 3
+@@ -419,6 +420,8 @@ __constructor_order_last(void)
+ 
+ int main(int argc, char **argv)
+ {
++	int ret = -1;
++
+ 	switch (argc) {
+ 	case 2:
+ 		rtc_file = argv[1];
+@@ -430,5 +433,11 @@ int main(int argc, char **argv)
+ 		return 1;
+ 	}
+ 
+-	return test_harness_run(argc, argv);
++	// Run the test if rtc_file is valid
++	if (access(rtc_file, F_OK) == 0)
++		ret = test_harness_run(argc, argv);
++	else
++		ksft_exit_fail_msg("[ERROR]: Cannot access rtc file %s - Exiting\n", rtc_file);
++
++	return ret;
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
