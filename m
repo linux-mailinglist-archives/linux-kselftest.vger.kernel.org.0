@@ -2,121 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390AD75E296
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Jul 2023 16:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B663B75E406
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Jul 2023 19:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjGWOWs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 23 Jul 2023 10:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
+        id S229843AbjGWR2A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 23 Jul 2023 13:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjGWOWs (ORCPT
+        with ESMTP id S229618AbjGWR17 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 23 Jul 2023 10:22:48 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1F595;
-        Sun, 23 Jul 2023 07:22:46 -0700 (PDT)
-Received: from fews01-sea.riseup.net (fews01-sea-pn.riseup.net [10.0.1.109])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4R859K22Dnz9tKq;
-        Sun, 23 Jul 2023 14:22:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1690122165; bh=BzwabxifSp+p4PAYhEknT/y66C5ageFXR6IPrGgoS2c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Usc7JN7loTFyCEqsB39yNbCDTJYBv3D3JcAzSH74akloAciEsMncZxJwiISPiAE1C
-         tN9tv4crvk/C8ZSZopKKgGzxgkhbVWYLAeEq1g5xCKRLBUnb9LPPzfXAdxEP32E2V2
-         T4aIx6tsZooWaQZBlCiAVzYn6/oIonWjE7dVhznQ=
-X-Riseup-User-ID: 31A219CC4290EDED5704FEFAA8012067F9DF7A1EE10ABB69FF497B6766463EE3
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews01-sea.riseup.net (Postfix) with ESMTPSA id 4R859D52CSzJp26;
-        Sun, 23 Jul 2023 14:22:40 +0000 (UTC)
-Message-ID: <025697f9-fda2-d039-5e0f-01165cee774f@riseup.net>
-Date:   Sun, 23 Jul 2023 11:22:37 -0300
+        Sun, 23 Jul 2023 13:27:59 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225511B3;
+        Sun, 23 Jul 2023 10:27:59 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 1EC4032004AE;
+        Sun, 23 Jul 2023 13:27:55 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sun, 23 Jul 2023 13:27:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1690133274; x=1690219674; bh=9pS/poHVY3gKi
+        EOMsPaEtsBloR1fdynWZkvZgdvRBgw=; b=C8rKzsFr2XmR44yoaGMA1zaUV+5/e
+        +K4DKSax0LmJnfIPGe3KjT2Zqe+NLze9qyLEkVSA17WbzeG9bRNAOa8L9w07J5Bv
+        Egpoe/pltHkmiYjl7QOIYknO24wzxmbyewbikFZlZzG/XNI2vJE10BItijf0Ukzb
+        V1Gg2xHrkjZpRiw4SnYDbNbWIeustV4whOqKd/bFGE4AJrbNt4C+x2Mb42OY1Pgh
+        SEBM6mFy+Er8FlBjBNrVfZagZ1IYgCKk1aa2mUkCXJLhTKLYnl5zVeeaR0/m9r+q
+        Ixx5ZqDwoogER7YyAdp2IMszPz9X4dD5D+Fxb2O4Y2zzfr9++yCEdMZoQ==
+X-ME-Sender: <xms:GmO9ZDmv7LyBV8FVTU8rjLNzDsm2GN7lQ-K5tnbeDrkVABFpHFExvA>
+    <xme:GmO9ZG3ttVRAlchkVrVMBpNQCnEa2SOGRh7ud3Jt9pWkfQdZkCnaDtFpLX_FKFvPU
+    zognaKQDzatVo8>
+X-ME-Received: <xmr:GmO9ZJpdouL2b4QnQ5tf-pqyohzWCMRKxDLaAXZXKQuKpV7AUs5wdGbf00Ko>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrheeigdduuddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnhephfffjeeghfejheejveehvefhteevveefgfeuudeuiedvieejiefhgeehleej
+    gfeunecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:GmO9ZLmiFXqV4OhDSySxY9u4F_mUnWbXptlKTqhDqVPmFi2dfJVzsQ>
+    <xmx:GmO9ZB1DOBgcnuk-kOLjEixcZRBAk-Wqy42J0N7QKAJlsQXJ0U7WgA>
+    <xmx:GmO9ZKs942FvFUaAkfUj3QuX0SV5CR-Xl7WGJOKS6J-3FS5uXK5T5Q>
+    <xmx:GmO9ZOms2VV35dkSkmglS2Q32iZW1huD5yJm-7PPAZyukkhfqc7C0A>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 23 Jul 2023 13:27:53 -0400 (EDT)
+Date:   Sun, 23 Jul 2023 20:27:50 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v1 01/11] selftests: forwarding:
+ custom_multipath_hash.sh: add cleanup for SIGTERM sent by timeout
+Message-ID: <ZL1jFk1z3zDH7dUM@shredder>
+References: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
+ <ZLzj5oYrbHGvCMkq@shredder>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 00/11] drm: kunit: Switch to kunit actions
-To:     Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emma Anholt <emma@anholt.net>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendan.higgins@linux.dev>
-References: <20230720-kms-kunit-actions-rework-v2-0-175017bd56ab@kernel.org>
-Content-Language: en-US
-From:   Maira Canal <mairacanal@riseup.net>
-In-Reply-To: <20230720-kms-kunit-actions-rework-v2-0-175017bd56ab@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZLzj5oYrbHGvCMkq@shredder>
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Maxime,
+On Sun, Jul 23, 2023 at 11:25:16AM +0300, Ido Schimmel wrote:
+> On Sat, Jul 22, 2023 at 02:36:00AM +0200, Mirsad Todorovac wrote:
+> > Add trap and cleanup for SIGTERM sent by timeout and SIGINT from
+> > keyboard, for the test times out and leaves incoherent network stack.
+> > 
+> > Fixes: 511e8db54036c ("selftests: forwarding: Add test for custom multipath hash")
+> > Cc: Ido Schimmel <idosch@nvidia.com>
+> > Cc: netdev@vger.kernel.org
+> > ---
+> 
+> The patches are missing your Signed-off-by and a cover letter. Anyway,
+> please don't send a new version just yet. I'm not sure this is the
+> correct approach and I'm looking into it.
 
-On 7/20/23 08:15, Maxime Ripard wrote:
-> Hi,
-> 
-> Since v6.5-rc1, kunit gained a devm/drmm-like mechanism that makes tests
-> resources much easier to cleanup.
-> 
-> This series converts the existing tests to use those new actions where
-> relevant.
-> > Let me know what you think,
+Please test with the following four patches on top of net.git:
 
-With the problems pointed out by kernel test bot fixed, the whole
-series is:
-
-Reviewed-by: Maíra Canal <mairacanal@riseup.net>
-
-Best Regards,
-- Maíra
-
-> Maxime
-> 
-> Signed-off-by: Maxime Ripard <mripard@kernel.org>
-> ---
-> Changes in v2:
-> - Fix some typos
-> - Use plaltform_device_del instead of removing the call to
->    platform_device_put after calling platform_device_add
-> - Link to v1: https://lore.kernel.org/r/20230710-kms-kunit-actions-rework-v1-0-722c58d72c72@kernel.org
-> 
-> ---
-> Maxime Ripard (11):
->        drm/tests: helpers: Switch to kunit actions
->        drm/tests: client-modeset: Remove call to drm_kunit_helper_free_device()
->        drm/tests: modes: Remove call to drm_kunit_helper_free_device()
->        drm/tests: probe-helper: Remove call to drm_kunit_helper_free_device()
->        drm/tests: helpers: Create a helper to allocate a locking ctx
->        drm/tests: helpers: Create a helper to allocate an atomic state
->        drm/vc4: tests: pv-muxing: Remove call to drm_kunit_helper_free_device()
->        drm/vc4: tests: mock: Use a kunit action to unregister DRM device
->        drm/vc4: tests: pv-muxing: Switch to managed locking init
->        drm/vc4: tests: Switch to atomic state allocation helper
->        drm/vc4: tests: pv-muxing: Document test scenario
-> 
->   drivers/gpu/drm/tests/drm_client_modeset_test.c |   8 --
->   drivers/gpu/drm/tests/drm_kunit_helpers.c       | 108 +++++++++++++++++++++-
->   drivers/gpu/drm/tests/drm_modes_test.c          |   8 --
->   drivers/gpu/drm/tests/drm_probe_helper_test.c   |   8 --
->   drivers/gpu/drm/vc4/tests/vc4_mock.c            |   5 ++
->   drivers/gpu/drm/vc4/tests/vc4_test_pv_muxing.c  | 115 +++++++++---------------
->   include/drm/drm_kunit_helpers.h                 |   7 ++
->   7 files changed, 158 insertions(+), 101 deletions(-)
-> ---
-> base-commit: c58c49dd89324b18a812762a2bfa5a0458e4f252
-> change-id: 20230710-kms-kunit-actions-rework-5d163762c93b
-> 
-> Best regards,
+https://github.com/idosch/linux/commits/submit/sefltests_fix_v1
