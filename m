@@ -2,97 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B663B75E406
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Jul 2023 19:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABCC75E435
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Jul 2023 20:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjGWR2A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 23 Jul 2023 13:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
+        id S229503AbjGWSus (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 23 Jul 2023 14:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjGWR17 (ORCPT
+        with ESMTP id S229477AbjGWSur (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 23 Jul 2023 13:27:59 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225511B3;
-        Sun, 23 Jul 2023 10:27:59 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 1EC4032004AE;
-        Sun, 23 Jul 2023 13:27:55 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sun, 23 Jul 2023 13:27:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1690133274; x=1690219674; bh=9pS/poHVY3gKi
-        EOMsPaEtsBloR1fdynWZkvZgdvRBgw=; b=C8rKzsFr2XmR44yoaGMA1zaUV+5/e
-        +K4DKSax0LmJnfIPGe3KjT2Zqe+NLze9qyLEkVSA17WbzeG9bRNAOa8L9w07J5Bv
-        Egpoe/pltHkmiYjl7QOIYknO24wzxmbyewbikFZlZzG/XNI2vJE10BItijf0Ukzb
-        V1Gg2xHrkjZpRiw4SnYDbNbWIeustV4whOqKd/bFGE4AJrbNt4C+x2Mb42OY1Pgh
-        SEBM6mFy+Er8FlBjBNrVfZagZ1IYgCKk1aa2mUkCXJLhTKLYnl5zVeeaR0/m9r+q
-        Ixx5ZqDwoogER7YyAdp2IMszPz9X4dD5D+Fxb2O4Y2zzfr9++yCEdMZoQ==
-X-ME-Sender: <xms:GmO9ZDmv7LyBV8FVTU8rjLNzDsm2GN7lQ-K5tnbeDrkVABFpHFExvA>
-    <xme:GmO9ZG3ttVRAlchkVrVMBpNQCnEa2SOGRh7ud3Jt9pWkfQdZkCnaDtFpLX_FKFvPU
-    zognaKQDzatVo8>
-X-ME-Received: <xmr:GmO9ZJpdouL2b4QnQ5tf-pqyohzWCMRKxDLaAXZXKQuKpV7AUs5wdGbf00Ko>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrheeigdduuddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
-    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
-    htvghrnhephfffjeeghfejheejveehvefhteevveefgfeuudeuiedvieejiefhgeehleej
-    gfeunecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:GmO9ZLmiFXqV4OhDSySxY9u4F_mUnWbXptlKTqhDqVPmFi2dfJVzsQ>
-    <xmx:GmO9ZB1DOBgcnuk-kOLjEixcZRBAk-Wqy42J0N7QKAJlsQXJ0U7WgA>
-    <xmx:GmO9ZKs942FvFUaAkfUj3QuX0SV5CR-Xl7WGJOKS6J-3FS5uXK5T5Q>
-    <xmx:GmO9ZOms2VV35dkSkmglS2Q32iZW1huD5yJm-7PPAZyukkhfqc7C0A>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 23 Jul 2023 13:27:53 -0400 (EDT)
-Date:   Sun, 23 Jul 2023 20:27:50 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+        Sun, 23 Jul 2023 14:50:47 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E13F3;
+        Sun, 23 Jul 2023 11:50:45 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id EEF6460171;
+        Sun, 23 Jul 2023 20:50:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1690138231; bh=eNrWuD560AZswhvCgLs7uptVHWEPszV5AXkZsEm1AFc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kKtW7zkPlbVYiEjfq2pAyG9eTvXD/dWqB/mgDKPn5grVXsvg1pj/XFfGqBgpgsR+y
+         N/62sf7AOkcvHooutHKix2yXbdfjEDXbdXfW27hDJRQ0qjWis8qb9buthEXVx8mSsV
+         jt02bHWDdNTjO57PQuGxmBbqi74QU/V73L2pr4L4mYMgFj1IqPg5s86Y59CN/fX++p
+         q9cXBGoccxd+DY6f/wPcze/U8GT6eZGlG5/shi8clMXmL8HMpXCSPpEYNab8jouJwW
+         lkQ6zxPE4g+9gNwa/pGZNJE7f9U9L6s0YkB7iUcW/rkiflIgMn0b6xMmEgucpLuYus
+         QcP27dxQET2YQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id oBXA4NpgkQJv; Sun, 23 Jul 2023 20:50:29 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id 3B3406015F;
+        Sun, 23 Jul 2023 20:50:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1690138229; bh=eNrWuD560AZswhvCgLs7uptVHWEPszV5AXkZsEm1AFc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OB5bpdEebStwgkNUwbQbvwyYjaNk2cxHv0UmILS6m2DSDFp7ALM9qZFAbejPhRy6C
+         2etVBk8UGrY1+gWFUBJIRJVnWd5uRyLn63lb4/PKNiIATHs6W5I36jOhV1dw5GdrWL
+         RR3IfSTFTg2bxjy7fFYnZQkmen+t+b2mXeU0OqOfgT8dvwCeiEohkve8IHhFCMurud
+         OvD6ptdv8uQ4/ciiAzn/puBTbbrEf71BEGVNNmkiOmQ0+J5/2C4Hp5Am+oerLT00VZ
+         wsop0c950e/OqgDVAPp5D/BW+AjaXEN8PZnFn6wNdsmSAEjvRyaVWKR6j1ZWGa5ZNU
+         uUmHfKYHE3Clw==
+Message-ID: <2004b5c6-6bff-88a8-a3f2-cfe95f12996b@alu.unizg.hr>
+Date:   Sun, 23 Jul 2023 20:50:13 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v1 01/11] selftests: forwarding: custom_multipath_hash.sh:
+ add cleanup for SIGTERM sent by timeout
+Content-Language: en-US
+To:     Ido Schimmel <idosch@idosch.org>
 Cc:     Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v1 01/11] selftests: forwarding:
- custom_multipath_hash.sh: add cleanup for SIGTERM sent by timeout
-Message-ID: <ZL1jFk1z3zDH7dUM@shredder>
 References: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
- <ZLzj5oYrbHGvCMkq@shredder>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZLzj5oYrbHGvCMkq@shredder>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <ZLzj5oYrbHGvCMkq@shredder> <ZL1jFk1z3zDH7dUM@shredder>
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZL1jFk1z3zDH7dUM@shredder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jul 23, 2023 at 11:25:16AM +0300, Ido Schimmel wrote:
-> On Sat, Jul 22, 2023 at 02:36:00AM +0200, Mirsad Todorovac wrote:
-> > Add trap and cleanup for SIGTERM sent by timeout and SIGINT from
-> > keyboard, for the test times out and leaves incoherent network stack.
-> > 
-> > Fixes: 511e8db54036c ("selftests: forwarding: Add test for custom multipath hash")
-> > Cc: Ido Schimmel <idosch@nvidia.com>
-> > Cc: netdev@vger.kernel.org
-> > ---
+On 7/23/23 19:27, Ido Schimmel wrote:
+> On Sun, Jul 23, 2023 at 11:25:16AM +0300, Ido Schimmel wrote:
+>> On Sat, Jul 22, 2023 at 02:36:00AM +0200, Mirsad Todorovac wrote:
+>>> Add trap and cleanup for SIGTERM sent by timeout and SIGINT from
+>>> keyboard, for the test times out and leaves incoherent network stack.
+>>>
+>>> Fixes: 511e8db54036c ("selftests: forwarding: Add test for custom multipath hash")
+>>> Cc: Ido Schimmel <idosch@nvidia.com>
+>>> Cc: netdev@vger.kernel.org
+>>> ---
+>>
+>> The patches are missing your Signed-off-by and a cover letter. Anyway,
+>> please don't send a new version just yet. I'm not sure this is the
+>> correct approach and I'm looking into it.
 > 
-> The patches are missing your Signed-off-by and a cover letter. Anyway,
-> please don't send a new version just yet. I'm not sure this is the
-> correct approach and I'm looking into it.
+> Please test with the following four patches on top of net.git:
+> 
+> https://github.com/idosch/linux/commits/submit/sefltests_fix_v1
 
-Please test with the following four patches on top of net.git:
+Will do. Just applying.
 
-https://github.com/idosch/linux/commits/submit/sefltests_fix_v1
+However, I have upgraded to iproute2-next, maybe the error message should
+give a hint on that, too ... That might relieve the pressure on developers
+answering always the same questions ...
+
+Kind regards,
+Mirsad
