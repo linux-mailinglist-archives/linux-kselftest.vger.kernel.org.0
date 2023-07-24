@@ -2,133 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5056F75F530
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 13:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3F075F53B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 13:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjGXLem (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 07:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        id S229797AbjGXLgh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 07:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjGXLe0 (ORCPT
+        with ESMTP id S229691AbjGXLgY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 07:34:26 -0400
+        Mon, 24 Jul 2023 07:36:24 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945FC26A3
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 04:33:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8AC10E3
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 04:35:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690198364;
+        s=mimecast20190719; t=1690198513;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EXJhrkLdNOLUHGZbbc+F0hjfqb3hPCsrY6WTn8MVyN8=;
-        b=IKMGMDoBf5Q4TRF+J45GToUGxW8KJvD5bGgLyJeeLFh25nplZJDxAd3SInz6BrXVMcuVby
-        hYYnA1MfyF7PRcydtsYPxyA9Zv0hniuCao8nXh20+jsSTaAkzAhJk2Wn0xOxzvlNoVm9B7
-        dKLPBtMs43iUq3LlMZkcsIFwzQ66bYY=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=eMJT6NzbKAHchuNQihrlyERlClqLTiPaYVCXQcFFroU=;
+        b=OHAAnjuSP/brcgJcG39PKyl9H86OLDBiCtwWKCoXPwagjjPLvQw4FbYojDkEG4kLV8CuSS
+        fbMLYqwFxwS5dFam2+O2f5kvmR/qf1PdKeGuUmhubBiirw9JMohfqymvigYL9ZYsVMc/ZB
+        jFfdnBoNt+jsj9EIUo0GWP5iXIzOp3U=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-212-x-6zLQxpObuRqRbI-hxOlw-1; Mon, 24 Jul 2023 07:32:43 -0400
-X-MC-Unique: x-6zLQxpObuRqRbI-hxOlw-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-316f39e3e89so2536813f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 04:32:42 -0700 (PDT)
+ us-mta-664-xb5MfbkvOXi4IgRjmnyyjg-1; Mon, 24 Jul 2023 07:35:11 -0400
+X-MC-Unique: xb5MfbkvOXi4IgRjmnyyjg-1
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b93f4c300bso35271511fa.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 04:35:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690198362; x=1690803162;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EXJhrkLdNOLUHGZbbc+F0hjfqb3hPCsrY6WTn8MVyN8=;
-        b=QyFldNYR/zT2lHpKns5X4/wjFfU90sFk8PNRZ0byU78c3nj5UJfd6AycF+Kqel+rT8
-         MYZyWIU2yjpXHlXSEM5Th8u5rl9/05NtmLJWZjdEilbyru/6wxHP2Lg/116KuUETWveh
-         hzSazLZvv1x18gX9xLZkRu9D1lrpHBMR+ri38dv4xM6Si0Xf3VpkO6HrUWAwKOWoijMw
-         nillVK1OzTWbgHThnutqIInBT7mq9xclf3ANbdbP5rWutvlLdxd+qNMhtUO4ezg0TS6H
-         GC266hiLVcMX+xk0mVxG5IdZbBls5RfOV94Y8bHYbMPacHFQ3i36GIJSyKq0RYtmjCb7
-         uhoA==
-X-Gm-Message-State: ABy/qLYM5o0ZNXl1TjjnM85O+c5FhLg2PDVMw0CV8a0ssGwnRLWpSGq+
-        DhIsIisME+h4Jpa1B6YJ7VVRAEDzf5s2PY6TKAyTeDNZIgBYO/jyCBYog7yTH995mx/boKGFqUz
-        YMHMYwxO4t4wd5yPyG4097SZuVO7J
-X-Received: by 2002:a5d:4ec5:0:b0:314:98f:2495 with SMTP id s5-20020a5d4ec5000000b00314098f2495mr7489822wrv.12.1690198362009;
-        Mon, 24 Jul 2023 04:32:42 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEI60yM7OEQYltk8pZJRHHkHj4AM6BZ+3LNkwODYxQy3aj86Uaqvq9RfiI7soFJIBmCEAmJvQ==
-X-Received: by 2002:a5d:4ec5:0:b0:314:98f:2495 with SMTP id s5-20020a5d4ec5000000b00314098f2495mr7489803wrv.12.1690198361680;
-        Mon, 24 Jul 2023 04:32:41 -0700 (PDT)
-Received: from vschneid.remote.csb ([149.12.7.81])
-        by smtp.gmail.com with ESMTPSA id w7-20020a5d4047000000b00313f61889ecsm12615302wrp.66.2023.07.24.04.32.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 04:32:41 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-        Julian Pidancet <julian.pidancet@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH v2 20/20] x86/mm, mm/vmalloc: Defer
- flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
-In-Reply-To: <188AEA79-10E6-4DFF-86F4-FE624FD1880F@vmware.com>
-References: <20230720163056.2564824-1-vschneid@redhat.com>
- <20230720163056.2564824-21-vschneid@redhat.com>
- <188AEA79-10E6-4DFF-86F4-FE624FD1880F@vmware.com>
-Date:   Mon, 24 Jul 2023 12:32:38 +0100
-Message-ID: <xhsmh8rb5tui1.mognet@vschneid.remote.csb>
+        d=1e100.net; s=20221208; t=1690198510; x=1690803310;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eMJT6NzbKAHchuNQihrlyERlClqLTiPaYVCXQcFFroU=;
+        b=BZVXukSlWz9MIo1cX5zMyylNn48dW0853eMkAowE09FJA9FOLU+TSSXqF2b2zTujOs
+         J/rrBcPCxKulSI8+zixFrVKVBKw5XKOof2gAxerbBqX/IbUDv7GbDSQwHTEWsAOCXrIW
+         SmvA3+VPaVvZMfhVj9RCQ3uGHSDpNUjq7umWk7oAb1HYv98hhw9MlVbe9i47vyVfHoyo
+         N2hn0eDx0gjWZfPz88MAxTaRBUwYQcHaI3PvwA1oBifR//SN4pjCUJYY5TIz895wm7um
+         ggwYR5LDSHWRvxb00RGbqMB/aIJoI0Km/fk8zXospSLC9QwAb31H+iKajEESdUgAc8Q/
+         8iaQ==
+X-Gm-Message-State: ABy/qLYSzHrCafenQASESBRTF39SRv8l9FsMp6N+PxuJO4mcHgfGptnF
+        /PLu+zRczuVEEuLlRZ32NKKXpPXxADcgrb/MgOYA82DMsn1IXbWJGYKsO1s8IaFT/gF4C0TOc3q
+        Kjykq+Q6YB1Kmg+RhDolc81KRgUQh
+X-Received: by 2002:a2e:96d1:0:b0:2b5:81bc:43a8 with SMTP id d17-20020a2e96d1000000b002b581bc43a8mr5173087ljj.0.1690198510174;
+        Mon, 24 Jul 2023 04:35:10 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlH6NuX+DPeSWpje6qdrDA76gRAGJ3wU7DiH93+PySyeupLPmy7RrJfQSrOoZuFGAXHyST8Hyw==
+X-Received: by 2002:a2e:96d1:0:b0:2b5:81bc:43a8 with SMTP id d17-20020a2e96d1000000b002b581bc43a8mr5173075ljj.0.1690198509742;
+        Mon, 24 Jul 2023 04:35:09 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c73d:bb00:91a5:d1c:3a7e:4c77? (p200300cbc73dbb0091a50d1c3a7e4c77.dip0.t-ipconnect.de. [2003:cb:c73d:bb00:91a5:d1c:3a7e:4c77])
+        by smtp.gmail.com with ESMTPSA id c22-20020a05600c0ad600b003fa98908014sm12663923wmr.8.2023.07.24.04.35.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Jul 2023 04:35:09 -0700 (PDT)
+Message-ID: <83a3f3e5-d41b-07d5-0dfd-ed9a380baae4@redhat.com>
+Date:   Mon, 24 Jul 2023 13:35:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 6/8] selftests/mm: Make migration test robust to
+ failure
+Content-Language: en-US
+To:     Ryan Roberts <ryan.roberts@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Florent Revest <revest@chromium.org>,
+        Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+References: <20230724082522.1202616-1-ryan.roberts@arm.com>
+ <20230724082522.1202616-7-ryan.roberts@arm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230724082522.1202616-7-ryan.roberts@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,66 +93,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 21/07/23 18:15, Nadav Amit wrote:
->> On Jul 20, 2023, at 9:30 AM, Valentin Schneider <vschneid@redhat.com> wr=
-ote:
->>
->> vunmap()'s issued from housekeeping CPUs are a relatively common source =
-of
->> interference for isolated NOHZ_FULL CPUs, as they are hit by the
->> flush_tlb_kernel_range() IPIs.
->>
->> Given that CPUs executing in userspace do not access data in the vmalloc
->> range, these IPIs could be deferred until their next kernel entry.
->
-> So I think there are a few assumptions here that it seems suitable to con=
-firm
-> and acknowledge the major one in the commit log (assuming they hold).
->
-> There is an assumption that VMAP page-tables are not freed. I actually
-> never paid attention to that, but skimming the code it does seem so. To
-> clarify the issue: if page-tables were freed and their pages were reused,
-> there would be a problem that page-walk caches for instance would be used
-> and =E2=80=9Cjunk=E2=80=9D entries from the reused pages would be used. S=
-ee [1].
->
+On 24.07.23 10:25, Ryan Roberts wrote:
+> The `migration` test currently has a number of robustness problems that
+> cause it to hang and leak resources.
+> 
+> Timeout: There are 3 tests, which each previously ran for 60 seconds.
+> However, the timeout in mm/settings for a single test binary was set to
+> 45 seconds. So when run using run_kselftest.sh, the top level timeout
+> would trigger before the test binary was finished. Solve this by meeting
+> in the middle; each of the 3 tests now runs for 20 seconds (for a total
+> of 60), and the top level timeout is set to 90 seconds.
+> 
+> Leaking child processes: the `shared_anon` test fork()s some children
+> but then an ASSERT() fires before the test kills those children. The
+> assert causes immediate exit of the parent and leaking of the children.
+> Furthermore, if run using the run_kselftest.sh wrapper, the wrapper
+> would get stuck waiting for those children to exit, which never happens.
+> Solve this by setting the "parent death signal" to SIGHUP in the child,
+> so that the child is killed automatically if the parent dies.
+> 
+> With these changes, the test binary now runs to completion on arm64,
+> with 2 tests passing and the `shared_anon` test failing.
+> 
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> ---
 
-Thanks for looking into this and sharing context. This is an area I don't
-have much experience with, so help is much appreciated!
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Indeed, accessing addresses that should be impacted by a TLB flush *before*
-executing the deferred flush is an issue. Deferring sync_core() for
-instruction patching is a similar problem - it's all in the shape of
-"access @addr impacted by @operation during kernel entry, before actually
-executing @operation".
+-- 
+Cheers,
 
-AFAICT the only reasonable way to go about the deferral is to prove that no
-such access happens before the deferred @operation is done. We got to prove
-that for sync_core() deferral, cf. PATCH 18.
-
-I'd like to reason about it for deferring vunmap TLB flushes:
-
-What addresses in VMAP range, other than the stack, can early entry code
-access? Yes, the ranges can be checked at runtime, but is there any chance
-of figuring this out e.g. at build-time?
-
-> I would also assume the memory-hot-unplug of some sorts is not an issue,
-> (i.e., you cannot have a stale TLB entry pointing to memory that was
-> unplugged).
->
-> I also think that there might be speculative code execution using stale
-> TLB entries that would point to memory that has been reused and perhaps
-> controllable by the user. If somehow the CPU/OS is tricked to use the
-> stale executable TLB entries early enough on kernel entry that might be
-> an issue. I guess it is probably theoretical issue, but it would be helpf=
-ul
-> to confirm.
->
-> In general, deferring TLB flushes can be done safely. This patch, I think,
-> takes it one step forward and allows the reuse of the memory before the T=
-LB
-> flush is actually done. This is more dangerous.
->
-> [1] https://lore.kernel.org/lkml/tip-b956575bed91ecfb136a8300742ecbbf4514=
-71ab@git.kernel.org/
+David / dhildenb
 
