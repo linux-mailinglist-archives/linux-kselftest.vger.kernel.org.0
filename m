@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3A075ED71
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 10:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180BC75ED73
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 10:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjGXIZl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 04:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
+        id S231463AbjGXIZp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 04:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbjGXIZk (ORCPT
+        with ESMTP id S231460AbjGXIZl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 04:25:40 -0400
+        Mon, 24 Jul 2023 04:25:41 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4C13134;
-        Mon, 24 Jul 2023 01:25:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA30B133;
+        Mon, 24 Jul 2023 01:25:40 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C54A715A1;
-        Mon, 24 Jul 2023 01:26:21 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BDAAB11FB;
+        Mon, 24 Jul 2023 01:26:23 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E5F693F67D;
-        Mon, 24 Jul 2023 01:25:36 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA6DE3F67D;
+        Mon, 24 Jul 2023 01:25:38 -0700 (PDT)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     "Andrew Morton" <akpm@linux-foundation.org>,
         "Shuah Khan" <shuah@kernel.org>,
@@ -32,9 +32,9 @@ To:     "Andrew Morton" <akpm@linux-foundation.org>,
         "Peter Xu" <peterx@redhat.com>
 Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 3/8] selftests/mm: Enable mrelease_test for arm64
-Date:   Mon, 24 Jul 2023 09:25:17 +0100
-Message-Id: <20230724082522.1202616-4-ryan.roberts@arm.com>
+Subject: [PATCH v3 4/8] selftests/mm: Fix thuge-gen test bugs
+Date:   Mon, 24 Jul 2023 09:25:18 +0100
+Message-Id: <20230724082522.1202616-5-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230724082522.1202616-1-ryan.roberts@arm.com>
 References: <20230724082522.1202616-1-ryan.roberts@arm.com>
@@ -49,33 +49,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-mrelease_test defaults to defining __NR_pidfd_open and
-__NR_process_mrelease syscall numbers to -1, if they are not defined
-anywhere else, and the suite would then be marked as skipped as a
-result.
+thuge-gen was previously only munmapping part of the mmapped buffer,
+which caused us to run out of 1G huge pages for a later part of the
+test. Fix this by munmapping the whole buffer. Based on the code, it
+looks like a typo rather than an intention to keep some of the buffer
+mapped.
 
-arm64 (at least the stock debian toolchain that I'm using) requires
-including <sys/syscall.h> to pull in the defines for these syscalls. So
-let's add this header. With this in place, the test is passing on arm64.
+thuge-gen was also calling mmap with SHM_HUGETLB flag (bit 11 set),
+which is actually MAP_DENYWRITE in mmap context. The man page says this
+flag is ignored in modern kernels. I'm pretty sure from the context that
+the author intended to pass the MAP_HUGETLB flag so I've fixed that up
+too.
 
 Reviewed-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 ---
- tools/testing/selftests/mm/mrelease_test.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/mm/thuge-gen.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/mrelease_test.c b/tools/testing/selftests/mm/mrelease_test.c
-index dca21042b679..d822004a374e 100644
---- a/tools/testing/selftests/mm/mrelease_test.c
-+++ b/tools/testing/selftests/mm/mrelease_test.c
-@@ -7,6 +7,7 @@
- #include <stdbool.h>
- #include <stdio.h>
- #include <stdlib.h>
-+#include <sys/syscall.h>
- #include <sys/wait.h>
- #include <unistd.h>
- #include <asm-generic/unistd.h>
+diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
+index 380ab5f0a534..16ed4dfa7359 100644
+--- a/tools/testing/selftests/mm/thuge-gen.c
++++ b/tools/testing/selftests/mm/thuge-gen.c
+@@ -139,7 +139,7 @@ void test_mmap(unsigned long size, unsigned flags)
+ 		before, after, before - after, size);
+ 	assert(size == getpagesize() || (before - after) == NUM_PAGES);
+ 	show(size);
+-	err = munmap(map, size);
++	err = munmap(map, size * NUM_PAGES);
+ 	assert(!err);
+ }
+ 
+@@ -222,7 +222,7 @@ int main(void)
+ 		test_mmap(ps, MAP_HUGETLB | arg);
+ 	}
+ 	printf("Testing default huge mmap\n");
+-	test_mmap(default_hps, SHM_HUGETLB);
++	test_mmap(default_hps, MAP_HUGETLB);
+ 
+ 	puts("Testing non-huge shmget");
+ 	test_shmget(getpagesize(), 0);
 -- 
 2.25.1
 
