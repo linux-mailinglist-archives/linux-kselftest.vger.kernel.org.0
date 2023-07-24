@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4C075ED79
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 10:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185A975ED7B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 10:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbjGXI0C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 04:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54286 "EHLO
+        id S231555AbjGXI0F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 04:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbjGXIZ6 (ORCPT
+        with ESMTP id S231490AbjGXIZ7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 04:25:58 -0400
+        Mon, 24 Jul 2023 04:25:59 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E700A1A1;
-        Mon, 24 Jul 2023 01:25:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FADDE6C;
+        Mon, 24 Jul 2023 01:25:46 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A37E515A1;
-        Mon, 24 Jul 2023 01:26:27 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97F62DE0;
+        Mon, 24 Jul 2023 01:26:29 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C45423F67D;
-        Mon, 24 Jul 2023 01:25:42 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B8B9E3F67D;
+        Mon, 24 Jul 2023 01:25:44 -0700 (PDT)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     "Andrew Morton" <akpm@linux-foundation.org>,
         "Shuah Khan" <shuah@kernel.org>,
@@ -32,9 +32,9 @@ To:     "Andrew Morton" <akpm@linux-foundation.org>,
         "Peter Xu" <peterx@redhat.com>
 Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 6/8] selftests/mm: Make migration test robust to failure
-Date:   Mon, 24 Jul 2023 09:25:20 +0100
-Message-Id: <20230724082522.1202616-7-ryan.roberts@arm.com>
+Subject: [PATCH v3 7/8] selftests/mm: Optionally pass duration to transhuge-stress
+Date:   Mon, 24 Jul 2023 09:25:21 +0100
+Message-Id: <20230724082522.1202616-8-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230724082522.1202616-1-ryan.roberts@arm.com>
 References: <20230724082522.1202616-1-ryan.roberts@arm.com>
@@ -49,77 +49,77 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The `migration` test currently has a number of robustness problems that
-cause it to hang and leak resources.
+Until now, transhuge-stress runs until its explicitly killed, so when
+invoked by run_kselftest.sh, it would run until the test timeout, then
+it would be killed and the test would be marked as failed.
 
-Timeout: There are 3 tests, which each previously ran for 60 seconds.
-However, the timeout in mm/settings for a single test binary was set to
-45 seconds. So when run using run_kselftest.sh, the top level timeout
-would trigger before the test binary was finished. Solve this by meeting
-in the middle; each of the 3 tests now runs for 20 seconds (for a total
-of 60), and the top level timeout is set to 90 seconds.
+Add a new, optional command line parameter that allows the user to
+specify the duration in seconds that the program should run. The program
+exits after this duration with a success (0) exit code. If the argument
+is omitted the old behacvior remains.
 
-Leaking child processes: the `shared_anon` test fork()s some children
-but then an ASSERT() fires before the test kills those children. The
-assert causes immediate exit of the parent and leaking of the children.
-Furthermore, if run using the run_kselftest.sh wrapper, the wrapper
-would get stuck waiting for those children to exit, which never happens.
-Solve this by setting the "parent death signal" to SIGHUP in the child,
-so that the child is killed automatically if the parent dies.
+On it's own, this doesn't quite solve our problem because
+run_kselftest.sh does not allow passing parameters to the program under
+test. But we will shortly move this to run_vmtests.sh, which does allow
+parameter passing.
 
-With these changes, the test binary now runs to completion on arm64,
-with 2 tests passing and the `shared_anon` test failing.
-
+Acked-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 ---
- tools/testing/selftests/mm/migration.c | 12 +++++++++---
- tools/testing/selftests/mm/settings    |  2 +-
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ tools/testing/selftests/mm/transhuge-stress.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-index 379581567f27..6908569ef406 100644
---- a/tools/testing/selftests/mm/migration.c
-+++ b/tools/testing/selftests/mm/migration.c
-@@ -10,12 +10,13 @@
- #include <numa.h>
- #include <numaif.h>
- #include <sys/mman.h>
-+#include <sys/prctl.h>
- #include <sys/types.h>
- #include <signal.h>
- #include <time.h>
+diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
+index ba9d37ad3a89..c61fb9350b8c 100644
+--- a/tools/testing/selftests/mm/transhuge-stress.c
++++ b/tools/testing/selftests/mm/transhuge-stress.c
+@@ -25,13 +25,14 @@ int main(int argc, char **argv)
+ {
+ 	size_t ram, len;
+ 	void *ptr, *p;
+-	struct timespec a, b;
++	struct timespec start, a, b;
+ 	int i = 0;
+ 	char *name = NULL;
+ 	double s;
+ 	uint8_t *map;
+ 	size_t map_len;
+ 	int pagemap_fd;
++	int duration = 0;
  
- #define TWOMEG (2<<20)
--#define RUNTIME (60)
-+#define RUNTIME (20)
+ 	ram = sysconf(_SC_PHYS_PAGES);
+ 	if (ram > SIZE_MAX / psize() / 4)
+@@ -42,9 +43,11 @@ int main(int argc, char **argv)
  
- #define ALIGN(x, a) (((x) + (a - 1)) & (~((a) - 1)))
- 
-@@ -155,10 +156,15 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
- 	memset(ptr, 0xde, TWOMEG);
- 	for (i = 0; i < self->nthreads - 1; i++) {
- 		pid = fork();
--		if (!pid)
-+		if (!pid) {
-+			prctl(PR_SET_PDEATHSIG, SIGHUP);
-+			/* Parent may have died before prctl so check now. */
-+			if (getppid() == 1)
-+				kill(getpid(), SIGHUP);
- 			access_mem(ptr);
--		else
-+		} else {
- 			self->pids[i] = pid;
-+		}
+ 	while (++i < argc) {
+ 		if (!strcmp(argv[i], "-h"))
+-			errx(1, "usage: %s [size in MiB]", argv[0]);
++			errx(1, "usage: %s [-f <filename>] [-d <duration>] [size in MiB]", argv[0]);
+ 		else if (!strcmp(argv[i], "-f"))
+ 			name = argv[++i];
++		else if (!strcmp(argv[i], "-d"))
++			duration = atoi(argv[++i]);
+ 		else
+ 			len = atoll(argv[i]) << 20;
  	}
+@@ -78,6 +81,8 @@ int main(int argc, char **argv)
+ 	if (!map)
+ 		errx(2, "map malloc");
  
- 	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-diff --git a/tools/testing/selftests/mm/settings b/tools/testing/selftests/mm/settings
-index 9abfc60e9e6f..ba4d85f74cd6 100644
---- a/tools/testing/selftests/mm/settings
-+++ b/tools/testing/selftests/mm/settings
-@@ -1 +1 @@
--timeout=45
-+timeout=90
++	clock_gettime(CLOCK_MONOTONIC, &start);
++
+ 	while (1) {
+ 		int nr_succeed = 0, nr_failed = 0, nr_pages = 0;
+ 
+@@ -118,5 +123,8 @@ int main(int argc, char **argv)
+ 		      "%4d succeed, %4d failed, %4d different pages",
+ 		      s, s * 1000 / (len >> HPAGE_SHIFT), len / s / (1 << 20),
+ 		      nr_succeed, nr_failed, nr_pages);
++
++		if (duration > 0 && b.tv_sec - start.tv_sec >= duration)
++			return 0;
+ 	}
+ }
 -- 
 2.25.1
 
