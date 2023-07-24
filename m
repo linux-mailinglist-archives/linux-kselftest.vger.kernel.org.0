@@ -2,80 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B525275FEB9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 20:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFF475FF47
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 20:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjGXSET (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 14:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
+        id S229582AbjGXStT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 14:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjGXSES (ORCPT
+        with ESMTP id S229479AbjGXStT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 14:04:18 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0342C18D;
-        Mon, 24 Jul 2023 11:04:17 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b8392076c9so65236011fa.1;
-        Mon, 24 Jul 2023 11:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690221855; x=1690826655;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8PMWehFMZvbk2xf8tY0y8u/pgKG1KcRSfvrbvLOT7Z4=;
-        b=odRmqTs3LH+/X1SRqOKZRonsMr4xoVid28yxjd9SgkVuFAU/jW4ox/pkN85Ij8h9XI
-         7XVza9c+4japLHxd5HRYDgOgCLI5pCk04S5W4RhksTDP2RgFQKQ7320qHlWHh0145wjo
-         GzoDL4VZMgjJ+RGeVQbcjdqY87+IB2Ar1L2o87YwlR/7cbwBiJSrrg9llLl+0Pdq+2/r
-         UwQ2nKQr5cyxqBVwYaCD4KUwXMJyPutsDuGFu29qkbktCwR9a54FK7vXzCi83i2UPNq0
-         Tyc49T/BVusdUR8SZVpY4ZNGRZz7U68xWgSoobgvfHslVNqBjwgR7eZc/SkZNx15gILc
-         ccNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690221855; x=1690826655;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8PMWehFMZvbk2xf8tY0y8u/pgKG1KcRSfvrbvLOT7Z4=;
-        b=MwIUaw5RoGp8qfJAz0HfFKgoF9ulT71fp6BbrbBgfMsiPXDSPIXqIbQ5avp2XOw1i0
-         NHrk9u0rLTo4Gh+Z1h3AwQVMAEg8Q8ODsbqOz1mBMigNOeCpKoJgEI+3AiqmYuY1SyhP
-         twKSFOKdPmE7yEabTybDKhoQ4xdlgdCbWliwUw6VMHTqWcw+GnrMx8wYliVZrW+KC4l3
-         Da69vglhcovY6nBgjls7jsPtFM1KESJBDmdz4vb0F4zWqw5SbWe/uyCZVSdo3IY1SkPo
-         1anNqlqfEkvf6+rBLyaPx4/r4Gfwa54WRyjMp6mqySomMwefgmOgWptun20iS5eNFC4y
-         PNWg==
-X-Gm-Message-State: ABy/qLYu3vpsNjKZ55pWcnzbqNywvTqU7kKZXVyXk7YUfUzJ1rzqgmuy
-        n/E8smw8mcMpGDRVGjXMLFpaFyhc/wTDmO1yS90=
-X-Google-Smtp-Source: APBJJlGpD8jSoPQKAMxYJ3oCKN4xLFvwl4+ahXeikaglH6MeZrL6kPt9e2V1d55IknUvqBC5UWa4Oj+J/uJsbzuYFEA=
-X-Received: by 2002:a2e:808a:0:b0:2b3:4ea3:d020 with SMTP id
- i10-20020a2e808a000000b002b34ea3d020mr6539375ljg.17.1690221855066; Mon, 24
- Jul 2023 11:04:15 -0700 (PDT)
+        Mon, 24 Jul 2023 14:49:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67BC910D9;
+        Mon, 24 Jul 2023 11:49:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B6DFFEC;
+        Mon, 24 Jul 2023 11:50:00 -0700 (PDT)
+Received: from [10.57.76.172] (unknown [10.57.76.172])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A5273F67D;
+        Mon, 24 Jul 2023 11:49:15 -0700 (PDT)
+Message-ID: <ef907f64-f7aa-3759-1adc-3fb7e3f3487b@arm.com>
+Date:   Mon, 24 Jul 2023 19:49:13 +0100
 MIME-Version: 1.0
-References: <20230723093806.2850822-1-mahmoudmatook.mm@gmail.com>
-In-Reply-To: <20230723093806.2850822-1-mahmoudmatook.mm@gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 24 Jul 2023 11:04:03 -0700
-Message-ID: <CAADnVQKPmUxv6or76-KBVtaD2i+aRpX_qKxr1v7cwdOhWH6QLQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: fix build errors if CONFIG_NF_CONNTRACK_MARK
- not set.
-To:     Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH v3 0/8] selftests/mm fixes for arm64
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Florent Revest <revest@chromium.org>,
+        Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20230724082522.1202616-1-ryan.roberts@arm.com>
+ <20230724093804.bbe8bc2a83d4575f17778eb0@linux-foundation.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230724093804.bbe8bc2a83d4575f17778eb0@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,81 +51,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jul 23, 2023 at 2:38=E2=80=AFAM Mahmoud Maatuq
-<mahmoudmatook.mm@gmail.com> wrote:
->
-> 'mark' member in 'struct nf_conn' is conditionally defined
->  by CONFIG_NF_CONNTRACK_MARK
->  so any reference to it should follow the same.
->
->  $ make -C tools/testing/selftests/bpf
->         progs/test_bpf_nf.c:219:12: error: no member named 'mark' in 'str=
-uct nf_conn'
->                                 if (ct->mark =3D=3D 42) {
->                                     ~~  ^
->         progs/test_bpf_nf.c:220:9: error: no member named 'mark' in 'stru=
-ct nf_conn'
->                                         ct->mark++;
->                                         ~~  ^
->         progs/test_bpf_nf.c:221:34: error: no member named 'mark' in 'str=
-uct nf_conn'
->                                 test_exist_lookup_mark =3D ct->mark;
->
-> Signed-off-by: Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
-> ---
->  .../testing/selftests/bpf/progs/test_bpf_nf.c | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/test=
-ing/selftests/bpf/progs/test_bpf_nf.c
-> index 77ad8adf68da..0b285de8b7e7 100644
-> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> @@ -157,7 +157,10 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, stru=
-ct bpf_sock_tuple *, u32,
->                 struct nf_conn *ct_ins;
->
->                 bpf_ct_set_timeout(ct, 10000);
-> -               ct->mark =3D 77;
-> +               #if defined(CONFIG_NF_CONNTRACK_MARK)
-> +                       ct->mark =3D 77;
-> +               #endif
-> +
->
->                 /* snat */
->                 saddr.ip =3D bpf_get_prandom_u32();
-> @@ -188,7 +191,9 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struc=
-t bpf_sock_tuple *, u32,
->                                 bpf_ct_change_timeout(ct_lk, 10000);
->                                 test_delta_timeout =3D ct_lk->timeout - b=
-pf_jiffies64();
->                                 test_delta_timeout /=3D CONFIG_HZ;
-> -                               test_insert_lookup_mark =3D ct_lk->mark;
-> +                               #if defined(CONFIG_NF_CONNTRACK_MARK)
-> +                                       test_insert_lookup_mark =3D ct_lk=
-->mark;
-> +                               #endif
->                                 bpf_ct_change_status(ct_lk,
->                                                      IPS_CONFIRMED | IPS_=
-SEEN_REPLY);
->                                 test_status =3D ct_lk->status;
-> @@ -210,10 +215,12 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, str=
-uct bpf_sock_tuple *, u32,
->                        sizeof(opts_def));
->         if (ct) {
->                 test_exist_lookup =3D 0;
-> -               if (ct->mark =3D=3D 42) {
-> -                       ct->mark++;
-> -                       test_exist_lookup_mark =3D ct->mark;
-> -               }
-> +               #if defined(CONFIG_NF_CONNTRACK_MARK)
-> +                       if (ct->mark =3D=3D 42) {
-> +                               ct->mark++;
-> +                               test_exist_lookup_mark =3D ct->mark;
-> +                       }
-> +               #endif
+On 24/07/2023 17:38, Andrew Morton wrote:
+> On Mon, 24 Jul 2023 09:25:14 +0100 Ryan Roberts <ryan.roberts@arm.com> wrote:
+> 
+>> This is v3 of my series to clean up mm selftests so that they run correctly on
+>> arm64. See [1] for full explanation.
+> 
+> Please don't do that.  Please maintain the [0/n] description alongside the
+> patchset and resend it each time you resend the series.
 
-That's not a fix.
-The test has to have CONFIG_NF_CONNTRACK_MARK enabled in the kernel.
-Make sure your kernel is built with _all_ configs specified in
-tools/testing/selftests/bpf/config*
+OK understood. Sorry about that. Do you have any docs for the mm submission
+process? If not, please keep pointing issues out and I'll get it right eventually.
+
+I previously thought that the cover letter was primarily for the email
+recipients and the description on each patch was the part that went into git?
+Clearly I'm wrong, but can't see anything in submitting-patches.rst so guess the
+mm process is a bit different?
+
+> 
+> I could go over and copy-paste [1] into this patchset, but I don't know if it
+> is fully up to date.   I'll leave the patchset intro blank for now - please
+> review/edit [1] and send the result in reply to this email, thanks. 
+
+I doubt you would want the whole cover letter in git, so here is the relavent intro:
+
+---8<---
+
+Hi All,
+
+Given my on-going work on large anon folios and contpte mappings, I decided it
+would be a good idea to start running mm selftests to help guard against
+regressions. However, it soon became clear that I couldn't get the suite to run
+cleanly on arm64 with a vanilla v6.5-rc1 kernel (perhaps I'm just doing it
+wrong??), so got stuck in a rabbit hole trying to debug and fix all the issues.
+Some were down to misconfigurations, but I also found a number of issues with
+the tests and even a couple of issues with the kernel.
+
+This series aims to fix (most of) the test issues. It applies on top of
+v6.5-rc3.
+
+Changes Since v2 [2]
+--------------------
+
+  - Patch 6: Change approach to cleaning up child processes; Use "parent death
+    signal", as suggested by David.
+  - Added Reviewed-by/Acked-by tags: thanks to David, Mark and Peter!
+
+Changes Since v1 [1]
+--------------------
+
+  - Patch 1: Explicitly set line buffer mode in ksft_print_header()
+  - Dropped v1 patch 2 (set execute permissions): Andrew has taken this into his
+    branch separately.
+  - Patch 2: Don't compile `soft-dirty` suite for arm64 instead of skipping it
+    at runtime.
+  - Patch 2: Declare fewer tests and skip all of test_softdirty() if soft-dirty
+    is not supported, rather than conditionally marking each check as skipped.
+  - Added Reviewed-by tags: thanks DavidH!
+  - Patch 8: Clarified commit message.
+
+---8<---
+
+Thanks,
+Ryan
+
