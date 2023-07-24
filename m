@@ -2,73 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3E675ED01
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 10:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F3975ED6D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 10:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjGXIB7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 04:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S229628AbjGXIZi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 04:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjGXIB6 (ORCPT
+        with ESMTP id S230022AbjGXIZg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 04:01:58 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06F5E0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 01:01:56 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-992f6d7c7fbso717405866b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 01:01:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1690185715; x=1690790515;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RvpQjdy2BZtG4KxZUJm0NSczIjObM2PdRZCjOhCuHqE=;
-        b=L8ohUoQwhRgvUZKLkgt2VAsrzphG3+p7mgJ/gQ+hDxT+HVl0t3pJLoFEdQrx/EQwy8
-         xN1jUdg4iR/MYSLHSdB0o3Yg4cMoEfFfJyuO4WEkhPBIWYOyMlTGIrl4OG209ohSxtQD
-         DQ/4D3OMZFqg3Mf/skvNwVLRIbKNFakNb+F8IzAU2JEIS0I+8iyUqV3ouJTt/iLoqnbv
-         TkD15YOuPNF7Z6yAakkJUlScTQgfZQXvscA83nD8qR63JT1c/g6Q1+T4UwOETkE86fMg
-         1NAHj9FRSpcvm/jIUFC37I2Hwi1EHaTDTYdpKW4AXtemRlwTju6DmY0fzVkMBXE4QIIT
-         SiCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690185715; x=1690790515;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RvpQjdy2BZtG4KxZUJm0NSczIjObM2PdRZCjOhCuHqE=;
-        b=JoUPGzEfrwb7wuHaY4kB5vpoqwT42/nTkJPyZqdB8BLCJjqPF4NP1nbH46tYy/j0ON
-         Hugqkvz9pPkkkbfrYWHyBCDyppK9h78bNT9aajeJjeh4zrqjuYbZPA0xNz1aNjXWR1vc
-         jgZxnx3BJyhRs5WnhtY6FXwAZAxEXCPU6g6wkOs2Ju/0MuYpVVZMCDOO30AFbYAY79Ew
-         pMBSgy1FgDLBZcx67xHs7tLCmLebQSAhaz+XXvhnxF1sDRWlJnGVwazwkTt3uo37BNp4
-         KNvw8iA0RbZkujbZxIuj/9okSvMtyynUWy9KCIQYRgItMFlCJ1gMMfi7Uo+iLnMisfNy
-         mVGQ==
-X-Gm-Message-State: ABy/qLajow2E24N79GohqXDX9xcycjzbGvYikf483YFxWHyUWxZOiwlV
-        Wz0YjiNhIrkJe99Y4k1+nuk6iEcvL27WTSDFYRmngQ==
-X-Google-Smtp-Source: APBJJlHC5rMQrIx5ImZ99gmyXHNXpIqWWNKYgsVWHrLadDUIN+FGDrHLMI+w2SLqw3PTowpbtiuavEOWH40HooYc2NA=
-X-Received: by 2002:a17:907:7846:b0:994:8e9:67fe with SMTP id
- lb6-20020a170907784600b0099408e967femr8119394ejc.35.1690185715296; Mon, 24
- Jul 2023 01:01:55 -0700 (PDT)
+        Mon, 24 Jul 2023 04:25:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 521D01AD;
+        Mon, 24 Jul 2023 01:25:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7F22DE0;
+        Mon, 24 Jul 2023 01:26:15 -0700 (PDT)
+Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 12A4C3F67D;
+        Mon, 24 Jul 2023 01:25:30 -0700 (PDT)
+From:   Ryan Roberts <ryan.roberts@arm.com>
+To:     "Andrew Morton" <akpm@linux-foundation.org>,
+        "Shuah Khan" <shuah@kernel.org>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        "David Hildenbrand" <david@redhat.com>,
+        "Mark Brown" <broonie@kernel.org>,
+        "John Hubbard" <jhubbard@nvidia.com>,
+        "Florent Revest" <revest@chromium.org>,
+        "Peter Xu" <peterx@redhat.com>
+Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 0/8] selftests/mm fixes for arm64
+Date:   Mon, 24 Jul 2023 09:25:14 +0100
+Message-Id: <20230724082522.1202616-1-ryan.roberts@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230720-so-reuseport-v6-2-7021b683cdae@isovalent.com> <20230720211646.34782-1-kuniyu@amazon.com>
-In-Reply-To: <20230720211646.34782-1-kuniyu@amazon.com>
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Mon, 24 Jul 2023 10:01:44 +0200
-Message-ID: <CAN+4W8h=dSqF-TV1pRueP1mGSpUpkkZGgMScL_=GR7PphTZRkQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 2/8] bpf: reject unhashed sockets in bpf_sk_assign
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
-        edumazet@google.com, haoluo@google.com, hemanthmalla@gmail.com,
-        joe@cilium.io, joe@wand.net.nz, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        martin.lau@linux.dev, mykolal@fb.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, sdf@google.com, shuah@kernel.org,
-        song@kernel.org, willemdebruijn.kernel@gmail.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,17 +47,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 11:17=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.c=
-om> wrote:
+Hi All,
 
-> > Fix the problem by rejecting unhashed sockets in bpf_sk_assign().
-> > This matches the behaviour of __inet_lookup_skb which is ultimately
-> > the goal of bpf_sk_assign().
-> >
-> > Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
->
-> Should this be 0c48eefae712 then ?
+This is v3 of my series to clean up mm selftests so that they run correctly on
+arm64. See [1] for full explanation.
 
-I think it makes sense to target it at the original helper add, since
-we really should've done the unhashed check back then. Relying on
-unhashed not being available is too subtle.
+Only patch 6 has changed vs v2. The rest are the same and already carry
+reviewed/acked-bys. So I'm hoping I can get the final patch reviewed and this
+series is hopefully then good enough to merge?
+
+Changes Since v2 [2]
+--------------------
+
+  - Patch 6: Change approach to cleaning up child processes; Use "parent death
+    signal", as suggested by David.
+  - Added Reviewed-by/Acked-by tags: thanks to David, Mark and Peter!
+
+Changes Since v1 [1]
+--------------------
+
+  - Patch 1: Explicitly set line buffer mode in ksft_print_header()
+  - Dropped v1 patch 2 (set execute permissions): Andrew has taken this into his
+    branch separately.
+  - Patch 2: Don't compile `soft-dirty` suite for arm64 instead of skipping it
+    at runtime.
+  - Patch 2: Declare fewer tests and skip all of test_softdirty() if soft-dirty
+    is not supported, rather than conditionally marking each check as skipped.
+  - Added Reviewed-by tags: thanks DavidH!
+  - Patch 8: Clarified commit message.
+
+
+[1] https://lore.kernel.org/linux-mm/20230713135440.3651409-1-ryan.roberts@arm.com/
+[2] https://lore.kernel.org/linux-mm/20230717103152.202078-1-ryan.roberts@arm.com/
+
+Thanks,
+Ryan
+
+
+Ryan Roberts (8):
+  selftests: Line buffer test program's stdout
+  selftests/mm: Skip soft-dirty tests on arm64
+  selftests/mm: Enable mrelease_test for arm64
+  selftests/mm: Fix thuge-gen test bugs
+  selftests/mm: va_high_addr_switch should skip unsupported arm64
+    configs
+  selftests/mm: Make migration test robust to failure
+  selftests/mm: Optionally pass duration to transhuge-stress
+  selftests/mm: Run all tests from run_vmtests.sh
+
+ tools/testing/selftests/kselftest.h           |  9 ++
+ tools/testing/selftests/kselftest/runner.sh   |  7 +-
+ tools/testing/selftests/mm/Makefile           | 82 ++++++++++---------
+ tools/testing/selftests/mm/madv_populate.c    | 26 +++++-
+ tools/testing/selftests/mm/migration.c        | 12 ++-
+ tools/testing/selftests/mm/mrelease_test.c    |  1 +
+ tools/testing/selftests/mm/run_vmtests.sh     | 28 ++++++-
+ tools/testing/selftests/mm/settings           |  2 +-
+ tools/testing/selftests/mm/thuge-gen.c        |  4 +-
+ tools/testing/selftests/mm/transhuge-stress.c | 12 ++-
+ .../selftests/mm/va_high_addr_switch.c        |  2 +-
+ 11 files changed, 132 insertions(+), 53 deletions(-)
+
+--
+2.25.1
+
