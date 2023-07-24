@@ -2,42 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C4E75F937
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 16:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D1A75FA00
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 16:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjGXOEp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 10:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S230486AbjGXOiU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 10:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjGXOEo (ORCPT
+        with ESMTP id S230341AbjGXOiT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 10:04:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B048E53;
-        Mon, 24 Jul 2023 07:04:43 -0700 (PDT)
-Received: from [192.168.100.7] (unknown [39.34.185.74])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3114F66070F8;
-        Mon, 24 Jul 2023 15:04:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1690207481;
-        bh=84gFfgvNjZLck9HjxQtgKLO7+C4nQjP+/K4qR/vw5mg=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=Zjt5nB2ho8foqo6yjSkDNZN7u5PDqCqUSX3rvsRIIXNCXYI5xlcdEVtNxeMKRVjX2
-         SkaX/s0DDu5RAV/j6Zz64gV5tOj3h1kPa+EjHv268IHMTLV3MxRrbIL+5F4T5LsG2C
-         iyBVLkVBlTlOgYLSWLlFd/BkYgHMSF39imCFxIaNg3hUroLyq0CCXJhkzdYSDcX+j7
-         mcRLHANqG4IEsRudMPKje83H8gWzfbhl+RKOn9EVn3cOFbgzbX0QQn3oGphiOZG+4O
-         jTACvSJ/3agvfTMsnyWJIz6TPB9weHU6nJG98gU3IqPzGyp9C3De+nfbbvLk1u5oCH
-         vPPEqd7JUp96A==
-Message-ID: <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com>
-Date:   Mon, 24 Jul 2023 19:04:27 +0500
+        Mon, 24 Jul 2023 10:38:19 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D244188
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 07:38:15 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51e24210395so15278a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 07:38:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690209493; x=1690814293;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b5SDTe6qOC5PXRB6SyhCG7ZaeHW8gj0AmjKckKwv3io=;
+        b=C9Suheke7UQIS/avFEu/JXXrfnObD0Xt0TNh7dM22D9jAawL6KZjL3QqM/z3wqzpm7
+         Mm6YMbmLhKk4HT4js0BuYeNzm0Hs5lGiTUonNYK4R1YxlN9UufVYBC7ruD+OUlg74rUR
+         46a2ArThiXaiWvRGM9jjZeLnWKh1O9ka7Tkd21FhQTItonpzlPJs1Ww16WWjwRf87RtU
+         59vTx2NKqdYe45KK5Y1YFLUDOCStjKyzdM3/kJ9CHWfHj2NuKmfVO4KpV9SaWezw8n2W
+         3tSWQhJJs7Y1INcgZ7gb204PsM5UMzzIkApxtp0SU2N09PJkoT5Pi0eXXnhEybhV9Nnv
+         tmnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690209493; x=1690814293;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b5SDTe6qOC5PXRB6SyhCG7ZaeHW8gj0AmjKckKwv3io=;
+        b=QneSgFBbVsSeJtJkslVOb2FIKIwH6pfPOz0Xo13+W/ZJH6J2vuKLebWyJv7/WGSDeQ
+         3eQfaIPDdpdcV5+kBcD0THoJPOKfwIzzidErQ+EPJrmNmkPh6BN53qXKhXuCa3YIHEjd
+         8BgvdBKeO1Bmfs2Ab9MIC+lL6WvHWjHY3EiQQndOndL29QrGyfuHfRPM6pxtJc02eMpw
+         mGdLvra2YdARHvpwHspO0UzQx5RivU6xPPWcGmtANZDZsU1Ki0BZ5Kc0CL6raMRTACYY
+         UTnU0X87oKiaY15+xeQkMFJ3VHQ6/UB1NvJp6KroIfCyrx9j+H/Z8JLrOkj6VgZG6JUn
+         RL0Q==
+X-Gm-Message-State: ABy/qLZhSk7m/isfWGGnTTLDvqxvN8GYgYTEjvmvGtM+EvYU2bosRbPw
+        Qb3NprjggDV1nqZcpIiX6/0JYqZFFfCMJsBLlIGuYw==
+X-Google-Smtp-Source: APBJJlFRzqXuIv1qPeWfBAjjHGcqTmgLN2bBdY5Dll/6hSi/V+dFxY9ftxsLNyp7eYXdBv5srMzDm+fP5nEzVgqY6F0=
+X-Received: by 2002:a50:d492:0:b0:51a:1ffd:10e with SMTP id
+ s18-20020a50d492000000b0051a1ffd010emr178091edi.3.1690209493308; Mon, 24 Jul
+ 2023 07:38:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+References: <20230713101415.108875-6-usama.anjum@collabora.com>
+ <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
+ <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com> <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
+ <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com> <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
+ <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com>
+In-Reply-To: <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Mon, 24 Jul 2023 16:38:01 +0200
+Message-ID: <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
+Subject: Re: [v2] fs/proc/task_mmu: Implement IOCTL for efficient page table scanning
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Andrei Vagin <avagin@gmail.com>,
         Danylo Mocherniuk <mdanylo@google.com>,
         Alex Sierra <alex.sierra@amd.com>,
@@ -52,7 +74,6 @@ Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         "Gustavo A . R . Silva" <gustavoars@kernel.org>,
         "Liam R . Howlett" <Liam.Howlett@oracle.com>,
         Matthew Wilcox <willy@infradead.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
         Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
         Pasha Tatashin <pasha.tatashin@soleen.com>,
         Paul Gofman <pgofman@codeweavers.com>,
@@ -64,231 +85,159 @@ Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         kernel@collabora.com
-Subject: Re: [v2] fs/proc/task_mmu: Implement IOCTL for efficient page table
- scanning
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-References: <20230713101415.108875-6-usama.anjum@collabora.com>
- <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
- <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com>
- <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
- <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com>
- <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fixed found bugs. Testing it further.
+On Mon, 24 Jul 2023 at 16:04, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> Fixed found bugs. Testing it further.
+>
+> - Split and backoff in case buffer full case as well
+> - Fix the wrong breaking of loop if page isn't interesting, skip intead
+> - Untag the address and save them into struct
+> - Round off the end address to next page
+>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  fs/proc/task_mmu.c | 54 ++++++++++++++++++++++++++--------------------
+>  1 file changed, 31 insertions(+), 23 deletions(-)
+>
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index add21fdf3c9a..64b326d0ec6d 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -1985,18 +1989,19 @@ static int pagemap_scan_output(unsigned long
+> categories,
+>         unsigned long n_pages, total_pages;
+>         int ret =3D 0;
+>
+> +       if (!p->vec_buf)
+> +               return 0;
+> +
+>         if (!pagemap_scan_is_interesting_page(categories, p)) {
+>                 *end =3D addr;
+>                 return 0;
+>         }
+>
+> -       if (!p->vec_buf)
+> -               return 0;
+> -
+>         categories &=3D p->arg.return_mask;
 
-- Split and backoff in case buffer full case as well
-- Fix the wrong breaking of loop if page isn't interesting, skip intead
-- Untag the address and save them into struct
-- Round off the end address to next page
+This is wrong - is_interesting() check must happen before output as
+the `*end =3D addr` means the range should be skipped, but return 0
+requests continuing of the walk.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- fs/proc/task_mmu.c | 54 ++++++++++++++++++++++++++--------------------
- 1 file changed, 31 insertions(+), 23 deletions(-)
+> @@ -2044,7 +2050,7 @@ static int pagemap_scan_thp_entry(pmd_t *pmd,
+> unsigned long start,
+>          * Break huge page into small pages if the WP operation
+>          * need to be performed is on a portion of the huge page.
+>          */
+> -       if (end !=3D start + HPAGE_SIZE) {
+> +       if (end !=3D start + HPAGE_SIZE || ret =3D=3D -ENOSPC) {
 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index add21fdf3c9a..64b326d0ec6d 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -1764,7 +1764,8 @@ struct pagemap_scan_private {
- 	struct page_region __user* vec_out;
- };
+Why is it needed? If `end =3D=3D start + HPAGE_SIZE` then we're handling a
+full hugepage anyway.
 
--static unsigned long pagemap_page_category(struct vm_area_struct *vma,
-unsigned long addr, pte_t pte)
-+static unsigned long pagemap_page_category(struct vm_area_struct *vma,
-+					   unsigned long addr, pte_t pte)
- {
- 	unsigned long categories = 0;
+> @@ -2066,8 +2072,8 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
+> unsigned long start,
+>  {
+>         struct pagemap_scan_private *p =3D walk->private;
+>         struct vm_area_struct *vma =3D walk->vma;
+> +       unsigned long addr, categories, next;
+>         pte_t *pte, *start_pte;
+> -       unsigned long addr;
+>         bool flush =3D false;
+>         spinlock_t *ptl;
+>         int ret;
+> @@ -2088,12 +2094,14 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
+> unsigned long start,
+>         }
+>
+>         for (addr =3D start; addr !=3D end; pte++, addr +=3D PAGE_SIZE) {
+> -               unsigned long categories =3D p->cur_vma_category |
+> -                       pagemap_page_category(vma, addr, ptep_get(pte));
+> -               unsigned long next =3D addr + PAGE_SIZE;
+> +               categories =3D p->cur_vma_category |
+> +                            pagemap_page_category(vma, addr, ptep_get(pt=
+e));
+> +               next =3D addr + PAGE_SIZE;
 
-@@ -1908,6 +1909,7 @@ static bool pagemap_scan_is_interesting_vma(unsigned
-long categories,
- 	categories ^= p->arg.category_inverted;
- 	if ((categories & required) != required)
- 		return false;
-+
- 	return true;
- }
+Why moving the variable declarations out of the loop?
 
-@@ -1930,6 +1932,7 @@ static int pagemap_scan_test_walk(unsigned long
-start, unsigned long end,
- 		return 1;
+>
+>                 ret =3D pagemap_scan_output(categories, p, addr, &next);
+> -               if (next =3D=3D addr)
+> +               if (ret =3D=3D 0 && next =3D=3D addr)
+> +                       continue;
+> +               else if (next =3D=3D addr)
+>                         break;
 
- 	p->cur_vma_category = vma_category;
-+
- 	return 0;
- }
+Ah, this indeed was a bug. Nit:
 
-@@ -1961,6 +1964,7 @@ static bool pagemap_scan_push_range(unsigned long
-categories,
- 	cur_buf->start = addr;
- 	cur_buf->end = end;
- 	cur_buf->categories = categories;
-+
- 	return true;
- }
+if (next =3D=3D addr) { if (!ret) continue; break; }
 
-@@ -1985,18 +1989,19 @@ static int pagemap_scan_output(unsigned long
-categories,
- 	unsigned long n_pages, total_pages;
- 	int ret = 0;
+> @@ -2204,8 +2212,6 @@ static const struct mm_walk_ops pagemap_scan_ops =
+=3D {
+>  static int pagemap_scan_get_args(struct pm_scan_arg *arg,
+>                                  unsigned long uarg)
+>  {
+> -       unsigned long start, end, vec;
+> -
+>         if (copy_from_user(arg, (void __user *)uarg, sizeof(*arg)))
+>                 return -EFAULT;
+>
+> @@ -2219,22 +2225,24 @@ static int pagemap_scan_get_args(struct pm_scan_a=
+rg
+> *arg,
+>              arg->category_anyof_mask | arg->return_mask) & ~PM_SCAN_CATE=
+GORIES)
+>                 return -EINVAL;
+>
+> -       start =3D untagged_addr((unsigned long)arg->start);
+> -       end =3D untagged_addr((unsigned long)arg->end);
+> -       vec =3D untagged_addr((unsigned long)arg->vec);
+> +       arg->start =3D untagged_addr((unsigned long)arg->start);
+> +       arg->end =3D untagged_addr((unsigned long)arg->end);
+> +       arg->vec =3D untagged_addr((unsigned long)arg->vec);
 
-+	if (!p->vec_buf)
-+		return 0;
-+
- 	if (!pagemap_scan_is_interesting_page(categories, p)) {
- 		*end = addr;
- 		return 0;
- 	}
+BTW, We should we keep the tag in args writeback().
 
--	if (!p->vec_buf)
--		return 0;
--
- 	categories &= p->arg.return_mask;
+>         /* Validate memory pointers */
+> -       if (!IS_ALIGNED(start, PAGE_SIZE))
+> +       if (!IS_ALIGNED(arg->start, PAGE_SIZE))
+>                 return -EINVAL;
+> -       if (!access_ok((void __user *)start, end - start))
+> +       if (!access_ok((void __user *)arg->start, arg->end - arg->start))
+>                 return -EFAULT;
+> -       if (!vec && arg->vec_len)
+> +       if (!arg->vec && arg->vec_len)
+>                 return -EFAULT;
+> -       if (vec && !access_ok((void __user *)vec,
+> +       if (arg->vec && !access_ok((void __user *)arg->vec,
+>                               arg->vec_len * sizeof(struct page_region)))
+>                 return -EFAULT;
+>
+>         /* Fixup default values */
+> +       arg->end =3D (arg->end & ~PAGE_MASK) ?
+> +                  ((arg->end & PAGE_MASK) + PAGE_SIZE) : (arg->end);
 
- 	n_pages = (*end - addr) / PAGE_SIZE;
--	if (check_add_overflow(p->found_pages, n_pages, &total_pages) ||
-total_pages > p->arg.max_pages) {
-+	if (check_add_overflow(p->found_pages, n_pages, &total_pages) ||
-+	    total_pages > p->arg.max_pages) {
- 		size_t n_too_much = total_pages - p->arg.max_pages;
- 		*end -= n_too_much * PAGE_SIZE;
- 		n_pages -= n_too_much;
-@@ -2012,6 +2017,7 @@ static int pagemap_scan_output(unsigned long categories,
- 	p->found_pages += n_pages;
- 	if (ret)
- 		p->end_addr = *end;
-+
- 	return ret;
- }
+arg->end =3D ALIGN(arg->end, PAGE_SIZE);
 
-@@ -2044,7 +2050,7 @@ static int pagemap_scan_thp_entry(pmd_t *pmd,
-unsigned long start,
- 	 * Break huge page into small pages if the WP operation
- 	 * need to be performed is on a portion of the huge page.
- 	 */
--	if (end != start + HPAGE_SIZE) {
-+	if (end != start + HPAGE_SIZE || ret == -ENOSPC) {
- 		spin_unlock(ptl);
- 		split_huge_pmd(vma, pmd, start);
- 		pagemap_scan_backout_range(p, start, end);
-@@ -2066,8 +2072,8 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
-unsigned long start,
- {
- 	struct pagemap_scan_private *p = walk->private;
- 	struct vm_area_struct *vma = walk->vma;
-+	unsigned long addr, categories, next;
- 	pte_t *pte, *start_pte;
--	unsigned long addr;
- 	bool flush = false;
- 	spinlock_t *ptl;
- 	int ret;
-@@ -2088,12 +2094,14 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
-unsigned long start,
- 	}
+>         if (!arg->max_pages)
+>                 arg->max_pages =3D ULONG_MAX;
+>
 
- 	for (addr = start; addr != end; pte++, addr += PAGE_SIZE) {
--		unsigned long categories = p->cur_vma_category |
--			pagemap_page_category(vma, addr, ptep_get(pte));
--		unsigned long next = addr + PAGE_SIZE;
-+		categories = p->cur_vma_category |
-+			     pagemap_page_category(vma, addr, ptep_get(pte));
-+		next = addr + PAGE_SIZE;
-
- 		ret = pagemap_scan_output(categories, p, addr, &next);
--		if (next == addr)
-+		if (ret == 0 && next == addr)
-+			continue;
-+		else if (next == addr)
- 			break;
-
- 		if (~p->arg.flags & PM_SCAN_WP_MATCHING)
-@@ -2175,7 +2183,7 @@ static int pagemap_scan_pte_hole(unsigned long addr,
-unsigned long end,
- {
- 	struct pagemap_scan_private *p = walk->private;
- 	struct vm_area_struct *vma = walk->vma;
--	int ret;
-+	int ret, err;
-
- 	if (!vma)
- 		return 0;
-@@ -2187,7 +2195,7 @@ static int pagemap_scan_pte_hole(unsigned long addr,
-unsigned long end,
- 	if (~p->arg.flags & PM_SCAN_WP_MATCHING)
- 		return ret;
-
--	int err = uffd_wp_range(vma, addr, end - addr, true);
-+	err = uffd_wp_range(vma, addr, end - addr, true);
- 	if (err < 0)
- 		ret = err;
-
-@@ -2204,8 +2212,6 @@ static const struct mm_walk_ops pagemap_scan_ops = {
- static int pagemap_scan_get_args(struct pm_scan_arg *arg,
- 				 unsigned long uarg)
- {
--	unsigned long start, end, vec;
--
- 	if (copy_from_user(arg, (void __user *)uarg, sizeof(*arg)))
- 		return -EFAULT;
-
-@@ -2219,22 +2225,24 @@ static int pagemap_scan_get_args(struct pm_scan_arg
-*arg,
- 	     arg->category_anyof_mask | arg->return_mask) & ~PM_SCAN_CATEGORIES)
- 		return -EINVAL;
-
--	start = untagged_addr((unsigned long)arg->start);
--	end = untagged_addr((unsigned long)arg->end);
--	vec = untagged_addr((unsigned long)arg->vec);
-+	arg->start = untagged_addr((unsigned long)arg->start);
-+	arg->end = untagged_addr((unsigned long)arg->end);
-+	arg->vec = untagged_addr((unsigned long)arg->vec);
-
- 	/* Validate memory pointers */
--	if (!IS_ALIGNED(start, PAGE_SIZE))
-+	if (!IS_ALIGNED(arg->start, PAGE_SIZE))
- 		return -EINVAL;
--	if (!access_ok((void __user *)start, end - start))
-+	if (!access_ok((void __user *)arg->start, arg->end - arg->start))
- 		return -EFAULT;
--	if (!vec && arg->vec_len)
-+	if (!arg->vec && arg->vec_len)
- 		return -EFAULT;
--	if (vec && !access_ok((void __user *)vec,
-+	if (arg->vec && !access_ok((void __user *)arg->vec,
- 			      arg->vec_len * sizeof(struct page_region)))
- 		return -EFAULT;
-
- 	/* Fixup default values */
-+	arg->end = (arg->end & ~PAGE_MASK) ?
-+		   ((arg->end & PAGE_MASK) + PAGE_SIZE) : (arg->end);
- 	if (!arg->max_pages)
- 		arg->max_pages = ULONG_MAX;
-
-@@ -2279,7 +2287,7 @@ static int pagemap_scan_init_bounce_buffer(struct
-pagemap_scan_private *p)
- 	if (!p->vec_buf)
- 		return -ENOMEM;
-
--	p->vec_out = (void __user *)p->arg.vec;
-+	p->vec_out = (struct page_region __user *)p->arg.vec;
-
- 	return 0;
- }
--- 
-2.39.2
-
+Best Regards
+Micha=C5=82 Miros=C5=82aw
