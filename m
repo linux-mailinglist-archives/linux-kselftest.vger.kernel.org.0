@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F89775FC23
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 18:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209D375FC25
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 18:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjGXQab (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 12:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57022 "EHLO
+        id S231497AbjGXQaq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 12:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjGXQaa (ORCPT
+        with ESMTP id S229485AbjGXQan (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 12:30:30 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A850010F7
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:30:24 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-583f048985bso17042777b3.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:30:24 -0700 (PDT)
+        Mon, 24 Jul 2023 12:30:43 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195D110C3
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:30:29 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-cbcffb18afeso4166210276.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:30:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690216223; x=1690821023;
+        d=google.com; s=20221208; t=1690216228; x=1690821028;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wZodKXjzwaMblNUGTJ/e9OGmsCh/NzKmrPm/sVrnOGs=;
-        b=71lpv9k2cfcGlRhTHzZE0I5yOQDBURs4QcLpkoigzk0Tpu5h1Kc2REqVH5dKvlhv26
-         Y8gsPh/tyN5yV2i8TdZ8RmiuzgsXnkOWB/c8R56bwfPRLZLU49Is7zyIEmbzo1Tw2A9b
-         M7MhENYCF9VPGZWeFcnd1eQLpOpToV/sxK9mYtXTtguX7mAMGbc9aYs6qMH0LWZYuZSY
-         ztlccMBytAFtoq/Kc6gtoZ7UA4L3MMTo15BmgBhNNipKuF8+OTI0FWz6Aiw2gdWQmOkB
-         DutDQfACAhu8RgXQ0+5tZqB4ehMawELJynLgn4LJgq1hA3eNuA4tIXMpE8Rqd7TqfNJS
-         0ijw==
+        bh=/n6z3jVDugJtd8hEqhJ3SYr02T4ZdkB3+d9CQl9+UoY=;
+        b=S5HbzgDivGpIklGgkQh013hsPVpnjZ1nd5ClrGqyLJ/80QBvbXYuDS6GM8OY1v4G64
+         WheWSo41V1+kAtB7ggGOrPk9/vLiKuKhQQep+3bNH8xM3UOoqxA7PpYya0n1S4fCRsHj
+         8eJKxRwuk5sHgK2jWGdAbTVLcjrlpFLVM03WN/LS5FNUqi798c4SolN1GAfjOzlQ6V6F
+         Bgb4wQwON3ImIasrJg2po4ziGp1iD/ZCeu/W76JYgN2jFgG8fCrTDcNbNECL1kGTCfdC
+         3xMucJG//iqM9XzKWpVDQUiklOQRj3AE4O3pAsABKxezs4qvbB02lyqKc4F65Ij6K4C4
+         KcUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690216223; x=1690821023;
+        d=1e100.net; s=20221208; t=1690216228; x=1690821028;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wZodKXjzwaMblNUGTJ/e9OGmsCh/NzKmrPm/sVrnOGs=;
-        b=U9PG6XrrLaUnH14Drp47v1SymTTKS8vjg6Oh/qLQ1LScIy64DWUO0VZ0U2fodPbaou
-         6EHKvFKLJ2ZAEWDrq1S/bD+AsWSJ7WzGqSWVv/VS/QgQrAM8SiBPjk6Fx00Ppq0Xuck+
-         eumEfN/rl93PGLeMxZbstrKqG0Hr6yGZ4elGpkSuizd/4TpHrogXmRlUQd9TJwONeYgF
-         PyMJ+kRH43XPeuHh+7r29CgKrWT9WuLXIFWdRbwSTVxZJ3cWVVviVxpFHXbElvkgLWE9
-         9TPis8ipFY+NcKtaX69cR/YF7fNGIwbNHA/vMVtBVSOphyfQae59gPl5RDj+B8KCvJf0
-         fVzQ==
-X-Gm-Message-State: ABy/qLYIbn5Brk0dv4DN48J+bD5WB+sF27JJOSmHXz5+kmnTzUBCoqHB
-        TBm65byjsT+vf2mOqPNpHQjaO5vNcg==
-X-Google-Smtp-Source: APBJJlFtkay6ZMGiBUQ0ZKoSGhP5FfT/lTPH9qFCf5jCGSluiHm25kmByyWZt+etk/Vfbrhgjn77KQ8ZMA==
+        bh=/n6z3jVDugJtd8hEqhJ3SYr02T4ZdkB3+d9CQl9+UoY=;
+        b=b0M9jTNPz6KuDEcwwlZYomNPC/QSwlQH0XClmfFsFOOIKop2bhNQvmpjew58GPGXnK
+         Q3bJb8mCoemvAwnAs5yqv3f4shjeOGgHwrIlpJrGLBgbFOROrZ/m5eyifFgcq+Ej/ZUU
+         yKK6q/7m3S0iAqkw/cnbeFJd5iq3DqXJ+FktCRTdwTNIPZEuZ2XKtgzSt+WZlya5IRDO
+         dbVY/QA6YzxxdzCsTUjYv742kzddjPBA+q8OjinEYT1RdFbdE0BaQr+qGlsh+VFNh7Uw
+         a0Vzf3P3krP0B8OytmmJcEddL3GemD4SR0DfzgkaNSFEQOHwpAh7qaRkxzVDAnHJFHBQ
+         4t1w==
+X-Gm-Message-State: ABy/qLa1t8ZgSrp8gtK5MNGr1CUhq89wpO/V3dqMzby7jnDnC8jow/r3
+        2h5WPxuhqF9KbR5YC7707Rp13N+dVg==
+X-Google-Smtp-Source: APBJJlFK1Hpzn7T8Xo3S1J6jHyFpLXZLTuF1yjkWCRI8SxNVouCj2GdmbKC7d3CKAzD7RUQL1XOhU00zng==
 X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a25:dc43:0:b0:d05:7ba4:67f9 with SMTP id
- y64-20020a25dc43000000b00d057ba467f9mr46506ybe.3.1690216223803; Mon, 24 Jul
- 2023 09:30:23 -0700 (PDT)
-Date:   Mon, 24 Jul 2023 16:28:21 +0000
+ (user=rmoar job=sendgmr) by 2002:a25:378f:0:b0:d0c:1fc:747a with SMTP id
+ e137-20020a25378f000000b00d0c01fc747amr31827yba.5.1690216228285; Mon, 24 Jul
+ 2023 09:30:28 -0700 (PDT)
+Date:   Mon, 24 Jul 2023 16:28:22 +0000
 In-Reply-To: <20230724162834.1354164-1-rmoar@google.com>
 Mime-Version: 1.0
 References: <20230724162834.1354164-1-rmoar@google.com>
 X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
-Message-ID: <20230724162834.1354164-2-rmoar@google.com>
-Subject: [PATCH v2 1/9] kunit: Add test attributes API structure
+Message-ID: <20230724162834.1354164-3-rmoar@google.com>
+Subject: [PATCH v2 2/9] kunit: Add speed attribute
 From:   Rae Moar <rmoar@google.com>
 To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
         brendan.higgins@linux.dev
@@ -71,383 +71,172 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add the basic structure of the test attribute API to KUnit, which can be
-used to save and access test associated data.
+Add speed attribute to the test attribute API. This attribute will allow
+users to mark tests with a category of speed.
 
-Add attributes.c and attributes.h to hold associated structs and functions
-for the API.
+Currently the categories of speed proposed are: normal, slow, and very_slow
+(outlined in enum kunit_speed). These are outlined in the enum kunit_speed.
 
-Create a struct that holds a variety of associated helper functions for
-each test attribute. These helper functions will be used to get the
-attribute value, convert the value to a string, and filter based on the
-value. This struct is flexible by design to allow for attributes of
-numerous types and contexts.
+The assumed default speed for tests is "normal". This indicates that the
+test takes a relatively trivial amount of time (less than 1 second),
+regardless of the machine it is running on. Any test slower than this could
+be marked as "slow" or "very_slow".
 
-Add a method to print test attributes in the format of "# [<test_name if
-not suite>.]<attribute_name>: <attribute_value>".
+Add the macro KUNIT_CASE_SLOW to set a test as slow, as this is likely a
+common use of the attributes API.
 
-Example for a suite: "# speed: slow"
+Add an example of marking a slow test to kunit-example-test.c.
 
-Example for a test case: "# test_case.speed: very_slow"
-
-Use this method to report attributes in the KTAP output (KTAP spec:
-https://docs.kernel.org/dev-tools/ktap.html) and _list_tests output when
-kernel's new kunit.action=list_attr option is used. Note this is derivative
-of the kunit.action=list option.
-
-In test.h, add fields and associated helper functions to test cases and
-suites to hold user-inputted test attributes.
-
+Reviewed-by: David Gow <davidgow@google.com>
 Signed-off-by: Rae Moar <rmoar@google.com>
 ---
 
 Changes since v1:
-- No major changes
-
+- Change kunit_attr_list definition to fix compile error.
 Changes since RFC v2:
-- No major changes
-
+- Fixup comment.
 Changes since RFC v1:
-- Add list_attr option to only include attribute in the _list_tests output
-  when this module param is set
-- Add printing options for attributes to print always, print only for
-  suites, or print never.
+- Remove the "fast" category of speed.
 
- include/kunit/attributes.h | 19 +++++++++
- include/kunit/test.h       | 33 ++++++++++++++++
- lib/kunit/Makefile         |  3 +-
- lib/kunit/attributes.c     | 80 ++++++++++++++++++++++++++++++++++++++
- lib/kunit/executor.c       | 21 ++++++++--
- lib/kunit/test.c           | 17 ++++----
- 6 files changed, 161 insertions(+), 12 deletions(-)
- create mode 100644 include/kunit/attributes.h
- create mode 100644 lib/kunit/attributes.c
+ include/kunit/test.h           | 32 ++++++++++++++++++++++++-
+ lib/kunit/attributes.c         | 44 +++++++++++++++++++++++++++++++++-
+ lib/kunit/kunit-example-test.c |  9 +++++++
+ 3 files changed, 83 insertions(+), 2 deletions(-)
 
-diff --git a/include/kunit/attributes.h b/include/kunit/attributes.h
-new file mode 100644
-index 000000000000..9fcd184cce36
---- /dev/null
-+++ b/include/kunit/attributes.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * KUnit API to save and access test attributes
-+ *
-+ * Copyright (C) 2023, Google LLC.
-+ * Author: Rae Moar <rmoar@google.com>
-+ */
-+
-+#ifndef _KUNIT_ATTRIBUTES_H
-+#define _KUNIT_ATTRIBUTES_H
-+
-+/*
-+ * Print all test attributes for a test case or suite.
-+ * Output format for test cases: "# <test_name>.<attribute>: <value>"
-+ * Output format for test suites: "# <attribute>: <value>"
-+ */
-+void kunit_print_attr(void *test_or_suite, bool is_test, unsigned int test_level);
-+
-+#endif /* _KUNIT_ATTRIBUTES_H */
 diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 23120d50499e..1fc9155988e9 100644
+index 1fc9155988e9..ed5f5000a095 100644
 --- a/include/kunit/test.h
 +++ b/include/kunit/test.h
-@@ -63,12 +63,16 @@ enum kunit_status {
+@@ -63,8 +63,27 @@ enum kunit_status {
  	KUNIT_SKIPPED,
  };
  
-+/* Holds attributes for each test case and suite */
-+struct kunit_attributes {};
++/* Attribute struct/enum definitions */
 +
++/*
++ * Speed Attribute is stored as an enum and separated into categories of
++ * speed: very_slowm, slow, and normal. These speeds are relative to
++ * other KUnit tests.
++ *
++ * Note: unset speed attribute acts as default of KUNIT_SPEED_NORMAL.
++ */
++enum kunit_speed {
++	KUNIT_SPEED_UNSET,
++	KUNIT_SPEED_VERY_SLOW,
++	KUNIT_SPEED_SLOW,
++	KUNIT_SPEED_NORMAL,
++	KUNIT_SPEED_MAX = KUNIT_SPEED_NORMAL,
++};
++
+ /* Holds attributes for each test case and suite */
+-struct kunit_attributes {};
++struct kunit_attributes {
++	enum kunit_speed speed;
++};
+ 
  /**
   * struct kunit_case - represents an individual test case.
-  *
-  * @run_case: the function representing the actual test case.
-  * @name:     the name of the test case.
-  * @generate_params: the generator function for parameterized tests.
-+ * @attr:     the attributes associated with the test
-  *
-  * A test case is a function with the signature,
-  * ``void (*)(struct kunit *)``
-@@ -104,6 +108,7 @@ struct kunit_case {
- 	void (*run_case)(struct kunit *test);
- 	const char *name;
- 	const void* (*generate_params)(const void *prev, char *desc);
-+	struct kunit_attributes attr;
- 
- 	/* private: internal use only. */
- 	enum kunit_status status;
-@@ -133,6 +138,18 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
-  */
- #define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
+@@ -150,6 +169,17 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
+ 		{ .run_case = test_name, .name = #test_name,	\
+ 		  .attr = attributes }
  
 +/**
-+ * KUNIT_CASE_ATTR - A helper for creating a &struct kunit_case
-+ * with attributes
++ * KUNIT_CASE_SLOW - A helper for creating a &struct kunit_case
++ * with the slow attribute
 + *
 + * @test_name: a reference to a test case function.
-+ * @attributes: a reference to a struct kunit_attributes object containing
-+ * test attributes
 + */
-+#define KUNIT_CASE_ATTR(test_name, attributes)			\
++
++#define KUNIT_CASE_SLOW(test_name)			\
 +		{ .run_case = test_name, .name = #test_name,	\
-+		  .attr = attributes }
++		  .attr.speed = KUNIT_SPEED_SLOW }
 +
  /**
   * KUNIT_CASE_PARAM - A helper for creation a parameterized &struct kunit_case
   *
-@@ -154,6 +171,20 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
- 		{ .run_case = test_name, .name = #test_name,	\
- 		  .generate_params = gen_params }
- 
-+/**
-+ * KUNIT_CASE_PARAM_ATTR - A helper for creating a parameterized &struct
-+ * kunit_case with attributes
-+ *
-+ * @test_name: a reference to a test case function.
-+ * @gen_params: a reference to a parameter generator function.
-+ * @attributes: a reference to a struct kunit_attributes object containing
-+ * test attributes
-+ */
-+#define KUNIT_CASE_PARAM_ATTR(test_name, gen_params, attributes)	\
-+		{ .run_case = test_name, .name = #test_name,	\
-+		  .generate_params = gen_params,				\
-+		  .attr = attributes }
-+
- /**
-  * struct kunit_suite - describes a related collection of &struct kunit_case
-  *
-@@ -163,6 +194,7 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
-  * @init:	called before every test case.
-  * @exit:	called after every test case.
-  * @test_cases:	a null terminated array of test cases.
-+ * @attr:	the attributes associated with the test suite
-  *
-  * A kunit_suite is a collection of related &struct kunit_case s, such that
-  * @init is called before every test case and @exit is called after every
-@@ -182,6 +214,7 @@ struct kunit_suite {
- 	int (*init)(struct kunit *test);
- 	void (*exit)(struct kunit *test);
- 	struct kunit_case *test_cases;
-+	struct kunit_attributes attr;
- 
- 	/* private: internal use only */
- 	char status_comment[KUNIT_STATUS_COMMENT_SIZE];
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index cb417f504996..46f75f23dfe4 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -6,7 +6,8 @@ kunit-objs +=				test.o \
- 					string-stream.o \
- 					assert.o \
- 					try-catch.o \
--					executor.o
-+					executor.o \
-+					attributes.o
- 
- ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
- kunit-objs +=				debugfs.o
 diff --git a/lib/kunit/attributes.c b/lib/kunit/attributes.c
-new file mode 100644
-index 000000000000..9bda5a5f4030
---- /dev/null
+index 9bda5a5f4030..ffd0d692b334 100644
+--- a/lib/kunit/attributes.c
 +++ b/lib/kunit/attributes.c
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit API to save and access test attributes
-+ *
-+ * Copyright (C) 2023, Google LLC.
-+ * Author: Rae Moar <rmoar@google.com>
-+ */
+@@ -40,9 +40,51 @@ struct kunit_attr {
+ 	enum print_ops print;
+ };
+ 
++/* String Lists for enum Attributes */
 +
-+#include <kunit/test.h>
-+#include <kunit/attributes.h>
++static const char * const speed_str_list[] = {"unset", "very_slow", "slow", "normal"};
 +
-+/* Options for printing attributes:
-+ * PRINT_ALWAYS - attribute is printed for every test case and suite if set
-+ * PRINT_SUITE - attribute is printed for every suite if set but not for test cases
-+ * PRINT_NEVER - attribute is never printed
-+ */
-+enum print_ops {
-+	PRINT_ALWAYS,
-+	PRINT_SUITE,
-+	PRINT_NEVER,
-+};
++/* To String Methods */
 +
-+/**
-+ * struct kunit_attr - represents a test attribute and holds flexible
-+ * helper functions to interact with attribute.
-+ *
-+ * @name: name of test attribute, eg. speed
-+ * @get_attr: function to return attribute value given a test
-+ * @to_string: function to return string representation of given
-+ * attribute value
-+ * @filter: function to indicate whether a given attribute value passes a
-+ * filter
-+ */
-+struct kunit_attr {
-+	const char *name;
-+	void *(*get_attr)(void *test_or_suite, bool is_test);
-+	const char *(*to_string)(void *attr, bool *to_free);
-+	int (*filter)(void *attr, const char *input, int *err);
-+	void *attr_default;
-+	enum print_ops print;
-+};
-+
-+/* List of all Test Attributes */
-+
-+static struct kunit_attr kunit_attr_list[] = {};
-+
-+/* Helper Functions to Access Attributes */
-+
-+void kunit_print_attr(void *test_or_suite, bool is_test, unsigned int test_level)
++static const char *attr_enum_to_string(void *attr, const char * const str_list[], bool *to_free)
 +{
-+	int i;
-+	bool to_free;
-+	void *attr;
-+	const char *attr_name, *attr_str;
++	long val = (long)attr;
++
++	*to_free = false;
++	if (!val)
++		return NULL;
++	return str_list[val];
++}
++
++static const char *attr_speed_to_string(void *attr, bool *to_free)
++{
++	return attr_enum_to_string(attr, speed_str_list, to_free);
++}
++
++/* Get Attribute Methods */
++
++static void *attr_speed_get(void *test_or_suite, bool is_test)
++{
 +	struct kunit_suite *suite = is_test ? NULL : test_or_suite;
 +	struct kunit_case *test = is_test ? test_or_suite : NULL;
 +
-+	for (i = 0; i < ARRAY_SIZE(kunit_attr_list); i++) {
-+		if (kunit_attr_list[i].print == PRINT_NEVER ||
-+				(test && kunit_attr_list[i].print == PRINT_SUITE))
-+			continue;
-+		attr = kunit_attr_list[i].get_attr(test_or_suite, is_test);
-+		if (attr) {
-+			attr_name = kunit_attr_list[i].name;
-+			attr_str = kunit_attr_list[i].to_string(attr, &to_free);
-+			if (test) {
-+				kunit_log(KERN_INFO, test, "%*s# %s.%s: %s",
-+					KUNIT_INDENT_LEN * test_level, "", test->name,
-+					attr_name, attr_str);
-+			} else {
-+				kunit_log(KERN_INFO, suite, "%*s# %s: %s",
-+					KUNIT_INDENT_LEN * test_level, "", attr_name, attr_str);
-+			}
-+
-+			/* Free to_string of attribute if needed */
-+			if (to_free)
-+				kfree(attr_str);
-+		}
-+	}
++	if (test)
++		return ((void *) test->attr.speed);
++	else
++		return ((void *) suite->attr.speed);
 +}
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 74982b83707c..12e38a48a5cc 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -2,6 +2,7 @@
- 
- #include <linux/reboot.h>
- #include <kunit/test.h>
-+#include <kunit/attributes.h>
- #include <linux/glob.h>
- #include <linux/moduleparam.h>
- 
-@@ -24,7 +25,8 @@ module_param_named(action, action_param, charp, 0);
- MODULE_PARM_DESC(action,
- 		 "Changes KUnit executor behavior, valid values are:\n"
- 		 "<none>: run the tests like normal\n"
--		 "'list' to list test names instead of running them.\n");
-+		 "'list' to list test names instead of running them.\n"
-+		 "'list_attr' to list test names and attributes instead of running them.\n");
- 
- /* glob_match() needs NULL terminated strings, so we need a copy of filter_glob_param. */
- struct kunit_test_filter {
-@@ -172,7 +174,7 @@ static void kunit_exec_run_tests(struct suite_set *suite_set)
- 	__kunit_test_suites_init(suite_set->start, num_suites);
- }
- 
--static void kunit_exec_list_tests(struct suite_set *suite_set)
-+static void kunit_exec_list_tests(struct suite_set *suite_set, bool include_attr)
- {
- 	struct kunit_suite * const *suites;
- 	struct kunit_case *test_case;
-@@ -180,10 +182,19 @@ static void kunit_exec_list_tests(struct suite_set *suite_set)
- 	/* Hack: print a ktap header so kunit.py can find the start of KUnit output. */
- 	pr_info("KTAP version 1\n");
- 
--	for (suites = suite_set->start; suites < suite_set->end; suites++)
-+	for (suites = suite_set->start; suites < suite_set->end; suites++) {
-+		/* Print suite name and suite attributes */
-+		pr_info("%s\n", (*suites)->name);
-+		if (include_attr)
-+			kunit_print_attr((void *)(*suites), false, 0);
 +
-+		/* Print test case name and attributes in suite */
- 		kunit_suite_for_each_test_case((*suites), test_case) {
- 			pr_info("%s.%s\n", (*suites)->name, test_case->name);
-+			if (include_attr)
-+				kunit_print_attr((void *)test_case, true, 0);
- 		}
-+	}
- }
+ /* List of all Test Attributes */
  
- int kunit_run_all_tests(void)
-@@ -206,7 +217,9 @@ int kunit_run_all_tests(void)
- 	if (!action_param)
- 		kunit_exec_run_tests(&suite_set);
- 	else if (strcmp(action_param, "list") == 0)
--		kunit_exec_list_tests(&suite_set);
-+		kunit_exec_list_tests(&suite_set, false);
-+	else if (strcmp(action_param, "list_attr") == 0)
-+		kunit_exec_list_tests(&suite_set, true);
- 	else
- 		pr_err("kunit executor: unknown action '%s'\n", action_param);
- 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 84e4666555c9..9ee55139ecd1 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -9,6 +9,7 @@
- #include <kunit/resource.h>
- #include <kunit/test.h>
- #include <kunit/test-bug.h>
-+#include <kunit/attributes.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
-@@ -168,6 +169,13 @@ size_t kunit_suite_num_test_cases(struct kunit_suite *suite)
- }
- EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
- 
-+/* Currently supported test levels */
-+enum {
-+	KUNIT_LEVEL_SUITE = 0,
-+	KUNIT_LEVEL_CASE,
-+	KUNIT_LEVEL_CASE_PARAM,
+-static struct kunit_attr kunit_attr_list[] = {};
++static struct kunit_attr kunit_attr_list[] = {
++	{
++		.name = "speed",
++		.get_attr = attr_speed_get,
++		.to_string = attr_speed_to_string,
++		.attr_default = (void *)KUNIT_SPEED_NORMAL,
++		.print = PRINT_ALWAYS,
++	},
 +};
-+
- static void kunit_print_suite_start(struct kunit_suite *suite)
- {
- 	/*
-@@ -181,17 +189,11 @@ static void kunit_print_suite_start(struct kunit_suite *suite)
- 	pr_info(KUNIT_SUBTEST_INDENT "KTAP version 1\n");
- 	pr_info(KUNIT_SUBTEST_INDENT "# Subtest: %s\n",
- 		  suite->name);
-+	kunit_print_attr((void *)suite, false, KUNIT_LEVEL_CASE);
- 	pr_info(KUNIT_SUBTEST_INDENT "1..%zd\n",
- 		  kunit_suite_num_test_cases(suite));
+ 
+ /* Helper Functions to Access Attributes */
+ 
+diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+index b69b689ea850..01a769f35e1d 100644
+--- a/lib/kunit/kunit-example-test.c
++++ b/lib/kunit/kunit-example-test.c
+@@ -220,6 +220,14 @@ static void example_params_test(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, param->value % param->value, 0);
  }
  
--/* Currently supported test levels */
--enum {
--	KUNIT_LEVEL_SUITE = 0,
--	KUNIT_LEVEL_CASE,
--	KUNIT_LEVEL_CASE_PARAM,
--};
--
- static void kunit_print_ok_not_ok(struct kunit *test,
- 				  unsigned int test_level,
- 				  enum kunit_status status,
-@@ -651,6 +653,7 @@ int kunit_run_tests(struct kunit_suite *suite)
- 			}
- 		}
- 
-+		kunit_print_attr((void *)test_case, true, KUNIT_LEVEL_CASE);
- 
- 		kunit_print_test_stats(&test, param_stats);
++/*
++ * This test should always pass. Can be used to practice filtering attributes.
++ */
++static void example_slow_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, 1 + 1, 2);
++}
++
+ /*
+  * Here we make a list of all the test cases we want to add to the test suite
+  * below.
+@@ -237,6 +245,7 @@ static struct kunit_case example_test_cases[] = {
+ 	KUNIT_CASE(example_all_expect_macros_test),
+ 	KUNIT_CASE(example_static_stub_test),
+ 	KUNIT_CASE_PARAM(example_params_test, example_gen_params),
++	KUNIT_CASE_SLOW(example_slow_test),
+ 	{}
+ };
  
 -- 
 2.41.0.487.g6d72f3e995-goog
