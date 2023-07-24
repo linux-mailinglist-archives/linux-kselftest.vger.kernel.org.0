@@ -2,43 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD04775FAAD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 17:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA2C75FB85
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 18:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjGXPWX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 11:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
+        id S230018AbjGXQLG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 12:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjGXPWW (ORCPT
+        with ESMTP id S229928AbjGXQLF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 11:22:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FFC133;
-        Mon, 24 Jul 2023 08:22:18 -0700 (PDT)
-Received: from [192.168.100.7] (unknown [39.34.185.74])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B5EE66070F7;
-        Mon, 24 Jul 2023 16:22:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1690212136;
-        bh=bnkD018OLMVlnqYn0CKMoCrb5lYKht87nInr5jLEyEA=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=CYMUR0MZRmc//CNry3EtS7AIREmSN/0yFPzY/6s695eoKPkgT+ct3gadk3IlUuUIp
-         MQNmt+B43Y0N1k1L8Jwy9R9/xb8ASxVQ4pQ0LCT+BODxDWSIDNDxoveDZyFbJemlpZ
-         EKSLpXeBZuE0+R2a9zUOOLqRR+NyU7g/1a1fsjeaDd8OVABfsAx6hGueqFQt4Qtf4M
-         93pIsSXckHctpaXrxDaA/9Mb8wZx/xOAp9UQ9PcGUkcldXmbxvGkRPX7D9sliDQ8H1
-         bXZrMpGeTNHoRV7CuK2Evmq1rYOF+ykT++ZYJ1iU+jRfRyRy/S12nefGQE7SFS4eD2
-         znKDMuxFs0sPA==
-Message-ID: <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com>
-Date:   Mon, 24 Jul 2023 20:21:58 +0500
+        Mon, 24 Jul 2023 12:11:05 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4CB10E7
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:11:02 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5223910acf2so8349a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:11:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690215061; x=1690819861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u3kbNyGxTzgeac58CFsNMUin81+ND8D8Z3uhWh4woO8=;
+        b=tigo2h0UJbLSdNBggb8+yka3tLWlOxt9O4d6NIR4mh9iEiIf1en0sl8VXgCF7R+a/t
+         tT7LAnPTQCFRJoo0KWqoqyRU9MAHIoPOGygj1DT5qhRnO0ELBnXIh5zBzmwOe5dznmpR
+         oK2ugIQjvmAQRczWo4nzF8BFniwOIxp8Ob3QNgni7FEXBDJPkhRsjBlyvf+2pOpfyScy
+         U2GCJzaS3tue+rOz+Sz9IInuWpFJ7fOOQw2hFvT1311EWcKQhsxRHWi26As9g75IdYr+
+         ayHwpRltXX4GhBn6/blJt9V95VxuAayWW8bx5GgGtHMzMjrA98jhAVUaJyPI8/gpIiuw
+         u1CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690215061; x=1690819861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u3kbNyGxTzgeac58CFsNMUin81+ND8D8Z3uhWh4woO8=;
+        b=NYd/8vhCLnsD5pdBX4fR6nSo/s+YYjM5yl6F+1InWGZEoKkkdaWSWgs9cP17D8z9di
+         9hhP1GGNIYqOfA93F+H3RGArIsjLj8BKdwTFQ35cImC5g28WU/BG5InPTq/vshooBk21
+         DLOTk5hCUqd7QRGyPBYMvfIQUh4J3sWkbE4t4TlgsCuVUUg51R/mWDEyBOkn4cRdrTdx
+         Fes98K0ukJ9zx7CU4qo8ZXZ7CCQ2+JNWrnrbQwHdQyUPWYOo7LGnk6tMpE+tJB+jJOmj
+         J9F1TRF7IfkKCqDZcduWSNTph/exySsNQ4DKF0bFWcLHKleQrZkcUYg8xw+BFnJ5j9AB
+         ZPJQ==
+X-Gm-Message-State: ABy/qLZfKmZD7ld+OinQoeJ8vsThmu+zcOTZVPpPJ9SzjB3uFIR8uBec
+        zZWjJgyn55XqUI0m/y1XKm/Vw2uETWU0W1j15CdTtA==
+X-Google-Smtp-Source: APBJJlF8bHvRHeT2oqat2ATehlhxW6USprsvQrLWXhzWPyCpmacj5+zK0woo1RH6qpDsIl+dtTSAFcyumUKkKtf+1lM=
+X-Received: by 2002:a50:d798:0:b0:522:28a1:2095 with SMTP id
+ w24-20020a50d798000000b0052228a12095mr116981edi.3.1690215061016; Mon, 24 Jul
+ 2023 09:11:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+References: <20230713101415.108875-6-usama.anjum@collabora.com>
+ <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
+ <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com> <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
+ <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com> <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
+ <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com> <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
+ <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com>
+In-Reply-To: <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Mon, 24 Jul 2023 18:10:49 +0200
+Message-ID: <CABb0KFHJVeEkh4f6WWK6FThCbA+NE8iYUZE68nV1YAxaHwiwog@mail.gmail.com>
+Subject: Re: [v2] fs/proc/task_mmu: Implement IOCTL for efficient page table scanning
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Andrei Vagin <avagin@gmail.com>,
         Danylo Mocherniuk <mdanylo@google.com>,
         Alex Sierra <alex.sierra@amd.com>,
@@ -64,190 +86,126 @@ Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         kernel@collabora.com
-Subject: Re: [v2] fs/proc/task_mmu: Implement IOCTL for efficient page table
- scanning
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230713101415.108875-6-usama.anjum@collabora.com>
- <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
- <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com>
- <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
- <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com>
- <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
- <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com>
- <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/24/23 7:38 PM, Michał Mirosław wrote:
-> On Mon, 24 Jul 2023 at 16:04, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->>
->> Fixed found bugs. Testing it further.
->>
->> - Split and backoff in case buffer full case as well
->> - Fix the wrong breaking of loop if page isn't interesting, skip intead
->> - Untag the address and save them into struct
->> - Round off the end address to next page
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->>  fs/proc/task_mmu.c | 54 ++++++++++++++++++++++++++--------------------
->>  1 file changed, 31 insertions(+), 23 deletions(-)
->>
->> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
->> index add21fdf3c9a..64b326d0ec6d 100644
->> --- a/fs/proc/task_mmu.c
->> +++ b/fs/proc/task_mmu.c
->> @@ -1985,18 +1989,19 @@ static int pagemap_scan_output(unsigned long
->> categories,
->>         unsigned long n_pages, total_pages;
->>         int ret = 0;
->>
->> +       if (!p->vec_buf)
->> +               return 0;
->> +
->>         if (!pagemap_scan_is_interesting_page(categories, p)) {
->>                 *end = addr;
->>                 return 0;
->>         }
->>
->> -       if (!p->vec_buf)
->> -               return 0;
->> -
->>         categories &= p->arg.return_mask;
-> 
-> This is wrong - is_interesting() check must happen before output as
-> the `*end = addr` means the range should be skipped, but return 0
-> requests continuing of the walk.
-Will revert.
+On Mon, 24 Jul 2023 at 17:22, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> On 7/24/23 7:38=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Mon, 24 Jul 2023 at 16:04, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >>
+> >> Fixed found bugs. Testing it further.
+> >>
+> >> - Split and backoff in case buffer full case as well
+> >> - Fix the wrong breaking of loop if page isn't interesting, skip intea=
+d
+> >> - Untag the address and save them into struct
+> >> - Round off the end address to next page
+> >>
+> >> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> >> ---
+> >>  fs/proc/task_mmu.c | 54 ++++++++++++++++++++++++++-------------------=
+-
+> >>  1 file changed, 31 insertions(+), 23 deletions(-)
+> >>
+> >> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> >> index add21fdf3c9a..64b326d0ec6d 100644
+> >> --- a/fs/proc/task_mmu.c
+> >> +++ b/fs/proc/task_mmu.c
+> >> @@ -2044,7 +2050,7 @@ static int pagemap_scan_thp_entry(pmd_t *pmd,
+> >> unsigned long start,
+> >>          * Break huge page into small pages if the WP operation
+> >>          * need to be performed is on a portion of the huge page.
+> >>          */
+> >> -       if (end !=3D start + HPAGE_SIZE) {
+> >> +       if (end !=3D start + HPAGE_SIZE || ret =3D=3D -ENOSPC) {
+> >
+> > Why is it needed? If `end =3D=3D start + HPAGE_SIZE` then we're handlin=
+g a
+> > full hugepage anyway.
+> If we weren't able to add the complete thp in the output buffer and we ne=
+ed
+> to perform WP on the entire page, we should split and rollback. Otherwise
+> we'll WP the entire thp and we'll lose the state on the remaining THP whi=
+ch
+> wasn't added to output.
+>
+> Lets say max=3D100
+> only 100 pages would be added to output
+> we need to split and rollback otherwise other 412 pages would get WP
 
-> 
->> @@ -2044,7 +2050,7 @@ static int pagemap_scan_thp_entry(pmd_t *pmd,
->> unsigned long start,
->>          * Break huge page into small pages if the WP operation
->>          * need to be performed is on a portion of the huge page.
->>          */
->> -       if (end != start + HPAGE_SIZE) {
->> +       if (end != start + HPAGE_SIZE || ret == -ENOSPC) {
-> 
-> Why is it needed? If `end == start + HPAGE_SIZE` then we're handling a
-> full hugepage anyway.
-If we weren't able to add the complete thp in the output buffer and we need
-to perform WP on the entire page, we should split and rollback. Otherwise
-we'll WP the entire thp and we'll lose the state on the remaining THP which
-wasn't added to output.
+In this case *end will be truncated by output() to match the number of
+pages that fit.
 
-Lets say max=100
-only 100 pages would be added to output
-we need to split and rollback otherwise other 412 pages would get WP
+> >> @@ -2066,8 +2072,8 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
+> >> unsigned long start,
+> >>  {
+> >>         struct pagemap_scan_private *p =3D walk->private;
+> >>         struct vm_area_struct *vma =3D walk->vma;
+> >> +       unsigned long addr, categories, next;
+> >>         pte_t *pte, *start_pte;
+> >> -       unsigned long addr;
+> >>         bool flush =3D false;
+> >>         spinlock_t *ptl;
+> >>         int ret;
+> >> @@ -2088,12 +2094,14 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
+> >> unsigned long start,
+> >>         }
+> >>
+> >>         for (addr =3D start; addr !=3D end; pte++, addr +=3D PAGE_SIZE=
+) {
+> >> -               unsigned long categories =3D p->cur_vma_category |
+> >> -                       pagemap_page_category(vma, addr, ptep_get(pte)=
+);
+> >> -               unsigned long next =3D addr + PAGE_SIZE;
+> >> +               categories =3D p->cur_vma_category |
+> >> +                            pagemap_page_category(vma, addr, ptep_get=
+(pte));
+> >> +               next =3D addr + PAGE_SIZE;
+> >
+> > Why moving the variable declarations out of the loop?
+> Saving spaces inside loop. What are pros of declation of variable in loop=
+?
 
-> 
->> @@ -2066,8 +2072,8 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
->> unsigned long start,
->>  {
->>         struct pagemap_scan_private *p = walk->private;
->>         struct vm_area_struct *vma = walk->vma;
->> +       unsigned long addr, categories, next;
->>         pte_t *pte, *start_pte;
->> -       unsigned long addr;
->>         bool flush = false;
->>         spinlock_t *ptl;
->>         int ret;
->> @@ -2088,12 +2094,14 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
->> unsigned long start,
->>         }
->>
->>         for (addr = start; addr != end; pte++, addr += PAGE_SIZE) {
->> -               unsigned long categories = p->cur_vma_category |
->> -                       pagemap_page_category(vma, addr, ptep_get(pte));
->> -               unsigned long next = addr + PAGE_SIZE;
->> +               categories = p->cur_vma_category |
->> +                            pagemap_page_category(vma, addr, ptep_get(pte));
->> +               next = addr + PAGE_SIZE;
-> 
-> Why moving the variable declarations out of the loop?
-Saving spaces inside loop. What are pros of declation of variable in loop?
+Informing the reader that the variables have scope limited to the loop body=
+.
 
-> 
->>
->>                 ret = pagemap_scan_output(categories, p, addr, &next);
->> -               if (next == addr)
->> +               if (ret == 0 && next == addr)
->> +                       continue;
->> +               else if (next == addr)
->>                         break;
-> 
-> Ah, this indeed was a bug. Nit:
-> 
-> if (next == addr) { if (!ret) continue; break; }
-> 
->> @@ -2204,8 +2212,6 @@ static const struct mm_walk_ops pagemap_scan_ops = {
->>  static int pagemap_scan_get_args(struct pm_scan_arg *arg,
->>                                  unsigned long uarg)
->>  {
->> -       unsigned long start, end, vec;
->> -
->>         if (copy_from_user(arg, (void __user *)uarg, sizeof(*arg)))
->>                 return -EFAULT;
->>
->> @@ -2219,22 +2225,24 @@ static int pagemap_scan_get_args(struct pm_scan_arg
->> *arg,
->>              arg->category_anyof_mask | arg->return_mask) & ~PM_SCAN_CATEGORIES)
->>                 return -EINVAL;
->>
->> -       start = untagged_addr((unsigned long)arg->start);
->> -       end = untagged_addr((unsigned long)arg->end);
->> -       vec = untagged_addr((unsigned long)arg->vec);
->> +       arg->start = untagged_addr((unsigned long)arg->start);
->> +       arg->end = untagged_addr((unsigned long)arg->end);
->> +       arg->vec = untagged_addr((unsigned long)arg->vec);
-> 
-> BTW, We should we keep the tag in args writeback().
-Sorry what?
-After this function, the start, end and vec would be used. We need to make
-sure that the address are untagged before that.
+[...]
+> >> @@ -2219,22 +2225,24 @@ static int pagemap_scan_get_args(struct pm_sca=
+n_arg
+> >> *arg,
+> >>              arg->category_anyof_mask | arg->return_mask) & ~PM_SCAN_C=
+ATEGORIES)
+> >>                 return -EINVAL;
+> >>
+> >> -       start =3D untagged_addr((unsigned long)arg->start);
+> >> -       end =3D untagged_addr((unsigned long)arg->end);
+> >> -       vec =3D untagged_addr((unsigned long)arg->vec);
+> >> +       arg->start =3D untagged_addr((unsigned long)arg->start);
+> >> +       arg->end =3D untagged_addr((unsigned long)arg->end);
+> >> +       arg->vec =3D untagged_addr((unsigned long)arg->vec);
+> >
+> > BTW, We should we keep the tag in args writeback().
+> Sorry what?
+> After this function, the start, end and vec would be used. We need to mak=
+e
+> sure that the address are untagged before that.
 
-> 
->>         /* Validate memory pointers */
->> -       if (!IS_ALIGNED(start, PAGE_SIZE))
->> +       if (!IS_ALIGNED(arg->start, PAGE_SIZE))
->>                 return -EINVAL;
->> -       if (!access_ok((void __user *)start, end - start))
->> +       if (!access_ok((void __user *)arg->start, arg->end - arg->start))
->>                 return -EFAULT;
->> -       if (!vec && arg->vec_len)
->> +       if (!arg->vec && arg->vec_len)
->>                 return -EFAULT;
->> -       if (vec && !access_ok((void __user *)vec,
->> +       if (arg->vec && !access_ok((void __user *)arg->vec,
->>                               arg->vec_len * sizeof(struct page_region)))
->>                 return -EFAULT;
->>
->>         /* Fixup default values */
->> +       arg->end = (arg->end & ~PAGE_MASK) ?
->> +                  ((arg->end & PAGE_MASK) + PAGE_SIZE) : (arg->end);
-> 
-> arg->end = ALIGN(arg->end, PAGE_SIZE);
-> 
->>         if (!arg->max_pages)
->>                 arg->max_pages = ULONG_MAX;
->>
-> 
-> Best Regards
-> Michał Mirosław
+We do write back the address the walk ended at to arg->start in
+userspace. This pointer I think needs the tag reconstructed so that
+retrying the ioctl() will be possible.
 
--- 
-BR,
-Muhammad Usama Anjum
+ Best Regards
+Micha=C5=82 Miros=C5=82aw
