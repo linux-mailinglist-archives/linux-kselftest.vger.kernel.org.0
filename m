@@ -2,186 +2,293 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE12075F76A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 14:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C4E75F937
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 16:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjGXM4D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 08:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
+        id S229887AbjGXOEp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 10:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjGXMzk (ORCPT
+        with ESMTP id S229873AbjGXOEo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 08:55:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B124C27;
-        Mon, 24 Jul 2023 05:51:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Mon, 24 Jul 2023 10:04:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B048E53;
+        Mon, 24 Jul 2023 07:04:43 -0700 (PDT)
+Received: from [192.168.100.7] (unknown [39.34.185.74])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D3416116E;
-        Mon, 24 Jul 2023 12:50:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE3EFC433D9;
-        Mon, 24 Jul 2023 12:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690203044;
-        bh=o3F0gqwirOzTh8gwGkZMmsXM7Yu/yi+gPnGo/AGnFQM=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=RKvbf5xFIOYmBfC9cHliD8dmfbRs+QpFurP/fbZe8s8WPczwbciazon6lfXd9pSXt
-         rheOw+8XHarDOdaOF5ubRH8/iZsUGbGtNhSaDV1Qx4zDPLo6HFjKB6fCIj0yN2+zWj
-         oCXS3GeKXc6x23k3PjdrPPXhENg2OPse9fbsyikKnvOksNaXle6MUIIkR7VJXplfqj
-         D1aon++cZTfW+FDS9bsY+rkjpaFz1hWPZqy9btbsOm6ybbejCdq2gtNCgmx55APO6f
-         wlr+K3ar2XUp+ugNJ5tb0YWCaAHRU1w0siIsTL98K1dL9appy8Gq6F1skQSUSNGDs4
-         BhqTm6IVAw7Ng==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 24 Jul 2023 13:46:22 +0100
-Subject: [PATCH v2 35/35] kselftest/arm64: Enable GCS for the FP stress
- tests
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3114F66070F8;
+        Mon, 24 Jul 2023 15:04:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1690207481;
+        bh=84gFfgvNjZLck9HjxQtgKLO7+C4nQjP+/K4qR/vw5mg=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=Zjt5nB2ho8foqo6yjSkDNZN7u5PDqCqUSX3rvsRIIXNCXYI5xlcdEVtNxeMKRVjX2
+         SkaX/s0DDu5RAV/j6Zz64gV5tOj3h1kPa+EjHv268IHMTLV3MxRrbIL+5F4T5LsG2C
+         iyBVLkVBlTlOgYLSWLlFd/BkYgHMSF39imCFxIaNg3hUroLyq0CCXJhkzdYSDcX+j7
+         mcRLHANqG4IEsRudMPKje83H8gWzfbhl+RKOn9EVn3cOFbgzbX0QQn3oGphiOZG+4O
+         jTACvSJ/3agvfTMsnyWJIz6TPB9weHU6nJG98gU3IqPzGyp9C3De+nfbbvLk1u5oCH
+         vPPEqd7JUp96A==
+Message-ID: <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com>
+Date:   Mon, 24 Jul 2023 19:04:27 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230724-arm64-gcs-v2-35-dc2c1d44c2eb@kernel.org>
-References: <20230724-arm64-gcs-v2-0-dc2c1d44c2eb@kernel.org>
-In-Reply-To: <20230724-arm64-gcs-v2-0-dc2c1d44c2eb@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3085; i=broonie@kernel.org;
- h=from:subject:message-id; bh=o3F0gqwirOzTh8gwGkZMmsXM7Yu/yi+gPnGo/AGnFQM=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkvnK8hNPDwiHC0iaEDryG+Mu2O7MgY2oLGt69EQIf
- sVXvDwmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZL5yvAAKCRAk1otyXVSH0HvdB/
- 48/ystdzGMlp9ZLcDce6kKIY6+miYLetihauHdnActGmdUw1giLgnaH6IqjXYWeEg4GQJpHOTRWlQ4
- /vQNIe9Yd0Db/nuJcsciW0gzge3Wx/rCLMOsEWZdmAbsilSwEHZtzbSYdq+aAhJhycf0ouOKX5MfAp
- 3mc1Ec0oRKmASjn/G3juxGiZMPk++J5C0pY5RIjCoG/0NFY7QLfeNZj+tbVKhkfqt0T+IFdzwMwmrN
- uUUWXBdHUuHPfUlZCvbhXeUx+jY6fDajjRvpjAf3Nt66rsHWzkokYRzk3hBNYOg/NMaM7g8XYQAWeY
- iJsXxNG0RU05traqr4buJj6xOOYhku
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yang Shi <shy828301@gmail.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [v2] fs/proc/task_mmu: Implement IOCTL for efficient page table
+ scanning
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+References: <20230713101415.108875-6-usama.anjum@collabora.com>
+ <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
+ <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com>
+ <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
+ <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com>
+ <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-While it's a bit off topic for them the floating point stress tests do give
-us some coverage of context thrashing cases, and also of active signal
-delivery separate to the relatively complicated framework in the actual
-signals tests. Have the tests enable GCS on startup, ignoring failures so
-they continue to work as before on systems without GCS.
+Fixed found bugs. Testing it further.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
+- Split and backoff in case buffer full case as well
+- Fix the wrong breaking of loop if page isn't interesting, skip intead
+- Untag the address and save them into struct
+- Round off the end address to next page
+
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/arm64/fp/assembler.h   | 15 +++++++++++++++
- tools/testing/selftests/arm64/fp/fpsimd-test.S |  2 ++
- tools/testing/selftests/arm64/fp/sve-test.S    |  2 ++
- tools/testing/selftests/arm64/fp/za-test.S     |  2 ++
- tools/testing/selftests/arm64/fp/zt-test.S     |  2 ++
- 5 files changed, 23 insertions(+)
+ fs/proc/task_mmu.c | 54 ++++++++++++++++++++++++++--------------------
+ 1 file changed, 31 insertions(+), 23 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/assembler.h b/tools/testing/selftests/arm64/fp/assembler.h
-index 9b38a0da407d..7012f9f796de 100644
---- a/tools/testing/selftests/arm64/fp/assembler.h
-+++ b/tools/testing/selftests/arm64/fp/assembler.h
-@@ -65,4 +65,19 @@ endfunction
- 	bl	puts
- .endm
- 
-+#define PR_SET_SHADOW_STACK_STATUS      72
-+# define PR_SHADOW_STACK_ENABLE         (1UL << 0)
-+
-+.macro enable_gcs
-+	// Run with GCS
-+	mov	x0, PR_SET_SHADOW_STACK_STATUS
-+	mov	x1, PR_SHADOW_STACK_ENABLE
-+	mov	x2, xzr
-+	mov	x3, xzr
-+	mov	x4, xzr
-+	mov	x5, xzr
-+	mov	x8, #__NR_prctl
-+	svc	#0
-+.endm
-+
- #endif /* ! ASSEMBLER_H */
-diff --git a/tools/testing/selftests/arm64/fp/fpsimd-test.S b/tools/testing/selftests/arm64/fp/fpsimd-test.S
-index 8b960d01ed2e..b16fb7f42e3e 100644
---- a/tools/testing/selftests/arm64/fp/fpsimd-test.S
-+++ b/tools/testing/selftests/arm64/fp/fpsimd-test.S
-@@ -215,6 +215,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
-index 4328895dfc87..486634bc7def 100644
---- a/tools/testing/selftests/arm64/fp/sve-test.S
-+++ b/tools/testing/selftests/arm64/fp/sve-test.S
-@@ -378,6 +378,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// Irritation signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
-index 9dcd70911397..f789694fa3ea 100644
---- a/tools/testing/selftests/arm64/fp/za-test.S
-+++ b/tools/testing/selftests/arm64/fp/za-test.S
-@@ -231,6 +231,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/zt-test.S b/tools/testing/selftests/arm64/fp/zt-test.S
-index d63286397638..ea5e55310705 100644
---- a/tools/testing/selftests/arm64/fp/zt-test.S
-+++ b/tools/testing/selftests/arm64/fp/zt-test.S
-@@ -200,6 +200,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index add21fdf3c9a..64b326d0ec6d 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -1764,7 +1764,8 @@ struct pagemap_scan_private {
+ 	struct page_region __user* vec_out;
+ };
 
+-static unsigned long pagemap_page_category(struct vm_area_struct *vma,
+unsigned long addr, pte_t pte)
++static unsigned long pagemap_page_category(struct vm_area_struct *vma,
++					   unsigned long addr, pte_t pte)
+ {
+ 	unsigned long categories = 0;
+
+@@ -1908,6 +1909,7 @@ static bool pagemap_scan_is_interesting_vma(unsigned
+long categories,
+ 	categories ^= p->arg.category_inverted;
+ 	if ((categories & required) != required)
+ 		return false;
++
+ 	return true;
+ }
+
+@@ -1930,6 +1932,7 @@ static int pagemap_scan_test_walk(unsigned long
+start, unsigned long end,
+ 		return 1;
+
+ 	p->cur_vma_category = vma_category;
++
+ 	return 0;
+ }
+
+@@ -1961,6 +1964,7 @@ static bool pagemap_scan_push_range(unsigned long
+categories,
+ 	cur_buf->start = addr;
+ 	cur_buf->end = end;
+ 	cur_buf->categories = categories;
++
+ 	return true;
+ }
+
+@@ -1985,18 +1989,19 @@ static int pagemap_scan_output(unsigned long
+categories,
+ 	unsigned long n_pages, total_pages;
+ 	int ret = 0;
+
++	if (!p->vec_buf)
++		return 0;
++
+ 	if (!pagemap_scan_is_interesting_page(categories, p)) {
+ 		*end = addr;
+ 		return 0;
+ 	}
+
+-	if (!p->vec_buf)
+-		return 0;
+-
+ 	categories &= p->arg.return_mask;
+
+ 	n_pages = (*end - addr) / PAGE_SIZE;
+-	if (check_add_overflow(p->found_pages, n_pages, &total_pages) ||
+total_pages > p->arg.max_pages) {
++	if (check_add_overflow(p->found_pages, n_pages, &total_pages) ||
++	    total_pages > p->arg.max_pages) {
+ 		size_t n_too_much = total_pages - p->arg.max_pages;
+ 		*end -= n_too_much * PAGE_SIZE;
+ 		n_pages -= n_too_much;
+@@ -2012,6 +2017,7 @@ static int pagemap_scan_output(unsigned long categories,
+ 	p->found_pages += n_pages;
+ 	if (ret)
+ 		p->end_addr = *end;
++
+ 	return ret;
+ }
+
+@@ -2044,7 +2050,7 @@ static int pagemap_scan_thp_entry(pmd_t *pmd,
+unsigned long start,
+ 	 * Break huge page into small pages if the WP operation
+ 	 * need to be performed is on a portion of the huge page.
+ 	 */
+-	if (end != start + HPAGE_SIZE) {
++	if (end != start + HPAGE_SIZE || ret == -ENOSPC) {
+ 		spin_unlock(ptl);
+ 		split_huge_pmd(vma, pmd, start);
+ 		pagemap_scan_backout_range(p, start, end);
+@@ -2066,8 +2072,8 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
+unsigned long start,
+ {
+ 	struct pagemap_scan_private *p = walk->private;
+ 	struct vm_area_struct *vma = walk->vma;
++	unsigned long addr, categories, next;
+ 	pte_t *pte, *start_pte;
+-	unsigned long addr;
+ 	bool flush = false;
+ 	spinlock_t *ptl;
+ 	int ret;
+@@ -2088,12 +2094,14 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
+unsigned long start,
+ 	}
+
+ 	for (addr = start; addr != end; pte++, addr += PAGE_SIZE) {
+-		unsigned long categories = p->cur_vma_category |
+-			pagemap_page_category(vma, addr, ptep_get(pte));
+-		unsigned long next = addr + PAGE_SIZE;
++		categories = p->cur_vma_category |
++			     pagemap_page_category(vma, addr, ptep_get(pte));
++		next = addr + PAGE_SIZE;
+
+ 		ret = pagemap_scan_output(categories, p, addr, &next);
+-		if (next == addr)
++		if (ret == 0 && next == addr)
++			continue;
++		else if (next == addr)
+ 			break;
+
+ 		if (~p->arg.flags & PM_SCAN_WP_MATCHING)
+@@ -2175,7 +2183,7 @@ static int pagemap_scan_pte_hole(unsigned long addr,
+unsigned long end,
+ {
+ 	struct pagemap_scan_private *p = walk->private;
+ 	struct vm_area_struct *vma = walk->vma;
+-	int ret;
++	int ret, err;
+
+ 	if (!vma)
+ 		return 0;
+@@ -2187,7 +2195,7 @@ static int pagemap_scan_pte_hole(unsigned long addr,
+unsigned long end,
+ 	if (~p->arg.flags & PM_SCAN_WP_MATCHING)
+ 		return ret;
+
+-	int err = uffd_wp_range(vma, addr, end - addr, true);
++	err = uffd_wp_range(vma, addr, end - addr, true);
+ 	if (err < 0)
+ 		ret = err;
+
+@@ -2204,8 +2212,6 @@ static const struct mm_walk_ops pagemap_scan_ops = {
+ static int pagemap_scan_get_args(struct pm_scan_arg *arg,
+ 				 unsigned long uarg)
+ {
+-	unsigned long start, end, vec;
+-
+ 	if (copy_from_user(arg, (void __user *)uarg, sizeof(*arg)))
+ 		return -EFAULT;
+
+@@ -2219,22 +2225,24 @@ static int pagemap_scan_get_args(struct pm_scan_arg
+*arg,
+ 	     arg->category_anyof_mask | arg->return_mask) & ~PM_SCAN_CATEGORIES)
+ 		return -EINVAL;
+
+-	start = untagged_addr((unsigned long)arg->start);
+-	end = untagged_addr((unsigned long)arg->end);
+-	vec = untagged_addr((unsigned long)arg->vec);
++	arg->start = untagged_addr((unsigned long)arg->start);
++	arg->end = untagged_addr((unsigned long)arg->end);
++	arg->vec = untagged_addr((unsigned long)arg->vec);
+
+ 	/* Validate memory pointers */
+-	if (!IS_ALIGNED(start, PAGE_SIZE))
++	if (!IS_ALIGNED(arg->start, PAGE_SIZE))
+ 		return -EINVAL;
+-	if (!access_ok((void __user *)start, end - start))
++	if (!access_ok((void __user *)arg->start, arg->end - arg->start))
+ 		return -EFAULT;
+-	if (!vec && arg->vec_len)
++	if (!arg->vec && arg->vec_len)
+ 		return -EFAULT;
+-	if (vec && !access_ok((void __user *)vec,
++	if (arg->vec && !access_ok((void __user *)arg->vec,
+ 			      arg->vec_len * sizeof(struct page_region)))
+ 		return -EFAULT;
+
+ 	/* Fixup default values */
++	arg->end = (arg->end & ~PAGE_MASK) ?
++		   ((arg->end & PAGE_MASK) + PAGE_SIZE) : (arg->end);
+ 	if (!arg->max_pages)
+ 		arg->max_pages = ULONG_MAX;
+
+@@ -2279,7 +2287,7 @@ static int pagemap_scan_init_bounce_buffer(struct
+pagemap_scan_private *p)
+ 	if (!p->vec_buf)
+ 		return -ENOMEM;
+
+-	p->vec_out = (void __user *)p->arg.vec;
++	p->vec_out = (struct page_region __user *)p->arg.vec;
+
+ 	return 0;
+ }
 -- 
-2.30.2
+2.39.2
 
