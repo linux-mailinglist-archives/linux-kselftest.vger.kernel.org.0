@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A1B75F4AB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 13:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1397475F4B1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 13:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjGXLOC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 07:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
+        id S231951AbjGXLOT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 07:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjGXLNs (ORCPT
+        with ESMTP id S231927AbjGXLOB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 07:13:48 -0400
+        Mon, 24 Jul 2023 07:14:01 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4766CE5A;
-        Mon, 24 Jul 2023 04:13:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88281B3;
+        Mon, 24 Jul 2023 04:13:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690197227; x=1721733227;
+  t=1690197228; x=1721733228;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Evb/uH75XnFTXbrCht5Yjl6IDfDcpiTHryTOzFFcMAQ=;
-  b=h3o5pnDT5/KWnZtKO87Ady4zUBbTYiVUFdFY0RiDAEAu7UCp+VDIOqBA
-   GakAV+T5waYMkOMsacNhZrgL2CzFSeaWzsp2bpDuK/Fyg7KfW59na9gXU
-   DRfAY/INok270TtAqNdf0iLKlxEC1p8CWpSu6NM1pzDnkYuWKb9sndrfo
-   yBX/UJVOyU4wgMzWtdZ6snw/XOe1jpPxQ937XabDNWB0dUCs7qCiWunzL
-   VQn/e98ncMLZ5+lHHJasyfn80QiNwXQQG8w9doOOz7ZN1zDZYdQslLi6c
-   g5xD392inpg4qXToFD+rVGwRyFD742O1Vt3aVzf/rhT5uv/NHC8nq32+e
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="347015022"
+  bh=kFFC2bK/nCwVQZLA9Z70O9G3InA/Pl+u4zLi4egWg38=;
+  b=nMdUS50/mijbGr/M+mI6LtAQww3p0rFKJzYCzE+Gvs3SFtI9neUjoST5
+   +125JXZTS9iSiO+dvhOpkWEUSjrbaIK8SZqnMKEk+2Bwml21gdUIwd9eE
+   hwXHOQLk+VjfEtHpOpefCQ1nPgsIr6fIQo8RcLPeF2kTmqz40800NGBOT
+   zxKKxYkkW+WXBD2HkyLFAc+//kwzcxf3JDIUHbNq0L+nbe8J0SXfpeJAh
+   +OuxfUVKjuaDxzSy8cpP/Mu7RWnFodSIh6fAHSfZLtxxEHNASDgP0akPy
+   8dRCISJRnUJ2GPXkCxBDLOu6DyhZnqyCUjsW2dKjriCsFxemWUtLM3xrC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="347015038"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="347015022"
+   d="scan'208";a="347015038"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:13:46 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:13:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="839415556"
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="839415576"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="839415556"
+   d="scan'208";a="839415576"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Jul 2023 04:13:46 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 24 Jul 2023 04:13:47 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -51,9 +51,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com
-Subject: [PATCH v4 08/12] iommu/vt-d: Make iotlb flush helpers to be extern
-Date:   Mon, 24 Jul 2023 04:13:30 -0700
-Message-Id: <20230724111335.107427-9-yi.l.liu@intel.com>
+Subject: [PATCH v4 09/12] iommu/vt-d: Add iotlb flush for nested domain
+Date:   Mon, 24 Jul 2023 04:13:31 -0700
+Message-Id: <20230724111335.107427-10-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230724111335.107427-1-yi.l.liu@intel.com>
 References: <20230724111335.107427-1-yi.l.liu@intel.com>
@@ -69,59 +69,91 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This makes the helpers visible to nested.c.
+This implements the .cache_invalidate_user() callback and sets the
+.cache_invalidate_user_data_len to support iotlb flush for nested domain.
 
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/intel/iommu.c | 10 +++++-----
- drivers/iommu/intel/iommu.h |  6 ++++++
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ drivers/iommu/intel/nested.c | 63 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 289e8c2417ad..3119a79ebc83 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1466,10 +1466,10 @@ static void iommu_flush_dev_iotlb(struct dmar_domain *domain,
- 	spin_unlock_irqrestore(&domain->lock, flags);
+diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
+index 98164894f22f..2739c0d7880d 100644
+--- a/drivers/iommu/intel/nested.c
++++ b/drivers/iommu/intel/nested.c
+@@ -69,8 +69,71 @@ static void intel_nested_domain_free(struct iommu_domain *domain)
+ 	kfree(to_dmar_domain(domain));
  }
  
--static void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
--				  struct dmar_domain *domain,
--				  unsigned long pfn, unsigned int pages,
--				  int ih, int map)
-+void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
-+			   struct dmar_domain *domain,
-+			   unsigned long pfn, unsigned int pages,
-+			   int ih, int map)
- {
- 	unsigned int aligned_pages = __roundup_pow_of_two(pages);
- 	unsigned int mask = ilog2(aligned_pages);
-@@ -1542,7 +1542,7 @@ static inline void __mapping_notify_one(struct intel_iommu *iommu,
- 		iommu_flush_write_buffer(iommu);
- }
- 
--static void intel_flush_iotlb_all(struct iommu_domain *domain)
-+void intel_flush_iotlb_all(struct iommu_domain *domain)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	struct iommu_domain_info *info;
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 4b12166a9c3f..5b292213bcb8 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -859,6 +859,12 @@ int prepare_domain_attach_device(struct iommu_domain *domain,
- 				 struct device *dev);
- bool intel_iommu_enforce_cache_coherency(struct iommu_domain *domain);
- void domain_update_iommu_cap(struct dmar_domain *domain);
-+void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
-+			   struct dmar_domain *domain,
-+			   unsigned long pfn, unsigned int pages,
-+			   int ih, int map);
-+void intel_flush_iotlb_all(struct iommu_domain *domain);
++static void intel_nested_invalidate(struct device *dev,
++				    struct dmar_domain *domain,
++				    u64 addr, unsigned long npages)
++{
++	struct device_domain_info *info = dev_iommu_priv_get(dev);
++	struct intel_iommu *iommu = info->iommu;
 +
- 
- int dmar_ir_support(void);
- 
++	if (addr == 0 && npages == -1)
++		intel_flush_iotlb_all(&domain->domain);
++	else
++		iommu_flush_iotlb_psi(iommu, domain,
++				      addr >> VTD_PAGE_SHIFT,
++				      npages, 1, 0);
++}
++
++static int intel_nested_cache_invalidate_user(struct iommu_domain *domain,
++					      void *user_data)
++{
++	struct iommu_hwpt_vtd_s1_invalidate_desc *req = user_data;
++	struct iommu_hwpt_vtd_s1_invalidate *inv_info = user_data;
++	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
++	unsigned int entry_size = inv_info->entry_size;
++	u64 uptr = inv_info->inv_data_uptr;
++	u64 nr_uptr = inv_info->entry_nr_uptr;
++	struct device_domain_info *info;
++	u32 entry_nr, index;
++	unsigned long flags;
++	int ret = 0;
++
++	if (get_user(entry_nr, (uint32_t __user *)u64_to_user_ptr(nr_uptr)))
++		return -EFAULT;
++
++	for (index = 0; index < entry_nr; index++) {
++		ret = copy_struct_from_user(req, sizeof(*req),
++					    u64_to_user_ptr(uptr + index * entry_size),
++					    entry_size);
++		if (ret) {
++			pr_err_ratelimited("Failed to fetch invalidation request\n");
++			break;
++		}
++
++		if (req->__reserved || (req->flags & ~IOMMU_VTD_QI_FLAGS_LEAF) ||
++		    !IS_ALIGNED(req->addr, VTD_PAGE_SIZE)) {
++			ret = -EINVAL;
++			break;
++		}
++
++		spin_lock_irqsave(&dmar_domain->lock, flags);
++		list_for_each_entry(info, &dmar_domain->devices, link)
++			intel_nested_invalidate(info->dev, dmar_domain,
++						req->addr, req->npages);
++		spin_unlock_irqrestore(&dmar_domain->lock, flags);
++	}
++
++	if (put_user(index, (uint32_t __user *)u64_to_user_ptr(nr_uptr)))
++		return -EFAULT;
++
++	return ret;
++}
++
+ static const struct iommu_domain_ops intel_nested_domain_ops = {
+ 	.attach_dev		= intel_nested_attach_dev,
++	.cache_invalidate_user	= intel_nested_cache_invalidate_user,
++	.cache_invalidate_user_data_len =
++		sizeof(struct iommu_hwpt_vtd_s1_invalidate),
+ 	.free			= intel_nested_domain_free,
+ 	.enforce_cache_coherency = intel_iommu_enforce_cache_coherency,
+ };
 -- 
 2.34.1
 
