@@ -2,67 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E1C75FCBD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 18:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAA275FDEE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 19:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjGXQ4n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 12:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
+        id S229591AbjGXRkK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 13:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbjGXQ4l (ORCPT
+        with ESMTP id S229837AbjGXRkJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 12:56:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D5AB1
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690217752;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+i0Z9WjluIMP5uW/WBHzltLXbYemxnhhH7IUl23Qdow=;
-        b=UYDVJJa3cS2XeMYyyveCqYXqI+6rthtZCbqUxDij8FW0rH8EpjKjqlFG3Qb4iGA2gy7F8Q
-        pCTgBnUbQq/XQ6pizAOWIQp/exhF9sdGKziALElKfnW0W7mnA7RwAv+HyNyUC522hLX6Fd
-        tiSNI+rgylYR/hDjpGU/ItoDP70OEcM=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-623-srHYzZPIPZmPtwYiLKpkSw-1; Mon, 24 Jul 2023 12:55:49 -0400
-X-MC-Unique: srHYzZPIPZmPtwYiLKpkSw-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4fbe4f88b67so3935651e87.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:55:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690217748; x=1690822548;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+i0Z9WjluIMP5uW/WBHzltLXbYemxnhhH7IUl23Qdow=;
-        b=haXpJ3/38QO5iwPZYwS5gXEhanvgmzyXHyCO9N+3hBXYM6cHWLhCJjM61NG9dd96Uu
-         ueZIp5dMpSwrIEHdJBMqy7/Pk+v98ghaoBFQf1OZkODRght3EAKRHNrroQ6Sl+4KoPWR
-         NmPAEjJ5h7kB3gQqGFK9HHoS/LlN0u7Y5f25zvt8WBsL/9Z6ontCRoFWiH1K0PaeLb4K
-         J+lGdYOxSxcgUaTC8hghmcm2h0IKw0wYGK5u6SHXdM3H03dnUHQc3GR156qceR1h8ykN
-         X+QWFz0cVso7nKzaG18x15Gh6CUD7LXDYEqU2jvsF2UDoMsnm7OJfx9EWDKtgQoyVZiT
-         P3SQ==
-X-Gm-Message-State: ABy/qLaCUOI5XnyTbrACrf6GFyxghLS0jGp4QDkxztD9ap6SI9TTa5ke
-        aijqvwrJiV6fH8+TDRSVw/V3NSd57qeIPBDEGwuD64jCAC62Ql7dxqc9SCXrrtTAp1NU+jPFKnB
-        /t1tX2OPGPKaNiCXpuBhnSFqvZik8
-X-Received: by 2002:ac2:5dee:0:b0:4fb:99c6:8533 with SMTP id z14-20020ac25dee000000b004fb99c68533mr5480444lfq.33.1690217747931;
-        Mon, 24 Jul 2023 09:55:47 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlESyHT5vseo1Fe9EOmjjndUHiTWba8Rkai6N/Uo2tJlbGYCmmO/8/5WknEFctQ/nYDYCoWt/g==
-X-Received: by 2002:ac2:5dee:0:b0:4fb:99c6:8533 with SMTP id z14-20020ac25dee000000b004fb99c68533mr5480427lfq.33.1690217747520;
-        Mon, 24 Jul 2023 09:55:47 -0700 (PDT)
-Received: from vschneid.remote.csb ([149.12.7.81])
-        by smtp.gmail.com with ESMTPSA id o25-20020a1c7519000000b003fbaade0735sm13965691wmc.19.2023.07.24.09.55.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 09:55:47 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Mon, 24 Jul 2023 13:40:09 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6F9C0;
+        Mon, 24 Jul 2023 10:40:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690220407; x=1721756407;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=c5Z6pBHbsES+jLFL8lHM4LvuACi7M2wwU23RdacU0yA=;
+  b=CtK0goGQkODinWx2CYn5Iyvj6TNpOz6xmeFPka2f81gfQD7UH9qAh7/9
+   IZhN3MzQ0+6pb4zRhg8PUriOR3lv4+QPaqW8Kr8UrVJEd2F2SdqRmr1i8
+   JB2wE8wfxpAcnzkkq6iX3Qa6itlq+GppDlMj5lQ9xfVinegPEWVB+//xb
+   tR9PA19OPZCBxd3fHT7XFoBtKrZoD0WEoWuC68FzH4ZCTsVGmJeUyjyER
+   +zgML7vpKOfJrvreCELAPmk52oT/Vwoi/30kV/ZagwyTIJI5uQ1h45csb
+   fIi+/PfTVLBY4T22Ov2Wb3sBrWCJBzas6qtxsLDsFGqhuQwYxvycV0sFT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="364968436"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="364968436"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 10:40:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="849718874"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="849718874"
+Received: from zhihuich-mobl.amr.corp.intel.com (HELO [10.251.18.158]) ([10.251.18.158])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 10:40:05 -0700
+Message-ID: <2284d0db-f94a-e059-7bd0-bab4f112ed35@intel.com>
+Date:   Mon, 24 Jul 2023 10:40:04 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [RFC PATCH v2 20/20] x86/mm, mm/vmalloc: Defer
+ flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
+Content-Language: en-US
+To:     Valentin Schneider <vschneid@redhat.com>,
+        Nadav Amit <namit@vmware.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -75,6 +70,7 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Neeraj Upadhyay <quic_neeraju@quicinc.com>,
         Joel Fernandes <joel@joelfernandes.org>,
@@ -96,7 +92,6 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Juerg Haefliger <juerg.haefliger@canonical.com>,
         Nicolas Saenz Julienne <nsaenz@kernel.org>,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Nadav Amit <namit@vmware.com>,
         Dan Carpenter <error27@gmail.com>,
         Chuang Wang <nashuiliang@gmail.com>,
         Yang Jihong <yangjihong1@huawei.com>,
@@ -105,147 +100,56 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Julian Pidancet <julian.pidancet@oracle.com>,
         Tom Lendacky <thomas.lendacky@amd.com>,
         Dionna Glaze <dionnaglaze@google.com>,
-        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
         Juri Lelli <juri.lelli@redhat.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH v2 15/20] context-tracking: Introduce work deferral
- infrastructure
-In-Reply-To: <ZL6QI4mV-NKlh4Ox@localhost.localdomain>
 References: <20230720163056.2564824-1-vschneid@redhat.com>
- <20230720163056.2564824-16-vschneid@redhat.com>
- <ZL6QI4mV-NKlh4Ox@localhost.localdomain>
-Date:   Mon, 24 Jul 2023 17:55:44 +0100
-Message-ID: <xhsmh351dtfjj.mognet@vschneid.remote.csb>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <20230720163056.2564824-21-vschneid@redhat.com>
+ <188AEA79-10E6-4DFF-86F4-FE624FD1880F@vmware.com>
+ <xhsmh8rb5tui1.mognet@vschneid.remote.csb>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <xhsmh8rb5tui1.mognet@vschneid.remote.csb>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 24/07/23 16:52, Frederic Weisbecker wrote:
-> Le Thu, Jul 20, 2023 at 05:30:51PM +0100, Valentin Schneider a =C3=A9crit=
- :
->> +enum ctx_state {
->> +	/* Following are values */
->> +	CONTEXT_DISABLED	=3D -1,	/* returned by ct_state() if unknown */
->> +	CONTEXT_KERNEL		=3D 0,
->> +	CONTEXT_IDLE		=3D 1,
->> +	CONTEXT_USER		=3D 2,
->> +	CONTEXT_GUEST		=3D 3,
->> +	CONTEXT_MAX             =3D 4,
->> +};
->> +
->> +/*
->> + * We cram three different things within the same atomic variable:
->> + *
->> + *                CONTEXT_STATE_END                        RCU_DYNTICKS=
-_END
->> + *                         |       CONTEXT_WORK_END                |
->> + *                         |               |                       |
->> + *                         v               v                       v
->> + *         [ context_state ][ context work ][ RCU dynticks counter ]
->> + *         ^                ^               ^
->> + *         |                |               |
->> + *         |        CONTEXT_WORK_START      |
->> + * CONTEXT_STATE_START              RCU_DYNTICKS_START
->
-> Should the layout be displayed in reverse? Well at least I always picture
-> bitmaps in reverse, that's probably due to the direction of the shift arr=
-ows.
-> Not sure what is the usual way to picture it though...
->
+On 7/24/23 04:32, Valentin Schneider wrote:
+> AFAICT the only reasonable way to go about the deferral is to prove that no
+> such access happens before the deferred @operation is done. We got to prove
+> that for sync_core() deferral, cf. PATCH 18.
+> 
+> I'd like to reason about it for deferring vunmap TLB flushes:
+> 
+> What addresses in VMAP range, other than the stack, can early entry code
+> access? Yes, the ranges can be checked at runtime, but is there any chance
+> of figuring this out e.g. at build-time?
 
-Surprisingly, I managed to confuse myself with that comment :-)  I think I
-am subconsciously more used to the reverse as well. I've flipped that and
-put "MSB" / "LSB" at either end.
+Nadav was touching on a very important point: TLB flushes for addresses
+are relatively easy to defer.  You just need to ensure that the CPU
+deferring the flush does an actual flush before it might architecturally
+consume the contents of the flushed entry.
 
->> + */
->> +
->> +#define CT_STATE_SIZE (sizeof(((struct context_tracking *)0)->state) * =
-BITS_PER_BYTE)
->> +
->> +#define CONTEXT_STATE_START 0
->> +#define CONTEXT_STATE_END   (bits_per(CONTEXT_MAX - 1) - 1)
->
-> Since you have non overlapping *_START symbols, perhaps the *_END
-> are superfluous?
->
+TLB flushes for freed page tables are another game entirely.  The CPU is
+free to cache any part of the paging hierarchy it wants at any time.
+It's also free to set accessed and dirty bits at any time, even for
+instructions that may never execute architecturally.
 
-They're only really there to tidy up the GENMASK() further down - it keeps
-the range and index definitions in one hunk. I tried defining that directly
-within the GENMASK() themselves but it got too ugly IMO.
+That basically means that if you have *ANY* freed page table page
+*ANYWHERE* in the page table hierarchy of any CPU at any time ... you're
+screwed.
 
->> +
->> +#define RCU_DYNTICKS_BITS  (IS_ENABLED(CONFIG_CONTEXT_TRACKING_WORK) ? =
-16 : 31)
->> +#define RCU_DYNTICKS_START (CT_STATE_SIZE - RCU_DYNTICKS_BITS)
->> +#define RCU_DYNTICKS_END   (CT_STATE_SIZE - 1)
->> +#define RCU_DYNTICKS_IDX   BIT(RCU_DYNTICKS_START)
->
-> Might be the right time to standardize and fix our naming:
->
-> CT_STATE_START,
-> CT_STATE_KERNEL,
-> CT_STATE_USER,
-> ...
-> CT_WORK_START,
-> CT_WORK_*,
-> ...
-> CT_RCU_DYNTICKS_START,
-> CT_RCU_DYNTICKS_IDX
->
+There's no reasoning about accesses or ordering.  As soon as the CPU
+does *anything*, it's out to get you.
 
-Heh, I have actually already done this for v3, though I hadn't touched the
-RCU_DYNTICKS* family. I'll fold that in.
-
->> +bool ct_set_cpu_work(unsigned int cpu, unsigned int work)
->> +{
->> +	struct context_tracking *ct =3D per_cpu_ptr(&context_tracking, cpu);
->> +	unsigned int old;
->> +	bool ret =3D false;
->> +
->> +	preempt_disable();
->> +
->> +	old =3D atomic_read(&ct->state);
->> +	/*
->> +	 * Try setting the work until either
->> +	 * - the target CPU no longer accepts any more deferred work
->> +	 * - the work has been set
->> +	 *
->> +	 * NOTE: CONTEXT_GUEST intersects with CONTEXT_USER and CONTEXT_IDLE
->> +	 * as they are regular integers rather than bits, but that doesn't
->> +	 * matter here: if any of the context state bit is set, the CPU isn't
->> +	 * in kernel context.
->> +	 */
->> +	while ((old & (CONTEXT_GUEST | CONTEXT_USER | CONTEXT_IDLE)) && !ret)
->
-> That may still miss a recent entry to userspace due to the first plain re=
-ad, ending
-> with an undesired interrupt.
->
-> You need at least one cmpxchg. Well, of course that stays racy by nature =
-because
-> between the cmpxchg() returning CONTEXT_KERNEL and the actual IPI raised =
-and
-> received, the remote CPU may have gone to userspace already. But still it=
- limits
-> a little the window.
->
-
-I can make that a 'do {} while ()' instead to force at least one execution
-of the cmpxchg().
-
-This is only about reducing the race window, right? If we're executing this
-just as the target CPU is about to enter userspace, we're going to be in
-racy territory anyway. Regardless, I'm happy to do that change.
-
+You're going to need to do something a lot more radical to deal with
+free page table pages.
