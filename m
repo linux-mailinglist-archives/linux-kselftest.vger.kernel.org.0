@@ -2,96 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA2C75FB85
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 18:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 548CD75FC21
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jul 2023 18:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjGXQLG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jul 2023 12:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
+        id S230310AbjGXQa1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jul 2023 12:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjGXQLF (ORCPT
+        with ESMTP id S229640AbjGXQa0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 12:11:05 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4CB10E7
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:11:02 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5223910acf2so8349a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:11:02 -0700 (PDT)
+        Mon, 24 Jul 2023 12:30:26 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCF31709
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:30:14 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-584139b6b03so5804337b3.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 09:30:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690215061; x=1690819861;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u3kbNyGxTzgeac58CFsNMUin81+ND8D8Z3uhWh4woO8=;
-        b=tigo2h0UJbLSdNBggb8+yka3tLWlOxt9O4d6NIR4mh9iEiIf1en0sl8VXgCF7R+a/t
-         tT7LAnPTQCFRJoo0KWqoqyRU9MAHIoPOGygj1DT5qhRnO0ELBnXIh5zBzmwOe5dznmpR
-         oK2ugIQjvmAQRczWo4nzF8BFniwOIxp8Ob3QNgni7FEXBDJPkhRsjBlyvf+2pOpfyScy
-         U2GCJzaS3tue+rOz+Sz9IInuWpFJ7fOOQw2hFvT1311EWcKQhsxRHWi26As9g75IdYr+
-         ayHwpRltXX4GhBn6/blJt9V95VxuAayWW8bx5GgGtHMzMjrA98jhAVUaJyPI8/gpIiuw
-         u1CA==
+        d=google.com; s=20221208; t=1690216213; x=1690821013;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ELz6+MdFAwylMEzq57vnQLUyST7xKxQ3gFrQ4xet5oM=;
+        b=BOuKpo28jYR0TEsF3UqCk6b9rkYbObdDcsJIOPy/T5B3QW/fTsV1V8pg6UsKAp4Auo
+         tQct2po9F1GYuWOrgrBX78Slhb4boeo9R1H3dcxBBt+xbxgxQufkI15lvoAhW7QJQVNz
+         Xgia7i3xcvOY3ceFl81PRkxmOsUXlox/ekcVwcgziBVgmT6X7s5nGzAvmvGIb5dBkCxF
+         KeUOX5jQ+XsFJw9zhr7bi9viIsgkG6z0azx3U9Rle9Ndlf94FNikuAu1pMGMlKIE1AZL
+         lRX/qFVIc5qxRf67DfVMy4hc5JXkD+OMHwpYJWInYQdyiJByR8eqL45UQemqnuPEN8r/
+         TC1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690215061; x=1690819861;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u3kbNyGxTzgeac58CFsNMUin81+ND8D8Z3uhWh4woO8=;
-        b=NYd/8vhCLnsD5pdBX4fR6nSo/s+YYjM5yl6F+1InWGZEoKkkdaWSWgs9cP17D8z9di
-         9hhP1GGNIYqOfA93F+H3RGArIsjLj8BKdwTFQ35cImC5g28WU/BG5InPTq/vshooBk21
-         DLOTk5hCUqd7QRGyPBYMvfIQUh4J3sWkbE4t4TlgsCuVUUg51R/mWDEyBOkn4cRdrTdx
-         Fes98K0ukJ9zx7CU4qo8ZXZ7CCQ2+JNWrnrbQwHdQyUPWYOo7LGnk6tMpE+tJB+jJOmj
-         J9F1TRF7IfkKCqDZcduWSNTph/exySsNQ4DKF0bFWcLHKleQrZkcUYg8xw+BFnJ5j9AB
-         ZPJQ==
-X-Gm-Message-State: ABy/qLZfKmZD7ld+OinQoeJ8vsThmu+zcOTZVPpPJ9SzjB3uFIR8uBec
-        zZWjJgyn55XqUI0m/y1XKm/Vw2uETWU0W1j15CdTtA==
-X-Google-Smtp-Source: APBJJlF8bHvRHeT2oqat2ATehlhxW6USprsvQrLWXhzWPyCpmacj5+zK0woo1RH6qpDsIl+dtTSAFcyumUKkKtf+1lM=
-X-Received: by 2002:a50:d798:0:b0:522:28a1:2095 with SMTP id
- w24-20020a50d798000000b0052228a12095mr116981edi.3.1690215061016; Mon, 24 Jul
- 2023 09:11:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230713101415.108875-6-usama.anjum@collabora.com>
- <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
- <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com> <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
- <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com> <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
- <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com> <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
- <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com>
-In-Reply-To: <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Mon, 24 Jul 2023 18:10:49 +0200
-Message-ID: <CABb0KFHJVeEkh4f6WWK6FThCbA+NE8iYUZE68nV1YAxaHwiwog@mail.gmail.com>
-Subject: Re: [v2] fs/proc/task_mmu: Implement IOCTL for efficient page table scanning
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yang Shi <shy828301@gmail.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        kernel@collabora.com
+        d=1e100.net; s=20221208; t=1690216213; x=1690821013;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ELz6+MdFAwylMEzq57vnQLUyST7xKxQ3gFrQ4xet5oM=;
+        b=AO3ua/h5u43bq7fH+jelZLZcsuYi2+5NlnFLKnnWN8VgxoJHwVGSQMQdCRORtU9BpE
+         IMe6uMoQwWxonHKz4X0TgBolbA/1/TL4swORGqbzkNpv61s6oOYqUaBhM2vNOT2D8pQq
+         DAnAxej1yVgS3iDTLQWtZGL+S49hF3vllDl+cGb2BFb1el5ULu9mIaujgdbniPZs8Ra6
+         JEde/1UfM5+Sf2CYFUef2Lq16sOirH7Zqbnv/3GPreXgfcPBiO4aTpRuP84MPh/9KTSO
+         Ol2PGuXX0kq3umPr7VNRfWN8BMYhqODwwXEcfcVwZBa8Oxb3hMQWwovS3Mu/6zIoYuuz
+         nMwA==
+X-Gm-Message-State: ABy/qLYeNB4BhRChQy/5JKGevrI9j62RtzikOp3izGC50wZmW9lxI2vG
+        at4yYBaB5/2bxia4wuaW0WShQCbiLg==
+X-Google-Smtp-Source: APBJJlGtp5p2K9FdBn6pyk++nPqX3JkC9EH97uae7sq/bwcn6aiUH2AEtN05a6P4phxsPwUGKKlDDw6pbg==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a25:d887:0:b0:d12:d6e4:a08d with SMTP id
+ p129-20020a25d887000000b00d12d6e4a08dmr12086ybg.7.1690216213261; Mon, 24 Jul
+ 2023 09:30:13 -0700 (PDT)
+Date:   Mon, 24 Jul 2023 16:28:20 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
+Message-ID: <20230724162834.1354164-1-rmoar@google.com>
+Subject: [PATCH v2 0/9] kunit: Add test attributes API
+From:   Rae Moar <rmoar@google.com>
+To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
+        brendan.higgins@linux.dev
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, jstultz@google.com,
+        tglx@linutronix.de, sboyd@kernel.org, Rae Moar <rmoar@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,113 +69,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 24 Jul 2023 at 17:22, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> On 7/24/23 7:38=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Mon, 24 Jul 2023 at 16:04, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >>
-> >> Fixed found bugs. Testing it further.
-> >>
-> >> - Split and backoff in case buffer full case as well
-> >> - Fix the wrong breaking of loop if page isn't interesting, skip intea=
-d
-> >> - Untag the address and save them into struct
-> >> - Round off the end address to next page
-> >>
-> >> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> >> ---
-> >>  fs/proc/task_mmu.c | 54 ++++++++++++++++++++++++++-------------------=
--
-> >>  1 file changed, 31 insertions(+), 23 deletions(-)
-> >>
-> >> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> >> index add21fdf3c9a..64b326d0ec6d 100644
-> >> --- a/fs/proc/task_mmu.c
-> >> +++ b/fs/proc/task_mmu.c
-> >> @@ -2044,7 +2050,7 @@ static int pagemap_scan_thp_entry(pmd_t *pmd,
-> >> unsigned long start,
-> >>          * Break huge page into small pages if the WP operation
-> >>          * need to be performed is on a portion of the huge page.
-> >>          */
-> >> -       if (end !=3D start + HPAGE_SIZE) {
-> >> +       if (end !=3D start + HPAGE_SIZE || ret =3D=3D -ENOSPC) {
-> >
-> > Why is it needed? If `end =3D=3D start + HPAGE_SIZE` then we're handlin=
-g a
-> > full hugepage anyway.
-> If we weren't able to add the complete thp in the output buffer and we ne=
-ed
-> to perform WP on the entire page, we should split and rollback. Otherwise
-> we'll WP the entire thp and we'll lose the state on the remaining THP whi=
-ch
-> wasn't added to output.
->
-> Lets say max=3D100
-> only 100 pages would be added to output
-> we need to split and rollback otherwise other 412 pages would get WP
+Hello everyone,
 
-In this case *end will be truncated by output() to match the number of
-pages that fit.
+This patch series adds a test attributes framework to KUnit.
 
-> >> @@ -2066,8 +2072,8 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
-> >> unsigned long start,
-> >>  {
-> >>         struct pagemap_scan_private *p =3D walk->private;
-> >>         struct vm_area_struct *vma =3D walk->vma;
-> >> +       unsigned long addr, categories, next;
-> >>         pte_t *pte, *start_pte;
-> >> -       unsigned long addr;
-> >>         bool flush =3D false;
-> >>         spinlock_t *ptl;
-> >>         int ret;
-> >> @@ -2088,12 +2094,14 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
-> >> unsigned long start,
-> >>         }
-> >>
-> >>         for (addr =3D start; addr !=3D end; pte++, addr +=3D PAGE_SIZE=
-) {
-> >> -               unsigned long categories =3D p->cur_vma_category |
-> >> -                       pagemap_page_category(vma, addr, ptep_get(pte)=
-);
-> >> -               unsigned long next =3D addr + PAGE_SIZE;
-> >> +               categories =3D p->cur_vma_category |
-> >> +                            pagemap_page_category(vma, addr, ptep_get=
-(pte));
-> >> +               next =3D addr + PAGE_SIZE;
-> >
-> > Why moving the variable declarations out of the loop?
-> Saving spaces inside loop. What are pros of declation of variable in loop=
-?
+There has been interest in filtering out "slow" KUnit tests. Most notably,
+a new config, CONFIG_MEMCPY_SLOW_KUNIT_TEST, has been added to exclude a
+particularly slow memcpy test
+(https://lore.kernel.org/all/20230118200653.give.574-kees@kernel.org/).
 
-Informing the reader that the variables have scope limited to the loop body=
-.
+This attributes framework can be used to save and access test associated
+data, including whether a test is slow. These attributes are reportable
+(via KTAP and command line output) and are also filterable.
 
-[...]
-> >> @@ -2219,22 +2225,24 @@ static int pagemap_scan_get_args(struct pm_sca=
-n_arg
-> >> *arg,
-> >>              arg->category_anyof_mask | arg->return_mask) & ~PM_SCAN_C=
-ATEGORIES)
-> >>                 return -EINVAL;
-> >>
-> >> -       start =3D untagged_addr((unsigned long)arg->start);
-> >> -       end =3D untagged_addr((unsigned long)arg->end);
-> >> -       vec =3D untagged_addr((unsigned long)arg->vec);
-> >> +       arg->start =3D untagged_addr((unsigned long)arg->start);
-> >> +       arg->end =3D untagged_addr((unsigned long)arg->end);
-> >> +       arg->vec =3D untagged_addr((unsigned long)arg->vec);
-> >
-> > BTW, We should we keep the tag in args writeback().
-> Sorry what?
-> After this function, the start, end and vec would be used. We need to mak=
-e
-> sure that the address are untagged before that.
+This framework is designed to allow for the addition of other attributes in
+the future. These attributes could include whether the test can be run
+concurrently, test file path, etc.
 
-We do write back the address the walk ended at to arg->start in
-userspace. This pointer I think needs the tag reconstructed so that
-retrying the ioctl() will be possible.
+To try out the framework I suggest running:
+"./tools/testing/kunit/kunit.py run --filter speed!=slow"
 
- Best Regards
-Micha=C5=82 Miros=C5=82aw
+This patch series was originally sent out as an RFC. Here is a link to the
+RFC v2:
+https://lore.kernel.org/all/20230707210947.1208717-1-rmoar@google.com/
+
+Thanks!
+Rae
+
+Rae Moar (9):
+  kunit: Add test attributes API structure
+  kunit: Add speed attribute
+  kunit: Add module attribute
+  kunit: Add ability to filter attributes
+  kunit: tool: Add command line interface to filter and report
+    attributes
+  kunit: memcpy: Mark tests as slow using test attributes
+  kunit: time: Mark test as slow using test attributes
+  kunit: add tests for filtering attributes
+  kunit: Add documentation of KUnit test attributes
+
+ .../dev-tools/kunit/running_tips.rst          | 166 +++++++
+ include/kunit/attributes.h                    |  50 +++
+ include/kunit/test.h                          |  70 ++-
+ kernel/time/time_test.c                       |   2 +-
+ lib/Kconfig.debug                             |   3 +
+ lib/kunit/Makefile                            |   3 +-
+ lib/kunit/attributes.c                        | 418 ++++++++++++++++++
+ lib/kunit/executor.c                          | 115 ++++-
+ lib/kunit/executor_test.c                     | 128 +++++-
+ lib/kunit/kunit-example-test.c                |   9 +
+ lib/kunit/test.c                              |  27 +-
+ lib/memcpy_kunit.c                            |   8 +-
+ tools/testing/kunit/kunit.py                  |  70 ++-
+ tools/testing/kunit/kunit_kernel.py           |   8 +-
+ tools/testing/kunit/kunit_parser.py           |  11 +-
+ tools/testing/kunit/kunit_tool_test.py        |  39 +-
+ 16 files changed, 1051 insertions(+), 76 deletions(-)
+ create mode 100644 include/kunit/attributes.h
+ create mode 100644 lib/kunit/attributes.c
+
+
+base-commit: 64bd4641310c41a1ecf07c13c67bc0ed61045dfd
+-- 
+2.41.0.487.g6d72f3e995-goog
+
