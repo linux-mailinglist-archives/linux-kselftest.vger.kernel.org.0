@@ -2,59 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FE0762572
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 00:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48AF762578
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 00:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbjGYWDT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 18:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
+        id S231302AbjGYWDX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 18:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbjGYWDC (ORCPT
+        with ESMTP id S231913AbjGYWDC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 25 Jul 2023 18:03:02 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8FF30D8
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:29 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5618857518dso58152437b3.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:29 -0700 (PDT)
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D91830E3
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:30 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-563ab574cb5so1114945a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690322532; x=1690927332;
+        d=google.com; s=20221208; t=1690322535; x=1690927335;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BglVD3tTlL86xZX6Z5R3ezR3rNJJfc76ia5n59qv+aM=;
-        b=zRhd85iuDOtshGYd/4Jep9VyX/mvBpjj+AMnE5r3esec0fcPCBEQMl/JEtx+EHjMRy
-         16c0nCer9NDvD9DmsZ3BrG0itoXxoO+MztpuF71UOBxCyoKNd+C3HOUK7PLIqo9+ZOvH
-         xYTSy5ByZJ+0l88FzUodtOjMv2qOeeP75bBMkog7vCXKI3Muyaq+yCse7YYasGyoRbF2
-         Hj0G/gK4CE0yib7qHFTLRAMIFGQDVG6EiqdBvggA8DKdvxgvHKXLieeUN7hw50iXqA0F
-         GXS0SBosCLT3aEk+lITLGy6tUisSuCL9Q8d78pAZh0Wcxciy/PnPxT9ZmVs+RQ+2rcnV
-         WnlA==
+        bh=uYb2UntJCk/zn4c108HA9yrg8j3dAHpcDzElziN7WIY=;
+        b=KzKHxwjX+E711xxfib442CgoVSiGsSdHc/CUQSTUEXKSPKkgRbSHvLd91MHGwgh54M
+         RfFdvSZ4IGgDHWno+btuSz3JsfVM7lIvc2MTvg7TlvMctrWM6jQuysdAM53lIzOrgEpV
+         PRNOwDJf7gl3z0zAcYY98BfV1PaJtFGmf56GPlyNt8Ol7kBWEpyrvXWonSvP1TZeX9qK
+         Kn1qEJCfOV/CETbMnx80pRU/1CSOJdyJigheERQMG7Mcemmm404KaOcbe1C5T5+N8pCf
+         ZozM49I5dHHl5cJzIZIgx1WlayzOn1U/BQYg09UqCxcvlHzw1vMWtnxcLuTy0jt1RZQH
+         cc3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690322532; x=1690927332;
+        d=1e100.net; s=20221208; t=1690322535; x=1690927335;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BglVD3tTlL86xZX6Z5R3ezR3rNJJfc76ia5n59qv+aM=;
-        b=Yp3m3bshd9RWJPLrDbpgRa0tLe/AkfM5usIjHk/tBz+Hi7n53aiJmaP+oqdJq7woXF
-         A1uspwWylJFROU21sfslkjFnFQ8bhzK2PW26+62cjODSCQWVvtigxwdgnPZjH/rJfdU5
-         65nOYh3NDPs1E/jPLSv5V7SoqkmqoebWaFu+a8ZtlNtv7f+B34Op2lGeA9Nq9u+quaPf
-         EpWGDDjtVkoQaZtmluciQGhfChvFRcO4E4WOAs9YO2Qzfdv3VQoLACtefVelx9HY+jma
-         t+z2Id4wDCGZ01SL5rYeMn+3dM3bsaMvEej5+HcH7kHlEfa9jTYhkzU7lAh+qf1GtpH0
-         uDxA==
-X-Gm-Message-State: ABy/qLZ+Z6ZijNVPvKy6hDt6sfao9S7AJVSAbYFA07mWTigShGr1oFjn
-        djlg7ZYLu/T+nBaIdx2m2GMyXZEB7+wwKSy+goJqjYWxAiy5mN1orOIEhFAGwjI/NwvtrL+BH9X
-        J7z4b4am8cZHwvDYa0dQlLETxo5L7K7OIqFjp6LWjilQ1TKvRK1qXyVT2k3am0msMVNBm+P8X4D
-        My
-X-Google-Smtp-Source: APBJJlGboFK0Pwxec1ZjSVCKt+ZgddJR8b1x55c9ByJsSn38G65QwUZX1hQ0ROLg6wiroNNOrrf9rj5p5hMr
+        bh=uYb2UntJCk/zn4c108HA9yrg8j3dAHpcDzElziN7WIY=;
+        b=Hc4uV/a+cwHZDn/EipwPVfGkU3PZ8FJ5UyCzFAuZNkPGmV1ss2hT7mk5o8DlaHftsM
+         KHtb05dm/2w9OlcQjJAWDvicHUkw5FmjIZLXUdJBLLVLZQr2dSo3IeKg4S67pHKy1tLB
+         K4a5TsmqLiAiI6t19fWokiSfAUemk43erlP9WGlzf8ZjISDOMXSGEUcSlfSow1g+6hih
+         AddK86s3xafv0896i/wkius3dzB7gOMzrV7Rh6ipYaNPls7y97LN9EawaTy58xh5fCxf
+         5lr8SkgVXn4lfF5asgBnWGsaZ9UP8eZ71w9Du7qSebPa604jPaziDhYSCIjA5+t644EW
+         oAoA==
+X-Gm-Message-State: ABy/qLbRkHpDxcLlCNvKUKaLuw9YRQdaIoa3/1do3IVI9L7/6EVr8jaJ
+        ORidBLN5vIRcDvLhjpKarB4mukrdy3DtERFuPVgqpiGharKdcKEWBsdNnKw1JF8VCu7TM5vlscs
+        AI1Av7GrTPNW68DycLk5vG3nIapKgkWl2oyk3XtTBHyzk2f8g917E+DOO91t43gfTSvMeUNa/kj
+        /h
+X-Google-Smtp-Source: APBJJlFrxhyN0gYmcU9m+L2b/2sDxek5BxJMk4MKZdCLwIXYEIL1JgCEJq+CGpMKSuItzkE4tA0pTqPKqjQY
 X-Received: from afranji.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:47f1])
- (user=afranji job=sendgmr) by 2002:a81:ae49:0:b0:580:e6dc:e2df with SMTP id
- g9-20020a81ae49000000b00580e6dce2dfmr3700ywk.9.1690322532285; Tue, 25 Jul
- 2023 15:02:12 -0700 (PDT)
-Date:   Tue, 25 Jul 2023 22:01:06 +0000
+ (user=afranji job=sendgmr) by 2002:a63:8c54:0:b0:55b:5c9b:671e with SMTP id
+ q20-20020a638c54000000b0055b5c9b671emr2339pgn.5.1690322534554; Tue, 25 Jul
+ 2023 15:02:14 -0700 (PDT)
+Date:   Tue, 25 Jul 2023 22:01:07 +0000
 In-Reply-To: <20230725220132.2310657-1-afranji@google.com>
 Mime-Version: 1.0
 References: <20230725220132.2310657-1-afranji@google.com>
 X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
-Message-ID: <20230725220132.2310657-14-afranji@google.com>
-Subject: [PATCH v4 13/28] KVM: selftests: TDX: Add TDX IO writes test
+Message-ID: <20230725220132.2310657-15-afranji@google.com>
+Subject: [PATCH v4 14/28] KVM: selftests: TDX: Add TDX IO reads test
 From:   Ryan Afranji <afranji@google.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
@@ -83,117 +83,98 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Sagi Shahar <sagis@google.com>
 
-The test verifies IO writes of various sizes from the guest to the host.
+The test verifies IO reads of various sizes from the host to the guest.
 
 Signed-off-by: Sagi Shahar <sagis@google.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-Change-Id: I91edb81a93d7bfd881ccde517c95b5728a2ba85e
+Change-Id: If5b43a7b084823707b5b4a546c16800d5c61daaf
 Signed-off-by: Ryan Afranji <afranji@google.com>
 ---
- .../selftests/kvm/include/x86_64/tdx/tdcall.h |  3 +
- .../selftests/kvm/x86_64/tdx_vm_tests.c       | 91 +++++++++++++++++++
- 2 files changed, 94 insertions(+)
+ .../selftests/kvm/x86_64/tdx_vm_tests.c       | 87 +++++++++++++++++++
+ 1 file changed, 87 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdcall.h b/tools/testing/selftests/kvm/include/x86_64/tdx/tdcall.h
-index 78001bfec9c8..b5e94b7c48fa 100644
---- a/tools/testing/selftests/kvm/include/x86_64/tdx/tdcall.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdcall.h
-@@ -10,6 +10,9 @@
- #define TDG_VP_VMCALL_INSTRUCTION_IO_READ 0
- #define TDG_VP_VMCALL_INSTRUCTION_IO_WRITE 1
- 
-+#define TDG_VP_VMCALL_SUCCESS 0x0000000000000000
-+#define TDG_VP_VMCALL_INVALID_OPERAND 0x8000000000000000
-+
- #define TDX_HCALL_HAS_OUTPUT BIT(0)
- 
- #define TDX_HYPERCALL_STANDARD 0
 diff --git a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
-index 9e9c3ad08a21..ca0136930775 100644
+index ca0136930775..9ac0b793f8c5 100644
 --- a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
 +++ b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
-@@ -339,6 +339,96 @@ void verify_get_td_vmcall_info(void)
+@@ -429,6 +429,92 @@ void verify_guest_writes(void)
  	printf("\t ... PASSED\n");
  }
  
-+#define TDX_IO_WRITES_TEST_PORT 0x51
++#define TDX_IO_READS_TEST_PORT 0x52
 +
 +/*
-+ * Verifies IO functionality by writing values of different sizes
-+ * to the host.
++ * Verifies IO functionality by reading values of different sizes
++ * from the host.
 + */
-+void guest_io_writes(void)
++void guest_io_reads(void)
 +{
-+	uint64_t byte_1 = 0xAB;
-+	uint64_t byte_2 = 0xABCD;
-+	uint64_t byte_4 = 0xFFABCDEF;
++	uint64_t data;
 +	uint64_t ret;
 +
-+	ret = tdg_vp_vmcall_instruction_io(TDX_IO_WRITES_TEST_PORT, 1,
-+					TDG_VP_VMCALL_INSTRUCTION_IO_WRITE,
-+					&byte_1);
++	ret = tdg_vp_vmcall_instruction_io(TDX_IO_READS_TEST_PORT, 1,
++					TDG_VP_VMCALL_INSTRUCTION_IO_READ,
++					&data);
 +	if (ret)
 +		tdx_test_fatal(ret);
++	if (data != 0xAB)
++		tdx_test_fatal(1);
 +
-+	ret = tdg_vp_vmcall_instruction_io(TDX_IO_WRITES_TEST_PORT, 2,
-+					TDG_VP_VMCALL_INSTRUCTION_IO_WRITE,
-+					&byte_2);
++	ret = tdg_vp_vmcall_instruction_io(TDX_IO_READS_TEST_PORT, 2,
++					TDG_VP_VMCALL_INSTRUCTION_IO_READ,
++					&data);
 +	if (ret)
 +		tdx_test_fatal(ret);
++	if (data != 0xABCD)
++		tdx_test_fatal(2);
 +
-+	ret = tdg_vp_vmcall_instruction_io(TDX_IO_WRITES_TEST_PORT, 4,
-+					TDG_VP_VMCALL_INSTRUCTION_IO_WRITE,
-+					&byte_4);
++	ret = tdg_vp_vmcall_instruction_io(TDX_IO_READS_TEST_PORT, 4,
++					TDG_VP_VMCALL_INSTRUCTION_IO_READ,
++					&data);
 +	if (ret)
 +		tdx_test_fatal(ret);
++	if (data != 0xFFABCDEF)
++		tdx_test_fatal(4);
 +
-+	// Write an invalid number of bytes.
-+	ret = tdg_vp_vmcall_instruction_io(TDX_IO_WRITES_TEST_PORT, 5,
-+					TDG_VP_VMCALL_INSTRUCTION_IO_WRITE,
-+					&byte_4);
++	// Read an invalid number of bytes.
++	ret = tdg_vp_vmcall_instruction_io(TDX_IO_READS_TEST_PORT, 5,
++					TDG_VP_VMCALL_INSTRUCTION_IO_READ,
++					&data);
 +	if (ret)
 +		tdx_test_fatal(ret);
 +
 +	tdx_test_success();
 +}
 +
-+void verify_guest_writes(void)
++void verify_guest_reads(void)
 +{
 +	struct kvm_vm *vm;
 +	struct kvm_vcpu *vcpu;
 +
-+	uint8_t byte_1;
-+	uint16_t byte_2;
-+	uint32_t byte_4;
-+
 +	vm = td_create();
 +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
-+	vcpu = td_vcpu_add(vm, 0, guest_io_writes);
++	vcpu = td_vcpu_add(vm, 0, guest_io_reads);
 +	td_finalize(vm);
 +
-+	printf("Verifying guest writes:\n");
++	printf("Verifying guest reads:\n");
 +
 +	td_vcpu_run(vcpu);
 +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
-+	TDX_TEST_ASSERT_IO(vcpu, TDX_IO_WRITES_TEST_PORT, 1,
-+			TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-+	byte_1 = *(uint8_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
++	TDX_TEST_ASSERT_IO(vcpu, TDX_IO_READS_TEST_PORT, 1,
++			TDG_VP_VMCALL_INSTRUCTION_IO_READ);
++	*(uint8_t *)((void *)vcpu->run + vcpu->run->io.data_offset) = 0xAB;
 +
 +	td_vcpu_run(vcpu);
 +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
-+	TDX_TEST_ASSERT_IO(vcpu, TDX_IO_WRITES_TEST_PORT, 2,
-+			TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-+	byte_2 = *(uint16_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
++	TDX_TEST_ASSERT_IO(vcpu, TDX_IO_READS_TEST_PORT, 2,
++			TDG_VP_VMCALL_INSTRUCTION_IO_READ);
++	*(uint16_t *)((void *)vcpu->run + vcpu->run->io.data_offset) = 0xABCD;
 +
 +	td_vcpu_run(vcpu);
 +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
-+	TDX_TEST_ASSERT_IO(vcpu, TDX_IO_WRITES_TEST_PORT, 4,
-+			TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-+	byte_4 = *(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
-+
-+	ASSERT_EQ(byte_1, 0xAB);
-+	ASSERT_EQ(byte_2, 0xABCD);
-+	ASSERT_EQ(byte_4, 0xFFABCDEF);
++	TDX_TEST_ASSERT_IO(vcpu, TDX_IO_READS_TEST_PORT, 4,
++			TDG_VP_VMCALL_INSTRUCTION_IO_READ);
++	*(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset) = 0xFFABCDEF;
 +
 +	td_vcpu_run(vcpu);
 +	ASSERT_EQ(vcpu->run->exit_reason, KVM_EXIT_SYSTEM_EVENT);
@@ -209,11 +190,11 @@ index 9e9c3ad08a21..ca0136930775 100644
  int main(int argc, char **argv)
  {
  	setbuf(stdout, NULL);
-@@ -353,6 +443,7 @@ int main(int argc, char **argv)
- 	run_in_new_process(&verify_td_ioexit);
+@@ -444,6 +530,7 @@ int main(int argc, char **argv)
  	run_in_new_process(&verify_td_cpuid);
  	run_in_new_process(&verify_get_td_vmcall_info);
-+	run_in_new_process(&verify_guest_writes);
+ 	run_in_new_process(&verify_guest_writes);
++	run_in_new_process(&verify_guest_reads);
  
  	return 0;
  }
