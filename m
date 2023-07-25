@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD18760D24
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 10:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6448F760D28
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 10:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232884AbjGYIhf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 04:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
+        id S232731AbjGYIho (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 04:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232798AbjGYIhT (ORCPT
+        with ESMTP id S232803AbjGYIhV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 04:37:19 -0400
+        Tue, 25 Jul 2023 04:37:21 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D041BCD;
-        Tue, 25 Jul 2023 01:37:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4905F19BD;
+        Tue, 25 Jul 2023 01:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690274221; x=1721810221;
+  t=1690274236; x=1721810236;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ivkkKYOG5fPMg48VMRAb+46zuN4nZoOD9NsoOY3CH/E=;
-  b=RjhCJwDl6MTaagY1yVvSlrYI7BB5WY0Xc9XgoBQkvcIp24xqegoo19Aw
-   4w8D3igiu5KDlHiZ0YJjx9XFOsVb2t/wwrV72xUa5m/3hCxbbRhas6AgD
-   U+L9Qp8DPKJ1ry/UIcVJd2vWEMPUGNmUZKUBys8mRTRe1BtEiFCVzpyDg
-   qrreyGK1is+0O1tW8inyr9Cnvgd7Nw94qIpjIHjAiJ+ZM27kaBhuOiZcf
-   Ick/709FtTx97pkdYd8C3mXN3gUiuOjW/wNvgWtxwghTyqY21mVq8iUoe
-   aoOWvdDt8oGdUaEEw2c4I2du/VXm+ixiNYOZ/oATCtqtvTpKPYYRrKMSU
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="371264459"
+  bh=Wrq3rwQEDKaPZJd20SlmwDK0bEVQC2vjYfUY/bdvPpc=;
+  b=jSteRh7ByodX3SODR9qdFzwFcsK671wmBfdG/2urhbGqgP+h79Etsr5Z
+   H5NPDxB7Hq1nukCKqQ5wb1Zys78WJA/DYo6/Ckl5pFP4n1uo9N6fi7kFI
+   3SBLqYgfJkh9lECA2tY/SYi9ghXO3TwJZacom1kVeXSht5O8TYKNfSD33
+   iDXvmWtmW7i8g0hZuRgGZwEeDpKMEmMx6RssVhMLUzEOoa7tgAfRZjd/C
+   pgSyP4MFhEcOjOr3lrGY/aqE+ZdOgvSxrVAFaoIEJzHOYcY1QNAZM2TDJ
+   tNkWVDUWCPwvpW/Q9SPxCTKHcIA+cqX3pBIJByXjPQKn63aLMjX91er+A
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="371264533"
 X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="371264459"
+   d="scan'208";a="371264533"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 01:37:00 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 01:37:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="761130258"
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="761130306"
 X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="761130258"
+   d="scan'208";a="761130306"
 Received: from haibo-optiplex-7090.sh.intel.com ([10.239.159.132])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 01:36:53 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 01:37:08 -0700
 From:   Haibo Xu <haibo1.xu@intel.com>
 Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         maz@kernel.org, oliver.upton@linux.dev, seanjc@google.com,
@@ -55,7 +55,7 @@ Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         Zenghui Yu <yuzenghui@huawei.com>,
         Ricardo Koller <ricarkol@google.com>,
         Vishal Annapurve <vannapurve@google.com>,
-        Like Xu <likexu@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
         Vipin Sharma <vipinsh@google.com>,
         David Matlack <dmatlack@google.com>,
         Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
@@ -63,9 +63,9 @@ Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: [PATCH v6 04/13] KVM: arm64: selftests: Rename vcpu_config and add to kvm_util.h
-Date:   Tue, 25 Jul 2023 16:41:30 +0800
-Message-Id: <4c3a15ad6dcf7d58fcad5ca9bed56b30c539c358.1690273969.git.haibo1.xu@intel.com>
+Subject: [PATCH v6 05/13] KVM: arm64: selftests: Delete core_reg_fixup
+Date:   Tue, 25 Jul 2023 16:41:31 +0800
+Message-Id: <93de039c7772bc5eb0b44d24a596363e92fc1714.1690273969.git.haibo1.xu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1690273969.git.haibo1.xu@intel.com>
 References: <cover.1690273969.git.haibo1.xu@intel.com>
@@ -84,244 +84,164 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Andrew Jones <ajones@ventanamicro.com>
 
-Rename vcpu_config to vcpu_reg_list to be more specific and add
-it to kvm_util.h. While it may not get used outside get-reg-list
-tests, exporting it doesn't hurt, as long as it has a unique enough
-name. This is a step in the direction of sharing most of the get-
-reg-list test code between architectures.
+core_reg_fixup() complicates sharing the get-reg-list test with
+other architectures. Rather than work at keeping it, with plenty
+of #ifdeffery, just delete it, as it's unlikely to test a kernel
+based on anything older than v5.2 with the get-reg-list test,
+which is a test meant to check for regressions in new kernels.
+(And, an older version of the test can still be used for older
+kernels if necessary.)
 
 Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
 Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
 ---
- .../selftests/kvm/aarch64/get-reg-list.c      | 60 +++++++------------
- .../selftests/kvm/include/kvm_util_base.h     | 16 +++++
- 2 files changed, 38 insertions(+), 38 deletions(-)
+ .../selftests/kvm/aarch64/get-reg-list.c      | 83 +++----------------
+ 1 file changed, 10 insertions(+), 73 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-index c9412be3a04c..cb6b40e167d0 100644
+index cb6b40e167d0..11630bbfb86b 100644
 --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
 +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-@@ -37,17 +37,6 @@
- static struct kvm_reg_list *reg_list;
- static __u64 *blessed_reg, blessed_n;
- 
--struct reg_sublist {
--	const char *name;
--	long capability;
--	int feature;
--	bool finalize;
--	__u64 *regs;
--	__u64 regs_n;
--	__u64 *rejects_set;
--	__u64 rejects_set_n;
--};
--
- struct feature_id_reg {
- 	__u64 reg;
- 	__u64 id_reg;
-@@ -76,12 +65,7 @@ static struct feature_id_reg feat_id_regs[] = {
- 	}
- };
- 
--struct vcpu_config {
--	char *name;
--	struct reg_sublist sublists[];
--};
--
--static struct vcpu_config *vcpu_configs[];
-+static struct vcpu_reg_list *vcpu_configs[];
- static int vcpu_configs_n;
- 
- #define for_each_sublist(c, s)							\
-@@ -103,9 +87,9 @@ static int vcpu_configs_n;
- 	for_each_reg_filtered(i)						\
- 		if (!find_reg(blessed_reg, blessed_n, reg_list->reg[i]))
- 
--static const char *config_name(struct vcpu_config *c)
-+static const char *config_name(struct vcpu_reg_list *c)
- {
--	struct reg_sublist *s;
-+	struct vcpu_reg_sublist *s;
- 	int len = 0;
- 
- 	if (c->name)
-@@ -390,18 +374,18 @@ static void core_reg_fixup(void)
- 	reg_list = tmp;
- }
- 
--static void prepare_vcpu_init(struct vcpu_config *c, struct kvm_vcpu_init *init)
-+static void prepare_vcpu_init(struct vcpu_reg_list *c, struct kvm_vcpu_init *init)
- {
--	struct reg_sublist *s;
-+	struct vcpu_reg_sublist *s;
- 
- 	for_each_sublist(c, s)
- 		if (s->capability)
- 			init->features[s->feature / 32] |= 1 << (s->feature % 32);
- }
- 
--static void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_config *c)
-+static void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
- {
--	struct reg_sublist *s;
-+	struct vcpu_reg_sublist *s;
- 	int feature;
- 
- 	for_each_sublist(c, s) {
-@@ -412,9 +396,9 @@ static void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_config *c)
+@@ -17,12 +17,10 @@
+  * by running the test with the --list command line argument.
+  *
+  * Note, the blessed list should be created from the oldest possible
+- * kernel. We can't go older than v4.15, though, because that's the first
+- * release to expose the ID system registers in KVM_GET_REG_LIST, see
+- * commit 93390c0a1b20 ("arm64: KVM: Hide unsupported AArch64 CPU features
+- * from guests"). Also, one must use the --core-reg-fixup command line
+- * option when running on an older kernel that doesn't include df205b5c6328
+- * ("KVM: arm64: Filter out invalid core register IDs in KVM_GET_REG_LIST")
++ * kernel. We can't go older than v5.2, though, because that's the first
++ * release which includes df205b5c6328 ("KVM: arm64: Filter out invalid
++ * core register IDs in KVM_GET_REG_LIST"). Without that commit the core
++ * registers won't match expectations.
+  */
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -317,63 +315,6 @@ static void print_reg(const char *prefix, __u64 id)
  	}
  }
  
--static void check_supported(struct vcpu_config *c)
-+static void check_supported(struct vcpu_reg_list *c)
+-/*
+- * Older kernels listed each 32-bit word of CORE registers separately.
+- * For 64 and 128-bit registers we need to ignore the extra words. We
+- * also need to fixup the sizes, because the older kernels stated all
+- * registers were 64-bit, even when they weren't.
+- */
+-static void core_reg_fixup(void)
+-{
+-	struct kvm_reg_list *tmp;
+-	__u64 id, core_off;
+-	int i;
+-
+-	tmp = calloc(1, sizeof(*tmp) + reg_list->n * sizeof(__u64));
+-
+-	for (i = 0; i < reg_list->n; ++i) {
+-		id = reg_list->reg[i];
+-
+-		if ((id & KVM_REG_ARM_COPROC_MASK) != KVM_REG_ARM_CORE) {
+-			tmp->reg[tmp->n++] = id;
+-			continue;
+-		}
+-
+-		core_off = id & ~REG_MASK;
+-
+-		switch (core_off) {
+-		case 0x52: case 0xd2: case 0xd6:
+-			/*
+-			 * These offsets are pointing at padding.
+-			 * We need to ignore them too.
+-			 */
+-			continue;
+-		case KVM_REG_ARM_CORE_REG(fp_regs.vregs[0]) ...
+-		     KVM_REG_ARM_CORE_REG(fp_regs.vregs[31]):
+-			if (core_off & 3)
+-				continue;
+-			id &= ~KVM_REG_SIZE_MASK;
+-			id |= KVM_REG_SIZE_U128;
+-			tmp->reg[tmp->n++] = id;
+-			continue;
+-		case KVM_REG_ARM_CORE_REG(fp_regs.fpsr):
+-		case KVM_REG_ARM_CORE_REG(fp_regs.fpcr):
+-			id &= ~KVM_REG_SIZE_MASK;
+-			id |= KVM_REG_SIZE_U32;
+-			tmp->reg[tmp->n++] = id;
+-			continue;
+-		default:
+-			if (core_off & 1)
+-				continue;
+-			tmp->reg[tmp->n++] = id;
+-			break;
+-		}
+-	}
+-
+-	free(reg_list);
+-	reg_list = tmp;
+-}
+-
+ static void prepare_vcpu_init(struct vcpu_reg_list *c, struct kvm_vcpu_init *init)
  {
--	struct reg_sublist *s;
-+	struct vcpu_reg_sublist *s;
+ 	struct vcpu_reg_sublist *s;
+@@ -412,7 +353,6 @@ static void check_supported(struct vcpu_reg_list *c)
  
- 	for_each_sublist(c, s) {
- 		if (!s->capability)
-@@ -430,14 +414,14 @@ static bool print_list;
+ static bool print_list;
  static bool print_filtered;
- static bool fixup_core_regs;
+-static bool fixup_core_regs;
  
--static void run_test(struct vcpu_config *c)
-+static void run_test(struct vcpu_reg_list *c)
+ static void run_test(struct vcpu_reg_list *c)
  {
- 	struct kvm_vcpu_init init = { .target = -1, };
- 	int new_regs = 0, missing_regs = 0, i, n;
- 	int failed_get = 0, failed_set = 0, failed_reject = 0;
- 	struct kvm_vcpu *vcpu;
- 	struct kvm_vm *vm;
--	struct reg_sublist *s;
-+	struct vcpu_reg_sublist *s;
+@@ -433,9 +373,6 @@ static void run_test(struct vcpu_reg_list *c)
  
- 	check_supported(c);
+ 	reg_list = vcpu_get_reg_list(vcpu);
  
-@@ -574,7 +558,7 @@ static void run_test(struct vcpu_config *c)
- 
- static void help(void)
- {
--	struct vcpu_config *c;
-+	struct vcpu_reg_list *c;
- 	int i;
+-	if (fixup_core_regs)
+-		core_reg_fixup();
+-
+ 	if (print_list || print_filtered) {
+ 		putchar('\n');
+ 		for_each_reg(i) {
+@@ -563,7 +500,7 @@ static void help(void)
  
  	printf(
-@@ -598,9 +582,9 @@ static void help(void)
+ 	"\n"
+-	"usage: get-reg-list [--config=<selection>] [--list] [--list-filtered] [--core-reg-fixup]\n\n"
++	"usage: get-reg-list [--config=<selection>] [--list] [--list-filtered]\n\n"
+ 	" --config=<selection>        Used to select a specific vcpu configuration for the test/listing\n"
+ 	"                             '<selection>' may be\n");
+ 
+@@ -577,7 +514,6 @@ static void help(void)
+ 	"\n"
+ 	" --list                      Print the register list rather than test it (requires --config)\n"
+ 	" --list-filtered             Print registers that would normally be filtered out (requires --config)\n"
+-	" --core-reg-fixup            Needed when running on old kernels with broken core reg listings\n"
+ 	"\n"
  	);
  }
- 
--static struct vcpu_config *parse_config(const char *config)
-+static struct vcpu_reg_list *parse_config(const char *config)
- {
--	struct vcpu_config *c;
-+	struct vcpu_reg_list *c;
- 	int i;
- 
- 	if (config[8] != '=')
-@@ -620,7 +604,7 @@ static struct vcpu_config *parse_config(const char *config)
- 
- int main(int ac, char **av)
- {
--	struct vcpu_config *c, *sel = NULL;
-+	struct vcpu_reg_list *c, *sel = NULL;
- 	int i, ret = 0;
+@@ -609,9 +545,7 @@ int main(int ac, char **av)
  	pid_t pid;
  
-@@ -1104,14 +1088,14 @@ static __u64 pauth_generic_regs[] = {
- 		.regs_n		= ARRAY_SIZE(pauth_generic_regs),	\
- 	}
+ 	for (i = 1; i < ac; ++i) {
+-		if (strcmp(av[i], "--core-reg-fixup") == 0)
+-			fixup_core_regs = true;
+-		else if (strncmp(av[i], "--config", 8) == 0)
++		if (strncmp(av[i], "--config", 8) == 0)
+ 			sel = parse_config(av[i]);
+ 		else if (strcmp(av[i], "--list") == 0)
+ 			print_list = true;
+@@ -654,8 +588,11 @@ int main(int ac, char **av)
+ }
  
--static struct vcpu_config vregs_config = {
-+static struct vcpu_reg_list vregs_config = {
- 	.sublists = {
- 	BASE_SUBLIST,
- 	VREGS_SUBLIST,
- 	{0},
- 	},
- };
--static struct vcpu_config vregs_pmu_config = {
-+static struct vcpu_reg_list vregs_pmu_config = {
- 	.sublists = {
- 	BASE_SUBLIST,
- 	VREGS_SUBLIST,
-@@ -1119,14 +1103,14 @@ static struct vcpu_config vregs_pmu_config = {
- 	{0},
- 	},
- };
--static struct vcpu_config sve_config = {
-+static struct vcpu_reg_list sve_config = {
- 	.sublists = {
- 	BASE_SUBLIST,
- 	SVE_SUBLIST,
- 	{0},
- 	},
- };
--static struct vcpu_config sve_pmu_config = {
-+static struct vcpu_reg_list sve_pmu_config = {
- 	.sublists = {
- 	BASE_SUBLIST,
- 	SVE_SUBLIST,
-@@ -1134,7 +1118,7 @@ static struct vcpu_config sve_pmu_config = {
- 	{0},
- 	},
- };
--static struct vcpu_config pauth_config = {
-+static struct vcpu_reg_list pauth_config = {
- 	.sublists = {
- 	BASE_SUBLIST,
- 	VREGS_SUBLIST,
-@@ -1142,7 +1126,7 @@ static struct vcpu_config pauth_config = {
- 	{0},
- 	},
- };
--static struct vcpu_config pauth_pmu_config = {
-+static struct vcpu_reg_list pauth_pmu_config = {
- 	.sublists = {
- 	BASE_SUBLIST,
- 	VREGS_SUBLIST,
-@@ -1152,7 +1136,7 @@ static struct vcpu_config pauth_pmu_config = {
- 	},
- };
- 
--static struct vcpu_config *vcpu_configs[] = {
-+static struct vcpu_reg_list *vcpu_configs[] = {
- 	&vregs_config,
- 	&vregs_pmu_config,
- 	&sve_config,
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 07732a157ccd..1a455511503e 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -15,6 +15,7 @@
- #include <linux/kernel.h>
- #include <linux/kvm.h>
- #include "linux/rbtree.h"
-+#include <linux/types.h>
- 
- #include <asm/atomic.h>
- 
-@@ -124,6 +125,21 @@ struct kvm_vm {
- 	uint32_t memslots[NR_MEM_REGIONS];
- };
- 
-+struct vcpu_reg_sublist {
-+	const char *name;
-+	long capability;
-+	int feature;
-+	bool finalize;
-+	__u64 *regs;
-+	__u64 regs_n;
-+	__u64 *rejects_set;
-+	__u64 rejects_set_n;
-+};
-+
-+struct vcpu_reg_list {
-+	char *name;
-+	struct vcpu_reg_sublist sublists[];
-+};
- 
- #define kvm_for_each_vcpu(vm, i, vcpu)			\
- 	for ((i) = 0; (i) <= (vm)->last_vcpu_id; (i)++)	\
+ /*
+- * The current blessed list was primed with the output of kernel version
++ * The original blessed list was primed with the output of kernel version
+  * v4.15 with --core-reg-fixup and then later updated with new registers.
++ * (The --core-reg-fixup option and it's fixup function have been removed
++ * from the test, as it's unlikely to use this type of test on a kernel
++ * older than v5.2.)
+  *
+  * The blessed list is up to date with kernel version v6.4 (or so we hope)
+  */
 -- 
 2.34.1
 
