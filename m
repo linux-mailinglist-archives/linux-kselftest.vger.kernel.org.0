@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEDD762576
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 00:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B4676257A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 00:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbjGYWDW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 18:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
+        id S231745AbjGYWDZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 18:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjGYWCr (ORCPT
+        with ESMTP id S231767AbjGYWCu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 18:02:47 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EC4271B
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:18 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-563bcd2cb78so1654253a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:18 -0700 (PDT)
+        Tue, 25 Jul 2023 18:02:50 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8374D2D5A
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:24 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-56942667393so78019337b3.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690322519; x=1690927319;
+        d=google.com; s=20221208; t=1690322520; x=1690927320;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JRhczmdPScKo2vay9vryElFC45oKYBjwBdCY5Tc9Lgg=;
-        b=57SgSzMp2WcSUTopm7St4O8LEi1JlQxQS++YhZNvtD6C5IPezdoXNsSva7qcRa95TH
-         CuUzrQcHvY2onxeJvA2c1bhB2gmiizkKLmn71GwMJyy3Hm2FFxnbIkFRLtYPl15/fo9H
-         02GG7Tsax5yc8MIT2D1lYjGlaRLIHJ0s3htuvNEhBkQ6qyxxZOh9DecsR5BCJh481R47
-         QE24yQWSrz0i7Qr01PYsyE8EAvWp2QToSs5YSSaj0k7hyjBM7QlaAlbgMqBEg/C6txYK
-         8vkMXlPgR6yg2+Ln7bRWtGYMUz1nk5ZPBWIzK47oHMtaDqPcHTzzYVVv9dVdYSXbDfSQ
-         iQyA==
+        bh=g4KcxLrzQkXOChykEZFXIv5nUY2y8T7+ZlIOw1AWFkc=;
+        b=fkrYsLWyogUVFgS4vePJWwymNPenlzaFl9gf8Jak3i3FMyFQEfdiYt85RuLv7nnYWq
+         4RNZ8BVD4lIIBvw8v1OiGn8I6qHrsP4bghvqX0r8CTRYxPxc57oeDSeDrRFtZWqZVT7U
+         fLgnE+HTKSsYGyOUcElr+LrKwCgPCE0YspD22KaNwn3TmWJRa2JF4dhyXdFIAgFH5JxV
+         U7be3pIOdvuFA/eWH7c1uy+2IARQb2dU+Sbhj37Fn487aAWBoPCsmWsrbsHUMk+dt8Yw
+         ziELdfhK5qQrLT47kvGQjjWnRq9MRHlHOfE5sS5dRSgGXYiuYpDZ31KyBQIvRdKLkKvu
+         4g0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690322519; x=1690927319;
+        d=1e100.net; s=20221208; t=1690322520; x=1690927320;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JRhczmdPScKo2vay9vryElFC45oKYBjwBdCY5Tc9Lgg=;
-        b=kbkqVl3nVEkDhZTjVTk4d0p9zZnphdVlUwt93dfaEhcaDllwmS5VRMctgBGJXVdEJL
-         mFeac2OEtQ68CB/EZ3VG+iwtZ61H9Mnvjg1NDm/NgiDlabQUERL58JPa8PLDoBGNcrQe
-         UViEx/huhouozGuF1ReNuDCV6qLl5/CDJPIjGFKluMIXxsyDtF8w+FPFFrm8AUlXamWA
-         2BJhm3bZbQLSYkNAIlVqp7fBo6ZiporkNNYuhAuJ7MzLTkny8T7dk/q9vi3WRA0iGk6L
-         EcWFAoNppZS3Z1bk1HibGXAhweUxn+5P4+XDvsLwHu+2l2mT7QWonmOAJ9t64HL+wxaC
-         XDHQ==
-X-Gm-Message-State: ABy/qLYnsCD5/LN8+wmbNNx7onK9KhmwLEQjZgdy74L3hLtSEEp10PBP
-        ASOhCp5CbBFPdRlFQlgpi3I4/6PJQjiZVm72Rm9UCcz3y48kKV0YeSIuIxDjE24mvioHP7xSFGZ
-        iD28iMfM6NngS+2X+CKs34ewptx8Wba4L3KlgBZP0+mJ1Lii7BazBf5Tg/pzt7roaaB8S8mC9md
-        Uq
-X-Google-Smtp-Source: APBJJlEe5oavYCB7A8L9kHsW/kzX5OqKPCp/uwzdu8psKVDAKzfjm3W9XVbOMyl6YzfDsrCNp+NlbhZgOFQu
+        bh=g4KcxLrzQkXOChykEZFXIv5nUY2y8T7+ZlIOw1AWFkc=;
+        b=Qt8BTBTAyzQyBWUtqo6SXGaD1aID+jDMvOzSLz2lcCsv7CBCH1GI6QGUKUQsy7hv6j
+         QNf+y0ANsXjwGN2HuGjJw4gMKiW0dRueOvBUnVsExPoY65MqiD98rRF7ZmD4NMREPM15
+         K0FVjO0xx1dXvS5GKXJo9Te1sgSd8cRUZa3hvkA6PCJ5PUTGclB3J27oHOrp7xW2Fw6z
+         DglIpezqZ1IyzABtqWYPCjIFeuEzyNqfQB/LrwaahTV6txMzjw2cUeBEYLi13BMZ17Jn
+         IqPrsDa4IqEXTCYbXagYtQeBJsHDeQ1oIKUZ/tcGlSe9d/1gggkJ5FsFSp0UeaoTZGhF
+         XgQg==
+X-Gm-Message-State: ABy/qLZUocFs8W0Ca3FF9tdMOmRXh2yaD4eyO6a4X2QpjLrDoSHgCJVB
+        ER12UsvvK2ziwfTOexhZYRgADKQ8MrLiZ2OpfBcl+COpnx/dFeB3xBCC/HEp+HuagZxcw+xPLXk
+        Xyelj+WCRo17MjNZI2W17rJNoyZX5GJHBIgoeXohY3zqp0x/BZm2miMXexIXf5va85AmJG4si1b
+        cO
+X-Google-Smtp-Source: APBJJlGk02QkSJLPp43LDnyvS2p1LTv46fGTg4fQgNMMmRcnaVvnBglLkNtr8PLqRyPqh66JIr5RCPySeD1A
 X-Received: from afranji.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:47f1])
- (user=afranji job=sendgmr) by 2002:a63:3344:0:b0:563:e1ff:aeb0 with SMTP id
- z65-20020a633344000000b00563e1ffaeb0mr1300pgz.3.1690322518353; Tue, 25 Jul
- 2023 15:01:58 -0700 (PDT)
-Date:   Tue, 25 Jul 2023 22:00:59 +0000
+ (user=afranji job=sendgmr) by 2002:a81:b614:0:b0:579:fc33:b3a2 with SMTP id
+ u20-20020a81b614000000b00579fc33b3a2mr4504ywh.10.1690322519981; Tue, 25 Jul
+ 2023 15:01:59 -0700 (PDT)
+Date:   Tue, 25 Jul 2023 22:01:00 +0000
 In-Reply-To: <20230725220132.2310657-1-afranji@google.com>
 Mime-Version: 1.0
 References: <20230725220132.2310657-1-afranji@google.com>
 X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
-Message-ID: <20230725220132.2310657-7-afranji@google.com>
-Subject: [PATCH v4 06/28] KVM: selftests: TDX: Use KVM_TDX_CAPABILITIES to
- validate TDs' attribute configuration
+Message-ID: <20230725220132.2310657-8-afranji@google.com>
+Subject: [PATCH v4 07/28] KVM: selftests: TDX: Update load_td_memory_region
+ for VM memory backed by guest memfd
 From:   Ryan Afranji <afranji@google.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
@@ -84,123 +84,94 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-This also exercises the KVM_TDX_CAPABILITIES ioctl.
+If guest memory is backed by restricted memfd
 
-Suggested-by: Isaku Yamahata <isaku.yamahata@intel.com>
++ UPM is being used, hence encrypted memory region has to be
+  registered
++ Can avoid making a copy of guest memory before getting TDX to
+  initialize the memory region
+
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-Change-Id: I967f7b613cd38469379fbbe297725d46b4e3ae4f
+Change-Id: I43a5a444d5d2b5bf0d6750f6ef82c16e3d7d755e
 Signed-off-by: Ryan Afranji <afranji@google.com>
 ---
- .../selftests/kvm/lib/x86_64/tdx/tdx_util.c   | 69 ++++++++++++++++++-
- 1 file changed, 66 insertions(+), 3 deletions(-)
+ .../selftests/kvm/lib/x86_64/tdx/tdx_util.c   | 41 +++++++++++++++----
+ 1 file changed, 32 insertions(+), 9 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-index c90ad29f7733..95c6fb263583 100644
+index 95c6fb263583..c30801f4f759 100644
 --- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
 +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-@@ -27,10 +27,9 @@ static char *tdx_cmd_str[] = {
- };
- #define TDX_MAX_CMD_STR (ARRAY_SIZE(tdx_cmd_str))
- 
--static void tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
-+static int _tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
- {
- 	struct kvm_tdx_cmd tdx_cmd;
--	int r;
- 
- 	TEST_ASSERT(ioctl_no < TDX_MAX_CMD_STR, "Unknown TDX CMD : %d\n",
- 		    ioctl_no);
-@@ -40,11 +39,58 @@ static void tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
- 	tdx_cmd.flags = flags;
- 	tdx_cmd.data = (uint64_t)data;
- 
--	r = ioctl(fd, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd);
-+	return ioctl(fd, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd);
-+}
-+
-+static void tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
-+{
-+	int r;
-+
-+	r = _tdx_ioctl(fd, ioctl_no, flags, data);
- 	TEST_ASSERT(r == 0, "%s failed: %d  %d", tdx_cmd_str[ioctl_no], r,
- 		    errno);
+@@ -199,6 +199,21 @@ static void tdx_td_finalizemr(struct kvm_vm *vm)
+ 	tdx_ioctl(vm->fd, KVM_TDX_FINALIZE_VM, 0, NULL);
  }
  
-+static struct kvm_tdx_capabilities *tdx_read_capabilities(struct kvm_vm *vm)
++/*
++ * Other ioctls
++ */
++
++/**
++ * Register a memory region that may contain encrypted data in KVM.
++ */
++static void register_encrypted_memory_region(
++	struct kvm_vm *vm, struct userspace_mem_region *region)
 +{
-+	int i;
-+	int rc = -1;
-+	int nr_cpuid_configs = 4;
-+	struct kvm_tdx_capabilities *tdx_cap = NULL;
-+
-+	do {
-+		nr_cpuid_configs *= 2;
-+
-+		tdx_cap = realloc(
-+			tdx_cap, sizeof(*tdx_cap) +
-+			nr_cpuid_configs * sizeof(*tdx_cap->cpuid_configs));
-+		TEST_ASSERT(tdx_cap != NULL,
-+			    "Could not allocate memory for tdx capability nr_cpuid_configs %d\n",
-+			    nr_cpuid_configs);
-+
-+		tdx_cap->nr_cpuid_configs = nr_cpuid_configs;
-+		rc = _tdx_ioctl(vm->fd, KVM_TDX_CAPABILITIES, 0, tdx_cap);
-+	} while (rc < 0 && errno == E2BIG);
-+
-+	TEST_ASSERT(rc == 0, "KVM_TDX_CAPABILITIES failed: %d %d",
-+		    rc, errno);
-+
-+	pr_debug("tdx_cap: attrs: fixed0 0x%016llx fixed1 0x%016llx\n"
-+		 "tdx_cap: xfam fixed0 0x%016llx fixed1 0x%016llx\n",
-+		 tdx_cap->attrs_fixed0, tdx_cap->attrs_fixed1,
-+		 tdx_cap->xfam_fixed0, tdx_cap->xfam_fixed1);
-+
-+	for (i = 0; i < tdx_cap->nr_cpuid_configs; i++) {
-+		const struct kvm_tdx_cpuid_config *config =
-+			&tdx_cap->cpuid_configs[i];
-+		pr_debug("cpuid config[%d]: leaf 0x%x sub_leaf 0x%x eax 0x%08x ebx 0x%08x ecx 0x%08x edx 0x%08x\n",
-+			 i, config->leaf, config->sub_leaf,
-+			 config->eax, config->ebx, config->ecx, config->edx);
-+	}
-+
-+	return tdx_cap;
++	vm_set_memory_attributes(vm, region->region.guest_phys_addr,
++				 region->region.memory_size,
++				 KVM_MEMORY_ATTRIBUTE_PRIVATE);
 +}
 +
- #define XFEATURE_LBR 15
- #define XFEATURE_CET_U 11
- #define XFEATURE_CET_S 12
-@@ -85,6 +131,21 @@ static void tdx_apply_cpuid_restrictions(struct kvm_cpuid2 *cpuid_data)
+ /*
+  * TD creation/setup/finalization
+  */
+@@ -383,30 +398,38 @@ static void load_td_memory_region(struct kvm_vm *vm,
+ 	if (!sparsebit_any_set(pages))
+ 		return;
+ 
++
++	if (region->region.gmem_fd != -1)
++		register_encrypted_memory_region(vm, region);
++
+ 	sparsebit_for_each_set_range(pages, i, j) {
+ 		const uint64_t size_to_load = (j - i + 1) * vm->page_size;
+ 		const uint64_t offset =
+ 			(i - lowest_page_in_region) * vm->page_size;
+ 		const uint64_t hva = hva_base + offset;
+ 		const uint64_t gpa = gpa_base + offset;
+-		void *source_addr;
++		void *source_addr = (void *)hva;
+ 
+ 		/*
+ 		 * KVM_TDX_INIT_MEM_REGION ioctl cannot encrypt memory in place,
+ 		 * hence we have to make a copy if there's only one backing
+ 		 * memory source
+ 		 */
+-		source_addr = mmap(NULL, size_to_load, PROT_READ | PROT_WRITE,
+-				   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+-		TEST_ASSERT(
+-			source_addr,
+-			"Could not allocate memory for loading memory region");
+-
+-		memcpy(source_addr, (void *)hva, size_to_load);
++		if (region->region.gmem_fd == -1) {
++			source_addr = mmap(NULL, size_to_load, PROT_READ | PROT_WRITE,
++					MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++			TEST_ASSERT(
++				source_addr,
++				"Could not allocate memory for loading memory region");
++
++			memcpy(source_addr, (void *)hva, size_to_load);
++			memset((void *)hva, 0, size_to_load);
++		}
+ 
+ 		tdx_init_mem_region(vm, source_addr, gpa, size_to_load);
+ 
+-		munmap(source_addr, size_to_load);
++		if (region->region.gmem_fd == -1)
++			munmap(source_addr, size_to_load);
  	}
  }
  
-+static void tdx_check_attributes(struct kvm_vm *vm, uint64_t attributes)
-+{
-+	struct kvm_tdx_capabilities *tdx_cap;
-+
-+	tdx_cap = tdx_read_capabilities(vm);
-+
-+	/* TDX spec: any bits 0 in attrs_fixed0 must be 0 in attributes */
-+	ASSERT_EQ(attributes & ~tdx_cap->attrs_fixed0, 0);
-+
-+	/* TDX spec: any bits 1 in attrs_fixed1 must be 1 in attributes */
-+	ASSERT_EQ(attributes & tdx_cap->attrs_fixed1, tdx_cap->attrs_fixed1);
-+
-+	free(tdx_cap);
-+}
-+
- static void tdx_td_init(struct kvm_vm *vm, uint64_t attributes)
- {
- 	const struct kvm_cpuid2 *cpuid;
-@@ -98,6 +159,8 @@ static void tdx_td_init(struct kvm_vm *vm, uint64_t attributes)
- 	memset(init_vm, 0, sizeof(*init_vm));
- 	memcpy(&init_vm->cpuid, cpuid, kvm_cpuid2_size(cpuid->nent));
- 
-+	tdx_check_attributes(vm, attributes);
-+
- 	init_vm->attributes = attributes;
- 
- 	tdx_apply_cpuid_restrictions(&init_vm->cpuid);
 -- 
 2.41.0.487.g6d72f3e995-goog
 
