@@ -2,148 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C1476271B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 01:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E515E76272E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 01:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbjGYXAt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 19:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
+        id S231409AbjGYXGY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 19:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjGYXAs (ORCPT
+        with ESMTP id S231379AbjGYXGX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 19:00:48 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FBF187
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 16:00:32 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b9c368f4b5so2525375ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 16:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1690326031; x=1690930831;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=uVbE9PpqtTjRZguNUGn7GQ+HDzP+gciTDtYmzLA3RsM=;
-        b=e4MK7YoeYSH4Hjj+wtNaqHyVEsYCiTGx0Vt1I8T/QHmoskzZVd1k7Rb65vXqrI4cTT
-         xW8TaC+RWj3pDiuUgE9+1cSz7VFna2ZgLcw2weOfflLtQLDhlhOnkuzsB/ADUADGnLqK
-         vaRpKmcD+fxNUvcTTR7GjGf87NHw8TqFjuYknN/QM55c0eNzhb3R8QG9GEvooqQCq8kk
-         6Nl64wvQPC8TLsjz9eCUB3bSsLuAewo80eTxolNasxjO6gs3Hx0NEmj+nX1wYr0Rb4XN
-         odqra0ylOmUbYwiIVO8XjzH0PKRYYeRmCfPPq27oanvFgGcOCxycLr7+eL7GystqsLPE
-         nJvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690326031; x=1690930831;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uVbE9PpqtTjRZguNUGn7GQ+HDzP+gciTDtYmzLA3RsM=;
-        b=Q9ppJ8kBLhC2uQ+7QDa17YGAVH2cK/kNrhN8mX62+VlcrAKdZt2i72DTWiTx7tP2zv
-         zkC6l3twOAGNpJruYKlDiNC2Zka3YU85stUTkuS0A6MEbpHs3fH/cETFbzCBeKcaiFoo
-         W2ntNSyo8hZTGYVuMM71ZhzU56U3sBcMmiJF1hKQmgSgxTakHoFdLVdpUmF5RSfF50bA
-         WK4v6sRt/Z4FgOpl5T4FNk+ZRAWWquZOEu2EdTA6CgNJL9uqSV4/KQHkTa1MN7bMMjzL
-         C0PYI/FJnPARXI/SubRLB9FX1kbccDs4lGHOK4LYjZzXNBwVmtJzG5odQacOxHs1s9by
-         RIOw==
-X-Gm-Message-State: ABy/qLZc63Tn+lA4kCj6fu+cKsrqLkTIoKYLo+KPo6Ulb8dUjHmD0ZuP
-        Eycv031JSEjlOriOl8Rz62wqVQ==
-X-Google-Smtp-Source: APBJJlHpxPL+SFanKMnnkAbfueA5pGy1UDUhVlT6eaDfkWzY0OCrdFy4ARsm7PFn1Lx+vBbj2pgKvw==
-X-Received: by 2002:a17:902:eccb:b0:1b8:c6f8:d9b with SMTP id a11-20020a170902eccb00b001b8c6f80d9bmr528597plh.34.1690326031117;
-        Tue, 25 Jul 2023 16:00:31 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id s10-20020a170902a50a00b001b857352285sm11552240plq.247.2023.07.25.16.00.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 16:00:30 -0700 (PDT)
-Message-ID: <64c0540e.170a0220.0452.5cfd@mx.google.com>
-Date:   Tue, 25 Jul 2023 16:00:30 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 25 Jul 2023 19:06:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F5D9C;
+        Tue, 25 Jul 2023 16:06:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C928861932;
+        Tue, 25 Jul 2023 23:06:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05956C433C8;
+        Tue, 25 Jul 2023 23:06:19 +0000 (UTC)
+Date:   Tue, 25 Jul 2023 19:06:17 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ajay Kaher <akaher@vmware.com>
+Cc:     shuah@kernel.org, mhiramat@kernel.org, chinglinyu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, lkp@intel.com,
+        namit@vmware.com, oe-lkp@lists.linux.dev, amakhalov@vmware.com,
+        er.ajay.kaher@gmail.com, srivatsa@csail.mit.edu, tkundu@vmware.com,
+        vsirnapalli@vmware.com
+Subject: Re: [PATCH v5 02/10] eventfs: Implement tracefs_inode_cache
+Message-ID: <20230725190617.14c85997@rorschach.local.home>
+In-Reply-To: <1690054625-31939-3-git-send-email-akaher@vmware.com>
+References: <1690054625-31939-1-git-send-email-akaher@vmware.com>
+        <1690054625-31939-3-git-send-email-akaher@vmware.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v6.5-rc3-22-g7e4bf0c1d0f7
-X-Kernelci-Report-Type: build
-Subject: kselftest/next build: 6 builds: 0 failed, 6 passed,
- 1 warning (v6.5-rc3-22-g7e4bf0c1d0f7)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next build: 6 builds: 0 failed, 6 passed, 1 warning (v6.5-rc3-22-=
-g7e4bf0c1d0f7)
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.5-rc3-22-g7e4bf0c1d0f7/
+Some more nits.
 
-Tree: kselftest
-Branch: next
-Git Describe: v6.5-rc3-22-g7e4bf0c1d0f7
-Git Commit: 7e4bf0c1d0f707d446ec1bb673d946ee55c9a4f4
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+On Sun, 23 Jul 2023 01:06:57 +0530
+Ajay Kaher <akaher@vmware.com> wrote:
 
-Warnings Detected:
+> Create a kmem cache of tracefs_inodes. To be more efficient, as there are
+> lots of tracefs inodes, create its own cache. This also allows to see how
+> many tracefs inodes have been created.
+> 
+> Add helper functions:
+> tracefs_alloc_inode()
+> tracefs_free_inode()
+> get_tracefs()
+> 
+> Signed-off-by: Ajay Kaher <akaher@vmware.com>
+> Co-developed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Tested-by: Ching-lin Yu <chinglinyu@google.com>
+> ---
+>  fs/tracefs/inode.c    | 39 +++++++++++++++++++++++++++++++++++++++
+>  fs/tracefs/internal.h | 19 +++++++++++++++++++
+>  2 files changed, 58 insertions(+)
+>  create mode 100644 fs/tracefs/internal.h
+> 
+> diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+> index 57ac8aa4a724..2508944cc4d8 100644
+> --- a/fs/tracefs/inode.c
+> +++ b/fs/tracefs/inode.c
+> @@ -21,13 +21,33 @@
+>  #include <linux/parser.h>
+>  #include <linux/magic.h>
+>  #include <linux/slab.h>
+> +#include "internal.h"
+>  
+>  #define TRACEFS_DEFAULT_MODE	0700
+> +static struct kmem_cache *tracefs_inode_cachep __ro_after_init;
+>  
+>  static struct vfsmount *tracefs_mount;
+>  static int tracefs_mount_count;
+>  static bool tracefs_registered;
+>  
+> +static struct inode *tracefs_alloc_inode(struct super_block *sb)
+> +{
+> +	struct tracefs_inode *ti;
+> +
+> +	ti = kmem_cache_alloc(tracefs_inode_cachep, GFP_KERNEL);
+> +	if (!ti)
+> +		return NULL;
+> +
+> +	ti->flags = 0;
+> +
+> +	return &ti->vfs_inode;
+> +}
+> +
+> +static void tracefs_free_inode(struct inode *inode)
+> +{
+> +	kmem_cache_free(tracefs_inode_cachep, get_tracefs(inode));
+> +}
+> +
+>  static ssize_t default_read_file(struct file *file, char __user *buf,
+>  				 size_t count, loff_t *ppos)
+>  {
+> @@ -346,6 +366,9 @@ static int tracefs_show_options(struct seq_file *m, struct dentry *root)
+>  }
+>  
+>  static const struct super_operations tracefs_super_operations = {
+> +	.alloc_inode    = tracefs_alloc_inode,
+> +	.free_inode     = tracefs_free_inode,
+> +	.drop_inode     = generic_delete_inode,
+>  	.statfs		= simple_statfs,
+>  	.remount_fs	= tracefs_remount,
+>  	.show_options	= tracefs_show_options,
+> @@ -628,10 +651,26 @@ bool tracefs_initialized(void)
+>  	return tracefs_registered;
+>  }
+>  
+> +static void init_once(void *foo)
+> +{
+> +	struct tracefs_inode *ti = (struct tracefs_inode *) foo;
+> +
+> +	inode_init_once(&ti->vfs_inode);
+> +}
+> +
+>  static int __init tracefs_init(void)
+>  {
+>  	int retval;
+>  
+> +	tracefs_inode_cachep = kmem_cache_create("tracefs_inode_cache",
+> +						 sizeof(struct tracefs_inode),
+> +						 0, (SLAB_RECLAIM_ACCOUNT|
+> +						     SLAB_MEM_SPREAD|
+> +						     SLAB_ACCOUNT),
+> +						 init_once);
+> +	if (!tracefs_inode_cachep)
+> +		return -ENOMEM;
+> +
+>  	retval = sysfs_create_mount_point(kernel_kobj, "tracing");
+>  	if (retval)
+>  		return -EINVAL;
+> diff --git a/fs/tracefs/internal.h b/fs/tracefs/internal.h
+> new file mode 100644
+> index 000000000000..49b5e8949e1c
+> --- /dev/null
+> +++ b/fs/tracefs/internal.h
+> @@ -0,0 +1,19 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _TRACEFS_INTERNAL_H
+> +#define _TRACEFS_INTERNAL_H
+> +
+> +enum {
+> +	TRACEFS_EVENT_INODE     = BIT(1),
+> +};
 
-arm64:
+Let's not introduce the enum until it is used.
 
-arm:
+-- Steve
 
-i386:
+> +
+> +struct tracefs_inode {
+> +	unsigned long           flags;
+> +	void                    *private;
+> +	struct inode            vfs_inode;
+> +};
+> +
+> +static inline struct tracefs_inode *get_tracefs(const struct inode *inode)
+> +{
+> +	return container_of(inode, struct tracefs_inode, vfs_inode);
+> +}
+> +#endif /* _TRACEFS_INTERNAL_H */
 
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-
-Warnings summary:
-
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
- !ENDBR: .text+0x13df86
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
-BR: .text+0x13df86
-
----
-For more info write to <info@kernelci.org>
