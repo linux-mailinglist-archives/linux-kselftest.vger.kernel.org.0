@@ -2,129 +2,260 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40C27620F8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 20:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0790C762104
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 20:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjGYSF6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 14:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
+        id S232314AbjGYSHk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 14:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbjGYSFx (ORCPT
+        with ESMTP id S232241AbjGYSHj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 14:05:53 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D858268D
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 11:05:45 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5223910acf2so1817a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 11:05:45 -0700 (PDT)
+        Tue, 25 Jul 2023 14:07:39 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E172122;
+        Tue, 25 Jul 2023 11:07:35 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-99b78fda9a8so654021966b.1;
+        Tue, 25 Jul 2023 11:07:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690308344; x=1690913144;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3gBnT3Q9DJqSuXcP4CzN0zSoMTfKvs3KyiDNWzlI9V4=;
-        b=IR7MPLRNrwqnMA6Taco+EOZJ6KtwnxWYXAWsiIpvLEpZ8GqzUUtArAD7xEuCO+mZv3
-         aOiO+lW2JAnLZdb/Ck6lRn0BxAyt4qUSG4lQz26wvv5CawhHADRbfR8JdTkmZuqKWid3
-         tQ4sxPrTLguBe5mOxWPkRgp5C+jQLB/QhL1zPzTMaIbs+8YY+xGjT6uCSOiuP+ShH/yh
-         bghhKsbg4+YtihSsav+R2zhvOZpDN1YaMGxBsWq+BgWfdppwO7aEJnEB/IB6oySvNTZv
-         PZ+ebPFJ7IFs6PMAwkdsvH388TRo5wF31MrlTWn+ckwpC0JHlIN/H20Q8pM/lztUD7CY
-         vZjA==
+        d=gmail.com; s=20221208; t=1690308454; x=1690913254;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=6P6nInJaW7G7gJCJpOM64PYpwfKrcIGKm7+sHoKzLBM=;
+        b=o0hUV0twM1c86PgBwH8TT3CNnElIybifN4P2oZW9MOLAwQ/UltCSOKmcmQ5aJ2PKyU
+         Us5KD3EBFY1du0cMSlHXPHdiHHYknP1TCPx6lz6HP+qayRY1IBEzVcaJJOywrOxDVw84
+         2LY76BTywpkUcda9EPxH1+r9Aafm4eEM2xNPnFzjBNmSuKWcB1ta1hdTlIEkXal+mfVa
+         zWPXv2MMRhKzC7Z2gt7WzOAYeJljVR2VQBdD4CmmHpgp8l/7+Ugq/KC0zbx6jurRWCl3
+         OW9aaxtveSNSHWrBxmDEAhoJTHQ9Xgv4xajJxqXT4gAzWqH6+uPMrZtPh294HGUzNGvC
+         YzNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690308344; x=1690913144;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3gBnT3Q9DJqSuXcP4CzN0zSoMTfKvs3KyiDNWzlI9V4=;
-        b=JHOwTPFW4s6DCXcANcKxlHmRcIbVg5SXLddxLgPbTf0avFB7ltolAm/oyaFpNg2zyD
-         xsOXE0549AHatatN7uU9DPS2DWSLJkRlh3htpAd3Nhq3JB80YGaqvB88KQVtAE14hxal
-         NUZte3TitI9m/YXG5f+s7a1Hjat8/1bG4pZsnsBfDEo2woUckpVa0qcFUx+TGjvL16e6
-         wTRl2jxGAfTehjd+1O3DYIs0SFkarAgBrI7ajHIYEjbHg+fxsCS3SnN3ElaZP1rENcVt
-         Cdu2/zAaAeHnXRBQDAnrJcJ1SHipnmmMOGWp89F6zVKQkXoi03EqLzLNreRXDTpZXIFA
-         VUgg==
-X-Gm-Message-State: ABy/qLaaEZrhizINlyabhIE5Nz85SBT5b6w4ugVRDDOHZnHVhzHUGUhh
-        CRj/sAJC1m7fT3hIN9IEwUMNFr2zxbxzyXhj9iGSLg==
-X-Google-Smtp-Source: APBJJlFx5VS5SCJzOTClBE3oorb3CkqCx6mrIr5bXycpxVlMeBOxmxwx7XhBiLPrxEo29Ul0BYE36xYQQxmuCt7+gdA=
-X-Received: by 2002:a50:d6de:0:b0:522:4741:d992 with SMTP id
- l30-20020a50d6de000000b005224741d992mr146970edj.4.1690308343974; Tue, 25 Jul
- 2023 11:05:43 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690308454; x=1690913254;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6P6nInJaW7G7gJCJpOM64PYpwfKrcIGKm7+sHoKzLBM=;
+        b=PR6Jf8I+zaiNUAtLSDCTG0gTlTKXCjHXud5apu885mwrYyU8U0Ek5O+V/KUSd0tYoY
+         LfMbPrfZwMNWDsd8otSeC/3dBsLSikF3wlhZ0RjuIrAJtC/x2DsWsTVCQddu2LH/zy3H
+         jGVgbigFDQd2jkjQwR6a0I3Rh4XdhWcAhgCTMb8/Dxv6sqj5xM64AmRnx29XroOxLuCw
+         FiX6RjT/wnZVdnwCF5RVBLPvJH2cPigN26gPgtYFOWCmLleo/XVW2q5mEk+Xiij/SNaP
+         UpcjDp9NfTy6l+lHlBH6ljNFW0MM2qK9hJyNNGcx6lYIXeMbsUeDrZdYV2VK+uTeWDCT
+         nbnA==
+X-Gm-Message-State: ABy/qLZzYeWDE0TX9oTFlPV4UbGQHzRVe+B1+Cct4hfRrDIAAa12Rloi
+        cEj9a0FJuDezVK4uUAb0L9A=
+X-Google-Smtp-Source: APBJJlExLR8jaPuaX780epX99381rLSkyjeh8Ha8M3N5UIXQ14qEb8M3XahPikZ6LkwvahSVlMiqEA==
+X-Received: by 2002:a17:906:31d4:b0:993:e2ba:55a2 with SMTP id f20-20020a17090631d400b00993e2ba55a2mr12119913ejf.19.1690308453541;
+        Tue, 25 Jul 2023 11:07:33 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id z6-20020a170906814600b00993cc1242d4sm8473747ejw.151.2023.07.25.11.07.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jul 2023 11:07:32 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id B9C0427C005A;
+        Tue, 25 Jul 2023 14:07:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 25 Jul 2023 14:07:30 -0400
+X-ME-Sender: <xms:Yg_AZG5hVtAL4Mgvrlx0MSLxw1en2Nwk10x5zOixwODm9ECNBUNZlg>
+    <xme:Yg_AZP5rrs0HoQXaQm5OHlWZWPz2qKoUeW7fZBgRhVgKMdwuUN8r9SWyj8X9ZK36Y
+    J5J4qHkacEVDjS-YQ>
+X-ME-Received: <xmr:Yg_AZFeH0hESD9YUCvD3ER5B9-AYO0IGXVWh5VLbM8EajuhJgriO5byNuPHUwg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedriedtgdduudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnheptdegheelveffudejffegvdelgffhhfelkeeiieefgeevteejvdegveeu
+    ffeihefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:Yg_AZDI2Uzd1M5m0QGTnCjYb63WwShmsoY3JIZLMCSRSSIUq6fl3ng>
+    <xmx:Yg_AZKLDet_ROuO94cl0a2SFyXb_d8eL6VWtuQ8eVSlxyiL1dExFUg>
+    <xmx:Yg_AZEx0R8nH4wZs3hX6WlvGVZgJBajXs4-6r3N4UMzAa04JUaglzA>
+    <xmx:Yg_AZMCa_TlnAd6VIMX1Fu_QsLhoVvcNLP8ZeAD6hYo7nziJIlN62w>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 25 Jul 2023 14:07:29 -0400 (EDT)
+Date:   Tue, 25 Jul 2023 11:07:04 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Benno Lossin <benno.lossin@proton.me>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] rust: kunit: add KUnit case and suite macros
+Message-ID: <ZMAPSHyswu1Kgd1U@boqun-archlinux>
+References: <20230720-rustbind-v1-0-c80db349e3b5@google.com>
+ <20230720-rustbind-v1-1-c80db349e3b5@google.com>
 MIME-Version: 1.0
-References: <20230713101415.108875-6-usama.anjum@collabora.com>
- <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
- <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com> <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
- <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com> <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
- <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com> <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
- <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com> <CABb0KFHJVeEkh4f6WWK6FThCbA+NE8iYUZE68nV1YAxaHwiwog@mail.gmail.com>
- <e1ead2e8-046a-31d9-8df9-27cdd7b7ff83@collabora.com> <1afedab8-5929-61e5-b0da-9c70dc01c254@collabora.com>
- <eac29a4d-aa3f-4df5-97e6-4aa3a358f2b1@collabora.com>
-In-Reply-To: <eac29a4d-aa3f-4df5-97e6-4aa3a358f2b1@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Tue, 25 Jul 2023 20:05:32 +0200
-Message-ID: <CABb0KFHuNpG+NJQ4sQdp1n_Kf4sO8aC5DBEppFc1zz=zAeDfQw@mail.gmail.com>
-Subject: Re: [v3] fs/proc/task_mmu: Implement IOCTL for efficient page table scanning
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yang Shi <shy828301@gmail.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230720-rustbind-v1-1-c80db349e3b5@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 25 Jul 2023 at 11:11, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> ----
-> Michal please post your thoughts before I post this as v26.
-> ----
-[...]
+On Thu, Jul 20, 2023 at 02:38:52PM +0800, David Gow wrote:
+> From: José Expósito <jose.exposito89@gmail.com>
+> 
+> Add a couple of Rust macros to allow to develop KUnit tests without
+> relying on generated C code:
+> 
+>  - The `kunit_unsafe_test_suite!` Rust macro is similar to the
+>    `kunit_test_suite` C macro.
+>  - The `kunit_case!` Rust macro is similar to the `KUNIT_CASE` C macro.
+>    It can be used with parameters to generate a test case or without
+>    parameters to be used as delimiter in `kunit_test_suite!`.
+> 
+> While these macros can be used on their own, a future patch will
+> introduce another macro to create KUnit tests using a user-space like
+> syntax.
+> 
+> Co-developed-by: David Gow <davidgow@google.com>
+> Signed-off-by: David Gow <davidgow@google.com>
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> ---
+>  rust/kernel/kunit.rs | 92 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  rust/kernel/lib.rs   |  1 +
+>  2 files changed, 93 insertions(+)
+> 
+> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+> index 722655b2d62d..4cffc71e463b 100644
+> --- a/rust/kernel/kunit.rs
+> +++ b/rust/kernel/kunit.rs
+> @@ -161,3 +161,95 @@ macro_rules! kunit_assert_eq {
+>          $crate::kunit_assert!($name, $file, $diff, $left == $right);
+>      }};
+>  }
+> +
+> +/// Represents an individual test case.
+> +///
+> +/// The test case should have the signature
+> +/// `unsafe extern "C" fn test_case(test: *mut crate::bindings::kunit)`.
+> +///
+> +/// The `kunit_unsafe_test_suite!` macro expects a NULL-terminated list of test cases. This macro
+> +/// can be invoked without parameters to generate the delimiter.
+> +#[macro_export]
+> +macro_rules! kunit_case {
 
-Looks ok - minor things below.
+kunit_case doesn't need to be a macro, right? We can define it as a
+const fn. Maybe one `kunit_case_null` and one `kunit_case`. Macros
+should be avoided whenever possible.
 
-1. I'd change the _WPASYNC things to something better, if this can
-also work with "normal" UFFD WP.
+Thoughts?
 
-2. For the address tagging part I'd prefer someone who knows how this
-is used take a look. We're ignoring the tag (but clear it on return in
-->start) - so it doesn't matter for the ioctl() itself.
+Regards,
+Boqun
 
-3. BTW, One of the uses is the GetWriteWatch and I wonder how it
-behaves on HugeTLB (MEM_LARGE_PAGES allocation)? Shouldn't it return a
-list of huge pages and write *lpdwGranularity =3D HPAGE_SIZE?
-
-4. The docs and commit messages need some rewording due to the changes
-in the API.
-
-Other than that:
-
-Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> +    () => {
+> +        $crate::bindings::kunit_case {
+> +            run_case: None,
+> +            name: core::ptr::null_mut(),
+> +            generate_params: None,
+> +            status: $crate::bindings::kunit_status_KUNIT_SUCCESS,
+> +            log: core::ptr::null_mut(),
+> +        }
+> +    };
+> +    ($name:ident, $run_case:ident) => {
+> +        $crate::bindings::kunit_case {
+> +            run_case: Some($run_case),
+> +            name: $crate::c_str!(core::stringify!($name)).as_char_ptr(),
+> +            generate_params: None,
+> +            status: $crate::bindings::kunit_status_KUNIT_SUCCESS,
+> +            log: core::ptr::null_mut(),
+> +        }
+> +    };
+> +}
+> +
+> +/// Registers a KUnit test suite.
+> +///
+> +/// # Safety
+> +///
+> +/// `test_cases` must be a NULL terminated array of test cases.
+> +///
+> +/// # Examples
+> +///
+> +/// ```ignore
+> +/// unsafe extern "C" fn test_fn(_test: *mut crate::bindings::kunit) {
+> +///     let actual = 1 + 1;
+> +///     let expected = 2;
+> +///     assert_eq!(actual, expected);
+> +/// }
+> +///
+> +/// static mut KUNIT_TEST_CASE: crate::bindings::kunit_case = crate::kunit_case!(name, test_fn);
+> +/// static mut KUNIT_NULL_CASE: crate::bindings::kunit_case = crate::kunit_case!();
+> +/// static mut KUNIT_TEST_CASES: &mut[crate::bindings::kunit_case] = unsafe {
+> +///     &mut[KUNIT_TEST_CASE, KUNIT_NULL_CASE]
+> +/// };
+> +/// crate::kunit_unsafe_test_suite!(suite_name, KUNIT_TEST_CASES);
+> +/// ```
+> +#[macro_export]
+> +macro_rules! kunit_unsafe_test_suite {
+> +    ($name:ident, $test_cases:ident) => {
+> +        const _: () = {
+> +            static KUNIT_TEST_SUITE_NAME: [i8; 256] = {
+> +                let name_u8 = core::stringify!($name).as_bytes();
+> +                let mut ret = [0; 256];
+> +
+> +                let mut i = 0;
+> +                while i < name_u8.len() {
+> +                    ret[i] = name_u8[i] as i8;
+> +                    i += 1;
+> +                }
+> +
+> +                ret
+> +            };
+> +
+> +            // SAFETY: `test_cases` is valid as it should be static.
+> +            static mut KUNIT_TEST_SUITE: core::cell::UnsafeCell<$crate::bindings::kunit_suite> =
+> +                core::cell::UnsafeCell::new($crate::bindings::kunit_suite {
+> +                    name: KUNIT_TEST_SUITE_NAME,
+> +                    test_cases: unsafe { $test_cases.as_mut_ptr() },
+> +                    suite_init: None,
+> +                    suite_exit: None,
+> +                    init: None,
+> +                    exit: None,
+> +                    status_comment: [0; 256usize],
+> +                    debugfs: core::ptr::null_mut(),
+> +                    log: core::ptr::null_mut(),
+> +                    suite_init_err: 0,
+> +                });
+> +
+> +            // SAFETY: `KUNIT_TEST_SUITE` is static.
+> +            #[used]
+> +            #[link_section = ".kunit_test_suites"]
+> +            static mut KUNIT_TEST_SUITE_ENTRY: *const $crate::bindings::kunit_suite =
+> +                unsafe { KUNIT_TEST_SUITE.get() };
+> +        };
+> +    };
+> +}
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 3642cadc34b1..ec81fd28d71a 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -18,6 +18,7 @@
+>  #![feature(new_uninit)]
+>  #![feature(receiver_trait)]
+>  #![feature(unsize)]
+> +#![feature(const_mut_refs)]
+>  
+>  // Ensure conditional compilation based on the kernel configuration works;
+>  // otherwise we may silently break things like initcall handling.
+> 
+> -- 
+> 2.41.0.255.g8b1d071c50-goog
+> 
