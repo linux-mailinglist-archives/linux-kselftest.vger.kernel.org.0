@@ -2,122 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CC7761BB1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 16:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A779761C03
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 16:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbjGYOaV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 10:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S233186AbjGYOl0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 10:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjGYOaU (ORCPT
+        with ESMTP id S233197AbjGYOlX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 10:30:20 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92077CD;
-        Tue, 25 Jul 2023 07:30:18 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1690295407t5fn9pna
-Received: from linux-lab-host.localdomain ( [61.141.78.189])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 25 Jul 2023 22:30:06 +0800 (CST)
-X-QQ-SSF: 01200000000000D0X000000A0000000
-X-QQ-FEAT: 5q30pvLz2idm6eGUKnhD29MMjU+BWKNUCYmE2YhHu34X2nvYfFSUxj32XjACV
-        aIqKUwI+BasNiTdoDyFtHtMkn16npcuE7XdblWOGfPHf4ZkbZjCo7hJ3GkSlHo4Uh2t8Q8U
-        b1HKet2rWr8hh9CPLs69dcZanl/yKSBaNV90y6ByeNjQsqVFTbxTdo5WjgR7sr274bBfsTW
-        RN1u5zi6bIZ424y091n+sUxr3DuuCsHEY14CXrHpHSN7ack5B7Kf5QkfjlYafkaq7kVM2c9
-        EOuAFrZYZ5QcA4mYZVzpUEP7ucDOrQDze0K2m0FFvedKGl4okpZF/w0chsC7SVO25cqSgi1
-        J07Jy6W0h15JOfh7xUof8BuCjd/IW2futU4SfuKrsKie3NwlRJvH9WcSOztnqF6zTovSoaJ
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 502512354175558940
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux@weissschuh.net,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v1 4/8] selftests/nolibc: add extra config file customize support
-Date:   Tue, 25 Jul 2023 22:30:06 +0800
-Message-Id: <20230725143006.37452-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230722120037.GA17311@1wt.eu>
-References: <20230722120037.GA17311@1wt.eu>
+        Tue, 25 Jul 2023 10:41:23 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E127136
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 07:40:57 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51e28b299adso8871825a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 07:40:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1690296051; x=1690900851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IThHZKgOu2CI5lLaW4+dohujcbudp1VuPGinJk5/sjg=;
+        b=YycOgFH4zQyYEHbalkot5ZX4yBrIJRW7H0IyiNBqCjc4D8OlAEz+b4bIO59iZ49fRx
+         zXsyax8B84PncxwgOuAD/wa5ujUzvNlDDELrEwV0QP2mM/De2ayWTLG3zzwXIzsbf26B
+         t7ubBySeNUCXq+H8Dmcw5oqpgp3RwpGP1rIOw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690296051; x=1690900851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IThHZKgOu2CI5lLaW4+dohujcbudp1VuPGinJk5/sjg=;
+        b=BkP31wrFQAw4afnD+wXQcBOB+CuObOaO0tm7Vo5ls8nJto2tyL7o/8sp6w7WQAoC7K
+         MNNsG9fbOsyJyr2sphSLjSqIptNftH+6YT7nbUM56w9UESMGyjv8zZO9oPhQhCRFCqNJ
+         HL/D9x/nYOCNfTV/lWGTHI3IWxuhaRBSTmXMX1BT3DBs/hmqDRoH/j0L27ExUwOW3iTQ
+         sxPNAIQYIBlsdc8ju3iGocUdMxFeCRCNGDCSl5XThO1aFWleGTRCCiY4tVXy1H/QFDMh
+         GY2RZj+To8LQTW61xq2M+T+0LCZBz2Z48kH4rQoNwlAdBoj0gm1cY2KfwrwGWolnE2SU
+         RQPg==
+X-Gm-Message-State: ABy/qLbyWwbCtShCqTlixBhFnAmzyrHzdE5QnW0T7Z9eMx9pBjeNKxnm
+        rgASWYT7i3g8iHTlivsK0Y9u2MkFM9pCgdI/uNWApA==
+X-Google-Smtp-Source: APBJJlF68pzIjDwAzPGMKcrhOEyk9TWf/oRIMQEj1J4deHdSxGb7fnpo7ceaea8lfJeFMZmiLVLVP2G2Gj0o1TJx2JU=
+X-Received: by 2002:a05:6402:10cb:b0:521:7ab6:b95d with SMTP id
+ p11-20020a05640210cb00b005217ab6b95dmr11439677edu.29.1690296051014; Tue, 25
+ Jul 2023 07:40:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cdbbc9df16044b568448ed9cd828d406f0851bfb.1690255889.git.yan@cloudflare.com>
+ <9a5c27e4-a1a3-1fe5-a179-bfd0072e7c59@web.de>
+In-Reply-To: <9a5c27e4-a1a3-1fe5-a179-bfd0072e7c59@web.de>
+From:   Yan Zhai <yan@cloudflare.com>
+Date:   Tue, 25 Jul 2023 09:40:39 -0500
+Message-ID: <CAO3-PbokoLz8S8YhV_nNjq+Oq3P_SXqbj-TNJmrC56DV8KLb7Q@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf 1/2] bpf: fix skb_do_redirect return values
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     kernel-team@cloudflare.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Hao Luo <haoluo@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jordan Griege <jgriege@cloudflare.com>,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
-
-> On Wed, Jul 19, 2023 at 05:14:07AM +0800, Zhangjin Wu wrote:
-> > The default DEFCONFIG_<ARCH> may not always work for all architectures,
-> > some architectures require to add extra kernel config options, this adds
-> > a new 'extconfig' target for this requirement.
-> > 
-> > It allows to customize extra kernel config options via the common
-> > common.config and the architecture specific <ARCH>.config, at last
-> > trigger 'allnoconfig' to let them take effect with missing config
-> > options as disabled.
-> > 
-> > The scripts/kconfig/merge_config.sh tool is used to merge the extra
-> > config files.
-> > 
-> > Suggested-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> > Link: https://lore.kernel.org/lkml/67eb70d4-c9ff-4afc-bac7-7f36cc2c81bc@t-8ch.de/
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/Makefile | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > index f42adef87e12..08a5ca5f418b 100644
-> > --- a/tools/testing/selftests/nolibc/Makefile
-> > +++ b/tools/testing/selftests/nolibc/Makefile
-> > @@ -39,6 +39,9 @@ DEFCONFIG_s390       = defconfig
-> >  DEFCONFIG_loongarch  = defconfig
-> >  DEFCONFIG            = $(DEFCONFIG_$(ARCH))
-> >  
-> > +# extra kernel config files under configs/, include common + architecture specific
-> > +EXTCONFIG            = common.config $(ARCH).config
-> > +
-> >  # optional tests to run (default = all)
-> >  TEST =
-> >  
-> > @@ -162,6 +165,10 @@ initramfs: nolibc-test
-> >  defconfig:
-> >  	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-> >  
-> > +extconfig:
-> > +	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -O "$(srctree)" -m "$(srctree)/.config" $(foreach c,$(EXTCONFIG),$(wildcard $(CURDIR)/configs/$c))
-> > +	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) KCONFIG_ALLCONFIG="$(srctree)/.config" allnoconfig
-> > +
-> 
-> Please also mention this entry in the "help" message.
-> Other than that, OK.
+On Tue, Jul 25, 2023 at 12:11=E2=80=AFAM Markus Elfring <Markus.Elfring@web=
+.de> wrote:
 >
+> >                                      =E2=80=A6 unexpected problems. Thi=
+s change
+> > converts the positive status code to proper error code.
+>
+> Please choose a corresponding imperative change suggestion.
+>
+> See also:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
+ocumentation/process/submitting-patches.rst?h=3Dv6.5-rc3#n94
+>
+>
+> Did you provide sufficient justification for a possible addition of the t=
+ag =E2=80=9CFixes=E2=80=9D?
+>
+>
+> =E2=80=A6
+> > v2: code style change suggested by Stanislav Fomichev
+> > ---
+> >  net/core/filter.c | 12 +++++++++++-
+> =E2=80=A6
+>
+> How do you think about to replace this marker by a line break?
+>
+> See also:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
+ocumentation/process/submitting-patches.rst?h=3Dv6.5-rc3#n711
+>
+> Regards,
+> Markus
 
-Willy, as we discussed in another tinyconfig series, in order to avoid
-add more complexity to users, I plan to drop this standalone 'extconfig'
-target and move the extra config operations to defconfig target like
-this:
+Hi Markus,
 
-    defconfig:
-     	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-     	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -O "$(srctree)" -m "$(srctree)/.config" $(foreach c,$(EXTCONFIG),$(wildcard $(CURDIR)/configs/$c))
-     	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) KCONFIG_ALLCONFIG="$(srctree)/.config" allnoconfig
+   Thanks for the suggestions, those are what I could use more help with.
+   Will address these in the next version.
 
-This extra config options are really critical to default boot and test, so, it
-should be a 'default' config action as the 'defconfig' target originally mean.
-
-Will test carefully about this change, what's your idea?
-
-Thanks,
-Zhangjin
-
-> Willy
+Yan
