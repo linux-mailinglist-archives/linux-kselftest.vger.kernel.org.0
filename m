@@ -2,58 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A57C760D5D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 10:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC29D760D5E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 10:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbjGYIoC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 04:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        id S231516AbjGYIoE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 04:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbjGYInh (ORCPT
+        with ESMTP id S233135AbjGYIno (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 04:43:37 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CC3268B
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 01:42:37 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbd33a1819so37885e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 01:42:36 -0700 (PDT)
+        Tue, 25 Jul 2023 04:43:44 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394342697
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 01:42:45 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fc075d9994so58315e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 01:42:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690274555; x=1690879355;
+        d=google.com; s=20221208; t=1690274564; x=1690879364;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UTlfLCTQDdYNnT4sdCUs0UbLqETwWl1AznO+clcmomg=;
-        b=Ae9vqONnNaWh1yooVDWsWcqyZqk/KZr7/gnSdEX+FsA17XrkBLrClQCxo2IDMSCtJf
-         5CHSftlg4tqTzJmhn4zBg3Tie/NdSuZpIypp7/qTcvyZx0jEwFVbNHzAV4smu42FyKUx
-         PebFdHKd4q+sRnzo5Yy8pVfBbt8bB6hqCgFs+uqe5+z2gHxHHpsltM7TEoPvQ5C6TB5s
-         3ZVwZ9Ku2sKu4+D9R3DHHUIXerBIEGUYN0pGru7MWUFgq4BubtMPm1Bc3el942Vyl7Br
-         3PSYRD27EGJXKropLow6cjqsUJ3Y0Sqk5z4a9j2/gRtja4Z225xE5qoXAy0zIBUQXU06
-         cr+g==
+        bh=d49fj9dg2nqRAYZI4N+vd4XtWUI8Rzl72CuhEPv0nWk=;
+        b=h76O3PraJL7t3a4lw2HpIs9Vf/PRzTOAbHCZLX2eCofTeZ/qCoTDr3Av7IWhIlNk4U
+         2fFurVEe9BmYRWFrjUixyK30XX7nd7rAuUABYSTFlnvbQQF7iE1X7UqXlWQNX1CZ3ZD4
+         zOQ3j5Sj+ZljcuBgEAYePo0t/WZSARELnmDzRNo4DzazwLEBHilc56vUlnGhUIdThDSi
+         sbHFJwLBOtBDpylr5U/k8+NzpVuZ42aa3VhgjXfpVfnhj2vJmr6wykUMbW6ilB+Uw01T
+         6Lom8iMikNeS9FJM/jgmicYY7m7LifwwvXnWnnvYwGp0NCBkCa93OtDYPsrQb80ykzVI
+         OcHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690274555; x=1690879355;
+        d=1e100.net; s=20221208; t=1690274564; x=1690879364;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UTlfLCTQDdYNnT4sdCUs0UbLqETwWl1AznO+clcmomg=;
-        b=R1INSz/T+1vfqTsEY2hd75kxECaQZxOrj1gccRme+ObiYm6a8xWdHpYaGo2X4nfa1t
-         lz+mipyxYkUU5rpekvaOrmKXaVw2N2YtvIY1NPLInvoHhKY3pNwMpoWPpmUXAw9R/klS
-         hsNQArkHClQ9T+A/2by8tEV0AGU3AQnUduqrejzEPoUwP9hDosiynoVvCY6rhBhfcYcz
-         4E7HWvj6sVWFq0nYL5JTZKpoP1XOEZlGuq/FXy/XsE1VFfIk8aS+jg7UWpiKfeseG5tu
-         BpYKXmpCv0O+9ojSUGs1vUrTV0mNWMxB1ovmS6lKFiQah44Xu4F7rkQMUWaM0uL7fSt6
-         ZTZA==
-X-Gm-Message-State: ABy/qLbR3yli54hwg2HeKYaLppZ5LiGz5eS5+Oi6WxPu2ZFg5x3OWB9B
-        lBe82GTv0Kvek68z46VHHmKf79vtn+DZoVyuJnNkJw==
-X-Google-Smtp-Source: APBJJlFRt3cwduziOFQ8rVhsPd05hwqCEzGZRceIdn41dig70hW30vmUcd/nwwQQ697yy+IHDz5v1xiQCq7Vz1+i6GY=
-X-Received: by 2002:a7b:cd93:0:b0:3f6:f4b:d4a6 with SMTP id
- y19-20020a7bcd93000000b003f60f4bd4a6mr33475wmj.7.1690274555439; Tue, 25 Jul
- 2023 01:42:35 -0700 (PDT)
+        bh=d49fj9dg2nqRAYZI4N+vd4XtWUI8Rzl72CuhEPv0nWk=;
+        b=SV+fQdWFCdlwf07SCTvPbKMu6ibPqWjjoCj9v2hc/vsA4oGhkeAW65KYvW4QeDrEJB
+         NjrYSTSbxc8QT2bxCRpcIgZ3bwVXmdJ5Dbr6E4r8rS+3q/WF5qtDmuJn9DDTLNqwyu+I
+         qVs2EdDWpHpwLDI7kXqKpGeaGiiEtX8VnpNEsR/6G776RuNTK2UUpN8FBXGkr4nABvaV
+         C6lpFTjGz5MqyeatoXq+F6+bQUNjK3eTOiQ2LmB51wWXvPTe7hwhYujQBCdtK6FWLRF0
+         8uCq47asSEpZd+mv71qkSSVCR/2LlpDvt9fwz21Juvl2jxSpSQkAEZQZpeGZelzLWWuE
+         7Fug==
+X-Gm-Message-State: ABy/qLbYG7aM2xyd75I8/rTO3JWYONAwF5Agq22A7x7bOkEHQnIA4LSn
+        /UuZoyO+dRCJyMi3idER63KBHWwnwtqTho9XC6KKPQ==
+X-Google-Smtp-Source: APBJJlFWi3uSj4qBxNiNlxstKaMd84At700nIYnvwJMh6xXo0PwfmpiCAkUkqZMrFfm7wtQ/VM7WudEiaFj6pxWnk2w=
+X-Received: by 2002:a05:600c:1d21:b0:3fd:e15:41e3 with SMTP id
+ l33-20020a05600c1d2100b003fd0e1541e3mr52820wms.2.1690274563692; Tue, 25 Jul
+ 2023 01:42:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230724162834.1354164-1-rmoar@google.com> <20230724162834.1354164-6-rmoar@google.com>
-In-Reply-To: <20230724162834.1354164-6-rmoar@google.com>
+References: <20230724162834.1354164-1-rmoar@google.com> <20230724162834.1354164-7-rmoar@google.com>
+In-Reply-To: <20230724162834.1354164-7-rmoar@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 25 Jul 2023 16:42:23 +0800
-Message-ID: <CABVgOS=R8OvM8JJr35ap1F_srw19M85Vr_7=KVmscOz0=bzC4g@mail.gmail.com>
-Subject: Re: [PATCH v2 5/9] kunit: tool: Add command line interface to filter
- and report attributes
+Date:   Tue, 25 Jul 2023 16:42:30 +0800
+Message-ID: <CABVgOSkQRSCX1yKeSnpdoWxbNu36oU7Ex1aPZRbbS4LQO8093A@mail.gmail.com>
+Subject: Re: [PATCH v2 6/9] kunit: memcpy: Mark tests as slow using test attributes
 To:     Rae Moar <rmoar@google.com>
 Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -61,581 +60,100 @@ Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
         linux-hardening@vger.kernel.org, jstultz@google.com,
         tglx@linutronix.de, sboyd@kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000078ea4406014bb62b"
+        boundary="000000000000f5c8cf06014bb6d7"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000078ea4406014bb62b
+--000000000000f5c8cf06014bb6d7
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
 On Tue, 25 Jul 2023 at 00:30, Rae Moar <rmoar@google.com> wrote:
 >
-> Add ability to kunit.py to filter attributes and report a list of tests
-> including attributes without running tests.
+> Mark slow memcpy KUnit tests using test attributes.
 >
-> Add flag "--filter" to input filters on test attributes. Tests will be
-> filtered out if they do not match all inputted filters.
+> Tests marked as slow are as follows: memcpy_large_test, memmove_test,
+> memmove_large_test, and memmove_overlap_test. These tests were the slowest
+> of the memcpy tests and relatively slower to most other KUnit tests. Most
+> of these tests are already skipped when CONFIG_MEMCPY_SLOW_KUNIT_TEST is
+> not enabled.
 >
-> Example: --filter speed=3Dslow (This filter would run only the tests that=
- are
-> marked as slow)
+> These tests can now be filtered using the KUnit test attribute filtering
+> feature. Example: --filter "speed>slow". This will run only the tests that
+> have speeds faster than slow. The slow attribute will also be outputted in
+> KTAP.
 >
-> Filters have operations: <, >, <=3D, >=3D, !=3D, and =3D. But note that t=
-he
-> characters < and > are often interpreted by the shell, so they may need t=
-o
-> be quoted or escaped.
+> Note: This patch is intended to replace the use of
+> CONFIG_MEMCPY_SLOW_KUNIT_TEST and to potentially deprecate this feature.
+> This patch does not remove the config option but does add a note to the
+> config definition commenting on this future shift.
 >
-> Example: --filter "speed>slow" or --filter speed\>slow (This filter would
-> run only the tests that have the speed faster than slow.
->
-> Additionally, multiple filters can be used.
->
-> Example: --filter "speed=3Dslow, module!=3Dexample" (This filter would ru=
-n
-> only the tests that have the speed slow and are not in the "example"
-> module)
->
-> Note if the user wants to skip filtered tests instead of not
-> running/showing them use the "--filter_action=3Dskip" flag.
->
-> Expose the output of kunit.action=3Dlist option with flag "--list_tests" =
-to
-> output a list of tests. Additionally, add flag "--list_tests_attr" to
-> output a list of tests and their attributes. These flags are useful to se=
-e
-> tests and test attributes without needing to run tests.
->
-> Example of the output of "--list_tests_attr":
->   example
->   example.test_1
->   example.test_2
->   # example.test_2.speed: slow
->
-> This output includes a suite, example, with two test cases, test_1 and
-> test_2. And in this instance test_2 has been marked as slow.
->
+> Acked-by: Kees Cook <keescook@chromium.org>
 > Signed-off-by: Rae Moar <rmoar@google.com>
 > ---
 
-Looks good, working well here.
-
 Reviewed-by: David Gow <davidgow@google.com>
 
-
+Thanks,
 -- David
 
 >
 > Changes since v1:
-> - No major changes
->
+> - No changes.
 > Changes since RFC v2:
-> - Remove --filter_skip flag and replace with =E2=80=93-filter_action
-> - Make KUnit executor errors visible in kunit.py and raw_output
-> - Fix up help comments
->
+> - No changes.
 > Changes since RFC v1:
-> - Change method for inputting filters to allow for spaces in filtering
->   values
-> - Add option to skip filtered tests instead of not run or show them with
->   the -=E2=80=93filter_skip flag
-> - Separate the new feature to list tests and their attributes into both
->   =E2=80=93-list_tests (lists just tests) and =E2=80=93-list_tests_attr (=
-lists all)
+> - Added note under CONFIG_MEMCPY_SLOW_KUNIT_TEST.
 >
->  tools/testing/kunit/kunit.py           | 70 ++++++++++++++++++++++++--
->  tools/testing/kunit/kunit_kernel.py    |  8 ++-
->  tools/testing/kunit/kunit_parser.py    | 11 +++-
->  tools/testing/kunit/kunit_tool_test.py | 39 +++++++-------
->  4 files changed, 99 insertions(+), 29 deletions(-)
+>  lib/Kconfig.debug  | 3 +++
+>  lib/memcpy_kunit.c | 8 ++++----
+>  2 files changed, 7 insertions(+), 4 deletions(-)
 >
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 3905c43369c3..bc74088c458a 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -55,8 +55,12 @@ class KunitExecRequest(KunitParseRequest):
->         build_dir: str
->         timeout: int
->         filter_glob: str
-> +       filter: str
-> +       filter_action: Optional[str]
->         kernel_args: Optional[List[str]]
->         run_isolated: Optional[str]
-> +       list_tests: bool
-> +       list_tests_attr: bool
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 550cb967b668..1b3894e861f2 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2701,6 +2701,9 @@ config MEMCPY_SLOW_KUNIT_TEST
+>           and bit ranges. These can be very slow, so they are split out
+>           as a separate config, in case they need to be disabled.
 >
->  @dataclass
->  class KunitRequest(KunitExecRequest, KunitBuildRequest):
-> @@ -102,19 +106,41 @@ def config_and_build_tests(linux: kunit_kernel.Linu=
-xSourceTree,
->
->  def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecR=
-equest) -> List[str]:
->         args =3D ['kunit.action=3Dlist']
+> +         Note this config option will be replaced by the use of KUnit test
+> +         attributes.
 > +
-> +       if request.kernel_args:
-> +               args.extend(request.kernel_args)
-> +
-> +       output =3D linux.run_kernel(args=3Dargs,
-> +                          timeout=3Drequest.timeout,
-> +                          filter_glob=3Drequest.filter_glob,
-> +                          filter=3Drequest.filter,
-> +                          filter_action=3Drequest.filter_action,
-> +                          build_dir=3Drequest.build_dir)
-> +       lines =3D kunit_parser.extract_tap_lines(output)
-> +       # Hack! Drop the dummy TAP version header that the executor print=
-s out.
-> +       lines.pop()
-> +
-> +       # Filter out any extraneous non-test output that might have gotte=
-n mixed in.
-> +       return [l for l in output if re.match(r'^[^\s.]+\.[^\s.]+$', l)]
-> +
-> +def _list_tests_attr(linux: kunit_kernel.LinuxSourceTree, request: Kunit=
-ExecRequest) -> Iterable[str]:
-> +       args =3D ['kunit.action=3Dlist_attr']
-> +
->         if request.kernel_args:
->                 args.extend(request.kernel_args)
->
->         output =3D linux.run_kernel(args=3Dargs,
->                            timeout=3Drequest.timeout,
->                            filter_glob=3Drequest.filter_glob,
-> +                          filter=3Drequest.filter,
-> +                          filter_action=3Drequest.filter_action,
->                            build_dir=3Drequest.build_dir)
->         lines =3D kunit_parser.extract_tap_lines(output)
->         # Hack! Drop the dummy TAP version header that the executor print=
-s out.
->         lines.pop()
->
->         # Filter out any extraneous non-test output that might have gotte=
-n mixed in.
-> -       return [l for l in lines if re.match(r'^[^\s.]+\.[^\s.]+$', l)]
-> +       return lines
->
->  def _suites_from_test_list(tests: List[str]) -> List[str]:
->         """Extracts all the suites from an ordered list of tests."""
-> @@ -128,10 +154,18 @@ def _suites_from_test_list(tests: List[str]) -> Lis=
-t[str]:
->                         suites.append(suite)
->         return suites
->
-> -
-> -
->  def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRe=
-quest) -> KunitResult:
->         filter_globs =3D [request.filter_glob]
-> +       if request.list_tests:
-> +               output =3D _list_tests(linux, request)
-> +               for line in output:
-> +                       print(line.rstrip())
-> +               return KunitResult(status=3DKunitStatus.SUCCESS, elapsed_=
-time=3D0.0)
-> +       if request.list_tests_attr:
-> +               attr_output =3D _list_tests_attr(linux, request)
-> +               for line in attr_output:
-> +                       print(line.rstrip())
-> +               return KunitResult(status=3DKunitStatus.SUCCESS, elapsed_=
-time=3D0.0)
->         if request.run_isolated:
->                 tests =3D _list_tests(linux, request)
->                 if request.run_isolated =3D=3D 'test':
-> @@ -155,6 +189,8 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, r=
-equest: KunitExecRequest) -
->                         args=3Drequest.kernel_args,
->                         timeout=3Drequest.timeout,
->                         filter_glob=3Dfilter_glob,
-> +                       filter=3Drequest.filter,
-> +                       filter_action=3Drequest.filter_action,
->                         build_dir=3Drequest.build_dir)
->
->                 _, test_result =3D parse_tests(request, metadata, run_res=
-ult)
-> @@ -341,6 +377,16 @@ def add_exec_opts(parser: argparse.ArgumentParser) -=
-> None:
->                             nargs=3D'?',
->                             default=3D'',
->                             metavar=3D'filter_glob')
-> +       parser.add_argument('--filter',
-> +                           help=3D'Filter KUnit tests with attributes, '
-> +                           'e.g. module=3Dexample or speed>slow',
-> +                           type=3Dstr,
-> +                               default=3D'')
-> +       parser.add_argument('--filter_action',
-> +                           help=3D'If set to skip, filtered tests will b=
-e skipped, '
-> +                               'e.g. --filter_action=3Dskip. Otherwise t=
-hey will not run.',
-> +                           type=3Dstr,
-> +                               choices=3D['skip'])
->         parser.add_argument('--kernel_args',
->                             help=3D'Kernel command-line parameters. Maybe=
- be repeated',
->                              action=3D'append', metavar=3D'')
-> @@ -350,6 +396,12 @@ def add_exec_opts(parser: argparse.ArgumentParser) -=
-> None:
->                             'what ran before it.',
->                             type=3Dstr,
->                             choices=3D['suite', 'test'])
-> +       parser.add_argument('--list_tests', help=3D'If set, list all test=
-s that will be '
-> +                           'run.',
-> +                           action=3D'store_true')
-> +       parser.add_argument('--list_tests_attr', help=3D'If set, list all=
- tests and test '
-> +                           'attributes.',
-> +                           action=3D'store_true')
->
->  def add_parse_opts(parser: argparse.ArgumentParser) -> None:
->         parser.add_argument('--raw_output', help=3D'If set don\'t parse o=
-utput from kernel. '
-> @@ -398,8 +450,12 @@ def run_handler(cli_args: argparse.Namespace) -> Non=
-e:
->                                         json=3Dcli_args.json,
->                                         timeout=3Dcli_args.timeout,
->                                         filter_glob=3Dcli_args.filter_glo=
-b,
-> +                                       filter=3Dcli_args.filter,
-> +                                       filter_action=3Dcli_args.filter_a=
-ction,
->                                         kernel_args=3Dcli_args.kernel_arg=
-s,
-> -                                       run_isolated=3Dcli_args.run_isola=
-ted)
-> +                                       run_isolated=3Dcli_args.run_isola=
-ted,
-> +                                       list_tests=3Dcli_args.list_tests,
-> +                                       list_tests_attr=3Dcli_args.list_t=
-ests_attr)
->         result =3D run_tests(linux, request)
->         if result.status !=3D KunitStatus.SUCCESS:
->                 sys.exit(1)
-> @@ -441,8 +497,12 @@ def exec_handler(cli_args: argparse.Namespace) -> No=
-ne:
->                                         json=3Dcli_args.json,
->                                         timeout=3Dcli_args.timeout,
->                                         filter_glob=3Dcli_args.filter_glo=
-b,
-> +                                       filter=3Dcli_args.filter,
-> +                                       filter_action=3Dcli_args.filter_a=
-ction,
->                                         kernel_args=3Dcli_args.kernel_arg=
-s,
-> -                                       run_isolated=3Dcli_args.run_isola=
-ted)
-> +                                       run_isolated=3Dcli_args.run_isola=
-ted,
-> +                                       list_tests=3Dcli_args.list_tests,
-> +                                       list_tests_attr=3Dcli_args.list_t=
-ests_attr)
->         result =3D exec_tests(linux, exec_request)
->         stdout.print_with_timestamp((
->                 'Elapsed time: %.3fs\n') % (result.elapsed_time))
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/ku=
-nit_kernel.py
-> index 7f648802caf6..0b6488efed47 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -330,11 +330,15 @@ class LinuxSourceTree:
->                         return False
->                 return self.validate_config(build_dir)
->
-> -       def run_kernel(self, args: Optional[List[str]]=3DNone, build_dir:=
- str=3D'', filter_glob: str=3D'', timeout: Optional[int]=3DNone) -> Iterato=
-r[str]:
-> +       def run_kernel(self, args: Optional[List[str]]=3DNone, build_dir:=
- str=3D'', filter_glob: str=3D'', filter: str=3D'', filter_action: Optional=
-[str]=3DNone, timeout: Optional[int]=3DNone) -> Iterator[str]:
->                 if not args:
->                         args =3D []
->                 if filter_glob:
-> -                       args.append('kunit.filter_glob=3D'+filter_glob)
-> +                       args.append('kunit.filter_glob=3D' + filter_glob)
-> +               if filter:
-> +                       args.append('kunit.filter=3D"' + filter + '"')
-> +               if filter_action:
-> +                       args.append('kunit.filter_action=3D' + filter_act=
-ion)
->                 args.append('kunit.enable=3D1')
->
->                 process =3D self._ops.start(args, build_dir)
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/ku=
-nit_parser.py
-> index fbc094f0567e..79d8832c862a 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -212,6 +212,7 @@ KTAP_START =3D re.compile(r'\s*KTAP version ([0-9]+)$=
-')
->  TAP_START =3D re.compile(r'\s*TAP version ([0-9]+)$')
->  KTAP_END =3D re.compile(r'\s*(List of all partitions:|'
->         'Kernel panic - not syncing: VFS:|reboot: System halted)')
-> +EXECUTOR_ERROR =3D re.compile(r'\s*kunit executor: (.*)$')
->
->  def extract_tap_lines(kernel_output: Iterable[str]) -> LineStream:
->         """Extracts KTAP lines from the kernel output."""
-> @@ -242,6 +243,8 @@ def extract_tap_lines(kernel_output: Iterable[str]) -=
-> LineStream:
->                                 # remove the prefix, if any.
->                                 line =3D line[prefix_len:]
->                                 yield line_num, line
-> +                       elif EXECUTOR_ERROR.search(line):
-> +                               yield line_num, line
->         return LineStream(lines=3Disolate_ktap_output(kernel_output))
->
->  KTAP_VERSIONS =3D [1]
-> @@ -447,7 +450,7 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
->         Log of diagnostic lines
->         """
->         log =3D []  # type: List[str]
-> -       non_diagnostic_lines =3D [TEST_RESULT, TEST_HEADER, KTAP_START]
-> +       non_diagnostic_lines =3D [TEST_RESULT, TEST_HEADER, KTAP_START, T=
-AP_START]
->         while lines and not any(re.match(lines.peek())
->                         for re in non_diagnostic_lines):
->                 log.append(lines.pop())
-> @@ -713,6 +716,11 @@ def parse_test(lines: LineStream, expected_num: int,=
- log: List[str], is_subtest:
->         """
->         test =3D Test()
->         test.log.extend(log)
-> +
-> +       # Parse any errors prior to parsing tests
-> +       err_log =3D parse_diagnostic(lines)
-> +       test.log.extend(err_log)
-> +
->         if not is_subtest:
->                 # If parsing the main/top-level test, parse KTAP version =
-line and
->                 # test plan
-> @@ -774,6 +782,7 @@ def parse_test(lines: LineStream, expected_num: int, =
-log: List[str], is_subtest:
->                 # Don't override a bad status if this test had one report=
-ed.
->                 # Assumption: no subtests means CRASHED is from Test.__in=
-it__()
->                 if test.status in (TestStatus.TEST_CRASHED, TestStatus.SU=
-CCESS):
-> +                       print_log(test.log)
->                         test.status =3D TestStatus.NO_TESTS
->                         test.add_error('0 tests run!')
->
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit=
-/kunit_tool_test.py
-> index be35999bb84f..b28c1510be2e 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -597,7 +597,7 @@ class KUnitMainTest(unittest.TestCase):
->                 self.assertEqual(self.linux_source_mock.build_reconfig.ca=
-ll_count, 0)
->                 self.assertEqual(self.linux_source_mock.run_kernel.call_c=
-ount, 1)
->                 self.linux_source_mock.run_kernel.assert_called_once_with=
-(
-> -                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'', timeout=3D300)
-> +                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'', filter=3D'', filter_action=3DNone, timeout=3D300)
->                 self.print_mock.assert_any_call(StrContains('Testing comp=
-lete.'))
->
->         def test_run_passes_args_pass(self):
-> @@ -605,7 +605,7 @@ class KUnitMainTest(unittest.TestCase):
->                 self.assertEqual(self.linux_source_mock.build_reconfig.ca=
-ll_count, 1)
->                 self.assertEqual(self.linux_source_mock.run_kernel.call_c=
-ount, 1)
->                 self.linux_source_mock.run_kernel.assert_called_once_with=
-(
-> -                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'', timeout=3D300)
-> +                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'', filter=3D'', filter_action=3DNone, timeout=3D300)
->                 self.print_mock.assert_any_call(StrContains('Testing comp=
-lete.'))
->
->         def test_exec_passes_args_fail(self):
-> @@ -629,7 +629,7 @@ class KUnitMainTest(unittest.TestCase):
->                         kunit.main(['run'])
->                 self.assertEqual(e.exception.code, 1)
->                 self.linux_source_mock.run_kernel.assert_called_once_with=
-(
-> -                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'', timeout=3D300)
-> +                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'', filter=3D'', filter_action=3DNone, timeout=3D300)
->                 self.print_mock.assert_any_call(StrContains(' 0 tests run=
-!'))
->
->         def test_exec_raw_output(self):
-> @@ -670,13 +670,13 @@ class KUnitMainTest(unittest.TestCase):
->                 self.linux_source_mock.run_kernel =3D mock.Mock(return_va=
-lue=3D[])
->                 kunit.main(['run', '--raw_output', 'filter_glob'])
->                 self.linux_source_mock.run_kernel.assert_called_once_with=
-(
-> -                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'filter_glob', timeout=3D300)
-> +                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'filter_glob', filter=3D'', filter_action=3DNone, timeout=3D300)
->
->         def test_exec_timeout(self):
->                 timeout =3D 3453
->                 kunit.main(['exec', '--timeout', str(timeout)])
->                 self.linux_source_mock.run_kernel.assert_called_once_with=
-(
-> -                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'', timeout=3Dtimeout)
-> +                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'', filter=3D'', filter_action=3DNone, timeout=3Dtimeout)
->                 self.print_mock.assert_any_call(StrContains('Testing comp=
-lete.'))
->
->         def test_run_timeout(self):
-> @@ -684,7 +684,7 @@ class KUnitMainTest(unittest.TestCase):
->                 kunit.main(['run', '--timeout', str(timeout)])
->                 self.assertEqual(self.linux_source_mock.build_reconfig.ca=
-ll_count, 1)
->                 self.linux_source_mock.run_kernel.assert_called_once_with=
-(
-> -                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'', timeout=3Dtimeout)
-> +                       args=3DNone, build_dir=3D'.kunit', filter_glob=3D=
-'', filter=3D'', filter_action=3DNone, timeout=3Dtimeout)
->                 self.print_mock.assert_any_call(StrContains('Testing comp=
-lete.'))
->
->         def test_run_builddir(self):
-> @@ -692,7 +692,7 @@ class KUnitMainTest(unittest.TestCase):
->                 kunit.main(['run', '--build_dir=3D.kunit'])
->                 self.assertEqual(self.linux_source_mock.build_reconfig.ca=
-ll_count, 1)
->                 self.linux_source_mock.run_kernel.assert_called_once_with=
-(
-> -                       args=3DNone, build_dir=3Dbuild_dir, filter_glob=
-=3D'', timeout=3D300)
-> +                       args=3DNone, build_dir=3Dbuild_dir, filter_glob=
-=3D'', filter=3D'', filter_action=3DNone, timeout=3D300)
->                 self.print_mock.assert_any_call(StrContains('Testing comp=
-lete.'))
->
->         def test_config_builddir(self):
-> @@ -710,7 +710,7 @@ class KUnitMainTest(unittest.TestCase):
->                 build_dir =3D '.kunit'
->                 kunit.main(['exec', '--build_dir', build_dir])
->                 self.linux_source_mock.run_kernel.assert_called_once_with=
-(
-> -                       args=3DNone, build_dir=3Dbuild_dir, filter_glob=
-=3D'', timeout=3D300)
-> +                       args=3DNone, build_dir=3Dbuild_dir, filter_glob=
-=3D'', filter=3D'', filter_action=3DNone, timeout=3D300)
->                 self.print_mock.assert_any_call(StrContains('Testing comp=
-lete.'))
->
->         def test_run_kunitconfig(self):
-> @@ -786,7 +786,7 @@ class KUnitMainTest(unittest.TestCase):
->                 kunit.main(['run', '--kernel_args=3Da=3D1', '--kernel_arg=
-s=3Db=3D2'])
->                 self.assertEqual(self.linux_source_mock.build_reconfig.ca=
-ll_count, 1)
->                 self.linux_source_mock.run_kernel.assert_called_once_with=
-(
-> -                     args=3D['a=3D1','b=3D2'], build_dir=3D'.kunit', fil=
-ter_glob=3D'', timeout=3D300)
-> +                     args=3D['a=3D1','b=3D2'], build_dir=3D'.kunit', fil=
-ter_glob=3D'', filter=3D'', filter_action=3DNone, timeout=3D300)
->                 self.print_mock.assert_any_call(StrContains('Testing comp=
-lete.'))
->
->         def test_list_tests(self):
-> @@ -794,13 +794,11 @@ class KUnitMainTest(unittest.TestCase):
->                 self.linux_source_mock.run_kernel.return_value =3D ['TAP =
-version 14', 'init: random output'] + want
->
->                 got =3D kunit._list_tests(self.linux_source_mock,
-> -                                    kunit.KunitExecRequest(None, None, '=
-.kunit', 300, 'suite*', None, 'suite'))
-> -
-> +                                    kunit.KunitExecRequest(None, None, '=
-.kunit', 300, 'suite*', '', None, None, 'suite', False, False))
->                 self.assertEqual(got, want)
->                 # Should respect the user's filter glob when listing test=
-s.
->                 self.linux_source_mock.run_kernel.assert_called_once_with=
-(
-> -                       args=3D['kunit.action=3Dlist'], build_dir=3D'.kun=
-it', filter_glob=3D'suite*', timeout=3D300)
-> -
-> +                       args=3D['kunit.action=3Dlist'], build_dir=3D'.kun=
-it', filter_glob=3D'suite*', filter=3D'', filter_action=3DNone, timeout=3D3=
-00)
->
->         @mock.patch.object(kunit, '_list_tests')
->         def test_run_isolated_by_suite(self, mock_tests):
-> @@ -809,10 +807,10 @@ class KUnitMainTest(unittest.TestCase):
->
->                 # Should respect the user's filter glob when listing test=
-s.
->                 mock_tests.assert_called_once_with(mock.ANY,
-> -                                    kunit.KunitExecRequest(None, None, '=
-.kunit', 300, 'suite*.test*', None, 'suite'))
-> +                                    kunit.KunitExecRequest(None, None, '=
-.kunit', 300, 'suite*.test*', '', None, None, 'suite', False, False))
->                 self.linux_source_mock.run_kernel.assert_has_calls([
-> -                       mock.call(args=3DNone, build_dir=3D'.kunit', filt=
-er_glob=3D'suite.test*', timeout=3D300),
-> -                       mock.call(args=3DNone, build_dir=3D'.kunit', filt=
-er_glob=3D'suite2.test*', timeout=3D300),
-> +                       mock.call(args=3DNone, build_dir=3D'.kunit', filt=
-er_glob=3D'suite.test*', filter=3D'', filter_action=3DNone, timeout=3D300),
-> +                       mock.call(args=3DNone, build_dir=3D'.kunit', filt=
-er_glob=3D'suite2.test*', filter=3D'', filter_action=3DNone, timeout=3D300)=
-,
->                 ])
->
->         @mock.patch.object(kunit, '_list_tests')
-> @@ -822,13 +820,12 @@ class KUnitMainTest(unittest.TestCase):
->
->                 # Should respect the user's filter glob when listing test=
-s.
->                 mock_tests.assert_called_once_with(mock.ANY,
-> -                                    kunit.KunitExecRequest(None, None, '=
-.kunit', 300, 'suite*', None, 'test'))
-> +                                    kunit.KunitExecRequest(None, None, '=
-.kunit', 300, 'suite*', '', None, None, 'test', False, False))
->                 self.linux_source_mock.run_kernel.assert_has_calls([
-> -                       mock.call(args=3DNone, build_dir=3D'.kunit', filt=
-er_glob=3D'suite.test1', timeout=3D300),
-> -                       mock.call(args=3DNone, build_dir=3D'.kunit', filt=
-er_glob=3D'suite.test2', timeout=3D300),
-> -                       mock.call(args=3DNone, build_dir=3D'.kunit', filt=
-er_glob=3D'suite2.test1', timeout=3D300),
-> +                       mock.call(args=3DNone, build_dir=3D'.kunit', filt=
-er_glob=3D'suite.test1', filter=3D'', filter_action=3DNone, timeout=3D300),
-> +                       mock.call(args=3DNone, build_dir=3D'.kunit', filt=
-er_glob=3D'suite.test2', filter=3D'', filter_action=3DNone, timeout=3D300),
-> +                       mock.call(args=3DNone, build_dir=3D'.kunit', filt=
-er_glob=3D'suite2.test1', filter=3D'', filter_action=3DNone, timeout=3D300)=
-,
->                 ])
->
-> -
->  if __name__ =3D=3D '__main__':
->         unittest.main()
+>  config IS_SIGNED_TYPE_KUNIT_TEST
+>         tristate "Test is_signed_type() macro" if !KUNIT_ALL_TESTS
+>         depends on KUNIT
+> diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
+> index 887926f04731..440aee705ccc 100644
+> --- a/lib/memcpy_kunit.c
+> +++ b/lib/memcpy_kunit.c
+> @@ -551,10 +551,10 @@ static void strtomem_test(struct kunit *test)
+>  static struct kunit_case memcpy_test_cases[] = {
+>         KUNIT_CASE(memset_test),
+>         KUNIT_CASE(memcpy_test),
+> -       KUNIT_CASE(memcpy_large_test),
+> -       KUNIT_CASE(memmove_test),
+> -       KUNIT_CASE(memmove_large_test),
+> -       KUNIT_CASE(memmove_overlap_test),
+> +       KUNIT_CASE_SLOW(memcpy_large_test),
+> +       KUNIT_CASE_SLOW(memmove_test),
+> +       KUNIT_CASE_SLOW(memmove_large_test),
+> +       KUNIT_CASE_SLOW(memmove_overlap_test),
+>         KUNIT_CASE(strtomem_test),
+>         {}
+>  };
 > --
 > 2.41.0.487.g6d72f3e995-goog
 >
 
---00000000000078ea4406014bb62b
+--000000000000f5c8cf06014bb6d7
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -702,14 +220,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA3
-4p3b2Thc3ulFKIHsb0nJrAF6B5emHJ8LUWAbsd8NCzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA3MjUwODQyMzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD5
+9NX+J0SBxf7njXT7fCfO4ac4Tb4MsEC6/WwfSlkxJDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA3MjUwODQyNDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAYDKGT/KfKnJp0YLym+bF
-HI6wafdusN4ji/ko994sD9nOymP5IfoJRdROHfV10WO0C1jCei6etCo9d1TTf2vpHjb6t087PisQ
-PGlsCXyzz5HtJG/1pwSR+jnJHYJFfsNbij0FCl/zm1c72Npme5FwCF4+KFHzdfSbaFjDQ/dQiYaR
-kq0EzUBkHnkURNuf1rmDba6MqEgaxQwjOv8oiRds9REk8njTXisAeSxDglDPv8heNGSj1gDIZ/b3
-P2xoZUbci21P2IL3EvpGSqyUS8aOcxEjA2iaIi50GwJwFwB8boY5ynt2AwVhseHxmMAXVEZ3DACj
-rXpZKCT2ggYPA1EzHA==
---00000000000078ea4406014bb62b--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAIpRgNPRKmTViOZniB5FP
+QG0IDSSoDbKaw5kze0ExU6QTcn2lJIAmVrPGT6ezUtxbWx0NjIrQDngS5XbCJ75/s2+gJQTdSEMS
+Uo4/SLSmZiLL3Cu4F9lyOxFIYwARLx+dC3kajmU8WJ/vONvk6N2KsLW1F5zqxaxVDLn1SUz2Z/A2
+9vQIWdQJt7E5touPB8fwa4iRbwQXO54jIbadOmjFxEUZMbqeBqPPIFSlMsRikF4bTodcusvl3tzI
+9iHEHeRTBQzLiTd6bJVNeZhilklKIRsjwnrxr8bHbxJDTW1off4pXiyqfUWS5R52NXoE8lgrIxOl
+BzeT4LBXlEOF8UtojQ==
+--000000000000f5c8cf06014bb6d7--
