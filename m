@@ -2,50 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2388A76070E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 06:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC84C760711
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 06:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjGYEM1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 00:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
+        id S231624AbjGYENR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 00:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjGYEMV (ORCPT
+        with ESMTP id S230379AbjGYENQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 00:12:21 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE501BD8
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 21:12:17 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-40553466a08so23019851cf.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 21:12:17 -0700 (PDT)
+        Tue, 25 Jul 2023 00:13:16 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E17173F
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 21:13:14 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-635eb3a1d93so39176486d6.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jul 2023 21:13:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1690258336; x=1690863136;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wj8PYguS3xX7U+0FfQZVAUdYXZWQu9LmjzUUJQ4wOaI=;
-        b=Z+JlgAUmlufgtTYuk+mYrzEGas5EJaJzImxCjVFBr0dYFePL976yPBjEzGmVMzbUM9
-         Dav85MBDgUkBe1I/XQTAiJ3spftEGcM0Zwyn6y2qqzq8aXoLHE/qwot4MSCmNGMD0Avk
-         mn+2qt1+snQsKuRjtQDe1vXqIW+YKBFKoSH2E=
+        d=cloudflare.com; s=google; t=1690258394; x=1690863194;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dExAqqjX2sAceHiZkTjWc7ytvlJ4THivNCeY471el6A=;
+        b=a7JHbgZ44jJD9d5BBzwGMElBDFTGmE6VPiSm37KRstnL6yyrYlU04Jyxj8DJlTLI0k
+         1GmawVpW5PeKff+kV0qUwqnxLNbVXOXAJSJ/D7TPQnkWacQb7Z1ntVAdH+WW/s/Wxgkv
+         Gz1dvEr/HcdiSu3pizPxhZC03nzUjhgq5jOHg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690258336; x=1690863136;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wj8PYguS3xX7U+0FfQZVAUdYXZWQu9LmjzUUJQ4wOaI=;
-        b=Piub7qpkEaTuywoDHuFuANJVwBgoP/oI6m7sr6nh56FStnOoZMEeN+si4TOczSUNe2
-         Cpp3CSyLugMCipyHsKf5Uj/udy2qxd39A1EhHLDuPMNBXhUrJ084DsU6ofWXlNyCRiX7
-         2k+fN7IwO9aQVqAcxFw/J9N5e6PKxfoZXLmfJwdtkH6enZnRVzGxRLJVvqWvSjSzplLi
-         hIdDI12kY+Byh8dfcDMZRkkznGv2kRx1kSmjjzglAwKkmxmGgF2cQDIC5RQGbrOwRcEV
-         V4/SZRoE3eP+y5NZ6Mp5I7XhQPS8lKQuFU9TZxcirdfB4EvKYB0macQ/Qx4+8vvE6f2R
-         MiBg==
-X-Gm-Message-State: ABy/qLZ/CXXO64yGwMBpIBAMmxlnWiNoUeVkjtMI+gH3jHpQNLQBEZLL
-        4mzjAwc1MkToWnCN8o0GrzS23w==
-X-Google-Smtp-Source: APBJJlEVOq7ulnNKppzYNyvaq6SerEQ1z7zrZ+6KuSpVoj/yWFAkJz0SGawCVDfDIJnNqpi4LictQQ==
-X-Received: by 2002:ac8:5914:0:b0:3fb:42cb:aa9 with SMTP id 20-20020ac85914000000b003fb42cb0aa9mr1930367qty.45.1690258336067;
-        Mon, 24 Jul 2023 21:12:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690258394; x=1690863194;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dExAqqjX2sAceHiZkTjWc7ytvlJ4THivNCeY471el6A=;
+        b=gS0dFHqfvSbCrOnFl+VniCr9uZ3CVMtwdoeGykEVtAC+mWxFzj7Re4K6N2VAIJS8eX
+         GRNAK87CegtAv/NleKZu9XNzHP6oIixmEM0TrljWj9HF4IrqkHSCXlrytY60vKz0Sw99
+         1h1KJ9IOGxvhd8O2GAgW72bRjwsophMcKpfekaKXa2b+9WoYGDmBjXxLI7veFwcFxoZt
+         XShU1t/QTHvTA8bkDLbezSzOrYGpQHgS/M2qtaxgieGAU1kWgb2YENfDzV5nA4ZO5qz8
+         tnIg+WOpf4PDS7Lip/DS1sOERznl7A1UCwgKZtMCUrS/+hWf0QqPNOdHo974D1d7/2vX
+         8sJA==
+X-Gm-Message-State: ABy/qLa49vnj3Xxq07QfNOPtZ4oIhzJzFFDWaXKyQknj3J57Wyg4kKee
+        k1Ijb2e4CSRK0f/s674Txm1Y7g==
+X-Google-Smtp-Source: APBJJlElpMFRA5wQX8bBctiucU9VqeMb9/lq+C7HP3dKR1bxEmkzSliV3j65wJVUuW3WBDafCxB8+w==
+X-Received: by 2002:a05:6214:184d:b0:63d:a05:256a with SMTP id d13-20020a056214184d00b0063d0a05256amr1596951qvy.8.1690258393862;
+        Mon, 24 Jul 2023 21:13:13 -0700 (PDT)
 Received: from debian.debian ([140.141.197.139])
-        by smtp.gmail.com with ESMTPSA id v18-20020ac87292000000b00400aa8592d1sm3779869qto.36.2023.07.24.21.12.14
+        by smtp.gmail.com with ESMTPSA id j8-20020a0cf308000000b0063cdbe73a05sm833186qvl.97.2023.07.24.21.13.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 21:12:15 -0700 (PDT)
-Date:   Mon, 24 Jul 2023 21:12:12 -0700
+        Mon, 24 Jul 2023 21:13:13 -0700 (PDT)
+Date:   Mon, 24 Jul 2023 21:13:10 -0700
 From:   Yan Zhai <yan@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -65,55 +66,77 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Yan Zhai <yan@cloudflare.com>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kernel-team@cloudflare.com, Jordan Griege <jgriege@cloudflare.com>
-Subject: [PATCH v3 bpf 0/2] bpf: return proper error codes for lwt redirect
-Message-ID: <cover.1690255889.git.yan@cloudflare.com>
+Subject: [PATCH v3 bpf 1/2] bpf: fix skb_do_redirect return values
+Message-ID: <cdbbc9df16044b568448ed9cd828d406f0851bfb.1690255889.git.yan@cloudflare.com>
+References: <cover.1690255889.git.yan@cloudflare.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1690255889.git.yan@cloudflare.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-lwt xmit hook does not expect positive return values in function
-ip_finish_output2 and ip6_finish_output2. However, BPF redirect programs
-can return positive values such like NET_XMIT_DROP, NET_RX_DROP, and etc
-as errors. Such return values can panic the kernel unexpectedly:
+skb_do_redirect returns various of values: error code (negative), 0
+(success), and some positive status code, e.g. NET_XMIT_CN, NET_RX_DROP.
+Such code are not handled at lwt xmit hook in function ip_finish_output2
+and ip6_finish_output, which can cause unexpected problems. This change
+converts the positive status code to proper error code.
 
-https://gist.github.com/zhaiyan920/8fbac245b261fe316a7ef04c9b1eba48
+Suggested-by: Stanislav Fomichev <sdf@google.com>
+Reported-by: Jordan Griege <jgriege@cloudflare.com>
+Signed-off-by: Yan Zhai <yan@cloudflare.com>
 
-This patch fixes the return values from BPF redirect, so the error
-handling would be consistent at xmit hook. It also adds a few test cases
-to prevent future regressions.
+---
+v3: converts also RX side return value in addition to TX values
+v2: code style change suggested by Stanislav Fomichev
+---
+ net/core/filter.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-v2: https://lore.kernel.org/netdev/ZLdY6JkWRccunvu0@debian.debian/ 
-v1: https://lore.kernel.org/bpf/ZLbYdpWC8zt9EJtq@debian.debian/
-
-changes since v2:
-  * subject name changed
-  * also covered redirect to ingress case
-  * added selftests
-
-changes since v1:
-  * minor code style changes
-
-Yan Zhai (2):
-  bpf: fix skb_do_redirect return values
-  bpf: selftests: add lwt redirect regression test cases
-
- net/core/filter.c                             |  12 +-
- tools/testing/selftests/bpf/Makefile          |   1 +
- .../selftests/bpf/progs/test_lwt_redirect.c   |  67 +++++++
- .../selftests/bpf/test_lwt_redirect.sh        | 165 ++++++++++++++++++
- 4 files changed, 244 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_lwt_redirect.c
- create mode 100755 tools/testing/selftests/bpf/test_lwt_redirect.sh
-
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 06ba0e56e369..3e232ce11ca0 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2095,7 +2095,12 @@ static const struct bpf_func_proto bpf_csum_level_proto = {
+ 
+ static inline int __bpf_rx_skb(struct net_device *dev, struct sk_buff *skb)
+ {
+-	return dev_forward_skb_nomtu(dev, skb);
++	int ret = dev_forward_skb_nomtu(dev, skb);
++
++	if (unlikely(ret > 0))
++		return -ENETDOWN;
++
++	return 0;
+ }
+ 
+ static inline int __bpf_rx_skb_no_mac(struct net_device *dev,
+@@ -2106,6 +2111,8 @@ static inline int __bpf_rx_skb_no_mac(struct net_device *dev,
+ 	if (likely(!ret)) {
+ 		skb->dev = dev;
+ 		ret = netif_rx(skb);
++	} else if (ret > 0) {
++		return -ENETDOWN;
+ 	}
+ 
+ 	return ret;
+@@ -2129,6 +2136,9 @@ static inline int __bpf_tx_skb(struct net_device *dev, struct sk_buff *skb)
+ 	ret = dev_queue_xmit(skb);
+ 	dev_xmit_recursion_dec();
+ 
++	if (unlikely(ret > 0))
++		ret = net_xmit_errno(ret);
++
+ 	return ret;
+ }
+ 
 -- 
 2.30.2
 
