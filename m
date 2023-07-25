@@ -2,123 +2,158 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C0E7619B7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 15:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53C47619C0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 15:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjGYNVH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 09:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S230091AbjGYNWB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 09:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjGYNVF (ORCPT
+        with ESMTP id S230060AbjGYNWA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 09:21:05 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4791FFA
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 06:20:58 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9939fbb7191so1165926466b.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 06:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1690291257; x=1690896057;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=Re/z3nObvtjSOuqc2XvuozwPKWBuW5694/qbzOrvreM=;
-        b=avOtOUW+Cj7SR0Q9peI/1FD6B3M1N5Hr+fpAclHpm7L8hzrxsUoV1RTF4m5DA/Dq6a
-         YJrqZXEXN7nHdcOkn45MQip/pZDwfl59O6sLsgxXu550emMbxOb105bU8WmyRsMyqKeR
-         DiZpVUvn/srF5U00xeHXv3iBuwmiPGmWrnWb4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690291257; x=1690896057;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Re/z3nObvtjSOuqc2XvuozwPKWBuW5694/qbzOrvreM=;
-        b=NomMz0eZoV16/r2ZxpGx0hGeYGM+uzz40Coaq8xzgt2+SYKNBFoaiigkga+VAuA06G
-         fvYID/uwSqS4sDUGo6XteM4bNmtKuxxyNx2MHT1MBFLiUN3xc6XK+C2GsOT/B+BZbtqQ
-         S62eG7BRJFkgtzrp8MW6CREAOJiV6HojC3Weri60+WAPBzLtAb78CFDGa28yFgDDeLSk
-         UhZgOoCR6osCJJ0MesN2b3HRSCMHbqNsxXMBDc5XHhB4LQgz8j/+Bp6qDwCFWaTdaNhs
-         Oe3k9rSMT3SHASpXfey1capS/it6tWOSq7DiDvJK5R5l8jCKueG8UPnJ4Rd5K8KKYfmt
-         pN4Q==
-X-Gm-Message-State: ABy/qLaEW8MRPTC7MSYUr054EHA9gRZzOVWGFo2ktSXwbkIxqZXkIHUS
-        eKtcDdznsD0z34pIJyJpxwjS8w==
-X-Google-Smtp-Source: APBJJlH+qEf1EkwtzcMEpjPEgMFdKkhYpww/2/CnlXcjZ72gg/UoQUeciPbGIm5RrLkuaIIGMvU/lQ==
-X-Received: by 2002:a17:907:2c4f:b0:993:d632:2c3 with SMTP id hf15-20020a1709072c4f00b00993d63202c3mr2315057ejc.21.1690291256910;
-        Tue, 25 Jul 2023 06:20:56 -0700 (PDT)
-Received: from cloudflare.com (79.184.214.102.ipv4.supernova.orange.pl. [79.184.214.102])
-        by smtp.gmail.com with ESMTPSA id j1-20020a170906254100b00992076f4a01sm8117208ejb.190.2023.07.25.06.20.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 06:20:56 -0700 (PDT)
-References: <cover.1690255889.git.yan@cloudflare.com>
-User-agent: mu4e 1.6.10; emacs 28.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Yan Zhai <yan@cloudflare.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jordan Griege <jgriege@cloudflare.com>,
-        kernel-team@cloudflare.com
-Subject: Re: [PATCH v3 bpf 0/2] bpf: return proper error codes for lwt redirect
-Date:   Tue, 25 Jul 2023 15:20:06 +0200
-In-reply-to: <cover.1690255889.git.yan@cloudflare.com>
-Message-ID: <87mszkxh3c.fsf@cloudflare.com>
+        Tue, 25 Jul 2023 09:22:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B297FE3;
+        Tue, 25 Jul 2023 06:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wGqxpUXCoDxIaORETfr7uIrAMmzRtESmnNtnwpMTjcQ=; b=f8AwNDDBNeSxUozU34si/zZBDf
+        plnXfYPhG0x+P/nfzmym0QplxCPJ7SZ/55xlG0/wfRzFP3qjjqPhRviGKBsC7Zd5aD7/51ehEIcju
+        h9rI0QP6TNGPTo8sDE7i8ZIUdODxaSbETaTglg2bkjgwSno/LOwy+t3L6frXOZ/gUdBsYDnf3fTWm
+        i32WJGiyMpI0+74+v+giFGr+IGzPqQICkYSOV1tb2wK/ha9P4p+geQWGEfD/B23DNww43mcOaxmvj
+        HnaHdDr5UPRMasRRiI/PqfVG343MRV53doZZI+vc7ByAdPWQKHp0/uzlgiPhp2WJKwweLe3q1Axtm
+        CBejci1Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qOHzA-005Uxm-Md; Tue, 25 Jul 2023 13:21:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5DFA9300155;
+        Tue, 25 Jul 2023 15:21:55 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 42E6127D9B9A2; Tue, 25 Jul 2023 15:21:55 +0200 (CEST)
+Date:   Tue, 25 Jul 2023 15:21:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH v2 20/20] x86/mm, mm/vmalloc: Defer
+ flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
+Message-ID: <20230725132155.GJ3765278@hirez.programming.kicks-ass.net>
+References: <20230720163056.2564824-1-vschneid@redhat.com>
+ <20230720163056.2564824-21-vschneid@redhat.com>
+ <188AEA79-10E6-4DFF-86F4-FE624FD1880F@vmware.com>
+ <xhsmh8rb5tui1.mognet@vschneid.remote.csb>
+ <2284d0db-f94a-e059-7bd0-bab4f112ed35@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2284d0db-f94a-e059-7bd0-bab4f112ed35@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 09:12 PM -07, Yan Zhai wrote:
-> lwt xmit hook does not expect positive return values in function
-> ip_finish_output2 and ip6_finish_output2. However, BPF redirect programs
-> can return positive values such like NET_XMIT_DROP, NET_RX_DROP, and etc
-> as errors. Such return values can panic the kernel unexpectedly:
->
-> https://gist.github.com/zhaiyan920/8fbac245b261fe316a7ef04c9b1eba48
->
-> This patch fixes the return values from BPF redirect, so the error
-> handling would be consistent at xmit hook. It also adds a few test cases
-> to prevent future regressions.
->
-> v2: https://lore.kernel.org/netdev/ZLdY6JkWRccunvu0@debian.debian/ 
-> v1: https://lore.kernel.org/bpf/ZLbYdpWC8zt9EJtq@debian.debian/
->
-> changes since v2:
->   * subject name changed
->   * also covered redirect to ingress case
->   * added selftests
->
-> changes since v1:
->   * minor code style changes
->
-> Yan Zhai (2):
->   bpf: fix skb_do_redirect return values
->   bpf: selftests: add lwt redirect regression test cases
->
->  net/core/filter.c                             |  12 +-
->  tools/testing/selftests/bpf/Makefile          |   1 +
->  .../selftests/bpf/progs/test_lwt_redirect.c   |  67 +++++++
->  .../selftests/bpf/test_lwt_redirect.sh        | 165 ++++++++++++++++++
->  4 files changed, 244 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/bpf/progs/test_lwt_redirect.c
->  create mode 100755 tools/testing/selftests/bpf/test_lwt_redirect.sh
+On Mon, Jul 24, 2023 at 10:40:04AM -0700, Dave Hansen wrote:
 
-For the series:
+> TLB flushes for freed page tables are another game entirely.  The CPU is
+> free to cache any part of the paging hierarchy it wants at any time.
+> It's also free to set accessed and dirty bits at any time, even for
+> instructions that may never execute architecturally.
+> 
+> That basically means that if you have *ANY* freed page table page
+> *ANYWHERE* in the page table hierarchy of any CPU at any time ... you're
+> screwed.
+> 
+> There's no reasoning about accesses or ordering.  As soon as the CPU
+> does *anything*, it's out to get you.
+> 
+> You're going to need to do something a lot more radical to deal with
+> free page table pages.
 
-Tested-by: Jakub Sitnicki <jakub@cloudflare.com>
+Ha! IIRC the only thing we can reasonably do there is to have strict
+per-cpu page-tables such that NOHZ_FULL CPUs can be isolated. That is,
+as long we the per-cpu tables do not contain -- and have never contained
+-- a particular table page, we can avoid flushing it. Because if it
+never was there, it also couldn't have speculatively loaded it.
+
+Now, x86 doesn't really do per-cpu page tables easily (otherwise we'd
+have done them ages ago) and doing them is going to be *major* surgery
+and pain.
+
+Other than that, we must take the TLBI-IPI when freeing
+page-table-pages.
+
+
+But yeah, I think Nadav is right, vmalloc.c never frees page-tables (or
+at least, I couldn't find it in a hurry either), but if we're going to
+be doing this, then that file must include a very prominent comment
+explaining it must never actually do so either.
+
+Not being able to free page-tables might be a 'problem' if we're going
+to be doing more of HUGE_VMALLOC, because that means it becomes rather
+hard to swizzle from small to large pages.
