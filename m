@@ -2,158 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53C47619C0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 15:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B13E7619E8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 15:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjGYNWB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 09:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S230324AbjGYN1Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 09:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjGYNWA (ORCPT
+        with ESMTP id S230310AbjGYN1X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 09:22:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B297FE3;
-        Tue, 25 Jul 2023 06:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wGqxpUXCoDxIaORETfr7uIrAMmzRtESmnNtnwpMTjcQ=; b=f8AwNDDBNeSxUozU34si/zZBDf
-        plnXfYPhG0x+P/nfzmym0QplxCPJ7SZ/55xlG0/wfRzFP3qjjqPhRviGKBsC7Zd5aD7/51ehEIcju
-        h9rI0QP6TNGPTo8sDE7i8ZIUdODxaSbETaTglg2bkjgwSno/LOwy+t3L6frXOZ/gUdBsYDnf3fTWm
-        i32WJGiyMpI0+74+v+giFGr+IGzPqQICkYSOV1tb2wK/ha9P4p+geQWGEfD/B23DNww43mcOaxmvj
-        HnaHdDr5UPRMasRRiI/PqfVG343MRV53doZZI+vc7ByAdPWQKHp0/uzlgiPhp2WJKwweLe3q1Axtm
-        CBejci1Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qOHzA-005Uxm-Md; Tue, 25 Jul 2023 13:21:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5DFA9300155;
-        Tue, 25 Jul 2023 15:21:55 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 42E6127D9B9A2; Tue, 25 Jul 2023 15:21:55 +0200 (CEST)
-Date:   Tue, 25 Jul 2023 15:21:55 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Valentin Schneider <vschneid@redhat.com>,
-        Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-        Julian Pidancet <julian.pidancet@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH v2 20/20] x86/mm, mm/vmalloc: Defer
- flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
-Message-ID: <20230725132155.GJ3765278@hirez.programming.kicks-ass.net>
-References: <20230720163056.2564824-1-vschneid@redhat.com>
- <20230720163056.2564824-21-vschneid@redhat.com>
- <188AEA79-10E6-4DFF-86F4-FE624FD1880F@vmware.com>
- <xhsmh8rb5tui1.mognet@vschneid.remote.csb>
- <2284d0db-f94a-e059-7bd0-bab4f112ed35@intel.com>
+        Tue, 25 Jul 2023 09:27:23 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA8BE6D
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 06:27:22 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-79a46f02d45so160497241.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 06:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690291642; x=1690896442;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ioiyZipNYQNpGagkyruO8NE61Cv2rplOTlMfdFh0CCk=;
+        b=B5oIVzIvrI6yphVwz5iUuGiAcqTLBSfjfUDCebR/4w70SIZ7ZTGIAwsK7PdDEu/K4I
+         sG7Oky5B/CK8YxQo/cHvcAKjsvUDPBt68n95wjBJbrTqsIG1anTLiwZlrRG8tn1dNVKj
+         grfnmg2ie+/ajWinc2ZsNwooO7Q4osaM7B8Isqdt3Qwt4pZMrISx6T+eHlUi5DslIwyv
+         R3U94lhpAuLtKRLKdwhYL35BO5nYJE7jCr6WaqUV5Nu4/wQkkJm6N8okt9ZxC72cNQrT
+         6Wru4RTC7UcBhHOR1U0BH5FZDn4ZtAljd6me15mMSp1KY/TYrx/K7IvUCGkmlTggEIef
+         spVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690291642; x=1690896442;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ioiyZipNYQNpGagkyruO8NE61Cv2rplOTlMfdFh0CCk=;
+        b=MddmoR7hxLTFsWrSkM/6Bp8ByuZLd62rE1A8q1QtslF9m0PYThfkuFF0f+wB2h59Fj
+         /grOKzwlj2iHT9eKRgqld1OyDdD+hlhr6aWNteZIXNTaBfNRSAJTvVpNejgTOort3DU9
+         PXBzLB04+7zeGndM639JsER9f7iq89muVQw6MGtsNLgzBBX93HOK0PfCrGtRdjNhTcle
+         54AM7PvghzYK71gsR/VWcgh6Ke8wDsFQCi2ysqM26NWbUDaUOpLmzs9gSpuGJiQfwBzP
+         n2LcbjypLBojhmsEkq6TO1F2YkFhXNLY8OYHY668b+PM/bKsfGufy1YqJq1LBfpvhTnj
+         02vg==
+X-Gm-Message-State: ABy/qLafk+XN/8s4OiIojRSVOOG4u1iobQoHNrtlaAxANyQ/SGZnQSeA
+        S4TNuWmrMyuJGVovDFfaVVSVupQUgWolQQqFHKVKFA==
+X-Google-Smtp-Source: APBJJlFNvn3s+3oAm8bOTez+axljqCb0cdR/HKWhBcUfLXHM467GPio5fZcYZwWXG5SRV0YkJpZLQMlUHpBTLGG1gt4=
+X-Received: by 2002:a05:6102:3d7:b0:443:5ce7:e62d with SMTP id
+ n23-20020a05610203d700b004435ce7e62dmr4261554vsq.21.1690291641801; Tue, 25
+ Jul 2023 06:27:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2284d0db-f94a-e059-7bd0-bab4f112ed35@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 25 Jul 2023 18:57:10 +0530
+Message-ID: <CA+G9fYvV-71XqpCr_jhdDfEtN701fBdG3q+=bafaZiGwUXy_aA@mail.gmail.com>
+Subject: selftests: mm: mremap_dontunmap.c:53:6: error: use of undeclared
+ identifier 'MREMAP_DONTUNMAP'
+To:     open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        linux-mm <linux-mm@kvack.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stefan Roesch <shr@devkernel.io>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 10:40:04AM -0700, Dave Hansen wrote:
+selftests:mm: mremap_dontunmap build failed with clang-16 due to below
+warnings / errors on Linux next-20230725 ( or older kernels ).
 
-> TLB flushes for freed page tables are another game entirely.  The CPU is
-> free to cache any part of the paging hierarchy it wants at any time.
-> It's also free to set accessed and dirty bits at any time, even for
-> instructions that may never execute architecturally.
-> 
-> That basically means that if you have *ANY* freed page table page
-> *ANYWHERE* in the page table hierarchy of any CPU at any time ... you're
-> screwed.
-> 
-> There's no reasoning about accesses or ordering.  As soon as the CPU
-> does *anything*, it's out to get you.
-> 
-> You're going to need to do something a lot more radical to deal with
-> free page table pages.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Ha! IIRC the only thing we can reasonably do there is to have strict
-per-cpu page-tables such that NOHZ_FULL CPUs can be isolated. That is,
-as long we the per-cpu tables do not contain -- and have never contained
--- a particular table page, we can avoid flushing it. Because if it
-never was there, it also couldn't have speculatively loaded it.
+clang --target=aarch64-linux-gnu -fintegrated-as
+-Werror=unknown-warning-option -Werror=ignored-optimization-argument
+-Werror=option-ignored -Werror=unused-command-line-argument
+--target=aarch64-linux-gnu -fintegrated-as -Wall -I
+tools/testing/selftests/../../..  -isystem
+/home/tuxbuild/.cache/tuxmake/builds/1/build/usr/include
+mremap_dontunmap.c vm_util.c -lrt -lpthread -o
+/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/mm/mremap_dontunmap
+mremap_dontunmap.c:53:6: error: use of undeclared identifier 'MREMAP_DONTUNMAP'
+                   MREMAP_DONTUNMAP | MREMAP_MAYMOVE, 0);
+                   ^
+mremap_dontunmap.c:108:6: error: use of undeclared identifier 'MREMAP_DONTUNMAP'
+                   MREMAP_DONTUNMAP | MREMAP_MAYMOVE, NULL);
+                   ^
+mremap_dontunmap.c:149:6: error: use of undeclared identifier 'MREMAP_DONTUNMAP'
+                   MREMAP_DONTUNMAP | MREMAP_MAYMOVE, NULL);
+                   ^
+mremap_dontunmap.c:200:21: error: use of undeclared identifier
+'MREMAP_DONTUNMAP'
+                   MREMAP_FIXED | MREMAP_DONTUNMAP | MREMAP_MAYMOVE,
+                                  ^
+mremap_dontunmap.c:252:6: error: use of undeclared identifier 'MREMAP_DONTUNMAP'
+                   MREMAP_DONTUNMAP | MREMAP_MAYMOVE, NULL);
+                   ^
+mremap_dontunmap.c:310:6: error: use of undeclared identifier 'MREMAP_DONTUNMAP'
+                   MREMAP_DONTUNMAP | MREMAP_MAYMOVE | MREMAP_FIXED,
+dest_mapping);
+                   ^
+6 errors generated.
+make[4]: Leaving directory 'tools/testing/selftests/mm'
 
-Now, x86 doesn't really do per-cpu page tables easily (otherwise we'd
-have done them ages ago) and doing them is going to be *major* surgery
-and pain.
 
-Other than that, we must take the TLBI-IPI when freeing
-page-table-pages.
+Links:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2T3676HpK243gMBLYJCp4OXDmWl/
 
+steps to reproduce:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2T3676HpK243gMBLYJCp4OXDmWl/tuxmake_reproducer.sh
 
-But yeah, I think Nadav is right, vmalloc.c never frees page-tables (or
-at least, I couldn't find it in a hurry either), but if we're going to
-be doing this, then that file must include a very prominent comment
-explaining it must never actually do so either.
-
-Not being able to free page-tables might be a 'problem' if we're going
-to be doing more of HUGE_VMALLOC, because that means it becomes rather
-hard to swizzle from small to large pages.
+--
+Linaro LKFT
+https://lkft.linaro.org
