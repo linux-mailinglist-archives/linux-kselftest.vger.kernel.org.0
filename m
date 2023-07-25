@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7428B761D69
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 17:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEA8761D6B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 17:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbjGYPdp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 11:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
+        id S231770AbjGYPdx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 11:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjGYPdp (ORCPT
+        with ESMTP id S231688AbjGYPdw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 11:33:45 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070461FCA
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 08:33:44 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id e9e14a558f8ab-34637e55d9dso4750775ab.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 08:33:44 -0700 (PDT)
+        Tue, 25 Jul 2023 11:33:52 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A4F1FD2
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 08:33:51 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-3463955e8c6so3794205ab.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 08:33:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1690299223; x=1690904023;
+        d=linuxfoundation.org; s=google; t=1690299230; x=1690904030;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NcZE0YtioxF2+m/NhSyjLV3N0x16iE/BIeSmFcb4big=;
-        b=UhyZKI5hoyLcl+X5NF7HSxxUc+Fjb3j6RkY1HalvianMocRJYdXU/1FyF6Ba7P45gi
-         t/fTNMCPhYA9wKFTf3AzzbSbkAfcmZrrVnleUqWBebrAGub6BX+9ZnLup+wFa7QgGqaO
-         MwnajVbV6D/HneVpOlKXkCpX9b6zvE+wvnvg8=
+        bh=psCANlN8ACjqTR5+3XCODQFlRe+14Lhpu8FtMgSALfM=;
+        b=XwyLWIwxqnXL7pdpixAZ7q7aZfXrtB5N3jrb9CGtJQgmoaMsAFjc824pcQav2Y8nFz
+         dN9U2IHD3t3dFCcUkGiv9g6fRURFGoyvqHGwYrax1UqC+4ubXYd6IgxqMJptSbhO53Ki
+         hXI7K1tKTwyp2MagRqI+xh6QKutgKA+929GC8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690299223; x=1690904023;
+        d=1e100.net; s=20221208; t=1690299230; x=1690904030;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NcZE0YtioxF2+m/NhSyjLV3N0x16iE/BIeSmFcb4big=;
-        b=YRT6MAjUmZTxgXt9j+4W+QUoruASceyTQrUEShGx9JCXX53LA1FL9rnuBa1usdYiFA
-         ouXw443dU3M6xAxcF5zWzbtlb80iDgg3CBfXpEWOZhLZbfTo5+g4180xJpnRh9PKe4d6
-         lOCQSfekMp4jR3faOR2JiGBKM07Jj2XvZuVN7XsRTIdnFDUh705BHonPTOOvJDGxY5fp
-         UamsmDrKiM3SOpoJ6EoquBgq+bb4W3KznlTsFYTj94eEjjakYviWAleN9r10zGyuCfzD
-         QIFN8DCbhuz7CuE3NBOYWUOVzirtiULsIkvEC5+pPTnFjomJpg99VW2uUCE/TIJazoa9
-         S2BQ==
-X-Gm-Message-State: ABy/qLZm114R2+P8A3GBHvLIsly6PcU2E9vOhSV7iNNi23CJQotBhLoj
-        k7XEokQ2R3T+MN+wZZKCc9Pu6w==
-X-Google-Smtp-Source: APBJJlH31qSc01sPP7Ny562tmdbA0KbLwNjP31nxHoDvFacgarF/gv3lyxwGrK6Cl7/oGuupaiyK1g==
-X-Received: by 2002:a92:c88e:0:b0:346:4eb9:9081 with SMTP id w14-20020a92c88e000000b003464eb99081mr8735353ilo.3.1690299223404;
-        Tue, 25 Jul 2023 08:33:43 -0700 (PDT)
+        bh=psCANlN8ACjqTR5+3XCODQFlRe+14Lhpu8FtMgSALfM=;
+        b=djyDp2VTvZFyKa9T53ORjf4uj+waQMV3d9yWPEw9kjKwo5zIYh7edrmcoSvfPsYz4f
+         Sew5f3W8IgMIgvE3lfI04FYlSst4jQv5XIEl5p1gEit3bYNNV7QnaIXMfzuVArV5T66l
+         /r8QbFretV2eoP39PTs7ApZUzIsOc797+CpilrBXEdfNfHCRO+ccWpxfSF5ZMUdMPiej
+         E9isdpwazx0E96alvl2kyk04uir4yUX9qCj1SOq7atQEc7XwSMrmeEymaylgNu3Aac1Z
+         lx/xXRqh0gFrnhdVQq1+omVto3Eh/bHa9bqvtTb2oO9LWn2Skdwp74hW4/gOWbuKzK1J
+         B51g==
+X-Gm-Message-State: ABy/qLaM5Qdg56RbsBBmV6PZRj1fIxqFPmviUhEDKuNFFVEmZaEYDihn
+        J5udhEgM5AbagWyjP4AOqb+zdQ==
+X-Google-Smtp-Source: APBJJlF7kccJ981q5CKsoJuFOTcAmWiQ82hFVPTu/ZADMUjQKNsZTHiZLqgFuMaVxnjNgiqvLsCSyQ==
+X-Received: by 2002:a92:908:0:b0:345:e438:7381 with SMTP id y8-20020a920908000000b00345e4387381mr8802640ilg.2.1690299230778;
+        Tue, 25 Jul 2023 08:33:50 -0700 (PDT)
 Received: from shuah-tx13.internal ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id w7-20020a92db47000000b0034294982b83sm3793994ilq.69.2023.07.25.08.33.42
+        by smtp.gmail.com with ESMTPSA id k8-20020a02a708000000b0042b394eb984sm3743384jam.105.2023.07.25.08.33.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 08:33:43 -0700 (PDT)
+        Tue, 25 Jul 2023 08:33:50 -0700 (PDT)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     shuah@kernel.org
 Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests:prctl: Fix make clean override warning
-Date:   Tue, 25 Jul 2023 09:33:41 -0600
-Message-Id: <20230725153341.15025-1-skhan@linuxfoundation.org>
+Subject: [PATCH] selftests:prctl: add set-process-name to .gitignore
+Date:   Tue, 25 Jul 2023 09:33:49 -0600
+Message-Id: <20230725153349.15048-1-skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,29 +66,22 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove clean target in Makefile to fix the following warning
-and use the one in common lib.mk
-
-Makefile:14: warning: overriding recipe for target 'clean'
-../lib.mk:160: warning: ignoring old recipe for target 'clean'
+Add newly addded set-process-name test to .gitignore
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/prctl/Makefile | 2 --
- 1 file changed, 2 deletions(-)
+ tools/testing/selftests/prctl/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/prctl/Makefile b/tools/testing/selftests/prctl/Makefile
-index cfc35d29fc2e..01dc90fbb509 100644
---- a/tools/testing/selftests/prctl/Makefile
-+++ b/tools/testing/selftests/prctl/Makefile
-@@ -10,7 +10,5 @@ all: $(TEST_PROGS)
- 
- include ../lib.mk
- 
--clean:
--	rm -fr $(TEST_PROGS)
- endif
- endif
+diff --git a/tools/testing/selftests/prctl/.gitignore b/tools/testing/selftests/prctl/.gitignore
+index 7a657b25f686..05d5e31661df 100644
+--- a/tools/testing/selftests/prctl/.gitignore
++++ b/tools/testing/selftests/prctl/.gitignore
+@@ -3,3 +3,4 @@ disable-tsc-ctxt-sw-stress-test
+ disable-tsc-on-off-stress-test
+ disable-tsc-test
+ set-anon-vma-name-test
++set-process-name
 -- 
 2.39.2
 
