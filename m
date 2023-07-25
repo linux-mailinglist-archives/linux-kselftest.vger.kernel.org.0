@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5988762564
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 00:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDC3762567
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 00:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbjGYWCv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 18:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
+        id S231856AbjGYWCy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 18:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbjGYWCa (ORCPT
+        with ESMTP id S231808AbjGYWCb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 18:02:30 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B4B26B3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:01 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-5637a108d02so2333961a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:01 -0700 (PDT)
+        Tue, 25 Jul 2023 18:02:31 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5832683
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:02 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c0f35579901so6803954276.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690322513; x=1690927313;
+        d=google.com; s=20221208; t=1690322515; x=1690927315;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2LFI4LFbO9Za9GYdKLk7QvU7CpMUS45By27lNDC3GjA=;
-        b=XPZYYN80whNtKmg72IIp/UHHoBnf0D4TOLXPAkgNa859gsOKEWP70FvNNQH3EqSmLb
-         /7xYxvbjdyPtqDhR6S+T/OpRbS4h0yD7l7Qyg5zacI8yFm6GAh2Foj3zFORHPP9Lih6k
-         dGSFTYH/lXXbywkCKF7WDkY3h7uEV8iNazvovq6bZzWbLiJPIGKx183ygDz6PjtSArqx
-         /uIWQxnizEM19sLjT+UP8ulLt4R4VXM/mh95WkN3v7DwtoTbRs0VJE66caFgzMp2pmxX
-         9khE9+ginvAEM+3DM55q12biTmLtqaxgPfZ1bkRgbc4G/rckAg3+V7Sb4WHEjCAbGrE8
-         RTqQ==
+        bh=l8eGH3ygkEuOZ47kPtRCFJ0Al+rLHkYn4Wu/qaGwYZM=;
+        b=O17YNG6iB0Xuh4somHJCNJmASI+hOdC7ojhwp+u2xlNX1R/ARIPn1a0k7tjNGhauj2
+         zcBPtQMLfj/2W8F4tuFrQR95cMghpvw/FK9lx5CX5ChaYCdshhd51esu2R2JWlpyMuSW
+         QxP1xK0js/vQpIhJDEuhP/THWdKt4dLB0ayY0zuv+om2hRM6McyNf5NT4EdJKjHH3UXu
+         OjPzpTVFLXhqL5GjLLIA/1yisaB1eZnuTi0jJMtn+/Zam3XSYRwDkAZaF/prH00agAYk
+         mDqlZ1yaom1FLS5qGHOQLL4ySmzuuMR+AIDjAaeYhvaLfm41dkF0SqeZvvMXbut1rZrS
+         w6lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690322513; x=1690927313;
+        d=1e100.net; s=20221208; t=1690322515; x=1690927315;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2LFI4LFbO9Za9GYdKLk7QvU7CpMUS45By27lNDC3GjA=;
-        b=hPH0CiAdbRiDSMpg5YfjOjIzpfu9EsqHrrIrIzu4cwC+NeAgoxB690ZnSFMykArcMt
-         OpMMPagNP/nW6aFHBkMmUZxRNqOmofm2+aG491UTGGtjrGnfiI2Go82z7EG7F4rMaiJ1
-         jNIAgdgY1ekyTn+hF8O78sjlyhrVGnwlRDnctGN93udpamKcYN7RaI99+uAZMchj6J0Q
-         ZmxhgaaW+WM2g8tpLRQeYHOyje+zvW6D+y0qhWFJ5X/8moh4pSO0GePQoXih9k0JaVNP
-         4Cesiv9kMCYY3A3qDEipXuBZSXGFYKUXIHHgAYTfNPj3bTMdNQ993bNvW9msSda0FIja
-         TuxA==
-X-Gm-Message-State: ABy/qLYJveDucPw7CcK1y66MsjYlCgdW84N/5wyQpLWck7Q+erfn1SEO
-        Qf1KDxjPKfIWQbm/r/ESxrMdIhV8MsgVR7dAUPRgES0gdpGrn6i3ApaY6zdOTDChf3ncYgvkDXi
-        CgAOuujF06bkw06nmIw0ilFUChgHhM5QnMe06bi8zx056XRdTpfF61QfrInsEfdoH+VaY5LCacT
-        5F
-X-Google-Smtp-Source: APBJJlEPI23MF32jHIZQ2ZRj8w4W6GxwOZ6bYhBqAkYrdYYyI9q1X89KcpwA0MZlRaLNL9IvTnS+4zGIWWHr
+        bh=l8eGH3ygkEuOZ47kPtRCFJ0Al+rLHkYn4Wu/qaGwYZM=;
+        b=F+IypqvQwuKrXB4bib/cFXzLg9MnJEJu2GM9638z7YNDUPlptVpIDMO6xQ5V0SPeef
+         6zhThvtgxo3wQT8TC0KAv5drEQI8KnfX5tVufCdgOQLrKoInKrCFXvBcsbgZGA0gMdzx
+         2WmqGt9IvhT8bfh6QCFr5MH1RAL3h8dbqW+5Ua2MEPGuCcUiEy0RhjGMw0Ow1wcQvoH0
+         WD/cu0lzPDUGJuBysb+jTPZ7SbkGYIzuAezG3E52TP+l2+wexrjx7q5FMsn2JxIse3Dk
+         rtIGsizb1hJRWYl4+IdKn8CeOq5QT6keWs61F1d0psnKTd2+UqPldi086ZI9ews7KmS7
+         NZUA==
+X-Gm-Message-State: ABy/qLZV9YtXGU1JIDQSnTsDdJKM2M6pJ78PXAZtP3xLoWBahYnSMRm9
+        yayQTioLtbG8yQbBU3AOJdeLN6vJeKS/3UX94m7W/GM2gl/A7f6Y9ILKyvN00ZgOZL8dKvgtJCk
+        ba5/qoa22fiGRTk1deFhXYcJ1xxGBhgkO3PweQSzBTpBmDzFcwbv5O2KJglVk+EHUyI6jdGz9xS
+        ub
+X-Google-Smtp-Source: APBJJlFegGohqWqOdSnA6IS8sXWJ8VHwoCGraN7Fw++Y6c88kB55gpqKOQlvPxRwGPoMkWW8QyxDbkskqqQz
 X-Received: from afranji.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:47f1])
- (user=afranji job=sendgmr) by 2002:a63:3e82:0:b0:563:9e04:52b with SMTP id
- l124-20020a633e82000000b005639e04052bmr2658pga.6.1690322512106; Tue, 25 Jul
- 2023 15:01:52 -0700 (PDT)
-Date:   Tue, 25 Jul 2023 22:00:56 +0000
+ (user=afranji job=sendgmr) by 2002:a25:abd2:0:b0:d05:e080:63c6 with SMTP id
+ v76-20020a25abd2000000b00d05e08063c6mr2231ybi.9.1690322514251; Tue, 25 Jul
+ 2023 15:01:54 -0700 (PDT)
+Date:   Tue, 25 Jul 2023 22:00:57 +0000
 In-Reply-To: <20230725220132.2310657-1-afranji@google.com>
 Mime-Version: 1.0
 References: <20230725220132.2310657-1-afranji@google.com>
 X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
-Message-ID: <20230725220132.2310657-4-afranji@google.com>
-Subject: [PATCH v4 03/28] KVM: selftests: Store initial stack address in
- struct kvm_vcpu
+Message-ID: <20230725220132.2310657-5-afranji@google.com>
+Subject: [PATCH v4 04/28] KVM: selftests: Refactor steps in vCPU descriptor
+ table initialization
 From:   Ryan Afranji <afranji@google.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
@@ -74,9 +74,8 @@ Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,52 +84,77 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-TDX guests' registers cannot be initialized directly using
-vcpu_regs_set(), hence the stack pointer needs to be initialized by
-the guest itself, running boot code beginning at the reset vector.
+Split the vCPU descriptor table initialization process into a few
+steps and expose them:
 
-We store the stack address as part of struct kvm_vcpu so that it can
-be accessible later to be passed to the boot code for rsp
-initialization.
++ Setting up the IDT
++ Syncing exception handlers into the guest
+
+In kvm_setup_idt(), we conditionally allocate guest memory for vm->idt
+to avoid double allocation when kvm_setup_idt() is used after
+vm_init_descriptor_tables().
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-Change-Id: I54e7bde72c5c21e7d8944415ac5818d9443e2b70
+Change-Id: I4a1229173a4e09d6a3770d4b67edc8cdfe83f868
 Signed-off-by: Ryan Afranji <afranji@google.com>
 ---
- tools/testing/selftests/kvm/include/kvm_util_base.h | 1 +
- tools/testing/selftests/kvm/lib/x86_64/processor.c  | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ .../selftests/kvm/include/x86_64/processor.h  |  2 ++
+ .../selftests/kvm/lib/x86_64/processor.c      | 19 ++++++++++++++++---
+ 2 files changed, 18 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index a07ce5f5244a..12524d94a4eb 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -67,6 +67,7 @@ struct kvm_vcpu {
- 	int fd;
- 	struct kvm_vm *vm;
- 	struct kvm_run *run;
-+	vm_vaddr_t initial_stack_addr;
- #ifdef __x86_64__
- 	struct kvm_cpuid2 *cpuid;
- #endif
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index a4923f92460d..2a83a23801b0 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -1060,6 +1060,8 @@ struct idt_entry {
+ 	uint32_t offset2; uint32_t reserved;
+ };
+ 
++void kvm_setup_idt(struct kvm_vm *vm, struct kvm_dtable *dt);
++void sync_exception_handlers_to_guest(struct kvm_vm *vm);
+ void vm_init_descriptor_tables(struct kvm_vm *vm);
+ void vcpu_init_descriptor_tables(struct kvm_vcpu *vcpu);
+ void vm_install_exception_handler(struct kvm_vm *vm, int vector,
 diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index e3a9366d4f80..78dd918b9a92 100644
+index 78dd918b9a92..4893a778fff5 100644
 --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
 +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -607,10 +607,12 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
- 	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
- 	vcpu_setup(vm, vcpu);
+@@ -1124,19 +1124,32 @@ void vm_init_descriptor_tables(struct kvm_vm *vm)
+ 			DEFAULT_CODE_SELECTOR);
+ }
  
-+	vcpu->initial_stack_addr = stack_vaddr;
++void kvm_setup_idt(struct kvm_vm *vm, struct kvm_dtable *dt)
++{
++	if (!vm->idt)
++		vm->idt = vm_vaddr_alloc_page(vm);
 +
- 	/* Setup guest general purpose registers */
- 	vcpu_regs_get(vcpu, &regs);
- 	regs.rflags = regs.rflags | 0x2;
--	regs.rsp = stack_vaddr;
-+	regs.rsp = vcpu->initial_stack_addr;
- 	regs.rip = (unsigned long) guest_code;
- 	vcpu_regs_set(vcpu, &regs);
++	dt->base = vm->idt;
++	dt->limit = NUM_INTERRUPTS * sizeof(struct idt_entry) - 1;
++}
++
++void sync_exception_handlers_to_guest(struct kvm_vm *vm)
++{
++	*(vm_vaddr_t *)addr_gva2hva(vm, (vm_vaddr_t)(&exception_handlers)) = vm->handlers;
++}
++
+ void vcpu_init_descriptor_tables(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_vm *vm = vcpu->vm;
+ 	struct kvm_sregs sregs;
  
+ 	vcpu_sregs_get(vcpu, &sregs);
+-	sregs.idt.base = vm->idt;
+-	sregs.idt.limit = NUM_INTERRUPTS * sizeof(struct idt_entry) - 1;
++	kvm_setup_idt(vcpu->vm, &sregs.idt);
+ 	sregs.gdt.base = vm->gdt;
+ 	sregs.gdt.limit = getpagesize() - 1;
+ 	kvm_seg_set_kernel_data_64bit(NULL, DEFAULT_DATA_SELECTOR, &sregs.gs);
+ 	vcpu_sregs_set(vcpu, &sregs);
+-	*(vm_vaddr_t *)addr_gva2hva(vm, (vm_vaddr_t)(&exception_handlers)) = vm->handlers;
++	sync_exception_handlers_to_guest(vm);
+ }
+ 
+ void vm_install_exception_handler(struct kvm_vm *vm, int vector,
 -- 
 2.41.0.487.g6d72f3e995-goog
 
