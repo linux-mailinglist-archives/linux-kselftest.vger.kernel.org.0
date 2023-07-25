@@ -2,150 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89298760E1F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 11:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AC4760DFE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 11:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232977AbjGYJOX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 05:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53794 "EHLO
+        id S230195AbjGYJJu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 05:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232742AbjGYJOW (ORCPT
+        with ESMTP id S229656AbjGYJJt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 05:14:22 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54AD10D1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 02:14:17 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98e39784a85so1344963566b.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 02:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1690276456; x=1690881256;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=90N1opdApkJ6sofZeZLN2gsjrZklninJ72RskdGs+7M=;
-        b=UPDLtLnhvE37z3PFQELXEQVb8YquW5JpuvtoFr9iv0obwYIY+gIrdJFeRZNXzVJYYp
-         l0iHf/qqttV965ifMacfBlMTrUEasWcc9uULu1gCzbdYdm2gWlQ6C3ep1USnbjP0hy/q
-         yIwpDDy41gNXW6+BJPKvEyEYtSGnsWTawtIqQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690276456; x=1690881256;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=90N1opdApkJ6sofZeZLN2gsjrZklninJ72RskdGs+7M=;
-        b=kMhYuPY3imORKzMUQXGodfLq4AGF5XsP87rZg6Juvo/ZdBaHO7pQM1KPLMx5vZVnhy
-         8RQphyX5mBnKoQtjK6eLnOL4h1u3WADUyKPt7WQin9YgoT1F/fFqXF60RO5UWVL0ldDk
-         hXD4P9NR6xa19yY5JqZ2L5htQRbDsMU85+4cEeLUgVG3z+dQGXMSTsm9ZzSGKwAz8+A4
-         tfXcHjpxG0+7x33DRL2edgU5u7nfIvbMoJJcwfddDVTtegHA2VBIH0HlUEkRfnRb3OwG
-         ajOCwEbTfsHaea9f/W6OSHPuMaRQ1VqaFjWtntKS4DYgYT5/16vz0s7UaNwnX9UUl4Zg
-         /e+A==
-X-Gm-Message-State: ABy/qLbUCB7n4SEYVfKzL4sbV+N4YhpUOYt69QyVjwKv9GUcOeL1NN7A
-        TJ1aXoflstd+RTBKHVX1LmSANA==
-X-Google-Smtp-Source: APBJJlE0BXPyh3d6xZ70mVilCUjvGA2mpPz33nUwaLBBcFccwg8UktLJu68ohKn6RQ3Y2pDbdKDTDA==
-X-Received: by 2002:a17:907:7744:b0:994:1805:1fad with SMTP id kx4-20020a170907774400b0099418051fadmr1555473ejc.10.1690276456161;
-        Tue, 25 Jul 2023 02:14:16 -0700 (PDT)
-Received: from cloudflare.com (79.184.214.102.ipv4.supernova.orange.pl. [79.184.214.102])
-        by smtp.gmail.com with ESMTPSA id f22-20020a1709067f9600b009920f18a5f0sm7764654ejr.185.2023.07.25.02.14.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 02:14:15 -0700 (PDT)
-References: <cover.1690255889.git.yan@cloudflare.com>
- <cdbbc9df16044b568448ed9cd828d406f0851bfb.1690255889.git.yan@cloudflare.com>
-User-agent: mu4e 1.6.10; emacs 28.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Yan Zhai <yan@cloudflare.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jordan Griege <jgriege@cloudflare.com>,
-        kernel-team@cloudflare.com
-Subject: Re: [PATCH v3 bpf 1/2] bpf: fix skb_do_redirect return values
-Date:   Tue, 25 Jul 2023 11:08:15 +0200
-In-reply-to: <cdbbc9df16044b568448ed9cd828d406f0851bfb.1690255889.git.yan@cloudflare.com>
-Message-ID: <87v8e8xsih.fsf@cloudflare.com>
+        Tue, 25 Jul 2023 05:09:49 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FEF9B;
+        Tue, 25 Jul 2023 02:09:48 -0700 (PDT)
+Received: from [192.168.100.7] (unknown [59.103.217.18])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7AD6F6607108;
+        Tue, 25 Jul 2023 10:09:39 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1690276186;
+        bh=XdNAqD8pBtuejUuQFT+jmKzDVpGQZBU3/DTPb3ihEmo=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=d7hVqBt3iuMHzYWfjG0CGNHi2ClrCmnXnBTsfB/r7HruJrbnSCqcl0i0Tg7QTfYQ6
+         NEbT9Gf30FbGxTKFtJrrJQlSSubGDgkKQHQ+ORIjYELSwWMG2oVJnCUm62xTckCxFB
+         jelQdGbUVo+0zxdWEwD895dvUagXZbyEbhEA3Aq6aEr0MVtd+tQ0D2fHTExwRtkTen
+         wGVREO5J1I63LV0rUN4hVnwdt0kWyGDsnwbF8HM4sFeGVeFVwQzO9MYJU7epJWQan7
+         Q9Bz2C8Y6/lcexEifufO2KP+gsE8uaxCCE00xg2rI5uasR2VO6ibEn8PUYe9IU+BdT
+         1VecNbs2To1Ug==
+Message-ID: <1afedab8-5929-61e5-b0da-9c70dc01c254@collabora.com>
+Date:   Tue, 25 Jul 2023 14:09:32 +0500
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yang Shi <shy828301@gmail.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [v2] fs/proc/task_mmu: Implement IOCTL for efficient page table
+ scanning
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230713101415.108875-6-usama.anjum@collabora.com>
+ <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
+ <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com>
+ <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
+ <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com>
+ <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
+ <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com>
+ <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
+ <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com>
+ <CABb0KFHJVeEkh4f6WWK6FThCbA+NE8iYUZE68nV1YAxaHwiwog@mail.gmail.com>
+ <e1ead2e8-046a-31d9-8df9-27cdd7b7ff83@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <e1ead2e8-046a-31d9-8df9-27cdd7b7ff83@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 09:13 PM -07, Yan Zhai wrote:
-> skb_do_redirect returns various of values: error code (negative), 0
-> (success), and some positive status code, e.g. NET_XMIT_CN, NET_RX_DROP.
-> Such code are not handled at lwt xmit hook in function ip_finish_output2
-> and ip6_finish_output, which can cause unexpected problems. This change
-> converts the positive status code to proper error code.
->
-> Suggested-by: Stanislav Fomichev <sdf@google.com>
-> Reported-by: Jordan Griege <jgriege@cloudflare.com>
-> Signed-off-by: Yan Zhai <yan@cloudflare.com>
->
-> ---
-> v3: converts also RX side return value in addition to TX values
-> v2: code style change suggested by Stanislav Fomichev
-> ---
->  net/core/filter.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 06ba0e56e369..3e232ce11ca0 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2095,7 +2095,12 @@ static const struct bpf_func_proto bpf_csum_level_proto = {
->  
->  static inline int __bpf_rx_skb(struct net_device *dev, struct sk_buff *skb)
->  {
-> -	return dev_forward_skb_nomtu(dev, skb);
-> +	int ret = dev_forward_skb_nomtu(dev, skb);
-> +
-> +	if (unlikely(ret > 0))
-> +		return -ENETDOWN;
-> +
-> +	return 0;
->  }
->  
->  static inline int __bpf_rx_skb_no_mac(struct net_device *dev,
-> @@ -2106,6 +2111,8 @@ static inline int __bpf_rx_skb_no_mac(struct net_device *dev,
->  	if (likely(!ret)) {
->  		skb->dev = dev;
->  		ret = netif_rx(skb);
-> +	} else if (ret > 0) {
-> +		return -ENETDOWN;
->  	}
->  
->  	return ret;
-> @@ -2129,6 +2136,9 @@ static inline int __bpf_tx_skb(struct net_device *dev, struct sk_buff *skb)
->  	ret = dev_queue_xmit(skb);
->  	dev_xmit_recursion_dec();
->  
-> +	if (unlikely(ret > 0))
-> +		ret = net_xmit_errno(ret);
-> +
->  	return ret;
->  }
+On 7/25/23 12:23 PM, Muhammad Usama Anjum wrote:
+> On 7/24/23 9:10 PM, Michał Mirosław wrote:
+> [...]>>>> @@ -2219,22 +2225,24 @@ static int pagemap_scan_get_args(struct
+> pm_scan_arg
+>>>>> *arg,
+>>>>>              arg->category_anyof_mask | arg->return_mask) & ~PM_SCAN_CATEGORIES)
+>>>>>                 return -EINVAL;
+>>>>>
+>>>>> -       start = untagged_addr((unsigned long)arg->start);
+>>>>> -       end = untagged_addr((unsigned long)arg->end);
+>>>>> -       vec = untagged_addr((unsigned long)arg->vec);
+>>>>> +       arg->start = untagged_addr((unsigned long)arg->start);
+>>>>> +       arg->end = untagged_addr((unsigned long)arg->end);
+>>>>> +       arg->vec = untagged_addr((unsigned long)arg->vec);
+>>>>
+>>>> BTW, We should we keep the tag in args writeback().
+>>> Sorry what?
+>>> After this function, the start, end and vec would be used. We need to make
+>>> sure that the address are untagged before that.
+>>
+>> We do write back the address the walk ended at to arg->start in
+>> userspace. This pointer I think needs the tag reconstructed so that
+>> retrying the ioctl() will be possible.
+> Even if we reconstruct the tag for end and vec, We need to update the start
+> address. Can we just put same tag as original start in it? I'm not sure.
+The special users would use tags. If they are using it, they'll just re-add
+the tag in next invocation. I think this implementation is correct.
 
-net_xmit_errno maps NET_XMIT_DROP to -ENOBUFS. It would make sense to me
-to map NET_RX_DROP to -ENOBUFS as well, instead of -ENETDOWN, to be
-consistent.
+> 
 
-It looks like the Fixes tag for this should point to the change that
-introduced BPF for LWT:
-
-Fixes: 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel infrastructure")
-
+-- 
+BR,
+Muhammad Usama Anjum
