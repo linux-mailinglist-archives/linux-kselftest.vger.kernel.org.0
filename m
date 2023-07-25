@@ -2,114 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860237620D8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 20:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40C27620F8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 20:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbjGYSBu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 14:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
+        id S232503AbjGYSF6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 14:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232383AbjGYSBl (ORCPT
+        with ESMTP id S232633AbjGYSFx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 14:01:41 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FCA2115;
-        Tue, 25 Jul 2023 11:01:38 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1690308093t9wenc48
-Received: from localhost.localdomain ( [42.242.128.198])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 26 Jul 2023 02:01:32 +0800 (CST)
-X-QQ-SSF: 01200000000000403000B00A0000000
-X-QQ-FEAT: hoArX50alxGfKCqcoJrDpBOVNpOBAj8Euz2UJh6j3yf0pnrWIamc1qk6NJsZy
-        ZPdG6F8iyNMtFTdqKUKL/Y80gyczqCycfftYBrPWMlKrVYIJUsBXBCwq4dUDN9P/gRGQ6MX
-        5v25aVNj8TMCLPo2SaYhIll5Zlpo/tzxtqGCtW+EvmEfl+bowYQeHhK06ZkQGRojxoMsHfg
-        MqDHWHmeJCKE0avHl7btJ2zcdw0ZpQYhMGYIfLkonv5xzILyLqC5SGFCNe5IWZOyxn6z4Po
-        ldkvveqgISSqk/h/KcsH8ZmcYKQNEg/GrmvqFlrnIlsXP1TvwXRssxHReSNcT3OpPUS3rSb
-        WI54hW64St4bxdwyT/GZd0Tt13b2WiJypbOQ+ol1nT5mO47I77QYh81YNn2RQ==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 4769715897786675155
-From:   Yuan Tan <tanyuan@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Yuan Tan <tanyuan@tinylab.org>
-Subject: [PATCH 2/2] selftests/nolibc: add testcase for pipe.
-Date:   Tue, 25 Jul 2023 14:01:30 -0400
-Message-Id: <160ddef0313e11085ee906144d6d9678b8156171.1690307717.git.tanyuan@tinylab.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1690307717.git.tanyuan@tinylab.org>
-References: <cover.1690307717.git.tanyuan@tinylab.org>
+        Tue, 25 Jul 2023 14:05:53 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D858268D
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 11:05:45 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5223910acf2so1817a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 11:05:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690308344; x=1690913144;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3gBnT3Q9DJqSuXcP4CzN0zSoMTfKvs3KyiDNWzlI9V4=;
+        b=IR7MPLRNrwqnMA6Taco+EOZJ6KtwnxWYXAWsiIpvLEpZ8GqzUUtArAD7xEuCO+mZv3
+         aOiO+lW2JAnLZdb/Ck6lRn0BxAyt4qUSG4lQz26wvv5CawhHADRbfR8JdTkmZuqKWid3
+         tQ4sxPrTLguBe5mOxWPkRgp5C+jQLB/QhL1zPzTMaIbs+8YY+xGjT6uCSOiuP+ShH/yh
+         bghhKsbg4+YtihSsav+R2zhvOZpDN1YaMGxBsWq+BgWfdppwO7aEJnEB/IB6oySvNTZv
+         PZ+ebPFJ7IFs6PMAwkdsvH388TRo5wF31MrlTWn+ckwpC0JHlIN/H20Q8pM/lztUD7CY
+         vZjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690308344; x=1690913144;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3gBnT3Q9DJqSuXcP4CzN0zSoMTfKvs3KyiDNWzlI9V4=;
+        b=JHOwTPFW4s6DCXcANcKxlHmRcIbVg5SXLddxLgPbTf0avFB7ltolAm/oyaFpNg2zyD
+         xsOXE0549AHatatN7uU9DPS2DWSLJkRlh3htpAd3Nhq3JB80YGaqvB88KQVtAE14hxal
+         NUZte3TitI9m/YXG5f+s7a1Hjat8/1bG4pZsnsBfDEo2woUckpVa0qcFUx+TGjvL16e6
+         wTRl2jxGAfTehjd+1O3DYIs0SFkarAgBrI7ajHIYEjbHg+fxsCS3SnN3ElaZP1rENcVt
+         Cdu2/zAaAeHnXRBQDAnrJcJ1SHipnmmMOGWp89F6zVKQkXoi03EqLzLNreRXDTpZXIFA
+         VUgg==
+X-Gm-Message-State: ABy/qLaaEZrhizINlyabhIE5Nz85SBT5b6w4ugVRDDOHZnHVhzHUGUhh
+        CRj/sAJC1m7fT3hIN9IEwUMNFr2zxbxzyXhj9iGSLg==
+X-Google-Smtp-Source: APBJJlFx5VS5SCJzOTClBE3oorb3CkqCx6mrIr5bXycpxVlMeBOxmxwx7XhBiLPrxEo29Ul0BYE36xYQQxmuCt7+gdA=
+X-Received: by 2002:a50:d6de:0:b0:522:4741:d992 with SMTP id
+ l30-20020a50d6de000000b005224741d992mr146970edj.4.1690308343974; Tue, 25 Jul
+ 2023 11:05:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230713101415.108875-6-usama.anjum@collabora.com>
+ <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
+ <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com> <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
+ <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com> <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
+ <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com> <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
+ <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com> <CABb0KFHJVeEkh4f6WWK6FThCbA+NE8iYUZE68nV1YAxaHwiwog@mail.gmail.com>
+ <e1ead2e8-046a-31d9-8df9-27cdd7b7ff83@collabora.com> <1afedab8-5929-61e5-b0da-9c70dc01c254@collabora.com>
+ <eac29a4d-aa3f-4df5-97e6-4aa3a358f2b1@collabora.com>
+In-Reply-To: <eac29a4d-aa3f-4df5-97e6-4aa3a358f2b1@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Tue, 25 Jul 2023 20:05:32 +0200
+Message-ID: <CABb0KFHuNpG+NJQ4sQdp1n_Kf4sO8aC5DBEppFc1zz=zAeDfQw@mail.gmail.com>
+Subject: Re: [v3] fs/proc/task_mmu: Implement IOCTL for efficient page table scanning
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yang Shi <shy828301@gmail.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a testcase of pipe that child process sends message to parent process.
+On Tue, 25 Jul 2023 at 11:11, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> ----
+> Michal please post your thoughts before I post this as v26.
+> ----
+[...]
 
-Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 34 ++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Looks ok - minor things below.
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 03b1d30f5507..43ba2884fd1e 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -767,6 +767,39 @@ int test_mmap_munmap(void)
- 	return ret;
- }
- 
-+int test_pipe(void)
-+{
-+	int pipefd[2];
-+	char buf[32];
-+	pid_t pid;
-+	char *msg = "hello, nolibc";
-+
-+	if (pipe(pipefd) == -1)
-+		return 1;
-+
-+	pid = fork();
-+
-+	switch (pid) {
-+	case -1:
-+		return 1;
-+
-+	case 0:
-+		close(pipefd[0]);
-+		write(pipefd[1], msg, strlen(msg));
-+		close(pipefd[1]);
-+		exit(EXIT_SUCCESS);
-+
-+	default:
-+		close(pipefd[1]);
-+		read(pipefd[0], buf, 32);
-+		close(pipefd[0]);
-+		wait(NULL);
-+
-+		if (strcmp(buf, msg))
-+			return 1;
-+		return 0;
-+	}
-+}
- 
- /* Run syscall tests between IDs <min> and <max>.
-  * Return 0 on success, non-zero on failure.
-@@ -851,6 +884,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(mmap_munmap_good);  EXPECT_SYSZR(1, test_mmap_munmap()); break;
- 		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
-+		CASE_TEST(pipe);              EXPECT_SYSZR(1, test_pipe()); break;
- 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
- 		CASE_TEST(poll_stdout);       EXPECT_SYSNE(1, ({ struct pollfd fds = { 1, POLLOUT, 0}; poll(&fds, 1, 0); }), -1); break;
- 		CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll((void *)1, 1, 0), -1, EFAULT); break;
--- 
-2.39.2
+1. I'd change the _WPASYNC things to something better, if this can
+also work with "normal" UFFD WP.
 
+2. For the address tagging part I'd prefer someone who knows how this
+is used take a look. We're ignoring the tag (but clear it on return in
+->start) - so it doesn't matter for the ioctl() itself.
+
+3. BTW, One of the uses is the GetWriteWatch and I wonder how it
+behaves on HugeTLB (MEM_LARGE_PAGES allocation)? Shouldn't it return a
+list of huge pages and write *lpdwGranularity =3D HPAGE_SIZE?
+
+4. The docs and commit messages need some rewording due to the changes
+in the API.
+
+Other than that:
+
+Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
