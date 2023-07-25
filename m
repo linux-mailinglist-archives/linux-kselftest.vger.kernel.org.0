@@ -2,142 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CB57614CA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 13:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0564F761879
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 14:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbjGYLWz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 07:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
+        id S229522AbjGYMhn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 08:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234455AbjGYLWy (ORCPT
+        with ESMTP id S232494AbjGYMhl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 07:22:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021021BEC;
-        Tue, 25 Jul 2023 04:22:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85AEC6168E;
-        Tue, 25 Jul 2023 11:22:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 605A4C433C9;
-        Tue, 25 Jul 2023 11:22:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690284164;
-        bh=3PZwNojel/fB0iAxHMvVvEfU8vg+2OWEs6gC1RrNPhs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ug3Bp0moAtl2iOU0LqyL6tock6eXDiL1XykMzJHwS26YFDBZTp2nVVg5DegFC95W1
-         wDJLMEHXkEgb5ZX1TQ495uXTpRNdYAXZ0H74hGRGrgpvceN4JFUqF6/WhthIgQOoXb
-         XvH/x8Td6KU4anPDoEwiqQRHT7TSms9g3xsZZT/xKIcjy12Z7QZkhJPm6IYHGnAxUf
-         /7VrDt7orGvGidvZWlI4CS9xmnPnE8482azX1QUUGJEU3qAo3Aq5g2wHoRF8lZwyFA
-         aKaa6T74oelllGzL5yE1ufrOMNi/c0qdUFY7RpOaL4AoiPSzhULoGduWnosuWAb/0L
-         PhJHNPXC3RiRg==
-Date:   Tue, 25 Jul 2023 13:22:42 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-        Julian Pidancet <julian.pidancet@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH v2 15/20] context-tracking: Introduce work deferral
- infrastructure
-Message-ID: <ZL+wgn76H1em9hZU@lothringen>
-References: <20230720163056.2564824-1-vschneid@redhat.com>
- <20230720163056.2564824-16-vschneid@redhat.com>
- <ZL6QI4mV-NKlh4Ox@localhost.localdomain>
- <xhsmh351dtfjj.mognet@vschneid.remote.csb>
- <ZL7OoUMLZwfUttjV@lothringen>
- <xhsmhzg3ks3mw.mognet@vschneid.remote.csb>
+        Tue, 25 Jul 2023 08:37:41 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7285C11A;
+        Tue, 25 Jul 2023 05:37:39 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1690288646t6jdi2ss
+Received: from linux-lab-host.localdomain ( [61.141.78.189])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 25 Jul 2023 20:37:25 +0800 (CST)
+X-QQ-SSF: 01200000000000D0X000000A0000000
+X-QQ-FEAT: CR3LFp2JE4n/UXq5fwdJeBv7RRG370WMr4PjV0XGpJjDqWqFCTyP4Cv4tFGF3
+        JQugoL6zG57Kn80OYBiAKbaMhyThfdKA6QevgJNq6ggmGgWdy8+03a/MJEmCF31zEptp8hr
+        w9YBWEGim1io4MLiGWNB4iTuccAXqiHnhRwxpOvhHHqQU+LREhp50SOzfmWdqY4MXZZKocc
+        gRtG82CpwEtnTPTrIm0DFj0bgyfWBSi8EM3YsHXwrgEQ1kt+EB2x672er+0j6uudhOdWhNi
+        ujp4LSoVCdOhkmXBhD8qKp0RWZWiVaSDM1kUnYZpTsdaYGfQY9lHyamzpSNaJt9BVNCSA05
+        Iq8uJ81hjmpopzlo3LGZHuFUxClK65AP3P3q1h5W0LxbmDhP7VYD2gJpzbyJIDcsMoHIPjI
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15160778282208324326
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: Re: [PATCH v2 02/14] selftests/nolibc: add macros to enhance maintainability
+Date:   Tue, 25 Jul 2023 20:37:25 +0800
+Message-Id: <20230725123725.35508-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230722122009.GE17311@1wt.eu>
+References: <20230722122009.GE17311@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhzg3ks3mw.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 11:10:31AM +0100, Valentin Schneider wrote:
-> I have reasons! I just swept them under the rug and didn't mention them :D
-> Also looking at the config dependencies again I got it wrong, but
-> nevertheless that means I get to ramble about it.
-> 
-> With NO_HZ_IDLE, we get CONTEXT_TRACKING_IDLE, so we get these
-> transitions:
-> 
->   ct_idle_enter()
->     ct_kernel_exit()
->       ct_state_inc_clear_work()
-> 
->   ct_idle_exit()
->     ct_kernel_enter()
->       ct_work_flush()
-> 
-> Now, if we just make CONTEXT_TRACKING_WORK depend on CONTEXT_TRACKING_IDLE
-> rather than CONTEXT_TRACKING_USER, we get to leverage the IPI deferral for
-> NO_HZ_IDLE kernels - in other words, we get to keep idle CPUs idle longer.
-> 
-> It's a completely different argument than reducing interference for
-> NOHZ_FULL userspace applications and I should have at the very least
-> mentioned it in the cover letter, but it's the exact same backing
-> mechanism.
-> 
-> Looking at it again, I'll probably make the CONTEXT_IDLE thing a separate
-> patch with a proper changelog.
+Hi, Willy
 
-Ok should that be a seperate Kconfig? This indeed can bring power improvement
-but at the cost of more overhead from the sender. A balance to be measured...
+> On Wed, Jul 19, 2023 at 09:19:10PM +0800, Zhangjin Wu wrote:
+> > The kernel targets share the same kernel make operations, the same
+> > .config file, the same kernel image, add MAKE_KERNEL, KERNEL_CONFIG and
+> > KERNEL_IMAGE for them.
+> > 
+> > Many targets share the same logging related settings, let's add common
+> > variables RUN_OUT, LOG_OUT and REPORT_RUN_OUT for them.
+> > 
+> > The qemu run/rerun targets share the same qemu system run command, add
+> > QEMU_SYSTEM_RUN for them.
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/testing/selftests/nolibc/Makefile | 41 ++++++++++++++++---------
+> >  1 file changed, 27 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > index 0cd17de2062c..8c531518bb9f 100644
+> > --- a/tools/testing/selftests/nolibc/Makefile
+> > +++ b/tools/testing/selftests/nolibc/Makefile
+> > @@ -166,45 +166,58 @@ endif
+> >  libc-test: nolibc-test.c
+> >  	$(QUIET_CC)$(CC) -o $@ $<
+> >  
+> > +# common macros for logging
+> > +RUN_OUT = $(CURDIR)/run.out
+> > +LOG_OUT = > "$(RUN_OUT)"
+> > +REPORT_RUN_OUT = $(REPORT) "$(RUN_OUT)"
+> > +
+> >  # local libc-test
+> >  run-libc-test: libc-test
+> > -	$(Q)./libc-test > "$(CURDIR)/run.out" || :
+> > -	$(Q)$(REPORT) $(CURDIR)/run.out
+> > +	$(Q)./libc-test $(LOG_OUT) || :
+> > +	$(Q)$(REPORT_RUN_OUT)
+> 
+> Sorry but I don't find that this improves maintainability, quite the
+> opposite in fact. One reason is that you never visually expect that
+> some shell indirection delimiters are hidden in a macro that seems
+> to only convey a name. Sure there are valid use cases for this, but
+> I think that here it's just adding too much abstraction and it makes
+> it quite hard to unfold all of this mentally.
+>
+
+Ok, will reserve less ones as possible as we can.
+
+- RUN_OUT is required for architecture specific output
+- REPORT_RUN_OUT is not necessary, will remove it
+
+> Please try to keep the number of macros to the minimum that needs to
+> be replaced or forced by the user. Here I'm not seeing a compelling
+> reason for a user to want to force LOG_OUT to something else. Also
+> makefile macros are generally a pain to debug, which is another
+> reason for not putting too many of them.
+>
+> I noticed that your next patch changes LOG_OUT to tee, it could have
+> done it everywhere and wouldn't affect readability as much.
+>
+
+I have forgetten to pick an old patch to silence the running log like
+this:
+
+    ifeq ($(QUIET_RUN),1)
+    LOG_OUT = > "$(RUN_OUT)"
+    else
+    LOG_OUT = | tee "$(RUN_OUT)"
+    endif
+
+Without QUIET_RUN, we can silence the running log with:
+
+    $ make run LOG_OUT="> /dev/null"
+
+It is not meaningful like QUIET_RUN, seems the QUIET_RUN is not
+necessary for we have 'grep status' now, so, let's remove this RUN_OUT
+too.
+
+Thanks,
+Zhangjin
+
+> Thanks,
+> Willy
