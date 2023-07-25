@@ -2,93 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1C3761C4D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 16:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249B7761CCE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 17:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjGYOzq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 10:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
+        id S229461AbjGYPBm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 11:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbjGYOzp (ORCPT
+        with ESMTP id S231674AbjGYPBQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 10:55:45 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65896E78
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 07:55:44 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-760dff4b701so68648139f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 07:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1690296944; x=1690901744;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=poOkid89WcEeHCeXFL1hv/OL8I2gj/LJb9FhxsPb1Uc=;
-        b=NSF2vx4e/ZSu2tp/7tSxXs5FJM3Tl8H6R1YIzJ7aBmw6h4/+vbz5PWM98hGij52c5Y
-         kuTAbUlGUpHR+Nh1+P6LXJAgh7D8O/nebeUfhlIDpK4RSpwt0916C2FBAU7NlWFPNsHo
-         6yWELUwa7YfShDcTtpukTkAj+QMRm9rIgrxlg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690296944; x=1690901744;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=poOkid89WcEeHCeXFL1hv/OL8I2gj/LJb9FhxsPb1Uc=;
-        b=DPEc9hCk2b2WIlEZ1LE7mEp4BeKzPn21E7E4HyQo2aHzigul4XHhesGVo3oiWCJcqa
-         FUwooeZrNPnKuduxWB5wEEK7ipBPXz6c+ZhiRTPtwSUVBsIfDrno7Kg7XVjDE1mO/7z/
-         rw5qdlt2mrTVOwL8KW6TGs5duyXxNk/RZ4QApFxHh2t5B1QiUnyU0Hn8K5jEkLNk6wC5
-         u8Ynxph9frBu16aFxREemfpDLYxj4WJMmJyNqrbUD+89bDGuVbprSRoHFkXBNZaD03Tb
-         nzxU52ryw/4h/+ZUu6D2xkvIYZBpqHitRT/0YcJae2Jb2pkRkiPS3k7lsNJXqh4zU7R5
-         dT5A==
-X-Gm-Message-State: ABy/qLY67rAkMQG9vMso/qwgUl8uOLUml/mUEFYcM5hn8Zr7SIcjawwS
-        wxdFN+qcv/sRej3OVvYPvq1RiA==
-X-Google-Smtp-Source: APBJJlHfdriZne2soE8HHVdEwEkNGZ9Ol4beSAt414g1akSKUSfQrIDfA6XTzFn0bxLh0NQ0xm3Xng==
-X-Received: by 2002:a92:c9c3:0:b0:341:c98a:529 with SMTP id k3-20020a92c9c3000000b00341c98a0529mr9987176ilq.0.1690296943844;
-        Tue, 25 Jul 2023 07:55:43 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p18-20020a92da52000000b00348e9aa50c8sm33229ilq.60.2023.07.25.07.55.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jul 2023 07:55:43 -0700 (PDT)
-Message-ID: <c36c25ad-4c09-cef2-76a1-1eb8fe7ee927@linuxfoundation.org>
-Date:   Tue, 25 Jul 2023 08:55:43 -0600
+        Tue, 25 Jul 2023 11:01:16 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938951FC9;
+        Tue, 25 Jul 2023 08:00:09 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1690297197tmjecvk6
+Received: from linux-lab-host.localdomain ( [61.141.78.189])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 25 Jul 2023 22:59:56 +0800 (CST)
+X-QQ-SSF: 01200000000000D0X000000A0000000
+X-QQ-FEAT: 3M0okmaRx3iangUTIDbCNJ438ntzVhib54bv4UnU6C6+yatFS1ltpib1xaSrb
+        hwEiC4EWQ7COfScGfT4jMkeXrgyjmIGGQCVeCateaUPHvEh1nM26kWCMLD0NFqNOGgSEs+w
+        dl99O5meQWjVQxpFuv27/cB2q/QhBvl7IIzkVAB0nFMPHs1PqDixoXC+2qJ6eCIsNjQLqrq
+        rxMInWyY1l7cx3ns/83x9w541AaMF4ltH99MmL4qszbYcSLuy/kiiJZSJ1EQBXi1ElFDWkT
+        P2YajB87+QUWKwxrJase8s1624cZ8/S8e3HON/SX85kdK24UL7NsCz7AwxfkqI2rtz5Ekds
+        O5WiXrqJ0P3BW5oDk+ZnqgpgrQQruGqMfVmWRIUgBPfgGVuvK6j0ip51InyWxCZgI1e9KIl
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 14432237341619812258
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: Re: [PATCH v2 09/14] selftests/nolibc: allow quit qemu-system when poweroff fails
+Date:   Tue, 25 Jul 2023 22:59:55 +0800
+Message-Id: <20230725145955.37685-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230722130248.GK17311@1wt.eu>
+References: <20230722130248.GK17311@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v5 00/19] selftests/resctrl: Fixes and cleanups
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-kselftest@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230717131507.32420-1-ilpo.jarvinen@linux.intel.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230717131507.32420-1-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/17/23 07:14, Ilpo Järvinen wrote:
-> Here is a series with some fixes and cleanups to resctrl selftests.
+Hi, Willy
+
+> On Wed, Jul 19, 2023 at 09:27:08PM +0800, Zhangjin Wu wrote:
+> > The kernel of some architectures can not poweroff qemu-system normally,
+> > especially for tinyconfig.
+> > 
+> > Some architectures may have no kernel poweroff support, the others may
+> > require more kernel config options and therefore slow down the
+> > tinyconfig build and test. and also, it's very hard (and some even not
+> > possible) to find out the exact poweroff related kernel config options
+> > for every architecture.
+> > 
+> > Since the low-level poweroff support is heavily kernel & qemu dependent,
+> > it is not that critical to both nolibc and nolibc-test, let's simply
+> > ignore the poweroff required kernel config options for tinyconfig (and
+> > even for defconfig) and quit qemu-system after a specified timeout or
+> > with an expected system halt or poweroff string (these strings mean our
+> > reboot() library routine is perfectly ok).
+> > 
+> > QEMU_TIMEOUT value can be configured for every architecture based on
+> > their time cost requirement of boot+test+poweroff.
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/testing/selftests/nolibc/Makefile | 23 +++++++++++++++++++++--
+> >  1 file changed, 21 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > index 541f3565e584..a03fab020ebe 100644
+> > --- a/tools/testing/selftests/nolibc/Makefile
+> > +++ b/tools/testing/selftests/nolibc/Makefile
+> > @@ -93,6 +93,9 @@ QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1
+> >  QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+> >  QEMU_ARGS            = $(QEMU_ARGS_$(XARCH)) $(QEMU_ARGS_EXTRA)
+> >  
+> > +# QEMU_TIMEOUT: some architectures can not poweroff normally, especially for tinyconfig
+> > +QEMU_TIMEOUT             = $(QEMU_TIMEOUT_$(XARCH))
+> > +
+> >  # OUTPUT is only set when run from the main makefile, otherwise
+> >  # it defaults to this nolibc directory.
+> >  OUTPUT ?= $(CURDIR)/
+> > @@ -224,16 +227,32 @@ kernel: extconfig
+> >  # common macros for qemu run/rerun targets
+> >  QEMU_SYSTEM_RUN = qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(KERNEL_IMAGE)" -serial stdio $(QEMU_ARGS)
+> >  
+> > +ifneq ($(QEMU_TIMEOUT),)
+> > +TIMEOUT_CMD = t=$(QEMU_TIMEOUT); \
+> > +	while [ $$t -gt 0 ]; do                                                       \
+> > +	    sleep 5; t=$$(expr $$t - 5); echo "detecting power off ...";              \
+> > +	    if grep -qE "reboot: System halted|reboot: Power down" "$(RUN_OUT)"; then \
+> > +		pkill -9 qemu-system-$(QEMU_ARCH);                                    \
+> > +		echo "powered off, test finish"; t=1; break;                          \
+> > +	    fi;                                                                       \
+> > +	done;                                                                         \
+> > +	if [ $$t -le 0 ]; then pkill -9 qemu-system-$(QEMU_ARCH); echo "qemu-system-$(QEMU_ARCH) timeout"; fi
 > 
-> v5:
-> - Improve changelogs
-> - Close fd_lm only in cat_val()
-> - Improve unmount error handling
-> 
+> Please have a look at the "timeout" command whichi makes all this much
+> simpler.
 
-Applied to linux-kselftest next for Linux 6.6-rc1
+Yeah, I used 'timeout --forgeground' before, but it is still a dead wait
+and it is very hard for us to configure a just right wait time.
 
-thanks,
--- Shuah
+If the configured wait time is short, the qemu will be killed during the
+test or before running the test, If the configured wait time is long, we
+will need to dead wait there even if the test is finished, although
+during interactive running, we can press 'CTRL + A X', but for
+background running, it is just time waste.
 
+To fix up this issue, the above method used at last allow to detect the
+output string, when the test finish and print something lines like:
+
+    reboot: System halted
+    reboot: Power down.
+
+We will use pkill to send signal to tell qemu quit, so, it is ok for us
+to configure a even'big' timeout, if the kernel can normally poweroff or
+if nolibc can successfully send the poweroff syscall, the above message
+will be detected and qemu will quit as expected, it will completely
+avoid dead wait, the configured timeout will never happen, this is
+comfortable.
+
+The worst case is only when qemu or kernel reject to boot, for example,
+a qemu bios missing or mismatch issue or a kernel regression or a wrong
+kernel config option, for these cases, the real timeout logic will work
+for us.
+
+As a summary, our timeout logic here include two parts: one is
+'poweroff' related string detection, another is the real timeout logic. 
+
+Based on current implementation, I even plan to add the test finish
+string in the expected strings:
+
+    Leaving init with final status
+
+And even further, when a hang detected (no normal poweroff or test
+finish string detected), print the whole or last part of running log to
+tell users what happens.
+
+> Also, please get used to never ever use kill -9 first. This
+> is exactly the way to leave temporary files and IPCs wandering around
+> while many programs that care about cleanups at least try to do that
+> upon a regular TERM or INT signal.
+>
+
+Ok, thanks, will use TERM or INT signal instead.
+
+> Willy
