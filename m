@@ -2,58 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E290376255B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 00:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C879C76255D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 00:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbjGYWCd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 18:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
+        id S230321AbjGYWCe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 18:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231831AbjGYWCO (ORCPT
+        with ESMTP id S230498AbjGYWCX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 18:02:14 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB0C3AB5
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:01:48 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c83284edf0eso6435576276.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:01:48 -0700 (PDT)
+        Tue, 25 Jul 2023 18:02:23 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36541FE6
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:01:50 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-5635233876bso3129989a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:01:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690322507; x=1690927307;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ubZcsRueKnG/2tJhq+EPb3SVilVStCRWb952/ddLi8c=;
-        b=ud8AM+bppLCLXb7mNMhfT1HFd6fwo+cTKJGi34ouT8C1dTzU25XfOaHvmrDsGlw6GA
-         1pzVxszWgv+Le37ynwaAVetaWFdJBakQXKzsFhDUpl28mnFvxes5ahVHm+11Y9T83W97
-         tUKXAkVvbGabJzahmjEDZduv8liOIarlNJsf49WtKeyDNa+sdQhPFgQIIzrXsu8qR/uf
-         OWjmTCxYLnvKBiY0BLVzWqwh63NDy1aUxgrhHjCkC9E2GF6hVX/obe1jmhAGUC3xSyLQ
-         wiJOofY1vkjv0STNHy9kPhkpPC41WhqPBOjXrAlfT+8AERpMDR0pHH+suBZHUuB6grKR
-         KfpQ==
+        d=google.com; s=20221208; t=1690322509; x=1690927309;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZbjAqcZWDEPBu4Z5VgM6o5j9i98p8IgHL/vVs/X78Tk=;
+        b=UIgE/7MBAcFLmyRerXAOoLDeD7A/VMjQ+Or6J5okuNTdygnqisvlbhUFjqiNcH5mfU
+         dIHeqek9tz4JhUXSrf9sDuA8gHgtKL2UH9T2AgDGGXmfPlx7dUnLgLvfPTZfrrzebC+e
+         kvX/aJiHWNuIKUssqf1mgMt7q1aeZ6uErcbRzFdnFH1pk1LtE+iadkzY48WgqkalCemE
+         N40BE9CE5oukPh6gJmrGtYEOXBLyo0vSOsraaJmIO3kw3bNizXCIMURK1jcE25RGFrOj
+         ndhcLgVqujW0LLlszEKxT7OCXpvK6mZRmcaYBNgv6pNBJcI+2Wae/LKBXlZBNNZMoCYk
+         a1ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690322507; x=1690927307;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ubZcsRueKnG/2tJhq+EPb3SVilVStCRWb952/ddLi8c=;
-        b=djWZBotQ4dVePLUImi1hYU31jXbWYfajWWOPrdG4yuIcXC7IAtJYT4t5Xq6LdShjuI
-         ZNAc2a1BOjbQvDQQlVfmv+Yvd/oOlmyI19Ty1DBN/ZyrbarZFwh1IyIvj+k5/3enGNIh
-         DW6CHnmm13YGjnLSXIVyP8E99ejE/usVs/GQ2maFIbm/zs8wnOzyBq0QexJLoNMN42TI
-         Jq7uuf7E6L7khHwvVtvjHtdBDL5phYbO8EVO0EjUkKPcvbdzdqOo8A1CCHF4SBHxA5+y
-         KnkuzfEyMQyg65We/D1qgKcZKDT1BhYSbTo9PwDi7Vx2LeVJBgMJG2Z7BM+BHTWzOCW8
-         QkGA==
-X-Gm-Message-State: ABy/qLagg2fmrfvOB/2zuCK5gSpuXPmGeDesfylY9JsrTFmMmakv+HLp
-        ruKHtC4iNNzDWgfW8PXLvTbswNeVHZd8w6VzZogxI7M+VBXEcFzf7ROGOFWPFYBgL+U63OnjA3j
-        8c9jWTIUnel7+Oi5+yd62cGMoqxmFYrawvORi/v7XaFVTeDnJwgmAtVawmO6ROQUW3P6pGHAFOp
-        ot
-X-Google-Smtp-Source: APBJJlHEAfMRm8eWf/ls6DYdKgZ6XdZbDl9DZTTszHVNGIuNrigBJPNT9N5SxYQ3DTQ8R7kkOfSEoUgntfED
+        d=1e100.net; s=20221208; t=1690322509; x=1690927309;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZbjAqcZWDEPBu4Z5VgM6o5j9i98p8IgHL/vVs/X78Tk=;
+        b=cKkrj7N9xmnRbdPsp+lIrX3wXlh+nim4Ei7Ad8rUQ9Woufl/y1SIP5PJoqzgVflUYt
+         7J5hk+r4Tz0zavMBFnUlcODRcr6J3PW2SDWegCY9gp75+0wqv0+C0C5tzCXlZPAULT1M
+         iL9tKIab4KPg4O9NdoCyhg7J/I8w82U6Rdy6z66Pypk/GrfNNBsccs8R34sRHo4PAjUe
+         GvsLPe5qZD5qQCSe09pXMrWZQXdVrU0M1d5+RqBYESLtfyaWhFUKOPEJsSMKG+i1VsvR
+         +0X+9NmInnpqDEPr57dW0ZjxmgSxhNoiRhhAi5W0daJ/GLISZRmljjspxhKV/kTbd9mv
+         W6Uw==
+X-Gm-Message-State: ABy/qLb3xJUbTSLaUcNiMV1Zv7kezPSA6aNwkzan6LM7og15dJns/73Y
+        egbWOZUp5OIjmx7MJ20+Fd+ZON3p0yTkfXHVIGID3tJmIxw8oEa0EJfifg8z9sBgMHdWiC5HpxQ
+        uPBSmNPSC2eRCMivvWiKH+ZVFfKdfyyjn+KUPCWklR8ZQ9uTAPtyPjVBCO8PVS9YV9YdtBt1uw5
+        Ii
+X-Google-Smtp-Source: APBJJlGvIFzyScaDHCvh1cO3MTYc7Lpg8/vEd/IveZYdr5gfm1CGYT3vx+XfuEJnvqmR1TZ+hHqPb0UhI5gJ
 X-Received: from afranji.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:47f1])
- (user=afranji job=sendgmr) by 2002:a25:42c4:0:b0:bc0:bfa7:7647 with SMTP id
- p187-20020a2542c4000000b00bc0bfa77647mr2084yba.0.1690322506990; Tue, 25 Jul
- 2023 15:01:46 -0700 (PDT)
-Date:   Tue, 25 Jul 2023 22:00:53 +0000
+ (user=afranji job=sendgmr) by 2002:a63:6f86:0:b0:55a:12cf:3660 with SMTP id
+ k128-20020a636f86000000b0055a12cf3660mr2074pgc.1.1690322508626; Tue, 25 Jul
+ 2023 15:01:48 -0700 (PDT)
+Date:   Tue, 25 Jul 2023 22:00:54 +0000
+In-Reply-To: <20230725220132.2310657-1-afranji@google.com>
 Mime-Version: 1.0
+References: <20230725220132.2310657-1-afranji@google.com>
 X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
-Message-ID: <20230725220132.2310657-1-afranji@google.com>
-Subject: [PATCH v4 00/28] TDX KVM selftests
+Message-ID: <20230725220132.2310657-2-afranji@google.com>
+Subject: [PATCH v4 01/28] KVM: selftests: Add function to allow one-to-one GVA
+ to GPA mappings
 From:   Ryan Afranji <afranji@google.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
@@ -70,170 +72,143 @@ Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
         like.xu@linux.intel.com, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org, ackerleytng@google.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+From: Ackerley Tng <ackerleytng@google.com>
 
-This is v4 of the patch series for TDX selftests.
+One-to-one GVA to GPA mappings can be used in the guest to set up boot
+sequences during which paging is enabled, hence requiring a transition
+from using physical to virtual addresses in consecutive instructions.
 
-It has been updated for Intel=E2=80=99s v14 of the TDX host patches which w=
-as
-proposed here:
-https://lore.kernel.org/lkml/cover.1685333727.git.isaku.yamahata@intel.com/
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+Change-Id: I5a15e241b3ce9014e17a794478bbfa65b9d8e0a1
+Signed-off-by: Ryan Afranji <afranji@google.com>
+---
+ .../selftests/kvm/include/kvm_util_base.h     |  3 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 81 ++++++++++++++++++-
+ 2 files changed, 83 insertions(+), 1 deletion(-)
 
-The tree can be found at:
-https://github.com/googleprodkernel/linux-cc/tree/tdx-selftests-rfc-v4
-
-Changes from RFC v3:
-
-In v14, TDX can only run with UPM enabled so the necessary changes were
-made to handle that.
-
-td_vcpu_run() was added to handle TdVmCalls that are now handled in
-userspace.
-
-The comments under the patch "KVM: selftests: Require GCC to realign
-stacks on function entry" were addressed with the following patch:
-https://lore.kernel.org/lkml/Y%2FfHLdvKHlK6D%2F1v@google.com/T/
-
-And other minor tweaks were made to integrate the selftest
-infrastructure onto v14.
-
-In RFCv4, TDX selftest code is organized into:
-
-+ headers in tools/testing/selftests/kvm/include/x86_64/tdx/
-+ common code in tools/testing/selftests/kvm/lib/x86_64/tdx/
-+ selftests in tools/testing/selftests/kvm/x86_64/tdx_*
-
-Dependencies
-
-+ Peter=E2=80=99s patches, which provide functions for the host to allocate
-  and track protected memory in the
-  guest. https://lore.kernel.org/lkml/20221018205845.770121-1-pgonda@google=
-.com/T/
-
-Further work for this patch series/TODOs
-
-+ Sean=E2=80=99s comments for the non-confidential UPM selftests patch seri=
-es
-  at https://lore.kernel.org/lkml/Y8dC8WDwEmYixJqt@google.com/T/#u apply
-  here as well
-+ Add ucall support for TDX selftests
-
-I would also like to acknowledge the following people, who helped
-review or test patches in RFCv1, RFCv2, and RFCv3:
-
-+ Sean Christopherson <seanjc@google.com>
-+ Zhenzhong Duan <zhenzhong.duan@intel.com>
-+ Peter Gonda <pgonda@google.com>
-+ Andrew Jones <drjones@redhat.com>
-+ Maxim Levitsky <mlevitsk@redhat.com>
-+ Xiaoyao Li <xiaoyao.li@intel.com>
-+ David Matlack <dmatlack@google.com>
-+ Marc Orr <marcorr@google.com>
-+ Isaku Yamahata <isaku.yamahata@gmail.com>
-+ Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-
-Links to earlier patch series
-
-+ RFC v1: https://lore.kernel.org/lkml/20210726183816.1343022-1-erdemaktas@=
-google.com/T/#u
-+ RFC v2: https://lore.kernel.org/lkml/20220830222000.709028-1-sagis@google=
-.com/T/#u
-+ RFC v3: https://lore.kernel.org/lkml/20230121001542.2472357-1-ackerleytng=
-@google.com/T/#u
-
-Ackerley Tng (12):
-  KVM: selftests: Add function to allow one-to-one GVA to GPA mappings
-  KVM: selftests: Expose function that sets up sregs based on VM's mode
-  KVM: selftests: Store initial stack address in struct kvm_vcpu
-  KVM: selftests: Refactor steps in vCPU descriptor table initialization
-  KVM: selftests: TDX: Use KVM_TDX_CAPABILITIES to validate TDs'
-    attribute configuration
-  KVM: selftests: TDX: Update load_td_memory_region for VM memory backed
-    by guest memfd
-  KVM: selftests: Add functions to allow mapping as shared
-  KVM: selftests: Expose _vm_vaddr_alloc
-  KVM: selftests: TDX: Add support for TDG.MEM.PAGE.ACCEPT
-  KVM: selftests: TDX: Add support for TDG.VP.VEINFO.GET
-  KVM: selftests: TDX: Add TDX UPM selftest
-  KVM: selftests: TDX: Add TDX UPM selftests for implicit conversion
-
-Erdem Aktas (3):
-  KVM: selftests: Add helper functions to create TDX VMs
-  KVM: selftests: TDX: Add TDX lifecycle test
-  KVM: selftests: TDX: Adding test case for TDX port IO
-
-Roger Wang (1):
-  KVM: selftests: TDX: Add TDG.VP.INFO test
-
-Ryan Afranji (2):
-  KVM: selftests: TDX: Verify the behavior when host consumes a TD
-    private memory
-  KVM: selftests: TDX: Add shared memory test
-
-Sagi Shahar (10):
-  KVM: selftests: TDX: Add report_fatal_error test
-  KVM: selftests: TDX: Add basic TDX CPUID test
-  KVM: selftests: TDX: Add basic get_td_vmcall_info test
-  KVM: selftests: TDX: Add TDX IO writes test
-  KVM: selftests: TDX: Add TDX IO reads test
-  KVM: selftests: TDX: Add TDX MSR read/write tests
-  KVM: selftests: TDX: Add TDX HLT exit test
-  KVM: selftests: TDX: Add TDX MMIO reads test
-  KVM: selftests: TDX: Add TDX MMIO writes test
-  KVM: selftests: TDX: Add TDX CPUID TDVMCALL test
-
- tools/testing/selftests/kvm/Makefile          |    8 +
- .../selftests/kvm/include/kvm_util_base.h     |   35 +
- .../selftests/kvm/include/x86_64/processor.h  |    4 +
- .../kvm/include/x86_64/tdx/td_boot.h          |   82 +
- .../kvm/include/x86_64/tdx/td_boot_asm.h      |   16 +
- .../selftests/kvm/include/x86_64/tdx/tdcall.h |   59 +
- .../selftests/kvm/include/x86_64/tdx/tdx.h    |   65 +
- .../kvm/include/x86_64/tdx/tdx_util.h         |   19 +
- .../kvm/include/x86_64/tdx/test_util.h        |  164 ++
- tools/testing/selftests/kvm/lib/kvm_util.c    |  115 +-
- .../selftests/kvm/lib/x86_64/processor.c      |   77 +-
- .../selftests/kvm/lib/x86_64/tdx/td_boot.S    |  101 ++
- .../selftests/kvm/lib/x86_64/tdx/tdcall.S     |  158 ++
- .../selftests/kvm/lib/x86_64/tdx/tdx.c        |  262 ++++
- .../selftests/kvm/lib/x86_64/tdx/tdx_util.c   |  565 +++++++
- .../selftests/kvm/lib/x86_64/tdx/test_util.c  |  101 ++
- .../kvm/x86_64/tdx_shared_mem_test.c          |  134 ++
- .../selftests/kvm/x86_64/tdx_upm_test.c       |  469 ++++++
- .../selftests/kvm/x86_64/tdx_vm_tests.c       | 1322 +++++++++++++++++
- 19 files changed, 3730 insertions(+), 26 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/td_boot.=
-h
- create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/td_boot_=
-asm.h
- create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/tdcall.h
- create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
- create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util=
-.h
- create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/test_uti=
-l.h
- create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/td_boot.S
- create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/tdcall.S
- create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
- create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
- create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/test_util.c
- create mode 100644 tools/testing/selftests/kvm/x86_64/tdx_shared_mem_test.=
-c
- create mode 100644 tools/testing/selftests/kvm/x86_64/tdx_upm_test.c
- create mode 100644 tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
-
---=20
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index af26c5687d86..a07ce5f5244a 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -513,6 +513,9 @@ vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_mi
+ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+ vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
+ 			    enum kvm_mem_region_type type);
++vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
++vm_vaddr_t vm_vaddr_alloc_1to1(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
++			       uint32_t data_memslot);
+ vm_vaddr_t vm_vaddr_alloc_pages(struct kvm_vm *vm, int nr_pages);
+ vm_vaddr_t __vm_vaddr_alloc_page(struct kvm_vm *vm,
+ 				 enum kvm_mem_region_type type);
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 518990ca408d..5bbcddcd6796 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -1371,6 +1371,58 @@ vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
+ 	return vaddr_start;
+ }
+ 
++/*
++ * VM Virtual Address Allocate Shared/Encrypted
++ *
++ * Input Args:
++ *   vm - Virtual Machine
++ *   sz - Size in bytes
++ *   vaddr_min - Minimum starting virtual address
++ *   paddr_min - Minimum starting physical address
++ *   data_memslot - memslot number to allocate in
++ *   encrypt - Whether the region should be handled as encrypted
++ *
++ * Output Args: None
++ *
++ * Return:
++ *   Starting guest virtual address
++ *
++ * Allocates at least sz bytes within the virtual address space of the vm
++ * given by vm.  The allocated bytes are mapped to a virtual address >=
++ * the address given by vaddr_min.  Note that each allocation uses a
++ * a unique set of pages, with the minimum real allocation being at least
++ * a page.
++ */
++static vm_vaddr_t
++_vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
++		vm_paddr_t paddr_min, uint32_t data_memslot, bool encrypt)
++{
++	uint64_t pages = (sz >> vm->page_shift) + ((sz % vm->page_size) != 0);
++
++	virt_pgd_alloc(vm);
++	vm_paddr_t paddr = _vm_phy_pages_alloc(vm, pages,
++					       paddr_min,
++					       data_memslot, encrypt);
++
++	/*
++	 * Find an unused range of virtual page addresses of at least
++	 * pages in length.
++	 */
++	vm_vaddr_t vaddr_start = vm_vaddr_unused_gap(vm, sz, vaddr_min);
++
++	/* Map the virtual pages. */
++	for (vm_vaddr_t vaddr = vaddr_start; pages > 0;
++		pages--, vaddr += vm->page_size, paddr += vm->page_size) {
++
++		virt_pg_map(vm, vaddr, paddr);
++
++		sparsebit_set(vm->vpages_mapped,
++			vaddr >> vm->page_shift);
++	}
++
++	return vaddr_start;
++}
++
+ /*
+  * VM Virtual Address Allocate
+  *
+@@ -1392,7 +1444,34 @@ vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
+  */
+ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min)
+ {
+-	return __vm_vaddr_alloc(vm, sz, vaddr_min, MEM_REGION_TEST_DATA);
++	return _vm_vaddr_alloc(vm, sz, vaddr_min,
++			       KVM_UTIL_MIN_PFN * vm->page_size, 0,
++			       vm->protected);
++}
++
++vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min)
++{
++	return _vm_vaddr_alloc(vm, sz, vaddr_min,
++			       KVM_UTIL_MIN_PFN * vm->page_size, 0, false);
++}
++
++/**
++ * Allocate memory in @vm of size @sz in memslot with id @data_memslot,
++ * beginning with the desired address of @vaddr_min.
++ *
++ * If there isn't enough memory at @vaddr_min, find the next possible address
++ * that can meet the requested size in the given memslot.
++ *
++ * Return the address where the memory is allocated.
++ */
++vm_vaddr_t vm_vaddr_alloc_1to1(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
++			       uint32_t data_memslot)
++{
++	vm_vaddr_t gva = _vm_vaddr_alloc(vm, sz, vaddr_min, (vm_paddr_t) vaddr_min,
++					 data_memslot, vm->protected);
++	ASSERT_EQ(gva, addr_gva2gpa(vm, gva));
++
++	return gva;
+ }
+ 
+ /*
+-- 
 2.41.0.487.g6d72f3e995-goog
 
