@@ -2,334 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBDA760D66
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 10:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27633760DA2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jul 2023 10:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231788AbjGYIoJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jul 2023 04:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
+        id S230207AbjGYIxk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jul 2023 04:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233161AbjGYIns (ORCPT
+        with ESMTP id S232776AbjGYIxB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 04:43:48 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FDF3A86
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 01:42:51 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbb07e7155so58665e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 01:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690274569; x=1690879369;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+RDS5NRcLAtuwBHn7yk278x72WmpR8QjmHxYjmbOCqY=;
-        b=RD6xQj7GXScR+Ob7NvKuhFC8uEdbOZirmdVe9sUcWHgoKQIV75hFJLGk1oqxUejk+k
-         AwKQ1zFgnD6s3yOxPMN0zNUqxw8TV4AA2mvH8NCKjwfh+/7VTQAT3GF7ov7YybVtNx52
-         bcVybCCEAGIA0fntIt7TFC+WgP+IEfbzPjZKug44bdwyli88gb028KClJU44N2pNy5/w
-         rmH5vxF+RWbuxYYCDIny9otNn0XTxWoqZAfvMO2RlYJjh4rjP8pxZJQepg8vsSyhi+y6
-         St4ijPUartW4oThXAcsTeCqjkBOMpzU8iTXB+95ziad0wJg4c7mU+dF2dhqKl2/rgdMj
-         zz9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690274569; x=1690879369;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+RDS5NRcLAtuwBHn7yk278x72WmpR8QjmHxYjmbOCqY=;
-        b=Is8sZhsXdIoMSYWmWL8Ln/z6ihxvx0etvdURnRBzJKDRcIcD36HL6DfAMxE8Mcrp9r
-         XJTZd4/pXwsHOPWlHKYd9eZFmOtEYKex7oYV/q03mLgSH/9zkNB1EgMS41cOx2NALoed
-         2hb8ws5bfeJ5aNjGqYM+t/Z7Bo9VO7Eel4LpmAbmmiDcVo8weZ6NmgSRCc0vqysoS8CQ
-         huObAzad0ufvvdu1QHkfKH9bjYwyFT1MY7Z0awPQAgDZ8J+5NzlwyjIRS4gSk7Wv0hrc
-         dR0sOmOO0Zsvw1VWw+6hFSzf7PWtqQfaGaPjF/5yEFprgWUvd3MZPDWYzcntDA+eKkNK
-         6WVA==
-X-Gm-Message-State: ABy/qLZUf8UPbWHLzzhghPoF9nXQGpTJ4qWyfYWqDS+LEcERq/AuSLKB
-        gYnuloh8plXYIXN5Fr3CnfM78eW82v7O54xrr21XZA==
-X-Google-Smtp-Source: APBJJlFqVyjYNgKMjQJuIt2opgmQvOpaRtg6cUU0hzKNtoRZzvXWh+ZlcFOOlwb0OGV0GX+Tiuny5Vv28eb5Kn9ksQQ=
-X-Received: by 2002:a05:600c:5111:b0:3f1:73b8:b5fe with SMTP id
- o17-20020a05600c511100b003f173b8b5femr34645wms.3.1690274569559; Tue, 25 Jul
- 2023 01:42:49 -0700 (PDT)
+        Tue, 25 Jul 2023 04:53:01 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F5A1BE7;
+        Tue, 25 Jul 2023 01:52:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UZDld2brxHcLrx2y1DGTp0MEfdKkimkfgXC2yRwshNAJASPt4IjBQ3GgqKRInJ1TVUE4tXaWmf7pcdFNDuAUq4QgUPEGzcB+Jd8psYa7DJ2KzQ2wqEGzcgbXkjykIQdN53qVHR2NTENPBRIX6RmPnfuXIXCHpirQe7nbDUI2TYm0lQnvLb+DJlFOkf9H3vnlw43YwkZjJLV+kXhcIoL5M3hdl+wQPFNSOx+n9+du2i9unR6nfOwQ9E3M9E6NaP2Xm2nw8Mdk0uJmz2i2Ue0M1O6XBOqSzkAlAc8o+uq8LglAnrTkRrO6wBYGL4VeQ5k22xTiISeOI43y2l61fVI4kQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5gKSAiY1bGs3nXMEwpyPOIpjSjSiKcJQypxfG6IaXoE=;
+ b=XigGxuV5PZeAqX4t29q4gzPs9UZ8T5ZZbD0uT4ETnGIhfelIl8u0Bp8xo/qldSUNqkdLxhLJvF9MlLUZHG7MXlV/vMqG8w3io2XWvwfy/SUt2nsOPLkDkKpztzMontdTjGD1Tb8OKbYKcU7dfxwQtoejvgZsWugqlYv96W5SKNh/Py4PAvmF3zWPeHkejJjo7B6KEJ89UKZ+ylTSv4EjaobzwjIFXgOPQ8q9IKkH5tst0BEVAhYVxQlk9+dBxkw1ovgAsreb7sBqhZPxgYCvcIgYrphKCtnHqXXg1dK1fa5CaoZSWr64WiogCYJjfAzNc6svgzFaUPXWnTtZt6bTdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5gKSAiY1bGs3nXMEwpyPOIpjSjSiKcJQypxfG6IaXoE=;
+ b=pppveTNmg9oaKvBXQtmD8SAfvU84BFVX8co0BkB3Uv3Hznj33kpsWa82/RHG7qbFcbRXeSze8L5gioF7lNCHNJR2HzNzIcurJQvNrUFlT46wQpCsRqFOEPTeUjqh1H64aGcWPgXusQnMvt6CFXO9z+9sCSYewVeg4p2QeggihkH0Cx9YAvWV4BgQLoOhc86NvvIsAS8G+MPg0sDdtyDQkwL4hxApUb/WRknkFKSyEDuvhiStbeJ5xVUYMOxHlvFAjtYoW1bxi9BIUMA1iu+FYOuoKgm3TV/Q8qQ8txdyLrioBCMG6QIy+wB+j9IaV1eDQpVcjdGmyq4CcRHyW6PNNg==
+Received: from BN9PR03CA0646.namprd03.prod.outlook.com (2603:10b6:408:13b::21)
+ by MW4PR12MB6850.namprd12.prod.outlook.com (2603:10b6:303:1ed::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.33; Tue, 25 Jul
+ 2023 08:52:11 +0000
+Received: from BN8NAM11FT091.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13b:cafe::5) by BN9PR03CA0646.outlook.office365.com
+ (2603:10b6:408:13b::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.33 via Frontend
+ Transport; Tue, 25 Jul 2023 08:52:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT091.mail.protection.outlook.com (10.13.176.134) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6631.29 via Frontend Transport; Tue, 25 Jul 2023 08:52:10 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 25 Jul 2023
+ 01:51:58 -0700
+Received: from yaviefel (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 25 Jul
+ 2023 01:51:54 -0700
+References: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
+User-agent: mu4e 1.8.11; emacs 28.2
+From:   Petr Machata <petrm@nvidia.com>
+To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+CC:     Ido Schimmel <idosch@nvidia.com>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v1 01/11] selftests: forwarding:
+ custom_multipath_hash.sh: add cleanup for SIGTERM sent by timeout
+Date:   Tue, 25 Jul 2023 10:44:32 +0200
+In-Reply-To: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
+Message-ID: <87mszkjrvc.fsf@nvidia.com>
 MIME-Version: 1.0
-References: <20230724162834.1354164-1-rmoar@google.com> <20230724162834.1354164-9-rmoar@google.com>
-In-Reply-To: <20230724162834.1354164-9-rmoar@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 25 Jul 2023 16:42:35 +0800
-Message-ID: <CABVgOSm2iRBNpZ2_CJ=4LbdQ=Pcp=aWRFBGBW-rQF6o6hCciLA@mail.gmail.com>
-Subject: Re: [PATCH v2 8/9] kunit: add tests for filtering attributes
-To:     Rae Moar <rmoar@google.com>
-Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004fd50706014bb7d2"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT091:EE_|MW4PR12MB6850:EE_
+X-MS-Office365-Filtering-Correlation-Id: a9445389-4f29-472c-0f80-08db8cec6efb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EC1X501cMoyzQaYAc9nVObPH+XxB0fHisAVwLYynI6cLFSnMlGby+3qmatbGfvv5ZMZ/wmQD3NfAHAcM0J6zHcuC08qbhqEbxaa/19lr3muPsLfO9n+iWMF4Fc4v89OYaFY7WCU7BHHKB5w/jzp727GzzWQFxTKmUPQZInViSmgm+Djuv2XDOw4SvLdhHuWhiTX0A9/oFG9IWfnd9DJEgVex+6mTAtS2Nhwndlr9rRL0zCX6jSLoJ1aGF6noX7z+1j4S3vMBs+6p5hIxnsDqQwkPzZYmecSGcPs4K9Em8XfgvuWhZW4XBz82S1MOWfnRrJs6fXEi/4wfMTVwhMq26vz6wMK0wMAeEsbdvse7EhWMrgTlKoXRaqA90i72smLctYZkDvj56cDxYhnRUVybFxkdZ3KEcuZW86hdZQqW/FpLmAwthwDgYQt9appnN8DCqwzgzi8CFaJH4iV78RFvZ7SU4iGh28u2Gznuab7NYID7DllMUQ34cjCu5cgg2smzU31WAOVSnQti30XQ92noSRpTWEwK1iMP0FmmUvONKjGmcdd3+drmfYnDZl9oJYqGRaQFzzAKTf0ni4eJlx7KmK4p9p0vKI2Zbga2m1Haltj1QhGjjTNTr0yy4wTNUCewzEQew8rRJlDORWPudWZiFR7WH9hee4YsO1KpXj/gacCZheizp130zqHJHx9ZWbr3AtMVX1x8o0d+cLP1N0cYfsbSjZYkcqy4noKexIR2azPazdOP577/ExumD7RBYRHP
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(39860400002)(396003)(451199021)(82310400008)(46966006)(40470700004)(36840700001)(54906003)(6666004)(478600001)(47076005)(186003)(336012)(2616005)(426003)(26005)(16526019)(2906002)(6916009)(316002)(70586007)(4326008)(70206006)(8676002)(5660300002)(8936002)(41300700001)(82740400003)(356005)(7636003)(86362001)(36756003)(40460700003)(83380400001)(36860700001)(40480700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2023 08:52:10.3143
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9445389-4f29-472c-0f80-08db8cec6efb
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT091.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6850
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000004fd50706014bb7d2
-Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 25 Jul 2023 at 00:31, Rae Moar <rmoar@google.com> wrote:
+Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr> writes:
+
+> Add trap and cleanup for SIGTERM sent by timeout and SIGINT from
+> keyboard, for the test times out and leaves incoherent network stack.
 >
-> Add four tests to executor_test.c to test behavior of filtering attributes.
->
-> - parse_filter_attr_test - to test the parsing of inputted filters
->
-> - filter_attr_test - to test the filtering procedure on attributes
->
-> - filter_attr_empty_test - to test the behavior when all tests are filtered
->   out
->
-> - filter_attr_skip_test - to test the configurable filter_action=skip
->   option
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
+> Fixes: 511e8db54036c ("selftests: forwarding: Add test for custom multipath hash")
+> Cc: Ido Schimmel <idosch@nvidia.com>
+> Cc: netdev@vger.kernel.org
 > ---
-
-Glad to see some tests for the parser-y bits.
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
-
+>  tools/testing/selftests/net/forwarding/custom_multipath_hash.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Changes since v1:
-> - No changes.
-> Changes since RFC v2:
-> - Change fake suite and test case names.
-> - Add a few ASSERT statements.
-> Changes since RFC v1:
-> - This is a new patch.
->
->  lib/kunit/executor_test.c | 116 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 116 insertions(+)
->
-> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
-> index d7ab069324b5..01280cb8d451 100644
-> --- a/lib/kunit/executor_test.c
-> +++ b/lib/kunit/executor_test.c
-> @@ -7,6 +7,7 @@
->   */
->
->  #include <kunit/test.h>
-> +#include <kunit/attributes.h>
->
->  static void kfree_at_end(struct kunit *test, const void *to_free);
->  static struct kunit_suite *alloc_fake_suite(struct kunit *test,
-> @@ -108,11 +109,126 @@ static void filter_suites_to_empty_test(struct kunit *test)
->                                 "should be empty to indicate no match");
+> diff --git a/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh b/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
+> index 56eb83d1a3bd..c7ab883d2515 100755
+> --- a/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
+> +++ b/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
+> @@ -363,7 +363,7 @@ custom_hash()
+>  	custom_hash_v6
 >  }
->
-> +static void parse_filter_attr_test(struct kunit *test)
-> +{
-> +       int j, filter_count;
-> +       struct kunit_attr_filter *parsed_filters;
-> +       char *filters = "speed>slow, module!=example";
-> +       int err = 0;
-> +
-> +       filter_count = kunit_get_filter_count(filters);
-> +       KUNIT_EXPECT_EQ(test, filter_count, 2);
-> +
-> +       parsed_filters = kunit_kcalloc(test, filter_count + 1, sizeof(*parsed_filters),
-> +                       GFP_KERNEL);
-> +       for (j = 0; j < filter_count; j++) {
-> +               parsed_filters[j] = kunit_next_attr_filter(&filters, &err);
-> +               KUNIT_ASSERT_EQ_MSG(test, err, 0, "failed to parse filter '%s'", filters[j]);
-> +       }
-> +
-> +       KUNIT_EXPECT_STREQ(test, kunit_attr_filter_name(parsed_filters[0]), "speed");
-> +       KUNIT_EXPECT_STREQ(test, parsed_filters[0].input, ">slow");
-> +
-> +       KUNIT_EXPECT_STREQ(test, kunit_attr_filter_name(parsed_filters[1]), "module");
-> +       KUNIT_EXPECT_STREQ(test, parsed_filters[1].input, "!=example");
-> +}
-> +
-> +static struct kunit_case dummy_attr_test_cases[] = {
-> +       /* .run_case is not important, just needs to be non-NULL */
-> +       { .name = "slow", .run_case = dummy_test, .module_name = "dummy",
-> +         .attr.speed = KUNIT_SPEED_SLOW },
-> +       { .name = "normal", .run_case = dummy_test, .module_name = "dummy" },
-> +       {},
-> +};
-> +
-> +static void filter_attr_test(struct kunit *test)
-> +{
-> +       struct kunit_suite *subsuite[3] = {NULL, NULL};
-> +       struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
-> +       struct suite_set got;
-> +       int err = 0;
-> +
-> +       subsuite[0] = alloc_fake_suite(test, "normal_suite", dummy_attr_test_cases);
-> +       subsuite[1] = alloc_fake_suite(test, "slow_suite", dummy_attr_test_cases);
-> +       subsuite[1]->attr.speed = KUNIT_SPEED_SLOW; // Set suite attribute
-> +
-> +       /*
-> +        * Want: normal_suite(slow, normal), slow_suite(slow, normal),
-> +        *              NULL -> normal_suite(normal), NULL
-> +        *
-> +        * The normal test in slow_suite is filtered out because the speed
-> +        * attribute is unset and thus, the filtering is based on the parent attribute
-> +        * of slow.
-> +        */
-> +       got = kunit_filter_suites(&suite_set, NULL, "speed>slow", NULL, &err);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
-> +       KUNIT_ASSERT_EQ(test, err, 0);
-> +       kfree_at_end(test, got.start);
-> +
-> +       /* Validate we just have normal_suite */
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
-> +       KUNIT_EXPECT_STREQ(test, got.start[0]->name, "normal_suite");
-> +       KUNIT_ASSERT_EQ(test, got.end - got.start, 1);
-> +
-> +       /* Now validate we just have normal test case */
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
-> +       KUNIT_EXPECT_STREQ(test, got.start[0]->test_cases[0].name, "normal");
-> +       KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].name);
-> +}
-> +
-> +static void filter_attr_empty_test(struct kunit *test)
-> +{
-> +       struct kunit_suite *subsuite[3] = {NULL, NULL};
-> +       struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
-> +       struct suite_set got;
-> +       int err = 0;
-> +
-> +       subsuite[0] = alloc_fake_suite(test, "suite1", dummy_attr_test_cases);
-> +       subsuite[1] = alloc_fake_suite(test, "suite2", dummy_attr_test_cases);
-> +
-> +       got = kunit_filter_suites(&suite_set, NULL, "module!=dummy", NULL, &err);
-> +       KUNIT_ASSERT_EQ(test, err, 0);
-> +       kfree_at_end(test, got.start); /* just in case */
-> +
-> +       KUNIT_EXPECT_PTR_EQ_MSG(test, got.start, got.end,
-> +                               "should be empty to indicate no match");
-> +}
-> +
-> +static void filter_attr_skip_test(struct kunit *test)
-> +{
-> +       struct kunit_suite *subsuite[2] = {NULL};
-> +       struct suite_set suite_set = {.start = subsuite, .end = &subsuite[1]};
-> +       struct suite_set got;
-> +       int err = 0;
-> +
-> +       subsuite[0] = alloc_fake_suite(test, "suite", dummy_attr_test_cases);
-> +
-> +       /* Want: suite(slow, normal), NULL -> suite(slow with SKIP, normal), NULL */
-> +       got = kunit_filter_suites(&suite_set, NULL, "speed>slow", "skip", &err);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
-> +       KUNIT_ASSERT_EQ(test, err, 0);
-> +       kfree_at_end(test, got.start);
-> +
-> +       /* Validate we have both the slow and normal test */
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
-> +       KUNIT_ASSERT_EQ(test, kunit_suite_num_test_cases(got.start[0]), 2);
-> +       KUNIT_EXPECT_STREQ(test, got.start[0]->test_cases[0].name, "slow");
-> +       KUNIT_EXPECT_STREQ(test, got.start[0]->test_cases[1].name, "normal");
-> +
-> +       /* Now ensure slow is skipped and normal is not */
-> +       KUNIT_EXPECT_EQ(test, got.start[0]->test_cases[0].status, KUNIT_SKIPPED);
-> +       KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].status);
-> +}
-> +
->  static struct kunit_case executor_test_cases[] = {
->         KUNIT_CASE(parse_filter_test),
->         KUNIT_CASE(filter_suites_test),
->         KUNIT_CASE(filter_suites_test_glob_test),
->         KUNIT_CASE(filter_suites_to_empty_test),
-> +       KUNIT_CASE(parse_filter_attr_test),
-> +       KUNIT_CASE(filter_attr_test),
-> +       KUNIT_CASE(filter_attr_empty_test),
-> +       KUNIT_CASE(filter_attr_skip_test),
->         {}
->  };
->
-> --
-> 2.41.0.487.g6d72f3e995-goog
->
+>  
+> -trap cleanup EXIT
+> +trap cleanup INT TERM EXIT
+>  
+>  setup_prepare
+>  setup_wait
 
---0000000000004fd50706014bb7d2
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+I believe the EXIT trap covers whatever the cause of the exit was, i.e.
+INT and TERM are implicitly covered:
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-9IGQSBx2i4m+hGXJpET+MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQCRI3Z4cAidgFcv
-Usqdz765x6KMZSfg/WtFrYg8ewsP2NpCxVM2+EhPyyEQ0k0DhtzdtGoI/Ug+jdFDyCKB9P2+EPLh
-iMjMnFILp7Zs4r18ECHlvZuDZfH9m0BchXIxu5jLIuQyKUWrCRDZZEDNr510ZhhVfYSFPA8ms1nk
-jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
-jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
-FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAM
-cSsNUwGwfGuutWEXqPOXNK9BCNuXTnWlxpodF4NN/TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA3MjUwODQyNDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAFfwf2edLxQ31qbL/hbQs
-HcG/TYjNsFVo6eoWD2zoF1RiJNyzJJ/A+8Vedm8IJ0RdPnby7OSArVg041MTugiau0apgoVC1EVr
-OAy4xYyMtOzDS5MBHUW8y21O4UT+YO5kkTDhDHPgAyM9nfQ6Ljk28CYoF9u2AeBkJCOg4dZJierF
-NRgIevSPt0hOa2rHnZhrY2I5hpYj5xZyfnMO5JpyzFbgXHcZ1kd1uLhxA9qA6q8uofzaCeoXmt8q
-0dtChRiKXDMtiC3t1+jSMGqpk3d3CHfgXyMlKI+FdEC4nnOJBumo9nFrvW5lfeodwc+s1WxFkFxN
-Q7R22hC0wIBix6XUWw==
---0000000000004fd50706014bb7d2--
+    $ vim tmp/x.sh
+    $ cat tmp/x.sh
+    foo() { date; }
+    trap foo EXIT
+    read -p Ready.
+    $ bash tmp/x.sh
+    Ready.^CTue Jul 25 10:44:20 AM CEST 2023
+
+Also, the interrupt trap seems to prevent the exit actually:
+
+    $ cat tmp/x.sh
+    foo() { date; }
+    trap foo INT TERM EXIT
+    read -p Ready.
+    [petr@yaviefel ~]$ bash tmp/x.sh 
+    Ready.^CTue Jul 25 10:43:35 AM CEST 2023
+    ^CTue Jul 25 10:43:35 AM CEST 2023
+    ^CTue Jul 25 10:43:36 AM CEST 2023
+    ^CTue Jul 25 10:43:36 AM CEST 2023
+
+(I see the same when I kill -TERM the script.)
+
+This would call cleanup, which would dismantle the configuration, but
+then would happilly proceed in the script. I might be missing something,
+but I don't see how this can work.
