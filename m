@@ -2,134 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E60C7639AE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 16:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B677639B9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 16:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbjGZO5c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jul 2023 10:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
+        id S234300AbjGZO6l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jul 2023 10:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234187AbjGZO50 (ORCPT
+        with ESMTP id S234303AbjGZO6i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jul 2023 10:57:26 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9887E2135;
-        Wed, 26 Jul 2023 07:57:25 -0700 (PDT)
-Received: from fews01-sea.riseup.net (fews01-sea-pn.riseup.net [10.0.1.109])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4R9xnw6mN0z9sp2;
-        Wed, 26 Jul 2023 14:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1690383445; bh=SRkpeWDGsQ784tK+v68bqnUs+FhdczWP/bjri3n67bo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sNVeMPF9guconmmPZdlmFRyoHTgCJpHYzx6J7IyxcBUvQpZedPDCo1UdSH/IUxmxx
-         lq6m9KeBsAMMxay2kAniYTHl4nr1YOuFuXhE2re9ye/JKLAY8KnmNQ7e9Ht39k6JPg
-         6S/Q+bJMcT9b1eJzD0poW8oPU/X2gvNeGwYG5Kf0=
-X-Riseup-User-ID: 5AD1C4D2966B104ABA09EAD525D21483029186B6F508999D2097E4A938347020
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews01-sea.riseup.net (Postfix) with ESMTPSA id 4R9xnr6ZhkzJntF;
-        Wed, 26 Jul 2023 14:57:20 +0000 (UTC)
-Message-ID: <1dd25d94-a714-5996-dd33-dfa9d1a95307@riseup.net>
-Date:   Wed, 26 Jul 2023 11:57:19 -0300
+        Wed, 26 Jul 2023 10:58:38 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52322109;
+        Wed, 26 Jul 2023 07:58:34 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1690383504t6indi1o
+Received: from linux-lab-host.localdomain ( [61.141.78.189])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 26 Jul 2023 22:58:23 +0800 (CST)
+X-QQ-SSF: 00200000000000D0X000000A0000000
+X-QQ-FEAT: 3M0okmaRx3gx1YD2Y2f418atJWwTGw4XT79+ZSinD1pcTvQdp5vp8yaZAPG+u
+        1dIO2RbMGkkhE3rpPrhTRe8MgIaCw8FPcA7QKZA+3UoqASQn50CYyKkYfKj8corHE2bYiJ4
+        eZ5R32XDCRLR9jJRb7Lpk5WsLdMhTcjw8Pf44ZYWJRfBUWXXjwUkj/viXBJmwL7i9WxornL
+        VG6ITcNFaZOYzjgScvBG55cKoGz0B67RU1ySgAhU8t4w73cvXq/n2VioN83mwCEeaEvoGci
+        vv7KwRuaFtHXrCaIVA9YNeRT7opgR2ixS1w+vAf96+EM1+yhBMQW2sP4OMxC8aOaC0/oxbm
+        FZehGxrsrPsSk/QtgDnXG2VROmYHV6dXBAD4Siw1707Ovyf/+UQr0mZmbCKu4brxTRMwMu8
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 18102331507296563561
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v2 7/7] selftests/nolibc: add test support for ppc64
+Date:   Wed, 26 Jul 2023 22:58:18 +0800
+Message-Id: <b7368dbb0b41c5dca1dade08ed300f30b4d541f0.1690373704.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1690373704.git.falcon@tinylab.org>
+References: <cover.1690373704.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 0/9] kunit: Add test attributes API
-Content-Language: en-US
-To:     Rae Moar <rmoar@google.com>, shuah@kernel.org, davidgow@google.com,
-        dlatypov@google.com, brendan.higgins@linux.dev
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org
-References: <20230725212522.1622716-1-rmoar@google.com>
-From:   Arthur Grillo Queiroz Cabral <arthurgrillo@riseup.net>
-In-Reply-To: <20230725212522.1622716-1-rmoar@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Here adds test support for big endian 64-bit PowerPC.
 
+The powernv machine of qemu-system-ppc64 is used with
+powernv_be_defconfig.
 
-On 25/07/23 18:25, 'Rae Moar' via KUnit Development wrote:
-> Hello everyone,
-> 
-> This patch series adds a test attributes framework to KUnit.
-> 
-> There has been interest in filtering out "slow" KUnit tests. Most notably,
-> a new config, CONFIG_MEMCPY_SLOW_KUNIT_TEST, has been added to exclude a
-> particularly slow memcpy test
-> (https://lore.kernel.org/all/20230118200653.give.574-kees@kernel.org/).
-> 
-> This attributes framework can be used to save and access test associated
-> data, including whether a test is slow. These attributes are reportable
-> (via KTAP and command line output) and are also filterable.
-> 
-> This framework is designed to allow for the addition of other attributes in
-> the future. These attributes could include whether the test can be run
-> concurrently, test file path, etc.
-> 
-> To try out the framework I suggest running:
-> "./tools/testing/kunit/kunit.py run --filter speed!=slow"
-> 
-> This patch series was originally sent out as an RFC. Here is a link to the
-> RFC v2:
-> https://lore.kernel.org/all/20230707210947.1208717-1-rmoar@google.com/
-> 
-> Thanks!
-> Rae
-> 
+As the document [1] shows:
 
-Great addition to the KUnit framework!
+  PowerNV (as Non-Virtualized) is the “bare metal” platform using the
+  OPAL firmware. It runs Linux on IBM and OpenPOWER systems and it can be
+  used as an hypervisor OS, running KVM guests, or simply as a host OS.
 
-On all the patch set
+Kernel uses ARCH=powerpc for both 32-bit and 64-bit PowerPC, here adds a
+ppc64 variant for big endian 64-bit PowerPC, users can pass ARCH=ppc64
+to test it.
 
-Reviewed-by: Arthur Grillo <arthurgrillo@riseup.net>
+Notes,
 
-Best Regards,
-~Arthur Grillo
+- differs from little endian 64-bit PowerPC, vmlinux is used instead of
+  zImage, because big endian zImage [2] only boot on qemu with x-vof=on
+  (added from qemu v7.0) and a fixup patch [3] for qemu v7.0.51:
 
-> Rae Moar (9):
->   kunit: Add test attributes API structure
->   kunit: Add speed attribute
->   kunit: Add module attribute
->   kunit: Add ability to filter attributes
->   kunit: tool: Add command line interface to filter and report
->     attributes
->   kunit: memcpy: Mark tests as slow using test attributes
->   kunit: time: Mark test as slow using test attributes
->   kunit: add tests for filtering attributes
->   kunit: Add documentation of KUnit test attributes
-> 
->  Documentation/dev-tools/kunit/run_wrapper.rst |  12 +
->  .../dev-tools/kunit/running_tips.rst          | 166 +++++++
->  include/kunit/attributes.h                    |  50 +++
->  include/kunit/test.h                          |  70 ++-
->  kernel/time/time_test.c                       |   2 +-
->  lib/Kconfig.debug                             |   3 +
->  lib/kunit/Makefile                            |   3 +-
->  lib/kunit/attributes.c                        | 418 ++++++++++++++++++
->  lib/kunit/executor.c                          | 114 ++++-
->  lib/kunit/executor_test.c                     | 128 +++++-
->  lib/kunit/kunit-example-test.c                |   9 +
->  lib/kunit/test.c                              |  27 +-
->  lib/memcpy_kunit.c                            |   8 +-
->  tools/testing/kunit/kunit.py                  |  70 ++-
->  tools/testing/kunit/kunit_kernel.py           |   8 +-
->  tools/testing/kunit/kunit_parser.py           |  11 +-
->  tools/testing/kunit/kunit_tool_test.py        |  39 +-
->  17 files changed, 1062 insertions(+), 76 deletions(-)
->  create mode 100644 include/kunit/attributes.h
->  create mode 100644 lib/kunit/attributes.c
-> 
-> 
-> base-commit: 64bd4641310c41a1ecf07c13c67bc0ed61045dfd
+- since the VSX support may be disabled in kernel side, to avoid
+  "illegal instruction" errors due to missing VSX kernel support, let's
+  simply let compiler not generate vector/scalar (VSX) instructions via
+  the '-mno-vsx' option.
+
+- as 'man gcc' shows, '-mmultiple' is used to generate code that uses
+  the load multiple word instructions and the store multiple word
+  instructions. those instructions do not work when the processor is in
+  little-endian mode (except PPC740/PPC750), so, we only enable it
+  for big endian powerpc.
+
+[1]: https://qemu.readthedocs.io/en/latest/system/ppc/powernv.html
+[2]: https://github.com/linuxppc/issues/issues/402
+[3]: https://lore.kernel.org/qemu-devel/20220504065536.3534488-1-aik@ozlabs.ru/
+
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index cd46b97983a4..b751e9fdf30d 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -22,6 +22,7 @@ XARCH           := $(or $(XARCH_$(ARCH)),$(ARCH))
+ # ARCH is supported by kernel
+ # map from user-input variant to kernel-supported
+ ARCH_ppc         = powerpc
++ARCH_ppc64       = powerpc
+ ARCH_ppc64le     = powerpc
+ override ARCH   := $(or $(ARCH_$(XARCH)),$(XARCH))
+ 
+@@ -33,6 +34,7 @@ IMAGE_arm64      = arch/arm64/boot/Image
+ IMAGE_arm        = arch/arm/boot/zImage
+ IMAGE_mips       = vmlinuz
+ IMAGE_ppc        = vmlinux
++IMAGE_ppc64      = vmlinux
+ IMAGE_ppc64le    = arch/powerpc/boot/zImage
+ IMAGE_riscv      = arch/riscv/boot/Image
+ IMAGE_s390       = arch/s390/boot/bzImage
+@@ -48,6 +50,7 @@ DEFCONFIG_arm64      = defconfig
+ DEFCONFIG_arm        = multi_v7_defconfig
+ DEFCONFIG_mips       = malta_defconfig
+ DEFCONFIG_ppc        = pmac32_defconfig
++DEFCONFIG_ppc64      = powernv_be_defconfig
+ DEFCONFIG_ppc64le    = powernv_defconfig
+ DEFCONFIG_riscv      = defconfig
+ DEFCONFIG_s390       = defconfig
+@@ -68,6 +71,7 @@ QEMU_ARCH_arm64      = aarch64
+ QEMU_ARCH_arm        = arm
+ QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
+ QEMU_ARCH_ppc        = ppc
++QEMU_ARCH_ppc64      = ppc64
+ QEMU_ARCH_ppc64le    = ppc64le
+ QEMU_ARCH_riscv      = riscv64
+ QEMU_ARCH_s390       = s390x
+@@ -82,6 +86,7 @@ QEMU_ARGS_arm64      = -M virt -cpu cortex-a53 -append "panic=-1 $(TEST:%=NOLIBC
+ QEMU_ARGS_arm        = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_ppc        = -M g3beige -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_ppc64      = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_ppc64le    = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+@@ -98,6 +103,7 @@ else
+ Q=@
+ endif
+ 
++CFLAGS_ppc64 = -m64 -mbig-endian -Wl,-EB,-melf64ppc -mmultiple -mno-vsx
+ CFLAGS_ppc64le = -m64 -mlittle-endian -Wl,-EL,-melf64ppc -mno-vsx
+ CFLAGS_s390 = -m64
+ CFLAGS_mips = -EL
+-- 
+2.25.1
+
