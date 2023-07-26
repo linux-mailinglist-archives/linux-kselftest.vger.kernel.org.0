@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F8C763644
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 14:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDA976364B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 14:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbjGZM0S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jul 2023 08:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
+        id S233234AbjGZM1S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jul 2023 08:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233542AbjGZM0Q (ORCPT
+        with ESMTP id S233371AbjGZM1R (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jul 2023 08:26:16 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9382D2689
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 05:26:09 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-99bcf2de59cso27368366b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 05:26:09 -0700 (PDT)
+        Wed, 26 Jul 2023 08:27:17 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CBE1FEC
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 05:27:15 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b9540031acso96887721fa.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 05:27:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1690374368; x=1690979168;
+        d=cloudflare.com; s=google; t=1690374434; x=1690979234;
         h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
          :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zw4DRcroK7b/Ks1g/UthzcdQpwOmLzE3yDyhD4mJ/48=;
-        b=NRctkvSKs+iRsVWTOZqB7gngDEnfK/LWaunoUHDqBmsl8zHpvn2iWS36/Od0sBmlP5
-         bgEFSxuRPtraPIqqbylltCq6p74DT34dqQ8CENZ7S2I/+5XFdRzWfZmSjBqVQSKZctZk
-         Pzv6HO/hLOX962lGP2VFYRYV5W4djxSgMgugU=
+        bh=UBWlekeadb6ll5cfrcuV68GqkFWW6y461yJLKCvTOag=;
+        b=RQnH4EvQgjKLSCBcnN6qage1q8xr1RAq6uvGWIBvdllBtnnhgDXKzy1D837z4p2fXC
+         ei3ZnUBc6aZFLHCOreaU1xSfrElRYNFOa+CVs5sibx1DPKBJZ/nigiCesxFewnuqs1z0
+         27sNVpGt60SLq4SuQWUwWBTwKVfiKCbHTxuRI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690374368; x=1690979168;
+        d=1e100.net; s=20221208; t=1690374434; x=1690979234;
         h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
          :user-agent:references:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zw4DRcroK7b/Ks1g/UthzcdQpwOmLzE3yDyhD4mJ/48=;
-        b=Q5cLKzxcrDUXtGLWbbDuCwYJBsa/YHMMHq2ov5PpYziGwxmidH/IpfIGFIftJdzj0o
-         F2BJrnE94tyPczcSvku0AJqfarW5jTQep7MGdJU9NoLEMxRUHRQUE1uJy8otpXk9KMqS
-         RGP3PsMgOAn+rkKL8hcxUxgd6vI+DjoJHXVmmIGE4twQ/9MHqG+xV69UDrx31kME+c+m
-         JqUfudiWZGHJW+WnA279OucTob0lYSyH/HYQamW+LepAHNat4tLYOwO1HvzWTYFKLTa/
-         Bkr5e/IOyRn59Dfb4QWuGPFse5DGv6Is8YWT+0VBTKZnYrJds/uHJpf7hsYN3PnnxeEB
-         /MOQ==
-X-Gm-Message-State: ABy/qLYtAXPKiGtkifl/L0DNyWrjXEWy2oecWMjLTf716ppoRi6FSeYt
-        oKFHu0r127zqFdU87bs0oiHQ1g==
-X-Google-Smtp-Source: APBJJlGUuhYIKX/FLcEg4ECj+YQkaLws6RHjkPmrOYhV3X8HJknZffmI3n4yRUjOAgIU0PfTwQlETw==
-X-Received: by 2002:a17:907:a049:b0:994:54e7:1287 with SMTP id gz9-20020a170907a04900b0099454e71287mr1478975ejc.73.1690374367751;
-        Wed, 26 Jul 2023 05:26:07 -0700 (PDT)
+        bh=UBWlekeadb6ll5cfrcuV68GqkFWW6y461yJLKCvTOag=;
+        b=kHx0s+7WYPXUT0dX2aPPhQcI6PE6Z6V8gOaGwUh58M9Weivb79t6na7bbRpOiVL0S0
+         3JNRlwsS3aX3o5pqt5U/qvXXlnp7kBtAi3SbBPaCWyE+B863kvoraXw0/p5Yjg9hbsp1
+         gXXATRvO3/xIVYe3gadiXE2i5QXU0CpofMbTK7eQvIRykHgN5X9EFfAVHkTUMKdq6cbR
+         sXbvNdnvBS2/ZVeHNhhP2hL8sn1nSISL7ikwpnqUjyboWpB6Md4JF+IL9qOjk11NXJxq
+         qp3jQI/CNSPWwkQWdPggO2s7f6obJIBRbFnsw0bqRZ8BXa92bCRqvyrQC/vAHNbYxecT
+         Scgg==
+X-Gm-Message-State: ABy/qLZQmWMcYzsKN0RxC3csRvWxcH/KfOMkfANtmYL8Z7B3tDKUD0cx
+        mmDJknxXJRpE/I4VRuIoi5t6Gw==
+X-Google-Smtp-Source: APBJJlGe0BnzdEiexUengASClPGYfYEAD6/edtGkc8pSs2d5oo3Xa6dhiLC0n0m2SfnTK3KW/uVebA==
+X-Received: by 2002:a2e:6e11:0:b0:2b9:aa4d:3728 with SMTP id j17-20020a2e6e11000000b002b9aa4d3728mr1294382ljc.29.1690374434227;
+        Wed, 26 Jul 2023 05:27:14 -0700 (PDT)
 Received: from cloudflare.com (79.184.136.135.ipv4.supernova.orange.pl. [79.184.136.135])
-        by smtp.gmail.com with ESMTPSA id n13-20020a170906378d00b0099b4ec39a19sm9621112ejc.6.2023.07.26.05.26.07
+        by smtp.gmail.com with ESMTPSA id kd7-20020a17090798c700b00992a8a54f32sm9436706ejc.139.2023.07.26.05.27.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jul 2023 05:26:07 -0700 (PDT)
+        Wed, 26 Jul 2023 05:27:13 -0700 (PDT)
 References: <cover.1690332693.git.yan@cloudflare.com>
- <e5d05e56bf41de82f10d33229b8a8f6b49290e98.1690332693.git.yan@cloudflare.com>
+ <9c4896b109a39c3fa088844addaa1737a84bbbb5.1690332693.git.yan@cloudflare.com>
 User-agent: mu4e 1.6.10; emacs 28.2
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     Yan Zhai <yan@cloudflare.com>
@@ -69,48 +69,29 @@ Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com,
         Jordan Griege <jgriege@cloudflare.com>,
         Markus Elfring <Markus.Elfring@web.de>
-Subject: Re: [PATCH v4 bpf 1/2] bpf: fix skb_do_redirect return values
-Date:   Wed, 26 Jul 2023 14:25:38 +0200
-In-reply-to: <e5d05e56bf41de82f10d33229b8a8f6b49290e98.1690332693.git.yan@cloudflare.com>
-Message-ID: <87ila6yi3l.fsf@cloudflare.com>
+Subject: Re: [PATCH v4 bpf 2/2] bpf: selftests: add lwt redirect regression
+ test cases
+Date:   Wed, 26 Jul 2023 14:26:57 +0200
+In-reply-to: <9c4896b109a39c3fa088844addaa1737a84bbbb5.1690332693.git.yan@cloudflare.com>
+Message-ID: <87edkuyi1r.fsf@cloudflare.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 06:08 PM -07, Yan Zhai wrote:
-> skb_do_redirect returns various of values: error code (negative),
-> 0 (success), and some positive status code, e.g. NET_XMIT_CN,
-> NET_RX_DROP. Commit 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel
-> infrastructure") didn't check the return code correctly, so positive
-> values are propagated back along call chain:
+On Tue, Jul 25, 2023 at 06:09 PM -07, Yan Zhai wrote:
+> Tests BPF redirect at the lwt xmit hook to ensure error handling are
+> safe, i.e. won't panic the kernel.
 >
->   ip_finish_output2
->     -> bpf_xmit
->       -> run_lwt_bpf
->         -> skb_do_redirect
->
-> Inside ip_finish_output2, redirected skb will continue to neighbor
-> subsystem as if LWTUNNEL_XMIT_CONTINUE is returned, despite that this
-> skb could have been freed. The bug can trigger use-after-free warning
-> and crashes kernel afterwards:
->
-> https://gist.github.com/zhaiyan920/8fbac245b261fe316a7ef04c9b1eba48
->
-> Convert positive statuses from skb_do_redirect eliminates this issue.
->
-> Fixes: 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel infrastructure")
 > Tested-by: Jakub Sitnicki <jakub@cloudflare.com>
-> Suggested-by: Markus Elfring <Markus.Elfring@web.de>
-> Suggested-by: Stanislav Fomichev <sdf@google.com>
-> Reported-by: Jordan Griege <jgriege@cloudflare.com>
+> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 > Signed-off-by: Yan Zhai <yan@cloudflare.com>
 > ---
 
