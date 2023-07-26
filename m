@@ -2,118 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5553763CE1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 18:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C016763CF6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 18:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231917AbjGZQqz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jul 2023 12:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33310 "EHLO
+        id S230335AbjGZQxl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jul 2023 12:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbjGZQqm (ORCPT
+        with ESMTP id S229539AbjGZQxk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jul 2023 12:46:42 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DC02703
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 09:46:35 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1bb775625e2so8481965ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 09:46:35 -0700 (PDT)
+        Wed, 26 Jul 2023 12:53:40 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA23B26A6
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 09:53:38 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso9097475e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 09:53:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1690389995; x=1690994795;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gcvGxWKs0ioHSwaNFVtuDJQ1B/8SpZlsoy8QXz36r7I=;
-        b=ctlEmW7DMTMNY+Sp7acXqqDtGLdfH554pjXRJaq8fLvxFb/RtQTWgjya5aX8frZUG+
-         kWLLX3V5bkPJ8D9sRUV/MwHTEJpB9RCwH6/ndhkksdQtRuU+HRr0zUfscDgxiFSHZA9+
-         yIU0ZD4Tam8mQ2WS+5pLZ/c5X4RhjfmHJo3MwLkOOIWTzwMnMBP8Q0wn+W52egZzi2xU
-         AAyOixs1odiPKZLEKGezwwzYUkbE2yPosL+ri5v70wHRzK4oQvk1fggscCcK6icuFnGe
-         uL29fxGA2FdvaKyJUxHyjHp+jMTQA1xrvEzeIai5Rjkq71aK2LAAFsldGh/eFZfk8xRM
-         s+hg==
+        d=linaro.org; s=google; t=1690390417; x=1690995217;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2UPiX7fReDR3fI6kmxK7fKJRGBv6XCkE0IO8pClG7+g=;
+        b=IBozOJkHMEJObNgwvMorzSH0KtIJG9/P8EQ1ZZJVm28cONWXXjTayecK4rWdnAyUxW
+         xxbMsywVvJPOah5xbdygmmgf+ExN/CF0K0egEoibj6PKc5IY6dINi6UaHUBLrrmte37n
+         qic+uwFKpgt43UklcnIv686n/cFqm13uOiM9iMZFtjQLJqOuOHW106bp0ljruQlr69w3
+         AnNrCBMX1dkprJy1ItKB7yxlKQvEbFdlYpsQuo/sAJ6RNxGA+WFBXtGTDXp5+veI3VGk
+         L49LlZG33rdpSc3BboCAuzFoSAI0Zlf0aIGHtfzhMFBjbcfnxs+ej+jjt00pALR/gJ/r
+         GpIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690389995; x=1690994795;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gcvGxWKs0ioHSwaNFVtuDJQ1B/8SpZlsoy8QXz36r7I=;
-        b=mGm09s0SwS3e3i7hCn95QySBHEylAu8/SwJQihK07rz93L7CJPj5Or5woxzG9enmEy
-         ldvK1RdfWxyEJmmVX4KmcCToJIlAGt5lEEgnD9/bYUD0MpV+sFxmtuvf1fgdxxHTZmVt
-         HVSgBxCwiXrONVdFb6P28uqHvc07Tkq6F88hL/eiGHBed1MiDheSPVtxhPYG54rsgtn4
-         feEVi+pWt+OkhoI4Sr8c7XC/n0bUHaUJzRN/PYOv0pFYpToB5H6HnILYM7OyacPZW37n
-         4X2/TxboOUoRIS8MFa0aI0I5joc8OcoZjS352i+EpZ4cilmmrsnOXX8ChssTFsR8J0mY
-         7/hQ==
-X-Gm-Message-State: ABy/qLZ7SmL3LHAkgpCj45rGW2e4BvnZrMJaWCMSx/C9YR6Ejp967uwm
-        wTuV8brFANBW7AeDgYI3V+W8Cg==
-X-Google-Smtp-Source: APBJJlHYD5X46sfJHvjFJ8cY7MrqSJBPdDrgEnmRM7T9AiO1YpDySEyimp6MxA9+6dubMdyjQlpBgQ==
-X-Received: by 2002:a17:902:c943:b0:1b2:676d:1143 with SMTP id i3-20020a170902c94300b001b2676d1143mr38193pla.15.1690389994874;
-        Wed, 26 Jul 2023 09:46:34 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id h5-20020a170902f54500b001bb6c5ff4edsm11628870plf.173.2023.07.26.09.46.33
+        d=1e100.net; s=20221208; t=1690390417; x=1690995217;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2UPiX7fReDR3fI6kmxK7fKJRGBv6XCkE0IO8pClG7+g=;
+        b=JlRqMlx3VIasuyEv8hPxn2e7sclEHrbfEqaXdkp8Zx61e0FKYfybNGouPsql4ysCNK
+         rA/t0MA28/vJj6ARYUCtNnySXByKYmLOwHwwYS+BewCcPhZOmGUjF0JG/KpKS9iVwOFK
+         RX8Q5pIa/9GIAZ+oIbSu+Owg4l1DEPFDWm3LFbfaZCK4zQFCj0j1b7tuVi3nkgRDMUMk
+         Xeb2XzrIKSFQXSk2aNUjh9H0sWE4tS8ClgAEaAkxqH4L5NitCTluXgxgJ/lkaC4SsvQ2
+         f1TLgaapbmDl4H5tDOZKMfKb9bGwQDjThDSNfJ/JkZjL8l7MaH00liLN99MGjnWtHo0x
+         bBUA==
+X-Gm-Message-State: ABy/qLZpl8yGgeHEeRs+vUYBAjG/IkBYlGtKnEZTZt8gbT2fJB1DEOgy
+        Gj58+R/zxaSx2bxvM89wlYv0sQ==
+X-Google-Smtp-Source: APBJJlFH2LcZdnXOgKo+SIZ831oYDnQvR/FZ52W3UHhYnhv2g2sJD4xB3T7pPoCuCQZaT/q8WmoofQ==
+X-Received: by 2002:a05:600c:4e14:b0:3fa:ef97:1fa5 with SMTP id b20-20020a05600c4e1400b003faef971fa5mr77269wmq.6.1690390417249;
+        Wed, 26 Jul 2023 09:53:37 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id f2-20020a7bc8c2000000b003fc04eb92cbsm2483960wml.44.2023.07.26.09.53.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jul 2023 09:46:34 -0700 (PDT)
-From:   Charlie Jenkins <charlie@rivosinc.com>
-To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     charlie@rivosinc.com, conor@kernel.org, paul.walmsley@sifive.com,
-        palmer@rivosinc.com, aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org,
-        alexghiti@rivosinc.com
-Subject: [PATCH v7 4/4] RISC-V: mm: Document mmap changes
-Date:   Wed, 26 Jul 2023 09:45:58 -0700
-Message-ID: <20230726164620.717288-5-charlie@rivosinc.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230726164620.717288-1-charlie@rivosinc.com>
-References: <20230726164620.717288-1-charlie@rivosinc.com>
+        Wed, 26 Jul 2023 09:53:36 -0700 (PDT)
+Date:   Wed, 26 Jul 2023 19:53:33 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Yan Zhai <yan@cloudflare.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com,
+        Jordan Griege <jgriege@cloudflare.com>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Subject: Re: [PATCH v4 bpf 1/2] bpf: fix skb_do_redirect return values
+Message-ID: <8b681fe1-4cc6-4310-9f50-1cff868f8f7f@kadam.mountain>
+References: <cover.1690332693.git.yan@cloudflare.com>
+ <e5d05e56bf41de82f10d33229b8a8f6b49290e98.1690332693.git.yan@cloudflare.com>
+ <a76b300a-e472-4568-b734-37115927621d@moroto.mountain>
+ <ZMEqYOOBc1ZNcEER@debian.debian>
+ <bc3ec02d-4d4e-477a-b8a5-5245425326c6@kadam.mountain>
+ <ZMFFbChK/66/8XZd@debian.debian>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZMFFbChK/66/8XZd@debian.debian>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The behavior of mmap is modified with this patch series, so explain the
-changes to the mmap hint address behavior.
+On Wed, Jul 26, 2023 at 09:10:20AM -0700, Yan Zhai wrote:
+> On Wed, Jul 26, 2023 at 06:01:00PM +0300, Dan Carpenter wrote:
+> > On Wed, Jul 26, 2023 at 07:14:56AM -0700, Yan Zhai wrote:
+> > > On Wed, Jul 26, 2023 at 04:39:08PM +0300, Dan Carpenter wrote:
+> > > > I'm not positive I understand the code in ip_finish_output2().  I think
+> > > > instead of looking for LWTUNNEL_XMIT_DONE it should instead look for
+> > > > != LWTUNNEL_XMIT_CONTINUE.  It's unfortunate that NET_XMIT_DROP and
+> > > > LWTUNNEL_XMIT_CONTINUE are the both 0x1.  Why don't we just change that
+> > > > instead?
+> > > > 
+> > > I considered about changing lwt side logic. But it would bring larger
+> > > impact since there are multiple types of encaps on this hook, not just
+> > > bpf redirect. Changing bpf return values is a minimum change on the
+> > > other hand. In addition, returning value of NET_RX_DROP and
+> > > NET_XMIT_CN are the same, so if we don't do something in bpf redirect,
+> > > there is no way to distinguish them later: the former is considered as
+> > > an error, while "CN" is considered as non-error.
+> > 
+> > Uh, NET_RX/XMIT_DROP values are 1.  NET_XMIT_CN is 2.
+> > 
+> > I'm not an expert but I think what happens is that we treat NET_XMIT_CN
+> > as success so that it takes a while for the resend to happen.
+> > Eventually the TCP layer will detect it as a dropped packet.
+> > 
+> My eyes slipped lines. CN is 2. But the fact RX return value can be
+> returned on a TX path still makes me feel unclean. Odds are low that
+> we will have new statuses in future, it is a risk. I'd hope to contain
+> these values only inside BPF redirect code as they are the reason why
+> such rx values can show up there. Meanwhile, your argument do make
+> good sense to me that the same problem may occur for other stuff. It
+> is true. In fact, I just re-examined BPF-REROUTE path, it has the
+> exact same issue by directly sending dst_output value back.
+> 
+> So I would propose to do two things:
+> 1. still convert BPF redirect ingress code to contain the propagation
+> of mixed return. Return only TX side value instead, which is also what
+> majority of those local senders are expecting. (I was wrong about
+> positive values returned to sendmsg below btw, they are not).
+> 
+> 2. change LWTUNNEL_XMIT_CONTINUE and check for this at xmit hook.
+> 
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- Documentation/riscv/vm-layout.rst | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Sounds good!
 
-diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
-index 5462c84f4723..69ff6da1dbf8 100644
---- a/Documentation/riscv/vm-layout.rst
-+++ b/Documentation/riscv/vm-layout.rst
-@@ -133,3 +133,25 @@ RISC-V Linux Kernel SV57
-    ffffffff00000000 |  -4     GB | ffffffff7fffffff |    2 GB | modules, BPF
-    ffffffff80000000 |  -2     GB | ffffffffffffffff |    2 GB | kernel
-   __________________|____________|__________________|_________|____________________________________________________________
-+
-+
-+Userspace VAs
-+--------------------
-+To maintain compatibility with software that relies on the VA space with a
-+maximum of 48 bits the kernel will, by default, return virtual addresses to
-+userspace from a 48-bit range (sv48). This default behavior is achieved by
-+passing 0 into the hint address parameter of mmap. On CPUs with an address space
-+smaller than sv48, the CPU maximum supported address space will be the default.
-+
-+Software can "opt-in" to receiving VAs from another VA space by providing
-+a hint address to mmap. A hint address passed to mmap will cause the largest
-+address space that fits entirely into the hint to be used, unless there is no
-+space left in the address space. If there is no space available in the requested
-+address space, an address in the next smallest available address space will be
-+returned.
-+
-+For example, in order to obtain 48-bit VA space, a hint address greater than
-+:code:`1 << 47` must be provided. Note that this is 47 due to sv48 userspace
-+ending at :code:`1 << 47` and the addresses beyond this are reserved for the
-+kernel. Similarly, to obtain 57-bit VA space addresses, a hint address greater
-+than or equal to :code:`1 << 56` must be provided.
--- 
-2.41.0
+regards,
+dan carpenter
 
