@@ -2,141 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D337E763B0D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 17:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB5C763B48
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 17:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbjGZP35 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jul 2023 11:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
+        id S234234AbjGZPjw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jul 2023 11:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232641AbjGZP35 (ORCPT
+        with ESMTP id S234333AbjGZPjv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jul 2023 11:29:57 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853FB2136;
-        Wed, 26 Jul 2023 08:29:53 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1690385383t5iif69s
+        Wed, 26 Jul 2023 11:39:51 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4611B0;
+        Wed, 26 Jul 2023 08:39:47 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1690385976t7iihfqr
 Received: from linux-lab-host.localdomain ( [61.141.78.189])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 26 Jul 2023 23:29:42 +0800 (CST)
+        id ; Wed, 26 Jul 2023 23:39:35 +0800 (CST)
 X-QQ-SSF: 01200000000000D0X000000A0000000
-X-QQ-FEAT: J5JfekO1WsiL3ug9fgDy4ITrNZ0Fco01rrnYx6BE0VpZMg43YoQewkRlQLBJn
-        hmjsVReJmsufwSNs1hcQEemS4Gi3UmrZjM2f332VOw0ctbp2I3bQ+11jvuvtO4kgHhB1Bb4
-        dgGHIEGSE1tH1ti5KfpuC1PJsLVA/YVixLnj6aMYZ6bf0vgvAsv1gLDot4aVJxN2aa9fLYE
-        D6+rvyZuIvWtkwPdlPTQepiwz9uEs22TuKaaByxV6pg93K+XJ9rbwzWtaI9m8I1BFDibKhC
-        7AWSr78gfaqfy5Y9MO3W7CAKq/11Z9jdzhX8g/dEApdrCur/O2zk/h5CKHGRV66cIvNu5CJ
-        gA75ep7cyJr+vfuVIyd/on06QRLMAMKwr89tP9wp2mTul2iE2UJZCTmuVdM5dw35aNaqmQg
-        ei5hA+tkEb8=
+X-QQ-FEAT: 5CNn+SP0K2tQLkLI/cB/7TfAh0HH7fuHBPafOFaqQnjr3ys+wr1X4G4JaRvR3
+        qPhRkkyyBgrAbZmDj01gVf2L2n+yDdZ+0WmHnYX8TidhXLfBFqjQH31IeTrcQFqKUJ01ef8
+        TRVG8Dcm/GIJKfkP8eQG737aDgDu3wrz7B+JpJovDb1TzhgQtLn95kLwxpa52sPZ34mts8/
+        fBDhlKnpUNm7i3QiVPiNrgc9VWjbKCaxsaGL/qJBE1oD7dtFLn2EkNY7DpXy78wSaw//3pE
+        01G2Wl7jsxwndshWM7nYirSptn/dK+43F3FetgHMHXCkYmH1wJoMMZVO1TTCIKAafyruU5d
+        nMC0Hqiz831rW2AAzKr+8S8nUBm1ycYGn6Jzzxqga0rYWrR5MMX8yvsAymbqWZbZk12CfH4
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 4160635926283433686
+X-BIZMAIL-ID: 17309130325439017752
 From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+To:     falcon@tinylab.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux@weissschuh.net,
-        thomas@t-8ch.de
-Subject: [PATCH v2 5/7] selftests/nolibc: add test support for ppc
-Date:   Wed, 26 Jul 2023 23:29:38 +0800
-Message-Id: <20230726152938.251649-1-falcon@tinylab.org>
+        thomas@t-8ch.de, w@1wt.eu
+Subject: [PATCH v2 4/7] selftests/nolibc: add XARCH and ARCH mapping support
+Date:   Wed, 26 Jul 2023 23:39:35 +0800
+Message-Id: <20230726153935.252238-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <55603bb4aecb20561e63f9ab10563c0c470300b1.1690373704.git.falcon@tinylab.org>
-References: <55603bb4aecb20561e63f9ab10563c0c470300b1.1690373704.git.falcon@tinylab.org>
+In-Reply-To: <4260bf6df7417ba5395e7a1f71609690bbd11b17.1690373704.git.falcon@tinylab.org>
+References: <4260bf6df7417ba5395e7a1f71609690bbd11b17.1690373704.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
-
-I'm very sorry, the extra configs/powerpc.config file is missing in this
-patch, perhaps a failed rebase introduced this issue.
-
-Please don't merge it, to avoid manually merge another addtional patch, if no
-other issues in this v2 series, I will send v3 immediately, just wait for your
-feedbacks, no hurry.
-
-Best regards,
-Zhangjin
-
-> The default qemu-system-ppc g3beige machine [1] is used to run 32-bit
-> powerpc kernel.
-> 
-> The pmac32_defconfig is used with extra PMACZILOG console options to
-> enable normal print.
-> 
-> Note, zImage doesn't boot due to "qemu-system-ppc: Some ROM regions are
-> overlapping" error, so, vmlinux is used instead.
-> 
-> Kernel uses ARCH=powerpc for both 32-bit and 64-bit PowerPC, here adds a
-> ppc variant for 32-bit PowerPC and use it as the default variant of
-> powerpc architecture.
-> 
-> Users can pass ARCH=powerpc or ARCH=ppc to test 32-bit PowerPC.
-> 
-> [1]: https://qemu.readthedocs.io/en/latest/system/ppc/powermac.html
-> 
+> [...]
+> Suggested-by: Willy Tarreau <w@1wt.eu>
+> Link: https://lore.kernel.org/lkml/20230702171715.GD16233@1wt.eu/
 > Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 > ---
->  tools/testing/selftests/nolibc/Makefile | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> index f04ec1cc132b..0e9abb7f3d4f 100644
-> --- a/tools/testing/selftests/nolibc/Makefile
-> +++ b/tools/testing/selftests/nolibc/Makefile
-> @@ -16,10 +16,12 @@ endif
+>  tools/testing/selftests/nolibc/Makefile | 27 ++++++++++++++++---------
+>  1 file changed, 18 insertions(+), 9 deletions(-)
 >  
->  # XARCH is used to save user-input ARCH variant
->  # allow configure default variant for target ARCH
-> +XARCH_powerpc    = ppc
->  XARCH           := $(or $(XARCH_$(ARCH)),$(ARCH))
+> [...]
+>  REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{if (!f) printf("\n"); f++; print;} /\[SKIPPED\][\r]*$$/{s++} \
+> @@ -102,7 +110,7 @@ help:
+>  	@echo "  run-user     runs the executable under QEMU (uses \$$ARCH, \$$TEST)"
+>  	@echo "  initramfs    prepare the initramfs with nolibc-test"
+>  	@echo "  defconfig    create a fresh new default config (uses \$$ARCH)"
+> -	@echo "  kernel       (re)build the kernel with the initramfs (uses \$$ARCH)"
+> +	@echo "  kernel       (re)build the kernel with the initramfs (uses $$ARCH)"
+
+and a wrongly removed '\' here.
+
+Thanks,
+Zhangjin
+
+>  	@echo "  run          runs the kernel in QEMU after building it (uses \$$ARCH, \$$TEST)"
+>  	@echo "  rerun        runs a previously prebuilt kernel in QEMU (uses \$$ARCH, \$$TEST)"
+>  	@echo "  clean        clean the sysroot, initramfs, build and output files"
+> @@ -111,12 +119,13 @@ help:
+>  	@echo ""
+>  	@echo "Currently using the following variables:"
+>  	@echo "  ARCH          = $(ARCH)"
+> +	@echo "  XARCH         = $(XARCH)"
+>  	@echo "  CROSS_COMPILE = $(CROSS_COMPILE)"
+>  	@echo "  CC            = $(CC)"
+>  	@echo "  OUTPUT        = $(OUTPUT)"
+>  	@echo "  TEST          = $(TEST)"
+> -	@echo "  QEMU_ARCH     = $(if $(QEMU_ARCH),$(QEMU_ARCH),UNKNOWN_ARCH) [determined from \$$ARCH]"
+> -	@echo "  IMAGE_NAME    = $(if $(IMAGE_NAME),$(IMAGE_NAME),UNKNOWN_ARCH) [determined from \$$ARCH]"
+> +	@echo "  QEMU_ARCH     = $(if $(QEMU_ARCH),$(QEMU_ARCH),UNKNOWN_ARCH) [determined from \$$XARCH]"
+> +	@echo "  IMAGE_NAME    = $(if $(IMAGE_NAME),$(IMAGE_NAME),UNKNOWN_ARCH) [determined from \$$XARCH]"
+>  	@echo ""
 >  
->  # ARCH is supported by kernel
->  # map from user-input variant to kernel-supported
-> +ARCH_ppc         = powerpc
->  override ARCH   := $(or $(ARCH_$(XARCH)),$(XARCH))
->  
->  # kernel image names by architecture
-> @@ -29,6 +31,7 @@ IMAGE_x86        = arch/x86/boot/bzImage
->  IMAGE_arm64      = arch/arm64/boot/Image
->  IMAGE_arm        = arch/arm/boot/zImage
->  IMAGE_mips       = vmlinuz
-> +IMAGE_ppc        = vmlinux
->  IMAGE_riscv      = arch/riscv/boot/Image
->  IMAGE_s390       = arch/s390/boot/bzImage
->  IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
-> @@ -42,6 +45,7 @@ DEFCONFIG_x86        = defconfig
->  DEFCONFIG_arm64      = defconfig
->  DEFCONFIG_arm        = multi_v7_defconfig
->  DEFCONFIG_mips       = malta_defconfig
-> +DEFCONFIG_ppc        = pmac32_defconfig
->  DEFCONFIG_riscv      = defconfig
->  DEFCONFIG_s390       = defconfig
->  DEFCONFIG_loongarch  = defconfig
-> @@ -60,6 +64,7 @@ QEMU_ARCH_x86        = x86_64
->  QEMU_ARCH_arm64      = aarch64
->  QEMU_ARCH_arm        = arm
->  QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
-> +QEMU_ARCH_ppc        = ppc
->  QEMU_ARCH_riscv      = riscv64
->  QEMU_ARCH_s390       = s390x
->  QEMU_ARCH_loongarch  = loongarch64
-> @@ -72,6 +77,7 @@ QEMU_ARGS_x86        = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(
->  QEMU_ARGS_arm64      = -M virt -cpu cortex-a53 -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->  QEMU_ARGS_arm        = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->  QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> +QEMU_ARGS_ppc        = -M g3beige -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->  QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->  QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->  QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+>  all: run
 > -- 
 > 2.25.1
