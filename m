@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8663F763DBF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 19:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9841A763DC2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 19:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbjGZRfC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jul 2023 13:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        id S231838AbjGZRfe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jul 2023 13:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbjGZRen (ORCPT
+        with ESMTP id S232640AbjGZRfO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jul 2023 13:34:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174C22695
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 10:33:53 -0700 (PDT)
+        Wed, 26 Jul 2023 13:35:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD6C2696
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 10:34:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690392833;
+        s=mimecast20190719; t=1690392867;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=595aIFAqz7KLDifNzOOpVRZNEJ01+8bEI4rnP/3L4To=;
-        b=EU90qie4Le5etddl8YKKIWKXHgzm41z8Z6eXELYjyMBArLmqSSfzLHflWXoGXMf35fZKZN
-        mD82zkAp3D/HziR3954TJwsErPkplaoq2tbalvFEWdyMdCU0z1ds/nGbHIHX8jR6QpoNrn
-        TO6ey8OVVycEb8LZvIjkoExlo3G3teo=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=L06ULfrhr6hW9gvP83AY+VEDaqsbr34/NwjBXuEOU0w=;
+        b=NyYImzB2t4fmQ2XlaHUQ5yNU2NgoI3wfyEHLAMSk/wA7QfDDIePTy2AUK5CVLC2oj3xl8o
+        89e/40tBMpNsr1C0940EGxO27MpaE5vlMHO9/R4bn4fZdG74tCNi1g9viOWnDi2SuCy2J4
+        xjVDrLnbdj3ipPft8GBEiSTddK31NeI=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-187-z1Zogd_7Ox2dyHYDcvZdqA-1; Wed, 26 Jul 2023 13:33:51 -0400
-X-MC-Unique: z1Zogd_7Ox2dyHYDcvZdqA-1
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7867b689079so1378539f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 10:33:51 -0700 (PDT)
+ us-mta-418-5qqH8IYbNdiaaIo2TkpNRA-1; Wed, 26 Jul 2023 13:34:26 -0400
+X-MC-Unique: 5qqH8IYbNdiaaIo2TkpNRA-1
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-78bc35225b7so1395239f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 10:34:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690392831; x=1690997631;
+        d=1e100.net; s=20221208; t=1690392866; x=1690997666;
         h=content-transfer-encoding:mime-version:organization:references
          :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=595aIFAqz7KLDifNzOOpVRZNEJ01+8bEI4rnP/3L4To=;
-        b=irYP5wHCb4uAiurufblfFFeR5ph3DiymjmXxDNd5tFXwhBap46fQ6L8o5gszsOT+3J
-         3ACpu9qRBGBXUtSVpFG4WCF/OV8CbwRqYWxa0ur+icv8dOj6Iwf7OOq8U2C9Tfw9yZIf
-         lBGqMenBOw5u8yKj8b3+1vgbI1gHSyokW/Cqk4iXofzWAYx9uPhP3UFd+ahRvlgXnXMl
-         Bonp8F6NoVra/Ke/jtJ+dpqV7EAAIX3mwaZ6509xQGaw0/CCbSSAs57ueb23WO4yV/84
-         Ek3589ktk7BLScfpeguj8ZygkZOVYAUGSGJoqLJAxZlURMZuimFbVV8X3mspT1McfQH4
-         97Ew==
-X-Gm-Message-State: ABy/qLZbw5g5idAi5qwIZX0/h97TBa+pPD+XOSMERu0XCJmB01+ftLLE
-        28E/tMtZddLVbhYPitt9G6Gk2lQnLCKvCT1WfHwo698Rcw+YWw/7Y9QfQrD+EcVwdQ87YARhv2k
-        yBozzk7GntsCQlhfLh3C27KUz0IKy
-X-Received: by 2002:a5e:8713:0:b0:786:98bd:66d4 with SMTP id y19-20020a5e8713000000b0078698bd66d4mr2821727ioj.15.1690392831043;
-        Wed, 26 Jul 2023 10:33:51 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFSNSK8ezzU7UY6kqRAWp8eJAgdkkstqtMf1gdt1dZfcxLAkXL1XnER7kAc9CqUzcaWir7uvw==
-X-Received: by 2002:a5e:8713:0:b0:786:98bd:66d4 with SMTP id y19-20020a5e8713000000b0078698bd66d4mr2821704ioj.15.1690392830818;
-        Wed, 26 Jul 2023 10:33:50 -0700 (PDT)
+        bh=L06ULfrhr6hW9gvP83AY+VEDaqsbr34/NwjBXuEOU0w=;
+        b=Gd0wxvdCKxMFfL0d5R7OpFUXLB39MSGeCceuW9nKzfWjbMA1sSGHDHNNTQ9pmHcRx0
+         PwKF2XDhKi5CWWcRvs4427k3BwYhVP8SC9DCm4DcpVUhsXqP+jWZ6svFQsWORlkeirMr
+         9ABGI9jsR5r9zueRfb9sbLXXztPubsSVXJMfrUnDj/R5iXUdc7tGhXO/GCWlLogeuJhU
+         T77qIdqbhqUmuRNhLvW+oVe0r5uALw5Rcmp9mMR8joFk4EHp8+DcCz2/ZHc/MHk0UFAp
+         UEUDDgKiUHQ95K8debNlszOVw2uOOzw4AVXOOSIWiE9TGmq+Km0SaFbPiZbW9u3v3+Le
+         apBg==
+X-Gm-Message-State: ABy/qLZHURn1QRBPuZ1FvbSXKtYt/UYqpTUj31KlXTdPB3A8OHUiZpDp
+        O9T5jQNAjn67KpJ1bABJZeZ7nykgIDi8NP/VUmD3V9D2fn7B/ni7YSd034MzBSpQhb91oe8vwY/
+        /LFg3n8P6CiI5/xeKGRxyq/jxp2EY
+X-Received: by 2002:a05:6602:19c7:b0:783:6906:a32c with SMTP id ba7-20020a05660219c700b007836906a32cmr2715317iob.16.1690392865896;
+        Wed, 26 Jul 2023 10:34:25 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGr/w0JObmLyn2KNA8gvVrm90xfj5H02NMUwVxRdYRCVlbW1sfxWsJzqC1FqZ4V7KdvwQIing==
+X-Received: by 2002:a05:6602:19c7:b0:783:6906:a32c with SMTP id ba7-20020a05660219c700b007836906a32cmr2715306iob.16.1690392865656;
+        Wed, 26 Jul 2023 10:34:25 -0700 (PDT)
 Received: from redhat.com ([38.15.60.12])
-        by smtp.gmail.com with ESMTPSA id f23-20020a6be817000000b0078b9d1653a8sm3815595ioh.42.2023.07.26.10.33.49
+        by smtp.gmail.com with ESMTPSA id p16-20020a02b390000000b004300d87030csm546160jan.109.2023.07.26.10.34.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jul 2023 10:33:50 -0700 (PDT)
-Date:   Wed, 26 Jul 2023 11:33:49 -0600
+        Wed, 26 Jul 2023 10:34:25 -0700 (PDT)
+Date:   Wed, 26 Jul 2023 11:34:24 -0600
 From:   Alex Williamson <alex.williamson@redhat.com>
 To:     Nicolin Chen <nicolinc@nvidia.com>
 Cc:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <yi.l.liu@intel.com>,
@@ -65,12 +65,11 @@ Cc:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <yi.l.liu@intel.com>,
         <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <mjrosato@linux.ibm.com>,
         <farman@linux.ibm.com>
-Subject: Re: [PATCH v8 1/4] vfio: Do not allow !ops->dma_unmap in
- vfio_pin/unpin_pages()
-Message-ID: <20230726113349.3dc1382c.alex.williamson@redhat.com>
-In-Reply-To: <064227abb779063c328fd79afc7c74dabdf2489e.1690226015.git.nicolinc@nvidia.com>
+Subject: Re: [PATCH v8 4/4] vfio: Support IO page table replacement
+Message-ID: <20230726113424.0e016e07.alex.williamson@redhat.com>
+In-Reply-To: <182b79f3838f84f220ede6089a0326b6f3f44acf.1690226015.git.nicolinc@nvidia.com>
 References: <cover.1690226015.git.nicolinc@nvidia.com>
-        <064227abb779063c328fd79afc7c74dabdf2489e.1690226015.git.nicolinc@nvidia.com>
+        <182b79f3838f84f220ede6089a0326b6f3f44acf.1690226015.git.nicolinc@nvidia.com>
 Organization: Red Hat
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -86,47 +85,69 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 24 Jul 2023 12:47:04 -0700
+On Mon, 24 Jul 2023 12:47:07 -0700
 Nicolin Chen <nicolinc@nvidia.com> wrote:
 
-> A driver that doesn't implement ops->dma_unmap shouldn't be allowed to do
-> vfio_pin/unpin_pages(), though it can use vfio_dma_rw() to access an iova
-> range. Deny !ops->dma_unmap cases in vfio_pin/unpin_pages().
+> Now both the physical path and the emulated path should support an IO page
+> table replacement. Call iommufd_device_replace/iommufd_access_replace(),
+> when vdev->iommufd_attached is true.
 > 
-> Suggested-by: Kevin Tian <kevin.tian@intel.com>
+> Also update the VFIO_DEVICE_ATTACH_IOMMUFD_PT kdoc in the uAPI header.
+> 
 > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> Reviewed-by: Yi Liu <yi.l.liu@intel.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 > ---
->  drivers/vfio/vfio_main.c | 4 ++++
->  1 file changed, 4 insertions(+)
-
-I assume these go through iommufd.
+>  drivers/vfio/iommufd.c    | 11 ++++++-----
+>  include/uapi/linux/vfio.h |  6 ++++++
+>  2 files changed, 12 insertions(+), 5 deletions(-)
 
 Reviewed-by: Alex Williamson <alex.williamson@redhat.com>
 
 > 
-> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-> index 902f06e52c48..0da8ed81a97d 100644
-> --- a/drivers/vfio/vfio_main.c
-> +++ b/drivers/vfio/vfio_main.c
-> @@ -1483,6 +1483,8 @@ int vfio_pin_pages(struct vfio_device *device, dma_addr_t iova,
->  	/* group->container cannot change while a vfio device is open */
->  	if (!pages || !npage || WARN_ON(!vfio_assert_device_open(device)))
+> diff --git a/drivers/vfio/iommufd.c b/drivers/vfio/iommufd.c
+> index 4d84904fd927..82eba6966fa5 100644
+> --- a/drivers/vfio/iommufd.c
+> +++ b/drivers/vfio/iommufd.c
+> @@ -146,9 +146,9 @@ int vfio_iommufd_physical_attach_ioas(struct vfio_device *vdev, u32 *pt_id)
 >  		return -EINVAL;
-> +	if (!device->ops->dma_unmap)
-> +		return -EINVAL;
->  	if (vfio_device_has_container(device))
->  		return vfio_device_container_pin_pages(device, iova,
->  						       npage, prot, pages);
-> @@ -1520,6 +1522,8 @@ void vfio_unpin_pages(struct vfio_device *device, dma_addr_t iova, int npage)
->  {
->  	if (WARN_ON(!vfio_assert_device_open(device)))
->  		return;
-> +	if (WARN_ON(!device->ops->dma_unmap))
-> +		return;
 >  
->  	if (vfio_device_has_container(device)) {
->  		vfio_device_container_unpin_pages(device, iova, npage);
+>  	if (vdev->iommufd_attached)
+> -		return -EBUSY;
+> -
+> -	rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
+> +		rc = iommufd_device_replace(vdev->iommufd_device, pt_id);
+> +	else
+> +		rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
+>  	if (rc)
+>  		return rc;
+>  	vdev->iommufd_attached = true;
+> @@ -223,8 +223,9 @@ int vfio_iommufd_emulated_attach_ioas(struct vfio_device *vdev, u32 *pt_id)
+>  	lockdep_assert_held(&vdev->dev_set->lock);
+>  
+>  	if (vdev->iommufd_attached)
+> -		return -EBUSY;
+> -	rc = iommufd_access_attach(vdev->iommufd_access, *pt_id);
+> +		rc = iommufd_access_replace(vdev->iommufd_access, *pt_id);
+> +	else
+> +		rc = iommufd_access_attach(vdev->iommufd_access, *pt_id);
+>  	if (rc)
+>  		return rc;
+>  	vdev->iommufd_attached = true;
+> diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
+> index fa06e3eb4955..537157ff8670 100644
+> --- a/include/uapi/linux/vfio.h
+> +++ b/include/uapi/linux/vfio.h
+> @@ -939,6 +939,12 @@ struct vfio_device_bind_iommufd {
+>   * Undo by VFIO_DEVICE_DETACH_IOMMUFD_PT or device fd close.  This is only
+>   * allowed on cdev fds.
+>   *
+> + * If a vfio device is currently attached to a valid hw_pagetable, without doing
+> + * a VFIO_DEVICE_DETACH_IOMMUFD_PT, a second VFIO_DEVICE_ATTACH_IOMMUFD_PT ioctl
+> + * passing in another hw_pagetable (hwpt) id is allowed. This action, also known
+> + * as a hw_pagetable replacement, will replace the device's currently attached
+> + * hw_pagetable with a new hw_pagetable corresponding to the given pt_id.
+> + *
+>   * Return: 0 on success, -errno on failure.
+>   */
+>  struct vfio_device_attach_iommufd_pt {
 
