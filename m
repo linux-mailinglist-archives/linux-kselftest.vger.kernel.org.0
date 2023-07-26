@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC02976398B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 16:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 704A1763994
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 16:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233676AbjGZOtz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jul 2023 10:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
+        id S233701AbjGZOwC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jul 2023 10:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbjGZOtx (ORCPT
+        with ESMTP id S232277AbjGZOwA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jul 2023 10:49:53 -0400
+        Wed, 26 Jul 2023 10:52:00 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466B62688;
-        Wed, 26 Jul 2023 07:49:49 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1690382979t5z5adzy
-Received: from linux-lab-host.localdomain ( [61.141.78.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD7D19A0;
+        Wed, 26 Jul 2023 07:51:58 -0700 (PDT)
+X-QQ-mid: bizesmtp74t1690383109tpb94mlh
+Received: from localhost.localdomain ( [61.141.78.189])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 26 Jul 2023 22:49:37 +0800 (CST)
+        id ; Wed, 26 Jul 2023 22:51:48 +0800 (CST)
 X-QQ-SSF: 01200000000000D0X000000A0000000
-X-QQ-FEAT: D6RqbDSxuq4bBscb3WVWJI1d+Kqxad6f7cVfrgZopYXRqGipdAcIvUN9SmVKh
-        FsqYoEBAYwJvS+xCmp3VNDRxt86o/WUyGbOg6iMds5ynt/tIJaIBSfOQ42vq3DqrHntG5kB
-        x8jfASTBlbomLdxOX1vAp8v5o6cGFXzyVY3L7U1gjdC+TPFHtuODcmmDGIK89nInZ9YTwyV
-        BeBmAGBGe4NT4Q+mpqeqnbRh+gjlUDZ8oA6ZQmXl31Ks+gwE3lYeI+kTS9YO1OmVOp/OtGc
-        wIGT5KKMo59tdUZa1Mny9zYq/jXM4N/lCuAaute9E6Y/G3yTgSt3O2uiJurAyCxBanLHl0H
-        vlJ/xqVrtqe38J5Kl727HMZez7flA0NA2fAw2HEr12N7eQvjGlZDlWiG279dFXn/WjL5pbl
+X-QQ-FEAT: OtIeQkg1QQHHCIiiAVCObq1XZpMiZZrep3CdnHIkv0Cbq1h4RDrOm7rMYOmUZ
+        TPmC2nvXS5zvaOqkRcYFP7EfRTxQFyzdfssN9/Zr9xCoiY3tRyPj8srSEwFivyx8xeQaLQX
+        b3Odf2maFdKYvMj0gCu2tmb4PLz2APzE+8iPcs1RsXJWOiOSXyUWSY4BvsyCLc/90ENTR0t
+        vkfEksPIiQbt4oShglA/Z3TXba5fVnLCA5jXsgBn4u+TmtrrxNqAHTiAvJBk9QW/oXJw0GX
+        yHdj+I2fEEDUD8nlIrzcPleDk+h/UglC9Cr8TQPiTBTknIe75gEv+IJOBa/s3LWCAetWPu1
+        JqzNl/k0pRQXeSgeoZ6pjTQJDInAolTF/IwBwWez3jMOCp2mJukfmi+T11QwA==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 7150859421509600242
+X-BIZMAIL-ID: 1055855130666732953
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de,
         =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 1/7] tools/nolibc: add support for powerpc
-Date:   Wed, 26 Jul 2023 22:49:32 +0800
-Message-Id: <a2fd0099dbe0fdf46cbca1db8da4b515dec793dd.1690373704.git.falcon@tinylab.org>
+Subject: [PATCH v2 2/7] tools/nolibc: add support for powerpc64
+Date:   Wed, 26 Jul 2023 22:50:46 +0800
+Message-Id: <7a406115cb891105e554d2bebb3532a5de70f5ca.1690373704.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1690373704.git.falcon@tinylab.org>
 References: <cover.1690373704.git.falcon@tinylab.org>
@@ -54,265 +54,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Both syscall declarations and _start code definition are added for
-powerpc to nolibc.
+This follows the 64-bit PowerPC ABI [1], refers to the slides: "A new
+ABI for little-endian PowerPC64 Design & Implementation" [2] and the
+musl code in arch/powerpc64/crt_arch.h.
 
-Like mips, powerpc uses a register (exactly, the summary overflow bit)
-to record the error occurred, and uses another register to return the
-value [1]. So, the return value of every syscall declaration must be
-normalized to easier the __sysret helper, return -value when there is an
-error, otheriwse, return value directly.
+Firstly, stdu and clrrdi are used instead of stwu and clrrwi for
+powerpc64.
 
-Glibc and musl use different methods to check the summary overflow bit,
-glibc (sysdeps/unix/sysv/linux/powerpc/sysdep.h) saves the cr register
-to r0 at first, and then check the summary overflow bit in cr0:
+Second, the stack frame size is increased to 32 bytes for powerpc64, 32
+bytes is the minimal stack frame size supported described in [2].
 
-    mfcr r0
-    r0 & (1 << 28) ? -r3 : r3
+Besides, the TOC pointer (GOT pointer) must be saved to r2.
 
-    -->
+This works on both little endian and big endian 64-bit PowerPC.
 
-    10003c14:       7c 00 00 26     mfcr    r0
-    10003c18:       74 09 10 00     andis.  r9,r0,4096
-    10003c1c:       41 82 00 08     beq     0x10003c24
-    10003c20:       7c 63 00 d0     neg     r3,r3
-
-Musl (arch/powerpc/syscall_arch.h) directly checks the summary overflow
-bit with the 'bns' instruction, it is smaller:
-
-    /* no summary overflow bit means no error, return value directly */
-    bns+ 1f
-    /* otherwise, return negated value */
-    neg r3, r3
-    1:
-
-    -->
-
-    10000418:       40 a3 00 08     bns     0x10000420
-    1000041c:       7c 63 00 d0     neg     r3,r3
-
-Like musl, Linux (arch/powerpc/include/asm/vdso/gettimeofday.h) uses the
-same method for do_syscall_2() too.
-
-Here applies the second method to get smaller size.
-
-[1]: https://man7.org/linux/man-pages/man2/syscall.2.html
+[1]: https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi.pdf
+[2]: https://www.llvm.org/devmtg/2014-04/PDFs/Talks/Euro-LLVM-2014-Weigand.pdf
 
 Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/arch-powerpc.h | 188 ++++++++++++++++++++++++++++
- tools/include/nolibc/arch.h         |   2 +
- 2 files changed, 190 insertions(+)
- create mode 100644 tools/include/nolibc/arch-powerpc.h
+ tools/include/nolibc/arch-powerpc.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/tools/include/nolibc/arch-powerpc.h b/tools/include/nolibc/arch-powerpc.h
-new file mode 100644
-index 000000000000..caa943e1521a
---- /dev/null
+index caa943e1521a..d783ed0b5dbd 100644
+--- a/tools/include/nolibc/arch-powerpc.h
 +++ b/tools/include/nolibc/arch-powerpc.h
-@@ -0,0 +1,188 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * PowerPC specific definitions for NOLIBC
-+ * Copyright (C) 2023 Zhangjin Wu <falcon@tinylab.org>
-+ */
+@@ -175,6 +175,19 @@
+ /* startup code */
+ void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
++#ifdef __powerpc64__
++	/* On 64-bit PowerPC, save TOC/GOT pointer to r2 */
++	extern char TOC __asm__ (".TOC.");
++	register volatile long r2 __asm__ ("r2") = (void *)&TOC - (void *)_start;
 +
-+#ifndef _NOLIBC_ARCH_POWERPC_H
-+#define _NOLIBC_ARCH_POWERPC_H
-+
-+#include "compiler.h"
-+#include "crt.h"
-+
-+/* Syscalls for PowerPC :
-+ *   - stack is 16-byte aligned
-+ *   - syscall number is passed in r0
-+ *   - arguments are in r3, r4, r5, r6, r7, r8, r9
-+ *   - the system call is performed by calling "sc"
-+ *   - syscall return comes in r3, and the summary overflow bit is checked
-+ *     to know if an error occurred, in which case errno is in r3.
-+ *   - the arguments are cast to long and assigned into the target
-+ *     registers which are then simply passed as registers to the asm code,
-+ *     so that we don't have to experience issues with register constraints.
-+ */
-+
-+#define _NOLIBC_SYSCALL_CLOBBERLIST \
-+	"memory", "cr0", "r12", "r11", "r10", "r9"
-+
-+#define my_syscall0(num)                                                     \
-+({                                                                           \
-+	register long _ret  __asm__ ("r3");                                  \
-+	register long _num  __asm__ ("r0") = (num);                          \
-+									     \
-+	__asm__ volatile (                                                   \
-+		"	sc\n"                                                \
-+		"	bns+ 1f\n"                                           \
-+		"	neg  %0, %0\n"                                       \
-+		"1:\n"                                                       \
-+		: "=r"(_ret), "+r"(_num)                                     \
-+		:                                                            \
-+		: _NOLIBC_SYSCALL_CLOBBERLIST, "r8", "r7", "r6", "r5", "r4"  \
-+	);                                                                   \
-+	_ret;                                                                \
-+})
-+
-+#define my_syscall1(num, arg1)                                               \
-+({                                                                           \
-+	register long _ret  __asm__ ("r3");                                  \
-+	register long _num  __asm__ ("r0") = (num);                          \
-+	register long _arg1 __asm__ ("r3") = (long)(arg1);                   \
-+									     \
-+	__asm__ volatile (                                                   \
-+		"	sc\n"                                                \
-+		"	bns+ 1f\n"                                           \
-+		"	neg  %0, %0\n"                                       \
-+		"1:\n"                                                       \
-+		: "=r"(_ret), "+r"(_num)                                     \
-+		: "0"(_arg1)                                                 \
-+		: _NOLIBC_SYSCALL_CLOBBERLIST, "r8", "r7", "r6", "r5", "r4"  \
-+	);                                                                   \
-+	_ret;                                                                \
-+})
-+
-+
-+#define my_syscall2(num, arg1, arg2)                                         \
-+({                                                                           \
-+	register long _ret  __asm__ ("r3");                                  \
-+	register long _num  __asm__ ("r0") = (num);                          \
-+	register long _arg1 __asm__ ("r3") = (long)(arg1);                   \
-+	register long _arg2 __asm__ ("r4") = (long)(arg2);                   \
-+									     \
-+	__asm__ volatile (                                                   \
-+		"	sc\n"                                                \
-+		"	bns+ 1f\n"                                           \
-+		"	neg  %0, %0\n"                                       \
-+		"1:\n"                                                       \
-+		: "=r"(_ret), "+r"(_num), "+r"(_arg2)                        \
-+		: "0"(_arg1)                                                 \
-+		: _NOLIBC_SYSCALL_CLOBBERLIST, "r8", "r7", "r6", "r5"        \
-+	);                                                                   \
-+	_ret;                                                                \
-+})
-+
-+
-+#define my_syscall3(num, arg1, arg2, arg3)                                   \
-+({                                                                           \
-+	register long _ret  __asm__ ("r3");                                  \
-+	register long _num  __asm__ ("r0") = (num);                          \
-+	register long _arg1 __asm__ ("r3") = (long)(arg1);                   \
-+	register long _arg2 __asm__ ("r4") = (long)(arg2);                   \
-+	register long _arg3 __asm__ ("r5") = (long)(arg3);                   \
-+									     \
-+	__asm__ volatile (                                                   \
-+		"	sc\n"                                                \
-+		"	bns+ 1f\n"                                           \
-+		"	neg  %0, %0\n"                                       \
-+		"1:\n"                                                       \
-+		: "=r"(_ret), "+r"(_num), "+r"(_arg2), "+r"(_arg3)           \
-+		: "0"(_arg1)                                                 \
-+		: _NOLIBC_SYSCALL_CLOBBERLIST, "r8", "r7", "r6"              \
-+	);                                                                   \
-+	_ret;                                                                \
-+})
-+
-+
-+#define my_syscall4(num, arg1, arg2, arg3, arg4)                             \
-+({                                                                           \
-+	register long _ret  __asm__ ("r3");                                  \
-+	register long _num  __asm__ ("r0") = (num);                          \
-+	register long _arg1 __asm__ ("r3") = (long)(arg1);                   \
-+	register long _arg2 __asm__ ("r4") = (long)(arg2);                   \
-+	register long _arg3 __asm__ ("r5") = (long)(arg3);                   \
-+	register long _arg4 __asm__ ("r6") = (long)(arg4);                   \
-+									     \
-+	__asm__ volatile (                                                   \
-+		"	sc\n"                                                \
-+		"	bns+ 1f\n"                                           \
-+		"	neg  %0, %0\n"                                       \
-+		"1:\n"                                                       \
-+		: "=r"(_ret), "+r"(_num), "+r"(_arg2), "+r"(_arg3),          \
-+		  "+r"(_arg4)                                                \
-+		: "0"(_arg1)                                                 \
-+		: _NOLIBC_SYSCALL_CLOBBERLIST, "r8", "r7"                    \
-+	);                                                                   \
-+	_ret;                                                                \
-+})
-+
-+
-+#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                       \
-+({                                                                           \
-+	register long _ret  __asm__ ("r3");                                  \
-+	register long _num  __asm__ ("r0") = (num);                          \
-+	register long _arg1 __asm__ ("r3") = (long)(arg1);                   \
-+	register long _arg2 __asm__ ("r4") = (long)(arg2);                   \
-+	register long _arg3 __asm__ ("r5") = (long)(arg3);                   \
-+	register long _arg4 __asm__ ("r6") = (long)(arg4);                   \
-+	register long _arg5 __asm__ ("r7") = (long)(arg5);                   \
-+									     \
-+	__asm__ volatile (                                                   \
-+		"	sc\n"                                                \
-+		"	bns+ 1f\n"                                           \
-+		"	neg  %0, %0\n"                                       \
-+		"1:\n"                                                       \
-+		: "=r"(_ret), "+r"(_num), "+r"(_arg2), "+r"(_arg3),          \
-+		  "+r"(_arg4), "+r"(_arg5)                                   \
-+		: "0"(_arg1)                                                 \
-+		: _NOLIBC_SYSCALL_CLOBBERLIST, "r8"                          \
-+	);                                                                   \
-+	_ret;                                                                \
-+})
-+
-+#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                 \
-+({                                                                           \
-+	register long _ret  __asm__ ("r3");                                  \
-+	register long _num  __asm__ ("r0") = (num);                          \
-+	register long _arg1 __asm__ ("r3") = (long)(arg1);                   \
-+	register long _arg2 __asm__ ("r4") = (long)(arg2);                   \
-+	register long _arg3 __asm__ ("r5") = (long)(arg3);                   \
-+	register long _arg4 __asm__ ("r6") = (long)(arg4);                   \
-+	register long _arg5 __asm__ ("r7") = (long)(arg5);                   \
-+	register long _arg6 __asm__ ("r8") = (long)(arg6);                   \
-+									     \
-+	__asm__ volatile (                                                   \
-+		"	sc\n"                                                \
-+		"	bns+ 1f\n"                                           \
-+		"	neg  %0, %0\n"                                       \
-+		"1:\n"                                                       \
-+		: "=r"(_ret), "+r"(_num), "+r"(_arg2), "+r"(_arg3),          \
-+		  "+r"(_arg4), "+r"(_arg5), "+r"(_arg6)                      \
-+		: "0"(_arg1)                                                 \
-+		: _NOLIBC_SYSCALL_CLOBBERLIST                                \
-+	);                                                                   \
-+	_ret;                                                                \
-+})
-+
-+/* startup code */
-+void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_stack_protector _start(void)
-+{
 +	__asm__ volatile (
 +		"mr     3, 1\n"         /* save stack pointer to r3, as arg1 of _start_c */
-+		"clrrwi 1, 1, 4\n"      /* align the stack to 16 bytes                   */
++		"clrrdi 1, 1, 4\n"      /* align the stack to 16 bytes                   */
 +		"li     0, 0\n"         /* zero the frame pointer                        */
-+		"stwu   1, -16(1)\n"    /* the initial stack frame                       */
++		"stdu   1, -32(1)\n"    /* the initial stack frame                       */
 +		"bl     _start_c\n"     /* transfer to c runtime                         */
 +	);
-+	__builtin_unreachable();
-+}
-+
-+#endif /* _NOLIBC_ARCH_POWERPC_H */
-diff --git a/tools/include/nolibc/arch.h b/tools/include/nolibc/arch.h
-index 82b43935650f..e276fb0680af 100644
---- a/tools/include/nolibc/arch.h
-+++ b/tools/include/nolibc/arch.h
-@@ -25,6 +25,8 @@
- #include "arch-aarch64.h"
- #elif defined(__mips__) && defined(_ABIO32)
- #include "arch-mips.h"
-+#elif defined(__powerpc__)
-+#include "arch-powerpc.h"
- #elif defined(__riscv)
- #include "arch-riscv.h"
- #elif defined(__s390x__)
++#else
+ 	__asm__ volatile (
+ 		"mr     3, 1\n"         /* save stack pointer to r3, as arg1 of _start_c */
+ 		"clrrwi 1, 1, 4\n"      /* align the stack to 16 bytes                   */
+@@ -182,6 +195,7 @@ void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_
+ 		"stwu   1, -16(1)\n"    /* the initial stack frame                       */
+ 		"bl     _start_c\n"     /* transfer to c runtime                         */
+ 	);
++#endif
+ 	__builtin_unreachable();
+ }
+ 
 -- 
 2.25.1
 
