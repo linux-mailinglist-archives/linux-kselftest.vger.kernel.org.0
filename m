@@ -2,162 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85617640F3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 23:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A9C764150
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 23:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjGZVKs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jul 2023 17:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
+        id S229574AbjGZVj2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jul 2023 17:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjGZVKr (ORCPT
+        with ESMTP id S229505AbjGZVj1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jul 2023 17:10:47 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9F11BE8
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 14:10:46 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5223910acf2so4641a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 14:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690405845; x=1691010645;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qwlPGFA6Wt4wHaQbg7XU0SaMv13PMQh8DDGdrKpf/oA=;
-        b=eLu+gNofp9wRbALE2bkVYGmwGJxPl36LCy1T4+1JgQnamYSfKJ9xDY86bimfkqoGIQ
-         zvgmsb7odQAULMETzbuIwLSJWIQ/Fwquxp67SYVP8fIfPzevZLwU33RjsCF5loWfigIi
-         D8J4p2w/m17TwgF7ZjEcVORxUQWSKgUpBlnqLCLO4uiCN/AITyww9rYNx7N4V3GnnYo0
-         HquyCXm2Odan4UPZidq5GwLDJdEDg9GXDQmUCnqz6MGT0lKOyrxtKU8w/LD8/mwZSugI
-         gH5NOFaIeUr6rA5zO0GBlWhk+rwHe8158VQtUck3GyvOBRGBVJ8hg9PlIx1e1hVSXqyV
-         yI3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690405845; x=1691010645;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qwlPGFA6Wt4wHaQbg7XU0SaMv13PMQh8DDGdrKpf/oA=;
-        b=RZAF+bROXfWp6ZBr9//Y6LwuXsU19CgLb90Anu9se96xVEFc2pb+X3rM/c0BxWdm8c
-         MDaM4ONDNOnKMWI4/rd5sHMvULHIyjMcm2KuA+EObJDVjQH6k5GnJRQXpV08fDs4wZfB
-         XAfkG4YuzS562Pne/5nDQ0NxncHgoSh6L1rPf00IfH1zt+ADALguaEpx+Vydzx1tsy2x
-         bQgd25sXhwlQ8EORYXp5bjty4tVKPc9jfnU6gOra0tEr3oDXjb3L/OgBepUXm78EDhol
-         D1ORsBJdzmIdeQaYVTLSMOy9UAns5SEjVTObT8lwJEX75EI6FUjNCHNTLNvGY75VjFP8
-         0TjA==
-X-Gm-Message-State: ABy/qLZchyvDYIFBjLGIp3UrG9U0R6j76CNgJQU4cKqBga9AGIDoaYdY
-        TGh4w0tIWbxhg5Pj+FmIs/7lam4G15eTebmzNp1K7Q==
-X-Google-Smtp-Source: APBJJlHivbRzuJT8P6p6jbxegWClyIOonCFtye/wSfmGogOINZRhaBvz2SCuEPMI1MLUCqxE5bFrkaSD3dQXAy/1y34=
-X-Received: by 2002:a50:d797:0:b0:522:4741:d992 with SMTP id
- w23-20020a50d797000000b005224741d992mr34619edi.4.1690405844799; Wed, 26 Jul
- 2023 14:10:44 -0700 (PDT)
+        Wed, 26 Jul 2023 17:39:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D3F268B;
+        Wed, 26 Jul 2023 14:39:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A28A61CCD;
+        Wed, 26 Jul 2023 21:39:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D242DC433C7;
+        Wed, 26 Jul 2023 21:39:21 +0000 (UTC)
+Date:   Wed, 26 Jul 2023 17:39:18 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ajay Kaher <akaher@vmware.com>
+Cc:     "shuah@kernel.org" <shuah@kernel.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        Ching-lin Yu <chinglinyu@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "lkp@intel.com" <lkp@intel.com>, Nadav Amit <namit@vmware.com>,
+        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Tapas Kundu <tkundu@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>
+Subject: Re: [PATCH v5 02/10] eventfs: Implement tracefs_inode_cache
+Message-ID: <20230726173918.107908a3@rorschach.local.home>
+In-Reply-To: <0FE7065F-6536-4311-AF41-4ABBD8E3ECF8@vmware.com>
+References: <1690054625-31939-1-git-send-email-akaher@vmware.com>
+        <1690054625-31939-3-git-send-email-akaher@vmware.com>
+        <20230725190617.14c85997@rorschach.local.home>
+        <0FE7065F-6536-4311-AF41-4ABBD8E3ECF8@vmware.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230713101415.108875-6-usama.anjum@collabora.com>
- <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
- <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com> <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
- <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com> <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
- <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com> <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
- <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com> <CABb0KFHJVeEkh4f6WWK6FThCbA+NE8iYUZE68nV1YAxaHwiwog@mail.gmail.com>
- <e1ead2e8-046a-31d9-8df9-27cdd7b7ff83@collabora.com> <1afedab8-5929-61e5-b0da-9c70dc01c254@collabora.com>
- <eac29a4d-aa3f-4df5-97e6-4aa3a358f2b1@collabora.com> <CABb0KFHuNpG+NJQ4sQdp1n_Kf4sO8aC5DBEppFc1zz=zAeDfQw@mail.gmail.com>
- <f949f74f-bb65-e3f2-e70d-7198446a9981@collabora.com>
-In-Reply-To: <f949f74f-bb65-e3f2-e70d-7198446a9981@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 26 Jul 2023 23:10:33 +0200
-Message-ID: <CABb0KFGQ_HbD+MNwKCcE+6D50XhJxpx0M0dRiC-EVwEXPv+4XA@mail.gmail.com>
-Subject: Re: [v3] fs/proc/task_mmu: Implement IOCTL for efficient page table scanning
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yang Shi <shy828301@gmail.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 26 Jul 2023 at 10:34, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 7/25/23 11:05=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Tue, 25 Jul 2023 at 11:11, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >>
-> >> ----
-> >> Michal please post your thoughts before I post this as v26.
-> >> ----
-> > [...]
-> >
-> > Looks ok - minor things below.
-> >
-> > 1. I'd change the _WPASYNC things to something better, if this can
-> > also work with "normal" UFFD WP.
-> Yeah, but we don't have any use case where UFFD WP is required. It can be
-> easily added later when user case arrives. Also UFFD WP sends messages to
-> userspace. User can easily do the bookkeeping in userspace as performance
-> isn't a concern there.
+On Wed, 26 Jul 2023 18:45:34 +0000
+Ajay Kaher <akaher@vmware.com> wrote:
 
-We shouldn't name the flags based on the use case but based on what
-they actually do. So if this checks UFFD registration for WP, then
-maybe PAGE_IS_WPALLOWED or something better describing the trait it
-matches?
+> Ok, I will move this to v6 04/10.
+> Let me know once you will complete the review of v5.
 
-> > 2. For the address tagging part I'd prefer someone who knows how this
-> > is used take a look. We're ignoring the tag (but clear it on return in
-> > ->start) - so it doesn't matter for the ioctl() itself.
-> I've added Kirill if he can give his thoughts about tagged memory.
->
-> Right now we are removing the tags from all 3 pointers (start, end, vec)
-> before using the pointers on kernel side. But we are overwriting and
-> writing the walk ending address in start which user can read/use.
->
-> I think we shouldn't over-write the start (and its tag) and instead retur=
-n
-> the ending walk address in new variable, walk_end.
+OK, I finished my review. Mostly more nits. Hopefully v6 will be what I
+pull into linux-next.
 
-The overwrite of `start` is making the ioctl restart (continuation)
-easier to handle. I prefer the current way, but it's not a strong
-opinion.
-
-> > 3. BTW, One of the uses is the GetWriteWatch and I wonder how it
-> > behaves on HugeTLB (MEM_LARGE_PAGES allocation)? Shouldn't it return a
-> > list of huge pages and write *lpdwGranularity =3D HPAGE_SIZE?
-> Wine/Proton doesn't used hugetlb by default. Hugetlb isn't enabled by
-> default on Debian as well. For GetWriteWatch() we don't care about the
-> hugetlb at all. We have added hugetlb's implementation to complete the
-> feature and leave out something.
-
-How is GetWriteWatch() working when passed a VirtualAlloc(...,
-MEM_LARGE_PAGES|MEM_WRITE_WATCH...)-allocated range? Does it still
-report 4K pages?
-This is only a problem when using max_pages: a hugetlb range might
-need counting and reporting huge pages and not 4K parts.
-
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+-- Steve
