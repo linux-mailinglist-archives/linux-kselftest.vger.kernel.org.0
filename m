@@ -2,224 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9CD763C05
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 18:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE07763CD5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jul 2023 18:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjGZQK2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jul 2023 12:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S230256AbjGZQqe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jul 2023 12:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjGZQK1 (ORCPT
+        with ESMTP id S230404AbjGZQqd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jul 2023 12:10:27 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EB11FD5
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 09:10:24 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-403a840dc64so49854531cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 09:10:24 -0700 (PDT)
+        Wed, 26 Jul 2023 12:46:33 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA6A270B
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 09:46:30 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1bb2468257fso38365425ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jul 2023 09:46:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1690387823; x=1690992623;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K7viDi95/DtqS7YumhA/QRcfR2/DcATgamUSnc6vM2A=;
-        b=sxj07bNcg5678Si4gdEEp+WW40Oh8OI/eqiNU57JICAoq/E0Moh1ql4Pa0rJCD5mXQ
-         owdUb7eyP+YcKFu9dUnu4PnUQ1PmNYO06AVBi6/Nq1AJjmy0x9dpbxtZCwdMGx8tDzkR
-         u9NWYslhaCMLBzgQIrcdD92wnxlUg+s93/lZY=
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1690389989; x=1690994789;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=taA43ETpLC9XelDxU6ZtNji2uVvqZo51XsvT9ZpAUOw=;
+        b=VZu9MJSwZY921d+CgkyRoxwMZ9iNSRGcNwXdvnISwMB6ZrvGY+S7PdYNnCTN09Ml//
+         9OT/zZSv24aoMTT4p8YMqfNMaKALTuecJg7AAfyMvLYvUtCBWMHD8HmcPWG3A6DhHADY
+         9zndIIv6HUn5DPGDsaK9svaN+56XhvqriI612ahHA8eL4BMQerz9GE7C7DWqrlrqyhrD
+         2oFORFcvVABTahHZpXH/yATcrYwkLWjanAhlDeD98fff8tZGesgkvYndd+KcVx+PyB7n
+         x3UZ7zYxPGWO/u8h37KPbndip2DXWlV/eE+HdzkbisNcgPAZzhTJsRw9oxmYcPU+eeIu
+         4kFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690387823; x=1690992623;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K7viDi95/DtqS7YumhA/QRcfR2/DcATgamUSnc6vM2A=;
-        b=BCZG8uhEjR+tCnHXWpTZYYO2h6xHJ9rxcyHjsn13i7gfU0oTePW6RkKfepe31HfbLj
-         LXpkmMxD5d7qytM619ve1/i0numJwzxoDvn/QCTzPE601o8M00A3AsNxdmIfuy5VnD9G
-         xzGL0vhS9OdwDC5nXlsiMOmgmjIHhifwu7WGtVVcEOH4KravRuIgT205VW6HZPw9I/2G
-         Iw9n5U1J46NodwU+zq0huuIalRm0P4WroxS5NzceYbLCt9V93oZU3MHj0YXbzor9DGoe
-         QlJIFZy8WBVgHVMu+oo3/IkxjwBAjzlCemTvAo3EoxTioJyzORdtLJjvNbY3OFbzRQSy
-         afUw==
-X-Gm-Message-State: ABy/qLZ9utVptquGK2lsPNj9xemoT6VWluKp0RnEKkw3i3NS9Ru8RTml
-        tfgszA9sYEfR1cNkd/4JpnLOeQ==
-X-Google-Smtp-Source: APBJJlFVm/mD0dcIslde2+vo1h0MzL3tM9Znqz5P9eLlBAcDjqJloXRDQy5GwhCsjZ2SScRq8TUP2A==
-X-Received: by 2002:ac8:5c02:0:b0:403:a63d:9a2e with SMTP id i2-20020ac85c02000000b00403a63d9a2emr3018341qti.10.1690387823149;
-        Wed, 26 Jul 2023 09:10:23 -0700 (PDT)
-Received: from debian.debian ([140.141.197.139])
-        by smtp.gmail.com with ESMTPSA id fb14-20020a05622a480e00b003f7fd3ce69fsm4902747qtb.59.2023.07.26.09.10.21
+        d=1e100.net; s=20221208; t=1690389989; x=1690994789;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=taA43ETpLC9XelDxU6ZtNji2uVvqZo51XsvT9ZpAUOw=;
+        b=aC7WpYLPQrqASLroLs9itme1WQT2YKdB4PlBkTCTCvs9adsqFudr9CEYGXWXbS1mEm
+         XHsunCHa/UabYIq8NAPu07B+sPGBJXiHJ1yIDybmJC8MXjH0saYLfaHaBvay6nQ86nEq
+         QinCqgmsBUEqidCkVuikmwv+dx/5gPO0K7vWtaD3sDzZgMdX+xaCPEjNeq8yzEAXbhwc
+         uBWuPzD0kmwqw0K7Q8Ig7ihiVhC79LcJU1s5UBdFw49RAJMc03QBWBjAio/nZvqFdzR9
+         FUvo0gXR8cvW7XZwsza2eFZzYqpY/53tqrmRtC7pxDF6JdcvdltYA9LcDlj+L1eTVTIu
+         wRUg==
+X-Gm-Message-State: ABy/qLa4MsDWxU9hxchkfkMe30J4yAgq2XsWAJBAo6eA3gNN4Z0zXWQK
+        V+Av3QGdfdsrjbOp4ciMJ8egeQ==
+X-Google-Smtp-Source: APBJJlH6j0Ww1otYztDyN7R8yPQEX4DMdjE4EaTSbvjzsuEj6+yeD2BZI9v3UPAjEZlsbhq1mBWpeg==
+X-Received: by 2002:a17:903:2308:b0:1b8:aef2:773e with SMTP id d8-20020a170903230800b001b8aef2773emr2582222plh.46.1690389989599;
+        Wed, 26 Jul 2023 09:46:29 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id h5-20020a170902f54500b001bb6c5ff4edsm11628870plf.173.2023.07.26.09.46.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jul 2023 09:10:22 -0700 (PDT)
-Date:   Wed, 26 Jul 2023 09:10:20 -0700
-From:   Yan Zhai <yan@cloudflare.com>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Yan Zhai <yan@cloudflare.com>, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com,
-        Jordan Griege <jgriege@cloudflare.com>,
-        Markus Elfring <Markus.Elfring@web.de>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Subject: Re: [PATCH v4 bpf 1/2] bpf: fix skb_do_redirect return values
-Message-ID: <ZMFFbChK/66/8XZd@debian.debian>
-References: <cover.1690332693.git.yan@cloudflare.com>
- <e5d05e56bf41de82f10d33229b8a8f6b49290e98.1690332693.git.yan@cloudflare.com>
- <a76b300a-e472-4568-b734-37115927621d@moroto.mountain>
- <ZMEqYOOBc1ZNcEER@debian.debian>
- <bc3ec02d-4d4e-477a-b8a5-5245425326c6@kadam.mountain>
+        Wed, 26 Jul 2023 09:46:29 -0700 (PDT)
+From:   Charlie Jenkins <charlie@rivosinc.com>
+To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     charlie@rivosinc.com, conor@kernel.org, paul.walmsley@sifive.com,
+        palmer@rivosinc.com, aou@eecs.berkeley.edu, anup@brainfault.org,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org,
+        alexghiti@rivosinc.com
+Subject: [PATCH v7 0/4] RISC-V: mm: Make SV48 the default address space
+Date:   Wed, 26 Jul 2023 09:45:54 -0700
+Message-ID: <20230726164620.717288-1-charlie@rivosinc.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bc3ec02d-4d4e-477a-b8a5-5245425326c6@kadam.mountain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 26, 2023 at 06:01:00PM +0300, Dan Carpenter wrote:
-> On Wed, Jul 26, 2023 at 07:14:56AM -0700, Yan Zhai wrote:
-> > On Wed, Jul 26, 2023 at 04:39:08PM +0300, Dan Carpenter wrote:
-> > > I'm not positive I understand the code in ip_finish_output2().  I think
-> > > instead of looking for LWTUNNEL_XMIT_DONE it should instead look for
-> > > != LWTUNNEL_XMIT_CONTINUE.  It's unfortunate that NET_XMIT_DROP and
-> > > LWTUNNEL_XMIT_CONTINUE are the both 0x1.  Why don't we just change that
-> > > instead?
-> > > 
-> > I considered about changing lwt side logic. But it would bring larger
-> > impact since there are multiple types of encaps on this hook, not just
-> > bpf redirect. Changing bpf return values is a minimum change on the
-> > other hand. In addition, returning value of NET_RX_DROP and
-> > NET_XMIT_CN are the same, so if we don't do something in bpf redirect,
-> > there is no way to distinguish them later: the former is considered as
-> > an error, while "CN" is considered as non-error.
-> 
-> Uh, NET_RX/XMIT_DROP values are 1.  NET_XMIT_CN is 2.
-> 
-> I'm not an expert but I think what happens is that we treat NET_XMIT_CN
-> as success so that it takes a while for the resend to happen.
-> Eventually the TCP layer will detect it as a dropped packet.
-> 
-My eyes slipped lines. CN is 2. But the fact RX return value can be
-returned on a TX path still makes me feel unclean. Odds are low that
-we will have new statuses in future, it is a risk. I'd hope to contain
-these values only inside BPF redirect code as they are the reason why
-such rx values can show up there. Meanwhile, your argument do make
-good sense to me that the same problem may occur for other stuff. It
-is true. In fact, I just re-examined BPF-REROUTE path, it has the
-exact same issue by directly sending dst_output value back.
+Make sv48 the default address space for mmap as some applications
+currently depend on this assumption. Users can now select a
+desired address space using a non-zero hint address to mmap. Previously,
+requesting the default address space from mmap by passing zero as the hint
+address would result in using the largest address space possible. Some
+applications depend on empty bits in the virtual address space, like Go and
+Java, so this patch provides more flexibility for application developers.
 
-So I would propose to do two things:
-1. still convert BPF redirect ingress code to contain the propagation
-of mixed return. Return only TX side value instead, which is also what
-majority of those local senders are expecting. (I was wrong about
-positive values returned to sendmsg below btw, they are not).
+-Charlie
 
-2. change LWTUNNEL_XMIT_CONTINUE and check for this at xmit hook.
+---
+v7:
+- Changing RLIMIT_STACK inside of an executing program does not trigger
+  arch_pick_mmap_layout(), so rewrite tests to change RLIMIT_STACK from a
+  script before executing tests. RLIMIT_STACK of infinity forces bottomup
+  mmap allocation.
+- Make arch_get_mmap_base macro more readible by extracting out the rnd
+  calculation.
+- Use MMAP_MIN_VA_BITS in TASK_UNMAPPED_BASE to support case when mmap
+  attempts to allocate address smaller than DEFAULT_MAP_WINDOW.
+- Fix incorrect wording in documentation.
 
-> > 
-> > > Also there seems to be a leak in lwtunnel_xmit().  Should that return
-> > > LWTUNNEL_XMIT_CONTINUE or should it call kfree_skb() before returning?
-> > > 
-> > > Something like the following?
-> > > 
-> > > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> > > index 11652e464f5d..375790b672bc 100644
-> > > --- a/include/linux/netdevice.h
-> > > +++ b/include/linux/netdevice.h
-> > > @@ -112,6 +112,9 @@ void netdev_sw_irq_coalesce_default_on(struct net_device *dev);
-> > >  #define NET_XMIT_CN		0x02	/* congestion notification	*/
-> > >  #define NET_XMIT_MASK		0x0f	/* qdisc flags in net/sch_generic.h */
-> > >  
-> > > +#define LWTUNNEL_XMIT_DONE NET_XMIT_SUCCESS
-> > > +#define LWTUNNEL_XMIT_CONTINUE 0x3
-> > > +
-> > >  /* NET_XMIT_CN is special. It does not guarantee that this packet is lost. It
-> > >   * indicates that the device will soon be dropping packets, or already drops
-> > >   * some packets of the same priority; prompting us to send less aggressively. */
-> > > diff --git a/include/net/lwtunnel.h b/include/net/lwtunnel.h
-> > > index 6f15e6fa154e..8ab032ee04d0 100644
-> > > --- a/include/net/lwtunnel.h
-> > > +++ b/include/net/lwtunnel.h
-> > > @@ -16,12 +16,6 @@
-> > >  #define LWTUNNEL_STATE_INPUT_REDIRECT	BIT(1)
-> > >  #define LWTUNNEL_STATE_XMIT_REDIRECT	BIT(2)
-> > >  
-> > > -enum {
-> > > -	LWTUNNEL_XMIT_DONE,
-> > > -	LWTUNNEL_XMIT_CONTINUE,
-> > > -};
-> > > -
-> > > -
-> > >  struct lwtunnel_state {
-> > >  	__u16		type;
-> > >  	__u16		flags;
-> > > diff --git a/net/core/lwtunnel.c b/net/core/lwtunnel.c
-> > > index 711cd3b4347a..732415d1287d 100644
-> > > --- a/net/core/lwtunnel.c
-> > > +++ b/net/core/lwtunnel.c
-> > > @@ -371,7 +371,7 @@ int lwtunnel_xmit(struct sk_buff *skb)
-> > >  
-> > >  	if (lwtstate->type == LWTUNNEL_ENCAP_NONE ||
-> > >  	    lwtstate->type > LWTUNNEL_ENCAP_MAX)
-> > > -		return 0;
-> > > +		return LWTUNNEL_XMIT_CONTINUE;
-> > 
-> > You are correct this path would leak skb. Return continue (or drop)
-> > would avoid the leak. Personally I'd prefer drop instead to signal the
-> > error setup. Since this is a separate issue, do you want to send a
-> > separate patch on this? Or I am happy to do it if you prefer.
-> > 
-> 
-> I don't know which makes sense so I'll leave that up to you.
-> 
-This conversation is juicy, I think we discovered two potential new
-problem sites (the leak here and the reroute path) :)
+v6:
+- Rebase onto the correct base
 
-> > >  
-> > >  	ret = -EOPNOTSUPP;
-> > >  	rcu_read_lock();
-> > > diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-> > > index 6e70839257f7..4be50a211b14 100644
-> > > --- a/net/ipv4/ip_output.c
-> > > +++ b/net/ipv4/ip_output.c
-> > > @@ -216,7 +216,7 @@ static int ip_finish_output2(struct net *net, struct sock *sk, struct sk_buff *s
-> > >  	if (lwtunnel_xmit_redirect(dst->lwtstate)) {
-> > >  		int res = lwtunnel_xmit(skb);
-> > >  
-> > > -		if (res < 0 || res == LWTUNNEL_XMIT_DONE)
-> > > +		if (res != LWTUNNEL_XMIT_CONTINUE)
-> > >  			return res;
-> > 
-> > Unfortunately we cannot return res directly here when res > 0. This is
-> > the final reason why I didn't patch here. Return values here can be
-> > propagated back to sendmsg syscall, so returning a positive value
-> > would break the syscall convention.
-> 
-> The neigh_output() function is going to return NET_XMIT_DROP so this
-> already happens.  Is that not what we want to happen?
-> 
-My bad, those return values are processed at ip_send_skb etc, while I
-was staring only at ip_local_out and beneath with my sleepy eyes.
+v5:
+- Minor wording change in documentation
+- Change some parenthesis in arch_get_mmap_ macros
+- Added case for addr==0 in arch_get_mmap_ because without this, programs would
+  crash if RLIMIT_STACK was modified before executing the program. This was
+  tested using the libhugetlbfs tests. 
 
-> I guess my concern is that eventually people will eventually new
-> introduce bugs.  Fixing incorrect error codes is something that I do
-> several times per week.  :P
-> 
-> regards,
-> dan carpenter
-> 
-> 
+v4:
+- Split testcases/document patch into test cases, in-code documentation, and
+  formal documentation patches
+- Modified the mmap_base macro to be more legible and better represent memory
+  layout
+- Fixed documentation to better reflect the implmentation
+- Renamed DEFAULT_VA_BITS to MMAP_VA_BITS
+- Added additional test case for rlimit changes
+---
+
+Charlie Jenkins (4):
+  RISC-V: mm: Restrict address space for sv39,sv48,sv57
+  RISC-V: mm: Add tests for RISC-V mm
+  RISC-V: mm: Update pgtable comment documentation
+  RISC-V: mm: Document mmap changes
+
+ Documentation/riscv/vm-layout.rst             | 22 +++++++
+ arch/riscv/include/asm/elf.h                  |  2 +-
+ arch/riscv/include/asm/pgtable.h              | 21 ++++--
+ arch/riscv/include/asm/processor.h            | 47 ++++++++++++--
+ tools/testing/selftests/riscv/Makefile        |  2 +-
+ tools/testing/selftests/riscv/mm/.gitignore   |  2 +
+ tools/testing/selftests/riscv/mm/Makefile     | 15 +++++
+ .../riscv/mm/testcases/mmap_bottomup.c        | 35 ++++++++++
+ .../riscv/mm/testcases/mmap_default.c         | 35 ++++++++++
+ .../selftests/riscv/mm/testcases/mmap_test.h  | 64 +++++++++++++++++++
+ .../selftests/riscv/mm/testcases/run_mmap.sh  | 12 ++++
+ 11 files changed, 244 insertions(+), 13 deletions(-)
+ create mode 100644 tools/testing/selftests/riscv/mm/.gitignore
+ create mode 100644 tools/testing/selftests/riscv/mm/Makefile
+ create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap_bottomup.c
+ create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap_default.c
+ create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap_test.h
+ create mode 100755 tools/testing/selftests/riscv/mm/testcases/run_mmap.sh
+
+-- 
+2.41.0
+
