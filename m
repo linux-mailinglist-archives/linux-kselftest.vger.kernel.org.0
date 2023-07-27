@@ -2,155 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194BE765271
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 13:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA69D7652A8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 13:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbjG0LcG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 07:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
+        id S233030AbjG0Lk3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 07:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbjG0LcE (ORCPT
+        with ESMTP id S232387AbjG0Lk2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 07:32:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5D92D73;
-        Thu, 27 Jul 2023 04:31:36 -0700 (PDT)
-Received: from [192.168.100.7] (unknown [59.103.218.24])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 95FF26607057;
-        Thu, 27 Jul 2023 12:31:22 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1690457490;
-        bh=QwGbrEQGGJI024TRKlZTazP2ydOrrqpiaW+jd0PA/0w=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=Kgu7lcFf3EpvlQmYW1IE3cyUf7qJnscHff1xjQoubuXKbU4ExNtRkW8Z8IHZDJqOs
-         IXxru92rni9lSRWKvjObLgbWHUKMItwvi0xD5QSeHZPszFamTsoC4CNTYwU2mpx0B/
-         v28NqlvfD9ExtM+xDMnT0dbhwn29t/VQiujMYC2MI6BM6rifPilvU0HAiW2YKQJBUE
-         22SLiSUpW7dW0hwiw1a+niUbHy2W7Wlvx7k9HzaJY+q9S0ORwYH1U1AIxHV8KdCKiR
-         BAxmXvTC/3WUHaYejcNER4w+b0xXgBo2BYfgOKoaqYubsKWC6kw4R49gcbkdHe7QYZ
-         RI96tQJYcvr2w==
-Message-ID: <df71c1ca-0f3f-fffb-a5d8-14ea99577387@collabora.com>
-Date:   Thu, 27 Jul 2023 16:31:18 +0500
+        Thu, 27 Jul 2023 07:40:28 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E623B135;
+        Thu, 27 Jul 2023 04:40:26 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fba8f2197bso1403010e87.3;
+        Thu, 27 Jul 2023 04:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690458025; x=1691062825;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CQNTkXPnx3vtxi9gXhe6F8GyptxWIzVy/cR8pZ3VmZI=;
+        b=n+dzJVefXszARcjuYn0EuJDKH4yuffGCemwWfVAWg7ZPElofPkCeKOzMNgjDwlIOqj
+         XZckvkessVyXYodF1UvhuOECm/TijRGu/fgNH4Ajq4t7HfAFkKQ9KevjJeKXapg8QxHW
+         qhH+rrwJheMYUHlt0jYw1zJhoIECYux/vEpfDLj8PIJMtKfbikVMi9jzG2e7RS3fGSfj
+         nx40Uk+jo0o91/rxBbIWje2meP7+ZE+Vkr1xHuA8yPoHsa62S9jTQ4//uTfmol4HQqoB
+         jvmvyCPRWlpvpuev5zQFMwZfKpPKVlBpIGkDEsMENkPrnv16yVDmHtUOv/17KdjaDH2T
+         FFMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690458025; x=1691062825;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CQNTkXPnx3vtxi9gXhe6F8GyptxWIzVy/cR8pZ3VmZI=;
+        b=f17APbwW0MYwpFIC/THCaafpK0POUhVp1nZVmZL8vfLQAZ4JJjwPCRs+PvllzTbrGM
+         Eue00UQ6wFZf72UpkIyZwyUGYPGQ5Dv+F9X1fjtYXWE60aVNgWCwMSYXDgPqvZ0Bf5NE
+         775sAL9dkvkNCPNz9axbw/q3FtfFlBe/nD4NEj4LloJe83zsLG9CqFlTfeJWsopaZSQw
+         XZFtlOhr7cTPdO/Yglzvc9Lshfh/p89xdZeP2Xc+HeiIfuixDkavLU7iGcxvghuWtsL1
+         pR0B7FA8ThZL8EKTNzhBNGslsWozYLcaQ82PnWNoHe0Wl3Y2OP5vhImMGMnDzyHk6Pox
+         lbLQ==
+X-Gm-Message-State: ABy/qLaDKKzROr9Y+Ytmo8fl3xipRErYnj+/HYLgKQRbHGIth/UXyUkS
+        EHafUWVnTjwqvMAgNXfpBG4=
+X-Google-Smtp-Source: APBJJlFZcJdV/2tsOuTHdZeivtkzWTWVOio476KT8N8lXbV+wlSd2bdlofgtNZw6MIh0NjgWFabYQA==
+X-Received: by 2002:a19:5f1c:0:b0:4fd:fc3d:cce7 with SMTP id t28-20020a195f1c000000b004fdfc3dcce7mr1288696lfb.44.1690458024822;
+        Thu, 27 Jul 2023 04:40:24 -0700 (PDT)
+Received: from ?IPV6:2a00:e180:1511:5300:e4c6:3a45:7174:efa8? ([2a00:e180:1511:5300:e4c6:3a45:7174:efa8])
+        by smtp.gmail.com with ESMTPSA id v16-20020a1cf710000000b003fc080acf68sm4459448wmh.34.2023.07.27.04.40.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jul 2023 04:40:23 -0700 (PDT)
+Message-ID: <dfe4bae7-13a0-3c5d-d671-f61b375cb0b4@gmail.com>
+Date:   Thu, 27 Jul 2023 13:40:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yang Shi <shy828301@gmail.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [v3] fs/proc/task_mmu: Implement IOCTL for efficient page table
- scanning
+Subject: Re: [Linaro-mm-sig] Re: [RFC PATCH 00/10] Device Memory TCP
 Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230713101415.108875-6-usama.anjum@collabora.com>
- <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com>
- <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
- <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com>
- <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
- <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com>
- <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
- <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com>
- <CABb0KFHJVeEkh4f6WWK6FThCbA+NE8iYUZE68nV1YAxaHwiwog@mail.gmail.com>
- <e1ead2e8-046a-31d9-8df9-27cdd7b7ff83@collabora.com>
- <1afedab8-5929-61e5-b0da-9c70dc01c254@collabora.com>
- <eac29a4d-aa3f-4df5-97e6-4aa3a358f2b1@collabora.com>
- <CABb0KFHuNpG+NJQ4sQdp1n_Kf4sO8aC5DBEppFc1zz=zAeDfQw@mail.gmail.com>
- <f949f74f-bb65-e3f2-e70d-7198446a9981@collabora.com>
- <CABb0KFGQ_HbD+MNwKCcE+6D50XhJxpx0M0dRiC-EVwEXPv+4XA@mail.gmail.com>
- <89c09085-19ab-462b-e3be-b4e492a85899@collabora.com>
- <CABb0KFFnWVy5k+8DhoS6jJzqeDDMkt3u=Rj6KS2HQSz1BY1+bw@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFFnWVy5k+8DhoS6jJzqeDDMkt3u=Rj6KS2HQSz1BY1+bw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Stephen Hemminger <stephen@networkplumber.org>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <12393cd2-4b09-4956-fff0-93ef3929ee37@kernel.org>
+ <CAHS8izNPTwtk+zN7XYt-+ycpT+47LMcRrYXYh=suTXCZQ6-rVQ@mail.gmail.com>
+ <ZLbUpdNYvyvkD27P@ziepe.ca> <20230718111508.6f0b9a83@kernel.org>
+ <35f3ec37-11fe-19c8-9d6f-ae5a789843cb@kernel.org>
+ <20230718112940.2c126677@kernel.org>
+ <eb34f812-a866-a1a3-9f9b-7d5054d17609@kernel.org>
+ <20230718154503.0421b4cd@kernel.org>
+ <CAHS8izPORN=r2-hzYSgN4s_Aoo2dnwoJXrU5Hu=43sb8zsWyhQ@mail.gmail.com>
+ <20230719105711.448f8cad@hermes.local> <ZLhww+P+7zhTTUk7@ziepe.ca>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <ZLhww+P+7zhTTUk7@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/27/23 4:26 PM, Michał Mirosław wrote:
-> On Thu, 27 Jul 2023 at 10:03, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->> On 7/27/23 2:10 AM, Michał Mirosław wrote:
->>> On Wed, 26 Jul 2023 at 10:34, Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:
->>>> On 7/25/23 11:05 PM, Michał Mirosław wrote:
->>>>> On Tue, 25 Jul 2023 at 11:11, Muhammad Usama Anjum
->>>>> <usama.anjum@collabora.com> wrote:
-> [...]
->>>>> 2. For the address tagging part I'd prefer someone who knows how this
->>>>> is used take a look. We're ignoring the tag (but clear it on return in
->>>>> ->start) - so it doesn't matter for the ioctl() itself.
->>>> I've added Kirill if he can give his thoughts about tagged memory.
->>>>
->>>> Right now we are removing the tags from all 3 pointers (start, end, vec)
->>>> before using the pointers on kernel side. But we are overwriting and
->>>> writing the walk ending address in start which user can read/use.
->>>>
->>>> I think we shouldn't over-write the start (and its tag) and instead return
->>>> the ending walk address in new variable, walk_end.
->>>
->>> The overwrite of `start` is making the ioctl restart (continuation)
->>> easier to handle. I prefer the current way, but it's not a strong
->>> opinion.
->> We shouldn't overwrite the start if we aren't gonna put the correct tag. So
->> I've resorted to adding another variable `walk_end` to return the walk
->> ending address.
-> 
-> Yes. We have two options:
-> 
-> 1. add new field and have the userspace check it and update start
-> itself to continue the scan,
-I've selected this option and sent v26 already:
-https://lore.kernel.org/all/20230727093637.1262110-1-usama.anjum@collabora.com
+Am 20.07.23 um 01:24 schrieb Jason Gunthorpe:
+> On Wed, Jul 19, 2023 at 10:57:11AM -0700, Stephen Hemminger wrote:
+>
+>> Naive idea.
+>> Would it be possible for process to use mmap() on the GPU memory and then
+>> do zero copy TCP receive some how? Or is this what is being proposed.
+> It could be possible, but currently there is no API to recover the
+> underlying dmabuf from the VMA backing the mmap.
 
->  or:
-> 2. reconstruct the tag from either orignal `start` or `end` and have
-> the userspace re-set `start` if it wants to restart the scan instead
-> of continuing.
-In some case, compiler can put integrity checking metadata in the pointer's
-upper byte. So copying start or end's meta data would be wrong.
+Sorry for being a bit late, have been on vacation.
 
-> 
-> (the second one, using `end`'s tag, might be the easiest for
-> userspace, as it can check `start` == `end` when deciding to continue
-> or restart).
-> 
-> Best Regards
-> Michał Mirosław
+Well actually this was discussed before to work around problems with 
+Windows applications through wine/proton.
 
--- 
-BR,
-Muhammad Usama Anjum
+Not 100% sure what the outcome of that was, but if I'm not completely 
+mistaken getting the fd behind a VMA should be possible.
+
+It might just not be the DMA-buf fd, because we use mmap() re-routing to 
+be able to work around problems with the reverse tracking of mappings.
+
+Christian.
+
+>
+> Also you can't just take arbitary struct pages from any old VMA and
+> make them "netmem"
+>
+> Jason
+> _______________________________________________
+> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
+> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
+
