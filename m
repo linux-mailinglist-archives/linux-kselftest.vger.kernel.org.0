@@ -2,53 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB584765804
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 17:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C96B765831
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 18:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbjG0PuR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 11:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        id S232051AbjG0QCA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 12:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjG0PuR (ORCPT
+        with ESMTP id S232144AbjG0QB6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 11:50:17 -0400
+        Thu, 27 Jul 2023 12:01:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD214F5
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 08:50:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D47B271E
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 09:01:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6739761EC0
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 15:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4773C433C7;
-        Thu, 27 Jul 2023 15:50:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E026C61E06
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 16:01:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EB9EC433C8;
+        Thu, 27 Jul 2023 16:01:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690473014;
-        bh=QbmwA8ZCbb79SnPyZtI//doQHzR6KgBBUGhYCCxM9vM=;
+        s=k20201202; t=1690473717;
+        bh=PoFAvcNSw2azpXJajYVTP1fkgUhuEl8F9XbcDH+zxDw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eHYDK2oH7qFasegLtgXFJ8mV/adivQKOUAbnCnrlyHEMIIKQqmfWIiTIwZuBWoAfC
-         igGCCzxgsKWSQcRzL2IGYpbuZ0aHWxipVg62MGyUxJlGC8dI+GiZ9VRq5A4I3whmUQ
-         cWe7VwmjPE+f1RJyc6Zkqsf2IyFBiiD8iio3aXqHcc2EaBJmZoZ21R3rnLYDZuv9gY
-         f4Zi79LQJDS5+ZKoAB4EkAmqrY3lE536JS0p9kNsVY3HtdizmWSAn1Ht30BO2sbEn5
-         wvxpPY/9SRn8P1+Tdm2JZa+Jb7JWUfKZRIMhfyShMGuyqcNVSe7d0ur1O0FKi1Twjo
-         ikHuQkk8tUEPg==
-Date:   Thu, 27 Jul 2023 16:50:10 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
+        b=fEp/XVnJo/RyDCP8H9CbCJGyaajnXOnM0yG3ui6WTkoYZqiie+bBZEBebRurCRIS/
+         JyfWq1CETyzZYjMy8FA7jHOJoAeGY7nBwuhv1MPGLgd2sKBE3h6xcQq6ONplUTt7gL
+         b1DpWk4iIRp0R7KA/xYaRRpbSuUIGi81rZYgcUz1TDOkc2jne0WRFSXc0N9zL6dsay
+         t3rWLV95MLASEbXTQG0f2ufRxcWgLelputCmFFBoYOsPWix69PlWbdR6IiKd0O34Ht
+         QrVdU0DOWCDp13A4wthxtYeccrI0TxYbXf2o7L3UZVA0MjimxSR6Y2i5vCZTcKho1z
+         TGntnipPgRMdg==
+Date:   Thu, 27 Jul 2023 17:01:52 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Will Deacon <will@kernel.org>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Shuah Khan <shuah@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH v3] kselftest/arm64: Exit streaming mode after collecting
  signal context
-Message-ID: <20230727155009.GA20050@willie-the-truck>
+Message-ID: <f98c3f05-46f4-415e-a32a-bd22fc756dc4@sirena.org.uk>
 References: <20230720-arm64-signal-memcpy-fix-v3-1-08aed2385d68@kernel.org>
+ <20230727155009.GA20050@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Hnfk6Dmn4XW6aKQA"
 Content-Disposition: inline
-In-Reply-To: <20230720-arm64-signal-memcpy-fix-v3-1-08aed2385d68@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20230727155009.GA20050@willie-the-truck>
+X-Cookie: Go 'way!  You're bothering me!
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,76 +61,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 07:42:09PM +0100, Mark Brown wrote:
-> When we collect a signal context with one of the SME modes enabled we will
-> have enabled that mode behind the compiler and libc's back so they may
-> issue some instructions not valid in streaming mode, causing spurious
-> failures.
-> 
-> For the code prior to issuing the BRK to trigger signal handling we need to
-> stay in streaming mode if we were already there since that's a part of the
-> signal context the caller is trying to collect. Unfortunately this code
-> includes a memset() which is likely to be heavily optimised and is likely
-> to use FP instructions incompatible with streaming mode. We can avoid this
-> happening by open coding the memset(), inserting a volatile assembly
-> statement to avoid the compiler recognising what's being done and doing
-> something in optimisation. This code is not performance critical so the
-> inefficiency should not be an issue.
-> 
-> After collecting the context we can simply exit streaming mode, avoiding
-> these issues. Use a full SMSTOP for safety to prevent any issues appearing
-> with ZA.
-> 
-> Reported-by: Will Deacon <will@kernel.org>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-> Changes in v3:
-> - Open code OPTIMISER_HIDE_VAR() instead of the memory clobber.
-> - Link to v2: https://lore.kernel.org/r/20230712-arm64-signal-memcpy-fix-v2-1-494f7025caf6@kernel.org
-> 
-> Changes in v2:
-> - Rebase onto v6.5-rc1.
-> - Link to v1: https://lore.kernel.org/r/20230628-arm64-signal-memcpy-fix-v1-1-db3e0300829e@kernel.org
-> ---
->  .../selftests/arm64/signal/test_signals_utils.h    | 25 +++++++++++++++++++++-
->  1 file changed, 24 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-> index 222093f51b67..c7f5627171dd 100644
-> --- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
-> +++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-> @@ -60,13 +60,25 @@ static __always_inline bool get_current_context(struct tdescr *td,
->  						size_t dest_sz)
->  {
->  	static volatile bool seen_already;
-> +	int i;
-> +	char *uc = (char *)dest_uc;
->  
->  	assert(td && dest_uc);
->  	/* it's a genuine invocation..reinit */
->  	seen_already = 0;
->  	td->live_uc_valid = 0;
->  	td->live_sz = dest_sz;
-> -	memset(dest_uc, 0x00, td->live_sz);
-> +
-> +	/*
-> +	 * This is a memset() but we don't want the compiler to
-> +	 * optimise it into either instructions or a library call
-> +	 * which might be incompatible with streaming mode.
-> +	 */
-> +	for (i = 0; i < td->live_sz; i++) {
-> +		uc[i] = 0;
-> +		__asm__ ("" : "=r" (uc[i]) : "0" (uc[i]));
-> +	}
 
-Looking more closely at this, I see that the bpf and kvm selftests are
-able to include <linux/compiler.h> directly, so I don't see why we need
-to open-code this here. I also spotted that we've *already* written our
-own version of this as the 'curse()' macro in selftests/arm64/bti/compiler.h!
+--Hnfk6Dmn4XW6aKQA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-So I think we should either use linux/compiler.h or make our curse macro
-usable to all the arm64 selftests.
+On Thu, Jul 27, 2023 at 04:50:10PM +0100, Will Deacon wrote:
 
-What do you think?
+> Looking more closely at this, I see that the bpf and kvm selftests are
+> able to include <linux/compiler.h> directly, so I don't see why we need
 
-Will
+Hrm, it does seem like that's on the specific list of headers we can get
+at.  I'm kind of surprised that it's not got dependencies that upset
+things.
+
+> to open-code this here. I also spotted that we've *already* written our
+> own version of this as the 'curse()' macro in selftests/arm64/bti/compiler.h!
+
+That one wasn't originally a kselftst so it'll just have pulled in
+something from completely outside the kernel build systems.
+
+--Hnfk6Dmn4XW6aKQA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTClO8ACgkQJNaLcl1U
+h9DcdQgAgvTAcPR0palC1xciXVX7eeY18VDgZXeeL48H39R6eswcymLnXq2sHICa
+f8Gyt92sr1+It1sbobjkZBfePtifYOomhNc8yaScKHd4asX9Il60vMwytLIZTHAQ
+O8iE7Vdums0SAd6a4NpI9UCayHJKFBO5XUSz5JlmrELL0SmyPYv/8VDzM6ebXKfN
+m/UvpplTwT/KFJql/Xg6rLz51bg/pAN6QSYUeF4Oap1bngr0/tD0a9a+cqTf9zAK
+8HT16kNL/KaFwDfSmgbfFt9ideOIWROd15Gi4n5O5jkDI87mnQ5S11n+JjN9hX/H
+fzn+imhmC59XVUhibSpMSawooTqZNg==
+=zul5
+-----END PGP SIGNATURE-----
+
+--Hnfk6Dmn4XW6aKQA--
