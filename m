@@ -2,136 +2,290 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13BB765BD3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 21:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2116765C0D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 21:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbjG0TEb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 15:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
+        id S230302AbjG0T0R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 15:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjG0TEa (ORCPT
+        with ESMTP id S229619AbjG0T0Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 15:04:30 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2056.outbound.protection.outlook.com [40.107.92.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9A830FB;
-        Thu, 27 Jul 2023 12:04:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JTMMPb32Ch8dnItP849KRTrv7fOHJCLrLMyTpjrx8H9kS0k89zJyi1dUd7J4IQrb71vwUta2/wMt+1JTuMv9Kbtwb5ZwEdjrDKTBOZ5r/Enls9gaLHlqjmie3cjtxrs5bq4wU6QTyu1gXxlOVnTcp/5PQO+28WGfZ2D4Ba1A6PA9Sj6/h9Rg6DL14XkGhNYMvk55XUae14FK3nyp+E4jExDujj0N23lTPOMN/CwBGZYpfyCjyLp0rj7py4KxT8FRzlGxea8+92PXFjwPVx1bPsPZc0amrrKX9c+SFv3yUtmq0JDfFhxbG7uVFGm6D/zmkbvZliStrUfqtNTl9isdSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uRRXd/e6Yz0GbO3AfaovNHOustiyT79PwQ1bjXoRG04=;
- b=iojsFMUQbBDxl8bnE+VXweFcRA1MXFZBJwgv7yqEY/gkLD3gipyC+Rbn6ZO+ne3TSlqXoug9GfsQAoviy3YtBTOx8iwsMS3Ms9KbUj/882SGn9TDDnfErCZYTxeCE7hvia9FpZcEaElft1jY4Gi6CwHnDPrS5LEi8YgkrYWSbDXvlWtrbKC/moqWQ4uzvpJQkx6y8S7SsElmvo/bPCJukKCev6LEd9Eknk9TN6I4rTwglRhckQeJXcYhPxQ4C9Qgursut/zKHzuru2JTeGt8r2y17RAGPxA9U7q9MeoWkNMC8vpNP5QT5Ai7RCJEttp/gy8LCK4wcIqXm8JYBQjYzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uRRXd/e6Yz0GbO3AfaovNHOustiyT79PwQ1bjXoRG04=;
- b=j9aFEfo14uppPBfZAE3KaXIPvFikV6t8c40pUk+IVunLcSNmNotj5cKu25ffSXgDnQBZs+wvhGYN9f7ib66/AOFxSFpnNU4PA0zNaVHBytEwA6r8O/t/gbak3t3I5DUXqaNVv9QcblHiuafTahzRfmpwPpL4J5wUNYFV7TojmMKsL2As3/Fr59VAWVqMxviyVMsL/4ltvZodg7qR691sF/6oRE2rb2TNNNxwQg70Q8ri4nHT2gMjFSybZ5i7VfhW/+fLoJk4Zr/beUaBSq7OgWbTlpQ7Y/TaUL+rg8w2vqAzpZHvF3YTe0SiRxyewRswtB0UMHF/gpITFb33N98vFg==
-Received: from BN9PR03CA0566.namprd03.prod.outlook.com (2603:10b6:408:138::31)
- by LV3PR12MB9093.namprd12.prod.outlook.com (2603:10b6:408:19d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Thu, 27 Jul
- 2023 19:04:16 +0000
-Received: from BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:138:cafe::7c) by BN9PR03CA0566.outlook.office365.com
- (2603:10b6:408:138::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29 via Frontend
- Transport; Thu, 27 Jul 2023 19:04:15 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BN8NAM11FT005.mail.protection.outlook.com (10.13.176.69) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6631.29 via Frontend Transport; Thu, 27 Jul 2023 19:04:15 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 27 Jul 2023
- 12:04:02 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Thu, 27 Jul 2023 12:04:02 -0700
-Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Thu, 27 Jul 2023 12:04:01 -0700
-Date:   Thu, 27 Jul 2023 12:04:00 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     <kevin.tian@intel.com>, <alex.williamson@redhat.com>,
-        <yi.l.liu@intel.com>, <joro@8bytes.org>, <will@kernel.org>,
-        <robin.murphy@arm.com>, <shuah@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <mjrosato@linux.ibm.com>, <farman@linux.ibm.com>
-Subject: Re: [PATCH v8 2/4] iommufd: Add iommufd_access_replace() API
-Message-ID: <ZMK/oN6EUdQnKd6i@Asurada-Nvidia>
-References: <cover.1690226015.git.nicolinc@nvidia.com>
- <5dfe3e9a9d511919cb105459ca9d96f013daadb4.1690226015.git.nicolinc@nvidia.com>
- <ZMEt+SMFBMKT3AoT@nvidia.com>
- <ZMGHFI4KB4XTG9EH@Asurada-Nvidia>
- <ZMGt/4CCCmUB85HX@nvidia.com>
- <ZMHdfycdAdmqB2VB@Asurada-Nvidia>
- <ZMJc9elDILpHaKP6@nvidia.com>
+        Thu, 27 Jul 2023 15:26:16 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28430268B;
+        Thu, 27 Jul 2023 12:26:14 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 64CB260171;
+        Thu, 27 Jul 2023 21:26:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1690485971; bh=7fw+979HTyI3g1irHu9HUvXN9G+83ViUcHnWOykGLQo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ds7DmjwyRCEn/utPKUwbq8uOWCVvzYsxdhFPhfZCeG7V7oijdsNqGDIxntdSCBjoI
+         mRlymUUKnIR56QpsixQIYBble7Ye3+K/6jYGivvFeEdM9Nc7bSvpzmnXNKBgbjrRvW
+         1sRtInDngtJWDHJ8brAuRvGaxsDh3hZm0UYaB4jmQciDkjBpisgJR8Ne6tbJE7Kxot
+         oUAIkVqq1y8Bw2++ZG2ddjRTd4Y80apfiS6FG72WeBLILcKXHU7Zjd9pJGoC+hrtkF
+         Dynlh+WqLc4bdOjRLGkCteC7nypRGxWWH4ML7tJBHKf3yN2shLvHWnrRtxMJQwAijv
+         WTyEicERvYA1g==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id JQ1USOFRCqN7; Thu, 27 Jul 2023 21:26:08 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id 6AAA96016E;
+        Thu, 27 Jul 2023 21:26:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1690485968; bh=7fw+979HTyI3g1irHu9HUvXN9G+83ViUcHnWOykGLQo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YdkWLbc/ePFiF615XLOoQ43cVK8dZujUylvK+MTbybvavLuJA0m2bq3GcDpPDq1AJ
+         bVdFbK6i4/x8v+mQbDGoS24Ze1pJNPrsT2ypJgak3qEaYsrpxQjYBBQUF7btXEdvwP
+         sa2iEjxnr0cLEj9cZxg8DycbAIe2vSiRNCA06U1EZAmr23SjoxrqFFSgLrPHH3RwGQ
+         KnGOpO7pmJ50LXnvlPHZLdhVu1i00swp+K3RMu0xP3dD6Qvn7eH/bwsjTTj1ViUo9W
+         z0ZxoEF3zSujUciSa5drnAWBBElnCOfkw3gIo+YSo5xTiVoqrly1GFHjBMa/AdjThV
+         8IBxsb/7JtwUw==
+Message-ID: <a9b6d9f5-14ae-a931-ab7b-d31b5e40f5df@alu.unizg.hr>
+Date:   Thu, 27 Jul 2023 21:26:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZMJc9elDILpHaKP6@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT005:EE_|LV3PR12MB9093:EE_
-X-MS-Office365-Filtering-Correlation-Id: 977bf219-0445-4681-382a-08db8ed44572
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OHKQ0b5f2Rnk5AP02TQFPSfXLRh0HDstAzWYQD1TDPx4WdAMYsxFkH1H5OHMJx4Fc5w55lFRgdYOSs0qLgKE4FfIsmsZKcNlhkvnPtf3PApq2Jda8m8xgraIsh9273PKx/Mrzy8k3nCxXdSQoc76aRJrWzvOww3FEUv7Z12Je+Aqck6FvkkbD9H2ZEcfZWzLI55UjoUx8xj5N3tRcF/kFrG9cfV5zyXpabdzWxL6qihsO54ujc4kAriH9X66NmvBBct3n425xth6jTxthSxV3I3RtyGkelsGPgUyWBUS3PKRUiyaUEyKl13mPmAXl/bT6ki1BV+R78e9mZ6TscNru+YmdU0M/ElvTS9Qx0aWSeRfq+TaXSfyOWKp56Qqq0bnZVjKKGjTtMYuqrAThSRo4nafCv3gKo6Z8tJVKywdCv/wHU7yicjmUv4qNfb37S0Y9JVsgTcXAzPuzXfTwhEXwbCNCyQ9cilfaquAW+hHjQd1FpbW0oaOsRU9quCjKPhtbDIwNr07umZA9HqM+MwBS0OROFbfjapruBfd3gY8GUGV7y85KtOWrKtw+BluRpiL4if1PihGG2bPd0ZYmJJFj6kw1wU47+cuFcCQVuRANjp4xEURKlmnvW97Zha2xrtF7qDyMZBfIidfpRCaZ3Am/SIj+y152LKBPn0UpgchiN5AeOuT1Jt64HzEo7/sGZbLt5r7/1gemcI+7iHwAPk1EswrRSg02UI4YOuc9CCSGhko+Mv9JGcWHZEuemy2IQYh
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(346002)(136003)(396003)(82310400008)(451199021)(46966006)(40470700004)(36840700001)(33716001)(4744005)(2906002)(47076005)(426003)(83380400001)(40480700001)(70586007)(186003)(70206006)(336012)(54906003)(9686003)(26005)(478600001)(7636003)(86362001)(356005)(36860700001)(55016003)(40460700003)(6636002)(4326008)(8676002)(8936002)(316002)(6862004)(7416002)(41300700001)(82740400003)(5660300002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2023 19:04:15.0506
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 977bf219-0445-4681-382a-08db8ed44572
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9093
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Subject: Re: [PATCH v1 01/11] selftests: forwarding: custom_multipath_hash.sh:
+ add cleanup for SIGTERM sent by timeout
+Content-Language: en-US
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+References: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
+ <ZLzj5oYrbHGvCMkq@shredder>
+ <0550924e-dce9-f90d-df8a-db810fd2499f@alu.unizg.hr>
+ <adc5e40d-d040-a65e-eb26-edf47dac5b02@alu.unizg.hr>
+ <ZL6OljQubhVtQjcD@shredder>
+ <cab8ea8a-98f4-ef9b-4215-e2a93cccaab1@alu.unizg.hr>
+ <ZMEQGIOQXv6so30x@shredder>
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZMEQGIOQXv6so30x@shredder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 09:03:01AM -0300, Jason Gunthorpe wrote:
-> On Wed, Jul 26, 2023 at 07:59:11PM -0700, Nicolin Chen wrote:
+On 7/26/23 14:22, Ido Schimmel wrote:
+> On Mon, Jul 24, 2023 at 10:46:09PM +0200, Mirsad Todorovac wrote:
+>> On 7/24/23 16:45, Ido Schimmel wrote:
+>>> On Sun, Jul 23, 2023 at 11:37:46PM +0200, Mirsad Todorovac wrote:
+>>>> Some tests however exited with error:
+>>
+>> Hi,
+>>
+>>>> marvin@defiant:~/linux/kernel/linux_torvalds$ grep "not ok" ../kselftest-6.5-rc2-net-forwarding-11.log
+>>>> not ok 3 selftests: net/forwarding: bridge_mdb.sh # exit=1
+>>>> not ok 5 selftests: net/forwarding: bridge_mdb_max.sh # exit=1
+>>>> not ok 11 selftests: net/forwarding: bridge_vlan_mcast.sh # exit=1
+>>>
+>>> I can't reproduce these three.
+>>
+>> I have now enabled 'set -x' and here is the link to the output.
+>>
+>> NOTE as there are side-effects to running the test scripts, I have ran the
 > 
-> > I just realized that either my v8 or your version calls unmap()
-> > first at the entire cur_ioas. So, there seems to be no point in
-> > doing that fallback re-add routine since the cur_ioas isn't the
-> > same, which I don't feel quite right...
+> I don't believe this is correct after "selftests: forwarding: Switch off
+> timeout".
 > 
-> The point is to restore the access back to how it should be on failure
-> so future use of the accesss still does the right thing.
+>> whole suite, just in case:
+>>
+>> https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-forwarding/kselftest-6.5-rc3-net-forwarding-12.log.xz
+>>
+>>> Do you have systemd-networkd running?
+>>
+>> No:
 > 
-> We already have built into this a certain non-atomicity for mdevs,
-> they can see a pin failure during replace if they race an access
-> during this unmap window. This is similar to the real HW iommu's
-> without atomic replace.
+> [...]
+> 
+>>>> not ok 15 selftests: net/forwarding: ethtool_extended_state.sh # exit=1
+>>>> not ok 17 selftests: net/forwarding: ethtool.sh # exit=1
+>>>> not ok 25 selftests: net/forwarding: hw_stats_l3_gre.sh # exit=1
+>>>
+>>> Fixed these three.
+>>>
+>>>> not ok 26 selftests: net/forwarding: ip6_forward_instats_vrf.sh # exit=1
+>>>
+>>> Fixed.
+>>
+>> Great job, that's almost 50% of them!
+>>
+>>>> not ok 80 selftests: net/forwarding: tc_actions.sh # exit=1
+>>>> not ok 83 selftests: net/forwarding: tc_flower.sh # exit=1
+>>>> not ok 84 selftests: net/forwarding: tc_flower_l2_miss.sh # exit=1
+>>>> not ok 89 selftests: net/forwarding: tc_tunnel_key.sh # exit=1
+>>>
+>>> Can't reproduce these.
+>>
+>> Hope the above will help.
+> 
+> Pushed fixes for tc_actions.sh, tc_flower.sh and tc_tunnel_key.sh to the
+> same branch. Please test them.
+> 
+> Regarding the MDB tests and tc_flower_l2_miss.sh, I suspect you might
+> have some daemon in user space that sends IGMP queries and therefore
+> messes with the tests. Please run the following commands in a separate
+> terminal before running tc_flower_l2_miss.sh:
+> 
+> # perf probe --add 'br_ip4_multicast_query'
+> # perf record -a -g -e 'probe:br_ip4_multicast_query'
+> 
+> After the test finishes, terminate the second command and run:
+> 
+> # perf report --stdio
+> 
+> It should show us if queries were received and which process sent them.
+> 
+>>
+>>> Pushed the fixes on top of the fixes from yesterday:
+>>>
+>>> https://github.com/idosch/linux/commits/submit/sefltests_fix_v1
+>>
+>> I have applied them.
+>>
+>> BTW, after running the full net/forwarding test suite, "ip link show"
+>> looks like this:
+>>
+>> marvin@defiant:~/linux/kernel/linux_torvalds$ ip link show
+>> 256: veth7@veth6: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether 16:74:e0:e6:f0:92 brd ff:ff:ff:ff:ff:ff
+>> 257: veth6@veth7: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether 22:f3:40:50:fb:73 brd ff:ff:ff:ff:ff:ff
+>> 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+>>      link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+>> 2: enp16s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+>>      link/ether 9c:6b:00:01:fb:80 brd ff:ff:ff:ff:ff:ff
+>> 3: veth1@veth0: <BROADCAST,MULTICAST,M-DOWN> mtu 10000 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether b6:46:e6:4c:e4:00 brd ff:ff:ff:ff:ff:ff
+>> 4: veth0@veth1: <BROADCAST,MULTICAST,M-DOWN> mtu 2000 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether 2e:ff:7f:8a:6b:d4 brd ff:ff:ff:ff:ff:ff
+>> 5: veth3@veth2: <BROADCAST,MULTICAST,M-DOWN> mtu 10000 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether ba:33:37:81:dc:5b brd ff:ff:ff:ff:ff:ff
+>> 6: veth2@veth3: <BROADCAST,MULTICAST,M-DOWN> mtu 2000 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether f2:fd:0a:9b:94:17 brd ff:ff:ff:ff:ff:ff
+>> 278: veth9@veth8: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether 0a:f1:22:04:0f:55 brd ff:ff:ff:ff:ff:ff
+>> 279: veth8@veth9: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether 92:be:71:00:59:0f brd ff:ff:ff:ff:ff:ff
+>> 282: gre0@NONE: <NOARP> mtu 1476 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+>>      link/gre 0.0.0.0 brd 0.0.0.0
+>> 283: gretap0@NONE: <BROADCAST,MULTICAST> mtu 1462 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+>> 284: erspan0@NONE: <BROADCAST,MULTICAST> mtu 1450 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+>> 366: ip6tnl0@NONE: <NOARP> mtu 1452 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+>>      link/tunnel6 :: brd :: permaddr ce1e:75f3:f565::
+>> 367: ip6gre0@NONE: <NOARP> mtu 1448 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+>>      link/gre6 :: brd :: permaddr 1e91:da47:154d::
+>> 237: veth5@veth4: <BROADCAST,MULTICAST,M-DOWN> mtu 2000 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether 6a:e3:dc:ad:8c:a0 brd ff:ff:ff:ff:ff:ff
+>> 238: veth4@veth5: <BROADCAST,MULTICAST,M-DOWN> mtu 10000 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+>>      link/ether ce:a7:61:90:c8:2d brd ff:ff:ff:ff:ff:ff
+>> marvin@defiant:~/linux/kernel/linux_torvalds$
+>>
+>> This is kinda awkward, because I have to reboot the machine for the next run, each time.
+> 
+> Why? The fact that the veth pairs are already present doesn't impact the
+> selftests.
+> 
+>>
+>> I am in no condition to try to figure out which tests leaked links.
+> 
+> The veth pairs were created by the first invocation of the selftests and
+> are not deleted at the end. We already discussed it. But the fact that
+> they are already present does not mean you can't re-run the tests.
+> 
+> Regarding gre0, gretap0, erspan0, ip6tnl0 and ip6gre0, they are
+> automatically created by the kernel when the relevant kernel modules are
+> loaded. They are not used by the selftests.
 
-I was concerned about, after the replace, mdev losing all the
-mappings due to the unmap() call, which means the fallback is
-not really a status quo. Do you mean that they could pin those
-lost mappings back?
+If you're in dilemma, my experiment had shown that it is sufficient to delete one
+side of the veth link, for another side automagically vanishes.
+
+BTW, the patches successfully applied, safe for the following:
+
+error: patch failed: tools/testing/selftests/net/forwarding/hw_stats_l3_gre.sh:99
+error: tools/testing/selftests/net/forwarding/hw_stats_l3_gre.sh: patch does not apply
+
+error: patch failed: tools/testing/selftests/net/forwarding/ethtool_extended_state.sh:108
+error: tools/testing/selftests/net/forwarding/ethtool_extended_state.sh: patch does not apply
+
+error: patch failed: tools/testing/selftests/net/forwarding/ethtool_mm.sh:278
+error: tools/testing/selftests/net/forwarding/ethtool_mm.sh: patch does not apply
+
+(Manual inspection revealed that all of those are adding of skip_on_veth which was already
+present in the script, but I recall you added skip_on_veth recently, so I guess this is something
+in our patch communication.)
+
+The test results are very good:
+
+marvin@defiant:~/linux/kernel/linux_torvalds$ grep "not ok" ../kselftest-6.5-rc3-net-forwarding-16.log
+not ok 3 selftests: net/forwarding: bridge_mdb.sh # exit=1
+not ok 5 selftests: net/forwarding: bridge_mdb_max.sh # exit=1
+not ok 11 selftests: net/forwarding: bridge_vlan_mcast.sh # exit=1
+not ok 26 selftests: net/forwarding: ip6_forward_instats_vrf.sh # exit=1
+not ok 49 selftests: net/forwarding: mirror_gre_changes.sh # exit=1
+not ok 84 selftests: net/forwarding: tc_flower_l2_miss.sh # exit=1
+marvin@defiant:~/linux/kernel/linux_torvalds$ grep -v "^# +" ../kselftest-6.5-rc3-net-forwarding-16.log | grep -A1 FAIL | grep -v -e -- | grep -v OK
+# TEST: IPv6 (S, G) port group entries configuration tests            [FAIL]
+# 	"temp" entry has an unpending group timer
+# TEST: IPv4 host entries forwarding tests                            [FAIL]
+# 	Packet not locally received after adding a host entry
+# TEST: IPv4 port group "exclude" entries forwarding tests            [FAIL]
+# 	Packet from valid source not received on H2 after adding entry
+# TEST: IPv4 port group "include" entries forwarding tests            [FAIL]
+# 	Packet from valid source not received on H2 after adding entry
+# TEST: IGMPv3 MODE_IS_INCLUDE tests                                  [FAIL]
+# 	Source not add to source list
+# TEST: ctl4: port: ngroups reporting                                 [FAIL]
+# 	Couldn't add MDB entries
+# TEST: ctl4: port maxgroups: reporting and treatment of 0            [FAIL]
+# 	Adding 5 MDB entries failed but should have passed
+# TEST: ctl4: port maxgroups: configure below ngroups                 [FAIL]
+# 	dev veth1: Couldn't add MDB entries
+# TEST: ctl4: port: ngroups reporting                                 [FAIL]
+# 	Couldn't add MDB entries
+# TEST: ctl4: port maxgroups: reporting and treatment of 0            [FAIL]
+# 	Adding 5 MDB entries failed but should have passed
+# TEST: ctl4: port maxgroups: configure below ngroups                 [FAIL]
+# 	dev veth1 vid 10: Couldn't add MDB entries
+# TEST: ctl4: port_vlan: ngroups reporting                            [FAIL]
+# 	Couldn't add MDB entries
+# TEST: ctl4: port_vlan: isolation of port and per-VLAN ngroups       [FAIL]
+# 	Couldn't add MDB entries to VLAN 10
+# TEST: ctl4: port_vlan maxgroups: reporting and treatment of 0       [FAIL]
+# 	Adding 5 MDB entries failed but should have passed
+# TEST: ctl4: port_vlan maxgroups: configure below ngroups            [FAIL]
+# 	dev veth1 vid 10: Couldn't add MDB entries
+# TEST: ctl4: port_vlan maxgroups: isolation of port and per-VLAN ngroups   [FAIL]
+# 	Couldn't add 5 entries
+# TEST: Vlan mcast_startup_query_interval global option default value   [FAIL]
+# 	Wrong default mcast_startup_query_interval global vlan option value
+# TEST: Ip6InHdrErrors                                                [FAIL]
+# TEST: mirror to gretap: TTL change (skip_hw)                        [FAIL]
+# 	Expected to capture 10 packets, got 14.
+# TEST: L2 miss - Multicast (IPv4)                                    [FAIL]
+# 	Unregistered multicast filter was not hit before adding MDB entry
+marvin@defiant:~/linux/kernel/linux_torvalds$
+
+In case you want to pursue these failures, there is the complete test output log
+here:
+
+https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-forwarding/kselftest-6.5-rc3-net-forwarding-16.log.xz
+
+Thanks again, great work!
+
+Kind regards,
+Mirsad
