@@ -2,170 +2,212 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F56C764A22
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 10:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B9E764D5C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 10:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbjG0IHM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 04:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
+        id S234324AbjG0Ibw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 04:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbjG0IG6 (ORCPT
+        with ESMTP id S234783AbjG0I26 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 04:06:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB3BC3;
-        Thu, 27 Jul 2023 01:03:24 -0700 (PDT)
-Received: from [192.168.100.7] (unknown [59.103.218.24])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 93E0E6607123;
-        Thu, 27 Jul 2023 09:03:16 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1690445003;
-        bh=dW1Iw2fW6OgCt1ybA/3F16Se6r7KV+IdGvqNyOupjdI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=DJzXf0kz3lRWuRFEQS8dTSgtxQvhEzEEPapXsYHDsEWxjW2Ym4qqvPYJsJ+smye+W
-         pZQaaMjEHn4QXqIl7dZ/0v720T7XU889U57N8aNmLfhEn5z97KaUd+aSLPJ3+XkR9R
-         UNc86yz7zNuqLYpSCIUsMueQJDLZhJ084zBoqP+jZwjeGclHm9U2uNGeE8mIfib7F2
-         h5n4lxgHhpbU2lNOR+CKGNEdnjPQybGqCyH+lbfwkicViEWibFWLxJ+rOY8AbV2G3p
-         aJQAPpSnoylfpx0raqcbFnwBFmvr+C7kNGkpR1sCZYVxULwWnYrYPVG6n9A6UcSJ1Q
-         WKC+00iUYfIzw==
-Message-ID: <89c09085-19ab-462b-e3be-b4e492a85899@collabora.com>
-Date:   Thu, 27 Jul 2023 13:03:11 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yang Shi <shy828301@gmail.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [v3] fs/proc/task_mmu: Implement IOCTL for efficient page table
- scanning
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230713101415.108875-6-usama.anjum@collabora.com>
- <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
- <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com>
- <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
- <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com>
- <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
- <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com>
- <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
- <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com>
- <CABb0KFHJVeEkh4f6WWK6FThCbA+NE8iYUZE68nV1YAxaHwiwog@mail.gmail.com>
- <e1ead2e8-046a-31d9-8df9-27cdd7b7ff83@collabora.com>
- <1afedab8-5929-61e5-b0da-9c70dc01c254@collabora.com>
- <eac29a4d-aa3f-4df5-97e6-4aa3a358f2b1@collabora.com>
- <CABb0KFHuNpG+NJQ4sQdp1n_Kf4sO8aC5DBEppFc1zz=zAeDfQw@mail.gmail.com>
- <f949f74f-bb65-e3f2-e70d-7198446a9981@collabora.com>
- <CABb0KFGQ_HbD+MNwKCcE+6D50XhJxpx0M0dRiC-EVwEXPv+4XA@mail.gmail.com>
+        Thu, 27 Jul 2023 04:28:58 -0400
+Received: from mgamail.intel.com (unknown [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8334155BC;
+        Thu, 27 Jul 2023 01:15:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690445739; x=1721981739;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=G+9SFEuBqhb03RWWy8hROl8bTq2U2RH8kY6YtRxt364=;
+  b=YaRsCEOin2EJInLmdRZEEybe/ZMEaTNOrGkBOG/71sM7V8FiQJH/IaTB
+   9T81Cxwr90NMDtIFP1WztTShC3V8qrRM1///S3HYnr9TkyQJdJgpYhdG0
+   sSto/yoE9Uf5EILlxMveQEDqlcscpMbL/aA1bctOCMAg5ZeGtkvsUASN0
+   OHHjjL3Bg1a4QU9acv43T3gcJsK1miaKswzLjleP+NjD1nt+Ey/O5MV7v
+   TFvyg7EbCPrqzsfderyXag0tw0dk8vUmkqI6kTjDePNSxtaMvJNFwZaxr
+   B47x2rSKduv/KIDAAgxCCNOBt3nm1X703fncOMvVBy0vr5D3SVt0nnGEt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="370917228"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="370917228"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 01:14:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="817015933"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="817015933"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Jul 2023 01:14:47 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 27 Jul 2023 01:14:47 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Thu, 27 Jul 2023 01:14:47 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Thu, 27 Jul 2023 01:14:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ehZHHrnCfct9JcuiOCsUbr0F9sykjX65aV4WYK1UZH33zD7w/MeC1v4IokWeQZR8y8ukO+ZP6qj9qw29vWlrDL19AEoBO+7pCavrToM3Ddw2XWigkzCPka3jJYuHV/tpzyblG89zEATpeqgEv06+HoWA+/ph4UaxYn/RHxEJhFIdnvKTebhxhM3EZ0IZHDiJiKtE1LjHfGByylrEsq5Z3wxC8eHTUDJdEn35X5JfLL+na4nKNRchrPpZGwQ/zTtQ+Voojw0pzCB5PZt8uS1ZzF1ITK3U+ZQj9ZpCMQs78Et+4pFMNzjMQZdMU9QgZ5ra3Qbg5oaBBGi5JkZLzkNDEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=44bFIsY8Ugwz/Vsvwz+W9XLAeFP55+CpjGwmQoz7CE4=;
+ b=cAGrE73lz54mQB5A6+R85nh53HkW7VsIhON8GsL6h8JbkCdOdg4iXl2T+6U8Zfskt9Rn15cDZnhlbrh+0cMtMLwDIU3A8nH8UdhLk+EiAmjjCnZeOdJig1bxOq73iNjVg/xZhx2+2B7mrPS8vf1Bs2oByHGKJMtcxMfLKOuvlCbwwGr5aQQrm6ZQyxU+Ig2LUK5QchWzEtsHD5JzodZfBrBXMSqFFAhUXlf2GsYmYIgbxYrECXq+/IUK60XBHhSekPTvkzmi7G+sX/5q6uJJGujgVc2pOD0Ad0bma77yPsjn/Bdr0SjDXR/Fm1+x7WqIjwgqYjxgCKb5w0sRVct5+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by CO1PR11MB5043.namprd11.prod.outlook.com (2603:10b6:303:96::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Thu, 27 Jul
+ 2023 08:14:45 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::8b87:d7d:f095:e3f9]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::8b87:d7d:f095:e3f9%6]) with mapi id 15.20.6631.026; Thu, 27 Jul 2023
+ 08:14:45 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: RE: [PATCH v4 4/4] iommufd/selftest: Add coverage for
+ IOMMU_GET_HW_INFO ioctl
+Thread-Topic: [PATCH v4 4/4] iommufd/selftest: Add coverage for
+ IOMMU_GET_HW_INFO ioctl
+Thread-Index: AQHZvh39pjev3HWHHkqCl2UrU23cMq/NSB6Q
+Date:   Thu, 27 Jul 2023 08:14:45 +0000
+Message-ID: <BN9PR11MB5276E70BEC76AB3D96CCF5028C01A@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230724105936.107042-1-yi.l.liu@intel.com>
+ <20230724105936.107042-5-yi.l.liu@intel.com>
+In-Reply-To: <20230724105936.107042-5-yi.l.liu@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFGQ_HbD+MNwKCcE+6D50XhJxpx0M0dRiC-EVwEXPv+4XA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CO1PR11MB5043:EE_
+x-ms-office365-filtering-correlation-id: b487ba43-9c4e-43f8-6361-08db8e798997
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3W39/E022eJxVLg1bUAG3qaI+yi++9OlrfvbiqzFRESllD88nh8HklF8b+YNMSH/BDfjsrds85ypwhR1pJl26JXc2ZBXymOXGBe0vbPEK8ylR1mtG/unrdRQ9OghWAds9PzHt48q9DGYVW2OeDeozsdYqaRYm4wuUp4uZWsAaNAk0n3TGUPsEpbyM3A1DTrRzdIRXTbtMlT+iYgqlbZwGPGTIqpW10jZRMc3SN087xoA1/Q82zFrfxi97fT505EbzP0zQjm+D2qnAQN5VAD/ggicwCaU7rRrlojDGlDXRJcFgea/iY04dccZbeL+kSi6MsH/iq94OSWEJHHv0j82X25873zk6InA/6+vUvDjHh3G7Bc7UjVq6Zv1KgecXWolo4vadQkBp+8BOZMvmZLDgY3yFgthQIWn9NK4YR2J6K/xzxUbvG8dN2QB35dIyC9pXFDgQDRujPFo61hpKKMVs2rWRBxPSh6KqxW2dnc40TxwzHU8P2q/ZVQlTo4tWb/upeigo7kobZgJaqCi8V2Eehc+MR8Q7kyYgkDKTNOZdBRoYFFbRYotmjczvW4kbheqZRSzv48d8yt26z+a/6513eqtKzAqL1MviEMLH7h9i/RSfnPVTEoEALMlwO2LXqHa
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(346002)(396003)(136003)(376002)(366004)(451199021)(478600001)(9686003)(54906003)(7696005)(110136005)(66476007)(71200400001)(186003)(26005)(6506007)(2906002)(66446008)(66556008)(4326008)(316002)(76116006)(8936002)(5660300002)(7416002)(8676002)(52536014)(41300700001)(64756008)(82960400001)(66946007)(122000001)(38100700002)(33656002)(55016003)(86362001)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YFPUghqFxzNJCB/S34aLO4DNXfxHBRjlCGR3prsp2jjZijODoK41FvsjztCr?=
+ =?us-ascii?Q?zLEd2fjLZ2EP3Rmup3rbgNdiWRzKDMBQvnFK3UMPicOTmwJEe7ufF8aHUL2D?=
+ =?us-ascii?Q?V0dRhNXB7IuJAYwefMUtwzx88leEuB5Qz/iftr7Kjs6+PM5E5cK5rlMr7apA?=
+ =?us-ascii?Q?bupSuvnIJK66Drh8Z+wX+ABwkj2TjH2A3hbZiCAPpaz+BKB0j88OseoyTixS?=
+ =?us-ascii?Q?yxRCuEbGkmviTVAzZaxKOW/A7vFczf3RLOdPQmYYWn4lKOBsZb9Jxm2BSbmk?=
+ =?us-ascii?Q?St+Czl2EqhrxpbGrhrExXFFa0G430N+Ch3xHG8wSfueybBkROVkBkFRPHE5H?=
+ =?us-ascii?Q?EiTSxJ//dsf4zQetv3G6BMUp+EzUNSuiVnZRHzOhcjhCGSXeNw+gdXT7XZ7Y?=
+ =?us-ascii?Q?S5HrCWreaPma2+xzN/T8EtKdYTPAUg2BQjQVNp8w2x9yf+WFOVX0NQtU17L0?=
+ =?us-ascii?Q?voikSaMLkWFsFHma0OtPglfQSEumMnE/aPwrq8t9VD63NDyIEQc/g3a6mXV1?=
+ =?us-ascii?Q?WKUQR6f/b2R+DR1K0jxUtlw5hDsRytIRjVwapkltVsta1obe49BxClzctVQS?=
+ =?us-ascii?Q?o8uD0dGRsT7sSXx+eVB6HLtSWXFmAxhZsTRZ6aRlhlt8Qb2jJbaSGYLk/9D8?=
+ =?us-ascii?Q?2Ikkx+061C57O8YX3VxgiuQGoYvK9t1MSuOXDAnQvvMLAcsygWILc1llTDbm?=
+ =?us-ascii?Q?HbGfojyGnSKgsl+TEuN6dOxeojutT2MqslJ5EfaEqPSkM6NpiptEMYTT0eUR?=
+ =?us-ascii?Q?yeCXVHv3+KtAxPFCHCRTXGI+k+O8QCTcGmx/FAJrmt5/2uLvD3JSz5ev0pSv?=
+ =?us-ascii?Q?X8WS/XEzlZK1xthh9mPS0bVMcshAIVnFJldifRcLyrHDRizE95TykmNccmTg?=
+ =?us-ascii?Q?hvgap7Ufp7tD3B6CdeiqlFXzBHfd67T+4pmlM0ld4ck9mIdHLVSP1HKbXP+r?=
+ =?us-ascii?Q?gw5QhgJTPc30OakUnDpev4U1xaPLo7gZUpkWXV8AqyTGP/MKGcrz3VTTBb9R?=
+ =?us-ascii?Q?dg8C4DogibhtSoeGeUbN+FEGJ3arLZdu66Rqaazp9CsC7oHvUasz9qFNQMB2?=
+ =?us-ascii?Q?pLH9peSqLLZUPFJvLZpMU+Y9QChcK1dODORJ/uHCSMVXARIhSWkiRGuLxYta?=
+ =?us-ascii?Q?TiCH8++URxEYpYt7D90vBXAXFohTik6SNjrWno+xvNGVHoBK6ev1/hUtCr8Y?=
+ =?us-ascii?Q?CkiNwmW8ZDbTk6FwYd0YMgM5W5wUPdyMy8NpoMW/57WWVx5uV2Z0B9nJ5dPP?=
+ =?us-ascii?Q?318iM6UIkJq2eFWNtAwrazuaZetVEcwUE4CL+T0m6dFgOwI4096pnIz5WYiA?=
+ =?us-ascii?Q?ltLVx0sVBNLbm9TOclU8DFB3sd7K4Bpfx/4M2NJFxhRVyfXA0igbQbz34n8x?=
+ =?us-ascii?Q?ryPBIi2K903Jh/x4VoiEQzHh9HKNe/LYQR1VE41oQQLt9ALhsVmNg7Ml2I6A?=
+ =?us-ascii?Q?3PszojJBP4D06XB/EDaDpJFfs6MXvC5qeyYVm/QLoNG3yCtjWWrHjoYKaf8j?=
+ =?us-ascii?Q?1LRfDDNPTUy4ZpT5hYDiW9UdHFaosBjVFUqCgBw+GHNPjjpXpKkZ1ONSjAUr?=
+ =?us-ascii?Q?hBVMzn7lBHLAbZQ8lBTD8z/mk7oPPp/sO5+g3ADY?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b487ba43-9c4e-43f8-6361-08db8e798997
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jul 2023 08:14:45.3606
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: r4DdM8DQ37ar4VlSeDVJ78fZ0lowWGPtsoWDWjR2RjctTPgnVHEGnVDdwn2p3Bmhuhy6YBX8Zb0SARQpHGXDsQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5043
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/27/23 2:10 AM, Michał Mirosław wrote:
-> On Wed, 26 Jul 2023 at 10:34, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->> On 7/25/23 11:05 PM, Michał Mirosław wrote:
->>> On Tue, 25 Jul 2023 at 11:11, Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:
->>>>
->>>> ----
->>>> Michal please post your thoughts before I post this as v26.
->>>> ----
->>> [...]
->>>
->>> Looks ok - minor things below.
->>>
->>> 1. I'd change the _WPASYNC things to something better, if this can
->>> also work with "normal" UFFD WP.
->> Yeah, but we don't have any use case where UFFD WP is required. It can be
->> easily added later when user case arrives. Also UFFD WP sends messages to
->> userspace. User can easily do the bookkeeping in userspace as performance
->> isn't a concern there.
-> 
-> We shouldn't name the flags based on the use case but based on what
-> they actually do. So if this checks UFFD registration for WP, then
-> maybe PAGE_IS_WPALLOWED or something better describing the trait it
-> matches?
-PAGE_IS_WPALLOWED seems appropriate.
+> From: Liu, Yi L <yi.l.liu@intel.com>
+> Sent: Monday, July 24, 2023 7:00 PM
+>=20
+> --- a/drivers/iommu/iommufd/device.c
+> +++ b/drivers/iommu/iommufd/device.c
+> @@ -8,6 +8,7 @@
+>=20
+>  #include "io_pagetable.h"
+>  #include "iommufd_private.h"
+> +#include "iommufd_test.h"
 
-> 
->>> 2. For the address tagging part I'd prefer someone who knows how this
->>> is used take a look. We're ignoring the tag (but clear it on return in
->>> ->start) - so it doesn't matter for the ioctl() itself.
->> I've added Kirill if he can give his thoughts about tagged memory.
->>
->> Right now we are removing the tags from all 3 pointers (start, end, vec)
->> before using the pointers on kernel side. But we are overwriting and
->> writing the walk ending address in start which user can read/use.
->>
->> I think we shouldn't over-write the start (and its tag) and instead return
->> the ending walk address in new variable, walk_end.
-> 
-> The overwrite of `start` is making the ioctl restart (continuation)
-> easier to handle. I prefer the current way, but it's not a strong
-> opinion.
-We shouldn't overwrite the start if we aren't gonna put the correct tag. So
-I've resorted to adding another variable `walk_end` to return the walk
-ending address.
+Is it stale?
 
-> 
->>> 3. BTW, One of the uses is the GetWriteWatch and I wonder how it
->>> behaves on HugeTLB (MEM_LARGE_PAGES allocation)? Shouldn't it return a
->>> list of huge pages and write *lpdwGranularity = HPAGE_SIZE?
->> Wine/Proton doesn't used hugetlb by default. Hugetlb isn't enabled by
->> default on Debian as well. For GetWriteWatch() we don't care about the
->> hugetlb at all. We have added hugetlb's implementation to complete the
->> feature and leave out something.
-> 
-> How is GetWriteWatch() working when passed a VirtualAlloc(...,
-> MEM_LARGE_PAGES|MEM_WRITE_WATCH...)-allocated range? Does it still
-> report 4K pages?
-> This is only a problem when using max_pages: a hugetlb range might
-> need counting and reporting huge pages and not 4K parts.
-> 
-> Best Regards
-> Michał Mirosław
+> @@ -211,7 +213,7 @@ FIXTURE_SETUP(iommufd_ioas)
+>=20
+>  	for (i =3D 0; i !=3D variant->mock_domains; i++) {
+>  		test_cmd_mock_domain(self->ioas_id, &self->stdev_id,
+> -				     &self->hwpt_id, NULL);
+> +				     &self->hwpt_id, &self->device_id);
+>  		self->base_iova =3D MOCK_APERTURE_START;
+>  	}
+>  }
+> @@ -290,6 +292,19 @@ TEST_F(iommufd_ioas, ioas_area_auto_destroy)
+>  	}
+>  }
+>=20
+> +TEST_F(iommufd_ioas, get_hw_info)
+> +{
+> +	struct iommu_test_hw_info info;
+> +
+> +	if (self->device_id) {
+> +		test_cmd_get_hw_info(self->device_id, sizeof(info), &info);
+> +		assert(info.test_reg =3D=3D
+> IOMMU_HW_INFO_SELFTEST_REGVAL);
+> +	} else {
+> +		test_err_get_hw_info(ENOENT, self->device_id,
+> +				     sizeof(info), &info);
+> +	}
 
-I'll send v26 in next hour.
-
--- 
-BR,
-Muhammad Usama Anjum
+If self->device_id is invalid it should be reported right after
+test_cmd_mock_domain()?
