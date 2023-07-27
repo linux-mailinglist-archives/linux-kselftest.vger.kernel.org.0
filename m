@@ -2,161 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C91765E34
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 23:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2B0765E4C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 23:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbjG0V3u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 17:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S231840AbjG0Vg5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 17:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbjG0V3s (ORCPT
+        with ESMTP id S229931AbjG0Vg4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 17:29:48 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD973588
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 14:29:20 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-666e97fcc60so1131459b3a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 14:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1690493360; x=1691098160;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ypAMONzQ9lM309vcGdh+Fb16cWv7RYOttEkuLSf+C9Q=;
-        b=Bwo2x8zf58r3/17nU/dEA+lgi98417VBN10q9GpXZ2yX5bWgvClfFlRZrYgWh6vxOe
-         r0mqw4aODhaJ2EjfLMEWChHMJo67QiYL7UuI76V0B5V0sBJqx633/8IdKvZ62MQ2+DUl
-         J6GIo9C/bwVjsIs63nkDd9w15op+eE3bPam4/TK3NShywE+8Xx/75LaHkeodFIhEIwPp
-         is5HGGIxHwP3BUX1Gg8ys2pqCCyqagzNp8TAZ2n3ah5xe/s8AuEUZyERBtbzxBBvh8e7
-         XW1EoV/f/B6VtHMfKKSgdzL/ZzdtxWPLIZShgMFFsPR1z034QbJg23p3Jo+apDeFjXi3
-         3MAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690493360; x=1691098160;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ypAMONzQ9lM309vcGdh+Fb16cWv7RYOttEkuLSf+C9Q=;
-        b=LaGnCQzFGcJAT8H2+6nQZLYCWLnl5AEcLtdPb+IvXgo5kTSaeNfS+qBUuHmB89nL+r
-         P+W45IHT7Ad5oKx4LwilCKezPi8zenZHofhuBUfOURS8b713eju0lh5GGDUnhUQV6o2P
-         lpRmRlntIjkjn2jDCsmJXAOwcLZ+QLcJC2oAQbf3d/y+NBnZxpgHrOVpHNyJGhyGPz4I
-         yj4mKj/5RzD3GlM09iPgmIyn45fS8QWFX0fLSrUsVxVt6om1Z99CIDGgI0xTMIbBKyY+
-         z13WpmJoyvpPUIW0Gw8Rm0oPyQwGXuld2+9s8bca2aqrYJokaVHf+nBc/ssDuoD/j34w
-         JxRw==
-X-Gm-Message-State: ABy/qLbYT3NrfwpgLTUcPyG54d91KM72CRXQQMi3yNrTegZtNJeB9JhY
-        sFtNUy0z1Iyfe117c3ZkiD12O5bHt0RQKpJH898=
-X-Google-Smtp-Source: APBJJlGB3S/nfKRJRrxAvCsM8dZOvIKZplWkk6B2QF6oZQ+44PkE/bkn/usw/Q968tVlGDZwNJliog==
-X-Received: by 2002:a05:6a20:7351:b0:133:656e:fe1e with SMTP id v17-20020a056a20735100b00133656efe1emr268970pzc.47.1690493360245;
-        Thu, 27 Jul 2023 14:29:20 -0700 (PDT)
-Received: from ghost ([2601:c0:ca7f:e7c0:e300:c3dd:e089:386])
-        by smtp.gmail.com with ESMTPSA id b14-20020aa7870e000000b00686c77a2905sm1906083pfo.20.2023.07.27.14.29.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jul 2023 14:29:20 -0700 (PDT)
-Date:   Thu, 27 Jul 2023 17:29:16 -0400
-From:   Charlie Jenkins <charlie@rivosinc.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        paul.walmsley@sifive.com, palmer@rivosinc.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org,
-        alexghiti@rivosinc.com
-Subject: Re: [PATCH v7 1/4] RISC-V: mm: Restrict address space for
- sv39,sv48,sv57
-Message-ID: <ZMLhrFfoerPIxRL7@ghost>
-References: <20230726164620.717288-1-charlie@rivosinc.com>
- <20230726164620.717288-2-charlie@rivosinc.com>
- <20230727-unruffled-joyride-410fc348ce7b@spud>
+        Thu, 27 Jul 2023 17:36:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3F1C3;
+        Thu, 27 Jul 2023 14:36:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D984A61EB8;
+        Thu, 27 Jul 2023 21:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D72AC433C8;
+        Thu, 27 Jul 2023 21:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690493811;
+        bh=duAwVmFYmsUINs8hFVbW/zohvuZX6TUh3Gnxn1i9JaI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VnkrMICyDKHI52bpNsVeWb1AIXCLlOc90Zm+WJzG7JhU/D/eh32guTyhJs9VbOXeY
+         VLunSyQzAZmzTpbjTD0/0bwVy6AP11F0L45gerinT+7xNzw+bUWgc1NJDEOd0uEw7k
+         0oizeR8ID0C2ayjOTINy9zIDUAhG5c3tNnJg2rSvPeFBObmg5Lisx+nvXBwG4+Xl67
+         qM9qBKsNHyW1L5vzqBQ1hNJg2A3IUp0YOwTv0VvVK+IsuC1joDQwV/a5XSzbXqGwPQ
+         WEEaOEhQLooEPvMJ6QS2mIGeMoxc3tmMofUdWTZQq7jpKKXznadVu7vzJ5i57P+phO
+         A0wy5jcHn6vKQ==
+Date:   Thu, 27 Jul 2023 14:36:48 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v3 1/2] asm-generic: Unify uapi bitsperlong.h for arm64,
+ riscv and loongarch
+Message-ID: <20230727213648.GA354736@dev-arch.thelio-3990X>
+References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
+ <1687443219-11946-2-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230727-unruffled-joyride-410fc348ce7b@spud>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1687443219-11946-2-git-send-email-yangtiezhu@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 01:33:41PM +0100, Conor Dooley wrote:
-> Hey Charlie,
-> 
-> On Wed, Jul 26, 2023 at 09:45:55AM -0700, Charlie Jenkins wrote:
-> > Make sv48 the default address space for mmap as some applications
-> > currently depend on this assumption. A hint address passed to mmap will
-> > cause the largest address space that fits entirely into the hint to be
-> > used. If the hint is less than or equal to 1<<38, an sv39 address will
-> > be used. An exception is that if the hint address is 0, then a sv48
-> > address will be used. After an address space is completely full, the next
-> > smallest address space will be used.
-> > 
-> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > ---
-> >  arch/riscv/include/asm/elf.h       |  2 +-
-> >  arch/riscv/include/asm/pgtable.h   | 13 ++++++++-
-> >  arch/riscv/include/asm/processor.h | 47 +++++++++++++++++++++++++-----
-> >  3 files changed, 53 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
-> > index c24280774caf..5d3368d5585c 100644
-> > --- a/arch/riscv/include/asm/elf.h
-> > +++ b/arch/riscv/include/asm/elf.h
-> > @@ -49,7 +49,7 @@ extern bool compat_elf_check_arch(Elf32_Ehdr *hdr);
-> >   * the loader.  We need to make sure that it is out of the way of the program
-> >   * that it will "exec", and that there is sufficient room for the brk.
-> >   */
-> > -#define ELF_ET_DYN_BASE		((TASK_SIZE / 3) * 2)
-> > +#define ELF_ET_DYN_BASE		((DEFAULT_MAP_WINDOW / 3) * 2)
-> >  
-> >  #ifdef CONFIG_64BIT
-> >  #ifdef CONFIG_COMPAT
-> > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> > index 75970ee2bda2..530f6a171a2b 100644
-> > --- a/arch/riscv/include/asm/pgtable.h
-> > +++ b/arch/riscv/include/asm/pgtable.h
-> > @@ -63,12 +63,23 @@
-> >   * position vmemmap directly below the VMALLOC region.
-> >   */
-> >  #ifdef CONFIG_64BIT
-> > +#define VA_BITS_SV39 39
-> > +#define VA_BITS_SV48 48
-> > +#define VA_BITS_SV57 57
-> > +
-> > +#define VA_USER_SV39 (UL(1) << (VA_BITS_SV39 - 1))
-> > +#define VA_USER_SV48 (UL(1) << (VA_BITS_SV48 - 1))
-> > +#define VA_USER_SV57 (UL(1) << (VA_BITS_SV57 - 1))
-> > +
-> >  #define VA_BITS		(pgtable_l5_enabled ? \
-> > -				57 : (pgtable_l4_enabled ? 48 : 39))
-> > +				VA_BITS_SV57 : (pgtable_l4_enabled ? VA_BITS_SV48 : VA_BITS_SV39))
-> >  #else
-> >  #define VA_BITS		32
-> >  #endif
-> 
-> Please, at the very least, build test things for rv32 if you are going
-> to change things in mm:
-> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
-> 
-> Thanks,
-> Conor.
-Thanks for that catch, I sent out a new patch to fix that up. There were
-also some problems with 32-bit compat support that I resolved.
+Hi Tiezhu and Arnd,
 
+On Thu, Jun 22, 2023 at 10:13:38PM +0800, Tiezhu Yang wrote:
+> Now we specify the minimal version of GCC as 5.1 and Clang/LLVM as 11.0.0
+> in Documentation/process/changes.rst, __CHAR_BIT__ and __SIZEOF_LONG__ are
+> usable, it is probably fine to unify the definition of __BITS_PER_LONG as
+> (__CHAR_BIT__ * __SIZEOF_LONG__) in asm-generic uapi bitsperlong.h.
+> 
+> In order to keep safe and avoid regression, only unify uapi bitsperlong.h
+> for some archs such as arm64, riscv and loongarch which are using newer
+> toolchains that have the definitions of __CHAR_BIT__ and __SIZEOF_LONG__.
+> 
+> Suggested-by: Xi Ruoyao <xry111@xry111.site>
+> Link: https://lore.kernel.org/all/d3e255e4746de44c9903c4433616d44ffcf18d1b.camel@xry111.site/
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Link: https://lore.kernel.org/linux-arch/a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com/
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/arm64/include/uapi/asm/bitsperlong.h          | 24 ----------------------
+>  arch/loongarch/include/uapi/asm/bitsperlong.h      |  9 --------
+>  arch/riscv/include/uapi/asm/bitsperlong.h          | 14 -------------
+>  include/uapi/asm-generic/bitsperlong.h             | 13 +++++++++++-
+>  tools/arch/arm64/include/uapi/asm/bitsperlong.h    | 24 ----------------------
+>  .../arch/loongarch/include/uapi/asm/bitsperlong.h  |  9 --------
+>  tools/arch/riscv/include/uapi/asm/bitsperlong.h    | 14 -------------
+>  tools/include/uapi/asm-generic/bitsperlong.h       | 14 ++++++++++++-
+>  tools/include/uapi/asm/bitsperlong.h               |  6 ------
+>  9 files changed, 25 insertions(+), 102 deletions(-)
+>  delete mode 100644 arch/arm64/include/uapi/asm/bitsperlong.h
+>  delete mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
+>  delete mode 100644 arch/riscv/include/uapi/asm/bitsperlong.h
+>  delete mode 100644 tools/arch/arm64/include/uapi/asm/bitsperlong.h
+>  delete mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
+>  delete mode 100644 tools/arch/riscv/include/uapi/asm/bitsperlong.h
+
+I think this change has backwards compatibility concerns, as it breaks
+building certain host tools on the stable releases (at least 6.4 and
+6.1, as that is where I noticed this). I see the following error on my
+aarch64 system:
+
+  $ make -skj"$(nproc)" ARCH=x86_64 CROSS_COMPILE=x86_64-linux- mrproper defconfig prepare
+  In file included from /usr/include/asm/bitsperlong.h:1,
+                   from /usr/include/asm-generic/int-ll64.h:12,
+                   from /usr/include/asm-generic/types.h:7,
+                   from /usr/include/asm/types.h:1,
+                   from tools/include/linux/types.h:13,
+                   from tools/arch/x86/include/asm/orc_types.h:9,
+                   from scripts/sorttable.h:96,
+                   from scripts/sorttable.c:201:
+  tools/include/asm-generic/bitsperlong.h:14:2: error: #error Inconsistent word size. Check asm/bitsperlong.h
+     14 | #error Inconsistent word size. Check asm/bitsperlong.h
+        |  ^~~~~
+
+A reverse bisect of 6.4 to 6.5-rc1 points to this patch. This Fedora
+rawhide container has kernel-headers 6.5.0-0.rc2.git0.1.fc39 and the
+error disappears when I downgrade to 6.4.0-0.rc7.git0.1.fc39. I have not
+done a ton of triage/debugging so far, as I am currently hunting down
+other regressions, but I figured I would get an initial report out,
+since I noticed it when validating LLVM from the new release/17.x
+branch. If there is any additional information I can provide or patches
+I can test, I am more than happy to do so.
+
+Cheers,
+Nathan
