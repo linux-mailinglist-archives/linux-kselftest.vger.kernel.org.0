@@ -2,175 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C11076503F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 11:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74502765219
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 13:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbjG0Jsg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 05:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
+        id S232733AbjG0LSg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 07:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234082AbjG0Jrc (ORCPT
+        with ESMTP id S231404AbjG0LSf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 05:47:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC3A9C
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 02:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690451202;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9/ZtPwamYEdAIqsg4Eha/G0ZWoXDeFDSv2EcRY5ZelM=;
-        b=R8ic1mutKT9WvgfYx6qW9G+tT318iDyS9F1WjRqBJnc9Q684N1enfmU0OjQD9YZ1jRzsJZ
-        A/4dTjDJJLhD8+6jq9F5ErnlTQ26ajNVUa86SbMFFyEXhJ2/YIAZ/RRS3B/44vE6rJqVi9
-        LokSgfFBYofPjN8Xkul99+DXW3KfLzg=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-580-FO8vV_gcMk-z6Pkr_6k1bg-1; Thu, 27 Jul 2023 05:46:38 -0400
-X-MC-Unique: FO8vV_gcMk-z6Pkr_6k1bg-1
-Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4fb748a83b4so672602e87.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 02:46:38 -0700 (PDT)
+        Thu, 27 Jul 2023 07:18:35 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7553E4F
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 04:18:33 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbd33a1819so56225e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 04:18:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690456712; x=1691061512;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SH5Ey1yx/8W+gaQNuiqylV1qlICOL1HJ7A2uan0PMYc=;
+        b=i9T+QFawmfH9eqYrh3XFg91TUVPFLGrGsr7hAIR7iYpnWl5/P7iYfGWOSE6FDiDvrn
+         2ONOFL80+FD4M2wIcn38qAGOkyhpHs4YvoSa/xob+21UCVsGXcpMiWoEkG0vCZmrk/mm
+         XlrbWFtNK9hydzzJvPHP2FPZKWkab9U2bw922rPeO4hG0XEkEpnEWyO4t+S8Qw7jrJ83
+         KvCn1fk30ZUxBKX3s1chc06AvfOfvn5UA9USV8LlryblfuGEk28s7MxN1KYXXRejP/ZN
+         q5aAUfGxfN0f/JfluZdJItXXtttE8Jct1vH86IHmCHzETa4PfIxLL+EvMR2zl8xuP5DJ
+         kTtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690451197; x=1691055997;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9/ZtPwamYEdAIqsg4Eha/G0ZWoXDeFDSv2EcRY5ZelM=;
-        b=LJyJ8oMOn4MK0gbVq1NY3gi84QKYsAfWaFm8kXirw29qu8rHYTIaW2vcr53eHLCRZR
-         4/6xPWE2diYIlpeQKCo2I6STwkXOLxCI8vxSlFObg0hhSWVQ+Npu8FNQyxYvSDLVaUEl
-         Yd6RihrG3S9l0pe9dO8WxKmp4ceGjyoVBaDhScf/edBYUNb1W1MdIwAjdoksHGTqGTmw
-         mXUDMSbbuYtbpuXQCS7q3ktlu7AqWFqPVRpbHGsVTjATOVw5EwcFPle5RlZkVpkrCysc
-         0l+caJFqwnJMLyx35/2jaAQOseL448P0DjgfiwEqOQkYP+9JHd+ksXgwwVhht4IJ4PhS
-         KP8g==
-X-Gm-Message-State: ABy/qLbK6qm4GEM28WygylIOb3MsXDiqHb/4uYcMlCUHuHd/XukgUgR8
-        8Ss5QCH25otTzGC0UBH5yVKhC0mmrEzkjTpqeu/bh/jaXoR9a91pGhWjHTGGGB5T6xwuQF4cADa
-        d+ofLv6DnkJSYRcVTnPa9mBqJ/DDk
-X-Received: by 2002:a05:6512:3186:b0:4f8:7513:8cb0 with SMTP id i6-20020a056512318600b004f875138cb0mr1763684lfe.2.1690451196869;
-        Thu, 27 Jul 2023 02:46:36 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHWfc8e6nRRU05KgrIaBfOnm87x2dNku7t4qZB3XfKVqk/Go7XcWjycqa01reYQ5M3BH+RFoA==
-X-Received: by 2002:a05:6512:3186:b0:4f8:7513:8cb0 with SMTP id i6-20020a056512318600b004f875138cb0mr1763631lfe.2.1690451196504;
-        Thu, 27 Jul 2023 02:46:36 -0700 (PDT)
-Received: from vschneid.remote.csb ([149.12.7.81])
-        by smtp.gmail.com with ESMTPSA id l10-20020a05600c1d0a00b003fd2d3462fcsm6308442wms.1.2023.07.27.02.46.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jul 2023 02:46:36 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-        Julian Pidancet <julian.pidancet@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH v2 02/20] tracing/filters: Enable filtering a
- cpumask field by another cpumask
-In-Reply-To: <20230726194148.4jhyqqbtn3qqqqsq@treble>
-References: <20230720163056.2564824-1-vschneid@redhat.com>
- <20230720163056.2564824-3-vschneid@redhat.com>
- <20230726194148.4jhyqqbtn3qqqqsq@treble>
-Date:   Thu, 27 Jul 2023 10:46:33 +0100
-Message-ID: <xhsmho7jxsn46.mognet@vschneid.remote.csb>
+        d=1e100.net; s=20221208; t=1690456712; x=1691061512;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SH5Ey1yx/8W+gaQNuiqylV1qlICOL1HJ7A2uan0PMYc=;
+        b=dkDXMU9Vzff+SiTk7wDCp0jmtS74k5oCcPcwPhQlXxHF9vDFKstJrJ32ulk1uNh81/
+         5IeUl9+6LsPgd8k0BmeFYfHkOGzd6raE4TB+8dZaFWPIqqZCfEM6LQo3VHS9aW5tvl4R
+         +infVs0+Nqiukk3pxiOMZmu5oKKSS0JEqXMLN3jJnCQnNNM0xEwjByeoxueiZNR2J+vY
+         XOsxMTVFYAxoz+O053c38hKYL30JrhPDlofDGlDeiczndp9MdhKouFbFgnL90CW8CWa/
+         L7MruXGx92f5bYkgmyr36ExfzfBXti9piYdaeb4tj9UjTlg+fOfPuUtD3cpWy9RiGtHe
+         tMGg==
+X-Gm-Message-State: ABy/qLZhcXLrKb+s6SrSzpzQtR6gUim4iOQfBd/yJc+PbGKX2g/cuASF
+        AlI2izOMasGqhgykomHS5NuiDULROj2ySXxHs4ID1Q==
+X-Google-Smtp-Source: APBJJlHmL9B+daS/oUn5P/jKQ75gM91um/p4wa9J286I+SzOpZEOHJOvM6BkXAJPDWTlWjVg5AyhtTvTpp5bjJzJf4s=
+X-Received: by 2002:a05:600c:1c06:b0:3f1:73b8:b5fe with SMTP id
+ j6-20020a05600c1c0600b003f173b8b5femr23389wms.3.1690456712044; Thu, 27 Jul
+ 2023 04:18:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230713101415.108875-6-usama.anjum@collabora.com>
+ <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
+ <7eedf953-7cf6-c342-8fa8-b7626d69ab63@collabora.com> <ZLpqzcyo2ZMXwtm4@qmqm.qmqm.pl>
+ <382f4435-2088-08ce-20e9-bc1a15050861@collabora.com> <ZLshsAj5PbsEAHhP@qmqm.qmqm.pl>
+ <b1071d62-5c8e-1b03-d919-b3a9db520e51@collabora.com> <CABb0KFF6M2_94Ect72zMtaRLBpOoHjHYJA-Ube3oQAh4cXSg5w@mail.gmail.com>
+ <44eddc7d-fd68-1595-7e4f-e196abe37311@collabora.com> <CABb0KFHJVeEkh4f6WWK6FThCbA+NE8iYUZE68nV1YAxaHwiwog@mail.gmail.com>
+ <e1ead2e8-046a-31d9-8df9-27cdd7b7ff83@collabora.com> <1afedab8-5929-61e5-b0da-9c70dc01c254@collabora.com>
+ <eac29a4d-aa3f-4df5-97e6-4aa3a358f2b1@collabora.com> <CABb0KFHuNpG+NJQ4sQdp1n_Kf4sO8aC5DBEppFc1zz=zAeDfQw@mail.gmail.com>
+ <f949f74f-bb65-e3f2-e70d-7198446a9981@collabora.com> <CABb0KFGQ_HbD+MNwKCcE+6D50XhJxpx0M0dRiC-EVwEXPv+4XA@mail.gmail.com>
+ <94c6b665-bbc2-5030-f9b1-d933791008b8@codeweavers.com>
+In-Reply-To: <94c6b665-bbc2-5030-f9b1-d933791008b8@codeweavers.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Thu, 27 Jul 2023 13:18:19 +0200
+Message-ID: <CABb0KFEr_CDZyvZ27q2b7DbXwW3h+hNLjjzBw1GzzkZW=j-Dow@mail.gmail.com>
+Subject: Re: [v3] fs/proc/task_mmu: Implement IOCTL for efficient page table scanning
+To:     Paul Gofman <pgofman@codeweavers.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yang Shi <shy828301@gmail.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 26/07/23 12:41, Josh Poimboeuf wrote:
-> On Thu, Jul 20, 2023 at 05:30:38PM +0100, Valentin Schneider wrote:
->>  int filter_assign_type(const char *type)
->>  {
->> -	if (strstr(type, "__data_loc") && strstr(type, "char"))
->> -		return FILTER_DYN_STRING;
->> +	if (strstr(type, "__data_loc")) {
->> +		if (strstr(type, "char"))
->> +			return FILTER_DYN_STRING;
->> +		if (strstr(type, "cpumask_t"))
->> +			return FILTER_CPUMASK;
->> +		}
+On Thu, 27 Jul 2023 at 01:06, Paul Gofman <pgofman@codeweavers.com> wrote:
 >
-> The closing bracket has the wrong indentation.
+> Hello Micha=C5=82,
 >
->> +		/* Copy the cpulist between { and } */
->> +		tmp = kmalloc((i - maskstart) + 1, GFP_KERNEL);
->> +		strscpy(tmp, str + maskstart, (i - maskstart) + 1);
->
-> Need to check kmalloc() failure?  And also free tmp?
->
+>      I was looking into that from the Wine point of view and did a bit
+> of testing, so will try to answer the question cited below.
 
-Heh, indeed, shoddy that :-)
+Thanks for the extensive explanation!
 
-Thanks!
-
->> +
->> +		pred->mask = kzalloc(cpumask_size(), GFP_KERNEL);
->> +		if (!pred->mask)
->> +			goto err_mem;
->> +
->> +		/* Now parse it */
->> +		if (cpulist_parse(tmp, pred->mask)) {
->> +			parse_error(pe, FILT_ERR_INVALID_CPULIST, pos + i);
->> +			goto err_free;
->> +		}
->> +
->> +		/* Move along */
->> +		i++;
->> +		if (field->filter_type == FILTER_CPUMASK)
->> +			pred->fn_num = FILTER_PRED_FN_CPUMASK;
->> +
+>      Without Windows large pages I guess the only way to make this work
+> correctly is to disable THP with madvise(MADV_NOHUGEPAGE) on the memory
+> ranges allocated with MEM_WRITE_WATCH, as the memory changes should not
+> only be reported but also tracked with 4k page granularity as Windows
+> applications expect.
 >
-> --
-> Josh
+>      Currently we don't implement MEM_LARGE_PAGES flag support in Wine
+> (while of course might want to do that in the future). On Windows using
+> this flag requires special permissions and implies more than just using
+> huge pages under the hood but also, in particular, locking pages in
+> memory. I'd expect that support to be extended in Windows though in the
+> future in some way. WRT write watches, the range is watched with large
+> page granularity. GetWriteWatch lpdwGranularity output parameter returns
+> the value of "large page minimum" (returned by GetLargePageMinimum) and
+> the returned addresses correspond to those large pages. I suppose to
+> implement that on top of Linux huge pages we'd need a way to control
+> huge pages allocation at the first place, i. e., a way to enforce the
+> specified size for the huge pages for the memory ranged being mapped.
+> Without that I am afraid the only way to correctly implement that is to
+> still disable THP on the range and only adjust our API output so that
+> matches expected.
+>
+>      Not related to the question, but without any relation to Wine and
+> Windows API current way of dealing with THP in the API design looks a
+> bit not straightforward to me. In a sense that transparent huge pages
+> will appear not so transparent when it comes to dirty pages tracking. If
+> I understand correctly, the application which allocated a reasonably big
+> memory area and didn't use madvise(MADV_NOHUGEPAGE) might end up with a
+> whole range being a single page and getting dirtified as a whole, which
+> may likely void app's optimization based on changed memory tracking. Not
+> that I know an ideal way out of this, maybe it is a matter of having THP
+> disabled by default on watched ranges or clearly warning about this
+> caveat in documentation?
 
+So, this means that the max_pages limit should count HugeTLB pages as
+1 not HPAGE_SIZE/PAGE_SIZE pages.
+Also, to get this right, we might need another PAGE_IS_HUGETLB
+category, so that userspace can differentiate the ranges if needed.
+
+Is it possible (on Windows) to have MEM_LARGE_PAGES allocation near a
+normal one and run GetWriteWatch() on both in one call? If so, how
+does it behave / what is expected?
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
