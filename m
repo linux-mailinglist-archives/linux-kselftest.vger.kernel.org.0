@@ -2,44 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3562A766037
+	by mail.lfdr.de (Postfix) with ESMTP id CDF97766039
 	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 01:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjG0X1F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 19:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
+        id S229573AbjG0X1H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 19:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjG0X1E (ORCPT
+        with ESMTP id S231703AbjG0X1F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 19:27:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007EA30D2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 16:27:02 -0700 (PDT)
+        Thu, 27 Jul 2023 19:27:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A862D40
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 16:27:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A69161F84
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 23:27:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91005C433C9;
-        Thu, 27 Jul 2023 23:27:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62E9561F89
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 23:27:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E1BC433C7;
+        Thu, 27 Jul 2023 23:27:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690500422;
-        bh=Znm9gRTwsFwQfwD1M+msy3+6gP9lF4h25ZTmsNIMG+8=;
+        s=k20201202; t=1690500423;
+        bh=3Twxt+ztmPtVD0NHowFG7vKtvYRRWttH91DBpHBezI0=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=WXvhCx3tVGtpH7KM3WsPf+wJKi5tzA8AnxDAawXXSng2MmFBYN0/MOXK0hpTf1zmq
-         4OHjaNBIFFH3UAccIjni55fGQFBVuTPLXT+t3urAataGB7cePSb0kFKv2TP1GatcaG
-         aPzOQovlIspJwoFZqRTLmSsj5s+6MiFqj4c7yeALO8SVg9C13lrx6WgmWZvDwCBXbu
-         Boz2mn5Q0wKvEvWiUTD3dL9pEKqA0/mgQypPE/e5U0CEQjYle5JI7JgcLPD2AMcRU1
-         J3ManrUKmRAZnIY9U3lhMr893MAvaOM+1JoBgusZacBW5rkYCQU4MYuyParCK8q1z3
-         mwEhAlv4/o42Q==
+        b=ZewPS2cTsNisFWlRk/n/RKJhsrj9H3CELspdWuitrGRnprnemAQxNUSQXdescoYYG
+         jKRJlkTsK+EJjc+EnyVmoyMCUdPouf+Y6I36UAwUyy+xO5nnGFmP4AtIkgk6pjGhwK
+         +5TSOInCLFslFOfSzycjHN750UwrZHmjqa0S5Yjaw6bXdPldwogORaOMsI5zvWydNn
+         +qQNSZugsczBIOczeOtC2Nqz1X6osFou49tdFWb/YblxaWJedI7sHntQo0kB+7Iy4I
+         sDQPpIZ3a/iWrb0xvF6qydxKgmFBDEej0l6x+VQ/8TWrfxUNhOG1Um13FlFsZdBYld
+         pzJPh/3jCBjEw==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Fri, 28 Jul 2023 00:26:14 +0100
-Subject: [PATCH v4 3/6] tools include: Add some common function attributes
+Date:   Fri, 28 Jul 2023 00:26:15 +0100
+Subject: [PATCH v4 4/6] kselftest/arm64: Make the tools/include headers
+ available
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230728-arm64-signal-memcpy-fix-v4-3-0c1290db5d46@kernel.org>
+Message-Id: <20230728-arm64-signal-memcpy-fix-v4-4-0c1290db5d46@kernel.org>
 References: <20230728-arm64-signal-memcpy-fix-v4-0-0c1290db5d46@kernel.org>
 In-Reply-To: <20230728-arm64-signal-memcpy-fix-v4-0-0c1290db5d46@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -48,19 +49,19 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=895; i=broonie@kernel.org;
- h=from:subject:message-id; bh=Znm9gRTwsFwQfwD1M+msy3+6gP9lF4h25ZTmsNIMG+8=;
- b=owGbwMvMwMWocq27KDak/QLjabUkhpRDf60vB71y215inrJV+E2EvtuMndOPcufzzNzl5MwV+Hzv
- Vf5vnYzGLAyMXAyyYoosa59lrEoPl9g6/9H8VzCDWJlApjBwcQrARFqY2f/X7OoRrrAS0kqpYioQzq
- nK0o7ktSu1PC/Nt2ihyavyes2Vfp4fb32arL/5T5mD5+M//xgaNiUeCk2XuvaHvccveOu1Z3OdzT46
- a4r0KKaoWcpxNFucLtg/SUw1wK+3kmtGjGKsr8f/CR1GveLSq26zehhIHHTMDP2w0apD/OhHA9Wzsa
- U7/kVMzzHdqHnO91v3ul/PbdbV8i+Qlrp59vyrHas25S+Kcc1/vKPuccdv16k+tuazJfonf7bn6spO
- DnRya1z3pCH2UsqpzR4nKr6fl3OpNvz6cut0pntr1Vh9k2t3HWF0ZU8ICRM6Jc7UweD2OWfqr8aFV2
- /qN0ruOfzjdOr/PBXpYjaHJAdbAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=679; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=3Twxt+ztmPtVD0NHowFG7vKtvYRRWttH91DBpHBezI0=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkwv08T3Xmn3L+KDEN17Ziv1NJDSuu1hCzTrzS5/3j
+ 8N2YXtOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZML9PAAKCRAk1otyXVSH0CiJB/
+ 9ZvL1M+upvI8SckwQ3t7MnnK28cyuCGBUjdWIBKplPv1nlemi4c/pqZfO6zlTC5YASi3j02mMbST3e
+ eKVB54k497BtzlMyMf4ey3HzQbBKKU+GRBrBzY3WdaZ+M7XZRCSlS04GSM+CKu4pqkB6Or4LQ1Su6l
+ kMVBEsMXvXwSqeRuYvi0fM+rW6/5VUzPiYbG2k9pzN7eE0TEi4hA2cWXbf8T3tStrldONWLT0M6Q9y
+ i8uiiYoBpfktwjLuI2k+uwa7uqggY5WrErTY7CPIedU62xatcELrugd7kx3AjlrVDKSnfduMszGPB/
+ hfUqp5TCNNwTtyHjZGPyOeow9ReB0R
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,37 +70,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We don't have definitions of __always_unused or __noreturn in the tools
-version of compiler.h, add them so we can use them in kselftests.
+Make the generic tools/include headers available to the arm64 selftests so
+we can reduce some duplication.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/include/linux/compiler.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ tools/testing/selftests/arm64/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
-index f75cced41d59..1684216e826a 100644
---- a/tools/include/linux/compiler.h
-+++ b/tools/include/linux/compiler.h
-@@ -42,6 +42,18 @@
- # define __always_inline	inline __attribute__((always_inline))
- #endif
+diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+index ace8b67fb22d..28b93cab8c0d 100644
+--- a/tools/testing/selftests/arm64/Makefile
++++ b/tools/testing/selftests/arm64/Makefile
+@@ -19,6 +19,8 @@ CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
  
-+#ifndef __always_unused
-+#define __always_unused __attribute__((__unused__))
-+#endif
+ CFLAGS += $(KHDR_INCLUDES)
+ 
++CFLAGS += -I$(top_srcdir)/tools/include
 +
-+#ifndef __noreturn
-+#define __noreturn __attribute__((__noreturn__))
-+#endif
-+
-+#ifndef unreachable
-+#define unreachable() __builtin_unreachable()
-+#endif
-+
- #ifndef noinline
- #define noinline
- #endif
+ export CFLAGS
+ export top_srcdir
+ 
 
 -- 
 2.30.2
