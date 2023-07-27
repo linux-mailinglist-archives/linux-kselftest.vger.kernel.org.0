@@ -2,72 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70577765E26
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 23:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C91765E34
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 23:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbjG0V1C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 17:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        id S231645AbjG0V3u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 17:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjG0V06 (ORCPT
+        with ESMTP id S232112AbjG0V3s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 17:26:58 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175931BF4
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 14:26:57 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-686f94328a4so634105b3a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 14:26:57 -0700 (PDT)
+        Thu, 27 Jul 2023 17:29:48 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD973588
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 14:29:20 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-666e97fcc60so1131459b3a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 14:29:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1690493216; x=1691098016;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gcvGxWKs0ioHSwaNFVtuDJQ1B/8SpZlsoy8QXz36r7I=;
-        b=O0RhQf8KfE7AkPva40tWc9J+su1HI1UE2kEfdz7pkwxir6Zk97X4vA7+YDbYbExjNZ
-         4RyRTkXeeZg8c5H4DsdkNwy5z0Oc/dOtYSntC5cuj+IHiZcJVOOl/pSPl7D3Ihdgfc6g
-         IPIa1TkeHGbit0ypGybX6xXCaiyifj2oUvQhzSw14P8D1lwo9LkNq8obIlWu0dEXqnfq
-         NOq9monYfeRcCg+StWnRJrEbiF6xrTEIpjpHi2DRzaZs15+pTwpPDnYlfAInaRS4UyKP
-         klrItNmQI+SFf7u8/3WOJRIz/cZ031FyXJArV/48cx9URntu/5ar9hUBmNCWWhDXMrQw
-         OqJA==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1690493360; x=1691098160;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ypAMONzQ9lM309vcGdh+Fb16cWv7RYOttEkuLSf+C9Q=;
+        b=Bwo2x8zf58r3/17nU/dEA+lgi98417VBN10q9GpXZ2yX5bWgvClfFlRZrYgWh6vxOe
+         r0mqw4aODhaJ2EjfLMEWChHMJo67QiYL7UuI76V0B5V0sBJqx633/8IdKvZ62MQ2+DUl
+         J6GIo9C/bwVjsIs63nkDd9w15op+eE3bPam4/TK3NShywE+8Xx/75LaHkeodFIhEIwPp
+         is5HGGIxHwP3BUX1Gg8ys2pqCCyqagzNp8TAZ2n3ah5xe/s8AuEUZyERBtbzxBBvh8e7
+         XW1EoV/f/B6VtHMfKKSgdzL/ZzdtxWPLIZShgMFFsPR1z034QbJg23p3Jo+apDeFjXi3
+         3MAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690493216; x=1691098016;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gcvGxWKs0ioHSwaNFVtuDJQ1B/8SpZlsoy8QXz36r7I=;
-        b=ZcrCYx+yNYR+NsRX10dlx9B0qV//KcSpHVnkXTawSLsnnxAAuLE/g4sNb+qHmAJ3Vu
-         S39y58gabBYdFLH/2r5j990/ShdJUCj79jt1qlkafIFxxuGkDYt49WkimvPb68ASrKOQ
-         b40q8njxGcb8cy5qmVY56Wtn76KpukWzqhtNrCo4APXbLkK4UxeCoMiHrynmyzt0B1Ti
-         bxmaZPwLcODycbX6LuRfy4Yhl1dB9FZyAcGMBuu+nM7+KUoPfYIPcKtQDdjGHi0pmzwK
-         RU45o3IFcPMkZHO8gJYf8RGLEpTE3+Cf/0H48vjlRXCT40iRLV3+tlUOrLvjRk9GFYWm
-         Mppw==
-X-Gm-Message-State: ABy/qLYFamWgK8gcoV+t2/pioa1S/MAN4SO4BC+DuF6/D030BaeSzFGh
-        KwIo4O5Y03BPq1E2Uh6mFxMVfg==
-X-Google-Smtp-Source: APBJJlFlY+9HLXpB5MOpoEilud+PtI86fX/t6QctT4gfhpPOy7817Igg+eQtg4O7iE22xtMxf1LQKw==
-X-Received: by 2002:a05:6a21:3984:b0:12f:d350:8a12 with SMTP id ad4-20020a056a21398400b0012fd3508a12mr467624pzc.21.1690493216617;
-        Thu, 27 Jul 2023 14:26:56 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id c5-20020aa78c05000000b00682562b1549sm1912312pfd.24.2023.07.27.14.26.55
+        d=1e100.net; s=20221208; t=1690493360; x=1691098160;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ypAMONzQ9lM309vcGdh+Fb16cWv7RYOttEkuLSf+C9Q=;
+        b=LaGnCQzFGcJAT8H2+6nQZLYCWLnl5AEcLtdPb+IvXgo5kTSaeNfS+qBUuHmB89nL+r
+         P+W45IHT7Ad5oKx4LwilCKezPi8zenZHofhuBUfOURS8b713eju0lh5GGDUnhUQV6o2P
+         lpRmRlntIjkjn2jDCsmJXAOwcLZ+QLcJC2oAQbf3d/y+NBnZxpgHrOVpHNyJGhyGPz4I
+         yj4mKj/5RzD3GlM09iPgmIyn45fS8QWFX0fLSrUsVxVt6om1Z99CIDGgI0xTMIbBKyY+
+         z13WpmJoyvpPUIW0Gw8Rm0oPyQwGXuld2+9s8bca2aqrYJokaVHf+nBc/ssDuoD/j34w
+         JxRw==
+X-Gm-Message-State: ABy/qLbYT3NrfwpgLTUcPyG54d91KM72CRXQQMi3yNrTegZtNJeB9JhY
+        sFtNUy0z1Iyfe117c3ZkiD12O5bHt0RQKpJH898=
+X-Google-Smtp-Source: APBJJlGB3S/nfKRJRrxAvCsM8dZOvIKZplWkk6B2QF6oZQ+44PkE/bkn/usw/Q968tVlGDZwNJliog==
+X-Received: by 2002:a05:6a20:7351:b0:133:656e:fe1e with SMTP id v17-20020a056a20735100b00133656efe1emr268970pzc.47.1690493360245;
+        Thu, 27 Jul 2023 14:29:20 -0700 (PDT)
+Received: from ghost ([2601:c0:ca7f:e7c0:e300:c3dd:e089:386])
+        by smtp.gmail.com with ESMTPSA id b14-20020aa7870e000000b00686c77a2905sm1906083pfo.20.2023.07.27.14.29.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jul 2023 14:26:56 -0700 (PDT)
+        Thu, 27 Jul 2023 14:29:20 -0700 (PDT)
+Date:   Thu, 27 Jul 2023 17:29:16 -0400
 From:   Charlie Jenkins <charlie@rivosinc.com>
-To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     charlie@rivosinc.com, conor@kernel.org, paul.walmsley@sifive.com,
-        palmer@rivosinc.com, aou@eecs.berkeley.edu, anup@brainfault.org,
+To:     Conor Dooley <conor@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        paul.walmsley@sifive.com, palmer@rivosinc.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
         konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org,
         alexghiti@rivosinc.com
-Subject: [PATCH v8 4/4] RISC-V: mm: Document mmap changes
-Date:   Thu, 27 Jul 2023 14:26:29 -0700
-Message-ID: <20230727212647.4182407-5-charlie@rivosinc.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230727212647.4182407-1-charlie@rivosinc.com>
-References: <20230727212647.4182407-1-charlie@rivosinc.com>
+Subject: Re: [PATCH v7 1/4] RISC-V: mm: Restrict address space for
+ sv39,sv48,sv57
+Message-ID: <ZMLhrFfoerPIxRL7@ghost>
+References: <20230726164620.717288-1-charlie@rivosinc.com>
+ <20230726164620.717288-2-charlie@rivosinc.com>
+ <20230727-unruffled-joyride-410fc348ce7b@spud>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230727-unruffled-joyride-410fc348ce7b@spud>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,44 +79,84 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The behavior of mmap is modified with this patch series, so explain the
-changes to the mmap hint address behavior.
-
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- Documentation/riscv/vm-layout.rst | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
-index 5462c84f4723..69ff6da1dbf8 100644
---- a/Documentation/riscv/vm-layout.rst
-+++ b/Documentation/riscv/vm-layout.rst
-@@ -133,3 +133,25 @@ RISC-V Linux Kernel SV57
-    ffffffff00000000 |  -4     GB | ffffffff7fffffff |    2 GB | modules, BPF
-    ffffffff80000000 |  -2     GB | ffffffffffffffff |    2 GB | kernel
-   __________________|____________|__________________|_________|____________________________________________________________
-+
-+
-+Userspace VAs
-+--------------------
-+To maintain compatibility with software that relies on the VA space with a
-+maximum of 48 bits the kernel will, by default, return virtual addresses to
-+userspace from a 48-bit range (sv48). This default behavior is achieved by
-+passing 0 into the hint address parameter of mmap. On CPUs with an address space
-+smaller than sv48, the CPU maximum supported address space will be the default.
-+
-+Software can "opt-in" to receiving VAs from another VA space by providing
-+a hint address to mmap. A hint address passed to mmap will cause the largest
-+address space that fits entirely into the hint to be used, unless there is no
-+space left in the address space. If there is no space available in the requested
-+address space, an address in the next smallest available address space will be
-+returned.
-+
-+For example, in order to obtain 48-bit VA space, a hint address greater than
-+:code:`1 << 47` must be provided. Note that this is 47 due to sv48 userspace
-+ending at :code:`1 << 47` and the addresses beyond this are reserved for the
-+kernel. Similarly, to obtain 57-bit VA space addresses, a hint address greater
-+than or equal to :code:`1 << 56` must be provided.
--- 
-2.41.0
+On Thu, Jul 27, 2023 at 01:33:41PM +0100, Conor Dooley wrote:
+> Hey Charlie,
+> 
+> On Wed, Jul 26, 2023 at 09:45:55AM -0700, Charlie Jenkins wrote:
+> > Make sv48 the default address space for mmap as some applications
+> > currently depend on this assumption. A hint address passed to mmap will
+> > cause the largest address space that fits entirely into the hint to be
+> > used. If the hint is less than or equal to 1<<38, an sv39 address will
+> > be used. An exception is that if the hint address is 0, then a sv48
+> > address will be used. After an address space is completely full, the next
+> > smallest address space will be used.
+> > 
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > ---
+> >  arch/riscv/include/asm/elf.h       |  2 +-
+> >  arch/riscv/include/asm/pgtable.h   | 13 ++++++++-
+> >  arch/riscv/include/asm/processor.h | 47 +++++++++++++++++++++++++-----
+> >  3 files changed, 53 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+> > index c24280774caf..5d3368d5585c 100644
+> > --- a/arch/riscv/include/asm/elf.h
+> > +++ b/arch/riscv/include/asm/elf.h
+> > @@ -49,7 +49,7 @@ extern bool compat_elf_check_arch(Elf32_Ehdr *hdr);
+> >   * the loader.  We need to make sure that it is out of the way of the program
+> >   * that it will "exec", and that there is sufficient room for the brk.
+> >   */
+> > -#define ELF_ET_DYN_BASE		((TASK_SIZE / 3) * 2)
+> > +#define ELF_ET_DYN_BASE		((DEFAULT_MAP_WINDOW / 3) * 2)
+> >  
+> >  #ifdef CONFIG_64BIT
+> >  #ifdef CONFIG_COMPAT
+> > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> > index 75970ee2bda2..530f6a171a2b 100644
+> > --- a/arch/riscv/include/asm/pgtable.h
+> > +++ b/arch/riscv/include/asm/pgtable.h
+> > @@ -63,12 +63,23 @@
+> >   * position vmemmap directly below the VMALLOC region.
+> >   */
+> >  #ifdef CONFIG_64BIT
+> > +#define VA_BITS_SV39 39
+> > +#define VA_BITS_SV48 48
+> > +#define VA_BITS_SV57 57
+> > +
+> > +#define VA_USER_SV39 (UL(1) << (VA_BITS_SV39 - 1))
+> > +#define VA_USER_SV48 (UL(1) << (VA_BITS_SV48 - 1))
+> > +#define VA_USER_SV57 (UL(1) << (VA_BITS_SV57 - 1))
+> > +
+> >  #define VA_BITS		(pgtable_l5_enabled ? \
+> > -				57 : (pgtable_l4_enabled ? 48 : 39))
+> > +				VA_BITS_SV57 : (pgtable_l4_enabled ? VA_BITS_SV48 : VA_BITS_SV39))
+> >  #else
+> >  #define VA_BITS		32
+> >  #endif
+> 
+> Please, at the very least, build test things for rv32 if you are going
+> to change things in mm:
+> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> io_uring/io_uring.c:3457:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/util.c:441:19: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> mm/mmap.c:1770:20: error: use of undeclared identifier 'VA_BITS_SV39'
+> 
+> Thanks,
+> Conor.
+Thanks for that catch, I sent out a new patch to fix that up. There were
+also some problems with 32-bit compat support that I resolved.
 
