@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76550765228
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 13:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3758076523E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 13:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjG0LWL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 07:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S233281AbjG0L0j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 07:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbjG0LWK (ORCPT
+        with ESMTP id S233283AbjG0L0e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 07:22:10 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22909E64
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 04:22:08 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so8076a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 04:22:08 -0700 (PDT)
+        Thu, 27 Jul 2023 07:26:34 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C331830DE
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 04:26:23 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5223910acf2so11295a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 04:26:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690456926; x=1691061726;
+        d=google.com; s=20221208; t=1690457182; x=1691061982;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pQEYdNvZMX6Etgo1t+7RDnKc5/X0V/U1VxFaQxCChgs=;
-        b=RuZ+CMuhY2GR/2JwXCGB9HPfr3Gfcaa0YbOYJp+zdkPA13cAwXi10wUP9fct76LtRp
-         088LwhB7lIRf3nsqlKP8wNe8EvCWQMn4k3d7pvOWHep9Hvm3Hff5YXTQLWaXdbcb/2Nj
-         J8cGgooQQt2Pl5P8UACstz0AiBDAtdwD7C7FqTT/IrIh/Ft+MLgFTq3Cqn6bUPa0uXXu
-         HgP/mhQAOCS/e1mFlm1L+qKumDvSbL2WSuruzdbdMlblir5AaPrxH8PmzVx0Q7OTmOhd
-         nJQTge6J+xvWdR+XQsWazjtgl81zzoOKdRvvP+qsbTgXI7voyqqrXSNSzM7bCtN4pPro
-         RRTw==
+        bh=ciA0d0f17XmFG0XwIFCtvuCfkBXh3LlkTiYPN1dYe+Y=;
+        b=tJlzpoXYcQoY9q62eGnq5YPAAwvPwnh8kmDb+8GMOL71T2p30m+4EJ9WaU/qDbDF/5
+         sXI93AZ4Al84/MWSGv6HKfhQKshHJOIBukPUWYTTpjz3TjOI3TxvfWhW6JOmLIp0wro3
+         x86BFhwkDQmJP4X/gFd9VfuM3/J2u0xELsuzbtDo7FSTIas6gGEk6UKI0kxCdqomvzGJ
+         aHoY4dr0LR1xJ8T5sQRRheWk6M4pmLkKmaHlZIgunfkL7kkIXY4MnwJ3pfzHma0zwrek
+         udVIrB7yvGwKOB5oIYJLqM/jIfe5PQVFjYlXh3ZeQr2LXKzxlDL7o7TP+89IkfgRdSXH
+         Xl0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690456926; x=1691061726;
+        d=1e100.net; s=20221208; t=1690457182; x=1691061982;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pQEYdNvZMX6Etgo1t+7RDnKc5/X0V/U1VxFaQxCChgs=;
-        b=TjoGL87ALbsnAwZ8yXEDkmnfYSi/WO3PpT3fDaSgz2tJhiwYEiHFmeTdEfCBCjOuT/
-         +AWMQDR3aM8eAwHfu/mFP4qpxxgw+c0r4FTMln+1cuXVcVxydseXXbE/dkiwXST/vdf5
-         NvGywZJ/TL9Pga4C8nysq+RNNUBcj95AUcJmPbE1w86QGSqWTT/Frui6IuK2JVwS/gWo
-         FKMOS4hTNpGixupMk7tyEfpVQwHGV/HbFjKk6D+VcTnpHktIY1TbMHzBbLtS+lPqfhKZ
-         jPkIar/EYtOaAa7COQhBV3cp+2hj50TzvF12Bb6kjw+Jbtf/SK6pZTdbNQ52msDkhChh
-         sMSw==
-X-Gm-Message-State: ABy/qLbW55ZIwOsJcDPPMvcfR3DYbQAIaFF6f7xwqKH14WnQHwxmvWzO
-        x60MUM6il0X3eGmHxfg6wzd27MafEvchdxwgR/h/eA==
-X-Google-Smtp-Source: APBJJlEKCU8y+i7yNjlzwM0W832RMv2M+/GkpbNF5mrtr7hkF1oVjo2BBhHfuYu274luOCGaIK1Syj5qH3V1YiEVi1Q=
-X-Received: by 2002:a50:d4c2:0:b0:522:28a1:2095 with SMTP id
- e2-20020a50d4c2000000b0052228a12095mr79473edj.3.1690456926488; Thu, 27 Jul
- 2023 04:22:06 -0700 (PDT)
+        bh=ciA0d0f17XmFG0XwIFCtvuCfkBXh3LlkTiYPN1dYe+Y=;
+        b=L137xg0IcWTVtMANo7yL0bvDmylAqag9LsA5nd3O/uRND4TICkwwtq+bWdEBxv5pJx
+         AhCgHIlqNSrQz+Uf9ZVilP2ERx0M9l1UVpj6Awmduku3dvH8T7/5eqJc4fTBJVF1mxp/
+         ci56BTUrhviVSuPEkDX01Q7q0l/MdEHreyHmOpTz4CXAlnNNDwGgc6klLVyt6fikWXdi
+         ls4ZSKoEJ7pMz1c3YE4QA/oCA55UdLF7ObMfZTfwfpSAwrt48nJ5+PxW0L6jwp81pSt7
+         4blDWgQbHpmHEHbDhBUh936KM7yOiayfgVuJJJ5aiLKskByuCc6ZO3eTGpCFVGOrZbN4
+         3JfA==
+X-Gm-Message-State: ABy/qLYmkF6zofpjVCGa62jybF1H/C9lL1b5/oTjnCp0xyQhpz8YYSW/
+        pKUYvXefrfDCJW46IGbO9YQubkf6y1cgG6UU47IFqw==
+X-Google-Smtp-Source: APBJJlFswdAxEynor9flG/zwO9VwsfMLSmQuNHR6pqQhqCCyuy9JPMlHSoZGyB/3PISkp/LNC/xvk4mrDwNS/cShlew=
+X-Received: by 2002:a50:d0cc:0:b0:521:f642:7183 with SMTP id
+ g12-20020a50d0cc000000b00521f6427183mr78381edf.1.1690457182010; Thu, 27 Jul
+ 2023 04:26:22 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230713101415.108875-6-usama.anjum@collabora.com>
  <a0b5c6776b2ed91f78a7575649f8b100e58bd3a9.1689881078.git.mirq-linux@rere.qmqm.pl>
@@ -57,15 +57,14 @@ References: <20230713101415.108875-6-usama.anjum@collabora.com>
  <e1ead2e8-046a-31d9-8df9-27cdd7b7ff83@collabora.com> <1afedab8-5929-61e5-b0da-9c70dc01c254@collabora.com>
  <eac29a4d-aa3f-4df5-97e6-4aa3a358f2b1@collabora.com> <CABb0KFHuNpG+NJQ4sQdp1n_Kf4sO8aC5DBEppFc1zz=zAeDfQw@mail.gmail.com>
  <f949f74f-bb65-e3f2-e70d-7198446a9981@collabora.com> <CABb0KFGQ_HbD+MNwKCcE+6D50XhJxpx0M0dRiC-EVwEXPv+4XA@mail.gmail.com>
- <94c6b665-bbc2-5030-f9b1-d933791008b8@codeweavers.com> <CABb0KFEr_CDZyvZ27q2b7DbXwW3h+hNLjjzBw1GzzkZW=j-Dow@mail.gmail.com>
-In-Reply-To: <CABb0KFEr_CDZyvZ27q2b7DbXwW3h+hNLjjzBw1GzzkZW=j-Dow@mail.gmail.com>
+ <89c09085-19ab-462b-e3be-b4e492a85899@collabora.com>
+In-Reply-To: <89c09085-19ab-462b-e3be-b4e492a85899@collabora.com>
 From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Thu, 27 Jul 2023 13:21:54 +0200
-Message-ID: <CABb0KFHKiS6VSYj6P9NbiP9h_0P_i+O+c9yweBMmKJRgnAPiRQ@mail.gmail.com>
+Date:   Thu, 27 Jul 2023 13:26:10 +0200
+Message-ID: <CABb0KFFnWVy5k+8DhoS6jJzqeDDMkt3u=Rj6KS2HQSz1BY1+bw@mail.gmail.com>
 Subject: Re: [v3] fs/proc/task_mmu: Implement IOCTL for efficient page table scanning
-To:     Paul Gofman <pgofman@codeweavers.com>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Andrei Vagin <avagin@gmail.com>,
         Danylo Mocherniuk <mdanylo@google.com>,
@@ -83,6 +82,7 @@ Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Matthew Wilcox <willy@infradead.org>,
         Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
         Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
         Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>,
         Vlastimil Babka <vbabka@suse.cz>,
@@ -97,52 +97,57 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 27 Jul 2023 at 13:18, Micha=C5=82 Miros=C5=82aw <emmir@google.com> =
-wrote:
-> On Thu, 27 Jul 2023 at 01:06, Paul Gofman <pgofman@codeweavers.com> wrote=
-:
-> > Hello Micha=C5=82,
-> >
-> >      I was looking into that from the Wine point of view and did a bit
-> > of testing, so will try to answer the question cited below.
->
-> Thanks for the extensive explanation!
->
-> >      Without Windows large pages I guess the only way to make this work
-> > correctly is to disable THP with madvise(MADV_NOHUGEPAGE) on the memory
-> > ranges allocated with MEM_WRITE_WATCH, as the memory changes should not
-> > only be reported but also tracked with 4k page granularity as Windows
-> > applications expect.
-> >
-> >      Currently we don't implement MEM_LARGE_PAGES flag support in Wine
-> > (while of course might want to do that in the future). On Windows using
-> > this flag requires special permissions and implies more than just using
-> > huge pages under the hood but also, in particular, locking pages in
-> > memory. I'd expect that support to be extended in Windows though in the
-> > future in some way. WRT write watches, the range is watched with large
-> > page granularity. GetWriteWatch lpdwGranularity output parameter return=
-s
-> > the value of "large page minimum" (returned by GetLargePageMinimum) and
-> > the returned addresses correspond to those large pages. I suppose to
-> > implement that on top of Linux huge pages we'd need a way to control
-> > huge pages allocation at the first place, i. e., a way to enforce the
-> > specified size for the huge pages for the memory ranged being mapped.
-> > Without that I am afraid the only way to correctly implement that is to
-> > still disable THP on the range and only adjust our API output so that
-> > matches expected.
+On Thu, 27 Jul 2023 at 10:03, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 7/27/23 2:10=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Wed, 26 Jul 2023 at 10:34, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >> On 7/25/23 11:05=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>> On Tue, 25 Jul 2023 at 11:11, Muhammad Usama Anjum
+> >>> <usama.anjum@collabora.com> wrote:
 [...]
+> >>> 2. For the address tagging part I'd prefer someone who knows how this
+> >>> is used take a look. We're ignoring the tag (but clear it on return i=
+n
+> >>> ->start) - so it doesn't matter for the ioctl() itself.
+> >> I've added Kirill if he can give his thoughts about tagged memory.
+> >>
+> >> Right now we are removing the tags from all 3 pointers (start, end, ve=
+c)
+> >> before using the pointers on kernel side. But we are overwriting and
+> >> writing the walk ending address in start which user can read/use.
+> >>
+> >> I think we shouldn't over-write the start (and its tag) and instead re=
+turn
+> >> the ending walk address in new variable, walk_end.
+> >
+> > The overwrite of `start` is making the ioctl restart (continuation)
+> > easier to handle. I prefer the current way, but it's not a strong
+> > opinion.
+> We shouldn't overwrite the start if we aren't gonna put the correct tag. =
+So
+> I've resorted to adding another variable `walk_end` to return the walk
+> ending address.
 
-The THP case we can leave it to userspace, as it can madvise() if the
-optimization lost due to dirty tracking of THP is more than THP adds.
-(BTW, the WP-watch is done via uffd - the default change would need to
-happen there).
+Yes. We have two options:
+
+1. add new field and have the userspace check it and update start
+itself to continue the scan,
+ or:
+2. reconstruct the tag from either orignal `start` or `end` and have
+the userspace re-set `start` if it wants to restart the scan instead
+of continuing.
+
+(the second one, using `end`'s tag, might be the easiest for
+userspace, as it can check `start` =3D=3D `end` when deciding to continue
+or restart).
 
 Best Regards
-> Micha=C5=82 Miros=C5=82aw
+Micha=C5=82 Miros=C5=82aw
