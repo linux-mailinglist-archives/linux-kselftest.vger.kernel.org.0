@@ -2,153 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11787656F2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 17:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3F6765724
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 17:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbjG0PHK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 11:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        id S234484AbjG0PPB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 11:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjG0PHJ (ORCPT
+        with ESMTP id S234481AbjG0PPA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 11:07:09 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6DE3AB1;
-        Thu, 27 Jul 2023 08:06:53 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1690470403thpm20hj
-Received: from linux-lab-host.localdomain ( [61.141.78.189])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 27 Jul 2023 23:06:42 +0800 (CST)
-X-QQ-SSF: 00200000002000D0X000B00A0000000
-X-QQ-FEAT: 3M0okmaRx3grTgKwDU4jisbzGh+NZB7/xNo7K2n7uIroM5MCBcugnNk/fjg7e
-        lQqqPh9SBo2j9DNGY7/7MXuFTe06T2qvVSYMBDAn2ENkrV0kQwdMV6eC5OouGaK6zJDhNEI
-        +WDXje/sDVWhnrPey77Lwqa5xhgbPbrqJt0wqv8ABuqd5xCSh/2YAzGjIv6m5psSufdeLFM
-        EE29nEQzSH0b8yQx4cYaqEk/50MVNrWCfIcv+sNF4E+K7D77ajYyJ9wxfWewJSiFdVRkxcI
-        3qKxYr8A60XCB4fOIc6rq6SieoZQGb/dppeNFPzjsV1bG04O2CgIZVcMF4vm5yphsrVuNWz
-        zMOB9OQ1uQPYjP8o3DDSi9ytLgZhrJDMb7F6SfkkERr0lazpROqTJC+rWIpOAW/WsVGxmCb
-        Ry4Nx2LKCsQ=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 100620124007279467
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v3 7/7] selftests/nolibc: add test support for ppc64
-Date:   Thu, 27 Jul 2023 23:06:38 +0800
-Message-Id: <b110b44b4d8e2ce4c170615616c81a4a2d80618e.1690468707.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1690468707.git.falcon@tinylab.org>
-References: <cover.1690468707.git.falcon@tinylab.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 27 Jul 2023 11:15:00 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480E019A4
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 08:14:58 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1bba7a32a40so7247235ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 08:14:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690470898; x=1691075698;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uh22aMhq83izPRCbdrRzzwtaMf1me9g6NjbX+Co5bp0=;
+        b=V5PJl9OPtbH6rKjCHnQT6vG07X8vn1wK9wE/VoB4pVOU/wXuTZXHBq4qngrQhFqdYx
+         7Nc/8XHsnrfsfvv63G5rKFMVKoj2MBlEBdyp1WGHDAFWz3vrGvQ3AdmEIExOtJ1aO6i+
+         cnpQEo0+AaWgfFRrDpzagp8FGIL+tu0h/ir+/VZ2zzregWOLzHJM0I9Ivoic0+BxzKz4
+         WYd1p4sm9ojfR9ElLG7BmLpUbcffOLNvMQyPdc38Ip378ziKHbWr9liHJkrm859/SeMX
+         ozbx6WwLe/AJVj5hZNh0cUCayyHYysk1ulw9KDKJg9gQ0Hv8Z3iv6s5gECSyYS8u0C8i
+         fslw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690470898; x=1691075698;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uh22aMhq83izPRCbdrRzzwtaMf1me9g6NjbX+Co5bp0=;
+        b=h+yVO9zB9Bxs04KVNtye2sxrCrCyQ/1vHrFR3pG1QGzue7PyoaXgsigY83jsfGxa6A
+         m2OeIsRttgKUvFemGCE8OtWIB+9taFuqS7MxSBKMT+UaV2fJDsFapRd47lMl0BMRSyDU
+         JwsX3GoyQZZn+02mCtkTIQ4blrpS5DphuD0vbDObCtm+nBD8yVnncN4ECPy3Ul9dtL8T
+         hssBTXkvnHvu5ynjZGg36W+Ir9vQGes6UFPJCuZNpNJV843XySqGCT2+ytFi9Qx/yx32
+         kRwAMkAYlskqmq7zJb7pci2xJ2F6AKDBa1MZwlR4rgOPOOD9TIP0Su6Tk+dqMpaKu3L8
+         dP3w==
+X-Gm-Message-State: ABy/qLbyAXUbQ6IF0uZ/cVvWLSHCWO8+tVRrgFxd6N9Gf2M9anoRUA01
+        i0TIGFHpH+MUId5IEy/CxVuyVaS1dTw=
+X-Google-Smtp-Source: APBJJlGAozwFR6Zya7MZdDqmVCOsox47jjr1N+m/uDgqX2krJoIRdH7cC9hMOsvAPWaaJ/Ie78DL6VKYewM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:d2cd:b0:1b9:ce2c:3bb0 with SMTP id
+ n13-20020a170902d2cd00b001b9ce2c3bb0mr23241plc.3.1690470897724; Thu, 27 Jul
+ 2023 08:14:57 -0700 (PDT)
+Date:   Thu, 27 Jul 2023 08:14:56 -0700
+In-Reply-To: <cover.1690364259.git.haibo1.xu@intel.com>
+Mime-Version: 1.0
+References: <cover.1690364259.git.haibo1.xu@intel.com>
+Message-ID: <ZMKI8RknjjZBOaxf@google.com>
+Subject: Re: [PATCH 0/4] RISCV: Add kvm Sstc timer selftest
+From:   Sean Christopherson <seanjc@google.com>
+To:     Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, ajones@ventanamicro.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Vipin Sharma <vipinsh@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Vishal Annapurve <vannapurve@google.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kvm-riscv@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kernel uses ARCH=powerpc for both 32-bit and 64-bit PowerPC, here adds a
-ppc64 variant for big endian 64-bit PowerPC, users can pass ARCH=ppc64
-to test it.
+On Thu, Jul 27, 2023, Haibo Xu wrote:
+> The sstc_timer selftest is used to validate Sstc timer functionality
+> in a guest, which sets up periodic timer interrupts and check the
+> basic interrupt status upon its receipt.
+> 
+> This KVM selftest was ported from aarch64 arch_timer and tested
+> with Linux v6.5-rc3 on a Qemu riscv64 virt machine.
 
-The powernv machine of qemu-system-ppc64 is used with
-powernv_be_defconfig.
-
-As the document [1] shows:
-
-  PowerNV (as Non-Virtualized) is the “bare metal” platform using the
-  OPAL firmware. It runs Linux on IBM and OpenPOWER systems and it can be
-  used as an hypervisor OS, running KVM guests, or simply as a host OS.
-
-Notes,
-
-- differs from little endian 64-bit PowerPC, vmlinux is used instead of
-  zImage, because big endian zImage [2] only boot on qemu with x-vof=on
-  (added from qemu v7.0) and a fixup patch [3] for qemu v7.0.51:
-
-- since the VSX support may be disabled in kernel side, to avoid
-  "illegal instruction" errors due to missing VSX kernel support, let's
-  simply let compiler not generate vector/scalar (VSX) instructions via
-  the '-mno-vsx' option.
-
-- as 'man gcc' shows, '-mmultiple' is used to generate code that uses
-  the load multiple word instructions and the store multiple word
-  instructions. Those instructions do not work when the processor is in
-  little-endian mode (except PPC740/PPC750), so, we only enable it
-  for big endian powerpc.
-
-[1]: https://qemu.readthedocs.io/en/latest/system/ppc/powernv.html
-[2]: https://github.com/linuxppc/issues/issues/402
-[3]: https://lore.kernel.org/qemu-devel/20220504065536.3534488-1-aik@ozlabs.ru/
-
-Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/lkml/20230722121019.GD17311@1wt.eu/
-Link: https://lore.kernel.org/lkml/20230719043353.GC5331@1wt.eu/
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index dfc411cd4f10..2e9694370913 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -22,6 +22,7 @@ XARCH           := $(or $(XARCH_$(ARCH)),$(ARCH))
- # ARCH is supported by kernel
- # map from user input variants to their kernel supported architectures
- ARCH_ppc         = powerpc
-+ARCH_ppc64       = powerpc
- ARCH_ppc64le     = powerpc
- override ARCH   := $(or $(ARCH_$(XARCH)),$(XARCH))
- 
-@@ -33,6 +34,7 @@ IMAGE_arm64      = arch/arm64/boot/Image
- IMAGE_arm        = arch/arm/boot/zImage
- IMAGE_mips       = vmlinuz
- IMAGE_ppc        = vmlinux
-+IMAGE_ppc64      = vmlinux
- IMAGE_ppc64le    = arch/powerpc/boot/zImage
- IMAGE_riscv      = arch/riscv/boot/Image
- IMAGE_s390       = arch/s390/boot/bzImage
-@@ -48,6 +50,7 @@ DEFCONFIG_arm64      = defconfig
- DEFCONFIG_arm        = multi_v7_defconfig
- DEFCONFIG_mips       = malta_defconfig
- DEFCONFIG_ppc        = pmac32_defconfig
-+DEFCONFIG_ppc64      = powernv_be_defconfig
- DEFCONFIG_ppc64le    = powernv_defconfig
- DEFCONFIG_riscv      = defconfig
- DEFCONFIG_s390       = defconfig
-@@ -68,6 +71,7 @@ QEMU_ARCH_arm64      = aarch64
- QEMU_ARCH_arm        = arm
- QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
- QEMU_ARCH_ppc        = ppc
-+QEMU_ARCH_ppc64      = ppc64
- QEMU_ARCH_ppc64le    = ppc64le
- QEMU_ARCH_riscv      = riscv64
- QEMU_ARCH_s390       = s390x
-@@ -82,6 +86,7 @@ QEMU_ARGS_arm64      = -M virt -cpu cortex-a53 -append "panic=-1 $(TEST:%=NOLIBC
- QEMU_ARGS_arm        = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_ppc        = -M g3beige -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_ppc64      = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_ppc64le    = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-@@ -98,6 +103,7 @@ else
- Q=@
- endif
- 
-+CFLAGS_ppc64 = -m64 -mbig-endian -Wl,-EB,-melf64ppc -mmultiple -mno-vsx
- CFLAGS_ppc64le = -m64 -mlittle-endian -Wl,-EL,-melf64ppc -mno-vsx
- CFLAGS_s390 = -m64
- CFLAGS_mips = -EL
--- 
-2.25.1
-
+Would it be possible to extract the ARM bits from arch_timer and make the bulk of
+the test common to ARM and RISC-V?  At a glance, there is quite a bit of copy+paste.
