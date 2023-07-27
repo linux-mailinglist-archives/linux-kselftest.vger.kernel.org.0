@@ -2,174 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CE6765D42
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 22:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732E4765D33
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jul 2023 22:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbjG0UZT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 16:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        id S230223AbjG0UZJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 16:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232636AbjG0UZO (ORCPT
+        with ESMTP id S229595AbjG0UZI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 16:25:14 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F7C26BB;
-        Thu, 27 Jul 2023 13:25:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UhzIbkZsGZoIW/HokhIuJPfxwZbCDrGdQhbb1f8I+WSvNNdEhiVss5JIyfpD/7yM7nPC0oBfyHvKewbf6FF3bNpoGLTXsFXiA0G5ntU14O/B78s1d/K2M9uj5RBwh6knNfDCI94xa/ghZgopqkzsaVMU4QRtkI2msURZe9mMGSZ3qYLRrUvYbUyDCRi8T+XPnmI0EcDuVOcCyEAyVtn7KJg/zyAYW+KgB6L410XCH05ns52G3YJFitAomVwIRsv0kR/ttAOaE2pfItXwrUVD6kNX8qvE1fxUoZLzYz9qaW4tulDGaOwe7Hae3YNvD6P3rjkdxhVsQaCK/mPpBQzxRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R6aD3dt1PckeOKkxIclyv3iBH0qTiumx46+55bGQRk0=;
- b=h/E3itdYFcD3vUqpGw84irZScQeZjOBEwa+l0JAaCtZsKfQrMtpBRrR6VMGhUkAPC7bKavGP9YoQK+EqSW1PO0wPxutenSOzo2GHUCJEEeBbIYuNwqHkz1TTpkukXoTJUQe6d1d3futMHBO/pOnQ+qNHZLaE6MsRzEiF/l+Xk7moyAEN03xwJ5/KVy1An2pu/JP8RJ2G0HEGRHcVs4yWDLTogwaemVm3cIMqq8UQe6HY3hb5L+xR3ys5m9rc1c5MqpfOuLwGNFF3908rULmb0XF1WgCnlkTXYFSFyVgMCeFnz4nQ5q11bbrwdWGpWIQHRajLRTCYeBanUFZ4UPnDzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R6aD3dt1PckeOKkxIclyv3iBH0qTiumx46+55bGQRk0=;
- b=YrCdY1Dz6Y45knIkuambopEJMgwHZ6ThTzEZxfMbBmht5pT5AnoeM/7Gv+w6M4yf73gbEUkl/s/OH/QVr4uCh6XbRHMhnKFFVSGKcHQWxmnklV4mMuspcWMuVqVTepSpIfqil26z2IttXaSf7GZUAxDT5E3i/v5AlbUwWh11tANJOOeoWD12AxzWLBWKG2vQknwN9yfhV+So3bKubVY4l3d9aO4S72YD4+LyLxQyf/Zg1T5Hcz1dHuXWVt3+CQd06UKonyf1okzGnbdmnk131QjApd9UDF1pi8Bxh+HsE+D+darW/cbdaGmPICCW67sFZj9eA52AUmBxwN68Wvya2w==
-Received: from DM6PR02CA0057.namprd02.prod.outlook.com (2603:10b6:5:177::34)
- by BY5PR12MB4950.namprd12.prod.outlook.com (2603:10b6:a03:1d9::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Thu, 27 Jul
- 2023 20:25:11 +0000
-Received: from DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:177:cafe::e3) by DM6PR02CA0057.outlook.office365.com
- (2603:10b6:5:177::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29 via Frontend
- Transport; Thu, 27 Jul 2023 20:25:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT099.mail.protection.outlook.com (10.13.172.241) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6631.29 via Frontend Transport; Thu, 27 Jul 2023 20:25:10 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 27 Jul 2023
- 13:24:54 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 27 Jul
- 2023 13:24:54 -0700
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Thu, 27 Jul 2023 13:24:53 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     <jgg@nvidia.com>, <kevin.tian@intel.com>
-CC:     <yi.l.liu@intel.com>, <joro@8bytes.org>, <will@kernel.org>,
-        <robin.murphy@arm.com>, <alex.williamson@redhat.com>,
-        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <farman@linux.ibm.com>
-Subject: [PATCH v10 6/6] vfio: Support IO page table replacement
-Date:   Thu, 27 Jul 2023 13:24:37 -0700
-Message-ID: <12b9718d0225701b37aad75395187ef667464bc0.1690488745.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <cover.1690488745.git.nicolinc@nvidia.com>
-References: <cover.1690488745.git.nicolinc@nvidia.com>
+        Thu, 27 Jul 2023 16:25:08 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32ECD213A;
+        Thu, 27 Jul 2023 13:25:07 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1690489498tn31pf5y
+Received: from linux-lab-host.localdomain ( [61.141.78.189])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 28 Jul 2023 04:24:56 +0800 (CST)
+X-QQ-SSF: 01200000000000D0X000000A0000000
+X-QQ-FEAT: OFQdrTmJ2CT0tv/k26zD61DgunIr3+i0gone8E+YGqdNlrN1NMVMfNlBeM907
+        QHYMz8CJvGbNGo2HcSksGZidroSyt7+Jq0dU4tKx5ZZiLbBmsl82jsZXPz/fIp7su2ohykc
+        554yQkRI4nz5yiK3mB6DzQ4AUpgeLhpu3NvDkupV1A4BbpHKbl+nPP2OAKUDI22ThM7qUKK
+        flti2txnb6ObvovHXy8v5rve33RQFJdVlo49Y31TT1pCPBQgSu2+DxtHvQf9Pb/7F5LC0/d
+        vCjccB3olddvLIM1bmTiA+Wf3Hb76B0A27Y0PylTN7gPtLhNMevIhh9v1KvAmL8lQjHWUUA
+        DhqwfpUhbSJaTlO3jnl/uFVJDaGyBW5Ij8WS61t2uqI0G7jdJzG3DM/UvtLyQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 6039361887706887061
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 03/12] selftests/nolibc: fix up O= option support
+Date:   Fri, 28 Jul 2023 04:24:56 +0800
+Message-Id: <1da6cedc8a7232833dbb7aaada5ae9df3e60ed7e.1690489039.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1690489039.git.falcon@tinylab.org>
+References: <cover.1690489039.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT099:EE_|BY5PR12MB4950:EE_
-X-MS-Office365-Filtering-Correlation-Id: 40c6c4ce-7dc4-4122-afb9-08db8edf93ad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FCoW6MUelZAu67e2fzAxOHM5s5vHs/cIpQy8E3iNMlWvqRB+zHO8bZy3mK/6B//lU1GQg/f5ha0uuZhgDDriVqglT6lHARSCSWKAIoF/bS+YVGp0EprrGDCF/qTl18t51opcXglJ7gKHEOpz4dWU6u6gOSa8ubWjPPTWpfO1pkVUZmuDB3vrJrzumx1EjbKKpsPdyrfwg9IAfoAgCSnjz55J0wSJZHKwCMQa591In3rkzihyIwVOXwKtkRpidXNrZliYo4CZZuk93itopU+DPNMAsUWWhLh6F3qdTrLlgSxnK5uAfWad5SJj8NnxHTcKDLjUakc+ybG21hx3jQmQVmRIMv7J/x8OyroHeVbC5XOUc2nhTpbykYvGvRK6a5ffUi91MseCH9hoi+q9QudoJOZAJswU91Aq+uC7oXGPYHx5g1o4rEuhif4gco910HEeB+3VAo7Szwkz+ZKiiCEIGaPCV9BtgQn2z+El0JNheQ1JmQmo5MzbqoAljVOYn3yMRvBzCvGlQWp1bth+MYBNnx5S7AubLdi9uPRyZAwIdOpgj6xVxhyJrU8Lr3vh/A7MW5UPrI5Yy/b4FdglV1MMRYEBIjsS+gVWRC6qbaz7u7jRGzipkIh66qseCJFgfwXoalnHSZrn/7nDZqOm2T0p/nEURcmBwoBdSiP/HdIw4o3Wc8tgu1yJDqOhUgSlI5QSAh08hyAPkZEg3yimrf3qjoKS5Wbhl8PSezLNmP13QA0yUoDeIZA5EKFZotOSWUKd
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199021)(82310400008)(40470700004)(36840700001)(46966006)(47076005)(478600001)(110136005)(54906003)(86362001)(70586007)(4326008)(316002)(70206006)(356005)(7636003)(40480700001)(186003)(6666004)(82740400003)(8676002)(26005)(336012)(40460700003)(7696005)(8936002)(7416002)(2906002)(426003)(41300700001)(5660300002)(2616005)(36756003)(83380400001)(36860700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2023 20:25:10.8135
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40c6c4ce-7dc4-4122-afb9-08db8edf93ad
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4950
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now both the physical path and the emulated path should support an IO page
-table replacement. Call iommufd_device_replace/iommufd_access_replace(),
-when vdev->iommufd_attached is true.
+To avoid pollute the source code tree and avoid mrproper for every
+architecture switch, the O= argument must be supported.
 
-Also update the VFIO_DEVICE_ATTACH_IOMMUFD_PT kdoc in the uAPI header.
+Both IMAGE and .config are from the building directory, let's use
+objtree instead of srctree for them.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Alex Williamson <alex.williamson@redhat.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+If no O= option specified, means building kernel in source code tree,
+objtree should be srctree in such case.
+
+Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/lkml/ZK0AB1OXH1s2xYsh@1wt.eu/
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- drivers/vfio/iommufd.c    | 11 ++++++-----
- include/uapi/linux/vfio.h |  6 ++++++
- 2 files changed, 12 insertions(+), 5 deletions(-)
+ tools/testing/selftests/nolibc/Makefile | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/vfio/iommufd.c b/drivers/vfio/iommufd.c
-index 4d84904fd927..82eba6966fa5 100644
---- a/drivers/vfio/iommufd.c
-+++ b/drivers/vfio/iommufd.c
-@@ -146,9 +146,9 @@ int vfio_iommufd_physical_attach_ioas(struct vfio_device *vdev, u32 *pt_id)
- 		return -EINVAL;
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index bfea1ea0b4e7..f5680b9ed85c 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -9,6 +9,9 @@ ifeq ($(srctree),)
+ srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
+ endif
  
- 	if (vdev->iommufd_attached)
--		return -EBUSY;
--
--	rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
-+		rc = iommufd_device_replace(vdev->iommufd_device, pt_id);
-+	else
-+		rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
- 	if (rc)
- 		return rc;
- 	vdev->iommufd_attached = true;
-@@ -223,8 +223,9 @@ int vfio_iommufd_emulated_attach_ioas(struct vfio_device *vdev, u32 *pt_id)
- 	lockdep_assert_held(&vdev->dev_set->lock);
++# add objtree for O= argument, required by IMAGE and .config
++objtree ?= $(srctree)
++
+ ifeq ($(ARCH),)
+ include $(srctree)/scripts/subarch.include
+ ARCH = $(SUBARCH)
+@@ -194,12 +197,12 @@ initramfs: nolibc-test
  
- 	if (vdev->iommufd_attached)
--		return -EBUSY;
--	rc = iommufd_access_attach(vdev->iommufd_access, *pt_id);
-+		rc = iommufd_access_replace(vdev->iommufd_access, *pt_id);
-+	else
-+		rc = iommufd_access_attach(vdev->iommufd_access, *pt_id);
- 	if (rc)
- 		return rc;
- 	vdev->iommufd_attached = true;
-diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-index fa06e3eb4955..537157ff8670 100644
---- a/include/uapi/linux/vfio.h
-+++ b/include/uapi/linux/vfio.h
-@@ -939,6 +939,12 @@ struct vfio_device_bind_iommufd {
-  * Undo by VFIO_DEVICE_DETACH_IOMMUFD_PT or device fd close.  This is only
-  * allowed on cdev fds.
-  *
-+ * If a vfio device is currently attached to a valid hw_pagetable, without doing
-+ * a VFIO_DEVICE_DETACH_IOMMUFD_PT, a second VFIO_DEVICE_ATTACH_IOMMUFD_PT ioctl
-+ * passing in another hw_pagetable (hwpt) id is allowed. This action, also known
-+ * as a hw_pagetable replacement, will replace the device's currently attached
-+ * hw_pagetable with a new hw_pagetable corresponding to the given pt_id.
-+ *
-  * Return: 0 on success, -errno on failure.
-  */
- struct vfio_device_attach_iommufd_pt {
+ # common macros for kernel targets
+ MAKE_KERNEL   = $(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE)
+-KERNEL_CONFIG = $(srctree)/.config
+-KERNEL_IMAGE  = $(srctree)/$(IMAGE)
++KERNEL_CONFIG = $(objtree)/.config
++KERNEL_IMAGE  = $(objtree)/$(IMAGE)
+ 
+ defconfig:
+ 	$(Q)$(MAKE_KERNEL) mrproper $(DEFCONFIG) prepare
+-	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -O "$(srctree)" -m "$(KERNEL_CONFIG)" $(foreach c,$(EXTCONFIG),$(wildcard $(CURDIR)/configs/$c))
++	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -O "$(objtree)" -m "$(KERNEL_CONFIG)" $(foreach c,$(EXTCONFIG),$(wildcard $(CURDIR)/configs/$c))
+ 	$(Q)$(MAKE_KERNEL) KCONFIG_ALLCONFIG="$(KERNEL_CONFIG)" allnoconfig
+ 
+ kernel: initramfs
 -- 
-2.41.0
+2.25.1
 
