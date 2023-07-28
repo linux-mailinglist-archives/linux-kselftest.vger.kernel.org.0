@@ -2,130 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2631D767629
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 21:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA22767677
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 21:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjG1TR1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 15:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        id S233366AbjG1Tlb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 15:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjG1TR0 (ORCPT
+        with ESMTP id S232706AbjG1Tla (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 15:17:26 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5672B19BA;
-        Fri, 28 Jul 2023 12:17:25 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 36SJHILA032228;
-        Fri, 28 Jul 2023 21:17:18 +0200
-Date:   Fri, 28 Jul 2023 21:17:18 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     tanyuan@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] tools/nolibc: add pipe() support
-Message-ID: <20230728191717.GA32165@1wt.eu>
-References: <d01fc60c6a85cc4af87f6f88eb5017b83c181f4d.1690307717.git.tanyuan@tinylab.org>
- <20230728155031.35125-1-falcon@tinylab.org>
+        Fri, 28 Jul 2023 15:41:30 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5268448C;
+        Fri, 28 Jul 2023 12:41:02 -0700 (PDT)
+X-QQ-mid: bizesmtp87t1690573251tapgz91s
+Received: from linux-lab-host.localdomain ( [61.141.77.223])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 29 Jul 2023 03:40:50 +0800 (CST)
+X-QQ-SSF: 01200000002000E0X000B00A0000000
+X-QQ-FEAT: +ynUkgUhZJkRDS+4P/cO6v+LDp1G8Bn7nTKxUBq3FBEVv78/MGTrl7l43ki+w
+        rJx6GQkHC18N/d1moGqxsXFO/p9rDRtH0FRkA9ilKkD1SGjFrYZfxLw40SilyWxLdw9KmZh
+        j5H/0CvAKu9fE3WgFKvaBYPyrgoBGAeLXdgz7OVcGqgHsHqdKBYNQlOyDeInHJWakmp7P5g
+        b7phuljLlBGyz1koIEANr23RS/5F4blRnMBDAyTNDmBSFpqAYYqlEyfj9bWr1dYbsQA8rUU
+        c4loSTtTk9a4PBHeGOuhSUXBdteN1hYGVJLdvU+pSWFs30Hg/wPClKOwFYbSK7kTinQWwjM
+        v1m3AP26a3JWcoGoiDGlhNGcQlNhA==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 2622001603414672531
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: [PATCH v3 08/12] selftests/nolibc: allow quit qemu-system when poweroff fails
+Date:   Sat, 29 Jul 2023 03:40:50 +0800
+Message-Id: <20230728194050.151614-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <4b4d792299ca5356f8f5af5fc9a27c687b0e4e38.1690489039.git.falcon@tinylab.org>
+References: <4b4d792299ca5356f8f5af5fc9a27c687b0e4e38.1690489039.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230728155031.35125-1-falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Zhangjin, hi Yuan,
+Hi, Willy
 
-On Fri, Jul 28, 2023 at 11:50:31PM +0800, Zhangjin Wu wrote:
-> Hi, Yuan
+two trivial updates required in this patch.
+
+[...]
 > 
-> > pipe is crucial for shell.
-> >
+> To tell users the test running progress in time, some critical running
+> status are also printed and detected.
 > 
-> As the syscall manpage[1] shows, pipe() is just one of the exceptions how
-> may require two return registers in some platforms, e.g.:
-> arch/mips/kernel/syscall.c
-> 
->     * For historic reasons the pipe(2) syscall on MIPS has an unusual calling
->      * convention.  It returns results in registers $v0 / $v1 which means there
->      * is no need for it to do verify the validity of a userspace pointer
->      * argument.  Historically that used to be expensive in Linux.  These days
->      * the performance advantage is negligible.
->      */
-(...)
+[...]
+> @@ -229,16 +232,39 @@ kernel: $(KERNEL_CONFIG)
+>  # common macros for qemu run/rerun targets
+>  QEMU_SYSTEM_RUN = qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(KERNEL_IMAGE)" -serial stdio $(QEMU_ARGS)
+>  
+> +TIMEOUT_CMD = t=$(QEMU_TIMEOUT); past=0; \
+> +	bios_timeout=$$(expr $$t - 7); kernel_timeout=$$(expr $$t - 5); init_timeout=$$(expr $$t - 3); test_timeout=$$(expr $$t - 1);              \
+> +	err=""; bios=0; kernel=0; init=0; test=0; poweredoff=0; panic=0;                                                                           \
 
-Ah indeed! I vaguely remembered that I had left that one aside for some
-time but did not remember why. Now I remember that I couldn't handle the
-MIPS implementation by then while it used to be my primary target.
+This 'panic=0;' variable init should be removed, it is not required in
+the latest version:
 
-> Since we are able to use pipe2() for pipe() (introduced from early Linux
-> 2.6.27, glibc 2.9) and use getpid+getppid for getxpid, getuid+geteuid
-> for getxuid and getgid+getegit for getxgid.
-> 
-> So, it is possible provide such pipe() as a wraper of pipe2() and
+	err=""; bios=0; kernel=0; init=0; test=0; poweredoff=0;                                                                                    \
 
-Indeed.
+> +	echo "Running $(KERNEL_IMAGE) on qemu-system-$(QEMU_ARCH)";                                                                                \
+> +	while [ $$t -gt 0 ]; do                                                                                                                    \
+> +	    sleep 2; t=$$(expr $$t - 2); past=$$(expr $$past + 2);                                                                                 \
+> +	    if [ $$bios -eq 0 ] && grep -E "Linux version|Kernel command line|printk: console" "$(RUN_OUT)"; then bios=1; fi;                      \
+> +	    if [ $$bios -eq 1 -a $$kernel -eq 0 ] && grep -E "Run .* as init process" "$(RUN_OUT)"; then kernel=1; fi;                             \
+> +	    if [ $$kernel -eq 1 -a $$init -eq 0 ] && grep -E "Running test" "$(RUN_OUT)"; then init=1; fi;                                         \
+> +	    if [ $$init -eq 1 -a $$test -eq 0 ] && grep -E "Leaving init with final status|Exiting with status" "$(RUN_OUT)"; then test=1; fi;     \
 
-> getxpid, getxuid and getxgid as wrappers of their corresponding syscall
-> pairs,
+It is better to get the line of 'Total number of errors' instead of
+'Exiting with status', the later never trigger in qemu-system run.
 
-I doubt anyone needs these ones, I didn't know them and do not even
-have their man page. Let's keep the focus on what developers really use.
+	    if [ $$init -eq 1 -a $$test -eq 0 ] && grep -E "Leaving init with final status|Total number of errors" "$(RUN_OUT)"; then test=1; fi;  \
 
-> then, no need to provide a second return value for all of the
-> existing architectures, for example:
+> +	    if [ $$init -eq 1 ] && grep -E "Kernel panic - not syncing: Attempted to kill init" "$(RUN_OUT)"; then err="test"; sleep 1; break; fi; \
+> +	    if [ $$test -eq 1 ] && grep -E "reboot: System halted|reboot: Power down" "$(RUN_OUT)"; then poweredoff=1; sleep 1; break; fi;         \
+> +	    if [ $$past -gt $$bios_timeout -a $$bios -eq 0 ]; then err="bios"; break; fi;                                                          \
+> +	    if [ $$past -gt $$kernel_timeout -a $$kernel -eq 0 ]; then err="kernel"; break; fi;                                                    \
+> +	    if [ $$past -gt $$init_timeout -a $$init -eq 0 ]; then err="init"; break; fi;                                                          \
+> +	    if [ $$past -gt $$test_timeout -a $$test -eq 0 ]; then err="test"; break; fi;                                                          \
+> +	done;                                                                                                                                      \
+> +	if [ -z "$$err" -a $$poweredoff -eq 0 -a $$panic -eq 0 ]; then err="qemu-system-$(QEMU_ARCH)"; fi;                                         \
 
+And here, we should remove the panic check here too, it is replaced with
+'err="test"':
 
-> 
->     #ifndef pipe
->     int pipe(int pipefd[2])
->     {
->         pipe2(pipefd, 0);
->     }
->     #endif
-> 
-> And for mips:
-> 
->     // may be in tools/include/nolibc/types.h ?
->     struct fd_pair {
->            long fd[2];
->     };
-> 
->     // tools/include/nolibc/arch-mips.h
->     struct fd_pair pipe(void)
->     {
->             struct fd_pair fds;
->             int pipefds[2];
->     
->             pipe2(pipefds, 0);
->     
->             fds.fd[0] = pipefds[0];
->             fds.fd[1] = pipefds[1];
->     
->             return fds;
->     }
+	if [ -z "$$err" -a $$poweredoff -eq 0 ]; then err="qemu-system-$(QEMU_ARCH)"; fi;                                                          \
 
-This one does not have the correct prototype for the function exposed
-to the user, pipe really is "int pipe(int pipefd[2])". Maybe you were
-thinking about sys_pipe() instead ? But since MIPS also has pipe2() now,
-there's no reason to make an exception.
-
-> To use such method, the test case should be changed too, perhaps an
-> easier method is even only provide pipe2() for all and let users define
-> their own pipe() if really required, we also need to change the test
-> case.
-
-No, we need to provide users with what they need to compile standard
-code. If we rely on pipe2() to deliver pipe(), that's fine. We can even
-do it per-arch if there are constraints but it seems to me that pipe2()
-is OK.
 
 Thanks,
-Willy
+Zhangjin
+
+> +	if [ -n "$$err" ]; then echo "$$err may timeout, test failed"; tail -10 $(RUN_OUT); else echo "powered off, test finish"; fi;              \
+> +	pkill -15 qemu-system-$(QEMU_ARCH) || true
+> +
+> +TIMEOUT_QEMU_RUN = ($(QEMU_SYSTEM_RUN) > "$(RUN_OUT)" &); $(TIMEOUT_CMD)
+> +
+>  # run the tests after building the kernel
+>  PHONY += $(KERNEL_IMAGE)
+>  $(KERNEL_IMAGE): kernel
+>  run: $(KERNEL_IMAGE)
+> -	$(Q)$(QEMU_SYSTEM_RUN) > "$(RUN_OUT)"
+> +	$(Q)$(TIMEOUT_QEMU_RUN)
+>  	$(Q)$(REPORT) "$(RUN_OUT)"
+>  
+>  # re-run the tests from an existing kernel
+>  rerun:
+> -	$(Q)$(QEMU_SYSTEM_RUN) > "$(RUN_OUT)"
+> +	$(Q)$(TIMEOUT_QEMU_RUN)
+>  	$(Q)$(REPORT) "$(RUN_OUT)"
+>  
+>  # report with existing test log
+> -- 
+> 2.25.1
