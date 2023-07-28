@@ -2,128 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA22767677
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 21:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6194D767687
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 21:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbjG1Tlb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 15:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S234653AbjG1ToZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 15:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232706AbjG1Tla (ORCPT
+        with ESMTP id S234663AbjG1ToY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 15:41:30 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5268448C;
-        Fri, 28 Jul 2023 12:41:02 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1690573251tapgz91s
-Received: from linux-lab-host.localdomain ( [61.141.77.223])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 29 Jul 2023 03:40:50 +0800 (CST)
-X-QQ-SSF: 01200000002000E0X000B00A0000000
-X-QQ-FEAT: +ynUkgUhZJkRDS+4P/cO6v+LDp1G8Bn7nTKxUBq3FBEVv78/MGTrl7l43ki+w
-        rJx6GQkHC18N/d1moGqxsXFO/p9rDRtH0FRkA9ilKkD1SGjFrYZfxLw40SilyWxLdw9KmZh
-        j5H/0CvAKu9fE3WgFKvaBYPyrgoBGAeLXdgz7OVcGqgHsHqdKBYNQlOyDeInHJWakmp7P5g
-        b7phuljLlBGyz1koIEANr23RS/5F4blRnMBDAyTNDmBSFpqAYYqlEyfj9bWr1dYbsQA8rUU
-        c4loSTtTk9a4PBHeGOuhSUXBdteN1hYGVJLdvU+pSWFs30Hg/wPClKOwFYbSK7kTinQWwjM
-        v1m3AP26a3JWcoGoiDGlhNGcQlNhA==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 2622001603414672531
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v3 08/12] selftests/nolibc: allow quit qemu-system when poweroff fails
-Date:   Sat, 29 Jul 2023 03:40:50 +0800
-Message-Id: <20230728194050.151614-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <4b4d792299ca5356f8f5af5fc9a27c687b0e4e38.1690489039.git.falcon@tinylab.org>
-References: <4b4d792299ca5356f8f5af5fc9a27c687b0e4e38.1690489039.git.falcon@tinylab.org>
+        Fri, 28 Jul 2023 15:44:24 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422953AB1
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 12:44:23 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-7748ca56133so24421239f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 12:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1690573462; x=1691178262;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IVYlyy1phIaXLckqq8rcJcrT6tAP9YEvkh5U2YAuBjA=;
+        b=gbxFAICkUa/e7YZ60wNF06DmZ9EZ5eTjiwhQrucRQ4mWWAAWg3UGTbAC5bzenvxANC
+         DygyMU802VySwy1Gt+ry6yeNZcqZTl0/N4m47KcwL1CB66nZfXBQCF5cwvAWSGA5lU84
+         I8n84qDcqRRotzCACQXhPYr4dFSs9DTZqpJaU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690573462; x=1691178262;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IVYlyy1phIaXLckqq8rcJcrT6tAP9YEvkh5U2YAuBjA=;
+        b=JhaEGJfGWds0/CTrXCtHnRqRbM19igCmiv9KNH9Rs0FoBhOJ4o/FB/j5VN175QGDSn
+         HKqD6aoYZM2kI6EtB+/mJbP/xii9qR33s58xaxXytDKZ0g1MZC67L/MbIrDcqy1g8Zxa
+         x34AJ3VBLjuUa2ByzF06IJ4h0GUTCmg+wdWee5Og0JdynNSbz1zQxdghsr4sUJYtCeUF
+         OW/COA/4yXfYlikmFcdbSIRon7LauxhYWujapZhbp7tR8Tm3vvuNcscEDk4YnK/uXyGt
+         1hqvYFr67o02fDOtYOLLSTLV3L/PeVV686UEwSp6fmOUGu6W/7dDmAZYuu99fnNupBZW
+         07Yw==
+X-Gm-Message-State: ABy/qLZp3q7WbHSfkYOsi6rr7C0DpzvLlz8TtOM1zfniJt6o6dVKYqa0
+        EXb238kDEP6uHt2n8SWx13m5Fg==
+X-Google-Smtp-Source: APBJJlHIRa/HS3RQAAZ2Lt+w0eqEG9zHSdhaKUD7cHdWfrtWI3sfdzsr0rUmGfe+T4Wcbja3cx2doQ==
+X-Received: by 2002:a6b:c9d3:0:b0:788:2d78:813c with SMTP id z202-20020a6bc9d3000000b007882d78813cmr575240iof.0.1690573462600;
+        Fri, 28 Jul 2023 12:44:22 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id f19-20020a056638119300b0042b31920313sm1299632jas.9.2023.07.28.12.44.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jul 2023 12:44:22 -0700 (PDT)
+Message-ID: <ec809279-cc41-7e0f-a567-29400b4c34a9@linuxfoundation.org>
+Date:   Fri, 28 Jul 2023 13:44:21 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH next 3/3] selftests:connector: Add root check and fix arg
+ error paths to skip
+Content-Language: en-US
+To:     Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1690564372.git.skhan@linuxfoundation.org>
+ <2c0ac97f9c8e6bd46b60854c136099c0dd4a09f6.1690564372.git.skhan@linuxfoundation.org>
+ <0CB227BA-69FD-447F-BE73-2482A6998F7E@oracle.com>
+ <5b283f3b-f176-7f19-5db0-1332a94a44be@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <5b283f3b-f176-7f19-5db0-1332a94a44be@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
-
-two trivial updates required in this patch.
-
-[...]
+On 7/28/23 13:06, Shuah Khan wrote:
+> On 7/28/23 12:10, Anjali Kulkarni wrote:
+>>
+>>
+>>> On Jul 28, 2023, at 10:29 AM, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>>
+>>> proc_filter test requires root privileges. Add root privilege check
+>>> and skip the test. Also fix argument parsing paths to skip in their
+>>> error legs.
+>>>
+>>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+>>> ---
+>>> tools/testing/selftests/connector/proc_filter.c | 9 +++++++--
+>>> 1 file changed, 7 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/connector/proc_filter.c b/tools/testing/selftests/connector/proc_filter.c
+>>> index 4fe8c6763fd8..7b2081b98e5c 100644
+>>> --- a/tools/testing/selftests/connector/proc_filter.c
+>>> +++ b/tools/testing/selftests/connector/proc_filter.c
+>>> @@ -248,7 +248,7 @@ int main(int argc, char *argv[])
+>>>
+>>>     if (argc > 2) {
+>>>         printf("Expected 0(assume no-filter) or 1 argument(-f)\n");
+>>> -        exit(1);
+>>> +        exit(KSFT_SKIP);
+>>>     }
+>>>
+>>>     if (argc == 2) {
+>>> @@ -256,10 +256,15 @@ int main(int argc, char *argv[])
+>>>             filter = 1;
+>>>         } else {
+>>>             printf("Valid option : -f (for filter feature)\n");
+>>> -            exit(1);
+>>> +            exit(KSFT_SKIP);
+>>>         }
+>>>     }
+>>>
+>>> +    if (geteuid()) {
+>>> +        printf("Connector test requires root privileges.\n");
+>>> +        exit(KSFT_SKIP);
+>>> +    }
+>>> +
+>>
+>> I am not sure why you have added this check? proc_filter does not need root privilege to run.
+>>
 > 
-> To tell users the test running progress in time, some critical running
-> status are also printed and detected.
+> It failed for me when I ran it saying it requires root privileges.
+> I had to run it as root.
 > 
-[...]
-> @@ -229,16 +232,39 @@ kernel: $(KERNEL_CONFIG)
->  # common macros for qemu run/rerun targets
->  QEMU_SYSTEM_RUN = qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(KERNEL_IMAGE)" -serial stdio $(QEMU_ARGS)
->  
-> +TIMEOUT_CMD = t=$(QEMU_TIMEOUT); past=0; \
-> +	bios_timeout=$$(expr $$t - 7); kernel_timeout=$$(expr $$t - 5); init_timeout=$$(expr $$t - 3); test_timeout=$$(expr $$t - 1);              \
-> +	err=""; bios=0; kernel=0; init=0; test=0; poweredoff=0; panic=0;                                                                           \
 
-This 'panic=0;' variable init should be removed, it is not required in
-the latest version:
+The following is what I see when I run the test as non-root
+user:
 
-	err=""; bios=0; kernel=0; init=0; test=0; poweredoff=0;                                                                                    \
+bind failed: Operation not permitted
 
-> +	echo "Running $(KERNEL_IMAGE) on qemu-system-$(QEMU_ARCH)";                                                                                \
-> +	while [ $$t -gt 0 ]; do                                                                                                                    \
-> +	    sleep 2; t=$$(expr $$t - 2); past=$$(expr $$past + 2);                                                                                 \
-> +	    if [ $$bios -eq 0 ] && grep -E "Linux version|Kernel command line|printk: console" "$(RUN_OUT)"; then bios=1; fi;                      \
-> +	    if [ $$bios -eq 1 -a $$kernel -eq 0 ] && grep -E "Run .* as init process" "$(RUN_OUT)"; then kernel=1; fi;                             \
-> +	    if [ $$kernel -eq 1 -a $$init -eq 0 ] && grep -E "Running test" "$(RUN_OUT)"; then init=1; fi;                                         \
-> +	    if [ $$init -eq 1 -a $$test -eq 0 ] && grep -E "Leaving init with final status|Exiting with status" "$(RUN_OUT)"; then test=1; fi;     \
-
-It is better to get the line of 'Total number of errors' instead of
-'Exiting with status', the later never trigger in qemu-system run.
-
-	    if [ $$init -eq 1 -a $$test -eq 0 ] && grep -E "Leaving init with final status|Total number of errors" "$(RUN_OUT)"; then test=1; fi;  \
-
-> +	    if [ $$init -eq 1 ] && grep -E "Kernel panic - not syncing: Attempted to kill init" "$(RUN_OUT)"; then err="test"; sleep 1; break; fi; \
-> +	    if [ $$test -eq 1 ] && grep -E "reboot: System halted|reboot: Power down" "$(RUN_OUT)"; then poweredoff=1; sleep 1; break; fi;         \
-> +	    if [ $$past -gt $$bios_timeout -a $$bios -eq 0 ]; then err="bios"; break; fi;                                                          \
-> +	    if [ $$past -gt $$kernel_timeout -a $$kernel -eq 0 ]; then err="kernel"; break; fi;                                                    \
-> +	    if [ $$past -gt $$init_timeout -a $$init -eq 0 ]; then err="init"; break; fi;                                                          \
-> +	    if [ $$past -gt $$test_timeout -a $$test -eq 0 ]; then err="test"; break; fi;                                                          \
-> +	done;                                                                                                                                      \
-> +	if [ -z "$$err" -a $$poweredoff -eq 0 -a $$panic -eq 0 ]; then err="qemu-system-$(QEMU_ARCH)"; fi;                                         \
-
-And here, we should remove the panic check here too, it is replaced with
-'err="test"':
-
-	if [ -z "$$err" -a $$poweredoff -eq 0 ]; then err="qemu-system-$(QEMU_ARCH)"; fi;                                                          \
+thanks,
+-- Shuah
 
 
-Thanks,
-Zhangjin
-
-> +	if [ -n "$$err" ]; then echo "$$err may timeout, test failed"; tail -10 $(RUN_OUT); else echo "powered off, test finish"; fi;              \
-> +	pkill -15 qemu-system-$(QEMU_ARCH) || true
-> +
-> +TIMEOUT_QEMU_RUN = ($(QEMU_SYSTEM_RUN) > "$(RUN_OUT)" &); $(TIMEOUT_CMD)
-> +
->  # run the tests after building the kernel
->  PHONY += $(KERNEL_IMAGE)
->  $(KERNEL_IMAGE): kernel
->  run: $(KERNEL_IMAGE)
-> -	$(Q)$(QEMU_SYSTEM_RUN) > "$(RUN_OUT)"
-> +	$(Q)$(TIMEOUT_QEMU_RUN)
->  	$(Q)$(REPORT) "$(RUN_OUT)"
->  
->  # re-run the tests from an existing kernel
->  rerun:
-> -	$(Q)$(QEMU_SYSTEM_RUN) > "$(RUN_OUT)"
-> +	$(Q)$(TIMEOUT_QEMU_RUN)
->  	$(Q)$(REPORT) "$(RUN_OUT)"
->  
->  # report with existing test log
-> -- 
-> 2.25.1
