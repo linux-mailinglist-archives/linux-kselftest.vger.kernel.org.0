@@ -2,679 +2,225 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCC876704A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 17:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF49076704D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 17:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbjG1POC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 11:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S236509AbjG1PPK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 11:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236318AbjG1POB (ORCPT
+        with ESMTP id S236318AbjG1PPJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 11:14:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BBF4209
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 08:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690557191;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=isGl7Mjxm83AG6h/oNeNrQK7TWRaAHmvi42LPCgtqIM=;
-        b=WAD/EkGMwckhH9eQ9/Zc6G7hW9m79gGnvO+KG+XnyjQeHZ475eYBesSxRDh32r1xZlZ2Nx
-        NhbxdiY2p3Hh7uSE65Cyk/3NpiLU4qBMCtk/S22e+Z/O8JVrQ2tOWDNkdkwfTBJMPzRSoM
-        Xv1NUBPbmUV7CNMSKarsUylf5kwhzrM=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-211-6bHhVf9tM9CLQ_ew_QXPBQ-1; Fri, 28 Jul 2023 11:13:09 -0400
-X-MC-Unique: 6bHhVf9tM9CLQ_ew_QXPBQ-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3175b757bbfso1293656f8f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 08:13:09 -0700 (PDT)
+        Fri, 28 Jul 2023 11:15:09 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736A02D7B
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 08:15:06 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51e2a6a3768so2893042a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 08:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1690557305; x=1691162105;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dUsoDe1aciZkS3SYBk+FJnom/bcWm6HUHz7xtg9wGVE=;
+        b=xlBQr91VrE+fcTMQtJeL8UehPRNRDcOoL3Jb7oeY/mrCveqo1mf708pc0eDYwfspAJ
+         A+kaOd3By9dV4yBq+KBkmUafQK3E1WIz9fm1vsVKJtrzZ69uoTGDsVyPg7Xo8lpzBMV7
+         F6TD0DCllb2LydrhPW33jZF0TgI2xFAg27NxhuBNndHVKqMobgm/+RCpx6Ngqg8YxKB7
+         b83oDwxzwWX8OZXxHIXZG598ch1mn5d3uloQxGo1tY0/gZEnwuPNS6xRJH8gYeGIarEo
+         Gc73xHWp4OAegZDVNbxQI5pzehlWrR/ANJAK/2Ze7/lopQhmjJV/Vq/9Qqv6X8RhKmbK
+         ZQvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690557188; x=1691161988;
+        d=1e100.net; s=20221208; t=1690557305; x=1691162105;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=isGl7Mjxm83AG6h/oNeNrQK7TWRaAHmvi42LPCgtqIM=;
-        b=h3bmjUKBuGjbgahIBVRC9JCrlLXsFBFX1ZHXwwhPAtM9nSDYL0eYq7vrLY+8cbsztv
-         EjDrMd+sukQ0SyLVmI5VuvOt02aZKyRXT9Qocrp987mo4lhhQaq432j6RN7+GcRkEi6x
-         5BskJYD8s8Zrzbyt4XkZw2yaj1aOR7S3OcI2yvQC+03vrzHaGvblXLDOOnU0+eoHl+hw
-         mgjl1ywRhA1vLbN5rnz6sEg+i7jd76SSZYwfbREOQ3dvFXLPJGTLrMpP2OPlpvOffsF/
-         TYWq7emSmD67zn/qLojF5g3eVp0DZQUhYNa7gqJlhAySv4pcwSXsqZoYKRYPxS2EsQMg
-         PNsw==
-X-Gm-Message-State: ABy/qLY8Jhl5j9J++5aHwcGzGDc8HEMb78NwR6fXqHnBw4zkstgXTPMg
-        qvIUc7YQp11zWapu60H3U5um2H73mpBkR/xjqR1N509fXI7rps6knRi1e/SOSOBypulWs/Tlw+h
-        SnlCA4icoYCvDq5Bp9TckEN5JidDl
-X-Received: by 2002:a5d:4e03:0:b0:314:3c84:4da2 with SMTP id p3-20020a5d4e03000000b003143c844da2mr2071442wrt.13.1690557188695;
-        Fri, 28 Jul 2023 08:13:08 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGWP99vjY41hgGBk57OTIpVgGID+jGvzp0fLqY/EfXC0LCV9v6bAZPXTzIPqoZJwawP3hvQIA==
-X-Received: by 2002:a5d:4e03:0:b0:314:3c84:4da2 with SMTP id p3-20020a5d4e03000000b003143c844da2mr2071418wrt.13.1690557188283;
-        Fri, 28 Jul 2023 08:13:08 -0700 (PDT)
-Received: from [192.168.1.67] (198.red-88-3-59.dynamicip.rima-tde.net. [88.3.59.198])
-        by smtp.gmail.com with ESMTPSA id g18-20020a5d5552000000b003142439c7bcsm5002915wrw.80.2023.07.28.08.13.07
+        bh=dUsoDe1aciZkS3SYBk+FJnom/bcWm6HUHz7xtg9wGVE=;
+        b=MVbkS4cjiTOXOuOrInc+Pc8/dUnn4wMwSkKP6wWkDQMv+BPBPYnelkRQmJxxYRh+P5
+         krrisycPBfy/oFgY7hPJ5/EFxSsRkYye35I5nIVqB4URLlCJJiDG2UZMBReH4Ho6CEDT
+         ZyKSG2JqCmPitBTr3RRuAj/BPWogKArwpVaIi1aWwNcLERQpfVr6s6XCbXPqCp8hUBPD
+         XFiofIl7inZBC2vrr+UsSuB6xgvSsDD1UWtojJMfGZlf22iTwtd5bsyE0bEjrXHWeMVI
+         UKv4GVI41m9phaE1T8AhJEfDFyGu+0sD/lI8rzP6a7KVwV8v+/kST7N1dtFM1XXCDx1j
+         eiuQ==
+X-Gm-Message-State: ABy/qLY12Kj30Y5HnXrdl273YmClpDW2yi7C9pfgUoVT4ot1YbzElTKc
+        BOqFygOWFSbyt/lqPo1rkCmB7Q==
+X-Google-Smtp-Source: APBJJlGrx217B3+2JoDDsOR5Pe+xG2RV8Yfclk4WQBqChj/RTKdH94R2bDDyfq5dnAZDNu9v1WPHIA==
+X-Received: by 2002:aa7:c68f:0:b0:51e:24e1:c0e9 with SMTP id n15-20020aa7c68f000000b0051e24e1c0e9mr2023024edq.10.1690557304905;
+        Fri, 28 Jul 2023 08:15:04 -0700 (PDT)
+Received: from [10.44.2.5] ([81.246.10.41])
+        by smtp.gmail.com with ESMTPSA id ba4-20020a0564021ac400b00522572f323dsm1880856edb.16.2023.07.28.08.15.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 08:13:07 -0700 (PDT)
-Message-ID: <284d4389-1395-fb82-135c-e81551f31091@redhat.com>
-Date:   Fri, 28 Jul 2023 17:13:06 +0200
+        Fri, 28 Jul 2023 08:15:04 -0700 (PDT)
+Message-ID: <1023fdeb-a45a-2e9e-cd2e-7e44e655e8fc@tessares.net>
+Date:   Fri, 28 Jul 2023 17:15:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [ovs-dev] [PATCH v2 net-next 1/5] selftests: openvswitch: add an
- initial flow programming case
-Content-Language: en-US
-To:     Aaron Conole <aconole@redhat.com>, netdev@vger.kernel.org
-Cc:     dev@openvswitch.org, linux-kernel@vger.kernel.org,
-        Ilya Maximets <i.maximets@ovn.org>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kselftest@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20230728115940.578658-1-aconole@redhat.com>
- <20230728115940.578658-2-aconole@redhat.com>
-From:   Adrian Moreno <amorenoz@redhat.com>
-In-Reply-To: <20230728115940.578658-2-aconole@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [RFC bpf-next v5] bpf: Force to MPTCP
+Content-Language: en-GB
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <3076188eb88cca9151a2d12b50ba1e870b11ce09.1689693294.git.geliang.tang@suse.com>
+ <CAHC9VhS_LKdkEmm5_J5y34RpaRcTbg8==fpz8pMThDCjF6nYtQ@mail.gmail.com>
+ <b41babb1-f0f2-dc2f-c2e3-1870107fbd9f@tessares.net>
+ <ZMKxC+CFj4GbCklg@google.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <ZMKxC+CFj4GbCklg@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi Stanislav,
 
-
-On 7/28/23 13:59, Aaron Conole wrote:
-> The openvswitch self-tests can test much of the control side of
-> the module (ie: what a vswitchd implementation would process),
-> but the actual packet forwarding cases aren't supported, making
-> the testing of limited value.
+On 27/07/2023 20:01, Stanislav Fomichev wrote:
+> On 07/27, Matthieu Baerts wrote:
+>> Hi Paul, Stanislav,
+>>
+>> On 18/07/2023 18:14, Paul Moore wrote:
+>>> On Tue, Jul 18, 2023 at 11:21 AM Geliang Tang <geliang.tang@suse.com> wrote:
+>>>>
+>>>> As is described in the "How to use MPTCP?" section in MPTCP wiki [1]:
+>>>>
+>>>> "Your app can create sockets with IPPROTO_MPTCP as the proto:
+>>>> ( socket(AF_INET, SOCK_STREAM, IPPROTO_MPTCP); ). Legacy apps can be
+>>>> forced to create and use MPTCP sockets instead of TCP ones via the
+>>>> mptcpize command bundled with the mptcpd daemon."
+>>>>
+>>>> But the mptcpize (LD_PRELOAD technique) command has some limitations
+>>>> [2]:
+>>>>
+>>>>  - it doesn't work if the application is not using libc (e.g. GoLang
+>>>> apps)
+>>>>  - in some envs, it might not be easy to set env vars / change the way
+>>>> apps are launched, e.g. on Android
+>>>>  - mptcpize needs to be launched with all apps that want MPTCP: we could
+>>>> have more control from BPF to enable MPTCP only for some apps or all the
+>>>> ones of a netns or a cgroup, etc.
+>>>>  - it is not in BPF, we cannot talk about it at netdev conf.
+>>>>
+>>>> So this patchset attempts to use BPF to implement functions similer to
+>>>> mptcpize.
+>>>>
+>>>> The main idea is add a hook in sys_socket() to change the protocol id
+>>>> from IPPROTO_TCP (or 0) to IPPROTO_MPTCP.
+>>>>
+>>>> [1]
+>>>> https://github.com/multipath-tcp/mptcp_net-next/wiki
+>>>> [2]
+>>>> https://github.com/multipath-tcp/mptcp_net-next/issues/79
+>>>>
+>>>> v5:
+>>>>  - add bpf_mptcpify helper.
+>>>>
+>>>> v4:
+>>>>  - use lsm_cgroup/socket_create
+>>>>
+>>>> v3:
+>>>>  - patch 8: char cmd[128]; -> char cmd[256];
+>>>>
+>>>> v2:
+>>>>  - Fix build selftests errors reported by CI
+>>>>
+>>>> Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/79
+>>>> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+>>>> ---
+>>>>  include/linux/bpf.h                           |   1 +
+>>>>  include/linux/lsm_hook_defs.h                 |   2 +-
+>>>>  include/linux/security.h                      |   6 +-
+>>>>  include/uapi/linux/bpf.h                      |   7 +
+>>>>  kernel/bpf/bpf_lsm.c                          |   2 +
+>>>>  net/mptcp/bpf.c                               |  20 +++
+>>>>  net/socket.c                                  |   4 +-
+>>>>  security/apparmor/lsm.c                       |   8 +-
+>>>>  security/security.c                           |   2 +-
+>>>>  security/selinux/hooks.c                      |   6 +-
+>>>>  tools/include/uapi/linux/bpf.h                |   7 +
+>>>>  .../testing/selftests/bpf/prog_tests/mptcp.c  | 128 ++++++++++++++++--
+>>>>  tools/testing/selftests/bpf/progs/mptcpify.c  |  17 +++
+>>>>  13 files changed, 187 insertions(+), 23 deletions(-)
+>>>>  create mode 100644 tools/testing/selftests/bpf/progs/mptcpify.c
+>>>
+>>> ...
+>>>
+>>>> diff --git a/security/security.c b/security/security.c
+>>>> index b720424ca37d..bbebcddce420 100644
+>>>> --- a/security/security.c
+>>>> +++ b/security/security.c
+>>>> @@ -4078,7 +4078,7 @@ EXPORT_SYMBOL(security_unix_may_send);
+>>>>   *
+>>>>   * Return: Returns 0 if permission is granted.
+>>>>   */
+>>>> -int security_socket_create(int family, int type, int protocol, int kern)
+>>>> +int security_socket_create(int *family, int *type, int *protocol, int kern)
+>>>>  {
+>>>>         return call_int_hook(socket_create, 0, family, type, protocol, kern);
+>>>>  }
+>>>
+>>> Using the LSM to change the protocol family is not something we want
+>>> to allow.  I'm sorry, but you will need to take a different approach.
+>>
+>> @Paul: Thank you for your feedback. It makes sense and I understand.
+>>
+>> @Stanislav: Despite the fact the implementation was smaller and reusing
+>> more code, it looks like we cannot go in the direction you suggested. Do
+>> you think what Geliang suggested before in his v3 [1] can be accepted?
+>>
+>> (Note that the v3 is the same as the v1, only some fixes in the selftests.)
 > 
-> Add some flow parsing and an initial ARP based test case using
-> arping utility.  This lets us display flows, add some basic
-> output flows with simple matches, and test against a known good
-> forwarding case.
+> We have too many hooks in networking, so something that doesn't add
+> a new one is preferable :-(
+
+Thank you for your reply and the explanation, I understand.
+
+> Moreover, we already have a 'socket init' hook, but it runs a bit late.
+
+Indeed. And we cannot move it before the creation of the socket.
+
+> Is existing cgroup/sock completely unworkable? Is it possible to
+> expose some new bpf_upgrade_socket_to(IPPROTO_MPTCP) kfunc which would
+> call some new net_proto_family->upgrade_to(IPPROTO_MPTCP) to do the surgery?
+> Or is it too hacky?
+
+I cannot judge if it is too hacky or not but if you think it would be
+OK, please tell us :)
+
+> Another option Alexei suggested is to add some fentry-like thing:
 > 
-> Signed-off-by: Aaron Conole <aconole@redhat.com>
-
-
-Reviewed-by: Adrian Moreno <amorenoz@redhat.com>
-
-> ---
-> NOTE: 3 lines flag the line-length checkpatch warning, but there didn't
->        seem to bea good way of breaking the lines smaller for 2 of them.
->        The third would still flag, even if broken at what looks like a
->        good point to break it.
+> noinline int update_socket_protocol(int protocol)
+> {
+> 	return protocol;
+> }
+> /* TODO: ^^^ add the above to mod_ret set */
 > 
->   .../selftests/net/openvswitch/openvswitch.sh  |  51 +++
->   .../selftests/net/openvswitch/ovs-dpctl.py    | 407 ++++++++++++++++++
->   2 files changed, 458 insertions(+)
+> int __sys_socket(int family, int type, int protocol)
+> {
+> 	...
 > 
-> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> index 3117a4be0cd0..5cdacb3c8c92 100755
-> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> @@ -11,6 +11,7 @@ VERBOSE=0
->   TRACING=0
->   
->   tests="
-> +	arp_ping				eth-arp: Basic arp ping between two NS
->   	netlink_checks				ovsnl: validate netlink attrs and settings
->   	upcall_interfaces			ovs: test the upcall interfaces"
->   
-> @@ -127,6 +128,16 @@ ovs_add_netns_and_veths () {
->   	return 0
->   }
->   
-> +ovs_add_flow () {
-> +	info "Adding flow to DP: sbx:$1 br:$2 flow:$3 act:$4"
-> +	ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py add-flow "$2" "$3" "$4"
-> +	if [ $? -ne 0 ]; then
-> +		echo "Flow [ $3 : $4 ] failed" >> ${ovs_dir}/debug.log
-> +		return 1
-> +	fi
-> +	return 0
-> +}
-> +
->   usage() {
->   	echo
->   	echo "$0 [OPTIONS] [TEST]..."
-> @@ -141,6 +152,46 @@ usage() {
->   	exit 1
->   }
->   
-> +# arp_ping test
-> +# - client has 1500 byte MTU
-> +# - server has 1500 byte MTU
-> +# - send ARP ping between two ns
-> +test_arp_ping () {
-> +
-> +	which arping >/dev/null 2>&1 || return $ksft_skip
-> +
-> +	sbx_add "test_arp_ping" || return $?
-> +
-> +	ovs_add_dp "test_arp_ping" arpping || return 1
-> +
-> +	info "create namespaces"
-> +	for ns in client server; do
-> +		ovs_add_netns_and_veths "test_arp_ping" "arpping" "$ns" \
-> +		    "${ns:0:1}0" "${ns:0:1}1" || return 1
-> +	done
-> +
-> +	# Setup client namespace
-> +	ip netns exec client ip addr add 172.31.110.10/24 dev c1
-> +	ip netns exec client ip link set c1 up
-> +	HW_CLIENT=`ip netns exec client ip link show dev c1 | grep -E 'link/ether [0-9a-f:]+' | awk '{print $2;}'`
-> +	info "Client hwaddr: $HW_CLIENT"
-> +
-> +	# Setup server namespace
-> +	ip netns exec server ip addr add 172.31.110.20/24 dev s1
-> +	ip netns exec server ip link set s1 up
-> +	HW_SERVER=`ip netns exec server ip link show dev s1 | grep -E 'link/ether [0-9a-f:]+' | awk '{print $2;}'`
-> +	info "Server hwaddr: $HW_SERVER"
-> +
-> +	ovs_add_flow "test_arp_ping" arpping \
-> +		"in_port(1),eth(),eth_type(0x0806),arp(sip=172.31.110.10,tip=172.31.110.20,sha=$HW_CLIENT,tha=ff:ff:ff:ff:ff:ff)" '2' || return 1
-> +	ovs_add_flow "test_arp_ping" arpping \
-> +		"in_port(2),eth(),eth_type(0x0806),arp()" '1' || return 1
-> +
-> +	ovs_sbx "test_arp_ping" ip netns exec client arping -I c1 172.31.110.20 -c 1 || return 1
-> +
-> +	return 0
-> +}
-> +
->   # netlink_validation
->   # - Create a dp
->   # - check no warning with "old version" simulation
-> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> index 1c8b36bc15d4..a11ba9f7ea6e 100644
-> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> @@ -9,9 +9,12 @@ import errno
->   import ipaddress
->   import logging
->   import multiprocessing
-> +import re
->   import struct
->   import sys
->   import time
-> +import types
-> +import uuid
->   
->   try:
->       from pyroute2 import NDB
-> @@ -59,6 +62,104 @@ def macstr(mac):
->       return outstr
->   
->   
-> +def strspn(str1, str2):
-> +    tot = 0
-> +    for char in str1:
-> +        if str2.find(char) == -1:
-> +            return tot
-> +        tot += 1
-> +    return tot
-> +
-> +
-> +def intparse(statestr, defmask="0xffffffff"):
-> +    totalparse = strspn(statestr, "0123456789abcdefABCDEFx/")
-> +    # scan until "/"
-> +    count = strspn(statestr, "x0123456789abcdefABCDEF")
-> +
-> +    firstnum = statestr[:count]
-> +    if firstnum[-1] == "/":
-> +        firstnum = firstnum[:-1]
-> +    k = int(firstnum, 0)
-> +
-> +    m = None
-> +    if defmask is not None:
-> +        secondnum = defmask
-> +        if statestr[count] == "/":
-> +            secondnum = statestr[count + 1 :]  # this is wrong...
-> +        m = int(secondnum, 0)
-> +
-> +    return statestr[totalparse + 1 :], k, m
-> +
-> +
-> +def parse_flags(flag_str, flag_vals):
-> +    bitResult = 0
-> +    maskResult = 0
-> +
-> +    if len(flag_str) == 0:
-> +        return flag_str, bitResult, maskResult
-> +
-> +    if flag_str[0].isdigit():
-> +        idx = 0
-> +        while flag_str[idx].isdigit() or flag_str[idx] == "x":
-> +            idx += 1
-> +        digits = flag_str[:idx]
-> +        flag_str = flag_str[idx:]
-> +
-> +        bitResult = int(digits, 0)
-> +        maskResult = int(digits, 0)
-> +
-> +    while len(flag_str) > 0 and (flag_str[0] == "+" or flag_str[0] == "-"):
-> +        if flag_str[0] == "+":
-> +            setFlag = True
-> +        elif flag_str[0] == "-":
-> +            setFlag = False
-> +
-> +        flag_str = flag_str[1:]
-> +
-> +        flag_len = 0
-> +        while (
-> +            flag_str[flag_len] != "+"
-> +            and flag_str[flag_len] != "-"
-> +            and flag_str[flag_len] != ","
-> +            and flag_str[flag_len] != ")"
-> +        ):
-> +            flag_len += 1
-> +
-> +        flag = flag_str[0:flag_len]
-> +
-> +        if flag in flag_vals:
-> +            if maskResult & flag_vals[flag]:
-> +                raise KeyError(
-> +                    "Flag %s set once, cannot be set in multiples" % flag
-> +                )
-> +
-> +            if setFlag:
-> +                bitResult |= flag_vals[flag]
-> +
-> +            maskResult |= flag_vals[flag]
-> +        else:
-> +            raise KeyError("Missing flag value: %s" % flag)
-> +
-> +        flag_str = flag_str[flag_len:]
-> +
-> +    return flag_str, bitResult, maskResult
-> +
-> +
-> +def parse_ct_state(statestr):
-> +    ct_flags = {
-> +        "new": 1 << 0,
-> +        "est": 1 << 1,
-> +        "rel": 1 << 2,
-> +        "rpl": 1 << 3,
-> +        "inv": 1 << 4,
-> +        "trk": 1 << 5,
-> +        "snat": 1 << 6,
-> +        "dnat": 1 << 7,
-> +    }
-> +
-> +    return parse_flags(statestr, ct_flags)
-> +
-> +
->   def convert_mac(mac_str, mask=False):
->       if mac_str is None or mac_str == "":
->           mac_str = "00:00:00:00:00:00"
-> @@ -79,6 +180,62 @@ def convert_ipv4(ip, mask=False):
->       return int(ipaddress.IPv4Address(ip))
->   
->   
-> +def parse_starts_block(block_str, scanstr, returnskipped, scanregex=False):
-> +    if scanregex:
-> +        m = re.search(scanstr, block_str)
-> +        if m is None:
-> +            if returnskipped:
-> +                return block_str
-> +            return False
-> +        if returnskipped:
-> +            block_str = block_str[len(m.group(0)) :]
-> +            return block_str
-> +        return True
-> +
-> +    if block_str.startswith(scanstr):
-> +        if returnskipped:
-> +            block_str = block_str[len(scanstr) :]
-> +        else:
-> +            return True
-> +
-> +    if returnskipped:
-> +        return block_str
-> +
-> +    return False
-> +
-> +
-> +def parse_extract_field(
-> +    block_str, fieldstr, scanfmt, convert, masked=False, defval=None
-> +):
-> +    if fieldstr and not block_str.startswith(fieldstr):
-> +        return block_str, defval
-> +
-> +    if fieldstr:
-> +        str_skiplen = len(fieldstr)
-> +        str_skipped = block_str[str_skiplen:]
-> +        if str_skiplen == 0:
-> +            return str_skipped, defval
-> +    else:
-> +        str_skiplen = 0
-> +        str_skipped = block_str
-> +
-> +    m = re.search(scanfmt, str_skipped)
-> +    if m is None:
-> +        raise ValueError("Bad fmt string")
-> +
-> +    data = m.group(0)
-> +    if convert:
-> +        data = convert(m.group(0))
-> +
-> +    str_skipped = str_skipped[len(m.group(0)) :]
-> +    if masked:
-> +        if str_skipped[0] == "/":
-> +            raise ValueError("Masking support TBD...")
-> +
-> +    str_skipped = str_skipped[strspn(str_skipped, ", ") :]
-> +    return str_skipped, data
-> +
-> +
->   class ovs_dp_msg(genlmsg):
->       # include the OVS version
->       # We need a custom header rather than just being able to rely on
-> @@ -278,6 +435,50 @@ class ovsactions(nla):
->   
->           return print_str
->   
-> +    def parse(self, actstr):
-> +        while len(actstr) != 0:
-> +            parsed = False
-> +            if actstr.startswith("drop"):
-> +                # for now, drops have no explicit action, so we
-> +                # don't need to set any attributes.  The final
-> +                # act of the processing chain will just drop the packet
-> +                return
-> +
-> +            elif parse_starts_block(actstr, "^(\d+)", False, True):
-> +                actstr, output = parse_extract_field(
-> +                    actstr, None, "(\d+)", lambda x: int(x), False, "0"
-> +                )
-> +                self["attrs"].append(["OVS_ACTION_ATTR_OUTPUT", output])
-> +                parsed = True
-> +            elif parse_starts_block(actstr, "recirc(", False):
-> +                actstr, recircid = parse_extract_field(
-> +                    actstr,
-> +                    "recirc(",
-> +                    "([0-9a-fA-Fx]+)",
-> +                    lambda x: int(x, 0),
-> +                    False,
-> +                    0,
-> +                )
-> +                self["attrs"].append(["OVS_ACTION_ATTR_RECIRC", recircid])
-> +                parsed = True
-> +
-> +            parse_flat_map = (
-> +                ("ct_clear", "OVS_ACTION_ATTR_CT_CLEAR"),
-> +                ("pop_vlan", "OVS_ACTION_ATTR_POP_VLAN"),
-> +                ("pop_eth", "OVS_ACTION_ATTR_POP_ETH"),
-> +                ("pop_nsh", "OVS_ACTION_ATTR_POP_NSH"),
-> +            )
-> +
-> +            for flat_act in parse_flat_map:
-> +                if parse_starts_block(actstr, flat_act[0], False):
-> +                    actstr += len(flat_act[0])
-> +                    self["attrs"].append([flat_act[1]])
-> +                    actstr = actstr[strspn(actstr, ", ") :]
-> +                    parsed = True
-> +
-> +            if not parsed:
-> +                raise ValueError("Action str: '%s' not supported" % actstr)
-> +
->   
->   class ovskey(nla):
->       nla_flags = NLA_F_NESTED
-> @@ -347,6 +548,53 @@ class ovskey(nla):
->                   init=init,
->               )
->   
-> +        def parse(self, flowstr, typeInst):
-> +            if not flowstr.startswith(self.proto_str):
-> +                return None, None
-> +
-> +            k = typeInst()
-> +            m = typeInst()
-> +
-> +            flowstr = flowstr[len(self.proto_str) :]
-> +            if flowstr.startswith("("):
-> +                flowstr = flowstr[1:]
-> +
-> +            keybits = b""
-> +            maskbits = b""
-> +            for f in self.fields_map:
-> +                if flowstr.startswith(f[1]):
-> +                    # the following assumes that the field looks
-> +                    # something like 'field.' where '.' is a
-> +                    # character that we don't exactly care about.
-> +                    flowstr = flowstr[len(f[1]) + 1 :]
-> +                    splitchar = 0
-> +                    for c in flowstr:
-> +                        if c == "," or c == ")":
-> +                            break
-> +                        splitchar += 1
-> +                    data = flowstr[:splitchar]
-> +                    flowstr = flowstr[splitchar:]
-> +                else:
-> +                    data = None
-> +
-> +                if len(f) > 4:
-> +                    func = f[4]
-> +                else:
-> +                    func = f[3]
-> +                k[f[0]] = func(data)
-> +                if len(f) > 4:
-> +                    m[f[0]] = func(data, True)
-> +                else:
-> +                    m[f[0]] = func(data)
-> +
-> +                flowstr = flowstr[strspn(flowstr, ", ") :]
-> +                if len(flowstr) == 0:
-> +                    return flowstr, k, m
-> +
-> +            flowstr = flowstr[strspn(flowstr, "), ") :]
-> +
-> +            return flowstr, k, m
-> +
->           def dpstr(self, masked=None, more=False):
->               outstr = self.proto_str + "("
->               first = False
-> @@ -810,6 +1058,71 @@ class ovskey(nla):
->       class ovs_key_mpls(nla):
->           fields = (("lse", ">I"),)
->   
-> +    def parse(self, flowstr, mask=None):
-> +        for field in (
-> +            ("OVS_KEY_ATTR_PRIORITY", "skb_priority", intparse),
-> +            ("OVS_KEY_ATTR_SKB_MARK", "skb_mark", intparse),
-> +            ("OVS_KEY_ATTR_RECIRC_ID", "recirc_id", intparse),
-> +            ("OVS_KEY_ATTR_DP_HASH", "dp_hash", intparse),
-> +            ("OVS_KEY_ATTR_CT_STATE", "ct_state", parse_ct_state),
-> +            ("OVS_KEY_ATTR_CT_ZONE", "ct_zone", intparse),
-> +            ("OVS_KEY_ATTR_CT_MARK", "ct_mark", intparse),
-> +            ("OVS_KEY_ATTR_IN_PORT", "in_port", intparse),
-> +            (
-> +                "OVS_KEY_ATTR_ETHERNET",
-> +                "eth",
-> +                ovskey.ethaddr,
-> +            ),
-> +            (
-> +                "OVS_KEY_ATTR_ETHERTYPE",
-> +                "eth_type",
-> +                lambda x: intparse(x, "0xffff"),
-> +            ),
-> +            (
-> +                "OVS_KEY_ATTR_IPV4",
-> +                "ipv4",
-> +                ovskey.ovs_key_ipv4,
-> +            ),
-> +            (
-> +                "OVS_KEY_ATTR_IPV6",
-> +                "ipv6",
-> +                ovskey.ovs_key_ipv6,
-> +            ),
-> +            (
-> +                "OVS_KEY_ATTR_ARP",
-> +                "arp",
-> +                ovskey.ovs_key_arp,
-> +            ),
-> +            (
-> +                "OVS_KEY_ATTR_TCP",
-> +                "tcp",
-> +                ovskey.ovs_key_tcp,
-> +            ),
-> +            (
-> +                "OVS_KEY_ATTR_TCP_FLAGS",
-> +                "tcp_flags",
-> +                lambda x: parse_flags(x, None),
-> +            ),
-> +        ):
-> +            fld = field[1] + "("
-> +            if not flowstr.startswith(fld):
-> +                continue
-> +
-> +            if not isinstance(field[2], types.FunctionType):
-> +                nk = field[2]()
-> +                flowstr, k, m = nk.parse(flowstr, field[2])
-> +            else:
-> +                flowstr = flowstr[len(fld) :]
-> +                flowstr, k, m = field[2](flowstr)
-> +
-> +            if m and mask is not None:
-> +                mask["attrs"].append([field[0], m])
-> +            self["attrs"].append([field[0], k])
-> +
-> +            flowstr = flowstr[strspn(flowstr, "),") :]
-> +
-> +        return flowstr
-> +
->       def dpstr(self, mask=None, more=False):
->           print_str = ""
->   
-> @@ -1358,11 +1671,92 @@ class OvsFlow(GenericNetlinkSocket):
->   
->               return print_str
->   
-> +        def parse(self, flowstr, actstr, dpidx=0):
-> +            OVS_UFID_F_OMIT_KEY = 1 << 0
-> +            OVS_UFID_F_OMIT_MASK = 1 << 1
-> +            OVS_UFID_F_OMIT_ACTIONS = 1 << 2
-> +
-> +            self["cmd"] = 0
-> +            self["version"] = 0
-> +            self["reserved"] = 0
-> +            self["dpifindex"] = 0
-> +
-> +            if flowstr.startswith("ufid:"):
-> +                count = 5
-> +                while flowstr[count] != ",":
-> +                    count += 1
-> +                ufidstr = flowstr[5:count]
-> +                flowstr = flowstr[count + 1 :]
-> +            else:
-> +                ufidstr = str(uuid.uuid4())
-> +            uuidRawObj = uuid.UUID(ufidstr).fields
-> +
-> +            self["attrs"].append(
-> +                [
-> +                    "OVS_FLOW_ATTR_UFID",
-> +                    [
-> +                        uuidRawObj[0],
-> +                        uuidRawObj[1] << 16 | uuidRawObj[2],
-> +                        uuidRawObj[3] << 24
-> +                        | uuidRawObj[4] << 16
-> +                        | uuidRawObj[5] & (0xFF << 32) >> 32,
-> +                        uuidRawObj[5] & (0xFFFFFFFF),
-> +                    ],
-> +                ]
-> +            )
-> +            self["attrs"].append(
-> +                [
-> +                    "OVS_FLOW_ATTR_UFID_FLAGS",
-> +                    int(
-> +                        OVS_UFID_F_OMIT_KEY
-> +                        | OVS_UFID_F_OMIT_MASK
-> +                        | OVS_UFID_F_OMIT_ACTIONS
-> +                    ),
-> +                ]
-> +            )
-> +
-> +            k = ovskey()
-> +            m = ovskey()
-> +            k.parse(flowstr, m)
-> +            self["attrs"].append(["OVS_FLOW_ATTR_KEY", k])
-> +            self["attrs"].append(["OVS_FLOW_ATTR_MASK", m])
-> +
-> +            a = ovsactions()
-> +            a.parse(actstr)
-> +            self["attrs"].append(["OVS_FLOW_ATTR_ACTIONS", a])
-> +
->       def __init__(self):
->           GenericNetlinkSocket.__init__(self)
->   
->           self.bind(OVS_FLOW_FAMILY, OvsFlow.ovs_flow_msg)
->   
-> +    def add_flow(self, dpifindex, flowmsg):
-> +        """
-> +        Send a new flow message to the kernel.
-> +
-> +        dpifindex should be a valid datapath obtained by calling
-> +        into the OvsDatapath lookup
-> +
-> +        flowmsg is a flow object obtained by calling a dpparse
-> +        """
-> +
-> +        flowmsg["cmd"] = OVS_FLOW_CMD_NEW
-> +        flowmsg["version"] = OVS_DATAPATH_VERSION
-> +        flowmsg["reserved"] = 0
-> +        flowmsg["dpifindex"] = dpifindex
-> +
-> +        try:
-> +            reply = self.nlm_request(
-> +                flowmsg,
-> +                msg_type=self.prid,
-> +                msg_flags=NLM_F_REQUEST | NLM_F_ACK,
-> +            )
-> +            reply = reply[0]
-> +        except NetlinkError as ne:
-> +            print(flowmsg)
-> +            raise ne
-> +        return reply
-> +
->       def dump(self, dpifindex, flowspec=None):
->           """
->           Returns a list of messages containing flows.
-> @@ -1514,6 +1908,11 @@ def main(argv):
->       dumpflcmd = subparsers.add_parser("dump-flows")
->       dumpflcmd.add_argument("dumpdp", help="Datapath Name")
->   
-> +    addflcmd = subparsers.add_parser("add-flow")
-> +    addflcmd.add_argument("flbr", help="Datapath name")
-> +    addflcmd.add_argument("flow", help="Flow specification")
-> +    addflcmd.add_argument("acts", help="Flow actions")
-> +
->       args = parser.parse_args()
->   
->       if args.verbose > 0:
-> @@ -1589,6 +1988,14 @@ def main(argv):
->           rep = ovsflow.dump(rep["dpifindex"])
->           for flow in rep:
->               print(flow.dpstr(True if args.verbose > 0 else False))
-> +    elif hasattr(args, "flbr"):
-> +        rep = ovsdp.info(args.flbr, 0)
-> +        if rep is None:
-> +            print("DP '%s' not found." % args.flbr)
-> +            return 1
-> +        flow = OvsFlow.ovs_flow_msg()
-> +        flow.parse(args.flow, args.acts, rep["dpifindex"])
-> +        ovsflow.add_flow(rep["dpifindex"], flow)
->   
->       return 0
->   
+> 	protocol = update_socket_protocol(protocol);
+> 
+> 	...
+> }
+> 
+> But it's also too problem specific it seems? And it's not cgroup-aware.
 
+It looks like it is what Geliang did in his v6. If it is the only
+acceptable solution, I guess we can do without cgroup support. We can
+continue the discussions in his v6 if that's easier.
+
+Cheers,
+Matt
 -- 
-Adrián Moreno
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
