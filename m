@@ -2,170 +2,249 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FB87673AF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 19:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451C37673E4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 19:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjG1RpB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 13:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39356 "EHLO
+        id S231826AbjG1RwW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 13:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjG1RpA (ORCPT
+        with ESMTP id S230145AbjG1RwV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 13:45:00 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D140C10CB;
-        Fri, 28 Jul 2023 10:44:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UR8U3K12yE2JP/0SyyBEvYWoUPJlM+qrhaEPhp+TqYyRyMMh8m5ulCBn8mT/eJUXc1EpRJL9xaqJ/gitumryBLRMowKOmySVVU1bzGBWsQ1DSISAhZZcWbhQoqOu5Lrs1dYWdocoxXmU48sreF6xyvgshyH1eR1H5lk/vhHNpEBEKf6EdLVHWsmtn9sfR09W2UESfncwOKh4oSy5sdXrB0pFu6wzDkZPrd3YEZaRrCSiglKLNqGZpLLFIsUB/vtn4zze6LBfOmIkibNdDULP1af4O+rhPesBC1zNOSkG11RDPV9Hhb22in+4gm6scPM4XbumOpWAN78QB/qLYvQO6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WYEVtr6GvMf4zoSXv94IFXgiiOXFWFa0gWy2SxQMWvM=;
- b=JGUkYqJGyhP9REQ5URElODr+atBNVVy4K/AeSHOimacXohJYPPRwqMJoxrT45zd0nUA5Q53hIIVM8umxNmTF57earAbChO2xYBLJDVVNGFMyWCx5QaydH/wGDxw6oeau7/Gesv7ftT7dXqyXeEa6A1wdGT2vE26Q49Gl9TNPpt+mVdsc1I8gfu42hc1S24zLnfEmrwP+QS+e7ZgokQ4Pf1KyjVWAlZgnnh9jLvD7bxO9EkUaV/Ar3ROrS5RqB1SscRWb7EbXAIvDpyMKN595+z6R5WUejjL56eizNyoblo8ReDiqKV2bzT4KviAMambriN7hM8mVcM3BjgsTol5J2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WYEVtr6GvMf4zoSXv94IFXgiiOXFWFa0gWy2SxQMWvM=;
- b=BtYuLnNlF8nrrPH8kHS0iRFRu/b1MCUVWgLjGO/0kRc/nAEwDaqxjZhropgaKekKL0R4IbJPLKKnuzOgbdiv5yopcGmEFhPrfZmmjlJlw5FA6qtNfXej3cRQRAHwRMNBQ07eSm/g+X3o/9AlssMCGJRJknI4vPGbwAmq7hQsEAm1OxJlHYvGidD1Q+hsXwMrILKS1I2I9+DFqmwKU/XxPtUuFtiJWZnFk5tRitC45D5vA1KtRgwLxml+dZYlPIaoyXtZpK/uZYe1Z8a21k9Y4ctC++pjOKsHrYeoFJ6sxuhcWsegCtvlzHD1VTt9WM4KI2PNZFUknkUGnUQRi0ug1w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CY8PR12MB7657.namprd12.prod.outlook.com (2603:10b6:930:9d::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Fri, 28 Jul
- 2023 17:44:57 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::5111:16e8:5afe:1da1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::5111:16e8:5afe:1da1%6]) with mapi id 15.20.6631.034; Fri, 28 Jul 2023
- 17:44:56 +0000
-Date:   Fri, 28 Jul 2023 14:44:54 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
-        robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
-        eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
-        mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com
-Subject: Re: [PATCH v3 07/17] iommufd: Add IOMMU_RESV_IOVA_RANGES
-Message-ID: <ZMP+lvbhAwEbhjx/@nvidia.com>
-References: <20230724110406.107212-1-yi.l.liu@intel.com>
- <20230724110406.107212-8-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230724110406.107212-8-yi.l.liu@intel.com>
-X-ClientProxiedBy: YT3PR01CA0119.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:85::24) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 28 Jul 2023 13:52:21 -0400
+X-Greylist: delayed 403 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Jul 2023 10:52:16 PDT
+Received: from out-105.mta0.migadu.com (out-105.mta0.migadu.com [IPv6:2001:41d0:1004:224b::69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D104113
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 10:52:16 -0700 (PDT)
+Message-ID: <4cfb1cae-5c25-107f-3f0b-c9538d62bd14@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1690566329; h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=djOJ7aCL19RNXe8MF64c4n/fALjFZtWZ/lQcY9gY93c=;
+        b=j5qOOAwcCkJHCY+tpKam4iLC6WF0wfvro1pvZmCS6NEVSkx+pvjP1XRnbwHnhZVY+26DhX
+        Jy+eKeWSfPGnhF54abvyFS6yxO3U7CuVTz19X4u85lngnyrT9mtTuaHJGaO5vm1nn3AEqk
+        XFGxmPjP/gAah8N55wYVQRaJmxGjshM=
+Date:   Fri, 28 Jul 2023 10:45:17 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CY8PR12MB7657:EE_
-X-MS-Office365-Filtering-Correlation-Id: f173542c-e5d5-44cb-fcba-08db8f925b81
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9KlR+wU5GMsUNMrf0MTuKxKw3LrHwQ8jkJOfLGlwdkkAlMNIFz+ILF1zyCT6ZgRWkyVNq5YRmtPokoZV2tj9rCLKvm36+igzz7r7GbFwmzJrPy0tcUfvYgzZhgXPblImq2IJCINtahNh04v70XGRhkJg5o41UUZxZmn6hkonyLOTDsOFOhdJsvgultkDjzwNFdcuhz54uz6DdyxDTH7M9DdaiLu4B65aokkEHawErbzxKdZVUfu12ng+iB/LFdzcHiTFyySzLLuVIXg4GCVa7VHhfuaUmIOREY1WdYuj//DUXVgDz6MLXCHX6EY7Puo7iAClMEvA387ZZdNYUquqbdza0a94HApg6aLh7Ol6NA2uqyP548p2I55kCM7nDmjL11WTobOaX7kIi0rFnGshgAT69QQRMZqa/qPyy4MUMIPqbfTjz6bjHkk+a4dHz9dvKoruIgcXWcNB+GoLvZg2Go+gx6YXHaZEd7t6H4BDrwDMajaCMvJqKgkPSoYrUYQ/9qcu+c32/RiQ2lzKf01PaxaDbJuhISXYwS9FHMoHOptfJZ57PfMyhBp66kGcPMht
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(136003)(366004)(346002)(451199021)(5660300002)(41300700001)(26005)(86362001)(66556008)(38100700002)(478600001)(6512007)(4326008)(8676002)(6916009)(8936002)(36756003)(186003)(316002)(66946007)(66476007)(6506007)(7416002)(2616005)(83380400001)(6486002)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RMu2YQtgEod8sPhYeUa+XNL/38LfWTIi/OrSysIxS7kt/fZ47RCNA4v7HFlu?=
- =?us-ascii?Q?nTDYjGkKgb2m9SyZl3+Z+Gu/sIiUn0ir87dn/OdeCiz7thOgyAs4cXKJ5ulC?=
- =?us-ascii?Q?zyW/ItEwD2pUzxwkV+2FsSHa3hngE+ewB59q4g9Flse7BurYEXU6Y9uXFlDx?=
- =?us-ascii?Q?EwQQ9lwAgCmU5pLvc2Nifst25MUOuge1tcQv7l14LYgnM20E/whhBX69+fOE?=
- =?us-ascii?Q?p+J6Vv1U8TIVn3Atr1CwOQTT5hqyiw3j83lX9Rr+QSjJHD7E9KrfylF/IXto?=
- =?us-ascii?Q?RU9TQXTtaou/lS1zBWEvNguap4mpF5z2FsSrlE1CtOrF3DM8jqx69mTm9WNa?=
- =?us-ascii?Q?AAZoDjEfWbHEJTlSkM5fV61Wk/efFAMI5wZFTiOD7uez19z7H4KZhtBXr701?=
- =?us-ascii?Q?xYMhoISETFBmPzshGZ3oIU4h/jdslHKYdCK6HWIggr6n3VjKahPH3WNwiOyn?=
- =?us-ascii?Q?H6U3Y3mjzb78QA0ZHboNufHf21a6/a4FSs7QgeJryPeNycKzvq70Z3WIgttZ?=
- =?us-ascii?Q?iBwJwuGg6Fe44PS8SMq20CNpCHndwJcdakfkzRE+sJup4HrpVTcsIc4C6rSk?=
- =?us-ascii?Q?kd4/crIEvM1hFB3tPBfMfNgAifjaeIjyGTyBK+J+MvFh3eqc0R6Nm8jhK6+d?=
- =?us-ascii?Q?jkvrCLt1/ocDT+/fuJf9zGAA0Rq+/K4mhkUOdyk9Q2u7hYgmc9x7s2f088To?=
- =?us-ascii?Q?rkCMkCGTQsuZDQyV3qfrtijb4GNne5oNt5DYARMdkUtGXtYu7COIUmrxJbmb?=
- =?us-ascii?Q?nS4kvu/+6Fv3tgAuaKjfHiB77vDADEAdgzBiyoznoSfOgdxxMZjdsYehp4i7?=
- =?us-ascii?Q?l5jKUjSfq20m+PAIuOyLDMJ4KLWnXrqoFdPJxEUr2ZTTFB6pgNrLph2dQGqO?=
- =?us-ascii?Q?9nXKRvBxWTmwcy6gF/d0qPDjj2bqaLI7ZIZ2eCRVBuWvGpkiKsRXhehC0CDE?=
- =?us-ascii?Q?oknjZNFejxZGusk0rESptRfnsfw6TQ+pOY2H4jnXI7qyX7dTONwZ0vM4wxIx?=
- =?us-ascii?Q?fOYE5d3Ac8ijEUeDmaJWdgCNRHKiyPHkqubiixkInsSgN42oUDIA3lxozXsJ?=
- =?us-ascii?Q?HlG0u9Na7qQHl1NzBDedXZXaBnCMtZjxqe0jyC4AOMk4e5oYtonnaH54ZJcd?=
- =?us-ascii?Q?mbI5zYY+UVMQ/9ozBXJiQJjfO0Yy3iR1lFVIRQ1enLy2d07gttfHNzFJQzbx?=
- =?us-ascii?Q?2bzeuQ2TfUXfe5GsTOZ2CP0y6UCHJcgLBWlELr/fAbCxnarw28Lse0z2xqsA?=
- =?us-ascii?Q?whUJGHZpfx9FquhjeiI7KicZt6E5vSDcAhThDqBRDeZ/XxRHAp/Rb/P1JNCJ?=
- =?us-ascii?Q?OI2LpmHZp+xwS5WMIYywezDfOdiT7xiARUo1MDtmt3eiVlrRIMLoYb7mwLlq?=
- =?us-ascii?Q?0orxOKbHYv1zj4a9a1Q6iJoScxvp5PWVi14ZbvQCbJy8Pg+ebp86wzf8NzYS?=
- =?us-ascii?Q?yOuAhJnWQ+1fd7bGJbWDrtpahTQXUQ2a2qvyIEG2ZBWt3UtyA9z0ihBksfFA?=
- =?us-ascii?Q?3wpEMn61AcdpcNV8b81LadruQN4u2Jlatjs3aV4KE7m+sLBtQ2Mhm/Cb0qtF?=
- =?us-ascii?Q?+Eg+y8U56jIyvCWG9tdf6XbqLU6rDGRHG2BOujuV?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f173542c-e5d5-44cb-fcba-08db8f925b81
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 17:44:56.8769
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VCCi7zHihjPrGIGEvjCVspsus5hdRkHPkUAJ045LWTWmmAYixOkZ/QYTWvkik5P9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7657
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Reply-To: yonghong.song@linux.dev
+Subject: Re: [RFC bpf-next v6] bpf: Force to MPTCP
+Content-Language: en-US
+To:     Geliang Tang <geliang.tang@suse.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <c0647d0d3c7158b96dec4604ba317df311c5012d.1690531142.git.geliang.tang@suse.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <c0647d0d3c7158b96dec4604ba317df311c5012d.1690531142.git.geliang.tang@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 04:03:56AM -0700, Yi Liu wrote:
 
-> +/**
-> + * struct iommu_resv_iova_ranges - ioctl(IOMMU_RESV_IOVA_RANGES)
-> + * @size: sizeof(struct iommu_resv_iova_ranges)
-> + * @dev_id: device to read resv iova ranges for
-> + * @num_iovas: Input/Output total number of resv ranges for the device
-> + * @__reserved: Must be 0
-> + * @resv_iovas: Pointer to the output array of struct iommu_resv_iova_range
-> + *
-> + * Query a device for ranges of reserved IOVAs. num_iovas will be set to the
-> + * total number of iovas and the resv_iovas[] will be filled in as space
-> + * permits.
-> + *
-> + * On input num_iovas is the length of the resv_iovas array. On output it is
-> + * the total number of iovas filled in. The ioctl will return -EMSGSIZE and
-> + * set num_iovas to the required value if num_iovas is too small. In this
-> + * case the caller should allocate a larger output array and re-issue the
-> + * ioctl.
-> + *
-> + * Under nested translation, userspace should query the reserved IOVAs for a
-> + * given device, and report it to the stage-1 I/O page table owner to exclude
-> + * the reserved IOVAs. The reserved IOVAs can also be used to figure out the
-> + * allowed IOVA ranges for the IOAS that the device is attached to. For detail
-> + * see ioctl IOMMU_IOAS_IOVA_RANGES.
 
-I'm not sure I like this, the other APIs here work with the *allowed*
-IOVAs, which is the inverse of this one which works with the
-*disallowed* IOVAs.
+On 7/28/23 12:59 AM, Geliang Tang wrote:
+> As is described in the "How to use MPTCP?" section in MPTCP wiki [1]:
+> 
+> "Your app can create sockets with IPPROTO_MPTCP as the proto:
+> ( socket(AF_INET, SOCK_STREAM, IPPROTO_MPTCP); ). Legacy apps can be
+> forced to create and use MPTCP sockets instead of TCP ones via the
+> mptcpize command bundled with the mptcpd daemon."
+> 
+> But the mptcpize (LD_PRELOAD technique) command has some limitations
+> [2]:
+> 
+>   - it doesn't work if the application is not using libc (e.g. GoLang
+> apps)
+>   - in some envs, it might not be easy to set env vars / change the way
+> apps are launched, e.g. on Android
+>   - mptcpize needs to be launched with all apps that want MPTCP: we could
+> have more control from BPF to enable MPTCP only for some apps or all the
+> ones of a netns or a cgroup, etc.
+>   - it is not in BPF, we cannot talk about it at netdev conf.
+> 
+> So this patchset attempts to use BPF to implement functions similer to
+> mptcpize.
+> 
+> The main idea is add a hook in sys_socket() to change the protocol id
+> from IPPROTO_TCP (or 0) to IPPROTO_MPTCP.
+> 
+> [1]
+> https://github.com/multipath-tcp/mptcp_net-next/wiki
+> [2]
+> https://github.com/multipath-tcp/mptcp_net-next/issues/79
+> 
+> v6:
+>   - add update_socket_protocol.
+> 
+> v5:
+>   - add bpf_mptcpify helper.
+> 
+> v4:
+>   - use lsm_cgroup/socket_create
+> 
+> v3:
+>   - patch 8: char cmd[128]; -> char cmd[256];
+> 
+> v2:
+>   - Fix build selftests errors reported by CI
+> 
+> Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/79
+> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+> ---
+>   net/mptcp/bpf.c                               |  17 +++
+>   net/socket.c                                  |   6 +
+>   .../testing/selftests/bpf/prog_tests/mptcp.c  | 126 ++++++++++++++++--
+>   tools/testing/selftests/bpf/progs/mptcpify.c  |  26 ++++
+>   4 files changed, 166 insertions(+), 9 deletions(-)
+>   create mode 100644 tools/testing/selftests/bpf/progs/mptcpify.c
+> 
+> diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
+> index 5a0a84ad94af..c43aee31014d 100644
+> --- a/net/mptcp/bpf.c
+> +++ b/net/mptcp/bpf.c
+> @@ -12,6 +12,23 @@
+>   #include <linux/bpf.h>
+>   #include "protocol.h"
+>   
+> +#ifdef CONFIG_BPF_JIT
+> +BTF_SET8_START(bpf_mptcp_fmodret_ids)
+> +BTF_ID_FLAGS(func, update_socket_protocol)
+> +BTF_SET8_END(bpf_mptcp_fmodret_ids)
+> +
+> +static const struct btf_kfunc_id_set bpf_mptcp_fmodret_set = {
+> +	.owner = THIS_MODULE,
+> +	.set   = &bpf_mptcp_fmodret_ids,
+> +};
+> +
+> +static int __init bpf_mptcp_kfunc_init(void)
+> +{
+> +	return register_btf_fmodret_id_set(&bpf_mptcp_fmodret_set);
+> +}
+> +late_initcall(bpf_mptcp_kfunc_init);
+> +#endif /* CONFIG_BPF_JIT */
+> +
+>   struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk)
+>   {
+>   	if (sk && sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP && sk_is_mptcp(sk))
+> diff --git a/net/socket.c b/net/socket.c
+> index 2b0e54b2405c..4c7b2ff711f0 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -1644,11 +1644,17 @@ struct file *__sys_socket_file(int family, int type, int protocol)
+>   	return sock_alloc_file(sock, flags, NULL);
+>   }
+>   
+> +noinline int update_socket_protocol(int family, int type, int protocol)
+> +{
+> +	return protocol;
+> +}
 
-It means we can't take the output of this API and feed it into
-IOMMUFD_CMD_IOAS_ALLOW_IOVAS.. Though I suppose qemu isn't going to do
-this anyhow.
+You need to add __weak attribute to the above function, otherwise,
+although compiler will not inline this function, it may still poke
+into this function and if the function body is simply enough, it will
+"inline" it like in this case. Adding a '__weak' attribute can
+prevent this.
 
-On the other hand, it is kind of hard to intersect an allowed list of
-multiple idevs into a single master list.
+The following is a snipet of asm code from a clang build kernel.
 
-As it is, userspace will have to aggregate the list, sort it, merge
-adjacent overlapping reserved ranges then invert the list to get an
-allowed list. This is not entirely simple..
+ffffffff8206a280 <update_socket_protocol>:
+ffffffff8206a280: f3 0f 1e fa           endbr64
+ffffffff8206a284: 0f 1f 44 00 00        nopl    (%rax,%rax)
+ffffffff8206a289: 89 d0                 movl    %edx, %eax
+ffffffff8206a28b: c3                    retq
+ffffffff8206a28c: 0f 1f 40 00           nopl    (%rax)
 
-Did you already write an algorithm to do this in qemu someplace?
+ffffffff8206a290 <__sys_socket>:
+ffffffff8206a290: f3 0f 1e fa           endbr64
+ffffffff8206a294: 0f 1f 44 00 00        nopl    (%rax,%rax)
+ffffffff8206a299: 55                    pushq   %rbp
+ffffffff8206a29a: 41 57                 pushq   %r15
+ffffffff8206a29c: 41 56                 pushq   %r14
+ffffffff8206a29e: 41 54                 pushq   %r12
+ffffffff8206a2a0: 53                    pushq   %rbx
+ffffffff8206a2a1: 50                    pushq   %rax
+ffffffff8206a2a2: f7 c6 f0 f7 f7 ff     testl   $0xfff7f7f0, %esi 
+# imm = 0xFFF7F7F0
+ffffffff8206a2a8: 74 0c                 je      0xffffffff8206a2b6 
+<__sys_socket+0x26>
+ffffffff8206a2aa: 49 c7 c6 ea ff ff ff  movq    $-0x16, %r14
+ffffffff8206a2b1: e9 a5 00 00 00        jmp     0xffffffff8206a35b 
+<__sys_socket+0xcb>
+ffffffff8206a2b6: 89 d3                 movl    %edx, %ebx
+ffffffff8206a2b8: 89 f5                 movl    %esi, %ebp
+ffffffff8206a2ba: 41 89 fe              movl    %edi, %r14d
+ffffffff8206a2bd: 41 89 f7              movl    %esi, %r15d
+ffffffff8206a2c0: 41 83 e7 0f           andl    $0xf, %r15d
+ffffffff8206a2c4: 65 4c 8b 25 74 e9 fc 7d       movq 
+%gs:0x7dfce974(%rip), %r12
+ffffffff8206a2cc: 49 8d bc 24 b0 07 00 00       leaq    0x7b0(%r12), %rdi
+ffffffff8206a2d4: e8 a7 49 41 ff        callq   0xffffffff8147ec80 
+<__asan_load8_noabort>
+ffffffff8206a2d9: 4d 8b a4 24 b0 07 00 00       movq    0x7b0(%r12), %r12
+ffffffff8206a2e1: 49 8d 7c 24 28        leaq    0x28(%r12), %rdi
+ffffffff8206a2e6: e8 95 49 41 ff        callq   0xffffffff8147ec80 
+<__asan_load8_noabort>
+ffffffff8206a2eb: 49 8b 7c 24 28        movq    0x28(%r12), %rdi
+ffffffff8206a2f0: 49 89 e0              movq    %rsp, %r8
+ffffffff8206a2f3: 44 89 f6              movl    %r14d, %esi
+ffffffff8206a2f6: 44 89 fa              movl    %r15d, %edx
+ffffffff8206a2f9: 89 d9                 movl    %ebx, %ecx
+ffffffff8206a2fb: 45 31 c9              xorl    %r9d, %r9d
+ffffffff8206a2fe: e8 1d fa ff ff        callq   0xffffffff82069d20 
+<__sock_create>
 
-Anyhow, this should be split out from this series. It seems simple
-enough to merge it now if someone can confirm what qemu needs.
+update_socket_protocol() is still there but its content
+has been inlined.
 
-Jason
+Also, do you need a prototype for this global function?
+See kernel/cgroup/rstat.c for an example to use
+'__diag_*' to avoid a prototype.
+
+> +
+>   int __sys_socket(int family, int type, int protocol)
+>   {
+>   	struct socket *sock;
+>   	int flags;
+>   
+> +	protocol = update_socket_protocol(family, type, protocol);
+>   	sock = __sys_socket_create(family, type, protocol);
+>   	if (IS_ERR(sock))
+>   		return PTR_ERR(sock);
+[...]
