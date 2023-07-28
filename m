@@ -2,118 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B9376634B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 06:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B517663D6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 08:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbjG1Eos (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 00:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S232862AbjG1GBo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 02:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233324AbjG1Eof (ORCPT
+        with ESMTP id S232861AbjG1GBn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 00:44:35 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0FA3A92;
-        Thu, 27 Jul 2023 21:44:26 -0700 (PDT)
+        Fri, 28 Jul 2023 02:01:43 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2054.outbound.protection.outlook.com [40.107.93.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0089026B2;
+        Thu, 27 Jul 2023 23:01:40 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WZV8b+dQK94sf3ur23uyFm3gLwYVKEJeUqaLAscTqGfsHa6GmtasAPu/O25GDnvHMZYE/oHFMsgYp7ZZ0e7zzxr+eeFyirqRwteteSGRrjux+Jwq5VfyIB6GjIpxhNUqylaML2b6jhdn35CQTyIBj5uX65bI5u2VjYNYlYgDBtX9ASj/wqkJ3Qdzl36sYilW0ImveaqCba2JIr5xmdpJPK5SnhHcxhJO1mBmZEsP6dguxAJzpV0ZeAAj0o8683RL9bsVkwltG80eBaeEY31kIICnEZllj1faaGAX0S/1OZSiKkbN8Db8R8sj7A/h0hX+06ZP9RHa2P6J91DtF5tlLw==
+ b=hwPpoi0mJFzBbAvr/tWkfPfS+K6vmjuUlx+Cw4AIlak3vgil1C7Kn8iOz2KKsId9xhZVwr+1NdezoKEVmI5fN/95Dmt05+Y6wXy7ajPVYfuFcSZD5bR7PQa1EfjQAalZNzjDT6Rtfg+7neRJmhym1pVoNKoXLfpCV1snQOho8myQ54nxhqFJGhgGVSJ0PqCoz9tuvmxwOWTWYqjO1k4UxTF3/enxHIyj776YUHtCJLo7k9GK67P2kEyKgZ2N6s3+xYhWqHNNPVjoqBHwQG6fBjMAAYP28PZblwJgqUkRV4bhWQW3XYDSmbL3bIR+49Zgi6/XNka/YFTnhLuKPjkKeQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cO+HdEFRgc+fGIm0mnRjW78mYR10GWTU281tj5iX7rM=;
- b=ABNtpHGLWUF7v9XXYaP77N2C4b3Qj90MjW0DRb/LoXQLpFGplHnJ4sx9FEwaQvwesHzSIRt1elcHpoz2Luu+dtkSvurF0Vse5iZJfJyDRA7QWGcH1/LP2uJbgWwMd/wQIhRF1GC4gQeYAY386nUlj8rd7o/UeMgc7Z2apgRnifwzNV55pOaX11FOjohOAskrcozwPKvIaLXYf/cHQ8RaEwYlHc5m2hn5qOwaxDU0gRngEgC1ca2yuGOOgyWHj1cfSBqdArusl99rVLM1Bf4YXQhZHcCXyoWR+5v9dgKSw6/CGpX96a5lIuNgoihve1gMKV7iuD9L+Sd6LbAGC2LDzQ==
+ bh=H8k5sm2gmo/Nz50bnBBKQQIabGJ3btvovva/VqkeocM=;
+ b=cAHZhwD4OSIhKXNQr7atMw2PsmUEB4/UHbvaVJU7KZYWKxYVAZpEIcyzHZnWnMzdTM1eEupXRxG0TRtnvEsMHW5c62DojqFC1DOPHAqiQGHCLBsKneVxSPsh1ufng/ttrIrag428M8wk6Ud8xwnc+2l2LF3MhzIALqQ5DkviRncFVaa0vK/lvQyodBsIR2O649rsE9kAyOsjtdl7cyb3+s7ZTHscrFq5NhHXxWwBZMLNNt9c5Mnjgy2NUOdNwizMbBbTC9g3i+FalscDplHi9dVyMvxkL+rC/xW/H4jY3LRUpWq0cIyICrKl4brSouEUt7M2y04gG34BlJwV2hT4iw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ 165.204.84.17) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cO+HdEFRgc+fGIm0mnRjW78mYR10GWTU281tj5iX7rM=;
- b=frWQjZK9ckHV0AouQ4zU/AFzEhL6mLTg3Y9LxAVMgeouhcRqlFAPZrCPLWvg+aFRjfnz/wmLOV3ixuZdkG+r6X/1nJRLjcC6L9hd1nNTOkiveJVGHzCVx18UhImmG3r5MmuyMnZQVdtGuEK1bYu0MVk7r3fo9q0QDVPcT99xI64n51nbSQQ0waQ+QXCV4OatRJAs16SGM0r+d82gDBkNi2lbXBHRiduu6m6v4Zp0AG5I24YLqU+ZkX6gvG9FItc9dJFi3zFH/A8c2ENZ+NU4l0ZrgZ8YPJ3b2xxy+HZvv/lHnOVR6Py52R0oIGNG/cCJhxXcWUXxEy9Wi82lP3/WaQ==
-Received: from CYZPR05CA0038.namprd05.prod.outlook.com (2603:10b6:930:a3::29)
- by DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) with
+ bh=H8k5sm2gmo/Nz50bnBBKQQIabGJ3btvovva/VqkeocM=;
+ b=uETzK9WtggVDmb21tByEbRHr5mtStWQXqS/FUg2NlbknkYm3KxIDcM59T1ByzhoEBZ/9fiWeP0FF8YNlZZtXK5nO1OgJbRgR2ipfOUajXr/YXH89N7OELABTqzQfnyzk+TG7REIq3hq+8QBrOuPfagKpu9BsvkKmxhIoCesPCrQ=
+Received: from CY8PR19CA0046.namprd19.prod.outlook.com (2603:10b6:930:6::10)
+ by MW4PR12MB7431.namprd12.prod.outlook.com (2603:10b6:303:225::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Fri, 28 Jul
- 2023 04:44:24 +0000
-Received: from CY4PEPF0000EDD2.namprd03.prod.outlook.com
- (2603:10b6:930:a3:cafe::6f) by CYZPR05CA0038.outlook.office365.com
- (2603:10b6:930:a3::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.5 via Frontend
- Transport; Fri, 28 Jul 2023 04:44:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- CY4PEPF0000EDD2.mail.protection.outlook.com (10.167.241.206) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6631.22 via Frontend Transport; Fri, 28 Jul 2023 04:44:24 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 27 Jul 2023
- 21:44:17 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Thu, 27 Jul 2023 21:44:16 -0700
-Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Thu, 27 Jul 2023 21:44:16 -0700
-Date:   Thu, 27 Jul 2023 21:44:14 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>
-Subject: Re: [PATCH v10 3/6] iommufd: Add iommufd_access_change_ioas(_id)
- helpers
-Message-ID: <ZMNHnmydMM1zExZW@Asurada-Nvidia>
-References: <cover.1690488745.git.nicolinc@nvidia.com>
- <ad75a1f7f0b4d5b6d35238b4ae7b41db1410110c.1690488745.git.nicolinc@nvidia.com>
- <BN9PR11MB527660F2932964A47396D1E88C06A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZMNF5vTTp2IRMsWH@Asurada-Nvidia>
- <BN9PR11MB5276C3F296F27696AFD92D0F8C06A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.24; Fri, 28 Jul
+ 2023 06:01:38 +0000
+Received: from CY4PEPF0000E9D5.namprd05.prod.outlook.com
+ (2603:10b6:930:6:cafe::c6) by CY8PR19CA0046.outlook.office365.com
+ (2603:10b6:930:6::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29 via Frontend
+ Transport; Fri, 28 Jul 2023 06:01:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000E9D5.mail.protection.outlook.com (10.167.241.76) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6631.22 via Frontend Transport; Fri, 28 Jul 2023 06:01:38 +0000
+Received: from BLR-PF38F8CF.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 28 Jul
+ 2023 01:01:33 -0500
+From:   Ayush Jain <ayush.jain3@amd.com>
+To:     <akpm@linux-foundation.org>, <shuah@kernel.org>,
+        <pasha.tatashin@soleen.com>, <zhansayabagdaulet@gmail.com>,
+        <tyhicks@linux.microsoft.com>,
+        <raghavendra.kodsarathimmappa@amd.com>
+CC:     <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <Narasimhan.V@amd.com>,
+        <Santosh.Shukla@amd.com>, Ayush Jain <ayush.jain3@amd.com>
+Subject: [PATCH 1/2] selftests: mm: ksm: Fix incorrect evaluation of parameter
+Date:   Fri, 28 Jul 2023 11:31:08 +0530
+Message-ID: <20230728060109.4403-1-ayush.jain3@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276C3F296F27696AFD92D0F8C06A@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-NV-OnPremToCloud: ExternallySecured
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD2:EE_|DM4PR12MB6280:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd70e105-c776-4a02-9c3b-08db8f255151
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D5:EE_|MW4PR12MB7431:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a035107-a299-46bf-7543-08db8f301b53
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I1wUtZkaja0CxmVv7lFDspaD0pihNxFGIvNEvfL0zFI05yy4WYAD/VVSrIsQsB9GhUN354rbyyjyON+kIydHQhHe+CBc0TLJRTCShf0fMKjGM5CWTGPc1sh5xca5TizDzpLnnakMggPk9S7frzTw3rpc2MNuf68CRx+w5Uq8UHRA6fc6Xvm8wzm+OVya1Czk5PmTUA2bvJ+CwrHqbceLEfyqD329s+iUSKLS/ysyb+kMnsEutV5h9MvAkgEFLaR1O5vATDPLnQslO3yuVQhDo6MZdV2gRLRPjLzC6ZpMME9ohZSogcgDo9i+FWvUjE+p850BQyDIbPKeCFT3XLGhcvqOwy9Y+zD8U06ubzIvC8oYwSx5rkyQ716w/ezYGMY49uyO2avYerBzyxplHr+nWYgTf62/5SvX9UXYc5Yhlclh1iuNpIFM6mE8w+ClRIFrK2pW9NCkTaiioOsOAPYjVgUi6S60PqefmtpZn4PxnMc2/7xxZK4Lt8ph+O106XgTFfPt+P/3pc1cTbmpT2E38elnJ/gwob9fhyENLFlYSOzg8IotxhesXItUwpdqQ50fJl8sh7MxuYdOmN5lUHsoFpue38voj8ySST0j2hXYi0UL9rvRw+lbew8hvYq1tX6mn5IpIEPbuw2gS6CseksU6PcCMg40chU2CEFwXnAcu19k5PlwHyB8BUJVXgBLDyjJIbDQzzqFrvsdSj62fAlH+e/DBeSLv/nB0urKP1qi47N1o91PoWjZ60cyiuKMf+3b
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199021)(82310400008)(46966006)(36840700001)(40470700004)(86362001)(7416002)(33716001)(2906002)(40460700003)(40480700001)(55016003)(426003)(47076005)(83380400001)(186003)(36860700001)(336012)(26005)(9686003)(7636003)(478600001)(356005)(54906003)(4326008)(82740400003)(6916009)(8936002)(70586007)(316002)(70206006)(8676002)(41300700001)(5660300002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 04:44:24.2828
+X-Microsoft-Antispam-Message-Info: CsVB1NNIwYbkBb8Dzw9odCc5Ni/j6O11QeUb/LPoS4gf4TjNS/u0kFxqcw60C9qZtpi67oT5r0EOQADSYIbopHbRbZm3LsJdy14B0qLvpEx3kjLUgR2rDeBSuFCSJiazgnLzdQrXz3lsooqV6U6CWxk+wOnmId7Yp8MmDCcSlWfpIKDhqFhjugNTnoZGU7X4LDnSV5FmboamZ+Kg5vBDQFMAjDaue77FoqbsV9NX37vjdQySWjEeYKoTHUctTZM5e+LKmb+GvmjU8km6jyM9dcA6+zFAfiCGx+29JHGnR6TbiCDWhIjse9aOBFu0kcKfti1zYYPJUSuVDL+dIuagQ7Na6Tn/1rRAZ3JkXstySNsuvSstgnRHN7/9IXIL/BU/g2uGeSBBKiuLyej0JTqvB8H+dTAU8ElyLUdyoQ0DXxi2sd0bkwhmCGOE5zeSq9Me3j0M+bVYA6/n1u7Stxl4i2g1xzdOBxTHb/ioWKQpB7guwz8FWNqvRZJc9HH9Iso5Jw97VJmjycWHvKDqjRQwusggZXxL7jcZpSZ0zPdPcNrZehHLZ2mIQz5KTmDq211scXAaln5F4rkGAMSJ23MCFpBZOP8xIDajwVP8Yo0sQEfpI6q7PNdGHgW/FpJQwyH6fla97zqdXx9gKt2VyrlZPc2BhxhKKSYX/kLJgFJFJkGr+0PYHMiCxRB54ufbDPQa9N2BedpI9Nw1oJlQrD+VIuB+JtOlrN1CkEk7RkJMQIU9f8AmukfPSAsZhD9dhPvqvIM+NF05lu9sd74DsMdKUQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(396003)(136003)(82310400008)(451199021)(46966006)(36840700001)(40470700004)(336012)(1076003)(26005)(186003)(316002)(478600001)(70586007)(16526019)(6636002)(70206006)(4326008)(41300700001)(86362001)(7696005)(8936002)(8676002)(6666004)(54906003)(110136005)(36756003)(5660300002)(426003)(2616005)(2906002)(36860700001)(47076005)(83380400001)(40460700003)(82740400003)(356005)(40480700001)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 06:01:38.1619
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd70e105-c776-4a02-9c3b-08db8f255151
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EDD2.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a035107-a299-46bf-7543-08db8f301b53
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D5.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6280
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7431
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -122,41 +102,49 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 04:41:18AM +0000, Tian, Kevin wrote:
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Friday, July 28, 2023 12:37 PM
-> >
-> > On Fri, Jul 28, 2023 at 04:23:03AM +0000, Tian, Kevin wrote:
-> > > > From: Nicolin Chen <nicolinc@nvidia.com>
-> > > > Sent: Friday, July 28, 2023 4:25 AM
-> > > >
-> > > > +static int iommufd_access_change_ioas(struct iommufd_access *access,
-> > > > +                                   struct iommufd_ioas *new_ioas)
-> > > > +{
-> > > > +     u32 iopt_access_list_id = access->iopt_access_list_id;
-> > > > +     struct iommufd_ioas *cur_ioas = access->ioas;
-> > > > +     int rc;
-> > > > +
-> > > > +     lockdep_assert_held(&access->ioas_lock);
-> > > > +
-> > > > +     /* We are racing with a concurrent detach, bail */
-> > > > +     if (cur_ioas != access->ioas_unpin)
-> > > > +             return -EBUSY;
-> > > > +
-> > > > +     if (IS_ERR(new_ioas))
-> > > > +             return PTR_ERR(new_ioas);
-> > >
-> > > iommufd_access_change_ioas_id() already checks errors.
-> >
-> > I've thought about that: given that iommufd_access_change_ioas
-> > is a standalone API, though it's not used anywhere else at the
-> > moment, it might be safer to have this check again. Otherwise,
-> > we would need a line of comments saying that "caller must make
-> > sure that the input new_ioas is not holding an error code" or
-> > so?
-> >
-> 
-> I don't think it's a common practice for the caller to pass in
-> an error pointer when it already knows it's an error...
+A missing break in kms_tests leads to kselftest hang when the
+parameter -s is used.
+In current code flow because of missing break in -s, -t parses
+args spilled from -s and as -t accepts only valid values as 0,1
+so any arg in -s >1 or <0, gets in ksm_test failure
 
-OK. I will just drop it then.
+This went undetected since, before the addition of option -t,
+the next case -M would immediately break out of the switch
+statement but that is no longer the case
+
+Add the missing break statement.
+
+----Before----
+./ksm_tests -H -s 100
+Invalid merge type
+
+----After----
+./ksm_tests -H -s 100
+Number of normal pages:    0
+Number of huge pages:    50
+Total size:    100 MiB
+Total time:    0.401732682 s
+Average speed:  248.922 MiB/s
+
+Fixes: 9e7cb94ca218 ("selftests: vm: add KSM merging time test")
+
+Signed-off-by: Ayush Jain <ayush.jain3@amd.com>
+---
+ tools/testing/selftests/mm/ksm_tests.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
+index 435acebdc325..380b691d3eb9 100644
+--- a/tools/testing/selftests/mm/ksm_tests.c
++++ b/tools/testing/selftests/mm/ksm_tests.c
+@@ -831,6 +831,7 @@ int main(int argc, char *argv[])
+ 				printf("Size must be greater than 0\n");
+ 				return KSFT_FAIL;
+ 			}
++			break;
+ 		case 't':
+ 			{
+ 				int tmp = atoi(optarg);
+-- 
+2.34.1
+
