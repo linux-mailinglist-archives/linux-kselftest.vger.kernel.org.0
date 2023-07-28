@@ -2,68 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE3F7673C4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 19:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D214E76740B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 19:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbjG1RrL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 13:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
+        id S231494AbjG1R4J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 13:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233465AbjG1RrI (ORCPT
+        with ESMTP id S234007AbjG1R4F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 13:47:08 -0400
-Received: from mgamail.intel.com (unknown [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72783AA5;
-        Fri, 28 Jul 2023 10:47:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690566427; x=1722102427;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fQcCyWy7ZpLKPdeNo1tv2DTEdBFWmo67ai8pbgNx/Sc=;
-  b=htP/es4R5YItqzDCtIP1+A1/F4kbjO17fH4UvmpUZv0nn/ltiVj+8Kar
-   fH6jDVe4LhLecIIqNKsooq8BRsyNqxde4K7nKLYY0Arh36U/VVvcLUFSs
-   HgNTAWD3wsh0rv3dszMSJoAZVD97wNv5fa1El79yThZiUORHOTYQoYQfa
-   nuFjOQDMy/wlrerN0Xj6EfXIjzeAYOriMNC7+v7hkWnFfQAWt7xPkHlib
-   v1EmOW5Q31SRy5917JIxa+1nycd+qEFAkmW93CE+o60z6jlPhMY2oeIpu
-   1FUBL/hGq6WxWUW79rGRI4E09mUjp+Smy0UC6z22xansgjQ+vabzt6k9q
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="371348214"
-X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
-   d="scan'208";a="371348214"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 10:47:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="901369122"
-X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
-   d="scan'208";a="901369122"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 28 Jul 2023 10:47:03 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qPRYM-0003Rn-16;
-        Fri, 28 Jul 2023 17:47:02 +0000
-Date:   Sat, 29 Jul 2023 01:46:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, igt-dev@lists.freedesktop.org,
-        intel-xe@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] kunit: Allow kunit test modules to use test filtering
-Message-ID: <202307290100.7X8zOW5k-lkp@intel.com>
-References: <20230728154419.1810177-8-janusz.krzysztofik@linux.intel.com>
-MIME-Version: 1.0
+        Fri, 28 Jul 2023 13:56:05 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B9B4205;
+        Fri, 28 Jul 2023 10:56:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jhIxpmdoC5XMqTrAVOTob9IC5uAqc399Xgmbwksitl0EORBZ0WRuTZ0ryEJKki4pWEWQS+cptCwME71dnurSRxu4R8XvRnvs0hEMPImr8nZNxj5FawrwQTSYp+uixNhuWnbioGYMBJvlRNAeQFT4cltjuNvWisMsE0Rd7rpf+pj7FhJLBYESg0xkWyi4RCKxpKv/MQdABqZszJCj92LLx40rYTm/8xYBenLhB4Bvds/uF2ui/H8vIstDWJS9euKdbmkhYMJ/JD+vKi1k25DSO4Yy71iqmIErpO3QCu+oHQNgp7gTbqzilYNIzBUy8oq8Viki84b3b38xz5JEfWs97A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wcuW2MghGpMTVkzvR4Zgk5HLNpEnjEwathmDj3laAdo=;
+ b=d/hspTclx3ZUXegOamKlDzXKDP8B4zHHmoT6ZtNTUjqSn1eF6hQmvppYr+3sv6vjDiYhDgVi0zrC1luOr7p5YKaT853qW88+GS/zWOQJKQ9L8en2x6s4hntEGNhGhAajhmvekHxPZqZqFMOGlqGeI/gHW6lkETe+IcCvMPBaD7Oo4NblpKb05+voYFN7/K7Vkb2QLJ7l7aZhHDkQ7KtaY/+iRmQ6PiW+ZuZphtndEtQcpQg6RSBfgiKPO9ZWTwC68W13EkrLGJNs4WPFl1pMK4sb48ftDEzDXqgSBYgyorbdRfrnc0zHpvkScJsu3lwpdei5TpklwRozd2ffNE5G4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wcuW2MghGpMTVkzvR4Zgk5HLNpEnjEwathmDj3laAdo=;
+ b=G8v2gCP0h4mb9ZbkY+r1YLG7fBhD020ktiBV9fX5PlEb36jcq9xz0qUzHa5H9DgSysksRlEHZHA6Sxan7SU6NhRGgLthB1r8hRqwA9oHcfe11288G6VphWWE+iJGYgtSnkMYjRi/EabMrPvwgwsZTfULbaKDRo79HVeoCvTuq9dKyCYmfNDZXXMBF8CrjHph+Uc6SGHP4/pcD1QG3kjkQNhNzMXGIhCmP0nMoMCls1Y5e7gRnKZP771Ef7jv7Z8OrE8Yd4uOK9VXm8UPRwvNnLe+mzDhSwCw0tibkWnaxVwA9ftuvGvNgFtZBJ/bqfDmf1uDuZi29JTfZBI1JuOxhQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM4PR12MB6590.namprd12.prod.outlook.com (2603:10b6:8:8f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Fri, 28 Jul
+ 2023 17:55:59 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::5111:16e8:5afe:1da1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::5111:16e8:5afe:1da1%6]) with mapi id 15.20.6631.034; Fri, 28 Jul 2023
+ 17:55:59 +0000
+Date:   Fri, 28 Jul 2023 14:55:57 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Yi Liu <yi.l.liu@intel.com>
+Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
+        eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
+        mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com
+Subject: Re: [PATCH v3 08/17] iommufd: IOMMU_HWPT_ALLOC allocation with user
+ data
+Message-ID: <ZMQBLTm+U+5bgC/Z@nvidia.com>
+References: <20230724110406.107212-1-yi.l.liu@intel.com>
+ <20230724110406.107212-9-yi.l.liu@intel.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230728154419.1810177-8-janusz.krzysztofik@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <20230724110406.107212-9-yi.l.liu@intel.com>
+X-ClientProxiedBy: YT4PR01CA0170.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:110::10) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB6590:EE_
+X-MS-Office365-Filtering-Correlation-Id: b44abea2-e965-4769-636c-08db8f93e69a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: t3AQ5EtFV/YZT61FBmNMcaa5f3b9VtnE1so8htlauMUNFZ1W+D6uf/VBed8QTHWj80jA49Fbp7xGd4YXo3ma8QaFAYIDYcYIWeoeqsy2RA/B6e7owbUqrVcoa1dxb8BZURScmHAmELdJIsO8fL1fwWSqCaLdUOQ/R+M/mPuIFfIXUYG81duBZLPS5eEevAzw0JnChMZxS6iYAw9lk2uSaIhZtdZJpPBnvALhNxlyGMfi4mf9iWLb55Mg5VI4fD81VPB1yakaVHlmtl/dnsZmFxtP5lBdnDJJcMNqddFrdR1eRkFNxTrtqFKjUIf0Lmy1v4i7UttxC2mVzieoAWc8CxLGeC+0xRLxlq0Mu4qlcft4UmrYHeFPcbhi5oapQVuZ8MiZKqzt/tjvIGEH0QjYAPY//QevpzZQymnYS+DqPvbCYqDr/wi5Ta2xQRAXhZOS4myBqMVlNFEKnwsW7sKODuMi9AT90Qs3lKKeaY4QAv4bG2p4wqW9nTWlSPVAhYOIW5Nq9E0v36kB/ist9IIqLWnrF8sLD1D7TaSTVEFWCbPfmjMgOVsv6jJz2l1HhSjN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(346002)(136003)(396003)(376002)(451199021)(86362001)(6512007)(6486002)(36756003)(186003)(38100700002)(2616005)(6506007)(26005)(66556008)(4326008)(6916009)(66476007)(66946007)(316002)(2906002)(5660300002)(7416002)(41300700001)(8676002)(8936002)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Z40oc5ewkQmKYph3UWJj1EtIdef73HFKU2CQ4nQ92EkjwG0D/bgXwXOhCjet?=
+ =?us-ascii?Q?dPI+B49mwhQeKdGgJNsljKrdQGs1r3MChhRHwxWuuoyQo5k8Ou8kjPk48Ohu?=
+ =?us-ascii?Q?VIZuABZ1rTOV0jdJ6U5bI2zAssqnPN1F4E0LfBCXORiEvizWRDtxXsKigz6C?=
+ =?us-ascii?Q?JJsJ/jo49A5+Ox4aOWKrb22ZwyLQF68+URaCA20GfyWZ1CO8D0/+fWewXRXp?=
+ =?us-ascii?Q?J+Q0SdXM02LC6EGsxWVUhQGJe0OLGOzsLVjAbvdcPS3mFpwVU7VGeS7PKsPZ?=
+ =?us-ascii?Q?Oyo8XoCs9kLzwkpdvPA/4TORo5FceaTtD0BZYxcjfxXcc8Ct42BlEbu42o7O?=
+ =?us-ascii?Q?3mFNpOVF6Tj4FZaeFWMjiwFVckDyh6JchqwbMxq97EA4+ju6dThmbIhy0AaL?=
+ =?us-ascii?Q?kim4/bf0AQ7X2iRLz1tHJAThHqcxKkJ5oRX0bsCn/TquDQsb5qwxWjKEiOZs?=
+ =?us-ascii?Q?q8OlHZ9H6P9XWSFB8AlJ/fsewsyx27DTpHaUy4mhsxI6uORSZTdeE28nrf25?=
+ =?us-ascii?Q?qzGJ3WGKh8jdPl35aV0mLkUrJ6n0aUnmmS6hXUZdVG5u55qXImsEGsQ2iKcb?=
+ =?us-ascii?Q?/qQFzydDUo/v77QqqZwxNYMmJB4u38Qb8Fz0k1LfneY5hr+kkNIOMwwE7yIP?=
+ =?us-ascii?Q?JYL+gVwsgxUUOOTLd72cgP1JHYDXI47lACHO7sDsu2ndn2/Z7lHmrSfTRPMA?=
+ =?us-ascii?Q?21f7t0sBrOR1ydHJwhOmMTTs4mieKtcRtXhEyM4gTA+/kv6GSbXD97Uqcd+P?=
+ =?us-ascii?Q?rx+GmDnzCTmA2dYqp/+KAYARzQl+S7vytMsEkzc3fqWMEJ4zCs6oJq0TwRAh?=
+ =?us-ascii?Q?GUC1SGn7M/cD3iXwDgH3AwAqLu4wSpX2ADI+1LxMWy4T5uPUZESFrkRzS3bS?=
+ =?us-ascii?Q?jxwMEXso/RIkjJsACTUeMWwhIN3pfc9nzPad9VIzv3YQBO5bx2n1bBjhQplu?=
+ =?us-ascii?Q?ffkAQlFL4XcafH8mSkHWBsrwcpNyjBvR6gVKEWxV099BQVTAPM7obHkOBLfb?=
+ =?us-ascii?Q?zsahY/VQ9LKgrkfKnyNsFpfqIUX4ViunoKUfo6u9rwc/WpEATL7OBMliIeNT?=
+ =?us-ascii?Q?CwSu1aHY2odHEu/aRnyOf5CI8FkS7IKsFtQsWI2IwmZuw5Zb+jvJDWnIFi+H?=
+ =?us-ascii?Q?HOdqMau1u8ImPwXCSMlqFiN5ALIpgYUrR4MApK5IOdsFLtBoPnpcC2b2SL5r?=
+ =?us-ascii?Q?gv/+kcxbc7GWlc20BGZb+q7mCbfCAnyv+Zw+iEm+5gtBQaBylGyIDdIqxIel?=
+ =?us-ascii?Q?52sXFaSpuFVgFO0zTg+WIA8XPXP5HDOjRDYYAXtkL7GsRX4oAzTGSC/F9opj?=
+ =?us-ascii?Q?sG2eviN8QOGYYfbwBz34Q+8Pm8fQMdvOxS3UVQtgSwYEZeoxsEfj4JRftn5A?=
+ =?us-ascii?Q?lgL1sZzavHLT3Mq/KxbQBhviiZsfeLAmBYby1nKV/oTHZvz3T4CSfe44QFny?=
+ =?us-ascii?Q?kAMAoe8l7aA0t8Rh9Hw8N4NUPbrw6I/G9pG/uLZdS75C4hLrBmFHROSrfbGB?=
+ =?us-ascii?Q?p0eFusbxQo3AlUmTly/msH4YEsDe3xeXRp16BLf5VWCs4ubj+5cN5rRYcOFx?=
+ =?us-ascii?Q?/kdDPE6HEO8ykKeGBZ1UMs4JaIL6qwdmTUdZ5spV?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b44abea2-e965-4769-636c-08db8f93e69a
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 17:55:59.7478
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Eobb3c3ThPk96H1/EXsPAg3aAZ2pFhsYMnLxTTq2HgK+LlGccpSytn78k3WwC8BA
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6590
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,147 +123,95 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Janusz,
+On Mon, Jul 24, 2023 at 04:03:57AM -0700, Yi Liu wrote:
 
-kernel test robot noticed the following build errors:
+> +	switch (pt_obj->type) {
+> +	case IOMMUFD_OBJ_IOAS:
+> +		ioas = container_of(pt_obj, struct iommufd_ioas, obj);
+> +		break;
+> +	case IOMMUFD_OBJ_HW_PAGETABLE:
+> +		/* pt_id points HWPT only when hwpt_type is !IOMMU_HWPT_TYPE_DEFAULT */
+> +		if (cmd->hwpt_type == IOMMU_HWPT_TYPE_DEFAULT) {
+> +			rc = -EINVAL;
+> +			goto out_put_pt;
+> +		}
+> +
+> +		parent = container_of(pt_obj, struct iommufd_hw_pagetable, obj);
+> +		/*
+> +		 * Cannot allocate user-managed hwpt linking to auto_created
+> +		 * hwpt. If the parent hwpt is already a user-managed hwpt,
+> +		 * don't allocate another user-managed hwpt linking to it.
+> +		 */
+> +		if (parent->auto_domain || parent->parent) {
+> +			rc = -EINVAL;
+> +			goto out_put_pt;
+> +		}
+> +		ioas = parent->ioas;
 
-[auto build test ERROR on shuah-kselftest/kunit-fixes]
-[also build test ERROR on linus/master v6.5-rc3]
-[cannot apply to shuah-kselftest/kunit next-20230728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Why do we set ioas here? I would think it should be NULL.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Janusz-Krzysztofik/kunit-Report-the-count-of-test-suites-in-a-module/20230728-234736
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit-fixes
-patch link:    https://lore.kernel.org/r/20230728154419.1810177-8-janusz.krzysztofik%40linux.intel.com
-patch subject: [PATCH 3/3] kunit: Allow kunit test modules to use test filtering
-config: mips-randconfig-r002-20230728 (https://download.01.org/0day-ci/archive/20230729/202307290100.7X8zOW5k-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230729/202307290100.7X8zOW5k-lkp@intel.com/reproduce)
+I think it is looking like a mistake to try and re-use
+iommufd_hw_pagetable_alloc() directly for the nested case. It should
+not have a IOAS argument, it should not do enforce_cc, or iopt_*
+functions
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307290100.7X8zOW5k-lkp@intel.com/
+So must of the function is removed. Probably better to make a new
+ioas-less function for the nesting case.
 
-All error/warnings (new ones prefixed by >>):
+> diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
+> index 510db114fc61..5f4420626421 100644
+> --- a/drivers/iommu/iommufd/main.c
+> +++ b/drivers/iommu/iommufd/main.c
+> @@ -426,7 +426,7 @@ static const struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
+>  	IOCTL_OP(IOMMU_GET_HW_INFO, iommufd_get_hw_info, struct iommu_hw_info,
+>  		 __reserved),
+>  	IOCTL_OP(IOMMU_HWPT_ALLOC, iommufd_hwpt_alloc, struct iommu_hwpt_alloc,
+> -		 __reserved),
+> +		 data_uptr),
 
->> lib/kunit/executor.c:182:42: warning: declaration of 'struct suite_set' will not be visible outside of this function [-Wvisibility]
-     182 | static void kunit_exec_list_tests(struct suite_set *suite_set)
-         |                                          ^
->> lib/kunit/executor.c:190:25: error: incomplete definition of type 'struct suite_set'
-     190 |         for (suites = suite_set->start; suites < suite_set->end; suites++)
-         |                       ~~~~~~~~~^
-   lib/kunit/executor.c:182:42: note: forward declaration of 'struct suite_set'
-     182 | static void kunit_exec_list_tests(struct suite_set *suite_set)
-         |                                          ^
-   lib/kunit/executor.c:190:52: error: incomplete definition of type 'struct suite_set'
-     190 |         for (suites = suite_set->start; suites < suite_set->end; suites++)
-         |                                                  ~~~~~~~~~^
-   lib/kunit/executor.c:182:42: note: forward declaration of 'struct suite_set'
-     182 | static void kunit_exec_list_tests(struct suite_set *suite_set)
-         |                                          ^
->> lib/kunit/executor.c:198:19: error: variable has incomplete type 'struct suite_set'
-     198 |         struct suite_set suite_set = {__kunit_suites_start, __kunit_suites_end};
-         |                          ^
-   lib/kunit/executor.c:198:9: note: forward declaration of 'struct suite_set'
-     198 |         struct suite_set suite_set = {__kunit_suites_start, __kunit_suites_end};
-         |                ^
-   In file included from lib/kunit/executor.c:230:
->> lib/kunit/executor_test.c:45:19: error: variable has incomplete type 'struct suite_set'
-      45 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
-         |                          ^
-   lib/kunit/executor_test.c:45:9: note: forward declaration of 'struct suite_set'
-      45 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
-         |                ^
-   lib/kunit/executor_test.c:46:19: error: variable has incomplete type 'struct suite_set'
-      46 |         struct suite_set got;
-         |                          ^
-   lib/kunit/executor_test.c:45:9: note: forward declaration of 'struct suite_set'
-      45 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
-         |                ^
-   lib/kunit/executor_test.c:69:19: error: variable has incomplete type 'struct suite_set'
-      69 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
-         |                          ^
-   lib/kunit/executor_test.c:69:9: note: forward declaration of 'struct suite_set'
-      69 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
-         |                ^
-   lib/kunit/executor_test.c:70:19: error: variable has incomplete type 'struct suite_set'
-      70 |         struct suite_set got;
-         |                          ^
-   lib/kunit/executor_test.c:69:9: note: forward declaration of 'struct suite_set'
-      69 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
-         |                ^
-   lib/kunit/executor_test.c:96:19: error: variable has incomplete type 'struct suite_set'
-      96 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
-         |                          ^
-   lib/kunit/executor_test.c:96:9: note: forward declaration of 'struct suite_set'
-      96 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
-         |                ^
-   lib/kunit/executor_test.c:97:19: error: variable has incomplete type 'struct suite_set'
-      97 |         struct suite_set got;
-         |                          ^
-   lib/kunit/executor_test.c:96:9: note: forward declaration of 'struct suite_set'
-      96 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
-         |                ^
-   lib/kunit/executor_test.c:138:4: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-     138 |                         (kunit_action_t *)kfree,
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 9 errors generated.
+Nono, these can never change once we put them it. It specifies the
+hard minimum size that userspace must provide. If userspace gives less
+than this then the ioctl always fails. Changing it breaks all the
+existing software.
+
+The core code ensures that the trailing part of the cmd struct is
+zero'd the extended implementation must cope with Zero'd values, which
+this does.
+
+> diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+> index f2026cde2d64..73bf9af91e99 100644
+> --- a/include/uapi/linux/iommufd.h
+> +++ b/include/uapi/linux/iommufd.h
+> @@ -364,12 +364,27 @@ enum iommu_hwpt_type {
+>   * @pt_id: The IOAS to connect this HWPT to
+>   * @out_hwpt_id: The ID of the new HWPT
+>   * @__reserved: Must be 0
+> + * @hwpt_type: One of enum iommu_hwpt_type
+> + * @data_len: Length of the type specific data
+> + * @data_uptr: User pointer to the type specific data
+>   *
+>   * Explicitly allocate a hardware page table object. This is the same object
+>   * type that is returned by iommufd_device_attach() and represents the
+>   * underlying iommu driver's iommu_domain kernel object.
+>   *
+> - * A HWPT will be created with the IOVA mappings from the given IOAS.
+> + * A kernel-managed HWPT will be created with the mappings from the given
+> + * IOAS via the @pt_id. The @hwpt_type for this allocation can be set to
+> + * either IOMMU_HWPT_TYPE_DEFAULT or a pre-defined type corresponding to
+> + * an I/O page table type supported by the underlying IOMMU hardware.
 
 
-vim +190 lib/kunit/executor.c
+> + * A user-managed HWPT will be created from a given parent HWPT via the
+> + * @pt_id, in which the parent HWPT must be allocated previously via the
+> + * same ioctl from a given IOAS (@pt_id). In this case, the @hwpt_type
+> + * must be set to a pre-defined type corresponding to an I/O page table
+> + * type supported by the underlying IOMMU hardware.
+> + *
+> + * If the @hwpt_type is set to IOMMU_HWPT_TYPE_DEFAULT, both the @data_len
+> + * and the @data_uptr will be ignored. Otherwise, both must be
+> given.
 
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  181  
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30 @182  static void kunit_exec_list_tests(struct suite_set *suite_set)
-aac35468ca20a3 Alan Maguire    2020-08-04  183  {
-e5857d396f35e5 Daniel Latypov  2022-07-09  184  	struct kunit_suite * const *suites;
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  185  	struct kunit_case *test_case;
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  186  
-6c738b52316c58 Rae Moar        2022-11-23  187  	/* Hack: print a ktap header so kunit.py can find the start of KUnit output. */
-6c738b52316c58 Rae Moar        2022-11-23  188  	pr_info("KTAP version 1\n");
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  189  
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30 @190  	for (suites = suite_set->start; suites < suite_set->end; suites++)
-e5857d396f35e5 Daniel Latypov  2022-07-09  191  		kunit_suite_for_each_test_case((*suites), test_case) {
-e5857d396f35e5 Daniel Latypov  2022-07-09  192  			pr_info("%s.%s\n", (*suites)->name, test_case->name);
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  193  		}
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  194  }
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  195  
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  196  int kunit_run_all_tests(void)
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  197  {
-e5857d396f35e5 Daniel Latypov  2022-07-09 @198  	struct suite_set suite_set = {__kunit_suites_start, __kunit_suites_end};
-1b11063d32d7e1 Daniel Latypov  2022-05-13  199  	int err = 0;
-d20a6ba5e3be5f Joe Fradley     2022-08-23  200  	if (!kunit_enabled()) {
-d20a6ba5e3be5f Joe Fradley     2022-08-23  201  		pr_info("kunit: disabled\n");
-d20a6ba5e3be5f Joe Fradley     2022-08-23  202  		goto out;
-d20a6ba5e3be5f Joe Fradley     2022-08-23  203  	}
-aac35468ca20a3 Alan Maguire    2020-08-04  204  
-a02353f491622e Daniel Latypov  2022-05-11  205  	if (filter_glob_param) {
-a02353f491622e Daniel Latypov  2022-05-11  206  		suite_set = kunit_filter_suites(&suite_set, filter_glob_param, &err);
-a02353f491622e Daniel Latypov  2022-05-11  207  		if (err) {
-a02353f491622e Daniel Latypov  2022-05-11  208  			pr_err("kunit executor: error filtering suites: %d\n", err);
-1b11063d32d7e1 Daniel Latypov  2022-05-13  209  			goto out;
-a02353f491622e Daniel Latypov  2022-05-11  210  		}
-a02353f491622e Daniel Latypov  2022-05-11  211  	}
-45dcbb6f5ef78b Brendan Higgins 2020-08-04  212  
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  213  	if (!action_param)
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  214  		kunit_exec_run_tests(&suite_set);
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  215  	else if (strcmp(action_param, "list") == 0)
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  216  		kunit_exec_list_tests(&suite_set);
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  217  	else
-9c6b0e1d8993e4 Daniel Latypov  2021-09-30  218  		pr_err("kunit executor: unknown action '%s'\n", action_param);
-aac35468ca20a3 Alan Maguire    2020-08-04  219  
-e5857d396f35e5 Daniel Latypov  2022-07-09  220  	if (filter_glob_param) { /* a copy was made of each suite */
-a127b154a8f231 Daniel Latypov  2021-09-14  221  		kunit_free_suite_set(suite_set);
-5d31f71efcb6bc Daniel Latypov  2021-02-05  222  	}
-5d31f71efcb6bc Daniel Latypov  2021-02-05  223  
-1b11063d32d7e1 Daniel Latypov  2022-05-13  224  out:
-1b11063d32d7e1 Daniel Latypov  2022-05-13  225  	kunit_handle_shutdown();
-1b11063d32d7e1 Daniel Latypov  2022-05-13  226  	return err;
-aac35468ca20a3 Alan Maguire    2020-08-04  227  }
-aac35468ca20a3 Alan Maguire    2020-08-04  228  
+ If the @hwpt_type is set to IOMMU_HWPT_TYPE_DEFAULT then @data_len
+ must be zero.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jason
