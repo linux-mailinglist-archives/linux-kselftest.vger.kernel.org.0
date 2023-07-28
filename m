@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9B3767466
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 20:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10912767468
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 20:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235910AbjG1SVW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 14:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
+        id S235967AbjG1SVY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 14:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234059AbjG1SVV (ORCPT
+        with ESMTP id S235923AbjG1SVW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 14:21:21 -0400
+        Fri, 28 Jul 2023 14:21:22 -0400
 Received: from CY4PR02CU008.outbound.protection.outlook.com (mail-westcentralusazon11012009.outbound.protection.outlook.com [40.93.200.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E584232;
-        Fri, 28 Jul 2023 11:21:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B728422A;
+        Fri, 28 Jul 2023 11:21:21 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dHvEXE8XKUnE8GvkG5RNdGMF4LQ0a9kd00ttBStdbVJfhPG8OF7DE999n294or9h3qgNfWxHBUCFrzFBgLPNJ+7fPbp8yaPxuS7RCFZyDZXIAKjOjZDqRUKNT0dH5JhPcudKAaYAaLduM/EBgS7JEYMiR4cOUeqMDeUkolxfWf9byNN9z9XBzC5llLD6nwm+pnMbGNf8RLtti7R8uaPorsVPDaZHCNqIYphcWonIXXe5iT/75mAnKaRDZlULO5ycO1VMX0bdfNktFxlp1QNkw1jMkik3ygrDsk+153WnsFTKcNIhUPOPbeVJ5b3Se5QQFMiUA3W9HivyhA/b6l4wrA==
+ b=AbHXSB6lK+GYztEgq1esT45tQ+bSTT+z4FBsKiNEIN8vN+DhptNlA1AbSN0qlJw/Mmdb+HdHC6yp5Wy95eIakQwmVI48gWQSUAgBYtuBxoMckcACyk5fmgnSGvXpN7bTrqXcyo4hnUFv95xgyF4Hj7lsy2mV5RGKagX72FvNk4twihzSgUmH7xh4PZZVOHFdyujU0m3pKPDUBh9JI08s0kzbQRKAGjxWyke7CDlpCgVro2JZGfnZl6M75jcfe9OnhCOoTRGB8Vll3U0xqrkbtrfInS1oed+Cfmolt/39FDIZaLTx2O1vjiuhjIjm1Ntw5mnS27B3Z7JHDSrYWWVDmQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EK/CPVX7KPPTFi9g8K7QxzUGBp438pRqJnXYdV6ILyY=;
- b=fEHgXBh5KzfjM3hEoWLUN6o50MnE40J53sMDKM+xXbmgtBMqcZ5NGymVI0n9C1nZPl987/W/HPnvfsMkveGFRGrW2ZYhXgGOvD7lTnDGLVL2T6go15y50sE4bFsjSlZcDR51sEIe25p/NCBFTBJ/DwTtKqMlb7Dp41v8npWzU8a7sRQeOa5uCv+rfuTEdjUfelMU79M8sGM8dOHq3MUwzCpMzJJqaUoX56ndxat30N6iHa319Xi38WCwU2E+RCoYohWjWiV7VItrPeCGWYEuxU78TLMUefnpkyW9skP9XLrcuNwwQQ6/94yA6iRzrh3EATOo5sVfdu3WFoMjokyiOw==
+ bh=h9dr8VcqHnHafKIs/SE0VyRBuRoqJbRFE8lhfXDwGdY=;
+ b=Kj9GTXmM1o/Rs1Wr7xYcDP+UW0KHfR2yh2u+P87TysT8l1uJ9pM1rVPuu9gqVSF744RVUQ/AUDpfrN954nweaYZSbaG+fOimbUYRzZowtVyKRYLk5xj5GsjRq7LcJ7PeAHL5AR1oPJRA+EyNcABW20E5MbUleayV65eumt1I3r9x3u8CVgzEM3udran7Cog1OrGfE55z7Q68XrgmlhM3fQbc2mLRvInU/1bN2GeaySLW0AQIFKAuk+eyOnvlTtrB+gH9SbCkJO4B8Yqcb36rBJR2AvEc6a4DYOlNrMd6lQlKM84qoBMUtr8mXy95z1FEsUxEY+xigzkudN+s8roBSg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
  dkim=pass header.d=vmware.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EK/CPVX7KPPTFi9g8K7QxzUGBp438pRqJnXYdV6ILyY=;
- b=brW9CYJXl7Yajaz8qlhskyByDsFQkl/N0nfiNdphIdwcKo3Ad5+ScMYdzD740oF64OFlTlnGXzxVqWOFX5dOlq8pkco5OUdExoVko35/1fOTEaOJiDoKtK3x87qNnyl7p+jogLm24rJbA17w1QUOv2cAQbY52TclL7nj7b3Ak+Q=
+ bh=h9dr8VcqHnHafKIs/SE0VyRBuRoqJbRFE8lhfXDwGdY=;
+ b=g/xUxHe1wz1UZCEchaoEwf4bzJvDxOQZv0jVH0wWj8QLmB3AhfRc9zrt/f9cLrclFD47LLSWpJ6sWmQmcF94C/1yXCCZpoLbSYrJ02YExP0XHGoL3K5ZhwBu45Un2BTTJDIX50AqWhMc5VvRPTowe8eYZu1A9wSx2oxPYcpiNwg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vmware.com;
 Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
  by SN7PR05MB9264.namprd05.prod.outlook.com (2603:10b6:806:26c::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Fri, 28 Jul
- 2023 18:21:18 +0000
+ 2023 18:21:19 +0000
 Received: from PH0PR05MB8703.namprd05.prod.outlook.com
  ([fe80::b5d8:98b9:6ca7:94f0]) by PH0PR05MB8703.namprd05.prod.outlook.com
  ([fe80::b5d8:98b9:6ca7:94f0%6]) with mapi id 15.20.6631.026; Fri, 28 Jul 2023
- 18:21:17 +0000
+ 18:21:19 +0000
 From:   Ajay Kaher <akaher@vmware.com>
 To:     rostedt@goodmis.org, shuah@kernel.org, mhiramat@kernel.org
 Cc:     chinglinyu@google.com, linux-kernel@vger.kernel.org,
@@ -49,9 +49,9 @@ Cc:     chinglinyu@google.com, linux-kernel@vger.kernel.org,
         namit@vmware.com, oe-lkp@lists.linux.dev, akaher@vmware.com,
         amakhalov@vmware.com, er.ajay.kaher@gmail.com,
         srivatsa@csail.mit.edu, tkundu@vmware.com, vsirnapalli@vmware.com
-Subject: [PATCH v6 01/10] tracing: Require all trace events to have a TRACE_SYSTEM
-Date:   Fri, 28 Jul 2023 23:50:43 +0530
-Message-Id: <1690568452-46553-2-git-send-email-akaher@vmware.com>
+Subject: [PATCH v6 02/10] eventfs: Implement tracefs_inode_cache
+Date:   Fri, 28 Jul 2023 23:50:44 +0530
+Message-Id: <1690568452-46553-3-git-send-email-akaher@vmware.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1690568452-46553-1-git-send-email-akaher@vmware.com>
 References: <1690568452-46553-1-git-send-email-akaher@vmware.com>
@@ -62,51 +62,51 @@ X-ClientProxiedBy: BYAPR11CA0090.namprd11.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PH0PR05MB8703:EE_|SN7PR05MB9264:EE_
-X-MS-Office365-Filtering-Correlation-Id: f408e033-3332-4898-5d9a-08db8f976f79
+X-MS-Office365-Filtering-Correlation-Id: ad2bbd36-b5c7-4bb0-64e5-08db8f977027
 X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7gN591uSyccpGT0mHCEqXmHqNYCMEQ5X77fdS90duzqnCAs4qZkxxP41NTme2andRh1zscQSQwtFsVP5iL4wSWSppXxgGki1Xrni+AdDB6n3F5Db0UVXd3qR9W3inOsz57954BbYUaeOR9tPG9rtnkpYlrKAiLKt8YmaF7sf0+sxws80KIESxNQt1B+sNc9d1xMrgqB6PsXUWOKrkpbVPIjLiFlb9HYwUCz+JFwI25292ickCmKuuZVJ+NmMZhIDpZiT46FR8gHfZDVNQvgG+9ustZeAJZXwnwsFNnwjLOdzti1cJcAURZlwyDyb8sDI+pAytP0jUjIeXYHN49VDuKhEqjAuYAVbB46eb8Xc3IjDnLJO52iwJDOgNRIWOxm+xTVr3hd7qW5Yw1kGEHggHWyjN4eljtFA7rp/MG375gTtLXYg9DBM3htSh2qvjrDSpK+RfJ9WTEIYwy5w+vdrLS21C/VqUSmzzlNftke8ZXIiCTCpsqLFXr1kOba5B04Gjznr/tL2BcPdTORtdNao9g0vK4eKoSWURy/hZMAetVAJR0//xXLnmE/J0TWfUL6HguOkc7/VUrqB+EGrY0FEv+E2AHWAsMlEeNFbwbnJip5C6N/QpZpntJ2zn5eLyLxDLwTCiszeCUwtF+e69Pi0dY4w3fIucXaFdDqn8HXypBo=
+X-Microsoft-Antispam-Message-Info: Yeo7xqc1M5VtVu436TWhqr1WYzwFuX+K7vR+PYvyQb8lDPthRdUHKbDm42ydIZHucVcX/5p7nDa4kbcMfZ7B+CW7YA9azo7Or2aEL5kXMDBLXhqJqOIwks6v/asXtHFRZh/DB82Ld4V4G5PaNJTcLOl7a5mnvG1qZEzTl+HxovZ206hc7ZKy8uGnn3uMfanxvMP4FnBiFDlh4M/lOG/VipAsfJ7s2FbNVvbZEPnmp/qkZFsADPyBOySdfMKkYqglFbGjP6tsHYyGG4kk9N0MbkA8eSXN8Ap7NS1roNJKKPMcdTbrYmPD47E25Nct/LP50a0HjPwDmOI1fzRocZbYHzqLrzG6lZKZP3zes0YqV1upweoZOE89Vnzxx8KYzsfQ8li15GwmEU7DnOMYlwLsU7xwIaB7U6FI5398RIuN4CybyJagp7XliMnUYS0W1bzYo65DqSn2BHIyJ8uRw1a9o14tSmi28pYBa3GOfcR5Y/vBun3wy062Y5eJSLYLfUzAvWiXZsZy4WB7XMHwNoBpLHmwZA1s9MDazUYh1PTsKsK224j80sJ9+qZpJlGF/CUckD1uv2hXoaRSPGHOieierGpwOVAfdXz7S7z1gHaaxhpGToUDT6jozlr8omAQjGXXxrw99gLFi++ZIrImP96L0khjWVjO5eEhcFKejEsPFb4=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(346002)(136003)(366004)(451199021)(2906002)(316002)(7416002)(8676002)(86362001)(8936002)(41300700001)(36756003)(6512007)(5660300002)(107886003)(26005)(6506007)(6666004)(6486002)(52116002)(83380400001)(478600001)(38350700002)(186003)(38100700002)(4326008)(66556008)(66946007)(66476007)(2616005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?n/K19fYdBsU62UwjInrzm17bogzdTBWlTBlYrzTqbY4HaWP6LFp90F02cgSV?=
- =?us-ascii?Q?3hbO2hcSASYvv54ofvm1zX3nnRlKNpikyE81w68MTnMTPilRxt/aUUb7e0Ob?=
- =?us-ascii?Q?dHmCAqm5KzAwcaanyo9Myl93UkRPjcdVnvWaeVPiFMZ1sWOWKos32AyHgnoW?=
- =?us-ascii?Q?QqXMb6nDkWvowO20Jp8LJlQ+/8VaNQQqL3fe5aoH/XkcKzn0/Ff1DYq08okN?=
- =?us-ascii?Q?aYjYcRJpzbu4K9iGmiK6KKRbqjxBbcMtkciz0+h8VJOVA4DYa/yaWJ47IVBc?=
- =?us-ascii?Q?lGJIsMnCCD5IjGv4PeEt0FNg96WDNopa5q/+NLX6737S8ZjcT66JUuIQQkMQ?=
- =?us-ascii?Q?Ec2ZcHt9s9alAZZhIWmxxLGuJaN11MlwCv7s78RxyYdLXPOwTUPEvX+92Z1N?=
- =?us-ascii?Q?krKUsTUE6oygTNMNwG0k/pHBLSquWOTwW32ZQ0NJV25C0+Us+n9Zu3E1ITI2?=
- =?us-ascii?Q?lD+NBWw9Ial9IlgAridJ4aLuBThH2tAXtw37VCh5yPHRPuVPXFjumU84CFYl?=
- =?us-ascii?Q?hUfMa6+HVXtXQy5+gmfZtsnYU0/zz0p+jrmhzfGbuTjKaq4lDcW4YJsYenFp?=
- =?us-ascii?Q?g7p0/PqbHBNNI3XS4oHv8/+rsNpj1lviboJZOr/pPubCTqZs4ai4SJIWswvD?=
- =?us-ascii?Q?dux8ZqcfgwK6v4qKXrVBPylm24cp8+xH0E3p8CyLodXMUbbdi/ygQ8HvWlCX?=
- =?us-ascii?Q?4+ay8MeSvoGHuyECUFVkM0fGlArjOuWr1gcEqATHlp4esTWu76Sd1lW3xfme?=
- =?us-ascii?Q?GKyYZD3anj705Nk8GVYD7hLKwvF/9v01s2q4UkTsV3iROCm+3fydRb4j/+ZO?=
- =?us-ascii?Q?UvYyHvRDePe62ej0N20TL7SMKX6vKepCzwrI90kPIHVfSbFTEKyS71I2l5Mc?=
- =?us-ascii?Q?3m6mvhkuSPubhccUNlQ8vKRwT18H7p7IVOoG/LddoUrXzDPKeps/gXc75wvG?=
- =?us-ascii?Q?praVqB5kjpXfhEoEYmRc9qIh/k0+IOwV8mwXLGN80qoBOqR5aP91aN3P0UD7?=
- =?us-ascii?Q?q5IzBuQzjGtVcv+/DRkANHoKGULuTzALouhrrM427+Vo3jfRXzkG8f/rvPm7?=
- =?us-ascii?Q?DRbkGxygNXubqL8cIkkdj73ZS57oyr+xO7kb/FWbRMxx1ddGF+KmsTe8dnbu?=
- =?us-ascii?Q?2EoGc9huN3RQEyRiFLivKC/cucLEKFVh/q4tkwldrEfkNztTS0W+WWGLpasE?=
- =?us-ascii?Q?6rVhPqMYjKaeB791lYN6yqS3oc66JtgpWrOGxgsCiOWrQQPW+r/Q3T8hzaY4?=
- =?us-ascii?Q?ikHXBjp73q+E617792U403vHIkvDPh7CPOCin75GmLrgU/kz2kOaZgg4EyGi?=
- =?us-ascii?Q?wMVc1fLGECd1oyJwce4ec9srzzxWUgEdqudhGmCQCbrTaR8PPLsCwkn3o4tE?=
- =?us-ascii?Q?Q9kzDys1J2xeFh1lN3jg7QLKJXWRj2dw1V9zwPFSDkZPy93OzkgVbQH6ZhBQ?=
- =?us-ascii?Q?GUKN8s+x9FpGO05i8VuQip2LjTtYTJH+UHL9ZaEGXmS40txDV0pMOL56hZIg?=
- =?us-ascii?Q?FHUsDs9uyVCplwdOfZjJxfg3c0nanUJ+UcNrFcjovQKp4sfYCXkZg1+RUngS?=
- =?us-ascii?Q?Ey7e0fMQLwl4CcVESZ6XD/v8LyopQ0JdHadjTfCl?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FT4kDbKFeog1QQTHAEjr0zKDhcWf4NAqNAqgf0atGwUCVt1vg5G3/EHSnsDC?=
+ =?us-ascii?Q?7tA/SDn1Z/YV8TvIL65P2AfJTmimQ6O17t2xr3o9yO95rJFcSF1A6HqYFsAp?=
+ =?us-ascii?Q?0rkCHii5iWvtks/70BUx/kol3+scWhWA/tNk6LIIJaPvwTza/kD1Z0shXbEy?=
+ =?us-ascii?Q?6GAQzawP6BLU73htIlRswe5tLBFqW3RhqM2EqUuvQ+JEy3ntSrS4/V0F0ZXe?=
+ =?us-ascii?Q?OTmMwFRJW2hNp6qCM84pbOttTB+bVSUwBYV4SU/ugA1vuZ0xpcAVtlxMSbDg?=
+ =?us-ascii?Q?82b9eb146C7Jouu6bZcNaib5jHnJ7RX9XmQsSNsG858SD9JXx36w0HMHMd2E?=
+ =?us-ascii?Q?oYpJkJTX7CkjTRupaCNIwCMbqTOnMG0v9dxmvhcxQ487b+wUUz9BUE2yvkmo?=
+ =?us-ascii?Q?n0oNsIVpqeFmLP79/jV3iSPGvACc9asBLqUdlGFTQL5bcgSp6tHtjFhrrEPo?=
+ =?us-ascii?Q?LJBj19pDdkEkigmPdRPu8EkN7cBTlN54ZLm+72Wf3oLiy5JacbwnMJUTjYGw?=
+ =?us-ascii?Q?t9yqYLpkqUqnrgpMiNormERxl2ueeknCczQQ7iBcTg0guP76MWuNf0uoRVpN?=
+ =?us-ascii?Q?9r4vTNRqLCmYUQ3HGKOMzMnrfx3VX38tocRRhY33LY/y3DVUDucGn+8d/1bn?=
+ =?us-ascii?Q?eE+LjWXP3IbVZ/7BHoDdMNqnCoieKrjfDPfB08BZv/VlFWth32tw3L3kgVfY?=
+ =?us-ascii?Q?vZLtvF+2s/YzPSYsSL0418KByIPASqUKa3hck6dR++A3PDriRWVdCQRIfX1Z?=
+ =?us-ascii?Q?WeRVYihYepfT7QvfryUKb9Ps+9wDoAqCiZO2MrJ9ZxCv0FlGytc29+8OZMLa?=
+ =?us-ascii?Q?E4JrA+SUOYdsUW9+NrZW/XF4y9/mq9Df3riZ5Xs3afpKjXsCAjkFfl+HjAZw?=
+ =?us-ascii?Q?RW/b0EQjwzTgEMfhs2cc5JMswU2iqlnK7p2RBwry2EAelp8IxGbSaaOaiL10?=
+ =?us-ascii?Q?S6waB2Xm8UQORcWsNmknJTeljDyEgwI1cd86fx9Ho40XMVzpDJk+aPE/1VgU?=
+ =?us-ascii?Q?gTXy1PzW67CoADgW/IZLbHHDNuBfBsNNQfSMMmHXRuuCKtL16OHKENLULjGz?=
+ =?us-ascii?Q?gbxzdJWOzHSzLwzgd+LEHgb1SRKWyMAKe66hFnS2zgAolaOkFRtMLizBSb5u?=
+ =?us-ascii?Q?aCoUYPfxnRQvg/pigigEnHN9I40C5/YCaUiH+buS+bcEP45cO73Mxdc2zIIH?=
+ =?us-ascii?Q?d1X6zKWgoMKH5MSgfHSuwRdhEXL5BWj048EM/hU28WpZ0UvM0yNM2RX0xCHm?=
+ =?us-ascii?Q?hAVpqsFdZQznHu/7+PU9DOMzea9dz7mCyz5GE3aVvL/wU2IyMdOrsoTSPw0O?=
+ =?us-ascii?Q?lCIR/YGcLZymIi+xvJI3lqlvkPW1R51GNWhgEhpoNEL9XohODnacJjdWvIaM?=
+ =?us-ascii?Q?uFoMJZbbnJ++kVgH7aPDNPRqRHriitrsS1Oj22lYnoFdsGJujjVmyxc7i8uG?=
+ =?us-ascii?Q?Fb1XbTyD7c8ysnj6qr4IBSJhe/XGtXz/Ss7el/uf34jLY6Ff3BjADH5oxMyS?=
+ =?us-ascii?Q?kra7wLacCBqGXDwLRpn5Nmv1xD0d2jv65oimw3S9towP9nWwztm35gSHshdV?=
+ =?us-ascii?Q?zjVU6olcIaSqV49tNNviwmL8XXzwXaU76w0rj6SJ?=
 X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f408e033-3332-4898-5d9a-08db8f976f79
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad2bbd36-b5c7-4bb0-64e5-08db8f977027
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 18:21:17.8381
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 18:21:18.9072
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dTp7P4ogwOy3JUXVd2CsEhqdEi63gPT5WRS1DWq0HjXc/n2tmQqwzM7si2DqaNvKuB2rOZIhXLMlT4IP76K3OA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ckH8W+j2TocyhhE8cWr03ICvNYJh5h9KNKjUquNF2vjOk+oIv65/6kmik5lOL+G66uAVz6I3ea8wY5htajpnzg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR05MB9264
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -118,53 +118,121 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Create a kmem cache of tracefs_inodes. To be more efficient, as there are
+lots of tracefs inodes, create its own cache. This also allows to see how
+many tracefs inodes have been created.
 
-The creation of the trace event directory requires that a TRACE_SYSTEM is
-defined that the trace event directory is added within the system it was
-defined in.
+Add helper functions:
+tracefs_alloc_inode()
+tracefs_free_inode()
+get_tracefs()
 
-The code handled the case where a TRACE_SYSTEM was not added, and would
-then add the event at the events directory. But nothing should be doing
-this. This code also prevents the implementation of creating dynamic
-dentrys for the eventfs system.
-
-As this path has never been hit on correct code, remove it. If it does get
-hit, issues a WARN_ON_ONCE() and return ENODEV.
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Ajay Kaher <akaher@vmware.com>
+Co-developed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Tested-by: Ching-lin Yu <chinglinyu@google.com>
 ---
- kernel/trace/trace_events.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ fs/tracefs/inode.c    | 39 +++++++++++++++++++++++++++++++++++++++
+ fs/tracefs/internal.h | 15 +++++++++++++++
+ 2 files changed, 54 insertions(+)
+ create mode 100644 fs/tracefs/internal.h
 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 5d6ae4eae510..a284171d5c74 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2426,14 +2426,15 @@ event_create_dir(struct dentry *parent, struct trace_event_file *file)
+diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+index 57ac8aa4a724..2508944cc4d8 100644
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -21,13 +21,33 @@
+ #include <linux/parser.h>
+ #include <linux/magic.h>
+ #include <linux/slab.h>
++#include "internal.h"
  
- 	/*
- 	 * If the trace point header did not define TRACE_SYSTEM
--	 * then the system would be called "TRACE_SYSTEM".
-+	 * then the system would be called "TRACE_SYSTEM". This should
-+	 * never happen.
- 	 */
--	if (strcmp(call->class->system, TRACE_SYSTEM) != 0) {
--		d_events = event_subsystem_dir(tr, call->class->system, file, parent);
--		if (!d_events)
--			return -ENOMEM;
--	} else
--		d_events = parent;
-+	if (WARN_ON_ONCE(strcmp(call->class->system, TRACE_SYSTEM) == 0))
-+		return -ENODEV;
+ #define TRACEFS_DEFAULT_MODE	0700
++static struct kmem_cache *tracefs_inode_cachep __ro_after_init;
+ 
+ static struct vfsmount *tracefs_mount;
+ static int tracefs_mount_count;
+ static bool tracefs_registered;
+ 
++static struct inode *tracefs_alloc_inode(struct super_block *sb)
++{
++	struct tracefs_inode *ti;
 +
-+	d_events = event_subsystem_dir(tr, call->class->system, file, parent);
-+	if (!d_events)
-+		return -ENOMEM;
++	ti = kmem_cache_alloc(tracefs_inode_cachep, GFP_KERNEL);
++	if (!ti)
++		return NULL;
++
++	ti->flags = 0;
++
++	return &ti->vfs_inode;
++}
++
++static void tracefs_free_inode(struct inode *inode)
++{
++	kmem_cache_free(tracefs_inode_cachep, get_tracefs(inode));
++}
++
+ static ssize_t default_read_file(struct file *file, char __user *buf,
+ 				 size_t count, loff_t *ppos)
+ {
+@@ -346,6 +366,9 @@ static int tracefs_show_options(struct seq_file *m, struct dentry *root)
+ }
  
- 	name = trace_event_name(call);
- 	file->dir = tracefs_create_dir(name, d_events);
+ static const struct super_operations tracefs_super_operations = {
++	.alloc_inode    = tracefs_alloc_inode,
++	.free_inode     = tracefs_free_inode,
++	.drop_inode     = generic_delete_inode,
+ 	.statfs		= simple_statfs,
+ 	.remount_fs	= tracefs_remount,
+ 	.show_options	= tracefs_show_options,
+@@ -628,10 +651,26 @@ bool tracefs_initialized(void)
+ 	return tracefs_registered;
+ }
+ 
++static void init_once(void *foo)
++{
++	struct tracefs_inode *ti = (struct tracefs_inode *) foo;
++
++	inode_init_once(&ti->vfs_inode);
++}
++
+ static int __init tracefs_init(void)
+ {
+ 	int retval;
+ 
++	tracefs_inode_cachep = kmem_cache_create("tracefs_inode_cache",
++						 sizeof(struct tracefs_inode),
++						 0, (SLAB_RECLAIM_ACCOUNT|
++						     SLAB_MEM_SPREAD|
++						     SLAB_ACCOUNT),
++						 init_once);
++	if (!tracefs_inode_cachep)
++		return -ENOMEM;
++
+ 	retval = sysfs_create_mount_point(kernel_kobj, "tracing");
+ 	if (retval)
+ 		return -EINVAL;
+diff --git a/fs/tracefs/internal.h b/fs/tracefs/internal.h
+new file mode 100644
+index 000000000000..954ea005632b
+--- /dev/null
++++ b/fs/tracefs/internal.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _TRACEFS_INTERNAL_H
++#define _TRACEFS_INTERNAL_H
++
++struct tracefs_inode {
++	unsigned long           flags;
++	void                    *private;
++	struct inode            vfs_inode;
++};
++
++static inline struct tracefs_inode *get_tracefs(const struct inode *inode)
++{
++	return container_of(inode, struct tracefs_inode, vfs_inode);
++}
++#endif /* _TRACEFS_INTERNAL_H */
 -- 
 2.39.0
 
