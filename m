@@ -2,113 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA00B767122
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 17:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85AE767151
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 18:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237247AbjG1PyM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 11:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41192 "EHLO
+        id S236225AbjG1QA2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 12:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236919AbjG1PyE (ORCPT
+        with ESMTP id S234529AbjG1QA0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 11:54:04 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01809448E
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 08:53:54 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d11f35a0d5cso2147614276.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 08:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690559634; x=1691164434;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pSKHeZCMgvA3kWIhrH+n4mSoJzgBzU5J6H2rFYp+lic=;
-        b=36hr/ZVZer9RvAya4ZWnFnQbK8YQhtITqVZBkBjBo440v2c0X6eN0dTqrfwuSz7rnr
-         k6WaexoqA62nX8FAG4nFQN42YtpTPoI2wh+3jJ8o7wPm1hCgTfuNVbS6EPbcqVQMYEN8
-         yX6GAsSlGhmh3OfRqIjW8R05WSUu0K/X4fXpahOmLUZoi6YQFqEw5dv+/YSaOupBw3r1
-         1QOJlnLq34i4AF+BnbyIEyZktriEUaH2gPVQf9yg//1ZrZLXvLnuD9WAlIPQNWkv2YPw
-         izFsP5t0laJ87+k+PtVShNOsqU9+ABHsrNM8WXC1tgWj4cUC0mfYLX4gBDtMPyqVsRaM
-         2pSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690559634; x=1691164434;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pSKHeZCMgvA3kWIhrH+n4mSoJzgBzU5J6H2rFYp+lic=;
-        b=HbMX14f8y28AlyiM7v0qCSYr9dP79UHVmDfIgMIHIZ48o/1snAyn2D7bKGYdEf0Htu
-         TXH8C7EyHNr0g1HYOM+0zHRy+tZ1QU86F5u28Yz4o5e0/Rj6YAqRcxItK0mb/0Tv4HIr
-         3HoCmr8Jk+QxGw7vm9Yt9Q5qEhQqmTHHhxgm3Z2kjUUqUK5jEWe8yiM92kemRXZ4wUWU
-         azxR81MLPavrf7/IVY16dcTCoblegd2sXt+D/TyNR9VIIvwQeoai16Yab11hE1L7eeQy
-         IeyDJlrxEAFjB7JM1tphbl47V06L2RQ1U9iLQXy4ef0UP6fo6LuuuRLPJx5E0GMc2qop
-         oaLA==
-X-Gm-Message-State: ABy/qLYgUMmtDzZgCtFyfeg2eROvc/qb68niAjo43r54wMRbxUzmvo5B
-        6nXJOKlpe28zxK/pHEmlzc7skny4qpk=
-X-Google-Smtp-Source: APBJJlHbJprqMW+zMuvG32ayD8bofMBAAKNaDzLOF7DuAIN4jyWdo3wXWE6hvbwHUsAc0SpOW5cSp73k0WI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:db82:0:b0:d0f:15a4:5a53 with SMTP id
- g124-20020a25db82000000b00d0f15a45a53mr10767ybf.2.1690559633993; Fri, 28 Jul
- 2023 08:53:53 -0700 (PDT)
-Date:   Fri, 28 Jul 2023 08:53:52 -0700
-In-Reply-To: <20230728-21d0e3ecb0d8916fd9d9bceb@orel>
-Mime-Version: 1.0
-References: <cover.1690364259.git.haibo1.xu@intel.com> <7e9d2d5518375083f10c92a3d1acd98914f69fd8.1690364259.git.haibo1.xu@intel.com>
- <20230728-21d0e3ecb0d8916fd9d9bceb@orel>
-Message-ID: <ZMPR56RVgzI6s6Ik@google.com>
-Subject: Re: [PATCH 2/4] KVM: riscv: selftests: Add exception handling support
-From:   Sean Christopherson <seanjc@google.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, xiaobo55x@gmail.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        Fri, 28 Jul 2023 12:00:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E0D110;
+        Fri, 28 Jul 2023 09:00:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 846536217D;
+        Fri, 28 Jul 2023 16:00:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95828C433C8;
+        Fri, 28 Jul 2023 16:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690560024;
+        bh=hYf2rKT66EA0CLZn0dh5++ZEnZG97g1m9o59RcdzOUI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Td4BxKeLp8QaPwWqHQy6Fx8W2LrPCrYUlu1FHCBUsHZ8/LXjVoR3VvSXxZEnMOk+8
+         i337flH1gYWa/tB98k96VkLHwDSJ+1PwC98Kzs1DyywIpuw5G7NXMPM3FLfSrU1/tC
+         cBI6M2GLk95RDUgycJ7+eBXJGEKJyIkwRBbAKoJNmRJunmbvtQI5nDCnoXjP/MQf1D
+         3yLjOHYu0p2S53UnrI14nFrYm+1xXZxoO7U7N+5vLDMvCBs59Sf7pwbG6y4K8qb+UV
+         73axdh7/A0S74p9M6VVrD8rFpNpgPlupr2+Ne5VA9RxvXeOoCAEAAxKv1+S9w1/tRQ
+         v+JeeohU1wfFw==
+Date:   Fri, 28 Jul 2023 11:00:14 -0500
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Colton Lewis <coltonlewis@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH v2 13/20] context_tracking: Make context_tracking_key
+ __ro_after_init
+Message-ID: <20230728160014.vjxikkoo4rieng55@treble>
+References: <20230720163056.2564824-1-vschneid@redhat.com>
+ <20230720163056.2564824-14-vschneid@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230720163056.2564824-14-vschneid@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 28, 2023, Andrew Jones wrote:
-> On Thu, Jul 27, 2023 at 03:20:06PM +0800, Haibo Xu wrote:
-> > +void vm_init_trap_vector_tables(struct kvm_vm *vm);
-> > +void vcpu_init_trap_vector_tables(struct kvm_vcpu *vcpu);
+On Thu, Jul 20, 2023 at 05:30:49PM +0100, Valentin Schneider wrote:
+> objtool now warns about it:
 > 
-> I think we should use a common name for these prototypes that the other
-> architectures agree to and then put them in a common header. My vote for
-> the naming is,
-
-Just allocate the tables in kvm_arch_vm_post_create().  I've been meaning to
-convert x86 and ARM, but keep getting distracted/waylaid by other things.
-
-https://lore.kernel.org/all/Y8hCBOndYMD9zsDL@google.com
-
->   void vm_init_vector_tables(struct kvm_vm *vm);
->   void vcpu_init_vector_tables(struct kvm_vcpu *vcpu);
+>   vmlinux.o: warning: objtool: enter_from_user_mode+0x4e: Non __ro_after_init static key "context_tracking_key" in .noinstr section
+>   vmlinux.o: warning: objtool: enter_from_user_mode+0x50: Non __ro_after_init static key "context_tracking_key" in .noinstr section
+>   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x60: Non __ro_after_init static key "context_tracking_key" in .noinstr section
+>   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x62: Non __ro_after_init static key "context_tracking_key" in .noinstr section
+>   [...]
 > 
-> > +
-> > +typedef void(*handler_fn)(struct ex_regs *);
-> > +void vm_install_exception_handler(struct kvm_vm *vm, int ec, handler_fn handler);
+> The key can only be enabled (and not disabled) in the __init function
+> ct_cpu_tracker_user(), so mark it as __ro_after_init.
 > 
-> I'd also put this typedef
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 
-And rename it to (*exception_handler_fn).
+It's best to avoid temporarily introducing warnings.  Bots will
+rightfully complain about that.  This patch and the next one should come
+before the objtool patches.
 
-> and prototype in a common header (with s/ec/vector/ to what you have here)
+Also it would be helpful for the commit log to have a brief
+justification for the patch beyond "fix the objtool warning".  Something
+roughly like:
 
-Hmm, yeah, I think it makes sense to let vm_install_exception_handler() be used
-from common code.  the vector to be installed is inherently arch specific, but
-it would be easy enough for a test to use #ifdeffery to define the correct vector.
+  Soon, runtime-mutable text won't be allowed in .noinstr sections, so
+  that a code patching IPI to a userspace-bound CPU can be safely
+  deferred to the next kernel entry.
+
+  'context_tracking_key' is only enabled in __init ct_cpu_tracker_user().
+  Mark it as __ro_after_init.
+
+-- 
+Josh
