@@ -2,132 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA8E767314
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 19:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0247B76731F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 19:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjG1RQ5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 13:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        id S229582AbjG1RUJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 13:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjG1RQ4 (ORCPT
+        with ESMTP id S229624AbjG1RUI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 13:16:56 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2048.outbound.protection.outlook.com [40.107.237.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A870B5;
-        Fri, 28 Jul 2023 10:16:55 -0700 (PDT)
+        Fri, 28 Jul 2023 13:20:08 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2052.outbound.protection.outlook.com [40.107.220.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111B13A81;
+        Fri, 28 Jul 2023 10:20:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bzwNQXy23fOw5ThNtRLTCQ3/l/rEhjcLEL6409nMbsWeY7iYUFIMkGMI9rjYEFo3YEIUomkoSgLiJ9zSPFu49ovH0ZLY7hR9mAdhj5k69OIWbRWdcDJ+PbdeHvW6BuAdX+WqBUcO5quUCiWDh9akSfcnQJmZhzXN9pU3TOZ3WpqvtslNsZVmUA0HALkg8tTJOF6sDLjQUnWmrRuRfed4vUzngCUQn7yvb7f/bGpZcFE9K2XS6+deolOv/4Y+7u0kThk0im1SFvFyvOoBBvy1r+F+I6K3YfLtoPy8f7mI59Au9yayIcG0tT9ByysScFAs5vVoGqb5LrZb/6sLecH3lQ==
+ b=IVLiuRUGxo8zcrfobJlbifkQknegE5MKACQIivNJvEzzMfku6mHuah8ODyAiK8bWVv92pM6Q3v6SM5UPYwjdjo4uwFEE8HwRK/NSShCyAkY3RJRY+otqd/mNk4TOkK535jPLpLgizDAbXG3fWzNlwj3IBQWk0DfpKS18I/pjDmxhikgD2iprNjZ5BGGkkFN34qXxJCC/H5+5fFs6+wdQIXT9LQAoVW2yH1gmeXgUeeV3RIuF/Emkt5ewrpxCI5B7jD6ylx/vrdPGQW1n0B7oID4yb+peRCPuUTdGALU131/0MdoU7v4a6zJt0DEo2N6gEojlRaKw/VFN5laRWgviHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xo+rL2FRDTJ6JU+Q+po61nE7D30fa0gmXmKP4dKN6Gs=;
- b=YqeQPI5aMw5X+w/U2J5S6EOQQDKJKcEPUy1jnT25lDWaPiSAtxzKt++Jo6ds04wzOAFp4H6G53o2IXYRiw8dApQ0DXbXMET+bFuGcTPvdvaCAhulb9A31nGu2fKthBbMkZebqsJ+rh/i5dmXYoj9MxXywrvBlQDLctQxLNWzT9LwzFTkXnc7qZJcQ/odIgqtp+afntQO/SGao7dkO0R6rmz4MCpIUgkFKp/k5jllbidS0hfSMOzf27CxzemYDyb8Cp0EyR9UQM1zi5tKP6WtI3kQF9DBRJb6VENC49kAkH1LObU9HjMqecH/8UgHO8ZC6m2I+DsjDqXkcDpwKyLx4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=JsQ3Wj4IegLGfYp83/8UeU/kJXCVWeck5aXmwz6/aSg=;
+ b=YzyrHBW0euBkAxXgBcIPF/FJZajKSq7CmynV/nZamkNY99QpFur+AbVpZXdQ18GQIAbzGnbUM1GasdXQGYhm++xALN/F9WUsWAIbbw3h21L6FT34pfccWJr+kzQQSoFSYoSNcX2t9j0ddQCEa1T5OJqhQJ+0VPB4O1O1bEE6cefJHXjI+lDb/ACsfhsfZ7rY21dDtFTfLjg06ZlriX517wRZQJAKhOiPz+Y1eZhl1kAqi2SbQCYf54mA7/w53wgme6WkHnlo6AqVhNwWyXiuMWGOPqfgJCf49VSDzaarR0ljuY/jjDxaFDNW0BZ/E9KwmP0gg2fuyFHx1930IWXzgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xo+rL2FRDTJ6JU+Q+po61nE7D30fa0gmXmKP4dKN6Gs=;
- b=fDlWd5LjgRzsZV8YgUN+mmjHDDBrQLK4+piJ+qvdVJGnL0BTizoU6aHVQMO3514nZhTgdFyCANnek7uQjEIv/mko+phFKD+Og3q0aTvjZ1FrqxH0VBW//bvq+GlP9lvcBDs0XD92EIUvkpgo1hmNUcpHClxLXIATK3m/OYX6PG/nsNWVM9/S3glG2Mq77SLcKqTskvPhEzxgfsmhhw+Nr7+EpFVeQSjQlI1pUIrEMKPifpnMqV7f9DE4z8h7JirYot0PFtJTni1AU1XjSLxDN4wyuu07UHjxgqkHcRCgoUYbP2XMkdexdhjJJMVBQsc8LIPWESq90BffSdM6CE44ig==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MW3PR12MB4539.namprd12.prod.outlook.com (2603:10b6:303:59::10) with
+ bh=JsQ3Wj4IegLGfYp83/8UeU/kJXCVWeck5aXmwz6/aSg=;
+ b=P4SMeLDEA/uQiH5lFSi3jrZQbCH/F/uGfS8ZsO7jWkiwLBhz0Hn0GxONwXgRl/Sh1y0EIIZWU+AQRMzUuzZGMWfMgHAcovDV/ero1DvufFPZ2+U/dsQlGiJ3k1e4vM63E+c7yzx7aoDgyg3xjYVHGzy5bFmWRygLmr52+r1/XZ4=
+Received: from MW4PR03CA0157.namprd03.prod.outlook.com (2603:10b6:303:8d::12)
+ by DM4PR12MB6063.namprd12.prod.outlook.com (2603:10b6:8:b1::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Fri, 28 Jul
- 2023 17:16:52 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::5111:16e8:5afe:1da1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::5111:16e8:5afe:1da1%6]) with mapi id 15.20.6631.034; Fri, 28 Jul 2023
- 17:16:52 +0000
-Date:   Fri, 28 Jul 2023 14:16:50 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v3 07/17] iommufd: Add IOMMU_RESV_IOVA_RANGES
-Message-ID: <ZMP4AhdE6RaXXgZH@nvidia.com>
-References: <20230724110406.107212-1-yi.l.liu@intel.com>
- <20230724110406.107212-8-yi.l.liu@intel.com>
- <BN9PR11MB5276AAD6B3785DC247E4F35F8C06A@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276AAD6B3785DC247E4F35F8C06A@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: CH2PR14CA0042.namprd14.prod.outlook.com
- (2603:10b6:610:56::22) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+ 2023 17:20:03 +0000
+Received: from CO1PEPF000044EE.namprd05.prod.outlook.com
+ (2603:10b6:303:8d:cafe::5b) by MW4PR03CA0157.outlook.office365.com
+ (2603:10b6:303:8d::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29 via Frontend
+ Transport; Fri, 28 Jul 2023 17:20:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000044EE.mail.protection.outlook.com (10.167.241.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6631.22 via Frontend Transport; Fri, 28 Jul 2023 17:20:03 +0000
+Received: from BLR-PF38F8CF.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 28 Jul
+ 2023 12:19:58 -0500
+From:   Ayush Jain <ayush.jain3@amd.com>
+To:     <akpm@linux-foundation.org>, <shuah@kernel.org>,
+        <pasha.tatashin@soleen.com>, <zhansayabagdaulet@gmail.com>,
+        <tyhicks@linux.microsoft.com>, <shr@devkernel.io>,
+        <raghavendra.kt@amd.com>
+CC:     <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <Narasimhan.V@amd.com>,
+        <Santosh.Shukla@amd.com>, Ayush Jain <ayush.jain3@amd.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: [PATCH v2 2/2] selftests: mm: add KSM_MERGE_TIME tests
+Date:   Fri, 28 Jul 2023 22:49:42 +0530
+Message-ID: <20230728171942.4683-1-ayush.jain3@amd.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230728163952.4634-1-ayush.jain3@amd.com>
+References: <20230728163952.4634-1-ayush.jain3@amd.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW3PR12MB4539:EE_
-X-MS-Office365-Filtering-Correlation-Id: b38f3ec5-d54a-4480-2e11-08db8f8e6faa
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044EE:EE_|DM4PR12MB6063:EE_
+X-MS-Office365-Filtering-Correlation-Id: e446e773-07fa-49d8-51cd-08db8f8ee15b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LB35rtaFvGlc4dxvQ53xX8h2O2i80DJZd5mQ/Mx/PYPjkTPPZjVpHkNzTB6795y8vonoAU0wPlWmN1zmrm5oRTr1+5894oBMsYVOyzu+kK5bCEW1mGcbZqDmdjGV21V6RVQfv4L266kfcgn01UcsQDrn/9PP3q4YjjKcE+73cyq1E3ybshUZpnw5DWiqC+zCtwUohuwO7HvwCV72wIQJcFH/bBTovILOVEm+ckqnLwNLKsFN/GTr/vn/Ew4+2EHomiTUFtHpDT28HthoOFbVTXPRruG6Je5mWxJck1clzg3p13McLcxNCTBoTGIHXOJS5qS2k6OANQjBxMpq+l/jO7Fp2iVj2/nCMa1JZKoEg2j5rjk0sDt2POFm90Kkkxf+xGNcu0qQQDobzMj4VbqPIa+StFWiLnE4FAhTBAXf79uQ7/yVPANTTNenpBJlwku2qkvId8xyex+5jfPDvTFsb+lgmgqakS1bYkYEGWiRjEz5W6+hYN3b+04i6OaYwzI94ldpLHYDht9A2irw2SnPifdCSKmCAY3dlFlAvidZBPrULzScbBm6FK6MHzz9imLL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(39860400002)(136003)(346002)(396003)(451199021)(316002)(26005)(8936002)(6506007)(41300700001)(66556008)(54906003)(4326008)(66476007)(66946007)(6916009)(6512007)(478600001)(8676002)(6486002)(38100700002)(36756003)(2616005)(2906002)(86362001)(186003)(5660300002)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZqqAeMdpB3hxnoSlVlejJ40ANiXyRXDxjpUMr21qN1jUkGZHQCGARqxec932?=
- =?us-ascii?Q?4rUREIu+bdTW7eaTYf6K8FqtOBPWoD5w2hhbq0+pM2DvGFc/RGn0EOD3GZGz?=
- =?us-ascii?Q?JBYMBiFjUotuqXlz4AQeceSGRiGnZ8hoT72QViDO2AwuuHtxmR8OS7LclNa+?=
- =?us-ascii?Q?FH4JOqlvBitEN5EL6ZmITeGvYZSFub9p5yjdyVU7ClxqU3AAb4OScKElUah6?=
- =?us-ascii?Q?an1zs1fwJ4oTA2cvUkgifcTlzKPMPFmjj6pn+sXAuGJpWZulGX8p86F7Xb0c?=
- =?us-ascii?Q?oM4yerSUkYToW0rvmGltS5IE3mM+DJBA8uDqXHdkbVG5fsNSHppAYE5t3iqW?=
- =?us-ascii?Q?DwivSroCm6X6QrWddmJyT/tmVY/T1Xq+FjN4tWlPoDMDzsV7fammwMfkLV47?=
- =?us-ascii?Q?ydcFEvRE2+vVTImlpVcQUXs6aWcIZJ+k1wtUlxJKBHv0WrEUq3/eIAiEc/oy?=
- =?us-ascii?Q?mgwO8d8b0+dQPRXpZmTQawCqK2VWoqx8QQS97eQ9hI58Gt4s33JGC+fUrefm?=
- =?us-ascii?Q?V1tw3O+UKHLxVrmx2ab5xdI2KypfwK4JGOwwHkjYE5sAL+ZC/a+5pyj45BbQ?=
- =?us-ascii?Q?65dX/I3fNhtEE0T42KpQP/OVXTGzC2zGBBRGXwXUe7iNT/w6Cm35OWTSoQqC?=
- =?us-ascii?Q?ls+t5SA1RGzFM6ZmfrjGB0YskHOcuWelUKgdrIYlm/o9uDnI4WJUjw5CZOKy?=
- =?us-ascii?Q?dCsULCvO+Vs0nlIvgnMbFixrWtKLT5kFnQlh/K20MJmPFcmZu+PneE9BkTkV?=
- =?us-ascii?Q?3ZbrZSZmVKYp9VlZztFuCu2nl5oCnI60IDDR4E99uhEvbAuQxTZOVlQqT2d2?=
- =?us-ascii?Q?BGxOSh0Mqof+v//K54+GEFJyEY7dPpwMdhu5ttB453fpJYQ4PutaUGUFjTxr?=
- =?us-ascii?Q?EDcQ38xOqjVLUwxtdOkCWAMDS9fjWOs6JzPNspUtg8Usj7TQGZJWOQMjkPkH?=
- =?us-ascii?Q?3eMMP5qf5PhsH+5Sz/oihBh+RFQQ1xRl+xjkxyHVjQlL1KjuqtZy393ld95e?=
- =?us-ascii?Q?+8sVPwHIkE134r5KcyUe2dV1GZ+XJd1HxlCjmEZLUlw8Uall7CjuI7fqlD1I?=
- =?us-ascii?Q?K7Zg75vww4gkuxhf7FV62+hKb9+cBbMZScI6lmnHCfCyncX86g7MRAHKNK6H?=
- =?us-ascii?Q?dLeMiCmtWu//ikmpnAPluA2sEjl53DQ767juutmS0u6Dq5JrMpPlD/YiUc/0?=
- =?us-ascii?Q?L4DvHg5BZf1Hu5C+3GnNhJJM5G0oWCnoCqDT8Udbje+9t2tMbvrCdPpAhCWT?=
- =?us-ascii?Q?72zI3l3CtIGH3VmfiwCL3HQ79VfLzBEwdptf0ZhBqE5ju7ruhfnubSiJtc39?=
- =?us-ascii?Q?oh4Vh873KZYyH8c2H8Os05DgbDheBQgCPSKkLwhUjR2Zfn6K59sqsM9qjgB1?=
- =?us-ascii?Q?FtpKXNpoX2XfdF9GcSh/vrK76XYzbmDOW2awjjy19Qmqlv3+QVO7vyK05p1O?=
- =?us-ascii?Q?g62F10dU8dLRiFZUEq1B3eFP6+QPG0N0AIw3135SqMcfQCHfauFN4znlgvFv?=
- =?us-ascii?Q?vit1xq+oDABV9rSsJloGKeOC36B6TsWYiH+MoDs+OKd3QNV9ZHYnGBY7X3EH?=
- =?us-ascii?Q?BgDnKhJRUyglS41aKQLw9VVg/CrGAdu0FX7iv0dP?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b38f3ec5-d54a-4480-2e11-08db8f8e6faa
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 17:16:52.7280
+X-Microsoft-Antispam-Message-Info: rv7xQD2Cxx291vpIq/v9YNAJnnWeloFjpYG2VdDH5wy7OuNdYQQ01EQFC2zUDQjPTueQy393NyyBcqiCVojcCOkefHDSy0iB3gB9JH681VbMYgGg36620uYuMBwsSfR9AHUDmCaBmzh9Ifs/N1Op33UhiahbY60+H4VKoy0Ds+fQjVeMeSO4Jv6+Mgg8+TbaI2YKgIYfsTwNyZrGLWcCU0LdWHT4Xat1Gpr8SOY9/0IONxY7j9wdtqX86BsO0WWIahAiNJn4jY0ngj2tDnvARgy77bi/C9NRAZTTmByuoCFgwmazzHxuXDXl0MLM0vVw5xg63oeKEU1r83GKkOEMnO2lN3fSSg9ZZM38I+PZ+7/G/j+Szl0aKuU8z+QtfBfvGyn+HlSO7Evfa8tqfk/ys1Z4VtwemnFYtmBeRvsGPxhF19AjN4/JVS3sSF2Quiaf97NQfe+y1aAlOHClkU1C9xTAqDu/LS97LZ8+8AyxdNq2+NjbKoxtNsyMBU7wrJMEzbghZPS+7GAxnPrqBrLBxUo10Fdw2Pb6OeR+u+zReSxFNQevvNMTmK9zEB862fHdO64f8nofZqE0FVerMyuI6q+DArcLE462pWB1d4r7jJnjgVYRSyBpHXl9sUqh4wMiORP50G9zsbCg9+Kzkfs2xx9MUitdvmvWJzFI2PVH34SVcNV7sUg6FDL1UpAu91GDyEK82SMQiLK95RHG7VtIA69jlWVBt741/nS2Qaapk2oh8/V3rJXOjfICRsQjVH5KQKds8q6BerIcn4WV7g6SGA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(136003)(82310400008)(451199021)(36840700001)(40470700004)(46966006)(81166007)(316002)(8676002)(47076005)(110136005)(478600001)(54906003)(86362001)(70586007)(70206006)(5660300002)(6636002)(4326008)(356005)(40480700001)(1076003)(82740400003)(336012)(7696005)(40460700003)(26005)(6666004)(186003)(7416002)(8936002)(2906002)(2616005)(41300700001)(16526019)(426003)(36756003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 17:20:03.0637
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gql+hcNuQ1MElFkPsAYyrzhqGCw4NcGUBpOtLfRcc8snw3KcxN+fz5LEQEdhZK0u
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4539
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+X-MS-Exchange-CrossTenant-Network-Message-Id: e446e773-07fa-49d8-51cd-08db8f8ee15b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044EE.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6063
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -136,30 +105,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 10:07:58AM +0000, Tian, Kevin wrote:
-> > From: Liu, Yi L <yi.l.liu@intel.com>
-> > Sent: Monday, July 24, 2023 7:04 PM
-> > 
-> > This reports device's reserved IOVA regions to userspace. This is needed
-> > in the nested translation as userspace owns stage-1 HWPT, and userspace
-> > needs to exclude the reserved IOVA regions in the stage-1 HWPT hence
-> > exclude
-> > them in the device's DMA address space.
-> > 
-> > This can also be used to figure out allowed IOVAs of an IOAS.
-> 
-> We may need a special type to mark SW_MSI since it requires identity
-> mapping in stage-1 instead of being reserved.
+add KSM_MERGE_TIME and KSM_MERGE_TIME_HUGE_PAGES tests with
+size of 100.
 
-Only the kernel can do this, so there is no action for user space to
-take beyond knowing that is is not mappable IOVA.
+./run_vmtests.sh -t ksm
+-----------------------------
+running ./ksm_tests -H -s 100
+-----------------------------
+Number of normal pages:    0
+Number of huge pages:    50
+Total size:    100 MiB
+Total time:    0.399844662 s
+Average speed:  250.097 MiB/s
+[PASS]
+-----------------------------
+running ./ksm_tests -P -s 100
+-----------------------------
+Total size:    100 MiB
+Total time:    0.451931496 s
+Average speed:  221.272 MiB/s
+[PASS]
 
-The merit for "SW_MSI" may be to inform the rest of the system about
-the IOVA of the ITS page, but with the current situation that isn't
-required since only the kernel needs that information.
+Signed-off-by: Ayush Jain <ayush.jain3@amd.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+---
+v1 -> v2
+collect Reviewed-by from David
 
-I think the long term way forward is to somehow arrange for the SW_MSI
-to not become mapped when creating the parent HWPT and instead cause
-the ITS page to be mapped through some explicit IOCTL.
+ tools/testing/selftests/mm/run_vmtests.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Jason
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 3f26f6e15b2a..ca3738e042c2 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -262,6 +262,10 @@ CATEGORY="madv_populate" run_test ./madv_populate
+ 
+ CATEGORY="memfd_secret" run_test ./memfd_secret
+ 
++# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
++CATEGORY="ksm" run_test ./ksm_tests -H -s 100
++# KSM KSM_MERGE_TIME test with size of 100
++CATEGORY="ksm" run_test ./ksm_tests -P -s 100
+ # KSM MADV_MERGEABLE test with 10 identical pages
+ CATEGORY="ksm" run_test ./ksm_tests -M -p 10
+ # KSM unmerge test
+-- 
+2.34.1
+
