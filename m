@@ -2,168 +2,218 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA3376603B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 01:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3E77660D9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 02:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbjG0X1L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jul 2023 19:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
+        id S232517AbjG1AoD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jul 2023 20:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjG0X1K (ORCPT
+        with ESMTP id S232492AbjG1AoB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 19:27:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BC62D40
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 16:27:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07BBC61F8F
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 23:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0ADC43395;
-        Thu, 27 Jul 2023 23:27:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690500428;
-        bh=9k3w2GBcBAqmmGMPcYLsGGGPHhPVChgtpgxlIPZIOJc=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=E0t01Qv+n6eKa+pxbIMDfoirGbEwAEgWccJu5vrJYO2FEgtdWqw47uCHBxvhGNGNj
-         Q/JYRe8HhOcXyS9FfQqEjnqABMLh39l+SR1JH40f9IZN9/D9VjBn3AdQ+34booim9c
-         9uTGIW0mP8Uw1C0e5Wsz2wXKVhFnYe0ITOOQ+4qsmQGlXYIwoNWFah0Ia1zn9cHP1d
-         UoM+YS/Y6jFzeGxOCQWlwzcyPIMgTcPuonNfG/htvQqm3JZL4Zuw3TltJ7wbRiTCK/
-         OjH+xIm8ZDtkEK061340hDNO/nzKfwddY5d+C0tdEOgSY2NeT6I0APhTof/NLfC7Gg
-         Wpi4GsJmvvWzw==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Fri, 28 Jul 2023 00:26:17 +0100
-Subject: [PATCH v4 6/6] kselftest/arm64: Use the tools/include compiler.h
- rather than our own
+        Thu, 27 Jul 2023 20:44:01 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C5135A9
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 17:43:53 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-348de7bc865so963255ab.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 17:43:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1690505032; x=1691109832;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s/aJ9ksmeVttXwGKwUVAJi8p79DGJB0zVa/mu7nUe/g=;
+        b=arbI1nple3pEZAfWdlLMRZfRSr+OZ67LXd6z/b2gt4LbN37fvQgaP9XQwqxKJBSgE3
+         hzhmxZkSnXVRLJHfKccq3tDsK03dmoanQxj8VlhBZneW6edBniqML4RUffXiwCxOQCWv
+         HYKAv3b9AUgVD9Gh7ex2kWFPd43Y6a+PRp6AU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690505032; x=1691109832;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s/aJ9ksmeVttXwGKwUVAJi8p79DGJB0zVa/mu7nUe/g=;
+        b=A8tchnBPOnRmHpiv+QXst14oChUOnlmKrRm/R78drJh4OvWNqOWeJ0G1VUmEFfLidm
+         5SXeGO10GYTIAswlO6k6XlM9UrxRlCbUXBEFUjfzVyiSm3qVWl/JbS1B6o0vjo/EKfVO
+         +K5xura655aG3ApAksS2/R1ud++Bcd6LuxoKKdV/AM8aFx9Oahx/o8WnfO3mdsO8SpPv
+         2uSXg1+0PQ1zAIfEAxEn/eCJkdMNHveG827W2kULIx0FGWq6z6ZApC5cARvykKJV4Gk8
+         LS2vsvHiH3LDrbtlgGHppAgkDiFtMzCPrGptzjqKeAiOqjm6W4JarRbnVxogtH+u0Yjn
+         hkeA==
+X-Gm-Message-State: ABy/qLa+OTVCouh0ingH2JJhMIkbwQ0eWHrDYpiTqdUBhJsDo6+tEfK5
+        50u7v2rvrulh5WW1tTuShkRxSw==
+X-Google-Smtp-Source: APBJJlHMMHqQCxm2X2zkZFYxUgIYIuXPx75dCbAYes3sMd2B8DNQk7mPNm5UaVFKmII9KL1Dl1Wq6w==
+X-Received: by 2002:a05:6602:1694:b0:780:cb36:6f24 with SMTP id s20-20020a056602169400b00780cb366f24mr1268855iow.2.1690505032517;
+        Thu, 27 Jul 2023 17:43:52 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id g22-20020a056602249600b0077e3acd5ea1sm762425ioe.53.2023.07.27.17.43.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jul 2023 17:43:52 -0700 (PDT)
+Message-ID: <799d6088-e28f-f386-6a00-2291304171a2@linuxfoundation.org>
+Date:   Thu, 27 Jul 2023 18:43:51 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230728-arm64-signal-memcpy-fix-v4-6-0c1290db5d46@kernel.org>
-References: <20230728-arm64-signal-memcpy-fix-v4-0-0c1290db5d46@kernel.org>
-In-Reply-To: <20230728-arm64-signal-memcpy-fix-v4-0-0c1290db5d46@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3009; i=broonie@kernel.org;
- h=from:subject:message-id; bh=9k3w2GBcBAqmmGMPcYLsGGGPHhPVChgtpgxlIPZIOJc=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkwv09LNwFQCF4CRRL0scso9UK+3zOt7IV4CbSxiXS
- 1PHiYZ+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZML9PQAKCRAk1otyXVSH0JSjB/
- 40eJ999zzsbI5ThnpILemnJjHqCswwKHRtduJHlB0FLL12fQX4/zXt7TK9eK8/uiLzsWi//nwQObtt
- WsamOENoa3zfgCaBFzj4j+F/sFkjN0mr/t56ZzINLHZhWO6rSzVbzD5a+9C3n4rzAQhHdKFxRGksj0
- 1aH020PnCSz1I43wDX8UoFB86XkxMOKERLAOkRy8rROErcI6XJ8ktqw7GDmGJvGjKlzHmEx8n1oDm0
- l9uFG/Kp4Fk4A3JWK4I7XVe3gIZOiJtI2SV74q7GqJV6lhu61gqgIWmef6ZWRHg585uGx93nE+ChDF
- +VYwf+d1XSdaMaRA8rtxEZCLX7FuJp
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: selftests: connector: proc_filter.c:48:20: error: invalid
+ application of 'sizeof' to an incomplete type 'struct proc_input'
+To:     Anjali Kulkarni <anjali.k.kulkarni@oracle.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        Netdev <netdev@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <CA+G9fYt=6ysz636XcQ=-KJp7vJcMZ=NjbQBrn77v7vnTcfP2cA@mail.gmail.com>
+ <E8C72537-4280-401A-B25D-9734D2756A6A@oracle.com>
+ <BB43F17E-EC00-4E72-BB3D-F4E6FA65F954@oracle.com>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <BB43F17E-EC00-4E72-BB3D-F4E6FA65F954@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The BTI test program started life as standalone programs outside the
-kselftest suite so provided it's own compiler.h. Now that we have updated
-the tools/include compiler.h to have all the definitions that we are using
-and the arm64 selftsets pull in tools/includes let's drop our custom
-version.
+On 7/27/23 11:34, Anjali Kulkarni wrote:
+> 
+> 
+>> On Jul 25, 2023, at 9:48 AM, Anjali Kulkarni <Anjali.K.Kulkarni@oracle.com> wrote:
+>>
+>>
+>>
+>>> On Jul 25, 2023, at 6:05 AM, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>>>
+>>> selftests: connector: proc_filter build failed with clang-16 due to below
+>>> warnings / errors on Linux next-20230725.
+>>>
+>>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>>
+>>> clang --target=aarch64-linux-gnu -fintegrated-as
+>>> -Werror=unknown-warning-option -Werror=ignored-optimization-argument
+>>> -Werror=option-ignored -Werror=unused-command-line-argument
+>>> --target=aarch64-linux-gnu -fintegrated-as -Wall proc_filter.c -o
+>>> /home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/connector/proc_filter
+>>> proc_filter.c:42:12: error: invalid application of 'sizeof' to an
+>>> incomplete type 'struct proc_input'
+>>> char buff[NL_MESSAGE_SIZE];
+>>> ^~~~~~~~~~~~~~~
+>>> proc_filter.c:22:5: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>> sizeof(struct proc_input))
+>>> ^ ~~~~~~~~~~~~~~~~~~~
+>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>> sizeof(struct proc_input))
+>>> ^
+>>> proc_filter.c:48:20: error: invalid application of 'sizeof' to an
+>>> incomplete type 'struct proc_input'
+>>> hdr->nlmsg_len = NL_MESSAGE_SIZE;
+>>> ^~~~~~~~~~~~~~~
+>>> proc_filter.c:22:5: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>> sizeof(struct proc_input))
+>>> ^ ~~~~~~~~~~~~~~~~~~~
+>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>> char buff[NL_MESSAGE_SIZE];
+>>> ^
+>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>> sizeof(struct proc_input))
+>>> ^
+>>> proc_filter.c:64:14: error: invalid application of 'sizeof' to an
+>>> incomplete type 'struct proc_input'
+>>> msg->len = sizeof(struct proc_input);
+>>> ^ ~~~~~~~~~~~~~~~~~~~
+>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>> char buff[NL_MESSAGE_SIZE];
+>>> ^
+>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>> sizeof(struct proc_input))
+>>> ^
+>>> proc_filter.c:65:35: error: incomplete definition of type 'struct proc_input'
+>>> ((struct proc_input *)msg->data)->mcast_op =
+>>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>> char buff[NL_MESSAGE_SIZE];
+>>> ^
+>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>> sizeof(struct proc_input))
+>>> ^
+>>> proc_filter.c:66:31: error: incomplete definition of type 'struct proc_input'
+>>> ((struct proc_input *)pinp)->mcast_op;
+>>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>> char buff[NL_MESSAGE_SIZE];
+>>> ^
+>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>> sizeof(struct proc_input))
+>>> ^
+>>> proc_filter.c:67:35: error: incomplete definition of type 'struct proc_input'
+>>> ((struct proc_input *)msg->data)->event_type =
+>>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>> char buff[NL_MESSAGE_SIZE];
+>>> ^
+>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>> sizeof(struct proc_input))
+>>> ^
+>>> proc_filter.c:68:31: error: incomplete definition of type 'struct proc_input'
+>>> ((struct proc_input *)pinp)->event_type;
+>>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>> char buff[NL_MESSAGE_SIZE];
+>>> ^
+>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>> sizeof(struct proc_input))
+>>> ^
+>>> proc_filter.c:245:20: error: variable has incomplete type 'struct proc_input'
+>>> struct proc_input input;
+>>> ^
+>>> proc_filter.c:245:9: note: forward declaration of 'struct proc_input'
+>>> struct proc_input input;
+>>> ^
+>>> proc_filter.c:264:22: error: use of undeclared identifier
+>>> 'PROC_EVENT_NONZERO_EXIT'
+>>> input.event_type = PROC_EVENT_NONZERO_EXIT;
+>>> ^
+>>> 9 errors generated.
+>>> make[4]: Leaving directory '/builds/linux/tools/testing/selftests/connector’
+>>>
+>>>
+>> These are expected since you need to have the changes in kernel that were committed with this patch to be installed on the kernel on which this is being compiled/run on. That is what the test is for, and the check to make it run on previous kernels as well was made a runtime check. Do you expect this to compile on a kernel without the corresponding kernel changes that were committed with this patch?
+>>
+>> Anjali
+> 
+> Gentle ping -  could you answer above questions?
+>>
 
-__unreachable() is named unreachable() there requiring an update in the
-code.
+I am seeing the same on linux-next next-20230727
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/bti/compiler.h | 21 ---------------------
- tools/testing/selftests/arm64/bti/system.c   |  4 +---
- tools/testing/selftests/arm64/bti/system.h   |  4 ++--
- tools/testing/selftests/arm64/bti/test.c     |  1 -
- 4 files changed, 3 insertions(+), 27 deletions(-)
+PROC_EVENT_NONZERO_EXIT is defined and NL_MESSAGE_SIZE
 
-diff --git a/tools/testing/selftests/arm64/bti/compiler.h b/tools/testing/selftests/arm64/bti/compiler.h
-deleted file mode 100644
-index ebb6204f447a..000000000000
---- a/tools/testing/selftests/arm64/bti/compiler.h
-+++ /dev/null
-@@ -1,21 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * Copyright (C) 2019  Arm Limited
-- * Original author: Dave Martin <Dave.Martin@arm.com>
-- */
--
--#ifndef COMPILER_H
--#define COMPILER_H
--
--#define __always_unused __attribute__((__unused__))
--#define __noreturn __attribute__((__noreturn__))
--#define __unreachable() __builtin_unreachable()
--
--/* curse(e) has value e, but the compiler cannot assume so */
--#define curse(e) ({				\
--	__typeof__(e) __curse_e = (e);		\
--	asm ("" : "+r" (__curse_e));		\
--	__curse_e;				\
--})
--
--#endif /* ! COMPILER_H */
-diff --git a/tools/testing/selftests/arm64/bti/system.c b/tools/testing/selftests/arm64/bti/system.c
-index 6385d8d4973b..93d772b00bfe 100644
---- a/tools/testing/selftests/arm64/bti/system.c
-+++ b/tools/testing/selftests/arm64/bti/system.c
-@@ -8,12 +8,10 @@
- 
- #include <asm/unistd.h>
- 
--#include "compiler.h"
--
- void __noreturn exit(int n)
- {
- 	syscall(__NR_exit, n);
--	__unreachable();
-+	unreachable();
- }
- 
- ssize_t write(int fd, const void *buf, size_t size)
-diff --git a/tools/testing/selftests/arm64/bti/system.h b/tools/testing/selftests/arm64/bti/system.h
-index aca118589705..2e9ee1284a0c 100644
---- a/tools/testing/selftests/arm64/bti/system.h
-+++ b/tools/testing/selftests/arm64/bti/system.h
-@@ -14,12 +14,12 @@ typedef __kernel_size_t size_t;
- typedef __kernel_ssize_t ssize_t;
- 
- #include <linux/errno.h>
-+#include <linux/compiler.h>
-+
- #include <asm/hwcap.h>
- #include <asm/ptrace.h>
- #include <asm/unistd.h>
- 
--#include "compiler.h"
--
- long syscall(int nr, ...);
- 
- void __noreturn exit(int n);
-diff --git a/tools/testing/selftests/arm64/bti/test.c b/tools/testing/selftests/arm64/bti/test.c
-index 2cd8dcee5aec..28a8e8a28a84 100644
---- a/tools/testing/selftests/arm64/bti/test.c
-+++ b/tools/testing/selftests/arm64/bti/test.c
-@@ -17,7 +17,6 @@
- typedef struct ucontext ucontext_t;
- 
- #include "btitest.h"
--#include "compiler.h"
- #include "signal.h"
- 
- #define EXPECTED_TESTS 18
+Anjali,
 
--- 
-2.30.2
+What are the dependent commits and should they be in next?
+Shouldn't this test patch go with the kernel patches it depends
+on? Can you do some testing on next and let me know why this
+test is failing to build?
+
+It is failing for me for sure.
+
+There could be problem in the test Makefile that it isn't including
+the right headers.
+
+thanks,
+-- Shuah
+
+thanks,
+-- Shuah
 
