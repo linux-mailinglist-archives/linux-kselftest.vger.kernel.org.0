@@ -2,44 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C7676682C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 11:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483B0766832
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 11:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235257AbjG1JGl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 05:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S230312AbjG1JGs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 05:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235174AbjG1JG2 (ORCPT
+        with ESMTP id S235224AbjG1JGc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 05:06:28 -0400
+        Fri, 28 Jul 2023 05:06:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A943582;
-        Fri, 28 Jul 2023 02:06:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BD3273D;
+        Fri, 28 Jul 2023 02:06:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E325862081;
-        Fri, 28 Jul 2023 09:06:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0080BC433C8;
-        Fri, 28 Jul 2023 09:06:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC6C162087;
+        Fri, 28 Jul 2023 09:06:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A6FC433C7;
+        Fri, 28 Jul 2023 09:06:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690535184;
-        bh=g19Qr7lTEX4DQpW0gKyuC8KKuGZXXC9l7fQhhK+dJSE=;
+        s=k20201202; t=1690535187;
+        bh=gTZ6pxd2ZYEYYmpnt5LVUEVpp6OYKOh/ECpVr3VoqbQ=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=CEFjL9Sx7KXL8EOMQcOXjK4yr3X1qxzElzF8P4uksXp3+8MUkFd7QM63SW0KNshB/
-         m7gnmqXLfNlJZFywCPGZpam1rw4l0RJuxim36RooRckxbCOEw9sagO8irzYnnlaAMp
-         WZxp3PTYVG1l2IsOb1jgLdoEu+OFYB+B91c2mMAs5cEN8cYMV1A6lCgNfdO6T79GLC
-         71j3bkf5xTdATo85I4CZhwPJbQFsa94KBFasLpfP7saMSomaUH9nZkKEN5Tq3e0eyv
-         +FVr1az/HIC1vR57CQKMDWjdEpColFwVqhc9UdvYklCc1aso1xdBDsWR7/AiCuHVaO
-         tOU73Z/hFWwAA==
+        b=VWDLwNhMJ04fIVVxLW/N4tmkApHKYCVE96oGEGLjdGRm/c+f4LIjivkGvfrDNyqIY
+         IFlE2hH97kWOhzVShr3kkiFwaHkV8NktgqbqwOYSGtQxUQ0GPrz95f3iT0KQ6rricM
+         zLRalJujFIkDn6f+minwS9idapvgbsmK2d3e3rCCcjLZGkdXZZP6uZQxOuLaOKFcwD
+         Ej8BgS5AMJzwkIEe9e7CLj0f0IhQRHgsjo9dOgF6k/l2iovCS+319YEJxWNC6PXUTJ
+         w7HB93NUPtUtIzY3DY8YfAMmB4Ibb62XMP8BCeDnopD9xjQNAYnFLuTZrnY2anKGqg
+         50iR+dM8eXClg==
 From:   Maxime Ripard <mripard@kernel.org>
-Date:   Fri, 28 Jul 2023 11:06:14 +0200
-Subject: [PATCH v3 01/11] drm/tests: helpers: Switch to kunit actions
+Date:   Fri, 28 Jul 2023 11:06:15 +0200
+Subject: [PATCH v3 02/11] drm/tests: client-modeset: Remove call to
+ drm_kunit_helper_free_device()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230728-kms-kunit-actions-rework-v3-1-952565ccccfe@kernel.org>
+Message-Id: <20230728-kms-kunit-actions-rework-v3-2-952565ccccfe@kernel.org>
 References: <20230728-kms-kunit-actions-rework-v3-0-952565ccccfe@kernel.org>
 In-Reply-To: <20230728-kms-kunit-actions-rework-v3-0-952565ccccfe@kernel.org>
 To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
@@ -53,12 +54,12 @@ Cc:     =?utf-8?q?Ma=C3=ADra_Canal?= <mairacanal@riseup.net>,
         linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
         Brendan Higgins <brendan.higgins@linux.dev>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3170; i=mripard@kernel.org;
- h=from:subject:message-id; bh=g19Qr7lTEX4DQpW0gKyuC8KKuGZXXC9l7fQhhK+dJSE=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCmHW7kcFk19LujtYX7eSdTX7/TqrR+97EXLLwSc2hr1S
- TRXj/NIRykLgxgXg6yYIkuMsPmSuFOzXney8c2DmcPKBDKEgYtTACZSrs7IcHmx6o5blq+msj01
- ONnBYfAkyXbS2dgdaytVPfbu8ygzcWH4n1X35O6vUOGVjhvuhn6zk/qXqvn1R9CbnIk5K7KXWEy
- 4xgcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1456; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=gTZ6pxd2ZYEYYmpnt5LVUEVpp6OYKOh/ECpVr3VoqbQ=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCmHW7kmVGiskl7alxi8TaZY4ldHx/JHHxp5jU5s+b5Y+
+ /mNGUelOkpZGMS4GGTFFFlihM2XxJ2a9bqTjW8ezBxWJpAhDFycAjCRYnVGhl6WLeGn6q+FT3r8
+ Pet90XOXBZuYjPSsph6onqO5w+ZiTSPDP8NJd1krfjq+3zy7rvey1cLDVk6qAdNzGzKc46uPGeU
+ a8gMA
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -71,104 +72,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Calling drm_kunit_helper_free_device() to clean up the resources
+allocated by drm_kunit_helper_alloc_device() is now optional and not
+needed in most cases.
+
+Remove it.
+
 Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 Reviewed-by: Maíra Canal <mairacanal@riseup.net>
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/gpu/drm/tests/drm_kunit_helpers.c | 54 ++++++++++++++++++++++++++++---
- 1 file changed, 50 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/tests/drm_client_modeset_test.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/tests/drm_kunit_helpers.c b/drivers/gpu/drm/tests/drm_kunit_helpers.c
-index 4df47071dc88..cdf35421e641 100644
---- a/drivers/gpu/drm/tests/drm_kunit_helpers.c
-+++ b/drivers/gpu/drm/tests/drm_kunit_helpers.c
-@@ -26,6 +26,28 @@ static struct platform_driver fake_platform_driver = {
- 	},
- };
- 
-+static void kunit_action_platform_driver_unregister(void *ptr)
-+{
-+	struct platform_driver *drv = ptr;
-+
-+	platform_driver_unregister(drv);
-+
-+}
-+
-+static void kunit_action_platform_device_put(void *ptr)
-+{
-+	struct platform_device *pdev = ptr;
-+
-+	platform_device_put(pdev);
-+}
-+
-+static void kunit_action_platform_device_del(void *ptr)
-+{
-+	struct platform_device *pdev = ptr;
-+
-+	platform_device_del(pdev);
-+}
-+
- /**
-  * drm_kunit_helper_alloc_device - Allocate a mock device for a KUnit test
-  * @test: The test context object
-@@ -35,8 +57,8 @@ static struct platform_driver fake_platform_driver = {
-  * able to leverage the usual infrastructure and most notably the
-  * device-managed resources just like a "real" device.
-  *
-- * Callers need to make sure drm_kunit_helper_free_device() on the
-- * device when done.
-+ * Resources will be cleaned up automatically, but the removal can be
-+ * forced using @drm_kunit_helper_free_device.
-  *
-  * Returns:
-  * A pointer to the new device, or an ERR_PTR() otherwise.
-@@ -49,12 +71,27 @@ struct device *drm_kunit_helper_alloc_device(struct kunit *test)
- 	ret = platform_driver_register(&fake_platform_driver);
- 	KUNIT_ASSERT_EQ(test, ret, 0);
- 
-+	ret = kunit_add_action_or_reset(test,
-+					kunit_action_platform_driver_unregister,
-+					&fake_platform_driver);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
- 	pdev = platform_device_alloc(KUNIT_DEVICE_NAME, PLATFORM_DEVID_NONE);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
- 
-+	ret = kunit_add_action_or_reset(test,
-+					kunit_action_platform_device_put,
-+					pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
- 	ret = platform_device_add(pdev);
- 	KUNIT_ASSERT_EQ(test, ret, 0);
- 
-+	ret = kunit_add_action_or_reset(test,
-+					kunit_action_platform_device_del,
-+					pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
- 	return &pdev->dev;
+diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+index 416a279b6dae..7516f6cb36e4 100644
+--- a/drivers/gpu/drm/tests/drm_client_modeset_test.c
++++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+@@ -82,13 +82,6 @@ static int drm_client_modeset_test_init(struct kunit *test)
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(drm_kunit_helper_alloc_device);
-@@ -70,8 +107,17 @@ void drm_kunit_helper_free_device(struct kunit *test, struct device *dev)
+ 
+-static void drm_client_modeset_test_exit(struct kunit *test)
+-{
+-	struct drm_client_modeset_test_priv *priv = test->priv;
+-
+-	drm_kunit_helper_free_device(test, priv->dev);
+-}
+-
+ static void drm_test_pick_cmdline_res_1920_1080_60(struct kunit *test)
  {
- 	struct platform_device *pdev = to_platform_device(dev);
- 
--	platform_device_unregister(pdev);
--	platform_driver_unregister(&fake_platform_driver);
-+	kunit_release_action(test,
-+			     kunit_action_platform_device_del,
-+			     pdev);
-+
-+	kunit_release_action(test,
-+			     kunit_action_platform_device_put,
-+			     pdev);
-+
-+	kunit_release_action(test,
-+			     kunit_action_platform_driver_unregister,
-+			     pdev);
- }
- EXPORT_SYMBOL_GPL(drm_kunit_helper_free_device);
+ 	struct drm_client_modeset_test_priv *priv = test->priv;
+@@ -188,7 +181,6 @@ static struct kunit_case drm_test_pick_cmdline_tests[] = {
+ static struct kunit_suite drm_test_pick_cmdline_test_suite = {
+ 	.name = "drm_test_pick_cmdline",
+ 	.init = drm_client_modeset_test_init,
+-	.exit = drm_client_modeset_test_exit,
+ 	.test_cases = drm_test_pick_cmdline_tests
+ };
  
 
 -- 
