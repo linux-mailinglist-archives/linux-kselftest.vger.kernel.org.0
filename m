@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6EC767207
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 18:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD03767215
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 18:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjG1QkZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 12:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
+        id S232761AbjG1Ql2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 12:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjG1QkY (ORCPT
+        with ESMTP id S232182AbjG1Ql1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 12:40:24 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94299E;
-        Fri, 28 Jul 2023 09:40:19 -0700 (PDT)
+        Fri, 28 Jul 2023 12:41:27 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2073.outbound.protection.outlook.com [40.107.92.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088C43C35;
+        Fri, 28 Jul 2023 09:41:25 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DQK1e4ej3rSo1w4parAFOeIRMOsg9/DXxU0A2EVPc6R6pXRlywGou6bRruC1Ec0PQSj8cAczKTVU2G3esjwsoNk6CpmgNkTSr2tUfGAUQeNCiB1u+3xq7+qetPzDj7LZ5XqZghOIu9t2p5xJM1gDQM9cs1p7vyXISCMf1Web23285dJrNksLuqJC9oD3/BOrnS2b9AGs9IYqpiZ6RODIPMITD+l08C0lt5UyWl3bEs5ARZSIVscJymGuTvhuw7pIy7X3ukctUTrCcSv3yMWHEnc0NVTQtlKRYLjk/o0mSpElHx6q8/sGPMiFnfTDzSvHTzjFrx8m/JVGBudJl9pkbA==
+ b=eQGFh3hl/WCG5LhUQ5cOec0irgUEd5kz623ZeLSo3LE3+T8AtXh6BRexgY757mi6OqN6eIS7vaY56yf2/asIanpkSGE3GSsf9tCmsxMibMzOVLPzsMZ55pAlr30UzRJ16AO1Hk1KyIPRijspHV+7w3MbSs1T82EtbDlZsvxxz2BtmNZgpq0xTcHKJL3V5SCVQymuLk1DgieSt+Y/drB3DCb0+Qny7XMMFrdfk+TIXTzzIztA2/Shmj1Vlr1g6jaPMqG80QLC2OV6LIht533vkRZMOFYitTDeFW72mBq/TDwGba9AYWBe9E6zLJ0s09QKdBgdBA7qSS3HxrsP7vbL/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yfagcM595CBddVOpZ8s2WHITdqCWuHqZNcCEFdTwj50=;
- b=MR412B+AS5yOxjeoIIuIWV9SyzLPFN+eN0kOh9q92BXoBXLqxlAcrUpbcQoDfMpmgYCiRrLZq8KqZy7Ka3cHif753Wdm5vpVbgIecjWdRif28KexwsSuqC8/Bbfomk9JGZeq4FUipucGdtpqr9xKyVD9h5Fb8Hsdsf8dteqlacx70nIYO0tg0cGlQana0uNAYb1LMysvYiFSoviusZnEfwIzetQpXNcTEsor9+Ur+IhZOEvz38OHJW21oIUFDEioNMkTqA3uoTERdiZWugC5PFX8Bdk9fP18pgHqDuREnZGWLvRXoY32i29RChmWg4eXshU/l8jHM5BCKmNLxFx/zg==
+ bh=JsQ3Wj4IegLGfYp83/8UeU/kJXCVWeck5aXmwz6/aSg=;
+ b=EQvAb2+sUqPhbHzG4eBgjPsxbiQt7IjE2WSbnz+I9adCIcZvpCCHl2KA1FBTkwida0ogF1VBZ41cGHyhBW6anM7mgmZa8cxZ7YiCE32vV+fuqq25low96a6DQNmJpr+31xONOE6n9uNCF6ux6AB0IqMjHiI5zWl4mxZLueKUyKY3d9Q+FXkvP3FQYQu1f5vHDhGxBfms+FlPKdPLftUXeJn/+Lyos5h11pMVjpe4heXU1yLnaBaId7wKDJGjUQ+PcfWeI1MxQXuJyf8zBZhfh7fjdMxnQPePoCk5/tr5N3bOlmU15cUMpqOT6nQcKdXlpJPWAY4Q1C6ndFyJnl6VWA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yfagcM595CBddVOpZ8s2WHITdqCWuHqZNcCEFdTwj50=;
- b=GNfC/rMs0HiZhy1Vg6v2KGbYncyVIZWLvYe2ImxrL+G1RDPnB34lTnLGZeFuKNlOBaHPrruJsDU/D/V76SkDY0QPeuF2AOrazqfsKHWdzrVw8LyXaoktndrwuGxTL4fHPaO5XFLw/CbV4r9r2OM3lJdlUCFyY5DOVemw63l04X4=
-Received: from DM6PR02CA0050.namprd02.prod.outlook.com (2603:10b6:5:177::27)
- by SJ1PR12MB6314.namprd12.prod.outlook.com (2603:10b6:a03:457::9) with
+ bh=JsQ3Wj4IegLGfYp83/8UeU/kJXCVWeck5aXmwz6/aSg=;
+ b=AH3yAzONhnExP/A9nk7HTKfDBELXkxIMsQLO8s4IgEcdh752krIGlQBi/7PD2PS3HFFrAKlCYonL5eCSCOzSujBpqxif8mIQz/RL/gUg50EkWcJ/QAHb8ATIVOCHkA2ubmragFqSk1S+yQi0fiQ7HOSF9ERVENubA4lo4uLgJG0=
+Received: from BY5PR16CA0017.namprd16.prod.outlook.com (2603:10b6:a03:1a0::30)
+ by CH0PR12MB5154.namprd12.prod.outlook.com (2603:10b6:610:b9::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Fri, 28 Jul
- 2023 16:40:14 +0000
-Received: from DM6NAM11FT004.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:177:cafe::ec) by DM6PR02CA0050.outlook.office365.com
- (2603:10b6:5:177::27) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 16:41:22 +0000
+Received: from DM6NAM11FT030.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:a03:1a0:cafe::41) by BY5PR16CA0017.outlook.office365.com
+ (2603:10b6:a03:1a0::30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29 via Frontend
- Transport; Fri, 28 Jul 2023 16:40:14 +0000
+ Transport; Fri, 28 Jul 2023 16:41:22 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT004.mail.protection.outlook.com (10.13.172.217) with Microsoft SMTP
+ DM6NAM11FT030.mail.protection.outlook.com (10.13.172.146) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6631.29 via Frontend Transport; Fri, 28 Jul 2023 16:40:13 +0000
+ 15.20.6631.35 via Frontend Transport; Fri, 28 Jul 2023 16:41:22 +0000
 Received: from BLR-PF38F8CF.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 28 Jul
- 2023 11:40:08 -0500
+ 2023 11:41:17 -0500
 From:   Ayush Jain <ayush.jain3@amd.com>
 To:     <akpm@linux-foundation.org>, <shuah@kernel.org>,
         <pasha.tatashin@soleen.com>, <zhansayabagdaulet@gmail.com>,
@@ -63,9 +63,9 @@ CC:     <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <Narasimhan.V@amd.com>,
         <Santosh.Shukla@amd.com>, Ayush Jain <ayush.jain3@amd.com>,
         David Hildenbrand <david@redhat.com>
-Subject: [PATCH v2 1/2] selftests: mm: ksm: Fix incorrect evaluation of parameter
-Date:   Fri, 28 Jul 2023 22:09:51 +0530
-Message-ID: <20230728163952.4634-1-ayush.jain3@amd.com>
+Subject: [PATCH v2 2/2] selftests: mm: add KSM_MERGE_TIME tests
+Date:   Fri, 28 Jul 2023 22:11:02 +0530
+Message-ID: <20230728164102.4655-1-ayush.jain3@amd.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,23 +75,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT004:EE_|SJ1PR12MB6314:EE_
-X-MS-Office365-Filtering-Correlation-Id: ab2184fb-2c21-462b-374c-08db8f895152
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT030:EE_|CH0PR12MB5154:EE_
+X-MS-Office365-Filtering-Correlation-Id: 91682171-bea5-4911-69e7-08db8f8979dc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7CkK629iEgji1PAgg3dop7x2E16PJA6R0vXzZu37IxxHAKtYFo710IcNWHX22gxk89pbjmQMJfK9x/llscITu/lexs8nd0Oa8xO72XeuywPjW1FegLYy84x57LU0bJUBb1hJYcOyOFB1zSBe5QT2JBI/RngZgO4+C6/kRF4k269uyeB4/obMmwkV8m3cNIs2ey5I9xHK+GTY2x/gTpkX1pDsQAqN93ehV1Lj0eVFabnaiyWKF4wK8XkFAC1PfHEKllnXphEDs49/33BNzxONSn1HBR0ZpO4+Xl9Hv3M0vZHvrfLYW+eMllCrnLN5Ycprd6db4iAsR6iD+mxCWIzq+xAKrkNA0rOMz6tRdweBNqD5kj5M/NmBcF6VeqIRGTQ5k3vBaHS9oeYxfr0iMQI8J1vP5AyzXusx5XwxXJj7VkWrTNzOtk3uPSLajaVIFpVPzQMVZrDti2XP03WOcLUDj2YpBrytrfXD6gKF2VOCflD219beIagwzoSCLIQAGHYhcxai7olWHttG8Gnq9SxjvmgjGvFu4VAM6sS+8YqC5wBggx/jMgubdgP6xRrzGHha5MW2YCsS4wD7VRgwE/pDTKVUNkS78hStPg7azAbTiyUPkgyOcUOgYR7IOIJzejTZdaToZkqCZNm4tiS9omUM3XiKFEyXwqDc7cIUG7cy7dEmnIVu+l7kUE7xItn+vCisTtyZR0OH+m8r9MjUWjrAiTws8PaRXBYbxV91Hrsu4zM26g2o5RYdUC2WAa+rKrfFH5h6cy0jORPuXtO9Z9H/4A==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(346002)(396003)(82310400008)(451199021)(46966006)(36840700001)(40470700004)(6636002)(4326008)(70206006)(6666004)(70586007)(40480700001)(5660300002)(478600001)(82740400003)(7696005)(316002)(356005)(110136005)(54906003)(81166007)(40460700003)(86362001)(41300700001)(8936002)(8676002)(26005)(1076003)(186003)(7416002)(16526019)(336012)(83380400001)(426003)(47076005)(2616005)(36860700001)(2906002)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 4yxy0vHFlWv/w8ya7wgiL6OmB9I74OV59heuMawk+pf2ZsZ9ubivde8cV5ZxN0p7IyTFoe7OCCnk0ZaVmXVqvTwciBeRiI8CpRsA+0JEkmPYeNcuXzExIIbedJ7zQM33oLIFQHd5SBhG97pfHoG/rmXGG52MnmjtKpThJdtXiNPKR95TiW3lE3nVQVQiNoIeqBtG4CgAA57aXySgcg+dRuRJZnlMhV6wxJTWkRS5oRIR9+XucWjeltvBeOPtG+skL5beqph+ZeVaTO0ustGH3htUtmqCWczJwXCqThJp2yIGBTOEAl/bWDt+g67c12lWC+ank8Hok08kxHKosPhWZbUxw6/0r+bzZUnchNuJl+ibHhI6GQfkrg5kXtWBkzlQpKtaaF3q62kOo9/+9O/cM27AFsuvcUEo8T02SUog5xdoRksaXfm1tONpet3k+GlZXG4l6PLZZET3lIeDkR0klSk0E0NyEQlxNdnCcIsEM4LXKLe9VwV3cO3h90mb29nBdy2Psrw5eUiJSPHw2xpp+dahzV0XXtcs0G0dNEP6tPXhaD2pQaWicq6De9UmiVmGtt1jmMt7xBjhvbUs9na7h343jxjMPJ/AdeJCG4iWBE98fdy298ZGRODHybI7lv5nf3+FTH3zPA9UcgVNjEY4ExMTJIHXi6alPchZLAYDiTxOwQAhc8m0zd0MXtvLDw2b554G4tWYyrPtywxL4fg4DVXfnqNLrkU010033gE8Wl2JYEjoDT/GKhQlS+mKOXN+3pPd43/DaF1pFy7qOch/Bw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(39860400002)(136003)(82310400008)(451199021)(36840700001)(40470700004)(46966006)(2906002)(47076005)(426003)(2616005)(40480700001)(16526019)(1076003)(70206006)(336012)(70586007)(186003)(6666004)(7696005)(54906003)(478600001)(110136005)(26005)(41300700001)(81166007)(86362001)(36860700001)(356005)(8936002)(316002)(8676002)(36756003)(6636002)(7416002)(4326008)(40460700003)(5660300002)(82740400003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 16:40:13.9910
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 16:41:22.0055
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab2184fb-2c21-462b-374c-08db8f895152
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91682171-bea5-4911-69e7-08db8f8979dc
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT004.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT030.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6314
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5154
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -103,54 +103,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A missing break in kms_tests leads to kselftest hang when the
-parameter -s is used.
-In current code flow because of missing break in -s, -t parses
-args spilled from -s and as -t accepts only valid values as 0,1
-so any arg in -s >1 or <0, gets in ksm_test failure
+add KSM_MERGE_TIME and KSM_MERGE_TIME_HUGE_PAGES tests with
+size of 100.
 
-This went undetected since, before the addition of option -t,
-the next case -M would immediately break out of the switch
-statement but that is no longer the case
-
-Add the missing break statement.
-
-----Before----
-./ksm_tests -H -s 100
-Invalid merge type
-
-----After----
-./ksm_tests -H -s 100
+./run_vmtests.sh -t ksm
+-----------------------------
+running ./ksm_tests -H -s 100
+-----------------------------
 Number of normal pages:    0
 Number of huge pages:    50
 Total size:    100 MiB
-Total time:    0.401732682 s
-Average speed:  248.922 MiB/s
-
-Fixes: 07115fcc15b4 ("selftests/mm: add new selftests for KSM")
+Total time:    0.399844662 s
+Average speed:  250.097 MiB/s
+[PASS]
+-----------------------------
+running ./ksm_tests -P -s 100
+-----------------------------
+Total size:    100 MiB
+Total time:    0.451931496 s
+Average speed:  221.272 MiB/s
+[PASS]
 
 Signed-off-by: Ayush Jain <ayush.jain3@amd.com>
 Reviewed-by: David Hildenbrand <david@redhat.com>
 ---
 v1 -> v2
 collect Reviewed-by from David
-Updated Fixes tag from commit 9e7cb94ca218 to 07115fcc15b4
 
- tools/testing/selftests/mm/ksm_tests.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/mm/run_vmtests.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
-index 435acebdc325..380b691d3eb9 100644
---- a/tools/testing/selftests/mm/ksm_tests.c
-+++ b/tools/testing/selftests/mm/ksm_tests.c
-@@ -831,6 +831,7 @@ int main(int argc, char *argv[])
- 				printf("Size must be greater than 0\n");
- 				return KSFT_FAIL;
- 			}
-+			break;
- 		case 't':
- 			{
- 				int tmp = atoi(optarg);
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 3f26f6e15b2a..ca3738e042c2 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -262,6 +262,10 @@ CATEGORY="madv_populate" run_test ./madv_populate
+ 
+ CATEGORY="memfd_secret" run_test ./memfd_secret
+ 
++# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
++CATEGORY="ksm" run_test ./ksm_tests -H -s 100
++# KSM KSM_MERGE_TIME test with size of 100
++CATEGORY="ksm" run_test ./ksm_tests -P -s 100
+ # KSM MADV_MERGEABLE test with 10 identical pages
+ CATEGORY="ksm" run_test ./ksm_tests -M -p 10
+ # KSM unmerge test
 -- 
 2.34.1
 
