@@ -2,102 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0247B76731F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 19:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E07E76733E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jul 2023 19:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbjG1RUJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 13:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
+        id S233260AbjG1RZ5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 13:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjG1RUI (ORCPT
+        with ESMTP id S233271AbjG1RZz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 13:20:08 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2052.outbound.protection.outlook.com [40.107.220.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111B13A81;
-        Fri, 28 Jul 2023 10:20:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IVLiuRUGxo8zcrfobJlbifkQknegE5MKACQIivNJvEzzMfku6mHuah8ODyAiK8bWVv92pM6Q3v6SM5UPYwjdjo4uwFEE8HwRK/NSShCyAkY3RJRY+otqd/mNk4TOkK535jPLpLgizDAbXG3fWzNlwj3IBQWk0DfpKS18I/pjDmxhikgD2iprNjZ5BGGkkFN34qXxJCC/H5+5fFs6+wdQIXT9LQAoVW2yH1gmeXgUeeV3RIuF/Emkt5ewrpxCI5B7jD6ylx/vrdPGQW1n0B7oID4yb+peRCPuUTdGALU131/0MdoU7v4a6zJt0DEo2N6gEojlRaKw/VFN5laRWgviHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JsQ3Wj4IegLGfYp83/8UeU/kJXCVWeck5aXmwz6/aSg=;
- b=YzyrHBW0euBkAxXgBcIPF/FJZajKSq7CmynV/nZamkNY99QpFur+AbVpZXdQ18GQIAbzGnbUM1GasdXQGYhm++xALN/F9WUsWAIbbw3h21L6FT34pfccWJr+kzQQSoFSYoSNcX2t9j0ddQCEa1T5OJqhQJ+0VPB4O1O1bEE6cefJHXjI+lDb/ACsfhsfZ7rY21dDtFTfLjg06ZlriX517wRZQJAKhOiPz+Y1eZhl1kAqi2SbQCYf54mA7/w53wgme6WkHnlo6AqVhNwWyXiuMWGOPqfgJCf49VSDzaarR0ljuY/jjDxaFDNW0BZ/E9KwmP0gg2fuyFHx1930IWXzgQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JsQ3Wj4IegLGfYp83/8UeU/kJXCVWeck5aXmwz6/aSg=;
- b=P4SMeLDEA/uQiH5lFSi3jrZQbCH/F/uGfS8ZsO7jWkiwLBhz0Hn0GxONwXgRl/Sh1y0EIIZWU+AQRMzUuzZGMWfMgHAcovDV/ero1DvufFPZ2+U/dsQlGiJ3k1e4vM63E+c7yzx7aoDgyg3xjYVHGzy5bFmWRygLmr52+r1/XZ4=
-Received: from MW4PR03CA0157.namprd03.prod.outlook.com (2603:10b6:303:8d::12)
- by DM4PR12MB6063.namprd12.prod.outlook.com (2603:10b6:8:b1::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Fri, 28 Jul
- 2023 17:20:03 +0000
-Received: from CO1PEPF000044EE.namprd05.prod.outlook.com
- (2603:10b6:303:8d:cafe::5b) by MW4PR03CA0157.outlook.office365.com
- (2603:10b6:303:8d::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29 via Frontend
- Transport; Fri, 28 Jul 2023 17:20:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044EE.mail.protection.outlook.com (10.167.241.68) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6631.22 via Frontend Transport; Fri, 28 Jul 2023 17:20:03 +0000
-Received: from BLR-PF38F8CF.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 28 Jul
- 2023 12:19:58 -0500
-From:   Ayush Jain <ayush.jain3@amd.com>
-To:     <akpm@linux-foundation.org>, <shuah@kernel.org>,
-        <pasha.tatashin@soleen.com>, <zhansayabagdaulet@gmail.com>,
-        <tyhicks@linux.microsoft.com>, <shr@devkernel.io>,
-        <raghavendra.kt@amd.com>
-CC:     <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <Narasimhan.V@amd.com>,
-        <Santosh.Shukla@amd.com>, Ayush Jain <ayush.jain3@amd.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH v2 2/2] selftests: mm: add KSM_MERGE_TIME tests
-Date:   Fri, 28 Jul 2023 22:49:42 +0530
-Message-ID: <20230728171942.4683-1-ayush.jain3@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230728163952.4634-1-ayush.jain3@amd.com>
-References: <20230728163952.4634-1-ayush.jain3@amd.com>
+        Fri, 28 Jul 2023 13:25:55 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB323A9C;
+        Fri, 28 Jul 2023 10:25:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690565152; x=1722101152;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mKRS6boUyUY8eyb/hoH/4uJAOZeecmb/FL8JIFuPo/w=;
+  b=cHnT1n7Z5oAnnGakpk4VzsVk0T9CJJBoZMXlpC0x6ltPZREPwQtx/dOv
+   PdswNw56QjQX9Dx1uXgTdJ6i2Pbio6qdyfUMnPzXzl1usYjKpxFHvkE7l
+   tv1pYfU2cXFEadWniP/eF87amwR/yRQsd3xkZFLEMxj8nul13riJ7Yja6
+   HkqtNb5JP3Tz1+KBfP1dALgGPMge8y8t/ctCCpyLBR2SFOp3FGUNdPhaQ
+   7QM/jAbWrPwpQXiZY9K42CcP1weVFt/6ZE84JMSIoGF8pW5oE6yIJ75Zp
+   8aWfGQqITInMKW60IFq3qTlkUk8fM9pzHTdNdZrioO+taT9vVuPHDFU3h
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="434931072"
+X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
+   d="scan'208";a="434931072"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 10:25:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="727556285"
+X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
+   d="scan'208";a="727556285"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 28 Jul 2023 10:25:48 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qPRDh-0003Qb-2T;
+        Fri, 28 Jul 2023 17:25:43 +0000
+Date:   Sat, 29 Jul 2023 01:24:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, igt-dev@lists.freedesktop.org,
+        intel-xe@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] kunit: Allow kunit test modules to use test filtering
+Message-ID: <202307290124.BnnhRy8b-lkp@intel.com>
+References: <20230728154419.1810177-8-janusz.krzysztofik@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044EE:EE_|DM4PR12MB6063:EE_
-X-MS-Office365-Filtering-Correlation-Id: e446e773-07fa-49d8-51cd-08db8f8ee15b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rv7xQD2Cxx291vpIq/v9YNAJnnWeloFjpYG2VdDH5wy7OuNdYQQ01EQFC2zUDQjPTueQy393NyyBcqiCVojcCOkefHDSy0iB3gB9JH681VbMYgGg36620uYuMBwsSfR9AHUDmCaBmzh9Ifs/N1Op33UhiahbY60+H4VKoy0Ds+fQjVeMeSO4Jv6+Mgg8+TbaI2YKgIYfsTwNyZrGLWcCU0LdWHT4Xat1Gpr8SOY9/0IONxY7j9wdtqX86BsO0WWIahAiNJn4jY0ngj2tDnvARgy77bi/C9NRAZTTmByuoCFgwmazzHxuXDXl0MLM0vVw5xg63oeKEU1r83GKkOEMnO2lN3fSSg9ZZM38I+PZ+7/G/j+Szl0aKuU8z+QtfBfvGyn+HlSO7Evfa8tqfk/ys1Z4VtwemnFYtmBeRvsGPxhF19AjN4/JVS3sSF2Quiaf97NQfe+y1aAlOHClkU1C9xTAqDu/LS97LZ8+8AyxdNq2+NjbKoxtNsyMBU7wrJMEzbghZPS+7GAxnPrqBrLBxUo10Fdw2Pb6OeR+u+zReSxFNQevvNMTmK9zEB862fHdO64f8nofZqE0FVerMyuI6q+DArcLE462pWB1d4r7jJnjgVYRSyBpHXl9sUqh4wMiORP50G9zsbCg9+Kzkfs2xx9MUitdvmvWJzFI2PVH34SVcNV7sUg6FDL1UpAu91GDyEK82SMQiLK95RHG7VtIA69jlWVBt741/nS2Qaapk2oh8/V3rJXOjfICRsQjVH5KQKds8q6BerIcn4WV7g6SGA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(136003)(82310400008)(451199021)(36840700001)(40470700004)(46966006)(81166007)(316002)(8676002)(47076005)(110136005)(478600001)(54906003)(86362001)(70586007)(70206006)(5660300002)(6636002)(4326008)(356005)(40480700001)(1076003)(82740400003)(336012)(7696005)(40460700003)(26005)(6666004)(186003)(7416002)(8936002)(2906002)(2616005)(41300700001)(16526019)(426003)(36756003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 17:20:03.0637
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e446e773-07fa-49d8-51cd-08db8f8ee15b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044EE.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6063
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230728154419.1810177-8-janusz.krzysztofik@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,51 +71,114 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-add KSM_MERGE_TIME and KSM_MERGE_TIME_HUGE_PAGES tests with
-size of 100.
+Hi Janusz,
 
-./run_vmtests.sh -t ksm
------------------------------
-running ./ksm_tests -H -s 100
------------------------------
-Number of normal pages:    0
-Number of huge pages:    50
-Total size:    100 MiB
-Total time:    0.399844662 s
-Average speed:  250.097 MiB/s
-[PASS]
------------------------------
-running ./ksm_tests -P -s 100
------------------------------
-Total size:    100 MiB
-Total time:    0.451931496 s
-Average speed:  221.272 MiB/s
-[PASS]
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Ayush Jain <ayush.jain3@amd.com>
-Reviewed-by: David Hildenbrand <david@redhat.com>
----
-v1 -> v2
-collect Reviewed-by from David
+[auto build test WARNING on shuah-kselftest/kunit-fixes]
+[also build test WARNING on linus/master v6.5-rc3]
+[cannot apply to shuah-kselftest/kunit next-20230728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- tools/testing/selftests/mm/run_vmtests.sh | 4 ++++
- 1 file changed, 4 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Janusz-Krzysztofik/kunit-Report-the-count-of-test-suites-in-a-module/20230728-234736
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit-fixes
+patch link:    https://lore.kernel.org/r/20230728154419.1810177-8-janusz.krzysztofik%40linux.intel.com
+patch subject: [PATCH 3/3] kunit: Allow kunit test modules to use test filtering
+config: hexagon-randconfig-r045-20230728 (https://download.01.org/0day-ci/archive/20230729/202307290124.BnnhRy8b-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230729/202307290124.BnnhRy8b-lkp@intel.com/reproduce)
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 3f26f6e15b2a..ca3738e042c2 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -262,6 +262,10 @@ CATEGORY="madv_populate" run_test ./madv_populate
- 
- CATEGORY="memfd_secret" run_test ./memfd_secret
- 
-+# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
-+CATEGORY="ksm" run_test ./ksm_tests -H -s 100
-+# KSM KSM_MERGE_TIME test with size of 100
-+CATEGORY="ksm" run_test ./ksm_tests -P -s 100
- # KSM MADV_MERGEABLE test with 10 identical pages
- CATEGORY="ksm" run_test ./ksm_tests -M -p 10
- # KSM unmerge test
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307290124.BnnhRy8b-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> lib/kunit/executor.c:182:42: warning: declaration of 'struct suite_set' will not be visible outside of this function [-Wvisibility]
+     182 | static void kunit_exec_list_tests(struct suite_set *suite_set)
+         |                                          ^
+   lib/kunit/executor.c:190:25: error: incomplete definition of type 'struct suite_set'
+     190 |         for (suites = suite_set->start; suites < suite_set->end; suites++)
+         |                       ~~~~~~~~~^
+   lib/kunit/executor.c:182:42: note: forward declaration of 'struct suite_set'
+     182 | static void kunit_exec_list_tests(struct suite_set *suite_set)
+         |                                          ^
+   lib/kunit/executor.c:190:52: error: incomplete definition of type 'struct suite_set'
+     190 |         for (suites = suite_set->start; suites < suite_set->end; suites++)
+         |                                                  ~~~~~~~~~^
+   lib/kunit/executor.c:182:42: note: forward declaration of 'struct suite_set'
+     182 | static void kunit_exec_list_tests(struct suite_set *suite_set)
+         |                                          ^
+   lib/kunit/executor.c:198:19: error: variable has incomplete type 'struct suite_set'
+     198 |         struct suite_set suite_set = {__kunit_suites_start, __kunit_suites_end};
+         |                          ^
+   lib/kunit/executor.c:198:9: note: forward declaration of 'struct suite_set'
+     198 |         struct suite_set suite_set = {__kunit_suites_start, __kunit_suites_end};
+         |                ^
+   In file included from lib/kunit/executor.c:230:
+   lib/kunit/executor_test.c:45:19: error: variable has incomplete type 'struct suite_set'
+      45 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                          ^
+   lib/kunit/executor_test.c:45:9: note: forward declaration of 'struct suite_set'
+      45 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:46:19: error: variable has incomplete type 'struct suite_set'
+      46 |         struct suite_set got;
+         |                          ^
+   lib/kunit/executor_test.c:45:9: note: forward declaration of 'struct suite_set'
+      45 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:69:19: error: variable has incomplete type 'struct suite_set'
+      69 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                          ^
+   lib/kunit/executor_test.c:69:9: note: forward declaration of 'struct suite_set'
+      69 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:70:19: error: variable has incomplete type 'struct suite_set'
+      70 |         struct suite_set got;
+         |                          ^
+   lib/kunit/executor_test.c:69:9: note: forward declaration of 'struct suite_set'
+      69 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:96:19: error: variable has incomplete type 'struct suite_set'
+      96 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                          ^
+   lib/kunit/executor_test.c:96:9: note: forward declaration of 'struct suite_set'
+      96 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:97:19: error: variable has incomplete type 'struct suite_set'
+      97 |         struct suite_set got;
+         |                          ^
+   lib/kunit/executor_test.c:96:9: note: forward declaration of 'struct suite_set'
+      96 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:138:4: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+     138 |                         (kunit_action_t *)kfree,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings and 9 errors generated.
+
+
+vim +182 lib/kunit/executor.c
+
+9c6b0e1d8993e4 Daniel Latypov 2021-09-30  181  
+9c6b0e1d8993e4 Daniel Latypov 2021-09-30 @182  static void kunit_exec_list_tests(struct suite_set *suite_set)
+aac35468ca20a3 Alan Maguire   2020-08-04  183  {
+e5857d396f35e5 Daniel Latypov 2022-07-09  184  	struct kunit_suite * const *suites;
+9c6b0e1d8993e4 Daniel Latypov 2021-09-30  185  	struct kunit_case *test_case;
+9c6b0e1d8993e4 Daniel Latypov 2021-09-30  186  
+6c738b52316c58 Rae Moar       2022-11-23  187  	/* Hack: print a ktap header so kunit.py can find the start of KUnit output. */
+6c738b52316c58 Rae Moar       2022-11-23  188  	pr_info("KTAP version 1\n");
+9c6b0e1d8993e4 Daniel Latypov 2021-09-30  189  
+9c6b0e1d8993e4 Daniel Latypov 2021-09-30  190  	for (suites = suite_set->start; suites < suite_set->end; suites++)
+e5857d396f35e5 Daniel Latypov 2022-07-09  191  		kunit_suite_for_each_test_case((*suites), test_case) {
+e5857d396f35e5 Daniel Latypov 2022-07-09  192  			pr_info("%s.%s\n", (*suites)->name, test_case->name);
+9c6b0e1d8993e4 Daniel Latypov 2021-09-30  193  		}
+9c6b0e1d8993e4 Daniel Latypov 2021-09-30  194  }
+9c6b0e1d8993e4 Daniel Latypov 2021-09-30  195  
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
