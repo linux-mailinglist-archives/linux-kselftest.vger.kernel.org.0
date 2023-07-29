@@ -2,68 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D003176806F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jul 2023 17:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED386768098
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jul 2023 18:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjG2P6H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 29 Jul 2023 11:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S229526AbjG2Q3T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 29 Jul 2023 12:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjG2P6H (ORCPT
+        with ESMTP id S229515AbjG2Q3T (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Jul 2023 11:58:07 -0400
-Received: from mgamail.intel.com (unknown [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344F330F3;
-        Sat, 29 Jul 2023 08:58:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690646286; x=1722182286;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8B2ZXTX/T+9iJs7GisviUMJRO157mD7QeorTcPRymOo=;
-  b=Rq0ZCDG9hFb/jAVogQOAJ2+D3h1K/mHDEGKNY3uCGZO12Xe3BW65/zBW
-   WVUEnwrHHb09GnzyH7DLdnzBb6dh+i8LiEw96MRiC8rrEiyDYx5BsUKoS
-   UsGvQjEu+p3EY5jMLl5uNDJ4wlUeZDALC2AB/rB2HR1pA3hvqYPETY/0p
-   ZCkN4nVS/8KiGzRK6gVZAYgNOKengfkdtppFIhncg3qRMTevBWUNKcuoG
-   z7eqqFH1Qg4vOC4zsYu0jXVecxnQ/4O5d1v1zGPo6xueCRDCiQ0bid3YF
-   WgrBhzkvuS7gPVG/2i0TdzvPWu3THHbFfeHcI0wLo+7k9lgtAz9nXcwmL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="371471164"
-X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="371471164"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 08:58:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="793225232"
-X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="793225232"
-Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.213.23.199])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 08:58:02 -0700
-From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, igt-dev@lists.freedesktop.org,
-        intel-xe@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-Subject: Re: [PATCH 3/3] kunit: Allow kunit test modules to use test filtering
-Date:   Sat, 29 Jul 2023 17:57:59 +0200
-Message-ID: <3204833.aV6nBDHxoP@jkrzyszt-mobl2.ger.corp.intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173,
- 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <202307290124.BnnhRy8b-lkp@intel.com>
-References: <20230728154419.1810177-8-janusz.krzysztofik@linux.intel.com>
- <202307290124.BnnhRy8b-lkp@intel.com>
+        Sat, 29 Jul 2023 12:29:19 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A989D1FF0;
+        Sat, 29 Jul 2023 09:29:17 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 36TGT7bV005278;
+        Sat, 29 Jul 2023 18:29:07 +0200
+Date:   Sat, 29 Jul 2023 18:29:07 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     thomas@t-8ch.de, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 3/7] selftests/nolibc: add extra configs customize
+ support
+Message-ID: <20230729162907.GA5219@1wt.eu>
+References: <74f6a3b5-666c-41e9-a3d5-0ed5457f20f5@t-8ch.de>
+ <20230729143933.14462-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230729143933.14462-1-falcon@tinylab.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,16 +42,75 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Friday, 28 July 2023 19:24:55 CEST kernel test robot wrote:
-> >> lib/kunit/executor.c:182:42: warning: declaration of 'struct suite_set' 
-will not be visible outside of this function [-Wvisibility]
->      182 | static void kunit_exec_list_tests(struct suite_set *suite_set)
->          |                                          ^
+On Sat, Jul 29, 2023 at 10:39:33PM +0800, Zhangjin Wu wrote:
+> > > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > > index f42adef87e12..9576f1a0a98d 100644
+> > > --- a/tools/testing/selftests/nolibc/Makefile
+> > > +++ b/tools/testing/selftests/nolibc/Makefile
+> > > @@ -39,6 +39,9 @@ DEFCONFIG_s390       = defconfig
+> > >  DEFCONFIG_loongarch  = defconfig
+> > >  DEFCONFIG            = $(DEFCONFIG_$(ARCH))
+> > >  
+> > > +# extra kernel config files under configs/, include common + architecture specific
+> > > +EXTCONFIG            = common.config $(ARCH).config
+> > 
+> > As this series seems to need a respin anyways:
+> > 
+> > extconfig means "extended config", correct?
+> > That is fairly nondescript.
+> >
+> 
+> It is more about 'extra' as commented (or 'additional'), for both
+> defconfig (may) and tinyconfig (must) require more options to make boot
+> and print work for nolibc-test.
+>          
+>     defconfig ------\
+>                      \
+>                       \
+>                       EXTCONFIG ----> a working .config for nolibc-test
+>                       /
+>                      /
+>     tinyconfig------/
+> 
+> > I would prefer something like "NOLIBC_TEST_CONFIG"
+> >
+> 
+> Using NOLIBC_TEST_CONFIG is ok, but with this name, do we still only put
+> the 'additional' options there? or we simply use EXTRA_CONFIG instead?
+> 
+>     # extra kernel config files under configs/, include common + architecture specific
+>     EXTRA_CONFIG       = common.config $(ARCH).config
 
-I've apparently broken this patch while reordering patches in the series.  
-Sorry for submitting that untested.  Please expect v2 soon.
+Either are fine to me. The most important is to mention that these
+configs are appended to the config during the defconfig and tinyconfig
+targets.
 
-Thanks,
-Janusz
+Also I find it odd to use $(ARCH) here, I would have expected $(XARCH)
+since you probably want to distinguish ppc64 from ppc for example.
 
+> > something like "make nolibctestconfig" to make an existing config ready for
+> > nolibc-test.
+> 
+> Do you mean rename 'defconfig' to 'nolibctestconfig'? or something
+> nolibc-test-config:
+> 
+>     nolibc-test-config:
+> 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+> 	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -O "$(srctree)" -m "$(srctree)/.config" $(foreach c,$(EXTRA_CONFIG),$(wildcard $(CURDIR)/configs/$c))
+> 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) KCONFIG_ALLCONFIG="$(srctree)/.config" allnoconfig
+> 
+> It looks too long ;-)
 
+I think that as long as we don't claim to call topdir's makefile targets
+from this directory, we can reuse some similarly named targets which are
+documented in "make help" and are non-ambiguous.
+
+> Currently, we use 'defconfig' by default and we use 'make defconfig
+> DEFCONFIG=tinyconfig' to switch to tinyconfig, in the next weeks, when
+> all of the nolibc supported architectures have tinyconfig support, it is
+> able to switch 'tinyconfig' as the default config target.
+
+As long as it doesn't require to locally maintain too many options, I
+think I'm fine with that. But we'll see.
+
+Willy
