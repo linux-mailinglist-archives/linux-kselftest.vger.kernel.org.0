@@ -2,186 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061287680D0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jul 2023 19:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D897B768131
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jul 2023 21:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjG2RqX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 29 Jul 2023 13:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
+        id S229712AbjG2TJK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 29 Jul 2023 15:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjG2RqW (ORCPT
+        with ESMTP id S229541AbjG2TJJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Jul 2023 13:46:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBBB2D4A;
-        Sat, 29 Jul 2023 10:46:21 -0700 (PDT)
+        Sat, 29 Jul 2023 15:09:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C2210C0;
+        Sat, 29 Jul 2023 12:09:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C035D601FE;
-        Sat, 29 Jul 2023 17:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8269FC433C8;
-        Sat, 29 Jul 2023 17:46:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690652780;
-        bh=e0zotVZ/XJUIPJGVsTb6UzBe7NAqRNMMif2hVV4YiQU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qZbtbH5WKJMuGws0Luokb+CuDmaBKbUK73w3QZie77uZxhedU9WqstnZvDo3dVwD9
-         NKYZsseSEnQSPungkiwE0y8+hOJNLE8tIi3KQ6EuqArgdBEVZ4nFJGlkY9LSe6R6FT
-         0EwLoNPg8BMybjeUnKIM9zadswk2O7XaWdGl7zfdjqCoGhjismZd+XOwWdND4cQ64H
-         4O5qJrLekx0s9mb6RhGZrLUkCt9wqsQd2FRSGWtTe9ul0wnbLxeJ+CHMK94UyMN+WB
-         eV7cfQpBj4tdS+BlsS2FK1aRi3IJPpIkRkOX6I7At4hdt6gUfuG+Y7MUbKAgQFdaU2
-         5IRSLh+6capaA==
-Date:   Sat, 29 Jul 2023 10:46:17 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v3 1/2] asm-generic: Unify uapi bitsperlong.h for arm64,
- riscv and loongarch
-Message-ID: <20230729174617.GA1229655@dev-arch.thelio-3990X>
-References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
- <1687443219-11946-2-git-send-email-yangtiezhu@loongson.cn>
- <20230727213648.GA354736@dev-arch.thelio-3990X>
- <1777400a-4d9c-4bdb-9d3b-f8808ef054cc@app.fastmail.com>
- <20230728173103.GA1299743@dev-arch.thelio-3990X>
- <a2fa1a31-e8bb-4659-9631-398b564e7c2b@app.fastmail.com>
- <20230728234429.GA611252@dev-arch.thelio-3990X>
- <e7a792d9-39b9-440a-9c22-99e25b25a396@app.fastmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05B8A60288;
+        Sat, 29 Jul 2023 19:09:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1ADC433C7;
+        Sat, 29 Jul 2023 19:09:03 +0000 (UTC)
+Date:   Sat, 29 Jul 2023 15:09:01 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH v2 02/20] tracing/filters: Enable filtering a
+ cpumask field by another cpumask
+Message-ID: <20230729150901.25b9ae0c@rorschach.local.home>
+In-Reply-To: <20230726194148.4jhyqqbtn3qqqqsq@treble>
+References: <20230720163056.2564824-1-vschneid@redhat.com>
+        <20230720163056.2564824-3-vschneid@redhat.com>
+        <20230726194148.4jhyqqbtn3qqqqsq@treble>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e7a792d9-39b9-440a-9c22-99e25b25a396@app.fastmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 29, 2023 at 09:59:23AM +0200, Arnd Bergmann wrote:
-> On Sat, Jul 29, 2023, at 01:44, Nathan Chancellor wrote:
-> > On Fri, Jul 28, 2023 at 10:56:38PM +0200, Arnd Bergmann wrote:
+On Wed, 26 Jul 2023 12:41:48 -0700
+Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+
+> On Thu, Jul 20, 2023 at 05:30:38PM +0100, Valentin Schneider wrote:
+> >  int filter_assign_type(const char *type)
+> >  {
+> > -	if (strstr(type, "__data_loc") && strstr(type, "char"))
+> > -		return FILTER_DYN_STRING;
+> > +	if (strstr(type, "__data_loc")) {
+> > +		if (strstr(type, "char"))
+> > +			return FILTER_DYN_STRING;
+> > +		if (strstr(type, "cpumask_t"))
+> > +			return FILTER_CPUMASK;
+> > +		}  
 > 
-> >     DESCEND objtool
-> >   In file included from 
-> > /usr/include/aarch64-linux-gnu/asm/bitsperlong.h:1,
-> >                    from /usr/include/asm-generic/int-ll64.h:12,
-> >                    from /usr/include/asm-generic/types.h:7,
-> >                    from /usr/include/aarch64-linux-gnu/asm/types.h:1,
-> >                    from /linux-stable/tools/include/linux/types.h:13,
-> >                    from 
-> > /linux-stable/tools/arch/x86/include/asm/orc_types.h:9,
-> >                    from /linux-stable/scripts/sorttable.h:96,
-> >                    from /linux-stable/scripts/sorttable.c:201:
-> >   /linux-stable/tools/include/asm-generic/bitsperlong.h:14:2: error: 
-> > #error Inconsistent word size. Check asm/bitsperlong.h
-> >      14 | #error Inconsistent word size. Check asm/bitsperlong.h
-> >         |  ^~~~~
-> >   make[3]: *** [/linux-stable/scripts/Makefile.host:114: 
-> > scripts/sorttable] Error 1
-> >   ...
-> >
-> >> I also noticed that your command line includes CROSS_COMPILE=x86_64-linux-
-> >> rather than CROSS_COMPILE=x86_64-linux-gnu-
-> >
-> > Right, as I was reproducing this with your kernel.org GCC for
-> > CROSS_COMPILE and Fedora's GCC for HOSTCC, since I wanted to make sure
-> > this was not some issue with clang (which it does not appear to be).
+> The closing bracket has the wrong indentation.
 > 
-> Ok, it's beginning to make more sense to me now. I see
-> that the tools/arch/x86/include/asm/orc_types.h comes from
-> the x86_64 target build and is intentional, as sorttable.c
-> needs to access the ORC information. Here the Makefile does
+> > +		/* Copy the cpulist between { and } */
+> > +		tmp = kmalloc((i - maskstart) + 1, GFP_KERNEL);
+> > +		strscpy(tmp, str + maskstart, (i - maskstart) + 1);  
 > 
-> ifdef CONFIG_UNWINDER_ORC
-> ifeq ($(ARCH),x86_64)
-> ARCH := x86
-> endif
-> HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/x86/include
-> HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
-> endif
+> Need to check kmalloc() failure?  And also free tmp?
+
+I came to state the same thing.
+
+Also, when you do an empty for loop:
+
+	for (; str[i] && str[i] != '}'; i++);
+
+Always put the semicolon on the next line, otherwise it is really easy
+to think that the next line is part of the for loop. That is, instead
+of the above, do:
+
+	for (; str[i] && str[i] != '}'; i++)
+		;
+
+
+-- Steve
+
+
 > 
-> in order to get the ORC definitions from asm/orc_types.h, but
-> then it looks like it also gets the uapi/asm/bitsperlong.h
-> header from there which contains
+> > +
+> > +		pred->mask = kzalloc(cpumask_size(), GFP_KERNEL);
+> > +		if (!pred->mask)
+> > +			goto err_mem;
+> > +
+> > +		/* Now parse it */
+> > +		if (cpulist_parse(tmp, pred->mask)) {
+> > +			parse_error(pe, FILT_ERR_INVALID_CPULIST, pos + i);
+> > +			goto err_free;
+> > +		}
+> > +
+> > +		/* Move along */
+> > +		i++;
+> > +		if (field->filter_type == FILTER_CPUMASK)
+> > +			pred->fn_num = FILTER_PRED_FN_CPUMASK;
+> > +  
 > 
-> #if defined(__x86_64__) && !defined(__ILP32__)
-> # define __BITS_PER_LONG 64
-> #else
-> # define __BITS_PER_LONG 32
-> #endif
-> 
-> and this would set __BITS_PER_LONG to 32 on arm64.
-> 
-> However, I don't see this actually being included on my
-> machine. Can you dump the sorttable.c preprocessor output
-> with your setup, using -fdirectives-only, so we can see
-> which of the two (__BITS_PER_LONG or BITS_PER_LONG) is
-> actually wrong and triggers the sanity check?
 
-Sure thing, this is the output of:
-
-  $ gcc -I/linux-stable/tools/include -I/linux-stable/tools/arch/x86/include -DUNWINDER_ORC_ENABLED -I ./scripts -E -fdirectives-only /linux-stable/scripts/sorttable.c
-
-https://gist.github.com/nathanchance/d2c3e58230930317dc84aff80fef38bf
-
-> What I see on my machine is that both definitions come
-> from the local tools/include/ headers, not from the
-> installed system headers, so I'm still doing something
-> wrong in my installation:
-
-Just to make sure, you have the 6.5-rc1+ headers installed and you are
-attempting to build the host tools from an earlier Linux release than
-6.5-rc1? I don't see a problem with building these host programs on
-mainline/6.5, I see this issue when building them in older stable
-releases (my reproduction so far has been on 6.4 but I see it when
-building all currently supported long term stable releases) when I have
-the 6.5-rc1+ headers installed.
-
-> ./tools/include/uapi/asm-generic/bitsperlong.h
-> #define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
-
-Because this is the mainline version, whereas the stable version is:
-
-#ifndef _UAPI__ASM_GENERIC_BITS_PER_LONG
-#define _UAPI__ASM_GENERIC_BITS_PER_LONG
-
-/*
- * There seems to be no way of detecting this automatically from user
- * space, so 64 bit architectures should override this in their
- * bitsperlong.h. In particular, an architecture that supports
- * both 32 and 64 bit user space must not rely on CONFIG_64BIT
- * to decide it, but rather check a compiler provided macro.
- */
-#ifndef __BITS_PER_LONG
-#define __BITS_PER_LONG 32
-#endif
-
-#endif /* _UAPI__ASM_GENERIC_BITS_PER_LONG */
-
-which seems to be where the mismatch is coming from?
-
-> ./tools/include/asm-generic/bitsperlong.h
-> #define BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
-> 
-> Neither of these files actually contains the sanity
-> check in linux-6.5-rc3, and comparing these is clearly
-> nonsensical, as they are defined the same way (rather
-> than checking CONFIG_64BIT), but also I don't see why
-> there is both a uapi/ version and a non-uapi version
-> in what is meant to be a userspace header.
-
-May be worth looping in the tools/ folks, since that whole directory is
-rather special IMO...
-
-Cheers,
-Nathan
