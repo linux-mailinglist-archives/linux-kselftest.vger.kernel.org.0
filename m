@@ -2,94 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCB27681F4
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jul 2023 23:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817AB76827F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jul 2023 00:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjG2VMv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 29 Jul 2023 17:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
+        id S229527AbjG2WR2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 29 Jul 2023 18:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjG2VMu (ORCPT
+        with ESMTP id S229459AbjG2WR1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Jul 2023 17:12:50 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4598010C4;
-        Sat, 29 Jul 2023 14:12:49 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id AEE9D5C00B7;
-        Sat, 29 Jul 2023 17:12:48 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 29 Jul 2023 17:12:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1690665168; x=1690751568; bh=2L
-        fIRxHFYf7tdiKVZVDNRsDqP9EiptdXtOO6rttjJd4=; b=YbZfH+nF9ZC2Yv40Wb
-        Fuit5rGlhfVzwXrH42XrZzJqEC8pysRJ8jeQeKPOki3IyRtp6rxWoRGy2h5cABB9
-        ARDZfDrglsLhUklgLkagtif1+btu2DkPyK7YfFfQoucZJFyzxV2srxa+0AUKSt3B
-        OJZPc5voyrmbP0Xhp5yf13ZHQpmAsAYJSVVq3jrmM88JWwrc/O4f3C1KAYrAd9oI
-        d8E9B92d6P9ioClbGuWJozgpUhmvqmblVVuUxZb1CCH1E4wTqRPSN1zJchFvPLaz
-        JnRRozeaut/LtlU7fcn4+56F4jpC0s3yAFJOtPwrIVfG+RWHIgeQTQyDYFP1SqxG
-        Oq4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1690665168; x=1690751568; bh=2LfIRxHFYf7td
-        iKVZVDNRsDqP9EiptdXtOO6rttjJd4=; b=m/YLPu8q3mhrS02GufIu+7Pus8img
-        YX5e4oOtO1PLj2Iw6Gr4VJ1jz1mVHnqlxu3r7U17Xeuq1vngeo3zyWfU7f5nKdc2
-        +H4T+t9DF1HrvdUptLghKQg8zFof6zG3u6RLWvhI37skysYRAr4wRqd0h1oHNlNV
-        PS0TGJ4m5mSjfXPokI6eRFwV/1hIKKGF5P7jwJN1xzWg/V+C2fCJ54oM6NLb1Q82
-        BntUGD10s/jC5xQEoH+trlllxHbSC95zVQ+5w13pYz3B+gaZO75aWmNYJdaOZ+Ew
-        yZWLTjGiJjaWyHsn/IEe4Htsd7h7VAJNlBzwR3axlSFehqxrT8RGoz5Hg==
-X-ME-Sender: <xms:z4DFZGACuWJH4Ai-lBBrfMWjpda14AuslY2pzRV42qxJAmcr6hrVPQ>
-    <xme:z4DFZAhfXvlLYmX9UkleogrCArOiJNv-rohV5b756dna6JHyvX-dFx5uIiuj6Dfnt
-    wIKbkq4pEZI4-8DdJM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrieekgdduheehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepjedvvddvudeludehjeeitdehheeivdejgfelleffiefgvefhhfeuudfhgeef
-    feehnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:z4DFZJn-T3kYtGDsJY4kOvnouMsFLtEenPFOL30hx98C2nXI8vOh3g>
-    <xmx:z4DFZExJvC0WEy5OIkZ_IByrdwEBK5xB-od0lZL1JJWU58QvY_Iogg>
-    <xmx:z4DFZLRBWVm5HJ7q0oAB4cR_DY0O1CMgQEknhzzozOs9cb1MqM52Kg>
-    <xmx:0IDFZGG_T2KqYRFvQlA-APHwKjQP-i6-G3opAzZVn6KmDzyfP0OjJA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 37ABCB60089; Sat, 29 Jul 2023 17:12:47 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-592-ga9d4a09b4b-fm-defalarms-20230725.001-ga9d4a09b
-Mime-Version: 1.0
-Message-Id: <6d6641b6-748e-412c-a139-35fc873a6a1b@app.fastmail.com>
-In-Reply-To: <20230729174617.GA1229655@dev-arch.thelio-3990X>
-References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
- <1687443219-11946-2-git-send-email-yangtiezhu@loongson.cn>
- <20230727213648.GA354736@dev-arch.thelio-3990X>
- <1777400a-4d9c-4bdb-9d3b-f8808ef054cc@app.fastmail.com>
- <20230728173103.GA1299743@dev-arch.thelio-3990X>
- <a2fa1a31-e8bb-4659-9631-398b564e7c2b@app.fastmail.com>
- <20230728234429.GA611252@dev-arch.thelio-3990X>
- <e7a792d9-39b9-440a-9c22-99e25b25a396@app.fastmail.com>
- <20230729174617.GA1229655@dev-arch.thelio-3990X>
-Date:   Sat, 29 Jul 2023 23:12:26 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Nathan Chancellor" <nathan@kernel.org>
-Cc:     "Tiezhu Yang" <yangtiezhu@loongson.cn>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v3 1/2] asm-generic: Unify uapi bitsperlong.h for arm64, riscv and
- loongarch
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        Sat, 29 Jul 2023 18:17:27 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230292680;
+        Sat, 29 Jul 2023 15:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1690669045; bh=5Md0jFhp2sJ0pGrekHfnvbdPswv4yRGYROCpxcISNyw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D+rotqYIOPAJoFdGZggWRqAG9l01ggLPuvwPy11NOFoJk+hXdP+fwCOb0p3cNAxX+
+         FA0rexChmizxYdpmH1T2YaehEleUxF/OLU6YOFr8AH9fuYb6UBmdNwa3MZ7oHRLW4o
+         kCXkazNJeOFhBYgViHX9ygsRzCq/JdfpCfkyVuk8=
+Date:   Sun, 30 Jul 2023 00:17:24 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Yuan Tan <tanyuan@tinylab.org>
+Cc:     w@1wt.eu, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/nolibc: add testcase for pipe.
+Message-ID: <27bd9bc1-e7a5-4a81-91c9-2642feabb7ce@t-8ch.de>
+References: <cover.1690307717.git.tanyuan@tinylab.org>
+ <160ddef0313e11085ee906144d6d9678b8156171.1690307717.git.tanyuan@tinylab.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <160ddef0313e11085ee906144d6d9678b8156171.1690307717.git.tanyuan@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,97 +44,85 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 29, 2023, at 19:46, Nathan Chancellor wrote:
-> On Sat, Jul 29, 2023 at 09:59:23AM +0200, Arnd Bergmann wrote:
->> On Sat, Jul 29, 2023, at 01:44, Nathan Chancellor wrote:
+On 2023-07-25 14:01:30-0400, Yuan Tan wrote:
+> Add a testcase of pipe that child process sends message to parent process.
+> 
+> Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
+> ---
+>  tools/testing/selftests/nolibc/nolibc-test.c | 34 ++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> index 03b1d30f5507..43ba2884fd1e 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -767,6 +767,39 @@ int test_mmap_munmap(void)
+>  	return ret;
+>  }
+>  
+> +int test_pipe(void)
+> +{
+> +	int pipefd[2];
+> +	char buf[32];
+> +	pid_t pid;
+> +	char *msg = "hello, nolibc";
 
->> 
->> in order to get the ORC definitions from asm/orc_types.h, but
->> then it looks like it also gets the uapi/asm/bitsperlong.h
->> header from there which contains
->> 
->> #if defined(__x86_64__) && !defined(__ILP32__)
->> # define __BITS_PER_LONG 64
->> #else
->> # define __BITS_PER_LONG 32
->> #endif
->> 
->> and this would set __BITS_PER_LONG to 32 on arm64.
->> 
->> However, I don't see this actually being included on my
->> machine. Can you dump the sorttable.c preprocessor output
->> with your setup, using -fdirectives-only, so we can see
->> which of the two (__BITS_PER_LONG or BITS_PER_LONG) is
->> actually wrong and triggers the sanity check?
->
-> Sure thing, this is the output of:
->
->   $ gcc -I/linux-stable/tools/include 
-> -I/linux-stable/tools/arch/x86/include -DUNWINDER_ORC_ENABLED -I 
-> ./scripts -E -fdirectives-only /linux-stable/scripts/sorttable.c
->
-> https://gist.github.com/nathanchance/d2c3e58230930317dc84aff80fef38bf
+const char * const
 
-Ok, so what we get is that the system-wide
-/usr/include/aarch64-linux-gnu/asm/bitsperlong.h
+> +
+> +	if (pipe(pipefd) == -1)
+> +		return 1;
+> +
+> +	pid = fork();
+> +
+> +	switch (pid) {
+> +	case -1:
+> +		return 1;
+> +
+> +	case 0:
+> +		close(pipefd[0]);
+> +		write(pipefd[1], msg, strlen(msg));
 
-includes the source tree file 
-tools/include/asm-generic/bitsperlong.h
+Isn't this missing to write trailing the 0 byte?
+Also check the return value.
 
-which in the old kernels only has the "32" fallback value.
+> +		close(pipefd[1]);
 
->> What I see on my machine is that both definitions come
->> from the local tools/include/ headers, not from the
->> installed system headers, so I'm still doing something
->> wrong in my installation:
->
-> Just to make sure, you have the 6.5-rc1+ headers installed and you are
-> attempting to build the host tools from an earlier Linux release than
-> 6.5-rc1? I don't see a problem with building these host programs on
-> mainline/6.5, I see this issue when building them in older stable
-> releases (my reproduction so far has been on 6.4 but I see it when
-> building all currently supported long term stable releases) when I have
-> the 6.5-rc1+ headers installed.
+Do we need to close the pipefds? The process is exiting anyways.
 
-Ok, I see. I missed that part of your description earlier.
+> +		exit(EXIT_SUCCESS);
+> +
+> +	default:
+> +		close(pipefd[1]);
+> +		read(pipefd[0], buf, 32);
 
->
-> which seems to be where the mismatch is coming from?
+Use sizeof(buf). Check return value == strlen(msg).
 
-Right, exactly.
+> +		close(pipefd[0]);
+> +		wait(NULL);
 
->> ./tools/include/asm-generic/bitsperlong.h
->> #define BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
->> 
->> Neither of these files actually contains the sanity
->> check in linux-6.5-rc3, and comparing these is clearly
->> nonsensical, as they are defined the same way (rather
->> than checking CONFIG_64BIT), but also I don't see why
->> there is both a uapi/ version and a non-uapi version
->> in what is meant to be a userspace header.
->
-> May be worth looping in the tools/ folks, since that whole directory is
-> rather special IMO...
+waitpid(pid, NULL, 0);
 
-I think the good news is that this only happens because
-the tools/ directory contains a copy of the kernel headers
-including that sanity check, and other user space won't
-suffer from it because they don't contain copies of kernel
-internal headers.
+> +
+> +		if (strcmp(buf, msg))
+> +			return 1;
+> +		return 0;
 
-Reverting the change might still end up being the easiest way
-out regardless, but it does seem like we should be able
-to address this in the tools directory by making sure it doesn't
-mix the installed headers with the local ones.
+return !!strcmp(buf, msg);
 
-Part of the problem I think is that the installed 
-/usr/include/asm-generic/int-ll64.h includes
-/usr/include/aarch64-linux-gnu/asm/bitsperlong.h, so both
-of them are the uapi headers, but this one has an
-"include <asm-generic/bitsperlong.h>" that expects the
-uapi version but instead gets the kernel version from
-the tools directory. We could override this by adding
-a working tools/include/asm-generic/bitsperlong.h header,
-but that has to be backported to the stable kernels then.
-
-       Arnd
+> +	}
+> +}
+>  
+>  /* Run syscall tests between IDs <min> and <max>.
+>   * Return 0 on success, non-zero on failure.
+> @@ -851,6 +884,7 @@ int run_syscall(int min, int max)
+>  		CASE_TEST(mmap_munmap_good);  EXPECT_SYSZR(1, test_mmap_munmap()); break;
+>  		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
+>  		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
+> +		CASE_TEST(pipe);              EXPECT_SYSZR(1, test_pipe()); break;
+>  		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
+>  		CASE_TEST(poll_stdout);       EXPECT_SYSNE(1, ({ struct pollfd fds = { 1, POLLOUT, 0}; poll(&fds, 1, 0); }), -1); break;
+>  		CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll((void *)1, 1, 0), -1, EFAULT); break;
+> -- 
+> 2.39.2
+> 
