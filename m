@@ -2,95 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B6D767933
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jul 2023 01:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD85076793C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jul 2023 02:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbjG1X6R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jul 2023 19:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        id S229459AbjG2AA0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jul 2023 20:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235757AbjG1X6G (ORCPT
+        with ESMTP id S230013AbjG2AAZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 19:58:06 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F7E4488
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 16:58:04 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id ca18e2360f4ac-785ccd731a7so30621439f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 16:58:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1690588683; x=1691193483;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NL4Ty9W9yHiaPkbQYQx9g/5UV+hA0UjBEBi+RTH+aac=;
-        b=TLFWx4KB3xYfeNfKl9Dpse1oeqCTIsG0pjd7uCDxQ9ChoNZCWhy4t9Wq+9DnEZ8MwZ
-         A72Do0ODAl7gmh3FUPqUYPER1fSJ7EQ3M8iuUD0KLU9VVUkDD36ce5QcYnBBrxctNZC3
-         g8ZlkDQSkvjl5/ruT9edVxvup2E+Lp1upJgHU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690588683; x=1691193483;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NL4Ty9W9yHiaPkbQYQx9g/5UV+hA0UjBEBi+RTH+aac=;
-        b=dKnGTK6cPMIT7zWsHayWkJDq1JAyF+lRa7ZIMp0MtD+NXlQBxUtp0kTHF/H/ZNdktv
-         UCE9YGCuEf06e6NJGwou01YZj4Zo2c8FVVYuEDcn/u4lkFTCpoi4zAjf+fLQ4iZRYzrj
-         gA9AfOmkvroiBN9mVlfjXHyYLjXKrjddfxT32u7RRX9V8dc6gihPP81/rQ/crcZ84KwL
-         WgyTZfGZi3j9RKASFaLIk7ycnytvuE9Jj6ZZohO3wJ18uWEZN6BJ+MPMoHxbSufU1BOw
-         jYk14WTuYj2mjCiuybepoes/PxuVz5+CzY/xN0s1mySCOUaJKRavZcge0iUSpZ43uXZh
-         Q5xA==
-X-Gm-Message-State: ABy/qLaO1ylIfu8Bts6RcxX6uTnJuFi+iLMjREAYRUdREI+Upj91mbbj
-        kA5T0Xul6VTW6haYXjhgIeZ3nw==
-X-Google-Smtp-Source: APBJJlHvYkT8BAaTCuibmpj+HHz6hACB/FZeTMmKFhu/g1MnAcTnF5r/QR5/+SqsUYONOst+SMKxqA==
-X-Received: by 2002:a05:6602:3d5:b0:780:d65c:d78f with SMTP id g21-20020a05660203d500b00780d65cd78fmr1545922iov.2.1690588683704;
-        Fri, 28 Jul 2023 16:58:03 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id cu5-20020a05663848c500b0042b16c005e9sm1411923jab.124.2023.07.28.16.58.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 16:58:03 -0700 (PDT)
-Message-ID: <7b7b8acc-5db2-5e6a-e803-e054ec7e1ab0@linuxfoundation.org>
-Date:   Fri, 28 Jul 2023 17:58:01 -0600
+        Fri, 28 Jul 2023 20:00:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE6B1BD6;
+        Fri, 28 Jul 2023 17:00:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A456962214;
+        Sat, 29 Jul 2023 00:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0FB12C433C7;
+        Sat, 29 Jul 2023 00:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690588824;
+        bh=K5+XOsV1PmFjr6Y+NoSjlqVr4nBt42EXshVfzdbLfbc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=jC4WrhGZHTySo/2DoZaU+HyEhhNvSxyBy0Pn9Hx4eRhJq4lmvDuSEDJIRzBkel3b+
+         aqenqxRRjSZn+o0U8iFp0ypgPEovV+uDlp8mrJwfC85e4mpFEgjo44vJ8kiErt4zmv
+         zfWs4xu49o44xjAgvZj/hHOv3VoVicW7KpS6CXTQS9fMIPhaQBSp69ifTiCSUm6+Vj
+         VWf3IRYDofG9QJ/CG4XpENN9V7VgYvS6XEx7vXx6TzN4nHGypG6plztqUeAT8s4vK9
+         EcLwkPfGsGx8D2BXloNMYrNsaA7UTUdp3o4WR/QRBVJstDciiqnuSx3u85yovKJ5j2
+         btEpM4O9fiZTw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8408C4166F;
+        Sat, 29 Jul 2023 00:00:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2] selftests:connector: Fix input argument error paths to
- skip
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     shuah@kernel.org, Liam.Howlett@oracle.com,
-        anjali.k.kulkarni@oracle.com, davem@davemloft.net,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230728225357.5040-1-skhan@linuxfoundation.org>
- <20230728162144.3db7dbac@kernel.org>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230728162144.3db7dbac@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next v6 0/5] Support defragmenting IPv(4|6) packets in BPF
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <169058882394.20221.4449281517467236117.git-patchwork-notify@kernel.org>
+Date:   Sat, 29 Jul 2023 00:00:23 +0000
+References: <cover.1689970773.git.dxu@dxuuu.xyz>
+In-Reply-To: <cover.1689970773.git.dxu@dxuuu.xyz>
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     linux-kernel@vger.kernel.org, coreteam@netfilter.org,
+        netfilter-devel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        alexei.starovoitov@gmail.com, fw@strlen.de, daniel@iogearbox.net,
+        dsahern@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/28/23 17:21, Jakub Kicinski wrote:
-> On Fri, 28 Jul 2023 16:53:57 -0600 Shuah Khan wrote:
->> Fix input argument parsing paths to skip from their error legs.
->> This fix helps to avoid false test failure reports without running
->> the test.
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Fri, 21 Jul 2023 14:22:44 -0600 you wrote:
+> === Context ===
 > 
-> netdev was not CCed on this or patch 3 of the previous series :S
-> Which is a bit odd 'cause it was CCed on patches 1 and 2 🤷️
+> In the context of a middlebox, fragmented packets are tricky to handle.
+> The full 5-tuple of a packet is often only available in the first
+> fragment which makes enforcing consistent policy difficult. There are
+> really only two stateless options, neither of which are very nice:
+> 
+> [...]
 
-Odd. get_maintainers.pl didn't give me netdev. I added netdev
-and others to the first patch from the bug report.
+Here is the summary with links:
+  - [bpf-next,v6,1/5] netfilter: defrag: Add glue hooks for enabling/disabling defrag
+    https://git.kernel.org/bpf/bpf-next/c/9abddac583d6
+  - [bpf-next,v6,2/5] netfilter: bpf: Support BPF_F_NETFILTER_IP_DEFRAG in netfilter link
+    https://git.kernel.org/bpf/bpf-next/c/91721c2d02d3
+  - [bpf-next,v6,3/5] bpf: selftests: Support not connecting client socket
+    https://git.kernel.org/bpf/bpf-next/c/3495e89cdc3a
+  - [bpf-next,v6,4/5] bpf: selftests: Support custom type and proto for client sockets
+    https://git.kernel.org/bpf/bpf-next/c/e15a22095608
+  - [bpf-next,v6,5/5] bpf: selftests: Add defrag selftests
+    https://git.kernel.org/bpf/bpf-next/c/c313eae739b9
 
-Would you like me to resend this with netdev on the cc?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-thanks,
--- Shuah
+
