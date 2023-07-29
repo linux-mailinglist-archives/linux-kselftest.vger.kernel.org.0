@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E580767D48
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jul 2023 10:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332B6767D5D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jul 2023 10:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbjG2IrS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 29 Jul 2023 04:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
+        id S231325AbjG2Ixp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 29 Jul 2023 04:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjG2IrP (ORCPT
+        with ESMTP id S229379AbjG2Ixo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Jul 2023 04:47:15 -0400
+        Sat, 29 Jul 2023 04:53:44 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0EE44B0;
-        Sat, 29 Jul 2023 01:47:11 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1690620419toqqujxk
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F7B3AAC;
+        Sat, 29 Jul 2023 01:53:42 -0700 (PDT)
+X-QQ-mid: bizesmtp90t1690620812t9ydr0if
 Received: from linux-lab-host.localdomain ( [61.141.77.223])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 29 Jul 2023 16:46:58 +0800 (CST)
+        id ; Sat, 29 Jul 2023 16:53:31 +0800 (CST)
 X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: LE7C6P2vL8R+bFTy2nwPvrMMRc/Epw5PWdpL/W4zti+NsWrjvDwO8POY0y7hP
-        cLoj07+RQoDWStbWvXLEzymREWbuZo5E9/e1iSEAg8Tf2LFHJZfqaJR8dIN7cnch3qclzJd
-        Ps1NV1t4btmWIFQRmDdxPYNR/PJK2SLVMwECJ3hcR3zr5+LJd4LaXgL3/I+Vx2JE6QxokRJ
-        C/bqxZw9CL3p55q3dKc9/kuqisSytn0GhXf91j/0jNz3p0AVHutQ4MYzTp5jyMo2rXH5mt0
-        sOBO03+q5BM7HN8NEWLnyLFu+EdkJYWPhzKvt7jMjnbRV/sCZbWxs3EEiGnfw3XzN+1xnW4
-        2YTF5AbhDoq7ysC5frC/pQBQtqfd6j0+mYmdj4boqkZjXL0PQxyVT0r8KyMnyCnO9o1S7Fe
+X-QQ-FEAT: CR3LFp2JE4n6SVVfIXGwQratCiG2siFVOsRGJG7IryRP8BSgKRAWimrsaivU6
+        6v0uB3y9xBvbzV/MNFljiVWwo6lLovkVYaZtPYFfQL8fRaXG3QjZ92ERmRs0vWUn166DAgV
+        mTADFX6KQGgRgmxmqgtjpvAEVDu8QLm2uP9t72i6Gx5twsAHfBn4peb5uKJXLYLQbPc9KnV
+        G/t0XqxeEtA3yl42JZypwCg1kXc/XH2QtKW/zlqkIGPYMkEWWrSZmNg0f9QK0K2kh0qvASe
+        zew0/V0g2bMBLREdHg08ISlbTqfshX1QZFFJ+dnzC9hNXKxzHvKy8nU3rNvpYGnwgMaDxSl
+        T85A0eT3pQ58YvbxT6CAxD+eYuiyWU8yIfY7AksSxNOV+YPK6s=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 610877963677456600
+X-BIZMAIL-ID: 15812370495398295004
 From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
+To:     thomas@t-8ch.de
 Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: Re: [PATCH v3 06/12] selftests/nolibc: customize CROSS_COMPILE for 32/64-bit powerpc
-Date:   Sat, 29 Jul 2023 16:46:58 +0800
-Message-Id: <20230729084658.7710-1-falcon@tinylab.org>
+        linux-kselftest@vger.kernel.org, w@1wt.eu
+Subject: Re: [PATCH v3 01/12] selftests/nolibc: allow report with existing test log
+Date:   Sat, 29 Jul 2023 16:53:31 +0800
+Message-Id: <20230729085331.7849-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230729083530.GN956@1wt.eu>
-References: <20230729083530.GN956@1wt.eu>
+In-Reply-To: <aa604c61-281d-42b0-85dd-d7a08cdaee6d@t-8ch.de>
+References: <aa604c61-281d-42b0-85dd-d7a08cdaee6d@t-8ch.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
@@ -51,78 +51,42 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On Fri, Jul 28, 2023 at 04:28:17AM +0800, Zhangjin Wu wrote:
-> > The little-endian powerpc64le compilers provided by Ubuntu and Fedora
-> > are able to compile big endian kernel and big endian nolibc-test [1].
+> On 2023-07-28 04:22:42+0800, Zhangjin Wu wrote:
+> > After the tests finish, it is valuable to report and summarize with
+> > existing test log.
 > > 
-> > These default CROSS_COMPILE settings allow to test target architectures
-> > with:
-> > 
-> >     $ cd /path/to/tools/testing/selftests/nolibc/
-> > 
-> >     $ for arch in ppc ppc64 ppc64le; do \
-> >         make run-user ARCH=$arch | grep "status: "; \
-> >       done
-> > 
-> > If want to use another cross compiler, please simply pass CROSS_COMPILE
-> > or CC as before.
-> > 
-> > For example, it is able to build 64-bit nolibc-test with the big endian
-> > powerpc64-linux-gcc crosstool from [2]:
-> > 
-> >     $ wget -c https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/13.1.0/x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
-> >     $ tar xvf x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
-> >     $ export PATH=$PWD/gcc-13.1.0-nolibc/powerpc64-linux/bin/:$PATH
-> > 
-> >     $ export CROSS_COMPILE_ppc64=powerpc64-linux-
-> >     $ export CROSS_COMPILE_ppc64le=powerpc64-linux-
-> >     $ for arch in ppc64 ppc64le; do \
-> >         make run-user ARCH=$arch | grep "status: "; \
-> >       done
-> > 
-> > Or specify CC directly with full path:
-> > 
-> >     $ export CC=$PWD/gcc-13.1.0-nolibc/powerpc64-linux/bin/powerpc64-linux-gcc
-> >     $ for arch in ppc64 ppc64le; do \
-> >         make run-user ARCH=$arch | grep "status: "; \
-> >       done
-> > 
-> > [1]: https://github.com/open-power/skiboot
-> > [2]: https://mirrors.edge.kernel.org/pub/tools/crosstool/
+> > This avoid rerun or run the tests again when not necessary.
 > > 
 > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 > > ---
-> >  tools/testing/selftests/nolibc/Makefile | 3 +++
-> >  1 file changed, 3 insertions(+)
+> >  tools/testing/selftests/nolibc/Makefile | 4 ++++
+> >  1 file changed, 4 insertions(+)
 > > 
 > > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > index 3f15c7f7ef76..6385915d16c9 100644
+> > index 2e9694370913..75419b695f0d 100644
 > > --- a/tools/testing/selftests/nolibc/Makefile
 > > +++ b/tools/testing/selftests/nolibc/Makefile
-> > @@ -46,6 +46,9 @@ IMAGE            = $(IMAGE_$(XARCH))
-> >  IMAGE_NAME       = $(notdir $(IMAGE))
+> > @@ -207,6 +207,10 @@ rerun:
+> >  	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+> >  	$(Q)$(REPORT) $(CURDIR)/run.out
 > >  
-> >  # CROSS_COMPILE: cross toolchain prefix by architecture
-> > +CROSS_COMPILE_ppc       ?= powerpc-linux-gnu-
-> > +CROSS_COMPILE_ppc64     ?= powerpc64le-linux-gnu-
-> > +CROSS_COMPILE_ppc64le   ?= powerpc64le-linux-gnu-
-> >  CROSS_COMPILE           ?= $(CROSS_COMPILE_$(XARCH))
+> > +# report with existing test log
+> > +report:
+> > +	$(Q)$(REPORT_RUN_OUT)
 > 
-> It seems to me that this patch and the previous one were rather
-> for the PPC series as I'm not seeing the relation with the tiny
-> config here.
+> Isn't REPORT_RUN_OUT gone in this revision?
 >
 
-Yes, it is also ok for the powerpc series, they mainly aim to the fast
-build and test goal of 'tinyconfig', and the other default
-CROSS_COMPILE's will be added together with the left tinyconfig support
-by architecture.
+Yeah, I moved it as the first generic patch but forgot it have used a
+later macro, and therefore no recheck in this revision, thanks a lot.
 
-I'm ok if you are happy to merge it into the powerpc series, then, we can focus
-on the left ones ;-)
-
-Thanks,
+Thanks
 Zhangjin
 
-
-> Willy
+> > +
+> >  clean:
+> >  	$(call QUIET_CLEAN, sysroot)
+> >  	$(Q)rm -rf sysroot
+> > -- 
+> > 2.25.1
+> > 
