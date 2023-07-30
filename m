@@ -2,111 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA770768411
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jul 2023 08:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31F2768414
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jul 2023 09:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjG3Gzw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 30 Jul 2023 02:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S229472AbjG3HDg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 30 Jul 2023 03:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjG3Gzw (ORCPT
+        with ESMTP id S229449AbjG3HDf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 30 Jul 2023 02:55:52 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6E61BFC;
-        Sat, 29 Jul 2023 23:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1690700149; bh=AsR7SScjhhhuUIwlLxCxzyirY1+1rrg50w0GYvxxVrU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hXOJs9hdlTZS/ostodKTbuDvGIJo6RGBMKe31DoWM+uezQM3R5hs9Ppdlz1bG/J4H
-         +2xyXaUlD5gxa1nxD7rcFDOp8ksTUt4KuFYZZvsJMF+pMKCbjdi4m2xBPem35bV/dE
-         zT6AyTYZE/kvrLmTxK1zoartVArnQo+ArOgnMVxo=
-Date:   Sun, 30 Jul 2023 08:55:47 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Yuan Tan <tanyuan@tinylab.org>, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/nolibc: add testcase for pipe.
-Message-ID: <ebf02a04-6e89-4bc9-beff-3902ad8a78b5@t-8ch.de>
-References: <cover.1690307717.git.tanyuan@tinylab.org>
- <160ddef0313e11085ee906144d6d9678b8156171.1690307717.git.tanyuan@tinylab.org>
- <27bd9bc1-e7a5-4a81-91c9-2642feabb7ce@t-8ch.de>
- <20230730033343.GB7339@1wt.eu>
+        Sun, 30 Jul 2023 03:03:35 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9AB5710FE;
+        Sun, 30 Jul 2023 00:03:33 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 36U73PO2008085;
+        Sun, 30 Jul 2023 09:03:25 +0200
+Date:   Sun, 30 Jul 2023 09:03:25 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux@weissschuh.net,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v3 4/7] selftests/nolibc: add XARCH and ARCH mapping
+ support
+Message-ID: <20230730070325.GA8033@1wt.eu>
+References: <45cc24c1cf8794782be2ae631ca01bcd136da6d9.1690468707.git.falcon@tinylab.org>
+ <20230730063818.10573-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230730033343.GB7339@1wt.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230730063818.10573-1-falcon@tinylab.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-07-30 05:33:43+0200, Willy Tarreau wrote:
-> On Sun, Jul 30, 2023 at 12:17:24AM +0200, Thomas Weißschuh wrote:
-> > > +	case 0:
-> > > +		close(pipefd[0]);
-> > > +		write(pipefd[1], msg, strlen(msg));
-> > 
-> > Isn't this missing to write trailing the 0 byte?
+On Sun, Jul 30, 2023 at 02:38:18PM +0800, Zhangjin Wu wrote:
+> with 'override', we are further able to use:
 > 
-> It depends if the other side expects to get the trailing 0.
-> In general it's better to avoid sending it since it's only
-> used for internal representation, and the other side must
-> be prepared to receive anything anyway.
+>     $ make ARCH=powerpc
+>     Makefile:29: *** ARCH=powerpc, XARCH=ppc.  Stop.
+>     $ make ARCH=ppc
+>     Makefile:29: *** ARCH=powerpc, XARCH=ppc.  Stop.
+>     $ make ARCH=ppc64
+>     Makefile:29: *** ARCH=powerpc, XARCH=ppc64.  Stop.
+>     $ make ARCH=ppc64le
+>     Makefile:29: *** ARCH=powerpc, XARCH=ppc64le.  Stop.
 > 
-> > Also check the return value.
-> 
-> Indeed!
-> 
-> > > +		close(pipefd[1]);
-> > 
-> > Do we need to close the pipefds? The process is exiting anyways.
-> 
-> It's better to, because we could imagine looping over the tests for
-> example. Thus each test shoulld have as little impact as possible
-> on other tests.
+> So, with 'override', users will be able to directly use the famous ARCH, it is
+> able to accept powerpc, ppc, ppc64, ppc64le and users can simply ignore XARCH
+> and we are able to only use XARCH as an internal variable to temply save input
+> ARCH and then convert it to an internal ARCH.
 
-I meant the newly forked child exiting, not nolibc-test in general.
-The exit is just below, so the fds in the child are close here anyways.
-                |
-		|
-		v
-> > > +		exit(EXIT_SUCCESS);
-> > > +
-> > > +	default:
-> > > +		close(pipefd[1]);
-> > > +		read(pipefd[0], buf, 32);
-> > 
-> > Use sizeof(buf). Check return value == strlen(msg).
-> > 
-> > > +		close(pipefd[0]);
-> > > +		wait(NULL);
-> > 
-> > waitpid(pid, NULL, 0);
-> > 
-> > > +
-> > > +		if (strcmp(buf, msg))
-> > > +			return 1;
-> > > +		return 0;
-> > 
-> > return !!strcmp(buf, msg);
-> 
-> In fact before that we need to terminate the output buffer. If for any
-> reason the transfer fails (e.g. the syscall fails or transfers data at
-> another location or of another length, we could end up comparing past
-> the end of the buffer. Thus I suggest adding this immediately after the
-> read():
-> 
-> 		buf[sizeof(buf) - 1] = 0;
+But it's extremely confusing as you can see above: the user passes
+one value and another one is found instead inside the makefile.
+Initially I said that I didn't want that we'd put incorrect values
+in ARCH so that it could be properly propagated through the various
+makefile layers and include files, and that led to XARCH. 
 
-This would still access uninitialized memory and lead to UB in strcmp as
-not all bytes in buf were written to by read().
+> Without 'override', we must carefully document its usage, it may be:
+> 
+>     # XARCH and ARCH mapping
+>     #
+>     # Usage:
+>     #      $ make ARCH=<kernel-supported-ARCH> XARCH=<nolibc-test-supported-variants> ...
+>     #
+>     #      e.g. make ARCH=powerpc XARCH=[ppc|ppc64|ppc64le]
 
-If we want to be really sure we should use memcmp() instead of strcmp().
-For memcmp() I would prefer to transfer and check without the '\0', so
-my review comments from before need to be adapted a bit.
+Please let's do much simpler:
+
+      # XARCH extends the kernel's ARCH with a few variants of the same
+      # architecture that only differ by the configuration, the toolchain
+      # and the Qemu program used. It is copied as-is into ARCH except for
+      # a few specific values which are mapped like this:
+      #  XARCH        ARCH      config
+      #   ppc        powerpc    32 bits
+      #   ppc64      powerpc    64 bits big endian
+      #   ppc64le    powerpc    64 bits little endian
+      #
+      # It is recommended to only use XARCH, though it does not harm if
+      # ARCH is already set. For simplicity, ARCH is sufficient for all
+      # architectures where both are equal.
+
+This way we'll even have the luxury of adding armv5, armv7 and thumb2
+if we want.
+
+>     # XARCH is used to save user-input ARCH variant
+>     # configure default variants for target kernel supported architectures
+> 
+> For the help page, if we only use '\$$XARCH or \$$ARCH', it may mislead users:
+> 
+> 	@echo "  run-user               runs the executable under QEMU (uses \$$ARCH or \\$XARCH, \$$TEST)"
+> 
+> That's why I at last add the 'override' keyword to make sure even if users
+> wrongly and only use ARCH as the argument, it must not fail, or we forcely ask
+> user pass ARCH and XARCH together.
+> 
+> 	@echo "  run-user               runs the executable under QEMU (uses \$$ARCH and \\$XARCH, \$$TEST)"
+> 
+> Or we simply only and always ask users to use XARCH (as the first version does)
+> for nolibc-test and let ARCH as the default one from a previous build kernel:
+> 
+> 	@echo "  run-user               runs the executable under QEMU (uses \$$XARCH, \$$TEST)"
+
+No, no, no, we don't use some defaults from a previous build. That makes
+problems much harder to debug and reproduce. However I'm fine with only
+indicating that QEMU uses XARCH if you want.
+
+> That means, the ugly 'override' does help us to save lots of teach work ;-)
+
+Precisely not. In my opinion you focus a lot on first use but not enough
+on troubleshooting. If someone wastes 20 minutes because they didn't want
+to take 20 seconds to read a help message, it's their problem. But if
+someones wastes one hour trying to debug a horribly inconsistent makefile
+that modifies their most critical variables along the execution, and they
+have to figure how to insert their stuff there to be accepted by the code,
+it's not respectful of their time and it becomes our problem.
+
+> I'm ok with 'override' or not, welcome your confirm, which direction do you
+> prefer?
+
+The one with least complications and which doesn't override ARCH. Also
+please remember the example I provided where the test can be fired from
+the top dir where ARCH has a well-defined set of values. You found yourself
+inconvenient to have to change it between commands and that's why you were
+trying to add menuconfig here to work around this problem.
+
+Thanks,
+Willy
