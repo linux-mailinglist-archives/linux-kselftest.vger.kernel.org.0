@@ -2,80 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A7C7684C8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jul 2023 12:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230317684ED
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jul 2023 13:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjG3KNP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 30 Jul 2023 06:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
+        id S229445AbjG3LIq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 30 Jul 2023 07:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjG3KNP (ORCPT
+        with ESMTP id S229727AbjG3LIp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 30 Jul 2023 06:13:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4587010C1;
-        Sun, 30 Jul 2023 03:13:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6FF66068F;
-        Sun, 30 Jul 2023 10:13:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E38A0C433C8;
-        Sun, 30 Jul 2023 10:13:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1690711991;
-        bh=WpJsh3fyEuGUo6PH6fN0EFyznVrVxs5GaJUXkqK1ArM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nV8ShlEG/+v+bYW2/rSVxdi5O9PKWdmulDttqQLptSkQKdhOrhN6JtjF/AlJxQYn7
-         XjYFwCQ50FZ0eNPZuUC3rAJldMdm9CknM3CBwNCYCsxngQMZ0giD0DbnK1Fwcp6Sbr
-         l0nVDirecyQtuyW4/aUFXyz2B8Vk2jqc68PzEsxA=
-Date:   Sun, 30 Jul 2023 12:13:07 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     Atul Kumar Pant <atulpant.linux@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kselftest@vger.kernel.org, linux-rtc@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5] selftests: rtc: Improve rtctest error handling
-Message-ID: <2023073058-uncurled-leverage-4045@gregkh>
-References: <20230722060706.79759-1-atulpant.linux@gmail.com>
- <9d51f21d-04e8-3dd2-91b9-9ab0cf848760@web.de>
+        Sun, 30 Jul 2023 07:08:45 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66DC91BD1;
+        Sun, 30 Jul 2023 04:08:42 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 36UB8XUv012520;
+        Sun, 30 Jul 2023 13:08:33 +0200
+Date:   Sun, 30 Jul 2023 13:08:33 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
+Cc:     Yuan Tan <tanyuan@tinylab.org>, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/nolibc: add testcase for pipe.
+Message-ID: <20230730110833.GA12462@1wt.eu>
+References: <cover.1690307717.git.tanyuan@tinylab.org>
+ <160ddef0313e11085ee906144d6d9678b8156171.1690307717.git.tanyuan@tinylab.org>
+ <27bd9bc1-e7a5-4a81-91c9-2642feabb7ce@t-8ch.de>
+ <20230730033343.GB7339@1wt.eu>
+ <ebf02a04-6e89-4bc9-beff-3902ad8a78b5@t-8ch.de>
+ <20230730071227.GB8033@1wt.eu>
+ <c5de2d13-3752-4e1b-90d9-f58cca99c702@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <9d51f21d-04e8-3dd2-91b9-9ab0cf848760@web.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c5de2d13-3752-4e1b-90d9-f58cca99c702@t-8ch.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On Sun, Jul 30, 2023 at 10:07:24AM +0200, Thomas Weißschuh wrote:
+> > In fact you make a good point regarding the fact that the test doesn't
+> > use read()'s return value. This problem totally goes away if the return
+> > value is used, e.g.:
+> > 
+> >       len = read(pipefd[0], buf, sizeof(buf));
+> >       close(pipefd[0]);
+> >       waitpid(pid, NULL, 0);
+> >       return len < 0 || len > sizeof(buf) || len > strlen(msg) || memcmp(buf, msg, len) != 0;
+> 
+> Wouldn't this happily accept len == 0?
+> 
+> Why not just:
+> 
+> if (len != strlen(msg))
+>   return 1;
+> return !!memcmp(buf, msg, len);
 
-This is the semi-friendly patch-bot of Greg Kroah-Hartman.
+Indeed, works for me.
 
-Markus, you seem to have sent a nonsensical or otherwise pointless
-review comment to a patch submission on a Linux kernel developer mailing
-list.  I strongly suggest that you not do this anymore.  Please do not
-bother developers who are actively working to produce patches and
-features with comments that, in the end, are a waste of time.
+> Also so far we have assumed that one call one call to read() is enough.
+> But looking at pipe(7) this is not guaranteed by the spec.
+> If we want to be really sure, a loop around read() seems to be necessary.
 
-Patch submitter, please ignore Markus's suggestion; you do not need to
-follow it at all.  The person/bot/AI that sent it is being ignored by
-almost all Linux kernel maintainers for having a persistent pattern of
-behavior of producing distracting and pointless commentary, and
-inability to adapt to feedback.  Please feel free to also ignore emails
-from them.
+In practice it will be OK as the message is small and sent in one syscall,
+so let's not care too much about this for now.
 
-thanks,
-
-greg k-h's patch email bot
+Willy
