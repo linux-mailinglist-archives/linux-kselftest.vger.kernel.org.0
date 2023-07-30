@@ -2,461 +2,374 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C55768888
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jul 2023 23:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E3D768919
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 00:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjG3VuA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 30 Jul 2023 17:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
+        id S229478AbjG3W2V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 30 Jul 2023 18:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjG3Vt7 (ORCPT
+        with ESMTP id S229725AbjG3W2U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 30 Jul 2023 17:49:59 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6C71B5;
-        Sun, 30 Jul 2023 14:49:54 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5221cf2bb8cso5808245a12.1;
-        Sun, 30 Jul 2023 14:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690753793; x=1691358593;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=opHOyZive7ntpmiWMXgz7SUFPRMq9K3nF76YJxo3aoM=;
-        b=rK5OlV75K1xTCqnK2O4OGf+PuumQ/qXk0alHbyNy64RHbRkyj7bkh0JyrWZl4Zoe8C
-         xbcKyMVUVPzZEQjjpX7M1aNMAJbQRu7rcKD5couFtBdf8YKBIIbobIVcl9E5ttihW7HS
-         UXKFl3pqut95fyZbe0PA0t/EO6UKEK5rdQEutSp2ic4sdzOtCvCCRlHcodjU+3ewUHe3
-         snv59UatI3Cbz6XkVrHu+MKQtm2JMworgZwkw99JP9pIot6sSziuy+qNhERzZOc31xH9
-         F98wI6EpT/BWdF2DEp4+s1jleeCQAkqxDzSYUjJZjAPVqRSA1Xy4zbcAXe0Y5gSYRQap
-         oIjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690753793; x=1691358593;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=opHOyZive7ntpmiWMXgz7SUFPRMq9K3nF76YJxo3aoM=;
-        b=jTeIYfBd3GliZrmiEACk1TIZ/NztvT5GQjttflB9wHP+6/2a06umnf4DWBi2/NAAcx
-         8kny6C1qxlbbnYhSKWmOUacFJkFQT7c9Bv7jjv43WLm3jOWTFyio+kFrC6DRwpPSj4Ub
-         1etyf+supv2eUUVacjONG1ShUvxp1MN2JicQUpbghQOxzAA1fuSbs7sfotYESd9S7gzR
-         aTZIn1PCDc4hQ/D0AanFriGH8+Jlqa9PN9jByNiygyUqTuPQbPPnyxVQB+4hpnY1y8OB
-         Eq7ZUD1Ifc6nVBdaflVPAlLqagzXnpQniC/ME5T0YC1gf1lWYWKNv3eS8B/QlZLLr/oP
-         u4Yg==
-X-Gm-Message-State: ABy/qLYBCUnJZNpNdgMGACwOkz526+Os6eLXCzQ9KTYhmBWWaYb8JNDc
-        zEnUW6VPa3/JPPk1/nmN4Hs=
-X-Google-Smtp-Source: APBJJlGlqVpVw6cH7zY2TrLmhQwq+z+8/jbTpRWJqf7H50T+yv/HMD20KvFLWJ3IAV3QSu//wqiI3g==
-X-Received: by 2002:aa7:c983:0:b0:522:50b9:a177 with SMTP id c3-20020aa7c983000000b0052250b9a177mr7308350edt.39.1690753792354;
-        Sun, 30 Jul 2023 14:49:52 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id w5-20020aa7d285000000b005227ead61d0sm4552290edq.83.2023.07.30.14.49.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jul 2023 14:49:51 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailauth.nyi.internal (Postfix) with ESMTP id AC89527C0054;
-        Sun, 30 Jul 2023 17:49:49 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sun, 30 Jul 2023 17:49:49 -0400
-X-ME-Sender: <xms:_NrGZHoWQxPQ39lkaAvryv9IS_44vdRTaPUmuQevLQznEj8QpD2uZw>
-    <xme:_NrGZBpKMEYrN8VDinDkdH_7i8S3dOqPE2C12LWe3vRUGdbq9ObAZKcgvdDKP-7nQ
-    YqBHY4LdljUvtlCLg>
-X-ME-Received: <xmr:_NrGZENBexhNiR0Q-egQq-kv7L2qU0ddkAqNk8FrspdtTvfwQgAz2SCU9Vw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrjedvgddtfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpedtgeehleevffdujeffgedvlefghffhleekieeifeegveetjedvgeevueff
-    ieehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:_NrGZK5nxLEoxMmUvwCpuX-GcLSE0Wr6tiK8LTJL-YgS0b-CqB-UTw>
-    <xmx:_NrGZG49ctrAkRlVjhQBTwZiOCTdjMFgjPhSQ_q548ORqukEmysk4A>
-    <xmx:_NrGZCiYIyysG0MRrEFHeNCR167d9FXl4Bc5Bd_O0yIAmIO6cXM4lA>
-    <xmx:_drGZGwKReWrAscI3723OrmIix0mvgE0kf565s4yTfNVwOXxVNdBMw>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 30 Jul 2023 17:49:48 -0400 (EDT)
-Date:   Sun, 30 Jul 2023 14:49:07 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Benno Lossin <benno.lossin@proton.me>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] rust: macros: add macro to easily run KUnit tests
-Message-ID: <ZMba0_XXZuTgWyWY@boqun-archlinux>
-References: <20230720-rustbind-v1-0-c80db349e3b5@google.com>
- <20230720-rustbind-v1-2-c80db349e3b5@google.com>
+        Sun, 30 Jul 2023 18:28:20 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCF410E2;
+        Sun, 30 Jul 2023 15:28:14 -0700 (PDT)
+X-QQ-mid: bizesmtp79t1690756083twjdn302
+Received: from linux-lab-host.localdomain ( [61.141.77.223])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 31 Jul 2023 06:28:02 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: BYUemv+qiN20N0IXYy3KikA3P9sw0+4stSjdfYybwyjoZusf3FcBoqTf9n2sU
+        a3oqdYYEdae0n2/MABZu79pKFljimCan6XyCRQ/lRDTR0HOk3S9jukbeYmya1sqLp3Cdbsz
+        RE6NNRFtgDw9NIXDZTLXdDmBudgwc/P6SGPmC0XQffBQ9CT4hNT63rCDjs63DjD0m52aBUg
+        oya8XjcDFZSzFWU/ZV2pH0nuF+VCh8nrchdgZm/0VeRGznXyS0SWc1aKLMNh3u212f+l7hT
+        lS8Du4t11hIfeYMDvZ0D+sq9un+4Q4B4yMFFrzDrSmmfiiQpemAwKzV/CA/i2VheFo8plid
+        rtwYKD6t1qXiU9VnoWtuCZ8mO5vPsK6JFgVpwAqPW7stTOhJfMbPK0b9Z+IZA==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 16680043692081012713
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: Re: [PATCH v3 08/12] selftests/nolibc: allow quit qemu-system when poweroff fails
+Date:   Mon, 31 Jul 2023 06:28:02 +0800
+Message-Id: <20230730222802.506188-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230729170651.GB5219@1wt.eu>
+References: <20230729170651.GB5219@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230720-rustbind-v1-2-c80db349e3b5@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 02:38:53PM +0800, David Gow wrote:
-> From: José Expósito <jose.exposito89@gmail.com>
-> 
-> Add a new procedural macro (`#[kunit_tests(kunit_test_suit_name)]`) to
-> run KUnit tests using a user-space like syntax.
-> 
-> The macro, that should be used on modules, transforms every `#[test]`
-> in a `kunit_case!` and adds a `kunit_unsafe_test_suite!` registering
-> all of them.
-> 
-> The only difference with user-space tests is that instead of using
-> `#[cfg(test)]`, `#[kunit_tests(kunit_test_suit_name)]` is used.
-> 
-> Note that `#[cfg(CONFIG_KUNIT)]` is added so the test module is not
-> compiled when `CONFIG_KUNIT` is set to `n`.
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
-> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-> ---
->  MAINTAINERS          |   1 +
->  rust/kernel/kunit.rs |  11 ++++
->  rust/macros/kunit.rs | 149 +++++++++++++++++++++++++++++++++++++++++++++++++++
->  rust/macros/lib.rs   |  29 ++++++++++
->  4 files changed, 190 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 2a942fe59144..c32ba6b29a96 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11373,6 +11373,7 @@ F:	Documentation/dev-tools/kunit/
->  F:	include/kunit/
->  F:	lib/kunit/
->  F:	rust/kernel/kunit.rs
-> +F:	rust/macros/kunit.rs
->  F:	scripts/rustdoc_test_*
->  F:	tools/testing/kunit/
->  
-> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-> index 4cffc71e463b..44ea67028316 100644
-> --- a/rust/kernel/kunit.rs
-> +++ b/rust/kernel/kunit.rs
-> @@ -40,6 +40,8 @@ pub fn info(args: fmt::Arguments<'_>) {
->      }
->  }
->  
-> +use macros::kunit_tests;
-> +
->  /// Asserts that a boolean expression is `true` at runtime.
->  ///
->  /// Public but hidden since it should only be used from generated tests.
-> @@ -253,3 +255,12 @@ macro_rules! kunit_unsafe_test_suite {
->          };
->      };
->  }
-> +
-> +#[kunit_tests(rust_kernel_kunit)]
-> +mod tests {
-> +    #[test]
-> +    fn rust_test_kunit_kunit_tests() {
-> +        let running = true;
-> +        assert_eq!(running, true);
-> +    }
-> +}
-> diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
-> new file mode 100644
-> index 000000000000..69dac253232f
-> --- /dev/null
-> +++ b/rust/macros/kunit.rs
-> @@ -0,0 +1,149 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Procedural macro to run KUnit tests using a user-space like syntax.
-> +//!
-> +//! Copyright (c) 2023 José Expósito <jose.exposito89@gmail.com>
-> +
-> +use proc_macro::{Delimiter, Group, TokenStream, TokenTree};
-> +use std::fmt::Write;
-> +
-> +pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
-> +    if attr.to_string().is_empty() {
-> +        panic!("Missing test name in #[kunit_tests(test_name)] macro")
-> +    }
-> +
-> +    let mut tokens: Vec<_> = ts.into_iter().collect();
-> +
-> +    // Scan for the "mod" keyword.
-> +    tokens
-> +        .iter()
-> +        .find_map(|token| match token {
-> +            TokenTree::Ident(ident) => match ident.to_string().as_str() {
-> +                "mod" => Some(true),
-> +                _ => None,
-> +            },
-> +            _ => None,
-> +        })
-> +        .expect("#[kunit_tests(test_name)] attribute should only be applied to modules");
-> +
-> +    // Retrieve the main body. The main body should be the last token tree.
-> +    let body = match tokens.pop() {
-> +        Some(TokenTree::Group(group)) if group.delimiter() == Delimiter::Brace => group,
-> +        _ => panic!("cannot locate main body of module"),
-> +    };
-> +
-> +    // Get the functions set as tests. Search for `[test]` -> `fn`.
-> +    let mut body_it = body.stream().into_iter();
-> +    let mut tests = Vec::new();
-> +    while let Some(token) = body_it.next() {
-> +        match token {
-> +            TokenTree::Group(ident) if ident.to_string() == "[test]" => match body_it.next() {
-> +                Some(TokenTree::Ident(ident)) if ident.to_string() == "fn" => {
-> +                    let test_name = match body_it.next() {
-> +                        Some(TokenTree::Ident(ident)) => ident.to_string(),
-> +                        _ => continue,
-> +                    };
-> +                    tests.push(test_name);
-> +                }
-> +                _ => continue,
-> +            },
-> +            _ => (),
-> +        }
-> +    }
-> +
-> +    // Add `#[cfg(CONFIG_KUNIT)]` before the module declaration.
-> +    let config_kunit = "#[cfg(CONFIG_KUNIT)]".to_owned().parse().unwrap();
-> +    tokens.insert(
-> +        0,
-> +        TokenTree::Group(Group::new(Delimiter::None, config_kunit)),
-> +    );
-> +
-> +    // Generate the test KUnit test suite and a test case for each `#[test]`.
-> +    // The code generated for the following test module:
-> +    //
-> +    // ```
-> +    // #[kunit_tests(kunit_test_suit_name)]
-> +    // mod tests {
-> +    //     #[test]
-> +    //     fn foo() {
-> +    //         assert_eq!(1, 1);
-> +    //     }
-> +    //
-> +    //     #[test]
-> +    //     fn bar() {
-> +    //         assert_eq!(2, 2);
-> +    //     }
-> +    // ```
-> +    //
-> +    // Looks like:
-> +    //
-> +    // ```
-> +    // unsafe extern "C" fn kunit_rust_wrapper_foo(_test: *mut kernel::bindings::kunit) {
-> +    //     foo();
-> +    // }
-> +    // static mut KUNIT_CASE_FOO: kernel::bindings::kunit_case =
-> +    //     kernel::kunit_case!(foo, kunit_rust_wrapper_foo);
-> +    //
-> +    // unsafe extern "C" fn kunit_rust_wrapper_bar(_test: * mut kernel::bindings::kunit) {
-> +    //     bar();
-> +    // }
-> +    // static mut KUNIT_CASE_BAR: kernel::bindings::kunit_case =
-> +    //     kernel::kunit_case!(bar, kunit_rust_wrapper_bar);
-> +    //
-> +    // static mut KUNIT_CASE_NULL: kernel::bindings::kunit_case = kernel::kunit_case!();
-> +    //
-> +    // static mut TEST_CASES : &mut[kernel::bindings::kunit_case] = unsafe {
-> +    //     &mut [KUNIT_CASE_FOO, KUNIT_CASE_BAR, KUNIT_CASE_NULL]
-> +    // };
-> +    //
-> +    // kernel::kunit_unsafe_test_suite!(kunit_test_suit_name, TEST_CASES);
-> +    // ```
-> +    let mut kunit_macros = "".to_owned();
-> +    let mut test_cases = "".to_owned();
-> +    for test in tests {
-> +        let kunit_wrapper_fn_name = format!("kunit_rust_wrapper_{}", test);
-> +        let kunit_case_name = format!("KUNIT_CASE_{}", test.to_uppercase());
-> +        let kunit_wrapper = format!(
-> +            "unsafe extern \"C\" fn {}(_test: *mut kernel::bindings::kunit) {{ {}(); }}",
-> +            kunit_wrapper_fn_name, test
-> +        );
-> +        let kunit_case = format!(
-> +            "static mut {}: kernel::bindings::kunit_case = kernel::kunit_case!({}, {});",
-> +            kunit_case_name, test, kunit_wrapper_fn_name
-> +        );
-> +        writeln!(kunit_macros, "{kunit_wrapper}").unwrap();
-> +        writeln!(kunit_macros, "{kunit_case}").unwrap();
-> +        writeln!(test_cases, "{kunit_case_name},").unwrap();
-> +    }
-> +
-> +    writeln!(
-> +        kunit_macros,
-> +        "static mut KUNIT_CASE_NULL: kernel::bindings::kunit_case = kernel::kunit_case!();"
-> +    )
-> +    .unwrap();
-> +
-> +    writeln!(
-> +        kunit_macros,
-> +        "static mut TEST_CASES : &mut[kernel::bindings::kunit_case] = unsafe {{ &mut[{test_cases} KUNIT_CASE_NULL] }};"
-> +    )
-> +    .unwrap();
-> +
-> +    writeln!(
-> +        kunit_macros,
-> +        "kernel::kunit_unsafe_test_suite!({attr}, TEST_CASES);"
-> +    )
-> +    .unwrap();
-> +
-> +    let new_body: TokenStream = vec![body.stream(), kunit_macros.parse().unwrap()]
-> +        .into_iter()
-> +        .collect();
-> +
-> +    // Remove the `#[test]` macros.
-> +    let new_body = new_body.to_string().replace("#[test]", "");
+Hi, Willy
 
-I've played this with some extra tests, one thing I notice is that
-Span/code location information is lost if we do this, for example, if I
-have a compile error in the test code (I introduced one on purpose in
-the `rust_kernel_kunit` test), I will get information like:
+[...]
+> You seem to focus a lot on "if the test hangs"
+> but nobody ever reported such a problem in the last few years. However
 
-	error[E0384]: cannot assign twice to immutable variable `running`
-	   --> ../rust/kernel/kunit.rs:329:1
-	    |
-	329 | #[kunit_tests(rust_kernel_kunit)]
-	    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	    | |
-	    | cannot assign twice to immutable variable
-	    | help: consider making this binding mutable: `mut running`
+Willy, as Thomas shared in another reply too, there is really a poweroff failure
+(even with defconfig) in the default ppc/g3beige 32-bit PowerPC Qemu we are
+adding support for.
 
-the location information is not very usefull. However if we do the
-following:
+Btw, It is possible to switch another 32-bit PowerPC board who support poweroff
+in qemu+kernel side, but need more investigate and survey, I have tried another
+two, no lucky, the ppce500 webpage [1] even claims there is 'Power-off
+functionality via one GPIO pin', but tried to enable the related gpios and
+reset options, still not work, perhaps I need help from more PowerPc users,
+will ask somebody to help me ;-)
 
-diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
-index 69dac253232f..913879765d24 100644
---- a/rust/macros/kunit.rs
-+++ b/rust/macros/kunit.rs
-@@ -134,15 +134,29 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
-     )
-     .unwrap();
+[1]: https://qemu.readthedocs.io/en/latest/system/ppc/ppce500.html
+
+> we've been spending weeks discussing how to add support for extra
+> features or architectures and such hacky stuff definitely steps in the
+> way and complicates everything.
+
+The background is, based on your feedback in another reply, printing the log to
+screen (another patch I have removed in this revision) may have some issues
+before. But if without any log and just hang after a poweroff failure and even
+further no timeout ... then, dead hang, that is really hard to debug, edit of
+Makefile and rerun and then we will know it fails at poweroff or just during
+qemu start ..., as you replied below, CTRL+C may help to cat the log file too,
+but it waste a CTRL+C + cat during the early development stage, especially when
+we require frequenty modify and test.
+
+[...]
+> 
+> This is not supposed to happen in automated tests, and archs that fail
+> at this will simply be either excluded from automated tests, or will
+> be run through whatever external timeout mechanism.
+>
+
+Agree with external timeout mechanism or even excluded from automated tests,
+but we at least to allow to do basic test without editing the Makefile or
+without forever Ctrl-C + cat run.out manually ;-)
+
+So, what about at least restore part of my old 'print running log to screen'
+patch like this:
+
+    # run the tests after building the kernel
+    run: kernel
+    	$(Q)$(QEMU_SYSTEM_RUN) | tee "$(RUN_OUT)"
+    	$(Q)$(REPORT) "$(RUN_OUT)"
+    
+    # re-run the tests from an existing kernel
+    rerun:
+    	$(Q)$(QEMU_SYSTEM_RUN) | tee "$(RUN_OUT)"
+    	$(Q)$(REPORT) "$(RUN_OUT)"
+
+Or even better, allow use a swtich to control it (the one we also removed from
+an old patch).
+
+    ifneq ($(QUIET_RUN),1)
+    LOG_OUT= | tee "$(RUN_OUT)"
+    else
+    LOG_OUT= > "$(RUN_OUT)"
+    endif
+
+If missing this, the early stages of a new architecture porting is definitely
+very hard, not think about poweroff failure, just think about some other
+potential exceptions which simply stop the booting or testing (not continue and
+not exit).
  
--    let new_body: TokenStream = vec![body.stream(), kunit_macros.parse().unwrap()]
--        .into_iter()
--        .collect();
--
-     // Remove the `#[test]` macros.
--    let new_body = new_body.to_string().replace("#[test]", "");
-+    let mut new_body = vec![];
-+    let mut body_it = body.stream().into_iter();
-+
-+    while let Some(token) = body_it.next() {
-+        match token {
-+            TokenTree::Punct(ref c) if c.as_char() == '#' => {
-+                match body_it.next() {
-+                    Some(TokenTree::Group(g)) if g.to_string() == "[test]" => (),
-+                    Some(next) => { new_body.extend([token, next]);},
-+                    _ => {new_body.push(token);},
-+                }
-+            }
-+            _ => { new_body.push(token); }
-+        }
-+    }
-+
-+    let mut new_body = TokenStream::from_iter(new_body);
-+    new_body.extend::<TokenStream>(kunit_macros.parse().unwrap());
-+
-     tokens.push(TokenTree::Group(Group::new(
-         Delimiter::Brace,
--        new_body.parse().unwrap(),
-+        new_body
-     )));
+> > Thirdly, just only when there is a hang (not specific to tinyconfig),
+> > such as wrong bios version or missing firmware or even kernel hang with
+> > new changes (for example, the irqstack related riscv kernel hang I
+> > reported), blabla. such hangs will be detected by the fixed timeout
+> > value (like a watchdog).
+> 
+> These are local tools issues, we can't fix them all and it's not our
+> job. We're just providing an easy and hopefully convenient framework
+> to test syscalls. We're not supposed to require users to have to go
+> through complex debugging in this. And if they face a failure due to
+> their local tools (like I had with my old qemu version), they'll just
+> work around it by rebuilding it and that will be done. In the worst
+> case, some archs might require a Ctrl-C once in a while during a
+> manual test. No big deal. Definitely not as big as spending 10 minutes
+> trying to figure how to find one's way through a complicated makefile,
+> or wondering what's that runaway qemu process in the background that
+> refuses to die, etc.
+
+Again Willy, without log and without timeout (with a tail of last 10 lines in
+the old version), just a 'forever' hang, Ctrl-C helps but not much, still
+require to check the log to see what happens or editing the Makefile to enable
+the logging temply, it is realy time-waste during development ;-)
+
+[...]
+> 
+> Again, never ever experienced such a problem with the default configs
+> for the supported archs, with one of my machines having a qemu version
+> as old as 2.7. Paul always runs all the tests as well and never reported
+> this problem either. Thus I would like that we stick to precise facts
+> about problems that occur rather than just papering over them in a
+> generic way.
+>
+
+Willy, before, the old versions of this patchset did only configure
+QEMU_TIMEOUT for the failed 32-bit PowerPC and not enabled for the other
+boards, but later after a dicussion (perhaps I misunderstood one of your
+suggestions?), this revision configure a default one for all, I also thought
+about it is not good for all boards, but still a choice to a board really have
+no poweroff support (external one is ok if with explicitly log printing to
+screen). 
+
+we have used something like this before:
+
+    ifneq ($(QEMU_TIMEOUT),)
+    ...
+    endif
  
-     tokens.into_iter().collect()
-
-
-then we get better information:
-
-	   --> ../rust/kernel/kunit.rs:335:13
-	    |
-	335 |         let running = true;
-	    |             ^^^^^^^
-	    |
-	    = help: maybe it is overwritten before being read?
-	    = note: `#[warn(unused_assignments)]` on by default
-
-	error[E0384]: cannot assign twice to immutable variable `running`
-	   --> ../rust/kernel/kunit.rs:336:9
-	    |
-	335 |         let running = true;
-	    |             -------
-	    |             |
-	    |             first assignment to `running`
-	    |             help: consider making this binding mutable: `mut running`
-	336 |         running = false;
-	    |         ^^^^^^^^^^^^^^^ cannot assign twice to immutable variable
-
-
-Regards,
-Boqun
-
-> +    tokens.push(TokenTree::Group(Group::new(
-> +        Delimiter::Brace,
-> +        new_body.parse().unwrap(),
-> +    )));
-> +
-> +    tokens.into_iter().collect()
-> +}
-> diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-> index 3fc74cb4ea19..cd0b720514ff 100644
-> --- a/rust/macros/lib.rs
-> +++ b/rust/macros/lib.rs
-> @@ -6,6 +6,7 @@
->  mod quote;
->  mod concat_idents;
->  mod helpers;
-> +mod kunit;
->  mod module;
->  mod pin_data;
->  mod pinned_drop;
-> @@ -246,3 +247,31 @@ pub fn pin_data(inner: TokenStream, item: TokenStream) -> TokenStream {
->  pub fn pinned_drop(args: TokenStream, input: TokenStream) -> TokenStream {
->      pinned_drop::pinned_drop(args, input)
->  }
-> +
-> +/// Registers a KUnit test suite and its test cases using a user-space like syntax.
-> +///
-> +/// This macro should be used on modules. If `CONFIG_KUNIT` (in `.config`) is `n`, the target module
-> +/// is ignored.
-> +///
-> +/// # Examples
-> +///
-> +/// ```ignore
-> +/// # use macros::kunit_tests;
-> +///
-> +/// #[kunit_tests(kunit_test_suit_name)]
-> +/// mod tests {
-> +///     #[test]
-> +///     fn foo() {
-> +///         assert_eq!(1, 1);
-> +///     }
-> +///
-> +///     #[test]
-> +///     fn bar() {
-> +///         assert_eq!(2, 2);
-> +///     }
-> +/// }
-> +/// ```
-> +#[proc_macro_attribute]
-> +pub fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
-> +    kunit::kunit_tests(attr, ts)
-> +}
+> > > > "Since the low-level poweroff support is heavily kernel & qemu dependent"
+> > > > 
+> > > > The kernel we can control.
+> > > > 
+> > > > How common are qemus with that are missing poweroff support? 
+> > > > As this worked before I guess the only architecture where this could
+> > > > pose a problem would be ppc.
+> > > > 
+> > 
+> > Yes, as explained above, based on the experience I have on tons of
+> > kernel versions of different architecture, it is really hard to make
+> > poweroff work as expected all the time, as the kernel and qemu changes,
+> > it may fail at any version randomly.
 > 
-> -- 
-> 2.41.0.255.g8b1d071c50-goog
+> Please could you provide us with a reproducer for this problem, with
+> the mainline commit ID, arch, toolchain used, qemu version, because I
+> think you're generalizing over a few cases that happened during your
+> tinyconfig tests, for various possible reasons, but which are likely
+> not good reasons for complicating everything.
+>
+
+It is very hard to list all, the following one is a section [1] (not updated
+for a long time) of the document of my 'Linux Lab' project:
+
+    ### 6.2.2 Poweroff hang
+    
+    Both of the `poweroff` and `reboot` commands not work on these boards currently (LINUX=v5.1):
+    
+    * mipsel/malta (exclude LINUX=v2.6.36)
+    * mipsel/ls232
+    * mipsel/ls1b
+    * mips64el/ls2k
+    * mips64el/ls3a7a
+    * aarch64/raspi3
+    * arm/versatilepb
+    
+    System will directly hang there while running `poweroff` or `reboot`, to exit qemu, please pressing `CTRL+a x` or using `pkill qemu`.
+    
+    To test such boards automatically, please make sure setting `TEST_TIMEOUT`, e.g. `make test TEST_TIMEOUT=50`.
+    
+    Welcome to fix up them.
+
+IMHO, since my project is mainly for kernel learning and development, I even
+don't care about why it not poweroff successfully at last although I have tried
+my best to find the realted options but failed at last, the reasons may be
+complex, from kernel side or from qemu side, both possible, or even simply a
+kernel option changed and the config options are not updated timely. 
+
+We have so many boards with kernel version from v2.6.10 to v6.4, many poweroff
+failures before:
+
+    $ ls -1 -d */*
+    aarch64/raspi3
+    aarch64/virt
+    arm/ebf-imx6ull
+    arm/mcimx6ul-evk
+    arm/versatilepb
+    arm/vexpress-a9
+    arm/virt
+    i386/pc
+    loongarch64/virt
+    mips64el/loongson3-virt
+    mips64el/ls2k
+    mips64el/ls3a7a
+    mipsel/ls1b
+    mipsel/ls232
+    mipsel/malta
+    ppc64le/powernv
+    ppc64le/pseries
+    ppc64/powernv
+    ppc64/pseries
+    ppc/g3beige
+    ppc/ppce500
+    riscv32/virt
+    riscv64/virt
+    s390x/s390-ccw-virtio
+    x86_64/pc
+
+    The kernel we used for i386/pc:
+
+    v2.6.10
+    v2.6.11.12
+    v2.6.12.6
+    v2.6.21.5
+    v2.6.24.7
+    v2.6.34.9
+    v2.6.35.14
+    v2.6.36
+    v3.10.108
+    v4.6.7
+    v5.1
+    v5.13
+    v5.2
+    v6.1.1
+
+[1]: https://github.com/tinyclub/linux-lab/blob/master/README.md#622-poweroff-hang
+ 
+> > Beside ppc, all of my local tinyconfig config files of every
+> > architecture are ready for boot and print and also of course for the
+> > 'reboot: ' line print. but it is 'hard' to find and enable the left
+> > options to just further enable 'poweroff' support.
 > 
+> If tinyconfig is not fixable, it's not usable, period. Right now all
+> archs stop fine for many of us with defconfig. If only a few tinyconfig
+> fail we'd rather invest time on these specific ones trying to figure
+> what options you need to add to the extra_config.
+>
+
+Yes, that's why I plan to send the left patches by architecture, it will give
+us more time to configure and confirm the missing poweroff options if really
+required, I will ask somebody else to work with me together. 
+ 
+> > Firstly, I have tried to enable some of them, but it deviates the
+> > tinyconfig goal, for example, x86 requires to enable both ACPI and PCI
+> > to just let poweroff work, so, I'm not planning to really enable them.
+> > 
+> > Secondly, the time cost to just find and enable the poweroff options for
+> > every architecture (and even for the new nolibc portings) is huge, I
+> > give up after several tries, and they may fail in some future versions
+> > randomly, I do think we may be not really interested in fixing up such
+> > bugs in kernel drivers side ;-)
+> 
+> OK so better just give up on tinyconfig if it's not suitable for the
+> tests ? The more you present the shortcomings that come with them, the
+> less appealing it looks now.
+>
+
+The only shortcoming is some 'poweroff' failures currently, I do think the
+time-saved is huge, with tinyconfig, I even don't want to try the time-consumer
+defconfig anymore (although it is a requirement of many kernel features for the
+last release), especially for nolibc development ;-)
+
+I'm using tinyconfig+nolibc for most of the boards supported by my Linux Lab
+project, I'm really happy with it, I use similar timeout + expected string
+logic now, it works better than the old pure timeout logic, then, I don't care
+about which poweroff options the target board want, just ignore the
+requirement. It is a very good kernel learning and development experience, I
+have used a defconfig based config and also a small config customized for
+nolibc for them before, but with the new tinyconfig (extra boot/print options)
+suggested by Thomas, it is really a good and a whole new experience.
+
+To be honest, from my side, it is ok to add tinyconfig for nolibc or not,
+because I can use the test script from Linux Lab project to test new nolibc
+features, but I do think this will help a lot for both the kernel and nolibc
+developers, so, I'm happy to continue, even we are facing some real
+difficulties currently.
+
+[...] 
+> > >
+> > 
+> > Yes, this timeout logic is ok to be removed from this patchset, till we
+> > get a better solution.
+>
+
+But again as explained above, we do need something to cope with 'dead' hang
+without any output.
+ 
+> Thanks.
+> 
+> It would really help if your series could focus on *one thing* at a
+> time. Currently I feel like in almost all patch series you've sent
+> there are good stuff that could have been merged already, but which
+> are mixed with hacks or unacceptable massive reworks that just result
+> in the rest being kept on hold.
+>
+
+Agree, thanks, I will try my best to split a huge stuff to smaller ones, I was
+a little hurried to want to upstream the non-rv32 related parts quickly, then,
+we can back to rv32 asap ;-)
+ 
+> I would really appreciate it if you thought about clearly presenting
+> the problems you're trying to solve before sending patch series, so
+> that we can collectively decide whether these problems deserve being
+> fixed or can be ignored, and if the cost of addressing them outweigh
+> their cost. It would save many hours of review of patches whose goal
+> is not always very clear.
+
+I like this suggestion, since you have mentioned before, based on your
+suggestions, like the syscall.h stuff, a disucss or a proposal is fired before
+a real patchset, although I think it worths a real RFC patchset, but let's
+delay it and I do need more work to solve the questions asked from you, this
+may be also related to some ideas mentioned by Arnd before, seems he have
+planed to generate some syscall templates from the kernel .tbls, let's discuss
+this in another thread, please ignore this one. 
+
+> A good rule of thumb is that something that
+> is only added and that provides a specific feature generally suffers
+> not much discussion (beyond the usual style/naming etc). But patches
+> that modify existing process, code organization or affect reliability
+> should be discussed and argumented before even being created. It's
+> easier to discuss a purpose than to try to review a patch for a context
+> that is not very clear.
+
+That's reasonable, a good rule is 'subtraction', not 'addition', sometimes, the
+implementation of new idea does add more impulsion to modify anything, it
+require calmness to go back to the core issue we want to solve.
+
+Thanks a lot.
+
+Best regards,
+Zhangjin
+
+> 
+> Thanks,
+> Willy
