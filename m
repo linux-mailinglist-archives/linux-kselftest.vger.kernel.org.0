@@ -2,232 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565E8768681
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jul 2023 18:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4B87686F7
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jul 2023 20:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbjG3QsS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 30 Jul 2023 12:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
+        id S229836AbjG3SC5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 30 Jul 2023 14:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjG3QsR (ORCPT
+        with ESMTP id S229743AbjG3SC4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 30 Jul 2023 12:48:17 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9EB1A5;
-        Sun, 30 Jul 2023 09:48:15 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 6A6AB6017E;
-        Sun, 30 Jul 2023 18:48:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690735693; bh=43H4EXXoSMkvICv8uWwTafOuMnO3jp1tSKuXKs07nSM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O1LmJRe7kY/vLUf9mYBqz0JnpRpzhjjM1x1b7UsidEbs3JnmEaEcmPMOQ9idsoTsH
-         p0mHd+LzKUcP2ZZsVWC9ZOYHz2MtEfGJFQznH7AxcCz9lvUVmfKjTZguhbVtdCWlXb
-         SU/O3OBiVT1h4/k+DrQ0vuhmSSaSfFCVw+qt/ehh1DiWazisnJn8EPVg2ILGlf1wag
-         avErB/ys0sAyoBeqYZkxNLOULH/3q1zUJtEDc+D9qy3TioRyI77Va2639trummpmND
-         IZmuvKHV4/rOQO+BrSqKDlgDbG0oLh3uTlqgofLsd9BAG86euRfXBBsj0X9KemZzIP
-         Xi2O2YJj8aDYg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EooBxH1sf3dr; Sun, 30 Jul 2023 18:48:10 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id 884376017C;
-        Sun, 30 Jul 2023 18:48:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690735690; bh=43H4EXXoSMkvICv8uWwTafOuMnO3jp1tSKuXKs07nSM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bz52X3+hOPWW6X6imEEOH1PR0YPoXncckUJNQivuaajGkd2Ube7vtKOJovG67fAdL
-         tAsfwFpeY9Cr0qX+EvpCQh8oR680Ecnddhs0BpDX3Go5RTlm3N/5mUK34BzOdHcbiX
-         BTjEdVovBT59v3U+NeV31qdLyZinYEudrWtjRXc8YLIa6RK2oAnMsVu5b64TMnP31F
-         41XQOXb5U7xlk3eUAiiMi1oYBX0LlQrq8KyV/9n8bFxKCClLEk+alzHkC69K4e9s99
-         693eWYzkAn0Uh8ZLQKq6MyuCySt7OlBLNDeP5TbaW20rtS6l0ORBFjO8fIip8bHy2x
-         DyFndGx1y63Ig==
-Message-ID: <da3f4f4e-47a7-25be-fa61-aebeba1d8d0c@alu.unizg.hr>
-Date:   Sun, 30 Jul 2023 18:48:04 +0200
+        Sun, 30 Jul 2023 14:02:56 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A37E6;
+        Sun, 30 Jul 2023 11:02:53 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1690740163tacgzyir
+Received: from linux-lab-host.localdomain ( [61.141.77.223])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 31 Jul 2023 02:02:42 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000B00A0000000
+X-QQ-FEAT: eLy0Un1haEtPNoBCMrR+0QNTGgaUHCp3JzruG7T8YQiEqqLJBEN6PtSjw2QPM
+        6lp4hvFV2qGAXjHgAr1s0SwClCkBQkcMxNtTZGLtoWKHHkHXRGpFjBe5fNQDlXYp8hzWzy1
+        reSOXTJnc42aBPgxYXHSzr8r13uruShQZEHsq4SEuqo8GA5pnKM2J5/K0S0O+qYFHlpZyC0
+        NPBmt9IcgcNq5TW5jLIRiClcMs9iX8dt+rA5xF5DK7PeHUXdwbmzei/gannkBq1z9FUDrEB
+        gO7NIwEb9ZlmOHbHIvbGbZbj1deIH04ENqe4D1vZ7YVFKgJc+VIZ+QYEO5gHn8rlPtvMHOz
+        nAmA8qu+SLZLqq7zewUmggH5Z4QBQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 10960849253273204474
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     falcon@tinylab.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de, w@1wt.eu
+Subject: Re: [PATCH v3 3/7] selftests/nolibc: add extra configs customize support
+Date:   Mon, 31 Jul 2023 02:02:42 +0800
+Message-Id: <20230730180242.387931-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230730112149.37896-1-falcon@tinylab.org>
+References: <20230730112149.37896-1-falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Subject: Re: [PATCH v1 01/11] selftests: forwarding: custom_multipath_hash.sh:
- add cleanup for SIGTERM sent by timeout
-To:     Ido Schimmel <idosch@idosch.org>, petrm@nvidia.com,
-        razor@blackwall.org
-Cc:     Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-References: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
- <ZLzj5oYrbHGvCMkq@shredder>
- <0550924e-dce9-f90d-df8a-db810fd2499f@alu.unizg.hr>
- <adc5e40d-d040-a65e-eb26-edf47dac5b02@alu.unizg.hr>
- <ZL6OljQubhVtQjcD@shredder>
- <cab8ea8a-98f4-ef9b-4215-e2a93cccaab1@alu.unizg.hr>
- <ZMEQGIOQXv6so30x@shredder>
- <a9b6d9f5-14ae-a931-ab7b-d31b5e40f5df@alu.unizg.hr>
- <ZMYXABUN9OzfN5D3@shredder>
-Content-Language: en-US
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZMYXABUN9OzfN5D3@shredder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/30/23 09:53, Ido Schimmel wrote:
-> On Thu, Jul 27, 2023 at 09:26:03PM +0200, Mirsad Todorovac wrote:
->> marvin@defiant:~/linux/kernel/linux_torvalds$ grep "not ok" ../kselftest-6.5-rc3-net-forwarding-16.log
->> not ok 3 selftests: net/forwarding: bridge_mdb.sh # exit=1
-> 
-> Other than one test case (see below), I believe this should be fixed by
-> the patches I just pushed to the existing branch. My earlier fix was
-> incomplete which is why it didn't solve the problem.
-> 
->> not ok 5 selftests: net/forwarding: bridge_mdb_max.sh # exit=1
-> 
-> Should be fixed with the patches.
+Hi,
 
-Congratulations! Indeed, it looks a lot better:
+> At last, here is it?
+> 
+>     # extra configs/ files appended to .config during the nolibc-test-config target
+>     # include common + architecture specific
+>     NOLIBC_TEST_CONFIG   = nolibc-test-common.config nolibc-test-$(XARCH).config
+> 
+>     nolibc-test-config:
+> 	$(Q)$(MAKE_KERNEL) mrproper
+> 	$(Q)$(MAKE_KERNEL) $(or $(CONFIG),$(DEFCONFIG)) prepare
 
-marvin@defiant:~/linux/kernel/linux_torvalds$ grep "not ok" ../kselftest-6.5-rc3-net-forwarding-18.log
-not ok 3 selftests: net/forwarding: bridge_mdb.sh # exit=1
-not ok 11 selftests: net/forwarding: bridge_vlan_mcast.sh # exit=1
-not ok 26 selftests: net/forwarding: ip6_forward_instats_vrf.sh # exit=1
-not ok 49 selftests: net/forwarding: mirror_gre_changes.sh # exit=1
-marvin@defiant:~/linux/kernel/linux_torvalds$ grep -v '^# +' ../kselftest-6.5-rc3-net-forwarding-18.log | grep -A1 -e '\[FAIL\]' | grep -v -e -- | grep -v OK
-# TEST: IPv4 (S, G) port group entries configuration tests            [FAIL]
-# 	Entry has an unpending group timer after replace
-# TEST: IPv6 (S, G) port group entries configuration tests            [FAIL]
-# 	Entry has an unpending group timer after replace
-# TEST: Vlan mcast_startup_query_interval global option default value   [FAIL]
-# 	Wrong default mcast_startup_query_interval global vlan option value
-# TEST: Ip6InHdrErrors                                                [FAIL]
-# TEST: mirror to gretap: TTL change (skip_hw)                        [FAIL]
-# 	Expected to capture 10 packets, got 15.
-# TEST: mirror to ip6gretap: TTL change (skip_hw)                     [FAIL]
-# 	Expected to capture 10 packets, got 13.
-marvin@defiant:~/linux/kernel/linux_torvalds$
+The 'prepare' should be removed, we have one in the end.
 
->> not ok 11 selftests: net/forwarding: bridge_vlan_mcast.sh # exit=1
-> 
-> Nik, the relevant failure is this one:
-> 
-> # TEST: Vlan mcast_startup_query_interval global option default value   [FAIL]
-> # 	Wrong default mcast_startup_query_interval global vlan option value
-> 
-> Any idea why the kernel will report "mcast_startup_query_interval" as
-> 3124 instead of 3125?
-> 
-> # + jq -e '.[].vlans[] | select(.vlan == 10 and                                             .mcast_startup_query_interval == 3125) '
-> # + echo -n '[{"ifname":"br0","vlans":[{"vlan":1,"mcast_snooping":1,"mcast_querier":0,"mcast_igmp_version":2,"mcast_mld_version":1,"mcast_last_member_count":2,"mcast_last_member_interval":100,"mcast_startup_query_count":2,"mcast_startup_query_interval":3124,"mcast_membership_interval":26000,"mcast_querier_interval":25500,"mcast_query_interval":12500,"mcast_query_response_interval":1000},{"vlan":10,"vlanEnd":11,"mcast_snooping":1,"mcast_querier":0,"mcast_igmp_version":2,"mcast_mld_version":1,"mcast_last_member_count":2,"mcast_last_member_interval":100,"mcast_startup_query_count":2,"mcast_startup_query_interval":3124,"mcast_membership_interval":26000,"mcast_querier_interval":25500,"mcast_query_interval":12500,"mcast_query_response_interval":1000}]}]'
-> # + check_err 4 'Wrong default mcast_startup_query_interval global vlan option value'
-> 
->> not ok 26 selftests: net/forwarding: ip6_forward_instats_vrf.sh # exit=1
-> 
-> Please run this one with +x so that we will get more info.
+> 	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -Q -O "$(objtree)" -m "$(KERNEL_CONFIG)" $(foreach c,$(NOLIBC_TEST_CONFIG),$(wildcard $(CURDIR)/configs/$c))
+> 	$(Q)$(MAKE_KERNEL) olddefconfig
 
-In fact, I have turned it on on all the remaining failing tests.
+Oh, sorry, test shows, 'allnoconfig' worth a comment ;-)
 
-In case you want to investigate further, please find the debug output log
-at the usual place:
+'allnoconfig' is ~2x faster than 'olddefconfig', it is more
+deterministic for it set all new symbols (the ones not specified in
+.config) with no.
 
-https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-forwarding/kselftest-6.5-rc3-net-forwarding-18.log.xz
+    // scripts/kconfig/Makefile
 
-https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-forwarding/bridge_mdb.sh.out.xz
-https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-forwarding/bridge_vlan_mcast.sh.out.xz
-https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-forwarding/ip6_forward_instats_vrf.sh.out.xz
-https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-forwarding/mirror_gre_changes.sh.out.xz
+        @echo  '  oldconfig       - Update current config utilising a provided .config as base'
+        @echo  '  defconfig       - New config with default from ARCH supplied defconfig'
+        @echo  '  allnoconfig     - New config where all options are answered with no'
+        @echo  '  allyesconfig    - New config where all options are accepted with yes'
+        @echo  '  olddefconfig    - Same as oldconfig but sets new symbols to their'
+        @echo  '                    default value without prompting'
 
-I hope this helps, because you drastically reduced the number of [FAIL] results.
 
-If it matters being heard from me, I think it's a great job!
+here is the result:
 
-Kind regards,
-Mirsad
+    // with 'allnoconfig'
+    $ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'; arch=ppc; time make tinyconfig kernel -C tools/testing/selftests/nolibc CONFIG=tinyconfig XARCH=$arch O=$PWD/kernel-$arch
+    real	3m37.337s
+    user	3m11.576s
+    sys         0m16.899s
 
->> not ok 49 selftests: net/forwarding: mirror_gre_changes.sh # exit=1
+    // with 'olddefconfig'
+    $ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'; arch=ppc; time make tinyconfig kernel -C tools/testing/selftests/nolibc CONFIG=tinyconfig XARCH=$arch O=$PWD/kernel-$arch 
+    real	5m28.759s
+    user	4m47.873s
+    sys         0m30.115s
+
+    // with 'defconfig'
+    
+
+Both merge_tools.sh and tinyconfig target use 'allnoconfig', the usage
+is clear enough, no risk:
+
+    scripts/kconfig/merge_config.sh:
+
+    # Use the merged file as the starting point for:
+    # alldefconfig: Fills in any missing symbols with Kconfig default
+    # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
+    make KCONFIG_ALLCONFIG=$TMP_FILE $OUTPUT_ARG $ALLTARGET
+
+
+    scripts/kconfig/Makefile:
+
+    tinyconfig:
+        $(Q)KCONFIG_ALLCONFIG=kernel/configs/tiny-base.config $(MAKE) -f $(srctree)/Makefile allnoconfig
+        $(Q)$(MAKE) -f $(srctree)/Makefile tiny.config
+
+
+And also since I have carefully test 'allnoconfig' for all of the nolibc
+supported architectures, it is not good to waste time to test
+'olddefconfig'. 'allnoconfig' is also more deterministic than
+'olddefconfig' since it only enable the options specified by us
+explicitly, so, no new symbols will be randomly enabled.
+
+I plan to add more comments before 'nolibc-test-config':
+
+    # kernel config for nolibc-test
+    #
+    # - delete the current configuration and all generated files via 'mrproper' target
+    # - generate .config via '$(CONFIG)' or '$(DEFCONFIG_$(XARCH))' target
+    # - merge extra config options from $(NOLIBC_TEST_CONFIG) files to .config
+    # - use merged .config as base and fills in any missing symbols with '# CONFIG_* is not set' via 'allnoconfig' target
+    # - prepare things we need to do before we recursively start building the kernel via 'prepare' target
+    #
+
+    nolibc-test-config:
+    	$(Q)$(MAKE_KERNEL) mrproper
+    	$(Q)$(MAKE_KERNEL) $(or $(CONFIG),$(DEFCONFIG))
+    	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -Q -O "$(objtree)" -m "$(KERNEL_CONFIG)" $(foreach c,$(NOLIBC_TEST_CONFIG),$(wildcard $(CURDIR)/configs/$c))
+    	$(Q)$(MAKE_KERNEL) KCONFIG_ALLCONFIG=$(KERNEL_CONFIG) allnoconfig
+    	$(Q)$(MAKE_KERNEL) prepare
+
+> 	$(Q)$(MAKE_KERNEL) prepare
 > 
-> Petr, please take a look. Probably need to make the filters more
-> specific. The failure is:
+>     defconfig: nolibc-test-config
 > 
-> # TEST: mirror to gretap: TTL change (skip_hw)                        [FAIL]
-> # 	Expected to capture 10 packets, got 14.
+> The last line still depends on your confirm.
 > 
->> not ok 84 selftests: net/forwarding: tc_flower_l2_miss.sh # exit=1
+> Without more issues, I will renew this patchset as v4, thanks very much!
 > 
-> Should be fixed with the patches.
+> (will update the XARCH patch to get your confirm in another reply too)
 > 
->> marvin@defiant:~/linux/kernel/linux_torvalds$ grep -v "^# +" ../kselftest-6.5-rc3-net-forwarding-16.log | grep -A1 FAIL | grep -v -e -- | grep -v OK
->> # TEST: IPv6 (S, G) port group entries configuration tests            [FAIL]
->> # 	"temp" entry has an unpending group timer
-> 
-> Not sure about this one. What is the output with the following diff?
-> 
-> diff --git a/tools/testing/selftests/net/forwarding/bridge_mdb.sh b/tools/testing/selftests/net/forwarding/bridge_mdb.sh
-> index 8493c3dfc01e..2b2a3b150861 100755
-> --- a/tools/testing/selftests/net/forwarding/bridge_mdb.sh
-> +++ b/tools/testing/selftests/net/forwarding/bridge_mdb.sh
-> @@ -628,6 +628,7 @@ __cfg_test_port_ip_sg()
->          bridge -d -s mdb show dev br0 vid 10 | grep "$grp_key" | \
->                  grep -q "0.00"
->          check_fail $? "\"temp\" entry has an unpending group timer"
-> +       bridge -d -s mdb show dev br0 vid 10 | grep "$grp_key"
->          bridge mdb del dev br0 port $swp1 $grp_key vid 10
->   
->          # Check error cases.
-> 
->> # TEST: IPv4 host entries forwarding tests                            [FAIL]
->> # 	Packet not locally received after adding a host entry
->> # TEST: IPv4 port group "exclude" entries forwarding tests            [FAIL]
->> # 	Packet from valid source not received on H2 after adding entry
->> # TEST: IPv4 port group "include" entries forwarding tests            [FAIL]
->> # 	Packet from valid source not received on H2 after adding entry
->> # TEST: IGMPv3 MODE_IS_INCLUDE tests                                  [FAIL]
->> # 	Source not add to source list
->> # TEST: ctl4: port: ngroups reporting                                 [FAIL]
->> # 	Couldn't add MDB entries
->> # TEST: ctl4: port maxgroups: reporting and treatment of 0            [FAIL]
->> # 	Adding 5 MDB entries failed but should have passed
->> # TEST: ctl4: port maxgroups: configure below ngroups                 [FAIL]
->> # 	dev veth1: Couldn't add MDB entries
->> # TEST: ctl4: port: ngroups reporting                                 [FAIL]
->> # 	Couldn't add MDB entries
->> # TEST: ctl4: port maxgroups: reporting and treatment of 0            [FAIL]
->> # 	Adding 5 MDB entries failed but should have passed
->> # TEST: ctl4: port maxgroups: configure below ngroups                 [FAIL]
->> # 	dev veth1 vid 10: Couldn't add MDB entries
->> # TEST: ctl4: port_vlan: ngroups reporting                            [FAIL]
->> # 	Couldn't add MDB entries
->> # TEST: ctl4: port_vlan: isolation of port and per-VLAN ngroups       [FAIL]
->> # 	Couldn't add MDB entries to VLAN 10
->> # TEST: ctl4: port_vlan maxgroups: reporting and treatment of 0       [FAIL]
->> # 	Adding 5 MDB entries failed but should have passed
->> # TEST: ctl4: port_vlan maxgroups: configure below ngroups            [FAIL]
->> # 	dev veth1 vid 10: Couldn't add MDB entries
->> # TEST: ctl4: port_vlan maxgroups: isolation of port and per-VLAN ngroups   [FAIL]
->> # 	Couldn't add 5 entries
->> # TEST: Vlan mcast_startup_query_interval global option default value   [FAIL]
->> # 	Wrong default mcast_startup_query_interval global vlan option value
->> # TEST: Ip6InHdrErrors                                                [FAIL]
->> # TEST: mirror to gretap: TTL change (skip_hw)                        [FAIL]
->> # 	Expected to capture 10 packets, got 14.
->> # TEST: L2 miss - Multicast (IPv4)                                    [FAIL]
->> # 	Unregistered multicast filter was not hit before adding MDB entry
->> marvin@defiant:~/linux/kernel/linux_torvalds$
->>
->> In case you want to pursue these failures, there is the complete test output log
->> here:
->>
->> https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-forwarding/kselftest-6.5-rc3-net-forwarding-16.log.xz
->>
->> Thanks again, great work!
->>
->> Kind regards,
->> Mirsad
+> Best regards,
+> Zhangjin
