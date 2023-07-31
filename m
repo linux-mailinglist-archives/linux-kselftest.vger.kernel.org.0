@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2F2769B1D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 17:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9611769B6D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 17:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjGaPsQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 11:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S232019AbjGaPzM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 11:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232487AbjGaPsO (ORCPT
+        with ESMTP id S232898AbjGaPzK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 11:48:14 -0400
+        Mon, 31 Jul 2023 11:55:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B3710D;
-        Mon, 31 Jul 2023 08:48:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA9A173F;
+        Mon, 31 Jul 2023 08:55:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 210FF611BD;
-        Mon, 31 Jul 2023 15:48:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAAFBC433C8;
-        Mon, 31 Jul 2023 15:48:05 +0000 (UTC)
-Date:   Mon, 31 Jul 2023 11:48:03 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E39D611E1;
+        Mon, 31 Jul 2023 15:55:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 494BDC433C7;
+        Mon, 31 Jul 2023 15:54:55 +0000 (UTC)
+Date:   Mon, 31 Jul 2023 11:54:53 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
-        x86@kernel.org, rcu@vger.kernel.org,
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -55,6 +55,7 @@ Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
         Uladzislau Rezki <urezki@gmail.com>,
         Christoph Hellwig <hch@infradead.org>,
         Lorenzo Stoakes <lstoakes@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
         Jason Baron <jbaron@akamai.com>,
         Kees Cook <keescook@chromium.org>,
         Sami Tolvanen <samitolvanen@google.com>,
@@ -77,15 +78,14 @@ Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH v2 02/20] tracing/filters: Enable filtering a
- cpumask field by another cpumask
-Message-ID: <20230731114803.019158b9@gandalf.local.home>
-In-Reply-To: <xhsmh4jlks4yw.mognet@vschneid.remote.csb>
+Subject: Re: [RFC PATCH v2 06/20] tracing/filters: Optimise scalar vs
+ cpumask filtering when the user mask is a single CPU
+Message-ID: <20230731115453.395d20c6@gandalf.local.home>
+In-Reply-To: <04f20e58-6b24-4f44-94e2-0d12324a30e4@kadam.mountain>
 References: <20230720163056.2564824-1-vschneid@redhat.com>
-        <20230720163056.2564824-3-vschneid@redhat.com>
-        <20230726194148.4jhyqqbtn3qqqqsq@treble>
-        <20230729150901.25b9ae0c@rorschach.local.home>
-        <xhsmh4jlks4yw.mognet@vschneid.remote.csb>
+        <20230720163056.2564824-7-vschneid@redhat.com>
+        <20230729155547.35719a1f@rorschach.local.home>
+        <04f20e58-6b24-4f44-94e2-0d12324a30e4@kadam.mountain>
 X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -100,31 +100,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 31 Jul 2023 12:19:51 +0100
-Valentin Schneider <vschneid@redhat.com> wrote:
-> >
-> > Also, when you do an empty for loop:
-> >
-> >       for (; str[i] && str[i] != '}'; i++);
-> >
-> > Always put the semicolon on the next line, otherwise it is really easy
-> > to think that the next line is part of the for loop. That is, instead
-> > of the above, do:
-> >
-> >       for (; str[i] && str[i] != '}'; i++)
-> >               ;
-> >  
+On Mon, 31 Jul 2023 15:07:52 +0300
+Dan Carpenter <dan.carpenter@linaro.org> wrote:
+
+> On Sat, Jul 29, 2023 at 03:55:47PM -0400, Steven Rostedt wrote:
+> > > @@ -1761,6 +1761,11 @@ static int parse_pred(const char *str, void *data,
+> > >  				FILTER_PRED_FN_CPUMASK;
+> > >  		} else if (field->filter_type == FILTER_CPU) {
+> > >  			pred->fn_num = FILTER_PRED_FN_CPU_CPUMASK;
+> > > +		} else if (single) {
+> > > +			pred->op = pred->op == OP_BAND ? OP_EQ : pred->op;  
+> > 
+> > Nit, the above can be written as:
+> > 
+> > 			pred->op = pret->op != OP_BAND ? : OP_EQ;
+> >   
 > 
-> Interestingly I don't think I've ever encountered that variant, usually
-> having an empty line (which this lacks) and the indentation level is enough
-> to identify these - regardless, I'll change it.
+> Heh.  Those are not equivalent.  The right way to write this is:
 
+You mean because of my typo?
 
-Do a "git grep -B1 -e '^\s*;\s*$'"
+> 
+> 	if (pred->op == OP_BAND)
+> 		pred->op = OP_EQ;
 
-You'll find that it is quite common.
-
-Thanks,
+But sure, I'm fine with that, and it's probably more readable too.
 
 -- Steve
-
