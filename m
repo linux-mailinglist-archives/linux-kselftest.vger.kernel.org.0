@@ -2,68 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42B176908B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 10:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A7B7691A9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 11:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbjGaIoV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 04:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
+        id S229962AbjGaJ0Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 05:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbjGaInw (ORCPT
+        with ESMTP id S229613AbjGaJZ6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 04:43:52 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533E546A6;
-        Mon, 31 Jul 2023 01:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690792855; x=1722328855;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ayoNeSBcOzbc8j3IcM+Na1jsjzLANSMfnbhKjPr7hqc=;
-  b=aCxo6ZebBA9jWG6KOZlV1w6vYCp4yTvV0Pk8Y6sG1hVvcrWvmEMsIn8Z
-   bv1YcPjuydnSzrg0L4YP4jTGvcGO7BfBG2SQMA+q06aGzrQJePb+KCS4Q
-   +EUKUtqNyBL253h40taM1L1p7vLABSA4VDgOZudUPzY0nIg2akKtG+MSQ
-   dHfK69nIgxXeenOuFB3Hk09Xx5xH7dsd6ut4OpsqSDlcHPq1YSqBNvbzQ
-   Oik8d81tzFEuqo8cKBy65t+igdPq188Ajmwg9aY0tgqhFN6tXy9c9nOxt
-   JS6C5c4JzxIlOan/jsow15tfrFgsAWvcKhQfe9ap0Ej+b18UbxJlQQqdc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="367846591"
-X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="367846591"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 01:39:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="842176723"
-X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="842176723"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 31 Jul 2023 01:39:11 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qQOQo-00051X-1L;
-        Mon, 31 Jul 2023 08:39:10 +0000
-Date:   Mon, 31 Jul 2023 16:39:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, igt-dev@lists.freedesktop.org,
-        intel-xe@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] kunit: Allow kunit test modules to use test
- filtering
-Message-ID: <202307311645.CdN0xKiF-lkp@intel.com>
-References: <20230731054552.2145292-8-janusz.krzysztofik@linux.intel.com>
+        Mon, 31 Jul 2023 05:25:58 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0071FCA;
+        Mon, 31 Jul 2023 02:24:40 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id F086F6017F;
+        Mon, 31 Jul 2023 11:24:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1690795477; bh=LkfFeBRdv/EiJnFEypSxyrbE9TqdrljO0R0Su/jnKm8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ipJ4XoHkuLqw/vryVgWHk4rtZwdzao6FreVkphSRGsQ3aFVo+iQbRLY9S/viexub/
+         O4MCvloxyXxuGeK/94KBEL14ZSvMXBUc4fqIEOwBc1IDmItZ/0bdybbcSwEQwQNHsa
+         UqcdlK/hpkgjLlA6s/WYI7Fw794BbuWa6K2asgwOKEk/S6UAjf9PrmCnnWlO5tgvqJ
+         YC3O2C6JGBYhUsybRb+7sdoxH2f4lU9EBISfmkSuVTxtMiGlZUxVW8T67i5VY8Nh25
+         XhhIbfqq7wvt/YC21TjOwvqWgka+qzBrqqvgr1YPKqq4lJCfe97MztJY3DXW5qYs56
+         3N1q5Q5eBdVdg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KX89WtKi1hOD; Mon, 31 Jul 2023 11:24:35 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id C9FF560182;
+        Mon, 31 Jul 2023 11:24:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1690795475; bh=LkfFeBRdv/EiJnFEypSxyrbE9TqdrljO0R0Su/jnKm8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BP6T+IoFeVtMtBCpyHkzSvgZVMcAMwnq5LlGPOj9y/+gNnKdP6pxegH9amjbtgUA4
+         b6QHdAmpbt1JeCTNZMe9k1WUxET5R30qgwqQ83nZ486jdRRsPP9hwTt7xIREfsAveG
+         02LOO4dC5bKeZCg+l9uwco3ivDkQEtyDrKoMmBvYOdvT8rV2qWqfcQqSpkXgR2Pcx6
+         CoQTxCurnyH7E4N87qjM7HxIsxFkdtG+h8u41AHmstseCm+dZWeWNN2T6PHaa8tuuL
+         9QYlES7qB2XpPo+x/Ja7LkuKJp1aOdk35KED8zX0XAfx7PQLEyGhMLQhZtQB8vKExN
+         w1XyvNe9yag0A==
+Message-ID: <2f203995-5ae0-13bc-d1a6-997c2b36a2b8@alu.unizg.hr>
+Date:   Mon, 31 Jul 2023 11:24:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230731054552.2145292-8-janusz.krzysztofik@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Subject: Re: [PATCH v1 01/11] selftests: forwarding: custom_multipath_hash.sh:
+ add cleanup for SIGTERM sent by timeout
+Content-Language: en-US
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     petrm@nvidia.com, razor@blackwall.org,
+        Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+References: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
+ <ZLzj5oYrbHGvCMkq@shredder>
+ <0550924e-dce9-f90d-df8a-db810fd2499f@alu.unizg.hr>
+ <adc5e40d-d040-a65e-eb26-edf47dac5b02@alu.unizg.hr>
+ <ZL6OljQubhVtQjcD@shredder>
+ <cab8ea8a-98f4-ef9b-4215-e2a93cccaab1@alu.unizg.hr>
+ <ZMEQGIOQXv6so30x@shredder>
+ <a9b6d9f5-14ae-a931-ab7b-d31b5e40f5df@alu.unizg.hr>
+ <ZMYXABUN9OzfN5D3@shredder>
+ <da3f4f4e-47a7-25be-fa61-aebeba1d8d0c@alu.unizg.hr>
+ <ZMdouQRypZCGZhV0@shredder>
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZMdouQRypZCGZhV0@shredder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,104 +84,162 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Janusz,
+On 7/31/23 09:54, Ido Schimmel wrote:
+> Thanks for testing.
 
-kernel test robot noticed the following build errors:
+Not at all.
 
-[auto build test ERROR on shuah-kselftest/kunit-fixes]
-[also build test ERROR on linus/master v6.5-rc4]
-[cannot apply to shuah-kselftest/kunit next-20230731]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> On Sun, Jul 30, 2023 at 06:48:04PM +0200, Mirsad Todorovac wrote:
+>> not ok 26 selftests: net/forwarding: ip6_forward_instats_vrf.sh # exit=1
+> 
+> Regarding this one, in the log I don't see the require_command() that I
+> added in "selftests: forwarding: Set default IPv6 traceroute utility".
+> Also, at line 470 I see "ip vrf exec vveth0 2001:1:2::2" which is
+> another indication that you don't have the patch.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Janusz-Krzysztofik/kunit-Report-the-count-of-test-suites-in-a-module/20230731-141908
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit-fixes
-patch link:    https://lore.kernel.org/r/20230731054552.2145292-8-janusz.krzysztofik%40linux.intel.com
-patch subject: [PATCH v2 3/3] kunit: Allow kunit test modules to use test filtering
-config: hexagon-randconfig-r041-20230731 (https://download.01.org/0day-ci/archive/20230731/202307311645.CdN0xKiF-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230731/202307311645.CdN0xKiF-lkp@intel.com/reproduce)
+This is correct.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307311645.CdN0xKiF-lkp@intel.com/
+Now I have:
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+root@defiant:tools/testing/selftests/net/forwarding# ./ip6_forward_instats_vrf.sh
+SKIP: traceroute6 not installed
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/locktorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/test-ww_mutex.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcutorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/refscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/torture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/scftorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp737.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp855.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp857.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp860.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp874.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp932.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_euc-jp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp950.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-3.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-5.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-9.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-u.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-ru.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-gaelic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-romanian.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-roman.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/binfmt_script.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/autofs/autofs4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-keys/trusted.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-example-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/math/prime_numbers.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/zlib_deflate/zlib_deflate.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpio/gpio-gw-pld.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpio/gpio-pcf857x.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/platform_lcd.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/rt4831-backlight.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/fbdev/vfb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dma/qcom/hdma_mgmt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dma/qcom/hdma.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/da9121-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/rt4831-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/tps6286x-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/serial/8250/8250_base.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/serial/serial_mctrl_gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/ttynull.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/goldfish.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/ttyprintk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/ppdev.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/lontium-lt9611uxc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sil-sii8620.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sii9234.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-raw-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-slimbus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/ssbi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/rt4831.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/qcom-pm8008.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/line-display.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/mmc_core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/pwrseq_emmc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/sdio_uart.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/crypto/atmel-sha204a.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/goldfish/goldfish_pipe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_userspace.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/pcmcia_rsrc.o
->> ERROR: modpost: "glob_match" [lib/kunit/kunit.ko] undefined!
+Mystery solved. This is much more useful output :-)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Installed traceroute6 and now the test is OK:
+
+root@defiant:tools/testing/selftests/net/forwarding# ./ip6_forward_instats_vrf.sh
+TEST: ping6                                                         [ OK ]
+TEST: Ip6InTooBigErrors                                             [ OK ]
+TEST: Ip6InHdrErrors                                                [ OK ]
+TEST: Ip6InAddrErrors                                               [ OK ]
+TEST: Ip6InDiscards                                                 [ OK ]
+root@defiant:tools/testing/selftests/net/forwarding#
+
+I guess that means only three are left.
+
+# ./bridge_mdb.sh
+dev br0 port veth1 grp 239.1.1.1 src 192.0.2.1 temp filter_mode include proto static vid 10  259.99
+TEST: IPv4 (S, G) port group entries configuration tests            [FAIL]
+	Entry has an unpending group timer after replace
+dev br0 port veth1 grp ff0e::1 src 2001:db8:1::1 temp filter_mode include proto static vid 10  259.99
+TEST: IPv6 (S, G) port group entries configuration tests            [FAIL]
+	Entry has an unpending group timer after replace
+# ./bridge_vlan_mcast.sh
+TEST: Vlan mcast_startup_query_interval global option default value   [FAIL]
+	Wrong default mcast_startup_query_interval global vlan option value
+# ./mirror_gre_changes.sh
+TEST: mirror to gretap: TTL change (skip_hw)                        [FAIL]
+	Expected to capture 10 packets, got 15.
+TEST: mirror to ip6gretap: TTL change (skip_hw)                     [FAIL]
+	Expected to capture 10 packets, got 13.
+WARN: Could not test offloaded functionality
+#
+
+NOTE: The error happened because two patches collided. This patch
+
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 975fc5168c6334..40a8c1541b7f81 100755
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -30,6 +30,7 @@ REQUIRE_MZ=${REQUIRE_MZ:=yes}
+  REQUIRE_MTOOLS=${REQUIRE_MTOOLS:=no}
+  STABLE_MAC_ADDRS=${STABLE_MAC_ADDRS:=no}
+  TCPDUMP_EXTRA_FLAGS=${TCPDUMP_EXTRA_FLAGS:=}
++TROUTE6=${TROUTE6:=traceroute6}
+  
+  relative_path="${BASH_SOURCE%/*}"
+  if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
+
+and this patch
+
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 71f7c0c49677..5b0183013017 100755
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -16,8 +16,6 @@ TEAMD=${TEAMD:=teamd}
+  WAIT_TIME=${WAIT_TIME:=5}
+  PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
+  PAUSE_ON_CLEANUP=${PAUSE_ON_CLEANUP:=no}
+-NETIF_TYPE=${NETIF_TYPE:=veth}
+-NETIF_CREATE=${NETIF_CREATE:=yes}
+  MCD=${MCD:=smcrouted}
+  MC_CLI=${MC_CLI:=smcroutectl}
+  PING_COUNT=${PING_COUNT:=10}
+@@ -30,6 +28,20 @@ REQUIRE_MZ=${REQUIRE_MZ:=yes}
+  REQUIRE_MTOOLS=${REQUIRE_MTOOLS:=no}
+  STABLE_MAC_ADDRS=${STABLE_MAC_ADDRS:=no}
+  TCPDUMP_EXTRA_FLAGS=${TCPDUMP_EXTRA_FLAGS:=}
++NETIF_TYPE=${NETIF_TYPE:=veth}
++NETIF_CREATE=${NETIF_CREATE:=yes}
++declare -A NETIFS=(
++       [p1]=veth0
++       [p2]=veth1
++       [p3]=veth2
++       [p4]=veth3
++       [p5]=veth4
++       [p6]=veth5
++       [p7]=veth6
++       [p8]=veth7
++       [p9]=veth8
++       [p10]=veth9
++)
+
+  relative_path="${BASH_SOURCE%/*}"
+  if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
+
+are not compatible.
+
+I have applied the 'require_command $TROUTE6' patch manually.
+
+I suppose this is what you intended to have:
+
+# Can be overridden by the configuration file.
+PING=${PING:=ping}
+PING6=${PING6:=ping6}
+MZ=${MZ:=mausezahn}
+ARPING=${ARPING:=arping}
+TEAMD=${TEAMD:=teamd}
+WAIT_TIME=${WAIT_TIME:=5}
+PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
+PAUSE_ON_CLEANUP=${PAUSE_ON_CLEANUP:=no}
+MCD=${MCD:=smcrouted}
+MC_CLI=${MC_CLI:=smcroutectl}
+PING_COUNT=${PING_COUNT:=10}
+PING_TIMEOUT=${PING_TIMEOUT:=5}
+WAIT_TIMEOUT=${WAIT_TIMEOUT:=20}
+INTERFACE_TIMEOUT=${INTERFACE_TIMEOUT:=600}
+LOW_AGEING_TIME=${LOW_AGEING_TIME:=1000}
+REQUIRE_JQ=${REQUIRE_JQ:=yes}
+REQUIRE_MZ=${REQUIRE_MZ:=yes}
+REQUIRE_MTOOLS=${REQUIRE_MTOOLS:=no}
+STABLE_MAC_ADDRS=${STABLE_MAC_ADDRS:=no}
+TCPDUMP_EXTRA_FLAGS=${TCPDUMP_EXTRA_FLAGS:=}
+TROUTE6=${TROUTE6:=traceroute6}
+NETIF_TYPE=${NETIF_TYPE:=veth}
+NETIF_CREATE=${NETIF_CREATE:=yes}
+declare -A NETIFS=(
+        [p1]=veth0
+        [p2]=veth1
+        [p3]=veth2
+        [p4]=veth3
+        [p5]=veth4
+        [p6]=veth5
+        [p7]=veth6
+        [p8]=veth7
+        [p9]=veth8
+        [p10]=veth9
+)
+
+relative_path="${BASH_SOURCE%/*}"
+if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
+         relative_path="."
+fi
+------------------------------------------------
+
+Probably for the production patch you would like to have this fixed.
+
+Have a nice day.
+
+Kind regards,
+Mirsad
