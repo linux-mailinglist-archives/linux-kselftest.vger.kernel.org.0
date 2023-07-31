@@ -2,81 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A7B7691A9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 11:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF0E769261
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 11:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjGaJ0Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 05:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
+        id S231494AbjGaJyW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 05:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjGaJZ6 (ORCPT
+        with ESMTP id S231590AbjGaJx7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 05:25:58 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0071FCA;
-        Mon, 31 Jul 2023 02:24:40 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id F086F6017F;
-        Mon, 31 Jul 2023 11:24:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690795477; bh=LkfFeBRdv/EiJnFEypSxyrbE9TqdrljO0R0Su/jnKm8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ipJ4XoHkuLqw/vryVgWHk4rtZwdzao6FreVkphSRGsQ3aFVo+iQbRLY9S/viexub/
-         O4MCvloxyXxuGeK/94KBEL14ZSvMXBUc4fqIEOwBc1IDmItZ/0bdybbcSwEQwQNHsa
-         UqcdlK/hpkgjLlA6s/WYI7Fw794BbuWa6K2asgwOKEk/S6UAjf9PrmCnnWlO5tgvqJ
-         YC3O2C6JGBYhUsybRb+7sdoxH2f4lU9EBISfmkSuVTxtMiGlZUxVW8T67i5VY8Nh25
-         XhhIbfqq7wvt/YC21TjOwvqWgka+qzBrqqvgr1YPKqq4lJCfe97MztJY3DXW5qYs56
-         3N1q5Q5eBdVdg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id KX89WtKi1hOD; Mon, 31 Jul 2023 11:24:35 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id C9FF560182;
-        Mon, 31 Jul 2023 11:24:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690795475; bh=LkfFeBRdv/EiJnFEypSxyrbE9TqdrljO0R0Su/jnKm8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BP6T+IoFeVtMtBCpyHkzSvgZVMcAMwnq5LlGPOj9y/+gNnKdP6pxegH9amjbtgUA4
-         b6QHdAmpbt1JeCTNZMe9k1WUxET5R30qgwqQ83nZ486jdRRsPP9hwTt7xIREfsAveG
-         02LOO4dC5bKeZCg+l9uwco3ivDkQEtyDrKoMmBvYOdvT8rV2qWqfcQqSpkXgR2Pcx6
-         CoQTxCurnyH7E4N87qjM7HxIsxFkdtG+h8u41AHmstseCm+dZWeWNN2T6PHaa8tuuL
-         9QYlES7qB2XpPo+x/Ja7LkuKJp1aOdk35KED8zX0XAfx7PQLEyGhMLQhZtQB8vKExN
-         w1XyvNe9yag0A==
-Message-ID: <2f203995-5ae0-13bc-d1a6-997c2b36a2b8@alu.unizg.hr>
-Date:   Mon, 31 Jul 2023 11:24:27 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Subject: Re: [PATCH v1 01/11] selftests: forwarding: custom_multipath_hash.sh:
- add cleanup for SIGTERM sent by timeout
-Content-Language: en-US
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     petrm@nvidia.com, razor@blackwall.org,
-        Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mon, 31 Jul 2023 05:53:59 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8565910C6
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 02:52:54 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fe28f92d8eso2290357e87.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 02:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1690797172; x=1691401972;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=iS9ynVL/SnopVJ2vw9YOzxEVqWQLoL/quqMJip/rlSE=;
+        b=TJGih8nCWL5gxD2BWkapKv6qzLQgYlt7Dn6tUvA7zsBBkj0NosBGxU6y4wTEHIMu9b
+         QNhfWKg5PLY3Lopd3sj6iaUhOmghM4XdsG0krJt7pnnvs8nkdNgFXco002qJe6S1WLjL
+         4D5feAhqvaQ0OrqYsnoNvfQpn+ks1/c6mkHzU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690797172; x=1691401972;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iS9ynVL/SnopVJ2vw9YOzxEVqWQLoL/quqMJip/rlSE=;
+        b=hlqSoVrM7TzYRQqM0KoQ3qNnG89TBqe45zQaYVhHbcPCrxdIxtAkf5bf1//ILOfOeu
+         PqmgebPN0lLIgBc2KGWG9Mj9QDVExxoeyLDXlS5sQzBhdEGO4+4bqNOO6KfSgfJTPWK4
+         WFapzW5V1nrkcB9t9BwoAtVD9/JvOLJhj/ly/HnApmiYAMC/Q7g9k+EvYsDjrLzI9LDz
+         qoZGctTeQctxFAT3TxVkA+RbX0/kQ/WTxuVzIUehJd6Zb5yEn7a9QSWQ8PvaJUGQkKVE
+         308CE8mVOmy5kUWU4z5SFvlz6a7NUTwFgYXpnfjpzRCLli4NVqbFi8S/TukjBMgVU/WU
+         217A==
+X-Gm-Message-State: ABy/qLZm3Q9s+oDJXOY8KX4s7/b7Au+FUU+UBZHfengMqYd0ih2qy/E8
+        7HSEBIXv1+VZzAwI1BcKl4Uf0Q==
+X-Google-Smtp-Source: APBJJlFIqs6ieNOIG6CV6VOvY4r1Ja1rFjHMIrHJIuZjzIq57jXM6bn1exmD7gtibtpDJrxd12r9Rg==
+X-Received: by 2002:a2e:8557:0:b0:2b9:4821:22b6 with SMTP id u23-20020a2e8557000000b002b9482122b6mr6184560ljj.10.1690797172186;
+        Mon, 31 Jul 2023 02:52:52 -0700 (PDT)
+Received: from cloudflare.com (79.184.136.135.ipv4.supernova.orange.pl. [79.184.136.135])
+        by smtp.gmail.com with ESMTPSA id q24-20020a17090622d800b0098d2f703408sm5858343eja.118.2023.07.31.02.52.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jul 2023 02:52:51 -0700 (PDT)
+References: <cover.1690332693.git.yan@cloudflare.com>
+ <9c4896b109a39c3fa088844addaa1737a84bbbb5.1690332693.git.yan@cloudflare.com>
+ <791b919c-de82-6dc8-905a-520543f975cd@linux.dev>
+User-agent: mu4e 1.6.10; emacs 28.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Yan Zhai <yan@cloudflare.com>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-References: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
- <ZLzj5oYrbHGvCMkq@shredder>
- <0550924e-dce9-f90d-df8a-db810fd2499f@alu.unizg.hr>
- <adc5e40d-d040-a65e-eb26-edf47dac5b02@alu.unizg.hr>
- <ZL6OljQubhVtQjcD@shredder>
- <cab8ea8a-98f4-ef9b-4215-e2a93cccaab1@alu.unizg.hr>
- <ZMEQGIOQXv6so30x@shredder>
- <a9b6d9f5-14ae-a931-ab7b-d31b5e40f5df@alu.unizg.hr>
- <ZMYXABUN9OzfN5D3@shredder>
- <da3f4f4e-47a7-25be-fa61-aebeba1d8d0c@alu.unizg.hr>
- <ZMdouQRypZCGZhV0@shredder>
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZMdouQRypZCGZhV0@shredder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com,
+        Jordan Griege <jgriege@cloudflare.com>,
+        Markus Elfring <Markus.Elfring@web.de>
+Subject: Re: [PATCH v4 bpf 2/2] bpf: selftests: add lwt redirect regression
+ test cases
+Date:   Mon, 31 Jul 2023 11:48:40 +0200
+In-reply-to: <791b919c-de82-6dc8-905a-520543f975cd@linux.dev>
+Message-ID: <87edkoflvx.fsf@cloudflare.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,162 +87,69 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/31/23 09:54, Ido Schimmel wrote:
-> Thanks for testing.
+On Fri, Jul 28, 2023 at 03:47 PM -07, Martin KaFai Lau wrote:
+> On 7/25/23 6:09 PM, Yan Zhai wrote:
 
-Not at all.
+[...]
 
-> On Sun, Jul 30, 2023 at 06:48:04PM +0200, Mirsad Todorovac wrote:
->> not ok 26 selftests: net/forwarding: ip6_forward_instats_vrf.sh # exit=1
-> 
-> Regarding this one, in the log I don't see the require_command() that I
-> added in "selftests: forwarding: Set default IPv6 traceroute utility".
-> Also, at line 470 I see "ip vrf exec vveth0 2001:1:2::2" which is
-> another indication that you don't have the patch.
+>> diff --git a/tools/testing/selftests/bpf/test_lwt_redirect.sh
+>> b/tools/testing/selftests/bpf/test_lwt_redirect.sh
+>> new file mode 100755
+>> index 000000000000..1b7b78b48174
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/test_lwt_redirect.sh
+>
+> This has to be written in the test_progs infrastructure in C. Only test_progs is
+> run by the BPF CI. Take a look at other tests in prog_tests/. For example,
+> tc_redirect.c and xdp_metadata.c which are having setup in netns/link/...etc. It
+> currently has helpers to add tc qdisc and filter but not adding route yet which
+> could be a useful addition.
 
-This is correct.
+Can we help make the BPF CI better so that it also runs other tests in
+addition test_progs?
 
-Now I have:
+We have bpf selftests written in shell and even Python. These are
+sometimes the right tools for the job and make adding tests easier,
+IMHO. Network setup from C is verbose and tedious. Not to mention, hard
+to read through.
 
-root@defiant:tools/testing/selftests/net/forwarding# ./ip6_forward_instats_vrf.sh
-SKIP: traceroute6 not installed
-
-Mystery solved. This is much more useful output :-)
-
-Installed traceroute6 and now the test is OK:
-
-root@defiant:tools/testing/selftests/net/forwarding# ./ip6_forward_instats_vrf.sh
-TEST: ping6                                                         [ OK ]
-TEST: Ip6InTooBigErrors                                             [ OK ]
-TEST: Ip6InHdrErrors                                                [ OK ]
-TEST: Ip6InAddrErrors                                               [ OK ]
-TEST: Ip6InDiscards                                                 [ OK ]
-root@defiant:tools/testing/selftests/net/forwarding#
-
-I guess that means only three are left.
-
-# ./bridge_mdb.sh
-dev br0 port veth1 grp 239.1.1.1 src 192.0.2.1 temp filter_mode include proto static vid 10  259.99
-TEST: IPv4 (S, G) port group entries configuration tests            [FAIL]
-	Entry has an unpending group timer after replace
-dev br0 port veth1 grp ff0e::1 src 2001:db8:1::1 temp filter_mode include proto static vid 10  259.99
-TEST: IPv6 (S, G) port group entries configuration tests            [FAIL]
-	Entry has an unpending group timer after replace
-# ./bridge_vlan_mcast.sh
-TEST: Vlan mcast_startup_query_interval global option default value   [FAIL]
-	Wrong default mcast_startup_query_interval global vlan option value
-# ./mirror_gre_changes.sh
-TEST: mirror to gretap: TTL change (skip_hw)                        [FAIL]
-	Expected to capture 10 packets, got 15.
-TEST: mirror to ip6gretap: TTL change (skip_hw)                     [FAIL]
-	Expected to capture 10 packets, got 13.
-WARN: Could not test offloaded functionality
-#
-
-NOTE: The error happened because two patches collided. This patch
-
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 975fc5168c6334..40a8c1541b7f81 100755
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -30,6 +30,7 @@ REQUIRE_MZ=${REQUIRE_MZ:=yes}
-  REQUIRE_MTOOLS=${REQUIRE_MTOOLS:=no}
-  STABLE_MAC_ADDRS=${STABLE_MAC_ADDRS:=no}
-  TCPDUMP_EXTRA_FLAGS=${TCPDUMP_EXTRA_FLAGS:=}
-+TROUTE6=${TROUTE6:=traceroute6}
-  
-  relative_path="${BASH_SOURCE%/*}"
-  if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
-
-and this patch
-
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 71f7c0c49677..5b0183013017 100755
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -16,8 +16,6 @@ TEAMD=${TEAMD:=teamd}
-  WAIT_TIME=${WAIT_TIME:=5}
-  PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
-  PAUSE_ON_CLEANUP=${PAUSE_ON_CLEANUP:=no}
--NETIF_TYPE=${NETIF_TYPE:=veth}
--NETIF_CREATE=${NETIF_CREATE:=yes}
-  MCD=${MCD:=smcrouted}
-  MC_CLI=${MC_CLI:=smcroutectl}
-  PING_COUNT=${PING_COUNT:=10}
-@@ -30,6 +28,20 @@ REQUIRE_MZ=${REQUIRE_MZ:=yes}
-  REQUIRE_MTOOLS=${REQUIRE_MTOOLS:=no}
-  STABLE_MAC_ADDRS=${STABLE_MAC_ADDRS:=no}
-  TCPDUMP_EXTRA_FLAGS=${TCPDUMP_EXTRA_FLAGS:=}
-+NETIF_TYPE=${NETIF_TYPE:=veth}
-+NETIF_CREATE=${NETIF_CREATE:=yes}
-+declare -A NETIFS=(
-+       [p1]=veth0
-+       [p2]=veth1
-+       [p3]=veth2
-+       [p4]=veth3
-+       [p5]=veth4
-+       [p6]=veth5
-+       [p7]=veth6
-+       [p8]=veth7
-+       [p9]=veth8
-+       [p10]=veth9
-+)
-
-  relative_path="${BASH_SOURCE%/*}"
-  if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
-
-are not compatible.
-
-I have applied the 'require_command $TROUTE6' patch manually.
-
-I suppose this is what you intended to have:
-
-# Can be overridden by the configuration file.
-PING=${PING:=ping}
-PING6=${PING6:=ping6}
-MZ=${MZ:=mausezahn}
-ARPING=${ARPING:=arping}
-TEAMD=${TEAMD:=teamd}
-WAIT_TIME=${WAIT_TIME:=5}
-PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
-PAUSE_ON_CLEANUP=${PAUSE_ON_CLEANUP:=no}
-MCD=${MCD:=smcrouted}
-MC_CLI=${MC_CLI:=smcroutectl}
-PING_COUNT=${PING_COUNT:=10}
-PING_TIMEOUT=${PING_TIMEOUT:=5}
-WAIT_TIMEOUT=${WAIT_TIMEOUT:=20}
-INTERFACE_TIMEOUT=${INTERFACE_TIMEOUT:=600}
-LOW_AGEING_TIME=${LOW_AGEING_TIME:=1000}
-REQUIRE_JQ=${REQUIRE_JQ:=yes}
-REQUIRE_MZ=${REQUIRE_MZ:=yes}
-REQUIRE_MTOOLS=${REQUIRE_MTOOLS:=no}
-STABLE_MAC_ADDRS=${STABLE_MAC_ADDRS:=no}
-TCPDUMP_EXTRA_FLAGS=${TCPDUMP_EXTRA_FLAGS:=}
-TROUTE6=${TROUTE6:=traceroute6}
-NETIF_TYPE=${NETIF_TYPE:=veth}
-NETIF_CREATE=${NETIF_CREATE:=yes}
-declare -A NETIFS=(
-        [p1]=veth0
-        [p2]=veth1
-        [p3]=veth2
-        [p4]=veth3
-        [p5]=veth4
-        [p6]=veth5
-        [p7]=veth6
-        [p8]=veth7
-        [p9]=veth8
-        [p10]=veth9
-)
-
-relative_path="${BASH_SOURCE%/*}"
-if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
-         relative_path="."
-fi
-------------------------------------------------
-
-Probably for the production patch you would like to have this fixed.
-
-Have a nice day.
-
-Kind regards,
-Mirsad
+# ./run_kselftest.sh --list
+bpf:test_verifier
+bpf:test_tag
+bpf:test_maps
+bpf:test_lru_map
+bpf:test_lpm_map
+bpf:test_progs
+bpf:test_dev_cgroup
+bpf:test_sock
+bpf:test_sockmap
+bpf:get_cgroup_id_user
+bpf:test_cgroup_storage
+bpf:test_tcpnotify_user
+bpf:test_sysctl
+bpf:test_progs-no_alu32
+bpf:test_kmod.sh
+bpf:test_xdp_redirect.sh
+bpf:test_xdp_redirect_multi.sh
+bpf:test_xdp_meta.sh
+bpf:test_xdp_veth.sh
+bpf:test_offload.py
+bpf:test_sock_addr.sh
+bpf:test_tunnel.sh
+bpf:test_lwt_seg6local.sh
+bpf:test_lirc_mode2.sh
+bpf:test_skb_cgroup_id.sh
+bpf:test_flow_dissector.sh
+bpf:test_xdp_vlan_mode_generic.sh
+bpf:test_xdp_vlan_mode_native.sh
+bpf:test_lwt_ip_encap.sh
+bpf:test_tcp_check_syncookie.sh
+bpf:test_tc_tunnel.sh
+bpf:test_tc_edt.sh
+bpf:test_xdping.sh
+bpf:test_bpftool_build.sh
+bpf:test_bpftool.sh
+bpf:test_bpftool_metadata.sh
+bpf:test_doc_build.sh
+bpf:test_xsk.sh
+bpf:test_xdp_features.sh
