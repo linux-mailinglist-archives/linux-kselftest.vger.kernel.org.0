@@ -2,115 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A184768B64
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 07:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B8F768BC8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 08:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjGaFv3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 01:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        id S229554AbjGaGR2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 02:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjGaFvX (ORCPT
+        with ESMTP id S229568AbjGaGR1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 01:51:23 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61781730;
-        Sun, 30 Jul 2023 22:51:11 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1690782665t6sax2el
-Received: from dslab-main2-ubuntu.tail147f4.ts ( [202.201.15.117])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 31 Jul 2023 13:51:03 +0800 (CST)
-X-QQ-SSF: 01200000000000704000000A0000000
-X-QQ-FEAT: jXjag1m6xl4TUwwOcxAHuSNvjezdnyUkeJyXtjE6BB1LN2sUyINMeltLYijKJ
-        UMECH7SIllnAtxMSpIe2wh4MC38HJh6Vjamnwx6HerLMhs4ijK/ySftTd6SmXUXtSgBI6zF
-        fdgepgMm9EFt3L9YSC/bFVrBnGow+n8WogQzdxwoXciLOZSmjVtdtnUWdmd3l4n9cOKh7s9
-        FitwrNZKDEevJn3RWFS4ficqy+A4GOlYHO3dvlEZkBA+p5n13KQF6lTPIIF6EMZDy+nWUNi
-        PoJzti3ZCeUjBV0P90IyLi0sDKCraQ/Hzwrd2oFMoiZ78XlgKImyNU8Ac8D0eeCwTXCiniw
-        JLazDYb9coRHXrMul12RLTJ7BMefgZSoqRYPt9kHjU+giphf34TNGRv9foQPw==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9840545900577853987
-From:   Yuan Tan <tanyuan@tinylab.org>
-To:     w@1wt.eu, thomas@t-8ch.de
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Yuan Tan <tanyuan@tinylab.org>
-Subject: [PATCH v2 2/2] selftests/nolibc: add testcase for pipe
-Date:   Mon, 31 Jul 2023 13:51:00 +0800
-Message-Id: <9221753abe0509ef5cbb474a31873012e0e40706.1690733545.git.tanyuan@tinylab.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1690733545.git.tanyuan@tinylab.org>
-References: <cover.1690733545.git.tanyuan@tinylab.org>
+        Mon, 31 Jul 2023 02:17:27 -0400
+Received: from mgamail.intel.com (unknown [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C0E10EA;
+        Sun, 30 Jul 2023 23:17:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690784221; x=1722320221;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KRtFQ2+1X4QJ3GHF5S3ruCx9W9SpVuuAs5HerfEdF1I=;
+  b=VKHhr16aIpVDsfYN82kYqJw0W63PUdWjiBIA2m4bCnvOTDS+0Hx9rLja
+   8gmqD+P59PwZ3saGPi9o1aErW/TW39UwHktSiZubK8VwE6sfwbtFWNdlJ
+   6vd8gghy6daQWlvT52XJnt/CMpcC/Pis31cRrUvg/uSZPH5svJjA5Y/WN
+   iHBHQLds9INmHD9nc4VA6bwDSmILL3w/+9QivlctO2RP08jtDby5F6bkm
+   Mxom0Mc1BpZNLD2P29qSIFgfDbjLx4mBFvTa4ve9oikgDGB/Z4hGQ2t7L
+   w+H9lNORnUAI0K/EOlooNIfWDRsDeCBmgwIFznlbR+M5vuGI7UIX8Q4dy
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="435231332"
+X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
+   d="scan'208";a="435231332"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 23:16:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="1058827619"
+X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
+   d="scan'208";a="1058827619"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO jkrzyszt-mobl2.intranet) ([10.213.1.128])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 23:16:41 -0700
+From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        igt-dev@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] kunit: Expose some built-in features to modules
+Date:   Mon, 31 Jul 2023 07:45:53 +0200
+Message-ID: <20230731054552.2145292-5-janusz.krzysztofik@linux.intel.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a testcase of pipe that child process sends message to parent
-process.
+Submit the top-level headers also from the kunit test module notifier
+initialization callback, so external tools that are parsing dmesg for
+kunit test output are able to tell how many test suites should be expected
+and whether to continue parsing after complete output from the first test
+suite is collected.
 
-Here we use memcmp() to avoid the output buffer issue.
+Extend kunit module notifier initialization callback with a processing
+path for only listing the tests provided by a module if the kunit action
+parameter is set to "list", so external tools can obtain a list of test
+cases to be executed in advance and can make a better job on assigning
+kernel messages interleaved with kunit output to specific tests.
 
-Suggested-by: Thomas Weißschuh <thomas@t-8ch.de>
-Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/all/c5de2d13-3752-4e1b-90d9-f58cca99c702@t-8ch.de/
-Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 35 ++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+Use test filtering functions in kunit module notifier callback functions,
+so external tools are able to execute individual test cases from kunit
+test modules in order to still better isolate their potential impact on
+kernel messages that appear interleaved with output from other tests.
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 03b1d30f5507..2653ab8d5124 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -767,6 +767,41 @@ int test_mmap_munmap(void)
- 	return ret;
- }
- 
-+int test_pipe(void)
-+{
-+	const char *const msg = "hello, nolibc";
-+	int pipefd[2];
-+	char buf[32];
-+	pid_t pid;
-+	ssize_t len;
-+
-+	if (pipe(pipefd) == -1)
-+		return 1;
-+
-+	pid = fork();
-+
-+	switch (pid) {
-+	case -1:
-+		return 1;
-+
-+	case 0:
-+		close(pipefd[0]);
-+		write(pipefd[1], msg, strlen(msg));
-+		close(pipefd[1]);
-+		exit(EXIT_SUCCESS);
-+
-+	default:
-+		close(pipefd[1]);
-+		len = read(pipefd[0], buf, sizeof(buf));
-+		close(pipefd[0]);
-+		waitpid(pid, NULL, 0);
-+
-+		if (len != strlen(msg))
-+			return 1;
-+		return !!memcmp(buf, msg, len);
-+	}
-+}
-+
- 
- /* Run syscall tests between IDs <min> and <max>.
-  * Return 0 on success, non-zero on failure.
+v2: Fix new name of a structure moved to kunit namespace not updated
+    across all uses.
+
+Janusz Krzysztofik (3):
+  kunit: Report the count of test suites in a module
+  kunit: Make 'list' action available to kunit test modules
+  kunit: Allow kunit test modules to use test filtering
+
+ include/kunit/test.h | 14 +++++++++++
+ lib/kunit/executor.c | 57 +++++++++++++++++++++++++-------------------
+ lib/kunit/test.c     | 57 +++++++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 103 insertions(+), 25 deletions(-)
+
 -- 
-2.34.1
+2.41.0
 
