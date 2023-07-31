@@ -2,43 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2018768B61
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 07:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A184768B64
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 07:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjGaFvA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 01:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
+        id S229620AbjGaFv3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 01:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbjGaFu5 (ORCPT
+        with ESMTP id S230102AbjGaFvX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 01:50:57 -0400
+        Mon, 31 Jul 2023 01:51:23 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DBBE76;
-        Sun, 30 Jul 2023 22:50:55 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1690782649tezi1726
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61781730;
+        Sun, 30 Jul 2023 22:51:11 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1690782665t6sax2el
 Received: from dslab-main2-ubuntu.tail147f4.ts ( [202.201.15.117])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 31 Jul 2023 13:50:47 +0800 (CST)
+        id ; Mon, 31 Jul 2023 13:51:03 +0800 (CST)
 X-QQ-SSF: 01200000000000704000000A0000000
-X-QQ-FEAT: lO87fmWkX3HIdlFAfcAaSU54ZhJkQnHcfd0NxI/L0CMTSCQD5GQMbaxv2ExB3
-        Vb3xSIQr3LnxxXtg354jzyBPkZz5hvWUwn9K1zH0B6+YEa2BDvgENNLsOe5N0CwRrzbCueb
-        ftemh3/tUhA17rKPM2v1yXcQQAoOXdqA5vkHJnOXmxc0n5rF6TFNIZ9BYf8LqzxirdkWC4d
-        NZqxjjAo+Z0FYWV9emq73G7rj+oy8XONBUYJY7e2taLamipnq/eaMzFRw7YX5aAw3qt2a2O
-        IcLPZ8tG2RoS9KcuIns1Ttz9TMt758U4m6vEE0C0DaYva/ca4GGMNZlwZLe5N5zzq+XKcOW
-        l/eNWpqsCT7sohq73d+r9mjiHm0Qb5z+j+hBnoIjW8TfsvK5pc=
+X-QQ-FEAT: jXjag1m6xl4TUwwOcxAHuSNvjezdnyUkeJyXtjE6BB1LN2sUyINMeltLYijKJ
+        UMECH7SIllnAtxMSpIe2wh4MC38HJh6Vjamnwx6HerLMhs4ijK/ySftTd6SmXUXtSgBI6zF
+        fdgepgMm9EFt3L9YSC/bFVrBnGow+n8WogQzdxwoXciLOZSmjVtdtnUWdmd3l4n9cOKh7s9
+        FitwrNZKDEevJn3RWFS4ficqy+A4GOlYHO3dvlEZkBA+p5n13KQF6lTPIIF6EMZDy+nWUNi
+        PoJzti3ZCeUjBV0P90IyLi0sDKCraQ/Hzwrd2oFMoiZ78XlgKImyNU8Ac8D0eeCwTXCiniw
+        JLazDYb9coRHXrMul12RLTJ7BMefgZSoqRYPt9kHjU+giphf34TNGRv9foQPw==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15683328812315869985
+X-BIZMAIL-ID: 9840545900577853987
 From:   Yuan Tan <tanyuan@tinylab.org>
 To:     w@1wt.eu, thomas@t-8ch.de
 Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yuan Tan <tanyuan@tinylab.org>
-Subject: [PATCH v2 1/2] tools/nolibc: add pipe() and pipe2() support
-Date:   Mon, 31 Jul 2023 13:50:45 +0800
-Message-Id: <23019c9ad3a63d7026a60df8bc41934c3e74e564.1690733545.git.tanyuan@tinylab.org>
+Subject: [PATCH v2 2/2] selftests/nolibc: add testcase for pipe
+Date:   Mon, 31 Jul 2023 13:51:00 +0800
+Message-Id: <9221753abe0509ef5cbb474a31873012e0e40706.1690733545.git.tanyuan@tinylab.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1690733545.git.tanyuan@tinylab.org>
 References: <cover.1690733545.git.tanyuan@tinylab.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
@@ -51,66 +52,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-According to manual page [1], posix spec [2] and source code like
-arch/mips/kernel/syscall.c, for historic reasons, the sys_pipe() syscall
-on some architectures has an unusual calling convention.  It returns
-results in two registers which means there is no need for it to do
-verify the validity of a userspace pointer argument.  Historically that
-used to be expensive in Linux.  These days the performance advantage is
-negligible.
+Add a testcase of pipe that child process sends message to parent
+process.
 
-Nolibc doesn't support the unusual calling convention above, luckily
-Linux provides a generic sys_pipe2() with an additional flags argument
-from 2.6.27. If flags is 0, then pipe2() is the same as pipe(). So here
-we use sys_pipe2() to implement the pipe().
+Here we use memcmp() to avoid the output buffer issue.
 
-pipe2() is also provided to allow users to use flags argument on demand.
-
-[1]: https://man7.org/linux/man-pages/man2/pipe.2.html
-[2]: https://pubs.opengroup.org/onlinepubs/9699919799/functions/pipe.html
-
-Suggested-by: Zhangjin Wu <falcon@tinylab.org>
-Link: https://lore.kernel.org/all/20230729100401.GA4577@1wt.eu/
+Suggested-by: Thomas Weißschuh <thomas@t-8ch.de>
+Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/all/c5de2d13-3752-4e1b-90d9-f58cca99c702@t-8ch.de/
 Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
 ---
- tools/include/nolibc/sys.h | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 35 ++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 8bfe7db20b80..9fec09c22dbe 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -752,6 +752,30 @@ int open(const char *path, int flags, ...)
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 03b1d30f5507..2653ab8d5124 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -767,6 +767,41 @@ int test_mmap_munmap(void)
+ 	return ret;
  }
  
++int test_pipe(void)
++{
++	const char *const msg = "hello, nolibc";
++	int pipefd[2];
++	char buf[32];
++	pid_t pid;
++	ssize_t len;
++
++	if (pipe(pipefd) == -1)
++		return 1;
++
++	pid = fork();
++
++	switch (pid) {
++	case -1:
++		return 1;
++
++	case 0:
++		close(pipefd[0]);
++		write(pipefd[1], msg, strlen(msg));
++		close(pipefd[1]);
++		exit(EXIT_SUCCESS);
++
++	default:
++		close(pipefd[1]);
++		len = read(pipefd[0], buf, sizeof(buf));
++		close(pipefd[0]);
++		waitpid(pid, NULL, 0);
++
++		if (len != strlen(msg))
++			return 1;
++		return !!memcmp(buf, msg, len);
++	}
++}
++
  
-+/*
-+ * int pipe2(int pipefd[2], int flags);
-+ * int pipe(int pipefd[2]);
-+ */
-+
-+static __attribute__((unused))
-+int sys_pipe2(int pipefd[2], int flags)
-+{
-+	return my_syscall2(__NR_pipe, pipefd, flags);
-+}
-+
-+static __attribute__((unused))
-+int pipe2(int pipefd[2], int flags)
-+{
-+	return __sysret(sys_pipe2(pipefd, flags));
-+}
-+
-+static __attribute__((unused))
-+int pipe(int pipefd[2])
-+{
-+	pipe2(pipefd, 0);
-+}
-+
-+
- /*
-  * int prctl(int option, unsigned long arg2, unsigned long arg3,
-  *                       unsigned long arg4, unsigned long arg5);
+ /* Run syscall tests between IDs <min> and <max>.
+  * Return 0 on success, non-zero on failure.
 -- 
 2.34.1
 
