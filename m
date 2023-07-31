@@ -2,182 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBE076A07D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 20:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56AB776A09D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 20:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbjGaSgM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 14:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S229738AbjGaSrM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 14:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjGaSgM (ORCPT
+        with ESMTP id S229479AbjGaSrL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 14:36:12 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023C419AE;
-        Mon, 31 Jul 2023 11:36:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1690828566;
-        bh=+ecIanusPEM9grLteoH4m5s9pVLXerZghs/LdT94HCs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DGJR/lKaDiHzpLrZgoy+WsW3XvLafzayhfbo83CH3WCJFtFKsjPFVYbgNwfyYpbzw
-         4aeAhuVb7m5wnQGpjFu+/uWlKNenVayrCw+HG6GE0Pwzu5y0nQ0X02jj+cIGGhsN76
-         tk5VVOXfVRQTNhF3g2O9Mrck4vOxQYjLsOw1n+sg=
-Date:   Mon, 31 Jul 2023 20:36:05 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        tanyuan@tinylab.org
-Subject: Re: [PATCH 1/4] selftests/nolibc: drop unused test helpers
-Message-ID: <26fd12c7-3c9c-4e1e-a8bf-9529cd624e81@t-8ch.de>
-References: <20230731073243.21265-1-falcon@tinylab.org>
- <20230731110226.115351-1-falcon@tinylab.org>
- <e7ec15d7-0152-4e69-920f-ffb1983e1011@t-8ch.de>
- <20230731165334.GA17823@1wt.eu>
+        Mon, 31 Jul 2023 14:47:11 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F9518F;
+        Mon, 31 Jul 2023 11:47:10 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b962c226ceso71015121fa.3;
+        Mon, 31 Jul 2023 11:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690829228; x=1691434028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nsDP4OSKk4fj8rnGVRvHaWke258uZTHgXHn3HYO48cQ=;
+        b=qRSadawJ6qlYS+8IeUlJ0Y+LCFExh7JSRCJ2Xx//mWnuxSLyFc1LqbweloptxXpnWf
+         vlInfCiRDHygNa6Hi7A1wHqoEK1tpvB8nUAnXoYBIL94/lFhMPqQZdY+FZmd9U81fNTi
+         wG1ej1YFOo4/zlZIwxnK3sNafE4sDe69UbXa1gPgyuJqYkxTpzApNum3Xw34s3zAVg+C
+         4PgPojAtL4jmX3pc9cnD1guqmqo/WMJxUlMDL4134gueoulDBoT5Ji3DB5eTCyxmz23M
+         uvohAoSq4Edn+Xb8PVVP119q9ld6lOwyM0+0xJmn219UVjKWHgLnu0reZR0k3jdkE3iD
+         HDEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690829228; x=1691434028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nsDP4OSKk4fj8rnGVRvHaWke258uZTHgXHn3HYO48cQ=;
+        b=I+JtUWjjf8qmkdKF0IP6wHuc9TkEMgD6DS61QH2cXFxkhVNNli9A7b8kLrj5M1uS3E
+         yQnNBJ1FouV92YD+Cd1WZttZkGaTqX+sKbh8l2ZwJSgK54LcKkLULOKAFGOV9HNem/3o
+         j2U3IMUXU2JvN24jj3Sntt5IsUncOP50wi+FkebHlRTiirHr9tSV4a1mtxkKJO5/3lRS
+         M57FkMtAM2juqyA7VptPgw5GSlOohHmdrj+uC7Y4B2VMAeH182XuOiLqzrmgJ5mhs6gC
+         jcNWPvI3M5E3Y/e5n/S7nzv5M5+fidtyi9GDe4lKOJMT4vEag88SQBt5HzbKlzFGB1DN
+         HK1A==
+X-Gm-Message-State: ABy/qLaTHQ8CrYTC4NqAWKyo8BXNKhJfeYYjf0bKK06U4ZeATFRww2Pt
+        PJdSurCvs5EvxD6702r3zzBc9ww46bxjZ3YA05U=
+X-Google-Smtp-Source: APBJJlFe+rjtdVgpjaiPDbFqCZuYnj78NXa8q3r/nKu4g9h0xqWtP+MGmHFMvlCtmZbUj2vsSdOQ2dy6rL1thFpCLMM=
+X-Received: by 2002:a2e:b16f:0:b0:2b7:a72:103b with SMTP id
+ a15-20020a2eb16f000000b002b70a72103bmr528373ljm.53.1690829227967; Mon, 31 Jul
+ 2023 11:47:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230731165334.GA17823@1wt.eu>
+References: <cover.1690332693.git.yan@cloudflare.com> <9c4896b109a39c3fa088844addaa1737a84bbbb5.1690332693.git.yan@cloudflare.com>
+ <791b919c-de82-6dc8-905a-520543f975cd@linux.dev> <87edkoflvx.fsf@cloudflare.com>
+In-Reply-To: <87edkoflvx.fsf@cloudflare.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 31 Jul 2023 11:46:56 -0700
+Message-ID: <CAADnVQ+7akLU_rY7xe=LbvY=bLiN8C5Vk5m0iwbao6hVH9v88w@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf 2/2] bpf: selftests: add lwt redirect regression
+ test cases
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Yan Zhai <yan@cloudflare.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Jordan Griege <jgriege@cloudflare.com>,
+        Markus Elfring <Markus.Elfring@web.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-07-31 18:53:34+0200, Willy Tarreau wrote:
-> Hi guys,
-> 
-> On Mon, Jul 31, 2023 at 05:30:23PM +0200, Thomas Weißschuh wrote:
-> 
-> > > > > > > Why not a simple 'static __attribute__((unused))' line, then, no need to
-> > > > > > > add them again next time.
-> > > > > > > 
-> > > > > > >     -static int expect_zr(int expr, int llen)
-> > > > > > >     +static __attribute__((unused))
-> > > > > > >     +int expect_zr(int expr, int llen)
-> > > > > > >      {
-> > > > > > 
-> > > > > > Personally I don't like having dead code lying around that needs to be
-> > > > > > maintained and skipped over while reading.
-> > > > > > It's not a given that we will need those helpers in the future at all.
-> > > > > >
-> > > > > 
-> > > > > It is reasonable in some degree from current status, especially for
-> > > > > these ones are newly added, but let us think about these scenes: when we
-> > > > > would drop or change some test cases in the future and the helpers may
-> > > > > would be not referenced by any test cases in a short time, and warnings
-> > > > > there, but some other cases may be added later to use them again ...
-> > > > 
-> > > > That doesn't seem very likely.
-> > > > Did it happen recently?
-> > > >
-> > > 
-> > > Yeah, it did happen, but I can not remember which one, a simple statistic
-> > > does show it may be likely:
-> > 
-> > I can't find it.
-> > 
-> > >     $ grep EXPECT_ -ur tools/testing/selftests/nolibc/nolibc-test.c | grep -v define | sed -e 's/.*\(EXPECT_[A-Z0-9]*\).*/\1/g' | sort | uniq -c | sort -k 1 -g -r
-> > >          55 EXPECT_EQ
-> > >          37 EXPECT_SYSER
-> > >          21 EXPECT_SYSZR
-> > >          11 EXPECT_SYSNE
-> > >           9 EXPECT_VFPRINTF
-> > >           4 EXPECT_PTRGT
-> > >           4 EXPECT_GE
-> > >           3 EXPECT_STRZR
-> > >           3 EXPECT_NE
-> > >           3 EXPECT_LT
-> > >           3 EXPECT_GT
-> > >           2 EXPECT_STRNZ
-> > >           2 EXPECT_STREQ
-> > >           2 EXPECT_PTRLT
-> > >           1 EXPECT_SYSER2
-> > >           1 EXPECT_SYSEQ
-> > >           1 EXPECT_PTRNZ
-> > >           1 EXPECT_PTRNE
-> > >           1 EXPECT_PTRER2
-> > >           1 EXPECT_PTRER
-> > >           1 EXPECT_PTREQ
-> > > 
-> > > 7 helpers are only used by once, another 3 helpers are used twice, and
-> > > another 4 are only used by three times.
-> > 
-> > Why can't we just drop them when they are not used anymore?
-> 
-> Actually we don't know if they're used or not given that the purpose of
-> the nolibc-test.c file is for it to be easy to add new tests, and the
-> collection of macros above serves this purpose. It's not just a series
-> of test but rather a small test framework. So the fact that right now
-> no single test uses some of them doesn't mean that someone else will
-> not have to reimplement them in two months.
+On Mon, Jul 31, 2023 at 2:52=E2=80=AFAM Jakub Sitnicki <jakub@cloudflare.co=
+m> wrote:
+>
+> On Fri, Jul 28, 2023 at 03:47 PM -07, Martin KaFai Lau wrote:
+> > On 7/25/23 6:09 PM, Yan Zhai wrote:
+>
+> [...]
+>
+> >> diff --git a/tools/testing/selftests/bpf/test_lwt_redirect.sh
+> >> b/tools/testing/selftests/bpf/test_lwt_redirect.sh
+> >> new file mode 100755
+> >> index 000000000000..1b7b78b48174
+> >> --- /dev/null
+> >> +++ b/tools/testing/selftests/bpf/test_lwt_redirect.sh
+> >
+> > This has to be written in the test_progs infrastructure in C. Only test=
+_progs is
+> > run by the BPF CI. Take a look at other tests in prog_tests/. For examp=
+le,
+> > tc_redirect.c and xdp_metadata.c which are having setup in netns/link/.=
+..etc. It
+> > currently has helpers to add tc qdisc and filter but not adding route y=
+et which
+> > could be a useful addition.
+>
+> Can we help make the BPF CI better so that it also runs other tests in
+> addition test_progs?
 
-Reimplementing them would mean to copy one of the sibling test macros
-and changing the name and the condition operator in one place.
-I regarded that as an acceptable effort instead of having to work around
-the warnings.
+Not really.
+CI is not just running the test. It needs to understand the output,
+pass it to UI, run in parallel, etc.
+All the shell scripts are not suitable for long term CI exposure.
 
-The warnings themselves I see as useful as they can give developers
-early feedback on their code. They would have avoided some of the issues
-with the recent pipe() series.
+So I completely agree with Martin. No new shell scripts.
+All selftests must be in test_progs.
 
-Do you have a preferred solution for the overall situation?
+> We have bpf selftests written in shell and even Python. These are
+> sometimes the right tools for the job and make adding tests easier,
+> IMHO. Network setup from C is verbose and tedious. Not to mention, hard
+> to read through.
 
-> However I share your concern that the file has become ugly over time.
-> I've recently been wondering why we wouldn't move all that to an external
-> include file. It could also encourage us to differentiate between the
-> macros used to only evaluate a result, and the tests themselves, as
-> we'd be certain that none of them could call a test function directly.
-> 
-> > > Btw, just thought about gc-section, do we need to further remove dead code/data
-> > > in the binary? I don't think it is necessary for nolibc-test itself, but with
-> > > '-Wl,--gc-sections -Wl,--print-gc-sections' may be a good helper to show us
-> > > which ones should be dropped or which ones are wrongly declared as public?
-> > > 
-> > > Just found '-O3 + -Wl,--gc-section + -Wl,--print-gc-sections' did tell
-> > > us something as below:
-> > > 
-> > >     removing unused section '.text.nolibc_raise'
-> > >     removing unused section '.text.nolibc_memmove'
-> > >     removing unused section '.text.nolibc_abort'
-> > >     removing unused section '.text.nolibc_memcpy'
-> > >     removing unused section '.text.__stack_chk_init'
-> > >     removing unused section '.text.is_setting_valid'
-> 
-> Just a note Zhangjin, it would really help if you wouldn't mix different
-> topics in mails. It's easy enough to start a separate thread since it's
-> a completely separate one here.
-> 
-> > > These info may help us further add missing 'static' keyword or find
-> > > another method to to drop the wrongly used status of some functions from
-> > > the code side.
-> > > 
-> > > It is very easy to add the missing 'static' keyword for is_setting_valid(), but
-> > > for __stack_chk_init(), is it ok for us to convert it to 'static' and remove
-> > > the 'weak' attrbute and even the 'section' attribute? seems it is only used by
-> > > our _start_c() currently.
-> > 
-> > Making is_setting_valid(), __stack_chk_init() seems indeed useful.
-> > Also all the run_foo() test functions.
-> 
-> Most of them could theoretically be turned to static. *But* it causes a
-> problem which is that it will multiply their occurrences in multi-unit
-> programs, and that's in part why we've started to use weak instead. Also
-> if you run through gdb and want to mark a break point, you won't have the
-> symbol when it's static, and the code will appear at multiple locations,
-> which is really painful. I'd instead really prefer to avoid static when
-> we don't strictly want to inline the code, and prefer weak when possible
-> because we know many of them will be dropped at link time (and that's
-> the exact purpose).
-
-Thanks for the clarification. I forgot about that completely!
-
-The stuff from nolibc-test.c itself (run_foo() and is_settings_valid())
-should still be done.
-
-Thomas
+For comparison take a look at BPF CI code base and what it takes to run
+the tests and process the output. There is plenty of work for CI ahead.
