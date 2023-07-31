@@ -2,61 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE7A7694A0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 13:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E417694AA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 13:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjGaLU6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 07:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
+        id S232613AbjGaLVp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 07:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbjGaLUy (ORCPT
+        with ESMTP id S232556AbjGaLVZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 07:20:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B272E10F7
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 04:20:04 -0700 (PDT)
+        Mon, 31 Jul 2023 07:21:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98CF1735
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 04:20:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690802403;
+        s=mimecast20190719; t=1690802426;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=V5VMLpHOhxXlUy0bWDF9kXZ97zc/VghMcLBrU5Ym92c=;
-        b=KNr1ZOZt8BHe9a9IfvWLmd6idJQ1b5fadL7pqUG5MP2af2rlu5ZkO/Efin4UqQiG+czwot
-        TfWvrchXUOMxxLvAdWRGI3ar3Qch6z1eu3ILZ/x2sQmkBQ/wiYZsUW49zFYQCS1cnh2gW6
-        p07/AuHmHRN8lC2ysCU1WQMuC8PwWBo=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5vaUW0ZFNoavCkOsFWH4xJQw7j0BCOKV0sVk8cbQiFE=;
+        b=Aix8KJ0XtXMNDGC7Px72w3at5hNZMKZsnaOI9NfnhJLKeZWnLtlbXclePR//6n8r++9lqs
+        6LvtOxJ/DpR5UXckAxkKcX9shXm9e5kZa1J1nNKwfLM4FPuHbAY94I0RIbgnarJ0D65cCM
+        Y/dI7anFnbPbFfktk1oWVptNJ5cYlX0=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-450-tBDkIt7ZMeueNeEWD-w6ew-1; Mon, 31 Jul 2023 07:20:02 -0400
-X-MC-Unique: tBDkIt7ZMeueNeEWD-w6ew-1
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4053d7854a9so56880681cf.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 04:20:02 -0700 (PDT)
+ us-mta-479-Ua0UKDTKM6ChJmia_M7Rvw-1; Mon, 31 Jul 2023 07:20:24 -0400
+X-MC-Unique: Ua0UKDTKM6ChJmia_M7Rvw-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-76c83aab2c7so427119385a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 04:20:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690802402; x=1691407202;
+        d=1e100.net; s=20221208; t=1690802424; x=1691407224;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V5VMLpHOhxXlUy0bWDF9kXZ97zc/VghMcLBrU5Ym92c=;
-        b=B1qWHyOMmTtpoUyepOxuXbXrn+eVQyV7tIEA+oRwyWsZklFOE7aSXEL57WVvUEcttv
-         lNzM+Bi+WXol6gsm0BYooscV/ofElADGWRUdl/e3t3tZxm1nFoqs6YBe3oXZM5s1OkG/
-         AU/DBejmxlPfqwWaDQMBsU/i0bGJex/AXXxCC2lZcdTsD8CkqM09bFPQYKkDFbIrB9XB
-         J1HrVtE1MAP2BtcLSsyvp9hOj8bZmyMEBbRby6FrLpZ9QAERZbhoBhI88JsFouO65TeS
-         HCKoVof5V1GExVOgzo0WK1CqmI3DHr8n4sR7D2WUPP1yigrNWnm3zGnuC3UTZFR4JSHA
-         PBug==
-X-Gm-Message-State: ABy/qLYd8OK7dXQDLBptVL/1vFOx6X+SuXisCSWYL2Hlsv9fVaJI3Dyx
-        CCKxTn2t2yuwftfbELjGeKygRi7sbKS4F9HGvkEgbfBzfr1ihrVhxI0CYpLOFzJC2oLGqbmLai5
-        Z2NT0fxsUs3nZUQBlIu4WSiX5r3KW
-X-Received: by 2002:ac8:7f08:0:b0:409:f273:e28d with SMTP id f8-20020ac87f08000000b00409f273e28dmr8487940qtk.62.1690802402008;
-        Mon, 31 Jul 2023 04:20:02 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEVg6/rKm0s9MUEi0BGjFI/ks14KzdgpHID8GGIpvi7qxLN20fQB6V4fe5ZTG4d6GXjiIiI+g==
-X-Received: by 2002:ac8:7f08:0:b0:409:f273:e28d with SMTP id f8-20020ac87f08000000b00409f273e28dmr8487873qtk.62.1690802401624;
-        Mon, 31 Jul 2023 04:20:01 -0700 (PDT)
+        bh=5vaUW0ZFNoavCkOsFWH4xJQw7j0BCOKV0sVk8cbQiFE=;
+        b=VcsqbyUUreooeBuys1FUlzv6xhOmRuNB5E9+nh/qtAncYEx5Yj7mY+dAoHmF/YVbfC
+         9f4exIVUVXq69162ZzQAGxGQINu/4L0dtB3gTW6n+sfpjsL0LeJ91kWDRupkmJzwaeJP
+         O/KshpoKwoFJpSvNQvRnw5tz1k02kIbvGfuDmXc+jtB+HdjLnpegwRbaLKzeveGswzFK
+         oC3qZDQEoJ0L5mc5R9b9/7EI28M88Ocn6TJ5QM4/Vbf6AvT/XodYcNR+9N4UKni1b98g
+         NV8WzZpK9qc0G4KjyZb7o86AXLPTcHajRm9TfNmsVXFO27jmQ2D9n8cyLB6lpWt1iBjo
+         brhQ==
+X-Gm-Message-State: ABy/qLblo6BX9lMBwvgMknwdAP0yjAg3LzAJ5MoRBOGXQBP8ocRX/ohV
+        VGXkBYzKk2ywzwLLIJD9uBYlPoTsT7b/MPMQRhWkyh80DCCROdF9UM6RIQABOybrknqYwiA+ZLU
+        tO+hjUaxG4WeleDFgRkBqJN0a+/08
+X-Received: by 2002:a05:620a:3199:b0:765:a678:977c with SMTP id bi25-20020a05620a319900b00765a678977cmr11440903qkb.67.1690802424229;
+        Mon, 31 Jul 2023 04:20:24 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlF4PsqV0GfIB6WcE+e1KZA+Ob00KHOmMkV0SPV2mk8Z9iXGAjuozcLuEeBrBpyr3ypNADcfxg==
+X-Received: by 2002:a05:620a:3199:b0:765:a678:977c with SMTP id bi25-20020a05620a319900b00765a678977cmr11440851qkb.67.1690802423943;
+        Mon, 31 Jul 2023 04:20:23 -0700 (PDT)
 Received: from vschneid.remote.csb ([149.12.7.81])
-        by smtp.gmail.com with ESMTPSA id x7-20020ac80187000000b00403f5873f5esm3447309qtf.24.2023.07.31.04.19.52
+        by smtp.gmail.com with ESMTPSA id c23-20020a05620a11b700b00767303dc070sm3206663qkk.8.2023.07.31.04.20.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 04:20:01 -0700 (PDT)
+        Mon, 31 Jul 2023 04:20:23 -0700 (PDT)
 From:   Valentin Schneider <vschneid@redhat.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
         bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
@@ -85,6 +84,7 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Uladzislau Rezki <urezki@gmail.com>,
         Christoph Hellwig <hch@infradead.org>,
         Lorenzo Stoakes <lstoakes@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
         Jason Baron <jbaron@akamai.com>,
         Kees Cook <keescook@chromium.org>,
         Sami Tolvanen <samitolvanen@google.com>,
@@ -107,15 +107,14 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH v2 02/20] tracing/filters: Enable filtering a
- cpumask field by another cpumask
-In-Reply-To: <20230729150901.25b9ae0c@rorschach.local.home>
+Subject: Re: [RFC PATCH v2 05/20] tracing/filters: Optimise cpumask vs
+ cpumask filtering when user mask is a single CPU
+In-Reply-To: <20230729153436.1e07bfa6@rorschach.local.home>
 References: <20230720163056.2564824-1-vschneid@redhat.com>
- <20230720163056.2564824-3-vschneid@redhat.com>
- <20230726194148.4jhyqqbtn3qqqqsq@treble>
- <20230729150901.25b9ae0c@rorschach.local.home>
-Date:   Mon, 31 Jul 2023 12:19:51 +0100
-Message-ID: <xhsmh4jlks4yw.mognet@vschneid.remote.csb>
+ <20230720163056.2564824-6-vschneid@redhat.com>
+ <20230729153436.1e07bfa6@rorschach.local.home>
+Date:   Mon, 31 Jul 2023 12:20:13 +0100
+Message-ID: <xhsmh3514s4ya.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -129,68 +128,32 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 29/07/23 15:09, Steven Rostedt wrote:
-> On Wed, 26 Jul 2023 12:41:48 -0700
-> Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+On 29/07/23 15:34, Steven Rostedt wrote:
+> On Thu, 20 Jul 2023 17:30:41 +0100
+> Valentin Schneider <vschneid@redhat.com> wrote:
 >
->> On Thu, Jul 20, 2023 at 05:30:38PM +0100, Valentin Schneider wrote:
->> >  int filter_assign_type(const char *type)
->> >  {
->> > -	if (strstr(type, "__data_loc") && strstr(type, "char"))
->> > -		return FILTER_DYN_STRING;
->> > +	if (strstr(type, "__data_loc")) {
->> > +		if (strstr(type, "char"))
->> > +			return FILTER_DYN_STRING;
->> > +		if (strstr(type, "cpumask_t"))
->> > +			return FILTER_CPUMASK;
->> > +		}
->>
->> The closing bracket has the wrong indentation.
->>
->> > +		/* Copy the cpulist between { and } */
->> > +		tmp = kmalloc((i - maskstart) + 1, GFP_KERNEL);
->> > +		strscpy(tmp, str + maskstart, (i - maskstart) + 1);
->>
->> Need to check kmalloc() failure?  And also free tmp?
+>>              /* Move along */
+>>              i++;
+>> +
+>> +		/*
+>> +		 * Optimisation: if the user-provided mask has a weight of one
+>> +		 * then we can treat it as a scalar input.
+>> +		 */
+>> +		single = cpumask_weight(pred->mask) == 1;
+>> +		if (single && field->filter_type == FILTER_CPUMASK) {
+>> +			pred->val = cpumask_first(pred->mask);
+>> +			kfree(pred->mask);
 >
-> I came to state the same thing.
+> Don't we need:
+>                       pred->mask = NULL;
 >
-> Also, when you do an empty for loop:
->
->       for (; str[i] && str[i] != '}'; i++);
->
-> Always put the semicolon on the next line, otherwise it is really easy
-> to think that the next line is part of the for loop. That is, instead
-> of the above, do:
->
->       for (; str[i] && str[i] != '}'; i++)
->               ;
+> here, or the free_predicate() will cause a double free?
 >
 
-Interestingly I don't think I've ever encountered that variant, usually
-having an empty line (which this lacks) and the indentation level is enough
-to identify these - regardless, I'll change it.
+We do, thanks for spotting this.
 
->
 > -- Steve
 >
->
->>
->> > +
->> > +		pred->mask = kzalloc(cpumask_size(), GFP_KERNEL);
->> > +		if (!pred->mask)
->> > +			goto err_mem;
->> > +
->> > +		/* Now parse it */
->> > +		if (cpulist_parse(tmp, pred->mask)) {
->> > +			parse_error(pe, FILT_ERR_INVALID_CPULIST, pos + i);
->> > +			goto err_free;
->> > +		}
->> > +
->> > +		/* Move along */
->> > +		i++;
->> > +		if (field->filter_type == FILTER_CPUMASK)
->> > +			pred->fn_num = FILTER_PRED_FN_CPUMASK;
->> > +
->>
+>> +		}
+>> +
 
