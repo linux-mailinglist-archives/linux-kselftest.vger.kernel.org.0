@@ -2,131 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B6976A02C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 20:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876D876A068
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 20:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjGaSRp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 14:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
+        id S231765AbjGaS3H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 14:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjGaSRo (ORCPT
+        with ESMTP id S231990AbjGaS3A (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 14:17:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6EC93;
-        Mon, 31 Jul 2023 11:17:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6695B6127C;
-        Mon, 31 Jul 2023 18:17:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51B5FC433C7;
-        Mon, 31 Jul 2023 18:16:55 +0000 (UTC)
-Date:   Mon, 31 Jul 2023 14:16:26 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-        Julian Pidancet <julian.pidancet@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH v2 06/20] tracing/filters: Optimise scalar vs
- cpumask filtering when the user mask is a single CPU
-Message-ID: <20230731141626.1b180ab1@gandalf.local.home>
-In-Reply-To: <b7cf996a-f443-402c-8e13-c5f25a964184@kadam.mountain>
-References: <20230720163056.2564824-1-vschneid@redhat.com>
-        <20230720163056.2564824-7-vschneid@redhat.com>
-        <20230729155547.35719a1f@rorschach.local.home>
-        <04f20e58-6b24-4f44-94e2-0d12324a30e4@kadam.mountain>
-        <20230731115453.395d20c6@gandalf.local.home>
-        <b7cf996a-f443-402c-8e13-c5f25a964184@kadam.mountain>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 31 Jul 2023 14:29:00 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDE51FC6;
+        Mon, 31 Jul 2023 11:28:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1690828125; bh=7NrEnQxXICxhw0/8TiGcDTN7V2/dgz44Rd+KTW46XH8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WbV3E8IWxUYOWeDUuQprLuCoGp3MIH2ALt16eJfJgVko1lMHMfHWC1jmiYvSjN0O4
+         b1V5XB2JI+/jDUhYUmKEBd3dyrEygjp2OCzKOJp/6sVEIWMGYYquL4W5BivSXmzQas
+         alFvO0/zWI/cx29RXEiZDfLEUYGTluJQM/cAzzyY=
+Date:   Mon, 31 Jul 2023 20:28:44 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Yuan Tan <tanyuan@tinylab.org>
+Cc:     w@1wt.eu, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] selftests/nolibc: add testcase for pipe
+Message-ID: <51b39ee9-7645-4759-9cc0-3cfe721a2757@t-8ch.de>
+References: <cover.1690733545.git.tanyuan@tinylab.org>
+ <9221753abe0509ef5cbb474a31873012e0e40706.1690733545.git.tanyuan@tinylab.org>
+ <a4899657-7d7b-4786-8903-8f51e438535d@t-8ch.de>
+ <C3AF612281F87D1A+733ce5c0d1efe1f81423e6885203d92cdb4eaee7.camel@tinylab.org>
+ <2ba88bae-2986-4e70-9828-824d7b140277@t-8ch.de>
+ <D55D0905148FA2ED+f06092bae15b312ff1b29ad170fb656b89722b30.camel@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <D55D0905148FA2ED+f06092bae15b312ff1b29ad170fb656b89722b30.camel@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 31 Jul 2023 19:03:04 +0300
-Dan Carpenter <dan.carpenter@linaro.org> wrote:
-
-> > > > Nit, the above can be written as:
+On 2023-08-01 02:01:36+0800, Yuan Tan wrote:
+> Hi Thomas,
+> On Mon, 2023-07-31 at 17:41 +0200, Thomas Weißschuh wrote:
+> > On 2023-07-31 20:35:28+0800, Yuan Tan wrote:
+> > > On Mon, 2023-07-31 at 08:10 +0200, Thomas Weißschuh wrote:
+> > > > On 2023-07-31 13:51:00+0800, Yuan Tan wrote:
+> > > > > Add a testcase of pipe that child process sends message to
+> > > > > parent
+> > > > > process.
 > > > > 
-> > > > 			pred->op = pret->op != OP_BAND ? : OP_EQ;
-> > > >     
+> > > > Thinking about it some more:
+> > > > 
+> > > > What's the advantage of going via a child process?
+> > > > The pipe should work the same within the same process.
+> > > > 
 > > > 
-> > > Heh.  Those are not equivalent.  The right way to write this is:  
+> > > The pipe is commonly used for process communication, and I think as
+> > > a
+> > > test case it is supposed to cover the most common scenarios.
 > > 
-> > You mean because of my typo?  
+> > The testcase is supposed to cover the code of nolibc.
+> > It should be the *minimal* amount of code to be reasonable sure that
+> > the
+> > code in nolibc does the correct thing.
+> > If pipe() returns a value that behaves like a pipe I see no reason to
+> > doubt it will also survive fork().
+> > 
+> > Validating that would mean testing the kernel and not nolibc.
+> > For the kernel there are different testsuites.
+> > 
+> > Less code means less work for everyone involved, now and in the
+> > future.
+> > 
 > 
-> No, I hadn't seen the s/pred/pret/ typo.  Your code does:
+> It's a good point and I never thought about this aspect.
 > 
-> 	if (pred->op != OP_BAND)
-> 		pred->op = true;
-> 	else
-> 		pred->op OP_EQ;
+> I wonder whether the code below is enough?
+> 
+> static int test_pipe(void)
+> {
+> 	int pipefd[2];
+> 
+> 	if (pipe(pipefd) == -1)
+> 		return 1;
+> 
+> 	close(pipefd[0]);
+> 	close(pipefd[1]);
+> 
+> 	return 0;
+> }
 
-Ah, for some reason I was thinking the ? : just was just a nop, but I guess
-it is to assign the cond value :-/
+That is very barebones.
 
-But of course every place I've done that, it was the condition value I
-wanted, which was the same as the value being assigned.
+If accidentally a wrong syscall number was used and the used syscall
+would not take any arguments this test would still succeed.
 
-Thanks,
+Keeping the write-read-cycle from the previous revision would test that
+nicely. Essentially the same code as before but without the fork().
 
--- Steve
-
+> 
+> And I forgot to add this line:
+> 
+> 	CASE_TEST(pipe); EXPECT_SYSZR(1, test_pipe()); break;
+> 
+> I will add it in next patch.
+> 
