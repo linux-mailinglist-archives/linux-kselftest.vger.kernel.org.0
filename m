@@ -2,129 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C0276A458
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 00:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F044A76A46F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 01:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjGaWtp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 18:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        id S231694AbjGaXCH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 19:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjGaWto (ORCPT
+        with ESMTP id S231143AbjGaXCE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 18:49:44 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 064CD1BD9;
-        Mon, 31 Jul 2023 15:49:41 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 36VMnTAY018361;
-        Tue, 1 Aug 2023 00:49:29 +0200
-Date:   Tue, 1 Aug 2023 00:49:29 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        tanyuan@tinylab.org
-Subject: Re: [PATCH 1/4] selftests/nolibc: drop unused test helpers
-Message-ID: <20230731224929.GA18296@1wt.eu>
-References: <20230731073243.21265-1-falcon@tinylab.org>
- <20230731110226.115351-1-falcon@tinylab.org>
- <e7ec15d7-0152-4e69-920f-ffb1983e1011@t-8ch.de>
- <20230731165334.GA17823@1wt.eu>
- <26fd12c7-3c9c-4e1e-a8bf-9529cd624e81@t-8ch.de>
+        Mon, 31 Jul 2023 19:02:04 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B671BE6
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 16:02:01 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5221cf2bb8cso7374026a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 16:02:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1690844519; x=1691449319;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4WL3gOAOsh8o0LXKeeq1iHRytJLE+8+Td/rKsOuxt3c=;
+        b=ifhJ1b6gnzdlfV3hSa51bPaBs3eS8DGeEYJ1X56dUdEAsywWSe+UBM5K8J0teZorOw
+         ZCeoSk2Wpbudv9QJbyUSVS61XtzgkEZLhUMfJhWJ/kMLB46f6ozvmjwPE8zS0H2Q+aBI
+         xVI7E+FKWFVFUFnmjndaHdAva+vDU9TxrTfD0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690844519; x=1691449319;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4WL3gOAOsh8o0LXKeeq1iHRytJLE+8+Td/rKsOuxt3c=;
+        b=aW1gnHZouDyxads+76rTHMdjZnw1R+69qfLTkfliU9A1Emc0mbu5N7usC05zUkdnel
+         j8yVY7RH0WPBekISXPFcPBRgrNNVobd9eGFzI8bOtg8AoT2leDU159MqxxLqTZoi9H3q
+         j8g34O6hm5LBwbUSCrcODCUsnJLL9dDTntbTfD7Hcm2WGcxpBz7YWYIsXg/LXC77aBjk
+         BjonMumq4UvMQrg+RhWRUk0zw0ZK+6MUTHSEy4g3lcZphf1UQdAZ9I15ntFVdWg3fZ0c
+         RNI7ZvrgrlpJrYeHDJEdd+paXdYqh0QXFIgtaeTY7U7coBSrFj7WZFoKKcfYX14hBwyj
+         Vklg==
+X-Gm-Message-State: ABy/qLaITTljrKB+ERQYBQi5NxSURceIvaAwUxRP+2BWLebZb0k2RVOa
+        XrHprcmJpZd/VrRSCdUUsch+vnTPWFPoWqMIqEaaPA==
+X-Google-Smtp-Source: APBJJlEArhe0cg2s67OkddzWHVkNzo44OpuZEBQ6YwO/CmvBOYKNaeen/qZXTJVAZN+WLMX4ggG5P4BVbhYZgzuz5ew=
+X-Received: by 2002:a05:6402:14d1:b0:522:ba6c:9b1b with SMTP id
+ f17-20020a05640214d100b00522ba6c9b1bmr880560edx.26.1690844519499; Mon, 31 Jul
+ 2023 16:01:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <26fd12c7-3c9c-4e1e-a8bf-9529cd624e81@t-8ch.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1690332693.git.yan@cloudflare.com> <e5d05e56bf41de82f10d33229b8a8f6b49290e98.1690332693.git.yan@cloudflare.com>
+ <266ab56e-ae83-7ddc-618e-3af228df81bd@linux.dev> <CAO3-Pbon7tCdChnK9kZ4992C-AFPvE5gTDWre6dQT9npEMxS2Q@mail.gmail.com>
+ <2f285967-6cc0-c492-6a79-edc233c1368e@linux.dev>
+In-Reply-To: <2f285967-6cc0-c492-6a79-edc233c1368e@linux.dev>
+From:   Yan Zhai <yan@cloudflare.com>
+Date:   Mon, 31 Jul 2023 18:01:48 -0500
+Message-ID: <CAO3-PboZ5eQUbL3UO1HsaQ0s5CyS0ch=ksFVP1R6s8zv0+FTAg@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf 1/2] bpf: fix skb_do_redirect return values
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com,
+        Jordan Griege <jgriege@cloudflare.com>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 08:36:05PM +0200, Thomas Weißschuh wrote:
-> > > > 7 helpers are only used by once, another 3 helpers are used twice, and
-> > > > another 4 are only used by three times.
-> > > 
-> > > Why can't we just drop them when they are not used anymore?
-> > 
-> > Actually we don't know if they're used or not given that the purpose of
-> > the nolibc-test.c file is for it to be easy to add new tests, and the
-> > collection of macros above serves this purpose. It's not just a series
-> > of test but rather a small test framework. So the fact that right now
-> > no single test uses some of them doesn't mean that someone else will
-> > not have to reimplement them in two months.
-> 
-> Reimplementing them would mean to copy one of the sibling test macros
-> and changing the name and the condition operator in one place.
+On Mon, Jul 31, 2023 at 5:11=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.=
+dev> wrote:
+>
+> On 7/31/23 2:35 PM, Yan Zhai wrote:
+> > On Fri, Jul 28, 2023 at 5:02=E2=80=AFPM Martin KaFai Lau <martin.lau@li=
+nux.dev> wrote:
+> >>
+> >> On 7/25/23 6:08 PM, Yan Zhai wrote:
+> >>> skb_do_redirect returns various of values: error code (negative),
+> >>> 0 (success), and some positive status code, e.g. NET_XMIT_CN,
+> >>> NET_RX_DROP. Commit 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel
+> >>> infrastructure") didn't check the return code correctly, so positive
+> >>> values are propagated back along call chain:
+> >>>
+> >>>     ip_finish_output2
+> >>>       -> bpf_xmit
+> >>>         -> run_lwt_bpf
+> >>>           -> skb_do_redirect
+> >>
+> >>   From looking at skb_do_redirect, the skb_do_redirect should have con=
+sumed the
+> >> skb except for the -EAGAIN return value. afaik, -EAGAIN could only hap=
+pen by
+> >> using the bpf_redirect_peer helper. lwt does not have the bpf_redirect=
+_peer
+> >> helper available, so there is no -EAGAIN case in lwt. iow, skb_do_redi=
+rect
+> >> should have always consumed the skb in lwt. or did I miss something?
+> >>
+> >> If that is the case, it feels like the fix should be in run_lwt_bpf() =
+and the
+> >> "if (ret =3D=3D 0)" test in run_lwt_bpf() is unnecessary?
+> >>
+> >>                          ret =3D skb_do_redirect(skb);
+> >>                          if (ret =3D=3D 0)
+> >>                                  ret =3D BPF_REDIRECT;
+> >>
+> >>
+> > Just fixing skb redirect return code won't be sufficient. I realized
+> > there are other return paths that need to be treated, e.g. bpf reroute
+> > path also directly returns dev_queue_xmit status. I plan to check for
+> > LWTUNNEL_XMIT_CONTINUE (and change it to a value that does not
+> > conflict with NET_RX_DROP and NET_XMIT_DROP) in the next revision. On
+> > the other hand, the return value of NETDEV_TX_BUSY is another hassle.
+>
+> I suspect we are talking about different things or I am still missing som=
+ething.
+>
+> I was thinking skb_do_redirect() should have always consumed the skb and
+> bpf_xmit should always return LWTUNNEL_XMIT_DONE also (instead of
+> LWTUNNEL_XMIT_CONTINUE described in the this patch commit message). It is=
+ what
+> sch_handle_egress() is doing also. Could you explain how is it different =
+from
+> the skb_do_redirect usage in sch_handle_egress() or you are suggesting th=
+e
+> current sch_handle_egress() has the issue too also?
+>
+I think we were not on the same page. You are absolutely right that
+skb_do_redirect should consume the packet anyway. The difference
+between your proposal and this patch is that this patch returns errno
+or LWTUNNEL_XMIT_DONE, and yours does not even return errno. Both
+approaches fix the issue of "redirect to down device crashes the
+kernel".
 
-Yes but that's the difference between us providing a basis for others
-to easily contribute tests and just saying "you can implement you test
-in this directory". Literally adding just one line is simple and
-encouraging enough.
+What I commented was an exact same issue at different location: BPF
+reroute may trigger the crash as well, since it also returns
+dev_queue_xmit status in bpf_xmit. Need to fix this, or instead fixing
+LWTUNNEL_XMIT_CONTINUE value and correct the behavior at lwtunnel_xmit
+rather than bpf_xmit.
 
-> I regarded that as an acceptable effort instead of having to work around
-> the warnings.
+Yan
 
-Warnings must always be addressed, and there are tools for this. One
-of them is the inline keyword which makes them go away. It's fine as
-long as we expect that functions are worth inlining (size, debuggability).
-A second one is the "unused" attribute. I know you said you don't find
-it clean but it's the official clean way to shut some specific warnings,
-by passing meta-information to the compiler about the intent for certain
-things. We can very well have a define saying that __maybe_unused maps
-to __attribute__((unused)) as done everywhere else, but it's in the end
-it remains the regular way to do it. Finally the third method consists
-in removing "static" so that the compiler doesn't know if we're going
-to use them elsewhere. My personal preference goes with the unused
-attribute because it's well aligned with the spirit of a test framework
-providing tools to those who need them.
-
-> The warnings themselves I see as useful as they can give developers
-> early feedback on their code. They would have avoided some of the issues
-> with the recent pipe() series.
-
-I totally agree with warnings. I compile my code with -W -Wall -Wextra
-for this exact reason. Also inside a lib test we must try to trigger
-more of them so as to be in the worst user situation, because if users
-detect them first, that's painful.
-
-> Do you have a preferred solution for the overall situation?
-
-I'd rather put unused everywhere (possibly with a define to make it
-more readable). And if the code is too large and too ugly (too many
-utility functions) really moving it into a .h would significantly
-help I think.
-
-> > > > It is very easy to add the missing 'static' keyword for is_setting_valid(), but
-> > > > for __stack_chk_init(), is it ok for us to convert it to 'static' and remove
-> > > > the 'weak' attrbute and even the 'section' attribute? seems it is only used by
-> > > > our _start_c() currently.
-> > > 
-> > > Making is_setting_valid(), __stack_chk_init() seems indeed useful.
-> > > Also all the run_foo() test functions.
-> > 
-> > Most of them could theoretically be turned to static. *But* it causes a
-> > problem which is that it will multiply their occurrences in multi-unit
-> > programs, and that's in part why we've started to use weak instead. Also
-> > if you run through gdb and want to mark a break point, you won't have the
-> > symbol when it's static, and the code will appear at multiple locations,
-> > which is really painful. I'd instead really prefer to avoid static when
-> > we don't strictly want to inline the code, and prefer weak when possible
-> > because we know many of them will be dropped at link time (and that's
-> > the exact purpose).
-> 
-> Thanks for the clarification. I forgot about that completely!
-> 
-> The stuff from nolibc-test.c itself (run_foo() and is_settings_valid())
-> should still be done.
-
-Yes, likely. Nolibc-test should be done just like users expect to use
-nolibc, and nolibc should be the most flexible possible.
-
-Cheers,
-Willy
+>
+> > As Dan suggested, packets might not have been freed when this is
+> > returned from drivers. The caller of dev_queue_xmit might need to free
+> > skb when this happens.
+> >
+> > Yan
+>
