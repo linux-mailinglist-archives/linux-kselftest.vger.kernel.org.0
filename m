@@ -2,200 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633FB769AB7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 17:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81730769ACC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 17:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjGaPXo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 11:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41888 "EHLO
+        id S230417AbjGaPad (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 11:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjGaPXn (ORCPT
+        with ESMTP id S230128AbjGaPac (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 11:23:43 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C199610E3;
-        Mon, 31 Jul 2023 08:23:41 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 8D6C96017F;
-        Mon, 31 Jul 2023 17:23:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690817019; bh=ISG2jRu84O8tN50xDVnUgYYjLOV7WKIkKxcodfIlYEQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fv57DVGLvEzKk1Izt27ydCPEXF6Nuv/OV/xQUWoDiv3NvevfgD5aO2Hy0W7Q4tG7M
-         Ttjj45mTWAcaCfhSWJFfjWrU/7orVtf+jR3UPn6HfCjSvZlCUbAQTyjcNlQobFF8fb
-         xZiicfpv9IYWiKl/vZUIEEFTlKR2UvvCcUOtvKk1AmoyVMPOjoZm23PMMxSGz7PXKZ
-         U4zCzxnvVDAiLTYQzlHXwGoCdAnyC3CrIj0WpgLR/YqpZ5rIsIXceCrLf5eoOeZkdQ
-         Bm7Fj4LxCBgMXsslQmUZJ0Mgx1ZUFoqA+ht5lE11QxSvk/ZgCjliCKUSC5PZKNKbqF
-         GtLmeAfP51aCQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7cjOiumQGmcF; Mon, 31 Jul 2023 17:23:37 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id 3F9F560173;
-        Mon, 31 Jul 2023 17:23:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690817017; bh=ISG2jRu84O8tN50xDVnUgYYjLOV7WKIkKxcodfIlYEQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LvP8vQ5XgRekhDcciWZXR/hj61jMzI3wku1bjiRW9kHavqUG5+hWdRaxm6y1wxupp
-         h+9ybpFDqaYOjJDdgIwWMpOKM4cOU4885W3ueEdXYs3uRlAvGXDuL1oIJptppm7wDb
-         qm/5PeYxS7HUaG9j4u9Ky70U7oKubIP/rT+6lFE/pVvaMLwmuOlq3KiACtsMPFFaWp
-         +utPu3/rp0EyxKS04qzp8MSKiaGIiXGpCyWuETv1uHWDPcoRqvT9HqCB3IjxfNZSmV
-         u25VD8ZcGLS47FPd5jbNO7e/wbrLx0jDqAcg/ZyGB8s+HSCQ/a4V4pqz/tZUldSbEC
-         TCFlusaGUo1Aw==
-Message-ID: <bdc5e82b-596d-d531-7685-0d1e52f2d125@alu.unizg.hr>
-Date:   Mon, 31 Jul 2023 17:23:37 +0200
+        Mon, 31 Jul 2023 11:30:32 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DCA10E3;
+        Mon, 31 Jul 2023 08:30:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1690817424;
+        bh=7PwxTw3aSVah1GIOmec1TC/G/sFMEfwrvAppv6sZQi8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hdHvZIMW32fYbk3AZr/ZfaIzQBJP11N0nSWLA8+ZD1VT4NwIM9VGY8OSZ241nEbR8
+         PHowpI/lpl0aoDNKEK7mZUf7zxky7FZiU/ZR2KGri/DYL39Ab0t55lwKdQije/3VwT
+         PV/DPzVJlpe/egcdVNw4DDTfwtLugcXpJB+NWK+A=
+Date:   Mon, 31 Jul 2023 17:30:23 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     w@1wt.eu, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        tanyuan@tinylab.org
+Subject: Re: [PATCH 1/4] selftests/nolibc: drop unused test helpers
+Message-ID: <e7ec15d7-0152-4e69-920f-ffb1983e1011@t-8ch.de>
+References: <20230731073243.21265-1-falcon@tinylab.org>
+ <20230731110226.115351-1-falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Subject: Re: [PATCH v1 01/11] selftests: forwarding: custom_multipath_hash.sh:
- add cleanup for SIGTERM sent by timeout
-Content-Language: en-US
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     petrm@nvidia.com, razor@blackwall.org,
-        Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-References: <0550924e-dce9-f90d-df8a-db810fd2499f@alu.unizg.hr>
- <adc5e40d-d040-a65e-eb26-edf47dac5b02@alu.unizg.hr>
- <ZL6OljQubhVtQjcD@shredder>
- <cab8ea8a-98f4-ef9b-4215-e2a93cccaab1@alu.unizg.hr>
- <ZMEQGIOQXv6so30x@shredder>
- <a9b6d9f5-14ae-a931-ab7b-d31b5e40f5df@alu.unizg.hr>
- <ZMYXABUN9OzfN5D3@shredder>
- <da3f4f4e-47a7-25be-fa61-aebeba1d8d0c@alu.unizg.hr>
- <ZMdouQRypZCGZhV0@shredder>
- <2f203995-5ae0-13bc-d1a6-997c2b36a2b8@alu.unizg.hr>
- <ZMei0VMIH/l1GzVM@shredder>
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZMei0VMIH/l1GzVM@shredder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230731110226.115351-1-falcon@tinylab.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/31/23 14:02, Ido Schimmel wrote:
+On 2023-07-31 19:02:26+0800, Zhangjin Wu wrote:
+> Hi, Willy
 
->> NOTE: The error happened because two patches collided. This patch
->>
->> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
->> index 975fc5168c6334..40a8c1541b7f81 100755
->> --- a/tools/testing/selftests/net/forwarding/lib.sh
->> +++ b/tools/testing/selftests/net/forwarding/lib.sh
->> @@ -30,6 +30,7 @@ REQUIRE_MZ=${REQUIRE_MZ:=yes}
->>   REQUIRE_MTOOLS=${REQUIRE_MTOOLS:=no}
->>   STABLE_MAC_ADDRS=${STABLE_MAC_ADDRS:=no}
->>   TCPDUMP_EXTRA_FLAGS=${TCPDUMP_EXTRA_FLAGS:=}
->> +TROUTE6=${TROUTE6:=traceroute6}
->>   relative_path="${BASH_SOURCE%/*}"
->>   if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
->>
->> and this patch
->>
->> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
->> index 71f7c0c49677..5b0183013017 100755
->> --- a/tools/testing/selftests/net/forwarding/lib.sh
->> +++ b/tools/testing/selftests/net/forwarding/lib.sh
->> @@ -16,8 +16,6 @@ TEAMD=${TEAMD:=teamd}
->>   WAIT_TIME=${WAIT_TIME:=5}
->>   PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
->>   PAUSE_ON_CLEANUP=${PAUSE_ON_CLEANUP:=no}
->> -NETIF_TYPE=${NETIF_TYPE:=veth}
->> -NETIF_CREATE=${NETIF_CREATE:=yes}
->>   MCD=${MCD:=smcrouted}
->>   MC_CLI=${MC_CLI:=smcroutectl}
->>   PING_COUNT=${PING_COUNT:=10}
->> @@ -30,6 +28,20 @@ REQUIRE_MZ=${REQUIRE_MZ:=yes}
->>   REQUIRE_MTOOLS=${REQUIRE_MTOOLS:=no}
->>   STABLE_MAC_ADDRS=${STABLE_MAC_ADDRS:=no}
->>   TCPDUMP_EXTRA_FLAGS=${TCPDUMP_EXTRA_FLAGS:=}
->> +NETIF_TYPE=${NETIF_TYPE:=veth}
->> +NETIF_CREATE=${NETIF_CREATE:=yes}
->> +declare -A NETIFS=(
->> +       [p1]=veth0
->> +       [p2]=veth1
->> +       [p3]=veth2
->> +       [p4]=veth3
->> +       [p5]=veth4
->> +       [p6]=veth5
->> +       [p7]=veth6
->> +       [p8]=veth7
->> +       [p9]=veth8
->> +       [p10]=veth9
->> +)
->>
->>   relative_path="${BASH_SOURCE%/*}"
->>   if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
->>
->> are not compatible.
->>
->> I have applied the 'require_command $TROUTE6' patch manually.
->>
->> I suppose this is what you intended to have:
->>
->> # Can be overridden by the configuration file.
->> PING=${PING:=ping}
->> PING6=${PING6:=ping6}
->> MZ=${MZ:=mausezahn}
->> ARPING=${ARPING:=arping}
->> TEAMD=${TEAMD:=teamd}
->> WAIT_TIME=${WAIT_TIME:=5}
->> PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
->> PAUSE_ON_CLEANUP=${PAUSE_ON_CLEANUP:=no}
->> MCD=${MCD:=smcrouted}
->> MC_CLI=${MC_CLI:=smcroutectl}
->> PING_COUNT=${PING_COUNT:=10}
->> PING_TIMEOUT=${PING_TIMEOUT:=5}
->> WAIT_TIMEOUT=${WAIT_TIMEOUT:=20}
->> INTERFACE_TIMEOUT=${INTERFACE_TIMEOUT:=600}
->> LOW_AGEING_TIME=${LOW_AGEING_TIME:=1000}
->> REQUIRE_JQ=${REQUIRE_JQ:=yes}
->> REQUIRE_MZ=${REQUIRE_MZ:=yes}
->> REQUIRE_MTOOLS=${REQUIRE_MTOOLS:=no}
->> STABLE_MAC_ADDRS=${STABLE_MAC_ADDRS:=no}
->> TCPDUMP_EXTRA_FLAGS=${TCPDUMP_EXTRA_FLAGS:=}
->> TROUTE6=${TROUTE6:=traceroute6}
->> NETIF_TYPE=${NETIF_TYPE:=veth}
->> NETIF_CREATE=${NETIF_CREATE:=yes}
->> declare -A NETIFS=(
->>         [p1]=veth0
->>         [p2]=veth1
->>         [p3]=veth2
->>         [p4]=veth3
->>         [p5]=veth4
->>         [p6]=veth5
->>         [p7]=veth6
->>         [p8]=veth7
->>         [p9]=veth8
->>         [p10]=veth9
->> )
->>
->> relative_path="${BASH_SOURCE%/*}"
->> if [[ "$relative_path" == "${BASH_SOURCE}" ]]; then
->>          relative_path="."
->> fi
->> ------------------------------------------------
->>
->> Probably for the production patch you would like to have this fixed.
+Thomas here :-)
+
+> > > > > Why not a simple 'static __attribute__((unused))' line, then, no need to
+> > > > > add them again next time.
+> > > > > 
+> > > > >     -static int expect_zr(int expr, int llen)
+> > > > >     +static __attribute__((unused))
+> > > > >     +int expect_zr(int expr, int llen)
+> > > > >      {
+> > > > 
+> > > > Personally I don't like having dead code lying around that needs to be
+> > > > maintained and skipped over while reading.
+> > > > It's not a given that we will need those helpers in the future at all.
+> > > >
+> > > 
+> > > It is reasonable in some degree from current status, especially for
+> > > these ones are newly added, but let us think about these scenes: when we
+> > > would drop or change some test cases in the future and the helpers may
+> > > would be not referenced by any test cases in a short time, and warnings
+> > > there, but some other cases may be added later to use them again ...
+> > 
+> > That doesn't seem very likely.
+> > Did it happen recently?
+> >
 > 
-> No, I don't intend to submit the patch that automatically creates the
-> veth pairs. It is superseded by "selftests: forwarding: Skip test when
-> no interfaces are specified".
+> Yeah, it did happen, but I can not remember which one, a simple statistic
+> does show it may be likely:
 
-It is your call, but consider that the majority of testers will use the default setup
-and maybe grep "not ok" messages in the log, because the amount of logs is overwhelming.
+I can't find it.
 
-Knowing that there is "forwarding.config.sample" probably requires in-depth knowledge
-of the selftest net/forwarding bundle and maybe direct hint from the developers?
+>     $ grep EXPECT_ -ur tools/testing/selftests/nolibc/nolibc-test.c | grep -v define | sed -e 's/.*\(EXPECT_[A-Z0-9]*\).*/\1/g' | sort | uniq -c | sort -k 1 -g -r
+>          55 EXPECT_EQ
+>          37 EXPECT_SYSER
+>          21 EXPECT_SYSZR
+>          11 EXPECT_SYSNE
+>           9 EXPECT_VFPRINTF
+>           4 EXPECT_PTRGT
+>           4 EXPECT_GE
+>           3 EXPECT_STRZR
+>           3 EXPECT_NE
+>           3 EXPECT_LT
+>           3 EXPECT_GT
+>           2 EXPECT_STRNZ
+>           2 EXPECT_STREQ
+>           2 EXPECT_PTRLT
+>           1 EXPECT_SYSER2
+>           1 EXPECT_SYSEQ
+>           1 EXPECT_PTRNZ
+>           1 EXPECT_PTRNE
+>           1 EXPECT_PTRER2
+>           1 EXPECT_PTRER
+>           1 EXPECT_PTREQ
+> 
+> 7 helpers are only used by once, another 3 helpers are used twice, and
+> another 4 are only used by three times.
 
-Kind regards,
-Mirsad
+Why can't we just drop them when they are not used anymore?
+
+> > > I'm ok to drop these ones, but another patch may be required to add
+> > > 'static __attribute__((unused))' for all of the currently used ones,
+> > > otherwise, there will be warnings randomly by a test case change or
+> > > drop.
+> > 
+> > Then we just drop the helper when we don't need it anymore.
+> > 
+> > I also dislike the __attribute__ spam to be honest.
+> >
+> 
+> Me too, but it does help sometimes ;-)
+> 
+> > > Or even further, is it possible to merge some of them to some more
+> > > generic helpers like the ones used from the selftest.h in your last RFC
+> > > patchset?
+> > 
+> > Something like this will indeed be part of the KTAP rework.
+> > But it's a change for another time.
+> 
+> Yes, this may be a better solution to such warnings.
+> 
+> Btw, just thought about gc-section, do we need to further remove dead code/data
+> in the binary? I don't think it is necessary for nolibc-test itself, but with
+> '-Wl,--gc-sections -Wl,--print-gc-sections' may be a good helper to show us
+> which ones should be dropped or which ones are wrongly declared as public?
+> 
+> Just found '-O3 + -Wl,--gc-section + -Wl,--print-gc-sections' did tell
+> us something as below:
+> 
+>     removing unused section '.text.nolibc_raise'
+>     removing unused section '.text.nolibc_memmove'
+>     removing unused section '.text.nolibc_abort'
+>     removing unused section '.text.nolibc_memcpy'
+>     removing unused section '.text.__stack_chk_init'
+>     removing unused section '.text.is_setting_valid'
+> 
+> These info may help us further add missing 'static' keyword or find
+> another method to to drop the wrongly used status of some functions from
+> the code side.
+> 
+> It is very easy to add the missing 'static' keyword for is_setting_valid(), but
+> for __stack_chk_init(), is it ok for us to convert it to 'static' and remove
+> the 'weak' attrbute and even the 'section' attribute? seems it is only used by
+> our _start_c() currently.
+
+Making is_setting_valid(), __stack_chk_init() seems indeed useful.
+Also all the run_foo() test functions.
+
+> For the left ones, some are related to libgcc for divide by zero or the other
+> divide functions, which may be not possible to drop in code side, but for
+> memmove/memset, it is able to add -ffreestanding in our nolibc-test like -Wall
+> and only wrap the 'weak' attribute with '#if __STDC_HOSTED__ == 1', for the ARM
+> specific one, '#ifdef __ARM_EABI__'.
+
+That seems very excessive.
+
+> And even further, the '_start_c()' should be 'static' too, perhaps the above
+> issues are worth a new patchset, If you agree, will send a new patchset to fix
+> up them.
+
+_start_c(), too.
