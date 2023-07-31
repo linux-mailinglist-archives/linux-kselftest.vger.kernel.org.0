@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E417694AA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 13:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 845777694B2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 13:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232613AbjGaLVp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 07:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
+        id S232243AbjGaLV4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 07:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232556AbjGaLVZ (ORCPT
+        with ESMTP id S232614AbjGaLVp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 07:21:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98CF1735
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 04:20:27 -0700 (PDT)
+        Mon, 31 Jul 2023 07:21:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D04170E
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 04:20:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690802426;
+        s=mimecast20190719; t=1690802453;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=5vaUW0ZFNoavCkOsFWH4xJQw7j0BCOKV0sVk8cbQiFE=;
-        b=Aix8KJ0XtXMNDGC7Px72w3at5hNZMKZsnaOI9NfnhJLKeZWnLtlbXclePR//6n8r++9lqs
-        6LvtOxJ/DpR5UXckAxkKcX9shXm9e5kZa1J1nNKwfLM4FPuHbAY94I0RIbgnarJ0D65cCM
-        Y/dI7anFnbPbFfktk1oWVptNJ5cYlX0=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=47HAhqvJlrFOjF3d3mT+sXNh9SqjQbM0s/wrTjkOtJg=;
+        b=Epsu1sHEHyXjWzUEAKGS76KcvpmP0zgHZKHyeS3Uk0D1M89ucFcH63fE+oAzmmMlAl4TX9
+        NhTld9OR1/83XP3n8hiPKGCc0yfR3k9Z/X8zzZdGArCrpP9Fv8Z5URcWG1ZSERmjtoE2Yd
+        6BevUJaiMR7ZWf7fS9a0PZ43lyukJD8=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-479-Ua0UKDTKM6ChJmia_M7Rvw-1; Mon, 31 Jul 2023 07:20:24 -0400
-X-MC-Unique: Ua0UKDTKM6ChJmia_M7Rvw-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-76c83aab2c7so427119385a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 04:20:24 -0700 (PDT)
+ us-mta-68-0hOhk9VVMuCqwg7rBn9wgg-1; Mon, 31 Jul 2023 07:20:52 -0400
+X-MC-Unique: 0hOhk9VVMuCqwg7rBn9wgg-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-63d0eb48a3dso33279466d6.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 04:20:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690802424; x=1691407224;
+        d=1e100.net; s=20221208; t=1690802452; x=1691407252;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5vaUW0ZFNoavCkOsFWH4xJQw7j0BCOKV0sVk8cbQiFE=;
-        b=VcsqbyUUreooeBuys1FUlzv6xhOmRuNB5E9+nh/qtAncYEx5Yj7mY+dAoHmF/YVbfC
-         9f4exIVUVXq69162ZzQAGxGQINu/4L0dtB3gTW6n+sfpjsL0LeJ91kWDRupkmJzwaeJP
-         O/KshpoKwoFJpSvNQvRnw5tz1k02kIbvGfuDmXc+jtB+HdjLnpegwRbaLKzeveGswzFK
-         oC3qZDQEoJ0L5mc5R9b9/7EI28M88Ocn6TJ5QM4/Vbf6AvT/XodYcNR+9N4UKni1b98g
-         NV8WzZpK9qc0G4KjyZb7o86AXLPTcHajRm9TfNmsVXFO27jmQ2D9n8cyLB6lpWt1iBjo
-         brhQ==
-X-Gm-Message-State: ABy/qLblo6BX9lMBwvgMknwdAP0yjAg3LzAJ5MoRBOGXQBP8ocRX/ohV
-        VGXkBYzKk2ywzwLLIJD9uBYlPoTsT7b/MPMQRhWkyh80DCCROdF9UM6RIQABOybrknqYwiA+ZLU
-        tO+hjUaxG4WeleDFgRkBqJN0a+/08
-X-Received: by 2002:a05:620a:3199:b0:765:a678:977c with SMTP id bi25-20020a05620a319900b00765a678977cmr11440903qkb.67.1690802424229;
-        Mon, 31 Jul 2023 04:20:24 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlF4PsqV0GfIB6WcE+e1KZA+Ob00KHOmMkV0SPV2mk8Z9iXGAjuozcLuEeBrBpyr3ypNADcfxg==
-X-Received: by 2002:a05:620a:3199:b0:765:a678:977c with SMTP id bi25-20020a05620a319900b00765a678977cmr11440851qkb.67.1690802423943;
-        Mon, 31 Jul 2023 04:20:23 -0700 (PDT)
+        bh=47HAhqvJlrFOjF3d3mT+sXNh9SqjQbM0s/wrTjkOtJg=;
+        b=Ixly7VVnZ/WytHLcQznZpQFj2uxjid6qFgDzcOWcKo9BDynwJpaeIJNooEfzi1vhce
+         EAKNG2/vilNSWyY6P7ucLToukrxmXLAXlxiUWQbFN3ZAuw1gCvcPLnXvKJCiogX+caXg
+         3XUEvjMooBBvWp8LAW5TY1j1Yzu9P5Ysy8n1c0C9I0Trn+yJeXC5PbVWc09He8rwtz3+
+         kviG99usdE7HxJ45G1HowzWIdQxMKoqKgerIkoJvxn3mIRLDOT1xex44lVuxorAGr70v
+         4Zbh+BixtQH7R7lWeFW4ZMOI2HQYmESQhDeB4D1q7VrBxTlVurqQk1Mj7VIqB3lw7mCE
+         /SOQ==
+X-Gm-Message-State: ABy/qLaTxeYJcbKRb/WMMAxODLhJik/TUqbDQ5dH3sUY4KOnYdxpJ+RD
+        VI2f44wPYc3jIRWvq0r0P1Lhgl6umT6vyFsj8+9K90ttZmrLfJP2/9BO3923u5aBlelK5BNVclI
+        YZt3RDNd2twXebmQv6pyqAvQM0+YF
+X-Received: by 2002:a0c:e14d:0:b0:634:20f:471c with SMTP id c13-20020a0ce14d000000b00634020f471cmr6609345qvl.14.1690802451987;
+        Mon, 31 Jul 2023 04:20:51 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGQmknuNkpt4OdqMMs+lcZsPQfXQHCOzlkWOeCIE2fDz4iRThyIeyibV6Yi3WqcRw7uGfKfaw==
+X-Received: by 2002:a0c:e14d:0:b0:634:20f:471c with SMTP id c13-20020a0ce14d000000b00634020f471cmr6609334qvl.14.1690802451661;
+        Mon, 31 Jul 2023 04:20:51 -0700 (PDT)
 Received: from vschneid.remote.csb ([149.12.7.81])
-        by smtp.gmail.com with ESMTPSA id c23-20020a05620a11b700b00767303dc070sm3206663qkk.8.2023.07.31.04.20.14
+        by smtp.gmail.com with ESMTPSA id n2-20020a0ce542000000b0061b5dbf1994sm3583834qvm.146.2023.07.31.04.20.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 04:20:23 -0700 (PDT)
+        Mon, 31 Jul 2023 04:20:51 -0700 (PDT)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
@@ -107,20 +107,20 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH v2 05/20] tracing/filters: Optimise cpumask vs
- cpumask filtering when user mask is a single CPU
-In-Reply-To: <20230729153436.1e07bfa6@rorschach.local.home>
+Subject: Re: [RFC PATCH v2 06/20] tracing/filters: Optimise scalar vs
+ cpumask filtering when the user mask is a single CPU
+In-Reply-To: <20230729155547.35719a1f@rorschach.local.home>
 References: <20230720163056.2564824-1-vschneid@redhat.com>
- <20230720163056.2564824-6-vschneid@redhat.com>
- <20230729153436.1e07bfa6@rorschach.local.home>
-Date:   Mon, 31 Jul 2023 12:20:13 +0100
-Message-ID: <xhsmh3514s4ya.mognet@vschneid.remote.csb>
+ <20230720163056.2564824-7-vschneid@redhat.com>
+ <20230729155547.35719a1f@rorschach.local.home>
+Date:   Mon, 31 Jul 2023 12:20:41 +0100
+Message-ID: <xhsmh1qgos4xi.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,32 +128,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 29/07/23 15:34, Steven Rostedt wrote:
-> On Thu, 20 Jul 2023 17:30:41 +0100
+On 29/07/23 15:55, Steven Rostedt wrote:
+> On Thu, 20 Jul 2023 17:30:42 +0100
 > Valentin Schneider <vschneid@redhat.com> wrote:
 >
->>              /* Move along */
->>              i++;
->> +
->> +		/*
->> +		 * Optimisation: if the user-provided mask has a weight of one
->> +		 * then we can treat it as a scalar input.
->> +		 */
->> +		single = cpumask_weight(pred->mask) == 1;
->> +		if (single && field->filter_type == FILTER_CPUMASK) {
->> +			pred->val = cpumask_first(pred->mask);
->> +			kfree(pred->mask);
+>> Steven noted that when the user-provided cpumask contains a single CPU,
+>> then the filtering function can use a scalar as input instead of a
+>> full-fledged cpumask.
+>>
+>> When the mask contains a single CPU, directly re-use the unsigned field
+>> predicate functions. Transform '&' into '==' beforehand.
+>>
+>> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+>> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+>> ---
+>>  kernel/trace/trace_events_filter.c | 7 ++++++-
+>>  1 file changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+>> index 2fe65ddeb34ef..54d642fabb7f1 100644
+>> --- a/kernel/trace/trace_events_filter.c
+>> +++ b/kernel/trace/trace_events_filter.c
+>> @@ -1750,7 +1750,7 @@ static int parse_pred(const char *str, void *data,
+>>               * then we can treat it as a scalar input.
+>>               */
+>>              single = cpumask_weight(pred->mask) == 1;
+>> -		if (single && field->filter_type == FILTER_CPUMASK) {
+>> +		if (single && field->filter_type != FILTER_CPU) {
+>>                      pred->val = cpumask_first(pred->mask);
+>>                      kfree(pred->mask);
+>>              }
+>> @@ -1761,6 +1761,11 @@ static int parse_pred(const char *str, void *data,
+>>                              FILTER_PRED_FN_CPUMASK;
+>>              } else if (field->filter_type == FILTER_CPU) {
+>>                      pred->fn_num = FILTER_PRED_FN_CPU_CPUMASK;
+>> +		} else if (single) {
+>> +			pred->op = pred->op == OP_BAND ? OP_EQ : pred->op;
 >
-> Don't we need:
->                       pred->mask = NULL;
+> Nit, the above can be written as:
 >
-> here, or the free_predicate() will cause a double free?
+>                       pred->op = pret->op != OP_BAND ? : OP_EQ;
 >
 
-We do, thanks for spotting this.
+That's neater, thanks!
 
 > -- Steve
 >
->> +		}
->> +
+>
+>> +			pred->fn_num = select_comparison_fn(pred->op, field->size, false);
+>> +			if (pred->op == OP_NE)
+>> +				pred->not = 1;
+>>              } else {
+>>                      switch (field->size) {
+>>                      case 8:
 
