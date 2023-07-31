@@ -2,129 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B6476A2F4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 23:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BF976A2FC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jul 2023 23:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjGaVf6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jul 2023 17:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
+        id S230255AbjGaVhA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jul 2023 17:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjGaVfs (ORCPT
+        with ESMTP id S230130AbjGaVg7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 17:35:48 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C79210C
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 14:35:20 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5221cf2bb8cso7304233a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 14:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1690839313; x=1691444113;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OoQ6AMqbH7T3p3Yr5Pye74Q6WCQZL+lK6DdYCEXr40o=;
-        b=YDtNwl2gvEdzUtsqGkrJjlUralI+dGLNS813sAQedgc5FSaOYZgvtEZA5Z6tcC5UzI
-         mAbX/ZGY5EoRq2jjO8qgvt2qAHUGcfWv5FM3ponM9TkB2ywUB90eka8w3BAjewqY0rnv
-         qprjOTgYL1vA4ZCIVQBHw0ksn9cr7Ls/qYsFA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690839313; x=1691444113;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OoQ6AMqbH7T3p3Yr5Pye74Q6WCQZL+lK6DdYCEXr40o=;
-        b=GV3PILLvzBrIQC7v+fwW7O9poUD/oTTIGO7UkalztiTuLxhstdmGnjcqiKqnglSmWt
-         JvX6oBiS28Tw55Vj5eBItXgFj0QlND04dO8iktFulSNFWLeasRzjcRysDdafLjNXa1je
-         h920Lz9f0AhRzNiZ3wsZY6fYQAsYzxXIjKW+0GQiqw4kYqIn7xptjlfcIqqySXpV7ifJ
-         MaAcBRcO/sxoPhu4DR+nkeG5wGk9U4cIHo77/+y6PizhI+tgb6uqJp4QNGaWqPvnqP+w
-         Ote6s1yGNiJtHzF6A5Sc+S2NYAQx++ZY++fc7xizg7X2bUujERGyyZMkKnw7BWsvAc3M
-         qcFA==
-X-Gm-Message-State: ABy/qLZ8PQSMovFoWb8aHcxedmfW9zijYorNID68IVgkRX2DzvqaqqCZ
-        1FqLtL0HSC8reBHf1tbBjTJx2qhU3146W7nDEIkLKg==
-X-Google-Smtp-Source: APBJJlFBfBMR6ifd3iBPqOfNdGmVDUsQS4R69cJOXFItn8JIAmskEdBDTXCgE3bDvE3zYTLX2ZEuz5+VLMSkWvgFjmg=
-X-Received: by 2002:aa7:d311:0:b0:522:4dd0:de6e with SMTP id
- p17-20020aa7d311000000b005224dd0de6emr825060edq.8.1690839312703; Mon, 31 Jul
- 2023 14:35:12 -0700 (PDT)
+        Mon, 31 Jul 2023 17:36:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A4B1FC7;
+        Mon, 31 Jul 2023 14:36:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2C2D612E8;
+        Mon, 31 Jul 2023 21:36:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F96C433C8;
+        Mon, 31 Jul 2023 21:36:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690839397;
+        bh=O6qxnqR2UAHIQWX1X+EfPZX7oeDEWTWYBmPMSon4/nE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MEMWPQTNbSMkn+e0CZ1BGodCS5gupvgQ6CLcver682e8pWcF72x1wyA/dPjWgo/2k
+         V5AGy4Tch89afNrbmK4+iF3BTc5+7qoZTzKd35MBSdq3cqbe/9929MwUR2dmqfXi4q
+         qZt/WxnDvxbJKx5pXnfdCBDINSxWC+cdsa0cc1DueOrkGjIjeWW1phpArFKEX8WBGf
+         U7Fa1RRvj1RODi0dYgbzik4qgX6k1DYeilEQJT+wCDYpDeAniKHTPhhA4v1HN6P2xW
+         DNQvcQezBxRziM73g8DIm/9dxwX+vfzzYKXg5f0bC0qbkunq9N2+aAqoqhNUYWkGII
+         GLsq7mH2CGTUg==
+Date:   Mon, 31 Jul 2023 16:36:31 -0500
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH v2 11/20] objtool: Flesh out warning related to
+ pv_ops[] calls
+Message-ID: <20230731213631.pywytiwdqgtgx4ps@treble>
+References: <20230720163056.2564824-1-vschneid@redhat.com>
+ <20230720163056.2564824-12-vschneid@redhat.com>
+ <20230728153334.myvh5sxppvjzd3oz@treble>
+ <xhsmh8raws53o.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <cover.1690332693.git.yan@cloudflare.com> <e5d05e56bf41de82f10d33229b8a8f6b49290e98.1690332693.git.yan@cloudflare.com>
- <266ab56e-ae83-7ddc-618e-3af228df81bd@linux.dev>
-In-Reply-To: <266ab56e-ae83-7ddc-618e-3af228df81bd@linux.dev>
-From:   Yan Zhai <yan@cloudflare.com>
-Date:   Mon, 31 Jul 2023 16:35:01 -0500
-Message-ID: <CAO3-Pbon7tCdChnK9kZ4992C-AFPvE5gTDWre6dQT9npEMxS2Q@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf 1/2] bpf: fix skb_do_redirect return values
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com,
-        Jordan Griege <jgriege@cloudflare.com>,
-        Markus Elfring <Markus.Elfring@web.de>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <xhsmh8raws53o.mognet@vschneid.remote.csb>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 5:02=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.=
-dev> wrote:
->
-> On 7/25/23 6:08 PM, Yan Zhai wrote:
-> > skb_do_redirect returns various of values: error code (negative),
-> > 0 (success), and some positive status code, e.g. NET_XMIT_CN,
-> > NET_RX_DROP. Commit 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel
-> > infrastructure") didn't check the return code correctly, so positive
-> > values are propagated back along call chain:
-> >
-> >    ip_finish_output2
-> >      -> bpf_xmit
-> >        -> run_lwt_bpf
-> >          -> skb_do_redirect
->
->  From looking at skb_do_redirect, the skb_do_redirect should have consume=
-d the
-> skb except for the -EAGAIN return value. afaik, -EAGAIN could only happen=
- by
-> using the bpf_redirect_peer helper. lwt does not have the bpf_redirect_pe=
-er
-> helper available, so there is no -EAGAIN case in lwt. iow, skb_do_redirec=
-t
-> should have always consumed the skb in lwt. or did I miss something?
->
-> If that is the case, it feels like the fix should be in run_lwt_bpf() and=
- the
-> "if (ret =3D=3D 0)" test in run_lwt_bpf() is unnecessary?
->
->                         ret =3D skb_do_redirect(skb);
->                         if (ret =3D=3D 0)
->                                 ret =3D BPF_REDIRECT;
->
->
-Just fixing skb redirect return code won't be sufficient. I realized
-there are other return paths that need to be treated, e.g. bpf reroute
-path also directly returns dev_queue_xmit status. I plan to check for
-LWTUNNEL_XMIT_CONTINUE (and change it to a value that does not
-conflict with NET_RX_DROP and NET_XMIT_DROP) in the next revision. On
-the other hand, the return value of NETDEV_TX_BUSY is another hassle.
-As Dan suggested, packets might not have been freed when this is
-returned from drivers. The caller of dev_queue_xmit might need to free
-skb when this happens.
+On Mon, Jul 31, 2023 at 12:16:59PM +0100, Valentin Schneider wrote:
+> You're quite right - fabricating an artificial warning with a call to __flush_tlb_local():
+> 
+>   vmlinux.o: warning: objtool: pv_ops[1]: indirect call to native_flush_tlb_local() leaves .noinstr.text section
+>   vmlinux.o: warning: objtool: __flush_tlb_all_noinstr+0x4: call to {dynamic}() leaves .noinstr.text section
+> 
+> Interestingly the second one doesn't seem to have triggered the "pv_ops"
+> bit of call_dest_name. Seems like any call to insn_reloc(NULL, x) will
+> return NULL.
 
-Yan
+Yeah, that's weird.
+
+> Trickling down the file yields:
+> 
+>   vmlinux.o: warning: objtool: pv_ops[1]: indirect call to native_flush_tlb_local() leaves .noinstr.text section
+>   vmlinux.o: warning: objtool: __flush_tlb_all_noinstr+0x4: call to pv_ops[0]() leaves .noinstr.text section
+> 
+> In my case (!PARAVIRT_XXL) pv_ops should look like:
+>   [0]: .cpu.io_delay
+>   [1]: .mmu.flush_tlb_user()
+> 
+> so pv_ops[1] looks right. Seems like pv_call_dest() gets it right because
+> it uses arch_dest_reloc_offset().
+> 
+> If I use the above to fix up validate_call(), would we still need
+> pv_call_dest() & co?
+
+The functionality in pv_call_dest() is still needed because it goes
+through all the possible targets for the .mmu.flush_tlb_user() pointer
+-- xen_flush_tlb() and native_flush_tlb_local() -- and makes sure
+they're noinstr.
+
+Ideally it would only print a single warning for this case, something
+like:
+
+  vmlinux.o: warning: objtool: __flush_tlb_all_noinstr+0x4: indirect call to native_flush_tlb_local() leaves .noinstr.text section
+
+I left out "pv_ops[1]" because it's already long enough :-)
+
+It would need a little bit of code shuffling.  But it's really a
+preexisting problem so don't feel compelled to fix it with this patch
+set.
+
+-- 
+Josh
