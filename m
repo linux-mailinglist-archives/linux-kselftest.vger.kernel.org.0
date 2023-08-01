@@ -2,88 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1721776AA43
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 09:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E7B76AA44
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 09:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjHAHsc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 03:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        id S231584AbjHAHtD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 03:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbjHAHsc (ORCPT
+        with ESMTP id S231426AbjHAHtD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 03:48:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD165E49
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 00:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690876065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fr3C+UyA3RRBD/kfZAlkA+cHPdjSroXf6vhyShW1as0=;
-        b=hM0ZPuixdTGD9gbW4FnGK0FsRlZVSUdgz7J74jxs+rjUc05vRPrsG4cILYA0Dsr2xqfHQ1
-        +GnZjdszrZWz6/PuW3mMQAwT/OW9m+K/ocbWwqUcaaVnUflYnGN106YOyKKwZGU8U1JHph
-        8tm4hV/8eos8gBCqfZaWiYDPyavoYL4=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-660-YQHCn5bpPjSVlx_Yym5-Qg-1; Tue, 01 Aug 2023 03:47:41 -0400
-X-MC-Unique: YQHCn5bpPjSVlx_Yym5-Qg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D21953815EEA;
-        Tue,  1 Aug 2023 07:47:40 +0000 (UTC)
-Received: from alecto.usersys.redhat.com (unknown [10.43.17.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C8C56492CAC;
-        Tue,  1 Aug 2023 07:47:37 +0000 (UTC)
-Date:   Tue, 1 Aug 2023 09:47:35 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Ruan Jinjie <ruanjinjie@huawei.com>
-Cc:     Ast@kernel.org, Daniel@iogearbox.net, Andrii@kernel.org,
-        Martin.lau@linux.dev, Song@kernel.org, Yonghong.song@linux.dev,
-        John.fastabend@gmail.com, Kpsingh@kernel.org, Sdf@google.com,
-        Haoluo@google.com, Jolsa@kernel.org, Mykolal@fb.com,
-        Shuah@kernel.org, Benjamin.tissoires@redhat.com, Memxor@gmail.com,
-        Iii@linux.ibm.com, Colin.i.king@gmail.com, Awkrail01@gmail.com,
-        Rdunlap@infradead.org, Joannelkoong@gmail.com, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH -next v2] selftests/bpf: replace fall through comment by
- fallthrough pseudo-keyword
-Message-ID: <20230801074735.GA571679@alecto.usersys.redhat.com>
-References: <20230801065447.3609130-1-ruanjinjie@huawei.com>
+        Tue, 1 Aug 2023 03:49:03 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38509E48;
+        Tue,  1 Aug 2023 00:49:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1690876140;
+        bh=qsbOXFqF2xX1Cj3m1X+7zylT1KmXCgIpush39Cl5JtQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bWUrDjWULaOlHXTqUu5UmVfeqHLaTpy2k1zUYBvlYy/zWGzYpIIMO0odL2xdqMWub
+         89KhGnUxOqLLpURKST/RRSaw1vdZ1EdRxudJofu/e9vi61Fh4nfRHnNV15aI6Hh4oV
+         BRIeXzkTP9f9pOIBvRo8C0a7UzmQscMANtzRGTTc=
+Date:   Tue, 1 Aug 2023 09:48:59 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuan Tan <tanyuan@tinylab.org>,
+        Zhangjin Wu <falcon@tinylab.org>
+Subject: Re: [PATCH v2 09/10] selftests/nolibc: test return value of read()
+ in test_vfprintf
+Message-ID: <ba29aabd-042b-473f-b395-efdb9db4c152@t-8ch.de>
+References: <20230801-nolibc-warnings-v2-0-1ba5ca57bd9b@weissschuh.net>
+ <20230801-nolibc-warnings-v2-9-1ba5ca57bd9b@weissschuh.net>
+ <ZMitRWU94SzCBNdd@1wt.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230801065447.3609130-1-ruanjinjie@huawei.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZMitRWU94SzCBNdd@1wt.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
-
-On Tue, Aug 01, 2023 at 02:54:47PM +0800, Ruan Jinjie wrote:
-> Replace the existing /* fall through */ comments with the
-> new pseudo-keyword macro fallthrough[1].
+On 2023-08-01 08:59:17+0200, Willy Tarreau wrote:
+> On Tue, Aug 01, 2023 at 07:30:16AM +0200, Thomas Weißschuh wrote:
+> > If read() fails and returns -1 buf would be accessed out of bounds.
+> > 
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
+> >  tools/testing/selftests/nolibc/nolibc-test.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> > index 82714051c72f..a334f8450a34 100644
+> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > @@ -1031,6 +1031,12 @@ static int expect_vfprintf(int llen, int c, const char *expected, const char *fm
+> >  	lseek(fd, 0, SEEK_SET);
+> >  
+> >  	r = read(fd, buf, sizeof(buf) - 1);
+> > +	if (r == -1) {
+> > +		llen += printf(" read() = %s", errorname(errno));
+> > +		result(llen, FAIL);
+> > +		return 1;
+> > +	}
+> > +
+> >  	buf[r] = '\0';
 > 
-> [1] https://www.kernel.org/doc/html/v5.7/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
+> In fact given the nature of this file (test if we properly implemented
+> our syscalls), I think that a more conservative approach is deserved
+> because if we messed up on read() we can have anything on return and we
+> don't want to trust that. As such I would suggest that we declare r as
+> ssize_t and verify that it's neither negative nor larger than
+> sizeof(buf)-1, which becomes:
 > 
-> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
-> ---
-> v2:
-> - Update the subject and commit message.
+>         if ((size_t)r >= sizeof(buf)) {
+>             ... fail ...
+>         }
 
-I think what Alexei meant was subject-prefix which needs to be
-'PATCH bpf-next'. You can read more about patch submission rules
-in Documentation/bpf/bpf_devel_QA.rst.
+As r == w is validated just below anyways we could move the assignment
+buf[r] = '\0' after that check and then we don't need a new block.
 
--- 
- Artem
+> You'll also have to turn w to ssize_t then due to the test later BTW.
 
+Will do in any case.
