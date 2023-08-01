@@ -2,113 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6A376BE1B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 21:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E1E76BE5F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 22:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbjHATtZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 15:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S229543AbjHAURi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 16:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjHATtT (ORCPT
+        with ESMTP id S229519AbjHAURi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 15:49:19 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67A92728;
-        Tue,  1 Aug 2023 12:49:14 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1690919344to62hk3f
-Received: from linux-lab-host.localdomain ( [116.30.131.233])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 02 Aug 2023 03:49:03 +0800 (CST)
-X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: znfcQSa1hKbBLWA55kcreUoddWXsgcsDCazeEwO2EhbsxtiTpktOt/e/Dttm0
-        0d2GKEdeHpAlQwJQc3xXv8/2hBO3KsmrrxKPL3jGr3MWPA9GxVCPnIPATBHor3ACABVMZfj
-        7qWXxXaJP9Iuemw10epz54mNEH5W8RCBv5W7s5kCHNz3OBvvp1+UM2hiwsIhhUbGqqyb0ty
-        SleE80b0rdcpqcWRlPXfV/cBbMXSyzLv4rd2ZV5IkMC57UPTyJZ3Nn53TDpRn89twxNILW/
-        AmBUYGSLbQZEd1guuWP4AnSO0jMoRE69nWaaobj9bGSc3z844fiuw/Pnf+6ZWu0ywsftYTA
-        vQKdfHdaPZ9nrpcs8+OO4zIuN7alsc3WiBUB67iSWwgDQVgrItbEX14GQT/LNoDdEQYXqDi
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 18295623081681766068
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, w@1wt.eu
-Subject: [PATCH v4 12/12] selftests/nolibc: customize CROSS_COMPILE for 32/64-bit powerpc
-Date:   Wed,  2 Aug 2023 03:49:02 +0800
-Message-Id: <2780d43e9d0a1e0e39e98b111766503eab01f4d7.1690916314.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1690916314.git.falcon@tinylab.org>
-References: <cover.1690916314.git.falcon@tinylab.org>
+        Tue, 1 Aug 2023 16:17:38 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 686A6E71;
+        Tue,  1 Aug 2023 13:17:36 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 371KHStg021073;
+        Tue, 1 Aug 2023 22:17:28 +0200
+Date:   Tue, 1 Aug 2023 22:17:28 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
+Cc:     Yuan Tan <tanyuan@tinylab.org>, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] tools/nolibc: add pipe(), pipe2() and their
+ testcase
+Message-ID: <20230801201728.GA20284@1wt.eu>
+References: <cover.1690903601.git.tanyuan@tinylab.org>
+ <d8591760-8a00-4837-bc4b-21418ac7a5d6@t-8ch.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <d8591760-8a00-4837-bc4b-21418ac7a5d6@t-8ch.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The little-endian powerpc64le compilers provided by Ubuntu and Fedora
-are able to compile big endian kernel and big endian nolibc-test [1].
+Hi,
 
-These default CROSS_COMPILE settings allow to test target architectures
-with:
+On Tue, Aug 01, 2023 at 05:42:57PM +0200, Thomas Weiﬂschuh  wrote:
+> 
+> Aug 1, 2023 17:40:01 Yuan Tan <tanyuan@tinylab.org>:
+> 
+> > Hi Willy and Thomas,
+> >
+> > In v3, I have fixed all the problems you mentioned.
+> >
+> > Welcome any other suggestion.
+> >
+> > ---
+> > Changes in v3:
+> > - Fix the missing return
+> > - Fix __NR_pipe to __NR_pipe2
+> > - Fix the missing static
+> > - Test case works in one process
+> > - Link to v2:
+> > † https://lore.kernel.org/all/cover.1690733545.git.tanyuan@tinylab.org
+> >
+> > Changes in v2:
+> > - Use sys_pipe2 to implement the pipe()
+> > - Use memcmp() instead of strcmp()
+> > - Link to v1:
+> > † https://lore.kernel.org/all/cover.1690307717.git.tanyuan@tinylab.org
+> >
+> > ---
+> > Yuan Tan (2):
+> > † tools/nolibc: add pipe() and pipe2() support
+> > † selftests/nolibc: add testcase for pipe
+> >
+> > tools/include/nolibc/sys.h†††††††††††††††††† | 24 ++++++++++++++++++++
+> > tools/testing/selftests/nolibc/nolibc-test.c | 22 ++++++++++++++++++
+> > 2 files changed, 46 insertions(+)
+> 
+> For the full series:
+> 
+> Reviewed-by: Thomas Weiﬂschuh <linux@weissschuh.net>
 
-    $ cd /path/to/tools/testing/selftests/nolibc/
+Thank you both, now queued on top of the rest in 20230801-nolibc-next-1.
+Thomas I'll try to review your last series tomorrow, at first glance it
+looks OK.
 
-    $ for arch in ppc ppc64 ppc64le; do \
-        make run-user ARCH=$arch | grep "status: "; \
-      done
-
-If want to use another cross compiler, please simply pass CROSS_COMPILE
-or CC as before.
-
-For example, it is able to build 64-bit nolibc-test with the big endian
-powerpc64-linux-gcc crosstool from [2]:
-
-    $ wget -c https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/13.1.0/x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
-    $ tar xvf x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
-    $ export PATH=$PWD/gcc-13.1.0-nolibc/powerpc64-linux/bin/:$PATH
-
-    $ export CROSS_COMPILE_ppc64=powerpc64-linux-
-    $ export CROSS_COMPILE_ppc64le=powerpc64-linux-
-    $ for arch in ppc64 ppc64le; do \
-        make run-user ARCH=$arch | grep "status: "; \
-      done
-
-Or specify CC directly with full path:
-
-    $ export CC=$PWD/gcc-13.1.0-nolibc/powerpc64-linux/bin/powerpc64-linux-gcc
-    $ for arch in ppc64 ppc64le; do \
-        make run-user ARCH=$arch | grep "status: "; \
-      done
-
-[1]: https://github.com/open-power/skiboot
-[2]: https://mirrors.edge.kernel.org/pub/tools/crosstool/
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 822cc4bae619..f44a09c39235 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -59,6 +59,9 @@ IMAGE            = $(IMAGE_$(XARCH))
- IMAGE_NAME       = $(notdir $(IMAGE))
- 
- # CROSS_COMPILE: cross toolchain prefix by architecture
-+CROSS_COMPILE_ppc       ?= powerpc-linux-gnu-
-+CROSS_COMPILE_ppc64     ?= powerpc64le-linux-gnu-
-+CROSS_COMPILE_ppc64le   ?= powerpc64le-linux-gnu-
- CROSS_COMPILE           ?= $(CROSS_COMPILE_$(XARCH))
- 
- # make sure CC is prefixed with CROSS_COMPILE
--- 
-2.25.1
-
+Thanks,
+Willy
