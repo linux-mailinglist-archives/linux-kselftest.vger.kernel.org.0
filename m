@@ -2,136 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D8476A98D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 08:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C40C76A993
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 08:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjHAGzb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 02:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
+        id S231941AbjHAG7l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 02:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjHAGza (ORCPT
+        with ESMTP id S229675AbjHAG7k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 02:55:30 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A430D103;
-        Mon, 31 Jul 2023 23:55:25 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RFQl64gqzztRn0;
-        Tue,  1 Aug 2023 14:52:02 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 1 Aug
- 2023 14:55:22 +0800
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-To:     <Ast@kernel.org>, <Daniel@iogearbox.net>, <Andrii@kernel.org>,
-        <Martin.lau@linux.dev>, <Song@kernel.org>,
-        <Yonghong.song@linux.dev>, <John.fastabend@gmail.com>,
-        <Kpsingh@kernel.org>, <Sdf@google.com>, <Haoluo@google.com>,
-        <Jolsa@kernel.org>, <Mykolal@fb.com>, <Shuah@kernel.org>,
-        <Benjamin.tissoires@redhat.com>, <Asavkov@redhat.com>,
-        <Memxor@gmail.com>, <Iii@linux.ibm.com>, <Colin.i.king@gmail.com>,
-        <Awkrail01@gmail.com>, <Rdunlap@infradead.org>,
-        <Joannelkoong@gmail.com>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next v2] selftests/bpf: replace fall through comment by fallthrough pseudo-keyword
-Date:   Tue, 1 Aug 2023 14:54:47 +0800
-Message-ID: <20230801065447.3609130-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 1 Aug 2023 02:59:40 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48A591BD;
+        Mon, 31 Jul 2023 23:59:39 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 3716xHHu030364;
+        Tue, 1 Aug 2023 08:59:17 +0200
+Date:   Tue, 1 Aug 2023 08:59:17 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuan Tan <tanyuan@tinylab.org>,
+        Zhangjin Wu <falcon@tinylab.org>
+Subject: Re: [PATCH v2 09/10] selftests/nolibc: test return value of read()
+ in test_vfprintf
+Message-ID: <ZMitRWU94SzCBNdd@1wt.eu>
+References: <20230801-nolibc-warnings-v2-0-1ba5ca57bd9b@weissschuh.net>
+ <20230801-nolibc-warnings-v2-9-1ba5ca57bd9b@weissschuh.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230801-nolibc-warnings-v2-9-1ba5ca57bd9b@weissschuh.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace the existing /* fall through */ comments with the
-new pseudo-keyword macro fallthrough[1].
+On Tue, Aug 01, 2023 at 07:30:16AM +0200, Thomas Weiﬂschuh wrote:
+> If read() fails and returns -1 buf would be accessed out of bounds.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> ---
+>  tools/testing/selftests/nolibc/nolibc-test.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> index 82714051c72f..a334f8450a34 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -1031,6 +1031,12 @@ static int expect_vfprintf(int llen, int c, const char *expected, const char *fm
+>  	lseek(fd, 0, SEEK_SET);
+>  
+>  	r = read(fd, buf, sizeof(buf) - 1);
+> +	if (r == -1) {
+> +		llen += printf(" read() = %s", errorname(errno));
+> +		result(llen, FAIL);
+> +		return 1;
+> +	}
+> +
+>  	buf[r] = '\0';
 
-[1] https://www.kernel.org/doc/html/v5.7/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
+In fact given the nature of this file (test if we properly implemented
+our syscalls), I think that a more conservative approach is deserved
+because if we messed up on read() we can have anything on return and we
+don't want to trust that. As such I would suggest that we declare r as
+ssize_t and verify that it's neither negative nor larger than
+sizeof(buf)-1, which becomes:
 
-Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
----
-v2:
-- Update the subject and commit message.
----
- tools/testing/selftests/bpf/prog_tests/kfunc_call.c          | 4 ++--
- tools/testing/selftests/bpf/progs/test_cls_redirect.c        | 2 +-
- tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c | 2 +-
- tools/testing/selftests/bpf/test_verifier.c                  | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+        if ((size_t)r >= sizeof(buf)) {
+            ... fail ...
+        }
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index a543742cd7bd..0fd08172965a 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -101,7 +101,7 @@ static void verify_success(struct kfunc_test_params *param)
- 	case syscall_test:
- 		topts.ctx_in = &args;
- 		topts.ctx_size_in = sizeof(args);
--		/* fallthrough */
-+		fallthrough;
- 	case syscall_null_ctx_test:
- 		break;
- 	case tc_test:
-@@ -167,7 +167,7 @@ static void verify_fail(struct kfunc_test_params *param)
- 	case syscall_test:
- 		topts.ctx_in = &args;
- 		topts.ctx_size_in = sizeof(args);
--		/* fallthrough */
-+		fallthrough;
- 	case syscall_null_ctx_test:
- 		break;
- 	case tc_test:
-diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-index 66b304982245..f97960759558 100644
---- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-+++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-@@ -300,7 +300,7 @@ bool pkt_skip_ipv6_extension_headers(buf_t *pkt,
- 		case IPPROTO_FRAGMENT:
- 			*is_fragment = true;
- 			/* NB: We don't check that hdrlen == 0 as per spec. */
--			/* fallthrough; */
-+			fallthrough;
- 
- 		case IPPROTO_HOPOPTS:
- 		case IPPROTO_ROUTING:
-diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c b/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c
-index f41c81212ee9..54dbf307c692 100644
---- a/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c
-+++ b/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c
-@@ -204,7 +204,7 @@ static bool pkt_skip_ipv6_extension_headers(struct bpf_dynptr *dynptr, __u64 *of
- 		case IPPROTO_FRAGMENT:
- 			*is_fragment = true;
- 			/* NB: We don't check that hdrlen == 0 as per spec. */
--			/* fallthrough; */
-+			fallthrough;
- 
- 		case IPPROTO_HOPOPTS:
- 		case IPPROTO_ROUTING:
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 31f1c935cd07..5621a4e0a1be 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -1289,7 +1289,7 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
- 				printf("Did not run the program (no permission) ");
- 				return 0;
- 			}
--			/* fallthrough; */
-+			fallthrough;
- 		default:
- 			printf("FAIL: Unexpected bpf_prog_test_run error (%s) ",
- 				strerror(saved_errno));
--- 
-2.34.1
+You'll also have to turn w to ssize_t then due to the test later BTW.
 
+Willy
