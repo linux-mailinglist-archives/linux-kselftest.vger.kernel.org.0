@@ -2,245 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCFC76A818
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 06:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BB576A848
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 07:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjHAE7S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 00:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
+        id S230201AbjHAFaZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 01:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjHAE7R (ORCPT
+        with ESMTP id S230076AbjHAFaV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 00:59:17 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A261FD0;
-        Mon, 31 Jul 2023 21:59:11 -0700 (PDT)
-X-QQ-mid: bizesmtp72t1690865943takhnre8
-Received: from linux-lab-host.localdomain ( [116.30.131.233])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 01 Aug 2023 12:59:02 +0800 (CST)
-X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: kW11ei911QK6B0OE3CAY7C3OEZKNbiYTxRaE8QZqvA8pLEHRtQ/zi3u4ytL33
-        qMZNdk7pvRQSk+8P6rKcxkPjcEwueoy5rFQpOrHyh4R/TIvc1Qij8gxcgshnf1RqNE/cKIs
-        SYAsphcnXucGtHHxA1QdiIl64B+dj4tqj1WVemEt+k22RFnJzWVXPJlIBub43TpfRTq4mGj
-        EaXrZslDz8Hl3wZgA/URHauv6cbOWWOftEdGdqkyLZU4pdecYeh3YFgKPWuEbbigA4KojP3
-        CgpHnir8BVkx7bamJDCkOnGt0dbqX47hf/7QefmTqVhnyITedq0rj80EBpbUe/G/pd7UckJ
-        9IkYm8YoOrvaUjbp2gG2HYUnNhjgRAzDZbdaWLY6Svdc1N0Lkk=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8745531179724185604
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     linux@weissschuh.net, w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        tanyuan@tinylab.org
-Subject: tools/nolibc: RFC: report and drop unused functions/data by gc-section 
-Date:   Tue,  1 Aug 2023 12:59:02 +0800
-Message-Id: <20230801045902.37360-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Aug 2023 01:30:21 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69931FCE;
+        Mon, 31 Jul 2023 22:30:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1690867812;
+        bh=xnVP4gFdYdwiynw59j3RfiQh37cKUd6vWBUWUZdEilI=;
+        h=From:Subject:Date:To:Cc:From;
+        b=emNZ+57FbrOqft2YmdCG3vX/KXJvDNP0aiJ1oyRql8RmVFLnY6m0MzTcHpgQPXt9x
+         w4qiBLlXJ4jOAw2g0knFb/CJcRCK/TFZXVgunmP/Gip73r00dqFNa3v3PwbIobPbra
+         78HGoo1+noOLSqbijLWOf78aT42TAJve41mbI1i0=
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v2 00/10] tools/nolibc: enable compiler warnings
+Date:   Tue, 01 Aug 2023 07:30:07 +0200
+Message-Id: <20230801-nolibc-warnings-v2-0-1ba5ca57bd9b@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAGCYyGQC/3WNQQ7CIBBFr9LMWgwFFHXlPUwXSMcyiaENU6mm4
+ e5i9y7fS/77KzAmQoZLs0LCTExjrKB2Dfjg4oCC+sqgpNLS6lbE8Ul3LxaXIsWBhT+isepknJc
+ a6mpK+KD3Vrx1lQPxPKbPdpDbn/3fyq2Qwpqz1b1yB9Xb64LEzD68wj7iDF0p5QuyMRS0swAAA
+ A==
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuan Tan <tanyuan@tinylab.org>,
+        Zhangjin Wu <falcon@tinylab.org>,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1690867811; l=1750;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=xnVP4gFdYdwiynw59j3RfiQh37cKUd6vWBUWUZdEilI=;
+ b=weqVOfZlOxGeB+2n6r5XlXzHkkxGq23nu/WtQpGNpKprxfAL0USYwUXkfQvQ3ku81Bhjcw7uk
+ AXeow8Ll2/0DJokl+xQg2GaMTOfV5qF+bfn7GVFjFIaxkUEeEt7ti6l
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy, Thomas
+To help the developers to avoid mistakes and keep the code smaller let's
+enable compiler warnings.
 
-Currently, since this part of the discussion is out of the original topic [1],
-as suggested by Willy, open a new thread for this.
+I stuck with __attribute__((unused)) over __maybe_unused in
+nolibc-test.c for consistency with nolibc proper.
+If we want to add a define it needs to be added twice once for nolibc
+proper and once for nolibc-test otherwise libc-test wouldn't build
+anymore.
 
-[1]: https://lore.kernel.org/lkml/20230731224929.GA18296@1wt.eu/#R
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Changes in v2:
+- Don't drop unused test helpers, mark them as __attribute__((unused))
+- Make some function in nolibc-test static
+- Also handle -W and -Wextra
+- Link to v1: https://lore.kernel.org/r/20230731-nolibc-warnings-v1-0-74973d2a52d7@weissschuh.net
 
-The original topic [1] tries to enable -Wall (or even -Wextra) to report some
-issues (include the dead unused functions/data) found during compiling stage,
-this further propose a method to enable '-ffunction-sections -fdata-sections
--Wl,--gc-sections,--print-gc-sections to' find the dead unused functions/data
-during linking stage:
+---
+Thomas Weißschuh (10):
+      tools/nolibc: drop unused variables
+      tools/nolibc: sys: avoid implicit sign cast
+      tools/nolibc: stdint: use int for size_t on 32bit
+      selftests/nolibc: drop unused variables
+      selftests/nolibc: mark test helpers as potentially unused
+      selftests/nolibc: make functions static if possible
+      selftests/nolibc: avoid unused arguments warnings
+      selftests/nolibc: avoid sign-compare warnings
+      selftests/nolibc: test return value of read() in test_vfprintf
+      selftests/nolibc: enable compiler warnings
 
-    Just thought about gc-section, do we need to further remove dead code/data
-    in the binary? I don't think it is necessary for nolibc-test itself, but with
-    '-Wl,--gc-sections -Wl,--print-gc-sections' may be a good helper to show us
-    which ones should be dropped or which ones are wrongly declared as public?
-    
-    Just found '-O3 + -Wl,--gc-section + -Wl,--print-gc-sections' did tell
-    us something as below:
-    
-        removing unused section '.text.nolibc_raise'
-        removing unused section '.text.nolibc_memmove'
-        removing unused section '.text.nolibc_abort'
-        removing unused section '.text.nolibc_memcpy'
-        removing unused section '.text.__stack_chk_init'
-        removing unused section '.text.is_setting_valid'
-    
-    These info may help us further add missing 'static' keyword or find
-    another method to to drop the wrongly used status of some functions from
-    the code side.
+ tools/include/nolibc/stdint.h                |   4 +
+ tools/include/nolibc/sys.h                   |   3 +-
+ tools/testing/selftests/nolibc/Makefile      |   2 +-
+ tools/testing/selftests/nolibc/nolibc-test.c | 108 +++++++++++++++++----------
+ 4 files changed, 74 insertions(+), 43 deletions(-)
+---
+base-commit: dfef4fc45d5713eb23d87f0863aff9c33bd4bfaf
+change-id: 20230731-nolibc-warnings-c6e47284ac03
 
-Let's continue the discussion as below.
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
-> On Mon, Jul 31, 2023 at 08:36:05PM +0200, Thomas Wei�schuh wrote:
-> 
-> [...]
-> 
-> > > > > It is very easy to add the missing 'static' keyword for is_setting_valid(), but
-> > > > > for __stack_chk_init(), is it ok for us to convert it to 'static' and remove
-> > > > > the 'weak' attrbute and even the 'section' attribute? seems it is only used by
-> > > > > our _start_c() currently.
-> > > > 
-> > > > Making is_setting_valid(), __stack_chk_init() seems indeed useful.
-> > > > Also all the run_foo() test functions.
-> > > 
-> > > Most of them could theoretically be turned to static. *But* it causes a
-> > > problem which is that it will multiply their occurrences in multi-unit
-> > > programs, and that's in part why we've started to use weak instead. Also
-> > > if you run through gdb and want to mark a break point, you won't have the
-> > > symbol when it's static,
-
-Willy, did I misunderstand something again? a simple test shows, seems this is
-not really always like that, static mainly means 'local', the symbol is still
-there if without -O2/-Os and is able to be set a breakpoint at:
-
-    // test.c: gcc -o test test.c
-    #include <stdio.h>
-
-    static int test (void)
-    {
-    	printf("hello, world!\n");
-    }
-
-    int main(void)
-    {
-    	test();
-    
-    	return 0;
-    }
-
-Even with -Os/-O2, an additional '-g' is able to generate the 'test' symbol for
-debug as we expect.
-
->     and the code will appear at multiple locations,
-> > > which is really painful. I'd instead really prefer to avoid static when
-> > > we don't strictly want to inline the code, and prefer weak when possible
-> > > because we know many of them will be dropped at link time (and that's
-> > > the exact purpose).
-
-For the empty __stack_chk_init() one (when the arch not support stackprotector)
-we used, when with 'weak', it is not possible drop it during link time even
-with -O3, the weak one will be dropped may be only when there is a global one
-with the same name is used or the 'weak' one is never really used?
-
-    #include <stdio.h>
-
-    __attribute__((weak,unused,section(".text.nolibc_memset")))
-    int test (void)
-    {
-    	printf("hello, world!\n");
-    }
-
-    int main(void)
-    {
-    	test();
-    
-    	return 0;
-    }
-
-
-    0000000000001060 <main>:
-        1060:       f3 0f 1e fa             endbr64 
-        1064:       48 83 ec 08             sub    $0x8,%rsp
-        1068:       e8 03 01 00 00          callq  1170 <test>
-        106d:       31 c0                   xor    %eax,%eax
-        106f:       48 83 c4 08             add    $0x8,%rsp
-        1073:       c3                      retq   
-        1074:       66 2e 0f 1f 84 00 00    nopw   %cs:0x0(%rax,%rax,1)
-        107b:       00 00 00 
-        107e:       66 90                   xchg   %ax,%ax
-
-Seems it is either impossible to add a 'inline' keyword again with the 'weak'
-attribute (warned by compiler), so, the _start_c (itself is always called by
-_start) will always add an empty call to the weak empty __stack_chk_init(),
--Os/-O2/-O3 don't help. for such an empty function, in my opinion, as the size
-we want to care about, the calling place should be simply removed by compiler.
-
-Test also shows, with current __inline__ method, the calling place is removed,
-but with c89, the __stack_chk_init() itself will not be droped automatically,
-only if not with -std=c89, it will be dropped and not appear in the
---print-gc-sections result.
-
-Even for a supported architecture, the shorter __stack_chk_init() may be better
-to inlined to the _start_c()?
-
-So, If my above test is ok, then, we'd better simply convert the whole
-__stack_chk_init() to a static one as below (I didn't investigate this deeply
-due to the warning about static and weak conflict at the first time):
-
-    diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
-    index 32e128b0fb62..a5f33fef1672 100644
-    --- a/tools/include/nolibc/crt.h
-    +++ b/tools/include/nolibc/crt.h
-    @@ -10,7 +10,7 @@
-     char **environ __attribute__((weak));
-     const unsigned long *_auxv __attribute__((weak));
-
-    -void __stack_chk_init(void);
-    +static void __stack_chk_init(void);
-     static void exit(int);
-
-     void _start_c(long *sp)
-    diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
-    index b620f2b9578d..13f1d0e60387 100644
-    --- a/tools/include/nolibc/stackprotector.h
-    +++ b/tools/include/nolibc/stackprotector.h
-    @@ -37,8 +37,7 @@ void __stack_chk_fail_local(void)
-     __attribute__((weak,section(".data.nolibc_stack_chk")))
-     uintptr_t __stack_chk_guard;
-
-    -__attribute__((weak,section(".text.nolibc_stack_chk"))) __no_stack_protector
-    -void __stack_chk_init(void)
-    +static __no_stack_protector void __stack_chk_init(void)
-     {
-            my_syscall3(__NR_getrandom, &__stack_chk_guard, sizeof(__stack_chk_guard), 0);
-            /* a bit more randomness in case getrandom() fails, ensure the guard is never 0 */
-    @@ -46,7 +45,7 @@ void __stack_chk_init(void)
-                    __stack_chk_guard ^= (uintptr_t) &__stack_chk_guard;
-     }
-     #else /* !defined(_NOLIBC_STACKPROTECTOR) */
-    -__inline__ void __stack_chk_init(void) {}
-    +static void __stack_chk_init(void) {}
-     #endif /* defined(_NOLIBC_STACKPROTECTOR) */
-
-     #endif /* _NOLIBC_STACKPROTECTOR_H */
-
-> > 
-> > Thanks for the clarification. I forgot about that completely!
-> > 
-> > The stuff from nolibc-test.c itself (run_foo() and is_settings_valid())
-> > should still be done.
-> 
-> Yes, likely. Nolibc-test should be done just like users expect to use
-> nolibc, and nolibc should be the most flexible possible.
-
-For the 'static' keyword we tested above, '-g' may help the debug requirement,
-so, is ok for us to apply 'static' for them safely now?
-
-A further test shows, with 'static' on _start_c() doesn't help the size, for it
-is always called from _start(), will never save move instructions, but we need
-a more 'used' attribute to silence the error 'nolibc-test.c:(.text+0x38cd):
-undefined reference to `_start_c'', so, reserve it as the before simpler 'void
-_start_c(void)' may be better?
-
-    static __attribute__((used)) void _start_c(long *sp)
-
-Thanks,
-Zhangjin
-
-> 
-> Cheers,
-> Willy
