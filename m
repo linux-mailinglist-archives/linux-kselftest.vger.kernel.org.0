@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2A176BDED
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 21:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3790B76BDF0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 21:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232199AbjHATja (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 15:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
+        id S230087AbjHATkf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 15:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbjHATj3 (ORCPT
+        with ESMTP id S229802AbjHATke (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 15:39:29 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5348619A8;
-        Tue,  1 Aug 2023 12:39:27 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1690918758tdq8mq9o
+        Tue, 1 Aug 2023 15:40:34 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D2019AA;
+        Tue,  1 Aug 2023 12:40:32 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1690918822txdprirx
 Received: from linux-lab-host.localdomain ( [116.30.131.233])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 02 Aug 2023 03:39:17 +0800 (CST)
+        id ; Wed, 02 Aug 2023 03:40:21 +0800 (CST)
 X-QQ-SSF: 01200000002000E0X000B00A0000000
-X-QQ-FEAT: D6RqbDSxuq47V5/O0pbAo//GjZY8tPkJDPm56ilbwVbuqUTvdeK45RzFqkM0Q
-        KlzUVm0mvSANRZiFY/pk4AgC+392xKcWobxCOHq4xZhdAAEUHx/8H2B5+QowAaGRVrSdSJy
-        T0IquIBWkJt2/dEwnf45XnkSFdVuNF1Wx2m9wreliQcI1wxdRr9N+1VbIyPtxPW3CyU3bCz
-        /L/MA/eRdzdfS80LJhaaD/KNQTm+8CXjsL5V9SfQxMT5CHfSKOuBbCOVzSx4UG+Sidq/DIM
-        q6gcP7jOJpKQIztrGBwt57kvX4S3PXduASWn2IK2zi5BVIO4xH9BIBVGyhi/9OAAr60hJEK
-        qT4friMz9RjQbyxiovCRW/dstWz3sMr5XJNUnntWjuZwx96UBeVDEfplylR6CizeVU1KpE9
+X-QQ-FEAT: mkz8qCx1xSPVZcKO2fmc3LAHwgMtTWIuFhUvM0Ah3H0V9yzy3C6jPnbyi3oG7
+        IaHjirJSaeNisKe1ZE6dMGqfaMDQV8lzetKG3trVM8FLpFopf/5FDgkS4JXY7BmF5w8HwXF
+        GszTzjCqu4gCZQa9Kf+Qcp7cRHuIwsdMaU25M2pmyvgLcIicoteXreZSstJoenuuasVWYkU
+        7I293AlhT7b2DKX1yMn4k9QQ+tVTnAjuTmSefIG+JHqVC5uYBa4jW6Msa8eDMaepTqrsVJR
+        cL9TSwIAGW2UJqusan/rRc3o7Ic8JDAdnEHCPrCaW71WrjxCPM5tESHoIwiAfTp0AXmD2lY
+        clOwjDAeftJFT33LBpJZLW7k5rg5K9NrXSYRLLbZc5/mnzr23yBLQLp86lAp7JwOq7jV33C
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6478331743894401545
+X-BIZMAIL-ID: 10879325403677757569
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, w@1wt.eu
-Subject: [PATCH v4 03/12] selftests/nolibc: fix up O= option support
-Date:   Wed,  2 Aug 2023 03:39:17 +0800
-Message-Id: <3daf2650a61e4605d68d5982ebd32e1edb7e6782.1690916314.git.falcon@tinylab.org>
+Subject: [PATCH v4 04/12] selftests/nolibc: add macros to reduce duplicated changes
+Date:   Wed,  2 Aug 2023 03:40:21 +0800
+Message-Id: <d18c46b935f2c7d56a8857b387067cb3fec11d05.1690916314.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1690916314.git.falcon@tinylab.org>
 References: <cover.1690916314.git.falcon@tinylab.org>
@@ -52,51 +52,92 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-To avoid pollute the source code tree and avoid mrproper for every
-architecture switch, the O= argument must be supported.
+The kernel targets share the same kernel make operations, the same
+.config file, the same kernel image, add MAKE_KERNEL, KERNEL_CONFIG and
+KERNEL_IMAGE for them.
 
-Both IMAGE and .config are from the building directory, let's use
-objtree instead of srctree for them.
+Many targets use the same log file, add RUN_OUT to allow save log by
+architecture, for example: 'make RUN_OUT=$PWD/run.$arch.out'.
 
-If no O= option specified, means building kernel in source code tree,
-objtree should be srctree in such case.
+The qemu run/rerun targets share the same qemu system run command, add
+QEMU_SYSTEM_RUN for them.
 
 Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/lkml/ZK0AB1OXH1s2xYsh@1wt.eu/
+Link: https://lore.kernel.org/lkml/20230722122009.GE17311@1wt.eu/
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/Makefile | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/nolibc/Makefile | 35 ++++++++++++++++---------
+ 1 file changed, 23 insertions(+), 12 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index f42adef87e12..f0bda0d28000 100644
+index f0bda0d28000..fdc72ca75589 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -9,6 +9,9 @@ ifeq ($(srctree),)
- srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
- endif
+@@ -142,41 +142,52 @@ endif
+ libc-test: nolibc-test.c
+ 	$(QUIET_CC)$(CC) -o $@ $<
  
-+# add objtree for O= argument, required by IMAGE and .config
-+objtree ?= $(srctree)
++# common macros for logging
++RUN_OUT = $(CURDIR)/run.out
 +
- ifeq ($(ARCH),)
- include $(srctree)/scripts/subarch.include
- ARCH = $(SUBARCH)
-@@ -167,12 +170,12 @@ kernel: initramfs
+ # local libc-test
+ run-libc-test: libc-test
+-	$(Q)./libc-test > "$(CURDIR)/run.out" || :
+-	$(Q)$(REPORT) $(CURDIR)/run.out
++	$(Q)./libc-test > "$(RUN_OUT)" || :
++	$(Q)$(REPORT) "$(RUN_OUT)"
+ 
+ # local nolibc-test
+ run-nolibc-test: nolibc-test
+-	$(Q)./nolibc-test > "$(CURDIR)/run.out" || :
+-	$(Q)$(REPORT) $(CURDIR)/run.out
++	$(Q)./nolibc-test > "$(RUN_OUT)" || :
++	$(Q)$(REPORT) "$(RUN_OUT)"
+ 
+ # qemu user-land test
+ run-user: nolibc-test
+-	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+-	$(Q)$(REPORT) $(CURDIR)/run.out
++	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(RUN_OUT)" || :
++	$(Q)$(REPORT) "$(RUN_OUT)"
+ 
+ initramfs: nolibc-test
+ 	$(QUIET_MKDIR)mkdir -p initramfs
+ 	$(call QUIET_INSTALL, initramfs/init)
+ 	$(Q)cp nolibc-test initramfs/init
+ 
++# common macros for kernel targets
++MAKE_KERNEL   = $(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE)
++KERNEL_CONFIG = $(objtree)/.config
++KERNEL_IMAGE  = $(objtree)/$(IMAGE)
++
+ defconfig:
+-	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
++	$(Q)$(MAKE_KERNEL) mrproper $(DEFCONFIG) prepare
+ 
+ kernel: initramfs
+-	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
++	$(Q)$(MAKE_KERNEL) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
++
++# common macros for qemu run/rerun targets
++QEMU_SYSTEM_RUN = qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(KERNEL_IMAGE)" -serial stdio $(QEMU_ARGS)
  
  # run the tests after building the kernel
  run: kernel
--	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-+	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(objtree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(objtree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+-	$(Q)$(REPORT) $(CURDIR)/run.out
++	$(Q)$(QEMU_SYSTEM_RUN) > "$(RUN_OUT)"
++	$(Q)$(REPORT) "$(RUN_OUT)"
  
  # re-run the tests from an existing kernel
  rerun:
--	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-+	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(objtree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(objtree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+-	$(Q)$(REPORT) $(CURDIR)/run.out
++	$(Q)$(QEMU_SYSTEM_RUN) > "$(RUN_OUT)"
++	$(Q)$(REPORT) "$(RUN_OUT)"
  
  clean:
+ 	$(call QUIET_CLEAN, sysroot)
 -- 
 2.25.1
 
