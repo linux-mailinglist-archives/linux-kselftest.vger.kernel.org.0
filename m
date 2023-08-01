@@ -2,90 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6133A76BBE2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 20:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A8776BC0E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 20:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjHASDs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 14:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
+        id S229486AbjHASNF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 14:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjHASDq (ORCPT
+        with ESMTP id S231907AbjHASNB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 14:03:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C03D212A;
-        Tue,  1 Aug 2023 11:03:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 1 Aug 2023 14:13:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF102103;
+        Tue,  1 Aug 2023 11:12:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WCvORc63Xc/jlm9uhOtZxAQJTdnogdSx3B9Dg3F/tt8=; b=QfGDKD4be3BGSAodWa+dJJ3tEM
+        YhOJFhFrT3pSCWtoS/zBT2d0uP3O9o7eVPK9hFmORSOITbkARctaoJI+JpEKiE6n66po3raOtFfEW
+        PyvYD0YHvjp5h8muMmThxHZkeEwGLSoDhpTYq/yk30WchOT3rgyVj2ulJ8505hWOI1VhSTt3O/CIx
+        o9gwbF0odd0wNUZ633IaG/8Fgn9soxTmwDDEe18Dcqbz/d+4Z/1a1TqR+5vg0ZCDcIuvMyJKx1qpk
+        ig+bASUTH6J57cu537egscDETfzYVMofvpu/FvzKwUfYn7hfvQObr9u2DiJ/ZGomwfzyBh6pSC2re
+        Ok4p2Jlg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qQtrc-00AHUX-8W; Tue, 01 Aug 2023 18:12:56 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B42461554;
-        Tue,  1 Aug 2023 18:03:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA578C433C7;
-        Tue,  1 Aug 2023 18:03:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690913020;
-        bh=t4H5U4PdS9V7b/INAz2Uy/vEVIT0Xt3TQ516E4LoedE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eb+N0V+12cPD0i8TS0jZxiFvWkwxmipgCkdOFw6ouNtBI/NQVs2BFc7sHUmrpwyCh
-         VuoPO7d74PzyBkkFiDMg3YcFzKCgYOEr01eQHqzHDI9cESZlowMv4HcxuyUscedv6w
-         S1CAHXieY6gOG3NZLDdYRyuIxU6uHN5a1douIJAOmXNjepUt5/KdUwH1d/CL2758rE
-         dQeE/68pY2slNKM6bss4odlurVY3vXKs4+gbUXXzYCpz4QGJBcUcjx9ChA26G6Tgm3
-         MNL8f8jAH07J0XewHxoZ5jsLgMq+M+ewSxv/p30AaJ5aQACGjnfruGfm5XA0k+CruF
-         cD3DmFo0iCa3g==
-Date:   Tue, 1 Aug 2023 19:03:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>
-Subject: Re: [PATCH v3 21/36] arm64/mm: Implement map_shadow_stack()
-Message-ID: <1237441e-3e1a-4682-b3bf-face931640d3@sirena.org.uk>
-References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
- <20230731-arm64-gcs-v3-21-cddf9f980d98@kernel.org>
- <5461c56cf4896f18bddaa66c3beec7b909fc8fb9.camel@intel.com>
- <0a6c90d6-f790-4036-a364-d4761fdd0e95@sirena.org.uk>
- <e827138f9d8800e3db158831bca88d1ea8b559af.camel@intel.com>
- <21d7e814-8608-40ce-b5d3-401f2110ad91@sirena.org.uk>
- <a9ea33d31aad0c45eab41b0dcbd4913d863cc930.camel@intel.com>
- <20230801172814.GD2607694@kernel.org>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7676C300134;
+        Tue,  1 Aug 2023 20:12:55 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5C6BC201C57DC; Tue,  1 Aug 2023 20:12:55 +0200 (CEST)
+Date:   Tue, 1 Aug 2023 20:12:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH v2 11/20] objtool: Flesh out warning related to
+ pv_ops[] calls
+Message-ID: <20230801181255.GE11704@hirez.programming.kicks-ass.net>
+References: <20230720163056.2564824-1-vschneid@redhat.com>
+ <20230720163056.2564824-12-vschneid@redhat.com>
+ <20230728153334.myvh5sxppvjzd3oz@treble>
+ <xhsmh8raws53o.mognet@vschneid.remote.csb>
+ <20230731213631.pywytiwdqgtgx4ps@treble>
+ <20230731214612.GC51835@hirez.programming.kicks-ass.net>
+ <20230801160636.ko3oc4cwycwejyxy@treble>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p8glKsiXtjodSLAk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230801172814.GD2607694@kernel.org>
-X-Cookie: I thought YOU silenced the guard!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230801160636.ko3oc4cwycwejyxy@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,37 +114,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Aug 01, 2023 at 11:06:36AM -0500, Josh Poimboeuf wrote:
+> On Mon, Jul 31, 2023 at 11:46:12PM +0200, Peter Zijlstra wrote:
+> > > Ideally it would only print a single warning for this case, something
+> > > like:
+> > > 
+> > >   vmlinux.o: warning: objtool: __flush_tlb_all_noinstr+0x4: indirect call to native_flush_tlb_local() leaves .noinstr.text section
+> > 
+> > But then what for the case where there are multiple implementations and
+> > more than one isn't noinstr?
+> 
+> The warning would be in the loop in pv_call_dest(), so it would
+> potentially print multiple warnings, one for each potential dest.
+> 
+> > IIRC that is where these double prints came from. One is the callsite
+> > (always one) and the second is the offending implementation (but there
+> > could be more).
+> 
+> It's confusing to warn about the call site and the destination in two
+> separate warnings.  That's why I'm proposing combining them into a
+> single warning (which still could end up as multiple warnings if there
+> are multiple affected dests).
+> 
+> > > I left out "pv_ops[1]" because it's already long enough :-)
+> > 
+> > The index number is useful when also looking at the assembler, which
+> > IIRC is an indexed indirect call.
+> 
+> Ok, so something like so?
+> 
+>   vmlinux.o: warning: objtool: __flush_tlb_all_noinstr+0x4: indirect call to pv_ops[1] (native_flush_tlb_local) leaves .noinstr.text section
 
---p8glKsiXtjodSLAk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Aug 01, 2023 at 08:28:14PM +0300, Mike Rapoport wrote:
-> On Tue, Aug 01, 2023 at 05:07:00PM +0000, Edgecombe, Rick P wrote:
-
-> > So the question is not what mode should arm support, but should we have
-> > the flags match between x86 and ARM?
-
-> What if the flag will be called, say, SHADOW_STACK_DEFAULT_INIT?
-> Then each arch can push whatever it likes to and from the userspace
-> perspective the shadow stack will have some basic init state, no matter
-> what architecture it is.
-
-x86 might have some fun with that and the existing userspace binaries...
-
---p8glKsiXtjodSLAk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTJSPIACgkQJNaLcl1U
-h9BcMwf+KLcNdiJZ3DEJDS8jRNNMVfxtKYOXlc4QIY6Iix9aZ5E6QB8ZJoOmkK4Y
-qzBMySqHh+SYZsz1IZrt/AhsMcuw1HiwbzI+Y53c+2QIMGd+u5Zfc+mSWY9chJwB
-DCahxNQc58D+byBBjeLqKGO4v+/3LNP/Nd/EaTGd0zUHqlAS7oR6akGoHXOJy7or
-5ZdHWcz7zRa3UazK6OiMaZYx8SifMmktj3HWTWgAapS+8ChVCEGkfSGgb4gvY80w
-zz2JPXJH2eXtVtUQGw4kzcc8pSO6kV/PPQPKeNLuA5py1yTRZrGGF4O8r7xNmr6r
-Qlx6pESKFYL7k0n9AKbLsqetNG4l7w==
-=b0mD
------END PGP SIGNATURE-----
-
---p8glKsiXtjodSLAk--
+Sure, that all would work I suppose.
