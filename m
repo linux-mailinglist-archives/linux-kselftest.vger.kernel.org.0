@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EE976BDFA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 21:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F8976BDFD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 21:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232582AbjHATls (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 15:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
+        id S230043AbjHATmo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 15:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232579AbjHATls (ORCPT
+        with ESMTP id S229841AbjHATmo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 15:41:48 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D3C1FF3;
-        Tue,  1 Aug 2023 12:41:36 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1690918887tcphyv4r
+        Tue, 1 Aug 2023 15:42:44 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A669B4;
+        Tue,  1 Aug 2023 12:42:42 -0700 (PDT)
+X-QQ-mid: bizesmtp90t1690918952tllk1j5k
 Received: from linux-lab-host.localdomain ( [116.30.131.233])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 02 Aug 2023 03:41:26 +0800 (CST)
+        id ; Wed, 02 Aug 2023 03:42:31 +0800 (CST)
 X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: nMuci6qhceNBRU+sDADE7/JtUrCHaoVrlifjCBDUL/jBJl0rtLP+oHvUfnRqC
-        i/gsuROO441HGXQZcSyxvg9IBfxJFwT38fc4uyMi/CVsu2P9+jh7eLJBBuy2sP7lGj1VqmI
-        5CBpoaaHzYnPvkYWGwrTm4z7ZiNH9QrByWSGmgedwfHdVvr8pCeHavaYZkDE8tSeM5DAwEY
-        X1hC/rz2f/5sGi5i6YHLJ6SWzKTURFFCUUuHomAiYdQv1LPiBRUczYmMnc6H2Y+BZhHUFLc
-        0i5jUYAvmZZ2Bn3jkKOxqCXE5GvhXQ5AGrBE2rBJmYOsuipqId1rgNaqa28M0P21hengeK/
-        oOc3xhr97IrWEaFRoM+5pFdtlCkDCO97FhtrfcQpzFDzYtFzogDvANJu3Ss3MSkdGKp5CxK
+X-QQ-FEAT: ZTnzshg2nJY+dbg7dnU05oGs2oZJoFlj5DwKG4YmNlZjegD8qfswfCMygHPoE
+        L10ipiSo21DO+0w3EvFmwlg0uJuV4b7xGHEzGgCpBvgE+5PfkniSob14/D3lbBZrcVUPDK7
+        6AIyA9GE/1RUDjjkrJp3ZrlAkquUd/B0Uida7DV8vwoFLVf7NGwobAca8DpHJIJYUmYH3RE
+        bLyuVu9jN3a16t89QTWcrwGzAmZS5jyXXy1ITQRWTy4HCNdr9gtP7HYZBE4HVobUBEuzKuM
+        zC/pSp69bdqF9i8x+o/QyR+jA3HutSxsS5ISBLW/Jj9lYTw0gb42U9yq+oTgZTMYugxvU1h
+        D++AQN6bc91ufgdmqekKlk8f30RDGBtrt//aIJZCHh8ifQJDPtPYb3OqUoVBTj2xIyH3Z9V
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 16416427454383325419
+X-BIZMAIL-ID: 17612294270200470935
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, w@1wt.eu,
         =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v4 05/12] selftests/nolibc: add XARCH and ARCH mapping support
-Date:   Wed,  2 Aug 2023 03:41:26 +0800
-Message-Id: <67396957cee44f6002d5a0dd74fbaeaa50d7d803.1690916314.git.falcon@tinylab.org>
+Subject: [PATCH v4 06/12] selftests/nolibc: add nolibc-test-config target
+Date:   Wed,  2 Aug 2023 03:42:31 +0800
+Message-Id: <c21c1c119d8398aaeef2020441e24a732ecc559b.1690916314.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1690916314.git.falcon@tinylab.org>
 References: <cover.1690916314.git.falcon@tinylab.org>
@@ -54,152 +54,76 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Most of the CPU architectures have different variants, but kernel
-usually only accepts parts of them via the ARCH variable, the others
-should be customized via kernel config files.
+The default DEFCONFIG_<XARCH> of some architectures may not just work
+for nolibc test, some require extra kernel config options to enable
+features like console for print.
 
-To simplify testing, a new XARCH variable is added to extend the
-kernel's ARCH with a few variants of the same architecture, and it is
-used to customize variant specific variables, at last XARCH is converted
-to the kernel's ARCH:
+To make nolibc-test happy, a new nolibc-test-config target is added with
+a new NOLIBC_TEST_CONFIG macro. The macro allows store extra common
+options via nolibc-test-common.config and the ones by architecture (or
+variant) via nolibc-test-$(XARCH).config.
 
-  e.g. make run XARCH=<one of the supported variants>
-                | \
-                |  `-> variant specific variables:
-                |      IMAGE, DEFCONFIG, QEMU_ARCH, QEMU_ARGS, CFLAGS ...
-                \
-                 `---> kernel's ARCH
+During the nolibc-test-config target, the above extra options will be
+appended to .config generated by the old DEFCONFIG_<XARCH> target or by
+another config target specified via the CONFIG variable (e.g.
+tinyconfig). At last, the 'allnoconfig' target is called with the
+.config as the base to let them take effect and let new missing symbols
+as no.
 
-XARCH and ARCH are carefully mapped to allow users to pass architecture
-variants via XARCH or pass architecture via ARCH from cmdline.
+The scripts/kconfig/merge_config.sh tool is used to merge the extra
+config files listed in NOLIBC_TEST_CONFIG.
 
-PowerPC is the first user and also a very good reference architecture of
-this mapping, it has variants with different combinations of
-32-bit/64-bit and bit endian/little endian.
-
-To use this mapping, the other architectures can refer to PowerPC, If
-the target architecture only has one variant, XARCH is simply an alias
-of ARCH, no additional mapping required.
-
-Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/lkml/20230702171715.GD16233@1wt.eu/
-Link: https://lore.kernel.org/lkml/20230730061801.GA7690@1wt.eu/
+Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
+Link: https://lore.kernel.org/lkml/67eb70d4-c9ff-4afc-bac7-7f36cc2c81bc@t-8ch.de/
+Link: https://lore.kernel.org/lkml/74f6a3b5-666c-41e9-a3d5-0ed5457f20f5@t-8ch.de/
+Suggested-by: Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/lkml/20230730061801.GA7690@1wt.eu/#t
 Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/Makefile | 46 ++++++++++++++++++-------
- 1 file changed, 34 insertions(+), 12 deletions(-)
+ tools/testing/selftests/nolibc/Makefile | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index fdc72ca75589..7902b86911a5 100644
+index 7902b86911a5..f01b258ef19b 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -17,6 +17,27 @@ include $(srctree)/scripts/subarch.include
- ARCH = $(SUBARCH)
- endif
- 
-+# XARCH extends the kernel's ARCH with a few variants of the same
-+# architecture that only differ by the configuration, the toolchain
-+# and the Qemu program used. It is copied as-is into ARCH except for
-+# a few specific values which are mapped like this:
-+#
-+#  XARCH        | ARCH      | config
-+#  -------------|-----------|-------------------------
-+#  ppc          | powerpc   | 32 bits
-+#  ppc64        | powerpc   | 64 bits big endian
-+#  ppc64le      | powerpc   | 64 bits little endian
-+#
-+# It is recommended to only use XARCH, though it does not harm if
-+# ARCH is already set. For simplicity, ARCH is sufficient for all
-+# architectures where both are equal.
-+
-+# configure default variants for target kernel supported architectures
-+XARCH            = $(or $(XARCH_$(ARCH)),$(ARCH))
-+
-+# map from user input variants to their kernel supported architectures
-+ARCH            := $(or $(ARCH_$(XARCH)),$(XARCH))
-+
- # kernel image names by architecture
- IMAGE_i386       = arch/x86/boot/bzImage
- IMAGE_x86_64     = arch/x86/boot/bzImage
-@@ -27,7 +48,7 @@ IMAGE_mips       = vmlinuz
- IMAGE_riscv      = arch/riscv/boot/Image
- IMAGE_s390       = arch/s390/boot/bzImage
- IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
--IMAGE            = $(IMAGE_$(ARCH))
-+IMAGE            = $(IMAGE_$(XARCH))
- IMAGE_NAME       = $(notdir $(IMAGE))
- 
- # default kernel configurations that appear to be usable
-@@ -40,7 +61,7 @@ DEFCONFIG_mips       = malta_defconfig
- DEFCONFIG_riscv      = defconfig
- DEFCONFIG_s390       = defconfig
+@@ -63,6 +63,10 @@ DEFCONFIG_s390       = defconfig
  DEFCONFIG_loongarch  = defconfig
--DEFCONFIG            = $(DEFCONFIG_$(ARCH))
-+DEFCONFIG            = $(DEFCONFIG_$(XARCH))
+ DEFCONFIG            = $(DEFCONFIG_$(XARCH))
  
++# extra configs/ files appended to .config during the nolibc-test-config target
++# include common + architecture specific
++NOLIBC_TEST_CONFIG   = nolibc-test-common.config nolibc-test-$(XARCH).config
++
  # optional tests to run (default = all)
  TEST =
-@@ -55,7 +76,7 @@ QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
- QEMU_ARCH_riscv      = riscv64
- QEMU_ARCH_s390       = s390x
- QEMU_ARCH_loongarch  = loongarch64
--QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
-+QEMU_ARCH            = $(QEMU_ARCH_$(XARCH))
  
- # QEMU_ARGS : some arch-specific args to pass to qemu
- QEMU_ARGS_i386       = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-@@ -67,7 +88,7 @@ QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
--QEMU_ARGS            = $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_EXTRA)
-+QEMU_ARGS            = $(QEMU_ARGS_$(XARCH)) $(QEMU_ARGS_EXTRA)
+@@ -192,8 +196,22 @@ MAKE_KERNEL   = $(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROS
+ KERNEL_CONFIG = $(objtree)/.config
+ KERNEL_IMAGE  = $(objtree)/$(IMAGE)
  
- # OUTPUT is only set when run from the main makefile, otherwise
- # it defaults to this nolibc directory.
-@@ -84,7 +105,7 @@ CFLAGS_mips = -EL
- CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
- CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
- 		$(call cc-option,-fno-stack-protector) \
--		$(CFLAGS_$(ARCH)) $(CFLAGS_STACKPROTECTOR)
-+		$(CFLAGS_$(XARCH)) $(CFLAGS_STACKPROTECTOR)
- LDFLAGS := -s
+-defconfig:
+-	$(Q)$(MAKE_KERNEL) mrproper $(DEFCONFIG) prepare
++# kernel config for nolibc-test
++#
++# - delete the current configuration and all generated files via 'mrproper' target
++# - generate .config via '$(CONFIG)' or '$(DEFCONFIG_$(XARCH))' target
++# - merge extra config options from $(NOLIBC_TEST_CONFIG) files to .config
++# - use merged .config as base and fills in any missing symbols with '# CONFIG_* is not set' via 'allnoconfig' target
++# - prepare things we need to do before we recursively start building the kernel via 'prepare' target
++#
++nolibc-test-config:
++	$(Q)$(MAKE_KERNEL) mrproper
++	$(Q)$(MAKE_KERNEL) $(or $(CONFIG),$(DEFCONFIG))
++	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -Q -O "$(objtree)" -m "$(KERNEL_CONFIG)" $(foreach c,$(NOLIBC_TEST_CONFIG),$(wildcard $(CURDIR)/configs/$c))
++	$(Q)$(MAKE_KERNEL) KCONFIG_ALLCONFIG=$(KERNEL_CONFIG) allnoconfig
++	$(Q)$(MAKE_KERNEL) prepare
++
++defconfig: nolibc-test-config
  
- REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{if (!f) printf("\n"); f++; print;} /\[SKIPPED\][\r]*$$/{s++} \
-@@ -99,24 +120,25 @@ help:
- 	@echo "  sysroot      create the nolibc sysroot here (uses \$$ARCH)"
- 	@echo "  nolibc-test  build the executable (uses \$$CC and \$$CROSS_COMPILE)"
- 	@echo "  libc-test    build an executable using the compiler's default libc instead"
--	@echo "  run-user     runs the executable under QEMU (uses \$$ARCH, \$$TEST)"
-+	@echo "  run-user     runs the executable under QEMU (uses \$$XARCH, \$$TEST)"
- 	@echo "  initramfs    prepare the initramfs with nolibc-test"
--	@echo "  defconfig    create a fresh new default config (uses \$$ARCH)"
--	@echo "  kernel       (re)build the kernel with the initramfs (uses \$$ARCH)"
--	@echo "  run          runs the kernel in QEMU after building it (uses \$$ARCH, \$$TEST)"
--	@echo "  rerun        runs a previously prebuilt kernel in QEMU (uses \$$ARCH, \$$TEST)"
-+	@echo "  defconfig    create a fresh new default config (uses \$$XARCH)"
-+	@echo "  kernel       (re)build the kernel with the initramfs (uses \$$XARCH)"
-+	@echo "  run          runs the kernel in QEMU after building it (uses \$$XARCH, \$$TEST)"
-+	@echo "  rerun        runs a previously prebuilt kernel in QEMU (uses \$$XARCH, \$$TEST)"
- 	@echo "  clean        clean the sysroot, initramfs, build and output files"
- 	@echo ""
- 	@echo "The output file is \"run.out\". Test ranges may be passed using \$$TEST."
- 	@echo ""
- 	@echo "Currently using the following variables:"
- 	@echo "  ARCH          = $(ARCH)"
-+	@echo "  XARCH         = $(XARCH)"
- 	@echo "  CROSS_COMPILE = $(CROSS_COMPILE)"
- 	@echo "  CC            = $(CC)"
- 	@echo "  OUTPUT        = $(OUTPUT)"
- 	@echo "  TEST          = $(TEST)"
--	@echo "  QEMU_ARCH     = $(if $(QEMU_ARCH),$(QEMU_ARCH),UNKNOWN_ARCH) [determined from \$$ARCH]"
--	@echo "  IMAGE_NAME    = $(if $(IMAGE_NAME),$(IMAGE_NAME),UNKNOWN_ARCH) [determined from \$$ARCH]"
-+	@echo "  QEMU_ARCH     = $(if $(QEMU_ARCH),$(QEMU_ARCH),UNKNOWN_ARCH) [determined from \$$XARCH]"
-+	@echo "  IMAGE_NAME    = $(if $(IMAGE_NAME),$(IMAGE_NAME),UNKNOWN_ARCH) [determined from \$$XARCH]"
- 	@echo ""
- 
- all: run
+ kernel: initramfs
+ 	$(Q)$(MAKE_KERNEL) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
 -- 
 2.25.1
 
