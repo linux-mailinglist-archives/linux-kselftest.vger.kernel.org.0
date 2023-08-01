@@ -2,84 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8323676AD60
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 11:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5753B76AF41
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 11:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbjHAJ2p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 05:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
+        id S233639AbjHAJqR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 05:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232900AbjHAJ23 (ORCPT
+        with ESMTP id S233631AbjHAJqD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 05:28:29 -0400
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08591FD6
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 02:27:23 -0700 (PDT)
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6b9ef9b1920so8054622a34.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Aug 2023 02:27:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690882042; x=1691486842;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C27ET6loiS4a597fDoDvp82lhEfceWexZEaZmg7rns4=;
-        b=YIvirzjV2yecRv3ojgUEREVsK7uqiMdUivGgSvzLiNG0vD1xa011iV8G4hnTezPgLc
-         OEzaC0eVYESBmXDxuBkQI/MdCUHfZucUMUMlHr+u3MswjQqScHby/tcEpivifKFUWF4B
-         p7IwHaCekSuix9OlTC3k0rqDUtGBgkWUEFhjmryhtX7tZuFZ938MmQP0zwlfLzqYzelW
-         J0qw7+TIjXyBz4H6DGLioaxONn2BDucbeCw3K5s6386AHCSUS0Kr9dMBz1q6h4VSgOpt
-         daAUCuWzVFs4B5rLpR3bv9xhz4qFseFIY/LD/t0aPVGgdSiw4eMng/G8KheYqxWZyVxT
-         +CAA==
-X-Gm-Message-State: ABy/qLZh6dZLwnYqFEMnWgVnLsIOB2sBtglb3Gm3PQs6/L7NIy+UXbLK
-        Ua/qn+YF6KidpghIQh0V/wUxHHqs4lnMUM4CI2cK2nLOgVVj
-X-Google-Smtp-Source: APBJJlF+q8vTSApLRQ0DsriyRIAi3yXyfIxfMoDXTZLqGmWRh5yGZx5GzEG93qqQR4NAAm6evBr0m5ieLt5iW0rGmHW5H8t1P6Mn
+        Tue, 1 Aug 2023 05:46:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DA05243
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 02:44:31 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2a0c:5a83:9100:a000:2ba:2ec4:c400:5d53])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: rcn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 600536607187;
+        Tue,  1 Aug 2023 10:44:29 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1690883069;
+        bh=qughrfaA+YuFiONlh2NrtbbhsF03cea1dOObdrTdUPI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kY+yQlDpYvQgbSjGnHKhvD+SxLvypqOMuBT2RvkYI8EQ1x+jUcgYMhXWa6Yr8raFs
+         DzjUhy5T6/s7DHtdBUzElfRZpHC0pAoz8pMA6Ag8y44sZ7t9C5dTz09eM3p64yl3lg
+         Idk5K9KMkZM3wACEqRj18eIb7qvF1+O0o3q4beZufTOLtipO9xxFdTlvymTuWkbjQ/
+         lWLO/fqbSrI/7NNbsyf2c3ngRQZUzZbSaLlwDIStHzW7FR60knm2LPqKAa1oHKAriW
+         s0VGMfx2WaukJKI9sV9OTefb9mnxxDvzO5kKWycl4nyMqFQM1G1bSrvJVNwxpS3Af/
+         n4o1gPH0LzMrA==
+From:   =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+To:     keescook@chromium.org
+Cc:     kernel@collabora.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/lkdtm: Disable CONFIG_UBSAN_TRAP in test config
+Date:   Tue,  1 Aug 2023 11:43:29 +0200
+Message-Id: <20230801094329.1878928-1-ricardo.canuelo@collabora.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a9d:6c8d:0:b0:6b7:1e75:18e with SMTP id
- c13-20020a9d6c8d000000b006b71e75018emr14153717otr.2.1690882042749; Tue, 01
- Aug 2023 02:27:22 -0700 (PDT)
-Date:   Tue, 01 Aug 2023 02:27:22 -0700
-In-Reply-To: <000000000000fac82605ee97fb72@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000083e9d60601d927a0@google.com>
-Subject: Re: [syzbot] [btrfs?] WARNING in btrfs_free_reserved_data_space_noquota
-From:   syzbot <syzbot+adec8406ad17413d4c06@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, christophe.leroy@csgroup.eu, clm@fb.com,
-        dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
-        npiggin@gmail.com, shuah@kernel.org,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
-        ye.xingchen@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+The lkdtm selftest config fragment enables CONFIG_UBSAN_TRAP to make the
+ARRAY_BOUNDS test kill the calling process when an out-of-bound access
+is detected by UBSAN. However, after this [1] commit, UBSAN is triggered
+under many new scenarios that weren't detected before, such as in struct
+definitions with fixed-size trailing arrays used as flexible arrays. As
+a result, CONFIG_UBSAN_TRAP=y has become a very aggressive option to
+enable except for specific situations.
 
-commit 487c20b016dc48230367a7be017f40313e53e3bd
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu Mar 30 21:53:51 2023 +0000
+`make kselftest-merge` applies CONFIG_UBSAN_TRAP=y to the kernel config
+for all selftests, which makes many of them fail because of system hangs
+during boot.
 
-    iov: improve copy_iovec_from_user() code generation
+This change removes the config option from the lkdtm kselftest and also
+the ARRAY_BOUNDS test to skip it rather than have it failing. If
+out-of-bound array accesses need to be checked, there's
+CONFIG_TEST_UBSAN for that.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17cfdf19a80000
-start commit:   4bdec23f971b Merge tag 'hwmon-for-v6.3-rc4' of git://git.k..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
-dashboard link: https://syzkaller.appspot.com/bug?extid=adec8406ad17413d4c06
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11bf8bcec80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=153d4f75c80000
+[1] commit 2d47c6956ab3 ("ubsan: Tighten UBSAN_BOUNDS on GCC")'
 
-If the result looks correct, please mark the issue as fixed by replying with:
+Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+---
+ tools/testing/selftests/lkdtm/config    | 1 -
+ tools/testing/selftests/lkdtm/tests.txt | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-#syz fix: iov: improve copy_iovec_from_user() code generation
+diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
+index 5d52f64dfb43..7afe05e8c4d7 100644
+--- a/tools/testing/selftests/lkdtm/config
++++ b/tools/testing/selftests/lkdtm/config
+@@ -9,7 +9,6 @@ CONFIG_INIT_ON_FREE_DEFAULT_ON=y
+ CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
+ CONFIG_UBSAN=y
+ CONFIG_UBSAN_BOUNDS=y
+-CONFIG_UBSAN_TRAP=y
+ CONFIG_STACKPROTECTOR_STRONG=y
+ CONFIG_SLUB_DEBUG=y
+ CONFIG_SLUB_DEBUG_ON=y
+diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+index 607b8d7e3ea3..6a49f2abbda8 100644
+--- a/tools/testing/selftests/lkdtm/tests.txt
++++ b/tools/testing/selftests/lkdtm/tests.txt
+@@ -7,7 +7,7 @@ EXCEPTION
+ #EXHAUST_STACK Corrupts memory on failure
+ #CORRUPT_STACK Crashes entire system on success
+ #CORRUPT_STACK_STRONG Crashes entire system on success
+-ARRAY_BOUNDS
++#ARRAY_BOUNDS Needs CONFIG_UBSAN_TRAP=y, might cause unrelated system hangs
+ CORRUPT_LIST_ADD list_add corruption
+ CORRUPT_LIST_DEL list_del corruption
+ STACK_GUARD_PAGE_LEADING
+-- 
+2.25.1
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
