@@ -2,62 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BD276B96B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 18:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EC976B97E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 18:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbjHAQIM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 12:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S233868AbjHAQQp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 12:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232752AbjHAQIL (ORCPT
+        with ESMTP id S232395AbjHAQQk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 12:08:11 -0400
+        Tue, 1 Aug 2023 12:16:40 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A46FF
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 09:07:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B5D19F
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 09:15:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690906047;
+        s=mimecast20190719; t=1690906553;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yWOPkGc2VQ+gyDNVe+LM0eiFFyEn/D0a9ZnSdC5vf9I=;
-        b=BDUGVodQtVryaNFPBqIQHVHNGSrDaV1qZLRVL3AUx9M48tb1/RLuh/T16BgmKQnW2NlCdz
-        CS2VNlaoFD38lPoRWH0idIfyv5lqd2/9y/2BQLMWwM0gi/iZobolsGLohddgJlhzrlciGm
-        LH8TnEBZWkzfZMRHnzHGRP74OGVO2wg=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=zFOWMuiniORO49YwegiVgeiHM1mUI62YaxCFbHJJ65A=;
+        b=cF0pi4Rrn5Vow9cylGRut0eituyVduyJkyhBKtVDSgcNw8FQ/nbEU7ins0IHr9Px+tHeyj
+        Bs4rhsjARTvHrAWIb+LQgfGh8NOXvTdYqOtG3+k+btfd3TbGuSsROAotXbBaNyIjsXT9s/
+        p1sMF/bztKCnRishBS5uHEi3Fbbizvs=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-28-EywGKrlcNmyhsH-sCwaeBA-1; Tue, 01 Aug 2023 12:07:24 -0400
-X-MC-Unique: EywGKrlcNmyhsH-sCwaeBA-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-76cb9958d60so38541585a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Aug 2023 09:07:24 -0700 (PDT)
+ us-mta-682-MNRkUx_mPR2NNY6A1FFOIw-1; Tue, 01 Aug 2023 12:15:52 -0400
+X-MC-Unique: MNRkUx_mPR2NNY6A1FFOIw-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3fe182913c5so17106225e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Aug 2023 09:15:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690906044; x=1691510844;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yWOPkGc2VQ+gyDNVe+LM0eiFFyEn/D0a9ZnSdC5vf9I=;
-        b=K+U1e/Uqw47Xc8DiSkdr5IEQVMg/q0IcZU1tat7L4FURD0exfi6iasqHzgPyT9qxIv
-         zEJdSeg5DclyRbyirN5AoPjMizi/5dwU6tUvB3CFSkjvxsaf+ar59faXuK9h/tGJdq4w
-         bbE59mfnkZX9NXskCRUtL8LaHxsl0NmFgjlDu5jnlPgJmQuItP07iuX266goKE6VOW8f
-         7esdUcsZuq0GA5yhKaG+D6MtsTOmdfnIM4KKfCQZLw4L1nybwSPI/3R4UXHc65kMoEKW
-         eSzK2lmQh8xT9EhTUfRsQgay0z9I7A/C00Bficl1P1gRUKL607QTopN5SjdcjayUlqPH
-         ZeUQ==
-X-Gm-Message-State: ABy/qLb4hEvC5TPOIu90M5w2C3C1Wju7jj8rxg7bsh1fw7p0E3sLQcKf
-        yh2WQdeHiSOAXR/BZ+fi+HFitGxL4RkebbUafcvh/vtk4yn/eHgvvy8GdlXbpUN3G01AZjKUzxj
-        m0G4/dPs/YlpoDSO1t6LBy5LQlfMi
-X-Received: by 2002:a05:620a:461f:b0:767:170d:887a with SMTP id br31-20020a05620a461f00b00767170d887amr11729620qkb.2.1690906043921;
-        Tue, 01 Aug 2023 09:07:23 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHqB7mU+Qbt0x6u8wDG4VYEiiNsMIxzWprLKmcc5Zc3mCLE/Anc8W8CylOrTkOpU586dh/Caw==
-X-Received: by 2002:a05:620a:461f:b0:767:170d:887a with SMTP id br31-20020a05620a461f00b00767170d887amr11729595qkb.2.1690906043654;
-        Tue, 01 Aug 2023 09:07:23 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id z5-20020a05620a100500b00767cf5d3faasm4237042qkj.86.2023.08.01.09.07.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Aug 2023 09:07:23 -0700 (PDT)
-Date:   Tue, 1 Aug 2023 12:07:20 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
+        d=1e100.net; s=20221208; t=1690906551; x=1691511351;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zFOWMuiniORO49YwegiVgeiHM1mUI62YaxCFbHJJ65A=;
+        b=h2t5J/Br7bhQke6Z8lsgXcJunUUH2YAEVY7daS6Xp36Wo6EzuYQSkRuiXeaySkN7K9
+         zB2eSLOoMdaO14AxkANompNEuxxk2e+KGrFUkPFqXWRjx/xuRytalt7T40Lrke1eLs4s
+         TdY2SIrjzbRCb/7VLOekMAjNkIW8grHFstuDJTcP0tG1NHb+2l9cm5Wj/LC7vP8dpcNi
+         0SIahqjyEpOwmXaUvdefu+LeeiVgKRRf9jToBgwG934GV8XhJh0b40nlKa60M9pYBSzZ
+         xcvfcVjoRk6a2wlLtPfCF5Kx/jZra7Zs7nrgpeLSIVkkhXFpzvONONjnqYF5AvmPYMSi
+         Kr1Q==
+X-Gm-Message-State: ABy/qLaHvNyfuCRmnOyXVVt9qAOzCVMFgNBPLRX1+J0qaxke5lqe9Bow
+        UEJdTBQTUCsKswa2b3Pp88r14BjF25dD7zGCQ2wMsO+aek6Cvv8CORfAC7p0frk96XOGHNhyhow
+        pbnJikwp3itljS9bR0oQYHYglxiqN
+X-Received: by 2002:a05:600c:215a:b0:3fe:1820:2447 with SMTP id v26-20020a05600c215a00b003fe18202447mr2804531wml.21.1690906550838;
+        Tue, 01 Aug 2023 09:15:50 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFevGQtmVAGPlMaUXjii2Ctv0aJTKLmXl6/VsEHj+ZxnwzOQpAFPv/TCZKzFkPu+a5+a4EGfQ==
+X-Received: by 2002:a05:600c:215a:b0:3fe:1820:2447 with SMTP id v26-20020a05600c215a00b003fe18202447mr2804514wml.21.1690906550506;
+        Tue, 01 Aug 2023 09:15:50 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:d100:871b:ec55:67d:5247? (p200300cbc705d100871bec55067d5247.dip0.t-ipconnect.de. [2003:cb:c705:d100:871b:ec55:67d:5247])
+        by smtp.gmail.com with ESMTPSA id 21-20020a05600c025500b003fe1a96845bsm8445619wmj.2.2023.08.01.09.15.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Aug 2023 09:15:50 -0700 (PDT)
+Message-ID: <30d86a2d-4af2-d840-91be-2e68c73a07bd@redhat.com>
+Date:   Tue, 1 Aug 2023 18:15:48 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 1/8] mm/gup: reintroduce FOLL_NUMA as
+ FOLL_HONOR_NUMA_FAULT
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
@@ -69,20 +77,18 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Jason Gunthorpe <jgg@ziepe.ca>,
         John Hubbard <jhubbard@nvidia.com>,
         Mel Gorman <mgorman@suse.de>, Shuah Khan <shuah@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v2 6/8] mm/huge_memory: remove stale NUMA hinting comment
- from follow_trans_huge_pmd()
-Message-ID: <ZMktuATuYhHdAW6M@x1n>
+        Paolo Bonzini <pbonzini@redhat.com>, stable@vger.kernel.org
 References: <20230801124844.278698-1-david@redhat.com>
- <20230801124844.278698-7-david@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230801124844.278698-7-david@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+ <20230801124844.278698-2-david@redhat.com> <ZMkpM95vdc9wgs9T@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZMkpM95vdc9wgs9T@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,21 +96,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 01, 2023 at 02:48:42PM +0200, David Hildenbrand wrote:
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 2cd3e5502180..0b709d2c46c6 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -1467,7 +1467,6 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
->  	if ((flags & FOLL_DUMP) && is_huge_zero_pmd(*pmd))
->  		return ERR_PTR(-EFAULT);
->  
-> -	/* Full NUMA hinting faults to serialise migration in fault paths */
->  	if (pmd_protnone(*pmd) && !gup_can_follow_protnone(vma, flags))
->  		return NULL;
+On 01.08.23 17:48, Peter Xu wrote:
+> On Tue, Aug 01, 2023 at 02:48:37PM +0200, David Hildenbrand wrote:
+>> @@ -2240,6 +2244,12 @@ static bool is_valid_gup_args(struct page **pages, int *locked,
+>>   		gup_flags |= FOLL_UNLOCKABLE;
+>>   	}
+>>   
+>> +	/*
+>> +	 * For now, always trigger NUMA hinting faults. Some GUP users like
+>> +	 * KVM really require it to benefit from autonuma.
+>> +	 */
+>> +	gup_flags |= FOLL_HONOR_NUMA_FAULT;
+> 
+> Since at it, do we want to not set it for FOLL_REMOTE, which still sounds
+> like a good thing to have?
 
-Perhaps squashing into patch 1?  Thanks,
+I thought about that, but decided against making that patch here more 
+complicated to eventually rip it again all out in #4.
+
+I fully agree that FOLL_REMOTE does not make too much sense, but let's 
+rather keep it simple for this patch.
+
+
+Thanks!
+
+> 
+> Other than that, looks good here.
+> 
+> Side note: when I was looking at the flags again just to check the
+> interactions over numa balancing, I found FOLL_NOFAULT and I highly suspect
+> that's not needed, instead it just wants to use follow_page[_mask]() with
+> some proper gup flags passed over.. but that's off topic.
+
+Be prepared for my proposal of removing foll_flags from follow_page() ;)
+
+(accompanied by a proper documentation)
+
+Especially as we have FOLL_PIN users of FOLL_NOFAULT, follow_page() is a 
+bad fit.
 
 -- 
-Peter Xu
+Cheers,
+
+David / dhildenb
 
