@@ -2,79 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD0476BD43
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 21:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601D376BDDE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 21:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbjHATFe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 15:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S229845AbjHATgR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 15:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbjHATFb (ORCPT
+        with ESMTP id S229841AbjHATgQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 15:05:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAA126A4;
-        Tue,  1 Aug 2023 12:05:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A4F461590;
-        Tue,  1 Aug 2023 19:05:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A61AAC433C8;
-        Tue,  1 Aug 2023 19:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690916725;
-        bh=XaEyLOjcTNwc9YeWlOJYScuIZzeMlhSmUXhkTyWOcdo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=grHpsCade+4hhBefcy1y7pfmLc1TAcGI5yfjr3ji+PPlfsj7KES8fDhea9q6wXLgD
-         xrGOW3viFBiZ2vyLfNwKC2X7e0UTc1/jdT+BIQoV/8PnGuJGh7RiYNNQpAaJGGf11f
-         CdB8b0Gn5nYSkS4o8WfpNo99u2ppuAN14a1C5I5IwjPlP7/PUzBYiYFueK9jOe6o1g
-         wKWlPPFaossUwjpE/h96bWJrEMfGbGHML66oQ9wJRkAletVZCNSjo4mwx9aKbjnxmW
-         /wU5qh51gu/TWRN8ejWFeGscGFLY08HjeLHMeUYNUquMcFllxGCj3PCG7S0rJoDSlE
-         IMkXmWaTTxdrg==
-Date:   Tue, 1 Aug 2023 20:05:16 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 11/36] arm64/mm: Map pages for guarded control stack
-Message-ID: <1cbd6d5a-0e58-4a3f-b7e5-bbab09f03c5d@sirena.org.uk>
-References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
- <20230731-arm64-gcs-v3-11-cddf9f980d98@kernel.org>
- <20230801170231.GC2607694@kernel.org>
+        Tue, 1 Aug 2023 15:36:16 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446EC19A4;
+        Tue,  1 Aug 2023 12:36:14 -0700 (PDT)
+X-QQ-mid: bizesmtp74t1690918563tu5j6iav
+Received: from linux-lab-host.localdomain ( [116.30.131.233])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 02 Aug 2023 03:36:02 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000B00A0000000
+X-QQ-FEAT: 7YFKcddXaghqkRBpLDziBfBC85h2DKn+U6m/sBmgHfGSmVRsmTQhKYsQg42hM
+        MbfkwiUcFRNNJuoTaXsSiXS7+l5BAw/+2gsQPjsjJCZS8j+tw8fE8TimR7dYP9i1pQmJd3Q
+        c9DmXh2DVR4RUZSa3saIisYRc5H+xZjDn+A413a+sxEn2ZmTPqIFwfTpvjh5mtk0xgFouFP
+        5vFSMa/l0ry511IC8G5iPzbNfNyK8jp1dajb+L8zxLptNVhupr5A9Vnf2x6fiJJu+xGDYO8
+        KUwus8Az8FFaUzbZQgMVcHWqm7MP715tAg5aKS/fGqF5G15bJXniVmTqa3sP/YhjaHLoU83
+        S8aC+rEioUrlAskK/E=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 8572330015572247094
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, w@1wt.eu
+Subject: [PATCH v4 00/12] tools/nolibc: add 32/64-bit powerpc support
+Date:   Wed,  2 Aug 2023 03:36:02 +0800
+Message-Id: <cover.1690916314.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zPbhvjZzJERchlQs"
-Content-Disposition: inline
-In-Reply-To: <20230801170231.GC2607694@kernel.org>
-X-Cookie: I thought YOU silenced the guard!
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,45 +50,99 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi, Willy, Hi Thomas
 
---zPbhvjZzJERchlQs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+v4 here is mainly with a new nolibc-test-config target from your
+suggestions and with the reordering of some patches to make
+nolibc-test-config be fast forward.
 
-On Tue, Aug 01, 2023 at 08:02:31PM +0300, Mike Rapoport wrote:
-> On Mon, Jul 31, 2023 at 02:43:20PM +0100, Mark Brown wrote:
+run-user tests for all of the powerpc variants:
 
-> >  {
-> > -	pteval_t prot = pgprot_val(protection_map[vm_flags &
-> > +	pteval_t prot;
-> > +
-> > +	/*
-> > +	 * If this is a GCS then only interpret VM_WRITE.
-> > +	 *
-> > +	 * TODO: Just make protection_map[] bigger?  Nothing seems
-> > +	 * ideal here.
-> > +	 */
+    $ for arch in ppc ppc64 ppc64le; do make run-user XARCH=$arch | grep status; done
+    165 test(s): 157 passed,   8 skipped,   0 failed => status: warning
+    165 test(s): 157 passed,   8 skipped,   0 failed => status: warning
+    165 test(s): 157 passed,   8 skipped,   0 failed => status: warning
 
-> I think extending protection_map and updating adjust_protection_map() is
-> cleaner and probably faster.
+and defconfig + run for ppc:
 
-That was my initial thought but then I immediately started second
-guessing myself about review comments.  Hopefully Will or Catalin will
-weigh in.
+    $ make nolibc-test-config XARCH=ppc
+    $ make run XARCH=ppc 
+    165 test(s): 159 passed,   6 skipped,   0 failed => status: warning
 
---zPbhvjZzJERchlQs
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+* tools/nolibc: add support for powerpc
+  tools/nolibc: add support for powerpc64
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTJV2sACgkQJNaLcl1U
-h9AlrwgAheuf8ghyBKWYbkyMEXdB+oQMSgcGlnFgC7nJJfw06f2XaVrBNE+6Swjh
-pgt+0RrRPIXZHhZXP3vHWP0yM/pgwS3o0K+/jolpahP+ieFfiJa5X4GTuGzPYZiq
-6XYZEXkdOtuuyx3McLXU4Eet7PsnmqDolbBcr2pV1oyvRj6zWbdfv+SYoL8DX6bA
-kUGWitWitEXi8bMTvWWg23s1MoFXLYxUWDZVwCl89aIipWnICzUze6O9FVMsfYJ1
-h8ITi9V3QFo5uKkn1MySOUPaK7TI+VKZhAJMaNEQmCHMFXTkQhpp1jJvY4FFRVi2
-rUxmpnOLBLA3hsMLGXV+tSV8S9P65g==
-=kTpO
------END PGP SIGNATURE-----
+    No change.
 
---zPbhvjZzJERchlQs--
+* selftests/nolibc: fix up O= option support
+  selftests/nolibc: add macros to reduce duplicated changes
+
+    From tinyconfig-part1 patchset, required by our nolibc-test-config target
+
+    Let nolibc-test-config be able to use objtree and the kernel related
+    macros directly.
+
+* selftests/nolibc: add XARCH and ARCH mapping support
+
+    Moved before nolibc-test-config, for the NOLIBC_TEST_CONFIG macro used by
+    nolibc-test-config target
+    
+    Willy talked about this twice, let nolibc-test-config be able to use
+    nolibc-test-$(XARCH).config listed in NOLIBC_TEST_CONFIG  directly.
+
+* selftests/nolibc: add nolibc-test-config target
+  selftests/nolibc: add help for nolibc-test-config target
+
+    A new generic nolibc-test-config target is added, allows to enable
+    additional options for a top-level config target.
+
+    defconfig is reserved as an alias of nolibc-test-config.
+
+    As suggested by Thomas and Willy.
+
+* selftests/nolibc: add test support for ppc
+  selftests/nolibc: add test support for ppc64le
+  selftests/nolibc: add test support for ppc64
+
+    Renamed from $(XARCH).config to nolibc-test-$(XARCH).config
+
+    As suggested by Willy.
+
+* selftests/nolibc: allow customize CROSS_COMPILE by architecture
+  selftests/nolibc: customize CROSS_COMPILE for 32/64-bit powerpc
+
+    Moved here as suggested by Willy.
+
+Best regards,
+Zhangjin
+---
+[1]: https://lore.kernel.org/lkml/cover.1690468707.git.falcon@tinylab.org/
+
+ 
+ 
+Zhangjin Wu (12):
+  tools/nolibc: add support for powerpc
+  tools/nolibc: add support for powerpc64
+  selftests/nolibc: fix up O= option support
+  selftests/nolibc: add macros to reduce duplicated changes
+  selftests/nolibc: add XARCH and ARCH mapping support
+  selftests/nolibc: add nolibc-test-config target
+  selftests/nolibc: add help for nolibc-test-config target
+  selftests/nolibc: add test support for ppc
+  selftests/nolibc: add test support for ppc64le
+  selftests/nolibc: add test support for ppc64
+  selftests/nolibc: allow customize CROSS_COMPILE by architecture
+  selftests/nolibc: customize CROSS_COMPILE for 32/64-bit powerpc
+
+ tools/include/nolibc/arch-powerpc.h           | 202 ++++++++++++++++++
+ tools/include/nolibc/arch.h                   |   2 +
+ tools/testing/selftests/nolibc/Makefile       | 157 ++++++++++----
+ .../nolibc/configs/nolibc-test-ppc.config     |   3 +
+ 4 files changed, 327 insertions(+), 37 deletions(-)
+ create mode 100644 tools/include/nolibc/arch-powerpc.h
+ create mode 100644 tools/testing/selftests/nolibc/configs/nolibc-test-ppc.config
+
+-- 
+2.25.1
+
