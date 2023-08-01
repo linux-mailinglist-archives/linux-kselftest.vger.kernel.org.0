@@ -2,106 +2,361 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B2876B1A3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 12:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733BF76B214
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 12:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjHAKVo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 06:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S231742AbjHAKoH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 06:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232788AbjHAKVW (ORCPT
+        with ESMTP id S230413AbjHAKoG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 06:21:22 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ED05276;
-        Tue,  1 Aug 2023 03:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1690885059; bh=mKkcfY5zqpLKFBoScbc+V2BRmzXnuf03ZpIGPeD6uB8=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=gkpHN0vgZPP+Bm7wa32u0lXIRovoBU79/16NvzMf77oQ/cOvUDBVEdYDHlfj/2bkX
-         Juql0hjSf1j3hqbpTnhu1sfJHloPN2BDmmnGRErWgzXMwfjaX8WY+peLolVN6poUGm
-         VnEvuEwbkEXIujjDmLYcCMMXzF9tun1kN8rucCDU=
-Date:   Tue, 1 Aug 2023 12:17:33 +0200 (GMT+02:00)
-From:   =?UTF-8?Q?Thomas_Wei=C3=9Fschuh_?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     linux@weissschuh.net, linux-kernel@vger.kernel.org,
+        Tue, 1 Aug 2023 06:44:06 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3AEDB;
+        Tue,  1 Aug 2023 03:44:02 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1690886636tmchd546
+Received: from linux-lab-host.localdomain ( [116.30.131.233])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 01 Aug 2023 18:43:55 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: ZNeI2QSW/Mx39dK7OEJT1d6tsQHw0YoDJZv+lKDYGz6eUdUvBGfqHNhKXEB5a
+        9Eet6yVB965cUMZqAUYRYtpMMC2pa67MqD342q8iZiwCN/3CY6c/j1yUnNFR0QLFXjUK9UQ
+        XByjUQQHID5nmWmpyvKJ7LHsxANQuFPUdltUgb0c1SpVRMzfqn4xTDbtuCdqoq/JxZiGp6A
+        RpPXMgf0utDx2nJyGGLgfXr6gRhQEnjjSkTH++wpjY1T3mC8hgvQazex4/1CJCVA80C0HlA
+        j2EG8W2KiI7bxhKCZgIEL9K/4vkaNZXab6Mo81C2x5gCVPkJZ2d9K6hPhCt+aCci0CiaF0A
+        EEpgxkvgtxNC29P4NiidaSEmdPCAffa1AOosXGOHNjY/dnT3Ui1BelJvhIOF+V4TRBK5fnN
+        Mdkdesql/to=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 3218652239303942793
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu, linux@weissschuh.net
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        tanyuan@tinylab.org, w@1wt.eu
-Message-ID: <9c47fc05-ba20-4d90-9d11-840f77c35aaa@t-8ch.de>
-In-Reply-To: <20230801101508.75571-1-falcon@tinylab.org>
-References: <6d67a8ed-8cb6-4ab7-8db0-68269981f8df@t-8ch.de> <20230801101508.75571-1-falcon@tinylab.org>
-Subject: Re: [PATCH v2 07/10] selftests/nolibc: avoid unused arguments
- warnings
+        tanyuan@tinylab.org
+Subject: Re: tools/nolibc: RFC: report and drop unused functions/data by gc-section
+Date:   Tue,  1 Aug 2023 18:43:55 +0800
+Message-Id: <20230801104355.77044-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ZMip5q9C/VuNMrUX@1wt.eu>
+References: <ZMip5q9C/VuNMrUX@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <9c47fc05-ba20-4d90-9d11-840f77c35aaa@t-8ch.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi, Willy, Hi, Thomas
 
-Aug 1, 2023 12:15:27 Zhangjin Wu <falcon@tinylab.org>:
-
-> Hi, Thomas
+> Hi Zhangjin,
+> 
+> On Tue, Aug 01, 2023 at 12:59:02PM +0800, Zhangjin Wu wrote:
+[...]
+> > 
+> > Willy, did I misunderstand something again? a simple test shows, seems this is
+> > not really always like that, static mainly means 'local', the symbol is still
+> > there if without -O2/-Os and is able to be set a breakpoint at:
+> > 
+[...]
+> > 
+> > Even with -Os/-O2, an additional '-g' is able to generate the 'test' symbol for
+> > debug as we expect.
+> 
+> Please compare this:
+> 
+>   $ cat test.c
+>   #include <stdio.h>
+>   
+>   static int test (void)
+>   {
+>       printf("hello, world!\n");
+>   }
+>   
+>   int main(void)
+>   {
+>       test();
+>   
+>       return 0;
+>   }
+>   
+>   $ gcc -Os -o test test.c
+>   $ objdump --disassemble=main  test
+>   (...)
+>   Disassembly of section .text:
+>   
+>   0000000000401040 <main>:
+>     401040:       50                      push   %rax
+>     401041:       bf 04 20 40 00          mov    $0x402004,%edi
+>     401046:       e8 e5 ff ff ff          call   401030 <puts@plt>
+>     40104b:       31 c0                   xor    %eax,%eax
+>     40104d:       5a                      pop    %rdx
+>     40104e:       c3                      ret    
+> 
+>   $ gdb ./test
+>   (...)
+>   Reading symbols from ./test...
+>   (gdb) b test
+>   Function "test" not defined.
+>   (gdb) r
+>   Starting program: /dev/shm/test 
+>   hello, world!
+>   [Inferior 1 (process 8780) exited normally]
+> 
+> To this:
+> 
+>   $ cat test.c
+>   #include <stdio.h>
+>   
+>   /*static*/ int test (void)
+>   {
+>       printf("hello, world!\n");
+>   }
+>   
+>   int main(void)
+>   {
+>       test();
+>   
+>       return 0;
+>   }
+>   
+>   $ gcc -Os -o test test.c
+>   $ objdump --disassemble=main  test
+>   (...)
+>   Disassembly of section .text:
+>   
+>   0000000000401040 <main>:
+>     401040:       50                      push   %rax
+>     401041:       e8 e0 00 00 00          call   401126 <test>
+>     401046:       31 c0                   xor    %eax,%eax
+>     401048:       5a                      pop    %rdx
+>     401049:       c3                      ret    
+> 
+>   $ gdb ./test
+>   (...)
+>   Reading symbols from ./test...
+>   (gdb) b test
+>   Breakpoint 1 at 0x401126
+>   (gdb) r
+>   Starting program: /dev/shm/test 
+>   
+>   Breakpoint 1, 0x0000000000401126 in test ()
+>   (gdb) 
+> 
+> See the difference ?
 >
->> On 2023-08-01 10:07:28+0200, Willy Tarreau wrote:
->>> On Tue, Aug 01, 2023 at 07:30:14AM +0200, Thomas Wei=C3=9Fschuh wrote:
->>>> This warnings will be enabled later so avoid triggering it.
->>>>
->>>> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
->>>> ---
->>>> tools/testing/selftests/nolibc/nolibc-test.c | 3 ++-
->>>> 1 file changed, 2 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/test=
-ing/selftests/nolibc/nolibc-test.c
->>>> index 53a3773c7790..cb17cccd0bc7 100644
->>>> --- a/tools/testing/selftests/nolibc/nolibc-test.c
->>>> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
->>>> @@ -1089,7 +1089,8 @@ static int smash_stack(void)
->>>> =C2=A0=C2=A0=C2=A0 return 1;
->>>> }
->>>>
->>>> -static int run_protection(int min, int max)
->>>> +static int run_protection(int __attribute__((unused)) min,
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 int __attribute__((unused)) max)
->>>
->>> This one is used to silence -Wunused-parameter I guess.
->>
->> Yep.
->>
->>> It's one of
->>> the rare warnings that I find totally useless in field, because it's
->>> simply against the principle of using function pointers with different
->>> functions having the same interface but different implementations. As
->>> your code evolves you end up with unused on absolutely *all* of the
->>> arguments of *all* such functions, which makes them a real pain to add
->>> and tends to encourage poor practices such as excessive code reuse just
->>> by laziness or boredom. BTW it's one of those that are already disabled
->>> in the kernel and we could very well do the same here.
->>
->> It's indeed unfortunate.
->>
->> As long as we don't have too many of them I would prefer to keep the
->> explicit annotations. While they are ugly we then can still reap the
->> positive aspects of the warning.
->>
->> This is where -std=3Dc89 bites us. With extensions (or C2X) we could als=
-o
->> just leave off the argument name to mark it as unused:
->> =C2=A0=C2=A0=C2=A0 run_protection(int, int)
->
-> what about further simply ignore the arguments like we did for main(void)=
-?
 
-That doesn't work because it is stored as a function pointer in the testcas=
-es array.
-And these members all take the two parameters.
+Thanks, Willy, I did all tests and mentioned this difference in my
+reply, but is not obviously described ;-)
+
+    "static mainly means 'local', the symbol is still there **if without
+    -O2/-Os** and is able to be set a breakpoint at".
+
+> > >     and the code will appear at multiple locations,
+> > > > > which is really painful. I'd instead really prefer to avoid static when
+> > > > > we don't strictly want to inline the code, and prefer weak when possible
+> > > > > because we know many of them will be dropped at link time (and that's
+> > > > > the exact purpose).
+> > 
+> > For the empty __stack_chk_init() one (when the arch not support stackprotector)
+> > we used, when with 'weak', it is not possible drop it during link time even
+> > with -O3, the weak one will be dropped may be only when there is a global one
+> > with the same name is used or the 'weak' one is never really used?
+> 
+> If that's the case for this one, it's sufficient to enclose it within a pair
+> of #if defined(__SSP__).
+>
+
+Yeah, it is a solution, but to be honest, let's think about the '#ifdef'
+ones we have used in in _start asm(), it is better to not add it back
+again ;-) 
+
+[...]
+> 
+> There is not better or worse, it doesn't work like this. What is important
+> to keep in mind is:
+>   - if the symbol needs to be exported, it must not be static. If it risks
+>     to be declared multiple times (since appearing in a .h possibly included
+>     multiple times), it needs to be marked weak.
+> 
+>   - if the symbol benefits from being reused a lot because it's huge and
+>     almost always needed, it can benefit as well from being exported so
+>     that at the end there is only one instead of multiple copies.
+> 
+>   - if the symbol is never needed outside and its duplication is not a
+>     problem, it's better static.
+> 
+> __stack_chk_init() used to be called directly from asm(). We had no other
+> option.
+
+Thanks, it explains clearly about why we use 'weak' for _start asm() before.
+
+> With _start_c() it seems this has changed so maybe it can now be
+> static (I have not checked).
+
+In my test environment (gcc 9.3 + ld 2.34 + x86_64), as I just tested
+about _start_c(), both
+
+    __attribute__((weak))
+
+    and
+
+    static __attribute__((used))
+
+provide the _start_c symbol as required by the _start asm() and it
+compiled without any failure.
+
+> But *these* are the only valid justifications,
+> nothing based on preference or being better or whatever. These serve two
+> completely different goals.
+>
+
+ok, so, the only benefit may be the saving of some bits of the function
+calling instructions.
+
+> > So, If my above test is ok, then, we'd better simply convert the whole
+> > __stack_chk_init() to a static one as below (I didn't investigate this deeply
+> > due to the warning about static and weak conflict at the first time):
+> 
+> Static and weak together make absolutely no sense. Static says "do not export
+> it, it's local" and weak says "when you find multiple copies of it, keep only
+> one". By definition they are mutually exclusive.
+>
+
+Yes, thanks to clarify it, I knew 'weak' is widely used in kernel side to
+override the generic weak functions with architecture specific optimized ones.
+I have used it frequently especially when I was developing the mainline MIPS
+ftrace support, in my memory, the sched_clock() is a very good example.
+
+> > > > Thanks for the clarification. I forgot about that completely!
+> > > > 
+> > > > The stuff from nolibc-test.c itself (run_foo() and is_settings_valid())
+> > > > should still be done.
+> > > 
+> > > Yes, likely. Nolibc-test should be done just like users expect to use
+> > > nolibc, and nolibc should be the most flexible possible.
+> > 
+> > For the 'static' keyword we tested above, '-g' may help the debug requirement,
+> > so, is ok for us to apply 'static' for them safely now?
+> 
+> Please, read above and do not speculate but actually try by yourself and
+> see what doesn't work.
+
+Willy, as I explained above, before sending my last reply, I did all
+tests (by default, tests often before any of my replies) but the issue
+is what you expected is the one I just not wrote obviously in my reply,
+it worths an improvement to avoid info gap ;-)
+
+> I can assure you that it's extremely time consuming
+> to have to justify everything that was done over the last years to reach
+> the current situation, so as to make sure we don't go back several years
+> just due to matters of taste. By definition a libc cannot look nice, and
+> when implemented exclusively in include files there are strong tradeoffs
+> that are needed. The vast majority of them are already documented in the
+> code and others in commit messages. Others will obviously depend on
+> everyone's experience at recognizing certain patterns. I think I'll spend
+> some time writing some doc explaining some design rules, some choices that
+> are imposed to us and certain patterns to adopt or avoid. It will surely
+> help and save us a lot of review and discussion time in the future (at
+> least I hope).
+>
+
+Agree, but I don't think it is a big program, the learning of the commit
+message, comments is a basic step before writing something new.
+
+Friendly to mention, something important I have found during the last
+several discussions among us is, although all of us are friendly and
+kindly enough, but due to some info gap or some info lost, we all may
+persist a direction which may have some traps and sometimes very easy to
+out-of-topic or out of the issues we are really solving, so, I was even
+worried about to send a new patch or start a new reply these days, one
+possible reason may be overloaded ;-)
+
+> > A further test shows, with 'static' on _start_c() doesn't help the size, for it
+> > is always called from _start(), will never save move instructions, but we need
+> > a more 'used' attribute to silence the error 'nolibc-test.c:(.text+0x38cd):
+> > undefined reference to `_start_c'', so, reserve it as the before simpler 'void
+> > _start_c(void)' may be better?
+> > 
+> >     static __attribute__((used)) void _start_c(long *sp)
+> 
+> Again if you test this you'll see that it probably does not work. It's
+> called from asm so it needs to be public. And it needs the weak
+> attribute to avoid clashes.
+
+Willy, I did test it before sending the last reply, and luckily, it
+worked at least with my compiler on x86_64 although we don't really want
+it for _start_c, let's reserve global as-is.
+
+I'm not mean we should use 'used' instead of 'weak' we have used in
+nolibc, just show my test result here as a reference. 
+
+Seems there is also a new 'retain', but it servces something different,
+it tells 'ld --gc-sections' not drop it, but 'used' is for compiler not
+discard it, this page does explain more: https://reviews.llvm.org/D96838
+
+Yuan and me are exploring the compiler and linker options/attributes to
+let our dead syscall patchset being able to drop every syscall (some of
+them are wrongly kept by KEEP), so we found some docs about 'used',
+'retain' and the other more related attributes in the past weeks.
+
+> 
+> At least you've convinced me about something: we need to split nolibc-test
+> into multiple files (e.g. one for syscalls, one for stdlib etc) so that we
+> also catch the cases where we're missing some weak attributes.
+
+Ok, thanks.
+
+As a summary, is it ok for Thomas to add a change like this to his patchset (or
+a standalone patchset from me)?
+
+    diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+    index 32e128b0fb62..a5f33fef1672 100644
+    --- a/tools/include/nolibc/crt.h
+    +++ b/tools/include/nolibc/crt.h
+    @@ -10,7 +10,7 @@
+     char **environ __attribute__((weak));
+     const unsigned long *_auxv __attribute__((weak));
+
+    -void __stack_chk_init(void);
+    +static void __stack_chk_init(void);
+     static void exit(int);
+
+     void _start_c(long *sp)
+    diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
+    index b620f2b9578d..13f1d0e60387 100644
+    --- a/tools/include/nolibc/stackprotector.h
+    +++ b/tools/include/nolibc/stackprotector.h
+    @@ -37,8 +37,7 @@ void __stack_chk_fail_local(void)
+     __attribute__((weak,section(".data.nolibc_stack_chk")))
+     uintptr_t __stack_chk_guard;
+
+    -__attribute__((weak,section(".text.nolibc_stack_chk"))) __no_stack_protector
+    -void __stack_chk_init(void)
+    +static __no_stack_protector void __stack_chk_init(void)
+     {
+            my_syscall3(__NR_getrandom, &__stack_chk_guard, sizeof(__stack_chk_guard), 0);
+            /* a bit more randomness in case getrandom() fails, ensure the guard is never 0 */
+    @@ -46,7 +45,7 @@ void __stack_chk_init(void)
+                    __stack_chk_guard ^= (uintptr_t) &__stack_chk_guard;
+     }
+     #else /* !defined(_NOLIBC_STACKPROTECTOR) */
+    -__inline__ void __stack_chk_init(void) {}
+    +static void __stack_chk_init(void) {}
+     #endif /* defined(_NOLIBC_STACKPROTECTOR) */
+     
+     #endif /* _NOLIBC_STACKPROTECTOR_H */
+
+Best regards,
+Zhangjin
+
+> 
+> Thanks,
+> Willy
