@@ -2,99 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C6176AB56
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 10:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB1E76ACAB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 11:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjHAIwf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 04:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S232701AbjHAJRo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 05:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjHAIwe (ORCPT
+        with ESMTP id S232547AbjHAJRQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 04:52:34 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972831711
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 01:52:31 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1bb81809ca8so42627595ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Aug 2023 01:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690879951; x=1691484751;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sQb6hWeSHt5AzlUqNhh20pk6zYPdhyIHacjYa5WcAVw=;
-        b=fShC8m0sAxSzyfBCOQCftRJtjAugW5Q74CK11/6Z/7aJGRUOP1SjNs5C6yvXEnrd3F
-         mC4jmWHzDL3Ii05rpo+SZAYNLkZNazAf9vHoPd59ZBsz3xxQZG+kJD2/Tufvdv0Rj3H+
-         l4eCSo4x839DYlntSH5tJza/polLoi3/uKRyBTq16Xo2iadb5gSl+UVAaolJoyxHO+8n
-         5Al57INR4QTnBf/tVo0V8g1Ni8EImtliXIE5IFU/geNc4XqrStasiHUv/6zTHMn1+J0H
-         I2trapnK3BJ+/YZwAwcEznbSZqxOgQ1bdvOucnv8AroAR7bdUDxR1CieJe0S2a0L0AaT
-         EBCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690879951; x=1691484751;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sQb6hWeSHt5AzlUqNhh20pk6zYPdhyIHacjYa5WcAVw=;
-        b=A/66f+kYUx3BN8Q4z2mvTvsKb1fSf8wTTXDimk1oQXshcOCSVyQc+avaL0H6ovL2hq
-         d76idiFs7XyCPQGwEF4SnVCy8gnM9LcCc8Fe3VtruDx5KoghoutmRKbok005kPkllETa
-         aMA/7k8voRjKmGAmzKylv/9E7lpYce9HK18hGP/58l7cRKS0oGe+2BSeaBTkb/UT2PFD
-         1lmTeDmEJTg9FtoRwCe+x5Yv23ZmEYCZZ19/Cmg23A/t/ui1UHkftfphQCCLMafu+OOt
-         nje0UO/pDLpkXD6mN4B8fQpXOLMLU5sONhwUKDEbVkaPEQ7KjxsenbsLTQDneFMeE4qX
-         QWFQ==
-X-Gm-Message-State: ABy/qLaQmk1rmVh5RTVkWd0hJiPmQnt291BeUaqJP37Yq9EfAAKry2yG
-        vsVtNDmH1ytUnuXmQdQ8K++88w==
-X-Google-Smtp-Source: APBJJlH7sFdfOCMX1cyHt9oMrKnAymfqE4PzBGrcLvsl3aP7Bhi9gwsVgnVM9S3nmr9v7kjQ0eNA/g==
-X-Received: by 2002:a17:902:7486:b0:1bc:5d0:e8db with SMTP id h6-20020a170902748600b001bc05d0e8dbmr7361705pll.62.1690879951085;
-        Tue, 01 Aug 2023 01:52:31 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id b11-20020a170903228b00b001b8943b37a5sm9942580plh.24.2023.08.01.01.52.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Aug 2023 01:52:30 -0700 (PDT)
-Date:   Tue, 1 Aug 2023 14:22:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Meng Li <li.meng@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Modify the function to et the highest_perf value
-Message-ID: <20230801085228.6f5xley3aybryfjv@vireshk-i7>
-References: <20230801004719.1298415-1-li.meng@amd.com>
- <5b92239a-4255-346d-1dfe-c7953535083d@amd.com>
+        Tue, 1 Aug 2023 05:17:16 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA0CD2728;
+        Tue,  1 Aug 2023 02:16:18 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 3719DrhR031934;
+        Tue, 1 Aug 2023 11:13:53 +0200
+Date:   Tue, 1 Aug 2023 11:13:53 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuan Tan <tanyuan@tinylab.org>,
+        Zhangjin Wu <falcon@tinylab.org>
+Subject: Re: [PATCH v2 06/10] selftests/nolibc: make functions static if
+ possible
+Message-ID: <ZMjM0UPRAqoC+goY@1wt.eu>
+References: <20230801-nolibc-warnings-v2-0-1ba5ca57bd9b@weissschuh.net>
+ <20230801-nolibc-warnings-v2-6-1ba5ca57bd9b@weissschuh.net>
+ <ZMiro1pwVvAzNel5@1wt.eu>
+ <bf97900a-98bb-45dc-9451-b9728173136e@t-8ch.de>
+ <ZMi+k0HsMGJxbs7V@1wt.eu>
+ <4ad4b853-b89f-4c5a-a50b-28739d7b81c0@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <5b92239a-4255-346d-1dfe-c7953535083d@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4ad4b853-b89f-4c5a-a50b-28739d7b81c0@t-8ch.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 31-07-23, 20:10, Mario Limonciello wrote:
-> On 7/31/23 19:47, Meng Li wrote:
-> > The previous function will be deprecated.
+On Tue, Aug 01, 2023 at 10:50:05AM +0200, Thomas Weißschuh wrote:
+> > > An alternative would be to add -g to CFLAGS (and remove -s from LDFLAGS).
+> > > This way we get full debugability including breakpoints for everything.
 > > 
-> > Signed-off-by: Meng Li <li.meng@amd.com>
-> > ---
+> > It wouldn't change much because while it would allow the debugger to know
+> > where the function was possibly inlined, it's still not very convenient:
+> > you believe you're in a function but in fact you're in the caller. It
+> > really depends what you're debugging but here I don't see all that as
+> > providing a value, at least it brings more annoyance and little to no
+> > gain IMHO.
 > 
-> This actually has functional impact; doesn't it?  Can you better describe
-> the reasoning and expected impact in the commit message?
+> Even if it doesn't work 100% properly it wouldn't it still be a superset
+> of the previous functionality?
 
-Also write the $Subject properly like:
+No, we need to be able to disassemble this to understand what was done
+to the code we believe is being tested. All of us have been dealing with
+this already, and making that code less mappable from asm to C is quite
+annoying.
 
-cpufreq: amd-pstate-ut: ...
+> And we don't have to manually keep track of which ones should be static
+> and which shouldn't (See this discussion).
 
--- 
-viresh
+We should not have to be concerned about this, because it's out of the
+scope of what this "program" is used for. If we're wondering too much,
+we're wasting our time on the wrong topic. So we have to find a reasonable
+rule. One that sounds fine to me is to say:
+  - all that's part of the framework to help with testing (i.e. the expect
+    functions, errorname()  etc) could be static because we don't really
+    care about them (at least we won't be placing breakpoints there). They
+    may be marked inline or unused and we can be done with them.
+
+  - user code and the calling stack from main should be easily traceable
+    using gdb and objdump -dr so that when you start with a new arch and
+    it breaks early (as happens by definition when syscalls or crt code
+    don't all work well) then it's possible to accurately trace it without
+    having to worry too much about what was transformed how.
+
+> Would it be better with -ggdb?
+
+It doesn't change. The thing is: by saying "static" you tell the
+compiler "I promise it cannot be used anywhere else, do what you want
+with it", and it can trivially decide to inline all or part of it, or
+change its number of arguments or whatever as it sees fit because no
+other code part relies on that function. And when you're trying to
+disassemble your test_mmap_munmap() and can't find it and can only
+infer its inlined presence in run_syscall() by seeing a value in a
+register that vaguely reminds you about __NR_mmap, it's clearly much
+less easy.
+
+> If you are still not conviced I'll drop the argument here :-)
+> (And the changes in the next revision)
+
+No problem, it's fine to discuss the current situation. I've just
+noticed a number of static on some test functions that would deserve
+being removed precisely for the reasons above. But that justifies the
+need for some doc about all this.
+
+> > > I didn't find the reasoning for -s in LDFLAGS.
+> > 
+> > It's historic, because normally when you want small binaries you strip
+> > them, and the command line was reused as-is, but I agree that we could
+> > get rid of it!
+> 
+> I'll remove it. It was annoying to figure out why my "-g" CFLAG didn't
+> work at all.
+
+Yes I can definitely understand!
+
+Thanks,
+Willy
