@@ -2,53 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2352076B756
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 16:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0BA76B759
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 16:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbjHAO0k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 10:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S234653AbjHAO0q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 10:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbjHAO0j (ORCPT
+        with ESMTP id S234655AbjHAO0o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 10:26:39 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BE010FA;
-        Tue,  1 Aug 2023 07:26:38 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b9c5e07c1bso48567045ad.2;
-        Tue, 01 Aug 2023 07:26:38 -0700 (PDT)
+        Tue, 1 Aug 2023 10:26:44 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B03A1BE3;
+        Tue,  1 Aug 2023 07:26:44 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1bbc06f830aso37668425ad.0;
+        Tue, 01 Aug 2023 07:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690899997; x=1691504797;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/p1iV8LRIobQrwk48Wu7X//d2jaCoMI2Cn450sEjblk=;
-        b=Dt1fTNWNFgET8qgImIooUfsHT0/C2kQgOHAES6nYzrPZ9Vd5663YprCHBAwOA36aNx
-         K8eNQtgIrAP5bwG93cLks8zYGDpNDpqRHXvSSCGm9GKQHqvqkHAl6XgvG6GLxjrmWrlV
-         RygQX6CN0NrDKLtfjqUk8LAsNhrIi6lBHrGFgPFySIBLthvT3uBhEIxVfyO99YknFYAK
-         qtJavW5oaRGrZDHjggZx+l3XjojQbCo5VxU4Z2wySllMKnIyoCSaVtwMaQNLx7m1eEjG
-         V1yj8Uc0uv1gwMoCTgH6H2DwTcvjGw2S9v6aASSJR+dGq0orsRtXkoselJW06lF8A3sc
-         wG5w==
+        d=gmail.com; s=20221208; t=1690900003; x=1691504803;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jnJPtOd/tAS5bP3jRwz3JALotAns59ZHUtYU5AlNpuM=;
+        b=ZGnzrX3ZoaH1ZZ13QRn9qI9/shQl5o5X2gXoWyFcjRzSbo95oytz3zedS8/SDcx8nE
+         bEbhWiLcEKLB4ZSN11/tiQBkFbmGJNph6W5PUPkT77hv2MXpr0h8sW0sO9ynq8W3SptX
+         tDTmloy/O+QwnEKnwIFXgfdw/4cHPmuEZiAxbX6b6ew5gOyhKTIIbMUNXGT1m44pTUHt
+         UMfUymD0DZWmG7PpHZkZoRJsqIeRx0hjCxlRyIr2KwbX/f7YY8Ixhu9U9YxYyXNYTle/
+         1+cCGU4ZR0mNPJFirVev4OSI/OFrFX7zLb6MlRZWd0jS0l1+Hxft8mVmCnDlWWk9zJIT
+         nwBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690899997; x=1691504797;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/p1iV8LRIobQrwk48Wu7X//d2jaCoMI2Cn450sEjblk=;
-        b=G7pq5at2RFL97Rn3d9kPsX8lp6fTtzFXFt2BFrbdvDR1vLjvYjh32URKikXv+D7LtN
-         wlGfdL+jub/WH8Oh+6p2Lc9M0hidcz573BFpB/RhybYs0/X6BrRlZW3UzYkrvOKqTJRQ
-         cMAXgGF1eiB0nl3oG0jxFDy+qi3lLiYs/5ZdPptxCHgTyjZbiAi4LZkvHLptgSjBqcZN
-         u2g2+DLsnOdpwUUsVXg4PSACynO0EJup1SMJ6kFTtwMSYS4/36xk2as7Ev150RHj4Fsi
-         Rsn8nGUNNNJEGbztowA4N51UlLKpYrQRJ/D3iqww5V4epeH3f2Tduco11otDqkZ7yh7y
-         SeFg==
-X-Gm-Message-State: ABy/qLbOAvVj0ynY9aZGijYbzAoedtAofD2q8wMdkZxEiDJBhacftWSr
-        m0zyYj3s6I9C/rLghoT13GvcXqDhDHIMrrTn
-X-Google-Smtp-Source: APBJJlFs6bTG0tOfzdrqqhxX1PPnAorUhSKFUH9Au3k7b7zUcZEPN0+zY5JsjrFax3hh4Am/xZN4aA==
-X-Received: by 2002:a17:902:d50a:b0:1b8:2c2a:962e with SMTP id b10-20020a170902d50a00b001b82c2a962emr15514951plg.33.1690899997283;
-        Tue, 01 Aug 2023 07:26:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690900003; x=1691504803;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jnJPtOd/tAS5bP3jRwz3JALotAns59ZHUtYU5AlNpuM=;
+        b=f4qICekWnbBhsfNsLer6ANIVa8bGcyRMIHBmI2JqtsiAEN1O6zfH+S6f0n3f0Z9vq9
+         ohSqCit6OkasY7wcyhe7M9s64g/LV4/L+fTYKmva+OcL04jbiO0+LpBN4zMYpx+HnSTF
+         0+wYKCy/Jt19yhlVtCPBaGpi7G7nK7oNpmLqToIAgcQxMoxmPodXHeW0dWicSBWHYA3r
+         +T1jeD2CoGJGagOnY2xc4QlKsh/7sezROOf+Lf1ytuaccNpzWxA3A7LXjvUz6N+PBJv4
+         zqkAIcygqovt5k2ZV8ZJmhHV6Y1sQPiVutsNivJpIP8fU9M1S7K1DZ+gkqT7Z/5c5Fbe
+         6S6w==
+X-Gm-Message-State: ABy/qLZeOpgOrz2ewCMfd5wpxBMA96EnFrqUGTdJ+KVmsmIJwaLJkhU/
+        l+d0e2lRuioNOIgMTBWLfOA60g2s8H8XCiqz
+X-Google-Smtp-Source: APBJJlGp0T3bwxu11JjeJvAP/G84kaAZx5TRCf188WmCYmtolQxWAT/yq+sNvIt6U96wH4E0P87MQw==
+X-Received: by 2002:a17:902:ce8d:b0:1b6:6a14:3734 with SMTP id f13-20020a170902ce8d00b001b66a143734mr18267314plg.29.1690900003056;
+        Tue, 01 Aug 2023 07:26:43 -0700 (PDT)
 Received: from localhost.localdomain (bb219-74-209-211.singnet.com.sg. [219.74.209.211])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c10600b001b8a00d4f7asm10565100pli.9.2023.08.01.07.26.30
+        by smtp.gmail.com with ESMTPSA id 6-20020a170902c10600b001b8a00d4f7asm10565100pli.9.2023.08.01.07.26.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Aug 2023 07:26:36 -0700 (PDT)
+        Tue, 01 Aug 2023 07:26:42 -0700 (PDT)
 From:   Leon Hwang <hffilwlqm@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
@@ -61,15 +62,17 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
         tangyeechou@gmail.com, kernel-patches-bot@fb.com,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v5 0/2] bpf, xdp: Add tracepoint to xdp attaching failure
-Date:   Tue,  1 Aug 2023 22:26:19 +0800
-Message-ID: <20230801142621.7925-1-hffilwlqm@gmail.com>
+Subject: [PATCH bpf-next v5 1/2] bpf, xdp: Add tracepoint to xdp attaching failure
+Date:   Tue,  1 Aug 2023 22:26:20 +0800
+Message-ID: <20230801142621.7925-2-hffilwlqm@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230801142621.7925-1-hffilwlqm@gmail.com>
+References: <20230801142621.7925-1-hffilwlqm@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,30 +80,84 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series introduces a new tracepoint in bpf_xdp_link_attach(). By
-this tracepoint, error message will be captured when error happens in
-dev_xdp_attach(), e.g. invalid attaching flags.
+When error happens in dev_xdp_attach(), it should have a way to tell
+users the error message like the netlink approach.
 
-v4 -> v5:
-* Initialise the extack variable.
-* Fix code style issue of variable declaration lines.
+To avoid breaking uapi, adding a tracepoint in bpf_xdp_link_attach() is
+an appropriate way to notify users the error message.
 
-v3 -> v4:
-* Fix selftest-crashed issue.
+Hence, bpf libraries are able to retrieve the error message by this
+tracepoint, and then report the error message to users.
 
-Leon Hwang (2):
-  bpf, xdp: add tracepoint to xdp attaching failure
-  selftests/bpf: Add testcase for xdp attaching failure tracepoint
+Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
+---
+ include/trace/events/xdp.h | 17 +++++++++++++++++
+ net/core/dev.c             |  5 ++++-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
- include/trace/events/xdp.h                    | 17 +++++
- net/core/dev.c                                |  5 +-
- .../selftests/bpf/prog_tests/xdp_attach.c     | 65 +++++++++++++++++++
- .../bpf/progs/test_xdp_attach_fail.c          | 54 +++++++++++++++
- 4 files changed, 140 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_attach_fail.c
-
-
-base-commit: a33d978500acd8fb67efac9773ba0a8502c1ff06
+diff --git a/include/trace/events/xdp.h b/include/trace/events/xdp.h
+index c40fc97f94171..cd89f1d5ce7b8 100644
+--- a/include/trace/events/xdp.h
++++ b/include/trace/events/xdp.h
+@@ -404,6 +404,23 @@ TRACE_EVENT(mem_return_failed,
+ 	)
+ );
+ 
++TRACE_EVENT(bpf_xdp_link_attach_failed,
++
++	TP_PROTO(const char *msg),
++
++	TP_ARGS(msg),
++
++	TP_STRUCT__entry(
++		__string(msg, msg)
++	),
++
++	TP_fast_assign(
++		__assign_str(msg, msg);
++	),
++
++	TP_printk("errmsg=%s", __get_str(msg))
++);
++
+ #endif /* _TRACE_XDP_H */
+ 
+ #include <trace/define_trace.h>
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 8e7d0cb540cdb..002fec07de739 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -133,6 +133,7 @@
+ #include <trace/events/net.h>
+ #include <trace/events/skb.h>
+ #include <trace/events/qdisc.h>
++#include <trace/events/xdp.h>
+ #include <linux/inetdevice.h>
+ #include <linux/cpu_rmap.h>
+ #include <linux/static_key.h>
+@@ -9470,6 +9471,7 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ {
+ 	struct net *net = current->nsproxy->net_ns;
+ 	struct bpf_link_primer link_primer;
++	struct netlink_ext_ack extack = {};
+ 	struct bpf_xdp_link *link;
+ 	struct net_device *dev;
+ 	int err, fd;
+@@ -9497,12 +9499,13 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 		goto unlock;
+ 	}
+ 
+-	err = dev_xdp_attach_link(dev, NULL, link);
++	err = dev_xdp_attach_link(dev, &extack, link);
+ 	rtnl_unlock();
+ 
+ 	if (err) {
+ 		link->dev = NULL;
+ 		bpf_link_cleanup(&link_primer);
++		trace_bpf_xdp_link_attach_failed(extack._msg);
+ 		goto out_put_dev;
+ 	}
+ 
 -- 
 2.41.0
 
