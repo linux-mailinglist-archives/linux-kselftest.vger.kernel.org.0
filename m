@@ -2,50 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5753B76AF41
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 11:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3981276AFC2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Aug 2023 11:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233639AbjHAJqR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 05:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
+        id S233734AbjHAJuF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 05:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233631AbjHAJqD (ORCPT
+        with ESMTP id S233510AbjHAJtw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 05:46:03 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DA05243
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 02:44:31 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPv6:2a0c:5a83:9100:a000:2ba:2ec4:c400:5d53])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: rcn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 600536607187;
-        Tue,  1 Aug 2023 10:44:29 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1690883069;
-        bh=qughrfaA+YuFiONlh2NrtbbhsF03cea1dOObdrTdUPI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kY+yQlDpYvQgbSjGnHKhvD+SxLvypqOMuBT2RvkYI8EQ1x+jUcgYMhXWa6Yr8raFs
-         DzjUhy5T6/s7DHtdBUzElfRZpHC0pAoz8pMA6Ag8y44sZ7t9C5dTz09eM3p64yl3lg
-         Idk5K9KMkZM3wACEqRj18eIb7qvF1+O0o3q4beZufTOLtipO9xxFdTlvymTuWkbjQ/
-         lWLO/fqbSrI/7NNbsyf2c3ngRQZUzZbSaLlwDIStHzW7FR60knm2LPqKAa1oHKAriW
-         s0VGMfx2WaukJKI9sV9OTefb9mnxxDvzO5kKWycl4nyMqFQM1G1bSrvJVNwxpS3Af/
-         n4o1gPH0LzMrA==
-From:   =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-To:     keescook@chromium.org
-Cc:     kernel@collabora.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/lkdtm: Disable CONFIG_UBSAN_TRAP in test config
-Date:   Tue,  1 Aug 2023 11:43:29 +0200
-Message-Id: <20230801094329.1878928-1-ricardo.canuelo@collabora.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Aug 2023 05:49:52 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75575198B;
+        Tue,  1 Aug 2023 02:49:13 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RFVfK5Grdz1GDQd;
+        Tue,  1 Aug 2023 17:48:09 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 1 Aug
+ 2023 17:49:09 +0800
+From:   Ruan Jinjie <ruanjinjie@huawei.com>
+To:     <Ast@kernel.org>, <Daniel@iogearbox.net>, <Andrii@kernel.org>,
+        <Martin.lau@linux.dev>, <Song@kernel.org>,
+        <Yonghong.song@linux.dev>, <John.fastabend@gmail.com>,
+        <Kpsingh@kernel.org>, <Sdf@google.com>, <Haoluo@google.com>,
+        <Jolsa@kernel.org>, <Mykolal@fb.com>, <Shuah@kernel.org>,
+        <Benjamin.tissoires@redhat.com>, <Asavkov@redhat.com>,
+        <Memxor@gmail.com>, <Iii@linux.ibm.com>, <Colin.i.king@gmail.com>,
+        <Awkrail01@gmail.com>, <Rdunlap@infradead.org>,
+        <Joannelkoong@gmail.com>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH bpf-next v3] selftests/bpf: replace fall through comment by fallthrough pseudo-keyword
+Date:   Tue, 1 Aug 2023 17:48:33 +0800
+Message-ID: <20230801094833.4146816-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,56 +54,94 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The lkdtm selftest config fragment enables CONFIG_UBSAN_TRAP to make the
-ARRAY_BOUNDS test kill the calling process when an out-of-bound access
-is detected by UBSAN. However, after this [1] commit, UBSAN is triggered
-under many new scenarios that weren't detected before, such as in struct
-definitions with fixed-size trailing arrays used as flexible arrays. As
-a result, CONFIG_UBSAN_TRAP=y has become a very aggressive option to
-enable except for specific situations.
+Replace the existing /* fall through */ comments with the
+new pseudo-keyword macro fallthrough[1].
 
-`make kselftest-merge` applies CONFIG_UBSAN_TRAP=y to the kernel config
-for all selftests, which makes many of them fail because of system hangs
-during boot.
+[1] https://www.kernel.org/doc/html/v5.7/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
 
-This change removes the config option from the lkdtm kselftest and also
-the ARRAY_BOUNDS test to skip it rather than have it failing. If
-out-of-bound array accesses need to be checked, there's
-CONFIG_TEST_UBSAN for that.
-
-[1] commit 2d47c6956ab3 ("ubsan: Tighten UBSAN_BOUNDS on GCC")'
-
-Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
 ---
- tools/testing/selftests/lkdtm/config    | 1 -
- tools/testing/selftests/lkdtm/tests.txt | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+v3:
+- Update the subject prefix and fix the 'fallthrough' undeclared build error.
+---
+v2:
+- Update the subject and commit message.
+---
+ tools/testing/selftests/bpf/prog_tests/kfunc_call.c          | 4 ++--
+ tools/testing/selftests/bpf/progs/test_cls_redirect.c        | 2 +-
+ tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c | 2 +-
+ tools/testing/selftests/bpf/test_verifier.c                  | 3 ++-
+ 4 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
-index 5d52f64dfb43..7afe05e8c4d7 100644
---- a/tools/testing/selftests/lkdtm/config
-+++ b/tools/testing/selftests/lkdtm/config
-@@ -9,7 +9,6 @@ CONFIG_INIT_ON_FREE_DEFAULT_ON=y
- CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
- CONFIG_UBSAN=y
- CONFIG_UBSAN_BOUNDS=y
--CONFIG_UBSAN_TRAP=y
- CONFIG_STACKPROTECTOR_STRONG=y
- CONFIG_SLUB_DEBUG=y
- CONFIG_SLUB_DEBUG_ON=y
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index 607b8d7e3ea3..6a49f2abbda8 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -7,7 +7,7 @@ EXCEPTION
- #EXHAUST_STACK Corrupts memory on failure
- #CORRUPT_STACK Crashes entire system on success
- #CORRUPT_STACK_STRONG Crashes entire system on success
--ARRAY_BOUNDS
-+#ARRAY_BOUNDS Needs CONFIG_UBSAN_TRAP=y, might cause unrelated system hangs
- CORRUPT_LIST_ADD list_add corruption
- CORRUPT_LIST_DEL list_del corruption
- STACK_GUARD_PAGE_LEADING
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+index a543742cd7bd..0fd08172965a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+@@ -101,7 +101,7 @@ static void verify_success(struct kfunc_test_params *param)
+ 	case syscall_test:
+ 		topts.ctx_in = &args;
+ 		topts.ctx_size_in = sizeof(args);
+-		/* fallthrough */
++		fallthrough;
+ 	case syscall_null_ctx_test:
+ 		break;
+ 	case tc_test:
+@@ -167,7 +167,7 @@ static void verify_fail(struct kfunc_test_params *param)
+ 	case syscall_test:
+ 		topts.ctx_in = &args;
+ 		topts.ctx_size_in = sizeof(args);
+-		/* fallthrough */
++		fallthrough;
+ 	case syscall_null_ctx_test:
+ 		break;
+ 	case tc_test:
+diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+index 66b304982245..f97960759558 100644
+--- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
++++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+@@ -300,7 +300,7 @@ bool pkt_skip_ipv6_extension_headers(buf_t *pkt,
+ 		case IPPROTO_FRAGMENT:
+ 			*is_fragment = true;
+ 			/* NB: We don't check that hdrlen == 0 as per spec. */
+-			/* fallthrough; */
++			fallthrough;
+ 
+ 		case IPPROTO_HOPOPTS:
+ 		case IPPROTO_ROUTING:
+diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c b/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c
+index f41c81212ee9..54dbf307c692 100644
+--- a/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c
++++ b/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c
+@@ -204,7 +204,7 @@ static bool pkt_skip_ipv6_extension_headers(struct bpf_dynptr *dynptr, __u64 *of
+ 		case IPPROTO_FRAGMENT:
+ 			*is_fragment = true;
+ 			/* NB: We don't check that hdrlen == 0 as per spec. */
+-			/* fallthrough; */
++			fallthrough;
+ 
+ 		case IPPROTO_HOPOPTS:
+ 		case IPPROTO_ROUTING:
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 31f1c935cd07..8f2e3852c207 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -28,6 +28,7 @@
+ #include <linux/bpf.h>
+ #include <linux/if_ether.h>
+ #include <linux/btf.h>
++#include <linux/compiler.h>
+ 
+ #include <bpf/btf.h>
+ #include <bpf/bpf.h>
+@@ -1289,7 +1290,7 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
+ 				printf("Did not run the program (no permission) ");
+ 				return 0;
+ 			}
+-			/* fallthrough; */
++			fallthrough;
+ 		default:
+ 			printf("FAIL: Unexpected bpf_prog_test_run error (%s) ",
+ 				strerror(saved_errno));
 -- 
-2.25.1
+2.34.1
 
