@@ -2,62 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900F576C294
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 04:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C05FB76C297
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 04:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjHBCBU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 22:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
+        id S230352AbjHBCCY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 22:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjHBCBT (ORCPT
+        with ESMTP id S229669AbjHBCCW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 22:01:19 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85861E53;
-        Tue,  1 Aug 2023 19:01:18 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fe389d6f19so4308404e87.3;
-        Tue, 01 Aug 2023 19:01:18 -0700 (PDT)
+        Tue, 1 Aug 2023 22:02:22 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B201E67;
+        Tue,  1 Aug 2023 19:02:21 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b9bd59d465so97404251fa.3;
+        Tue, 01 Aug 2023 19:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690941676; x=1691546476;
+        d=gmail.com; s=20221208; t=1690941739; x=1691546539;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kfJe9BpFl8b7JDGf91rp83jhgS2ZS1vO2M4ah8lJAhM=;
-        b=h3VdRHTBZt3cAaKjjOGTTnH7QUnbMtm6Pfq3stfPGTm4mGpcTwULiRKf3CaYovDR20
-         8BFdQiehASCHuPW0FD8aYP7gdkn0vMPjanuhskZDiKWWWq6EW0I4yFlEJXP0AdsttVU+
-         sUkCi6wjzSV6FSARA9S45ckqy0Co2jFZs4AQGD9eyYwYlwN6AUpwfQpuHjGYbch1gesZ
-         lMrRztTovO3MgPL1ioeEYBTRgp7uVk72WX0WEz99HSmBUE9P6ecI20k8Zu/T+R2D/u44
-         1zu6DFOuvA+Uj8GnL6IoZvBklZun6O4VnzRr4+dQTWBTyF+m9jXmQvIGH+Ij769R4eBX
-         BUIA==
+        bh=7BRNQZESjyk6IP99SQFSrutDbZmWlCuaWV8SfC7y5xc=;
+        b=RescUJyA4czz2u48U2yw6OwDEJhPPMZ5LPu/vHcqMP2ujZH2KrD93KlDeAzenoKEQV
+         2lTjLCYkYzvWRowhIE4IlB27gLUJ5UUVgAIvqpAHZd5ynlMs5CQQNG35qkhmHDebxT5P
+         V8VUysW079YKkGkz9/ivxoDvOQ3i6EF+X85hYKxDmt+nd82A53KN/Zy0KRXZ6TbAzjLG
+         d4q8oaVncLzZ2GGhw0fxstmxv0oLqDlSev+NubvETyLS5f1YFDLLwz2IlM+SxtqKxVJR
+         7Cit8m8XPAVblxn5NVRaai4sCh67qSxbEAb4KrlypAJRTqAK3uE5obDASpc8aalSo3+G
+         AjeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690941676; x=1691546476;
+        d=1e100.net; s=20221208; t=1690941739; x=1691546539;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kfJe9BpFl8b7JDGf91rp83jhgS2ZS1vO2M4ah8lJAhM=;
-        b=Nrx6aBEG0utbIIgjzZJAwCOqZc8AFNBQYmthi71ughaDkazNVgwgyxaf8OXs1coUmu
-         cdfnxtUsKWT7k/P7K+Yv9wOwgYFcOpwf1BbRMSjs7Qjyd1g0S1OvWbaeCvq++H5ZVmna
-         J1U8KxUCuQ8vtzOR6vopx6efykY83c/OUawZhJKKdmackJdQHlxw1nnn/8nsFWYYsIHl
-         9hxfDTkL+1M6QbNU1TEng0Co1qEXh5fJ60e5fdqEW+bsXOWJE4aCWfzsdc0zvWbzK6rt
-         01MN+zw3UUsA+k9UvUgTpiAV757/R44QrO3nKxectSr+cssxncqyzrayKNipHU/R7xJf
-         qMvg==
-X-Gm-Message-State: ABy/qLY4VkV4tnVa3kLYfnV5Yx7xkvJL4kTdzPHgB81KNsvh3FgT/Kn6
-        jh0usv0SIAULPWcqoJY8BJTz9HURcvPbI2LxnzM=
-X-Google-Smtp-Source: APBJJlFSc5EC10ZCdUzxQha4Ci3cTcn+L8pZloh77cez7PrKQIQzj4fBTNpduGray2L9IMoboiVn+AIBhCwewb9HLIM=
-X-Received: by 2002:a2e:b001:0:b0:2b6:c2e4:a57a with SMTP id
- y1-20020a2eb001000000b002b6c2e4a57amr4186390ljk.38.1690941676288; Tue, 01 Aug
- 2023 19:01:16 -0700 (PDT)
+        bh=7BRNQZESjyk6IP99SQFSrutDbZmWlCuaWV8SfC7y5xc=;
+        b=DkO5SfgcRFSN2VqxeaMLJXfHKvp31mW314oRru5r14qaFCbdT2Ei/DEzC3CCk53ErJ
+         AxACtLj2EXAJCs14cFtAqGnNlQ7XGhZbHXR9ea2DUkcwi6D8QNqPDzVgb0ud3Wr+qNEz
+         eedlqRPETBl+pMOK3p+K6jhvrSm/RzzfboACJiY2Q6zyGqhlA4V4KbVBO/PSkycz+Jpc
+         d89UvaZS58EkcI3q7abFXo9VnDe75v9fYQZpZf0WE1XR9CcjJObfdRjppj1Y/FYQw7bL
+         XvRtkndxZur9tPr3lS/7Svib+yB+yP0Fu9yKufDqIe/RwctecRZTQVeLuCMAxQiTdmdk
+         0GYg==
+X-Gm-Message-State: ABy/qLbTA33O42rBjnP/9AEp/06hsAnu1PqvgIRQyC8XeQb2MsH5SphO
+        MKgrTcT7yVwhlDssl5eFsc1Yl3HM9yRMpLDBolk=
+X-Google-Smtp-Source: APBJJlHWMN+tdmvCgw7W5gmCWTgI3jD9ANjOYsnpgN9t/xJYLucTLaKx+Y5GKFzrL3a8R5KltoFMpV8MP4RICRmEGes=
+X-Received: by 2002:a2e:9942:0:b0:2b9:cb2a:11bf with SMTP id
+ r2-20020a2e9942000000b002b9cb2a11bfmr3820055ljj.49.1690941739021; Tue, 01 Aug
+ 2023 19:02:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1690364259.git.haibo1.xu@intel.com> <ZMKI8RknjjZBOaxf@google.com>
- <CAJve8o=GZnLLedT7TvCLvgd5Z3ZxJNfM6gG03Eyc+7krtMY--g@mail.gmail.com> <20230728-5b0f530eba70ad08e8f4a67d@orel>
-In-Reply-To: <20230728-5b0f530eba70ad08e8f4a67d@orel>
+References: <cover.1690364259.git.haibo1.xu@intel.com> <36b5837e9e94465dd2b7d7a17bb84dea082f2ffa.1690364259.git.haibo1.xu@intel.com>
+ <20230728-42019a78766a59dc5abdd412@orel>
+In-Reply-To: <20230728-42019a78766a59dc5abdd412@orel>
 From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Wed, 2 Aug 2023 10:01:05 +0800
-Message-ID: <CAJve8onvmDtD_GsbkUChzf6Sbt37FpfNvWEd+rJr7F1NxfjnCg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] RISCV: Add kvm Sstc timer selftest
+Date:   Wed, 2 Aug 2023 10:02:07 +0800
+Message-ID: <CAJve8omPWM7JR+Bqtemw0XjP8Q-C5zNbAzWxB_HMFcWKoSFuog@mail.gmail.com>
+Subject: Re: [PATCH 3/4] KVM: riscv: selftests: Add guest helper to get vcpu id
 To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Haibo Xu <haibo1.xu@intel.com>,
+Cc:     Haibo Xu <haibo1.xu@intel.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
@@ -65,10 +64,11 @@ Cc:     Sean Christopherson <seanjc@google.com>,
         Shuah Khan <shuah@kernel.org>,
         Anup Patel <anup@brainfault.org>,
         Atish Patra <atishp@atishpatra.org>,
-        Vipin Sharma <vipinsh@google.com>,
+        Sean Christopherson <seanjc@google.com>,
         Colton Lewis <coltonlewis@google.com>,
-        Marc Zyngier <maz@kernel.org>,
         Andrew Jones <andrew.jones@linux.dev>,
+        Vipin Sharma <vipinsh@google.com>,
+        Marc Zyngier <maz@kernel.org>,
         Vishal Annapurve <vannapurve@google.com>,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -85,49 +85,83 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 5:57=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+On Fri, Jul 28, 2023 at 5:49=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
 om> wrote:
 >
-> On Fri, Jul 28, 2023 at 09:37:36AM +0800, Haibo Xu wrote:
-> > On Thu, Jul 27, 2023 at 11:14=E2=80=AFPM Sean Christopherson <seanjc@go=
-ogle.com> wrote:
-> > >
-> > > On Thu, Jul 27, 2023, Haibo Xu wrote:
-> > > > The sstc_timer selftest is used to validate Sstc timer functionalit=
-y
-> > > > in a guest, which sets up periodic timer interrupts and check the
-> > > > basic interrupt status upon its receipt.
-> > > >
-> > > > This KVM selftest was ported from aarch64 arch_timer and tested
-> > > > with Linux v6.5-rc3 on a Qemu riscv64 virt machine.
-> > >
-> > > Would it be possible to extract the ARM bits from arch_timer and make=
- the bulk of
-> > > the test common to ARM and RISC-V?  At a glance, there is quite a bit=
- of copy+paste.
+> On Thu, Jul 27, 2023 at 03:20:07PM +0800, Haibo Xu wrote:
+> > Add guest_get_vcpuid() helper to simplify accessing to per-cpu
+> > private data. The sscratch CSR was used to store the vcpu id.
 > >
-> > Sure, I will have a try to consolidate the common code for ARM and RISC=
--V in v2.
+> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+> > ---
+> >  tools/testing/selftests/kvm/include/riscv/processor.h | 2 ++
+> >  tools/testing/selftests/kvm/lib/riscv/processor.c     | 8 ++++++++
+> >  2 files changed, 10 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/to=
+ols/testing/selftests/kvm/include/riscv/processor.h
+> > index 9ea6e7bedc61..ca53570ce6de 100644
+> > --- a/tools/testing/selftests/kvm/include/riscv/processor.h
+> > +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
+> > @@ -165,4 +165,6 @@ struct sbiret sbi_ecall(int ext, int fid, unsigned =
+long arg0,
+> >                       unsigned long arg3, unsigned long arg4,
+> >                       unsigned long arg5);
+> >
+> > +uint32_t guest_get_vcpuid(void);
+>
+> I'd also put this prototype somewhere common.
+>
+> > +
+> >  #endif /* SELFTEST_KVM_PROCESSOR_H */
+> > diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/=
+testing/selftests/kvm/lib/riscv/processor.c
+> > index f1b0be58a5dc..b8ad3e69a697 100644
+> > --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> > @@ -316,6 +316,9 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm=
+, uint32_t vcpu_id,
+> >       vcpu_set_reg(vcpu, RISCV_CORE_REG(regs.sp), stack_vaddr + stack_s=
+ize);
+> >       vcpu_set_reg(vcpu, RISCV_CORE_REG(regs.pc), (unsigned long)guest_=
+code);
+> >
+> > +     /* Setup scratch regiter of guest */
+>
+> typo: register
+>
+> The comment above is pretty useless since it just states what the code
+> states, but with even less information, since it doesn't state how the
+> sscratch register is getting set up. I'd either drop it or write it
+> as
+>
+>  /* Setup sscratch for guest_get_vcpuid() */
+>
+> > +     vcpu_set_reg(vcpu, RISCV_CSR_REG(sscratch), vcpu_id);
+> > +
+> >       /* Setup default exception vector of guest */
+> >       vcpu_set_reg(vcpu, RISCV_CSR_REG(stvec), (unsigned long)guest_une=
+xp_trap);
+> >
+> > @@ -424,3 +427,8 @@ void vm_install_interrupt_handler(struct kvm_vm *vm=
+, void (*handler)(struct ex_r
+> >
+> >       handlers->exception_handlers[1][0] =3D handler;
+> >  }
+> > +
+> > +uint32_t guest_get_vcpuid(void)
+> > +{
+> > +     return csr_read(CSR_SSCRATCH);
+> > +}
+> > --
+> > 2.34.1
 > >
 >
-> Yes, afaict, we should be able to make aarch64/arch_timer.c another "spli=
-t
-> test", like we did for aarch64/get-reg-list.c, but before we do that, I'd
-> like to get an ack from the Arm maintainers on the get-reg-list split to
-> be sure that approach is acceptable.
->
 
-Yes, we can re-use the split method.
+Sure! will fix them in v2.
 
-Since there is less configuration data that should be handled, I think
-it may be
-easier for the timer test  to consolidate the code, since most of the
-operations
-can be overloaded for different ARCH.
-
-I'll have a try and send the v2 soon!
-
-Thanks!
+Thanks,
+Haibo
 
 > Thanks,
 > drew
