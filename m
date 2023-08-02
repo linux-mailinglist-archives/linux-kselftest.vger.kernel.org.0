@@ -2,66 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EEE576D939
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 23:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E82E76D942
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 23:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbjHBVKc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Aug 2023 17:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S230242AbjHBVME (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Aug 2023 17:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231745AbjHBVKZ (ORCPT
+        with ESMTP id S231439AbjHBVME (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Aug 2023 17:10:25 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E142D71;
-        Wed,  2 Aug 2023 14:10:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1691010618;
-        bh=oTA4sFk3bKb9W5XPFGUOTn9eAXi1JwBusDe7257XUyQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wj9uG0lcZEAduLgS4VVAhiEEUXvYq8JnbrQmhFzk8hUsybD8jYbNscZGIq1trymsP
-         VIFyO0khGmAs8pm9GAqg+fhZPOKKoI+hl8J1dWmE2RUoVJF9k7etO+/P6QQGa+Ap9W
-         9CfoFGRNo1DMShG/BmO4fs88djlVGXRJKW6ZwFc8=
-Date:   Wed, 2 Aug 2023 23:10:17 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuan Tan <tanyuan@tinylab.org>,
-        Zhangjin Wu <falcon@tinylab.org>
-Subject: Re: [PATCH v2 00/10] tools/nolibc: enable compiler warnings
-Message-ID: <40bfb455-80c4-4ab1-b36e-ba5cbd723198@t-8ch.de>
-References: <20230801-nolibc-warnings-v2-0-1ba5ca57bd9b@weissschuh.net>
- <20230802202243.GA23256@1wt.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230802202243.GA23256@1wt.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 2 Aug 2023 17:12:04 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1662E2726
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 14:12:03 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d3ae4f43dceso236410276.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Aug 2023 14:12:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691010722; x=1691615522;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c0p0yEIzRim0dAJzv4cvo4xUxAql8N+5yPd28VmvQmM=;
+        b=tA6hk6rt/sZ0gzS/QtHZmiDhiz/ozOMiZBbFHARXWovhe8S6odoIIL0oEBFsPnN+D3
+         0RRiFn+MpP1A2sjDbE5oFaSpZkTh5mNOJi+Gi2Ok5dAj4H1L/zCyOlPZE+KEy+0L/G37
+         YQhyqBPmUK2Gb//rBWUl1zPBgVGonoYS4ZtMK3jz/Es32zck6NsYH7iGTkd2d14k9zHi
+         xHsAnQE2/liZXfqrQmilvfZL/UqfBKA5QS6xhSz0pEhZJMGUACzwDOWlhlpU5ip8ef0T
+         F+s37InE/MwwI7JLCausTqlMtLD1eb9oKcRVNvTV4pojV1upGgPWNWMjRp+CeGY79e1L
+         FoLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691010722; x=1691615522;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c0p0yEIzRim0dAJzv4cvo4xUxAql8N+5yPd28VmvQmM=;
+        b=b6f5xlAPR7lmwHepdWUO2MrfyDqtVoG6aqFsH2kkmvzokqQjUDvvaQCY76Mhav3Rih
+         HQE7mr1OS15lgPi2VckuYuzS94+hBYfuk0aw1IjnlHC8yZdf6wmJqzufCmw+v16AKeFx
+         RGGmvSEXtj+UHBV++iIwLRhbWDmnbnfknd0LUVvi27Bcoy46I2fZJ23T+JSS8HVEsopc
+         vp7ZU35RWIfzvvZoGQIKKT9NzsU0KNoOtm5n5kpT1mSGiR4fN2cubFPRayft6HN7+v1u
+         sjKiMdHyt8Hvdugy7oaAy5dxOVfxZPWr/GoQiX4/YCD8avx+iiEF9FzGCsCaMQ1LCk4g
+         GrEA==
+X-Gm-Message-State: ABy/qLbmOkPSYrU7/5pSyuLSWoJzdlvHpD9xT2uxbtJob8mISPovoEol
+        r4GAc5zhIWDHOZCSKurRAhaucYCKJrw=
+X-Google-Smtp-Source: APBJJlE0UpAj8QPCOauNfmd67hYtykGLEOcvpIdTxaQ9xHW06ICLpBWZ8ZXToBUrb2/1EN5U53ZOEU2H/qA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:7341:0:b0:d0b:ca14:33fd with SMTP id
+ o62-20020a257341000000b00d0bca1433fdmr118184ybc.8.1691010722283; Wed, 02 Aug
+ 2023 14:12:02 -0700 (PDT)
+Date:   Wed,  2 Aug 2023 14:11:49 -0700
+In-Reply-To: <20230731022405.854884-1-maobibo@loongson.cn>
+Mime-Version: 1.0
+References: <20230731022405.854884-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.41.0.585.gd2178a4bd4-goog
+Message-ID: <169100955679.1738452.11040795142369096451.b4-ty@google.com>
+Subject: Re: [PATCH] KVM: selftests: use unified time type for comparison
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Bibo Mao <maobibo@loongson.cn>
+Cc:     Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-08-02 22:22:43+0200, Willy Tarreau wrote:
-> Hi Thomas,
+On Mon, 31 Jul 2023 10:24:05 +0800, Bibo Mao wrote:
+> With test case kvm_page_table_test, start time is acquired with
+> time type CLOCK_MONOTONIC_RAW, however end time in function timespec_elapsed
+> is acquired with time type CLOCK_MONOTONIC. This will cause
+> inaccurate elapsed time calculation on some platform such as LoongArch.
 > 
-> On Tue, Aug 01, 2023 at 07:30:07AM +0200, Thomas Weißschuh wrote:
-> > To help the developers to avoid mistakes and keep the code smaller let's
-> > enable compiler warnings.
-> (...)
+> This patch modified test case kvm_page_table_test, and uses unified
+> time type CLOCK_MONOTONIC for start time.
 > 
-> OK, that's overall OK to me, and I noted thta you'll likely update
-> 6 and 9. Just let me know how you prefer to proceed, I hope to send
-> the PR to Shuah this week-end so I want to be sure we avoid a last
-> minute rush and the risks of breakage that comes with it.
+> [...]
 
-I'm not yet sure when I can rework those patches.
-Could you already pick up those you are fine with?
-(And also leave out the final one to not have spurious warnings)
+Applied to kvm-x86 selftests, thanks!
 
-Thomas
+[1/1] KVM: selftests: use unified time type for comparison
+      https://github.com/kvm-x86/linux/commit/b859b018aadf
+
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
