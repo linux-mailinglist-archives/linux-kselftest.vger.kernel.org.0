@@ -2,70 +2,29 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7FF76D1FD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 17:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489C776D21A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 17:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234440AbjHBPcP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Aug 2023 11:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
+        id S235247AbjHBPfN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Aug 2023 11:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234926AbjHBPb5 (ORCPT
+        with ESMTP id S235297AbjHBPe7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Aug 2023 11:31:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A6C44B6
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 08:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690990201;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zpl8aOOTIJ9mlaQuYNUfJFxKv/U9O46R/LTmVpfLtOc=;
-        b=Tszg2KFjFWc6p2eCoQprY1kaXZ/lBQ4PR9IZivXTXA60Z0TGeLYsgvEaExBxC8aCY7JtMy
-        hDZsGVIee7yCXFDsjbWD/AzxM8FkH8/ERU06Iosh/BK4UUxwQRWIC8OGNRzwrUpfWZqXD+
-        E/KqGpfcdLrvVpGoz0Xv+2T/WZYItfw=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-250-WGCsw4HXOiqTDnCedfgbmQ-1; Wed, 02 Aug 2023 11:30:00 -0400
-X-MC-Unique: WGCsw4HXOiqTDnCedfgbmQ-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-315af0252c2so4253181f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Aug 2023 08:30:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690990199; x=1691594999;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Zpl8aOOTIJ9mlaQuYNUfJFxKv/U9O46R/LTmVpfLtOc=;
-        b=QJVjERaVnLWakTPgYmpB+3Q1S7yYMAUOt0ksBkkk1BQuK3f253DFjHmDnqQ6oRQaLa
-         Z9gR9bnjyARFX0OZH+uJegG/paGIxYM8GE14QVNKLI+C9P0n3s2x760NujY6mMa07PQP
-         B60HLYEh+qZuZ8xBIrnGOWnfhHEVxYCP0qfHIreY4GcfHvuOfSIJ0dKOdeOYuSmnDd6j
-         kVNGAnCkaBcAbCluMJ55yspkz3+x83pARzUKwcIpk6yb94jBfVJlCgRcrlAdfXYiSmeS
-         yX2uyO9acYNW1SGitpzF8p9SEj8Ldn+mFOxdzIjQpJ4S9+z6JIlGKmEdBgZDgO9+ej3a
-         InGw==
-X-Gm-Message-State: ABy/qLZmvGCv39HgY2UFXpy84JNz3QIuhImAJ29oHqO5ODReVEPlIcrz
-        NavJe4syqzuyVp+T7fNziH6FMsEwINsppurmFkmaypQb8bX4eWva397pifPMxN5V08KvanvB4Vv
-        UnoYOMvcarS1rDsaeXXw+a4N2wAxO5sDPECOc
-X-Received: by 2002:adf:e68b:0:b0:314:824:3788 with SMTP id r11-20020adfe68b000000b0031408243788mr5186029wrm.27.1690990198975;
-        Wed, 02 Aug 2023 08:29:58 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGPZ/gSkVfcDR0DyBgF0AO8vuUoscywmniaGjeRDFdrJLQLEfW8GrNw+nUwMNbFo2XQBknSkA==
-X-Received: by 2002:adf:e68b:0:b0:314:824:3788 with SMTP id r11-20020adfe68b000000b0031408243788mr5186009wrm.27.1690990198551;
-        Wed, 02 Aug 2023 08:29:58 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70b:e00:b8a4:8613:1529:1caf? (p200300cbc70b0e00b8a4861315291caf.dip0.t-ipconnect.de. [2003:cb:c70b:e00:b8a4:8613:1529:1caf])
-        by smtp.gmail.com with ESMTPSA id o20-20020a5d58d4000000b0031762e89f94sm19173032wrf.117.2023.08.02.08.29.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Aug 2023 08:29:58 -0700 (PDT)
-Message-ID: <cc408a90-9044-54cd-04a5-5977ffe8b24b@redhat.com>
-Date:   Wed, 2 Aug 2023 17:29:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 3/8] kvm: explicitly set FOLL_HONOR_NUMA_FAULT in
- hva_to_pfn_slow()
-Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>
+        Wed, 2 Aug 2023 11:34:59 -0400
+X-Greylist: delayed 342 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Aug 2023 08:34:33 PDT
+Received: from outbound-smtp01.blacknight.com (outbound-smtp01.blacknight.com [81.17.249.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBBE3C23
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 08:34:33 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp01.blacknight.com (Postfix) with ESMTPS id 3D966C4AB9
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 16:34:24 +0100 (IST)
+Received: (qmail 29631 invoked from network); 2 Aug 2023 15:34:24 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.20.191])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Aug 2023 15:34:23 -0000
+Date:   Wed, 2 Aug 2023 16:34:21 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     David Hildenbrand <david@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
@@ -78,66 +37,39 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         John Hubbard <jhubbard@nvidia.com>,
         Mel Gorman <mgorman@suse.de>, Shuah Khan <shuah@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v2 6/8] mm/huge_memory: remove stale NUMA hinting comment
+ from follow_trans_huge_pmd()
+Message-ID: <20230802153421.x5455znvogns5dfv@techsingularity.net>
 References: <20230801124844.278698-1-david@redhat.com>
- <20230801124844.278698-4-david@redhat.com>
- <20230802152702.wamtroy3zm7nbtvs@techsingularity.net>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230802152702.wamtroy3zm7nbtvs@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <20230801124844.278698-7-david@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20230801124844.278698-7-david@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 02.08.23 17:27, Mel Gorman wrote:
-> On Tue, Aug 01, 2023 at 02:48:39PM +0200, David Hildenbrand wrote:
->> KVM is *the* case we know that really wants to honor NUMA hinting falls.
->> As we want to stop setting FOLL_HONOR_NUMA_FAULT implicitly, set
->> FOLL_HONOR_NUMA_FAULT whenever we might obtain pages on behalf of a VCPU
->> to map them into a secondary MMU, and add a comment why.
->>
->> Do that unconditionally in hva_to_pfn_slow() when calling
->> get_user_pages_unlocked().
->>
->> kvmppc_book3s_instantiate_page(), hva_to_pfn_fast() and
->> gfn_to_page_many_atomic() are similarly used to map pages into a
->> secondary MMU. However, FOLL_WRITE and get_user_page_fast_only() always
->> implicitly honor NUMA hinting faults -- as documented for
->> FOLL_HONOR_NUMA_FAULT -- so we can limit this change to a single location
->> for now.
->>
->> Don't set it in check_user_page_hwpoison(), where we really only want to
->> check if the mapped page is HW-poisoned.
->>
->> We won't set it for other KVM users of get_user_pages()/pin_user_pages()
->> * arch/powerpc/kvm/book3s_64_mmu_hv.c: not used to map pages into a
->>    secondary MMU.
->> * arch/powerpc/kvm/e500_mmu.c: only used on shared TLB pages with userspace
->> * arch/s390/kvm/*: s390x only supports a single NUMA node either way
->> * arch/x86/kvm/svm/sev.c: not used to map pages into a secondary MMU.
->>
->> This is a preparation for making FOLL_HONOR_NUMA_FAULT no longer
->> implicitly be set by get_user_pages() and friends.
->>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
+On Tue, Aug 01, 2023 at 02:48:42PM +0200, David Hildenbrand wrote:
+> That comment for pmd_protnone() was added in commit 2b4847e73004
+> ("mm: numa: serialise parallel get_user_page against THP migration"), which
+> noted:
 > 
-> Seems sane but I don't know KVM well enough to know if this is the only
-> relevant case so didn't ack.
+> 	THP does not unmap pages due to a lack of support for migration
+> 	entries at a PMD level.  This allows races with get_user_pages
+> 
+> Nowadays, we do have PMD migration entries, so the comment no longer
+> applies. Let's drop it.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Makes sense, some careful eyes from KVM people would be appreciated.
-
-At least from kvm_main.c POV, I'm pretty confident that that's it.
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
 
 -- 
-Cheers,
-
-David / dhildenb
-
+Mel Gorman
+SUSE Labs
