@@ -2,83 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1140A76C048
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 00:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A325376C17A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 02:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbjHAWSu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 18:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
+        id S231225AbjHBA0r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 20:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbjHAWSt (ORCPT
+        with ESMTP id S230159AbjHBA0q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 18:18:49 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DEDE57
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 15:18:48 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5222bc916acso8028101a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Aug 2023 15:18:48 -0700 (PDT)
+        Tue, 1 Aug 2023 20:26:46 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8262113
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 17:26:45 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-686f94328a4so261606b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Aug 2023 17:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1690928327; x=1691533127;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qPseTy7IzinUQZpPzP36aZrRMGJ435Us12Gys3Nc6zk=;
-        b=oWRJ4PZkbCJ2ey++KZdiAfsp6lEM0ajwDZWvbZ2+wZ4pZdXAocuW8kuVFjO3dnKtnf
-         8lzUDjsfEiq9ZGq+SNVu1I1PVaPvDvJ+ZeGXNk6rd9FVxoAV+2Y1PfIgtto1waRbirIz
-         66lQccpXqqqoVxMDXlAsWc7hkQOt7OkpsWcx4=
+        d=chromium.org; s=google; t=1690936005; x=1691540805;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ncHraoviZc3rMsglYeHEXiGJaPKUwsQ2j0eLs4ZTVeE=;
+        b=R3UYo3wpgXgWXbhhdS+7cytaSoCT/qI6YRh811BRTzij/CB7G4G5cE+yeihxnWegTs
+         vEhb34Ps7flQIOfysvRWZdZKjyqierWxL/QzK3jHbPYP1cOG/fdreanLhDcRJ5ELygMG
+         H0rhTvQmNngRG2+qASYMWxFkHA6VtBqrbVH64=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690928327; x=1691533127;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qPseTy7IzinUQZpPzP36aZrRMGJ435Us12Gys3Nc6zk=;
-        b=SohzTq5KmNTdyQpX3EgNdcThwrjq2rZoyx2j0REoe9MLnjOIAuZR3WfTLgO1ijWrsz
-         eZ0TKDCvEvjeQjBEle534j3QNVopW3gtACuIU3Vd/qChbV0G8PQAl28EOLteCMvze20h
-         KAfJaTkGT4lRGkebHZBOyiRA+XlUhFXZwQZdEBJwmbVF+uXvloYp8J3CtZ5B8rVX+o3y
-         7v5P8MFUJGHiy1vHbVFCQL5IachkYhD5qm56ZRI7qUqYrfyjxr2xshwWQnfDvUlOGqJz
-         wOjSQHrcb4YxxLMYFznQvhKUF5Ui1NwadTBfZRgdoamTCksmIRPbuRMAnQlaERKP4JIS
-         Mf+A==
-X-Gm-Message-State: ABy/qLZ/kdV4qxEZ/OFgzfx/IQALIdB1Osg4p5RMdGVUM6bCvvcJhvyD
-        5a6YZd7L4253Ra+GmO5DkAnQHa9KY+DSBSBY+bUcww==
-X-Google-Smtp-Source: APBJJlF6hKrUdco2WhtqBq/dd/fptQdjNbrXp5Xp8ffyLBxvo4Hhe4gPknw50y7nZFOKqOmpsbN//GRQckBdVERYlwc=
-X-Received: by 2002:a05:6402:125a:b0:51d:e30b:f33a with SMTP id
- l26-20020a056402125a00b0051de30bf33amr3473017edw.34.1690928327002; Tue, 01
- Aug 2023 15:18:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690936005; x=1691540805;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ncHraoviZc3rMsglYeHEXiGJaPKUwsQ2j0eLs4ZTVeE=;
+        b=fgvZek02WfuiBHFDrL0sWrTtISWoOzIZENQokDcNhf9HXo4P9qPmudpSC/rrRyGWkR
+         b0TVtQyPn3tUFeB8yKXf7sOJdOLEpzj4JG+VI5JjwkIyaU1+UHSSMrMSJbgdzlcs8W6o
+         P1SfWIU8LtpeuSzHA2aq9mLbL1nPf/K1otDkKN1YvXRw/tmp5NRMKmWG1gGvSSF9jzDG
+         hgdJHraWYdk2sqMCLeZiJmdlfbYcyIzGYs83rFwXRU1W/nH2+T6+EzWhDwHqBZTPKwTO
+         WKt//xteekoGRP8tn2E9O0SVPuexgrJFqnE7g1Ie3vtohURxG7h9VpY07/srPCjAU3Jj
+         lYWA==
+X-Gm-Message-State: ABy/qLa6xqDd3KYHpCrIFRyvJeYL4oiXU/VrTp4BzxDypJXPGoewm+cV
+        5deygHgS8cGFczyq8kEeLfCojg==
+X-Google-Smtp-Source: APBJJlF32qL/mI7cDAGBT/q8Fvj9Jh1MeZmPhhge7nH1COqcQqKkfK0BDXFwQZbWHLXguXTHHPQcCw==
+X-Received: by 2002:a05:6a20:3d8a:b0:132:ce08:1e28 with SMTP id s10-20020a056a203d8a00b00132ce081e28mr20906787pzi.22.1690936005376;
+        Tue, 01 Aug 2023 17:26:45 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id c21-20020aa78e15000000b0063b898b3502sm9840848pfr.153.2023.08.01.17.26.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Aug 2023 17:26:44 -0700 (PDT)
+Date:   Tue, 1 Aug 2023 17:26:44 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Ricardo =?iso-8859-1?Q?Ca=F1uelo?= <ricardo.canuelo@collabora.com>
+Cc:     kernel@collabora.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/lkdtm: Disable CONFIG_UBSAN_TRAP in test config
+Message-ID: <202308011724.C76E2B90@keescook>
+References: <20230801094329.1878928-1-ricardo.canuelo@collabora.com>
 MIME-Version: 1.0
-References: <cover.1690332693.git.yan@cloudflare.com> <e5d05e56bf41de82f10d33229b8a8f6b49290e98.1690332693.git.yan@cloudflare.com>
- <a76b300a-e472-4568-b734-37115927621d@moroto.mountain> <ZMEqYOOBc1ZNcEER@debian.debian>
- <bc3ec02d-4d4e-477a-b8a5-5245425326c6@kadam.mountain> <ZMFFbChK/66/8XZd@debian.debian>
- <8b681fe1-4cc6-4310-9f50-1cff868f8f7f@kadam.mountain> <38c61917-98b5-4ca0-b04e-64f956ace6e4@kadam.mountain>
-In-Reply-To: <38c61917-98b5-4ca0-b04e-64f956ace6e4@kadam.mountain>
-From:   Yan Zhai <yan@cloudflare.com>
-Date:   Tue, 1 Aug 2023 17:18:36 -0500
-Message-ID: <CAO3-Pbpx8vmC_-o59s61mU=TzYLb+VpZ2qk+QhTMjVM6jf=71g@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf 1/2] bpf: fix skb_do_redirect return values
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com,
-        Jordan Griege <jgriege@cloudflare.com>,
-        Markus Elfring <Markus.Elfring@web.de>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230801094329.1878928-1-ricardo.canuelo@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,36 +70,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 9:26=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro=
-.org> wrote:
->
-> I'm not a networking person, but I was looking at some use after free
-> static checker warnings.
+On Tue, Aug 01, 2023 at 11:43:29AM +0200, Ricardo Cañuelo wrote:
+> The lkdtm selftest config fragment enables CONFIG_UBSAN_TRAP to make the
+> ARRAY_BOUNDS test kill the calling process when an out-of-bound access
+> is detected by UBSAN. However, after this [1] commit, UBSAN is triggered
+> under many new scenarios that weren't detected before, such as in struct
+> definitions with fixed-size trailing arrays used as flexible arrays. As
+> a result, CONFIG_UBSAN_TRAP=y has become a very aggressive option to
+> enable except for specific situations.
 
-Did you refer to the gist I posted or something new?
+Yeah, that's fair. We need to actually get these issues reported and
+TRAP doesn't help with that.
 
->
-> Apparently the rule with xmit functions is that if they return a value
-> > 15 then that means the skb was not freed.  Otherwise it's supposed to
-> be freed.  So like NETDEV_TX_BUSY is 0x10 so it's not freed.
->
-> This is checked with using the dev_xmit_complete() function.  So I feel
-> like it would make sense for LWTUNNEL_XMIT_CONTINUE to return higher
-> than 15.
+> 
+> `make kselftest-merge` applies CONFIG_UBSAN_TRAP=y to the kernel config
+> for all selftests, which makes many of them fail because of system hangs
+> during boot.
+> 
+> This change removes the config option from the lkdtm kselftest and also
+> the ARRAY_BOUNDS test to skip it rather than have it failing. If
+> out-of-bound array accesses need to be checked, there's
+> CONFIG_TEST_UBSAN for that.
 
-Yes I am adopting your suggestion in v5. Dealing with NETDEV_TX_BUSY
-would be left as another item (potentially more suited for netdev
-rather than bpf). Would be great to find a reproduction of memleak.
+I *think* instead, we can turn off TRAP but retain the ARRAY_BOUNDS
+kselftest by looking for either WARN or TRAP results:
 
->
-> Because that's the bug right?  The original code was assuming that
-> everything besides LWTUNNEL_XMIT_DONE was freed.
->
-> regards,
-> dan carpenter
->
+-ARRAY_BOUNDS
++ARRAY_BOUNDS call trace:|UBSAN: array-index-out-of-bounds
 
+Can test that and send a v2?
 
---=20
+-Kees
 
-Yan
+-- 
+Kees Cook
