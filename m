@@ -2,302 +2,351 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36E276D838
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 21:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6023C76D83B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 21:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjHBTzE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Aug 2023 15:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
+        id S231493AbjHBTzR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Aug 2023 15:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjHBTzD (ORCPT
+        with ESMTP id S231830AbjHBTzP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Aug 2023 15:55:03 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CB71BD5
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 12:55:01 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6bcb15aa074so186668a34.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Aug 2023 12:55:01 -0700 (PDT)
+        Wed, 2 Aug 2023 15:55:15 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41322704
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 12:55:12 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c6dd0e46a52so173111276.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Aug 2023 12:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1691006101; x=1691610901;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2fk7IVszVGEX05tlsz3xS9WSAYRKj6iRdkz3X4m9LLk=;
-        b=a4r1NIwyeNPmYaRDUwHG6QqlAcxCuWFkiQ9bjYob7bVbJcmYh8bb+iFKflVUDLPSTL
-         Dmp1/X7VacHvPtUaNtg/dVJpdgr/HgUZPNCEZgECbUr+47se3QuRhwsTi8iTMgoJm6Mu
-         lyoUzhVLySE85gpxZc4Ev/+WQQWnkqwPq9FOo=
+        d=google.com; s=20221208; t=1691006112; x=1691610912;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vsTv4l3aM1hxHagjQekhivcP8BzeguBOu+Z/J5EBK6c=;
+        b=1Z3rm52lW1E1rKJETarUbcMZebSxTyOBuPRcpXU6Ehr1utRe3K/BD3K56DJyi+3b5a
+         g/nq4vTlMjA7Pv0e1ir4I/PIPkjNptQqKjUnyyt3egX7Szt6ApLbfg7ghYy2P0hNdSUv
+         p9kRQkUhyY1QtAw8mYU5Y31X+GOPGBoyV4qD24uR8oqhxIWYZTZXrPku4n6lf08vVaHY
+         d4MBneP8M5ztzeFfqTjmuS+wVfilMjNAzut+4jUUJpwzrsKLhQJq9BcVfPAl6b80y2lP
+         9XNV6Nm9Aq36QpnLxbahmvLAf9KBlANqr3PvdwkAGPwPkA+Sf8CQBzON2UTJwGzjzzn/
+         cu6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691006101; x=1691610901;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2fk7IVszVGEX05tlsz3xS9WSAYRKj6iRdkz3X4m9LLk=;
-        b=lnwtc6blq01WwwVHcMqw5dvJvchhx9zZy/BMkFF2191IokLSnN5iZITARWD3LjGpFM
-         i5A7ysOUahTOfo027tp65vCYVzXJX0absLqY8YfIZkCsHasCkbGq8gw0DOtVLi2XcoEg
-         BrcbS9siSADJURJyZNHyZcN1pm+Q+tYjgB6qhkgi1NHCekOVMc9u3T3qlI4ZKLdih7rF
-         2AkP7HVJkSKorQIJqJY2sUCqguoWxgdVIi2vj45V3Oq3jY/WHO+nTZqshy/1VLeZiovI
-         E7iq4VzFKwN16gUnLql9ofmm2cpAZrxrZ37Rj4kd5jwFbujpPPCaKMMjyqIMd2SmDZz1
-         7cpg==
-X-Gm-Message-State: ABy/qLb5Thl3ZM4GKlS/lt8T+TXLjrmI354S4hw3I1/bc9/DYUcTKc8W
-        P2V3K7pkrFhZJhLLatLtRtA6UNVC3hc9Q89xpFq8ZA==
-X-Google-Smtp-Source: APBJJlGu7kqV6VwbdzSfXnrVqjHk9QX7dxjnDkVK5xVnfSpyzukHJ2KYy3H9D73h3oD02/LXWWYZ+2w+tqBoa3LmXiA=
-X-Received: by 2002:a9d:5a89:0:b0:6b8:b83c:a1f8 with SMTP id
- w9-20020a9d5a89000000b006b8b83ca1f8mr15064427oth.19.1691006100913; Wed, 02
- Aug 2023 12:55:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230713143406.14342-1-cyphar@cyphar.com> <CABi2SkVCp_MDh9MgD-UJ_hgJ58ynm22XJ53zE+ZCBSsWFBxiOw@mail.gmail.com>
- <o2tz56m3y2pbbj2sezyqvtw3caqwcqtqqkkfrq632ofpyj4enp@znkxadzn5lmj>
- <CALmYWFs_dNCzw_pW1yRAo4bGCPEtykroEQaowNULp7svwMLjOg@mail.gmail.com>
- <20230801.032503-medium.noises.extinct.omen-CStYZUqcNLCS@cyphar.com> <CABi2SkXWfup2_UeKqm7C-xkjF5gnhKuxOP7TsRVa5MLbxabFQg@mail.gmail.com>
-In-Reply-To: <CABi2SkXWfup2_UeKqm7C-xkjF5gnhKuxOP7TsRVa5MLbxabFQg@mail.gmail.com>
-From:   Jeff Xu <jeffxu@chromium.org>
-Date:   Wed, 2 Aug 2023 12:54:48 -0700
-Message-ID: <CABi2SkXCsiz+WpPQc=iRjbq-Dp5XR-kDXcVg0A+HDu5Ddni6+g@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/3] memfd: cleanups for vm.memfd_noexec
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Jeff Xu <jeffxu@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1691006112; x=1691610912;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vsTv4l3aM1hxHagjQekhivcP8BzeguBOu+Z/J5EBK6c=;
+        b=EgiKW6vIPGcVEYh0jA9R1JpVZA5FMUdBSl4RjffxYrFfhJZ77PGW1hM2rXnIuLoGFr
+         eP4CAfSTaj1hlMvyWDOOreSdnk0Qpd85VB+BVf2RBvXtBdIVbZzQZwjuXDfkZ/XBIn7G
+         eSHaMUFxjW8c4QYf1uZx4QTveV3KMvCvUVva/c2nRIrhUBpIW4Wu3U42e1XPnYVrJyBJ
+         WeRVrqNmzvl92b44OQTFNr4kMRsNsbTe841UtaDZnxKMoCMhlaGKX9c4Wpy9C/2wdLjt
+         6+tOQcfcqsIDH2fDCAdt1fKzD3cDRMqznr9g42p4F9zYA4BTbs51B10yi2p5CGK/z8Pr
+         KPWA==
+X-Gm-Message-State: ABy/qLYDgenH0YNka3qmxLEEUKwdx+1w+0q/rxfIpInBS1K1qS9Ig9n2
+        UA/9Eq4WzLQwPJ+0rwsGu7epfo+uqIQ=
+X-Google-Smtp-Source: APBJJlGaw2tbZ5PGtoXoBNzA2JGWKl/m0J34RtXjTcrzSkFb8b3iZqAWlBYDvywJxnNUJKFwarIY6gvO2Y0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1582:b0:d0a:353b:b93b with SMTP id
+ k2-20020a056902158200b00d0a353bb93bmr136607ybu.3.1691006111814; Wed, 02 Aug
+ 2023 12:55:11 -0700 (PDT)
+Date:   Wed, 2 Aug 2023 12:55:09 -0700
+In-Reply-To: <20230712075910.22480-3-thuth@redhat.com>
+Mime-Version: 1.0
+References: <20230712075910.22480-1-thuth@redhat.com> <20230712075910.22480-3-thuth@redhat.com>
+Message-ID: <ZMq0nYYDbOX1cOKN@google.com>
+Subject: Re: [PATCH 2/4] KVM: selftests: x86: Use TAP interface in the
+ sync_regs test
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Huth <thuth@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kselftest@vger.kernel.org,
+        David Matlack <dmatlack@google.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 2, 2023 at 12:47=E2=80=AFPM Jeff Xu <jeffxu@chromium.org> wrote=
-:
->
-> On Tue, Aug 1, 2023 at 6:05=E2=80=AFPM Aleksa Sarai <cyphar@cyphar.com> w=
-rote:
-> >
-> This thread is getting longer with different topics, I will try to
-> respond with trimmed interleaved replies [1]
-> There are 3 topics (logging/'migration/ratcheting), this response will
-> be regarding ratcheting.
->
-> [1] https://www.kernel.org/doc/html/latest/process/submitting-patches.htm=
-l?highlight=3Dsigned%20off#use-trimmed-interleaved-replies-in-email-discuss=
-ions
->
-> >
-> > > > > >  * The ratcheting mechanism for vm.memfd_noexec doesn't make se=
-nse as a
-> > > > > >    security mechanism because a CAP_SYS_ADMIN capable user can =
-create
-> > > > > >    executable binaries in a hidden tmpfs very easily, not to me=
-ntion the
-> > > > > >    many other things they can do.
-> > > > > >
-> > > > > By further limiting CAP_SYS_ADMIN, an attacker can't modify this
-> > > > > sysctl even after compromising some system service with high
-> > > > > privilege, YAMA has the same approach for ptrace_scope=3D3
-> > > >
-> > > > Personally, I also think this behaviour from YAMA is a little goofy=
- too,
-> > > > but given that it only locks the most extreme setting and there is =
-no
-> > > > way to get around the most extreme setting, I guess it makes some s=
-ense
-> > > > (not to mention it's an LSM and so there is an argument that it sho=
-uld
-> > > > be possible to lock out privileged users from modifying it).
-> > > > There are many other security sysctls, and very few have this behav=
-iour
-> > > > because it doesn't make much sense in most cases.
-> > > >
-> > > > > In addition, this sysctl is pid_name spaced, this means child
-> > > > > pid_namespace will alway have the same or stricter security setti=
-ng
-> > > > > than its parent, this allows admin to maintain a tree like view. =
-If we
-> > > > > allow the child pid namespace to elevate its setting, then the
-> > > > > system-wide setting is no longer meaningful.
-> > > >
-> > > > "no longer meaningful" is too strong of a statement imho. It is sti=
-ll
-> > > > useful for constraining non-root processes and presumably ChromeOS
-> > > > disallows random processes to do CLONE_NEWUSER (otherwise the prote=
-ction
-> > > > of this sysctl is pointless) so in practice for ChromeOS there is n=
-o
-> > > > change in the attack surface.
-> > > >
-> > > > (FWIW, I think tying this to the user namespace would've made more =
-sense
-> > > > since this is about privilege restrictions, but that ship has saile=
-d.)
-> > > >
-> > > The reason that this sysctl is a PID namespace is that I hope a
-> > > container and host can have different sysctl values, e.g. host will
-> > > allow runc's use of X mfd, while a container  doesn't want X mfd. .
-> > > To clarify what you meant, do you mean this: when a container is in
-> > > its own pid_namespace, and has "=3D2", the programs inside the contai=
-ner
-> > > can still use CLONE_NEWUSER to break out "=3D2" ?
-> >
-> > With the current implementation, this is not possible. My point was tha=
-t
-> > even if it were possible to lower the sysctl, ChromeOS presumably
-> > already blocks the operations that a user would be able to use to creat=
-e
-> > a memfd (an unprivileged user cannot CLONE_NEWPID to modify the sysctl
-> > without CLONE_NEWUSER, which is presumably blocked on ChromeOS due to
-> > the other security concerns).
-> >
-> >
-> > > > > The code sample shared in this patch set indicates that the attac=
-ker
-> > > > > already has the ability of creating tmpfs and executing complex s=
-teps,
-> > > > > at that point, it doesn't matter if the code execution is from me=
-mfd
-> > > > > or not. For a safe by default system such as ChromeOS, attackers =
-won't
-> > > > > easily run arbitrary code, memfd is one of the open doors for tha=
-t, so
-> > > > > we are disabling executable memfd in ChromeOS. In other words:  i=
-f an
-> > > > > attacker can already execute the arbitrary code as sample given i=
-n
-> > > > > ChromeOS, without using executable memfd,  then memfd is no longe=
-r the
-> > > > > thing we need to worry about, the arbitrary code execution is alr=
-eady
-> > > > > achieved by the attacker. Even though I use ChromeOS as an exampl=
-e, I
-> > > > > think the same type of threat model applies to any system that wa=
-nts
-> > > > > to disable executable memfd entirely.
-> > > >
-> > > > I understand the threat model this sysctl is blocking, my point is =
-that
-> > > > blocking CAP_SYS_ADMIN from modifying the setting doesn't make sens=
-e
-> > > > from that threat model. An attacker that manages to trick some proc=
-ess
-> > > > into creating a memfd with an executable payload is not going to be=
- able
-> > > > to change the sysctl setting (unless there's a confused deputy with
-> > > > CAP_SYS_ADMIN, in which case you have much bigger issues).
-> > > >
-> > > It is the reverse.  An attacker that manages to trick some
-> > > CAP_SYSADMIN processes into changing this sysctl value (i.e. lower th=
-e
-> > > setting to 0 if no ratcheting), will be able to continue to use mfd a=
-s
-> > > part of the attack chain.
-> > >  In chromeOS, an attacker that can change sysctl might not necessaril=
-y
-> > > gain full arbitrary code execution already. As I mentioned previously=
-,
-> > > the main threat model here is to prevent  arbitrary code execution
-> > > through mfd.  If an attacker already gains arbitrary code execution,
-> > > at that point, we no longer worry about mfd.
-> >
-> > If an attacker can trick a privileged process into writing to arbitrary
-> > sysctls, the system has much bigger issues than arbitrary (presumably
-> > unprivileged) code execution. On the other hand, requiring you to reboo=
-t
-> > a server due to a misconfigured sysctl *is* broken.
-> >
-> > Again, at the very least, not even allowing capable(CAP_SYS_ADMIN) to
-> > change the setting is actually broken.
-> >
-> > > > If a CAP_SYS_ADMIN-capable user wants to change the sysctl, blockin=
-g it
-> > > > doesn't add any security because that process could create a memfd-=
-like
-> > > > fd to execute without issues.
-> > > >What practical attack does this ratcheting
-> > > > mechanism protect against? (This is a question you can answer with =
-the
-> > > > YAMA sysctl, but not this one AFAICS.)
-> > > >
-> > > > But even if you feel that allowing this in child user namespaces is
-> > > > unsafe or undesirable, it's absolutely necessary that
-> > > > capable(CAP_SYS_ADMIN) should be able to un-brick the running syste=
-m by
-> > > > changing the sysctl. The alternative is that you need to reboot you=
-r
-> > > > server in order to un-set a sysctl that broke some application you =
-run.
-> > > >
-> > >
-> > > > Also, by the same token, this ratcheting mechanism doesn't make sen=
-se
-> > > > with =3D1 *at all* because it could break programs in a way that wo=
-uld
-> > > > require a reboot but it's not a "security setting" (and the YAMA sy=
-sctl
-> > > > mentioned only locks the sysctl at the highest setting).
-> > > >
-> > > I think a system should use "=3D0" when it is unsure about its progra=
-m's
-> > > need or not need executable memfd. Technically, it is not that this
-> > > sysctl breaks the user, but the admin  made the mistake to set the
-> > > wrong sysctl value, and an admin should know what they are doing for =
-a
-> > > sysctl. Yes. rebooting increases the steps to undo the mistake, but
-> > > that could be an incentive for the admin to fully test its programs
-> > > before turning on this sysctl - and avoid unexpected runtime errors.
-> >
-> > I don't think this stance is really acceptable -- if an admin that has
-> > privileges to load kernel modules is not able to disable a sysctl that
-> > can break working programs without rebooting there is
-> >
-> > When this sysctl was first proposed a few years ago (when kernel folks
-> > found out that runc was using executable memfds), my understanding is
-> > that the long-term goal was to switch programs to have
-> > non-executable-memfds by default on most distributions. Making it
-> > impossible for an admin to lower the sysctl value flies in the face of
-> > this goal.
-> >
-> > At the very least, being unable to lower the sysctl from =3D1 to =3D0 i=
-s
-> > just broken (even if you use the yama example -- yama only locks the
-> > sysctl at highest possible setting, not on lower settings). But in my
-> > view, having this sysctl ratchet at all doesn't make sense.
-> >
-> To reiterate/summarize the current mechanism for vm.memfd_noexec
->
-> 1> It is a pid namespace sysctl,  init ns and child pid ns can have
-> different setting values.
-> 2> child pid ns inherits parent's pid ns's sysctl at the time of fork.
-> 3> There are  3 values for the sysctl, each higher value is more
-> restrictive than the lower one. Once set, doesn't allow downgrading.
->
-> It can be used as  following:
-> 1>
-> init ns: vm.memfd_noexec =3D 2 (at boot time)
-> Not allow executable memfd for the entire system, including its container=
-s.
->
-> 2>
-> init ns: vm.memfd_noexec =3D 0 or 1
-> container (child init namespace) vm.memfd_noexec =3D 2.
-> The host allows runc's usage of executable memfd during container
-> creation. Inside the container, executable memfd is not allowed.
->
-> The inherence + not allow downgrading is to reason with how
-> vm.memfd_noexec is applied in the process tree.
-> Without it, essentially we are losing the hierarchy view across the
-> process tree and  a process can evaluate its capability by modifying
-*elevate*
-> the setting. I think that is a less secure approach I would not
-> prefer.
->
-> Thanks
->
-> -Jeff
+On Wed, Jul 12, 2023, Thomas Huth wrote:
+> The sync_regs test currently does not have any output (unless one
+> of the TEST_ASSERT statement fails), so it's hard to say for a user
+> whether a certain new sub-test has been included in the binary or
+> not. Let's make this a little bit more user-friendly and include
+> some TAP output via the kselftest_harness.h interface.
+> To be able to use the interface, we have to break up the huge main()
+> function here in more fine grained parts - then we can use the
+> TEST_F() macro to define the individual tests. Since these are run
+> with a separate VM now, we have also to make sure to create the
+> expected state at the beginning of each test, so some parts grow
+> a little bit - which should be OK considering that the individual
+> tests are more self-contained now.
+> 
+> Suggested-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  .../selftests/kvm/x86_64/sync_regs_test.c     | 113 +++++++++++++++---
+
+FYI, there's an in-flight patch[*] to expand this test's coverage, and I plan on
+grabbing that in some form before this one (sorry).  Let me know if there are
+any tweaks that can be done to Michal's patch to make it easier to convert the
+test to tap.
+
+I'll also try to get Michal's patch into kvm-x86/next sooner than later so that
+you can use that as the basic.
+
+Oh, and no need to post "KVM: selftests: Rename the ASSERT_EQ macro" in the next
+version, I'm planning on grabbing that one straightaway.
+
+[*] https://lore.kernel.org/all/20230728001606.2275586-3-mhal@rbox.co
+
+>  1 file changed, 98 insertions(+), 15 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/sync_regs_test.c b/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
+> index 2da89fdc2471a..e1359a4a07fea 100644
+> --- a/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
+> @@ -16,6 +16,7 @@
+>  #include <string.h>
+>  #include <sys/ioctl.h>
+>  
+> +#include "kselftest_harness.h"
+>  #include "test_util.h"
+>  #include "kvm_util.h"
+>  #include "processor.h"
+> @@ -80,23 +81,24 @@ static void compare_vcpu_events(struct kvm_vcpu_events *left,
+>  #define TEST_SYNC_FIELDS   (KVM_SYNC_X86_REGS|KVM_SYNC_X86_SREGS|KVM_SYNC_X86_EVENTS)
+>  #define INVALID_SYNC_FIELD 0x80000000
+>  
+> -int main(int argc, char *argv[])
+> -{
+> -	struct kvm_vcpu *vcpu;
+> +FIXTURE(sync_regs_test) {
+>  	struct kvm_vm *vm;
+> -	struct kvm_run *run;
+> -	struct kvm_regs regs;
+> -	struct kvm_sregs sregs;
+> -	struct kvm_vcpu_events events;
+> -	int rv, cap;
+> +	struct kvm_vcpu *vcpu;
+> +};
+>  
+> -	cap = kvm_check_cap(KVM_CAP_SYNC_REGS);
+> -	TEST_REQUIRE((cap & TEST_SYNC_FIELDS) == TEST_SYNC_FIELDS);
+> -	TEST_REQUIRE(!(cap & INVALID_SYNC_FIELD));
+> +FIXTURE_SETUP(sync_regs_test) {
+> +	self->vm = vm_create_with_one_vcpu(&self->vcpu, guest_code);
+> +}
+>  
+> -	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+> +FIXTURE_TEARDOWN(sync_regs_test) {
+> +	kvm_vm_free(self->vm);
+> +}
+>  
+> -	run = vcpu->run;
+> +TEST_F(sync_regs_test, read_invalid)
+> +{
+> +	struct kvm_vcpu *vcpu = self->vcpu;
+> +	struct kvm_run *run = vcpu->run;
+> +	int rv;
+>  
+>  	/* Request reading invalid register set from VCPU. */
+>  	run->kvm_valid_regs = INVALID_SYNC_FIELD;
+> @@ -112,6 +114,13 @@ int main(int argc, char *argv[])
+>  		    "Invalid kvm_valid_regs did not cause expected KVM_RUN error: %d\n",
+>  		    rv);
+>  	run->kvm_valid_regs = 0;
+> +}
+> +
+> +TEST_F(sync_regs_test, set_invalid)
+> +{
+> +	struct kvm_vcpu *vcpu = self->vcpu;
+> +	struct kvm_run *run = vcpu->run;
+> +	int rv;
+>  
+>  	/* Request setting invalid register set into VCPU. */
+>  	run->kvm_dirty_regs = INVALID_SYNC_FIELD;
+> @@ -127,11 +136,22 @@ int main(int argc, char *argv[])
+>  		    "Invalid kvm_dirty_regs did not cause expected KVM_RUN error: %d\n",
+>  		    rv);
+>  	run->kvm_dirty_regs = 0;
+> +}
+> +
+> +TEST_F(sync_regs_test, req_and_verify_all_valid)
+> +{
+> +	struct kvm_vcpu *vcpu = self->vcpu;
+> +	struct kvm_run *run = vcpu->run;
+> +	struct kvm_vcpu_events events;
+> +	struct kvm_sregs sregs;
+> +	struct kvm_regs regs;
+> +	int rv;
+>  
+>  	/* Request and verify all valid register sets. */
+>  	/* TODO: BUILD TIME CHECK: TEST_ASSERT(KVM_SYNC_X86_NUM_FIELDS != 3); */
+>  	run->kvm_valid_regs = TEST_SYNC_FIELDS;
+>  	rv = _vcpu_run(vcpu);
+> +	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+
+Just use vcpu_run() instead of _vcpu_run().  And please post that as a separate
+patch, I think/hope it will make the conversion-to-tap patch smaller.
+
+>  	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+>  
+>  	vcpu_regs_get(vcpu, &regs);
+> @@ -142,6 +162,22 @@ int main(int argc, char *argv[])
+>  
+>  	vcpu_events_get(vcpu, &events);
+>  	compare_vcpu_events(&events, &run->s.regs.events);
+> +}
+> +
+> +TEST_F(sync_regs_test, set_and_verify_various)
+> +{
+> +	struct kvm_vcpu *vcpu = self->vcpu;
+> +	struct kvm_run *run = vcpu->run;
+> +	struct kvm_vcpu_events events;
+> +	struct kvm_sregs sregs;
+> +	struct kvm_regs regs;
+> +	int rv;
+> +
+> +	/* Run once to get register set */
+> +	run->kvm_valid_regs = TEST_SYNC_FIELDS;
+> +	rv = _vcpu_run(vcpu);
+> +	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+
+Same comment here.
+
+> +	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+>  
+>  	/* Set and verify various register values. */
+>  	run->s.regs.regs.rbx = 0xBAD1DEA;
+> @@ -151,6 +187,7 @@ int main(int argc, char *argv[])
+>  	run->kvm_valid_regs = TEST_SYNC_FIELDS;
+>  	run->kvm_dirty_regs = KVM_SYNC_X86_REGS | KVM_SYNC_X86_SREGS;
+>  	rv = _vcpu_run(vcpu);
+> +	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+
+And here.
+
+>  	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+>  	TEST_ASSERT(run->s.regs.regs.rbx == 0xBAD1DEA + 1,
+>  		    "rbx sync regs value incorrect 0x%llx.",
+> @@ -167,6 +204,13 @@ int main(int argc, char *argv[])
+>  
+>  	vcpu_events_get(vcpu, &events);
+>  	compare_vcpu_events(&events, &run->s.regs.events);
+> +}
+> +
+> +TEST_F(sync_regs_test, clear_kvm_dirty_regs_bits)
+> +{
+> +	struct kvm_vcpu *vcpu = self->vcpu;
+> +	struct kvm_run *run = vcpu->run;
+> +	int rv;
+>  
+>  	/* Clear kvm_dirty_regs bits, verify new s.regs values are
+>  	 * overwritten with existing guest values.
+> @@ -175,10 +219,25 @@ int main(int argc, char *argv[])
+>  	run->kvm_dirty_regs = 0;
+>  	run->s.regs.regs.rbx = 0xDEADBEEF;
+>  	rv = _vcpu_run(vcpu);
+> +	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+
+Here too.
+
+>  	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+>  	TEST_ASSERT(run->s.regs.regs.rbx != 0xDEADBEEF,
+>  		    "rbx sync regs value incorrect 0x%llx.",
+>  		    run->s.regs.regs.rbx);
+> +}
+> +
+> +TEST_F(sync_regs_test, clear_kvm_valid_and_dirty_regs)
+> +{
+> +	struct kvm_vcpu *vcpu = self->vcpu;
+> +	struct kvm_run *run = vcpu->run;
+> +	struct kvm_regs regs;
+> +	int rv;
+> +
+> +	/* Run once to get register set */
+> +	run->kvm_valid_regs = TEST_SYNC_FIELDS;
+> +	rv = _vcpu_run(vcpu);
+> +	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+
+At least you're consistent :-)
+
+> +	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+>  
+>  	/* Clear kvm_valid_regs bits and kvm_dirty_bits.
+>  	 * Verify s.regs values are not overwritten with existing guest values
+> @@ -187,9 +246,11 @@ int main(int argc, char *argv[])
+>  	run->kvm_valid_regs = 0;
+>  	run->kvm_dirty_regs = 0;
+>  	run->s.regs.regs.rbx = 0xAAAA;
+> +	vcpu_regs_get(vcpu, &regs);
+
+Can you split this change to its own patch too?  I'm pretty sure that change
+stands on its own, and slotting it in here made me do a double-take.
+
+>  	regs.rbx = 0xBAC0;
+>  	vcpu_regs_set(vcpu, &regs);
+>  	rv = _vcpu_run(vcpu);
+> +	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+>  	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+>  	TEST_ASSERT(run->s.regs.regs.rbx == 0xAAAA,
+>  		    "rbx sync regs value incorrect 0x%llx.",
+> @@ -198,6 +259,20 @@ int main(int argc, char *argv[])
+>  	TEST_ASSERT(regs.rbx == 0xBAC0 + 1,
+>  		    "rbx guest value incorrect 0x%llx.",
+>  		    regs.rbx);
+> +}
+> +
+> +TEST_F(sync_regs_test, clear_kvm_valid_regs_bits)
+> +{
+> +	struct kvm_vcpu *vcpu = self->vcpu;
+> +	struct kvm_run *run = vcpu->run;
+> +	struct kvm_regs regs;
+> +	int rv;
+> +
+> +	/* Run once to get register set */
+> +	run->kvm_valid_regs = TEST_SYNC_FIELDS;
+> +	rv = _vcpu_run(vcpu);
+> +	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+
+Once more, with feeling!
+
+> +	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+>  
+>  	/* Clear kvm_valid_regs bits. Verify s.regs values are not overwritten
+>  	 * with existing guest values but that guest values are overwritten
+> @@ -207,6 +282,7 @@ int main(int argc, char *argv[])
+>  	run->kvm_dirty_regs = TEST_SYNC_FIELDS;
+>  	run->s.regs.regs.rbx = 0xBBBB;
+>  	rv = _vcpu_run(vcpu);
+> +	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+
+Heh.
+
+>  	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+>  	TEST_ASSERT(run->s.regs.regs.rbx == 0xBBBB,
+>  		    "rbx sync regs value incorrect 0x%llx.",
+> @@ -215,8 +291,15 @@ int main(int argc, char *argv[])
+>  	TEST_ASSERT(regs.rbx == 0xBBBB + 1,
+>  		    "rbx guest value incorrect 0x%llx.",
+>  		    regs.rbx);
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	int cap;
+>  
+> -	kvm_vm_free(vm);
+> +	cap = kvm_check_cap(KVM_CAP_SYNC_REGS);
+> +	TEST_REQUIRE((cap & TEST_SYNC_FIELDS) == TEST_SYNC_FIELDS);
+> +	TEST_REQUIRE(!(cap & INVALID_SYNC_FIELD));
+>  
+> -	return 0;
+> +	return test_harness_run(argc, argv);
+>  }
+> -- 
+> 2.39.3
+> 
