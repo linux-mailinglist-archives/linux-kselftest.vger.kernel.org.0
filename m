@@ -2,55 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F3E76D9C9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 23:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE5876D9CB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 23:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbjHBVnU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Aug 2023 17:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
+        id S233055AbjHBVnV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Aug 2023 17:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232306AbjHBVnT (ORCPT
+        with ESMTP id S231209AbjHBVnU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Aug 2023 17:43:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09687E7D;
+        Wed, 2 Aug 2023 17:43:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F01198A;
         Wed,  2 Aug 2023 14:43:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9382061AF0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47E3B61B38;
+        Wed,  2 Aug 2023 21:43:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A000C433CC;
         Wed,  2 Aug 2023 21:43:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 761AFC433CB;
-        Wed,  2 Aug 2023 21:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1691012598;
-        bh=plLKrdhuxTu4fXv62XEDStD9l4o2qp5Q+Y0GoiThmrE=;
+        bh=cjc8ooSUQ83tCK1u+lTmvslo5pngriB995qOBl2lfEU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LvH1bZLSqUYN0scYv4lgnIiiDHf/QbLHgwsHOhtc3Vu4diL5ne6xiURe9ZI79A1j/
-         OIqJB+nLKkuOOaOvyLxQ13IN+eONATxWLDnpP64G30W9BWufAZcpdYRYmciHUccQOC
-         nhQyU6uhjVaGyeL6rKJbEg02JFLwjDrrpcGMyjMQNTgRaAs0UTGGvfs/QmfY/lo7Qt
-         4s7GgdsMoCuHY+hP5os6TKeBmnMtJFXcc7fVhfKPACmGAsu6Ap7zZjyreNQ8Em5OWJ
-         VpOG7/Q3fTDf75C/ilhCKDeDXjPE5ROuB8ebDYWwLJuMDDxyvuQDvsAXCahfNfp5eJ
-         UdAuCeJNT/CBA==
+        b=ikb6ovw/+AobHS2orGwswuXn2tlkNHwauXcRV6Typ+Y049vivhXS52JNo31EJITXY
+         emfTMVPVnHa84OqOMbZVTo5kbKeKGHOpjFsOIeWxAksOBD1KxT8ZuTuTDN9rHg/Wtg
+         F6AsCQyf2TOaPUNj4vCWIaI9DFBrBCpREyoQkRdtVM0UMwWQZ0IvN7lTXtGoZETgG1
+         Zy9ankfs8/EVYFpEOb4r0JbOi6tvKYPa9H418hI6X4RnEuTQTALWYSvV2UiFkf7cm9
+         hWtnjYErjiGV3ODf3wRp8IeVQt7UDKHS7oVF7VZO8K+omnCY5RDlEJw9kWy79bTpag
+         AZGMQFafNxOcQ==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
+Cc:     SeongJae Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
         damon@lists.linux.dev, linux-mm@kvack.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 03/13] mm/damon/core-test: add a unit test for __damos_filter_out()
-Date:   Wed,  2 Aug 2023 21:43:02 +0000
-Message-Id: <20230802214312.110532-4-sj@kernel.org>
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 04/13] selftests/damon/sysfs: test address range damos filter
+Date:   Wed,  2 Aug 2023 21:43:03 +0000
+Message-Id: <20230802214312.110532-5-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230802214312.110532-1-sj@kernel.org>
 References: <20230802214312.110532-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,94 +56,32 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Implement a kunit test for the core of address range DAMOS filter
-handling, namely __damos_filter_out().  The test especially focus on
-regions that overlap with given filter's target address range.
+Add a selftest for checking existence of addr_{start,end} files under
+DAMOS filter directory, and 'addr' damos filter type input of DAMON
+sysfs interface.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/core-test.h | 61 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ tools/testing/selftests/damon/sysfs.sh | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/mm/damon/core-test.h b/mm/damon/core-test.h
-index 4bddbfe243c3..6cc8b245586d 100644
---- a/mm/damon/core-test.h
-+++ b/mm/damon/core-test.h
-@@ -353,6 +353,66 @@ static void damos_test_new_filter(struct kunit *test)
- 	damos_destroy_filter(filter);
+diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
+index 967e27267549..5677cfd342fc 100644
+--- a/tools/testing/selftests/damon/sysfs.sh
++++ b/tools/testing/selftests/damon/sysfs.sh
+@@ -103,9 +103,12 @@ test_filter()
+ 	ensure_file "$filter_dir/type" "exist" "600"
+ 	ensure_write_succ "$filter_dir/type" "anon" "valid input"
+ 	ensure_write_succ "$filter_dir/type" "memcg" "valid input"
++	ensure_write_succ "$filter_dir/type" "addr" "valid input"
+ 	ensure_write_fail "$filter_dir/type" "foo" "invalid input"
+ 	ensure_file "$filter_dir/matching" "exist" "600"
+ 	ensure_file "$filter_dir/memcg_path" "exist" "600"
++	ensure_file "$filter_dir/addr_start" "exist" "600"
++	ensure_file "$filter_dir/addr_end" "exist" "600"
  }
  
-+static void damos_test_filter_out(struct kunit *test)
-+{
-+	struct damon_target *t;
-+	struct damon_region *r, *r2;
-+	struct damos_filter *f;
-+
-+	f = damos_new_filter(DAMOS_FILTER_TYPE_ADDR, true);
-+	f->addr_range = (struct damon_addr_range){
-+		.start = DAMON_MIN_REGION * 2, .end = DAMON_MIN_REGION * 6};
-+
-+	t = damon_new_target();
-+	r = damon_new_region(DAMON_MIN_REGION * 3, DAMON_MIN_REGION * 5);
-+	damon_add_region(r, t);
-+
-+	/* region in the range */
-+	KUNIT_EXPECT_TRUE(test, __damos_filter_out(NULL, t, r, f));
-+	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), 1);
-+
-+	/* region before the range */
-+	r->ar.start = DAMON_MIN_REGION * 1;
-+	r->ar.end = DAMON_MIN_REGION * 2;
-+	KUNIT_EXPECT_FALSE(test, __damos_filter_out(NULL, t, r, f));
-+	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), 1);
-+
-+	/* region after the range */
-+	r->ar.start = DAMON_MIN_REGION * 6;
-+	r->ar.end = DAMON_MIN_REGION * 8;
-+	KUNIT_EXPECT_FALSE(test, __damos_filter_out(NULL, t, r, f));
-+	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), 1);
-+
-+	/* region started before the range */
-+	r->ar.start = DAMON_MIN_REGION * 1;
-+	r->ar.end = DAMON_MIN_REGION * 4;
-+	KUNIT_EXPECT_FALSE(test, __damos_filter_out(NULL, t, r, f));
-+	/* filter should have split the region */
-+	KUNIT_EXPECT_EQ(test, r->ar.start, DAMON_MIN_REGION * 1);
-+	KUNIT_EXPECT_EQ(test, r->ar.end, DAMON_MIN_REGION * 2);
-+	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), 2);
-+	r2 = damon_next_region(r);
-+	KUNIT_EXPECT_EQ(test, r2->ar.start, DAMON_MIN_REGION * 2);
-+	KUNIT_EXPECT_EQ(test, r2->ar.end, DAMON_MIN_REGION * 4);
-+	damon_destroy_region(r2, t);
-+
-+	/* region started in the range */
-+	r->ar.start = DAMON_MIN_REGION * 2;
-+	r->ar.end = DAMON_MIN_REGION * 8;
-+	KUNIT_EXPECT_TRUE(test, __damos_filter_out(NULL, t, r, f));
-+	/* filter should have split the region */
-+	KUNIT_EXPECT_EQ(test, r->ar.start, DAMON_MIN_REGION * 2);
-+	KUNIT_EXPECT_EQ(test, r->ar.end, DAMON_MIN_REGION * 6);
-+	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), 2);
-+	r2 = damon_next_region(r);
-+	KUNIT_EXPECT_EQ(test, r2->ar.start, DAMON_MIN_REGION * 6);
-+	KUNIT_EXPECT_EQ(test, r2->ar.end, DAMON_MIN_REGION * 8);
-+	damon_destroy_region(r2, t);
-+
-+	damon_free_target(t);
-+	damos_free_filter(f);
-+}
-+
- static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_target),
- 	KUNIT_CASE(damon_test_regions),
-@@ -366,6 +426,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_update_monitoring_result),
- 	KUNIT_CASE(damon_test_set_attrs),
- 	KUNIT_CASE(damos_test_new_filter),
-+	KUNIT_CASE(damos_test_filter_out),
- 	{},
- };
- 
+ test_filters()
 -- 
 2.25.1
 
