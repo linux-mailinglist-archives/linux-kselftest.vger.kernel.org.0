@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196F676D1E3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 17:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6FA76D233
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 17:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjHBP2F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Aug 2023 11:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
+        id S232828AbjHBPhv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Aug 2023 11:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233802AbjHBP1l (ORCPT
+        with ESMTP id S235308AbjHBPh1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Aug 2023 11:27:41 -0400
-X-Greylist: delayed 1031 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Aug 2023 08:25:30 PDT
-Received: from outbound-smtp16.blacknight.com (outbound-smtp16.blacknight.com [46.22.139.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25E259E0
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 08:25:30 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp16.blacknight.com (Postfix) with ESMTPS id 9127D1C414D
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 16:16:15 +0100 (IST)
-Received: (qmail 9455 invoked from network); 2 Aug 2023 15:16:15 -0000
+        Wed, 2 Aug 2023 11:37:27 -0400
+X-Greylist: delayed 565 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Aug 2023 08:36:31 PDT
+Received: from outbound-smtp55.blacknight.com (outbound-smtp55.blacknight.com [46.22.136.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802653C2B
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 08:36:31 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
+        by outbound-smtp55.blacknight.com (Postfix) with ESMTPS id 4E8EFFAE56
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 16:27:04 +0100 (IST)
+Received: (qmail 2300 invoked from network); 2 Aug 2023 15:27:04 -0000
 Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.20.191])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Aug 2023 15:16:15 -0000
-Date:   Wed, 2 Aug 2023 16:16:13 +0100
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Aug 2023 15:27:04 -0000
+Date:   Wed, 2 Aug 2023 16:27:02 +0100
 From:   Mel Gorman <mgorman@techsingularity.net>
 To:     David Hildenbrand <david@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -37,96 +37,57 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         John Hubbard <jhubbard@nvidia.com>,
         Mel Gorman <mgorman@suse.de>, Shuah Khan <shuah@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v2 2/8] smaps: use vm_normal_page_pmd() instead of
- follow_trans_huge_pmd()
-Message-ID: <20230802151613.3nyg3xof3gyovlxu@techsingularity.net>
+Subject: Re: [PATCH v2 3/8] kvm: explicitly set FOLL_HONOR_NUMA_FAULT in
+ hva_to_pfn_slow()
+Message-ID: <20230802152702.wamtroy3zm7nbtvs@techsingularity.net>
 References: <20230801124844.278698-1-david@redhat.com>
- <20230801124844.278698-3-david@redhat.com>
+ <20230801124844.278698-4-david@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20230801124844.278698-3-david@redhat.com>
+In-Reply-To: <20230801124844.278698-4-david@redhat.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 01, 2023 at 02:48:38PM +0200, David Hildenbrand wrote:
-> We shouldn't be using a GUP-internal helper if it can be avoided.
+On Tue, Aug 01, 2023 at 02:48:39PM +0200, David Hildenbrand wrote:
+> KVM is *the* case we know that really wants to honor NUMA hinting falls.
+> As we want to stop setting FOLL_HONOR_NUMA_FAULT implicitly, set
+> FOLL_HONOR_NUMA_FAULT whenever we might obtain pages on behalf of a VCPU
+> to map them into a secondary MMU, and add a comment why.
 > 
-> Similar to smaps_pte_entry() that uses vm_normal_page(), let's use
-> vm_normal_page_pmd() that similarly refuses to return the huge zeropage.
+> Do that unconditionally in hva_to_pfn_slow() when calling
+> get_user_pages_unlocked().
 > 
-> In contrast to follow_trans_huge_pmd(), vm_normal_page_pmd():
+> kvmppc_book3s_instantiate_page(), hva_to_pfn_fast() and
+> gfn_to_page_many_atomic() are similarly used to map pages into a
+> secondary MMU. However, FOLL_WRITE and get_user_page_fast_only() always
+> implicitly honor NUMA hinting faults -- as documented for
+> FOLL_HONOR_NUMA_FAULT -- so we can limit this change to a single location
+> for now.
 > 
-> (1) Will always return the head page, not a tail page of a THP.
+> Don't set it in check_user_page_hwpoison(), where we really only want to
+> check if the mapped page is HW-poisoned.
 > 
->  If we'd ever call smaps_account with a tail page while setting "compound
->  = true", we could be in trouble, because smaps_account() would look at
->  the memmap of unrelated pages.
+> We won't set it for other KVM users of get_user_pages()/pin_user_pages()
+> * arch/powerpc/kvm/book3s_64_mmu_hv.c: not used to map pages into a
+>   secondary MMU.
+> * arch/powerpc/kvm/e500_mmu.c: only used on shared TLB pages with userspace
+> * arch/s390/kvm/*: s390x only supports a single NUMA node either way
+> * arch/x86/kvm/svm/sev.c: not used to map pages into a secondary MMU.
 > 
->  If we're unlucky, that memmap does not exist at all. Before we removed
->  PG_doublemap, we could have triggered something similar as in
->  commit 24d7275ce279 ("fs/proc: task_mmu.c: don't read mapcount for
->  migration entry").
+> This is a preparation for making FOLL_HONOR_NUMA_FAULT no longer
+> implicitly be set by get_user_pages() and friends.
 > 
->  This can theoretically happen ever since commit ff9f47f6f00c ("mm: proc:
->  smaps_rollup: do not stall write attempts on mmap_lock"):
-> 
->   (a) We're in show_smaps_rollup() and processed a VMA
->   (b) We release the mmap lock in show_smaps_rollup() because it is
->       contended
->   (c) We merged that VMA with another VMA
->   (d) We collapsed a THP in that merged VMA at that position
-> 
->  If the end address of the original VMA falls into the middle of a THP
->  area, we would call smap_gather_stats() with a start address that falls
->  into a PMD-mapped THP. It's probably very rare to trigger when not
->  really forced.
-> 
-> (2) Will succeed on a is_pci_p2pdma_page(), like vm_normal_page()
-> 
->  Treat such PMDs here just like smaps_pte_entry() would treat such PTEs.
->  If such pages would be anonymous, we most certainly would want to
->  account them.
-> 
-> (3) Will skip over pmd_devmap(), like vm_normal_page() for pte_devmap()
-> 
->  As noted in vm_normal_page(), that is only for handling legacy ZONE_DEVICE
->  pages. So just like smaps_pte_entry(), we'll now also ignore such PMD
->  entries.
-> 
->  Especially, follow_pmd_mask() never ends up calling
->  follow_trans_huge_pmd() on pmd_devmap(). Instead it calls
->  follow_devmap_pmd() -- which will fail if neither FOLL_GET nor FOLL_PIN
->  is set.
-> 
->  So skipping pmd_devmap() pages seems to be the right thing to do.
-> 
-> (4) Will properly handle VM_MIXEDMAP/VM_PFNMAP, like vm_normal_page()
-> 
->  We won't be returning a memmap that should be ignored by core-mm, or
->  worse, a memmap that does not even exist. Note that while
->  walk_page_range() will skip VM_PFNMAP mappings, walk_page_vma() won't.
-> 
->  Most probably this case doesn't currently really happen on the PMD level,
->  otherwise we'd already be able to trigger kernel crashes when reading
->  smaps / smaps_rollup.
-> 
-> So most probably only (1) is relevant in practice as of now, but could only
-> cause trouble in extreme corner cases.
-> 
-> Fixes: ff9f47f6f00c ("mm: proc: smaps_rollup: do not stall write attempts on mmap_lock")
 > Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Maybe move the follow_trans_huge_pmd() declaration from linux/huge_mm.h
-to mm/internal.h to discourage future mistakes? Otherwise
-
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
+Seems sane but I don't know KVM well enough to know if this is the only
+relevant case so didn't ack.
 
 -- 
 Mel Gorman
