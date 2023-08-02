@@ -2,278 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D3676C2B7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 04:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A4D76C2C5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Aug 2023 04:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjHBCKY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Aug 2023 22:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
+        id S231654AbjHBCTH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Aug 2023 22:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjHBCKY (ORCPT
+        with ESMTP id S231656AbjHBCTG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 22:10:24 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D42319A0
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 19:10:22 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RFwMk5c3XztRgv;
-        Wed,  2 Aug 2023 10:06:58 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 2 Aug 2023 10:10:19 +0800
-Message-ID: <6ab00e7d-12e3-57e6-df03-abdb6029a531@huawei.com>
-Date:   Wed, 2 Aug 2023 10:10:19 +0800
+        Tue, 1 Aug 2023 22:19:06 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2047.outbound.protection.outlook.com [40.107.22.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C2B2689;
+        Tue,  1 Aug 2023 19:19:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jj9R6ldbdSqNnEdzvjVW/pPQbkDj9Uo6wr5yxUFeuXNlC0edc9hSv/8/fPplPBnkQlMuLS547nMn3Mf7lRaVoRkeyE+hsxq6mbRRGaflpPtodIfy4fRrKdtLMt/pAZtMZCwF+erQXQu2OI3bLwtU2MhXY9GlAletI3wwSYNGYpRJeh8hYoyI5sQ2FhIXI5l2hlWfk8TdxuFvCTbCbQT3UYZUaxwoVyvfk74iykuP/tF0XsrQ3ioKTOxoqrTQt+O0E3yvDGm4GnzaHwRCkaEqBMPHQexPpAc4oW/nXJb+GOdr/MC5StGbNGquaUUGpClo2hvAkV1tr96CeQn2BRWt7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5DGcjeUrNorHbWvij4vJzLryXSw/kY5C4fREMw64RXE=;
+ b=MFYMlpR5poEvMYAHFQjDv6DSD2QZ5aYz+I7i1PbbFDkdxavuW8DKZSfDmjlJUTnyv4QLaewB6QXXdmPOsjEDIjT4gHzbxkMplEEeev6Vwvm7MiyawpqCHbFoMJM+8i98YsxaGc6dIfu/2cvwo+eQUjociYVzYRi1m2dK0da+VD7u17SRy8VAhouTXjSilN+z8noerhhANX5CKxCwN6paKfOCqRDfwvkOm657/zDHvyK6tEkIIjQH/kFzbobMNPmOud6VMXFLtbP4aNFRt/RExypnvg3Tb5QmCiU2rCByS0CvRNDRUcWjYOnUFLy1VfXvCnUH769ky1f9NH/95jKwjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5DGcjeUrNorHbWvij4vJzLryXSw/kY5C4fREMw64RXE=;
+ b=4Qpdz3dcsvAjmd7ZKXvvvITTcQYPSP9fyWkRtUDRSe0q4qniXoaAy43JgSvf0OQzF4PcKU+oG/WGPlyvBvUDbrr9QE6TNg0HMV/loz/r+e+sTjUTxmiWbsHyk6qwpz6ogqNOJOqcfg9K8xVDLlUqB82MtorwcIOWKjwlC1b9f1xBxDpyuJLSgNBsrTTb4eKBSQneN/M1U0xkZPkr1LJNRI6+Ivjzezia8b1ZlnLzjFwayEQJrAeDaRxFb29c+JdeU40p081ZEai02OZ/ajKdDgpMplKql8MAbx7wJ4gNb+xMmTr4xbBdm8GD6HQvgAnK2+AIrZ9n2/mlkuzLNPnEig==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com (2603:10a6:7:83::14)
+ by AM7PR04MB7079.eurprd04.prod.outlook.com (2603:10a6:20b:11d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.45; Wed, 2 Aug
+ 2023 02:18:58 +0000
+Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com
+ ([fe80::bf65:a49a:8861:4f92]) by HE1PR0402MB3497.eurprd04.prod.outlook.com
+ ([fe80::bf65:a49a:8861:4f92%2]) with mapi id 15.20.6631.043; Wed, 2 Aug 2023
+ 02:18:58 +0000
+Date:   Wed, 2 Aug 2023 10:19:03 +0800
+From:   Geliang Tang <geliang.tang@suse.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC bpf-next v7 0/6] bpf: Force to MPTCP
+Message-ID: <20230802021903.GA3070@bogon>
+References: <cover.1690624340.git.geliang.tang@suse.com>
+ <20230801004323.l2npfegkq3srzff3@MacBook-Pro-8.local>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230801004323.l2npfegkq3srzff3@MacBook-Pro-8.local>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ClientProxiedBy: SI2PR02CA0009.apcprd02.prod.outlook.com
+ (2603:1096:4:194::11) To HE1PR0402MB3497.eurprd04.prod.outlook.com
+ (2603:10a6:7:83::14)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH -next] kunit: fix possible memory leak in
- kunit_filter_suites()
-Content-Language: en-US
-To:     Rae Moar <rmoar@google.com>
-CC:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
-        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>
-References: <20230801073700.3740895-1-ruanjinjie@huawei.com>
- <CA+GJov57JgEDN-hryh4nmLAAyDTvrWCnnHow5wP0RQCXcRmoZQ@mail.gmail.com>
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-In-Reply-To: <CA+GJov57JgEDN-hryh4nmLAAyDTvrWCnnHow5wP0RQCXcRmoZQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.109.254]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HE1PR0402MB3497:EE_|AM7PR04MB7079:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4ab749c5-b54c-4ce4-aef0-08db92fed3d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UJ38BUa0eohITOjkByT1TeBw7uB6yxJ0hbXIbcke9eIpgTdSKKH7m+Wnf6k9HYvU9E6gI6FCzme28m2/g9LkFwJHL9DSzNWel3LhyslPP0GxNinNlT3GdThudwPLfEY9hSM8L5KNdY3z/rBw0/2F8vornAeMuua1NVo286RhegNvqWxmC1qo2jTd0aLhVv1qLqSwMokk4Dh+MQLyVJa65kipjSfJVg34ywtfeNOIrT5hj8miYcSyRjOpKg1SiodVS3hzGmQ75ieZH/ylpyI6GRo/4qiKRY4LsoM9Kmevw0wb1C933ZQ+nymdSiCh9odwIWVlXiJsJrDreukTpOLuZZ4BqyNUeVw80PEt9hIFWkf/WH+v35rvPd2UIZfklYZwc9m+MZyYV7CQFxqwL9k+lwpam4A7dONxYsZh2J6ZxYl3vu6Bvm+bvWDhIGVLLRKy+bwPE2g8kQ69bu3/U1KWqktwJS+x8v6B6jqLFqKUV1iFEbW/05OdBVt9+/dk9ZPbrx8PrYYLAurY5WjPfDw3kQ+eZJW1qoKn9mDvJM+Flz83rYxJ7DOut/M3YRk9RtmHmxrhdUYoppxznmwCbZlNZ0211O4tExxhJ3o1gTmMsDE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB3497.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(376002)(366004)(136003)(396003)(346002)(451199021)(186003)(966005)(6512007)(9686003)(316002)(86362001)(478600001)(54906003)(38100700002)(66946007)(66556008)(66476007)(6666004)(33656002)(6486002)(33716001)(6916009)(4326008)(6506007)(41300700001)(26005)(8676002)(5660300002)(8936002)(1076003)(4744005)(2906002)(7416002)(7406005)(44832011)(13296009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?b2ibr3Ye3EjlCaHa7OICxYKDCaiYX+oY35VLw8rFldkmwIxRdMgVkz2ykkQz?=
+ =?us-ascii?Q?uKSxgFp5k4ZpD0ZPFWNrXQTUdV4weWzRe5NnRsV+wFcobBbFlmTRkmPkq17V?=
+ =?us-ascii?Q?nJxX2t7kNGeO4WzuxAlPE0Y5GZ00zw0wCibVMdLozvfbrhbGD6V4ONi+uQ+r?=
+ =?us-ascii?Q?0AoUxan8JYp/big3TmXobNHltmEwzO7Rq7i9OlouY5j22NNL7WpzQcANEq/a?=
+ =?us-ascii?Q?QLYZnhVg9j0YqRmLiz0lsKLl/HeJ9+v25fpWC5rP3YKyCmoaM48V7x+Bj7+P?=
+ =?us-ascii?Q?xuhq2wS372xWlniJslA7kbU/72igxYRu45XZX+4W9d6G/t5u00Os6yTZSVCV?=
+ =?us-ascii?Q?X3kgF1LaNLNXiGI7URhSNmYYfWFVZI64ghYOwoK+cPx7DXGYDdqJ+BkPen4p?=
+ =?us-ascii?Q?XpM046FNZOooivFtQIq6fH1Ws81jMB0kDq3BNoPg//R4tqwgWZBVs6QOHU84?=
+ =?us-ascii?Q?FQ+/wDpyiajtlFccXi+Uc34SPm67HrPeA/NoB5CypZILFsVhx9DbryKp2Yyy?=
+ =?us-ascii?Q?3+I5C+PKHHwJYqrfyniLmVHfBJ+6WwV9x8WKO/u8YXGi2o4Gf8qALqW3U/nr?=
+ =?us-ascii?Q?4ul74fvfz719/EvJXH8VdLHOHq+XAl6B4EEGuACg1h4jC56bgLkMzLOJQHkG?=
+ =?us-ascii?Q?QiHlQinPtGGttN2W4L1vVPf8mCwn9U2WAIWmxC2gNis3kCOfx/lcJvr5DTwB?=
+ =?us-ascii?Q?SxEmOlzp7CFkZFqEekFWRnwDPQBPx0ew1Awl/S88nmHe/+cIUtw/znk5zhyf?=
+ =?us-ascii?Q?UMj9kP7lNiKSAT2758bRI4ehwAyj/zfu6y5+fmzlTHHkG/ctW7Qvik1d7Iat?=
+ =?us-ascii?Q?lcd1o87Vja5Thz3TLF5E38+5d6n3XpHJYJfAjm0MVGTgMF32L/phMh3JEra9?=
+ =?us-ascii?Q?FYDcF5vtcdXxk/IGvd1c5Oym3ek6eTtoATPK6rY1mGWFgP4zqPGNgJx77rSw?=
+ =?us-ascii?Q?r/BIpK4NlO/qb7KfXGlqpEjuw7lYlo+Nmn8EVdeisEafyDlo4EEaPq/Arwgr?=
+ =?us-ascii?Q?neNMUB7+KUVj6MwvgDaqhJyyDwb91wi443aXxVTP4yreodkz8eAZmVxUbmsX?=
+ =?us-ascii?Q?/f/ZX+zGbq3mKRAPM7FEi1CqW6Gp2ZfO08pFvRZ1BRPIuGCHAAf8BUTs7105?=
+ =?us-ascii?Q?3LAao/1yWPZ4Z17sH8Awspu7+CSGAjZl8NVz72/7HSYfYNcm1X4DVJb0hlva?=
+ =?us-ascii?Q?mS0srpYKvdxnB+XNQRC26VugDUTXHxiRMTO7IPQZXYTzFd92mR43S92aHvhU?=
+ =?us-ascii?Q?NVLAhbolq+zAtFr8HPcsv8tpk4ViQodRGRlU1AoZRWyrbQy6CXwPlWIA7A4g?=
+ =?us-ascii?Q?06KsmBP3DMX0oBu0kD85pvaeUTE+T+/fPgZWntWkhBcuosZ1faIoQvlvp92I?=
+ =?us-ascii?Q?jf3ZqON5TBZRQHgpKLyMTxu78BQxdlT1J3mY0xvuW4EqLS33PWIu+oOf7reA?=
+ =?us-ascii?Q?jKCYbk66fiM/UrA+KDX4ioquXZJ+cuarQlk07ej+D5YmbWNZC0s5WLVcHNM/?=
+ =?us-ascii?Q?LLAnMCO/PkEfEnSo9QDtXlzoS5lN0txvoTjZPBB+uPmKr5av0apzW1rGByr5?=
+ =?us-ascii?Q?oUKlxD9o+Xx7cV47doaQE2HWcF20LVgox7sJrNtx?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ab749c5-b54c-4ce4-aef0-08db92fed3d5
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB3497.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2023 02:18:57.9338
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BQf/7G8I6zxrraDcWkf8TuPRzEFMQyOABmgzJevB3yqSqaOHHUTEIBMIkDtdfDnjqV8HiiVg/p27gBHpkujgqQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7079
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 2023/8/2 5:22, Rae Moar wrote:
-> On Tue, Aug 1, 2023 at 3:37 AM 'Ruan Jinjie' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
->>
->> Inject fault while probing drm_kunit_helpers.ko, if one of
->> kunit_next_attr_filter(), kunit_filter_glob_tests() and
->> kunit_filter_attr_tests() fails, parsed_filters,
->> parsed_glob.suite_glob/test_glob alloced in
->> kunit_parse_glob_filter() is leaked.
->> And the filtered_suite->test_cases alloced in kunit_filter_glob_tests()
->> or kunit_filter_attr_tests() may also be leaked.
->>
->> unreferenced object 0xff110001067e4800 (size 1024):
->>   comm "kunit_try_catch", pid 96, jiffies 4294671796 (age 763.547s)
->>   hex dump (first 32 bytes):
->>     73 75 69 74 65 32 00 00 00 00 00 00 00 00 00 00  suite2..........
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<00000000116e8eba>] __kmalloc_node_track_caller+0x4e/0x140
->>     [<00000000e2f9cce9>] kmemdup+0x2c/0x60
->>     [<000000002a36710b>] kunit_filter_suites+0x3e4/0xa50
->>     [<0000000045779fb9>] filter_suites_test+0x1b7/0x440
->>     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->>     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->>     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->>     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->>     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
->> unreferenced object 0xff11000105d79b00 (size 192):
->>   comm "kunit_try_catch", pid 96, jiffies 4294671796 (age 763.547s)
->>   hex dump (first 32 bytes):
->>     f0 e1 5a 88 ff ff ff ff 60 59 bb 8a ff ff ff ff  ..Z.....`Y......
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->>     [<000000006afe50bd>] kunit_filter_suites+0x424/0xa50
->>     [<0000000045779fb9>] filter_suites_test+0x1b7/0x440
->>     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->>     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->>     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->>     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->>     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
->> unreferenced object 0xff110001067e6000 (size 1024):
->>   comm "kunit_try_catch", pid 98, jiffies 4294671798 (age 763.545s)
->>   hex dump (first 32 bytes):
->>     73 75 69 74 65 32 00 00 00 00 00 00 00 00 00 00  suite2..........
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<00000000116e8eba>] __kmalloc_node_track_caller+0x4e/0x140
->>     [<00000000e2f9cce9>] kmemdup+0x2c/0x60
->>     [<000000002a36710b>] kunit_filter_suites+0x3e4/0xa50
->>     [<00000000f452f130>] filter_suites_test_glob_test+0x1b7/0x660
->>     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->>     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->>     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->>     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->>     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
->> unreferenced object 0xff11000103f3a800 (size 96):
->>   comm "kunit_try_catch", pid 98, jiffies 4294671798 (age 763.545s)
->>   hex dump (first 32 bytes):
->>     f0 e1 5a 88 ff ff ff ff 40 39 bb 8a ff ff ff ff  ..Z.....@9......
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->>     [<000000006afe50bd>] kunit_filter_suites+0x424/0xa50
->>     [<00000000f452f130>] filter_suites_test_glob_test+0x1b7/0x660
->>     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->>     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->>     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->>     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->>     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
->> unreferenced object 0xff11000101a72ac0 (size 16):
->>   comm "kunit_try_catch", pid 104, jiffies 4294671814 (age 763.529s)
->>   hex dump (first 16 bytes):
->>     00 00 00 00 00 00 00 00 e0 2a a7 01 01 00 11 ff  .........*......
->>   backtrace:
->>     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->>     [<00000000c7b724e7>] kunit_filter_suites+0x108/0xa50
->>     [<00000000bad5427d>] filter_attr_test+0x1e9/0x6a0
->>     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->>     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->>     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->>     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->>     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
->> unreferenced object 0xff11000103caf880 (size 32):
->>   comm "kunit_try_catch", pid 104, jiffies 4294671814 (age 763.547s)
->>   hex dump (first 32 bytes):
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->>     [<00000000c47b0f75>] kunit_filter_suites+0x189/0xa50
->>     [<00000000bad5427d>] filter_attr_test+0x1e9/0x6a0
->>     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->>     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->>     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->>     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->>     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
->> unreferenced object 0xff11000101a72ae0 (size 16):
->>   comm "kunit_try_catch", pid 106, jiffies 4294671823 (age 763.538s)
->>   hex dump (first 16 bytes):
->>     00 00 00 00 00 00 00 00 00 2b a7 01 01 00 11 ff  .........+......
->>   backtrace:
->>     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->>     [<00000000c7b724e7>] kunit_filter_suites+0x108/0xa50
->>     [<0000000096255c51>] filter_attr_empty_test+0x1b0/0x310
->>     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->>     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->>     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->>     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->>     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
->> unreferenced object 0xff11000103caf9c0 (size 32):
->>   comm "kunit_try_catch", pid 106, jiffies 4294671823 (age 763.538s)
->>   hex dump (first 32 bytes):
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->>     [<00000000c47b0f75>] kunit_filter_suites+0x189/0xa50
->>     [<0000000096255c51>] filter_attr_empty_test+0x1b0/0x310
->>     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->>     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->>     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->>     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->>     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
->> unreferenced object 0xff11000101a72b00 (size 16):
->>   comm "kunit_try_catch", pid 108, jiffies 4294671832 (age 763.529s)
->>   hex dump (first 16 bytes):
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->>     [<00000000c47b0f75>] kunit_filter_suites+0x189/0xa50
->>     [<00000000881258cc>] filter_attr_skip_test+0x148/0x770
->>     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->>     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->>     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->>     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->>     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
->>
->> Fixes: 5d31f71efcb6 ("kunit: add kunit.filter_glob cmdline option to filter suites")
->> Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
->> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+On Mon, Jul 31, 2023 at 05:43:23PM -0700, Alexei Starovoitov wrote:
+> On Sat, Jul 29, 2023 at 05:57:21PM +0800, Geliang Tang wrote:
+> > 
+> > The main idea is to add a hook in sys_socket() to change the protocol id
+> > from IPPROTO_TCP (or 0) to IPPROTO_MPTCP.
 > 
-> Hello!
+> I still think it's a hack, but its blast radius is nicely contained.
+> And since I cannot propose any better I'm ok with it.
 > 
-> I have tested this and this all looks good to me. Sorry for the delay
-> in responding to the patches addressing the bugs in filtering. I have
-> been out of the office for a few days. Thanks for addressing this!
+> Patches 1-2 can be squashed into one.
+> Just like patches 3-6 as a single patch for selftests.
 
-I find when open kmemleak and some kunit test config, the above memory
-leak info always occur.
+Thanks Alexei. I'll squash patch 1 and patch 2 into one, and squash patch 3
+and patch 6 into one for selftests. But I prefer to keep patch 4 and patch 5
+as is, since they were implemented in different times for different purposes.
+They were merged into MPTCP repo on May 17 for "run MPTCP sched tests in a
+dedicated ns" [1].
+
+[1]
+https://patchwork.kernel.org/project/mptcp/cover/cover.1684362296.git.geliang.tang@suse.com/
+
+-Geliang
 
 > 
-> Reviewed-by: Rae Moar <rmoar@google.com>
-> 
-> -Rae
-> 
->> ---
->>  lib/kunit/executor.c | 17 ++++++++++++-----
->>  1 file changed, 12 insertions(+), 5 deletions(-)
->>
->> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
->> index 5b5bed1efb93..481901d245d0 100644
->> --- a/lib/kunit/executor.c
->> +++ b/lib/kunit/executor.c
->> @@ -151,7 +151,7 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
->>                 for (j = 0; j < filter_count; j++)
->>                         parsed_filters[j] = kunit_next_attr_filter(&filters, err);
->>                 if (*err)
->> -                       return filtered;
->> +                       goto err;
->>         }
->>
->>         for (i = 0; &suite_set->start[i] != suite_set->end; i++) {
->> @@ -163,7 +163,7 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
->>                                         parsed_glob.test_glob);
->>                         if (IS_ERR(filtered_suite)) {
->>                                 *err = PTR_ERR(filtered_suite);
->> -                               return filtered;
->> +                               goto err;
->>                         }
->>                 }
->>                 if (filter_count) {
->> @@ -172,15 +172,18 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
->>                                                 parsed_filters[k], filter_action, err);
->>
->>                                 /* Free previous copy of suite */
->> -                               if (k > 0 || filter_glob)
->> +                               if (k > 0 || filter_glob) {
->> +                                       kfree(filtered_suite->test_cases);
->>                                         kfree(filtered_suite);
->> +                               }
->> +
->>                                 filtered_suite = new_filtered_suite;
->>
->>                                 if (*err)
->> -                                       return filtered;
->> +                                       goto err;
->>                                 if (IS_ERR(filtered_suite)) {
->>                                         *err = PTR_ERR(filtered_suite);
->> -                                       return filtered;
->> +                                       goto err;
->>                                 }
->>                                 if (!filtered_suite)
->>                                         break;
->> @@ -194,6 +197,10 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
->>         }
->>         filtered.end = copy;
->>
->> +err:
->> +       if (*err)
->> +               kfree(copy);
->> +
->>         if (filter_glob) {
->>                 kfree(parsed_glob.suite_glob);
->>                 kfree(parsed_glob.test_glob);
->> --
->> 2.34.1
->>
->> --
->> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
->> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
->> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230801073700.3740895-1-ruanjinjie%40huawei.com.
+> But before proceeding I'd like an explicit ack from netdev maintainers.
