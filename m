@@ -2,107 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E2276EDB9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 17:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F1276ED07
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 16:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236924AbjHCPNy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Aug 2023 11:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S234740AbjHCOqR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Aug 2023 10:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236907AbjHCPNx (ORCPT
+        with ESMTP id S235304AbjHCOqO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 11:13:53 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A69EE75
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 08:13:52 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-686c06b806cso729159b3a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 08:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1691075631; x=1691680431;
-        h=to:from:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+a2fB54AlyWkzUEDuBDciIZSmupcAmDbViWZx3iiKns=;
-        b=Ia16/ollXxBwMbhUVSz6hrN1tzd3JyT9/2JfyDWqgU811+gqlY2/F4J61JC5EvCmui
-         A5diJaWmzz0zpBQIJhvmum3sz+EmiFTCz9CI5nCYorYmWtKYoiFDs/odDi0QI3S+2/R3
-         1B5dMWtoqJDTScq0i6GhqmVryrks7vHhEDz17rWrQCpuIYcEYV69peyUjAKxvnrqnqra
-         FDDSvBA1edVKuGCjMkgOmmqdi/MsJvjKYisoBApyRESUgn8Jl9eabBXcl8eDVt8qE0WT
-         oAKuNEd6CZ1rldGMm6us9LM5dPZZm/bINtvp0r+ssEuAnQmKF4TazYbtaQDBo0Gh1sQL
-         fy6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691075631; x=1691680431;
-        h=to:from:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+a2fB54AlyWkzUEDuBDciIZSmupcAmDbViWZx3iiKns=;
-        b=HSuDeNl3dDPwehaMpfiHsAsJmeLES3GOSeS9wbe6DgS5NyU2kvb3Iof8miIx4zeZKy
-         /M2tLnLxB2S5cV9eAWXgtQDSjUrj0e4kWj7CTF8jw1+MWKqq1z1qbzIH38KfQoIXodCe
-         WvJXActMx0Se11wBQAyMFk4pRADpESjM1WVSt99hkF77H+HmIQjDTkE4Zl2gPWmHUS/0
-         tAh+FIOllAEBwTPqhTkES1Hq3/F5gUZf5/wEcl3QMj6xzEMJb3RSwYSpm7p5PRSvdJxQ
-         fM3g7iba7bQhQqvgrI445DcvotDZ+o5u2HpXP7XkGYG25X6CW+YwKIDrUH4Fn+05yr0P
-         moCw==
-X-Gm-Message-State: ABy/qLYIWpxBmVZZnxSJuf6jOAu9jC57ecACzKcZtSS9sB+7cAGSeD3k
-        Isd2jXDWZLSn1Si500FL0ZrFMg==
-X-Google-Smtp-Source: APBJJlFXAXyW8unSJ5ZlFzseZ1bjrOQHVX7phAzP8V10iSKpxZee3WmCWxSSSr3wjOFSUnrA5p1HQg==
-X-Received: by 2002:a05:6a00:b8f:b0:687:472f:514a with SMTP id g15-20020a056a000b8f00b00687472f514amr11383383pfj.2.1691075631160;
-        Thu, 03 Aug 2023 08:13:51 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id v13-20020a62a50d000000b0066ebaeb149dsm7176947pfm.88.2023.08.03.08.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Aug 2023 08:13:50 -0700 (PDT)
-In-Reply-To: <20230713115829.110421-1-alexghiti@rivosinc.com>
-References: <20230713115829.110421-1-alexghiti@rivosinc.com>
-Subject: Re: [PATCH] selftests: riscv: Fix compilation error with
- vstate_exec_nolibc.c
-Message-Id: <169107392503.27633.2191837906397435034.b4-ty@rivosinc.com>
-Date:   Thu, 03 Aug 2023 07:45:25 -0700
+        Thu, 3 Aug 2023 10:46:14 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DB71BC3;
+        Thu,  3 Aug 2023 07:46:09 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1691073958thq43qfz
+Received: from linux-lab-host.localdomain ( [116.30.131.233])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 03 Aug 2023 22:45:57 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: kUim6XnhvqW9dcd6EzLklGa12GVbNXdonLh2Hg+1w3dBPk/x2b5VmNG+MPDn6
+        PEFmwIR3cWR5MbUVbtIZAVws1QPogU+mUqaPc8Z5UL+wjlb/HxUYHDFDvWxvxrn7beB6YEn
+        BJDzwZdTbH+Pnq0s4jmy5USrmMOGCTiHxvHBDfw/upU5HD5rm6FNcWY2ldr2xYwhSoB3WBs
+        PydhNf4Gm9/FF4g1QfFcGO6D/1kY4BgUZfzgZOoFzKDqyTLkcYjUwBmT0W+0+t3inyNao0z
+        f/vv2iK7gyd6zVCAbhLmVK+KbTNnHyFRBSR3I1RimV2DcL7oRA9h0E+76pdW21iRRQWUVYs
+        X2PNNE2eNamVHpyeMuQ3SnFchCFW33O5RCRXPS9FqjSIWkh1GgEQMKggZnremX9J5q+j9qf
+        pKTbbIaUw/s=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 2311120515883083357
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, tanyuan@tinylab.org
+Subject: [PATCH v1 2/3] selftests/nolibc: fix up O= option support
+Date:   Thu,  3 Aug 2023 22:45:52 +0800
+Message-Id: <759307255e4ca3b37b67321d333967a21122c422.1691073180.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1691073180.git.falcon@tinylab.org>
+References: <cover.1691073180.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13-dev-901c5
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Chiu <andy.chiu@sifive.com>,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Alexandre Ghiti <alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+To avoid pollute the source code tree and avoid mrproper for every
+architecture switch, the O= argument must be supported.
 
-On Thu, 13 Jul 2023 13:58:29 +0200, Alexandre Ghiti wrote:
-> The following error happens:
-> 
-> In file included from vstate_exec_nolibc.c:2:
-> /usr/include/riscv64-linux-gnu/sys/prctl.h:42:12: error: conflicting types for ‘prctl’; h
-> ave ‘int(int, ...)’
->    42 | extern int prctl (int __option, ...) __THROW;
->       |            ^~~~~
-> In file included from ./../../../../include/nolibc/nolibc.h:99,
->                  from <command-line>:
-> ./../../../../include/nolibc/sys.h:892:5: note: previous definition of ‘prctl’ with type
-> ‘int(int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)
-> ’
->   892 | int prctl(int option, unsigned long arg2, unsigned long arg3,
->       |     ^~~~~
-> 
-> [...]
+Both IMAGE and .config are from the building directory, let's use
+objtree instead of srctree for them.
 
-Applied, thanks!
+If no O= option specified, means building kernel in source code tree,
+objtree should be srctree in such case.
 
-[1/1] selftests: riscv: Fix compilation error with vstate_exec_nolibc.c
-      https://git.kernel.org/palmer/c/25696067202f
+Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/lkml/ZK0AB1OXH1s2xYsh@1wt.eu/
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Best regards,
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 51fef5e6a152..af590aee063a 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -9,6 +9,9 @@ ifeq ($(srctree),)
+ srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
+ endif
+ 
++# add objtree for O= argument, required by IMAGE and .config
++objtree ?= $(srctree)
++
+ ifeq ($(ARCH),)
+ include $(srctree)/scripts/subarch.include
+ ARCH = $(SUBARCH)
+@@ -217,12 +220,12 @@ kernel: initramfs
+ 
+ # run the tests after building the kernel
+ run: kernel
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
++	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(objtree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ # re-run the tests from an existing kernel
+ rerun:
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
++	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(objtree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ # report with existing test log
 -- 
-Palmer Dabbelt <palmer@rivosinc.com>
+2.25.1
 
