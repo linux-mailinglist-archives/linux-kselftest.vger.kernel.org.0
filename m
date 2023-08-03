@@ -2,141 +2,361 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3273C76E2B2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 10:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960A276E2D2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 10:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbjHCIQJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Aug 2023 04:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
+        id S234484AbjHCIVE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Aug 2023 04:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjHCIPv (ORCPT
+        with ESMTP id S234207AbjHCIUk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 04:15:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6825B9D
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 01:07:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691050040;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jthayd5ui56Fpxqb9t3oQzEYmi7UMCMbE1ASe7GtkgY=;
-        b=LMe/BuKCSYiuwFscQ8KkvFfptCLN8CpE5q8mj/kq6wro8u8v9bbBCzTfw4S4VTTe+PaTHf
-        2mkrmuQtHInwM8D0wod7j+POP/007BA3wwpt+hXCBd/DYHZg+ynxHDodMZz5B+jaUiw5T5
-        NXc8i7T6dxiwmpTqVw1lUX+MI8CDIEc=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-580-CMlPuktwPsuY8-D7H6rkNQ-1; Thu, 03 Aug 2023 04:07:18 -0400
-X-MC-Unique: CMlPuktwPsuY8-D7H6rkNQ-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-76cd4e1628eso14792085a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 01:07:18 -0700 (PDT)
+        Thu, 3 Aug 2023 04:20:40 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C25F6A74
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 01:15:49 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fe32ec7201so52485e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 01:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691050548; x=1691655348;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BiM+4dSjfBsVl7canuXcNoRsm5/7H0M0KGKMOvT+RLw=;
+        b=wvcZ4XdNzK2YcVyl20cbCnhgZQu00DS7f6/AFkNXDQRMfXK7X29HlIWmVexHukb5pF
+         EHfdZwogBdTdJA403MwF8XZ0tqxHTRCWobKfNcSgtgjZ69+VI3SvJdpy2xs81FU4ow1X
+         42L2l0GSbF7eKVy7zj5bjLfbrNavGYHa/ayzq1rKp7Rq0KV3cazO3Opqkz7c/k0JfuL2
+         erEQ54rnGDwz+BvsQq3e6tItbOq18BPKPlrqI86mEW5MRCWukT66zFxavYQ/yBE3IEnR
+         y2mww77RrlixQIthz3l5uLgxn7hz87CW1P8NJ4KBGdWJGAfW/7wrCi1SQ5euR/QKc+GS
+         WT5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691050038; x=1691654838;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jthayd5ui56Fpxqb9t3oQzEYmi7UMCMbE1ASe7GtkgY=;
-        b=hFA0BEiUmX45Gkp8kFmpmugzf+8YhP7ATvDU0MiLbiFojVGtF3WP/7EpOg7cJTvVCU
-         ut6y8KfgER5t/D+DKAnxMwjuweLIuDnSVu3aroczQSBGuyTTAN5KPRJTpaZ3jSXPBQuf
-         IkSS0Rs3gyGAcVBskzIjHm4ehX0zkWMS/jgE+A4tcbFPQPiOejDu+b98T7qUcUrLrDRW
-         /XRogdDlwi8f1XfKALdjqkC3mGMUJ4UwRNl+rkXbxV6UEXCc0+u/b1MTDVHZun5C8f2m
-         5Jyse2XCqGHxG8bM/J2MdezJeu1Gim8EGSORySxHbfk6LL1TFG9rdMdA7pSHIID5I/Dp
-         fnbw==
-X-Gm-Message-State: ABy/qLbqvi1Q58sC1tr756nFtRt4Ybqenz5mSWXyZvf9PevHk5RpELY+
-        Kl8/OplXTMoYu46AloOAPHE2pYFWO3l/GL10JzWMxYcPx0q0wuZ57tE38K4OiaA8w6TKoMYVjUQ
-        O3Vj1H2xprqE4IPM2U9SegAIUOxIh
-X-Received: by 2002:a05:620a:4402:b0:767:e5ae:85cf with SMTP id v2-20020a05620a440200b00767e5ae85cfmr20789787qkp.5.1691050038476;
-        Thu, 03 Aug 2023 01:07:18 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFViPhNhnNp9SBe9EOo0iTO871MZ55RotErSLZwYTVfkCRo/1er0GobsFumxfa1ZKbpiUUQug==
-X-Received: by 2002:a05:620a:4402:b0:767:e5ae:85cf with SMTP id v2-20020a05620a440200b00767e5ae85cfmr20789778qkp.5.1691050038153;
-        Thu, 03 Aug 2023 01:07:18 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-226-226.dyn.eolo.it. [146.241.226.226])
-        by smtp.gmail.com with ESMTPSA id d8-20020a37c408000000b00767b4fa5d96sm5645884qki.27.2023.08.03.01.07.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Aug 2023 01:07:17 -0700 (PDT)
-Message-ID: <9916825da00d375a33abdcb0aa773c5520a307e1.camel@redhat.com>
-Subject: Re: [net-next 2/2] selftests: seg6: add selftest for NEXT-C-SID
- flavor in SRv6 End.X behavior
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>
-Date:   Thu, 03 Aug 2023 10:07:14 +0200
-In-Reply-To: <20230731175117.17376-3-andrea.mayer@uniroma2.it>
-References: <20230731175117.17376-1-andrea.mayer@uniroma2.it>
-         <20230731175117.17376-3-andrea.mayer@uniroma2.it>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        d=1e100.net; s=20221208; t=1691050548; x=1691655348;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BiM+4dSjfBsVl7canuXcNoRsm5/7H0M0KGKMOvT+RLw=;
+        b=becDG2Y+AhIAsN0DItaiJdsglw94gTpRqfXUICHSOU7MdcSsnIlvBp3s5Pkz1yuxPI
+         yBCcSXWhbyxXnv//UWdKeFwMjQBqBWhrLplcmn5aeE4sPfsmFY0Mcg8IM2XM8Oimc/S1
+         JFDkfAaKC0oefJzC1TswWkCvvTTlui6uyrFgx7AHhG8F37suX24DRrp3Gs30WAzjitBD
+         b7mHPEeh6/8G/y25+R7RdHWlI0rofH64x21CsHcGVN741USOFLH7I73oWL1SjO9lCap3
+         scoOho7bgwI8F3d8SFf7IbLY/PqXv5zYGzAnyhOkVcekIUNXhY7ls80zFhAVf5x/CyIN
+         6cHA==
+X-Gm-Message-State: ABy/qLY/WEeZtZ8OY8i0E9W58bktfrMuNwYHELBIrw4apz2v4gdwLjRi
+        isiOR8PMptsGR0KQCkY/hn2HxXlwCeqXq2sUz78f+g==
+X-Google-Smtp-Source: APBJJlFf4EetmXpIrlrhTA6x90iasT+njiUn4COPCwyzd1VcWog9z+dnkSX0hQMZt8YiW+7IDjrPsljNZkxp6x4Ylb4=
+X-Received: by 2002:a7b:cbcd:0:b0:3fd:e15:6d5 with SMTP id n13-20020a7bcbcd000000b003fd0e1506d5mr488371wmi.2.1691050548293;
+ Thu, 03 Aug 2023 01:15:48 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+References: <20230802212834.761327-1-rmoar@google.com>
+In-Reply-To: <20230802212834.761327-1-rmoar@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 3 Aug 2023 16:15:34 +0800
+Message-ID: <CABVgOSkGL2QhcQ7067NddajXGOJvjN88O7OjdTs3YY2xgMSZPQ@mail.gmail.com>
+Subject: Re: [PATCH -next] kunit: fix uninitialized variables bug in
+ attributes filtering
+To:     Rae Moar <rmoar@google.com>
+Cc:     shuah@kernel.org, brendan.higgins@linux.dev, ruanjinjie@huawei.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000004081d506020063f8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2023-07-31 at 19:51 +0200, Andrea Mayer wrote:
-> From: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
->=20
-> This selftest is designed for testing the support of NEXT-C-SID flavor
-> for SRv6 End.X behavior. It instantiates a virtual network composed of
-> several nodes: hosts and SRv6 routers. Each node is realized using a
-> network namespace that is properly interconnected to others through veth
-> pairs, according to the topology depicted in the selftest script file.
-> The test considers SRv6 routers implementing IPv4/IPv6 L3 VPNs leveraged
-> by hosts for communicating with each other. Such routers i) apply
-> different SRv6 Policies to the traffic received from connected hosts,
-> considering the IPv4 or IPv6 protocols; ii) use the NEXT-C-SID
-> compression mechanism for encoding several SRv6 segments within a single
-> 128-bit SID address, referred to as a Compressed SID (C-SID) container.
->=20
-> The NEXT-C-SID is provided as a "flavor" of the SRv6 End.X behavior,
-> enabling it to properly process the C-SID containers. The correct
-> execution of the enabled NEXT-C-SID SRv6 End.X behavior is verified
-> through reachability tests carried out between hosts belonging to the
-> same VPN.
->=20
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> Signed-off-by: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
+--0000000000004081d506020063f8
+Content-Type: text/plain; charset="UTF-8"
 
-The patches LGTM, but there is a minor issues WRT the tag area. Since
-this patch contains a
+On Thu, 3 Aug 2023 at 05:28, Rae Moar <rmoar@google.com> wrote:
+>
+> Fix smatch warnings regarding uninitialized variables in the filtering
+> patch of the new KUnit Attributes feature.
+>
+> Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Closes: https://lore.kernel.org/r/202307270610.s0w4NKEn-lkp@intel.com/
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> ---
 
-From: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
+These fixes look good, especially the ones in attributes.c.
 
-tag, Paolo's sob should come first.
+There's still a possibility of returning uninitialised or freed
+pointers in executor.c. If we can keep 'filtered' valid at all times,
+this should be easier to deal with, e.g.:
 
-According to the the newly created shell script comments, it looks like
-the patch as been co developed by both Paolo abd Andrea.
+- Initialise 'filtered' to {NULL, NULL}, which is a valid "empty" value.
+- Only ever set start and end at the same time, so don't set 'start'
+immediately after allocation.
+- Wait until the filtering is complete and successful (i.e., where
+'end' is set now), and set 'start' there as well.
+- Then return filtered will definitely either return the completely
+filtered value, or a valid empty suite_set.
 
-In that case the correct tag sequence would be:
+Otherwise, this looks good.
 
-SoB Paolo
-Co-devel Andrea
-SoB Andrea
+-- David
 
-Since the above is relevant for correct patch authorship attribution I
-suggest to address that in a new revision.
+>
+> Note that this is rebased on top of the recent fix:
+> ("kunit: fix possible memory leak in kunit_filter_suites()").
+>
+>  lib/kunit/attributes.c | 40 +++++++++++++++++-----------------------
+>  lib/kunit/executor.c   | 10 +++++++---
+>  2 files changed, 24 insertions(+), 26 deletions(-)
+>
+> diff --git a/lib/kunit/attributes.c b/lib/kunit/attributes.c
+> index d37c40c0ce4f..5e3034b6be99 100644
+> --- a/lib/kunit/attributes.c
+> +++ b/lib/kunit/attributes.c
+> @@ -102,7 +102,7 @@ static int int_filter(long val, const char *op, int input, int *err)
+>  static int attr_enum_filter(void *attr, const char *input, int *err,
+>                 const char * const str_list[], int max)
+>  {
+> -       int i, j, input_int;
+> +       int i, j, input_int = -1;
+>         long test_val = (long)attr;
+>         const char *input_val = NULL;
+>
+> @@ -124,7 +124,7 @@ static int attr_enum_filter(void *attr, const char *input, int *err,
+>                         input_int = j;
+>         }
+>
+> -       if (!input_int) {
+> +       if (input_int < 0) {
+>                 *err = -EINVAL;
+>                 pr_err("kunit executor: invalid filter input: %s\n", input);
+>                 return false;
+> @@ -186,8 +186,10 @@ static void *attr_module_get(void *test_or_suite, bool is_test)
+>         // Suites get their module attribute from their first test_case
+>         if (test)
+>                 return ((void *) test->module_name);
+> -       else
+> +       else if (kunit_suite_num_test_cases(suite) > 0)
+>                 return ((void *) suite->test_cases[0].module_name);
+> +       else
+> +               return (void *) "";
+>  }
+>
+>  /* List of all Test Attributes */
+> @@ -221,7 +223,7 @@ const char *kunit_attr_filter_name(struct kunit_attr_filter filter)
+>  void kunit_print_attr(void *test_or_suite, bool is_test, unsigned int test_level)
+>  {
+>         int i;
+> -       bool to_free;
+> +       bool to_free = false;
+>         void *attr;
+>         const char *attr_name, *attr_str;
+>         struct kunit_suite *suite = is_test ? NULL : test_or_suite;
+> @@ -255,7 +257,7 @@ void kunit_print_attr(void *test_or_suite, bool is_test, unsigned int test_level
+>
+>  int kunit_get_filter_count(char *input)
+>  {
+> -       int i, comma_index, count = 0;
+> +       int i, comma_index = 0, count = 0;
+>
+>         for (i = 0; input[i]; i++) {
+>                 if (input[i] == ',') {
+> @@ -272,7 +274,7 @@ int kunit_get_filter_count(char *input)
+>  struct kunit_attr_filter kunit_next_attr_filter(char **filters, int *err)
+>  {
+>         struct kunit_attr_filter filter = {};
+> -       int i, j, comma_index, new_start_index;
+> +       int i, j, comma_index = 0, new_start_index = 0;
+>         int op_index = -1, attr_index = -1;
+>         char op;
+>         char *input = *filters;
+> @@ -316,7 +318,7 @@ struct kunit_attr_filter kunit_next_attr_filter(char **filters, int *err)
+>                 filter.attr = &kunit_attr_list[attr_index];
+>         }
+>
+> -       if (comma_index) {
+> +       if (comma_index > 0) {
+>                 input[comma_index] = '\0';
+>                 filter.input = input + op_index;
+>                 input = input + new_start_index;
+> @@ -356,31 +358,22 @@ struct kunit_suite *kunit_filter_attr_tests(const struct kunit_suite *const suit
+>
+>         /* Save filtering result on default value */
+>         default_result = filter.attr->filter(filter.attr->attr_default, filter.input, err);
+> -       if (*err) {
+> -               kfree(copy);
+> -               kfree(filtered);
+> -               return NULL;
+> -       }
+> +       if (*err)
+> +               goto err;
+>
+>         /* Save suite attribute value and filtering result on that value */
+>         suite_val = filter.attr->get_attr((void *)suite, false);
+>         suite_result = filter.attr->filter(suite_val, filter.input, err);
+> -       if (*err) {
+> -               kfree(copy);
+> -               kfree(filtered);
+> -               return NULL;
+> -       }
+> +       if (*err)
+> +               goto err;
+>
+>         /* For each test case, save test case if passes filtering. */
+>         kunit_suite_for_each_test_case(suite, test_case) {
+>                 test_val = filter.attr->get_attr((void *) test_case, true);
+>                 test_result = filter.attr->filter(filter.attr->get_attr(test_case, true),
+>                                 filter.input, err);
+> -               if (*err) {
+> -                       kfree(copy);
+> -                       kfree(filtered);
+> -                       return NULL;
+> -               }
+> +               if (*err)
+> +                       goto err;
+>
+>                 /*
+>                  * If attribute value of test case is set, filter on that value.
+> @@ -406,7 +399,8 @@ struct kunit_suite *kunit_filter_attr_tests(const struct kunit_suite *const suit
+>                 }
+>         }
+>
+> -       if (n == 0) {
+> +err:
+> +       if (n == 0 || *err) {
+>                 kfree(copy);
+>                 kfree(filtered);
+>                 return NULL;
+> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> index 481901d245d0..b6e07de2876a 100644
+> --- a/lib/kunit/executor.c
+> +++ b/lib/kunit/executor.c
+> @@ -130,7 +130,7 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+>         struct kunit_suite **copy, *filtered_suite, *new_filtered_suite;
+>         struct suite_set filtered;
+>         struct kunit_glob_filter parsed_glob;
+> -       struct kunit_attr_filter *parsed_filters;
+> +       struct kunit_attr_filter *parsed_filters = NULL;
+>
+>         const size_t max = suite_set->end - suite_set->start;
+>
+> @@ -147,7 +147,11 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+>         /* Parse attribute filters */
+>         if (filters) {
+>                 filter_count = kunit_get_filter_count(filters);
+> -               parsed_filters = kcalloc(filter_count + 1, sizeof(*parsed_filters), GFP_KERNEL);
+> +               parsed_filters = kcalloc(filter_count, sizeof(*parsed_filters), GFP_KERNEL);
+> +               if (!parsed_filters) {
+> +                       kfree(copy);
+> +                       return filtered;
 
-BTW, I a really appreciate the descriptive-but-not-too-verbose commit
-message!
+Is 'filtered' properly initialised here?
+filtered.start is already set to 'copy' by this point (so, having
+freed 'copy', this would now be an invalid pointer).
+filtered.end is uninitialised.
 
-Thanks,
+Can we instead initialise filtered to {NULL, NULL} at the start, and
+only set start and end after the filtering has succeeded?
 
-Paolo
+> +               }
+>                 for (j = 0; j < filter_count; j++)
+>                         parsed_filters[j] = kunit_next_attr_filter(&filters, err);
+>                 if (*err)
+> @@ -166,7 +170,7 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+>                                 goto err;
+>                         }
+>                 }
+> -               if (filter_count) {
+> +               if (filter_count > 0 && parsed_filters != NULL) {
+>                         for (k = 0; k < filter_count; k++) {
+>                                 new_filtered_suite = kunit_filter_attr_tests(filtered_suite,
+>                                                 parsed_filters[k], filter_action, err);
+>
+> base-commit: 3bffe185ad11e408903d2782727877388d08d94e
+> --
+> 2.41.0.585.gd2178a4bd4-goog
+>
 
+--0000000000004081d506020063f8
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+9IGQSBx2i4m+hGXJpET+MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQCRI3Z4cAidgFcv
+Usqdz765x6KMZSfg/WtFrYg8ewsP2NpCxVM2+EhPyyEQ0k0DhtzdtGoI/Ug+jdFDyCKB9P2+EPLh
+iMjMnFILp7Zs4r18ECHlvZuDZfH9m0BchXIxu5jLIuQyKUWrCRDZZEDNr510ZhhVfYSFPA8ms1nk
+jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
+jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
+FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDV
+eAtnEqmpNX2czJtg7AmAhFo5dhowdn/aLiAUOe3KcTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA4MDMwODE1NDhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAIPVZNFrfbeoajipFxH7q
+q2a3fJh3CcE+sgUxbVg0S5BksKga2Fvv8xFHU0bsHKL54XlgSAC/ZqhLBGY0B8NbjBOzQkSmN+Hr
+Gk0JBQaapeYp1sc6kOqDAyMvOT0LeQuVvTzyFlTnMAKwNMsGD8Q/Ba6KKumdn+a15G+xHWQSHkld
+v8ZZaE6p+DMtm6G9USpMPbeyNPuf8pWgb5+amYhBVUwxH5j9pzzYsiBNaaw/Kq1RD55Y8jxRRK9R
+srhVQuoHa5ELbg6tiSQPnpTU97k653QjKt2ze+4+aQwCxvH6qaeco2WhwmFL66qZfvcs0rw7vAR5
+n2nVKoM0l0siWmJ5hw==
+--0000000000004081d506020063f8--
