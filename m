@@ -2,139 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D54376E28E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 10:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3273C76E2B2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 10:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbjHCILb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Aug 2023 04:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
+        id S232799AbjHCIQJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Aug 2023 04:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbjHCILD (ORCPT
+        with ESMTP id S231343AbjHCIPv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 04:11:03 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E4935BC
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 01:03:13 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9936b3d0286so96744266b.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 01:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1691049792; x=1691654592;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GrJQSNHnWu1Mk5U+4IadqjOBUP3A5seeDYi38nWCivY=;
-        b=KwkT2N3PnW/R4BDYOzR+gHZbBvaQbN2DmN4G4cp/vO9MI6hwOw43rB3gJ7xyRvAd2l
-         Xzhx0deoBlgSKZTOTDNNaMI70lQzpdhOS+A8n1V6nuBwo74OH63U9ztZQms14YeVUCM6
-         X+iC5w6tvwGk9aCZeBWjVmg27727jU47u0+/+INna0wmiQMcF4QfrqvAt1uNoOHDmfkS
-         m091u50oCxlPSRc3eUNBlYoSmPcyuYSCb4ZMV5XSGc9KFTqWzX0dERGOj0hRWNNU53ap
-         3OgGo/+Yb8SwQa4H/rX1e4W6ZRM/BuJGtE7/9RWCWeU4NGRiENn9DhIH9sLlvif5tQjZ
-         3Jzg==
+        Thu, 3 Aug 2023 04:15:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6825B9D
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 01:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1691050040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jthayd5ui56Fpxqb9t3oQzEYmi7UMCMbE1ASe7GtkgY=;
+        b=LMe/BuKCSYiuwFscQ8KkvFfptCLN8CpE5q8mj/kq6wro8u8v9bbBCzTfw4S4VTTe+PaTHf
+        2mkrmuQtHInwM8D0wod7j+POP/007BA3wwpt+hXCBd/DYHZg+ynxHDodMZz5B+jaUiw5T5
+        NXc8i7T6dxiwmpTqVw1lUX+MI8CDIEc=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-580-CMlPuktwPsuY8-D7H6rkNQ-1; Thu, 03 Aug 2023 04:07:18 -0400
+X-MC-Unique: CMlPuktwPsuY8-D7H6rkNQ-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-76cd4e1628eso14792085a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 01:07:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691049792; x=1691654592;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GrJQSNHnWu1Mk5U+4IadqjOBUP3A5seeDYi38nWCivY=;
-        b=B+2nekBootGvy8totD4jFTJ9u8B3+VInrOQ41R+umPktG4wwL0LA5Ri1rt4FHsfo1R
-         ZW9ovykf+UgmUUVT4Ci28+c/mn+zV2oRupnzRxf+RXtTqmyaLFDkm3MWOh5q5P231Nw8
-         4YW0VN7MZlHF4Y/CbPCR7uHjug6f3LgydZ3n/NaWqgRzFx6doDuNfbsSyRb6DdqY60Fj
-         6qjnkrZdlI1qhccQS/CD4jjMnoWr54ku6bZQhBELNm3ujbMjHqIoEHOLtAk3JnvbxVQc
-         gV8WuAyppIB5wkXQOKOjBBTFqIQ/1iQo2+89GeHaPKf0EyFVqoGqwbUbaAW0mYPvwY7C
-         KYyg==
-X-Gm-Message-State: ABy/qLY9pKp5jJ6FV2UaZPiCAwLTZzJ9JnXamxe/JkCqLz0SLdvuSrtA
-        d3YmLmmSAcghBtGuvXu9RPXzGg==
-X-Google-Smtp-Source: APBJJlFuoAgOoNZTTSWYdyf/voBRcYNotvUorgT7zRDZV0LpAzuovYP3wZXGHTzDfXBjWUDoRCCLCg==
-X-Received: by 2002:aa7:de14:0:b0:519:6a6a:7659 with SMTP id h20-20020aa7de14000000b005196a6a7659mr8036773edv.18.1691049791807;
-        Thu, 03 Aug 2023 01:03:11 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:ace8:eb44:12a0:888? ([2a02:578:8593:1200:ace8:eb44:12a0:888])
-        by smtp.gmail.com with ESMTPSA id ay9-20020a056402202900b005223d76a3e3sm9669924edb.85.2023.08.03.01.03.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Aug 2023 01:03:11 -0700 (PDT)
-Message-ID: <6bcd3193-deb2-42b6-9732-48d76eb59913@tessares.net>
-Date:   Thu, 3 Aug 2023 10:03:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v8 4/4] selftests/bpf: Add mptcpify test
-Content-Language: en-GB
-To:     Geliang Tang <geliang.tang@suse.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Mat Martineau <martineau@kernel.org>,
+        d=1e100.net; s=20221208; t=1691050038; x=1691654838;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jthayd5ui56Fpxqb9t3oQzEYmi7UMCMbE1ASe7GtkgY=;
+        b=hFA0BEiUmX45Gkp8kFmpmugzf+8YhP7ATvDU0MiLbiFojVGtF3WP/7EpOg7cJTvVCU
+         ut6y8KfgER5t/D+DKAnxMwjuweLIuDnSVu3aroczQSBGuyTTAN5KPRJTpaZ3jSXPBQuf
+         IkSS0Rs3gyGAcVBskzIjHm4ehX0zkWMS/jgE+A4tcbFPQPiOejDu+b98T7qUcUrLrDRW
+         /XRogdDlwi8f1XfKALdjqkC3mGMUJ4UwRNl+rkXbxV6UEXCc0+u/b1MTDVHZun5C8f2m
+         5Jyse2XCqGHxG8bM/J2MdezJeu1Gim8EGSORySxHbfk6LL1TFG9rdMdA7pSHIID5I/Dp
+         fnbw==
+X-Gm-Message-State: ABy/qLbqvi1Q58sC1tr756nFtRt4Ybqenz5mSWXyZvf9PevHk5RpELY+
+        Kl8/OplXTMoYu46AloOAPHE2pYFWO3l/GL10JzWMxYcPx0q0wuZ57tE38K4OiaA8w6TKoMYVjUQ
+        O3Vj1H2xprqE4IPM2U9SegAIUOxIh
+X-Received: by 2002:a05:620a:4402:b0:767:e5ae:85cf with SMTP id v2-20020a05620a440200b00767e5ae85cfmr20789787qkp.5.1691050038476;
+        Thu, 03 Aug 2023 01:07:18 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFViPhNhnNp9SBe9EOo0iTO871MZ55RotErSLZwYTVfkCRo/1er0GobsFumxfa1ZKbpiUUQug==
+X-Received: by 2002:a05:620a:4402:b0:767:e5ae:85cf with SMTP id v2-20020a05620a440200b00767e5ae85cfmr20789778qkp.5.1691050038153;
+        Thu, 03 Aug 2023 01:07:18 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-226-226.dyn.eolo.it. [146.241.226.226])
+        by smtp.gmail.com with ESMTPSA id d8-20020a37c408000000b00767b4fa5d96sm5645884qki.27.2023.08.03.01.07.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Aug 2023 01:07:17 -0700 (PDT)
+Message-ID: <9916825da00d375a33abdcb0aa773c5520a307e1.camel@redhat.com>
+Subject: Re: [net-next 2/2] selftests: seg6: add selftest for NEXT-C-SID
+ flavor in SRv6 End.X behavior
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <cover.1691047403.git.geliang.tang@suse.com>
- <4b95511da1a9dfd1a55734e32b7b6510739a7ab7.1691047403.git.geliang.tang@suse.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Autocrypt: addr=matthieu.baerts@tessares.net; keydata=
- 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
-In-Reply-To: <4b95511da1a9dfd1a55734e32b7b6510739a7ab7.1691047403.git.geliang.tang@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
+        Hangbin Liu <liuhangbin@gmail.com>
+Date:   Thu, 03 Aug 2023 10:07:14 +0200
+In-Reply-To: <20230731175117.17376-3-andrea.mayer@uniroma2.it>
+References: <20230731175117.17376-1-andrea.mayer@uniroma2.it>
+         <20230731175117.17376-3-andrea.mayer@uniroma2.it>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -142,29 +90,53 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Geliang,
+On Mon, 2023-07-31 at 19:51 +0200, Andrea Mayer wrote:
+> From: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
+>=20
+> This selftest is designed for testing the support of NEXT-C-SID flavor
+> for SRv6 End.X behavior. It instantiates a virtual network composed of
+> several nodes: hosts and SRv6 routers. Each node is realized using a
+> network namespace that is properly interconnected to others through veth
+> pairs, according to the topology depicted in the selftest script file.
+> The test considers SRv6 routers implementing IPv4/IPv6 L3 VPNs leveraged
+> by hosts for communicating with each other. Such routers i) apply
+> different SRv6 Policies to the traffic received from connected hosts,
+> considering the IPv4 or IPv6 protocols; ii) use the NEXT-C-SID
+> compression mechanism for encoding several SRv6 segments within a single
+> 128-bit SID address, referred to as a Compressed SID (C-SID) container.
+>=20
+> The NEXT-C-SID is provided as a "flavor" of the SRv6 End.X behavior,
+> enabling it to properly process the C-SID containers. The correct
+> execution of the enabled NEXT-C-SID SRv6 End.X behavior is verified
+> through reachability tests carried out between hosts belonging to the
+> same VPN.
+>=20
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> Signed-off-by: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
 
-On 03/08/2023 09:30, Geliang Tang wrote:
-> Implement a new test program mptcpify: if the family is AF_INET or
-> AF_INET6, the type is SOCK_STREAM, and the protocol ID is 0 or
-> IPPROTO_TCP, set it to IPPROTO_MPTCP. It will be hooked in
-> update_socket_protocol().
-> 
-> Extend the MPTCP test base, add a selftest test_mptcpify() for the
-> mptcpify case. Open and load the mptcpify test prog to mptcpify the
-> TCP sockets dynamically, then use start_server() and connect_to_fd()
-> to create a TCP socket, but actually what's created is an MPTCP
-> socket, which can be verified through the outputs of 'ss' and 'nstat'
-> commands.
+The patches LGTM, but there is a minor issues WRT the tag area. Since
+this patch contains a
 
-Thank you for the modifications!
+From: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
 
-For MPTCP related code, it looks good to me:
+tag, Paolo's sob should come first.
 
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+According to the the newly created shell script comments, it looks like
+the patch as been co developed by both Paolo abd Andrea.
 
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+In that case the correct tag sequence would be:
+
+SoB Paolo
+Co-devel Andrea
+SoB Andrea
+
+Since the above is relevant for correct patch authorship attribution I
+suggest to address that in a new revision.
+
+BTW, I a really appreciate the descriptive-but-not-too-verbose commit
+message!
+
+Thanks,
+
+Paolo
+
