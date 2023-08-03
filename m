@@ -2,89 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5034D76E239
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 09:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7FC76E255
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 10:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234211AbjHCH57 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Aug 2023 03:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        id S234293AbjHCICM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Aug 2023 04:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234174AbjHCH5J (ORCPT
+        with ESMTP id S232519AbjHCIA7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 03:57:09 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AB093ED
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 00:44:54 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-99c10ba30afso381911666b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 00:44:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1691048689; x=1691653489;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CSSRhpwsXf70z+1rxlQ2+hkymtm2lwEBhyh07kPB2pk=;
-        b=hVshpXD1f4VzOD4XcxN3LbCb5HapivOPgFQ+ILU0E4alQRUTVmJwgTwVgUvmzBMszt
-         NDqQtPAZmoLrTkgoPimF8eEzhIDPdpAKz+2EKqLtmx7HB/j2CAUcEcg/+5rMoDpwE0nO
-         3eWEEAyYy1dNbtgfyBWfxn0dYcGaX5y2VC5pxwRD13Nkz2YIkx8/HrOFqbbgo1cDi1xv
-         RefAjQl5EQ0h6nMKJja2YklPKW0V8kuY+qiTMI5yn3SCwLsVjJpvexcAFsqNgXTVLnRH
-         QkGpbWuDmvFT02VSc55AQg68lHgTe2htKOM4EvvpIE/Tk4ZGfEhGvwHg19itDFbM26AX
-         qdMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691048689; x=1691653489;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CSSRhpwsXf70z+1rxlQ2+hkymtm2lwEBhyh07kPB2pk=;
-        b=ga2cdbzlneFM4YNmm0pudF/MAdks+ngckhPAnhafKxbVn5Mc63LMswKmTOB+MpFofB
-         7GR5d4LdnwtJ4nPB5CDwqnilOAiXjkPwW35zcGmvHrHQqQazIRxs+L02oKVjSolzUI13
-         RI8nNCP7WAJ5ba9EIj+hqrfw1/4pmlwYwtY+dmAJIH8f4FnRNk67J2h674IAszIEpser
-         P3I9hpXQHEc1ZdfBiBXg2Zl00tN/d23/W5902kuaru9wzPKTZEOQ5GD4i6bG7SLj71UC
-         wejHhIVuYMvMgI2PclDAlOqCorlIJfPvtLZfjHW1+S32Y1Wxbo0tS6OF4+NNcAdqtm6H
-         fLqg==
-X-Gm-Message-State: ABy/qLYGYfEjRRrCdl5vGCoh0n9oD9lLSrUZofHXjRzR/H7PXPzz4kFq
-        0nt98+ZriyXxpwWEWNe6E3erQA==
-X-Google-Smtp-Source: APBJJlHdMEoyrcmNp/byt0aZUIBGbZ/dYH98Vd4bOX3Z9OBMzCaUzxR0W2Ed2cfgzDFl1sbdTUlvww==
-X-Received: by 2002:a17:906:8a4d:b0:993:da0b:8783 with SMTP id gx13-20020a1709068a4d00b00993da0b8783mr8855806ejc.3.1691048689638;
-        Thu, 03 Aug 2023 00:44:49 -0700 (PDT)
-Received: from localhost (212-5-140-29.ip.btc-net.bg. [212.5.140.29])
-        by smtp.gmail.com with ESMTPSA id si15-20020a170906cecf00b00993004239a4sm10128648ejb.215.2023.08.03.00.44.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Aug 2023 00:44:49 -0700 (PDT)
-Date:   Thu, 3 Aug 2023 10:44:47 +0300
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Haibo Xu <xiaobo55x@gmail.com>, Haibo Xu <haibo1.xu@intel.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Colton Lewis <coltonlewis@google.com>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Vishal Annapurve <vannapurve@google.com>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH 1/4] tools: riscv: Add header file csr.h
-Message-ID: <20230803-5b7e7c0d95597b004764a296@orel>
-References: <cover.1690364259.git.haibo1.xu@intel.com>
- <35ce2b9f7ca655eb3af13730b1ca9f05b518e08f.1690364259.git.haibo1.xu@intel.com>
- <20230728-879500f157954d849fb303ec@orel>
- <CAJve8onDLEC1JFdERi098sTmN3-UkwaJ1aJz3CJNYU-GShkEyg@mail.gmail.com>
- <ZMsbXk4JU/Ung7qu@gmail.com>
+        Thu, 3 Aug 2023 04:00:59 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8B549C5;
+        Thu,  3 Aug 2023 00:51:36 -0700 (PDT)
+X-QQ-mid: bizesmtp63t1691049082t37lovh4
+Received: from linux-lab-host.localdomain ( [116.30.131.233])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 03 Aug 2023 15:51:21 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: q+EIYT+FhZpJNnQZqE13UO0u+lKWcobXuNSUyobgDPkR8n5tc51SRyUG83dCj
+        EaAODalCOPJ0Y8eYCeuOoPrGTA9n7ym8gi8axHTk+HW3JtQh8KJ+8+k3+3Ag/Kwf3LWAOMR
+        xG4SyySoWR78Oy7cj7MN0KTQZT6Cs/5qPN1w7SRKorM3g2t6EHTDVOXntFLU/39gjD6XNuV
+        J0a0vI2PdO0u9BM6Id0w3Q3q5qXOgOcVIc9uNuOE0irr8/LLJjovA4KU5s+8/eojb3S8T5m
+        v9nXZlfjuBTwatjba7v/+y8So2lQnkojeICFhGtNQvYyyylETpBN5fKr1ofddqsvMefrenZ
+        tgz4/vIG0v5NgokY1k9Fc1H21BZpJ/dg1jITvVLL6KbN/QfZhdfQwndlihW6MUcr7Uy6K2a
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 8175652093103281820
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, tanyuan@tinylab.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v4 08/12] selftests/nolibc: add test support for ppc
+Date:   Thu,  3 Aug 2023 15:51:20 +0800
+Message-Id: <20230803075120.76776-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230803020533.GA23704@1wt.eu>
+References: <20230803020533.GA23704@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZMsbXk4JU/Ung7qu@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,25 +53,70 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 02, 2023 at 11:13:34PM -0400, Guo Ren wrote:
-> On Wed, Aug 02, 2023 at 10:05:00AM +0800, Haibo Xu wrote:
-> > On Fri, Jul 28, 2023 at 5:43 PM Andrew Jones <ajones@ventanamicro.com> wrote:
-> > >
-> > > On Thu, Jul 27, 2023 at 03:20:05PM +0800, Haibo Xu wrote:
-> > > > Borrow some of the csr definitions and operations from kernel's
-> > > > arch/riscv/include/asm/csr.h to tools/ for riscv.
-> > >
-> > > You should copy the entire file verbatim.
-> > >
-> > 
-> > Ok, will copy all the definitions in the original csr.h
-> Why not include the original one? Maintain the one csr.h is more
-> comfortable.
+Hi, Willy
 
-selftests and other userspace tools can't always compile when including a
-kernel header without modifying the header in some way. Rather than
-polluting headers with #ifdeffery, the practice has been to copy necessary
-headers to tools/include and modify if necessary.
+> On Thu, Aug 03, 2023 at 10:58:55AM +0800, Zhangjin Wu wrote:
+> > Yes, ppc series at first, will renew it today. let's delay the whole tinyconfig
+> > series (include part1) in v6.7, we have no enough time to test them carefully
+> > for v6.6.
+> 
+> Thanks.
+>
 
-Thanks,
-drew
+To even further simplify the ppc series merge progress, since Yuan have helped
+me sending the standalone serial console enable patch for pmac32_defconfig [1],
+and it has gotten a Reviewed-by line from the ppc maintainer, perhaps we can
+safely expect it in v6.6, so, I plan to delay the nolibc-test-config related
+stuff and minimize the whole ppc series to only these necessary patches:
+
+    $ git log --reverse --oneline 813cab75752d9f2bbd71179b0c43c1052515cf48^..HEAD
+    813cab75752d tools/nolibc: add support for powerpc
+    122e2610c649 tools/nolibc: add support for powerpc64
+    f31fe18cf2e2 selftests/nolibc: add XARCH and ARCH mapping support
+    b25c71125154 selftests/nolibc: add test support for ppc
+    27bc0026f1e7 selftests/nolibc: add test support for ppc64le
+    d70649478ef8 (HEAD -> v6.6-nolibc-202308031233-pure-ppc-v5) selftests/nolibc: add test support for ppc64
+
+After this ppc series, if you are still happy with parts of the left ones, I
+will renew them.
+
+[1]: https://lore.kernel.org/lkml/bb7b5f9958b3e3a20f6573ff7ce7c5dc566e7e32.1690982937.git.tanyuan@tinylab.org/
+
+> 
+> [...]
+> > So, it is ok for us to simply ignore -O0 currently, let's work on them
+> > in v6.7.
+> 
+> Yeah I'm fine with this. In the worst case those using -O0 can also avoid
+> using stack-protector.
+>
+
+Yeah, let's ignore -O0 here.
+
+but must clarify that, even with the default "-Os" from command line,
+when using gcc 13.1.0, it has '__no_stack_protector' attribute but this
+attribute breaks 'omit-frame-pointer' and result in segfaults. To avoid
+touching the common code, I plan to let ppc32 uses its own
+__no_stack_protector with '__optimize__("-fno-stack-protector")', I hope
+it is fair enough now ;-)
+
+Here is what I have added for arch-powerpc.h in the first patch of the series:
+
+    /* FIXME: For ppc32, with newer gcc compilers (e.g. gcc 13.1.0),
+     * "omit-frame-pointer" fails with __attribute__((no_stack_protector)) but
+     * works with __attribute__((__optimize__("-fno-stack-protector")))
+     */
+    #ifdef __no_stack_protector
+    #undef __no_stack_protector
+    #define __no_stack_protector __attribute__((__optimize__("-fno-stack-protector")))
+    #endif
+
+If you are happy with this, v5 with come with it.
+
+Thanks!
+
+Best regards,
+Zhangjin
+
+> 
+> Willy
