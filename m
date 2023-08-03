@@ -2,114 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5958176EEF0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 18:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD7176EF05
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 18:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237312AbjHCQCL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Aug 2023 12:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
+        id S236262AbjHCQId (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Aug 2023 12:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237330AbjHCQB6 (ORCPT
+        with ESMTP id S235750AbjHCQIb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 12:01:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC91D3C21
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 09:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691078466;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=cwXRj1KBICVmDyXNwF6/K1df3vGE/T6x9GRpnMzQtuM=;
-        b=N7cPTW7PELdCNR7kAvryNsreyMdVf3rfOHCmOnpbcwBCJlH+uj0Y5891GnSeKmn2iL2wUM
-        2ZqsbNFr4GHIHbcNtuV3KsvbQWBjTAvuUclG4hlkIcE2Tc0C3gDM+vAlWuOMG5EWunhgHW
-        T1QPSGrN/f0CYbiFcTuluUeGZ6KaJE8=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-689-EiJFcPc9Mly3YhvZ1ULh6g-1; Thu, 03 Aug 2023 12:01:01 -0400
-X-MC-Unique: EiJFcPc9Mly3YhvZ1ULh6g-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-63d245b67abso11438136d6.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 09:00:59 -0700 (PDT)
+        Thu, 3 Aug 2023 12:08:31 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D1C1BF6
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 09:08:30 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-76c4890a220so84117185a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 09:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1691078909; x=1691683709;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+XToHAF3Tp6ttDMOwj4eUjXmrH43hQkGliAE52bu3OI=;
+        b=nwBfuP1EF89+aISDQLUPsPs557pMHRTYHh/moPt/GEUf3VZSegFJN2WLjwtOxNaeVr
+         tELhzCnpQiVVzn/p9TxTM40ypLAI9Wl8Dm00Ma0u6gCG9cYdJZyEwo/8Du3Xb48kiI3S
+         aj+mMtHg5P4dd9nwwPCbs602BbZueBi9x/ZXCX+ClObKOCBNOJ2QGS2u1cys65T6jh4F
+         sdy7Pm6FD7EqT02Lj5dytAzyu/Lm8M/yCK7CYer/QhZjZ1QXAsA3k1m/WtIhfHYpfDaQ
+         JTwBdRXqxtir8UKBvShgRNW5OjaHl24g01HNtAzPqjO+63i2Pwtjedb13yOisZI7uZQ1
+         KP1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691078458; x=1691683258;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cwXRj1KBICVmDyXNwF6/K1df3vGE/T6x9GRpnMzQtuM=;
-        b=WW9IID73Sb/Qk5ugxlcY42pV2buaoH28rmkcV/dqeY66HFW/W1ZxzBozCRmoR2kpNI
-         Mi+3k6WLbNeZRovjwHlixohypSPlFRHgUTMPuw/lrwZlcP31iwStuicO6GdBiV50OUD+
-         o/rRCWs3H95UOuv3gYocBgjxXxGSR/IVEDLsNMDF2SvpR+sGDMsjfanqvea8jR5YPk1x
-         Wqrz5O/BNv52psawMfrxIrA58Jj0jNvOePi08Xq2WZcTUc+e6fcsCvqKgD2DVczZWtaV
-         gmu/LSIZTY/+I8uUnSUtrtqOaT2j1kZx3p8dT7uoxNyG3LsnebUFH/8EoY/utcyX3a9I
-         vG7w==
-X-Gm-Message-State: ABy/qLZJgIIxUKOrfjgt1uuaW5tYnybWeWfSJQj6+Z3QSxKmSl+fTsya
-        hWKoPAjLpGlRLgLfqAGfj1N/HubQeYgUDshc/mmQrXAeojDDTKIBaWP/nzlVAwhKHOKdpRcaLi3
-        Tk6qcg6IwSuBdteBFJQo/GWX0rBUi
-X-Received: by 2002:a0c:cb86:0:b0:63d:b75:c971 with SMTP id p6-20020a0ccb86000000b0063d0b75c971mr19142302qvk.15.1691078457937;
-        Thu, 03 Aug 2023 09:00:57 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFCc7WuuoDe+WhLh9WzsibbctR6fIN91ahYBGVYqFqyM7r8CuW7h/Cye78YzhzmJhvadLpnLg==
-X-Received: by 2002:a0c:cb86:0:b0:63d:b75:c971 with SMTP id p6-20020a0ccb86000000b0063d0b75c971mr19142272qvk.15.1691078457517;
-        Thu, 03 Aug 2023 09:00:57 -0700 (PDT)
-Received: from fedora ([174.89.37.244])
-        by smtp.gmail.com with ESMTPSA id w19-20020a0cdf93000000b0062de6537febsm2729qvl.58.2023.08.03.09.00.56
+        d=1e100.net; s=20221208; t=1691078909; x=1691683709;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+XToHAF3Tp6ttDMOwj4eUjXmrH43hQkGliAE52bu3OI=;
+        b=Ki32I3zPtQP+q5mCQQzGdb3uVq9L2cQejuRKxpPHhrYFgSMFhs7J7pToG45ax+OSC5
+         JuN5AvCVKjmp8xfw1jfqEJ4xMaVHTW+zkpcn/C9Q8Blu5VsuBDK2YHbhwGrIMsvINicD
+         C/2R6g72jVwBS+vHyeVjyzXeyWkEM3RfKx2OgyF5OSw1dy++0928P/r1TPx61o+P4jY1
+         Wi9zK6l9/ysv96u5gvSVHEi81txWyNpXfm1OZf8JkHjhBmxs52MjsqS8jp3dwqwo0LI3
+         7uELxGtV0pHHE/4RNffN0dAQyvfiWNYd0bOrJSEK+yIlOpSz2eNhaSUFrWC2bNE73rOk
+         Sxhw==
+X-Gm-Message-State: ABy/qLY61AuzIAF5yyOTtl5+ZOpewyUEaB8KXTb5DSVX/TA3bwSnxTCi
+        6+FTCLjGWzfTVj4mG9MyV3ujDmy/YcR3IBHlMr8rtw==
+X-Google-Smtp-Source: APBJJlE/HITWbFDhpZ/D5lR41JynAMCPkaudsb/XHWlqv+SykPhRMLbLhtMkySOs7sEOxK1mOiRSuw==
+X-Received: by 2002:a37:5a05:0:b0:767:2471:c880 with SMTP id o5-20020a375a05000000b007672471c880mr18403599qkb.28.1691078909290;
+        Thu, 03 Aug 2023 09:08:29 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:9910])
+        by smtp.gmail.com with ESMTPSA id g16-20020ae9e110000000b0076cb0ed2d7asm14050qkm.24.2023.08.03.09.08.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Aug 2023 09:00:57 -0700 (PDT)
-Date:   Thu, 3 Aug 2023 12:00:47 -0400
-From:   Lucas Karpinski <lkarpins@redhat.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
+        Thu, 03 Aug 2023 09:08:29 -0700 (PDT)
+Date:   Thu, 3 Aug 2023 12:08:28 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Lucas Karpinski <lkarpins@redhat.com>
+Cc:     Michal Hocko <mhocko@kernel.org>,
         Roman Gushchin <roman.gushchin@linux.dev>,
         Shakeel Butt <shakeelb@google.com>,
         Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
         Zefan Li <lizefan.x@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Muchun Song <muchun.song@linux.dev>, cgroups@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests: cgroup: fix test_kmem_basic slab1 check
-Message-ID: <ix6vzgjqay2x7bskle7pypoint4nj66fwq7odvd5hektatvp2l@kukoifnfj3dr>
+Subject: Re: [PATCH v2] selftests: cgroup: fix test_kmem_basic slab1 check
+Message-ID: <20230803160828.GA223746@cmpxchg.org>
+References: <ix6vzgjqay2x7bskle7pypoint4nj66fwq7odvd5hektatvp2l@kukoifnfj3dr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ix6vzgjqay2x7bskle7pypoint4nj66fwq7odvd5hektatvp2l@kukoifnfj3dr>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-test_kmem_basic creates 100,000 negative dentries, with each one mapping
-to a slab object. After memory.high is set, these are reclaimed through
-the shrink_slab function call which reclaims all 100,000 entries. The
-test passes the majority of the time because when slab1 is calculated,
-it is often above 0, however, 0 is also an acceptable value.
+On Thu, Aug 03, 2023 at 12:00:47PM -0400, Lucas Karpinski wrote:
+> test_kmem_basic creates 100,000 negative dentries, with each one mapping
+> to a slab object. After memory.high is set, these are reclaimed through
+> the shrink_slab function call which reclaims all 100,000 entries. The
+> test passes the majority of the time because when slab1 is calculated,
+> it is often above 0, however, 0 is also an acceptable value.
+> 
+> Signed-off-by: Lucas Karpinski <lkarpins@redhat.com>
 
-Signed-off-by: Lucas Karpinski <lkarpins@redhat.com>
----
-https://lore.kernel.org/all/m6jbt5hzq27ygt3l4xyiaxxb7i5auvb2lahbcj4yaxxigqzu5e@5rn6s2yjzv7u/
-V2: Corrected title
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 
- tools/testing/selftests/cgroup/test_kmem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> @@ -71,7 +71,7 @@ static int test_kmem_basic(const char *root)
+>  
+>  	cg_write(cg, "memory.high", "1M");
+>  	slab1 = cg_read_key_long(cg, "memory.stat", "slab ");
+> -	if (slab1 <= 0)
+> +	if (slab1 < 0)
+>  		goto cleanup;
 
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index 258ddc565deb..ba0a0bfc5a98 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -71,7 +71,7 @@ static int test_kmem_basic(const char *root)
- 
- 	cg_write(cg, "memory.high", "1M");
- 	slab1 = cg_read_key_long(cg, "memory.stat", "slab ");
--	if (slab1 <= 0)
-+	if (slab1 < 0)
- 		goto cleanup;
- 
- 	current = cg_read_long(cg, "memory.current");
--- 
-2.41.0
+This conflicts with a recent patch already queued up in -mm:
+
+  selftests: cgroup: fix test_kmem_basic false positives
+
+which adds a sleep(1) between cg_write() and cg_read_key_long().
+
+Can you please rebase on top of
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+
+and re-send the patch with
+
+  To: Andrew Morton <akpm@linux-foundation.org>
+
+? Thanks
 
