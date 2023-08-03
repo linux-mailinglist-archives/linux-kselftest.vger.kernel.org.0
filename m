@@ -2,80 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8963176E8B5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 14:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7BB76E8D6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 14:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234101AbjHCMpU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Aug 2023 08:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
+        id S234220AbjHCMxu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Aug 2023 08:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjHCMpT (ORCPT
+        with ESMTP id S234146AbjHCMxt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 08:45:19 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971C73588
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 05:45:17 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RGpSW5c58z1K9RV;
-        Thu,  3 Aug 2023 20:44:11 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 3 Aug 2023 20:45:14 +0800
-Message-ID: <8a78b634-1097-a2a7-985e-3a07d52a271f@huawei.com>
-Date:   Thu, 3 Aug 2023 20:45:13 +0800
+        Thu, 3 Aug 2023 08:53:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AD535A8;
+        Thu,  3 Aug 2023 05:53:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AA8161D91;
+        Thu,  3 Aug 2023 12:53:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4BBEC433C8;
+        Thu,  3 Aug 2023 12:53:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691067227;
+        bh=r4FB9C3DbyML50THOYSEoMjiyY77SgxV2l1qtwpxE3Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nN0wvvfqkt0Oh2vmUhgUKxgefq2fjGdBl3Xc1C0D1Hv1tbt26iNf+M/ps2GN9QKkh
+         Zzp8aOGK4IJdtlp78ZHErfGc3btpdICVz9a69a8tzFGauOoN8QRlkjiHUSFeerQaeC
+         MdNTQg6Pa+W0RXdTbE4nmWBys5er8hvo3aWE9i+uJVTn1EuIMDRakpkWVWdIvGwVBR
+         u39lif0pHj6/7hYmNeWAWnbvQigCf8NtUwdzAMM1pCGbXbsHLQuRd/S3zTD7E8ZVlf
+         34m/8LH+0HMVIBO9P+jMC2OqUTOdeAPbVnnepr2zeM4fkSbPChud+iiZ1nHCngAz2C
+         OoZ/H55FwCmhw==
+Date:   Thu, 3 Aug 2023 14:53:38 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Geliang Tang <geliang.tang@suse.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v8 1/4] bpf: Add update_socket_protocol hook
+Message-ID: <ZMujUofDnb8wMb36@kernel.org>
+References: <cover.1691047403.git.geliang.tang@suse.com>
+ <120b307aacd1791fac016d33e112069ffb7db21a.1691047403.git.geliang.tang@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] kselftest/arm64: add RCpc load-acquire to the tested
- hwcaps
-To:     Mark Brown <broonie@kernel.org>
-CC:     <will@kernel.org>, <shuah@kernel.org>, <catalin.marinas@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kselftest@vger.kernel.org>, <xiexiuqi@huawei.com>
-References: <20230803070231.3962475-1-zengheng4@huawei.com>
- <54792955-9bd1-417f-8000-8e95f06a76d3@sirena.org.uk>
-Content-Language: en-US
-From:   Zeng Heng <zengheng4@huawei.com>
-In-Reply-To: <54792955-9bd1-417f-8000-8e95f06a76d3@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <120b307aacd1791fac016d33e112069ffb7db21a.1691047403.git.geliang.tang@suse.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, Aug 03, 2023 at 03:30:39PM +0800, Geliang Tang wrote:
+> Add a hook named update_socket_protocol in __sys_socket(), for bpf
+> progs to attach to and update socket protocol. One user case is to
+> force legacy TCP apps to create and use MPTCP sockets instead of
+> TCP ones.
+> 
+> Define a mod_ret set named bpf_mptcp_fmodret_ids, add the hook
+> update_socket_protocol into this set, and register it in
+> bpf_mptcp_kfunc_init().
+> 
+> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
 
-在 2023/8/3 19:36, Mark Brown 写道:
-> On Thu, Aug 03, 2023 at 03:02:31PM +0800, Zeng Heng wrote:
->
->> @@ -364,6 +376,20 @@ static const struct hwcap_data {
->>   		.hwcap_bit = HWCAP2_SVE_EBF16,
->>   		.cpuinfo = "sveebf16",
->>   	},
->> +	{
->> +		.name = "RCpc load-acquire",
->> +		.at_hwcap = AT_HWCAP,
->> +		.hwcap_bit = HWCAP_LRCPC,
->> +		.cpuinfo = "lrcpc",
->> +		.sigill_fn = lrcpc_sigill,
->> +	},
-> The table is roughly ordered by feature name, it'd be good to keep it
-> that way (apart from anything else it minimises merge conflicts).  It'd
-> also be good to follow the existing style and use the FEAT_ name for the
-> feature as the display name, if there isn't one then at least something
-> similarly all caps like the name of the ID register field?
+...
 
-Thanks for review,  and v2 would be sent later.
+> diff --git a/net/socket.c b/net/socket.c
+> index 2b0e54b2405c..586a437d7a5e 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -1644,11 +1644,36 @@ struct file *__sys_socket_file(int family, int type, int protocol)
+>  	return sock_alloc_file(sock, flags, NULL);
+>  }
+>  
+> +/**
 
+Hi Geliang Tang,
 
-Zeng Heng
+nit: The format of the text below is not in kernel doc format,
+     so it is probably better if the comment begins with '/*'
+     rather than '/**'.
 
+> + *	A hook for bpf progs to attach to and update socket protocol.
+> + *
+> + *	A static noinline declaration here could cause the compiler to
+> + *	optimize away the function. A global noinline declaration will
+> + *	keep the definition, but may optimize away the callsite.
+> + *	Therefore, __weak is needed to ensure that the call is still
+> + *	emitted, by telling the compiler that we don't know what the
+> + *	function might eventually be.
+> + *
+> + *	__diag_* below are needed to dismiss the missing prototype warning.
+> + */
+
+...
