@@ -2,65 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB66776F5D4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 00:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E2076F5D6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 00:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbjHCWqS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Aug 2023 18:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S232684AbjHCWq5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Aug 2023 18:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbjHCWpE (ORCPT
+        with ESMTP id S231824AbjHCWpt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 18:45:04 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBC030C2
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 15:45:02 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5229e0603edso1934a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 15:45:02 -0700 (PDT)
+        Thu, 3 Aug 2023 18:45:49 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0889E2129
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 15:45:47 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fe32ec7201so15705e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 15:45:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691102701; x=1691707501;
+        d=google.com; s=20221208; t=1691102745; x=1691707545;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+6smnJ5pF8HUrKYLrYO8s3lDcgGNpNsYKDGlsiPBw0U=;
-        b=m75TjT8R2WjgM2vazVNguss8LygmT5e8ZRaNoBZBBnyj8FDSjNEBP3ItJGsx83oSy0
-         BnwLkOEbv+ydKQbItcBYaxe3/vmi7q71GZmj5TuCV1LIZ9y9Jc/TIYB1DnzjQ6z+LZyE
-         oiCk4EeyvXBlchmXO8t3/zNXBFgLO2yes790nqbei0Ll8f8NkvG/mc9FbPKvNVxTth0d
-         zdudXCn1R6Anu2h2yn76dKCtNoINsQy19ApHO6jD0MzJGgXR7S0sF1Z91P614je3eTf1
-         +SRNYlGnTrbBj1aq7HOsCl+ndVEiHGStaNCklWf4sxXYTLYboiNoxrjaiuD4Qzl51cFE
-         oSHQ==
+        bh=TyJt2lSUmMO3OJ2k3/3u5PRPTjSeHbCnS5RMZYTuA+Q=;
+        b=BIzP2Fjoyeb0X9L9s8Y5uJPPEVOtvo4T1EYci5Nb4QE3ps0ktlNI/KlUAGeHM60JVM
+         3/tQmgjc+r57aQFjrAtpPeK16QW8QY0fyxlUyjjEceKBbHsMypWAmonO5MTQvplbORo7
+         RXkaCDO0pcZhW0vC/bQPeGrrQP21v4DTQ8YyPgrXTfCsnma68V2Aaa5+fOYNn7tXUXL0
+         JQ36WZ2jNSWgSUtgcSfXP/OmiDyiSQhqCzRbJxhYLUXiPe1+sGQhx0NosGLtUDccND0x
+         y58GDiVEuCZvKKSyVfvxjkIRXRSZKQZHJZgz+kJaY+rgwp/kdO+N1laRBWrvKhGdXpVd
+         2Hng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691102701; x=1691707501;
+        d=1e100.net; s=20221208; t=1691102745; x=1691707545;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+6smnJ5pF8HUrKYLrYO8s3lDcgGNpNsYKDGlsiPBw0U=;
-        b=eiz1SB1ALiC0gQe8dW66LdfHZ1z1x5IO70rRD551ag7d8VsUUakpXvLipjHTSjpy+f
-         Bg9F0DS13aKQrubekx4nIyE8U3Rc0tSQNRpf4MyOdTKIkHbUzr1GQG/YbK/tsgh1K+8A
-         9ck6O+yirFyfolTpOSBya8zjqorQ7bmU95PNu/oQ0RZZb4I7alOkHMo/x+/P5cRQf2yj
-         tM5jzlJATk9F5nHsGPmQAn9lgvgD4Jt1lJPPFt0zWsKZUI0XvclDLWxTdC/c9dp/UqH1
-         Pw7Oio0hd/vVOFedO+gJATRQQPzwrO8qExkiSbHH8wua6uBy2CevHIGktvZgTe0jYFKN
-         JcbQ==
-X-Gm-Message-State: AOJu0Yz/xSLvxTkJ1o6Z2WwbsZp2OTL5GSbWHwxvYvGet/hFOkhnjS8r
-        P+oiheggnyxE8U5GoD+MSp+P7KCbcRp/h7SBeSAiKg==
-X-Google-Smtp-Source: AGHT+IFwt7FHYToqP4OA8hrQda2zpIiHH27fhxUzTMyYE2OUsvTzOiAF61m89sTN0bLIm/O2GG/BTWxyM0OhUCPBv4s=
-X-Received: by 2002:a50:9e43:0:b0:519:7d2:e256 with SMTP id
- z61-20020a509e43000000b0051907d2e256mr22206ede.0.1691102700947; Thu, 03 Aug
- 2023 15:45:00 -0700 (PDT)
+        bh=TyJt2lSUmMO3OJ2k3/3u5PRPTjSeHbCnS5RMZYTuA+Q=;
+        b=B717V6p/pDsxhwHAYDX2q3lpY5lYSO9e2VrAwZz/WHfxGVezURtjlNxfUhZl/yWwM9
+         xZEuZKu7lcKUZ6frHoF15H3TxRcIiNErsy3TLHoMEJojpVwtgbYO6GMWqKeeLbQ39s1q
+         /qByMI8LXaCii4A0jBUvXNqtzM5dAsxHTTDAjt3Rtm/7geGHMB0mjorWvXWGDJiC4ZtP
+         eazWoDXWrmNpJQm123Q7huvbZxTMwKWCzQI36lXBHE6JK/HelWjoxOYgY+Qs5X31poBl
+         i3XHKg7mZBcJJfqB3BASAv36LzlrBnMUlFPRbuQggZG6no/tJeoGNxAak/87cWD32qCy
+         CfPw==
+X-Gm-Message-State: AOJu0Yz7s33i9F8G7thggsC6EO0AgZYzGFU3eWbH+7dGAX3L0wE5pW2+
+        w/UxTebOayIVWw99f+okugt30Rwh6/hCGCFY512jTcwIXFhNGlfbHpI=
+X-Google-Smtp-Source: AGHT+IEY0to5g0b9UivQ/Y1OVr2JhT7BXCjIWUf4ALZj3oU9COezVrn+bW3bLHu6x0wNsSNT5ieMmHRYXddFvSgYk0g=
+X-Received: by 2002:a05:600c:1f90:b0:3f1:9a3d:4f7f with SMTP id
+ je16-20020a05600c1f9000b003f19a3d4f7fmr7953wmb.1.1691102745470; Thu, 03 Aug
+ 2023 15:45:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230801073700.3740895-1-ruanjinjie@huawei.com>
-In-Reply-To: <20230801073700.3740895-1-ruanjinjie@huawei.com>
+References: <20230803193635.1047337-1-rmoar@google.com>
+In-Reply-To: <20230803193635.1047337-1-rmoar@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 4 Aug 2023 06:44:48 +0800
-Message-ID: <CABVgOS=KKnn2-axsmtnoJvepLpMKFENjn_oe3nkCyK=Ng6TyMg@mail.gmail.com>
-Subject: Re: [PATCH -next] kunit: fix possible memory leak in kunit_filter_suites()
-To:     Ruan Jinjie <ruanjinjie@huawei.com>
-Cc:     brendan.higgins@linux.dev, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
+Date:   Fri, 4 Aug 2023 06:45:33 +0800
+Message-ID: <CABVgOS=wy+V9+E-iDeKnF405ERXTk2DyXN6ixFnaqk=RCmVp4g@mail.gmail.com>
+Subject: Re: [PATCH -next v2] kunit: fix uninitialized variables bug in
+ attributes filtering
+To:     Rae Moar <rmoar@google.com>
+Cc:     shuah@kernel.org, brendan.higgins@linux.dev, ruanjinjie@huawei.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000cad4af06020c8740"
+        boundary="00000000000071344106020c8a40"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,225 +72,241 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000cad4af06020c8740
+--00000000000071344106020c8a40
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 1 Aug 2023 at 15:37, 'Ruan Jinjie' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
+On Fri, 4 Aug 2023 at 03:37, Rae Moar <rmoar@google.com> wrote:
 >
-> Inject fault while probing drm_kunit_helpers.ko, if one of
-> kunit_next_attr_filter(), kunit_filter_glob_tests() and
-> kunit_filter_attr_tests() fails, parsed_filters,
-> parsed_glob.suite_glob/test_glob alloced in
-> kunit_parse_glob_filter() is leaked.
-> And the filtered_suite->test_cases alloced in kunit_filter_glob_tests()
-> or kunit_filter_attr_tests() may also be leaked.
+> Fix smatch warnings regarding uninitialized variables in the filtering
+> patch of the new KUnit Attributes feature.
 >
-> unreferenced object 0xff110001067e4800 (size 1024):
->   comm "kunit_try_catch", pid 96, jiffies 4294671796 (age 763.547s)
->   hex dump (first 32 bytes):
->     73 75 69 74 65 32 00 00 00 00 00 00 00 00 00 00  suite2..........
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<00000000116e8eba>] __kmalloc_node_track_caller+0x4e/0x140
->     [<00000000e2f9cce9>] kmemdup+0x2c/0x60
->     [<000000002a36710b>] kunit_filter_suites+0x3e4/0xa50
->     [<0000000045779fb9>] filter_suites_test+0x1b7/0x440
->     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
-> unreferenced object 0xff11000105d79b00 (size 192):
->   comm "kunit_try_catch", pid 96, jiffies 4294671796 (age 763.547s)
->   hex dump (first 32 bytes):
->     f0 e1 5a 88 ff ff ff ff 60 59 bb 8a ff ff ff ff  ..Z.....`Y......
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->     [<000000006afe50bd>] kunit_filter_suites+0x424/0xa50
->     [<0000000045779fb9>] filter_suites_test+0x1b7/0x440
->     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
-> unreferenced object 0xff110001067e6000 (size 1024):
->   comm "kunit_try_catch", pid 98, jiffies 4294671798 (age 763.545s)
->   hex dump (first 32 bytes):
->     73 75 69 74 65 32 00 00 00 00 00 00 00 00 00 00  suite2..........
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<00000000116e8eba>] __kmalloc_node_track_caller+0x4e/0x140
->     [<00000000e2f9cce9>] kmemdup+0x2c/0x60
->     [<000000002a36710b>] kunit_filter_suites+0x3e4/0xa50
->     [<00000000f452f130>] filter_suites_test_glob_test+0x1b7/0x660
->     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
-> unreferenced object 0xff11000103f3a800 (size 96):
->   comm "kunit_try_catch", pid 98, jiffies 4294671798 (age 763.545s)
->   hex dump (first 32 bytes):
->     f0 e1 5a 88 ff ff ff ff 40 39 bb 8a ff ff ff ff  ..Z.....@9......
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->     [<000000006afe50bd>] kunit_filter_suites+0x424/0xa50
->     [<00000000f452f130>] filter_suites_test_glob_test+0x1b7/0x660
->     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
-> unreferenced object 0xff11000101a72ac0 (size 16):
->   comm "kunit_try_catch", pid 104, jiffies 4294671814 (age 763.529s)
->   hex dump (first 16 bytes):
->     00 00 00 00 00 00 00 00 e0 2a a7 01 01 00 11 ff  .........*......
->   backtrace:
->     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->     [<00000000c7b724e7>] kunit_filter_suites+0x108/0xa50
->     [<00000000bad5427d>] filter_attr_test+0x1e9/0x6a0
->     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
-> unreferenced object 0xff11000103caf880 (size 32):
->   comm "kunit_try_catch", pid 104, jiffies 4294671814 (age 763.547s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->     [<00000000c47b0f75>] kunit_filter_suites+0x189/0xa50
->     [<00000000bad5427d>] filter_attr_test+0x1e9/0x6a0
->     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
-> unreferenced object 0xff11000101a72ae0 (size 16):
->   comm "kunit_try_catch", pid 106, jiffies 4294671823 (age 763.538s)
->   hex dump (first 16 bytes):
->     00 00 00 00 00 00 00 00 00 2b a7 01 01 00 11 ff  .........+......
->   backtrace:
->     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->     [<00000000c7b724e7>] kunit_filter_suites+0x108/0xa50
->     [<0000000096255c51>] filter_attr_empty_test+0x1b0/0x310
->     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
-> unreferenced object 0xff11000103caf9c0 (size 32):
->   comm "kunit_try_catch", pid 106, jiffies 4294671823 (age 763.538s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->     [<00000000c47b0f75>] kunit_filter_suites+0x189/0xa50
->     [<0000000096255c51>] filter_attr_empty_test+0x1b0/0x310
->     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
-> unreferenced object 0xff11000101a72b00 (size 16):
->   comm "kunit_try_catch", pid 108, jiffies 4294671832 (age 763.529s)
->   hex dump (first 16 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<000000000d6e4891>] __kmalloc+0x4d/0x140
->     [<00000000c47b0f75>] kunit_filter_suites+0x189/0xa50
->     [<00000000881258cc>] filter_attr_skip_test+0x148/0x770
->     [<00000000cd1104a7>] kunit_try_run_case+0x119/0x270
->     [<00000000c654c917>] kunit_generic_run_threadfn_adapter+0x4e/0xa0
->     [<00000000d195ac13>] kthread+0x2c7/0x3c0
->     [<00000000b79c1ee9>] ret_from_fork+0x2c/0x70
->     [<000000001167f7e6>] ret_from_fork_asm+0x1b/0x30
->
-> Fixes: 5d31f71efcb6 ("kunit: add kunit.filter_glob cmdline option to filter suites")
 > Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
-> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Closes: https://lore.kernel.org/r/202307270610.s0w4NKEn-lkp@intel.com/
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
 > ---
+>
+> Change since v1:
+> - Changed initialization of filtered to be {NULL, NULL} at the start and
+>   only updated when ready to return.
+> - Remove unnecessary +1 in memory allocation for parsed_filters in
+>   executor test.
+>
+> Note that this is rebased on top of the recent fix:
+> ("kunit: fix possible memory leak in kunit_filter_suites()").
 
-Looks good to me. Thanks!
+Thanks: this looks good to me now!
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  lib/kunit/executor.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
 >
+>  lib/kunit/attributes.c    | 40 +++++++++++++++++----------------------
+>  lib/kunit/executor.c      | 18 +++++++++++-------
+>  lib/kunit/executor_test.c |  2 +-
+>  3 files changed, 29 insertions(+), 31 deletions(-)
+>
+> diff --git a/lib/kunit/attributes.c b/lib/kunit/attributes.c
+> index d37c40c0ce4f..5e3034b6be99 100644
+> --- a/lib/kunit/attributes.c
+> +++ b/lib/kunit/attributes.c
+> @@ -102,7 +102,7 @@ static int int_filter(long val, const char *op, int input, int *err)
+>  static int attr_enum_filter(void *attr, const char *input, int *err,
+>                 const char * const str_list[], int max)
+>  {
+> -       int i, j, input_int;
+> +       int i, j, input_int = -1;
+>         long test_val = (long)attr;
+>         const char *input_val = NULL;
+>
+> @@ -124,7 +124,7 @@ static int attr_enum_filter(void *attr, const char *input, int *err,
+>                         input_int = j;
+>         }
+>
+> -       if (!input_int) {
+> +       if (input_int < 0) {
+>                 *err = -EINVAL;
+>                 pr_err("kunit executor: invalid filter input: %s\n", input);
+>                 return false;
+> @@ -186,8 +186,10 @@ static void *attr_module_get(void *test_or_suite, bool is_test)
+>         // Suites get their module attribute from their first test_case
+>         if (test)
+>                 return ((void *) test->module_name);
+> -       else
+> +       else if (kunit_suite_num_test_cases(suite) > 0)
+>                 return ((void *) suite->test_cases[0].module_name);
+> +       else
+> +               return (void *) "";
+>  }
+>
+>  /* List of all Test Attributes */
+> @@ -221,7 +223,7 @@ const char *kunit_attr_filter_name(struct kunit_attr_filter filter)
+>  void kunit_print_attr(void *test_or_suite, bool is_test, unsigned int test_level)
+>  {
+>         int i;
+> -       bool to_free;
+> +       bool to_free = false;
+>         void *attr;
+>         const char *attr_name, *attr_str;
+>         struct kunit_suite *suite = is_test ? NULL : test_or_suite;
+> @@ -255,7 +257,7 @@ void kunit_print_attr(void *test_or_suite, bool is_test, unsigned int test_level
+>
+>  int kunit_get_filter_count(char *input)
+>  {
+> -       int i, comma_index, count = 0;
+> +       int i, comma_index = 0, count = 0;
+>
+>         for (i = 0; input[i]; i++) {
+>                 if (input[i] == ',') {
+> @@ -272,7 +274,7 @@ int kunit_get_filter_count(char *input)
+>  struct kunit_attr_filter kunit_next_attr_filter(char **filters, int *err)
+>  {
+>         struct kunit_attr_filter filter = {};
+> -       int i, j, comma_index, new_start_index;
+> +       int i, j, comma_index = 0, new_start_index = 0;
+>         int op_index = -1, attr_index = -1;
+>         char op;
+>         char *input = *filters;
+> @@ -316,7 +318,7 @@ struct kunit_attr_filter kunit_next_attr_filter(char **filters, int *err)
+>                 filter.attr = &kunit_attr_list[attr_index];
+>         }
+>
+> -       if (comma_index) {
+> +       if (comma_index > 0) {
+>                 input[comma_index] = '\0';
+>                 filter.input = input + op_index;
+>                 input = input + new_start_index;
+> @@ -356,31 +358,22 @@ struct kunit_suite *kunit_filter_attr_tests(const struct kunit_suite *const suit
+>
+>         /* Save filtering result on default value */
+>         default_result = filter.attr->filter(filter.attr->attr_default, filter.input, err);
+> -       if (*err) {
+> -               kfree(copy);
+> -               kfree(filtered);
+> -               return NULL;
+> -       }
+> +       if (*err)
+> +               goto err;
+>
+>         /* Save suite attribute value and filtering result on that value */
+>         suite_val = filter.attr->get_attr((void *)suite, false);
+>         suite_result = filter.attr->filter(suite_val, filter.input, err);
+> -       if (*err) {
+> -               kfree(copy);
+> -               kfree(filtered);
+> -               return NULL;
+> -       }
+> +       if (*err)
+> +               goto err;
+>
+>         /* For each test case, save test case if passes filtering. */
+>         kunit_suite_for_each_test_case(suite, test_case) {
+>                 test_val = filter.attr->get_attr((void *) test_case, true);
+>                 test_result = filter.attr->filter(filter.attr->get_attr(test_case, true),
+>                                 filter.input, err);
+> -               if (*err) {
+> -                       kfree(copy);
+> -                       kfree(filtered);
+> -                       return NULL;
+> -               }
+> +               if (*err)
+> +                       goto err;
+>
+>                 /*
+>                  * If attribute value of test case is set, filter on that value.
+> @@ -406,7 +399,8 @@ struct kunit_suite *kunit_filter_attr_tests(const struct kunit_suite *const suit
+>                 }
+>         }
+>
+> -       if (n == 0) {
+> +err:
+> +       if (n == 0 || *err) {
+>                 kfree(copy);
+>                 kfree(filtered);
+>                 return NULL;
 > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index 5b5bed1efb93..481901d245d0 100644
+> index 481901d245d0..dc295150c4e5 100644
 > --- a/lib/kunit/executor.c
 > +++ b/lib/kunit/executor.c
-> @@ -151,7 +151,7 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+> @@ -127,19 +127,18 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+>  {
+>         int i, j, k;
+>         int filter_count = 0;
+> -       struct kunit_suite **copy, *filtered_suite, *new_filtered_suite;
+> -       struct suite_set filtered;
+> +       struct kunit_suite **copy, **copy_start, *filtered_suite, *new_filtered_suite;
+> +       struct suite_set filtered = {NULL, NULL};
+>         struct kunit_glob_filter parsed_glob;
+> -       struct kunit_attr_filter *parsed_filters;
+> +       struct kunit_attr_filter *parsed_filters = NULL;
+>
+>         const size_t max = suite_set->end - suite_set->start;
+>
+>         copy = kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
+> -       filtered.start = copy;
+>         if (!copy) { /* won't be able to run anything, return an empty set */
+> -               filtered.end = copy;
+>                 return filtered;
+>         }
+> +       copy_start = copy;
+>
+>         if (filter_glob)
+>                 kunit_parse_glob_filter(&parsed_glob, filter_glob);
+> @@ -147,7 +146,11 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+>         /* Parse attribute filters */
+>         if (filters) {
+>                 filter_count = kunit_get_filter_count(filters);
+> -               parsed_filters = kcalloc(filter_count + 1, sizeof(*parsed_filters), GFP_KERNEL);
+> +               parsed_filters = kcalloc(filter_count, sizeof(*parsed_filters), GFP_KERNEL);
+> +               if (!parsed_filters) {
+> +                       kfree(copy);
+> +                       return filtered;
+> +               }
 >                 for (j = 0; j < filter_count; j++)
 >                         parsed_filters[j] = kunit_next_attr_filter(&filters, err);
 >                 if (*err)
-> -                       return filtered;
-> +                       goto err;
->         }
->
->         for (i = 0; &suite_set->start[i] != suite_set->end; i++) {
-> @@ -163,7 +163,7 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
->                                         parsed_glob.test_glob);
->                         if (IS_ERR(filtered_suite)) {
->                                 *err = PTR_ERR(filtered_suite);
-> -                               return filtered;
-> +                               goto err;
+> @@ -166,7 +169,7 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+>                                 goto err;
 >                         }
 >                 }
->                 if (filter_count) {
-> @@ -172,15 +172,18 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+> -               if (filter_count) {
+> +               if (filter_count > 0 && parsed_filters != NULL) {
+>                         for (k = 0; k < filter_count; k++) {
+>                                 new_filtered_suite = kunit_filter_attr_tests(filtered_suite,
 >                                                 parsed_filters[k], filter_action, err);
+> @@ -195,6 +198,7 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
 >
->                                 /* Free previous copy of suite */
-> -                               if (k > 0 || filter_glob)
-> +                               if (k > 0 || filter_glob) {
-> +                                       kfree(filtered_suite->test_cases);
->                                         kfree(filtered_suite);
-> +                               }
-> +
->                                 filtered_suite = new_filtered_suite;
->
->                                 if (*err)
-> -                                       return filtered;
-> +                                       goto err;
->                                 if (IS_ERR(filtered_suite)) {
->                                         *err = PTR_ERR(filtered_suite);
-> -                                       return filtered;
-> +                                       goto err;
->                                 }
->                                 if (!filtered_suite)
->                                         break;
-> @@ -194,6 +197,10 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+>                 *copy++ = filtered_suite;
 >         }
+> +       filtered.start = copy_start;
 >         filtered.end = copy;
 >
-> +err:
-> +       if (*err)
-> +               kfree(copy);
-> +
->         if (filter_glob) {
->                 kfree(parsed_glob.suite_glob);
->                 kfree(parsed_glob.test_glob);
-> --
-> 2.34.1
+>  err:
+> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+> index 01280cb8d451..3e0a1c99cb4e 100644
+> --- a/lib/kunit/executor_test.c
+> +++ b/lib/kunit/executor_test.c
+> @@ -119,7 +119,7 @@ static void parse_filter_attr_test(struct kunit *test)
+>         filter_count = kunit_get_filter_count(filters);
+>         KUNIT_EXPECT_EQ(test, filter_count, 2);
 >
+> -       parsed_filters = kunit_kcalloc(test, filter_count + 1, sizeof(*parsed_filters),
+> +       parsed_filters = kunit_kcalloc(test, filter_count, sizeof(*parsed_filters),
+>                         GFP_KERNEL);
+>         for (j = 0; j < filter_count; j++) {
+>                 parsed_filters[j] = kunit_next_attr_filter(&filters, &err);
+>
+> base-commit: 3bffe185ad11e408903d2782727877388d08d94e
 > --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230801073700.3740895-1-ruanjinjie%40huawei.com.
+> 2.41.0.585.gd2178a4bd4-goog
+>
 
---000000000000cad4af06020c8740
+--00000000000071344106020c8a40
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -354,14 +373,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCg
-vR2LJansRUh66MFWkQwE8V+J5wz4aneTTZ8oG5oQhjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA4MDMyMjQ1MDFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC6
+Tm+UTSS1frg672isgiu1fdIcJ2TbHgHy5IaQ5zKu7TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA4MDMyMjQ1NDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAjJ3DC592RqC09YNeAp6o
-noXusmZAW/Kh2RuGHp8/+t/v1lLT3glr5p+2ifqbzsPQjFwxciLRiqyHVk5mCGD6DnZ9p+YUQjZg
-h7NrTr2ATBnvWeuMgsHWlnTjOOHj9XxC6879V7WxdV36IBQBxnAMu9JC6rcFpOIm6GuhTLaho1ks
-iGJ3DJDCQJwPiNdUxMglJmzPpvL8KhpFscLiMXqj5ZTq/ejqG8oBnTjlKKUipHfJf3LslHyJRreX
-PIcsnYkhKiFeUsERPRMdH3YV6prhCgD8ex3+r3oPRi//52CkOoST7fPRTkybKfjHWderPGBwrhpa
-7tUboxomn8dDTWFDjA==
---000000000000cad4af06020c8740--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAIM9M1tjn57XLWjW8F8hd
+XGu0tLJw+KjOL4fRzbPtJxPGRDrjuYxeCYT4nyGIl0j+MCUG0l1To2dNpQxZjhewSIoUJl5tWwec
+6mz3cqjCUVuGEHi6mMfLbR7z2ZVQh2Cbeun14ktlHP49qC5SB/xS8887ludr7WF0ZzyzOx4f05RH
+RAevOlHAEk9lg0IgIuXcRgSmtiLYkeUxGnG8gROW2iVZNfiEfFkNJT0sb4LplEU2sAFfxf8xTbza
+42H/fW7I4xjNuw38KTDtzvnKgV+KBWxxC1AiVfyKmwdC9magG9S3I5BgK5AqygAOa6VvuzyT+o91
+DxFrA6LvTUuTTxDrKQ==
+--00000000000071344106020c8a40--
