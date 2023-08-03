@@ -2,58 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFEF176EA65
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 15:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B102976EAF7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 15:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234033AbjHCNbq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Aug 2023 09:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
+        id S236424AbjHCNou (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Aug 2023 09:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbjHCNba (ORCPT
+        with ESMTP id S236460AbjHCNoc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 09:31:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA404C09;
-        Thu,  3 Aug 2023 06:30:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D069661DA5;
-        Thu,  3 Aug 2023 13:30:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F633C433C9;
-        Thu,  3 Aug 2023 13:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691069423;
-        bh=KM3SVbE2l+Dymo4uy1mdhvTALidWFZb++YPoJUNyLsk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=q6gHVJ09+jSpCCsxY8+TRUxq+H8nQLw7ZgVIiu5RBLOc/4pvgrPB+PlP/ueOfgq+a
-         irUEUhwjGGX/xC6CfcN8SadzEyUTiBb71b0hSoZC+q0ajPjUZ+Nz+8CAJKD+MUdCEw
-         Gs2ikg6UyGPuq5AdNcDWC53cIK7NyErUzsHbTjmeB1X957F17U5eTwv5ll9p/47BYA
-         daQrthLio61DDXujuvhDEKv6zxnL8sQGG7bBMOpw7pgumfZE2escYA6/xxje4gqZBq
-         hocEF3SJLaqOrIPSEkZiUsV6s2xM1fBhH05dIFc3aUp8dn4AffBK+mObznWIFypqxL
-         rkbaOBurCZf7A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 127E0C3274D;
-        Thu,  3 Aug 2023 13:30:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 3 Aug 2023 09:44:32 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC3B44AB
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 06:41:57 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RGqjt6yGLzrS32;
+        Thu,  3 Aug 2023 21:40:50 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 3 Aug
+ 2023 21:41:54 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <broonie@kernel.org>, <kristina.martsenko@arm.com>,
+        <catalin.marinas@arm.com>, <shuah@kernel.org>, <will@kernel.org>
+CC:     <xiexiuqi@huawei.com>, <zengheng4@huawei.com>,
+        <linux-kselftest@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH v2] kselftest/arm64: add RCpc load-acquire to hwcap test
+Date:   Thu, 3 Aug 2023 21:39:05 +0800
+Message-ID: <20230803133905.971697-1-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 net-next 0/5] selftests: openvswitch: add flow programming
- cases
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <169106942307.23843.4039028020019462397.git-patchwork-notify@kernel.org>
-Date:   Thu, 03 Aug 2023 13:30:23 +0000
-References: <20230801212226.909249-1-aconole@redhat.com>
-In-Reply-To: <20230801212226.909249-1-aconole@redhat.com>
-To:     Aaron Conole <aconole@redhat.com>
-Cc:     netdev@vger.kernel.org, dev@openvswitch.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah@kernel.org, pabeni@redhat.com, kuba@kernel.org,
-        edumazet@google.com, davem@davemloft.net, pshelar@ovn.org,
-        amorenoz@redhat.com, i.maximets@ovn.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,37 +49,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+Add the RCpc and various features check in the set of hwcap tests.
 
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+---
+v1 -> v2:
+ - sort features by name
 
-On Tue,  1 Aug 2023 17:22:21 -0400 you wrote:
-> The openvswitch selftests currently contain a few cases for managing the
-> datapath, which includes creating datapath instances, adding interfaces,
-> and doing some basic feature / upcall tests.  This is useful to validate
-> the control path.
-> 
-> Add the ability to program some of the more common flows with actions. This
-> can be improved overtime to include regression testing, etc.
-> 
-> [...]
+ tools/testing/selftests/arm64/abi/hwcap.c | 26 +++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Here is the summary with links:
-  - [v3,net-next,1/5] selftests: openvswitch: add an initial flow programming case
-    https://git.kernel.org/netdev/net-next/c/918423fda910
-  - [v3,net-next,2/5] selftests: openvswitch: support key masks
-    https://git.kernel.org/netdev/net-next/c/9f1179fbbd84
-  - [v3,net-next,3/5] selftests: openvswitch: add a test for ipv4 forwarding
-    https://git.kernel.org/netdev/net-next/c/05398aa40953
-  - [v3,net-next,4/5] selftests: openvswitch: add basic ct test case parsing
-    https://git.kernel.org/netdev/net-next/c/2893ba9c1d1a
-  - [v3,net-next,5/5] selftests: openvswitch: add ct-nat test case with ipv4
-    https://git.kernel.org/netdev/net-next/c/60f10077eec6
+diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
+index d4ad813fed10..6a0adf916028 100644
+--- a/tools/testing/selftests/arm64/abi/hwcap.c
++++ b/tools/testing/selftests/arm64/abi/hwcap.c
+@@ -39,6 +39,18 @@ static void cssc_sigill(void)
+ 	asm volatile(".inst 0xdac01c00" : : : "x0");
+ }
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
++static void ilrcpc_sigill(void)
++{
++	/* LDAPUR W0, [SP, #8] */
++	asm volatile(".inst 0x994083e0" : : : );
++}
++
++static void lrcpc_sigill(void)
++{
++	/* LDAPR W0, [SP, #0] */
++	asm volatile(".inst 0xb8bfc3e0" : : : );
++}
++
+ static void mops_sigill(void)
+ {
+ 	char dst[1], src[1];
+@@ -223,6 +235,20 @@ static const struct hwcap_data {
+ 		.cpuinfo = "cssc",
+ 		.sigill_fn = cssc_sigill,
+ 	},
++	{
++		.name = "LRCPC",
++		.at_hwcap = AT_HWCAP,
++		.hwcap_bit = HWCAP_LRCPC,
++		.cpuinfo = "lrcpc",
++		.sigill_fn = lrcpc_sigill,
++	},
++	{
++		.name = "LRCPC2",
++		.at_hwcap = AT_HWCAP,
++		.hwcap_bit = HWCAP_ILRCPC,
++		.cpuinfo = "ilrcpc",
++		.sigill_fn = ilrcpc_sigill,
++	},
+ 	{
+ 		.name = "MOPS",
+ 		.at_hwcap = AT_HWCAP2,
+--
+2.25.1
 
