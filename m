@@ -2,81 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3B576F1CB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 20:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E4376F33A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 21:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjHCSZ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Aug 2023 14:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
+        id S229767AbjHCTHA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Aug 2023 15:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjHCSZ5 (ORCPT
+        with ESMTP id S231236AbjHCTGs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 14:25:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC0F115
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 11:25:13 -0700 (PDT)
+        Thu, 3 Aug 2023 15:06:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5143130EB
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 12:05:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691087112;
+        s=mimecast20190719; t=1691089525;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=Bg75TmGjdsFOEFOAfLLtRHbxB/2lhyot0KBO00fo9Xg=;
-        b=ThP0J0aiU3n3zcBF3JH6Os/gpwh4SnKcVlIqbsrJ+i6/zT0Lv93NEwx/MWAh+2jvZV0e+E
-        1zGp51Rg3opxUIeqjRqnQ7k2inBxbRw+bSiylvuozMcwzdCDFw/+81nPYmbFOwckqm+vnH
-        zLH1OxvmnUyP/TLuhYXXJ3AjLVQGA+M=
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pPDr3fHEuj+B4yeJMYhNPLAGlxXe+c7xVHr2n9vPefY=;
+        b=VW7C+229dJ/5Z9ZvgL/ZirL8YGYjjAyH6QDdBJJohCWVLSET5kjuhkxSWjOuvOapSYxv0t
+        TnSKlwRvsOmoYnVftqbt5p2xaKCrW3+XDjPDECdUowkWAKkpDBAT/Q2Fb9RkBcHPTtFq/V
+        ptgMOcc71nUn+HoQ1saqreYtDb+HsuM=
 Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
  [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-638-yDp3XKj7Ngy5fyIdJg0SGw-1; Thu, 03 Aug 2023 14:25:11 -0400
-X-MC-Unique: yDp3XKj7Ngy5fyIdJg0SGw-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-76cbb1e9420so119709085a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 11:25:11 -0700 (PDT)
+ us-mta-91-IioUA8FkOIq_YN9KJpCGJw-1; Thu, 03 Aug 2023 15:05:24 -0400
+X-MC-Unique: IioUA8FkOIq_YN9KJpCGJw-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-76cde638658so30394985a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 12:05:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691087110; x=1691691910;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bg75TmGjdsFOEFOAfLLtRHbxB/2lhyot0KBO00fo9Xg=;
-        b=BF1fZiYKyEdkoWRkpPt4Y80rR0A+ruV/MgGgg4SwCT4vd3Jmr0T8/d3kQ1xQOdy9RU
-         NPl8hKuja4N/HwFEouXrF+j/PINvmja1jT/L60nR8/ytC3G+eKUOq0GWBKvHZjWcfOkY
-         jjMYrWg5+qNJX0DLJodFUF1M72lOBR28crcYXMmFa9QhTJIH/+FjmgEB8LMt4YSqdTD0
-         LQ4pNNTZhj+Vh9DjXHVYNuqGDy3nkA9xMeEoeWmP8F23otjzGfBf0BcZDM7kINuj0drN
-         odiUbYP3dNu7kdtNGwDLz7BD5m2FnV01dJagHcmjFGKLa6qvxuWhOFp0s0ZQm65EsekR
-         VURQ==
-X-Gm-Message-State: ABy/qLZIsyc9uDtEDRblF7FdcLbA79Rd/HrqTZUUIDb7UAVwL8cA5QyG
-        CEhkRLw18tnPmaUB+IqJbMrfa6FbSp9a5exQTWH9SPwXwBqXalkd6XZpHfDoSuHX0thi70hqfYJ
-        ddBiVQT247/z3zLChq0fq3Fi0MvTN
-X-Received: by 2002:a05:620a:2411:b0:767:e993:5702 with SMTP id d17-20020a05620a241100b00767e9935702mr19254477qkn.35.1691087110597;
-        Thu, 03 Aug 2023 11:25:10 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlG8u1dArhCtl/gFW5cvCnwFM7M0fcDbBkzHRi/22XXRQTF7dNuPgLM+jSKKGLekwW/FPx8bXA==
-X-Received: by 2002:a05:620a:2411:b0:767:e993:5702 with SMTP id d17-20020a05620a241100b00767e9935702mr19254462qkn.35.1691087110340;
-        Thu, 03 Aug 2023 11:25:10 -0700 (PDT)
-Received: from fedora ([174.89.37.244])
-        by smtp.gmail.com with ESMTPSA id dq15-20020a05622a520f00b0040c72cae9f9sm105382qtb.93.2023.08.03.11.25.09
+        d=1e100.net; s=20221208; t=1691089524; x=1691694324;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pPDr3fHEuj+B4yeJMYhNPLAGlxXe+c7xVHr2n9vPefY=;
+        b=RjoNDyEjHeIdpzCld6M0870RUhHsUrHXH7Hypl3jQdFLe2Se6kRitGJqG9vHX6P0dk
+         RwjG6irgaOhD7V5Dd6jkDM3xX4fPJ2L8fSu30r+xTcn7uD70RviPnyK2adRGaFury79Y
+         dDgL/SlOnWOktkeO8EvsJQZ5LNermXSV+qaeDVDcz5Q/dUprgyFIbsrJw2Fw6yWECB8J
+         B+lZ569qn+IIXI1Tsa864SsLK8YVBy//AbGU+hX57fOnSIalYYaNUjpISJVl9yggJ7GQ
+         +IWDZX72ha2KeaaoMmPee7gZdjlQe357nEVg7/P6S7W/iqeklOIhJnACBXDhxuTTWEXh
+         xKdg==
+X-Gm-Message-State: ABy/qLaTkpUOgCs/D7C6ef/6ppvQqFZUusUzpDCZQwZB1YI64t7L961r
+        Q7NNPrc2nqEY6dKg3KVaRCazBuwuJsXIJ/BFqYUl56AzBsppE0eEiwMbyBiyMTUnucw+xtdDCXv
+        yl7Lqqqmys8ylbF9mazgYQG1YUjzU
+X-Received: by 2002:a05:622a:c1:b0:400:8036:6f05 with SMTP id p1-20020a05622a00c100b0040080366f05mr24001855qtw.2.1691089523795;
+        Thu, 03 Aug 2023 12:05:23 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlH2ykL98pmKhK3SiQ2b6vrIhtlRShiCOrIVRmlDJBxu7aT77VMcWW+uQQCpCeqHjK8Bd8KhMA==
+X-Received: by 2002:a05:622a:c1:b0:400:8036:6f05 with SMTP id p1-20020a05622a00c100b0040080366f05mr24001840qtw.2.1691089523525;
+        Thu, 03 Aug 2023 12:05:23 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id m25-20020aed27d9000000b0040fe0fdf555sm135924qtg.22.2023.08.03.12.05.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Aug 2023 11:25:09 -0700 (PDT)
-Date:   Thu, 3 Aug 2023 14:25:00 -0400
-From:   Lucas Karpinski <lkarpins@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Muchun Song <muchun.song@linux.dev>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] selftests: cgroup: fix test_kmem_basic slab1 check
-Message-ID: <zff2gqiy4cggy4px2hbcyna6eipy56qc4itx5cx5agtxlzdxt7@dvfdarqkucac>
+        Thu, 03 Aug 2023 12:05:23 -0700 (PDT)
+Date:   Thu, 3 Aug 2023 15:05:21 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        liubo <liubo254@huawei.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>, Shuah Khan <shuah@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 6/7] selftest/mm: ksm_functional_tests: test in
+ mmap_and_merge_range() if anything got merged
+Message-ID: <ZMv6cZH2PdyeTmw1@x1n>
+References: <20230803143208.383663-1-david@redhat.com>
+ <20230803143208.383663-7-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: NeoMutt/20230517
+In-Reply-To: <20230803143208.383663-7-david@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,32 +90,70 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-test_kmem_basic creates 100,000 negative dentries, with each one mapping
-to a slab object. After memory.high is set, these are reclaimed through
-the shrink_slab function call which reclaims all 100,000 entries. The
-test passes the majority of the time because when slab1 is calculated,
-it is often above 0, however, 0 is also an acceptable value.
+On Thu, Aug 03, 2023 at 04:32:07PM +0200, David Hildenbrand wrote:
+> Let's extend mmap_and_merge_range() to test if anything in the current
+> process was merged. range_maps_duplicates() is too unreliable for that
+> use case, so instead look at KSM stats.
+> 
+> Trigger a complete unmerge first, to cleanup the stable tree and
+> stabilize accounting of merged pages.
+> 
+> Note that we're using /proc/self/ksm_merging_pages instead of
+> /proc/self/ksm_stat, because that one is available in more existing
+> kernels.
+> 
+> If /proc/self/ksm_merging_pages can't be opened, we can't perform any
+> checks and simply skip them.
+> 
+> We have to special-case the shared zeropage for now. But the only user
+> -- test_unmerge_zero_pages() -- performs its own merge checks.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Signed-off-by: Lucas Karpinski <lkarpins@redhat.com>
----
- v3: rebased on mm-unstable
+Acked-by: Peter Xu <peterx@redhat.com>
 
- tools/testing/selftests/cgroup/test_kmem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+One nitpick:
 
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index 1b2cec9d18a4..67cc0182058d 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -75,7 +75,7 @@ static int test_kmem_basic(const char *root)
- 	sleep(1);
- 
- 	slab1 = cg_read_key_long(cg, "memory.stat", "slab ");
--	if (slab1 <= 0)
-+	if (slab1 < 0)
- 		goto cleanup;
- 
- 	current = cg_read_long(cg, "memory.current");
+> ---
+>  .../selftests/mm/ksm_functional_tests.c       | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+> index 0de9d33cd565..cb63b600cb4f 100644
+> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+> @@ -30,6 +30,7 @@
+>  static int ksm_fd;
+>  static int ksm_full_scans_fd;
+>  static int proc_self_ksm_stat_fd;
+> +static int proc_self_ksm_merging_pages_fd;
+>  static int ksm_use_zero_pages_fd;
+>  static int pagemap_fd;
+>  static size_t pagesize;
+> @@ -88,6 +89,22 @@ static long get_my_ksm_zero_pages(void)
+>  	return my_ksm_zero_pages;
+>  }
+>  
+> +static long get_my_merging_pages(void)
+> +{
+> +	char buf[10];
+> +	ssize_t ret;
+> +
+> +	if (proc_self_ksm_merging_pages_fd < 0)
+> +		return proc_self_ksm_merging_pages_fd;
+
+Better do the fds check all in main(), e.g. not all callers below considers
+negative values, so -1 can pass "if (get_my_merging_pages())" etc.
+
+> +
+> +	ret = pread(proc_self_ksm_merging_pages_fd, buf, sizeof(buf) - 1, 0);
+> +	if (ret <= 0)
+> +		return -errno;
+> +	buf[ret] = 0;
+> +
+> +	return strtol(buf, NULL, 10);
+> +}
+
 -- 
-2.41.0
+Peter Xu
 
