@@ -2,267 +2,215 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF6976EF68
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 18:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2802B76EFE7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 18:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236948AbjHCQ2E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Aug 2023 12:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
+        id S230356AbjHCQsK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Aug 2023 12:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236715AbjHCQ15 (ORCPT
+        with ESMTP id S232935AbjHCQrz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 12:27:57 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C408E3C02
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 09:27:53 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fba8e2aa52so11696805e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 09:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1691080072; x=1691684872;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wyY2zV5vJaOIfyB4fQkW5n9NhYmmuO2ZPGVSyZVmtMg=;
-        b=qbePPPfnLE5E4qAH1BV1jZ3I2w0UFqw7GHg+qcz81lgnRyzwbkr4gOfO3r/MN/07JP
-         yK0ubEgcerqoCtTP6BIAtvJNzs1BqO+Yz8yj/nK+QDjNb28KWk1ZpUWQyVhWhk1oZqH+
-         WtjKMxfH6f3mJCOZ4ce95a6nIzJyG1Wqa3l4eX4eOpQeP8Zy/jgtFGHcTsw6YzQj/NgO
-         qOOIRvzNowKD0Vd1RXXtzJ0cfJJihEcTN7BmEK70n0y9wejojrxytcA6ZShYWqJPq2Fo
-         ziPpAKOfqzI3O8fyFW6KS4CjDEoG/h2IsFFr9pH39JZmvRfogLjMzpLbYUfMM71MPHDB
-         4haw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691080072; x=1691684872;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wyY2zV5vJaOIfyB4fQkW5n9NhYmmuO2ZPGVSyZVmtMg=;
-        b=SrnfG4qiZ5aDxYz69k567uYrcAr2IlwUP7/Sb6nz9vwhL7eS7hUNOsqkTM+gIspYXX
-         Ifica8OlgM8cIJ0+oD/yS1wHVDxMZ0uQTYRxKog1hOGfavKFAjpuW+Tr1rdhnPX8K3YA
-         Xqdt0FHv7BuJbfbVf3qz2V/VgI3H5Mj2cy0GP1Bq4lzRLU4hRHL8aaaBlGsZqNEp9XPg
-         5bOa4mIFRXKSjIYeyxrwLNCB/39gJjl5vv8FCVin8xhJKhxhPb+A3VNh1YSNaUEXOtmU
-         UCL191OV6cO8EvWVryTnuR2FV4dE79zxeds57LWyknrG8Z0oyHjBA+yEqtzQpegRgxt/
-         7+8w==
-X-Gm-Message-State: ABy/qLZh6XccBbRFSqxYj/90sg081JNFLHrz5kPw/6PLSQgZe5iGPnHU
-        mbh1VLC2Hg/1bQxgsHIz5v132g==
-X-Google-Smtp-Source: APBJJlFOUzY4WZSRiAxXYt14cKpFQXdsNaYdRrHkNPWzcIugEnJx/GRXshHYrzwhcSV1nJLZnuS4cg==
-X-Received: by 2002:adf:f490:0:b0:315:a74c:f627 with SMTP id l16-20020adff490000000b00315a74cf627mr7639736wro.16.1691080072198;
-        Thu, 03 Aug 2023 09:27:52 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id o10-20020a5d474a000000b003141a3c4353sm253167wrs.30.2023.08.03.09.27.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Aug 2023 09:27:51 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 03 Aug 2023 18:27:30 +0200
-Subject: [PATCH net 4/4] mptcp: fix disconnect vs accept race
+        Thu, 3 Aug 2023 12:47:55 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2087.outbound.protection.outlook.com [40.107.92.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA31DA;
+        Thu,  3 Aug 2023 09:47:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jaIyykD9LTjypAIPFSahqsoNOS83yzHl1ZXRsyBmLWdXFMXzD/PZNNpoWNq7mK5Yoatrznkj88an8kpCpJx7bTrLzb1zlu9XJ7rj+k+PwOCugpRMR+ndrGGb+s/VgRE6wwtlbRlB2E5C/OpQ5WP9iVln+n8TWLovIXnKl2rAmQ/TxlaLZcBIUG6JkObIfvDcEg02tGMpXY8OYqj/3qR3RYAL34YE486v8pIOijZlWIP8n4LZP2tUdhnmgq9G87Wl8Bxsoh8Nlt1oXg5LcX1+8zZ7rIszMztPw680C3b1edQ1a9M9WzulobNN3ALMM3XVadhK50fRR2YpC9n8ZnN3bA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YbcMkhYlFFKFnjE6NwOrolSHJ3TLqk6B+Sx73Ti/FGE=;
+ b=NoCgU26bPjw1M/ppZfPj4Jh4qR/VNVpwcNugH80Kygxoig+8o8fwrKNvHBKpHe0cKLbPGVjbtHBQBcG8YJwtZBydv0joyNOg9Y7u7fLOBgIWYaA0UdaOG1iZ2XpDdCEkCzV8wGy5ZcFAzGb0sYk0SKuZW1OixTla02RQqoqClVwMkDMxtqHpRisC6GyZqNvV3Sj4OCXgF4LKynG6qFltlbWIe+O45WqMWPN8p+Cvr9Es8crUZd2yYfA2F9IO0yusJZTje2E15w4W+kA0NSCA8RHPxe2bdAiNWSNuJVepBezBx5VCMAxWHZiKH5EOAOxCV4fErnYXxa2uus82cqm4Gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YbcMkhYlFFKFnjE6NwOrolSHJ3TLqk6B+Sx73Ti/FGE=;
+ b=F+bwY/d676+ZN1fzwwLbr6dBXULsRdYqZ8sRGxu+h8COk/19uSkn9+otybT1Sspcv6hvdNJFT7HgT6U5qPdtGkGuhKe4+RRRMoohBn3uAgQ/VszfPoPj5XF99pluXR963ZRGtmT99pVXJpOViKM5U/86adtylTgQUHaXqKI0kcRNr1mpBPFEdQbE0sG473mqytmUKw5vxwgAMTBQXc53ueqZDT1Sr/6nbmVqTUKL0ojnvJIc0Ym0eOXPTJKz3SABV/UbZacoLAfJOVidBR+0cScFdx9JDJIge5CsAnMiM3T+9IqvfpC9nRCN90lSEo2i5iDqnFA24Q+CJqS4mW0zoQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by CH0PR12MB8550.namprd12.prod.outlook.com (2603:10b6:610:192::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.47; Thu, 3 Aug
+ 2023 16:47:52 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::5111:16e8:5afe:1da1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::5111:16e8:5afe:1da1%6]) with mapi id 15.20.6631.046; Thu, 3 Aug 2023
+ 16:47:51 +0000
+Date:   Thu, 3 Aug 2023 13:47:50 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v3 08/17] iommufd: IOMMU_HWPT_ALLOC allocation with user
+ data
+Message-ID: <ZMvaNqskASX3pGuF@nvidia.com>
+References: <20230724110406.107212-1-yi.l.liu@intel.com>
+ <20230724110406.107212-9-yi.l.liu@intel.com>
+ <ZMQBLTm+U+5bgC/Z@nvidia.com>
+ <BN9PR11MB5276C84452E56AB03B819D208C05A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZMe0IQksFgV6yKTB@nvidia.com>
+ <ZMrp0ofsx8M6fT/S@Asurada-Nvidia>
+ <ZMrqEAOh82SBvyaq@nvidia.com>
+ <ZMr6lJpRDNZsvSm/@Asurada-Nvidia>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZMr6lJpRDNZsvSm/@Asurada-Nvidia>
+X-ClientProxiedBy: BL0PR0102CA0013.prod.exchangelabs.com
+ (2603:10b6:207:18::26) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230803-upstream-net-20230803-misc-fixes-6-5-v1-4-6671b1ab11cc@tessares.net>
-References: <20230803-upstream-net-20230803-misc-fixes-6-5-v1-0-6671b1ab11cc@tessares.net>
-In-Reply-To: <20230803-upstream-net-20230803-misc-fixes-6-5-v1-0-6671b1ab11cc@tessares.net>
-To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Geliang Tang <geliang.tang@suse.com>
-Cc:     Andrea Claudi <aclaudi@redhat.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        stable@vger.kernel.org, Christoph Paasch <cpaasch@apple.com>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6350;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=aKcow2E15Tjek3grxJIpgMFsqze4hMw1QTBvn16JVm8=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBky9WCZ/PIlkegmWQ+oRn1/er9lZ7+r/US1BaBo
- xry6wrvOpyJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZMvVggAKCRD2t4JPQmmg
- c6r+EADDM4nK4HHbE8VttqzJEu2kc7hBHUe/O1+iQPG3XmqMkMORrSJP1OjRnmYV0NBnKGARiKJ
- /drfsn60O8gpJoMpBhOuoWhUvlXaWNTURDne8QvBuY+b04dhjLQ/K4+im9U0FQiPDRC7JMbtu/N
- VRdEBWbcSVTcLPrxqtXljnPYlpXxAGQU0UAoYA0phciVxwJkRCbXnl3pcRZqH4DW+L71cIxAGpk
- dcuuzpfXakNQ4NwWvg1kMYhgM74q9DVuVRhsvOFgfouWWg4eYk2KZBN0hF09wYUapzilA56mN0P
- o0dYXp0+OohL2LG5BzeyAjFyC/LSNbHrxkUgbR/Q2s/bQlR+OBtW74z8JrR3dq5v9ovYwxAGjLn
- Hm51kzqOkgIg8n45zIgF9X7vLzwTY04kdRmsA+kKrXen0hQlrCRS9wWGy+PIiVtXJTWS9d7D4LH
- mztuedwS5jh4zK77CJQGydo2XCwvqe3cpR5+RdsSTvXfNUa5HhCCE8n8sJM62BbNCe4bXpLg0sE
- DhBUkMig9XxKur3bdZmrdF+NE9rqmLWmn9LDbs7RfPs+4a1pXL0RWLDeFdwMSzB6QT1ST8oJPPt
- lRWH8NfWhlbwrbglyp3pMK3TRtAsgoiQefToVlOc/vzh03SIwGz40Ih4PJF41EM9c1PXCAsqLFJ
- +qc+0oELhN/D9jA==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH0PR12MB8550:EE_
+X-MS-Office365-Filtering-Correlation-Id: df503b35-d826-426b-0557-08db94416072
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PUalJmP4ebQ+lk9npchnSLr+Hem91SwQfivPqt1oTZdm968kEh0XiHMK82i0Xz/WRGjYW0u8E/mNbXvNtXpJWS5ZyNCR5PNXV6p4+vE3Fi8c6tH5dK3OJv/gPtdZKYpd3KmVLGl5pCPJX9hjM3KWl4JQ2rxYYoo+dwiLrJkBQB4Zvfb84HoUVW42jD5V/Tdctzh/kWw/+avRzZDoC32wDDP2p5d/SQ/Gz1pO/vm835aQ59YbjHco7X6UnomW8RWd8ehFqYcQFWfMQmQr6c2IgSKkGUcU1vukV4qT3SwR0+fVh6U2C9doxngyGlIphAx8ZJ41KKe3CG/eHVFyxpIIReJIpblwd14O9maO87v9Vzmg0wpYL8EAD5KTDvW0TXozXOKqyRt5elnSuUTxwc59vDy9R33COVMGwtdBU/zTdgv5V1ZSu2ZyC5P0ecanqcRwk3qE46peOfPyUci7jWASA+HfEMRFSSCgl96L6xwtgud72FSnwmgW1jexQaJSOZIR+pu5IePEasM+/rTT44qP7M9BG5LAg1VIvWBZRmXtlV9x3Ofv/2dJqeJ8AiBnTeSV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(366004)(136003)(39860400002)(451199021)(66899021)(41300700001)(38100700002)(6486002)(6512007)(54906003)(6636002)(66556008)(4326008)(66476007)(66946007)(316002)(37006003)(5660300002)(478600001)(26005)(83380400001)(186003)(6506007)(2616005)(6862004)(36756003)(7416002)(8676002)(8936002)(86362001)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DTHpaui4knb0rRsxIy/z6ecOJ598EvkqwafbXjUQ9zu7mVCfBNkwdbbNazB4?=
+ =?us-ascii?Q?nv6HVp5m3PSKiOffbRKha0d8pnZ9cfjG1Zj73ONt4R1BzSdGDRsUuhP4tD4q?=
+ =?us-ascii?Q?ImCUjkEPFCkpxdYVShAruoYN5bl4ODbtLQwPzALDQceaVGwZk5xD7Wi3GOVJ?=
+ =?us-ascii?Q?pgchpjBLdYMhTqMcyOl022GwfpsCB8hfqA+BU39smz+LLcVzFaP4LsGPqM5M?=
+ =?us-ascii?Q?qjCRHtpNg89kzDZiGBrQrrzwR71KjDtGPrLJ1f7S5eS+bl621CPSvxS4MyXd?=
+ =?us-ascii?Q?PAdrVW9VkzSxCkvTbw+Ol5h+tpmlg12YdEf7IETgY0xdsRQmNfrE+IIH9WQj?=
+ =?us-ascii?Q?XDhWKpzu8QWa2zxgdQ1xhqUUmTWSMETav8RoVwQQQyqpMs1eXAz9cdij0UTw?=
+ =?us-ascii?Q?ZCPd+myg6t/qZ9VLtfZooPZa0FvQ+XgW/sU5nisY2zmKMxBRmuUSOEwJIOlU?=
+ =?us-ascii?Q?oEoosJoJclnq2v6nTt/fQyCU8ZCI0SFYMlBwBuVFO8zS02TJW0oOZWL9AOnQ?=
+ =?us-ascii?Q?DJzKjHvfRDoKjZ7u9cxG6mDuHL4FXmnLX807ExrTYYs8nqcbYoCIMovHI+3x?=
+ =?us-ascii?Q?TINErZyRiE20JJg9tRCpxtzRjJLAoJu3+qA36xmz6DDC394sUqWdW6+X57DB?=
+ =?us-ascii?Q?kFNU46QUynrI6/+XoERzd4tSt4zWh9QeDn+o/Ssl7JiIn8y6fetMnFpo9oeX?=
+ =?us-ascii?Q?T4etzrqJyWuc6Nd6wOXBf7X1Z1V3TtHmk3u7hdQApBsnixIFVCTkHyZ0mNJP?=
+ =?us-ascii?Q?DPo/YWEHsHcdHpb3F7vHZzq8D+NtlKTxPV/pgxh1r0hZVJbqWyfYqnrFcB/x?=
+ =?us-ascii?Q?fufPsHaVMuoWFYewIhjtXfobxaoNHJoNjxKEkCFQE8YpmStUJ7r/k0ySEmyE?=
+ =?us-ascii?Q?uEbdD3ZcbG+xlcWYGm6ePi8UvZpl3PY2Z/Y1kSrmvVAC1u8uXtEUOI/dW/Yw?=
+ =?us-ascii?Q?jLgzIF2Z6pI5xf5YS6JZglMjmyLw0g5n78mmaa97L48qxiHLrYr4dU27SoqN?=
+ =?us-ascii?Q?FhH4+Evlh6b3HtQQzn9n+nJ9Ik7Rm7ns+ZHgfRAvDBTB+El2ZEeiuca1QSup?=
+ =?us-ascii?Q?WZFAndbg7j/0ZLme3sKmZN4bcmMnPDyzTurzgXD52noXZUPk5LWStRvx1dLR?=
+ =?us-ascii?Q?QeNiHLWyHAfh8jAPEV4i5POyMJLsrOoF8roK5SRlEkBYv2CmuK9qyNfd+gGr?=
+ =?us-ascii?Q?Kfv6tUaFPgwMyS2r5xv0CXqV5SjFW4+cFaUxGwpYx4wXYojPbDPEqJOv0a6i?=
+ =?us-ascii?Q?yXlmBKDN7zl/fdNCIaWmP+AakGVjzB9iKdr0EA+QGbFFSBLCfwvF92u7YF2D?=
+ =?us-ascii?Q?bR/OHtoaSLYPF4QR5N4BSnt2XNaWSvO5SSc28lHaqfTtT9mrAcTyEtIekldo?=
+ =?us-ascii?Q?afsSyAGL7vZtcWonxEFYXf0wQ2XYoUaToN7wPPsxdYw0mVL9Ub8Oyf/HA5PW?=
+ =?us-ascii?Q?jU+iGhSOdrdMGO+3iGHTWu9d2vdSTOZL4J2mmR6N9cauHSCCptIAVt1LqfZk?=
+ =?us-ascii?Q?spFQVzz0On6exBH59KJ+/c9ht1+TqrQHAwToRUCMIUdqWOHsawee4dX+eie1?=
+ =?us-ascii?Q?jNHwKvGO5Zm5sJmbqeGtRS4Evrqt8hxTvXfKqGVj?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: df503b35-d826-426b-0557-08db94416072
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2023 16:47:51.6920
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: G7SVeXPeNbWwSbuPVrG6WNUExWltMrZ2ForHzysisk4GnJVNr7uWy1lgt3Jx4ABK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8550
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+On Wed, Aug 02, 2023 at 05:53:40PM -0700, Nicolin Chen wrote:
+> On Wed, Aug 02, 2023 at 08:43:12PM -0300, Jason Gunthorpe wrote:
+> > On Wed, Aug 02, 2023 at 04:42:10PM -0700, Nicolin Chen wrote:
+> > > On Mon, Jul 31, 2023 at 10:16:17AM -0300, Jason Gunthorpe wrote:
+> > >  
+> > > > > Ideally expanding uAPI structure size should come with new flag bits.
+> > > > 
+> > > > Flags or some kind of 'zero is the same behavior as a smaller struct'
+> > > > scheme.
+> > > > 
+> > > > This patch is doing the zero option:
+> > > > 
+> > > >  	__u32 __reserved;
+> > > > +	__u32 hwpt_type;
+> > > > +	__u32 data_len;
+> > > > +	__aligned_u64 data_uptr;
+> > > >  };
+> > > > 
+> > > > hwpt_type == 0 means default type
+> > > > data_len == 0 means no data
+> > > > data_uptr is ignored (zero is safe)
+> > > > 
+> > > > So there is no need to change it
+> > > 
+> > > TEST_LENGTH passing ".size = sizeof(struct _struct) - 1" expects a
+> > > -EINVAL error code from "if (ucmd.user_size < op->min_size)" check
+> > > in the iommufd_fops_ioctl(). This has been working when min_size is
+> > > exactly the size of the structure.
+> > > 
+> > > When the size of the structure becomes larger than min_size, i.e.
+> > > the passing size above is larger than min_size, it bypasses that
+> > > min_size sanity and goes down to an ioctl handler with a potential
+> > > risk. And actually, the size range can be [min_size, struct_size),
+> > > making it harder for us to sanitize with the existing code.
+> > > 
+> > > I wonder what's the generic way of sanitizing this case? And, it
+> > > seems that TEST_LENGTH needs some rework to test min_size only?
+> > 
+> > Yes, it should technically test using offsetof and a matching set of
+> > struct members.
+> 
+> OK. I copied 3 lines for offsetofend from the kernel and did this:
+> --------------------------------------------------------------------------
+> diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
+> index 6b075a68b928..a15a475c1243 100644
+> --- a/tools/testing/selftests/iommu/iommufd.c
+> +++ b/tools/testing/selftests/iommu/iommufd.c
+> @@ -86,12 +86,13 @@ TEST_F(iommufd, cmd_fail)
+> 
+>  TEST_F(iommufd, cmd_length)
+>  {
+> -#define TEST_LENGTH(_struct, _ioctl)                                     \
+> +#define TEST_LENGTH(_struct, _ioctl, _last)                              \
+>         {                                                                \
+> +               size_t min_size = offsetofend(struct _struct, _last);    \
+>                 struct {                                                 \
+>                         struct _struct cmd;                              \
+>                         uint8_t extra;                                   \
+> -               } cmd = { .cmd = { .size = sizeof(struct _struct) - 1 }, \
+> +               } cmd = { .cmd = { .size = min_size - 1 },               \
+>                           .extra = UINT8_MAX };                          \
+>                 int old_errno;                                           \
+>                 int rc;                                                  \
+> --------------------------------------------------------------------------
+> 
+> Any misaligned size within the range of [min_size, struct_size) still
+> doesn't have a coverage though. Is this something that we have to let
+> it fail with a potential risk?
 
-Despite commit 0ad529d9fd2b ("mptcp: fix possible divide by zero in
-recvmsg()"), the mptcp protocol is still prone to a race between
-disconnect() (or shutdown) and accept.
+It looks about right, I didn't try to test all the permutations, it
+could be done but I'm not sure it has value.
 
-The root cause is that the mentioned commit checks the msk-level
-flag, but mptcp_stream_accept() does acquire the msk-level lock,
-as it can rely directly on the first subflow lock.
-
-As reported by Christoph than can lead to a race where an msk
-socket is accepted after that mptcp_subflow_queue_clean() releases
-the listener socket lock and just before it takes destructive
-actions leading to the following splat:
-
-BUG: kernel NULL pointer dereference, address: 0000000000000012
-PGD 5a4ca067 P4D 5a4ca067 PUD 37d4c067 PMD 0
-Oops: 0000 [#1] PREEMPT SMP
-CPU: 2 PID: 10955 Comm: syz-executor.5 Not tainted 6.5.0-rc1-gdc7b257ee5dd #37
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2.el7 04/01/2014
-RIP: 0010:mptcp_stream_accept+0x1ee/0x2f0 include/net/inet_sock.h:330
-Code: 0a 09 00 48 8b 1b 4c 39 e3 74 07 e8 bc 7c 7f fe eb a1 e8 b5 7c 7f fe 4c 8b 6c 24 08 eb 05 e8 a9 7c 7f fe 49 8b 85 d8 09 00 00 <0f> b6 40 12 88 44 24 07 0f b6 6c 24 07 bf 07 00 00 00 89 ee e8 89
-RSP: 0018:ffffc90000d07dc0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff888037e8d020 RCX: ffff88803b093300
-RDX: 0000000000000000 RSI: ffffffff833822c5 RDI: ffffffff8333896a
-RBP: 0000607f82031520 R08: ffff88803b093300 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000003e83 R12: ffff888037e8d020
-R13: ffff888037e8c680 R14: ffff888009af7900 R15: ffff888009af6880
-FS:  00007fc26d708640(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000012 CR3: 0000000066bc5001 CR4: 0000000000370ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- do_accept+0x1ae/0x260 net/socket.c:1872
- __sys_accept4+0x9b/0x110 net/socket.c:1913
- __do_sys_accept4 net/socket.c:1954 [inline]
- __se_sys_accept4 net/socket.c:1951 [inline]
- __x64_sys_accept4+0x20/0x30 net/socket.c:1951
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x47/0xa0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-
-Address the issue by temporary removing the pending request socket
-from the accept queue, so that racing accept() can't touch them.
-
-After depleting the msk - the ssk still exists, as plain TCP sockets,
-re-insert them into the accept queue, so that later inet_csk_listen_stop()
-will complete the tcp socket disposal.
-
-Fixes: 2a6a870e44dd ("mptcp: stops worker on unaccepted sockets at listener close")
-Cc: stable@vger.kernel.org
-Reported-by: Christoph Paasch <cpaasch@apple.com>
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/423
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- net/mptcp/protocol.h |  1 -
- net/mptcp/subflow.c  | 60 ++++++++++++++++++++++++++--------------------------
- 2 files changed, 30 insertions(+), 31 deletions(-)
-
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index 37fbe22e2433..ba2a873a4d2e 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -325,7 +325,6 @@ struct mptcp_sock {
- 	u32		subflow_id;
- 	u32		setsockopt_seq;
- 	char		ca_name[TCP_CA_NAME_MAX];
--	struct mptcp_sock	*dl_next;
- };
- 
- #define mptcp_data_lock(sk) spin_lock_bh(&(sk)->sk_lock.slock)
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index 9ee3b7abbaf6..94ae7dd01c65 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -1793,34 +1793,21 @@ static void subflow_state_change(struct sock *sk)
- void mptcp_subflow_queue_clean(struct sock *listener_sk, struct sock *listener_ssk)
- {
- 	struct request_sock_queue *queue = &inet_csk(listener_ssk)->icsk_accept_queue;
--	struct mptcp_sock *msk, *next, *head = NULL;
--	struct request_sock *req;
--	struct sock *sk;
-+	struct request_sock *req, *head, *tail;
-+	struct mptcp_subflow_context *subflow;
-+	struct sock *sk, *ssk;
- 
--	/* build a list of all unaccepted mptcp sockets */
-+	/* Due to lock dependencies no relevant lock can be acquired under rskq_lock.
-+	 * Splice the req list, so that accept() can not reach the pending ssk after
-+	 * the listener socket is released below.
-+	 */
- 	spin_lock_bh(&queue->rskq_lock);
--	for (req = queue->rskq_accept_head; req; req = req->dl_next) {
--		struct mptcp_subflow_context *subflow;
--		struct sock *ssk = req->sk;
--
--		if (!sk_is_mptcp(ssk))
--			continue;
--
--		subflow = mptcp_subflow_ctx(ssk);
--		if (!subflow || !subflow->conn)
--			continue;
--
--		/* skip if already in list */
--		sk = subflow->conn;
--		msk = mptcp_sk(sk);
--		if (msk->dl_next || msk == head)
--			continue;
--
--		sock_hold(sk);
--		msk->dl_next = head;
--		head = msk;
--	}
-+	head = queue->rskq_accept_head;
-+	tail = queue->rskq_accept_tail;
-+	queue->rskq_accept_head = NULL;
-+	queue->rskq_accept_tail = NULL;
- 	spin_unlock_bh(&queue->rskq_lock);
-+
- 	if (!head)
- 		return;
- 
-@@ -1829,13 +1816,19 @@ void mptcp_subflow_queue_clean(struct sock *listener_sk, struct sock *listener_s
- 	 */
- 	release_sock(listener_ssk);
- 
--	for (msk = head; msk; msk = next) {
--		sk = (struct sock *)msk;
-+	for (req = head; req; req = req->dl_next) {
-+		ssk = req->sk;
-+		if (!sk_is_mptcp(ssk))
-+			continue;
-+
-+		subflow = mptcp_subflow_ctx(ssk);
-+		if (!subflow || !subflow->conn)
-+			continue;
-+
-+		sk = subflow->conn;
-+		sock_hold(sk);
- 
- 		lock_sock_nested(sk, SINGLE_DEPTH_NESTING);
--		next = msk->dl_next;
--		msk->dl_next = NULL;
--
- 		__mptcp_unaccepted_force_close(sk);
- 		release_sock(sk);
- 
-@@ -1859,6 +1852,13 @@ void mptcp_subflow_queue_clean(struct sock *listener_sk, struct sock *listener_s
- 
- 	/* we are still under the listener msk socket lock */
- 	lock_sock_nested(listener_ssk, SINGLE_DEPTH_NESTING);
-+
-+	/* restore the listener queue, to let the TCP code clean it up */
-+	spin_lock_bh(&queue->rskq_lock);
-+	WARN_ON_ONCE(queue->rskq_accept_head);
-+	queue->rskq_accept_head = head;
-+	queue->rskq_accept_tail = tail;
-+	spin_unlock_bh(&queue->rskq_lock);
- }
- 
- static int subflow_ulp_init(struct sock *sk)
-
--- 
-2.40.1
-
+Jason
