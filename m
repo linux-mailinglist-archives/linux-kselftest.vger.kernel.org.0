@@ -2,85 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E652D76DEBF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 05:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A4676DEC4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Aug 2023 05:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbjHCDNZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Aug 2023 23:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
+        id S229875AbjHCDOE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Aug 2023 23:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjHCDNY (ORCPT
+        with ESMTP id S232183AbjHCDOA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Aug 2023 23:13:24 -0400
-Received: from mgamail.intel.com (unknown [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093C11FD6;
-        Wed,  2 Aug 2023 20:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691032403; x=1722568403;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yPbevtCcZpOeTAiAA2lNuyEOiqfa6vas4KxoyVt3mTA=;
-  b=l5RMvK6L4EaKVttyVzlCDzc6hv+TSMEJ4huwnIYIjuIWpR+PxYx7iMHm
-   zxyQnOR3TzmJ1SffRFpfdrnzQVbcGWtPTtEE+wCZ5iCO+5YYl8ZlrL0C5
-   Ufj8jgKDLD9+2O/kNEkyZsl+3WIEn3QhhmfWDZSh7Ui3zH65iqH6zzp8O
-   tSMytMw0IEn85BsDz18oDI8AKcKGaisKjX2/hBsPuCkNe+7OeDw2y3AUt
-   btQk/I8cMr6fFJ7EpnUiVPh1BHgTux/dR4LB/0bGD1Xgu8Xh9gG8wsvLL
-   9v0GawJqnJxPapFuAqrajLAcyswn5ht4eM7QS9wPx2j/l9MoEIk06ptWB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="433597060"
-X-IronPort-AV: E=Sophos;i="6.01,251,1684825200"; 
-   d="scan'208";a="433597060"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 20:13:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="843385818"
-X-IronPort-AV: E=Sophos;i="6.01,251,1684825200"; 
-   d="scan'208";a="843385818"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.255.31.34]) ([10.255.31.34])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 20:13:16 -0700
-Message-ID: <d57dc99c-4970-fe0f-53f9-ea6f926910ca@linux.intel.com>
-Date:   Thu, 3 Aug 2023 11:13:14 +0800
+        Wed, 2 Aug 2023 23:14:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFE82733;
+        Wed,  2 Aug 2023 20:13:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 393B461BBB;
+        Thu,  3 Aug 2023 03:13:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E38EC433C8;
+        Thu,  3 Aug 2023 03:13:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691032430;
+        bh=uSf3xwCl9efisUoSoRQolXl/7p0nzj1kHz1aHfTxnaQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uFvnua7i+h2fTCQnHkPAqHkhk4HR3P1ec2xaUq82RSv28DeurXfTFLyeOVT3N6t2T
+         Zi+KP8sQToelogOWDV8DtPiMR8Rqu841G+Vuso7CJTxQ98EG+AF8RqM7YpeLTlpL10
+         /4rLkdHqqROKCyrS3vD9SjL/Rxbarby8sOFZ4Z3IemhHX+8Mvn0S2m+wG5IeJaw0Qv
+         //FtbaC5/s05HRXE2/IJULu1h+H3jOspin6MkVFkt/x5ye+ArRtbSknZeUkLpjePT1
+         lnNdOodIgzRMyXO5qWmI0uFmc1vIVy5l22EvaYnDOJhFV8arl2VglqsgA+KhySREUp
+         /U9Srj+PmyrCQ==
+Date:   Wed, 2 Aug 2023 23:13:34 -0400
+From:   Guo Ren <guoren@kernel.org>
+To:     Haibo Xu <xiaobo55x@gmail.com>
+Cc:     Andrew Jones <ajones@ventanamicro.com>,
+        Haibo Xu <haibo1.xu@intel.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Colton Lewis <coltonlewis@google.com>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Vishal Annapurve <vannapurve@google.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH 1/4] tools: riscv: Add header file csr.h
+Message-ID: <ZMsbXk4JU/Ung7qu@gmail.com>
+References: <cover.1690364259.git.haibo1.xu@intel.com>
+ <35ce2b9f7ca655eb3af13730b1ca9f05b518e08f.1690364259.git.haibo1.xu@intel.com>
+ <20230728-879500f157954d849fb303ec@orel>
+ <CAJve8onDLEC1JFdERi098sTmN3-UkwaJ1aJz3CJNYU-GShkEyg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Cc:     baolu.lu@linux.intel.com, "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: Re: [PATCH v4 04/12] iommu/vt-d: Add helper to setup pasid nested
- translation
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-References: <20230724111335.107427-1-yi.l.liu@intel.com>
- <20230724111335.107427-5-yi.l.liu@intel.com>
- <BN9PR11MB5276C84A20C48B4041BE07B78C0BA@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276C84A20C48B4041BE07B78C0BA@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJve8onDLEC1JFdERi098sTmN3-UkwaJ1aJz3CJNYU-GShkEyg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,73 +75,20 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/8/2 15:10, Tian, Kevin wrote:
->> From: Liu, Yi L<yi.l.liu@intel.com>
->> Sent: Monday, July 24, 2023 7:13 PM
->>   }
->> +
->> +/**
->> + * intel_pasid_setup_nested() - Set up PASID entry for nested translation.
->> + * This could be used for nested translation based vIOMMU. e.g. guest IOVA
-> s/could be/is/
-
-Ack.
-
+On Wed, Aug 02, 2023 at 10:05:00AM +0800, Haibo Xu wrote:
+> On Fri, Jul 28, 2023 at 5:43 PM Andrew Jones <ajones@ventanamicro.com> wrote:
+> >
+> > On Thu, Jul 27, 2023 at 03:20:05PM +0800, Haibo Xu wrote:
+> > > Borrow some of the csr definitions and operations from kernel's
+> > > arch/riscv/include/asm/csr.h to tools/ for riscv.
+> >
+> > You should copy the entire file verbatim.
+> >
 > 
->> + * and guest shared virtual address. In this case, the first level page
->> + * tables are used for GVA/GIOVA-GPA translation in the guest, second level
->> + * page tables are used for GPA-HPA translation.
-> let's be consistent on using stage-1/stage-2
+> Ok, will copy all the definitions in the original csr.h
+Why not include the original one? Maintain the one csr.h is more
+comfortable.
 > 
-> btw the convention is to have 1-line summary, then the list of
-> parameters followed by detail explanation of the function.
+> > Thanks,
+> > drew
 > 
-
-This patch just follows the existing code style in this file. Need a
-separated patch to cleanup this.
-
->> + *
->> + * @iommu:      IOMMU which the device belong to
->> + * @dev:        Device to be set up for translation
->> + * @pasid:      PASID to be programmed in the device PASID table
->> + * @domain:     User stage-1 domain nested on a s2 domain
->> + */
->> +int intel_pasid_setup_nested(struct intel_iommu *iommu, struct device
->> *dev,
->> +			     u32 pasid, struct dmar_domain *domain)
->> +{
->> +	struct iommu_hwpt_vtd_s1 *s1_cfg = &domain->s1_cfg;
->> +	pgd_t *s1_gpgd = (pgd_t *)(uintptr_t)domain->s1_pgtbl;
->> +	struct dmar_domain *s2_domain = domain->s2_domain;
->> +	u16 did = domain_id_iommu(domain, iommu);
->> +	struct dma_pte *pgd = s2_domain->pgd;
->> +	struct pasid_entry *pte;
->> +
->> +	if (!ecap_nest(iommu->ecap)) {
->> +		pr_err_ratelimited("%s: No nested translation support\n",
->> +				   iommu->name);
->> +		return -ENODEV;
->> +	}
-> -EINVAL
-
-This is in the attach domain path. -EINVAL has the special meaning of
-"this domain is not compatible with iommu for the device".
-
-So here, I still think we should return -ENODEV and the caller doesn't
-need to retry anymore.
-
-> 
->> +
->> +	if (s2_domain->agaw > iommu->agaw) {
->> +		pr_err_ratelimited("Incompatible agaw %s\n", iommu-
->>> name);
->> +		return -EINVAL;
->> +	}
-> there is a duplicated check in intel_nested_attach_dev().
-> 
-
-Yeah, should be removed.
-
-Best regards,
-baolu
-
