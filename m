@@ -2,144 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795E77706CC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 19:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 108817706E4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 19:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbjHDRK5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 13:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S230294AbjHDRPW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 13:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjHDRKt (ORCPT
+        with ESMTP id S230245AbjHDRPV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 13:10:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB365254;
-        Fri,  4 Aug 2023 10:10:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 336B6620BD;
-        Fri,  4 Aug 2023 17:10:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC834C433C8;
-        Fri,  4 Aug 2023 17:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691169024;
-        bh=LpOa1+W78YUI0pP3gtmRJrUFbY+NCvdbjWtUDqJpXsA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=odzz0itV4ygxP67SjWWwGwJbZ+soQiIp2Nu9jCWBEfj3D/H4s4Cg42NjQayVI/v/c
-         rfl4CMrAL55C4xBuns5HH6CDsDSXjVTmzVGpLcWKAFNdqfZF/+OKsunzRoTDsPEALm
-         8zjEvR35b/L0bUGT4PmP21opHbOasTDlAzGoxEVmIZLgks52lxfeHAJ7ifnscRW0f9
-         Ep0jlMvgK9OsmEZsX9+EC8AUw9TC16+TinjXMtxRPiZtJ5+y1G5SWMD+tapWERVh5m
-         ofBJ+gLeyTi06fNQf2F8DGj1KxkD3yTdRk8Ar/CdNjYmDkxgDMUxWNBfTyXAJd+WUd
-         +mrVR0T+A5zYg==
-Date:   Fri, 4 Aug 2023 18:10:15 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v3 21/36] arm64/mm: Implement map_shadow_stack()
-Message-ID: <21a7b7ab-acbc-4778-bf2c-f4e7346c3dd9@sirena.org.uk>
-References: <5461c56cf4896f18bddaa66c3beec7b909fc8fb9.camel@intel.com>
- <0a6c90d6-f790-4036-a364-d4761fdd0e95@sirena.org.uk>
- <e827138f9d8800e3db158831bca88d1ea8b559af.camel@intel.com>
- <21d7e814-8608-40ce-b5d3-401f2110ad91@sirena.org.uk>
- <a9ea33d31aad0c45eab41b0dcbd4913d863cc930.camel@intel.com>
- <55c629cc-0545-460b-91cb-2ebdb8ae9051@sirena.org.uk>
- <7d03be1277a5f4be23df35ca96f4d6cd77735e2b.camel@intel.com>
- <475f31e1-0f6f-44a9-b93a-540c1d43e1bb@sirena.org.uk>
- <9902dd7e-1427-4c7e-b602-c1fbf6512f10@sirena.org.uk>
- <a21ab778704d02b8539e5c459750f8a2f771bede.camel@intel.com>
+        Fri, 4 Aug 2023 13:15:21 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AC2469A;
+        Fri,  4 Aug 2023 10:15:18 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 669F460177;
+        Fri,  4 Aug 2023 19:15:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691169317; bh=sb+VS7L5uN94PDJDVY+D3C5Qp9r6bdxatdxyOwcIY78=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=o55LdpicpCEISOuOMZpN2vqwB7CeMEghdBFWb5zaDnAkP9aJegW2OhxJepMZZWpIS
+         62g/X+BcRjdhwZiDa2KWNMF93ilGBm/6P2JYGhKDyS6ErpUCJ55iaupK+Sz976E55+
+         c63Zv8ueZcRq9ryljItaSjbrbsdzMZEqfwHUgw4gqc2lubt/dshTRafhDycA/mprER
+         YFAoZl9SDy0paZXYqCvtBTZtVuCFskG9JKcupeOTo2a+0Y5AxVR1V++cSra7YujoR9
+         mLkCxwOg/GN6KlSZr+FGmOWrkg1f5+xXIUDzr2tdllv2AMm+AsgpY32FrPudthv2hO
+         +tJe1QLzx0tag==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Bnq7fFXCgYMd; Fri,  4 Aug 2023 19:15:14 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id BFF3E60174;
+        Fri,  4 Aug 2023 19:15:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691169314; bh=sb+VS7L5uN94PDJDVY+D3C5Qp9r6bdxatdxyOwcIY78=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=L4w1aMKgw7IGC9Vqt1cQGfMyxddvk56MZHTaN0VFrB/rgGFl1ZiQoxyo0ShzNtwRj
+         geVdJ6Q/J9D+5TuUXNZizl6t6QX3Om17RhC6esXkeAif+8BgV60T2rx2SW2ZjjwEGB
+         F/nyxc42Oeo3poLTy5YLNI2LaZCsxKl4K29mcTsUIK0O+uQOY8MtDBha1AqL0n9se0
+         4j2FwSLsS5hbFEjxIbuOsP4WMtKPdvcHdEetYInUZt0HSuj99TbIHfxMzNqQs2Umlm
+         8829CHjOgm8rJ746VVBALblQcMqtoMV1LXFmJfQJ72Xe3i5DxYROn/yJR0Q3pIMdvk
+         Jvt/PcNuBpcQw==
+Message-ID: <a2a844d0-0d2c-c74b-e2d3-d924a9dc1e00@alu.unizg.hr>
+Date:   Fri, 4 Aug 2023 19:15:10 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pNJflhZYfBsbzGQE"
-Content-Disposition: inline
-In-Reply-To: <a21ab778704d02b8539e5c459750f8a2f771bede.camel@intel.com>
-X-Cookie: I'm hungry, time to eat lunch.
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v3 1/2] [DONE REQ CHG] test_firmware: prevent race
+ conditions by a correct implementation of locking
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Luis R . Rodriguez" <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Tianfei Zhang <tianfei.zhang@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        Dan Carpenter <error27@gmail.com>
+References: <20230803165304.9200-1-mirsad.todorovac@alu.unizg.hr>
+ <2023080435-unweave-suspect-3299@gregkh>
+Content-Language: en-US
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <2023080435-unweave-suspect-3299@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi, Mr. Greg,
 
---pNJflhZYfBsbzGQE
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 8/4/23 13:22, Greg Kroah-Hartman wrote:
+> On Thu, Aug 03, 2023 at 06:53:04PM +0200, Mirsad Todorovac wrote:
+>> [ Upstream commit 4acfe3dfde685a5a9eaec5555351918e2d7266a1 ]
+> 
+> <snip>
+> 
+> Ok, I am totally confused as to what patch is the newest one, and which
+> is for what branches, sorry.
+> 
+> So, I've deleted all of the patches from my review queue and I would ask
+> that you start over.
+> 
+> Note, if you put the kernel version in the subject line, it makes it
+> simpler for me to understand what goes where.
+> 
+> Here is an example to follow:
+> 	https://lore.kernel.org/r/20230802170227.1590187-1-eahariha@linux.microsoft.com
+> 
+> There are loads of other examples on the stable mailing list, please
+> don't make it hard for me to understand what to do here, make it obvious
+> as I'm dealing with hundreds of patches a day.
 
-On Fri, Aug 04, 2023 at 04:43:45PM +0000, Edgecombe, Rick P wrote:
-> On Fri, 2023-08-04 at 14:38 +0100, Mark Brown wrote:
+Done requested changes and resubmitted. I hope it is done right this time. Of course,
+it could be better still, but this should work out.
 
-> > BTW are you planning to repost the series for this release?=A0 We're
-> > almost at -rc5 which is pretty late and I didn't see anything yet.=A0
+It is a paramount that we make your life with applying patches easier and this is
+a new situation that I haven't got covered yet.
 
-> There were a few patches I posted on top of the last series after your
-> comments, but I wasn't planning on reposting the whole thing. Why do
-> you ask? Just trying to figure out the best version to base off of?
+I will also try to imitate the skilled patch submitters the next time before wasting
+your time or reinventing the wheel.
 
-> > It
-> > looks like there's a branch in tip that's getting some updates but
-> > it's
-> > not getting merged for -next.
+> thanks,
 
-> Hmm, not sure why it's not in -next anymore. I'll look into that.
-> Thanks for pointing it out.
+You're welcome.
 
-Mainly it was the inclusion in -next with a view to it getting merged
-that prompted me to ask, for the last release cycle had seemed to be
-gated on it being posted on the list (which is a standard workflow).
-
-Due to issues in mainline I really need a -rc3, and ideally -rc4, base
-but other than occasionally having to pull new bits out of your series
-it's not causing me any serious issues and I don't anticipate the arm64
-stuff getting in this time round.
-
---pNJflhZYfBsbzGQE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTNMPYACgkQJNaLcl1U
-h9Df8wf/TEg2LpbxxUNsAzZ3/r+uWmICEGa9AkGhiRS5KriCkO6ASDIEBMN4m//n
-1axQnkGLfUqNjHbkHyhegN5yGxXY7LSsrb6xVyWTRJTQ6zYOlzoDFYmvvhsezc7r
-qZrwqduFAB2BNGSDJVO+ni/ceEZ7/bmioIjhTd1anN7C0Ps9JFnZN8AnhW+s/hNd
-iceyRHZm/Z9goHQARi1RWwCMum3cOYsJT6YBpTxdVPnIZlb9M3QDLA5IMyVPHZG+
-MfibKT1HEeLWqo4w6ZjIluc/yqMrQEBfYq8ghZfa9F1IcB48w+5q6+iPl8LZBmVy
-OCOMl1GumMBem4Q8UZ/yo4ImOaRNHw==
-=N/z3
------END PGP SIGNATURE-----
-
---pNJflhZYfBsbzGQE--
+Kind regards,
+Mirsad
