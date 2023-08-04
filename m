@@ -2,159 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96FD17705FC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 18:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9208D77061A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 18:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjHDQ3f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 12:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S229939AbjHDQhW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 12:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjHDQ3a (ORCPT
+        with ESMTP id S229655AbjHDQhV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 12:29:30 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18E149D4;
-        Fri,  4 Aug 2023 09:29:26 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1691166555tdpbv9cd
-Received: from linux-lab-host.localdomain ( [116.30.131.233])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 05 Aug 2023 00:29:14 +0800 (CST)
-X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: LE7C6P2vL8RUuavYw7rhI2XUZwK4snUu5RXWraK2h7oK/GpZAwUMcj6ycz+kn
-        wnzQN8dCxuAjmJxlQrxyDF8Nvjjgh1yYNHWVyuNOdtu5lFYcp4XTe+6bKE9kdj8BpmdoRoj
-        WYU+gB09ya1aLyEaGN2SK8jhuLOLqnJ0f8od7k9sXFvXD6HdEGu7qz8w9eukFTpRkK5o0Hq
-        K01RoKSV1XoLW47pueOV8xWxjehzfJaXnEDlxIeAvyQHMI2EfOEWfE/6xqz5nj7LBax2meX
-        xfI953exVCEW1lClszFQF8tzDM4f1vULbrV1ZW0BeksYPyABvEgf/1RzF988K+c8ky3u7pa
-        tkk+p0jkwC3+3GYtqdqy6wnAoM+SmCZs+bqmngI
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12427017400466547691
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, tanyuan@tinylab.org, w@1wt.eu
-Subject: Re: [PATCH v1 2/3] selftests/nolibc: fix up O= option support
-Date:   Sat,  5 Aug 2023 00:29:10 +0800
-Message-Id: <20230804162910.305533-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <500504f6-fed1-45a4-a518-4631a6f3e463@t-8ch.de>
-References: <500504f6-fed1-45a4-a518-4631a6f3e463@t-8ch.de>
+        Fri, 4 Aug 2023 12:37:21 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1842BE7
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 09:37:19 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-63cfd6e3835so13645916d6.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Aug 2023 09:37:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1691167038; x=1691771838;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iUJy9CxyJyDezGa57jwVulgOP6Mhmh9lxMHoUFNxQOg=;
+        b=N8zywGIpRTGhPC/hd5Uaa9XnP65QfObz3MOaQDHYBSgg96x0lu4ubKHgZyvQjRg+92
+         VimNYt6Qi+T2OSX2whxjKdAwU5/KjPFJAJ8FQDdIS6jXwklryXprXrKQGXj9+OlCaDkz
+         3BPikSVV1zG++16OImjNF+EnR6jfDlpZjFzRRbEI2TKM1ALXkZgWSYisS9iRkCf9uPpL
+         wBCvyMsghryoppGBxdYYnIv8JITuv327O30KANkFj9SkQRGLPKdUnIYxkMPnuCb+6MV2
+         utPvzU/Zd0n7b7YmTIV2gNEhgfjpPjenS3EcryRbLfQHd44dgYs/kyhVn6CXzmHTcpuN
+         jP0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691167038; x=1691771838;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iUJy9CxyJyDezGa57jwVulgOP6Mhmh9lxMHoUFNxQOg=;
+        b=GI4jcG2ulejJjFDX0LtDK4i9ZaHzmQYRXwBKzfZgDfGncCkG4g1pSHrcuQk501MObm
+         6Z0qgV323khZFBz1pqWJP3j9DUZSCHU/axioVwc2XxVNXGr4guUjzvUl46DGTxWsOvTS
+         Tc/NfPWEaUP/aI6bOthCu55k4zygpL+FaTU9rke/HOYRO2GachwunsXOQp+ER8Y9TGtB
+         cN9d0QRn2abHLNDG03SvtHJvaSGcnIGxN5ZAd4/lvMCMs8+1D+h4msi22ZuJlKPPdgui
+         Fp+UPDOhN/Auz6I7S6CmkFu23SotB6eYLVWcEdYKVz9Q5RkfND41lzBDVfzEmaq9VfPB
+         Nskw==
+X-Gm-Message-State: AOJu0Yx35OITHUhrq+mAcQSgfyIQww2WUaB5yIU2v+0jDWINy+nPowes
+        fVWIkXRyB2kkjt3ttSUmTbVmjg==
+X-Google-Smtp-Source: AGHT+IGvEQu5HgCOytuEIOWYX6CR56Y/2e5JSlxsagFnROkz1i4u6xSjaOns8WHVi48AGsOpTahDqQ==
+X-Received: by 2002:a0c:e10a:0:b0:62d:f806:7f80 with SMTP id w10-20020a0ce10a000000b0062df8067f80mr2235164qvk.13.1691167038197;
+        Fri, 04 Aug 2023 09:37:18 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:9910])
+        by smtp.gmail.com with ESMTPSA id e29-20020a0cb45d000000b00632266b569esm782221qvf.87.2023.08.04.09.37.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Aug 2023 09:37:17 -0700 (PDT)
+Date:   Fri, 4 Aug 2023 12:37:16 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Lucas Karpinski <lkarpins@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: cgroup: fix test_kmem_memcg_deletion false
+ positives
+Message-ID: <20230804163716.GA337691@cmpxchg.org>
+References: <edpx3ejic2cxolhoynxvwal2i4a35akopg6hshcfxker6oxcn7@l32pzfyucgec>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <edpx3ejic2cxolhoynxvwal2i4a35akopg6hshcfxker6oxcn7@l32pzfyucgec>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On 2023-08-04 23:52:18+0800, Zhangjin Wu wrote:
-> > > On 2023-08-04 15:43:42+0800, Zhangjin Wu wrote:
-> > > > Hi, Thomas
-> > > > 
-> > > > > On 2023-08-03 22:45:52+0800, Zhangjin Wu wrote:
-> > > > > > To avoid pollute the source code tree and avoid mrproper for every
-> > > > > > architecture switch, the O= argument must be supported.
-> > > > > > 
-> > > > > > Both IMAGE and .config are from the building directory, let's use
-> > > > > > objtree instead of srctree for them.
-> > > > > > 
-> > > > > > If no O= option specified, means building kernel in source code tree,
-> > > > > > objtree should be srctree in such case.
-> > > > > > 
-> > > > > > Suggested-by: Willy Tarreau <w@1wt.eu>
-> > > > > > Link: https://lore.kernel.org/lkml/ZK0AB1OXH1s2xYsh@1wt.eu/
-> > > > > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > > > > > ---
-> > > > > >  tools/testing/selftests/nolibc/Makefile | 7 +++++--
-> > > > > >  1 file changed, 5 insertions(+), 2 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > > > > > index 51fef5e6a152..af590aee063a 100644
-> > > > > > --- a/tools/testing/selftests/nolibc/Makefile
-> > > > > > +++ b/tools/testing/selftests/nolibc/Makefile
-> > > > > > @@ -9,6 +9,9 @@ ifeq ($(srctree),)
-> > > > > >  srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
-> > > > > >  endif
-> > > > > >  
-> > > > > > +# add objtree for O= argument, required by IMAGE and .config
-> > > > > > +objtree ?= $(srctree)
-> > > > > 
-> > > > > Isn't this already set by the included tools/scripts/Makefile.include?
-> > > > >
-> > > > 
-> > > > Good question, but it is empty if no O= specified, checked it several
-> > > > times before ;-)
-> > > 
-> > > For me it is not empty when I am in tools/testing/selftests/nolibc/.
-> > >
-> > 
-> > Interesting, here is the code I added to check the value:
-> > 
-> >     diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> >     index 22f1e1d73fa8..1ae19e896e24 100644
-> >     --- a/tools/testing/selftests/nolibc/Makefile
-> >     +++ b/tools/testing/selftests/nolibc/Makefile
-> >     @@ -12,6 +12,8 @@ include $(srctree)/scripts/subarch.include
-> >      ARCH = $(SUBARCH)
-> >      endif
-> >     
-> >     +$(error objtree=$(objtree), srctree=$(srctree))
-> >     +
-> > 
-> > Whenever I do defconfig or run,
-> > 
-> >     $ make help
-> >     Makefile:15: *** objtree=, srctree=/labs/linux-lab/src/linux-stable.  Stop.
-> > 
-> > It is only not empty when we pass O explicitly:
-> > 
-> >     $ mkdir out
-> >     $ make help O=out
-> >     Makefile:15: *** objtree=out, srctree=/labs/linux-lab/src/linux-stable.  Stop.
-> >     $ make help O=$PWD/out
-> >     Makefile:15: *** objtree=/labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/out, srctree=/labs/linux-lab/src/linux-stable.  Stop.
+On Fri, Aug 04, 2023 at 11:37:33AM -0400, Lucas Karpinski wrote:
+> The test allocates dcache inside a cgroup, then destroys the cgroups and
+> then checks the sanity of numbers on the parent level. The reason it
+> fails is because dentries are freed with an RCU delay - a debugging
+> sleep shows that usage drops as expected shortly after.
 > 
-> Welp, now it's the same for me.
-> I guess I messed it up before, maybe I forgot to remove your changes
-> while testing?
+> Insert a 1s sleep after completing the cgroup creation/deletions. This
+> should be good enough, assuming that machines running those tests are
+> otherwise not very busy. This commit is directly inspired by Johannes
+> over at the link below.
 > 
-> Anyways instead of having to manually do stuff with $(objtree) we could
-> also use $(OUTPUT)$(IMAGE) to always get the correct image.
->
-
-Do you mean here?
-
-    # kernel image names by architecture
-    IMAGE_i386    = arch/x86/boot/bzImage
-    IMAGE_x86     = arch/x86/boot/bzImage
-    IMAGE_arm64   = arch/arm64/boot/Image
-    IMAGE_arm     = arch/arm/boot/zImage
-    IMAGE_mips    = vmlinuz
-    IMAGE_riscv   = arch/riscv/boot/Image
-    IMAGE         = $(IMAGE_$(ARCH))
-    IMAGE_NAME    = $(notdir $(IMAGE))
-
-It does save another KERNEL_IMAGE macro in my future patch ;-)
-
-But without O=, OUTPUT is also empty like objtree and when empty, it is
-assigned as $(CURDIR), not $(srctree) as we expected for IMAGE and .config. To
-be cleaner, objtree should also be used:
-
-    - IMAGE         = $(IMAGE_$(ARCH))
-    + IMAGE         = $(objtree)/$(IMAGE_$(ARCH))
-
-Is this what you want?
-
-Thanks!
-Zhangjin
-
-> > [..]
-> > 
-> > After align the empty objtree value with you, will renew this patch.
+> Link: https://lore.kernel.org/all/20230801135632.1768830-1-hannes@cmpxchg.org/
 > 
-> Thanks!
-> Thomas
+> Signed-off-by: Lucas Karpinski <lkarpins@redhat.com>
+
+Maybe I'm missing something, but there isn't a limit set anywhere that
+would cause the dentries to be reclaimed and freed, no? When the
+subgroups are deleted, the objects are just moved to the parent. The
+counters inside the parent (which are hierarchical) shouldn't change.
+
+So this seems to be a different scenario than test_kmem_basic. If the
+test is failing for you, I can't quite see why.
