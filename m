@@ -2,181 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E552676FA33
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 08:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC26B76FA3D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 08:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbjHDGhR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 02:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
+        id S233053AbjHDGit (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 02:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbjHDGhB (ORCPT
+        with ESMTP id S233127AbjHDGiK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 02:37:01 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144C146A8;
-        Thu,  3 Aug 2023 23:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691131013; x=1722667013;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Je63kurmjyA/vAtMTAnDLQswSWkn2HEqNz1j/hPqaMA=;
-  b=SwhKU+SdXBKjR5bE8o5fWBCjngKWk5badcLmAhYteWfMmhjqr9vX0Vc4
-   FzZf2UU9BN9h9TEehhiNVxFYUJ7Ah3oZpmmYf0zSzaNeJuzRBgeqZsT6G
-   C6Xds7viZyGaVuZU0vwhyMt1GVFP7cAqqOLBK1nKBdd5uhqoRDRkKLc8J
-   5BBmcW+oGFV89O9aFEQ0+sEug7HvOiDdNvbuJJdCoJpYXNCMPp4pqCg2b
-   e3EO4oOWoQpHVioWqxUd/tvWdNbVx+R/I9Mdk2APR4YIQez+dDhQpU32j
-   LqXEwPdJiOprHrEKAJXyeJ78PcSzpttjWi+UAemRtuI0cP6b8dlwBZcyW
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="373728412"
-X-IronPort-AV: E=Sophos;i="6.01,254,1684825200"; 
-   d="scan'208";a="373728412"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 23:36:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="679792001"
-X-IronPort-AV: E=Sophos;i="6.01,254,1684825200"; 
-   d="scan'208";a="679792001"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga003.jf.intel.com with ESMTP; 03 Aug 2023 23:36:39 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 3 Aug 2023 23:36:38 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 3 Aug 2023 23:36:38 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Thu, 3 Aug 2023 23:36:38 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.175)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Thu, 3 Aug 2023 23:36:38 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mtjpNfdJIvfbPZCeuqt08tRzbacAOwMecKpA+dgfn9DfAVrQK/t/s6O41dKLWZoPwuDL8LDQ7yunPao8haPZniizawmWt9TPjNMpzWxlcwpH2jszdeLOq9QPneRD0snDmLvV3ngg3Ks0uaIZZbc75hkAriu7wEM8EJywCnFcCBP+ENj47Ma81uqedfjTuTqsTiU2DpR28EklaEZc8ZpGdUdEeX8mGrkj0yxa9LOGqpSk9BWv0JJ92ZlXCJ5ldD7R8CVbklFCD1l6/fQYJmZgFNC1GsEOUhThyq/ZSdQXb9QQe/letW16umHg1PLuMXNVWfzG9bCFjmHrTcTgjKXdpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Je63kurmjyA/vAtMTAnDLQswSWkn2HEqNz1j/hPqaMA=;
- b=bRD7l34njjwRUvs9Iz+wxpJcGuKtjFmTy0OKvSVAnLmpbte1GzO7ghlaLJTs4ZwwVfiBa8c/P/WM5jlJhNxd/k1h4Ni+cEcewTf2jN5rARzHG45v0YLo5/NqBUHx+s6OYLWlm79AQdsf6ll6+/TUXEmaKlLhOTqVV2HoSFeiGnTohVW9Rtjy1d5bVgZzKFuQOmPEqLfzksG77ehvsnrTs2eO5P+cR6v+oPDUZQhZcuLeUZvMnRiasEGJ3gzXz6/RPH2+fOIE+eptQNDGfGC6KnEvqgjCYqWqHcSp7qU6ZPKeiMBZYrp7hG7345tXYfjLiRQPChmeyXOEZswhmanXcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by DS0PR11MB7558.namprd11.prod.outlook.com (2603:10b6:8:148::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.21; Fri, 4 Aug
- 2023 06:36:36 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::b556:42c4:772f:d47e]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::b556:42c4:772f:d47e%7]) with mapi id 15.20.6609.032; Fri, 4 Aug 2023
- 06:36:36 +0000
-From:   "Liu, Yi L" <yi.l.liu@intel.com>
-To:     "Liu, Jingqi" <jingqi.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: RE: [PATCH v5 2/4] iommu: Add new iommu op to get iommu hardware
- information
-Thread-Topic: [PATCH v5 2/4] iommu: Add new iommu op to get iommu hardware
- information
-Thread-Index: AQHZxhdAeyQAUZYpokOwdR2C5Dk4XK/ZctkAgAA80kA=
-Date:   Fri, 4 Aug 2023 06:36:36 +0000
-Message-ID: <DS0PR11MB75297FC544E151D7A8840A27C309A@DS0PR11MB7529.namprd11.prod.outlook.com>
-References: <20230803143144.200945-1-yi.l.liu@intel.com>
- <20230803143144.200945-3-yi.l.liu@intel.com>
- <fa0f5283-fdc6-1cd5-b34d-dcdc86856ad1@intel.com>
-In-Reply-To: <fa0f5283-fdc6-1cd5-b34d-dcdc86856ad1@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB7529:EE_|DS0PR11MB7558:EE_
-x-ms-office365-filtering-correlation-id: 2fc3a40e-bd18-4fd1-108e-08db94b526d6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: T3aDjmHLnYHemXu+EahxVcHPVTSkbdlVJj9CCakOX1F/1lxTWw40+SAk4suBJryhFgQ62QqgdVJJ33tkMDJlBcBxGu7LMkyWO0NkUASxKCoHw05v7N3fVysnQn2dP2j5ch11SWqqvLa8BjKXSqNWyahKiMbtgQWTmiPdYBAH84/c7PFNkV/U9Jo1L5qM7gtpIgffUx/dOfbcauOSZ1EOdRGtgiAQHnSxG+GLtQshkQ/Bj4QPmhkFcTBh+AIxGeteazvviXKnJcgDIxVf79plJUnhnNC80c2i6jQBcXVG9KRHWbixxmsTb3lJNodvLwlh01ALDvYEmTMWqKoallPn+qfAWjQQ3Ia1lODGwOZaRbTWS9D7G4KI9/5jroaDu67+xtQKx2Yukoxam6BD2juUBqbVptxkwlnu5Qx6APCg0yCQ/HXXmyNpSYP/tpPpaT+oKoNME5uLUhAVmkImgWSLF74sMHTgwc7WRmyqEHwGvkEYIGN/LtaOUtAWq29plCYM0CBKy5SMzoVPEOzL36N9j9uknjoSKY9ewyqmdYvYGdH3sqi3o0dfUgWiMR7lUs2j6ADKoulcOWSWEUZO9Y9yNaabMQ4R/gSbKz3Mf/FvnAU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(396003)(376002)(366004)(346002)(451199021)(186006)(1800799003)(7696005)(38070700005)(558084003)(9686003)(86362001)(71200400001)(55016003)(6506007)(26005)(38100700002)(122000001)(82960400001)(33656002)(66556008)(66476007)(66446008)(66946007)(4326008)(76116006)(64756008)(2906002)(316002)(5660300002)(7416002)(52536014)(41300700001)(8936002)(8676002)(478600001)(110136005)(54906003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?enBNdkRSK0t1VzhtQ0lCRXRDeS84NU9HVm1DZHh3Y3lTaFhMOUp6d2JmekhU?=
- =?utf-8?B?SjE4bVpXRFIrOUlmakx5bmxTcm9UTUVwZzFLZ01IWVp0dm9ZTzR3d1g1ZTkr?=
- =?utf-8?B?NmVyM0R2dExjOXlsWlRTazVyc2M4WjBrSTRrUVQ3V3F3bXNWUHlFZkF6VU4v?=
- =?utf-8?B?Q1JoVmhOcWRpMjBDaDE3eDArQ1NpQlRUc3lKSU5NeDQrK1JnT1dKQlg0STFz?=
- =?utf-8?B?Rm50ZnBhSDcvbVkxS0JXcUp0K3RmMy84Nk9sRlNEemRCRHlPOXdoQ0pYZWIx?=
- =?utf-8?B?cStQa0M2SzduMjc5WUpFZmJQRkVpTGdEUHBkOEtWN0tJMGJIZG5XTDlFOVIv?=
- =?utf-8?B?dFBNZzFINFhyMHdrSmpVMkhvSXlQQk1CSGhCL0VRajh4QzZTT29odVlGM3RH?=
- =?utf-8?B?U0RRRjRkUlpGLzcwRWtrZ2VueXNlWEtjcXJ3alVDZVA5cmNoaHJZaFo2Ri9x?=
- =?utf-8?B?K0FtTkVYcHB0NGEyNCsyajdjZ3BHRmhLdCt2U0V3MUhncWw3RzBLTVV4UE40?=
- =?utf-8?B?bHJLRGxYZEpTZ1FGTU1DeGdTUFdwbDB2K0lEdXV2eUgranJQbEFXRTh2WjJh?=
- =?utf-8?B?NUJuTE5aS0tDSGdwbEFXWUlRdDlwakx2ZVpXWUxUUGRrbDFZcFVja01rc1dH?=
- =?utf-8?B?WUwrK3BsM2FQZ1JiQzA0YnZibHgwZllpWG1BQ05aQXZCWWNTS21qeUJMb3k3?=
- =?utf-8?B?RWNwOTRDR3JuOGIvY21oY3Q5V0VNd09icUFFaW03MG1aZC9raE5MVGJDVi9K?=
- =?utf-8?B?RmFVVXI3WHpIZytuWEV2TkFoQXhraktGUysvRHBML2pBOEk0ckxJcnVLcy82?=
- =?utf-8?B?aThieS95YU85b1doRWZxQWdDdmdxVTc4VXJDay84c2JKQzVocUVCVzI0UmFQ?=
- =?utf-8?B?elRiYWp2Rm00OFBOUERlTnY4Zm5PQzV0UHRHVDh4b0NBMDZJeERRM1VuKzlN?=
- =?utf-8?B?YnFkTyt1N1czQnZvdy9ydk9OZ2s5SnA5T3dQMjlTU0VMTDFXakpxVVIxNHhY?=
- =?utf-8?B?OWVGV0E2SlhMeXR0QnJ2Z2p1L2ZEaU4rUTFtcDRBOUwvcEtYUDlUcUpycGlk?=
- =?utf-8?B?K0VLczVFMDgwdGlBNDZHWXZuYjRYRHVoNzY4Y3BXdnVtY2ZuSzd3L2NRckFT?=
- =?utf-8?B?azZiUEF2c2JaWVVzY0hPRnJqNUhzZ2diYmVHTkljOS92N0E0S3BzREUyTlAw?=
- =?utf-8?B?ZG1BNWdzSElhWjBFSDBBaTdmZkVsMzJxYWdtQ0VDNVF3RDdSZ01vK0VyOENl?=
- =?utf-8?B?TUVvaXZNTU5LM2NOc2pVWFBIY2lIdG9xTjhicWdQTUxISW43Q0xmVmlpT3Zw?=
- =?utf-8?B?WXB2aXNJd1hrZGRISHN3SmE1M295WWNWQU8xdU4rc2ZidVNyS0dpUVlRM25h?=
- =?utf-8?B?dkJ3WUVMbi9Dc0FHVERiaXpOdURIbVdHK21pdXZiRDR1S1RteElNaDNPaVhv?=
- =?utf-8?B?N2JlSnUwdWhPcVBzY0ovLzdidERpdmNYa3JkZm56T1I4VTRLTG9KQWhjMjQ4?=
- =?utf-8?B?K1BNOXg0OFROczl2R0R3Sk1IRlZrbytrakUxSjd5N0hNSmJIV0xkR2d1TnVk?=
- =?utf-8?B?SzNuK2VWb0ZnZDlzcnRQS2dsaDJlbm5Tbm9ObWZIME12aWlwTEpzR3BjQ2Ni?=
- =?utf-8?B?UC9Fd2x0Q3RxMWRaRnJScElPMHZLT01EOGlrbG9qN1N6RDc3Qm5Id3ZKKzBD?=
- =?utf-8?B?WmpmMzRwNDlCQ1FTZ3o3djcxYmdNR2w5RlU4UzZxeFdkdDNKZC9jK2tKWjNu?=
- =?utf-8?B?NWxWQUdUbEMzVTJ5MGpUNFovM0t1MDFBb0hMQStwRGVPMGdvRk8yTXdEWDZN?=
- =?utf-8?B?MzJrSWswSTNIZFdPN0hoQk01T2tSTUNhUStVTTR6MkRpcFJqQ1RCeDRmZVky?=
- =?utf-8?B?NElUR3NwZjBRZHhqTi9HcmlIRVcxNWpraG9JUmE3K0tuRjZiSVcrOWNtRnhw?=
- =?utf-8?B?V01zWkc2OHJSZ1kraktNaytFSHJmTlFSMkw3aTRlV3hTSjJQYXlZaWl0ZDJR?=
- =?utf-8?B?eWE1Q05RZnRRTTRSVlV3R2FlTUk0OEdmbFdQbG1LUmFIeHdZU3h0SmNjNmg1?=
- =?utf-8?B?a2VjajBPbndaeTV1dnprWDY4U1hySWoyVjFqQ3A4ajRwK0tUN2J6M3cwMDFq?=
- =?utf-8?Q?Wsbk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 4 Aug 2023 02:38:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF09546A8
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 23:37:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1691131040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JRbNEV/g+3SWffCtpqnTW+44zOe74EJ4R0UlzfLRMdg=;
+        b=PMkPLqtql8aAN6zEikNPdsu9piQg05ONrBhy3AOvBn5bNGJBiWzLVv6UbuF9WXs4SyCPAq
+        NUIiH3n/9wk2f1DjoUJ0PJVD9RKQKVR/0VtbtRZrrS5FzoZfbm0M+ocmpnG4AHMry2uDKy
+        6CR6F9mZvtTnpSwLCRDzLju+lTN7QS0=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-163-AYYiqcAuNJqWW1X4_GkDtw-1; Fri, 04 Aug 2023 02:37:19 -0400
+X-MC-Unique: AYYiqcAuNJqWW1X4_GkDtw-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-40ff512f8a8so5564421cf.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Aug 2023 23:37:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691131039; x=1691735839;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JRbNEV/g+3SWffCtpqnTW+44zOe74EJ4R0UlzfLRMdg=;
+        b=WPQJEBwPoN7lz2j4gLyP1x4kb2E865svaoV7cmgGc7UAe8lNV03kQQ3KO9MW9bnUH/
+         y32sYbHUsF1/5CtSaT8D5jtxtTj0tzG0ONTjXZ/ZzeFeSfxb98+ROS+S5CpxQY9rEtyL
+         sSCjIYWmBEcopmBeSlZV15bqtSvCLpRgmMQOljIGEmjavBgDeJ89aHQm6ZsDzHPWvKk/
+         sLA92gQG9AOmuofGbYtIJAiQgaOkWPQBzaRNUcaOYF7wFeV/uQv/CIfh0M08nDY9U7Rv
+         Nq9FYavPPa0pQQOWDIl7/Ev4nzJfJhre+mATNrRxvUHVYWVPWnrMaYGn/23JPbVUEqfB
+         j4EQ==
+X-Gm-Message-State: AOJu0Yw/cW8Rc2W1/2fWAFYeP8FRaZleQTFdZW0ngSD8kS2+szDMUGA+
+        uDQ5n7rxi9ea8K445svPpugtj+z4oF7c6PcYZdxrbrCdEPv3J6HSlG0eCnkJczepJdmTq3+w373
+        Ynq8pCv0Oo66BOH8QKDleaH1OJrPgpAToUpnM9rI=
+X-Received: by 2002:a05:622a:44f:b0:404:a649:879c with SMTP id o15-20020a05622a044f00b00404a649879cmr1022820qtx.49.1691131038969;
+        Thu, 03 Aug 2023 23:37:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEQAEaqfcC9XZlm+xYVaRBqSvtLqOU49iCHOkXeJwSJ4Vq7u3O4eD+BrXMQHkYycIHuMGVRvA==
+X-Received: by 2002:a05:622a:44f:b0:404:a649:879c with SMTP id o15-20020a05622a044f00b00404a649879cmr1022804qtx.49.1691131038689;
+        Thu, 03 Aug 2023 23:37:18 -0700 (PDT)
+Received: from fedora19.localdomain ([2401:d002:2d05:b10a:c9ac:2dd7:6463:bb84])
+        by smtp.gmail.com with ESMTPSA id 7-20020a17090a034700b002681bda127esm920379pjf.35.2023.08.03.23.37.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Aug 2023 23:37:18 -0700 (PDT)
+Date:   Fri, 4 Aug 2023 16:37:11 +1000
+From:   Ian Wienand <iwienand@redhat.com>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Martin Doucha <mdoucha@suse.cz>,
+        Yang Xu <xuyang2018.jy@fujitsu.com>
+Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
+Message-ID: <ZMycl7xKyJoQNpcu@fedora19.localdomain>
+References: <20221107191136.18048-1-pvorel@suse.cz>
+ <Y2l3vJb1y2Jynf50@google.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2fc3a40e-bd18-4fd1-108e-08db94b526d6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Aug 2023 06:36:36.4478
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kRul5jOIaVZOcNQeMvjEXgcF2qaK6qbwM4uEZd8mzbXK2JCCJqVD/PPX1b4tsdiTlKuirD9yk2ZZ44wDQ61L9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7558
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2l3vJb1y2Jynf50@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -185,9 +85,107 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-PiBGcm9tOiBMaXUsIEppbmdxaSA8amluZ3FpLmxpdUBpbnRlbC5jb20+DQo+IFNlbnQ6IEZyaWRh
-eSwgQXVndXN0IDQsIDIwMjMgMTA6NTggQU0NCg0KPiA+ICsvKioNCj4gPiArICogZW51bSBpb21t
-dV9od19pbmZvX3R5cGUgLSBJT01NVSBIYXJkd2FyZSBJbmZvIFR5cGVzDQo+ID4gKyAqIEBJT01N
-VV9IV19JTkZPX1RZUEVfTk9ORTogVXNlZCBieSB0aGUgZHJpdmVycyB0aGF0IGRvZXMgbm90IHJl
-cG9ydA0KPiBoYXJkd2FyZSBpbmZvDQo+IEl0IGxvb2tzIGxpa2UgdGhpczoNCj4gL3MvZG9lcy9k
-bw0KDQpZZXMuDQoNClJlZ2FyZHMsDQpZaSBMaXUNCg==
+On Mon, Nov 07, 2022 at 01:25:16PM -0800, Minchan Kim wrote:
+> > following bug is trying to workaround an error on ppc64le, where
+> > zram01.sh LTP test (there is also kernel selftest
+> > tools/testing/selftests/zram/zram01.sh, but LTP test got further
+> > updates) has often mem_used_total 0 although zram is already filled.
+
+> Is it happening on only ppc64le?
+
+I have managed to replicate this on an arm64 system.  I frankly don't
+know what is so special about it -- it's a qemu guest and I'm not sure
+what exactly it's running ontop of.
+
+> Is it a new regression? What kernel version did you use?
+
+I've replicated this on 4.18.0; obviously something more recent would
+be useful but I'm hesitant to destroy too much state in case it is
+something ...
+
+> Actually, mem_used_total indicates how many *physical memory* were
+> currently used to keep original data size.
+> 
+> However, if the test data is repeated pattern of unsigned long
+> (https://github.com/torvalds/linux/blob/master/drivers/block/zram/zram_drv.c#L210)
+> zram doesn't allocate the physical memory but just mark the unsigned long's value
+> in meta area for decompression later.
+
+To recap; this test [1] creates a zram device, makes a filesystem on
+it, and fills it with sequential 1k writes from /dev/zero via dd.  The
+problem is that it sees the mem_used_total for the zram device as zero
+in the sysfs stats after the writes; this causes a divide by zero
+error in the script calculation.
+
+An annoted extract:
+
+ zram01 3 TINFO: /sys/block/zram1/disksize = '26214400'
+ zram01 3 TPASS: test succeeded
+ zram01 4 TINFO: set memory limit to zram device(s)
+ zram01 4 TINFO: /sys/block/zram1/mem_limit = '25M'
+ zram01 4 TPASS: test succeeded
+ zram01 5 TINFO: make vfat filesystem on /dev/zram1
+
+ >> at this point a cat of /sys/block/zram1/mm_stat shows
+ >>   65536      527    65536 26214400    65536        0        0        0
+
+ zram01 5 TPASS: zram_makefs succeeded
+ zram01 6 TINFO: mount /dev/zram1
+ zram01 6 TPASS: mount of zram device(s) succeeded
+ zram01 7 TINFO: filling zram1 (it can take long time)
+ zram01 7 TPASS: zram1 was filled with '25568' KB
+
+ >> at this point "ls -lh" shows the file
+ >> total 25M
+ >> -rwxr-xr-x. 1 root root 25M Aug  4 01:06 file
+
+ >> however, /sys/block/zram1/mm_stat shows
+ >>   9502720        0        0 26214400   196608      145        0        0
+ >> the script reads this zero value and tries to calculate the
+ >> compression ratio
+
+ ./zram01.sh: line 145: 100 * 1024 * 25568 / 0: division by 0 (error token is "0")
+
+ >> If we do a "sync" then redisply the mm_stat after, we get
+ >>   26214400     2842    65536 26214400   196608      399        0        0
+
+I have managed to instrument this, and in the following
+
+ static ssize_t mm_stat_show(struct device *dev,
+                struct device_attribute *attr, char *buf)
+ {
+  ...
+        if (init_done(zram)) {
+		mem_used = zs_get_total_pages(zram->mem_pool);
+                pr_info("mm_stat_show: init done %p %lld\n", zram->mem_pool, mem_used);
+                zs_pool_stats(zram->mem_pool, &pool_stats);
+
+zs_get_total_pages(zram->mem_pool) is definitely zero, which is why
+the mm_stat is returning zero.  i.e. zsmalloc really doesn't seem to
+have any pages recorded for that mem_pool ...
+
+This doesn't seem to make sense; how can a device that has a file
+system on it not even have one page assigned to it in zram->mem_pool?
+
+I *think* this has something to do with the de-deuplication as noted.
+If I stub out page_same_filled() to return false always, we see instead
+
+ zram01 7 TPASS: zram1 was filled with '25568' KB
+ >>  < immediately after >
+ >> 10223616    48516   131072 26214400   196608        0        0        0
+ >>  < after sync >
+ >> 26214400   126933   327680 26214400   327680        0        0        0
+
+So I think this test still needs a sync to be sure that it's seeing
+the right values?  It's probably expected that this takes some time to
+write everything out?
+
+But is it possible that mem_used_total being zero is a bug -- possibly
+triggered by the de-dup path and the test writing the same thing in
+every block?  Something like the first de-duped page also being thrown
+out?
+
+-i
+
+[1] https://github.com/linux-test-project/ltp/blob/8c201e55f684965df2ae5a13ff439b28278dec0d/testcases/kernel/device-drivers/zram/zram01.sh
+
