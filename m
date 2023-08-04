@@ -2,248 +2,212 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539E476F81F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 04:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F0E76F8E8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 06:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbjHDC6k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Aug 2023 22:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
+        id S229834AbjHDE0o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 00:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjHDC6j (ORCPT
+        with ESMTP id S231822AbjHDE0n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 22:58:39 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2743AA3;
-        Thu,  3 Aug 2023 19:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691117917; x=1722653917;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=z4LB8RNSm2kn25FS3xnbneimHurzuBCfFzvEVLw/4QA=;
-  b=bcq/X9vF4lmY4f+NjuohMZDPQnfVtqiaI+QzIy3vqw7rPttC/2KojDW3
-   DbcxFVemCFSCsbaRNyLJxVerxQULz4+4z4kq3h1gAWuR3n6vhzCpHqomC
-   G5NrpjPP9psqKHuMGMYPwZgWGh32UwgiiJhj9ogFgS8pgJasqBR8fNYhE
-   uR2/yBKUGm42U4Mc62i73fQWNJ6k9tx6SOTdE6STHKDjO5OLoijA7CyuA
-   /ToBQUhzIJ1iQ7Hr/hb2aU2LpaNkBlemFRGynWh+pwlolefH1owg5vq39
-   9B4RJLgg3m3Qab/o2pIm+K8wkGPjjvOuDucdmqqvQKhFg2/upjsu3ueNu
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="373694035"
-X-IronPort-AV: E=Sophos;i="6.01,253,1684825200"; 
-   d="scan'208";a="373694035"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 19:58:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="1060543528"
-X-IronPort-AV: E=Sophos;i="6.01,253,1684825200"; 
-   d="scan'208";a="1060543528"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga005.fm.intel.com with ESMTP; 03 Aug 2023 19:58:36 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 3 Aug 2023 19:58:36 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 3 Aug 2023 19:58:35 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Thu, 3 Aug 2023 19:58:35 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.46) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Thu, 3 Aug 2023 19:58:35 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lvLn6dof/WQWcn73u1TCzawrWjOFEz+IwmZ+qaIwSYzO8iK8blXbUbyS8h5eAxxzfsLeYwffNek+qEmfwygCbunrMwkifGbLfDBcrOdrqRarz7NxVf/y1XjHfdFi/oqogEnzCewDn2ZLOsZPA5nAJAkl2sV/TpNQd0cCyhVJmzbN6S3xoNuhb8Mn0rEyfD0jD2Q45OTSkndLTTIJ7t96ENpHe77+5uXKlcUWbhJgtH2GzKJwePK4VPi80stsDjms55a+xydjvaTAV6ROWiqHHBcw4TDeuPXlvtnE8kq/f7Cs4Ia/NC5UtNumzABUN/NKxtuveSDFUXwZ202dsYrY/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GYo1z/+/YarQJNz5x6toQa2zERtje0/YAlQIsLUcPoA=;
- b=OOXZhTsplXm50Mkm7kJhyzL2/SkhTXsmbClRZTvpP83iO3cCrScQO1kY1PWX6fT6NlwXFuCbGgn6XwD2atJ3IWkrlBMLg6+uGuFKWVe/OdflLNH/h9UNO02vNkTowzr5DtzgfODmAVkqeuBEZZ7PgYjzULxbusR1IYuLf3yNomlMFhUJBWNNoHcOgyOc5FDFGGObyEi/4XWfOukxr/v44zcKPmucEddCuHe0fPAFCbJYXDq2dAZP/XPmH/bBlnoNUpEhNwkKGEm54p3MIC+ChRxn6VZWKfjwVQS3Fr08r9XTOPyHcDIPU6uXUzK7D//sjxzNAOHAG+xviLLUpflCQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5469.namprd11.prod.outlook.com (2603:10b6:5:399::13)
- by PH7PR11MB7498.namprd11.prod.outlook.com (2603:10b6:510:276::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.45; Fri, 4 Aug
- 2023 02:58:31 +0000
-Received: from DM4PR11MB5469.namprd11.prod.outlook.com
- ([fe80::4e97:daa2:4c07:fc9c]) by DM4PR11MB5469.namprd11.prod.outlook.com
- ([fe80::4e97:daa2:4c07:fc9c%6]) with mapi id 15.20.6652.020; Fri, 4 Aug 2023
- 02:58:31 +0000
-Message-ID: <fa0f5283-fdc6-1cd5-b34d-dcdc86856ad1@intel.com>
-Date:   Fri, 4 Aug 2023 10:58:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v5 2/4] iommu: Add new iommu op to get iommu hardware
- information
-Content-Language: en-US
-To:     Yi Liu <yi.l.liu@intel.com>, <joro@8bytes.org>,
-        <alex.williamson@redhat.com>, <jgg@nvidia.com>,
-        <kevin.tian@intel.com>, <robin.murphy@arm.com>,
-        <baolu.lu@linux.intel.com>
-CC:     <cohuck@redhat.com>, <eric.auger@redhat.com>,
-        <nicolinc@nvidia.com>, <kvm@vger.kernel.org>,
-        <mjrosato@linux.ibm.com>, <chao.p.peng@linux.intel.com>,
-        <yi.y.sun@linux.intel.com>, <peterx@redhat.com>,
-        <jasowang@redhat.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <lulu@redhat.com>, <suravee.suthikulpanit@amd.com>,
-        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <zhenzhong.duan@intel.com>
-References: <20230803143144.200945-1-yi.l.liu@intel.com>
- <20230803143144.200945-3-yi.l.liu@intel.com>
-From:   "Liu, Jingqi" <jingqi.liu@intel.com>
-In-Reply-To: <20230803143144.200945-3-yi.l.liu@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR01CA0148.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::28) To DM4PR11MB5469.namprd11.prod.outlook.com
- (2603:10b6:5:399::13)
+        Fri, 4 Aug 2023 00:26:43 -0400
+Received: from out-98.mta1.migadu.com (out-98.mta1.migadu.com [95.215.58.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803694229
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 21:26:41 -0700 (PDT)
+Message-ID: <de5118d6-3dfe-9185-dbfa-c797f2821ce2@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1691123197; h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m082I1X9tbhjiROnfjM2jHYq1ftKJQeenvc+niZ4Cz4=;
+        b=r7HILlHe7qtM8mdPN1M9YxKznXH26/pkhJZWm8x4FppG3rvuS7a0kxExrHjfW44V6uoGm3
+        WfzZ8o6wxbk087JzIhHSJkwcUWal+76Bn8tcBHo+WOIIrDgb9wwYTccBs/1mfdKzsy0qdK
+        xQTi76W9uccn4yQOKHqHlmCiY7IOsJs=
+Date:   Thu, 3 Aug 2023 21:26:24 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5469:EE_|PH7PR11MB7498:EE_
-X-MS-Office365-Filtering-Correlation-Id: a3a93394-173d-4bd8-0774-08db9496aec0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NisiSmu1w/pN0+ZuwK4G8WeKUG7D9+hC2cB7SzYLdPQjQf5CGD4n8peX0XYf4Kw3aq4k+RI1VIWPUlmcg1b7m3+Kzx33fUp42GJc05BYSwAjB3kPP7YB4l/fKUUR+LWj7yEay4K8uWfTbODbx45b5GgYHLo75SPt5azbakn6VqQxXRM8hjHvYoD5N8VYC835cW+6W4P4C/z48uB9EU1rDWXVEPR8bEZIvDcE23/aP8LnShbB+6gQZS1SsOOvDAKRBoFXBqK4GIyD5trXccvt8etgG1LdgApizCSTOMT5KI4FuOzQFrrBDmQLcWuSYwFfm/4+wHFccWj/hNF1rX0izZg+qFJHCsHJxP0Wm2wuVDqoZplqzAcrNNfMwPGxuXHu70d4NF2SPfg0ZDfC4XQafG5HeX3exxbLnyN7jeX/+4iuuv+PQ2qpiDqfaNulZMlU68BL3Ch+7KO4roMRbdYNFLrIzfJORGBba3fJME+5LOTlTcKpmPruFIac5l+5CPmRnepVImxD6WlUQ93NOFKlOo3bFhCo/eGPfdrl3srLQA96bFuEJFuH31EuGGygFJMyZJmiPK7LPGO4rRi3LozHWq/hkB8dsv3kuZLJyXefhRAJVn7rUY2usyXA1cFKdD5dLFazBbcMVkkQiUmR44WQFQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5469.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(396003)(346002)(39860400002)(366004)(136003)(1800799003)(186006)(451199021)(478600001)(86362001)(31696002)(6512007)(36756003)(6666004)(6486002)(316002)(8936002)(8676002)(41300700001)(5660300002)(31686004)(4326008)(66556008)(66476007)(83380400001)(7416002)(38100700002)(2906002)(66946007)(26005)(2616005)(53546011)(82960400001)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VkFzb0lGd1YyYWMvRWF6ZDkyVGs3dC84KzkvYkJ6ODAwck85WTlBY21CcHUv?=
- =?utf-8?B?aXpNNUtPOFBsd0d5d1g0ZFQ0OStTdjhaMVc3MWdQdUdITXV4WENOWXdqOW51?=
- =?utf-8?B?bHFqWnV2SGQyVnAyOENpckFIRjBtcXZzSnFUaUtOTi9FaU1waXNQRnk0b1NF?=
- =?utf-8?B?NXZhWjIwZTVCQndpaTRJQU5PNWtJREFzZXVvdTh0WVJWamlmVHZtTldmWWNt?=
- =?utf-8?B?ZzBHSDJ2V25lUzljS1dONEJyeHBvMjlHRFl5Y1A2ZlZKR3RLNmdoRjhacFVC?=
- =?utf-8?B?VDVzWCtPeW9ZcHl3NTd2QVovRFVkVG1xV0MwWWd2N0dYemN4TTRGK2JXUE9L?=
- =?utf-8?B?RUQ1QkVHQ2pwN1cwVFFIV2ZndHVpQ2ZwbDViVit0STYwMEpHQ3Z0U1JGQko2?=
- =?utf-8?B?WnJUUmhLak5QVUw1dEhwd2hEUFB5ZzBES3FIdlFTQ0tCN1VhK25xU3hPWUtW?=
- =?utf-8?B?cU9WM0pSbWNoRm9DZE4vV211MFBmdWtibVlZSy93WmJTWjhDUmI3UXA0Y0JP?=
- =?utf-8?B?UU1QRDJHYXcyd2ZuRDlXVnRFK1RCZWJqaXNROFpNcjM1R1JleU5MV1F0UnR2?=
- =?utf-8?B?SVBvcmhWdldsMW05RnBEeGF2bXkzWGZYUkRDbm81UUlCbjZTN2NmcEU1MUNV?=
- =?utf-8?B?ZzF0a0tQZkJMc1JlZ21PQllId0xvTHI1eE5ZbFluWTdGUlVJQUwxNDJQMkdS?=
- =?utf-8?B?RWdzWit5UENjaHFOQ2l2aERWWTNmZUErRjg3dTZnYXZvaE5IU3BOUlM4azgz?=
- =?utf-8?B?bEFvbDVUMkJKWFpZeFlsd3dBM3BxcDg3VTE2czNNNkc4bEpmQ1E5ZmtDZGNZ?=
- =?utf-8?B?RlA3OWFuWXN5Q3VBbnZzSW9SK3JyclowMmIwKzA2UjhzZjJpV0M0VWZlaTZv?=
- =?utf-8?B?bi9tYWJ6VUVqazgydWRpdVJWYkJWMDJjY0pxWTJDaHpmR2htMWJNT2R3WTg2?=
- =?utf-8?B?VjZZdDlKcmFqdkVmeUhTUGtDd0JTWFZnSHNFTGRKR1FUTERsa2NadDhmZ01K?=
- =?utf-8?B?Z0NSZm9mSnNxckNSc2J6VEdEemIvZzZKSkZjYzBwRnJIUWZSQmFEK3dTZDZj?=
- =?utf-8?B?VTV0S3M5UTV1S2EwZUdIa3NnZENKYm1pRjFJYlBlRDRHMTZCZ05QTGhXSUVt?=
- =?utf-8?B?ZWx3L09pUk9KQ3M3NC9CbGNZb3BJcFZUVkt0TlhYV2d2ODYvVVg1dGZBWG9W?=
- =?utf-8?B?ZFhSTXZNMlhLUFRla0pPWGRXNnNpd3A3a3ovTVFsZjBoRkJibHQvTlFIUU5t?=
- =?utf-8?B?U0hSTDkxOHU4bGltWGZyRU03anFIS3BNVTJ6bXVtMEtqakNYWW9JWFdBeDYw?=
- =?utf-8?B?NGdFeGZQYUpoUHdlYWtqNWFzMmEyUU9BUzNGaUNsVG1BOCs2VWhVcjR6dHNm?=
- =?utf-8?B?QjI5SmFrMEZ0VEFIdC9YWGwzR0RZZlFPaTBuc0EwVHRWckhSN0djY2xnbnJo?=
- =?utf-8?B?czhvaGJlRVlMa2thWDFLOFVieWVLWnFOVzY5MlNKZGttMm9zTnhUOGo3OE1u?=
- =?utf-8?B?dFhoNThxbm9aUG16ZXJBSW9HeExQNmVVMitXMVl1Y0N6RGszOHRNS1lhOERp?=
- =?utf-8?B?a2lTSVkwQzM0blJvanZ6TXp2MVlBK0FYQ3hHNC9Oell0RVFmRHhZeFc1Q25y?=
- =?utf-8?B?alltZTBjU0Q2c1pYeno3aHNVc1UxVGdXL0F0QnpGVjVsd2Uzc1RtL0VQWVZQ?=
- =?utf-8?B?V3ZTMFJvVWJyWmdoV1NndGJ4SkZjeHFoYW5JYXM1ZGNKMGZJUmd4UXVjTVVt?=
- =?utf-8?B?a1A2RHoreXhhQzhyRHljSDE2WVg4MG00V3B4ZjB0SDBqVDRZWXVlUXdpRmFM?=
- =?utf-8?B?RU5YUFlrc1VDTUJFMXJQazA1SFV5dGgxRWk2RHhXKzVlYU1COE1FcnFFUjJr?=
- =?utf-8?B?Z0tyZHEvL1JLRkt6dDVSWFNBMy9GYXYxV3dxNnZoaE9vN2RldjNsSy8wSUxo?=
- =?utf-8?B?MzZWSFBBZXJnbWdsQlFEemprTy9YeDFiaFlUSFpLeTYzNDFoVFRtS3p6RWhW?=
- =?utf-8?B?VWRPbnNLaFFOTWRTZGI3YU8zbjlvWGgvTGVJeU44WWVFU0x0YlVTak4zSHMv?=
- =?utf-8?B?NUF6RHd1aG1VMUN0cktwSWx6VjU4KzJYWjRkQmtvSUJiS3c0Z2E1MHFRc1pR?=
- =?utf-8?Q?JZCg9HYwG2PzYph8AbiVmnPEi?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3a93394-173d-4bd8-0774-08db9496aec0
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5469.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2023 02:58:30.4607
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dso3QXZ+sYt0zDXkBgJqKvBQrOCyqM7CVe6Rm/JYT6LP+qHCeKgPFdNvURLDxNRhzfYC3bP5MJz+rfPPp5yuJA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7498
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next v9 4/4] selftests/bpf: Add mptcpify test
+To:     Geliang Tang <geliang.tang@suse.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Simon Horman <horms@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1691069778.git.geliang.tang@suse.com>
+ <92ee6be5a465601ff3a2df29b6a517086e87ca3c.1691069778.git.geliang.tang@suse.com>
+ <1bf7f5cf-a944-a284-28af-83a6603542fb@linux.dev>
+ <20230804022459.GA28296@localhost>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20230804022459.GA28296@localhost>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/3/2023 10:31 PM, Yi Liu wrote:
-> From: Lu Baolu <baolu.lu@linux.intel.com>
->
-> Introduce a new iommu op to get the IOMMU hardware capabilities for
-> iommufd. This information will be used by any vIOMMU driver which is
-> owned by userspace.
->
-> This op chooses to make the special parameters opaque to the core. This
-> suits the current usage model where accessing any of the IOMMU device
-> special parameters does require a userspace driver that matches the kernel
-> driver. If a need for common parameters, implemented similarly by several
-> drivers, arises then there's room in the design to grow a generic parameter
-> set as well. No wrapper API is added as it is supposed to be used by
-> iommufd only.
->
-> Different IOMMU hardware would have different hardware information. So the
-> information reported differs as well. To let the external user understand
-> the difference. enum iommu_hw_info_type is defined. For the iommu drivers
-> that are capable to report hardware information, it should have a unique
-> iommu_hw_info_type and return to caller. For the driver doesn't report
-> hardware information, caller just uses IOMMU_HW_INFO_TYPE_NONE if a type
-> is required.
->
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> ---
->   include/linux/iommu.h        | 9 +++++++++
->   include/uapi/linux/iommufd.h | 8 ++++++++
->   2 files changed, 17 insertions(+)
->
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index e0245aa82b75..f2d6a3989713 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -228,6 +228,14 @@ struct iommu_iotlb_gather {
->   /**
->    * struct iommu_ops - iommu ops and capabilities
->    * @capable: check capability
-> + * @hw_info: IOMMU hardware information. The type of the returned data is
-> + *           marked by the output type of this op. Type is one of
-> + *           enum iommu_hw_info_type defined in include/uapi/linux/iommufd.h.
-> + *           The drivers that support this op should define a unique type
-> + *           in include/uapi/linux/iommufd.h. The data buffer returned by this
-> + *           op is allocated in the IOMMU driver and the caller should free it
-> + *           after use. Return the data buffer if success, or ERR_PTR on
-> + *           failure.
->    * @domain_alloc: allocate iommu domain
->    * @probe_device: Add device to iommu driver handling
->    * @release_device: Remove device from iommu driver handling
-> @@ -257,6 +265,7 @@ struct iommu_iotlb_gather {
->    */
->   struct iommu_ops {
->   	bool (*capable)(struct device *dev, enum iommu_cap);
-> +	void *(*hw_info)(struct device *dev, u32 *length, u32 *type);
->   
->   	/* Domain allocation and freeing by the iommu driver */
->   	struct iommu_domain *(*domain_alloc)(unsigned iommu_domain_type);
-> diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-> index 8245c01adca6..1f616b0f8ae0 100644
-> --- a/include/uapi/linux/iommufd.h
-> +++ b/include/uapi/linux/iommufd.h
-> @@ -370,4 +370,12 @@ struct iommu_hwpt_alloc {
->   	__u32 __reserved;
->   };
->   #define IOMMU_HWPT_ALLOC _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_ALLOC)
-> +
-> +/**
-> + * enum iommu_hw_info_type - IOMMU Hardware Info Types
-> + * @IOMMU_HW_INFO_TYPE_NONE: Used by the drivers that does not report hardware info
-It looks like this:
-/s/does/do
 
-Thanks,
-Jingqi
+
+On 8/3/23 7:24 PM, Geliang Tang wrote:
+> Hi Yonghong,
+> 
+> On Thu, Aug 03, 2023 at 06:23:57PM -0700, Yonghong Song wrote:
+>>
+>>
+>> On 8/3/23 6:41 AM, Geliang Tang wrote:
+>>> Implement a new test program mptcpify: if the family is AF_INET or
+>>> AF_INET6, the type is SOCK_STREAM, and the protocol ID is 0 or
+>>> IPPROTO_TCP, set it to IPPROTO_MPTCP. It will be hooked in
+>>> update_socket_protocol().
+>>>
+>>> Extend the MPTCP test base, add a selftest test_mptcpify() for the
+>>> mptcpify case. Open and load the mptcpify test prog to mptcpify the
+>>> TCP sockets dynamically, then use start_server() and connect_to_fd()
+>>> to create a TCP socket, but actually what's created is an MPTCP
+>>> socket, which can be verified through the outputs of 'ss' and 'nstat'
+>>> commands.
+>>>
+>>> Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+>>> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+>>> ---
+>>>    .../testing/selftests/bpf/prog_tests/mptcp.c  | 94 +++++++++++++++++++
+>>>    tools/testing/selftests/bpf/progs/mptcpify.c  | 25 +++++
+>>>    2 files changed, 119 insertions(+)
+>>>    create mode 100644 tools/testing/selftests/bpf/progs/mptcpify.c
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+>>> index 4407bd5c9e9a..caab3aa6a162 100644
+>>> --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
+>>> +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+>>> @@ -6,6 +6,7 @@
+>>>    #include "cgroup_helpers.h"
+>>>    #include "network_helpers.h"
+>>>    #include "mptcp_sock.skel.h"
+>>> +#include "mptcpify.skel.h"
+>>>    char NS_TEST[32];
+>>> @@ -195,8 +196,101 @@ static void test_base(void)
+>>>    	close(cgroup_fd);
+>>>    }
+>>> +static void send_byte(int fd)
+>>> +{
+>>> +	char b = 0x55;
+>>> +
+>>> +	ASSERT_EQ(write(fd, &b, sizeof(b)), 1, "send single byte");
+>>> +}
+>>> +
+>>> +static int verify_mptcpify(void)
+>>> +{
+>>> +	char cmd[256];
+>>> +	int err = 0;
+>>> +
+>>> +	snprintf(cmd, sizeof(cmd),
+>>> +		 "ip netns exec %s ss -tOni | grep -q '%s'",
+>>> +		 NS_TEST, "tcp-ulp-mptcp");
+>>
+>> Could you show what is the expected output from the above command line
+>>    ip netns exec %s ss -tOni
+>> ?
+>> This way, users can easily reason about the ss states based on tests.
+> 
+> There're too many items in the output of command 'ip netns exec %s ss -tOni':
+> 
+> '''
+> State Recv-Q Send-Q Local Address:Port  Peer Address:Port Process
+> ESTAB 0      0          127.0.0.1:42225    127.0.0.1:44180 cubic wscale:7,7 rto:201 rtt:0.034/0.017 ato:40 mss:16640 pmtu:65535 rcvmss:536 advmss:65483 cwnd:10 bytes_received:1 segs_out:1 segs_in:3 data_segs_in:1 send 39152941176bps lastsnd:7 lastrcv:7 lastack:7 pacing_rate 78305882352bps delivered:1 app_limited rcv_space:33280 rcv_ssthresh:33280 minrtt:0.034 snd_wnd:33280 tcp-ulp-mptcp flags:Mec token:0000(id:0)/3a1e0d3c(id:0) seq:c2802f11c5228db6 sfseq:1 ssnoff:49d3c135 maplen:1
+> ESTAB 0      0          127.0.0.1:44180    127.0.0.1:42225 cubic wscale:7,7 rto:201 rtt:0.036/0.02 mss:16640 pmtu:65535 rcvmss:536 advmss:65483 cwnd:10 bytes_sent:1 bytes_acked:2 segs_out:3 segs_in:2 data_segs_out:1 send 36977777778bps lastsnd:7 lastrcv:7 lastack:7 pacing_rate 72200677960bps delivery_rate 8874666664bps delivered:2 rcv_space:33280 rcv_ssthresh:33280 minrtt:0.015 snd_wnd:33280 tcp-ulp-mptcp flags:Mmec token:0000(id:0)/39429ce(id:0) seq:e3ed00de37c805c sfseq:1 ssnoff:d4e4d561 maplen:0
+> '''
+> 
+> We only care about this 'tcp-ulp-mptcp' item.
+> 
+> Show all output will confuse users. So we just pick and test the only
+> item we care.
+
+Thanks. Originally I thought at least we should put one line in
+the comment which has 'tcp-ulp-mptcp' like
+
+ESTAB 0      0          127.0.0.1:44180    127.0.0.1:42225 cubic 
+wscale:7,7 rto:201 rtt:0.036/0.02 mss:16640 pmtu:65535 rcvmss:536 
+advmss:65483 cwnd:10 bytes_sent:1 bytes_acked:2 segs_out:3 segs_in:2 
+data_segs_out:1 send 36977777778bps lastsnd:7 lastrcv:7 lastack:7 
+pacing_rate 72200677960bps delivery_rate 8874666664bps delivered:2 
+rcv_space:33280 rcv_ssthresh:33280 minrtt:0.015 snd_wnd:33280 
+tcp-ulp-mptcp flags:Mmec token:0000(id:0)/39429ce(id:0) 
+seq:e3ed00de37c805c sfseq:1 ssnoff:d4e4d561 maplen:0
+
+or simplified version
+
+ESTAB 0      0          127.0.0.1:44180    127.0.0.1:42225 cubic
+... tcp-ulp-mptcp flags:Mmec ...
+
+But people familiar with 'ss' should be able to dump it and get
+the above (maybe without tcp-ulp-mptcp) easily. So I am okay
+with no additional comments.
+
+> 
+>>
+>>> +	if (!ASSERT_OK(system(cmd), "No tcp-ulp-mptcp found!"))
+>>> +		err++;
+>>> +
+>>> +	snprintf(cmd, sizeof(cmd),
+>>> +		 "ip netns exec %s nstat -asz %s | awk '%s' | grep -q '%s'",
+>>> +		 NS_TEST, "MPTcpExtMPCapableSYNACKRX",
+>>> +		 "NR==1 {next} {print $2}", "1");
+>>
+>> The same thing here. Could you show the expected output with
+>>     ip netns exec %s nstat -asz %s
+>> ?
+> 
+> The output of 'ip netns exec %s nstat -asz %s' is:
+> 
+> '''
+> #kernel
+> MPTcpExtMPCapableSYNACKRX       1                  0.0
+> '''
+> 
+> The same, we only check if it contains an MPTcpExtMPCapableSYNACKRX, not
+> show the output.
+> 
+> -Geliang
+> 
+>>
+>>> +	if (!ASSERT_OK(system(cmd), "No MPTcpExtMPCapableSYNACKRX found!"))
+>>> +		err++;
+>>> +
+>>> +	return err;
+>>> +}
+>>> +
+>> [...]
