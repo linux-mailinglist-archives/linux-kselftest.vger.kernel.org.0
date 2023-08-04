@@ -2,165 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923F7770B43
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 23:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99019770BC4
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 00:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjHDVyE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 17:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S230112AbjHDWKn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 18:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjHDVyD (ORCPT
+        with ESMTP id S229772AbjHDWKm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 17:54:03 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97920106;
-        Fri,  4 Aug 2023 14:54:02 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-48716a85f16so712524e0c.3;
-        Fri, 04 Aug 2023 14:54:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691186041; x=1691790841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Esa07M2shux5azrFa7lTIRiE3FnlvA6v4xak5W6Yyjk=;
-        b=lslOMdYCeC30UPvTIvI0aosjpBXGZn7sngPRuURDVQ39HLaBeQ6E/lkAuru/lXRBMz
-         m73gHAIS54CrSn65n5Jchg0KoWL48g8oB7eYtld/P90faJs0n6W82Xe8Z0UlGTUmo5bb
-         IvgYdyJQwcRUODos9vjSb7M54g/qLDb6w8KhKe35u9GAje0D1cR+kHcRQ239Ws+AEk03
-         2nHILU3myArnRstOptus5JIOHmwCOFNth6EjpnvwSOZ6AuCPbBPzYG2GOgldSlizDSWx
-         A61CryrSa7G3lGA/7I30HRvCkTrEuX8+ndwXYAXhGu5E9muo7ZFoxixnlI4Dp4Nb5n8+
-         fKhg==
+        Fri, 4 Aug 2023 18:10:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD5CE69
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 15:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1691186996;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=evYrVf/iKCZzrXphWuBBZKTjd3mBH9ss4zSdxYs7MUs=;
+        b=VeasDIYTPlIONOCJA9UE7idljjljNYzyejhonPRqXrfewl2R2y4HUHZU1ihYDWX6NhjUkN
+        W1SDxDCup5/jgVqC20/+NIlrKqGyjq01mktVL6+9vKPM4RCLzdzWSBiSvlqiCahc0fGhrP
+        xrrJFk3L06boX+/6+syqW9xwVlHcVB8=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-67-385f2fDBP-2TGh7_wunr-w-1; Fri, 04 Aug 2023 18:09:55 -0400
+X-MC-Unique: 385f2fDBP-2TGh7_wunr-w-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5223bdb71e5so1569952a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Aug 2023 15:09:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691186041; x=1691790841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Esa07M2shux5azrFa7lTIRiE3FnlvA6v4xak5W6Yyjk=;
-        b=WprTbY8wMpoNBqHN9Z3yJ+ZIRdOkbNev2GtGqXaaWELL7Yr950X2VwD2DL1ZJYUZGI
-         AGP1hvQMvVBOshJY2aB1i33MfxCFMvoxQ+2FJ3XhYB9MwE2Krwl004tb/rln6U8ZQwov
-         BfgD3z1TViicvoPorjtcVZLdO5b+IYbdIC5jnrhfXv2rS5w5T+z1oukKvPFu9hY8zjYP
-         +sk8BWMsb/hnIuZI0Q6+YSZW21E/N8Kq6h7NE0rvcDcwHbEUY5wVGWIpqjW/n8VLislX
-         sW218Z3dk+qynta6YEXxzyEZKX49HbNkdJ690GT3Uk75PsUowdH68XT9Fo0POpBGUAU6
-         Zvng==
-X-Gm-Message-State: AOJu0YwgP1NQLSM6m5A8Lm6OliPi5Q9AxQx035swA5IgsHS//8nT3roE
-        VCBaKowlwhEdTcZdmXAiR6Yeup+Wi3V9u5r60w0=
-X-Google-Smtp-Source: AGHT+IFahKpzpIJYaivvhmIRXbOcsGuHjA0b6V8skSUZy2IVPHamiQVkLgSl7ceD8hFW+TEIM7u0UyhOIYM9qK4nTCA=
-X-Received: by 2002:a1f:5e04:0:b0:471:17be:ba8d with SMTP id
- s4-20020a1f5e04000000b0047117beba8dmr2417786vkb.3.1691186041493; Fri, 04 Aug
- 2023 14:54:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691186994; x=1691791794;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=evYrVf/iKCZzrXphWuBBZKTjd3mBH9ss4zSdxYs7MUs=;
+        b=GQYTiENX5qsD1//ulVT5Sq1IKMe0q/wdYaCE43n7YcNMw85Lm0VUVTlp+kX+m5ibjO
+         MGmE0UIRloSoLlZ6S6vEFn37cRBLHGBhqq+lFZfUrhmtfjvbGw3xgPKaJuyE6w5LplwK
+         KX51j1LGfkeYdKz3411cOPX5tfnJnyLnJwUqqlPg1/9dTWn71A75OSI5nbnsGjSV1LPm
+         a0vx3xJyN4XYcL5dytc+d65U8VoQxmRwChq0Qp8LNaCrYkxvGtyANqBI1anRcwj0n7V5
+         534uBxnfKE3Bo8XUy7MA84Zru/cmG/GrCuM8/hH97GutxV9csoAEcgSgSvU7wl3TJhMU
+         TiHw==
+X-Gm-Message-State: AOJu0YyUQErG7vBvlUqM/joEt6bWOK4MXEyyxFFJ2jy7OEosSdl0vMIH
+        6mQV0JYPy7i2SOJ0VecF7C9M2nvFxKeUX1PxSkXlBZcLugp+/K/xr0nI3Y1P3z8BiyjxGOd5kSW
+        Oaab11eL1bHQMU0EJwu4GzcIIg7D4
+X-Received: by 2002:aa7:c990:0:b0:521:a99b:a233 with SMTP id c16-20020aa7c990000000b00521a99ba233mr2648709edt.10.1691186994115;
+        Fri, 04 Aug 2023 15:09:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHBekLNPRykim88ENWzH/K7RT7FRQkvjiPm6lNHDHg7kFI2E3ObIAF2P2Vh1gJoj7x5HPbMiw==
+X-Received: by 2002:aa7:c990:0:b0:521:a99b:a233 with SMTP id c16-20020aa7c990000000b00521a99ba233mr2648687edt.10.1691186993726;
+        Fri, 04 Aug 2023 15:09:53 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id p12-20020aa7d30c000000b00522ce914f51sm1774622edq.67.2023.08.04.15.09.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Aug 2023 15:09:53 -0700 (PDT)
+Message-ID: <ff7fecca-8413-6625-4d10-a6b3c21fc24d@redhat.com>
+Date:   Sat, 5 Aug 2023 00:09:49 +0200
 MIME-Version: 1.0
-References: <20230727093637.1262110-1-usama.anjum@collabora.com> <20230727093637.1262110-3-usama.anjum@collabora.com>
-In-Reply-To: <20230727093637.1262110-3-usama.anjum@collabora.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Fri, 4 Aug 2023 14:53:49 -0700
-Message-ID: <CANaxB-zZFq7VD7tBBUmACUJPE9iVuTyQKfg4Jw82-U_1qw6ALg@mail.gmail.com>
-Subject: Re: [PATCH v26 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] selftests/rseq: Fix build with undefined __weak
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
         Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sean Christopherson <seanjc@google.com>
+Cc:     Aaron Lewis <aaronlewis@google.com>, stable@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20230804-kselftest-rseq-build-v1-1-015830b66aa9@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20230804-kselftest-rseq-build-v1-1-015830b66aa9@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 2:37=E2=80=AFAM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
+On 8/4/23 21:22, Mark Brown wrote:
+> Commit 3bcbc20942db ("selftests/rseq: Play nice with binaries statically
+> linked against glibc 2.35+") which is now in Linus' tree introduced uses
+> of __weak but did nothing to ensure that a definition is provided for it
+> resulting in build failures for the rseq tests:
+> 
+> rseq.c:41:1: error: unknown type name '__weak'
+> __weak ptrdiff_t __rseq_offset;
+> ^
+> rseq.c:41:17: error: expected ';' after top level declarator
+> __weak ptrdiff_t __rseq_offset;
+>                  ^
+>                  ;
+> rseq.c:42:1: error: unknown type name '__weak'
+> __weak unsigned int __rseq_size;
+> ^
+> rseq.c:43:1: error: unknown type name '__weak'
+> __weak unsigned int __rseq_flags;
+> 
+> Fix this by using the definition from tools/include compiler.h.
+> 
 
-<snip>
+Queued, thanks.  Sorry for the breakage.
 
-> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long uarg)
-> +{
-> +       unsigned long walk_start, walk_end;
-> +       struct mmu_notifier_range range;
-> +       struct pagemap_scan_private p;
-> +       size_t n_ranges_out =3D 0;
-> +       int ret;
-> +
-> +       memset(&p, 0, sizeof(p));
-> +       ret =3D pagemap_scan_get_args(&p.arg, uarg);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret =3D pagemap_scan_init_bounce_buffer(&p);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* Protection change for the range is going to happen. */
-> +       if (p.arg.flags & PM_SCAN_WP_MATCHING) {
-> +               mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA=
-, 0,
-> +                                       mm, p.arg.start, p.arg.end);
-> +               mmu_notifier_invalidate_range_start(&range);
-> +       }
-> +
-> +       walk_start =3D walk_end =3D p.arg.start;
-> +       for (; walk_end !=3D p.arg.end; walk_start =3D walk_end) {
-> +               int n_out;
-> +
-> +               walk_end =3D min_t(unsigned long,
-> +                                (walk_start + PAGEMAP_WALK_SIZE) & PAGEM=
-AP_WALK_MASK,
-> +                                p.arg.end);
+Paolo
 
-This approach has performance implications. The basic program that scans
-its address space takes around 20-30 seconds, but it has just a few
-small mappings. The first optimization that comes to mind is to remove
-the PAGEMAP_WALK_SIZE limit and instead halt walk_page_range when the
-bounce buffer is full. After draining the buffer, the walk_page_range
-function can be restarted.
+> Fixes: 3bcbc20942db ("selftests/rseq: Play nice with binaries statically linked against glibc 2.35+")
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+> It'd be good if the KVM testing could include builds of the rseq
+> selftests, the KVM tests pull in code from rseq but not the build system
+> which has resulted in multiple failures like this.
+> ---
+>   tools/testing/selftests/rseq/Makefile | 4 +++-
+>   tools/testing/selftests/rseq/rseq.c   | 2 ++
+>   2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+> index b357ba24af06..7a957c7d459a 100644
+> --- a/tools/testing/selftests/rseq/Makefile
+> +++ b/tools/testing/selftests/rseq/Makefile
+> @@ -4,8 +4,10 @@ ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep clang),)
+>   CLANG_FLAGS += -no-integrated-as
+>   endif
+>   
+> +top_srcdir = ../../../..
+> +
+>   CFLAGS += -O2 -Wall -g -I./ $(KHDR_INCLUDES) -L$(OUTPUT) -Wl,-rpath=./ \
+> -	  $(CLANG_FLAGS)
+> +	  $(CLANG_FLAGS) -I$(top_srcdir)/tools/include
+>   LDLIBS += -lpthread -ldl
+>   
+>   # Own dependencies because we only want to build against 1st prerequisite, but
+> diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+> index a723da253244..96e812bdf8a4 100644
+> --- a/tools/testing/selftests/rseq/rseq.c
+> +++ b/tools/testing/selftests/rseq/rseq.c
+> @@ -31,6 +31,8 @@
+>   #include <sys/auxv.h>
+>   #include <linux/auxvec.h>
+>   
+> +#include <linux/compiler.h>
+> +
+>   #include "../kselftest.h"
+>   #include "rseq.h"
+>   
+> 
+> ---
+> base-commit: 5d0c230f1de8c7515b6567d9afba1f196fb4e2f4
+> change-id: 20230804-kselftest-rseq-build-9d537942b1de
+> 
+> Best regards,
 
-The test program and perf data can be found here:
-https://gist.github.com/avagin/c5a22f3c78f8cb34281602dfe9c43d10
-
-> +
-> +               ret =3D mmap_read_lock_killable(mm);
-> +               if (ret)
-> +                       break;
-> +               ret =3D walk_page_range(mm, walk_start, walk_end,
-> +                                     &pagemap_scan_ops, &p);
-> +               mmap_read_unlock(mm);
-> +
-> +               n_out =3D pagemap_scan_flush_buffer(&p);
-> +               if (n_out < 0)
-> +                       ret =3D n_out;
-> +               else
-> +                       n_ranges_out +=3D n_out;
-> +
-> +               if (ret)
-> +                       break;
-> +       }
-> +
-
-Thanks,
-Andrei
