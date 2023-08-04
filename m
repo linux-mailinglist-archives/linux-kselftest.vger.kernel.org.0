@@ -2,61 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0EDB770C2C
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 00:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A414770C33
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 01:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjHDWzp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 18:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
+        id S229523AbjHDXCB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 19:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjHDWzl (ORCPT
+        with ESMTP id S229452AbjHDXCA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 18:55:41 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541B8524A;
-        Fri,  4 Aug 2023 15:55:37 -0700 (PDT)
+        Fri, 4 Aug 2023 19:02:00 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EDCE72;
+        Fri,  4 Aug 2023 16:01:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691189737; x=1722725737;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2fvEsveno8xxmnboEXIklg54Ni9FCooh+WfUEmGZ3+M=;
-  b=BIvm8GSdxf9W2XfN5FZblXGiK8CQbsDVG5ujo45HhvVMcvAUZplQvWzj
-   ynCzy4q/y19HZ4xKs1Z2BmRY0EszhRp0fX/aX13fLpkORpwsnm73mMxPm
-   f9Pjqr3yyQM+qHLOu3wy0L3Jt6K7rlKluxW7ZUdtN67aaCyL76e7UG3Ln
-   GaXhJNDr5ODaGDTbEWVaKjVEPeVhrzs4rdltPZJnaxmrPojs2W7NRS0Jq
-   24kK9E3IEmZolKqjLuHxmkm6tZS16TfF9dguSXbwmNZydXQsaflABBcvy
-   IMbNxh28bVV74aa30+P089++YUc66RJjqB35yO7KFDi9Ov9DHBiRYb/u3
+  t=1691190119; x=1722726119;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2MzQ2ck5DpFrJfh90LVzgdpOp29rmsWZF1F9PlHAoZ0=;
+  b=VyXv1PqluG+RaVlWUafMWQ+7OFRRlr//RVU2vWXoQvqpvahlKfvH3TWb
+   SX28QRM6H3huUvRUcS/V1suHW/DvjHtEK7jslhNoR0DuiMvYwt59SsJkp
+   k1y01JwoddUFiz8X6Sf3IUWq0+xIq/Htu9JCfaaL5wlFPi/ELpO2QZaf5
+   dNQzKDAAOLyhZp9xYkxi6Yt3Y2glqtskAuZO+QxdDHTlj44QrFUFO9Lme
+   1tCM+97EzYfvzaDcP0yKX+/mY3jgC2IV+4j6+5SjIFNW8FdDdWo+Sitfk
+   gs2tjKUlaWY8a+Ktvc7qsei0aWhVUGKtrxjy/CFy8HvUj1fTIhrBnawLy
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="360325240"
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="401223810"
 X-IronPort-AV: E=Sophos;i="6.01,256,1684825200"; 
-   d="scan'208";a="360325240"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 15:55:32 -0700
+   d="scan'208";a="401223810"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 16:01:58 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="733445199"
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="853977801"
 X-IronPort-AV: E=Sophos;i="6.01,256,1684825200"; 
-   d="scan'208";a="733445199"
-Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO jkrzyszt-mobl2.intranet) ([10.213.4.149])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 15:55:26 -0700
-From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        igt-dev@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>,
-        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-Subject: [PATCH v4 3/3] kunit: Allow kunit test modules to use test filtering
-Date:   Sat,  5 Aug 2023 00:52:24 +0200
-Message-ID: <20230804225220.8005-8-janusz.krzysztofik@linux.intel.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230804225220.8005-5-janusz.krzysztofik@linux.intel.com>
-References: <20230804225220.8005-5-janusz.krzysztofik@linux.intel.com>
+   d="scan'208";a="853977801"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 04 Aug 2023 16:01:55 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qS3nu-0003Af-0P;
+        Fri, 04 Aug 2023 23:01:54 +0000
+Date:   Sat, 5 Aug 2023 07:01:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zheng Yejian <zhengyejian1@huawei.com>, rostedt@goodmis.org,
+        mhiramat@kernel.org, vnagarnaik@google.com, shuah@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] tracing: Fix cpu buffers unavailable due to
+ 'record_disabled' messed
+Message-ID: <202308050601.nsx7Z4CY-lkp@intel.com>
+References: <20230804124549.2562977-2-zhengyejian1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230804124549.2562977-2-zhengyejian1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,237 +67,83 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-External tools, e.g., Intel GPU tools (IGT), support execution of
-individual selftests provided by kernel modules.  That could be also
-applicable to kunit test modules if they provided test filtering.  But
-test filtering is now possible only when kunit code is built into the
-kernel.  Moreover, a filter can be specified only at boot time, then
-reboot is required each time a different filter is needed.
+Hi Zheng,
 
-Build the test filtering code also when kunit is configured as a module,
-expose test filtering functions to other kunit source files, and use them
-in kunit module notifier callback functions.  Userspace can then reload
-the kunit module with a value of the filter_glob parameter tuned to a
-specific kunit test module every time it wants to limit the scope of tests
-executed on that module load.  Make the kunit.filter* parameters visible
-in sysfs for user convenience.
+kernel test robot noticed the following build errors:
 
-v4: Refresh on top of newly applied attributes patches and changes
-    introdced by new versions of other patches submitted in series with
-    this one.
-v3: Fix CONFIG_GLOB, required by filtering functions, not selected when
-    building as a module.
-v2: Fix new name of a structure moved to kunit namespace not updated
-    across all uses.
+[auto build test ERROR on linus/master]
+[also build test ERROR on rostedt-trace/for-next v6.5-rc4 next-20230804]
+[cannot apply to rostedt-trace/for-next-urgent]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
----
- include/kunit/test.h | 11 ++++++++
- lib/kunit/Kconfig    |  2 +-
- lib/kunit/executor.c | 63 ++++++++++++++++++++++++++------------------
- lib/kunit/test.c     | 20 ++++++++++++++
- 4 files changed, 69 insertions(+), 27 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Zheng-Yejian/tracing-Fix-cpu-buffers-unavailable-due-to-record_disabled-messed/20230804-204751
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230804124549.2562977-2-zhengyejian1%40huawei.com
+patch subject: [PATCH 1/2] tracing: Fix cpu buffers unavailable due to 'record_disabled' messed
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20230805/202308050601.nsx7Z4CY-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230805/202308050601.nsx7Z4CY-lkp@intel.com/reproduce)
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 6a338a3267ed5..d33114097d0d0 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -310,6 +310,9 @@ static inline void kunit_set_failure(struct kunit *test)
- 
- bool kunit_enabled(void);
- const char *kunit_action(void);
-+const char *kunit_filter_glob(void);
-+char *kunit_filter(void);
-+char *kunit_filter_action(void);
- 
- void kunit_init_test(struct kunit *test, const char *name, char *log);
- 
-@@ -320,6 +323,14 @@ size_t kunit_suite_num_test_cases(struct kunit_suite *suite);
- unsigned int kunit_test_case_num(struct kunit_suite *suite,
- 				 struct kunit_case *test_case);
- 
-+struct kunit_suite_set
-+kunit_filter_suites(const struct kunit_suite_set *suite_set,
-+		    const char *filter_glob,
-+		    char *filters,
-+		    char *filter_action,
-+		    int *err);
-+void kunit_free_suite_set(struct kunit_suite_set suite_set);
-+
- int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites);
- 
- void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites);
-diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-index 626719b95badd..68a6daec0aef1 100644
---- a/lib/kunit/Kconfig
-+++ b/lib/kunit/Kconfig
-@@ -4,7 +4,7 @@
- 
- menuconfig KUNIT
- 	tristate "KUnit - Enable support for unit tests"
--	select GLOB if KUNIT=y
-+	select GLOB
- 	help
- 	  Enables support for kernel unit tests (KUnit), a lightweight unit
- 	  testing and mocking framework for the Linux kernel. These tests are
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index b3878a34c35a5..a3e49c9deb6f0 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -27,24 +27,37 @@ const char *kunit_action(void)
- 	return action_param;
- }
- 
--#if IS_BUILTIN(CONFIG_KUNIT)
--
- static char *filter_glob_param;
- static char *filter_param;
- static char *filter_action_param;
- 
--module_param_named(filter_glob, filter_glob_param, charp, 0);
-+module_param_named(filter_glob, filter_glob_param, charp, 0400);
- MODULE_PARM_DESC(filter_glob,
- 		"Filter which KUnit test suites/tests run at boot-time, e.g. list* or list*.*del_test");
--module_param_named(filter, filter_param, charp, 0);
-+module_param_named(filter, filter_param, charp, 0400);
- MODULE_PARM_DESC(filter,
- 		"Filter which KUnit test suites/tests run at boot-time using attributes, e.g. speed>slow");
--module_param_named(filter_action, filter_action_param, charp, 0);
-+module_param_named(filter_action, filter_action_param, charp, 0400);
- MODULE_PARM_DESC(filter_action,
- 		"Changes behavior of filtered tests using attributes, valid values are:\n"
- 		"<none>: do not run filtered tests as normal\n"
- 		"'skip': skip all filtered tests instead so tests will appear in output\n");
- 
-+const char *kunit_filter_glob(void)
-+{
-+	return filter_glob_param;
-+}
-+
-+char *kunit_filter(void)
-+{
-+	return filter_param;
-+}
-+
-+char *kunit_filter_action(void)
-+{
-+	return filter_action_param;
-+}
-+
- /* glob_match() needs NULL terminated strings, so we need a copy of filter_glob_param. */
- struct kunit_glob_filter {
- 	char *suite_glob;
-@@ -108,10 +121,7 @@ kunit_filter_glob_tests(const struct kunit_suite *const suite, const char *test_
- 	return copy;
- }
- 
--static char *kunit_shutdown;
--core_param(kunit_shutdown, kunit_shutdown, charp, 0644);
--
--static void kunit_free_suite_set(struct kunit_suite_set suite_set)
-+void kunit_free_suite_set(struct kunit_suite_set suite_set)
- {
- 	struct kunit_suite * const *suites;
- 
-@@ -120,7 +130,7 @@ static void kunit_free_suite_set(struct kunit_suite_set suite_set)
- 	kfree(suite_set.start);
- }
- 
--static struct kunit_suite_set
-+struct kunit_suite_set
- kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 		    const char *filter_glob,
- 		    char *filters,
-@@ -207,22 +217,6 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 	return filtered;
- }
- 
--static void kunit_handle_shutdown(void)
--{
--	if (!kunit_shutdown)
--		return;
--
--	if (!strcmp(kunit_shutdown, "poweroff"))
--		kernel_power_off();
--	else if (!strcmp(kunit_shutdown, "halt"))
--		kernel_halt();
--	else if (!strcmp(kunit_shutdown, "reboot"))
--		kernel_restart(NULL);
--
--}
--
--#endif
--
- void kunit_exec_run_tests(struct kunit_suite_set *suite_set, bool builtin)
- {
- 	size_t num_suites = suite_set->end - suite_set->start;
-@@ -260,6 +254,23 @@ void kunit_exec_list_tests(struct kunit_suite_set *suite_set, bool include_attr)
- 
- #if IS_BUILTIN(CONFIG_KUNIT)
- 
-+static char *kunit_shutdown;
-+core_param(kunit_shutdown, kunit_shutdown, charp, 0644);
-+
-+static void kunit_handle_shutdown(void)
-+{
-+	if (!kunit_shutdown)
-+		return;
-+
-+	if (!strcmp(kunit_shutdown, "poweroff"))
-+		kernel_power_off();
-+	else if (!strcmp(kunit_shutdown, "halt"))
-+		kernel_halt();
-+	else if (!strcmp(kunit_shutdown, "reboot"))
-+		kernel_restart(NULL);
-+
-+}
-+
- int kunit_run_all_tests(void)
- {
- 	struct kunit_suite_set suite_set = {
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 5232a43737826..8162f2ea73b59 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -740,6 +740,20 @@ static void kunit_module_init(struct module *mod)
- 		mod->kunit_suites, mod->kunit_suites + mod->num_kunit_suites,
- 	};
- 	const char *action = kunit_action();
-+	int err = 0;
-+
-+	suite_set = kunit_filter_suites(&suite_set,
-+					kunit_filter_glob() ?: "*.*",
-+					kunit_filter(), kunit_filter_action(),
-+					&err);
-+	if (err) {
-+		pr_err("kunit module: error filtering suites: %d\n",
-+		       err);
-+		kfree(suite_set.start);
-+		suite_set.start = NULL;
-+	}
-+	mod->kunit_suites = (struct kunit_suite **)suite_set.start;
-+	mod->num_kunit_suites = suite_set.end - suite_set.start;
- 
- 	if (!action)
- 		kunit_exec_run_tests(&suite_set, false);
-@@ -753,11 +767,17 @@ static void kunit_module_init(struct module *mod)
- 
- static void kunit_module_exit(struct module *mod)
- {
-+	struct kunit_suite_set suite_set = {
-+		mod->kunit_suites, mod->kunit_suites + mod->num_kunit_suites,
-+	};
- 	const char *action = kunit_action();
- 
- 	if (!action)
- 		__kunit_test_suites_exit(mod->kunit_suites,
- 					 mod->num_kunit_suites);
-+
-+	if (suite_set.start)
-+		kunit_free_suite_set(suite_set);
- }
- 
- static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308050601.nsx7Z4CY-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   kernel/trace/trace.c: In function 'tracing_set_cpumask':
+>> kernel/trace/trace.c:5280:60: error: 'struct trace_array' has no member named 'max_buffer'; did you mean 'array_buffer'?
+    5280 |                         ring_buffer_record_disable_cpu(tr->max_buffer.buffer, cpu);
+         |                                                            ^~~~~~~~~~
+         |                                                            array_buffer
+   kernel/trace/trace.c:5286:59: error: 'struct trace_array' has no member named 'max_buffer'; did you mean 'array_buffer'?
+    5286 |                         ring_buffer_record_enable_cpu(tr->max_buffer.buffer, cpu);
+         |                                                           ^~~~~~~~~~
+         |                                                           array_buffer
+
+
+vim +5280 kernel/trace/trace.c
+
+  5260	
+  5261	int tracing_set_cpumask(struct trace_array *tr,
+  5262				cpumask_var_t tracing_cpumask_new)
+  5263	{
+  5264		int cpu;
+  5265	
+  5266		if (!tr)
+  5267			return -EINVAL;
+  5268	
+  5269		local_irq_disable();
+  5270		arch_spin_lock(&tr->max_lock);
+  5271		for_each_tracing_cpu(cpu) {
+  5272			/*
+  5273			 * Increase/decrease the disabled counter if we are
+  5274			 * about to flip a bit in the cpumask:
+  5275			 */
+  5276			if (cpumask_test_cpu(cpu, tr->tracing_cpumask) &&
+  5277					!cpumask_test_cpu(cpu, tracing_cpumask_new)) {
+  5278				atomic_inc(&per_cpu_ptr(tr->array_buffer.data, cpu)->disabled);
+  5279				ring_buffer_record_disable_cpu(tr->array_buffer.buffer, cpu);
+> 5280				ring_buffer_record_disable_cpu(tr->max_buffer.buffer, cpu);
+  5281			}
+  5282			if (!cpumask_test_cpu(cpu, tr->tracing_cpumask) &&
+  5283					cpumask_test_cpu(cpu, tracing_cpumask_new)) {
+  5284				atomic_dec(&per_cpu_ptr(tr->array_buffer.data, cpu)->disabled);
+  5285				ring_buffer_record_enable_cpu(tr->array_buffer.buffer, cpu);
+  5286				ring_buffer_record_enable_cpu(tr->max_buffer.buffer, cpu);
+  5287			}
+  5288		}
+  5289		arch_spin_unlock(&tr->max_lock);
+  5290		local_irq_enable();
+  5291	
+  5292		cpumask_copy(tr->tracing_cpumask, tracing_cpumask_new);
+  5293	
+  5294		return 0;
+  5295	}
+  5296	
+
 -- 
-2.41.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
