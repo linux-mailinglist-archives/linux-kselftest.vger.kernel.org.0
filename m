@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4563376F959
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 07:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD1C76F95C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 07:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233701AbjHDFKD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 01:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S233728AbjHDFKH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 01:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233866AbjHDFIA (ORCPT
+        with ESMTP id S233877AbjHDFIB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 01:08:00 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2063.outbound.protection.outlook.com [40.107.6.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B594226;
-        Thu,  3 Aug 2023 22:07:40 -0700 (PDT)
+        Fri, 4 Aug 2023 01:08:01 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2087.outbound.protection.outlook.com [40.107.6.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8C42D5F;
+        Thu,  3 Aug 2023 22:07:48 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XXZfdhlssHsvNFQypnENJI8ufnm2XnI94XRop6+RtD/moryiYZR+umbKHeaSdSyAhxEUpqIoMh43TvcfTvDv3hK3M4drvaEfSFL8EQAbmV1PWp5EcbljmHuVqHdVMznbpIms7ZguB8IrkoHpqo+pNBCGo5HZ3aoQ3/xkTbHRREbLJuPtPWiwQslQMYn1t+Yh/ErdwKGBEIUf+QATshgi2fF+oL8m1MXjF/ZVkE4yQeym5ieSHdGgjPkYcC8VR1zNzDj4tD9US3xSb1AroQPW7uK84GtUM90IHa5EXCmeCfO9Dt6IL/nAh2bb0goxY1CSUuWE5LXrLK92C3su6AkgMg==
+ b=B3gd2y1usb3YXK7gICPMAlQ7DTsi00yexxbTyNKTKSxH0sqTv6bhsJfUrJe1qo78RIRaKU5cnVkpJkemDwiWqMND3FLK49n12P3/nr+8y9XEQQjf2RrdsNbZiWRkazyJBaopSorhrxevNb0KJmRy1w2va6slRo04WS/wa25LezwIGuRO0EVMphcKE4hbsMTME3nkBOgExvGQ+AGXNwD8caNgoLizkRlMh82t+TlNqPiisjR028cyFTjLiR+deT8oPaw4C2yhyKlNfRMm1F+Z6OyL1FK2Qo5g4DT18q/IW19uPWI1PKMSxBvPh3SZydnGacsx8TeA1ilPuEL5V8+J5A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CqQC7wtcem5w25ikCspTa0HnuFuf5IRIq7RQHED/ZEY=;
- b=HmBQfAohHe7DAoljvx6iZRdkljlQMZxZ5BgR8Ivnit8SaaDRzniOt5jgTwPvmQX4NNAwHvVfhnKq2wrrXK4jdwoyrAmY6n5VcjzxJDsSRJ97M99OWVVDcDRKj6JXftxc0s9yN/eDmq6BYJogpYCZk4dFfwPk9B36z5hSyMbqAS/zSqFI2ZfS4wi+o1ZmPLDtBE8hPImCT85pMTT1/F8DHBZ7zU8Oz0qwAOQrcsC5vRy6puEb2kBHViS/zZ+vqetF9VP4Pnj6N3B5LR99cTf6tesGzXAlrmuLTPhFEAMw51YstEVLhBE/C4Qclf5IFbee0hVNnfOwu97l6yvGJmjtpg==
+ bh=vHTWD5WwibfCNfatfe/o1L4JL9TuE7410T4Cf3XxDWM=;
+ b=VlIYxWbDawp7wVlfzFNkOnb6FbZVo4RI36w0sqqA7ivS8VQh7P7GFmka3qCQCJjfIngDZPgUcOYSULXKrbr2iKeAt6uIl5Vv652swz15CnqKdaWdtzJn5H3kqix2ic9DJq4Nlz29kafBmYewMoPtAEZa0dleDFjAfZNpmPROm6g1nO3iMUBK15OvDNvz+OodpdfzOOgvYFbHvfygv8URCURYjbMq+jgdwXGiWVU2L3GHFnNuTqMbalNs87A2hcUdfYg4LdHGefDlBCA2Xbe6wDmVodDBLPYejh6OCRjV7yO1Y/EvH+05dWOE9cXBh35HfNIYDMYqIJmESF7pzG13FA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
  dkim=pass header.d=suse.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CqQC7wtcem5w25ikCspTa0HnuFuf5IRIq7RQHED/ZEY=;
- b=1GvAhVrVpIxktJeajVVvYXzLrKku15VGR0D6U37lbAib7uC+J3yW1nBMgYbpqBT7tzzgJfckgumYs+vgnee4A8FOVSB4Pq60ooZqMpnKk0/+TkTnJRfPmUstLYG3j1aKQTAcgyfHsTDumTv0n0PDhYkhRO80DOhSvFeMV7TMKe7ke3+YPjWqYTSjs2DKhSMwZU5TVeSCyF0kvqqXgyufFBYxbCheg/5jGUUH5p9Dbh3pUCyjK0Xgg/483HWbcNQPI21I2tuHqY6XhzdmCFTTIf0VwyvaaEKPkTuWoR28TuJM/zaxWekLlmvH9cQOOrgiXaQNHVtu1H5yBlw4wjjleQ==
+ bh=vHTWD5WwibfCNfatfe/o1L4JL9TuE7410T4Cf3XxDWM=;
+ b=4BPVTGACN+f7H+gcmaL8EY71sVKIy8Qj7HJQDJ9jsz1qAG1gjPjDaAuV6RR6GirNxxubXTvNE5yyOGdVHsGjOs4I+IsMtN0KFuoppIoaYMpxqsz7eigv6lG+JnaLUCG5qiQku+o0CUNJEaDtvW+iPKiEstD+gDp6l3fZGGuydc194LMLW7y6OeoJ6Q+rQ91eD6cThbeMcYGTzbkKChUa2ZJT7RAGpakyXKPxsZZnq/rDOYcwprVelVcaSQbT09+qbdfic1xIemqT/tCeSZ86ujETJRglLHP6w5XIhTvRbqExkmqjaxWWbx9ZXjyEM+cBa6K5hOYS9KrPFGIZWivnhA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=suse.com;
 Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com (2603:10a6:7:83::14)
  by DUZPR04MB10061.eurprd04.prod.outlook.com (2603:10a6:10:4df::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.47; Fri, 4 Aug
- 2023 05:07:38 +0000
+ 2023 05:07:46 +0000
 Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com
  ([fe80::2867:7a72:20ac:5f71]) by HE1PR0402MB3497.eurprd04.prod.outlook.com
  ([fe80::2867:7a72:20ac:5f71%3]) with mapi id 15.20.6652.020; Fri, 4 Aug 2023
- 05:07:38 +0000
+ 05:07:46 +0000
 From:   Geliang Tang <geliang.tang@suse.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -71,64 +71,64 @@ Cc:     Geliang Tang <geliang.tang@suse.com>, bpf@vger.kernel.org,
         apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
         selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v11 1/5] bpf: Add update_socket_protocol hook
-Date:   Fri,  4 Aug 2023 13:07:39 +0800
-Message-Id: <5155cc5bc678564fcc4e0f6d4a4f82f646c66beb.1691125344.git.geliang.tang@suse.com>
+Subject: [PATCH bpf-next v11 2/5] selftests/bpf: Use random netns name for mptcp
+Date:   Fri,  4 Aug 2023 13:07:40 +0800
+Message-Id: <15d7646940fcbb8477b1be1aa11a5d5485d10b48.1691125344.git.geliang.tang@suse.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <cover.1691125344.git.geliang.tang@suse.com>
 References: <cover.1691125344.git.geliang.tang@suse.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0051.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::6) To HE1PR0402MB3497.eurprd04.prod.outlook.com
+X-ClientProxiedBy: SI1PR02CA0053.apcprd02.prod.outlook.com
+ (2603:1096:4:1f5::8) To HE1PR0402MB3497.eurprd04.prod.outlook.com
  (2603:10a6:7:83::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: HE1PR0402MB3497:EE_|DUZPR04MB10061:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92fcfff0-56a4-47cf-5673-08db94a8b8c5
+X-MS-Office365-Filtering-Correlation-Id: 6457fef6-5076-43df-2ca3-08db94a8bd85
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BaLHE1LwLlzY7p4aU/AEJKrDJnHELmucfQ3tiQvQzfkCVN+Xsvmw7EJWP9g7jrEpYlCChhwulqnVbh4AmnBh5G3BigXhd/eMVVwQhS9FB8fYcOjgDRJv/cu6/2zrsopUvdxjkKPsJ6C6TUSEFkBjFbn6tjRcAComZH6PtyrkzVyU7zklRvwolfYYOUB2L+pXpAypq+NcXn4UiRQA6y2PdVPirmvXLfT5lyAVJ7yecB/3eDtKa9L+UWLwoHIlHNJGHQ4XclsAMjfdvdyfVhl6RIut8tRkY6BsBSMoLNoFPhb5WDx8gJaImJhrvCpTTYR9kPckuGT+JmyL5nMRS4XlWRDJPZlKNjQdFbJ4Q+iJEnKAwxS3t7aOFHL0juMNiQrPjXICcJ4K08z49+6IZpgP+CUnr/JvoZqeAgZ649ANWRYop5l8u3GLrE1R7xdUPfp8mPCBWuYJWWUfI1TiNAaRJc057mxbfVgyLLhBhcL0c3f8Rmqy92M0e0du0GEFjH+4lKc35/iAF17ot/sr6xFFjBWs5hTzY5tBGsHrCBnKjkJn6c4siFF8Xx3I+p/Y7apCptZ5B6P8B8Ee59XShkws2+l9yfEq5ZvUPAQzgN886tM7OdVBjv/AIOWrEqfIrt/k
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB3497.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(366004)(39860400002)(346002)(376002)(1800799003)(186006)(451199021)(86362001)(36756003)(54906003)(478600001)(110136005)(38100700002)(921005)(2616005)(83380400001)(6506007)(26005)(6486002)(41300700001)(8936002)(8676002)(15650500001)(966005)(6512007)(4326008)(66476007)(7406005)(66556008)(44832011)(316002)(7416002)(5660300002)(66946007)(2906002)(13296009);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: pSbN7Bb/c2CcQBz9mNCGpAzVJOwL/jv8Obp3ue+/xqSaTazURwomoMmYBoMj5XryW/fqyvpqoVzG7cxDJXysr4JScyyXIeLKSYhOWCZMSas5QmSXq7LLOJC6taUCG4oy57+Ewts5HQOmhl1FO/h5v5OoPQkCo9bM8kl3tfqQRkeS2IHdyh4w6+KrO1q0s9OtuULWHC87BiCTS7XK40dqxcNy4D9jpklHzOAf8Zn50rm5HiV4i0j71JLtq8dJz3CrQCiSVChn3HEYdB6QEDBnKc6yZZNm1NCTEGd0YHrsmoUcDd/2MPlHS5SpIaJJzERITGsJGw9Y7cLQ/4CU2Yi3SphGllnUlFteE9alxx44UKH1NK+mJHddM8h1Ji5UWG5Xm4M2KSXbINX8IobQS9WCqjdRubdcf7l8UlsLnDG/lttqqFn3CknpyvfhUpZFB3OWXICFpVu2rBqWcmpzGnqgUWeZzBC3K+b8QCaysgA8sgQLUb7yFEFYgE70lKOZnHfTlld7ivajkGCS5aRmChr7BrkLWKRz/3RfhH9BvdvpQnpBpjwYmB7LkDg/lIJLGyV8U8UJ02HLT86p8opT/k4eBqf0AXATF35GCMSZ7rxtVdoWmjtu5ObfXlM9ReyTSRjPgTsmWtqyR39FOolWfjeH4vB1lVMhMHASjemVUB2mDvc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB3497.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(366004)(39860400002)(346002)(376002)(1800799003)(186006)(451199021)(86362001)(36756003)(54906003)(478600001)(110136005)(38100700002)(921005)(2616005)(83380400001)(6506007)(26005)(6666004)(6486002)(41300700001)(8936002)(8676002)(6512007)(4326008)(66476007)(7406005)(66556008)(44832011)(316002)(7416002)(5660300002)(66946007)(2906002)(13296009)(17423001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lHXxGiJ/OmZKuCSO4pA8LvWah7rS2b7eYmeg6i6b/0oqNPInA1Db1BEg+xgH?=
- =?us-ascii?Q?km6eONxzK53JwgHmFITH7dqwLUjSuz6UkGCNpqL3EfR/wk4YTZ2oKqDmb/6M?=
- =?us-ascii?Q?7SdYJCTMi44ibWeoxF4cR8jqQdGkmg3767VtEH4bkDXl+IAmetnO6dxLzFT1?=
- =?us-ascii?Q?5ag96jPU47ad47RVnHmdb4Mroqqy8KOudt6jyEyrc8zTk6EOaGVJ/rsrqG5c?=
- =?us-ascii?Q?rBYIHLFzKE4rQ03fEVsSqlPeMAmRnUrCkO8Olk/jnpiQc24RHA+Luh7QPh9+?=
- =?us-ascii?Q?GKSMAK38TFrADB5u50SWOwQSDaeB/o7wlXz0d8PhAJ3x5gK95YFQYDepjoMU?=
- =?us-ascii?Q?efWcNh07k4OOGf9SB08xFSh7/k37yuI3xiuFgQ8PxNnItl/MJpeif2uw94dY?=
- =?us-ascii?Q?vk7UMgZH01GWNGlT1eirJS2WLNi4UUAJt8CqED12dojP2GT8XA/I90F+flCz?=
- =?us-ascii?Q?6EtLNdumPAlHRjnIBMeBE0Wx4ijSmbjYWBIWhSc+WNSSFrevTEcxs96D23ai?=
- =?us-ascii?Q?kaqa7y4kIIf5JKqADhws1yh8f3gd/O9thv9jKkM/LLGT8AAcVZoHtYuQ3L9B?=
- =?us-ascii?Q?++xjmR7UDNOqQBzB8sQCb/KLoCPhNTqJYKJWAXkAWz0K0q4Nq9Z9sZHGJga9?=
- =?us-ascii?Q?ATEJLarQdI7erfakbuE2J3tcAIqVPIHxJuaWtDGW5EX1dK5ggCO1fmeytlQs?=
- =?us-ascii?Q?f0hJnOzEtVVxryislrH+phLjdhOS9+5dMue5K4idcg7jj/Rj72hCF48x9Ur2?=
- =?us-ascii?Q?b/WPFblyZF7z0NNj/t39vOb5I0neZNswuOUlmD/DUM+yZwFSPpdWRsjqEDO4?=
- =?us-ascii?Q?OCIuV7ZB52CYrEGKwtvKvbdsiwf3vyAAflSUb7sxH/FxdU9J5HZhqYmA7y7Z?=
- =?us-ascii?Q?68IGHI4CqCqBFQcGXrxWE8UrcXYN0Olk/RclZEN526vSwYiTRwvDw6OV2DJH?=
- =?us-ascii?Q?BJ2FnAVUR8H0p5u30Cz8rxL4coebYuaDRGLCobcWg27GsULxhChShvGS3b2U?=
- =?us-ascii?Q?Y3ws2oBkscSfamS/p7C3L3V2uBi+IDzGo0sFCJkY3Qlp7glK+Wu61AsNGoE3?=
- =?us-ascii?Q?CBoeQ/ZgmwfGKZB5ZvsSBszcDOcIf8PfF4VQtw3Z2qhRfPAeOs8mFJ7CG+Vy?=
- =?us-ascii?Q?yQgFdOgY5tj20WninrDkg7O5QOKJiKxJ6S3YMgOmKe99WfuUW1b2VmbcQpcW?=
- =?us-ascii?Q?fT0/5AlroaHxcV9kXA0ATpL0DRpNLpox3AiVrzgyHwQbUemLgai4fIY5TzZA?=
- =?us-ascii?Q?y6R4q1k5kYoJLvFJteXF8+xUTGjpgo+dbHIEjpJvOLT3lT8PzqeH8EzzSmR6?=
- =?us-ascii?Q?WWLy273K5wZ7+RUAP7Q2VNzoxLYCB1EksC+GT3nP7jndgCYfq1Tdqqg0eeGl?=
- =?us-ascii?Q?SWAr65jBbYWGJoJPprUkpJg+eitomOGEytB9ZXkBFbRZAFBr+EPhVN31Er6e?=
- =?us-ascii?Q?VeqggeUlhFBVYZrXb6OhAg23sqrp/kuKxyo/CH++kOJtvcM0HASha16zNXvF?=
- =?us-ascii?Q?JKhc+cCmCDQurt/6TjT+Pcylb2ArQHITzRVTRq8qf1cVhwmRS/TYDW9SEVJq?=
- =?us-ascii?Q?S5QflXUucKRIFcZUCrObe2OsuT0jThrtiaYqu+RE?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HhEUx/lGqelC1GhAyxJBmSdZtfyu5oNyUtqJ2Hkvt0m+LJH0XRBxbiPvQVHN?=
+ =?us-ascii?Q?Vwve2vs+2N/u57YZsOh1kUaLUaHA7HdX28Vz85zB8CbRpaIN81IXM0nHeN2E?=
+ =?us-ascii?Q?ai0PO6oOXfvTfIBtbKhM2FXNc4kLYgzrEd5IKcXA8iosyRuDRZNkChwxIHxu?=
+ =?us-ascii?Q?S1fTI4R3vkAg63pqlDaFBGATrPjpiHRKpJWR6Tvs/hB+tpA4x7/om0hRHBpk?=
+ =?us-ascii?Q?FFPoqhBX6n0axA5NINvZTvaj0keua34KdHSrHIKsj2w7TSUOPfTNNqCRMImy?=
+ =?us-ascii?Q?o8bzzFahUE1n/SS8OjPuugza4HuZEp3RlTJo4ZU7jJmflEOH1wiBal7AQ5Do?=
+ =?us-ascii?Q?KYRrJi2t3gpu7PzCfn2uQVjQLr8faeR45/hzvCPwlei7z7yWiaz8O9Bc9120?=
+ =?us-ascii?Q?FgeJ/h+XMPORRI8ankJFN/5svZVI1j+xOqLzSD/WbM/RAMKixhswS5ourwu3?=
+ =?us-ascii?Q?nKWiBATRJGs4Z6yNIEVF7W6KbFeH8ctJd/h+2Dvl5U+2CSAf6d6n4o853GSF?=
+ =?us-ascii?Q?uwUKdCcw+jMwGEwxu4BwndlCNzwDqBDr0ZLtWsjwxNgZ3QcM+lO6cH6V5QXO?=
+ =?us-ascii?Q?c6vdax1YFZay4s/0LdEFk/1Lq7lNhBgq41zFmUUxYH6vn2Ia1GENEd+/RFjE?=
+ =?us-ascii?Q?UM39Sg8KmbRnUaawzI3EH8zxE47iBJIJe/d3oIoZLhvdKPPtTrNLfKRVoZEw?=
+ =?us-ascii?Q?twuyUa/YlsEDbNpRBi0OV9HBl1z7cVwUUQRz1iZrPmUXAy7oBHQOHWjeM4u0?=
+ =?us-ascii?Q?QAgtaXnvJFLycaf1lS0LfWN1jQxwhBt18xc2pqewV5CsmzgpCZ1iH3biyjMW?=
+ =?us-ascii?Q?pb65y2HysYNQjzgJafxoxPISTj9QrGeZIf5DY9FxJn2InLg2afmlrT8/UnT2?=
+ =?us-ascii?Q?9BrLOFIvc2fBWbRUWzvQENzOEl9i/NJMjt2PjtHuZdVY+7f8hqCo9HWkmwnK?=
+ =?us-ascii?Q?XhaLtAK0AuTTs1WRhYBYxqiOWy0kgrR1evNn+OY9k7dNtgsycwTdm1qSCmlE?=
+ =?us-ascii?Q?1jlCNNgl8tGJ7lrM2eUzGrwAJIlIzLlIasqx5ecOddvBbISLneWFid4U+wi1?=
+ =?us-ascii?Q?FdMN8B/PRVmIs+/0LpxXryf9rgmrOQIu+L2n6Rht8pwwRaYLssd5sPgOTI0n?=
+ =?us-ascii?Q?6Bf8eD5Fk5IvQnWNGgqNYz0TvQSMWtePs8kF586RgGE8A3UKfuCHJkigsTMm?=
+ =?us-ascii?Q?qt7ZtCFOo7EkDvKY9j/JEqQTJNEE4ImW6KNQD5QVG3NWurdSjAoRVWtLKd2e?=
+ =?us-ascii?Q?/dHmYPrLXXIfzZtxbt2EIIVL016fKdL6+5439juCCzM3COeeommYW3Hw3wAo?=
+ =?us-ascii?Q?/78r84yyKd5a+qXGXSXc8qTTaVnyMscpuUaQDdPMKYVxjezTcxIUj1ZAsDp5?=
+ =?us-ascii?Q?wGBvE48F+S7jT6EZ5jxw/qL4FHneRHkIMyaBNwC9V0XuUDV3qUKsZ8mpMklD?=
+ =?us-ascii?Q?nDsxk6m2ruqSxyA6NW0nPmGqvjaf/gF/r9m7gvrPrYMfpKYVeYKM2y8T3FML?=
+ =?us-ascii?Q?/crpl7+N+UTdDKWZSIC3BM+4BJ0e7CVtP402R1Ne8gsql9Y1QJSGK377GWd9?=
+ =?us-ascii?Q?OzIiiOGjjU/Oi3G7G1vEVPFV4PVBwViViSIQtBXr?=
 X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92fcfff0-56a4-47cf-5673-08db94a8b8c5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6457fef6-5076-43df-2ca3-08db94a8bd85
 X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB3497.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2023 05:07:38.1228
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2023 05:07:45.9074
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FpBmmYCkebPHfVYQf+8oXtYGPloS6hlSe7tZWXSwvLoAuSp+nQE1I/UkTBe7o7g49K+CTuSUuXlRWr6k5w8IEw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: HmnQABBxMK1bA+PdiJkaP/PpAp90HghE3WaOvZ1NaTROCC18dgzFWo+FQJ8vluo81Jt3ECTmW0BcVJx1lOUlBw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DUZPR04MB10061
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -140,87 +140,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a hook named update_socket_protocol in __sys_socket(), for bpf
-progs to attach to and update socket protocol. One user case is to
-force legacy TCP apps to create and use MPTCP sockets instead of
-TCP ones.
+Use rand() to generate a random netns name instead of using the fixed
+name "mptcp_ns" for every test.
 
-Define a mod_ret set named bpf_mptcp_fmodret_ids, add the hook
-update_socket_protocol into this set, and register it in
-bpf_mptcp_kfunc_init().
+By doing that, we can re-launch the test even if there was an issue
+removing the previous netns or if by accident, a netns with this generic
+name already existed on the system.
 
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/79
-Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Note that using a different name each will also help adding more
+subtests in future commits.
+
 Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 Signed-off-by: Geliang Tang <geliang.tang@suse.com>
 ---
- net/mptcp/bpf.c | 15 +++++++++++++++
- net/socket.c    | 24 ++++++++++++++++++++++++
- 2 files changed, 39 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/mptcp.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
-index 5a0a84ad94af..8a16672b94e2 100644
---- a/net/mptcp/bpf.c
-+++ b/net/mptcp/bpf.c
-@@ -19,3 +19,18 @@ struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk)
+diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+index cd0c42fff7c0..4ccca3d39a8f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
++++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+@@ -7,7 +7,7 @@
+ #include "network_helpers.h"
+ #include "mptcp_sock.skel.h"
  
- 	return NULL;
- }
-+
-+BTF_SET8_START(bpf_mptcp_fmodret_ids)
-+BTF_ID_FLAGS(func, update_socket_protocol)
-+BTF_SET8_END(bpf_mptcp_fmodret_ids)
-+
-+static const struct btf_kfunc_id_set bpf_mptcp_fmodret_set = {
-+	.owner = THIS_MODULE,
-+	.set   = &bpf_mptcp_fmodret_ids,
-+};
-+
-+static int __init bpf_mptcp_kfunc_init(void)
-+{
-+	return register_btf_fmodret_id_set(&bpf_mptcp_fmodret_set);
-+}
-+late_initcall(bpf_mptcp_kfunc_init);
-diff --git a/net/socket.c b/net/socket.c
-index 2b0e54b2405c..9f98ced88ac5 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -1644,11 +1644,35 @@ struct file *__sys_socket_file(int family, int type, int protocol)
- 	return sock_alloc_file(sock, flags, NULL);
- }
+-#define NS_TEST "mptcp_ns"
++char NS_TEST[32];
  
-+/*	A hook for bpf progs to attach to and update socket protocol.
-+ *
-+ *	A static noinline declaration here could cause the compiler to
-+ *	optimize away the function. A global noinline declaration will
-+ *	keep the definition, but may optimize away the callsite.
-+ *	Therefore, __weak is needed to ensure that the call is still
-+ *	emitted, by telling the compiler that we don't know what the
-+ *	function might eventually be.
-+ *
-+ *	__diag_* below are needed to dismiss the missing prototype warning.
-+ */
-+
-+__diag_push();
-+__diag_ignore_all("-Wmissing-prototypes",
-+		  "kfuncs which will be used in BPF programs");
-+
-+__weak noinline int update_socket_protocol(int family, int type, int protocol)
-+{
-+	return protocol;
-+}
-+
-+__diag_pop();
-+
- int __sys_socket(int family, int type, int protocol)
- {
- 	struct socket *sock;
- 	int flags;
+ #ifndef TCP_CA_NAME_MAX
+ #define TCP_CA_NAME_MAX	16
+@@ -147,6 +147,8 @@ static void test_base(void)
+ 	if (!ASSERT_GE(cgroup_fd, 0, "test__join_cgroup"))
+ 		return;
  
-+	protocol = update_socket_protocol(family, type, protocol);
- 	sock = __sys_socket_create(family, type, protocol);
- 	if (IS_ERR(sock))
- 		return PTR_ERR(sock);
++	srand(time(NULL));
++	snprintf(NS_TEST, sizeof(NS_TEST), "mptcp_ns_%d", rand());
+ 	SYS(fail, "ip netns add %s", NS_TEST);
+ 	SYS(fail, "ip -net %s link set dev lo up", NS_TEST);
+ 
 -- 
 2.35.3
 
