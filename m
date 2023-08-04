@@ -2,279 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1889D7706B1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 19:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795E77706CC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 19:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbjHDRHa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 13:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S232125AbjHDRK5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 13:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbjHDRHa (ORCPT
+        with ESMTP id S232161AbjHDRKt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 13:07:30 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC86469A;
-        Fri,  4 Aug 2023 10:07:16 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 490EE60177;
-        Fri,  4 Aug 2023 19:07:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1691168835; bh=JumSvu3iT0+NxH9SPTG0Zvsq/MzGUE4lhaT/ijlPQ/I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=19VoSiUA45WPIud1c8O95Oov0OPUiMu8xH4iS3u8WcjA7BPaJtdth1CYPsJweVpXA
-         bWnyf/V4BwznJLuBJMPi2gNxtNQZu7i+jxu6uL/iqO3BECYLj+QSTewbcKe/MYODdu
-         3kqNMar0QDDymAD0bSRkvH7vcCyJsegX312HvQzpD0gMeSlPg4AkBO4M9t2UFfIcWd
-         rejV0HI0PUpuw8wvLAQyIfAZaoSNX/kAa+JJAsg531xXTuk9y6Vbxiwun5zBUuX/+X
-         05CZfcQy4pk6o95Nso9jshNgUJbCGgV0jw30JB2hq/KAPcMg3WaslzGzJ9nL/zxDhP
-         47PoVoZN6nyeQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id JBuLlGB_YCx6; Fri,  4 Aug 2023 19:07:12 +0200 (CEST)
-Received: from defiant.. (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id 603A960174;
-        Fri,  4 Aug 2023 19:06:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1691168832; bh=JumSvu3iT0+NxH9SPTG0Zvsq/MzGUE4lhaT/ijlPQ/I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=yiLAlM26aqn9NxLeLdglwXGqAGPLXEyo7yuwWW0IG+hfrEq2M/4KoZvyOqhEB+Ss1
-         TOVau3/Tx5VCfCEdCmeDd9jzAvfLUZgVKGLDiBJTzuNmd2pPTisR12km5QdXg+rjI2
-         XCoJ0D4kt0Qzqmlw0FYNzE3QPbbTwF0NZd0x/woGIq6IZsr9I7wbryZ8zWy7n6tEaF
-         BYzOjBfKT9rU4MFlAlIdN3+GSCa57CvNiekp0YHE8goOfhw7GfAaY1ERNCBCwTT8XE
-         PHywhTWzD+k3hACKQ9yo1Jmr4uxwunaahZN+DWC6ZLACcJExNeev3ojJvayVgEu7qx
-         rW4N30o2YVMzA==
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        linux-kernel@vger.kernel.org
-Cc:     "Luis R . Rodriguez" <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        Dan Carpenter <error27@gmail.com>
-Subject: [PATCH v4 5.4 1/2] test_firmware: prevent race conditions by a correct implementation of locking
-Date:   Fri,  4 Aug 2023 19:05:28 +0200
-Message-Id: <20230804170528.93028-1-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.34.1
+        Fri, 4 Aug 2023 13:10:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB365254;
+        Fri,  4 Aug 2023 10:10:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 336B6620BD;
+        Fri,  4 Aug 2023 17:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC834C433C8;
+        Fri,  4 Aug 2023 17:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691169024;
+        bh=LpOa1+W78YUI0pP3gtmRJrUFbY+NCvdbjWtUDqJpXsA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=odzz0itV4ygxP67SjWWwGwJbZ+soQiIp2Nu9jCWBEfj3D/H4s4Cg42NjQayVI/v/c
+         rfl4CMrAL55C4xBuns5HH6CDsDSXjVTmzVGpLcWKAFNdqfZF/+OKsunzRoTDsPEALm
+         8zjEvR35b/L0bUGT4PmP21opHbOasTDlAzGoxEVmIZLgks52lxfeHAJ7ifnscRW0f9
+         Ep0jlMvgK9OsmEZsX9+EC8AUw9TC16+TinjXMtxRPiZtJ5+y1G5SWMD+tapWERVh5m
+         ofBJ+gLeyTi06fNQf2F8DGj1KxkD3yTdRk8Ar/CdNjYmDkxgDMUxWNBfTyXAJd+WUd
+         +mrVR0T+A5zYg==
+Date:   Fri, 4 Aug 2023 18:10:15 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v3 21/36] arm64/mm: Implement map_shadow_stack()
+Message-ID: <21a7b7ab-acbc-4778-bf2c-f4e7346c3dd9@sirena.org.uk>
+References: <5461c56cf4896f18bddaa66c3beec7b909fc8fb9.camel@intel.com>
+ <0a6c90d6-f790-4036-a364-d4761fdd0e95@sirena.org.uk>
+ <e827138f9d8800e3db158831bca88d1ea8b559af.camel@intel.com>
+ <21d7e814-8608-40ce-b5d3-401f2110ad91@sirena.org.uk>
+ <a9ea33d31aad0c45eab41b0dcbd4913d863cc930.camel@intel.com>
+ <55c629cc-0545-460b-91cb-2ebdb8ae9051@sirena.org.uk>
+ <7d03be1277a5f4be23df35ca96f4d6cd77735e2b.camel@intel.com>
+ <475f31e1-0f6f-44a9-b93a-540c1d43e1bb@sirena.org.uk>
+ <9902dd7e-1427-4c7e-b602-c1fbf6512f10@sirena.org.uk>
+ <a21ab778704d02b8539e5c459750f8a2f771bede.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pNJflhZYfBsbzGQE"
+Content-Disposition: inline
+In-Reply-To: <a21ab778704d02b8539e5c459750f8a2f771bede.camel@intel.com>
+X-Cookie: I'm hungry, time to eat lunch.
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[ Upstream commit 4acfe3dfde685a5a9eaec5555351918e2d7266a1 ]
 
-Dan Carpenter spotted a race condition in a couple of situations like
-these in the test_firmware driver:
+--pNJflhZYfBsbzGQE
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-{
-        u8 val;
-        int ret;
+On Fri, Aug 04, 2023 at 04:43:45PM +0000, Edgecombe, Rick P wrote:
+> On Fri, 2023-08-04 at 14:38 +0100, Mark Brown wrote:
 
-        ret = kstrtou8(buf, 10, &val);
-        if (ret)
-                return ret;
+> > BTW are you planning to repost the series for this release?=A0 We're
+> > almost at -rc5 which is pretty late and I didn't see anything yet.=A0
 
-        mutex_lock(&test_fw_mutex);
-        *(u8 *)cfg = val;
-        mutex_unlock(&test_fw_mutex);
+> There were a few patches I posted on top of the last series after your
+> comments, but I wasn't planning on reposting the whole thing. Why do
+> you ask? Just trying to figure out the best version to base off of?
 
-        /* Always return full write size even if we didn't consume all */
-        return size;
-}
+> > It
+> > looks like there's a branch in tip that's getting some updates but
+> > it's
+> > not getting merged for -next.
 
-static ssize_t config_num_requests_store(struct device *dev,
-                                         struct device_attribute *attr,
-                                         const char *buf, size_t count)
-{
-        int rc;
+> Hmm, not sure why it's not in -next anymore. I'll look into that.
+> Thanks for pointing it out.
 
-        mutex_lock(&test_fw_mutex);
-        if (test_fw_config->reqs) {
-                pr_err("Must call release_all_firmware prior to changing config\n");
-                rc = -EINVAL;
-                mutex_unlock(&test_fw_mutex);
-                goto out;
-        }
-        mutex_unlock(&test_fw_mutex);
+Mainly it was the inclusion in -next with a view to it getting merged
+that prompted me to ask, for the last release cycle had seemed to be
+gated on it being posted on the list (which is a standard workflow).
 
-        // NOTE: HERE is the race!!! Function can be preempted!
+Due to issues in mainline I really need a -rc3, and ideally -rc4, base
+but other than occasionally having to pull new bits out of your series
+it's not causing me any serious issues and I don't anticipate the arm64
+stuff getting in this time round.
 
-        // test_fw_config->reqs can change between the release of
-        // the lock about and acquire of the lock in the
-        // test_dev_config_update_u8()
+--pNJflhZYfBsbzGQE
+Content-Type: application/pgp-signature; name="signature.asc"
 
-        rc = test_dev_config_update_u8(buf, count,
-                                       &test_fw_config->num_requests);
+-----BEGIN PGP SIGNATURE-----
 
-out:
-        return rc;
-}
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTNMPYACgkQJNaLcl1U
+h9Df8wf/TEg2LpbxxUNsAzZ3/r+uWmICEGa9AkGhiRS5KriCkO6ASDIEBMN4m//n
+1axQnkGLfUqNjHbkHyhegN5yGxXY7LSsrb6xVyWTRJTQ6zYOlzoDFYmvvhsezc7r
+qZrwqduFAB2BNGSDJVO+ni/ceEZ7/bmioIjhTd1anN7C0Ps9JFnZN8AnhW+s/hNd
+iceyRHZm/Z9goHQARi1RWwCMum3cOYsJT6YBpTxdVPnIZlb9M3QDLA5IMyVPHZG+
+MfibKT1HEeLWqo4w6ZjIluc/yqMrQEBfYq8ghZfa9F1IcB48w+5q6+iPl8LZBmVy
+OCOMl1GumMBem4Q8UZ/yo4ImOaRNHw==
+=N/z3
+-----END PGP SIGNATURE-----
 
-static ssize_t config_read_fw_idx_store(struct device *dev,
-                                        struct device_attribute *attr,
-                                        const char *buf, size_t count)
-{
-        return test_dev_config_update_u8(buf, count,
-                                         &test_fw_config->read_fw_idx);
-}
-
-The function test_dev_config_update_u8() is called from both the locked
-and the unlocked context, function config_num_requests_store() and
-config_read_fw_idx_store() which can both be called asynchronously as
-they are driver's methods, while test_dev_config_update_u8() and siblings
-change their argument pointed to by u8 *cfg or similar pointer.
-
-To avoid deadlock on test_fw_mutex, the lock is dropped before calling
-test_dev_config_update_u8() and re-acquired within test_dev_config_update_u8()
-itself, but alas this creates a race condition.
-
-Having two locks wouldn't assure a race-proof mutual exclusion.
-
-This situation is best avoided by the introduction of a new, unlocked
-function __test_dev_config_update_u8() which can be called from the locked
-context and reducing test_dev_config_update_u8() to:
-
-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-{
-        int ret;
-
-        mutex_lock(&test_fw_mutex);
-        ret = __test_dev_config_update_u8(buf, size, cfg);
-        mutex_unlock(&test_fw_mutex);
-
-        return ret;
-}
-
-doing the locking and calling the unlocked primitive, which enables both
-locked and unlocked versions without duplication of code.
-
-Fixes: c92316bf8e948 ("test_firmware: add batched firmware tests")
-Cc: Luis R. Rodriguez <mcgrof@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Takashi Iwai <tiwai@suse.de>
-Cc: Tianfei Zhang <tianfei.zhang@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Colin Ian King <colin.i.king@gmail.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.4, 4.19, 4.14
-Suggested-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/r/20230509084746.48259-1-mirsad.todorovac@alu.unizg.hr
-Signed-off-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-
-[ This is the patch to fix the racing condition in locking for the 5.4,	]
-[ 4.19 and 4.14 stable branches. Not all the fixes from the upstream	]
-[ commit apply, but those which do are verbatim equal to those in the	]
-[ upstream commit.							]
-
----
- v4:
-	minor versioning clarifications for the patchwork. no changes to the commit.
-
- v3:
-	fixed a minor typo. no change to commit.
-
- v2:
-	tested on 5.4 stable build.
-
- lib/test_firmware.c | 37 ++++++++++++++++++++++++++++---------
- 1 file changed, 28 insertions(+), 9 deletions(-)
-
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 38553944e967..92d7195d5b5b 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -301,16 +301,26 @@ static ssize_t config_test_show_str(char *dst,
- 	return len;
- }
- 
--static int test_dev_config_update_bool(const char *buf, size_t size,
--				       bool *cfg)
-+static inline int __test_dev_config_update_bool(const char *buf, size_t size,
-+						bool *cfg)
- {
- 	int ret;
- 
--	mutex_lock(&test_fw_mutex);
- 	if (strtobool(buf, cfg) < 0)
- 		ret = -EINVAL;
- 	else
- 		ret = size;
-+
-+	return ret;
-+}
-+
-+static int test_dev_config_update_bool(const char *buf, size_t size,
-+				       bool *cfg)
-+{
-+	int ret;
-+
-+	mutex_lock(&test_fw_mutex);
-+	ret = __test_dev_config_update_bool(buf, size, cfg);
- 	mutex_unlock(&test_fw_mutex);
- 
- 	return ret;
-@@ -340,7 +350,7 @@ static ssize_t test_dev_config_show_int(char *buf, int cfg)
- 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
- 
--static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-+static inline int __test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
- {
- 	int ret;
- 	long new;
-@@ -352,14 +362,23 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
- 	if (new > U8_MAX)
- 		return -EINVAL;
- 
--	mutex_lock(&test_fw_mutex);
- 	*(u8 *)cfg = new;
--	mutex_unlock(&test_fw_mutex);
- 
- 	/* Always return full write size even if we didn't consume all */
- 	return size;
- }
- 
-+static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-+{
-+	int ret;
-+
-+	mutex_lock(&test_fw_mutex);
-+	ret = __test_dev_config_update_u8(buf, size, cfg);
-+	mutex_unlock(&test_fw_mutex);
-+
-+	return ret;
-+}
-+
- static ssize_t test_dev_config_show_u8(char *buf, u8 cfg)
- {
- 	u8 val;
-@@ -392,10 +411,10 @@ static ssize_t config_num_requests_store(struct device *dev,
- 		mutex_unlock(&test_fw_mutex);
- 		goto out;
- 	}
--	mutex_unlock(&test_fw_mutex);
- 
--	rc = test_dev_config_update_u8(buf, count,
--				       &test_fw_config->num_requests);
-+	rc = __test_dev_config_update_u8(buf, count,
-+					 &test_fw_config->num_requests);
-+	mutex_unlock(&test_fw_mutex);
- 
- out:
- 	return rc;
--- 
-2.34.1
-
+--pNJflhZYfBsbzGQE--
