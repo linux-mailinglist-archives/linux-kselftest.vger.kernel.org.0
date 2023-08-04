@@ -2,124 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C726077091B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 21:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF346770B4C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 23:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjHDTgm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 15:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S229901AbjHDV7s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 17:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjHDTgk (ORCPT
+        with ESMTP id S229826AbjHDV7s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 15:36:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED04E7
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 12:35:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691177753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=/fEGLQTPa3ePRn0SUruCR/akdAF06PibGk+SoDw6oqs=;
-        b=EKepgm59iEW0B4OmUB2n2dIYEg80eS9pWxANbLzawBzMWgFpg6+l4s5Ruko2L5Ly5/KabE
-        KasgEN0ynKNy8fxLQDBeP7t3iisxryDBy6YvUmnFIr1vCi6Kz3ob9aVvxsa7cmmIMULOFc
-        NmCw4HnM4J3dxnEklTAxl+oVQ9xWBlM=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-624-_riD2ztuNEm9K1gKjvzraw-1; Fri, 04 Aug 2023 15:35:51 -0400
-X-MC-Unique: _riD2ztuNEm9K1gKjvzraw-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7659c6caeaeso319686385a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Aug 2023 12:35:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691177751; x=1691782551;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/fEGLQTPa3ePRn0SUruCR/akdAF06PibGk+SoDw6oqs=;
-        b=c+DBjkRuu7E7Awm5xmrewU0fjB+9YdBOM6ffH7uL+ouBLYmeWQ/xcoOnDGxZdMgTXk
-         2mBP1jsKGQPOq327eR1UfrEeLyys2jkF9REzDgp5l/uRIym4oeH6wZuMWYfVolAPmDcN
-         sYXP32lMkv6RjKE8FAhOQLmxWSdJkwHNhR5A4GAY9uRQ+BJ1nHmzj1Od7BtOLDo363hX
-         i6lJs1dTE8ZLCxzPZaaXT4VMxjbhe0ixP8eJeM+uCBekCg2Qj2k+IHMyB3dp9unZDcfv
-         GTDPxwP8oX7GlJfRlL5f60sTx/LJCmek0k52FdU8TV9/oRHSxsjA96qt00wyG7NReyxk
-         XubA==
-X-Gm-Message-State: AOJu0YyZO1+hjBqLG8HWVTPRKCWFDIR+/g6O/gpdfnpynHzxCRNb2q4o
-        8vTVDVEtULbkd0keeKHBmYNVvBca7wmsAaBES2ns+SQFSH/xc3hw4kbD5Wo4QDflLlue+pzbo4t
-        P6bJguDkEBNH1o8nltrorJhvfgNDmfPA4iMfmzuq0Og==
-X-Received: by 2002:a05:620a:4456:b0:76c:b476:f712 with SMTP id w22-20020a05620a445600b0076cb476f712mr3876344qkp.51.1691177751274;
-        Fri, 04 Aug 2023 12:35:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF+9eMVqPJLY6YIUSKa4NNv1paAfI3JX7M2BAluopih9iKnho0rRGuzu78ZOQHGnUECV5Khzw==
-X-Received: by 2002:a05:620a:4456:b0:76c:b476:f712 with SMTP id w22-20020a05620a445600b0076cb476f712mr3876330qkp.51.1691177751036;
-        Fri, 04 Aug 2023 12:35:51 -0700 (PDT)
-Received: from fedora ([174.89.37.244])
-        by smtp.gmail.com with ESMTPSA id 4-20020a05620a070400b0076745f352adsm847974qkc.59.2023.08.04.12.35.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 12:35:45 -0700 (PDT)
-Date:   Fri, 4 Aug 2023 15:35:29 -0400
-From:   Lucas Karpinski <lkarpins@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Muchun Song <muchun.song@linux.dev>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] selftests: cgroup: fix test_kmem_basic less than error
-Message-ID: <7d6gcuyzdjcice6qbphrmpmv5skr5jtglg375unnjxqhstvhxc@qkn6dw6bao6v>
+        Fri, 4 Aug 2023 17:59:48 -0400
+X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Aug 2023 14:59:44 PDT
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEAB180;
+        Fri,  4 Aug 2023 14:59:44 -0700 (PDT)
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 374LdqY3031774;
+        Fri, 4 Aug 2023 23:39:58 +0200
+Received: from [192.168.1.55] (host-79-18-185-225.retail.telecomitalia.it [79.18.185.225])
+        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 2F7C01209D4;
+        Fri,  4 Aug 2023 23:39:48 +0200 (CEST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+        s=ed201904; t=1691185189; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L2eY65w4QX2NFbKU1+DDTyYdgcmreNvLmXgo7ENzCQY=;
+        b=z57vFvjdKrtJ+iilaAJJLfVIouzA+c8OFSmCnw4GuawqK8M0dmlNn0k/Fy2e7u96x1ehCF
+        DIOPPKSst3eLXXCQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+        t=1691185189; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L2eY65w4QX2NFbKU1+DDTyYdgcmreNvLmXgo7ENzCQY=;
+        b=Ox71sguE0YicW+Ke/W0Pw44zeXJ7qgQKqTLeTdr1t1m7lMROPyrvdm7pHujGvWzolsGQbM
+        r/YxW2A49ma1vaWo3TwleiR8Xnx+Hxpd4zY6dm7cLWU9sKUx437ovbKOK9qop6dUaNIf/a
+        Fev0p2Q8qan4LabWBH7lARiDS7KOeTqSa5ShLVlI8Hpc4jc35iWrjLSKgQ7R00B08OkOHy
+        GTlBxLksejW4WEFrZQoe1cjo3dfvCe4YplSnn1CSddwGDw69bh+bavF2gz0GTuVk8tA9eM
+        E4g4qEEJSMVHKAPJMO5Pvcix+YdUtTXjTDULLD/YGm5BgKJCwxu9Ohp0uM9n8g==
+Message-ID: <f778eef0-a035-0a29-3108-0f6f53a475ed@uniroma2.it>
+Date:   Fri, 4 Aug 2023 23:39:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [net-next 2/2] selftests: seg6: add selftest for NEXT-C-SID
+ flavor in SRv6 End.X behavior
+To:     Paolo Abeni <pabeni@redhat.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
+References: <20230731175117.17376-1-andrea.mayer@uniroma2.it>
+ <20230731175117.17376-3-andrea.mayer@uniroma2.it>
+ <9916825da00d375a33abdcb0aa773c5520a307e1.camel@redhat.com>
+From:   Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
+In-Reply-To: <9916825da00d375a33abdcb0aa773c5520a307e1.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Antivirus: Avast (VPS 230804-6, 4/8/2023), Outbound message
+X-Antivirus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-test_kmem_basic creates 100,000 negative dentries, with each one mapping
-to a slab object. After memory.high is set, these are reclaimed through
-the shrink_slab function call which reclaims all 100,000 entries. The
-test passes the majority of the time because when slab1 or current is
-calculated, it is often above 0, however, 0 is also an acceptable value.
+Hi Paolo,
 
-Signed-off-by: Lucas Karpinski <lkarpins@redhat.com>
----
-In the previous patch, I missed a change to the variable 'current' even
-after some testing as the issue was so sporadic. Current takes the slab
-size into account and can also face the same issue where it fails since
-the reported value is 0, which is an acceptable value.
+please see my answer below, thanks.
 
-Drop: b4abfc19 in mm-unstable
-V2: https://lore.kernel.org/all/ix6vzgjqay2x7bskle7pypoint4nj66fwq7odvd5hektatvp2l@kukoifnfj3dr/
+Il 03/08/2023 10:07, Paolo Abeni ha scritto:
+> On Mon, 2023-07-31 at 19:51 +0200, Andrea Mayer wrote:
+>> From: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
+>>
+>> This selftest is designed for testing the support of NEXT-C-SID flavor
+>> for SRv6 End.X behavior. It instantiates a virtual network composed of
+>> several nodes: hosts and SRv6 routers. Each node is realized using a
+>> network namespace that is properly interconnected to others through veth
+>> pairs, according to the topology depicted in the selftest script file.
+>> The test considers SRv6 routers implementing IPv4/IPv6 L3 VPNs leveraged
+>> by hosts for communicating with each other. Such routers i) apply
+>> different SRv6 Policies to the traffic received from connected hosts,
+>> considering the IPv4 or IPv6 protocols; ii) use the NEXT-C-SID
+>> compression mechanism for encoding several SRv6 segments within a single
+>> 128-bit SID address, referred to as a Compressed SID (C-SID) container.
+>>
+>> The NEXT-C-SID is provided as a "flavor" of the SRv6 End.X behavior,
+>> enabling it to properly process the C-SID containers. The correct
+>> execution of the enabled NEXT-C-SID SRv6 End.X behavior is verified
+>> through reachability tests carried out between hosts belonging to the
+>> same VPN.
+>>
+>> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+>> Signed-off-by: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
+> 
+> The patches LGTM, but there is a minor issues WRT the tag area. Since
+> this patch contains a
+> 
+> From: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
+> 
+> tag, Paolo's sob should come first.
+> 
+> According to the the newly created shell script comments, it looks like
+> the patch as been co developed by both Paolo abd Andrea.
+> 
+> In that case the correct tag sequence would be:
+> 
+> SoB Paolo
+> Co-devel Andrea
+> SoB Andrea
+> 
+> Since the above is relevant for correct patch authorship attribution I
+> suggest to address that in a new revision.
 
- tools/testing/selftests/cgroup/test_kmem.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+We will follow your suggestions and we resubmit the v2 patch with
+the tags in the correct order.
 
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index 1b2cec9d18a4..ed2e50bb1e76 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -75,11 +75,11 @@ static int test_kmem_basic(const char *root)
- 	sleep(1);
- 
- 	slab1 = cg_read_key_long(cg, "memory.stat", "slab ");
--	if (slab1 <= 0)
-+	if (slab1 < 0)
- 		goto cleanup;
- 
- 	current = cg_read_long(cg, "memory.current");
--	if (current <= 0)
-+	if (current < 0)
- 		goto cleanup;
- 
- 	if (slab1 < slab0 / 2 && current < slab0 / 2)
--- 
-2.41.0
+> 
+> BTW, I a really appreciate the descriptive-but-not-too-verbose commit
+> message!
+> 
+> Thanks,
+> 
+> Paolo
+> 
 
+Ciao,
+Paolo
