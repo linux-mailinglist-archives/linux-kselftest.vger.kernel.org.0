@@ -2,66 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783B077075D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 19:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B078770767
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 20:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjHDR5V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 13:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
+        id S229885AbjHDSBU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 14:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjHDR5U (ORCPT
+        with ESMTP id S229626AbjHDSBS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 13:57:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05034C02
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 10:56:33 -0700 (PDT)
+        Fri, 4 Aug 2023 14:01:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E82D46B2
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 11:00:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691171793;
+        s=mimecast20190719; t=1691172031;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SvrjTDcs8djDadP7h1Zm3W5QUjzYJ5c3VH4x+NLfDfU=;
-        b=PJhvUtnzsAl8qMCIHgFJ7eKwvQSaoNKTmnr20Yag3RYRR7iGXRua1PrMfcnLQ2M5bmGYhd
-        6OWjJWCo8VOKapZiG07aSFFBmBTfshFGpORR/ZshtbjmpRPeBDm8BGDUh1TfcyoNDsrSp5
-        LBI5DyYm9q8l7HUAoeK7H3P88VbMxYY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=plknfH3SDQ/AujyL8eWFqeOy7h7VD7A1dUfZFnOOKDM=;
+        b=WleMOlCiA9fEGrBu8XtpTlTUrdZVCU7GibyEzku5Npwg2zxSgIaKX9qHsS3dmDkeY2poBy
+        8spRhZcFBzRUmCzzJu9x/PhPZucCFquFIjhQXUNvW/Ead5gaXG/y2OwUAH4S6xphz3RnfO
+        BQltXk9GLdQfpNE/AMYrFPyyLk65SCI=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-440-9LJzE4YUM8uSsXY37v0W-w-1; Fri, 04 Aug 2023 13:56:31 -0400
-X-MC-Unique: 9LJzE4YUM8uSsXY37v0W-w-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3113da8b778so1227978f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Aug 2023 10:56:31 -0700 (PDT)
+ us-mta-651-vrbKPaqMNMS89XFENopv9w-1; Fri, 04 Aug 2023 14:00:29 -0400
+X-MC-Unique: vrbKPaqMNMS89XFENopv9w-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-317421b94a4so1180906f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Aug 2023 11:00:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691171790; x=1691776590;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
+        d=1e100.net; s=20221208; t=1691172028; x=1691776828;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SvrjTDcs8djDadP7h1Zm3W5QUjzYJ5c3VH4x+NLfDfU=;
-        b=HhO0JuUKOTRO4W/kigJ8jUabvjHiJSHP4RC0FVb3lfyLWjVc/FChtH8fkbNrePZiFB
-         5AQg/oVgiC+3IYWLbSJqWpjJQdWOFHXipKlmRQcAImbaTSZ6B0zqEsL0lxryGG/sBdil
-         IR7P3m3Sct3eyh7PRMQJjJerDXx6+7wlL5OTGnDiEkwrMgomVMO9JCSErJywLnmbx022
-         y7d+4DNEuet6l5vQLtpZyROyG0xvZUHROwoYqj7iQ6CxhEEib18+vvQZQ2XqbOJf8fqn
-         bcV0TrDYP0E5u4lM6dCXRWM1bnJXsZNQ4TEbcUkkg4LtsXm/ft/AdYc1GbtTHB3EpL7L
-         SvWw==
-X-Gm-Message-State: AOJu0YytP+FX14T9nCN4Ll8SHwbDgry85cTaXYDpmqme15mrEdO52XmV
-        yWVQ/qEDK/FRG0KGLuBepB+dgFGl7xKv1Zj0qwNqE31S8NLlO04YYIaZt0wtvoIA/gkbrViirXB
-        0wEqo1pUO1z9ilNHmnVZnkHXPz5um
-X-Received: by 2002:a5d:6844:0:b0:313:eaf5:515 with SMTP id o4-20020a5d6844000000b00313eaf50515mr1604577wrw.6.1691171790519;
-        Fri, 04 Aug 2023 10:56:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG3eXsxv8k5tyLwX8sSg2B1xCMehT/x7CzauR+iGPFIENNB/npkytR7rq7w+vcRW+JFx9Ra1A==
-X-Received: by 2002:a5d:6844:0:b0:313:eaf5:515 with SMTP id o4-20020a5d6844000000b00313eaf50515mr1604569wrw.6.1691171790149;
-        Fri, 04 Aug 2023 10:56:30 -0700 (PDT)
+        bh=plknfH3SDQ/AujyL8eWFqeOy7h7VD7A1dUfZFnOOKDM=;
+        b=HCYHygv6QRdpchV+XCkq+BMDI+KjpNHayM+rJyU5MFGLW5HTXMTlIAN4oH4mj6+jJC
+         /JBNYZm6JSHu6b4quxFLQPMTwQA8FAXmWgFJaoMmHX1DBF7TbFsUnKgz7/s8xB9Z+KNy
+         DYzd+AvGoJDWkCRrnlg1W1+ZzWrgmciqJ97+UJcvHW0UVOOoqHzNsfr60DvoGbAVZyfb
+         trzpAVvNCa21W8rPb3bIBKdxAcf18VOY4fqHBVrTfauqXZ54+iywK8cDZSP/ne29uxRG
+         HKEyBYGMXRSm9NsdYlx4as8XfnGRv1/GGObkqoalTrDTdulEKe+sWk6txQW9bPVIdXYz
+         aNdA==
+X-Gm-Message-State: AOJu0YwR06fvoQ/eSS3Ppz7JQarrG1Iik9pPTK7/AUDpyeKmqHT74LJM
+        n4Em0oOTIkvof7I4S1m7NLoTzTT2QtqB/Er5cXbXBvOmkzy7+ZIILhO5EBvUxNiz7UMYx+Y1sDh
+        pvWEyNskGnwSqsK3mqVOKWJ9khz3x
+X-Received: by 2002:adf:e90b:0:b0:314:49e4:b0c4 with SMTP id f11-20020adfe90b000000b0031449e4b0c4mr1906973wrm.70.1691172028376;
+        Fri, 04 Aug 2023 11:00:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHxHfzUz1EPw43upa/7C1PthJlkuVCBp6Z+blRveCGIYkYDQyDnvZ5j7WD7RCluzgxUr1F+kA==
+X-Received: by 2002:adf:e90b:0:b0:314:49e4:b0c4 with SMTP id f11-20020adfe90b000000b0031449e4b0c4mr1906951wrm.70.1691172027948;
+        Fri, 04 Aug 2023 11:00:27 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f2d:8e00:a20e:59bc:3c13:4806? (p200300d82f2d8e00a20e59bc3c134806.dip0.t-ipconnect.de. [2003:d8:2f2d:8e00:a20e:59bc:3c13:4806])
-        by smtp.gmail.com with ESMTPSA id y6-20020a05600c364600b003fe2a40d287sm2942118wmq.1.2023.08.04.10.56.29
+        by smtp.gmail.com with ESMTPSA id m15-20020a056000008f00b0031417b0d338sm3082057wrx.87.2023.08.04.11.00.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Aug 2023 10:56:29 -0700 (PDT)
-Message-ID: <859496c5-3971-0b65-c297-d29083719a75@redhat.com>
-Date:   Fri, 4 Aug 2023 19:56:28 +0200
+        Fri, 04 Aug 2023 11:00:27 -0700 (PDT)
+Message-ID: <dff76f35-8564-1908-2a17-1479c53e56cf@redhat.com>
+Date:   Fri, 4 Aug 2023 20:00:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
+Subject: Re: [PATCH v3 7/7] selftest/mm: ksm_functional_tests: Add PROT_NONE
+ test
 Content-Language: en-US
 To:     Peter Xu <peterx@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -77,12 +79,10 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Mel Gorman <mgorman@suse.de>, Shuah Khan <shuah@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>
 References: <20230803143208.383663-1-david@redhat.com>
- <20230803143208.383663-7-david@redhat.com> <ZMv6cZH2PdyeTmw1@x1n>
+ <20230803143208.383663-8-david@redhat.com> <ZMv6wG7PqehMp6vT@x1n>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-Subject: Re: [PATCH v3 6/7] selftest/mm: ksm_functional_tests: test in
- mmap_and_merge_range() if anything got merged
-In-Reply-To: <ZMv6cZH2PdyeTmw1@x1n>
+In-Reply-To: <ZMv6wG7PqehMp6vT@x1n>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -95,83 +95,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 03.08.23 21:05, Peter Xu wrote:
-> On Thu, Aug 03, 2023 at 04:32:07PM +0200, David Hildenbrand wrote:
->> Let's extend mmap_and_merge_range() to test if anything in the current
->> process was merged. range_maps_duplicates() is too unreliable for that
->> use case, so instead look at KSM stats.
+On 03.08.23 21:06, Peter Xu wrote:
+> On Thu, Aug 03, 2023 at 04:32:08PM +0200, David Hildenbrand wrote:
+>> Let's test whether merging and unmerging in PROT_NONE areas works as
+>> expected.
 >>
->> Trigger a complete unmerge first, to cleanup the stable tree and
->> stabilize accounting of merged pages.
+>> Pass a page protection to mmap_and_merge_range(), which will trigger
+>> an mprotect() after writing to the pages, but before enabling merging.
 >>
->> Note that we're using /proc/self/ksm_merging_pages instead of
->> /proc/self/ksm_stat, because that one is available in more existing
->> kernels.
+>> Make sure that unsharing works as expected, by performing a ptrace write
+>> (using /proc/self/mem) and by setting MADV_UNMERGEABLE.
 >>
->> If /proc/self/ksm_merging_pages can't be opened, we can't perform any
->> checks and simply skip them.
->>
->> We have to special-case the shared zeropage for now. But the only user
->> -- test_unmerge_zero_pages() -- performs its own merge checks.
+>> Note that this implicitly tests that ptrace writes in an inaccessible
+>> (PROT_NONE) mapping work as expected.
 >>
 >> Signed-off-by: David Hildenbrand <david@redhat.com>
 > 
+> [...]
+> 
+>> +static void test_prot_none(void)
+>> +{
+>> +	const unsigned int size = 2 * MiB;
+>> +	char *map;
+>> +	int i;
+>> +
+>> +	ksft_print_msg("[RUN] %s\n", __func__);
+>> +
+>> +	map = mmap_and_merge_range(0x11, size, PROT_NONE, false);
+>> +	if (map == MAP_FAILED)
+>> +		goto unmap;
+>> +
+>> +	/* Store a unique value in each page on one half using ptrace */
+>> +	for (i = 0; i < size / 2; i += pagesize) {
+>> +		lseek(mem_fd, (uintptr_t) map + i, SEEK_SET);
+>> +		if (write(mem_fd, &i, sizeof(size)) != sizeof(size)) {
+> 
+> sizeof(i)?  May not matter a huge lot, though..
 
-Hi Peter,
+Oh, indeed, thanks!
 
-thanks for the review!
-
+> 
+>> +			ksft_test_result_fail("ptrace write failed\n");
+>> +			goto unmap;
+>> +		}
+>> +	}
+> 
 > Acked-by: Peter Xu <peterx@redhat.com>
 > 
-> One nitpick:
-> 
->> ---
->>   .../selftests/mm/ksm_functional_tests.c       | 47 +++++++++++++++++++
->>   1 file changed, 47 insertions(+)
->>
->> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
->> index 0de9d33cd565..cb63b600cb4f 100644
->> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
->> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
->> @@ -30,6 +30,7 @@
->>   static int ksm_fd;
->>   static int ksm_full_scans_fd;
->>   static int proc_self_ksm_stat_fd;
->> +static int proc_self_ksm_merging_pages_fd;
->>   static int ksm_use_zero_pages_fd;
->>   static int pagemap_fd;
->>   static size_t pagesize;
->> @@ -88,6 +89,22 @@ static long get_my_ksm_zero_pages(void)
->>   	return my_ksm_zero_pages;
->>   }
->>   
->> +static long get_my_merging_pages(void)
->> +{
->> +	char buf[10];
->> +	ssize_t ret;
->> +
->> +	if (proc_self_ksm_merging_pages_fd < 0)
->> +		return proc_self_ksm_merging_pages_fd;
-> 
-> Better do the fds check all in main(), e.g. not all callers below considers
-> negative values, so -1 can pass "if (get_my_merging_pages())" etc.
 
-The two existing callers should be handling it correctly:
-
-if (get_my_merging_pages() > 0)
-	-> fail
-
-if (val && !get_my_merging_pages()
-	-> fail
-
-Both will pass on negative values, unless I am missing something.
-
-I tried to keep the test working also on older kernels where 
-ksm_merging_pages does not exist yet (it's ~1 year old).
-
-
-Anyhow, if you think it's better to make the test fail on these setups, 
-I can change it.
+Thanks!
 
 -- 
 Cheers,
