@@ -2,151 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B078770767
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 20:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C8077079D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 20:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjHDSBU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 14:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        id S230233AbjHDSLK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 14:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjHDSBS (ORCPT
+        with ESMTP id S230389AbjHDSLG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 14:01:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E82D46B2
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 11:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691172031;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=plknfH3SDQ/AujyL8eWFqeOy7h7VD7A1dUfZFnOOKDM=;
-        b=WleMOlCiA9fEGrBu8XtpTlTUrdZVCU7GibyEzku5Npwg2zxSgIaKX9qHsS3dmDkeY2poBy
-        8spRhZcFBzRUmCzzJu9x/PhPZucCFquFIjhQXUNvW/Ead5gaXG/y2OwUAH4S6xphz3RnfO
-        BQltXk9GLdQfpNE/AMYrFPyyLk65SCI=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-651-vrbKPaqMNMS89XFENopv9w-1; Fri, 04 Aug 2023 14:00:29 -0400
-X-MC-Unique: vrbKPaqMNMS89XFENopv9w-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-317421b94a4so1180906f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Aug 2023 11:00:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691172028; x=1691776828;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=plknfH3SDQ/AujyL8eWFqeOy7h7VD7A1dUfZFnOOKDM=;
-        b=HCYHygv6QRdpchV+XCkq+BMDI+KjpNHayM+rJyU5MFGLW5HTXMTlIAN4oH4mj6+jJC
-         /JBNYZm6JSHu6b4quxFLQPMTwQA8FAXmWgFJaoMmHX1DBF7TbFsUnKgz7/s8xB9Z+KNy
-         DYzd+AvGoJDWkCRrnlg1W1+ZzWrgmciqJ97+UJcvHW0UVOOoqHzNsfr60DvoGbAVZyfb
-         trzpAVvNCa21W8rPb3bIBKdxAcf18VOY4fqHBVrTfauqXZ54+iywK8cDZSP/ne29uxRG
-         HKEyBYGMXRSm9NsdYlx4as8XfnGRv1/GGObkqoalTrDTdulEKe+sWk6txQW9bPVIdXYz
-         aNdA==
-X-Gm-Message-State: AOJu0YwR06fvoQ/eSS3Ppz7JQarrG1Iik9pPTK7/AUDpyeKmqHT74LJM
-        n4Em0oOTIkvof7I4S1m7NLoTzTT2QtqB/Er5cXbXBvOmkzy7+ZIILhO5EBvUxNiz7UMYx+Y1sDh
-        pvWEyNskGnwSqsK3mqVOKWJ9khz3x
-X-Received: by 2002:adf:e90b:0:b0:314:49e4:b0c4 with SMTP id f11-20020adfe90b000000b0031449e4b0c4mr1906973wrm.70.1691172028376;
-        Fri, 04 Aug 2023 11:00:28 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHxHfzUz1EPw43upa/7C1PthJlkuVCBp6Z+blRveCGIYkYDQyDnvZ5j7WD7RCluzgxUr1F+kA==
-X-Received: by 2002:adf:e90b:0:b0:314:49e4:b0c4 with SMTP id f11-20020adfe90b000000b0031449e4b0c4mr1906951wrm.70.1691172027948;
-        Fri, 04 Aug 2023 11:00:27 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f2d:8e00:a20e:59bc:3c13:4806? (p200300d82f2d8e00a20e59bc3c134806.dip0.t-ipconnect.de. [2003:d8:2f2d:8e00:a20e:59bc:3c13:4806])
-        by smtp.gmail.com with ESMTPSA id m15-20020a056000008f00b0031417b0d338sm3082057wrx.87.2023.08.04.11.00.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Aug 2023 11:00:27 -0700 (PDT)
-Message-ID: <dff76f35-8564-1908-2a17-1479c53e56cf@redhat.com>
-Date:   Fri, 4 Aug 2023 20:00:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 7/7] selftest/mm: ksm_functional_tests: Add PROT_NONE
- test
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org,
+        Fri, 4 Aug 2023 14:11:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9D8524B
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 11:10:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B7BD620F0
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 18:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B14FC433C8;
+        Fri,  4 Aug 2023 18:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691172623;
+        bh=LRfDGzlKqw9WloIyMQx9PfNIvHzqL+giWs8MmY+dgT0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=diUTdc1C3DchzkeOc1ug8TZ/1FXRjErHRM11gbJ/UXtOuaDqPUxMxft6H9gR2davD
+         OOvwtQ9m39nUozaNyTeIynxyjt1ofyTSRDHk5oomv5/eY4MweU9zw/mJJQvXWyNrqC
+         WfIdCJWVqZFsribxpKSOCJE8dmgKqflmImu6YjOGY0T7rZ+l7Uka/boM9A1IFvDjzm
+         YMqbzT2mRHEzdDsZdIxnXv/adM6N/JtvwP6PFsinYg0W2S47AqnofPTzTeZvgTeLKT
+         N0cISqQbgaJFogguU9PB10tsKUGTv868tasOUAKqcEaBACTKfs4Zqb0qHWxqCH2idE
+         rAj8VoNnM113Q==
+From:   Will Deacon <will@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
         linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        liubo <liubo254@huawei.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>, Shuah Khan <shuah@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20230803143208.383663-1-david@redhat.com>
- <20230803143208.383663-8-david@redhat.com> <ZMv6wG7PqehMp6vT@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ZMv6wG7PqehMp6vT@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 0/6] kselfest/arm64: Fix a SVE memcpy() issue and use tools/include
+Date:   Fri,  4 Aug 2023 19:10:12 +0100
+Message-Id: <169116701323.148038.6695968230784644639.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20230728-arm64-signal-memcpy-fix-v4-0-0c1290db5d46@kernel.org>
+References: <20230728-arm64-signal-memcpy-fix-v4-0-0c1290db5d46@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 03.08.23 21:06, Peter Xu wrote:
-> On Thu, Aug 03, 2023 at 04:32:08PM +0200, David Hildenbrand wrote:
->> Let's test whether merging and unmerging in PROT_NONE areas works as
->> expected.
->>
->> Pass a page protection to mmap_and_merge_range(), which will trigger
->> an mprotect() after writing to the pages, but before enabling merging.
->>
->> Make sure that unsharing works as expected, by performing a ptrace write
->> (using /proc/self/mem) and by setting MADV_UNMERGEABLE.
->>
->> Note that this implicitly tests that ptrace writes in an inaccessible
->> (PROT_NONE) mapping work as expected.
->>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
+On Fri, 28 Jul 2023 00:26:11 +0100, Mark Brown wrote:
+> Will noticed that with newer toolchains memcpy() ends up being
+> implemented with SVE instructions, breaking the signals tests when in
+> streaming mode.  We fixed this by using an open coded version of
+> OPTIMZER_HIDE_VAR(), but in the process it was noticed that some of the
+> selftests are using the tools/include headers and it might be nice to
+> share things there.  We also have a custom compiler.h in the BTI tests.
 > 
 > [...]
-> 
->> +static void test_prot_none(void)
->> +{
->> +	const unsigned int size = 2 * MiB;
->> +	char *map;
->> +	int i;
->> +
->> +	ksft_print_msg("[RUN] %s\n", __func__);
->> +
->> +	map = mmap_and_merge_range(0x11, size, PROT_NONE, false);
->> +	if (map == MAP_FAILED)
->> +		goto unmap;
->> +
->> +	/* Store a unique value in each page on one half using ptrace */
->> +	for (i = 0; i < size / 2; i += pagesize) {
->> +		lseek(mem_fd, (uintptr_t) map + i, SEEK_SET);
->> +		if (write(mem_fd, &i, sizeof(size)) != sizeof(size)) {
-> 
-> sizeof(i)?  May not matter a huge lot, though..
 
-Oh, indeed, thanks!
+Applied to arm64 (for-next/selftests), thanks!
 
-> 
->> +			ksft_test_result_fail("ptrace write failed\n");
->> +			goto unmap;
->> +		}
->> +	}
-> 
-> Acked-by: Peter Xu <peterx@redhat.com>
-> 
+[1/6] kselftest/arm64: Exit streaming mode after collecting signal context
+      https://git.kernel.org/arm64/c/d6da04b6fbab
+[2/6] tools compiler.h: Add OPTIMIZER_HIDE_VAR()
+      https://git.kernel.org/arm64/c/e5d51a665021
+[3/6] tools include: Add some common function attributes
+      https://git.kernel.org/arm64/c/51e6ac1fa451
+[4/6] kselftest/arm64: Make the tools/include headers available
+      https://git.kernel.org/arm64/c/35d7bc983a74
+[5/6] kselftest/arm64: Use shared OPTIMZER_HIDE_VAR() definiton
+      https://git.kernel.org/arm64/c/db7a89f706d6
+[6/6] kselftest/arm64: Use the tools/include compiler.h rather than our own
+      https://git.kernel.org/arm64/c/672dbf97f612
 
-Thanks!
-
--- 
 Cheers,
+-- 
+Will
 
-David / dhildenb
-
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
