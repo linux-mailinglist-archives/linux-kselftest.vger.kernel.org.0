@@ -2,118 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108817706E4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 19:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4547706E9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 19:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjHDRPW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 13:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
+        id S231513AbjHDRRk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 13:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbjHDRPV (ORCPT
+        with ESMTP id S229927AbjHDRRj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 13:15:21 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AC2469A;
-        Fri,  4 Aug 2023 10:15:18 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 669F460177;
-        Fri,  4 Aug 2023 19:15:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1691169317; bh=sb+VS7L5uN94PDJDVY+D3C5Qp9r6bdxatdxyOwcIY78=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=o55LdpicpCEISOuOMZpN2vqwB7CeMEghdBFWb5zaDnAkP9aJegW2OhxJepMZZWpIS
-         62g/X+BcRjdhwZiDa2KWNMF93ilGBm/6P2JYGhKDyS6ErpUCJ55iaupK+Sz976E55+
-         c63Zv8ueZcRq9ryljItaSjbrbsdzMZEqfwHUgw4gqc2lubt/dshTRafhDycA/mprER
-         YFAoZl9SDy0paZXYqCvtBTZtVuCFskG9JKcupeOTo2a+0Y5AxVR1V++cSra7YujoR9
-         mLkCxwOg/GN6KlSZr+FGmOWrkg1f5+xXIUDzr2tdllv2AMm+AsgpY32FrPudthv2hO
-         +tJe1QLzx0tag==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Bnq7fFXCgYMd; Fri,  4 Aug 2023 19:15:14 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id BFF3E60174;
-        Fri,  4 Aug 2023 19:15:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1691169314; bh=sb+VS7L5uN94PDJDVY+D3C5Qp9r6bdxatdxyOwcIY78=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=L4w1aMKgw7IGC9Vqt1cQGfMyxddvk56MZHTaN0VFrB/rgGFl1ZiQoxyo0ShzNtwRj
-         geVdJ6Q/J9D+5TuUXNZizl6t6QX3Om17RhC6esXkeAif+8BgV60T2rx2SW2ZjjwEGB
-         F/nyxc42Oeo3poLTy5YLNI2LaZCsxKl4K29mcTsUIK0O+uQOY8MtDBha1AqL0n9se0
-         4j2FwSLsS5hbFEjxIbuOsP4WMtKPdvcHdEetYInUZt0HSuj99TbIHfxMzNqQs2Umlm
-         8829CHjOgm8rJ746VVBALblQcMqtoMV1LXFmJfQJ72Xe3i5DxYROn/yJR0Q3pIMdvk
-         Jvt/PcNuBpcQw==
-Message-ID: <a2a844d0-0d2c-c74b-e2d3-d924a9dc1e00@alu.unizg.hr>
-Date:   Fri, 4 Aug 2023 19:15:10 +0200
+        Fri, 4 Aug 2023 13:17:39 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DA54698
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 10:17:38 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5223910acf2so877a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Aug 2023 10:17:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691169456; x=1691774256;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2T7SZZ0QByC9mXWRPlKUQtKM6dHFG9MmvGQY+HbLzlI=;
+        b=hmS6ejEYooO73Y1iHy9ByBdsVNCWHhIXOmkn86Mpa2uIhVYifsMqtqRwFHXLw/ex06
+         7oFeaY4aQ/qnfIVyspO+UKW5YG709KzIf154oIbVuXABHG+pSDHlG1gVvIR1Hfl7hJug
+         //45rV4vbvwomgdKJjj/XPpv2ceSPFrIHzDSgLK3+R1Wt5fVPcBFmcjs3uis7aTQzkgt
+         kGRHQs/CsbSOOMee/gSnPungVo+QlAaPXW9rJ1nV4aQrdcfEnPjEO5I5KaisoGeymxqL
+         rbe5rObHIcOApfBUD1UkUBHby2p3hJw4TPnXVRiQolYKTVfcOnGO8E+giH8NQKotR+v0
+         EbYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691169456; x=1691774256;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2T7SZZ0QByC9mXWRPlKUQtKM6dHFG9MmvGQY+HbLzlI=;
+        b=S1s1guaJXhIjVSwaiKbyiY39Dqs59sWHdl8V5LOZUl3tCrTMr7uMimiePs6BC64XVd
+         zD5bGhOKoGACEar4UDOmmFlSmQyqm8iPpkZgKY9KOWQzdQcfTz4/sLAX2BE2d4k8TzCq
+         j9H713WzKrNfl6hhNnz0TOPqLLaSXQK1B91ZJiFDWUSLwE9MrsWE3XmWq5JtgD4O/8+2
+         8L920ZQtw9/x8glr/HfgOLQclwLHI3jlBTjx+LVQHv2X6MyktD5bqogXO6Nsyvawpl0S
+         VyCjUEgnzKb6MNxBjS4y0NFsnfE+vPX4vJ7Er+NRTwuVm+GsLNRPj4uQxdyk+KxIHJXt
+         8eiA==
+X-Gm-Message-State: AOJu0YwBFd8YSGQDV2bZjVPCm4HeVIvICLFLOILcezBwoSrkKMU3lGIG
+        TyZYGGnNbiOY/MMYBAaYdMVpuDQpjexDpakzqIHOng==
+X-Google-Smtp-Source: AGHT+IFIK7TPHCce2Qe4wF8yiMXNXYDY1TdJ/LxM9hHDEm980z2PUH32FJWyzAfwa5rUA9j0fY/RVeEM/1u2sys5awU=
+X-Received: by 2002:a50:a6cf:0:b0:523:13df:297b with SMTP id
+ f15-20020a50a6cf000000b0052313df297bmr5477edc.1.1691169456301; Fri, 04 Aug
+ 2023 10:17:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 1/2] [DONE REQ CHG] test_firmware: prevent race
- conditions by a correct implementation of locking
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Luis R . Rodriguez" <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
+References: <20230727093637.1262110-1-usama.anjum@collabora.com>
+ <20230727093637.1262110-3-usama.anjum@collabora.com> <ZMvDCeUN8qrUmnJV@gmail.com>
+ <CABb0KFF7K2SHvSwXMheVAgd3VcJf_twuRsc=P-uTJW9HGQcqfA@mail.gmail.com> <CANaxB-ytK5QNP4K4L3T=-F6sLc5kD6HjHc_C3U2sdTtBDgbmCg@mail.gmail.com>
+In-Reply-To: <CANaxB-ytK5QNP4K4L3T=-F6sLc5kD6HjHc_C3U2sdTtBDgbmCg@mail.gmail.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Fri, 4 Aug 2023 19:17:24 +0200
+Message-ID: <CABb0KFEfmRz+Z_-7GygTL12E5Y254dvoUfWe4uSv9-wOx+Cs8w@mail.gmail.com>
+Subject: Re: [PATCH v26 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Andrei Vagin <avagin@gmail.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        Dan Carpenter <error27@gmail.com>
-References: <20230803165304.9200-1-mirsad.todorovac@alu.unizg.hr>
- <2023080435-unweave-suspect-3299@gregkh>
-Content-Language: en-US
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <2023080435-unweave-suspect-3299@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Mr. Greg,
+On Fri, 4 Aug 2023 at 17:59, Andrei Vagin <avagin@gmail.com> wrote:
+>
+> On Thu, Aug 3, 2023 at 8:25=E2=80=AFAM Micha=C5=82 Miros=C5=82aw <emmir@g=
+oogle.com> wrote:
+> >
+> > On Thu, 3 Aug 2023 at 17:09, Andrei Vagin <avagin@gmail.com> wrote:
+> > > On Thu, Jul 27, 2023 at 02:36:34PM +0500, Muhammad Usama Anjum wrote:
+> > [...]
+> > > > +     n_pages =3D (*end - addr) / PAGE_SIZE;
+> > > > +     if (check_add_overflow(p->found_pages, n_pages, &total_pages)=
+ ||
+> > > > +         total_pages > p->arg.max_pages) {
+> > >
+> > > why do we need to use check_add_overflow here?
+> > >
+> > > > +             size_t n_too_much =3D total_pages - p->arg.max_pages;
+> > >
+> > > it is unsafe to use total_pages if check_add_overflow returns non-zer=
+o.
+> >
+> > Since we're adding unsigned integers, this is well defined even after o=
+verflow.
+>
+> The description of check_add_overflow declares that is unsafe:
+> https://elixir.bootlin.com/linux/latest/source/include/linux/overflow.h#L=
+62
+>
+> It actually doesn't matter, because it should be impossible to
+> overflow total_pages
+> and we can consider not to use check_add_overflow here.
 
-On 8/4/23 13:22, Greg Kroah-Hartman wrote:
-> On Thu, Aug 03, 2023 at 06:53:04PM +0200, Mirsad Todorovac wrote:
->> [ Upstream commit 4acfe3dfde685a5a9eaec5555351918e2d7266a1 ]
-> 
-> <snip>
-> 
-> Ok, I am totally confused as to what patch is the newest one, and which
-> is for what branches, sorry.
-> 
-> So, I've deleted all of the patches from my review queue and I would ask
-> that you start over.
-> 
-> Note, if you put the kernel version in the subject line, it makes it
-> simpler for me to understand what goes where.
-> 
-> Here is an example to follow:
-> 	https://lore.kernel.org/r/20230802170227.1590187-1-eahariha@linux.microsoft.com
-> 
-> There are loads of other examples on the stable mailing list, please
-> don't make it hard for me to understand what to do here, make it obvious
-> as I'm dealing with hundreds of patches a day.
+It seems the doc warning is quite new (d219d2a9a92e / Mon Aug 29
+13:37:17 2022 -0700). The underlying __builtin_add_overflow() is
+well-defined for any integer type, though. Even staying with C99,
+arithmetic on unsigned integers is always defined as being done modulo
+2^n.
 
-Done requested changes and resubmitted. I hope it is done right this time. Of course,
-it could be better still, but this should work out.
-
-It is a paramount that we make your life with applying patches easier and this is
-a new situation that I haven't got covered yet.
-
-I will also try to imitate the skilled patch submitters the next time before wasting
-your time or reinventing the wheel.
-
-> thanks,
-
-You're welcome.
-
-Kind regards,
-Mirsad
+Best Regards
+Micha=C5=82 Miros=C5=82aw
