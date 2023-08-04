@@ -2,279 +2,528 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCF37702B0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 16:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0407702BC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Aug 2023 16:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbjHDOM0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 10:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
+        id S229763AbjHDOPD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 10:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbjHDOMR (ORCPT
+        with ESMTP id S229676AbjHDOPC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 10:12:17 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2057.outbound.protection.outlook.com [40.107.220.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465DD1994;
-        Fri,  4 Aug 2023 07:12:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Fw2h5XOWaqYDNnDXHjvBFju359r/Faxcz/GL9T9yS/3sRzpsSgeYDw8EGMMYUyVmDCAHrij38sJ+gr+XSDdk1oi4FJmLJE8PKYN3DYxxaIJqhAzBEIIaVg+C9BtKdIrj7IA+A8ugUUeXJw7JxbNgzJJh6WbW6ZxBh/OOU70zVOnSQbYd919hgnMrvuUo+Uw3hEhZzfXJtSBRmb6lcUOPyNi4ssjalz5HlbYIDwNqv2XeohXwnFhordZsEjLd+yezJ8Tr9T+24zmLnjNKKUKxDpsqMyiAXp5E4+MiKuqSX5pVyADToLK75WEq5+0uqPd9km4/ReLb+w73SEO0ZmqA8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6wTWyjrXzreKk+DJWT2zlESyKLss4moZMmmLXDbolZE=;
- b=ZzfWu5yNfQKZKtCd1m1ez6LP8i+gXWu8O8XbMkw90Bco/TWtrNBpHG/sVk6ppnXohkPcxplRdMxX0dpXBeId9pQO1oF8qrKKQTzOU+h+KN2pb/1D7a8qIN8UwaqYVi2yjec6J3ae9MG96IrvoLfDk7e83zftjQUQyrjab0ptt7usNPe61M5FfRImMHXbxNN7teY4pY/B2cEmwgc/o4KYslFz6V36moM6lCfbH7XMq8SQ+Um0AEEEICwSO35Xc4Go0fc66e9CL0FlAMuseRZkE+pZi+ukXwEVFOEREPn7ZafwkWLUTeuwtKDlkWIBsDNnEgCtVD4asIvGlGG4F8r7qA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6wTWyjrXzreKk+DJWT2zlESyKLss4moZMmmLXDbolZE=;
- b=B9Y9NJTGF7Oz4izYXzyUwIE1/RGRLqcedo6MFJCVAMeRuUjdqsvySgT8dRV8MpSuxFzokuGuJFGwVmmvxd0DlERBfL8PFatnQ/R4V/MT5xbRAlZ4hsorLH/udZ1yLx3au6kMjizcH2cJYmryE9iKPR02X98woIrXD09f0KvpvoZXKLdVQekK8Og+PcGnIwGKQZsDk1IUMe5HOpGSWAqaHnNMtkrS64xragxfmuz9csWgoFxY28gXq0eewn3biOw85QYMKLBniMCmNzFxBtW0EMwvA7N0MhGzVw8O6uTFkiM6D5n5f2hipAeUEao8fAErhgMl3hC/FGNPdmoD6GHH3A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CH3PR12MB7667.namprd12.prod.outlook.com (2603:10b6:610:14f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.20; Fri, 4 Aug
- 2023 14:12:13 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::5111:16e8:5afe:1da1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::5111:16e8:5afe:1da1%6]) with mapi id 15.20.6631.046; Fri, 4 Aug 2023
- 14:12:12 +0000
-Date:   Fri, 4 Aug 2023 11:12:11 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
-        alex.williamson@redhat.com, kevin.tian@intel.com,
-        robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
-        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
-        peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com
-Subject: Re: [PATCH v5 3/4] iommufd: Add IOMMU_GET_HW_INFO
-Message-ID: <ZM0HO02QRHnIKIIJ@nvidia.com>
-References: <20230803143144.200945-1-yi.l.liu@intel.com>
- <20230803143144.200945-4-yi.l.liu@intel.com>
- <51418f60-db2f-8ee3-ed9c-1a97d89774cf@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <51418f60-db2f-8ee3-ed9c-1a97d89774cf@linux.intel.com>
-X-ClientProxiedBy: BL1PR13CA0275.namprd13.prod.outlook.com
- (2603:10b6:208:2bc::10) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 4 Aug 2023 10:15:02 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF876CC;
+        Fri,  4 Aug 2023 07:15:00 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 374DlZpc008038;
+        Fri, 4 Aug 2023 09:14:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding:content-type; s=PODMain02222019; bh=w
+        OVGArtdsCZe+Ii8gbqWx1uJm+237Op5rjPj+EgVx00=; b=j3y2zCRSKos322Psq
+        1SN4Tz/3iUKnYQL5HnfuaI+LZ4yE+TVljmHJOXsTqSUi+oMvkk+QQ2C2568VAdeq
+        TtgQU5F2cXn3pI53WUjLnlhJCdwRrlISuAdqrwWFE2XeqPyXITiMXnRRhrzmeaWu
+        XivG2/SUuTSzf3nRh4nEArOq/WWsZXK2PiWy7VwQ0A27tp5fTRGO9stXgU+2bxli
+        jplx6ITF3e2iJJVRwd+uqy8sR2dlhXlD7jJapc03eDZgRroaWPZxuYJQXqK1pRjv
+        nucFxPbfhj1hisML6lloe2wlTAuTPFBlAetPbUm5cI4UU+y0RKiIPFVZ+H6Cs2Ts
+        OhDrg==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3s4y6jwrm6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Aug 2023 09:14:50 -0500 (CDT)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Fri, 4 Aug
+ 2023 15:14:49 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.30 via Frontend Transport; Fri, 4 Aug 2023 15:14:49 +0100
+Received: from EDIN4L06LR3.ad.cirrus.com (EDIN4L06LR3.ad.cirrus.com [198.61.64.107])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CB35515B6;
+        Fri,  4 Aug 2023 14:14:48 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <brendan.higgins@linux.dev>, <davidgow@google.com>
+CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH] kunit: Replace fixed-size log with dynamically-extending buffer
+Date:   Fri, 4 Aug 2023 15:14:46 +0100
+Message-ID: <20230804141446.21068-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH3PR12MB7667:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9740c7dc-2bb6-4ccc-0ad4-08db94f4cc7d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: McxDhLcvl3cZqZO1KcM7wnBLIF2ZiGZLDcAVHr859B+Xn1J7lBEP+iq4nxzIWpnkzS2iAT9GJYZol0YU36TPjpR3DszoMOsKwR/RLOnTdLPN613JJU2Wr0xAsblkdb10n4DhYshVTKkNNcip6xCjsCg6H9McB0bv5XVu4iDyYLR1hZr7xWU/youT31kHNipQqcRmcdQAv8Vh0iiV9mhNCU63oQjd9PXKdm6Wyq7InWuMW1H+9hZMgd1IUEdJj6v7ado1tuUOVVmwoxVcWdqYjq7MZW+OJcb/GM3W+0rfTu2UTeNs91CU2/2zCpuZfs2widA98PaqCE8Y7gMTFT41i82VRrkZutgYk5tnhIDEuALb31cPHG5GMRd7GnSlToiGYYAjmI5DsyjdPdr8aOWmRzVqv2EVATsE448yQIuTJzYNc8NlDbCzsRGgjWb26dLDqOLo1eSP/IJeqLKchJEnUPx4P4M86WND9d86HwBHHVsUl/qcSFiclVrWQnYdl884kMILvxqFuKNCAXhgqOKyeAqfDQnHh0boBXCvNxRAuN6ZcOky2bIf23nfRqh9aDdO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(376002)(346002)(366004)(1800799003)(186006)(451199021)(2906002)(2616005)(86362001)(36756003)(38100700002)(41300700001)(6486002)(6512007)(316002)(66476007)(6916009)(4326008)(66946007)(66556008)(26005)(6506007)(53546011)(5660300002)(478600001)(7416002)(8676002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rWGMS8EcZc0qcjzhpvCUB4wX0ZgCwqXX+PHWemxgF35A+Evb94iNdtnXrhPn?=
- =?us-ascii?Q?My4mThLQlP1hcIwSt26wUV70rdmvn1BsLvuMkCwR4XOlX3PJ6AuE5Iwwou2M?=
- =?us-ascii?Q?HIpbVZghFaK5PMuGEh0omQfHYHmttfj/IIxRx5yQYxMzB41W1rKXD+3evKi+?=
- =?us-ascii?Q?5BEwJffbuMEm7FJeliQf7hdlhqF9/LwYclbgfL8ksdSr4AFxCPlsY4ApDcYS?=
- =?us-ascii?Q?g56PMox3nKuivHySsjvL3z1DN9rsZ+sIhJKIsHLP6VbQvajPuy5nierCRNOO?=
- =?us-ascii?Q?lGA5L1et49RV5lgjnPQuRk8V+svDF7TsvZY4oCRhsjw6bheuOCyIQWeNk8sN?=
- =?us-ascii?Q?ocVs0qTomqsdfqmdll8oMMzlc5tWV28f48dJtBHWEFY63fpLmRlblHnmuVpA?=
- =?us-ascii?Q?nBPFy3qgsv0F7CZM1+f7kJ36fl8WiIOd7jI8pAkdcvAe0H0o+BBV+8JBCMwd?=
- =?us-ascii?Q?EHf71V/OBzNXDwXNsvweHmFZYPbWe5j4w4Amf8WBiHK9SBUqS4P9HaWRuy3p?=
- =?us-ascii?Q?fxeKFyQt9If6PfLDvrWGtyR6DgXmJv0N/mO3VkDI2kL/xxQB/4xsCtvkTRG6?=
- =?us-ascii?Q?CHTON8H/cqGVIrVyY/P1xUUD5JT2AlHMgT8+pNlb58/7zTG4QuVUlK78xUD+?=
- =?us-ascii?Q?0rLX8RuaJ8pVQyYJcEh2c19CdMGdV/wIyljh2h66tQEyIzuxwciKjs9/rO6S?=
- =?us-ascii?Q?gNq0k9byadXIULb5/w7zUNahlzD9czxzwnjKyNHVeDgrxeMVe/QSnWCb9C2c?=
- =?us-ascii?Q?L6j7epGZDKshTFBqAdO+wNbhQQWSwp0QXKlfUERM6/BWEq6djPFwE3fvYARF?=
- =?us-ascii?Q?Z1Wjtnz5nUuxLPJCUc5ZZf9g1X1hCRTuhY3Y90JJguJYb+RIsAcix+t/GTyW?=
- =?us-ascii?Q?GWCRU2X5xXUpFbePjfPNYXfnhAo6fX93dxeRlQ87hDUE+eX/sqZCfike45Hq?=
- =?us-ascii?Q?L09aiW9I/BPJXW2yn79Tvf77KDncIpOX9eGujr1TCtgfcreE/2AdYqv72tK7?=
- =?us-ascii?Q?hu6nCI6aC8NWAdeY/gHZ9wsmzMBvhFelfdAaxsrbFsMMQP0KnoS93YGjeJfv?=
- =?us-ascii?Q?vmJGcThvfbjx1f3QQgNug05vf6OFcCMIrRiJc5HCYBd7UQZlXO2rHXef/Cgj?=
- =?us-ascii?Q?KIBrxSAgvzBvgwFWh7oG8dyd2ghJWqmvo4T3+apNl2LBekZh+kk61qpaGA0B?=
- =?us-ascii?Q?5enyGE9oqby4hP28s4wHzKN+daP5RhX5zGiABsj5WL/RLgBv4Mx1LGh6HZU2?=
- =?us-ascii?Q?Ei9pPrHgYxpRCNeyyOUtyA3Ny6Wdp6tpWk0Vg0qO5ELJvfOs7FcH60ieL5nC?=
- =?us-ascii?Q?Ono6sctgkirpZByiapyPwYWqhkDsyHYf9SSv5PcLMZG+9p7JUt+AdZQWtc3Z?=
- =?us-ascii?Q?y0yg6WNSHd2P3cNHwvwDmuwnghVpCf17wxVIODUfsE6Bho0Jac2RFgZuSKiu?=
- =?us-ascii?Q?xNFB6xfY9gO7R/8G58Ow4M7l1PWO/uF7V91iPBHU15L02P0m+by0krPgNCg8?=
- =?us-ascii?Q?874Ws3mR6Cz4oiYZtHFyVqDu7P8Isw0VnZGAa6xtntTgsYBRPuKbE7pvL8Jr?=
- =?us-ascii?Q?YXWzRlz+ydxLKISgUKTjiMuMdSHEoStFSGHnnNGU?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9740c7dc-2bb6-4ccc-0ad4-08db94f4cc7d
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2023 14:12:12.8570
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9PVJ3aSfX0XhxZA9p9RJE2peCJm+MoWWdSXEuip4ja1pDn2Kct2ueYSvPcXS9E9h
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7667
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: jG111MwDC_gKWw1U_lx62uMCzxJU4Wt-
+X-Proofpoint-ORIG-GUID: jG111MwDC_gKWw1U_lx62uMCzxJU4Wt-
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 04, 2023 at 09:59:11AM +0800, Baolu Lu wrote:
-> On 2023/8/3 22:31, Yi Liu wrote:
-> > Under nested IOMMU translation, userspace owns the stage-1 translation
-> > table (e.g. the stage-1 page table of Intel VT-d or the context table
-> > of ARM SMMUv3, and etc.). Stage-1 translation tables are vendor specific,
-> > and need to be compatiable with the underlying IOMMU hardware. Hence,
-> 
->                  compatible
-> 
-> > userspace should know the IOMMU hardware capability before creating and
-> > configuring the stage-1 translation table to kernel.
-> > 
-> > This adds IOMMU_GET_HW_INFO ioctl to query the IOMMU hardware information
-> > (a.k.a capability) for a given device. The returned data is vendor specific,
-> > userspace needs to decode it with the structure mapped by the @out_data_type
-> > field.
-> > 
-> > As only physical devices have IOMMU hardware, so this will return error
-> > if the given device is not a physical device.
-> > 
-> > Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> > Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> > ---
-> >   drivers/iommu/iommufd/main.c | 79 ++++++++++++++++++++++++++++++++++++
-> >   include/uapi/linux/iommufd.h | 36 ++++++++++++++++
-> >   2 files changed, 115 insertions(+)
-> > 
-> > diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-> > index 94c498b8fdf6..a0302bcaa97c 100644
-> > --- a/drivers/iommu/iommufd/main.c
-> > +++ b/drivers/iommu/iommufd/main.c
-> > @@ -17,6 +17,7 @@
-> >   #include <linux/bug.h>
-> >   #include <uapi/linux/iommufd.h>
-> >   #include <linux/iommufd.h>
-> > +#include "../iommu-priv.h"
-> >   #include "io_pagetable.h"
-> >   #include "iommufd_private.h"
-> > @@ -177,6 +178,81 @@ static int iommufd_destroy(struct iommufd_ucmd *ucmd)
-> >   	return 0;
-> >   }
-> > +static int iommufd_zero_fill_user(void __user *ptr, size_t bytes)
-> > +{
-> > +	int index = 0;
-> > +
-> > +	for (; index < bytes; index++) {
-> > +		if (put_user(0, (uint8_t __user *)(ptr + index)))
-> > +			return -EFAULT;
-> > +	}
-> > +	return 0;
-> > +}
-> > +
-> > +static int iommufd_get_hw_info(struct iommufd_ucmd *ucmd)
-> > +{
-> > +	u32 hw_info_type = IOMMU_HW_INFO_TYPE_NONE;
-> > +	struct iommu_hw_info *cmd = ucmd->cmd;
-> > +	unsigned int length = 0, data_len;
-> > +	struct iommufd_device *idev;
-> > +	const struct iommu_ops *ops;
-> > +	void __user *user_ptr;
-> > +	void *data = NULL;
-> > +	int rc = 0;
-> > +
-> > +	if (cmd->flags || cmd->__reserved || !cmd->data_len)
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	idev = iommufd_get_device(ucmd, cmd->dev_id);
-> > +	if (IS_ERR(idev))
-> > +		return PTR_ERR(idev);
-> > +
-> > +	user_ptr = u64_to_user_ptr(cmd->data_ptr);
-> > +
-> > +	ops = dev_iommu_ops(idev->dev);
-> > +	if (!ops->hw_info)
-> > +		goto done;
-> > +
-> > +	data = ops->hw_info(idev->dev, &data_len, &hw_info_type);
-> > +	if (IS_ERR(data)) {
-> > +		rc = PTR_ERR(data);
-> > +		goto out_err;
-> 
-> Can kfree() handle a ERR_PTR input? I am afraid not,
-> 
-> /**
->  * kfree - free previously allocated memory
->  * @object: pointer returned by kmalloc() or kmem_cache_alloc()
->  *
->  * If @object is NULL, no operation is performed.
->  */
-> void kfree(const void *object)
-> {
->         struct folio *folio;
->         struct slab *slab;
->         struct kmem_cache *s;
-> 
->         trace_kfree(_RET_IP_, object);
-> 
->         if (unlikely(ZERO_OR_NULL_PTR(object)))
->                 return;
-> 
-> So, perhaps we should add
-> 
-> 	data = NULL;
-> 
-> before
-> 	goto out_err;
+Re-implement the log buffer as a list of buffer fragments that can
+be extended as the size of the log info grows.
 
-No, use more labels.
+When using parameterization the test case can run many times and create
+a large amount of log. It's not really practical to keep increasing the
+size of the fixed buffer every time a test needs more space. And a big
+fixed buffer wastes memory.
 
-> > +	}
-> > +
-> > +	/* driver has hw_info callback should have a unique hw_info_type */
-> > +	if (WARN_ON_ONCE(hw_info_type == IOMMU_HW_INFO_TYPE_NONE)) {
-> > +		rc = -ENODEV;
-> > +		goto out_err;
-> > +	}
-> > +
-> > +	length = min(cmd->data_len, data_len);
-> > +	if (copy_to_user(user_ptr, data, length)) {
-> > +		rc = -EFAULT;
-> > +		goto out_err;
-> > +	}
-> > +
-> > +done:
+The original char *log pointer is replaced by a pointer to a list of
+struct kunit_log_frag, each containing a fixed-size buffer.
 
-No label here, put it in a if {}
+kunit_log_append() now attempts to append to that last kunit_log_frag in
+the list. If there isn't enough space it will append a new kunit_log_frag
+to the list. This simple implementation does not attempt to completely
+fill the buffer in every kunit_log_frag.
 
-> > +	/*
-> > +	 * Zero the trailing bytes if the user buffer is bigger than the
-> > +	 * data size kernel actually has.
-> > +	 */
-> > +	if (length < cmd->data_len) {
-> > +		rc = iommufd_zero_fill_user(user_ptr + length,
-> > +					    cmd->data_len - length);
-> > +		if (rc)
-> > +			goto out_err;
-> > +	}
-> > +
-> > +	cmd->data_len = length;
-> > +	cmd->out_data_type = hw_info_type;
-> > +	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-> > +
-> > +out_err:
+The 'log' member of kunit_suite, kunit_test_case and kunit_suite must be a
+pointer because the API of kunit_log() requires that is the same type in
+all  three structs. As kunit.log is a pointer to the 'log' of the current
+kunit_case, it must be a pointer in the other two structs.
 
-err_free:
-> > +	kfree(data);
+The existing kunit-test.c log tests have been updated for the new log
+buffer and a new kunit_log_extend_test() case to test extending the buffer.
 
-err_put:
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+---
+ include/kunit/test.h   | 25 +++++++++----
+ lib/kunit/debugfs.c    | 65 ++++++++++++++++++++++++++-------
+ lib/kunit/kunit-test.c | 82 +++++++++++++++++++++++++++++++++++++-----
+ lib/kunit/test.c       | 51 ++++++++++++++++----------
+ 4 files changed, 177 insertions(+), 46 deletions(-)
 
-> > +	iommufd_put_object(&idev->obj);
-> > +	return rc;
-> > +}
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 011e0d6bb506..907b30401669 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -33,8 +33,8 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+ 
+ struct kunit;
+ 
+-/* Size of log associated with test. */
+-#define KUNIT_LOG_SIZE 2048
++/* Initial size of log associated with test. */
++#define KUNIT_DEFAULT_LOG_SIZE 500
+ 
+ /* Maximum size of parameter description string. */
+ #define KUNIT_PARAM_DESC_SIZE 128
+@@ -85,6 +85,11 @@ struct kunit_attributes {
+ 	enum kunit_speed speed;
+ };
+ 
++struct kunit_log_frag {
++	struct list_head list;
++	char buf[KUNIT_DEFAULT_LOG_SIZE];
++};
++
+ /**
+  * struct kunit_case - represents an individual test case.
+  *
+@@ -132,7 +137,7 @@ struct kunit_case {
+ 	/* private: internal use only. */
+ 	enum kunit_status status;
+ 	char *module_name;
+-	char *log;
++	struct list_head *log;
+ };
+ 
+ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
+@@ -252,7 +257,7 @@ struct kunit_suite {
+ 	/* private: internal use only */
+ 	char status_comment[KUNIT_STATUS_COMMENT_SIZE];
+ 	struct dentry *debugfs;
+-	char *log;
++	struct list_head *log;
+ 	int suite_init_err;
+ };
+ 
+@@ -272,7 +277,7 @@ struct kunit {
+ 
+ 	/* private: internal use only. */
+ 	const char *name; /* Read only after initialization! */
+-	char *log; /* Points at case log after initialization */
++	struct list_head *log; /* Points at case log after initialization */
+ 	struct kunit_try_catch try_catch;
+ 	/* param_value is the current parameter value for a test case. */
+ 	const void *param_value;
+@@ -304,7 +309,7 @@ static inline void kunit_set_failure(struct kunit *test)
+ 
+ bool kunit_enabled(void);
+ 
+-void kunit_init_test(struct kunit *test, const char *name, char *log);
++void kunit_init_test(struct kunit *test, const char *name, struct list_head *log);
+ 
+ int kunit_run_tests(struct kunit_suite *suite);
+ 
+@@ -317,6 +322,12 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
+ 
+ void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites);
+ 
++static inline void kunit_init_log_frag(struct kunit_log_frag *frag)
++{
++	INIT_LIST_HEAD(&frag->list);
++	frag->buf[0] = '\0';
++}
++
+ #if IS_BUILTIN(CONFIG_KUNIT)
+ int kunit_run_all_tests(void);
+ #else
+@@ -451,7 +462,7 @@ static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp
+ 
+ void kunit_cleanup(struct kunit *test);
+ 
+-void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
++void __printf(2, 3) kunit_log_append(struct list_head *log, const char *fmt, ...);
+ 
+ /**
+  * kunit_mark_skipped() - Marks @test_or_suite as skipped
+diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+index 22c5c496a68f..a26b6d31bd2f 100644
+--- a/lib/kunit/debugfs.c
++++ b/lib/kunit/debugfs.c
+@@ -5,6 +5,7 @@
+  */
+ 
+ #include <linux/debugfs.h>
++#include <linux/list.h>
+ #include <linux/module.h>
+ 
+ #include <kunit/test.h>
+@@ -37,14 +38,15 @@ void kunit_debugfs_init(void)
+ 		debugfs_rootdir = debugfs_create_dir(KUNIT_DEBUGFS_ROOT, NULL);
+ }
+ 
+-static void debugfs_print_result(struct seq_file *seq,
+-				 struct kunit_suite *suite,
+-				 struct kunit_case *test_case)
++static void debugfs_print_log(struct seq_file *seq, const struct list_head *log)
+ {
+-	if (!test_case || !test_case->log)
++	struct kunit_log_frag *frag;
++
++	if (!log)
+ 		return;
+ 
+-	seq_printf(seq, "%s", test_case->log);
++	list_for_each_entry(frag, log, list)
++		seq_puts(seq, frag->buf);
+ }
+ 
+ /*
+@@ -69,10 +71,9 @@ static int debugfs_print_results(struct seq_file *seq, void *v)
+ 	seq_printf(seq, KUNIT_SUBTEST_INDENT "1..%zd\n", kunit_suite_num_test_cases(suite));
+ 
+ 	kunit_suite_for_each_test_case(suite, test_case)
+-		debugfs_print_result(seq, suite, test_case);
++		debugfs_print_log(seq, test_case->log);
+ 
+-	if (suite->log)
+-		seq_printf(seq, "%s", suite->log);
++	debugfs_print_log(seq, suite->log);
+ 
+ 	seq_printf(seq, "%s %d %s\n",
+ 		   kunit_status_to_ok_not_ok(success), 1, suite->name);
+@@ -100,14 +101,53 @@ static const struct file_operations debugfs_results_fops = {
+ 	.release = debugfs_release,
+ };
+ 
++static struct list_head *kunit_debugfs_alloc_log(void)
++{
++	struct list_head *log;
++	struct kunit_log_frag *frag;
++
++	log = kzalloc(sizeof(*log), GFP_KERNEL);
++	if (!log)
++		return NULL;
++
++	INIT_LIST_HEAD(log);
++
++	frag = kmalloc(sizeof(*frag), GFP_KERNEL);
++	if (!frag) {
++		kfree(log);
++		return NULL;
++	}
++
++	kunit_init_log_frag(frag);
++	list_add_tail(&frag->list, log);
++
++	return log;
++}
++
++static void kunit_debugfs_free_log(struct list_head *log)
++{
++	struct kunit_log_frag *frag, *n;
++
++	if (!log)
++		return;
++
++	list_for_each_entry_safe(frag, n, log, list) {
++		list_del(&frag->list);
++		kfree(frag);
++	}
++
++	kfree(log);
++}
++
+ void kunit_debugfs_create_suite(struct kunit_suite *suite)
+ {
+ 	struct kunit_case *test_case;
+ 
+ 	/* Allocate logs before creating debugfs representation. */
+-	suite->log = kzalloc(KUNIT_LOG_SIZE, GFP_KERNEL);
++	suite->log = kunit_debugfs_alloc_log();
++
+ 	kunit_suite_for_each_test_case(suite, test_case)
+-		test_case->log = kzalloc(KUNIT_LOG_SIZE, GFP_KERNEL);
++		test_case->log = kunit_debugfs_alloc_log();
+ 
+ 	suite->debugfs = debugfs_create_dir(suite->name, debugfs_rootdir);
+ 
+@@ -121,7 +161,8 @@ void kunit_debugfs_destroy_suite(struct kunit_suite *suite)
+ 	struct kunit_case *test_case;
+ 
+ 	debugfs_remove_recursive(suite->debugfs);
+-	kfree(suite->log);
++	kunit_debugfs_free_log(suite->log);
++
+ 	kunit_suite_for_each_test_case(suite, test_case)
+-		kfree(test_case->log);
++		kunit_debugfs_free_log(test_case->log);
+ }
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index 83d8e90ca7a2..abf659c6ded4 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -533,9 +533,16 @@ static struct kunit_suite kunit_resource_test_suite = {
+ static void kunit_log_test(struct kunit *test)
+ {
+ 	struct kunit_suite suite;
++	struct kunit_log_frag *frag;
+ 
+-	suite.log = kunit_kzalloc(test, KUNIT_LOG_SIZE, GFP_KERNEL);
++	suite.log = kunit_kzalloc(test, sizeof(*suite.log), GFP_KERNEL);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
++	INIT_LIST_HEAD(suite.log);
++	frag = kunit_kmalloc(test, sizeof(*frag), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, frag);
++	kunit_init_log_frag(frag);
++	KUNIT_ASSERT_EQ(test, frag->buf[0], '\0');
++	list_add_tail(&frag->list, suite.log);
+ 
+ 	kunit_log(KERN_INFO, test, "put this in log.");
+ 	kunit_log(KERN_INFO, test, "this too.");
+@@ -543,14 +550,17 @@ static void kunit_log_test(struct kunit *test)
+ 	kunit_log(KERN_INFO, &suite, "along with this.");
+ 
+ #ifdef CONFIG_KUNIT_DEBUGFS
++	frag = list_first_entry(test->log, struct kunit_log_frag, list);
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+-				     strstr(test->log, "put this in log."));
++				     strstr(frag->buf, "put this in log."));
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+-				     strstr(test->log, "this too."));
++				     strstr(frag->buf, "this too."));
++
++	frag = list_first_entry(suite.log, struct kunit_log_frag, list);
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+-				     strstr(suite.log, "add to suite log."));
++				     strstr(frag->buf, "add to suite log."));
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+-				     strstr(suite.log, "along with this."));
++				     strstr(frag->buf, "along with this."));
+ #else
+ 	KUNIT_EXPECT_NULL(test, test->log);
+ #endif
+@@ -558,19 +568,75 @@ static void kunit_log_test(struct kunit *test)
+ 
+ static void kunit_log_newline_test(struct kunit *test)
+ {
++	struct kunit_log_frag *frag;
++
+ 	kunit_info(test, "Add newline\n");
+ 	if (test->log) {
+-		KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add newline\n"),
+-			"Missing log line, full log:\n%s", test->log);
+-		KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\n\n"));
++		frag = list_first_entry(test->log, struct kunit_log_frag, list);
++		KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(frag->buf, "Add newline\n"),
++			"Missing log line, full log:\n%s", frag->buf);
++		KUNIT_EXPECT_NULL(test, strstr(frag->buf, "Add newline\n\n"));
+ 	} else {
+ 		kunit_skip(test, "only useful when debugfs is enabled");
+ 	}
+ }
+ 
++static void kunit_log_extend_test(struct kunit *test)
++{
++#ifdef CONFIG_KUNIT_DEBUGFS
++	struct kunit_suite suite;
++	struct kunit_log_frag *frag;
++	char *p, *pn;
++	size_t len;
++	int i, q;
++
++	suite.log = kunit_kzalloc(test, sizeof(*suite.log), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
++	INIT_LIST_HEAD(suite.log);
++	frag = kunit_kmalloc(test, sizeof(*frag), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, frag);
++	kunit_init_log_frag(frag);
++	KUNIT_ASSERT_EQ(test, frag->buf[0], '\0');
++	list_add_tail(&frag->list, suite.log);
++
++	for (i = 0; i < KUNIT_DEFAULT_LOG_SIZE; ++i) {
++		kunit_log(KERN_INFO, &suite,
++			  "The quick brown fox jumps over the lazy penguin %d\n", i);
++	}
++
++	/* There must be more than one buffer fragment now */
++	KUNIT_ASSERT_FALSE(test, list_is_singular(suite.log));
++
++	/* Copy all the data into a contiguous string for easier parsing */
++	len = 0;
++	list_for_each_entry(frag, suite.log, list)
++		len += strlen(frag->buf);
++
++	p = kunit_kmalloc(test, len + 1, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p);
++
++	list_for_each_entry(frag, suite.log, list)
++		strlcat(p, frag->buf, len);
++
++	i = 0;
++	while ((pn = strchr(p, '\n')) != NULL) {
++		*pn = '\0';
++		KUNIT_ASSERT_EQ(test, sscanf(p,
++					     "The quick brown fox jumps over the lazy penguin %d\n",
++					     &q), 1);
++		KUNIT_ASSERT_EQ(test, q, i);
++		p = pn + 1;
++		++i;
++	}
++#else
++	kunit_skip(test, "only useful when debugfs is enabled");
++#endif
++}
++
+ static struct kunit_case kunit_log_test_cases[] = {
+ 	KUNIT_CASE(kunit_log_test),
+ 	KUNIT_CASE(kunit_log_newline_test),
++	KUNIT_CASE(kunit_log_extend_test),
+ 	{}
+ };
+ 
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index cb9797fa6303..f90e395b3656 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -11,6 +11,7 @@
+ #include <kunit/test-bug.h>
+ #include <kunit/attributes.h>
+ #include <linux/kernel.h>
++#include <linux/list.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+ #include <linux/panic.h>
+@@ -114,46 +115,54 @@ static void kunit_print_test_stats(struct kunit *test,
+  * already present.
+  * @log: The log to add the newline to.
+  */
+-static void kunit_log_newline(char *log)
++static void kunit_log_newline(struct kunit_log_frag *frag)
+ {
+ 	int log_len, len_left;
+ 
+-	log_len = strlen(log);
+-	len_left = KUNIT_LOG_SIZE - log_len - 1;
++	log_len = strlen(frag->buf);
++	len_left = sizeof(frag->buf) - log_len - 1;
+ 
+-	if (log_len > 0 && log[log_len - 1] != '\n')
+-		strncat(log, "\n", len_left);
++	if (log_len > 0 && frag->buf[log_len - 1] != '\n')
++		strncat(frag->buf, "\n", len_left);
+ }
+ 
+-/*
+- * Append formatted message to log, size of which is limited to
+- * KUNIT_LOG_SIZE bytes (including null terminating byte).
+- */
+-void kunit_log_append(char *log, const char *fmt, ...)
++/* Append formatted message to log, extending the log buffer if necessary. */
++void kunit_log_append(struct list_head *log, const char *fmt, ...)
+ {
+ 	va_list args;
++	struct kunit_log_frag *frag;
+ 	int len, log_len, len_left;
+ 
+ 	if (!log)
+ 		return;
+ 
+-	log_len = strlen(log);
+-	len_left = KUNIT_LOG_SIZE - log_len - 1;
+-	if (len_left <= 0)
+-		return;
++	frag = list_last_entry(log, struct kunit_log_frag, list);
++	log_len = strlen(frag->buf);
++	len_left = sizeof(frag->buf) - log_len - 1;
+ 
+ 	/* Evaluate length of line to add to log */
+ 	va_start(args, fmt);
+ 	len = vsnprintf(NULL, 0, fmt, args) + 1;
+ 	va_end(args);
+ 
++	if (len > len_left) {
++		frag = kmalloc(sizeof(*frag), GFP_KERNEL);
++		if (!frag)
++			return;
++
++		kunit_init_log_frag(frag);
++		list_add_tail(&frag->list, log);
++		len_left = sizeof(frag->buf) - 1;
++		log_len = 0;
++	}
++
+ 	/* Print formatted line to the log */
+ 	va_start(args, fmt);
+-	vsnprintf(log + log_len, min(len, len_left), fmt, args);
++	vsnprintf(frag->buf + log_len, min(len, len_left), fmt, args);
+ 	va_end(args);
+ 
+ 	/* Add newline to end of log if not already present. */
+-	kunit_log_newline(log);
++	kunit_log_newline(frag);
+ }
+ EXPORT_SYMBOL_GPL(kunit_log_append);
+ 
+@@ -359,14 +368,18 @@ void __kunit_do_failed_assertion(struct kunit *test,
+ }
+ EXPORT_SYMBOL_GPL(__kunit_do_failed_assertion);
+ 
+-void kunit_init_test(struct kunit *test, const char *name, char *log)
++void kunit_init_test(struct kunit *test, const char *name, struct list_head *log)
+ {
+ 	spin_lock_init(&test->lock);
+ 	INIT_LIST_HEAD(&test->resources);
+ 	test->name = name;
+ 	test->log = log;
+-	if (test->log)
+-		test->log[0] = '\0';
++	if (test->log) {
++		struct kunit_log_frag *frag = list_first_entry(test->log,
++							       struct kunit_log_frag,
++							       list);
++		frag->buf[0] = '\0';
++	}
+ 	test->status = KUNIT_SUCCESS;
+ 	test->status_comment[0] = '\0';
+ }
+-- 
+2.30.2
 
-Jason
