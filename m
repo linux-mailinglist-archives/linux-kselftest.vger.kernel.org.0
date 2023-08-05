@@ -2,136 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BC2770E09
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 08:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17752770E7C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 09:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjHEGNZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Aug 2023 02:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S229494AbjHEHiU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 5 Aug 2023 03:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjHEGNY (ORCPT
+        with ESMTP id S229379AbjHEHiT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Aug 2023 02:13:24 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288B64ED0;
-        Fri,  4 Aug 2023 23:13:22 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1691215993ty0dxrkb
-Received: from linux-lab-host.localdomain ( [116.30.131.233])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 05 Aug 2023 14:13:12 +0800 (CST)
-X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: VudjVnMJxE6y0HQdOAnIPW2Xm5and1bBaT6pX9ZCs1jzBV+VotcyCU7xHF8c2
-        FJ8c1IS734nq3CP1BRwRLg4LfZfUimvLvF/xBDGhTUxe4pd1bybAdcSavoW54CMSSrHpsB2
-        mANBiu2rVvVdMcY7IJfVl5cYBAoG8Gq6cpaAnTWvk0cnl9r4JKMabJrlzxI/WvlLkuUr9Hs
-        6aM7b/2PH9u/TWGLbkDATDLliZpiME9l9NAccP4y+wcqoMokBowHc7k4HqwryQJ4Gg5ik6t
-        ay4C4v5/10U4XvHXebFaLKXL3Vyf5F7Jryf18X3+YtN6z+6mgbkmJznf//wgfner21xQVko
-        iKOYjLmMArC5jIDUZp0t3h5fekE5sH+9UqD6m2t6QmLjrpo3Ml8w+rF9JlPTcb6kqgFxxlt
-        KaQ2z2e4dmM=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9091032993655144416
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 3/3] selftests/nolibc: fix up O= option support
-Date:   Sat,  5 Aug 2023 14:13:11 +0800
-Message-Id: <06d96bd81fe812a9718098a383678ad3beba98b1.1691215074.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1691215074.git.falcon@tinylab.org>
-References: <cover.1691215074.git.falcon@tinylab.org>
+        Sat, 5 Aug 2023 03:38:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8AA4ECB;
+        Sat,  5 Aug 2023 00:38:18 -0700 (PDT)
+Received: from localhost.localdomain (unknown [59.103.216.172])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8F7D16607185;
+        Sat,  5 Aug 2023 08:38:14 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1691221096;
+        bh=T1gmHJSmBZ1fsUMOMsX2TjrN4WmMi/RdeZt+BUdWBE4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mreXjLAsnKYryATtZ8P1ASgsHotjTcLRyKzRdkGE00wN3/dkfyl+3tvQGUs56Mfvc
+         VLC6Qpv0dvdXI2fXXpqvC0fZSveMq6zyKreNgexdvPo53zfVr2Vc0zGlVPcFNLsGee
+         JM38/VUtvZttrbKdTof33pwMhmhmaOVhHyqfKoxfxCS683g48OCjbnjdHK8+r7u475
+         jIAFzk1iSHeYXHrCKcFk9umHtQtWwileMpQyl84mtm6OUwQq46XeoG76/9kgjeSduy
+         nLaTSWuOj5DqVer2G6GzvinziQsVOOfiXKFtKKV8OaIYAKa/UhlaNI0ynKggPKitlN
+         0ZONSjcbX02dg==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/6] selftests: capabilities: remove duplicate unneeded defines
+Date:   Sat,  5 Aug 2023 12:37:59 +0500
+Message-Id: <20230805073809.1753462-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-To avoid pollute the source code tree and avoid mrproper for every
-architecture switch, the O= argument must be supported.
+These duplicate defines should automatically be picked up from kernel
+headers. Use KHDR_INCLUDES to add kernel header files.
 
-Both IMAGE and .config are from the building directory, let's use
-objtree instead of srctree for them.
-
-If no O= option specified, means building kernel in source code tree,
-objtree should be srctree in such case.
-
-To support relative path, as suggested by Thomas, $(COMMAND_O) is used
-to pass the O=$(ABSOLUTE_O) to the $(MAKE) commands.
-
-Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/lkml/ZK0AB1OXH1s2xYsh@1wt.eu/
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/lkml/058a264d-45bd-4f1f-8af3-56ed337b3251@t-8ch.de/
-Link: https://lore.kernel.org/lkml/500504f6-fed1-45a4-a518-4631a6f3e463@t-8ch.de/
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/nolibc/Makefile | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ tools/testing/selftests/capabilities/Makefile       | 2 +-
+ tools/testing/selftests/capabilities/test_execve.c  | 8 --------
+ tools/testing/selftests/capabilities/validate_cap.c | 8 --------
+ 3 files changed, 1 insertion(+), 17 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 51fef5e6a152..20797ba5d393 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -9,6 +9,9 @@ ifeq ($(srctree),)
- srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
- endif
+diff --git a/tools/testing/selftests/capabilities/Makefile b/tools/testing/selftests/capabilities/Makefile
+index 6e9d98d457d5b..411ac098308f1 100644
+--- a/tools/testing/selftests/capabilities/Makefile
++++ b/tools/testing/selftests/capabilities/Makefile
+@@ -2,7 +2,7 @@
+ TEST_GEN_FILES := validate_cap
+ TEST_GEN_PROGS := test_execve
  
-+# add objtree for O= option, required by IMAGE and .config
-+objtree ?= $(srctree)
-+
- ifeq ($(ARCH),)
- include $(srctree)/scripts/subarch.include
- ARCH = $(SUBARCH)
-@@ -52,7 +55,7 @@ IMAGE_ppc64le    = arch/powerpc/boot/zImage
- IMAGE_riscv      = arch/riscv/boot/Image
- IMAGE_s390       = arch/s390/boot/bzImage
- IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
--IMAGE            = $(IMAGE_$(XARCH))
-+IMAGE            = $(objtree)/$(IMAGE_$(XARCH))
- IMAGE_NAME       = $(notdir $(IMAGE))
+-CFLAGS += -O2 -g -std=gnu99 -Wall
++CFLAGS += -O2 -g -std=gnu99 -Wall $(KHDR_INCLUDES)
+ LDLIBS += -lcap-ng -lrt -ldl
  
- # CROSS_COMPILE: cross toolchain prefix by architecture
-@@ -173,7 +176,7 @@ sysroot: sysroot/$(ARCH)/include
- sysroot/$(ARCH)/include:
- 	$(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
- 	$(QUIET_MKDIR)mkdir -p sysroot
--	$(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
-+	$(Q)$(MAKE) -C ../../../include/nolibc $(COMMAND_O) ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
- 	$(Q)mv sysroot/sysroot sysroot/$(ARCH)
+ include ../lib.mk
+diff --git a/tools/testing/selftests/capabilities/test_execve.c b/tools/testing/selftests/capabilities/test_execve.c
+index df0ef02b40367..e3a352b020a79 100644
+--- a/tools/testing/selftests/capabilities/test_execve.c
++++ b/tools/testing/selftests/capabilities/test_execve.c
+@@ -20,14 +20,6 @@
  
- ifneq ($(NOLIBC_SYSROOT),0)
-@@ -210,19 +213,19 @@ initramfs: nolibc-test
- 	$(Q)cp nolibc-test initramfs/init
+ #include "../kselftest.h"
  
- defconfig:
--	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-+	$(Q)$(MAKE) -C $(srctree) $(COMMAND_O) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+-#ifndef PR_CAP_AMBIENT
+-#define PR_CAP_AMBIENT			47
+-# define PR_CAP_AMBIENT_IS_SET		1
+-# define PR_CAP_AMBIENT_RAISE		2
+-# define PR_CAP_AMBIENT_LOWER		3
+-# define PR_CAP_AMBIENT_CLEAR_ALL	4
+-#endif
+-
+ static int nerrs;
+ static pid_t mpid;	/*  main() pid is used to avoid duplicate test counts */
  
- kernel: initramfs
--	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
-+	$(Q)$(MAKE) -C $(srctree) $(COMMAND_O) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
+diff --git a/tools/testing/selftests/capabilities/validate_cap.c b/tools/testing/selftests/capabilities/validate_cap.c
+index cdfc94268fe6e..60b4e7b716a75 100644
+--- a/tools/testing/selftests/capabilities/validate_cap.c
++++ b/tools/testing/selftests/capabilities/validate_cap.c
+@@ -9,14 +9,6 @@
  
- # run the tests after building the kernel
- run: kernel
--	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-+	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
+ #include "../kselftest.h"
  
- # re-run the tests from an existing kernel
- rerun:
--	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-+	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
- 
- # report with existing test log
+-#ifndef PR_CAP_AMBIENT
+-#define PR_CAP_AMBIENT			47
+-# define PR_CAP_AMBIENT_IS_SET		1
+-# define PR_CAP_AMBIENT_RAISE		2
+-# define PR_CAP_AMBIENT_LOWER		3
+-# define PR_CAP_AMBIENT_CLEAR_ALL	4
+-#endif
+-
+ #if __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 19)
+ # define HAVE_GETAUXVAL
+ #endif
 -- 
-2.25.1
+2.39.2
 
