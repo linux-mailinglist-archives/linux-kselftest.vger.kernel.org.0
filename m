@@ -2,84 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3C977122E
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 22:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F7B7712E0
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Aug 2023 00:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjHEUtC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Aug 2023 16:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
+        id S229609AbjHEWlg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 5 Aug 2023 18:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjHEUtB (ORCPT
+        with ESMTP id S229478AbjHEWlf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Aug 2023 16:49:01 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 577EAE78;
-        Sat,  5 Aug 2023 13:49:00 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 375Kmj8j007515;
-        Sat, 5 Aug 2023 22:48:45 +0200
-Date:   Sat, 5 Aug 2023 22:48:45 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, tanyuan@tinylab.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v6 8/8] selftests/nolibc: customize CROSS_COMPILE for
- 32/64-bit powerpc
-Message-ID: <20230805204845.GA7300@1wt.eu>
-References: <cover.1691259983.git.falcon@tinylab.org>
- <2c3ac4542621ddc4b2cab006ae8e3a7b709921f1.1691259983.git.falcon@tinylab.org>
+        Sat, 5 Aug 2023 18:41:35 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C4119B5;
+        Sat,  5 Aug 2023 15:41:34 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bbf8cb61aeso21419215ad.2;
+        Sat, 05 Aug 2023 15:41:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691275294; x=1691880094;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RdojjPd8jvPUy+VY2bdrww/YrOG4FByQTZ03QZtrm54=;
+        b=ozZ5l4FBOZxgf7mujZOAtnlb+SkNaxFvIjeBW6mDAZ5T3bifbXM/cMhHRKVjbkZ4NO
+         24Dlele9V4ytN3EVZjnD79Jp9Hkf7lW5YpSnnr1CUICs6YtrQxh+D7evr5/k15Fh3b2/
+         X3eAGU5mIsacQaDXBruJD0gdL8Mc/u8nAnFjaJIHgT1lQworaCPN5TG/PkJCv8y4bLAO
+         14YQwGJ0WhgZjqVzYzyppwA78o6rXU/lqTXUTKMENMiIjQVTYkMk9aBFbp3CcPzdgP6O
+         1Ietr4SjTwoc1QN+bSyAboKJq5fNHXFiW4+/bWHMDUVAqDXIbDcIOqMy3la436kU4NHh
+         RArw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691275294; x=1691880094;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RdojjPd8jvPUy+VY2bdrww/YrOG4FByQTZ03QZtrm54=;
+        b=V5wNSAlg9JiH82RIt9bK0fpLhhnb7QJpMJh7DvebYfa4T2txB3yz7r+hMqLm+DnEAQ
+         CRv+QHBGE6Sj1t/Y5DVOTi3dj3q4fFweHtivMO6JvVksiZssyxwALK/NUgKPYXBPsUnR
+         d5V/8vEjs5zTxPjmVq85nVnwfyctHQ+6NsNEB3+twmBmYPlkjUSLS0Rg6Mfu1xbNnsR8
+         gHIYXZId6TKzElggshRF9s+GWfsOGXqKg1m+sPZzT6g/lF5OiN/7IOGR7i/F3K+zbJlv
+         A0pkh+2m7F57uQQ1MCd3hly5I2dGYZcCgPoAmG24XlTVNbEmompJfocS53UVejiIddw0
+         9KxQ==
+X-Gm-Message-State: AOJu0Ywk5JAy7Yws/Bt/w1W2EnKZ0YybdkiaOQkJdVJd9MUzoVBawZrZ
+        s35D9ykPdavrpZmm8Wlh+l8=
+X-Google-Smtp-Source: AGHT+IEr3Ev54+ZX199Mfgcb1yPQS5UrLPN6X4H84L2cml1KstTYje3IxocoRhMgKtwZF3hk0VNjqg==
+X-Received: by 2002:a17:902:d48c:b0:1bc:1df2:4c07 with SMTP id c12-20020a170902d48c00b001bc1df24c07mr5554184plg.63.1691275293522;
+        Sat, 05 Aug 2023 15:41:33 -0700 (PDT)
+Received: from Osmten.. ([103.84.150.77])
+        by smtp.gmail.com with ESMTPSA id c8-20020a170903234800b001a6a6169d45sm3960358plh.168.2023.08.05.15.41.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Aug 2023 15:41:33 -0700 (PDT)
+From:   Osama Muhammad <osmtendev@gmail.com>
+To:     =shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Osama Muhammad <osmtendev@gmail.com>
+Subject: [PATCH] selftests: prctl: Add prctl test for PR_GET_NAME
+Date:   Sun,  6 Aug 2023 03:41:15 +0500
+Message-Id: <20230805224115.22540-1-osmtendev@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2c3ac4542621ddc4b2cab006ae8e3a7b709921f1.1691259983.git.falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Aug 06, 2023 at 02:47:09AM +0800, Zhangjin Wu wrote:
-> The little-endian powerpc64le compilers provided by Ubuntu and Fedora
-> are able to compile big endian kernel and big endian nolibc-test [1].
+This patch covers the testing of PR_GET_NAME by
+reading it's value from proc/self/task/pid/comm
+and matching it by the value returned by  PR_GET_NAME.
 
-FWIW I'm wondering why focusing on these ones which have a different
-naming from the other ones, when I think that most users rely on the
-ones maintained by Arnd there:
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+---
+ .../selftests/prctl/set-process-name.c        | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-   https://mirrors.edge.kernel.org/pub/tools/crosstool/
+diff --git a/tools/testing/selftests/prctl/set-process-name.c b/tools/testing/selftests/prctl/set-process-name.c
+index 3bc5e0e09..41f4b105d 100644
+--- a/tools/testing/selftests/prctl/set-process-name.c
++++ b/tools/testing/selftests/prctl/set-process-name.c
+@@ -47,6 +47,28 @@ int check_null_pointer(char *check_name)
+ 	return res;
+ }
+ 
++int check_name(void)
++{
++
++	int pid;
++
++	pid = getpid();
++	FILE *fptr;
++	char path[50] = {};
++	int j;
++
++	j = snprintf(path, 50, "/proc/self/task/%d/comm", pid);
++	fptr = fopen(path, "r");
++	char name[TASK_COMM_LEN] = {};
++	int res = prctl(PR_GET_NAME, name, NULL, NULL, NULL);
++	char output[TASK_COMM_LEN] = {};
++
++	fscanf(fptr, "%s", output);
++
++	return !strcmp(output, name);
++
++}
++
+ TEST(rename_process) {
+ 
+ 	EXPECT_GE(set_name(CHANGE_NAME), 0);
+@@ -57,6 +79,9 @@ TEST(rename_process) {
+ 
+ 	EXPECT_GE(set_name(CHANGE_NAME), 0);
+ 	EXPECT_LT(check_null_pointer(CHANGE_NAME), 0);
++
++	EXPECT_TRUE(check_name());
++
+ }
+ 
+ TEST_HARNESS_MAIN
+-- 
+2.34.1
 
-Yours is called powerpc64le while the one above is "powerpc64", it
-requires to make an exception for this one, I find this a bit odd.
-
-If someone wants to use their distro's cross toolchain, that's fine,
-but I think that it will depend on distros anyway and some may not
-even be provided (like loongarch) so I think it would make more sense
-to adopt the canonical naming from Arnd's toolchains above.
-
-It's not critical, but as you showed below, it makes building for ppc
-a little bit cumbersome: those "export" lines could be dropped when
-using the default names, and that's what we should document as the
-recommended way to test:
-
-> For example, it is able to build 64-bit nolibc-test with the big endian
-> powerpc64-linux-gcc crosstool from [2]:
-> 
->     $ wget -c https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/13.1.0/x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
->     $ tar xvf x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
->     $ export PATH=$PWD/gcc-13.1.0-nolibc/powerpc64-linux/bin/:$PATH
-> 
->     $ export CROSS_COMPILE_ppc=powerpc64-linux-
->     $ export CROSS_COMPILE_ppc64=powerpc64-linux-
->     $ export CROSS_COMPILE_ppc64le=powerpc64-linux-
->     $ for arch in ppc ppc64 ppc64le; do \
->         make run-user XARCH=$arch | grep "status: "; \
->       done
-
-Any opinion on this ?
-
-Thanks,
-Willy
