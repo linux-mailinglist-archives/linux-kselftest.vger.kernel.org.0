@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720E8770E05
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 08:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B1C770E07
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 08:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjHEGLS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Aug 2023 02:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S229697AbjHEGMV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 5 Aug 2023 02:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjHEGLR (ORCPT
+        with ESMTP id S229493AbjHEGMU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Aug 2023 02:11:17 -0400
+        Sat, 5 Aug 2023 02:12:20 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5764ED0;
-        Fri,  4 Aug 2023 23:11:14 -0700 (PDT)
-X-QQ-mid: bizesmtp64t1691215864tag61k2f
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35F64ED7;
+        Fri,  4 Aug 2023 23:12:18 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1691215929tog00vde
 Received: from linux-lab-host.localdomain ( [116.30.131.233])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 05 Aug 2023 14:11:03 +0800 (CST)
+        id ; Sat, 05 Aug 2023 14:12:07 +0800 (CST)
 X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: 8bAiRczmfHQKjO9A1xPL3JmyacwtRyy73Jl2Cs1iUKjm25LcZFMQudKWkiaFZ
-        IJp6L5sal0Hp/oWyQxR9EDHA7nZqiySF6iI+A1CEN2Mvq5wOX9HcrkPaPf3s3Y+lLO53rJB
-        GoHB/YNUR4z3ZoZwFyb+DBA0qFedj960y2VB4wKFb8wxuumbnMNxx7HUQeCoZYSSOP37w6s
-        6dpqY28Jy+95HnUtTTsrUK7xI7eR6EBjUU5kkj1DFpVnUWb5AtGE3TLazK7nXJYLafcIUdU
-        DQOGQ6mJamimV6zPoW6Fmi7LkGH5R291K6g9wInj2w+XHDyAD8lUMUK2QRk5GTMf+m0ypYj
-        fhWumx98lefPMNh4s/GKxwRAHpp1UvJmvW5QlIeJofvXWHB+Z67I5SVJc8V7w==
+X-QQ-FEAT: SFhf6fKhx/8agEErdMFhc7b3CoQDfYYa64dUygiIKK6bfOZW6eaO50gmvgSkJ
+        OB2wiuG3XUXSphcBxzDQxJ8KvWYDUBOCG/qoCQhBDcxqxE/86kdeVcccD8qpUqs15yjeJzZ
+        exjvN/l5mh7xTgDXFe/PzeMYPSNntJp8E4l9XUXxt+6KIwfohSXa8LlMLWBQrQe5+YvQWr4
+        HKdVPxT5hcEAwPGdjf8HubUIfTFKdxHSfAGChvwOPFs0XUk7l/iBSC5psv5GkI9Z+cI1yxc
+        9Wu+MJ5k2GW5hkmk0Zvbxi2wgOK5CHoZV3Knytk3+cGpEbkXcYRgQG4eHY64SDUI0DyGccD
+        nhNSMAqRrd0rn376xf0rcC+l9pWB7sFcEuTc3fjAbe+9u2CcbprXWHT0bGe4c62rPAherny
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17493183823704717070
+X-BIZMAIL-ID: 1579897849559597880
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 1/3] selftests/nolibc: allow report with existing test log
-Date:   Sat,  5 Aug 2023 14:11:02 +0800
-Message-Id: <307eb92fa4c9b774d48732a1de34076d826d40eb.1691215074.git.falcon@tinylab.org>
+Subject: [PATCH v2 2/3] tools/nolibc: stackprotector.h: make __stack_chk_init static
+Date:   Sat,  5 Aug 2023 14:12:06 +0800
+Message-Id: <faf22279ef2c69a18a4fe01c4b4ea82bccc3e74d.1691215074.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1691215074.git.falcon@tinylab.org>
 References: <cover.1691215074.git.falcon@tinylab.org>
@@ -53,32 +53,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-After the tests finish, it is valuable to report and summarize with
-existing test log.
+This allows to generate smaller text/data/dec size.
 
-This avoid rerun or run the tests again when not necessary.
+As the _start_c() function added by crt.h, __stack_chk_init() is called
+from _start_c() instead of the assembly _start. So, it is able to mark
+it with static now.
 
 Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/include/nolibc/crt.h            | 2 +-
+ tools/include/nolibc/stackprotector.h | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 16cc33db54e3..51fef5e6a152 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -225,6 +225,10 @@ rerun:
- 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
+diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+index 32e128b0fb62..a5f33fef1672 100644
+--- a/tools/include/nolibc/crt.h
++++ b/tools/include/nolibc/crt.h
+@@ -10,7 +10,7 @@
+ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
  
-+# report with existing test log
-+report:
-+	$(Q)$(REPORT) $(CURDIR)/run.out
-+
- clean:
- 	$(call QUIET_CLEAN, sysroot)
- 	$(Q)rm -rf sysroot
+-void __stack_chk_init(void);
++static void __stack_chk_init(void);
+ static void exit(int);
+ 
+ void _start_c(long *sp)
+diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
+index b620f2b9578d..13f1d0e60387 100644
+--- a/tools/include/nolibc/stackprotector.h
++++ b/tools/include/nolibc/stackprotector.h
+@@ -37,8 +37,7 @@ void __stack_chk_fail_local(void)
+ __attribute__((weak,section(".data.nolibc_stack_chk")))
+ uintptr_t __stack_chk_guard;
+ 
+-__attribute__((weak,section(".text.nolibc_stack_chk"))) __no_stack_protector
+-void __stack_chk_init(void)
++static __no_stack_protector void __stack_chk_init(void)
+ {
+ 	my_syscall3(__NR_getrandom, &__stack_chk_guard, sizeof(__stack_chk_guard), 0);
+ 	/* a bit more randomness in case getrandom() fails, ensure the guard is never 0 */
+@@ -46,7 +45,7 @@ void __stack_chk_init(void)
+ 		__stack_chk_guard ^= (uintptr_t) &__stack_chk_guard;
+ }
+ #else /* !defined(_NOLIBC_STACKPROTECTOR) */
+-__inline__ void __stack_chk_init(void) {}
++static void __stack_chk_init(void) {}
+ #endif /* defined(_NOLIBC_STACKPROTECTOR) */
+ 
+ #endif /* _NOLIBC_STACKPROTECTOR_H */
 -- 
 2.25.1
 
