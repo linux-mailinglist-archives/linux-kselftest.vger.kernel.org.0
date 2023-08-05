@@ -2,40 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B1C770E07
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 08:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6BC2770E09
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 08:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjHEGMV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Aug 2023 02:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S229564AbjHEGNZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 5 Aug 2023 02:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjHEGMU (ORCPT
+        with ESMTP id S229493AbjHEGNY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Aug 2023 02:12:20 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35F64ED7;
-        Fri,  4 Aug 2023 23:12:18 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1691215929tog00vde
+        Sat, 5 Aug 2023 02:13:24 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288B64ED0;
+        Fri,  4 Aug 2023 23:13:22 -0700 (PDT)
+X-QQ-mid: bizesmtp71t1691215993ty0dxrkb
 Received: from linux-lab-host.localdomain ( [116.30.131.233])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 05 Aug 2023 14:12:07 +0800 (CST)
+        id ; Sat, 05 Aug 2023 14:13:12 +0800 (CST)
 X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: SFhf6fKhx/8agEErdMFhc7b3CoQDfYYa64dUygiIKK6bfOZW6eaO50gmvgSkJ
-        OB2wiuG3XUXSphcBxzDQxJ8KvWYDUBOCG/qoCQhBDcxqxE/86kdeVcccD8qpUqs15yjeJzZ
-        exjvN/l5mh7xTgDXFe/PzeMYPSNntJp8E4l9XUXxt+6KIwfohSXa8LlMLWBQrQe5+YvQWr4
-        HKdVPxT5hcEAwPGdjf8HubUIfTFKdxHSfAGChvwOPFs0XUk7l/iBSC5psv5GkI9Z+cI1yxc
-        9Wu+MJ5k2GW5hkmk0Zvbxi2wgOK5CHoZV3Knytk3+cGpEbkXcYRgQG4eHY64SDUI0DyGccD
-        nhNSMAqRrd0rn376xf0rcC+l9pWB7sFcEuTc3fjAbe+9u2CcbprXWHT0bGe4c62rPAherny
+X-QQ-FEAT: VudjVnMJxE6y0HQdOAnIPW2Xm5and1bBaT6pX9ZCs1jzBV+VotcyCU7xHF8c2
+        FJ8c1IS734nq3CP1BRwRLg4LfZfUimvLvF/xBDGhTUxe4pd1bybAdcSavoW54CMSSrHpsB2
+        mANBiu2rVvVdMcY7IJfVl5cYBAoG8Gq6cpaAnTWvk0cnl9r4JKMabJrlzxI/WvlLkuUr9Hs
+        6aM7b/2PH9u/TWGLbkDATDLliZpiME9l9NAccP4y+wcqoMokBowHc7k4HqwryQJ4Gg5ik6t
+        ay4C4v5/10U4XvHXebFaLKXL3Vyf5F7Jryf18X3+YtN6z+6mgbkmJznf//wgfner21xQVko
+        iKOYjLmMArC5jIDUZp0t3h5fekE5sH+9UqD6m2t6QmLjrpo3Ml8w+rF9JlPTcb6kqgFxxlt
+        KaQ2z2e4dmM=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1579897849559597880
+X-BIZMAIL-ID: 9091032993655144416
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 2/3] tools/nolibc: stackprotector.h: make __stack_chk_init static
-Date:   Sat,  5 Aug 2023 14:12:06 +0800
-Message-Id: <faf22279ef2c69a18a4fe01c4b4ea82bccc3e74d.1691215074.git.falcon@tinylab.org>
+Subject: [PATCH v2 3/3] selftests/nolibc: fix up O= option support
+Date:   Sat,  5 Aug 2023 14:13:11 +0800
+Message-Id: <06d96bd81fe812a9718098a383678ad3beba98b1.1691215074.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1691215074.git.falcon@tinylab.org>
 References: <cover.1691215074.git.falcon@tinylab.org>
@@ -53,55 +54,84 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This allows to generate smaller text/data/dec size.
+To avoid pollute the source code tree and avoid mrproper for every
+architecture switch, the O= argument must be supported.
 
-As the _start_c() function added by crt.h, __stack_chk_init() is called
-from _start_c() instead of the assembly _start. So, it is able to mark
-it with static now.
+Both IMAGE and .config are from the building directory, let's use
+objtree instead of srctree for them.
 
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+If no O= option specified, means building kernel in source code tree,
+objtree should be srctree in such case.
+
+To support relative path, as suggested by Thomas, $(COMMAND_O) is used
+to pass the O=$(ABSOLUTE_O) to the $(MAKE) commands.
+
+Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/lkml/ZK0AB1OXH1s2xYsh@1wt.eu/
+Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
+Link: https://lore.kernel.org/lkml/058a264d-45bd-4f1f-8af3-56ed337b3251@t-8ch.de/
+Link: https://lore.kernel.org/lkml/500504f6-fed1-45a4-a518-4631a6f3e463@t-8ch.de/
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/crt.h            | 2 +-
- tools/include/nolibc/stackprotector.h | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ tools/testing/selftests/nolibc/Makefile | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
-index 32e128b0fb62..a5f33fef1672 100644
---- a/tools/include/nolibc/crt.h
-+++ b/tools/include/nolibc/crt.h
-@@ -10,7 +10,7 @@
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 51fef5e6a152..20797ba5d393 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -9,6 +9,9 @@ ifeq ($(srctree),)
+ srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
+ endif
  
--void __stack_chk_init(void);
-+static void __stack_chk_init(void);
- static void exit(int);
++# add objtree for O= option, required by IMAGE and .config
++objtree ?= $(srctree)
++
+ ifeq ($(ARCH),)
+ include $(srctree)/scripts/subarch.include
+ ARCH = $(SUBARCH)
+@@ -52,7 +55,7 @@ IMAGE_ppc64le    = arch/powerpc/boot/zImage
+ IMAGE_riscv      = arch/riscv/boot/Image
+ IMAGE_s390       = arch/s390/boot/bzImage
+ IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
+-IMAGE            = $(IMAGE_$(XARCH))
++IMAGE            = $(objtree)/$(IMAGE_$(XARCH))
+ IMAGE_NAME       = $(notdir $(IMAGE))
  
- void _start_c(long *sp)
-diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
-index b620f2b9578d..13f1d0e60387 100644
---- a/tools/include/nolibc/stackprotector.h
-+++ b/tools/include/nolibc/stackprotector.h
-@@ -37,8 +37,7 @@ void __stack_chk_fail_local(void)
- __attribute__((weak,section(".data.nolibc_stack_chk")))
- uintptr_t __stack_chk_guard;
+ # CROSS_COMPILE: cross toolchain prefix by architecture
+@@ -173,7 +176,7 @@ sysroot: sysroot/$(ARCH)/include
+ sysroot/$(ARCH)/include:
+ 	$(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
+ 	$(QUIET_MKDIR)mkdir -p sysroot
+-	$(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
++	$(Q)$(MAKE) -C ../../../include/nolibc $(COMMAND_O) ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
+ 	$(Q)mv sysroot/sysroot sysroot/$(ARCH)
  
--__attribute__((weak,section(".text.nolibc_stack_chk"))) __no_stack_protector
--void __stack_chk_init(void)
-+static __no_stack_protector void __stack_chk_init(void)
- {
- 	my_syscall3(__NR_getrandom, &__stack_chk_guard, sizeof(__stack_chk_guard), 0);
- 	/* a bit more randomness in case getrandom() fails, ensure the guard is never 0 */
-@@ -46,7 +45,7 @@ void __stack_chk_init(void)
- 		__stack_chk_guard ^= (uintptr_t) &__stack_chk_guard;
- }
- #else /* !defined(_NOLIBC_STACKPROTECTOR) */
--__inline__ void __stack_chk_init(void) {}
-+static void __stack_chk_init(void) {}
- #endif /* defined(_NOLIBC_STACKPROTECTOR) */
+ ifneq ($(NOLIBC_SYSROOT),0)
+@@ -210,19 +213,19 @@ initramfs: nolibc-test
+ 	$(Q)cp nolibc-test initramfs/init
  
- #endif /* _NOLIBC_STACKPROTECTOR_H */
+ defconfig:
+-	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
++	$(Q)$(MAKE) -C $(srctree) $(COMMAND_O) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+ 
+ kernel: initramfs
+-	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
++	$(Q)$(MAKE) -C $(srctree) $(COMMAND_O) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
+ 
+ # run the tests after building the kernel
+ run: kernel
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
++	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ # re-run the tests from an existing kernel
+ rerun:
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
++	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ # report with existing test log
 -- 
 2.25.1
 
