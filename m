@@ -2,125 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F7B7712E0
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Aug 2023 00:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EDED7712F7
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Aug 2023 01:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjHEWlg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Aug 2023 18:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
+        id S229680AbjHEXOU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 5 Aug 2023 19:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjHEWlf (ORCPT
+        with ESMTP id S229441AbjHEXOU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Aug 2023 18:41:35 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C4119B5;
-        Sat,  5 Aug 2023 15:41:34 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bbf8cb61aeso21419215ad.2;
-        Sat, 05 Aug 2023 15:41:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691275294; x=1691880094;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RdojjPd8jvPUy+VY2bdrww/YrOG4FByQTZ03QZtrm54=;
-        b=ozZ5l4FBOZxgf7mujZOAtnlb+SkNaxFvIjeBW6mDAZ5T3bifbXM/cMhHRKVjbkZ4NO
-         24Dlele9V4ytN3EVZjnD79Jp9Hkf7lW5YpSnnr1CUICs6YtrQxh+D7evr5/k15Fh3b2/
-         X3eAGU5mIsacQaDXBruJD0gdL8Mc/u8nAnFjaJIHgT1lQworaCPN5TG/PkJCv8y4bLAO
-         14YQwGJ0WhgZjqVzYzyppwA78o6rXU/lqTXUTKMENMiIjQVTYkMk9aBFbp3CcPzdgP6O
-         1Ietr4SjTwoc1QN+bSyAboKJq5fNHXFiW4+/bWHMDUVAqDXIbDcIOqMy3la436kU4NHh
-         RArw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691275294; x=1691880094;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RdojjPd8jvPUy+VY2bdrww/YrOG4FByQTZ03QZtrm54=;
-        b=V5wNSAlg9JiH82RIt9bK0fpLhhnb7QJpMJh7DvebYfa4T2txB3yz7r+hMqLm+DnEAQ
-         CRv+QHBGE6Sj1t/Y5DVOTi3dj3q4fFweHtivMO6JvVksiZssyxwALK/NUgKPYXBPsUnR
-         d5V/8vEjs5zTxPjmVq85nVnwfyctHQ+6NsNEB3+twmBmYPlkjUSLS0Rg6Mfu1xbNnsR8
-         gHIYXZId6TKzElggshRF9s+GWfsOGXqKg1m+sPZzT6g/lF5OiN/7IOGR7i/F3K+zbJlv
-         A0pkh+2m7F57uQQ1MCd3hly5I2dGYZcCgPoAmG24XlTVNbEmompJfocS53UVejiIddw0
-         9KxQ==
-X-Gm-Message-State: AOJu0Ywk5JAy7Yws/Bt/w1W2EnKZ0YybdkiaOQkJdVJd9MUzoVBawZrZ
-        s35D9ykPdavrpZmm8Wlh+l8=
-X-Google-Smtp-Source: AGHT+IEr3Ev54+ZX199Mfgcb1yPQS5UrLPN6X4H84L2cml1KstTYje3IxocoRhMgKtwZF3hk0VNjqg==
-X-Received: by 2002:a17:902:d48c:b0:1bc:1df2:4c07 with SMTP id c12-20020a170902d48c00b001bc1df24c07mr5554184plg.63.1691275293522;
-        Sat, 05 Aug 2023 15:41:33 -0700 (PDT)
-Received: from Osmten.. ([103.84.150.77])
-        by smtp.gmail.com with ESMTPSA id c8-20020a170903234800b001a6a6169d45sm3960358plh.168.2023.08.05.15.41.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Aug 2023 15:41:33 -0700 (PDT)
-From:   Osama Muhammad <osmtendev@gmail.com>
-To:     =shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Osama Muhammad <osmtendev@gmail.com>
-Subject: [PATCH] selftests: prctl: Add prctl test for PR_GET_NAME
-Date:   Sun,  6 Aug 2023 03:41:15 +0500
-Message-Id: <20230805224115.22540-1-osmtendev@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 5 Aug 2023 19:14:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7851BD4;
+        Sat,  5 Aug 2023 16:14:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AA2560F5D;
+        Sat,  5 Aug 2023 23:14:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D2DC433C7;
+        Sat,  5 Aug 2023 23:14:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691277257;
+        bh=SZoeTvqPDR+vF5ZhiCtzVJefMWAWzNemtsBf6oZ55KE=;
+        h=From:Date:Subject:To:Cc:From;
+        b=emYiu/DWEy4ADUS7nok1VtJ7U9KQO/u+30fWplQDUTEqupWAfksoKEPIoWF6wDflE
+         cbF5MRrK6naDO5cLSaQboghSIIZjdkM2WMr42K/bRkzw4/3lQHdsJK5h50ClkEj/D2
+         67M9HJlfQTXOY/MPT28nL2W9LWMCjcCfac/IPrDD3R2nLycgfvZDqi53YcmrX/7d+J
+         t/2bKkU+fjIv4up7DJQ6JTUMjZy/qJTO4RG4GuZWSxIRDaod0EPXFBFxyhvPs1uVVf
+         9k/rvOLTCJnabjfo0pxiAdLeID8A7qI1DCPrW7EYQ5X43z/0tUS3BJPiUMavWNW0Li
+         QajkVStE0684Q==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Sun, 06 Aug 2023 00:14:07 +0100
+Subject: [PATCH] selftests: Hook more tests into the build infrastructure
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230806-kselftest-perf-events-build-v1-1-0120e7a9cd72@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAL7XzmQC/x3MQQqDMBAF0KvIrDswSRGkVykuNP7ooETJpFIQ7
+ 97Q5du8iwxZYfRqLso41XRPFe7RUFiGNIN1qiYv/imdtLwatlhghQ/kyDiRivH40W3iIJDoXOf
+ HAVSHIyPq97+/+/v+AVI0C0ttAAAA
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Marco Elver <elver@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1388; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=SZoeTvqPDR+vF5ZhiCtzVJefMWAWzNemtsBf6oZ55KE=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkztfGiwnJOHJxtvWUO88geBNS9exbfDWBm8AO3
+ tnIh5OaFQ6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZM7XxgAKCRAk1otyXVSH
+ 0G4LB/9KLFWJA9HBLL7c0D8f81z5Hevsci0B27cyEjxnlyeE81cZMb32fcUrZ4tD7c9W8HN/QqN
+ UOHENUxjrDYU67lvrx8smA3Sa8twHU7A8K6P+ZO+K/IRb9s00FF7+7ex6GLigNjFr1JWAfZnb0I
+ WYgW2M9tfzVTvwKA/uuXwVDfwYcqU7uO3LqpVDQ6HmgJ+sPO15s5xCqKbb9A6zmnjCVoixvKZ/o
+ Na81CLTIae+3zVk7yy8LDcVuLD76OkmNvVCRj6Uu7kq/9cOd9vWdJe6yjFsmOi1dJtkis8xTXbr
+ XoSGuBvwwhnxxVnbD0Ks20gdZRfMYlxoOMRMWqYYc+w/hZw5
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch covers the testing of PR_GET_NAME by
-reading it's value from proc/self/task/pid/comm
-and matching it by the value returned by  PR_GET_NAME.
+We have some dmabuf-heaps and perf_events tests but they are not hooked
+up to the kselftest build infrastructure which is a bit of an obstacle
+to running them in systems with generic infrastructure for selftests.
+Add them to the top level kselftest Makefile so they get built as
+standard.
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../selftests/prctl/set-process-name.c        | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ tools/testing/selftests/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/prctl/set-process-name.c b/tools/testing/selftests/prctl/set-process-name.c
-index 3bc5e0e09..41f4b105d 100644
---- a/tools/testing/selftests/prctl/set-process-name.c
-+++ b/tools/testing/selftests/prctl/set-process-name.c
-@@ -47,6 +47,28 @@ int check_null_pointer(char *check_name)
- 	return res;
- }
- 
-+int check_name(void)
-+{
-+
-+	int pid;
-+
-+	pid = getpid();
-+	FILE *fptr;
-+	char path[50] = {};
-+	int j;
-+
-+	j = snprintf(path, 50, "/proc/self/task/%d/comm", pid);
-+	fptr = fopen(path, "r");
-+	char name[TASK_COMM_LEN] = {};
-+	int res = prctl(PR_GET_NAME, name, NULL, NULL, NULL);
-+	char output[TASK_COMM_LEN] = {};
-+
-+	fscanf(fptr, "%s", output);
-+
-+	return !strcmp(output, name);
-+
-+}
-+
- TEST(rename_process) {
- 
- 	EXPECT_GE(set_name(CHANGE_NAME), 0);
-@@ -57,6 +79,9 @@ TEST(rename_process) {
- 
- 	EXPECT_GE(set_name(CHANGE_NAME), 0);
- 	EXPECT_LT(check_null_pointer(CHANGE_NAME), 0);
-+
-+	EXPECT_TRUE(check_name());
-+
- }
- 
- TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 666b56f22a41..bdee501596ef 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -12,6 +12,7 @@ TARGETS += core
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
+ TARGETS += damon
++TARGETS += dmabuf-heaps
+ TARGETS += drivers/dma-buf
+ TARGETS += drivers/s390x/uvdevice
+ TARGETS += drivers/net/bonding
+@@ -56,6 +57,7 @@ TARGETS += net/mptcp
+ TARGETS += net/openvswitch
+ TARGETS += netfilter
+ TARGETS += nsfs
++TARGETS += perf_events
+ TARGETS += pidfd
+ TARGETS += pid_namespace
+ TARGETS += powerpc
+@@ -88,6 +90,7 @@ endif
+ TARGETS += tmpfs
+ TARGETS += tpm2
+ TARGETS += tty
++TARGETS += uevents
+ TARGETS += user
+ TARGETS += vDSO
+ TARGETS += mm
+
+---
+base-commit: 5d0c230f1de8c7515b6567d9afba1f196fb4e2f4
+change-id: 20230805-kselftest-perf-events-build-c0e0f1182bae
+
+Best regards,
 -- 
-2.34.1
+Mark Brown <broonie@kernel.org>
 
