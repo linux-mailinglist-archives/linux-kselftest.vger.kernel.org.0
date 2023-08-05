@@ -2,116 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB33B770D13
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 03:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63847770D38
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Aug 2023 03:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbjHEBbj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Aug 2023 21:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
+        id S229487AbjHEB4e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Aug 2023 21:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjHEBbi (ORCPT
+        with ESMTP id S229671AbjHEB4d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 21:31:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F0BE72;
-        Fri,  4 Aug 2023 18:31:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25C0E62193;
-        Sat,  5 Aug 2023 01:31:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B4BEC433CC;
-        Sat,  5 Aug 2023 01:31:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691199096;
-        bh=ci8WuP6g2LqliK0OHhqNPGA26G25KgSCEbHqWe0PT68=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QA3cE8I1zOdVnBlgr6ab50bKaWyj8synF3xXyhjxdE4vBfRvLRXpFLYpvdCRUmIsf
-         8PkIa7yZDIjmG0Tt9ECDlTGPwfNNaDRNi25lzVsAGKvtx+QW8V+cuIL6e0ZYNDJB8M
-         UZ/rYO7JybeG7cPBx82sZS9gx8Vueqth4ZHnQ1+73AaJvXbox93IBMkiP65LRZTsjS
-         uR/EsdNk7ejMyirWMZ2HWttPmg8yvKfk6vrhZ+BtDPjigHAFhTS+nmAHYTx5JVK9Dw
-         79fnWijGBmknBOSqRRp9uu4P4yPy/Xz3rZR9pAEWoc4F9uE7UounFGmwOkBP6+joLo
-         2W0NiY2+BHLCw==
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5221c6a2d3dso3386720a12.3;
-        Fri, 04 Aug 2023 18:31:36 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yw8EFBS5mG13tPDqW3fx567iZVd44aEnDqHe6ZsOvWIH1i2RgPL
-        xFrakQm0QiC1BaVUefg4vXjwZJ/T8VW8JMwWH5M=
-X-Google-Smtp-Source: AGHT+IFd+UVpJ54Cs2bzLsBO42WkS7CwRLTDvfC4S2+C8McYBhJ44DBsoDX8bvx2T1Y2vcQvTfkpUl3/zFXzIHMGMTc=
-X-Received: by 2002:a50:ee81:0:b0:523:1edf:c6b6 with SMTP id
- f1-20020a50ee81000000b005231edfc6b6mr2011319edr.40.1691199094841; Fri, 04 Aug
- 2023 18:31:34 -0700 (PDT)
+        Fri, 4 Aug 2023 21:56:33 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A07C10D2;
+        Fri,  4 Aug 2023 18:56:31 -0700 (PDT)
+Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RHly76QYnzVjsj;
+        Sat,  5 Aug 2023 09:54:39 +0800 (CST)
+Received: from [10.67.110.218] (10.67.110.218) by
+ dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Sat, 5 Aug 2023 09:56:28 +0800
+Message-ID: <6fba4b93-0e7d-0f92-6ffc-690888274f00@huawei.com>
+Date:   Sat, 5 Aug 2023 09:56:28 +0800
 MIME-Version: 1.0
-References: <cover.1690364259.git.haibo1.xu@intel.com> <35ce2b9f7ca655eb3af13730b1ca9f05b518e08f.1690364259.git.haibo1.xu@intel.com>
- <20230728-879500f157954d849fb303ec@orel> <CAJve8onDLEC1JFdERi098sTmN3-UkwaJ1aJz3CJNYU-GShkEyg@mail.gmail.com>
- <ZMsbXk4JU/Ung7qu@gmail.com> <20230803-5b7e7c0d95597b004764a296@orel>
-In-Reply-To: <20230803-5b7e7c0d95597b004764a296@orel>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 5 Aug 2023 09:31:23 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRHGkHnQZNUi6J+xsst0-8CDJxp=79tPj=i_1s2SiW7Hg@mail.gmail.com>
-Message-ID: <CAJF2gTRHGkHnQZNUi6J+xsst0-8CDJxp=79tPj=i_1s2SiW7Hg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] tools: riscv: Add header file csr.h
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <xiaobo55x@gmail.com>, Haibo Xu <haibo1.xu@intel.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Colton Lewis <coltonlewis@google.com>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Vishal Annapurve <vannapurve@google.com>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/2] tracing: Fix cpu buffers unavailable due to
+ 'record_disabled' messed
+To:     kernel test robot <lkp@intel.com>, <rostedt@goodmis.org>,
+        <mhiramat@kernel.org>, <vnagarnaik@google.com>, <shuah@kernel.org>
+CC:     <oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+References: <20230804124549.2562977-2-zhengyejian1@huawei.com>
+ <202308050731.PQutr3r0-lkp@intel.com>
+Content-Language: en-US
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+In-Reply-To: <202308050731.PQutr3r0-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.218]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500012.china.huawei.com (7.185.36.15)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 3, 2023 at 3:44=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
-m> wrote:
->
-> On Wed, Aug 02, 2023 at 11:13:34PM -0400, Guo Ren wrote:
-> > On Wed, Aug 02, 2023 at 10:05:00AM +0800, Haibo Xu wrote:
-> > > On Fri, Jul 28, 2023 at 5:43=E2=80=AFPM Andrew Jones <ajones@ventanam=
-icro.com> wrote:
-> > > >
-> > > > On Thu, Jul 27, 2023 at 03:20:05PM +0800, Haibo Xu wrote:
-> > > > > Borrow some of the csr definitions and operations from kernel's
-> > > > > arch/riscv/include/asm/csr.h to tools/ for riscv.
-> > > >
-> > > > You should copy the entire file verbatim.
-> > > >
-> > >
-> > > Ok, will copy all the definitions in the original csr.h
-> > Why not include the original one? Maintain the one csr.h is more
-> > comfortable.
->
-> selftests and other userspace tools can't always compile when including a
-> kernel header without modifying the header in some way. Rather than
-> polluting headers with #ifdeffery, the practice has been to copy necessar=
-y
-> headers to tools/include and modify if necessary.
-Okay, got it.
+On 2023/8/5 09:15, kernel test robot wrote:
+> Hi Zheng,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on rostedt-trace/for-next v6.5-rc4 next-20230804]
+> [cannot apply to rostedt-trace/for-next-urgent]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Zheng-Yejian/tracing-Fix-cpu-buffers-unavailable-due-to-record_disabled-messed/20230804-204751
+> base:   linus/master
+> patch link:    https://lore.kernel.org/r/20230804124549.2562977-2-zhengyejian1%40huawei.com
+> patch subject: [PATCH 1/2] tracing: Fix cpu buffers unavailable due to 'record_disabled' messed
+> config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20230805/202308050731.PQutr3r0-lkp@intel.com/config)
+> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> reproduce: (https://download.01.org/0day-ci/archive/20230805/202308050731.PQutr3r0-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202308050731.PQutr3r0-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     kernel/trace/trace.c: In function 'tracing_set_cpumask':
+>>> kernel/trace/trace.c:5280:60: error: 'struct trace_array' has no member named 'max_buffer'; did you mean 'array_buffer'?
+>      5280 |                         ring_buffer_record_disable_cpu(tr->max_buffer.buffer, cpu);
+>           |                                                            ^~~~~~~~~~
+>           |                                                            array_buffer
+>     kernel/trace/trace.c:5286:59: error: 'struct trace_array' has no member named 'max_buffer'; did you mean 'array_buffer'?
+>      5286 |                         ring_buffer_record_enable_cpu(tr->max_buffer.buffer, cpu);
+>           |                                                           ^~~~~~~~~~
+>           |                                                           array_buffer
+> 
 
->
-> Thanks,
-> drew
+Thank you, robot!
+I'll fix it in v2 soon.
 
+> 
+> vim +5280 kernel/trace/trace.c
+> 
+>    5260	
+>    5261	int tracing_set_cpumask(struct trace_array *tr,
+>    5262				cpumask_var_t tracing_cpumask_new)
+>    5263	{
+>    5264		int cpu;
+>    5265	
+>    5266		if (!tr)
+>    5267			return -EINVAL;
+>    5268	
+>    5269		local_irq_disable();
+>    5270		arch_spin_lock(&tr->max_lock);
+>    5271		for_each_tracing_cpu(cpu) {
+>    5272			/*
+>    5273			 * Increase/decrease the disabled counter if we are
+>    5274			 * about to flip a bit in the cpumask:
+>    5275			 */
+>    5276			if (cpumask_test_cpu(cpu, tr->tracing_cpumask) &&
+>    5277					!cpumask_test_cpu(cpu, tracing_cpumask_new)) {
+>    5278				atomic_inc(&per_cpu_ptr(tr->array_buffer.data, cpu)->disabled);
+>    5279				ring_buffer_record_disable_cpu(tr->array_buffer.buffer, cpu);
+>> 5280				ring_buffer_record_disable_cpu(tr->max_buffer.buffer, cpu);
+>    5281			}
+>    5282			if (!cpumask_test_cpu(cpu, tr->tracing_cpumask) &&
+>    5283					cpumask_test_cpu(cpu, tracing_cpumask_new)) {
+>    5284				atomic_dec(&per_cpu_ptr(tr->array_buffer.data, cpu)->disabled);
+>    5285				ring_buffer_record_enable_cpu(tr->array_buffer.buffer, cpu);
+>    5286				ring_buffer_record_enable_cpu(tr->max_buffer.buffer, cpu);
+>    5287			}
+>    5288		}
+>    5289		arch_spin_unlock(&tr->max_lock);
+>    5290		local_irq_enable();
+>    5291	
+>    5292		cpumask_copy(tr->tracing_cpumask, tracing_cpumask_new);
+>    5293	
+>    5294		return 0;
+>    5295	}
+>    5296	
+> 
 
-
---=20
-Best Regards
- Guo Ren
