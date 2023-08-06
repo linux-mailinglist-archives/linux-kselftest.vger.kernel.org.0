@@ -2,120 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDED7712F7
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Aug 2023 01:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4C6771350
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Aug 2023 05:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjHEXOU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Aug 2023 19:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
+        id S229504AbjHFDLr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 5 Aug 2023 23:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjHEXOU (ORCPT
+        with ESMTP id S229441AbjHFDLq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Aug 2023 19:14:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7851BD4;
-        Sat,  5 Aug 2023 16:14:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AA2560F5D;
-        Sat,  5 Aug 2023 23:14:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D2DC433C7;
-        Sat,  5 Aug 2023 23:14:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691277257;
-        bh=SZoeTvqPDR+vF5ZhiCtzVJefMWAWzNemtsBf6oZ55KE=;
-        h=From:Date:Subject:To:Cc:From;
-        b=emYiu/DWEy4ADUS7nok1VtJ7U9KQO/u+30fWplQDUTEqupWAfksoKEPIoWF6wDflE
-         cbF5MRrK6naDO5cLSaQboghSIIZjdkM2WMr42K/bRkzw4/3lQHdsJK5h50ClkEj/D2
-         67M9HJlfQTXOY/MPT28nL2W9LWMCjcCfac/IPrDD3R2nLycgfvZDqi53YcmrX/7d+J
-         t/2bKkU+fjIv4up7DJQ6JTUMjZy/qJTO4RG4GuZWSxIRDaod0EPXFBFxyhvPs1uVVf
-         9k/rvOLTCJnabjfo0pxiAdLeID8A7qI1DCPrW7EYQ5X43z/0tUS3BJPiUMavWNW0Li
-         QajkVStE0684Q==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Sun, 06 Aug 2023 00:14:07 +0100
-Subject: [PATCH] selftests: Hook more tests into the build infrastructure
+        Sat, 5 Aug 2023 23:11:46 -0400
+Received: from smtpbg153.qq.com (smtpbg153.qq.com [13.245.218.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3C21FE3;
+        Sat,  5 Aug 2023 20:11:40 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1691291487tssduu4n
+Received: from linux-lab-host.localdomain ( [116.30.130.12])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 06 Aug 2023 11:11:26 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: CR3LFp2JE4nboq28VJZElwwxerbkOQA/h6OX31e6jdysPA4Z72TbeYkM7Q4aw
+        q9prSqgqwtPVqTpQjlGJ7/0y8cLdXg8ph4OdeOqnykkYP0ZSzivSKdx97Vypho+dxQw5kqq
+        j/4g0lZhpv270TPFgyYLIsY1UgEG5u7/71CXvC8kErMF65yNU7+RZMJAhT9UiRlZzIA64sP
+        WZ+o7irh9vX63y0vsa+DJU0Aeb/YmiMl0HSEz7IqwhxxIV2DDutP5qdJ/R8wqNp6hC+PXrY
+        7z3q3cW3ZoJSqLpLIbulludgekYZxhlxynkbfRxBtQ5eeVXc9nUk7tCVvPy2gmn9yD+o9gz
+        2t56BrgriflX1tiHo96K7UwwToy9iqkO36RG9by/iS3Qiwt1z1defyT/EzoP6U8A7F1eWtu
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 13213960197169536215
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, tanyuan@tinylab.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v6 8/8] selftests/nolibc: customize CROSS_COMPILE for 32/64-bit powerpc
+Date:   Sun,  6 Aug 2023 11:11:25 +0800
+Message-Id: <20230806031125.6800-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230805204845.GA7300@1wt.eu>
+References: <20230805204845.GA7300@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230806-kselftest-perf-events-build-v1-1-0120e7a9cd72@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAL7XzmQC/x3MQQqDMBAF0KvIrDswSRGkVykuNP7ooETJpFIQ7
- 97Q5du8iwxZYfRqLso41XRPFe7RUFiGNIN1qiYv/imdtLwatlhghQ/kyDiRivH40W3iIJDoXOf
- HAVSHIyPq97+/+/v+AVI0C0ttAAAA
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Marco Elver <elver@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1388; i=broonie@kernel.org;
- h=from:subject:message-id; bh=SZoeTvqPDR+vF5ZhiCtzVJefMWAWzNemtsBf6oZ55KE=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkztfGiwnJOHJxtvWUO88geBNS9exbfDWBm8AO3
- tnIh5OaFQ6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZM7XxgAKCRAk1otyXVSH
- 0G4LB/9KLFWJA9HBLL7c0D8f81z5Hevsci0B27cyEjxnlyeE81cZMb32fcUrZ4tD7c9W8HN/QqN
- UOHENUxjrDYU67lvrx8smA3Sa8twHU7A8K6P+ZO+K/IRb9s00FF7+7ex6GLigNjFr1JWAfZnb0I
- WYgW2M9tfzVTvwKA/uuXwVDfwYcqU7uO3LqpVDQ6HmgJ+sPO15s5xCqKbb9A6zmnjCVoixvKZ/o
- Na81CLTIae+3zVk7yy8LDcVuLD76OkmNvVCRj6Uu7kq/9cOd9vWdJe6yjFsmOi1dJtkis8xTXbr
- XoSGuBvwwhnxxVnbD0Ks20gdZRfMYlxoOMRMWqYYc+w/hZw5
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We have some dmabuf-heaps and perf_events tests but they are not hooked
-up to the kselftest build infrastructure which is a bit of an obstacle
-to running them in systems with generic infrastructure for selftests.
-Add them to the top level kselftest Makefile so they get built as
-standard.
+Hi, Willy
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
+> On Sun, Aug 06, 2023 at 02:47:09AM +0800, Zhangjin Wu wrote:
+> > The little-endian powerpc64le compilers provided by Ubuntu and Fedora
+> > are able to compile big endian kernel and big endian nolibc-test [1].
+> 
+> FWIW I'm wondering why focusing on these ones which have a different
+> naming from the other ones, when I think that most users rely on the
+> ones maintained by Arnd there:
+> 
+>    https://mirrors.edge.kernel.org/pub/tools/crosstool/
+>
+
+Arnd's toolchains may be a more distribution independent ones.
+
+> Yours is called powerpc64le while the one above is "powerpc64", it
+> requires to make an exception for this one, I find this a bit odd.
+> 
+
+Yes, one is little endian output by default, another may be big endian output
+by default.
+
+> If someone wants to use their distro's cross toolchain, that's fine,
+> but I think that it will depend on distros anyway and some may not
+> even be provided (like loongarch) so I think it would make more sense
+> to adopt the canonical naming from Arnd's toolchains above.
+>
+
+Agree very much, let's switch to Arnd's toolchains.
+
+> It's not critical, but as you showed below, it makes building for ppc
+> a little bit cumbersome: those "export" lines could be dropped when
+> using the default names, and that's what we should document as the
+> recommended way to test:
+> 
+> > For example, it is able to build 64-bit nolibc-test with the big endian
+> > powerpc64-linux-gcc crosstool from [2]:
+> > 
+> >     $ wget -c https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/13.1.0/x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
+> >     $ tar xvf x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
+> >     $ export PATH=$PWD/gcc-13.1.0-nolibc/powerpc64-linux/bin/:$PATH
+> > 
+> >     $ export CROSS_COMPILE_ppc=powerpc64-linux-
+> >     $ export CROSS_COMPILE_ppc64=powerpc64-linux-
+> >     $ export CROSS_COMPILE_ppc64le=powerpc64-linux-
+> >     $ for arch in ppc ppc64 ppc64le; do \
+> >         make run-user XARCH=$arch | grep "status: "; \
+> >       done
+> 
+> Any opinion on this ?
+>
+
+Ok, let's go this way, if the others are ok for you, could you please
+drop the last two CROSS_COMPILE patches from this v6 ppc series? Thanks.
+
+I will send v2 CROSS_COMPILE series with them, with Arnd's toolchains, the
+whole CROSS_COMPILE series will be unified and become very simple, although
+they need to download the toolchains manually one by one, but it is possible to
+write a common script, but that is another requirement.
+
+BR,
+Zhangjin
 ---
- tools/testing/selftests/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+[1]: https://lore.kernel.org/lkml/cover.1691259983.git.falcon@tinylab.org/
+[2]: https://lore.kernel.org/lkml/cover.1691263493.git.falcon@tinylab.org/
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 666b56f22a41..bdee501596ef 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -12,6 +12,7 @@ TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += damon
-+TARGETS += dmabuf-heaps
- TARGETS += drivers/dma-buf
- TARGETS += drivers/s390x/uvdevice
- TARGETS += drivers/net/bonding
-@@ -56,6 +57,7 @@ TARGETS += net/mptcp
- TARGETS += net/openvswitch
- TARGETS += netfilter
- TARGETS += nsfs
-+TARGETS += perf_events
- TARGETS += pidfd
- TARGETS += pid_namespace
- TARGETS += powerpc
-@@ -88,6 +90,7 @@ endif
- TARGETS += tmpfs
- TARGETS += tpm2
- TARGETS += tty
-+TARGETS += uevents
- TARGETS += user
- TARGETS += vDSO
- TARGETS += mm
-
----
-base-commit: 5d0c230f1de8c7515b6567d9afba1f196fb4e2f4
-change-id: 20230805-kselftest-perf-events-build-c0e0f1182bae
-
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
-
+> Thanks,
+> Willy
