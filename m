@@ -2,337 +2,197 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C991A772D50
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Aug 2023 19:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33916772D60
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Aug 2023 19:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjHGRxl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Aug 2023 13:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
+        id S230236AbjHGR6a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Aug 2023 13:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjHGRxk (ORCPT
+        with ESMTP id S229717AbjHGR63 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Aug 2023 13:53:40 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45ED10F7
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Aug 2023 10:53:36 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-68730bafa6bso3841293b3a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Aug 2023 10:53:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1691430816; x=1692035616;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RCP5BEYE3PoYJ5/ScF2zz+qCzrPnvgCeGwlMhj3SY1E=;
-        b=wy/eJssMAH1COYyqyKXt40eoDoO5PZFm5eZaAslJDQuSmPNwiMxeydLomfZckhjuTD
-         3Ld79x4kdLmp41JnM+70vsTJqbGR8mXMbNfYVefIanrcfeKdmyQXtVVlOSceIRnPZMsF
-         eJMM7xnVS3BtOzcj5IF4DTL8cup0otzN6J19WrXuoBkW1omwNZF0KRcBcaaytg/A7Ovv
-         JoOeSxOb7AMsSai7BtOd7OdAg7KHF54i0xU6VCE5J1YV46ZMjmxR9inFypiTr+ElfWkw
-         51bkK748zC96T85wyt3gl4/FHjGbrnDMjro2oY0PtB3h3NX1+PH8hxNf0DOMIIZFolUu
-         dYow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691430816; x=1692035616;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RCP5BEYE3PoYJ5/ScF2zz+qCzrPnvgCeGwlMhj3SY1E=;
-        b=OYD5mYUhxGcM2IUtNFS26rp6EbOQcAfhALbjeWLwuVjW3jCFCgu+3SZ2waXBbvR/as
-         6bmKMr14VlXRvtwaED9ozg8LlUe6P4gJLiHfXav+8bRs+lH7yEbZh1Oyz62GI1Z/7/jS
-         cAvSVqFJ7thqNNcBojA4N2GAxDM57aX1KtB3AlO4J2vfurH8QquuyYPHqJLAZ4FYuVmm
-         crTqt2ogLAqrhVmaRmZSR95uRN+ys8JIeFwW3ae202oVCqQ04tPb5ILX68CZsrbVIT49
-         y/lSHC5cr56hs3jPe9QKG19yr5OBplvT4evGLn+x8fB0MAGxa8SEsDcxzdH+zWejOO52
-         cNnw==
-X-Gm-Message-State: AOJu0YzxV09gmlVD6T69ZCSRCHYZ/uFx3EuVgTpW8+SKtfBOHErmQlXI
-        gvtSitjvHQQYHgpEgAyGVO/Z/Q==
-X-Google-Smtp-Source: AGHT+IEdHPkqEiEp9lih3/DkRkTB+DjFWF3Lf0bADKGbKUr8B5zIR9lfDWqHuEaA4aXFcOhIDzRYvg==
-X-Received: by 2002:a05:6a20:42a8:b0:13f:c159:63ec with SMTP id o40-20020a056a2042a800b0013fc15963ecmr10577943pzj.24.1691430816123;
-        Mon, 07 Aug 2023 10:53:36 -0700 (PDT)
-Received: from ghost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id e18-20020aa78c52000000b0068620bee456sm6417758pfd.209.2023.08.07.10.53.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Aug 2023 10:53:35 -0700 (PDT)
-Date:   Mon, 7 Aug 2023 10:53:32 -0700
-From:   Charlie Jenkins <charlie@rivosinc.com>
-To:     Alexandre Ghiti <alex@ghiti.fr>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        conor@kernel.org, paul.walmsley@sifive.com, palmer@rivosinc.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org,
-        alexghiti@rivosinc.com
-Subject: Re: [PATCH v8 2/4] RISC-V: mm: Add tests for RISC-V mm
-Message-ID: <ZNEvnBaf0P1owNNU@ghost>
-References: <20230727212647.4182407-1-charlie@rivosinc.com>
- <20230727212647.4182407-3-charlie@rivosinc.com>
- <a96afa52-14aa-28f8-d4e5-34bbd3e400ef@ghiti.fr>
+        Mon, 7 Aug 2023 13:58:29 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2A8170B;
+        Mon,  7 Aug 2023 10:58:28 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 377F140Q011181;
+        Mon, 7 Aug 2023 12:58:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=
+        PODMain02222019; bh=VkFnQsZNlDqBq06hekSB15FFoglrgZ3jS+q8nHiG8Bs=; b=
+        XRP8EGUajQsR7m0Fg5/D1vjIWgEI1RTTBnBuc870JuYKnQmKpQdP4/Ovf7sA5oCb
+        PTd52cDEjTYgYuHMe82luGWg9Q/K65YPySzaBP/dG0knxFR1Y17odjyhaWGY2iD5
+        CcKStTdr6PHIhFR+s8+J/CJabQHC/9oZGUjdcPdVT+Yu+yGgczAOkQgz9VNXH5u7
+        LSTmWdN3vVko9F1inOKBy9eNSRnTREaPAA5NePYW+seAsfeKOWyIJ9o6WI5SzS7x
+        RkD2DsW+cDaYQloMuLqpgkKjqJOuVABpbCpYNYU9Rs8MlyK9Ier/ko3fhJNmpvAj
+        hLeTIXyHZApAtgSnu3ZXnQ==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3s9juhsv9a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Aug 2023 12:58:17 -0500 (CDT)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 7 Aug
+ 2023 18:58:16 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.30 via Frontend Transport; Mon, 7 Aug 2023 18:58:16 +0100
+Received: from [198.61.64.220] (EDIN4L06LR3.ad.cirrus.com [198.61.64.220])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9E42015B7;
+        Mon,  7 Aug 2023 17:58:15 +0000 (UTC)
+Message-ID: <b0bf7b45-5d63-5dbf-e529-9c3a3f6ac6dd@opensource.cirrus.com>
+Date:   Mon, 7 Aug 2023 18:58:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a96afa52-14aa-28f8-d4e5-34bbd3e400ef@ghiti.fr>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH] kunit: Replace fixed-size log with dynamically-extending
+ buffer
+To:     David Gow <davidgow@google.com>
+CC:     <brendan.higgins@linux.dev>, <linux-kselftest@vger.kernel.org>,
+        <kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>, Rae Moar <rmoar@google.com>
+References: <20230804141446.21068-1-rf@opensource.cirrus.com>
+ <CABVgOSmhj_Qu+NCCzCmVx9Z0n-pAD-s2UekbVv1Y-2kOnNN_NA@mail.gmail.com>
+Content-Language: en-US
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <CABVgOSmhj_Qu+NCCzCmVx9Z0n-pAD-s2UekbVv1Y-2kOnNN_NA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: HAuCc9EXEAWGvfYF1Do2V0iu-EQUtQTX
+X-Proofpoint-ORIG-GUID: HAuCc9EXEAWGvfYF1Do2V0iu-EQUtQTX
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Aug 06, 2023 at 12:06:49PM +0200, Alexandre Ghiti wrote:
+On 5/8/23 10:17, David Gow wrote:
+> On Fri, 4 Aug 2023 at 22:14, Richard Fitzgerald
+> <rf@opensource.cirrus.com> wrote:
+>>
+>> Re-implement the log buffer as a list of buffer fragments that can
+>> be extended as the size of the log info grows.
+>>
+>> When using parameterization the test case can run many times and create
+>> a large amount of log. It's not really practical to keep increasing the
+>> size of the fixed buffer every time a test needs more space. And a big
+>> fixed buffer wastes memory.
+>>
+>> The original char *log pointer is replaced by a pointer to a list of
+>> struct kunit_log_frag, each containing a fixed-size buffer.
+>>
+>> kunit_log_append() now attempts to append to that last kunit_log_frag in
+>> the list. If there isn't enough space it will append a new kunit_log_frag
+>> to the list. This simple implementation does not attempt to completely
+>> fill the buffer in every kunit_log_frag.
+>>
+>> The 'log' member of kunit_suite, kunit_test_case and kunit_suite must be a
+>> pointer because the API of kunit_log() requires that is the same type in
+>> all  three structs. As kunit.log is a pointer to the 'log' of the current
+>> kunit_case, it must be a pointer in the other two structs.
+>>
+>> The existing kunit-test.c log tests have been updated for the new log
+>> buffer and a new kunit_log_extend_test() case to test extending the buffer.
+>>
+>> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+>> ---
 > 
-> On 27/07/2023 23:26, Charlie Jenkins wrote:
-> > Add tests that enforce mmap hint address behavior. mmap should default
-> > to sv48. mmap will provide an address at the highest address space that
-> > can fit into the hint address, unless the hint address is less than sv39
-> > and not 0, then it will return a sv39 address.
-> > 
-> > These tests are split into two files: mmap_default.c and mmap_bottomup.c
-> > because a new process must be exec'd in order to change the mmap layout.
-> > The run_mmap.sh script sets the stack to be unlimited for the
-> > mmap_bottomup.c test which triggers a bottomup layout.
-> > 
-> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > ---
-> >   tools/testing/selftests/riscv/Makefile        |  2 +-
-> >   tools/testing/selftests/riscv/mm/.gitignore   |  2 +
-> >   tools/testing/selftests/riscv/mm/Makefile     | 15 +++++
-> >   .../riscv/mm/testcases/mmap_bottomup.c        | 35 ++++++++++
-> >   .../riscv/mm/testcases/mmap_default.c         | 35 ++++++++++
-> >   .../selftests/riscv/mm/testcases/mmap_test.h  | 64 +++++++++++++++++++
-> >   .../selftests/riscv/mm/testcases/run_mmap.sh  | 12 ++++
-> >   7 files changed, 164 insertions(+), 1 deletion(-)
-> >   create mode 100644 tools/testing/selftests/riscv/mm/.gitignore
-> >   create mode 100644 tools/testing/selftests/riscv/mm/Makefile
-> >   create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap_bottomup.c
-> >   create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap_default.c
-> >   create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap_test.h
-> >   create mode 100755 tools/testing/selftests/riscv/mm/testcases/run_mmap.sh
-> > 
-> > diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-> > index f4b3d5c9af5b..4a9ff515a3a0 100644
-> > --- a/tools/testing/selftests/riscv/Makefile
-> > +++ b/tools/testing/selftests/riscv/Makefile
-> > @@ -5,7 +5,7 @@
-> >   ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-> >   ifneq (,$(filter $(ARCH),riscv))
-> > -RISCV_SUBTARGETS ?= hwprobe vector
-> > +RISCV_SUBTARGETS ?= hwprobe vector mm
-> >   else
-> >   RISCV_SUBTARGETS :=
-> >   endif
-> > diff --git a/tools/testing/selftests/riscv/mm/.gitignore b/tools/testing/selftests/riscv/mm/.gitignore
-> > new file mode 100644
-> > index 000000000000..5c2c57cb950c
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/mm/.gitignore
-> > @@ -0,0 +1,2 @@
-> > +mmap_bottomup
-> > +mmap_default
-> > diff --git a/tools/testing/selftests/riscv/mm/Makefile b/tools/testing/selftests/riscv/mm/Makefile
-> > new file mode 100644
-> > index 000000000000..11e0f0568923
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/mm/Makefile
-> > @@ -0,0 +1,15 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# Copyright (C) 2021 ARM Limited
-> > +# Originally tools/testing/arm64/abi/Makefile
-> > +
-> > +# Additional include paths needed by kselftest.h and local headers
-> > +CFLAGS += -D_GNU_SOURCE -std=gnu99 -I.
-> > +
-> > +TEST_GEN_FILES := testcases/mmap_default testcases/mmap_bottomup
-> > +
-> > +TEST_PROGS := testcases/run_mmap.sh
-> > +
-> > +include ../../lib.mk
-> > +
-> > +$(OUTPUT)/mm: testcases/mmap_default.c testcases/mmap_bottomup.c testcases/mmap_tests.h
-> > +	$(CC) -o$@ $(CFLAGS) $(LDFLAGS) $^
-> > diff --git a/tools/testing/selftests/riscv/mm/testcases/mmap_bottomup.c b/tools/testing/selftests/riscv/mm/testcases/mmap_bottomup.c
-> > new file mode 100644
-> > index 000000000000..b29379f7e478
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/mm/testcases/mmap_bottomup.c
-> > @@ -0,0 +1,35 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +#include <sys/mman.h>
-> > +#include <testcases/mmap_test.h>
-> > +
-> > +#include "../../kselftest_harness.h"
-> > +
-> > +TEST(infinite_rlimit)
-> > +{
-> > +// Only works on 64 bit
-> > +#if __riscv_xlen == 64
-> > +	struct addresses mmap_addresses;
-> > +
-> > +	EXPECT_EQ(BOTTOM_UP, memory_layout());
-> > +
-> > +	do_mmaps(&mmap_addresses);
-> > +
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.no_hint);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_37_addr);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_38_addr);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_46_addr);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_47_addr);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_55_addr);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_56_addr);
-> > +
-> > +	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.no_hint);
+> +Rae, since she's the last person to touch the log code.
 > 
+> Thanks a bunch. Some way of handling longer logs has been on the to-do
+> list for a while, and this is probably better than the other options
+> of allowing per-test log sizes or using krealloc().
 > 
-> This test ^ will only work on sv48+ systems, if launched on a sv39 system,
-> it will fail
+> This mostly works okay here, but the test fails when running:
+> ./tools/testing/kunit/kunit.py run --alltests
+> [17:05:12]     # kunit_log_extend_test: EXPECTATION FAILED at
+> lib/kunit/kunit-test.c:624
+> [17:05:12]     Expected sscanf(p, "The quick brown fox jumps over the
+> lazy penguin %d", &q) == 1, but
+> [17:05:12]         sscanf(p, "The quick brown fox jumps over the lazy
+> penguin %d", &q) == 0 (0x0)
+> 
+> I haven't found the cause of it, yet, but it happens both on UML and
+> QEMU x86_64.
 >
-I may be missing something, but why would this test fail? It may not be
-particularily useful since the addresses will always be in the sv39
-address space, but it shouldn't fail. I have tested in QEMU and it
-passes. This tests if 1UL << 47 is greater than the returned mmap address
-which will always be true.
+
+Strange, I haven't been able to reproduce this. But sscanf() isn't the
+best function to use here because of how it treats whitespace.
+'\n' doesn't match a newline, it mtaches any whitespace.
+I'm working on a V2 chain, and one change I've made is to replace the
+sscanf() with an exact match of what the string should be. I've also
+added some test cases.
+
+>>   include/kunit/test.h   | 25 +++++++++----
+>>   lib/kunit/debugfs.c    | 65 ++++++++++++++++++++++++++-------
+>>   lib/kunit/kunit-test.c | 82 +++++++++++++++++++++++++++++++++++++-----
+>>   lib/kunit/test.c       | 51 ++++++++++++++++----------
+>>   4 files changed, 177 insertions(+), 46 deletions(-)
+>>
+>> diff --git a/include/kunit/test.h b/include/kunit/test.h
+>> index 011e0d6bb506..907b30401669 100644
+>> --- a/include/kunit/test.h
+>> +++ b/include/kunit/test.h
+>> @@ -33,8 +33,8 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+>>
+>>   struct kunit;
+>>
+>> -/* Size of log associated with test. */
+>> -#define KUNIT_LOG_SIZE 2048
+>> +/* Initial size of log associated with test. */
+>> +#define KUNIT_DEFAULT_LOG_SIZE 500
 > 
+> Would it make more sense to call this KUNIT_LOG_FRAGMENT_SIZE or
+> similar, as not only is this the default size, but also the amount by
+> which the size is incremented.
 > 
-> > +	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_37_addr);
-> > +	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_38_addr);
-> > +	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_46_addr);
-> > +	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.on_47_addr);
-> > +	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.on_55_addr);
-> > +	EXPECT_GT(1UL << 56, (unsigned long)mmap_addresses.on_56_addr);
-> > +#endif
-> > +}
-> > +
-> > +TEST_HARNESS_MAIN
-> > diff --git a/tools/testing/selftests/riscv/mm/testcases/mmap_default.c b/tools/testing/selftests/riscv/mm/testcases/mmap_default.c
-> > new file mode 100644
-> > index 000000000000..d1accb91b726
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/mm/testcases/mmap_default.c
-> > @@ -0,0 +1,35 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +#include <sys/mman.h>
-> > +#include <testcases/mmap_test.h>
-> > +
-> > +#include "../../kselftest_harness.h"
-> > +
-> > +TEST(default_rlimit)
-> > +{
-> > +// Only works on 64 bit
-> > +#if __riscv_xlen == 64
-> > +	struct addresses mmap_addresses;
-> > +
-> > +	EXPECT_EQ(TOP_DOWN, memory_layout());
-> > +
-> > +	do_mmaps(&mmap_addresses);
-> > +
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.no_hint);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_37_addr);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_38_addr);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_46_addr);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_47_addr);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_55_addr);
-> > +	EXPECT_NE(MAP_FAILED, mmap_addresses.on_56_addr);
-> > +
-> > +	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.no_hint);
-> > +	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_37_addr);
-> > +	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_38_addr);
-> > +	EXPECT_GT(1UL << 38, (unsigned long)mmap_addresses.on_46_addr);
-> > +	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.on_47_addr);
-> > +	EXPECT_GT(1UL << 47, (unsigned long)mmap_addresses.on_55_addr);
-> > +	EXPECT_GT(1UL << 56, (unsigned long)mmap_addresses.on_56_addr);
-> > +#endif
-> > +}
-> > +
-> > +TEST_HARNESS_MAIN
-> > diff --git a/tools/testing/selftests/riscv/mm/testcases/mmap_test.h b/tools/testing/selftests/riscv/mm/testcases/mmap_test.h
-> > new file mode 100644
-> > index 000000000000..98a892de5d19
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/mm/testcases/mmap_test.h
-> > @@ -0,0 +1,64 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > +#ifndef _TESTCASES_MMAP_TEST_H
-> > +#define _TESTCASES_MMAP_TEST_H
-> > +#include <sys/mman.h>
-> > +#include <sys/resource.h>
-> > +#include <stddef.h>
-> > +
-> > +#define TOP_DOWN 0
-> > +#define BOTTOM_UP 1
-> > +
-> > +struct addresses {
-> > +	int *no_hint;
-> > +	int *on_37_addr;
-> > +	int *on_38_addr;
-> > +	int *on_46_addr;
-> > +	int *on_47_addr;
-> > +	int *on_55_addr;
-> > +	int *on_56_addr;
-> > +};
-> > +
-> > +void do_mmaps(struct addresses *mmap_addresses)
+> Also, there's plenty of scope for bikeshedding the exact value of
+> this, two considerations being:
+> - Most tests have very small logs: we possibly should look into what
+> the average log size is.
+> - It may make sense to tweak the log size to fit nicely within common
+> allocation/page sizes. e.g., PAGE_SIZE-sizeof(struct list_head) or
+> something. Though that is probably too big by default.
 > 
+
+This initial implementation doesn't support splitting the log line over
+multiple fragments (I like to avoid rewirting the whole world in one
+patch.) So the fragment size also limits the maximum log line.
+
+I've done some work in supporting long lines and will include it in
+my V2 chain.
+
+...
+
+>> +       i = 0;
+>> +       while ((pn = strchr(p, '\n')) != NULL) {
+>> +               *pn = '\0';
+>> +               KUNIT_ASSERT_EQ(test, sscanf(p,
+>> +                                            "The quick brown fox jumps over the lazy penguin %d\n",
 > 
-> I would static inline this function definition since you are in a header
-> file.
+> Do we want the '\n' at the end of this if we're overwriting it above?
 > 
+
+Oh, that's an embarrassing error. But see my comment above about
+sscanf().
+
+>> +                                            &q), 1);
+>> +               KUNIT_ASSERT_EQ(test, q, i);
 > 
-> > +{
-> > +	/*
-> > +	 * Place all of the hint addresses on the boundaries of mmap
-> > +	 * sv39, sv48, sv57
-> > +	 * User addresses end at 1<<38, 1<<47, 1<<56 respectively
-> > +	 */
-> > +	void *on_37_bits = (void *)(1UL << 37);
-> > +	void *on_38_bits = (void *)(1UL << 38);
-> > +	void *on_46_bits = (void *)(1UL << 46);
-> > +	void *on_47_bits = (void *)(1UL << 47);
-> > +	void *on_55_bits = (void *)(1UL << 55);
-> > +	void *on_56_bits = (void *)(1UL << 56);
-> > +
-> > +	int prot = PROT_READ | PROT_WRITE;
-> > +	int flags = MAP_PRIVATE | MAP_ANONYMOUS;
-> > +
-> > +	mmap_addresses->no_hint =
-> > +		mmap(NULL, 5 * sizeof(int), prot, flags, 0, 0);
-> > +	mmap_addresses->on_37_addr =
-> > +		mmap(on_37_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> > +	mmap_addresses->on_38_addr =
-> > +		mmap(on_38_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> > +	mmap_addresses->on_46_addr =
-> > +		mmap(on_46_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> > +	mmap_addresses->on_47_addr =
-> > +		mmap(on_47_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> > +	mmap_addresses->on_55_addr =
-> > +		mmap(on_55_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> > +	mmap_addresses->on_56_addr =
-> > +		mmap(on_56_bits, 5 * sizeof(int), prot, flags, 0, 0);
-> > +}
-> > +
-> > +int memory_layout(void)
-> > +{
-> > +	int prot = PROT_READ | PROT_WRITE;
-> > +	int flags = MAP_PRIVATE | MAP_ANONYMOUS;
-> > +
-> > +	void *value1 = mmap(NULL, sizeof(int), prot, flags, 0, 0);
-> > +	void *value2 = mmap(NULL, sizeof(int), prot, flags, 0, 0);
-> > +
-> > +	return value2 > value1;
-> > +}
-> > +#endif /* _TESTCASES_MMAP_TEST_H */
-> > diff --git a/tools/testing/selftests/riscv/mm/testcases/run_mmap.sh b/tools/testing/selftests/riscv/mm/testcases/run_mmap.sh
-> > new file mode 100755
-> > index 000000000000..ca5ad7c48bad
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/mm/testcases/run_mmap.sh
-> > @@ -0,0 +1,12 @@
-> > +#!/bin/sh
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +
-> > +original_stack_limit=$(ulimit -s)
-> > +
-> > +./mmap_default
-> > +
-> > +# Force mmap_bottomup to be ran with bottomup memory due to
-> > +# the unlimited stack
-> > +ulimit -s unlimited
-> > +./mmap_bottomup
-> > +ulimit -s $original_stack_limit
+> Could we make these KUNIT_EXPECT_EQ? I'd rather not have this kill the
+> test thread.
+> 
+
+Yes, that's a typo.
+Personally, I find the choice of ASSERT/EXPECT confusing. Since people
+are so used to _asserting_ the condition to be checked, the brain tends
+to go for ASSERT out of habit. IMO it would have been better to use
+ASSERT for the thing the test is checking (for consistency with normal
+usage) and maybe KUNIT_NEEDS_xxx() for things that are prerequisites of
+the test code itself.
