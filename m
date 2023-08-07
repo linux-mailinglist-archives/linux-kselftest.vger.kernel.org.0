@@ -2,46 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A23771C1E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Aug 2023 10:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E2A771C6B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Aug 2023 10:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjHGIQP convert rfc822-to-8bit (ORCPT
+        id S230294AbjHGIkj convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Aug 2023 04:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
+        Mon, 7 Aug 2023 04:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjHGIQO (ORCPT
+        with ESMTP id S230242AbjHGIki (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Aug 2023 04:16:14 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9FE1BB
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Aug 2023 01:16:12 -0700 (PDT)
+        Mon, 7 Aug 2023 04:40:38 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FB21721
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Aug 2023 01:40:36 -0700 (PDT)
 Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
  relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-201-6FPU6Xj6Ow-DPKP--BfwjA-1; Mon, 07 Aug 2023 09:16:06 +0100
-X-MC-Unique: 6FPU6Xj6Ow-DPKP--BfwjA-1
+ uk-mta-74-vUjLTDvzN4WT0QZiNbwsZw-1; Mon, 07 Aug 2023 09:40:30 +0100
+X-MC-Unique: vUjLTDvzN4WT0QZiNbwsZw-1
 Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
  (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 7 Aug
- 2023 09:16:02 +0100
+ 2023 09:40:27 +0100
 Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 7 Aug 2023 09:16:02 +0100
+ id 15.00.1497.048; Mon, 7 Aug 2023 09:40:27 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
 To:     'Zhangjin Wu' <falcon@tinylab.org>, "w@1wt.eu" <w@1wt.eu>
 CC:     "arnd@arndb.de" <arnd@arndb.de>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         "thomas@t-8ch.de" <thomas@t-8ch.de>
-Subject: RE: [PATCH v6 06/15] tools/nolibc: __sysret: support syscalls who
- return a pointer
-Thread-Topic: [PATCH v6 06/15] tools/nolibc: __sysret: support syscalls who
- return a pointer
-Thread-Index: AQHZyGJM8MfmHZ1C3ES1BFx0kL6bna/eeWXw
-Date:   Mon, 7 Aug 2023 08:16:02 +0000
-Message-ID: <a1732bbffd1542d3b9dd34c92f45076c@AcuMS.aculab.com>
-References: <20230806095846.GB10627@1wt.eu>
- <20230806123351.35202-1-falcon@tinylab.org>
-In-Reply-To: <20230806123351.35202-1-falcon@tinylab.org>
+Subject: RE: [PATCH v3] tools/nolibc: fix up size inflate regression
+Thread-Topic: [PATCH v3] tools/nolibc: fix up size inflate regression
+Thread-Index: AQHZyPQZCzWEgy7xdkqtRS3MdkRe3q/efQWQ
+Date:   Mon, 7 Aug 2023 08:40:27 +0000
+Message-ID: <f51e54bcf470451ea36f24640f000e61@AcuMS.aculab.com>
+References: <8eaab5da2dcbba42e3f3efc2ae686a22c95f84f0.1691386601.git.falcon@tinylab.org>
+In-Reply-To: <8eaab5da2dcbba42e3f3efc2ae686a22c95f84f0.1691386601.git.falcon@tinylab.org>
 Accept-Language: en-GB, en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
@@ -63,20 +60,82 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Zhangjin Wu
-> Sent: 06 August 2023 13:34
+> Sent: 07 August 2023 06:58
 ...
-> Based on your macro version, I tried to use the is_signed_type() from kernel,
-> it seems works.
+> +/* __auto_type is used instead of __typeof__ to workaround the build error
+> + * 'error: assignment of read-only variable' when the argument has 'const' in
+> + * the type, but __auto_type is a new feature from newer gcc version and it
+> + * only works with 'const' from gcc 11.0 (__GXX_ABI_VERSION = 1016)
+> + * https://gcc.gnu.org/legacy-ml/gcc-patches/2013-11/msg01378.html
+> + */
 
-You'll find that (void *)0 isn't 'constant enough' for
-is_constexpr() - so is_constexpr((type)0) can be used
-to detect pointer types.
-Probably requires an 'is_pointer_type()' define.
-This also rather means that is_signed_type() needs to be
-wrapped in is_constexpr() - probably generating header
-file inclusion hell.
+You can use typeof((x) + 0) to lose the 'const' flag.
+The only downside is that char/short become int.
 
-I'm going to add a comment on v3 of the patch...
+> +
+> +#if __GXX_ABI_VERSION >= 1016
+> +#define __GXX_HAS_AUTO_TYPE_WITH_CONST_SUPPORT
+> +#endif
+> +
+> +#ifdef __GXX_HAS_AUTO_TYPE_WITH_CONST_SUPPORT
+> +#define __sysret(arg)                                                    \
+> +({                                                                       \
+> +	__auto_type __ret = (arg);                                       \
+> +	if (__is_signed_type(__typeof__(arg))) {                         \
+> +		if (__ret < 0) {                                         \
+> +			SET_ERRNO(-(long)__ret);                         \
+> +			__ret = (__typeof__(arg))(-1L);                  \
+> +		}                                                        \
+> +	} else {                                                         \
+> +		if ((unsigned long)__ret >= (unsigned long)-MAX_ERRNO) { \
+> +			SET_ERRNO(-(long)__ret);                         \
+> +			__ret = (__typeof__(arg))(-1L);                  \
+> +		}                                                        \
+> +	}                                                                \
+> +	__ret;                                                           \
+> +})
+> +
+> +#else  /* ! __GXX_HAS_AUTO_TYPE_WITH_CONST_SUPPORT */
+> +#define __sysret(arg)                                                    \
+> +({                                                                       \
+> +	long __ret = (long)(arg);                                        \
+> +	if (__is_signed_type(__typeof__(arg))) {                         \
+> +		if (__ret < 0) {                                         \
+> +			SET_ERRNO(-__ret);                               \
+> +			__ret = -1L;                                     \
+> +		}                                                        \
+> +	} else {                                                         \
+> +		if ((unsigned long)__ret >= (unsigned long)-MAX_ERRNO) { \
+> +			SET_ERRNO(-__ret);                               \
+> +			__ret = -1L;                                     \
+> +		}                                                        \
+> +	}                                                                \
+> +	(__typeof__(arg))__ret;                                          \
+> +})
+> +#endif /* ! __GXX_HAS_AUTO_TYPE_WITH_CONST_SUPPORT */
+
+with (retyped so it may be wrong):
+#define is_constexpr(x) sizeof(*(0 ? (void *)((long)(x) * 0) : (int *)0)) == 1)
+and (because even (void *)0 isn't completely constant):
+#define is_pointer(x) (!is_constexpr((typeof(x))0))
+
+You can probably do:
+#define __sysret(arg) \
+({ \
+	typeof((arg) + 0) __ret = arg; \
+	if (__built_choose_expr(is_pointer(arg), (unsigned long)-(MAX_ERRNO+1), __ret) \
+			< (__built_choose_expr(is_pointer(arg), (unsigned long)__ret, 0)) { \
+		SET_ERRNO(-__ret); \
+		__reg = typeof(ret)-1L; \
+	} \
+	__ret; \
+})
+
+Apart from the annoyance of having to reverse the conditional
+that only has one copy of the check.
+
+Using two __builtin_choose_expr() saves you having to write two
+comparisons that are valid for both pointer and integer.
 
 	David
 
