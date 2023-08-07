@@ -2,122 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A59771F0F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Aug 2023 13:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141CD7724D1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Aug 2023 15:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231770AbjHGLBK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Aug 2023 07:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S231909AbjHGNAz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Aug 2023 09:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjHGLBJ (ORCPT
+        with ESMTP id S231728AbjHGNAy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Aug 2023 07:01:09 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AF61701;
-        Mon,  7 Aug 2023 04:01:03 -0700 (PDT)
-X-QQ-mid: bizesmtp64t1691406050t3gsqv07
-Received: from linux-lab-host.localdomain ( [116.30.130.12])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 07 Aug 2023 19:00:49 +0800 (CST)
-X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: J5JfekO1WsimCxeLeaIRwLKPUP4hLs0KL6RLQnScNWp3T1pU0LAVZjC4TPlkd
-        k87XCapHbL4LiEUGX5UZzfPUuqLPBeuaVV+KP1TgwYN7UkHO+yVc+ABChQVqPXW25W9OJby
-        8VJAFTRRJjcUrn3uVYbuqzR+WQyMe0Bn25SZCtFh1UrDUTCf1zjc2R9uAAUYlXWusvIOFve
-        EFf8yDr5+a4HBvMgz8LsmEVwLXWMGmuKVjORDG8muFdZOfP0KYtkaZcPyPTqRLyc7qJ3IhA
-        SWfMtQ5ktT3lDR7PRBcoVeNvp4D4X0KTJQ9rGNoNog53rAKrSD5ZfQF6n1KebVvS50WvULX
-        i1BA8QyGptm586LBXjH4xN8xN3X+gV2DtmyvFzbSqd37csOi48U/HGkUDf7Y/bz6a6+fmgO
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 355986596095762811
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux@weissschuh.net,
-        tanyuan@tinylab.org, thomas@t-8ch.de
-Subject: [PATCH] tools/nolibc: silence ppc64 compile warnings
-Date:   Mon,  7 Aug 2023 19:00:48 +0800
-Message-Id: <682bbec9ff358b3726daee00752dbe0abc99370a.1691405029.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 7 Aug 2023 09:00:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298261BC;
+        Mon,  7 Aug 2023 06:00:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9872D619FD;
+        Mon,  7 Aug 2023 13:00:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31608C433C7;
+        Mon,  7 Aug 2023 13:00:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691413252;
+        bh=VIywjKfIQjCBtdbDPXYlia2uvZPXVd/riPHCXoskQic=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rvvDU8srIyUZqSC/AZn5tENk73e6b7lcMD0bggv0OZy+kdMv1wzrdao14Ek53Iiyx
+         IRdeP2i7dHvG05GYveqesPRozZBWvPkPzVgLAPzRKehV8FG4dTBFTlwNmq6W9aAmXd
+         TOJ2NMgyqruEmA77u2ERYj64yfya3426m3ZWoUGeog++a6pvx66c8pChwY38vz523S
+         ChaYFX40JW+pa2BW1vXmOmq45J6hBtdc88n5UAJdNuTfAiy2eP80JJIFmiP356Yg99
+         NUF9YdSDWmi87A0gAAG2I/js0A4x5VYEjSB7V464D9htKF6RuocFXxnBcwe4+5gtev
+         Hkzg/2TxLfPZA==
+Date:   Mon, 7 Aug 2023 14:00:42 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 21/36] arm64/mm: Implement map_shadow_stack()
+Message-ID: <3a077ff3-8627-4337-9b4a-6a8828eda0e7@sirena.org.uk>
+References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
+ <20230731-arm64-gcs-v3-21-cddf9f980d98@kernel.org>
+ <ZNDFioFIM34VcsuV@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zuyh0JKERt9z219h"
+Content-Disposition: inline
+In-Reply-To: <ZNDFioFIM34VcsuV@arm.com>
+X-Cookie: idleness, n.:
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Silence the following warnings reported by the new -Wall -Wextra options
-with pure assembly code.
 
-    In file included from sysroot/powerpc/include/stdio.h:13,
-                     from nolibc-test.c:13:
-    sysroot/powerpc/include/arch.h: In function '_start':
-    sysroot/powerpc/include/arch.h:192:32: warning: unused variable 'r2' [-Wunused-variable]
-      192 |         register volatile long r2 __asm__ ("r2") = (void *)&TOC - (void *)_start;
-          |                                ^~
-    sysroot/powerpc/include/arch.h:187:97: warning: optimization may eliminate reads and/or writes to register variables [-Wvolatile-register-var]
-      187 | void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_stack_protector _start(void)
-          |                                                                                                 ^~~~~~
+--zuyh0JKERt9z219h
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Since only elfv2 ABI requires to save the TOC/GOT pointer to r2
-register, when using elfv1 ABI, the old C code is simply ignored by the
-compiler, but the compiler can not ignore the inline assembly code and
-will introduce build failure or running segfaults. So, let's further
-only add the new assembly code for elfv2 ABI with the checking of
-_CALL_ELF == 2.
+On Mon, Aug 07, 2023 at 11:20:58AM +0100, Szabolcs Nagy wrote:
+> The 07/31/2023 14:43, Mark Brown wrote:
+> > +SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsigned int, flags)
+> > +{
+> > +	unsigned long alloc_size;
+> > +	unsigned long __user *cap_ptr;
+> > +	unsigned long cap_val;
+> > +	int ret;
+> > +
+> > +	if (!system_supports_gcs())
+> > +		return -EOPNOTSUPP;
+> > +
+> > +	if (flags)
+> > +		return -EINVAL;
+> > +
+> > +	if (addr % 16)
+> > +		return -EINVAL;
 
-Link: https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi.pdf
-Link: https://www.llvm.org/devmtg/2014-04/PDFs/Talks/Euro-LLVM-2014-Weigand.pdf
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
+> mmap addr must be page aligned (and there is no align req on size).
 
-Hi, Willy
+> i'd expect similar api here.
 
-When rebase on latest 20230806-for-6.6-1 branch, -Wall -Wextra reported
-the above warnings.
+That's not what the manual page or a quick check of the code suggest
+that mmap() does, they say that the kernel just takes it as a hint and
+chooses a nearby page boundary, though I didn't test.  I'm not sure why
+I have that alignment check at all TBH, and to the extent it's needed I
+could just be 8 - this level of code doesn't really care.
 
-Here uses volatile inline assembly code instead of C code to silence the
-unused and optimization warnings.
+> > +	if (size == 16 || size % 16)
+> > +		return -EINVAL;
 
-And since only elfv2 require to save TOC pointer to r2 register, this
-further only add the assembly code for elfv2.
+> why %16 and not %8 ?
 
-BR,
-Zhangjin
+I don't think that's needed any more - there was some stuff in an
+earlier version of the code but no longer.
 
----
- tools/include/nolibc/arch-powerpc.h | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+--zuyh0JKERt9z219h
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/tools/include/nolibc/arch-powerpc.h b/tools/include/nolibc/arch-powerpc.h
-index 76c3784f9dc7..ac212e6185b2 100644
---- a/tools/include/nolibc/arch-powerpc.h
-+++ b/tools/include/nolibc/arch-powerpc.h
-@@ -187,9 +187,17 @@
- void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- #ifdef __powerpc64__
--	/* On 64-bit PowerPC, save TOC/GOT pointer to r2 */
--	extern char TOC __asm__ (".TOC.");
--	register volatile long r2 __asm__ ("r2") = (void *)&TOC - (void *)_start;
-+#if _CALL_ELF == 2
-+	/* with -mabi=elfv2, save TOC/GOT pointer to r2
-+	 * r12 is global entry pointer, we use it to compute TOC from r12
-+	 * https://www.llvm.org/devmtg/2014-04/PDFs/Talks/Euro-LLVM-2014-Weigand.pdf
-+	 * https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi.pdf
-+	 */
-+	__asm__ volatile (
-+		"addis  2, 12, .TOC. - _start@ha\n"
-+		"addi   2,  2, .TOC. - _start@l\n"
-+	);
-+#endif /* _CALL_ELF == 2 */
- 
- 	__asm__ volatile (
- 		"mr     3, 1\n"         /* save stack pointer to r3, as arg1 of _start_c */
--- 
-2.25.1
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTQ6voACgkQJNaLcl1U
+h9ADtwf9Hi+3Tmw6lo4OcpVr7n1Zx4xMLurjUWXhlQulr3E2yaNH/LoJepX0V/Hy
+cYyeMDXfa9itHkAmxF+PWpfByFW2ak1NvN+VB1ywgbz4kJFiAK11hsjQzWuiJw+s
+e1it4mLwr1FXHqL0ewxN4pWvkFHmoyVTtKmtIlYrR4K9Xq8KEWrEDi6x5LHrI6tk
+HXZ6HBESzDzzrctdnfG91f3YdpxLKuvuE1l+HEVfKlh5EqEHtTxzLT1BCDHy4ebI
+URGjT1qEAOxoNDbYkJaaPcVnDkFfcXuSC07xv57tktihM+MnQCtZd0b+IH9lf6Ry
+E10gfnUnsEkptjykMZVkmRiHM0iWvQ==
+=jbyG
+-----END PGP SIGNATURE-----
+
+--zuyh0JKERt9z219h--
