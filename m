@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6355277333D
+	by mail.lfdr.de (Postfix) with ESMTP id ADE9F77333E
 	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 01:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjHGXBz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S230411AbjHGXBz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Mon, 7 Aug 2023 19:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjHGXBr (ORCPT
+        with ESMTP id S230429AbjHGXBr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 7 Aug 2023 19:01:47 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A5C10F3
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Aug 2023 16:01:36 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1bc4abfca29so31349325ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Aug 2023 16:01:36 -0700 (PDT)
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5393B1710
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Aug 2023 16:01:38 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-268476c3b2aso4295051a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Aug 2023 16:01:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691449296; x=1692054096;
+        d=google.com; s=20221208; t=1691449298; x=1692054098;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uc0bDe1Q5+nbJUU+pVaB9FCp2PCsV5hV6cNG49jJHNg=;
-        b=GrSgTtJgL52TnT/uTWzmQ2rNlZPMbNRraizKQo1lbsrgS8zwcyUDm/ibZ0i0T0QYEI
-         yNGDLdTinm9lF/7glMsZWObw9+hcPz72q1jY6CwmSxTTdKkZON2YroHaQrrQXbAHzbQo
-         heRRBKsGOWIDPIqYmgci7pKiKPglMpS6h9iRl8awq8Lyaj9f+vpI1RSUwe1evQmeQxeA
-         yljxtZt0T+nuOX1tF6nEDUnR3GksjVD7fY4jPs/3Rs3LnZFfDyMDuDHLL3u5JxtDAq1V
-         xs0gZDjgwhRYUB/gtHhjLT5AK2LTUatS5+kQJVwvaYLLe2SctFNprHtCwE+H/4e8eSf+
-         djuw==
+        bh=xQQ9HxwXisHRcLOUmLrJOKcqzoMdHrdIoIQ6IecTXIw=;
+        b=twH1EXTprHGVwETfKOR51WQSclQGswbqnS6IDXUASDrraJoaBBJYcSIr+OJT2dIZJR
+         leBiyKihkh50aLALvTrdxF+IKAJ3jFcttX4/CKOLWxYHPK/Hq89n7DG+SBlYwcID3qdF
+         r93db5otOGAqx3LNRu2anFQex0nM0yDk4Ocl4C3YoZtmkh0ZpAu9rG9vF8Ge7lA2vx6I
+         txWNeQ43dVlLxzHcjvUKfuL1Y8dBqKNMZLPnHXBO368htDjuIqSLeQJbC51Wv+IDGGQX
+         gOucjyOb8r/lQtjAMCpy64pvNfNhbplU+k6NXtECSvjvhj9qtAksadi1TPZipdkllAL2
+         VucA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691449296; x=1692054096;
+        d=1e100.net; s=20221208; t=1691449298; x=1692054098;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uc0bDe1Q5+nbJUU+pVaB9FCp2PCsV5hV6cNG49jJHNg=;
-        b=NrvB4w/qTccG6P8z5l4grVZ6Zh5+i7fu+edsMHgQza8U3yvLJOqNs+bhbTHYwKDlxN
-         cOpPWkELkQXreOC0nVJZA2D/hUmOxzluv2gHqHXwiMXk8IeQGdwR2F2HbfhSjrsMm2Kv
-         QzTBytEDy4+w8sQPYLD7vNV9VztVuGgOSjXFwJFVXgUtlbSM0jRrQm67b7kcctFM3zfd
-         tFLiPhu31wSG9lU1TvTD/6x7ieH2j662retjET/lwzni+1fWsjDFlnk0RWCcxKHU+Wm5
-         3XOVaZALpIw7LaQnDuGgEvjgu+YmRlfY/uMH4TnJ1gMBOZpJqXp08pxSi8fiFIoYbiQb
-         te8w==
-X-Gm-Message-State: AOJu0YzUEAocepzi1Chlgx234Fr/SnEeLLy7QtNQpvQKMMJJNpUHyuod
-        YcFT3r9o/o515DB0zfWIRywkwDvbUsedrj9GYg==
-X-Google-Smtp-Source: AGHT+IEsBZifLl0MXUJYmHs+o0Sd8bVj+Mb8G+Oni/9He6IpfqCSyYz//gy84XV6WPfUm4O1N2BM29fLaYhVypmzPQ==
+        bh=xQQ9HxwXisHRcLOUmLrJOKcqzoMdHrdIoIQ6IecTXIw=;
+        b=JZgwDLtU78bSzXqIudihoNTAfr7tqjo8XPCrycOQ/unUuCtfe6Njola2qrFyTFOu4q
+         iFqGK1V0KAVQuKKn3S1PnTsXu1zlVqYv4drhYdk+JT/sPHxRfkLBB7VmHC2zcV6ygFF/
+         p2HgM1Q+0YidMhzOF0/K7HeE5iRIIEXuU5ajMamLuOD9BrRfaT0y5vlGzatIjSaKicVw
+         GYjM+De56uOTuYKhzXmCv6jni6KR+woDeLHzh65YZ7g2rSakp6aJvGFpMo2/zGH7yck+
+         jQm5FbXQHTuhf0eh8XBFmdQHaiOXw3We9eAO+nHkIfNp3vuHm5QEtWQS0QOpFSSnluEi
+         pFyw==
+X-Gm-Message-State: AOJu0YyDXlkqt2Yvy/S0ctQf3XS3t00YD4kR0/oRXZGpthMki3HKBU6K
+        6VX8OgK+Gapc8jRxLbbMGJQ80zhLABKq0z0bAg==
+X-Google-Smtp-Source: AGHT+IFl+V5hav9OEzCEyrerIZ0f25Av5tTYJlIA3LgxqYATB6cN3FKketKmrAM4bjvMcGk+n/Bq9UjqJvwkgCrNng==
 X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a17:903:1ce:b0:1b9:df8f:888c with SMTP
- id e14-20020a17090301ce00b001b9df8f888cmr40364plh.8.1691449296351; Mon, 07
- Aug 2023 16:01:36 -0700 (PDT)
-Date:   Mon,  7 Aug 2023 23:01:07 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a17:90b:314c:b0:267:f245:85f1 with
+ SMTP id ip12-20020a17090b314c00b00267f24585f1mr86267pjb.1.1691449298375; Mon,
+ 07 Aug 2023 16:01:38 -0700 (PDT)
+Date:   Mon,  7 Aug 2023 23:01:08 +0000
 In-Reply-To: <cover.1691446946.git.ackerleytng@google.com>
 Mime-Version: 1.0
 References: <cover.1691446946.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
-Message-ID: <a4692b4772ac71d4f1551cf58fe5333d6ea15796.1691446946.git.ackerleytng@google.com>
-Subject: [RFC PATCH 04/11] KVM: selftests: Test transferring private memory to
- another VM
+Message-ID: <5a869a885bb3a74bd77222f75dedcbace266e4cc.1691446946.git.ackerleytng@google.com>
+Subject: [RFC PATCH 05/11] KVM: x86: Refactor sev's flag migration_in_progress
+ to kvm struct
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     pbonzini@redhat.com, seanjc@google.com, tglx@linutronix.de,
         x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -66,130 +66,109 @@ Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         erdemaktas@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
         david@redhat.com, qperret@google.com, michael.roth@amd.com,
         wei.w.wang@intel.com, liam.merwick@oracle.com,
-        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
+        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com,
+        Sagi Shahar <sagis@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+The migration_in_progress flag will also be needed for migration of
+non-sev VMs.
+
+Co-developed-by: Sagi Shahar <sagis@google.com>
+Signed-off-by: Sagi Shahar <sagis@google.com>
+Co-developed-by: Vishal Annapurve <vannapurve@google.com>
+Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- tools/testing/selftests/kvm/Makefile          |  1 +
- .../kvm/x86_64/private_mem_migrate_tests.c    | 87 +++++++++++++++++++
- 2 files changed, 88 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/private_mem_migrate_tests.c
+ arch/x86/kvm/svm/sev.c   | 17 ++++++-----------
+ arch/x86/kvm/svm/svm.h   |  1 -
+ include/linux/kvm_host.h |  1 +
+ 3 files changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index cb9450022302..d348ff56c92b 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -82,6 +82,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/platform_info_test
- TEST_GEN_PROGS_x86_64 += x86_64/pmu_event_filter_test
- TEST_GEN_PROGS_x86_64 += x86_64/private_mem_conversions_test
- TEST_GEN_PROGS_x86_64 += x86_64/private_mem_kvm_exits_test
-+TEST_GEN_PROGS_x86_64 += x86_64/private_mem_migrate_tests
- TEST_GEN_PROGS_x86_64 += x86_64/set_boot_cpu_id
- TEST_GEN_PROGS_x86_64 += x86_64/set_sregs_test
- TEST_GEN_PROGS_x86_64 += x86_64/smaller_maxphyaddr_emulation_test
-diff --git a/tools/testing/selftests/kvm/x86_64/private_mem_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/private_mem_migrate_tests.c
-new file mode 100644
-index 000000000000..4226de3ebd41
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/private_mem_migrate_tests.c
-@@ -0,0 +1,87 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "kvm_util_base.h"
-+#include "test_util.h"
-+#include "ucall_common.h"
-+#include <linux/kvm.h>
-+#include <linux/sizes.h>
-+
-+#define TRANSFER_PRIVATE_MEM_TEST_SLOT 10
-+#define TRANSFER_PRIVATE_MEM_GPA ((uint64_t)(1ull << 32))
-+#define TRANSFER_PRIVATE_MEM_GVA TRANSFER_PRIVATE_MEM_GPA
-+#define TRANSFER_PRIVATE_MEM_VALUE 0xdeadbeef
-+
-+static void transfer_private_mem_guest_code_src(void)
-+{
-+	uint64_t volatile *const ptr = (uint64_t *)TRANSFER_PRIVATE_MEM_GVA;
-+
-+	*ptr = TRANSFER_PRIVATE_MEM_VALUE;
-+
-+	GUEST_SYNC1(*ptr);
-+}
-+
-+static void transfer_private_mem_guest_code_dst(void)
-+{
-+	uint64_t volatile *const ptr = (uint64_t *)TRANSFER_PRIVATE_MEM_GVA;
-+
-+	GUEST_SYNC1(*ptr);
-+}
-+
-+static void test_transfer_private_mem(void)
-+{
-+	struct kvm_vm *src_vm, *dst_vm;
-+	struct kvm_vcpu *src_vcpu, *dst_vcpu;
-+	int src_memfd, dst_memfd;
-+	struct ucall uc;
-+
-+	const struct vm_shape shape = {
-+		.mode = VM_MODE_DEFAULT,
-+		.type = KVM_X86_SW_PROTECTED_VM,
-+	};
-+
-+	/* Build the source VM, use it to write to private memory */
-+	src_vm = __vm_create_shape_with_one_vcpu(
-+		shape, &src_vcpu, 0, transfer_private_mem_guest_code_src);
-+	src_memfd = vm_create_guest_memfd(src_vm, SZ_4K, 0);
-+
-+	vm_mem_add(src_vm, DEFAULT_VM_MEM_SRC, TRANSFER_PRIVATE_MEM_GPA,
-+		   TRANSFER_PRIVATE_MEM_TEST_SLOT, 1, KVM_MEM_PRIVATE,
-+		   src_memfd, 0);
-+
-+	virt_map(src_vm, TRANSFER_PRIVATE_MEM_GVA, TRANSFER_PRIVATE_MEM_GPA, 1);
-+	vm_set_memory_attributes(src_vm, TRANSFER_PRIVATE_MEM_GPA, SZ_4K,
-+				 KVM_MEMORY_ATTRIBUTE_PRIVATE);
-+
-+	vcpu_run(src_vcpu);
-+	TEST_ASSERT_KVM_EXIT_REASON(src_vcpu, KVM_EXIT_IO);
-+	get_ucall(src_vcpu, &uc);
-+	TEST_ASSERT(uc.args[0] == TRANSFER_PRIVATE_MEM_VALUE,
-+		    "Source VM should be able to write to private memory");
-+
-+	/* Build the destination VM with linked fd */
-+	dst_vm = __vm_create_shape_with_one_vcpu(
-+		shape, &dst_vcpu, 0, transfer_private_mem_guest_code_dst);
-+	dst_memfd = vm_link_guest_memfd(dst_vm, src_memfd, 0);
-+
-+	vm_mem_add(dst_vm, DEFAULT_VM_MEM_SRC, TRANSFER_PRIVATE_MEM_GPA,
-+		   TRANSFER_PRIVATE_MEM_TEST_SLOT, 1, KVM_MEM_PRIVATE,
-+		   dst_memfd, 0);
-+
-+	virt_map(dst_vm, TRANSFER_PRIVATE_MEM_GVA, TRANSFER_PRIVATE_MEM_GPA, 1);
-+	vm_set_memory_attributes(dst_vm, TRANSFER_PRIVATE_MEM_GPA, SZ_4K,
-+				 KVM_MEMORY_ATTRIBUTE_PRIVATE);
-+
-+	vcpu_run(dst_vcpu);
-+	TEST_ASSERT_KVM_EXIT_REASON(dst_vcpu, KVM_EXIT_IO);
-+	get_ucall(dst_vcpu, &uc);
-+	TEST_ASSERT(uc.args[0] == TRANSFER_PRIVATE_MEM_VALUE,
-+		    "Destination VM should be able to read value transferred");
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM));
-+
-+	test_transfer_private_mem();
-+
-+	return 0;
-+}
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 07756b7348ae..725289b523c7 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -1556,8 +1556,6 @@ static bool is_cmd_allowed_from_mirror(u32 cmd_id)
+ 
+ static int sev_lock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
+ {
+-	struct kvm_sev_info *dst_sev = &to_kvm_svm(dst_kvm)->sev_info;
+-	struct kvm_sev_info *src_sev = &to_kvm_svm(src_kvm)->sev_info;
+ 	int r = -EBUSY;
+ 
+ 	if (dst_kvm == src_kvm)
+@@ -1567,10 +1565,10 @@ static int sev_lock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
+ 	 * Bail if these VMs are already involved in a migration to avoid
+ 	 * deadlock between two VMs trying to migrate to/from each other.
+ 	 */
+-	if (atomic_cmpxchg_acquire(&dst_sev->migration_in_progress, 0, 1))
++	if (atomic_cmpxchg_acquire(&dst_kvm->migration_in_progress, 0, 1))
+ 		return -EBUSY;
+ 
+-	if (atomic_cmpxchg_acquire(&src_sev->migration_in_progress, 0, 1))
++	if (atomic_cmpxchg_acquire(&src_kvm->migration_in_progress, 0, 1))
+ 		goto release_dst;
+ 
+ 	r = -EINTR;
+@@ -1583,21 +1581,18 @@ static int sev_lock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
+ unlock_dst:
+ 	mutex_unlock(&dst_kvm->lock);
+ release_src:
+-	atomic_set_release(&src_sev->migration_in_progress, 0);
++	atomic_set_release(&src_kvm->migration_in_progress, 0);
+ release_dst:
+-	atomic_set_release(&dst_sev->migration_in_progress, 0);
++	atomic_set_release(&dst_kvm->migration_in_progress, 0);
+ 	return r;
+ }
+ 
+ static void sev_unlock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
+ {
+-	struct kvm_sev_info *dst_sev = &to_kvm_svm(dst_kvm)->sev_info;
+-	struct kvm_sev_info *src_sev = &to_kvm_svm(src_kvm)->sev_info;
+-
+ 	mutex_unlock(&dst_kvm->lock);
+ 	mutex_unlock(&src_kvm->lock);
+-	atomic_set_release(&dst_sev->migration_in_progress, 0);
+-	atomic_set_release(&src_sev->migration_in_progress, 0);
++	atomic_set_release(&dst_kvm->migration_in_progress, 0);
++	atomic_set_release(&src_kvm->migration_in_progress, 0);
+ }
+ 
+ /* vCPU mutex subclasses.  */
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 18af7e712a5a..d306e2312b53 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -87,7 +87,6 @@ struct kvm_sev_info {
+ 	struct list_head mirror_vms; /* List of VMs mirroring */
+ 	struct list_head mirror_entry; /* Use as a list entry of mirrors */
+ 	struct misc_cg *misc_cg; /* For misc cgroup accounting */
+-	atomic_t migration_in_progress;
+ };
+ 
+ struct kvm_svm {
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 091bc89ae805..3e03eeca279f 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -842,6 +842,7 @@ struct kvm {
+ #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+ 	struct xarray mem_attr_array;
+ #endif
++	atomic_t migration_in_progress;
+ 	char stats_id[KVM_STATS_NAME_SIZE];
+ };
+ 
 -- 
 2.41.0.640.ga95def55d0-goog
 
