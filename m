@@ -2,206 +2,212 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D68D7726EB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Aug 2023 16:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF69177273A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Aug 2023 16:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbjHGOEP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Aug 2023 10:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
+        id S229517AbjHGONb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Aug 2023 10:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235169AbjHGODt (ORCPT
+        with ESMTP id S232676AbjHGONa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Aug 2023 10:03:49 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AE81FE4;
-        Mon,  7 Aug 2023 07:02:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691416973; x=1722952973;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=CvYMilWXhftGiNbs0zmYaPfZE4y554HvHzlmByODIvc=;
-  b=iX45k3uywezKf7Buszj9UUs416QVF61nLBwC/kojszFGJgu9UHQK7CJd
-   g6jZCBi29/moRkVu5sEddw65XxXnAEVk+2EMCh8r07z7kPGkPVenFNpUx
-   CHsc4w2MtBIHxmmZeoownMgGZKcV/+z+ZegdSiY/P+iIS6czl/KK9CvmU
-   1XiQtBoEDwfSjXtbh8i10rMvo51yBLRW2nfwpVfApr1gfqlym1vq+jPly
-   d/dtEKw3f7rPSOYALB0Km3K2nDPiXRME1MiqENTRJ78Zvjl9VfbGp/59K
-   cky6qGMzNpjse28gC4FVKrar95QS9qDyushoJzjoSR84ba6fTAOqoH2kB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="434396995"
-X-IronPort-AV: E=Sophos;i="6.01,262,1684825200"; 
-   d="scan'208";a="434396995"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 07:02:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="854669981"
-X-IronPort-AV: E=Sophos;i="6.01,262,1684825200"; 
-   d="scan'208";a="854669981"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga004.jf.intel.com with ESMTP; 07 Aug 2023 07:02:37 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 7 Aug 2023 07:02:37 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Mon, 7 Aug 2023 07:02:37 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Mon, 7 Aug 2023 07:02:37 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VTfRtc60UhnsluPMaReCAi6WLZS/LcaCfj4BQVN/igMsp8myDymU22zT7J7tKPUDqGNRReyW1B7iviQZ0coCs+e422km9E6A7xPUFWUmMiK+6CD1ac9aVKWdkv+GQjc95ewk1Ovuzn9CZDHKPxkuTA1ddagk7uO40bzgUSdbCj1HcJfBcYkcMJeiZJEC6DrCz0/zyPfdBkjEcRGOzFoM6u8QOijbK7ADtkn5vuOxnWsyjA++ZgGm03sa2vTxq3E264K9VukdvAC1zlEkdUAP0GcqPOpN3qcqG3e90PR8UjLjkc3Aq/0hzOFXG/XSIIvkiBJBG/h6BPGcWzLw/yEBHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CvYMilWXhftGiNbs0zmYaPfZE4y554HvHzlmByODIvc=;
- b=MfYFoVDh5pA7PziCHLQLVPf8eshbTN6AIQsbonvVCSDw/lJnWpZuRAfjhJ8ks3kzQorSfKT+1NaqaRtKdeBgCQ7y/CzPjvh0sjWemXa1TelG8KqkG6dC//qei2wKUNZBo+sbPK5YIfuFa5zxxSMkGlSSzzIwzNBYSdt9f3fLQulCP0Wk4MiyeyBC31emDymiDOnQXBtwmfKjdVbQWacXr+6u+tcQVDP2np+4m8iUQIabAyg230mxQjtl4Q4B/0iD64N0DfLZ+P4f3CJNrNKUOB3/d8oMigsiUVwY5k1XAJkl2K6rx9QvYqAvnTzDaRKbMHA9EMIXfe3QVJT/3p01hA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by CY8PR11MB7396.namprd11.prod.outlook.com (2603:10b6:930:87::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.26; Mon, 7 Aug
- 2023 14:02:35 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::b556:42c4:772f:d47e]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::b556:42c4:772f:d47e%7]) with mapi id 15.20.6652.025; Mon, 7 Aug 2023
- 14:02:35 +0000
-From:   "Liu, Yi L" <yi.l.liu@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: RE: [PATCH v4 07/12] iommufd: Add data structure for Intel VT-d
- stage-1 cache invalidation
-Thread-Topic: [PATCH v4 07/12] iommufd: Add data structure for Intel VT-d
- stage-1 cache invalidation
-Thread-Index: AQHZvh/vmslv1BsHJ0KI1gktitpb2K/WrSKAgABmfoCAALXhgIACYSNwgAASEoCABK1qoA==
-Date:   Mon, 7 Aug 2023 14:02:35 +0000
-Message-ID: <DS0PR11MB75290C3742DB3A7AD3BE6796C30CA@DS0PR11MB7529.namprd11.prod.outlook.com>
-References: <20230724111335.107427-1-yi.l.liu@intel.com>
- <20230724111335.107427-8-yi.l.liu@intel.com>
- <BN9PR11MB52763681308D7950A51E18438C0BA@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZMpei2/CffaW97iU@nvidia.com>
- <BN9PR11MB5276035683CE2AFB7B0F36D28C08A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <DS0PR11MB75295187EE9B4EB64D8797CFC309A@DS0PR11MB7529.namprd11.prod.outlook.com>
- <ZM0FQW9qo3RoNKmX@nvidia.com>
-In-Reply-To: <ZM0FQW9qo3RoNKmX@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB7529:EE_|CY8PR11MB7396:EE_
-x-ms-office365-filtering-correlation-id: ef9ee540-65b4-4b43-7966-08db974ef386
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: D366J5c5I9wntjS9fp+BgwMHpXO38dLIVlY1marSBBiwH5Ol2wBLwTywf6yMP5GbpVdUUmFiSvP5lC+QXOVW9sWcVGP2tldut2M75AnKyMAsecOL1ybwnWDjzwylEsrVd2MIGPu6FW7Ruob6oxCpBQ0K+vOtthC/WV061simy8Ki9KNEq0JoKqtLaKND0CwNZxi/VSwQE/NMo1QMGybQHPfa8oW5oK2+CD49WBk6/jpXR+jgITVAp8Z9tPj4YNrjvaEG3BGW8/J/8kyBq7auLLP7uUVrWsXO9AkrHau/f8/olgi3RdtPHnVZyJDHUSo0GMlyMhCcKlZR46wBXLFZUhosY9/EgaqU+B6zIdXpHpHNiwBj8pu+UWATT9HIApKCFYUwr9J4jSU87bKeT+58+35auaDBUvYgbOmHvvHr+Z3mITA2eXWzB/CaFkzdKkz+AP9qRKYLUsAj8Xll+wJkjA8H/O0oPRe6PT3t6MV72MJ/Wa+r4vavEs2jr9BwYSkhaBauqShlwqq4ZSQr9uN6gA21/trJEVHWYJGJTccHDLE4Rc/o0GH9WAJwOJ6HSs0YQGPY2LDJgxP7ILzXm86jFfSOrbzOxbT9QXSI78ZuhBS7KJhCbpNiBq2wk4e2jFj+
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(376002)(136003)(346002)(39860400002)(451199021)(186006)(1800799003)(55016003)(9686003)(4326008)(316002)(6916009)(86362001)(122000001)(478600001)(54906003)(38100700002)(76116006)(66946007)(71200400001)(66556008)(66476007)(66446008)(64756008)(33656002)(7696005)(6506007)(82960400001)(41300700001)(52536014)(38070700005)(8676002)(8936002)(2906002)(83380400001)(7416002)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c0xHVWlReTZRTjgyMXMrWkVNRkpVSUVLVTBWMVdCdWEvVFBpZEMzd1lKemdU?=
- =?utf-8?B?U2pCV1Q3VERqemhjOUdvbEZtVkZMUFVCTExBRE1DVG9iVWJ5bUpyS0pPcjJi?=
- =?utf-8?B?U1g1VXZyQ1hyenJKOWd1TGEwUUVnazFQSkM0QUU5SFBqUUdWRmNWRGFXNGhN?=
- =?utf-8?B?S21LMUZVTmxjZjhyWHVyTEhqWGh0MVlLaUtJajUvaUV0cUM1SGFIN0lxSzEw?=
- =?utf-8?B?Tm02dVIwcm9PU0EycWZYa3Y5UkpFK2Z6ZEZGcWx6VlhFcnNCMENOS3dveDFR?=
- =?utf-8?B?d1Jobi9yb0oyekVPYlhtUDVwbnRhdno0QkNFbjZRaVpETjZJUVJKeGhQL0VI?=
- =?utf-8?B?RjJhSmVXOW4yQ0JLa2YyOTlxVjl1ZWdmTlJKWE9oL2hiNDFVaFBCank5NlBN?=
- =?utf-8?B?SkRLZmRWajg2SnNVQXpwL1V2NEQvek1HSDF1N2tYeHZZQ214V013b1FhMUV3?=
- =?utf-8?B?RUUwdlR1blFRSFpIbGowSjV5QTlMWmMwK0dVV002ZHhvalI3SSs1SGsyTit1?=
- =?utf-8?B?UG5Td2JYc2E2ZEZlL1M3dk9BNnlaOVlCNjhoOUlHYkVOa2hkbnFXcTRYZG9r?=
- =?utf-8?B?Qi9XdHZ3b3V3eG92S1ZRQmgyVGFtcUJ6UHFHempLV0tjVk1jTDMzQktIeHVV?=
- =?utf-8?B?Q2xCOWtCUjluRmVVa1JZbUVOQnA5c3phd2tIQ3gvL0M4dlo0R09oeW9nMFpz?=
- =?utf-8?B?YmdCZ29LbkRwbW9kajBLdkhiQWc4UHNsZmtYUWU0SkNibEdpaDU2K3lZbmJk?=
- =?utf-8?B?a2NtdytTU3diR1JHQ2ZSc0hoa08vMElUUi9FTFpoQ3F3L01rSWFTcWR6cXUz?=
- =?utf-8?B?cHQ3RGg4WC91TGJQRmdoNWhWclRFdWRjTEVDY0s5QlpkM0xiWmtTN0N2a1h4?=
- =?utf-8?B?ZjdSL01HREJZa2VDekQ5S05yWnBheVdzbnJrTkt2T3ZERmM4SHQ1cnFlNlIv?=
- =?utf-8?B?VnhVNjBxTFUxU3NRcVFvYjlaSDE3cmlDVzVHSExCbTBhdUMxcnEyZXNWQ0V3?=
- =?utf-8?B?QW4vTEFJQ2xJN3FsK0RZd1pjbHdQU1JBTEtZNG9BL0JJSmVSSTRWeTdhZ3Fw?=
- =?utf-8?B?dTJ4c0l4c3NPOHF1UFVLdU9HQ0pEYU5wUTBnYUcva3BGVnJSK01oaGcrd0Fa?=
- =?utf-8?B?ODFrazUxNWF2NUpWZVFQNjFLUHNGaElUUWdOYmVrdmtSUHJsamM0b3ZLQUUy?=
- =?utf-8?B?a0U2dlc4cFc2c2lQOENRZkZJbmIyUEo1QjhiTkphSE53dTRhazVvUHpQMDZh?=
- =?utf-8?B?RlkyRVMvMThPL3Q5UFJUQU9ZSXJZOXF5SjJXeDJ3dVEwZElDdU96RWVUNmVN?=
- =?utf-8?B?NUZXT3phNWIyU1BJQy9RcmRiM0xuMnA2M2FlTVgrMjk0VE5IN2JBdmNKUk1z?=
- =?utf-8?B?SXQzK3JQVGZ0UW9aOEpUV2dCam5Iamo0TVhyT0xpejB4dDBRQVozZE9hSEJq?=
- =?utf-8?B?d3dUNGoreWtOalZJMUFCWWRoV0FCendtZFdad1VLeDRTOW9LVWlMN0R0M2Y2?=
- =?utf-8?B?VXhMdm1wSHpaTFNqZ0Z3ZWpwMDEyazRJRVg1WTNqaFRpbkJqMy9mK3EwQzA3?=
- =?utf-8?B?ZlpVb0VxeVRRbVc1czNFVU9EanlNQUJ6RFR2cFRUekl1Q01pV2JvOHh1MEF2?=
- =?utf-8?B?SEN2N2VuRWl5NU1yOCtSR1MxcjhMZ05RY1lPZjhLcUcvbjJUOU95UHpXZzBp?=
- =?utf-8?B?eU1yRTIzL3ZpUzlYS2VqMmNaYU5xMXMraG9HOHIzOXVtWkVSOVhtaElXTlBr?=
- =?utf-8?B?NVFwTjhLVEduNmUxeVMzRUVVMlpGek1lbkFkNXlaYzFvb0pGK0t6d3JqQTYy?=
- =?utf-8?B?NTdYcTY2K3Y0M29vT1Z6YnFiOUZ2aFlsNnJVZnQ3UEVHWjVtOHkxMXhSUERa?=
- =?utf-8?B?c0pGRmNHeXBQMk40RXB3YytJV3FKc2dFU3JUbmlNS3FpUW8vUFkrSisvL3pv?=
- =?utf-8?B?TkEvUU9PY3E1UmFyMnBZU0QrOGNjdm9pQVpEZWNGODVaakt1Z3pDWkszV3J6?=
- =?utf-8?B?YzVKSjBRangwSHB1bjF6TUtXOGRxcjFjMEpnWDlMYm5MR2ZLV0poV3R3Q09T?=
- =?utf-8?B?Nzk4ZitYYWk4cVpJOVRUMFRxKy9aU1BFaEV3QT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 7 Aug 2023 10:13:30 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F335CE53;
+        Mon,  7 Aug 2023 07:13:25 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1691417575tcjpc2mz
+Received: from linux-lab-host.localdomain ( [116.30.130.12])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 07 Aug 2023 22:12:53 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: Fc2LLDWeHZ+nR+5cfJg6QxzjqIcbKDbNzrvy1zplnpYJRlW14iNG274IzKXPX
+        4l4rIhkpYAYpOOAuoryivBQEL6g/FUb8T8Uo+Lyp36PEkV+0A+ZHyVAIkcozcGBQ8KZBZdg
+        HUowF4+cjZIQx8Lm+6xBmm2lF2atk9nRM7L2jY9RQpHFQU9kxNjmE2UNfFWMlCN2fM0sSFi
+        8xFX6o3lmrgsipUSB6cTk3EriP1DF7FZuiLA4qFsK0JxYAZFddpdHCAGwC7ejbzanAQdjUB
+        bsma9Qw/Ww4YB41lnxSA0ypYlQJibYh9bCys1hySEqJ5x1G73oOPXtFATGImrkYb8I6OFbt
+        b/ZOGwAnLO6fRhzT5x/P4S/lJBKDB4avnj77BLU0SbO+OYSUNHgLZkEmv+CUw==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 13948958742550991541
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     david.laight@aculab.com
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de, w@1wt.eu
+Subject: RE: [PATCH v3] tools/nolibc: fix up size inflate regression
+Date:   Mon,  7 Aug 2023 22:12:52 +0800
+Message-Id: <20230807141252.24482-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <f51e54bcf470451ea36f24640f000e61@AcuMS.aculab.com>
+References: <f51e54bcf470451ea36f24640f000e61@AcuMS.aculab.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef9ee540-65b4-4b43-7966-08db974ef386
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Aug 2023 14:02:35.1487
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XuBqs9kw/a73TiJXV3g326K06UY/fcJQGP0bg9weVYolBZ4FMB0XyLpiRhONQcEJrwOWdSxr0/P7fvrtYGFyTg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7396
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-PiBGcm9tOiBKYXNvbiBHdW50aG9ycGUgPGpnZ0BudmlkaWEuY29tPg0KPiBTZW50OiBGcmlkYXks
-IEF1Z3VzdCA0LCAyMDIzIDEwOjA0IFBNDQo+IA0KPiBPbiBGcmksIEF1ZyAwNCwgMjAyMyBhdCAw
-MTowNDo1N1BNICswMDAwLCBMaXUsIFlpIEwgd3JvdGU6DQo+ID4gPiA+IEhhdmluZyB0aGUgZHJp
-dmVyIGNvcHkgaW4gYSBsb29wIG1pZ2h0IGJlIGJldHRlcg0KPiA+ID4gPg0KPiA+ID4NCj4gPiA+
-IENhbiB5b3UgZWxhYm9yYXRlPw0KPiA+DQo+ID4gSSB0aGluayBKYXNvbiBtZWFucyB0aGUgd2F5
-IGluIHBhdGNoIDA5Lg0KPiANCj4gWWVhaCwgeW91IGNhbid0IHJldXNlIHRoZSBzdGFjayBidWZm
-ZXIgZm9yIGFuIGFycmF5LCBzbyBwYXRjaCA5IGNvcGllcw0KPiBlYWNoIGVsZW1lbnQgdW5pcXVl
-bHkuDQo+IA0KPiBUaGlzIGlzIG1vcmUgY2FsbHMgdG8gY29weV90b191c2VyLCB3aGljaCBoYXMg
-c29tZSBjb3N0DQo+IA0KPiBCdXQgd2UgYXZvaWQgYSBtZW1vcnkgYWxsb2NhdGlvbg0KDQpZZXMu
-DQoNCj4gUGF0Y2ggOSBzaG91bGQgbm90IGFidXNlIHRoZSB1c2VyX2RhdGEsIGNhc3QgaXQgdG8g
-dGhlIGludl9pbmZvIGFuZA0KPiBqdXN0IHB1dCByZXEgb24gdGhlIHN0YWNrOg0KPiANCj4gCXN0
-cnVjdCBpb21tdV9od3B0X3Z0ZF9zMV9pbnZhbGlkYXRlICppbnZfaW5mbyA9IHVzZXJfZGF0YTsN
-Cj4gCXN0cnVjdCBpb21tdV9od3B0X3Z0ZF9zMV9pbnZhbGlkYXRlX2Rlc2MgcmVxOw0KDQpTdXJl
-LiBUaGUgd2F5IGluIHBhdGNoIDA5IGlzIGEgYml0IHRyaWNreS4gVGhlIGFib3ZlIGlzIGJldHRl
-ciBhbmQgY2xlYXJlci4g8J+Yig0KDQo+IEJ1dCBJJ20gbm90IHN1cmUgYWJvdXQgdGhpcyBlbnRy
-eV9zaXplIGxvZ2ljLCB3aGF0IGhhcHBlbnMgaWYgdGhlDQo+IGVudHJ5X3NpemUgaXMgbGFyZ2Vy
-IHRoYW4gdGhlIGtlcm5lbCBzdXBwb3J0cz8gSSB0aGluayBpdCBzaG91bGQNCj4gZmFpbC4uDQoN
-Clllcy4gc2hvdWxkIGZhaWwuIEl0IHNob3VsZCBiZSBmYWlsZWQgaW4gY29weV9zdHJ1Y3RfZnJv
-bV91c2VyKCkgYXMgSSB1c2UNCml0IHRvIGNvcHkgdGhlIHN0cnVjdCBpb21tdV9od3B0X3Z0ZF9z
-MV9pbnZhbGlkYXRlX2Rlc2MuDQoNCiogLUUyQklHOiAgKEB1c2l6ZSA+IEBrc2l6ZSkgYW5kIHRo
-ZXJlIGFyZSBub24temVybyB0cmFpbGluZyBieXRlcyBpbiBAc3JjLg0KDQpSZWdhcmRzLA0KWWkg
-TGl1DQo=
+Hi, David
+
+> From: Zhangjin Wu
+> > Sent: 07 August 2023 06:58
+> ...
+> > +/* __auto_type is used instead of __typeof__ to workaround the build error
+> > + * 'error: assignment of read-only variable' when the argument has 'const' in
+> > + * the type, but __auto_type is a new feature from newer gcc version and it
+> > + * only works with 'const' from gcc 11.0 (__GXX_ABI_VERSION = 1016)
+> > + * https://gcc.gnu.org/legacy-ml/gcc-patches/2013-11/msg01378.html
+> > + */
+> 
+> You can use typeof((x) + 0) to lose the 'const' flag.
+> The only downside is that char/short become int.
+>
+
+Great, thanks!
+
+let's use it, and at least kill the branch using fixed 'long' type.
+
+    #if __GXX_ABI_VERSION >= 1016
+    #define __typeofdecl(arg) __auto_type
+    #else
+    #define __typeofdecl(arg) __typeof__(arg)
+    #endif
+
+    #define __sysret(arg)                                                    \
+    ({                                                                       \
+            __typeofdecl((arg) + 0) __ret = (arg);                           \
+            if (__is_signed_type(__typeof__(arg))) {                         \
+                    if ((long)__ret < 0) {                                   \
+                            SET_ERRNO(-(long)__ret);                         \
+                            __ret = (__typeof__(arg))-1L;                    \
+                    }                                                        \
+            } else {                                                         \
+                    if ((unsigned long)__ret >= (unsigned long)-MAX_ERRNO) { \
+                            SET_ERRNO(-(long)__ret);                         \
+                            __ret = (__typeof__(arg))-1L;                    \
+                    }                                                        \
+            }                                                                \
+            __ret;                                                           \
+    })
+
+My simple test on nolibc-test shows David's typeof solution does give
+the same size result like __auto_type.
+
+what's your suggestion? simply give up the '__auto_type' stuff and use
+the generic __typeof__ version?
+
+Willy, could you please test David's typeof solution on the one which
+have 3-4% size inflating? or any other big programs using nolibc.
+
+> > +
+> > +#if __GXX_ABI_VERSION >= 1016
+> > +#define __GXX_HAS_AUTO_TYPE_WITH_CONST_SUPPORT
+> > +#endif
+> > +
+> > +#ifdef __GXX_HAS_AUTO_TYPE_WITH_CONST_SUPPORT
+> > +#define __sysret(arg)                                                    \
+> > +({                                                                       \
+> > +	__auto_type __ret = (arg);                                       \
+> > +	if (__is_signed_type(__typeof__(arg))) {                         \
+> > +		if (__ret < 0) {                                         \
+> > +			SET_ERRNO(-(long)__ret);                         \
+> > +			__ret = (__typeof__(arg))(-1L);                  \
+> > +		}                                                        \
+> > +	} else {                                                         \
+> > +		if ((unsigned long)__ret >= (unsigned long)-MAX_ERRNO) { \
+> > +			SET_ERRNO(-(long)__ret);                         \
+> > +			__ret = (__typeof__(arg))(-1L);                  \
+> > +		}                                                        \
+> > +	}                                                                \
+> > +	__ret;                                                           \
+> > +})
+> > +
+> > +#else  /* ! __GXX_HAS_AUTO_TYPE_WITH_CONST_SUPPORT */
+> > +#define __sysret(arg)                                                    \
+> > +({                                                                       \
+> > +	long __ret = (long)(arg);                                        \
+> > +	if (__is_signed_type(__typeof__(arg))) {                         \
+> > +		if (__ret < 0) {                                         \
+> > +			SET_ERRNO(-__ret);                               \
+> > +			__ret = -1L;                                     \
+> > +		}                                                        \
+> > +	} else {                                                         \
+> > +		if ((unsigned long)__ret >= (unsigned long)-MAX_ERRNO) { \
+> > +			SET_ERRNO(-__ret);                               \
+> > +			__ret = -1L;                                     \
+> > +		}                                                        \
+> > +	}                                                                \
+> > +	(__typeof__(arg))__ret;                                          \
+> > +})
+> > +#endif /* ! __GXX_HAS_AUTO_TYPE_WITH_CONST_SUPPORT */
+> 
+> with (retyped so it may be wrong):
+> #define is_constexpr(x) sizeof(*(0 ? (void *)((long)(x) * 0) : (int *)0)) == 1)
+> and (because even (void *)0 isn't completely constant):
+> #define is_pointer(x) (!is_constexpr((typeof(x))0))
+> 
+> You can probably do:
+> #define __sysret(arg) \
+> ({ \
+> 	typeof((arg) + 0) __ret = arg; \
+> 	if (__built_choose_expr(is_pointer(arg), (unsigned long)-(MAX_ERRNO+1), __ret) \
+> 			< (__built_choose_expr(is_pointer(arg), (unsigned long)__ret, 0)) { \
+> 		SET_ERRNO(-__ret); \
+> 		__reg = typeof(ret)-1L; \
+> 	} \
+> 	__ret; \
+> })
+> 
+> Apart from the annoyance of having to reverse the conditional
+> that only has one copy of the check.
+> 
+> Using two __builtin_choose_expr() saves you having to write two
+> comparisons that are valid for both pointer and integer.
+>
+
+It works perfectly.
+
+    /*
+     * This returns a constant expression while determining if an argument is
+     * a constant expression, most importantly without evaluating the argument.
+     * Glory to Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
+     * (from include/linux/const.h)
+     */
+
+    #define __is_constexpr(x) \
+            (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+
+    #define __is_pointer(x) (!__is_constexpr((__typeof__(x))0))
+
+    #define __sysret(arg)                                                                      \
+    ({                                                                                         \
+            __typeofdecl((arg) + 0) __ret = (arg);                                             \
+            if (__builtin_choose_expr(__is_pointer(arg), (unsigned long)-(MAX_ERRNO + 1), ((long)__ret)) \
+                    < __builtin_choose_expr(__is_pointer(arg), (unsigned long)__ret, 0)) {      \
+                    SET_ERRNO(-(long)__ret);                                                   \
+                    __ret = (__typeof__(arg))-1L;                                              \
+            }                                                                                  \
+            __ret;                                                                             \
+    })
+
+I have tried the 'is_constexpr()' macro but failed and didn't look into
+it, your explanation here [1] is very clear:
+
+    You'll find that (void *)0 isn't 'constant enough' for
+    is_constexpr() - so is_constexpr((type)0) can be used
+    to detect pointer types.
+
+Best regards,
+Zhangjin
+---
+[1]: https://lore.kernel.org/lkml/a1732bbffd1542d3b9dd34c92f45076c@AcuMS.aculab.com/
+
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
