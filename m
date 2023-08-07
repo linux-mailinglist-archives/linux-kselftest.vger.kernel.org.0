@@ -2,49 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A5A771652
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Aug 2023 19:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF347718CC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Aug 2023 05:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjHFRfl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 6 Aug 2023 13:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
+        id S229608AbjHGDdI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 6 Aug 2023 23:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjHFRfk (ORCPT
+        with ESMTP id S229529AbjHGDdH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 6 Aug 2023 13:35:40 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0301C107;
-        Sun,  6 Aug 2023 10:35:36 -0700 (PDT)
-X-QQ-mid: bizesmtp84t1691343318tuni9m1q
-Received: from linux-lab-host.localdomain ( [116.30.130.12])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 07 Aug 2023 01:35:17 +0800 (CST)
-X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: XBN7tc9DADJdp0LzmFQ4W9/XjsHtdlmMvejuqH/d5Er1Lpm1BQRlBSu9tTUQY
-        pUCwURMVIGuCL4icN7qKNoYU3oyw94IHuVzg58Ii8DR20+zCb70nwa91tl0NVmdzhC+J0Pq
-        GTCKMdy6mrgX22pvppDJAaYKWJFIeNRKfVXPMo0JdIN7PVbP/Dh3xs0jb5zza5iUZ6odNcK
-        +sU7ENwd+MEV1lYWvTIczcLwXG13l4frI72ej1xDVwb3zS8svKDqUii0Wb/nRlniilS8StA
-        4soId+KSj4ZUyA7V3mnvcA/hONzs8yWRffqJsPxOXwgWFDkIYnXw1BLZ2/H1sSYQshRZ9gr
-        3oPVwPykfly+S/ZCjmv7VGHDzvU51fdrHeFhXwkm8H+xNp4PV0LfGbsrFtUMdKFEmEBMWv/
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3186474216457718583
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        thomas@t-8ch.de
-Subject: [PATCH v2] tools/nolibc: fix up size inflate regression
-Date:   Mon,  7 Aug 2023 01:35:12 +0800
-Message-Id: <20230806173512.205928-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <95fe3e732f455fab653fe1427118d905e4d04257.1691339836.git.falcon@tinylab.org>
-References: <95fe3e732f455fab653fe1427118d905e4d04257.1691339836.git.falcon@tinylab.org>
+        Sun, 6 Aug 2023 23:33:07 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915F89D;
+        Sun,  6 Aug 2023 20:33:05 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d4f022c6c91so1223947276.2;
+        Sun, 06 Aug 2023 20:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691379185; x=1691983985;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PS6IeiZC33tTmiycd5oF9VziudnWFwA4fXSnPFJgzm0=;
+        b=jt1NcVkycFoQG/yHGtB+0jJlF/PZNamsiqBz0RYMIxTM2FlSh/KhjEUFsd4aHnhmP6
+         MIhB9FV/feBXmmOswUlFFjoABsS06vHrlIE7o9OtVnaXAJ66xaoRySmjFz/hP+hlylat
+         nmRdzA9UoLApEKAH12FPgawBGQ4j8n52ukQCgNh3Oxt1MTXRI+QvXD4qU2HrCGhDA/eq
+         S81N6xgsx7YR+qmVSykEcXlQlbvpyNttJ8kmT0uQgRkAX46FLXaHjXRCAGyusZrFz+sB
+         /qeAWIvGmiYogbK/PblG/PRiZ4NINhBEMonwBXNXWdaRYuFmAKV54FBzEQRXUk3aL7un
+         /xAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691379185; x=1691983985;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PS6IeiZC33tTmiycd5oF9VziudnWFwA4fXSnPFJgzm0=;
+        b=ifd7vK+EOrLWK1QzyPoCeCDsfPFVT2lCb38Pqntv/pjYw+2a86V1FUF6MmSfELvzim
+         3MmTBp5Nr8ZKJPFOkGg/W3vcz1DpTm34Yx0T0IAK2pVHdan6Yazg8n+mOUqoAgK7L8GT
+         AoUMG/YVCoNvLPrGChDnBrqp3somKIynOe6iHUYpCam+oyOqd9bE4nOEwgby01vieeSJ
+         xOFaMpYzOimdRU7VkI5VQacSVsEWoY5Wpi5YGt5wlT1i5aNuY/mKQenr8trAlSRljbSM
+         6nXb5SGx7AuYRbAya5domUgA1+Jus3G1xTr16Gs4EHwZrL3ye8v3xfGzswWgrFnbBYxr
+         mHjw==
+X-Gm-Message-State: AOJu0YwS2RVlDDjKPaHsw1Us5JIqiX+ghVoO51mRM2iWVJpdIGAOiOjb
+        IeyQbjSrsR99Td2XMBTxKCn7YrcaB5/cIBSXnHo=
+X-Google-Smtp-Source: AGHT+IGPWU9smSGwGTr83XrOkHe/s5ajPSR2PQbL5KXhpXzqbR4Ms/gkpEunaKMSN++k3I+OK1Jz5YNuHLhT1H1UCHQ=
+X-Received: by 2002:a25:26c9:0:b0:d0d:786:2999 with SMTP id
+ m192-20020a2526c9000000b00d0d07862999mr7742055ybm.29.1691379184552; Sun, 06
+ Aug 2023 20:33:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230727093637.1262110-1-usama.anjum@collabora.com>
+ <20230727093637.1262110-3-usama.anjum@collabora.com> <CABb0KFFtjTve+uM=CTPChzUbJvJ=Tr3Q8espo_Rr_hutZPPAiw@mail.gmail.com>
+ <6b6a4e1c-a9e9-9592-d5b4-3c9210c8b650@collabora.com>
+In-Reply-To: <6b6a4e1c-a9e9-9592-d5b4-3c9210c8b650@collabora.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Sun, 6 Aug 2023 20:32:53 -0700
+Message-ID: <CANaxB-wf6OeEAk0VtZoo6gJOBY9QAJHpO4=ctKHz1Nf8O1uw1g@mail.gmail.com>
+Subject: Re: WIP: Performance improvements
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,236 +95,176 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
-
-> [...]
-> before:
-> 
->     // ppc64le
->     $ size nolibc-test
->        text	   data	    bss	    dec	    hex	filename
->       27916	      8	     80	  28004	   6d64	nolibc-test
-> 
->     // mips
->     $ size nolibc-test
->        text	   data	    bss	    dec	    hex	filename
->       23276	     64	     64	  23404	   5b6c	nolibc-test
-> 
-> after:
-> 
->     // ppc64le
->     $ size nolibc-test
->        text	   data	    bss	    dec	    hex	filename
->       27736	      8	     80	  27824	   6cb0	nolibc-test
-> 
->     // mips
->     $ size nolibc-test
->        text	   data	    bss	    dec	    hex	filename
->       23036	     64	     64	  23164	   5a7c	nolibc-test
-> 
-> Suggested-by: Willy Tarreau <w@1wt.eu>
-> Link: https://lore.kernel.org/lkml/20230806095846.GB10627@1wt.eu/
-> Link: https://lore.kernel.org/lkml/20230806134348.GA19145@1wt.eu/
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
-> 
-> v2 here is further fix up argument with 'const' in the type and also
-> support "void *" argument, v1 is [1].
-> 
-> Tested on many architectures (i386, x86_64, mips, ppc64) and gcc version
-> (from gcc 4.8-13.1.0), compiles well without any warning and errors and
-> also with smaller size.
-> 
-> [1]: https://lore.kernel.org/lkml/20230806131921.52453-1-falcon@tinylab.org/
-> 
-> ---
->  tools/include/nolibc/sys.h | 52 ++++++++++++++++++++++++++++++--------
->  1 file changed, 41 insertions(+), 11 deletions(-)
-> 
-> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> index 56f63eb48a1b..9c7448ae19e2 100644
-> --- a/tools/include/nolibc/sys.h
-> +++ b/tools/include/nolibc/sys.h
-> @@ -35,15 +35,45 @@
->   * (src/internal/syscall_ret.c) and glibc (sysdeps/unix/sysv/linux/sysdep.h)
->   */
->  
-> -static __inline__ __attribute__((unused, always_inline))
-> -long __sysret(unsigned long ret)
-> -{
-> -	if (ret >= (unsigned long)-MAX_ERRNO) {
-> -		SET_ERRNO(-(long)ret);
-> -		return -1;
-> -	}
-> -	return ret;
-> -}
-> +/*
-> + * Whether 'type' is a signed type or an unsigned type. Supports scalar types,
-> + * bool and also pointer types. (from include/linux/compiler.h)
-> + */
-> +#define __is_signed_type(type) (((type)(-1)) < (type)1)
-> +
-> +/* __auto_type is used instead of __typeof__ to workaround the build error
-> + * 'error: assignment of read-only variable' when the argument has 'const' in
-> + * the type, but __auto_type is a new feature from newer version and it only
-> + * work with 'const' from gcc 11.0 (__GXX_ABI_VERSION = 1016)
-> + * https://gcc.gnu.org/legacy-ml/gcc-patches/2013-11/msg01378.html
-> + */
-> +
-> +#if __GXX_ABI_VERSION < 1016
-> +#define __typeofdecl(arg) long
-> +#define __typeofconv1(arg) (long)
-> +#define __typeofconv2(arg) (long)
-> +#else
-> +#define __typeofdecl(arg) __auto_type
-> +#define __typeofconv1(arg)
-> +#define __typeofconv2(arg) (__typeof__(arg))
-> +#endif
+On Fri, Jul 28, 2023 at 4:02=E2=80=AFAM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
 >
-
-With nolibc-test, we did more tests.
-
-for ppc64le (long better):
-
-    // __auto_type
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      27736	      8	     80	  27824	   6cb0	nolibc-test
-
-    // long
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      27612	      8	     80	  27700	   6c34	nolibc-test
-
-for ppc64 (long better):
-
-    // __auto_type
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      27136	   1880	     80	  29096	   71a8	nolibc-test
-
-    // long
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      27012	   1880	     80	  28972	   712c	nolibc-test
-
-A further test on x86_64 (__auto_type better):
-
-     // __auto_type
-     $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      22206	      8	     88	  22302	   571e	nolibc-test
-
-     // long
-     $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      22347	      8	     88	  22443	   57ab	nolibc-test
-
-And i386 (almost the same):
-
-     // __auto_type
-     $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      19718	      4	     52	  19774	   4d3e	nolibc-test
-
-     // long
-     $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      19717	      4	     52	  19773	   4d3d	nolibc-test
-
-arm64 (__auto_type better):
-    // __auto_type
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      25764	      8	     80	  25852	   64fc	nolibc-test
-
-    // long
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      26004	      8	     80	  26092	   65ec	nolibc-test
-
-arm (the same):
-
-    // __auto_type
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      19595	      0	     52	  19647	   4cbf	nolibc-test
-
-    // long
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      19595	      0	     52	  19647	   4cbf	nolibc-test
-
-
-riscv64 (__auto_type better):
-
-    // __auto_type
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      21814	      8	     80	  21902	   558e	nolibc-test
-
-    // long
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      21912	      8	     80	  22000	   55f0	nolibc-test
-
-s390 (__auto_type better):
-
-    // __auto_type
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      22302	      0	     80	  22382	   576e	nolibc-test
-
-    // long
-    $ size nolibc-test
-       text	   data	    bss	    dec	    hex	filename
-      22438	      0	     80	  22518	   57f6	nolibc-test
-
-As a summary, in nolibc-test, for 32-bit architectures, __auto_type has the
-same as long, for 64-bit architecture, __auto_type has less size than long,
-only ppc64/ppc64le has reverse result.
-
-BR,
-Zhangjin
-
-> +#define __sysret(arg)                                                           \
-> +({                                                                              \
-> +	__typeofdecl(arg) __sysret_arg = __typeofconv1(arg)(arg);               \
-> +	if (__is_signed_type(__typeof__(arg))) {                                \
-> +		if (__sysret_arg < 0) {                                         \
-> +			SET_ERRNO(-(long)__sysret_arg);                         \
-> +			__sysret_arg = __typeofconv2(arg)(-1L);                 \
-> +		}                                                               \
-> +	} else {                                                                \
-> +		if ((unsigned long)__sysret_arg >= (unsigned long)-MAX_ERRNO) { \
-> +			SET_ERRNO(-(long)__sysret_arg);                         \
-> +			__sysret_arg = __typeofconv2(arg)(-1L);                 \
-> +		}                                                               \
-> +	}                                                                       \
-> +	(__typeof__(arg))__sysret_arg;                                          \
-> +})
->  
->  /* Functions in this file only describe syscalls. They're declared static so
->   * that the compiler usually decides to inline them while still being allowed
-> @@ -94,7 +124,7 @@ void *sbrk(intptr_t inc)
->  	if (ret && sys_brk(ret + inc) == ret + inc)
->  		return ret + inc;
->  
-> -	return (void *)__sysret(-ENOMEM);
-> +	return __sysret((void *)-ENOMEM);
->  }
->  
->  
-> @@ -682,7 +712,7 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
->  static __attribute__((unused))
->  void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
+> We are optimizing for more performance. Please find the change-set below
+> for easy review before next revision and post your comments:
+>
+> - Replace memcpy() with direct copy as it proving to be very expensive
+> - Don't check if PAGE_IS_FILE if no mask needs it as it is very
+>   expensive to check per pte
+> - Add question in comment for discussion purpose
+> - Add fast path for exclusive WP for ptes
+> ---
+>  fs/proc/task_mmu.c | 54 ++++++++++++++++++++++++++++++++++++----------
+>  1 file changed, 43 insertions(+), 11 deletions(-)
+>
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 7e92c33635cab..879baf896ed0b 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -1757,37 +1757,51 @@ static int pagemap_release(struct inode *inode,
+> struct file *file)
+>                                  PAGE_IS_HUGE)
+>  #define PM_SCAN_FLAGS          (PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPAS=
+YNC)
+>
+> +#define MASKS_OF_INTEREST(a)   (a.category_inverted | a.category_mask | =
+\
+> +                                a.category_anyof_mask | a.return_mask)
+> +
+>  struct pagemap_scan_private {
+>         struct pm_scan_arg arg;
+> +       unsigned long masks_of_interest;
+>         unsigned long cur_vma_category;
+>         struct page_region *vec_buf, cur_buf;
+>         unsigned long vec_buf_len, vec_buf_index, found_pages, end_addr;
+>         struct page_region __user *vec_out;
+>  };
+>
+> -static unsigned long pagemap_page_category(struct vm_area_struct *vma,
+> +static unsigned long pagemap_page_category(struct pagemap_scan_private *=
+p,
+> +                                          struct vm_area_struct *vma,
+>                                            unsigned long addr, pte_t pte)
 >  {
-> -	return (void *)__sysret((unsigned long)sys_mmap(addr, length, prot, flags, fd, offset));
-> +	return __sysret(sys_mmap(addr, length, prot, flags, fd, offset));
->  }
->  
->  static __attribute__((unused))
-> -- 
-> 2.25.1
-> 
-> 
+>         unsigned long categories =3D 0;
+>
+>         if (pte_present(pte)) {
+> -               struct page *page =3D vm_normal_page(vma, addr, pte);
+> +               struct page *page;
+>
+>                 categories |=3D PAGE_IS_PRESENT;
+>                 if (!pte_uffd_wp(pte))
+>                         categories |=3D PAGE_IS_WRITTEN;
+> -               if (page && !PageAnon(page))
+> -                       categories |=3D PAGE_IS_FILE;
+> +
+> +               if (p->masks_of_interest & PAGE_IS_FILE) {
+> +                       page =3D vm_normal_page(vma, addr, pte);
+> +                       if (page && !PageAnon(page))
+> +                               categories |=3D PAGE_IS_FILE;
+> +               }
+> +
+>                 if (is_zero_pfn(pte_pfn(pte)))
+>                         categories |=3D PAGE_IS_PFNZERO;
+>         } else if (is_swap_pte(pte)) {
+> -               swp_entry_t swp =3D pte_to_swp_entry(pte);
+> +               swp_entry_t swp;
+>
+>                 categories |=3D PAGE_IS_SWAPPED;
+>                 if (!pte_swp_uffd_wp_any(pte))
+>                         categories |=3D PAGE_IS_WRITTEN;
+> -               if (is_pfn_swap_entry(swp) && !PageAnon(pfn_swap_entry_to=
+_page(swp)))
+> -                       categories |=3D PAGE_IS_FILE;
+> +
+> +               if (p->masks_of_interest & PAGE_IS_FILE) {
+> +                       swp =3D pte_to_swp_entry(pte);
+> +                       if (is_pfn_swap_entry(swp) && !PageAnon(pfn_swap_=
+entry_to_page(swp)))
+> +                               categories |=3D PAGE_IS_FILE;
+> +               }
+>         }
+>
+>         return categories;
+> @@ -1957,9 +1971,7 @@ static bool pagemap_scan_push_range(unsigned long
+> categories,
+>                 if (p->vec_buf_index >=3D p->vec_buf_len)
+>                         return false;
+>
+> -               memcpy(&p->vec_buf[p->vec_buf_index], cur_buf,
+> -                      sizeof(*p->vec_buf));
+> -               ++p->vec_buf_index;
+> +               p->vec_buf[p->vec_buf_index++] =3D *cur_buf;
+>         }
+>
+>         cur_buf->start =3D addr;
+> @@ -2095,9 +2107,24 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
+> unsigned long start,
+>                 return 0;
+>         }
+>
+> +       if (!p->vec_buf) {
+> +               /* Fast path for performing exclusive WP */
+> +               for (addr =3D start; addr !=3D end; pte++, addr +=3D PAGE=
+_SIZE) {
+> +                       if (pte_uffd_wp(ptep_get(pte)))
+> +                               continue;
+> +                       make_uffd_wp_pte(vma, addr, pte);
+> +                       if (!flush) {
+> +                               start =3D addr;
+> +                               flush =3D true;
+> +                       }
+> +               }
+> +               ret =3D 0;
+> +               goto flush_and_return;
+> +       }
+> +
+>         for (addr =3D start; addr !=3D end; pte++, addr +=3D PAGE_SIZE) {
+>                 unsigned long categories =3D p->cur_vma_category |
+> -                                          pagemap_page_category(vma, add=
+r, ptep_get(pte));
+> +                                          pagemap_page_category(p, vma, =
+addr, ptep_get(pte));
+>                 unsigned long next =3D addr + PAGE_SIZE;
+>
+>                 ret =3D pagemap_scan_output(categories, p, addr, &next);
+> @@ -2119,6 +2146,7 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
+> unsigned long start,
+>                 }
+>         }
+>
+> +flush_and_return:
+>         if (flush)
+>                 flush_tlb_range(vma, start, addr);
+>
+> @@ -2284,6 +2312,9 @@ static int pagemap_scan_init_bounce_buffer(struct
+> pagemap_scan_private *p)
+>          * consecutive ranges that have the same categories returned acro=
+ss
+>          * walk_page_range() calls.
+>          */
+> +       // Question: Increasing the vec_buf_len increases the execution s=
+peed.
+> +       // But it'll increase the memory needed to run the IOCTL. Can we =
+do
+> something here?
+> +       // Right now only have space for 512 entries of page_region
+
+The main problem here is that walk_page_range is executed for 512 pages.
+I think we need to execute it for the whole range and interrupt it
+when we need to
+drain the bounce buffer.
+
+For a trivial program that scans its address space the time is reduced from=
+ 20
+seconds to 0.001 seconds. The test program and perf data are here:
+https://gist.github.com/avagin/c5a22f3c78f8cb34281602dfe9c43d10
+
+>         p->vec_buf_len =3D min_t(size_t, PAGEMAP_WALK_SIZE >> PAGE_SHIFT,
+>                                p->arg.vec_len - 1);
+>         p->vec_buf =3D kmalloc_array(p->vec_buf_len, sizeof(*p->vec_buf),
+> @@ -2329,6 +2360,7 @@ static long do_pagemap_scan(struct mm_struct *mm,
+> unsigned long uarg)
+>         if (ret)
+>                 return ret;
+>
+> +       p.masks_of_interest =3D MASKS_OF_INTEREST(p.arg);
+>         ret =3D pagemap_scan_init_bounce_buffer(&p);
+>         if (ret)
+>                 return ret;
+> --
+> 2.39.2
+>
