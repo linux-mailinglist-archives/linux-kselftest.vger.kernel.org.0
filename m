@@ -2,58 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C6077334B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 01:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94049773354
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 01:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjHGXCP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Aug 2023 19:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
+        id S231444AbjHGXCl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Aug 2023 19:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjHGXCJ (ORCPT
+        with ESMTP id S230131AbjHGXCR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Aug 2023 19:02:09 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10D21BCC
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Aug 2023 16:01:47 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-58440eb872aso65576777b3.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Aug 2023 16:01:47 -0700 (PDT)
+        Mon, 7 Aug 2023 19:02:17 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200341FC9
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Aug 2023 16:01:49 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-585f04ffa3eso65814187b3.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Aug 2023 16:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691449306; x=1692054106;
+        d=google.com; s=20221208; t=1691449308; x=1692054108;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BmCSN9U26XeKjtggc7A1AMQ3t040EnO1ZTd61OqRXuY=;
-        b=d72qL5jaNo875D2Ttbag8JHQYT0xztiBQFBU5CxKpoNsYkmS2+1znT1q9wiJEFvc63
-         +c+Avp84BYasJEda1jz758T5BmgFVY9UR451d1KAluobzBS+p1AxvdBTSy6eF/jtEbm2
-         MOMjeEHA8cbVLcnuO+BfSIMApEJUigH/OETJLnHKppMM72zxbrbKCcn//LSACaAS9Vov
-         95P7RI0h7cIj8D7tONzUpe9CtETOANdTi/8X497uExjXNbjmkbWvwFvfnXozz/0ccb2R
-         S3YQE+WFDkENXvnJocQWdvHXkH1wbtnNpLJSq4RXbNBFh5COsIr2Jdq+OPF3tw8UgQOU
-         d6tA==
+        bh=IGhoZooqadODHcw0sKitGtx/x1DrGCR27u12EaEc5Bk=;
+        b=u3QTOXFm9OBaQwq6T7BIR0Q+bo9nIq4PtS/Gtd/NlHHiWA75p5FU8hLg8GrlR6JTSv
+         nrusB4nabH9ryjjrQ7I4j9ROJwbZwrwaKsa8CrPgwuOHhP50Y2KDNbdKPKpX/fHRxy81
+         G8RPWfOA4YE/Udx3DhY8BK1fLBC2SonctbBdOi6o84iJ+7a8JiOh30rt/h754ZQc7yWk
+         LP4WzrMp9p9au1SC/1Ig3p5XCFuAMSYSvdPpx8/fYaKAOITQKfm/VVAGfP5UzJ/k0fUc
+         apGgcpo18O21U9BdUL1r9W5BQRH6jcGHUToKZe3ZTopV/Wh3lIbtQjTKs60PD2anls+p
+         7EsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691449306; x=1692054106;
+        d=1e100.net; s=20221208; t=1691449308; x=1692054108;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BmCSN9U26XeKjtggc7A1AMQ3t040EnO1ZTd61OqRXuY=;
-        b=hMeeWrw0wEgkSfyE3nnuWshHBUiJINjdM3BLQ2aoDEZXTCCuyr8vD5QHwkHmprlCfr
-         VTv99nYnbUDytn3ibO7kK5eAA9LVukn/TLc0rORFJUgrDUAduSMcLjm9hFPowyGSnKc1
-         R8w+QvkJ5On6XIO4QNDYswaUf2yZCXPr9irvZOpl/VlTA7SDFHKBJubniQyWS4OoJdcV
-         AEFQFc6lUXG3LhpFpsXmsUHXjeatr8ZVuoB6pKV4BI9uiePhtHtlPD+tW/JMbWFJUKqB
-         RQHM7fUfG8OEhzHDTSn7e18odne8YmXDtl/sPE4rtHyZLFcgpK6eWYV8GCwVHQaD08lJ
-         OcWw==
-X-Gm-Message-State: AOJu0YzUE3EJOIf11QOrUgGR3gLynSFjjtM+1pzuiV5VQRAnx44Z0gp0
-        XVs9IPjiMz/gWdn9zQoqBbeuAg9Dg8qncSajkA==
-X-Google-Smtp-Source: AGHT+IExjc0x98FZmfGU4JNmMPoNaPHSdSedyqNJXW+Jgjfi29x9X+b9Rq+BbC+BOMnbjOvbXPm6IhRLXHIT9Zp4IQ==
+        bh=IGhoZooqadODHcw0sKitGtx/x1DrGCR27u12EaEc5Bk=;
+        b=IR68UY/rMXGc6p4M6LL54SEppP9ycMbwkchJc+PVuiuxis/s3ZAIj9w/7AvTjm8Gco
+         80zAueDTsL9A84L0ep/i3BfxvVZv6ORU7LtF6yNvL0CHVKopEMvrgg13f6aEknWo7tWI
+         q35GZ6ZkaG3RSfzbe5ArBkujlhHGhuFMOpNo7nZTNqU7Giy4grcrQR8Cw+96s1oSWK0t
+         yTkoNbON/ffUOBOmwVfEFG5GL5HQROrXmhUneaZqyERuLpO1jZB2Xk8+E1kkWBZrzgO2
+         MiH0Gol+Oq8ksNmAL3ir6Lvv9au+QA8WvPF7x7Dl8Pg+T5basXD/hYPL+thfEu2GVd51
+         JyfQ==
+X-Gm-Message-State: AOJu0Yz4++2RUz46ZT5pH+AqyC3eIcFc+D9MLmR/4M/nu3hzkR8U3Y8M
+        O46KpNuBfA6YsoGF/ZzNLCSOh//mXX2usyXbIQ==
+X-Google-Smtp-Source: AGHT+IH9f9RoYdTDwcLqKlgV75d0SH2uiiILMo3c1b9SEmL2dgda9SBOo94a94VqNiHt5g21Tkl3iy4Z5sOB9n5Vpg==
 X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a25:add3:0:b0:d05:7ba4:67f9 with SMTP
- id d19-20020a25add3000000b00d057ba467f9mr57902ybe.3.1691449306075; Mon, 07
- Aug 2023 16:01:46 -0700 (PDT)
-Date:   Mon,  7 Aug 2023 23:01:12 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a25:8052:0:b0:d3d:74b6:e085 with SMTP
+ id a18-20020a258052000000b00d3d74b6e085mr61692ybn.8.1691449308117; Mon, 07
+ Aug 2023 16:01:48 -0700 (PDT)
+Date:   Mon,  7 Aug 2023 23:01:13 +0000
 In-Reply-To: <cover.1691446946.git.ackerleytng@google.com>
 Mime-Version: 1.0
 References: <cover.1691446946.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
-Message-ID: <a3d025e75df68558dcd8a12656772c27c4a36f97.1691446946.git.ackerleytng@google.com>
-Subject: [RFC PATCH 09/11] KVM: x86: Handle moving of memory context for
- intra-host migration
+Message-ID: <6244c632343298a1ee785a20f3eb6d6b1f3d3e0a.1691446946.git.ackerleytng@google.com>
+Subject: [RFC PATCH 10/11] KVM: selftests: Generalize migration functions from sev_migrate_tests.c
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     pbonzini@redhat.com, seanjc@google.com, tglx@linutronix.de,
         x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -66,8 +65,7 @@ Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         erdemaktas@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
         david@redhat.com, qperret@google.com, michael.roth@amd.com,
         wei.w.wang@intel.com, liam.merwick@oracle.com,
-        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com,
-        Sagi Shahar <sagis@google.com>
+        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -79,240 +77,160 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Migration of memory context involves moving lpage_info and
-mem_attr_array from source to destination VM.
+These functions will be used in private (guest mem) migration tests.
 
-Co-developed-by: Sagi Shahar <sagis@google.com>
-Signed-off-by: Sagi Shahar <sagis@google.com>
-Co-developed-by: Vishal Annapurve <vannapurve@google.com>
-Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- arch/x86/kvm/x86.c       | 110 +++++++++++++++++++++++++++++++++++++++
- include/linux/kvm_host.h |  17 ++++++
- virt/kvm/guest_mem.c     |  25 +++++++++
- 3 files changed, 152 insertions(+)
+ .../selftests/kvm/include/kvm_util_base.h     | 13 +++++
+ .../selftests/kvm/x86_64/sev_migrate_tests.c  | 48 +++++++------------
+ 2 files changed, 30 insertions(+), 31 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index a1a28dd77b94..12688754c556 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -4402,6 +4402,33 @@ void kvm_unlock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
- }
- EXPORT_SYMBOL_GPL(kvm_unlock_two_vms);
- 
-+static int kvm_lock_vm_memslots(struct kvm *dst_kvm, struct kvm *src_kvm)
-+{
-+	int r = -EINVAL;
-+
-+	if (dst_kvm == src_kvm)
-+		return r;
-+
-+	r = -EINTR;
-+	if (mutex_lock_killable(&dst_kvm->slots_lock))
-+		return r;
-+
-+	if (mutex_lock_killable_nested(&src_kvm->slots_lock, SINGLE_DEPTH_NESTING))
-+		goto unlock_dst;
-+
-+	return 0;
-+
-+unlock_dst:
-+	mutex_unlock(&dst_kvm->slots_lock);
-+	return r;
-+}
-+
-+static void kvm_unlock_vm_memslots(struct kvm *dst_kvm, struct kvm *src_kvm)
-+{
-+	mutex_unlock(&src_kvm->slots_lock);
-+	mutex_unlock(&dst_kvm->slots_lock);
-+}
-+
- /*
-  * Read or write a bunch of msrs. All parameters are kernel addresses.
-  *
-@@ -6325,6 +6352,78 @@ int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irq_event,
- 	return 0;
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index 868925b26a7b..af6ebead5bc3 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -331,6 +331,19 @@ static inline void vm_enable_cap(struct kvm_vm *vm, uint32_t cap, uint64_t arg0)
+ 	vm_ioctl(vm, KVM_ENABLE_CAP, &enable_cap);
  }
  
-+static bool memslot_configurations_match(struct kvm_memslots *src_slots,
-+					 struct kvm_memslots *dst_slots)
++static inline int __vm_migrate_from(struct kvm_vm *dst, struct kvm_vm *src)
 +{
-+	struct kvm_memslot_iter src_iter;
-+	struct kvm_memslot_iter dst_iter;
-+
-+	kvm_for_each_memslot_pair(&src_iter, src_slots, &dst_iter, dst_slots) {
-+		if (src_iter.slot->base_gfn != dst_iter.slot->base_gfn ||
-+		    src_iter.slot->npages != dst_iter.slot->npages ||
-+		    src_iter.slot->flags != dst_iter.slot->flags)
-+			return false;
-+
-+		if (kvm_slot_can_be_private(dst_iter.slot) &&
-+		    !kvm_gmem_params_match(src_iter.slot, dst_iter.slot))
-+			return false;
-+	}
-+
-+	/* There should be no more nodes to iterate if configurations match */
-+	return !src_iter.node && !dst_iter.node;
++	return __vm_enable_cap(dst, KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM, src->fd);
 +}
 +
-+static int kvm_move_memory_ctxt_from(struct kvm *dst, struct kvm *src)
++static inline void vm_migrate_from(struct kvm_vm *dst, struct kvm_vm *src)
 +{
-+	struct kvm_memslot_iter src_iter;
-+	struct kvm_memslot_iter dst_iter;
-+	struct kvm_memslots *src_slots, *dst_slots;
-+	int i;
++	int ret;
 +
-+	/* TODO: Do we also need to check consistency for as_id == SMM? */
-+	src_slots = __kvm_memslots(src, 0);
-+	dst_slots = __kvm_memslots(dst, 0);
-+
-+	if (!memslot_configurations_match(src_slots, dst_slots))
-+		return -EINVAL;
-+
-+	/*
-+	 * Transferring lpage_info is an optimization, lpage_info can be rebuilt
-+	 * by the destination VM.
-+	 */
-+	kvm_for_each_memslot_pair(&src_iter, src_slots, &dst_iter, dst_slots) {
-+		for (i = 1; i < KVM_NR_PAGE_SIZES; ++i) {
-+			unsigned long ugfn = dst_iter.slot->userspace_addr >> PAGE_SHIFT;
-+			int level = i + 1;
-+
-+			/*
-+			 * If the gfn and userspace address are not aligned wrt each
-+			 * other, skip migrating lpage_info.
-+			 */
-+			if ((dst_iter.slot->base_gfn ^ ugfn) &
-+				(KVM_PAGES_PER_HPAGE(level) - 1))
-+				continue;
-+
-+			kvfree(dst_iter.slot->arch.lpage_info[i - 1]);
-+			dst_iter.slot->arch.lpage_info[i - 1] =
-+				src_iter.slot->arch.lpage_info[i - 1];
-+			src_iter.slot->arch.lpage_info[i - 1] = NULL;
-+		}
-+	}
-+
-+#ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
-+	/*
-+	 * For VMs that don't use private memory, this will just be moving an
-+	 * empty xarray pointer.
-+	 */
-+	dst->mem_attr_array.xa_head = src->mem_attr_array.xa_head;
-+	src->mem_attr_array.xa_head = NULL;
-+#endif
-+
-+	kvm_vm_dead(src);
-+	return 0;
++	ret = __vm_migrate_from(dst, src);
++	TEST_ASSERT(!ret, "Migration failed, ret: %d, errno: %d\n", ret, errno);
 +}
 +
- static int kvm_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+ static inline void vm_set_memory_attributes(struct kvm_vm *vm, uint64_t gpa,
+ 					    uint64_t size, uint64_t attributes)
  {
- 	int r;
-@@ -6351,6 +6450,14 @@ static int kvm_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
- 	if (r)
- 		goto out_mark_migration_done;
+diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+index c7ef97561038..cee8219fe8d2 100644
+--- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
++++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+@@ -80,20 +80,6 @@ static struct kvm_vm *aux_vm_create(bool with_vcpus)
+ 	return vm;
+ }
  
-+	r = kvm_lock_vm_memslots(kvm, source_kvm);
-+	if (r)
-+		goto out_unlock;
-+
-+	r = kvm_move_memory_ctxt_from(kvm, source_kvm);
-+	if (r)
-+		goto out_unlock_memslots;
-+
- 	/*
- 	 * Different types of VMs will allow userspace to define if moving
- 	 * encryption context should be supported.
-@@ -6360,6 +6467,9 @@ static int kvm_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
- 		r = static_call(kvm_x86_vm_move_enc_context_from)(kvm, source_kvm);
+-static int __sev_migrate_from(struct kvm_vm *dst, struct kvm_vm *src)
+-{
+-	return __vm_enable_cap(dst, KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM, src->fd);
+-}
+-
+-
+-static void sev_migrate_from(struct kvm_vm *dst, struct kvm_vm *src)
+-{
+-	int ret;
+-
+-	ret = __sev_migrate_from(dst, src);
+-	TEST_ASSERT(!ret, "Migration failed, ret: %d, errno: %d\n", ret, errno);
+-}
+-
+ static void test_sev_migrate_from(bool es)
+ {
+ 	struct kvm_vm *src_vm;
+@@ -105,13 +91,13 @@ static void test_sev_migrate_from(bool es)
+ 		dst_vms[i] = aux_vm_create(true);
+ 
+ 	/* Initial migration from the src to the first dst. */
+-	sev_migrate_from(dst_vms[0], src_vm);
++	vm_migrate_from(dst_vms[0], src_vm);
+ 
+ 	for (i = 1; i < NR_MIGRATE_TEST_VMS; i++)
+-		sev_migrate_from(dst_vms[i], dst_vms[i - 1]);
++		vm_migrate_from(dst_vms[i], dst_vms[i - 1]);
+ 
+ 	/* Migrate the guest back to the original VM. */
+-	ret = __sev_migrate_from(src_vm, dst_vms[NR_MIGRATE_TEST_VMS - 1]);
++	ret = __vm_migrate_from(src_vm, dst_vms[NR_MIGRATE_TEST_VMS - 1]);
+ 	TEST_ASSERT(ret == -1 && errno == EIO,
+ 		    "VM that was migrated from should be dead. ret %d, errno: %d\n", ret,
+ 		    errno);
+@@ -133,7 +119,7 @@ static void *locking_test_thread(void *arg)
+ 
+ 	for (i = 0; i < NR_LOCK_TESTING_ITERATIONS; ++i) {
+ 		j = i % NR_LOCK_TESTING_THREADS;
+-		__sev_migrate_from(input->vm, input->source_vms[j]);
++		__vm_migrate_from(input->vm, input->source_vms[j]);
  	}
  
-+out_unlock_memslots:
-+	kvm_unlock_vm_memslots(kvm, source_kvm);
-+out_unlock:
- 	kvm_unlock_two_vms(kvm, source_kvm);
- out_mark_migration_done:
- 	kvm_mark_migration_done(kvm, source_kvm);
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 3e03eeca279f..2f44b5d294a8 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1144,6 +1144,15 @@ static inline bool kvm_memslot_iter_is_valid(struct kvm_memslot_iter *iter, gfn_
- 	     kvm_memslot_iter_is_valid(iter, end);			\
- 	     kvm_memslot_iter_next(iter))
+ 	return NULL;
+@@ -170,7 +156,7 @@ static void test_sev_migrate_parameters(void)
  
-+/* Iterate over a pair of memslots in gfn order until one of the trees end */
-+#define kvm_for_each_memslot_pair(iter1, slots1, iter2, slots2)		\
-+	for (kvm_memslot_iter_start(iter1, slots1, 0),			\
-+		     kvm_memslot_iter_start(iter2, slots2, 0);		\
-+	     kvm_memslot_iter_is_valid(iter1, U64_MAX) &&		\
-+		     kvm_memslot_iter_is_valid(iter2, U64_MAX);		\
-+	     kvm_memslot_iter_next(iter1),				\
-+		     kvm_memslot_iter_next(iter2))
-+
- /*
-  * KVM_SET_USER_MEMORY_REGION ioctl allows the following operations:
-  * - create a new memory slot
-@@ -2359,6 +2368,8 @@ static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
- #ifdef CONFIG_KVM_PRIVATE_MEM
- int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
- 			      gfn_t gfn, kvm_pfn_t *pfn, int *max_order);
-+bool kvm_gmem_params_match(struct kvm_memory_slot *slot1,
-+			   struct kvm_memory_slot *slot2);
- #else
- static inline int kvm_gmem_get_pfn(struct kvm *kvm,
- 				   struct kvm_memory_slot *slot, gfn_t gfn,
-@@ -2367,6 +2378,12 @@ static inline int kvm_gmem_get_pfn(struct kvm *kvm,
- 	KVM_BUG_ON(1, kvm);
- 	return -EIO;
- }
-+
-+static inline bool kvm_gmem_params_match(struct kvm_memory_slot *slot1,
-+					 struct kvm_memory_slot *slot2)
-+{
-+	return false;
-+}
- #endif /* CONFIG_KVM_PRIVATE_MEM */
+ 	vm_no_vcpu = vm_create_barebones();
+ 	vm_no_sev = aux_vm_create(true);
+-	ret = __sev_migrate_from(vm_no_vcpu, vm_no_sev);
++	ret = __vm_migrate_from(vm_no_vcpu, vm_no_sev);
+ 	TEST_ASSERT(ret == -1 && errno == EINVAL,
+ 		    "Migrations require SEV enabled. ret %d, errno: %d\n", ret,
+ 		    errno);
+@@ -184,25 +170,25 @@ static void test_sev_migrate_parameters(void)
+ 	sev_ioctl(sev_es_vm_no_vmsa->fd, KVM_SEV_ES_INIT, NULL);
+ 	__vm_vcpu_add(sev_es_vm_no_vmsa, 1);
  
- #endif
-diff --git a/virt/kvm/guest_mem.c b/virt/kvm/guest_mem.c
-index 1b3df273f785..2f84e5c67942 100644
---- a/virt/kvm/guest_mem.c
-+++ b/virt/kvm/guest_mem.c
-@@ -686,6 +686,31 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
- }
- EXPORT_SYMBOL_GPL(kvm_gmem_get_pfn);
+-	ret = __sev_migrate_from(sev_vm, sev_es_vm);
++	ret = __vm_migrate_from(sev_vm, sev_es_vm);
+ 	TEST_ASSERT(
+ 		ret == -1 && errno == EINVAL,
+ 		"Should not be able migrate to SEV enabled VM. ret: %d, errno: %d\n",
+ 		ret, errno);
  
-+bool kvm_gmem_params_match(struct kvm_memory_slot *slot1,
-+			   struct kvm_memory_slot *slot2)
-+{
-+	bool ret;
-+	struct file *file1;
-+	struct file *file2;
-+
-+	if (slot1->gmem.pgoff != slot2->gmem.pgoff)
-+		return false;
-+
-+	file1 = kvm_gmem_get_file(slot1);
-+	file2 = kvm_gmem_get_file(slot2);
-+
-+	ret = (file1 && file2 &&
-+	       file_inode(file1) == file_inode(file2));
-+
-+	if (file1)
-+		fput(file1);
-+	if (file2)
-+		fput(file2);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(kvm_gmem_params_match);
-+
- static int kvm_gmem_init_fs_context(struct fs_context *fc)
- {
- 	if (!init_pseudo(fc, GUEST_MEMORY_MAGIC))
+-	ret = __sev_migrate_from(sev_es_vm, sev_vm);
++	ret = __vm_migrate_from(sev_es_vm, sev_vm);
+ 	TEST_ASSERT(
+ 		ret == -1 && errno == EINVAL,
+ 		"Should not be able migrate to SEV-ES enabled VM. ret: %d, errno: %d\n",
+ 		ret, errno);
+ 
+-	ret = __sev_migrate_from(vm_no_vcpu, sev_es_vm);
++	ret = __vm_migrate_from(vm_no_vcpu, sev_es_vm);
+ 	TEST_ASSERT(
+ 		ret == -1 && errno == EINVAL,
+ 		"SEV-ES migrations require same number of vCPUS. ret: %d, errno: %d\n",
+ 		ret, errno);
+ 
+-	ret = __sev_migrate_from(vm_no_vcpu, sev_es_vm_no_vmsa);
++	ret = __vm_migrate_from(vm_no_vcpu, sev_es_vm_no_vmsa);
+ 	TEST_ASSERT(
+ 		ret == -1 && errno == EINVAL,
+ 		"SEV-ES migrations require UPDATE_VMSA. ret %d, errno: %d\n",
+@@ -355,14 +341,14 @@ static void test_sev_move_copy(void)
+ 
+ 	sev_mirror_create(mirror_vm, sev_vm);
+ 
+-	sev_migrate_from(dst_mirror_vm, mirror_vm);
+-	sev_migrate_from(dst_vm, sev_vm);
++	vm_migrate_from(dst_mirror_vm, mirror_vm);
++	vm_migrate_from(dst_vm, sev_vm);
+ 
+-	sev_migrate_from(dst2_vm, dst_vm);
+-	sev_migrate_from(dst2_mirror_vm, dst_mirror_vm);
++	vm_migrate_from(dst2_vm, dst_vm);
++	vm_migrate_from(dst2_mirror_vm, dst_mirror_vm);
+ 
+-	sev_migrate_from(dst3_mirror_vm, dst2_mirror_vm);
+-	sev_migrate_from(dst3_vm, dst2_vm);
++	vm_migrate_from(dst3_mirror_vm, dst2_mirror_vm);
++	vm_migrate_from(dst3_vm, dst2_vm);
+ 
+ 	kvm_vm_free(dst_vm);
+ 	kvm_vm_free(sev_vm);
+@@ -384,8 +370,8 @@ static void test_sev_move_copy(void)
+ 
+ 	sev_mirror_create(mirror_vm, sev_vm);
+ 
+-	sev_migrate_from(dst_mirror_vm, mirror_vm);
+-	sev_migrate_from(dst_vm, sev_vm);
++	vm_migrate_from(dst_mirror_vm, mirror_vm);
++	vm_migrate_from(dst_vm, sev_vm);
+ 
+ 	kvm_vm_free(mirror_vm);
+ 	kvm_vm_free(dst_mirror_vm);
 -- 
 2.41.0.640.ga95def55d0-goog
 
