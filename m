@@ -2,141 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C43773DB0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 18:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E8B774068
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 19:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjHHQUw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Aug 2023 12:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
+        id S231374AbjHHRCr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Aug 2023 13:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbjHHQT3 (ORCPT
+        with ESMTP id S233771AbjHHRBs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 12:19:29 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2070.outbound.protection.outlook.com [40.107.101.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CEF900E;
-        Tue,  8 Aug 2023 08:48:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jJZh0sAxNNQT2xSe9z2Z4pxhf3JBVInAWHuHYhhaVoaxh/5NPM5xZrEtW0kIVZwaW7dkuowD1a8PA2fw79oeuYF6YGXfqG/2tx6xbU02LzMqxIahi65sV3JP4bYpwgZWBJY5ab7QRwTNdR8CQhyF2PR7r3ZsS/2iGRL7gKg3iUAZ/659FvL+QT3igjd5h5xWriZvyIekCWPXpA9VIABe6S+VtCJG66aFG/llUxA7sOIQnc4+lmUh6a6jHZ8F4Qw6M3O3eRHZbXprItE7Y1jtihhPy8dlD4bo4A17iP3GASsI3oduoe8HiWi1wL73vEhYBISaPlYXl7IlKvRFvf0Jvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=esVSysetGhzh6t5ORSQSSD6Oz46VS/5ZRsXchN81E0w=;
- b=ZtiW7nPpIeJ1tTeUF/fFg1LQ35lPiSY1mitqay5vtkynRC/dHmMITZU0ReCLHntCtlx4SPJ55ne6WmjsleY1WgSM37qZr6KbfJnNays/3hWM7pn/BdsXssm6nvdC8Qqpo4ZQfkzhw179ZpiMIwbH3TfXG/h7WlPhVKQ7lnTKJNu/lelFycKJVM2vkVSYrttaotor0Buv6tMNHh2E13cZvaNXBx38g7RN2PHvJadIENP1xvXpp18Y9SkGYncPGIqMqjVPlnCjYuhcoAukrJ6c3pKUKtSuzxGE/GoxiRcDe8gIzeinLgy2Wswq+cuyfrvLhJSV44fFMGCE+E7vL0F3dA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=esVSysetGhzh6t5ORSQSSD6Oz46VS/5ZRsXchN81E0w=;
- b=xqCQuWvyoG19yc6iCvifNAFK1NXDzqMwGq9GmrGBr/jTFhlWoHmvigs7Bu7+ygEwoHxZAXV5pP6DmVmVQChs1uBkjdrhpKF7u7nOUyrbo4ad9qk6KXdq3XG+FaU6rOjgrzf1xa+vXDBjoWRA0CzlayXqq9mAXF1htiRD69hhc4E=
-Received: from MW4PR04CA0344.namprd04.prod.outlook.com (2603:10b6:303:8a::19)
- by DM3PR12MB9325.namprd12.prod.outlook.com (2603:10b6:0:46::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.27; Tue, 8 Aug
- 2023 08:12:37 +0000
-Received: from MWH0EPF000971E9.namprd02.prod.outlook.com
- (2603:10b6:303:8a:cafe::9a) by MW4PR04CA0344.outlook.office365.com
- (2603:10b6:303:8a::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.27 via Frontend
- Transport; Tue, 8 Aug 2023 08:12:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MWH0EPF000971E9.mail.protection.outlook.com (10.167.243.71) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6652.19 via Frontend Transport; Tue, 8 Aug 2023 08:12:37 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
- 2023 03:11:35 -0500
-From:   Meng Li <li.meng@amd.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>,
-        "Nathan Fontenot" <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        "Perry Yuan" <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
-Subject: [PATCH V1 6/6] Documentation: introduce AMD Pstate Preferrd Core mode kernel command line options
-Date:   Tue, 8 Aug 2023 16:10:01 +0800
-Message-ID: <20230808081001.2215240-7-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230808081001.2215240-1-li.meng@amd.com>
-References: <20230808081001.2215240-1-li.meng@amd.com>
+        Tue, 8 Aug 2023 13:01:48 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0D258F8D;
+        Tue,  8 Aug 2023 09:01:13 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id A6E1660173;
+        Tue,  8 Aug 2023 10:53:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691484837; bh=tkIdjaCIZxuCMCril+uMFLD30L4EwBbIMx25+pZyiFc=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=VTLtJO2lgounct7FeM0VWk10tM5AnVCMV4tbccq2a60ZGpktif0DKBZ+jtTIYUQVA
+         +sUNTnfJBLIF1h/vs9TR07doW69kzMxWd+yVYtw50SZrAcie/VngdXdI56CLL1XL8H
+         reHAb/5NnPHwdM5y2jE51baWzrLXsTZQitqxN+wlzg4OMqFaiuKyy8hzb90a4DrAsB
+         ifMFQ06sOhXA1VgtuXViMuNwkuybVEhnHL3IVeFOrUNoqy3zewvwXoRpf/nXEM4VuK
+         9kpMBrRhvNWkUtbQ0qBzzj/a1I2eqZYy2frVrRgl27TPT8Hexu97JN7tMCbZyHEhOz
+         CGZz1dJREIXyA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mWdK7oF-jwBA; Tue,  8 Aug 2023 10:53:55 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id BB78A6015F;
+        Tue,  8 Aug 2023 10:53:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691484835; bh=tkIdjaCIZxuCMCril+uMFLD30L4EwBbIMx25+pZyiFc=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=0PBv/ik5TAMYekzrraheXTmOBkzHPVfCKFbBTr4cLyaU/wGwFwV+Qk/h4kUe9Nj3W
+         irzHthPYuUUrelWzDSrSF2uG9OJbth6JsfP69OzdWtsgchBQdXXERWOGHCfZYIzeUs
+         nMsTZi+vXGBXIadoE9ZL/SIKI/XYBYsPgba6W4OQRVGE0g22SOPa1gUUiKiXx4YHrh
+         GLDbdmUPvt9qF2w6glJL3BgwpRj/E2MIfS49cRaPJhhaCDFu35H9UqfOseyumD3OJ5
+         8/Tjzdgp4gR/eCoZfrFsgDyxqwT96XKx/HrEuIB+VjWYuj9vjFz1y6u697+Q8ys18/
+         NHxw6XzrbPsww==
+Message-ID: <25d01cd0-e6a1-1701-a066-f96a23767361@alu.unizg.hr>
+Date:   Tue, 8 Aug 2023 10:53:36 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: Re: selftests: net/af_unix test_unix_oob [FAILED]
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     alexander@mihalicyn.com, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, shuah@kernel.org
+References: <abf98942-0058-f2ad-8e55-fbdd83b7c2d6@alu.unizg.hr>
+ <20230807204648.50070-1-kuniyu@amazon.com>
+ <ba4da366-b8cf-ca36-e2dc-cce7260cccf8@alu.unizg.hr>
+Content-Language: en-US
+In-Reply-To: <ba4da366-b8cf-ca36-e2dc-cce7260cccf8@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E9:EE_|DM3PR12MB9325:EE_
-X-MS-Office365-Filtering-Correlation-Id: 71c336c2-ae13-403f-0fa0-08db97e73a3b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bGGRQABzEAOEQ5DAoStKk2a3nrUY92wyQ+Zvh+Gm88Flku/3tClT7AGEDWckV9FeTswTKN2nNPsEixVKbbVZwdM1p2pOpt2LauezIwoFCzHl8HjPhO5PcUIIvmh829wHGazwNncgGI/Ry4s0eZP/6GmDwhmGW+MZ5TrGtUEhgwAkbTcjnGEDWAZyI15XRe2vWxSzMX7CLfFWUHtVK+NnpWEQlZ3s9NCwHKddD0MQXiUtH8qvtauXSU/4dc0te/dXzGz4x72HkfojZM5J39dxHXfHEcndLw7C1BJNL6K5gYcwomWfVtR7smcyab75LPAelDInjWJY5giKnp1pAHNVjLsurJTZBwVxVAUDsNBFLhpK/WXHmPOAegbUzhWy6+ck6Hp0S3KCGLFqBXXfyCs7Bv22t+5sRqbKZUvoHbsw6T3VJjf33PbR1MU9AenktGt0RNSDuXRRCRZiaJYd32/wrGf/Zf8zTcCIn9dodU7lmR3DsRSHE9DXX2o+qTWetevTngxnZTsTZe5P15fZmLYwcuZHI3KfAm44SgSI4P54xYdYhe5/tyrLPvszMu6Ezz6F3L30t8wNBfmdW9H0tWhabRSuK1QdFfEIc3n9Rym1XkySITyBdg2NpYxkumzwddKtnqM1cchGMIfQtOuFkKUe8qW40Ta9cOx/Ox3HHnbM8JIYYW9pgyntB8C6CU9+acAVsyV5jSkLfJCPzPU2f4aHVpABIpB6lO9FKG23WVUbbXx2jv8eSBY4iAfQ9lDlcz1M5tFzUkTZj+B4oMLDwsNGnoqo0p8PoTj8XBiLyvougqFowkjrbZ69/rD65bFCSzplB62VHaA0IZRpGMezZpplJ0IcHgP7QHm2W7mUfMqbcxBpGKs4pYvP7uM3cUU3eYYO
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(396003)(346002)(376002)(82310400008)(1800799003)(186006)(90021799007)(451199021)(90011799007)(46966006)(40470700004)(36840700001)(2616005)(7696005)(1076003)(26005)(36756003)(16526019)(336012)(6666004)(82740400003)(478600001)(81166007)(356005)(110136005)(54906003)(70586007)(70206006)(6636002)(4326008)(41300700001)(426003)(316002)(8936002)(8676002)(5660300002)(40460700003)(4744005)(2906002)(36860700001)(83380400001)(47076005)(86362001)(40480700001)(36900700001)(14943795004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2023 08:12:37.1527
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71c336c2-ae13-403f-0fa0-08db97e73a3b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000971E9.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9325
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-AMD Pstate driver support enable/disable Preferred core.
-Default disabled on platforms supporting AMD Preferred Core.
-Enable AMD Pstate Preferred Core with
-"amd_prefcore=enable" added to the kernel command line.
+On 8/8/23 01:09, Mirsad Todorovac wrote:
+> On 8/7/23 22:46, Kuniyuki Iwashima wrote:
+>> From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+>> Date: Mon, 7 Aug 2023 21:44:41 +0200
+>>> Hi all,
+>>>
+>>> In the kernel 6.5-rc5 build on Ubuntu 22.04 LTS (jammy jellyfish) on a Ryzen 7950 assembled box,
+>>> vanilla torvalds tree kernel, the test test_unix_oob unexpectedly fails:
+>>>
+>>> # selftests: net/af_unix: test_unix_oob
+>>> # Test 2 failed, sigurg 23 len 63 OOB %
+>>>
+>>> It is this code:
+>>>
+>>>           /* Test 2:
+>>>            * Verify that the first OOB is over written by
+>>>            * the 2nd one and the first OOB is returned as
+>>>            * part of the read, and sigurg is received.
+>>>            */
+>>>           wait_for_data(pfd, POLLIN | POLLPRI);
+>>>           len = 0;
+>>>           while (len < 70)
+>>>                   len = recv(pfd, buf, 1024, MSG_PEEK);
+>>>           len = read_data(pfd, buf, 1024);
+>>>           read_oob(pfd, &oob);
+>>>           if (!signal_recvd || len != 127 || oob != '#') {
+>>>                   fprintf(stderr, "Test 2 failed, sigurg %d len %d OOB %c\n",
+>>>                   signal_recvd, len, oob);
+>>>                   die(1);
+>>>           }
+>>>
+>>> In 6.5-rc4, this test was OK, so it might mean we have a regression?
+>>
+>> Thanks for reporting.
+>>
+>> I confirmed the test doesn't fail on net-next at least, but it's based
+>> on v6.5-rc4.
+>>
+>>    ---8<---
+>>    [root@localhost ~]# ./test_unix_oob
+>>    [root@localhost ~]# echo $?
+>>    0
+>>    [root@localhost ~]# uname -r
+>>    6.5.0-rc4-01192-g66244337512f
+>>    ---8<---
+>>
+>> I'll check 6.5-rc5 later.
+> 
+> Hi, Kuniyuki,
+> 
+> It seems that there is a new development. I could reproduce the error with the failed test 2
+> as early as 6.0-rc1. However, the gotcha is that the error appears to be sporadically manifested
+> (possibly a race)?
+> 
+> I am currently attempting a bisect.
 
-Signed-off-by: Meng Li <li.meng@amd.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+Bisect had shown that the condition existed already at 5.11 torvalds tree.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 2de235d52fac..bc92e178431b 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -363,6 +363,11 @@
- 			  selects a performance level in this range and appropriate
- 			  to the current workload.
- 
-+	amd_prefcore=
-+			[X86]
-+			enable
-+			  Enable AMD Pstate Preferred Core.
-+
- 	amijoy.map=	[HW,JOY] Amiga joystick support
- 			Map of devices attached to JOY0DAT and JOY1DAT
- 			Format: <a>,<b>
--- 
-2.34.1
+It has to do with the configs chosen (I used the configs from seltests/*/config merged), but it
+is also present in the Ubuntu production build:
 
+marvin@defiant:~$ cd linux/kernel/linux_torvalds
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+Test 2 failed, sigurg 23 len 63 OOB %
+marvin@defiant:~/linux/kernel/linux_torvalds$ uname -rms
+Linux 6.4.8-060408-generic x86_64
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+Test 1 failed sigurg 0 len 63
+marvin@defiant:~/linux/kernel/linux_torvalds$
+
+It happens on rare occasions, so it seems to be a hard-to-spot race.
+
+Normal test running test_unix_oob once never noticed that, save by accident, which brought the problem to attention ...
+
+However, the problem seems to be config-driven rather than kernel-version-driven.
+
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..100000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+Test 3.1 Inline failed, len 1 oob % atmark 0
+Test 1 Inline failed, sigurg 0 len 63
+Test 1 Inline failed, sigurg 0 len 63
+Test 1 Inline failed, sigurg 0 len 63
+Test 2 Inline failed, len 63 atmark 1
+Test 3 Inline failed, sigurg 23 len 63 data x
+Test 3 Inline failed, sigurg 23 len 63 data x
+Test 3 Inline failed, sigurg 23 len 63 data x
+Test 3 Inline failed, sigurg 23 len 63 data x
+Test 2 Inline failed, len 63 atmark 1
+Test 3.1 Inline failed, len 1 oob % atmark 0
+Test 2 failed, sigurg 23 len 63 OOB %
+marvin@defiant:~/linux/kernel/linux_torvalds$ uname -rms
+Linux 6.5.0-060500rc4-generic x86_64
+marvin@defiant:~/linux/kernel/linux_torvalds$
+
+At moments, I was able to reproduce with certain configs, but now something odd happens.
+
+I will keep investigating.
+
+Kind regards,
+Mirsad
