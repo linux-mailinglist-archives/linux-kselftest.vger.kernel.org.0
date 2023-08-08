@@ -2,121 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA8A774424
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 20:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D084E77476C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 21:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235298AbjHHSPf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Aug 2023 14:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S231494AbjHHTOq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Aug 2023 15:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235434AbjHHSPG (ORCPT
+        with ESMTP id S235486AbjHHTOO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 14:15:06 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD3D1775B0
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 10:21:16 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKvWT2hLmzrSG1;
-        Tue,  8 Aug 2023 21:42:29 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
- (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
- 2023 21:43:39 +0800
-From:   Zeng Heng <zengheng4@huawei.com>
-To:     <kristina.martsenko@arm.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <broonie@kernel.org>, <shuah@kernel.org>
-CC:     <linux-kselftest@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <xiexiuqi@huawei.com>,
-        <zengheng4@huawei.com>
-Subject: [PATCH v2 5/5] kselftest/arm64: add lse and lse2 features to hwcap test
-Date:   Tue, 8 Aug 2023 21:40:36 +0800
-Message-ID: <20230808134036.668954-6-zengheng4@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230808134036.668954-1-zengheng4@huawei.com>
-References: <20230808134036.668954-1-zengheng4@huawei.com>
+        Tue, 8 Aug 2023 15:14:14 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2244ECA
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 09:37:20 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-997c4107d62so818330666b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Aug 2023 09:37:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1691512570; x=1692117370;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7bw2MRgpkFm1vILiE0Y5MYyZNNxscMVN+eqSvqqHwK4=;
+        b=EePW+ss015g11YgFFHMy90Z5WBj/PCKy6a/lhF3ExOntSwvl8wOFfJQ1JbeQoQrrOx
+         xGv9mUGakIoi++O8fmZPptc9lYFC2bKDg9uXW/+1Mxi9bbiHs3cBrG5MKCqPjOigSNk/
+         6O3T2Scei8koWcY2M/Eaj3ZH5HH0kvS2OwUipqKRF44XHNPvdm7NRKse4GbRIsRU3CNw
+         MHRQ4gStC0CIZh/3TmsijzYoIO2grgcREPRoC80135uNlMXE9RheTTzhehwkkqfMOILw
+         IG+BZkUNI0ZVxYlQC6LMviOYgjd4hQSn16di8r9dqB6kv/iUsDpTXsLNS+LLy0b/jFrX
+         XBlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691512570; x=1692117370;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7bw2MRgpkFm1vILiE0Y5MYyZNNxscMVN+eqSvqqHwK4=;
+        b=gmK05mtrRT2bDMQHawXlfzi+B5RSkLW9iBV0fB18ClEnEZTjhae0dw0qbc/H+xpyTi
+         7vxrG1mjLnNPa8uER2OxbxhL0rZ4r4uUoEiiWSRus42Vzl/cODReLCWrsmdcg5XALE4b
+         9EX2OJdbim6sSWnc6v/FbFl658h4+zTeddegeFHIS/llWyK5vzrUWYYFRJBsdZ9rOoX6
+         kGctxd809feS8/TaV/zGM2BHg5CMX0iS0uDFly2K6owoG/On9EVbGRtMDP84Nx7Qybmp
+         g/UOCXBUKp1ADZj5kvY1VipCVOwPt9dK9/R7PjzxQFwOo6Yz1ZuQ/syVql8PHWrMofK0
+         K41Q==
+X-Gm-Message-State: AOJu0YyMBMH8qH2AVchj7B5iAVS5qRcAUtE4ztpIqMjNHLCPk5CTl7XZ
+        Nqm90m6lR2pNylKej0WcIE7vuSuHXsZHm1QOtiUY1Q==
+X-Google-Smtp-Source: AGHT+IGyc5YFMEUdUm3mgxMUbhzIYZxUjCAeYEgPYwAXs5W80a27H3BIhOB0Da8QtwlqT/aZI8FmyxUNTteHqh8I214=
+X-Received: by 2002:a17:906:217:b0:98d:4000:1bf9 with SMTP id
+ 23-20020a170906021700b0098d40001bf9mr85402ejd.65.1691512570147; Tue, 08 Aug
+ 2023 09:36:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230720-so-reuseport-v6-0-7021b683cdae@isovalent.com>
+ <20230720-so-reuseport-v6-7-7021b683cdae@isovalent.com> <CAP01T76fZhrELGxsm5-u85AL5994mS0NGZd6gw-RYaHE8vKfTA@mail.gmail.com>
+In-Reply-To: <CAP01T76fZhrELGxsm5-u85AL5994mS0NGZd6gw-RYaHE8vKfTA@mail.gmail.com>
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Tue, 8 Aug 2023 17:35:59 +0100
+Message-ID: <CAN+4W8j7Lyh4Zm1neabe2f+DJWbP4zRrATM4rwD3=EBS0s1CjA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 7/8] bpf, net: Support SO_REUSEPORT sockets
+ with bpf_sk_assign
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Joe Stringer <joe@cilium.io>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add the LSE and various features check in the set of hwcap tests.
+On Tue, Aug 8, 2023 at 5:23=E2=80=AFAM Kumar Kartikeya Dwivedi <memxor@gmai=
+l.com> wrote:
+>
+> Hi Lorenz, Kuniyuki, Martin,
+>
+> I am getting a KASAN (inline mode) splat on bpf-next when I run
+> ./test_progs -t btf_skc_cls_ingress, and I bisected it to this commit:
+> 9c02bec95954 ("bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign"=
+)
 
-As stated in the ARM manual, the LSE2 feature allows for atomic access
-to unaligned memory. Therefore, for processors that only have the LSE
-feature, we register .sigbus_fn to test their ability to perform
-unaligned access.
+Thanks for the report. I forgot about struct request_sock again...
+I'll have a fix shortly, I hope.
 
-Signed-off-by: Zeng Heng <zengheng4@huawei.com>
----
- tools/testing/selftests/arm64/abi/hwcap.c | 30 +++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
-
-diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-index 69234a8e8c59..112b6a219382 100644
---- a/tools/testing/selftests/arm64/abi/hwcap.c
-+++ b/tools/testing/selftests/arm64/abi/hwcap.c
-@@ -34,6 +34,12 @@
-  */
- typedef void (*sig_fn)(void);
-
-+static void atomics_sigill(void)
-+{
-+	/* STADD W0, [SP] */
-+	asm volatile(".inst 0xb82003ff" : : : );
-+}
-+
- static void crc32_sigill(void)
- {
- 	asm volatile("crc32w w0, w0, w1");
-@@ -231,6 +237,14 @@ static void svebf16_sigill(void)
- 	asm volatile(".inst 0x658aa000" : : : "z0");
- }
-
-+static void uscat_sigbus(void)
-+{
-+	/* unaligned atomic access */
-+	asm volatile("ADD x1, sp, #2" : : : );
-+	/* STADD W0, [X1] */
-+	asm volatile(".inst 0xb820003f" : : : );
-+}
-+
- static const struct hwcap_data {
- 	const char *name;
- 	unsigned long at_hwcap;
-@@ -276,6 +290,22 @@ static const struct hwcap_data {
- 		.cpuinfo = "ilrcpc",
- 		.sigill_fn = ilrcpc_sigill,
- 	},
-+	{
-+		.name = "LSE",
-+		.at_hwcap = AT_HWCAP,
-+		.hwcap_bit = HWCAP_ATOMICS,
-+		.cpuinfo = "atomics",
-+		.sigill_fn = atomics_sigill,
-+	},
-+	{
-+		.name = "LSE2",
-+		.at_hwcap = AT_HWCAP,
-+		.hwcap_bit = HWCAP_USCAT,
-+		.cpuinfo = "uscat",
-+		.sigill_fn = atomics_sigill,
-+		.sigbus_fn = uscat_sigbus,
-+		.sigbus_reliable = true,
-+	},
- 	{
- 		.name = "MOPS",
- 		.at_hwcap = AT_HWCAP2,
---
-2.25.1
-
+Lorenz
