@@ -2,83 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A0177404D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 19:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F252677423C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 19:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233972AbjHHRBl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Aug 2023 13:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
+        id S234846AbjHHRht (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Aug 2023 13:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233828AbjHHRBB (ORCPT
+        with ESMTP id S234992AbjHHRhO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 13:01:01 -0400
+        Tue, 8 Aug 2023 13:37:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8768681;
-        Tue,  8 Aug 2023 09:00:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF676CC5
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 09:16:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 396B8624C2;
-        Tue,  8 Aug 2023 11:12:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B77C433C7;
-        Tue,  8 Aug 2023 11:12:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01D5F624EC
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 12:25:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 785D1C433C8;
+        Tue,  8 Aug 2023 12:25:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691493129;
-        bh=1QMm2qYYenzfqrS9JtfJhviMwybOhFCTNjTSNEl8Uq4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Pac1+sdY1mCBsPtQKAp6KfSZke3+ZBoIRZKAq4FOZYbRqr3J1FmN1eYHV24JD+vWP
-         8rXqfnrUS7PT+9ReDUlUeSB3dy8aNma2jcigPfN1Xc7fVYYRfv0ja/Ce83eULQnwpb
-         XViufpw39qsVaOpRvFR8jsCujgepLFVxZ+Su+ULX8NTvV/OGwHjSvwsrKjv5tERC+X
-         BmvFyy5T3jDSNAh6afNl3pVM3QRaYoA+s5iqziwsiQjlcxAHGyso1yzzbzqNGvIa3i
-         n77zRhws7zWBAx27h8GEQwAmQE0Ss/XkGz1YXHZuN2REA6IA8apT+hhHu6ElBm+Csk
-         hrRwlqbGY3yjw==
-Received: from [104.132.45.110] (helo=wait-a-minute.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1qTKdC-00377i-VX;
-        Tue, 08 Aug 2023 12:12:07 +0100
-Date:   Tue, 08 Aug 2023 12:12:13 +0100
-Message-ID: <87y1ilpz3m.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Anup Patel <anup@brainfault.org>
-Cc:     oliver.upton@linux.dev, xiaobo55x@gmail.com,
-        ajones@ventanamicro.com, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Like Xu <likexu@tencent.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        Haibo Xu <haibo1.xu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH v6 00/13] RISCV: Add KVM_GET_REG_LIST API
-In-Reply-To: <CAAhSdy0yug=J0nxnnPoLYL=0MiT0w6qgPYOcv0QwMRe+fsQn8Q@mail.gmail.com>
-References: <cover.1690273969.git.haibo1.xu@intel.com>
-        <CAAhSdy0yug=J0nxnnPoLYL=0MiT0w6qgPYOcv0QwMRe+fsQn8Q@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 104.132.45.110
-X-SA-Exim-Rcpt-To: anup@brainfault.org, oliver.upton@linux.dev, xiaobo55x@gmail.com, ajones@ventanamicro.com, seanjc@google.com, pbonzini@redhat.com, corbet@lwn.net, atishp@atishpatra.org, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, shuah@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, ricarkol@google.com, vannapurve@google.com, likexu@tencent.com, vipinsh@google.com, dmatlack@google.com, coltonlewis@google.com, kvm@vger.kernel.org, haibo1.xu@intel.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        s=k20201202; t=1691497529;
+        bh=sC4E02/BINj7pWyMVS4nyFpH+D3+VLo6Wp6B42jku/4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q28XMu64mWD15itogR6BMxaA6ubBhoSOaubWdiTCnaglTpbF66HSqigAVm33dEQUj
+         smQ1R876W6LEBgC36amH/C6R61bi/IQIBZaEa4wXXbIoVG39LgPzNu0P///zk1Gqbt
+         44nvYmCZcclX8NwhkQRREdroBbso7PgiwC8kl8RP5OiCjnup9NGU8IlsqBmKIB1NXx
+         K5h4XO86/EIzty9ilZuPGaBqSb2qIiyTsqpC7of+PdXf1nBEtGjW783PoRt3+GAKow
+         rTggNw9zo6LD+r6SxqzNvFwnINZ2zuzAfiQZmv++589imen0Toqvz/EEkWoXpcuV4d
+         0DuCj6jSyasRA==
+Date:   Tue, 8 Aug 2023 13:25:24 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Zeng Heng <zengheng4@huawei.com>
+Cc:     kristina.martsenko@arm.com, shuah@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-kselftest@vger.kernel.org, xiexiuqi@huawei.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/5] kselftest/arm64: add float-point feature to hwcap
+ test
+Message-ID: <29093701-3fd7-443b-b5c5-4333a6812c4f@sirena.org.uk>
+References: <20230808061356.2215158-1-zengheng4@huawei.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ahY/9JK6eeajWjO0"
+Content-Disposition: inline
+In-Reply-To: <20230808061356.2215158-1-zengheng4@huawei.com>
+X-Cookie: You need not be present to win.
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -89,68 +60,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 07 Aug 2023 04:48:33 +0100,
-Anup Patel <anup@brainfault.org> wrote:
->=20
-> Hi Marc, Hi Oliver,
->=20
-> On Tue, Jul 25, 2023 at 2:05=E2=80=AFPM Haibo Xu <haibo1.xu@intel.com> wr=
-ote:
-> >
-> > KVM_GET_REG_LIST will dump all register IDs that are available to
-> > KVM_GET/SET_ONE_REG and It's very useful to identify some platform
-> > regression issue during VM migration.
-> >
-> > Patch 1-7 re-structured the get-reg-list test in aarch64 to make some
-> > of the code as common test framework that can be shared by riscv.
-> >
-> > Patch 8 move reject_set check logic to a function so as to check for
-> > different errno for different registers.
-> > Patch 9 move finalize_vcpu back to run_test so that riscv can implement
-> > its specific operation.
-> > Patch 10 change to do the get/set operation only on present-blessed lis=
-t.
-> > Patch 11 add the skip_set facilities so that riscv can skip set operati=
-on
-> > on some registers.
-> > Patch 12 enabled the KVM_GET_REG_LIST API in riscv.
-> > patch 13 added the corresponding kselftest for checking possible
-> > register regressions.
-> >
-> > The get-reg-list kvm selftest was ported from aarch64 and tested with
-> > Linux v6.5-rc3 on a Qemu riscv64 virt machine.
-> >
-> > ---
-> > Changed since v5:
-> >   * Rebase to v6.5-rc3
-> >   * Minor fix for Andrew's comments
-> >
-> > Andrew Jones (7):
-> >   KVM: arm64: selftests: Replace str_with_index with strdup_printf
-> >   KVM: arm64: selftests: Drop SVE cap check in print_reg
-> >   KVM: arm64: selftests: Remove print_reg's dependency on vcpu_config
-> >   KVM: arm64: selftests: Rename vcpu_config and add to kvm_util.h
-> >   KVM: arm64: selftests: Delete core_reg_fixup
-> >   KVM: arm64: selftests: Split get-reg-list test code
-> >   KVM: arm64: selftests: Finish generalizing get-reg-list
-> >
-> > Haibo Xu (6):
-> >   KVM: arm64: selftests: Move reject_set check logic to a function
-> >   KVM: arm64: selftests: Move finalize_vcpu back to run_test
-> >   KVM: selftests: Only do get/set tests on present blessed list
-> >   KVM: selftests: Add skip_set facility to get_reg_list test
-> >   KVM: riscv: Add KVM_GET_REG_LIST API support
-> >   KVM: riscv: selftests: Add get-reg-list test
->=20
-> Are you okay for this series to go through the KVM RISC-V tree ?
 
-Sure, seems fine from my point of view. But please put it on an
-immutable topic branch so that we can also merge it in the arm64 tree,
-should we need to resolve any conflicts.
+--ahY/9JK6eeajWjO0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks,
+On Tue, Aug 08, 2023 at 02:13:51PM +0800, Zeng Heng wrote:
 
-	M.
+> +static void fp_sigill(void)
+> +{
+> +	/* FMOV	S0, #1 */
+> +	asm volatile(".inst 0x1e2e1000" : : : );
+> +}
+> +
 
---=20
-Without deviation from the norm, progress is not possible.
+That should assemble even with the toolchain configured for v8.0 so
+there shouldn't be any need to hand encode here.  Otherwise
+
+Reviewed-by: Mark Brown <broonie@kernel.org>
+
+--ahY/9JK6eeajWjO0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTSNDMACgkQJNaLcl1U
+h9Clbgf/fyRUUr0Fm7raPd7+oEvUJK1+OOiSohJBBi1FrE3WKR4utWBFUSdAVix0
+LszS7Z2FbT2LZA2XDiCLzrdkcwTxaA+qsjrZ3q6RndKF/1AW8vXAWiLl+mvAmxl4
+dDsDwzziKlLZTROTLTo6YV+jnIDHutCst33/1PwUULQBKx64rJQ7GiESrs5Yp2pH
+JG3pyFBCNbEY51poQ716+E7RI8CMCyJBUqqc4D+YtBA7ftD/0ppDUdzUxTpqF7PV
+x8ZXs4iys74O0I/qAYDv7z/KcPf4g0DHCsdEU7mEVCLr/U0cJgNQsQEefa0c1mDW
+iUsPGrvwX5o4LCa/rpDQeIWDzmigIA==
+=c5Q1
+-----END PGP SIGNATURE-----
+
+--ahY/9JK6eeajWjO0--
