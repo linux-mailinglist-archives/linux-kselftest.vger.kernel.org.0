@@ -2,37 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D502774810
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 21:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D94774808
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 21:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjHHTZj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Aug 2023 15:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
+        id S233994AbjHHTYo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Aug 2023 15:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232721AbjHHTZX (ORCPT
+        with ESMTP id S231809AbjHHTYb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 15:25:23 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7A3C12C83;
-        Tue,  8 Aug 2023 11:49:29 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 378In9WT005841;
-        Tue, 8 Aug 2023 20:49:09 +0200
-Date:   Tue, 8 Aug 2023 20:49:09 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     david.laight@aculab.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v5] tools/nolibc: fix up size inflate regression
-Message-ID: <ZNKOJY+g66nkIyvv@1wt.eu>
-References: <b6ff2684f557f6ce00151905990643e651391614.1691437328.git.falcon@tinylab.org>
+        Tue, 8 Aug 2023 15:24:31 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272F016D0F2;
+        Tue,  8 Aug 2023 12:21:28 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d5eeb722a82so143040276.0;
+        Tue, 08 Aug 2023 12:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691522487; x=1692127287;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=diySgYB/+o5ldcXShApfWPeWlXdCLBpgzXr+03nag2s=;
+        b=aI86kVcP5RX4GTYucp3JU2R1gispSFteGcvwqhB5v+uYh7lcaprwx/MvsiOux+7dVV
+         FFTmPer/GsrHdWL9j/bC/KWEeoGTrZpUO47fwt/mV+10/Hu3EKMNvfEBqSbXbB00sYoR
+         hRX5bHwEgspX/uOCtN77niYpyyOiMriJM0k5xj+6ISQ3+EXFKDYoML2VRJ1K4vfPoP85
+         BSEDZ7jJ2ZRd1COxOLZZ9aTxlVrNmDjU7uJ7dYXmEyYsU5u8s79gWzDLoFdCjAfDOJwq
+         PO6pjyJaiVBjmwDI63B0SRwDiN/KKCjI8gtWXmhsACnd6YuRIplqMyjIm3yJMQzZz+YL
+         e6LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691522487; x=1692127287;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=diySgYB/+o5ldcXShApfWPeWlXdCLBpgzXr+03nag2s=;
+        b=GmbKAGog9a3FtxS35aPx1HGMUtiUeYhBqb75eikpgEPjGuvacKtkfY2cZ8DjDWkApa
+         AKb5g5n863fJ8Kvve3U9rIjnuQ6xgRYWqvH4y4kN4PUQC9y+oQvrHLcWie08f3AZJPUq
+         eCHgONeIY2OwLusi/4eSWK00d/ADVeuu86s06Pwitqwi27Vhinm1uHdiIm37GrogT4sn
+         qUQzJjU9RonkUkwhFPTu/IRjOKCSwerlIwvkWdHaw0rKSYWMsFIcnGgRYtQB9u9F4PJO
+         uUIo9XEJ8zLYjSZG/WIi6pqJp8JsVurbTGVpRQWSpp8GTmDZ5COcwNpTK3Z5fyWL9pqh
+         JSdQ==
+X-Gm-Message-State: AOJu0YwEWrzG6rtEJWUnF63B7B4CPFUxJCL2SVOQvdRF+RB8YJPj756j
+        tNRpLnHZrTB8k4T8LKOFACpzrTtBbcl406CkJ6w=
+X-Google-Smtp-Source: AGHT+IG5d90bapjIOlJBGA8irxOFPeCaIv3uCJP0B3jPOYPbIPyqiMre2cM/diK+xvgImaerO4LitHR/iRqNuHbzkeQ=
+X-Received: by 2002:a25:aaaa:0:b0:d43:a0d8:8db4 with SMTP id
+ t39-20020a25aaaa000000b00d43a0d88db4mr11596435ybi.11.1691522486684; Tue, 08
+ Aug 2023 12:21:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6ff2684f557f6ce00151905990643e651391614.1691437328.git.falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230808104309.357852-1-usama.anjum@collabora.com> <20230808104309.357852-3-usama.anjum@collabora.com>
+In-Reply-To: <20230808104309.357852-3-usama.anjum@collabora.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Tue, 8 Aug 2023 12:21:10 -0700
+Message-ID: <CANaxB-ww6AcO4QThubYw62Mdeid4e3FOQAXvA_GZ=wu4J60-AQ@mail.gmail.com>
+Subject: Re: [PATCH v27 2/6] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,205 +93,134 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Zhangjin,
+On Tue, Aug 8, 2023 at 3:43=E2=80=AFAM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
 
-On Tue, Aug 08, 2023 at 04:04:05AM +0800, Zhangjin Wu wrote:
-> As reported and suggested by Willy, the inline __sysret() helper
-> introduces three types of conversions and increases the size:
-> 
-> (1) the "unsigned long" argument to __sysret() forces a sign extension
-> from all sys_* functions that used to return 'int'
-> 
-> (2) the comparison with the error range now has to be performed on a
-> 'unsigned long' instead of an 'int'
-> 
-> (3) the return value from __sysret() is a 'long' (note, a signed long)
-> which then has to be turned back to an 'int' before being returned by the
-> caller to satisfy the caller's prototype.
-> 
-> To fix up this, firstly, let's use macro instead of inline function to
-> preserves the input type and avoids these useless conversions (1), (3).
-> 
-> Secondly, comparison to -MAX_ERRNO inflicts on all integer returns where
-> we could previously keep a simple sign comparison, let's use a new
-> __is_pointer() macro suggested by David Laight to limit the comparison
-> to -MAX_ERRNO (2) only for pointer returns and preserve a simple sign
-> comparison for integer returns as before. The __builtin_choose_expr()
-> is suggested by David Laight to choose different comparisons based on
-> the types to share code.
-> 
-> Thirdly, fix up the following warning by an explicit conversion and let
-> __sysret() be able to accept the (void *) type of argument:
-> 
->     sysroot/powerpc/include/sys.h: In function 'sbrk':
->     sysroot/powerpc/include/sys.h:104:16: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->       104 |         return (void *)__sysret(-ENOMEM);
-> 
-> Fourthly, to further workaround the argument type with 'const' flag,
-> must use __auto_type for gcc >= 11.0 and __typeof__((arg) + 0) suggested
-> by David Laight for old gcc versions.
-(...)
-> tools/include/nolibc/sys.h | 74 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------
-> 1 file changed, 59 insertions(+), 15 deletions(-)
+....
 
-Quite frankly, even if it can be looked at as a piece of art, I don't
-like it. It's overkill for what we need and it brings in several tricky
-macros that we don't need and that require a link to their analysis so
-that nobody breaks them by accident. I mean, if one day we need them,
-okay we know we can find them, they're perfect for certain use cases.
-But all this just to avoid a ternary operation is far too much IMHO.
-That's without counting on the compiler tricks to use the ugly
-__auto_type when available, and the macro names which continue to
-possibly interact with user code.
+> +static int pagemap_scan_output(unsigned long categories,
+> +                              struct pagemap_scan_private *p,
+> +                              unsigned long addr, unsigned long *end)
+> +{
+> +       unsigned long n_pages, total_pages;
+> +       int ret =3D 0;
+> +
+> +       if (!p->vec_buf)
+> +               return 0;
+> +
+> +       categories &=3D p->arg.return_mask;
+> +
+> +       n_pages =3D (*end - addr) / PAGE_SIZE;
+> +       if (check_add_overflow(p->found_pages, n_pages, &total_pages) || =
+//TODO
 
-And if you remember, originally you proposed to factor the SET_ERRNO()
-stuff in every syscall in order to "simplify the code and improve
-maintainability". It's clear that we've long abandonned that goal here.
-If we had no other choice, I'd rather roll back to the clean, readable
-and trustable SET_ERRNO() in every syscall!
+Need to fix this TODO.
 
-So I just restarted from what I proposed the other day, using a ternary
-operator as I suggested in order to address the const case, and it gives
-me the following patch, which is way simpler and still a bit readable.
-It's made of two nested (?:) :
-  - the first one to determine if we have to check for the sign or
-    against -MAX_ERRNO to detect an error (depends on the arg's
-    signedness)
-  - the second one to return either the argument as-is or -1.
+> +           total_pages > p->arg.max_pages) {
+> +               size_t n_too_much =3D total_pages - p->arg.max_pages;
+> +               *end -=3D n_too_much * PAGE_SIZE;
+> +               n_pages -=3D n_too_much;
+> +               ret =3D -ENOSPC;
+> +       }
+> +
+> +       if (!pagemap_scan_push_range(categories, p, addr, *end)) {
+> +               *end =3D addr;
+> +               n_pages =3D 0;
+> +               ret =3D -ENOSPC;
+> +       }
+> +
+> +       p->found_pages +=3D n_pages;
+> +       if (ret)
+> +               p->walk_end_addr =3D *end;
+> +
+> +       return ret;
+> +}
+> +
 
-The only two tricks are that (typeof(arg))-1 is compared to 1 instead of
-zero so that gcc doesn't complain that we're comparing against a null
-pointer, and similarly we compare arg+1 to 1 instead of arg to 0 for the
-negative case, and that's all. It gives me the expected code and output
-from gcc-4.7 to 12.3, and clang-13.
+...
 
-I've checked against your version and it's always exactly the same (in
-fact to be more precise sometimes it's 1-2 bytes smaller but that's only
-due to the compiler taking liberties with the code ordering, it could as
-well have done it the other way around, though it did not this time):
+> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long uarg)
+> +{
+> +       struct mmu_notifier_range range;
+> +       struct pagemap_scan_private p;
+> +       unsigned long walk_start;
+> +       size_t n_ranges_out =3D 0;
+> +       int ret;
+> +
+> +       memset(&p, 0, sizeof(p));
+> +       ret =3D pagemap_scan_get_args(&p.arg, uarg);
+> +       if (ret)
+> +               return ret;
+> +
+> +       p.masks_of_interest =3D MASKS_OF_INTEREST(p.arg);
+> +       ret =3D pagemap_scan_init_bounce_buffer(&p);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /* Protection change for the range is going to happen. */
+> +       if (p.arg.flags & PM_SCAN_WP_MATCHING) {
+> +               mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA=
+, 0,
+> +                                       mm, p.arg.start, p.arg.end);
+> +               mmu_notifier_invalidate_range_start(&range);
+> +       }
+> +
+> +       walk_start =3D p.arg.start;
+> +       for (; walk_start < p.arg.end; walk_start =3D p.arg.walk_end) {
+> +               int n_out;
+> +
+> +               if (fatal_signal_pending(current)) {
+> +                       ret =3D -EINTR;
+> +                       break;
+> +               }
+> +
+> +               ret =3D mmap_read_lock_killable(mm);
+> +               if (ret)
+> +                       break;
+> +               ret =3D walk_page_range(mm, walk_start, p.arg.end,
+> +                                     &pagemap_scan_ops, &p);
+> +               mmap_read_unlock(mm);
+> +
+> +               n_out =3D pagemap_scan_flush_buffer(&p);
+> +               if (n_out < 0)
+> +                       ret =3D n_out;
+> +               else
+> +                       n_ranges_out +=3D n_out;
+> +
+> +               if (ret !=3D -ENOSPC || p.arg.vec_len - 1 =3D=3D 0 ||
+> +                   p.found_pages =3D=3D p.arg.max_pages) {
+> +                       p.walk_end_addr =3D p.arg.end;
 
- 26144 zhangjin-v5/nolibc-test--Os-arm64     | 26144 willy/nolibc-test--Os-arm64
- 23340 zhangjin-v5/nolibc-test--Os-armv5     | 23340 willy/nolibc-test--Os-armv5
- 23232 zhangjin-v5/nolibc-test--Os-armv7     | 23232 willy/nolibc-test--Os-armv7
- 17508 zhangjin-v5/nolibc-test--Os-armv7t    | 17508 willy/nolibc-test--Os-armv7t
- 19674 zhangjin-v5/nolibc-test--Os-i386      | 19673 willy/nolibc-test--Os-i386
- 19821 zhangjin-v5/nolibc-test--Os-i586      | 19820 willy/nolibc-test--Os-i586
- 23084 zhangjin-v5/nolibc-test--Os-loongarch | 23084 willy/nolibc-test--Os-loongarch
- 23404 zhangjin-v5/nolibc-test--Os-mips      | 23404 willy/nolibc-test--Os-mips
- 27108 zhangjin-v5/nolibc-test--Os-ppc32     | 27108 willy/nolibc-test--Os-ppc32
- 27652 zhangjin-v5/nolibc-test--Os-ppc64     | 27652 willy/nolibc-test--Os-ppc64
- 27652 zhangjin-v5/nolibc-test--Os-ppc64le   | 27652 willy/nolibc-test--Os-ppc64le
- 19356 zhangjin-v5/nolibc-test--Os-riscv     | 19356 willy/nolibc-test--Os-riscv
- 22152 zhangjin-v5/nolibc-test--Os-s390      | 22152 willy/nolibc-test--Os-s390
- 22300 zhangjin-v5/nolibc-test--Os-x86_64    | 22299 willy/nolibc-test--Os-x86_64
+You should not change p.walk_end_addr If ret is ENOSPC. Pls add a test
+case to check this.
 
-Unless there's any objection, I'll queue this one. And if __sysret()
-annoys us again in the future I might very well revert that simplification.
-
-Any question about the patch ?
+> +                       break;
+> +               }
+> +       }
+> +
+> +       if (p.cur_buf.start !=3D p.cur_buf.end) {
+> +               if (copy_to_user(p.vec_out, &p.cur_buf, sizeof(p.cur_buf)=
+))
+> +                       ret =3D -EFAULT;
+> +               else
+> +                       ++n_ranges_out;
+> +       }
+> +
+> +       /* ENOSPC signifies early stop (buffer full) from the walk. */
+> +       if (!ret || ret =3D=3D -ENOSPC)
+> +               ret =3D n_ranges_out;
+> +
+> +       p.arg.walk_end =3D p.walk_end_addr ? p.walk_end_addr : walk_start=
+;
+> +       if (pagemap_scan_writeback_args(&p.arg, uarg))
+> +               ret =3D -EFAULT;
+> +
+> +       if (p.arg.flags & PM_SCAN_WP_MATCHING)
+> +               mmu_notifier_invalidate_range_end(&range);
+> +
+> +       kfree(p.vec_buf);
+> +       return ret;
+> +}
 
 Thanks,
-Willy
-
----
-
-From 73dd63ed6666c6f212ba09247e68b6b5711ed6ec Mon Sep 17 00:00:00 2001
-From: Willy Tarreau <w@1wt.eu>
-Date: Tue, 8 Aug 2023 20:12:50 +0200
-Subject: tools/nolibc: avoid undesired casts in the __sysret() macro
-
-Having __sysret() as an inline function has the unfortunate effect of
-adding casts and large constants comparisons after the syscall returns
-that significantly inflate some light code that's otherwise syscall-
-heavy. Even nolibc-test grew by ~1%.
-
-Let's switch back to a macro for this, and apply the following rule:
-  - if the argument (the local variable containing the syscall return
-    value) is signed, any negative value is an error, so the check is
-    performed compared to zero with the argument's type ;
-
-  - otherwise if the argument is unsigned, only values >= -MAX_ERRNO
-    indicate an error. That's what is used for mmap() for example.
-
-The result is calculated using a ternary operator so that we don't need
-to assign values to a temporary variable and that it does work fine with
-const if needed.
-
-The sbrk() and mmap() syscalls were also fixed to return the correct
-type (they used to have double casts to hide the pointer and restore
-it).
-
-Fixes: 428905da6ec4 ("tools/nolibc: sys.h: add a syscall return helper")
-Link: https://lore.kernel.org/lkml/20230806095846.GB10627@1wt.eu/
-Cc: Zhangjin Wu <falcon@tinylab.org>
-Cc: David Laight <David.Laight@ACULAB.COM>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
----
- tools/include/nolibc/sys.h | 35 +++++++++++++++++++----------------
- 1 file changed, 19 insertions(+), 16 deletions(-)
-
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 833d6c5e86dc..6b5f39fbf998 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -28,22 +28,25 @@
- #include "types.h"
- 
- 
--/* Syscall return helper for library routines, set errno as -ret when ret is in
-- * range of [-MAX_ERRNO, -1]
-- *
-- * Note, No official reference states the errno range here aligns with musl
-- * (src/internal/syscall_ret.c) and glibc (sysdeps/unix/sysv/linux/sysdep.h)
-+/* Syscall return helper: takes the syscall value in argument and checks for an
-+ * error in it. For unsigned returns, an error is within [-MAX_ERRNO, -1]. For
-+ * signed returns, an error is any value < 0. When an error is encountered,
-+ * -ret is set into errno and -1 is returned. Otherwise the returned value is
-+ * passed as-is with its type preserved.
-  */
- 
--static __inline__ __attribute__((unused, always_inline))
--long __sysret(unsigned long ret)
--{
--	if (ret >= (unsigned long)-MAX_ERRNO) {
--		SET_ERRNO(-(long)ret);
--		return -1;
--	}
--	return ret;
--}
-+#define __sysret(arg)								\
-+({										\
-+	__typeof__(arg) __sysret_arg = (arg);					\
-+	((((__typeof__(arg)) -1) > (__typeof__(arg)) 1) ?   /* unsigned arg? */	\
-+	 (uintptr_t)__sysret_arg >= (uintptr_t)-(MAX_ERRNO) :      /* errors */	\
-+	 (__sysret_arg + 1) < ((__typeof__(arg))1)     /* signed: <0 = error */	\
-+	) ? ({									\
-+		SET_ERRNO(-(intptr_t)__sysret_arg);				\
-+		((__typeof__(arg)) -1);              /* return -1 upon error */	\
-+	}) : __sysret_arg;        /* return original value & type on success */	\
-+})
-+
- 
- /* Functions in this file only describe syscalls. They're declared static so
-  * that the compiler usually decides to inline them while still being allowed
-@@ -94,7 +97,7 @@ void *sbrk(intptr_t inc)
- 	if (ret && sys_brk(ret + inc) == ret + inc)
- 		return ret + inc;
- 
--	return (void *)__sysret(-ENOMEM);
-+	return __sysret((void *)-ENOMEM);
- }
- 
- 
-@@ -682,7 +685,7 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
- static __attribute__((unused))
- void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
- {
--	return (void *)__sysret((unsigned long)sys_mmap(addr, length, prot, flags, fd, offset));
-+	return __sysret(sys_mmap(addr, length, prot, flags, fd, offset));
- }
- 
- static __attribute__((unused))
--- 
-2.35.3
-
+Andrei
