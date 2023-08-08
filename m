@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22765774722
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 21:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A179377472A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 21:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbjHHTKH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Aug 2023 15:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
+        id S233935AbjHHTKZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Aug 2023 15:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233609AbjHHTJl (ORCPT
+        with ESMTP id S234564AbjHHTKD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 15:09:41 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FCFD928C
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 09:31:22 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51e24210395so22a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Aug 2023 09:31:22 -0700 (PDT)
+        Tue, 8 Aug 2023 15:10:03 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C63E30669
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 09:31:43 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5223910acf2so25a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Aug 2023 09:31:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691512259; x=1692117059;
+        d=google.com; s=20221208; t=1691512271; x=1692117071;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1xX3tSEBeL6lcSXFEkd6/L/gijMEOGIE1j38F1aN2x0=;
-        b=ZSURCaiI4uHovtbIt4BC4d7RA6fRcVaG6jMkKz2glQxcrZbD3nMNr2QQj/f4umtK7d
-         NyqJ567V1RmxNHOTEl35NkeBfU3/dKA3+UCX+tdffbymcwfOsCCCUEPMCBn2sdig8hgK
-         QD7HrK92u4zvdEh9e78Spz1xfO+tJVozt9kugqaJu5FpCn0t8KTwX55OINl2Dukacz3k
-         6EjjrUqE1ne0kOByuj00ARVL/vElm8fSRRzZMM5wv4TMbnn+BBCDcV5HDIIQd7ZjE3nu
-         tgZyluMS3olZH4/D33rWKoxKx5geO3KPvWt0+OdGMCZFC4zTuJxcRYy/3/77/ivkWDQg
-         xq9g==
+        bh=CvOiQxcFks9q8tzg8jrCdHzEBjfA9txOJkBSp8KgHAs=;
+        b=vyP67To3w7M2WYAEuI1fPekcbBNL0YhvvLcv8jMq1FPZa90wKZ3Iw8wbtqB/30UG48
+         nyaGzJUiunQZ11Sap+KIIcirG1U6ElA4VmEx17B5X+NTCVEWTq96ko4vJ9OJwxUVSEGC
+         QWbuPW/oKJMFIPSkKwdgdxPouavUpOdMvpVNNMADyCMnEXSQEyVOTcbM7RfY8Y58PtCU
+         ayAuR89GNMR9dPY4wDXxTi2+R+g04I+nI2s/GUGRlAj5fmi2LKDrOzuTnyulJbeCG/R9
+         jEkR4j/LqENoPI9XG/YfxEjokRnSdzyXl3yzsXPCZB6QRfEv6I+plICkWaGRAS+BqO9R
+         QRZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691512259; x=1692117059;
+        d=1e100.net; s=20221208; t=1691512271; x=1692117071;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1xX3tSEBeL6lcSXFEkd6/L/gijMEOGIE1j38F1aN2x0=;
-        b=R5gkq6bKeOhhFTRUiHFOonv+OVlNVE8BlR+BwPpvtYd+bGgvqAgPDPT+vv4tXyxQkf
-         pDYZwUZ6XIKqc/wGzV21pi4MJwl7U4f8pyT3KBrpCv7CIlDPmgDHQXap4z3mlD1EVv98
-         QsJjhVYBuTS2uod8eey/g7Qjl9Jghu7Rn1fnx/+yvROlir89cNAHICuo2a8w1H8HSXJk
-         UOqRfT/+zJRorm1HuGeD3T+XdjJgYnosPnq/R/DlGHVnRqtEsegbzJM7ewMwDTsTi5eb
-         sSIQEZ1pG4WRJPsysxs0dtlPDNF2dUM01GNf6o9vElT8M4L89ajDVLH0GWDB1YYgMNkM
-         dYVg==
-X-Gm-Message-State: AOJu0Yw/9PUYDJHlSGQZY7p69zGBXeAoz/vanLPPBnsWiI646LAlmcAr
-        +4c26/TaCj9hMWhauZ3y08VtN9k6e56YQK5BRgGO/eJS0XqoTNDegN8=
-X-Google-Smtp-Source: AGHT+IHHBj+JMRoY2Rc9Watos5MOLLYPxXUDuvXezmIXm8xsjK7cEyQWZY3aJlDo3S4nUygwmnrHwro6IdUNtyUdYdk=
-X-Received: by 2002:a05:600c:1c97:b0:3f1:9a3d:4f7f with SMTP id
- k23-20020a05600c1c9700b003f19a3d4f7fmr292165wms.1.1691480862959; Tue, 08 Aug
- 2023 00:47:42 -0700 (PDT)
+        bh=CvOiQxcFks9q8tzg8jrCdHzEBjfA9txOJkBSp8KgHAs=;
+        b=PoDBWVQZu+g2EZWH4/JPzJRYaZ7LSuDMO154wKjwtgFp0g331lhnMQ2qlVpwHC8N1O
+         dv1QbWLKmZHZFt15lW/aQUndSOE5sXUi+HUUJgFXUnVUcJLRc6mpjSI3swYOVFxp5zhH
+         9oBvYVcvMdIlJfhZEl6x5zXDSuYNPrcxf405A7IK8nj+2uVhXnxtzB+qq2WXUJqwzigX
+         gyNujyrUcVuhZ6vyzURajVhbbMiUXi4r3DxfxNWlejwU813XQ29SbjCkNuirmxnh3b0W
+         +kIX6fvKDbvwcMfA0LhxuRnxas0hB61HBY4/b4HQAdAKVV7lncTFkocl/m132782tXKj
+         nRoA==
+X-Gm-Message-State: AOJu0YwYbZCADl9QiBKLvVfoRHhcndNf/kCH47u6fHUXnUetgiJEnFP5
+        +NPgiubZIsavR0rnecyqosdRA2YHheXW/tlcXLFbmEboTiAsxWhEYb0=
+X-Google-Smtp-Source: AGHT+IFraQ0OcIWw4OFyPefngCmKF1+A14fe6gIk1IZceTxJUf6o9Mr0SifYlTI7pCN2/4k8cfiNcRMbcptc64cAum0=
+X-Received: by 2002:a05:600c:1f93:b0:3f7:e4d8:2569 with SMTP id
+ je19-20020a05600c1f9300b003f7e4d82569mr264291wmb.5.1691480868259; Tue, 08 Aug
+ 2023 00:47:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230807102352.4607-5-janusz.krzysztofik@linux.intel.com> <20230807102352.4607-7-janusz.krzysztofik@linux.intel.com>
-In-Reply-To: <20230807102352.4607-7-janusz.krzysztofik@linux.intel.com>
+References: <20230807102352.4607-5-janusz.krzysztofik@linux.intel.com> <20230807102352.4607-8-janusz.krzysztofik@linux.intel.com>
+In-Reply-To: <20230807102352.4607-8-janusz.krzysztofik@linux.intel.com>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 8 Aug 2023 15:47:31 +0800
-Message-ID: <CABVgOSkKotPU13YJyT6bcerXZyZuc7Vu+1kyatEjXjvcM7fRzg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] kunit: Make 'list' action available to kunit test modules
+Date:   Tue, 8 Aug 2023 15:47:36 +0800
+Message-ID: <CABVgOSnjy=LCRTDHvjSUAr+SF=GKwGs7kgeYjN29xSNvG84NKg@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] kunit: Allow kunit test modules to use test filtering
 To:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
 Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -60,7 +60,7 @@ Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
         igt-dev@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000058947806026be3e8"
+        boundary="00000000000011175e06026be485"
 X-Spam-Status: No, score=-16.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
         DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
@@ -72,178 +72,254 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000058947806026be3e8
+--00000000000011175e06026be485
 Content-Type: text/plain; charset="UTF-8"
 
 On Mon, 7 Aug 2023 at 18:28, Janusz Krzysztofik
 <janusz.krzysztofik@linux.intel.com> wrote:
 >
-> Results from kunit tests reported via dmesg may be interleaved with other
-> kernel messages.  When parsing dmesg for modular kunit results in real
-> time, external tools, e.g., Intel GPU tools (IGT), may want to insert
-> their own test name markers into dmesg at the start of each test, before
-> any kernel message related to that test appears there, so existing upper
-> level test result parsers have no doubt which test to blame for a specific
-> kernel message.  Unfortunately, kunit reports names of tests only at their
-> completion (with the exeption of a not standarized "# Subtest: <name>"
-> header above a test plan of each test suite or parametrized test).
+> External tools, e.g., Intel GPU tools (IGT), support execution of
+> individual selftests provided by kernel modules.  That could be also
+> applicable to kunit test modules if they provided test filtering.  But
+> test filtering is now possible only when kunit code is built into the
+> kernel.  Moreover, a filter can be specified only at boot time, then
+> reboot is required each time a different filter is needed.
 >
-> External tools could be able to insert their own "start of the test"
-> markers with test names included if they new those names in advance.
-> Test names could be learned from a list if provided by a kunit test
-> module.
+> Build the test filtering code also when kunit is configured as a module,
+> expose test filtering functions to other kunit source files, and use them
+> in kunit module notifier callback functions.  Userspace can then reload
+> the kunit module with a value of the filter_glob parameter tuned to a
+> specific kunit test module every time it wants to limit the scope of tests
+> executed on that module load.  Make the kunit.filter* parameters visible
+> in sysfs for user convenience.
 >
-> There exists a feature of listing kunit tests without actually executing
-> them, but it is now limited to configurations with the kunit module built
-> in and covers only built-in tests, already available at boot time.
-> Moreover, switching from list to normal mode requires reboot.  If that
-> feature was also available when kunit is built as a module, userspace
-> could load the module with action=list parameter, load some kunit test
-> modules they are interested in and learn about the list of tests provided
-> by those modules, then unload them, reload the kunit module in normal mode
-> and execute the tests with their lists already known.
->
-> Extend kunit module notifier initialization callback with a processing
-> path for only listing the tests provided by a module if the kunit action
-> parameter is set to "list" or "list_attr".  For user convenience, make the
-> kunit.action parameter visible in sysfs.
->
-> v2: Don't use a different format, use kunit_exec_list_tests() (Rae),
->   - refresh on top of new attributes patches, handle newly introduced
->     kunit.action=list_attr case (Rae).
+> v5: Refresh on tpp of attributes filtering fix
+> v4: Refresh on top of newly applied attributes patches and changes
+>     introdced by new versions of other patches submitted in series with
+>     this one.
+> v3: Fix CONFIG_GLOB, required by filtering functions, not selected when
+>     building as a module (lkp@intel.com).
+> v2: Fix new name of a structure moved to kunit namespace not updated
+>     across all uses (lkp@intel.com).
 >
 > Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-> Cc: Rae Moar <rmoar@google.com>
 > ---
 
-Looks good, thanks!
+This works a treat here. It's a bit annoying to have to unload /
+reload the module to change the filter, which might be something for
+us to consider in the future (maybe via a debugfs entry?), but this is
+nevertheless an improvement.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
->  include/kunit/test.h |  2 ++
->  lib/kunit/executor.c | 28 +++++++++++++++++-----------
->  lib/kunit/test.c     | 18 +++++++++++++++---
->  3 files changed, 34 insertions(+), 14 deletions(-)
+Cheers,
+-- David
+
+>  include/kunit/test.h | 11 ++++++++
+>  lib/kunit/Kconfig    |  2 +-
+>  lib/kunit/executor.c | 63 ++++++++++++++++++++++++++------------------
+>  lib/kunit/test.c     | 17 ++++++++++++
+>  4 files changed, 66 insertions(+), 27 deletions(-)
 >
 > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 3d002e6b252f2..6a338a3267ed5 100644
+> index 6a338a3267ed5..d33114097d0d0 100644
 > --- a/include/kunit/test.h
 > +++ b/include/kunit/test.h
-> @@ -309,6 +309,7 @@ static inline void kunit_set_failure(struct kunit *test)
->  }
+> @@ -310,6 +310,9 @@ static inline void kunit_set_failure(struct kunit *test)
 >
 >  bool kunit_enabled(void);
-> +const char *kunit_action(void);
+>  const char *kunit_action(void);
+> +const char *kunit_filter_glob(void);
+> +char *kunit_filter(void);
+> +char *kunit_filter_action(void);
 >
 >  void kunit_init_test(struct kunit *test, const char *name, char *log);
 >
-> @@ -324,6 +325,7 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
+> @@ -320,6 +323,14 @@ size_t kunit_suite_num_test_cases(struct kunit_suite *suite);
+>  unsigned int kunit_test_case_num(struct kunit_suite *suite,
+>                                  struct kunit_case *test_case);
+>
+> +struct kunit_suite_set
+> +kunit_filter_suites(const struct kunit_suite_set *suite_set,
+> +                   const char *filter_glob,
+> +                   char *filters,
+> +                   char *filter_action,
+> +                   int *err);
+> +void kunit_free_suite_set(struct kunit_suite_set suite_set);
+> +
+>  int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites);
+>
 >  void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites);
+> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
+> index 626719b95badd..68a6daec0aef1 100644
+> --- a/lib/kunit/Kconfig
+> +++ b/lib/kunit/Kconfig
+> @@ -4,7 +4,7 @@
 >
->  void kunit_exec_run_tests(struct kunit_suite_set *suite_set, bool builtin);
-> +void kunit_exec_list_tests(struct kunit_suite_set *suite_set, bool include_attr);
->
->  #if IS_BUILTIN(CONFIG_KUNIT)
->  int kunit_run_all_tests(void);
+>  menuconfig KUNIT
+>         tristate "KUnit - Enable support for unit tests"
+> -       select GLOB if KUNIT=y
+> +       select GLOB
+>         help
+>           Enables support for kernel unit tests (KUnit), a lightweight unit
+>           testing and mocking framework for the Linux kernel. These tests are
 > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index 5ef90c334eb0f..e877c1f1e75c8 100644
+> index e877c1f1e75c8..5181aa2e760b6 100644
 > --- a/lib/kunit/executor.c
 > +++ b/lib/kunit/executor.c
-> @@ -13,22 +13,29 @@
->  extern struct kunit_suite * const __kunit_suites_start[];
->  extern struct kunit_suite * const __kunit_suites_end[];
->
-> +static char *action_param;
-> +
-> +module_param_named(action, action_param, charp, 0400);
-> +MODULE_PARM_DESC(action,
-> +                "Changes KUnit executor behavior, valid values are:\n"
-> +                "<none>: run the tests like normal\n"
-> +                "'list' to list test names instead of running them.\n"
-> +                "'list_attr' to list test names and attributes instead of running them.\n");
-> +
-> +const char *kunit_action(void)
-
-I'm not _totally_ sold on the name kunit_action() for a function here,
-but none of the other options I can think of (kunit_get_action(),
-kunit_action_param(), kunit_action_value(), etc) sound better, so
-let's go with it.
-
-
-> +{
-> +       return action_param;
-> +}
-> +
->  #if IS_BUILTIN(CONFIG_KUNIT)
->
->  static char *filter_glob_param;
-> -static char *action_param;
->  static char *filter_param;
->  static char *filter_action_param;
->
->  module_param_named(filter_glob, filter_glob_param, charp, 0);
->  MODULE_PARM_DESC(filter_glob,
->                 "Filter which KUnit test suites/tests run at boot-time, e.g. list* or list*.*del_test");
-> -module_param_named(action, action_param, charp, 0);
-> -MODULE_PARM_DESC(action,
-> -                "Changes KUnit executor behavior, valid values are:\n"
-> -                "<none>: run the tests like normal\n"
-> -                "'list' to list test names instead of running them.\n"
-> -                "'list_attr' to list test names and attributes instead of running them.\n");
->  module_param_named(filter, filter_param, charp, 0);
->  MODULE_PARM_DESC(filter,
->                 "Filter which KUnit test suites/tests run at boot-time using attributes, e.g. speed>slow");
-> @@ -239,10 +246,7 @@ void kunit_exec_run_tests(struct kunit_suite_set *suite_set, bool builtin)
->         __kunit_test_suites_init(suite_set->start, num_suites);
+> @@ -27,24 +27,37 @@ const char *kunit_action(void)
+>         return action_param;
 >  }
 >
 > -#if IS_BUILTIN(CONFIG_KUNIT)
 > -
-> -static void kunit_exec_list_tests(struct kunit_suite_set *suite_set,
-> -                                 bool include_attr)
-> +void kunit_exec_list_tests(struct kunit_suite_set *suite_set, bool include_attr)
->  {
->         struct kunit_suite * const *suites;
->         struct kunit_case *test_case;
-> @@ -265,6 +269,8 @@ static void kunit_exec_list_tests(struct kunit_suite_set *suite_set,
->         }
+>  static char *filter_glob_param;
+>  static char *filter_param;
+>  static char *filter_action_param;
+>
+> -module_param_named(filter_glob, filter_glob_param, charp, 0);
+> +module_param_named(filter_glob, filter_glob_param, charp, 0400);
+>  MODULE_PARM_DESC(filter_glob,
+>                 "Filter which KUnit test suites/tests run at boot-time, e.g. list* or list*.*del_test");
+> -module_param_named(filter, filter_param, charp, 0);
+> +module_param_named(filter, filter_param, charp, 0400);
+>  MODULE_PARM_DESC(filter,
+>                 "Filter which KUnit test suites/tests run at boot-time using attributes, e.g. speed>slow");
+> -module_param_named(filter_action, filter_action_param, charp, 0);
+> +module_param_named(filter_action, filter_action_param, charp, 0400);
+>  MODULE_PARM_DESC(filter_action,
+>                 "Changes behavior of filtered tests using attributes, valid values are:\n"
+>                 "<none>: do not run filtered tests as normal\n"
+>                 "'skip': skip all filtered tests instead so tests will appear in output\n");
+>
+> +const char *kunit_filter_glob(void)
+> +{
+> +       return filter_glob_param;
+> +}
+> +
+> +char *kunit_filter(void)
+> +{
+> +       return filter_param;
+> +}
+> +
+> +char *kunit_filter_action(void)
+> +{
+> +       return filter_action_param;
+> +}
+> +
+>  /* glob_match() needs NULL terminated strings, so we need a copy of filter_glob_param. */
+>  struct kunit_glob_filter {
+>         char *suite_glob;
+> @@ -108,10 +121,7 @@ kunit_filter_glob_tests(const struct kunit_suite *const suite, const char *test_
+>         return copy;
 >  }
 >
-> +#if IS_BUILTIN(CONFIG_KUNIT)
+> -static char *kunit_shutdown;
+> -core_param(kunit_shutdown, kunit_shutdown, charp, 0644);
+> -
+> -static void kunit_free_suite_set(struct kunit_suite_set suite_set)
+> +void kunit_free_suite_set(struct kunit_suite_set suite_set)
+>  {
+>         struct kunit_suite * const *suites;
+>
+> @@ -120,7 +130,7 @@ static void kunit_free_suite_set(struct kunit_suite_set suite_set)
+>         kfree(suite_set.start);
+>  }
+>
+> -static struct kunit_suite_set
+> +struct kunit_suite_set
+>  kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>                     const char *filter_glob,
+>                     char *filters,
+> @@ -218,22 +228,6 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>         return filtered;
+>  }
+>
+> -static void kunit_handle_shutdown(void)
+> -{
+> -       if (!kunit_shutdown)
+> -               return;
+> -
+> -       if (!strcmp(kunit_shutdown, "poweroff"))
+> -               kernel_power_off();
+> -       else if (!strcmp(kunit_shutdown, "halt"))
+> -               kernel_halt();
+> -       else if (!strcmp(kunit_shutdown, "reboot"))
+> -               kernel_restart(NULL);
+> -
+> -}
+> -
+> -#endif
+> -
+>  void kunit_exec_run_tests(struct kunit_suite_set *suite_set, bool builtin)
+>  {
+>         size_t num_suites = suite_set->end - suite_set->start;
+> @@ -271,6 +265,23 @@ void kunit_exec_list_tests(struct kunit_suite_set *suite_set, bool include_attr)
+>
+>  #if IS_BUILTIN(CONFIG_KUNIT)
+>
+> +static char *kunit_shutdown;
+> +core_param(kunit_shutdown, kunit_shutdown, charp, 0644);
+> +
+> +static void kunit_handle_shutdown(void)
+> +{
+> +       if (!kunit_shutdown)
+> +               return;
+> +
+> +       if (!strcmp(kunit_shutdown, "poweroff"))
+> +               kernel_power_off();
+> +       else if (!strcmp(kunit_shutdown, "halt"))
+> +               kernel_halt();
+> +       else if (!strcmp(kunit_shutdown, "reboot"))
+> +               kernel_restart(NULL);
+> +
+> +}
 > +
 >  int kunit_run_all_tests(void)
 >  {
 >         struct kunit_suite_set suite_set = {
 > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 8b2808068497f..5232a43737826 100644
+> index 5232a43737826..49698a168437a 100644
 > --- a/lib/kunit/test.c
 > +++ b/lib/kunit/test.c
-> @@ -739,13 +739,25 @@ static void kunit_module_init(struct module *mod)
->         struct kunit_suite_set suite_set = {
+> @@ -740,6 +740,17 @@ static void kunit_module_init(struct module *mod)
 >                 mod->kunit_suites, mod->kunit_suites + mod->num_kunit_suites,
 >         };
-> -
-> -       kunit_exec_run_tests(&suite_set, false);
-> +       const char *action = kunit_action();
+>         const char *action = kunit_action();
+> +       int err = 0;
 > +
-> +       if (!action)
-> +               kunit_exec_run_tests(&suite_set, false);
-> +       else if (!strcmp(action, "list"))
-> +               kunit_exec_list_tests(&suite_set, false);
-> +       else if (!strcmp(action, "list_attr"))
-> +               kunit_exec_list_tests(&suite_set, true);
-> +       else
-> +               pr_err("kunit: unknown action '%s'\n", action);
->  }
+> +       suite_set = kunit_filter_suites(&suite_set,
+> +                                       kunit_filter_glob() ?: "*.*",
+
+I've just learnt a new gcc extension! A bit scary, but it works on
+clang as well, so I'm fine with it.
+
+
+> +                                       kunit_filter(), kunit_filter_action(),
+> +                                       &err);
+> +       if (err)
+> +               pr_err("kunit module: error filtering suites: %d\n", err);
+> +
+> +       mod->kunit_suites = (struct kunit_suite **)suite_set.start;
+> +       mod->num_kunit_suites = suite_set.end - suite_set.start;
+>
+>         if (!action)
+>                 kunit_exec_run_tests(&suite_set, false);
+> @@ -753,11 +764,17 @@ static void kunit_module_init(struct module *mod)
 >
 >  static void kunit_module_exit(struct module *mod)
 >  {
-> -       __kunit_test_suites_exit(mod->kunit_suites, mod->num_kunit_suites);
-> +       const char *action = kunit_action();
+> +       struct kunit_suite_set suite_set = {
+> +               mod->kunit_suites, mod->kunit_suites + mod->num_kunit_suites,
+> +       };
+>         const char *action = kunit_action();
+>
+>         if (!action)
+>                 __kunit_test_suites_exit(mod->kunit_suites,
+>                                          mod->num_kunit_suites);
 > +
-> +       if (!action)
-> +               __kunit_test_suites_exit(mod->kunit_suites,
-> +                                        mod->num_kunit_suites);
+> +       if (suite_set.start)
+> +               kunit_free_suite_set(suite_set);
 >  }
 >
 >  static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
@@ -251,7 +327,7 @@ let's go with it.
 > 2.41.0
 >
 
---00000000000058947806026be3e8
+--00000000000011175e06026be485
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -318,14 +394,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDA
-SZYyZqauVRk78yef0+QxVUv6jrXFKNbmJmZ1ZMFaUTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA4MDgxNjMwNTlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC5
+OWIziW184Bl6vjbiYf7sQNq4RA2PJVRgLg8daP0XNzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA4MDgxNjMxMTFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAF31GonnNHALXE7WxC0Jm
-JorlFkgAa7Xwenc8fNJLmSiW8RB17L7GBpQDoa7xm5xb2UsbpphaR78JVndJz6gpXR3aKwj4UPST
-iyH/2uR7Ves+ugN65UBfx9/FHCeCuTarc/w5dFxM3i52DyPlYH5Bu4ljTU+DQ4AThzCm1EZWnxxl
-t9VAwes6GVgSyi++xcUT5A/Ii6u6Vigq1xsqSiXyMemyJo8ESNi9xMkHMLw7eycWCD0dttRSflXP
-v/FrG3UilgCrD3W6HSc1XZ6D9i4lkk0DSLuG+ioiAJA+3P0Wyrv//OAxGYpXrnNWQfJ4fpTa+R5s
-iLWC+V3WM9VG/SLHgA==
---00000000000058947806026be3e8--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAU7W2snXP9zOnzJG9TVYs
+hkSrCd/Jj6IsncxtXAvTlPZAK0knbWG58uk5a58OwAB/mfwAfZsqB56dmHRX5Y4tZUDjtE2JS3BJ
+Bk3wQoCtukJXvGSpliMM1zlgOFqUOMXvsCboDZwSQkLGvcDh0CmbsMs5zcRAWR5N/VHsEtlkLgnZ
+eYFTZzXdiMmTcbyQdzMsl7Ud23yBlC+6aq6BFkCUYISnFGyeFMVv/vuA1+t3WR6EwatHeyKYpMOa
+zrluP27ACgHylo28G3PNgh2N7RQpfqumFmKypRwGIXTvgouVkKK9d37ZmiKrIB5lkG1WCeZRvGzh
+n5sABUqn+VO91DtFng==
+--00000000000011175e06026be485--
