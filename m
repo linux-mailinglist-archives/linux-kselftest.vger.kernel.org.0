@@ -2,87 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62C1774D62
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 23:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFEB774A27
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 22:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbjHHVxS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Aug 2023 17:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S234089AbjHHUU7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Aug 2023 16:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231659AbjHHVxJ (ORCPT
+        with ESMTP id S234016AbjHHUUu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 17:53:09 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500E091241;
-        Tue,  8 Aug 2023 10:32:05 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id BFE2A5C009D;
-        Tue,  8 Aug 2023 13:32:04 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 08 Aug 2023 13:32:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1691515924; x=1691602324; bh=rM
-        UaHZaSAI4l93e7AeZWrkXodMmRgdTWwjGdICmzDaY=; b=QIb8cGi7i1UpCeFo5r
-        lPDUKHa3UY9ysLj4xsmXkoQgvBnocxeYG0J5izW/BE4h7jAd0iuMvoFXviIVuqjU
-        klbeJ0cZ8iy+M0HSct94mQUeO5Anw0ggFpYldatqYosC+89HxfY4nRT2YxEwZ87N
-        AUa032AxMKzHx3eOvh/u8IzjecbYVvlnIzVdGqs9PdD/Vjj0AYzNjyRK5GoGoghU
-        YzvDY5hvLZOvbYdJXEhDPqjPbnOt9pIAIj1lFWq+DPxlbT2/6y5yuaF9kWuKSexX
-        bbxGShvrwZaCorxqbR4fQ1X553N6umvdv5D2sIt373aRzFqA4rHe5VrG9ZQqBXF5
-        i56g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1691515924; x=1691602324; bh=rMUaHZaSAI4l9
-        3e7AeZWrkXodMmRgdTWwjGdICmzDaY=; b=l7U6RjUGhd233kTpEmkm+1CLdkldm
-        P/2Bkl4+Awfzq9S1G9OmEPBEy+17nWwdTGB4KB18+fV+EFau+oDwheZDXD2FyPb5
-        zSGkfWbcI5YIyZcV9ligquRd8/vW/gdugihmSiZQMDAEUQYvwv2Wb1DxOdpog+DD
-        0gnFnOGvfevxWVD0eQ+2GapGhe8QOdDe7bTDCqvje3wDMcwzlPJPFlk8NxvfsT2J
-        nXM9C0cIQjlBuspJUlHzmkjyjAvaSlO0+JvfMMdnCS3OYa7YBjKIOR2/sElWcFXe
-        O/7mfnzROWwl3puMBQXllZdeMhRIxCjAeSZvrP00SpXm8tVF6IdrW1x4A==
-X-ME-Sender: <xms:FHzSZMTGHEnq7zDK1mIf5aLNFwb-rsYwg34gMlfZrRrosCiTnUUzGA>
-    <xme:FHzSZJzVeniscGdjhruJMk1lVnAJa1Z81GpRZLlOULuY1vPspgjeAhT3JvgUQPUYB
-    RnEELaBVO9M0_eRKPk>
-X-ME-Received: <xmr:FHzSZJ1zZ9PeCvuflHXT4OGmzhHugInOtK-hxKlOQLlTyf9wKX2m4SknA5x72tgHwrUSjjRNDYUy6Fmd-rIzOIYrFVCOE58151IDrfL5HCjn>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrledvgdduudefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfhgfhffvvefuffgjkfggtgesthdtredttdertdenucfhrhhomhepufhtvghf
-    rghnucftohgvshgthhcuoehshhhrseguvghvkhgvrhhnvghlrdhioheqnecuggftrfgrth
-    htvghrnhepveelgffghfehudeitdehjeevhedthfetvdfhledutedvgeeikeeggefgudeg
-    uedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
-    hhrhesuggvvhhkvghrnhgvlhdrihho
-X-ME-Proxy: <xmx:FHzSZAC0ivTxstdOr3eWUaee0pkAovRjRbMc_Bvxe6iBw2ViHBBH5g>
-    <xmx:FHzSZFhoCulsZuDMQnDf0QX8RnXxp-vDECZNYiceJ-rKjCylbKZfHw>
-    <xmx:FHzSZMoZNJWXhrGmrXm5ALc1DBlfE3uRX6Hd-Vu2maNn3B-0Q3H2iw>
-    <xmx:FHzSZAozjPgXYOkeAjtH_oqX0kF4XAk7otsZsyd0Md4QNHXHdDcx_Q>
-Feedback-ID: i84614614:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 8 Aug 2023 13:32:03 -0400 (EDT)
-References: <20230728163952.4634-1-ayush.jain3@amd.com>
-User-agent: mu4e 1.10.1; emacs 28.2.50
-From:   Stefan Roesch <shr@devkernel.io>
-To:     Ayush Jain <ayush.jain3@amd.com>
-Cc:     akpm@linux-foundation.org, shuah@kernel.org,
-        pasha.tatashin@soleen.com, zhansayabagdaulet@gmail.com,
-        tyhicks@linux.microsoft.com, raghavendra.kt@amd.com,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Narasimhan.V@amd.com,
-        Santosh.Shukla@amd.com, David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v2 1/2] selftests: mm: ksm: Fix incorrect evaluation of
- parameter
-Date:   Tue, 08 Aug 2023 10:31:24 -0700
-In-reply-to: <20230728163952.4634-1-ayush.jain3@amd.com>
-Message-ID: <qvqwfs4tphip.fsf@devbig1114.prn1.facebook.com>
+        Tue, 8 Aug 2023 16:20:50 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEDA6AB0;
+        Tue,  8 Aug 2023 12:26:51 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 752E76016E;
+        Tue,  8 Aug 2023 21:26:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691522799; bh=42Ov8jrdWSouqXJnDzfdWxBesTTZMngT6wAy2edAW/w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=E9hNIjarZwig6adv0rcta4RJ24zoCbOYC/g7Gf4o1c4zg2Kr4JpxkCEPhBkbit9UE
+         ZkJnHdyKGMqapeAqMoaZrlncClCAAG+h4Ime3ZfV9VTZrmvmxICm8uKKHTHAG8I4Cf
+         OksjKB/F/ZFoAJOH2XQNujeIDSLjjDNm2qcSCQlotRRqr4dHnugtFmSxgSfr7m/Kq0
+         rQdiE+Kbz/QQWnPTOiSdrnfBXUjU6praYDZphGoZ4optoejIZwIli70nnPaYMttbCD
+         NcGeU+Qq+qkCKEfg2/LBp+ZY73kFjI6/zmH79DI1O/04zPu2qUpERhhT+w1/hCAaRQ
+         TsovLiRX9dtug==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id e3CtfOAwfMdD; Tue,  8 Aug 2023 21:26:36 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id 6CAD46015F;
+        Tue,  8 Aug 2023 21:26:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691522796; bh=42Ov8jrdWSouqXJnDzfdWxBesTTZMngT6wAy2edAW/w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pGaNmvMEH4k+VJqZzWBluvDX2OkmL7ZytZAuuKwGVMDdOlnGV7PZA29V0IAVsA6xr
+         /JlrKKECBLrY7m3fiY4lWYeU+Ucpr7uK2q/aa2tj8zB0fIX+IpdHGzjcXsfMaDTQoC
+         8rPGqsoldTV3dRsDY//Oi5+QH0iKWOX4yQhIZDXLhhZlwi4KC5plobP+CE9TMBLHR8
+         AphrCDIWKrI5ZQdOU6cK3YBRbhMRXqixizNXvNCYQo1Q+JXebzHsSFPrrrlOFNeTFa
+         XrgKPguPHnDd7f/A/y7YTWnshbB4TJnYLvkAUYk/v9NFdOb+ZytpkU1PhSN7lTP4sN
+         wd6jl2PAPokcw==
+Message-ID: <dc641c92-38c2-4aa6-71d7-b30064c38d55@alu.unizg.hr>
+Date:   Tue, 8 Aug 2023 21:26:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v3 4.14 1/1] test_firmware: fix the memory leaks with the
+ reqs buffer
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei Zhang <tianfei.zhang@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        Dan Carpenter <error27@gmail.com>, Takashi Iwai <tiwai@suse.de>
+References: <20230804170017.92671-1-mirsad.todorovac@alu.unizg.hr>
+ <2023080705-poet-nickname-5e08@gregkh>
+ <a9e443c7-c7b5-63ce-08d9-5604ac545bf6@alu.unizg.hr>
+ <2023080802-moonrise-cascade-a4c0@gregkh>
+ <1269af66-bd86-0fab-e4ec-968f14371279@alu.unizg.hr>
+ <2023080817-why-shawl-8ac1@gregkh>
+Content-Language: en-US
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <2023080817-why-shawl-8ac1@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -90,55 +81,81 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
-Ayush Jain <ayush.jain3@amd.com> writes:
 
-> A missing break in kms_tests leads to kselftest hang when the
-> parameter -s is used.
-> In current code flow because of missing break in -s, -t parses
-> args spilled from -s and as -t accepts only valid values as 0,1
-> so any arg in -s >1 or <0, gets in ksm_test failure
->
-> This went undetected since, before the addition of option -t,
-> the next case -M would immediately break out of the switch
-> statement but that is no longer the case
->
-> Add the missing break statement.
->
-> ----Before----
-> ./ksm_tests -H -s 100
-> Invalid merge type
->
-> ----After----
-> ./ksm_tests -H -s 100
-> Number of normal pages:    0
-> Number of huge pages:    50
-> Total size:    100 MiB
-> Total time:    0.401732682 s
-> Average speed:  248.922 MiB/s
->
-> Fixes: 07115fcc15b4 ("selftests/mm: add new selftests for KSM")
->
-> Signed-off-by: Ayush Jain <ayush.jain3@amd.com>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-> ---
-> v1 -> v2
-> collect Reviewed-by from David
-> Updated Fixes tag from commit 9e7cb94ca218 to 07115fcc15b4
->
->  tools/testing/selftests/mm/ksm_tests.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
-> index 435acebdc325..380b691d3eb9 100644
-> --- a/tools/testing/selftests/mm/ksm_tests.c
-> +++ b/tools/testing/selftests/mm/ksm_tests.c
-> @@ -831,6 +831,7 @@ int main(int argc, char *argv[])
->  				printf("Size must be greater than 0\n");
->  				return KSFT_FAIL;
->  			}
-> +			break;
->  		case 't':
->  			{
->  				int tmp = atoi(optarg);
+On 8/8/23 09:35, Greg Kroah-Hartman wrote:
+> On Tue, Aug 08, 2023 at 08:24:43AM +0200, Mirsad Todorovac wrote:
+>> On 8/8/23 06:28, Greg Kroah-Hartman wrote:
+>>> On Mon, Aug 07, 2023 at 08:28:04PM +0200, Mirsad Todorovac wrote:
+>>>> On 8/7/23 11:15, Greg Kroah-Hartman wrote:
+>>>>> On Fri, Aug 04, 2023 at 07:00:18PM +0200, Mirsad Todorovac wrote:
+>>>>>> [ commit be37bed754ed90b2655382f93f9724b3c1aae847 upstream ]
+>>>>>>
+>>>>>> Dan Carpenter spotted that test_fw_config->reqs will be leaked if
+>>>>>> trigger_batched_requests_store() is called two or more times.
+>>>>>> The same appears with trigger_batched_requests_async_store().
+>>>>>>
+>>>>>> This bug wasn't triggered by the tests, but observed by Dan's visual
+>>>>>> inspection of the code.
+>>>>>>
+>>>>>> The recommended workaround was to return -EBUSY if test_fw_config->reqs
+>>>>>> is already allocated.
+>>>>>>
+>>>>>> Fixes: c92316bf8e94 ("test_firmware: add batched firmware tests")
+>>>>>> Cc: Luis Chamberlain <mcgrof@kernel.org>
+>>>>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>>>> Cc: Russ Weight <russell.h.weight@intel.com>
+>>>>>> Cc: Tianfei Zhang <tianfei.zhang@intel.com>
+>>>>>> Cc: Shuah Khan <shuah@kernel.org>
+>>>>>> Cc: Colin Ian King <colin.i.king@gmail.com>
+>>>>>> Cc: Randy Dunlap <rdunlap@infradead.org>
+>>>>>> Cc: linux-kselftest@vger.kernel.org
+>>>>>> Cc: stable@vger.kernel.org # v4.14
+>>>>>> Suggested-by: Dan Carpenter <error27@gmail.com>
+>>>>>> Suggested-by: Takashi Iwai <tiwai@suse.de>
+>>>>>> Link: https://lore.kernel.org/r/20230509084746.48259-2-mirsad.todorovac@alu.unizg.hr
+>>>>>> Signed-off-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+>>>>>>
+>>>>>> [ This fix is applied against the 4.14 stable branch. There are no changes to the ]
+>>>>>> [ fix in code when compared to the upstread, only the reformatting for backport.  ]
+>>>>>
+>>>>> Thanks for all of these, now queued up.
+>>>>
+>>>> No problem, I should have done it right the first time to reduce your load.
+>>>>
+>>>> I really believe that backporting bug fix patches is important because many systems
+>>>> cannot upgrade because of the legacy apps and hardware, to state the obvious.
+>>>
+>>> What "legacy apps" rely on a specific kernel version?
+>>
+>> Hi, Mr. Greg,
+>>
+>> Actually, in our particular case, it was the Eprints that required old mysql on Debian stretch
+>> rather than MariaDB that came with Buster. So, the release required particular kernel version (4.9).
+> 
+> So what happens when this kernel becomes end-of-life?
 
-Acked-by: Stefan Roesch <shr@devkernel.io>
+I guess by now I could maintain the 4.19 line, with the bug fixes and the security fixes,
+but it would impose significant overhead to already overwhelmed IT department.
+
+I could use the same config and produce the same kernel, but w/o the testing as it would
+happen w the distro kernels.
+
+>> Of course, we can upgrade to any mainline kernel, but that is no longer a tested distro kernel,
+>> and faults would be blamed on me entirely. Plus the overhead of regular patching ...
+> 
+> You should be doing regular patching for any LTS kernel as well, right?
+> Same for testing, there should not be any difference in testing any
+> kernel update be it on a LTS branch, or between major versions.
+
+Sure, but apt-get dist-upgrade is easier than rebuilding the kernel. I say, we'd have to
+get the necessary "blessings" to make this routine or procedure. Now we have the machines
+that could build a recent kernel in less than an hour, but it wasn't always so :-)
+
+We still do not have a twin test server for each single one of our production releases.
+
+> anyway, good luck!
+
+Thanks, I think we'll need it.
+
+Kind regards,
+Mirsad Todorovac
