@@ -2,56 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CB3774774
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 21:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274A177441E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Aug 2023 20:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjHHTPJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Aug 2023 15:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
+        id S235492AbjHHSPY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Aug 2023 14:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjHHTOm (ORCPT
+        with ESMTP id S235450AbjHHSOz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 15:14:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA48C1458A
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 09:37:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C650362542
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 12:58:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 687F9C433C7;
-        Tue,  8 Aug 2023 12:58:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691499482;
-        bh=v3/qlqeE30vxmg5ij1peV318QeAlN3UEdap7fO4RiRA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lZZsCImzCZd9fcCT1rTimMEhp9bwObuITXcD8c35VupduGQY8uVM9oN1Kgd3HoRJk
-         mvvgA6beWBceVlRf0GJSv4L0Pra7DrFtIVhgzc9Q74wC5De4IzhKVgffRRdz66FB9v
-         jqrNnMDWlyY6InAY+IoyU6m+bWk+e4lU4RXptXPWKvGWENaskAhV3D7679JgSQGcPN
-         kPn2bkPekEOoWnZlqEFpN0GvGXB3aplY41GpS+mdWs8vswAR6QaatKuT+I/9U9hR4E
-         efr5iF5rVxDliTr3rb7kzEf0kgE6E6rWAoOL1JaI2V8YyUmIvY2/UIB7V1IXSehjga
-         ilfPstXkq2K0g==
-Date:   Tue, 8 Aug 2023 13:57:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Zeng Heng <zengheng4@huawei.com>
-Cc:     kristina.martsenko@arm.com, shuah@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-kselftest@vger.kernel.org, xiexiuqi@huawei.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/5] kselftest/arm64: add features check to hwcap test
-Message-ID: <d9d8912b-125b-41fa-9c34-f624b4cc59f7@sirena.org.uk>
-References: <20230808061356.2215158-1-zengheng4@huawei.com>
- <20230808061356.2215158-6-zengheng4@huawei.com>
+        Tue, 8 Aug 2023 14:14:55 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825B81E4C1
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 10:21:14 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RKvWQ6l4Vz1L9Dx;
+        Tue,  8 Aug 2023 21:42:26 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
+ 2023 21:43:36 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <kristina.martsenko@arm.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <broonie@kernel.org>, <shuah@kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <xiexiuqi@huawei.com>,
+        <zengheng4@huawei.com>
+Subject: [PATCH v2 1/5] kselftest/arm64: add float-point feature to hwcap test
+Date:   Tue, 8 Aug 2023 21:40:32 +0800
+Message-ID: <20230808134036.668954-2-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230808134036.668954-1-zengheng4@huawei.com>
+References: <20230808134036.668954-1-zengheng4@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0ZBW3VawUfWDahIx"
-Content-Disposition: inline
-In-Reply-To: <20230808061356.2215158-6-zengheng4@huawei.com>
-X-Cookie: You need not be present to win.
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,34 +50,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Add the FP feature check in the set of hwcap tests.
 
---0ZBW3VawUfWDahIx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+---
+ tools/testing/selftests/arm64/abi/hwcap.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-On Tue, Aug 08, 2023 at 02:13:56PM +0800, Zeng Heng wrote:
-> Add new feature checks and provide testing item to support capturing
-> SIGBUS exception signal.
+diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
+index 6a0adf916028..ec247587f2bf 100644
+--- a/tools/testing/selftests/arm64/abi/hwcap.c
++++ b/tools/testing/selftests/arm64/abi/hwcap.c
+@@ -39,6 +39,11 @@ static void cssc_sigill(void)
+ 	asm volatile(".inst 0xdac01c00" : : : "x0");
+ }
 
-I've not checked that the specific LSE2 behaviour is sensible but the
-integration with the framework looks good.  The manual encoding is not
-really important, just a stylistic nit.
++static void fp_sigill(void)
++{
++	asm volatile("fmov s0, #1");
++}
++
+ static void ilrcpc_sigill(void)
+ {
+ 	/* LDAPUR W0, [SP, #8] */
+@@ -235,6 +240,13 @@ static const struct hwcap_data {
+ 		.cpuinfo = "cssc",
+ 		.sigill_fn = cssc_sigill,
+ 	},
++	{
++		.name = "FP",
++		.at_hwcap = AT_HWCAP,
++		.hwcap_bit = HWCAP_FP,
++		.cpuinfo = "fp",
++		.sigill_fn = fp_sigill,
++	},
+ 	{
+ 		.name = "LRCPC",
+ 		.at_hwcap = AT_HWCAP,
+--
+2.25.1
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
---0ZBW3VawUfWDahIx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTSO9QACgkQJNaLcl1U
-h9BO7wgAhYV5mp+7d+fsY5nk2D+h2rP95692ZikiI0HBcLWydupXVSfcSBjsCfsi
-lkr4t1l15Jrmyl+wcOuouGj/Nyk1B9nvGAVBlOrVQqWpazzW9pCZ1/zqTU6xm34O
-pzVGLq6Y2VCFlRtIgjDwpCQ3dNeUWfrYfQ33oPzCJ/hkZQdXh/rf22F/EYlJ1lAI
-hBirSrUdpGhpLKZ6Pp3Ve65XkD/fXeYSoDC3te/v4wMH9Iz8f2Kx/kSBY8OOdUyr
-vUhtl38VqLFfsDkNfNzFHJ+R8dmX0SVSatqVdFKaj2K4oF9Pzzq7esglB6QrCCXX
-SLzavDqVdulgNSZKWSztzEt6/nUgMg==
-=BcHf
------END PGP SIGNATURE-----
-
---0ZBW3VawUfWDahIx--
