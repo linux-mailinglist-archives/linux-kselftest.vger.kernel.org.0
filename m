@@ -2,86 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9523775ECB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 14:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2323776004
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 14:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjHIMV7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Aug 2023 08:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
+        id S229926AbjHIM71 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Aug 2023 08:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbjHIMV4 (ORCPT
+        with ESMTP id S230501AbjHIM70 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Aug 2023 08:21:56 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B55E1FCC
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Aug 2023 05:21:55 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-523643207dbso928365a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Aug 2023 05:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20221208.gappssmtp.com; s=20221208; t=1691583714; x=1692188514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gse4lQ89R/swNYJYWFRKmfEvRYWCgDAQeQk+i+FC3Qc=;
-        b=z4Z49MED7B2iO1P22Sflcd12HqFoBF5yfCPEmSnPuw92T8YnUDH2KmdmqK/zmm3Hsv
-         Y1A4Myz/vjPMCMyAiAMJtrC215szsuavogK4ztLxqkGSQO7aPAZzUkD1Ozkyv7H3dSaL
-         qsE22vwvMjFkqhjUQQdHhf2t+Y2yF2VZL5Bid1o6X2mZ0zwKa1F0dMm02EOtwX7YI8oZ
-         kQr4IP0wXNHwqQREssTv7kAUZWMAwp8PYn9E03Y7mqOyy+xa2JAZIQ2g56zk0jeEXZhW
-         kRD0s2bF7FjY+mFqcKXFd8fyuF9dqKo3ka5wJ+o55aO6bmVU6NblI+YE2iiYmI3rXl30
-         +XNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691583714; x=1692188514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gse4lQ89R/swNYJYWFRKmfEvRYWCgDAQeQk+i+FC3Qc=;
-        b=VpuqeO2D7YvX9ajwXKPKrEIs2I/uyVkAl4BZWU6wmKXASpbCCjRKM6fpFtnv2apIGp
-         a9JVaQNTnDtKvHE9SSEdbkCSteJOcN9qa5ifIWpZPUSksYuDWn7h/wWK15a6ckmoT7wR
-         4BnggeoEV9Fv9UEQdaxeSk6UmrwpOAfDxwWIsANUN6unZy7zcOzsq+c7ziUbVrXbW5SZ
-         NgeBCOvrqeFEShqA5/8dvzde6tx7hYR+IT7hNZ5u41aSnvxYzD/XAIW7+8iRaRR5Ppri
-         PGhG8kLRFqZuPpukbOQyMZ35sZmYBgFcj7gvprUkBOLKmUaYchnOYNOTXhV9WSl60S76
-         uEWA==
-X-Gm-Message-State: AOJu0YzEyP0ERN/5Lhv7ABJIEgPMsZoadToKov1cLeqTPd3GvHaIryIX
-        2Bl5esG815Tn2pHHd5+HlqMLXcWTfXXzbKnoR5rhLQ==
-X-Google-Smtp-Source: AGHT+IEllS//Vo5DIeilEm06so+oXBAZVZjqk1bluFXrO7jOq/QKmFdOTXQUqzX5tkMzooCga5rA10uXjLIWp+wEMZQ=
-X-Received: by 2002:aa7:d912:0:b0:522:1e2f:99db with SMTP id
- a18-20020aa7d912000000b005221e2f99dbmr2557441edr.5.1691583713714; Wed, 09 Aug
- 2023 05:21:53 -0700 (PDT)
+        Wed, 9 Aug 2023 08:59:26 -0400
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D681FF5
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Aug 2023 05:59:25 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-354-VfHXE0NLNFKdLa8hkAYfpA-1; Wed, 09 Aug 2023 08:59:21 -0400
+X-MC-Unique: VfHXE0NLNFKdLa8hkAYfpA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B873F38008B4;
+        Wed,  9 Aug 2023 12:59:20 +0000 (UTC)
+Received: from hog.localdomain (unknown [10.45.224.100])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 561452166B25;
+        Wed,  9 Aug 2023 12:59:18 +0000 (UTC)
+From:   Sabrina Dubroca <sd@queasysnail.net>
+To:     netdev@vger.kernel.org
+Cc:     Sabrina Dubroca <sd@queasysnail.net>,
+        Vadim Fedorenko <vfedorenko@novek.ru>,
+        Frantisek Krenzelok <fkrenzel@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Apoorv Kothari <apoorvko@amazon.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [PATCH net-next v3 0/6] tls: implement key updates for TLS1.3
+Date:   Wed,  9 Aug 2023 14:58:49 +0200
+Message-Id: <cover.1691584074.git.sd@queasysnail.net>
 MIME-Version: 1.0
-References: <cover.1690273969.git.haibo1.xu@intel.com> <CAAhSdy0yug=J0nxnnPoLYL=0MiT0w6qgPYOcv0QwMRe+fsQn8Q@mail.gmail.com>
- <87y1ilpz3m.wl-maz@kernel.org>
-In-Reply-To: <87y1ilpz3m.wl-maz@kernel.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 9 Aug 2023 17:51:41 +0530
-Message-ID: <CAAhSdy3f9cyh_b9Z9ah9QOdqWUMzhMV39hxUqVCStOc2FWRYDQ@mail.gmail.com>
-Subject: Re: [PATCH v6 00/13] RISCV: Add KVM_GET_REG_LIST API
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     oliver.upton@linux.dev, xiaobo55x@gmail.com,
-        ajones@ventanamicro.com, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Like Xu <likexu@tencent.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        Haibo Xu <haibo1.xu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: queasysnail.net
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252; x-default=true
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,75 +61,105 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Marc,
+This adds support for receiving KeyUpdate messages (RFC 8446, 4.6.3
+[1]). A sender transmits a KeyUpdate message and then changes its TX
+key. The receiver should react by updating its RX key before
+processing the next message.
 
-On Tue, Aug 8, 2023 at 4:42=E2=80=AFPM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Mon, 07 Aug 2023 04:48:33 +0100,
-> Anup Patel <anup@brainfault.org> wrote:
-> >
-> > Hi Marc, Hi Oliver,
-> >
-> > On Tue, Jul 25, 2023 at 2:05=E2=80=AFPM Haibo Xu <haibo1.xu@intel.com> =
-wrote:
-> > >
-> > > KVM_GET_REG_LIST will dump all register IDs that are available to
-> > > KVM_GET/SET_ONE_REG and It's very useful to identify some platform
-> > > regression issue during VM migration.
-> > >
-> > > Patch 1-7 re-structured the get-reg-list test in aarch64 to make some
-> > > of the code as common test framework that can be shared by riscv.
-> > >
-> > > Patch 8 move reject_set check logic to a function so as to check for
-> > > different errno for different registers.
-> > > Patch 9 move finalize_vcpu back to run_test so that riscv can impleme=
-nt
-> > > its specific operation.
-> > > Patch 10 change to do the get/set operation only on present-blessed l=
-ist.
-> > > Patch 11 add the skip_set facilities so that riscv can skip set opera=
-tion
-> > > on some registers.
-> > > Patch 12 enabled the KVM_GET_REG_LIST API in riscv.
-> > > patch 13 added the corresponding kselftest for checking possible
-> > > register regressions.
-> > >
-> > > The get-reg-list kvm selftest was ported from aarch64 and tested with
-> > > Linux v6.5-rc3 on a Qemu riscv64 virt machine.
-> > >
-> > > ---
-> > > Changed since v5:
-> > >   * Rebase to v6.5-rc3
-> > >   * Minor fix for Andrew's comments
-> > >
-> > > Andrew Jones (7):
-> > >   KVM: arm64: selftests: Replace str_with_index with strdup_printf
-> > >   KVM: arm64: selftests: Drop SVE cap check in print_reg
-> > >   KVM: arm64: selftests: Remove print_reg's dependency on vcpu_config
-> > >   KVM: arm64: selftests: Rename vcpu_config and add to kvm_util.h
-> > >   KVM: arm64: selftests: Delete core_reg_fixup
-> > >   KVM: arm64: selftests: Split get-reg-list test code
-> > >   KVM: arm64: selftests: Finish generalizing get-reg-list
-> > >
-> > > Haibo Xu (6):
-> > >   KVM: arm64: selftests: Move reject_set check logic to a function
-> > >   KVM: arm64: selftests: Move finalize_vcpu back to run_test
-> > >   KVM: selftests: Only do get/set tests on present blessed list
-> > >   KVM: selftests: Add skip_set facility to get_reg_list test
-> > >   KVM: riscv: Add KVM_GET_REG_LIST API support
-> > >   KVM: riscv: selftests: Add get-reg-list test
-> >
-> > Are you okay for this series to go through the KVM RISC-V tree ?
->
-> Sure, seems fine from my point of view. But please put it on an
-> immutable topic branch so that we can also merge it in the arm64 tree,
-> should we need to resolve any conflicts.
+This patchset implements key updates by:
+ 1. pausing decryption when a KeyUpdate message is received, to avoid
+    attempting to use the old key to decrypt a record encrypted with
+    the new key
+ 2. returning -EKEYEXPIRED to syscalls that cannot receive the
+    KeyUpdate message, until the rekey has been performed by userspace
+ 3. passing the KeyUpdate message to userspace as a control message
+ 4. allowing updates of the crypto_info via the TLS_TX/TLS_RX
+    setsockopts
 
-I have created topic branch riscv_kvm_get_reg_list in the KVM RISC-V
-repo https://github.com/kvm-riscv/linux.git.
+This API has been tested with gnutls to make sure that it allows
+userspace libraries to implement key updates [2]. Thanks to Frantisek
+Krenzelok <fkrenzel@redhat.com> for providing the implementation in
+gnutls and testing the kernel patches.
 
-This branch is based upon Linux-6.5-rc5 and also merged into the
-riscv_kvm_next branch for the upcoming merge window.
 
-Regards,
-Anup
+=======================================================================
+Discussions around v2 of this patchset focused on how HW offload would
+interact with rekey.
+
+RX
+ - The existing SW path will handle all records between the KeyUpdate
+   message signaling the change of key and the new key becoming known
+   to the kernel -- those will be queued encrypted, and decrypted in
+   SW as they are read by userspace (once the key is provided, ie same
+   as this patchset)
+ - Call ->tls_dev_del + ->tls_dev_add immediately during
+   setsockopt(TLS_RX)
+
+TX
+ - After setsockopt(TLS_TX), switch to the existing SW path (not the
+   current device_fallback) until we're able to re-enable HW offload
+   - tls_device_sendmsg will call into tls_sw_sendmsg under lock_sock
+     to avoid changing socket ops during the rekey while another
+     thread might be waiting on the lock
+ - We only re-enable HW offload (call ->tls_dev_add to install the new
+   key in HW) once all records sent with the old key have been
+   ACKed. At this point, all unacked records are SW-encrypted with the
+   new key, and the old key is unused by both HW and retransmissions.
+   - If there are no unacked records when userspace does
+     setsockopt(TLS_TX), we can (try to) install the new key in HW
+     immediately.
+   - If yet another key has been provided via setsockopt(TLS_TX), we
+     don't install intermediate keys, only the latest.
+   - TCP notifies ktls of ACKs via the icsk_clean_acked callback. In
+     case of a rekey, tls_icsk_clean_acked will record when all data
+     sent with the most recent past key has been sent. The next call
+     to sendmsg will install the new key in HW.
+   - We close and push the current SW record before reenabling
+     offload.
+
+If ->tls_dev_add fails to install the new key in HW, we stay in SW
+mode. We can add a counter to keep track of this.
+
+
+In addition:
+
+Because we can't change socket ops during a rekey, we'll also have to
+modify do_tls_setsockopt_conf to check ctx->tx_conf and only call
+either tls_set_device_offload or tls_set_sw_offload. RX already uses
+the same ops for both TLS_HW and TLS_SW, so we could switch between HW
+and SW mode on rekey.
+
+An alternative would be to have a common sendmsg which locks
+the socket and then calls the correct implementation. We'll need that
+anyway for the offload under rekey case, so that would only add a test
+to the SW path's ops (compared to the current code). That should allow
+us to simplify build_protos a bit, but might have a performance
+impact - we'll need to check it if we want to go that route.
+=======================================================================
+
+Note: in a future series, I'll clean up tls_set_sw_offload and
+eliminate the per-cipher copy-paste using tls_cipher_size_desc.
+
+[1] https://www.rfc-editor.org/rfc/rfc8446#section-4.6.3
+[2] https://gitlab.com/gnutls/gnutls/-/merge_requests/1625
+
+Sabrina Dubroca (6):
+  tls: remove tls_context argument from tls_set_sw_offload
+  tls: block decryption when a rekey is pending
+  tls: implement rekey for TLS1.3
+  docs: tls: document TLS1.3 key updates
+  selftests: tls: add key_generation argument to tls_crypto_info_init
+  selftests: tls: add rekey tests
+
+ Documentation/networking/tls.rst  |  21 ++
+ include/net/tls.h                 |   3 +
+ net/tls/tls.h                     |   3 +-
+ net/tls/tls_device.c              |   2 +-
+ net/tls/tls_main.c                |  47 ++-
+ net/tls/tls_sw.c                  | 184 +++++++++---
+ tools/testing/selftests/net/tls.c | 466 +++++++++++++++++++++++++++++-
+ 7 files changed, 661 insertions(+), 65 deletions(-)
+
+-- 
+2.40.1
+
