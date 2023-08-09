@@ -2,125 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5647756EF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 12:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D75A0775AC2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 13:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjHIKQb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Aug 2023 06:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S233280AbjHILLU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Aug 2023 07:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbjHIKQa (ORCPT
+        with ESMTP id S233278AbjHILLT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Aug 2023 06:16:30 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584FB1FDE;
-        Wed,  9 Aug 2023 03:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691576189; x=1723112189;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=h5cY00xplnCVKxo8zCQtJf9FxOjyPsmGsh03040yI1Y=;
-  b=J4bRfPm9MCC48yYuVBHoNrXErukkMxyIeWfs0aB33Xu5F54Sz/FVDekI
-   kSP0KrBMnGpevawsdFc3R3yNDhlIdedl9WODkqjIIvjXFtyIK72ye9q3X
-   DA1IR2Ztgu9WSwCIquToxDCj2GHxUtxO06uyDz4GV+piZKsb8v7ZYGr7U
-   ToQap4tlj53Iiii64ee9WZVwaKoMqqBhq5oAllGBYCBgPDxkHtqVtT1KX
-   OY8g5bVwml9YWbEVjLGNlzrA8khQX+Lwx5sKPA7coXFsw8/6F+Sp607Oz
-   wTGO9lU9gT1iyue2NiZkqr0ixyoAPcotSMzPz5Eay4opUoi5nLt9r4Mj3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="361212578"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="361212578"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 03:16:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="978320803"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="978320803"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.210.171]) ([10.254.210.171])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 03:16:21 -0700
-Message-ID: <aa455c36-83be-7757-7171-05460a459a2e@linux.intel.com>
-Date:   Wed, 9 Aug 2023 18:16:19 +0800
+        Wed, 9 Aug 2023 07:11:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4298B10F3;
+        Wed,  9 Aug 2023 04:11:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC2426314D;
+        Wed,  9 Aug 2023 11:11:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFF93C433C8;
+        Wed,  9 Aug 2023 11:11:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1691579478;
+        bh=0B4w8yT672LEU41zZFrzrUkp6So9MY7mja83t2lJo28=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=yTRlKeW3joA5D9QQ+v7ju1jdwX2cDyhudbMi2Ws4LYzdRKcAIZWy8cv5232lFM/51
+         2z2R6U6kjv7igkN4JdbTjxXzt9pMgD4Kq/D4RsAH+rJdW5k6CowkxLcxJQ0jMAL8ep
+         LovWEEnZ/GZbWxUTgHwmErHhooOrkUXF1RUacA9w=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei Zhang <tianfei.zhang@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kselftest@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Dan Carpenter <dan.carpenter@linaro.org>
+Subject: [PATCH 4.14 203/204] test_firmware: fix a memory leak with reqs buffer
+Date:   Wed,  9 Aug 2023 12:42:21 +0200
+Message-ID: <20230809103649.301827663@linuxfoundation.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230809103642.552405807@linuxfoundation.org>
+References: <20230809103642.552405807@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
-        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
-        peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com
-Subject: Re: [PATCH v6 3/4] iommufd: Add IOMMU_GET_HW_INFO
-Content-Language: en-US
-To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
-        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
-        robin.murphy@arm.com
-References: <20230808153510.4170-1-yi.l.liu@intel.com>
- <20230808153510.4170-4-yi.l.liu@intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230808153510.4170-4-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/8/8 23:35, Yi Liu wrote:
-> +static int iommufd_fill_hw_info(struct device *dev, void __user *user_ptr,
-> +				unsigned int *length, u32 *type)
-> +{
-> +	const struct iommu_ops *ops;
-> +	unsigned int data_len;
-> +	void *data;
-> +	int rc = 0;
-> +
-> +	ops = dev_iommu_ops(dev);
-> +	if (!ops->hw_info) {
-> +		*length = 0;
-> +		*type = IOMMU_HW_INFO_TYPE_NONE;
-> +		return 0;
-> +	}
-> +
-> +	data = ops->hw_info(dev, &data_len, type);
-> +	if (IS_ERR(data))
-> +		return PTR_ERR(data);
-> +
-> +	/*
-> +	 * drivers that have hw_info callback should have a unique
-> +	 * iommu_hw_info_type.
-> +	 */
-> +	if (WARN_ON_ONCE(*type == IOMMU_HW_INFO_TYPE_NONE)) {
-> +		rc = -ENODEV;
-> +		goto err_free;
-> +	}
-> +
-> +	*length = min(*length, data_len);
-> +	if (copy_to_user(user_ptr, data, *length)) {
+From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-copy_to_user() returns the number of bytes that were successfully
-copied, right?
+commit be37bed754ed90b2655382f93f9724b3c1aae847 upstream.
 
-If so, isn't it always failure case? Or I missed anything?
+Dan Carpenter spotted that test_fw_config->reqs will be leaked if
+trigger_batched_requests_store() is called two or more times.
+The same appears with trigger_batched_requests_async_store().
 
-> +		rc = -EFAULT;
-> +		goto err_free;
+This bug wasn't trigger by the tests, but observed by Dan's visual
+inspection of the code.
 
-nit: this goto is unnecessary.
+The recommended workaround was to return -EBUSY if test_fw_config->reqs
+is already allocated.
 
-> +	}
-> +
-> +err_free:
-> +	kfree(data);
-> +	return rc;
-> +}
+Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf")
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Russ Weight <russell.h.weight@intel.com>
+Cc: Tianfei Zhang <tianfei.zhang@intel.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Colin Ian King <colin.i.king@gmail.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: stable@vger.kernel.org # v5.4
+Suggested-by: Dan Carpenter <error27@gmail.com>
+Suggested-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Link: https://lore.kernel.org/r/20230509084746.48259-2-mirsad.todorovac@alu.unizg.hr
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ lib/test_firmware.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Best regards,
-baolu
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -621,6 +621,11 @@ static ssize_t trigger_batched_requests_
+ 
+ 	mutex_lock(&test_fw_mutex);
+ 
++        if (test_fw_config->reqs) {
++                rc = -EBUSY;
++                goto out_bail;
++        }
++
+ 	test_fw_config->reqs = vzalloc(sizeof(struct test_batched_req) *
+ 				       test_fw_config->num_requests * 2);
+ 	if (!test_fw_config->reqs) {
+@@ -723,6 +728,11 @@ ssize_t trigger_batched_requests_async_s
+ 
+ 	mutex_lock(&test_fw_mutex);
+ 
++        if (test_fw_config->reqs) {
++                rc = -EBUSY;
++                goto out_bail;
++        }
++
+ 	test_fw_config->reqs = vzalloc(sizeof(struct test_batched_req) *
+ 				       test_fw_config->num_requests * 2);
+ 	if (!test_fw_config->reqs) {
+
+
