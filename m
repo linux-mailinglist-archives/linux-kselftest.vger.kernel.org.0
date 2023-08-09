@@ -2,184 +2,248 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55F97751A5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 05:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893307751F1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 06:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbjHIDs2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Aug 2023 23:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S230110AbjHIEbb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Aug 2023 00:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjHIDs0 (ORCPT
+        with ESMTP id S230101AbjHIEb3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 23:48:26 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE6C173A
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 20:48:24 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so964069a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Aug 2023 20:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20221208.gappssmtp.com; s=20221208; t=1691552903; x=1692157703;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wcsclxtm27Oz1sDHzPRuy+Izl0iwle6aRoNm7chV/mE=;
-        b=EAu5utSgSArNbjdpW2PWgXWxU171HGHts/s7dBkm0zVj5aCYmQgRY1eVDfdx5vr8cA
-         uGKn7OVjBlH4x+6LdBhrQT6Lg9LhLj1yy1RH2qqx1h5mvCbwLwDTmi/MZ0ikszErkW7A
-         c2wgoyYGmr5Xx1SM2v4R30bMVFeofVKHtC6o0RiWqEd1AY94fkLRImRdySpiVfKzCHyP
-         2nptFLeLbD+hH2/FAjLldDdYM1xVC0YQevFNuibuhkBMw35KddsaCG7bR1RVsurPGN57
-         4zXG/WD6m3xLx9dq37bTRRVaAPx+TLrhm8T5caUwPW3f4koGnwh0i2q7yp3JZqW5SBBb
-         uphQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691552903; x=1692157703;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wcsclxtm27Oz1sDHzPRuy+Izl0iwle6aRoNm7chV/mE=;
-        b=R1Z0gHmTymxBt4VEjb9dwwHSv0HBFsXLxvihdD134FfN8BVkTXzu1yl1V8C9T/eXRK
-         fSmgTNW1LrgsXKfviBQDl/V8qROMm7/YF1cwJWjeBGqy/5YbRQ97rhhiwKDgc7OSO9tn
-         o67vqEpr3wvm3lB/1Oq4M0L02EjeYoayGMZtyIRhiXKBY+eatgkx6pPsG5cVaC/fF6pZ
-         SYa/mPxu8HYDTcKWZAmMcqh7FLfI0aXW+S2V4mOVPBWHmEUiO0FxZZ/odjNMaz7H8fBi
-         NRpzLAW+vgmD37hzsHkEPGKRgN/p/mlNFbdCW2AV5YsHKhHVGI0U7DUu5bu/KptU9qtB
-         N5OA==
-X-Gm-Message-State: AOJu0YwxI8RmJsRXLu/rwJ5qKwxVBI4FkNvKh4h3nwxUI87MhIHSQzFP
-        5UQuVcUZ1VPV87XNEVykKTN30Crc45Z4TZpXl3kMWw==
-X-Google-Smtp-Source: AGHT+IFauvweysXXn8GP5MBQlVkSnEFT74it4SwljMy29zvw5obroURdfY0qKL+rjI6eMwJTbfFGGEzPUIYTUHgx/6I=
-X-Received: by 2002:a05:6402:3587:b0:51f:ef58:da87 with SMTP id
- y7-20020a056402358700b0051fef58da87mr14581549edc.2.1691552902500; Tue, 08 Aug
- 2023 20:48:22 -0700 (PDT)
+        Wed, 9 Aug 2023 00:31:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D94A1BDA;
+        Tue,  8 Aug 2023 21:31:28 -0700 (PDT)
+Received: from [192.168.100.7] (unknown [59.103.218.230])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A65296607193;
+        Wed,  9 Aug 2023 05:31:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1691555486;
+        bh=xGTOVBf346p5z7gNl1KYsQVdZ1a5kLLBqA30qKLUwLk=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=nCzWb4J3wzCCrxjFs9KzjZu7S+A0zBSNj0abZIZQiqxXmLJdf/8OYdTkD8AkSHq55
+         8YEL9f/3M1+EuVWhryjVnX/jKuTQlpudcZrrlS1+/oRx0HPQBNbKIDOva/d90sU/5Q
+         LqCI5WWJxwlA+lhzD04b7IPIETpF6et+ddKWYlW5TdxZiiveoHdDevHJ5gCNgL7E6Y
+         GBWr5AG3OcbOD7vJyYeJbJwqP9BgB6WjIvRJ8ZfYZ9hCpHjc7i9wvmePInqQvFOqgK
+         afBzw2NwqrvsYSRR3BGya817C3Pd5oShlxGV6GGOEe6WJ9yZ3mUdThWd7eOvDTZS1y
+         tGyyCHoAGs2Wg==
+Message-ID: <e2967189-84b1-6bcb-9d7f-4c528c06c4bc@collabora.com>
+Date:   Wed, 9 Aug 2023 09:31:14 +0500
 MIME-Version: 1.0
-References: <cover.1690273969.git.haibo1.xu@intel.com> <CAAhSdy0yug=J0nxnnPoLYL=0MiT0w6qgPYOcv0QwMRe+fsQn8Q@mail.gmail.com>
- <87y1ilpz3m.wl-maz@kernel.org> <CAJve8onZuOHkAUVY3=QeBPMx5n2F1fGgn57rPp7MB1Q5=vXasA@mail.gmail.com>
-In-Reply-To: <CAJve8onZuOHkAUVY3=QeBPMx5n2F1fGgn57rPp7MB1Q5=vXasA@mail.gmail.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 9 Aug 2023 09:18:09 +0530
-Message-ID: <CAAhSdy277PEBZ4wyUHxQPyN2TugGfhBmC5jUoFTAqMU8vwbt5w@mail.gmail.com>
-Subject: Re: [PATCH v6 00/13] RISCV: Add KVM_GET_REG_LIST API
-To:     Haibo Xu <xiaobo55x@gmail.com>
-Cc:     Marc Zyngier <maz@kernel.org>, oliver.upton@linux.dev,
-        ajones@ventanamicro.com, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Like Xu <likexu@tencent.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        Haibo Xu <haibo1.xu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Subject: Re: [PATCH v27 2/6] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     Andrei Vagin <avagin@gmail.com>
+References: <20230808104309.357852-1-usama.anjum@collabora.com>
+ <20230808104309.357852-3-usama.anjum@collabora.com>
+ <CANaxB-ww6AcO4QThubYw62Mdeid4e3FOQAXvA_GZ=wu4J60-AQ@mail.gmail.com>
+ <624cfa26-5650-ee0d-8e0a-1d844175bcaf@collabora.com>
+ <CANaxB-yhCcvc9W6POFR8SNjECeD_WNGidnuxXrHKT2if=CgyrA@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CANaxB-yhCcvc9W6POFR8SNjECeD_WNGidnuxXrHKT2if=CgyrA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 9, 2023 at 8:56=E2=80=AFAM Haibo Xu <xiaobo55x@gmail.com> wrote=
-:
->
-> On Tue, Aug 8, 2023 at 7:12=E2=80=AFPM Marc Zyngier <maz@kernel.org> wrot=
-e:
-> >
-> > On Mon, 07 Aug 2023 04:48:33 +0100,
-> > Anup Patel <anup@brainfault.org> wrote:
-> > >
-> > > Hi Marc, Hi Oliver,
-> > >
-> > > On Tue, Jul 25, 2023 at 2:05=E2=80=AFPM Haibo Xu <haibo1.xu@intel.com=
-> wrote:
-> > > >
-> > > > KVM_GET_REG_LIST will dump all register IDs that are available to
-> > > > KVM_GET/SET_ONE_REG and It's very useful to identify some platform
-> > > > regression issue during VM migration.
-> > > >
-> > > > Patch 1-7 re-structured the get-reg-list test in aarch64 to make so=
-me
-> > > > of the code as common test framework that can be shared by riscv.
-> > > >
-> > > > Patch 8 move reject_set check logic to a function so as to check fo=
-r
-> > > > different errno for different registers.
-> > > > Patch 9 move finalize_vcpu back to run_test so that riscv can imple=
-ment
-> > > > its specific operation.
-> > > > Patch 10 change to do the get/set operation only on present-blessed=
- list.
-> > > > Patch 11 add the skip_set facilities so that riscv can skip set ope=
-ration
-> > > > on some registers.
-> > > > Patch 12 enabled the KVM_GET_REG_LIST API in riscv.
-> > > > patch 13 added the corresponding kselftest for checking possible
-> > > > register regressions.
-> > > >
-> > > > The get-reg-list kvm selftest was ported from aarch64 and tested wi=
-th
-> > > > Linux v6.5-rc3 on a Qemu riscv64 virt machine.
-> > > >
-> > > > ---
-> > > > Changed since v5:
-> > > >   * Rebase to v6.5-rc3
-> > > >   * Minor fix for Andrew's comments
-> > > >
-> > > > Andrew Jones (7):
-> > > >   KVM: arm64: selftests: Replace str_with_index with strdup_printf
-> > > >   KVM: arm64: selftests: Drop SVE cap check in print_reg
-> > > >   KVM: arm64: selftests: Remove print_reg's dependency on vcpu_conf=
-ig
-> > > >   KVM: arm64: selftests: Rename vcpu_config and add to kvm_util.h
-> > > >   KVM: arm64: selftests: Delete core_reg_fixup
-> > > >   KVM: arm64: selftests: Split get-reg-list test code
-> > > >   KVM: arm64: selftests: Finish generalizing get-reg-list
-> > > >
-> > > > Haibo Xu (6):
-> > > >   KVM: arm64: selftests: Move reject_set check logic to a function
-> > > >   KVM: arm64: selftests: Move finalize_vcpu back to run_test
-> > > >   KVM: selftests: Only do get/set tests on present blessed list
-> > > >   KVM: selftests: Add skip_set facility to get_reg_list test
-> > > >   KVM: riscv: Add KVM_GET_REG_LIST API support
-> > > >   KVM: riscv: selftests: Add get-reg-list test
-> > >
-> > > Are you okay for this series to go through the KVM RISC-V tree ?
-> >
-> > Sure, seems fine from my point of view. But please put it on an
-> > immutable topic branch so that we can also merge it in the arm64 tree,
-> > should we need to resolve any conflicts.
-> >
->
-> Hi Marc,
->
-> Thanks for your review!
->
-> Which topic branch do you prefer or suggest to use?
-> I can do a rebase on it and fix any potential conflicts.
+On 8/9/23 12:55 AM, Andrei Vagin wrote:
+> On Tue, Aug 8, 2023 at 12:35 PM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> On 8/9/23 12:21 AM, Andrei Vagin wrote:
+>>> On Tue, Aug 8, 2023 at 3:43 AM Muhammad Usama Anjum
+>>> <usama.anjum@collabora.com> wrote:
+>>>
+>>> ....
+>>>
+>>>> +static int pagemap_scan_output(unsigned long categories,
+>>>> +                              struct pagemap_scan_private *p,
+>>>> +                              unsigned long addr, unsigned long *end)
+>>>> +{
+>>>> +       unsigned long n_pages, total_pages;
+>>>> +       int ret = 0;
+>>>> +
+>>>> +       if (!p->vec_buf)
+>>>> +               return 0;
+>>>> +
+>>>> +       categories &= p->arg.return_mask;
+>>>> +
+>>>> +       n_pages = (*end - addr) / PAGE_SIZE;
+>>>> +       if (check_add_overflow(p->found_pages, n_pages, &total_pages) || //TODO
+>>>
+>>> Need to fix this TODO.
+>> Sorry, I forgot to remove the "//TODO". As far as I've understood, the last
+>> discussion ended in keeping the check_add_overflow(). [1] I'll just remove
+>> the TODO.
+>>
+>> https://lore.kernel.org/all/CABb0KFEfmRz+Z_-7GygTL12E5Y254dvoUfWe4uSv9-wOx+Cs8w@mail.gmail.com
+>>
+>>
+>>>
+>>>> +           total_pages > p->arg.max_pages) {
+>>>> +               size_t n_too_much = total_pages - p->arg.max_pages;
+>>>> +               *end -= n_too_much * PAGE_SIZE;
+>>>> +               n_pages -= n_too_much;
+>>>> +               ret = -ENOSPC;
+>>>> +       }
+>>>> +
+>>>> +       if (!pagemap_scan_push_range(categories, p, addr, *end)) {
+>>>> +               *end = addr;
+>>>> +               n_pages = 0;
+>>>> +               ret = -ENOSPC;
+>>>> +       }
+>>>> +
+>>>> +       p->found_pages += n_pages;
+>>>> +       if (ret)
+>>>> +               p->walk_end_addr = *end;
+>>>> +
+>>>> +       return ret;
+>>>> +}
+>>>> +
+>>>
+>>> ...
+>>>
+>>>> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long uarg)
+>>>> +{
+>>>> +       struct mmu_notifier_range range;
+>>>> +       struct pagemap_scan_private p;
+>>>> +       unsigned long walk_start;
+>>>> +       size_t n_ranges_out = 0;
+>>>> +       int ret;
+>>>> +
+>>>> +       memset(&p, 0, sizeof(p));
+>>>> +       ret = pagemap_scan_get_args(&p.arg, uarg);
+>>>> +       if (ret)
+>>>> +               return ret;
+>>>> +
+>>>> +       p.masks_of_interest = MASKS_OF_INTEREST(p.arg);
+>>>> +       ret = pagemap_scan_init_bounce_buffer(&p);
+>>>> +       if (ret)
+>>>> +               return ret;
+>>>> +
+>>>> +       /* Protection change for the range is going to happen. */
+>>>> +       if (p.arg.flags & PM_SCAN_WP_MATCHING) {
+>>>> +               mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
+>>>> +                                       mm, p.arg.start, p.arg.end);
+>>>> +               mmu_notifier_invalidate_range_start(&range);
+>>>> +       }
+>>>> +
+>>>> +       walk_start = p.arg.start;
+>>>> +       for (; walk_start < p.arg.end; walk_start = p.arg.walk_end) {
+>>>> +               int n_out;
+>>>> +
+>>>> +               if (fatal_signal_pending(current)) {
+>>>> +                       ret = -EINTR;
+>>>> +                       break;
+>>>> +               }
+>>>> +
+>>>> +               ret = mmap_read_lock_killable(mm);
+>>>> +               if (ret)
+>>>> +                       break;
+>>>> +               ret = walk_page_range(mm, walk_start, p.arg.end,
+>>>> +                                     &pagemap_scan_ops, &p);
+>>>> +               mmap_read_unlock(mm);
+>>>> +
+>>>> +               n_out = pagemap_scan_flush_buffer(&p);
+>>>> +               if (n_out < 0)
+>>>> +                       ret = n_out;
+>>>> +               else
+>>>> +                       n_ranges_out += n_out;
+>>>> +
+>>>> +               if (ret != -ENOSPC || p.arg.vec_len - 1 == 0 ||
+>>>> +                   p.found_pages == p.arg.max_pages) {
+>>>> +                       p.walk_end_addr = p.arg.end;
+>>>
+>>> You should not change p.walk_end_addr If ret is ENOSPC. Pls add a test
+>>> case to check this.
+>> Yeah, I'm not setting walk_end_addr if ret is ENOSPC.
+>>
+>> I'm setting walk_end_addr only when ret = 0. I'd added this as a result of
+>> a test case in my local test application. I can look at adding some tests
+>> in pagemap_ioctl.c kselftest as well.
+> 
+> I am not sure that I understand what you mean here. ENOSPC can be returned
+> when the vec array is full and in this case, walk_end_addr should be
+> the address when it stops scanning.
+I'll copy a test case in kselftest to prove or dis-prove the correctness of
+walk_end address.
 
-I will share a branch with a stable commit history.
-I have already resolved conflicts at my end.
+> 
+>>
+>>>
+>>>> +                       break;
+>>>> +               }
+>>>> +       }
+>>>> +
+>>>> +       if (p.cur_buf.start != p.cur_buf.end) {
+>>>> +               if (copy_to_user(p.vec_out, &p.cur_buf, sizeof(p.cur_buf)))
+>>>> +                       ret = -EFAULT;
+>>>> +               else
+>>>> +                       ++n_ranges_out;
+>>>> +       }
+>>>> +
+>>>> +       /* ENOSPC signifies early stop (buffer full) from the walk. */
+>>>> +       if (!ret || ret == -ENOSPC)
+>>>> +               ret = n_ranges_out;
+>>>> +
+>>>> +       p.arg.walk_end = p.walk_end_addr ? p.walk_end_addr : walk_start;
+>>>> +       if (pagemap_scan_writeback_args(&p.arg, uarg))
+>>>> +               ret = -EFAULT;
+>>>> +
+>>>> +       if (p.arg.flags & PM_SCAN_WP_MATCHING)
+>>>> +               mmu_notifier_invalidate_range_end(&range);
+>>>> +
+>>>> +       kfree(p.vec_buf);
+>>>> +       return ret;
+>>>> +}
+>>>
+>>> Thanks,
+>>> Andrei
+>>
+>> --
+>> BR,
+>> Muhammad Usama Anjum
 
-Regards,
-Anup
-
->
-> Regards,
-> Haibo
->
-> > Thanks,
-> >
-> >         M.
-> >
-> > --
-> > Without deviation from the norm, progress is not possible.
+-- 
+BR,
+Muhammad Usama Anjum
