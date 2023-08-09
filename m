@@ -2,67 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC044775E8F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 14:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F615775E94
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 14:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbjHIMLS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Aug 2023 08:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S232224AbjHIML2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Aug 2023 08:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231724AbjHIMLR (ORCPT
+        with ESMTP id S231634AbjHIMLX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Aug 2023 08:11:17 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F601BF7
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Aug 2023 05:11:15 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fe32ec7201so61325e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Aug 2023 05:11:15 -0700 (PDT)
+        Wed, 9 Aug 2023 08:11:23 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E661FEF
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Aug 2023 05:11:21 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5232ce75e26so9752a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Aug 2023 05:11:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691583073; x=1692187873;
+        d=google.com; s=20221208; t=1691583080; x=1692187880;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JP703h8w9qIgvpbe+Mvhn2Qsf3ihu1s5NJN7WG3TCHA=;
-        b=v36g6Y8YiuqRvmIlyxkzAE4v5om4BbyroY7m8wgCVpi0XjxSWqRR71CrHe2Lpx8l/8
-         Yp0Pg2UDJej7yCkHj3lYRtYZyygUE/r1RaSgDvYm9uGXCymTx4azCJaJSZHXSEi09isQ
-         F7gbdTCjqoRE2Q0F+P9VfjXXzL+wLYHn+BbU+OKgRP0UKjryC+t+EfeVtRqGz8qjqlO/
-         c2mISLt91rNqzUGw8/+2bSgPQXscQtAKnVDyFgCdPact5JsH8rkk5loDHa/LMOkaT6Dx
-         fl+eFK9nLMchpyhkPCe/LzQ8MJJt/F/y4gU35j/CewdvwmrTHryYsWiGlNyI//BHlus6
-         EKew==
+        bh=ch80sZySwK2H1WT73/ypZhoPOqBgd38Q2lXyWu0o+Fw=;
+        b=z4mBqMJosgfQZ0UEAW4qJSjeMZo0kc/WG5xK8IKtcKWFVuqTLdJfKAh0rVbORIKEFp
+         OkIbZFXiOPlX0zAlA9glN4Yuy6X3WR8hTlaHpCZuH7YdaxqaYa1T9sMetN+MZDW+6XKt
+         Pa7jVvxGKW2J6gNrtG6hmbbQrtf8/biJ32oTbUB8TKCcv8x7W5TAvg164ktPU7x60KB1
+         fJIptzOrjRBikCDi/IW+WWHgelMUgaFEWeCX74zWUrDVhgxur/95peyzYHYoPH0DU20I
+         43RfX2JUo1WUGpH7k3if5Ul1mqB0C5EuVbPyKF3RX9cYmeP6usrcXDfVAo9U/La/4TNm
+         ieew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691583073; x=1692187873;
+        d=1e100.net; s=20221208; t=1691583080; x=1692187880;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JP703h8w9qIgvpbe+Mvhn2Qsf3ihu1s5NJN7WG3TCHA=;
-        b=K0mYNGqLHvl03NR7P6S/iXFU0X+Y3pp2sP+muNUEEwbBIHhrkKvI0WPwUpo4V5JMxd
-         W1+WxX7FVJyk+RcxQIVyflX7k4UiN1jYpTk6sVR445a2VfWdC9o/RTgMiyZfGbvmKELK
-         m8pyuy+kO2QTn/nBhadygsdzOPXaW3X/NP66QVjpzE9SCxPGsz2wAe1Gf8RsaVw8vW4Y
-         CjnGR7Wq2X/JEh0jh30DJ/2V6vf7CbdQN78DBeXW1w+hFbycy6LF2pf48lWFDaEDv6eD
-         Ew1AfVGhDWdKEpVHeVXWBbEriihkm+wZmu7q38b7sHVKSRtDqQUSz9IiJD2f6EwLQSYI
-         Uajw==
-X-Gm-Message-State: AOJu0YzxuiR7YR17kYjh8jlFjMbPNbIqkgPSMWkXlILNfS1xQsuXvfZb
-        8AhfNMkM9GjXVnQ8Pf9acU6XOVXOAr17hUNo9KVdcg==
-X-Google-Smtp-Source: AGHT+IEKQDajEEB+f4ehqxGs8n/WjBBzPLJ7UWaGK9bOjSBD1h9ZigQW7/+VO213HjiAcETspKy2gf3RoZY2buEXmOc=
-X-Received: by 2002:a05:600c:3551:b0:3fe:b38:5596 with SMTP id
- i17-20020a05600c355100b003fe0b385596mr80131wmq.6.1691583073359; Wed, 09 Aug
- 2023 05:11:13 -0700 (PDT)
+        bh=ch80sZySwK2H1WT73/ypZhoPOqBgd38Q2lXyWu0o+Fw=;
+        b=YvxufJjOvX9DPKwpTi6D068mN9/IzSqd/LTrs7Zl9KCtO7OqNAM4JZJyT68M7TEew/
+         XNnf5bsSQgQQsbq7jBOuMeRp/alCQG7EKnx7LzgAOcTz4HEcPyowIkTK0cWK7GNRRxbX
+         0mHdz6kkMQrwIYQlqHY0LphGstH02+dUbNNyERCRyWnzY1RlAIk7VyfJbT/c03r6UynV
+         mANr5Mw1nylnxphPI/PmVCy/H4Zb8wJA22GXqqq9Lpo84TbL9eca0SIw8VCCcPKuRxWT
+         s38OOEV7rqxbYwv3dmlSmOFFUVAD3x0O2Qkrlive1jF3eGivKH3PewxUScaYdDHIo9z/
+         Rn0Q==
+X-Gm-Message-State: AOJu0Yx19UVlkLlC4Bmy4wPlBM4BXzIf7nskVE7qJvLBwH3S2uT+MCXt
+        2hjvZDjyGMDg3N2wMuFSzsWIR4SGubl9yDZ2KHCM2A==
+X-Google-Smtp-Source: AGHT+IFcbI7+TVqi1QnX1WIMCPoGpECfn+hk9799z7A6XqTqdUccO7axr6bw5nL0cGOAfwBKJzTDnzKc+m00mnbmWf0=
+X-Received: by 2002:a50:cc9b:0:b0:523:193b:5587 with SMTP id
+ q27-20020a50cc9b000000b00523193b5587mr87413edi.6.1691583079849; Wed, 09 Aug
+ 2023 05:11:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230808123529.4725-1-rf@opensource.cirrus.com> <20230808123529.4725-2-rf@opensource.cirrus.com>
-In-Reply-To: <20230808123529.4725-2-rf@opensource.cirrus.com>
+References: <20230808123529.4725-1-rf@opensource.cirrus.com>
+ <20230808123529.4725-3-rf@opensource.cirrus.com> <CA+GJov79EJLbdptX+hhTqa90C7A0aJ-wzjxF1LDn++jWHeNXFA@mail.gmail.com>
+ <371a6ba0-c076-8e44-ae2f-32429de507da@opensource.cirrus.com>
+In-Reply-To: <371a6ba0-c076-8e44-ae2f-32429de507da@opensource.cirrus.com>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 9 Aug 2023 20:11:00 +0800
-Message-ID: <CABVgOS=BrJ82v3_O9wGxTGoPRjH-rSWiTMS6+S=x4yPng_-XFA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] kunit: Replace fixed-size log with
- dynamically-extending buffer
+Date:   Wed, 9 Aug 2023 20:11:08 +0800
+Message-ID: <CABVgOSmO3cH_oDN1sNWaNYRy8uLxHHUkWPhTevWhHgMjd4LQ5g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] kunit: kunit-test: Add test cases for extending
+ log buffer
 To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     brendan.higgins@linux.dev, rmoar@google.com,
+Cc:     Rae Moar <rmoar@google.com>, brendan.higgins@linux.dev,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003b2c7106027c60da"
+        boundary="00000000000099722706027c60e1"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,503 +73,127 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000003b2c7106027c60da
+--00000000000099722706027c60e1
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 8 Aug 2023 at 20:35, Richard Fitzgerald
+On Wed, 9 Aug 2023 at 17:39, Richard Fitzgerald
 <rf@opensource.cirrus.com> wrote:
 >
-> Re-implement the log buffer as a list of buffer fragments that can
-> be extended as the size of the log info grows.
+> On 8/8/23 22:16, Rae Moar wrote:
+> > On Tue, Aug 8, 2023 at 8:35=E2=80=AFAM Richard Fitzgerald
+> > <rf@opensource.cirrus.com> wrote:
+> >>
+> >> Add test cases for the dynamically-extending log buffer.
+> >>
+> >> kunit_log_extend_test_1() logs a series of numbered lines then tests
+> >> that the resulting log contains all the lines.
+> >>
+> >> kunit_log_extend_test_2() logs a large number of lines of varying leng=
+th
+> >> to create many fragments, then tests that all lines are present.
+> >>
+> >> kunit_log_frag_sized_line_test() logs a line that exactly fills a
+> >> fragment. This should not cause an extension of the log or truncation
+> >> of the line.
+> >>
+> >> kunit_log_newline_test() has a new test to append a line that is exact=
+ly
+> >> the length of the available space in the current fragment and check th=
+at
+> >> the resulting log has a trailing '\n'.
+> >>
+> >> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> >
+> > Hello!
+> >
+> > I am happy to see so many tests in this patch series. I've been
+> > working with these patches and the debugfs logs seem to be working
+> > well.
+> >
+> > However, when I ran the new kunit-log-test tests three of the tests
+> > failed: kunit_log_extend_test_1(), kunit_log_extend_test_2(), and
+> > kunit_log_newline_test().
+> >
+> > The diagnostic info for kunit_log_extend_test_1() reports:
+> >
+> > [20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
+> > lib/kunit/kunit-test.c:705
+> > [20:55:27] Expected p =3D=3D line, but
+> > [20:55:27]     p =3D=3D "xxxxxx=E2=80=A6xxxx12345678"
+> > [20:55:27]     line =3D=3D "The quick brown fox jumps over the lazy pen=
+guin 0"
+> > =E2=80=A6
+> > [20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
+> > lib/kunit/kunit-test.c:705
+> > [20:55:27] Expected p =3D=3D line, but
+> > [20:55:27]     p =3D=3D "The quick brown fox jumps over the lazy pengui=
+n 1"
+> > [20:55:27]     line =3D=3D "The quick brown fox jumps over the lazy pen=
+guin 4"
+> > [20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
+> > lib/kunit/kunit-test.c:705
+> > [20:55:27] Expected p =3D=3D line, but
+> > [20:55:27]     p =3D=3D "The quick brown fox jumps over the lazy pengui=
+n 2"
+> > [20:55:27]     line =3D=3D "The quick brown fox jumps over the lazy pen=
+guin 5"
+> > =E2=80=A6
+> > [20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
+> > lib/kunit/kunit-test.c:709
+> > [20:55:27] Expected i =3D=3D num_lines, but
+> > [20:55:27]     i =3D=3D 64 (0x40)
+> > [20:55:27]     num_lines =3D=3D 141 (0x8d)
+> >
+> > So it looks like the log contains a different number of lines than
+> > expected which is causing the difference of 3 between expected and
+> > what was obtained. Potentially the log is not getting cleared/freed
+> > properly in between test cases?
+> >
+> > The diagnostic info for kunit_log_extend_test_2() reports:
+> >
+> > [20:55:27]     # kunit_log_extend_test_2: EXPECTATION FAILED at
+> > lib/kunit/kunit-test.c:776
+> > [20:55:27]     Expected p =3D=3D &line[i], but
+> > [20:55:27]         p =3D=3D
+> > "xxxxx...xxxxx123456780123456789abcdef101112131415161718191a1b1c1d1e1f2=
+02122232425262728292a2b2c2d2e2f30313233343536373839"
+> > [20:55:27]         &line[i] =3D=3D
+> > "0123456789abcdef101112131415161718191a1b1c1d1e1f202122232425262728292a=
+2b2c2d2e2f30313233343536373839"
+> > [20:55:27]     # kunit_log_extend_test_2: EXPECTATION FAILED at
+> > lib/kunit/kunit-test.c:781
+> > [20:55:27]     Expected n =3D=3D num_lines, but
+> > [20:55:27]         n =3D=3D 147 (0x93)
+> > [20:55:27]         num_lines =3D=3D 155 (0x9b)
+> > [20:55:27] Not enough lines.
+> >
+> > Similar difference in the number of lines here.
+> >
+> > The diagnostic info for kunit_log_newline_test() reports that the test
+> > fails on this line:
+> >
+> > KUNIT_EXPECT_EQ(test, p[strlen(p) - 1], '\n');
+> >
+> > Let me know if you are seeing similar errors. I can post the full log
+> > if that would be helpful.
+> >
+> > -Rae
+> >
 >
-> When using parameterization the test case can run many times and create
-> a large amount of log. It's not really practical to keep increasing the
-> size of the fixed buffer every time a test needs more space. And a big
-> fixed buffer wastes memory.
+> Ah, I see a bug in get_concatenated_log().
+> Does this change fix it for you?
 >
-> The original char *log pointer is replaced by a pointer to a list of
-> struct kunit_log_frag, each containing a fixed-size buffer.
->
-> kunit_log_append() now attempts to append to the last kunit_log_frag in
-> the list. If there isn't enough space it will append a new kunit_log_frag
-> to the list. This simple implementation does not attempt to completely
-> fill the buffer in every kunit_log_frag.
->
-> The 'log' member of kunit_suite, kunit_test_case and kunit_suite must be a
-> pointer because the API of kunit_log() requires that is the same type in
-> all  three structs. As kunit.log is a pointer to the 'log' of the current
-> kunit_case, it must be a pointer in the other two structs.
->
-> The existing kunit-test.c log tests have been updated to build against the
-> new fragmented log implementation.
->
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> ---
+>         len++; /* for terminating '\0' */
+> -       p =3D kunit_kmalloc(test, len, GFP_KERNEL);
+> +       p =3D kunit_kzalloc(test, len, GFP_KERNEL);
 
-Looks good to me.
+This fixes what seems to be the same issue for me, under x86_64/qemu.
 
-A few small notes inline below, mostly around the possibility of
-either embedding the list_head in the kunit_case struct directly
-(rather than using a pointer), or of pointing directly to the first
-fragment, rather than a separately-allocated struct list_head. Neither
-are showstoppers, though (and if it increases complexity at all, it's
-possibly premature optimization).
-
-Otherwise, some test nitpicks and the fact that this will need a
-trivial rebase due to the module filtering stuff landing in
-kselftest/kunit.
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-The other patches in the series pass the initial sniff test: I'll try
-to get a more thorough review done in the next day or two.
-
-Cheers,
+Thanks,
 -- David
 
->  include/kunit/test.h   | 25 +++++++++++-----
->  lib/kunit/debugfs.c    | 65 ++++++++++++++++++++++++++++++++++--------
->  lib/kunit/kunit-test.c | 29 +++++++++++++------
->  lib/kunit/test.c       | 63 ++++++++++++++++++++++++++++------------
->  4 files changed, 136 insertions(+), 46 deletions(-)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 011e0d6bb506..ef8e09aafe1b 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -33,8 +33,8 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
->
->  struct kunit;
->
-> -/* Size of log associated with test. */
-> -#define KUNIT_LOG_SIZE 2048
-> +/* Size of log buffer fragments. */
-> +#define KUNIT_LOG_FRAGMENT_SIZE (256 - sizeof(struct list_head))
->
->  /* Maximum size of parameter description string. */
->  #define KUNIT_PARAM_DESC_SIZE 128
-> @@ -85,6 +85,11 @@ struct kunit_attributes {
->         enum kunit_speed speed;
->  };
->
-> +struct kunit_log_frag {
-> +       struct list_head list;
-> +       char buf[KUNIT_LOG_FRAGMENT_SIZE];
-> +};
-> +
->  /**
->   * struct kunit_case - represents an individual test case.
->   *
-> @@ -132,7 +137,7 @@ struct kunit_case {
->         /* private: internal use only. */
->         enum kunit_status status;
->         char *module_name;
-> -       char *log;
-> +       struct list_head *log;
-
-I wonder if this has to be a pointer? Would it make more sense to
-embed the struct list_head (or possibly a whole struct
-kunit_log_fragment if we weren't worried about kernel image size, see
-below) here, to avoid an extra allocation and a bunch of extra
-indirect memory accesses.
-
-Even if we still want to pass a pointer to a struct list_head around,
-we could just take the address of this one, rather than allocating it
-separately. We'd have to copy the whole struct list_head around,
-rather than just the pointer, and it'd increase the size of struct
-kunit_case and similar, but struct list_head is just two pointers, so
-it shouldn't be drastic enough to matter.
-
-Not a problem either way: I doubt this would be a performance or
-memory bottleneck, so if it's simpler to keep it as a pointer I don't
-mind, but if it's an easy enough change, it may be worth it.
-
->  };
->
->  static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
-> @@ -252,7 +257,7 @@ struct kunit_suite {
->         /* private: internal use only */
->         char status_comment[KUNIT_STATUS_COMMENT_SIZE];
->         struct dentry *debugfs;
-> -       char *log;
-> +       struct list_head *log;
-
-As above, should this be a pointer?
-
->         int suite_init_err;
->  };
->
-> @@ -272,7 +277,7 @@ struct kunit {
->
->         /* private: internal use only. */
->         const char *name; /* Read only after initialization! */
-> -       char *log; /* Points at case log after initialization */
-> +       struct list_head *log; /* Points at case log after initialization */
-
-I could imagine this either being a pointer to &(case.log), or a copy
-of the list_head which is then copied back into the case structure if
-we went with a less pointer-y implementation.
-
->         struct kunit_try_catch try_catch;
->         /* param_value is the current parameter value for a test case. */
->         const void *param_value;
-> @@ -304,7 +309,7 @@ static inline void kunit_set_failure(struct kunit *test)
->
->  bool kunit_enabled(void);
->
-> -void kunit_init_test(struct kunit *test, const char *name, char *log);
-> +void kunit_init_test(struct kunit *test, const char *name, struct list_head *log);
->
->  int kunit_run_tests(struct kunit_suite *suite);
->
-> @@ -317,6 +322,12 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
->
->  void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites);
->
-> +static inline void kunit_init_log_frag(struct kunit_log_frag *frag)
-> +{
-> +       INIT_LIST_HEAD(&frag->list);
-> +       frag->buf[0] = '\0';
-> +}
-> +
-
-There's now a (trivial) conflict between this and the latest
-kselftest/kunit branch (with the module filtering patches). If you're
-doing a v3, could you rebase?
-
->  #if IS_BUILTIN(CONFIG_KUNIT)
->  int kunit_run_all_tests(void);
->  #else
-> @@ -451,7 +462,7 @@ static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp
->
->  void kunit_cleanup(struct kunit *test);
->
-> -void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
-> +void __printf(2, 3) kunit_log_append(struct list_head *log, const char *fmt, ...);
->
->  /**
->   * kunit_mark_skipped() - Marks @test_or_suite as skipped
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index 22c5c496a68f..a26b6d31bd2f 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -5,6 +5,7 @@
->   */
->
->  #include <linux/debugfs.h>
-> +#include <linux/list.h>
->  #include <linux/module.h>
->
->  #include <kunit/test.h>
-> @@ -37,14 +38,15 @@ void kunit_debugfs_init(void)
->                 debugfs_rootdir = debugfs_create_dir(KUNIT_DEBUGFS_ROOT, NULL);
->  }
->
-> -static void debugfs_print_result(struct seq_file *seq,
-> -                                struct kunit_suite *suite,
-> -                                struct kunit_case *test_case)
-> +static void debugfs_print_log(struct seq_file *seq, const struct list_head *log)
->  {
-> -       if (!test_case || !test_case->log)
-> +       struct kunit_log_frag *frag;
-> +
-> +       if (!log)
->                 return;
->
-> -       seq_printf(seq, "%s", test_case->log);
-> +       list_for_each_entry(frag, log, list)
-> +               seq_puts(seq, frag->buf);
->  }
->
->  /*
-> @@ -69,10 +71,9 @@ static int debugfs_print_results(struct seq_file *seq, void *v)
->         seq_printf(seq, KUNIT_SUBTEST_INDENT "1..%zd\n", kunit_suite_num_test_cases(suite));
->
->         kunit_suite_for_each_test_case(suite, test_case)
-> -               debugfs_print_result(seq, suite, test_case);
-> +               debugfs_print_log(seq, test_case->log);
->
-> -       if (suite->log)
-> -               seq_printf(seq, "%s", suite->log);
-> +       debugfs_print_log(seq, suite->log);
->
->         seq_printf(seq, "%s %d %s\n",
->                    kunit_status_to_ok_not_ok(success), 1, suite->name);
-> @@ -100,14 +101,53 @@ static const struct file_operations debugfs_results_fops = {
->         .release = debugfs_release,
->  };
->
-> +static struct list_head *kunit_debugfs_alloc_log(void)
-> +{
-> +       struct list_head *log;
-> +       struct kunit_log_frag *frag;
-> +
-> +       log = kzalloc(sizeof(*log), GFP_KERNEL);
-> +       if (!log)
-> +               return NULL;
-> +
-> +       INIT_LIST_HEAD(log);
-> +
-> +       frag = kmalloc(sizeof(*frag), GFP_KERNEL);
-
-If we're always allocating at least one fragment, would it make sense
-to embed a while kunit_log_frag in the test struct, rather than just a
-list_head (so the first fragment doesn't need allocating separately)?
-
-Of course, that could bloat the kunit_case / kunit_suite structs too
-much (and therefore the .kunit_test_suites section). But maybe even a
-pointer to a kunit_log_frag would work.
-
-Probably not worth the extra complexity, but it's a thought...
-
-> +       if (!frag) {
-> +               kfree(log);
-> +               return NULL;
-> +       }
-> +
-> +       kunit_init_log_frag(frag);
-> +       list_add_tail(&frag->list, log);
-> +
-> +       return log;
-> +}
-> +
-> +static void kunit_debugfs_free_log(struct list_head *log)
-> +{
-> +       struct kunit_log_frag *frag, *n;
-> +
-> +       if (!log)
-> +               return;
-> +
-> +       list_for_each_entry_safe(frag, n, log, list) {
-> +               list_del(&frag->list);
-> +               kfree(frag);
-> +       }
-> +
-> +       kfree(log);
-> +}
-> +
->  void kunit_debugfs_create_suite(struct kunit_suite *suite)
->  {
->         struct kunit_case *test_case;
->
->         /* Allocate logs before creating debugfs representation. */
-> -       suite->log = kzalloc(KUNIT_LOG_SIZE, GFP_KERNEL);
-> +       suite->log = kunit_debugfs_alloc_log();
-> +
->         kunit_suite_for_each_test_case(suite, test_case)
-> -               test_case->log = kzalloc(KUNIT_LOG_SIZE, GFP_KERNEL);
-> +               test_case->log = kunit_debugfs_alloc_log();
->
->         suite->debugfs = debugfs_create_dir(suite->name, debugfs_rootdir);
->
-> @@ -121,7 +161,8 @@ void kunit_debugfs_destroy_suite(struct kunit_suite *suite)
->         struct kunit_case *test_case;
->
->         debugfs_remove_recursive(suite->debugfs);
-> -       kfree(suite->log);
-> +       kunit_debugfs_free_log(suite->log);
-> +
->         kunit_suite_for_each_test_case(suite, test_case)
-> -               kfree(test_case->log);
-> +               kunit_debugfs_free_log(test_case->log);
->  }
-> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-> index 83d8e90ca7a2..54dc011c8980 100644
-> --- a/lib/kunit/kunit-test.c
-> +++ b/lib/kunit/kunit-test.c
-> @@ -533,9 +533,16 @@ static struct kunit_suite kunit_resource_test_suite = {
->  static void kunit_log_test(struct kunit *test)
->  {
->         struct kunit_suite suite;
-> +       struct kunit_log_frag *frag;
->
-> -       suite.log = kunit_kzalloc(test, KUNIT_LOG_SIZE, GFP_KERNEL);
-> +       suite.log = kunit_kzalloc(test, sizeof(*suite.log), GFP_KERNEL);
->         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
-> +       INIT_LIST_HEAD(suite.log);
-> +       frag = kunit_kmalloc(test, sizeof(*frag), GFP_KERNEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, frag);
-> +       kunit_init_log_frag(frag);
-> +       KUNIT_EXPECT_EQ(test, frag->buf[0], '\0');
-> +       list_add_tail(&frag->list, suite.log);
->
->         kunit_log(KERN_INFO, test, "put this in log.");
->         kunit_log(KERN_INFO, test, "this too.");
-> @@ -543,14 +550,17 @@ static void kunit_log_test(struct kunit *test)
->         kunit_log(KERN_INFO, &suite, "along with this.");
->
->  #ifdef CONFIG_KUNIT_DEBUGFS
-> +       frag = list_first_entry(test->log, struct kunit_log_frag, list);
->         KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> -                                    strstr(test->log, "put this in log."));
-> +                                    strstr(frag->buf, "put this in log."));
->         KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> -                                    strstr(test->log, "this too."));
-> +                                    strstr(frag->buf, "this too."));
-> +
-> +       frag = list_first_entry(suite.log, struct kunit_log_frag, list);
->         KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> -                                    strstr(suite.log, "add to suite log."));
-> +                                    strstr(frag->buf, "add to suite log."));
->         KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> -                                    strstr(suite.log, "along with this."));
-> +                                    strstr(frag->buf, "along with this."));
->  #else
->         KUNIT_EXPECT_NULL(test, test->log);
->  #endif
-> @@ -558,11 +568,14 @@ static void kunit_log_test(struct kunit *test)
->
->  static void kunit_log_newline_test(struct kunit *test)
->  {
-> +       struct kunit_log_frag *frag;
-> +
->         kunit_info(test, "Add newline\n");
->         if (test->log) {
-> -               KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add newline\n"),
-> -                       "Missing log line, full log:\n%s", test->log);
-> -               KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\n\n"));
-> +               frag = list_first_entry(test->log, struct kunit_log_frag, list);
-> +               KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(frag->buf, "Add newline\n"),
-> +                       "Missing log line, full log:\n%s", frag->buf);
-
-I'm not super thrilled that this only operates on the first fragment.
-Could we at least note that this is not the "full log" in the
-assertion message here, and maybe also assert that the log hasn't
-grown to a second fragment?
-
-> +               KUNIT_EXPECT_NULL(test, strstr(frag->buf, "Add newline\n\n"));
->         } else {
->                 kunit_skip(test, "only useful when debugfs is enabled");
->         }
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index cb9797fa6303..bdb361741214 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -11,6 +11,7 @@
->  #include <kunit/test-bug.h>
->  #include <kunit/attributes.h>
->  #include <linux/kernel.h>
-> +#include <linux/list.h>
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
->  #include <linux/panic.h>
-> @@ -114,46 +115,66 @@ static void kunit_print_test_stats(struct kunit *test,
->   * already present.
->   * @log: The log to add the newline to.
->   */
-> -static void kunit_log_newline(char *log)
-> +static void kunit_log_newline(struct kunit_log_frag *frag)
->  {
->         int log_len, len_left;
->
-> -       log_len = strlen(log);
-> -       len_left = KUNIT_LOG_SIZE - log_len - 1;
-> +       log_len = strlen(frag->buf);
-> +       len_left = sizeof(frag->buf) - log_len - 1;
->
-> -       if (log_len > 0 && log[log_len - 1] != '\n')
-> -               strncat(log, "\n", len_left);
-> +       if (log_len > 0 && frag->buf[log_len - 1] != '\n')
-> +               strncat(frag->buf, "\n", len_left);
->  }
->
-> -/*
-> - * Append formatted message to log, size of which is limited to
-> - * KUNIT_LOG_SIZE bytes (including null terminating byte).
-> - */
-> -void kunit_log_append(char *log, const char *fmt, ...)
-> +static struct kunit_log_frag *kunit_log_extend(struct list_head *log)
-> +{
-> +       struct kunit_log_frag *frag;
-> +
-> +       frag = kmalloc(sizeof(*frag), GFP_KERNEL);
-> +       if (!frag)
-> +               return NULL;
-> +
-> +       kunit_init_log_frag(frag);
-> +       list_add_tail(&frag->list, log);
-> +
-> +       return frag;
-> +}
-> +
-> +/* Append formatted message to log, extending the log buffer if necessary. */
-> +void kunit_log_append(struct list_head *log, const char *fmt, ...)
->  {
->         va_list args;
-> +       struct kunit_log_frag *frag;
->         int len, log_len, len_left;
->
->         if (!log)
->                 return;
->
-> -       log_len = strlen(log);
-> -       len_left = KUNIT_LOG_SIZE - log_len - 1;
-> -       if (len_left <= 0)
-> -               return;
-> +       frag = list_last_entry(log, struct kunit_log_frag, list);
-> +       log_len = strlen(frag->buf);
-
-I was going to wonder whether or not we should cache the length of the
-current fragment somewhere, but thinking about it, it's probably not
-worth it given we're only measuring a single fragment, and it's capped
-at 256 bytes.
-
-
-> +       len_left = sizeof(frag->buf) - log_len - 1;
->
->         /* Evaluate length of line to add to log */
->         va_start(args, fmt);
->         len = vsnprintf(NULL, 0, fmt, args) + 1;
->         va_end(args);
->
-> +       if (len > len_left) {
-> +               frag = kunit_log_extend(log);
-> +               if (!frag)
-> +                       return;
-> +
-> +               len_left = sizeof(frag->buf) - 1;
-> +               log_len = 0;
-> +       }
-> +
->         /* Print formatted line to the log */
->         va_start(args, fmt);
-> -       vsnprintf(log + log_len, min(len, len_left), fmt, args);
-> +       vsnprintf(frag->buf + log_len, min(len, len_left), fmt, args);
->         va_end(args);
->
->         /* Add newline to end of log if not already present. */
-> -       kunit_log_newline(log);
-> +       kunit_log_newline(frag);
->  }
->  EXPORT_SYMBOL_GPL(kunit_log_append);
->
-> @@ -359,14 +380,18 @@ void __kunit_do_failed_assertion(struct kunit *test,
->  }
->  EXPORT_SYMBOL_GPL(__kunit_do_failed_assertion);
->
-> -void kunit_init_test(struct kunit *test, const char *name, char *log)
-> +void kunit_init_test(struct kunit *test, const char *name, struct list_head *log)
->  {
->         spin_lock_init(&test->lock);
->         INIT_LIST_HEAD(&test->resources);
->         test->name = name;
->         test->log = log;
-> -       if (test->log)
-> -               test->log[0] = '\0';
-> +       if (test->log) {
-> +               struct kunit_log_frag *frag = list_first_entry(test->log,
-> +                                                              struct kunit_log_frag,
-> +                                                              list);
-> +               frag->buf[0] = '\0';
-> +       }
->         test->status = KUNIT_SUCCESS;
->         test->status_comment[0] = '\0';
->  }
-> --
-> 2.30.2
->
-
---0000000000003b2c7106027c60da
+--00000000000099722706027c60e1
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -634,14 +260,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAk
-QJ52i4o+qMc1U99cNtpi9OG6TpwrTOeIpwD3wyj+VjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA4MDkxMjExMTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBX
+7V3HU8N/FHUutyhL9Ibhg+KnWEjwhce6wMNyG2iECjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA4MDkxMjExMjBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAOwRk8G2yXhzGvYUbzVs9
-yC1X1jRULo4e72NvwTeimbcTG9qjqNdllSUEmhvbfq+WEc4O7q5qYl42LM8UZhrIzQsrkhbeOZyc
-xK1nHCECcVzImyPrzqjnCc1wvdUJC5xNddF8em/z6gCRbEK7c44uRl9/yGPJKdydDFhyPYI7tGtM
-qmcOeQSzV/gFfWDwgKJj2Tjpdxtwl2QvHD3WBEcFFhH81MOfImvcPgv74cvm441mXfBQDHODCpmv
-sfGbi3RfKQROzJasmHMmbqF1RejchDAI7kwhCEShcikXbhA++40Ub3y0nnb1F3f2+rUvgxwKkEeH
-nAbBCS5f89a7/VS6mA==
---0000000000003b2c7106027c60da--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEANcUJnBizVUxVRZJn1PVZ
+vgeRsTNR9+erhk++q9s6PFpiulJEmYFATNiZvw40e0DQEvX+7k9gxVj2MzB0IUH8CDI+T1nQ3e40
+FOao9K36G/ZHlIXg5OQ2/LDrv++nC44sQ79F8UHaOamr5gHNIErzWOp/YTf7gu1n54zfeac0fw4j
+qZmH9AZM+9FaOsPjKPglkZfPzaxns1N47htzh0srVPqKryOonTO/oiX+fwi1aF+BeSZqHiohz7qt
+AUSef3T3CabNfpyJhwv236+8NMcFlcY4oUFd77BDa91ZLva9NvxEuDgodoSng5LlkDBtTU8Mskeu
+94+d26mgLxLaKKig9Q==
+--00000000000099722706027c60e1--
