@@ -2,179 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764F677625D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 16:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B370877629D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 16:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbjHIOYX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Aug 2023 10:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S233075AbjHIOho (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Aug 2023 10:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbjHIOYX (ORCPT
+        with ESMTP id S229994AbjHIOho (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Aug 2023 10:24:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDC01FD8;
-        Wed,  9 Aug 2023 07:24:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2042063A1D;
-        Wed,  9 Aug 2023 14:24:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEDFEC433CA;
-        Wed,  9 Aug 2023 14:24:16 +0000 (UTC)
-Date:   Wed, 9 Aug 2023 15:24:14 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
- Stacks
-Message-ID: <ZNOhjrYleGBR6Pbs@arm.com>
-References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
+        Wed, 9 Aug 2023 10:37:44 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9267EE;
+        Wed,  9 Aug 2023 07:37:43 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 379BTo3Y016955;
+        Wed, 9 Aug 2023 09:37:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=
+        PODMain02222019; bh=gscSkCQwk0KkjxKaYGnY8JJLlDWP6PeBiYDmNdDiJ/s=; b=
+        AC/rEOSpAbCmdIDuUA9sFGkEeCbouqR2fIc8EN8CJrffdRH2ewnXKkcztuSffpcA
+        QziWGh2R0Y0fL7OzJC+ddAQnifBejj+blfMklyfVrTgbaKCFOg2gw6Uu+TEurZjE
+        SKFiIIh8Gvs3B1Y54OtjZ5s0T0rsBE23iL+IFmA2GCzi6ExOFAJH29vo35kvvJf2
+        4IKTj639euEQv5nTQXfw/AqpTp7BoCtxhpJCECPWOdAev1PGUYI26ZkDsArEkh4A
+        YoWbaYrSPhN3Hf3GpBf1nll9JSK1YA/2YV80pHbMrtOCeZ82YKqNT0VDwM2mH+uL
+        KelKP1/Xq2OxuL/EVaKFuQ==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3sb7vtaja4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Aug 2023 09:37:22 -0500 (CDT)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 9 Aug
+ 2023 15:37:20 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.30 via Frontend
+ Transport; Wed, 9 Aug 2023 15:37:20 +0100
+Received: from [198.61.64.220] (EDIN4L06LR3.ad.cirrus.com [198.61.64.220])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5391F45D;
+        Wed,  9 Aug 2023 14:37:20 +0000 (UTC)
+Message-ID: <cdca5909-1484-ff07-3184-37d6b3463068@opensource.cirrus.com>
+Date:   Wed, 9 Aug 2023 15:37:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v2 1/6] kunit: Replace fixed-size log with
+ dynamically-extending buffer
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>
+CC:     <brendan.higgins@linux.dev>, <rmoar@google.com>,
+        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+References: <20230808123529.4725-1-rf@opensource.cirrus.com>
+ <20230808123529.4725-2-rf@opensource.cirrus.com>
+ <CABVgOS=BrJ82v3_O9wGxTGoPRjH-rSWiTMS6+S=x4yPng_-XFA@mail.gmail.com>
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <CABVgOS=BrJ82v3_O9wGxTGoPRjH-rSWiTMS6+S=x4yPng_-XFA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: AkE4-HTogJzdmFBI5Cn_8W4WVp60XgQ9
+X-Proofpoint-ORIG-GUID: AkE4-HTogJzdmFBI5Cn_8W4WVp60XgQ9
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 11:00:08PM +0100, Mark Brown wrote:
-> +2.  Enabling and disabling Guarded Control Stacks
-> +-------------------------------------------------
-> +
-> +* GCS is enabled and disabled for a thread via the PR_SET_SHADOW_STACK_STATUS
-> +  prctl(), this takes a single flags argument specifying which GCS features
-> +  should be used.
-> +
-> +* When set PR_SHADOW_STACK_ENABLE flag allocates a Guarded Control Stack for
+On 9/8/23 13:11, David Gow wrote:
+> On Tue, 8 Aug 2023 at 20:35, Richard Fitzgerald
+> <rf@opensource.cirrus.com> wrote:
+>>
+>> Re-implement the log buffer as a list of buffer fragments that can
+>> be extended as the size of the log info grows.
+>>
+>> When using parameterization the test case can run many times and create
+>> a large amount of log. It's not really practical to keep increasing the
+>> size of the fixed buffer every time a test needs more space. And a big
+>> fixed buffer wastes memory.
+>>
+>> The original char *log pointer is replaced by a pointer to a list of
+>> struct kunit_log_frag, each containing a fixed-size buffer.
+>>
+>> kunit_log_append() now attempts to append to the last kunit_log_frag in
+>> the list. If there isn't enough space it will append a new kunit_log_frag
+>> to the list. This simple implementation does not attempt to completely
+>> fill the buffer in every kunit_log_frag.
+>>
+>> The 'log' member of kunit_suite, kunit_test_case and kunit_suite must be a
+>> pointer because the API of kunit_log() requires that is the same type in
+>> all  three structs. As kunit.log is a pointer to the 'log' of the current
+>> kunit_case, it must be a pointer in the other two structs.
+>>
+>> The existing kunit-test.c log tests have been updated to build against the
+>> new fragmented log implementation.
+>>
+>> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+>> ---
+> 
+> Looks good to me.
+> 
+> A few small notes inline below, mostly around the possibility of
+> either embedding the list_head in the kunit_case struct directly
+> (rather than using a pointer), or of pointing directly to the first
+> fragment, rather than a separately-allocated struct list_head. Neither
+> are showstoppers, though (and if it increases complexity at all, it's
+> possibly premature optimization).
+>
 
-The 'for' at the end of the line above is not needed.
+I did start out trying to use the first fragment as the list head.
+Trouble with this is that the functions in list.h expect to have a
+dummy list_head node that is only the head, but not an actual list
+member. It's possible to workaround this but the shenanigans involved is
+likely to trip someone up later so reverted to doing the list the way
+the API intended.
 
-> +  and enables GCS for the thread, enabling the functionality controlled by
-> +  GCSPRE0_EL1.{nTR, RVCHKEN, PCRSEL}.
+For the pointers, I did consider embedding the list_head instead of
+using a pointer. But then the struct kunit can't refer to the
+kunit_case list, it can only take it over. There can only be one list
+head because the ->prev and ->next pointers of the first and last
+members in the list can only point to one head.
 
-This should be GCSCRE0_EL1.
+After playing around with it I decided that it wasn't worth trying to
+avoid the pointers. At least... it wasn't worth spending a lot of time
+trying to avoid them for an initial implementation.
 
-> +* When set the PR_SHADOW_STACK_PUSH flag enables the functionality controlled
-> +  by GCSCRE0_EL1.PUSHMEn, allowing explicit GCS pushes.
-> +
-> +* When set the PR_SHADOW_STACK_WRITE flag enables the functionality controlled
-> +  by GCSCRE0_EL1.STREn, allowing explicit stores to the Guarded Control Stack.
-> +
-> +* Any unknown flags will cause PR_SET_SHADOW_STACK_STATUS to return -EINVAL.
-> +
-> +* PR_LOCK_SHADOW_STACK_STATUS is passed a bitmask of features with the same
-> +  values as used for PR_SET_SHADOW_STACK_STATUS.  Any future changes to the
-> +  status of the specified GCS mode bits will be rejected.
-> +
-> +* PR_LOCK_SHADOW_STACK_STATUS allows any bit to be locked, this allows
-> +  userspace to prevent changes to any future features.
+Maybe some magic with typeof() in the kunit_log() would let us use
+different types for the members of kunit_suite, kunit_case, kunit?
+Then the list_head can be directly embedded in the first two but a
+pointer in kunit?
 
-I presume a new lock prctl() won't allow unlocking but can only extend
-the lock. I haven't looked at the patches yet but it may be worth
-spelling this out.
+> Otherwise, some test nitpicks and the fact that this will need a
+> trivial rebase due to the module filtering stuff landing in
+> kselftest/kunit.
+> 
+> Reviewed-by: David Gow <davidgow@google.com>
+> 
 
-> +* PR_SET_SHADOW_STACK_STATUS and PR_LOCK_SHADOW_STACK_STATUS affect only the
-> +  thread the called them, any other running threads will be unaffected.
+...
 
-s/the called/that called/
+>>   static void kunit_log_newline_test(struct kunit *test)
+>>   {
+>> +       struct kunit_log_frag *frag;
+>> +
+>>          kunit_info(test, "Add newline\n");
+>>          if (test->log) {
+>> -               KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add newline\n"),
+>> -                       "Missing log line, full log:\n%s", test->log);
+>> -               KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\n\n"));
+>> +               frag = list_first_entry(test->log, struct kunit_log_frag, list);
+>> +               KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(frag->buf, "Add newline\n"),
+>> +                       "Missing log line, full log:\n%s", frag->buf);
+> 
+> I'm not super thrilled that this only operates on the first fragment.
+> Could we at least note that this is not the "full log" in the
+> assertion message here, and maybe also assert that the log hasn't
+> grown to a second fragment?
+> 
 
-> +* New threads inherit the GCS configuration of the thread that created them.
-> +
-> +* GCS is disabled on exec().
-> +
-> +* The current GCS configuration for a thread may be read with the
-> +  PR_GET_SHADOW_STACK_STATUS prctl(), this returns the same flags that
-> +  are passed to PR_SET_SHADOW_STACK_STATUS.
-> +
-> +* If GCS is disabled for a thread after having previously been enabled then
-> +  the stack will remain allocated for the lifetime of the thread.
+The only aim in this first patch is to make sure that kunit-test.c still
+builds. I've added extra newline test cases in later patches.
 
-Sorry if this has been discussed in other threads. What is the issue
-with unmapping/freeing of the shadow stack?
+...
 
-> At present
-> +  any attempt to reenable GCS for the thread will be rejected, this may be
-> +  revisited in future.
+> 
+> I was going to wonder whether or not we should cache the length of the
+> current fragment somewhere, but thinking about it, it's probably not
+> worth it given we're only measuring a single fragment, and it's capped
+> at 256 bytes.
+> 
+Yes, I had the same thought but decided to leave it as something that
+can be done later. But as you say it's doubtful whether it's worth the
+extra storage space when the buffer fragments are small. On x86_64
+simply adding a length member could add 8 bytes per fragment (because of
+rounding). If the size of the fragment buffer is capped at 256 we could
+use single byte for the length and hope the compiler doesn't insert
+padding between a char and a char[] array.
 
-What's the rationale here? Is it that function returns won't work?
+Take a look at what happens when you log a message to the kernel log and
+by comparison this kunit logging is super-lightweight.
 
-> +3.  Allocation of Guarded Control Stacks
-> +----------------------------------------
-> +
-> +* When GCS is enabled for a thread a new Guarded Control Stack will be
-> +  allocated for it of size RLIMIT_STACK / 2 or 2 gigabytes, whichever is
-> +  smaller.
-
-Is this number based on the fact that a function call would only push
-the LR to GCS while standard function prologue pushes at least two
-registers?
-
-> +* When GCS is disabled for a thread the Guarded Control Stack initially
-> +  allocated for that thread will be freed.  Note carefully that if the
-> +  stack has been switched this may not be the stack currently in use by
-> +  the thread.
-
-Does this not contradict an earlier statement that the GCS is not freed
-for a thread when disabled?
-
-> +4.  Signal handling
-> +--------------------
-> +
-> +* A new signal frame record gcs_context encodes the current GCS mode and
-> +  pointer for the interrupted context on signal delivery.  This will always
-> +  be present on systems that support GCS.
-> +
-> +* The record contains a flag field which reports the current GCS configuration
-> +  for the interrupted context as PR_GET_SHADOW_STACK_STATUS would.
-> +
-> +* The signal handler is run with the same GCS configuration as the interrupted
-> +  context.
-> +
-> +* When GCS is enabled for the interrupted thread a signal handling specific
-> +  GCS cap token will be written to the GCS, this is an architectural GCS cap
-> +  token with bit 63 set.  The GCSPR_EL0 reported in the signal frame will
-> +  point to this cap token.
-
-I lost track of the GCS spec versions. Has the valid cap token format
-been updated? What I have in my spec (though most likely old) is:
-
-  An entry in the Guarded control stack is defined as a Valid cap entry,
-  if bits [63:12] of the value are same as bits [63:12] of the address
-  where the entry is stored and bits [11:0] contain a Valid cap token.
-
-
-The other bits in the code look fine to me so far but I haven't looked
-at the code yet.
-
--- 
-Catalin
+(I did look at whether we could re-use the existing kernel log
+implementation but decided it was too heavily hardcoded to how the
+kernel log works.)
