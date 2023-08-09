@@ -2,118 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C5A775093
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 03:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D757750E0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Aug 2023 04:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjHIBxR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Aug 2023 21:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S229480AbjHICYM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Aug 2023 22:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjHIBxP (ORCPT
+        with ESMTP id S229671AbjHICYM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 21:53:15 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBCA1BF0
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 18:53:13 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1bc73a2b0easo16668045ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Aug 2023 18:53:13 -0700 (PDT)
+        Tue, 8 Aug 2023 22:24:12 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD82173A
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 19:24:09 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-55bac17b442so4657928a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Aug 2023 19:24:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1691545992; x=1692150792;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2tar+fwRF9EwexnZBlGXBQ+bino7OPSUOa9FVKEDgW8=;
-        b=FPpY5cIUXnip2ZGbpSphNOYtcmoz+9UqNCzoKTIuGrXSltzFcKRrlt8IZVpkHLRqCx
-         OnkTugPfEWDKKQRJ75G2J1aJXt6PH8fts5QVkJJs8njOPLx6pNBBDKHzo/kPhqxS0sx3
-         1HU8/tEpAVmLFR+F4zwPNJwDwa/GS5jdzeVtMhkd3NlduxYlQA9dfzjF/ys4sjj6OEtk
-         sjDMhjLy6jjBKzFs07exQfX4lKo012NsKC4Zu68gj0Uv/D7Nb/c/EwcN8oQMkTg6va+w
-         mYmQCyjU8OGyh+PyGz8lSNWVUIf8yU596h/YkYk7J+SNhMSNxobFIMZoGtxQE5T5cv3X
-         /BDA==
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1691547849; x=1692152649;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ZTtDHy5Qvp267yqDv43DcnxV6yG5lp3fRdfJ2VcdVU=;
+        b=mqXD6FxZKb4vxJiKczo1T37otbXFJEFz8ghlFMjK69B5sqQ14VqmlKpRTkp/LufxnJ
+         sYZjl9v131m3PG54SVp+I9hKXwH2s0MtP/dRzhDO6ute9IyADoI0AkJX+m3vyEVYh9vX
+         S7bMdvr+29gVGDdi4TiuilkMib7tCUSKkSeZEwbwahhG1fpVTB4VmdlveU+2l/8oyy/Z
+         ke754bBRpfOEF4PRGhd00b0INA+B2HzTYKFUBncox0m4sdJ9QzK94xEeJkQtULivWjWT
+         OLIlldDI0ApQZ1sbbphDcQ1DW55KtsnG/yUYFPbta5YoI9QScOJBTx+67ZDOEBKD6k5Q
+         OFcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691545992; x=1692150792;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2tar+fwRF9EwexnZBlGXBQ+bino7OPSUOa9FVKEDgW8=;
-        b=LADtlYBSG0TEVlpxK7vcOlcCopwVymWEJnlq6xhtHP/Epn8QzqpkD41Uz8UUgsmCZr
-         jxVSL5KA/yg5WZeQkzlm+CQgWQZWYqr0zcN5Fbn4AsQvsK9XfHqSkRKsd+z37Prj/Nn/
-         ThyL7Q+dYWmphxiAe14fxF4ZuhyNMjd/kHCgNdEFioYk1Ej4Cf5YV0dQMpl9//msuICp
-         bnRIPZo2S+qVOHCRvIsmJvIwKF6UN1RRHRzgaDFcmCXlBiQAEbCzgg1cgoh81w3c2CWF
-         yH8q6TeSRJK6G5L31NRxCF5ajrxS0SribyExRknn3xgIkNDTRZaQl6M2K5/lz88h+VGl
-         mVpQ==
-X-Gm-Message-State: AOJu0YyQB0MD3AgY2yLk8zYwUHlTrvOGWnijNYoxPAFGNgKjkxWDU3HL
-        O1qKiVzaRSRkRlwMa4YiBxAKUA==
-X-Google-Smtp-Source: AGHT+IGZcbmVCa5ZDQZDqMBC5RXy8ZlAEnBSQVfL2GCWuQwF+OUfXTklfpU8ydkeXzNNensTQj2vcA==
-X-Received: by 2002:a17:903:1207:b0:1b8:6850:c3c4 with SMTP id l7-20020a170903120700b001b86850c3c4mr1594061plh.22.1691545992539;
-        Tue, 08 Aug 2023 18:53:12 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id bj7-20020a170902850700b001b87bedcc6fsm9657591plb.93.2023.08.08.18.53.11
+        d=1e100.net; s=20221208; t=1691547849; x=1692152649;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4ZTtDHy5Qvp267yqDv43DcnxV6yG5lp3fRdfJ2VcdVU=;
+        b=XtTcSn/0UBSt86UfiRjUd1kA8mKUATkMoGGSKDcvv2ux+eYy/jnCqHqYjPf23sZa8Q
+         nccbZjyns/mjKxjHJiCfkq4hH88PtxcLJYXfRKnbot+k2OHWHR42j2eqWD5eUKgQ6NnY
+         enptoa7YsViwUn41LD99tb55xDT+re6sJIvazGKUFob5jtiBhQJGzKzGQG7mws1Ncz/r
+         Mb6GQc/SJ/ybjq1mSekf4oFNyquPZ6n+WctZb2EXqVm9nnoXMz7WUVlH2i8kXSBlzWVg
+         U54YFlAGKcfbhCp0tFeNEKEkp0hLt1IZKP62gq4gRzJg0nTvwQPQxMXMJXTxAdT4SarH
+         dcyA==
+X-Gm-Message-State: AOJu0Yw8aFae2IFEGkcdd9fQADfwp9tqiWMIbk8GMJ3LxzTh+1l+MztO
+        AXjELgaN1gDf23wuupxxmkeRFw==
+X-Google-Smtp-Source: AGHT+IGgEJkFDzjP5YK2mplVsNu3hoiWSM2Ja9D5UXGydHRPnJGFYlZwoPVOTEGhocdSlrKwd1BBiA==
+X-Received: by 2002:a17:90a:7f83:b0:269:1e3f:a54d with SMTP id m3-20020a17090a7f8300b002691e3fa54dmr1162767pjl.10.1691547849122;
+        Tue, 08 Aug 2023 19:24:09 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id q15-20020a17090ad38f00b00268188ea4b9sm234448pju.19.2023.08.08.19.24.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 18:53:12 -0700 (PDT)
-From:   Charlie Jenkins <charlie@rivosinc.com>
-To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     charlie@rivosinc.com, conor@kernel.org, paul.walmsley@sifive.com,
-        palmer@rivosinc.com, aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com, rdunlap@infradead.org,
-        alexghiti@rivosinc.com
-Subject: [PATCH v9 4/4] RISC-V: mm: Document mmap changes
-Date:   Tue,  8 Aug 2023 18:51:10 -0700
-Message-Id: <20230809015110.3290774-5-charlie@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230809015110.3290774-1-charlie@rivosinc.com>
-References: <20230809015110.3290774-1-charlie@rivosinc.com>
+        Tue, 08 Aug 2023 19:24:08 -0700 (PDT)
+Message-ID: <64d2f8c8.170a0220.65ff4.0834@mx.google.com>
+Date:   Tue, 08 Aug 2023 19:24:08 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.5-rc3-26-g2b2fe6052dd01
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: next
+Subject: kselftest/next build: 6 builds: 0 failed, 6 passed,
+ 1 warning (v6.5-rc3-26-g2b2fe6052dd01)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The behavior of mmap is modified with this patch series, so explain the
-changes to the mmap hint address behavior.
+kselftest/next build: 6 builds: 0 failed, 6 passed, 1 warning (v6.5-rc3-26-=
+g2b2fe6052dd01)
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.5-rc3-26-g2b2fe6052dd01/
+
+Tree: kselftest
+Branch: next
+Git Describe: v6.5-rc3-26-g2b2fe6052dd01
+Git Commit: 2b2fe6052dd01fdb4e9a31031c2c9d8f03cf7753
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+Warnings Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x13df86
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x13df86
+
 ---
- Documentation/riscv/vm-layout.rst | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
-index 5462c84f4723..69ff6da1dbf8 100644
---- a/Documentation/riscv/vm-layout.rst
-+++ b/Documentation/riscv/vm-layout.rst
-@@ -133,3 +133,25 @@ RISC-V Linux Kernel SV57
-    ffffffff00000000 |  -4     GB | ffffffff7fffffff |    2 GB | modules, BPF
-    ffffffff80000000 |  -2     GB | ffffffffffffffff |    2 GB | kernel
-   __________________|____________|__________________|_________|____________________________________________________________
-+
-+
-+Userspace VAs
-+--------------------
-+To maintain compatibility with software that relies on the VA space with a
-+maximum of 48 bits the kernel will, by default, return virtual addresses to
-+userspace from a 48-bit range (sv48). This default behavior is achieved by
-+passing 0 into the hint address parameter of mmap. On CPUs with an address space
-+smaller than sv48, the CPU maximum supported address space will be the default.
-+
-+Software can "opt-in" to receiving VAs from another VA space by providing
-+a hint address to mmap. A hint address passed to mmap will cause the largest
-+address space that fits entirely into the hint to be used, unless there is no
-+space left in the address space. If there is no space available in the requested
-+address space, an address in the next smallest available address space will be
-+returned.
-+
-+For example, in order to obtain 48-bit VA space, a hint address greater than
-+:code:`1 << 47` must be provided. Note that this is 47 due to sv48 userspace
-+ending at :code:`1 << 47` and the addresses beyond this are reserved for the
-+kernel. Similarly, to obtain 57-bit VA space addresses, a hint address greater
-+than or equal to :code:`1 << 56` must be provided.
--- 
-2.34.1
-
+For more info write to <info@kernelci.org>
