@@ -2,181 +2,210 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF47777CF2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Aug 2023 17:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB5B777DB2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Aug 2023 18:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236256AbjHJP5N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Aug 2023 11:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S236685AbjHJQHr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Aug 2023 12:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236332AbjHJP5K (ORCPT
+        with ESMTP id S236695AbjHJQHd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Aug 2023 11:57:10 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55BE2112;
-        Thu, 10 Aug 2023 08:57:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JX3Ps9baebypnVI+ev2DPdzcwsw9qJpEWX0xBS+QOUZhVS5TxUm23AJA3v7PiHVq4zTGBauakiH+U0+151ntWl3S1hQ7nO0mZcG82+4UVZBk/cPm4TIWx30BvqU3+usMbkmK8p/4hClBIeoveRLbqJvHz84GPb/Q7eiYdO0/Bq/A8kfwTM5czSfwT2b/a0kGsDsXjFWA3vDrsn39tnl3RG+u2yFcEeOMTK9aIHRCW6xL+pKloo6hDgPpzTHf3347PBx5ogdJiDW0miuLCuTwvdADrCFsN8HBfNlDeM6HT6InujLBs2TFvmSBSm4sWspVfMESaI4YW+frNnEV3fAmGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=J4WadUE/0c677yqnwhT2LBHCKMtHyc5okxShkY3Uj3o=;
- b=V0RfB4nqiJulJzjlX9axe/ac3MH1kpXjq2xsUElhh0mthApWhD6TAiW3q6l52JTB8eM5+E1XMJhZQF+xyAIqoZqjRi/xeVR2BGxlOp1zOJFrHw0wmPvuog1v6UCHk3MfK130jPMBPQo1dtuhDR56CoY5RnY6SFBlfKS86gEo2nBogev2gXpNPJrl3t317dj/JdcQe8umDYTEOURRhwRf0XGwrCGAVdkWaHjULVP5Pl1ZyeQEg400v2t28hem2CZPmrhSv6PMozQO06pZb3zcejY+ziLaRzhE/26BbViKtinuS3285mujZ8U0tg7eaA5liXToZ+JEjv7x+G8GcyX3iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J4WadUE/0c677yqnwhT2LBHCKMtHyc5okxShkY3Uj3o=;
- b=VYL2JJRueVUAJkiGXErDYl4eDVWFXxsjpAF3C2PN6gIwL/XsdfY1C+48UuJSB1L2k5P7KH2ZUeG4xuoMmoBIJJQucGvHE2o/1bfxgHnyfIlPJladuI3gLXqxS488UL0W91E3Ev0Y5jGKoSyjFiyRtEDVR/Xwt1ngGB/uVDtCiGKIaI7OCqov15HK2tMEP4XYmDyrZClQxu2cqT6wnK/evOC+V8ZF46RIfYIKiPknqMvuOBqKCPx5+nJIhtwWBbp+0wSy96udtOV3/IZKOe8T3TVNbjmIGq+iGdedvkJuIvCqGYbZhn0z7PQa0Mqm+migTtav/zG8TnuCPbMhvf9Kjw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SA1PR12MB8118.namprd12.prod.outlook.com (2603:10b6:806:333::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30; Thu, 10 Aug
- 2023 15:57:08 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::5111:16e8:5afe:1da1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::5111:16e8:5afe:1da1%6]) with mapi id 15.20.6652.029; Thu, 10 Aug 2023
- 15:57:08 +0000
-Date:   Thu, 10 Aug 2023 12:57:04 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v4 09/12] iommu/vt-d: Add iotlb flush for nested domain
-Message-ID: <ZNUI0D7ZMvLWlBNx@nvidia.com>
-References: <ZNJ+Uv/WJwngosjJ@Asurada-Nvidia>
- <BN9PR11MB5276BFFEC7E12EEBD4503BF08C12A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <DS0PR11MB7529C3646E38542457D7B75DC312A@DS0PR11MB7529.namprd11.prod.outlook.com>
- <BN9PR11MB5276912120F662498910A1D48C12A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <DS0PR11MB7529C310FAEA61B6E7988629C312A@DS0PR11MB7529.namprd11.prod.outlook.com>
- <ZNO92PIx2IQ70+DY@nvidia.com>
- <ZNPlGd4/72dahSs4@Asurada-Nvidia>
- <ZNPmpW3/zDnjqxyU@nvidia.com>
- <ZNP0UKGU6id5wfc6@Asurada-Nvidia>
- <BN9PR11MB527683351B687B97AB84B51B8C13A@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB527683351B687B97AB84B51B8C13A@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: SJ0PR13CA0189.namprd13.prod.outlook.com
- (2603:10b6:a03:2c3::14) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Thu, 10 Aug 2023 12:07:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2217C49FE;
+        Thu, 10 Aug 2023 09:06:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF223661D0;
+        Thu, 10 Aug 2023 16:05:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CDCAC433CA;
+        Thu, 10 Aug 2023 16:05:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691683516;
+        bh=3dqXqxLfF0EBUTIcyGpG0Y9ki6xtjmzbbUkts8u5Ikg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M3iKU92fRFQ5ebgkTvsvwFRj8QHGGGfCT7avNetLStA0oCGGNiMdq5s1BU8wM99Wq
+         cpLnFaNt5Y/WyIo/3u3hcU8KPqIxozR1VglUeMDq2sISkdEnj+wwOSJf5AiYhtT/2t
+         SlMvoi2pAG8JQpJHfXVLKoIXBMd/GoSC3dKXIxNGFzZv2lBL0ArZI8WA6y2eAtJcRX
+         2yzhhaPLgupPXHj9POOF9o54cYVHYP/0Hy8nP/kWQ2V3qULt/iXLK2gYREqJTs0WZH
+         k57P/Xu/0fJfpnylthHNhnuqqHv1d5rI1cRLVMcxAkA8mAVUExfN6T2BKpjM/k5CMd
+         yEHBV303fFSGA==
+Date:   Thu, 10 Aug 2023 17:05:07 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 00/36] arm64/gcs: Provide support for GCS in userspace
+Message-ID: <137de09e-6341-4c97-96ca-116e40c9cb8b@sirena.org.uk>
+References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
+ <20230801141319.GC26253@willie-the-truck>
+ <09b7a94d-cc88-4372-85de-52db26bc2daf@sirena.org.uk>
+ <20230808133857.GC2369@willie-the-truck>
+ <f279ec25-e1c7-48e6-bd9d-5c753e829aad@sirena.org.uk>
+ <20230810094016.GA5365@willie-the-truck>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SA1PR12MB8118:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4ca29f58-6b91-4c0b-e2bb-08db99ba730f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1yjtdrx3o91Auy5VICMVvPwcm3WZFfE+/RHv4XKVvGk1qk4v+cMViWDowQuFOESAEOIpyDdLNyBcUfrmwlGg4vm9FxrwUCVd8o2+lgQjO1ChtaM7xZ99szYdAGyyQsuxkxwhGOqG9krVdWh11uHYR7j3hpYTbm4ws0A6oD3XfQBf/w3uwtWT+RnSfKOvj61InX/WO4snH9gYdDIcavAIWw7kqt2QRnbBywUym3rowoYu4yVZN6OmyPHYDmRVzA9879s8lrnltZkabxGWGys9joVwE7o9FQZYwXEIf6+AoDVj0DjZapAWKQrrdCTIaqs06CLYqMwbNCpOUeYLHcD7SxIgDbCTun2/371VqnwkLk4EZ+wgclz3ymNGBDW7jIotzYVipxlW7VTaQaDHzsTkLIQjmQemTw9/zmpygK8qWIppD+KYDAFCeoSEtpbjVtALeVtLZmQUpUGD85ggZSCOLrtGgI0D27zOA2DZihqtBf4e6bzcztlybv79oTkxsx9gY92NT18cJ2ynbNzkO1hmGvonM9+dyndWlaucljk/okjlcz2jw5Q27PssRg3I+nGV
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(376002)(366004)(346002)(39860400002)(1800799006)(186006)(451199021)(54906003)(36756003)(478600001)(6666004)(66946007)(6916009)(26005)(66476007)(6506007)(66556008)(6512007)(6486002)(4326008)(2906002)(41300700001)(316002)(7416002)(5660300002)(8936002)(8676002)(38100700002)(86362001)(83380400001)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/Vpwbf6o35ih7tkc/SCYREgbX52l3pg5/mH1aUJCdRtkOJQVexA15yF19GnW?=
- =?us-ascii?Q?gxHDFbClprgt5MVJceFuzHH8exIKTl0atGOK1dGBE7nM/HjHYe0Kz3nSWooK?=
- =?us-ascii?Q?yYbJzfQTBu7px44AcsUEUocC7ErFwAij2hgfeAuyZBcL2NeM2JoGl7QfObHC?=
- =?us-ascii?Q?qM1Qo4Qx/DEgFoNOXU4q9PXmHyj0yxCuJt8fC+smuOMr/cKEOLI+ObKnmcJ3?=
- =?us-ascii?Q?IBFl9xlViJ2zZjWZWWN90bGaHjktPSBOUg3L//KflUjQSgZiKmNK6GDq+RvF?=
- =?us-ascii?Q?3j+itTACNRs0zlnmQx6ynwSREV2E3sW0vEhOQVrikgQkRCgCyV9rInxe+ShR?=
- =?us-ascii?Q?0K0yENA66jubM5aLIOWaW4Az4rFCPDhTXfwn7O3VyUn6tPBvN+TVUd6ZIV7d?=
- =?us-ascii?Q?wBYvAZJwINBuRtrjUzqTxfnOeQSSZFJAT5SUtSu48O8vlaNNkZPh32q8QGBn?=
- =?us-ascii?Q?b7wCuehHRBHU36k5Il3mPA5szJCdhuGsGZBWb7c2dNvWyjuYjx/shkM7+o0x?=
- =?us-ascii?Q?ODdUHUCppSty86Au2mGJKvlGRBUKnQ47jH5vTkCLVFA2Cuz10OZSn2l+7VxA?=
- =?us-ascii?Q?LpxxjqmJAdPAJQawlFvIZyHOsdVN0b7M2J/P3bit7WzNLri8Hxhfv3G8MLXG?=
- =?us-ascii?Q?ZfWYCfs0XtxKK1PEJ4PRr6T6gpzvF6wXQSVNSpy1xZCTQJP3MBS0u4tZJabl?=
- =?us-ascii?Q?eA7fzITXws3w1LxJTGK3VND7A9qRjG7QSpeUbmxVfCLc4q2sZLUzbsbNdg4O?=
- =?us-ascii?Q?liKYskqfPjbdSdCJzKBNO5UieP1yWME9VUSplX3EOBwdzlqe9Cd2tlvd8+my?=
- =?us-ascii?Q?pzFEXc+pk8XmGkyCcf5rEn6HCMGt1NeOmQyXJBtw50HcMjcS2fhyTR4L4PgP?=
- =?us-ascii?Q?UiQBHR03+RtYyAsZ8Ql5dpI+cKFMJQpg2s1D6aZNHuimSrIqbm7P1q8rpfx5?=
- =?us-ascii?Q?Vgj+WTFBzJV/kG5AkknF/n8Y4sjvrsfEtDncdmwk/CnVR68ActqKcJwcG+XB?=
- =?us-ascii?Q?6x2AdxDvx/OvHFaWj5GvLccP9h6QEr25NsPNgwo80PD46l9gWN+qC+dcv3ep?=
- =?us-ascii?Q?/L3WFQPJeaJLl0l7v4u3l2tq/lFJe50MBaz6RcGdQ+eowDMYQeCVXnks3mGe?=
- =?us-ascii?Q?tbSPQr2sionNKVnKS+RYKdgrqYACtpGmmYA9PwJkraJrUybAwTICCBRgRfwt?=
- =?us-ascii?Q?oIllzyP4fEHcsi9GfyzQfPequ+1FYaFcvcZO/S+X+P5/r96jAvymkgjhZtkF?=
- =?us-ascii?Q?S57gJ61z5pbKpdb/PV4+3mamPWERmJnpvviYSVdtzHb9ode428mDJrwGHSq1?=
- =?us-ascii?Q?AlPCxRL4evDQGg5bPaYmr1/h7f0mIupTqdCvdjEPQMin829TA/JRusU60f8q?=
- =?us-ascii?Q?hlEnsj7Ugo9W/H6f+c7Psqha3VJV7j7LVhIa6Xv6TaYm0YYTNZaBGmsszGZz?=
- =?us-ascii?Q?IsWMrwCDmfpMeocyc1Zgq/nWe4/0ky+WNvpPdstxLTJpwQ1xjZ++VM6+Hgjh?=
- =?us-ascii?Q?j7S8JLfru0y5ZEPubWT6SO2TAoUS76qEaU2WR7DoSewIqwBVi3jDSL2eOANz?=
- =?us-ascii?Q?AEL72Gqne1Ay+QrYG6D+KE+WsOJg95+Znv29Ph9J?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ca29f58-6b91-4c0b-e2bb-08db99ba730f
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2023 15:57:07.9159
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5IE0DFGoAERbrQCyDYNiUOhtWbxP8FcTEZkuIb5hFuieEz6D2bt8v5xBvFlvia2n
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8118
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5H6oHgjZfBXx+cAU"
+Content-Disposition: inline
+In-Reply-To: <20230810094016.GA5365@willie-the-truck>
+X-Cookie: Reunite Gondwondaland!
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 02:49:59AM +0000, Tian, Kevin wrote:
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Thursday, August 10, 2023 4:17 AM
-> > 
-> > On Wed, Aug 09, 2023 at 04:19:01PM -0300, Jason Gunthorpe wrote:
-> > > On Wed, Aug 09, 2023 at 12:12:25PM -0700, Nicolin Chen wrote:
-> > > > On Wed, Aug 09, 2023 at 01:24:56PM -0300, Jason Gunthorpe wrote:
-> > > > > Similarly for managing the array of invalidation commands.
-> > > >
-> > > > You mean an embedded uptr inside a driver user data struct right?
-> > > > Sure, that should go through the new helper too.
-> > >
-> > > If we are committed that all drivers have to process an array then put
-> > > the array in the top level struct and pass it in the same user_data
-> > > struct and use another helper to allow the driver to iterate through
-> > > it.
-> > 
-> > I see. Both VTD and SMMU pass uptr to the arrays of invalidation
-> > commands/requests. The only difference is that SMMU's array is a
-> > ring buffer other than a plain one indexing from the beginning.
-> > But the helper could take two index inputs, which should work for
-> > VTD case too. If another IOMMU driver only supports one request,
-> > rather than a array of requests, we can treat that as a single-
-> > entry array.
-> > 
-> 
-> I like this approach.
 
-Do we need to worry about the ring wrap around? It is already the case
-that the VMM has to scan the ring and extract the invalidation
-commands, wouldn't it already just linearize them?
+--5H6oHgjZfBXx+cAU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Is there a use case for invaliation only SW emulated rings, and do we
-care about optimizing for the wrap around case?
+On Thu, Aug 10, 2023 at 10:40:16AM +0100, Will Deacon wrote:
+> On Tue, Aug 08, 2023 at 09:25:11PM +0100, Mark Brown wrote:
 
-Let's answer those questions before designing something complicated :)
+> > I'm not sure that your assumption that the only people would would
+> > consider deploying this are those who have deployed SCS is a valid one,
+> > SCS users are definitely part of the mix but GCS is expected to be much
+> > more broadly applicable.  As you say SCS is very invasive, requires a
+> > rebuild of everything with different code generated and as Szabolcs
+> > outlined has ABI challenges for general distros.  Any code built (or
+> > JITed) with anything other than clang is going to require some explicit
+> > support to do SCS (eg, the kernel's SCS support does nothing for
+> > assembly code) and there's a bunch of runtime support.  It's very much a
+> > specialist feature, mainly practical in well controlled somewhat
+> > vertical systems - I've not seen any suggestion that general purpose
+> > distros are considering using it.
 
-Jason
+> I've also seen no suggestion that general purpose distros are considering
+> GCS -- that's what I'm asking about here, and also saying that we shouldn=
+'t
+> rush in an ABI without confidence that it actually works beyond unit tests
+> (although it's great that you wrote selftests!).
+
+It defintely works substantially beyond selftests.  For the actual
+distros there's definitely interest out there, gated on upstreaming.
+
+> > In contrast in the case of GCS one of the nice features is that for most
+> > code it's very much non-invasive, much less so than things like PAC/BTI
+> > and SCS, which means that the audience is much wider than it is for SCS
+> > - it's a *much* easier sell for general purpose distros to enable GCS
+> > than to enable SCS.
+
+> This sounds compelling, but has anybody tried running significant parts o=
+f a
+> distribution (e.g. running Debian source package tests, booting Android,
+> using a browser, running QEMU) with GCS enabled? I can well imagine
+> non-trivial applications violating both assumptions of the architecture a=
+nd
+> the ABI.
+
+Android is the main full userspace that people have been working with,
+we've not run into anything ABI related yet that I'm aware of - there is
+one thing that's being chased down but we're fairly confident that is a
+bug somewhere rather than the ABI being unsuitable.
+
+> > > If not, why are we bothering? If so, how much of that distribution has
+> > > been brought up and how does the "dynamic linker or other startup cod=
+e"
+> > > decide what to do?
+
+> > There is active interest in the x86 shadow stack support from distros,
+> > GCS is a lot earlier on in the process but isn't fundamentally different
+> > so it is expected that this will translate.  There is also a chicken and
+> > egg thing where upstream support gates a lot of people's interest, what
+> > people will consider carrying out of tree is different to what they'll
+> > enable.=20
+
+> I'm not saying we should wait until distros are committed, but Arm should
+> be able to do that work on a fork, exactly like we did for the arm64
+> bringup. We have the fastmodel, so running interesting stuff with GCS
+> enabled should be dead easy, no?
+
+Right, this is happening but your pushback seemed to be "why would
+anyone even consider deploying this?" rather than "could anyone deploy
+this?", tests on forks can help a bit with the first question but your
+concern seemed more at the level of even getting people to look at the
+work rather than just rejecting it out of hand.
+
+> > The majority of the full distro work at this point is on the x86 side
+> > given the hardware availability, we are looking at that within Arm of
+> > course.  I'm not aware of any huge blockers we have encountered thus
+> > far.
+
+> Ok, so it sounds like you've started something then? How far have you got?
+
+I'd say thus far text mode embedded/server type stuff is looking pretty
+good, especially for C stuff - setjmp/longjmp and an unwinder cover a
+*lot*.  We do need to do more here, especially GUI stuff, but it's
+progressing well thus far.
+
+> While we'd be daft not to look at what the x86 folks are doing, I don't
+> think we should rely solely on them to inform the design for arm64 when
+> it should be relatively straightforward to prototype the distro work on
+> the model. There's also no rush to land the kernel changes given that
+> GCS hardware doesn't exist.
+
+Sure, but we're also in the position where there's only been the very
+beginnings of kernel review and obviously that's very important too and
+there's often really substantial lead times on that, plus the potential
+for need for redoing all the testing if there's issues identified.  I'd
+hope to at least be able to get to a point where the major concern
+people have is testing.  Another goal here is to feed any concerns we do
+have into what's happening with x86 and RISC-V so that we have as much
+alignment as possible in how this is supposed to work on Linux, that'll
+make everyone's life easier.
+
+In terms of timescales given that users with generic distros are a big
+part of the expected audience while we're well in advance of where it's
+actually going to be used we do need to be mindful of lead times in
+getting support into the software users are likely to want to run so
+they've got something they can use when they do get hardware.  We don't
+need to rush into anything, but we should probably use that time for
+careful consideration.
+
+--5H6oHgjZfBXx+cAU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTVCrIACgkQJNaLcl1U
+h9BHVwgAgSbEUGUic59Pll+iHR6rMHH93h8r1BQCHM7w3dxRlH4WQAvF84q/FUw2
+BvNcZc0s34e1gGq9GO3VlDPB0v1oMiJOjyjZ4V147fI5yH9YpEN93CoddrH+4Q9Z
+hN/7EJ0PHxL/eaJM5EKzuAYo3iWQGg1IQRQ4XQugjYa4ID2KHo9OWVXpMTq+swnQ
+pgGXC+k61Wjov3YeJwwBcZc8b9Ev2QE0T09jigsR6IRmYS+nD+LQWi2s9Utb7b+v
+CE8pnWa10JCf8Or6Pft32TX975ZpuvLHvEoHdRlUHZqpl96Nj5yj9ZFX2q3Efvg1
+veMSeRwi5FXGa41z5bay9s/8jeTTMg==
+=NmPw
+-----END PGP SIGNATURE-----
+
+--5H6oHgjZfBXx+cAU--
