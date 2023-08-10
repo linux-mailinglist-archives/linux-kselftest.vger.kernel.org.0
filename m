@@ -2,227 +2,192 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B697774C9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Aug 2023 11:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFD6777755
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Aug 2023 13:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbjHJJk2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Aug 2023 05:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
+        id S235413AbjHJLjf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Aug 2023 07:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjHJJk1 (ORCPT
+        with ESMTP id S235421AbjHJLjd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Aug 2023 05:40:27 -0400
+        Thu, 10 Aug 2023 07:39:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AA4DA;
-        Thu, 10 Aug 2023 02:40:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83489120;
+        Thu, 10 Aug 2023 04:39:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E27D964D2C;
-        Thu, 10 Aug 2023 09:40:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DD45C433C7;
-        Thu, 10 Aug 2023 09:40:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14CFF65A3A;
+        Thu, 10 Aug 2023 11:39:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC500C43391;
+        Thu, 10 Aug 2023 11:39:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691660425;
-        bh=sIPt3F3NESEzK1OvlyyFT5VyVQ7tE7yPYubqQGStCqg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IP8wHcn150hnKrZvepWZRu/bnQUdsnKp47dRm/aFoEOE+zmmb5oelBi/0ntmITG0C
-         GxnEh1vJB+bmqUgUZKCZWFGgq0598Qp8ItPgtUCT4ebSzjj73B7qiveA8tSUG6bUIu
-         X/zQebJJjEdNCt3iFsoJV3655xdL6Fznj/O9YYQHvX5KTm0sh/0EwK6DahGuoDdcfa
-         r+qksmi5gW/78J957YpZKYdhGAZe0GI/talrbTnfFLtOQIC+iOS5UQS8oTWDkGFm0a
-         XZlgficEyzqu70VQik1EX2X8tFZCvnFML8NGJHla/35zm9SYh9XelgwUQ7xVTiRz1S
-         QcqAzpTWxhy5Q==
-Date:   Thu, 10 Aug 2023 10:40:16 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 00/36] arm64/gcs: Provide support for GCS in userspace
-Message-ID: <20230810094016.GA5365@willie-the-truck>
-References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
- <20230801141319.GC26253@willie-the-truck>
- <09b7a94d-cc88-4372-85de-52db26bc2daf@sirena.org.uk>
- <20230808133857.GC2369@willie-the-truck>
- <f279ec25-e1c7-48e6-bd9d-5c753e829aad@sirena.org.uk>
+        s=k20201202; t=1691667569;
+        bh=TWailZRjY0e+eZNG0KbVuBj7vwCo8+irTvS4gJ/TsSo=;
+        h=From:Date:Subject:To:Cc:From;
+        b=Ycec3jI++B2DemmO0X24rmDGt5uP/+g1lYJa9Hyfi6d7UELoLZXB2Z5ejbmN3GcDv
+         EwUHHtrZ1gwmF3reOs3j0i8eihpBloUT0ls1xGLxo7AoC+9i3v2zRTYJBaiE2Aqrna
+         SEIhk49XQm6fWl5yW1NHtYQ3SVJwn/+nG8Tz06hHyNJFv+bY7yudAOsGJ8lN/PsBJj
+         hNUZVVGhKtExtD13jG4RganXxBb2d5fq568W7HS7B6fjT350Ndae6rFjw7jUDoIQIl
+         EBhgGSTQpuxChF7NBVcTrXtGe/7l15wJAuslGWJAD+OPADnJiRzgz+if6YOL6FwM9v
+         7ePKJCEaliyqw==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Thu, 10 Aug 2023 12:39:19 +0100
+Subject: [PATCH] kselftest/arm64: Size sycall-abi buffers for the actual
+ maximum VL
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f279ec25-e1c7-48e6-bd9d-5c753e829aad@sirena.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230810-arm64-syscall-abi-perf-v1-1-6a0d7656359c@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAGbM1GQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDCwNL3cSiXDMT3eLK4uTEnBzdxKRM3YLUojRdw1RTC3OzFEMzwyQjJaD
+ mgqLUtMwKsMHRsbW1AHmPd99oAAAA
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-034f2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4518; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=TWailZRjY0e+eZNG0KbVuBj7vwCo8+irTvS4gJ/TsSo=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBk1Mxui0TdliWUY4lyyzPw0Wk8Ox8X4CucUB4Yx3uP
+ ksqc6rmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZNTMbgAKCRAk1otyXVSH0P6AB/
+ 9Pmv5jV7G7opPlIhRunsboaHBuLcjYK2tKjRx7V2lXPOa6FG/2vE309Uw9blivEmaaSMRnGeT3lQMP
+ MvMBa4SWHtxc9gti0FdbitmV28cTVcn093jkUGITx6LjrMDp35HKZj3Nxxvg1ggIPfPijzm/U7m8ze
+ bf6eHIzYh2SxWR6J3qz2N/utG3AxuR1j4sxl/FdynAbgXi5kF/dwelXg4PpDP7YHV7Fuwemng2lJSs
+ MZ4fir0mayRVS2dfwTD+7MdeV9ISUgqi0WBNOoMdFJjIvppsTioRgi7x8NApwT1hwEoQFVwsfL0l5u
+ R8W763tA9dyG9X9tzVbuYCr68YeHHj
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 08, 2023 at 09:25:11PM +0100, Mark Brown wrote:
-> On Tue, Aug 08, 2023 at 02:38:58PM +0100, Will Deacon wrote:
-> 
-> > But seriously, I think the question is more about what this brings us
-> > *on top of* SCS, since for the forseeable future folks that care about
-> > this stuff (like Android) will be using SCS. GCS on its own doesn't make
-> > sense to me, given the recompilation effort to remove SCS and the lack
-> > of hardware, so then you have to look at what it brings in addition to
-> > GCS and balance that against the performance cost.
-> 
-> > Given that, is anybody planning to ship a distribution with this enabled?
-> 
-> I'm not sure that your assumption that the only people would would
-> consider deploying this are those who have deployed SCS is a valid one,
-> SCS users are definitely part of the mix but GCS is expected to be much
-> more broadly applicable.  As you say SCS is very invasive, requires a
-> rebuild of everything with different code generated and as Szabolcs
-> outlined has ABI challenges for general distros.  Any code built (or
-> JITed) with anything other than clang is going to require some explicit
-> support to do SCS (eg, the kernel's SCS support does nothing for
-> assembly code) and there's a bunch of runtime support.  It's very much a
-> specialist feature, mainly practical in well controlled somewhat
-> vertical systems - I've not seen any suggestion that general purpose
-> distros are considering using it.
+Our ABI opts to provide future proofing by defining a much larger
+SVE_VQ_MAX than the architecture actually supports.  Since we use
+this define to control the size of our vector data buffers this results
+in a lot of overhead when we initialise which can be a very noticable
+problem in emulation, we fill buffers that are orders of magnitude
+larger than we will ever actually use even with virtual platforms that
+provide the full range of architecturally supported vector lengths.
 
-I've also seen no suggestion that general purpose distros are considering
-GCS -- that's what I'm asking about here, and also saying that we shouldn't
-rush in an ABI without confidence that it actually works beyond unit tests
-(although it's great that you wrote selftests!).
+Define and use the actual architecture maximum to mitigate this.
 
-> In contrast in the case of GCS one of the nice features is that for most
-> code it's very much non-invasive, much less so than things like PAC/BTI
-> and SCS, which means that the audience is much wider than it is for SCS
-> - it's a *much* easier sell for general purpose distros to enable GCS
-> than to enable SCS.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/abi/syscall-abi.c | 38 +++++++++++++++----------
+ 1 file changed, 23 insertions(+), 15 deletions(-)
 
-This sounds compelling, but has anybody tried running significant parts of a
-distribution (e.g. running Debian source package tests, booting Android,
-using a browser, running QEMU) with GCS enabled? I can well imagine
-non-trivial applications violating both assumptions of the architecture and
-the ABI.
+diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
+index 18cc123e2347..d704511a0955 100644
+--- a/tools/testing/selftests/arm64/abi/syscall-abi.c
++++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
+@@ -20,12 +20,20 @@
+ 
+ #include "syscall-abi.h"
+ 
++/*
++ * The kernel defines a much larger SVE_VQ_MAX than is expressable in
++ * the architecture, this creates a *lot* of overhead filling the
++ * buffers (especially ZA) on emulated platforms so use the actual
++ * architectural maximum instead.
++ */
++#define ARCH_SVE_VQ_MAX 16
++
+ static int default_sme_vl;
+ 
+ static int sve_vl_count;
+-static unsigned int sve_vls[SVE_VQ_MAX];
++static unsigned int sve_vls[ARCH_SVE_VQ_MAX];
+ static int sme_vl_count;
+-static unsigned int sme_vls[SVE_VQ_MAX];
++static unsigned int sme_vls[ARCH_SVE_VQ_MAX];
+ 
+ extern void do_syscall(int sve_vl, int sme_vl);
+ 
+@@ -130,9 +138,9 @@ static int check_fpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 
+ #define SVE_Z_SHARED_BYTES (128 / 8)
+ 
+-static uint8_t z_zero[__SVE_ZREG_SIZE(SVE_VQ_MAX)];
+-uint8_t z_in[SVE_NUM_ZREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
+-uint8_t z_out[SVE_NUM_ZREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
++static uint8_t z_zero[__SVE_ZREG_SIZE(ARCH_SVE_VQ_MAX)];
++uint8_t z_in[SVE_NUM_ZREGS * __SVE_ZREG_SIZE(ARCH_SVE_VQ_MAX)];
++uint8_t z_out[SVE_NUM_ZREGS * __SVE_ZREG_SIZE(ARCH_SVE_VQ_MAX)];
+ 
+ static void setup_z(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 		    uint64_t svcr)
+@@ -190,8 +198,8 @@ static int check_z(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 	return errors;
+ }
+ 
+-uint8_t p_in[SVE_NUM_PREGS * __SVE_PREG_SIZE(SVE_VQ_MAX)];
+-uint8_t p_out[SVE_NUM_PREGS * __SVE_PREG_SIZE(SVE_VQ_MAX)];
++uint8_t p_in[SVE_NUM_PREGS * __SVE_PREG_SIZE(ARCH_SVE_VQ_MAX)];
++uint8_t p_out[SVE_NUM_PREGS * __SVE_PREG_SIZE(ARCH_SVE_VQ_MAX)];
+ 
+ static void setup_p(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 		    uint64_t svcr)
+@@ -222,8 +230,8 @@ static int check_p(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 	return errors;
+ }
+ 
+-uint8_t ffr_in[__SVE_PREG_SIZE(SVE_VQ_MAX)];
+-uint8_t ffr_out[__SVE_PREG_SIZE(SVE_VQ_MAX)];
++uint8_t ffr_in[__SVE_PREG_SIZE(ARCH_SVE_VQ_MAX)];
++uint8_t ffr_out[__SVE_PREG_SIZE(ARCH_SVE_VQ_MAX)];
+ 
+ static void setup_ffr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 		      uint64_t svcr)
+@@ -300,8 +308,8 @@ static int check_svcr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 	return errors;
+ }
+ 
+-uint8_t za_in[ZA_SIG_REGS_SIZE(SVE_VQ_MAX)];
+-uint8_t za_out[ZA_SIG_REGS_SIZE(SVE_VQ_MAX)];
++uint8_t za_in[ZA_SIG_REGS_SIZE(ARCH_SVE_VQ_MAX)];
++uint8_t za_out[ZA_SIG_REGS_SIZE(ARCH_SVE_VQ_MAX)];
+ 
+ static void setup_za(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 		     uint64_t svcr)
+@@ -470,9 +478,9 @@ void sve_count_vls(void)
+ 		return;
+ 
+ 	/*
+-	 * Enumerate up to SVE_VQ_MAX vector lengths
++	 * Enumerate up to ARCH_SVE_VQ_MAX vector lengths
+ 	 */
+-	for (vq = SVE_VQ_MAX; vq > 0; vq /= 2) {
++	for (vq = ARCH_SVE_VQ_MAX; vq > 0; vq /= 2) {
+ 		vl = prctl(PR_SVE_SET_VL, vq * 16);
+ 		if (vl == -1)
+ 			ksft_exit_fail_msg("PR_SVE_SET_VL failed: %s (%d)\n",
+@@ -496,9 +504,9 @@ void sme_count_vls(void)
+ 		return;
+ 
+ 	/*
+-	 * Enumerate up to SVE_VQ_MAX vector lengths
++	 * Enumerate up to ARCH_SVE_VQ_MAX vector lengths
+ 	 */
+-	for (vq = SVE_VQ_MAX; vq > 0; vq /= 2) {
++	for (vq = ARCH_SVE_VQ_MAX; vq > 0; vq /= 2) {
+ 		vl = prctl(PR_SME_SET_VL, vq * 16);
+ 		if (vl == -1)
+ 			ksft_exit_fail_msg("PR_SME_SET_VL failed: %s (%d)\n",
 
-> For the majority of programs all the support that is needed is in the
-> kernel and libgcc/libc, there's no impact on the code generation.  There
-> are no extra instructions in the normal flow which will impact systems
-> without the feature, and there are no extra registers in use, so even if
-> the binaries are run on a system without GCS or for some reason someone
-> decides that it's best to turn the feature off on a system that is capable
-> of using it the fact that it's just using the existing bl/ret pairs means
-> that there is minimal overhead.  This all means that it's much more
-> practical to deploy in general purpose distros.  On the other hand when
-> active it affects all code, this improves coverage but the improved
-> coverage can be a worry.
-> 
-> I can see that systems that have gone through all the effort of enabling
-> SCS might not rush to implement GCS, though there should be no harm in
-> having the two features running side by side beyond the doubled memory
-> requirements so you can at least have a transition plan (GCS does have
-> some allowances which enable hardware to mitigate some of the memory
-> bandwidth requirements at least).  You do still get the benefit of the
-> additional hardware protections GCS offers, and the coverage of all
-> branch and ret instructions will be of interest both for security and
-> for unwinders.  It's definitely offers less of an incremental
-> improvement on top of SCS than it is without SCS though.
-> 
-> GCS and SCS are comparable features in terms of the protection they aim
-> to add but their system integration impacts are different.
+---
+base-commit: 52a93d39b17dc7eb98b6aa3edb93943248e03b2f
+change-id: 20230809-arm64-syscall-abi-perf-1e5876d161b2
 
-Again, this sounds plausible but I don't see any data to back it up so I
-don't really have a feeling as to how true it is.
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-> > If not, why are we bothering? If so, how much of that distribution has
-> > been brought up and how does the "dynamic linker or other startup code"
-> > decide what to do?
-> 
-> There is active interest in the x86 shadow stack support from distros,
-> GCS is a lot earlier on in the process but isn't fundamentally different
-> so it is expected that this will translate.  There is also a chicken and
-> egg thing where upstream support gates a lot of people's interest, what
-> people will consider carrying out of tree is different to what they'll
-> enable. 
-
-I'm not saying we should wait until distros are committed, but Arm should
-be able to do that work on a fork, exactly like we did for the arm64
-bringup. We have the fastmodel, so running interesting stuff with GCS
-enabled should be dead easy, no?
-
-> Architecture specific feedback on the implementation can also be fed back
-> into the still ongoing review of the ABI that is being established for
-> x86, there will doubtless be pushback about variations between
-> architectures from userspace people.
-> 
-> The userspace decision about enablement will primarily be driven by an
-> ELF marking which the dynamic linker looks at to determine if the
-> binaries it is loading can support GCS, a later dlopen() can either
-> refuse to load an additional library if the process currently has GCS
-> enabled, ignore the issue and hope things work out (there's a good
-> chance they will but obviously that's not safe) or (more complicatedly)
-> go round all the threads and disable GCS before proceeding.  The main
-> reason any sort of rebuild is required for most code is to add the ELF
-> marking, there will be a compiler option to select it.  Static binaries
-> should know if everything linked into them is GCS compatible and enable
-> GCS if appropriate in their startup code.
-> 
-> The majority of the full distro work at this point is on the x86 side
-> given the hardware availability, we are looking at that within Arm of
-> course.  I'm not aware of any huge blockers we have encountered thus
-> far.
-
-Ok, so it sounds like you've started something then? How far have you got?
-
-> It is fair to say that there's less active interest on the arm64 side
-> since as you say the feature is quite a way off making it's way into
-> hardware, though there are also long lead times on getting the full
-> software stack to end users and kernel support becomes a blocker for
-> the userspace stack.
->
-> 
-> > After the mess we had with BTI and mprotect(), I'm hesitant to merge
-> > features like this without knowing that the ABI can stand real code.
-> 
-> The equivalent x86 feature is in current hardware[1], there has been
-> some distro work (I believe one of the issues x86 has had is coping with
-> a distro which shipped an early out of tree ABI, that experience has
-> informed the current ABI which as the cover letter says we are following
-> closely).  AIUI the biggest blocker on userspace work for x86 right now
-> is landing the kernel side of things so that everyone else has a stable
-> ABI to work from and don't need to carry out of tree patches, I've heard
-> frustration expressed at the deployment being held up.  IIRC Fedora were
-> on the leading edge in terms of active interest, they tend to be given
-> that they're one of the most quickly iterating distros.  
-> 
-> This definitely does rely fairly heavily on the x86 experience for
-> confidence in the ABI, and to be honest one of the big unknowns at this
-> point is if you or Catalin will have opinions on how things are being
-> done.
-
-While we'd be daft not to look at what the x86 folks are doing, I don't
-think we should rely solely on them to inform the design for arm64 when
-it should be relatively straightforward to prototype the distro work on
-the model. There's also no rush to land the kernel changes given that
-GCS hardware doesn't exist.
-
-Will
