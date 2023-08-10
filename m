@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DC4778215
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Aug 2023 22:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3F177821A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Aug 2023 22:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbjHJUYZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Aug 2023 16:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
+        id S232642AbjHJUYc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Aug 2023 16:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjHJUYZ (ORCPT
+        with ESMTP id S235759AbjHJUY1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Aug 2023 16:24:25 -0400
+        Thu, 10 Aug 2023 16:24:27 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E112136;
-        Thu, 10 Aug 2023 13:24:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A6C2136;
+        Thu, 10 Aug 2023 13:24:26 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F0BD46607234;
-        Thu, 10 Aug 2023 21:24:18 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D1CB66607237;
+        Thu, 10 Aug 2023 21:24:23 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1691699061;
-        bh=mfSXUsLYLqVGYNrw2dZQqMTMToZ4UamGbospLR4IvHs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bTQUuyaTsT4EW5uT9OWjFc8TsukuzocVCxxs9n7j/GmeMBx2LLhm6jgXKjgYLMaCz
-         ZljCRyzgyBMvdz2eRnnUPFyWLTQDH1OI27p8Xnxb19S9h0dybbnyc7LQRRvKQY7G3X
-         y2Izdgt26uuhj0vssozDzgG+G7biJDBpGT/Nch1NkZm55YNWqUIKhLRZ8HnnZGuqU5
-         q1+S87MJaAuVUhJ8iHenz++PbiZsLxaYLjYPBrEJkiPo+d7nF3q4x2pTWmjmp+au0D
-         /mx986LwBtszj9tEdB8ruQLIQ4scrw0enrywTFIETmKeedCSZbLJB8WDecqBTTAD7Q
-         79ghEnvWiapkg==
+        s=mail; t=1691699065;
+        bh=dbK8sqVnzBOlOzUBAaN2yohYQfmSrnWeR3s6Om57BdA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dl20LqSp9vDKF3cb97AHuK0zEtiJ9O00IS3Zg6xIv9eBFSohEAvKfo8cH/B24qeLv
+         xrQBmX51L73/y9k5qJ5skKCh5TOxC2uaVN5L6/ylOsNAHl4U42yRIOn6+jsO6T1jOs
+         aq0lBwHotXc4kVn+UFA8ZSdV8j1TZpMW93BxaEKu9Qz5uS8DMaWIN0+i+GmhGvWMWo
+         sPYRe6xiiES1cq70bFZBgNGIRQPo6QqUNn7ORiWQffyuTlqE0jNAVVoD+QskNrnc4t
+         KdYwKwz81JaRTv/VjhFjV0UD9OGDzA1uzBBkwg/vNGZZh2sgH/nv2//4yy881U24ES
+         BYFoCOkal2iEg==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -43,12 +43,14 @@ Cc:     cocci@inria.fr, Mark Brown <broonie@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>, kernel@collabora.com,
         Guenter Roeck <groeck@chromium.org>,
         =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 0/2] Add a test to catch unprobed Devicetree devices
-Date:   Thu, 10 Aug 2023 16:23:49 -0400
-Message-ID: <20230810202413.1780286-1-nfraprado@collabora.com>
+        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH 2/2] kselftest: Add Devicetree unprobed devices test
+Date:   Thu, 10 Aug 2023 16:23:51 -0400
+Message-ID: <20230810202413.1780286-3-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230810202413.1780286-1-nfraprado@collabora.com>
+References: <20230810202413.1780286-1-nfraprado@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -61,79 +63,147 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Introduce a new kselftest to detect devices that were declared in the
+Devicetree, and are expected to be probed by a driver, but weren't.
 
-Regressions that cause a device to no longer be probed by a driver can
-have a big impact on the platform's functionality, and despite being
-relatively common there isn't currently any generic test to detect them.
-As an example, bootrr [1] does test for device probe, but it requires
-defining the expected probed devices for each platform.
+The test uses two lists: a list of compatibles that can match a
+Devicetree device to a driver, and a list of compatibles that should be
+ignored. The first is automatically generated from a script that parses
+the kernel source using Coccinelle, and will be run as part of building
+this test, therefore Coccinelle is a build-time dependency for this
+test. The list of compatibles to ignore is a hand-crafted list to
+capture the few exceptions of compatibles that are expected to match a
+driver but not be bound to it.
 
-Given that the Devicetree already provides a static description of
-devices on the system, it is a good basis for building such a test on
-top.
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+---
 
-This series introduces a test to catch regressions that prevent devices
-from probing.
-
-Patch 1 introduces a script to parse the kernel source using Coccinelle
-and extract all compatibles that can be matched by a Devicetree node to
-a driver. Patch 2 adds a kselftest that walks over the Devicetree nodes
-on the current platform and compares the compatibles to the ones on the
-list, and on an ignore list, to point out devices that failed to be
-probed.
-
-A compatible list is needed because not all compatibles that can show up
-in a Devicetree node can be used to match to a driver, for example the
-code for that compatible might use "OF_DECLARE" type macros and avoid
-the driver framework, or the node might be controlled by a driver that
-was bound to a different node.
-
-An ignore list is needed for the few cases where it's common for a
-driver to match a device but not probe, like for the "simple-mfd"
-compatible, where the driver only probes if that compatible is the
-node's first compatible.
-
-Even though there's already scripts/dtc/dt-extract-compatibles that does
-a similar job, it didn't seem to find all compatibles, returning ~3k,
-while Coccinelle found ~11k. Besides that, Coccinelle actually parses
-the C files, so it should be a more robust solution than relying on
-regexes.
-
-The reason for parsing the kernel source instead of relying on
-information exposed by the kernel at runtime (say, looking at modaliases
-or introducing some other mechanism), is to be able to catch issues
-where a config was renamed or a driver moved across configs, and the
-.config used by the kernel not updated accordingly. We need to parse the
-source to find all compatibles present in the kernel independent of the
-current config being run.
-
-Feedback is very much welcome.
-
-Thanks,
-Nícolas
-
-[1] https://github.com/kernelci/bootrr
-
-
-Nícolas F. R. A. Prado (2):
-  scripts/dtc: Add script to extract matchable DT compatibles
-  kselftest: Add Devicetree unprobed devices test
-
- scripts/dtc/extract-matchable-dt-compatibles  | 33 +++++++++++
- scripts/dtc/matchable_dt_compatibles.cocci    | 58 +++++++++++++++++++
  tools/testing/selftests/Makefile              |  1 +
  tools/testing/selftests/dt/.gitignore         |  1 +
  tools/testing/selftests/dt/Makefile           | 17 ++++++
  .../selftests/dt/compatible_ignore_list       |  3 +
  .../selftests/dt/test_unprobed_devices.sh     | 58 +++++++++++++++++++
- 7 files changed, 171 insertions(+)
- create mode 100755 scripts/dtc/extract-matchable-dt-compatibles
- create mode 100644 scripts/dtc/matchable_dt_compatibles.cocci
+ 5 files changed, 80 insertions(+)
  create mode 100644 tools/testing/selftests/dt/.gitignore
  create mode 100644 tools/testing/selftests/dt/Makefile
  create mode 100644 tools/testing/selftests/dt/compatible_ignore_list
  create mode 100755 tools/testing/selftests/dt/test_unprobed_devices.sh
 
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 8dca8acdb671..2fe992ca9294 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -16,6 +16,7 @@ TARGETS += drivers/dma-buf
+ TARGETS += drivers/s390x/uvdevice
+ TARGETS += drivers/net/bonding
+ TARGETS += drivers/net/team
++TARGETS += dt
+ TARGETS += efivarfs
+ TARGETS += exec
+ TARGETS += fchmodat2
+diff --git a/tools/testing/selftests/dt/.gitignore b/tools/testing/selftests/dt/.gitignore
+new file mode 100644
+index 000000000000..f6476c9f2884
+--- /dev/null
++++ b/tools/testing/selftests/dt/.gitignore
+@@ -0,0 +1 @@
++compatible_list
+diff --git a/tools/testing/selftests/dt/Makefile b/tools/testing/selftests/dt/Makefile
+new file mode 100644
+index 000000000000..fa5f3c12a659
+--- /dev/null
++++ b/tools/testing/selftests/dt/Makefile
+@@ -0,0 +1,17 @@
++COCCI = $(shell which spatch 2>/dev/null)
++
++ifneq ($(COCCI),)
++TEST_PROGS := test_unprobed_devices.sh
++TEST_GEN_FILES := compatible_list
++TEST_FILES := compatible_ignore_list
++
++include ../lib.mk
++
++$(OUTPUT)/compatible_list:
++	cd $(top_srcdir) && ./scripts/dtc/extract-matchable-dt-compatibles > $(OUTPUT)/compatible_list
++
++else
++
++all:
++
++endif
+diff --git a/tools/testing/selftests/dt/compatible_ignore_list b/tools/testing/selftests/dt/compatible_ignore_list
+new file mode 100644
+index 000000000000..5d7fc6229428
+--- /dev/null
++++ b/tools/testing/selftests/dt/compatible_ignore_list
+@@ -0,0 +1,3 @@
++fixed-factor-clock
++fixed-clock
++simple-mfd
+diff --git a/tools/testing/selftests/dt/test_unprobed_devices.sh b/tools/testing/selftests/dt/test_unprobed_devices.sh
+new file mode 100755
+index 000000000000..4741bedefd1f
+--- /dev/null
++++ b/tools/testing/selftests/dt/test_unprobed_devices.sh
+@@ -0,0 +1,58 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (c) 2023 Collabora Ltd
++#
++# Based on Frank Rowand's dt_stat script.
++#
++# This script tests for devices that were declared on the Devicetree and are
++# expected to bind to a driver, but didn't.
++#
++# To achieve this, two lists are used:
++# * a list of the compatibles that can be matched by a Devicetree node
++# * a list of compatibles that should be ignored
++#
++PDT=/proc/device-tree/
++COMPAT_LIST=compatible_list
++IGNORE_LIST=compatible_ignore_list
++
++nodes_compatible=$(
++	for node_compat in $(find ${PDT} -name compatible); do
++		node=$(dirname "${node_compat}")
++		# Check if node is available
++		[[ -e "${node}"/status && $(tr -d '\000' < "${node}"/status) != "okay" ]] && continue
++		echo "${node}" | sed -e 's|\/proc\/device-tree||'
++	done | sort
++	)
++
++nodes_dev_bound=$(
++	IFS=$'\n'
++	for uevent in $(find /sys/devices -name uevent); do
++		if [[ -d "$(dirname "${uevent}")"/driver ]]; then
++			grep '^OF_FULLNAME=' "${uevent}" | sed -e 's|OF_FULLNAME=||'
++		fi
++	done
++	)
++
++retval=0
++for node in ${nodes_compatible}; do
++	if ! echo "${nodes_dev_bound}" | grep -E -q "(^| )${node}( |\$)"; then
++		compatibles=$(tr '\000' '\n' < "${PDT}"/"${node}"/compatible)
++
++		for compatible in ${compatibles}; do
++			if grep -x -q "${compatible}" "$IGNORE_LIST"; then
++				echo "DEBUG: Ignoring " "${node}"
++				continue
++			fi
++
++			if grep -x -q "${compatible}" "$COMPAT_LIST"; then
++				echo "BROKEN: " "${node}"
++				retval=1
++				continue 2
++			fi
++		done
++		echo "DEBUG: Skipping " "${node}"
++	fi
++done
++
++exit $retval
 -- 
 2.41.0
 
