@@ -2,208 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3F177821A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Aug 2023 22:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FA0778227
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Aug 2023 22:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbjHJUYc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Aug 2023 16:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
+        id S234857AbjHJU1C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Aug 2023 16:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235759AbjHJUY1 (ORCPT
+        with ESMTP id S235841AbjHJU1A (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Aug 2023 16:24:27 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A6C2136;
-        Thu, 10 Aug 2023 13:24:26 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D1CB66607237;
-        Thu, 10 Aug 2023 21:24:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1691699065;
-        bh=dbK8sqVnzBOlOzUBAaN2yohYQfmSrnWeR3s6Om57BdA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dl20LqSp9vDKF3cb97AHuK0zEtiJ9O00IS3Zg6xIv9eBFSohEAvKfo8cH/B24qeLv
-         xrQBmX51L73/y9k5qJ5skKCh5TOxC2uaVN5L6/ylOsNAHl4U42yRIOn6+jsO6T1jOs
-         aq0lBwHotXc4kVn+UFA8ZSdV8j1TZpMW93BxaEKu9Qz5uS8DMaWIN0+i+GmhGvWMWo
-         sPYRe6xiiES1cq70bFZBgNGIRQPo6QqUNn7ORiWQffyuTlqE0jNAVVoD+QskNrnc4t
-         KdYwKwz81JaRTv/VjhFjV0UD9OGDzA1uzBBkwg/vNGZZh2sgH/nv2//4yy881U24ES
-         BYFoCOkal2iEg==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     cocci@inria.fr, Mark Brown <broonie@kernel.org>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        kernelci@lists.linux.dev, Julia Lawall <Julia.Lawall@inria.fr>,
-        Bjorn Andersson <andersson@kernel.org>, kernel@collabora.com,
-        Guenter Roeck <groeck@chromium.org>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 2/2] kselftest: Add Devicetree unprobed devices test
-Date:   Thu, 10 Aug 2023 16:23:51 -0400
-Message-ID: <20230810202413.1780286-3-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230810202413.1780286-1-nfraprado@collabora.com>
-References: <20230810202413.1780286-1-nfraprado@collabora.com>
+        Thu, 10 Aug 2023 16:27:00 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655A22723
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Aug 2023 13:26:59 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1bc5acc627dso10196625ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Aug 2023 13:26:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1691699219; x=1692304019;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7VqWk9TlJRT8ykwWsdvSnZzCfxI5F9cpgpLcByRA+sY=;
+        b=K6Xr+JpfP3xNnjYDhY0dK5WU16CS3QdsDehTrDhfKyWhlQr9Ju/mj540r6Y+bgal7r
+         Iu8tF0uh1VerGPWpO5/wmQxvZkh8iK1gyky0YbGqEnpkyPiNkPHdIw5lKML5Pok1+I7a
+         XPeKJAL5CSpLJAKuJCFlHYDzyBBWqVnVMzUfw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691699219; x=1692304019;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7VqWk9TlJRT8ykwWsdvSnZzCfxI5F9cpgpLcByRA+sY=;
+        b=dLpazX/brCaoLW1Da6xev+RVQ43Icxw73/cuLKW8yRVRWvfkjhmLuTWXGSkb1/JPjj
+         tR5gYgOiaIvy6Bmz0FHW00W+5T2Qf/Vy+sL/005GyUnGujJusgzXzCRwUspndW1Oc7d9
+         6cGnqP7L/7HVlXQsN5y+k3/Xy7CwfJ3QkvqpbJv1tlPiXlxlITzL2zbQjpsG+JQyXaNr
+         sGC6KyDrCaH50burQcsA0wjM4ZS4MgrjMQb+NyLYGSDY6FJPwPF88wMmj8KNnfNRa4PH
+         mRufA/F72JRtRCvdTHa+qh2bPnlMKttqXOue5+hHHxK5cym4+E9VTQRCL27GYJ5HDv4o
+         K8ZA==
+X-Gm-Message-State: AOJu0Yyd2rsyFb3gBbaVYw6k7HwsmLvF4u/JobhhMSZXh9RJ3CuNNBC5
+        N103uuYrSm+s/Dw8886GWCrOBA==
+X-Google-Smtp-Source: AGHT+IFgOcyEjd2Q4OTHrM/7gs8YLxs3o0idMAJRHLTXxcQ2zXZGYP1++8Hj+FJQ5dwHLcBJL9Zu0w==
+X-Received: by 2002:a17:902:d3cd:b0:1bb:5b88:73da with SMTP id w13-20020a170902d3cd00b001bb5b8873damr2990326plb.61.1691699218904;
+        Thu, 10 Aug 2023 13:26:58 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id k3-20020a170902694300b001a98f844e60sm2183276plt.263.2023.08.10.13.26.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Aug 2023 13:26:58 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] selftests/seccomp: Handle arm32 corner cases better
+Date:   Thu, 10 Aug 2023 13:26:56 -0700
+Message-Id: <20230810202653.never.932-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2014; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=CLpz6EOfRrbHfxs+DW+QOBPRQnZKfWBS9qhYDrihYZA=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk1UgQGhY779bsGNZZQsbavTn3fuJhNl9tmHaJi
+ pe/oTK88q2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZNVIEAAKCRCJcvTf3G3A
+ JuJ/EACTcQ+/SL8NKJMeMFthsYqig1wZP1bL6BwiogHpMrhrE4JVzTccWGM8XLHbP63E9NyJdTG
+ CbifBfVw4Q2qw1VXKAvuSpkN6uSsMv4s3/BosmYE5yEu4i608R2SQMqm1ifN1U1ovAAYvXxVXY4
+ mEy+5TG5jPr/3XZrHHgf7ygankQSzS38Na8mfcmebpJfZweX8kDy8Zew6h2tSG09wMBoAlirQEt
+ K2TKbjN/dhB2e906M3h7tHIXjIH8gThBwY+4s6o+DI5vhpDjT/6ETxNgaAK9wmXNCyP2v+o3GBL
+ hscos8jzbMZ4QJ/+1PCtSgY7j2PzQmbNzr/wDgkA/LSuAVhL58isbFkaIrHmgXPHd6IDjiaEXR5
+ Vr7pR97vDB1V6HJ5lHg9kZShcr1TABvwit/h/O5anJXH2Aer12Ng1kHn9m+2buZI5tYjvB8gicC
+ JJg/zttnHUhUwzKUKUk3wlToFm9Czbj+vraJF+kexBjCW+DPUS0l6Oa6JPjElLKe5BrrUhTlyBN
+ 3LLd16WA4HhAwVyVlq6vm2gbEUUeXthpn3hm6b/JxOULzY/vOxkMGjjbKalbsRof+RKDJPz6vM5
+ cYVUoyL+rap+LF2B7gOhxuHz9zwF4EvwPoQ4wd4snZlGZ/T6NlRz3bHc8/4DkmejD6OCLSsBxS6
+ UCCv7P2 xUDMYFGA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce a new kselftest to detect devices that were declared in the
-Devicetree, and are expected to be probed by a driver, but weren't.
+It turns out arm32 doesn't handle syscall -1 gracefully, so skip testing
+for that. Additionally skip tests that depend on clone3 when it is not
+available (for example when building the seccomp selftests on an old arm
+image without clone3 headers). And improve error reporting for when
+nanosleep fails, as seen on arm32 since v5.15.
 
-The test uses two lists: a list of compatibles that can match a
-Devicetree device to a driver, and a list of compatibles that should be
-ignored. The first is automatically generated from a script that parses
-the kernel source using Coccinelle, and will be run as part of building
-this test, therefore Coccinelle is a build-time dependency for this
-test. The list of compatibles to ignore is a hand-crafted list to
-capture the few exceptions of compatibles that are expected to match a
-driver but not be bound to it.
-
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Cc: Lecopzer Chen <lecopzer.chen@mediatek.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/dt/.gitignore         |  1 +
- tools/testing/selftests/dt/Makefile           | 17 ++++++
- .../selftests/dt/compatible_ignore_list       |  3 +
- .../selftests/dt/test_unprobed_devices.sh     | 58 +++++++++++++++++++
- 5 files changed, 80 insertions(+)
- create mode 100644 tools/testing/selftests/dt/.gitignore
- create mode 100644 tools/testing/selftests/dt/Makefile
- create mode 100644 tools/testing/selftests/dt/compatible_ignore_list
- create mode 100755 tools/testing/selftests/dt/test_unprobed_devices.sh
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 8dca8acdb671..2fe992ca9294 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -16,6 +16,7 @@ TARGETS += drivers/dma-buf
- TARGETS += drivers/s390x/uvdevice
- TARGETS += drivers/net/bonding
- TARGETS += drivers/net/team
-+TARGETS += dt
- TARGETS += efivarfs
- TARGETS += exec
- TARGETS += fchmodat2
-diff --git a/tools/testing/selftests/dt/.gitignore b/tools/testing/selftests/dt/.gitignore
-new file mode 100644
-index 000000000000..f6476c9f2884
---- /dev/null
-+++ b/tools/testing/selftests/dt/.gitignore
-@@ -0,0 +1 @@
-+compatible_list
-diff --git a/tools/testing/selftests/dt/Makefile b/tools/testing/selftests/dt/Makefile
-new file mode 100644
-index 000000000000..fa5f3c12a659
---- /dev/null
-+++ b/tools/testing/selftests/dt/Makefile
-@@ -0,0 +1,17 @@
-+COCCI = $(shell which spatch 2>/dev/null)
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index f6a04d88e02f..38f651469968 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -2184,6 +2184,9 @@ FIXTURE_TEARDOWN(TRACE_syscall)
+ 
+ TEST(negative_ENOSYS)
+ {
++#if defined(__arm__)
++	SKIP(return, "arm32 does not support calling syscall -1");
++#endif
+ 	/*
+ 	 * There should be no difference between an "internal" skip
+ 	 * and userspace asking for syscall "-1".
+@@ -3072,7 +3075,8 @@ TEST(syscall_restart)
+ 		timeout.tv_sec = 1;
+ 		errno = 0;
+ 		EXPECT_EQ(0, nanosleep(&timeout, NULL)) {
+-			TH_LOG("Call to nanosleep() failed (errno %d)", errno);
++			TH_LOG("Call to nanosleep() failed (errno %d: %s)",
++				errno, strerror(errno));
+ 		}
+ 
+ 		/* Read final sync from parent. */
+@@ -3908,6 +3912,9 @@ TEST(user_notification_filter_empty)
+ 		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
+ 	}
+ 
++	if (__NR_clone3 < 0)
++		SKIP(return, "Test not built with clone3 support");
 +
-+ifneq ($(COCCI),)
-+TEST_PROGS := test_unprobed_devices.sh
-+TEST_GEN_FILES := compatible_list
-+TEST_FILES := compatible_ignore_list
+ 	pid = sys_clone3(&args, sizeof(args));
+ 	ASSERT_GE(pid, 0);
+ 
+@@ -3962,6 +3969,9 @@ TEST(user_notification_filter_empty_threaded)
+ 		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
+ 	}
+ 
++	if (__NR_clone3 < 0)
++		SKIP(return, "Test not built with clone3 support");
 +
-+include ../lib.mk
-+
-+$(OUTPUT)/compatible_list:
-+	cd $(top_srcdir) && ./scripts/dtc/extract-matchable-dt-compatibles > $(OUTPUT)/compatible_list
-+
-+else
-+
-+all:
-+
-+endif
-diff --git a/tools/testing/selftests/dt/compatible_ignore_list b/tools/testing/selftests/dt/compatible_ignore_list
-new file mode 100644
-index 000000000000..5d7fc6229428
---- /dev/null
-+++ b/tools/testing/selftests/dt/compatible_ignore_list
-@@ -0,0 +1,3 @@
-+fixed-factor-clock
-+fixed-clock
-+simple-mfd
-diff --git a/tools/testing/selftests/dt/test_unprobed_devices.sh b/tools/testing/selftests/dt/test_unprobed_devices.sh
-new file mode 100755
-index 000000000000..4741bedefd1f
---- /dev/null
-+++ b/tools/testing/selftests/dt/test_unprobed_devices.sh
-@@ -0,0 +1,58 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2023 Collabora Ltd
-+#
-+# Based on Frank Rowand's dt_stat script.
-+#
-+# This script tests for devices that were declared on the Devicetree and are
-+# expected to bind to a driver, but didn't.
-+#
-+# To achieve this, two lists are used:
-+# * a list of the compatibles that can be matched by a Devicetree node
-+# * a list of compatibles that should be ignored
-+#
-+PDT=/proc/device-tree/
-+COMPAT_LIST=compatible_list
-+IGNORE_LIST=compatible_ignore_list
-+
-+nodes_compatible=$(
-+	for node_compat in $(find ${PDT} -name compatible); do
-+		node=$(dirname "${node_compat}")
-+		# Check if node is available
-+		[[ -e "${node}"/status && $(tr -d '\000' < "${node}"/status) != "okay" ]] && continue
-+		echo "${node}" | sed -e 's|\/proc\/device-tree||'
-+	done | sort
-+	)
-+
-+nodes_dev_bound=$(
-+	IFS=$'\n'
-+	for uevent in $(find /sys/devices -name uevent); do
-+		if [[ -d "$(dirname "${uevent}")"/driver ]]; then
-+			grep '^OF_FULLNAME=' "${uevent}" | sed -e 's|OF_FULLNAME=||'
-+		fi
-+	done
-+	)
-+
-+retval=0
-+for node in ${nodes_compatible}; do
-+	if ! echo "${nodes_dev_bound}" | grep -E -q "(^| )${node}( |\$)"; then
-+		compatibles=$(tr '\000' '\n' < "${PDT}"/"${node}"/compatible)
-+
-+		for compatible in ${compatibles}; do
-+			if grep -x -q "${compatible}" "$IGNORE_LIST"; then
-+				echo "DEBUG: Ignoring " "${node}"
-+				continue
-+			fi
-+
-+			if grep -x -q "${compatible}" "$COMPAT_LIST"; then
-+				echo "BROKEN: " "${node}"
-+				retval=1
-+				continue 2
-+			fi
-+		done
-+		echo "DEBUG: Skipping " "${node}"
-+	fi
-+done
-+
-+exit $retval
+ 	pid = sys_clone3(&args, sizeof(args));
+ 	ASSERT_GE(pid, 0);
+ 
 -- 
-2.41.0
+2.34.1
 
