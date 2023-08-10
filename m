@@ -2,210 +2,185 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D69C9777E9C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Aug 2023 18:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A337777EE5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Aug 2023 19:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbjHJQuJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Aug 2023 12:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        id S234083AbjHJROx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Aug 2023 13:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjHJQuI (ORCPT
+        with ESMTP id S233590AbjHJROw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Aug 2023 12:50:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E2910FB
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Aug 2023 09:49:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691686172;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tge3O5xH64mxBw706PQBRXVPAQR3V2nMkvoZ63xOAkM=;
-        b=VCL8S9eJ0Eg+0phM0U70dyD2jh86/g6IMOHqZF4jKKA5nTxiXLXdnWZEd4fRYMqs4xpPoj
-        b+aq+7auN9TkZmeBftEeWrm371254KLSZEH5nxp7qTHG/Z+ju8z+1YZn0UVxggGJZ+wTxp
-        p31wgKXCLz6tB6iWLompNwszJdUUhm0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-163-dr6RQufnMiCwlBoPe1VO0w-1; Thu, 10 Aug 2023 12:49:30 -0400
-X-MC-Unique: dr6RQufnMiCwlBoPe1VO0w-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3172a94b274so762095f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Aug 2023 09:49:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691686169; x=1692290969;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tge3O5xH64mxBw706PQBRXVPAQR3V2nMkvoZ63xOAkM=;
-        b=Y+r0Rmi53BTZ842p3EtWPUu2h8859hZvAVvQZYSyesQy3Cv8S5Okny2idaLg8WlzVS
-         1iAn+Nq/3vL9lQMRbjO5PyMmd1a/FihSmU4GAiTAu2LmYPAn9cWCgzx2czqGSY3jUY8m
-         nRHTH3Jk79gEN7yGAFaVjaYztquCuwiAjtMbS1MtyYaaCN/pWgVp2fhZNixNa+QjpMiJ
-         b9cGiB89iQGU5xPtvNONvZQGUj9qD3hPevXuk7FnEHvs6ezeJ6lGVuNJJKu1/svQiiIl
-         pgMljWY3eMIvX1rB8No5PmkXQT0KRzaQnsN50sMZ1LYEGThDocUheRicUuiNjcLIsOnR
-         4LEQ==
-X-Gm-Message-State: AOJu0YxsxP7Fqu60uIB1AB0Q47EnH1Pyurm1SmOZm7RkxWbv6zALd5Bm
-        4kuQd+DMLkjJlEsaOX+MyuHnQC12dw+CuSctHSJmBn4YVTULAREU4YKpL9Tau7OVIP4xsbFLBM/
-        ED0Nd0mQXSUDBrwFbV5j1AuFiV5aE
-X-Received: by 2002:adf:d08f:0:b0:314:15a8:7879 with SMTP id y15-20020adfd08f000000b0031415a87879mr2255461wrh.34.1691686169544;
-        Thu, 10 Aug 2023 09:49:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHq1BI0Gqfj+OV17MjOWpCbOf7zfRKHjnaHO0MoYGdJDjgjD3C4QZsV1UEojpyIp/BuDW68EA==
-X-Received: by 2002:adf:d08f:0:b0:314:15a8:7879 with SMTP id y15-20020adfd08f000000b0031415a87879mr2255431wrh.34.1691686169133;
-        Thu, 10 Aug 2023 09:49:29 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c71a:8a00:8200:f041:4b87:a8be? (p200300cbc71a8a008200f0414b87a8be.dip0.t-ipconnect.de. [2003:cb:c71a:8a00:8200:f041:4b87:a8be])
-        by smtp.gmail.com with ESMTPSA id o17-20020adfe811000000b0031762e89f94sm2657508wrm.117.2023.08.10.09.49.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Aug 2023 09:49:28 -0700 (PDT)
-Message-ID: <6a7bff41-259b-89f3-1a46-5b5b73d3fea1@redhat.com>
-Date:   Thu, 10 Aug 2023 18:49:26 +0200
+        Thu, 10 Aug 2023 13:14:52 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2044.outbound.protection.outlook.com [40.107.94.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D1C26A9;
+        Thu, 10 Aug 2023 10:14:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ty0Cy7bwu6EDuCtwqH/w4q9aX2rPM9N6HJiflY3SKo6dOpSNYM0oasDn4uCG1sltxQE52UGjI+muxeDr3ri4tjXEVGDGwCbebf/wU9E2IUFu5hLM9Zue6ZO7QuYGgY+vGaChru+lkqhzeNtBO9lNdvKl25WqHS5XoF+TfMwyJgc+4sEjmI3d07BbELLo2NJyrUMdSgvkM0xPemNTRYBhiXj7J0g1PcurJFYBAF3egePnyHX8Nun56r1XGqKz7TWQ9Dpk0SFgbLhirgY1dbczjKfW3KxbhbSt3k2L8gZgTFGjWbNBKNGo4tCItLm3ca60xPz75FJt2cl5DWHuLNqeQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Vgt/Mpcs8ArLfngkU8MD9Z9frW7tGAhbmUOzS59+OLE=;
+ b=Uhm+Q3TpwFfjx+hkEx5NoI2IYSiQ4ikvmzGsJORuxDWPg5CpNtnYpGucISa2byNJ7g9/EOl+Pf1QsadF8mGZQIOBnjoczSLOS+soq2NElxjSyOHRGSf+3Rq0AUW7FRLUsMpzMOqEp5llrIKxlmvoVogJqGAUao/tQyBcJJEzz0IUFWA7avQP2zq4gXSz6mH2U7bVosT1Uc9+21/cQxP07cq4lcjxDH9516+fa49vUHuaBTI4EjELTS849HdTqupjh+L9QTu0DyRBK3mKNDXDGN2k0otAxsdrpBZRW1xlpGWQSYUJJTvc4Ax+30Qj1FI/ZqlqldrF0c4hg/x36Opikw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Vgt/Mpcs8ArLfngkU8MD9Z9frW7tGAhbmUOzS59+OLE=;
+ b=XuhngiCuv5DIMGYBQZe15KBKDk/hTKRsenGWuyCn9J9f/TPYW+o1YF/2VQeS2G5mtqGE97o0w3utWhNPmspq/c6E4vGcmPrN/RwWA1ztOrnCW3g4VIEyw4EnFdOrmzQj+JGR19f42KBG/66p4Il7zhHV9HxDJ/Nejoft9a3pA8+wFpGmT3+MiRQcs98lQmtoF75A8aw2lKNSE3uVXnTGdqdv34jHr3+akaMbph5t+/ccrJhyCYjQW4XsYhJ1A4h57EVPiWRz7CjLF1apO3eKupesCTTdMDaLZH6eCyXk2TA3gmpVIVPkRfbfcpQWzFLV+O156hGrewqemu56yJDKnw==
+Received: from MW4PR03CA0048.namprd03.prod.outlook.com (2603:10b6:303:8e::23)
+ by CH3PR12MB9195.namprd12.prod.outlook.com (2603:10b6:610:1a3::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30; Thu, 10 Aug
+ 2023 17:14:49 +0000
+Received: from CO1PEPF000044F7.namprd21.prod.outlook.com
+ (2603:10b6:303:8e:cafe::1d) by MW4PR03CA0048.outlook.office365.com
+ (2603:10b6:303:8e::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30 via Frontend
+ Transport; Thu, 10 Aug 2023 17:14:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ CO1PEPF000044F7.mail.protection.outlook.com (10.167.241.197) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.0 via Frontend Transport; Thu, 10 Aug 2023 17:14:49 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 10 Aug 2023
+ 10:14:40 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Thu, 10 Aug 2023 10:14:39 -0700
+Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
+ Transport; Thu, 10 Aug 2023 10:14:38 -0700
+Date:   Thu, 10 Aug 2023 10:14:37 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v4 09/12] iommu/vt-d: Add iotlb flush for nested domain
+Message-ID: <ZNUa/VmeiIo0YA0v@Asurada-Nvidia>
+References: <BN9PR11MB5276BFFEC7E12EEBD4503BF08C12A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <DS0PR11MB7529C3646E38542457D7B75DC312A@DS0PR11MB7529.namprd11.prod.outlook.com>
+ <BN9PR11MB5276912120F662498910A1D48C12A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <DS0PR11MB7529C310FAEA61B6E7988629C312A@DS0PR11MB7529.namprd11.prod.outlook.com>
+ <ZNO92PIx2IQ70+DY@nvidia.com>
+ <ZNPlGd4/72dahSs4@Asurada-Nvidia>
+ <ZNPmpW3/zDnjqxyU@nvidia.com>
+ <ZNP0UKGU6id5wfc6@Asurada-Nvidia>
+ <BN9PR11MB527683351B687B97AB84B51B8C13A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZNUI0D7ZMvLWlBNx@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH mm-unstable fix] mm: userfaultfd: check for start + len
- overflow in validate_range: fix
-Content-Language: en-US
-To:     Ryan Roberts <ryan.roberts@arm.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Alumbaugh" <talumbau@google.com>,
-        Yu Zhao <yuzhao@google.com>,
-        ZhangPeng <zhangpeng362@huawei.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        syzbot+42309678e0bc7b32f8e9@syzkaller.appspotmail.com
-References: <20230714182932.2608735-1-axelrasmussen@google.com>
- <8fbb5965-28f7-4e9a-ac04-1406ed8fc2d4@arm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <8fbb5965-28f7-4e9a-ac04-1406ed8fc2d4@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZNUI0D7ZMvLWlBNx@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044F7:EE_|CH3PR12MB9195:EE_
+X-MS-Office365-Filtering-Correlation-Id: effefcfb-ffe2-4752-0e15-08db99c54d8f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1GYsI/53v8xMfDc4L7h/H0CmH/qXPY0XP0kpaG4r8lUMqEIy0ljq5+pM20nmOHGmMIHXSqLbPtLCqeh0buGZ4fSif6tI4ogyF1MDYbvt2MiGr+NUVIHySAr06CtlSpl4j5L5VBJIQI/L5JAuw/5S33u/MXQAZy7Mvw6IoAnXleCoeLRRbmNXvHYIN1rw2yTKpRl3KQC0lSIzey189ViU97FfvkC4j1c02+WrRzzoC/zJC5bWJCcoYSALQN1SmSxpPswZMok0+k4hfvG3kktRApS45XuXy7YOHjoKO2eLtvpDwAnq6I8CVSlg0uYwgDuVXhnX4UmqzVSV8Hi1xHuRx7j3u8Q0XCnBexyEEVpdNcPOaVQNAkju9JcFOKgQZQ0m/FgAAdouqrCwLsEXIw7MOxFmVi1LdBjpeIEodFTM157vkZHFeSoIoiVx0H5KsQDTuGBLDJWz+xdB54aeeJGrk/co09mL72PMUcJ6D4q5g14cTGXLOJEFnS6TEOMOneIkZGXzqRcAIf2efKAin3cB/BmHWHgtgIP9v6YWCqzVOXvvCtpSObNa8Q2JxufBBIlSqFX96K42o7x+/RjfwojTJNFpQjkqkIYjjx63ycv49XUukq/sYpiltpEpjuXb9FS2otDWgEmZ5zaH8d/yP7cRgNvkpDGFNzcyWz2SboodLEDCwO2gFXoijLtlwDhtuj2hy0j4nIL4z0bcp/sT8rSAODRdcAnwFwj6mJui9wM9J+evsLnuGDUCIWaviFM+h2qe
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(376002)(346002)(451199021)(186006)(1800799006)(82310400008)(36840700001)(46966006)(40470700004)(40460700003)(4326008)(6636002)(82740400003)(7416002)(356005)(7636003)(336012)(33716001)(41300700001)(70586007)(36860700001)(70206006)(40480700001)(47076005)(5660300002)(55016003)(426003)(83380400001)(316002)(54906003)(9686003)(8936002)(8676002)(6862004)(86362001)(2906002)(478600001)(26005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2023 17:14:49.1103
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: effefcfb-ffe2-4752-0e15-08db99c54d8f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044F7.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9195
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10.08.23 17:53, Ryan Roberts wrote:
-> On 14/07/2023 19:29, Axel Rasmussen wrote:
->> This commit removed an extra check for zero-length ranges, and folded it
->> into the common validate_range() helper used by all UFFD ioctls.
->>
->> It failed to notice though that UFFDIO_COPY *only* called validate_range
->> on the dst range, not the src range. So removing this check actually let
->> us proceed with zero-length source ranges, eventually hitting a BUG
->> further down in the call stack.
->>
->> The correct fix seems clear: call validate_range() on the src range too.
->>
->> Other ioctls are not affected by this, as they only have one range, not
->> two (src + dst).
->>
->> Reported-by: syzbot+42309678e0bc7b32f8e9@syzkaller.appspotmail.com
->> Closes: https://syzkaller.appspot.com/bug?extid=42309678e0bc7b32f8e9
->> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
->> ---
->>   fs/userfaultfd.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
->> index 53a7220c4679..36d233759233 100644
->> --- a/fs/userfaultfd.c
->> +++ b/fs/userfaultfd.c
->> @@ -1759,6 +1759,9 @@ static int userfaultfd_copy(struct userfaultfd_ctx *ctx,
->>   			   sizeof(uffdio_copy)-sizeof(__s64)))
->>   		goto out;
->>   
->> +	ret = validate_range(ctx->mm, uffdio_copy.src, uffdio_copy.len);
->> +	if (ret)
->> +		goto out;
->>   	ret = validate_range(ctx->mm, uffdio_copy.dst, uffdio_copy.len);
->>   	if (ret)
->>   		goto out;
+On Thu, Aug 10, 2023 at 12:57:04PM -0300, Jason Gunthorpe wrote:
+> On Thu, Aug 10, 2023 at 02:49:59AM +0000, Tian, Kevin wrote:
+> > > From: Nicolin Chen <nicolinc@nvidia.com>
+> > > Sent: Thursday, August 10, 2023 4:17 AM
+> > > 
+> > > On Wed, Aug 09, 2023 at 04:19:01PM -0300, Jason Gunthorpe wrote:
+> > > > On Wed, Aug 09, 2023 at 12:12:25PM -0700, Nicolin Chen wrote:
+> > > > > On Wed, Aug 09, 2023 at 01:24:56PM -0300, Jason Gunthorpe wrote:
+> > > > > > Similarly for managing the array of invalidation commands.
+> > > > >
+> > > > > You mean an embedded uptr inside a driver user data struct right?
+> > > > > Sure, that should go through the new helper too.
+> > > >
+> > > > If we are committed that all drivers have to process an array then put
+> > > > the array in the top level struct and pass it in the same user_data
+> > > > struct and use another helper to allow the driver to iterate through
+> > > > it.
+> > > 
+> > > I see. Both VTD and SMMU pass uptr to the arrays of invalidation
+> > > commands/requests. The only difference is that SMMU's array is a
+> > > ring buffer other than a plain one indexing from the beginning.
+> > > But the helper could take two index inputs, which should work for
+> > > VTD case too. If another IOMMU driver only supports one request,
+> > > rather than a array of requests, we can treat that as a single-
+> > > entry array.
+> > > 
+> > 
+> > I like this approach.
 > 
-> 
-> Hi Axel,
-> 
-> I've just noticed that this patch, now in mm-unstable, regresses the mkdirty mm
-> selftest:
-> 
-> # [INFO] detected THP size: 2048 KiB
-> TAP version 13
-> 1..6
-> # [INFO] PTRACE write access
-> ok 1 SIGSEGV generated, page not modified
-> # [INFO] PTRACE write access to THP
-> ok 2 SIGSEGV generated, page not modified
-> # [INFO] Page migration
-> ok 3 SIGSEGV generated, page not modified
-> # [INFO] Page migration of THP
-> ok 4 SIGSEGV generated, page not modified
-> # [INFO] PTE-mapping a THP
-> ok 5 SIGSEGV generated, page not modified
-> # [INFO] UFFDIO_COPY
-> not ok 6 UFFDIO_COPY failed
-> Bail out! 1 out of 6 tests failed
-> # Totals: pass:5 fail:1 xfail:0 xpass:0 skip:0 error:0
-> 
-> Whereas all 6 tests pass against v6.5-rc4.
-> 
-> I'm afraid I don't know the test well and haven't looked at what the issue might
-> be, but noticed and thought I should point it out.
+> Do we need to worry about the ring wrap around? It is already the case
+> that the VMM has to scan the ring and extract the invalidation
+> commands, wouldn't it already just linearize them?
 
-That test (written by me ;) ) essentially does
+I haven't got the chance to send the latest vSMMU series but I
+pass down the raw user CMDQ to the host to go through, as it'd
+be easier to stall the consumer index movement when a command
+in the middle fails.
 
-src = malloc(pagesize);
-dst = mmap(NULL, pagesize, PROT_READ, MAP_PRIVATE|MAP_ANON, -1, 0)
-...
+> Is there a use case for invaliation only SW emulated rings, and do we
+> care about optimizing for the wrap around case?
 
-uffdio_copy.dst = (unsigned long) dst;
-uffdio_copy.src = (unsigned long) src;
-uffdio_copy.len = pagesize;
-uffdio_copy.mode = 0;
-if (ioctl(uffd, UFFDIO_COPY, &uffdio_copy)) {
-...
+Hmm, why a SW emulated ring?
 
+Yes for the latter question. SMMU kernel driver has something
+like Q_WRP and other helpers, so it wasn't difficult to process
+the user CMDQ in the same raw form. But it does complicates the
+common code if we want to do it there.
 
-So src might not be aligned to a full page.
-
-According to the man page:
-
-"EINVAL Either dst or len was not a multiple of the system page size, or 
-the range specified by src and len or dst and len was invalid."
-
-So, AFAIKT, there is no requirement for src to be page-aligned.
-
-Using validate_range() on the src is wrong.
-
--- 
-Cheers,
-
-David / dhildenb
-
+Thanks
+Nic
