@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FA677989C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 22:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A1E77989F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 22:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjHKUcu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Aug 2023 16:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
+        id S233523AbjHKUd5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Aug 2023 16:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234601AbjHKUct (ORCPT
+        with ESMTP id S230153AbjHKUd5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Aug 2023 16:32:49 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B6518E;
-        Fri, 11 Aug 2023 13:32:48 -0700 (PDT)
-X-QQ-mid: bizesmtp74t1691785963tp54ggzl
+        Fri, 11 Aug 2023 16:33:57 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B747618B;
+        Fri, 11 Aug 2023 13:33:55 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1691786030ts4c8dvh
 Received: from linux-lab-host.localdomain ( [116.30.128.116])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 12 Aug 2023 04:32:42 +0800 (CST)
+        id ; Sat, 12 Aug 2023 04:33:49 +0800 (CST)
 X-QQ-SSF: 01200000002000E0X000B00A0000000
-X-QQ-FEAT: +ynUkgUhZJmk+CmCBh8hIWz7kAw/TgBO6SK/g3i3wf3qZL1DjYMFDwQpLi61w
-        QrkXy+r9OW+Wp8HSnO76LSPbMqIxJjDmNxbqur9WbAzA3u7JISFeDOMqkoP3lHEJ5IP2KxM
-        Du26jloWTDgWRPDhYE9/4HWirH0fMkbvCfL6EZ4wPf1cb1JvrsIes1wxcxn+68Xbnmu9pBm
-        JBvPHO54FvcVguAcMFURVp9vMhRE+3Sup3pat94nDCP8/cuAjBJyVjiUf4sdc1e0jTUU72q
-        ZHXX5VNPFOTFwHQFW0QQSWlDlbAtn7Fs9uuxyDN6eN+WKgB8Cc9BC04muM4DpmI77vTSL51
-        X36+B3RYg6jr9B7+XZHLHVdQVUpSRMk/2cCM/Vxow6BufaIvYaRRIrp0jrcH82VKkxt6/yf
+X-QQ-FEAT: +ynUkgUhZJl3WY6C5uvcvVVodeorT98CN4gBSPLs8ljQvf3SUgVweUZ5odeml
+        jBoWGtzPGyigtk2lzzaV7dxp7YDXE01eLeKimDced/7TqZeA5MPIXnVYtl7X7Yc70WHEHT9
+        oiSr6ElMCxKbjQupSBxnAp0jY7+jQL64ADS4h8g7YttibF5eRAxDTxOjNZ03RheQ4nQMqR8
+        iR+6GG/xBozmKozu0CMuk7+4aKKhj0kESIDRfcuAJvIj9N1bs/IAwLvaW4MgfaEK9A4Ouw1
+        4wVjmg/GcO2mePQLGWdPVuVl5m7ZWm40EqkqpNtpDUN4gxHz1aic0MilaOmfiMI6zIAPYaw
+        Ulfngh8zC1LMBSK6aVyEIiEPKyJOzYI8ugrt/qxlFQdSQXIgydbsCeo5vnZ/I9Q+HVqUkUV
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10532850792558521576
+X-BIZMAIL-ID: 17079127722739655232
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     falcon@tinylab.org, w@1wt.eu
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         tanyuan@tinylab.org, thomas@t-8ch.de
-Subject: [PATCH v2 5/7] selftests/nolibc: customize CROSS_COMPILE for all architectures
-Date:   Sat, 12 Aug 2023 04:32:41 +0800
-Message-Id: <a5deb231269cff5225be8331888fbea19337d5f9.1691783604.git.falcon@tinylab.org>
+Subject: [PATCH v2 6/7] selftests/nolibc: import cc-cross-prefix macro
+Date:   Sat, 12 Aug 2023 04:33:48 +0800
+Message-Id: <ed99c37b653b909348a7e99e5fc51cf676008002.1691783604.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1691783604.git.falcon@tinylab.org>
 References: <cover.1691783604.git.falcon@tinylab.org>
@@ -42,7 +42,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,64 +50,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This simplifies the 'make' commands for nolibc supported architectures,
-only requires the XARCH option now.
+cc-cross-prefix is required to return first <prefix> where a <prefix>gcc
+is found in PATH, this allows to customize more than one cross compiler.
 
-As suggested by Willy, the small, newest and obtainable cross toolchains
-from [1] are customized by default, users must download, decompress and
-configure the bin/ path to the PATH environment variable manually.
-
-If still want to use a cross toolchain from local software repositories,
-we can also pass CROSS_COMPILE, CROSS_COMPILE_$(XARCH) or even CC from
-command line.
-
-After carefully install and configure $(CROSS_COMPILE_$(XARCH)),
-qemu-system-$(XARCH) and qemu-$(XARCH), it is able to run tests for the
-architectures or their variants like this:
-
-    $ ARCHS="i386 x86_64 arm64 arm mips ppc ppc64 ppc64le riscv s390 loongarch"
-    $ for arch in ${ARCHS[@]}; do printf "%9s: " $arch; make run-user XARCH=$arch | grep status; done
-    $ for arch in ${ARCHS[@]}; do printf "%9s: " $arch; make defconfig run XARCH=$arch | grep status; done
-
-[1]: https://mirrors.edge.kernel.org/pub/tools/crosstool/
+Since scripts/Makefile.compiler provides cc-option too, let's use it
+instead of tools/build/Build.include.
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/Makefile | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ tools/testing/selftests/nolibc/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 5aff60d31d72..9a787fdf9842 100644
+index 9a787fdf9842..7687988c780b 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -55,6 +55,27 @@ IMAGE            = $(IMAGE_$(XARCH))
- IMAGE_NAME       = $(notdir $(IMAGE))
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for nolibc tests
+-# We need this for the "cc-option" macro.
+-include ../../../build/Build.include
++# We need this for the "cc-option" and "cc-cross-prefix" macros.
++include ../../../../scripts/Makefile.compiler
  
- # CROSS_COMPILE: cross toolchain prefix by architecture
-+#
-+# Notes,
-+# - The small, newest and obtainable cross toolchains from [1] are recommended,
-+#   Please download, decompress and add the bin/ path to 'PATH' env variable
-+# - To use another cross compiler, pass 'CROSS_COMPLE', 'CROSS_COMPILE_$(XARCH)'
-+#   by variant or even 'CC' from command line
-+#
-+# [1]: https://mirrors.edge.kernel.org/pub/tools/crosstool/
-+
-+CROSS_COMPILE_i386      ?= x86_64-linux-
-+CROSS_COMPILE_x86_64    ?= x86_64-linux-
-+CROSS_COMPILE_x86       ?= x86_64-linux-
-+CROSS_COMPILE_arm64     ?= aarch64-linux-
-+CROSS_COMPILE_arm       ?= arm-linux-gnueabi-
-+CROSS_COMPILE_mips      ?= mips64-linux-
-+CROSS_COMPILE_ppc       ?= powerpc64-linux-
-+CROSS_COMPILE_ppc64     ?= powerpc64-linux-
-+CROSS_COMPILE_ppc64le   ?= powerpc64-linux-
-+CROSS_COMPILE_riscv     ?= riscv64-linux-
-+CROSS_COMPILE_s390      ?= s390-linux-
-+CROSS_COMPILE_loongarch ?= loongarch64-linux-
- CROSS_COMPILE           ?= $(CROSS_COMPILE_$(XARCH))
- 
- # Make CC is always prefixed with $(CROSS_COMPILE)
+ # we're in ".../tools/testing/selftests/nolibc"
+ ifeq ($(srctree),)
 -- 
 2.25.1
 
