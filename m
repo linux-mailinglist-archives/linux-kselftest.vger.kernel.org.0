@@ -2,164 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0682778722
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 07:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2A3778755
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 08:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbjHKFx5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Aug 2023 01:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S233570AbjHKGRi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Aug 2023 02:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbjHKFxy (ORCPT
+        with ESMTP id S231214AbjHKGRh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Aug 2023 01:53:54 -0400
-Received: from out-66.mta1.migadu.com (out-66.mta1.migadu.com [IPv6:2001:41d0:203:375::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F782D43
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Aug 2023 22:53:52 -0700 (PDT)
-Message-ID: <ffd1bb86-ed32-3301-346a-e369219841de@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1691733229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a0vN514ycLDgfH8MPcX9gq+8dxj3gNQV5oVnf0li0cE=;
-        b=JGmgvn6cT7iTucUb6YruBhmAOZ9kEYGTR86F5nxUdlIxB1sAjLg16WTdyyeLeQTmzqgKdH
-        jGa16MemhcwHh+bjncETZ1dIBXUzxGMceG+QpeyqE8KeRwXCnrlguN+d04BUCLqtJo7fjP
-        XWZKQ8rVNuEVS9ZwUFm0eyigLr88Kog=
-Date:   Thu, 10 Aug 2023 22:53:38 -0700
+        Fri, 11 Aug 2023 02:17:37 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E602D4F
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Aug 2023 23:17:36 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1bc7e65ea44so11977865ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Aug 2023 23:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691734656; x=1692339456;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zT3po1gHIt6nPnvjsqOOvRKd1niJj75SVykGMENxpsE=;
+        b=CspI2QH/oPGq3QjFLjbOhAgBHsclK/zfrD/U/vxI0yWfOjtL8ftBGpzRjqU4PUaAL6
+         ofDVscUYH3PeuOn5xSkr2RnTzeXHOQgecckMFMV62bGm9qJfBSiu0OUcyHn1Rt9PjNM9
+         ANLlgpOPQo9d1nSHqZUCNLHI3I4MZSu2SONMN71BbVzpSUYxbXofbXfpYRhrwLNXTEwp
+         WRHkt3lnAzcaHu3t54x+2uHQxZIglWW5YPluFfUVmXAC6m2ZFTpjKttVxmEc6uMnLFut
+         y+Doyr4BOUIW3rLUeO7McH8cW40GoCNWQOiLbTOeMQkJIocmg8t3/zrr0DZKLR8DhyG3
+         XMqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691734656; x=1692339456;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zT3po1gHIt6nPnvjsqOOvRKd1niJj75SVykGMENxpsE=;
+        b=PqWI5A6pqrwkZYH0jBxzd7q89nxIyZLcZQUnZIAp3P9volCHoDGBxNdFcRGDMjcDHU
+         LmOzPhvs87mpgdmtj5JaAqEuCYJebLvDOgw29+dw0zrCx81QqhPxziv2farY1MS9Fmu7
+         RHDLqOb6qR6sQZnF7ZWhAbay7LBXNcpp5SFaClAF/a8tOZvGgfaOnpYRtHO70UIV4sB6
+         uFPK/Zwu4VxPDB3JzdV2rJxjUDf0vw41UDqCIUDO7rCZdDlNbS2Ub0gp0nRzQjGInpSA
+         PJwjjBV4EPt22+sEPXKKM1FO0qa1AY8M4bw+x79aMoMzpQRkL3GV+qXffk+rCh25Xq8j
+         gcrg==
+X-Gm-Message-State: AOJu0YzkW5S0JmKC62p8YH3AdXE7iI+9AiTMiObfc2XevGKqOoB7r3Dh
+        kmQn2TVJbjjUGRl+CpsQvz3qeA==
+X-Google-Smtp-Source: AGHT+IFKziwPEu+qyJ63lojKtvSeYDeu+04YrQlRjRIh2+V5Kvfbjv07QAHfSLIpUnieYaUVrXz30w==
+X-Received: by 2002:a17:902:e84f:b0:1bc:e37:aa76 with SMTP id t15-20020a170902e84f00b001bc0e37aa76mr5729526plg.6.1691734656165;
+        Thu, 10 Aug 2023 23:17:36 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id l5-20020a170903120500b001bbc8d65de0sm2913338plh.67.2023.08.10.23.17.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Aug 2023 23:17:35 -0700 (PDT)
+Date:   Fri, 11 Aug 2023 11:47:33 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Meng Li <li.meng@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH V2] cpufreq: amd-pstate-ut: Modify the function to get
+ the highest_perf value
+Message-ID: <20230811061733.mvqlir3nbnzdp6tx@vireshk-i7>
+References: <20230803014354.3304825-1-li.meng@amd.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v11 2/5] selftests/bpf: Use random netns name for
- mptcp
-Content-Language: en-US
-To:     Geliang Tang <geliang.tang@suse.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Simon Horman <horms@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <cover.1691125344.git.geliang.tang@suse.com>
- <15d7646940fcbb8477b1be1aa11a5d5485d10b48.1691125344.git.geliang.tang@suse.com>
- <8b706f66-2afa-b3d0-a13a-11f1ffb452fe@linux.dev>
- <20230807064044.GA11180@localhost.localdomain>
- <9a84e026-402d-b6d9-b6d1-57d91455da47@linux.dev>
- <20230809081944.GA29707@bogon>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20230809081944.GA29707@bogon>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230803014354.3304825-1-li.meng@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/9/23 1:19 AM, Geliang Tang wrote:
-> On Tue, Aug 08, 2023 at 11:03:30PM -0700, Martin KaFai Lau wrote:
->> On 8/6/23 11:40 PM, Geliang Tang wrote:
->>> On Fri, Aug 04, 2023 at 05:23:32PM -0700, Martin KaFai Lau wrote:
->>>> On 8/3/23 10:07 PM, Geliang Tang wrote:
->>>>> Use rand() to generate a random netns name instead of using the fixed
->>>>> name "mptcp_ns" for every test.
->>>>>
->>>>> By doing that, we can re-launch the test even if there was an issue
->>>>> removing the previous netns or if by accident, a netns with this generic
->>>>> name already existed on the system.
->>>>>
->>>>> Note that using a different name each will also help adding more
->>>>> subtests in future commits.
->>>
->>> Hi Martin,
->>>
->>> I tried to run mptcp tests simultaneously, and got "Cannot create
->>> namespace file "/var/run/netns/mptcp_ns": File exists" errors sometimes.
->>> So I add this patch to fix it.
->>>
->>> It's easy to reproduce, just run this commands in multiple terminals:
->>>    > for i in `seq 1 100`; do sudo ./test_progs -t mptcp; done
->>
->> Not only the "-t mptcp" test. Other tests in test_progs also don't support
->> running parallel in multiple terminals. Does it really help to test the bpf
->> part of the prog_tests/mptcp.c test by running like this? If it wants to
->> exercise the other mptcp networking specific code like this, a separate
->> mptcp test is needed outside of test_progs and it won't be run in the bpf
->> CI.
->>
->> If you agree, can you please avoid introducing unnecessary randomness to the
->> test_progs where bpf CI and most users don't run in this way?
+On 03-08-23, 09:43, Meng Li wrote:
+> The previous function amd_get_highest_perf() will be deprecated.
+> It can only return 166 or 255 by cpuinfo. For platforms that
+> support preferred core, the value of highest perf can be between
+> 166 and 255. Therefore, it will cause amd-pstate-ut to fail when
+> run amd_pstate_ut_check_perf().
 > 
-> Thanks Martin. Sure, I agree. Let's drop this patch.
+> Signed-off-by: Meng Li <li.meng@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate-ut.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks you.
+Applied. Thanks.
 
->> I have a high level question. In LPC 2022
->> (https://lpc.events/event/16/contributions/1354/), I recall there was idea
->> in using bpf to make other mptcp decision/policy. Any thought and progress
->> on this? This set which only uses bpf to change the protocol feels like an
->> incomplete solution.
-> 
-> We are implementing MPTCP packet scheduler using BPF. Patches aren't
-> sent to BPF mail list yet, only temporarily on our mptcp repo[1].
-> 
-> Here are the patches:
-> 
->   selftests/bpf: Add bpf_burst test
->   selftests/bpf: Add bpf_burst scheduler
->   bpf: Export more bpf_burst related functions
->   selftests/bpf: Add bpf_red test
->   selftests/bpf: Add bpf_red scheduler
->   selftests/bpf: Add bpf_rr test
->   selftests/bpf: Add bpf_rr scheduler
->   selftests/bpf: Add bpf_bkup test
->   selftests/bpf: Add bpf_bkup scheduler
->   selftests/bpf: Add bpf_first test
->   selftests/bpf: Add bpf_first scheduler
->   selftests/bpf: Add bpf scheduler test
->   selftests/bpf: add two mptcp netns helpers
->   selftests/bpf: use random netns name for mptcp
->   selftests/bpf: Add mptcp sched structs
->   bpf: Add bpf_mptcp_sched_kfunc_set
->   bpf: Add bpf_mptcp_sched_ops
-> 
-> If you could take a look at these patches in advance, I would greatly
-> appreciate it. Any feedback is welcome.
-> 
-> [1]
-> https://github.com/multipath-tcp/mptcp_net-next.git
-
-Thanks for sharing. I did not go into the details. iiuc, the scheduler is 
-specific to a namespace. Do you see if it is useful to have more finer control 
-like depending on what IP address it is connected to? BPF policy is usually 
-found more useful to have finer policy control than global or per-netns.
-
-The same question goes for the fmod_ret here in this patch. The progs/mptcpify.c 
-selftest is as good as upgrading all TCP connections. Is it your only use case 
-and no need for finer selection?
-
+-- 
+viresh
