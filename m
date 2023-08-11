@@ -2,127 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D963A7798A2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 22:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B1E7798E6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 22:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236199AbjHKUfE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Aug 2023 16:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S236246AbjHKUw0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Aug 2023 16:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjHKUfE (ORCPT
+        with ESMTP id S233925AbjHKUwZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Aug 2023 16:35:04 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531C51AA;
-        Fri, 11 Aug 2023 13:35:03 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1691786097t68neb4h
-Received: from linux-lab-host.localdomain ( [116.30.128.116])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 12 Aug 2023 04:34:56 +0800 (CST)
-X-QQ-SSF: 01200000002000E0X000B00A0000000
-X-QQ-FEAT: X8eDqSQ5BkoKQePf2zVu8YMMFfNFjgBgxrLs2bAsPeoLTEUbzreCZd+1mSd20
-        7U3TEs36Uo9gkL4FqLIEZtzmKcjTET+hKQVgGRen90EEjks1kEZ2RdYJHJ1K60hBz0ekXsq
-        EwXwQaUkkaWjEQ4/xwiAcD4sJvBPi62L6Xt0+/7eZgk2y5ce5xWUfnAWqTvsrWBuO+hsPvh
-        Y0z7i6GriAoG00RsA3sB2j1wNDC2I8o71hN2UdMxANB5rFiESNUYMZ/TjksRcXH0HVuOJiJ
-        Zil6yT8ZDR7IGL5eEb0DLZ9z4yr1ziQS6AH8YcVZLVzTVw/Oekri+azHmh87U2b8mZR/dLp
-        7Zq35cw61OiwR9RAEyzQq7vw06R9hH//KTJUlbFHGiHhhcr4R+2DsEczjk/zuqG2BtqLzYB
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10952256110585604528
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     falcon@tinylab.org, w@1wt.eu
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tanyuan@tinylab.org, thomas@t-8ch.de
-Subject: [PATCH v2 7/7] selftests/nolibc: allow use cross toolchains from software repository
-Date:   Sat, 12 Aug 2023 04:34:55 +0800
-Message-Id: <b06de47989e3138de3d178da0d705ad6560924ec.1691783604.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1691783604.git.falcon@tinylab.org>
-References: <cover.1691783604.git.falcon@tinylab.org>
+        Fri, 11 Aug 2023 16:52:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62D330DB
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Aug 2023 13:51:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1691787097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=T8aVoixM0xxO+gfsUyyhZDp4bChNMHCVGjLRMPROvP8=;
+        b=ND/zo0nfbyrtRPuOhDKVA89mjhP7jQ/8rPPwXm/ydLLvYZAGMrS1jlCMXrP6qVqp/yMhdc
+        YpXEJa/3fXPMNheY6Ng7/wjbHVTjv8AH7/bHk0VZjOb9V18azI9IKNFOCPdyjhoMCfb3Hi
+        MdUgI563ajbPd2qA89pZLO7KZULDgdI=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-292-7FhJPhHpNWaL1-zEqfgUAQ-1; Fri, 11 Aug 2023 16:51:35 -0400
+X-MC-Unique: 7FhJPhHpNWaL1-zEqfgUAQ-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-642efbdc73fso1739356d6.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Aug 2023 13:51:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691787095; x=1692391895;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T8aVoixM0xxO+gfsUyyhZDp4bChNMHCVGjLRMPROvP8=;
+        b=ag9QDxkz8ho6FI6XMbIMRd7YCvij5NejNwgW0xLk9nhl4qasa/15UoTUM/rtigK0xU
+         Ajx+JFxiqXSWuy8E7uuVhgeDBhlXpdEsKGxgre6TxZIPKgNMzkEUY58cRvsw+1FsMDPH
+         xCsA0DlXplI3M3YaZfPbgVfh9MLR7WFZvCEtPKOF631T365STVfbZ2UHbwyzXXPmYMYI
+         QXRcJZT5it6W5mT+Uv1PJ65zA6GFaBwP4eB7G9haVPuGCGMch4tJQYYoS//8l+MbuXlT
+         xF9N5PHubYecR30yy3S8Qbb/4mQt/DsXtcz9bM2WM06qKcncf6hKYG+I03ZNBzVjXRo1
+         j58Q==
+X-Gm-Message-State: AOJu0YwPmGrEccTYwiVZR/7avgiUCnbjkrNbSNpF7Q1j0Xd4E890ZXgd
+        QieAUAGRhAXImzAqR1CHgx8urTR9CrpQPQDyxjV8Chr7n0wB+LIqU1URpiqFKg1n2xPISt2d4GV
+        BPX1tLZwtaiOKCQlhUa4sDcSSGNvR
+X-Received: by 2002:a05:6214:3002:b0:63f:7d29:1697 with SMTP id ke2-20020a056214300200b0063f7d291697mr3548985qvb.2.1691787094954;
+        Fri, 11 Aug 2023 13:51:34 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEsPsGGsWG+AWvL3NdKiHHIMNHgjAVmUCW2ANACa31+gfznIUk9YVZFCFV5mZXxugGUYOyp/w==
+X-Received: by 2002:a05:6214:3002:b0:63f:7d29:1697 with SMTP id ke2-20020a056214300200b0063f7d291697mr3548975qvb.2.1691787094629;
+        Fri, 11 Aug 2023 13:51:34 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id f8-20020a0caa88000000b00637873ff0f3sm1479316qvb.15.2023.08.11.13.51.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Aug 2023 13:51:32 -0700 (PDT)
+Date:   Fri, 11 Aug 2023 16:51:30 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Yu Zhao <yuzhao@google.com>,
+        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH mm-unstable fix] mm: userfaultfd: check for start + len
+ overflow in validate_range: fix
+Message-ID: <ZNafUoITDCuQOTMO@x1n>
+References: <20230810192128.1855570-1-axelrasmussen@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230810192128.1855570-1-axelrasmussen@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This allows users to install and use cross toolchains from local
-software repositories.
+On Thu, Aug 10, 2023 at 12:21:28PM -0700, Axel Rasmussen wrote:
+> A previous fixup to this commit fixed one issue, but introduced another:
+> we're now overly strict when validating the src address for UFFDIO_COPY.
+> 
+> Most of the validation in validate_range is useful to apply to src as
+> well as dst, but page alignment is only a requirement for dst, not src.
+> So, split the function up so src can use an "unaligned" variant, while
+> still allowing us to share the majority of the code between the
+> different cases.
+> 
+> Reported-by: Ryan Roberts <ryan.roberts@arm.com>
+> Closes: https://lore.kernel.org/linux-mm/8fbb5965-28f7-4e9a-ac04-1406ed8fc2d4@arm.com/T/#t
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
-The prefixes of local cross toolchains are appended to the
-CROSS_COMPILE_$(XARCH) list, cc-cross-prefix is called to search this
-list and return the first <prefix> where a <prefix>gcc is found in PATH.
+Acked-by: Peter Xu <peterx@redhat.com>
 
-Since different distributions have different prefixes, here only adds
-the frequently used ones.
-
-To use more prefixes not listed in Makefile, please put the lines as
-following in your script and load it with a 'source' command:
-
-    export CROSS_COMPILE_i386="x86_64-linux-"
-    export CROSS_COMPILE_x86_64="x86_64-linux-"
-    export CROSS_COMPILE_x86="x86_64-linux-"
-    export CROSS_COMPILE_arm64="aarch64-linux-"
-    export CROSS_COMPILE_arm="arm-linux-gnueabi-"
-    export CROSS_COMPILE_mips="mips64-linux-"
-    export CROSS_COMPILE_ppc="powerpc64-linux-"
-    export CROSS_COMPILE_ppc64="powerpc64-linux-"
-    export CROSS_COMPILE_ppc64le="powerpc64-linux-"
-    export CROSS_COMPILE_riscv="riscv64-linux-"
-    export CROSS_COMPILE_s390="s390-linux-"
-    export CROSS_COMPILE_loongarch="loongarch64-linux-"
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/Makefile | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
-
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 7687988c780b..ef2507f12e24 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -59,24 +59,25 @@ IMAGE_NAME       = $(notdir $(IMAGE))
- # Notes,
- # - The small, newest and obtainable cross toolchains from [1] are recommended,
- #   Please download, decompress and add the bin/ path to 'PATH' env variable
-+# - The frequently used prefixes are added for local cross toolchains
- # - To use another cross compiler, pass 'CROSS_COMPLE', 'CROSS_COMPILE_$(XARCH)'
- #   by variant or even 'CC' from command line
- #
- # [1]: https://mirrors.edge.kernel.org/pub/tools/crosstool/
- 
--CROSS_COMPILE_i386      ?= x86_64-linux-
--CROSS_COMPILE_x86_64    ?= x86_64-linux-
--CROSS_COMPILE_x86       ?= x86_64-linux-
--CROSS_COMPILE_arm64     ?= aarch64-linux-
--CROSS_COMPILE_arm       ?= arm-linux-gnueabi-
--CROSS_COMPILE_mips      ?= mips64-linux-
--CROSS_COMPILE_ppc       ?= powerpc64-linux-
--CROSS_COMPILE_ppc64     ?= powerpc64-linux-
--CROSS_COMPILE_ppc64le   ?= powerpc64-linux-
--CROSS_COMPILE_riscv     ?= riscv64-linux-
--CROSS_COMPILE_s390      ?= s390-linux-
-+CROSS_COMPILE_i386      ?= x86_64-linux- x86_64-linux-gnu-
-+CROSS_COMPILE_x86_64    ?= x86_64-linux- x86_64-linux-gnu-
-+CROSS_COMPILE_x86       ?= x86_64-linux- x86_64-linux-gnu-
-+CROSS_COMPILE_arm64     ?= aarch64-linux- aarch64-linux-gnu-
-+CROSS_COMPILE_arm       ?= arm-linux-gnueabi- arm-none-eabi-
-+CROSS_COMPILE_mips      ?= mips64-linux- mips64el-linux-gnuabi64-
-+CROSS_COMPILE_ppc       ?= powerpc64-linux- powerpc-linux-gnu-
-+CROSS_COMPILE_ppc64     ?= powerpc64-linux- powerpc64le-linux-gnu-
-+CROSS_COMPILE_ppc64le   ?= powerpc64-linux- powerpc64le-linux-gnu-
-+CROSS_COMPILE_riscv     ?= riscv64-linux- riscv64-linux-gnu-
-+CROSS_COMPILE_s390      ?= s390-linux- s390x-linux-gnu-
- CROSS_COMPILE_loongarch ?= loongarch64-linux-
--CROSS_COMPILE           ?= $(CROSS_COMPILE_$(XARCH))
-+CROSS_COMPILE           ?= $(call cc-cross-prefix,$(CROSS_COMPILE_$(XARCH)))
- 
- # Make CC is always prefixed with $(CROSS_COMPILE)
- include ../../../scripts/Makefile.include
 -- 
-2.25.1
+Peter Xu
 
