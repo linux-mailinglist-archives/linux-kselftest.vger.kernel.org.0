@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E057799EC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 23:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6527799F2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 23:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237072AbjHKVvF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Aug 2023 17:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
+        id S236570AbjHKVwO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Aug 2023 17:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237070AbjHKVvE (ORCPT
+        with ESMTP id S235401AbjHKVwO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Aug 2023 17:51:04 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964DD2712;
-        Fri, 11 Aug 2023 14:51:03 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1691790647tk467uon
+        Fri, 11 Aug 2023 17:52:14 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E957271B;
+        Fri, 11 Aug 2023 14:52:10 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1691790715t2l3imm8
 Received: from linux-lab-host.localdomain ( [116.30.128.116])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 12 Aug 2023 05:50:45 +0800 (CST)
+        id ; Sat, 12 Aug 2023 05:51:53 +0800 (CST)
 X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: cknW069rtVdcYll5qSTwzsTfqXrvv75L0qlCqnV/4/VuNNA7AGW2lTfMec+rQ
-        gEw8mbCx55sIMZILg5KY6QqKA+LhLlKg5bADNzSAvAlfol9VlvGPKaKhHJ/bXqcbpBQY9gV
-        C0DVP4IGf98tFitIlQSyk5om2TtXNcx+SX7xsxiCPx7YbfwTS64JfQSNKLwptd5ADVtfSyf
-        I5AdAfTL6bbgRExXfcQMn7T9lmasM9eDj+0hWlw5iNtV8lDfnf2oti4bBDVfPw6G52Dnyto
-        jTDMKgGG4xzfJdBamFQYhuWsLwhYy4TPPJB72surXE19oa0ZzXscT77AHrYFWUEZLX8ySFy
-        7taB/RHQeSTab8kW2cW9spWFSz7nxNBDKqV9hqMf48knKOe2WazBXHc7rPhhA==
+X-QQ-FEAT: jGGC4gWX7WFEuWrQD10QYevA6rKFR5eyLN27zADU7mMJyUa1X6F5wj5b8c1PO
+        ER8oXLqoaZcj68vp2XW1IvvzWMXYjLid4rTDbWxcHY9+xK0LZ6TboYz9xrN1UuKrfZPeivH
+        Xhx+frlWCSJTPIl4qTvNiv+IIPg62gxZBtdjgSzG1OWsfAsHQZwMgx7V1TgW3uPw9evoaY9
+        f/3qSx8aKzolxDdGprJ9lCbNnqC8BdKQhSeoDf1ZVL0vz1omtIq9sC7KeFcpXHcLENpcFN+
+        ZEMfFnvLJZED4528TgM/+SpuC2OxOWzKeNxwVnytS785YBa97JXf5RSeKCPgFQkYpErIUmN
+        JyXdyk2gkVM2i9Ad6ukNE5KRQK4tVquu5jqDZvRRUNb6m1LNpMtGj4GfqQLSUQA0SHWLMTn
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10867541119786147020
+X-BIZMAIL-ID: 14313426769615256479
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, david.laight@aculab.com, arnd@arndb.de,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         tanyuan@tinylab.org, thomas@t-8ch.de
-Subject: [PATCH v6 1/2] tools/nolibc: let sys_brk, sys_mmap and sys_mmap2 return long
-Date:   Sat, 12 Aug 2023 05:50:45 +0800
-Message-Id: <82b584cbda5cee8d5318986644a2a64ba749a098.1691788036.git.falcon@tinylab.org>
+Subject: [PATCH v6 2/2] tools/nolibc: fix up size inflate regression
+Date:   Sat, 12 Aug 2023 05:51:53 +0800
+Message-Id: <96624cc918092737d35dd539d184de06dba7a9b8.1691788036.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1691788036.git.falcon@tinylab.org>
 References: <cover.1691788036.git.falcon@tinylab.org>
@@ -43,7 +43,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,107 +51,71 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Firstly, since the sys_* functions are internally used by our library
-routines, it is ok to let them preserve the 'long' return type of
-my_syscall<N> macros, that means not necessary to return pointer like
-their library routines do.
+As reported and suggested by Willy, the inline __sysret() helper
+introduces three types of conversions and increases the size:
 
-Secondly, in order to avoid the size inflating issues introduced by the
-sign extension, it is better to let __sysret() only accept integer input
-types, to do so, we must let all of the sys_* functions not return
-pointers.
+(1) the "unsigned long" argument to __sysret() forces a sign extension
+from all sys_* functions that used to return 'int'
 
-There are only three sys_* functions which return pointer, let's make
-them return 'long' instead of pointer.
+(2) the comparison with the error range now has to be performed on a
+'unsigned long' instead of an 'int'
 
-Link: https://lore.kernel.org/lkml/20230809221743.83107-1-falcon@tinylab.org/
+(3) the return value from __sysret() is a 'long' (note, a signed long)
+which then has to be turned back to an 'int' before being returned by the
+caller to satisfy the caller's prototype.
+
+To fix up this, firstly, let's use macro instead of inline function to
+preserves the input type and avoids these useless conversions (1), (3).
+
+Secondly, since all of the sys_* functions have been converted to return
+integer, now, it is able to remove comparison to a 'unsigned long'
+-MAX_ERRNO (2) and restore the simple sign comparison as before.
+
+Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/lkml/20230806095846.GB10627@1wt.eu/
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/arch-s390.h |  4 ++--
- tools/include/nolibc/sys.h       | 16 ++++++++--------
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ tools/include/nolibc/sys.h | 27 ++++++++++-----------------
+ 1 file changed, 10 insertions(+), 17 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
-index 5d60fd43f883..6396c2a6bc3a 100644
---- a/tools/include/nolibc/arch-s390.h
-+++ b/tools/include/nolibc/arch-s390.h
-@@ -160,7 +160,7 @@ struct s390_mmap_arg_struct {
- };
- 
- static __attribute__((unused))
--void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
-+long sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
- 	       off_t offset)
- {
- 	struct s390_mmap_arg_struct args = {
-@@ -172,7 +172,7 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
- 		.offset = (unsigned long)offset
- 	};
- 
--	return (void *)my_syscall1(__NR_mmap, &args);
-+	return my_syscall1(__NR_mmap, &args);
- }
- #define sys_mmap sys_mmap
- 
 diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 833d6c5e86dc..a28e7fbff448 100644
+index a28e7fbff448..e0b68d3532b6 100644
 --- a/tools/include/nolibc/sys.h
 +++ b/tools/include/nolibc/sys.h
-@@ -74,9 +74,9 @@ long __sysret(unsigned long ret)
-  */
+@@ -27,23 +27,16 @@
+ #include "errno.h"
+ #include "types.h"
  
- static __attribute__((unused))
--void *sys_brk(void *addr)
-+long sys_brk(void *addr)
- {
--	return (void *)my_syscall1(__NR_brk, addr);
-+	return my_syscall1(__NR_brk, addr);
- }
+-
+-/* Syscall return helper for library routines, set errno as -ret when ret is in
+- * range of [-MAX_ERRNO, -1]
+- *
+- * Note, No official reference states the errno range here aligns with musl
+- * (src/internal/syscall_ret.c) and glibc (sysdeps/unix/sysv/linux/sysdep.h)
+- */
+-
+-static __inline__ __attribute__((unused, always_inline))
+-long __sysret(unsigned long ret)
+-{
+-	if (ret >= (unsigned long)-MAX_ERRNO) {
+-		SET_ERRNO(-(long)ret);
+-		return -1;
+-	}
+-	return ret;
+-}
++/* Syscall return helper, set errno as -ret when ret < 0 */
++#define __sysret(arg)                        \
++({                                           \
++	__typeof__(arg) __ret = (arg);       \
++	if (__ret < 0) {                     \
++		SET_ERRNO(-__ret);           \
++		__ret = -1L;                 \
++	}                                    \
++	__ret;                               \
++})
  
- static __attribute__((unused))
-@@ -89,12 +89,12 @@ static __attribute__((unused))
- void *sbrk(intptr_t inc)
- {
- 	/* first call to find current end */
--	void *ret = sys_brk(0);
-+	void *ret = (void *)sys_brk(0);
- 
--	if (ret && sys_brk(ret + inc) == ret + inc)
-+	if (ret && (void *)sys_brk(ret + inc) == ret + inc)
- 		return ret + inc;
- 
--	return (void *)__sysret(-ENOMEM);
-+	return (void *)__sysret((long)-ENOMEM);
- }
- 
- 
-@@ -658,7 +658,7 @@ int mknod(const char *path, mode_t mode, dev_t dev)
- 
- #ifndef sys_mmap
- static __attribute__((unused))
--void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
-+long sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
- 	       off_t offset)
- {
- 	int n;
-@@ -670,7 +670,7 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
- 	n = __NR_mmap;
- #endif
- 
--	return (void *)my_syscall6(n, addr, length, prot, flags, fd, offset);
-+	return my_syscall6(n, addr, length, prot, flags, fd, offset);
- }
- #endif
- 
-@@ -682,7 +682,7 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
- static __attribute__((unused))
- void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
- {
--	return (void *)__sysret((unsigned long)sys_mmap(addr, length, prot, flags, fd, offset));
-+	return (void *)__sysret(sys_mmap(addr, length, prot, flags, fd, offset));
- }
- 
- static __attribute__((unused))
+ /* Functions in this file only describe syscalls. They're declared static so
+  * that the compiler usually decides to inline them while still being allowed
 -- 
 2.25.1
 
