@@ -2,126 +2,205 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B1E7798E6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 22:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B647799E2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 23:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236246AbjHKUw0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Aug 2023 16:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
+        id S236570AbjHKVt7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Aug 2023 17:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbjHKUwZ (ORCPT
+        with ESMTP id S236989AbjHKVt6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Aug 2023 16:52:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62D330DB
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Aug 2023 13:51:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691787097;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T8aVoixM0xxO+gfsUyyhZDp4bChNMHCVGjLRMPROvP8=;
-        b=ND/zo0nfbyrtRPuOhDKVA89mjhP7jQ/8rPPwXm/ydLLvYZAGMrS1jlCMXrP6qVqp/yMhdc
-        YpXEJa/3fXPMNheY6Ng7/wjbHVTjv8AH7/bHk0VZjOb9V18azI9IKNFOCPdyjhoMCfb3Hi
-        MdUgI563ajbPd2qA89pZLO7KZULDgdI=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-292-7FhJPhHpNWaL1-zEqfgUAQ-1; Fri, 11 Aug 2023 16:51:35 -0400
-X-MC-Unique: 7FhJPhHpNWaL1-zEqfgUAQ-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-642efbdc73fso1739356d6.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Aug 2023 13:51:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691787095; x=1692391895;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T8aVoixM0xxO+gfsUyyhZDp4bChNMHCVGjLRMPROvP8=;
-        b=ag9QDxkz8ho6FI6XMbIMRd7YCvij5NejNwgW0xLk9nhl4qasa/15UoTUM/rtigK0xU
-         Ajx+JFxiqXSWuy8E7uuVhgeDBhlXpdEsKGxgre6TxZIPKgNMzkEUY58cRvsw+1FsMDPH
-         xCsA0DlXplI3M3YaZfPbgVfh9MLR7WFZvCEtPKOF631T365STVfbZ2UHbwyzXXPmYMYI
-         QXRcJZT5it6W5mT+Uv1PJ65zA6GFaBwP4eB7G9haVPuGCGMch4tJQYYoS//8l+MbuXlT
-         xF9N5PHubYecR30yy3S8Qbb/4mQt/DsXtcz9bM2WM06qKcncf6hKYG+I03ZNBzVjXRo1
-         j58Q==
-X-Gm-Message-State: AOJu0YwPmGrEccTYwiVZR/7avgiUCnbjkrNbSNpF7Q1j0Xd4E890ZXgd
-        QieAUAGRhAXImzAqR1CHgx8urTR9CrpQPQDyxjV8Chr7n0wB+LIqU1URpiqFKg1n2xPISt2d4GV
-        BPX1tLZwtaiOKCQlhUa4sDcSSGNvR
-X-Received: by 2002:a05:6214:3002:b0:63f:7d29:1697 with SMTP id ke2-20020a056214300200b0063f7d291697mr3548985qvb.2.1691787094954;
-        Fri, 11 Aug 2023 13:51:34 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEsPsGGsWG+AWvL3NdKiHHIMNHgjAVmUCW2ANACa31+gfznIUk9YVZFCFV5mZXxugGUYOyp/w==
-X-Received: by 2002:a05:6214:3002:b0:63f:7d29:1697 with SMTP id ke2-20020a056214300200b0063f7d291697mr3548975qvb.2.1691787094629;
-        Fri, 11 Aug 2023 13:51:34 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id f8-20020a0caa88000000b00637873ff0f3sm1479316qvb.15.2023.08.11.13.51.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Aug 2023 13:51:32 -0700 (PDT)
-Date:   Fri, 11 Aug 2023 16:51:30 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Alumbaugh" <talumbau@google.com>,
-        Yu Zhao <yuzhao@google.com>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH mm-unstable fix] mm: userfaultfd: check for start + len
- overflow in validate_range: fix
-Message-ID: <ZNafUoITDCuQOTMO@x1n>
-References: <20230810192128.1855570-1-axelrasmussen@google.com>
+        Fri, 11 Aug 2023 17:49:58 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1880271B;
+        Fri, 11 Aug 2023 14:49:56 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1691790579tkj0p149
+Received: from linux-lab-host.localdomain ( [116.30.128.116])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 12 Aug 2023 05:49:37 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: 6ArnuSDJ+imdjIsPAg2aZv30ftS7gvrLOQT/s0i2uZr+N4GpwHnJHt6VK7wh1
+        biDC0h/O025nReykwSJTCXH4DssW37zZS2dabtY5B8HJJyugPHl7OCNk1vZxxinSkLiHt7S
+        vWhchCv0HLIiYyUZIEKbr8nTMF98Q055kZ6rRhXBi0A99EbJgVXlyvbmcdEI782kV4x4oW5
+        RKA6bd1xqCeZHTYnyN/B/UZj1WMwoARd76OGsVfQOBVawQfNPrCi3LSz9GH+F5dD36imZeI
+        p5sfHu+dxqKC4p8WBz8Z78SnxkaQ0OrqsNDXInn7CORNGUBHyCMim8fguBq4jTdm+5ucvpN
+        r9i9gQpb2cEFCWyRUOXgW5B5PYK+9misFDfHikwHi3UbSpGVhgXszGBMBApW+dmeBRsLg/B
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 10591784151840439354
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, david.laight@aculab.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tanyuan@tinylab.org, thomas@t-8ch.de
+Subject: [PATCH v6 0/2] tools/nolibc: fix up size inflat regression
+Date:   Sat, 12 Aug 2023 05:49:36 +0800
+Message-Id: <cover.1691788036.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230810192128.1855570-1-axelrasmussen@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 12:21:28PM -0700, Axel Rasmussen wrote:
-> A previous fixup to this commit fixed one issue, but introduced another:
-> we're now overly strict when validating the src address for UFFDIO_COPY.
-> 
-> Most of the validation in validate_range is useful to apply to src as
-> well as dst, but page alignment is only a requirement for dst, not src.
-> So, split the function up so src can use an "unaligned" variant, while
-> still allowing us to share the majority of the code between the
-> different cases.
-> 
-> Reported-by: Ryan Roberts <ryan.roberts@arm.com>
-> Closes: https://lore.kernel.org/linux-mm/8fbb5965-28f7-4e9a-ac04-1406ed8fc2d4@arm.com/T/#t
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+Hi, Willy
 
-Acked-by: Peter Xu <peterx@redhat.com>
+As we discussed in v5, I have proposed a my_syscall() macro, it can
+convert all of the sys_* functions to macros, and such macros can simply
+preserve input types from library routines and inherit the 'long' return
+type from my_syscall<N>. As a result, our __sysret() helper will only
+require to accept integer types and therefore we can simply revert it to
+our old sign comparison version (but as macro).
+
+I have already prepared a series of my_syscall() patchset but it
+includes several not that simple patches, before sending it for review,
+to directly solve the __sysret() issue at first, it is better to only
+convert the current three sys_* functions to return 'long' instead of
+pointer, which will make things easier.
+
+Here is the testing result on all archs (except loongarch) with Arnd's
+gcc 13.2.0, before testing it, we'd better apply the CROSS_COMPILE
+patchset [1] manually:
+
+    // before
+    $ ARCHS="i386 x86_64 arm64 arm mips ppc ppc64 ppc64le riscv s390"
+    $ for arch in ${ARCHS[@]}; do printf "%9s: " $arch; make run-user XARCH=$arch 2>/dev/null | grep status | tr '\n' ' '; \
+	size nolibc-test | tail -1 | tr '\t' ' ' | tr -s ' ' | cut -d ' ' -f2; done
+         i386: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 19654
+       x86_64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 22337
+        arm64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 26292
+          arm: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 23140
+         mips: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 23164
+          ppc: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 26812
+        ppc64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 27380
+      ppc64le: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 28004
+        riscv: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 22062
+         s390: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 22592 
+
+    // after
+    $ for arch in ${ARCHS[@]}; do printf "%9s: " $arch; make run-user XARCH=$arch 2>/dev/null | grep status | tr '\n' ' '; \
+	size nolibc-test | tail -1 | tr '\t' ' ' | tr -s ' ' | cut -d ' ' -f2; done
+         i386: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 19502
+       x86_64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 22000
+        arm64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 25860
+          arm: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 23108
+         mips: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 22908
+          ppc: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 26616
+        ppc64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 27192
+      ppc64le: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 27816
+        riscv: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 21790
+         s390: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 22184
+
+    // compare
+         i386: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 19654 -> 19502
+       x86_64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 22337 -> 22000
+        arm64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 26292 -> 25860
+          arm: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 23140 -> 23108
+         mips: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 23164 -> 22908
+          ppc: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 26812 -> 26616
+        ppc64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 27380 -> 27192
+      ppc64le: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 28004 -> 27816
+        riscv: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 22062 -> 21790
+         s390: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 22592 -> 22184
+
+After these two patches, will send the proposed my_syscall() patchset
+tomorrow, it can even further reduce more type conversions and therefore
+reduce more binary bytes, here is a preview of the testing result:
+
+   // with the coming my_syscall() patchset, sys_* from functionsn to macros
+     i386: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 19250
+   x86_64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 21733
+    arm64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 25804
+      arm: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 22828
+     mips: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 22740
+      ppc: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 26376
+    ppc64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 26752
+  ppc64le: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 27360
+    riscv: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 21746
+     s390: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 21928
+
+   // compare: __sysret() function -> __sysret() macro -> sys_* macros
+         i386: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 19654 -> 19502 -> 19250 
+       x86_64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 22337 -> 22000 -> 21733
+        arm64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 26292 -> 25860 -> 25804
+          arm: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 23140 -> 23108 -> 22828
+         mips: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 23164 -> 22908 -> 22740
+          ppc: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 26812 -> 26616 -> 26376
+        ppc64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 27380 -> 27192 -> 26752
+      ppc64le: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 28004 -> 27816 -> 27360
+        riscv: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 22062 -> 21790 -> 21746
+         s390: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 22592 -> 22184 -> 21928
+
+It can also shrink the whole sys.h from 1171 lines to around 738 lines.
+
+Changes from v5 --> v6:
+
+* The method introduced in v5 works but it is too complex ;-)
+
+* Convert the return type of sys_brk/mmap/mmap2 from pointer to 'long'
+  (like my_syscall<N> does), after this, all of the sys_* functions
+  return integer.
+
+* Restore __sysret() helper to sign comparison as originally, but also
+  use macro instead of inline function to avoid useless input type and
+  return type conversion.
+
+Changes from v4 --> v5:
+
+* Use __typeof__((arg) + 0) to lose the 'const' flag for old gcc
+  versions.
+
+* Import the famous __is_constexpr() macro from kernel side and add a
+  __is_pointer() macro based on it. (David, to avoid introduce extra
+  discuss on the prove-in-use __is_constexpr macro, this patch uses the
+  original version instead of your suggested version, more info here:
+  https://lore.kernel.org/lkml/20220131204357.1133674-1-keescook@chromium.org/)
+
+* Use __builtin_choose_expr() to merge two comparisons to share the same
+  errno setting code and the -1L assignment code.
+
+Changes from v3 --> v4:
+
+* fix up a new warning about 'ret < 0' when the input arg type is (void *)
+
+Changes from v2 --> v3:
+
+* define a __GXX_HAS_AUTO_TYPE_WITH_CONST_SUPPORT for gcc >= 11.0 (ABI_VERSION >= 1016)
+* split __sysret() to two versions by the macro instead of a mixed unified and unreadable version
+* use shorter __ret instead of __sysret_arg
+
+Changes from v1 --> v2:
+
+* fix up argument with 'const' in the type
+* support "void *" argument
+
+
+Best regards,
+Zhangjin Wu
+---
+
+v5: https://lore.kernel.org/lkml/b6ff2684f557f6ce00151905990643e651391614.1691437328.git.falcon@tinylab.org/
+v4: https://lore.kernel.org/lkml/a4084f7fac7a89f861b5582774bc7a98634d1e76.1691392805.git.falcon@tinylab.org/
+v3: https://lore.kernel.org/lkml/8eaab5da2dcbba42e3f3efc2ae686a22c95f84f0.1691386601.git.falcon@tinylab.org/
+v2: https://lore.kernel.org/lkml/95fe3e732f455fab653fe1427118d905e4d04257.1691339836.git.falcon@tinylab.org/
+v1: https://lore.kernel.org/lkml/20230806131921.52453-1-falcon@tinylab.org/
+
+[1]: https://lore.kernel.org/lkml/cover.1691783604.git.falcon@tinylab.org/
+
+Zhangjin Wu (2):
+  tools/nolibc: let sys_brk, sys_mmap and sys_mmap2 return long
+  tools/nolibc: fix up size inflate regression
+
+ tools/include/nolibc/arch-s390.h |  4 +--
+ tools/include/nolibc/sys.h       | 43 +++++++++++++-------------------
+ 2 files changed, 20 insertions(+), 27 deletions(-)
 
 -- 
-Peter Xu
+2.25.1
 
