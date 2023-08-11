@@ -2,88 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17777791A3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 16:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2EB7791B8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 16:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235397AbjHKORS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Aug 2023 10:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
+        id S232559AbjHKOXX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Aug 2023 10:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235808AbjHKORO (ORCPT
+        with ESMTP id S232453AbjHKOXW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Aug 2023 10:17:14 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ACE2706;
-        Fri, 11 Aug 2023 07:17:01 -0700 (PDT)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+        Fri, 11 Aug 2023 10:23:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C85E53;
+        Fri, 11 Aug 2023 07:23:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F1E446607247;
-        Fri, 11 Aug 2023 15:16:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1691763419;
-        bh=NZlwVv6zfIFpXPe7gaVoJDJ6zhVLPAy87Kilc5JeT1E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IrTmanFGMYBw2UDSuTY+IFBMMkyHRoMJ4Nq+idLsIYKvBJclwmAhm4+iPptpQJN5A
-         HqJWWCXHMBUEAwjVx2vQ3KYWPcSMgmvuOithi9eP1n+obhS2NXbfK04V3dzP/0CK3L
-         ndZpjntTTim3BnDtAGhiFhzTb9zI2wQ4lNnmPH33ehV2wgLeMGZjqjuIvK4lbH3pW2
-         5pGkeWPtynt5FAKQ1vC4kM+fucxNt3lzGK70ACvsrMRZzVYi+2lowmJFsYgb9ADxq6
-         QOYOUb9nviBWASIbtoVKlVjg26LtbaOWNFxgER8Z+KqeB4HNIg8zVImwNthCIXU/mE
-         nRwBpMHKqmO2Q==
-Date:   Fri, 11 Aug 2023 10:16:52 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9695665A33;
+        Fri, 11 Aug 2023 14:23:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85887C433C8;
+        Fri, 11 Aug 2023 14:23:14 +0000 (UTC)
+Date:   Fri, 11 Aug 2023 15:23:12 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, cocci@inria.fr,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        kernelci@lists.linux.dev, Julia Lawall <Julia.Lawall@inria.fr>,
-        Bjorn Andersson <andersson@kernel.org>, kernel@collabora.com,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] kselftest: Add Devicetree unprobed devices test
-Message-ID: <b4b1f56b-94c0-4849-a7fc-9228b4e40dc7@notapiano>
-References: <20230810202413.1780286-1-nfraprado@collabora.com>
- <20230810202413.1780286-3-nfraprado@collabora.com>
- <ZNY9sBgzrEQVVQT+@finisterre.sirena.org.uk>
+Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 09/36] arm64/mm: Allocate PIE slots for EL0 guarded
+ control stack
+Message-ID: <ZNZEUEqJuHrdEa/c@arm.com>
+References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
+ <20230807-arm64-gcs-v4-9-68cfa37f9069@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZNY9sBgzrEQVVQT+@finisterre.sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230807-arm64-gcs-v4-9-68cfa37f9069@kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 11, 2023 at 02:54:56PM +0100, Mark Brown wrote:
-> On Thu, Aug 10, 2023 at 04:23:51PM -0400, Nícolas F. R. A. Prado wrote:
-> > Introduce a new kselftest to detect devices that were declared in the
-> > Devicetree, and are expected to be probed by a driver, but weren't.
-> > 
-> > The test uses two lists: a list of compatibles that can match a
-> > Devicetree device to a driver, and a list of compatibles that should be
-> > ignored. The first is automatically generated from a script that parses
-> > the kernel source using Coccinelle, and will be run as part of building
-> > this test, therefore Coccinelle is a build-time dependency for this
-> > test. The list of compatibles to ignore is a hand-crafted list to
-> > capture the few exceptions of compatibles that are expected to match a
-> > driver but not be bound to it.
-> 
-> This doesn't appear to produce KTAP output which is going to make it
-> less useful for generic kselftest runners.
+On Mon, Aug 07, 2023 at 11:00:14PM +0100, Mark Brown wrote:
+> diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
+> index eed814b00a38..b157ae0420ed 100644
+> --- a/arch/arm64/include/asm/pgtable-prot.h
+> +++ b/arch/arm64/include/asm/pgtable-prot.h
+> @@ -131,15 +131,23 @@ extern bool arm64_use_ng_mappings;
+>  /* 6:                                PTE_PXN | PTE_WRITE            */
+>  /* 7: PAGE_SHARED_EXEC               PTE_PXN | PTE_WRITE | PTE_USER */
+>  /* 8: PAGE_KERNEL_ROX      PTE_UXN                                  */
+> -/* 9:                      PTE_UXN |                       PTE_USER */
+> +/* 9: PAGE_GCS_RO          PTE_UXN |                       PTE_USER */
+>  /* a: PAGE_KERNEL_EXEC     PTE_UXN |           PTE_WRITE            */
+> -/* b:                      PTE_UXN |           PTE_WRITE | PTE_USER */
+> +/* b: PAGE_GCS             PTE_UXN |           PTE_WRITE | PTE_USER */
+>  /* c: PAGE_KERNEL_RO       PTE_UXN | PTE_PXN                        */
+>  /* d: PAGE_READONLY        PTE_UXN | PTE_PXN |             PTE_USER */
+>  /* e: PAGE_KERNEL          PTE_UXN | PTE_PXN | PTE_WRITE            */
+>  /* f: PAGE_SHARED          PTE_UXN | PTE_PXN | PTE_WRITE | PTE_USER */
+>  
+> +#define _PAGE_GCS	(_PAGE_DEFAULT | PTE_UXN | PTE_WRITE | PTE_USER)
+> +#define _PAGE_GCS_RO	(_PAGE_DEFAULT | PTE_UXN | PTE_USER)
+> +
+> +#define PAGE_GCS	__pgprot(_PAGE_GCS)
+> +#define PAGE_GCS_RO	__pgprot(_PAGE_GCS_RO)
+> +
+>  #define PIE_E0	( \
+> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS),           PIE_GCS)  | \
+> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS_RO),        PIE_R)   | \
+>  	PIRx_ELx_PERM(pte_pi_index(_PAGE_EXECONLY),      PIE_X_O) | \
+>  	PIRx_ELx_PERM(pte_pi_index(_PAGE_READONLY_EXEC), PIE_RX)  | \
+>  	PIRx_ELx_PERM(pte_pi_index(_PAGE_SHARED_EXEC),   PIE_RWX) | \
+> @@ -147,6 +155,8 @@ extern bool arm64_use_ng_mappings;
+>  	PIRx_ELx_PERM(pte_pi_index(_PAGE_SHARED),        PIE_RW))
+>  
+>  #define PIE_E1	( \
+> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS),           PIE_RW)      | \
+> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS_RO),        PIE_R)      | \
 
-Right, I'm going to need to rewrite it in C for that, but since I already had
-the shell script done, I decided to send it as is for the RFC, since I wanted to
-get feedback on the general approach more than anything.
+Had some thoughts on this. Why do we need the EL1 GCS attributes to map
+to RW? The instructions we'd use to write the shadow stack are the GCS
+'T' variants that run as user already.
 
-Thanks,
-Nícolas
+The only instructions we have in the kernel that would run as EL1 on a
+user address are the exclusives (futex code or the old deprecated
+emulation but we don't care about them in this context). So I wonder
+whether the kernel PIE entry could simply be PIE_NONE_O. Would this be
+too restrictive for future uses? Given the coherency between a GCS
+access and a standard data access, we may want to restrict it now until
+we have a use-case.
+
+-- 
+Catalin
