@@ -2,150 +2,193 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA0D779098
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 15:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8097790D0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 15:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbjHKNRt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Aug 2023 09:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S231211AbjHKNcj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Aug 2023 09:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjHKNRs (ORCPT
+        with ESMTP id S229523AbjHKNcj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Aug 2023 09:17:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E869F26A0;
-        Fri, 11 Aug 2023 06:17:47 -0700 (PDT)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BAECC6607247;
-        Fri, 11 Aug 2023 14:17:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1691759866;
-        bh=L9YasLlSzK5k+C3DoxCi9Qs1i1/Jfe91wWSnXZpz0PE=;
+        Fri, 11 Aug 2023 09:32:39 -0400
+Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D0F2D52;
+        Fri, 11 Aug 2023 06:32:38 -0700 (PDT)
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4RMl8c53QwzH1;
+        Fri, 11 Aug 2023 15:32:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1691760756; bh=NfrgfFGHCga9/EC5NbBTXDZZMQ+au5SsG2T+NouDd98=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l4gr2y6+v6uvPxZoRsge8aKFNhLdLxOvlD+Nyb0Owsm+ZmjXzxtJng++00GSR5n9V
-         /m/PLS6ePwLcciNzJ5wpB3S2uswrBqqGL/4pDvU9X93VY/ycDYBNV0SsAolwuzPIGw
-         EQ68F86OpAxnVwNn8BSTadCBTnSbKssPYSJNrmPbWsTgfuQoE2Dy35Epxuk0q81R+3
-         uetDCzkip61SSNIRcqNlqz/p+S7P/ad0LPIloe/2yCQGZWMRmQ1ONdE8YLQtbK4kh+
-         /iKdm0VQsSaaIZDaN0rKQLkICv6ACqAyS7yLbTxpblm0xO3xBpaKWurorPfF7ILOTt
-         Aas1zU6hflC5g==
-Date:   Fri, 11 Aug 2023 09:17:40 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, cocci@inria.fr,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        kernelci@lists.linux.dev, Julia Lawall <Julia.Lawall@inria.fr>,
-        Bjorn Andersson <andersson@kernel.org>, kernel@collabora.com,
-        Guenter Roeck <groeck@chromium.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] Add a test to catch unprobed Devicetree devices
-Message-ID: <7e915b52-c356-4a39-b286-27b31fa1abf9@notapiano>
-References: <20230810202413.1780286-1-nfraprado@collabora.com>
- <20230810214309.GA1226583-robh@kernel.org>
+        b=LrLplw1VKNapfSiTZM0ge43vU7/4YDPbdoM8upUMUpGUcvwmbVp2S1UWV1X9oowhK
+         2LW9XDZUrqRegyaDh1es58iNHcJhmITsYCWxHUS6avG+8V9flhoJREZaFx4Hz5Tr9e
+         xHbAy866iRFY572fHAogvK8ZCPWs9vKxuxZF9i3C601NDP84vpWwJx2KEflpIQzAf3
+         2i4DDZ31Y2P5RnRZBmU5DwHDLg/COv2TbaCKYZsSI2hhLe5kHHMz2VDJ7xVuVfPthy
+         E5ZR16V6YjH02Tl15rTTUWcotslLVJHCDb7ND4kC+kKsQyxri7RBlVIEb1EogZ/pBW
+         P6IYc0Bt7r64w==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.8 at mail
+Date:   Fri, 11 Aug 2023 15:32:31 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <emmir@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v28 2/6] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <ZNY4bz1450enHxlG@qmqm.qmqm.pl>
+References: <20230809061603.1969154-1-usama.anjum@collabora.com>
+ <20230809061603.1969154-3-usama.anjum@collabora.com>
+ <CABb0KFGqDo8hFohqpXewoquyLVZUhG-bRHxpw_PYXzGW9wXofQ@mail.gmail.com>
+ <97de19a3-bba2-9260-7741-cd5b6f4581e9@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230810214309.GA1226583-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <97de19a3-bba2-9260-7741-cd5b6f4581e9@collabora.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 03:43:09PM -0600, Rob Herring wrote:
-> On Thu, Aug 10, 2023 at 04:23:49PM -0400, N�colas F. R. A. Prado wrote:
+On Fri, Aug 11, 2023 at 05:02:44PM +0500, Muhammad Usama Anjum wrote:
+> On 8/10/23 10:32 PM, Michał Mirosław wrote:
+> > On Wed, 9 Aug 2023 at 08:16, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+[...]
+> >> --- a/fs/proc/task_mmu.c
+> >> +++ b/fs/proc/task_mmu.c
+> > [...]
+> >> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> >> +static unsigned long pagemap_thp_category(pmd_t pmd)
+> >> +{
+> >> +       unsigned long categories = PAGE_IS_HUGE;
+> >> +
+> >> +       if (pmd_present(pmd)) {
+> >> +               categories |= PAGE_IS_PRESENT;
+> >> +               if (!pmd_uffd_wp(pmd))
+> >> +                       categories |= PAGE_IS_WRITTEN;
+> >> +               if (is_zero_pfn(pmd_pfn(pmd)))
+> >> +                       categories |= PAGE_IS_PFNZERO;
+> >> +       } else if (is_swap_pmd(pmd)) {
+> >> +               categories |= PAGE_IS_SWAPPED;
+> >> +               if (!pmd_swp_uffd_wp(pmd))
+> >> +                       categories |= PAGE_IS_WRITTEN;
+> >> +       }
+> >> +
+> >> +       return categories;
+> >> +}
+> > I guess THPs can't be file-backed currently, but can we somehow mark
+> > this assumption so it can be easily found if the capability arrives?
+> Yeah, THPs cannot be file backed. Lets not care for some feature which may
+> not arrive in several years or eternity.
+
+Yes, it might not arrive. But please add at least a comment, so that it
+is clearly visible that lack if PAGE_IS_FILE here is intentional.
+
+> >> +#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+> >> +
+> >> +#ifdef CONFIG_HUGETLB_PAGE
+> >> +static unsigned long pagemap_hugetlb_category(pte_t pte)
+> >> +{
+> >> +       unsigned long categories = PAGE_IS_HUGE;
+> >> +
+> >> +       if (pte_present(pte)) {
+> >> +               categories |= PAGE_IS_PRESENT;
+> >> +               if (!huge_pte_uffd_wp(pte))
+> >> +                       categories |= PAGE_IS_WRITTEN;
+> >> +               if (!PageAnon(pte_page(pte)))
+> >> +                       categories |= PAGE_IS_FILE;
+> >> +               if (is_zero_pfn(pte_pfn(pte)))
+> >> +                       categories |= PAGE_IS_PFNZERO;
+> >> +       } else if (is_swap_pte(pte)) {
+> >> +               categories |= PAGE_IS_SWAPPED;
+> >> +               if (!pte_swp_uffd_wp_any(pte))
+> >> +                       categories |= PAGE_IS_WRITTEN;
+> >> +       }
 > > 
-> > Regressions that cause a device to no longer be probed by a driver can
-> > have a big impact on the platform's functionality, and despite being
-> > relatively common there isn't currently any generic test to detect them.
-> > As an example, bootrr [1] does test for device probe, but it requires
-> > defining the expected probed devices for each platform.
+> > BTW, can a HugeTLB page be file-backed and swapped out?
+> Accourding to pagemap_hugetlb_range(), file-backed HugeTLB page cannot be
+> swapped.
+
+Here too a comment that leaving out this case is intentional would be useful.
+
+> > [...]
+> >> +       walk_start = p.arg.start;
+> >> +       for (; walk_start < p.arg.end; walk_start = p.arg.walk_end) {
+[...[
+> >> +               ret = mmap_read_lock_killable(mm);
+> >> +               if (ret)
+> >> +                       break;
+> >> +               ret = walk_page_range(mm, walk_start, p.arg.end,
+> >> +                                     &pagemap_scan_ops, &p);
+> >> +               mmap_read_unlock(mm);
+[...]
+> >> +               if (ret != -ENOSPC || p.arg.vec_len - 1 == 0 ||
+> >> +                   p.found_pages == p.arg.max_pages)
+> >> +                       break;
 > > 
-> > Given that the Devicetree already provides a static description of
-> > devices on the system, it is a good basis for building such a test on
-> > top.
-> > 
-> > This series introduces a test to catch regressions that prevent devices
-> > from probing.
-> > 
-> > Patch 1 introduces a script to parse the kernel source using Coccinelle
-> > and extract all compatibles that can be matched by a Devicetree node to
-> > a driver. Patch 2 adds a kselftest that walks over the Devicetree nodes
-> > on the current platform and compares the compatibles to the ones on the
-> > list, and on an ignore list, to point out devices that failed to be
-> > probed.
-> > 
-> > A compatible list is needed because not all compatibles that can show up
-> > in a Devicetree node can be used to match to a driver, for example the
-> > code for that compatible might use "OF_DECLARE" type macros and avoid
-> > the driver framework, or the node might be controlled by a driver that
-> > was bound to a different node.
-> > 
-> > An ignore list is needed for the few cases where it's common for a
-> > driver to match a device but not probe, like for the "simple-mfd"
-> > compatible, where the driver only probes if that compatible is the
-> > node's first compatible.
-> > 
-> > Even though there's already scripts/dtc/dt-extract-compatibles that does
-> > a similar job, it didn't seem to find all compatibles, returning ~3k,
-> > while Coccinelle found ~11k. Besides that, Coccinelle actually parses
-> > the C files, so it should be a more robust solution than relying on
-> > regexes.
+> > The second condition is equivalent to `p.arg.vec_len == 1`, but why is
+> > that an ending condition? Isn't the last entry enough to gather one
+> > more range? (The walk could have returned -ENOSPC due to buffer full
+> > and after flushing it could continue with the last free entry.)
+> Now we are walking the entire range walk_page_range(). We don't break loop
+> when we get -ENOSPC as this error may only mean that the temporary buffer
+> is full. So we need check if max pages have been found or output buffer is
+> full or ret is 0 or any other error. When p.arg.vec_len = 1 is end
+> condition as the last entry is in cur. As we have walked over the entire
+> range, cur must be full after which the walk returned.
 > 
-> I just sent a patch[1] last week fixing missing a bunch. I only looked 
-> at the change in count of undocumented (by schema) though.
+> So current condition is necessary. I've double checked it. I'll change it
+> to `p.arg.vec_len == 1`.
 
-Ah, looks like I mixed up the output from the dt-extract-compatibles script and
-the output from the make dt_compatible_check. The python script does list
-practically (*) all compatibles that Coccinelle found. So I'll look into
-extending it for the purposes of this test next.
+If we have walked the whole range, then the loop will end anyway due to
+`walk_start < walk_end` not held in the `for()`'s condition.
 
-(*) it misses 3 compatibles in .h files, and fsl,mpc5200-gpt-gpio because the
-comment above it has ';'. Those are easy to fix though, either on the regex or
-on the driver's code.
-
-> 
-> In any case, I'm happy if we have a better solution, but really we 
-> should only have 1. So your script would need to replace the existing 
-> one.
-
-Agreed.
-
-> 
-> I'd be interested in a performance comparison. IME, coccinelle is 
-> fairly slow. Slower is okay to a point though.
-
-Yes, Coccinelle seems to be quite a bit slower. I can provide a comparison after
-I've tweaked the python script to get the same matches as Coccinelle so it is a
-fair comparison.
-
-> 
+[...]
+> >> +/*
+> >> + * struct pm_scan_arg - Pagemap ioctl argument
+> >> + * @size:              Size of the structure
+> >> + * @flags:             Flags for the IOCTL
+> >> + * @start:             Starting address of the region
+> >> + * @end:               Ending address of the region
+> >> + * @walk_end           Address where the scan stopped (written by kernel).
+> >> + *                     walk_end == end informs that the scan completed on entire range.
 > > 
-> > The reason for parsing the kernel source instead of relying on
-> > information exposed by the kernel at runtime (say, looking at modaliases
-> > or introducing some other mechanism), is to be able to catch issues
-> > where a config was renamed or a driver moved across configs, and the
-> > .config used by the kernel not updated accordingly. We need to parse the
-> > source to find all compatibles present in the kernel independent of the
-> > current config being run.
-> 
-> I've been down this route. I had another implementation using gdb to 
-> extract all of_device_id objects from a built kernel, but besides the 
-> build time, it was really slow.
+> > Can we ensure this holds also for the tagged pointers?
+> No, we cannot.
 
-Interesting to know, that's another option that I'd considered.
+So this need explanation in the comment here. (Though I'd still like to
+know how the address tags are supposed to be used from someone that
+knows them.)
 
-Thanks,
-N�colas
+Best Regards
+Michał Mirosław
