@@ -2,178 +2,233 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854E0779502
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 18:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF15779538
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 18:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbjHKQqG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Aug 2023 12:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S235659AbjHKQwX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Aug 2023 12:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjHKQqF (ORCPT
+        with ESMTP id S235446AbjHKQwW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Aug 2023 12:46:05 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2070.outbound.protection.outlook.com [40.107.93.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D668530CF;
-        Fri, 11 Aug 2023 09:45:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a+EEMtDIl2QsaVJpNqdY4RhtaQBrZPE1OAA+zWGiCoUeu0TazPqJxatEUINI2bud05anopeYgSqQCWBGtKlj1LgNceAMQn7dtTI+OeDZnPgaCb4CrdMmyUlkzTlTSc/WBRbkfKQLt/AY/VUlzoe8nSPDP7+9PPLHU2Cckyxmr9je9sVUK8ivzdgh4Cv0T3tXJ5AlEP7umT8XSSD6W/vRqGe6HHDrANbJSj6J6PZlnZwh6x4wHSRXXQE1TfV60VQrPTObMa0cq2Od5ZKWgswrCUxIxTU4JI3ZXyrUsNRRtnpnxK4RhVgke0eNYxKeaqSacpA2necY8mZ39zWk4IDXnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OxEv3kdh7Y3oPUDR/cXKlVfg7Z8PMG719tE7nLKO/TU=;
- b=J9w3b7sIFrAozdqXTb2NKYR3ivO0RsdTAqKIMeRT3Z+nnBwpUXxhCfh6gaYpW5BD4j+KCprU2vlIPXxRAYPLXy6VfUK7HhLUIFJQ2WQPe+IDzJ7zXjhGrHnI4sFA6aWLl5Gvs00PSbvredsyLo1cFtVb7z/9PvH9+2Stb3aQwOwBeHd8S7eSYb2QKsVYUql227vrFkC60tAiOBVpVnRkADTvsnaGHBCK3Ch/bZ9Bun2vNXYC8bBupLvTlzq4XgEU9pUgR37Q5YotDO0n2LRiIruN5NwdX8O+/NWyGBIb9s/trD9q8r0sndfIj36M6Z2iEJOfsgG8l19sNbTeW/DEOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OxEv3kdh7Y3oPUDR/cXKlVfg7Z8PMG719tE7nLKO/TU=;
- b=QTVJASBwXya7/jt8IpfckFTyqUz+3ifSqQfGxTP9+7WMse4SIg2hQaCb3Y6HHxNMYdQ7XepMV2naFLK2NDECXOUPMz+gObiUbzUxIFO4+GMsgh3hbYWir+JBd+MZ6Y81QgLfTv3bCSLPs9hXXb8oR6GUHsIBka1rkkny60hlNn/Cpdyfi/Yg6zAsS//PUBc90LCqGdDrDWYZNABTDmlpSsK31rZAK2h8rHwC4bsNJeUS5sbhixB7jIRJ2k6CY6n/jcBWun70FOZtPWJY/07ZiD0JzHCJ3dQabtn7j/fmb5IiATB4IvwH9TJsxcb4LQThre1OR7aI+9k+disbduftDw==
-Received: from CH2PR19CA0019.namprd19.prod.outlook.com (2603:10b6:610:4d::29)
- by LV2PR12MB5846.namprd12.prod.outlook.com (2603:10b6:408:175::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30; Fri, 11 Aug
- 2023 16:45:42 +0000
-Received: from MWH0EPF000989E9.namprd02.prod.outlook.com
- (2603:10b6:610:4d:cafe::6) by CH2PR19CA0019.outlook.office365.com
- (2603:10b6:610:4d::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.31 via Frontend
- Transport; Fri, 11 Aug 2023 16:45:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MWH0EPF000989E9.mail.protection.outlook.com (10.167.241.136) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6652.19 via Frontend Transport; Fri, 11 Aug 2023 16:45:41 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 11 Aug 2023
- 09:45:21 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 11 Aug
- 2023 09:45:21 -0700
-Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Fri, 11 Aug 2023 09:45:20 -0700
-Date:   Fri, 11 Aug 2023 09:45:18 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-CC:     Jason Gunthorpe <jgg@nvidia.com>, "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v4 09/12] iommu/vt-d: Add iotlb flush for nested domain
-Message-ID: <ZNZlnh+/Q5Vk5Kul@Asurada-Nvidia>
-References: <ZNO92PIx2IQ70+DY@nvidia.com>
- <ZNPlGd4/72dahSs4@Asurada-Nvidia>
- <ZNPmpW3/zDnjqxyU@nvidia.com>
- <ZNP0UKGU6id5wfc6@Asurada-Nvidia>
- <BN9PR11MB527683351B687B97AB84B51B8C13A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZNUI0D7ZMvLWlBNx@nvidia.com>
- <ZNUa/VmeiIo0YA0v@Asurada-Nvidia>
- <ZNU6BnTgNEWlwNYQ@nvidia.com>
- <ZNVQcmYp27ap7h30@Asurada-Nvidia>
- <BN9PR11MB5276D0B3E0106C73C498B8018C10A@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Fri, 11 Aug 2023 12:52:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B16930DF;
+        Fri, 11 Aug 2023 09:52:21 -0700 (PDT)
+Received: from [192.168.100.7] (unknown [39.34.188.71])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2C07B660724E;
+        Fri, 11 Aug 2023 17:52:14 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1691772739;
+        bh=cJDpSEZxlvhurhUAGfOasu425SbOowOI0HNqe2vHqeo=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=meOVd+WllbvxSa+vTR+OBY1oYnYFhopr636PpY8Sfkq8nFpU9jcg33RG5oft82yVi
+         5Io5fTTbN1LqLO7RwRxA4q3adfuMxDf0GAnL7HJAVBLpfqoa1zCKNjY9CSrsrO7A0s
+         kT7QjmeldaPrsK03ewt4f3FqUFiSLlCe/PuGwmc30W9JC4envtKRsl/MiFO+OT5Xwv
+         ksLyqf5iv/jMYppexgVSA+Lyq57urM84XpeT86/DCJ92iVxy5l0ggG6XbqAifybRc+
+         1fj/8LU/VR5VxQzxqlBzBobnCb+wQJl3yyytLCGvb3BEHvi8jyP0TpEnrJrXMhEDBt
+         4ij4UiROvONAA==
+Message-ID: <a087cea7-1a71-331f-48a4-b53a387e6f4b@collabora.com>
+Date:   Fri, 11 Aug 2023 21:52:10 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276D0B3E0106C73C498B8018C10A@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989E9:EE_|LV2PR12MB5846:EE_
-X-MS-Office365-Filtering-Correlation-Id: edc32989-36d3-4487-fcf8-08db9a8a6672
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: szGgPs26a6i2y1b83hmDK1Y3irF7cAqtvAlXi+X1cTxEbgKqfvAPapRDBimxg03cGHuhnM8XQIbIqKFAXXpI1B/Nr2wFtOsgBBOWtMxO7zwwlhNm9+ZSg34T1T8Aj2b6SgkymNquE+wBdse+M6rtMESeAcClvh7AJUfB3LUXcM8uo/hBDUPFCjYRfRLxX4NS7vvS7apfSdIo9VkzJPX2b7r1TBKy7ObCZp/2OuXT8WSRKfBd+tncSLwnFeMTlkhwdgD59SqhfDwlBuDCzontTEtkimw45D0W3R2dE9QEOkAgez2RiWi2NEOGn4Sj46SlmBDiJa2Gv9M5Ul+Ate2YEGT7j7Dlnj38GKKR2DHSlrtpU7wxSjIIdG6Vrfh3mwc+8OUBAVf6MrUqqEzKO78b2FndAFQV+vm7OTSAPyZT4yTEbsv55Irq1X5gEMLRtMfLOCODeaN68hSMcmWQgD3KLBEJ9jR+m4cfcqd6sHCbltPGR01+LbOptn6aG/5Dlv+Rb9Ae0AYLchXMK3tWPpWIAgjXkdhdTAMXannRsFQvF1G0hMg5wExrnNMiLFJQcj+ouDV/eMwDINcU2RZ1zgAl5aGl6yGq0FruaeP3+7nCgpElopf0D3ycLMzj5PZSHP3121Lik+yPOoRFaQw/CVjqTvFwXCkPMbEESHTMMBOS7xCVk25hRviOHkMloT5faxe3FknAxQD0LjLEl+qddZIPQ62jSaOXkw4m5FsZWOnES3UpMtHRHaAh3carwRApNji8
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(136003)(376002)(451199021)(1800799006)(186006)(82310400008)(40470700004)(36840700001)(46966006)(2906002)(55016003)(40480700001)(478600001)(82740400003)(356005)(54906003)(7636003)(40460700003)(5660300002)(7416002)(8936002)(8676002)(86362001)(33716001)(70206006)(4326008)(6916009)(70586007)(41300700001)(316002)(9686003)(36860700001)(83380400001)(426003)(47076005)(26005)(336012);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2023 16:45:41.6470
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: edc32989-36d3-4487-fcf8-08db9a8a6672
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000989E9.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5846
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v28 5/6] mm/pagemap: add documentation of PAGEMAP_SCAN
+ IOCTL
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230809061603.1969154-1-usama.anjum@collabora.com>
+ <20230809061603.1969154-6-usama.anjum@collabora.com>
+ <CABb0KFGftHi1t3Pt8V3XvsG=+-hvfQMMteW9VXEPrRmfUdZZWA@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFGftHi1t3Pt8V3XvsG=+-hvfQMMteW9VXEPrRmfUdZZWA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 11, 2023 at 03:52:52AM +0000, Tian, Kevin wrote:
- 
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Friday, August 11, 2023 5:03 AM
-> >
-> > > > > Is there a use case for invaliation only SW emulated rings, and do we
-> > > > > care about optimizing for the wrap around case?
-> > > >
-> > > > Hmm, why a SW emulated ring?
-> > >
-> > > That is what you are building. The VMM catches the write of the
-> > > producer pointer and the VMM SW bundles it up to call into the kernel.
-> >
-> > Still not fully getting it. Do you mean a ring that is prepared
-> > by the VMM? I think the only case that we need to handle a ring
-> > is what I did by forwarding the guest CMDQ (a ring) to the host
-> > directly. Not sure why VMM would need another ring for those
-> > linearized invalidation commands. Or maybe I misunderstood..
-> >
+On 8/11/23 12:26 AM, Michał Mirosław wrote:
+> On Wed, 9 Aug 2023 at 08:16, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>> Add some explanation and method to use write-protection and written-to
+>> on memory range.
+> [...]
+>> --- a/Documentation/admin-guide/mm/pagemap.rst
+>> +++ b/Documentation/admin-guide/mm/pagemap.rst
+>> @@ -227,3 +227,67 @@ Before Linux 3.11 pagemap bits 55-60 were used for "page-shift" (which is
+>>  always 12 at most architectures). Since Linux 3.11 their meaning changes
+>>  after first clear of soft-dirty bits. Since Linux 4.2 they are used for
+>>  flags unconditionally.
+>> +
+>> +Pagemap Scan IOCTL
+>> +==================
+>> +
+>> +The ``PAGEMAP_SCAN`` IOCTL on the pagemap file can be used to get or optionally
+>> +clear the info about page table entries. The following operations are supported
+>> +in this IOCTL:
+>> +- Get the information if the pages have Async Write-Protection enabled
+>> +  (``PAGE_IS_WPALLOWED``), have been written to (``PAGE_IS_WRITTEN``), file mapped
+>> +  (``PAGE_IS_FILE``), present (``PAGE_IS_PRESENT``), swapped (``PAGE_IS_SWAPPED``)
+>> +  or page has pfn zero (``PAGE_IS_PFNZERO``).
 > 
-> iiuc the point of a ring-based native format is to maximum code reuse
-> when later in-kernel fast invalidation path (from kvm to smmu driver)
-> is enabled. Then both slow (via vmm) and fast (in-kernel) path use
-> the same logic to handle guest invalidation queue.
+> A recent addition -- PAGE_IS_HUGE -- is missing.
+> 
+> BTW, it could be easier to understand if the page categories were
+> separated from the operation description and listed so that each has
+> its own line and maybe a longer description where needed.
+I've made 90% of changes you have asked in documentation.
 
-I see. That's about the fast path topic. Thanks for the input.
+> 
+>> +- Find pages which have been written to and/or write protect
+>> +  (atomic ``PM_SCAN_WP_MATCHING + PM_SCAN_CHECK_WPASYNC``) the pages atomically.
+>> +  The (``PM_SCAN_WP_MATCHING``) is used to WP the matched pages. The
+>> +  (``PM_SCAN_CHECK_WPASYNC``) aborts the operation if non-Async-Write-Protected
+>> +  pages are found.
+> 
+> The operation the IOCTL does now is: "scan the process page tables and
+> report memory ranges matching provided criteria '.
+> Flags extend the operation: "PM_SCAN_WP_MATCHING write protects the
+> memory reported" (it does it atomically, but this is just an
+> optimization, isn't it? A process could gather the ranges, WP them,
+> and then copy.)
+> "PM_SCAN_CHECK_WPASYNC" aborts the scan early if a non-WP-able
+> matching page is found.
+> 
+>> +The ``struct pm_scan_arg`` is used as the argument of the IOCTL.
+>> + 1. The size of the ``struct pm_scan_arg`` must be specified in the ``size``
+>> +    field. This field will be helpful in recognizing the structure if extensions
+>> +    are done later.
+>> + 2. The flags can be specified in the ``flags`` field. The ``PM_SCAN_WP_MATCHING``
+>> +    and ``PM_SCAN_CHECK_WPASYNC`` are the only added flags at this time. The get
+>> +    operation is optionally performed depending upon if the output buffer is
+>> +    provided or not.
+>> + 3. The range is specified through ``start`` and ``end``.
+>> + 4. The output buffer of ``struct page_region`` array and size is specified in
+>> +    ``vec`` and ``vec_len``.
+>> + 5. The optional maximum requested pages are specified in the ``max_pages``.
+>> + 6. The masks are specified in ``category_mask``, ``category_anyof_mask``,
+>> +    ``category_inverted`` and ``return_mask``.
+>> +    1.  To find if ``PAGE_IS_WRITTEN`` flag is set for pages which have
+>> +        ``PAGE_IS_FILE`` set and ``PAGE_IS_SWAPPED`` unset, ``category_mask``
+>> +        is set to ``PAGE_IS_FILE | PAGE_IS_SWAPPED``, ``category_inverted`` is
+>> +        set to ``PAGE_IS_SWAPPED`` and ``return_mask`` is set to ``PAGE_IS_WRITTEN``.
+>> +        The output buffer in ``vec`` and length must be specified in ``vec_len``.
+>> +    2. To find pages which have either ``PAGE_IS_FILE`` or ``PAGE_IS_SWAPPED``
+>> +       set, ``category_anyof_mask`` is set to  ``PAGE_IS_FILE | PAGE_IS_SWAPPED``.
+>> +    3. To find written pages and engage write protect, ``PAGE_IS_WRITTEN`` is
+>> +       specified in ``category_mask`` and ``return_mask``. In addition to
+>> +       specifying the output buffer in ``vec`` and length in ``vec_len``, the
+>> +       ``PM_SCAN_WP_MATCHING`` is specified in ``flags`` to perform write protect
+>> +       on the range as well.
+> 
+> Could this be rewritten as examples? E.g.:
+> 
+> Finding dirty file-backed pages:
+> 
+> struct pm_scan_arg arg = {
+>  .size = sizeof(arg),
+>   .flags = 0,
+>  ...
+>    .category_mask = ...,
+>    .return_mask = ...
+> };
+> ssize_t n = ioctl(..., &arg);
+> 
+> Find dirty pages and write protect them in the same call:
+> 
+> arg = { ... };
+> do {
+>   ... ioctl(...)
+> } while(...);
+> 
+> (The code snippets heavily commented.)
+> 
+>> +The ``PAGE_IS_WRITTEN`` flag can be considered as the better and correct
+> 
+> "as a better-performing alternative"
+> 
+>> +alternative of soft-dirty flag. It doesn't get affected by housekeeping chores
+>> +(VMA merging) of the kernel and hence the user can find the true soft-dirty pages
+>> +only.
+> 
+> This is still an optimization, e.g. in THP case there might be too
+> many pages reported?
+> 
+>> + This IOCTL adds the atomic way to find which pages have been written and
+>> +write protect those pages again. This kind of operation is needed to efficiently
+>> +find out which pages have changed in the memory.
+> 
+> This repeats the description of PM_SCAN_WP_MATCHING -- I suggest
+> removing this part.
+> 
+>> +To get information about which pages have been written to or optionally write
+>> +protect the pages, following must be performed first in order:
+> 
+> "PAGE_IS_WRITTEN" category is used with uffd write protect-enabled
+> ranges to implement memory dirty tracking in userspace:
+> 
+>> + 1. The userfaultfd file descriptor is created with ``userfaultfd`` syscall.
+>> + 2. The ``UFFD_FEATURE_WP_UNPOPULATED`` and ``UFFD_FEATURE_WP_ASYNC`` features
+>> +    are set by ``UFFDIO_API`` IOCTL.
+>> + 3. The memory range is registered with ``UFFDIO_REGISTER_MODE_WP`` mode
+>> +    through ``UFFDIO_REGISTER`` IOCTL.
+>> + 4. Then any part of the registered memory or the whole memory region must
+>> +    be write protected using ``PAGEMAP_SCAN`` IOCTL with flag ``PM_SCAN_OP_WP``
+>> +    or the ``UFFDIO_WRITEPROTECT`` IOCTL can be used. Both of these perform the
+>> +    same operation. The former is better in terms of performance.
+> 
+> I guess that the UFFD performance could be fixed? But this part refers
+> to the old PM_SCAN_OP_WP, so an updated example is needed.
+> 
+>> + 5. Now the ``PAGEMAP_SCAN`` IOCTL can be used to either just find pages which
+>> +    have been written to and/or optionally write protect the pages as well.
+> 
+> "find the pages written to since they were last write protected", but
+> this sounds contradicting: we look for pages that were WP but written
+> anyway. (IOW: marking write-protected is an implementation detail -
+> the ioctl is to find pages that changed since they were last marked.)
+> Maybe we should call the operation "marking CLEAN" or alike?
+> 
+> Best Regards
+> Michał Mirosław
 
-> But if stepping back a bit supporting an array-based non-native format
-> could simplify the uAPI design and allows code sharing for array among
-> vendor drivers. You can still keep the entry as native format then the
-> only difference with future in-kernel fast path is just on walking an array
-> vs. walking a ring. And VMM doesn't need to expose non-invalidate
-> cmds to the kernel and then be skipped.
-
-Ah, so we might still design the uAPI to be ring based at this
-moment, yet don't support a case CONS > 0 to leave that to an
-upgrade in the future.
-
-I will try estimating a bit how complicated to implement the
-ring, to see if we could just start with that. Otherwise, will
-just start with an array.
-
-Thanks
-Nic
+-- 
+BR,
+Muhammad Usama Anjum
