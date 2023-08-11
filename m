@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2EB7791B8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 16:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6568B779281
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 17:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232559AbjHKOXX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Aug 2023 10:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
+        id S235479AbjHKPJn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Aug 2023 11:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbjHKOXW (ORCPT
+        with ESMTP id S235128AbjHKPJl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Aug 2023 10:23:22 -0400
+        Fri, 11 Aug 2023 11:09:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C85E53;
-        Fri, 11 Aug 2023 07:23:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1CA19AE;
+        Fri, 11 Aug 2023 08:09:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9695665A33;
-        Fri, 11 Aug 2023 14:23:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85887C433C8;
-        Fri, 11 Aug 2023 14:23:14 +0000 (UTC)
-Date:   Fri, 11 Aug 2023 15:23:12 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCC7467439;
+        Fri, 11 Aug 2023 15:09:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91028C433C8;
+        Fri, 11 Aug 2023 15:09:35 +0000 (UTC)
+Date:   Fri, 11 Aug 2023 16:09:33 +0100
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
@@ -49,73 +49,67 @@ Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 09/36] arm64/mm: Allocate PIE slots for EL0 guarded
- control stack
-Message-ID: <ZNZEUEqJuHrdEa/c@arm.com>
+Subject: Re: [PATCH v4 17/36] arm64/mm: Handle GCS data aborts
+Message-ID: <ZNZPLTky6IZ47n4l@arm.com>
 References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-9-68cfa37f9069@kernel.org>
+ <20230807-arm64-gcs-v4-17-68cfa37f9069@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230807-arm64-gcs-v4-9-68cfa37f9069@kernel.org>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230807-arm64-gcs-v4-17-68cfa37f9069@kernel.org>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 11:00:14PM +0100, Mark Brown wrote:
-> diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
-> index eed814b00a38..b157ae0420ed 100644
-> --- a/arch/arm64/include/asm/pgtable-prot.h
-> +++ b/arch/arm64/include/asm/pgtable-prot.h
-> @@ -131,15 +131,23 @@ extern bool arm64_use_ng_mappings;
->  /* 6:                                PTE_PXN | PTE_WRITE            */
->  /* 7: PAGE_SHARED_EXEC               PTE_PXN | PTE_WRITE | PTE_USER */
->  /* 8: PAGE_KERNEL_ROX      PTE_UXN                                  */
-> -/* 9:                      PTE_UXN |                       PTE_USER */
-> +/* 9: PAGE_GCS_RO          PTE_UXN |                       PTE_USER */
->  /* a: PAGE_KERNEL_EXEC     PTE_UXN |           PTE_WRITE            */
-> -/* b:                      PTE_UXN |           PTE_WRITE | PTE_USER */
-> +/* b: PAGE_GCS             PTE_UXN |           PTE_WRITE | PTE_USER */
->  /* c: PAGE_KERNEL_RO       PTE_UXN | PTE_PXN                        */
->  /* d: PAGE_READONLY        PTE_UXN | PTE_PXN |             PTE_USER */
->  /* e: PAGE_KERNEL          PTE_UXN | PTE_PXN | PTE_WRITE            */
->  /* f: PAGE_SHARED          PTE_UXN | PTE_PXN | PTE_WRITE | PTE_USER */
->  
-> +#define _PAGE_GCS	(_PAGE_DEFAULT | PTE_UXN | PTE_WRITE | PTE_USER)
-> +#define _PAGE_GCS_RO	(_PAGE_DEFAULT | PTE_UXN | PTE_USER)
+On Mon, Aug 07, 2023 at 11:00:22PM +0100, Mark Brown wrote:
+> @@ -510,6 +527,26 @@ static vm_fault_t __do_page_fault(struct mm_struct *mm,
+>  	 */
+>  	if (!(vma->vm_flags & vm_flags))
+>  		return VM_FAULT_BADACCESS;
 > +
-> +#define PAGE_GCS	__pgprot(_PAGE_GCS)
-> +#define PAGE_GCS_RO	__pgprot(_PAGE_GCS_RO)
-> +
->  #define PIE_E0	( \
-> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS),           PIE_GCS)  | \
-> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS_RO),        PIE_R)   | \
->  	PIRx_ELx_PERM(pte_pi_index(_PAGE_EXECONLY),      PIE_X_O) | \
->  	PIRx_ELx_PERM(pte_pi_index(_PAGE_READONLY_EXEC), PIE_RX)  | \
->  	PIRx_ELx_PERM(pte_pi_index(_PAGE_SHARED_EXEC),   PIE_RWX) | \
-> @@ -147,6 +155,8 @@ extern bool arm64_use_ng_mappings;
->  	PIRx_ELx_PERM(pte_pi_index(_PAGE_SHARED),        PIE_RW))
+> +	if (vma->vm_flags & VM_SHADOW_STACK) {
+> +		/*
+> +		 * Writes to a GCS must either be generated by a GCS
+> +		 * operation or be from EL1.
+> +		 */
+> +		if (is_write_abort(esr) &&
+> +		    !(is_gcs_fault(esr) || is_el1_data_abort(esr)))
+> +			return VM_FAULT_BADACCESS;
+
+Related to my PIE permissions comment: when do we have a valid EL1 data
+write abort that's not a GCS fault? Does a faulting GCSSTTR set the
+ESR_ELx_GCS bit?
+
+> +	} else {
+> +		/*
+> +		 * GCS faults should never happen for pages that are
+> +		 * not part of a GCS and the operation being attempted
+> +		 * can never succeed.
+> +		 */
+> +		if (is_gcs_fault(esr))
+> +			return VM_FAULT_BADACCESS;
+
+If one does a GCS push/store to a non-GCS page, do we get a GCS fault or
+something else? I couldn't figure out from the engineering spec. If the
+hardware doesn't generate such exceptions, we might as well remove this
+'else' branch. But maybe it does generate a GCS-specific fault as you
+added a similar check in is_invalid_el0_gcs_access().
+
+> @@ -595,6 +644,19 @@ static int __kprobes do_page_fault(unsigned long far, unsigned long esr,
+>  	if (!vma)
+>  		goto lock_mmap;
 >  
->  #define PIE_E1	( \
-> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS),           PIE_RW)      | \
-> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS_RO),        PIE_R)      | \
+> +	/*
+> +	 * We get legitimate write faults for GCS pages from GCS
+> +	 * operations and from EL1 writes to EL0 pages but just plain
 
-Had some thoughts on this. Why do we need the EL1 GCS attributes to map
-to RW? The instructions we'd use to write the shadow stack are the GCS
-'T' variants that run as user already.
-
-The only instructions we have in the kernel that would run as EL1 on a
-user address are the exclusives (futex code or the old deprecated
-emulation but we don't care about them in this context). So I wonder
-whether the kernel PIE entry could simply be PIE_NONE_O. Would this be
-too restrictive for future uses? Given the coherency between a GCS
-access and a standard data access, we may want to restrict it now until
-we have a use-case.
+What are the EL1 writes to the shadow stack? Would it not use
+copy_to_user_gcs()?
 
 -- 
 Catalin
