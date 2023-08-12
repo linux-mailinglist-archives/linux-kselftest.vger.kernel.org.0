@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830B9779D6C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Aug 2023 07:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C854D779D71
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Aug 2023 07:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235488AbjHLF6i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 12 Aug 2023 01:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
+        id S233647AbjHLF6o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 12 Aug 2023 01:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233647AbjHLF6h (ORCPT
+        with ESMTP id S235619AbjHLF6n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 12 Aug 2023 01:58:37 -0400
-X-Greylist: delayed 139453 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Aug 2023 22:58:35 PDT
-Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906D7127;
-        Fri, 11 Aug 2023 22:58:35 -0700 (PDT)
+        Sat, 12 Aug 2023 01:58:43 -0400
+Received: from out203-205-221-233.mail.qq.com (out203-205-221-233.mail.qq.com [203.205.221.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602D518F;
+        Fri, 11 Aug 2023 22:58:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1691819908;
+        s=s201512; t=1691819919;
         bh=6k+2tlcHY6MZU1kfTY6UiFMgENXZRojososrfddZu4I=;
-        h=From:To:Cc:Subject:Date;
-        b=ZmB3cJWBDsyHZM7BhMd1wkOWXlDefme40o0ikENygQfXQeg7cep7Xv03D0kVhPgig
-         fGwsnlE1yKkC4fIvFAgD+s4pMcuTYRfQLifCat40X8UgT+ieDlmQzClquf4kfarpwC
-         9qyd9xXzDR45PXg9P/rCypFZJQQcAGfJtjTJwknY=
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=LPQVLmrsKYLI9e9HiVnPxJiYj+MVC5PGhSXNXy1gz1VDHtt4myPeM0IAwqVCp/1x0
+         2yMRQkcsZleN6VpM5sXaT7koNtlFJo/xIpSH5Impt5h8uDI+0/IT2NBcuDBm3n+3/u
+         Gf5enaMUJyvt3MJTzKckMqrW2wPTtsKpmw1necg4=
 Received: from localhost.localdomain ([183.197.149.136])
         by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
         id E97B6647; Sat, 12 Aug 2023 13:58:23 +0800
-X-QQ-mid: xmsmtpt1691819903tjj8co8sd
-Message-ID: <tencent_89AF48A3CA88040670422959BB97062A2408@qq.com>
-X-QQ-XMAILINFO: NcdhUYIpzyYIKndtqfunD+qyjoV23avozVjtyniOAOQzyWGfkdOsh1PmlHRmZu
-         1a8cOYp2BUT3DL2R/dnbDneIQKH/79sLWHSf+DeWPx5R4fp9Icm9mr4agJYzd5b/aq94swhGCDHx
-         YH5gyo/z+Lrdffh4/VOdadR4mG1F01UHOGTYbE8waE9DHSuyCnU3xJrHCYyv/unwhIFsexjgTjRm
-         4+QGzFPPLfQsN22fm4H5kgtv0HFtgkUGIt2Crmd1txPC0A9f+M4zNsid55FLS5GynOjLRAiW72+D
-         f+wjMNYKF7KTz33cjgptIMCI+nfBjG0zJpMuPXWzXZC/ykaOJRtc8gCmiXuxw4Bz99Xgb9tTj65U
-         pNsSYC8fuiuyK6fqgepnn/F7EtWqpuRMavZj1bL5j+yp3L9rZ0IoS7wSuAgn5Z1SihX0ghICvey5
-         BEIW/IsNfGu7UXSg+isDWZ3NbZdvYsx/wdOLdqT6vNxVw8wJrGZfKFEemXSH3MsV7fF6nCBtELvH
-         hp01wbipUxw0nU5uqTjiIdCVpo5GKNHzeP/hL2N4hOCe77qO9HQnfMUaiw0PhqJDN+7p1pexaIm2
-         DjHspo2BL/HVTxtDSZG2YkUt3lx1RFM48nw5GNmTyg4SKOnehALJ6RQraauW0ZgDk4+OtdGQ5F05
-         m1X58E+CcfLOTl7MSYqequQ7919awtuH1nL2QWwDzykK7O56ZQvJXAP8ZbUK4W87YJiLDdL8vjw3
-         mPKhGpjnbdgWuFH2F1MdigmSjewvtnu7KWK2v9gOS+2MjYUvLio6FivxDcYsXml+siQAWCw7/BeB
-         bFuoiDnZAlUqJnRGaKDKO0XPhIaPah5XryJIa6x0Ooo+2AZj9lM3DZg65Sxw9Q3i2MmXecfMgalm
-         NvxY11bixjcHwZIMchV0ELi9X4IxH02BghdfQkjSFowT2bMTI30tq0nM5dFiW04mkyImiKGeVHgd
-         Ht4Ps2BVXRa9oOr9VTsD6kMPyO7sYsfi/Ytk+kHXeNQQfKJcWaWuHF8obD3R7i
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+X-QQ-mid: xmsmtpt1691819907tjhossl2a
+Message-ID: <tencent_50B4B2622FE7546A5FF9464310650C008509@qq.com>
+X-QQ-XMAILINFO: MpO6L0LObisWlSPyv0ox+ZvMrl6iV1FUX3NaeEq6C+iNu2Xfz/4TfRjebT0iwT
+         jRO2L4CZ8senOrM1WgysUkFrCY9MDXEcFoEdjONCfIqk8yzynKkc8DvKvb2/BXLLIWZwA9/KUZXX
+         h7Sw1SckGjvWMulxOgVVEQtTBIwfTpDF80SV+YfkZCaBN0cvEJW8ABUL/FZdJ39pAQ18z8hr8IzV
+         mel8lr/rjN7bS1LFBGdiCpMgcBEGqaoCa1pyPBr7rQWJPvPj43IvehKPTsNfEX9fKJ49FPtfQ/qe
+         IQa8LRQY2Xz0wbdnxH0KVe15p1sWFbLgz5IJwkadS7c947YelRQ9P/x4uSvF62Jkc3mhZTh5ksch
+         XV0kelJvfMZHClTO8bwzFIEYK7U/H4VArDCN5U5oP4lo3hseBlwnt1BOouNaImdDsDCdD2ecC075
+         6gZ86VxIYxBmpEP7zK7j0fBXRiWbTAU5R20g9578yxK+iKRm7wVAU13e/Pa3lemy9+H4lTQxc5id
+         3mW4VlPXq3fhnrr03fIzNPU59zrVn8mVcqoFeD9+ijAjIs6GrgnZHj8vjRCtziRK+ZVGQ7sBD9Pb
+         YXLBVS9eGHWdEPAo1gNESRjErU9tUSvYN2SG90NFdNLaiEupzEP5NxiUDv1zf8l7+70m9qvJdmQA
+         7Dk8potQQIftKVhxBRS/Bz/9KXilmvzDwz/4JVM8OdZvUQEIiYFezP2lTNMaG5LNjQEHU/uwrYVN
+         pNTQCNlRLcfVqReM7i5Ou9yCuAkD5IvShNlaqHrgB4cdwq51kpiHECSt+ddInqdxVkDOFZu5vtlC
+         hR8vR7y83s7aF2kAO2J2x+YiHqglNddCnYlCWH+Vn99f9SVhqiIW6DpSJLSuKUkBK2h4WmGeOi7B
+         lfkINmi6Ep3mvGlUuysnRvuaQ5oWppxA7a6KKoTUrLHRGNy88GWI1IbfdLT9TojIDwp3LvbiWHW6
+         FmTn3FRfjQJ3MJNC/0asszYu6BfmaJJYLVLsNbj9+bcI84M7piKRtG68OBwJQ0GeWva9KtyfjXoQ
+         rtAxIumjDt1vZVJbleo+iU2j9hgl8auCm/suww8ejBNg0fCeOy
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
 From:   Rong Tao <rtoax@foxmail.com>
 To:     sdf@google.com, ast@kernel.org
 Cc:     rongtao@cestc.cn, rtoax@foxmail.com,
@@ -59,9 +59,11 @@ Cc:     rongtao@cestc.cn, rtoax@foxmail.com,
         linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
         linux-kernel@vger.kernel.org (open list)
 Subject: [PATCH bpf-next v3] selftests/bpf: trace_helpers.c: optimize kallsyms cache
-Date:   Sat, 12 Aug 2023 13:57:02 +0800
-X-OQ-MSGID: <20230812055703.7218-1-rtoax@foxmail.com>
+Date:   Sat, 12 Aug 2023 13:57:03 +0800
+X-OQ-MSGID: <20230812055703.7218-2-rtoax@foxmail.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230812055703.7218-1-rtoax@foxmail.com>
+References: <20230812055703.7218-1-rtoax@foxmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
