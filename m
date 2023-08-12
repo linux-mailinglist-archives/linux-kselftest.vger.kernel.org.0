@@ -2,120 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6527799F2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Aug 2023 23:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4755A779C47
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Aug 2023 03:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236570AbjHKVwO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Aug 2023 17:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
+        id S236089AbjHLBh4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Aug 2023 21:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235401AbjHKVwO (ORCPT
+        with ESMTP id S229573AbjHLBh4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Aug 2023 17:52:14 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E957271B;
-        Fri, 11 Aug 2023 14:52:10 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1691790715t2l3imm8
-Received: from linux-lab-host.localdomain ( [116.30.128.116])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 12 Aug 2023 05:51:53 +0800 (CST)
-X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: jGGC4gWX7WFEuWrQD10QYevA6rKFR5eyLN27zADU7mMJyUa1X6F5wj5b8c1PO
-        ER8oXLqoaZcj68vp2XW1IvvzWMXYjLid4rTDbWxcHY9+xK0LZ6TboYz9xrN1UuKrfZPeivH
-        Xhx+frlWCSJTPIl4qTvNiv+IIPg62gxZBtdjgSzG1OWsfAsHQZwMgx7V1TgW3uPw9evoaY9
-        f/3qSx8aKzolxDdGprJ9lCbNnqC8BdKQhSeoDf1ZVL0vz1omtIq9sC7KeFcpXHcLENpcFN+
-        ZEMfFnvLJZED4528TgM/+SpuC2OxOWzKeNxwVnytS785YBa97JXf5RSeKCPgFQkYpErIUmN
-        JyXdyk2gkVM2i9Ad6ukNE5KRQK4tVquu5jqDZvRRUNb6m1LNpMtGj4GfqQLSUQA0SHWLMTn
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 14313426769615256479
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, david.laight@aculab.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tanyuan@tinylab.org, thomas@t-8ch.de
-Subject: [PATCH v6 2/2] tools/nolibc: fix up size inflate regression
-Date:   Sat, 12 Aug 2023 05:51:53 +0800
-Message-Id: <96624cc918092737d35dd539d184de06dba7a9b8.1691788036.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1691788036.git.falcon@tinylab.org>
-References: <cover.1691788036.git.falcon@tinylab.org>
+        Fri, 11 Aug 2023 21:37:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0463580
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Aug 2023 18:37:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83A7C64389
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Aug 2023 01:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451E3C433C7;
+        Sat, 12 Aug 2023 01:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691804274;
+        bh=Y3jlMG7U38Uvwq9s8XM0hS54dhwwvJi9rI3hlZA/GwI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VdN+8WRIQQxtvmjwzfT7j1VOMGnph7TNmRcEOh4aQLRZCCkVy3IAZpsz+LWNMGCfg
+         JbrSTIuEDEhfRG3NzmXqZg6hPXzstIu/bYrKC59z5Z9pb2SlSrvCpoG5dCDpn23dw4
+         X0iySDDTK3MYwAOQIAA4/upzUGDOouZIulxQnkzOrGgmeA3Fxvr06Wg7e2nRm8UVWx
+         xldYuIePbx+G3NN86+HPaeNpzq/6/JG1GVhzhNaCkPVjoGUxJ8nS+o9AYGRMlnrw8D
+         x6kdbi6MCRP8i7cmKcYZZHfftrQHtG/kc8MUK3yU/jWNVn6+ukfAhz4Fnx+FCpVuj9
+         P/ZnfDEvYyOPQ==
+Date:   Fri, 11 Aug 2023 18:37:53 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Sabrina Dubroca <sd@queasysnail.net>
+Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
+        Frantisek Krenzelok <fkrenzel@redhat.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Apoorv Kothari <apoorvko@amazon.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: Re: [PATCH net-next v3 2/6] tls: block decryption when a rekey is
+ pending
+Message-ID: <20230811183753.3a18a09a@kernel.org>
+In-Reply-To: <eae51cdb1d15c914577a88fb5cd9d1c4b1121642.1691584074.git.sd@queasysnail.net>
+References: <cover.1691584074.git.sd@queasysnail.net>
+        <eae51cdb1d15c914577a88fb5cd9d1c4b1121642.1691584074.git.sd@queasysnail.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As reported and suggested by Willy, the inline __sysret() helper
-introduces three types of conversions and increases the size:
+On Wed,  9 Aug 2023 14:58:51 +0200 Sabrina Dubroca wrote:
+> +static int tls_check_pending_rekey(struct sock *sk, struct sk_buff *skb)
+> +{
+> +	const struct tls_msg *tlm = tls_msg(skb);
+> +	const struct strp_msg *rxm = strp_msg(skb);
+> +
+> +	if (tlm->control == TLS_RECORD_TYPE_HANDSHAKE) {
 
-(1) the "unsigned long" argument to __sysret() forces a sign extension
-from all sys_* functions that used to return 'int'
+unlikely()
 
-(2) the comparison with the error range now has to be performed on a
-'unsigned long' instead of an 'int'
+does the nachine code look worse if we flip the condition and return
+early instead of indenting the entire function?
 
-(3) the return value from __sysret() is a 'long' (note, a signed long)
-which then has to be turned back to an 'int' before being returned by the
-caller to satisfy the caller's prototype.
+> +		char hs_type;
+> +		int err;
 
-To fix up this, firstly, let's use macro instead of inline function to
-preserves the input type and avoids these useless conversions (1), (3).
+I'd probably err on the side of declaring those on the outside, but if
+we don't we should move rxm in here, it's not needed outside. Either,
+or.
 
-Secondly, since all of the sys_* functions have been converted to return
-integer, now, it is able to remove comparison to a 'unsigned long'
--MAX_ERRNO (2) and restore the simple sign comparison as before.
+> +		if (rxm->full_len < 1)
+> +			return -EINVAL;
+> +
+> +		err = skb_copy_bits(skb, rxm->offset, &hs_type, 1);
+> +		if (err < 0)
+> +			return err;
+> +
+> +		if (hs_type == TLS_HANDSHAKE_KEYUPDATE) {
+> +			struct tls_context *ctx = tls_get_ctx(sk);
 
-Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/lkml/20230806095846.GB10627@1wt.eu/
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/sys.h | 27 ++++++++++-----------------
- 1 file changed, 10 insertions(+), 17 deletions(-)
+feels a bit like we should just pass ctx rather than sk?
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index a28e7fbff448..e0b68d3532b6 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -27,23 +27,16 @@
- #include "errno.h"
- #include "types.h"
- 
--
--/* Syscall return helper for library routines, set errno as -ret when ret is in
-- * range of [-MAX_ERRNO, -1]
-- *
-- * Note, No official reference states the errno range here aligns with musl
-- * (src/internal/syscall_ret.c) and glibc (sysdeps/unix/sysv/linux/sysdep.h)
-- */
--
--static __inline__ __attribute__((unused, always_inline))
--long __sysret(unsigned long ret)
--{
--	if (ret >= (unsigned long)-MAX_ERRNO) {
--		SET_ERRNO(-(long)ret);
--		return -1;
--	}
--	return ret;
--}
-+/* Syscall return helper, set errno as -ret when ret < 0 */
-+#define __sysret(arg)                        \
-+({                                           \
-+	__typeof__(arg) __ret = (arg);       \
-+	if (__ret < 0) {                     \
-+		SET_ERRNO(-__ret);           \
-+		__ret = -1L;                 \
-+	}                                    \
-+	__ret;                               \
-+})
- 
- /* Functions in this file only describe syscalls. They're declared static so
-  * that the compiler usually decides to inline them while still being allowed
--- 
-2.25.1
-
+> +			struct tls_sw_context_rx *rx_ctx = ctx->priv_ctx_rx;
+> +
+> +			rx_ctx->key_update_pending = true;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
