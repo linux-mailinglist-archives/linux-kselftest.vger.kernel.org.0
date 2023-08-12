@@ -2,109 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50223779D0F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Aug 2023 05:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830B9779D6C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Aug 2023 07:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbjHLDzJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Aug 2023 23:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S235488AbjHLF6i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 12 Aug 2023 01:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjHLDzI (ORCPT
+        with ESMTP id S233647AbjHLF6h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Aug 2023 23:55:08 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAEF30D2;
-        Fri, 11 Aug 2023 20:55:06 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4RN6Hm6gm1z4f3m6S;
-        Sat, 12 Aug 2023 11:55:00 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP1 (Coremail) with SMTP id cCh0CgAHNTGUAtdkCZvtAQ--.44296S2;
-        Sat, 12 Aug 2023 11:55:02 +0800 (CST)
-Subject: Re: [PATCH] kunit: replace KUNIT_TRIGGER_STATIC_STUB maro with
- KUNIT_STATIC_STUB_REDIRECT
-To:     brendan.higgins@linux.dev, davidgow@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-References: <20230725172051.2142641-1-shikemeng@huaweicloud.com>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <c01d16ea-b88c-7fc4-3e72-fbd8c7dbf2eb@huaweicloud.com>
-Date:   Sat, 12 Aug 2023 11:55:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Sat, 12 Aug 2023 01:58:37 -0400
+X-Greylist: delayed 139453 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Aug 2023 22:58:35 PDT
+Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906D7127;
+        Fri, 11 Aug 2023 22:58:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1691819908;
+        bh=6k+2tlcHY6MZU1kfTY6UiFMgENXZRojososrfddZu4I=;
+        h=From:To:Cc:Subject:Date;
+        b=ZmB3cJWBDsyHZM7BhMd1wkOWXlDefme40o0ikENygQfXQeg7cep7Xv03D0kVhPgig
+         fGwsnlE1yKkC4fIvFAgD+s4pMcuTYRfQLifCat40X8UgT+ieDlmQzClquf4kfarpwC
+         9qyd9xXzDR45PXg9P/rCypFZJQQcAGfJtjTJwknY=
+Received: from localhost.localdomain ([183.197.149.136])
+        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
+        id E97B6647; Sat, 12 Aug 2023 13:58:23 +0800
+X-QQ-mid: xmsmtpt1691819903tjj8co8sd
+Message-ID: <tencent_89AF48A3CA88040670422959BB97062A2408@qq.com>
+X-QQ-XMAILINFO: NcdhUYIpzyYIKndtqfunD+qyjoV23avozVjtyniOAOQzyWGfkdOsh1PmlHRmZu
+         1a8cOYp2BUT3DL2R/dnbDneIQKH/79sLWHSf+DeWPx5R4fp9Icm9mr4agJYzd5b/aq94swhGCDHx
+         YH5gyo/z+Lrdffh4/VOdadR4mG1F01UHOGTYbE8waE9DHSuyCnU3xJrHCYyv/unwhIFsexjgTjRm
+         4+QGzFPPLfQsN22fm4H5kgtv0HFtgkUGIt2Crmd1txPC0A9f+M4zNsid55FLS5GynOjLRAiW72+D
+         f+wjMNYKF7KTz33cjgptIMCI+nfBjG0zJpMuPXWzXZC/ykaOJRtc8gCmiXuxw4Bz99Xgb9tTj65U
+         pNsSYC8fuiuyK6fqgepnn/F7EtWqpuRMavZj1bL5j+yp3L9rZ0IoS7wSuAgn5Z1SihX0ghICvey5
+         BEIW/IsNfGu7UXSg+isDWZ3NbZdvYsx/wdOLdqT6vNxVw8wJrGZfKFEemXSH3MsV7fF6nCBtELvH
+         hp01wbipUxw0nU5uqTjiIdCVpo5GKNHzeP/hL2N4hOCe77qO9HQnfMUaiw0PhqJDN+7p1pexaIm2
+         DjHspo2BL/HVTxtDSZG2YkUt3lx1RFM48nw5GNmTyg4SKOnehALJ6RQraauW0ZgDk4+OtdGQ5F05
+         m1X58E+CcfLOTl7MSYqequQ7919awtuH1nL2QWwDzykK7O56ZQvJXAP8ZbUK4W87YJiLDdL8vjw3
+         mPKhGpjnbdgWuFH2F1MdigmSjewvtnu7KWK2v9gOS+2MjYUvLio6FivxDcYsXml+siQAWCw7/BeB
+         bFuoiDnZAlUqJnRGaKDKO0XPhIaPah5XryJIa6x0Ooo+2AZj9lM3DZg65Sxw9Q3i2MmXecfMgalm
+         NvxY11bixjcHwZIMchV0ELi9X4IxH02BghdfQkjSFowT2bMTI30tq0nM5dFiW04mkyImiKGeVHgd
+         Ht4Ps2BVXRa9oOr9VTsD6kMPyO7sYsfi/Ytk+kHXeNQQfKJcWaWuHF8obD3R7i
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     sdf@google.com, ast@kernel.org
+Cc:     rongtao@cestc.cn, rtoax@foxmail.com,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next v3] selftests/bpf: trace_helpers.c: optimize kallsyms cache
+Date:   Sat, 12 Aug 2023 13:57:02 +0800
+X-OQ-MSGID: <20230812055703.7218-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-In-Reply-To: <20230725172051.2142641-1-shikemeng@huaweicloud.com>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: cCh0CgAHNTGUAtdkCZvtAQ--.44296S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr45AF4rJrWxGryUGr45ZFb_yoW8Zw13pa
-        93CFykZr1UJFs2kFyxZFWvqr4akw4xJrWjkr43Ww4fZFW8Xrs7Ga1DKw4rKw4UG3ykXa98
-        Z3sIyFy5Ka1DArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1CPfJUUUUU==
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Friendly ping...
+From: Rong Tao <rongtao@cestc.cn>
 
-on 7/26/2023 1:20 AM, Kemeng Shi wrote:
-> We mix up KUNIT_TRIGGER_STATIC_STUB and KUNIT_STATIC_STUB_REDIRECT in
-> static_stub header. Just correct KUNIT_TRIGGER_STATIC_STUB to
-> KUNIT_STATIC_STUB_REDIRECT which is documented.
-> 
-> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-> ---
->  include/kunit/static_stub.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
-> index 9b80150a5d62..85315c80b303 100644
-> --- a/include/kunit/static_stub.h
-> +++ b/include/kunit/static_stub.h
-> @@ -11,7 +11,7 @@
->  #if !IS_ENABLED(CONFIG_KUNIT)
->  
->  /* If CONFIG_KUNIT is not enabled, these stubs quietly disappear. */
-> -#define KUNIT_TRIGGER_STATIC_STUB(real_fn_name, args...) do {} while (0)
-> +#define KUNIT_STATIC_STUB_REDIRECT(real_fn_name, args...) do {} while (0)
->  
->  #else
->  
-> @@ -30,7 +30,7 @@
->   * This is a function prologue which is used to allow calls to the current
->   * function to be redirected by a KUnit test. KUnit tests can call
->   * kunit_activate_static_stub() to pass a replacement function in. The
-> - * replacement function will be called by KUNIT_TRIGGER_STATIC_STUB(), which
-> + * replacement function will be called by KUNIT_STATIC_STUB_REDIRECT(), which
->   * will then return from the function. If the caller is not in a KUnit context,
->   * the function will continue execution as normal.
->   *
-> @@ -87,7 +87,7 @@ void __kunit_activate_static_stub(struct kunit *test,
->   * When activated, calls to real_fn_addr from within this test (even if called
->   * indirectly) will instead call replacement_addr. The function pointed to by
->   * real_fn_addr must begin with the static stub prologue in
-> - * KUNIT_TRIGGER_STATIC_STUB() for this to work. real_fn_addr and
-> + * KUNIT_STATIC_STUB_REDIRECT() for this to work. real_fn_addr and
->   * replacement_addr must have the same type.
->   *
->   * The redirection can be disabled again with kunit_deactivate_static_stub().
-> 
+Static ksyms often have problems because the number of symbols exceeds the
+MAX_SYMS limit. Like changing the MAX_SYMS from 300000 to 400000 in
+commit e76a014334a6("selftests/bpf: Bump and validate MAX_SYMS") solves
+the problem somewhat, but it's not the perfect way.
+
+This commit uses dynamic memory allocation, which completely solves the
+problem caused by the limitation of the number of kallsyms.
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+v3: Do not use structs and judge ksyms__add_symbol function return value.
+v2: https://lore.kernel.org/lkml/tencent_B655EE5E5D463110D70CD2846AB3262EED09@qq.com/
+    Do the usual len/capacity scheme here to amortize the cost of realloc, and
+    don't free symbols.
+v1: https://lore.kernel.org/lkml/tencent_AB461510B10CD484E0B2F62E3754165F2909@qq.com/
+---
+ tools/testing/selftests/bpf/trace_helpers.c | 42 ++++++++++++++++-----
+ 1 file changed, 32 insertions(+), 10 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index f83d9f65c65b..d8391a2122b4 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -18,10 +18,32 @@
+ #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
+ #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
+ 
+-#define MAX_SYMS 400000
+-static struct ksym syms[MAX_SYMS];
++static struct ksym *syms;
++static int sym_cap;
+ static int sym_cnt;
+ 
++static int ksyms__add_symbol(const char *name, unsigned long addr)
++{
++	void *tmp;
++	unsigned int new_cap;
++
++	if (sym_cnt + 1 > sym_cap) {
++		new_cap = sym_cap * 4 / 3;
++		tmp = realloc(syms, sizeof(struct ksym) * new_cap);
++		if (!tmp)
++			return -ENOMEM;
++		syms = tmp;
++		sym_cap = new_cap;
++	}
++
++	syms[sym_cnt].addr = addr;
++	syms[sym_cnt].name = strdup(name);
++
++	sym_cnt++;
++
++	return 0;
++}
++
+ static int ksym_cmp(const void *p1, const void *p2)
+ {
+ 	return ((struct ksym *)p1)->addr - ((struct ksym *)p2)->addr;
+@@ -33,9 +55,13 @@ int load_kallsyms_refresh(void)
+ 	char func[256], buf[256];
+ 	char symbol;
+ 	void *addr;
+-	int i = 0;
++	int ret;
+ 
++	sym_cap = 1024;
+ 	sym_cnt = 0;
++	syms = malloc(sizeof(struct ksym) * sym_cap);
++	if (!syms)
++		return -ENOMEM;
+ 
+ 	f = fopen("/proc/kallsyms", "r");
+ 	if (!f)
+@@ -46,15 +72,11 @@ int load_kallsyms_refresh(void)
+ 			break;
+ 		if (!addr)
+ 			continue;
+-		if (i >= MAX_SYMS)
+-			return -EFBIG;
+-
+-		syms[i].addr = (long) addr;
+-		syms[i].name = strdup(func);
+-		i++;
++		ret = ksyms__add_symbol(func, (unsigned long)addr);
++		if (ret)
++			return ret;
+ 	}
+ 	fclose(f);
+-	sym_cnt = i;
+ 	qsort(syms, sym_cnt, sizeof(struct ksym), ksym_cmp);
+ 	return 0;
+ }
+-- 
+2.41.0
 
