@@ -2,120 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE726779F7B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Aug 2023 13:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 342ED77A066
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Aug 2023 16:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236795AbjHLLHS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 12 Aug 2023 07:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S236413AbjHLOWS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 12 Aug 2023 10:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236477AbjHLLHL (ORCPT
+        with ESMTP id S234551AbjHLOWQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 12 Aug 2023 07:07:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61255AF;
-        Sat, 12 Aug 2023 04:07:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F30D463A4F;
-        Sat, 12 Aug 2023 11:07:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0980EC433C8;
-        Sat, 12 Aug 2023 11:07:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1691838433;
-        bh=PIh5nnK6kOB1HMKbcrDeCFnagp8juSndGPC0D3oJydc=;
+        Sat, 12 Aug 2023 10:22:16 -0400
+Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF54171F;
+        Sat, 12 Aug 2023 07:22:18 -0700 (PDT)
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4RNNCR1K35z8L;
+        Sat, 12 Aug 2023 16:22:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1691850136; bh=u5bq7pd5Cv90/Zbgy2FhjyRSbq0SeJ3nBFKvllWi1eg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FUPbZapArRfdTmYpcstLNsz2wiruIK842FXmF41avM/ehhtZkoDhVFojaHOup1EWZ
-         yV8ZTwikgiZAV3Hwx3EgpY7eiA9Ivcx7grp5dQKLWMeQ9yqpUxzmVS2+YV28tc+bvk
-         VTWYA38wNWZdBB6jXwk5StekNOfAa3CmVGdWouRM=
-Date:   Sat, 12 Aug 2023 13:07:10 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] drivers: base: Add tests showing devm handling
- inconsistencies
-Message-ID: <2023081248-uselessly-reckless-1963@gregkh>
-References: <20230720-kunit-devm-inconsistencies-test-v3-0-6aa7e074f373@kernel.org>
- <xlb7rwyg5j4hk6afqssxniprn72goxv4avjzjrs3oc3nvfhbsa@fn4amdp6dkx5>
- <2023073131-glimmer-both-05b6@gregkh>
- <2023080416-suspend-cattail-f048@gregkh>
- <ckldghyavb6fj2mxfcw5spsr3v2rlyj2br64tnvwl5waz3i6id@zbxu7ipjtlwd>
+        b=c3QN0PdbGboHQRbBeobFKVXGXglpVS0Mrl0gqCrK49+VoIjGt/OyVtf9lbfoSz5W7
+         oXedUXsCMS59O0kX2vamz4MNt1flWx1AorUMh2Cc+gp7Gn/pbvaHsHb/n4JSDv1pfg
+         v1By/PS1eu61cqPVOE3EtQ53iHf7pELje3zmG5My2sG/sjaL8GmlADrKRr0ANFf+JA
+         hij/Eo1vOvA/gzdJR9QUOLskfTfw6WD77N1V+1DgRzPpsy3u/BDqGtlLsXT/tnRPHC
+         MkPyYl5LxLUVuFu/NF/42rz04gFxscyMb6I63fmubnrp5lGQ4szPSjD2yxXnivZ69i
+         AvvZCuk7olxxg==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.8 at mail
+Date:   Sat, 12 Aug 2023 16:22:09 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <emmir@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v28 2/6] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <ZNeVkRo2ChHSpv6M@qmqm.qmqm.pl>
+References: <20230809061603.1969154-1-usama.anjum@collabora.com>
+ <20230809061603.1969154-3-usama.anjum@collabora.com>
+ <CABb0KFGqDo8hFohqpXewoquyLVZUhG-bRHxpw_PYXzGW9wXofQ@mail.gmail.com>
+ <97de19a3-bba2-9260-7741-cd5b6f4581e9@collabora.com>
+ <ZNY4bz1450enHxlG@qmqm.qmqm.pl>
+ <f80cc4b8-39ca-c410-655a-9abc377ec442@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ckldghyavb6fj2mxfcw5spsr3v2rlyj2br64tnvwl5waz3i6id@zbxu7ipjtlwd>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f80cc4b8-39ca-c410-655a-9abc377ec442@collabora.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 08:54:08AM +0200, Maxime Ripard wrote:
-> Hi,
+On Fri, Aug 11, 2023 at 08:30:16PM +0500, Muhammad Usama Anjum wrote:
+> On 8/11/23 6:32 PM, Michał Mirosław wrote:
+> > On Fri, Aug 11, 2023 at 05:02:44PM +0500, Muhammad Usama Anjum wrote:
+> >> Now we are walking the entire range walk_page_range(). We don't break loop
+> >> when we get -ENOSPC as this error may only mean that the temporary buffer
+> >> is full. So we need check if max pages have been found or output buffer is
+> >> full or ret is 0 or any other error. When p.arg.vec_len = 1 is end
+> >> condition as the last entry is in cur. As we have walked over the entire
+> >> range, cur must be full after which the walk returned.
+> >>
+> >> So current condition is necessary. I've double checked it. I'll change it
+> >> to `p.arg.vec_len == 1`.
+> > If we have walked the whole range, then the loop will end anyway due to
+> > `walk_start < walk_end` not held in the `for()`'s condition.
+> Sorry, for not explaining to-the-point.
+> Why would we walk the entire range when we should recognize that the output
+> buffer is full and break the loop?
 > 
-> On Fri, Aug 04, 2023 at 05:01:50PM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Jul 31, 2023 at 09:28:47AM +0200, Greg Kroah-Hartman wrote:
-> > > On Mon, Jul 31, 2023 at 08:34:03AM +0200, Maxime Ripard wrote:
-> > > > On Thu, Jul 20, 2023 at 02:45:06PM +0200, Maxime Ripard wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > This follows the discussion here:
-> > > > > https://lore.kernel.org/linux-kselftest/20230324123157.bbwvfq4gsxnlnfwb@houat/
-> > > > > 
-> > > > > This shows a couple of inconsistencies with regard to how device-managed
-> > > > > resources are cleaned up. Basically, devm resources will only be cleaned up
-> > > > > if the device is attached to a bus and bound to a driver. Failing any of
-> > > > > these cases, a call to device_unregister will not end up in the devm
-> > > > > resources being released.
-> > > > > 
-> > > > > We had to work around it in DRM to provide helpers to create a device for
-> > > > > kunit tests, but the current discussion around creating similar, generic,
-> > > > > helpers for kunit resumed interest in fixing this.
-> > > > > 
-> > > > > This can be tested using the command:
-> > > > > ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/base/test/
-> > > > > 
-> > > > > I added the fix David suggested back in that discussion which does fix
-> > > > > the tests. The SoB is missing, since David didn't provide it back then.
-> > > > > 
-> > > > > Let me know what you think,
-> > > > > Maxime
-> > > > > 
-> > > > > Signed-off-by: Maxime Ripard <mripard@kernel.org>
-> > > > 
-> > > > Ping?
-> > > 
-> > > It's in my review queue, still trying to catch up...
-> > 
-> > I didn't make it here this week, sorry.
-> 
-> np, I just don't want that patch to disappear into the ether :)
-> 
-> > I kind of worry about encoding the current "odd" functionality in a
-> > test as being the correct thing, but will look at it closer next week.
-> 
-> I don't think I'm doing that? The tests we've added are all how we think
-> it should behave, the broken ones being skipped to avoid any failures.
-> 
-> The last patch drops the kunit_skip() to make sure that it's tested
-> going forward.
-> 
-> So we shouldn't encode the odd behaviour anywhere in this series, unless
-> I got you wrong?
+> I've test cases written for this case. If I remove `p.arg.vec_len == 1`
+> check, there is infinite loop for walking. So we are doing correct thing here.
 
-No you are correct, I was mis-remembering things.
+It seems there is a bug somewhere then. I'll take a look at v29.
 
-This looks good, thanks for sticking with it, all now applied to my
-tree.
+> > [...]
+> >>>> +/*
+> >>>> + * struct pm_scan_arg - Pagemap ioctl argument
+> >>>> + * @size:              Size of the structure
+> >>>> + * @flags:             Flags for the IOCTL
+> >>>> + * @start:             Starting address of the region
+> >>>> + * @end:               Ending address of the region
+> >>>> + * @walk_end           Address where the scan stopped (written by kernel).
+> >>>> + *                     walk_end == end informs that the scan completed on entire range.
+> >>>
+> >>> Can we ensure this holds also for the tagged pointers?
+> >> No, we cannot.
+> > So this need explanation in the comment here. (Though I'd still like to
+> > know how the address tags are supposed to be used from someone that
+> > knows them.)
+> I've looked at some documentations (presentations/talks) about tags. Tags
+> is more like userspace feature. Kernel should just ignore them for our use
+> case. I'll add comment.
 
-greg k-h
+Kernel does ignore them when reading, but what about returning a tagged
+pointer? How that should work? In case of `walk_end` we can safely copy
+the tag from `end` or `start` when we return exactly on of those. But what
+about other addresses? When fed back as `start` any tag will work, so
+the question is only what to do with pointers in the middle? We can clear
+those of course - this should be mentioned in the doc - so userspace always
+gets a predictable value (note: 'predictable' does not require treating
+`start` and `end` the same way as addresses between them, just that what
+happens is well defined). (I think making `walk_end` == `end` work
+regardless of pointer tagging will make userspace happier, but I guess
+doc will also make it workable. And I'm repeating myself. ;-)
+
+Best Regards
+Michał Mirosław
