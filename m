@@ -2,23 +2,23 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D7377A1A7
+	by mail.lfdr.de (Postfix) with ESMTP id 80EAB77A1A8
 	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Aug 2023 20:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjHLSKX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S229630AbjHLSKX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Sat, 12 Aug 2023 14:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjHLSKW (ORCPT
+        with ESMTP id S229452AbjHLSKW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sat, 12 Aug 2023 14:10:22 -0400
 Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5D91704;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E2210E3;
         Sat, 12 Aug 2023 11:10:23 -0700 (PDT)
 Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 37CI9v8r016225
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 37CI9v8s016225
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Sat, 12 Aug 2023 20:09:57 +0200
+        Sat, 12 Aug 2023 20:09:58 +0200
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -32,10 +32,12 @@ Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
         Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
         Hangbin Liu <liuhangbin@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net-next v2 0/2] seg6: add NEXT-C-SID support for SRv6 End.X behavior
-Date:   Sat, 12 Aug 2023 20:09:24 +0200
-Message-Id: <20230812180926.16689-1-andrea.mayer@uniroma2.it>
+Subject: [net-next v2 1/2] seg6: add NEXT-C-SID support for SRv6 End.X behavior
+Date:   Sat, 12 Aug 2023 20:09:25 +0200
+Message-Id: <20230812180926.16689-2-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20230812180926.16689-1-andrea.mayer@uniroma2.it>
+References: <20230812180926.16689-1-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
@@ -50,75 +52,234 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In the Segment Routing (SR) architecture a list of instructions, called
-segments, can be added to the packet headers to influence the forwarding and
-processing of the packets in an SR enabled network.
+The NEXT-C-SID mechanism described in [1] offers the possibility of
+encoding several SRv6 segments within a single 128 bit SID address. Such
+a SID address is called a Compressed SID (C-SID) container. In this way,
+the length of the SID List can be drastically reduced.
 
-Considering the Segment Routing over IPv6 data plane (SRv6) [1], the segment
-identifiers (SIDs) are IPv6 addresses (128 bits) and the segment list (SID
-List) is carried in the Segment Routing Header (SRH). A segment may correspond
-to a "behavior" that is executed by a node when the packet is received.
-The Linux kernel currently supports a large subset of the behaviors described
-in [2] (e.g., End, End.X, End.T and so on).
+A SID instantiated with the NEXT-C-SID flavor considers an IPv6 address
+logically structured in three main blocks: i) Locator-Block; ii)
+Locator-Node Function; iii) Argument.
 
-In some SRv6 scenarios, the number of segments carried by the SID List may
-increase dramatically, reducing the MTU (Maximum Transfer Unit) size and/or
-limiting the processing power of legacy hardware devices (due to longer IPv6
-headers).
+                        C-SID container
++------------------------------------------------------------------+
+|     Locator-Block      |Loc-Node|            Argument            |
+|                        |Function|                                |
++------------------------------------------------------------------+
+<--------- B -----------> <- NF -> <------------- A --------------->
 
-The NEXT-C-SID mechanism [3] extends the SRv6 architecture by providing several
-ways to efficiently represent the SID List.
-By leveraging the NEXT-C-SID, it is possible to encode several SRv6 segments
-within a single 128 bit SID address (also referenced as Compressed SID
-Container). In this way, the length of the SID List can be drastically reduced.
+   (i) The Locator-Block can be any IPv6 prefix available to the provider;
 
-The NEXT-C-SID mechanism is built upon the "flavors" framework defined in [2].
-This framework is already supported by the Linux SRv6 subsystem and is used to
-modify and/or extend a subset of existing behaviors.
+  (ii) The Locator-Node Function represents the node and the function to
+       be triggered when a packet is received on the node;
 
-In this patchset, we extend the SRv6 End.X behavior in order to support the
-NEXT-C-SID mechanism.
+ (iii) The Argument carries the remaining C-SIDs in the current C-SID
+       container.
 
-In details, the patchset is made of:
- - patch 1/2: add NEXT-C-SID support for SRv6 End.X behavior;
- - patch 2/2: add selftest for NEXT-C-SID in SRv6 End.X behavior.
+This patch leverages the NEXT-C-SID mechanism previously introduced in the
+Linux SRv6 subsystem [2] to support SID compression capabilities in the
+SRv6 End.X behavior [3].
+An SRv6 End.X behavior with NEXT-C-SID flavor works as an End.X behavior
+but it is capable of processing the compressed SID List encoded in C-SID
+containers.
 
+An SRv6 End.X behavior with NEXT-C-SID flavor can be configured to support
+user-provided Locator-Block and Locator-Node Function lengths. In this
+implementation, such lengths must be evenly divisible by 8 (i.e. must be
+byte-aligned), otherwise the kernel informs the user about invalid
+values with a meaningful error code and message through netlink_ext_ack.
 
-From the user space perspective, we do not need to change the iproute2 code to
-support the NEXT-C-SID flavor for the SRv6 End.X behavior. However, we will
-update the man page considering the NEXT-C-SID flavor applied to the SRv6 End.X
-behavior in a separate patch.
+If Locator-Block and/or Locator-Node Function lengths are not provided
+by the user during configuration of an SRv6 End.X behavior instance with
+NEXT-C-SID flavor, the kernel will choose their default values i.e.,
+32-bit Locator-Block and 16-bit Locator-Node Function.
 
-Comments, improvements and suggestions are always appreciated.
+[1] - https://datatracker.ietf.org/doc/html/draft-ietf-spring-srv6-srh-compression
+[2] - https://lore.kernel.org/all/20220912171619.16943-1-andrea.mayer@uniroma2.it/
+[3] - https://datatracker.ietf.org/doc/html/rfc8986#name-endx-l3-cross-connect
 
-Thank you all,
-Andrea
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+---
+ net/ipv6/seg6_local.c | 108 ++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 88 insertions(+), 20 deletions(-)
 
-[1] - https://datatracker.ietf.org/doc/html/rfc8754
-[2] - https://datatracker.ietf.org/doc/html/rfc8986
-[3] - https://datatracker.ietf.org/doc/html/draft-ietf-spring-srv6-srh-compression
-
-v1 -> v2:
- - Fix author tags in the commit message in patch 2/2, thanks to Paolo Abeni;
-
- - Remove unnecessary supp_ops == 0 check in patch 1/2, thanks to Hangbin Liu;
-
- - Fix 'is it possible' -> 'it is possible' in cover letter, thanks to
-   Hangbin Liu.
-
-Andrea Mayer (1):
-  seg6: add NEXT-C-SID support for SRv6 End.X behavior
-
-Paolo Lungaroni (1):
-  selftests: seg6: add selftest for NEXT-C-SID flavor in SRv6 End.X
-    behavior
-
- net/ipv6/seg6_local.c                         |  108 +-
- tools/testing/selftests/net/Makefile          |    1 +
- .../net/srv6_end_x_next_csid_l3vpn_test.sh    | 1213 +++++++++++++++++
- 3 files changed, 1302 insertions(+), 20 deletions(-)
- create mode 100755 tools/testing/selftests/net/srv6_end_x_next_csid_l3vpn_test.sh
-
+diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+index dd433cc265c8..24e2b4b494cb 100644
+--- a/net/ipv6/seg6_local.c
++++ b/net/ipv6/seg6_local.c
+@@ -109,15 +109,19 @@ struct bpf_lwt_prog {
+ #define next_csid_chk_lcnode_fn_bits(flen)		\
+ 	next_csid_chk_lcblock_bits(flen)
+ 
++/* flag indicating that flavors are set up for a given End* behavior */
++#define SEG6_F_LOCAL_FLAVORS		SEG6_F_ATTR(SEG6_LOCAL_FLAVORS)
++
+ #define SEG6_F_LOCAL_FLV_OP(flvname)	BIT(SEG6_LOCAL_FLV_OP_##flvname)
++#define SEG6_F_LOCAL_FLV_NEXT_CSID	SEG6_F_LOCAL_FLV_OP(NEXT_CSID)
+ #define SEG6_F_LOCAL_FLV_PSP		SEG6_F_LOCAL_FLV_OP(PSP)
+ 
+ /* Supported RFC8986 Flavor operations are reported in this bitmask */
+ #define SEG6_LOCAL_FLV8986_SUPP_OPS	SEG6_F_LOCAL_FLV_PSP
+ 
+-/* Supported Flavor operations are reported in this bitmask */
+-#define SEG6_LOCAL_FLV_SUPP_OPS		(SEG6_F_LOCAL_FLV_OP(NEXT_CSID) | \
++#define SEG6_LOCAL_END_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
+ 					 SEG6_LOCAL_FLV8986_SUPP_OPS)
++#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	SEG6_F_LOCAL_FLV_NEXT_CSID
+ 
+ struct seg6_flavors_info {
+ 	/* Flavor operations */
+@@ -411,9 +415,72 @@ static int end_next_csid_core(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ 	return input_action_end_finish(skb, slwt);
+ }
+ 
++static int input_action_end_x_finish(struct sk_buff *skb,
++				     struct seg6_local_lwt *slwt)
++{
++	seg6_lookup_nexthop(skb, &slwt->nh6, 0);
++
++	return dst_input(skb);
++}
++
++static int input_action_end_x_core(struct sk_buff *skb,
++				   struct seg6_local_lwt *slwt)
++{
++	struct ipv6_sr_hdr *srh;
++
++	srh = get_and_validate_srh(skb);
++	if (!srh)
++		goto drop;
++
++	advance_nextseg(srh, &ipv6_hdr(skb)->daddr);
++
++	return input_action_end_x_finish(skb, slwt);
++
++drop:
++	kfree_skb(skb);
++	return -EINVAL;
++}
++
++static int end_x_next_csid_core(struct sk_buff *skb,
++				struct seg6_local_lwt *slwt)
++{
++	const struct seg6_flavors_info *finfo = &slwt->flv_info;
++	struct in6_addr *daddr = &ipv6_hdr(skb)->daddr;
++
++	if (seg6_next_csid_is_arg_zero(daddr, finfo))
++		return input_action_end_x_core(skb, slwt);
++
++	/* update DA */
++	seg6_next_csid_advance_arg(daddr, finfo);
++
++	return input_action_end_x_finish(skb, slwt);
++}
++
+ static bool seg6_next_csid_enabled(__u32 fops)
+ {
+-	return fops & BIT(SEG6_LOCAL_FLV_OP_NEXT_CSID);
++	return fops & SEG6_F_LOCAL_FLV_NEXT_CSID;
++}
++
++/* Processing of SRv6 End, End.X, and End.T behaviors can be extended through
++ * the flavors framework. These behaviors must report the subset of (flavor)
++ * operations they currently implement. In this way, if a user specifies a
++ * flavor combination that is not supported by a given End* behavior, the
++ * kernel refuses to instantiate the tunnel reporting the error.
++ */
++static int seg6_flv_supp_ops_by_action(int action, __u32 *fops)
++{
++	switch (action) {
++	case SEG6_LOCAL_ACTION_END:
++		*fops = SEG6_LOCAL_END_FLV_SUPP_OPS;
++		break;
++	case SEG6_LOCAL_ACTION_END_X:
++		*fops = SEG6_LOCAL_END_X_FLV_SUPP_OPS;
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
+ }
+ 
+ /* We describe the packet state in relation to the absence/presence of the SRH
+@@ -746,21 +813,14 @@ static int input_action_end(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ /* regular endpoint, and forward to specified nexthop */
+ static int input_action_end_x(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ {
+-	struct ipv6_sr_hdr *srh;
+-
+-	srh = get_and_validate_srh(skb);
+-	if (!srh)
+-		goto drop;
+-
+-	advance_nextseg(srh, &ipv6_hdr(skb)->daddr);
+-
+-	seg6_lookup_nexthop(skb, &slwt->nh6, 0);
++	const struct seg6_flavors_info *finfo = &slwt->flv_info;
++	__u32 fops = finfo->flv_ops;
+ 
+-	return dst_input(skb);
++	/* check for the presence of NEXT-C-SID since it applies first */
++	if (seg6_next_csid_enabled(fops))
++		return end_x_next_csid_core(skb, slwt);
+ 
+-drop:
+-	kfree_skb(skb);
+-	return -EINVAL;
++	return input_action_end_x_core(skb, slwt);
+ }
+ 
+ static int input_action_end_t(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+@@ -1404,13 +1464,14 @@ static struct seg6_action_desc seg6_action_table[] = {
+ 		.action		= SEG6_LOCAL_ACTION_END,
+ 		.attrs		= 0,
+ 		.optattrs	= SEG6_F_LOCAL_COUNTERS |
+-				  SEG6_F_ATTR(SEG6_LOCAL_FLAVORS),
++				  SEG6_F_LOCAL_FLAVORS,
+ 		.input		= input_action_end,
+ 	},
+ 	{
+ 		.action		= SEG6_LOCAL_ACTION_END_X,
+ 		.attrs		= SEG6_F_ATTR(SEG6_LOCAL_NH6),
+-		.optattrs	= SEG6_F_LOCAL_COUNTERS,
++		.optattrs	= SEG6_F_LOCAL_COUNTERS |
++				  SEG6_F_LOCAL_FLAVORS,
+ 		.input		= input_action_end_x,
+ 	},
+ 	{
+@@ -2070,7 +2131,8 @@ static int parse_nla_flavors(struct nlattr **attrs, struct seg6_local_lwt *slwt,
+ {
+ 	struct seg6_flavors_info *finfo = &slwt->flv_info;
+ 	struct nlattr *tb[SEG6_LOCAL_FLV_MAX + 1];
+-	unsigned long fops;
++	int action = slwt->action;
++	__u32 fops, supp_fops;
+ 	int rc;
+ 
+ 	rc = nla_parse_nested_deprecated(tb, SEG6_LOCAL_FLV_MAX,
+@@ -2086,7 +2148,8 @@ static int parse_nla_flavors(struct nlattr **attrs, struct seg6_local_lwt *slwt,
+ 		return -EINVAL;
+ 
+ 	fops = nla_get_u32(tb[SEG6_LOCAL_FLV_OPERATION]);
+-	if (fops & ~SEG6_LOCAL_FLV_SUPP_OPS) {
++	rc = seg6_flv_supp_ops_by_action(action, &supp_fops);
++	if (rc < 0 || (fops & ~supp_fops)) {
+ 		NL_SET_ERR_MSG(extack, "Unsupported Flavor operation(s)");
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -2618,6 +2681,11 @@ int __init seg6_local_init(void)
+ 	 */
+ 	BUILD_BUG_ON(SEG6_LOCAL_MAX + 1 > BITS_PER_TYPE(unsigned long));
+ 
++	/* Check whether the number of defined flavors exceeds the maximum
++	 * allowed value.
++	 */
++	BUILD_BUG_ON(SEG6_LOCAL_FLV_OP_MAX + 1 > BITS_PER_TYPE(__u32));
++
+ 	/* If the default NEXT-C-SID Locator-Block/Node Function lengths (in
+ 	 * bits) have been changed with invalid values, kernel build stops
+ 	 * here.
 -- 
 2.20.1
 
