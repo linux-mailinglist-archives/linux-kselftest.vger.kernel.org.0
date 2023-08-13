@@ -2,110 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07C577A6A5
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Aug 2023 15:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CE077A702
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Aug 2023 16:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjHMN5Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 13 Aug 2023 09:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S230360AbjHMOlv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 13 Aug 2023 10:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjHMN5X (ORCPT
+        with ESMTP id S229516AbjHMOlu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 13 Aug 2023 09:57:23 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AD2AB;
-        Sun, 13 Aug 2023 06:57:23 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1691935022tmd0znhp
-Received: from linux-lab-host.localdomain ( [116.30.128.116])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 13 Aug 2023 21:57:00 +0800 (CST)
-X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: XBN7tc9DADKY0u0gYyU/9iar40391tVgg6th9DXb2Tc89vEhh6Pcj3EUcGKpW
-        XlLZ/uLOrczFEQ9JcKBt4mHPcilMtoya+/qW+cUrzQWYrU09RsgIjQQaT24orKUyM3oFroK
-        32PzoSmcCOym28AKRahOkSWGDt7Id3i43dPVskDaFkFhxRwhyvSKDBZt0W+RfZM+mlY+8lg
-        3sRaaeiwijD9FGchbgrQBTl/3KnJXhwmlatbl01hHd8U7nUZWst2pvjT+nlrQRShuv2a/X2
-        y2zBxi/bYfIqmq70O1F+ldTksLDaOl9G1meioVDU6NXq7veZwG+Qnl9xyA05000UyZ2w2VV
-        w6e6CkPI3VhabDJfVus6Fp2xGd4mUa5CcxKYVbCBvdK1jMDpqE4RLUXVFgNyg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1576533473743589944
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tanyuan@tinylab.org, thomas@t-8ch.de
-Subject: Re: [PATCH v6 0/2] tools/nolibc: fix up size inflat regression
-Date:   Sun, 13 Aug 2023 21:56:59 +0800
-Message-Id: <20230813135659.19763-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230813090830.GF8237@1wt.eu>
-References: <20230813090830.GF8237@1wt.eu>
+        Sun, 13 Aug 2023 10:41:50 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADB3E65
+        for <linux-kselftest@vger.kernel.org>; Sun, 13 Aug 2023 07:41:52 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b9c0391749so54815701fa.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 13 Aug 2023 07:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1691937711; x=1692542511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jnO3PmCn30n5xbeq5GUi5oVZC3HsNOcy8ts4GlaH4vE=;
+        b=CTC0lsczhmswXNxFIM3zvA/6X+f7vThA2LJ2rcZbyecUXg3iTed62Ipg+dmpBLb79B
+         RgBe9gYx1wsPdFg2SUldO4WC5z38PQOCJufWrL3aua7aV6kkdaLpcQYjnGx3L7b0XYAB
+         0KcejgbBkGAslci8El2DeARYPfUnW6KMd39lA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691937711; x=1692542511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jnO3PmCn30n5xbeq5GUi5oVZC3HsNOcy8ts4GlaH4vE=;
+        b=L0FeoDJYmsYRkIrq4U1xw5Cee4KB3u0YYFYZ8u/833WOr9REaLwjCMYIZ1zuIL2WTS
+         Yhtutrz3xeRQ+HlGzhT31SRDNQ5mSCd+PDfcJc1fW6o9AR1f/2FMAo7SUM6G06C3Jc5P
+         jSnkmX0bw+QjFtXRs59PMJ1LOehayScI3uumE8ApORn5oKs9XvyTKwHL0ff/hH2PvADw
+         WMj4QNxHhfLEC4QRzCWoKecL90Qwax0eJJYLmbP4aQh/ptLLmWDqctHZmKRS3JiO/Ln/
+         N6fktmJ2mlYG+nRsuzNN6YXfgGdUHkHIRw4jNotqb+puUXnF7TPIEwk8p3DqTVlPNx0K
+         zL0A==
+X-Gm-Message-State: AOJu0Yy58S9GEBfT9clBU+ZD5hOWbW3JIG6DXmJ5q3FY5+N3lGL4lCKe
+        MBca3WtaprvJiHIr9YucQ1uSnCLk2qr/t6rSQPOXgg==
+X-Google-Smtp-Source: AGHT+IHxbQigoKtMcn3roqdpsFfVukg6GeGMbqguN1Xof1u3+VwFxhgH6/lyOLcKxb5c8D8h678jAV5EAh0ntivHY08=
+X-Received: by 2002:a05:651c:104a:b0:2b8:67ce:4ad7 with SMTP id
+ x10-20020a05651c104a00b002b867ce4ad7mr4969134ljm.6.1691937710915; Sun, 13 Aug
+ 2023 07:41:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230813033737.3731290-1-joel@joelfernandes.org> <2023081317-engine-pauper-2a6a@gregkh>
+In-Reply-To: <2023081317-engine-pauper-2a6a@gregkh>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sun, 13 Aug 2023 10:41:41 -0400
+Message-ID: <CAEXW_YRW4Q2mtaKjyHpLhfjuF04aLO6UBrvWvUrOYSU-kg=7SQ@mail.gmail.com>
+Subject: Re: [PATCH] rcutorture: Copy out ftrace into its own console file
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Joel <agnel.joel@gmail.com>,
+        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
-
-> On Sat, Aug 12, 2023 at 05:49:36AM +0800, Zhangjin Wu wrote:
-> > After these two patches, will send the proposed my_syscall() patchset
-> > tomorrow, it can even further reduce more type conversions and therefore
-> > reduce more binary bytes, here is a preview of the testing result:
-> > 
-> >    // with the coming my_syscall() patchset, sys_* from functionsn to macros
-> >      i386: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 19250
-> >    x86_64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 21733
-> (...)
-> > It can also shrink the whole sys.h from 1171 lines to around 738 lines.
-> 
-> Please, Zhangjin, please. Let's stop constantly speaking about potential
-> future improvements when the present is broken. It needlessly adds a lot
-> of noise in the discussion and tends to encourage you to explore areas
-> that are incompatible with what is required to fix the breakage, and
-> very likely steers your approach to fixes in a direction that you think
-> is compatible with such future paths. But as long as existing code is
-> broken you cannot speculate on how better the next iteration will be,
-> because it's built on a broken basis. And I would like to remind that
-> the *only* reason for the current breakage is this attempt to save even
-> more code lines, that was not a requirement at all in the first place!
-> Sure it can be fine to remove code when possible, but not at the cost of
-> trying to force squares to enter round holes like this. The reality is
-> that *some* syscalls are different and *some* archs are different, and
-> these differences have to be taken into account, and if we keep exceptions
-> it's fine.
+On Sun, Aug 13, 2023 at 2:28=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
 >
-
-Agree very much, that's why I didn't send the new patchset but only send
-these two ones about size inflate regression, I don't want to discuss
-more than one issue at a time either (and you also have shared this idea
-several times) ;-)
-
-The progress and preview data here is only because the patch 1/2 [1] is
-an important preparation of the new patchset, the data here is more or
-less providing a selling point why we need patch 1/2, I have explained
-it in this reply [2]. Of course, we can roll them back directly, and If
-we do need sys_brk/mmap return 'long', we can revert the rolling-back
-and apply patch 1/2.
-
-    [PATCH v6 1/2] tools/nolibc: let sys_brk, sys_mmap and sys_mmap2 return long
-
-> So let's only speak about this later once the issue is completely solved.
+> On Sun, Aug 13, 2023 at 03:37:36AM +0000, Joel Fernandes (Google) wrote:
+> > From: Joel <agnel.joel@gmail.com>
+> >
+> > Often times it is difficult to jump to the ftrace buffers and treat it
+> > independently during debugging. Copy the contents of the buffers into
+> > its own file.
+> >
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 >
+> "From:" doesn't match the signed-off-by :(
 
-Ok, it is the right direction.
-
-Best regards,
-Zhangjin
----
-[1]: https://lore.kernel.org/lkml/82b584cbda5cee8d5318986644a2a64ba749a098.1691788036.git.falcon@tinylab.org/
-[2]: https://lore.kernel.org/lkml/20230813132620.19411-1-falcon@tinylab.org/
-
-> Thanks,
-> Willy
+Yeah I suck. Apparently I still don't know how to send a patch after 13 yea=
+rs.
