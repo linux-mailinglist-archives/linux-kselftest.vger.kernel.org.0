@@ -2,419 +2,251 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4209977A58C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Aug 2023 10:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA3977A5A8
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Aug 2023 10:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjHMIOk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 13 Aug 2023 04:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
+        id S230326AbjHMIv4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 13 Aug 2023 04:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjHMIOj (ORCPT
+        with ESMTP id S229531AbjHMIvz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 13 Aug 2023 04:14:39 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34780E7;
-        Sun, 13 Aug 2023 01:14:41 -0700 (PDT)
-Received: from [192.168.100.7] (unknown [39.34.188.71])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1E3DF6607122;
-        Sun, 13 Aug 2023 09:14:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1691914479;
-        bh=BChGkJRkjZWgzyQFOCbWXa50jj06kVV10+dAvRN9voo=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=FCjVfVG7uidfPv4zBprM+S9bPUpZPT4QO+5p6F/iyUYonAtFmweBtVQnsE41tO6AT
-         iYGrXnHeRy8PaUESj4Yy8QykXZvZR5wwXxRvBf5l4d1tFCLOqnhyUcuIGWcoBKKv8p
-         J9hnsOO/1lt0xJoVb0NXw7zvGwf9NLV0NyKYw5BaWW4DGnEamKQKhkUocsYlUTpAZF
-         dJ3zBOMRho7KbqY2qS65pmtOOIGaMBcwtdrkF/YGKNkG01ys1nml0itErhrF3/Sl59
-         vlNDWVHqWxQXa3Rq7trUFSTtL2YBUF47GKSDBACjCQoopInUfZf85qfIVSVS8x7yw8
-         +Ec9weZFL4DSw==
-Message-ID: <be42f268-a52a-6ae0-619a-7c8ca5bb58ae@collabora.com>
-Date:   Sun, 13 Aug 2023 13:14:28 +0500
+        Sun, 13 Aug 2023 04:51:55 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20CEF170C;
+        Sun, 13 Aug 2023 01:51:56 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 37D8peaY008548;
+        Sun, 13 Aug 2023 10:51:40 +0200
+Date:   Sun, 13 Aug 2023 10:51:40 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v5] tools/nolibc: fix up size inflate regression
+Message-ID: <20230813085140.GD8237@1wt.eu>
+References: <ZNKOJY+g66nkIyvv@1wt.eu>
+ <20230809221743.83107-1-falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v29 2/6] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-References: <20230811180842.3141781-1-usama.anjum@collabora.com>
- <20230811180842.3141781-3-usama.anjum@collabora.com>
- <ZNeqHj//Rt0MIa8s@qmqm.qmqm.pl>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZNeqHj//Rt0MIa8s@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230809221743.83107-1-falcon@tinylab.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/12/23 8:49 PM, Michał Mirosław wrote:
-> On Fri, Aug 11, 2023 at 11:08:38PM +0500, Muhammad Usama Anjum wrote:
->> The PAGEMAP_SCAN IOCTL on the pagemap file can be used to get or optionally
->> clear the info about page table entries. The following operations are supported
->> in this IOCTL:
->> - Scan the address range and get the memory ranges matching the provided criteria.
->>   This is performed by default when the output buffer is specified.
-> 
-> Nit: This is actually performed always, but you can disable the output part
-> by passing {NULL, 0} for the buffer.
-I'll update it to:
-"This is performed when the output buffer is specified."
+Hi Zhangjin,
 
+On Thu, Aug 10, 2023 at 06:17:43AM +0800, Zhangjin Wu wrote:
+> > Quite frankly, even if it can be looked at as a piece of art, I don't
+> > like it. It's overkill for what we need and it brings in several tricky
+> > macros that we don't need and that require a link to their analysis so
+> > that nobody breaks them by accident. I mean, if one day we need them,
+> > okay we know we can find them, they're perfect for certain use cases.
+> > But all this just to avoid a ternary operation is far too much IMHO.
+> > That's without counting on the compiler tricks to use the ugly
+> > __auto_type when available, and the macro names which continue to
+> > possibly interact with user code.
+> >
 > 
-> [...]
->> --- a/fs/proc/task_mmu.c
->> +++ b/fs/proc/task_mmu.c
->> @@ -19,6 +19,8 @@
->>  #include <linux/shmem_fs.h>
->>  #include <linux/uaccess.h>
->>  #include <linux/pkeys.h>
->> +#include <linux/minmax.h>
->> +#include <linux/overflow.h>
->>  
->>  #include <asm/elf.h>
->>  #include <asm/tlb.h>
->> @@ -1749,11 +1751,682 @@ static int pagemap_release(struct inode *inode, struct file *file)
->>  	return 0;
->>  }
->>  
->> +#define PM_SCAN_CATEGORIES	(PAGE_IS_WPALLOWED | PAGE_IS_WRITTEN |	\
->> +				 PAGE_IS_FILE |	PAGE_IS_PRESENT |	\
->> +				 PAGE_IS_SWAPPED | PAGE_IS_PFNZERO |	\
->> +				 PAGE_IS_HUGE)
->> +#define PM_SCAN_FLAGS		(PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC)
->> +
->> +struct pagemap_scan_private {
->> +	struct pm_scan_arg arg;
->> +	unsigned long masks_of_interest, cur_vma_category;
->> +	struct page_region *vec_buf;
->> +	unsigned long vec_buf_len, vec_buf_index, found_pages, walk_end_addr;
->> +	struct page_region __user *vec_out;
->> +};
-> [...]
->> +static unsigned long pagemap_thp_category(pmd_t pmd)
->> +{
->> +	unsigned long categories = PAGE_IS_HUGE;
->> +
->> +	/*
->> +	 * THPs don't support file-backed memory. So PAGE_IS_FILE
->> +	 * hasn't been checked here.
-> 
-> "hasn't been" -> "is not"
-> (same for HugeTLB comment)
-I'll update.
+> Agree, I don't like __auto_type too, although I have tried to find whether
+> there is a direct macro for it, but NO such one, and the __auto_type in some
+> older versions don't accept 'const' flag, so, I'm also worried about if gcc
+> will change it in the future ;-(
 
-> 
->> +static bool pagemap_scan_push_range(unsigned long categories,
->> +				    struct pagemap_scan_private *p,
->> +				    unsigned long addr, unsigned long end)
->> +{
->> +	struct page_region *cur_buf = &p->vec_buf[p->vec_buf_index];
->> +
->> +	/*
->> +	 * When there is no output buffer provided at all, the sentinel values
->> +	 * won't match here. There is no other way for `cur_buf->end` to be
->> +	 * non-zero other than it being non-empty.
->> +	 */
->> +	if (addr == cur_buf->end && categories == cur_buf->categories) {
->> +		cur_buf->end = end;
->> +		return true;
->> +	}
->> +
->> +	if (cur_buf->end) {
->> +		if (p->vec_buf_index >= p->vec_buf_len - 1)
->> +			return false;
->> +
->> +		cur_buf = &p->vec_buf[++p->vec_buf_index];
->> +	}
->> +
->> +	cur_buf->start = addr;
->> +	cur_buf->end = end;
->> +	cur_buf->categories = categories;
->> +
->> +	return true;
->> +}
->> +
->> +static void pagemap_scan_backout_range(struct pagemap_scan_private *p,
->> +				       unsigned long addr, unsigned long end)
->> +{
->> +	struct page_region *cur_buf = &p->vec_buf[p->vec_buf_index];
->> +
->> +	if (cur_buf->start != addr) {
->> +		cur_buf->end = addr;
->> +	} else {
->> +		cur_buf->start = cur_buf->end = 0;
->> +		if (p->vec_buf_index > 0)
->> +			p->vec_buf_index--;
-> 
-> There is no need to move to the previous index, as if the walk ends at
-> this moment, the flush_buffer() code will ignore the empty last range.
-Yeah, I'll update.
+I mean, it's just that we do not need it at all.
 
-> 
->> +	}
->> +
->> +	p->found_pages -= (end - addr) / PAGE_SIZE;
->> +}
->> +
->> +static int pagemap_scan_output(unsigned long categories,
->> +			       struct pagemap_scan_private *p,
->> +			       unsigned long addr, unsigned long *end)
->> +{
->> +	unsigned long n_pages, total_pages;
->> +	int ret = 0;
->> +
->> +	if (!p->vec_buf)
->> +		return 0;
->> +
->> +	categories &= p->arg.return_mask;
->> +
->> +	n_pages = (*end - addr) / PAGE_SIZE;
->> +	if (check_add_overflow(p->found_pages, n_pages, &total_pages) ||
->> +	    total_pages > p->arg.max_pages) {
->> +		size_t n_too_much = total_pages - p->arg.max_pages;
->> +		*end -= n_too_much * PAGE_SIZE;
->> +		n_pages -= n_too_much;
->> +		ret = -ENOSPC;
->> +	}
->> +
->> +	if (!pagemap_scan_push_range(categories, p, addr, *end)) {
->> +		*end = addr;
->> +		n_pages = 0;
->> +		ret = -ENOSPC;
->> +	}
->> +
->> +	p->found_pages += n_pages;
->> +	if (ret)
->> +		p->walk_end_addr = *end;
->> +
->> +	return ret;
->> +}
-> [...]
->> +static int pagemap_scan_init_bounce_buffer(struct pagemap_scan_private *p)
->> +{
->> +	if (!p->arg.vec_len)
->> +		return 0;
-> 
-> The removal of `cur_buf` lost the case of empty non-NULL output buffer
-> passed in args.  That was requesting the walk to stop at first matching
-> page (with the address returned in `walk_end`).  The push_range() call
-> is still checking that, but since neither the buffer nor the sentinel
-> values are set, the case is not possible to invoke.
-Yeah, this is why I've removed all that logic here. The vec_len is set to 0
-and vec_buf to NULL. This handles all the cases.
+> Seems __sysret() is mainly used by us in sys.h,
 
-> 
->> +	/*
->> +	 * Allocate a smaller buffer to get output from inside the page
->> +	 * walk functions and walk the range in PAGEMAP_WALK_SIZE chunks.
->> +	 */
-> 
-> I think this is no longer true? We can now allocate arbitrary number of
-> entries, but should probably have at least 512 to cover one PMD of pages.
-> So it would be better to have a constant that holds the number of
-> entries in the bounce buffer.
-I'll remove the comment. PAGEMAP_WALK_SIZE >> PAGE_SHIFT is a constant
-already, just a fancy one.
+Sure, it was added not long ago by you to factor all the calls to
+SET_ERRNO():
 
-Altough if we can increase 512 to bigger number, it'll be better in terms
-of performance. I'm not sure how much we can increase it.
+   428905da6ec4 ("tools/nolibc: sys.h: add a syscall return helper")
 
-> 
->> +	p->vec_buf_len = min_t(size_t, PAGEMAP_WALK_SIZE >> PAGE_SHIFT,
->> +			       p->arg.vec_len);
->> +	p->vec_buf = kmalloc_array(p->vec_buf_len, sizeof(*p->vec_buf),
->> +				   GFP_KERNEL);
->> +	if (!p->vec_buf)
->> +		return -ENOMEM;
->> +
->> +	p->vec_buf[0].end = 0;
-> 
-> p->vec_buf->start = p->vec_buf->end = 0;
-Sure.
+> perhaps we can simply
+> assume and guarantee nobody will use 'const' in such cases.
 
-> 
->> +	p->vec_out = (struct page_region __user *)p->arg.vec;
->> +
->> +	return 0;
->> +}
->> +
->> +static int pagemap_scan_flush_buffer(struct pagemap_scan_private *p)
->> +{
->> +	const struct page_region *buf = p->vec_buf;
->> +	int n = (int)p->vec_buf_index;
-> 
-> Why do you need an `int` here (requiring a cast)?
-Just looked at it, n and return code of pagemap_scan_flush_buffer() should
-be long. Changed.
+There is absolutely *no* problem with const since the value is use by
+a "return" statement.
 
+> > And if you remember, originally you proposed to factor the SET_ERRNO()
+> > stuff in every syscall in order to "simplify the code and improve
+> > maintainability". It's clear that we've long abandonned that goal here.
+> > If we had no other choice, I'd rather roll back to the clean, readable
+> > and trustable SET_ERRNO() in every syscall!
+> >
 > 
->> +	if (p->arg.vec_len == 0)
->> +		return 0;
-> 
-> This should be actually `if (!buf)` as this notes that we don't have any
-> buffer allocated (due to no output requested).
-I'll update. !buf seems more reasonable.
+> Agree, or we simply use the original version without pointer returns support
+> (only sbrk and mmap currently) but convert it to the macro version.
 
-> 
->> +	if (buf[n].end && buf[n].end != buf[n].start)
->> +		n++;
-> 
-> Testing `buf[n].end` is redundant, as the range is nonempty if
-> `end != start`.
-Sure.
+I indeed think that's the cleanest approach. There will hardly be more
+than 2 syscalls returning pointers or unsigned values and all this extra
+complexity added just to avoid *two* SET_ERRNO() calls is totally
+pointless.
 
-> 
->> +	if (!n)
->> +		return 0;
->> +
->> +	if (copy_to_user(p->vec_out, buf, n * sizeof(*buf)))
->> +		return -EFAULT;
->> +
->> +	p->arg.vec_len -= n;
->> +	p->vec_out += n;
->> +
->> +	p->vec_buf_index = 0;
->> +	p->vec_buf_len = min_t(size_t, p->vec_buf_len, p->arg.vec_len);
->> +	p->vec_buf[0].end = 0;
-> 
-> buf->start = buf->end = 0;
-Sure.
+> Or, as the idea mentioned by Thomas in a reply: if we can let the sys_
+> functions use 'long' returns, or even further, we convert all of the sys_
+> functions to macros and let them preserve input types from library routines and
+> preserve return types from the my_syscall<N> macros.
 
-> 
->> +	return n;
->> +}
->> +
->> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long uarg)
->> +{
->> +	struct mmu_notifier_range range;
->> +	struct pagemap_scan_private p = {0};
->> +	unsigned long walk_start;
->> +	size_t n_ranges_out = 0;
->> +	int ret;
->> +
->> +	ret = pagemap_scan_get_args(&p.arg, uarg);
->> +	if (ret)
->> +		return ret;
->> +
->> +	p.masks_of_interest = p.arg.category_inverted | p.arg.category_mask |
->> +			      p.arg.category_anyof_mask | p.arg.return_mask;
-> 
-> `category_inverted` can be left out, because if a set bit it is not also in one
-> of the masks, then its value is going to be ignored.
-Okay.
+It would be annoying because the sys_* implement some fallbacks, themselves
+based on #ifdef and such stuff. Macros are really a pain when they're
+repeated. They're a pain to edit, to debug, to modify and you'll see that
+editors are even not good with them, you often end up modifying more than
+you want to try to keep trailing backslashes aligned.
 
+> As we discussed in my our syscall.h proposal, if there is a common
+> my_syscall(), every sys_ function can be simply defined to something
+> like:
 > 
-> [...]
->> +	for (walk_start = p.arg.start; walk_start < p.arg.end;
->> +			walk_start = p.arg.walk_end) {
->> +		int n_out;
->> +
->> +		if (fatal_signal_pending(current)) {
->> +			ret = -EINTR;
->> +			break;
->> +		}
->> +
->> +		ret = mmap_read_lock_killable(mm);
->> +		if (ret)
->> +			break;
->> +		ret = walk_page_range(mm, walk_start, p.arg.end,
->> +				      &pagemap_scan_ops, &p);
->> +		mmap_read_unlock(mm);
->> +
->> +		n_out = pagemap_scan_flush_buffer(&p);
->> +		if (n_out < 0)
->> +			ret = n_out;
->> +		else
->> +			n_ranges_out += n_out;
->> +
->> +		p.walk_end_addr = p.walk_end_addr ? p.walk_end_addr : p.arg.end;
+>     #define sys_<NAME>(...) my_syscall(<NAME>, __VA_ARGS__)
 > 
-> Why is `p.walk_end_addr` needed? It is not used in the loop code. Shoudn't
-> it be `p.arg.walk_end` as used in the `for` loop continuation statement?
-It isn't needed for the loop. But we need to note down the ending address
-of walk. We can switch to using p.arg.walk_end for better logical reason.
-I'll update code.
+> In my_syscall(), it can even simply return -ENOSYS if the __NR_xxx is
+> not defined (we init such __NR_xxx to something like __NR_NOSYS):
+> 
+>     // sysnr.h
+> 
+>     // If worried about the applications use this macro, perhaps we can
+>     // use a different prefix, for example, NOLIBC_NR_xxx
+> 
+>     #define NOLIBC_NR_NOSYS (-1L)
+> 
+>     #ifndef __NR_xxx
+>     #define NOLIBC_NR_xxx NOLIBC_NR_NOSYS
+>     #else
+>     #define NOLIBC_NR_xxx __NR_xxx
+>     #endif
+> 
+>     // syscall.h
+> 
+>     // _my_syscall is similar to syscall() in unistd.h, but without the
+>     // __sysret normalization
+> 
+>     #define _my_syscalln(N, ...) my_syscall##N(__VA_ARGS__)
+>     #define _my_syscall_n(N, ...) _my_syscalln(N, __VA_ARGS__)
+>     #define _my_syscall(...) _my_syscall_n(_syscall_narg(__VA_ARGS__), ##__VA_ARGS__)
+> 
+>     #define my_syscall(name, ...)                                       \
+>     ({                                                                  \
+>            long _ret;                                                   \
+>            if (NOLIBC_NR_##name == NOLIBC_NR_NOSYS)                     \
+>                    _ret = -ENOSYS;                                      \
+>            else                                                         \
+>                    _ret = _my_syscall(NOLIBC_NR_##name, ##__VA_ARGS__); \
+>            _ret;                                                        \
+>     })
+> 
+>     // sys_<NAME> list, based on unistd.h
+> 
+>     #define sys_<NAME>(...) my_syscall(<NAME>, __VA_ARGS__)
+>     #define sys_<NAME>(...) my_syscall(<NAME>, __VA_ARGS__)
+>     #define sys_<NAME>(...) my_syscall(<NAME>, __VA_ARGS__)
+> 
+> With above conversions, we may be able to predefine all of the
+> sys_<NAME> functions to preserve the input types from library rountines
+> and return types from my_syscall<N> (by default, 'long'). This also
+> follows the suggestion from Arnd: let sys_ not use the other low level
+> syscalls, only use its own.
 
-> 
->> +		if (ret != -ENOSPC || p.arg.vec_len == 0 ||
->> +		    p.found_pages == p.arg.max_pages)
->> +			break;
-> 
-> Nit: I think you could split this into two or three separate `if (x)
-> break;` for easier reading. The `vec_len` and `found_pages` are
-> buffer-full tests, so could go along, but `ret != ENOSPC` is checking an
-> error condition aborting the scan before it ends.
-Can be done.
+Maybe, but I'm not sure there is much to gain here, compared to the
+flexibility to map one to another (e.g. see sys_chmod()).
 
+> This may also help us to remove all of the `#ifdef __NR_` wrappers, we
+> can directly check the -ENOSYS in the library routines and try another
+> sys_<NAME> if required, at last, call __sysret() to normalize the errors
+> and return value.
 > 
->> +	}
->> +
->> +	/* ENOSPC signifies early stop (buffer full) from the walk. */
->> +	if (!ret || ret == -ENOSPC)
->> +		ret = n_ranges_out;
->> +
->> +	p.arg.walk_end = p.walk_end_addr ? p.walk_end_addr : walk_start;
->> +	if (pagemap_scan_writeback_args(&p.arg, uarg))
->> +		ret = -EFAULT;
-> [...]
->> --- a/include/uapi/linux/fs.h
->> +++ b/include/uapi/linux/fs.h
-> [...]
->> +/*
->> + * struct pm_scan_arg - Pagemap ioctl argument
->> + * @size:		Size of the structure
->> + * @flags:		Flags for the IOCTL
->> + * @start:		Starting address of the region
->> + * @end:		Ending address of the region
->> + * @walk_end		Address where the scan stopped (written by kernel).
->> + *			walk_end == end (tag removed) informs that the scan completed on entire range.
+> Use dup2 and dup3 as examples, with sysnr.h and syscall.h above, sys.h
+> will work like this, without any #ifdef's:
 > 
-> I'm not sure `tag removed` is enough to know what tag was removed.
-> Maybe something like "with address tags cleared" would fit?
-Okay.
+>     /*
+>      * int dup2(int old, int new);
+>      */
+>    
+>     static __attribute__((unused))
+>     int dup2(int old, int new)
+>     {
+> 	int ret = sys_dup3(old, new, 0);
+> 
+> 	if (ret == -ENOSYS)
+> 		ret = sys_dup2(old, new);
+> 
+> 	return __sysret(ret);
+>     }
 
-> 
-> Best Regards
-> Michał Mirosław
+But this will add a useless test after all such syscalls, we'd rather
+not do that!
 
--- 
-BR,
-Muhammad Usama Anjum
+> > -static __inline__ __attribute__((unused, always_inline))
+> > -long __sysret(unsigned long ret)
+> > -{
+> > -	if (ret >= (unsigned long)-MAX_ERRNO) {
+> > -		SET_ERRNO(-(long)ret);
+> > -		return -1;
+> > -	}
+> > -	return ret;
+> > -}
+> > +#define __sysret(arg)								\
+> > +({										\
+> > +	__typeof__(arg) __sysret_arg = (arg);					\
+> 
+> Here ignores the 'const' flag in input type?
+
+Yes, as explained above, there's no issue with const. The issue
+that was met in the version I suggested in the message was that
+there was an assignment to the variable of value -1 to be returned,
+which is not permitted when it's const, and I said that it was not
+necessary, it was just a convenience, but that using "?:" does the
+job as well without having to do any assignment.
+
+> > +	((((__typeof__(arg)) -1) > (__typeof__(arg)) 1) ?   /* unsigned arg? */	\
+> > +	 (uintptr_t)__sysret_arg >= (uintptr_t)-(MAX_ERRNO) :      /* errors */	\
+> > +	 (__sysret_arg + 1) < ((__typeof__(arg))1)     /* signed: <0 = error */	\
+> > +	) ? ({									\
+> > +		SET_ERRNO(-(intptr_t)__sysret_arg);				\
+> > +		((__typeof__(arg)) -1);              /* return -1 upon error */	\
+> > +	}) : __sysret_arg;        /* return original value & type on success */	\
+> > +})
+> > +
+> >
+> 
+> To be honest, it is also a little complex when with one "?:" embedded in
+> another, I even don't understand how the 'unsigned arg' branch works,
+> sorry, is it dark magic like the __is_constexpr? ;-)
+
+The thing is that we don't need to do anything specific for consts, we
+just need to check whether an argument is signed or unsigned. The test
+for unsigned is that all unsigned integers are positive, so
+((unsigned)-1 > 0) is always true. We just compare it to 1 instead of
+0 to shut up the compiler which was seeing a comparison against NULL.
+
+The rest is just checking if arg < 0 if arg is signed, or
+arg >= -MAX_ERRNO if it's unsigned, and if so, assigns its negation to
+errno and returns -1 otherwise returns it as-is. So it's not dark magic,
+doesn't rely on compiler's behavior and does not require links to external
+books explaining why the macro works in modern compilers.
+
+Sure it's not pretty, and I'd rather just go back to SET_ERRNO() to be
+honest, because we're there just because of the temptation to remove
+lines that were not causing any difficulties :-/
+
+I think we can do something in-between and deal only with signed returns,
+and explicitly place the test for MAX_ERRNO on the two unsigned ones
+(brk and mmap). It should look approximately like this:
+
+ #define __sysret(arg)							\
+ ({									\
+ 	__typeof__(arg) __sysret_arg = (arg);				\
+ 	(__sysret_arg < 0) ? ({           /* error ? */                 \
+ 		SET_ERRNO(-__sysret_arg); /* yes: errno != -ret */      \
+ 		((__typeof__(arg)) -1);   /*      return -1 */          \
+ 	}) : __sysret_arg;                /* return original value */   \
+ })
+
+Willy
