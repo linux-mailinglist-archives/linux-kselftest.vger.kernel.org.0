@@ -2,61 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D85877BD5C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 17:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A1B77BD84
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 17:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjHNPqm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Aug 2023 11:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
+        id S229831AbjHNP6c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Aug 2023 11:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbjHNPqZ (ORCPT
+        with ESMTP id S229714AbjHNP6S (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 11:46:25 -0400
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473AF10F4
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 08:46:24 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-184--xZHB92IP4OU1uQ2F_SF_g-1; Mon, 14 Aug 2023 11:46:19 -0400
-X-MC-Unique: -xZHB92IP4OU1uQ2F_SF_g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83A13855716;
-        Mon, 14 Aug 2023 15:46:18 +0000 (UTC)
-Received: from hog (unknown [10.39.192.31])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B0C3063F71;
-        Mon, 14 Aug 2023 15:46:16 +0000 (UTC)
-Date:   Mon, 14 Aug 2023 17:46:15 +0200
-From:   Sabrina Dubroca <sd@queasysnail.net>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
-        Frantisek Krenzelok <fkrenzel@redhat.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Apoorv Kothari <apoorvko@amazon.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: Re: [PATCH net-next v3 3/6] tls: implement rekey for TLS1.3
-Message-ID: <ZNpMR8nYKlIP9JQw@hog>
-References: <cover.1691584074.git.sd@queasysnail.net>
- <c0ef5c0cf4f56d247081ce366eb5de09bf506cf4.1691584074.git.sd@queasysnail.net>
- <20230811184347.1f7077a9@kernel.org>
- <ZNpC4lAmlLn-5A9h@hog>
- <20230814082128.632d2b03@kernel.org>
+        Mon, 14 Aug 2023 11:58:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E5C10CE
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 08:57:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692028652;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7qH/OU93DvHxo0hLIYaxXR0nJoX5oGDzCEQsY4s9O1c=;
+        b=A4GFCdphoNmiW7VBWxTZmhLZp2rXPB1LhchwHvY59q+Vdr62Z46lBuXhrpsLgWTFFaQWsT
+        NyorszjeYBrs33U1uTMCW/1ZyOA4CqGPfoOo+PsgtrJCz4YmmvYMR33pNp6Xty3N6M6Vkx
+        h2AATDaxKpCW7aEyf6SdNDzxQ6M0Qrw=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-680-k9GslaAxOPy2p9_sf3Qx7w-1; Mon, 14 Aug 2023 11:57:31 -0400
+X-MC-Unique: k9GslaAxOPy2p9_sf3Qx7w-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-63cceb8c21aso62273496d6.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 08:57:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692028651; x=1692633451;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7qH/OU93DvHxo0hLIYaxXR0nJoX5oGDzCEQsY4s9O1c=;
+        b=CyJYb63QHyE68jVWM6z94FKyzIwvU1UCXR6HFPfLdX6KS+HMtEjHzPCHI4Urj6d+YP
+         wIqDUc266ndtPqrCSQI7mZA1EHQB4d69sz5yeXkRFq4bdPIwSG0rqRUPv878RoXz6tve
+         NxFBjCh9PD4BgvFtkUkPBN5jUn8tIoOQcXxJ9Dx3I/sod0uv3/Z6TQvfaItcTkIv4tN+
+         XsOR+YTN1IuQy0yIQ4aFNHeDxzXXYag6B0mGknMnLTpUtDOpXTTNFzkHs679iCUNW7Kr
+         S1QiyqC+kkPwnp6F3MfEcKlVdTY8kyXPfvsgSA2fw2JOOUTPXIsTt/KYANUu6TovhksM
+         CYPg==
+X-Gm-Message-State: AOJu0YxscXXtvDBkjBVMmfd85RBPymc7xA62TXSrA5xOWezkLABiHtPG
+        WRte5FGJtjWcyk4fsCTA4uYL9xjrVt2rZr5L+NyCALO3tPw8XceD5kQXEi+4oX6rbzDWrlxBLjn
+        rqq3q1gC3vk7GE2Y4BZMKIgkeJhuo
+X-Received: by 2002:a0c:8e45:0:b0:63c:fb61:a201 with SMTP id w5-20020a0c8e45000000b0063cfb61a201mr9439838qvb.35.1692028650889;
+        Mon, 14 Aug 2023 08:57:30 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFRANvGEcmQZTMaKhUgzhPKVlKrTJYRQomkCbYmgKk3CSjdb0k3TsBz/oJJyzY8rNaOmV349g==
+X-Received: by 2002:a0c:8e45:0:b0:63c:fb61:a201 with SMTP id w5-20020a0c8e45000000b0063cfb61a201mr9439829qvb.35.1692028650657;
+        Mon, 14 Aug 2023 08:57:30 -0700 (PDT)
+Received: from fedora ([174.89.37.104])
+        by smtp.gmail.com with ESMTPSA id d11-20020a05620a166b00b00767d00d10e9sm3078589qko.58.2023.08.14.08.56.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Aug 2023 08:56:18 -0700 (PDT)
+Date:   Mon, 14 Aug 2023 11:55:45 -0400
+From:   Lucas Karpinski <lkarpins@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: cgroup: fix test_kmem_memcg_deletion false
+ positives
+Message-ID: <eex2vdlg4ow2j5bybmav73nbfzuspkk4zobnk7svua4jaypqb5@7ie6e4mci43t>
+References: <edpx3ejic2cxolhoynxvwal2i4a35akopg6hshcfxker6oxcn7@l32pzfyucgec>
+ <20230804163716.GA337691@cmpxchg.org>
+ <x2zp6vbr5c3oa3xyfctj66y4ikdxtuo7wsqamkqgyt5ppu6ccb@vwxzimqvrhgk>
 MIME-Version: 1.0
-In-Reply-To: <20230814082128.632d2b03@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: queasysnail.net
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+In-Reply-To: <x2zp6vbr5c3oa3xyfctj66y4ikdxtuo7wsqamkqgyt5ppu6ccb@vwxzimqvrhgk>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,37 +89,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-2023-08-14, 08:21:28 -0700, Jakub Kicinski wrote:
-> On Mon, 14 Aug 2023 17:06:10 +0200 Sabrina Dubroca wrote:
-> > 2023-08-11, 18:43:47 -0700, Jakub Kicinski wrote:
-> > > On Wed,  9 Aug 2023 14:58:52 +0200 Sabrina Dubroca wrote:  
-> > > >  			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXSW);
-> > > >  			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRRXSW);
-> > > >  			conf = TLS_SW;  
+On Fri, Aug 04, 2023 at 02:59:28PM -0400, Lucas Karpinski wrote:
+> On Fri, Aug 04, 2023 at 12:37:16PM -0400, Johannes Weiner wrote:
+> > On Fri, Aug 04, 2023 at 11:37:33AM -0400, Lucas Karpinski wrote:
+> > > The test allocates dcache inside a cgroup, then destroys the cgroups and
+> > > then checks the sanity of numbers on the parent level. The reason it
+> > > fails is because dentries are freed with an RCU delay - a debugging
+> > > sleep shows that usage drops as expected shortly after.
 > > > 
-> > > Should we add a statistic for rekeying?  
+> > > Insert a 1s sleep after completing the cgroup creation/deletions. This
+> > > should be good enough, assuming that machines running those tests are
+> > > otherwise not very busy. This commit is directly inspired by Johannes
+> > > over at the link below.
+> > > 
+> > > Link: https://lore.kernel.org/all/20230801135632.1768830-1-hannes@cmpxchg.org/
+> > > 
+> > > Signed-off-by: Lucas Karpinski <lkarpins@redhat.com>
 > > 
-> > Hmpf, at least I shouldn't be incrementing the existing stats on every
-> > update, especially not TLSCURR* :/
+> > Maybe I'm missing something, but there isn't a limit set anywhere that
+> > would cause the dentries to be reclaimed and freed, no? When the
+> > subgroups are deleted, the objects are just moved to the parent. The
+> > counters inside the parent (which are hierarchical) shouldn't change.
 > > 
-> > I don't see much benefit in tracking succesful rekeys. Failed rekeys
-> > seem more interesting to me. What would we get from counting succesful
-> > rekeys?
+> > So this seems to be a different scenario than test_kmem_basic. If the
+> > test is failing for you, I can't quite see why.
+> >
+> You're right, the parent inherited the counters and it should behave
+> the same whether I'm directly removing the child or if I was moving it
+> under another cgroup. I do see the behaviour you described on my
+> x86_64 setup, but the wrong behaviour on my aarch64 dev. platform. I'll
+> take a closer look, but just wanted to leave an example here of what I
+> see.
 > 
-> No huge benefit from counting rekeys, the main (only?) one I see is
-> that when user reports issues we can see whether rekeys were involved
-> (given that they are fairly rare). It could help narrow down triage.
+> Example of slab size pre/post sleep:
+> slab_pre = 18164688, slab_post = 3360000
+> 
+> Thanks,
+> Lucas
+Looked into the failures and I do have a proposed solution, just want
+some feedback first. With how the kernel entry in memory.stat is 
+updated, it takes into account all charged / uncharged pages, it looks 
+like it makes more sense to use that single entry rather than `slab + 
+anon + file + kernel_stack + pagetables + percpu + sock' as it would
+cover all utilization.
 
-Ok. So unless you objcet I'll add 4 more counters: {RX,TX}REKEY{OK,ERROR}.
-
-And it probably shouldn't be "rekey" in case we decide to implement
-full 1.2 renegotiation (with cipher change) and use the same
-counter. Or 1.2 renegotiation without cipher change gets to use the
-rekey counters, and cipher change would get a new set of counters.
-
-I could also just call them *UPDATE* but that might be a bit too
-vague.
-
--- 
-Sabrina
+Thanks,
+Lucas
 
