@@ -2,65 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF0077B476
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 10:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7086E77B4E9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 10:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234740AbjHNImY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Aug 2023 04:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46792 "EHLO
+        id S235525AbjHNI6Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Aug 2023 04:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234757AbjHNIl5 (ORCPT
+        with ESMTP id S235936AbjHNI5n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 04:41:57 -0400
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E3A12E;
-        Mon, 14 Aug 2023 01:41:55 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4RPSYr29qcz9sn2;
-        Mon, 14 Aug 2023 10:41:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-        t=1692002512;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W7cNopV9QtwDfWAl6SLw4jWogCD7aoRQLSKJtTeB2Z4=;
-        b=RMj4CUJ8Rvd/ZNQXo32QMV7F9lurzqTpsl02OwCu1jTFQ0n1d0fmf72WxHZ1ua+c7jCd9S
-        D1E9rniYp4s34lLn7rTOmuQpmh3X6pRzrzURyHouUZnlH8th5qc4KVaHELYz6gQeWZpln9
-        Vgr+Uwo20A0DzCdzDAKx/PsWiZrylfeBS0edlCGMrrdZhKBQMuJCc+nW+saFy+eUxwGf0d
-        /C3mvRd8NQMshleiI648XFnhOm+WbbnHPwtFAXk+GOcWLpgSGxvim4H+QKq7B+9A3O8LTY
-        AMH1dOh1rk34EaAWtAIFNW6K9gvaZ1cf5MF5xsgbBghS5oC5H3C0dlRfJeTWbA==
-From:   Aleksa Sarai <cyphar@cyphar.com>
-Date:   Mon, 14 Aug 2023 18:41:01 +1000
-Subject: [PATCH v2 5/5] selftests: improve vm.memfd_noexec sysctl tests
+        Mon, 14 Aug 2023 04:57:43 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226D310F2;
+        Mon, 14 Aug 2023 01:55:31 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id B65CB6016E;
+        Mon, 14 Aug 2023 10:55:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1692003317; bh=VQy5c2/nDDbNkydVW9MBCgI4reVwpfLDVYXeXthZIdc=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=e7DCEI/UOd6r521/7QGzvwjK/WqfjX+9opvAic4Dk78wQqmMwxJ3YY46BXZt/KuIO
+         dyxNei5zN42Ilrzc3cZ0+ZOZc/dxoueuUDsrqBq6iBsM0UiO8iSbnNAjioI5XZRGN/
+         XpUaIqCE/RqXOw+c96rZFklXf6VbOnLDBiJGZtPDpUQuNMnBbCCmoP/Z2dLxM7qCRt
+         CyhLxTCt9PFmLRbqbr4DSD2B6enIzY0gD8pFjdCeDMV8KrjIspqSlK1G1gO9DZsLFn
+         RsQLn2dRyFUyBpSb0Ge9hMBnAN+M0tcmVnZR+Xv0ItpExEwJqmYld/x5jFELS6f4Ne
+         d7n0X9IWhadUA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WsHRS72meZ71; Mon, 14 Aug 2023 10:55:15 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id 1E6A46015E;
+        Mon, 14 Aug 2023 10:55:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1692003315; bh=VQy5c2/nDDbNkydVW9MBCgI4reVwpfLDVYXeXthZIdc=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=J9mdlWg+4NjgO7JfU1U0SkIn9qKTuEae7tsVyBM6r8a+4WzHB6xAMc3c28fWJfM6v
+         QMHs86RQZiQwfrPkLNBrlRZpTePFuCJLk6Yy+O3Ki4/NYFE5P+qkFP4215hUd3WD2f
+         7uB4XxbLS4M7M2HqOehnU+EJHbywJLU4RL7AzrZsfgZw3UPVT6gNGYwAK6bHlKObY0
+         syX4mp6uuliZ9mg1hoTeZIWcMUNLEVwQc4QxN3Wow1lawVB21k6hnVRL812+gq8Tww
+         8kA8xhctdSbuuCa/DDsNTCkCUEjCaT+TipAPSR7LJZHR1gCWnzhuUFnCoMPIyBEoGe
+         Q0vo+yPU9i1lg==
+Message-ID: <39ea7c85-c235-bc49-cd49-a2d7633eda4c@alu.unizg.hr>
+Date:   Mon, 14 Aug 2023 10:54:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230814-memfd-vm-noexec-uapi-fixes-v2-5-7ff9e3e10ba6@cyphar.com>
-References: <20230814-memfd-vm-noexec-uapi-fixes-v2-0-7ff9e3e10ba6@cyphar.com>
-In-Reply-To: <20230814-memfd-vm-noexec-uapi-fixes-v2-0-7ff9e3e10ba6@cyphar.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Verkamp <dverkamp@chromium.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        stable@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13000; i=cyphar@cyphar.com;
- h=from:subject:message-id; bh=0sdx3MhmB3vX/NM+/SK9/yhr9yRSi3Geq1KMMGDcLxI=;
- b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMaTcfLG2x/3+jGwuzwQtTl/LxLKg180rat3ZkqJalPZ28
- m4xPnS+o5SFQYyLQVZMkWWbn2fopvmLryR/WskGM4eVCWQIAxenAEzk2QFGhs4PXJ+fSNazrA34
- 9lOx7d2F0lMb0t2/9PwKXp7O0yOxYwkjwxtGGx9O5lVLjRPsOj1U3HqnnHOabjbXuDJo82yHIOl
- 6XgA=
-X-Developer-Key: i=cyphar@cyphar.com; a=openpgp;
- fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: selftests: net/af_unix test_unix_oob [FAILED]
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     alexander@mihalicyn.com, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, shuah@kernel.org
+References: <abf98942-0058-f2ad-8e55-fbdd83b7c2d6@alu.unizg.hr>
+ <20230807204648.50070-1-kuniyu@amazon.com>
+ <ba4da366-b8cf-ca36-e2dc-cce7260cccf8@alu.unizg.hr>
+ <25d01cd0-e6a1-1701-a066-f96a23767361@alu.unizg.hr>
+Content-Language: en-US
+In-Reply-To: <25d01cd0-e6a1-1701-a066-f96a23767361@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,500 +72,142 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds proper tests for the nesting functionality of vm.memfd_noexec
-as well as some minor cleanups to spawn_*_thread().
+On 8/8/23 10:53, Mirsad Todorovac wrote:
+> On 8/8/23 01:09, Mirsad Todorovac wrote:
+>> On 8/7/23 22:46, Kuniyuki Iwashima wrote:
+>>> From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+>>> Date: Mon, 7 Aug 2023 21:44:41 +0200
+>>>> Hi all,
+>>>>
+>>>> In the kernel 6.5-rc5 build on Ubuntu 22.04 LTS (jammy jellyfish) on a Ryzen 7950 assembled box,
+>>>> vanilla torvalds tree kernel, the test test_unix_oob unexpectedly fails:
+>>>>
+>>>> # selftests: net/af_unix: test_unix_oob
+>>>> # Test 2 failed, sigurg 23 len 63 OOB %
+>>>>
+>>>> It is this code:
+>>>>
+>>>>           /* Test 2:
+>>>>            * Verify that the first OOB is over written by
+>>>>            * the 2nd one and the first OOB is returned as
+>>>>            * part of the read, and sigurg is received.
+>>>>            */
+>>>>           wait_for_data(pfd, POLLIN | POLLPRI);
+>>>>           len = 0;
+>>>>           while (len < 70)
+>>>>                   len = recv(pfd, buf, 1024, MSG_PEEK);
+>>>>           len = read_data(pfd, buf, 1024);
+>>>>           read_oob(pfd, &oob);
+>>>>           if (!signal_recvd || len != 127 || oob != '#') {
+>>>>                   fprintf(stderr, "Test 2 failed, sigurg %d len %d OOB %c\n",
+>>>>                   signal_recvd, len, oob);
+>>>>                   die(1);
+>>>>           }
+>>>>
+>>>> In 6.5-rc4, this test was OK, so it might mean we have a regression?
+>>>
+>>> Thanks for reporting.
+>>>
+>>> I confirmed the test doesn't fail on net-next at least, but it's based
+>>> on v6.5-rc4.
+>>>
+>>>    ---8<---
+>>>    [root@localhost ~]# ./test_unix_oob
+>>>    [root@localhost ~]# echo $?
+>>>    0
+>>>    [root@localhost ~]# uname -r
+>>>    6.5.0-rc4-01192-g66244337512f
+>>>    ---8<---
+>>>
+>>> I'll check 6.5-rc5 later.
+>>
+>> Hi, Kuniyuki,
+>>
+>> It seems that there is a new development. I could reproduce the error with the failed test 2
+>> as early as 6.0-rc1. However, the gotcha is that the error appears to be sporadically manifested
+>> (possibly a race)?
+>>
+>> I am currently attempting a bisect.
+> 
+> Bisect had shown that the condition existed already at 5.11 torvalds tree.
+> 
+> It has to do with the configs chosen (I used the configs from seltests/*/config merged), but it
+> is also present in the Ubuntu production build:
+> 
+> marvin@defiant:~$ cd linux/kernel/linux_torvalds
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> Test 2 failed, sigurg 23 len 63 OOB %
+> marvin@defiant:~/linux/kernel/linux_torvalds$ uname -rms
+> Linux 6.4.8-060408-generic x86_64
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> Test 1 failed sigurg 0 len 63
+> marvin@defiant:~/linux/kernel/linux_torvalds$
+> 
+> It happens on rare occasions, so it seems to be a hard-to-spot race.
+> 
+> Normal test running test_unix_oob once never noticed that, save by accident, which brought the problem to attention ...
+> 
+> However, the problem seems to be config-driven rather than kernel-version-driven.
+> 
+> marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..100000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+> Test 3.1 Inline failed, len 1 oob % atmark 0
+> Test 1 Inline failed, sigurg 0 len 63
+> Test 1 Inline failed, sigurg 0 len 63
+> Test 1 Inline failed, sigurg 0 len 63
+> Test 2 Inline failed, len 63 atmark 1
+> Test 3 Inline failed, sigurg 23 len 63 data x
+> Test 3 Inline failed, sigurg 23 len 63 data x
+> Test 3 Inline failed, sigurg 23 len 63 data x
+> Test 3 Inline failed, sigurg 23 len 63 data x
+> Test 2 Inline failed, len 63 atmark 1
+> Test 3.1 Inline failed, len 1 oob % atmark 0
+> Test 2 failed, sigurg 23 len 63 OOB %
+> marvin@defiant:~/linux/kernel/linux_torvalds$ uname -rms
+> Linux 6.5.0-060500rc4-generic x86_64
+> marvin@defiant:~/linux/kernel/linux_torvalds$
+> 
+> At moments, I was able to reproduce with certain configs, but now something odd happens.
+> 
+> I will keep investigating.
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- tools/testing/selftests/memfd/memfd_test.c | 339 +++++++++++++++++++++--------
- 1 file changed, 254 insertions(+), 85 deletions(-)
+Please not that the bug persisted in 6.5-rc6:
 
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index 8b7390ad81d1..3df008677239 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -18,6 +18,7 @@
- #include <sys/syscall.h>
- #include <sys/wait.h>
- #include <unistd.h>
-+#include <ctype.h>
- 
- #include "common.h"
- 
-@@ -43,7 +44,6 @@
-  */
- static size_t mfd_def_size = MFD_DEF_SIZE;
- static const char *memfd_str = MEMFD_STR;
--static pid_t spawn_newpid_thread(unsigned int flags, int (*fn)(void *));
- static int newpid_thread_fn2(void *arg);
- static void join_newpid_thread(pid_t pid);
- 
-@@ -96,12 +96,12 @@ static void sysctl_assert_write(const char *val)
- 	int fd = open("/proc/sys/vm/memfd_noexec", O_WRONLY | O_CLOEXEC);
- 
- 	if (fd < 0) {
--		printf("open sysctl failed\n");
-+		printf("open sysctl failed: %m\n");
- 		abort();
- 	}
- 
- 	if (write(fd, val, strlen(val)) < 0) {
--		printf("write sysctl failed\n");
-+		printf("write sysctl %s failed: %m\n", val);
- 		abort();
- 	}
- }
-@@ -111,7 +111,7 @@ static void sysctl_fail_write(const char *val)
- 	int fd = open("/proc/sys/vm/memfd_noexec", O_WRONLY | O_CLOEXEC);
- 
- 	if (fd < 0) {
--		printf("open sysctl failed\n");
-+		printf("open sysctl failed: %m\n");
- 		abort();
- 	}
- 
-@@ -122,6 +122,33 @@ static void sysctl_fail_write(const char *val)
- 	}
- }
- 
-+static void sysctl_assert_equal(const char *val)
-+{
-+	char *p, buf[128] = {};
-+	int fd = open("/proc/sys/vm/memfd_noexec", O_RDONLY | O_CLOEXEC);
-+
-+	if (fd < 0) {
-+		printf("open sysctl failed: %m\n");
-+		abort();
-+	}
-+
-+	if (read(fd, buf, sizeof(buf)) < 0) {
-+		printf("read sysctl failed: %m\n");
-+		abort();
-+	}
-+
-+	/* Strip trailing whitespace. */
-+	p = buf;
-+	while (!isspace(*p))
-+		p++;
-+	*p = '\0';
-+
-+	if (strcmp(buf, val) != 0) {
-+		printf("unexpected sysctl value: expected %s, got %s\n", val, buf);
-+		abort();
-+	}
-+}
-+
- static int mfd_assert_reopen_fd(int fd_in)
- {
- 	int fd;
-@@ -736,7 +763,7 @@ static int idle_thread_fn(void *arg)
- 	return 0;
- }
- 
--static pid_t spawn_idle_thread(unsigned int flags)
-+static pid_t spawn_thread(unsigned int flags, int (*fn)(void *), void *arg)
- {
- 	uint8_t *stack;
- 	pid_t pid;
-@@ -747,10 +774,7 @@ static pid_t spawn_idle_thread(unsigned int flags)
- 		abort();
- 	}
- 
--	pid = clone(idle_thread_fn,
--		    stack + STACK_SIZE,
--		    SIGCHLD | flags,
--		    NULL);
-+	pid = clone(fn, stack + STACK_SIZE, SIGCHLD | flags, arg);
- 	if (pid < 0) {
- 		printf("clone() failed: %m\n");
- 		abort();
-@@ -759,6 +783,33 @@ static pid_t spawn_idle_thread(unsigned int flags)
- 	return pid;
- }
- 
-+static void join_thread(pid_t pid)
-+{
-+	int wstatus;
-+
-+	if (waitpid(pid, &wstatus, 0) < 0) {
-+		printf("newpid thread: waitpid() failed: %m\n");
-+		abort();
-+	}
-+
-+	if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) != 0) {
-+		printf("newpid thread: exited with non-zero error code %d\n",
-+		       WEXITSTATUS(wstatus));
-+		abort();
-+	}
-+
-+	if (WIFSIGNALED(wstatus)) {
-+		printf("newpid thread: killed by signal %d\n",
-+		       WTERMSIG(wstatus));
-+		abort();
-+	}
-+}
-+
-+static pid_t spawn_idle_thread(unsigned int flags)
-+{
-+	return spawn_thread(flags, idle_thread_fn, NULL);
-+}
-+
- static void join_idle_thread(pid_t pid)
- {
- 	kill(pid, SIGTERM);
-@@ -1111,42 +1162,69 @@ static void test_noexec_seal(void)
- 	close(fd);
- }
- 
--static void test_sysctl_child(void)
-+static void test_sysctl_sysctl0(void)
- {
- 	int fd;
--	int pid;
- 
--	printf("%s sysctl 0\n", memfd_str);
--	sysctl_assert_write("0");
--	fd = mfd_assert_new("kern_memfd_sysctl_0",
-+	sysctl_assert_equal("0");
-+
-+	fd = mfd_assert_new("kern_memfd_sysctl_0_dfl",
- 			    mfd_def_size,
- 			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
--
- 	mfd_assert_mode(fd, 0777);
- 	mfd_assert_has_seals(fd, 0);
- 	mfd_assert_chmod(fd, 0644);
- 	close(fd);
-+}
- 
--	printf("%s sysctl 1\n", memfd_str);
--	sysctl_assert_write("1");
--	fd = mfd_assert_new("kern_memfd_sysctl_1",
-+static void test_sysctl_set_sysctl0(void)
-+{
-+	sysctl_assert_write("0");
-+	test_sysctl_sysctl0();
-+}
-+
-+static void test_sysctl_sysctl1(void)
-+{
-+	int fd;
-+
-+	sysctl_assert_equal("1");
-+
-+	fd = mfd_assert_new("kern_memfd_sysctl_1_dfl",
- 			    mfd_def_size,
- 			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
-+	mfd_assert_mode(fd, 0666);
-+	mfd_assert_has_seals(fd, F_SEAL_EXEC);
-+	mfd_fail_chmod(fd, 0777);
-+	close(fd);
- 
--	printf("%s child ns\n", memfd_str);
--	pid = spawn_newpid_thread(CLONE_NEWPID, newpid_thread_fn2);
--	join_newpid_thread(pid);
-+	fd = mfd_assert_new("kern_memfd_sysctl_1_exec",
-+			    mfd_def_size,
-+			    MFD_CLOEXEC | MFD_EXEC | MFD_ALLOW_SEALING);
-+	mfd_assert_mode(fd, 0777);
-+	mfd_assert_has_seals(fd, 0);
-+	mfd_assert_chmod(fd, 0644);
-+	close(fd);
- 
-+	fd = mfd_assert_new("kern_memfd_sysctl_1_noexec",
-+			    mfd_def_size,
-+			    MFD_CLOEXEC | MFD_NOEXEC_SEAL | MFD_ALLOW_SEALING);
- 	mfd_assert_mode(fd, 0666);
- 	mfd_assert_has_seals(fd, F_SEAL_EXEC);
- 	mfd_fail_chmod(fd, 0777);
--	sysctl_fail_write("0");
- 	close(fd);
-+}
- 
--	printf("%s sysctl 2\n", memfd_str);
--	sysctl_assert_write("2");
--	mfd_fail_new("kern_memfd_sysctl_2_exec",
--		     MFD_EXEC | MFD_CLOEXEC | MFD_ALLOW_SEALING);
-+static void test_sysctl_set_sysctl1(void)
-+{
-+	sysctl_assert_write("1");
-+	test_sysctl_sysctl1();
-+}
-+
-+static void test_sysctl_sysctl2(void)
-+{
-+	int fd;
-+
-+	sysctl_assert_equal("2");
- 
- 	fd = mfd_assert_new("kern_memfd_sysctl_2_dfl",
- 			    mfd_def_size,
-@@ -1156,98 +1234,188 @@ static void test_sysctl_child(void)
- 	mfd_fail_chmod(fd, 0777);
- 	close(fd);
- 
--	fd = mfd_assert_new("kern_memfd_sysctl_2_noexec_seal",
-+	mfd_fail_new("kern_memfd_sysctl_2_exec",
-+		     MFD_CLOEXEC | MFD_EXEC | MFD_ALLOW_SEALING);
-+
-+	fd = mfd_assert_new("kern_memfd_sysctl_2_noexec",
- 			    mfd_def_size,
--			    MFD_NOEXEC_SEAL | MFD_CLOEXEC | MFD_ALLOW_SEALING);
-+			    MFD_CLOEXEC | MFD_NOEXEC_SEAL | MFD_ALLOW_SEALING);
- 	mfd_assert_mode(fd, 0666);
- 	mfd_assert_has_seals(fd, F_SEAL_EXEC);
- 	mfd_fail_chmod(fd, 0777);
- 	close(fd);
--
--	sysctl_fail_write("0");
--	sysctl_fail_write("1");
- }
- 
--static int newpid_thread_fn(void *arg)
-+static void test_sysctl_set_sysctl2(void)
- {
--	test_sysctl_child();
--	return 0;
-+	sysctl_assert_write("2");
-+	test_sysctl_sysctl2();
- }
- 
--static void test_sysctl_child2(void)
-+static int sysctl_simple_child(void *arg)
- {
- 	int fd;
-+	int pid;
- 
--	sysctl_fail_write("0");
--	fd = mfd_assert_new("kern_memfd_sysctl_1",
--			    mfd_def_size,
--			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
-+	printf("%s sysctl 0\n", memfd_str);
-+	test_sysctl_set_sysctl0();
- 
--	mfd_assert_mode(fd, 0666);
--	mfd_assert_has_seals(fd, F_SEAL_EXEC);
--	mfd_fail_chmod(fd, 0777);
--	close(fd);
-+	printf("%s sysctl 1\n", memfd_str);
-+	test_sysctl_set_sysctl1();
-+
-+	printf("%s sysctl 0\n", memfd_str);
-+	test_sysctl_set_sysctl0();
-+
-+	printf("%s sysctl 2\n", memfd_str);
-+	test_sysctl_set_sysctl2();
-+
-+	printf("%s sysctl 1\n", memfd_str);
-+	test_sysctl_set_sysctl1();
-+
-+	printf("%s sysctl 0\n", memfd_str);
-+	test_sysctl_set_sysctl0();
-+
-+	return 0;
-+}
-+
-+/*
-+ * Test sysctl
-+ * A very basic test to make sure the core sysctl semantics work.
-+ */
-+static void test_sysctl_simple(void)
-+{
-+	int pid = spawn_thread(CLONE_NEWPID, sysctl_simple_child, NULL);
-+
-+	join_thread(pid);
- }
- 
--static int newpid_thread_fn2(void *arg)
-+static int sysctl_nested(void *arg)
- {
--	test_sysctl_child2();
-+	void (*fn)(void) = arg;
-+
-+	fn();
- 	return 0;
- }
--static pid_t spawn_newpid_thread(unsigned int flags, int (*fn)(void *))
-+
-+static int sysctl_nested_wait(void *arg)
- {
--	uint8_t *stack;
--	pid_t pid;
-+	/* Wait for a SIGCONT. */
-+	kill(getpid(), SIGSTOP);
-+	return sysctl_nested(arg);
-+}
- 
--	stack = malloc(STACK_SIZE);
--	if (!stack) {
--		printf("malloc(STACK_SIZE) failed: %m\n");
--		abort();
--	}
-+static void test_sysctl_sysctl1_failset(void)
-+{
-+	sysctl_fail_write("0");
-+	test_sysctl_sysctl1();
-+}
- 
--	pid = clone(fn,
--		    stack + STACK_SIZE,
--		    SIGCHLD | flags,
--		    NULL);
--	if (pid < 0) {
--		printf("clone() failed: %m\n");
--		abort();
--	}
-+static void test_sysctl_sysctl2_failset(void)
-+{
-+	sysctl_fail_write("1");
-+	test_sysctl_sysctl2();
- 
--	return pid;
-+	sysctl_fail_write("0");
-+	test_sysctl_sysctl2();
- }
- 
--static void join_newpid_thread(pid_t pid)
-+static int sysctl_nested_child(void *arg)
- {
--	int wstatus;
-+	int fd;
-+	int pid;
- 
--	if (waitpid(pid, &wstatus, 0) < 0) {
--		printf("newpid thread: waitpid() failed: %m\n");
--		abort();
--	}
-+	printf("%s nested sysctl 0\n", memfd_str);
-+	sysctl_assert_write("0");
-+	/* A further nested pidns works the same. */
-+	pid = spawn_thread(CLONE_NEWPID, sysctl_simple_child, NULL);
-+	join_thread(pid);
- 
--	if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) != 0) {
--		printf("newpid thread: exited with non-zero error code %d\n",
--		       WEXITSTATUS(wstatus));
--		abort();
--	}
-+	printf("%s nested sysctl 1\n", memfd_str);
-+	sysctl_assert_write("1");
-+	/* Child inherits our setting. */
-+	pid = spawn_thread(CLONE_NEWPID, sysctl_nested, test_sysctl_sysctl1);
-+	join_thread(pid);
-+	/* Child cannot raise the setting. */
-+	pid = spawn_thread(CLONE_NEWPID, sysctl_nested,
-+			   test_sysctl_sysctl1_failset);
-+	join_thread(pid);
-+	/* Child can lower the setting. */
-+	pid = spawn_thread(CLONE_NEWPID, sysctl_nested,
-+			   test_sysctl_set_sysctl2);
-+	join_thread(pid);
-+	/* Child lowering the setting has no effect on our setting. */
-+	test_sysctl_sysctl1();
-+
-+	printf("%s nested sysctl 2\n", memfd_str);
-+	sysctl_assert_write("2");
-+	/* Child inherits our setting. */
-+	pid = spawn_thread(CLONE_NEWPID, sysctl_nested, test_sysctl_sysctl2);
-+	join_thread(pid);
-+	/* Child cannot raise the setting. */
-+	pid = spawn_thread(CLONE_NEWPID, sysctl_nested,
-+			   test_sysctl_sysctl2_failset);
-+	join_thread(pid);
-+
-+	/* Verify that the rules are actually inherited after fork. */
-+	printf("%s nested sysctl 0 -> 1 after fork\n", memfd_str);
-+	sysctl_assert_write("0");
- 
--	if (WIFSIGNALED(wstatus)) {
--		printf("newpid thread: killed by signal %d\n",
--		       WTERMSIG(wstatus));
--		abort();
--	}
-+	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
-+			   test_sysctl_sysctl1_failset);
-+	sysctl_assert_write("1");
-+	kill(pid, SIGCONT);
-+	join_thread(pid);
-+
-+	printf("%s nested sysctl 0 -> 2 after fork\n", memfd_str);
-+	sysctl_assert_write("0");
-+
-+	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
-+			   test_sysctl_sysctl2_failset);
-+	sysctl_assert_write("2");
-+	kill(pid, SIGCONT);
-+	join_thread(pid);
-+
-+	/*
-+	 * Verify that the current effective setting is saved on fork, meaning
-+	 * that the parent lowering the sysctl doesn't affect already-forked
-+	 * children.
-+	 */
-+	printf("%s nested sysctl 2 -> 1 after fork\n", memfd_str);
-+	sysctl_assert_write("2");
-+	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
-+			   test_sysctl_sysctl2);
-+	sysctl_assert_write("1");
-+	kill(pid, SIGCONT);
-+	join_thread(pid);
-+
-+	printf("%s nested sysctl 2 -> 0 after fork\n", memfd_str);
-+	sysctl_assert_write("2");
-+	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
-+			   test_sysctl_sysctl2);
-+	sysctl_assert_write("0");
-+	kill(pid, SIGCONT);
-+	join_thread(pid);
-+
-+	printf("%s nested sysctl 1 -> 0 after fork\n", memfd_str);
-+	sysctl_assert_write("1");
-+	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
-+			   test_sysctl_sysctl1);
-+	sysctl_assert_write("0");
-+	kill(pid, SIGCONT);
-+	join_thread(pid);
-+
-+	return 0;
- }
- 
- /*
-- * Test sysctl
-- * A very basic sealing test to see whether setting/retrieving seals works.
-+ * Test sysctl with nested pid namespaces
-+ * Make sure that the sysctl nesting semantics work correctly.
-  */
--static void test_sysctl(void)
-+static void test_sysctl_nested(void)
- {
--	int pid = spawn_newpid_thread(CLONE_NEWPID, newpid_thread_fn);
-+	int pid = spawn_thread(CLONE_NEWPID, sysctl_nested_child, NULL);
- 
--	join_newpid_thread(pid);
-+	join_thread(pid);
- }
- 
- /*
-@@ -1433,6 +1601,9 @@ int main(int argc, char **argv)
- 	test_seal_grow();
- 	test_seal_resize();
- 
-+	test_sysctl_simple();
-+	test_sysctl_nested();
-+
- 	test_share_dup("SHARE-DUP", "");
- 	test_share_mmap("SHARE-MMAP", "");
- 	test_share_open("SHARE-OPEN", "");
-@@ -1447,8 +1618,6 @@ int main(int argc, char **argv)
- 	test_share_fork("SHARE-FORK", SHARED_FT_STR);
- 	join_idle_thread(pid);
- 
--	test_sysctl();
--
- 	printf("memfd: DONE\n");
- 
- 	return 0;
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..100000}; do !!; done
+for a in {0..100000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+Test 2 failed, sigurg 23 len 63 OOB %
+Test 2 Inline failed, len 63 atmark 1
+Test 3 Inline failed, sigurg 23 len 63 data x
+Test 2 failed, sigurg 23 len 63 OOB %
+Test 3.1 Inline failed, len 1 oob % atmark 0
+Test 3 Inline failed, sigurg 23 len 63 data x
+Test 1 Inline failed, sigurg 0 len 63
+Test 1 Inline failed, sigurg 0 len 63
+Test 3.1 Inline failed, len 1 oob % atmark 0
+Test 1 Inline failed, sigurg 0 len 63
+Test 2 failed, sigurg 23 len 63 OOB %
+Test 1 Inline failed, sigurg 0 len 63
+Test 2 failed, sigurg 23 len 63 OOB %
+Test 3.1 Inline failed, len 1 oob % atmark 0
+Test 3.1 Inline failed, len 1 oob % atmark 0
+marvin@defiant:~/linux/kernel/linux_torvalds$
 
--- 
-2.41.0
+The bug can be triggered as a non-privileged user, but is not clear whether it is exploitable to elevate privileges.
 
+Best regards,
+Mirsad Todorovac
