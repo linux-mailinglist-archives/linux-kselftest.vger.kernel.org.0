@@ -2,102 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26AC77BDF2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 18:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE7077BE36
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 18:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjHNQ3j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Aug 2023 12:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
+        id S229870AbjHNQiu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Aug 2023 12:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjHNQ3a (ORCPT
+        with ESMTP id S231984AbjHNQio (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 12:29:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8566FE0;
-        Mon, 14 Aug 2023 09:29:27 -0700 (PDT)
+        Mon, 14 Aug 2023 12:38:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A188C110
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 09:38:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 221CC65218;
-        Mon, 14 Aug 2023 16:29:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D344C43391;
-        Mon, 14 Aug 2023 16:29:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36D826329A
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 16:38:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F01E4C433C8;
+        Mon, 14 Aug 2023 16:38:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692030566;
-        bh=DNY59+l4eLHFd7cPF+IJT2wogfX2f9bA2o7xtjOlI0I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GXKkyKRjJrgG9ZKR4/KXM/ZQifAN3LmqgAJoTQwlcqp94JcyJIZogGfhJRr3yD56l
-         7S/JhwlMX+t9g1l4j04OKOiNu/sXlVUnksPsinCU7BlFH3flO5h/+inLouDz7Y1bpO
-         VGyTuUg0V+uzdq6RD28Vzx7liNaFgq/k5tQ8OKR6Anbpc6QAK7BqoFvngM2GRMDJst
-         yYo9S8r8j5Owfu9hs/Jq7gUwiGl+zUmH43+cdbvjs1mTutjgkQIPOddTewnFyAgUOm
-         hlEs/nSOadUMNlkettYYJJkjXIsHjFs7qMZFyjtcgEaL6gAZ662gE7NmkhqrejY7JG
-         jOWm+uADUauTA==
-Message-ID: <ee132c0c-daed-3ffb-b6d9-156e1bbd9e1f@kernel.org>
-Date:   Mon, 14 Aug 2023 10:29:24 -0600
+        s=k20201202; t=1692031122;
+        bh=Jf1iq9wGtQfAIBSrpy5kkz8GRhPWJIBfCGoDOX+sg6M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W84N48cxbiaK8DJhvqBuceVGFwkK6ClD+RToC1HSNPx5ZxBS8qn0Zxc/1cHflhWrX
+         85uyykDRjyNTZQVUR05++hki6WCrJTqRza2ny+/iaq/mB4lHka+lrAcG8aKJdpD6kp
+         pM0LfDovYWRK5RbTAOydWae+wyTgIpCttTEXLPvID/Xr3oTxSLrstv64f3l9/DNgIs
+         zu2GdJBBkMS/jzk4ha00REKTnKhyjg/zyQc597jSd6B3OJJdZIS+5qEh5qiPUxW8LF
+         KhfNVbm1iN6OMRGDNJ0eV42TWIkhBCrf5s4Jkfw2qs8ERpvatbWKPM9q59PV6mZy9J
+         2oQ0YPM5LGuIg==
+Date:   Mon, 14 Aug 2023 17:38:37 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Zeng Heng <zengheng4@huawei.com>
+Cc:     shuah@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, xiexiuqi@huawei.com
+Subject: Re: [PATCH -next 3/4] kselftest/arm64: add pmull feature to hwcap
+ test
+Message-ID: <3864eda1-0d02-42a2-ae9c-0d1eb3195a19@sirena.org.uk>
+References: <20230814021747.1784812-1-zengheng4@huawei.com>
+ <20230814021747.1784812-4-zengheng4@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.14.0
-Subject: Re: [net-next v2 2/2] selftests: seg6: add selftest for NEXT-C-SID
- flavor in SRv6 End.X behavior
-Content-Language: en-US
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>
-References: <20230812180926.16689-1-andrea.mayer@uniroma2.it>
- <20230812180926.16689-3-andrea.mayer@uniroma2.it>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20230812180926.16689-3-andrea.mayer@uniroma2.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="82IVcnuVjLk8SJTS"
+Content-Disposition: inline
+In-Reply-To: <20230814021747.1784812-4-zengheng4@huawei.com>
+X-Cookie: FACILITY REJECTED 100044200000
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/12/23 12:09 PM, Andrea Mayer wrote:
-> From: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
-> 
-> This selftest is designed for testing the support of NEXT-C-SID flavor
-> for SRv6 End.X behavior. It instantiates a virtual network composed of
-> several nodes: hosts and SRv6 routers. Each node is realized using a
-> network namespace that is properly interconnected to others through veth
-> pairs, according to the topology depicted in the selftest script file.
-> The test considers SRv6 routers implementing IPv4/IPv6 L3 VPNs leveraged
-> by hosts for communicating with each other. Such routers i) apply
-> different SRv6 Policies to the traffic received from connected hosts,
-> considering the IPv4 or IPv6 protocols; ii) use the NEXT-C-SID
-> compression mechanism for encoding several SRv6 segments within a single
-> 128-bit SID address, referred to as a Compressed SID (C-SID) container.
-> 
-> The NEXT-C-SID is provided as a "flavor" of the SRv6 End.X behavior,
-> enabling it to properly process the C-SID containers. The correct
-> execution of the enabled NEXT-C-SID SRv6 End.X behavior is verified
-> through reachability tests carried out between hosts belonging to the
-> same VPN.
-> 
-> Signed-off-by: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
-> Co-developed-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> ---
->  tools/testing/selftests/net/Makefile          |    1 +
->  .../net/srv6_end_x_next_csid_l3vpn_test.sh    | 1213 +++++++++++++++++
->  2 files changed, 1214 insertions(+)
->  create mode 100755 tools/testing/selftests/net/srv6_end_x_next_csid_l3vpn_test.sh
-> 
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+--82IVcnuVjLk8SJTS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Mon, Aug 14, 2023 at 10:17:46AM +0800, Zeng Heng wrote:
+
+>  	asm volatile("mrs x0, S3_3_C2_C4_0" : : : "x0");
+> @@ -359,6 +365,13 @@ static const struct hwcap_data {
+>  		.cpuinfo = "rng",
+>  		.sigill_fn = rng_sigill,
+>  	},
+> +	{
+> +		.name = "PMULL",
+> +		.at_hwcap = AT_HWCAP,
+> +		.hwcap_bit = HWCAP_PMULL,
+> +		.cpuinfo = "pmull",
+> +		.sigill_fn = pmull_sigill,
+> +	},
+
+Please keep the table alphabatically sorted - the function is in the
+right place but this seems to have got reordered.
+
+--82IVcnuVjLk8SJTS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTaWI0ACgkQJNaLcl1U
+h9CgHgf7B0sGb+LPurc7k9CkdDHSRChUt9+5E/NIHJrWmRviOXcgQNa1kByy4H1B
+TSgaAbHgJPBjKrn9s7LbfOxVP2osiIIhRVoDdFZbhJL7EWFEUsQylSyPzFsjIGjH
+BAw1r60vNyqCMLYYhgKG9F/rk2exVCi54uyaC/mvH9iONSoncqt+ej+OFIwL9CmW
+otS3P6l6ucO3i0PAqr3XJh76yX++KbRlye7UoYiIUF3sEviAnd2l4fApcQew6V5I
+WKhrzOKXW+r0+p0Fhs4azhLEIRpHsO82bQNUd3fydXs+8N6iLEKF9SM45AILeAQq
+kddH1+RoAK8WPTHtJjB+/LPNvncIhg==
+=Kx54
+-----END PGP SIGNATURE-----
+
+--82IVcnuVjLk8SJTS--
