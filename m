@@ -2,78 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A987C77B263
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 09:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A8B77B2AD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 09:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234076AbjHNH0e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Aug 2023 03:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
+        id S232931AbjHNHjY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Aug 2023 03:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbjHNH0F (ORCPT
+        with ESMTP id S234226AbjHNHjG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 03:26:05 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5B51E71;
-        Mon, 14 Aug 2023 00:26:03 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 37E7PqqQ016748;
-        Mon, 14 Aug 2023 09:25:52 +0200
-Date:   Mon, 14 Aug 2023 09:25:52 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tanyuan@tinylab.org, thomas@t-8ch.de
-Subject: Re: [PATCH v6 2/2] tools/nolibc: fix up size inflate regression
-Message-ID: <20230814072552.GD14322@1wt.eu>
-References: <20230813090037.GE8237@1wt.eu>
- <20230813133944.19604-1-falcon@tinylab.org>
+        Mon, 14 Aug 2023 03:39:06 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5719AE77;
+        Mon, 14 Aug 2023 00:39:03 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1691998737thw1uylw
+Received: from linux-lab-host.localdomain ( [116.30.128.116])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 14 Aug 2023 15:38:55 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: ILHsT53NKPgSYc2MJc8LgfLuQ9xVIs8E0t6Kl0PCU8zSJzGcvbRYI2goUtxYt
+        5au0ZM7oybWImKhQsYttCh8pALgLX1+FjjCR+0gb27MUrdFcA3fmgj103AXv/FhkHIvsL4T
+        qeXry1LDorRRL/xtNUI0UBvVV2It6vX4vN5eOP8UaQXNnY5I+/ixbYyUWQhtca9rYcTKu9K
+        dA36fp2dvzJ959VKWfe/6IGAZ4bfFdIiA5BGnZeAnji0DfM0a7lR2O88h3Kqt9pENRV6j3f
+        LlM1uW88XQqpkqVLi3U7FDrKq2mKj97yFF1uXFAd2RI6cy5imHgEyIyhdwNE4aXLyV31lpC
+        U7usk9ZS5cuZv3UsAw1lpT++o46Og==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 4215077401987166728
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, tanyuan@tinylab.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v2 0/7] selftests/nolibc: customize CROSS_COMPILE for all supported architectures
+Date:   Mon, 14 Aug 2023 15:38:54 +0800
+Message-Id: <20230814073854.13444-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230814071850.GC14322@1wt.eu>
+References: <20230814071850.GC14322@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230813133944.19604-1-falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Aug 13, 2023 at 09:39:44PM +0800, Zhangjin Wu wrote:
-> > Let's just roll brk(), mmap() and sbrk() to their original, working,
-> > definition:
+> On Sun, Aug 13, 2023 at 06:05:03PM +0800, Zhangjin Wu wrote:
+> > > I think that later I'll further extend XARCH with new variants to
+> > > support ARMv5 and Thumb2, because we have different code for this
+> > > and I continue to manually change the CFLAGS to test both.
+> > >
 > > 
-> >  static __attribute__((unused))
-> >  void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
-> >  {
-> >         void *ret = sys_mmap(addr, length, prot, flags, fd, offset);
-> >  
-> >         if ((unsigned long)ret >= -MAX_ERRNO) {
-> >                 SET_ERRNO(-(long)ret);
-> >                 ret = MAP_FAILED;
-> >         }
-> >         return ret;
-> >  }
-> >
+> > Ok, what about further add x86_64 as the default variant for x86 (like ppc for
+> > powerpc)? and then it is able to only resereve the variables for x86_64. I have
+> > prepared a patch for this goal in our new tinyconfig patchset, it will further
+> > avoid adding the same nolibc-test-x86.config and nolibc-test-x86_64.config.
 > 
-> Agree, only left a suggestion here [2] about whether we can apply the 2nd patch
-> instead of rolling them back, let's discuss it in [2] thread.
-(...)
-> [2]: https://lore.kernel.org/lkml/20230813132620.19411-1-falcon@tinylab.org/
+> I'm confused, x86 already defaults to x86_64, it's just that it depends
+> on the .config itself to figure whether to produce a 32- or 64-bit kernel.
+> But for example it starts qemu in 64-bit mode. Am I missing anything ?
+>
 
-I'm sorry but I can't find this "suggestion" in this yet-another-super-
-long-description-of-another-idea-of-redesign. In addition it's extremely
-painful to constantly have to go through web links to follow a single
-conversation. Mail works in threads for a reason. When the same discussion
-is handled in many parallel threads it becomes impossible to keep it
-focused on a specific topic. This is also why you should stop systematically
-responding to a message with yet another redesign suggestion, this is super
-hard to follow and it literally takes me several hours a week! And at the
-end we've not addressed the initial problem but discussed plenty of other
-things.
+In kernel side, it is, but in our nolibc-test, we have added a copy of x86_64
+for x86:
 
-Thanks,
-Willy
+    $ grep -E "_x86" tools/testing/selftests/nolibc/Makefile 
+    IMAGE_x86_64     = arch/x86/boot/bzImage
+    IMAGE_x86        = arch/x86/boot/bzImage
+    CROSS_COMPILE_x86_64    ?= x86_64-linux- x86_64-linux-gnu-
+    CROSS_COMPILE_x86       ?= x86_64-linux- x86_64-linux-gnu-
+    DEFCONFIG_x86_64     = defconfig
+    DEFCONFIG_x86        = defconfig
+    QEMU_ARCH_x86_64     = x86_64
+    QEMU_ARCH_x86        = x86_64
+    QEMU_ARGS_x86_64     = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+    QEMU_ARGS_x86        = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+
+With 'XARCH', the "_x86" copy of them can be simply replaced with such a line:
+
+     # configure default variants for target kernel supported architectures
+     XARCH_powerpc    = ppc
+    +XARCH_x86        = x86_64
+     XARCH            = $(or $(XARCH_$(ARCH)),$(ARCH))
+
+And therefore, the future nolibc-test-x86_64.config is also enough for x86.
+
+But I have seen the 'x86' exception in tools/include/nolibc/Makefile, just a
+confirm on if this replacement is ok.
+
+BR,
+Zhangjin
+
+> Willy
