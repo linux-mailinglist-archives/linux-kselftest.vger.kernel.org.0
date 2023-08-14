@@ -2,143 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A897477AB39
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Aug 2023 22:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B25BD77AF3B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 03:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbjHMUgD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 13 Aug 2023 16:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
+        id S229641AbjHNBrP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 13 Aug 2023 21:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjHMUgC (ORCPT
+        with ESMTP id S232318AbjHNBqk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 13 Aug 2023 16:36:02 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01E1E53
-        for <linux-kselftest@vger.kernel.org>; Sun, 13 Aug 2023 13:36:03 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7910b9bb891so118055139f.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 13 Aug 2023 13:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1691958963; x=1692563763;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0iOirdFXAoR4Dw5/bPjx/MkVB+PbXDe73OjSK0jH83c=;
-        b=Q7j+GZAQELuXA+fkPVYYc2MCLGuNFdpba8u9NPav5G6xgAZwmnfe/hu/EroDvFfNRx
-         u1PM5Y23qwjzYO838EHiidTRsVhEsutMjyAwh6bp4vQwl2edIo+EK0X+lodcx6/IFAca
-         7rapvLC94KaC4ykdFUwGylYJ4+5nE4c5nZQlU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691958963; x=1692563763;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0iOirdFXAoR4Dw5/bPjx/MkVB+PbXDe73OjSK0jH83c=;
-        b=iBumgfxJVnYKxZpH/AfXAIKZzxclT8A/zizYFlA7ilttC3e8DfB8UuJniwxLFB4vRx
-         qh0ETlIQ0qyXhipdxZzFP+SUoxbZJfMGLM/9MibBXSAqVgYEorYix3nQLFwTubRgEgTs
-         d+ow6ZjvDA1l4Qc6GmczGTgkcNtECovcgDnoIG2X31RJAhGIirQmTNUGsjxnSGaGyyk+
-         lthE5BQl0oVZ5FBUxCF/5I4vLWNBRdnO+41P6UlC5LGl85AqNOptUkB3jXAKOQntPy02
-         34rl4yutDHMrkLKlnW5ZgmQBqZndeNLHqYZsizObet+q+/QIvwiKnPeHr5aBH4V46V93
-         dUfA==
-X-Gm-Message-State: AOJu0YzNcSRVCSXgDQjmxWIejYP8EIgBt85SAReGHpk4DLJZgUhHSavx
-        /VOZA9zVOGDiMBpBtHmWoUoDSw==
-X-Google-Smtp-Source: AGHT+IFbDXxmLldQoWKZd5uSmnRGDGphEDAM5QfwwW4+ElNvXFWN1Z5dMNo0UGjx7wHHJYzCe9hSeQ==
-X-Received: by 2002:a05:6e02:2162:b0:345:d2fe:da92 with SMTP id s2-20020a056e02216200b00345d2feda92mr11738497ilv.10.1691958963068;
-        Sun, 13 Aug 2023 13:36:03 -0700 (PDT)
-Received: from localhost (254.82.172.34.bc.googleusercontent.com. [34.172.82.254])
-        by smtp.gmail.com with ESMTPSA id x14-20020a02ac8e000000b0042b27413760sm2522937jan.142.2023.08.13.13.36.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Aug 2023 13:36:02 -0700 (PDT)
-Date:   Sun, 13 Aug 2023 20:36:02 +0000
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Joel <agnel.joel@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v2] rcutorture: Copy out ftrace into its own console file
-Message-ID: <20230813203602.GA696907@google.com>
+        Sun, 13 Aug 2023 21:46:40 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF4CE63;
+        Sun, 13 Aug 2023 18:46:37 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4RPHLd6kLgz4f3lY2;
+        Mon, 14 Aug 2023 09:46:33 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP4 (Coremail) with SMTP id gCh0CgDnwqV5h9lkUqyjAg--.38273S2;
+        Mon, 14 Aug 2023 09:46:34 +0800 (CST)
+Subject: Re: [PATCH] kunit: replace KUNIT_TRIGGER_STATIC_STUB maro with
+ KUNIT_STATIC_STUB_REDIRECT
+To:     David Gow <davidgow@google.com>
+Cc:     brendan.higgins@linux.dev, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+References: <20230725172051.2142641-1-shikemeng@huaweicloud.com>
+ <CABVgOSn_k=TV4Y7pKTw5LY3su6r0TYi_ci95MKw7-wRHA1+MdA@mail.gmail.com>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <915f6336-fc33-c87e-01ac-a80550abbf61@huaweicloud.com>
+Date:   Mon, 14 Aug 2023 09:44:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CABVgOSn_k=TV4Y7pKTw5LY3su6r0TYi_ci95MKw7-wRHA1+MdA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: gCh0CgDnwqV5h9lkUqyjAg--.38273S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw48Aw47AF4DArWrAF18Xwb_yoW5Ww1xpa
+        93C3WUur1UJFs2kFyIvFW0qr1akws5Jr4Utr13Ww4Sqa13Wr1xKa1DKr1rK3yUW3ykJa90
+        vasIvFy5KayDArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1wL05UUUUU==
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-Often times during debugging, it is difficult to jump to the ftrace dump
-in the console log and treat it independent of the result of the log file.
-Copy the contents of the buffers into its own file to make it easier to refer
-to the ftrace dump. The original ftrace dump is still available in the
-console log if it is desired to refer to it there.
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
-v1-v2: Change log updates, "From:" updates.
-
- .../selftests/rcutorture/bin/functions.sh     | 24 +++++++++++++++++++
- .../selftests/rcutorture/bin/parse-console.sh |  7 ++++++
- 2 files changed, 31 insertions(+)
- mode change 100644 => 100755 tools/testing/selftests/rcutorture/bin/functions.sh
-
-diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/testing/selftests/rcutorture/bin/functions.sh
-old mode 100644
-new mode 100755
-index b8e2ea23cb3f..2ec4ab87a7f0
---- a/tools/testing/selftests/rcutorture/bin/functions.sh
-+++ b/tools/testing/selftests/rcutorture/bin/functions.sh
-@@ -331,3 +331,27 @@ specify_qemu_net () {
- 		echo $1 -net none
- 	fi
- }
-+
-+# Extract the ftrace output from the console log output
-+# The ftrace output looks in the logs looks like:
-+# Dumping ftrace buffer:
-+# ---------------------------------
-+# [...]
-+# ---------------------------------
-+extract_ftrace_from_console() {
-+        awk '
-+        /Dumping ftrace buffer:/ {
-+        capture = 1
-+        next
-+    }
-+    /---------------------------------/ {
-+        if(capture == 1) {
-+            capture = 2
-+            next
-+        } else if(capture == 2) {
-+            capture = 0
-+        }
-+    }
-+    capture == 2
-+    ' "$1";
-+}
-diff --git a/tools/testing/selftests/rcutorture/bin/parse-console.sh b/tools/testing/selftests/rcutorture/bin/parse-console.sh
-index 9ab0f6bc172c..e3d2f69ec0fb 100755
---- a/tools/testing/selftests/rcutorture/bin/parse-console.sh
-+++ b/tools/testing/selftests/rcutorture/bin/parse-console.sh
-@@ -182,3 +182,10 @@ if ! test -s $file.diags
- then
- 	rm -f $file.diags
- fi
-+
-+# Call extract_ftrace_from_console function, if the output is empty,
-+# don't create $file.ftrace. Otherwise output the results to $file.ftrace
-+extract_ftrace_from_console $file > $file.ftrace
-+if [ ! -s $file.ftrace ]; then
-+	rm -f $file.ftrace
-+fi
--- 
-2.41.0.640.ga95def55d0-goog
+on 8/12/2023 3:48 PM, David Gow wrote:
+> On Tue, 25 Jul 2023 at 17:20, Kemeng Shi <shikemeng@huaweicloud.com> wrote:
+>>
+>> We mix up KUNIT_TRIGGER_STATIC_STUB and KUNIT_STATIC_STUB_REDIRECT in
+>> static_stub header. Just correct KUNIT_TRIGGER_STATIC_STUB to
+>> KUNIT_STATIC_STUB_REDIRECT which is documented.
+>>
+>> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+>> ---
+> 
+> Thanks for catching this!
+> 
+> Only minor note is that there's a typo in the subject ("maro","macro").
+> 
+> Fixes: e047c5eaa763 ("kunit: Expose 'static stub' API to redirect functions")
+> Reviewed-by: David Gow <davidgow@google.com>
+> Thanks for the feedback, I will fix it in next version.
+> Cheers,
+> -- David
+> 
+>>  include/kunit/static_stub.h | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
+>> index 9b80150a5d62..85315c80b303 100644
+>> --- a/include/kunit/static_stub.h
+>> +++ b/include/kunit/static_stub.h
+>> @@ -11,7 +11,7 @@
+>>  #if !IS_ENABLED(CONFIG_KUNIT)
+>>
+>>  /* If CONFIG_KUNIT is not enabled, these stubs quietly disappear. */
+>> -#define KUNIT_TRIGGER_STATIC_STUB(real_fn_name, args...) do {} while (0)
+>> +#define KUNIT_STATIC_STUB_REDIRECT(real_fn_name, args...) do {} while (0)
+>>
+>>  #else
+>>
+>> @@ -30,7 +30,7 @@
+>>   * This is a function prologue which is used to allow calls to the current
+>>   * function to be redirected by a KUnit test. KUnit tests can call
+>>   * kunit_activate_static_stub() to pass a replacement function in. The
+>> - * replacement function will be called by KUNIT_TRIGGER_STATIC_STUB(), which
+>> + * replacement function will be called by KUNIT_STATIC_STUB_REDIRECT(), which
+>>   * will then return from the function. If the caller is not in a KUnit context,
+>>   * the function will continue execution as normal.
+>>   *
+>> @@ -87,7 +87,7 @@ void __kunit_activate_static_stub(struct kunit *test,
+>>   * When activated, calls to real_fn_addr from within this test (even if called
+>>   * indirectly) will instead call replacement_addr. The function pointed to by
+>>   * real_fn_addr must begin with the static stub prologue in
+>> - * KUNIT_TRIGGER_STATIC_STUB() for this to work. real_fn_addr and
+>> + * KUNIT_STATIC_STUB_REDIRECT() for this to work. real_fn_addr and
+>>   * replacement_addr must have the same type.
+>>   *
+>>   * The redirection can be disabled again with kunit_deactivate_static_stub().
+>> --
+>> 2.30.0
+>>
+>> --
+>> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+>> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+>> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230725172051.2142641-1-shikemeng%40huaweicloud.com.
 
