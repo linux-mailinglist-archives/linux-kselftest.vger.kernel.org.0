@@ -2,167 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1C277B9D5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 15:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE94A77BA62
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 15:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjHNNXy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Aug 2023 09:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S230337AbjHNNmr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Aug 2023 09:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjHNNXj (ORCPT
+        with ESMTP id S230509AbjHNNmV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 09:23:39 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622F610C0;
-        Mon, 14 Aug 2023 06:23:38 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37E5t3EO003856;
-        Mon, 14 Aug 2023 08:23:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding:content-type; s=
-        PODMain02222019; bh=qUcroq0sql/GRbImJk7ytIZcccdHxxZwy9OPYA42Fng=; b=
-        d3VmG24jOMJaqUrRC6qp4dUbommpGhtT4+kdxtXyfercPkap+HeuRe/xVlbckRT6
-        Ilk/Nb/HAK1MMPewLyzrFVuJ9GpXagBoKAvhM2BRvn082JIezCtLEAJQlClXU7PY
-        SQofO2zimheoZKLobnEY4ldDB+eeC1Z3xsQHivWd2nQeGtu0fN1+7tnwxiiE90Ck
-        yRImeHC5PZy0qx6eqyFINY15iOSxOxytoHUWlnFgo0Ekl3b8DIKq/Wq17M058Wc+
-        KKr89YAxRc1/oSUc9Ozk16SfuYkm7iKgVDHJxwcpDBhf5DPEPexpqXORbFnP9Jcy
-        OCiSQwoG5pjxqjKWm5ppyw==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3se8kqt6x8-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Aug 2023 08:23:20 -0500 (CDT)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 14 Aug
- 2023 14:23:16 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.30 via Frontend
- Transport; Mon, 14 Aug 2023 14:23:16 +0100
-Received: from EDIN4L06LR3.ad.cirrus.com (EDIN4L06LR3.ad.cirrus.com [198.61.65.68])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2258B3578;
-        Mon, 14 Aug 2023 13:23:16 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
-        <rmoar@google.com>
-CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v4 10/10] kunit: string-stream: Test performance of string_stream
-Date:   Mon, 14 Aug 2023 14:23:09 +0100
-Message-ID: <20230814132309.32641-11-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230814132309.32641-1-rf@opensource.cirrus.com>
-References: <20230814132309.32641-1-rf@opensource.cirrus.com>
+        Mon, 14 Aug 2023 09:42:21 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E023D106;
+        Mon, 14 Aug 2023 06:42:20 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-68843ed67a8so166825b3a.2;
+        Mon, 14 Aug 2023 06:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692020540; x=1692625340;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lDCAzxWdtY8TWbeLrXdWW1Rai4n5TCJ5494zqu6HPfU=;
+        b=Fjxw6gu8bboVjTZ+auStS34IcemdRAKkM+l3uJNXDisu2msNUp+VeFdjl63CoEetEY
+         Nr4h1LFqyJcDm2xvSnXF0ptRW5mPdJ3Gdpmh2gsRjyc65E08bIG+BVaG28tdv/t1v/x3
+         lOwabI1XL66yLiAu6ZzR/ApmyEWyFYIN01fonPiBsRJF2rJgclPOWP4pep2ANjAkKANq
+         8I+MoaxPlX3rFpRQBYtRZ0wOA0Fc1KdeJytDa0UyBWaqLynECIxewWZIAJuayKggHglk
+         dDyh4fqEZyjwy1BI9HAZ7u1Ybu+wNl82tS+WOOSTG6gIbJXVwZchk4+bma5M9poAQA3S
+         g6EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692020540; x=1692625340;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lDCAzxWdtY8TWbeLrXdWW1Rai4n5TCJ5494zqu6HPfU=;
+        b=Xt3WvWCV/v1QaznAUbyyWnOy8efqNfzJPq0iNc/huPCd65hNJw4ylc7L7bp2AbE1f1
+         RxiZIsBBfm3Pg5pNt9Hwzdg71wpieSWNcpeQ1ag31rKyrjuVXT/thIPgeIhkPXcGXFAe
+         TR5nkAW9D4+JiuwNWiYfmX9rH/qFgIAQAEKm/WNR626w/ARFuW+0x6atc1w46Z3XEVmR
+         M/q1f8cwvYFTH9wGRHjCcDcd5ZU0j+W7O41vv+8JkVi6nFcNTStQ8E3BCh0baZ+rLvy7
+         FE65u4MVvTpR35rf2+VKceblA7Ws9KUvMUq02Bisebvr1Apa/9teTSyznOX0Tdoljxgv
+         qfNg==
+X-Gm-Message-State: AOJu0YzuRHcP/1shtFPYo2SaBzT1vJAHqkozA2Y/Yws6wZkVa2+Nxgg7
+        0+rtrB+Fuq/GU97in8QiHqrEAN8MnMY1TRUE
+X-Google-Smtp-Source: AGHT+IE9wKPAW8hDDXYgn6NS1woZmMGvp8CdL1oFFe/zjWjyGir6jLu0Ld1BbUDtZFJTbdD3OGS95A==
+X-Received: by 2002:a05:6a21:47cb:b0:131:eeba:184b with SMTP id as11-20020a056a2147cb00b00131eeba184bmr11891180pzc.25.1692020539955;
+        Mon, 14 Aug 2023 06:42:19 -0700 (PDT)
+Received: from localhost.localdomain (bb219-74-209-211.singnet.com.sg. [219.74.209.211])
+        by smtp.gmail.com with ESMTPSA id m3-20020a638c03000000b0055c02b8688asm8555583pgd.20.2023.08.14.06.42.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Aug 2023 06:42:19 -0700 (PDT)
+From:   Leon Hwang <hffilwlqm@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, x86@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, mykolal@fb.com,
+        shuah@kernel.org, davem@davemloft.net, dsahern@kernel.org,
+        hffilwlqm@gmail.com, tangyeechou@gmail.com,
+        kernel-patches-bot@fb.com, maciej.fijalkowski@intel.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH bpf-next 0/2] bpf, x64: Fix tailcall infinite loop bug
+Date:   Mon, 14 Aug 2023 21:41:45 +0800
+Message-ID: <20230814134147.70289-1-hffilwlqm@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: gF-U2VPMNOOpEKszEfhbqrqrTpbnDKz2
-X-Proofpoint-GUID: gF-U2VPMNOOpEKszEfhbqrqrTpbnDKz2
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test of the speed and memory use of string_stream.
+From commit ebf7d1f508a73871 ("bpf, x64: rework pro/epilogue and tailcall
+handling in JIT"), the tailcall on x64 works better than before.
 
-string_stream_performance_test() doesn't actually "test" anything (it
-cannot fail unless the system has run out of allocatable memory) but it
-measures the speed and memory consumption of the string_stream and reports
-the result.
+From commit e411901c0b775a3a ("bpf: allow for tailcalls in BPF subprograms
+for x64 JIT"), tailcall is able to run in BPF subprograms on x64.
 
-This allows changes in the string_stream implementation to be compared.
+From commit 5b92a28aae4dd0f8 ("bpf: Support attaching tracing BPF program
+to other BPF programs"), BPF program is able to trace other BPF programs.
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- lib/kunit/string-stream-test.c | 54 ++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+How about combining them all together?
 
-diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
-index 05bfade2bd8a..b55cc14f43fb 100644
---- a/lib/kunit/string-stream-test.c
-+++ b/lib/kunit/string-stream-test.c
-@@ -8,7 +8,9 @@
- 
- #include <kunit/static_stub.h>
- #include <kunit/test.h>
-+#include <linux/ktime.h>
- #include <linux/slab.h>
-+#include <linux/timekeeping.h>
- 
- #include "string-stream.h"
- 
-@@ -370,6 +372,57 @@ static void string_stream_auto_newline_test(struct kunit *test)
- 			   "One\nTwo\nThree\nFour\nFive\nSix\nSeven\n\nEight\n");
- }
- 
-+/*
-+ * This doesn't actually "test" anything. It reports time taken
-+ * and memory used for logging a large number of lines.
-+ */
-+static void string_stream_performance_test(struct kunit *test)
-+{
-+	struct string_stream_fragment *frag_container;
-+	struct string_stream *stream;
-+	char test_line[101];
-+	ktime_t start_time, end_time;
-+	size_t len, bytes_requested, actual_bytes_used, total_string_length;
-+	int offset, i;
-+
-+	stream = alloc_string_stream(test, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
-+
-+	memset(test_line, 'x', sizeof(test_line) - 1);
-+	test_line[sizeof(test_line) - 1] = '\0';
-+
-+	start_time = ktime_get();
-+	for (i = 0; i < 10000; i++) {
-+		offset = i % (sizeof(test_line) - 1);
-+		string_stream_add(stream, "%s: %d\n", &test_line[offset], i);
-+	}
-+	end_time = ktime_get();
-+
-+	/*
-+	 * Calculate memory used. This doesn't include invisible
-+	 * overhead due to kernel allocator fragment size rounding.
-+	 */
-+	bytes_requested = sizeof(*stream);
-+	actual_bytes_used = ksize(stream);
-+	total_string_length = 0;
-+
-+	list_for_each_entry(frag_container, &stream->fragments, node) {
-+		bytes_requested += sizeof(*frag_container);
-+		actual_bytes_used += ksize(frag_container);
-+
-+		len = strlen(frag_container->fragment);
-+		total_string_length += len;
-+		bytes_requested += len + 1; /* +1 for '\0' */
-+		actual_bytes_used += ksize(frag_container->fragment);
-+	}
-+
-+	kunit_info(test, "Time elapsed:           %lld us\n",
-+		   ktime_us_delta(end_time, start_time));
-+	kunit_info(test, "Total string length:    %zu\n", total_string_length);
-+	kunit_info(test, "Bytes requested:        %zu\n", bytes_requested);
-+	kunit_info(test, "Actual bytes allocated: %zu\n", actual_bytes_used);
-+}
-+
- static int string_stream_test_init(struct kunit *test)
- {
- 	struct string_stream_test_priv *priv;
-@@ -400,6 +453,7 @@ static struct kunit_case string_stream_test_cases[] = {
- 	KUNIT_CASE(string_stream_append_empty_string_test),
- 	KUNIT_CASE(string_stream_no_auto_newline_test),
- 	KUNIT_CASE(string_stream_auto_newline_test),
-+	KUNIT_CASE(string_stream_performance_test),
- 	{}
- };
- 
+1. FENTRY/FEXIT on a BPF subprogram.
+2. A tailcall runs in the BPF subprogram.
+3. The tailcall calls itself.
+
+As a result, a tailcall infinite loop comes up. And the loop would halt
+the machine.
+
+As we know, in tail call context, the tail_call_cnt propagates by stack
+and RAX register between BPF subprograms. So do it in FENTRY/FEXIT
+trampolines.
+
+How did I discover the bug?
+
+From commit 7f6e4312e15a5c37 ("bpf: Limit caller's stack depth 256 for
+subprogs with tailcalls"), the total stack size limits to around 8KiB.
+Then, I write some bpf progs to validate the stack consuming, that are
+tailcalls running in bpf2bpf and FENTRY/FEXIT tracing on bpf2bpf[1].
+
+At that time, accidently, I made a tailcall loop. And then the loop halted
+my VM. Without the loop, the bpf progs would consume over 8KiB stack size.
+But the _stack-overflow_ did not halt my VM.
+
+With bpf_printk(), I confirmed that the tailcall count limit did not work
+expectedly. Next, read the code and fix it.
+
+Finally, unfortunately, I only fix it on x64 but other arches. As a
+result, CI tests failed because this bug hasn't been fixed on s390x.
+
+Some helps are requested.
+
+[1]: https://github.com/Asphaltt/learn-by-example/tree/main/ebpf/tailcall-stackoverflow
+
+Leon Hwang (2):
+  bpf, x64: Fix tailcall infinite loop bug
+  selftests/bpf: Add testcases for tailcall infinite loop bug fixing
+
+ arch/x86/net/bpf_jit_comp.c                   |  23 ++-
+ include/linux/bpf.h                           |   6 +
+ kernel/bpf/trampoline.c                       |   5 +-
+ kernel/bpf/verifier.c                         |   9 +-
+ .../selftests/bpf/prog_tests/tailcalls.c      | 194 +++++++++++++++++-
+ .../bpf/progs/tailcall_bpf2bpf_fentry.c       |  18 ++
+ .../bpf/progs/tailcall_bpf2bpf_fexit.c        |  18 ++
+ 7 files changed, 264 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_fentry.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_fexit.c
+
+
+base-commit: 9930e4af4b509bcf6f060b09b16884f26102d110
 -- 
-2.30.2
+2.41.0
 
