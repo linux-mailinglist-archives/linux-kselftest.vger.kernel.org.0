@@ -2,90 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB56077C210
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 23:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB4277C25C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 23:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbjHNVFZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Aug 2023 17:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S231839AbjHNV1h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Aug 2023 17:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232897AbjHNVFY (ORCPT
+        with ESMTP id S232641AbjHNV1g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 17:05:24 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2F6DE
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 14:05:23 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1bc7b25c699so29252695ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 14:05:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692047123; x=1692651923;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rbAqdxFtoX3bkDfM4kN5C0n/JYAhX0IdvmwRc1W7v3E=;
-        b=aU1riK9M1P7N+89kCy8Te9dMZuoQB8HuURBX7Sr5hfor3VlfCzKzpOFaL4jdvqZaBh
-         GubU/DiG1dcOLQsD9bSYv+UQxc3ROrfo6bvgyb54pURtJzzZeOmKU1/9RAD9yyF6syQC
-         9i1nx3a+96L/srFeZicMFIvxQHoY6GS7oYYgY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692047123; x=1692651923;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rbAqdxFtoX3bkDfM4kN5C0n/JYAhX0IdvmwRc1W7v3E=;
-        b=iipfHdztNkVrFCo8JqhRr87p2kaxZxPhsVU7Bk/znzW0cqRkueTnJ6GYr4oMzaJxOb
-         JeD3cwOxbX6kEHvEQR5YprBkeimhomllEljpajZm+cVEBfrCpoOMyij4W8mHXbZkrmPy
-         XHXebgFDktLLVPqEhztghH6lt4RzIwp4AhQY0UCsnCbeDNbkzv92Ll1kuhluo1nkBlhE
-         LsAcTPKh0NZuBSHBXmAne8jq0bpzRbqcvvfJKtuYctDCXjsWfvZld0NX5fP+2FppCpjH
-         pZH1uTnxU2hLORhnUAPQGfMqcZS82CuXCyn2yNqzVhR4dHirEXt7sQLxB8+OAbfjpBmw
-         jEMw==
-X-Gm-Message-State: AOJu0YxBoFYA8RolMHzMxWxil7xKSwKKJJnxUbt3ZWt4IO7db5KMJF30
-        SB9dkqn4YFrdB12becDWYJNR9GUw2mSA/QBooA0=
-X-Google-Smtp-Source: AGHT+IHOyv6KjV38QRfIiFQ0899WKF/5k7KLFAQqKabq/9I1n/gQ3lqbSVx4EKttbStm2ZO1+AKozg==
-X-Received: by 2002:a17:902:db05:b0:1bb:c971:ef92 with SMTP id m5-20020a170902db0500b001bbc971ef92mr9928350plx.59.1692047122793;
-        Mon, 14 Aug 2023 14:05:22 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id u18-20020a170903125200b001b53953f306sm9905125plh.178.2023.08.14.14.05.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 14:05:22 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Brendan Higgins <brendan.higgins@linux.dev>
-Cc:     Kees Cook <keescook@chromium.org>, David Gow <davidgow@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Petr Skocik <pskocik@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jens Axboe <axboe@kernel.dk>, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Marco Elver <elver@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "haifeng.xu" <haifeng.xu@shopee.com>,
+        Mon, 14 Aug 2023 17:27:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E368B3;
+        Mon, 14 Aug 2023 14:27:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 220C36217F;
+        Mon, 14 Aug 2023 21:27:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A3C5C433C8;
+        Mon, 14 Aug 2023 21:27:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692048454;
+        bh=ROTw5Shu1qnV11NIDTQkvpaBafpBtU+9vSUPGkEv9rk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=oIKwP8elZUnZFrS7Axf1DTHkNw0siHSXXuF+b5QvVIJvtoQoB9h+RctPmiH6aMBPk
+         FLAQ8C0mf1g+vIuV7jjG7+LbpLsXa7Aafmtwy9hCmhDmWAeVUZA7sz4uf2f3dVqvJo
+         CHxz4iWvYCe4Bjx44shhyRzl3LVuCmqVkcsnyvkHPJhT/mxgFpSKATYrQ1fq0U/AMf
+         Aj6RJEfDovg2k2t86nSMYFch5Zdh1wxJZahQ+XPrclc9Hr64gK0F82RDuWEonRETrm
+         GJE/HgbsmQgSTtrHwvh+vJDvuvQWSM6QX1RWgbv6ac9KUIngWmPEnA8j/I5eut23Ol
+         jtp6FC2H9f0Ug==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1BD30CE039C; Mon, 14 Aug 2023 14:27:34 -0700 (PDT)
+Date:   Mon, 14 Aug 2023 14:27:34 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] [RFC] signal: Add KUnit tests
-Date:   Mon, 14 Aug 2023 14:05:12 -0700
-Message-Id: <20230814210508.never.871-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Joel <agnel.joel@gmail.com>,
+        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] rcutorture: Copy out ftrace into its own console file
+Message-ID: <8f952ce7-2122-45a4-82a3-a4e4dcd85ff4@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230813203602.GA696907@google.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7560; i=keescook@chromium.org;
- h=from:subject:message-id; bh=PF2MobMOQslBs357nkGARKlzx63FBChyOYfmSJC+BxQ=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk2pcIIK4kP2LoF7unJCvNcio7tUwScsAvQ3EDT
- GBzEOhmGJuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZNqXCAAKCRCJcvTf3G3A
- JtlTD/98HMw5S03yxakwDr6hYsu4qQvVnrvfZ8hdgJPMEQMpRFZgSMej0/hW1+bIraY/Qb1RliA
- KEY0hxPvy74YgihZOqpokV2KwA3xp9VguHLMYShkUzY8kpag9eeFHvWraqR8hudJivoEYN3CZP7
- BdGahPBGtGq/dIEvKJ/dScCrODM6B9sJzXIkugQ2zsgnAR9ThR2TFEqM8HdnvSPtZu5BvFngmft
- 1lh91CSKOA8w9xSefd4HxUqaUItmIen8pIDBvzE5LbfmcY3u2IO0IlZdjAcTSpO3ykqWoBGUKl7
- vdcdT32v7ihsqmzJFq2lYhndA2aKd0cq9Hl7bOnRpjUXCwki0STfqVBDBUJch2TJBOboroaWv5x
- 6FLH2TujmMvP6ZmRW0C/JTYdQo8RdWOQvKnQN8cLNW8azXwNcRbvHmLtUFb1b4wXopaP7iazlvz
- wiL9XAfwJceLR3UgcADT2W+nYDktcU4M3QX3/EMg6K/rGepdky9QNFNEgl+GbUZ9bL/+xw/fMWd
- GPi24csOyaXK/sydgiIalwwLlqAVw1P2D1IANttv35NhQWqs/XQzOz/PgipcapnHuCPigwchP4j
- 6cCiitzVyXMt5uqNKfbOI8PvtJhu4LtOFdrpJFCzqxevHLxEprt5Rq49rxWCmNwb51CqL6O4wxe
- i2Wm1ma TkkHA0Rg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230813203602.GA696907@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -96,250 +63,93 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a continuation of the proposal[1] for mocking init_task for
-KUnit testing. Changing the behavior of kill_something_info() is moving
-forward[2] and I'd _really_ like to have some unit tests in place to
-actually test the behavioral changes.
+On Sun, Aug 13, 2023 at 08:36:02PM +0000, Joel Fernandes (Google) wrote:
+> From: Joel Fernandes (Google) <joel@joelfernandes.org>
+> 
+> Often times during debugging, it is difficult to jump to the ftrace dump
+> in the console log and treat it independent of the result of the log file.
+> Copy the contents of the buffers into its own file to make it easier to refer
+> to the ftrace dump. The original ftrace dump is still available in the
+> console log if it is desired to refer to it there.
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-I tried to incorporate feedback from Daniel and David, and I think the
-result is fairly workable -- the only tricky part is building valid
-task_struct instances. :)
+Queued, thank you!  I did the usual wordsmithing, please see below.
 
-Notably, I haven't actually gotten as far as testing the actual proposed
-behavioral change since I wanted to make sure this approach wasn't going
-to totally crash and burn.
+I also fixed up the indentation and spacing.  I don't know about you,
+but the initial format made that a bit hard for me to read.  ;-)
 
-Thoughts?
+If there are multiple ftrace dumps in a given console.log file, this
+will concatenate them.  Is that the intent?
 
-[1] https://lore.kernel.org/all/202212012008.D6F6109@keescook/
-[2] https://lore.kernel.org/all/87jzu12pjh.fsf_-_@email.froward.int.ebiederm.org
+							Thanx, Paul
 
-Cc: Brendan Higgins <brendan.higgins@linux.dev>
-Cc: David Gow <davidgow@google.com>
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Petr Skocik <pskocik@gmail.com>
-Cc: Oleg Nesterov <oleg@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: linux-kselftest@vger.kernel.org
-Cc: kunit-dev@googlegroups.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/kunit/resource.h     |  15 ++++
- include/linux/sched/signal.h |  11 ++-
- kernel/signal.c              | 135 +++++++++++++++++++++++++++++++++++
- 3 files changed, 158 insertions(+), 3 deletions(-)
+------------------------------------------------------------------------
 
-diff --git a/include/kunit/resource.h b/include/kunit/resource.h
-index c7383e90f5c9..dbf84a58f7a6 100644
---- a/include/kunit/resource.h
-+++ b/include/kunit/resource.h
-@@ -479,4 +479,19 @@ void kunit_remove_action(struct kunit *test,
- void kunit_release_action(struct kunit *test,
- 			  kunit_action_t *action,
- 			  void *ctx);
-+
-+#define kunit_get_mock_pointer(name, actual) ({			\
-+	typeof(*(actual)) *ptr = actual;			\
-+	struct kunit_resource *resource;			\
-+								\
-+	if (kunit_get_current_test()) {				\
-+		resource = kunit_find_named_resource(current->kunit_test, name); \
-+		if (resource) {					\
-+			ptr = resource->data;			\
-+			kunit_put_resource(resource);		\
-+		}						\
-+	}							\
-+	ptr;							\
-+})
-+
- #endif /* _KUNIT_RESOURCE_H */
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index 669e8cff40c7..700271f43491 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -637,14 +637,19 @@ static inline unsigned long sigsp(unsigned long sp, struct ksignal *ksig)
- extern void __cleanup_sighand(struct sighand_struct *);
- extern void flush_itimer_signals(void);
- 
-+/* This is used for KUnit mocking. */
-+#ifndef __init_task_ptr
-+#define __init_task_ptr	(&init_task)
-+#endif
-+
- #define tasklist_empty() \
--	list_empty(&init_task.tasks)
-+	list_empty(&__init_task_ptr->tasks)
- 
- #define next_task(p) \
- 	list_entry_rcu((p)->tasks.next, struct task_struct, tasks)
- 
- #define for_each_process(p) \
--	for (p = &init_task ; (p = next_task(p)) != &init_task ; )
-+	for (p = __init_task_ptr ; (p = next_task(p)) != __init_task_ptr ; )
- 
- extern bool current_is_single_threaded(void);
- 
-@@ -653,7 +658,7 @@ extern bool current_is_single_threaded(void);
-  *          'break' will not work as expected - use goto instead.
-  */
- #define do_each_thread(g, t) \
--	for (g = t = &init_task ; (g = t = next_task(g)) != &init_task ; ) do
-+	for (g = t = __init_task_ptr ; (g = t = next_task(g)) != __init_task_ptr ; ) do
- 
- #define while_each_thread(g, t) \
- 	while ((t = next_thread(t)) != g)
-diff --git a/kernel/signal.c b/kernel/signal.c
-index b5370fe5c198..7607d302ebb9 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -11,6 +11,14 @@
-  *		to allow signals to be sent reliably.
-  */
- 
-+#if IS_ENABLED(CONFIG_KUNIT)
-+/* This must be defined before we include include/linux/sched/signal.h */
-+#define __init_task_ptr kunit_get_mock_pointer("mock_init_task", &init_task)
-+
-+#include <kunit/resource.h>
-+#include <kunit/test-bug.h>
-+#endif
-+
- #include <linux/slab.h>
- #include <linux/export.h>
- #include <linux/init.h>
-@@ -4842,3 +4850,130 @@ void kdb_send_sig(struct task_struct *t, int sig)
- 		kdb_printf("Signal %d is sent to process %d.\n", sig, t->pid);
+commit ce1cf26540b96fc52aec6f6f8e365960ca79a0ad
+Author: Joel Fernandes (Google) <joel@joelfernandes.org>
+Date:   Sun Aug 13 20:36:02 2023 +0000
+
+    rcutorture: Copy out ftrace into its own console file
+    
+    When debugging it can be difficult to quickly find the ftrace dump
+    withiin the console log, which in turn makes it difficult to process it
+    independent of the result of the console output.  This commit therefore
+    copies the contents of the buffers into its own file to make it easier
+    to locate and process the ftrace dump. The original ftrace dump is still
+    available in the console log in cases where it is more convenient to
+    process it there, for example, when you have a script that processes
+    console output as well as ftrace-dump data.
+    
+    Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/testing/selftests/rcutorture/bin/functions.sh
+old mode 100644
+new mode 100755
+index b8e2ea23cb3f..40bcddf5f197
+--- a/tools/testing/selftests/rcutorture/bin/functions.sh
++++ b/tools/testing/selftests/rcutorture/bin/functions.sh
+@@ -331,3 +331,27 @@ specify_qemu_net () {
+ 		echo $1 -net none
+ 	fi
  }
- #endif	/* CONFIG_KGDB_KDB */
 +
-+#if IS_ENABLED(CONFIG_KUNIT)
-+static void test_empty_task_list(struct kunit *test)
-+{
-+	struct kunit_resource resource;
-+	static struct task_struct empty_task_list = {
-+			.tasks	= LIST_HEAD_INIT(empty_task_list.tasks),
-+		};
-+	struct task_struct *p;
-+	int count = 0;
-+
-+	kunit_add_named_resource(test, NULL, NULL, &resource,
-+				 "mock_init_task", &empty_task_list);
-+
-+	KUNIT_EXPECT_TRUE(test, tasklist_empty());
-+
-+	for_each_process(p)
-+		count++;
-+
-+	/* System hangs without this... */
-+	kunit_remove_resource(test, &resource);
-+
-+	KUNIT_EXPECT_EQ(test, count, 0);
-+}
-+
-+static void test_for_each_process(struct kunit *test)
-+{
-+	struct kunit_resource resource;
-+	static struct task_struct task1 = {
-+			.pid = 1,
-+			.tasks	= LIST_HEAD_INIT(task1.tasks),
-+		};
-+	static struct task_struct task2 = {
-+			.pid = 2,
-+		}, task3 = {
-+			.pid = 3,
-+		};
-+	struct task_struct *p;
-+	int count = 0;
-+
-+	list_add(&task2.tasks, &task1.tasks);
-+	list_add(&task3.tasks, &task1.tasks);
-+
-+	kunit_add_named_resource(test, NULL, NULL, &resource,
-+				 "mock_init_task", &task1);
-+
-+	/* Walk the process list backwards. */
-+	for_each_process(p) {
-+		KUNIT_EXPECT_EQ(test, 3 - count, p->pid);
-+		count++;
++# Extract the ftrace output from the console log output
++# The ftrace output looks in the logs looks like:
++# Dumping ftrace buffer:
++# ---------------------------------
++# [...]
++# ---------------------------------
++extract_ftrace_from_console() {
++	awk '
++	/Dumping ftrace buffer:/ {
++		capture = 1
++		next
 +	}
-+
-+	/* System hangs without this... */
-+	kunit_remove_resource(test, &resource);
-+
-+	/* init_task isn't counted... */
-+	KUNIT_EXPECT_EQ(test, count, 2);
++	/---------------------------------/ {
++		if (capture == 1) {
++			capture = 2
++			next
++		} else if (capture == 2) {
++			capture = 0
++		}
++	}
++	capture == 2
++	' "$1";
 +}
+diff --git a/tools/testing/selftests/rcutorture/bin/parse-console.sh b/tools/testing/selftests/rcutorture/bin/parse-console.sh
+index 9ab0f6bc172c..e3d2f69ec0fb 100755
+--- a/tools/testing/selftests/rcutorture/bin/parse-console.sh
++++ b/tools/testing/selftests/rcutorture/bin/parse-console.sh
+@@ -182,3 +182,10 @@ if ! test -s $file.diags
+ then
+ 	rm -f $file.diags
+ fi
 +
-+static void test_kill_something_info(struct kunit *test)
-+{
-+	struct kunit_resource resource;
-+	static struct task_struct task1 = {
-+			.pid = 1,
-+			.tasks	= LIST_HEAD_INIT(task1.tasks),
-+		};
-+	static struct task_struct task2 = {
-+			.pid = 2,
-+		}, task3 = {
-+			.pid = 3,
-+		};
-+	struct kernel_siginfo siginfo = {
-+			.si_code = SI_KERNEL,
-+		};
-+	struct task_struct *p;
-+	int count = 0;
-+
-+	list_add(&task2.tasks, &task1.tasks);
-+	list_add(&task3.tasks, &task1.tasks);
-+
-+	kunit_add_named_resource(test, NULL, NULL, &resource,
-+				 "mock_init_task", &task1);
-+
-+	/* Make sure we have a process list. */
-+	for_each_process(p)
-+		count++;
-+	KUNIT_EXPECT_EQ(test, count, 2);
-+
-+	/* INT_MIN pid must return ESRCH */
-+	KUNIT_EXPECT_EQ(test, -ESRCH,
-+		kill_something_info(SIGHUP, SEND_SIG_NOINFO, INT_MIN));
-+
-+	/* Invalid signal: EINVAL */
-+	KUNIT_EXPECT_EQ(test, -EINVAL,
-+		kill_something_info(_NSIG + 1, SEND_SIG_NOINFO, 2));
-+
-+	/* Missing pid: ESRCH */
-+	KUNIT_EXPECT_EQ(test, -ESRCH,
-+		kill_something_info(SIGHUP, SEND_SIG_NOINFO, 42));
-+
-+	/* Bypass permission checks with SEND_SIG_NOINFO. */
-+	KUNIT_EXPECT_EQ(test, 0,
-+		kill_something_info(SIGHUP, SEND_SIG_NOINFO, 2));
-+
-+	/* XXX: Hm, I was expecting this to explode in cred deref... */
-+	KUNIT_EXPECT_EQ(test, 0,
-+		kill_something_info(SIGHUP, &siginfo, 3));
-+
-+	/* XXX more tests here, perhaps after mocking out group_send_sig_info() ... */
-+
-+	/* System hangs without this... */
-+	kunit_remove_resource(test, &resource);
-+}
-+
-+static struct kunit_case test_cases[] = {
-+	KUNIT_CASE(test_empty_task_list),
-+	KUNIT_CASE(test_for_each_process),
-+	KUNIT_CASE(test_kill_something_info),
-+	{}
-+};
-+
-+static struct kunit_suite test_suite = {
-+	.name = "signal",
-+	.test_cases = test_cases,
-+};
-+kunit_test_suite(test_suite);
-+#endif	/* CONFIG_KUNIT */
--- 
-2.34.1
-
++# Call extract_ftrace_from_console function, if the output is empty,
++# don't create $file.ftrace. Otherwise output the results to $file.ftrace
++extract_ftrace_from_console $file > $file.ftrace
++if [ ! -s $file.ftrace ]; then
++	rm -f $file.ftrace
++fi
