@@ -2,120 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D14177B707
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 12:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72C477B75E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 13:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234362AbjHNKqd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Aug 2023 06:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
+        id S233029AbjHNLQZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Aug 2023 07:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbjHNKqC (ORCPT
+        with ESMTP id S232623AbjHNLQI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 06:46:02 -0400
-Received: from out203-205-251-53.mail.qq.com (out203-205-251-53.mail.qq.com [203.205.251.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A93DD2;
-        Mon, 14 Aug 2023 03:45:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1692009955;
-        bh=umFsdvDAuvz1J8EoJo1lr2CqjYOfjh1XPn/9tPSiG4Y=;
-        h=From:To:Cc:Subject:Date;
-        b=xFJ6BehuCpx83twfFIAQ7Or3PYxyyNfZYb3G6zlD9PTD3iEamNckUK/PAS/BKBbUo
-         PgicPDmem6m6eOhXkD2LU72EZ7its13ndR7/0QO909DIOngj1YnuerfYZ+wNXwwNmL
-         TOoYCP0NOkxIbMg2mGngdDjoD3Ldrd3x+VCCyUmE=
-Received: from localhost.localdomain ([39.156.73.12])
-        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
-        id B74184DB; Mon, 14 Aug 2023 18:45:52 +0800
-X-QQ-mid: xmsmtpt1692009952t89pqxxic
-Message-ID: <tencent_64FC724AC5F05568F41BD1C68058E83CEB05@qq.com>
-X-QQ-XMAILINFO: N+tZcXNNUKPOOU6mrYt7eWO5IlTUiooyQVOdfe5Xk6wjeGjCYen6UhWbYnGIdH
-         /nqtCJeRFxzlETRA6KlREZfPDs2OcddzVgoJrlkvjg2wH46gEDwy8kGxKWRu6/nx0WfLHmqAdGly
-         w5WWWEaQbY8uTZjoPFXYBGlgM8mjtZPj3xN5o4Wm2abicfRQ1dF9NUCbTjDklWgj38rwfJJgzjsd
-         uPSK6mGYpqe99cJUJheEx2aaz+5lea04tzsa3QuCthHpwYp5MTHeD1yECBuLdJksPt2HW/i/8YRd
-         qBMwyOylGGNdQ7o2B2fQ26/ocNR768d4I32hgLjX4z35FE0OQZE7uUipppqE6pkgXmrmcdDv/Oi4
-         rTELURsWNdmfXJHlN24ga8PeJscUoXbxlX31kJfKKpGwqO60R2TB3IEC4uvL+CzAsPBLHr3Xh5hU
-         TINsI3DBwAWW2Eo47/v/3WCYiKI+w8MNRzyRQST6YG4UMPIqgjHGJEIx0CYLvZMQyrsqZPo/2rnt
-         W/OgTuYeyn0BaBRLcm0FB+LhjPFwkM7CLxlv8u+08qKRqca9qKrFtCXXuqlhcZ31J4hhAOSqr117
-         qS1NyFr2IiP10tKDBg8lme9IqqYS2fRCgDr8LEBw6GujUjZLoGVZ6baaE56nNZVEZfp1RQhUufDN
-         eCeRLTJ392h+vIqmZtUrVLaXV+FZTPJowV0MBhvRw6jgXM0GQfQ51d71+a2V5ujvKLcIRDQJifjg
-         IuCQMfYtYW3JbHil2So4IY6kslGk39llFx+pmPlZQz0DZTpXDQfZx6tcUm1d20rQXV9Z2K7KQOTU
-         9f+IAuDvr5IsclD5j0ywsoIJPKUBv7Y+MWp51TnvGSjnQgl1MqqKkgFet3arDLze4lTeclDS8Zxu
-         jAAFzqeBpQlfdiCDfrnHAbKOMYwkSwX6NRv9XQxDWYaeoDU7wjPqDa/tsm+9Ee4SfCdISbwwgwFN
-         ipUB6Wt7iZ4KAFUBYdK88FTVbUylGkgb52LC7tFEzw/qvzQWhWQpAikCikxBywJjXpzojpG9TcC9
-         CFOWZzzA==
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     akpm@linux-foundation.org
-Cc:     rongtao@cestc.cn, rtoax@foxmail.com, Shuah Khan <shuah@kernel.org>,
-        linux-mm@kvack.org (open list:MEMORY MANAGEMENT),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] selftests/mm: fix uffd-stress help information
-Date:   Mon, 14 Aug 2023 18:45:50 +0800
-X-OQ-MSGID: <20230814104550.62846-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.3
+        Mon, 14 Aug 2023 07:16:08 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3568B1BD
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 04:16:05 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-129-2x1Vd_nCORSXjSBBMiHBAA-1; Mon, 14 Aug 2023 12:16:03 +0100
+X-MC-Unique: 2x1Vd_nCORSXjSBBMiHBAA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 14 Aug
+ 2023 12:15:51 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 14 Aug 2023 12:15:51 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Zhangjin Wu' <falcon@tinylab.org>, "w@1wt.eu" <w@1wt.eu>
+CC:     "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "thomas@t-8ch.de" <thomas@t-8ch.de>
+Subject: RE: [PATCH v5] tools/nolibc: fix up size inflate regression
+Thread-Topic: [PATCH v5] tools/nolibc: fix up size inflate regression
+Thread-Index: AQHZzpwIMKbqPe7hTkqs7/1zyBEHW6/pnUhg
+Date:   Mon, 14 Aug 2023 11:15:51 +0000
+Message-ID: <6fef903020954515abdcee7261918903@AcuMS.aculab.com>
+References: <20230814082224.GA16761@1wt.eu>
+ <20230814104226.7094-1-falcon@tinylab.org>
+In-Reply-To: <20230814104226.7094-1-falcon@tinylab.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+From: Zhangjin Wu
+> Sent: 14 August 2023 11:42
+...
+> [...]
+> > > > Sure it's not pretty, and I'd rather just go back to SET_ERRNO() to be
+> > > > honest, because we're there just because of the temptation to remove
+> > > > lines that were not causing any difficulties :-/
+> > > >
+> > > > I think we can do something in-between and deal only with signed returns,
+> > > > and explicitly place the test for MAX_ERRNO on the two unsigned ones
+> > > > (brk and mmap). It should look approximately like this:
+> > > >
+> > > >  #define __sysret(arg)                                                \
+> > > >  ({                                                                   \
+> > > >  	__typeof__(arg) __sysret_arg = (arg);                           \
+> > > >  	(__sysret_arg < 0) ? ({           /* error ? */                 \
+> > > >  		SET_ERRNO(-__sysret_arg); /* yes: errno != -ret */      \
+> > > >  		((__typeof__(arg)) -1);   /*      return -1 */          \
 
-commit 686a8bb72349("selftests/mm: split uffd tests into uffd-stress and
-uffd-unit-tests") split uffd tests into uffd-stress and uffd-unit-tests,
-obviously we need to modify the help information synchronously.
+I'm pretty sure you don't need the explicit cast.
+(It would be needed for a pointer type.)
+Can you use __arg < ? SET_ERRNO(-__arg), -1 : __arg
 
-Also modify code indentation.
+Thinking, maybe it should be:
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/mm/uffd-stress.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+#define __sysret(syscall_fn_args)
+({
+	__typeof__(syscall_fn_args) __rval = syscall_fn_args;
+	__rval >= 0 ? __rval : SET_ERRNO(-__rval), -1;
+})
 
-diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-index 995ff13e74c7..e40b6d7d2c0e 100644
---- a/tools/testing/selftests/mm/uffd-stress.c
-+++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -53,21 +53,21 @@ pthread_attr_t attr;
- 	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
- 
- const char *examples =
--    "# Run anonymous memory test on 100MiB region with 99999 bounces:\n"
--    "./userfaultfd anon 100 99999\n\n"
--    "# Run share memory test on 1GiB region with 99 bounces:\n"
--    "./userfaultfd shmem 1000 99\n\n"
--    "# Run hugetlb memory test on 256MiB region with 50 bounces:\n"
--    "./userfaultfd hugetlb 256 50\n\n"
--    "# Run the same hugetlb test but using private file:\n"
--    "./userfaultfd hugetlb-private 256 50\n\n"
--    "# 10MiB-~6GiB 999 bounces anonymous test, "
--    "continue forever unless an error triggers\n"
--    "while ./userfaultfd anon $[RANDOM % 6000 + 10] 999; do true; done\n\n";
-+	"# Run anonymous memory test on 100MiB region with 99999 bounces:\n"
-+	"./uffd-stress anon 100 99999\n\n"
-+	"# Run share memory test on 1GiB region with 99 bounces:\n"
-+	"./uffd-stress shmem 1000 99\n\n"
-+	"# Run hugetlb memory test on 256MiB region with 50 bounces:\n"
-+	"./uffd-stress hugetlb 256 50\n\n"
-+	"# Run the same hugetlb test but using private file:\n"
-+	"./uffd-stress hugetlb-private 256 50\n\n"
-+	"# 10MiB-~6GiB 999 bounces anonymous test, "
-+	"continue forever unless an error triggers\n"
-+	"while ./uffd-stress anon $[RANDOM % 6000 + 10] 999; do true; done\n\n";
- 
- static void usage(void)
- {
--	fprintf(stderr, "\nUsage: ./userfaultfd <test type> <MiB> <bounces>\n\n");
-+	fprintf(stderr, "\nUsage: ./uffd-stress <test type> <MiB> <bounces>\n\n");
- 	fprintf(stderr, "Supported <test type>: anon, hugetlb, "
- 		"hugetlb-private, shmem, shmem-private\n\n");
- 	fprintf(stderr, "Examples:\n\n");
--- 
-2.39.3
+Since, IIRC, the usage is return __sysret(sycall_fn(args));
+
+I'm not sure how public SET_ERRO() is.
+But it could include the negate have the value of -1 cast to its argument type?
+I think:
+	error = -(int)(long)(arg + 0u);
+will avoid any sign extension - the (int) might not even be needed.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
