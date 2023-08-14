@@ -2,109 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEBA77C10C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 21:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C54277C14E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 22:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjHNTv1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Aug 2023 15:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S231472AbjHNUJT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Aug 2023 16:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbjHNTvE (ORCPT
+        with ESMTP id S232123AbjHNUJS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 15:51:04 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EEAFA
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 12:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692042664; x=1723578664;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oqkmurrjjCknc2tekPnRE1SNkVqLKF9XJZEokVHf3SI=;
-  b=hMMEycJUrSJk6Fdya3Qx4860BvVzHOV1yJlPtIDZHNiqwTbpfwbucwSU
-   XP+v80p743tv/+y3+j22b9Ar/13scJR9PxnVxXnPmzgVG673PNm1lUkHT
-   iXFw073ir7UpebYgC/umybMfMBlkCBLdQZgYTYmKIA/QTQs2KT6zPwLV1
-   kboQABF2MeMr+J+VnPXuJCngdjXzwOm+NwVe4UcfPdNNktfFryI+KJVbk
-   8mnYQRwuhZ89T0q3/Q5e5hLCizVvpJKjcHoA1N4Nzku14ZuQdyCkxqgOo
-   C/sZ6SpYe8RrlTSaCL6BVoH0tjeHrwij0dtCq59XY0c5NDk/cizYcCvQM
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="403103855"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="403103855"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 12:51:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="980119418"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="980119418"
-Received: from yjiang5-mobl.amr.corp.intel.com (HELO localhost) ([10.212.61.216])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 12:51:00 -0700
-Date:   Mon, 14 Aug 2023 12:50:59 -0700
-From:   Yunhong Jiang <yunhong.jiang@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     shuah@kernel.org
-Subject: How to run a single test on kselftest
-Message-ID: <20230814195059.GA6500@yjiang5-mobl.amr.corp.intel.com>
+        Mon, 14 Aug 2023 16:09:18 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D70E5B
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 13:09:17 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-790b6761117so39036939f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 13:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1692043757; x=1692648557;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nt8NvhUj7LKsuWhX8m0JFQKuVQwNc3xYghyI5ahujTg=;
+        b=F4pkr89Wd6hHcMWTQPchd8CfEDE/g8JERZp9kc3KydWNRglQYJOcnqVSPrvm8oRir3
+         tvr8+a2c2SWuyb6su27tvsQObBaZ1ljXQaZSSw4O4vhayScU/K6FXe5sm0kq59VcM3rZ
+         3O+sK+XpxSZOAKIfdYNW+3EZVUk29nhmWQkCo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692043757; x=1692648557;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nt8NvhUj7LKsuWhX8m0JFQKuVQwNc3xYghyI5ahujTg=;
+        b=Vluv17rPP/RcNP6gD22m/MnuBLxPIWi2oWZxSc+db/uQmD7Z5oWuPEoNbWPQNCXpJT
+         QcFAgYzaXs6iauBrgHfgZBlZhOdywGy+Gj063wzPXtqHLYQelhT1sDChaHYssKAibu3c
+         E9ljeGAlhK9bwxKd2H+DZyBu0c17Jtlcr/wx94avUJnd6NCRJQoPfBHP8/wO/hbS0t1/
+         u2D/D0tQOPadB2Su00RSzk4dDbblV1Dff3epi3DEVHH4BXsR7hiZnDNb1OWvZPN45ztU
+         DAYn8lUjnCAE+pKp+BJ0m69xJAbEq997QuRWBLiW6sVmadMGqtgwuy9FZtPJ+H3Zd3mc
+         aBRQ==
+X-Gm-Message-State: AOJu0YyCe9suX+TU+3marhDfpDtJddj02CftSkXkNtXMZEqJi+pQDAQb
+        CRGaHMneCW05uI/izC2bWdxrXA==
+X-Google-Smtp-Source: AGHT+IGTgPBpODx4qk2Anc+l3jSCJ2IEDatahTsi8+z4UZZFhoUDKKki3Bcw7oIodOMyeAALgUNC3w==
+X-Received: by 2002:a5e:c90f:0:b0:780:d65c:d78f with SMTP id z15-20020a5ec90f000000b00780d65cd78fmr13736926iol.2.1692043756908;
+        Mon, 14 Aug 2023 13:09:16 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id p10-20020a056638190a00b0042b46224650sm3145372jal.91.2023.08.14.13.09.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Aug 2023 13:09:16 -0700 (PDT)
+Message-ID: <b43706b7-4ced-9e00-823a-230a5a5e6345@linuxfoundation.org>
+Date:   Mon, 14 Aug 2023 14:09:15 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] selftests: prctl: Add prctl test for PR_GET_NAME
+Content-Language: en-US
+To:     Osama Muhammad <osmtendev@gmail.com>, shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230806151810.9958-1-osmtendev@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230806151810.9958-1-osmtendev@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
-   Can anyone give some hints on how to run a single test on the kselftest
-framework? The reason that I want such support is because I have to run
-test cases inside emulator, which is very slow.
+On 8/6/23 09:18, Osama Muhammad wrote:
+> This patch covers the testing of PR_GET_NAME by
+> reading it's value from proc/self/task/pid/comm
+> and matching it by the value returned by  PR_GET_NAME.
+> 
 
-   Per the kselftest documents, I can run kvm selftests with "make
--C tools/testing/selftests TARGETS=kvm run_tests", but it does not provide
-a mechanism to run a single test in KVM subsystem. It takes a very long
-time to finish the KVM subset testing inside the slow emulator while I'm
-only trying to replace/add one testcase.
+So the values should match? Can you elaborate that in the
+change log.
 
-   Currently I modify the code like below, to run only a single test. Not
-sure if there is a more generic way to do that. If no such mechanism and
-there are more people have similar need, is it possible to add it? I'm more
-than happy to contribute with guide.
+> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> ---
+>   .../selftests/prctl/set-process-name.c        | 25 +++++++++++++++++++
+>   1 file changed, 25 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/prctl/set-process-name.c b/tools/testing/selftests/prctl/set-process-name.c
+> index 3bc5e0e09..41f4b105d 100644
+> --- a/tools/testing/selftests/prctl/set-process-name.c
+> +++ b/tools/testing/selftests/prctl/set-process-name.c
+> @@ -47,6 +47,28 @@ int check_null_pointer(char *check_name)
+>   	return res;
+>   }
+>   
+> +int check_name(void)
+> +{
+> +
+> +	int pid;
+> +
+> +	pid = getpid();
+> +	FILE *fptr;
+> +	char path[50] = {};
 
-Thank you
---jyh
+Define this and use it. Don't hard-code the size.
+MAX_PATH_LEN - look for other such defines.
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index c692cc86e7da..25fce1a3ceb8 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -56,7 +56,7 @@ LIBKVM_riscv += lib/riscv/processor.c
- LIBKVM_riscv += lib/riscv/ucall.c
+> +	int j;
+> +
+> +	j = snprintf(path, 50, "/proc/self/task/%d/comm", pid);
 
- # Non-compiled test targets
--TEST_PROGS_x86_64 += x86_64/nx_huge_pages_test.sh
-+#TEST_PROGS_x86_64 += x86_64/nx_huge_pages_test.sh
+Here - it makes it easier to maintain.
 
- # Compiled test targets
- TEST_GEN_PROGS_x86_64 = x86_64/cpuid_test
-@@ -135,7 +135,7 @@ TEST_GEN_PROGS_x86_64 += kvm_binary_stats_test
- TEST_GEN_PROGS_x86_64 += system_counter_offset_test
+> +	fptr = fopen(path, "r");
+> +	char name[TASK_COMM_LEN] = {};
+> +	int res = prctl(PR_GET_NAME, name, NULL, NULL, NULL);
+> +	char output[TASK_COMM_LEN] = {};
 
- # Compiled outputs used by test targets
--TEST_GEN_PROGS_EXTENDED_x86_64 += x86_64/nx_huge_pages_test
-+#TEST_GEN_PROGS_EXTENDED_x86_64 += x86_64/nx_huge_pages_test
+Code after declarations please. It is easier to read and follow.
 
- TEST_GEN_PROGS_aarch64 += aarch64/aarch32_id_regs
- TEST_GEN_PROGS_aarch64 += aarch64/arch_timer
-@@ -186,6 +186,8 @@ TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(ARCH_DIR))
- TEST_GEN_PROGS_EXTENDED += $(TEST_GEN_PROGS_EXTENDED_$(ARCH_DIR))
- LIBKVM += $(LIBKVM_$(ARCH_DIR))
+> +
+> +	fscanf(fptr, "%s", output);
 
-+TEST_GEN_PROGS = x86_64/cr4_cpuid_sync_test
-+
- OVERRIDE_TARGETS = 1
+Don't you want to check error return here?
 
- # lib.mak defines $(OUTPUT), prepends $(OUTPUT)/ to $(TEST_GEN_PROGS), and most
+> +
+> +	return !strcmp(output, name);
+> +
+> +}
+> +
+>   TEST(rename_process) {
+>   
+>   	EXPECT_GE(set_name(CHANGE_NAME), 0);
+> @@ -57,6 +79,9 @@ TEST(rename_process) {
+>   
+>   	EXPECT_GE(set_name(CHANGE_NAME), 0);
+>   	EXPECT_LT(check_null_pointer(CHANGE_NAME), 0);
+> +
 
+No need to for this extra line
+
+> +	EXPECT_TRUE(check_name());
+> +
+>   }
+>   
+>   TEST_HARNESS_MAIN
+
+thanks,
+-- Shuah
