@@ -2,154 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E0E77C0B1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 21:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEEBA77C10C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Aug 2023 21:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbjHNTXI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Aug 2023 15:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
+        id S231253AbjHNTv1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Aug 2023 15:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbjHNTXF (ORCPT
+        with ESMTP id S231530AbjHNTvE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 15:23:05 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DFBE5F;
-        Mon, 14 Aug 2023 12:22:56 -0700 (PDT)
+        Mon, 14 Aug 2023 15:51:04 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EEAFA
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 12:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692040977; x=1723576977;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KpwpOIRxehht6Q5HjcHL8pin7vF2ossXjqiaYikcuUY=;
-  b=eVPLTOM52FfAHT06+CFDTduwwXemVkk8SMODSMKdPMwNmRmN92VQM1ll
-   nbfWukm8WrXS5hLIW43QLi4E+q5Xr53159W0iQ1/nj9FLKkn2L/onHw3B
-   ySThpdZOnMHDm65jVWh7QFpmzFQesm+pcU2xUoK310duBNoa5+/UxAsCv
-   cGOfmBvbSxNSwdyedzqmHpWw/2zAwh81NoOQ/V3hDdVCvBA1eop1tpdqJ
-   UW+gpl66V7HTeBXtOPBYzkWZ8PSpfjDta/f2TW9NusXhXIgqlaZke1R9v
-   wbrx+LEIixGACOqVTl6Wf7tkseX+Fube8cnb0S04+54TzsXsijVnzNOJd
+  t=1692042664; x=1723578664;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oqkmurrjjCknc2tekPnRE1SNkVqLKF9XJZEokVHf3SI=;
+  b=hMMEycJUrSJk6Fdya3Qx4860BvVzHOV1yJlPtIDZHNiqwTbpfwbucwSU
+   XP+v80p743tv/+y3+j22b9Ar/13scJR9PxnVxXnPmzgVG673PNm1lUkHT
+   iXFw073ir7UpebYgC/umybMfMBlkCBLdQZgYTYmKIA/QTQs2KT6zPwLV1
+   kboQABF2MeMr+J+VnPXuJCngdjXzwOm+NwVe4UcfPdNNktfFryI+KJVbk
+   8mnYQRwuhZ89T0q3/Q5e5hLCizVvpJKjcHoA1N4Nzku14ZuQdyCkxqgOo
+   C/sZ6SpYe8RrlTSaCL6BVoH0tjeHrwij0dtCq59XY0c5NDk/cizYcCvQM
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="438453784"
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="403103855"
 X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="438453784"
+   d="scan'208";a="403103855"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 12:22:55 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 12:51:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="980106219"
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="980119418"
 X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="980106219"
-Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Aug 2023 12:22:52 -0700
-Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qVd9Q-0000Mx-0L;
-        Mon, 14 Aug 2023 19:22:52 +0000
-Date:   Tue, 15 Aug 2023 03:22:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
-        brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: Re: [PATCH v4 07/10] kunit: string-stream: Decouple string_stream
- from kunit
-Message-ID: <202308150347.LvFXkSdz-lkp@intel.com>
-References: <20230814132309.32641-8-rf@opensource.cirrus.com>
+   d="scan'208";a="980119418"
+Received: from yjiang5-mobl.amr.corp.intel.com (HELO localhost) ([10.212.61.216])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 12:51:00 -0700
+Date:   Mon, 14 Aug 2023 12:50:59 -0700
+From:   Yunhong Jiang <yunhong.jiang@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     shuah@kernel.org
+Subject: How to run a single test on kselftest
+Message-ID: <20230814195059.GA6500@yjiang5-mobl.amr.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230814132309.32641-8-rf@opensource.cirrus.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Richard,
+Hi,
+   Can anyone give some hints on how to run a single test on the kselftest
+framework? The reason that I want such support is because I have to run
+test cases inside emulator, which is very slow.
 
-kernel test robot noticed the following build warnings:
+   Per the kselftest documents, I can run kvm selftests with "make
+-C tools/testing/selftests TARGETS=kvm run_tests", but it does not provide
+a mechanism to run a single test in KVM subsystem. It takes a very long
+time to finish the KVM subset testing inside the slow emulator while I'm
+only trying to replace/add one testcase.
 
-[auto build test WARNING on shuah-kselftest/kunit]
-[also build test WARNING on shuah-kselftest/kunit-fixes linus/master v6.5-rc6 next-20230809]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+   Currently I modify the code like below, to run only a single test. Not
+sure if there is a more generic way to do that. If no such mechanism and
+there are more people have similar need, is it possible to add it? I'm more
+than happy to contribute with guide.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Fitzgerald/kunit-string-stream-Improve-testing-of-string_stream/20230814-212947
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
-patch link:    https://lore.kernel.org/r/20230814132309.32641-8-rf%40opensource.cirrus.com
-patch subject: [PATCH v4 07/10] kunit: string-stream: Decouple string_stream from kunit
-config: hexagon-randconfig-r014-20230815 (https://download.01.org/0day-ci/archive/20230815/202308150347.LvFXkSdz-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230815/202308150347.LvFXkSdz-lkp@intel.com/reproduce)
+Thank you
+--jyh
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308150347.LvFXkSdz-lkp@intel.com/
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index c692cc86e7da..25fce1a3ceb8 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -56,7 +56,7 @@ LIBKVM_riscv += lib/riscv/processor.c
+ LIBKVM_riscv += lib/riscv/ucall.c
 
-All warnings (new ones prefixed by >>):
+ # Non-compiled test targets
+-TEST_PROGS_x86_64 += x86_64/nx_huge_pages_test.sh
++#TEST_PROGS_x86_64 += x86_64/nx_huge_pages_test.sh
 
->> lib/kunit/string-stream.c:199:38: warning: cast from 'void (*)(struct string_stream *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-     199 |         if (kunit_add_action_or_reset(test, (kunit_action_t *)raw_free_string_stream, stream) != 0)
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                                               ^~~~
-   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                    ^~~~
->> lib/kunit/string-stream.c:199:38: warning: cast from 'void (*)(struct string_stream *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-     199 |         if (kunit_add_action_or_reset(test, (kunit_action_t *)raw_free_string_stream, stream) != 0)
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                                               ^~~~
-   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                             ^~~~
->> lib/kunit/string-stream.c:199:38: warning: cast from 'void (*)(struct string_stream *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-     199 |         if (kunit_add_action_or_reset(test, (kunit_action_t *)raw_free_string_stream, stream) != 0)
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                                               ^~~~
-   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                                      ^~~~
-   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
-      68 |         (cond) ?                                        \
-         |          ^~~~
-   lib/kunit/string-stream.c:210:29: warning: cast from 'void (*)(struct string_stream *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-     210 |         kunit_release_action(test, (kunit_action_t *)raw_free_string_stream, (void *)stream);
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
+ # Compiled test targets
+ TEST_GEN_PROGS_x86_64 = x86_64/cpuid_test
+@@ -135,7 +135,7 @@ TEST_GEN_PROGS_x86_64 += kvm_binary_stats_test
+ TEST_GEN_PROGS_x86_64 += system_counter_offset_test
 
+ # Compiled outputs used by test targets
+-TEST_GEN_PROGS_EXTENDED_x86_64 += x86_64/nx_huge_pages_test
++#TEST_GEN_PROGS_EXTENDED_x86_64 += x86_64/nx_huge_pages_test
 
-vim +199 lib/kunit/string-stream.c
+ TEST_GEN_PROGS_aarch64 += aarch64/aarch32_id_regs
+ TEST_GEN_PROGS_aarch64 += aarch64/arch_timer
+@@ -186,6 +186,8 @@ TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(ARCH_DIR))
+ TEST_GEN_PROGS_EXTENDED += $(TEST_GEN_PROGS_EXTENDED_$(ARCH_DIR))
+ LIBKVM += $(LIBKVM_$(ARCH_DIR))
 
-   188	
-   189	struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
-   190	{
-   191		struct string_stream *stream;
-   192	
-   193		stream = raw_alloc_string_stream(gfp);
-   194		if (IS_ERR(stream))
-   195			return stream;
-   196	
-   197		stream->test = test;
-   198	
- > 199		if (kunit_add_action_or_reset(test, (kunit_action_t *)raw_free_string_stream, stream) != 0)
-   200			return ERR_PTR(-ENOMEM);
-   201	
-   202		return stream;
-   203	}
-   204	
++TEST_GEN_PROGS = x86_64/cr4_cpuid_sync_test
++
+ OVERRIDE_TARGETS = 1
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+ # lib.mak defines $(OUTPUT), prepends $(OUTPUT)/ to $(TEST_GEN_PROGS), and most
+
