@@ -2,127 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCFA77D4BC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Aug 2023 23:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E5977D4D1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Aug 2023 23:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239675AbjHOVCQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Aug 2023 17:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S239927AbjHOVHG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Aug 2023 17:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239825AbjHOVCI (ORCPT
+        with ESMTP id S239969AbjHOVGn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Aug 2023 17:02:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98B0F2;
-        Tue, 15 Aug 2023 14:02:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E96A656EB;
-        Tue, 15 Aug 2023 21:02:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFEC6C433C9;
-        Tue, 15 Aug 2023 21:02:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692133326;
-        bh=cyy9dMmZpCKf0kwV7gSnc6iwwZGFtG1+94Uv3PmsMU4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bqt6Z6qZREPwPFwBqdMZB2kGJkkZypRmE9bwxc/FX8l6pnZwrXqDF3bNuPrbnNof+
-         Zbk1pTJchswaB67AS8Nj1Fds9Y0G2RQA9I45EqR3l7nWywG7yppNaZroed7qaeEEAZ
-         33mA8BkQ+gc93Br35uBf/91KWeipdjt2HZOsVUK2Ux2Vxd9ZCygGsOHP3hrhNO5jUy
-         2VYsEWdiWM2RoeaISTVoMt6DhY/pcivI+RFTbrq8SXdIqqMaMX6HRMevIxKwi4XifW
-         48vwEdEv9oFNrQbuyJP6Pq9qrvMreh/m17TY8MRUHS9jLxuBTcpwnJXfg4G673G6/2
-         25g2vLFO2qOfA==
-Date:   Tue, 15 Aug 2023 22:01:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v4 21/36] arm64/mm: Implement map_shadow_stack()
-Message-ID: <496b9d81-c4c8-471d-9be0-3a0c8fbab436@sirena.org.uk>
-References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-21-68cfa37f9069@kernel.org>
- <8a7bb14f808ab9da413c11f281041375d9a54b01.camel@intel.com>
+        Tue, 15 Aug 2023 17:06:43 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E5710EC
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 14:06:42 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-790af3bfa5cso71675739f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 14:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1692133601; x=1692738401;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ztLnjM2bT7vmtp/V6hmceBoe8bOCHnQ/mTwytlgMJ0k=;
+        b=P1/t/kHsKTxx7aLVHwTvVN6FXN2EqSV0VXYYogCZouU+XE8hV3iXyqyJlRRR120XxY
+         CTyORPHhGsqstcShVUHuVYcbs8C+Rj0RF/XEWUxqblHoMakuDm5pTFM8rYmNO/bprU62
+         8POVTIbxNYDyQeA2JZrpX30bdCEb3+CqB+fSg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692133601; x=1692738401;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ztLnjM2bT7vmtp/V6hmceBoe8bOCHnQ/mTwytlgMJ0k=;
+        b=Ub0vPYbk+sKLiFXp5lo0A1SZ0fsFNun+sBK1BveV5tli3oYkfxwLkNviL271xtX0vk
+         C+XEfcg/9YanU9PxbcT3B8xm22R8WBcmpgZXVl8Q0rTMWoznuZCZXEKgKig863f/zSNz
+         SbCt44sRVFR9HtmPRyZOA8mr8MT+qj5GvE0e6fQmYIFBDXb5i9VQkmY7yicFyeMGYJGC
+         huzzo11Ee2lcvCPDVgLziJBkbe8IZ9RnSHN8U7rncRBhHJ73vfmT4aVNUXj35aNtgjzj
+         SArY9BhPqlOClGDGG+OzKKHHxYMCwqTkzUgwwf2XaBcTeVHzJfD8FrFFfsW/Tnn91twH
+         TR4Q==
+X-Gm-Message-State: AOJu0YwIhEe180Q2oGREhLq1dx5TAzuJHQOeEM13yDBGm9jgTXDn8LEb
+        CegGC1h8zBjVrFfh6PbyxnWWbvTICGwGeuNek5s=
+X-Google-Smtp-Source: AGHT+IFUXyZf8I8S5b3XfgFxHspACqwcGfGxF/4GQIdz13SeeG7e3I4G1dL3njsF8dW7XfS0jKSGDA==
+X-Received: by 2002:a05:6e02:549:b0:349:385e:287e with SMTP id i9-20020a056e02054900b00349385e287emr113728ils.1.1692133601393;
+        Tue, 15 Aug 2023 14:06:41 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c18-20020a92cf52000000b00348d2e9701csm4140269ilr.63.2023.08.15.14.06.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Aug 2023 14:06:40 -0700 (PDT)
+Message-ID: <85a03aa3-3d6e-3b16-d113-7d7f5a84bfb4@linuxfoundation.org>
+Date:   Tue, 15 Aug 2023 15:06:39 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dU1pnpOPTrUAVGE+"
-Content-Disposition: inline
-In-Reply-To: <8a7bb14f808ab9da413c11f281041375d9a54b01.camel@intel.com>
-X-Cookie: Darth Vader sleeps with a Teddywookie.
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [GIT PULL] nolibc changes for 6.6-rc1
+Content-Language: en-US
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20230806172245.GA26239@1wt.eu>
+ <3efa3710-4e8b-d187-a24d-ff85858e37fe@linuxfoundation.org>
+ <20230815143540.GA15075@1wt.eu>
+ <29590d7b-40fd-0426-75c6-36667e344f6c@linuxfoundation.org>
+ <9950607c-cafe-c011-7d5f-76a8a971beb0@linuxfoundation.org>
+ <ZNvIkD1oxZENVkoe@1wt.eu>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ZNvIkD1oxZENVkoe@1wt.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 8/15/23 12:48, Willy Tarreau wrote:
+> Hello Shuah,
+> 
+> On Tue, Aug 15, 2023 at 12:13:24PM -0600, Shuah Khan wrote:
+>> On 8/15/23 08:39, Shuah Khan wrote:
+>>> On 8/15/23 08:35, Willy Tarreau wrote:
+>>>> On Tue, Aug 15, 2023 at 08:25:51AM -0600, Shuah Khan wrote:
+>>>>>> The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+>>>>>>
+>>>>>>      Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+>>>>>>
+>>>>>> are available in the Git repository at:
+>>>>>>
+>>>>>>      https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/ 20230806-for-6.6-1
+>>>>>>
+>>>>>> for you to fetch changes up to d98c1e27e46e47a3ae67e1d048f153598ba82611:
+>>>>>>
+>>>>>>      tools/nolibc: stackprotector.h: make __stack_chk_init static (2023-08-06 18:44:47 +0200)
+>>>>>>
+>>>>>
+>>>>> Hi Willy,
+>>>>>
+>>>>> I am sorry for the delay on this. I was traveling last week
+>>>>> and getting back to digging myself out of emails.
+>>>>
+>>>> No problem, thanks for getting back :-)
+>>>>
+>>>>> I am having trouble pulling this request though:
+>>>>>
+>>>>> git request-pull https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/ 20230806-for-6.6-1
+>>>>>
+>>>>> gives me the following error
+>>>>>
+>>>>> fatal: Not a valid revision: git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/
+>>>>>
+>>>>> I don't see a tag at https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
+>>>>
+>>>> Ah sorry for the misunderstanding, that's the branch name, I'll set a
+>>>> tag then.
+>>>>
+>>>
+>>> No worries. Could you also share the test you run? I will pull
+>>> you request and run tests.
+>>>
+>>
+>> Please send either another pull request or send the tag details.
+> 
+> I've pushed a tag named 20230815-for-6.6-2 in the repo below:
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
+> 
+> Please let me know if you want me to resend a PR.
+> 
 
---dU1pnpOPTrUAVGE+
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Pull worked fine and my verify_fixes script failed on the following patches.
 
-On Tue, Aug 15, 2023 at 08:42:52PM +0000, Edgecombe, Rick P wrote:
-> On Mon, 2023-08-07 at 23:00 +0100, Mark Brown wrote:
-> > +=A0=A0=A0=A0=A0=A0=A0if (flags & ~(SHADOW_STACK_SET_TOKEN |
-> > SHADOW_STACK_SET_MARKER))
-> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0return -EINVAL;
+Commit: 6c931bf0c732 ("selftests/nolibc: avoid buffer underrun in space printing")
+	Fixes tag: Fixes: 8a27526f49f9 ("selftests/nolibc: add EXPECT_PTREQ, EXPECT_PTRNE and EXPECT_PTRER")
+	Has these problem(s):
+		- Target SHA1 does not exist
+Commit: 40f12898b479 ("tools/nolibc/stdio: add setvbuf() to set buffering mode")
+	Fixes tag: Fixes: ecb7fe2cd610 ("selftests: line buffer test program's stdout")
+	Has these problem(s):
+		- Target SHA1 does not exist
 
-> Thanks for adding SHADOW_STACK_SET_MARKER. I don't see where it is
-> defined in these patches though. Might have been left out on accident?
 
-I added it to the dependency patches I've got which pull bits out of the
-x86 series prior to you having rebased it, the ABI bits are mixed in
-with the x86 architecture changes which I didn't feel like dealing with
-the rebasing for so I pulled out the ABI portions.  I'll resolve this
-properly when I rebase back onto the x86 series (ideally after the next
-merge window it'll be in mainline!).  For these that'll probably boil
-down to adding defines to prctl.h for the generic prctl API.
+Will you be able to add the right commit IDs and resend the pull, so there
+are no mistakes if I guess it wrong.
 
---dU1pnpOPTrUAVGE+
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
+-- Shuah
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTb58UACgkQJNaLcl1U
-h9Bc4Af/Xi/XuQ8BuGwUsA64+0G15WTAgvnaEr6smr1t4oyMFuQMUHjd7iBjOThm
-PV/FOTfozLwcOPBbBklofnYUDiI04WMQKwGbdr7Zi1+GFR6+EN7hirIWkuuvQlL5
-NKBQjm5eyQL/yYYt4BJ6hRDbRNoCsRtT6zZHwZJpMXiv+nVQBOZlasA6cZ0TgBO3
-HkA5PardmuhDrB+yavSIm9rV91v8lOpnDP5q3yF8ShV6Il1n6n8cY4FsnTaXQfpk
-dYkB1QCKNAiqGdIWRgeV11iWfrslrXztH2Z94tOjqgbLti1lmf9XEIoX4Wk9Juu8
-JF1NdrdhL8X0X+5VS1Mt4bHie2rizQ==
-=r3Gb
------END PGP SIGNATURE-----
 
---dU1pnpOPTrUAVGE+--
