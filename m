@@ -2,337 +2,203 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1049677CADC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Aug 2023 11:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E3777CAF3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Aug 2023 12:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236317AbjHOJ6B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Aug 2023 05:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
+        id S236352AbjHOKIT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Aug 2023 06:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236319AbjHOJ5n (ORCPT
+        with ESMTP id S236346AbjHOKIG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Aug 2023 05:57:43 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094DEF7;
-        Tue, 15 Aug 2023 02:57:40 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37F8tg3B001809;
-        Tue, 15 Aug 2023 04:57:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        PODMain02222019; bh=ZNPjAeE5YnECSaUt9zbIIpoKxn8nKOtX2VZRGmkqxe0=; b=
-        debtOuoF2aEkWgMJv39U3lVnw8ubGEQfidXErCQeVhjgjaLEpFLZzXex9wwzOp2T
-        NeLna6x4mzxJoQfHbxUtAcB9D8vpkGbmJGuI+MV73lNRMFC9vjnkNgTWLrjCyhbK
-        rwHORsJm9opCKGssexOtQDIViA7ex2WqTBGxeqHdyFl0qPIAxGTsd2IBXnd3N0Yo
-        gc1qNrIi3jCeneRgrBOZrzD99PkGNzXrrgzhvMDbDqbNdd9pxxA7t503WVFBWSC1
-        NJr4/ZLZQLULlzQNTNF9A9qoLbdqZt/Iqvc0vJueyTJ0Fo+4FTUSluOoB71l5LVW
-        q9VTpgD4gUrihNFCZMFDFQ==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3se6uhjtkx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Aug 2023 04:57:36 -0500 (CDT)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 15 Aug
- 2023 10:57:34 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.30 via Frontend Transport; Tue, 15 Aug 2023 10:57:34 +0100
-Received: from [198.61.65.68] (EDIN4L06LR3.ad.cirrus.com [198.61.65.68])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3EAED11AA;
-        Tue, 15 Aug 2023 09:57:34 +0000 (UTC)
-Message-ID: <a8804709-ee00-d2ea-d55d-f8138bd3a500@opensource.cirrus.com>
-Date:   Tue, 15 Aug 2023 10:57:34 +0100
+        Tue, 15 Aug 2023 06:08:06 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2052.outbound.protection.outlook.com [40.107.21.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31468E65;
+        Tue, 15 Aug 2023 03:08:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qxny30uj47ZfScJurxZBnDlw9dwN8mXgZzNTPPi4pSntKoO8ZVdNkPJORTuwo81W0oqc91DSbPpm2gEr9d/FUOMkchp8wKURtfB25iCrxFevtqoBLTHdrm6WtWjPqCL/3LLmJ+fy42N6X9rgo2QDVhWp7l02aKavuM1aOiXN6JT5xMoNB/Lzt5jr9/rnPEX9OaRwOyVCJ0zvUhqCMaqFbzgg96UYh4HsYNpm3+7f0XzAYCPkeT5p0bwZHbeV+O+DyCo5VM3WzNXfrhyPrLnapcvYJH3pHJ6Bwl9raJmVK59S/NjnUqS/vxtyFOQ0v/5L038XNBXCoOocRmbJDpbuPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VMOHZ/3ErHxlUPtp04s1cINgL/8IkCXNd8pGXxaSuVY=;
+ b=der/Tro9hRcGR9hFMpMN6lxVNPP9KW+omeWiU+Offkiq5teGok7C4HnIqbSoIqB5XMNjPKmgREzp5bv5alXov0ztX/my96M4nlqoVZyGA6MqoRoV6sgm6/X6oJIORHCZsolqrgkkC95D42esrMc/b3ElPuF16LYuQAluQliD9b091cXqoG/ZIiLo/f7RKCJss1hD6AcREIclO1HJMHhxaNZ/o+bxAQ8ngBIOTMyIjGPClRtU8CCBUe6CIlvA2ehmMAXCyqml3O9gYGFUU01qWkRjkl0JEXg6BrRvMUngVOiCbwadqfkaiItRXL33ldUN4mg9Z3fMW4VAi0yGlhQKdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VMOHZ/3ErHxlUPtp04s1cINgL/8IkCXNd8pGXxaSuVY=;
+ b=mzmjxeawqOcwMa0U8+X/UkkSFlwsc7G1Jb7UC3gqcqG+kvlD1OjeQRMaiBNMj0PVwOjYOJ9VgSICwtv+ap1KlL7Bhzg4YCiMYW7XtdxpyzVBZpR1pau/3SFeSpT53oQ5/DWOU1dFlHL+mBIhgjMJQuqEg1eGoaaTZAtSs5OLCZZckMC5nMOBYlMjhfL1MXme/Cia+6U9YGkuRcYPo9kkar2pMd6AROcL2tduTcCRgq4nP5AzYnaBcJEzhSn8gq0BEPYWXbHgmOwsNbZrs73ig2SCdhm9W6o2ppkQl9XaISTJi8oQE0euLiMyzTrgnw96bvT6kECsi//mfWkF145S5A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com (2603:10a6:7:83::14)
+ by AM9PR04MB8307.eurprd04.prod.outlook.com (2603:10a6:20b:3e6::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.26; Tue, 15 Aug
+ 2023 10:08:00 +0000
+Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com
+ ([fe80::2867:7a72:20ac:5f71]) by HE1PR0402MB3497.eurprd04.prod.outlook.com
+ ([fe80::2867:7a72:20ac:5f71%3]) with mapi id 15.20.6678.025; Tue, 15 Aug 2023
+ 10:07:59 +0000
+Date:   Tue, 15 Aug 2023 18:08:16 +0800
+From:   Geliang Tang <geliang.tang@suse.com>
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Simon Horman <horms@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH mptcp-next v13 4/4] selftests/bpf: Add mptcpify test
+Message-ID: <20230815100816.GA24858@bogon>
+References: <cover.1691808484.git.geliang.tang@suse.com>
+ <15a618b03f65177166adf2850d4159cd4b77dfb1.1691808484.git.geliang.tang@suse.com>
+ <00809f4a-e7ca-bf53-7824-e22791ee6738@linux.dev>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00809f4a-e7ca-bf53-7824-e22791ee6738@linux.dev>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ClientProxiedBy: TYAPR03CA0018.apcprd03.prod.outlook.com
+ (2603:1096:404:14::30) To HE1PR0402MB3497.eurprd04.prod.outlook.com
+ (2603:10a6:7:83::14)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v4 06/10] kunit: string-stream: Pass struct kunit to
- string_stream_get_string()
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-CC:     <brendan.higgins@linux.dev>, <rmoar@google.com>,
-        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
-References: <20230814132309.32641-1-rf@opensource.cirrus.com>
- <20230814132309.32641-7-rf@opensource.cirrus.com>
- <CABVgOS=WoKEpPU=0f=mSfdx1g6AkEtx6QJTiNru1XSTev3sGaQ@mail.gmail.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <CABVgOS=WoKEpPU=0f=mSfdx1g6AkEtx6QJTiNru1XSTev3sGaQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: xcIhC68AuyMZUnLZfqYBQ4kvndF3OPNm
-X-Proofpoint-ORIG-GUID: xcIhC68AuyMZUnLZfqYBQ4kvndF3OPNm
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HE1PR0402MB3497:EE_|AM9PR04MB8307:EE_
+X-MS-Office365-Filtering-Correlation-Id: 38f714a3-7a39-4486-d151-08db9d7780c5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 13un73JGoua+TN/ee01SBnIcpHFGPpCLx+lOxRNJlyyQevTWM3QE1Cm6n/bMWBO2j2+EXDS4hjrHGPdOSCh4NZ86HmowF8n4JziVV+HM5Tau7Y3JEpa32HzvsOWMahsPaPiH4SDhngtINB51gLRhTtbTDdY7xqU1BsSCw/RtwJE97Th5MqyzXzW44cWqVe5EVJ7K0ZUG9H0ON+ry4HvVZUguCXAKuJK9ix0N4758XiBEwnXQtU77IHMqbtudziEeBdP1N+LiQzZXlhIlYBUwdbRAEWYCOTboc4sVrV4edpMHwfw4bUBjVWnkPD7tmSJr4VYliweKjPGqlnKkLbRFjAQgh5FWRHooe7lTLejvBUbp3e8U0n5WtQ+5upOEvAYETzTc4A5oYPkHnwdkGRhK0cRbCY+6k9amnTR6MnEnDvh643KSHYf7KOUzXPLRV9vmWq6a08cWDEX/7TUzPOt5XCNygwstgjBQ48cSF44nszbZmNRp5m5qPwJA3ZWXRc58baVfal/79bF8QMRDdotLTHRcdlXGlKmd6dDCsWMlUn11z8KrqFNT62mlzUh34McU+KZ9FTtsSkgeEKqtpvoyPfgsWkvDVv1S2QnxvWKMoX3j0nu8U5gJXuMUO/DRwdtQ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB3497.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(366004)(396003)(376002)(39860400002)(136003)(186006)(1800799006)(451199021)(6486002)(6512007)(9686003)(6666004)(33656002)(86362001)(38100700002)(83380400001)(53546011)(6506007)(26005)(1076003)(44832011)(2906002)(54906003)(478600001)(33716001)(7416002)(41300700001)(66946007)(8936002)(66476007)(7406005)(8676002)(66556008)(5660300002)(6916009)(4326008)(316002)(13296009)(21314003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Xbq1jS0Wbd2H2DLM7DWy5mnT2Y8EtaBnpT5UeSjjdNXUWb70yI/e5Mb9zsST?=
+ =?us-ascii?Q?j0kqlx1b2wI4fMcb2KOvh+XTlz/j1ZlF30KcvYTBdmBJJ/EOOIFCQZG2fMlt?=
+ =?us-ascii?Q?+nTt43BpKxxWLrpHG4ubQn0+C2QGm7DyzXukkDwaYA91oo8ow8jeg6UYoG65?=
+ =?us-ascii?Q?pheif0O+ZiMKkQdhu6ra2011f/YIMBJqrfAj4g+GVahpJqMdSSnZLl9L5Ztn?=
+ =?us-ascii?Q?zvFSDe0FDkLwcDIXKpTRTgWW8BfYp0XK8B4vzmV3EvFO798b45mzJr976qhC?=
+ =?us-ascii?Q?EeqbWZbfHuah6ddaw31nwzatftrQfDWkPnDNsYwv0iJzXz8VkSE2wLhJbyzu?=
+ =?us-ascii?Q?jqbHghfDEV6XW15VRdFAGVsMbPe5zz81V3V+P6eM85tAz4mspHzMAMHAALG0?=
+ =?us-ascii?Q?AI3gzomoY4v7xGrmElaFdHTLQ476CTkOJAv0R0pEbBgMzJQD3iTQw4/GekBi?=
+ =?us-ascii?Q?0xY3xwuz08trElPkNlhLK2gueZARX2QWBU7g6gRSRZWnbNL0MZxKsfHMHr3u?=
+ =?us-ascii?Q?favLuNTnDHIt9v/mLY3y3xaItoKCXQL51HmZ/CWOOvhaut0okRC8D89HA3kE?=
+ =?us-ascii?Q?qtvKrZeVJNTVkSfhgmW6GxkBR3p6oG5FuqxcCnVe81X1Ah+Qb2QfoevorgPd?=
+ =?us-ascii?Q?MuSLbxbTOKW/j2ees8SMZTxLF1w9tSL1HZYbRMbshp6fNYe6ZcbGgofgV5Xu?=
+ =?us-ascii?Q?avi+AvVA3zBzcyLAfLaoUxEOHamC56GGvxPCKgB+tFesVm4ylM5SLwPLlulZ?=
+ =?us-ascii?Q?ywzkikF2HXq5QbZR3G3Y+n+zDW0Qx2hRgc4e+FdkWETCkAAAsZFIUdTZeWn+?=
+ =?us-ascii?Q?QmmCe3dFVgwv8bBk2nWG3DN7mpZUEi0l2k4ayi/zmnr+G84e25IFyvkw08uW?=
+ =?us-ascii?Q?9fTVlvhoPoAFooeZJloE+UNZw8pB+m4FX9dfBjBMKivipB/gH+mCuNKVRIhR?=
+ =?us-ascii?Q?0NuB0Ek34APVY6RT6RUQI6lDCdrgTPtD+T1tLnwpH1DXpMBe+tXqBLjenaFZ?=
+ =?us-ascii?Q?cLp8DS4hX0NnSZ67P16hn7SqGb3iY0bdjhoPzube3Sq28Ue6+fMYaYQ5iCOv?=
+ =?us-ascii?Q?zmvX04TctIFzb5VKaKxgiElV4Uy3oPIVwiR4F7D/eHOAYMpW1ShK2YFDGQdW?=
+ =?us-ascii?Q?olaFVsHSAprLDKacPZ74/zB/suNKN8FXtGdvyJrZnDdOSO4CfFqzN9ucpe3d?=
+ =?us-ascii?Q?W5ySom1S6oYn+rrENf3/XMJVbxSN4lomwjYkfWTxZus5w0VG+6fDXVDDW4/M?=
+ =?us-ascii?Q?yQaaSFynji1OY2oCRhd8eCvdFYbKtS4BciHG1Y6iqRnkZ0k12eBAr7GBdVIb?=
+ =?us-ascii?Q?ltt0j+zFCXDISdGEUCqCepJ4jmxHVPn8esU9DlAdltEYyQsBGWDV0osGsciZ?=
+ =?us-ascii?Q?Bu17Obu9bgJ22QDr1xmbInbntR5C7j/7bPfs4WTBbC5e5a1Fc5QrGRUBuQwl?=
+ =?us-ascii?Q?Ty7dNa2RkEberXND8mzvb1q2r5EZTLMMvQ8vzk3v7FbvY02DXqp4F5zufBSw?=
+ =?us-ascii?Q?/B+z2ZD3+ouWHkNgRrbmcXkLQcp3BJAgsTxoP87ES/tDUuYkBfcqOdhM/9uN?=
+ =?us-ascii?Q?qcEZwojQ78xb8zyJbwlXUJ9Rxsk+ptJztGqdKvMn6mjaNEWIdPUY0m72Ml5C?=
+ =?us-ascii?Q?EQ=3D=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38f714a3-7a39-4486-d151-08db9d7780c5
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB3497.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2023 10:07:59.4714
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nrtOYSC87Vb0M6KRJvACVGq6m+pZsABNVSsYPl6F75UsN4oaRLJwm1u/TzUEpdipMU3UReBu6gCKZkHGaJeTIA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8307
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 15/8/23 10:16, David Gow wrote:
-> On Mon, 14 Aug 2023 at 21:23, Richard Fitzgerald
-> <rf@opensource.cirrus.com> wrote:
->>
->> Pass a struct kunit* and gfp_t to string_stream_get_string(). Allocate
->> the returned buffer using these instead of using the stream->test and
->> stream->gfp.
->>
->> This is preparation for removing the dependence of string_stream on
->> struct kunit, so that string_stream can be used for the debugfs log.
->>
->> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
->> ---
+On Mon, Aug 14, 2023 at 11:23:49PM -0700, Martin KaFai Lau wrote:
+> On 8/11/23 7:54 PM, Geliang Tang wrote:
+> > +static int verify_mptcpify(int server_fd)
+> > +{
+> > +	socklen_t optlen;
+> > +	char cmd[256];
+> > +	int protocol;
+> > +	int err = 0;
+> > +
+> > +	optlen = sizeof(protocol);
+> > +	if (!ASSERT_OK(getsockopt(server_fd, SOL_SOCKET, SO_PROTOCOL, &protocol, &optlen),
+> > +		       "getsockopt(SOL_PROTOCOL)"))
+> > +		return -1;
+> > +
+> > +	if (!ASSERT_EQ(protocol, IPPROTO_MPTCP, "protocol isn't MPTCP"))
+> > +		err++;
+> > +
+> > +	/* Output of nstat:
+> > +	 *
+> > +	 * #kernel
+> > +	 * MPTcpExtMPCapableSYNACKRX       1                  0.0
+> > +	 */
+> > +	snprintf(cmd, sizeof(cmd),
+> > +		 "ip netns exec %s nstat -asz %s | awk '%s' | grep -q '%s'",
+> > +		 NS_TEST, "MPTcpExtMPCapableSYNACKRX",
+> > +		 "NR==1 {next} {print $2}", "1");
 > 
-> Makes sense to me.
+> Is the mp-capable something that the regular mptcp user want to learn from a
+> fd also? Does it have a simpler way like to learn this, eg. getsockopt(fd,
+> SOL_MPTCP, MPTCP_xxx), instead of parsing text output?
+
+Thanks Martin. Yes, you're right. A better one is using getsockopt
+(MPTCP_INFO) to get the mptcpi_flags, then test the FALLBACK bit to make
+sure this MPTCP connection didn't fallback. This is, in other word, this
+MPTCP connection has been established correctly. Something like this:
+
++       optlen = sizeof(info);
++       if (!ASSERT_OK(getsockopt(fd, SOL_MPTCP, MPTCP_INFO, &info, &optlen),
++                      "getsockopt(MPTCP_INFO)"))
++               return -1;
++
++       if (!ASSERT_FALSE(info.mptcpi_flags & MPTCP_INFO_FLAG_FALLBACK,
++                         "MPTCP fallback"))
++               err++;
+
+It's necessary to add this further check after the MPTCP protocol check
+using getsockopt(SOL_PROTOCOL). Since in some cases, the MPTCP protocol
+check is not enough. Say, if we change TCP protocol into MPTCP using
+"cgroup/sock_create", the hook of BPF_CGROUP_RUN_PROG_INET_SOCK in
+inet_create(), this place is too late to change the protocol. Although
+sk->sk_protocol is set to MPTCP correctly, and the MPTCP protocol check
+using getsockopt(SOL_PROTOCOL) will pass. This MPTCP connection will
+fallback to TCP connection. So this further check is needed.
+
+-Geliang
+
 > 
-> I think that, if we weren't going to remove the struct kunit
-> dependency, we'd want to either keep a version of
-> string_stream_get_string() which uses it, or, e.g., fall back to it if
-> the struct passed in is NULL.
->
-
-That was my first thought. But I thought that was open to subtle
-accidental bugs in calling code - it might return you a managed
-allocation, or it might return you an unmanaged allocation that you
-must free.
-
-As there weren't many callers of string_stream_get_string() I decided
-to go with changing the API to pass in test and gfp like other managed
-allocations. This makes it more generalized, since the returned buffer
-is not part of the stream itself, it's a temporary buffer owned by the
-caller. It also makes it clearer that what you are getting back is
-likely to be a managed allocation.
-
-If you'd prefer to leave string_stream_get_string() as it was, or make
-it return an unmanged buffer, I can send a new version.
-
-> The other option is to have a version which doesn't manage the string
-> at all, so just takes a gfp and requires the caller to free it (or
-
-I didn't add a companion function to get a raw unmanaged string buffer
-because there's nothing that needs it. It could be added later if
-it's needed.
-
-> register an action to do so). If we did that, we could get rid of the
-> struct kunit pointer totally (though it may be better to keep it and
-> have both versions).
-> 
-
-Another option is to make string_stream_get_string() return a raw
-buffer and add a kunit_string_stream_geT_string() that returns a
-managed buffer. This follows some consistency with the normal mallocs
-where kunit_xxxx() is the managed version.
-
-> So -- to switch to some stream-of-consciousness thoughts about this --
-> basically there are three possible variants of
-> string_stream_get_string():
-> - Current version: uses the stream's struct kunit. Useless if this is
-> NULL, but very convenient otherwise.
-> - This patch: manage the string using the struct kunit passed as an
-> argument. Still can't be used directly outside a test, but adds enough
-> flexibility to get _append to work.
-> - Totally unmanaged: the generated string is allocated separately, and
-> must be freed (directly or in a deferred action) by the caller. Works
-> well outside tests, but less convenient.
-> 
-> Personally, I feel that the design of string_stream is heading towards
-> the third option. By the end of this series, everything uses
-> _string_stream_concatenate_to_buf() anyway. There's only one call to
-> string_stream_get_string() outside of the logging / string_stream
-> tests, and all that does is log the results (and it has a fallback to
-> log each fragment separately if the allocation fails).
-> 
-> Then again, if this is only really being used in tests, then we can
-> probably just stick with string_stream_get_string() as-is, remove the
-> string_stream->test member totally, and if we need it, we can make
-> _string_stream_concatenate_to_buf() public, or add an unmanaged
-> version anyway.
->
-
-I didn't remove ->test because there's some existing code in assert.c
-that uses it, and I didn't want to break that.
-
-> So, after all that, I think this is probably good as-is. _Maybe_ we
-> could rename string_stream_get_string() to something like
-> string_stream_get_managed_string(), now that it's the only function
-> which is "managed" as a KUnit resource, but we can equally put that
-> off until we need to add an unmanaged version.
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
-> 
-> Cheers,
-> -- David
+> > +	if (!ASSERT_OK(system(cmd), "No MPTcpExtMPCapableSYNACKRX found!"))
 > 
 > 
->>   lib/kunit/string-stream-test.c | 26 +++++++++++++++-----------
->>   lib/kunit/string-stream.c      |  8 ++++----
->>   lib/kunit/string-stream.h      |  3 ++-
->>   lib/kunit/test.c               |  2 +-
->>   4 files changed, 22 insertions(+), 17 deletions(-)
->>
->> diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
->> index 46c2ac162fe8..8a30bb7d5fb7 100644
->> --- a/lib/kunit/string-stream-test.c
->> +++ b/lib/kunit/string-stream-test.c
->> @@ -57,7 +57,7 @@ static void string_stream_line_add_test(struct kunit *test)
->>          }
->>          num_lines = i;
->>
->> -       concat_string = string_stream_get_string(stream);
->> +       concat_string = string_stream_get_string(test, stream, GFP_KERNEL);
->>          KUNIT_EXPECT_NOT_ERR_OR_NULL(test, concat_string);
->>          KUNIT_EXPECT_EQ(test, strlen(concat_string), total_len);
->>
->> @@ -113,7 +113,7 @@ static void string_stream_variable_length_line_test(struct kunit *test)
->>          }
->>          num_lines = i;
->>
->> -       concat_string = string_stream_get_string(stream);
->> +       concat_string = string_stream_get_string(test, stream, GFP_KERNEL);
->>          KUNIT_EXPECT_NOT_ERR_OR_NULL(test, concat_string);
->>          KUNIT_EXPECT_EQ(test, strlen(concat_string), total_len);
->>
->> @@ -165,17 +165,18 @@ static void string_stream_append_test(struct kunit *test)
->>
->>          /* Append content of empty stream to empty stream */
->>          string_stream_append(stream_1, stream_2);
->> -       KUNIT_EXPECT_EQ(test, strlen(string_stream_get_string(stream_1)), 0);
->> +       KUNIT_EXPECT_EQ(test, strlen(string_stream_get_string(test, stream_1, GFP_KERNEL)), 0);
->>
->>          /* Add some data to stream_1 */
->>          for (i = 0; i < ARRAY_SIZE(strings_1); ++i)
->>                  string_stream_add(stream_1, "%s\n", strings_1[i]);
->>
->> -       original_content = string_stream_get_string(stream_1);
->> +       original_content = string_stream_get_string(test, stream_1, GFP_KERNEL);
->>
->>          /* Append content of empty stream to non-empty stream */
->>          string_stream_append(stream_1, stream_2);
->> -       KUNIT_EXPECT_STREQ(test, string_stream_get_string(stream_1), original_content);
->> +       KUNIT_EXPECT_STREQ(test, string_stream_get_string(test, stream_1, GFP_KERNEL),
->> +                          original_content);
->>
->>          /* Add some data to stream_2 */
->>          for (i = 0; i < ARRAY_SIZE(strings_2); ++i)
->> @@ -188,14 +189,15 @@ static void string_stream_append_test(struct kunit *test)
->>           * End result should be the original content of stream_1 plus
->>           * the content of stream_2.
->>           */
->> -       stream_2_content = string_stream_get_string(stream_2);
->> +       stream_2_content = string_stream_get_string(test, stream_2, GFP_KERNEL);
->>          combined_length = strlen(original_content) + strlen(stream_2_content);
->>          combined_length++; /* for terminating \0 */
->>          combined_content = kunit_kmalloc(test, combined_length, GFP_KERNEL);
->>          KUNIT_ASSERT_NOT_ERR_OR_NULL(test, combined_content);
->>          snprintf(combined_content, combined_length, "%s%s", original_content, stream_2_content);
->>
->> -       KUNIT_EXPECT_STREQ(test, string_stream_get_string(stream_1), combined_content);
->> +       KUNIT_EXPECT_STREQ(test, string_stream_get_string(test, stream_1, GFP_KERNEL),
->> +                          combined_content);
->>
->>          /* Append content of non-empty stream to empty stream */
->>          string_stream_destroy(stream_1);
->> @@ -204,7 +206,8 @@ static void string_stream_append_test(struct kunit *test)
->>          KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream_1);
->>
->>          string_stream_append(stream_1, stream_2);
->> -       KUNIT_EXPECT_STREQ(test, string_stream_get_string(stream_1), stream_2_content);
->> +       KUNIT_EXPECT_STREQ(test, string_stream_get_string(test, stream_1, GFP_KERNEL),
->> +                          stream_2_content);
->>   }
->>
->>   /* Adding an empty string should not create a fragment. */
->> @@ -224,7 +227,8 @@ static void string_stream_append_empty_string_test(struct kunit *test)
->>          string_stream_add(stream, "Add this line");
->>          string_stream_add(stream, "%s", "");
->>          KUNIT_EXPECT_EQ(test, list_count_nodes(&stream->fragments), 1);
->> -       KUNIT_EXPECT_STREQ(test, string_stream_get_string(stream), "Add this line");
->> +       KUNIT_EXPECT_STREQ(test, string_stream_get_string(test, stream, GFP_KERNEL),
->> +                          "Add this line");
->>   }
->>
->>   /* Adding strings without automatic newline appending */
->> @@ -244,7 +248,7 @@ static void string_stream_no_auto_newline_test(struct kunit *test)
->>          string_stream_add(stream, "Two\n");
->>          string_stream_add(stream, "%s\n", "Three");
->>          string_stream_add(stream, "Four");
->> -       KUNIT_EXPECT_STREQ(test, string_stream_get_string(stream),
->> +       KUNIT_EXPECT_STREQ(test, string_stream_get_string(test, stream, GFP_KERNEL),
->>                             "OneTwo\nThree\nFour");
->>   }
->>
->> @@ -271,7 +275,7 @@ static void string_stream_auto_newline_test(struct kunit *test)
->>          string_stream_add(stream, "Five\n%s", "Six");
->>          string_stream_add(stream, "Seven\n\n");
->>          string_stream_add(stream, "Eight");
->> -       KUNIT_EXPECT_STREQ(test, string_stream_get_string(stream),
->> +       KUNIT_EXPECT_STREQ(test, string_stream_get_string(test, stream, GFP_KERNEL),
->>                             "One\nTwo\nThree\nFour\nFive\nSix\nSeven\n\nEight\n");
->>   }
->>
->> diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
->> index 1dcf6513b692..eb673d3ea3bd 100644
->> --- a/lib/kunit/string-stream.c
->> +++ b/lib/kunit/string-stream.c
->> @@ -117,13 +117,14 @@ static void string_stream_clear(struct string_stream *stream)
->>          spin_unlock(&stream->lock);
->>   }
->>
->> -char *string_stream_get_string(struct string_stream *stream)
->> +char *string_stream_get_string(struct kunit *test, struct string_stream *stream,
->> +                              gfp_t gfp)
->>   {
->>          struct string_stream_fragment *frag_container;
->>          size_t buf_len = stream->length + 1; /* +1 for null byte. */
->>          char *buf;
->>
->> -       buf = kunit_kzalloc(stream->test, buf_len, stream->gfp);
->> +       buf = kunit_kzalloc(test, buf_len, gfp);
->>          if (!buf)
->>                  return NULL;
->>
->> @@ -140,8 +141,7 @@ int string_stream_append(struct string_stream *stream,
->>   {
->>          const char *other_content;
->>
->> -       other_content = string_stream_get_string(other);
->> -
->> +       other_content = string_stream_get_string(other->test, other, other->gfp);
->>          if (!other_content)
->>                  return -ENOMEM;
->>
->> diff --git a/lib/kunit/string-stream.h b/lib/kunit/string-stream.h
->> index 048930bf97f0..6b4a747881c5 100644
->> --- a/lib/kunit/string-stream.h
->> +++ b/lib/kunit/string-stream.h
->> @@ -39,7 +39,8 @@ int __printf(2, 0) string_stream_vadd(struct string_stream *stream,
->>                                        const char *fmt,
->>                                        va_list args);
->>
->> -char *string_stream_get_string(struct string_stream *stream);
->> +char *string_stream_get_string(struct kunit *test, struct string_stream *stream,
->> +                              gfp_t gfp);
->>
->>   int string_stream_append(struct string_stream *stream,
->>                           struct string_stream *other);
->> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
->> index 49698a168437..520e15f49d0d 100644
->> --- a/lib/kunit/test.c
->> +++ b/lib/kunit/test.c
->> @@ -286,7 +286,7 @@ static void kunit_print_string_stream(struct kunit *test,
->>          if (string_stream_is_empty(stream))
->>                  return;
->>
->> -       buf = string_stream_get_string(stream);
->> +       buf = string_stream_get_string(test, stream, GFP_KERNEL);
->>          if (!buf) {
->>                  kunit_err(test,
->>                            "Could not allocate buffer, dumping stream:\n");
->> --
->> 2.30.2
->>
