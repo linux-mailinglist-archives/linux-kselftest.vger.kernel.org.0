@@ -2,66 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9CE77CA48
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Aug 2023 11:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607D677CA4F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Aug 2023 11:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235984AbjHOJSy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Aug 2023 05:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
+        id S236095AbjHOJTZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Aug 2023 05:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236194AbjHOJSL (ORCPT
+        with ESMTP id S236207AbjHOJSO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Aug 2023 05:18:11 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2252F2D69
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 02:17:14 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fe32ec7201so53455e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 02:17:14 -0700 (PDT)
+        Tue, 15 Aug 2023 05:18:14 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46D82D7C
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 02:17:21 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51e24210395so9704a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 02:17:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692091032; x=1692695832;
+        d=google.com; s=20221208; t=1692091040; x=1692695840;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GowF5CTLVR7Avf9e8beD6iYwXoQ+CRQxPiz2QfNik1I=;
-        b=BfPcREk2dM9/BJY5f9sJlyxLJEnxyAEtcbOHs6O/+TsIiVONEV5YxQslJDQ5te6p9n
-         K6kHfOdF4oW/MjzhN1fpYb62GqkUBC9vms1rEX24MyOIYSMTozdD/e6sZ0/0bQG0+iva
-         OOxEztQvMygDUP+qKfXhJ55BPL/n8m+5i+GOwUs6RKccVvuUKPcnmd+gt2ZrULIwc36A
-         AlxSDMcxrLe7yP5Q0fvgsOv5FxkomSwkH8lCPdyJRc95si4S1i0Y41lhHkDZYjA4P6Dd
-         YbqP/zU3g5sBGBKZHWoJj9/1HzecgzTWs3wCcjU5NBYYjMTB8ngoV1W9gUmhYo55mP02
-         h7UA==
+        bh=1bKK0e8251j/eltAS2Y9HiiamxKszuiqlIfSiFjb9+Q=;
+        b=BSoSJn28/nyw9iFamDyICjO5w4akdIfVezzFm6Rj3LdPh3a3uoUrEk9sBIH8Zh8tX/
+         W8WWGiuErW9RCuKzqT7mbj93kluNMIne/7l2WZ8LCwV9iMTXgaofogqc0HWgDPekLJq4
+         cmwwSO2VGIX3YDbnGvrrMuKDwAgjd3gQX1qe+up4THyoA6H2U3mhGmuZQ7UBYH/luaMX
+         gwHVRDkZwwK5Rtpk7zZk8DlgBTSVm150o/jsN+yiudXGtjiQhF9CZcc/20wNKxj5AsVT
+         2LR2n7TTcBKM8NGLIbdgXN8vgwBHf0AybE/BiIfwEMO0WNbB8Lql5mGGc3L/zD+W8uKG
+         sA8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692091032; x=1692695832;
+        d=1e100.net; s=20221208; t=1692091040; x=1692695840;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GowF5CTLVR7Avf9e8beD6iYwXoQ+CRQxPiz2QfNik1I=;
-        b=IDV/kjqebMVs3CBfKNdYqhaE5lLjpF5wAH+n0++RZqRVTTVPl62wBZHbIkYG71JQh2
-         DiMDrv3q22EyXrOGBRXdUvb6cCKc7wWFsKcLPpuQLBtDCYoZeFRrwGYIWjRJqG6Qgz6v
-         R6EB8PJmiMNqu7xaZUnW/ezjZOper1Jhj+GaKaMf8VDQ7iHVnIwnCj5RGj9QF7fky150
-         PMfkNhUPY0uABoVg4CByfYoH11ntVeJaZT9O5eek5SHfEXNwD1IERkuHQyzCijs2p7KB
-         me/+sl2axZYH8wT4RkOrzmSF9FS3YNiJfiox5/oDQBzSNOAjXHtCfvljgeQ4NNU1s6xZ
-         GsRg==
-X-Gm-Message-State: AOJu0YypksXwt/kxaOtKOkMcgCI7Ec4nMf8OXuOCQHmLysuDNt4Gl4V1
-        ib+/h9nBQ75hXVclCxWOT55Zpw+s9DUbnS4dnqjr4Q==
-X-Google-Smtp-Source: AGHT+IH7NENnkb2762z3k+rO3X2TULZLhNtmRS4BtWaJ8tp1cEmmOq/bR8CP7HqYQMaDVetzSMsbeP0Cw8lphOr1OUw=
-X-Received: by 2002:a05:600c:1d84:b0:3f1:73b8:b5fe with SMTP id
- p4-20020a05600c1d8400b003f173b8b5femr368187wms.3.1692091032704; Tue, 15 Aug
- 2023 02:17:12 -0700 (PDT)
+        bh=1bKK0e8251j/eltAS2Y9HiiamxKszuiqlIfSiFjb9+Q=;
+        b=VZ5dbUsewFiog1nvyYQNaLyxAIqOdLbvbSO61m0e8Mi4Sl+FZpvJfWuY6KMrLE4r4r
+         VH/N8P8KfguqCfkCvhoIIjsdO/cHkFOIQ/yi/I6UozRDM3VMFsFvYxnfb8BEIRqI4M7X
+         DtuHHoZSAbXtnls5mSydm5YU+JxZINbAKllx2n780CrELvgycslzJs7tmeQJYXvieO7s
+         SfDgM32l2INrEX4nz+dS+3BBSjDrmm3kbvfcI3iOPZdBesh1NfhKkE/FBgYSwCwbSAIo
+         9TW4Eofkf993UvH26oXi+G3Px8mGyfOAY12y0oNbnewmeD9buKJ8rp69Ml1O12DVo/Wz
+         HItg==
+X-Gm-Message-State: AOJu0Ywt0naWp11P0PIgWhHgMnFoHC7lTea078VJOD/kZXzKtKd8YY8O
+        766LUqXgUchTSaNzBC0vLkahBfNb09HbfxdrGYkGyQ==
+X-Google-Smtp-Source: AGHT+IGwbqz+YZ8sdyPZmGmvywa7X0eMrTUDYaElxGTX0/mUDeGDmG1largsuPeknJs4wSAxN2F7O1wAmHP8zNJ2qjY=
+X-Received: by 2002:a50:8a83:0:b0:523:caae:d6ee with SMTP id
+ j3-20020a508a83000000b00523caaed6eemr307523edj.2.1692091040353; Tue, 15 Aug
+ 2023 02:17:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230814132309.32641-1-rf@opensource.cirrus.com> <20230814132309.32641-10-rf@opensource.cirrus.com>
-In-Reply-To: <20230814132309.32641-10-rf@opensource.cirrus.com>
+References: <20230814132309.32641-1-rf@opensource.cirrus.com> <20230814132309.32641-11-rf@opensource.cirrus.com>
+In-Reply-To: <20230814132309.32641-11-rf@opensource.cirrus.com>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 15 Aug 2023 17:17:00 +0800
-Message-ID: <CABVgOSn8eKwCAKwk7befTn1BYNRTTrGzEVBykNdXpqUZYqy7Hw@mail.gmail.com>
-Subject: Re: [PATCH v4 09/10] kunit: Use string_stream for test log
+Date:   Tue, 15 Aug 2023 17:17:08 +0800
+Message-ID: <CABVgOSnXHg9Vf=818P3usDquF0JWx2oem48fSV4krL_MTGcVCA@mail.gmail.com>
+Subject: Re: [PATCH v4 10/10] kunit: string-stream: Test performance of string_stream
 To:     Richard Fitzgerald <rf@opensource.cirrus.com>
 Cc:     brendan.higgins@linux.dev, rmoar@google.com,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f22d7b0602f2a480"
+        boundary="00000000000068d42f0602f2a53d"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,31 +70,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000f22d7b0602f2a480
+--00000000000068d42f0602f2a53d
 Content-Type: text/plain; charset="UTF-8"
 
 On Mon, 14 Aug 2023 at 21:23, Richard Fitzgerald
 <rf@opensource.cirrus.com> wrote:
 >
-> Replace the fixed-size log buffer with a string_stream so that the
-> log can grow as lines are added.
+> Add a test of the speed and memory use of string_stream.
 >
-> The existing kunit log tests have been updated for using a
-> string_stream as the log. As they now depend on string_stream
-> functions they cannot build when kunit-test is a module. They have
-> been moved to a separate source file to be built only if kunit-test
-> is built-in.
+> string_stream_performance_test() doesn't actually "test" anything (it
+> cannot fail unless the system has run out of allocatable memory) but it
+> measures the speed and memory consumption of the string_stream and reports
+> the result.
+>
+> This allows changes in the string_stream implementation to be compared.
 >
 > Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 > ---
 
-Yay! This is much nicer.
+Thanks, this is very useful.
 
-A part of me wonders if it makes sense to do something to allow the
-tests to continue to work as a module (either exporting the needed
-string stream functions, or moving the tests into the main KUnit
-module, and just exporting the suite definition to a stub module).
-Probably not worth it, though...
+My results are (UML):
+   # string_stream_performance_test: Time elapsed:           5021 us
+   # string_stream_performance_test: Total string length:    573890
+   # string_stream_performance_test: Bytes requested:        823930
+   # string_stream_performance_test: Actual bytes allocated: 1048312
+
+KUnit isn't really ideal for performance testing, but this works well
+enough and fits in well alongside the other string stream tests.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
@@ -102,391 +105,94 @@ Cheers,
 -- David
 
 
->  include/kunit/test.h   | 14 ++++----
->  lib/kunit/Makefile     |  5 +--
->  lib/kunit/debugfs.c    | 36 +++++++++++++--------
->  lib/kunit/kunit-test.c | 52 +-----------------------------
->  lib/kunit/log-test.c   | 72 ++++++++++++++++++++++++++++++++++++++++++
->  lib/kunit/test.c       | 44 +++-----------------------
->  6 files changed, 110 insertions(+), 113 deletions(-)
->  create mode 100644 lib/kunit/log-test.c
+>  lib/kunit/string-stream-test.c | 54 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
 >
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index d33114097d0d..b915a0fe93c0 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -32,9 +32,7 @@
->  DECLARE_STATIC_KEY_FALSE(kunit_running);
+> diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
+> index 05bfade2bd8a..b55cc14f43fb 100644
+> --- a/lib/kunit/string-stream-test.c
+> +++ b/lib/kunit/string-stream-test.c
+> @@ -8,7 +8,9 @@
 >
->  struct kunit;
-> -
-> -/* Size of log associated with test. */
-> -#define KUNIT_LOG_SIZE 2048
-> +struct string_stream;
+>  #include <kunit/static_stub.h>
+>  #include <kunit/test.h>
+> +#include <linux/ktime.h>
+>  #include <linux/slab.h>
+> +#include <linux/timekeeping.h>
 >
->  /* Maximum size of parameter description string. */
->  #define KUNIT_PARAM_DESC_SIZE 128
-> @@ -132,7 +130,7 @@ struct kunit_case {
->         /* private: internal use only. */
->         enum kunit_status status;
->         char *module_name;
-> -       char *log;
-> +       struct string_stream *log;
->  };
+>  #include "string-stream.h"
 >
->  static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
-> @@ -252,7 +250,7 @@ struct kunit_suite {
->         /* private: internal use only */
->         char status_comment[KUNIT_STATUS_COMMENT_SIZE];
->         struct dentry *debugfs;
-> -       char *log;
-> +       struct string_stream *log;
->         int suite_init_err;
->  };
->
-> @@ -278,7 +276,7 @@ struct kunit {
->
->         /* private: internal use only. */
->         const char *name; /* Read only after initialization! */
-> -       char *log; /* Points at case log after initialization */
-> +       struct string_stream *log; /* Points at case log after initialization */
->         struct kunit_try_catch try_catch;
->         /* param_value is the current parameter value for a test case. */
->         const void *param_value;
-> @@ -314,7 +312,7 @@ const char *kunit_filter_glob(void);
->  char *kunit_filter(void);
->  char *kunit_filter_action(void);
->
-> -void kunit_init_test(struct kunit *test, const char *name, char *log);
-> +void kunit_init_test(struct kunit *test, const char *name, struct string_stream *log);
->
->  int kunit_run_tests(struct kunit_suite *suite);
->
-> @@ -472,7 +470,7 @@ static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp
->
->  void kunit_cleanup(struct kunit *test);
->
-> -void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
-> +void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt, ...);
->
->  /**
->   * kunit_mark_skipped() - Marks @test_or_suite as skipped
-> diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-> index 46f75f23dfe4..65735c2e1d14 100644
-> --- a/lib/kunit/Makefile
-> +++ b/lib/kunit/Makefile
-> @@ -18,9 +18,10 @@ obj-y +=                             hooks.o
->
->  obj-$(CONFIG_KUNIT_TEST) +=            kunit-test.o
->
-> -# string-stream-test compiles built-in only.
-> +# string-stream-test and log-test compiles built-in only.
->  ifeq ($(CONFIG_KUNIT_TEST),y)
-> -obj-$(CONFIG_KUNIT_TEST) +=            string-stream-test.o
-> +obj-$(CONFIG_KUNIT_TEST) +=            string-stream-test.o \
-> +                                       log-test.o
->  endif
->
->  obj-$(CONFIG_KUNIT_EXAMPLE_TEST) +=    kunit-example-test.o
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index 22c5c496a68f..ab53a7e5c898 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -37,14 +37,21 @@ void kunit_debugfs_init(void)
->                 debugfs_rootdir = debugfs_create_dir(KUNIT_DEBUGFS_ROOT, NULL);
+> @@ -370,6 +372,57 @@ static void string_stream_auto_newline_test(struct kunit *test)
+>                            "One\nTwo\nThree\nFour\nFive\nSix\nSeven\n\nEight\n");
 >  }
 >
-> -static void debugfs_print_result(struct seq_file *seq,
-> -                                struct kunit_suite *suite,
-> -                                struct kunit_case *test_case)
-> +static void debugfs_print_result(struct seq_file *seq, struct string_stream *log)
->  {
-> -       if (!test_case || !test_case->log)
-> +       struct string_stream_fragment *frag_container;
-> +
-> +       if (!log)
->                 return;
->
-> -       seq_printf(seq, "%s", test_case->log);
-> +       /*
-> +        * Walk the fragments so we don't need to allocate a temporary
-> +        * buffer to hold the entire string.
-> +        */
-> +       spin_lock(&log->lock);
-> +       list_for_each_entry(frag_container, &log->fragments, node)
-> +               seq_printf(seq, "%s", frag_container->fragment);
-> +       spin_unlock(&log->lock);
->  }
->
->  /*
-> @@ -69,10 +76,9 @@ static int debugfs_print_results(struct seq_file *seq, void *v)
->         seq_printf(seq, KUNIT_SUBTEST_INDENT "1..%zd\n", kunit_suite_num_test_cases(suite));
->
->         kunit_suite_for_each_test_case(suite, test_case)
-> -               debugfs_print_result(seq, suite, test_case);
-> +               debugfs_print_result(seq, test_case->log);
->
-> -       if (suite->log)
-> -               seq_printf(seq, "%s", suite->log);
-> +       debugfs_print_result(seq, suite->log);
->
->         seq_printf(seq, "%s %d %s\n",
->                    kunit_status_to_ok_not_ok(success), 1, suite->name);
-> @@ -105,9 +111,13 @@ void kunit_debugfs_create_suite(struct kunit_suite *suite)
->         struct kunit_case *test_case;
->
->         /* Allocate logs before creating debugfs representation. */
-> -       suite->log = kzalloc(KUNIT_LOG_SIZE, GFP_KERNEL);
-> -       kunit_suite_for_each_test_case(suite, test_case)
-> -               test_case->log = kzalloc(KUNIT_LOG_SIZE, GFP_KERNEL);
-> +       suite->log = raw_alloc_string_stream(GFP_KERNEL);
-> +       string_stream_set_append_newlines(suite->log, true);
-> +
-> +       kunit_suite_for_each_test_case(suite, test_case) {
-> +               test_case->log = raw_alloc_string_stream(GFP_KERNEL);
-> +               string_stream_set_append_newlines(test_case->log, true);
-> +       }
->
->         suite->debugfs = debugfs_create_dir(suite->name, debugfs_rootdir);
->
-> @@ -121,7 +131,7 @@ void kunit_debugfs_destroy_suite(struct kunit_suite *suite)
->         struct kunit_case *test_case;
->
->         debugfs_remove_recursive(suite->debugfs);
-> -       kfree(suite->log);
-> +       raw_free_string_stream(suite->log);
->         kunit_suite_for_each_test_case(suite, test_case)
-> -               kfree(test_case->log);
-> +               raw_free_string_stream(test_case->log);
->  }
-> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-> index 83d8e90ca7a2..ecc39d5f7411 100644
-> --- a/lib/kunit/kunit-test.c
-> +++ b/lib/kunit/kunit-test.c
-> @@ -530,55 +530,6 @@ static struct kunit_suite kunit_resource_test_suite = {
->         .test_cases = kunit_resource_test_cases,
->  };
->
-> -static void kunit_log_test(struct kunit *test)
-> -{
-> -       struct kunit_suite suite;
-> -
-> -       suite.log = kunit_kzalloc(test, KUNIT_LOG_SIZE, GFP_KERNEL);
-> -       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
-> -
-> -       kunit_log(KERN_INFO, test, "put this in log.");
-> -       kunit_log(KERN_INFO, test, "this too.");
-> -       kunit_log(KERN_INFO, &suite, "add to suite log.");
-> -       kunit_log(KERN_INFO, &suite, "along with this.");
-> -
-> -#ifdef CONFIG_KUNIT_DEBUGFS
-> -       KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> -                                    strstr(test->log, "put this in log."));
-> -       KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> -                                    strstr(test->log, "this too."));
-> -       KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> -                                    strstr(suite.log, "add to suite log."));
-> -       KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> -                                    strstr(suite.log, "along with this."));
-> -#else
-> -       KUNIT_EXPECT_NULL(test, test->log);
-> -#endif
-> -}
-> -
-> -static void kunit_log_newline_test(struct kunit *test)
-> -{
-> -       kunit_info(test, "Add newline\n");
-> -       if (test->log) {
-> -               KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add newline\n"),
-> -                       "Missing log line, full log:\n%s", test->log);
-> -               KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\n\n"));
-> -       } else {
-> -               kunit_skip(test, "only useful when debugfs is enabled");
-> -       }
-> -}
-> -
-> -static struct kunit_case kunit_log_test_cases[] = {
-> -       KUNIT_CASE(kunit_log_test),
-> -       KUNIT_CASE(kunit_log_newline_test),
-> -       {}
-> -};
-> -
-> -static struct kunit_suite kunit_log_test_suite = {
-> -       .name = "kunit-log-test",
-> -       .test_cases = kunit_log_test_cases,
-> -};
-> -
->  static void kunit_status_set_failure_test(struct kunit *test)
->  {
->         struct kunit fake;
-> @@ -658,7 +609,6 @@ static struct kunit_suite kunit_current_test_suite = {
->  };
->
->  kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
-> -                 &kunit_log_test_suite, &kunit_status_test_suite,
-> -                 &kunit_current_test_suite);
-> +                 &kunit_status_test_suite, &kunit_current_test_suite);
->
->  MODULE_LICENSE("GPL v2");
-> diff --git a/lib/kunit/log-test.c b/lib/kunit/log-test.c
-> new file mode 100644
-> index 000000000000..a93d87112fea
-> --- /dev/null
-> +++ b/lib/kunit/log-test.c
-> @@ -0,0 +1,72 @@
-> +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * KUnit test for logging.
-> + *
-> + * Based on code:
-> + * Copyright (C) 2019, Google LLC.
-> + * Author: Brendan Higgins <brendanhiggins@google.com>
+> + * This doesn't actually "test" anything. It reports time taken
+> + * and memory used for logging a large number of lines.
 > + */
-> +#include <kunit/test.h>
-> +
-> +#include "string-stream.h"
-> +
-> +static void kunit_log_test(struct kunit *test)
+> +static void string_stream_performance_test(struct kunit *test)
 > +{
-> +       struct kunit_suite suite;
-> +       char *full_log;
+> +       struct string_stream_fragment *frag_container;
+> +       struct string_stream *stream;
+> +       char test_line[101];
+> +       ktime_t start_time, end_time;
+> +       size_t len, bytes_requested, actual_bytes_used, total_string_length;
+> +       int offset, i;
 > +
-> +       suite.log = alloc_string_stream(test, GFP_KERNEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
-> +       string_stream_set_append_newlines(suite.log, true);
+> +       stream = alloc_string_stream(test, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
 > +
-> +       kunit_log(KERN_INFO, test, "put this in log.");
-> +       kunit_log(KERN_INFO, test, "this too.");
-> +       kunit_log(KERN_INFO, &suite, "add to suite log.");
-> +       kunit_log(KERN_INFO, &suite, "along with this.");
+> +       memset(test_line, 'x', sizeof(test_line) - 1);
+> +       test_line[sizeof(test_line) - 1] = '\0';
 > +
-> +#ifdef CONFIG_KUNIT_DEBUGFS
-> +       KUNIT_EXPECT_TRUE(test, test->log->append_newlines);
-> +
-> +       full_log = string_stream_get_string(test, test->log, GFP_KERNEL);
-> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> +                                    strstr(full_log, "put this in log."));
-> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> +                                    strstr(full_log, "this too."));
-> +
-> +       full_log = string_stream_get_string(test, suite.log, GFP_KERNEL);
-> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> +                                    strstr(full_log, "add to suite log."));
-> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> +                                    strstr(full_log, "along with this."));
-> +#else
-> +       KUNIT_EXPECT_NULL(test, test->log);
-> +#endif
-> +}
-> +
-> +static void kunit_log_newline_test(struct kunit *test)
-> +{
-> +       char *full_log;
-> +
-> +       kunit_info(test, "Add newline\n");
-> +       if (test->log) {
-> +               full_log = string_stream_get_string(test, test->log, GFP_KERNEL);
-> +               KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(full_log, "Add newline\n"),
-> +                       "Missing log line, full log:\n%s", full_log);
-> +               KUNIT_EXPECT_NULL(test, strstr(full_log, "Add newline\n\n"));
-> +       } else {
-> +               kunit_skip(test, "only useful when debugfs is enabled");
+> +       start_time = ktime_get();
+> +       for (i = 0; i < 10000; i++) {
+> +               offset = i % (sizeof(test_line) - 1);
+> +               string_stream_add(stream, "%s: %d\n", &test_line[offset], i);
 > +       }
+> +       end_time = ktime_get();
+> +
+> +       /*
+> +        * Calculate memory used. This doesn't include invisible
+> +        * overhead due to kernel allocator fragment size rounding.
+> +        */
+> +       bytes_requested = sizeof(*stream);
+> +       actual_bytes_used = ksize(stream);
+> +       total_string_length = 0;
+> +
+> +       list_for_each_entry(frag_container, &stream->fragments, node) {
+> +               bytes_requested += sizeof(*frag_container);
+> +               actual_bytes_used += ksize(frag_container);
+> +
+> +               len = strlen(frag_container->fragment);
+> +               total_string_length += len;
+> +               bytes_requested += len + 1; /* +1 for '\0' */
+> +               actual_bytes_used += ksize(frag_container->fragment);
+> +       }
+> +
+> +       kunit_info(test, "Time elapsed:           %lld us\n",
+> +                  ktime_us_delta(end_time, start_time));
+> +       kunit_info(test, "Total string length:    %zu\n", total_string_length);
+> +       kunit_info(test, "Bytes requested:        %zu\n", bytes_requested);
+> +       kunit_info(test, "Actual bytes allocated: %zu\n", actual_bytes_used);
 > +}
 > +
-> +static struct kunit_case kunit_log_test_cases[] = {
-> +       KUNIT_CASE(kunit_log_test),
-> +       KUNIT_CASE(kunit_log_newline_test),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite kunit_log_test_suite = {
-> +       .name = "kunit-log-test",
-> +       .test_cases = kunit_log_test_cases,
-> +};
-> +
-> +kunit_test_suites(&kunit_log_test_suite);
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 4b69d12dfc96..14e889e80129 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -109,51 +109,17 @@ static void kunit_print_test_stats(struct kunit *test,
->                   stats.total);
->  }
->
-> -/**
-> - * kunit_log_newline() - Add newline to the end of log if one is not
-> - * already present.
-> - * @log: The log to add the newline to.
-> - */
-> -static void kunit_log_newline(char *log)
-> -{
-> -       int log_len, len_left;
-> -
-> -       log_len = strlen(log);
-> -       len_left = KUNIT_LOG_SIZE - log_len - 1;
-> -
-> -       if (log_len > 0 && log[log_len - 1] != '\n')
-> -               strncat(log, "\n", len_left);
-> -}
-> -
-> -/*
-> - * Append formatted message to log, size of which is limited to
-> - * KUNIT_LOG_SIZE bytes (including null terminating byte).
-> - */
-> -void kunit_log_append(char *log, const char *fmt, ...)
-> +/* Append formatted message to log. */
-> +void kunit_log_append(struct string_stream *log, const char *fmt, ...)
+>  static int string_stream_test_init(struct kunit *test)
 >  {
->         va_list args;
-> -       int len, log_len, len_left;
+>         struct string_stream_test_priv *priv;
+> @@ -400,6 +453,7 @@ static struct kunit_case string_stream_test_cases[] = {
+>         KUNIT_CASE(string_stream_append_empty_string_test),
+>         KUNIT_CASE(string_stream_no_auto_newline_test),
+>         KUNIT_CASE(string_stream_auto_newline_test),
+> +       KUNIT_CASE(string_stream_performance_test),
+>         {}
+>  };
 >
->         if (!log)
->                 return;
->
-> -       log_len = strlen(log);
-> -       len_left = KUNIT_LOG_SIZE - log_len - 1;
-> -       if (len_left <= 0)
-> -               return;
-> -
-> -       /* Evaluate length of line to add to log */
->         va_start(args, fmt);
-> -       len = vsnprintf(NULL, 0, fmt, args) + 1;
-> +       string_stream_vadd(log, fmt, args);
->         va_end(args);
-> -
-> -       /* Print formatted line to the log */
-> -       va_start(args, fmt);
-> -       vsnprintf(log + log_len, min(len, len_left), fmt, args);
-> -       va_end(args);
-> -
-> -       /* Add newline to end of log if not already present. */
-> -       kunit_log_newline(log);
->  }
->  EXPORT_SYMBOL_GPL(kunit_log_append);
->
-> @@ -359,14 +325,14 @@ void __kunit_do_failed_assertion(struct kunit *test,
->  }
->  EXPORT_SYMBOL_GPL(__kunit_do_failed_assertion);
->
-> -void kunit_init_test(struct kunit *test, const char *name, char *log)
-> +void kunit_init_test(struct kunit *test, const char *name, struct string_stream *log)
->  {
->         spin_lock_init(&test->lock);
->         INIT_LIST_HEAD(&test->resources);
->         test->name = name;
->         test->log = log;
->         if (test->log)
-> -               test->log[0] = '\0';
-> +               string_stream_clear(log);
->         test->status = KUNIT_SUCCESS;
->         test->status_comment[0] = '\0';
->  }
 > --
 > 2.30.2
 >
 
---000000000000f22d7b0602f2a480
+--00000000000068d42f0602f2a53d
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -553,14 +259,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDi
-/zrIVDDDqQzRfBT8ogUek3FH/593Th6h+/v18YvFGDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA4MTUwOTE3MTJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBn
+PxcF1RGyEThu8UWg+RKPY8jN+WGr7oAl5mwanGTkXjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA4MTUwOTE3MjBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAJltIJQ3AdI1MpuYUk2r9
-1JjknYVx3AemAfCAnPotqnHCZN31+/3xzgHMPvx0xy/tzWhtEQ14OMW+6JBMLnpjEU1VWF21f2W5
-xxoD5ETsRX39d1s/TBMCyQOy/+1AzG4xMDEX41qfv7OGo0RKPEMsEydXPM40y8pQokRND+Qz2OFa
-Xzk7wtZ/r0kqTtlf+C3sOCOh8Vky0OO4/8QKzFduLYQPSkXmbM6cYGeqlQ10XUHCw/bsdX3ZbyWH
-3pSNTswSLXHKx9o2t+IaQx1fyKct0TM1EGwpJkylTvk6AxeW4BoB3vGaVF87bkxlAF2hykUGBjZC
-vfdog7iBxh7mJ+/XTw==
---000000000000f22d7b0602f2a480--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAl+i4MZe8HMPua/eKTBtJ
+L4grw9oymU3fDnIGH2f/ETWh9M5Ui1rQyYLiPEEe/FBV1tGVUMiNDLFGx/Z0IVNEmjGJr/SCvi5i
+9/oZQ3/nUTGgcohAuoYdtvwUYQSrgnU2ARmr8ps5KEzg8DtoTYj8uSV5c36yDOEsoBUVbmeALCuB
+Zo5QSKRAIK0HDdtsO12r9SvQSgDBLGOXO8kjPfLoj/uogL+5vaLjAhoza3IAEZzM6A5zD5rtDgV1
+7GJpiCqys2q6RAFtTF/1uYUpo3XFGxFl7oiKxmdH35bXajAR9KZFLs6Ac92/GfvrXAzOpypkmcY+
+rKBI8qchH7ZVW+Ivaw==
+--00000000000068d42f0602f2a53d--
