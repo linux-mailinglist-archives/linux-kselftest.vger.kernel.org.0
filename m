@@ -2,148 +2,185 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2B477CE9D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Aug 2023 17:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C0477CEEC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Aug 2023 17:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237528AbjHOPAC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Aug 2023 11:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        id S234266AbjHOPR4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Aug 2023 11:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237808AbjHOO7i (ORCPT
+        with ESMTP id S237938AbjHOPRa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Aug 2023 10:59:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD00798
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 07:59:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C677C1063;
-        Tue, 15 Aug 2023 08:00:18 -0700 (PDT)
-Received: from donnerap.arm.com (donnerap.manchester.arm.com [10.32.100.58])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7659E3F6C4;
-        Tue, 15 Aug 2023 07:59:35 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] kselftest/arm64: build BTI tests in output directory
-Date:   Tue, 15 Aug 2023 15:59:31 +0100
-Message-Id: <20230815145931.2522557-1-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 15 Aug 2023 11:17:30 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457521BFB;
+        Tue, 15 Aug 2023 08:17:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=YjYoGIziY2w2SX5FBV0LAvBmWZHGropt2vcWSdUJdtY=; b=DPdWmj470BuEOBTtkKtzBY4ko2
+        ghXqtKYBFMKaAHfIqy/iQsBzO8ndnDytW/wQ07TaT4+8ykvDusl2fSXblwPhU+ijTG7NwC6ILJ3id
+        EGcW75/+va4eU4AC762RGDeEco/Pf5yxETdGE/+7Q3WtZ1HDFlJik1+Ssvr3YZLddVD2xSvdk4Ljp
+        X9FcUvebMUbSufuSh/lz1sqqGqmXitA9RLd4Hu/TnFidSBAVlGNkw2rLHcU7vgitTuFXtln2UIA8h
+        tL8w/zPsM37Xx/+Q3V26P72XUh2RaECKXqkjuSQbzS2pqLo/5RBuWAk7S164AjCww5XbQ0As3lcYf
+        8b9nhQxw==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qVvml-000Mk3-02; Tue, 15 Aug 2023 17:16:43 +0200
+Received: from [85.1.206.226] (helo=pc-102.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qVvmk-0004Dw-EL; Tue, 15 Aug 2023 17:16:42 +0200
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: trace_helpers.c: optimize
+ kallsyms cache
+To:     Rong Tao <rtoax@foxmail.com>, sdf@google.com, ast@kernel.org
+Cc:     rongtao@cestc.cn, Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
+        <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230812055703.7218-1-rtoax@foxmail.com>
+ <tencent_50B4B2622FE7546A5FF9464310650C008509@qq.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <d1ad0b4d-574c-15e5-928f-2d9acc30dfe1@iogearbox.net>
+Date:   Tue, 15 Aug 2023 17:16:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <tencent_50B4B2622FE7546A5FF9464310650C008509@qq.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/27001/Tue Aug 15 09:40:17 2023)
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The arm64 BTI selftests are currently built in the source directory,
-then the generated binaries are copied to the output directory.
-This leaves the object files around in a potentially otherwise pristine
-source tree, tainting it for out-of-tree kernel builds.
+On 8/12/23 7:57 AM, Rong Tao wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+> 
+> Static ksyms often have problems because the number of symbols exceeds the
+> MAX_SYMS limit. Like changing the MAX_SYMS from 300000 to 400000 in
+> commit e76a014334a6("selftests/bpf: Bump and validate MAX_SYMS") solves
+> the problem somewhat, but it's not the perfect way.
+> 
+> This commit uses dynamic memory allocation, which completely solves the
+> problem caused by the limitation of the number of kallsyms.
+> 
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
+> v3: Do not use structs and judge ksyms__add_symbol function return value.
+> v2: https://lore.kernel.org/lkml/tencent_B655EE5E5D463110D70CD2846AB3262EED09@qq.com/
+>      Do the usual len/capacity scheme here to amortize the cost of realloc, and
+>      don't free symbols.
+> v1: https://lore.kernel.org/lkml/tencent_AB461510B10CD484E0B2F62E3754165F2909@qq.com/
+> ---
+>   tools/testing/selftests/bpf/trace_helpers.c | 42 ++++++++++++++++-----
+>   1 file changed, 32 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+> index f83d9f65c65b..d8391a2122b4 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> @@ -18,10 +18,32 @@
+>   #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
+>   #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
+>   
+> -#define MAX_SYMS 400000
+> -static struct ksym syms[MAX_SYMS];
+> +static struct ksym *syms;
+> +static int sym_cap;
+>   static int sym_cnt;
+>   
+> +static int ksyms__add_symbol(const char *name, unsigned long addr)
+> +{
+> +	void *tmp;
+> +	unsigned int new_cap;
+> +
+> +	if (sym_cnt + 1 > sym_cap) {
+> +		new_cap = sym_cap * 4 / 3;
+> +		tmp = realloc(syms, sizeof(struct ksym) * new_cap);
+> +		if (!tmp)
+> +			return -ENOMEM;
+> +		syms = tmp;
+> +		sym_cap = new_cap;
+> +	}
+> +
+> +	syms[sym_cnt].addr = addr;
+> +	syms[sym_cnt].name = strdup(name);
 
-Prepend $(OUTPUT) to every reference to an object file in the Makefile,
-and remove the extra handling and copying. This puts all generated files
-under the output directory.
+Fwiw, strdup() should error check too.. and for teardown in the test suite, lets
+also have the counterpart where we release all the allocated mem.
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- tools/testing/selftests/arm64/bti/Makefile    | 45 +++++++++----------
- .../selftests/arm64/bti/gen/.gitignore        |  2 -
- 2 files changed, 20 insertions(+), 27 deletions(-)
- delete mode 100644 tools/testing/selftests/arm64/bti/gen/.gitignore
+> +	sym_cnt++;
+> +
+> +	return 0;
+> +}
+> +
+>   static int ksym_cmp(const void *p1, const void *p2)
+>   {
+>   	return ((struct ksym *)p1)->addr - ((struct ksym *)p2)->addr;
+> @@ -33,9 +55,13 @@ int load_kallsyms_refresh(void)
+>   	char func[256], buf[256];
+>   	char symbol;
+>   	void *addr;
+> -	int i = 0;
+> +	int ret;
+>   
+> +	sym_cap = 1024;
 
-diff --git a/tools/testing/selftests/arm64/bti/Makefile b/tools/testing/selftests/arm64/bti/Makefile
-index ccdac414ad940..05e4ee523a534 100644
---- a/tools/testing/selftests/arm64/bti/Makefile
-+++ b/tools/testing/selftests/arm64/bti/Makefile
-@@ -2,8 +2,6 @@
- 
- TEST_GEN_PROGS := btitest nobtitest
- 
--PROGS := $(patsubst %,gen/%,$(TEST_GEN_PROGS))
--
- # These tests are built as freestanding binaries since otherwise BTI
- # support in ld.so is required which is not currently widespread; when
- # it is available it will still be useful to test this separately as the
-@@ -18,44 +16,41 @@ CFLAGS_COMMON = -ffreestanding -Wall -Wextra $(CFLAGS)
- BTI_CC_COMMAND = $(CC) $(CFLAGS_BTI) $(CFLAGS_COMMON) -c -o $@ $<
- NOBTI_CC_COMMAND = $(CC) $(CFLAGS_NOBTI) $(CFLAGS_COMMON) -c -o $@ $<
- 
--%-bti.o: %.c
-+$(OUTPUT)/%-bti.o: %.c
- 	$(BTI_CC_COMMAND)
- 
--%-bti.o: %.S
-+$(OUTPUT)/%-bti.o: %.S
- 	$(BTI_CC_COMMAND)
- 
--%-nobti.o: %.c
-+$(OUTPUT)/%-nobti.o: %.c
- 	$(NOBTI_CC_COMMAND)
- 
--%-nobti.o: %.S
-+$(OUTPUT)/%-nobti.o: %.S
- 	$(NOBTI_CC_COMMAND)
- 
- BTI_OBJS =                                      \
--	test-bti.o                           \
--	signal-bti.o                            \
--	start-bti.o                             \
--	syscall-bti.o                           \
--	system-bti.o                            \
--	teststubs-bti.o                         \
--	trampoline-bti.o
--gen/btitest: $(BTI_OBJS)
-+	$(OUTPUT)/test-bti.o                    \
-+	$(OUTPUT)/signal-bti.o                  \
-+	$(OUTPUT)/start-bti.o                   \
-+	$(OUTPUT)/syscall-bti.o                 \
-+	$(OUTPUT)/system-bti.o                  \
-+	$(OUTPUT)/teststubs-bti.o               \
-+	$(OUTPUT)/trampoline-bti.o
-+$(OUTPUT)/btitest: $(BTI_OBJS)
- 	$(CC) $(CFLAGS_BTI) $(CFLAGS_COMMON) -nostdlib -static -o $@ $^
- 
- NOBTI_OBJS =                                    \
--	test-nobti.o                         \
--	signal-nobti.o                          \
--	start-nobti.o                           \
--	syscall-nobti.o                         \
--	system-nobti.o                          \
--	teststubs-nobti.o                       \
--	trampoline-nobti.o
--gen/nobtitest: $(NOBTI_OBJS)
-+	$(OUTPUT)/test-nobti.o                  \
-+	$(OUTPUT)/signal-nobti.o                \
-+	$(OUTPUT)/start-nobti.o                 \
-+	$(OUTPUT)/syscall-nobti.o               \
-+	$(OUTPUT)/system-nobti.o                \
-+	$(OUTPUT)/teststubs-nobti.o             \
-+	$(OUTPUT)/trampoline-nobti.o
-+$(OUTPUT)/nobtitest: $(NOBTI_OBJS)
- 	$(CC) $(CFLAGS_BTI) $(CFLAGS_COMMON) -nostdlib -static -o $@ $^
- 
- # Including KSFT lib.mk here will also mangle the TEST_GEN_PROGS list
- # to account for any OUTPUT target-dirs optionally provided by
- # the toplevel makefile
- include ../../lib.mk
--
--$(TEST_GEN_PROGS): $(PROGS)
--	cp $(PROGS) $(OUTPUT)/
-diff --git a/tools/testing/selftests/arm64/bti/gen/.gitignore b/tools/testing/selftests/arm64/bti/gen/.gitignore
-deleted file mode 100644
-index 73869fabada42..0000000000000
---- a/tools/testing/selftests/arm64/bti/gen/.gitignore
-+++ /dev/null
-@@ -1,2 +0,0 @@
--btitest
--nobtitest
--- 
-2.25.1
+On my dev node, I have:
+
+   # cat /proc/kallsyms | wc -l
+   242586
+
+Why starting out so low with 1k? I would have expected that for most cases we
+don't need the realloc() path to begin with, but just in corner cases like in
+e76a014334a6.
+
+>   	sym_cnt = 0;
+> +	syms = malloc(sizeof(struct ksym) * sym_cap);
+> +	if (!syms)
+> +		return -ENOMEM;
+>   
+>   	f = fopen("/proc/kallsyms", "r");
+>   	if (!f)
+> @@ -46,15 +72,11 @@ int load_kallsyms_refresh(void)
+>   			break;
+>   		if (!addr)
+>   			continue;
+> -		if (i >= MAX_SYMS)
+> -			return -EFBIG;
+> -
+> -		syms[i].addr = (long) addr;
+> -		syms[i].name = strdup(func);
+> -		i++;
+> +		ret = ksyms__add_symbol(func, (unsigned long)addr);
+> +		if (ret)
+> +			return ret;
+>   	}
+>   	fclose(f);
+> -	sym_cnt = i;
+>   	qsort(syms, sym_cnt, sizeof(struct ksym), ksym_cmp);
+>   	return 0;
+>   }
+> 
 
