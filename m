@@ -2,149 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A1D77D6A1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 01:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15AFE77D6D0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 01:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbjHOX0e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Aug 2023 19:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
+        id S240734AbjHOXy4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Aug 2023 19:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240585AbjHOX0H (ORCPT
+        with ESMTP id S240732AbjHOXym (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Aug 2023 19:26:07 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8989010F0;
-        Tue, 15 Aug 2023 16:26:06 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-34992058e95so24926645ab.1;
-        Tue, 15 Aug 2023 16:26:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692141966; x=1692746766;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yuFOXmtSNny9sLwdulB8nAUmEQZyFm5IBCtyhhdlg5o=;
-        b=jqvg+OKU+BdVajqZOkReX1+RHnXR+7InhHkL9knqU8H+lVM7RvKDa0TlQ8r601XW5I
-         CIUrbY6VfQbRzLZ9Y3QYE3j5J3cBRALQFFk8XAGUl+Y3VvQqsahzwmSzQ+TqYi1gOojd
-         Ss0dSqXBSABfMwAw9jgaGR7GIhYxwz1quyTMTTbScu4cmanMO/02pMSxAACh5idnHyHa
-         TLtscM2wLm29gPRZo2crI3qkhI3hboBUsoDgMfx1n1oE3PQi8YZPpPUSu4GiCmCZVuoq
-         lBHipjBXNFOaALK+fu2yPwwelGsgYdTxKKw+1FtGi/bDfic77M9vQUzU721TkMmK+Cpo
-         dyyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692141966; x=1692746766;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yuFOXmtSNny9sLwdulB8nAUmEQZyFm5IBCtyhhdlg5o=;
-        b=ZDj/SMQW6BUX82wWaegzxzD+MBkKOxyZRnekjN5HVEEoPwMuqspqOBQYOqAMVjA9kW
-         AlKR+KLGIAObe3qfJcszZckwMiGyCjuYx8QBfXED64S1LSWRHyqi7uLbBYcAtDqwckZ+
-         tmiUYHqDnTWqR8zo91fpCobVCe73C52Vc/s686VOXAagUqslbdL2iImgZXugej5qvPd6
-         S3E3j1J7tI+DFPZCo5sc5H9Bs4sWvq7pb6+rx/Ji/jGaR+5Up0U3CoECRBiIkzTRu0X9
-         lad9yc3kLNB8H7cg+FvbjL7bEwAmOxD/vZHZim0cny3y2kewjJC0ENQ71TycnqPGLBQU
-         YCqQ==
-X-Gm-Message-State: AOJu0YwKvNdNNInAnbQxviXQs5OukFF4M37FR7poee8e941PonvKErzX
-        CSSfZilnvMZ6j7Hijp3OAM11/stOs3ZNP1IaQkxpAPyr6FEz/g==
-X-Google-Smtp-Source: AGHT+IH8BU95JCOFeRU6qCQ9pPnR0FH1UKm37FfLUUA0ybas4MbPzgqExxhQqNeCSW7tJt8xpgtaVNsczjD1HmMaGBM=
-X-Received: by 2002:a05:6e02:f45:b0:349:77c7:2ab4 with SMTP id
- y5-20020a056e020f4500b0034977c72ab4mr496504ilj.30.1692141965799; Tue, 15 Aug
- 2023 16:26:05 -0700 (PDT)
+        Tue, 15 Aug 2023 19:54:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866A5EE;
+        Tue, 15 Aug 2023 16:54:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 073CD62C98;
+        Tue, 15 Aug 2023 23:54:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47CCBC433C8;
+        Tue, 15 Aug 2023 23:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692143680;
+        bh=n6eEACiqimpPB7PLvfd+oUPFPVhzIcPuBLC1dr7dvkk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DxIy5vbUapbtWP3sld3mWYjZBRmjMrNODKGFDnO97nPi0kw+utGl7YhSUxRcSA55j
+         bgF8O8udbd4TU+m5lMdm4Tq8mz2Iji+2duH30c7Uih+GPjDtxMtERbEdC1HkZkRbV1
+         vhFKi5KpL9sjgdjBtwcn8MOqnv66AJbhzBkjh1oYLzW8TtTXJwoSBhyLhul3VdRwcO
+         1WhbPKDlq0Tm06lqfY+xHm0muT2Lor4Y/lV59laZCZRREuOI6SYgQstfXcPOumpgOw
+         HGCLOk+Rs8gWd4G0xWygKex2ny89KElnHHwFax3NDVcmPkRCbi5eOwwkFR7OjQVK7e
+         9jsYzSH7oiqSw==
+Date:   Wed, 16 Aug 2023 00:54:30 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 17/36] arm64/mm: Handle GCS data aborts
+Message-ID: <752f9f06-69e3-4e60-94ca-49cacb1122ff@sirena.org.uk>
+References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
+ <20230807-arm64-gcs-v4-17-68cfa37f9069@kernel.org>
+ <ZNZPLTky6IZ47n4l@arm.com>
 MIME-Version: 1.0
-References: <20230815155612.2535947-1-andre.przywara@arm.com> <20230815155612.2535947-4-andre.przywara@arm.com>
-In-Reply-To: <20230815155612.2535947-4-andre.przywara@arm.com>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Tue, 15 Aug 2023 16:25:54 -0700
-Message-ID: <CAKEwX=NvBCiy6WxJWg9EYyTwKTQY35G6=3T2L8KKEe46xg82rg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] selftests: cachestat: test for cachestat availability
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bU0eg43A83FLgDHm"
+Content-Disposition: inline
+In-Reply-To: <ZNZPLTky6IZ47n4l@arm.com>
+X-Cookie: Darth Vader sleeps with a Teddywookie.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 15, 2023 at 8:56=E2=80=AFAM Andre Przywara <andre.przywara@arm.=
-com> wrote:
->
-> As cachestat is a new syscall, it won't be available on older kernels,
-> for instance those running on a build machine. In this case, a run
-> reports all tests as "not ok" at the moment.
-Interesting - I was under the assumption that if you backported the
-selftests for cachestat, you would also backport the syscall's implementati=
-on
-and wiring.
 
-But yeah, I guess if you build with !CONFIG_CACHESTAT_SYSCALL,
-these tests would fail.
->
-> Test for the cachestat syscall availability first, before doing further
-> tests, and bail out early with a TAP SKIP comment.
->
-> This also uses the opportunity to add the proper TAP headers, and add
-> one check for the syscall error handling (illegal file descriptor).
-Thanks for the addition!
->
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  .../selftests/cachestat/test_cachestat.c      | 22 ++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/t=
-esting/selftests/cachestat/test_cachestat.c
-> index a5a4ac8dcb76c..77620e7ecf562 100644
-> --- a/tools/testing/selftests/cachestat/test_cachestat.c
-> +++ b/tools/testing/selftests/cachestat/test_cachestat.c
-> @@ -15,6 +15,8 @@
->
->  #include "../kselftest.h"
->
-> +#define NR_TESTS       8
-> +
->  static const char * const dev_files[] =3D {
->         "/dev/zero", "/dev/null", "/dev/urandom",
->         "/proc/version", "/proc"
-> @@ -235,7 +237,25 @@ bool test_cachestat_shmem(void)
->
->  int main(void)
->  {
-> -       int ret =3D 0;
-> +       int ret;
-> +
-> +       ksft_print_header();
-> +
-> +       ret =3D syscall(__NR_cachestat, -1, NULL, NULL, 0);
-> +       if (ret =3D=3D -1 && errno =3D=3D ENOSYS) {
-nit: if (ret && errno =3D=3D ENOSYS) sounds cleaner, but up to you.
-> +               printf("1..0 # Skipped: cachestat syscall not available\n=
-");
-nit: perhaps ksft_print_msg()?
-> +               return KSFT_SKIP;
-> +       }
-> +
-> +       ksft_set_plan(NR_TESTS);
-> +
-> +       if (ret =3D=3D -1 && errno =3D=3D EBADF) {
-> +               ksft_test_result_pass("bad file descriptor recognized\n")=
-;
-> +               ret =3D 0;
-> +       } else {
-> +               ksft_test_result_fail("bad file descriptor ignored\n");
-> +               ret =3D 1;
-> +       }
-Nice!
->
->         for (int i =3D 0; i < 5; i++) {
->                 const char *dev_filename =3D dev_files[i];
-> --
-> 2.25.1
->
-Nitpicking aside:
-Acked-by: Nhat Pham <nphamcs@gmail.com>
+--bU0eg43A83FLgDHm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Aug 11, 2023 at 04:09:33PM +0100, Catalin Marinas wrote:
+> On Mon, Aug 07, 2023 at 11:00:22PM +0100, Mark Brown wrote:
+
+> > +		if (is_write_abort(esr) &&
+> > +		    !(is_gcs_fault(esr) || is_el1_data_abort(esr)))
+> > +			return VM_FAULT_BADACCESS;
+
+> Related to my PIE permissions comment: when do we have a valid EL1 data
+> write abort that's not a GCS fault? Does a faulting GCSSTTR set the
+> ESR_ELx_GCS bit?
+
+Yes, it should do.  The GCS instructions have access descriptors created
+with CreateAccDescGCS() which results in the access being flagged as a
+GCS access.
+
+> > +	} else {
+> > +		/*
+> > +		 * GCS faults should never happen for pages that are
+> > +		 * not part of a GCS and the operation being attempted
+> > +		 * can never succeed.
+> > +		 */
+> > +		if (is_gcs_fault(esr))
+> > +			return VM_FAULT_BADACCESS;
+
+> If one does a GCS push/store to a non-GCS page, do we get a GCS fault or
+> something else? I couldn't figure out from the engineering spec. If the
+> hardware doesn't generate such exceptions, we might as well remove this
+> 'else' branch. But maybe it does generate a GCS-specific fault as you
+> added a similar check in is_invalid_el0_gcs_access().
+
+Yes, see AddGCSRecord() and LoadCheckGCSRecord() - all GCS initiated
+accesses need to be AccDescGCS so appropriate permissions enforcement
+can happen and that's what causes the fault to be flagged as GCS.
+
+> > @@ -595,6 +644,19 @@ static int __kprobes do_page_fault(unsigned long f=
+ar, unsigned long esr,
+> >  	if (!vma)
+> >  		goto lock_mmap;
+> > =20
+> > +	/*
+> > +	 * We get legitimate write faults for GCS pages from GCS
+> > +	 * operations and from EL1 writes to EL0 pages but just plain
+
+> What are the EL1 writes to the shadow stack? Would it not use
+> copy_to_user_gcs()?
+
+They should, yes - I'll reword the comment.
+
+--bU0eg43A83FLgDHm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTcEDYACgkQJNaLcl1U
+h9A2rAgAhd1tNqwsfCv0ZnuQlRFZyTwPwFCn76BeqIuV3TYu4Nymed/YLhOECsZ9
+H6Fni+Igkf4ckDfRhk742+N6QqLOBZz4ddBTJDV74NJk7EgWWv9srbi10k/thyIT
+O/Wz8nVnuUHHXN3dkJIZJQ/l6GjLrzoiskqkrh9ft7HskvTTe1DOL8gFS8Qa5DjS
+ut+XhC5VI7HX7iBwhhqw1tEjsQM3ldnl0r/rSd37tFbJbDX6ujuMlgpBKReSH8qV
+kfrNbgpcBoxaKvE/rytuAXTIS2oqh/1yHuWi8ujBlZgGf8Vo7OK0alzL8T+oIEaQ
+92UJwq3fW51GVCMDxbeaCh1vD7hrKg==
+=cuH7
+-----END PGP SIGNATURE-----
+
+--bU0eg43A83FLgDHm--
