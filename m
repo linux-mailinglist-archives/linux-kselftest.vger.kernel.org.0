@@ -2,123 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A7577D9F0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 07:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1881577DA47
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 08:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241970AbjHPFpR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Aug 2023 01:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S242007AbjHPGKx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Aug 2023 02:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241957AbjHPFoo (ORCPT
+        with ESMTP id S242039AbjHPGKY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Aug 2023 01:44:44 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98C494;
-        Tue, 15 Aug 2023 22:44:42 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 76401C009; Wed, 16 Aug 2023 07:44:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1692164677; bh=4gbF64ZAps2tu8Us8hVmy7bZFfqOLG3YAt1/kY1ChvI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gxpolGnipyoWx6NOs1Wo2RpVLOc+yxa4jjFF12DjfWBz8Auah8rAfmB8pHTN3YuGu
-         eLs5+UdNOMA9lhc71/oJTy2R9g1UIO11cPq2Z3tkaFLxJ8ytoyZ1pVn6wYv0CqbjFr
-         QpIfTqw060s51OxpvNjQ7V49+nI3W2kebtvnxWk2IDtleiW+HeT/l/ukow9vtA+qRD
-         vk8aWqdxw5A0qVyTGqm7i3CwvQY5nlCPAJH/04DeMhfpdFUmnOlmz9lFpuk6tOvyLG
-         lgvW9zea711VF9wFQMFXnZbbkOe8AalL/QbxF4gTQAC1p1k/tUxJlwSAyQ8RPrBpiB
-         Gik41FMsf2v9Q==
+        Wed, 16 Aug 2023 02:10:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D084B213A
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 23:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 649B56498B
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 06:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C413AC433BA;
+        Wed, 16 Aug 2023 06:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692166221;
+        bh=Uw8bTVFIBNZcxW+KxD6j2IfyOEvIwjpoIZwuxS/bQwY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=FUEPhoQ6BnLEBWxEAlOK2b35sOck++bagDPDWDDbqfnNOYLb01cM4DJuIBnK4Tnh5
+         jk8GyAKx0NhsCA6YZDUhb92SjXoKODsJQX6n90ap+rnqsJRqaWkuMElfg4EnVPiocR
+         Fbjhj9ONjneBLttYkwIm7gfidZjbaZp5ZD4k+dEkrcKubFZ+Z5uFo29Owe3JbUDJeK
+         1E4PZCPm61Gxuzp1KsRSjPxF2UR/C85nJllpnaYDt4jRgjfFW3j1A5Unqp6cU3HA0O
+         wM4J/zTHruK3LF6YZ1ZiWPehdFBBOw+2K5q5ibsoU37Po4Pf3yoCg8c5jIKnP3Ul2E
+         igPGGD/B12uEQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AE7BBC39562;
+        Wed, 16 Aug 2023 06:10:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: bonding: remove redundant delete action
+ of device link1_1
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <169216622171.7878.6507698004399073444.git-patchwork-notify@kernel.org>
+Date:   Wed, 16 Aug 2023 06:10:21 +0000
+References: <20230812084036.1834188-1-shaozhengchao@huawei.com>
+In-Reply-To: <20230812084036.1834188-1-shaozhengchao@huawei.com>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, j.vosburgh@gmail.com, andy@greyhouse.net,
+        weiyongjun1@huawei.com, yuehaibing@huawei.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
-Received: from odin (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 2C5C1C009;
-        Wed, 16 Aug 2023 07:44:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1692164676; bh=4gbF64ZAps2tu8Us8hVmy7bZFfqOLG3YAt1/kY1ChvI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Le9BCk3BgokIeFhQZ+E2qn5OLRfVeXZzjZj6lNANgyEGwg69oTq4rzoHh3BlR2+ky
-         VK9y9v0mZn9j0gHRq4yv8ICwuk5hMQqiuVQv1K7ifIlEASm3suPqJ8iJLyHZVw4yDL
-         mAWxPdPvf505aXF6nXW8ZOLxRLR9y/01xn948nv0roYzxswTm08gkUYHE6offRFNMr
-         ANBAlzKf0paytsaUQdQ2/XLSVoIwjgEsXq4IAIGcnXPkoCpzDSwfk8t8Wm/4tyKCNM
-         ect0SxgtjREzw1KK+2kTc+huXX6/Xf0xmSgO9ulctpEPmqUgJpVa0OFv9UKN8Doo0g
-         p2bvpBnLDL9ug==
-Received: from localhost (odin [local])
-        by odin (OpenSMTPD) with ESMTPA id 014ee523;
-        Wed, 16 Aug 2023 05:44:28 +0000 (UTC)
-Date:   Wed, 16 Aug 2023 14:44:13 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        Christian Brauner <brauner@kernel.org>, stable@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] memfd: replace ratcheting feature from
- vm.memfd_noexec with hierarchy
-Message-ID: <ZNxiLe_jkXpxh3QU@codewreck.org>
-References: <20230814-memfd-vm-noexec-uapi-fixes-v2-0-7ff9e3e10ba6@cyphar.com>
- <20230814-memfd-vm-noexec-uapi-fixes-v2-4-7ff9e3e10ba6@cyphar.com>
- <CALmYWFvxLee5+RyLh=vo6kpwMVS-_C7BJ9kmTPDa2tetgHOHPw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CALmYWFvxLee5+RyLh=vo6kpwMVS-_C7BJ9kmTPDa2tetgHOHPw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Jeff Xu wrote on Tue, Aug 15, 2023 at 10:13:18PM -0700:
-> > Given that it is possible for CAP_SYS_ADMIN users to create executable
-> > binaries without memfd_create(2) and without touching the host
-> > filesystem (not to mention the many other things a CAP_SYS_ADMIN process
-> > would be able to do that would be equivalent or worse), it seems strange
-> > to cause a fair amount of headache to admins when there doesn't appear
-> > to be an actual security benefit to blocking this. There appear to be
-> > concerns about confused-deputy-esque attacks[2] but a confused deputy that
-> > can write to arbitrary sysctls is a bigger security issue than
-> > executable memfds.
-> >
-> Something to point out: The demo code might be enough to prove your
-> case in other distributions, however, in ChromeOS, you can't run this
-> code. The executable in ChromeOS are all from known sources and
-> verified at boot.
-> If an attacker could run this code in ChromeOS, that means the
-> attacker already acquired arbitrary code execution through other ways,
-> at that point, the attacker no longer needs to create/find an
-> executable memfd, they already have the vehicle. You can't use an
-> example of an attacker already running arbitrary code to prove that
-> disable downgrading is useless.
-> I agree it is a big problem that an attacker already can modify a
-> sysctl.  Assuming this can happen by controlling arguments passed into
-> sysctl, at the time, the attacker might not have full arbitrary code
-> execution yet, that is the reason the original design is so
-> restrictive.
+Hello:
 
-I don't understand how you can say an attacker cannot run arbitrary code
-within a process here, yet assert that they'd somehow run memfd_create +
-execveat on it if this sysctl is lowered -- the two look equivalent to
-me?
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-CAP_SYS_ADMIN is a kludge of a capability that pretty much gives root as
-soon as you can run arbitrary code (just have a look at the various
-container escape example when the capability is given); I see little
-point in trying to harden just this here.
-It'd make more sense to limit all sysctl modifications in the context
-you're thinking of through e.g. selinux or another LSM.
+On Sat, 12 Aug 2023 16:40:36 +0800 you wrote:
+> When run command "ip netns delete client", device link1_1 has been
+> deleted. So, it is no need to delete link1_1 again. Remove it.
+> 
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> ---
+>  .../drivers/net/bonding/bond-arp-interval-causes-panic.sh        | 1 -
+>  1 file changed, 1 deletion(-)
 
-(in the context of users making their own containers, my suggestion is
-always to never use CAP_SYS_ADMIN, or if they must give it to a separate
-minimal container where they can limit user interaction)
+Here is the summary with links:
+  - [net-next] selftests: bonding: remove redundant delete action of device link1_1
+    https://git.kernel.org/netdev/net-next/c/e56e220d73ca
 
-
-FWIW, I also think the proposed =2 behaviour makes more sense, but this
-is something we already discussed last month so I won't come back to it
-as not really involved here.
-
+You are awesome, thank you!
 -- 
-Dominique Martinet | Asmadeus
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
