@@ -2,239 +2,201 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9479E77DC7E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 10:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A7D77DD20
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 11:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243039AbjHPIiD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Aug 2023 04:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
+        id S243266AbjHPJSN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Aug 2023 05:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243063AbjHPIhG (ORCPT
+        with ESMTP id S243292AbjHPJR5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Aug 2023 04:37:06 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB01935B6;
-        Wed, 16 Aug 2023 01:36:03 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 37G8ZWHQ016519;
-        Wed, 16 Aug 2023 10:35:32 +0200
-Date:   Wed, 16 Aug 2023 10:35:32 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah <shuah@kernel.org>
-Subject: Re: [GIT PULL] nolibc changes for 6.6-rc1
-Message-ID: <ZNyKVGn1wBkUz2+n@1wt.eu>
-References: <20230806172245.GA26239@1wt.eu>
- <3efa3710-4e8b-d187-a24d-ff85858e37fe@linuxfoundation.org>
- <20230815143540.GA15075@1wt.eu>
- <29590d7b-40fd-0426-75c6-36667e344f6c@linuxfoundation.org>
- <9950607c-cafe-c011-7d5f-76a8a971beb0@linuxfoundation.org>
- <ZNvIkD1oxZENVkoe@1wt.eu>
- <85a03aa3-3d6e-3b16-d113-7d7f5a84bfb4@linuxfoundation.org>
+        Wed, 16 Aug 2023 05:17:57 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF24A173F;
+        Wed, 16 Aug 2023 02:17:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692177475; x=1723713475;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zwwmpOW207j3wPu+ifgrfWePdPO66yRkiGRCHXKVykM=;
+  b=NiJlrvcRIfIdke8Fs5vR64S9B1TTF3k0f5JFmA0pgrfkIvO5Dh4ikMMB
+   k1KdOiJsuknzXTbl0ve2eGFfAOSONM1/vjpXLwAiMUJD2VDlQwvBkJxNN
+   lR8TzFZTzU6Bb/GpMhsUsNclcV5LvJPfUHe2VCH4YXL4Beyg7DGiNhHCW
+   8Ywf/CXRYSwXOyao5mrAMXTzzOJCNK33KGg6lbSwMgXqmscR+p+EaVL4+
+   z+WKuz/HRxfSiPMRL3BYamKpMIhSeiWQflaclbyeA4DTXWqFrNOVt6LPZ
+   2e1JfqhkdBHmKSm5c04xjZKZt0P8wBQG6Uu7h6VE7qnid8bOflU4oht5I
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="376212911"
+X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
+   d="scan'208";a="376212911"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 02:17:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="799500182"
+X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
+   d="scan'208";a="799500182"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 16 Aug 2023 02:17:47 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qWCew-0000AX-2d;
+        Wed, 16 Aug 2023 09:17:46 +0000
+Date:   Wed, 16 Aug 2023 17:17:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>,
+        kernel@collabora.com, Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Subject: Re: [PATCH v30 2/6] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <202308161737.upLWpu8Q-lkp@intel.com>
+References: <20230816065925.850879-3-usama.anjum@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <85a03aa3-3d6e-3b16-d113-7d7f5a84bfb4@linuxfoundation.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230816065925.850879-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Shuah,
+Hi Muhammad,
 
-On Tue, Aug 15, 2023 at 03:06:39PM -0600, Shuah Khan wrote:
-> > I've pushed a tag named 20230815-for-6.6-2 in the repo below:
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-> > 
-> > Please let me know if you want me to resend a PR.
-> > 
-> 
-> Pull worked fine and my verify_fixes script failed on the following patches.
-> 
-> Commit: 6c931bf0c732 ("selftests/nolibc: avoid buffer underrun in space printing")
-> 	Fixes tag: Fixes: 8a27526f49f9 ("selftests/nolibc: add EXPECT_PTREQ, EXPECT_PTRNE and EXPECT_PTRER")
-> 	Has these problem(s):
-> 		- Target SHA1 does not exist
+kernel test robot noticed the following build warnings:
 
-Sadly this one was within the same branch and got rebased, now fixed.
-Another one had the same issue after the fix, I've dropped the fixes
-tag.
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on next-20230815]
+[cannot apply to linus/master v6.5-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Commit: 40f12898b479 ("tools/nolibc/stdio: add setvbuf() to set buffering mode")
-> 	Fixes tag: Fixes: ecb7fe2cd610 ("selftests: line buffer test program's stdout")
-> 	Has these problem(s):
-> 		- Target SHA1 does not exist
+url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230816-150412
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230816065925.850879-3-usama.anjum%40collabora.com
+patch subject: [PATCH v30 2/6] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230816/202308161737.upLWpu8Q-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230816/202308161737.upLWpu8Q-lkp@intel.com/reproduce)
 
-This one mentioned a commit that's only in linux-next, I simply dropped
-the fixes tag.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308161737.upLWpu8Q-lkp@intel.com/
 
-> Will you be able to add the right commit IDs and resend the pull, so there
-> are no mistakes if I guess it wrong.
+All warnings (new ones prefixed by >>):
 
-Please use the new following one instead.
+   In file included from include/asm-generic/bug.h:5,
+                    from arch/m68k/include/asm/bug.h:32,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/mm.h:6,
+                    from include/linux/pagewalk.h:5,
+                    from fs/proc/task_mmu.c:2:
+   fs/proc/task_mmu.c: In function 'pagemap_scan_get_args':
+>> fs/proc/task_mmu.c:2269:24: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    2269 |         if (!access_ok((void __user *)arg->start, arg->end - arg->start))
+         |                        ^
+   include/linux/compiler.h:76:45: note: in definition of macro 'likely'
+      76 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   fs/proc/task_mmu.c:2269:14: note: in expansion of macro 'access_ok'
+    2269 |         if (!access_ok((void __user *)arg->start, arg->end - arg->start))
+         |              ^~~~~~~~~
+   fs/proc/task_mmu.c:2273:36: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    2273 |         if (arg->vec && !access_ok((void __user *)arg->vec,
+         |                                    ^
+   include/linux/compiler.h:76:45: note: in definition of macro 'likely'
+      76 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   fs/proc/task_mmu.c:2273:26: note: in expansion of macro 'access_ok'
+    2273 |         if (arg->vec && !access_ok((void __user *)arg->vec,
+         |                          ^~~~~~~~~
+   fs/proc/task_mmu.c: In function 'pagemap_scan_init_bounce_buffer':
+   fs/proc/task_mmu.c:2310:22: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    2310 |         p->vec_out = (struct page_region __user *)p->arg.vec;
+         |                      ^
+   fs/proc/task_mmu.c: At top level:
+   fs/proc/task_mmu.c:1998:13: warning: 'pagemap_scan_backout_range' defined but not used [-Wunused-function]
+    1998 | static void pagemap_scan_backout_range(struct pagemap_scan_private *p,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Thanks!
-Willy
 
-The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+vim +2269 fs/proc/task_mmu.c
 
-  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+  2245	
+  2246	static int pagemap_scan_get_args(struct pm_scan_arg *arg,
+  2247					 unsigned long uarg)
+  2248	{
+  2249		if (copy_from_user(arg, (void __user *)uarg, sizeof(*arg)))
+  2250			return -EFAULT;
+  2251	
+  2252		if (arg->size != sizeof(struct pm_scan_arg))
+  2253			return -EINVAL;
+  2254	
+  2255		/* Validate requested features */
+  2256		if (arg->flags & ~PM_SCAN_FLAGS)
+  2257			return -EINVAL;
+  2258		if ((arg->category_inverted | arg->category_mask |
+  2259		     arg->category_anyof_mask | arg->return_mask) & ~PM_SCAN_CATEGORIES)
+  2260			return -EINVAL;
+  2261	
+  2262		arg->start = untagged_addr((unsigned long)arg->start);
+  2263		arg->end = untagged_addr((unsigned long)arg->end);
+  2264		arg->vec = untagged_addr((unsigned long)arg->vec);
+  2265	
+  2266		/* Validate memory pointers */
+  2267		if (!IS_ALIGNED(arg->start, PAGE_SIZE))
+  2268			return -EINVAL;
+> 2269		if (!access_ok((void __user *)arg->start, arg->end - arg->start))
+  2270			return -EFAULT;
+  2271		if (!arg->vec && arg->vec_len)
+  2272			return -EINVAL;
+  2273		if (arg->vec && !access_ok((void __user *)arg->vec,
+  2274				      arg->vec_len * sizeof(struct page_region)))
+  2275			return -EFAULT;
+  2276	
+  2277		/* Fixup default values */
+  2278		arg->end = ALIGN(arg->end, PAGE_SIZE);
+  2279		arg->walk_end = 0;
+  2280		if (!arg->max_pages)
+  2281			arg->max_pages = ULONG_MAX;
+  2282	
+  2283		return 0;
+  2284	}
+  2285	
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/ tags/20230816-for-6.6-3
-
-for you to fetch changes up to 938315d721db3b08c958e92b8237fb4986c66b7e:
-
-  tools/nolibc: avoid undesired casts in the __sysret() macro (2023-08-16 10:31:17 +0200)
-
-----------------------------------------------------------------
-Ryan Roberts (1):
-      tools/nolibc/stdio: add setvbuf() to set buffering mode
-
-Thomas Weiﬂschuh (22):
-      selftests/nolibc: drop test chmod_net
-      selftests/nolibc: simplify call to ioperm
-      tools/nolibc: completely remove optional environ support
-      selftests/nolibc: make evaluation of test conditions
-      selftests/nolibc: simplify status printing
-      selftests/nolibc: avoid gaps in test numbers
-      selftests/nolibc: avoid buffer underrun in space printing
-      tools/nolibc: drop unused variables
-      tools/nolibc: fix return type of getpagesize()
-      tools/nolibc: setvbuf: avoid unused parameter warnings
-      tools/nolibc: sys: avoid implicit sign cast
-      tools/nolibc: stdint: use __SIZE_TYPE__ for size_t
-      selftests/nolibc: drop unused variables
-      selftests/nolibc: mark test helpers as potentially unused
-      selftests/nolibc: make functions static if possible
-      selftests/nolibc: avoid unused parameter warnings
-      selftests/nolibc: avoid sign-compare warnings
-      selftests/nolibc: use correct return type for read() and write()
-      selftests/nolibc: prevent out of bounds access in expect_vfprintf
-      selftests/nolibc: don't strip nolibc-test
-      selftests/nolibc: enable compiler warnings
-      MAINTAINERS: nolibc: add myself as co-maintainer
-
-Willy Tarreau (3):
-      selftests/nolibc: avoid warnings during intptr tests
-      tools/nolibc: keep brk(), sbrk(), mmap() away from __sysret()
-      tools/nolibc: avoid undesired casts in the __sysret() macro
-
-Yuan Tan (2):
-      tools/nolibc: add pipe() and pipe2() support
-      selftests/nolibc: add testcase for pipe
-
-Zhangjin Wu (76):
-      selftests/nolibc: add a standalone test report macro
-      selftests/nolibc: always print the path to test log file
-      selftests/nolibc: restore the failed tests print
-      tools/nolibc: fix up #error compile failures with -ENOSYS
-      tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
-      tools/nolibc: sys.h: add a syscall return helper
-      tools/nolibc: unistd.h: apply __sysret() helper
-      tools/nolibc: sys.h: apply __sysret() helper
-      tools/nolibc: unistd.h: reorder the syscall macros
-      tools/nolibc: arch-*.h: fix up code indent errors
-      toolc/nolibc: arch-*.h: clean up whitespaces after __asm__
-      tools/nolibc: arch-loongarch.h: shrink with _NOLIBC_SYSCALL_CLOBBERLIST
-      tools/nolibc: arch-mips.h: shrink with _NOLIBC_SYSCALL_CLOBBERLIST
-      tools/nolibc: add missing my_syscall6() for mips
-      tools/nolibc: __sysret: support syscalls who return a pointer
-      tools/nolibc: clean up mmap() routine
-      tools/nolibc: clean up sbrk() routine
-      selftests/nolibc: export argv0 for some tests
-      selftests/nolibc: prepare: create /dev/zero
-      selftests/nolibc: add EXPECT_PTREQ, EXPECT_PTRNE and EXPECT_PTRER
-      selftests/nolibc: add sbrk_0 to test current brk getting
-      selftests/nolibc: add mmap_bad test case
-      selftests/nolibc: add munmap_bad test case
-      selftests/nolibc: add mmap_munmap_good test case
-      selftests/nolibc: add run-libc-test target
-      selftests/nolibc: stat_fault: silence NULL argument warning with glibc
-      selftests/nolibc: gettid: restore for glibc and musl
-      selftests/nolibc: add _LARGEFILE64_SOURCE for musl
-      selftests/nolibc: fix up int_fast16/32_t test cases for musl
-      tools/nolibc: types.h: add RB_ flags for reboot()
-      selftests/nolibc: prefer <sys/reboot.h> to <linux/reboot.h>
-      selftests/nolibc: fix up kernel parameters support
-      selftests/nolibc: link_cross: use /proc/self/cmdline
-      tools/nolibc: add rmdir() support
-      selftests/nolibc: add a new rmdir() test case
-      selftests/nolibc: fix up failures when CONFIG_PROC_FS=n
-      selftests/nolibc: prepare /tmp for tests that need to write
-      selftests/nolibc: vfprintf: remove MEMFD_CREATE dependency
-      selftests/nolibc: chdir_root: restore current path after test
-      selftests/nolibc: stat_timestamps: remove procfs dependency
-      selftests/nolibc: chroot_exe: remove procfs dependency
-      selftests/nolibc: add chmod_argv0 test
-      selftests/nolibc: report: print a summarized test status
-      selftests/nolibc: report: print total tests
-      selftests/nolibc: report: align passed, skipped and failed
-      selftests/nolibc: report: extrude the test status line
-      selftests/nolibc: report: add newline before test failures
-      tools/nolibc: arch-*.h: add missing space after ','
-      tools/nolibc: fix up startup failures for -O0 under gcc < 11.1.0
-      tools/nolibc: remove the old sys_stat support
-      tools/nolibc: add new crt.h with _start_c
-      tools/nolibc: stackprotector.h: add empty __stack_chk_init for !_NOLIBC_STACKPROTECTOR
-      tools/nolibc: crt.h: initialize stack protector
-      tools/nolibc: arm: shrink _start with _start_c
-      tools/nolibc: aarch64: shrink _start with _start_c
-      tools/nolibc: i386: shrink _start with _start_c
-      tools/nolibc: x86_64: shrink _start with _start_c
-      tools/nolibc: mips: shrink _start with _start_c
-      tools/nolibc: loongarch: shrink _start with _start_c
-      tools/nolibc: riscv: shrink _start with _start_c
-      tools/nolibc: s390: shrink _start with _start_c
-      selftests/nolibc: add EXPECT_PTRGE, EXPECT_PTRGT, EXPECT_PTRLE, EXPECT_PTRLT
-      selftests/nolibc: add testcases for startup code
-      selftests/nolibc: allow run nolibc-test locally
-      selftests/nolibc: allow test -include /path/to/nolibc.h
-      selftests/nolibc: mmap_munmap_good: fix up return value
-      tools/nolibc: add support for powerpc
-      tools/nolibc: add support for powerpc64
-      selftests/nolibc: add XARCH and ARCH mapping support
-      selftests/nolibc: add test support for ppc
-      selftests/nolibc: add test support for ppc64le
-      selftests/nolibc: add test support for ppc64
-      selftests/nolibc: allow report with existing test log
-      tools/nolibc: stackprotector.h: make __stack_chk_init static
-      selftests/nolibc: libc-test: use HOSTCC instead of CC
-      tools/nolibc: silence ppc64 compile warnings
-
- MAINTAINERS                                  |   1 +
- tools/include/nolibc/Makefile                |   1 +
- tools/include/nolibc/arch-aarch64.h          |  85 +---
- tools/include/nolibc/arch-arm.h              | 111 +----
- tools/include/nolibc/arch-i386.h             |  86 +---
- tools/include/nolibc/arch-loongarch.h        |  83 +---
- tools/include/nolibc/arch-mips.h             | 147 +++----
- tools/include/nolibc/arch-powerpc.h          | 221 ++++++++++
- tools/include/nolibc/arch-riscv.h            |  83 +---
- tools/include/nolibc/arch-s390.h             |  77 +---
- tools/include/nolibc/arch-x86_64.h           |  86 +---
- tools/include/nolibc/arch.h                  |   2 +
- tools/include/nolibc/crt.h                   |  61 +++
- tools/include/nolibc/nolibc.h                |   9 +-
- tools/include/nolibc/stackprotector.h        |   5 +-
- tools/include/nolibc/stdint.h                |   2 +-
- tools/include/nolibc/stdio.h                 |  27 ++
- tools/include/nolibc/stdlib.h                |  12 +-
- tools/include/nolibc/sys.h                   | 534 +++++++----------------
- tools/include/nolibc/types.h                 |  22 +-
- tools/include/nolibc/unistd.h                |  13 +-
- tools/testing/selftests/nolibc/Makefile      | 111 +++--
- tools/testing/selftests/nolibc/nolibc-test.c | 609 ++++++++++++++++++++-------
- 23 files changed, 1221 insertions(+), 1167 deletions(-)
- create mode 100644 tools/include/nolibc/arch-powerpc.h
- create mode 100644 tools/include/nolibc/crt.h
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
