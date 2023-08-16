@@ -2,150 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AFE77D6D0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 01:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFFE77D71A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 02:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240734AbjHOXy4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Aug 2023 19:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
+        id S236511AbjHPAfR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Aug 2023 20:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240732AbjHOXym (ORCPT
+        with ESMTP id S240783AbjHPAfJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Aug 2023 19:54:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866A5EE;
-        Tue, 15 Aug 2023 16:54:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 073CD62C98;
-        Tue, 15 Aug 2023 23:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47CCBC433C8;
-        Tue, 15 Aug 2023 23:54:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692143680;
-        bh=n6eEACiqimpPB7PLvfd+oUPFPVhzIcPuBLC1dr7dvkk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DxIy5vbUapbtWP3sld3mWYjZBRmjMrNODKGFDnO97nPi0kw+utGl7YhSUxRcSA55j
-         bgF8O8udbd4TU+m5lMdm4Tq8mz2Iji+2duH30c7Uih+GPjDtxMtERbEdC1HkZkRbV1
-         vhFKi5KpL9sjgdjBtwcn8MOqnv66AJbhzBkjh1oYLzW8TtTXJwoSBhyLhul3VdRwcO
-         1WhbPKDlq0Tm06lqfY+xHm0muT2Lor4Y/lV59laZCZRREuOI6SYgQstfXcPOumpgOw
-         HGCLOk+Rs8gWd4G0xWygKex2ny89KElnHHwFax3NDVcmPkRCbi5eOwwkFR7OjQVK7e
-         9jsYzSH7oiqSw==
-Date:   Wed, 16 Aug 2023 00:54:30 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 17/36] arm64/mm: Handle GCS data aborts
-Message-ID: <752f9f06-69e3-4e60-94ca-49cacb1122ff@sirena.org.uk>
-References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-17-68cfa37f9069@kernel.org>
- <ZNZPLTky6IZ47n4l@arm.com>
+        Tue, 15 Aug 2023 20:35:09 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D546CE6B;
+        Tue, 15 Aug 2023 17:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692146108; x=1723682108;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8f2iATa2xEdHMvk63Q2DKkqtOyMKfE9XSsgVimDXLjw=;
+  b=l5mAKEN9Vd1We5pBI/8+CLUs1NtUDQShseXKcGVEMIor5he0Yo+sqls/
+   88UUg+tEse86z4TYl93ierEybkmfncK164AqsMK/W9fpnaw5tOyeYELZV
+   Ls32ruiKTtDyScrKxV322wQcvH952hwPjfSFBY80VxeP4FDlLxOZ9uArp
+   L7pc5ODwaCDJFoCwf9fKSIT8pwamvJ83oHkJ0mr+WbkmoDvNIj59KglMt
+   9cOCU78IsEuj/ffg4cgjqH05NrZzCGyRfG1F8nWNpbPDizATbVMw8dNb9
+   uyL8MB3LGmeSMCgx06LmrheXAKE+4x3Lwq8LX/AarrAH8hpqiWMpc9FOZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="438753898"
+X-IronPort-AV: E=Sophos;i="6.01,175,1684825200"; 
+   d="scan'208";a="438753898"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 17:35:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="824042590"
+X-IronPort-AV: E=Sophos;i="6.01,175,1684825200"; 
+   d="scan'208";a="824042590"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.212.45]) ([10.254.212.45])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 17:35:02 -0700
+Message-ID: <c6c6a390-d1d1-a5f7-cbdb-2120043eceec@linux.intel.com>
+Date:   Wed, 16 Aug 2023 08:35:00 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bU0eg43A83FLgDHm"
-Content-Disposition: inline
-In-Reply-To: <ZNZPLTky6IZ47n4l@arm.com>
-X-Cookie: Darth Vader sleeps with a Teddywookie.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Cc:     baolu.lu@linux.intel.com, joro@8bytes.org,
+        alex.williamson@redhat.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com
+Subject: Re: [PATCH v4 11/12] iommu/vt-d: Implement hw_info for iommu
+ capability query
+To:     Jason Gunthorpe <jgg@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+References: <20230724111335.107427-1-yi.l.liu@intel.com>
+ <20230724111335.107427-12-yi.l.liu@intel.com> <ZNuoWRH/HthxsLMd@nvidia.com>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZNuoWRH/HthxsLMd@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 2023/8/16 0:31, Jason Gunthorpe wrote:
+> On Mon, Jul 24, 2023 at 04:13:33AM -0700, Yi Liu wrote:
+>> Add intel_iommu_hw_info() to report cap_reg and ecap_reg information.
+>>
+>> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
+>> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
+>> Signed-off-by: Yi Liu<yi.l.liu@intel.com>
+>> ---
+>>   drivers/iommu/intel/iommu.c  | 19 +++++++++++++++++++
+>>   include/uapi/linux/iommufd.h | 23 +++++++++++++++++++++++
+>>   2 files changed, 42 insertions(+)
+> I would like to pick this patch out of this series to go with the main
+> get_info stuff so that we have drivers implementing what is merged. I
+> made the trivial fixup.
+> 
+> Lu are you OK?
 
---bU0eg43A83FLgDHm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes.
 
-On Fri, Aug 11, 2023 at 04:09:33PM +0100, Catalin Marinas wrote:
-> On Mon, Aug 07, 2023 at 11:00:22PM +0100, Mark Brown wrote:
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 
-> > +		if (is_write_abort(esr) &&
-> > +		    !(is_gcs_fault(esr) || is_el1_data_abort(esr)))
-> > +			return VM_FAULT_BADACCESS;
-
-> Related to my PIE permissions comment: when do we have a valid EL1 data
-> write abort that's not a GCS fault? Does a faulting GCSSTTR set the
-> ESR_ELx_GCS bit?
-
-Yes, it should do.  The GCS instructions have access descriptors created
-with CreateAccDescGCS() which results in the access being flagged as a
-GCS access.
-
-> > +	} else {
-> > +		/*
-> > +		 * GCS faults should never happen for pages that are
-> > +		 * not part of a GCS and the operation being attempted
-> > +		 * can never succeed.
-> > +		 */
-> > +		if (is_gcs_fault(esr))
-> > +			return VM_FAULT_BADACCESS;
-
-> If one does a GCS push/store to a non-GCS page, do we get a GCS fault or
-> something else? I couldn't figure out from the engineering spec. If the
-> hardware doesn't generate such exceptions, we might as well remove this
-> 'else' branch. But maybe it does generate a GCS-specific fault as you
-> added a similar check in is_invalid_el0_gcs_access().
-
-Yes, see AddGCSRecord() and LoadCheckGCSRecord() - all GCS initiated
-accesses need to be AccDescGCS so appropriate permissions enforcement
-can happen and that's what causes the fault to be flagged as GCS.
-
-> > @@ -595,6 +644,19 @@ static int __kprobes do_page_fault(unsigned long f=
-ar, unsigned long esr,
-> >  	if (!vma)
-> >  		goto lock_mmap;
-> > =20
-> > +	/*
-> > +	 * We get legitimate write faults for GCS pages from GCS
-> > +	 * operations and from EL1 writes to EL0 pages but just plain
-
-> What are the EL1 writes to the shadow stack? Would it not use
-> copy_to_user_gcs()?
-
-They should, yes - I'll reword the comment.
-
---bU0eg43A83FLgDHm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTcEDYACgkQJNaLcl1U
-h9A2rAgAhd1tNqwsfCv0ZnuQlRFZyTwPwFCn76BeqIuV3TYu4Nymed/YLhOECsZ9
-H6Fni+Igkf4ckDfRhk742+N6QqLOBZz4ddBTJDV74NJk7EgWWv9srbi10k/thyIT
-O/Wz8nVnuUHHXN3dkJIZJQ/l6GjLrzoiskqkrh9ft7HskvTTe1DOL8gFS8Qa5DjS
-ut+XhC5VI7HX7iBwhhqw1tEjsQM3ldnl0r/rSd37tFbJbDX6ujuMlgpBKReSH8qV
-kfrNbgpcBoxaKvE/rytuAXTIS2oqh/1yHuWi8ujBlZgGf8Vo7OK0alzL8T+oIEaQ
-92UJwq3fW51GVCMDxbeaCh1vD7hrKg==
-=cuH7
------END PGP SIGNATURE-----
-
---bU0eg43A83FLgDHm--
+Best regards,
+baolu
