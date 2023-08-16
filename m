@@ -2,144 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B141977E92D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 21:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600A677E933
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 21:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345608AbjHPS7a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Aug 2023 14:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
+        id S243799AbjHPTAe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Aug 2023 15:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345675AbjHPS71 (ORCPT
+        with ESMTP id S1344961AbjHPTAa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Aug 2023 14:59:27 -0400
-Received: from out-42.mta1.migadu.com (out-42.mta1.migadu.com [IPv6:2001:41d0:203:375::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C2F2700
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 11:59:25 -0700 (PDT)
-Message-ID: <3590084f-bc61-b2c7-ed1b-dd4caa85fdcd@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1692212362;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PCFj1wUEPbKCUAicOTDsxyUO5WEYUOvgrXDS/ukJ/vw=;
-        b=pVduOOAy3dw3c4iuelYrt3xow2jG7+SQcWBUGfqv58WAu6NkLuNcB3VtXyyrEGaRv549MB
-        ppQQsVgUAivt2n09prjT8L27YETLhN/YnQrzxWne4u//uOPeyx4qZiZqV/FNKIyzfzL9jj
-        lkpc3ZHx2YYM6kTZCPi0DdwbLph1aLY=
-Date:   Wed, 16 Aug 2023 11:59:12 -0700
+        Wed, 16 Aug 2023 15:00:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854D62128;
+        Wed, 16 Aug 2023 12:00:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 237EB62C3A;
+        Wed, 16 Aug 2023 19:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 79FD3C433C8;
+        Wed, 16 Aug 2023 19:00:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692212428;
+        bh=rEdul0JpWo7UI26UCX+q00I+G+ygegw9aObVQvYySQI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=HTi8CWJQFmhUdke7qA/SrQiU5COF+gwJ7Tdlwl5X9rh1Zm6plgklArcrTsArFqx5I
+         piJ2OTVJj19Ah/2MScXA854R3eb8qaKx2WXDPNeiI08fmTpqZ+gptxBVZ7TzTmGyi2
+         sQhmBQQb57HYAmEPaZCMdzrUG8ijso96fEUMEEFWGyChPfWKhoeuY0wVF/S3RuIpef
+         4Uhtb5iT0vGSLoRQIBtfh9PU1BMjolhvnKpEXE9xnncDvz9wXHlnzJ0krxFsxxHVgw
+         ZVQik7R6HdSylHFVaa1PTRyED9XhDJMGP9Pgq7c9XbPR2dxi0DJcPb/Vy55O1xY3qN
+         iNha9n9uHj+KQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5D2BAE93B39;
+        Wed, 16 Aug 2023 19:00:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v14 4/4] selftests/bpf: Add mptcpify test
-Content-Language: en-US
-To:     Geliang Tang <geliang.tang@suse.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Yonghong Song <yonghong.song@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Simon Horman <horms@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v14 0/4] bpf: Force to MPTCP
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <169221242837.25657.8139131994909389115.git-patchwork-notify@kernel.org>
+Date:   Wed, 16 Aug 2023 19:00:28 +0000
 References: <cover.1692147782.git.geliang.tang@suse.com>
- <364e72f307e7bb38382ec7442c182d76298a9c41.1692147782.git.geliang.tang@suse.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <364e72f307e7bb38382ec7442c182d76298a9c41.1692147782.git.geliang.tang@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1692147782.git.geliang.tang@suse.com>
+To:     Geliang Tang <geliang.tang@suse.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, revest@chromium.org,
+        jackmanb@chromium.org, matthieu.baerts@tessares.net,
+        martineau@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, john.johansen@canonical.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        mykolal@fb.com, shuah@kernel.org, horms@kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/15/23 6:11 PM, Geliang Tang wrote:
-> Implement a new test program mptcpify: if the family is AF_INET or
-> AF_INET6, the type is SOCK_STREAM, and the protocol ID is 0 or
-> IPPROTO_TCP, set it to IPPROTO_MPTCP. It will be hooked in
-> update_socket_protocol().
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
+
+On Wed, 16 Aug 2023 09:11:55 +0800 you wrote:
+> As is described in the "How to use MPTCP?" section in MPTCP wiki [1]:
 > 
-> Extend the MPTCP test base, add a selftest test_mptcpify() for the
-> mptcpify case. Open and load the mptcpify test prog to mptcpify the
-> TCP sockets dynamically, then use start_server() and connect_to_fd()
-> to create a TCP socket, but actually what's created is an MPTCP
-> socket, which can be verified through 'getsockopt(SOL_PROTOCOL)'
-> and 'getsockopt(MPTCP_INFO)'.
+> "Your app should create sockets with IPPROTO_MPTCP as the proto:
+> ( socket(AF_INET, SOCK_STREAM, IPPROTO_MPTCP); ). Legacy apps can be
+> forced to create and use MPTCP sockets instead of TCP ones via the
+> mptcpize command bundled with the mptcpd daemon."
 > 
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-> ---
->   .../testing/selftests/bpf/prog_tests/mptcp.c  | 116 ++++++++++++++++++
->   tools/testing/selftests/bpf/progs/mptcpify.c  |  20 +++
->   2 files changed, 136 insertions(+)
->   create mode 100644 tools/testing/selftests/bpf/progs/mptcpify.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-> index 3d3999067e27..68ebf9735e16 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-> @@ -2,13 +2,30 @@
->   /* Copyright (c) 2020, Tessares SA. */
->   /* Copyright (c) 2022, SUSE. */
->   
-> +#include <linux/mptcp.h>
-bpf CI failed 
-(https://github.com/kernel-patches/bpf/actions/runs/5882006207/job/15951617063):
+> [...]
 
-   /tmp/work/bpf/bpf/tools/testing/selftests/bpf/prog_tests/mptcp.c:5:10: fatal 
-error: 'linux/mptcp.h' file not found
-   #include <linux/mptcp.h>
+Here is the summary with links:
+  - [bpf-next,v14,1/4] bpf: Add update_socket_protocol hook
+    https://git.kernel.org/bpf/bpf-next/c/0dd061a6a115
+  - [bpf-next,v14,2/4] selftests/bpf: Add two mptcp netns helpers
+    https://git.kernel.org/bpf/bpf-next/c/97c9c652089b
+  - [bpf-next,v14,3/4] selftests/bpf: Fix error checks of mptcp open_and_load
+    https://git.kernel.org/bpf/bpf-next/c/207746550262
+  - [bpf-next,v14,4/4] selftests/bpf: Add mptcpify test
+    https://git.kernel.org/bpf/bpf-next/c/ddba122428a7
 
-I fixed that by copying the 'struct mptcp_info' but renamed to 'struct 
-__mptcp_info' just in case any fallout in the future.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-My environment also does not have SOL_MPTCP, so I do an ifndef for it also.
-
-> +#include <netinet/in.h>
->   #include <test_progs.h>
->   #include "cgroup_helpers.h"
->   #include "network_helpers.h"
->   #include "mptcp_sock.skel.h"
-> +#include "mptcpify.skel.h"
->   
->   #define NS_TEST "mptcp_ns"
->   
-> +#ifndef IPPROTO_MPTCP
-> +#define IPPROTO_MPTCP 262
-> +#endif
-> +
-> +#ifndef MPTCP_INFO
-> +#define MPTCP_INFO		1
-> +#endif
-> +#ifndef MPTCP_INFO_FLAG_FALLBACK
-> +#define MPTCP_INFO_FLAG_FALLBACK		_BITUL(0)
-
-I have to add '#include <linux/const.h>' for the _BITUL() here also....
-
-The set is applied. Please follow up if I make mistake on those fixes.
 
